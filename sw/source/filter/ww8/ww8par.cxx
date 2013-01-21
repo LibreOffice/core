@@ -1761,6 +1761,8 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         return 0;
 
     String sAuthor;
+    String sInitials;
+    String sName;
     if( bVer67 )
     {
         const WW67_ATRD* pDescri = (const WW67_ATRD*)pSD->GetData();
@@ -1775,13 +1777,35 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     {
         const WW8_ATRD* pDescri = (const WW8_ATRD*)pSD->GetData();
 
-        if (const String* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst)))
-            sAuthor = *pA;
-        else
         {
             sal_uInt16 nLen = SVBT16ToShort(pDescri->xstUsrInitl[0]);
             for(sal_uInt16 nIdx = 1; nIdx <= nLen; ++nIdx)
-                sAuthor += SVBT16ToShort(pDescri->xstUsrInitl[nIdx]);
+                sInitials += SVBT16ToShort(pDescri->xstUsrInitl[nIdx]);
+        }
+
+        if (const String* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst)))
+            sAuthor = *pA;
+        else
+            sAuthor = sInitials;
+
+        // If there is a bookmark tag, a text range should be commented.
+        sal_uInt32 nTagBkmk = SVBT32ToUInt32(pDescri->ITagBkmk);
+        if (nTagBkmk != 0xFFFFFFFF)
+        {
+            sName = OUString::valueOf(sal_Int32(nTagBkmk));
+            int nAtnIndex = GetAnnotationIndex(nTagBkmk);
+            if (nAtnIndex != -1)
+            {
+                WW8_CP nStart = GetAnnotationStart(nAtnIndex);
+                WW8_CP nEnd = GetAnnotationEnd(nAtnIndex);
+                sal_Int32 nLen = nEnd - nStart;
+                // Don't support ranges affecting multiple SwTxtNode for now.
+                if (nLen && pPaM->GetPoint()->nContent.GetIndex() >= nLen)
+                {
+                    pPaM->SetMark();
+                    pPaM->GetPoint()->nContent -= nLen;
+                }
+            }
         }
     }
 
@@ -1803,8 +1827,17 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     this->pFmtOfJustInsertedApo = 0;
     SwPostItField aPostIt(
         (SwPostItFieldType*)rDoc.GetSysFldType(RES_POSTITFLD), sAuthor,
-        sTxt, aEmptyStr, aEmptyStr, aDate );
+        sTxt, sInitials, sName, aDate );
     aPostIt.SetTextObject(pOutliner);
+
+    // If this is a range, create the associated fieldmark.
+    if (pPaM->HasMark())
+    {
+        IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess();
+        pMarksAccess->makeFieldBookmark(*pPaM, aPostIt.GetName(), ODF_COMMENTRANGE);
+        pPaM->Exchange();
+        pPaM->DeleteMark();
+    }
 
     pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));
     rDoc.InsertPoolItem(*pPaM, SwFmtFld(aPostIt), 0);
@@ -5365,6 +5398,54 @@ const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
     if (mpAtnNames && nIdx < mpAtnNames->size())
         pRet = &((*mpAtnNames)[nIdx]);
     return pRet;
+}
+
+int SwWW8ImplReader::GetAnnotationIndex(sal_uInt32 nTag)
+{
+    if (!mpAtnIndexes.get() && pWwFib->lcbSttbfAtnbkmk)
+    {
+        mpAtnIndexes.reset(new std::map<sal_uInt32, int>());
+        std::vector<String> aStrings;
+        std::vector<ww::bytes> aEntries;
+        WW8ReadSTTBF(!bVer67, *pTableStream, pWwFib->fcSttbfAtnbkmk, pWwFib->lcbSttbfAtnbkmk, sizeof(struct WW8_ATNBE), eStructCharSet, aStrings, &aEntries);
+        for (size_t i = 0; i < aStrings.size() && i < aEntries.size(); ++i)
+        {
+            ww::bytes aEntry = aEntries[i];
+            WW8_ATNBE* pAtnbeStruct = (WW8_ATNBE*)(&aEntry[0]);
+            mpAtnIndexes->insert(std::pair<sal_uInt32, int>(SVBT32ToUInt32(pAtnbeStruct->nTag), i));
+        }
+    }
+    if (mpAtnIndexes.get())
+    {
+        std::map<sal_uInt32, int>::iterator it = mpAtnIndexes->find(nTag);
+        if (it != mpAtnIndexes->end())
+            return it->second;
+    }
+    return -1;
+}
+
+WW8_CP SwWW8ImplReader::GetAnnotationStart(int nIndex)
+{
+    if (!mpAtnStarts.get() && pWwFib->lcbPlcfAtnbkf)
+        // A PLCFBKF is a PLC whose data elements are FBKF structures (4 bytes each).
+        mpAtnStarts.reset(new WW8PLCFspecial(pTableStream, pWwFib->fcPlcfAtnbkf, pWwFib->lcbPlcfAtnbkf, 4));
+
+    if (mpAtnStarts.get())
+        return mpAtnStarts->GetPos(nIndex);
+    else
+        return SAL_MAX_INT32;
+}
+
+WW8_CP SwWW8ImplReader::GetAnnotationEnd(int nIndex)
+{
+    if (!mpAtnEnds.get() && pWwFib->lcbPlcfAtnbkl)
+        // The Plcfbkl structure is a PLC that contains only CPs and no additional data.
+        mpAtnEnds.reset(new WW8PLCFspecial(pTableStream, pWwFib->fcPlcfAtnbkl, pWwFib->lcbPlcfAtnbkl, 0));
+
+    if (mpAtnEnds.get())
+        return mpAtnEnds->GetPos(nIndex);
+    else
+        return SAL_MAX_INT32;
 }
 
 sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)

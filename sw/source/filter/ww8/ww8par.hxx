@@ -1101,6 +1101,9 @@ private:
     SwMSDffManager* pMSDffManager;
 
     std::vector<String>* mpAtnNames;
+    boost::shared_ptr< std::map<sal_uInt32, int> > mpAtnIndexes;
+    boost::shared_ptr<WW8PLCFspecial> mpAtnStarts;
+    boost::shared_ptr<WW8PLCFspecial> mpAtnEnds;
 
     sw::util::AuthorInfos m_aAuthorInfos;
     String sBaseURL;
@@ -1484,6 +1487,9 @@ private:
 // spaeter zu ersetzen durch Aufruf in entsprechend erweiterten SvxMSDffManager
 
     const String* GetAnnotationAuthor(sal_uInt16 nIdx);
+    int GetAnnotationIndex(sal_uInt32 nTag);
+    WW8_CP GetAnnotationStart(int nIndex);
+    WW8_CP GetAnnotationEnd(int nIndex);
 
     // Schnittstellen fuer die Toggle-Attribute
     void SetToggleAttr(sal_uInt8 nAttrId, bool bOn);
