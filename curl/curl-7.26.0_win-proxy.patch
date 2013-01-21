@@ -84,7 +84,7 @@
 +        /* Look for the http proxy setting */
 +        char* tok;
 +
-+        if (NULL != ieProxy) {
++        if(NULL != ieProxy) {
 +          tok = strtok(ieProxy, ";");
 +          if(strchr(tok, '=') == NULL) {
 +            proxy = strdup(ieProxy);
