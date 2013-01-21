@@ -298,8 +298,8 @@ public:
 
     sal_Bool ShowDocumentInfoDialog();
 
-    ::rtl::OUString GetReccomendedDir( const ::rtl::OUString& aSuggestedDir );
-    ::rtl::OUString GetReccomendedName( const ::rtl::OUString& aSuggestedName,
+    ::rtl::OUString GetRecommendedDir( const ::rtl::OUString& aSuggestedDir );
+    ::rtl::OUString GetRecommendedName( const ::rtl::OUString& aSuggestedName,
                                         const ::rtl::OUString& aTypeName );
 
 };
@@ -946,12 +946,12 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         }
     }
 
-    ::rtl::OUString aReccomendedDir = GetReccomendedDir( aSuggestedDir );
-    if ( !aReccomendedDir.isEmpty() )
-        pFileDlg->SetDisplayFolder( aReccomendedDir );
-    ::rtl::OUString aReccomendedName = GetReccomendedName( aSuggestedName, aAdjustToType );
-    if ( !aReccomendedName.isEmpty() )
-        pFileDlg->SetFileName( aReccomendedName );
+    ::rtl::OUString aRecommendedDir = GetRecommendedDir( aSuggestedDir );
+    if ( !aRecommendedDir.isEmpty() )
+        pFileDlg->SetDisplayFolder( aRecommendedDir );
+    ::rtl::OUString aRecommendedName = GetRecommendedName( aSuggestedName, aAdjustToType );
+    if ( !aRecommendedName.isEmpty() )
+        pFileDlg->SetFileName( aRecommendedName );
 
     uno::Reference < view::XSelectionSupplier > xSel( GetModel()->getCurrentController(), uno::UNO_QUERY );
     if ( xSel.is() && xSel->getSelection().hasValue() )
@@ -1133,9 +1133,9 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString ModelData_Impl::GetReccomendedDir( const ::rtl::OUString& aSuggestedDir )
+::rtl::OUString ModelData_Impl::GetRecommendedDir( const ::rtl::OUString& aSuggestedDir )
 {
-    ::rtl::OUString aReccomendedDir;
+    ::rtl::OUString aRecommendedDir;
 
     if ( ( !aSuggestedDir.isEmpty() || GetStorable()->hasLocation() )
       && !GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage")),
@@ -1160,36 +1160,36 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
 
         aLocation.setFinalSlash();
         if ( !aLocation.HasError() )
-            aReccomendedDir = aLocation.GetMainURL( INetURLObject::NO_DECODE );
+            aRecommendedDir = aLocation.GetMainURL( INetURLObject::NO_DECODE );
     }
     else
     {
-        aReccomendedDir = INetURLObject( SvtPathOptions().GetWorkPath() ).GetMainURL( INetURLObject::NO_DECODE );
+        aRecommendedDir = INetURLObject( SvtPathOptions().GetWorkPath() ).GetMainURL( INetURLObject::NO_DECODE );
     }
 
-    return aReccomendedDir;
+    return aRecommendedDir;
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString ModelData_Impl::GetReccomendedName( const ::rtl::OUString& aSuggestedName, const ::rtl::OUString& aTypeName )
+::rtl::OUString ModelData_Impl::GetRecommendedName( const ::rtl::OUString& aSuggestedName, const ::rtl::OUString& aTypeName )
 {
     // the last used name might be provided by aSuggestedName from the old selection, or from the MediaDescriptor
-    ::rtl::OUString aReccomendedName;
+    ::rtl::OUString aRecommendedName;
 
     if ( !aSuggestedName.isEmpty() )
-        aReccomendedName = aSuggestedName;
+        aRecommendedName = aSuggestedName;
     else
     {
-        aReccomendedName = INetURLObject( GetStorable()->getLocation() ).GetName( INetURLObject::DECODE_WITH_CHARSET );
-        if ( aReccomendedName.isEmpty() )
+        aRecommendedName = INetURLObject( GetStorable()->getLocation() ).GetName( INetURLObject::DECODE_WITH_CHARSET );
+        if ( aRecommendedName.isEmpty() )
         {
             try {
                 uno::Reference< frame::XTitle > xTitle( GetModel(), uno::UNO_QUERY_THROW );
-                aReccomendedName = xTitle->getTitle();
+                aRecommendedName = xTitle->getTitle();
             } catch( const uno::Exception& ) {}
         }
 
-        if ( !aReccomendedName.isEmpty() && !aTypeName.isEmpty() )
+        if ( !aRecommendedName.isEmpty() && !aTypeName.isEmpty() )
         {
             // adjust the extension to the type
             uno::Reference< container::XNameAccess > xTypeDetection = uno::Reference< container::XNameAccess >(
@@ -1197,7 +1197,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
                 uno::UNO_QUERY );
             if ( xTypeDetection.is() )
             {
-                INetURLObject aObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "file:///c:/" ) ) + aReccomendedName );
+                INetURLObject aObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "file:///c:/" ) ) + aRecommendedName );
 
                 uno::Sequence< beans::PropertyValue > aTypeNameProps;
                 if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.getLength() )
@@ -1210,12 +1210,12 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
                         aObj.SetExtension( aExtensions[0] );
                 }
 
-                aReccomendedName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
+                aRecommendedName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
             }
         }
     }
 
-    return aReccomendedName;
+    return aRecommendedName;
 }
 
 
