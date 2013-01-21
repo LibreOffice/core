@@ -29,15 +29,15 @@
 +#ifdef WIN32
 +static char* wstrToCstr( LPWSTR wStr )
 +{
-+	int bufSize;
-+	char* out = NULL;
-+	if ( wStr != NULL )
-+	{
-+		bufSize = WideCharToMultiByte( CP_ACP,  0, wStr, -1, NULL, 0, NULL, NULL );
-+		out = ( char* )malloc( bufSize * sizeof(char));
-+		WideCharToMultiByte( CP_ACP, 0, wStr, -1, out, bufSize, NULL, NULL );
-+	}
-+	return out;
++    int bufSize;
++    char* out = NULL;
++    if ( wStr != NULL )
++    {
++        bufSize = WideCharToMultiByte( CP_ACP,  0, wStr, -1, NULL, 0, NULL, NULL );
++        out = ( char* )malloc( bufSize * sizeof(char));
++        WideCharToMultiByte( CP_ACP, 0, wStr, -1, out, bufSize, NULL, NULL );
++    }
++    return out;
 +}
 +#endif
 +
@@ -64,12 +64,12 @@
 +    if(!ieProxyConfig->fAutoDetect) {
 +      char *ieProxy;
 +      char *ieNoProxy;
-+		  char* pos;
++      char* pos;
 +
 +      ieProxy = wstrToCstr(ieProxyConfig->lpszProxy);
 +      ieNoProxy = wstrToCstr(ieProxyConfig->lpszProxyBypass);
 +
-+			/* Convert the ieNoProxy into a proper no_proxy value */
++      /* Convert the ieNoProxy into a proper no_proxy value */
 +      no_proxy = strdup(ieNoProxy);
 +      pos = strpbrk(no_proxy, "; ");
 +      while (NULL != pos) {
@@ -102,10 +102,10 @@
 +    else {
 +      /* TODO Handle the Proxy config Auto Detection case */
 +    }
-+		
++
 +    GlobalFree( ieProxyConfig->lpszAutoConfigUrl );
-+		GlobalFree( ieProxyConfig->lpszProxy );
-+		GlobalFree( ieProxyConfig->lpszProxyBypass );
++    GlobalFree( ieProxyConfig->lpszProxy );
++    GlobalFree( ieProxyConfig->lpszProxyBypass );
 +  }
 +#else /* !WIN32 */
    char proxy_env[128];
