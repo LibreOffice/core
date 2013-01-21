@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn///zI\u003d",
+        "filename": "cui/source/dialogs/SpellDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-21T20:48:35Z",
+      "side": 1,
+      "message": "probalby this cast to sal_uInt16 here should be removed too\n(yes, we have code that casts sal_uInt16 to sal_uInt16 ... just to be sure)",
+      "revId": "91e083d681a1e6691d75ec25b486fe964d1c76a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///zo\u003d",
+        "filename": "cui/source/dialogs/hlinettp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-21T20:48:35Z",
+      "side": 1,
+      "message": "this is more intuitively \".startsWith(sAnonymous)\"",
+      "revId": "91e083d681a1e6691d75ec25b486fe964d1c76a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///zk\u003d",
+        "filename": "cui/source/options/optgenrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-21T20:48:35Z",
+      "side": 1,
+      "message": "hmm... i wonder if it would be better for these comparisons to convert the other side to String instead, because in that case the superfluous conversion will be removed when String is removed, while these OUString conversion may stay around forever.",
+      "revId": "91e083d681a1e6691d75ec25b486fe964d1c76a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAATn///zM\u003d",
+        "filename": "sw/source/ui/docvw/SidebarWin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-21T20:48:35Z",
+      "side": 1,
+      "message": "this is wrong, because replaceAt returns a new string and does not modify sMeta (actually you should get a warning about that);\n also it could be better with copy(0,20).",
+      "revId": "91e083d681a1e6691d75ec25b486fe964d1c76a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
