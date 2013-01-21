@@ -54,7 +54,6 @@ gb_CXXFLAGS := \
 	$(gb_CXXFLAGS_COMMON) \
 	-fPIC \
 	-Wshadow \
-	-Wsign-promo \
 	-Woverloaded-virtual \
 
 ifneq ($(COM_GCC_IS_CLANG),TRUE)
