@@ -179,7 +179,7 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
     if( bIncludeType )
     {
         Reference< XIdlClass > xIdlClass = TypeToIdlClass( aValType, xMgr );
-        aRetStr = aRetStr + OUString( OUString(" (Typ: ") ) + xIdlClass->getName() + OUString(""));
+        aRetStr += " (Typ: " + xIdlClass->getName() + ")";
     }
     return aRetStr;
 }
