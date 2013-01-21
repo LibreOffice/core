@@ -152,6 +152,8 @@ private:
         }
     };
 
+    typedef std::map<Window*, stringmap> AtkMap;
+
     struct ParserState
     {
         std::vector<RadioButtonGroupMap> m_aGroupMaps;
@@ -176,6 +178,8 @@ private:
         std::map<Window*, Window*> m_aRedundantParentWidgets;
 
         std::vector<SizeGroup> m_aSizeGroups;
+
+        AtkMap m_aAtkInfo;
     };
 
     void loadTranslations(const com::sun::star::lang::Locale &rLocale, const OUString &rUri);
@@ -245,7 +249,8 @@ public:
 
 private:
     Window *insertObject(Window *pParent, const OString &rClass, const OString &rID,
-        stringmap &rProps, stringmap &rPangoAttributes, std::vector<OString> &rItems);
+        stringmap &rProps, stringmap &rPangoAttributes,
+        stringmap &rAtkProps, std::vector<OString> &rItems);
 
     Window *makeObject(Window *pParent, const OString &rClass, const OString &rID,
         stringmap &rVec, const std::vector<OString> &rItems);
@@ -266,6 +271,7 @@ private:
     void applyPackingProperty(Window *pCurrent, xmlreader::XmlReader &reader);
     void collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
     void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
+    void collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
     void collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMap);
 
     void insertMenuObject(PopupMenu *pParent, const OString &rClass, const OString &rID,

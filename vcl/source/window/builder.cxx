@@ -160,6 +160,35 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
 
     handleChild(pParent, reader);
 
+    //Set a11y relations when everything has been imported
+    for (AtkMap::iterator aI = m_pParserState->m_aAtkInfo.begin(),
+         aEnd = m_pParserState->m_aAtkInfo.end(); aI != aEnd; ++aI)
+    {
+        Window *pSource = aI->first;
+        const stringmap &rMap = aI->second;
+
+        for (stringmap::const_iterator aP = rMap.begin(),
+            aEndP = rMap.end(); aP != aEndP; ++aP)
+        {
+            const OString &rTarget = aP->second;
+            Window *pTarget = get<Window>(rTarget);
+            SAL_WARN_IF(!pTarget, "vcl", "missing member of a11y relation");
+            if (!pTarget)
+                continue;
+            const OString &rType = aP->first;
+            if (rType == "labelled-by")
+                pSource->SetAccessibleRelationLabeledBy(pTarget);
+            else if (rType == "label-for")
+                pSource->SetAccessibleRelationLabelFor(pTarget);
+            else if (rType == "member-of")
+                pSource->SetAccessibleRelationMemberOf(pTarget);
+            else
+            {
+                SAL_INFO("vcl.layout", "unhandled a11y relation :" << rType.getStr());
+            }
+        }
+    }
+
     //Set radiobutton groups when everything has been imported
     for (std::vector<RadioButtonGroupMap>::iterator aI = m_pParserState->m_aGroupMaps.begin(),
          aEnd = m_pParserState->m_aGroupMaps.end(); aI != aEnd; ++aI)
@@ -1099,7 +1128,9 @@ namespace
 }
 
 Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
-    const OString &rID, stringmap &rProps, stringmap &rPango, std::vector<OString> &rItems)
+    const OString &rID, stringmap &rProps, stringmap &rPango,
+    stringmap &rAtk,
+    std::vector<OString> &rItems)
 {
     Window *pCurrentChild = NULL;
 
@@ -1147,10 +1178,13 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
             const OString &rValue = aI->second;
             pCurrentChild->set_font_attribute(rKey, rValue);
         }
+
+        m_pParserState->m_aAtkInfo[pCurrentChild] = rAtk;
     }
 
     rProps.clear();
     rPango.clear();
+    rAtk.clear();
     rItems.clear();
 
     if (!pCurrentChild)
@@ -1392,6 +1426,32 @@ void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &
             sProperty = OString(span.begin, span.length);
         }
         else if (span.equals(RTL_CONSTASCII_STRINGPARAM("value")))
+        {
+            span = reader.getAttributeValue(false);
+            sValue = OString(span.begin, span.length);
+        }
+    }
+
+    if (!sProperty.isEmpty())
+        rMap[sProperty] = sValue;
+}
+
+void VclBuilder::collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
+{
+    xmlreader::Span span;
+    int nsId;
+
+    OString sProperty;
+    OString sValue;
+
+    while (reader.nextAttribute(&nsId, &span))
+    {
+        if (span.equals(RTL_CONSTASCII_STRINGPARAM("type")))
+        {
+            span = reader.getAttributeValue(false);
+            sProperty = OString(span.begin, span.length);
+        }
+        else if (span.equals(RTL_CONSTASCII_STRINGPARAM("target")))
         {
             span = reader.getAttributeValue(false);
             sValue = OString(span.begin, span.length);
@@ -1959,7 +2019,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 
     int nLevel = 1;
 
-    stringmap aProperties, aPangoAttributes;
+    stringmap aProperties, aPangoAttributes, aAtkAttributes;
     std::vector<OString> aItems;
 
     if (!sCustomProperty.isEmpty())
@@ -1981,7 +2041,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
                 if (!pCurrentChild)
                 {
                     pCurrentChild = insertObject(pParent, sClass, sID,
-                        aProperties, aPangoAttributes, aItems);
+                        aProperties, aPangoAttributes, aAtkAttributes, aItems);
                 }
                 handleChild(pCurrentChild, reader);
             }
@@ -1994,6 +2054,8 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
                     collectProperty(reader, sID, aProperties);
                 else if (name.equals(RTL_CONSTASCII_STRINGPARAM("attribute")))
                     collectPangoAttribute(reader, aPangoAttributes);
+                else if (name.equals(RTL_CONSTASCII_STRINGPARAM("relation")))
+                    collectAtkAttribute(reader, aAtkAttributes);
             }
         }
 
@@ -2018,7 +2080,10 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     }
 
     if (!pCurrentChild)
-        pCurrentChild = insertObject(pParent, sClass, sID, aProperties, aPangoAttributes, aItems);
+    {
+        pCurrentChild = insertObject(pParent, sClass, sID, aProperties,
+            aPangoAttributes, aAtkAttributes, aItems);
+    }
 
     return pCurrentChild;
 }
