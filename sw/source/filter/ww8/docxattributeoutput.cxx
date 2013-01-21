@@ -272,9 +272,14 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
         m_rExport.mpParentFrame = pParentFrame;
 
+        m_bTextFrameSyntax = true;
+        m_aTextFrameStyle = "position:absolute";
+        m_rExport.OutputFormat( pParentFrame->GetFrmFmt(), false, false, true );
+        m_bTextFrameSyntax = false;
+
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
         m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
-        m_pSerializer->startElementNS( XML_v, XML_rect, FSEND );
+        m_pSerializer->startElementNS( XML_v, XML_rect, XML_style, m_aTextFrameStyle.makeStringAndClear(), FSEND );
         m_pSerializer->startElementNS( XML_v, XML_textbox, FSEND );
         m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
         m_rExport.WriteText( );
@@ -4168,7 +4173,12 @@ void DocxAttributeOutput::ParaSnapToGrid( const SvxParaGridItem& rGrid )
 
 void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
 {
-    if ( m_rExport.bOutFlyFrmAttrs )
+    if (m_bTextFrameSyntax)
+    {
+        m_aTextFrameStyle.append(";width:").append(double(rSize.GetWidth()) / 20);
+        m_aTextFrameStyle.append("pt;height:").append(double(rSize.GetHeight()) / 20).append("pt");
+    }
+    else if ( m_rExport.bOutFlyFrmAttrs )
     {
         if ( !m_pFlyAttrList )
             m_pFlyAttrList = m_pSerializer->createAttrList( );
@@ -4212,7 +4222,10 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 {
     bool bEcma = m_rExport.GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
-    if ( m_rExport.bOutFlyFrmAttrs )
+    if (m_bTextFrameSyntax)
+    {
+    }
+    else if ( m_rExport.bOutFlyFrmAttrs )
     {
         if ( !m_pFlyAttrList )
             m_pFlyAttrList = m_pSerializer->createAttrList();
@@ -4260,7 +4273,10 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 {
 
-    if ( m_rExport.bOutFlyFrmAttrs )
+    if (m_bTextFrameSyntax)
+    {
+    }
+    else if ( m_rExport.bOutFlyFrmAttrs )
     {
         if ( !m_pFlyAttrList )
             m_pFlyAttrList = m_pSerializer->createAttrList();
@@ -4320,7 +4336,10 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 
 void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
 {
-    if ( m_rExport.bOutFlyFrmAttrs )
+    if (m_bTextFrameSyntax)
+    {
+    }
+    else if ( m_rExport.bOutFlyFrmAttrs )
     {
         if ( !m_pFlyAttrList )
             m_pFlyAttrList = m_pSerializer->createAttrList();
@@ -4348,7 +4367,11 @@ void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
 
 void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert )
 {
-    if ( m_rExport.bOutFlyFrmAttrs )
+    if (m_bTextFrameSyntax)
+    {
+        m_aTextFrameStyle.append(";margin-top:").append(double(rFlyVert.GetPos()) / 20).append("pt");
+    }
+    else if ( m_rExport.bOutFlyFrmAttrs )
     {
         if ( !m_pFlyAttrList )
             m_pFlyAttrList = m_pSerializer->createAttrList();
@@ -4406,7 +4429,11 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
 
 void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori )
 {
-    if ( m_rExport.bOutFlyFrmAttrs )
+    if (m_bTextFrameSyntax)
+    {
+        m_aTextFrameStyle.append(";margin-left:").append(double(rFlyHori.GetPos()) / 20).append("pt");
+    }
+    else if ( m_rExport.bOutFlyFrmAttrs )
     {
         if ( !m_pFlyAttrList )
             m_pFlyAttrList = m_pSerializer->createAttrList();
@@ -4478,6 +4505,8 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 
 void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
+    if (m_bTextFrameSyntax)
+        return;
 
     if ( !m_bOpenedSectPr )
     {
@@ -4663,6 +4692,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
       m_pParentFrame( NULL ),
+      m_bTextFrameSyntax( false ),
       m_closeHyperlinkInThisRun( false ),
       m_closeHyperlinkInPreviousRun( false ),
       m_startedHyperlink( false ),

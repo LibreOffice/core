@@ -601,6 +601,8 @@ private:
     DocxColBreakStatus m_nColBreakStatus;
 
     sw::Frame *m_pParentFrame;
+    bool m_bTextFrameSyntax;
+    OStringBuffer m_aTextFrameStyle;
     // close of hyperlink needed
     bool m_closeHyperlinkInThisRun;
     bool m_closeHyperlinkInPreviousRun;
