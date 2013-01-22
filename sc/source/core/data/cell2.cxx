@@ -990,10 +990,9 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 }
             }
             else if ( eUpdateRefMode == URM_MOVE )
-            {   // bei Move/D&D neu kompilieren wenn ColRowName verschoben wurde
-                // oder diese Zelle auf einen zeigt und verschoben wurde
-                // During Move/D&D was recompiled, when ColRowName had been delayed
-                bColRowNameCompile = bCompile;      // evtl. aus Copy-ctor
+            {   // Recomplie for Move/D&D when ColRowName was moved or this Cell
+                // points to one and was moved.
+                bColRowNameCompile = bCompile;      // Possibly from Copy ctor
                 if ( !bColRowNameCompile )
                 {
                     bool bMoved = (aPos != aOldPos);
@@ -1047,7 +1046,7 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
         }
 
         bool bNeedDirty = false;
-        // NeedDirty bei Aenderungen ausser Copy und Move/Insert ohne RelNames
+        // NeedDirty for changes except for Copy and Move/Insert without RelNames
         if ( bRangeModified || pRangeData || bColRowNameCompile ||
                 (bValChanged && eUpdateRefMode != URM_COPY &&
                  (eUpdateRefMode != URM_MOVE || bHasRelName) &&
@@ -1058,10 +1057,10 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             bNeedDirty = false;
         if (pUndoDoc && (bValChanged || pRangeData || bOnRefMove))
         {
-            //  Copy the cell to aUndoPos, which is its current position in the document,
-            //  so this works when UpdateReference is called before moving the cells
-            //  (InsertCells/DeleteCells - aPos is changed above) as well as when UpdateReference
-            //  is called after moving the cells (MoveBlock/PasteFromClip - aOldPos is changed).
+            // Copy the cell to aUndoPos, which is its current position in the document,
+            // so this works when UpdateReference is called before moving the cells
+            // (InsertCells/DeleteCells - aPos is changed above) as well as when UpdateReference
+            // is called after moving the cells (MoveBlock/PasteFromClip - aOldPos is changed).
 
             // If there is already a formula cell in the undo document, don't overwrite it,
             // the first (oldest) is the important cell.
@@ -1111,9 +1110,9 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             }
         }
         if ( bNeedDirty && (!(eUpdateRefMode == URM_INSDEL && bHasRelName) || pRangeData) )
-        {   // Referenzen abgeschnitten, ungueltig o.ae.?
+        {   // Cut off references, invalid or similar?
             bool bOldAutoCalc = pDocument->GetAutoCalc();
-            // no Interpret in SubMinimalRecalc because of evntual wrong reference
+            // No Interpret in SubMinimalRecalc because of eventual wrong reference
             pDocument->SetAutoCalc( false );
             SetDirty();
             pDocument->SetAutoCalc( bOldAutoCalc );
@@ -1131,15 +1130,15 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
     if( pCode->GetNextReferenceRPN() && !pDocument->IsClipOrUndo() )
     {
         EndListeningTo( pDocument );
-        // IncTab _nach_ EndListeningTo und _vor_ Compiler UpdateInsertTab !
+        // IncTab _after_ EndListeningTo and _before_ Compiler UpdateInsertTab!
         if ( bPosChanged )
             aPos.IncTab(nNewSheets);
         ScRangeData* pRangeData;
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
         pRangeData = aComp.UpdateInsertTab( nTable, false, nNewSheets );
-        if (pRangeData)                     // Shared Formula against real Formula
-        {                                   // exchange
+        if (pRangeData) // Exchange Shared Formula with real Formula
+        {
             bool bRefChanged;
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
@@ -1167,15 +1166,15 @@ bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, bool bIsMove, SCTAB nSheets)
     if( pCode->GetNextReferenceRPN() && !pDocument->IsClipOrUndo() )
     {
         EndListeningTo( pDocument );
-        // IncTab _after_ EndListeningTo und _before_ Compiler UpdateDeleteTab !
+        // IncTab _after_ EndListeningTo und _before_ Compiler UpdateDeleteTab!
         if ( bPosChanged )
             aPos.IncTab(-1*nSheets);
         ScRangeData* pRangeData;
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
         pRangeData = aComp.UpdateDeleteTab(nTable, bIsMove, false, bRefChanged, nSheets);
-        if (pRangeData)                     // Shared Formula against real Formula
-        {                                   // exchange
+        if (pRangeData) // Exchange Shared Formula with real Formula
+        {
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
@@ -1187,7 +1186,7 @@ bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, bool bIsMove, SCTAB nSheets)
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
             aComp2.UpdateInsertTab( nTable,true, nSheets );
-            // bRefChanged kann beim letzten UpdateDeleteTab zurueckgesetzt worden sein
+            // bRefChanged could have been reset at the last UpdateDeleteTab
             bRefChanged = true;
             bCompile = true;
         }
@@ -1211,8 +1210,8 @@ void ScFormulaCell::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
         pRangeData = aComp.UpdateMoveTab( nOldPos, nNewPos, false );
-        if (pRangeData)                     // Shared Formula gegen echte Formel
-        {                                   // exchange
+        if (pRangeData) // Exchange Shared Formula with real Formula
+        {
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
@@ -1294,7 +1293,7 @@ void ScFormulaCell::UpdateCompile( bool bForceIfNameInUse )
     CompileTokenArray();
 }
 
-//  Reference transposition is only called in Clipboard Document
+// Reference transposition is only called in Clipboard Document
 void ScFormulaCell::TransposeReference()
 {
     bool bFound = false;
@@ -1337,7 +1336,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     EndListeningTo( pDocument );
 
     ScAddress aOldPos = aPos;
-    bool bPosChanged = false;           // If this cell has been moved
+    bool bPosChanged = false; // Whether this cell has been moved
 
     ScRange aDestRange( rDest, ScAddress(
                 static_cast<SCCOL>(rDest.Col() + rSource.aEnd.Row() - rSource.aStart.Row()),
@@ -1345,7 +1344,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
                 rDest.Tab() + rSource.aEnd.Tab() - rSource.aStart.Tab() ) );
     if ( aDestRange.In( aOldPos ) )
     {
-        //  Count back Positions
+        // Count back Positions
         SCsCOL nRelPosX = aOldPos.Col();
         SCsROW nRelPosY = aOldPos.Row();
         SCsTAB nRelPosZ = aOldPos.Tab();
@@ -1377,7 +1376,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         {
             t->CalcAbsIfRel( aOldPos );
             bool bMod;
-            {   // own scope for SingleDoubleRefModifier dtor if SingleRef
+            {   // Own scope for SingleDoubleRefModifier dtor if SingleRef
                 SingleDoubleRefModifier aMod( *t );
                 ScComplexRefData& rRef = aMod.Ref();
                 bMod = (ScRefUpdate::UpdateTranspose( pDocument, rSource,
@@ -1391,9 +1390,9 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         }
     }
 
-    if (pShared)            // Shared Formula against real Formula exchange
+    if (pShared) // Exchange Shared Formula with real Formula
     {
-        pDocument->RemoveFromFormulaTree( this );   // update formula count
+        pDocument->RemoveFromFormulaTree( this ); // update formula count
         delete pCode;
         pCode = new ScTokenArray( *pShared->GetCode() );
         bRefChanged = true;
@@ -1404,7 +1403,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
             {
                 t->CalcAbsIfRel( aOldPos );
                 bool bMod;
-                {   // own scope for SingleDoubleRefModifier dtor if SingleRef
+                {   // Own scope for SingleDoubleRefModifier dtor if SingleRef
                     SingleDoubleRefModifier aMod( *t );
                     ScComplexRefData& rRef = aMod.Ref();
                     bMod = (ScRefUpdate::UpdateTranspose( pDocument, rSource,
@@ -1427,11 +1426,11 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         }
 
         bCompile = true;
-        CompileTokenArray();                // also call StartListeningTo
+        CompileTokenArray(); // also call StartListeningTo
         SetDirty();
     }
     else
-        StartListeningTo( pDocument );      // Listener as previous
+        StartListeningTo( pDocument ); // Listener as previous
 
     delete pOld;
 }
@@ -1462,7 +1461,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         {
             t->CalcAbsIfRel( aPos );
             bool bMod;
-            {   // own scope for SingleDoubleRefModifier dtor if SingleRef
+            {   // Own scope for SingleDoubleRefModifier dtor if SingleRef
                 SingleDoubleRefModifier aMod( *t );
                 ScComplexRefData& rRef = aMod.Ref();
                 bMod = (ScRefUpdate::UpdateGrow( rArea,nGrowX,nGrowY,
@@ -1476,9 +1475,9 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         }
     }
 
-    if (pShared)            // Shared Formula gegen echte Formel austauschen
+    if (pShared) // Exchange Shared Formula with real Formula
     {
-        pDocument->RemoveFromFormulaTree( this );   // update formula count
+        pDocument->RemoveFromFormulaTree( this ); // Update formula count
         delete pCode;
         pCode = new ScTokenArray( *pShared->GetCode() );
         bRefChanged = true;
@@ -1489,7 +1488,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
             {
                 t->CalcAbsIfRel( aPos );
                 bool bMod;
-                {   // own scope for SingleDoubleRefModifier dtor if SingleRef
+                {   // Own scope for SingleDoubleRefModifier dtor if SingleRef
                     SingleDoubleRefModifier aMod( *t );
                     ScComplexRefData& rRef = aMod.Ref();
                     bMod = (ScRefUpdate::UpdateGrow( rArea,nGrowX,nGrowY,
@@ -1504,11 +1503,11 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
     if (bRefChanged)
     {
         bCompile = true;
-        CompileTokenArray();                // also call StartListeningTo
+        CompileTokenArray(); // Also call StartListeningTo
         SetDirty();
     }
     else
-        StartListeningTo( pDocument );      // Listener as previous
+        StartListeningTo( pDocument ); // Listener as previous
 }
 
 static void lcl_FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes, ScTokenArray* pCode, ScRangeName* pNames)
@@ -1559,7 +1558,7 @@ void ScFormulaCell::CompileDBFormula()
 
 void ScFormulaCell::CompileDBFormula( bool bCreateFormulaString )
 {
-    // two phases must be called after each other
+    // Two phases must be called after each other
     // 1. Formula String with old generated names
     // 2. Formula String with new generated names
     if ( bCreateFormulaString )
@@ -1570,14 +1569,14 @@ void ScFormulaCell::CompileDBFormula( bool bCreateFormulaString )
         {
             switch ( p->GetOpCode() )
             {
-                case ocBad:             // DB-Area eventually goes bad
+                case ocBad:             // DB Area eventually goes bad
                 case ocColRowName:      // in case of the same names
-                case ocDBArea:          // DB-Area
+                case ocDBArea:          // DB Area
                     bRecompile = true;
                 break;
                 case ocName:
                     if ( p->GetIndex() >= SC_START_INDEX_DB_COLL )
-                        bRecompile = true;  // DB-Area
+                        bRecompile = true;  // DB Area
                 break;
                 default:
                     ; // nothing
@@ -1610,7 +1609,7 @@ void ScFormulaCell::CompileDBFormula( bool bCreateFormulaString )
 
 void ScFormulaCell::CompileNameFormula( bool bCreateFormulaString )
 {
-    // two phases must be called after each other
+    // Two phases must be called after each other
     // 1. Formula String with old generated names
     // 2. Formula String with new generated names
     if ( bCreateFormulaString )
