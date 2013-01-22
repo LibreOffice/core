@@ -469,10 +469,13 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
         // still need to recalc volatile formula cells.
         aDocument.CalcFormulaTree(false, true, false);
 
+    bool bAdjustHeightOld = aDocument.IsAdjustHeightEnabled();
     aDocument.EnableAdjustHeight(false);
 
     aDocument.SetXMLFromWrapper( false );
     AfterXMLLoading(bRet);
+
+    aDocument.EnableAdjustHeight(bAdjustHeightOld);
 
     return bRet;
 }
