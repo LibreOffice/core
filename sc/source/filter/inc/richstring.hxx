@@ -24,7 +24,7 @@
 #include "stylesbuffer.hxx"
 
 class EditTextObject;
-class ESelection;
+struct ESelection;
 class ScEditEngineDefaulter;
 
 namespace com { namespace sun { namespace star {
