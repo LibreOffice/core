@@ -910,7 +910,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             }
             for( sal_Int32 index = 0; index < childNodes.getLength(); index++ )
             {
-                if (OUString(aNewName+extn) == childNodes[index]->getName())
+                if (aNewName+extn == childNodes[index]->getName())
                 {
                     bFound = sal_True;
                     break;
@@ -939,8 +939,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
                 bValid = sal_True;
                 for( sal_Int32 index = 0; index < childNodes.getLength(); index++ )
                 {
-                    if (OUString(aUserSuppliedName+extn)
-                            == childNodes[index]->getName())
+                    if (aUserSuppliedName+extn == childNodes[index]->getName())
                     {
                         bValid = sal_False;
                         String aError( m_createErrStr );

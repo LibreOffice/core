@@ -355,6 +355,58 @@ inline bool operator!=(::rtl::OUString const& rLeft, UniString const& rRight)
     return rLeft != ::rtl::OUString(rRight);
 }
 
+#ifdef RTL_FAST_STRING
+// The above operators make comparisons involving fast string concatenation ambiguous, so provide explicit overloads.
+template< typename T1, typename T2 >
+inline bool operator==( const rtl::OUStringConcat< T1, T2 >& concat, const OUString& str )
+{
+    return OUString( concat ) == str;
+}
+
+template< typename T1, typename T2 >
+inline bool operator!=( const rtl::OUStringConcat< T1, T2 >& concat, const OUString& str )
+{
+    return OUString( concat ) == str;
+}
+
+template< typename T1, typename T2 >
+inline bool operator==( const OUString& str, const rtl::OUStringConcat< T1, T2 >& concat )
+{
+    return str == OUString( concat );
+}
+
+template< typename T1, typename T2 >
+inline bool operator!=( const OUString& str, const rtl::OUStringConcat< T1, T2 >& concat )
+{
+    return str != OUString( concat );
+}
+
+template< typename T1, typename T2 >
+inline bool operator==( const rtl::OUStringConcat< T1, T2 >& concat, const UniString& str )
+{
+    return UniString( concat ) == str;
+}
+
+template< typename T1, typename T2 >
+inline bool operator!=( const rtl::OUStringConcat< T1, T2 >& concat, const UniString& str )
+{
+    return UniString( concat ) == str;
+}
+
+template< typename T1, typename T2 >
+inline bool operator==( const UniString& str, const rtl::OUStringConcat< T1, T2 >& concat )
+{
+    return str == UniString( concat );
+}
+
+template< typename T1, typename T2 >
+inline bool operator!=( const UniString& str, const rtl::OUStringConcat< T1, T2 >& concat )
+{
+    return str != UniString( concat );
+}
+
+#endif
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
