@@ -1833,6 +1833,16 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             else
                 pJcVal = "start";
             nIndent = sal_Int32( pTblFmt->GetLRSpace( ).GetLeft( ) );
+            // Table indentation has different meaning in Word, depending if the table is nested or not.
+            // If nested, tblInd is added to parent table's left spacing and defines left edge position
+            // If not nested, text position of left-most cell must be at absolute X = tblInd
+            // so, table_spacing + table_spacing_to_content = tblInd
+            if (m_nTableDepth == 0)
+            {
+                const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
+                const SwFrmFmt * pFrmFmt = pTabBox->GetFrmFmt();
+                nIndent += sal_Int32( pFrmFmt->GetBox( ).GetDistance( BOX_LINE_LEFT ) );
+            }
             break;
         }
     }
@@ -1844,7 +1854,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     TableDefaultBorders( pTableTextNodeInfoInner );
 
     // Output the default cell margins
-    TableDefaultCellMargins( pTableTextNodeInfoInner, nIndent );
+    TableDefaultCellMargins( pTableTextNodeInfoInner );
 
     TableBidi( pTableTextNodeInfoInner );
 
@@ -1886,7 +1896,7 @@ void DocxAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Point
     impl_pageBorders( m_pSerializer, pFrmFmt->GetBox( ), XML_tblBorders, !bEcma, true );
 }
 
-void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_Int32& tblIndent )
+void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwFrmFmt * pFrmFmt = pTabBox->GetFrmFmt();
@@ -1894,9 +1904,6 @@ void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::P
     const bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
     impl_cellMargins(m_pSerializer, rBox, XML_tblCellMar, !bEcma);
-
-    // add table cell left margin to tblIndent
-    tblIndent += sal_Int32( rBox.GetDistance( BOX_LINE_LEFT ) );
 }
 
 void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
