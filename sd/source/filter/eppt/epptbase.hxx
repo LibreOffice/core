@@ -88,9 +88,9 @@ class PropValue
         ::com::sun::star::uno::Reference
             < ::com::sun::star::beans::XPropertySet >           mXPropSet;
 
-        sal_Bool    ImplGetPropertyValue( const String& rString );
+        sal_Bool    ImplGetPropertyValue( const OUString& rString );
         sal_Bool    ImplGetPropertyValue( const ::com::sun::star::uno::Reference
-                        < ::com::sun::star::beans::XPropertySet > &, const String& );
+                        < ::com::sun::star::beans::XPropertySet > &, const OUString& );
 
     public :
 

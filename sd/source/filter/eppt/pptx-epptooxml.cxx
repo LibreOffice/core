@@ -334,7 +334,7 @@ bool PowerPointExport::exportDocument() throw()
     DrawingML::ResetCounters();
     maShapeMap.clear ();
 
-    addRelation( US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ), S( "ppt/presentation.xml" ) );
+    addRelation( US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ), "ppt/presentation.xml" );
 
     mPresentationFS = openFragmentStreamWithSerializer( US( "ppt/presentation.xml" ),
                                                     US( "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" ) );
@@ -388,7 +388,7 @@ bool PowerPointExport::exportDocument() throw()
 void PowerPointExport::ImplWriteBackground( FSHelperPtr pFS, Reference< XPropertySet > rXPropSet )
 {
     FillStyle aFillStyle( FillStyle_NONE );
-    if ( ImplGetPropertyValue( rXPropSet, S( "FillStyle" ) ) )
+    if ( ImplGetPropertyValue( rXPropSet, "FillStyle" ) )
         mAny >>= aFillStyle;
 
     if( aFillStyle == FillStyle_NONE ||
@@ -1810,7 +1810,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape( Reference< XShape > x
     WritePresetShape( "rect" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
-    WriteBlipFill( xProps, S( "GraphicURL" ) );
+    WriteBlipFill( xProps, "GraphicURL" );
     mpFS->endElementNS( XML_p, XML_spPr );
 
     WriteTextBox( xShape, XML_p );

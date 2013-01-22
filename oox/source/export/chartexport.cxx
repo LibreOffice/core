@@ -524,7 +524,7 @@ ChartExport& ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_
     pFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr, FSEND );
 
     // TODO: get the correct chart name chart id
-    OUString sName = S("Object 1");
+    OUString sName = "Object 1";
     Reference< XNamed > xNamed( xShape, UNO_QUERY );
     if (xNamed.is())
         sName = xNamed->getName();
@@ -1138,7 +1138,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
     // bar direction
     sal_Bool bVertical = sal_False;
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
-    if( GetProperty( xPropSet, S( "Vertical" ) ) )
+    if( GetProperty( xPropSet, "Vertical" ) )
         mAny >>= bVertical;
 
     const char* bardir = bVertical? "bar":"col";
@@ -1156,7 +1156,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
         // Shape
         namespace cssc = ::com::sun::star::chart;
         sal_Int32 nGeom3d = cssc::ChartSolidType::RECTANGULAR_SOLID;
-        if( xPropSet.is() && GetProperty( xPropSet, S("SolidType") ) )
+        if( xPropSet.is() && GetProperty( xPropSet, "SolidType") )
             mAny >>= nGeom3d;
         const char* sShapeType = NULL;
         switch( nGeom3d )
@@ -1180,7 +1180,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
     }
 
     //overlap
-    if( xTypeProp.is() && GetProperty( xTypeProp, S("OverlapSequence") ) )
+    if( xTypeProp.is() && GetProperty( xTypeProp, "OverlapSequence") )
     {
         uno::Sequence< sal_Int32 > aBarPositionSequence;
         mAny >>= aBarPositionSequence;
@@ -1193,7 +1193,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
                     FSEND );
         }
     }
-    if( xTypeProp.is() && GetProperty( xTypeProp, S("GapwidthSequence") ) )
+    if( xTypeProp.is() && GetProperty( xTypeProp, "GapwidthSequence") )
     {
         uno::Sequence< sal_Int32 > aBarPositionSequence;
         mAny >>= aBarPositionSequence;
@@ -1262,7 +1262,7 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
     // show marker?
     sal_Int32 nSymbolType = ::com::sun::star::chart::ChartSymbolType::NONE;
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
-    if( GetProperty( xPropSet, S( "SymbolType" ) ) )
+    if( GetProperty( xPropSet, "SymbolType" ) )
         mAny >>= nSymbolType;
 
     const char* marker = nSymbolType == ::com::sun::star::chart::ChartSymbolType::NONE? "0":"1";
@@ -1502,7 +1502,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                         aSeriesSeq[nSeriesIdx], getModel() );
                     if( xPropSet.is() )
                     {
-                        if( GetProperty( xPropSet, S("Axis") ) )
+                        if( GetProperty( xPropSet, "Axis") )
                         {
                             mAny >>= nAttachedAxis;
                             if( nAttachedAxis == ::com::sun::star::chart::ChartAxisAssign::SECONDARY_Y )
@@ -1523,7 +1523,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                         case chart::TYPEID_PIE:
                         case chart::TYPEID_DOUGHNUT:
                         {
-                            if( xPropSet.is() && GetProperty( xPropSet, S("SegmentOffset") ) )
+                            if( xPropSet.is() && GetProperty( xPropSet, "SegmentOffset") )
                             {
                                 sal_Int32 nOffset = 0;
                                 mAny >>= nOffset;
@@ -2020,7 +2020,7 @@ void ChartExport::_exportAxis(
             FSEND );
     // orientation: minMax, maxMin
     sal_Bool bReverseDirection = sal_False;
-    if(GetProperty( xAxisProp, S( "ReverseDirection" ) ) )
+    if(GetProperty( xAxisProp, "ReverseDirection" ) )
         mAny >>= bReverseDirection;
 
     const char* orientation = bReverseDirection ? "maxMin":"minMax";
@@ -2028,7 +2028,7 @@ void ChartExport::_exportAxis(
             XML_val, orientation,
             FSEND );
     // logBase, min, max
-    if(GetProperty( xAxisProp, S( "Logarithmic" ) ) )
+    if(GetProperty( xAxisProp, "Logarithmic" ) )
     {
         sal_Bool bLogarithmic = sal_False;
         mAny >>= bLogarithmic;
@@ -2042,10 +2042,10 @@ void ChartExport::_exportAxis(
         }
     }
     sal_Bool bAutoMax = sal_False;
-    if(GetProperty( xAxisProp, S( "AutoMax" ) ) )
+    if(GetProperty( xAxisProp, "AutoMax" ) )
         mAny >>= bAutoMax;
 
-    if( !bAutoMax && (GetProperty( xAxisProp, S( "Max" ) ) ))
+    if( !bAutoMax && (GetProperty( xAxisProp, "Max" ) ) )
     {
         double dMax = 0;
         mAny >>= dMax;
@@ -2055,10 +2055,10 @@ void ChartExport::_exportAxis(
     }
 
     sal_Bool bAutoMin = sal_False;
-    if(GetProperty( xAxisProp, S( "AutoMin" ) ) )
+    if(GetProperty( xAxisProp, "AutoMin" ) )
         mAny >>= bAutoMin;
 
-    if( !bAutoMin && (GetProperty( xAxisProp, S( "Min" ) ) ))
+    if( !bAutoMin && (GetProperty( xAxisProp, "Min" ) ) )
     {
         double dMin = 0;
         mAny >>= dMin;
@@ -2112,7 +2112,7 @@ void ChartExport::_exportAxis(
 
     // majorTickMark
     sal_Int32 nValue = 0;
-    if(GetProperty( xAxisProp, S( "Marks" ) ) )
+    if(GetProperty( xAxisProp, "Marks" ) )
     {
         mAny >>= nValue;
         sal_Bool bInner = nValue & ::com::sun::star::chart::ChartAxisMarks::INNER;
@@ -2131,7 +2131,7 @@ void ChartExport::_exportAxis(
             FSEND );
     }
     // minorTickMark
-    if(GetProperty( xAxisProp, S( "HelpMarks" ) ) )
+    if(GetProperty( xAxisProp, "HelpMarks" ) )
     {
         mAny >>= nValue;
         sal_Bool bInner = nValue & ::com::sun::star::chart::ChartAxisMarks::INNER;
@@ -2152,9 +2152,9 @@ void ChartExport::_exportAxis(
     // tickLblPos
     const char* sTickLblPos = NULL;
     sal_Bool bDisplayLabel = sal_True;
-    if(GetProperty( xAxisProp, S( "DisplayLabels" ) ) )
+    if(GetProperty( xAxisProp, "DisplayLabels" ) )
         mAny >>= bDisplayLabel;
-    if( bDisplayLabel && (GetProperty( xAxisProp, S( "LabelPosition" ) ) ))
+    if( bDisplayLabel && (GetProperty( xAxisProp, "LabelPosition" ) ) )
     {
         ::com::sun::star::chart::ChartAxisLabelPosition eLabelPosition = ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS;
         mAny >>= eLabelPosition;
@@ -2190,7 +2190,7 @@ void ChartExport::_exportAxis(
     // crosses & crossesAt
     sal_Bool bCrossesValue = sal_False;
     const char* sCrosses = NULL;
-    if(GetProperty( xAxisProp, S( "CrossoverPosition" ) ) )
+    if(GetProperty( xAxisProp, "CrossoverPosition" ) )
     {
         ::com::sun::star::chart::ChartAxisPosition ePosition( ::com::sun::star::chart::ChartAxisPosition_ZERO );
         mAny >>= ePosition;
@@ -2211,7 +2211,7 @@ void ChartExport::_exportAxis(
         }
     }
 
-    if( bCrossesValue && GetProperty( xAxisProp, S("CrossoverValue" ) ) )
+    if( bCrossesValue && GetProperty( xAxisProp, "CrossoverValue" ) )
     {
         double dValue = 0;
         mAny >>= dValue;
@@ -2252,10 +2252,10 @@ void ChartExport::_exportAxis(
 
     // majorUnit
     sal_Bool bAutoStepMain = sal_False;
-    if(GetProperty( xAxisProp, S( "AutoStepMain" ) ) )
+    if(GetProperty( xAxisProp, "AutoStepMain" ) )
         mAny >>= bAutoStepMain;
 
-    if( !bAutoStepMain && (GetProperty( xAxisProp, S( "StepMain" ) ) ))
+    if( !bAutoStepMain && (GetProperty( xAxisProp, "StepMain" ) ) )
     {
         double dMajorUnit = 0;
         mAny >>= dMajorUnit;
@@ -2265,10 +2265,10 @@ void ChartExport::_exportAxis(
     }
     // minorUnit
     sal_Bool bAutoStepHelp = sal_False;
-    if(GetProperty( xAxisProp, S( "AutoStepHelp" ) ) )
+    if(GetProperty( xAxisProp, "AutoStepHelp" ) )
         mAny >>= bAutoStepHelp;
 
-    if( !bAutoStepHelp && (GetProperty( xAxisProp, S( "StepHelp" ) ) ))
+    if( !bAutoStepHelp && (GetProperty( xAxisProp, "StepHelp" ) ) )
     {
         double dMinorUnit = 0;
         mAny >>= dMinorUnit;
@@ -2385,10 +2385,10 @@ void ChartExport::exportGrouping( sal_Bool isBar )
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
     // grouping
     sal_Bool bStacked = sal_False;
-    if( GetProperty( xPropSet, S( "Stacked" ) ) )
+    if( GetProperty( xPropSet, "Stacked" ) )
         mAny >>= bStacked;
     sal_Bool bPercentage = sal_False;
-    if( GetProperty( xPropSet, S( "Percent" ) ) )
+    if( GetProperty( xPropSet, "Percent" ) )
         mAny >>= bPercentage;
 
     const char* grouping = NULL;
@@ -2415,7 +2415,7 @@ void ChartExport::exportMarker()
             FSEND );
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY );
     sal_Int32 nSymbolType = ::com::sun::star::chart::ChartSymbolType::NONE;
-    if( GetProperty( xPropSet, S( "SymbolType" ) ) )
+    if( GetProperty( xPropSet, "SymbolType" ) )
         mAny >>= nSymbolType;
     // TODO: more properties support for marker
     if( nSymbolType == ::com::sun::star::chart::ChartSymbolType::NONE )
@@ -2432,7 +2432,7 @@ void ChartExport::exportSmooth()
     FSHelperPtr pFS = GetFS();
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY );
     sal_Int32 nSplineType = 0;
-    if( GetProperty( xPropSet, S( "SplineType" ) ) )
+    if( GetProperty( xPropSet, "SplineType" ) )
         mAny >>= nSplineType;
     if( nSplineType != 0 )
     {
@@ -2447,7 +2447,7 @@ void ChartExport::exportFirstSliceAng( )
     FSHelperPtr pFS = GetFS();
     sal_Int32 nStartingAngle = 0;
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
-    if( GetProperty( xPropSet, S( "StartingAngle" ) ) )
+    if( GetProperty( xPropSet, "StartingAngle" ) )
         mAny >>= nStartingAngle;
 
     // convert to ooxml angle
@@ -2466,7 +2466,7 @@ void ChartExport::exportView3D()
     pFS->startElement( FSNS( XML_c, XML_view3D ),
             FSEND );
     // rotX
-    if( GetProperty( xPropSet, S( "RotationHorizontal" ) ) )
+    if( GetProperty( xPropSet, "RotationHorizontal" ) )
     {
         sal_Int32 nRotationX = 0;
         mAny >>= nRotationX;
@@ -2478,7 +2478,7 @@ void ChartExport::exportView3D()
             FSEND );
     }
     // rotY
-    if( GetProperty( xPropSet, S( "RotationVertical" ) ) )
+    if( GetProperty( xPropSet, "RotationVertical" ) )
     {
         sal_Int32 nRotationY = 0;
         mAny >>= nRotationY;
@@ -2490,7 +2490,7 @@ void ChartExport::exportView3D()
             FSEND );
     }
     // perspective
-    if( GetProperty( xPropSet, S( "Perspective" ) ) )
+    if( GetProperty( xPropSet, "Perspective" ) )
     {
         sal_Int32 nPerspective = 0;
         mAny >>= nPerspective;
@@ -2501,7 +2501,7 @@ void ChartExport::exportView3D()
             FSEND );
     }
     // rAngAx
-    if( GetProperty( xPropSet, S( "RightAngledAxes" ) ) )
+    if( GetProperty( xPropSet, "RightAngledAxes" ) )
     {
         sal_Bool bRightAngled = sal_False;
         mAny >>= bRightAngled;
@@ -2519,7 +2519,7 @@ sal_Bool ChartExport::isDeep3dChart()
     if( mbIs3DChart )
     {
         Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
-        if( GetProperty( xPropSet, S( "Deep" ) ) )
+        if( GetProperty( xPropSet, "Deep" ) )
             mAny >>= isDeep;
     }
     return isDeep;

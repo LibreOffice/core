@@ -676,21 +676,21 @@ sal_Bool PropValue::GetPropertyValue(
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PropValue::ImplGetPropertyValue( const String& rString )
+sal_Bool PropValue::ImplGetPropertyValue( const OUString& rString )
 {
     return GetPropertyValue( mAny, mXPropSet, rString );
 }
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PropValue::ImplGetPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & aXPropSet, const String& rString )
+sal_Bool PropValue::ImplGetPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & aXPropSet, const OUString& rString )
 {
     return GetPropertyValue( mAny, aXPropSet, rString );
 }
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PropStateValue::ImplGetPropertyValue( const String& rString, sal_Bool bGetPropertyState )
+sal_Bool PropStateValue::ImplGetPropertyValue( const OUString& rString, sal_Bool bGetPropertyState )
 {
     ePropState = ::com::sun::star::beans::PropertyState_AMBIGUOUS_VALUE;
     sal_Bool bRetValue = sal_True;

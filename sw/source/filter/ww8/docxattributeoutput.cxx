@@ -1273,7 +1273,7 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
             OUString osUrl( sUrl );
 
             OString sId = rtl::OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
-                        S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
+                        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
                         osUrl, true ), RTL_TEXTENCODING_UTF8 );
 
             m_pHyperlinkAttrList->add( FSNS( XML_r, XML_id), sId.getStr());
@@ -2078,7 +2078,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         // TODO Convert the file name to relative for better interoperability
 
         aRelId = m_rExport.AddRelation(
-                    S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" ),
+                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
                     OUString( aFileName ) );
 
         nImageType = XML_link;

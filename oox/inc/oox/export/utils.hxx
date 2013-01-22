@@ -20,7 +20,6 @@
 #ifndef _OOX_EXPORT_UTILS_HXX_
 #define _OOX_EXPORT_UTILS_HXX_
 
-#define S(x) String( RTL_CONSTASCII_USTRINGPARAM( x ) )
 #define US(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ))
 #define I32S(x) rtl::OString::valueOf( (sal_Int32) x ).getStr()
 #define I64S(x) rtl::OString::valueOf( (sal_Int64) x ).getStr()

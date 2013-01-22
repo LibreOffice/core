@@ -83,7 +83,7 @@ class PropStateValue : public PropValue
         ::com::sun::star::uno::Reference
             < ::com::sun::star::beans::XPropertyState >         mXPropState;
 
-        sal_Bool    ImplGetPropertyValue( const String& rString, sal_Bool bGetPropertyState = sal_True );
+        sal_Bool    ImplGetPropertyValue( const OUString& rString, sal_Bool bGetPropertyState = sal_True );
 
 };
 

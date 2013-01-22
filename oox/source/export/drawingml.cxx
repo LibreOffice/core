@@ -115,7 +115,7 @@ void DrawingML::ResetCounters()
     mnImageCounter = 1;
 }
 
-bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, String aName )
+bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, OUString aName )
 {
     bool bRetValue = false;
 
@@ -171,7 +171,7 @@ void DrawingML::WriteSolidFill( sal_uInt32 nColor )
 
 void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
 {
-    if ( GetProperty( rXPropSet, S( "FillColor" ) ) )
+    if ( GetProperty( rXPropSet, "FillColor" ) )
         WriteSolidFill( *((sal_uInt32*) mAny.getValue()) & 0xffffff );
 }
 
@@ -552,7 +552,7 @@ OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, OUString& rU
 void DrawingML::WriteBlipMode( Reference< XPropertySet > rXPropSet )
 {
     BitmapMode eBitmapMode( BitmapMode_NO_REPEAT );
-    if (GetProperty( rXPropSet, S( "FillBitmapMode" ) ) )
+    if (GetProperty( rXPropSet, "FillBitmapMode" ) )
         mAny >>= eBitmapMode;
 
     DBG(printf("fill bitmap mode: %d\n", eBitmapMode));
@@ -571,12 +571,12 @@ void DrawingML::WriteBlipMode( Reference< XPropertySet > rXPropSet )
     }
 }
 
-void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, String sURLPropName )
+void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sURLPropName )
 {
     WriteBlipFill( rXPropSet, sURLPropName, XML_a );
 }
 
-void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, String sURLPropName, sal_Int32 nXmlNamespace )
+void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sURLPropName, sal_Int32 nXmlNamespace )
 {
     if ( GetProperty( rXPropSet, sURLPropName ) ) {
         OUString aURL;
@@ -591,9 +591,9 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, String sURLP
 
         WriteBlip( rXPropSet, aURL );
 
-        if( sURLPropName == S( "FillBitmapURL" ) )
+        if( sURLPropName == "FillBitmapURL" )
             WriteBlipMode( rXPropSet );
-        else if( GetProperty( rXPropSet, S( "FillBitmapStretch" ) ) ) {
+        else if( GetProperty( rXPropSet, "FillBitmapStretch" ) ) {
                 bool bStretch = false;
                 mAny >>= bStretch;
 
@@ -856,12 +856,12 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
         bIsField = sal_True;
             rXPropSet.set( rXTextField, UNO_QUERY );
             if( rXPropSet.is() ) {
-                String aFieldKind( rXTextField->getPresentation( sal_True ) );
+                OUString aFieldKind( rXTextField->getPresentation( sal_True ) );
                 DBG(printf ("field kind: %s\n", USS(aFieldKind) ));
-                if( aFieldKind == S( "Page" ) ) {
+                if( aFieldKind == "Page" ) {
                     return "slidenum";
                 }
-        // else if( aFieldKind == S( "URL" ) ) {
+        // else if( aFieldKind == "URL" ) {
         // do not return here
         // and make URL field text run with hyperlink property later
         // }
@@ -917,7 +917,7 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
         Reference< XPropertySet > xPropSet( rRun, UNO_QUERY );
 
         try {
-        if( !xPropSet.is() || !( xPropSet->getPropertyValue( S( "PlaceholderText" ) ) >>= sText ) )
+        if( !xPropSet.is() || !( xPropSet->getPropertyValue( "PlaceholderText" ) >>= sText ) )
             return;
         if( sText.isEmpty() )
             return;
@@ -1490,10 +1490,10 @@ sax_fastparser::FSHelperPtr DrawingML::CreateOutputStream (
 
 void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
 {
-    if ( !GetProperty( xPropSet, S( "FillStyle" ) ) )
+    if ( !GetProperty( xPropSet, "FillStyle" ) )
         return;
     FillStyle aFillStyle( FillStyle_NONE );
-    xPropSet->getPropertyValue( S( "FillStyle" ) ) >>= aFillStyle;
+    xPropSet->getPropertyValue( "FillStyle" ) >>= aFillStyle;
 
     if( aFillStyle == FillStyle_NONE ||
         aFillStyle == FillStyle_HATCH )
@@ -1508,7 +1508,7 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
         WriteGradientFill( xPropSet );
         break;
     case ::com::sun::star::drawing::FillStyle_BITMAP :
-        WriteBlipFill( xPropSet, S( "FillBitmapURL" ) );
+        WriteBlipFill( xPropSet, "FillBitmapURL" );
         break;
     default:
         ;

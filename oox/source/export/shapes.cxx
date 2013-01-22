@@ -597,10 +597,10 @@ sal_Bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
         Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
         if ( xPropSetInfo.is() )
         {
-            if ( xPropSetInfo->hasPropertyByName( S( "IsEmptyPresentationObject" ) ) )
+            if ( xPropSetInfo->hasPropertyByName( "IsEmptyPresentationObject" ) )
             {
                 sal_Bool bIsEmptyPresObj = sal_False;
-                if ( xPropSet->getPropertyValue( S( "IsEmptyPresentationObject" ) ) >>= bIsEmptyPresObj )
+                if ( xPropSet->getPropertyValue( "IsEmptyPresentationObject" ) >>= bIsEmptyPresObj )
                 {
                     DBG(printf("empty presentation object %d, props:\n", bIsEmptyPresObj));
                     if( bIsEmptyPresObj )
@@ -608,10 +608,10 @@ sal_Bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
                 }
             }
 
-            if ( xPropSetInfo->hasPropertyByName( S( "IsPresentationObject" ) ) )
+            if ( xPropSetInfo->hasPropertyByName( "IsPresentationObject" ) )
             {
                 sal_Bool bIsPresObj = sal_False;
-                if ( xPropSet->getPropertyValue( S( "IsPresentationObject" ) ) >>= bIsPresObj )
+                if ( xPropSet->getPropertyValue( "IsPresentationObject" ) >>= bIsPresObj )
                 {
                     DBG(printf("presentation object %d, props:\n", bIsPresObj));
                     if( bIsPresObj )
@@ -833,7 +833,7 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
 
     OUString sGraphicURL;
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
-    if( !pGraphic && ( !xShapeProps.is() || !( xShapeProps->getPropertyValue( S( "GraphicURL" ) ) >>= sGraphicURL ) ) )
+    if( !pGraphic && ( !xShapeProps.is() || !( xShapeProps->getPropertyValue( "GraphicURL" ) >>= sGraphicURL ) ) )
     {
         DBG(printf("no graphic URL found\n"));
         return;
@@ -848,9 +848,9 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
     OUString sName, sDescr;
     bool bHaveName, bHaveDesc;
 
-    if ( ( bHaveName= GetProperty( xShapeProps, S( "Name" ) ) ) )
+    if ( ( bHaveName= GetProperty( xShapeProps, "Name" ) ) )
         mAny >>= sName;
-    if ( ( bHaveDesc = GetProperty( xShapeProps, S( "Description" ) ) ) )
+    if ( ( bHaveDesc = GetProperty( xShapeProps, "Description" ) ) )
         mAny >>= sDescr;
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
@@ -875,7 +875,7 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
     // now we stretch always when we get pGraphic (when changing that
     // behavior, test n#780830 for regression, where the OLE sheet might get tiled
     bool bStretch = false;
-    if( !pGraphic && GetProperty( xShapeProps, S( "FillBitmapStretch" ) ) )
+    if( !pGraphic && GetProperty( xShapeProps, "FillBitmapStretch" ) )
         mAny >>= bStretch;
 
     if ( pGraphic || bStretch )
@@ -1061,7 +1061,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
     if( xShapeProps.is() )
     {
-        xShapeProps->getPropertyValue( S( "CornerRadius" ) ) >>= nRadius;
+        xShapeProps->getPropertyValue( "CornerRadius" ) >>= nRadius;
     }
 
     if( nRadius )
@@ -1173,7 +1173,7 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
     mpFS->startElementNS( XML_a, XML_graphic, FSEND );
     mpFS->startElementNS( XML_a, XML_graphicData, XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/table", FSEND );
 
-    if ( xPropSet.is() && ( xPropSet->getPropertyValue( S("Model") ) >>= xTable ) )
+    if ( xPropSet.is() && ( xPropSet->getPropertyValue( "Model" ) >>= xTable ) )
     {
         mpFS->startElementNS( XML_a, XML_tbl, FSEND );
         mpFS->singleElementNS( XML_a, XML_tblPr, FSEND );
@@ -1190,7 +1190,7 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
         {
             Reference< XPropertySet > xColPropSet( xColumns->getByIndex( x ), UNO_QUERY_THROW );
             sal_Int32 nWidth(0);
-            xColPropSet->getPropertyValue( S("Width") ) >>= nWidth;
+            xColPropSet->getPropertyValue( "Width" ) >>= nWidth;
 
             mpFS->singleElementNS( XML_a, XML_gridCol, XML_w, I64S(MM100toEMU(nWidth)), FSEND );
         }
@@ -1203,7 +1203,7 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
             Reference< XPropertySet > xRowPropSet( xRows->getByIndex( nRow ), UNO_QUERY_THROW );
             sal_Int32 nRowHeight(0);
 
-            xRowPropSet->getPropertyValue( S("Height") ) >>= nRowHeight;
+            xRowPropSet->getPropertyValue( "Height" ) >>= nRowHeight;
 
             mpFS->startElementNS( XML_a, XML_tr, XML_h, I64S( MM100toEMU( nRowHeight ) ), FSEND );
 
@@ -1279,7 +1279,7 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
     WriteShapeTransformation( xShape, XML_a,0,0,false);
     WritePresetShape( "rect" );
-    WriteBlipFill( Reference< XPropertySet >(xShape, UNO_QUERY ), S( "GraphicURL" ) );
+    WriteBlipFill( Reference< XPropertySet >(xShape, UNO_QUERY ), "GraphicURL" );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     WriteTextBox( xShape, mnXmlNamespace );
@@ -1293,7 +1293,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
 {
     Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
     if( xPropSet.is() ) {
-        if( GetProperty( xPropSet, S("Model") ) )
+        if( GetProperty( xPropSet, "Model" ) )
         {
             Reference< XChartDocument > xChartDoc;
             mAny >>= xChartDoc;
@@ -1322,7 +1322,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                                                                                           .append( (sal_Int32) mnSpreadsheetCounter )
                                                                                           .appendAscii( ".xlsx" )
                                                                                           .makeStringAndClear(),
-                                                                                          S("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") );
+                                                                                          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" );
                         // export the embedded document
                         Sequence< PropertyValue > rMedia(1);
 

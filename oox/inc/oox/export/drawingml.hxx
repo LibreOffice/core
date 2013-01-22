@@ -76,7 +76,7 @@ protected:
     ::sax_fastparser::FSHelperPtr mpFS;
     ::oox::core::XmlFilterBase* mpFB;
 
-    bool GetProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, String aName );
+    bool GetProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString aName );
     bool GetPropertyAndState( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
                   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState > rXPropState,
                   String aName, ::com::sun::star::beans::PropertyState& eState );
@@ -104,8 +104,8 @@ public:
     void WriteSolidFill( sal_uInt32 nColor );
     void WriteSolidFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteGradientFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
-    void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, String sURLPropName, sal_Int32 nXmlNamespace );
-    void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, String sURLPropName );
+    void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString sURLPropName, sal_Int32 nXmlNamespace );
+    void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString sURLPropName );
     void WriteOutline( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteStretch();
     void WriteLinespacing( ::com::sun::star::style::LineSpacing& rLineSpacing );
