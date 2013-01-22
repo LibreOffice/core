@@ -239,15 +239,6 @@ ModalDialog DLG_CHINESETRANSLATION
 
     DIRECTION_RADIOBUTTONS( T_COL_2, T_ROW_2, (T_FULL_WIDTH - T_COL_2 - RSC_SP_DLG_INNERBORDER_RIGHT) )
 
-    CheckBox CB_USE_VARIANTS
-    {
-        HelpID = "svx:CheckBox:DLG_CHINESETRANSLATION:CB_USE_VARIANTS";
-        Pos = MAP_APPFONT( T_COL_3, T_ROW_4 );
-        Size = MAP_APPFONT ( T_FULL_WIDTH - T_COL_3 - RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_CHECKBOX_HEIGHT ) ;
-
-        Text [ en-US ] = "~Use Taiwan, Hong Kong SAR, and Macao SAR character variants";
-    };
-
     FixedLine FL_COMMONTERMS
     {
         Pos = MAP_APPFONT ( T_COL_1 , T_ROW_5 ) ;

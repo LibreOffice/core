@@ -230,7 +230,7 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const ::rtl::O
         SolarMutexGuard aSolarGuard;
         if( m_bDisposed || m_bInDispose || !m_pDialog )
             return aRet;
-        m_pDialog->getSettings( bDirectionToSimplified, bUseCharacterVariants, bTranslateCommonTerms );
+        m_pDialog->getSettings( bDirectionToSimplified, bTranslateCommonTerms );
     }
 
     if( rPropertyName.equals( C2U("IsDirectionToSimplified") ) )

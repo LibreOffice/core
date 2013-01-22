@@ -43,12 +43,10 @@ public:
     virtual ~ChineseTranslationDialog();
 
     void getSettings( sal_Bool& rbDirectionToSimplified
-                    , sal_Bool& rbUseCharacterVariants
                     , sal_Bool& rbTranslateCommonTerms ) const;
 
 private:
     DECL_LINK( DictionaryHdl, void* );
-    DECL_LINK( DirectionHdl, void* );
     DECL_LINK( CommonTermsHdl, void* );
     DECL_LINK( OkHdl, void* );
     void impl_UpdateVariantsCheckBox();
@@ -58,7 +56,6 @@ private:
 
     RadioButton m_aRB_To_Simplified;
     RadioButton m_aRB_To_Traditional;
-    CheckBox    m_aCB_Use_Variants;
 
     FixedLine   m_aFL_Commonterms;
 
