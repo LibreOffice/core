@@ -4,7 +4,7 @@ Globals
     {
         variables
         {
-            UREPACKAGEVERSION 4.0.0.1
+            UREPACKAGEVERSION 4.0.1.0
             URELAYERVERSION 1
             REFERENCEOOOMAJORMINOR 3.4
             UNIXBASISROOTNAME libreoffice4.0
@@ -48,12 +48,12 @@ LibreOffice
         {
             PRODUCTNAME LibreOffice
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION .0.1
+            PRODUCTEXTENSION .1.0
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4.0
             USERDIRPRODUCTVERSION 4
-            ABOUTBOXPRODUCTVERSION 4.0.0.1
+            ABOUTBOXPRODUCTVERSION 4.0.1.0
             ABOUTBOXPRODUCTVERSIONSUFFIX +
             BASEPRODUCTVERSION 4.0
             PCPFILENAME libreoffice.pcp
@@ -63,7 +63,7 @@ LibreOffice
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 4.0.0.1
+            PACKAGEVERSION 4.0.1.0
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -98,13 +98,13 @@ LibreOffice_Dev
         {
             PRODUCTNAME LOdev
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION .0.1
+            PRODUCTEXTENSION .1.0
             UNIXBASISROOTNAME lodev4.0
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4.0
             USERDIRPRODUCTVERSION 4
-            ABOUTBOXPRODUCTVERSION 4.0.0.1
+            ABOUTBOXPRODUCTVERSION 4.0.1.0
             ABOUTBOXPRODUCTVERSIONSUFFIX +
             BASEPRODUCTVERSION 4.0
             DEVELOPMENTPRODUCT 1
@@ -119,7 +119,7 @@ LibreOffice_Dev
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 4.0.0.1
+            PACKAGEVERSION 4.0.1.0
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -157,9 +157,9 @@ URE
         {
             PRODUCTNAME URE
             PRODUCTVERSION 4.0
-            PACKAGEVERSION 4.0.0.1
+            PACKAGEVERSION 4.0.1.0
             PACKAGEREVISION 1
-            PRODUCTEXTENSION .0.1
+            PRODUCTEXTENSION .1.0
             BRANDPACKAGEVERSION 4.0
             LICENSENAME LGPL
             NOVERSIONINDIRNAME 1
@@ -190,11 +190,11 @@ LibreOffice_SDK
         {
             PRODUCTNAME LibreOffice
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION .0.1
+            PRODUCTEXTENSION .1.0
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 4.0
-            PACKAGEVERSION 4.0.0.1
+            PACKAGEVERSION 4.0.1.0
             PACKAGEREVISION {buildid}
             PACK_INSTALLED 1
             DMG_VOLUMEEXTENSION SDK
@@ -229,12 +229,12 @@ LibreOffice_Dev_SDK
         {
             PRODUCTNAME LOdev
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION .0.1
+            PRODUCTEXTENSION .1.0
             UNIXBASISROOTNAME lodev4.0
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 4.0
-            PACKAGEVERSION 4.0.0.1
+            PACKAGEVERSION 4.0.1.0
             PACKAGEREVISION {buildid}
             BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX lodev
@@ -274,11 +274,11 @@ LibreOffice_Test
         {
             PRODUCTNAME LibreOffice
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION .0.1
+            PRODUCTEXTENSION .1.0
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
             BRANDPACKAGEVERSION 4.0
-            PACKAGEVERSION 4.0.0.1
+            PACKAGEVERSION 4.0.1.0
             PACKAGEREVISION {buildid}
             PACK_INSTALLED 1
             DMG_VOLUMEEXTENSION TEST
@@ -313,12 +313,12 @@ LibreOffice_Dev_Test
         {
             PRODUCTNAME LOdev
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION .0.1
+            PRODUCTEXTENSION .1.0
             UNIXBASISROOTNAME lodev4.0
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
             BRANDPACKAGEVERSION 4.0
-            PACKAGEVERSION 4.0.0.1
+            PACKAGEVERSION 4.0.1.0
             PACKAGEREVISION {buildid}
             BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX lodev
@@ -357,12 +357,12 @@ OxygenOffice
         {
             PRODUCTNAME OxygenOffice
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION .0.1
+            PRODUCTEXTENSION .1.0
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4.0
             USERDIRPRODUCTVERSION 4
-            ABOUTBOXPRODUCTVERSION 4.0.0.1
+            ABOUTBOXPRODUCTVERSION 4.0.1.0
             ABOUTBOXPRODUCTVERSIONSUFFIX +
             BASEPRODUCTVERSION 4.0
             PCPFILENAME openoffice.pcp
@@ -372,7 +372,7 @@ OxygenOffice
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 4.0.0.1
+            PACKAGEVERSION 4.0.1.0
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
             SERVICESPROJEKT 1
