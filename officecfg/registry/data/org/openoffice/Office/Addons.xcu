@@ -77,7 +77,7 @@
                         <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$run?language=Python&amp;location=share</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Start (the program in the Writer document)</value>
+                        <value xml:lang="en-US">Start Logo program (text or selected text of the document)</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -130,7 +130,7 @@
                         <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$commandline?language=Python&amp;location=share</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Logo command line (press F1 here for help)</value>
+                        <value xml:lang="en-US">Logo command line (press Enter for command execution or F1 for help)</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
