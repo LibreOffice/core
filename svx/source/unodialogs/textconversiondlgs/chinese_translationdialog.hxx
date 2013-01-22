@@ -65,8 +65,6 @@ private:
     FixedLine   m_aFL_Bottomline;
 
     OKButton        m_aBP_OK;
-    CancelButton    m_aBP_Cancel;
-    HelpButton      m_aBP_Help;
 
     ChineseDictionaryDialog* m_pDictionaryDialog;
 };

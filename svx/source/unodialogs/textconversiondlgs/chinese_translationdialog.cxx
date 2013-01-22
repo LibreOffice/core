@@ -54,8 +54,6 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     , m_aPB_Editterms( this, TextConversionDlgs_ResId( PB_EDITTERMS ) )
     , m_aFL_Bottomline( this, TextConversionDlgs_ResId( T_FL_BOTTOMLINE ) )
     , m_aBP_OK( this, TextConversionDlgs_ResId( PB_OK ) )
-    , m_aBP_Cancel( this, TextConversionDlgs_ResId( PB_CANCEL ) )
-    , m_aBP_Help( this, TextConversionDlgs_ResId( PB_HELP ) )
     , m_pDictionaryDialog(0)
 {
     FreeResource();
