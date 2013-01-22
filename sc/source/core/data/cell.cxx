@@ -1143,25 +1143,18 @@ void ScFormulaCell::CalcAfterLoad()
             pDocument->AddSubTotalCell(this);
     }
 
-    // irgendwie koennen unter os/2 mit rotter FPU-Exception /0 ohne Err503 gespeichert
-    // werden, woraufhin spaeter im NumberFormatter die BLC Lib bei einem fabs(-NAN) abstuerzt
-    //(#32739#) hier fuer alle Systeme ausbuegeln, damit da auch Err503 steht
-
-    // somehow we can under os / 2 store without Err503 with rotter FPU / 0, followed later
-    // in the BLC Lib NumberFormatter a fabs (NAN) is crashing (# 32739 #) iron out here for all
-    // the systems, so there is also Err503
-
+    // On OS/2 with broken FPU exception, we can somehow store /0 without Err503. Later on in
+    // the BLC Lib NumberFormatter crashes when doing a fabs (NAN) (# 32739 #).
+    // We iron this out here for all systems, such that we also have an Err503 here.
     if ( aResult.IsValue() && !::rtl::math::isFinite( aResult.GetDouble() ) )
     {
-        OSL_FAIL("Formelzelle INFINITY !!! Woher kommt das Dokument?");
+        OSL_FAIL("Formula cell INFINITY!!! Where does this document come from?");
         aResult.SetResultError( errIllegalFPOperation );
         bDirty = true;
     }
-    // DoubleRefs bei binaeren Operatoren waren vor v5.0 immer Matrix,
-    // jetzt nur noch wenn in Matrixformel, sonst implizite Schnittmenge
 
-    // Double Refs in binary operators were always in front of Matrix v5.0, now only when in an
-    // array formula, otherwise an implicit intersection
+    // DoubleRefs for binary operators were always a Matrix before version v5.0.
+    // Now this is only the case when when in an array formula, otherwise it's an implicit intersection
     if ( pDocument->GetSrcVersion() < SC_MATRIX_DOUBLEREF &&
             GetMatrixFlag() == MM_NONE && pCode->HasMatrixDoubleRefOps() )
     {
@@ -1169,9 +1162,8 @@ void ScFormulaCell::CalcAfterLoad()
         SetMatColsRows( 1, 1);
     }
 
-    // Must the cells be calculated? After Load cells can contain an error code, and then start
-    // the listener and ggbf. Recalculate if not RECALCMODE_NORMAL
-
+    // Do the cells need to be calculated? After Load cells can contain an error code, and then start
+    // the listener and Recalculate (if needed) if not RECALCMODE_NORMAL
     if( !bNewCompiled || !pCode->GetCodeError() )
     {
         StartListeningTo( pDocument );
@@ -1179,16 +1171,11 @@ void ScFormulaCell::CalcAfterLoad()
             bDirty = true;
     }
     if ( pCode->IsRecalcModeAlways() )
-    {   // zufall(), heute(), jetzt() bleiben immer im FormulaTree, damit sie
-        // auch bei jedem F9 berechnet werden.
-
-        // accident(), today(), now() always stay in the FormulaTree, so that they
-        // can also be calculated for each F9.
+    {   // random(), today(), now() always stay in the FormulaTree, so that they are calculated
+        // for each F9
         bDirty = true;
     }
-    // Noch kein SetDirty weil noch nicht alle Listener bekannt, erst in
-    // SetDirtyAfterLoad.
-    // Still no SetDirty because all Listeners are not know, first in SetDirtyAfterLoad.
+    // No SetDirty yet, as no all Listeners are known yet (only in SetDirtyAfterLoad)
 }
 
 
@@ -1204,12 +1191,8 @@ void ScFormulaCell::Interpret()
         return;     // no double/triple processing
 
     //! HACK:
-    //  Wenn der Aufruf aus einem Reschedule im DdeLink-Update kommt, dirty stehenlassen
-    //  Besser: Dde-Link Update ohne Reschedule oder ganz asynchron !!!
-
-    //  If the call comes from a Reschedule in the DdeLink-Update, dirty let stand
-    //  Better: Dde-Link Update without Reschdule or completely asynchronously !!!
-
+    //  If the call originates from a Reschedule in DdeLink update, leave dirty
+    //  Better: Do a Dde Link Update without Reschedule or do it completely asynchronously!
     if ( pDocument->IsInDdeLinkUpdate() )
         return;
 
@@ -1551,7 +1534,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                      p->GetStringResult() == aResult.GetString()))
             {
                 // A convergence in the first iteration doesn't necessarily
-                // mean that it's done, it may be because not all related cells
+                // mean that it's done, it may be as not all related cells
                 // of a circle changed their values yet. If the set really
                 // converges it will do so also during the next iteration. This
                 // fixes situations like of #i44115#. If this wasn't wanted an
@@ -1592,7 +1575,6 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         {
             // #i102616# Compare anyway if the sheet is still marked unchanged for single-sheet saving
             // Also handle special cases of initial results after loading.
-
             if ( !bContentChanged && pDocument->IsStreamValid(aPos.Tab()) )
             {
                 ScFormulaResult aNewResult( p->GetResultToken().get());
@@ -1691,7 +1673,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         if ( !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
 
-    //  FORCED cells also immediately tested for validity (start macro possibly)
+        //  FORCED cells also immediately tested for validity (start macro possibly)
 
         if ( pCode->IsRecalcModeForced() )
         {
@@ -1705,7 +1687,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             }
         }
 
-        // Reschedule verlangsamt das ganze erheblich, nur bei Prozentaenderung ausfuehren
+        // Reschedule slows the whole thing down considerably, thus only execute on percent change
         ScProgress::GetInterpretProgress()->SetStateCountDownOnPercent(
             pDocument->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE );
 
@@ -1741,7 +1723,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
     }
     else
     {
-    //  Cells with compiler errors should not be marked dirty forever
+        // Cells with compiler errors should not be marked dirty forever
         OSL_ENSURE( pCode->GetCodeError(), "no UPN-Code und no errors ?!?!" );
         bDirty = false;
         bTableOpDirty = false;
