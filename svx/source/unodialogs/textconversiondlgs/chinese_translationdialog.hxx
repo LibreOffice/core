@@ -52,17 +52,11 @@ private:
     void impl_UpdateVariantsCheckBox();
 
 private:
-    FixedLine   m_aFL_Direction;
-
     RadioButton m_aRB_To_Simplified;
     RadioButton m_aRB_To_Traditional;
 
-    FixedLine   m_aFL_Commonterms;
-
     CheckBox    m_aCB_Translate_Commonterms;
     PushButton  m_aPB_Editterms;
-
-    FixedLine   m_aFL_Bottomline;
 
     OKButton        m_aBP_OK;
 
