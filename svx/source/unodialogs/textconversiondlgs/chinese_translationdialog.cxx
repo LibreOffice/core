@@ -45,7 +45,6 @@ using namespace ::com::sun::star::uno;
 
 ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     : ModalDialog(pParent, "ChineseConversionDialog", "svx/ui/chineseconversiondialog.ui")
-
     , m_pDictionaryDialog(0)
 {
     get(m_pBP_OK, "ok");
@@ -53,7 +52,6 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     get(m_pRB_To_Simplified, "tosimplified");
     get(m_pRB_To_Traditional, "totraditional");
     get(m_pCB_Translate_Commonterms, "commonterms");
-    FreeResource();
 
     m_pRB_To_Simplified->SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED );
     m_pRB_To_Traditional->SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL );
