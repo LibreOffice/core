@@ -194,8 +194,8 @@ void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
         }
 
         // release all physically selected fonts on this device
-    if( ImplGetGraphics() )
-         mpGraphics->ReleaseFonts();
+        if( ImplGetGraphics() )
+            mpGraphics->ReleaseFonts();
     }
 
     if ( GetOutDevType() == OUTDEV_PRINTER || mpPDFWriter )
@@ -406,7 +406,7 @@ sal_uInt16 OutputDevice::GetFontSubstituteCount()
 {
     const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
     if( !pSubst )
-    return 0;
+        return 0;
     int nCount =  pSubst->GetFontSubstituteCount();
     return (sal_uInt16)nCount;
 }
@@ -8045,7 +8045,7 @@ sal_Bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     ::basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
     if( !GetTextOutlines( aB2DPolyPolyVector, rStr, nBase, nIndex, nLen,
                          bOptimize, nTWidth, pDXArray ) )
-    return sal_False;
+        return sal_False;
 
     // convert to a tool polypolygon vector
     rResultVector.reserve( aB2DPolyPolyVector.size() );
@@ -8068,7 +8068,7 @@ sal_Bool OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     ::basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
     if( !GetTextOutlines( aB2DPolyPolyVector, rStr, nBase, nIndex, nLen,
                          bOptimize, nTWidth, pDXArray ) )
-    return sal_False;
+        return sal_False;
 
     // convert and merge into a tool polypolygon
     ::basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
