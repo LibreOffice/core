@@ -1468,7 +1468,7 @@
                     </info>
                     <value></value>
                 </prop>
-                <prop oor:name="StringRefAddressSyntax" oor:type="xs:int" oor:nillable="false">
+                <prop oor:name="StringRefAddressSyntax" oor:type="xs:int">
                     <!-- UIHints: Tools - Options - Spreadsheet - Formula -->
                     <info>
                         <author>kyoshida</author>
