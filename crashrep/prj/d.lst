@@ -1,3 +1,0 @@
-..\%__SRC%\bin\soreport.exe %_DEST%\bin\crashrep.exe
-..\%__SRC%\bin\soreport.exe.manifest %_DEST%\bin\crashrep.exe.manifest
-..\%__SRC%\bin\crashrep %_DEST%\bin\crashrep

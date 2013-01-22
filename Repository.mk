@@ -36,6 +36,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     cfgex \
     cpp \
     cppunit/cppunittester \
+    $(call gb_Helper_optional,CRASHREP,crashrep) \
     g2g \
     gencoll_rule \
     genconv_dict \

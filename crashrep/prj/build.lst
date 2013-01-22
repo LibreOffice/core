@@ -1,5 +1,2 @@
 cr	crashrep	:    sal sysui shell NULL
-cr	crashrep				usr1	-	all	cr_mkout NULL
-cr	crashrep\source\all		nmake	-	all	cr_sresource NULL
-cr	crashrep\source\unx		nmake	-	u	cr_sunx NULL
-cr	crashrep\source\win32	nmake	-	n	cr_swin32 cr_sresource NULL
+cr	crashrep\prj		nmake	-	all	cr_crashrep NULL

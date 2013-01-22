@@ -19,7 +19,6 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <sys/utsname.h>
-#include <_version.h>
 #include <errno.h>
 #include <string.h>
 #include <assert.h>

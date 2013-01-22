@@ -62,6 +62,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	cppuhelper \
 	$(call gb_Helper_optional,CPPUNIT,cppunit) \
 	cpputools \
+	$(call gb_Helper_optional,CRASHREP,crashrep) \
 	$(call gb_Helper_optional,CT2N,ct2n) \
 	cui \
 	$(call gb_Helper_optional,CURL,curl) \

@@ -66,8 +66,6 @@
 #include <malloc.h>
 #include <process.h>
 
-#include <_version.h>
-
 #include "resource.h"
 #include "base64.h"
 
