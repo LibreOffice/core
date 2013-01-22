@@ -188,6 +188,7 @@ class FieldMarkParamsHelper
         return bResult;
     }
 };
+static OString impl_ConvertColor( const Color &rColor );
 void DocxAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 /*nScript*/ )
 {
     if (bIsRTL)
@@ -251,6 +252,35 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     m_bParagraphOpened = true;
 }
 
+void lcl_TextFrameShadow(FSHelperPtr pSerializer, const SwFrmFmt& rFrmFmt)
+{
+    SvxShadowItem aShadowItem = rFrmFmt.GetShadow();
+    if (aShadowItem.GetLocation() == SVX_SHADOW_NONE)
+        return;
+
+    OString aShadowWidth( OString::valueOf( double( aShadowItem.GetWidth() ) / 20) + "pt");
+    OString aOffset;
+    switch (aShadowItem.GetLocation())
+    {
+        case SVX_SHADOW_TOPLEFT: aOffset = "-" + aShadowWidth + ",-" + aShadowWidth; break;
+        case SVX_SHADOW_TOPRIGHT: aOffset = aShadowWidth + ",-" + aShadowWidth; break;
+        case SVX_SHADOW_BOTTOMLEFT: aOffset = "-" + aShadowWidth + "," + aShadowWidth; break;
+        case SVX_SHADOW_BOTTOMRIGHT: aOffset = aShadowWidth + "," + aShadowWidth; break;
+        case SVX_SHADOW_NONE:
+        case SVX_SHADOW_END:
+            break;
+    }
+    if (aOffset.isEmpty())
+        return;
+
+    OString aShadowColor = impl_ConvertColor(aShadowItem.GetColor());
+    pSerializer->singleElementNS(XML_v, XML_shadow,
+            XML_on, "t",
+            XML_color, "#" + aShadowColor,
+            XML_offset, aOffset,
+            FSEND);
+}
+
 void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
 {
     // write the paragraph properties + the run, already in the correct order
@@ -284,6 +314,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
         m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
         m_pSerializer->startElementNS( XML_v, XML_rect, xFlyAttrList );
+        lcl_TextFrameShadow(m_pSerializer, rFrmFmt);
         m_pSerializer->startElementNS( XML_v, XML_textbox, FSEND );
         m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
         m_rExport.WriteText( );
