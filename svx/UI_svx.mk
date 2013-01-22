@@ -11,6 +11,7 @@ $(eval $(call gb_UI_UI,svx))
 
 $(eval $(call gb_UI_add_uifiles,svx,\
 	svx/uiconfig/ui/asianphoneticguidedialog \
+	svx/uiconfig/ui/chineseconversiondialog \
 	svx/uiconfig/ui/compressgraphicdialog \
 ))
 
