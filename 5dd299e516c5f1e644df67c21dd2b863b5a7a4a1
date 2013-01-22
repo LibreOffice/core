@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn///w8\u003d",
+        "filename": "fpicker/source/aqua/CFStringUtilities.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-22T11:30:16Z",
+      "side": 1,
+      "message": "I think this does not even compile. Please see the documentation ( http://cgit.freedesktop.org/libreoffice/core/tree/sal/inc/sal/log.hxx ) . These macros take two arguments, where the first one is a log area. Which also means the area should not be \"\u003e\u003e\u003e \", but something more suitable, and it should be added to sal/inc/sal/log-areas.dox .",
+      "revId": "5dd299e516c5f1e644df67c21dd2b863b5a7a4a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
