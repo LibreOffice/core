@@ -73,6 +73,10 @@
 #include "globalnames.hxx"
 
 #include "formulabuffer.hxx"
+#include "vcl/mapmod.hxx"
+#include "editutil.hxx"
+#include "editeng/editstat.hxx"
+
 namespace oox {
 namespace xls {
 
@@ -134,6 +138,11 @@ public:
     inline void         setCurrentSheetIndex( sal_Int16 nSheet ) { mnCurrSheet = nSheet; }
 
     // document model ---------------------------------------------------------
+
+    inline ScEditEngineDefaulter& getEditEngine() const
+    {
+        return *mxEditEngine.get();
+    }
 
     inline ScDocument& getScDocument() const
     {
@@ -235,6 +244,7 @@ private:
     void                finalize();
 
 private:
+    typedef ::std::auto_ptr< ScEditEngineDefaulter >    EditEngineDefaulterPtr;
     typedef ::std::auto_ptr< FormulaBuffer >            FormulaBufferPtr;
     typedef ::std::auto_ptr< SegmentProgressBar >       ProgressBarPtr;
     typedef ::std::auto_ptr< WorkbookSettings >         WorkbookSettPtr;
@@ -292,6 +302,8 @@ private:
     AddressConvPtr      mxAddrConverter;        /// Cell address and cell range address converter.
     ExcelChartConvPtr   mxChartConverter;       /// Chart object converter.
     PageSettConvPtr     mxPageSettConverter;    /// Page/print settings converter.
+
+    EditEngineDefaulterPtr mxEditEngine;
 
     // OOXML/BIFF12 specific
     XmlFilterBase*      mpOoxFilter;            /// Base OOXML/BIFF12 filter object.
@@ -535,6 +547,15 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     mxChartConverter.reset( new ExcelChartConverter( *this ) );
     mxPageSettConverter.reset( new PageSettingsConverter( *this ) );
 
+    // initialise edit engine
+    ScDocument& rDoc = getScDocument();
+    mxEditEngine.reset( new ScEditEngineDefaulter( rDoc.GetEnginePool() ) );
+    mxEditEngine->SetRefMapMode( MAP_100TH_MM );
+    mxEditEngine->SetEditTextObjectPool( rDoc.GetEditPool() );
+    mxEditEngine->SetUpdateMode( false );
+    mxEditEngine->EnableUndo( false );
+    mxEditEngine->SetControlWord( mxEditEngine->GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
+
     // set some document properties needed during import
     if( mrBaseFilter.isImportFilter() )
     {
@@ -699,6 +720,11 @@ void WorkbookHelper::finalizeWorkbookImport()
 ScDocument& WorkbookHelper::getScDocument() const
 {
     return mrBookGlob.getScDocument();
+}
+
+ScEditEngineDefaulter& WorkbookHelper::getEditEngine() const
+{
+    return mrBookGlob.getEditEngine();
 }
 
 Reference< XSpreadsheetDocument > WorkbookHelper::getDocument() const

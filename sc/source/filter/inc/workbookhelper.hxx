@@ -55,6 +55,7 @@ namespace oox { namespace core {
 } }
 
 class ScDocument;
+class ScEditEngineDefaulter;
 
 namespace oox {
 namespace xls {
@@ -146,6 +147,7 @@ public:
 
     // document model ---------------------------------------------------------
     ScDocument& getScDocument() const;
+    ScEditEngineDefaulter& getEditEngine() const;
     /** Returns a reference to the source/target spreadsheet document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >
                         getDocument() const;

@@ -68,6 +68,7 @@
 #include "formulabuffer.hxx"
 #include "scitems.hxx"
 #include <svl/stritem.hxx>
+#include "editutil.hxx"
 
 namespace oox {
 namespace xls {
@@ -1547,12 +1548,14 @@ void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rT
 
 void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichString& rString, const Font* pFirstPortionFont ) const
 {
-    Reference< XText > xText( getCell( rAddress ), UNO_QUERY );
-    OSL_ENSURE( xText.is(), "WorksheetHelper::putRichString - missing text interface" );
-    /*  Passing false will always append the portions to the XText. This is
-        essential for special rich formatting attributes at the leading text
-        portion supported by edit cells only, e.g. font escapement. */
-    rString.convert( xText, false, pFirstPortionFont );
+    ScDocument& rDoc = getScDocument();
+    ScEditEngineDefaulter& rEE = getEditEngine();
+
+    ::std::auto_ptr< ::EditTextObject > pTextObj( rString.convert( rEE, pFirstPortionFont ) );
+    ScBaseCell* pNewCell = new ScEditCell( pTextObj.get(), &rDoc, rEE.GetEditTextObjectPool() );
+    ScAddress aAddress;
+    ScUnoConversion::FillScAddress( aAddress, rAddress );
+    rDoc.PutCell( aAddress, pNewCell );
 }
 
 void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTokenSequence& rTokens ) const

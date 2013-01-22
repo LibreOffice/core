@@ -23,6 +23,10 @@
 #include "oox/helper/refvector.hxx"
 #include "stylesbuffer.hxx"
 
+class EditTextObject;
+class ESelection;
+class ScEditEngineDefaulter;
+
 namespace com { namespace sun { namespace star {
     namespace text { class XText; }
 } } }
@@ -68,7 +72,9 @@ public:
     /** Converts the portion and replaces or appends to the passed XText. */
     void                convert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
+
                             const Font* pFont, bool bReplace );
+    void                convert( ScEditEngineDefaulter& rEE, ESelection& rSelection, const Font* pFont );
 
     void                writeFontProperties(
         const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
@@ -250,6 +256,7 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
                             bool bReplaceOld,
                             const Font* pFirstPortionFont = 0 ) const;
+    ::EditTextObject*   convert( ScEditEngineDefaulter& rEE, const Font* pFont ) const;
 
 private:
     /** Creates, appends, and returns a new empty string portion. */

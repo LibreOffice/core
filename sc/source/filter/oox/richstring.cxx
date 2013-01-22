@@ -21,9 +21,11 @@
 
 #include <com/sun/star/text/XText.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <editeng/editobj.hxx>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "biffinputstream.hxx"
+#include "editutil.hxx"
 
 namespace oox {
 namespace xls {
@@ -110,6 +112,41 @@ void RichStringPortion::convert( const Reference< XText >& rxText, const Font* p
             pFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
         }
     }
+}
+
+void RichStringPortion::convert( ScEditEngineDefaulter& rEE, ESelection& rSelection, const Font* pFont )
+{
+    rSelection.nStartPos = rSelection.nEndPos;
+    rSelection.nStartPara = rSelection.nEndPara;
+    SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
+
+    const Font* pFontToUse = mxFont.get() ? mxFont.get() : lclNeedsRichTextFormat( pFont ) ? pFont : NULL;
+
+    if ( pFontToUse )
+        pFontToUse->fillToItemSet( aItemSet, FONT_PROPTYPE_TEXT );
+
+    // #TODO need to manually adjust nEndPos ( and nEndPara ) to cater for any paragraphs
+    sal_Int32 nLastParaLoc = -1;
+    sal_Int32 nSearchIndex = maText.indexOf( '\n' );
+    sal_Int32 nParaOccurence = 0;
+    while ( nSearchIndex != -1 )
+    {
+        nLastParaLoc = nSearchIndex;
+        ++nParaOccurence;
+        rSelection.nEndPos = 0;
+        nSearchIndex = maText.indexOf( '\n', nSearchIndex + 1);
+    }
+
+    rSelection.nEndPara += nParaOccurence;
+    if ( nLastParaLoc != -1 )
+    {
+        rSelection.nEndPos = maText.getLength() - 1 - nLastParaLoc;
+    }
+    else
+    {
+        rSelection.nEndPos = rSelection.nStartPos + maText.getLength();
+    }
+    rEE.QuickSetAttribs( aItemSet, rSelection );
 }
 
 void RichStringPortion::writeFontProperties( const Reference<XText>& rxText, const Font* pFont ) const
@@ -376,6 +413,27 @@ void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld, co
         pFirstPortionFont = 0;  // use passed font for first portion only
         bReplaceOld = false;    // do not replace first portion text with following portions
     }
+}
+
+::EditTextObject* RichString::convert( ScEditEngineDefaulter& rEE, const Font* pFirstPortionFont ) const
+{
+    EditTextObject* pTextObj = NULL;
+    ESelection aSelection;
+
+    OUString sString;
+    for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
+        sString += (*aIt)->getText();
+
+    rEE.SetText( sString );
+
+    for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
+    {
+        (*aIt)->convert( rEE, aSelection, pFirstPortionFont );
+        pFirstPortionFont = 0;
+    }
+
+    pTextObj = rEE.CreateTextObject();
+    return pTextObj;
 }
 
 // private --------------------------------------------------------------------

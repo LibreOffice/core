@@ -75,6 +75,7 @@
 #include "scitems.hxx"
 #include "attrib.hxx"
 #include "globstr.hrc"
+#include "xlconst.hxx"
 
 using ::com::sun::star::table::BorderLine2;
 namespace oox {
@@ -1019,58 +1020,75 @@ bool Font::needsRichTextFormat() const
 
 void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool bSkipPoolDefs ) const
 {
+    bool bEdit = ( ePropType == FONT_PROPTYPE_TEXT );
     namespace cssawt = ::com::sun::star::awt;
     if ( maUsedFlags.mbNameUsed )
     {
         if( !maApiData.maLatinFont.maName.isEmpty() )
         {
             rtl_TextEncoding eFontEnc = maApiData.maLatinFont.mnTextEnc;
+            // taken from binary importer
+            rtl_TextEncoding eTempTextEnc = (bEdit && (eFontEnc == getTextEncoding())) ?
+                ScfTools::GetSystemTextEncoding() : eFontEnc;
+
             SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maLatinFont.mnFamily ), maApiData.maLatinFont.maName, rtl::OUString(),
-                PITCH_DONTKNOW, eFontEnc, ATTR_FONT );
+                PITCH_DONTKNOW, eTempTextEnc, ATTR_FONT );
+            ScfTools::PutItem( rItemSet, aFontItem, bEdit ? EE_CHAR_FONTINFO : ATTR_FONT, bSkipPoolDefs );
         }
         if( !maApiData.maAsianFont.maName.isEmpty() )
         {
             rtl_TextEncoding eFontEnc = maApiData.maAsianFont.mnTextEnc;
+            // taken from binary importer
+            rtl_TextEncoding eTempTextEnc = (bEdit && (eFontEnc == getTextEncoding())) ?
+                ScfTools::GetSystemTextEncoding() : eFontEnc;
             SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maAsianFont.mnFamily ), maApiData.maAsianFont.maName, rtl::OUString(),
-                PITCH_DONTKNOW, eFontEnc, ATTR_FONT );
+                PITCH_DONTKNOW, eTempTextEnc, ATTR_FONT );
+            ScfTools::PutItem( rItemSet, aFontItem, bEdit ? EE_CHAR_FONTINFO_CJK : ATTR_CJK_FONT, bSkipPoolDefs );
         }
         if( !maApiData.maCmplxFont.maName.isEmpty() )
         {
             rtl_TextEncoding eFontEnc = maApiData.maCmplxFont.mnTextEnc;
+            // taken from binary importer
+            rtl_TextEncoding eTempTextEnc = (bEdit && (eFontEnc == getTextEncoding())) ?
+                ScfTools::GetSystemTextEncoding() : eFontEnc;
             SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maCmplxFont.mnFamily ), maApiData.maCmplxFont.maName, rtl::OUString(),
-                PITCH_DONTKNOW, eFontEnc, ATTR_FONT );
+                PITCH_DONTKNOW, eTempTextEnc, ATTR_FONT );
+            ScfTools::PutItem( rItemSet, aFontItem, bEdit ? EE_CHAR_FONTINFO_CTL : ATTR_CTL_FONT, bSkipPoolDefs );
         }
     }
     // font height
     if( maUsedFlags.mbHeightUsed )
     {
-        // leave in twips ?
-        SvxFontHeightItem aHeightItem( maApiData.maDesc.Height, 100, ATTR_FONT_HEIGHT );
-        ScfTools::PutItem( rItemSet, aHeightItem, ATTR_FONT_HEIGHT, bSkipPoolDefs );
-        ScfTools::PutItem( rItemSet, aHeightItem, ATTR_CJK_FONT_HEIGHT, bSkipPoolDefs );
-        ScfTools::PutItem( rItemSet, aHeightItem, ATTR_CTL_FONT_HEIGHT, bSkipPoolDefs );
+        sal_Int32 nHeight = maApiData.maDesc.Height;
+        // do we use EXC_FONTITEM_HF ( or is it just relevant for the binary filter )
+        if( bEdit/* && (eType != EXC_FONTITEM_HF) */)     // do not convert header/footer height
+            nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // 1 in == 72 pt
+        SvxFontHeightItem aHeightItem( nHeight, 100, ATTR_FONT_HEIGHT );
+        ScfTools::PutItem( rItemSet, aHeightItem, bEdit ? EE_CHAR_FONTHEIGHT :  ATTR_FONT_HEIGHT, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aHeightItem, bEdit ? EE_CHAR_FONTHEIGHT_CJK : ATTR_CJK_FONT_HEIGHT, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aHeightItem, bEdit ? EE_CHAR_FONTHEIGHT_CTL : ATTR_CTL_FONT_HEIGHT, bSkipPoolDefs );
     }
     // font weight
     if( maUsedFlags.mbWeightUsed )
     {
         ::FontWeight fWeight = VCLUnoHelper::ConvertFontWeight( maApiData.maDesc.Weight );
         SvxWeightItem aWeightItem( fWeight, ATTR_FONT_WEIGHT );
-        ScfTools::PutItem( rItemSet, aWeightItem, ATTR_FONT_WEIGHT, bSkipPoolDefs );
-        ScfTools::PutItem( rItemSet, aWeightItem, ATTR_CTL_FONT_WEIGHT, bSkipPoolDefs );
-        ScfTools::PutItem( rItemSet, aWeightItem, ATTR_CJK_FONT_WEIGHT, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aWeightItem, bEdit ? EE_CHAR_WEIGHT : ATTR_FONT_WEIGHT, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aWeightItem, bEdit ? EE_CHAR_WEIGHT_CTL : ATTR_CTL_FONT_WEIGHT, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aWeightItem, bEdit ? EE_CHAR_WEIGHT_CJK : ATTR_CJK_FONT_WEIGHT, bSkipPoolDefs );
     }
     // font posture
     if( maUsedFlags.mbPostureUsed )
     {
         SvxPostureItem aPostItem( ( maApiData.maDesc.Slant == cssawt::FontSlant_ITALIC ) ? ITALIC_NORMAL :  ITALIC_NONE,  ATTR_FONT_POSTURE);
-        ScfTools::PutItem( rItemSet, aPostItem, ATTR_FONT_POSTURE, bSkipPoolDefs );
-        ScfTools::PutItem( rItemSet, aPostItem, ATTR_CJK_FONT_POSTURE, bSkipPoolDefs );
-        ScfTools::PutItem( rItemSet, aPostItem, ATTR_CTL_FONT_POSTURE, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aPostItem, bEdit ? EE_CHAR_ITALIC : ATTR_FONT_POSTURE, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aPostItem, bEdit ? EE_CHAR_ITALIC_CJK : ATTR_CJK_FONT_POSTURE, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aPostItem, bEdit ? EE_CHAR_ITALIC_CTL : ATTR_CTL_FONT_POSTURE, bSkipPoolDefs );
     }
     // character color
     if( maUsedFlags.mbColorUsed )
     {
-        ScfTools::PutItem( rItemSet,SvxColorItem( maApiData.mnColor, ATTR_FONT_COLOR  ) , bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet,SvxColorItem( maApiData.mnColor, bEdit ? EE_CHAR_COLOR : ATTR_FONT_COLOR  ) , bSkipPoolDefs );
     }
     // underline style
     if( maUsedFlags.mbUnderlineUsed )
@@ -1083,24 +1101,24 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
         else
             eScUnderl = UNDERLINE_NONE;
         SvxUnderlineItem aUnderlItem( eScUnderl, ATTR_FONT_UNDERLINE );
-        ScfTools::PutItem( rItemSet, aUnderlItem, ATTR_FONT_UNDERLINE, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aUnderlItem, bEdit ? EE_CHAR_UNDERLINE : ATTR_FONT_UNDERLINE, bSkipPoolDefs );
     }
     // strike out style
     if( maUsedFlags.mbStrikeoutUsed )
     {
-        ScfTools::PutItem( rItemSet, SvxCrossedOutItem( maModel.mbStrikeout ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT ), ATTR_FONT_CROSSEDOUT, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, SvxCrossedOutItem( maModel.mbStrikeout ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, bEdit ? EE_CHAR_STRIKEOUT : ATTR_FONT_CROSSEDOUT ), ATTR_FONT_CROSSEDOUT, bSkipPoolDefs );
     }
 
     // outline style
     if( maUsedFlags.mbOutlineUsed )
     {
-        ScfTools::PutItem( rItemSet, SvxContourItem( maApiData.mbOutline, ATTR_FONT_CONTOUR ), ATTR_FONT_CONTOUR, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, SvxContourItem( maApiData.mbOutline, ATTR_FONT_CONTOUR ), bEdit ? EE_CHAR_OUTLINE : ATTR_FONT_CONTOUR, bSkipPoolDefs );
     }
 
     // shadow style
     if( maUsedFlags.mbShadowUsed )
     {
-        ScfTools::PutItem( rItemSet, SvxShadowedItem( maApiData.mbShadow, ATTR_FONT_SHADOWED ), ATTR_FONT_SHADOWED, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, SvxShadowedItem( maApiData.mbShadow, ATTR_FONT_SHADOWED ), bEdit ? EE_CHAR_SHADOW : ATTR_FONT_SHADOWED, bSkipPoolDefs );
     }
     if( maUsedFlags.mbEscapementUsed )
     {
@@ -1109,10 +1127,10 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
             eScEscapem = SVX_ESCAPEMENT_SUPERSCRIPT;
         else if ( maApiData.mnEscapement == API_ESCAPE_SUBSCRIPT )
             eScEscapem = SVX_ESCAPEMENT_SUBSCRIPT;
-        rItemSet.Put( SvxEscapementItem( eScEscapem, EE_CHAR_ESCAPEMENT ) );
-        if( ePropType == FONT_PROPTYPE_TEXT )
+        if( ePropType == FONT_PROPTYPE_TEXT && bEdit )
         {
            // #TODO handle EscapementHeight
+            rItemSet.Put( SvxEscapementItem( eScEscapem, EE_CHAR_ESCAPEMENT ) );
         }
     }
 }
