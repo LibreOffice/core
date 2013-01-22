@@ -25,6 +25,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/event.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/metric.hxx>
@@ -2313,6 +2314,30 @@ void Window::remove_from_all_size_groups()
         pWindowImpl->m_xSizeGroup->erase(this);
         pWindowImpl->m_xSizeGroup.reset();
     }
+}
+
+void Window::add_mnemonic_label(FixedText *pLabel)
+{
+    std::vector<FixedText*>& v = mpWindowImpl->m_aMnemonicLabels;
+    if (std::find(v.begin(), v.end(), pLabel) != v.end())
+        return;
+    v.push_back(pLabel);
+    pLabel->set_mnemonic_widget(this);
+}
+
+void Window::remove_mnemonic_label(FixedText *pLabel)
+{
+    std::vector<FixedText*>& v = mpWindowImpl->m_aMnemonicLabels;
+    std::vector<FixedText*>::iterator aFind = std::find(v.begin(), v.end(), pLabel);
+    if (aFind == v.end())
+        return;
+    v.erase(aFind);
+    pLabel->set_mnemonic_widget(NULL);
+}
+
+std::vector<FixedText*> Window::list_mnemonic_labels() const
+{
+    return mpWindowImpl->m_aMnemonicLabels;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

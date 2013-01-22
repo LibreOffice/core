@@ -151,6 +151,7 @@ FixedText::FixedText( Window* pParent, WinBits nStyle )
     : Control(WINDOW_FIXEDTEXT)
     , m_nMaxWidthChars(-1)
     , m_nMinWidthChars(-1)
+    , m_pMnemonicWindow(NULL)
 {
     ImplInit( pParent, nStyle );
 }
@@ -161,6 +162,7 @@ FixedText::FixedText( Window* pParent, const ResId& rResId )
     : Control(WINDOW_FIXEDTEXT)
     , m_nMaxWidthChars(-1)
     , m_nMinWidthChars(-1)
+    , m_pMnemonicWindow(NULL)
 {
     rResId.SetRT( RSC_TEXT );
     WinBits nStyle = ImplInitRes( rResId );
@@ -177,6 +179,7 @@ FixedText::FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessi
     : Control( WINDOW_FIXEDTEXT )
     , m_nMaxWidthChars(-1)
     , m_nMinWidthChars(-1)
+    , m_pMnemonicWindow(NULL)
 {
     rResId.SetRT( RSC_TEXT );
     WinBits nStyle = ImplInitRes( rResId );
@@ -474,6 +477,34 @@ bool FixedText::set_property(const rtl::OString &rKey, const rtl::OString &rValu
     else
         return Control::set_property(rKey, rValue);
     return true;
+}
+
+Window* FixedText::getAccessibleRelationLabelFor() const
+{
+    Window *pWindow = Control::getAccessibleRelationLabelFor();
+    if (pWindow)
+        return pWindow;
+    return get_mnemonic_widget();
+}
+
+void FixedText::set_mnemonic_widget(Window *pWindow)
+{
+    if (pWindow == m_pMnemonicWindow)
+        return;
+    if (m_pMnemonicWindow)
+    {
+        Window *pTempReEntryGuard = m_pMnemonicWindow;
+        m_pMnemonicWindow = NULL;
+        pTempReEntryGuard->remove_mnemonic_label(this);
+    }
+    m_pMnemonicWindow = pWindow;
+    if (m_pMnemonicWindow)
+        m_pMnemonicWindow->add_mnemonic_label(this);
+}
+
+FixedText::~FixedText()
+{
+    set_mnemonic_widget(NULL);
 }
 
 SelectableFixedText::SelectableFixedText(Window* pParent, WinBits nStyle)

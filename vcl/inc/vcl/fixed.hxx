@@ -38,6 +38,7 @@ class VCL_DLLPUBLIC FixedText : public Control
 private:
     sal_Int32 m_nMaxWidthChars;
     sal_Int32 m_nMinWidthChars;
+    Window *m_pMnemonicWindow;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -55,10 +56,13 @@ protected:
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
+    virtual Window* getAccessibleRelationLabelFor() const;
+
 public:
                     FixedText( Window* pParent, WinBits nStyle = 0 );
                     FixedText( Window* pParent, const ResId& rResId );
                     FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabelForRelation );
+                    ~FixedText();
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
@@ -75,6 +79,8 @@ public:
     Size            CalcMinimumSize(long nMaxWidth = 0x7fffffff) const;
     virtual Size    GetOptimalSize() const;
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    void set_mnemonic_widget(Window *pWindow);
+    Window* get_mnemonic_widget() const { return m_pMnemonicWindow; }
 };
 
 class VCL_DLLPUBLIC SelectableFixedText : public Edit

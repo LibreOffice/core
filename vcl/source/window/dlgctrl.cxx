@@ -24,6 +24,7 @@
 #include <window.h>
 
 #include <vcl/event.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
@@ -434,6 +435,16 @@ static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Uni
             cCompareChar = xCharClass->toUpper( rtl::OUString(cCompareChar), 0, 1, rLocale )[0];
             if ( cCompareChar == cCharCode )
             {
+                if (pWindow->GetType() == WINDOW_FIXEDTEXT)
+                {
+                    FixedText *pFixedText = static_cast<FixedText*>(pWindow);
+                    Window *pMnemonicWidget = pFixedText->get_mnemonic_widget();
+                    SAL_WARN_IF(isContainerWindow(pFixedText->GetParent()) && !pMnemonicWidget,
+                        "vcl.a11y", "label missing mnemonic_widget?");
+                    if (pMnemonicWidget)
+                        return pMnemonicWidget;
+                }
+
                 // Bei Static-Controls auf das naechste Controlm weiterschalten
                 if ( (pWindow->GetType() == WINDOW_FIXEDTEXT)   ||
                      (pWindow->GetType() == WINDOW_FIXEDLINE)   ||
@@ -1207,15 +1218,8 @@ static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window
     return pWindow;
 }
 
-Window* Window::GetAccessibleRelationLabelFor() const
+Window* Window::getLegacyNonLayoutAccessibleRelationLabelFor() const
 {
-    if ( mpWindowImpl->mbDisableAccessibleLabelForRelation )
-        return NULL;
-
-    if ( mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pLabelForWindow )
-        return mpWindowImpl->mpAccessibleInfos->pLabelForWindow;
-
-
     Window* pWindow = NULL;
     Window* pFrameWindow = ImplGetFrameWindow();
 
@@ -1296,14 +1300,8 @@ static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Windo
     return pWindow;
 }
 
-Window* Window::GetAccessibleRelationLabeledBy() const
+Window* Window::getLegacyNonLayoutAccessibleRelationLabeledBy() const
 {
-    if ( mpWindowImpl->mbDisableAccessibleLabeledByRelation )
-        return NULL;
-
-    if ( mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pLabeledByWindow )
-        return mpWindowImpl->mpAccessibleInfos->pLabeledByWindow;
-
     Window* pWindow = NULL;
     Window* pFrameWindow = ImplGetFrameWindow();
 
@@ -1332,11 +1330,8 @@ Window* Window::GetAccessibleRelationLabeledBy() const
     return pWindow;
 }
 
-Window* Window::GetAccessibleRelationMemberOf() const
+Window* Window::getLegacyNonLayoutAccessibleRelationMemberOf() const
 {
-    if ( mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pMemberOfWindow )
-        return mpWindowImpl->mpAccessibleInfos->pMemberOfWindow;
-
     Window* pWindow = NULL;
     Window* pFrameWindow = GetParent();
     if ( !pFrameWindow )

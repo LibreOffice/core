@@ -53,6 +53,7 @@ class Cursor;
 class DockingManager;
 class ScrollBar;
 class Bitmap;
+class FixedText;
 class Image;
 class MouseEvent;
 class KeyEvent;
@@ -571,6 +572,15 @@ protected:
 
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();
+
+    // These eventually are supposed to go when everything is converted to .ui
+    SAL_DLLPRIVATE Window* getLegacyNonLayoutAccessibleRelationMemberOf() const;
+    SAL_DLLPRIVATE Window* getLegacyNonLayoutAccessibleRelationLabeledBy() const;
+    SAL_DLLPRIVATE Window* getLegacyNonLayoutAccessibleRelationLabelFor() const;
+
+    // Let Label override the code part of GetAccessibleRelationLabelFor
+    virtual Window* getAccessibleRelationLabelFor() const;
+    virtual sal_uInt16 getDefaultAccessibleRole() const;
 public:
     // Single argument ctors shall be explicit.
     explicit            Window( Window* pParent, WinBits nStyle = 0 );
@@ -1221,6 +1231,13 @@ public:
      */
     void add_to_size_group(boost::shared_ptr< VclSizeGroup > xGroup);
     void remove_from_all_size_groups();
+
+    /*
+     * add/remove mnemonic label
+     */
+    void add_mnemonic_label(FixedText *pLabel);
+    void remove_mnemonic_label(FixedText *pLabel);
+    std::vector<FixedText*> list_mnemonic_labels() const;
 
     /*
      * Move this widget to be the nNewPosition'd child of its parent

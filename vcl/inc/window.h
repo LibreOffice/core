@@ -43,6 +43,7 @@ struct SalPaintEvent;
 struct ImplDelData;
 struct ImplAccessibleInfos;
 
+class FixedText;
 class Window;
 class VclSizeGroup;
 class VirtualDevice;
@@ -285,6 +286,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > mxWindowPeer;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
     ::boost::shared_ptr< VclSizeGroup > m_xSizeGroup;
+    ::std::vector< FixedText* > m_aMnemonicLabels;
     ImplAccessibleInfos* mpAccessibleInfos;
     VCLXWindow*         mpVCLXWindow;
     Region              maWinRegion;        // region to 'shape' the VCL window (frame coordinates)

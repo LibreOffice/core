@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include "window.h"
@@ -19,6 +20,11 @@ VclContainer::VclContainer(Window *pParent, WinBits nStyle)
     EnableChildTransparentMode();
     SetPaintTransparent(true);
     SetBackground();
+}
+
+sal_uInt16 VclContainer::getDefaultAccessibleRole() const
+{
+    return com::sun::star::accessibility::AccessibleRole::PANEL;
 }
 
 Size VclContainer::GetOptimalSize() const
@@ -294,6 +300,11 @@ bool VclBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
     else
         return VclContainer::set_property(rKey, rValue);
     return true;
+}
+
+sal_uInt16 VclBox::getDefaultAccessibleRole() const
+{
+    return com::sun::star::accessibility::AccessibleRole::FILLER;
 }
 
 #define DEFAULT_CHILD_MIN_WIDTH 85

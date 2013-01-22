@@ -44,6 +44,7 @@ public:
 protected:
     virtual Size calculateRequisition() const = 0;
     virtual void setAllocation(const Size &rAllocation) = 0;
+    virtual sal_uInt16 getDefaultAccessibleRole() const;
 private:
     bool m_bLayoutDirty;
 };
@@ -78,6 +79,7 @@ public:
     }
     virtual bool set_property(const OString &rKey, const OString &rValue);
 protected:
+    virtual sal_uInt16 getDefaultAccessibleRole() const;
     void accumulateMaxes(const Size &rChildSize, Size &rSize) const;
     Size finalizeMaxes(const Size &rSize, sal_uInt16 nVisibleChildren) const;
 
@@ -670,6 +672,11 @@ inline bool isContainerWindow(const Window &rWindow)
 {
     WindowType eType = rWindow.GetType();
     return (eType == WINDOW_CONTAINER || eType == WINDOW_SCROLLWINDOW);
+}
+
+inline bool isContainerWindow(const Window *pWindow)
+{
+    return pWindow && isContainerWindow(*pWindow);
 }
 
 #endif
