@@ -160,6 +160,17 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
 
     handleChild(pParent, reader);
 
+    //Set Mnemonic widgets when everything has been imported
+    for (std::vector<MnemonicWidgetMap>::iterator aI = m_pParserState->m_aMnemonicWidgetMaps.begin(),
+        aEnd = m_pParserState->m_aMnemonicWidgetMaps.end(); aI != aEnd; ++aI)
+    {
+        FixedText *pOne = get<FixedText>(aI->m_sID);
+        Window *pOther = get<Window>(aI->m_sValue);
+        SAL_WARN_IF(!pOne || !pOther, "vcl", "missing member of Mnemonic Widget Mapping");
+        if (pOne && pOther)
+            pOne->set_mnemonic_widget(pOther);
+    }
+
     //Set a11y relations when everything has been imported
     for (AtkMap::iterator aI = m_pParserState->m_aAtkInfo.begin(),
          aEnd = m_pParserState->m_aAtkInfo.end(); aI != aEnd; ++aI)
@@ -781,6 +792,16 @@ bool VclBuilder::extractButtonImage(const OString &id, stringmap &rMap, bool bRa
     return false;
 }
 
+void VclBuilder::extractMnemonicWidget(const OString &id, stringmap &rMap)
+{
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("mnemonic-widget"));
+    if (aFind != rMap.end())
+    {
+        m_pParserState->m_aMnemonicWidgetMaps.push_back(MnemonicWidgetMap(id, aFind->second));
+        rMap.erase(aFind);
+    }
+}
+
 Window* VclBuilder::prepareWidgetOwnScrolling(Window *pParent, WinBits &rWinStyle)
 {
     //For Widgets that manage their own scrolling, if one appears as a child of
@@ -1011,6 +1032,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkLabel")
     {
+        extractMnemonicWidget(id, rMap);
         if (extractSelectable(rMap))
             pWindow = new SelectableFixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
         else

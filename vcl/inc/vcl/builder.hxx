@@ -98,6 +98,7 @@ private:
     typedef StringPair TextBufferMap;
     typedef StringPair WidgetAdjustmentMap;
     typedef StringPair ButtonMenuMap;
+    typedef StringPair MnemonicWidgetMap;
 
     struct ComboBoxModelMap
     {
@@ -180,6 +181,8 @@ private:
         std::vector<SizeGroup> m_aSizeGroups;
 
         AtkMap m_aAtkInfo;
+
+        std::vector<MnemonicWidgetMap> m_aMnemonicWidgetMaps;
     };
 
     void loadTranslations(const com::sun::star::lang::Locale &rLocale, const OUString &rUri);
@@ -262,6 +265,7 @@ private:
     bool extractScrollAdjustment(const OString &id, stringmap &rVec);
     bool extractButtonImage(const OString &id, stringmap &rMap, bool bRadio);
     bool extractStock(const OString &id, stringmap &rMap);
+    void extractMnemonicWidget(const OString &id, stringmap &rMap);
 
     void handleTranslations(xmlreader::XmlReader &reader);
 
