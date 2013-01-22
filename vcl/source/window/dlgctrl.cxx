@@ -1334,6 +1334,9 @@ Window* Window::GetAccessibleRelationLabeledBy() const
 
 Window* Window::GetAccessibleRelationMemberOf() const
 {
+    if ( mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pMemberOfWindow )
+        return mpWindowImpl->mpAccessibleInfos->pMemberOfWindow;
+
     Window* pWindow = NULL;
     Window* pFrameWindow = GetParent();
     if ( !pFrameWindow )
