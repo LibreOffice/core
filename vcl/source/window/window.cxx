@@ -8882,64 +8882,62 @@ void Window::SetAccessibleName( const String& rName )
 
 String Window::GetAccessibleName() const
 {
-    String aAccessibleName;
-    if ( mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pAccessibleName )
+    if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pAccessibleName)
+        return *mpWindowImpl->mpAccessibleInfos->pAccessibleName;
+    return getDefaultAccessibleName();
+}
+
+OUString Window::getDefaultAccessibleName() const
+{
+    OUString aAccessibleName;
+    switch ( GetType() )
     {
-        aAccessibleName = *mpWindowImpl->mpAccessibleInfos->pAccessibleName;
-    }
-    else
-    {
-        switch ( GetType() )
+        case WINDOW_MULTILINEEDIT:
+        case WINDOW_PATTERNFIELD:
+        case WINDOW_NUMERICFIELD:
+        case WINDOW_METRICFIELD:
+        case WINDOW_CURRENCYFIELD:
+        case WINDOW_LONGCURRENCYFIELD:
+        case WINDOW_CALCINPUTLINE:
+        case WINDOW_EDIT:
+
+        case WINDOW_DATEBOX:
+        case WINDOW_TIMEBOX:
+        case WINDOW_CURRENCYBOX:
+        case WINDOW_LONGCURRENCYBOX:
+        case WINDOW_DATEFIELD:
+        case WINDOW_TIMEFIELD:
+        case WINDOW_SPINFIELD:
+
+        case WINDOW_COMBOBOX:
+        case WINDOW_LISTBOX:
+        case WINDOW_MULTILISTBOX:
+        case WINDOW_TREELISTBOX:
+        case WINDOW_METRICBOX:
         {
-            case WINDOW_MULTILINEEDIT:
-            case WINDOW_PATTERNFIELD:
-            case WINDOW_NUMERICFIELD:
-            case WINDOW_METRICFIELD:
-            case WINDOW_CURRENCYFIELD:
-            case WINDOW_LONGCURRENCYFIELD:
-            case WINDOW_CALCINPUTLINE:
-            case WINDOW_EDIT:
-
-            case WINDOW_DATEBOX:
-            case WINDOW_TIMEBOX:
-            case WINDOW_CURRENCYBOX:
-            case WINDOW_LONGCURRENCYBOX:
-            case WINDOW_DATEFIELD:
-            case WINDOW_TIMEFIELD:
-            case WINDOW_SPINFIELD:
-
-            case WINDOW_COMBOBOX:
-            case WINDOW_LISTBOX:
-            case WINDOW_MULTILISTBOX:
-            case WINDOW_TREELISTBOX:
-            case WINDOW_METRICBOX:
-            {
-                Window *pLabel = GetAccessibleRelationLabeledBy();
-                if ( pLabel && pLabel != this )
-                    aAccessibleName = pLabel->GetText();
-            }
-            break;
-
-            case WINDOW_IMAGEBUTTON:
-            case WINDOW_PUSHBUTTON:
-                aAccessibleName = GetText();
-                if ( !aAccessibleName.Len() )
-                {
-                    aAccessibleName = GetQuickHelpText();
-                    if ( !aAccessibleName.Len() )
-                        aAccessibleName = GetHelpText();
-                }
-            break;
-
-            default:
-                aAccessibleName = GetText();
-                break;
+            Window *pLabel = GetAccessibleRelationLabeledBy();
+            if ( pLabel && pLabel != this )
+                aAccessibleName = pLabel->GetText();
         }
+        break;
 
-        aAccessibleName = GetNonMnemonicString( aAccessibleName );
+        case WINDOW_IMAGEBUTTON:
+        case WINDOW_PUSHBUTTON:
+            aAccessibleName = GetText();
+            if (aAccessibleName.isEmpty())
+            {
+                aAccessibleName = GetQuickHelpText();
+                if (aAccessibleName.isEmpty())
+                    aAccessibleName = GetHelpText();
+            }
+        break;
+
+        default:
+            aAccessibleName = GetText();
+            break;
     }
 
-    return aAccessibleName;
+    return GetNonMnemonicString( aAccessibleName );
 }
 
 void Window::SetAccessibleDescription( const String& rDescription )

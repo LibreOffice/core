@@ -1070,6 +1070,14 @@ void VclFrame::set_label(const rtl::OUString &rLabel)
     pLabel->SetText(rLabel);
 }
 
+OUString VclFrame::getDefaultAccessibleName() const
+{
+    const Window *pLabel = get_label_widget();
+    if (pLabel)
+        return pLabel->GetAccessibleName();
+    return VclBin::getDefaultAccessibleName();
+}
+
 Size VclAlignment::calculateRequisition() const
 {
     Size aRet(m_nLeftPadding + m_nRightPadding,

@@ -581,6 +581,7 @@ protected:
     // Let Label override the code part of GetAccessibleRelationLabelFor
     virtual Window* getAccessibleRelationLabelFor() const;
     virtual sal_uInt16 getDefaultAccessibleRole() const;
+    virtual OUString getDefaultAccessibleName() const;
 public:
     // Single argument ctors shall be explicit.
     explicit            Window( Window* pParent, WinBits nStyle = 0 );

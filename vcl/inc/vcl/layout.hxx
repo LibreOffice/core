@@ -450,6 +450,7 @@ public:
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
+    virtual OUString getDefaultAccessibleName() const;
 };
 
 class VCL_DLLPUBLIC VclAlignment : public VclBin
