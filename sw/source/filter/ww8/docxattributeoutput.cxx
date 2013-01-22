@@ -4512,7 +4512,23 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
     if (m_bTextFrameSyntax)
+    {
+        const SvxBorderLine* pLeft = rBox.GetLine(BOX_LINE_LEFT);
+        const SvxBorderLine* pRight = rBox.GetLine(BOX_LINE_RIGHT);
+        const SvxBorderLine* pTop = rBox.GetLine(BOX_LINE_TOP);
+        const SvxBorderLine* pBottom = rBox.GetLine(BOX_LINE_BOTTOM);
+        if (pLeft && pRight && pTop && pBottom &&
+                *pLeft == *pRight && *pLeft == *pTop && *pLeft == *pBottom)
+        {
+            OString sColor("#" + impl_ConvertColor(pTop->GetColor()));
+            m_pFlyAttrList->add(XML_strokecolor, sColor);
+
+            double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
+            sal_Int32 nWidth = sal_Int32(fConverted / 20);
+            m_pFlyAttrList->add(XML_strokeweight, OString::valueOf(nWidth) + "pt");
+        }
         return;
+    }
 
     if ( !m_bOpenedSectPr )
     {
