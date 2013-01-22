@@ -93,13 +93,13 @@ ModalDialog RID_SCDLG_DATABAR
     FixedText FT_POSITION
     {
         Pos = MAP_APPFONT( 10, 135 );
-        Size = MAP_APPFONT( 70, 14 );
+        Size = MAP_APPFONT( 110, 14 );
         Text [ en-US ] = "Position of vertical axis";
     };
     FixedText FT_COLOR_AXIS
     {
         Pos = MAP_APPFONT( 10, 155 );
-        Size = MAP_APPFONT( 70, 14 );
+        Size = MAP_APPFONT( 110, 14 );
         Text [ en-US ] = "Color of vertical axis";
     };
     ListBox LB_POS
@@ -120,7 +120,7 @@ ModalDialog RID_SCDLG_DATABAR
     };
     ListBox LB_COL_AXIS
     {
-        Pos = MAP_APPFONT( 100, 155 );
+        Pos = MAP_APPFONT( 120, 155 );
         Size = MAP_APPFONT( 60, 50 );
         Border = TRUE;
         DropDown = TRUE;
@@ -145,7 +145,7 @@ ModalDialog RID_SCDLG_DATABAR
     };
     ListBox LB_AXIS_POSITION
     {
-        Pos = MAP_APPFONT( 100, 135 );
+        Pos = MAP_APPFONT( 120, 135 );
         Size = MAP_APPFONT( 50, 50 );
         Border = TRUE;
         DropDown = TRUE;
