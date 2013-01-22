@@ -35,6 +35,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 
 #include <unotools/tempfile.hxx>
@@ -69,6 +70,7 @@ public:
     void testN789482();
     void test1Table1Page();
     void testTextFrames();
+    void testTextFrameBorders();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -109,6 +111,7 @@ void Test::run()
         {"n789482.docx", &Test::testN789482},
 //      {"1-table-1-page.docx", &Test::test1Table1Page}, // doesn't work on openSUSE12.2 at least
         {"textframes.odt", &Test::testTextFrames},
+        {"textframe-borders.docx", &Test::testTextFrameBorders}
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -517,6 +520,23 @@ void Test::testTextFrames()
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
+}
+
+void Test::testTextFrameBorders()
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD99594), getProperty<sal_Int32>(xFrame, "BackColor"));
+
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xFrame, "TopBorder");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xC0504D), aBorder.Color);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), aBorder.LineWidth);
+
+    table::ShadowFormat aShadowFormat = getProperty<table::ShadowFormat>(xFrame, "ShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadowFormat.Location);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(48), aShadowFormat.ShadowWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aShadowFormat.Color);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
