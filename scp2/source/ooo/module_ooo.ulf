@@ -91,6 +91,12 @@ en-US = "Breton"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_BR]
 en-US = "Breton spelling dictionary"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_BS]
+en-US = "Bosnian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_BS]
+en-US = "Bosnian spelling dictionary"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_CA]
 en-US = "Catalan"
 

@@ -1345,6 +1345,15 @@ End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Bs
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Bs;
+	Name = "dict-bs.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ca
     Dir = gid_Brand_Dir_Share_Extensions_Dict_Ca;
     Name = "dict-ca.oxt";
