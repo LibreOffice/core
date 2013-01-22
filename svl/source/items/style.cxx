@@ -872,7 +872,8 @@ SfxStyleSheet::SfxStyleSheet(const XubString &rName,
 SfxStyleSheet::SfxStyleSheet(const SfxStyleSheet& rStyle) :
     SfxStyleSheetBase(rStyle),
     SfxListener( rStyle ),
-    SfxBroadcaster( rStyle )
+    SfxBroadcaster( rStyle ),
+    svl::StyleSheetUser()
 {}
 
 SfxStyleSheet::~SfxStyleSheet()
