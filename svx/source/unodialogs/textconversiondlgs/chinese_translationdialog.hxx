@@ -52,11 +52,11 @@ private:
     void impl_UpdateVariantsCheckBox();
 
 private:
-    RadioButton m_aRB_To_Simplified;
-    RadioButton m_aRB_To_Traditional;
+    RadioButton* m_pRB_To_Simplified;
+    RadioButton* m_pRB_To_Traditional;
 
-    CheckBox    m_aCB_Translate_Commonterms;
-    PushButton  m_aPB_Editterms;
+    CheckBox*   m_pCB_Translate_Commonterms;
+    PushButton* m_pPB_Editterms;
 
     OKButton*   m_pBP_OK;
 

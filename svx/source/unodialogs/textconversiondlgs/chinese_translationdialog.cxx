@@ -46,32 +46,32 @@ using namespace ::com::sun::star::uno;
 ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     : ModalDialog(pParent, "ChineseConversionDialog", "svx/ui/chineseconversiondialog.ui")
 
-    , m_aRB_To_Simplified( this, TextConversionDlgs_ResId( RB_TO_SIMPLIFIED ) )
-    , m_aRB_To_Traditional( this, TextConversionDlgs_ResId( RB_TO_TRADITIONAL ) )
-    , m_aCB_Translate_Commonterms( this, TextConversionDlgs_ResId( CB_TRANSLATE_COMMONTERMS ) )
-    , m_aPB_Editterms( this, TextConversionDlgs_ResId( PB_EDITTERMS ) )
     , m_pDictionaryDialog(0)
 {
     get(m_pBP_OK, "ok");
+    get(m_pPB_Editterms, "editterms");
+    get(m_pRB_To_Simplified, "tosimplified");
+    get(m_pRB_To_Traditional, "totraditional");
+    get(m_pCB_Translate_Commonterms, "commonterms");
     FreeResource();
 
-    m_aRB_To_Simplified.SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED );
-    m_aRB_To_Traditional.SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL );
+    m_pRB_To_Simplified->SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED );
+    m_pRB_To_Traditional->SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL );
 
     SvtLinguConfig  aLngCfg;
     sal_Bool bValue = sal_Bool();
     Any aAny( aLngCfg.GetProperty( rtl::OUString( UPN_IS_DIRECTION_TO_SIMPLIFIED ) ) );
     aAny >>= bValue;
     if( bValue )
-        m_aRB_To_Simplified.Check();
+        m_pRB_To_Simplified->Check();
     else
-        m_aRB_To_Traditional.Check();
+        m_pRB_To_Traditional->Check();
 
     aAny = aLngCfg.GetProperty( rtl::OUString( UPN_IS_TRANSLATE_COMMON_TERMS ) );
     if( aAny >>= bValue )
-        m_aCB_Translate_Commonterms.Check( bValue );
+        m_pCB_Translate_Commonterms->Check( bValue );
 
-    m_aPB_Editterms.SetClickHdl( LINK( this, ChineseTranslationDialog, DictionaryHdl ) );
+    m_pPB_Editterms->SetClickHdl( LINK( this, ChineseTranslationDialog, DictionaryHdl ) );
     m_pBP_OK->SetClickHdl( LINK( this, ChineseTranslationDialog, OkHdl ) );
 }
 
@@ -88,8 +88,8 @@ ChineseTranslationDialog::~ChineseTranslationDialog()
 void ChineseTranslationDialog::getSettings( sal_Bool& rbDirectionToSimplified
                                           , sal_Bool& rbTranslateCommonTerms ) const
 {
-    rbDirectionToSimplified = m_aRB_To_Simplified.IsChecked();
-    rbTranslateCommonTerms = m_aCB_Translate_Commonterms.IsChecked();
+    rbDirectionToSimplified = m_pRB_To_Simplified->IsChecked();
+    rbTranslateCommonTerms = m_pCB_Translate_Commonterms->IsChecked();
 }
 
 IMPL_LINK_NOARG(ChineseTranslationDialog, OkHdl)
@@ -97,9 +97,9 @@ IMPL_LINK_NOARG(ChineseTranslationDialog, OkHdl)
     //save settings to configuration
     SvtLinguConfig  aLngCfg;
     Any aAny;
-    aAny <<= sal_Bool( !!m_aRB_To_Simplified.IsChecked() );
+    aAny <<= sal_Bool( !!m_pRB_To_Simplified->IsChecked() );
     aLngCfg.SetProperty( rtl::OUString( UPN_IS_DIRECTION_TO_SIMPLIFIED ), aAny );
-    aAny <<= sal_Bool( !!m_aCB_Translate_Commonterms.IsChecked() );
+    aAny <<= sal_Bool( !!m_pCB_Translate_Commonterms->IsChecked() );
     aLngCfg.SetProperty( rtl::OUString( UPN_IS_TRANSLATE_COMMON_TERMS ), aAny );
 
     EndDialog( RET_OK );
@@ -125,9 +125,9 @@ IMPL_LINK_NOARG(ChineseTranslationDialog, DictionaryHdl)
         else
         {
             sal_Int32 nTextConversionOptions = i18n::TextConversionOption::NONE;
-            if( !m_aCB_Translate_Commonterms.IsChecked() )
+            if( !m_pCB_Translate_Commonterms->IsChecked() )
                 nTextConversionOptions = nTextConversionOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
-            m_pDictionaryDialog->setDirectionAndTextConversionOptions( m_aRB_To_Simplified.IsChecked(), nTextConversionOptions );
+            m_pDictionaryDialog->setDirectionAndTextConversionOptions( m_pRB_To_Simplified->IsChecked(), nTextConversionOptions );
             m_pDictionaryDialog->Execute();
         }
     }

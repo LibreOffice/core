@@ -97,7 +97,7 @@
                         <property name="hexpand">True</property>
                         <property name="row_spacing">6</property>
                         <child>
-                          <object class="GtkRadioButton" id="radiobutton1">
+                          <object class="GtkRadioButton" id="tosimplified">
                             <property name="label" translatable="yes">_Traditional Chinese to simplified Chinese</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -106,7 +106,7 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">radiobutton2</property>
+                            <property name="group">totraditional</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -116,7 +116,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="radiobutton2">
+                          <object class="GtkRadioButton" id="totraditional">
                             <property name="label" translatable="yes">_Simplified Chinese to traditional Chinese</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -124,7 +124,7 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">radiobutton1</property>
+                            <property name="group">tosimplified</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -179,7 +179,7 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">6</property>
                         <child>
-                          <object class="GtkCheckButton" id="checkbutton1">
+                          <object class="GtkCheckButton" id="commonterms">
                             <property name="label" translatable="yes">Translate _common terms</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -197,7 +197,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="button1">
+                          <object class="GtkButton" id="editterms">
                             <property name="label" translatable="yes">_Edit Terms...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
