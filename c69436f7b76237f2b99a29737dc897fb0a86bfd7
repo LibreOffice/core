@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAATn///x0\u003d",
+        "filename": "connectivity/source/drivers/postgresql/pq_xtables.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-01-22T08:29:58Z",
+      "side": 1,
+      "message": "Note that in cases like this the OUStringBuffer can be removed completely. Either OUString can be created directly and then used, or if the expression is simple enough and used only once, the expression can be used directly in the one place where the string is needed.",
+      "revId": "c69436f7b76237f2b99a29737dc897fb0a86bfd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
