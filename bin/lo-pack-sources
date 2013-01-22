@@ -131,15 +131,15 @@ sub generate_lo_module_changelog($$$)
         die "Error: generating failed: $!\n";
 }
 
-sub run_autoreconf($$)
+sub run_autogen($$)
 {
     my ($dir, $module) = @_;
 
-    print "Running autoreconf for $module...\n";
+    print "Running autogen for $module...\n";
     system ("cd $dir && " .
-            "autoreconf -f -i && " .
+            "NOCONFIGURE=1 ./autogen.sh && " .
             "rm -rf autom4te.cache && " .
-            "cd - >/dev/null 2>&1") && die "Error: autoreconf failed: $!\n";
+            "cd - >/dev/null 2>&1") && die "Error: autogen failed: $!\n";
 }
 
 sub generate_sources_version_file($$)
@@ -266,7 +266,7 @@ sub prepare_module_sources($$$$)
     # prepare sources
     my $temp_dir = copy_lo_module_to_tempdir($source_dir, $module, $lo_topdir_name);
     generate_lo_module_changelog($source_dir, "$temp_dir/$lo_topdir_name", $module);
-    run_autoreconf("$temp_dir/$lo_topdir_name", $module) if ($module eq 'core');
+    run_autogen("$temp_dir/$lo_topdir_name", $module) if ($module eq 'core');
     generate_sources_version_file("$temp_dir/$lo_topdir_name", $release_version) if ($module eq 'core');
 
     return $temp_dir;
