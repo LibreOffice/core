@@ -208,6 +208,11 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_Br
     DosName = "dict-br";
 End
 
+Directory gid_Brand_Dir_Share_Extensions_Dict_Bs
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-bs";
+End
+
 Directory gid_Brand_Dir_Share_Extensions_Dict_Ca
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-ca";
