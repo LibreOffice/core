@@ -19,7 +19,6 @@
 
 
 #include "chinese_translationdialog.hxx"
-#include "chinese_translationdialog.hrc"
 #include "resid.hxx"
 #include "chinese_dictionarydialog.hxx"
 #include <com/sun/star/i18n/TextConversionOption.hpp>
