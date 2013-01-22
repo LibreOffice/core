@@ -281,6 +281,41 @@ namespace vcl_sal {
         { SunXK_Cut,   "Cut" },
     };
 
+    static const struct KeysymNameReplacement aImplReplacements_Slovenian[] =
+    {
+        { XK_Control_L, "Krmilka" },
+        { XK_Control_R, "Krmilka" },
+        { XK_Shift_L, "Dvigalka" },
+        { XK_Shift_R, "Dvigalka" },
+        { XK_Alt_L, "Izmenjalka" },
+        { XK_Alt_R, "Desna izmenjalka" },
+        { XK_Page_Up, "Prejšnja stranf" },
+        { XK_Page_Down, "Naslednja stran" },
+        { XK_End, "Konec" },
+        { XK_Home, "Začetek" },
+        { XK_Insert, "Vstavljalka" },
+        { XK_Delete, "Brisalka" },
+        { XK_Escape, "Ubežnica" },
+        { XK_Right, "Desno" },
+        { XK_Left, "Levo" },
+        { XK_Up, "Navzgor" },
+        { XK_Down, "Navzdol" },
+        { XK_BackSpace, "Vračalka" },
+        { XK_Return, "Vnašalka" },
+        { XK_slash, "Poševnica" },
+        { XK_space, "Preslednica" },
+        { SunXK_Stop,  "Ustavi" },
+        { SunXK_Again, "Ponovi" },
+        { SunXK_Props, "Lastnosti" },
+        { SunXK_Undo,  "Razveljavi" },
+        { SunXK_Front, "Ospredje" },
+        { SunXK_Copy,  "Kopiraj" },
+        { SunXK_Open,  "Odpri" },
+        { SunXK_Paste, "Prilepi" },
+        { SunXK_Find,  "Najdi" },
+        { SunXK_Cut,   "Izreži" },
+    };
+
     static const struct KeysymNameReplacement aImplReplacements_Spanish[] =
     {
         { XK_Shift_L, "Mayús" },
@@ -375,6 +410,7 @@ namespace vcl_sal {
     {
         { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
         { "de", aImplReplacements_German, SAL_N_ELEMENTS(aImplReplacements_German) },
+        { "sl", aImplReplacements_Slovenian, SAL_N_ELEMENTS(aImplReplacements_Slovenian) },
         { "es", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
         { "et", aImplReplacements_Estonian, SAL_N_ELEMENTS(aImplReplacements_Estonian) },
         { "fr", aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
