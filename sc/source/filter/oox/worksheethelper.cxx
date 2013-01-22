@@ -69,6 +69,7 @@
 #include "scitems.hxx"
 #include <svl/stritem.hxx>
 #include "editutil.hxx"
+#include <editeng/editobj.hxx>
 
 namespace oox {
 namespace xls {
