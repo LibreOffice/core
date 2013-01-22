@@ -55,8 +55,7 @@ ColorNameMap::ColorNameMap() {
     {
         // Create color table in which to look up the given color.
         css::uno::Reference< css::container::XNameContainer > xColorTable (
-            comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ColorTable")) ),
+            comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.drawing.ColorTable" ),
             css::uno::UNO_QUERY);
 
         // Get list of color names in order to iterate over the color table.

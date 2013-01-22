@@ -557,7 +557,7 @@ void AccFrameSelector::removeAccessibleEventListener( const Reference< XAccessib
 
 OUString AccFrameSelector::getImplementationName(  ) throw (RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("AccFrameSelector"));
+    return OUString("AccFrameSelector");
 }
 
 // ----------------------------------------------------------------------------
@@ -581,9 +581,9 @@ Sequence< OUString > AccFrameSelector::getSupportedServiceNames(  )
 {
     Sequence< OUString > aRet(3);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessible         ) );
-    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleContext  ) );
-    pArray[2] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleComponent) );
+    pArray[0] = OUString( sAccessible );
+    pArray[1] = OUString( sAccessibleContext );
+    pArray[2] = OUString( sAccessibleComponent );
     return aRet;
 }
 

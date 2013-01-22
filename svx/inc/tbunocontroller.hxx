@@ -48,7 +48,7 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
 
         static ::rtl::OUString getImplementationName_Static() throw()
         {
-            return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svx.FontHeightToolBoxController" ));
+            return ::rtl::OUString("com.sun.star.svx.FontHeightToolBoxController");
         }
 
         static ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();

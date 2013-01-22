@@ -111,12 +111,11 @@ void SAL_CALL
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     AccessibleGraphicShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("AccessibleGraphicShape"));
+    return OUString("AccessibleGraphicShape");
 }
 
 
@@ -134,8 +133,7 @@ void SAL_CALL
 
     // ...and add additional names.
     aServiceNames.realloc (nCount + 1);
-    static const OUString sAdditionalServiceName (RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.drawing.AccessibleGraphicShape"));
+    static const OUString sAdditionalServiceName ("com.sun.star.drawing.AccessibleGraphicShape");
     aServiceNames[nCount] = sAdditionalServiceName;
 
     return aServiceNames;
@@ -170,21 +168,20 @@ uno::Sequence<uno::Type> SAL_CALL
     AccessibleGraphicShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString sName;
+    OUString sName;
 
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
         case DRAWING_GRAPHIC_OBJECT:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("GraphicObjectShape"));
+            sName = "GraphicObjectShape";
             break;
 
         default:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleGraphicShape"));
+            sName = "UnknownAccessibleGraphicShape";
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
-                sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
-                    + xDescriptor->getShapeType();
+                sName += ": " + xDescriptor->getShapeType();
     }
 
     return sName;

@@ -300,17 +300,17 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         if( !maEditSource.IsValid() )
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown edit source")), mxFrontEnd);
+            throw uno::RuntimeException("Unknown edit source", mxFrontEnd);
 
         SvxTextForwarder* pTextForwarder = maEditSource.GetTextForwarder();
 
         if( !pTextForwarder )
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch text forwarder, model might be dead")), mxFrontEnd);
+            throw uno::RuntimeException("Unable to fetch text forwarder, model might be dead", mxFrontEnd);
 
         if( pTextForwarder->IsValid() )
             return *pTextForwarder;
         else
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text forwarder is invalid, model might be dead")), mxFrontEnd);
+            throw uno::RuntimeException("Text forwarder is invalid, model might be dead", mxFrontEnd);
     }
 
     SvxViewForwarder& AccessibleTextHelper_Impl::GetViewForwarder() const SAL_THROW((uno::RuntimeException))
@@ -318,17 +318,17 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         if( !maEditSource.IsValid() )
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown edit source")), mxFrontEnd);
+            throw uno::RuntimeException("Unknown edit source", mxFrontEnd);
 
         SvxViewForwarder* pViewForwarder = maEditSource.GetViewForwarder();
 
         if( !pViewForwarder )
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch view forwarder, model might be dead")), mxFrontEnd);
+            throw uno::RuntimeException("Unable to fetch view forwarder, model might be dead", mxFrontEnd);
 
         if( pViewForwarder->IsValid() )
             return *pViewForwarder;
         else
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("View forwarder is invalid, model might be dead")), mxFrontEnd);
+            throw uno::RuntimeException("View forwarder is invalid, model might be dead", mxFrontEnd);
     }
 
     SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder( sal_Bool bCreate ) const SAL_THROW((uno::RuntimeException))
@@ -336,16 +336,16 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         if( !maEditSource.IsValid() )
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown edit source")), mxFrontEnd);
+            throw uno::RuntimeException("Unknown edit source", mxFrontEnd);
 
         SvxEditViewForwarder* pViewForwarder = maEditSource.GetEditViewForwarder( bCreate );
 
         if( !pViewForwarder )
         {
             if( bCreate )
-                throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch edit view forwarder, model might be dead")), mxFrontEnd);
+                throw uno::RuntimeException("Unable to fetch edit view forwarder, model might be dead", mxFrontEnd);
             else
-                throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No edit view forwarder, object not in edit mode")), mxFrontEnd);
+                throw uno::RuntimeException("No edit view forwarder, object not in edit mode", mxFrontEnd);
         }
 
         if( pViewForwarder->IsValid() )
@@ -353,9 +353,9 @@ namespace accessibility
         else
         {
             if( bCreate )
-                throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("View forwarder is invalid, model might be dead")), mxFrontEnd);
+                throw uno::RuntimeException("View forwarder is invalid, model might be dead", mxFrontEnd);
             else
-                throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("View forwarder is invalid, object not in edit mode")), mxFrontEnd);
+                throw uno::RuntimeException("View forwarder is invalid, object not in edit mode", mxFrontEnd);
         }
     }
 
@@ -366,7 +366,7 @@ namespace accessibility
         if( maEditSource.IsValid() )
             return maEditSource;
         else
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleTextHelper_Impl::GetEditSource: no edit source")), mxFrontEnd );
+            throw uno::RuntimeException("AccessibleTextHelper_Impl::GetEditSource: no edit source", mxFrontEnd );
     }
 
     sal_Bool AccessibleTextHelper_Impl::IsSelected() const
@@ -1634,7 +1634,7 @@ namespace accessibility
         if( 0 > i || i >= getAccessibleChildCount() ||
             GetTextForwarder().GetParagraphCount() <= i )
         {
-            throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid child index")), mxFrontEnd);
+            throw lang::IndexOutOfBoundsException("Invalid child index", mxFrontEnd);
         }
 
         DBG_ASSERT(mxFrontEnd.is(), "AccessibleTextHelper_Impl::UpdateVisibleChildren: no frontend set");
@@ -1667,18 +1667,17 @@ namespace accessibility
 
         // make given position relative
         if( !mxFrontEnd.is() )
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleTextHelper_Impl::getAccessibleAt: frontend invalid")), mxFrontEnd );
+            throw uno::RuntimeException("AccessibleTextHelper_Impl::getAccessibleAt: frontend invalid", mxFrontEnd );
 
         uno::Reference< XAccessibleContext > xFrontEndContext = mxFrontEnd->getAccessibleContext();
 
         if( !xFrontEndContext.is() )
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleTextHelper_Impl::getAccessibleAt: frontend invalid")), mxFrontEnd );
+            throw uno::RuntimeException("AccessibleTextHelper_Impl::getAccessibleAt: frontend invalid", mxFrontEnd );
 
         uno::Reference< XAccessibleComponent > xFrontEndComponent( xFrontEndContext, uno::UNO_QUERY );
 
         if( !xFrontEndComponent.is() )
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleTextHelper_Impl::getAccessibleAt: frontend is no XAccessibleComponent")),
-                                        mxFrontEnd );
+            throw uno::RuntimeException("AccessibleTextHelper_Impl::getAccessibleAt: frontend is no XAccessibleComponent", mxFrontEnd );
 
         // #103862# No longer need to make given position relative
         Point aPoint( _aPoint.X, _aPoint.Y );

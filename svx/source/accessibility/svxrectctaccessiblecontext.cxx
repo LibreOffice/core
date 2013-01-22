@@ -505,7 +505,7 @@ sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
 
 ::rtl::OUString SAL_CALL SvxRectCtlAccessibleContext::getImplementationName( void ) throw( RuntimeException )
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.ui.SvxRectCtlAccessibleContext" ) );
+    return ::rtl::OUString( "com.sun.star.comp.ui.SvxRectCtlAccessibleContext" );
 }
 
 sal_Bool SAL_CALL SvxRectCtlAccessibleContext::supportsService( const ::rtl::OUString& sServiceName ) throw( RuntimeException )
@@ -526,10 +526,10 @@ sal_Bool SAL_CALL SvxRectCtlAccessibleContext::supportsService( const ::rtl::OUS
     return sal_False;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL SvxRectCtlAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
+Sequence< OUString > SAL_CALL SvxRectCtlAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
 {
-    const ::rtl::OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
-    return Sequence< ::rtl::OUString >( &sServiceName, 1 );
+    const OUString sServiceName( "com.sun.star.accessibility.AccessibleContext" );
+    return Sequence< OUString >( &sServiceName, 1 );
 }
 
 //=====  XTypeProvider  =======================================================
@@ -600,7 +600,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getSelectedAccess
 
 void SAL_CALL SvxRectCtlAccessibleContext::deselectAccessibleChild( sal_Int32 /*nIndex*/ ) throw( lang::IndexOutOfBoundsException, RuntimeException )
 {
-    ::rtl::OUString aMessage( RTL_CONSTASCII_USTRINGPARAM( "deselectAccessibleChild is not possible in this context" ) );
+    OUString aMessage( "deselectAccessibleChild is not possible in this context" );
 
     DBG_ASSERT( sal_False, "SvxRectCtlAccessibleContext::deselectAccessibleChild() is not possible!" );
 
@@ -1035,9 +1035,9 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getMinimumValue() throw( RuntimeE
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL SvxRectCtlChildAccessibleContext::getImplementationName( void ) throw( RuntimeException )
+OUString SAL_CALL SvxRectCtlChildAccessibleContext::getImplementationName( void ) throw( RuntimeException )
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.ui.SvxRectCtlChildAccessibleContext" ) );
+    return OUString( "com.sun.star.comp.ui.SvxRectCtlChildAccessibleContext" );
 }
 
 sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::supportsService( const ::rtl::OUString& sServiceName ) throw( RuntimeException )
@@ -1056,10 +1056,10 @@ sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::supportsService( const ::rtl
     return sal_False;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL SvxRectCtlChildAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
+Sequence< OUString > SAL_CALL SvxRectCtlChildAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
 {
-    const ::rtl::OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.accessibility.AccessibleContext"));
-    return Sequence< ::rtl::OUString >( &sServiceName, 1 );
+    const OUString sServiceName ("com.sun.star.accessibility.AccessibleContext");
+    return Sequence< OUString >( &sServiceName, 1 );
 }
 
 //=====  XTypeProvider  =======================================================

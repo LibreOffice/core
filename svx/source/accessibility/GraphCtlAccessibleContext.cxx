@@ -560,7 +560,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground (void)
 
 OUString SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationName( void ) throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.ui.SvxGraphCtrlAccessibleContext" ) );
+    return OUString( "com.sun.star.comp.ui.SvxGraphCtrlAccessibleContext" );
 }
 
 //-----------------------------------------------------------------------------
@@ -588,9 +588,9 @@ Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedService
 {
     Sequence< OUString > aSNs( 3 );
 
-    aSNs[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.Accessible" ) );
-    aSNs[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
-    aSNs[2] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AccessibleGraphControl" ) );
+    aSNs[0] = "com.sun.star.accessibility.Accessible";
+    aSNs[1] = "com.sun.star.accessibility.AccessibleContext";
+    aSNs[2] = "com.sun.star.drawing.AccessibleGraphControl";
 
     return aSNs;
 }
@@ -607,7 +607,7 @@ Sequence<sal_Int8> SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationId( 
 
 OUString SvxGraphCtrlAccessibleContext::getServiceName( void ) throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
+    return OUString( "com.sun.star.accessibility.AccessibleContext" );
 }
 
 //=====  XAccessibleSelection =============================================

@@ -222,7 +222,7 @@ void AccessibleShape::UpdateStates (void)
                 try
                 {
                     drawing::FillStyle aFillStyle;
-                    bShapeIsOpaque =  ( xSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle"))) >>= aFillStyle)
+                    bShapeIsOpaque =  ( xSet->getPropertyValue (::rtl::OUString("FillStyle")) >>= aFillStyle)
                                         && aFillStyle == drawing::FillStyle_SOLID;
                 }
                 catch (::com::sun::star::beans::UnknownPropertyException&)
@@ -371,7 +371,7 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shape has no child with index "))
+            ::rtl::OUString("shape has no child with index ")
             + rtl::OUString::valueOf(nIndex),
             static_cast<uno::XWeak*>(this));
 
@@ -482,10 +482,8 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     if ( mxShape.is() )
     {
 
-        static const OUString sBoundRectName (
-            RTL_CONSTASCII_USTRINGPARAM("BoundRect"));
-        static const OUString sAnchorPositionName (
-            RTL_CONSTASCII_USTRINGPARAM("AnchorPosition"));
+        static const OUString sBoundRectName ("BoundRect");
+        static const OUString sAnchorPositionName ("AnchorPosition");
 
         // Get the shape's bounding box in internal coordinates (in 100th of
         // mm).  Use the property BoundRect.  Only if that is not supported ask
@@ -544,8 +542,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
         // Transform coordinates from internal to pixel.
         if (maShapeTreeInfo.GetViewForwarder() == NULL)
             throw uno::RuntimeException (::rtl::OUString (
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "AccessibleShape has no valid view forwarder")),
+                "AccessibleShape has no valid view forwarder"),
                 static_cast<uno::XWeak*>(this));
         ::Size aPixelSize = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
             ::Size (aBoundingBox.Width, aBoundingBox.Height));
@@ -648,7 +645,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")) );
+            aColor = aSet->getPropertyValue (OUString("LineColor"));
             aColor >>= nColor;
         }
     }
@@ -674,7 +671,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")) );
+            aColor = aSet->getPropertyValue (OUString("FillColor"));
             aColor >>= nColor;
         }
     }
@@ -770,7 +767,7 @@ void SAL_CALL
     AccessibleShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleShape"));
+    return ::rtl::OUString("AccessibleShape");
 }
 
 
@@ -788,8 +785,7 @@ uno::Sequence<OUString> SAL_CALL
 
     // ...and add additional names.
     aServiceNames.realloc (nCount + 1);
-    static const OUString sAdditionalServiceName (RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.drawing.AccessibleShape"));
+    static const OUString sAdditionalServiceName ("com.sun.star.drawing.AccessibleShape");
     aServiceNames[nCount] = sAdditionalServiceName;
 
     return aServiceNames;
@@ -876,8 +872,7 @@ void SAL_CALL
     AccessibleShape::notifyEvent (const document::EventObject& rEventObject)
     throw (uno::RuntimeException)
 {
-    static const OUString sShapeModified (
-        RTL_CONSTASCII_USTRINGPARAM("ShapeModified"));
+    static const OUString sShapeModified ("ShapeModified");
 
     // First check if the event is for us.
     uno::Reference<drawing::XShape> xShape (
@@ -992,7 +987,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
             if (xSet.is())
             {
-                uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")) ));
+                uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString("ZOrder")));
                 aZOrder >>= nIndex;
 
                 // Add one to be not zero based.
@@ -1003,7 +998,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
         {
             // We throw our own exception that is a bit more informative.
             throw uno::RuntimeException (::rtl::OUString (
-                RTL_CONSTASCII_USTRINGPARAM("AccessibleShape has invalid index and no ZOrder property")),
+                "AccessibleShape has invalid index and no ZOrder property"),
                 static_cast<uno::XWeak*>(this));
         }
 
@@ -1011,7 +1006,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 
     // Put a space between name and index because of Gnopernicus othewise
     // spells the name.
-    sName += OUString (RTL_CONSTASCII_USTRINGPARAM(" ")) + OUString::valueOf (nIndex);
+    sName += " " + OUString::valueOf (nIndex);
 
     return sName;
 }
@@ -1062,12 +1057,8 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             break;
 
         case DRAWING_CONTROL:
-            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBackground")),
-                DescriptionGenerator::COLOR,
-                OUString());
-            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBorder")),
-                DescriptionGenerator::INTEGER,
-                OUString());
+            aDG.AddProperty ("ControlBackground", DescriptionGenerator::COLOR, "");
+            aDG.AddProperty ("ControlBorder", DescriptionGenerator::INTEGER, "");
             break;
 
         case DRAWING_TEXT:
@@ -1075,12 +1066,11 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             break;
 
         default:
-            aDG.Initialize (::rtl::OUString (
-                                RTL_CONSTASCII_USTRINGPARAM("Unknown accessible shape")));
+            aDG.Initialize ("Unknown accessible shape");
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
-                aDG.AppendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("service name=")));
+                aDG.AppendString ("service name=");
                 aDG.AppendString (xDescriptor->getShapeType());
             }
     }
@@ -1169,20 +1159,20 @@ void AccessibleShape::UpdateNameAndDescription (void)
         OUString sString;
 
         // Get the accessible name.
-        sString = GetOptionalProperty(xSet, OUString(RTL_CONSTASCII_USTRINGPARAM("Title")));
+        sString = GetOptionalProperty(xSet, "Title");
         if (!sString.isEmpty())
         {
             SetAccessibleName(sString, AccessibleContextBase::FromShape);
         }
         else
         {
-            sString = GetOptionalProperty(xSet, OUString(RTL_CONSTASCII_USTRINGPARAM("Name")));
+            sString = GetOptionalProperty(xSet, "Name");
             if (!sString.isEmpty())
                 SetAccessibleName(sString, AccessibleContextBase::FromShape);
         }
 
         // Get the accessible description.
-        sString = GetOptionalProperty(xSet, OUString(RTL_CONSTASCII_USTRINGPARAM("Description")));
+        sString = GetOptionalProperty(xSet, "Description");
         if (!sString.isEmpty())
             SetAccessibleDescription(sString, AccessibleContextBase::FromShape);
     }
@@ -1190,9 +1180,6 @@ void AccessibleShape::UpdateNameAndDescription (void)
     {
     }
 }
-
-
-
 
 } // end of namespace accessibility
 

@@ -106,7 +106,7 @@ public:
 
     static ::rtl::OUString getImplementationName_Static() throw()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svx.FindTextToolboxController" ));
+        return ::rtl::OUString("com.sun.star.svx.FindTextToolboxController");
     }
 
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
@@ -238,9 +238,9 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
 
-    static ::rtl::OUString getImplementationName_Static() throw()
+    static OUString getImplementationName_Static() throw()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.Impl.FindbarDispatcher" ));
+        return OUString("com.sun.star.comp.svx.Impl.FindbarDispatcher");
     }
 
     static css::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();

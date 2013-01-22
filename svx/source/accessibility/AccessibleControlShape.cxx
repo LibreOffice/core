@@ -57,19 +57,19 @@ namespace
     //................................................................
     const ::rtl::OUString& lcl_getNamePropertyName( )
     {
-        static ::rtl::OUString s_sNamePropertyName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
+        static ::rtl::OUString s_sNamePropertyName( "Name" );
         return s_sNamePropertyName;
     }
     //................................................................
     const ::rtl::OUString& lcl_getDescPropertyName( )
     {
-        static ::rtl::OUString s_sDescPropertyDesc( RTL_CONSTASCII_USTRINGPARAM( "HelpText" ) );
+        static ::rtl::OUString s_sDescPropertyDesc( "HelpText" );
         return s_sDescPropertyDesc;
     }
     //................................................................
     const ::rtl::OUString& lcl_getLabelPropertyName( )
     {
-        static ::rtl::OUString s_sLabelPropertyLabel( RTL_CONSTASCII_USTRINGPARAM( "Label" ) );
+        static ::rtl::OUString s_sLabelPropertyLabel( "Label" );
         return s_sLabelPropertyLabel;
     }
     //................................................................
@@ -320,7 +320,7 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
 //-----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL AccessibleControlShape::getImplementationName(void) throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.accessibility.AccessibleControlShape" ) );
+    return OUString( "com.sun.star.comp.accessibility.AccessibleControlShape" );
 }
 
 //-----------------------------------------------------------------------------
@@ -332,14 +332,13 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
     switch (nShapeType)
     {
         case DRAWING_CONTROL:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ControlShape"));
+            sName = "ControlShape";
             break;
         default:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleControlShape"));
+            sName = "UnknownAccessibleControlShape";
             Reference< XShapeDescriptor > xDescriptor (mxShape, UNO_QUERY);
             if (xDescriptor.is())
-                sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
-                    + xDescriptor->getShapeType();
+                sName += ": " + xDescriptor->getShapeType();
     }
 
     return sName;
@@ -364,12 +363,8 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
             if ( sDesc.isEmpty() )
             {   // no -> use the default
                 aDG.Initialize (STR_ObjNameSingulUno);
-                aDG.AddProperty (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBackground")),
-                    DescriptionGenerator::COLOR,
-                    ::rtl::OUString());
-                aDG.AddProperty (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBorder")),
-                    DescriptionGenerator::INTEGER,
-                    ::rtl::OUString());
+                aDG.AddProperty ("ControlBackground", DescriptionGenerator::COLOR, "");
+                aDG.AddProperty ( "ControlBorder", DescriptionGenerator::INTEGER, "");
             }
             // ensure that we are listening to the Name property
             m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, sal_True, lcl_getDescPropertyName() );
@@ -377,12 +372,11 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
         break;
 
         default:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Unknown accessible control shape")) );
+            aDG.Initialize ("Unknown accessible control shape");
             Reference< XShapeDescriptor > xDescriptor (mxShape, UNO_QUERY);
             if (xDescriptor.is())
             {
-                aDG.AppendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("service name=")));
+                aDG.AppendString ("service name=");
                 aDG.AppendString (xDescriptor->getShapeType());
             }
     }
@@ -400,15 +394,14 @@ void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent&
     ::osl::MutexGuard aGuard( maMutex );
 
     // check if it is the name or the description
-    if  (   _rEvent.PropertyName.equals( lcl_getNamePropertyName() )
-        ||  _rEvent.PropertyName.equals( lcl_getLabelPropertyName( ) )
-        )
+    if  (   _rEvent.PropertyName == lcl_getNamePropertyName()
+            ||  _rEvent.PropertyName == lcl_getLabelPropertyName() )
     {
         SetAccessibleName(
             CreateAccessibleName(),
             AccessibleContextBase::AutomaticallyCreated);
     }
-    else if ( _rEvent.PropertyName.equals( lcl_getDescPropertyName() ) )
+    else if ( _rEvent.PropertyName == lcl_getDescPropertyName() )
     {
         SetAccessibleDescription(
             CreateAccessibleDescription(),

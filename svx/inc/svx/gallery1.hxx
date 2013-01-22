@@ -68,7 +68,7 @@ public:
     sal_Bool                IsReadOnly() const { return bReadOnly; }
     sal_Bool                IsDefault() const;
 
-    sal_Bool                IsHidden() const { return aName.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("private://gallery/hidden/")); }
+    sal_Bool                IsHidden() const { return aName.match("private://gallery/hidden/"); }
 
     sal_Bool                IsModified() const { return bModified; }
     void                    SetModified( sal_Bool bSet ) { bModified = ( bSet && !IsReadOnly() ); }
