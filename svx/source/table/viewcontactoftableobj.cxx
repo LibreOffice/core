@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include "vcl/svapp.hxx"
 #include "viewcontactoftableobj.hxx"
 #include <svx/svdotable.hxx>
 #include <com/sun/star/table/XTable.hpp>
@@ -357,7 +357,7 @@ namespace drawinglayer
                 }
             }
 
-            if(!getRightLine().isEmpty() && getRightIsOutside())
+            if(!getRightLine().isEmpty())
             {
                 // create right line from top to bottom
                 const basegfx::B2DPoint aStart(getTransform() * basegfx::B2DPoint(1.0, 0.0));
@@ -491,12 +491,13 @@ namespace sdr
                             // mirror all left lines
                             bMirror = (bIsRTL ? 0 != nX : nX != nColCount);
                         }
+                        if(bMirror)
+                        {
+                            aLine.SetMirrorWidths( );
+                        }
+
                     }
 
-                    if(bMirror)
-                    {
-                        aLine.SetMirrorWidths( );
-                    }
 
                     return;
                 }
@@ -523,7 +524,8 @@ namespace sdr
                 if(nAllCount)
                 {
                     const sdr::table::TableLayouter& rTableLayouter = rTableObj.getTableLayouter();
-                    const bool bIsRTL(com::sun::star::text::WritingMode_RL_TB == rTableObj.GetWritingMode());
+                    const bool bIsRTL(Application::GetSettings().GetLayoutRTL());
+
                     sdr::table::CellPos aCellPos;
                     sdr::table::CellRef xCurrentCell;
                     basegfx::B2IRectangle aCellArea;
