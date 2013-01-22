@@ -683,11 +683,6 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff
             return;
     }
 
-    // maybe optimize:
-    // If frequently the same color, blank without color in between,
-    // maybe summarize or at least the blank; for less attributes
-    sal_Bool bOptimizeHighlight = sal_True; // war in der BasicIDE static
-    if ( bOptimizeHighlight )
     {
         // Only blanks and tabs have to be attributed along.
         // When two identical attributes are placed consecutively,
