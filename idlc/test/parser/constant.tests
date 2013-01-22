@@ -31,7 +31,7 @@ constants C {
 };
 
 
-EXPECT SUCCESS "constant.tests 2":
+EXPECT FAILURE "constant.tests 2":
 module m {
     const boolean C1 = FALSE;
     const byte C2 = 0;
@@ -75,7 +75,7 @@ constants C {};
 
 
 EXPECT SUCCESS "constant.tests 8":
-module m {
+constants C {
     const byte C1 = -128;
     const byte C2 = -0200;
     const byte C3 = -0x80;
@@ -119,168 +119,168 @@ module m {
 
 
 EXPECT FAILURE "constant.tests 9":
-module m { const byte C = -129; };
+constants C { const byte C1 = -129; };
 
 
 EXPECT FAILURE "constant.tests 10":
-module m { const byte C = -0201; };
+constants C { const byte C1 = -0201; };
 
 
 EXPECT FAILURE "constant.tests 11":
-module m { const byte C = -0x81; };
+constants C { const byte C1 = -0x81; };
 
 
 EXPECT FAILURE "constant.tests 12":
-module m { const byte C = 256; };
+constants C { const byte C1 = 256; };
 
 
 EXPECT FAILURE "constant.tests 13":
-module m { const byte C = 0400; };
+constants C { const byte C1 = 0400; };
 
 
 EXPECT FAILURE "constant.tests 14":
-module m { const byte C = 0x100; };
+constants C { const byte C1 = 0x100; };
 
 
 EXPECT FAILURE "constant.tests 15":
-module m { const short C = -32769; };
+constants C { const short C1 = -32769; };
 
 
 EXPECT FAILURE "constant.tests 16":
-module m { const short C = -0100001; };
+constants C { const short C1 = -0100001; };
 
 
 EXPECT FAILURE "constant.tests 17":
-module m { const short C = -0x8001; };
+constants C { const short C1 = -0x8001; };
 
 
 EXPECT FAILURE "constant.tests 18":
-module m { const short C = 32768; };
+constants C { const short C1 = 32768; };
 
 
 EXPECT FAILURE "constant.tests 19":
-module m { const short C = 0100000; };
+constants C { const short C1 = 0100000; };
 
 
 EXPECT FAILURE "constant.tests 20":
-module m { const short C = 0x8000; };
+constants C { const short C1 = 0x8000; };
 
 
 EXPECT FAILURE "constant.tests 21":
-module m { const unsigned short C = -1; };
+constants C { const unsigned short C1 = -1; };
 
 
 EXPECT FAILURE "constant.tests 22":
-module m { const unsigned short C = -01; };
+constants C { const unsigned short C1 = -01; };
 
 
 EXPECT FAILURE "constant.tests 23":
-module m { const unsigned short C = -0x1; };
+constants C { const unsigned short C1 = -0x1; };
 
 
 EXPECT FAILURE "constant.tests 24":
-module m { const unsigned short C = 65536; };
+constants C { const unsigned short C1 = 65536; };
 
 
 EXPECT FAILURE "constant.tests 25":
-module m { const unsigned short C = 0200000; };
+constants C { const unsigned short C1 = 0200000; };
 
 
 EXPECT FAILURE "constant.tests 26":
-module m { const unsigned short C = 0x10000; };
+constants C { const unsigned short C1 = 0x10000; };
 
 
 EXPECT FAILURE "constant.tests 27":
-module m { const long C = -2147483649; };
+constants C { const long C1 = -2147483649; };
 
 
 EXPECT FAILURE "constant.tests 28":
-module m { const long C = -020000000001; };
+constants C { const long C1 = -020000000001; };
 
 
 EXPECT FAILURE "constant.tests 29":
-module m { const long C = -0x80000001; };
+constants C { const long C1 = -0x80000001; };
 
 
 EXPECT FAILURE "constant.tests 30":
-module m { const long C = 2147483648; };
+constants C { const long C1 = 2147483648; };
 
 
 EXPECT FAILURE "constant.tests 31":
-module m { const long C = 020000000000; };
+constants C { const long C1 = 020000000000; };
 
 
 EXPECT FAILURE "constant.tests 32":
-module m { const long C = 0x80000000; };
+constants C { const long C1 = 0x80000000; };
 
 
 EXPECT FAILURE "constant.tests 33":
-module m { const unsigned long C = -1; };
+constants C { const unsigned long C1 = -1; };
 
 
 EXPECT FAILURE "constant.tests 34":
-module m { const unsigned long C = -01; };
+constants C { const unsigned long C1 = -01; };
 
 
 EXPECT FAILURE "constant.tests 35":
-module m { const unsigned long C = -0x1; };
+constants C { const unsigned long C1 = -0x1; };
 
 
 EXPECT FAILURE "constant.tests 36":
-module m { const unsigned long C = 4294967296; };
+constants C { const unsigned long C1 = 4294967296; };
 
 
 EXPECT FAILURE "constant.tests 37":
-module m { const unsigned long C = 040000000000; };
+constants C { const unsigned long C1 = 040000000000; };
 
 
 EXPECT FAILURE "constant.tests 38":
-module m { const unsigned long C = 0x100000000; };
+constants C { const unsigned long C1 = 0x100000000; };
 
 
 EXPECT FAILURE "constant.tests 39":
-module m { const hyper C = -9223372036854775809; };
+constants C { const hyper C1 = -9223372036854775809; };
 
 
 EXPECT FAILURE "constant.tests 40":
-module m { const hyper C = -01000000000000000000001; };
+constants C { const hyper C1 = -01000000000000000000001; };
 
 
 EXPECT FAILURE "constant.tests 41":
-module m { const hyper C = -0x8000000000000001; };
+constants C { const hyper C1 = -0x8000000000000001; };
 
 
 EXPECT FAILURE "constant.tests 42":
-module m { const hyper C = 9223372036854775808; };
+constants C { const hyper C1 = 9223372036854775808; };
 
 
 EXPECT FAILURE "constant.tests 43":
-module m { const hyper C = 01000000000000000000000; };
+constants C { const hyper C1 = 01000000000000000000000; };
 
 
 EXPECT FAILURE "constant.tests 44":
-module m { const hyper C = 0x8000000000000000; };
+constants C { const hyper C1 = 0x8000000000000000; };
 
 
 EXPECT FAILURE "constant.tests 45":
-module m { const unsigned hyper C = -1; };
+constants C { const unsigned hyper C1 = -1; };
 
 
 EXPECT FAILURE "constant.tests 46":
-module m { const unsigned hyper C = -01; };
+constants C { const unsigned hyper C1 = -01; };
 
 
 EXPECT FAILURE "constant.tests 47":
-module m { const unsigned hyper C = -0x1; };
+constants C { const unsigned hyper C1 = -0x1; };
 
 
 EXPECT FAILURE "constant.tests 48":
-module m { const unsigned hyper C = 18446744073709551616; };
+constants C { const unsigned hyper C1 = 18446744073709551616; };
 
 
 EXPECT FAILURE "constant.tests 49":
-module m { const unsigned hyper C = 02000000000000000000000; };
+constants C { const unsigned hyper C1 = 02000000000000000000000; };
 
 
 EXPECT FAILURE "constant.tests 50":
-module m { const unsigned hyper C = 0x10000000000000000; };
+constants C { const unsigned hyper C1 = 0x10000000000000000; };

@@ -23,7 +23,6 @@ published struct Struct2<T> { T member; };
 published exception E1 {};
 published interface I1 {};
 published typedef long Typedef;
-published const long Constant = 1;
 published constants Constants { const long Constant = 1; };
 published service Service1: I1 {};
 published service Service2 { interface I1; };
@@ -413,26 +412,6 @@ published typedef E T;
 published struct S { T m; };
 
 
-EXPECT SUCCESS "published.tests 69":
-const long C1 = 1;
-const long C2 = C1 + 1;
-
-
-EXPECT FAILURE "published.tests 70":
-const long C1 = 1;
-published const long C2 = C1 + 1;
-
-
-EXPECT SUCCESS "published.tests 71":
-published const long C1 = 1;
-const long C2 = C1 + 1;
-
-
-EXPECT SUCCESS "published.tests 72":
-published const long C1 = 1;
-published const long C2 = C1 + 1;
-
-
 EXPECT SUCCESS "published.tests 73":
 constants Cs {
 	const long C1 = 1;
@@ -445,46 +424,6 @@ published constants Cs {
 	const long C1 = 1;
 	const long C2 = C1 + 1;
 };
-
-
-EXPECT SUCCESS "published.tests 75":
-constants Cs { const long C1 = 1; };
-const long C2 = Cs::C1 + 1;
-
-
-EXPECT FAILURE "published.tests 76":
-constants Cs { const long C1 = 1; };
-published const long C2 = Cs::C1 + 1;
-
-
-EXPECT SUCCESS "published.tests 77":
-published constants Cs { const long C1 = 1; };
-const long C2 = Cs::C1 + 1;
-
-
-EXPECT SUCCESS "published.tests 78":
-published constants Cs { const long C1 = 1; };
-published const long C2 = Cs::C1 + 1;
-
-
-EXPECT SUCCESS "published.tests 79":
-const long C1 = 1;
-constants Cs { const long C2 = C1 + 1; };
-
-
-EXPECT FAILURE "published.tests 80":
-const long C1 = 1;
-published constants Cs { const long C2 = C1 + 1; };
-
-
-EXPECT SUCCESS "published.tests 81":
-published const long C1 = 1;
-constants Cs { const long C2 = C1 + 1; };
-
-
-EXPECT SUCCESS "published.tests 82":
-published const long C1 = 1;
-published constants Cs { const long C2 = C1 + 1; };
 
 
 EXPECT SUCCESS "published.tests 83":
@@ -509,22 +448,22 @@ published constants Cs2 { const long C2 = Cs1::C1 + 1; };
 
 EXPECT SUCCESS "published.tests 87":
 typedef long T;
-const T C = 1;
+constants Cs { const T C = 1; };
 
 
 EXPECT FAILURE "published.tests 88":
 typedef long T;
-published const T C = 1;
+published constants Cs { const T C = 1; };
 
 
 EXPECT SUCCESS "published.tests 89":
 published typedef long T;
-const T C = 1;
+constants Cs { const T C = 1; };
 
 
 EXPECT SUCCESS "published.tests 90":
 published typedef long T;
-published const T C = 1;
+published constants Cs { const T C = 1; };
 
 
 EXPECT SUCCESS "published.tests 91":

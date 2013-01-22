@@ -361,7 +361,7 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 /*
  * These are production names:
  */
-%type <dclval>	type_dcl const_dcl
+%type <dclval>	type_dcl
 %type <dclval>	array_declarator
 %type <dclval>  exception_name
 %type <cdclval> array_type constructed_type_spec enum_type op_type_spec
@@ -443,14 +443,6 @@ publishable_definition:
 	type_dcl 
 	{
 		idlc()->setParseState(PS_TypeDeclSeen);
-	}
-	';'
-	{
-		idlc()->setParseState(PS_NoState);
-	}
-	| const_dcl
-	{
-		idlc()->setParseState(PS_ConstantDeclSeen);
 	}
 	';'
 	{
@@ -1288,13 +1280,6 @@ constants_exports :
 	;
 
 constants_export :
-	const_dcl
-	{
-		idlc()->setParseState(PS_ConstantDeclSeen);
-	}
-	';' {};
-
-const_dcl : 
 	IDL_CONST
 	{
 		idlc()->setParseState(PS_ConstSeen);
@@ -1331,7 +1316,10 @@ const_dcl :
 			}
 		}
 		delete $5;
+
+		idlc()->setParseState(PS_ConstantDeclSeen);
 	}
+	';' {};
 	;
 
 constants_dcl : 
