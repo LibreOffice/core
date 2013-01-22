@@ -349,18 +349,9 @@ bool SdStyleSheet::IsUsed() const
             if( pListener == this )
                 continue;
 
-            // NULL-Pointer ist im Listener-Array erlaubt
-            if (pListener)
-            {
-                if (pListener->ISA(sdr::properties::AttributeProperties))
-                {
-                    bResult = true;
-                }
-                else if (pListener->ISA(SfxStyleSheet))
-                {
-                    bResult = ((SfxStyleSheet*)pListener)->IsUsed();
-                }
-            }
+            const svl::StyleSheetUser* const pUser(dynamic_cast<svl::StyleSheetUser*>(pListener));
+            if (pUser)
+                bResult = pUser->isUsedByModel();
             if (bResult)
                 break;
         }

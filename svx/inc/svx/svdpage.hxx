@@ -20,6 +20,7 @@
 #ifndef _SVDPAGE_HXX
 #define _SVDPAGE_HXX
 
+#include <svl/stylesheetuser.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/print.hxx>
 #include <vcl/gdimtf.hxx>
@@ -368,7 +369,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // class SdrPageProperties
 
-class SVX_DLLPUBLIC SdrPageProperties : public SfxListener
+class SVX_DLLPUBLIC SdrPageProperties : public SfxListener, public svl::StyleSheetUser
 {
 private:
     // data
@@ -390,6 +391,8 @@ public:
 
     // Notify(...) from baseclass SfxListener
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+
+    virtual bool isUsedByModel() const;
 
     // data read/write
     const SfxItemSet& GetItemSet() const;

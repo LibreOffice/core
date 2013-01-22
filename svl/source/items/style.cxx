@@ -913,6 +913,11 @@ void SfxStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint )
     Forward(rBC, rHint);
 }
 
+bool SfxStyleSheet::isUsedByModel() const
+{
+    return IsUsed();
+}
+
 //////////////////////// SfxStyleSheetPool ///////////////////////////////
 
 SfxStyleSheetPool::SfxStyleSheetPool( SfxItemPool const& rSet)

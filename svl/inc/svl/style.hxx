@@ -34,6 +34,7 @@
 #include <svl/lstner.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/stylesheetuser.hxx>
 
 #include <svl/style.hrc>
 
@@ -267,7 +268,7 @@ public:
 //=========================================================================
 
 class SVL_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,
-                     public SfxListener, public SfxBroadcaster
+                     public SfxListener, public SfxBroadcaster, public svl::StyleSheetUser
 {
 public:
                         TYPEINFO();
@@ -276,6 +277,9 @@ public:
                         SfxStyleSheet( const SfxStyleSheet& );
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    virtual bool        isUsedByModel() const;
+
     virtual bool        SetParent( const UniString& );
 
 protected:

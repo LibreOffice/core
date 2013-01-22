@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
 
 #include <svx/svdpage.hxx>
 
@@ -1194,6 +1195,12 @@ void SdrPageProperties::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
             }
         }
     }
+}
+
+bool SdrPageProperties::isUsedByModel() const
+{
+    assert(mpSdrPage);
+    return mpSdrPage->IsInserted();
 }
 
 const SfxItemSet& SdrPageProperties::GetItemSet() const

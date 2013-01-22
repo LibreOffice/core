@@ -21,6 +21,7 @@
 #define _SDR_PROPERTIES_ATTRIBUTEPROPERTIES_HXX
 
 #include <svl/lstner.hxx>
+#include <svl/stylesheetuser.hxx>
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include "svx/svxdllapi.h"
 
@@ -30,7 +31,7 @@ namespace sdr
 {
     namespace properties
     {
-        class SVX_DLLPUBLIC AttributeProperties : public DefaultProperties, public SfxListener
+        class SVX_DLLPUBLIC AttributeProperties : public DefaultProperties, public SfxListener, public svl::StyleSheetUser
         {
             // add style sheet, do all the necessary handling
             void ImpAddStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
@@ -82,6 +83,8 @@ namespace sdr
 
             // This is the Notify(...) from 2nd base class SfxListener
             virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+
+            virtual bool isUsedByModel() const;
         };
     } // end of namespace properties
 } // end of namespace sdr

@@ -608,6 +608,18 @@ namespace sdr
                 GetSdrObject().Notify(rBC, rHint);
             }
         }
+
+        bool AttributeProperties::isUsedByModel() const
+        {
+            const SdrObject& rObj(GetSdrObject());
+            if (rObj.IsInserted())
+            {
+                const SdrPage* const pPage(rObj.GetPage());
+                if (pPage && pPage->IsInserted())
+                    return true;
+            }
+            return false;
+        }
     } // end of namespace properties
 } // end of namespace sdr
 
