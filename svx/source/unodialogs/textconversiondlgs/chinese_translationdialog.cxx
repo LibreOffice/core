@@ -44,7 +44,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
-    : ModalDialog( pParent, TextConversionDlgs_ResId( DLG_CHINESETRANSLATION ) )
+    : ModalDialog(pParent, "ChineseConversionDialog", "svx/ui/chineseconversiondialog.ui")
+
     , m_aFL_Direction( this, TextConversionDlgs_ResId( FL_DIRECTION ) )
     , m_aRB_To_Simplified( this, TextConversionDlgs_ResId( RB_TO_SIMPLIFIED ) )
     , m_aRB_To_Traditional( this, TextConversionDlgs_ResId( RB_TO_TRADITIONAL ) )
