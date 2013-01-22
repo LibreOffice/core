@@ -11,6 +11,7 @@ $(eval $(call gb_Module_Module,idlc))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,idlc,Executable_idlc))
+$(eval $(call gb_Module_add_check_targets,idlc,CustomTarget_parser_test))
 endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
