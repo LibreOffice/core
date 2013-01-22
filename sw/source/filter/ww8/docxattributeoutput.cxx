@@ -273,13 +273,17 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_rExport.mpParentFrame = pParentFrame;
 
         m_bTextFrameSyntax = true;
+        m_pFlyAttrList = m_pSerializer->createAttrList( );
         m_aTextFrameStyle = "position:absolute";
         m_rExport.OutputFormat( pParentFrame->GetFrmFmt(), false, false, true );
+        m_pFlyAttrList->add(XML_style, m_aTextFrameStyle.makeStringAndClear());
+        XFastAttributeListRef xFlyAttrList( m_pFlyAttrList );
+        m_pFlyAttrList = NULL;
         m_bTextFrameSyntax = false;
 
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
         m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
-        m_pSerializer->startElementNS( XML_v, XML_rect, XML_style, m_aTextFrameStyle.makeStringAndClear(), FSEND );
+        m_pSerializer->startElementNS( XML_v, XML_rect, xFlyAttrList );
         m_pSerializer->startElementNS( XML_v, XML_textbox, FSEND );
         m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
         m_rExport.WriteText( );
@@ -4493,9 +4497,11 @@ void DocxAttributeOutput::FormatAnchor( const SwFmtAnchor& )
 
 void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 {
-    if ( !m_rExport.bOutPageDescs )
+    OString sColor = impl_ConvertColor( rBrush.GetColor( ) );
+    if (m_bTextFrameSyntax)
+        m_pFlyAttrList->add(XML_fillcolor, "#" + sColor);
+    else if ( !m_rExport.bOutPageDescs )
     {
-        OString sColor = impl_ConvertColor( rBrush.GetColor( ) );
         m_pSerializer->singleElementNS( XML_w, XML_shd,
                 FSNS( XML_w, XML_fill ), sColor.getStr( ),
                 FSNS( XML_w, XML_val ), "clear",
