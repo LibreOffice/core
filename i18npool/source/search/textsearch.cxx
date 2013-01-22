@@ -673,8 +673,10 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
     // REG_NOSUB is not used anywhere => not implemented
     // NORM_WORD_ONLY is only used for SearchAlgorithm==Absolute
     // LEV_RELAXED is only used for SearchAlgorithm==Approximate
-    // why is even ALL_IGNORE_CASE deprecated in UNO? because of transliteration taking care of it???
-    if( (rOptions.searchFlag & com::sun::star::util::SearchFlags::ALL_IGNORE_CASE) != 0)
+    // Note that the search flag ALL_IGNORE_CASE is deprecated in UNO
+    // probably because the transliteration flag IGNORE_CASE handles it as well.
+    if( (rOptions.searchFlag & com::sun::star::util::SearchFlags::ALL_IGNORE_CASE) != 0
+    ||  (rOptions.transliterateFlags & TransliterationModules_IGNORE_CASE) != 0)
         nIcuSearchFlags |= UREGEX_CASE_INSENSITIVE;
     UErrorCode nIcuErr = U_ZERO_ERROR;
     // assumption: transliteration didn't mangle regexp control chars
