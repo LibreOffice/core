@@ -58,7 +58,7 @@ private:
     CheckBox    m_aCB_Translate_Commonterms;
     PushButton  m_aPB_Editterms;
 
-    OKButton        m_aBP_OK;
+    OKButton*   m_pBP_OK;
 
     ChineseDictionaryDialog* m_pDictionaryDialog;
 };

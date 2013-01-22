@@ -50,9 +50,9 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     , m_aRB_To_Traditional( this, TextConversionDlgs_ResId( RB_TO_TRADITIONAL ) )
     , m_aCB_Translate_Commonterms( this, TextConversionDlgs_ResId( CB_TRANSLATE_COMMONTERMS ) )
     , m_aPB_Editterms( this, TextConversionDlgs_ResId( PB_EDITTERMS ) )
-    , m_aBP_OK( this, TextConversionDlgs_ResId( PB_OK ) )
     , m_pDictionaryDialog(0)
 {
+    get(m_pBP_OK, "ok");
     FreeResource();
 
     m_aRB_To_Simplified.SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED );
@@ -72,7 +72,7 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
         m_aCB_Translate_Commonterms.Check( bValue );
 
     m_aPB_Editterms.SetClickHdl( LINK( this, ChineseTranslationDialog, DictionaryHdl ) );
-    m_aBP_OK.SetClickHdl( LINK( this, ChineseTranslationDialog, OkHdl ) );
+    m_pBP_OK->SetClickHdl( LINK( this, ChineseTranslationDialog, OkHdl ) );
 }
 
 ChineseTranslationDialog::~ChineseTranslationDialog()
