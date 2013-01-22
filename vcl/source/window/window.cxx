@@ -8452,7 +8452,7 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
                 uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
 #if defined(UNX) && !defined(MACOSX)
-                Reference<XSystemClipboard> xSystemClipboard = SystemClipboard::createUnix( xContext, Application::GetDisplayConnection(), "CLIPBOARD", vcl::createBmpConverter() );
+                Reference<XSystemClipboard> xSystemClipboard = SystemClipboard::createUnix( xContext, Application::GetDisplayConnection(), "PRIMARY", vcl::createBmpConverter() );
                 mpWindowImpl->mpFrameData->mxSelection = uno::Reference< XClipboard >( xSystemClipboard, UNO_QUERY );
 #       else
                 static uno::Reference< XClipboard > s_xSelection;
