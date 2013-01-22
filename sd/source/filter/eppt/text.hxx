@@ -27,6 +27,8 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
+#include <boost/shared_ptr.hpp>
+
 namespace com { namespace sun { namespace star {
 namespace awt { struct FontDescriptor; }
 namespace beans { class XPropertyState; }
@@ -219,38 +221,23 @@ class ParagraphObj : public std::vector<PortionObj*>, public PropStateValue, pub
         ParagraphObj&   operator=( const ParagraphObj& rParagraphObj );
 };
 
-struct ImplTextObj
-{
-    sal_uInt32      mnRefCount;
-    sal_uInt32      mnTextSize;
-    int             mnInstance;
-    std::vector<ParagraphObj*> maList;
-    sal_Bool        mbHasExtendedBullets;
-    sal_Bool        mbFixedCellHeightUsed;
-
-                    ImplTextObj( int nInstance );
-                    ~ImplTextObj();
-};
+struct ImplTextObj;
 
 class TextObj
 {
-        ImplTextObj*    mpImplTextObj;
-        void            ImplCalculateTextPositions();
+    boost::shared_ptr<ImplTextObj>    mpImplTextObj;
+    void            ImplCalculateTextPositions();
 
-    public :
-                        TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText > &
-                                    rXText, int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rBuProv );
-                        TextObj( const TextObj& rTextObj );
-                        ~TextObj();
+public :
+    TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText > &
+            rXText, int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rBuProv );
 
-        ParagraphObj*   GetParagraph(int idx) { return mpImplTextObj->maList[idx]; };
-        sal_uInt32      ParagraphCount() const { return mpImplTextObj->maList.size(); };
-        sal_uInt32      Count() const { return mpImplTextObj->mnTextSize; };
-        int             GetInstance() const { return mpImplTextObj->mnInstance; };
-        sal_Bool        HasExtendedBullets(){ return mpImplTextObj->mbHasExtendedBullets; };
-        void            WriteTextSpecInfo( SvStream* pStrm );
-
-        TextObj&        operator=( TextObj& rTextObj );
+    ParagraphObj*   GetParagraph(int idx);
+    sal_uInt32      ParagraphCount() const;
+    sal_uInt32      Count() const;
+    int             GetInstance() const;
+    sal_Bool        HasExtendedBullets();
+    void            WriteTextSpecInfo( SvStream* pStrm );
 };
 
 #endif

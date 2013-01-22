@@ -1180,10 +1180,21 @@ ParagraphObj& ParagraphObj::operator=( const ParagraphObj& rParagraphObj )
     return *this;
 }
 
+struct ImplTextObj
+{
+    sal_uInt32      mnTextSize;
+    int             mnInstance;
+    std::vector<ParagraphObj*> maList;
+    sal_Bool        mbHasExtendedBullets;
+    sal_Bool        mbFixedCellHeightUsed;
+
+    ImplTextObj( int nInstance );
+    ~ImplTextObj();
+};
+
 ImplTextObj::ImplTextObj( int nInstance )
   : maList()
 {
-    mnRefCount = 1;
     mnTextSize = 0;
     mnInstance = nInstance;
     mbHasExtendedBullets = sal_False;
@@ -1197,10 +1208,9 @@ ImplTextObj::~ImplTextObj()
 }
 
 TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText > & rXTextRef,
-            int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rProv )
+            int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rProv ):
+    mpImplTextObj(new ImplTextObj(nInstance))
 {
-    mpImplTextObj = new ImplTextObj( nInstance );
-
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess >
         aXTextParagraphEA( rXTextRef, ::com::sun::star::uno::UNO_QUERY );
 
@@ -1230,18 +1240,6 @@ TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSim
     ImplCalculateTextPositions();
 }
 
-TextObj::TextObj( const TextObj& rTextObj )
-{
-    mpImplTextObj = const_cast<TextObj&>(rTextObj).mpImplTextObj;
-    mpImplTextObj->mnRefCount++;
-}
-
-TextObj::~TextObj()
-{
-    if ( ! ( --mpImplTextObj->mnRefCount ) )
-        delete mpImplTextObj;
-}
-
 void TextObj::ImplCalculateTextPositions()
 {
     mpImplTextObj->mnTextSize = 0;
@@ -1249,16 +1247,29 @@ void TextObj::ImplCalculateTextPositions()
         mpImplTextObj->mnTextSize += GetParagraph(i)->ImplCalculateTextPositions( mpImplTextObj->mnTextSize );
 }
 
-TextObj& TextObj::operator=( TextObj& rTextObj )
+ParagraphObj* TextObj::GetParagraph(int idx)
 {
-    if ( this != &rTextObj )
-    {
-        if ( ! ( --mpImplTextObj->mnRefCount ) )
-            delete mpImplTextObj;
-        mpImplTextObj = rTextObj.mpImplTextObj;
-        mpImplTextObj->mnRefCount++;
-    }
-    return *this;
+    return mpImplTextObj->maList[idx];
+}
+
+sal_uInt32 TextObj::ParagraphCount() const
+{
+    return mpImplTextObj->maList.size();
+}
+
+sal_uInt32 TextObj::Count() const
+{
+    return mpImplTextObj->mnTextSize;
+}
+
+int TextObj::GetInstance() const
+{
+    return mpImplTextObj->mnInstance;
+}
+
+sal_Bool TextObj::HasExtendedBullets()
+{
+    return mpImplTextObj->mbHasExtendedBullets;
 }
 
 FontCollectionEntry::~FontCollectionEntry()
