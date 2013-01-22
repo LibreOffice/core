@@ -25,7 +25,7 @@ else:
     __lngpath__ = unohelper.fileUrlToSystemPath(re.sub("program/(fundamental.ini|fundamentalrc)$", "", urebootstrap))
 __lngpath__ = __lngpath__ + "share/Scripts/python/LibreLogo/".replace("/", os.sep)
 
-__translang__ = "ca|cs|de|dk|el|en|es|et|fr|hu|it|nl|no|pl|pt|ro|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
+__translang__ = "am|ca|cs|de|dk|el|en|eo|es|et|fr|hu|it|ja|nl|no|pl|pt|ro|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
 __lng__ = {}
 __docs__ = {}
 __prevcode__ = None
@@ -568,16 +568,29 @@ def run(arg=None, arg2 = -1):
     with __lock__:
         __thread__ = 1
     try:
-        __initialize__()
-        __setlang__()
+        __getdocument__()
         if arg2 == -1:
-            arg2 = _.doc.getText().getString()
+            try:
+                _.cursor = _.doc.getCurrentController().getViewCursor().getText().createTextCursor() # copy selection
+                _.cursor.gotoRange(_.doc.getCurrentController().getViewCursor(), False)
+                1/len(_.cursor.getString()) # exception, if zero length
+            except:
+                _.cursor = _.doc.getText().createTextCursorByRange(_.doc.getText().getStart())
+                _.cursor.gotoEnd(True)
+            c = _.doc.Text.createTextCursor() # go to the first page
+            c.gotoStart(False)
+            _.doc.CurrentController.getViewCursor().gotoRange(c, False)
+            __initialize__()
+            __setlang__()
+            arg2 = _.cursor.getString()
             if len(arg2) > 20000:
                 if MessageBox(_.doc.CurrentController.Frame.ContainerWindow, __l12n__(_.lng)['ERR_NOTAPROGRAM'], __l12n__(_.lng)['LIBRELOGO'], "querybox", __YES_NO_CANCEL__) != 2:
                     with __lock__:
                         __thread__ = None
                     return None
-            __gotoline__(1)
+        else:
+            __initialize__()
+            __setlang__()
         if __prevcode__ and __prevcode__ == arg2 and __prevlang__ == _.lng:
             __thread__ = LogoProgram(__prevcompiledcode__)
         else:
@@ -1430,12 +1443,14 @@ def __compil__(s):
     return to_ascii(globs) + "\n" + result
 
 def __gotoline__(n):
-    __dispatcher__(".uno:Escape")
-    c = _.doc.Text.createTextCursor()
-    c.gotoStart(False)
+    _.cursor.collapseToStart()
     for i in range(1, n):
-        c.gotoNextParagraph(False)
-    _.doc.CurrentController.getViewCursor().gotoRange(c, False)
+        _.cursor.gotoNextParagraph(False)
+    try:
+        _.doc.CurrentController.getViewCursor().gotoRange(_.cursor, False)
+    except:
+        __dispatcher__(".uno:Escape")
+        _.doc.CurrentController.getViewCursor().gotoRange(_.cursor.getStart(), False)
 
 g_exportedScripts = left, right, goforward, gobackward, run, stop, home, clearscreen, commandline, __translate__
 g_ImplementationHelper = unohelper.ImplementationHelper()
