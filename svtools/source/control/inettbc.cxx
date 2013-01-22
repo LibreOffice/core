@@ -1034,7 +1034,7 @@ long SvtURLBox::Notify( NotifyEvent &rEvt )
     {
 #ifndef UNX
         // pb: don't select automatically on unix #93251#
-        SetSelection( Selection( 0, GetText().Len() ) );
+        SetSelection( Selection( 0, GetText().getLength() ) );
 #endif
     }
     else if ( EVENT_LOSEFOCUS == rEvt.GetType() )
