@@ -68,6 +68,7 @@ public:
     void testFdo51550();
     void testN789482();
     void test1Table1Page();
+    void testTextFrames();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -107,6 +108,7 @@ void Test::run()
         {"fdo51550.odt", &Test::testFdo51550},
         {"n789482.docx", &Test::testN789482},
 //      {"1-table-1-page.docx", &Test::test1Table1Page}, // doesn't work on openSUSE12.2 at least
+        {"textframes.odt", &Test::testTextFrames},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -507,6 +509,14 @@ void Test::test1Table1Page()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+}
+
+void Test::testTextFrames()
+{
+    // The frames were simply missing, so let's check if all 3 frames were imported back.
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
