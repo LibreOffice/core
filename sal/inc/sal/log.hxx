@@ -218,7 +218,8 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
       <segment> ::= [0-9a-z]+
 
-    For a list of areas used see @ref sal_log_areas "SAL debug areas".
+    For a list of areas used see @ref sal_log_areas "SAL debug areas". Whenever
+    you use a new log area, add it to the file sal/inc/sal/log-areas.dox .
 
     Whether these macros generate any log output is controlled in a two-stage
     process.
