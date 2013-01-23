@@ -122,7 +122,9 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bHasTextImport(false),
     bIsFirstTextImport(false),
     bSolarMutexLocked(false),
-    bFormulaTextResult(false)
+    bFormulaTextResult(false),
+    mbPossibleErrorCell(false),
+    mbCheckWithCompilerForError(false)
 {
     rtl::math::setNan(&fValue); // NaN by default
 
@@ -352,9 +354,13 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
 
             ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
 
-            if( ((nCellType == util::NumberFormat::TEXT) || bFormulaTextResult) )
+            if( ((nCellType == util::NumberFormat::TEXT) || pOUFormula || bFormulaTextResult) )
             {
-                if (!bHasTextImport)
+                if ( pOUFormula )
+                {
+                    pContext = new ScXMLTextPContext(rXMLImport, nPrefix, rLName, xAttrList, this);
+                }
+                else if (!bHasTextImport)
                 {
                     bIsFirstTextImport = true;
                     bHasTextImport = true;
@@ -725,7 +731,7 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
     {
         if( bFormulaTextResult && pOUTextValue )
         {
-            if (!GetScImport().IsFormulaErrorConstant(*pOUTextValue))
+            if( !IsPossibleErrorString() )
             {
                 pFCell->SetHybridString( *pOUTextValue );
                 pFCell->ResetDirty();
@@ -733,11 +739,13 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
         }
         else if (!rtl::math::isNan(fValue))
         {
-            pFCell->SetHybridDouble(fValue);
+            if( pOUTextContent )
+                pFCell->SetHybridValueString( fValue, *pOUTextContent );
+            else
+                pFCell->SetHybridDouble(fValue);
             pFCell->ResetDirty();
         }
         pFCell->StartListeningTo(rXMLImport.GetDocument());
-        // Leave the cell dirty when the cached result is not given.
     }
 }
 
@@ -766,7 +774,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
 
             if(!aCellString.isEmpty())
             {
-                if (bDoIncrement && !GetScImport().IsFormulaErrorConstant(aCellString))
+                if (bDoIncrement && !IsPossibleErrorString())
                 {
                     pFCell->SetHybridString( aCellString );
                     pFCell->ResetDirty();
@@ -1113,7 +1121,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                 ScMatrixRef pMat(new ScMatrix(nMatrixCols, nMatrixRows));
                 if (bFormulaTextResult && pOUTextValue)
                 {
-                    if (!GetScImport().IsFormulaErrorConstant(*pOUTextValue))
+                    if (!IsPossibleErrorString())
                     {
                         pFCell->SetResultMatrix(
                             nMatrixCols, nMatrixRows, pMat, new formula::FormulaStringToken(*pOUTextValue));
@@ -1153,14 +1161,20 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
 // - is blank
 // - has a constant error value beginning with "#" (such as "#VALUE!" or "#N/A")
 // - has an "Err:[###]" (where "[###]" is an error number)
-bool ScXMLTableRowCellContext::HasSpecialCaseFormulaText() const
+void ScXMLTableRowCellContext::HasSpecialCaseFormulaText()
 {
-    if(  pOUTextContent &&
-         ( pOUTextContent->isEmpty() || (pOUTextContent->indexOf("#") > -1) ||
-           (pOUTextContent->indexOf("Err:")  > -1) )
-      )
-        return true;
-    return false;
+    if(  pOUTextContent )
+    {
+        if ( pOUTextContent->isEmpty()  || (pOUTextContent->indexOf("Err:")  > -1) )
+            mbPossibleErrorCell = true;
+        else if (pOUTextContent->indexOf("#") > -1)
+            mbCheckWithCompilerForError = true;
+    }
+}
+
+bool ScXMLTableRowCellContext::IsPossibleErrorString() const
+{
+     return mbPossibleErrorCell || ( mbCheckWithCompilerForError && GetScImport().IsFormulaErrorConstant(*pOUTextValue) );
 }
 
 
@@ -1179,8 +1193,8 @@ void ScXMLTableRowCellContext::EndElement()
             aTextImport->ResetCursor();
         }
     }
-
-    if( bFormulaTextResult && HasSpecialCaseFormulaText() )
+    HasSpecialCaseFormulaText();
+    if( bFormulaTextResult && (mbPossibleErrorCell || mbCheckWithCompilerForError) )
     {
         pOUTextValue.reset(*pOUTextContent);
         nCellType = util::NumberFormat::TEXT;
