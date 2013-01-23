@@ -96,11 +96,11 @@ bool SalGraphics::drawAlphaBitmap( const SalTwoRect&,
 // ----------------------------------------------------------------------------
 
 bool SalGraphics::drawTransformedBitmap(
-    const basegfx::B2DPoint& rNull,
-    const basegfx::B2DPoint& rX,
-    const basegfx::B2DPoint& rY,
-    const SalBitmap& rSourceBitmap,
-    const SalBitmap* pAlphaBitmap)
+    const basegfx::B2DPoint& /* rNull */,
+    const basegfx::B2DPoint& /* rX */,
+    const basegfx::B2DPoint& /* rY */,
+    const SalBitmap& /* rSourceBitmap */,
+    const SalBitmap* /* pAlphaBitmap */)
 {
     // here direct support for transformed bitmaps can be impemented
     return false;
