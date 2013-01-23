@@ -198,7 +198,7 @@ void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
             mpGraphics->ReleaseFonts();
     }
 
-    if ( GetOutDevType() == OUTDEV_PRINTER || mpPDFWriter )
+//    if ( GetOutDevType() == OUTDEV_PRINTER || mpPDFWriter )
     {
         ImplSVData* pSVData = ImplGetSVData();
 
