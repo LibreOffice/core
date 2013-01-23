@@ -56,7 +56,7 @@ SW_DLLPUBLIC String MakeSender()
     String sRet;
     String sSenderToken(SW_RES(STR_SENDER_TOKENS));
     xub_StrLen nSttPos = 0, nTokenCount = comphelper::string::getTokenCount(sSenderToken, ';');
-    sal_Bool bLastLength = sal_True;
+    bool bLastLength = true;
     for( xub_StrLen i = 0; i < nTokenCount; i++ )
     {
         String sToken = sSenderToken.GetToken( 0, ';', nSttPos );
@@ -70,7 +70,7 @@ SW_DLLPUBLIC String MakeSender()
         {
             if(bLastLength)
                 sRet +=NEXTLINE;
-            bLastLength = sal_True;
+            bLastLength = true;
         }
         else if(sToken.EqualsAscii("FIRSTNAME"))
             sRet += (String)rUserOpt.GetFirstName();
@@ -300,7 +300,7 @@ Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
 
 bool SwEnvItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
 {
-    sal_Bool bRet = true;
+    bool bRet = true;
     switch(nMemberId & ~CONVERT_TWIPS)
     {
         case MID_ENV_ADDR_TEXT : rVal <<= aAddrText; break;

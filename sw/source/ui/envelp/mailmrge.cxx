@@ -344,7 +344,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     aLk = LINK(this, SwMailMergeDlg, FilenameHdl);
     aGenerateFromDataBaseCB.SetClickHdl( aLk );
-    sal_Bool bColumn = pModOpt->IsNameFromColumn();
+    bool bColumn = pModOpt->IsNameFromColumn();
     if(bColumn)
         aGenerateFromDataBaseCB.Check();
 

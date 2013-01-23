@@ -69,7 +69,7 @@ class SwEnvFmtPage : public SfxTabPage
 
     void SetMinMax();
 
-    SfxItemSet  *GetCollItemSet(SwTxtFmtColl* pColl, sal_Bool bSender);
+    SfxItemSet  *GetCollItemSet(SwTxtFmtColl* pColl, bool bSender);
 
     SwEnvDlg    *GetParentSwEnvDlg() {return (SwEnvDlg*) GetParentDialog();}
 

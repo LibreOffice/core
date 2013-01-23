@@ -163,18 +163,18 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
             // now we still have to look for '>'
             if(svtools::HTMLUNKNOWN != eFoundType)
             {
-                sal_Bool bFound = sal_False;
+                bool bFound = false;
                 for(sal_uInt16 i = nPortEnd; i < nStrLen; i++)
                     if(cCloseBracket == rSource.GetChar(i))
                     {
-                        bFound = sal_True;
+                        bFound = true;
                         nPortEnd = i;
                         break;
                     }
                 if(!bFound && (eFoundType == svtools::HTMLCOMMENT))
                 {
                     // comment without ending in this line
-                    bFound  = sal_True;
+                    bFound  = true;
                     nPortEnd = nStrLen - 1;
                 }
 
@@ -439,7 +439,7 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
 {
     sal_Bool bDone = sal_False;
     SwSrcEditWindow* pSrcEditWin = (SwSrcEditWindow*)GetParent();
-    sal_Bool bChange = !pSrcEditWin->IsReadonly() || !TextEngine::DoesKeyChangeText( rKEvt );
+    bool bChange = !pSrcEditWin->IsReadonly() || !TextEngine::DoesKeyChangeText( rKEvt );
     if(bChange)
         bDone = pTextView->KeyInput( rKEvt );
 
@@ -787,7 +787,7 @@ void SwSrcEditWindow::GetFocus()
     pOutWin->GrabFocus();
 }
 
-static sal_Bool  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages[])
+static bool lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages[])
 {
     switch(eEnc)
     {

@@ -173,11 +173,11 @@ void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLab
 sal_Bool    SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType)
 {
     const OUString* pNode = aNodeNames.getConstArray();
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     for(sal_Int32 nNode = 0; nNode < aNodeNames.getLength() && !bFound; nNode++)
     {
         if(pNode[nNode] == rManufacturer)
-            bFound = sal_True;
+            bFound = true;
     }
     if(bFound)
     {
@@ -207,24 +207,24 @@ sal_Bool    SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rt
     return sal_False;
 }
 
-static sal_Bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
+static bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
 {
     const OUString* pLabels = rLabels.getConstArray();
     for(sal_Int32 i = 0; i < rLabels.getLength(); i++)
         if(pLabels[i] == rNode)
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 
 void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
         const rtl::OUString& rType, const SwLabRec& rRec)
 {
     const OUString* pNode = aNodeNames.getConstArray();
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     for(sal_Int32 nNode = 0; nNode < aNodeNames.getLength() && !bFound; nNode++)
     {
         if(pNode[nNode] == rManufacturer)
-            bFound = sal_True;
+            bFound = true;
     }
     if(!bFound)
     {

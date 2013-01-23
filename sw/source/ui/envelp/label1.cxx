@@ -137,14 +137,14 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     pRec->aMake   = pRec->aType = aTmp;
     pRec->SetFromItem( aItem );
 
-    sal_Bool bDouble = sal_False;
+    bool bDouble = false;
 
     for (sal_uInt16 nRecPos = 0; nRecPos < pRecs->size(); nRecPos++)
     {
         if (pRec->aMake == (*pRecs)[nRecPos]->aMake &&
             pRec->aType == (*pRecs)[nRecPos]->aType)
         {
-            bDouble = sal_True;
+            bDouble = true;
             break;
         }
     }
@@ -198,7 +198,7 @@ void SwLabDlg::GetLabItem(SwLabItem &rItem)
 SwLabRec* SwLabDlg::GetRecord(const String &rRecName, sal_Bool bCont)
 {
     SwLabRec* pRec = NULL;
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     String sCustom(SW_RES(STR_CUSTOM));
 
     const sal_uInt16 nCount = Recs().size();
@@ -208,7 +208,7 @@ SwLabRec* SwLabDlg::GetRecord(const String &rRecName, sal_Bool bCont)
         if (pRec->aType != sCustom &&
             rRecName == pRec->aType && bCont == pRec->bCont)
         {
-            bFound = sal_True;
+            bFound = true;
             break;
         }
     }
@@ -412,17 +412,17 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         const String aType ( GetParentSwLabDlg()->Recs()[i]->aType );
-        sal_Bool bInsert = sal_False;
+        bool bInsert = false;
         if ( GetParentSwLabDlg()->Recs()[i]->aType == sCustom )
         {
-            bInsert = sal_True;
+            bInsert = true;
             aTypeBox.InsertEntry(aType );
         }
         else if ( GetParentSwLabDlg()->Recs()[i]->bCont == bCont )
         {
             if ( aHiddenSortTypeBox.GetEntryPos(aType) == LISTBOX_ENTRY_NOTFOUND )
             {
-                bInsert = sal_True;
+                bInsert = true;
                 aHiddenSortTypeBox.InsertEntry( aType );
             }
         }
@@ -703,7 +703,7 @@ static void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName
     }
 }
 
-static sal_Bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
+static bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
 {
     SvTreeListEntry* pEntry = rAutoTextLB.First();
     while(pEntry)
@@ -711,24 +711,24 @@ static sal_Bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const String& rBlockNa
         if(*(String*)pEntry->GetUserData() == rBlockName)
         {
             rAutoTextLB.Select(pEntry);
-            return sal_True;
+            return true;
         }
         pEntry = rAutoTextLB.Next(pEntry);
     }
-    return sal_False;
+    return false;
 }
 
 void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
 {
     aLabItem = (const SwLabItem&) rSet.Get(FN_LABEL);
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     sal_uInt16 i;
     for(i = 0; i < aAutoTextGroupLB.GetEntryCount() && !bFound; i++)
         if( String(aLabItem.sGlossaryGroup) ==
             *(String*)aAutoTextGroupLB.GetEntryData( i ))
         {
-            bFound = sal_True;
+            bFound = true;
             break;
         }
 
@@ -739,7 +739,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
         for(i = 0; i < aAutoTextGroupLB.GetEntryCount() && !bFound; i++)
             if(0 == (*(String*)aAutoTextGroupLB.GetEntryData( i )).SearchAscii( "crd") )
             {
-                bFound = sal_True;
+                bFound = true;
                 break;
             }
     }

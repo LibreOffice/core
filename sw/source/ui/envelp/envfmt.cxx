@@ -207,14 +207,14 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
                    aEntryName;
 
             sal_uInt16 nPos   = 0;
-            sal_Bool   bFound = sal_False;
+            bool bFound = false;
             while (nPos < aSizeFormatBox.GetEntryCount() && !bFound)
             {
                 aEntryName = aSizeFormatBox.GetEntry(i);
                 if (aEntryName < aPaperName)
                     nPos++;
                 else
-                    bFound = sal_True;
+                    bFound = true;
             }
             aSizeFormatBox.InsertEntry(aPaperName, nPos);
             aIDs.insert( aIDs.begin() + nPos, (sal_uInt16) i);
@@ -273,7 +273,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
     OSL_ENSURE(pSh, "Shell missing");
 
     // determine collection-ptr
-    sal_Bool bSender = pButton != &aAddrEditButton;
+    bool bSender = pButton != &aAddrEditButton;
 
     SwTxtFmtColl* pColl = pSh->GetTxtCollFromPool( static_cast< sal_uInt16 >(
         bSender ? RES_POOLCOLL_SENDADRESS : RES_POOLCOLL_JAKETADRESS));
@@ -387,7 +387,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
   Description: A temporary Itemset that gets discarded at abort
 ------------------------------------------------------------------------*/
 
-SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, sal_Bool bSender)
+SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, bool bSender)
 {
     SfxItemSet *&pAddrSet = bSender ? GetParentSwEnvDlg()->pSenderSet : GetParentSwEnvDlg()->pAddresseeSet;
 

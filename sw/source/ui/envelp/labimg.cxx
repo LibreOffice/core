@@ -275,7 +275,7 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
     EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    sal_Bool bNoConfigValues = sal_True;
+    bool bNoConfigValues = true;
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0, nProperty = 0; nProp < aNames.getLength(); nProp++, nProperty++)
@@ -287,7 +287,7 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
                 if(nProp == 17 && !bIsLabel)
                     nProperty += 3;
                 if(nProperty >= 20)
-                    bNoConfigValues = sal_False;
+                    bNoConfigValues = false;
                 switch(nProperty)
                 {
                     case  0: aItem.bCont = *(sal_Bool*)pValues[nProp].getValue(); break;// "Medium/Continous",

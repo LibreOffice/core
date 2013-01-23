@@ -62,7 +62,7 @@ class SwLabPreview : public Window
 
     void Paint(const Rectangle&);
 
-    void DrawArrow(const Point& rP1, const Point& rP2, sal_Bool bArrow);
+    void DrawArrow(const Point& rP1, const Point& rP2, bool bArrow);
 
     using Window::GetParent;
     SwLabFmtPage* GetParent() {return (SwLabFmtPage*) Window::GetParent();}
@@ -107,7 +107,7 @@ class SwLabFmtPage : public SfxTabPage
     PushButton   aSavePB;
 
     Timer aPreviewTimer;
-    sal_Bool  bModified;
+    bool  bModified;
 
     SwLabItem    aItem;
 
@@ -151,7 +151,7 @@ class SwSaveLabelDlg : public ModalDialog
 
     QueryBox        aQueryMB;
 
-    sal_Bool        bSuccess;
+    bool        bSuccess;
     SwLabFmtPage*   pLabPage;
     SwLabRec&       rLabRec;
 
@@ -166,7 +166,7 @@ public:
             aMakeCB.SetText(String(rMake));
             aTypeED.SetText(String(rType));
         }
-    sal_Bool GetLabel(SwLabItem& rItem);
+    bool GetLabel(SwLabItem& rItem);
 };
 #endif
 

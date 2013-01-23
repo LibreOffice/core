@@ -42,7 +42,7 @@ namespace {
 
     struct SidebarWinOrder
     {
-        sal_Bool operator()( const SidebarWinKey& rSidebarWinKeyA,
+        bool operator()( const SidebarWinKey& rSidebarWinKeyA,
                              const SidebarWinKey& rSidebarWinKeyB ) const
         {
             return rSidebarWinKeyA < rSidebarWinKeyB;
@@ -67,7 +67,7 @@ namespace {
 
     struct FrmOrder
     {
-        sal_Bool operator()( const FrmKey& rFrmKeyA,
+        bool operator()( const FrmKey& rFrmKeyA,
                              const FrmKey& rFrmKeyB ) const
         {
             return rFrmKeyA < rFrmKeyB;

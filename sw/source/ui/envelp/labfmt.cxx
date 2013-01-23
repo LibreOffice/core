@@ -173,15 +173,15 @@ void SwLabPreview::Paint(const Rectangle &)
     if (aItem.lLeft)
     {
         long lX = (lX0 + lX1) / 2;
-        DrawArrow(Point(lX0, lY0 - 5), Point(lX1, lY0 - 5), sal_False);
-        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), sal_True);
+        DrawArrow(Point(lX0, lY0 - 5), Point(lX1, lY0 - 5), false);
+        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), true);
         DrawText(Point(lX1 - lLeftWidth, lY0 - 10 - lXHeight), aLeftStr);
     }
 
     // annotation: upper border
     if (aItem.lUpper)
     {
-        DrawArrow(Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), sal_False);
+        DrawArrow(Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), false);
         DrawText(Point(lX0 - 10 - lUpperWidth, ROUND(lY0 + f * aItem.lUpper / 2 - lXHeight / 2)), aUpperStr);
     }
 
@@ -201,36 +201,36 @@ void SwLabPreview::Paint(const Rectangle &)
     if (aItem.nCols > 1)
     {
         long lX = (lX1 + lX3) / 2;
-        DrawArrow(Point(lX1, lY0 - 5), Point(lX3, lY0 - 5), sal_False);
-        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), sal_True);
+        DrawArrow(Point(lX1, lY0 - 5), Point(lX3, lY0 - 5), false);
+        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), true);
         DrawText(Point(lX - lHDistWidth / 2, lY0 - 10 - lXHeight), aHDistStr);
     }
 
     // annotation: vertical gap
     if (aItem.nRows > 1)
     {
-        DrawArrow(Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), sal_False);
+        DrawArrow(Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), false);
         DrawText(Point(lX0 - 10 - lVDistWidth, ROUND(lY1 + f * aItem.lVDist / 2 - lXHeight / 2)), aVDistStr);
     }
 
     // annotation: columns
     {
         long lY = lY0 + lOutlineH + 4;
-        DrawArrow(Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), sal_True);
+        DrawArrow(Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), true);
         DrawText(Point((lX0 + lX0 + lOutlineW - 1) / 2 - lColsWidth / 2, lY + 5), aColsStr);
     }
 
     // annotation: lines
     {
         long lX = lX0 + lOutlineW + 4;
-        DrawArrow(Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), sal_True);
+        DrawArrow(Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), true);
         DrawText(Point(lX + 5, (lY0 + lY0 + lOutlineH - 1 - lXHeight / 2) / 2), aRowsStr);
     }
 }
 
 // Arror or interval character --------------------------------------------
 
-void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, sal_Bool bArrow)
+void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, bool bArrow)
 {
     DrawLine(rP1, rP2);
 
@@ -315,7 +315,7 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aPHeightText  (this, SW_RES(TXT_PHEIGHT )),
     aPHeightField (this, SW_RES(FLD_PHEIGHT )),
     aSavePB      (this, SW_RES(PB_SAVE  )),
-    bModified(sal_False),
+    bModified(false),
     aItem        ((const SwLabItem&) rSet.Get(FN_LABEL))
 {
     FreeResource();
@@ -370,7 +370,7 @@ SwLabFmtPage::~SwLabFmtPage()
 // Modify-handler of MetricFields. start preview timer
 IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, ModifyHdl)
 {
-    bModified = sal_True;
+    bModified = true;
     aPreviewTimer.Start();
     return 0;
 }
@@ -575,7 +575,7 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
     pSaveDlg->Execute();
     if(pSaveDlg->GetLabel(aItem))
     {
-        bModified = sal_False;
+        bModified = false;
         const Sequence<OUString>& rMan = GetParentSwLabDlg()->GetLabelsConfig().GetManufacturers();
         std::vector<rtl::OUString>& rMakes(GetParentSwLabDlg()->Makes());
         if(rMakes.size() < (sal_uInt16)rMan.getLength())
@@ -606,7 +606,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
 
     aQueryMB(this,  SW_RES(MB_QUERY )),
 
-    bSuccess(sal_False),
+    bSuccess(false),
     pLabPage(pParent),
     rLabRec(rRec)
 {
@@ -644,7 +644,7 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
     }
     rLabRec.aType = sType;
     rCfg.SaveLabel(sMake, sType, rLabRec);
-    bSuccess = sal_True;
+    bSuccess = true;
     EndDialog(RET_OK);
     return 0;
 }
@@ -655,7 +655,7 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyHdl)
     return 0;
 }
 
-sal_Bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)
+bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)
 {
     if(bSuccess)
     {

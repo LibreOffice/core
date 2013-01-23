@@ -100,10 +100,10 @@ static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, sal_Bool b
 void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
-    sal_Bool bQuickBalloon = 0 != (rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ));
+    bool bQuickBalloon = 0 != (rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ));
     if(bQuickBalloon && rSh.GetViewOptions()->IsPreventTips())
         return;
-    sal_Bool bWeiter = sal_True;
+    bool bWeiter = true;
     SET_CURR_SHELL(&rSh);
     String sTxt;
     Point aPos( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));
@@ -380,7 +380,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 }
             }
 
-            bWeiter = sal_False;
+            bWeiter = false;
         }
         if( bWeiter )
         {
@@ -419,7 +419,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 Rectangle aRect(rEvt.GetMousePosPixel(), aTxtSize);
                 Help::ShowQuickHelp(this, aRect, sTxt);
             }
-            bWeiter = sal_False;
+            bWeiter = false;
         }
     }
 
@@ -438,7 +438,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 pObj = aVEvt.pObj;
                 sTxt = pField->GetURL();
 
-                bWeiter = sal_False;
+                bWeiter = false;
             }
         }
         if (bWeiter && eHit == SDRHIT_TEXTEDIT)
@@ -463,7 +463,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 if (pField )
                 {
                     sTxt = ((const SvxURLField*) pField)->GetURL();
-                    bWeiter = sal_False;
+                    bWeiter = false;
                 }
             }
         }
@@ -502,7 +502,7 @@ void  SwEditWin::Paint(const Rectangle& rRect)
     SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
     if(!pWrtShell)
         return;
-    sal_Bool bPaintShadowCrsr = sal_False;
+    bool bPaintShadowCrsr = false;
     if( pShadCrsr )
     {
         Rectangle aRect( pShadCrsr->GetRect());
@@ -515,7 +515,7 @@ void  SwEditWin::Paint(const Rectangle& rRect)
             // resides somewhat above, then everything is clipped outside
             // and we have to make the "inner part" at the end of the
             // Paint visible again. Otherwise Paint errors occur!
-            bPaintShadowCrsr = sal_True;
+            bPaintShadowCrsr = true;
         }
     }
 
