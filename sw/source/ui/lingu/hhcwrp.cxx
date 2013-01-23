@@ -49,7 +49,6 @@
 
 #include <unomid.h>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
@@ -169,7 +168,7 @@ SwHHCWrapper::~SwHHCWrapper()
 
 
 void SwHHCWrapper::GetNextPortion(
-        ::rtl::OUString&    rNextPortion,
+        OUString&           rNextPortion,
         LanguageType&       rLangOfPortion,
         sal_Bool bAllowChanges )
 {
@@ -380,15 +379,12 @@ void SwHHCWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAttrib
 
 void SwHHCWrapper::ReplaceUnit(
          const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
-         const ::rtl::OUString& rOrigText,
+         const OUString& rOrigText,
          const OUString& rReplaceWith,
          const uno::Sequence< sal_Int32 > &rOffsets,
          ReplacementAction eAction,
          LanguageType *pNewUnitLanguage )
 {
-    static OUString aBracketedStart( "(" );
-    static OUString aBracketedEnd( ")" );
-
     OSL_ENSURE( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
     if (!(nUnitStart >= 0 && nUnitEnd >= nUnitStart))
         return;
@@ -413,12 +409,12 @@ void SwHHCWrapper::ReplaceUnit(
         break;
         case eReplacementBracketed :
         {
-            (((aNewTxt = aOrigTxt) += aBracketedStart) += rReplaceWith) += aBracketedEnd;
+            aNewTxt = aOrigTxt + "(" + rReplaceWith + ")";
         }
         break;
         case eOriginalBracketed :
         {
-            (((aNewTxt = rReplaceWith) += aBracketedStart) += aOrigTxt) += aBracketedEnd;
+            aNewTxt = rReplaceWith + "(" + aOrigTxt + ")";
         }
         break;
         case eReplacementAbove  :
