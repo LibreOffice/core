@@ -39,6 +39,7 @@ $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/outlinepositionpage \
 	sw/uiconfig/swriter/ui/printoptionspage \
 	sw/uiconfig/swriter/ui/printeroptions \
+	sw/uiconfig/swriter/ui/rowheight \
 	sw/uiconfig/swriter/ui/sortdialog \
 	sw/uiconfig/swriter/ui/splittable \
 	sw/uiconfig/swriter/ui/statisticsinfopage \

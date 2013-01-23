@@ -28,12 +28,8 @@ class SwWrtShell;
 
 class SwTableHeightDlg : public SvxStandardDialog
 {
-      FixedLine       aHeightFL;
-    MetricField     aHeightEdit;
-    CheckBox        aAutoHeightCB;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    MetricField*    m_pHeightEdit;
+    CheckBox*       m_pAutoHeightCB;
     SwWrtShell      &rSh;
 
 protected:

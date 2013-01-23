@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkAction" id="action1"/>
-  <object class="GtkDialog" id="Row Height">
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">0.01</property>
+    <property name="upper">99</property>
+    <property name="value">0.01</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkDialog" id="RowHeightDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Row Height</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -20,6 +27,8 @@
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -75,6 +84,7 @@
               <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkBox" id="box1">
@@ -83,10 +93,11 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkSpinButton" id="spinbutton1">
+                      <object class="GtkSpinButton" id="heightmf:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
+                        <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -96,11 +107,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton1">
+                      <object class="GtkCheckButton" id="fit">
                         <property name="label" translatable="yes">_Fit to size</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -119,6 +131,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Height</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>

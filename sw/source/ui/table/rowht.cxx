@@ -34,18 +34,14 @@
 #include <usrpref.hxx>
 
 #include <cmdid.h>
-#include <rowht.hrc>
 #include <table.hrc>
-
-
-
 
 void SwTableHeightDlg::Apply()
 {
-    SwTwips nHeight = static_cast< SwTwips >(aHeightEdit.Denormalize(aHeightEdit.GetValue(FUNIT_TWIP)));
+    SwTwips nHeight = static_cast< SwTwips >(m_pHeightEdit->Denormalize(m_pHeightEdit->GetValue(FUNIT_TWIP)));
     SwFmtFrmSize aSz(ATT_FIX_SIZE, 0, nHeight);
 
-    SwFrmSize eFrmSize = (SwFrmSize) aAutoHeightCB.IsChecked() ?
+    SwFrmSize eFrmSize = (SwFrmSize) m_pAutoHeightCB->IsChecked() ?
         ATT_MIN_SIZE : ATT_FIX_SIZE;
     if(eFrmSize != aSz.GetHeightSizeType())
     {
@@ -54,37 +50,28 @@ void SwTableHeightDlg::Apply()
     rSh.SetRowHeight( aSz );
 }
 
-// CTOR / DTOR -----------------------------------------------------------
 
-
-SwTableHeightDlg::SwTableHeightDlg( Window *pParent, SwWrtShell &rS ) :
-
-    SvxStandardDialog(pParent, SW_RES(DLG_ROW_HEIGHT)),
-    aHeightFL(this, SW_RES(FL_HEIGHT)),
-
-    aHeightEdit(this, SW_RES(ED_HEIGHT)),
-    aAutoHeightCB(this, SW_RES(CB_AUTOHEIGHT)),
-    aOKBtn(this, SW_RES(BT_OK)),
-    aCancelBtn(this, SW_RES(BT_CANCEL)),
-    aHelpBtn( this, SW_RES( BT_HELP ) ),
-    rSh( rS )
+SwTableHeightDlg::SwTableHeightDlg(Window *pParent, SwWrtShell &rS)
+    : SvxStandardDialog(pParent, "RowHeightDialog", "modules/swriter/ui/rowheight.ui")
+    , rSh( rS )
 {
-    FreeResource();
+    get(m_pHeightEdit, "heightmf");
+    get(m_pAutoHeightCB, "fit");
 
     FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( 0 != PTR_CAST( SwWebDocShell,
                                 rSh.GetView().GetDocShell() ) )->GetMetric();
-    ::SetFieldUnit( aHeightEdit, eFieldUnit );
+    ::SetFieldUnit(*m_pHeightEdit, eFieldUnit);
 
-    aHeightEdit.SetMin(MINLAY, FUNIT_TWIP);
-    if(!aHeightEdit.GetMin())
-        aHeightEdit.SetMin(1);
+    m_pHeightEdit->SetMin(MINLAY, FUNIT_TWIP);
+    if(!m_pHeightEdit->GetMin())
+        m_pHeightEdit->SetMin(1);
     SwFmtFrmSize *pSz;
     rSh.GetRowHeight( pSz );
     if ( pSz )
     {
         long nHeight = pSz->GetHeight();
-        aAutoHeightCB.Check(pSz->GetHeightSizeType() != ATT_FIX_SIZE);
-        aHeightEdit.SetValue(aHeightEdit.Normalize(nHeight), FUNIT_TWIP);
+        m_pAutoHeightCB->Check(pSz->GetHeightSizeType() != ATT_FIX_SIZE);
+        m_pHeightEdit->SetValue(m_pHeightEdit->Normalize(nHeight), FUNIT_TWIP);
 
         delete pSz;
     }
