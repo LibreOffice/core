@@ -48,7 +48,7 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres, SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric, String &rText, const IntlWrapper * pIntlWrapper = 0 ) const;
+                                    SfxMapUnit ePresMetric, OUString &rText, const IntlWrapper * pIntlWrapper = 0 ) const;
 
     sal_Bool                    IsEnabled() const { return bEnabled; }
     void                    SetEnabled( sal_Bool bEnable ) { bEnabled = bEnable; }

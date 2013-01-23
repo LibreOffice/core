@@ -135,23 +135,19 @@ bool SvxGrfCrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 SfxItemPresentation SvxGrfCrop::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit /*ePresUnit*/,
-    String &rText, const IntlWrapper* pIntl ) const
+    OUString &rText, const IntlWrapper* pIntl ) const
 {
-    rText.Erase();
+    rText = OUString();
     switch( ePres )
     {
     case SFX_ITEM_PRESENTATION_NAMELESS:
     case SFX_ITEM_PRESENTATION_COMPLETE:
         if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
         {
-            ( rText.AssignAscii( "L: " )) += ::GetMetricText( GetLeft(),
-                                            eCoreUnit, SFX_MAPUNIT_MM, pIntl );
-            ( rText.AppendAscii( " R: " )) += ::GetMetricText( GetRight(),
-                                            eCoreUnit, SFX_MAPUNIT_MM, pIntl );
-            ( rText.AppendAscii( " T: " )) += ::GetMetricText( GetTop(),
-                                            eCoreUnit, SFX_MAPUNIT_MM, pIntl );
-            ( rText.AppendAscii( " B: " )) += ::GetMetricText( GetBottom(),
-                                            eCoreUnit, SFX_MAPUNIT_MM, pIntl );
+            rText = "L: "  + OUString(::GetMetricText( GetLeft(), eCoreUnit, SFX_MAPUNIT_MM, pIntl )) +
+                    " R: " + OUString(::GetMetricText( GetRight(), eCoreUnit, SFX_MAPUNIT_MM, pIntl )) +
+                    " T: " + OUString(::GetMetricText( GetTop(), eCoreUnit, SFX_MAPUNIT_MM, pIntl )) +
+                    " B: " + OUString(::GetMetricText( GetBottom(), eCoreUnit, SFX_MAPUNIT_MM, pIntl ));
         }
         break;
 

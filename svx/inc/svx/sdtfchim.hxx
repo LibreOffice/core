@@ -31,7 +31,7 @@ public:
 
     SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,
                                     SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
-                                        String &rText, const IntlWrapper * = 0) const;
+                                    OUString &rText, const IntlWrapper * = 0) const;
 
     SVX_DLLPRIVATE virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 nItem ) const;
     SVX_DLLPRIVATE virtual SvStream&            Store( SvStream&, sal_uInt16 nVersion ) const;

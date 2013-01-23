@@ -37,7 +37,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String &rText,
+                                    OUString &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 };
 

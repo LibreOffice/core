@@ -67,18 +67,15 @@ SfxItemPresentation SfxRectangleItem::GetPresentation
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
     SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    OUString&               rText,
     const IntlWrapper *
 )   const
 {
     DBG_CHKTHIS(SfxRectangleItem, 0);
-    rText = OUString::valueOf(aVal.Top());
-    rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-    rText += OUString::valueOf(aVal.Left());
-    rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-    rText += OUString::valueOf(aVal.Bottom());
-    rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-    rText += OUString::valueOf(aVal.Right());
+    rText = OUString::number(aVal.Top())    + ", " +
+            OUString::number(aVal.Left())   + ", " +
+            OUString::number(aVal.Bottom()) + ", " +
+            OUString::number(aVal.Right());
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 

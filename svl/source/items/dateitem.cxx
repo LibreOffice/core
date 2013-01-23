@@ -122,7 +122,7 @@ SfxItemPresentation SfxDateTimeItem::GetPresentation
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
     SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    OUString&               rText,
     const IntlWrapper *   pIntlWrapper
 )   const
 {
@@ -130,21 +130,21 @@ SfxItemPresentation SfxDateTimeItem::GetPresentation
     if (aDateTime.IsValidDate())
         if (pIntlWrapper)
         {
-            rText = pIntlWrapper->getLocaleData()->getDate(aDateTime);
-            rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-            rText += pIntlWrapper->getLocaleData()->getTime(aDateTime);
+            rText = pIntlWrapper->getLocaleData()->getDate(aDateTime) +
+                    ", " +
+                    pIntlWrapper->getLocaleData()->getTime(aDateTime);
         }
         else
         {
             DBG_WARNING("SfxDateTimeItem::GetPresentation():"
                          " Using default en_US IntlWrapper");
             const IntlWrapper aIntlWrapper( LanguageTag( LANGUAGE_ENGLISH_US) );
-            rText = aIntlWrapper.getLocaleData()->getDate(aDateTime);
-            rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-            rText += aIntlWrapper.getLocaleData()->getTime(aDateTime);
+            rText = aIntlWrapper.getLocaleData()->getDate(aDateTime) +
+                    ", " +
+                    aIntlWrapper.getLocaleData()->getTime(aDateTime);
         }
     else
-        rText.Erase();
+        rText = OUString();
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 

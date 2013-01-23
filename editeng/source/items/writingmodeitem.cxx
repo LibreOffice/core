@@ -68,14 +68,14 @@ sal_uInt16 SvxWritingModeItem::GetVersion( sal_uInt16 /*nFVer*/ ) const
 SfxItemPresentation SvxWritingModeItem::GetPresentation( SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/,
         SfxMapUnit /*ePresMetric*/,
-        String &rText,
+        OUString &rText,
         const IntlWrapper *  ) const
 {
     SfxItemPresentation eRet = ePres;
     switch( ePres )
     {
     case SFX_ITEM_PRESENTATION_NONE:
-        rText.Erase();
+        rText = OUString();
         break;
 
     case SFX_ITEM_PRESENTATION_NAMELESS:

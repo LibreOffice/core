@@ -152,9 +152,9 @@ class INetURLHistory_Impl
 
     /** crc32.
     */
-    sal_uInt32 crc32 (UniString const & rData) const
+    sal_uInt32 crc32 (OUString const & rData) const
     {
-        return rtl_crc32 (0, rData.GetBuffer(), rData.Len() * sizeof(sal_Unicode));
+        return rtl_crc32 (0, rData.getStr(), rData.getLength() * sizeof(sal_Unicode));
     }
 
     /** find.

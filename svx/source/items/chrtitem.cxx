@@ -252,7 +252,7 @@ XubString SvxDoubleItem::GetValueText() const
 
 SfxItemPresentation SvxDoubleItem::GetPresentation
             ( SfxItemPresentation /*ePresentation*/, SfxMapUnit /*eCoreMetric*/,
-              SfxMapUnit /*ePresentationMetric*/, XubString& rText,
+              SfxMapUnit /*ePresentationMetric*/, OUString& rText,
               const IntlWrapper * pIntlWrapper) const
 {
     DBG_ASSERT( pIntlWrapper, "SvxDoubleItem::GetPresentation: no IntlWrapper" );

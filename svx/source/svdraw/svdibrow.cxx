@@ -75,13 +75,13 @@ enum ItemType {
 class ImpItemListRow
 {
 public:
-    XubString                   aName;
-    XubString                   aValue;
-    SfxItemState                eState;
+    OUString                        aName;
+    OUString                        aValue;
+    SfxItemState                    eState;
     sal_uInt16                      nWhichId;
 
-    TypeId                      pType;
-    ItemType                    eItemType;
+    TypeId                          pType;
+    ItemType                        eItemType;
 
     sal_Int32                       nVal;
     sal_Int32                       nMin;
@@ -144,8 +144,8 @@ XubString ImpItemListRow::GetItemTypeStr() const
 
 sal_Bool ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
 {
-    return (aName.Equals(rEntry.aName)
-        && aValue.Equals(rEntry.aValue)
+    return (aName.equals(rEntry.aName)
+        && aValue.equals(rEntry.aValue)
         && eState==rEntry.eState
         && nWhichId==rEntry.nWhichId
         && bComment==rEntry.bComment
@@ -568,7 +568,7 @@ void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntP
         RowInserted(nEntryNum);
     } else if (*pAktEntry!=rEntry) {
         bool bStateDiff=rEntry.eState!=pAktEntry->eState;
-        bool bValueDiff=!rEntry.aValue.Equals(pAktEntry->aValue);
+        bool bValueDiff=!rEntry.aValue.equals(pAktEntry->aValue);
         bool bAllDiff = true;
         if (bStateDiff || bValueDiff) {
             // check whether only state and/or value have changed
@@ -968,7 +968,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
 
                     while(nIndent > 0)
                     {
-                        aEntry.aName.Insert(sal_Unicode(' '), 0);
+                        aEntry.aName = " " + aEntry.aName;
                         nIndent--;
                     }
 
@@ -1018,8 +1018,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                                               SFX_MAPUNIT_MM, aEntry.aValue);
                         if (aEntry.bCanNum)
                         {
-                            aEntry.aValue.InsertAscii(": ",0);
-                            aEntry.aValue.Insert(OUString::valueOf(aEntry.nVal),0);
+                            aEntry.aValue = OUString::number(aEntry.nVal) + ": " + aEntry.aValue;
                         }
                     }
                     else

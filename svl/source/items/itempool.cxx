@@ -458,7 +458,7 @@ SfxItemPresentation SfxItemPool::GetPresentation
     SfxItemPresentation ePresent,   /*  IN: gew"unschte Art der Darstellung;
                                             siehe <SfxItemPresentation> */
     SfxMapUnit          eMetric,    /*  IN: gew"unschte Ma\seinheit der Darstellung */
-    XubString&           rText,      /*  OUT: textuelle Darstellung von 'rItem' */
+    OUString&           rText,      /*  OUT: textuelle Darstellung von 'rItem' */
     const IntlWrapper * pIntlWrapper
 )   const
 

@@ -69,15 +69,14 @@ SfxPoolItem* SvxRotateModeItem::Create( SvStream& rStream, sal_uInt16 ) const
 SfxItemPresentation SvxRotateModeItem::GetPresentation(
                                 SfxItemPresentation ePres,
                                 SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
-                                String& rText, const IntlWrapper * )  const
+                                OUString& rText, const IntlWrapper * )  const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText.AppendAscii("...");
-            rText.AppendAscii(": ");
+            rText += "...: ";
 //          break; // DURCHFALLEN!!!
 
         case SFX_ITEM_PRESENTATION_NAMELESS:

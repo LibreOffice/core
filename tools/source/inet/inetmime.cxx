@@ -51,7 +51,7 @@ inline Charset::Charset(rtl_TextEncoding eTheEncoding,
     DBG_ASSERT(m_pRanges, "Charset::Charset(): Bad ranges");
 }
 
-void appendISO88591(UniString & rText, sal_Char const * pBegin,
+void appendISO88591(OUString & rText, sal_Char const * pBegin,
                     sal_Char const * pEnd);
 
 }
@@ -173,14 +173,14 @@ bool Charset::contains(sal_uInt32 nChar) const
 
 namespace unnamed_tools_inetmime {
 
-void appendISO88591(UniString & rText, sal_Char const * pBegin,
+void appendISO88591(OUString & rText, sal_Char const * pBegin,
                     sal_Char const * pEnd)
 {
     xub_StrLen nLength = static_cast< xub_StrLen >(pEnd - pBegin);
     sal_Unicode * pBuffer = new sal_Unicode[nLength];
     for (sal_Unicode * p = pBuffer; pBegin != pEnd;)
         *p++ = sal_uChar(*pBegin++);
-    rText.Append(pBuffer, nLength);
+    rText += OUString(pBuffer, nLength);
     delete[] pBuffer;
 }
 
@@ -279,7 +279,7 @@ bool parseParameters(ParameterList const & rInput,
                                                        + rInput.m_pList->
                                                              m_aCharset.
                                                                  getLength());
-            UniString aValue;
+            OUString aValue;
             bool bBadEncoding = false;
             Parameter * pNext = p;
             do
@@ -311,21 +311,21 @@ bool parseParameters(ParameterList const & rInput,
             while (pNext && pNext->m_nSection > 0);
             if (bBadEncoding)
             {
-                aValue.Erase();
+                aValue = OUString();
                 for (pNext = p;;)
                 {
                     if (pNext->m_bExtended)
                     {
                         for (sal_Int32 i = 0; i < pNext->m_aValue.getLength(); ++i)
-                            aValue += sal_Unicode(
+                            aValue += OUString(sal_Unicode(
                                 sal_Unicode(
                                     sal_uChar(pNext->m_aValue[i]))
-                                | 0xF800);
+                                | 0xF800));
                     }
                     else
                     {
                         for (sal_Int32 i = 0; i < pNext->m_aValue.getLength(); ++i)
-                            aValue += sal_Unicode(sal_uChar(pNext->m_aValue[i]));
+                            aValue += OUString( sal_Unicode(sal_uChar(pNext->m_aValue[i])) );
                     }
                     pNext = pNext->m_pNext;
                     if (!pNext || pNext->m_nSection == 0)
@@ -2413,7 +2413,7 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
     const sal_Char * pBegin = rBody.getStr();
     const sal_Char * pEnd = pBegin + rBody.getLength();
 
-    UniString sDecoded;
+    OUString sDecoded;
     const sal_Char * pCopyBegin = pBegin;
 
     /* bool bStartEncodedWord = true; */
@@ -2666,7 +2666,7 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
             {
                 appendISO88591(sDecoded, pCopyBegin, pWSPBegin);
                 if (eType == HEADER_FIELD_TEXT)
-                    sDecoded.Append(
+                    sDecoded += OUString(
                         pUnicodeBuffer,
                         static_cast< xub_StrLen >(nUnicodeSize));
                 else if (nCommentLevel == 0)
@@ -2698,10 +2698,10 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                             case '\\':
                             case '\x0D':
                             case '=':
-                                sDecoded += '\\';
+                                sDecoded += "\\";
                                 break;
                         }
-                        sDecoded += *pTextPtr;
+                        sDecoded += OUString(*pTextPtr);
                     }
                 }
                 delete[] pUnicodeBuffer;
@@ -2720,7 +2720,7 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
         {
             if (bQuotedEncodedText)
             {
-                sDecoded += '"';
+                sDecoded += "\"";
                 const sal_Unicode * pTextPtr = sEncodedText.getStr();
                 const sal_Unicode * pTextEnd = pTextPtr + sEncodedText.getLength();
                 for (;pTextPtr != pTextEnd; ++pTextPtr)
@@ -2730,12 +2730,12 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                         case '"':
                         case '\\':
                         case '\x0D':
-                            sDecoded += '\\';
+                            sDecoded += "\\";
                             break;
                     }
-                    sDecoded += *pTextPtr;
+                    sDecoded += OUString(*pTextPtr);
                 }
-                sDecoded += '"';
+                sDecoded += "\"";
             }
             else
                 sDecoded += sEncodedText;
@@ -2781,7 +2781,7 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                     sal_Unicode aUTF16Buf[2];
                     xub_StrLen nUTF16Len = static_cast< xub_StrLen >(
                         putUTF32Character(aUTF16Buf, nCharacter) - aUTF16Buf);
-                    sDecoded.Append(aUTF16Buf, nUTF16Len);
+                    sDecoded += OUString(aUTF16Buf, nUTF16Len);
                     p = pUTF8End;
                     pCopyBegin = p;
                 }

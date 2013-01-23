@@ -67,7 +67,7 @@ SfxItemPresentation SvXMLAttrContainerItem::GetPresentation(
                     SfxItemPresentation /*ePresentation*/,
                     SfxMapUnit /*eCoreMetric*/,
                     SfxMapUnit /*ePresentationMetric*/,
-                    XubString &/*rText*/,
+                    OUString & /*rText*/,
                     const IntlWrapper * /*pIntlWrapper*/ ) const
 {
     return SFX_ITEM_PRESENTATION_NONE;

@@ -154,7 +154,7 @@ public:
     virtual SfxItemPresentation     GetPresentation( const SfxPoolItem& rItem,
                                         SfxItemPresentation ePresentation,
                                         SfxMapUnit          ePresentationMetric,
-                                        XubString&              rText,
+                                        OUString&           rText,
                                         const IntlWrapper * pIntlWrapper
                                          = 0 ) const;
     virtual SfxItemPool*            Clone() const;

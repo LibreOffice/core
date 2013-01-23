@@ -61,7 +61,7 @@ public:
                                         const SfxPoolItem&  rItem,
                                         SfxItemPresentation ePresentation,
                                         SfxMapUnit          ePresentationMetric,
-                                        String&             rText,
+                                        OUString&           rText,
                                         const IntlWrapper* pIntl = 0 ) const;
 
     static void InitVersionMaps();

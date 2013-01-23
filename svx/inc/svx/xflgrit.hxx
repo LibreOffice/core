@@ -37,7 +37,7 @@ public:
             TYPEINFO();
             XFillGradientItem() : NameOrIndex(XATTR_FILLGRADIENT, -1) {}
             XFillGradientItem(sal_Int32 nIndex, const XGradient& rTheGradient);
-            XFillGradientItem(const UniString& rName, const XGradient& rTheGradient);
+            XFillGradientItem(const OUString& rName, const XGradient& rTheGradient);
             XFillGradientItem(const XGradient& rTheGradient);
             XFillGradientItem(const XFillGradientItem& rItem);
             XFillGradientItem(SvStream& rIn, sal_uInt16 nVer = 0);
@@ -46,14 +46,14 @@ public:
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
     virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
+    virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const;
     const XGradient&        GetGradientValue() const; // GetValue -> GetGradientValue
     void                    SetGradientValue(const XGradient& rNew) { aGradient = rNew; Detach(); } // SetValue -> SetGradientValue
 

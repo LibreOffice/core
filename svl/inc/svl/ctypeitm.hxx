@@ -55,7 +55,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
-                                                 XubString &rText,
+                                                 OUString & rText,
                                                  const IntlWrapper* pIntlWrapper = 0 ) const;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal,

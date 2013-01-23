@@ -90,7 +90,7 @@ int SfxInt16Item::Compare(const SfxPoolItem & rWith) const
 // virtual
 SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
-                                                  XubString & rText,
+                                                  OUString & rText,
                                                   const IntlWrapper *) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);

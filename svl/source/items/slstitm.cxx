@@ -159,11 +159,11 @@ SfxItemPresentation SfxStringListItem::GetPresentation
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
     SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    OUString&               rText,
     const IntlWrapper *
 )   const
 {
-    rText.AssignAscii(RTL_CONSTASCII_STRINGPARAM("(List)"));
+    rText = "(List)";
     return SFX_ITEM_PRESENTATION_NONE;
 }
 

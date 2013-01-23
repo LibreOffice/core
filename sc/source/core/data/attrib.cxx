@@ -332,19 +332,19 @@ SfxItemPresentation ScProtectionAttr::GetPresentation
         SfxItemPresentation ePres,
         SfxMapUnit /* eCoreMetric */,
         SfxMapUnit /* ePresMetric */,
-        String& rText,
+        OUString& rText,
         const IntlWrapper* /* pIntl */
     ) const
 {
-    String aStrYes  ( ScGlobal::GetRscString(STR_YES) );
-    String aStrNo   ( ScGlobal::GetRscString(STR_NO) );
-    rtl::OUString aStrSep(": ");
-    rtl::OUString aStrDelim( ", ");
+    OUString aStrYes  ( ScGlobal::GetRscString(STR_YES) );
+    OUString aStrNo   ( ScGlobal::GetRscString(STR_NO) );
+    OUString aStrSep(": ");
+    OUString aStrDelim( ", ");
 
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             break;
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
@@ -352,14 +352,14 @@ SfxItemPresentation ScProtectionAttr::GetPresentation
             break;
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText  = ScGlobal::GetRscString(STR_PROTECTION); rText += aStrSep;
-            rText += (bProtection ? aStrYes : aStrNo);       rText += aStrDelim;
-            rText += ScGlobal::GetRscString(STR_FORMULAS);   rText += aStrSep;
-            rText += (!bHideFormula ? aStrYes : aStrNo);     rText += aStrDelim;
-            rText += ScGlobal::GetRscString(STR_HIDE);       rText += aStrSep;
-            rText += (bHideCell ? aStrYes : aStrNo);         rText += aStrDelim;
-            rText += ScGlobal::GetRscString(STR_PRINT);      rText += aStrSep;
-            rText += (!bHidePrint ? aStrYes : aStrNo);
+            rText  = ScGlobal::GetRscString(STR_PROTECTION) + aStrSep +
+                     (bProtection ? aStrYes : aStrNo)       + aStrDelim +
+                     ScGlobal::GetRscString(STR_FORMULAS)   + aStrSep +
+                     (!bHideFormula ? aStrYes : aStrNo)     + aStrDelim +
+                     ScGlobal::GetRscString(STR_HIDE)       + aStrSep +
+                     (bHideCell ? aStrYes : aStrNo)         + aStrDelim +
+                     ScGlobal::GetRscString(STR_PRINT)      + aStrSep +
+                     (!bHidePrint ? aStrYes : aStrNo);
             break;
 
         default:
@@ -462,17 +462,16 @@ SfxItemPresentation ScRangeItem::GetPresentation
         SfxItemPresentation ePres,
         SfxMapUnit          /* eCoreUnit */,
         SfxMapUnit          /* ePresUnit */,
-        String&             rText,
-        const IntlWrapper* /* pIntl */
+        OUString&           rText,
+        const IntlWrapper*  /* pIntl */
     ) const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_COMPLETE:
-        rText  = ScGlobal::GetRscString(STR_AREA);
-        rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
+        rText = OUString(ScGlobal::GetRscString(STR_AREA)) + ": ";
         /* !!! fall-through !!! */
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
@@ -578,34 +577,32 @@ SfxItemPresentation ScTableListItem::GetPresentation
         SfxItemPresentation ePres,
         SfxMapUnit          /* eCoreUnit */,
         SfxMapUnit          /* ePresUnit */,
-        String&             rText,
+        OUString&           rText,
         const IntlWrapper* /* pIntl */
     ) const
 {
-    const sal_Unicode cDelim = ',';
-
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
             {
-            rText  = '(';
+            rText  = "(";
             if ( nCount>0 && pTabArr )
                 for ( sal_uInt16 i=0; i<nCount; i++ )
                 {
-                    rText += String::CreateFromInt32( pTabArr[i] );
+                    rText += OUString::number( pTabArr[i] );
                     if ( i<(nCount-1) )
-                        rText += cDelim;
+                        rText += ",";
                 }
-            rText += ')';
+            rText += ")";
             }
             return ePres;
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
 
         default:
@@ -952,12 +949,12 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /* eCoreUnit */,
     SfxMapUnit          /* ePresUnit */,
-    String&             rText,
+    OUString&           rText,
     const IntlWrapper* /* pIntl */
 )   const
 {
-    rtl::OUString aDel(": ");
-    rText.Erase();
+    OUString aDel(": ");
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -965,18 +962,15 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
         switch( Which() )
         {
             case SID_SCATTR_PAGE_CHARTS:
-            rText  = ScGlobal::GetRscString(STR_VOBJ_CHART);
-            rText += aDel;
+            rText = ScGlobal::GetRscString(STR_VOBJ_CHART) + aDel;
             break;
 
             case SID_SCATTR_PAGE_OBJECTS:
-            rText  = ScGlobal::GetRscString(STR_VOBJ_OBJECT);
-            rText += aDel;
+            rText = ScGlobal::GetRscString(STR_VOBJ_OBJECT) + aDel;
             break;
 
             case SID_SCATTR_PAGE_DRAWINGS:
-            rText  = ScGlobal::GetRscString(STR_VOBJ_DRAWINGS);
-            rText += aDel;
+            rText = ScGlobal::GetRscString(STR_VOBJ_DRAWINGS) + aDel;
             break;
 
             default:
@@ -1144,31 +1138,30 @@ int ScPageScaleToItem::operator==( const SfxPoolItem& rCmp ) const
 }
 
 namespace {
-void lclAppendScalePageCount( String& rText, sal_uInt16 nPages )
+void lclAppendScalePageCount( OUString& rText, sal_uInt16 nPages )
 {
-    rText.AppendAscii( ": " );
+    rText += ": ";
     if( nPages )
     {
-        String aPages( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_PAGES ) );
-        aPages.SearchAndReplaceAscii( "%1", String::CreateFromInt32( nPages ) );
-        rText.Append( aPages );
+        OUString aPages( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_PAGES ) );
+        rText += aPages.replaceFirst( "%1", OUString::number( nPages ) );
     }
     else
-        rText.Append( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_AUTO ) );
+        rText += ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_AUTO );
 }
 } // namespace
 
 SfxItemPresentation ScPageScaleToItem::GetPresentation(
-        SfxItemPresentation ePres, SfxMapUnit, SfxMapUnit, XubString& rText, const IntlWrapper* ) const
+        SfxItemPresentation ePres, SfxMapUnit, SfxMapUnit, OUString& rText, const IntlWrapper* ) const
 {
-    rText.Erase();
+    rText = OUString();
     if( !IsValid() || (ePres == SFX_ITEM_PRESENTATION_NONE) )
         return SFX_ITEM_PRESENTATION_NONE;
 
-    String aName( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALETO ) );
-    String aValue( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_WIDTH ) );
+    OUString aName( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALETO ) );
+    OUString aValue( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_WIDTH ) );
     lclAppendScalePageCount( aValue, mnWidth );
-    aValue.AppendAscii( ", " ).Append( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_HEIGHT ) );
+    aValue = aValue + ", " + ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_HEIGHT );
     lclAppendScalePageCount( aValue, mnHeight );
 
     switch( ePres )
@@ -1185,7 +1178,7 @@ SfxItemPresentation ScPageScaleToItem::GetPresentation(
         break;
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText.Assign( aName ).AppendAscii( " (" ).Append( aValue ).Append( ')' );
+            rText = aName + " (" + aValue + ")";
         break;
 
         default:

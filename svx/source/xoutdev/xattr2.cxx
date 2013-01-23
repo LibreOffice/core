@@ -86,21 +86,19 @@ SfxItemPresentation XLineTransparenceItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
             return ePres;
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = XubString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) );
-            rText.AppendAscii(": ");
+            rText = OUString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) ) + ": ";
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += OUString::number(GetValue());
-            rText += sal_Unicode('%');
+            rText = rText + OUString::number( GetValue() ) + "%";
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;
@@ -156,9 +154,9 @@ SfxPoolItem* XLineJointItem::Clone(SfxItemPool* /*pPool*/) const
 // -----------------------------------------------------------------------------
 
 SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
-                                                     SfxMapUnit /*ePresUnit*/, XubString& rText, const IntlWrapper*) const
+                                                     SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch( ePres )
     {
@@ -331,9 +329,9 @@ SfxPoolItem* XLineCapItem::Clone(SfxItemPool* /*pPool*/) const
 // -----------------------------------------------------------------------------
 
 SfxItemPresentation XLineCapItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
-                                                     SfxMapUnit /*ePresUnit*/, XubString& rText, const IntlWrapper*) const
+                                                     SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch( ePres )
     {
@@ -482,21 +480,19 @@ SfxItemPresentation XFillTransparenceItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
             return ePres;
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = XubString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) );
-            rText.AppendAscii(": ");
+            rText = OUString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) ) + ": ";
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += OUString::number(GetValue());
-            rText += sal_Unicode('%');
+            rText = rText + OUString::number( GetValue() ) + "%";
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;
@@ -609,18 +605,17 @@ SfxItemPresentation XGradientStepCountItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
             return ePres;
         case SFX_ITEM_PRESENTATION_COMPLETE:
-//          rText = XubString( ResId( RID_SVXSTR_GRADIENTSTEPCOUNT, DIALOG_MGR() ) );
-//          rText += ": ";
+//          rText = OUString( ResId( RID_SVXSTR_GRADIENTSTEPCOUNT, DIALOG_MGR() ) ) + ": ";
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += OUString::number(GetValue());
             return ePres;
@@ -660,10 +655,10 @@ SfxItemPresentation XFillBmpTileItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -708,10 +703,10 @@ SfxItemPresentation XFillBmpPosItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -761,10 +756,10 @@ SfxItemPresentation XFillBmpSizeXItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -814,10 +809,10 @@ SfxItemPresentation XFillBmpSizeYItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -867,10 +862,10 @@ SfxItemPresentation XFillBmpSizeLogItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -915,10 +910,10 @@ SfxItemPresentation XFillBmpTileOffsetXItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -963,10 +958,10 @@ SfxItemPresentation XFillBmpTileOffsetYItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -1011,10 +1006,10 @@ SfxItemPresentation XFillBmpStretchItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -1059,10 +1054,10 @@ SfxItemPresentation XFillBmpPosOffsetXItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -1107,10 +1102,10 @@ SfxItemPresentation XFillBmpPosOffsetYItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -1176,9 +1171,9 @@ SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) con
 //------------------------------------------------------------------------
 
 SfxItemPresentation XFillBackgroundItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
-                                                          SfxMapUnit /*ePresUnit*/, XubString& rText, const IntlWrapper*) const
+                                                          SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch( ePres )
     {

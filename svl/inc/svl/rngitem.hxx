@@ -53,7 +53,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    XubString &rText,
+                                    OUString &rText,
                                     const IntlWrapper * = 0 ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
     inline NUMTYPE&             From() { return nFrom; }
@@ -82,7 +82,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    XubString &rText,
+                                    OUString &rText,
                                     const IntlWrapper * = 0 ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
     inline const NUMTYPE*       GetRanges() const { return _pRanges; }

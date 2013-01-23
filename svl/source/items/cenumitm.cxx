@@ -49,10 +49,10 @@ int SfxEnumItemInterface::operator ==(const SfxPoolItem & rItem) const
 // virtual
 SfxItemPresentation
 SfxEnumItemInterface::GetPresentation(SfxItemPresentation, SfxMapUnit,
-                                      SfxMapUnit, XubString & rText,
+                                      SfxMapUnit, OUString & rText,
                                       const IntlWrapper *) const
 {
-    rText = XubString::CreateFromInt32(GetEnumValue());
+    rText = OUString::number( GetEnumValue() );
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
@@ -212,7 +212,7 @@ int CntBoolItem::Compare(const SfxPoolItem & rWith) const
 // virtual
 SfxItemPresentation CntBoolItem::GetPresentation(SfxItemPresentation,
                                                  SfxMapUnit, SfxMapUnit,
-                                                 UniString & rText,
+                                                 OUString & rText,
                                                  const IntlWrapper *) const
 {
     rText = GetValueTextByVal(m_bValue);

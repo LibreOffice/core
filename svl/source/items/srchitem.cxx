@@ -261,7 +261,7 @@ SfxItemPresentation SvxSearchItem::GetPresentation
     SfxItemPresentation ,
     SfxMapUnit          ,
     SfxMapUnit          ,
-    XubString&          ,
+    OUString&           ,
     const IntlWrapper *
 )   const
 {

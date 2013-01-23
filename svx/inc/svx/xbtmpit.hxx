@@ -46,7 +46,7 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
     virtual SvStream&       Store( SvStream& rOut, sal_uInt16 nItemVersion  ) const;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
+    virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
@@ -54,7 +54,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const;
 
     const XOBitmap& GetBitmapValue() const; // GetValue -> GetBitmapValue
     void  SetBitmapValue( const XOBitmap& rNew )  { aXOBitmap = rNew; Detach(); } // SetValue -> SetBitmapValue

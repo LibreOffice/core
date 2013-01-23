@@ -56,7 +56,7 @@ public:
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
-                                                XubString & rText,
+                                                OUString & rText,
                                                 const IntlWrapper * = 0)
         const;
 

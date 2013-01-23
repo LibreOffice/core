@@ -290,11 +290,11 @@ public:
     void SetSourceUnit(FieldUnit eSrc)      { eSrcFU=eSrc; bSrcFU=sal_True;  bDirty=sal_True; }
     void SetDestinationUnit(MapUnit eDst)   { eDstMU=eDst; bDstFU=sal_False; bDirty=sal_True; }
     void SetDestinationUnit(FieldUnit eDst) { eDstFU=eDst; bDstFU=sal_True;  bDirty=sal_True; }
-    void TakeStr(long nVal, XubString& rStr) const;
-    static void TakeUnitStr(MapUnit eUnit, XubString& rStr);
-    static void TakeUnitStr(FieldUnit eUnit, XubString& rStr);
-    static XubString GetUnitStr(MapUnit eUnit)   { XubString aStr; TakeUnitStr(eUnit,aStr); return aStr; }
-    static XubString GetUnitStr(FieldUnit eUnit) { XubString aStr; TakeUnitStr(eUnit,aStr); return aStr; }
+    void TakeStr(long nVal, OUString& rStr) const;
+    static void TakeUnitStr(MapUnit eUnit, OUString& rStr);
+    static void TakeUnitStr(FieldUnit eUnit, OUString& rStr);
+    static OUString GetUnitStr(MapUnit eUnit)   { OUString aStr; TakeUnitStr(eUnit,aStr); return aStr; }
+    static OUString GetUnitStr(FieldUnit eUnit) { OUString aStr; TakeUnitStr(eUnit,aStr); return aStr; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

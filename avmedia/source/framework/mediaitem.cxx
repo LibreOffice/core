@@ -139,10 +139,10 @@ SfxPoolItem* MediaItem::Clone( SfxItemPool* ) const
 SfxItemPresentation MediaItem::GetPresentation( SfxItemPresentation,
                                                   SfxMapUnit,
                                                   SfxMapUnit,
-                                                  XubString& rText,
+                                                  OUString& rText,
                                                   const IntlWrapper * ) const
 {
-    rText.Erase();
+    rText = OUString();
     return SFX_ITEM_PRESENTATION_NONE;
 }
 

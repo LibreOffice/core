@@ -69,14 +69,14 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    String&             rText,
-    const IntlWrapper*    pIntl
+    OUString&           rText,
+    const IntlWrapper*  pIntl
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -84,10 +84,9 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
             sal_uInt16 nHght = (sal_uInt16) GetPageFtnInfo().GetHeight();
             if ( nHght )
             {
-                rText = SW_RESSTR( STR_MAX_FTN_HEIGHT );
-                rText += ' ';
-                rText += ::GetMetricText( nHght, eCoreUnit, ePresUnit, pIntl );
-                rText += ::GetSvxString( ::GetMetricId( ePresUnit ) );
+                rText = SW_RESSTR( STR_MAX_FTN_HEIGHT ) + " " +
+                        ::GetMetricText( nHght, eCoreUnit, ePresUnit, pIntl ) +
+                        ::GetSvxString( ::GetMetricId( ePresUnit ) );
             }
             return ePres;
         }

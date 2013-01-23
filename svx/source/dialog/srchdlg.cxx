@@ -2252,7 +2252,7 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
 
         if ( !IsInvalidItem( rItem.pItem ) )
         {
-            String aStr;
+            OUString aStr;
             rPool.GetPresentation( *rItem.pItem,
                                     SFX_ITEM_PRESENTATION_COMPLETE,
                                     eMapUnit, aStr );

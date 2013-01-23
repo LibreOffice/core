@@ -236,7 +236,7 @@ SfxItemPresentation SvxMacroItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText,
+    OUString&           rText,
     const IntlWrapper *
 )   const
 {
@@ -254,7 +254,7 @@ SfxItemPresentation SvxMacroItem::GetPresentation
             rText += cpDelim;
     }
 */
-    rText.Erase();
+    rText = OUString();
     return SFX_ITEM_PRESENTATION_NONE;
 }
 

@@ -244,13 +244,13 @@ SfxItemPresentation SvxLineSpacingItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
 #ifdef DBG_UTIL
-    rText.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "SvxLineSpacingItem" ));
+    rText = "SvxLineSpacingItem";
 #else
-    rText.Erase();
+    rText = OUString();
 #endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -437,13 +437,13 @@ SfxItemPresentation SvxAdjustItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -566,14 +566,14 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
         {
-            rText.Erase();
+            rText = OUString();
             break;
         }
 
@@ -585,9 +585,7 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            rText = EE_RESSTR(RID_SVXITEMS_WIDOWS_COMPLETE);
-            rText += ' ';
-            rText += EE_RESSTR(RID_SVXITEMS_LINES);
+            rText = EE_RESSTR(RID_SVXITEMS_WIDOWS_COMPLETE) + " " + EE_RESSTR(RID_SVXITEMS_LINES);
         }
 
         default:
@@ -596,7 +594,7 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
         }
     }
 
-    rText.SearchAndReplace( rtl::OUString("%1"), String::CreateFromInt32( GetValue() ) );
+    rText = rText.replaceFirst( "%1", OUString::number( GetValue() ) );
     return ePres;
 }
 
@@ -638,14 +636,14 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
         {
-            rText.Erase();
+            rText = OUString();
             break;
         }
 
@@ -657,9 +655,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            rText = EE_RESSTR(RID_SVXITEMS_ORPHANS_COMPLETE);
-            rText += ' ';
-            rText += EE_RESSTR(RID_SVXITEMS_LINES);
+            rText = EE_RESSTR(RID_SVXITEMS_ORPHANS_COMPLETE) + " " + EE_RESSTR(RID_SVXITEMS_LINES);
         }
 
         default:
@@ -668,7 +664,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
         }
     }
 
-    rText.SearchAndReplace( rtl::OUString("%1"), String::CreateFromInt32( GetValue() ) );
+    rText = rText.replaceFirst( "%1", OUString::number( GetValue() ) );
     return ePres;
 }
 
@@ -759,13 +755,14 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
+    OUString cpDelimTmp(cpDelim);
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
@@ -773,19 +770,15 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
 
             if ( bHyphen )
                 nId = RID_SVXITEMS_HYPHEN_TRUE;
-            rText = EE_RESSTR(nId);
-            rText += cpDelim;
+            rText = EE_RESSTR(nId) + cpDelimTmp;
             nId = RID_SVXITEMS_PAGE_END_FALSE;
 
             if ( bPageEnd )
                 nId = RID_SVXITEMS_PAGE_END_TRUE;
-            rText += EE_RESSTR(nId);
-            rText += cpDelim;
-            rText += String::CreateFromInt32( nMinLead );
-            rText += cpDelim;
-            rText += String::CreateFromInt32( nMinTrail );
-            rText += cpDelim;
-            rText += String::CreateFromInt32( nMaxHyphens );
+            rText = rText + EE_RESSTR(nId) + cpDelimTmp +
+                    OUString::number( nMinLead ) + cpDelimTmp +
+                    OUString::number( nMinTrail ) + cpDelimTmp +
+                    OUString::number( nMaxHyphens );
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -794,22 +787,22 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
 
             if ( bHyphen )
                 nId = RID_SVXITEMS_HYPHEN_TRUE;
-            rText = EE_RESSTR(nId);
-            rText += cpDelim;
+            rText = EE_RESSTR(nId) + cpDelimTmp;
             nId = RID_SVXITEMS_PAGE_END_FALSE;
 
             if ( bPageEnd )
                 nId = RID_SVXITEMS_PAGE_END_TRUE;
-            rText += EE_RESSTR(nId);
-            rText += cpDelim;
-            rText += String::CreateFromInt32(nMinLead);
-            rText += EE_RESSTR(RID_SVXITEMS_HYPHEN_MINLEAD);
-            rText += cpDelim;
-            rText += String::CreateFromInt32(nMinTrail);
-            rText += EE_RESSTR(RID_SVXITEMS_HYPHEN_MINTRAIL);
-            rText += cpDelim;
-            rText += String::CreateFromInt32(nMaxHyphens);
-            rText += EE_RESSTR(RID_SVXITEMS_HYPHEN_MAX);
+            rText = rText +
+                    EE_RESSTR(nId) +
+                    cpDelimTmp +
+                    OUString::number( nMinLead ) +
+                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MINLEAD) +
+                    cpDelimTmp +
+                    OUString::number( nMinTrail ) +
+                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MINTRAIL) +
+                    cpDelimTmp +
+                    OUString::number( nMaxHyphens ) +
+                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MAX);
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
         default: ;//prevent warning
@@ -1128,10 +1121,10 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *pIntl
+    OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     if ( ePres > SFX_ITEM_PRESENTATION_NONE )
     {
@@ -1142,7 +1135,7 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
             if ( SVX_TAB_ADJUST_DEFAULT != ((*this)[i]).GetAdjustment() )
             {
                 if ( bComma )
-                    rText += sal_Unicode(',');
+                    rText += ",";
                 rText += GetMetricText(
                     ((*this)[i]).GetTabPos(), eCoreUnit, ePresUnit, pIntl );
                 if ( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
@@ -1294,13 +1287,13 @@ SfxItemPresentation SvxFmtSplitItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -1360,10 +1353,10 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
     bool bSet = ( GetValue().Len() > 0 );
 
     switch ( ePres )
@@ -1379,8 +1372,7 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             if ( bSet )
             {
-                rText = EE_RESSTR(RID_SVXITEMS_PAGEMODEL_COMPLETE);
-                rText += GetValue();
+                rText = EE_RESSTR(RID_SVXITEMS_PAGEMODEL_COMPLETE) + GetValue();
             }
             return SFX_ITEM_PRESENTATION_COMPLETE;
         default: ;//prevent warning
@@ -1420,12 +1412,12 @@ sal_uInt16  SvxScriptSpaceItem::GetVersion( sal_uInt16 nFFVer ) const
 SfxItemPresentation SvxScriptSpaceItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
-        String &rText, const IntlWrapper* /*pIntl*/ ) const
+        OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     switch( ePres )
     {
     case SFX_ITEM_PRESENTATION_NONE:
-        rText.Erase();
+        rText = OUString();
         break;
     case SFX_ITEM_PRESENTATION_NAMELESS:
     case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -1473,12 +1465,12 @@ sal_uInt16 SvxHangingPunctuationItem::GetVersion( sal_uInt16 nFFVer ) const
 SfxItemPresentation SvxHangingPunctuationItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
-        String &rText, const IntlWrapper* /*pIntl*/ ) const
+        OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     switch( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             break;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -1526,12 +1518,12 @@ sal_uInt16 SvxForbiddenRuleItem::GetVersion( sal_uInt16 nFFVer ) const
 SfxItemPresentation SvxForbiddenRuleItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
-        String &rText, const IntlWrapper* /*pIntl*/ ) const
+        OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     switch( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             break;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -1583,12 +1575,12 @@ sal_uInt16 SvxParaVertAlignItem::GetVersion( sal_uInt16 nFFVer ) const
 SfxItemPresentation SvxParaVertAlignItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
-        String &rText, const IntlWrapper*  ) const
+        OUString &rText, const IntlWrapper*  ) const
 {
     switch( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             break;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -1668,12 +1660,12 @@ sal_uInt16  SvxParaGridItem::GetVersion( sal_uInt16 nFFVer ) const
 SfxItemPresentation SvxParaGridItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
-        String &rText, const IntlWrapper* /*pIntl*/ ) const
+        OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     switch( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             break;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:

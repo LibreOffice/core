@@ -134,7 +134,7 @@ void CntContentTypeItem::SetValue( const OUString& rNewVal )
 //----------------------------------------------------------------------------
 int CntContentTypeItem::Compare( const SfxPoolItem &rWith, const IntlWrapper& rIntlWrapper ) const
 {
-    String aOwnText, aWithText;
+    OUString aOwnText, aWithText;
     GetPresentation( SFX_ITEM_PRESENTATION_NAMELESS,
                      SFX_MAPUNIT_APPFONT, SFX_MAPUNIT_APPFONT, aOwnText, &rIntlWrapper );
     rWith.GetPresentation( SFX_ITEM_PRESENTATION_NAMELESS,
@@ -147,7 +147,7 @@ SfxItemPresentation CntContentTypeItem::GetPresentation(
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreMetric,
     SfxMapUnit          ePresMetric,
-    XubString         & rText,
+    OUString          & rText,
     const IntlWrapper * pIntlWrapper) const
 {
     if (_aPresentation.isEmpty())

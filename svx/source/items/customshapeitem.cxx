@@ -252,14 +252,12 @@ int SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
 
 SfxItemPresentation SdrCustomShapeGeometryItem::GetPresentation(
     SfxItemPresentation ePresentation, SfxMapUnit /*eCoreMetric*/,
-    SfxMapUnit /*ePresentationMetric*/, XubString &rText, const IntlWrapper *) const
+    SfxMapUnit /*ePresentationMetric*/, OUString &rText, const IntlWrapper *) const
 {
-    rText += sal_Unicode( ' ' );
+    rText += " ";
     if ( ePresentation == SFX_ITEM_PRESENTATION_COMPLETE )
     {
-        XubString aStr;
-        aStr += sal_Unicode( ' ' );
-        rText.Insert( aStr, 0 );
+        rText = " " + rText;
     }
     return ePresentation;
 }

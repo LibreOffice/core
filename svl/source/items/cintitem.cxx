@@ -59,11 +59,11 @@ int CntByteItem::Compare(const SfxPoolItem & rWith) const
 // virtual
 SfxItemPresentation CntByteItem::GetPresentation(SfxItemPresentation,
                                                  SfxMapUnit, SfxMapUnit,
-                                                 XubString & rText,
+                                                 OUString & rText,
                                                  const IntlWrapper *) const
 {
     DBG_CHKTHIS(CntByteItem, 0);
-    rText = XubString::CreateFromInt32(m_nValue);
+    rText = OUString::number( m_nValue );
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
@@ -193,12 +193,12 @@ int CntUInt16Item::Compare(const SfxPoolItem & rWith) const
 // virtual
 SfxItemPresentation CntUInt16Item::GetPresentation(SfxItemPresentation,
                                                    SfxMapUnit, SfxMapUnit,
-                                                   XubString & rText,
+                                                   OUString & rText,
                                                    const IntlWrapper *)
     const
 {
     DBG_CHKTHIS(CntUInt16Item, 0);
-    rText = XubString::CreateFromInt32(m_nValue);
+    rText = OUString::number( m_nValue );
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
@@ -325,11 +325,11 @@ int CntInt32Item::Compare(const SfxPoolItem & rWith) const
 // virtual
 SfxItemPresentation CntInt32Item::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
-                                                  XubString & rText,
+                                                  OUString & rText,
                                                   const IntlWrapper *) const
 {
     DBG_CHKTHIS(CntInt32Item, 0);
-    rText = XubString::CreateFromInt32(m_nValue);
+    rText = OUString::number( m_nValue );
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
@@ -458,7 +458,7 @@ int CntUInt32Item::Compare(const SfxPoolItem & rWith) const
 // virtual
 SfxItemPresentation CntUInt32Item::GetPresentation(SfxItemPresentation,
                                                    SfxMapUnit, SfxMapUnit,
-                                                   XubString & rText,
+                                                   OUString & rText,
                                                    const IntlWrapper *)
     const
 {
