@@ -130,7 +130,10 @@ namespace connectivity
     public:
         enum Rule
         {
-            select_statement = 0,
+            UNKNOWN_RULE = 0,  // ID indicating that a node is no rule with a matching Rule-enum value (see getKnownRuleID)
+                               // we make sure it is 0 so that it is the default-constructor value of this enum
+                               // and std::map<foo,Rule>::operator[](bar) default-inserts UNKNOWN_RULE rather than select_statement (!)
+            select_statement,
             table_exp,
             table_ref_commalist,
             table_ref,
@@ -229,8 +232,7 @@ namespace connectivity
             other_like_predicate_part_2,
             between_predicate_part_2,
             cast_spec,
-            rule_count,             // last value
-            UNKNOWN_RULE = -1       // ID indicating that a node is no rule with a matching Rule-enum value (see getKnownRuleID)
+            rule_count             // last value
         };
 
         // must be ascii encoding for the value

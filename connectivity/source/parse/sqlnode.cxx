@@ -59,6 +59,7 @@
 #include <tools/diagnose_ex.h>
 #include <string.h>
 #include <boost/bind.hpp>
+#include <boost/static_assert.hpp>
 #include <algorithm>
 #include <functional>
 #include <rtl/logfile.hxx>
@@ -1289,8 +1290,9 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
         if(!s_xLocaleData.is())
             s_xLocaleData = LocaleData::create(m_xContext);
 
-        // reset to 0
-        memset(OSQLParser::s_nRuleIDs,0,sizeof(OSQLParser::s_nRuleIDs[0]) * (OSQLParseNode::rule_count+1));
+        // reset to UNKNOWN_RULE
+        BOOST_STATIC_ASSERT(OSQLParseNode::UNKNOWN_RULE==0);
+        memset(OSQLParser::s_nRuleIDs,0,sizeof(OSQLParser::s_nRuleIDs));
 
         struct
         {
@@ -1398,8 +1400,10 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::between_predicate_part_2, "between_predicate_part_2" },
             { OSQLParseNode::cast_spec, "cast_spec" }
         };
-        size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
-        OSL_ENSURE( nRuleMapCount == size_t( OSQLParseNode::rule_count ), "OSQLParser::OSQLParser: added a new rule? Adjust this map!" );
+        const size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
+        // added a new rule? Adjust this map!
+        // +1 for UNKNOWN_RULE
+        BOOST_STATIC_ASSERT( nRuleMapCount + 1 == static_cast<size_t>(OSQLParseNode::rule_count) );
 
         for ( size_t mapEntry = 0; mapEntry < nRuleMapCount; ++mapEntry )
         {
