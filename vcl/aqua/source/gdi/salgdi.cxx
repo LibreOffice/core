@@ -1532,15 +1532,46 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool AquaSalGraphics::drawTransformedBitmap(
-    const basegfx::B2DPoint& rNull,
-    const basegfx::B2DPoint& rX,
-    const basegfx::B2DPoint& rY,
-    const SalBitmap& rSourceBitmap,
-    const SalBitmap* pAlphaBitmap)
+    const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX, const basegfx::B2DPoint& rY,
+    const SalBitmap& rSrcBitmap, const SalBitmap* pAlphaBmp )
 {
-    // here direct support for transformed bitmaps can be impemented
-    (void)rNull; (void)rX; (void)rY; (void)rSourceBitmap; (void)pAlphaBitmap;
-    return false;
+    if( !CheckContext() )
+        return true;
+
+    // get the Quartz image
+    CGImageRef xImage = NULL;
+    const Size aSize = rSrcBitmap.GetSize();
+    const AquaSalBitmap& rSrcSalBmp = static_cast<const AquaSalBitmap&>(rSrcBitmap);
+    const AquaSalBitmap* pMaskSalBmp = static_cast<const AquaSalBitmap*>(pAlphaBmp);
+    if( !pMaskSalBmp)
+        xImage = rSrcSalBmp.CreateCroppedImage( 0, 0, (int)aSize.Width(), (int)aSize.Height() );
+    else
+        xImage = rSrcSalBmp.CreateWithMask( *pMaskSalBmp, 0, 0, (int)aSize.Width(), (int)aSize.Height() );
+    if( !xImage )
+        return false;
+
+    // setup the image transformation
+    // using the rNull,rX,rY points as destinations for the (0,0),(0,Width),(Height,0) source points
+    CGContextSaveGState( mrContext );
+    const basegfx::B2DVector aXRel = rX - rNull;
+    const basegfx::B2DVector aYRel = rY - rNull;
+    const CGAffineTransform aCGMat = CGAffineTransformMake(
+        aXRel.getX()/aSize.Width(), aXRel.getY()/aSize.Width(),
+        aYRel.getX()/aSize.Height(), aYRel.getY()/aSize.Height(),
+        rNull.getX(), rNull.getY());
+    CGContextConcatCTM( mrContext, aCGMat );
+
+    // draw the transformed image
+    const CGRect aSrcRect = {{0,0}, {aSize.Width(), aSize.Height()}};
+    CGContextDrawImage( mrContext, aSrcRect, xImage );
+    CGImageRelease( xImage );
+    // restore the Quartz graphics state
+    CGContextRestoreGState(mrContext);
+
+    // mark the destination as painted
+    const CGRect aDstRect = CGRectApplyAffineTransform( aSrcRect, aCGMat );
+    RefreshRect( aDstRect );
+    return true;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
