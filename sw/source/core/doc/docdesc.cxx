@@ -296,12 +296,12 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         ((SwPageDesc&)rChged).Mirror();
     else
     {
-        // Or else transfer values from Master to Left and First.
-        ::lcl_DescSetAttr( ((SwPageDesc&)rChged).GetMaster(),
-                       ((SwPageDesc&)rChged).GetLeft() );
-        ::lcl_DescSetAttr( ((SwPageDesc&)rChged).GetMaster(),
-                       ((SwPageDesc&)rChged).GetFirst() );
+        // Or else transfer values from Master to Left
+        ::lcl_DescSetAttr(rChged.GetMaster(),
+                   const_cast<SwPageDesc&>(rChged).GetLeft());
     }
+    ::lcl_DescSetAttr(rChged.GetMaster(),
+                   const_cast<SwPageDesc&>(rChged).GetFirst());
 
     // Take over NumType.
     if( rChged.GetNumType().GetNumberingType() != pDesc->GetNumType().GetNumberingType() )
