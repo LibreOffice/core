@@ -65,6 +65,8 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     bool        bIsFirstTextImport;
     bool        bSolarMutexLocked;
     bool        bFormulaTextResult;
+    bool        mbPossibleErrorCell;
+    bool        mbCheckWithCompilerForError;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -92,7 +94,9 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     void PutFormulaCell             ( const ScAddress& rScCurrentPos );
     void AddFormulaCell             ( const ScAddress& rScCellPos );
 
-    bool HasSpecialCaseFormulaText() const;
+    void HasSpecialCaseFormulaText();
+
+    bool IsPossibleErrorString() const;
 
 public:
 
