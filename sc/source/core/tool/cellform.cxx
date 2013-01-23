@@ -125,6 +125,8 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
                             double fValue = pFCell->GetValue();
                             if ( !bNullVals && fValue == 0.0 )
                                 rString = rtl::OUString();
+                            else if ( pFCell->IsHybridValueCell() )
+                                rString = pFCell->GetString();
                             else
                                 rFormatter.GetOutputString( fValue, nFormat, rString, ppColor, bUseStarFormat );
                         }

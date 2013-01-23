@@ -352,9 +352,13 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
 
             ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
 
-            if( ((nCellType == util::NumberFormat::TEXT) || bFormulaTextResult) )
+            if( ((nCellType == util::NumberFormat::TEXT) || pOUFormula) )
             {
-                if (!bHasTextImport)
+                if ( pOUFormula )
+                {
+                    pContext = new ScXMLTextPContext(rXMLImport, nPrefix, rLName, xAttrList, this);
+                }
+                else if (!bHasTextImport)
                 {
                     bIsFirstTextImport = true;
                     bHasTextImport = true;
@@ -733,11 +737,13 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
         }
         else if (!rtl::math::isNan(fValue))
         {
-            pFCell->SetHybridDouble(fValue);
+            if( pOUTextContent )
+                pFCell->SetHybridValueString( fValue, *pOUTextContent );
+            else
+                pFCell->SetHybridDouble(fValue);
             pFCell->ResetDirty();
         }
         pFCell->StartListeningTo(rXMLImport.GetDocument());
-        // Leave the cell dirty when the cached result is not given.
     }
 }
 

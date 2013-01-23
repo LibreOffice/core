@@ -430,6 +430,7 @@ public:
                     // display as empty string if formula::svEmptyCell result
     bool            IsEmptyDisplayedAsString();
     bool            IsValue();      // also true if formula::svEmptyCell
+    bool            IsHybridValueCell(); // for cells after import to deal with inherited number formats
     double          GetValue();
     double          GetValueAlways();   // ignore errors
     rtl::OUString   GetString();
@@ -492,6 +493,13 @@ public:
     void            SetHybridFormula( const rtl::OUString& r,
                                     const formula::FormulaGrammar::Grammar eGrammar )
                         { aResult.SetHybridFormula( r); eTempGrammar = eGrammar; }
+
+    /**
+     * For import only: use for formula cells that return a number
+     * formatted as some kind of string
+     */
+    void SetHybridValueString( double nVal, const OUString& r )
+                        { aResult.SetHybridValueString( nVal, r ); }
 
     void SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL )
     {

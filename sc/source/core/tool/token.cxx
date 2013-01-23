@@ -1096,13 +1096,13 @@ void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
 }
 
 
-double          ScHybridCellToken::GetDouble() const    { return fDouble; }
-const String &  ScHybridCellToken::GetString() const    { return aString; }
+double ScHybridCellToken::GetDouble() const { return mfDouble; }
+const String& ScHybridCellToken::GetString() const { return maString; }
 bool ScHybridCellToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
-        fDouble == r.GetDouble() && aString == r.GetString() &&
-        aFormula == static_cast<const ScHybridCellToken &>(r).GetFormula();
+        mfDouble == r.GetDouble() && maString == r.GetString() &&
+        maFormula == static_cast<const ScHybridCellToken &>(r).GetFormula();
 }
 
 

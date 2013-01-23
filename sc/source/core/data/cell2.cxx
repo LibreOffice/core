@@ -496,6 +496,11 @@ bool ScFormulaCell::IsValue()
     return aResult.IsValue();
 }
 
+bool ScFormulaCell::IsHybridValueCell()
+{
+    return aResult.GetType() == formula::svHybridValueCell;
+}
+
 double ScFormulaCell::GetValue()
 {
     MaybeInterpret();
@@ -1600,7 +1605,7 @@ void ScFormulaCell::CompileDBFormula( bool bCreateFormulaString )
             SetHybridFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE);
         }
     }
-    else if ( !pCode->GetLen() && aResult.GetHybridFormula().Len() )
+    else if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
     {
         Compile( aResult.GetHybridFormula(), false, eTempGrammar );
         aResult.SetToken( NULL);
@@ -1647,7 +1652,7 @@ void ScFormulaCell::CompileNameFormula( bool bCreateFormulaString )
             SetHybridFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE);
         }
     }
-    else if ( !pCode->GetLen() && aResult.GetHybridFormula().Len() )
+    else if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
     {
         Compile( aResult.GetHybridFormula(), false, eTempGrammar );
         aResult.SetToken( NULL);

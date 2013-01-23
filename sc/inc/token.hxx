@@ -414,26 +414,37 @@ public:
 class SC_DLLPUBLIC ScHybridCellToken : public ScToken
 {
 private:
-            double              fDouble;
-            String              aString;
-            String              aFormula;
+    double mfDouble;
+    String maString;
+    OUString maFormula;
 public:
-                                ScHybridCellToken( double f,
-                                        const String & rStr,
-                                        const String & rFormula ) :
-                                    ScToken( formula::svHybridCell ),
-                                    fDouble( f ), aString( rStr ),
-                                    aFormula( rFormula ) {}
-                                ScHybridCellToken( const ScHybridCellToken& r ) :
-                                    ScToken( r ), fDouble( r.fDouble),
-                                    aString( r.aString), aFormula( r.aFormula) {}
-            const String &      GetFormula() const  { return aFormula; }
-    virtual double              GetDouble() const;
-    virtual const String &      GetString() const;
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScHybridCellToken(*this); }
+    ScHybridCellToken( double f,
+            const OUString & rStr,
+            const OUString & rFormula ) :
+        ScToken( formula::svHybridCell ),
+        mfDouble( f ), maString( rStr ),
+        maFormula( rFormula ) {}
+
+    const OUString& GetFormula() const  { return maFormula; }
+    virtual double GetDouble() const;
+    virtual const String& GetString() const;
+    virtual bool operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken* Clone() const { return new ScHybridCellToken(*this); }
 };
 
+class SC_DLLPUBLIC ScHybridValueCellToken : public ScToken
+{
+private:
+    double mfValue;
+    String maString;
+public:
+    ScHybridValueCellToken (double f, const OUString& rStr ):
+        ScToken( formula::svHybridValueCell ),
+        mfValue( f ), maString( rStr ) {}
+
+    virtual double GetDouble() const { return mfValue; }
+    virtual const String & GetString() const { return maString; }
+};
 
 // Simplify argument passing to RefUpdate methods with ScSingleRefToken or
 // ScDoubleRefToken
