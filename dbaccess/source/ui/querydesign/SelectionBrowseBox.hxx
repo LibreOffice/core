@@ -246,7 +246,7 @@ namespace dbaui
             @return
                 <TRUE/> if an error occurred otherwise <FALSE/>
         */
-        sal_Bool        saveField(const String& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction);
+        sal_Bool        saveField(String& _sFieldName, OTableFieldDescRef& _pEntry, sal_Bool& _bListAction);
 
         /** sets the table window at the _pEntry
             @param  _pEntry
