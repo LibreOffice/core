@@ -16,6 +16,13 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+sub encode($)
+{
+    my ($arg) = @_;
+    $arg =~ s/'/'\\''/g;
+    return $arg
+}
+
 $#ARGV >= 1
     or die "Usage: $0 <input file>|-SUCCESS|-FAILURE <command> <arguments...>";
 if ($ARGV[0] eq "-SUCCESS")
@@ -78,7 +85,22 @@ while (1) {
         {
             undef $title;
         }
-        open PIPE, "| @ARGV" or die "cannot start process: $!";
+        my $prog = '';
+        my $assigns = 1;
+        for ($i = 0; $i != scalar(@ARGV); ++$i)
+        {
+            $prog .= ' ' unless $i == 0;
+            if ($assigns && $ARGV[$i] =~ /^([A-Za-z_][A-Za-z0-9_]+)=(.*)$/)
+            {
+                $prog .= $1 . "='" . encode($2) . "'";
+            }
+            else
+            {
+                $prog .= "'" . encode($ARGV[$i]) . "'";
+                $assigns = 0;
+            }
+        }
+        open PIPE, "| $prog" or die "cannot start process: $!";
         $open = 1;
     }
     elsif ($open && $input)
