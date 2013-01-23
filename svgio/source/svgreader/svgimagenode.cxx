@@ -255,7 +255,7 @@ namespace svgio
                     {
                         const SvgNode* mpXLink = getDocument().findSvgNodeById(maXLink);
 
-                        if(mpXLink)
+                        if(mpXLink && Display_none != mpXLink->getDisplay())
                         {
                             mpXLink->decomposeSvgNode(aNewTarget, true);
 

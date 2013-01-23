@@ -144,6 +144,7 @@ namespace svgio
             mpId(0),
             mpClass(0),
             maXmlSpace(XmlSpace_notset),
+            maDisplay(Display_inline),
             maCssStyleVector()
         {
             OSL_ENSURE(SVGTokenUnknown != maType, "SvgNode with unknown type created (!)");
@@ -225,6 +226,104 @@ namespace svgio
                     }
                     break;
                 }
+                case SVGTokenDisplay:
+                {
+                    if(aContent.getLength())
+                    {
+                        static rtl::OUString aStrInline(rtl::OUString::createFromAscii("inline"));
+                        static rtl::OUString aStrBlock(rtl::OUString::createFromAscii("block"));
+                        static rtl::OUString aStrList_item(rtl::OUString::createFromAscii("list-item"));
+                        static rtl::OUString aStrRun_in(rtl::OUString::createFromAscii("run-in"));
+                        static rtl::OUString aStrCompact(rtl::OUString::createFromAscii("compact"));
+                        static rtl::OUString aStrMarker(rtl::OUString::createFromAscii("marker"));
+                        static rtl::OUString aStrTable(rtl::OUString::createFromAscii("table"));
+                        static rtl::OUString aStrInline_table(rtl::OUString::createFromAscii("inline-table"));
+                        static rtl::OUString aStrTable_row_group(rtl::OUString::createFromAscii("table-row-group"));
+                        static rtl::OUString aStrTable_header_group(rtl::OUString::createFromAscii("table-header-group"));
+                        static rtl::OUString aStrTable_footer_group(rtl::OUString::createFromAscii("table-footer-group"));
+                        static rtl::OUString aStrTable_row(rtl::OUString::createFromAscii("table-row"));
+                        static rtl::OUString aStrTable_column_group(rtl::OUString::createFromAscii("table-column-group"));
+                        static rtl::OUString aStrTable_column(rtl::OUString::createFromAscii("table-column"));
+                        static rtl::OUString aStrTable_cell(rtl::OUString::createFromAscii("table-cell"));
+                        static rtl::OUString aStrTable_caption(rtl::OUString::createFromAscii("table-caption"));
+                        static rtl::OUString aStrNone(rtl::OUString::createFromAscii("none"));
+                        static rtl::OUString aStrInherit(rtl::OUString::createFromAscii("inherit"));
+
+                        if(aContent.match(aStrInline))
+                        {
+                            setDisplay(Display_inline);
+                        }
+                        else if(aContent.match(aStrNone))
+                        {
+                            setDisplay(Display_none);
+                        }
+                        else if(aContent.match(aStrInherit))
+                        {
+                            setDisplay(Display_inherit);
+                        }
+                        else if(aContent.match(aStrBlock))
+                        {
+                            setDisplay(Display_block);
+                        }
+                        else if(aContent.match(aStrList_item))
+                        {
+                            setDisplay(Display_list_item);
+                        }
+                        else if(aContent.match(aStrRun_in))
+                        {
+                            setDisplay(Display_run_in);
+                        }
+                        else if(aContent.match(aStrCompact))
+                        {
+                            setDisplay(Display_compact);
+                        }
+                        else if(aContent.match(aStrMarker))
+                        {
+                            setDisplay(Display_marker);
+                        }
+                        else if(aContent.match(aStrTable))
+                        {
+                            setDisplay(Display_table);
+                        }
+                        else if(aContent.match(aStrInline_table))
+                        {
+                            setDisplay(Display_inline_table);
+                        }
+                        else if(aContent.match(aStrTable_row_group))
+                        {
+                            setDisplay(Display_table_row_group);
+                        }
+                        else if(aContent.match(aStrTable_header_group))
+                        {
+                            setDisplay(Display_table_header_group);
+                        }
+                        else if(aContent.match(aStrTable_footer_group))
+                        {
+                            setDisplay(Display_table_footer_group);
+                        }
+                        else if(aContent.match(aStrTable_row))
+                        {
+                            setDisplay(Display_table_row);
+                        }
+                        else if(aContent.match(aStrTable_column_group))
+                        {
+                            setDisplay(Display_table_column_group);
+                        }
+                        else if(aContent.match(aStrTable_column))
+                        {
+                            setDisplay(Display_table_column);
+                        }
+                        else if(aContent.match(aStrTable_cell))
+                        {
+                            setDisplay(Display_table_cell);
+                        }
+                        else if(aContent.match(aStrTable_caption))
+                        {
+                            setDisplay(Display_table_caption);
+                        }
+                    }
+                    break;
+                }
                 default:
                 {
                     break;
@@ -234,6 +333,11 @@ namespace svgio
 
         void SvgNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
         {
+            if(Display_none == getDisplay())
+            {
+                return;
+            }
+
             if(!bReferenced)
             {
                 if(SVGTokenDefs == getType() ||
@@ -253,6 +357,9 @@ namespace svgio
 
                     // also not directly used are Markers and Patterns, only indirecty used
                     // by reference
+
+                    // #i121656# also do not decompose nodes which have display="none" set
+                    // as property
                     return;
                 }
             }
@@ -267,7 +374,7 @@ namespace svgio
                 {
                     SvgNode* pCandidate = rChildren[a];
 
-                    if(pCandidate)
+                    if(pCandidate && Display_none != pCandidate->getDisplay())
                     {
                         drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 

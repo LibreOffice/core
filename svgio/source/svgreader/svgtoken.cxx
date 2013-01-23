@@ -30,6 +30,7 @@ namespace svgio
         static OUString aSVGStrViewBox(OUString::createFromAscii("viewBox"));
         static OUString aSVGStrTransform(OUString::createFromAscii("transform"));
         static OUString aSVGStrStyle(OUString::createFromAscii("style"));
+        static OUString aSVGStrDisplay(OUString::createFromAscii("display")); // #i121656#
         static OUString aSVGStrD(OUString::createFromAscii("d"));
         static OUString aSVGStrX(OUString::createFromAscii("x"));
         static OUString aSVGStrY(OUString::createFromAscii("y"));
@@ -173,6 +174,7 @@ namespace svgio
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrViewBox, SVGTokenViewBox));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTransform, SVGTokenTransform));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStyle, SVGTokenStyle));
+                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDisplay, SVGTokenDisplay)); // #i121656#
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrD, SVGTokenD));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrX, SVGTokenX));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrY, SVGTokenY));

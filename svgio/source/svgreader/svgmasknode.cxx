@@ -194,7 +194,7 @@ namespace svgio
 
         void SvgMaskNode::apply(drawinglayer::primitive2d::Primitive2DSequence& rTarget) const
         {
-            if(rTarget.hasElements())
+            if(rTarget.hasElements() && Display_none != getDisplay())
             {
                 drawinglayer::primitive2d::Primitive2DSequence aMaskTarget;
 

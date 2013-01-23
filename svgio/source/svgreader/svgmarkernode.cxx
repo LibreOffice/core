@@ -182,7 +182,7 @@ namespace svgio
 
         const drawinglayer::primitive2d::Primitive2DSequence& SvgMarkerNode::getMarkerPrimitives() const
         {
-            if(!aPrimitives.hasElements())
+            if(!aPrimitives.hasElements() && Display_none != getDisplay())
             {
                 decomposeSvgNode(const_cast< SvgMarkerNode* >(this)->aPrimitives, true);
             }

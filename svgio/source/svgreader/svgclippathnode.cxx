@@ -128,7 +128,7 @@ namespace svgio
 
         void SvgClipPathNode::apply(drawinglayer::primitive2d::Primitive2DSequence& rContent) const
         {
-            if(rContent.hasElements())
+            if(rContent.hasElements() && Display_none != getDisplay())
             {
                 const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
                 drawinglayer::primitive2d::Primitive2DSequence aClipTarget;

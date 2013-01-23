@@ -162,7 +162,12 @@ namespace svgio
 
                 for(sal_uInt32 a(0); a < nCount; a++)
                 {
-                    rResults[a]->decomposeSvgNode(aRetval, false);
+                    SvgNode* pCandidate = rResults[a];
+
+                    if(Display_none != pCandidate->getDisplay())
+                    {
+                        pCandidate->decomposeSvgNode(aRetval, false);
+                    }
                 }
             }
             else

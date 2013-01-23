@@ -40,6 +40,7 @@ namespace svgio
             SVGTokenViewBox,
             SVGTokenTransform,
             SVGTokenStyle,
+            SVGTokenDisplay, // #i121656#
             SVGTokenD,
             SVGTokenX,
             SVGTokenY,

@@ -145,7 +145,7 @@ namespace svgio
             // try to access link to content
             const SvgNode* mpXLink = getDocument().findSvgNodeById(maXLink);
 
-            if(mpXLink)
+            if(mpXLink && Display_none != mpXLink->getDisplay())
             {
                 // decompose childs
                 drawinglayer::primitive2d::Primitive2DSequence aNewTarget;

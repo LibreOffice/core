@@ -56,6 +56,29 @@ namespace svgio
             XmlSpace_preserve
         };
 
+        // display property (see SVG 1.1. 11.5), not inheritable
+        enum Display // #i121656#
+        {
+            Display_inline, // the default
+            Display_block,
+            Display_list_item,
+            Display_run_in,
+            Display_compact,
+            Display_marker,
+            Display_table,
+            Display_inline_table,
+            Display_table_row_group,
+            Display_table_header_group,
+            Display_table_footer_group,
+            Display_table_row,
+            Display_table_column_group,
+            Display_table_column,
+            Display_table_cell,
+            Display_table_caption,
+            Display_none,
+            Display_inherit
+        };
+
         class SvgNode : private boost::noncopyable, public InfoProvider
         {
         private:
@@ -76,6 +99,9 @@ namespace svgio
 
             /// XmlSpace value
             XmlSpace                    maXmlSpace;
+
+            /// Display value #i121656#
+            Display                     maDisplay;
 
             /// CSS styles
             SvgStyleAttributeVector     maCssStyleVector;
@@ -118,6 +144,10 @@ namespace svgio
             /// XmlSpace access
             XmlSpace getXmlSpace() const;
             void setXmlSpace(XmlSpace eXmlSpace = XmlSpace_notset) { maXmlSpace = eXmlSpace; }
+
+            /// Display access #i121656#
+            Display getDisplay() const { return maDisplay; }
+            void setDisplay(Display eDisplay = Display_inherit) { maDisplay = eDisplay; }
 
             /// alternative parent
             void setAlternativeParent(const SvgNode* pAlternativeParent = 0) { mpAlternativeParent = pAlternativeParent; }
