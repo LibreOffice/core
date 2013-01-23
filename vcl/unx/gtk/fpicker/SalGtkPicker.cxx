@@ -23,19 +23,11 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
-#include <com/sun/star/lang/SystemDependent.hpp>
-#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
-#include <com/sun/star/awt/SystemDependentXWindow.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <rtl/process.h>
 #include <osl/diagnose.h>
-#include <com/sun/star/uno/Any.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
