@@ -124,7 +124,7 @@ public:
                                     SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String& rText,
+                                    OUString& rText,
                                     const IntlWrapper* pIntl = 0 ) const;
 
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -178,7 +178,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
-                                                 String &rText,
+                                                 OUString &rText,
                                                  const IntlWrapper* pIntl = 0 ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
 
@@ -234,7 +234,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
-                                                 String &rText,
+                                                 OUString &rText,
                                                  const IntlWrapper* pIntl = 0 ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
 
@@ -308,7 +308,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
-                                                 String& rText,
+                                                 OUString& rText,
                                                  const IntlWrapper* pIntl = 0 ) const;
 };
 
@@ -375,7 +375,7 @@ public:
     virtual SfxItemPresentation GetPresentation(
                                     SfxItemPresentation ePresentation,
                                     SfxMapUnit, SfxMapUnit,
-                                    XubString& rText,
+                                    OUString& rText,
                                     const IntlWrapper* = 0 ) const;
 
     virtual bool                QueryValue( ::com::sun::star::uno::Any& rAny, sal_uInt8 nMemberId = 0 ) const;

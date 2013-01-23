@@ -583,13 +583,13 @@ SfxItemPresentation XFillBitmapItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -608,11 +608,11 @@ bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nM
     nMemberId &= ~CONVERT_TWIPS;
 
     // needed for MID_NAME
-    ::rtl::OUString aApiName;
+    OUString aApiName;
     // needed for complete item (MID 0)
-    ::rtl::OUString aInternalName;
+    OUString aInternalName;
 
-    ::rtl::OUString aURL;
+    OUString aURL;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBmp;
 
     if( nMemberId == MID_NAME )

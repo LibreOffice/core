@@ -44,7 +44,7 @@ public:
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-                                    String &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const;
 
     virtual sal_uInt16          GetValueCount() const;
     com::sun::star::drawing::LineCap GetValue() const;

@@ -506,10 +506,10 @@ SfxItemPresentation XLineStyleItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -934,13 +934,13 @@ SfxItemPresentation XLineDashItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -1295,19 +1295,19 @@ SfxItemPresentation XLineWidthItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper * pIntl
+    OUString&           rText, const IntlWrapper * pIntl
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetMetricText( (long) GetValue(),
-                                    eCoreUnit, ePresUnit, pIntl);
-            rText += SVX_RESSTR( GetMetricId( ePresUnit) );
+                                    eCoreUnit, ePresUnit, pIntl) +
+                    SVX_RESSTR( GetMetricId( ePresUnit) );
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;
@@ -1402,13 +1402,13 @@ SfxItemPresentation XLineColorItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -1671,13 +1671,13 @@ SfxItemPresentation XLineStartItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -2318,13 +2318,13 @@ SfxItemPresentation XLineEndItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -2440,19 +2440,19 @@ SfxItemPresentation XLineStartWidthItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper * pIntl
+    OUString&           rText, const IntlWrapper * pIntl
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetMetricText( (long) GetValue(),
-                                    eCoreUnit, ePresUnit, pIntl);
-            rText += SVX_RESSTR( GetMetricId( ePresUnit) );
+                                    eCoreUnit, ePresUnit, pIntl) +
+                    SVX_RESSTR( GetMetricId( ePresUnit) );
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;
@@ -2531,19 +2531,19 @@ SfxItemPresentation XLineEndWidthItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *pIntl
+    OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetMetricText( (long) GetValue(),
-                                    eCoreUnit, ePresUnit, pIntl);
-            rText += SVX_RESSTR( GetMetricId( ePresUnit) );
+                                    eCoreUnit, ePresUnit, pIntl) +
+                    SVX_RESSTR( GetMetricId( ePresUnit) );
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;
@@ -2622,17 +2622,17 @@ SfxItemPresentation XLineStartCenterItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = XubString( ResId( GetValue() ? RID_SVXSTR_CENTERED :
+            rText = OUString( ResId( GetValue() ? RID_SVXSTR_CENTERED :
                             RID_SVXSTR_NOTCENTERED, DIALOG_MGR() ) );
             return ePres;
         default:
@@ -2714,17 +2714,17 @@ SfxItemPresentation XLineEndCenterItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = XubString( ResId( GetValue() ? RID_SVXSTR_CENTERED :
+            rText = OUString( ResId( GetValue() ? RID_SVXSTR_CENTERED :
                             RID_SVXSTR_NOTCENTERED, DIALOG_MGR() ) );
             return ePres;
         default:
@@ -2814,10 +2814,10 @@ SfxItemPresentation XFillStyleItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
 
     switch ( ePres )
     {
@@ -2960,13 +2960,13 @@ SfxItemPresentation XFillColorItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -3034,13 +3034,13 @@ SfxItemPresentation XSecondaryFillColorItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -3162,10 +3162,10 @@ XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
 |*
 *************************************************************************/
 
-XFillGradientItem::XFillGradientItem(const XubString& rName,
-                                   const XGradient& rTheGradient, sal_uInt16 nWhich_) :
-    NameOrIndex(nWhich_, rName),
-    aGradient(rTheGradient)
+XFillGradientItem::XFillGradientItem(const OUString& rName,
+                                   const XGradient& rTheGradient, sal_uInt16 nWhich)
+    : NameOrIndex(nWhich, rName)
+    , aGradient(rTheGradient)
 {
 }
 
@@ -3344,13 +3344,13 @@ SfxItemPresentation XFillGradientItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -3691,7 +3691,7 @@ bool XFillFloatTransparenceItem::PutValue( const ::com::sun::star::uno::Any& rVa
 
 SfxItemPresentation XFillFloatTransparenceItem::GetPresentation(    SfxItemPresentation ePres,
                                                                     SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
-                                                                    XubString& rText,
+                                                                    OUString& rText,
                                                                     const IntlWrapper * pIntlWrapper ) const
 {
     return XFillGradientItem::GetPresentation( ePres, eCoreUnit, ePresUnit, rText, pIntlWrapper );
@@ -3923,13 +3923,13 @@ SfxItemPresentation XFillHatchItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:

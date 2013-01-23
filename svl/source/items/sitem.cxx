@@ -81,7 +81,7 @@ SfxItemPresentation SfxSetItem::GetPresentation
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
     SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              /*rText*/,
+    OUString&              /*rText*/,
     const IntlWrapper *
 )   const
 {

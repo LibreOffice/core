@@ -63,14 +63,14 @@ SfxItemPresentation SfxSpellCheckItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          ,
     SfxMapUnit          ,
-    String&             rText,
+    OUString&           rText,
     const IntlWrapper*
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
@@ -142,24 +142,25 @@ SfxItemPresentation SfxHyphenRegionItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          ,
     SfxMapUnit          ,
-    String&             rText,
+    OUString&           rText,
     const IntlWrapper*
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            rText += String::CreateFromInt32( nMinLead );
-            rText += EE_RESSTR( RID_SVXITEMS_HYPHEN_MINLEAD );
-            rText += ',';
-            rText += String::CreateFromInt32( nMinTrail );
-            rText += EE_RESSTR( RID_SVXITEMS_HYPHEN_MINTRAIL );
+            rText = rText +
+                    OUString::number( nMinLead ) +
+                    EE_RESSTR( RID_SVXITEMS_HYPHEN_MINLEAD ) +
+                    "," +
+                    OUString::number( nMinTrail ) +
+                    EE_RESSTR( RID_SVXITEMS_HYPHEN_MINTRAIL );
             return ePres;
         }
         default:

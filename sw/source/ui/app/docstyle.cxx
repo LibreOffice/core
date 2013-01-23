@@ -706,13 +706,13 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                         break;
                     default:
                     {
-                        String aItemPresentation;
+                        OUString aItemPresentation;
                         if ( !IsInvalidItem( pItem ) &&
                              pPool->GetPool().GetPresentation(
                                 *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
                                 eUnit, aItemPresentation, &aIntlWrapper ) )
                         {
-                            if ( aDesc.Len() && aItemPresentation.Len() )
+                            if ( aDesc.Len() && aItemPresentation.getLength() )
                                 aDesc += sPlus;
                             aDesc += aItemPresentation;
                         }
@@ -755,7 +755,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                         break;
                     default:
                     {
-                        String aItemPresentation;
+                        OUString aItemPresentation;
                         if ( !IsInvalidItem( pItem ) &&
                              pPool->GetPool().GetPresentation(
                                 *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
@@ -782,7 +782,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                                     bIsDefault = true;
                                 if(!bHasCJKFontPrefix)
                                 {
-                                    aItemPresentation.Insert(SW_RESSTR(STR_CJK_FONT), 0);
+                                    aItemPresentation = SW_RESSTR(STR_CJK_FONT) + aItemPresentation;
                                     bHasCJKFontPrefix = true;
                                 }
                                 break;
@@ -793,7 +793,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                                 case RES_CHRATR_WEIGHT:
                                 if(!bHasWesternFontPrefix)
                                 {
-                                    aItemPresentation.Insert(SW_RESSTR(STR_WESTERN_FONT), 0);
+                                    aItemPresentation = SW_RESSTR(STR_WESTERN_FONT) + aItemPresentation;
                                     bHasWesternFontPrefix = true;
                                     bIsDefault = true;
                                 }
@@ -803,7 +803,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                             }
                             if(bIsDefault)
                             {
-                                if ( aDesc.Len() && aItemPresentation.Len() )
+                                if ( aDesc.Len() && aItemPresentation.getLength() )
                                     aDesc += sPlus;
                                 aDesc += aItemPresentation;
                             }

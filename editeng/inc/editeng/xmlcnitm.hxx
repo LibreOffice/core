@@ -49,7 +49,7 @@ public:
                                 SfxItemPresentation ePresentation,
                                 SfxMapUnit eCoreMetric,
                                 SfxMapUnit ePresentationMetric,
-                                XubString &rText,
+                                OUString &rText,
                                 const IntlWrapper *pIntlWrapper = 0 ) const;
 
     virtual sal_uInt16 GetVersion( sal_uInt16 nFileFormatVersion ) const;

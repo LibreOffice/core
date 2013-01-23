@@ -66,7 +66,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const;
     virtual sal_uInt16       GetValueCount() const;
     virtual rtl::OUString    GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual sal_uInt16       GetEnumValue() const;

@@ -65,7 +65,7 @@ int SfxVisibilityItem::Compare(const SfxPoolItem & rWith) const
 // virtual
 SfxItemPresentation SfxVisibilityItem::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
-                                                  XubString & rText,
+                                                  OUString & rText,
                                                   const IntlWrapper *) const
 {
     rText = GetValueTextByVal(m_nValue.bVisible);
@@ -126,9 +126,9 @@ sal_uInt16 SfxVisibilityItem::GetValueCount() const
 
 //============================================================================
 // virtual
-rtl::OUString SfxVisibilityItem::GetValueTextByVal(sal_Bool bTheValue) const
+OUString SfxVisibilityItem::GetValueTextByVal(sal_Bool bTheValue) const
 {
-    return bTheValue ?  rtl::OUString("TRUE") : rtl::OUString("FALSE");
+    return bTheValue ? OUString("TRUE") : OUString("FALSE");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

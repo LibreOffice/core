@@ -67,7 +67,7 @@ SfxItemPresentation SfxXRangeItem::GetPresentation
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
     SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    OUString&               rText,
     const IntlWrapper *
 )   const
 {
@@ -172,7 +172,7 @@ int SfxXRangesItem::operator==( const SfxPoolItem &rItem ) const
 SfxItemPresentation SfxXRangesItem::GetPresentation( SfxItemPresentation /*ePres*/,
                                     SfxMapUnit /*eCoreMetric*/,
                                     SfxMapUnit /*ePresMetric*/,
-                                    XubString &/*rText*/,
+                                    OUString & /*rText*/,
                                     const IntlWrapper * ) const
 {
     // not implemented

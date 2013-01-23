@@ -381,14 +381,14 @@ SfxItemPresentation SvxBulletItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     SfxItemPresentation eRet = SFX_ITEM_PRESENTATION_NONE;
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             eRet = SFX_ITEM_PRESENTATION_NONE;
             break;
 

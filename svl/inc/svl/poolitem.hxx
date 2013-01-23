@@ -157,7 +157,6 @@ class SvXMLUnitConverter;
 class SfxItemPool;
 class SfxItemSet;
 
-class String;
 namespace rtl
 {
     class OUString;
@@ -209,7 +208,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePresentation,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresentationMetric,
-                                    XubString &rText,
+                                    OUString &rText,
                                     const IntlWrapper * pIntlWrapper = 0 ) const;
 
     virtual sal_uInt16           GetVersion( sal_uInt16 nFileFormatVersion ) const;
@@ -351,7 +350,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    XubString &rText,
+                                    OUString &rText,
                                     const IntlWrapper * = 0 ) const;
 
     // von sich selbst eine Kopie erzeugen
@@ -379,7 +378,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    XubString &rText,
+                                    OUString &rText,
                                     const IntlWrapper * = 0 ) const;
 
     // von sich selbst eine Kopie erzeugen

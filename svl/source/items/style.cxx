@@ -343,16 +343,16 @@ XubString SfxStyleSheetBase::GetDescription( SfxMapUnit eMetric )
     IntlWrapper aIntlWrapper( SvtSysLocale().GetLanguageTag() );
     while ( pItem )
     {
-        XubString aItemPresentation;
+        OUString aItemPresentation;
 
         if ( !IsInvalidItem( pItem ) &&
              pPool->GetPool().GetPresentation(
                 *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
                 eMetric, aItemPresentation, &aIntlWrapper ) )
         {
-            if ( aDesc.Len() && aItemPresentation.Len() )
+            if ( aDesc.Len() && !aItemPresentation.isEmpty() )
                 aDesc.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" + "));
-            if ( aItemPresentation.Len() )
+            if ( !aItemPresentation.isEmpty() )
                 aDesc += aItemPresentation;
         }
         pItem = aIter.NextItem();

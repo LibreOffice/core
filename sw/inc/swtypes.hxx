@@ -44,7 +44,7 @@ namespace utl{
 
 class Size;
 class ResMgr;
-class UniString;
+class String;
 class SwPathFinder;
 class Graphic;
 class OutputDevice;

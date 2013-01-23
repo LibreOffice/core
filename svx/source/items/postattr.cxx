@@ -50,20 +50,19 @@ SfxItemPresentation SvxPostItAuthorItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = GetValue();
             return SFX_ITEM_PRESENTATION_NAMELESS;
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = SVX_RESSTR(RID_SVXITEMS_AUTHOR_COMPLETE);
-            rText += GetValue();
+            rText = SVX_RESSTR(RID_SVXITEMS_AUTHOR_COMPLETE) + GetValue();
             return SFX_ITEM_PRESENTATION_COMPLETE;
         default: ;//prevent warning
     }
@@ -99,20 +98,19 @@ SfxItemPresentation SvxPostItDateItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = GetValue();
             return SFX_ITEM_PRESENTATION_NAMELESS;
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = SVX_RESSTR(RID_SVXITEMS_DATE_COMPLETE);
-            rText += GetValue();
+            rText = SVX_RESSTR(RID_SVXITEMS_DATE_COMPLETE) + GetValue();
             return SFX_ITEM_PRESENTATION_COMPLETE;
         default: ;//prevent warning
     }
@@ -148,20 +146,19 @@ SfxItemPresentation SvxPostItTextItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = GetValue();
             return SFX_ITEM_PRESENTATION_NAMELESS;
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = SVX_RESSTR(RID_SVXITEMS_TEXT_COMPLETE);
-            rText += GetValue();
+            rText = SVX_RESSTR(RID_SVXITEMS_TEXT_COMPLETE) + GetValue();
             return SFX_ITEM_PRESENTATION_COMPLETE;
         default: ;//prevent warning
     }

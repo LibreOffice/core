@@ -73,14 +73,14 @@ SfxItemPresentation SfxFlagItem::GetPresentation
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
     SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    OUString&               rText,
     const IntlWrapper *
 )   const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
-    rText.Erase();
+    rText = OUString();
     for ( sal_uInt8 nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
-        rText += XubString::CreateFromInt32( (int)GetFlag(nFlag) );
+        rText += GetFlag(nFlag) ? OUString("true") : OUString("false");
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 

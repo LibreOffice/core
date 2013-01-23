@@ -101,10 +101,11 @@ SfxItemPresentation SvxPageItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
+    OUString cpDelimTmp = OUString(cpDelim);
 
     switch ( ePres )
     {
@@ -114,12 +115,10 @@ SfxItemPresentation SvxPageItem::GetPresentation
         {
             if ( aDescName.Len() )
             {
-                rText = aDescName;
-                rText += cpDelim;
+                rText = aDescName + cpDelimTmp;
             }
             DBG_ASSERT( eNumType <= SVX_NUMBER_NONE, "enum overflow" );
-            rText += SVX_RESSTR(RID_SVXITEMS_PAGE_NUM_BEGIN + eNumType);
-            rText += cpDelim;
+            rText += SVX_RESSTR(RID_SVXITEMS_PAGE_NUM_BEGIN + eNumType) + cpDelimTmp;
             if ( bLandscape )
                 rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
@@ -127,8 +126,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
             String aUsageText = GetUsageText( eUse );
             if (aUsageText.Len())
             {
-                rText += cpDelim;
-                rText += aUsageText;
+                rText += cpDelimTmp + aUsageText;
             }
             return SFX_ITEM_PRESENTATION_NAMELESS;
         }
@@ -137,12 +135,10 @@ SfxItemPresentation SvxPageItem::GetPresentation
             rText += SVX_RESSTR(RID_SVXITEMS_PAGE_COMPLETE);
             if ( aDescName.Len() )
             {
-                rText += aDescName;
-                rText += cpDelim;
+                rText += aDescName + cpDelimTmp;
             }
             DBG_ASSERT( eNumType <= SVX_NUMBER_NONE, "enum overflow" );
-            rText += SVX_RESSTR(RID_SVXITEMS_PAGE_NUM_BEGIN + eNumType);
-            rText += cpDelim;
+            rText += SVX_RESSTR(RID_SVXITEMS_PAGE_NUM_BEGIN + eNumType) + cpDelimTmp;
             if ( bLandscape )
                 rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
@@ -150,8 +146,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
             String aUsageText = GetUsageText( eUse );
             if (aUsageText.Len())
             {
-                rText += cpDelim;
-                rText += aUsageText;
+                rText += cpDelimTmp + aUsageText;
             }
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
@@ -307,10 +302,10 @@ SfxItemPresentation SvxSetItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
     return SFX_ITEM_PRESENTATION_NONE;
 }
 

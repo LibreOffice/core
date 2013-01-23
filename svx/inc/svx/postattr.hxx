@@ -41,7 +41,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
@@ -72,7 +72,8 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const;
+
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
     inline SvxPostItDateItem& operator=( const SvxPostItDateItem& rDate )
@@ -99,11 +100,11 @@ public:
     SvxPostItTextItem( sal_uInt16 nWhich  );
 
     SvxPostItTextItem( const String& rText, sal_uInt16 nWhich  );
-    // "pure virtual methods" vom SfxPoolItem
+    // "pure virtual methods" from SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 

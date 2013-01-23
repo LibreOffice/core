@@ -70,15 +70,12 @@ SfxItemPresentation SfxPointItem::GetPresentation
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
     SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    OUString&               rText,
     const IntlWrapper *
 )   const
 {
     DBG_CHKTHIS(SfxPointItem, 0);
-    rText = OUString::valueOf(aVal.X());
-    rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-    rText += OUString::valueOf(aVal.Y());
-    rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    rText = OUString::valueOf(aVal.X()) + ", " + OUString::valueOf(aVal.Y()) + ", ";
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 

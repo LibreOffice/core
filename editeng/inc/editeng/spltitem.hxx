@@ -53,7 +53,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const;
 };
 
 inline SvxFmtSplitItem::SvxFmtSplitItem( const sal_Bool bSplit, const sal_uInt16 nWh ) :

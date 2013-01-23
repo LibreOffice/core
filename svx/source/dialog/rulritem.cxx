@@ -124,7 +124,7 @@ SfxItemPresentation SvxLongLRSpaceItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             /*rText*/, const IntlWrapper *
+    OUString&           /*rText*/, const IntlWrapper *
 )   const
 {
 
@@ -250,7 +250,7 @@ SfxItemPresentation SvxLongULSpaceItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             /*rText*/, const IntlWrapper *
+    OUString&           /*rText*/, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;
@@ -378,7 +378,7 @@ SfxItemPresentation SvxPagePosSizeItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             /*rText*/, const IntlWrapper *
+    OUString&           /*rText*/, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;
@@ -452,7 +452,7 @@ SfxItemPresentation SvxColumnItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             /*rText*/, const IntlWrapper *
+    OUString&           /*rText*/, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;
@@ -607,7 +607,7 @@ SfxItemPresentation SvxObjectItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             /*rText*/, const IntlWrapper *
+    OUString&           /*rText*/, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;

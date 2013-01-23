@@ -30,7 +30,7 @@ public:
     SdrTextAniDelayItem(SvStream& rIn): SfxUInt16Item(SDRATTR_TEXT_ANIDELAY,rIn)  {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
+    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const;
 };
 
 #endif

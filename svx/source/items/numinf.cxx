@@ -123,10 +123,10 @@ SfxItemPresentation SvxNumberInfoItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText.Erase();
+    rText = OUString();
     return SFX_ITEM_PRESENTATION_NONE;
 }
 

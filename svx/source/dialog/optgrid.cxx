@@ -111,17 +111,17 @@ SfxItemPresentation  SvxGridItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = rtl::OUString("SvxGridItem");
+            rText = "SvxGridItem";
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;

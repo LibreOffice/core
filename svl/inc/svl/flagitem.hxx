@@ -54,7 +54,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    XubString &rText,
+                                    OUString & rText,
                                     const IntlWrapper * = 0 ) const;
             sal_uInt16           GetValue() const { return nVal; }
             void             SetValue( sal_uInt16 nNewVal ) {

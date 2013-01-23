@@ -73,12 +73,12 @@ SfxItemPresentation SvxOrientationItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&              rText, const IntlWrapper * ) const
+    OUString&           rText, const IntlWrapper * ) const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -241,42 +241,44 @@ SfxItemPresentation SvxMarginItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *pIntl
+    OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
+    OUString cpDelimTmp = OUString(cpDelim);
+
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            rText.Erase();
+            rText = OUString();
             return SFX_ITEM_PRESENTATION_NONE;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
-            rText = GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl );
-            rText += cpDelim;
-            rText += GetMetricText( (long)nTopMargin, eCoreUnit, ePresUnit, pIntl );
-            rText += cpDelim;
-            rText += GetMetricText( (long)nRightMargin, eCoreUnit, ePresUnit, pIntl );
-            rText += cpDelim;
-            rText += GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, pIntl );
+            rText = GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        cpDelimTmp +
+                        GetMetricText( (long)nTopMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        cpDelimTmp +
+                        GetMetricText( (long)nRightMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        cpDelimTmp +
+                        GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, pIntl );
             return SFX_ITEM_PRESENTATION_NAMELESS;
         }
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            rText = SVX_RESSTR(RID_SVXITEMS_MARGIN_LEFT);
-            rText += GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl );
-            rText += SVX_RESSTR(GetMetricId(ePresUnit));
-            rText += cpDelim;
-            rText += SVX_RESSTR(RID_SVXITEMS_MARGIN_TOP);
-            rText += GetMetricText( (long)nTopMargin, eCoreUnit, ePresUnit, pIntl );
-            rText += SVX_RESSTR(GetMetricId(ePresUnit));
-            rText += cpDelim;
-            rText += SVX_RESSTR(RID_SVXITEMS_MARGIN_RIGHT);
-            rText += GetMetricText( (long)nRightMargin, eCoreUnit, ePresUnit, pIntl );
-            rText += SVX_RESSTR(GetMetricId(ePresUnit));
-            rText += cpDelim;
-            rText += SVX_RESSTR(RID_SVXITEMS_MARGIN_BOTTOM);
-            rText += GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, pIntl );
-            rText += SVX_RESSTR(GetMetricId(ePresUnit));
+            rText = SVX_RESSTR(RID_SVXITEMS_MARGIN_LEFT) +
+                        GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        SVX_RESSTR(GetMetricId(ePresUnit)) +
+                        cpDelimTmp +
+                        SVX_RESSTR(RID_SVXITEMS_MARGIN_TOP) +
+                        GetMetricText( (long)nTopMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        SVX_RESSTR(GetMetricId(ePresUnit)) +
+                        cpDelimTmp +
+                        SVX_RESSTR(RID_SVXITEMS_MARGIN_RIGHT) +
+                        GetMetricText( (long)nRightMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        SVX_RESSTR(GetMetricId(ePresUnit)) +
+                        cpDelimTmp +
+                        SVX_RESSTR(RID_SVXITEMS_MARGIN_BOTTOM) +
+                        GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        SVX_RESSTR(GetMetricId(ePresUnit));
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
         default: ; //prevent warning

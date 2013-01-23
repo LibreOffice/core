@@ -68,7 +68,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const;
 
     // Access methods:
     void SetFamilyName( const String& rFamilyName ) { aFamilyName = rFamilyName; }

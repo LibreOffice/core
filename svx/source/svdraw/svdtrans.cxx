@@ -825,203 +825,201 @@ void SdrFormatter::Undirty()
 }
 
 
-void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
+void SdrFormatter::TakeStr(long nVal, OUString& rStr) const
 {
-    sal_Unicode aNullCode('0');
+    OUString aNullCode("0");
 
     if(!nVal)
     {
-        rStr = String();
-        rStr += aNullCode;
+        rStr = aNullCode;
         return;
     }
 
     // we may lose some decimal places here, because of MulDiv instead of Real
-    sal_Bool bNeg(nVal < 0);
+    bool bNeg(nVal < 0);
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
 
     ForceUndirty();
 
-    sal_Int16 nK(nKomma_);
-    XubString aStr;
+    sal_Int16 nC(nKomma_);
 
     if(bNeg)
         nVal = -nVal;
 
-    while(nK <= -3)
+    while(nC <= -3)
     {
         nVal *= 1000;
-        nK += 3;
+        nC += 3;
     }
 
-    while(nK <= -1)
+    while(nC <= -1)
     {
         nVal *= 10;
-        nK++;
+        nC++;
     }
 
     if(nMul_ != nDiv_)
         nVal = BigMulDiv(nVal, nMul_, nDiv_);
 
-    aStr = OUString::valueOf(nVal);
+    OUStringBuffer aStr = OUString::valueOf(nVal);
 
-    if(nK > 0 && aStr.Len() <= nK )
+    if(nC > 0 && aStr.getLength() <= nC )
     {
         // decimal separator necessary
-        sal_Int16 nAnz(nK - aStr.Len());
+        sal_Int32 nAnz(nC - aStr.getLength());
 
         if(nAnz >= 0 && rLoc.isNumLeadingZero())
             nAnz++;
 
-        for(xub_StrLen  i=0; i<nAnz; i++)
-            aStr.Insert(aNullCode, 0);
+        for(sal_Int32  i=0; i<nAnz; i++)
+            aStr.insert(0, aNullCode);
 
         // remove superfluous decimal points
-        xub_StrLen nNumDigits(rLoc.getNumDigits());
-        xub_StrLen nWeg(nK - nNumDigits);
+        sal_Int32 nNumDigits(rLoc.getNumDigits());
+        sal_Int32 nWeg(nC - nNumDigits);
 
         if(nWeg > 0)
         {
             // TODO: we should round here
-            aStr.Erase(aStr.Len() - nWeg);
-            nK = nNumDigits;
+            aStr.remove(aStr.getLength() - nWeg, nWeg);
+            nC = nNumDigits;
         }
     }
 
     // remember everything before the decimal separator for later
-    xub_StrLen nVorKomma(aStr.Len() - nK);
+    sal_Int32 nForComma(aStr.getLength() - nC);
 
-    if(nK > 0)
+    if(nC > 0)
     {
-        // insert KommaChar (decimal separator)
+        // insert comma char (decimal separator)
         // remove trailing zeros
-        while(nK > 0 && aStr.GetChar(aStr.Len() - 1) == aNullCode)
+        while(nC > 0 && aStr[aStr.getLength() - 1] == aNullCode[0])
         {
-            aStr.Erase(aStr.Len() - 1);
-            nK--;
+            aStr.remove(aStr.getLength() - 1, 1);
+            nC--;
         }
 
-        if(nK > 0)
+        if(nC > 0)
         {
             // do we still have decimal places?
             sal_Unicode cDec(rLoc.getNumDecimalSep()[0]);
-            aStr.Insert(cDec, nVorKomma);
+            aStr.insert(nForComma, cDec);
         }
     }
 
     // add in thousands separator (if necessary)
-    if( nVorKomma > 3 )
+    if( nForComma > 3 )
     {
-        String aThoSep( rLoc.getNumThousandSep() );
-        if ( aThoSep.Len() > 0 )
+        OUString aThoSep( rLoc.getNumThousandSep() );
+        if ( aThoSep.getLength() > 0 )
         {
-            sal_Unicode cTho( aThoSep.GetChar(0) );
-            sal_Int32 i(nVorKomma - 3);
+            sal_Unicode cTho( aThoSep[0] );
+            sal_Int32 i(nForComma - 3);
 
             while(i > 0)
             {
-                rStr.Insert(cTho, (xub_StrLen)i);
+                aStr.insert(i, cTho);
                 i -= 3;
             }
         }
     }
 
-    if(!aStr.Len())
-        aStr += aNullCode;
+    if(!aStr.getLength())
+        aStr.insert(aStr.getLength(), aNullCode);
 
-    if(bNeg && (aStr.Len() > 1 || aStr.GetChar(0) != aNullCode))
+    if(bNeg && (aStr.getLength() > 1 || aStr[0] != aNullCode[0]))
     {
-        rStr.Insert(sal_Unicode('-'), 0);
+        aStr.insert(0, "-");
     }
 
-    rStr = aStr;
+    rStr = aStr.makeStringAndClear();
 }
 
-void SdrFormatter::TakeUnitStr(MapUnit eUnit, XubString& rStr)
+void SdrFormatter::TakeUnitStr(MapUnit eUnit, OUString& rStr)
 {
     switch(eUnit)
     {
         // metrically
         case MAP_100TH_MM   :
         {
-            rStr = OUString("/100mm");
+            rStr = "/100mm";
             break;
         }
         case MAP_10TH_MM    :
         {
-            rStr = OUString("/10mm");
+            rStr = "/10mm";
             break;
         }
         case MAP_MM         :
         {
-            rStr = OUString("mm");
+            rStr = "mm";
             break;
         }
         case MAP_CM         :
         {
-            rStr = OUString("cm");
+            rStr = "cm";
             break;
         }
 
         // Inch
         case MAP_1000TH_INCH:
         {
-            rStr = OUString("/1000\"");
+            rStr = "/1000\"";
             break;
         }
         case MAP_100TH_INCH :
         {
-            rStr = OUString("/100\"");
+            rStr = "/100\"";
             break;
         }
         case MAP_10TH_INCH  :
         {
-            rStr = OUString("/10\"");
+            rStr = "/10\"";
             break;
         }
         case MAP_INCH       :
         {
-            rStr = OUString("\"");
+            rStr = "\"";
             break;
         }
         case MAP_POINT      :
         {
-            rStr = OUString("pt");
+            rStr = "pt";
             break;
         }
         case MAP_TWIP       :
         {
-            rStr = OUString("twip");
+            rStr = "twip";
             break;
         }
 
         // others
         case MAP_PIXEL      :
         {
-            rStr = OUString("pixel");
+            rStr = "pixel";
             break;
         }
         case MAP_SYSFONT    :
         {
-            rStr = OUString("sysfont");
+            rStr = "sysfont";
             break;
         }
         case MAP_APPFONT    :
         {
-            rStr = OUString("appfont");
+            rStr = "appfont";
             break;
         }
         case MAP_RELATIVE   :
         {
-            rStr = OUString("%");
+            rStr = "%";
             break;
         }
         default: break;
     }
 }
 
-void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
+void SdrFormatter::TakeUnitStr(FieldUnit eUnit, OUString& rStr)
 {
     switch(eUnit)
     {
@@ -1036,66 +1034,66 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         // metrically
         case FUNIT_100TH_MM:
         {
-            rStr = OUString("/100mm");
+            rStr = "/100mm";
             break;
         }
         case FUNIT_MM     :
         {
-            rStr = OUString("mm");
+            rStr = "mm";
             break;
         }
         case FUNIT_CM     :
         {
-            rStr = OUString("cm");
+            rStr = "cm";
             break;
         }
         case FUNIT_M      :
         {
-            rStr = OUString("m");
+            rStr = "m";
             break;
         }
         case FUNIT_KM     :
         {
-            rStr = OUString("km");
+            rStr = "km";
             break;
         }
 
         // Inch
         case FUNIT_TWIP   :
         {
-            rStr = OUString("twip");
+            rStr = "twip";
             break;
         }
         case FUNIT_POINT  :
         {
-            rStr = OUString("pt");
+            rStr = "pt";
             break;
         }
         case FUNIT_PICA   :
         {
-            rStr = OUString("pica");
+            rStr = "pica";
             break;
         }
         case FUNIT_INCH   :
         {
-            rStr = OUString("\"");
+            rStr = "\"";
             break;
         }
         case FUNIT_FOOT   :
         {
-            rStr = OUString("ft");
+            rStr = "ft";
             break;
         }
         case FUNIT_MILE   :
         {
-            rStr = OUString("mile(s)");
+            rStr = "mile(s)";
             break;
         }
 
         // others
         case FUNIT_PERCENT:
         {
-            rStr = OUString("%");
+            rStr = "%";
             break;
         }
     }

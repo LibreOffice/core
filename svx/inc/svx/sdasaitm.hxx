@@ -51,7 +51,7 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
             virtual int                 operator==( const SfxPoolItem& ) const;
             virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,
                                             SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
-                                                String &rText, const IntlWrapper * = 0) const;
+                                            OUString &rText, const IntlWrapper * = 0) const;
             virtual SfxPoolItem*        Create( SvStream&, sal_uInt16 nItem ) const;
             virtual SvStream&           Store( SvStream&, sal_uInt16 nVersion ) const;
             virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const;

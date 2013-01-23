@@ -42,7 +42,7 @@ public:
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres,
                                                 SfxMapUnit eCoreMetric,
                                                 SfxMapUnit ePresMetric,
-                                                String& rText, const IntlWrapper * = 0) const;
+                                                OUString& rText, const IntlWrapper * = 0) const;
 };
 
 

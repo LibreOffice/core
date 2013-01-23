@@ -42,11 +42,11 @@ public:
     virtual SfxItemPresentation GetPresentation(const SfxPoolItem& rItem,
         SfxItemPresentation ePresentation,
         SfxMapUnit          ePresentationMetric,
-        String&             rText,
+        OUString&             rText,
         const IntlWrapper * pIntlWrapper
         = 0) const;
 
-    static void TakeItemName(sal_uInt16 nWhich, String& rItemName);
+    static void TakeItemName(sal_uInt16 nWhich, OUString& rItemName);
 };
 
 #endif // _SVDPOOL_HXX

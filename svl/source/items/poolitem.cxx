@@ -209,7 +209,7 @@ SfxItemPresentation SfxPoolItem::GetPresentation
     SfxItemPresentation /*ePresentation*/,       // IN:  wie formatiert werden soll
     SfxMapUnit          /*eCoreMetric*/,         // IN:  Ma\seinheit des SfxPoolItems
     SfxMapUnit          /*ePresentationMetric*/, // IN:  Wunsch-Ma\einheit der Darstellung
-    XubString&          /*rText*/,               // OUT: textuelle Darstellung
+    OUString&           /*rText*/,               // OUT: textuelle Darstellung
     const IntlWrapper *
 )   const
 
@@ -294,12 +294,12 @@ SfxItemPresentation SfxVoidItem::GetPresentation
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
     SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    OUString&               rText,
     const IntlWrapper *
 )   const
 {
     DBG_CHKTHIS(SfxVoidItem, 0);
-    rText.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Void"));
+    rText = "Void";
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 

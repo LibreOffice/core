@@ -86,7 +86,7 @@ int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith,
 // virtual
 SfxItemPresentation
 CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
-                                        SfxMapUnit, XubString & rText,
+                                        SfxMapUnit, OUString & rText,
                                         const IntlWrapper *) const
 {
     DBG_CHKTHIS(CntUnencodedStringItem, 0);

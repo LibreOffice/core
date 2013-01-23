@@ -696,7 +696,7 @@ static SfxItemPresentation lcl_HFPresentation
     SfxItemPresentation ePresentation,
     SfxMapUnit          eCoreMetric,
     SfxMapUnit          ePresentationMetric,
-    String&             rText,
+    OUString&           rText,
     const IntlWrapper* pIntl
 )
 {
@@ -711,14 +711,14 @@ static SfxItemPresentation lcl_HFPresentation
 
     SfxItemIter aIter( rSet );
     pItem = aIter.FirstItem();
-    String  aText;
-    rtl::OUString aDel(" + ");
+    OUString aText;
+    OUString aDel(" + ");
 
     while( pItem )
     {
         sal_uInt16 nWhich = pItem->Which();
 
-        aText.Erase();
+        aText = "";
 
         switch( nWhich )
         {
@@ -742,8 +742,7 @@ static SfxItemPresentation lcl_HFPresentation
                 aText = EE_RESSTR(RID_SVXITEMS_LRSPACE_LEFT);
                 if ( 100 != nPropLeftMargin )
                 {
-                    aText += String::CreateFromInt32( nPropLeftMargin );
-                    aText += '%';
+                    aText = aText + OUString::number( nPropLeftMargin ) + "%";
                 }
                 else
                 {
@@ -758,8 +757,7 @@ static SfxItemPresentation lcl_HFPresentation
                 aText += EE_RESSTR(RID_SVXITEMS_LRSPACE_RIGHT);
                 if ( 100 != nPropRightMargin )
                 {
-                    aText += String::CreateFromInt32( nPropRightMargin );
-                    aText += '%';
+                    aText = aText + OUString::number( nPropLeftMargin ) + "%";
                 }
                 else
                 {
@@ -777,10 +775,9 @@ static SfxItemPresentation lcl_HFPresentation
 
         }
 
-        if ( aText.Len() )
+        if ( aText.getLength() )
         {
-            rText += aText;
-            rText += aDel;
+            rText = rText + aText + aDel;
         }
 
         pItem = aIter.NextItem();
@@ -796,13 +793,13 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
     const SfxPoolItem&  rItem,
     SfxItemPresentation ePresentation,
     SfxMapUnit          ePresentationMetric,
-    String&             rText,
+    OUString&           rText,
     const IntlWrapper* pIntl ) const
 {
     sal_uInt16  nW = rItem.Which();
-    String aStrYes  ( ScGlobal::GetRscString(STR_YES) );
-    String aStrNo   ( ScGlobal::GetRscString(STR_NO) );
-    rtl::OUString aStrSep(": ");
+    OUString aStrYes  ( ScGlobal::GetRscString(STR_YES) );
+    OUString aStrNo   ( ScGlobal::GetRscString(STR_NO) );
+    OUString aStrSep(": ");
 
     switch( nW )
     {
@@ -810,8 +807,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         switch ( ePresentation )
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText  = ScGlobal::GetRscString(STR_SCATTR_PAGE_PRINTDIR);
-            rText += aStrSep;
+            rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_PRINTDIR) + aStrSep;
 //          break; // DURCHFALLEN!!!
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ?
@@ -829,8 +825,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         switch ( ePresentation )
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText  = ScGlobal::GetRscString(STR_SCATTR_PAGE_HEADERS);
-            rText += aStrSep;
+            rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_HEADERS) + aStrSep;
 //          break; // DURCHFALLEN!!!
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
@@ -846,8 +841,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         switch ( ePresentation )
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText  = ScGlobal::GetRscString(STR_SCATTR_PAGE_NULLVALS);
-            rText += aStrSep;
+            rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_NULLVALS) + aStrSep;
 //          break; // DURCHFALLEN!!!
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
@@ -863,8 +857,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         switch ( ePresentation )
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText  = ScGlobal::GetRscString(STR_SCATTR_PAGE_FORMULAS);
-            rText += aStrSep;
+            rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_FORMULAS) + aStrSep;
 //          break; // DURCHFALLEN!!!
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
@@ -880,8 +873,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         switch ( ePresentation )
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText  = ScGlobal::GetRscString(STR_SCATTR_PAGE_NOTES);
-            rText += aStrSep;
+            rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_NOTES) + aStrSep;
 //          break; // DURCHFALLEN!!!
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
@@ -897,8 +889,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         switch ( ePresentation )
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText  = ScGlobal::GetRscString(STR_SCATTR_PAGE_GRID);
-            rText += aStrSep;
+            rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_GRID) + aStrSep;
 //          break; // DURCHFALLEN!!!
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
@@ -920,14 +911,14 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
                 {
                     case SFX_ITEM_PRESENTATION_COMPLETE:
                     {
-                        rText.Assign( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALETOPAGES ) ).Append( aStrSep );
+                        rText = ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALETOPAGES ) + aStrSep;
                     }
 //                  break; // DURCHFALLEN!!!
                     case SFX_ITEM_PRESENTATION_NAMELESS:
                     {
                         String aPages( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_PAGES ) );
                         aPages.SearchAndReplaceAscii( "%1", String::CreateFromInt32( nPagNo ) );
-                        rText.Append( aPages );
+                        rText += aPages;
                     }
                     break;
                     default:
@@ -952,8 +943,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
                 switch ( ePresentation )
                 {
                     case SFX_ITEM_PRESENTATION_COMPLETE:
-                    rText  = ScGlobal::GetRscString(STR_SCATTR_PAGE_FIRSTPAGENO);
-                    rText += aStrSep;
+                    rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_FIRSTPAGENO) + aStrSep;
 //                  break; // DURCHFALLEN!!!
                     case SFX_ITEM_PRESENTATION_NAMELESS:
                     rText += String::CreateFromInt32( nPagNo );
@@ -980,12 +970,10 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
                 switch ( ePresentation )
                 {
                     case SFX_ITEM_PRESENTATION_COMPLETE:
-                    rText  = ScGlobal::GetRscString(STR_SCATTR_PAGE_SCALE);
-                    rText += aStrSep;
+                    rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_SCALE) + aStrSep;
 //                  break; // DURCHFALLEN!!!
                     case SFX_ITEM_PRESENTATION_NAMELESS:
-                    rText += String::CreateFromInt32( nPercent );
-                    rText += '%';
+                    rText = rText + OUString::number( nPercent ) + "%";
                     break;
                     default:
                     {
@@ -1002,28 +990,22 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
 
         case ATTR_PAGE_HEADERSET:
         {
-            String  aBuffer;
+            OUString  aBuffer;
 
             if( lcl_HFPresentation( rItem, ePresentation, GetMetric( nW ), ePresentationMetric, aBuffer, pIntl ) != SFX_ITEM_PRESENTATION_NONE )
             {
-                rText  = ScGlobal::GetRscString(STR_HEADER);
-                rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ( " ));
-                rText += aBuffer;
-                rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ) " ));
+                rText = OUString(ScGlobal::GetRscString(STR_HEADER)) + " ( " + aBuffer + " ) ";
             }
         }
         break;
 
         case ATTR_PAGE_FOOTERSET:
         {
-            String  aBuffer;
+            OUString  aBuffer;
 
             if( lcl_HFPresentation( rItem, ePresentation, GetMetric( nW ), ePresentationMetric, aBuffer, pIntl ) != SFX_ITEM_PRESENTATION_NONE )
             {
-                rText  = ScGlobal::GetRscString(STR_FOOTER);
-                rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ( " ));
-                rText += aBuffer;
-                rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ) " ));
+                rText = OUString(ScGlobal::GetRscString(STR_FOOTER)) + " ( " + aBuffer + " ) ";
             }
         }
         break;
