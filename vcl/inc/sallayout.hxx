@@ -250,7 +250,6 @@ public:
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
                         int&, sal_Int32* pGlyphAdvAry, int* pCharPosAry ) const;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
-    virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( SalLayout& rBaseLayout,

@@ -2080,30 +2080,4 @@ bool MultiSalLayout::GetOutline( SalGraphics& rGraphics,
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
-bool MultiSalLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rRect ) const
-{
-    bool bRet = false;
-
-    Rectangle aRectangle;
-    for( int i = mnLevel; --i >= 0; )
-    {
-        SalLayout& rLayout = *mpLayouts[ i ];
-        rLayout.DrawBase() = maDrawBase;
-        rLayout.DrawOffset() += maDrawOffset;
-        rLayout.InitFont();
-        if( rLayout.GetBoundRect( rGraphics, aRectangle ) )
-        {
-            rRect.Union( aRectangle );
-            bRet = true;
-        }
-        rLayout.DrawOffset() -= maDrawOffset;
-    }
-
-    return bRet;
-}
-
-// =======================================================================
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
