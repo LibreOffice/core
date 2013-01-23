@@ -778,6 +778,12 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     sal_Bool bOldModifyFlag = pDocSh->IsEnableSetModified();
     if(bOldModifyFlag)
         pDocSh->EnableSetModified( sal_False );
+    // HACK: SwDocShell has some cached font info, VCL informs about font updates,
+    // but loading of docs with embedded fonts happens after SwDocShell is created
+    // but before SwEditWin (which handles the VCL event) is created. So update
+    // manually.
+    if( pDocSh->GetDoc()->get( IDocumentSettingAccess::EMBED_FONTS ))
+        pDocSh->UpdateFontList();
     OSL_ENSURE( pDocSh, "view without DocShell." );
     SwWebDocShell* pWebDShell = PTR_CAST( SwWebDocShell, pDocSh );
 
