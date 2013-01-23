@@ -1961,7 +1961,7 @@ namespace svgio
             return 0;
         }
 
-        const SvgNumber SvgStyleAttributes::getStrokeWidth() const
+        SvgNumber SvgStyleAttributes::getStrokeWidth() const
         {
             if(mbIsClipPathContent)
             {
@@ -1983,7 +1983,7 @@ namespace svgio
             return SvgNumber(1.0);
         }
 
-        const SvgNumber SvgStyleAttributes::getStopOpacity() const
+        SvgNumber SvgStyleAttributes::getStopOpacity() const
         {
             if(maStopOpacity.isSet())
             {
@@ -1994,7 +1994,7 @@ namespace svgio
             return SvgNumber(1.0);
         }
 
-        const SvgNumber SvgStyleAttributes::getFillOpacity() const
+        SvgNumber SvgStyleAttributes::getFillOpacity() const
         {
             if(mbIsClipPathContent)
             {
@@ -2016,7 +2016,7 @@ namespace svgio
             return SvgNumber(1.0);
         }
 
-        const FillRule SvgStyleAttributes::getFillRule() const
+        FillRule SvgStyleAttributes::getFillRule() const
         {
             if(FillRule_notset != maFillRule)
             {
@@ -2057,7 +2057,7 @@ namespace svgio
             return maStrokeDasharray;
         }
 
-        const SvgNumber SvgStyleAttributes::getStrokeDashOffset() const
+        SvgNumber SvgStyleAttributes::getStrokeDashOffset() const
         {
             if(maStrokeDashOffset.isSet())
             {
@@ -2075,7 +2075,7 @@ namespace svgio
             return SvgNumber(0.0);
         }
 
-        const StrokeLinecap SvgStyleAttributes::getStrokeLinecap() const
+        StrokeLinecap SvgStyleAttributes::getStrokeLinecap() const
         {
             if(maStrokeLinecap != StrokeLinecap_notset)
             {
@@ -2093,7 +2093,7 @@ namespace svgio
             return StrokeLinecap_butt;
         }
 
-        const StrokeLinejoin SvgStyleAttributes::getStrokeLinejoin() const
+        StrokeLinejoin SvgStyleAttributes::getStrokeLinejoin() const
         {
             if(maStrokeLinejoin != StrokeLinejoin_notset)
             {
@@ -2111,7 +2111,7 @@ namespace svgio
             return StrokeLinejoin_miter;
         }
 
-        const SvgNumber SvgStyleAttributes::getStrokeMiterLimit() const
+        SvgNumber SvgStyleAttributes::getStrokeMiterLimit() const
         {
             if(maStrokeMiterLimit.isSet())
             {
@@ -2129,7 +2129,7 @@ namespace svgio
             return SvgNumber(4.0);
         }
 
-        const SvgNumber SvgStyleAttributes::getStrokeOpacity() const
+        SvgNumber SvgStyleAttributes::getStrokeOpacity() const
         {
             if(maStrokeOpacity.isSet())
             {
@@ -2165,7 +2165,7 @@ namespace svgio
             return maFontFamily;
         }
 
-        const SvgNumber SvgStyleAttributes::getFontSize() const
+        SvgNumber SvgStyleAttributes::getFontSize() const
         {
             if(maFontSize.isSet())
             {
@@ -2183,7 +2183,7 @@ namespace svgio
             return SvgNumber(12.0);
         }
 
-        const FontStretch SvgStyleAttributes::getFontStretch() const
+        FontStretch SvgStyleAttributes::getFontStretch() const
         {
             if(maFontStretch != FontStretch_notset)
             {
@@ -2215,7 +2215,7 @@ namespace svgio
             return FontStretch_normal;
         }
 
-        const FontStyle SvgStyleAttributes::getFontStyle() const
+        FontStyle SvgStyleAttributes::getFontStyle() const
         {
             if(maFontStyle != FontStyle_notset)
             {
@@ -2233,7 +2233,7 @@ namespace svgio
             return FontStyle_normal;
         }
 
-        const FontWeight SvgStyleAttributes::getFontWeight() const
+        FontWeight SvgStyleAttributes::getFontWeight() const
         {
             if(maFontWeight != FontWeight_notset)
             {
@@ -2265,7 +2265,7 @@ namespace svgio
             return FontWeight_400;
         }
 
-        const TextAlign SvgStyleAttributes::getTextAlign() const
+        TextAlign SvgStyleAttributes::getTextAlign() const
         {
             if(maTextAlign != TextAlign_notset)
             {
@@ -2301,7 +2301,7 @@ namespace svgio
             return 0;
         }
 
-        const TextDecoration SvgStyleAttributes::getTextDecoration() const
+        TextDecoration SvgStyleAttributes::getTextDecoration() const
         {
             const SvgStyleAttributes* pDefining = getTextDecorationDefiningSvgStyleAttributes();
 
@@ -2316,7 +2316,7 @@ namespace svgio
             }
         }
 
-        const TextAnchor SvgStyleAttributes::getTextAnchor() const
+        TextAnchor SvgStyleAttributes::getTextAnchor() const
         {
             if(maTextAnchor != TextAnchor_notset)
             {
@@ -2361,7 +2361,7 @@ namespace svgio
             return 0;
         }
 
-        const rtl::OUString SvgStyleAttributes::getMarkerStartXLink() const
+        rtl::OUString SvgStyleAttributes::getMarkerStartXLink() const
         {
             if(maMarkerStartXLink.getLength())
             {
@@ -2393,7 +2393,7 @@ namespace svgio
             return mpMarkerStartXLink;
         }
 
-        const rtl::OUString SvgStyleAttributes::getMarkerMidXLink() const
+        rtl::OUString SvgStyleAttributes::getMarkerMidXLink() const
         {
             if(maMarkerMidXLink.getLength())
             {
@@ -2425,7 +2425,7 @@ namespace svgio
             return mpMarkerMidXLink;
         }
 
-        const rtl::OUString SvgStyleAttributes::getMarkerEndXLink() const
+        rtl::OUString SvgStyleAttributes::getMarkerEndXLink() const
         {
             if(maMarkerEndXLink.getLength())
             {

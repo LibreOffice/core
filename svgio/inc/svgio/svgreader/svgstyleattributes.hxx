@@ -290,11 +290,11 @@ namespace svgio
             void setStopColor(const SvgPaint& rStopColor) { maStopColor = rStopColor; }
 
             /// stroke-width content
-            const SvgNumber getStrokeWidth() const;
+            SvgNumber getStrokeWidth() const;
             void setStrokeWidth(const SvgNumber& rStrokeWidth = SvgNumber()) { maStrokeWidth = rStrokeWidth; }
 
             /// stop opacity content
-            const SvgNumber getStopOpacity() const;
+            SvgNumber getStopOpacity() const;
             void setStopOpacity(const SvgNumber& rStopOpacity = SvgNumber()) { maStopOpacity = rStopOpacity; }
 
             /// access to evtl. set fill gradient
@@ -314,11 +314,11 @@ namespace svgio
             void setSvgPatternNodeStroke(const SvgPatternNode* pNew) { mpSvgPatternNodeStroke = pNew; }
 
             /// fill opacity content
-            const SvgNumber getFillOpacity() const;
+            SvgNumber getFillOpacity() const;
             void setFillOpacity(const SvgNumber& rFillOpacity = SvgNumber()) { maFillOpacity = rFillOpacity; }
 
             /// fill rule content
-            const FillRule getFillRule() const;
+            FillRule getFillRule() const;
             void setFillRule(const FillRule aFillRule = FillRule_notset) { maFillRule = aFillRule; }
 
             /// fill StrokeDasharray content
@@ -326,27 +326,27 @@ namespace svgio
             void setStrokeDasharray(const SvgNumberVector& rStrokeDasharray = SvgNumberVector()) { maStrokeDasharray = rStrokeDasharray; }
 
             /// #121221# StrokeDasharray needs a set state, it *may* be set to empty by purpose
-            const bool getStrokeDasharraySet() const { return mbStrokeDasharraySet; }
+            bool getStrokeDasharraySet() const { return mbStrokeDasharraySet; }
             void setStrokeDasharraySet(bool bNew) { mbStrokeDasharraySet = bNew; }
 
             /// StrokeDashOffset content
-            const SvgNumber getStrokeDashOffset() const;
+            SvgNumber getStrokeDashOffset() const;
             void setStrokeDashOffset(const SvgNumber& rStrokeDashOffset = SvgNumber()) { maStrokeDashOffset = rStrokeDashOffset; }
 
             /// StrokeLinecap content
-            const StrokeLinecap getStrokeLinecap() const;
+            StrokeLinecap getStrokeLinecap() const;
             void setStrokeLinecap(const StrokeLinecap aStrokeLinecap = StrokeLinecap_notset) { maStrokeLinecap = aStrokeLinecap; }
 
             /// StrokeLinejoin content
-            const StrokeLinejoin getStrokeLinejoin() const;
+            StrokeLinejoin getStrokeLinejoin() const;
             void setStrokeLinejoin(const StrokeLinejoin aStrokeLinejoin = StrokeLinejoin_notset) { maStrokeLinejoin = aStrokeLinejoin; }
 
             /// StrokeMiterLimit content
-            const SvgNumber getStrokeMiterLimit() const;
+            SvgNumber getStrokeMiterLimit() const;
             void setStrokeMiterLimit(const SvgNumber& rStrokeMiterLimit = SvgNumber()) { maStrokeMiterLimit = rStrokeMiterLimit; }
 
             /// StrokeOpacity content
-            const SvgNumber getStrokeOpacity() const;
+            SvgNumber getStrokeOpacity() const;
             void setStrokeOpacity(const SvgNumber& rStrokeOpacity = SvgNumber()) { maStrokeOpacity = rStrokeOpacity; }
 
             /// Font content
@@ -354,36 +354,36 @@ namespace svgio
             void setFontFamily(const SvgStringVector& rSvgStringVector = SvgStringVector()) { maFontFamily = rSvgStringVector; }
 
             /// FontSize content
-            const SvgNumber getFontSize() const;
+            SvgNumber getFontSize() const;
             void setFontSize(const SvgNumber& rFontSize = SvgNumber()) { maFontSize = rFontSize; }
 
             /// FontStretch content
-            const FontStretch getFontStretch() const;
+            FontStretch getFontStretch() const;
             void setFontStretch(const FontStretch aFontStretch = FontStretch_notset) { maFontStretch = aFontStretch; }
 
             /// FontStyle content
-            const FontStyle getFontStyle() const;
+            FontStyle getFontStyle() const;
             void setFontStyle(const FontStyle aFontStyle = FontStyle_notset) { maFontStyle = aFontStyle; }
 
             /// FontVariant content
-            const FontVariant getFontVariant() const;
+            FontVariant getFontVariant() const;
             void setFontVariant(const FontVariant aFontVariant = FontVariant_notset) { maFontVariant = aFontVariant; }
 
             /// FontWeight content
-            const FontWeight getFontWeight() const;
+            FontWeight getFontWeight() const;
             void setFontWeight(const FontWeight aFontWeight = FontWeight_notset) { maFontWeight = aFontWeight; }
 
             /// TextAlign content
-            const TextAlign getTextAlign() const;
+            TextAlign getTextAlign() const;
             void setTextAlign(const TextAlign aTextAlign = TextAlign_notset) { maTextAlign = aTextAlign; }
 
             /// TextDecoration content
             const SvgStyleAttributes* getTextDecorationDefiningSvgStyleAttributes() const;
-            const TextDecoration getTextDecoration() const;
+            TextDecoration getTextDecoration() const;
             void setTextDecoration(const TextDecoration aTextDecoration = TextDecoration_notset) { maTextDecoration = aTextDecoration; }
 
             /// TextAnchor content
-            const TextAnchor getTextAnchor() const;
+            TextAnchor getTextAnchor() const;
             void setTextAnchor(const TextAnchor aTextAnchor = TextAnchor_notset) { maTextAnchor = aTextAnchor; }
 
             /// Color content
@@ -391,7 +391,7 @@ namespace svgio
             void setColor(const SvgPaint& rColor) { maColor = rColor; }
 
             /// Opacity content
-            const SvgNumber getOpacity() const { return maOpacity; }
+            SvgNumber getOpacity() const { return maOpacity; }
             void setOpacity(const SvgNumber& rOpacity = SvgNumber()) { maOpacity = rOpacity; }
 
             // Title content
@@ -411,17 +411,17 @@ namespace svgio
             void setMaskXLink(const rtl::OUString& rNew) { maMaskXLink = rNew; }
 
             // MarkerStartXLink content
-            const rtl::OUString getMarkerStartXLink() const;
+            rtl::OUString getMarkerStartXLink() const;
             const SvgMarkerNode* accessMarkerStartXLink() const;
             void setMarkerStartXLink(const rtl::OUString& rNew) { maMarkerStartXLink = rNew; }
 
             // MarkerMidXLink content
-            const rtl::OUString getMarkerMidXLink() const;
+            rtl::OUString getMarkerMidXLink() const;
             const SvgMarkerNode* accessMarkerMidXLink() const;
             void setMarkerMidXLink(const rtl::OUString& rNew) { maMarkerMidXLink = rNew; }
 
             // MarkerEndXLink content
-            const rtl::OUString getMarkerEndXLink() const;
+            rtl::OUString getMarkerEndXLink() const;
             const SvgMarkerNode* accessMarkerEndXLink() const;
             void setMarkerEndXLink(const rtl::OUString& rNew) { maMarkerEndXLink = rNew; }
 
