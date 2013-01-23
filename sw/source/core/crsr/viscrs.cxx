@@ -266,26 +266,9 @@ void SwSelPaintRects::Show()
 
             if (xTargetOverlay.is())
             {
-                // #i97672# get the system's highlight color and limit it to the
-                // maximum allowed luminance. This is needed to react on too bright
-                // highlight colors which would otherwise vive a bad visualisation.
-                const OutputDevice *pOut = Application::GetDefaultDevice();
-                Color aHighlight(pOut->GetSettings().GetStyleSettings().GetHighlightColor());
+                // get the system's hilight color
                 const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                const basegfx::BColor aSelection(aHighlight.getBColor());
-                const double fLuminance(aSelection.luminance());
-                const double fMaxLum(aSvtOptionsDrawinglayer.GetSelectionMaximumLuminancePercent() / 100.0);
-
-                if(fLuminance > fMaxLum)
-                {
-                    const double fFactor(fMaxLum / fLuminance);
-                    const basegfx::BColor aNewSelection(
-                        aSelection.getRed() * fFactor,
-                        aSelection.getGreen() * fFactor,
-                        aSelection.getBlue() * fFactor);
-
-                    aHighlight = Color(aNewSelection);
-                }
+                const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
 
                 // create correct selection
                 mpCursorOverlay = new sdr::overlay::OverlaySelection(

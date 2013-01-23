@@ -151,6 +151,11 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         sal_uInt16  GetTransparentSelectionPercent() const;
         sal_uInt16  GetSelectionMaximumLuminancePercent() const;
 
+        // get system hilight color, limited to the maximum allowed luminance
+        // (defined in GetSelectionMaximumLuminancePercent() in SvtOptionsDrawinglayer,
+        // combined with Application::GetSettings().GetStyleSettings().GetHighlightColor())
+        Color getHilightColor() const;
+
         void        SetTransparentSelection( sal_Bool bState );
         void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
 
