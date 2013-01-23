@@ -2168,7 +2168,7 @@ namespace
             return eNoSelectStatement;
 
         ::connectivity::OSQLParseNode* pParseTree = pNode->getChild(2); // selection
-        sal_Bool bFirstField = sal_True;    // bei der Initialisierung mu� auf alle Faelle das erste Feld neu aktiviert werden
+        sal_Bool bFirstField = sal_True;    // bei der Initialisierung muß auf alle Faelle das erste Feld neu aktiviert werden
 
         SqlParseError eErrorCode = eOk;
 
