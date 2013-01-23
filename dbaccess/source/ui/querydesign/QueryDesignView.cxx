@@ -3388,7 +3388,8 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
         case OSQLParseNode::data_type:
         case OSQLParseNode::column_def:
         case OSQLParseNode::table_node:
-        case OSQLParseNode::as:  // Seems to never be generated?
+        case OSQLParseNode::as_clause:
+        case OSQLParseNode::opt_as:
         case OSQLParseNode::op_column_commalist:
         case OSQLParseNode::table_primary_as_range_column:
         case OSQLParseNode::character_string_type:

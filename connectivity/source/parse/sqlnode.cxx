@@ -392,9 +392,19 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUStringBuffer& rString,
         bHandled = impl_parseTableNameNodeToString_throw( rString, rParam );
         break;
 
-    case as:
-        if ( rParam.aMetaData.generateASBeforeCorrelationName() )
-            rString.append(::rtl::OUString(" AS"));
+    case as_clause:
+        assert(nCount == 0 || nCount == 2);
+        if (nCount == 2)
+        {
+            if ( rParam.aMetaData.generateASBeforeCorrelationName() )
+                rString.append(::rtl::OUString(" AS "));
+            m_aChildren[1]->impl_parseNodeToString_throw( rString, rParam );
+        }
+        bHandled = true;
+        break;
+
+    case opt_as:
+        assert(nCount == 0);
         bHandled = true;
         break;
 
@@ -1386,7 +1396,8 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::data_type, "data_type" },
             { OSQLParseNode::column_def, "column_def" },
             { OSQLParseNode::table_node, "table_node" },
-            { OSQLParseNode::as, "as" },
+            { OSQLParseNode::as_clause, "as_clause" },
+            { OSQLParseNode::opt_as, "opt_as" },
             { OSQLParseNode::op_column_commalist, "op_column_commalist" },
             { OSQLParseNode::table_primary_as_range_column, "table_primary_as_range_column" },
             { OSQLParseNode::datetime_primary, "datetime_primary" },
