@@ -90,7 +90,10 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                     # read the file
                     filename = unohelper.fileUrlToSystemPath( url )
 
-                    fileHandle = open( filename )
+                    if sys.version >= '3':
+                        fileHandle = open( filename, encoding='utf_8' )
+                    else:
+                        fileHandle = open( filename )
                     src = fileHandle.read().replace("\r","")
                     if not src.endswith( "\n" ):
                         src = src + "\n"
