@@ -765,7 +765,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
 
     ScSplitPos eWhich = pViewData->GetActivePart();
     ScGridWindow* pGridWin = (ScGridWindow*)pViewData->GetActiveWin();
-    ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObj, nTab );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
     if ( pGridWin )
     {
         ScAddress aOldStt;
