@@ -1229,6 +1229,27 @@ sal_uInt16 SvtOptionsDrawinglayer::GetSelectionMaximumLuminancePercent() const
     return aRetval;
 }
 
+Color SvtOptionsDrawinglayer::getHilightColor() const
+{
+    Color aRetval(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+    const basegfx::BColor aSelection(aRetval.getBColor());
+    const double fLuminance(aSelection.luminance());
+    const double fMaxLum(GetSelectionMaximumLuminancePercent() / 100.0);
+
+    if(fLuminance > fMaxLum)
+    {
+        const double fFactor(fMaxLum / fLuminance);
+        const basegfx::BColor aNewSelection(
+            aSelection.getRed() * fFactor,
+            aSelection.getGreen() * fFactor,
+            aSelection.getBlue() * fFactor);
+
+        aRetval = Color(aNewSelection);
+    }
+
+    return aRetval;
+}
+
 namespace
 {
     class theOptionsDrawinglayerMutex : public rtl::Static<osl::Mutex, theOptionsDrawinglayerMutex>{};
