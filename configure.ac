@@ -7804,7 +7804,8 @@ if test "$ENABLE_MYSQLC" = "YES"; then
             AC_MSG_CHECKING([for $LIBMYSQL])
             if test -e "$with_libmysql_path/lib/$LIBMYSQL"; then
                 AC_MSG_RESULT([found.])
-                LIBMYSQL_PATH=$with_libmysql_path
+                PathFormat "$with_libmysql_path"
+                LIBMYSQL_PATH="$formatted_path"
             else
                 AC_MSG_ERROR([not found. Please specify proper path in --with-libmysql-path.])
             fi
