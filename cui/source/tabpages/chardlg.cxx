@@ -2750,12 +2750,12 @@ IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, CheckBox*, pBox )
 
 IMPL_LINK_NOARG(SvxCharPositionPage, KerningSelectHdl_Impl)
 {
-    if ( m_pKerningLB->GetSelectEntryPos() > 0 )
+    if ( m_pKerningLB->GetSelectEntryPos() > LW_NORMAL )
     {
         m_pKerningFT->Enable();
         m_pKerningMF->Enable();
 
-        if ( m_pKerningLB->GetSelectEntryPos() == 2 )
+        if ( m_pKerningLB->GetSelectEntryPos() == LW_SCHMAL )
         {
             // Condensed -> max value == 1/6 of the current font height
             SvxFont& rFont = GetPreviewFont();
@@ -2790,7 +2790,7 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl)
     long nKern = (short)m_pKerningMF->Denormalize( nVal );
 
     // Condensed? -> then negative
-    if ( m_pKerningLB->GetSelectEntryPos() == 2 )
+    if ( m_pKerningLB->GetSelectEntryPos() == LW_SCHMAL )
         nKern *= -1;
 
     SvxFont& rFont = GetPreviewFont();
@@ -2854,7 +2854,7 @@ void  SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
 
     //the only thing that has to be checked is the max. allowed value for the
     //condense edit field
-    if ( m_pKerningLB->GetSelectEntryPos() == 2 )
+    if ( m_pKerningLB->GetSelectEntryPos() == LW_SCHMAL )
     {
         // Condensed -> max value == 1/6 of the current font height
         SvxFont& rFont = GetPreviewFont();
