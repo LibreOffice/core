@@ -2202,7 +2202,8 @@ namespace
                     pColumnRef = pColumnRef->getChild(0);
                     OTableFieldDescRef aInfo = new OTableFieldDesc();
 
-                    if (    pColumnRef->count() == 3 &&
+                    if (    pColumnRef->getKnownRuleID() != OSQLParseNode::subquery &&
+                            pColumnRef->count() == 3 &&
                             SQL_ISPUNCTUATION(pColumnRef->getChild(0),"(") &&
                             SQL_ISPUNCTUATION(pColumnRef->getChild(2),")")
                         )

@@ -649,7 +649,7 @@ sal_Bool OSelectionBrowseBox::fillColumnRef(const ::rtl::OUString& _sColumnName,
     return bError;
 }
 // -----------------------------------------------------------------------------
-sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction)
+sal_Bool OSelectionBrowseBox::saveField(String& _sFieldName ,OTableFieldDescRef& _pEntry, sal_Bool& _bListAction)
 {
     sal_Bool bError = sal_False;
 
@@ -680,50 +680,63 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
     // we have to look which entries  we should quote
 
     const ::rtl::OUString sFieldAlias = _pEntry->GetFieldAlias();
-    size_t nPass = 4;
     ::connectivity::OSQLParser& rParser( rController.getParser() );
-    OSQLParseNode* pParseNode = NULL;
-    // 4 passes in trying to interprete the field name
-    // - don't quote the field name, parse internationally
-    // - don't quote the field name, parse en-US
-    // - quote the field name, parse internationally
-    // - quote the field name, parse en-US
-    do
     {
-        bool bQuote = ( nPass <= 2 );
-        bool bInternational = ( nPass % 2 ) == 0;
+        // automatically add parentheses around subqueries
+        OSQLParseNode *pParseNode = NULL;
+        OUString devnull;
+        pParseNode = rParser.parseTree( devnull, _sFieldName, true );
+        if (pParseNode == NULL)
+            pParseNode = rParser.parseTree( devnull, _sFieldName, false );
+        if (pParseNode != NULL && SQL_ISRULE(pParseNode, select_statement))
+            _sFieldName = ::rtl::OUString("(") + _sFieldName + ")";
+    }
 
-        ::rtl::OUString sSql;
-        if ( bQuote )
-            sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), _sFieldName );
-        else
-            sSql += _sFieldName;
+    OSQLParseNode* pParseNode = NULL;
+    {
+        // 4 passes in trying to interprete the field name
+        // - don't quote the field name, parse internationally
+        // - don't quote the field name, parse en-US
+        // - quote the field name, parse internationally
+        // - quote the field name, parse en-US
+        size_t nPass = 4;
+        ::rtl::OUString sQuotedFullFieldName(::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), _sFieldName ));
+        ::rtl::OUString sFullFieldName(_sFieldName);
 
         if  ( _pEntry->isAggreateFunction() )
         {
             OSL_ENSURE(!_pEntry->GetFunction().isEmpty(),"Functionname darf hier nicht leer sein! ;-(");
-            ::rtl::OUStringBuffer aTmpStr2( _pEntry->GetFunction());
-            aTmpStr2.appendAscii("(");
-            aTmpStr2.append(sSql);
-            aTmpStr2.appendAscii(")");
-            sSql = aTmpStr2.makeStringAndClear();
+            sQuotedFullFieldName = _pEntry->GetFunction() + "(" + sQuotedFullFieldName + ")";
+            sFullFieldName = _pEntry->GetFunction() + "(" + sFullFieldName + ")";
         }
 
-        sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")) + sSql;
-        if ( !sFieldAlias.isEmpty() )
-        { // always quote the alias name there canbe no function in it
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
-            sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), sFieldAlias );
-        }
-        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x"));
+        do
+        {
+            bool bQuote = ( nPass <= 2 );
+            bool bInternational = ( nPass % 2 ) == 0;
 
-        pParseNode = rParser.parseTree( sErrorMsg, sSql, bInternational );
+            ::rtl::OUString sSql;
+            if ( bQuote )
+                sSql += sQuotedFullFieldName;
+            else
+                sSql += sFullFieldName;
+
+            sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")) + sSql;
+            if ( !sFieldAlias.isEmpty() )
+            { // always quote the alias name: there cannot be a function in it
+                sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+                sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), sFieldAlias );
+            }
+            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x"));
+
+            pParseNode = rParser.parseTree( sErrorMsg, sSql, bInternational );
+        }
+        while ( ( pParseNode == NULL ) && ( --nPass > 0 ) );
     }
-    while ( ( pParseNode == NULL ) && ( --nPass > 0 ) );
 
     if ( pParseNode == NULL )
     {
-        // something different which we have to check (may be a select statement)
+        // something different which we have to check
         String sErrorMessage( ModuleRes( STR_QRY_COLUMN_NOT_FOUND ) );
         sErrorMessage.SearchAndReplaceAscii("$name$",_sFieldName);
         OSQLWarningBox( this, sErrorMessage ).Execute();
@@ -737,8 +750,8 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
     {
         _pEntry->SetField(_sFieldName);
         clearEntryFunctionField(_sFieldName,_pEntry,_bListAction,_pEntry->GetColumnId());
-    } // travel through the select column parse node
-    else
+    }
+    else // travel through the select column parse node
     {
         ::comphelper::UStringMixEqual bCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
 
@@ -777,6 +790,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
 
             ::connectivity::OSQLParseNode* pColumnRef = pChild->getChild(0);
             if (
+                    pColumnRef->getKnownRuleID() != OSQLParseNode::subquery &&
                     pColumnRef->count() == 3 &&
                     SQL_ISPUNCTUATION(pColumnRef->getChild(0),"(") &&
                     SQL_ISPUNCTUATION(pColumnRef->getChild(2),")")
