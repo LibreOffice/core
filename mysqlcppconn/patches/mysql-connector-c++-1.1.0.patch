@@ -32,44 +32,6 @@
 +  #define CPPCONN_PUBLIC_EXCEPTION SAL_EXCEPTION_DLLPUBLIC_EXPORT
  
  #endif    //#ifndef _SQL_BUILD_CONFIG_H_
---- misc/mysql-connector-c++-1.1.0/cppconn/config.h	2009-08-14 10:17:38.234375000 +0200
-+++ misc/build/mysql-connector-c++-1.1.0/cppconn/config.h	2009-08-14 09:56:37.000000000 +0200
-@@ -1 +1,34 @@
--dummy
-+#include <sal/types.h>
-+
-+#define HAVE_FUNCTION_STRTOL 1
-+#define HAVE_FUNCTION_STRTOUL 1
-+#define HAVE_FUNCTION_STRTOL 1
-+#define HAVE_FUNCTION_STRTOULL 1
-+
-+#if defined(MACOSX) || defined(SOLARIS) || defined(LINUX)
-+    #define HAVE_STDINT_H
-+    #define HAVE_INTTYPES_H
-+#endif
-+
-+#ifdef HAVE_STDINT_H
-+#include <stdint.h>
-+#endif
-+
-+#ifdef HAVE_INTTYPES_H
-+#include <inttypes.h>
-+#endif
-+
-+#if !defined(HAVE_STDINT_H) && !defined(HAVE_INTTYPES_H) 
-+
-+// if we do not have the standard C99 integer types, then define them based on the respective SAL types
-+#if !defined(_SYS_TYPES_H)
-+typedef sal_Int8    int8_t;
-+typedef sal_Int16   int16_t;
-+typedef sal_Int32   int32_t;
-+#endif // !defined(_SYS_TYPES_H)
-+typedef sal_uInt8   uint8_t;
-+typedef sal_uInt16  uint16_t;
-+typedef sal_uInt32  uint32_t;
-+typedef sal_Int64   int64_t;
-+typedef sal_uInt64  uint64_t;
-+#endif // !defined(HAVE_STDINT_H) && !defined(HAVE_INTTYPES_H)
 --- misc/mysql-connector-c++-1.1.0/cppconn/exception.h	2009-08-20 17:51:23.000000000 +0200
 +++ misc/build/mysql-connector-c++-1.1.0/cppconn/exception.h	2009-09-11 09:41:41.076379817 +0200
 @@ -37,7 +37,7 @@
@@ -112,74 +74,6 @@
  {
  	NonScrollableException(const NonScrollableException& e) : SQLException(e.what(), e.sql_state, e.errNo) { }
  	NonScrollableException(const std::string& reason) : SQLException(reason, "", 0) {}
---- misc/mysql-connector-c++-1.1.0/driver/makefile.mk	2009-09-11 09:42:34.087202551 +0200
-+++ misc/build/mysql-connector-c++-1.1.0/driver/makefile.mk	2009-09-11 09:42:25.902286382 +0200
-@@ -1,1 +1,64 @@
--dummy
-+PRJ=..$/..$/..$/..$/..
-+
-+.INCLUDE : $(PRJ)$/cppconn_config.pmk
-+
-+PRJINC=..
-+TARGET=$(PRJNAME)
-+
-+# --- Settings -----------------------------------------------------
-+
-+.INCLUDE :  settings.mk
-+
-+.INCLUDE : $(PRJ)$/mysql_config.pmk
-+
-+# --- Files --------------------------------------------------------
-+
-+.IF "$(OS)-$(RTL_ARCH)" == "LINUX-x86"
-+    SHL1NOCHECK=TRUE
-+.ENDIF
-+SHL1TARGET=$(TARGET)
-+
-+LIB1TARGET=$(SLB)$/$(PRJNAME).lib
-+LIB1OBJFILES+= \
-+        $(SLO)$/mysql_art_resultset.obj \
-+        $(SLO)$/mysql_art_rset_metadata.obj \
-+        $(SLO)$/mysql_connection.obj \
-+        $(SLO)$/mysql_debug.obj \
-+        $(SLO)$/mysql_driver.obj \
-+        $(SLO)$/mysql_metadata.obj \
-+        $(SLO)$/mysql_parameter_metadata.obj \
-+        $(SLO)$/mysql_prepared_statement.obj \
-+        $(SLO)$/mysql_ps_resultset.obj \
-+        $(SLO)$/mysql_ps_resultset_metadata.obj \
-+        $(SLO)$/mysql_resultbind.obj \
-+        $(SLO)$/mysql_resultset.obj \
-+        $(SLO)$/mysql_resultset_metadata.obj \
-+        $(SLO)$/mysql_statement.obj \
-+        $(SLO)$/mysql_util.obj \
-+        $(SLO)$/mysql_warning.obj \
-+
-+SHL1STDLIBS=\
-+       $(MYSQL_LIB)
-+
-+SHL1RPATH=OXT
-+SHL1IMPLIB=  i$(TARGET)
-+SHL1LIBS=    $(LIB1TARGET) $(SLB)$/$(CPPCONN_NATIVEAPI).lib
-+SHL1DEF=     $(MISC)$/$(SHL1TARGET).def
-+DEF1NAME=    $(SHL1TARGET)
-+DEF1DEPN=    $(MISC)$/$(SHL1TARGET).flt \
-+              $(LIB1TARGET)
-+DEFLIB1NAME=$(TARGET)
-+
-+# --- Targets ------------------------------------------------------
-+
-+.INCLUDE :  target.mk
-+
-+# --- filter file ------------------------------
-+
-+.IF "$(depend)"==""
-+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-+    @echo CLEAR_THE_FILE	> $@
-+	@echo _TI				>>$@
-+	@echo _real				>>$@
-+	@echo __CT				>>$@
-+.ENDIF # "$(depend)"==""
 --- misc/mysql-connector-c++-1.1.0/driver/mysql_debug.h	2009-08-13 17:13:46.000000000 +0200
 +++ misc/build/mysql-connector-c++-1.1.0/driver/mysql_debug.h	2009-08-14 09:56:37.015625000 +0200
 @@ -25,16 +25,6 @@
@@ -207,31 +101,4 @@
  
  #include <stack>
  #include "mysql_util.h"
---- misc/mysql-connector-c++-1.1.0/driver/nativeapi/makefile.mk	2009-08-17 21:32:53.694119382 +0200
-+++ misc/build/mysql-connector-c++-1.1.0/driver/nativeapi/makefile.mk	2009-08-17 21:32:50.534346360 +0200
-@@ -1 +1,24 @@
--dummy
-+PRJ=..$/..$/..$/..$/..$/..
-+PRJINC=..$/..
-+
-+.INCLUDE : $(PRJ)$/cppconn_config.pmk
-+
-+TARGET=$(CPPCONN_NATIVEAPI)
-+
-+# --- Settings -----------------------------------------------------
-+
-+.INCLUDE :  settings.mk
-+
-+.INCLUDE : $(PRJ)$/mysql_config.pmk
-+
-+LIB1TARGET=$(SLB)$/$(TARGET).lib
-+LIB1OBJFILES+= \
-+        $(SLO)$/mysql_client_api.obj \
-+        $(SLO)$/library_loader.obj \
-+        $(SLO)$/mysql_native_driver_wrapper.obj \
-+        $(SLO)$/mysql_native_connection_wrapper.obj \
-+        $(SLO)$/mysql_native_resultset_wrapper.obj \
-+        $(SLO)$/mysql_native_statement_wrapper.obj \
-+
-+# --- Targets ------------------------------------------------------
-+.INCLUDE :  target.mk
+

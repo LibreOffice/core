@@ -183,6 +183,70 @@ $(call gb_LinkTarget_add_libs,$(1),-liconv)
 
 endef
 
+ifeq ($(SYSTEM_MYSQL),YES)
+
+define gb_LinkTarget__use_mysql
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_MYSQL \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(MYSQL_LIB) \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$(MYSQL_INC) \
+	$$(INCLUDE) \
+)
+endef
+
+else
+
+define gb_LinkTarget__use_mysql
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(LIBMYSQL_PATH)/include \
+	$$(INCLUDE) \
+)
+
+endef
+
+endif
+
+ifeq ($(SYSTEM_MYSQL_CPPCONN),YES)
+
+define gb_LinkTarget__use_mysqlcppconn
+$(call gb_LinkTarget_add_libs,$(1),\
+	-lmysqlcppconn \
+)
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_MYSQL_CPPCONN` \
+)
+endef
+
+else
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
+	mysqlcppconn \
+))
+
+define gb_LinkTarget__use_mysqlcppconn
+
+$(call gb_LinkTarget_use_libraries,$(1),\
+	mysqlcppconn \
+)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,mysqlcppconn) \
+	-I$(call gb_UnpackedTarball_get_dir,mysqlcppconn)/cppconn \
+	$$(INCLUDE) \
+)
+
+endef
+
+endif
+
 ifeq ($(SYSTEM_ZLIB),YES)
 
 define gb_LinkTarget__use_zlib
