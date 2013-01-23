@@ -1286,10 +1286,8 @@ AC_ARG_WITH(system-nss,
     [with_system_nss="$with_system_libs"])
 
 AC_ARG_WITH(myspell-dicts,
-    AS_HELP_STRING([--without-myspell-dicts],
-        [Removes myspell dictionaries from LibreOffice installation set, for
-         people building for specific distributions where the myspell dictionaries
-         are installed from other sources.]),
+    AS_HELP_STRING([--with-myspell-dicts],
+        [Adds myspell dictionaries to the LibreOffice installation set]),
 ,)
 
 AC_ARG_WITH(system-dicts,
@@ -1711,8 +1709,8 @@ AC_ARG_WITH(jdk-home,
 ,)
 
 AC_ARG_WITH(help,
-    AS_HELP_STRING([--without-help],
-        [Disable the build of help.]))
+    AS_HELP_STRING([--with-help],
+        [Enable the build of help.]))
 
 AC_ARG_WITH(java,
     AS_HELP_STRING([--with-java],
