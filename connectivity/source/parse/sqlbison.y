@@ -4772,7 +4772,18 @@ sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)
 //-----------------------------------------------------------------------------
 OSQLParseNode::Rule OSQLParser::RuleIDToRule( sal_uInt32 _nRule )
 {
-    return s_aReverseRuleIDLookup[ _nRule ];
+    OSQLParser::RuleIDMap::const_iterator i (s_aReverseRuleIDLookup.find(_nRule));
+    if (i == s_aReverseRuleIDLookup.end())
+    {
+        SAL_WARN("connectivity.parse",
+		 "connectivity::OSQLParser::RuleIDToRule cannot reverse-lookup rule. "
+		 "Reverse mapping incomplete? "
+		 "_nRule='" << _nRule << "' "
+		 "yytname[_nRule]='" << yytname[_nRule] << "'");
+        return OSQLParseNode::UNKNOWN_RULE;
+    }
+    else
+        return i->second;
 }
 
 //-----------------------------------------------------------------------------

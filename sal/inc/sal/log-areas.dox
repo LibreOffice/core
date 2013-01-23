@@ -37,6 +37,7 @@ certain functionality.
 @section connectivity
 
 @li @c connectivity.mork
+@li @c connectivity.parse
 
 @section cui
 
