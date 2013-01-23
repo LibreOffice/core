@@ -1022,11 +1022,6 @@ void PresenterToolBar::CheckMouseOver (
     const bool bOverWindow,
     const bool bMouseDown)
 {
-    css::awt::MouseEvent rTemp =rEvent;
-    if(Application::GetSettings().GetLayoutRTL()){
-        awt::Rectangle aWindowBox = mxWindow->getPosSize();
-        rTemp.X=aWindowBox.Width-rTemp.X;
-    }
     ElementContainer::iterator iPart;
     ElementContainer::const_iterator iEnd (maElementContainer.end());
     for (iPart=maElementContainer.begin(); iPart!=iEnd; ++iPart)
@@ -1040,13 +1035,13 @@ void PresenterToolBar::CheckMouseOver (
 
             awt::Rectangle aBox ((*iElement)->GetBoundingBox());
             const bool bIsOver = bOverWindow
-                && aBox.X <= rTemp.X
-                && aBox.Width+aBox.X-1 >= rTemp.X
-                && aBox.Y <= rTemp.Y
-                && aBox.Height+aBox.Y-1 >= rTemp.Y;
+                && aBox.X <= rEvent.X
+                && aBox.Width+aBox.X-1 >= rEvent.X
+                && aBox.Y <= rEvent.Y
+                && aBox.Height+aBox.Y-1 >= rEvent.Y;
             (*iElement)->SetState(
                 bIsOver,
-                bIsOver && rTemp.Buttons!=0 && bMouseDown && rTemp.ClickCount>0);
+                bIsOver && rEvent.Buttons!=0 && bMouseDown && rEvent.ClickCount>0);
         }
     }
 }

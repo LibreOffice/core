@@ -513,26 +513,14 @@ void SAL_CALL PresenterSlideSorter::windowPaint (const css::awt::PaintEvent& rEv
 void SAL_CALL PresenterSlideSorter::mousePressed (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
 {
-    css::awt::MouseEvent rTemp =rEvent;
-    /// check whether RTL interface or not
-    if(Application::GetSettings().GetLayoutRTL()){
-        awt::Rectangle aBox = mxWindow->getPosSize();
-        rTemp.X=aBox.Width-rEvent.X;
-    }
-    const geometry::RealPoint2D aPosition(rTemp.X, rEvent.Y);
+    const geometry::RealPoint2D aPosition(rEvent.X, rEvent.Y);
     mnSlideIndexMousePressed = mpLayout->GetSlideIndexForPosition(aPosition);
 }
 
 void SAL_CALL PresenterSlideSorter::mouseReleased (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
 {
-    css::awt::MouseEvent rTemp =rEvent;
-    /// check whether RTL interface or not
-    if(Application::GetSettings().GetLayoutRTL()){
-        awt::Rectangle aBox = mxWindow->getPosSize();
-        rTemp.X=aBox.Width-rEvent.X;
-    }
-    const geometry::RealPoint2D aPosition(rTemp.X, rEvent.Y);
+    const geometry::RealPoint2D aPosition(rEvent.X, rEvent.Y);
     const sal_Int32 nSlideIndex (mpLayout->GetSlideIndexForPosition(aPosition));
 
     if (nSlideIndex == mnSlideIndexMousePressed && mnSlideIndexMousePressed >= 0)
@@ -576,13 +564,7 @@ void SAL_CALL PresenterSlideSorter::mouseMoved (const css::awt::MouseEvent& rEve
 {
     if (mpMouseOverManager.get() != NULL)
     {
-        css::awt::MouseEvent rTemp =rEvent;
-        /// check whether RTL interface or not
-        if(Application::GetSettings().GetLayoutRTL()){
-            awt::Rectangle aBox = mxWindow->getPosSize();
-            rTemp.X=aBox.Width-rEvent.X;
-        }
-        const geometry::RealPoint2D aPosition(rTemp.X, rEvent.Y);
+        geometry::RealPoint2D aPosition(rEvent.X, rEvent.Y);
         sal_Int32 nSlideIndex (mpLayout->GetSlideIndexForPosition(aPosition));
 
         if (nSlideIndex < 0)

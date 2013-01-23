@@ -2967,7 +2967,9 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
 
     // --- RTL --- (mirror mouse pos)
     if( Application::GetSettings().GetLayoutRTL() )
-        aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
+        // Disable mirroring for presenter console
+        if(!(pThis->m_aTitle !="" && pThis->m_bFullscreen))
+            aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 
     vcl::DeletionListener aDel( pThis );
 
@@ -3031,7 +3033,9 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
 
     // --- RTL --- (mirror mouse pos)
     if( Application::GetSettings().GetLayoutRTL() )
-        aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
+        // Disable mirroring for presenter console
+        if(!(pThis->m_aTitle !="" && pThis->m_bFullscreen))
+            aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 
     pThis->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
 
@@ -3054,7 +3058,9 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 
     // --- RTL --- (mirror mouse pos)
     if( Application::GetSettings().GetLayoutRTL() )
-        aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
+        // Disable mirroring for presenter console
+        if(!(pThis->m_aTitle !="" && pThis->m_bFullscreen))
+            aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 
     vcl::DeletionListener aDel( pThis );
 
