@@ -156,8 +156,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
 	drawinglayer/source/primitive3d/textureprimitive3d \
 	drawinglayer/source/primitive3d/transformprimitive3d \
 	drawinglayer/source/processor2d/baseprocessor2d \
-	drawinglayer/source/processor2d/vclhelperbitmaptransform \
-	drawinglayer/source/processor2d/vclhelperbitmaprender \
 	drawinglayer/source/processor2d/vclhelperbufferdevice \
 	drawinglayer/source/processor2d/vclprocessor2d \
 	drawinglayer/source/processor2d/helperwrongspellrenderer \

@@ -75,6 +75,18 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect&, const SalBitmap& /*rSou
     return false;
 }
 
+bool SvpSalGraphics::drawTransformedBitmap(
+    const basegfx::B2DPoint& rNull,
+    const basegfx::B2DPoint& rX,
+    const basegfx::B2DPoint& rY,
+    const SalBitmap& rSourceBitmap,
+    const SalBitmap* pAlphaBitmap)
+{
+    // here direct support for transformed bitmaps can be impemented
+    (void)rNull; (void)rX; (void)rY; (void)rSourceBitmap; (void)pAlphaBitmap;
+    return false;
+}
+
 bool SvpSalGraphics::drawAlphaRect( long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/, sal_uInt8 /*nTransparency*/ )
 {
     // TODO(P3) implement alpha blending
@@ -455,73 +467,72 @@ void SvpSalGraphics::copyArea( long nDestX,
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::copyBits( const SalTwoRect* pPosAry,
+void SvpSalGraphics::copyBits( const SalTwoRect& rPosAry,
                                SalGraphics*      pSrcGraphics )
 {
     SvpSalGraphics* pSrc = pSrcGraphics ?
         static_cast<SvpSalGraphics*>(pSrcGraphics) : this;
-    B2IRange aSrcRect( pPosAry->mnSrcX, pPosAry->mnSrcY,
-                       pPosAry->mnSrcX+pPosAry->mnSrcWidth,
-                       pPosAry->mnSrcY+pPosAry->mnSrcHeight );
-    B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
-                        pPosAry->mnDestX+pPosAry->mnDestWidth,
-                        pPosAry->mnDestY+pPosAry->mnDestHeight );
+    B2IRange aSrcRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
+                       rPosAry.mnSrcX+rPosAry.mnSrcWidth,
+                       rPosAry.mnSrcY+rPosAry.mnSrcHeight );
+    B2IRange aDestRect( rPosAry.mnDestX, rPosAry.mnDestY,
+                        rPosAry.mnDestX+rPosAry.mnDestWidth,
+                        rPosAry.mnDestY+rPosAry.mnDestHeight );
     m_aDevice->drawBitmap( pSrc->m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
-                                        const SalBitmap& rSalBitmap )
+void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
 {
     const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSalBitmap);
-    B2IRange aSrcRect( pPosAry->mnSrcX, pPosAry->mnSrcY,
-                       pPosAry->mnSrcX+pPosAry->mnSrcWidth,
-                       pPosAry->mnSrcY+pPosAry->mnSrcHeight );
-    B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
-                        pPosAry->mnDestX+pPosAry->mnDestWidth,
-                        pPosAry->mnDestY+pPosAry->mnDestHeight );
+    B2IRange aSrcRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
+                       rPosAry.mnSrcX+rPosAry.mnSrcWidth,
+                       rPosAry.mnSrcY+rPosAry.mnSrcHeight );
+    B2IRange aDestRect( rPosAry.mnDestX, rPosAry.mnDestY,
+                        rPosAry.mnDestX+rPosAry.mnDestWidth,
+                        rPosAry.mnDestY+rPosAry.mnDestHeight );
     m_aDevice->drawBitmap( rSrc.getBitmap(), aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawBitmap( const SalTwoRect*,
+void SvpSalGraphics::drawBitmap( const SalTwoRect&,
                                  const SalBitmap&,
                                  SalColor )
 {
     // SNI, as in X11 plugin
 }
 
-void SvpSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
+void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                                  const SalBitmap& rSalBitmap,
                                  const SalBitmap& rTransparentBitmap )
 {
     const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSalBitmap);
     const SvpSalBitmap& rSrcTrans = static_cast<const SvpSalBitmap&>(rTransparentBitmap);
-    B2IRange aSrcRect( pPosAry->mnSrcX, pPosAry->mnSrcY,
-                       pPosAry->mnSrcX+pPosAry->mnSrcWidth,
-                       pPosAry->mnSrcY+pPosAry->mnSrcHeight );
-    B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
-                        pPosAry->mnDestX+pPosAry->mnDestWidth,
-                        pPosAry->mnDestY+pPosAry->mnDestHeight );
+    B2IRange aSrcRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
+                       rPosAry.mnSrcX+rPosAry.mnSrcWidth,
+                       rPosAry.mnSrcY+rPosAry.mnSrcHeight );
+    B2IRange aDestRect( rPosAry.mnDestX, rPosAry.mnDestY,
+                        rPosAry.mnDestX+rPosAry.mnDestWidth,
+                        rPosAry.mnDestY+rPosAry.mnDestHeight );
     m_aDevice->drawMaskedBitmap( rSrc.getBitmap(), rSrcTrans.getBitmap(), aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawMask( const SalTwoRect* pPosAry,
+void SvpSalGraphics::drawMask( const SalTwoRect& rPosAry,
                                const SalBitmap& rSalBitmap,
                                SalColor nMaskColor )
 {
     const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSalBitmap);
-    B2IRange aSrcRect( pPosAry->mnSrcX, pPosAry->mnSrcY,
-                       pPosAry->mnSrcX+pPosAry->mnSrcWidth,
-                       pPosAry->mnSrcY+pPosAry->mnSrcHeight );
-    B2IPoint aDestPoint( pPosAry->mnDestX, pPosAry->mnDestY );
+    B2IRange aSrcRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
+                       rPosAry.mnSrcX+rPosAry.mnSrcWidth,
+                       rPosAry.mnSrcY+rPosAry.mnSrcHeight );
+    B2IPoint aDestPoint( rPosAry.mnDestX, rPosAry.mnDestY );
 
     // BitmapDevice::drawMaskedColor works with 0==transparent,
     // 255==opaque. drawMask() semantic is the other way
     // around. Therefore, invert mask.
     BitmapDeviceSharedPtr aCopy =
-        cloneBitmapDevice( B2IVector( pPosAry->mnSrcWidth, pPosAry->mnSrcHeight ),
+        cloneBitmapDevice( B2IVector( rPosAry.mnSrcWidth, rPosAry.mnSrcHeight ),
                            rSrc.getBitmap() );
     basebmp::Color aBgColor( COL_WHITE );
     aCopy->clear(aBgColor);
@@ -529,7 +540,7 @@ void SvpSalGraphics::drawMask( const SalTwoRect* pPosAry,
     aCopy->drawMaskedColor( aFgColor, rSrc.getBitmap(), aSrcRect, B2IPoint() );
 
     basebmp::Color aColor( nMaskColor );
-    B2IRange aSrcRect2( 0, 0, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight );
+    B2IRange aSrcRect2( 0, 0, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight );
     m_aDevice->drawMaskedColor( aColor, aCopy, aSrcRect, aDestPoint, m_aClipMap );
     dbgOut( m_aDevice );
 }

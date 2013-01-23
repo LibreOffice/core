@@ -85,6 +85,7 @@ namespace vclcanvas
         {
             // VDev content is more current than bitmap - copy contents before!
             mpVDev->EnableMapMode( sal_False );
+            mpVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
             const Point aEmptyPoint;
             *maBitmap = mpVDev->GetBitmapEx( aEmptyPoint,
                                              mpVDev->GetOutputSizePixel() );
@@ -105,6 +106,7 @@ namespace vclcanvas
         if( mbVDevContentIsCurrent && mpVDev )
         {
             mpVDev->EnableMapMode( sal_False );
+            mpVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
             aSize = mpVDev->GetOutputSizePixel();
         }
 
@@ -148,6 +150,7 @@ namespace vclcanvas
         {
             // fill with bitmap content
             mpVDev->EnableMapMode( sal_False );
+            mpVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
             const Point aEmptyPoint;
             mpVDev->DrawBitmapEx( aEmptyPoint, *maBitmap );
         }

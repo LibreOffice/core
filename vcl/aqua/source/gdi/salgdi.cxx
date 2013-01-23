@@ -1096,17 +1096,17 @@ sal_Bool AquaSalGraphics::drawPolyPolygonBezier( sal_uLong, const sal_uLong*,
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGraphics )
+void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGraphics )
 {
     if( !pSrcGraphics )
         pSrcGraphics = this;
 
     //from unix salgdi2.cxx
     //[FIXME] find a better way to prevent calc from crashing when width and height are negative
-    if( pPosAry->mnSrcWidth <= 0
-        || pPosAry->mnSrcHeight <= 0
-        || pPosAry->mnDestWidth <= 0
-        || pPosAry->mnDestHeight <= 0 )
+    if( rPosAry.mnSrcWidth <= 0
+        || rPosAry.mnSrcHeight <= 0
+        || rPosAry.mnDestWidth <= 0
+        || rPosAry.mnDestHeight <= 0 )
     {
         return;
     }
@@ -1115,16 +1115,16 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
     /*const*/ AquaSalGraphics* pSrc = static_cast<AquaSalGraphics*>(pSrcGraphics);
     const bool bSameGraphics = (this == pSrc) || (mbWindow && mpFrame && pSrc->mbWindow && (mpFrame == pSrc->mpFrame));
     if( bSameGraphics
-    &&  (pPosAry->mnSrcWidth == pPosAry->mnDestWidth)
-    &&  (pPosAry->mnSrcHeight == pPosAry->mnDestHeight))
+    &&  (rPosAry.mnSrcWidth == rPosAry.mnDestWidth)
+    &&  (rPosAry.mnSrcHeight == rPosAry.mnDestHeight))
     {
         // short circuit if there is nothing to do
-        if( (pPosAry->mnSrcX == pPosAry->mnDestX)
-        &&  (pPosAry->mnSrcY == pPosAry->mnDestY))
+        if( (rPosAry.mnSrcX == rPosAry.mnDestX)
+        &&  (rPosAry.mnSrcY == rPosAry.mnDestY))
             return;
         // use copyArea() if source and destination context are identical
-        copyArea( pPosAry->mnDestX, pPosAry->mnDestY, pPosAry->mnSrcX, pPosAry->mnSrcY,
-            pPosAry->mnSrcWidth, pPosAry->mnSrcHeight, 0 );
+        copyArea( rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnSrcX, rPosAry.mnSrcY,
+            rPosAry.mnSrcWidth, rPosAry.mnSrcHeight, 0 );
         return;
     }
 
@@ -1133,8 +1133,8 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
 
     DBG_ASSERT( pSrc->mxLayer!=NULL, "AquaSalGraphics::copyBits() from non-layered graphics" );
 
-    const CGPoint aDstPoint = { +pPosAry->mnDestX - pPosAry->mnSrcX, pPosAry->mnDestY - pPosAry->mnSrcY };
-    if( (pPosAry->mnSrcWidth == pPosAry->mnDestWidth && pPosAry->mnSrcHeight == pPosAry->mnDestHeight) &&
+    const CGPoint aDstPoint = { +rPosAry.mnDestX - rPosAry.mnSrcX, rPosAry.mnDestY - rPosAry.mnSrcY };
+    if( (rPosAry.mnSrcWidth == rPosAry.mnDestWidth && rPosAry.mnSrcHeight == rPosAry.mnDestHeight) &&
         (!mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth) ) // workaround a Quartz crasher
     {
         // in XOR mode the drawing context is redirected to the XOR mask
@@ -1145,7 +1145,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
                 xCopyContext = mpXorEmulation->GetTargetContext();
 
         CGContextSaveGState( xCopyContext );
-        const CGRect aDstRect = { {pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight} };
+        const CGRect aDstRect = { {rPosAry.mnDestX, rPosAry.mnDestY}, {rPosAry.mnDestWidth, rPosAry.mnDestHeight} };
         CGContextClipToRect( xCopyContext, aDstRect );
 
         // draw at new destination
@@ -1160,14 +1160,14 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
     }
     else
     {
-        SalBitmap* pBitmap = pSrc->getBitmap( pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight );
+        SalBitmap* pBitmap = pSrc->getBitmap( rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight );
 
         if( pBitmap )
         {
-            SalTwoRect aPosAry( *pPosAry );
+            SalTwoRect aPosAry( rPosAry );
             aPosAry.mnSrcX = 0;
             aPosAry.mnSrcY = 0;
-            drawBitmap( &aPosAry, *pBitmap );
+            drawBitmap( aPosAry, *pBitmap );
             delete pBitmap;
         }
     }
@@ -1192,7 +1192,7 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
         aPosAry.mnDestY = nDstY;
         aPosAry.mnDestWidth = nSrcWidth;
         aPosAry.mnDestHeight = nSrcHeight;
-        drawBitmap( &aPosAry, *pBitmap );
+        drawBitmap( aPosAry, *pBitmap );
         delete pBitmap;
     }
 #else
@@ -1239,17 +1239,17 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
+void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
 {
     if( !CheckContext() )
         return;
 
     const AquaSalBitmap& rBitmap = static_cast<const AquaSalBitmap&>(rSalBitmap);
-    CGImageRef xImage = rBitmap.CreateCroppedImage( (int)pPosAry->mnSrcX, (int)pPosAry->mnSrcY, (int)pPosAry->mnSrcWidth, (int)pPosAry->mnSrcHeight );
+    CGImageRef xImage = rBitmap.CreateCroppedImage( (int)rPosAry.mnSrcX, (int)rPosAry.mnSrcY, (int)rPosAry.mnSrcWidth, (int)rPosAry.mnSrcHeight );
     if( !xImage )
         return;
 
-    const CGRect aDstRect = {{pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight}};
+    const CGRect aDstRect = {{rPosAry.mnDestX, rPosAry.mnDestY}, {rPosAry.mnDestWidth, rPosAry.mnDestHeight}};
     CGContextDrawImage( mrContext, aDstRect, xImage );
     CGImageRelease( xImage );
     RefreshRect( aDstRect );
@@ -1257,26 +1257,26 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rS
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,SalColor )
+void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,SalColor )
 {
     DBG_ERROR("not implemented for color masking!");
-    drawBitmap( pPosAry, rSalBitmap );
+    drawBitmap( rPosAry, rSalBitmap );
 }
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap, const SalBitmap& rTransparentBitmap )
+void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, const SalBitmap& rTransparentBitmap )
 {
     if( !CheckContext() )
         return;
 
     const AquaSalBitmap& rBitmap = static_cast<const AquaSalBitmap&>(rSalBitmap);
     const AquaSalBitmap& rMask = static_cast<const AquaSalBitmap&>(rTransparentBitmap);
-    CGImageRef xMaskedImage( rBitmap.CreateWithMask( rMask, pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight ) );
+    CGImageRef xMaskedImage( rBitmap.CreateWithMask( rMask, rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight ) );
     if( !xMaskedImage )
         return;
 
-    const CGRect aDstRect = {{pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight}};
+    const CGRect aDstRect = {{rPosAry.mnDestX, rPosAry.mnDestY}, {rPosAry.mnDestWidth, rPosAry.mnDestHeight}};
     CGContextDrawImage( mrContext, aDstRect, xMaskedImage );
     CGImageRelease( xMaskedImage );
     RefreshRect( aDstRect );
@@ -1284,17 +1284,17 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rS
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::drawMask( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap, SalColor nMaskColor )
+void AquaSalGraphics::drawMask( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, SalColor nMaskColor )
 {
     if( !CheckContext() )
         return;
 
     const AquaSalBitmap& rBitmap = static_cast<const AquaSalBitmap&>(rSalBitmap);
-    CGImageRef xImage = rBitmap.CreateColorMask( pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight, nMaskColor );
+    CGImageRef xImage = rBitmap.CreateColorMask( rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight, nMaskColor );
     if( !xImage )
         return;
 
-    const CGRect aDstRect = {{pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight}};
+    const CGRect aDstRect = {{rPosAry.mnDestX, rPosAry.mnDestY}, {rPosAry.mnDestWidth, rPosAry.mnDestHeight}};
     CGContextDrawImage( mrContext, aDstRect, xImage );
     CGImageRelease( xImage );
     RefreshRect( aDstRect );
@@ -1528,6 +1528,19 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 
     CGImageRelease(xMaskedImage);
     return true;
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool AquaSalGraphics::drawTransformedBitmap(
+    const basegfx::B2DPoint& rNull,
+    const basegfx::B2DPoint& rX,
+    const basegfx::B2DPoint& rY,
+    const SalBitmap& rSourceBitmap,
+    const SalBitmap* pAlphaBitmap)
+{
+    // here direct support for transformed bitmaps can be impemented
+    (void)rNull; (void)rX; (void)rY; (void)rSourceBitmap; (void)pAlphaBitmap;
+    return false;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
