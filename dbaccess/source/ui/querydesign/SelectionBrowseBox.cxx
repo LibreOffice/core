@@ -633,7 +633,7 @@ sal_Bool OSelectionBrowseBox::fillColumnRef(const ::rtl::OUString& _sColumnName,
             {
                 String sErrorMsg(ModuleRes(RID_STR_FIELD_DOESNT_EXIST));
                 sErrorMsg.SearchAndReplaceAscii("$name$",_sColumnName);
-                OSQLWarningBox( this, sErrorMsg ).Execute();
+                OSQLErrorBox( this, sErrorMsg ).Execute();
                 bError = sal_True;
             }
             else
@@ -739,7 +739,8 @@ sal_Bool OSelectionBrowseBox::saveField(String& _sFieldName ,OTableFieldDescRef&
         // something different which we have to check
         String sErrorMessage( ModuleRes( STR_QRY_COLUMN_NOT_FOUND ) );
         sErrorMessage.SearchAndReplaceAscii("$name$",_sFieldName);
-        OSQLWarningBox( this, sErrorMessage ).Execute();
+        OSQLErrorBox( this, sErrorMessage ).Execute();
+
         return sal_True;
     }
 
@@ -895,7 +896,7 @@ sal_Bool OSelectionBrowseBox::saveField(String& _sFieldName ,OTableFieldDescRef&
             { // the field could not be inserted
                 String sErrorMessage( ModuleRes( RID_STR_FIELD_DOESNT_EXIST ) );
                 sErrorMessage.SearchAndReplaceAscii("$name$",aSelEntry->GetField());
-                OSQLWarningBox( this, sErrorMessage ).Execute();
+                OSQLErrorBox( this, sErrorMessage ).Execute();
                 bError = sal_True;
             }
         }

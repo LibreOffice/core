@@ -751,7 +751,16 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
 //==================================================================
 OSQLWarningBox::OSQLWarningBox( Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
-    :OSQLMessageBox( _pParent, String( ModuleRes( STR_STAT_WARNING ) ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
+    :OSQLMessageBox( _pParent, String( ModuleRes( STR_EXCEPTION_WARNING ) ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
+{
+}
+
+//==================================================================
+// OSQLErrorBox
+//==================================================================
+OSQLErrorBox::OSQLErrorBox( Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
+    const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
+    :OSQLMessageBox( _pParent, String( ModuleRes( STR_EXCEPTION_ERROR ) ), _rMessage, _nStyle, OSQLMessageBox::Error, _pAdditionalErrorInfo )
 {
 }
 

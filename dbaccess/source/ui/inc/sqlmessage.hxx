@@ -119,6 +119,18 @@ public:
                     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
 };
 
+//==================================================================
+// OSQLErrorBox
+//==================================================================
+class OSQLErrorBox : public OSQLMessageBox
+{
+public:
+    OSQLErrorBox( Window* _pParent,
+                  const OUString& _rMessage,
+                  WinBits _nStyle = WB_OK | WB_DEF_OK,
+                  const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
+};
+
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
