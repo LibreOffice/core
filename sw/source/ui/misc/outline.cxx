@@ -244,6 +244,14 @@ IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn )
         if( pRules )
             pFormMenu->SetItemText(pFormMenu->GetItemId(i), pRules->GetName());
     }
+
+    OString sHelpId(pFormMenu->GetHelpId(pFormMenu->GetItemId("form1")));
+    for (sal_Int32 i = 2; i <= 9; ++i)
+    {
+        OString sForm("form");
+        pFormMenu->SetHelpId(pFormMenu->GetItemId(sForm + OString::valueOf(i)), sHelpId);
+    }
+
     pFormMenu->SetSelectHdl(LINK(this, SwOutlineTabDialog, MenuSelectHdl));
     pFormMenu->Execute(pBtn, Rectangle(Point(0,0), pBtn->GetSizePixel()), POPUPMENU_EXECUTE_DOWN);
     return 0;
