@@ -456,42 +456,42 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
 
     switch ( aLink.GetType() ) {
         case GFX_LINK_TYPE_NATIVE_GIF:
-            sMediaType = US( "image/gif" );
+            sMediaType = "image/gif";
             pExtension = ".gif";
             break;
         case GFX_LINK_TYPE_NATIVE_JPG:
-            sMediaType = US( "image/jpeg" );
+            sMediaType = "image/jpeg";
             pExtension = ".jpeg";
             break;
         case GFX_LINK_TYPE_NATIVE_PNG:
-            sMediaType = US( "image/png" );
+            sMediaType = "image/png";
             pExtension = ".png";
             break;
         case GFX_LINK_TYPE_NATIVE_TIF:
-            sMediaType = US( "image/tiff" );
+            sMediaType = "image/tiff";
             pExtension = ".tiff";
             break;
         case GFX_LINK_TYPE_NATIVE_WMF:
-            sMediaType = US( "image/x-wmf" );
+            sMediaType = "image/x-wmf";
             pExtension = ".wmf";
             break;
         case GFX_LINK_TYPE_NATIVE_MET:
-            sMediaType = US( "image/x-met" );
+            sMediaType = "image/x-met";
             pExtension = ".met";
             break;
         case GFX_LINK_TYPE_NATIVE_PCT:
-            sMediaType = US( "image/x-pict" );
+            sMediaType = "image/x-pict";
             pExtension = ".pct";
             break;
         default: {
             GraphicType aType = rGraphic.GetType();
             if ( aType == GRAPHIC_BITMAP ) {
                 GraphicConverter::Export( aStream, rGraphic, CVT_PNG );
-                sMediaType = US( "image/png" );
+                sMediaType = "image/png";
                 pExtension = ".png";
             } else if ( aType == GRAPHIC_GDIMETAFILE ) {
                 GraphicConverter::Export( aStream, rGraphic, CVT_EMF );
-                sMediaType = US( "image/x-emf" );
+                sMediaType = "image/x-emf";
                 pExtension = ".emf";
             } else {
                 OSL_TRACE( "unhandled graphic type" );
@@ -515,7 +515,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
     xOutStream->closeOutput();
 
     sRelId = mpFB->addRelation( mpFS->getOutputStream(),
-                                US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" ),
+                                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
                                 OUStringBuffer()
                                 .appendAscii( GetRelationCompPrefix() )
                                 .appendAscii( "media/image" )
@@ -826,7 +826,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
     mAny >>= sURL;
     if( !sURL.isEmpty() ) {
         OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
-                              US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
+                              "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
                               sURL, true );
 
         mpFS->singleElementNS( XML_a, XML_hlinkClick,
@@ -1029,12 +1029,12 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                         if ( aPropName == "NumberingType" )
                             nNumberingType = *( (sal_Int16*)pValue );
                         else if ( aPropName == "Prefix" ) {
-                            if( *(OUString*)pValue == US( ")" ) )
+                            if( *(OUString*)pValue == ")")
                                 bPBoth = true;
                         } else if ( aPropName == "Suffix" ) {
-                            if( *(OUString*)pValue == US( "." ) )
+                            if( *(OUString*)pValue == ".")
                                 bSDot = true;
-                            else if( *(OUString*)pValue == US( ")" ) )
+                            else if( *(OUString*)pValue == ")")
                                 bPBehind = true;
                         } else if ( aPropName == "BulletChar" )
                         {

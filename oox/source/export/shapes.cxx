@@ -1340,7 +1340,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                         xOutStream->closeOutput();
 
                         OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
-                                                             US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package" ),
+                                                             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package",
                                                              OUStringBuffer()
                                                              .appendAscii( GetRelationCompPrefix() )
                                                              .appendAscii( "embeddings/spreadsheet" )
