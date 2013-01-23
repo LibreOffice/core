@@ -84,6 +84,49 @@ public:
 
 };
 
+/// Handles <style:font-face>
+class XMLFontStyleContext_Impl : public SvXMLStyleContext
+{
+    ::com::sun::star::uno::Any aFamilyName;
+    ::com::sun::star::uno::Any aStyleName;
+    ::com::sun::star::uno::Any aFamily;
+    ::com::sun::star::uno::Any aPitch;
+    ::com::sun::star::uno::Any aEnc;
+
+    SvXMLImportContextRef xStyles;
+
+    XMLFontStylesContext *GetStyles()
+    {
+        return ((XMLFontStylesContext *)&xStyles);
+    }
+
+public:
+
+    TYPEINFO();
+
+    XMLFontStyleContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const ::rtl::OUString& rLName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            XMLFontStylesContext& rStyles );
+    virtual ~XMLFontStyleContext_Impl();
+
+    void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
+                       const OUString& rValue );
+
+    void FillProperties( ::std::vector< XMLPropertyState > &rProps,
+                         sal_Int32 nFamilyNameIdx,
+                         sal_Int32 nStyleNameIdx,
+                         sal_Int32 nFamilyIdx,
+                         sal_Int32 nPitchIdx,
+                         sal_Int32 nCharsetIdx ) const;
+
+    SvXMLImportContext * CreateChildContext(
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

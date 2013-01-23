@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <xmloff/XMLFontStylesContext.hxx>
 
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
@@ -29,8 +30,6 @@
 #include "fonthdl.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/maptype.hxx>
-#include <xmloff/XMLFontStylesContext.hxx>
-
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -77,44 +76,6 @@ static const SvXMLTokenMapEntry* lcl_getFontStyleAttrTokenMap()
     };
     return aFontStyleAttrTokenMap;
 }
-
-class XMLFontStyleContext_Impl : public SvXMLStyleContext
-{
-    Any aFamilyName;
-    Any aStyleName;
-    Any aFamily;
-    Any aPitch;
-    Any aEnc;
-
-    SvXMLImportContextRef xStyles;
-
-    XMLFontStylesContext *GetStyles()
-    {
-        return ((XMLFontStylesContext *)&xStyles);
-    }
-
-public:
-
-    TYPEINFO();
-
-    XMLFontStyleContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            XMLFontStylesContext& rStyles );
-    virtual ~XMLFontStyleContext_Impl();
-
-    void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
-                       const OUString& rValue );
-
-    void FillProperties( ::std::vector< XMLPropertyState > &rProps,
-                         sal_Int32 nFamilyNameIdx,
-                         sal_Int32 nStyleNameIdx,
-                         sal_Int32 nFamilyIdx,
-                         sal_Int32 nPitchIdx,
-                         sal_Int32 nCharsetIdx ) const;
-
-};
 
 TYPEINIT1( XMLFontStyleContext_Impl, SvXMLStyleContext );
 
