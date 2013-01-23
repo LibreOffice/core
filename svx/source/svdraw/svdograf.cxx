@@ -656,7 +656,6 @@ const OUString& SdrGrafObj::GetFilterName() const
 
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    bool bAnim = pGraphic->IsAnimated();
     bool bNoPresGrf = ( pGraphic->GetType() != GRAPHIC_NONE ) && !bEmptyPresObj;
 
     rInfo.bResizeFreeAllowed = aGeo.nDrehWink % 9000 == 0 ||
@@ -664,10 +663,10 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
                                aGeo.nDrehWink % 27000 == 0;
 
     rInfo.bResizePropAllowed = true;
-    rInfo.bRotateFreeAllowed = bNoPresGrf && !bAnim;
-    rInfo.bRotate90Allowed = bNoPresGrf && !bAnim;
-    rInfo.bMirrorFreeAllowed = bNoPresGrf && !bAnim;
-    rInfo.bMirror45Allowed = bNoPresGrf && !bAnim;
+    rInfo.bRotateFreeAllowed = bNoPresGrf;
+    rInfo.bRotate90Allowed = bNoPresGrf;
+    rInfo.bMirrorFreeAllowed = bNoPresGrf;
+    rInfo.bMirror45Allowed = bNoPresGrf;
     rInfo.bMirror90Allowed = !bEmptyPresObj;
     rInfo.bTransparenceAllowed = false;
     rInfo.bGradientAllowed = false;

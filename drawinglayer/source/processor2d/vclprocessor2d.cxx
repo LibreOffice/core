@@ -25,9 +25,7 @@
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <vclhelperbitmaptransform.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <vclhelperbitmaprender.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -436,7 +434,7 @@ namespace drawinglayer
 
             if(maBColorModifierStack.count())
             {
-                aBitmapEx = impModifyBitmapEx(maBColorModifierStack, aBitmapEx);
+                aBitmapEx = aBitmapEx.ModifyBitmapEx(maBColorModifierStack);
 
                 if(aBitmapEx.IsEmpty())
                 {
@@ -453,36 +451,24 @@ namespace drawinglayer
                 }
             }
 
+            // decompose matrix to check for shear, rotate and mirroring
+            basegfx::B2DVector aScale, aTranslate;
+            double fRotate, fShearX;
+
+            aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
+            const bool bRotated(!basegfx::fTools::equalZero(fRotate));
+            const bool bSheared(!basegfx::fTools::equalZero(fShearX));
+
+            if(!aBitmapEx.IsTransparent() && (bSheared || bRotated))
             {
-                static bool bForceUseOfOwnTransformer(false);
-
-                // decompose matrix to check for shear, rotate and mirroring
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
-                aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-                // #i121387# when mirrored and rotated, avoid the GraphicManager output which has low quality
-                const bool bRotated(!basegfx::fTools::equalZero(fRotate));
-                const bool bSheared(!basegfx::fTools::equalZero(fShearX));
-                //const bool bMirrored(aScale.getX() < 0.0 || aScale.getY() < 0.0);
-                // const bool bMirroredAndRotated(bRotated && bMirrored);
-
-                if(!bForceUseOfOwnTransformer && !bRotated && !bSheared) // && !bMirrored)
-                {
-                    RenderBitmapPrimitive2D_BitmapEx(*mpOutputDevice, aBitmapEx, aLocalTransform);
-                }
-                else
-                {
-                    if(!aBitmapEx.IsTransparent() && (bSheared || bRotated))
-                    {
-                        // parts will be uncovered, extend aBitmapEx with a mask bitmap
-                        const Bitmap aContent(aBitmapEx.GetBitmap());
-                        aBitmapEx = BitmapEx(aContent, Bitmap(aContent.GetSizePixel(), 1));
-                    }
-
-                    RenderBitmapPrimitive2D_self(*mpOutputDevice, aBitmapEx, aLocalTransform);
-                }
+                // parts will be uncovered, extend aBitmapEx with a mask bitmap
+                const Bitmap aContent(aBitmapEx.GetBitmap());
+                aBitmapEx = BitmapEx(aContent, Bitmap(aContent.GetSizePixel(), 1));
             }
+
+            // draw using OutputDevice'sDrawTransformedBitmapEx
+            mpOutputDevice->DrawTransformedBitmapEx(aLocalTransform, aBitmapEx);
         }
 
         void VclProcessor2D::RenderFillGraphicPrimitive2D(const primitive2d::FillGraphicPrimitive2D& rFillBitmapCandidate)
@@ -563,7 +549,7 @@ namespace drawinglayer
                                 if(maBColorModifierStack.count())
                                 {
                                     // when color modifier, apply to bitmap
-                                    aBitmapEx = impModifyBitmapEx(maBColorModifierStack, aBitmapEx);
+                                    aBitmapEx = aBitmapEx.ModifyBitmapEx(maBColorModifierStack);
 
                                     // impModifyBitmapEx uses empty bitmap as sign to return that
                                     // the content will be completely replaced to mono color, use shortcut

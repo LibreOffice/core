@@ -57,42 +57,42 @@ bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
 
 // =======================================================================
 
-void WinSalGraphics::copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics )
+void WinSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
     HDC     hSrcDC;
     DWORD   nRop;
 
     if ( pSrcGraphics )
-        hSrcDC = static_cast<WinSalGraphics*>(pSrcGraphics)->mhDC;
+        hSrcDC = static_cast<WinSalGraphics*>(pSrcGraphics)->getHDC();
     else
-        hSrcDC = mhDC;
+        hSrcDC = getHDC();
 
     if ( mbXORMode )
         nRop = SRCINVERT;
     else
         nRop = SRCCOPY;
 
-    if ( (pPosAry->mnSrcWidth  == pPosAry->mnDestWidth) &&
-         (pPosAry->mnSrcHeight == pPosAry->mnDestHeight) )
+    if ( (rPosAry.mnSrcWidth  == rPosAry.mnDestWidth) &&
+         (rPosAry.mnSrcHeight == rPosAry.mnDestHeight) )
     {
-        BitBlt( mhDC,
-                (int)pPosAry->mnDestX, (int)pPosAry->mnDestY,
-                (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight,
+        BitBlt( getHDC(),
+                (int)rPosAry.mnDestX, (int)rPosAry.mnDestY,
+                (int)rPosAry.mnDestWidth, (int)rPosAry.mnDestHeight,
                 hSrcDC,
-                (int)pPosAry->mnSrcX, (int)pPosAry->mnSrcY,
+                (int)rPosAry.mnSrcX, (int)rPosAry.mnSrcY,
                 nRop );
     }
     else
     {
-        int nOldStretchMode = SetStretchBltMode( mhDC, STRETCH_DELETESCANS );
-        StretchBlt( mhDC,
-                    (int)pPosAry->mnDestX, (int)pPosAry->mnDestY,
-                    (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight,
+        int nOldStretchMode = SetStretchBltMode( getHDC(), STRETCH_DELETESCANS );
+        StretchBlt( getHDC(),
+                    (int)rPosAry.mnDestX, (int)rPosAry.mnDestY,
+                    (int)rPosAry.mnDestWidth, (int)rPosAry.mnDestHeight,
                     hSrcDC,
-                    (int)pPosAry->mnSrcX, (int)pPosAry->mnSrcY,
-                    (int)pPosAry->mnSrcWidth, (int)pPosAry->mnSrcHeight,
+                    (int)rPosAry.mnSrcX, (int)rPosAry.mnSrcY,
+                    (int)rPosAry.mnSrcWidth, (int)rPosAry.mnSrcHeight,
                     nRop );
-        SetStretchBltMode( mhDC, nOldStretchMode );
+        SetStretchBltMode( getHDC(), nOldStretchMode );
     }
 }
 
@@ -282,19 +282,19 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                     // we will prevent bitblt from copying useless data
                     // epsecially now shadows from overlapping windows will appear (#i36344)
                     hOldClipRgn = CreateRectRgn( 0, 0, 0, 0 );
-                    nOldClipRgnType = GetClipRgn( mhDC, hOldClipRgn );
+                    nOldClipRgnType = GetClipRgn( getHDC(), hOldClipRgn );
 
                     bRestoreClipRgn = TRUE; // indicate changed clipregion and force invalidate
-                    ExtSelectClipRgn( mhDC, hInvalidateRgn, RGN_DIFF );
+                    ExtSelectClipRgn( getHDC(), hInvalidateRgn, RGN_DIFF );
                 }
             }
         }
     }
 
-    BitBlt( mhDC,
+    BitBlt( getHDC(),
             (int)nDestX, (int)nDestY,
             (int)nSrcWidth, (int)nSrcHeight,
-            mhDC,
+            getHDC(),
             (int)nSrcX, (int)nSrcY,
             SRCCOPY );
 
@@ -302,7 +302,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
     {
         // restore old clip region
         if( nOldClipRgnType != ERROR )
-            SelectClipRgn( mhDC, hOldClipRgn);
+            SelectClipRgn( getHDC(), hOldClipRgn);
         DeleteRegion( hOldClipRgn );
 
         // invalidate regions that were not copied
@@ -310,7 +310,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
 
         // Combine Invalidate Region with existing ClipRegion
         HRGN    hTempRgn = CreateRectRgn( 0, 0, 0, 0 );
-        if ( GetClipRgn( mhDC, hTempRgn ) == 1 )
+        if ( GetClipRgn( getHDC(), hTempRgn ) == 1 )
         {
             int nRgnType = CombineRgn( hInvalidateRgn, hTempRgn, hInvalidateRgn, RGN_AND );
             if ( (nRgnType == ERROR) || (nRgnType == NULLREGION) )
@@ -338,7 +338,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
 // -----------------------------------------------------------------------
 
 void ImplDrawBitmap( HDC hDC,
-                     const SalTwoRect* pPosAry, const WinSalBitmap& rSalBitmap,
+                     const SalTwoRect& rPosAry, const WinSalBitmap& rSalBitmap,
                      sal_Bool bPrinter, int nDrawMode )
 {
     if( hDC )
@@ -366,10 +366,10 @@ void ImplDrawBitmap( HDC hDC,
             const int           nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
 
             StretchDIBits( hDC,
-                           (int)pPosAry->mnDestX, (int)pPosAry->mnDestY,
-                           (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight,
-                           (int)pPosAry->mnSrcX, (int)(pBIH->biHeight - pPosAry->mnSrcHeight - pPosAry->mnSrcY),
-                           (int)pPosAry->mnSrcWidth, (int)pPosAry->mnSrcHeight,
+                           (int)rPosAry.mnDestX, (int)rPosAry.mnDestY,
+                           (int)rPosAry.mnDestWidth, (int)rPosAry.mnDestHeight,
+                           (int)rPosAry.mnSrcX, (int)(pBIH->biHeight - rPosAry.mnSrcHeight - rPosAry.mnSrcY),
+                           (int)rPosAry.mnSrcWidth, (int)rPosAry.mnSrcHeight,
                            pBits, pBI, DIB_RGB_COLORS, nDrawMode );
 
             GlobalUnlock( hDrawDIB );
@@ -404,14 +404,14 @@ void ImplDrawBitmap( HDC hDC,
                 nOldTextColor = ::SetTextColor( hDC, nTextColor );
             }
 
-            if ( (pPosAry->mnSrcWidth  == pPosAry->mnDestWidth) &&
-                 (pPosAry->mnSrcHeight == pPosAry->mnDestHeight) )
+            if ( (rPosAry.mnSrcWidth  == rPosAry.mnDestWidth) &&
+                 (rPosAry.mnSrcHeight == rPosAry.mnDestHeight) )
             {
                 BitBlt( hDC,
-                        (int)pPosAry->mnDestX, (int)pPosAry->mnDestY,
-                        (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight,
+                        (int)rPosAry.mnDestX, (int)rPosAry.mnDestY,
+                        (int)rPosAry.mnDestWidth, (int)rPosAry.mnDestHeight,
                         hBmpDC,
-                        (int)pPosAry->mnSrcX, (int)pPosAry->mnSrcY,
+                        (int)rPosAry.mnSrcX, (int)rPosAry.mnSrcY,
                         nDrawMode );
             }
             else
@@ -419,11 +419,11 @@ void ImplDrawBitmap( HDC hDC,
                 const int nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
 
                 StretchBlt( hDC,
-                            (int)pPosAry->mnDestX, (int)pPosAry->mnDestY,
-                            (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight,
+                            (int)rPosAry.mnDestX, (int)rPosAry.mnDestY,
+                            (int)rPosAry.mnDestWidth, (int)rPosAry.mnDestHeight,
                             hBmpDC,
-                            (int)pPosAry->mnSrcX, (int)pPosAry->mnSrcY,
-                            (int)pPosAry->mnSrcWidth, (int)pPosAry->mnSrcHeight,
+                            (int)rPosAry.mnSrcX, (int)rPosAry.mnSrcY,
+                            (int)rPosAry.mnSrcWidth, (int)rPosAry.mnSrcHeight,
                             nDrawMode );
 
                 SetStretchBltMode( hDC, nOldStretchMode );
@@ -445,17 +445,36 @@ void ImplDrawBitmap( HDC hDC,
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
-                              const SalBitmap& rSalBitmap )
+void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
-    ImplDrawBitmap( mhDC, pPosAry, static_cast<const WinSalBitmap&>(rSalBitmap),
-                    mbPrinter,
-                    mbXORMode ? SRCINVERT : SRCCOPY );
+    bool bTryDirectPaint(!mbPrinter && !mbXORMode);
+
+    if(bTryDirectPaint)
+    {
+        // only paint direct when no scaling and no MapMode, else the
+        // more expensive conversions may be done for short-time Bitmap/BitmapEx
+        // used for buffering only
+        if(rPosAry.mnSrcWidth == rPosAry.mnDestWidth && rPosAry.mnSrcHeight == rPosAry.mnDestHeight)
+        {
+            bTryDirectPaint = false;
+        }
+    }
+
+    // try to draw using GdiPlus directly
+    if(bTryDirectPaint && tryDrawBitmapGdiPlus(rPosAry, rSalBitmap))
+    {
+        return;
+    }
+
+    // fall back old stuff
+    ImplDrawBitmap(getHDC(), rPosAry, static_cast<const WinSalBitmap&>(rSalBitmap),
+        mbPrinter,
+        mbXORMode ? SRCINVERT : SRCCOPY );
 }
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
+void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
                               SalColor nTransparentColor )
 {
@@ -504,28 +523,46 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
 
     // hMaskBitmap is destroyed by new SalBitmap 'pMask' ( bDIB==FALSE, bCopy == FALSE )
     if( pMask->Create( hMaskBitmap, FALSE, FALSE ) )
-        drawBitmap( pPosAry, rSalBitmap, *pMask );
+        drawBitmap( rPosAry, rSalBitmap, *pMask );
 
     delete pMask;
 }
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
+void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
                               const SalBitmap& rSTransparentBitmap )
 {
     DBG_ASSERT( !mbPrinter, "No transparency print possible!" );
+    bool bTryDirectPaint(!mbPrinter && !mbXORMode);
+
+    if(bTryDirectPaint)
+    {
+        // only paint direct when no scaling and no MapMode, else the
+        // more expensive conversions may be done for short-time Bitmap/BitmapEx
+        // used for buffering only
+        if(rPosAry.mnSrcWidth == rPosAry.mnDestWidth && rPosAry.mnSrcHeight == rPosAry.mnDestHeight)
+        {
+            bTryDirectPaint = false;
+        }
+    }
+
+    // try to draw using GdiPlus directly
+    if(bTryDirectPaint && drawAlphaBitmap(rPosAry, rSSalBitmap, rSTransparentBitmap))
+    {
+        return;
+    }
 
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
     const WinSalBitmap& rTransparentBitmap = static_cast<const WinSalBitmap&>(rSTransparentBitmap);
 
-    SalTwoRect  aPosAry = *pPosAry;
+    SalTwoRect  aPosAry = rPosAry;
     int         nDstX = (int)aPosAry.mnDestX;
     int         nDstY = (int)aPosAry.mnDestY;
     int         nDstWidth = (int)aPosAry.mnDestWidth;
     int         nDstHeight = (int)aPosAry.mnDestHeight;
-    HDC         hDC = mhDC;
+    HDC         hDC = getHDC();
     HBITMAP     hMemBitmap = 0;
     HBITMAP     hMaskBitmap = 0;
 
@@ -548,17 +585,17 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
         WinSalBitmap aTmp;
 
         if( aTmp.Create( rTransparentBitmap, this ) )
-            ImplDrawBitmap( hMaskDC, &aPosAry, aTmp, FALSE, SRCCOPY );
+            ImplDrawBitmap( hMaskDC, aPosAry, aTmp, FALSE, SRCCOPY );
     }
     else
-        ImplDrawBitmap( hMaskDC, &aPosAry, rTransparentBitmap, FALSE, SRCCOPY );
+        ImplDrawBitmap( hMaskDC, aPosAry, rTransparentBitmap, FALSE, SRCCOPY );
 
     // now MemDC contains background, MaskDC the transparency mask
 
     // #105055# Respect XOR mode
     if( mbXORMode )
     {
-        ImplDrawBitmap( hMaskDC, &aPosAry, rSalBitmap, FALSE, SRCERASE );
+        ImplDrawBitmap( hMaskDC, aPosAry, rSalBitmap, FALSE, SRCERASE );
         // now MaskDC contains the bitmap area with black background
         BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCINVERT );
         // now MemDC contains background XORed bitmap area ontop
@@ -567,7 +604,7 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     {
         BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCAND );
         // now MemDC contains background with masked-out bitmap area
-        ImplDrawBitmap( hMaskDC, &aPosAry, rSalBitmap, FALSE, SRCERASE );
+        ImplDrawBitmap( hMaskDC, aPosAry, rSalBitmap, FALSE, SRCERASE );
         // now MaskDC contains the bitmap area with black background
         BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCPAINT );
         // now MemDC contains background and bitmap merged together
@@ -584,19 +621,6 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
         DeleteObject( hMemBitmap );
         DeleteObject( hMaskBitmap );
     }
-}
-
-// -----------------------------------------------------------------------
-
-bool WinSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
-                      const SalBitmap&  rSrcBitmap,
-                      const SalBitmap&  rAlphaBmp )
-{
-    (void)rTR; (void)rSrcBitmap; (void)rAlphaBmp;
-
-    // TODO(P3): implement alpha bmp blits. Catch: Windows only
-    // handles 32bpp, premultiplied bitmaps
-    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -619,7 +643,7 @@ bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
 
     // hMemDC contains a 1x1 bitmap of the right color - stretch-blit
     // that to dest hdc
-    bool bRet = AlphaBlend( mhDC, nX, nY, nWidth, nHeight,
+    bool bRet = AlphaBlend( getHDC(), nX, nY, nWidth, nHeight,
                             hMemDC, 0,0,1,1,
                             aFunc ) == TRUE;
 
@@ -630,7 +654,7 @@ bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::drawMask( const SalTwoRect* pPosAry,
+void WinSalGraphics::drawMask( const SalTwoRect& rPosAry,
                             const SalBitmap& rSSalBitmap,
                             SalColor nMaskColor )
 {
@@ -638,11 +662,11 @@ void WinSalGraphics::drawMask( const SalTwoRect* pPosAry,
 
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
-    SalTwoRect  aPosAry = *pPosAry;
+    SalTwoRect  aPosAry = rPosAry;
     const BYTE  cRed = SALCOLOR_RED( nMaskColor );
     const BYTE  cGreen = SALCOLOR_GREEN( nMaskColor );
     const BYTE  cBlue = SALCOLOR_BLUE( nMaskColor );
-    HDC         hDC = mhDC;
+    HDC         hDC = getHDC();
     HBRUSH      hMaskBrush = CreateSolidBrush( RGB( cRed, cGreen, cBlue ) );
     HBRUSH      hOldBrush = SelectBrush( hDC, hMaskBrush );
 
@@ -653,10 +677,10 @@ void WinSalGraphics::drawMask( const SalTwoRect* pPosAry,
         WinSalBitmap aTmp;
 
         if( aTmp.Create( rSalBitmap, this ) )
-            ImplDrawBitmap( hDC, &aPosAry, aTmp, FALSE, 0x00B8074AUL );
+            ImplDrawBitmap( hDC, aPosAry, aTmp, FALSE, 0x00B8074AUL );
     }
     else
-        ImplDrawBitmap( hDC, &aPosAry, rSalBitmap, FALSE, 0x00B8074AUL );
+        ImplDrawBitmap( hDC, aPosAry, rSalBitmap, FALSE, 0x00B8074AUL );
 
     SelectBrush( hDC, hOldBrush );
     DeleteBrush( hMaskBrush );
@@ -673,7 +697,7 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     nDX = labs( nDX );
     nDY = labs( nDY );
 
-    HDC     hDC = mhDC;
+    HDC     hDC = getHDC();
     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );
     HDC     hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
     sal_Bool    bRet;
@@ -704,7 +728,7 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
 
 SalColor WinSalGraphics::getPixel( long nX, long nY )
 {
-    COLORREF aWinCol = ::GetPixel( mhDC, (int) nX, (int) nY );
+    COLORREF aWinCol = ::GetPixel( getHDC(), (int) nX, (int) nY );
 
     if ( CLR_INVALID == aWinCol )
         return MAKE_SALCOLOR( 0, 0, 0 );
@@ -721,15 +745,15 @@ void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
     if ( nFlags & SAL_INVERT_TRACKFRAME )
     {
         HPEN    hDotPen = CreatePen( PS_DOT, 0, 0 );
-        HPEN    hOldPen = SelectPen( mhDC, hDotPen );
-        HBRUSH  hOldBrush = SelectBrush( mhDC, GetStockBrush( NULL_BRUSH ) );
-        int     nOldROP = SetROP2( mhDC, R2_NOT );
+        HPEN    hOldPen = SelectPen( getHDC(), hDotPen );
+        HBRUSH  hOldBrush = SelectBrush( getHDC(), GetStockBrush( NULL_BRUSH ) );
+        int     nOldROP = SetROP2( getHDC(), R2_NOT );
 
-        WIN_Rectangle( mhDC, (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
+        WIN_Rectangle( getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
 
-        SetROP2( mhDC, nOldROP );
-        SelectPen( mhDC, hOldPen );
-        SelectBrush( mhDC, hOldBrush );
+        SetROP2( getHDC(), nOldROP );
+        SelectPen( getHDC(), hOldPen );
+        SelectBrush( getHDC(), hOldBrush );
         DeletePen( hDotPen );
     }
     else if ( nFlags & SAL_INVERT_50 )
@@ -742,11 +766,11 @@ void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
             pSalData->mh50Brush = CreatePatternBrush( pSalData->mh50Bmp );
         }
 
-        COLORREF nOldTextColor = ::SetTextColor( mhDC, 0 );
-        HBRUSH hOldBrush = SelectBrush( mhDC, pSalData->mh50Brush );
-        PatBlt( mhDC, nX, nY, nWidth, nHeight, PATINVERT );
-        ::SetTextColor( mhDC, nOldTextColor );
-        SelectBrush( mhDC, hOldBrush );
+        COLORREF nOldTextColor = ::SetTextColor( getHDC(), 0 );
+        HBRUSH hOldBrush = SelectBrush( getHDC(), pSalData->mh50Brush );
+        PatBlt( getHDC(), nX, nY, nWidth, nHeight, PATINVERT );
+        ::SetTextColor( getHDC(), nOldTextColor );
+        SelectBrush( getHDC(), hOldBrush );
     }
     else
     {
@@ -755,7 +779,7 @@ void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
          aRect.top       = (int)nY;
          aRect.right     = (int)nX+nWidth;
          aRect.bottom    = (int)nY+nHeight;
-         ::InvertRect( mhDC, &aRect );
+         ::InvertRect( getHDC(), &aRect );
     }
 }
 
@@ -768,7 +792,7 @@ void WinSalGraphics::invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInver
     HBRUSH      hBrush;
     HBRUSH      hOldBrush = 0;
     COLORREF    nOldTextColor RGB(0,0,0);
-    int         nOldROP = SetROP2( mhDC, R2_NOT );
+    int         nOldROP = SetROP2( getHDC(), R2_NOT );
 
     if ( nSalFlags & SAL_INVERT_TRACKFRAME )
         hPen = CreatePen( PS_DOT, 0, 0 );
@@ -791,10 +815,10 @@ void WinSalGraphics::invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInver
             hBrush = GetStockBrush( BLACK_BRUSH );
 
         hPen = GetStockPen( NULL_PEN );
-        nOldTextColor = ::SetTextColor( mhDC, 0 );
-        hOldBrush = SelectBrush( mhDC, hBrush );
+        nOldTextColor = ::SetTextColor( getHDC(), 0 );
+        hOldBrush = SelectBrush( getHDC(), hBrush );
     }
-    hOldPen = SelectPen( mhDC, hPen );
+    hOldPen = SelectPen( getHDC(), hPen );
 
     POINT* pWinPtAry;
     // for NT, we can handover the array directly
@@ -805,24 +829,24 @@ void WinSalGraphics::invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInver
     // for Windows 95 and its maximum number of points
     if ( nSalFlags & SAL_INVERT_TRACKFRAME )
     {
-        if ( !Polyline( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
-            Polyline( mhDC, pWinPtAry, MAX_64KSALPOINTS );
+        if ( !Polyline( getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+            Polyline( getHDC(), pWinPtAry, MAX_64KSALPOINTS );
     }
     else
     {
-        if ( !WIN_Polygon( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
-            WIN_Polygon( mhDC, pWinPtAry, MAX_64KSALPOINTS );
+        if ( !WIN_Polygon( getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+            WIN_Polygon( getHDC(), pWinPtAry, MAX_64KSALPOINTS );
     }
 
-    SetROP2( mhDC, nOldROP );
-    SelectPen( mhDC, hOldPen );
+    SetROP2( getHDC(), nOldROP );
+    SelectPen( getHDC(), hOldPen );
 
     if ( nSalFlags & SAL_INVERT_TRACKFRAME )
         DeletePen( hPen );
     else
     {
-        ::SetTextColor( mhDC, nOldTextColor );
-        SelectBrush( mhDC, hOldBrush );
+        ::SetTextColor( getHDC(), nOldTextColor );
+        SelectBrush( getHDC(), hOldBrush );
     }
 }
 

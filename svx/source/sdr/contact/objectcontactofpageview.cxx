@@ -173,6 +173,7 @@ namespace sdr
             const double fCurrentTime(getPrimitiveAnimator().GetTime());
             OutputDevice& rTargetOutDev = GetPageWindow().GetPaintWindow().GetTargetOutputDevice();
             basegfx::B2DRange aViewRange;
+            basegfx::B2DHomMatrix aViewTransformation;
 
             // create ViewRange
             if(isOutputToRecordingMetaFile())
@@ -222,12 +223,16 @@ namespace sdr
 
                 // transform to world coordinates
                 aViewRange.transform(rTargetOutDev.GetInverseViewTransformation());
+
+                // for metafile, leave ViewTransformation empty, but for pixel renderer
+                // get it from OutputDevice
+                aViewTransformation = rTargetOutDev.GetViewTransformation();
             }
 
             // update local ViewInformation2D
             const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
                 basegfx::B2DHomMatrix(),
-                rTargetOutDev.GetViewTransformation(),
+                aViewTransformation,
                 aViewRange,
                 GetXDrawPageForSdrPage(GetSdrPage()),
                 fCurrentTime,

@@ -300,7 +300,7 @@
           <desc>Indicates whether a double-click on an object activates the rotation mode.</desc>
           <label>Rotation Mode after clicking object</label>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
       <prop oor:name="Preview" oor:type="xs:double" oor:nillable="false">
         <!-- OldPath: Draw/Other -->

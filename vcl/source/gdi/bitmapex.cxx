@@ -36,6 +36,7 @@
 
 #include <image.h>
 #include <impimagetree.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 // BitmapEx::Create
 #include <salbmp.hxx>
@@ -848,6 +849,373 @@ bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
     delete pSalMask;
 
     return false;
+}
+
+// ------------------------------------------------------------------
+
+namespace
+{
+    void impSmoothPoint(BitmapColor& rValue, const basegfx::B2DPoint& rSource, sal_Int32 nIntX, sal_Int32 nIntY, BitmapReadAccess& rRead)
+    {
+        double fDeltaX(rSource.getX() - nIntX);
+        double fDeltaY(rSource.getY() - nIntY);
+        sal_Int32 nIndX(0L);
+        sal_Int32 nIndY(0L);
+
+        if(fDeltaX > 0.0 && nIntX + 1L < rRead.Width())
+        {
+            nIndX++;
+        }
+        else if(fDeltaX < 0.0 && nIntX >= 1L)
+        {
+            fDeltaX = -fDeltaX;
+            nIndX--;
+        }
+
+        if(fDeltaY > 0.0 && nIntY + 1L < rRead.Height())
+        {
+            nIndY++;
+        }
+        else if(fDeltaY < 0.0 && nIntY >= 1L)
+        {
+            fDeltaY = -fDeltaY;
+            nIndY--;
+        }
+
+        if(nIndX || nIndY)
+        {
+            const double fColorToReal(1.0 / 255.0);
+            double fR(rValue.GetRed() * fColorToReal);
+            double fG(rValue.GetGreen() * fColorToReal);
+            double fB(rValue.GetBlue() * fColorToReal);
+            double fRBottom(0.0), fGBottom(0.0), fBBottom(0.0);
+
+            if(nIndX)
+            {
+                const double fMulA(fDeltaX * fColorToReal);
+                double fMulB(1.0 - fDeltaX);
+                const BitmapColor aTopPartner(rRead.GetColor(nIntY, nIntX + nIndX));
+
+                fR = (fR * fMulB) + (aTopPartner.GetRed() * fMulA);
+                fG = (fG * fMulB) + (aTopPartner.GetGreen() * fMulA);
+                fB = (fB * fMulB) + (aTopPartner.GetBlue() * fMulA);
+
+                if(nIndY)
+                {
+                    fMulB *= fColorToReal;
+                    const BitmapColor aBottom(rRead.GetColor(nIntY + nIndY, nIntX));
+                    const BitmapColor aBottomPartner(rRead.GetColor(nIntY + nIndY, nIntX + nIndX));
+
+                    fRBottom = (aBottom.GetRed() * fMulB) + (aBottomPartner.GetRed() * fMulA);
+                    fGBottom = (aBottom.GetGreen() * fMulB) + (aBottomPartner.GetGreen() * fMulA);
+                    fBBottom = (aBottom.GetBlue() * fMulB) + (aBottomPartner.GetBlue() * fMulA);
+                }
+            }
+
+            if(nIndY)
+            {
+                if(!nIndX)
+                {
+                    const BitmapColor aBottom(rRead.GetColor(nIntY + nIndY, nIntX));
+
+                    fRBottom = aBottom.GetRed() * fColorToReal;
+                    fGBottom = aBottom.GetGreen() * fColorToReal;
+                    fBBottom = aBottom.GetBlue() * fColorToReal;
+                }
+
+                const double fMulB(1.0 - fDeltaY);
+
+                fR = (fR * fMulB) + (fRBottom * fDeltaY);
+                fG = (fG * fMulB) + (fGBottom * fDeltaY);
+                fB = (fB * fMulB) + (fBBottom * fDeltaY);
+            }
+
+            rValue.SetRed((sal_uInt8)(fR * 255.0));
+            rValue.SetGreen((sal_uInt8)(fG * 255.0));
+            rValue.SetBlue((sal_uInt8)(fB * 255.0));
+        }
+    }
+
+    Bitmap impTransformBitmap(
+        const Bitmap& rSource,
+        const Size aDestinationSize,
+        const basegfx::B2DHomMatrix& rTransform,
+        bool bSmooth)
+    {
+        Bitmap aDestination(aDestinationSize, 24);
+        BitmapWriteAccess* pWrite = aDestination.AcquireWriteAccess();
+
+        if(pWrite)
+        {
+            const Size aContentSizePixel(rSource.GetSizePixel());
+            BitmapReadAccess* pRead = (const_cast< Bitmap& >(rSource)).AcquireReadAccess();
+
+            if(pRead)
+            {
+                const Size aDestinationSizePixel(aDestination.GetSizePixel());
+                bool bWorkWithIndex(rSource.GetBitCount() <= 8);
+                BitmapColor aOutside(BitmapColor(0xff, 0xff, 0xff));
+
+                for(sal_Int32 y(0L); y < aDestinationSizePixel.getHeight(); y++)
+                {
+                    for(sal_Int32 x(0L); x < aDestinationSizePixel.getWidth(); x++)
+                    {
+                        const basegfx::B2DPoint aSourceCoor(rTransform * basegfx::B2DPoint(x, y));
+                        const sal_Int32 nIntX(basegfx::fround(aSourceCoor.getX()));
+
+                        if(nIntX >= 0L && nIntX < aContentSizePixel.getWidth())
+                        {
+                            const sal_Int32 nIntY(basegfx::fround(aSourceCoor.getY()));
+
+                            if(nIntY >= 0L && nIntY < aContentSizePixel.getHeight())
+                            {
+                                // inside pixel
+                                BitmapColor aValue;
+
+                                if(bWorkWithIndex)
+                                {
+                                    aValue = pRead->GetPaletteColor(pRead->GetPixelIndex(nIntY, nIntX));
+                                }
+                                else
+                                {
+                                    aValue = pRead->GetPixel(nIntY, nIntX);
+                                }
+
+                                if(bSmooth)
+                                {
+                                    impSmoothPoint(aValue, aSourceCoor, nIntX, nIntY, *pRead);
+                                }
+
+                                pWrite->SetPixel(y, x, aValue);
+                                continue;
+                            }
+                        }
+
+                        // here are outside pixels. Complete mask
+                        if(bWorkWithIndex)
+                        {
+                            pWrite->SetPixel(y, x, aOutside);
+                        }
+                    }
+                }
+
+                delete pRead;
+            }
+
+            delete pWrite;
+        }
+
+        rSource.AdaptBitCount(aDestination);
+
+        return aDestination;
+    }
+} // end of anonymous namespace
+BitmapEx BitmapEx::TransformBitmapEx(
+    double fWidth,
+    double fHeight,
+    const basegfx::B2DHomMatrix& rTransformation) const
+{
+    if(fWidth <= 1 || fHeight <= 1)
+        return BitmapEx();
+
+    // force destination to 24 bit, we want to smooth output
+    const Size aDestinationSize(basegfx::fround(fWidth), basegfx::fround(fHeight));
+    static bool bDoSmoothAtAll(true);
+    const Bitmap aDestination(impTransformBitmap(GetBitmap(), aDestinationSize, rTransformation, bDoSmoothAtAll));
+
+    // create mask
+    if(IsTransparent())
+    {
+        if(IsAlpha())
+        {
+            const Bitmap aAlpha(impTransformBitmap(GetAlpha().GetBitmap(), aDestinationSize, rTransformation, bDoSmoothAtAll));
+            return BitmapEx(aDestination, AlphaMask(aAlpha));
+        }
+        else
+        {
+            const Bitmap aLclMask(impTransformBitmap(GetMask(), aDestinationSize, rTransformation, false));
+            return BitmapEx(aDestination, aLclMask);
+        }
+    }
+
+    return BitmapEx(aDestination);
+}
+
+// ------------------------------------------------------------------
+
+BitmapEx BitmapEx::getTransformed(
+    const basegfx::B2DHomMatrix& rTransformation,
+    double fMaximumArea) const
+{
+    BitmapEx aRetval;
+
+    if(IsEmpty())
+        return aRetval;
+
+    const sal_uInt32 nSourceWidth(GetSizePixel().Width());
+    const sal_uInt32 nSourceHeight(GetSizePixel().Height());
+
+    if(!nSourceWidth || !nSourceHeight)
+        return aRetval;
+
+    // Get dest range
+    basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
+    aOutlineRange.transform(rTransformation);
+
+    // get target size
+    double fWidth(aOutlineRange.getWidth());
+    double fHeight(aOutlineRange.getHeight());
+
+    if(fWidth < 1.0 || fHeight < 1.0)
+        return aRetval;
+
+    // test if discrete size (pixel) maybe too big and limit it
+    const double fArea(fWidth * fHeight);
+    const bool bNeedToReduce(fArea > fMaximumArea);
+    double fReduceFactor(1.0);
+
+    if(bNeedToReduce)
+    {
+        fReduceFactor = sqrt(fMaximumArea / fArea);
+        fWidth *= fReduceFactor;
+        fHeight *= fReduceFactor;
+    }
+
+    // Build complete transform from source pixels to target pixels.
+    // Start by scaling from source pixel size to unit coordinates
+    basegfx::B2DHomMatrix aTransform(
+        basegfx::tools::createScaleB2DHomMatrix(
+            1.0 / nSourceWidth,
+            1.0 / nSourceHeight));
+
+    // multiply with given transform which leads from unit coordinates inside
+    // aOutlineRange
+    aTransform = rTransformation * aTransform;
+
+    // substract top-left of aOutlineRange
+    aTransform.translate(-aOutlineRange.getMinX(), -aOutlineRange.getMinY());
+
+    // scale to target pixels (if needed)
+    if(bNeedToReduce)
+    {
+        aTransform.scale(fReduceFactor, fReduceFactor);
+    }
+
+    // invert to get transformation from target pixel coordiates to source pixels
+    aTransform.invert();
+
+    // create bitmap using source, destination and linear back-transformation
+    aRetval = TransformBitmapEx(fWidth, fHeight, aTransform);
+
+    return aRetval;
+}
+
+// ------------------------------------------------------------------
+
+BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorModifierStack) const
+{
+    Bitmap aChangedBitmap(GetBitmap());
+    bool bDone(false);
+
+    for(sal_uInt32 a(rBColorModifierStack.count()); a && !bDone; )
+    {
+        const basegfx::BColorModifier& rModifier = rBColorModifierStack.getBColorModifier(--a);
+
+        switch(rModifier.getMode())
+        {
+            case basegfx::BCOLORMODIFYMODE_REPLACE :
+            {
+                // complete replace
+                if(IsTransparent())
+                {
+                    // clear bitmap with dest color
+                    if(aChangedBitmap.GetBitCount() <= 8)
+                    {
+                        // do NOT use erase; for e.g. 8bit Bitmaps, the nearest color to the given
+                        // erase color is determined and used -> this may be different from what is
+                        // wanted here. Better create a new bitmap with the needed color explicitely
+                        BitmapReadAccess* pReadAccess = aChangedBitmap.AcquireReadAccess();
+                        OSL_ENSURE(pReadAccess, "Got no Bitmap ReadAccess ?!?");
+
+                        if(pReadAccess)
+                        {
+                            BitmapPalette aNewPalette(pReadAccess->GetPalette());
+                            aNewPalette[0] = BitmapColor(Color(rModifier.getBColor()));
+                            aChangedBitmap = Bitmap(
+                                aChangedBitmap.GetSizePixel(),
+                                aChangedBitmap.GetBitCount(),
+                                &aNewPalette);
+                            delete pReadAccess;
+                        }
+                    }
+                    else
+                    {
+                        aChangedBitmap.Erase(Color(rModifier.getBColor()));
+                    }
+                }
+                else
+                {
+                    // erase bitmap, caller will know to paint direct
+                    aChangedBitmap.SetEmpty();
+                }
+
+                bDone = true;
+                break;
+            }
+
+            default : // BCOLORMODIFYMODE_INTERPOLATE, BCOLORMODIFYMODE_GRAY, BCOLORMODIFYMODE_BLACKANDWHITE
+            {
+                BitmapWriteAccess* pContent = aChangedBitmap.AcquireWriteAccess();
+
+                if(pContent)
+                {
+                    const double fConvertColor(1.0 / 255.0);
+
+                    for(sal_uInt32 y(0L); y < (sal_uInt32)pContent->Height(); y++)
+                    {
+                        for(sal_uInt32 x(0L); x < (sal_uInt32)pContent->Width(); x++)
+                        {
+                            const BitmapColor aBMCol(pContent->GetColor(y, x));
+                            const basegfx::BColor aBSource(
+                                (double)aBMCol.GetRed() * fConvertColor,
+                                (double)aBMCol.GetGreen() * fConvertColor,
+                                (double)aBMCol.GetBlue() * fConvertColor);
+                            const basegfx::BColor aBDest(rModifier.getModifiedColor(aBSource));
+
+                            pContent->SetPixel(y, x, BitmapColor(Color(aBDest)));
+                        }
+                    }
+
+                    delete pContent;
+                }
+
+                break;
+            }
+        }
+    }
+
+    if(aChangedBitmap.IsEmpty())
+    {
+        return BitmapEx();
+    }
+    else
+    {
+        if(IsTransparent())
+        {
+            if(IsAlpha())
+            {
+                return BitmapEx(aChangedBitmap, GetAlpha());
+            }
+            else
+            {
+                return BitmapEx(aChangedBitmap, GetMask());
+            }
+        }
+        else
+        {
+            return BitmapEx(aChangedBitmap);
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

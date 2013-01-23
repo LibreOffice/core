@@ -147,7 +147,7 @@ public:
     // a control is painted; but presentation effects need
     // the background set to None; workaround: set the background
     // before copyBits
-    virtual void            copyBits( const SalTwoRect* pPosAry,
+    virtual void            copyBits( const SalTwoRect& rPosAry,
                                       SalGraphics* pSrcGraphics );
 
 protected:

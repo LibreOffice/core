@@ -19,21 +19,22 @@
 
 
 #include <svsys.h>
-
 #include <vcl/bitmap.hxx> // for BitmapSystemData
 #include <vcl/salbtype.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-
 #include <win/wincomp.hxx>
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
 #include <win/salbmp.h>
-
 #include <string.h>
+#include <vcl/timer.hxx>
+#include <comphelper/broadcasthelper.hxx>
+#include <map>
 
-// -----------
+#include <gdiplus.h>
+
+// ------------------------------------------------------------------
 // - Inlines -
-// -----------
 
 inline void ImplSetPixel4( const HPBYTE pScanline, long nX, const BYTE cIndex )
 {
@@ -43,14 +44,139 @@ inline void ImplSetPixel4( const HPBYTE pScanline, long nX, const BYTE cIndex )
                  ( rByte &= 0x0f, rByte |= ( cIndex << 4 ) );
 }
 
-// ----------------
-// - WinSalBitmap -
-// ----------------
+// ------------------------------------------------------------------
+// Helper class to manage Gdiplus::Bitmap instances inside of
+// WinSalBitmap
 
-WinSalBitmap::WinSalBitmap() :
-        mhDIB       ( 0 ),
-        mhDDB       ( 0 ),
-        mnBitCount  ( 0 )
+struct Comparator
+{
+    bool operator()(WinSalBitmap* pA, WinSalBitmap* pB) const
+    {
+        return pA < pB;
+    }
+};
+
+typedef ::std::map< WinSalBitmap*, sal_uInt32, Comparator > EntryMap;
+static const sal_uInt32 nDefaultCycles(60);
+
+class GdiPlusBuffer : protected comphelper::OBaseMutex, public Timer
+{
+private:
+    EntryMap        maEntries;
+
+public:
+    GdiPlusBuffer()
+    :   Timer(),
+        maEntries()
+    {
+        SetTimeout(1000);
+        Stop();
+    }
+
+    ~GdiPlusBuffer()
+    {
+        Stop();
+    }
+
+    void addEntry(WinSalBitmap& rEntry)
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        EntryMap::iterator aFound = maEntries.find(&rEntry);
+
+        if(aFound == maEntries.end())
+        {
+            if(maEntries.empty())
+            {
+                Start();
+            }
+
+            maEntries[&rEntry] = nDefaultCycles;
+        }
+    }
+
+    void remEntry(WinSalBitmap& rEntry)
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        EntryMap::iterator aFound = maEntries.find(&rEntry);
+
+        if(aFound != maEntries.end())
+        {
+            maEntries.erase(aFound);
+
+            if(maEntries.empty())
+            {
+                Stop();
+            }
+        }
+    }
+
+    void touchEntry(WinSalBitmap& rEntry)
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        EntryMap::iterator aFound = maEntries.find(&rEntry);
+
+        if(aFound != maEntries.end())
+        {
+            aFound->second = nDefaultCycles;
+        }
+    }
+
+    // from parent Timer
+    virtual void Timeout()
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        EntryMap::iterator aIter(maEntries.begin());
+
+        while(aIter != maEntries.end())
+        {
+            if(aIter->second)
+            {
+                aIter->second--;
+                aIter++;
+            }
+            else
+            {
+                EntryMap::iterator aDelete(aIter);
+                WinSalBitmap* pSource = aDelete->first;
+                aIter++;
+                maEntries.erase(aDelete);
+
+                if(maEntries.empty())
+                {
+                    Stop();
+                }
+
+                // delete at WinSalBitmap after entry is removed; this
+                // way it would not hurt to call remEntry from there, too
+                if(pSource->maGdiPlusBitmap.get())
+                {
+                    pSource->maGdiPlusBitmap.reset();
+                }
+            }
+        }
+
+        if(!maEntries.empty())
+        {
+            Start();
+        }
+    }
+};
+
+// ------------------------------------------------------------------
+// Global instance of GdiPlusBuffer which manages Gdiplus::Bitmap
+// instances
+
+static GdiPlusBuffer aGdiPlusBuffer;
+
+// ------------------------------------------------------------------
+// - WinSalBitmap -
+
+WinSalBitmap::WinSalBitmap()
+:   maSize(),
+    mhDIB(0),
+    mhDDB(0),
+    maGdiPlusBitmap(),
+    mnBitCount(0)
 {
 }
 
@@ -59,6 +185,292 @@ WinSalBitmap::WinSalBitmap() :
 WinSalBitmap::~WinSalBitmap()
 {
     Destroy();
+}
+
+// ------------------------------------------------------------------
+
+void WinSalBitmap::Destroy()
+{
+    if(maGdiPlusBitmap.get())
+    {
+        aGdiPlusBuffer.remEntry(*this);
+    }
+
+    if( mhDIB )
+        GlobalFree( mhDIB );
+    else if( mhDDB )
+        DeleteObject( mhDDB );
+
+    maSize = Size();
+    mnBitCount = 0;
+}
+
+// ------------------------------------------------------------------
+
+GdiPlusBmpPtr WinSalBitmap::ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource) const
+{
+    if(maGdiPlusBitmap.get())
+    {
+        aGdiPlusBuffer.touchEntry(const_cast< WinSalBitmap& >(*this));
+    }
+    else
+    {
+        if(maSize.Width() > 0 && maSize.Height() > 0)
+        {
+            WinSalBitmap* pThat = const_cast< WinSalBitmap* >(this);
+
+            if(pAlphaSource)
+            {
+                pThat->maGdiPlusBitmap.reset(pThat->ImplCreateGdiPlusBitmap(*pAlphaSource));
+            }
+            else
+            {
+                pThat->maGdiPlusBitmap.reset(pThat->ImplCreateGdiPlusBitmap());
+            }
+
+            if(maGdiPlusBitmap.get())
+            {
+                aGdiPlusBuffer.addEntry(*pThat);
+            }
+        }
+    }
+
+    return maGdiPlusBitmap;
+}
+
+// ------------------------------------------------------------------
+
+Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
+{
+    Gdiplus::Bitmap* pRetval(0);
+    WinSalBitmap* pSalRGB = const_cast< WinSalBitmap* >(this);
+    WinSalBitmap* pExtraWinSalRGB = 0;
+
+    if(!pSalRGB->ImplGethDIB())
+    {
+        // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
+        pExtraWinSalRGB = new WinSalBitmap();
+        pExtraWinSalRGB->Create(*pSalRGB, pSalRGB->GetBitCount());
+        pSalRGB = pExtraWinSalRGB;
+    }
+
+    BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(true);
+    BitmapBuffer* pExtraRGB = 0;
+
+    if(pRGB && BMP_FORMAT_24BIT_TC_BGR != (pRGB->mnFormat & ~BMP_FORMAT_TOP_DOWN))
+    {
+        // convert source bitmap to BMP_FORMAT_24BIT_TC_BGR format if not yet in that format
+        SalTwoRect aSalTwoRect;
+
+        aSalTwoRect.mnSrcX = aSalTwoRect.mnSrcY = aSalTwoRect.mnDestX = aSalTwoRect.mnDestY = 0;
+        aSalTwoRect.mnSrcWidth = aSalTwoRect.mnDestWidth = pRGB->mnWidth;
+        aSalTwoRect.mnSrcHeight = aSalTwoRect.mnDestHeight = pRGB->mnHeight;
+
+        pExtraRGB = StretchAndConvert(
+            *pRGB,
+            aSalTwoRect,
+            BMP_FORMAT_24BIT_TC_BGR,
+            0);
+
+        pSalRGB->ReleaseBuffer(pRGB, true);
+        pRGB = pExtraRGB;
+    }
+
+    if(pRGB
+        && pRGB->mnWidth > 0
+        && pRGB->mnHeight > 0
+        && BMP_FORMAT_24BIT_TC_BGR == (pRGB->mnFormat & ~BMP_FORMAT_TOP_DOWN))
+    {
+        const sal_uInt32 nW(pRGB->mnWidth);
+        const sal_uInt32 nH(pRGB->mnHeight);
+
+        pRetval = new Gdiplus::Bitmap(nW, nH, PixelFormat24bppRGB);
+
+        if(pRetval)
+        {
+            sal_uInt8* pSrcRGB(pRGB->mpBits);
+            const sal_uInt32 nExtraRGB(pRGB->mnScanlineSize - (nW * 3));
+            const bool bTopDown(pRGB->mnFormat & BMP_FORMAT_TOP_DOWN);
+
+            for(sal_uInt32 y(0); y < nH; y++)
+            {
+                const sal_uInt32 nYInsert(bTopDown ? y : nH - y - 1);
+
+                for(sal_uInt32 x(0); x < nW; x++)
+                {
+                    const sal_uInt8 nB(*pSrcRGB++);
+                    const sal_uInt8 nG(*pSrcRGB++);
+                    const sal_uInt8 nR(*pSrcRGB++);
+
+                    pRetval->SetPixel(x, nYInsert, Gdiplus::Color(nR, nG, nB));
+                }
+
+                pSrcRGB += nExtraRGB;
+            }
+        }
+    }
+
+    if(pExtraRGB)
+    {
+        delete pExtraRGB;
+    }
+    else
+    {
+        pSalRGB->ReleaseBuffer(pRGB, true);
+    }
+
+    if(pExtraWinSalRGB)
+    {
+        delete pExtraWinSalRGB;
+    }
+
+    return pRetval;
+}
+
+// ------------------------------------------------------------------
+
+Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlphaSource)
+{
+    Gdiplus::Bitmap* pRetval(0);
+    WinSalBitmap* pSalRGB = const_cast< WinSalBitmap* >(this);
+    WinSalBitmap* pExtraWinSalRGB = 0;
+
+    if(!pSalRGB->ImplGethDIB())
+    {
+        // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
+        pExtraWinSalRGB = new WinSalBitmap();
+        pExtraWinSalRGB->Create(*pSalRGB, pSalRGB->GetBitCount());
+        pSalRGB = pExtraWinSalRGB;
+    }
+
+    BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(true);
+    BitmapBuffer* pExtraRGB = 0;
+
+    if(pRGB && BMP_FORMAT_24BIT_TC_BGR != (pRGB->mnFormat & ~BMP_FORMAT_TOP_DOWN))
+    {
+        // convert source bitmap to BMP_FORMAT_24BIT_TC_BGR format if not yet in that format
+        SalTwoRect aSalTwoRect;
+
+        aSalTwoRect.mnSrcX = aSalTwoRect.mnSrcY = aSalTwoRect.mnDestX = aSalTwoRect.mnDestY = 0;
+        aSalTwoRect.mnSrcWidth = aSalTwoRect.mnDestWidth = pRGB->mnWidth;
+        aSalTwoRect.mnSrcHeight = aSalTwoRect.mnDestHeight = pRGB->mnHeight;
+
+        pExtraRGB = StretchAndConvert(
+            *pRGB,
+            aSalTwoRect,
+            BMP_FORMAT_24BIT_TC_BGR,
+            0);
+
+        pSalRGB->ReleaseBuffer(pRGB, true);
+        pRGB = pExtraRGB;
+    }
+
+    WinSalBitmap* pSalA = const_cast< WinSalBitmap* >(&rAlphaSource);
+    WinSalBitmap* pExtraWinSalA = 0;
+
+    if(!pSalA->ImplGethDIB())
+    {
+        // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
+        pExtraWinSalA = new WinSalBitmap();
+        pExtraWinSalA->Create(*pSalA, pSalA->GetBitCount());
+        pSalA = pExtraWinSalA;
+    }
+
+    BitmapBuffer* pA = pSalA->AcquireBuffer(true);
+    BitmapBuffer* pExtraA = 0;
+
+    if(pA && BMP_FORMAT_8BIT_PAL != (pA->mnFormat & ~BMP_FORMAT_TOP_DOWN))
+    {
+        // convert alpha bitmap to BMP_FORMAT_8BIT_PAL format if not yet in that format
+        SalTwoRect aSalTwoRect;
+
+        aSalTwoRect.mnSrcX = aSalTwoRect.mnSrcY = aSalTwoRect.mnDestX = aSalTwoRect.mnDestY = 0;
+        aSalTwoRect.mnSrcWidth = aSalTwoRect.mnDestWidth = pA->mnWidth;
+        aSalTwoRect.mnSrcHeight = aSalTwoRect.mnDestHeight = pA->mnHeight;
+        const BitmapPalette& rTargetPalette = Bitmap::GetGreyPalette(256);
+
+        pExtraA = StretchAndConvert(
+            *pA,
+            aSalTwoRect,
+            BMP_FORMAT_8BIT_PAL,
+            &rTargetPalette);
+
+        pSalA->ReleaseBuffer(pA, true);
+        pA = pExtraA;
+    }
+
+    if(pRGB
+        && pA
+        && pRGB->mnWidth > 0
+        && pRGB->mnHeight > 0
+        && pRGB->mnWidth == pA->mnWidth
+        && pRGB->mnHeight == pA->mnHeight
+        && BMP_FORMAT_24BIT_TC_BGR == (pRGB->mnFormat & ~BMP_FORMAT_TOP_DOWN)
+        && BMP_FORMAT_8BIT_PAL == (pA->mnFormat & ~BMP_FORMAT_TOP_DOWN))
+    {
+        // we have alpha and bitmap in known formats, create GdiPlus Bitmap as 32bit ARGB
+        const sal_uInt32 nW(pRGB->mnWidth);
+        const sal_uInt32 nH(pRGB->mnHeight);
+
+        pRetval = new Gdiplus::Bitmap(nW, nH, PixelFormat32bppARGB);
+
+        if(pRetval)
+        {
+            sal_uInt8* pSrcRGB(pRGB->mpBits);
+            sal_uInt8* pSrcA(pA->mpBits);
+            const sal_uInt32 nExtraRGB(pRGB->mnScanlineSize - (nW * 3));
+            const sal_uInt32 nExtraA(pA->mnScanlineSize - nW);
+            const bool bTopDown(pRGB->mnFormat & BMP_FORMAT_TOP_DOWN);
+
+            for(sal_uInt32 y(0); y < nH; y++)
+            {
+                const sal_uInt32 nYInsert(bTopDown ? y : nH - y - 1);
+
+                for(sal_uInt32 x(0); x < nW; x++)
+                {
+                    const sal_uInt8 nB(*pSrcRGB++);
+                    const sal_uInt8 nG(*pSrcRGB++);
+                    const sal_uInt8 nR(*pSrcRGB++);
+                    const sal_uInt8 nA(0xff - *pSrcA++);
+
+                    pRetval->SetPixel(x, nYInsert, Gdiplus::Color(nA, nR, nG, nB));
+                }
+
+                pSrcRGB += nExtraRGB;
+                pSrcA += nExtraA;
+            }
+        }
+    }
+
+    if(pExtraA)
+    {
+        delete pExtraA;
+    }
+    else
+    {
+        pSalA->ReleaseBuffer(pA, true);
+    }
+
+    if(pExtraWinSalA)
+    {
+        delete pExtraWinSalA;
+    }
+
+    if(pExtraRGB)
+    {
+        delete pExtraRGB;
+    }
+    else
+    {
+        pSalRGB->ReleaseBuffer(pRGB, true);
+    }
+
+    if(pExtraWinSalRGB)
+    {
+        delete pExtraWinSalRGB;
+    }
+
+    return pRetval;
 }
 
 // ------------------------------------------------------------------
@@ -172,7 +584,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
     {
         PBITMAPINFO         pBI = (PBITMAPINFO) GlobalLock( rSalBmp.mhDIB );
         PBITMAPINFOHEADER   pBIH = (PBITMAPINFOHEADER) pBI;
-        HDC                 hDC  = pGraphics->mhDC;
+        HDC                 hDC  = pGraphics->getHDC();
         HBITMAP             hNewDDB;
         BITMAP              aDDBInfo;
         PBYTE               pBits = (PBYTE) pBI + *(DWORD*) pBI +
@@ -277,21 +689,6 @@ bool WinSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::s
     }
     return false;
 }
-
-// ------------------------------------------------------------------
-
-void WinSalBitmap::Destroy()
-{
-    if( mhDIB )
-        GlobalFree( mhDIB );
-    else if( mhDDB )
-        DeleteObject( mhDDB );
-
-    maSize = Size();
-    mnBitCount = 0;
-}
-
-// ------------------------------------------------------------------
 
 sal_uInt16 WinSalBitmap::ImplGetDIBColorCount( HGLOBAL hDIB )
 {

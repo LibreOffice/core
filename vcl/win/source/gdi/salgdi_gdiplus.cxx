@@ -19,12 +19,11 @@
 
 #include <stdio.h>
 #include <string.h>
-
 #include <svsys.h>
-
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
+#include <win/salbmp.h>
 
 #if defined _MSC_VER
 #ifndef min
@@ -160,7 +159,7 @@ bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
     if(mbBrush && nCount && (fTransparency >= 0.0 && fTransparency < 1.0))
     {
         Gdiplus::GpGraphics *pGraphics = NULL;
-        Gdiplus::DllExports::GdipCreateFromHDC(mhDC, &pGraphics);
+        Gdiplus::DllExports::GdipCreateFromHDC(getHDC(), &pGraphics);
         const sal_uInt8 aTrans((sal_uInt8)255 - (sal_uInt8)basegfx::fround(fTransparency * 255.0));
         Gdiplus::Color aTestColor(aTrans, SALCOLOR_RED(maFillColor), SALCOLOR_GREEN(maFillColor), SALCOLOR_BLUE(maFillColor));
         Gdiplus::GpSolidFill *pTestBrush;
@@ -209,7 +208,7 @@ bool WinSalGraphics::drawPolyLine(
     if(mbPen && nCount)
     {
         Gdiplus::GpGraphics *pGraphics = NULL;
-        Gdiplus::DllExports::GdipCreateFromHDC(mhDC, &pGraphics);
+        Gdiplus::DllExports::GdipCreateFromHDC(getHDC(), &pGraphics);
         const sal_uInt8 aTrans = (sal_uInt8)basegfx::fround( 255 * (1.0 - fTransparency) );
         Gdiplus::Color aTestColor(aTrans, SALCOLOR_RED(maLineColor), SALCOLOR_GREEN(maLineColor), SALCOLOR_BLUE(maLineColor));
         Gdiplus::GpPen *pTestPen = NULL;
@@ -304,5 +303,200 @@ bool WinSalGraphics::drawPolyLine(
 }
 
 // -----------------------------------------------------------------------
+
+void paintToGdiPlus(
+    Gdiplus::Graphics& rGraphics,
+    const SalTwoRect& rTR,
+    Gdiplus::Bitmap& rBitmap)
+{
+    // only parts of source are used
+    Gdiplus::PointF aDestPoints[3];
+    Gdiplus::ImageAttributes aAttributes;
+
+    // define target region as paralellogram
+    aDestPoints[0].X = Gdiplus::REAL(rTR.mnDestX);
+    aDestPoints[0].Y = Gdiplus::REAL(rTR.mnDestY);
+    aDestPoints[1].X = Gdiplus::REAL(rTR.mnDestX + rTR.mnDestWidth);
+    aDestPoints[1].Y = Gdiplus::REAL(rTR.mnDestY);
+    aDestPoints[2].X = Gdiplus::REAL(rTR.mnDestX);
+    aDestPoints[2].Y = Gdiplus::REAL(rTR.mnDestY + rTR.mnDestHeight);
+
+    aAttributes.SetWrapMode(Gdiplus::WrapModeTileFlipXY);
+
+    rGraphics.DrawImage(
+        &rBitmap,
+        aDestPoints,
+        3,
+        Gdiplus::REAL(rTR.mnSrcX),
+        Gdiplus::REAL(rTR.mnSrcY),
+        Gdiplus::REAL(rTR.mnSrcWidth),
+        Gdiplus::REAL(rTR.mnSrcHeight),
+        Gdiplus::UnitPixel,
+        &aAttributes,
+        0,
+        0);
+}
+
+// -----------------------------------------------------------------------
+
+void setInterpolationMode(
+    Gdiplus::Graphics& rGraphics,
+    const long& rSrcWidth,
+    const long& rDestWidth,
+    const long& rSrcHeight,
+    const long& rDestHeight)
+{
+    const bool bSameWidth(rSrcWidth == rDestWidth);
+    const bool bSameHeight(rSrcHeight == rDestHeight);
+
+    if(bSameWidth && bSameHeight)
+    {
+        rGraphics.SetInterpolationMode(Gdiplus::InterpolationModeInvalid);
+    }
+    else if(rDestWidth > rSrcWidth && rDestHeight > rSrcHeight)
+    {
+        rGraphics.SetInterpolationMode(Gdiplus::InterpolationModeDefault);
+    }
+    else if(rDestWidth < rSrcWidth && rDestHeight < rSrcHeight)
+    {
+        rGraphics.SetInterpolationMode(Gdiplus::InterpolationModeBicubic);
+    }
+    else
+    {
+        rGraphics.SetInterpolationMode(Gdiplus::InterpolationModeDefault);
+    }
+}
+
+
+bool WinSalGraphics::tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap)
+{
+    if(rTR.mnSrcWidth && rTR.mnSrcHeight && rTR.mnDestWidth && rTR.mnDestHeight)
+    {
+        const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSrcBitmap);
+        GdiPlusBmpPtr aARGB(rSalBitmap.ImplGetGdiPlusBitmap());
+
+        if(aARGB.get())
+        {
+            Gdiplus::Graphics aGraphics(getHDC());
+
+            setInterpolationMode(
+                aGraphics,
+                rTR.mnSrcWidth,
+                rTR.mnDestWidth,
+                rTR.mnSrcHeight,
+                rTR.mnDestHeight);
+
+            paintToGdiPlus(
+                aGraphics,
+                rTR,
+                *aARGB.get());
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool WinSalGraphics::drawAlphaBitmap(
+    const SalTwoRect& rTR,
+    const SalBitmap& rSrcBitmap,
+    const SalBitmap& rAlphaBmp)
+{
+    if(rTR.mnSrcWidth && rTR.mnSrcHeight && rTR.mnDestWidth && rTR.mnDestHeight)
+    {
+        const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSrcBitmap);
+        const WinSalBitmap& rSalAlpha = static_cast< const WinSalBitmap& >(rAlphaBmp);
+        GdiPlusBmpPtr aARGB(rSalBitmap.ImplGetGdiPlusBitmap(&rSalAlpha));
+
+        if(aARGB.get())
+        {
+            Gdiplus::Graphics aGraphics(getHDC());
+
+            setInterpolationMode(
+                aGraphics,
+                rTR.mnSrcWidth,
+                rTR.mnDestWidth,
+                rTR.mnSrcHeight,
+                rTR.mnDestHeight);
+
+            paintToGdiPlus(
+                aGraphics,
+                rTR,
+                *aARGB.get());
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+bool WinSalGraphics::drawTransformedBitmap(
+    const basegfx::B2DPoint& rNull,
+    const basegfx::B2DPoint& rX,
+    const basegfx::B2DPoint& rY,
+    const SalBitmap& rSourceBitmap,
+    const SalBitmap* pAlphaBitmap)
+{
+    const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSourceBitmap);
+    const WinSalBitmap* pSalAlpha = static_cast< const WinSalBitmap* >(pAlphaBitmap);
+    GdiPlusBmpPtr aARGB(rSalBitmap.ImplGetGdiPlusBitmap(pSalAlpha));
+
+    if(aARGB.get())
+    {
+        const long nSrcWidth(aARGB->GetWidth());
+        const long nSrcHeight(aARGB->GetHeight());
+
+        if(nSrcWidth && nSrcHeight)
+        {
+            const long nDestWidth(basegfx::fround(basegfx::B2DVector(rX - rNull).getLength()));
+            const long nDestHeight(basegfx::fround(basegfx::B2DVector(rY - rNull).getLength()));
+
+            if(nDestWidth && nDestHeight)
+            {
+                Gdiplus::Graphics aGraphics(getHDC());
+                Gdiplus::PointF aDestPoints[3];
+                Gdiplus::ImageAttributes aAttributes;
+
+                setInterpolationMode(
+                    aGraphics,
+                    nSrcWidth,
+                    nDestWidth,
+                    nSrcHeight,
+                    nDestHeight);
+
+                // this mode is only capable of drawing the whole bitmap to a paralellogram
+                aDestPoints[0].X = Gdiplus::REAL(rNull.getX());
+                aDestPoints[0].Y = Gdiplus::REAL(rNull.getY());
+                aDestPoints[1].X = Gdiplus::REAL(rX.getX());
+                aDestPoints[1].Y = Gdiplus::REAL(rX.getY());
+                aDestPoints[2].X = Gdiplus::REAL(rY.getX());
+                aDestPoints[2].Y = Gdiplus::REAL(rY.getY());
+
+                aAttributes.SetWrapMode(Gdiplus::WrapModeTileFlipXY);
+
+                aGraphics.DrawImage(
+                    aARGB.get(),
+                    aDestPoints,
+                    3,
+                    Gdiplus::REAL(0.0),
+                    Gdiplus::REAL(0.0),
+                    Gdiplus::REAL(nSrcWidth),
+                    Gdiplus::REAL(nSrcHeight),
+                    Gdiplus::UnitPixel,
+                    &aAttributes,
+                    0,
+                    0);
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

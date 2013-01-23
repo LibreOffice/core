@@ -267,8 +267,9 @@ struct VCL_DLLPUBLIC BitmapBuffer
 // - StretchAndConvert -
 // ---------------------
 
-VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
-                                               sal_uLong nDstBitmapFormat, BitmapPalette* pDstPal = NULL, ColorMask* pDstMask = NULL );
+VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert(
+    const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
+    sal_uLong nDstBitmapFormat, const BitmapPalette* pDstPal = NULL, const ColorMask* pDstMask = NULL );
 
 // ------------------------------------------------------------------
 

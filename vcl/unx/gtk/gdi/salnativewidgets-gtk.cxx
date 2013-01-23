@@ -521,7 +521,7 @@ bool GtkSalGraphics::setClipRegion( const Region& i_rClip )
     return bRet;
 }
 
-void GtkSalGraphics::copyBits( const SalTwoRect* pPosAry,
+void GtkSalGraphics::copyBits( const SalTwoRect& rPosAry,
                                SalGraphics* pSrcGraphics )
 {
     GtkSalFrame* pFrame = GetGtkFrame();
@@ -539,7 +539,7 @@ void GtkSalGraphics::copyBits( const SalTwoRect* pPosAry,
                                             None );
         }
     }
-    X11SalGraphics::copyBits( pPosAry, pSrcGraphics );
+    X11SalGraphics::copyBits( rPosAry, pSrcGraphics );
     if( pFrame && pFrame->getBackgroundPixmap() != None )
         XSetWindowBackgroundPixmap( pFrame->getDisplay()->GetDisplay(),
                                     aWin,

@@ -185,15 +185,15 @@ public:
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    virtual void        copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics );
-    virtual void        drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap );
-    virtual void        drawBitmap( const SalTwoRect* pPosAry,
+    virtual void        copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics );
+    virtual void        drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap );
+    virtual void        drawBitmap( const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
                                     SalColor nTransparentColor );
-    virtual void        drawBitmap( const SalTwoRect* pPosAry,
+    virtual void        drawBitmap( const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
                                     const SalBitmap& rTransparentBitmap );
-    virtual void        drawMask( const SalTwoRect* pPosAry,
+    virtual void        drawMask( const SalTwoRect& rPosAry,
                                   const SalBitmap& rSalBitmap,
                                   SalColor nMaskColor );
 
@@ -209,6 +209,12 @@ public:
     virtual bool            drawAlphaBitmap( const SalTwoRect&,
                                              const SalBitmap& rSourceBitmap,
                                              const SalBitmap& rAlphaBitmap );
+    virtual bool drawTransformedBitmap(
+        const basegfx::B2DPoint& rNull,
+        const basegfx::B2DPoint& rX,
+        const basegfx::B2DPoint& rY,
+        const SalBitmap& rSourceBitmap,
+        const SalBitmap* pAlphaBitmap);
 
     virtual bool            drawAlphaRect( long nX, long nY, long nWidth,
                                            long nHeight, sal_uInt8 nTransparency );

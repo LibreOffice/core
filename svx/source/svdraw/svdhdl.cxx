@@ -525,7 +525,7 @@ void SdrHdl::CreateB2dIAObject()
             // for SJ and the CustomShapeHandles:
             case HDL_CUSTOMSHAPE1:
             {
-                eKindOfMarker = (b1PixMore) ? Customshape_7x7 : Customshape_9x9;
+                eKindOfMarker = (b1PixMore) ? Customshape_9x9 : Customshape_7x7;
                 eColIndex = Yellow;
                 break;
             }

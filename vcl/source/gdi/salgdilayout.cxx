@@ -80,6 +80,19 @@ SalGraphics::~SalGraphics()
 
 // ----------------------------------------------------------------------------
 
+bool SalGraphics::drawTransformedBitmap(
+    const basegfx::B2DPoint& /* rNull */,
+    const basegfx::B2DPoint& /* rX */,
+    const basegfx::B2DPoint& /* rY */,
+    const SalBitmap& /* rSourceBitmap */,
+    const SalBitmap* /* pAlphaBitmap */)
+{
+    // here direct support for transformed bitmaps can be impemented
+    return false;
+}
+
+// ----------------------------------------------------------------------------
+
 void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) const
 {
     long w;
@@ -554,59 +567,59 @@ void    SalGraphics::CopyArea( long nDestX, long nDestY,
     }
     copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
 }
-void    SalGraphics::CopyBits( const SalTwoRect* pPosAry,
+void    SalGraphics::CopyBits( const SalTwoRect& rPosAry,
                                SalGraphics* pSrcGraphics, const OutputDevice *pOutDev, const OutputDevice *pSrcOutDev )
 {
     if( ( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) ) ||
         (pSrcGraphics && ( (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL)  || (pSrcOutDev && pSrcOutDev->IsRTLEnabled()) ) ) )
     {
-        SalTwoRect pPosAry2 = *pPosAry;
+        SalTwoRect aPosAry2 = rPosAry;
         if( (pSrcGraphics && (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL)) || (pSrcOutDev && pSrcOutDev->IsRTLEnabled()) )
-            mirror( pPosAry2.mnSrcX, pPosAry2.mnSrcWidth, pSrcOutDev );
+            mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, pSrcOutDev );
         if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-            mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth, pOutDev );
-        copyBits( &pPosAry2, pSrcGraphics );
+            mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, pOutDev );
+        copyBits( aPosAry2, pSrcGraphics );
     }
     else
-        copyBits( pPosAry, pSrcGraphics );
+        copyBits( rPosAry, pSrcGraphics );
 }
-void    SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
+void    SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        SalTwoRect pPosAry2 = *pPosAry;
-        mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth, pOutDev );
-        drawBitmap( &pPosAry2, rSalBitmap );
+        SalTwoRect aPosAry2 = rPosAry;
+        mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, pOutDev );
+        drawBitmap( aPosAry2, rSalBitmap );
     }
     else
-        drawBitmap( pPosAry, rSalBitmap );
+        drawBitmap( rPosAry, rSalBitmap );
 }
-void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
+void SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSalBitmap,
                               const SalBitmap& rTransparentBitmap, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        SalTwoRect pPosAry2 = *pPosAry;
-        mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth, pOutDev );
-        drawBitmap( &pPosAry2, rSalBitmap, rTransparentBitmap );
+        SalTwoRect aPosAry2 = rPosAry;
+        mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, pOutDev );
+        drawBitmap( aPosAry2, rSalBitmap, rTransparentBitmap );
     }
     else
-        drawBitmap( pPosAry, rSalBitmap, rTransparentBitmap );
+        drawBitmap( rPosAry, rSalBitmap, rTransparentBitmap );
 }
-void    SalGraphics::DrawMask( const SalTwoRect* pPosAry,
+void    SalGraphics::DrawMask( const SalTwoRect& rPosAry,
                                   const SalBitmap& rSalBitmap,
                                   SalColor nMaskColor, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        SalTwoRect pPosAry2 = *pPosAry;
-        mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth, pOutDev );
-        drawMask( &pPosAry2, rSalBitmap, nMaskColor );
+        SalTwoRect aPosAry2 = rPosAry;
+        mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, pOutDev );
+        drawMask( aPosAry2, rSalBitmap, nMaskColor );
     }
     else
-        drawMask( pPosAry, rSalBitmap, nMaskColor );
+        drawMask( rPosAry, rSalBitmap, nMaskColor );
 }
 SalBitmap*  SalGraphics::GetBitmap( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev )
 {
@@ -744,12 +757,38 @@ bool SalGraphics::DrawAlphaBitmap( const SalTwoRect& rPosAry,
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        SalTwoRect pPosAry2 = rPosAry;
-        mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth, pOutDev );
-        return drawAlphaBitmap( pPosAry2, rSourceBitmap, rAlphaBitmap );
+        SalTwoRect aPosAry2 = rPosAry;
+        mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, pOutDev );
+        return drawAlphaBitmap( aPosAry2, rSourceBitmap, rAlphaBitmap );
     }
     else
         return drawAlphaBitmap( rPosAry, rSourceBitmap, rAlphaBitmap );
+}
+
+bool SalGraphics::DrawTransformedBitmap(
+    const basegfx::B2DPoint& rNull,
+    const basegfx::B2DPoint& rX,
+    const basegfx::B2DPoint& rY,
+    const SalBitmap& rSourceBitmap,
+    const SalBitmap* pAlphaBitmap,
+    const OutputDevice* pOutDev)
+{
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
+    {
+        basegfx::B2DPoint aNull(rNull);
+        basegfx::B2DPoint aX(rX);
+        basegfx::B2DPoint aY(rY);
+
+        mirror(aNull, pOutDev);
+        mirror(aX, pOutDev);
+        mirror(aY, pOutDev);
+
+        return drawTransformedBitmap(aNull, aX, aY, rSourceBitmap, pAlphaBitmap);
+    }
+    else
+    {
+        return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap);
+    }
 }
 
 bool SalGraphics::DrawAlphaRect( long nX, long nY, long nWidth, long nHeight,

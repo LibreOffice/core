@@ -24,6 +24,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
 #include <tools/color.hxx>
+#include <basegfx/color/bcolormodifier.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -380,6 +381,44 @@ public:
                 0 is not transparent, 255 is fully transparent
      */
     sal_uInt8 GetTransparency(sal_Int32 nX, sal_Int32 nY) const;
+
+    /** Create transformed Bitmap
+
+        @param fWidth
+        The target width in pixels
+
+        @param fHeight
+        The target height in pixels
+
+        @param rTransformation
+        The back transformation for each pixel in (0 .. fWidth),(0 .. fHeight) to
+        local pixel coordiantes
+    */
+    BitmapEx TransformBitmapEx(
+        double fWidth,
+        double fHeight,
+        const basegfx::B2DHomMatrix& rTransformation) const;
+
+    /** Create transformed Bitmap
+
+        @param rTransformation
+        The transformation from unit coordinates to target
+
+        @param fMaximumArea
+        A limitation for the maximum size of pixels to use for the result
+
+        @return The transformed bitmap
+    */
+    BitmapEx getTransformed(
+        const basegfx::B2DHomMatrix& rTransformation,
+        double fMaximumArea = 500000.0) const;
+
+    /** Create ColorStack-modified version of this BitmapEx
+
+        @param rBColorModifierStack
+        A ColrModifierStack which defines how each pixel has to be modified
+    */
+    BitmapEx ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorModifierStack) const;
 
 public:
 

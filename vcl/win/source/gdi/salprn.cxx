@@ -1074,7 +1074,7 @@ static WinSalGraphics* ImplCreateSalPrnGraphics( HDC hDC )
 {
     WinSalGraphics* pGraphics = new WinSalGraphics;
     pGraphics->SetLayout( 0 );
-    pGraphics->mhDC     = hDC;
+    pGraphics->setHDC(hDC);
     pGraphics->mhWnd    = 0;
     pGraphics->mbPrinter = TRUE;
     pGraphics->mbVirDev = FALSE;
@@ -1095,7 +1095,7 @@ static sal_Bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* p
     if ( pPrinter->mpGraphics )
     {
         ImplSalDeInitGraphics( pPrinter->mpGraphics );
-        DeleteDC( pPrinter->mpGraphics->mhDC );
+        DeleteDC( pPrinter->mpGraphics->getHDC() );
         delete pPrinter->mpGraphics;
     }
 
@@ -1163,7 +1163,7 @@ WinSalInfoPrinter::~WinSalInfoPrinter()
     if ( mpGraphics )
     {
         ImplSalDeInitGraphics( mpGraphics );
-        DeleteDC( mpGraphics->mhDC );
+        DeleteDC( mpGraphics->getHDC() );
         delete mpGraphics;
     }
 }

@@ -85,8 +85,9 @@ class VCL_PLUGIN_PUBLIC SalGraphics
     int                     m_nLayout; // 0: mirroring off, 1: mirror x-axis
 
 protected:
+    /// bitfield
     // flags which hold the SetAntialiasing() value from OutputDevice
-    bool                    m_bAntiAliasB2DDraw;
+    bool                    m_bAntiAliasB2DDraw : 1;
 
 public:
     void                    setAntiAliasB2DDraw(bool bNew) { m_bAntiAliasB2DDraw = bNew; }
@@ -122,20 +123,20 @@ protected:
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    virtual void            copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics ) = 0;
-    virtual void            drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap ) = 0;
-    virtual void            drawBitmap( const SalTwoRect* pPosAry,
-                                        const SalBitmap& rSalBitmap,
-                                        SalColor nTransparentColor ) = 0;
-    virtual void            drawBitmap( const SalTwoRect* pPosAry,
-                                        const SalBitmap& rSalBitmap,
-                                        const SalBitmap& rMaskBitmap ) = 0;
-    virtual void            drawMask( const SalTwoRect* pPosAry,
-                                      const SalBitmap& rSalBitmap,
-                                      SalColor nMaskColor ) = 0;
+    virtual void        copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) = 0;
+    virtual void        drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) = 0;
+    virtual void        drawBitmap( const SalTwoRect& rPosAry,
+                                    const SalBitmap& rSalBitmap,
+                                    SalColor nTransparentColor ) = 0;
+    virtual void        drawBitmap( const SalTwoRect& rPosAry,
+                                    const SalBitmap& rSalBitmap,
+                                    const SalBitmap& rMaskBitmap ) = 0;
+    virtual void        drawMask( const SalTwoRect& rPosAry,
+                                  const SalBitmap& rSalBitmap,
+                                  SalColor nMaskColor ) = 0;
 
-    virtual SalBitmap*      getBitmap( long nX, long nY, long nWidth, long nHeight ) = 0;
-    virtual SalColor        getPixel( long nX, long nY ) = 0;
+    virtual SalBitmap*  getBitmap( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual SalColor    getPixel( long nX, long nY ) = 0;
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) = 0;
@@ -165,9 +166,18 @@ protected:
         otherwise. In this case, clients should try to emulate alpha
         compositing themselves
      */
-    virtual bool            drawAlphaBitmap( const SalTwoRect&,
-                                             const SalBitmap& rSourceBitmap,
-                                             const SalBitmap& rAlphaBitmap ) = 0;
+    virtual bool        drawAlphaBitmap( const SalTwoRect&,
+                                         const SalBitmap& rSourceBitmap,
+                                         const SalBitmap& rAlphaBitmap ) = 0;
+
+    /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system */
+    virtual bool drawTransformedBitmap(
+        const basegfx::B2DPoint& rNull,
+        const basegfx::B2DPoint& rX,
+        const basegfx::B2DPoint& rY,
+        const SalBitmap& rSourceBitmap,
+        const SalBitmap* pAlphaBitmap) = 0;
+
     /** Render solid rectangle with given transparency
 
         @param nTransparency
@@ -408,19 +418,19 @@ public:
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    void                    CopyBits( const SalTwoRect* pPosAry,
+    void                    CopyBits( const SalTwoRect& rPosAry,
                                       SalGraphics* pSrcGraphics,
                                       const OutputDevice *pOutDev,
                                       const OutputDevice *pSrcOutDev );
-    void                    DrawBitmap( const SalTwoRect* pPosAry,
+    void                    DrawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap,
                                         const OutputDevice *pOutDev );
-    void                    DrawBitmap( const SalTwoRect* pPosAry,
+    void                    DrawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap,
                                         const SalBitmap& rTransparentBitmap,
                                         const OutputDevice *pOutDev );
 
-    void                    DrawMask( const SalTwoRect* pPosAry,
+    void                    DrawMask( const SalTwoRect& rPosAry,
                                       const SalBitmap& rSalBitmap,
                                       SalColor nMaskColor,
                                       const OutputDevice *pOutDev );
@@ -486,6 +496,14 @@ public:
                                              const SalBitmap& rSourceBitmap,
                                              const SalBitmap& rAlphaBitmap,
                                              const OutputDevice *pOutDev );
+
+    bool DrawTransformedBitmap(
+        const basegfx::B2DPoint& rNull,
+        const basegfx::B2DPoint& rX,
+        const basegfx::B2DPoint& rY,
+        const SalBitmap& rSourceBitmap,
+        const SalBitmap* pAlphaBitmap,
+        const OutputDevice* pOutDev );
 
     bool                    DrawAlphaRect( long nX, long nY, long nWidth, long nHeight,
                                            sal_uInt8 nTransparency, const OutputDevice *pOutDev );

@@ -756,7 +756,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         mpAlphaVDev->SetMapMode( rNewMapMode );
 
     // Ist Default-MapMode, dann bereche nichts
-    sal_Bool bOldMap = mbMap;
+    bool bOldMap = mbMap;
     mbMap = !rNewMapMode.IsDefault();
     if ( mbMap )
     {

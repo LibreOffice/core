@@ -140,8 +140,14 @@ public:
 
 class WinSalGraphics : public SalGraphics
 {
+private:
+    HDC                     mhLocalDC;              // HDC
+
 public:
-    HDC                     mhDC;               // HDC
+    HDC getHDC() const { return mhLocalDC; }
+    void setHDC(HDC aNew) { mhLocalDC = aNew; }
+
+public:
     HWND                    mhWnd;              // Window-Handle, when Window-Graphics
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
     const ImplWinFontData*  mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
@@ -168,15 +174,17 @@ public:
     KERNINGPAIR*            mpFontKernPairs;    // Kerning Pairs of the current Font
     sal_uIntPtr                 mnFontKernPairCount;// Number of Kerning Pairs of the current Font
     int                     mnPenWidth;         // Linienbreite
-    sal_Bool                    mbStockPen;         // is Pen a stockpen
-    sal_Bool                    mbStockBrush;       // is Brush a stcokbrush
-    sal_Bool                    mbPen;              // is Pen (FALSE == NULL_PEN)
-    sal_Bool                    mbBrush;            // is Brush (FALSE == NULL_BRUSH)
-    sal_Bool                    mbPrinter;          // is Printer
-    sal_Bool                    mbVirDev;           // is VirDev
-    sal_Bool                    mbWindow;           // is Window
-    sal_Bool                    mbScreen;           // is Screen compatible
-    bool                    mbXORMode;          // _every_ output with RasterOp XOR
+
+    /// bitfield
+    bool                    mbStockPen : 1;         // is Pen a stockpen
+    bool                    mbStockBrush : 1;       // is Brush a stcokbrush
+    bool                    mbPen : 1;              // is Pen (FALSE == NULL_PEN)
+    bool                    mbBrush : 1;            // is Brush (FALSE == NULL_BRUSH)
+    bool                    mbPrinter : 1;          // is Printer
+    bool                    mbVirDev : 1;           // is VirDev
+    bool                    mbWindow : 1;           // is Window
+    bool                    mbScreen : 1;           // is Screen compatible
+    bool                    mbXORMode : 1;          // _every_ output with RasterOp XOR
 
     // remember RGB values for SetLineColor/SetFillColor
     SalColor                maLineColor;
@@ -215,15 +223,15 @@ protected:
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    virtual void        copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics );
-    virtual void        drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap );
-    virtual void        drawBitmap( const SalTwoRect* pPosAry,
+    virtual void        copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics );
+    virtual void        drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap );
+    virtual void        drawBitmap( const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
                                     SalColor nTransparentColor );
-    virtual void        drawBitmap( const SalTwoRect* pPosAry,
+    virtual void        drawBitmap( const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
                                     const SalBitmap& rTransparentBitmap );
-    virtual void        drawMask( const SalTwoRect* pPosAry,
+    virtual void        drawMask( const SalTwoRect& rPosAry,
                                   const SalBitmap& rSalBitmap,
                                   SalColor nMaskColor );
 
@@ -249,7 +257,17 @@ protected:
     virtual bool        drawAlphaBitmap( const SalTwoRect&,
                                          const SalBitmap& rSourceBitmap,
                                          const SalBitmap& rAlphaBitmap );
+    virtual bool drawTransformedBitmap(
+        const basegfx::B2DPoint& rNull,
+        const basegfx::B2DPoint& rX,
+        const basegfx::B2DPoint& rY,
+        const SalBitmap& rSourceBitmap,
+        const SalBitmap* pAlphaBitmap);
     virtual bool        drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency );
+
+private:
+    // local helpers
+    bool tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap);
 
 public:
     // public SalGraphics methods, the interface to the independent vcl part

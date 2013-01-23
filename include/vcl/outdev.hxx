@@ -72,6 +72,7 @@ class SalLayout;
 class ImplLayoutArgs;
 class ImplFontAttributes;
 class VirtualDevice;
+struct SalTwoRect;
 
 namespace com {
 namespace sun {
@@ -336,27 +337,29 @@ private:
     Point               maRefPoint;
     sal_uInt16              mnAntialiasing;
     LanguageType        meTextLanguage;
-    mutable sal_Bool       mbMap:1,
-                        mbMapIsDefault:1,
-                        mbClipRegion:1,
-                        mbBackground:1,
-                        mbOutput:1,
-                        mbDevOutput:1,
-                        mbOutputClipped:1,
-                        mbLineColor:1,
-                        mbFillColor:1,
-                        mbInitLineColor:1,
-                        mbInitFillColor:1,
-                        mbInitFont:1,
-                        mbInitTextColor:1,
-                        mbInitClipRegion:1,
-                        mbClipRegionSet:1,
-                        mbKerning:1,
-                        mbNewFont:1,
-                        mbTextLines:1,
-                        mbTextSpecial:1,
-                        mbRefPoint:1,
-                        mbEnableRTL:1;
+
+    /// bitfield
+    mutable bool        mbMap : 1;
+    mutable bool        mbMapIsDefault : 1;
+    mutable bool        mbClipRegion : 1;
+    mutable bool        mbBackground : 1;
+    mutable bool        mbOutput : 1;
+    mutable bool        mbDevOutput : 1;
+    mutable bool        mbOutputClipped : 1;
+    mutable bool        mbLineColor : 1;
+    mutable bool        mbFillColor : 1;
+    mutable bool        mbInitLineColor : 1;
+    mutable bool        mbInitFillColor : 1;
+    mutable bool        mbInitFont : 1;
+    mutable bool        mbInitTextColor : 1;
+    mutable bool        mbInitClipRegion : 1;
+    mutable bool        mbClipRegionSet : 1;
+    mutable bool        mbKerning : 1;
+    mutable bool        mbNewFont : 1;
+    mutable bool        mbTextLines : 1;
+    mutable bool        mbTextSpecial : 1;
+    mutable bool        mbRefPoint : 1;
+    mutable bool        mbEnableRTL : 1;
 
 public:
     SAL_DLLPRIVATE sal_Int32    ImplGetDPIX() const { return mnDPIX; }
@@ -455,7 +458,7 @@ public:
     SAL_DLLPRIVATE void         ImplDrawBitmapWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
     SAL_DLLPRIVATE void         ImplDrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
 
-    SAL_DLLPRIVATE void         ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pPosAry );
+    SAL_DLLPRIVATE void         ImplDrawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
     SAL_DLLPRIVATE void         ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                         const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                         const Bitmap& rBitmap, const sal_uLong nAction );
@@ -745,6 +748,20 @@ public:
     void                DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                       const BitmapEx& rBitmapEx );
+
+    /** Draw BitampEx transformed
+
+        @param rTransformation
+        The transformation describing the target positioning of the given bitmap. Transforming
+        the unit object coordinates (0, 0, 1, 1) with this matrix is the transformation to
+        discrete coordinates
+
+        @param rBitmapEx
+        The BitmapEx to be painted
+    */
+    void DrawTransformedBitmapEx(
+        const basegfx::B2DHomMatrix& rTransformation,
+        const BitmapEx& rBitmapEx);
 
     void                DrawMask( const Point& rDestPt,
                                   const Bitmap& rBitmap, const Color& rMaskColor );

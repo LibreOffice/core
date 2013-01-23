@@ -155,6 +155,7 @@ namespace vclcanvas
     {
         mp2ndOutDev = rOutDev;
         mp2ndOutDev->getOutDev().EnableMapMode( sal_False );
+        mp2ndOutDev->getOutDev().SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
     }
 
     void CanvasHelper::clear()
@@ -166,6 +167,7 @@ namespace vclcanvas
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
             rOutDev.EnableMapMode( sal_False );
+            rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
             rOutDev.SetLineColor( COL_WHITE );
             rOutDev.SetFillColor( COL_WHITE );
             rOutDev.SetClipRegion();
@@ -178,6 +180,7 @@ namespace vclcanvas
 
                 rOutDev2.SetDrawMode( DRAWMODE_DEFAULT );
                 rOutDev2.EnableMapMode( sal_False );
+                rOutDev2.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
                 rOutDev2.SetLineColor( COL_WHITE );
                 rOutDev2.SetFillColor( COL_WHITE );
                 rOutDev2.SetClipRegion();
@@ -934,6 +937,7 @@ namespace vclcanvas
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
         rOutDev.EnableMapMode( sal_False );
+        rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
 
         // TODO(F2): Support alpha vdev canvas here
         const Point aEmptyPoint(0,0);
@@ -963,6 +967,7 @@ namespace vclcanvas
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
         rOutDev.EnableMapMode( sal_False );
+        rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
 
         Bitmap aBitmap( rOutDev.GetBitmap(aRect.TopLeft(),
                                           aRect.GetSize()) );
@@ -1015,6 +1020,7 @@ namespace vclcanvas
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
         rOutDev.EnableMapMode( sal_False );
+        rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
 
         const Rectangle aRect( ::vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
         const sal_uInt16    nBitCount( ::std::min( (sal_uInt16)24U,
@@ -1139,6 +1145,7 @@ namespace vclcanvas
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
         rOutDev.EnableMapMode( sal_False );
+        rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
 
         const Size aBmpSize( rOutDev.GetOutputSizePixel() );
 
@@ -1176,6 +1183,7 @@ namespace vclcanvas
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
         rOutDev.EnableMapMode( sal_False );
+        rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
 
         const Size aBmpSize( rOutDev.GetOutputSizePixel() );
 
@@ -1219,6 +1227,7 @@ namespace vclcanvas
         OutputDevice* p2ndOutDev = NULL;
 
         rOutDev.EnableMapMode( sal_False );
+        rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
 
         if( mp2ndOutDev )
             p2ndOutDev = &mp2ndOutDev->getOutDev();

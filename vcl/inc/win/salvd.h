@@ -30,8 +30,14 @@ class WinSalGraphics;
 
 class WinSalVirtualDevice : public SalVirtualDevice
 {
+private:
+    HDC                     mhLocalDC;              // HDC or 0 for Cache Device
+
 public:
-    HDC                     mhDC;                   // HDC or 0 for Cache Device
+    HDC getHDC() { return mhLocalDC; }
+    void setHDC(HDC aNew) { mhLocalDC = aNew; }
+
+public:
     HBITMAP                 mhBmp;                  // Memory Bitmap
     HBITMAP                 mhDefBmp;               // Default Bitmap
     WinSalGraphics*         mpGraphics;             // current VirDev graphics

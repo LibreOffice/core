@@ -1422,7 +1422,7 @@ void WinSalGraphics::SetTextColor( SalColor nSalColor )
         aCol = PALRGB_TO_RGB( aCol );
     }
 
-    ::SetTextColor( mhDC, aCol );
+    ::SetTextColor( getHDC(), aCol );
 }
 
 // -----------------------------------------------------------------------
@@ -1520,7 +1520,7 @@ HFONT WinSalGraphics::ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontS
         hdcScreen = GetDC(0);
 
     LOGFONTW aLogFont;
-    ImplGetLogFontFromFontSelect( mhDC, i_pFont, aLogFont, true );
+    ImplGetLogFontFromFontSelect( getHDC(), i_pFont, aLogFont, true );
 
     // on the display we prefer Courier New when Courier is a
     // bitmap only font and we need to stretch or rotate it
@@ -1562,17 +1562,17 @@ HFONT WinSalGraphics::ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontS
         // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
         SelectFont( hdcScreen, SelectFont( hdcScreen , hNewFont ) );
     }
-    o_rOldFont = ::SelectFont( mhDC, hNewFont );
+    o_rOldFont = ::SelectFont( getHDC(), hNewFont );
 
     TEXTMETRICW aTextMetricW;
-    if( !::GetTextMetricsW( mhDC, &aTextMetricW ) )
+    if( !::GetTextMetricsW( getHDC(), &aTextMetricW ) )
     {
         // the selected font doesn't work => try a replacement
         // TODO: use its font fallback instead
         lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
         aLogFont.lfPitchAndFamily = FIXED_PITCH;
         HFONT hNewFont2 = CreateFontIndirectW( &aLogFont );
-        SelectFont( mhDC, hNewFont2 );
+        SelectFont( getHDC(), hNewFont2 );
         DeleteFont( hNewFont );
         hNewFont = hNewFont2;
     }
@@ -1590,7 +1590,7 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
     {
         // deselect still active font
         if( mhDefFont )
-            ::SelectFont( mhDC, mhDefFont );
+            ::SelectFont( getHDC(), mhDefFont );
         mfCurrentFontScale = mfFontScale[nFallbackLevel];
         // release no longer referenced font handles
         for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
@@ -1633,7 +1633,7 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
     mhFonts[ nFallbackLevel ] = hNewFont;
     // now the font is live => update font face
     if( mpWinFontData[ nFallbackLevel ] )
-        mpWinFontData[ nFallbackLevel ]->UpdateFromHDC( mhDC );
+        mpWinFontData[ nFallbackLevel ]->UpdateFromHDC( getHDC() );
 
     if( !nFallbackLevel )
     {
@@ -1662,17 +1662,17 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
 void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
     // temporarily change the HDC to the font in the fallback level
-    HFONT hOldFont = SelectFont( mhDC, mhFonts[nFallbackLevel] );
+    HFONT hOldFont = SelectFont( getHDC(), mhFonts[nFallbackLevel] );
 
     wchar_t aFaceName[LF_FACESIZE+60];
-    if( ::GetTextFaceW( mhDC, sizeof(aFaceName)/sizeof(wchar_t), aFaceName ) )
+    if( ::GetTextFaceW( getHDC(), sizeof(aFaceName)/sizeof(wchar_t), aFaceName ) )
         pMetric->SetFamilyName( String().Assign( reinterpret_cast<const sal_Unicode*>(aFaceName)));
 
     // get the font metric
     TEXTMETRICA aWinMetric;
-    const bool bOK = GetTextMetricsA( mhDC, &aWinMetric );
+    const bool bOK = GetTextMetricsA( getHDC(), &aWinMetric );
     // restore the HDC to the font in the base level
-    SelectFont( mhDC, hOldFont );
+    SelectFont( getHDC(), hOldFont );
     if( !bOK )
         return;
 
@@ -1691,7 +1691,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     {
         // check if there are kern pairs
         // TODO: does this work with GPOS kerning?
-        DWORD nKernPairs = ::GetKerningPairsA( mhDC, 0, NULL );
+        DWORD nKernPairs = ::GetKerningPairsA( getHDC(), 0, NULL );
         pMetric->mbKernableFont = (nKernPairs > 0);
     }
     else
@@ -1752,13 +1752,13 @@ sal_uLong WinSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKer
         mnFontKernPairCount = 0;
 
         KERNINGPAIR* pPairs = NULL;
-        int nCount = ::GetKerningPairsW( mhDC, 0, NULL );
+        int nCount = ::GetKerningPairsW( getHDC(), 0, NULL );
         if( nCount )
         {
             pPairs = new KERNINGPAIR[ nCount+1 ];
             mpFontKernPairs = pPairs;
             mnFontKernPairCount = nCount;
-            ::GetKerningPairsW( mhDC, nCount, pPairs );
+            ::GetKerningPairsW( getHDC(), nCount, pPairs );
         }
 
         mbFontKernInit = FALSE;
@@ -2217,7 +2217,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     }
 
     ImplEnumInfo aInfo;
-    aInfo.mhDC          = mhDC;
+    aInfo.mhDC          = getHDC();
     aInfo.mpList        = pFontList;
     aInfo.mpName        = NULL;
     aInfo.mpLogFontA    = NULL;
@@ -2246,7 +2246,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     memset( &aLogFont, 0, sizeof( aLogFont ) );
     aLogFont.lfCharSet = DEFAULT_CHARSET;
     aInfo.mpLogFontW = &aLogFont;
-    EnumFontFamiliesExW( mhDC, &aLogFont,
+    EnumFontFamiliesExW( getHDC(), &aLogFont,
         (FONTENUMPROCW)SalEnumFontsProcExW, (LPARAM)(void*)&aInfo, 0 );
 
     // check what Courier fonts are used on the screen, so to perhaps
@@ -2258,7 +2258,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     }
 
     // set glyph fallback hook
-    static WinGlyphFallbackSubstititution aSubstFallback( mhDC );
+    static WinGlyphFallbackSubstititution aSubstFallback( getHDC() );
     pFontList->SetFallbackHook( &aSubstFallback );
 }
 
@@ -2276,7 +2276,7 @@ void WinSalGraphics::GetDevFontSubstList( OutputDevice* )
 
 sal_Bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& rRect )
 {
-    HDC hDC = mhDC;
+    HDC hDC = getHDC();
 
     // use unity matrix
     MAT2 aMat;
@@ -2311,7 +2311,7 @@ sal_Bool WinSalGraphics::GetGlyphOutline( sal_GlyphId nIndex,
 {
     rB2DPolyPoly.clear();
 
-    HDC  hDC = mhDC;
+    HDC  hDC = getHDC();
 
     // use unity matrix
     MAT2 aMat;
@@ -2515,7 +2515,7 @@ ScopedFont::~ScopedFont()
         // restore original font, destroy temporary font
         HFONT hTempFont = m_rData.mhFonts[0];
         m_rData.mhFonts[0] = m_hOrigFont;
-        SelectObject( m_rData.mhDC, m_hOrigFont );
+        SelectObject( m_rData.getHDC(), m_hOrigFont );
         DeleteObject( hTempFont );
     }
 }
@@ -2570,7 +2570,7 @@ sal_Bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 #if OSL_DEBUG_LEVEL > 1
     // get font metrics
     TEXTMETRICA aWinMetric;
-    if( !::GetTextMetricsA( mhDC, &aWinMetric ) )
+    if( !::GetTextMetricsA( getHDC(), &aWinMetric ) )
         return FALSE;
 
     DBG_ASSERT( !(aWinMetric.tmPitchAndFamily & TMPF_DEVICE), "cannot subset device font" );
@@ -2585,10 +2585,10 @@ sal_Bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // check if the font has a CFF-table
     const DWORD nCffTag = CalcTag( "CFF " );
-    const RawFontData aRawCffData( mhDC, nCffTag );
+    const RawFontData aRawCffData( getHDC(), nCffTag );
     if( aRawCffData.get() )
     {
-        pWinFontData->UpdateFromHDC( mhDC );
+        pWinFontData->UpdateFromHDC( getHDC() );
         const ImplFontCharMap* pCharMap = pWinFontData->GetImplFontCharMap();
         pCharMap->AddReference();
 
@@ -2618,7 +2618,7 @@ sal_Bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     }
 
     // get raw font file data
-    const RawFontData xRawFontData( mhDC, 0 );
+    const RawFontData xRawFontData( getHDC(), 0 );
     if( !xRawFontData.get() )
         return FALSE;
 
@@ -2718,19 +2718,19 @@ const void* WinSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont,
     SetFont( &aIFSD, 0 );
 
     // get the raw font file data
-    RawFontData aRawFontData( mhDC );
+    RawFontData aRawFontData( getHDC() );
     *pDataLen = aRawFontData.size();
     if( !aRawFontData.get() )
         return NULL;
 
     // get important font properties
     TEXTMETRICA aTm;
-    if( !::GetTextMetricsA( mhDC, &aTm ) )
+    if( !::GetTextMetricsA( getHDC(), &aTm ) )
         *pDataLen = 0;
     const bool bPFA = (*aRawFontData.get() < 0x80);
     rInfo.m_nFontType = bPFA ? FontSubsetInfo::TYPE1_PFA : FontSubsetInfo::TYPE1_PFB;
     WCHAR aFaceName[64];
-    sal_Int32 nFNLen = ::GetTextFaceW( mhDC, 64, aFaceName );
+    sal_Int32 nFNLen = ::GetTextFaceW( getHDC(), 64, aFaceName );
     // #i59854# strip eventual null byte
     while( nFNLen > 0 && aFaceName[nFNLen-1] == 0 )
         nFNLen--;
@@ -2748,7 +2748,7 @@ const void* WinSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont,
     {
         int nCharWidth = 0;
         const sal_Unicode cChar = pUnicodes[i];
-        if( !::GetCharWidth32W( mhDC, cChar, cChar, &nCharWidth ) )
+        if( !::GetCharWidth32W( getHDC(), cChar, cChar, &nCharWidth ) )
             *pDataLen = 0;
         pCharWidths[i] = nCharWidth;
     }
@@ -2815,7 +2815,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     if( pFont->IsSubsettable() )
     {
         // get raw font file data
-        const RawFontData xRawFontData( mhDC );
+        const RawFontData xRawFontData( getHDC() );
         if( !xRawFontData.get() )
             return;
 
@@ -2879,7 +2879,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
         for( sal_Unicode i = 32; i < 256; ++i )
         {
             int nCharWidth = 0;
-            if( ::GetCharWidth32W( mhDC, i, i, &nCharWidth ) )
+            if( ::GetCharWidth32W( getHDC(), i, i, &nCharWidth ) )
             {
                 rUnicodeEnc[ i ] = rWidths.size();
                 rWidths.push_back( nCharWidth );

@@ -496,7 +496,7 @@ sal_Bool GenPspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, v
     return m_pPrinterGfx->DrawEPS( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ), pPtr, nSize );
 }
 
-void GenPspGraphics::copyBits( const SalTwoRect*,
+void GenPspGraphics::copyBits( const SalTwoRect&,
                             SalGraphics* )
 {
     OSL_FAIL( "Error: PrinterGfx::CopyBits() not implemented" );
@@ -507,12 +507,12 @@ void GenPspGraphics::copyArea ( long,long,long,long,long,long,sal_uInt16 )
     OSL_FAIL( "Error: PrinterGfx::CopyArea() not implemented" );
 }
 
-void GenPspGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
+void GenPspGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
 {
-    Rectangle aSrc (Point(pPosAry->mnSrcX, pPosAry->mnSrcY),
-                    Size(pPosAry->mnSrcWidth, pPosAry->mnSrcHeight));
-    Rectangle aDst (Point(pPosAry->mnDestX, pPosAry->mnDestY),
-                    Size(pPosAry->mnDestWidth, pPosAry->mnDestHeight));
+    Rectangle aSrc (Point(rPosAry.mnSrcX, rPosAry.mnSrcY),
+                    Size(rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
+    Rectangle aDst (Point(rPosAry.mnDestX, rPosAry.mnDestY),
+                    Size(rPosAry.mnDestWidth, rPosAry.mnDestHeight));
 
     BitmapBuffer* pBuffer= const_cast<SalBitmap&>(rSalBitmap).AcquireBuffer(sal_True);
 
@@ -522,21 +522,21 @@ void GenPspGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
     const_cast<SalBitmap&>(rSalBitmap).ReleaseBuffer (pBuffer, sal_True);
 }
 
-void GenPspGraphics::drawBitmap( const SalTwoRect*,
+void GenPspGraphics::drawBitmap( const SalTwoRect&,
                               const SalBitmap&,
                               const SalBitmap& )
 {
     OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
 }
 
-void GenPspGraphics::drawBitmap( const SalTwoRect*,
+void GenPspGraphics::drawBitmap( const SalTwoRect&,
                               const SalBitmap&,
                               SalColor )
 {
     OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent color");
 }
 
-void GenPspGraphics::drawMask( const SalTwoRect*,
+void GenPspGraphics::drawMask( const SalTwoRect&,
                             const SalBitmap &,
                             SalColor )
 {
@@ -1337,6 +1337,19 @@ bool GenPspGraphics::drawAlphaBitmap( const SalTwoRect&,
 {
     return false;
 }
+
+bool GenPspGraphics::drawTransformedBitmap(
+    const basegfx::B2DPoint& rNull,
+    const basegfx::B2DPoint& rX,
+    const basegfx::B2DPoint& rY,
+    const SalBitmap& rSourceBitmap,
+    const SalBitmap* pAlphaBitmap)
+{
+    // here direct support for transformed bitmaps can be impemented
+    (void)rNull; (void)rX; (void)rY; (void)rSourceBitmap; (void)pAlphaBitmap;
+    return false;
+}
+
 
 bool GenPspGraphics::drawAlphaRect( long, long, long, long, sal_uInt8 )
 {
