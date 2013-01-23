@@ -81,8 +81,8 @@ using namespace ::com::sun::star;
 #define CLEARTITEM  rSet.InvalidateItem(nWhich)
 
 #define LW_NORMAL   0
-#define LW_GESPERRT 1
-#define LW_SCHMAL   2
+#define LW_EXPANDED 1
+#define LW_CONDENSED   2
 
 // static ----------------------------------------------------------------
 
@@ -2755,7 +2755,7 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningSelectHdl_Impl)
         m_pKerningFT->Enable();
         m_pKerningMF->Enable();
 
-        if ( m_pKerningLB->GetSelectEntryPos() == LW_SCHMAL )
+        if ( m_pKerningLB->GetSelectEntryPos() == LW_CONDENSED )
         {
             // Condensed -> max value == 1/6 of the current font height
             SvxFont& rFont = GetPreviewFont();
@@ -2790,7 +2790,7 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl)
     long nKern = (short)m_pKerningMF->Denormalize( nVal );
 
     // Condensed? -> then negative
-    if ( m_pKerningLB->GetSelectEntryPos() == LW_SCHMAL )
+    if ( m_pKerningLB->GetSelectEntryPos() == LW_CONDENSED )
         nKern *= -1;
 
     SvxFont& rFont = GetPreviewFont();
@@ -2854,7 +2854,7 @@ void  SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
 
     //the only thing that has to be checked is the max. allowed value for the
     //condense edit field
-    if ( m_pKerningLB->GetSelectEntryPos() == LW_SCHMAL )
+    if ( m_pKerningLB->GetSelectEntryPos() == LW_CONDENSED )
     {
         // Condensed -> max value == 1/6 of the current font height
         SvxFont& rFont = GetPreviewFont();
@@ -3003,11 +3003,11 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 
         if ( nKerning > 0 )
         {
-            m_pKerningLB->SelectEntryPos( LW_GESPERRT );
+            m_pKerningLB->SelectEntryPos( LW_EXPANDED );
         }
         else if ( nKerning < 0 )
         {
-            m_pKerningLB->SelectEntryPos( LW_SCHMAL );
+            m_pKerningLB->SelectEntryPos( LW_CONDENSED );
             nKerning = -nKerning;
         }
         else
@@ -3178,13 +3178,13 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     short nKerning = 0;
     SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
 
-    if ( nPos == LW_GESPERRT || nPos == LW_SCHMAL )
+    if ( nPos == LW_EXPANDED || nPos == LW_CONDENSED )
     {
         long nTmp = static_cast<long>(m_pKerningMF->GetValue());
         long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)eUnit );
         nKerning = (short)m_pKerningMF->Denormalize( nVal );
 
-        if ( nPos == LW_SCHMAL )
+        if ( nPos == LW_CONDENSED )
             nKerning *= - 1;
     }
 
