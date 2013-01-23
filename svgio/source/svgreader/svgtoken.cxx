@@ -35,6 +35,7 @@ namespace svgio
         static rtl::OUString aSVGStrViewBox(rtl::OUString::createFromAscii("viewBox"));
         static rtl::OUString aSVGStrTransform(rtl::OUString::createFromAscii("transform"));
         static rtl::OUString aSVGStrStyle(rtl::OUString::createFromAscii("style"));
+        static rtl::OUString aSVGStrDisplay(rtl::OUString::createFromAscii("display")); // #121656#
         static rtl::OUString aSVGStrD(rtl::OUString::createFromAscii("d"));
         static rtl::OUString aSVGStrX(rtl::OUString::createFromAscii("x"));
         static rtl::OUString aSVGStrY(rtl::OUString::createFromAscii("y"));
@@ -178,6 +179,7 @@ namespace svgio
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrViewBox, SVGTokenViewBox));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTransform, SVGTokenTransform));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStyle, SVGTokenStyle));
+                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDisplay, SVGTokenDisplay)); // #121656#
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrD, SVGTokenD));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrX, SVGTokenX));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrY, SVGTokenY));
