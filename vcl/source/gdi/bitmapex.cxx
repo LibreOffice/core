@@ -904,6 +904,24 @@ SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx )
 
                 if( !!aMask)
                 {
+                    // fdo#59616 enforce same size for both mask and content
+                    if( aMask.GetSizePixel() != aBmp.GetSizePixel() )
+                    {
+                        Bitmap aNewMask;
+                        const Size aNominalSize=aBmp.GetSizePixel();
+                        BitmapReadAccess aAcc(aMask);
+                        if( aAcc.HasPalette() )
+                            aNewMask = Bitmap(aNominalSize,
+                                              aMask.GetBitCount(),
+                                              &aAcc.GetPalette());
+                        else
+                            aNewMask = Bitmap(aNominalSize,
+                                              aMask.GetBitCount());
+                        const Rectangle aCopyArea(Point(0,0), aNominalSize);
+                        aNewMask.CopyPixel(aCopyArea, aCopyArea, &aMask);
+                        aMask = aNewMask;
+                    }
+
                     // do we have an alpha mask?
                     if( ( 8 == aMask.GetBitCount() ) && aMask.HasGreyPalette() )
                     {
