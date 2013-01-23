@@ -66,7 +66,7 @@ class SwHHCWrapper : public editeng::HangulHanjaConversion
     void        SelectNewUnit_impl( const sal_Int32 nUnitStart,
                                     const sal_Int32 nUnitEnd );
     void        ChangeText( const String &rNewText,
-                            const ::rtl::OUString& rOrigText,
+                            const OUString& rOrigText,
                             const ::com::sun::star::uno::Sequence< sal_Int32 > *pOffsets,
                             SwPaM *pCrsr );
     void        ChangeText_impl( const String &rNewText, sal_Bool bKeepAttributes );
@@ -75,15 +75,15 @@ class SwHHCWrapper : public editeng::HangulHanjaConversion
     inline void SetDrawObj( sal_Bool bNew ) { m_bIsDrawObj = bNew; }
 
 protected:
-    virtual void    GetNextPortion( ::rtl::OUString& rNextPortion,
+    virtual void    GetNextPortion( OUString& rNextPortion,
                             LanguageType& rLangOfPortion,
                             sal_Bool bAllowImplicitChangesForNotConvertibleText );
     virtual void    HandleNewUnit( const sal_Int32 nUnitStart,
                                    const sal_Int32 nUnitEnd );
     virtual void    ReplaceUnit(
                         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
-                        const ::rtl::OUString& rOrigText,
-                        const ::rtl::OUString& rReplaceWith,
+                        const OUString& rOrigText,
+                        const OUString& rReplaceWith,
                         const ::com::sun::star::uno::Sequence< sal_Int32 > &rOffsets,
                         ReplacementAction eAction,
                         LanguageType *pNewUnitLanguage );
