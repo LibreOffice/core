@@ -978,7 +978,7 @@ void ScFormulaCell::Compile( const rtl::OUString& rFormula, bool bNoListening,
         delete pCodeOld;
     if( !pCode->GetCodeError() )
     {
-        if ( !pCode->GetLen() && aResult.GetHybridFormula().Len() && rFormula == rtl::OUString(aResult.GetHybridFormula()) )
+        if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() && rFormula == aResult.GetHybridFormula() )
         {   // not recursive CompileTokenArray/Compile/CompileTokenArray
             if ( rFormula[0] == '=' )
                 pCode->AddBad( rFormula.copy(1) );
@@ -1002,7 +1002,7 @@ void ScFormulaCell::Compile( const rtl::OUString& rFormula, bool bNoListening,
 void ScFormulaCell::CompileTokenArray( bool bNoListening )
 {
     // Not already compiled?
-    if( !pCode->GetLen() && aResult.GetHybridFormula().Len() )
+    if( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
         Compile( aResult.GetHybridFormula(), bNoListening, eTempGrammar);
     else if( bCompile && !pDocument->IsClipOrUndo() && !pCode->GetCodeError() )
     {
@@ -1110,7 +1110,7 @@ void ScFormulaCell::CalcAfterLoad()
 {
     bool bNewCompiled = false;
     // If a Calc 1.0-doc is read, we have a result, but no token array
-    if( !pCode->GetLen() && aResult.GetHybridFormula().Len() )
+    if( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
     {
         Compile( aResult.GetHybridFormula(), true, eTempGrammar);
         aResult.SetToken( NULL);
@@ -1459,7 +1459,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         // This should only be a temporary condition and, since we set an
         // error, if ran into it again we'd bump into the dirty-clearing
         // condition further down.
-        if ( !pCode->GetLen() && aResult.GetHybridFormula().Len() )
+        if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
         {
             pCode->SetCodeError( errNoCode );
             // This is worth an assertion; if encountered in daily work
@@ -1595,7 +1595,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 }
                 else
                 {
-                    if ( eOld == svHybridCell )     // string result from SetFormulaResultString?
+                    if ( eOld == svHybridCell || eOld == svHybridValueCell )     // string result from SetFormulaResultString?
                         eOld = svString;            // ScHybridCellToken has a valid GetString method
 
                     // #i106045# use approxEqual to compare with stored value
@@ -1620,7 +1620,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             if ( bChanged && !bContentChanged && pDocument->IsStreamValid(aPos.Tab()) )
             {
                 if ( ( eOld == svUnknown && ( eNew == svError || ( eNew == svDouble && aNewResult.GetDouble() == 0.0 ) ) ) ||
-                     ( eOld == svHybridCell && eNew == svString && aResult.GetString() == aNewResult.GetString() ) ||
+                     ( (eOld == svHybridCell || eOld == svHybridValueCell) && eNew == svString && aResult.GetString() == aNewResult.GetString() ) ||
                      ( eOld == svDouble && eNew == svDouble && rtl::math::approxEqual( aResult.GetDouble(), aNewResult.GetDouble() ) ) )
                 {
                     // no change, see above
