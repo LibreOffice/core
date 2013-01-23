@@ -1419,7 +1419,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     // OOXml also supports those types of borders, but we'll try to play with the first ones.
     //      thickThinMediumGap, thickThinLargeGap, thickThinSmallGap
     //      thinThickLargeGap, thinThickMediumGap, thinThickSmallGap
-    const char* pVal = "none";
+    const char* pVal = "nil";
     if ( pBorderLine && !pBorderLine->isEmpty( ) )
     {
         switch (pBorderLine->GetBorderLineStyle())
