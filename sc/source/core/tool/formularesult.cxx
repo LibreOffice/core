@@ -268,7 +268,8 @@ bool ScFormulaResult::IsEmptyDisplayedAsString() const
 bool ScFormulaResult::IsValue() const
 {
     formula::StackVar sv = GetCellResultType();
-    return sv == formula::svDouble || sv == formula::svError || sv == formula::svEmptyCell;
+    return sv == formula::svDouble || sv == formula::svError
+        || sv == formula::svEmptyCell || sv == formula::svHybridValueCell;
 }
 
 bool ScFormulaResult::IsMultiline() const
@@ -331,6 +332,7 @@ double ScFormulaResult::GetDouble() const
             switch (mpToken->GetType())
             {
                 case formula::svHybridCell:
+                case formula::svHybridValueCell:
                     return mpToken->GetDouble();
                 case formula::svMatrixCell:
                     {
@@ -359,6 +361,7 @@ const String & ScFormulaResult::GetString() const
         {
             case formula::svString:
             case formula::svHybridCell:
+            case formula::svHybridValueCell:
                 return mpToken->GetString();
             case formula::svMatrixCell:
                 {
@@ -382,7 +385,7 @@ ScConstMatrixRef ScFormulaResult::GetMatrix() const
     return NULL;
 }
 
-const String & ScFormulaResult::GetHybridFormula() const
+const OUString& ScFormulaResult::GetHybridFormula() const
 {
     if (GetType() == formula::svHybridCell)
     {
@@ -390,7 +393,7 @@ const String & ScFormulaResult::GetHybridFormula() const
         if (p)
             return p->GetFormula();
     }
-    return EMPTY_STRING;
+    return EMPTY_OUSTRING;
 }
 
 void ScFormulaResult::SetHybridDouble( double f )
@@ -439,6 +442,23 @@ void ScFormulaResult::SetHybridFormula( const String & rFormula )
     if (mbToken && mpToken)
         mpToken->DecRef();
     mpToken = new ScHybridCellToken( f, aStr, rFormula);
+    mpToken->IncRef();
+    mbToken = true;
+}
+
+void ScFormulaResult::SetHybridValueString( double nVal, const OUString& rStr )
+{
+    if(GetType() == formula::svMatrixCell)
+    {
+        SetDouble(nVal);
+        return;
+    }
+
+    ResetToDefaults();
+    if (mbToken && mpToken)
+        mpToken->DecRef();
+
+    mpToken = new ScHybridValueCellToken( nVal, rStr );
     mpToken->IncRef();
     mbToken = true;
 }
