@@ -513,7 +513,7 @@ static void filterAccelerator( rtl::OUString& io_rText )
     }
     else
     {
-        OSL_FAIL( "unsupported class" );
+        SAL_INFO( "vcl.aqua.print", "Unsupported class" << ([pSender class] ? [NSStringFromClass([pSender class]) UTF8String] : "nil"));
     }
     mpController->updateEnableState();
 }
@@ -545,7 +545,7 @@ static void filterAccelerator( rtl::OUString& io_rText )
     }
     else
     {
-        OSL_FAIL( "unsupported class" );
+        SAL_INFO( "vcl.aqua.print", "Unsupported class" << ([pSender class] ? [NSStringFromClass([pSender class]) UTF8String] : "nil"));
     }
     mpController->updateEnableState();
 }
@@ -1357,7 +1357,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
         }
         else
         {
-            OSL_FAIL( "Unsupported UI option" );
+            SAL_INFO( "vcl.aqua.print", "Unsupported UI option \"" << aCtrlType << "\"");
         }
     }
         
