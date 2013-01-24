@@ -981,7 +981,8 @@ static void lcl_WriteCell( XclExpXmlStream& rStrm, sal_Int32 nElement, const ScA
                     FSEND );
             pStream->writeEscaped( XclXmlUtils::ToOUString(
                         *pData->mpFormulaCell->GetDocument(),
-                        pData->mpFormulaCell->aPos, pData->mpFormulaCell->GetCode() ) );
+                        pData->mpFormulaCell->aPos, pData->mpFormulaCell->GetCode(),
+                        rStrm.GetRoot().GetOpCodeMap() ) );
             pStream->endElement( XML_f );
             break;
         case EXC_CHTR_TYPE_STRING:

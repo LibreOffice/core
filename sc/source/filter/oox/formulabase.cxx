@@ -209,6 +209,12 @@ const sal_uInt16 FUNCFLAG_MACROFUNC         = 0x0040;   /// Function is a macro-
 const sal_uInt16 FUNCFLAG_MACROCMD          = 0x0080;   /// Function is a macro-sheet command.
 const sal_uInt16 FUNCFLAG_ALWAYSVAR         = 0x0100;   /// Function is always represented by a tFuncVar token.
 const sal_uInt16 FUNCFLAG_PARAMPAIRS        = 0x0200;   /// Optional parameters are expected to appear in pairs.
+const sal_uInt16 FUNCFLAG_MACROCALL_FN      = 0x0400;   /** Function is stored as macro call in Excel (_xlfn. prefix)
+                                                            for OOXML. OOXML name MUST exist. Do not use without
+                                                            FUNCFLAG_MACROCALL. */
+const sal_uInt16 FUNCFLAG_MACROCALL_NEW     = FUNCFLAG_MACROCALL | FUNCFLAG_MACROCALL_FN;   /** New Excel functions not
+                                                            defined in OOXML, _xlfn. prefix in all formats. OOXML name
+                                                            must exist. */
 
 /// Converts a function library index (value of enum FunctionLibraryType) to function flags.
 #define FUNCLIB_TO_FUNCFLAGS( funclib_index ) static_cast< sal_uInt16 >( static_cast< sal_uInt8 >( funclib_index ) << 12 )
@@ -722,7 +728,7 @@ static const FunctionData saFuncTableOox[] =
 /* FIXME: BIFF12 function identifer available? Where to obtain? */
 static const FunctionData saFuncTable2013[] =
 {
-    { "IFNA",                   "IFNA",                 NOID,   NOID,   2,  2,  V, { VO, RO }, FUNCFLAG_MACROCALL },
+    { "IFNA",                   "IFNA",                 NOID,   NOID,   2,  2,  V, { VO, RO }, FUNCFLAG_MACROCALL_NEW },
 };
 
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
@@ -825,7 +831,8 @@ struct FunctionProviderImpl
     FuncIdMap           maBiffFuncs;        /// Maps BIFF2-BIFF8 function indexes to function data.
     FuncNameMap         maMacroFuncs;       /// Maps macro function names to function data.
 
-    explicit            FunctionProviderImpl( FilterType eFilter, BiffType eBiff, bool bImportFilter );
+    explicit            FunctionProviderImpl( FilterType eFilter, BiffType eBiff, bool bImportFilter,
+                                              bool bCallerKnowsAboutMacroExport );
 
 private:
     /** Creates and inserts a function info struct from the passed function data. */
@@ -839,9 +846,16 @@ private:
 
 // ----------------------------------------------------------------------------
 
-FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, bool bImportFilter )
+FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, bool bImportFilter,
+        bool bCallerKnowsAboutMacroExport )
 {
-    OSL_ENSURE( bImportFilter, "FunctionProviderImpl::FunctionProviderImpl - need special handling for macro call functions" );
+    // NOTE: this warning is only applicable if called for not yet existing
+    // external export filter, not the Calc internal conversion from binary to
+    // OOXML that also uses this mapping. Which is the only reason for
+    // bCallerKnowsAboutMacroExport, to suppress this warning then.
+    OSL_ENSURE( bImportFilter || bCallerKnowsAboutMacroExport,
+            "FunctionProviderImpl::FunctionProviderImpl - need special handling for macro call functions" );
+    (void)bCallerKnowsAboutMacroExport;
     sal_uInt8 nMaxParam = 0;
     switch( eFilter )
     {
@@ -890,6 +904,11 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
         OSL_ENSURE( !xFuncInfo->maOoxFuncName.isEmpty(), "FunctionProviderImpl::initFunc - missing OOXML function name" );
         OSL_ENSURE( !getFlag( rFuncData.mnFlags, FUNCFLAG_MACROCALLODF ), "FunctionProviderImpl::initFunc - unexpected flag FUNCFLAG_MACROCALLODF" );
         xFuncInfo->maBiffMacroName = "_xlfn." + xFuncInfo->maOoxFuncName;
+        if( getFlag( rFuncData.mnFlags, FUNCFLAG_MACROCALL_FN ) )
+        {
+            xFuncInfo->maOoxFuncName = "_xlfn." + xFuncInfo->maOoxFuncName;
+            //! From here on maOoxFuncName contains the _xlfn. prefix!
+        }
     }
     else if( getFlag( rFuncData.mnFlags, FUNCFLAG_MACROCALLODF ) )
     {
@@ -936,8 +955,9 @@ void FunctionProviderImpl::initFuncs( const FunctionData* pBeg, const FunctionDa
 
 // ----------------------------------------------------------------------------
 
-FunctionProvider::FunctionProvider( FilterType eFilter, BiffType eBiff, bool bImportFilter ) :
-    mxFuncImpl( new FunctionProviderImpl( eFilter, eBiff, bImportFilter ) )
+FunctionProvider::FunctionProvider( FilterType eFilter, BiffType eBiff, bool bImportFilter,
+        bool bCallerKnowsAboutMacroExport ) :
+    mxFuncImpl( new FunctionProviderImpl( eFilter, eBiff, bImportFilter, bCallerKnowsAboutMacroExport ) )
 {
 }
 
@@ -1269,8 +1289,8 @@ bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, c
 // ----------------------------------------------------------------------------
 
 OpCodeProvider::OpCodeProvider( const Reference< XMultiServiceFactory >& rxModelFactory,
-        FilterType eFilter, BiffType eBiff, bool bImportFilter ) :
-    FunctionProvider( eFilter, eBiff, bImportFilter ),
+        FilterType eFilter, BiffType eBiff, bool bImportFilter, bool bCallerKnowsAboutMacroExport ) :
+    FunctionProvider( eFilter, eBiff, bImportFilter, bCallerKnowsAboutMacroExport ),
     mxOpCodeImpl( new OpCodeProviderImpl( getFuncs(), rxModelFactory ) )
 {
 }

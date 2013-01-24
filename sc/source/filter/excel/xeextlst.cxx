@@ -58,7 +58,8 @@ XclExpExtCfvo::XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& 
 {
     if( rEntry.GetType() == COLORSCALE_FORMULA )
     {
-        rtl::OUString aFormula = XclXmlUtils::ToOUString( GetRoot().GetDoc(), rSrcPos, rEntry.GetFormula()->Clone() );
+        rtl::OUString aFormula = XclXmlUtils::ToOUString( GetRoot().GetDoc(), rSrcPos,
+                rEntry.GetFormula()->Clone(), GetRoot().GetOpCodeMap() );
         maValue = rtl::OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8 );
     }
     else

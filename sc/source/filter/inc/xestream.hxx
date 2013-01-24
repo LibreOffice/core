@@ -34,6 +34,7 @@
 
 #include "xlstream.hxx"
 #include "xestring.hxx"
+#include "compiler.hxx"
 
 #include <filter/msfilter/mscodec.hxx>
 #include <vector>
@@ -286,7 +287,8 @@ public:
     static ::rtl::OUString ToOUString( const char* s );
     static ::rtl::OUString ToOUString( const ScfUInt16Vec& rBuffer, sal_Int32 nStart = 0, sal_Int32 nLength = -1 );
     static ::rtl::OUString ToOUString( const String& s );
-    static ::rtl::OUString ToOUString( ScDocument& rDocument, const ScAddress& rAddress, ScTokenArray* pTokenArray );
+    static ::rtl::OUString ToOUString( ScDocument& rDocument, const ScAddress& rAddress,
+                                       ScTokenArray* pTokenArray, const ScCompiler::OpCodeMapPtr & xOpCodeMap );
     static ::rtl::OUString ToOUString( const XclExpString& s );
     static const char* ToPsz( bool b );
 
