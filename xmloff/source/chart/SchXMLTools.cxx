@@ -380,14 +380,34 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
         return xRet;
     }
 
-    try
+    bool bUseInternal = false;
+    uno::Reference<beans::XPropertySet> xPropSet(xDataProvider, uno::UNO_QUERY);
+    if (xPropSet.is())
     {
-        xRet.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( rRange, xDataProvider )));
-        SchXMLTools::setXMLRangePropertyAtDataSequence( xRet, rRange );
+        try
+        {
+            sal_Bool bVal;
+            uno::Any any = xPropSet->getPropertyValue("UseInternalDataProvider");
+            if (any >>= bVal)
+                bUseInternal = static_cast<bool>(bVal);
+        }
+        catch (const beans::UnknownPropertyException&)
+        {
+            // Do nothing
+        }
     }
-    catch( const lang::IllegalArgumentException & )
+
+    if (!bUseInternal)
     {
-        OSL_FAIL( "could not create data sequence" );
+        try
+        {
+            xRet.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( rRange, xDataProvider )));
+            SchXMLTools::setXMLRangePropertyAtDataSequence( xRet, rRange );
+        }
+        catch( const lang::IllegalArgumentException & )
+        {
+            OSL_FAIL( "could not create data sequence" );
+        }
     }
 
     if( !xRet.is() && !xChartDoc->hasInternalDataProvider() && !rRange.isEmpty() )
