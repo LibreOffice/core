@@ -41,6 +41,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/frame/status/UpperLowerMarginScale.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <limits.h>
@@ -55,6 +56,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/gradient.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
 #include <editeng/pbinitem.hxx>
@@ -3325,8 +3327,10 @@ public:
                                           //copied to the GraphicObject when necessary
     Link            aDoneLink;
     SvStream*       pStream;
+    Gradient aGradient;
+    drawing::FillStyle eFillStyle;
 
-    SvxBrushItem_Impl( GraphicObject* p ) : pGraphicObject( p ), nGraphicTransparency(0), pStream(0) {}
+    SvxBrushItem_Impl( GraphicObject* p ) : pGraphicObject( p ), nGraphicTransparency(0), pStream(0), eFillStyle(drawing::FillStyle_NONE) {}
 };
 
 // -----------------------------------------------------------------------
@@ -3639,6 +3643,25 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_GRAPHIC_TRANSPARENCY :
             rVal <<= pImpl->nGraphicTransparency;
         break;
+        case MID_FILL_STYLE:
+            rVal <<= pImpl->eFillStyle;
+        break;
+        case MID_FILL_GRADIENT:
+        {
+            awt::Gradient aGradient;
+            aGradient.Style = (awt::GradientStyle)pImpl->aGradient.GetStyle();
+            aGradient.StartColor = pImpl->aGradient.GetStartColor().GetColor();
+            aGradient.EndColor = pImpl->aGradient.GetEndColor().GetColor();
+            aGradient.Angle = pImpl->aGradient.GetAngle();
+            aGradient.Border = pImpl->aGradient.GetBorder();
+            aGradient.XOffset = pImpl->aGradient.GetOfsX();
+            aGradient.YOffset = pImpl->aGradient.GetOfsY();
+            aGradient.StartIntensity = pImpl->aGradient.GetStartIntensity();
+            aGradient.EndIntensity = pImpl->aGradient.GetEndIntensity();
+            aGradient.StepCount = pImpl->aGradient.GetSteps();
+            rVal <<= aGradient;
+        }
+        break;
     }
 
     return true;
@@ -3754,6 +3777,26 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
         }
         break;
+        case MID_FILL_STYLE:
+            rVal >>= pImpl->eFillStyle;
+        break;
+        case MID_FILL_GRADIENT:
+        {
+            awt::Gradient aGradient;
+            if (!(rVal >>= aGradient))
+                return false;
+            pImpl->aGradient.SetStyle((GradientStyle)aGradient.Style);
+            pImpl->aGradient.SetStartColor(aGradient.StartColor);
+            pImpl->aGradient.SetEndColor(aGradient.EndColor);
+            pImpl->aGradient.SetAngle(aGradient.Angle);
+            pImpl->aGradient.SetBorder(aGradient.Border);
+            pImpl->aGradient.SetOfsX(aGradient.XOffset);
+            pImpl->aGradient.SetOfsY(aGradient.YOffset);
+            pImpl->aGradient.SetStartIntensity(aGradient.StartIntensity);
+            pImpl->aGradient.SetEndIntensity(aGradient.EndIntensity);
+            pImpl->aGradient.SetSteps(aGradient.StepCount);
+        }
+        break;
     }
 
     return true;
@@ -3824,6 +3867,8 @@ SvxBrushItem& SvxBrushItem::operator=( const SvxBrushItem& rItem )
         }
     }
     pImpl->nGraphicTransparency = rItem.pImpl->nGraphicTransparency;
+    pImpl->eFillStyle = rItem.pImpl->eFillStyle;
+    pImpl->aGradient = rItem.pImpl->aGradient;
     return *this;
 }
 
@@ -3835,7 +3880,9 @@ int SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
 
     SvxBrushItem& rCmp = (SvxBrushItem&)rAttr;
     sal_Bool bEqual = ( aColor == rCmp.aColor && eGraphicPos == rCmp.eGraphicPos &&
-        pImpl->nGraphicTransparency == rCmp.pImpl->nGraphicTransparency);
+        pImpl->nGraphicTransparency == rCmp.pImpl->nGraphicTransparency &&
+        pImpl->eFillStyle == rCmp.pImpl->eFillStyle &&
+        pImpl->aGradient == rCmp.pImpl->aGradient);
 
     if ( bEqual )
     {
@@ -4146,6 +4193,27 @@ void  SvxBrushItem::ApplyGraphicTransparency_Impl()
         pImpl->pGraphicObject->SetAttr(aAttr);
     }
 }
+
+drawing::FillStyle SvxBrushItem::GetFillStyle() const
+{
+    return pImpl->eFillStyle;
+}
+
+const Gradient& SvxBrushItem::GetGradient() const
+{
+    return pImpl->aGradient;
+}
+
+void SvxBrushItem::SetFillStyle(drawing::FillStyle eNew)
+{
+    pImpl->eFillStyle = eNew;
+}
+
+void SvxBrushItem::SetGradient(Gradient& rNew)
+{
+    pImpl->aGradient = rNew;
+}
+
 // class SvxFrameDirectionItem ----------------------------------------------
 
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,

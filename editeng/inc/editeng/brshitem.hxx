@@ -23,6 +23,7 @@
 #include <vcl/wall.hxx>
 #include <tools/link.hxx>
 #include <editeng/editengdllapi.h>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 // class SvxBrushItem ----------------------------------------------------
 
@@ -33,6 +34,7 @@ namespace rtl
 {
     class OUString;
 }
+class Gradient;
 
 #define BRUSH_GRAPHIC_VERSION   ((sal_uInt16)0x0001)
 
@@ -111,12 +113,16 @@ public:
     const GraphicObject*    GetGraphicObject() const;
     const String*           GetGraphicLink() const      { return pStrLink; }
     const String*           GetGraphicFilter() const    { return pStrFilter; }
+    com::sun::star::drawing::FillStyle GetFillStyle() const;
+    const Gradient& GetGradient() const;
 
     void                SetGraphicPos( SvxGraphicPosition eNew );
     void                SetGraphic( const Graphic& rNew );
     void                SetGraphicObject( const GraphicObject& rNewObj );
     void                SetGraphicLink( const String& rNew );
     void                SetGraphicFilter( const String& rNew );
+    void                SetFillStyle(com::sun::star::drawing::FillStyle eNew);
+    void                SetGradient(Gradient& rNew);
 
     SvxBrushItem&       operator=( const SvxBrushItem& rItem);
 
