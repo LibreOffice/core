@@ -30,6 +30,7 @@
 #include <sfx2/thumbnailviewitem.hxx>
 #include <sot/storage.hxx>
 #include <svtools/imagemgr.hxx>
+#include <svtools/miscopt.hxx>
 #include <svtools/PlaceEditDialog.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -176,6 +177,13 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpSearchView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
 
     maTabControl.SetActivatePageHdl(LINK(this,SfxTemplateManagerDlg,ActivatePageHdl));
+
+    SvtMiscOptions aMiscOptions;
+    if ( !aMiscOptions.IsExperimentalMode() )
+    {
+        sal_uInt16 nPos = mpViewBar->GetItemId(TBI_TEMPLATE_REPOSITORY);
+        mpViewBar->RemoveItem(nPos);
+    }
 
     mpViewBar->Show();
     mpActionBar->Show();
