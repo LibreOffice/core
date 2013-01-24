@@ -705,7 +705,7 @@ namespace dbaui
 
         bChangedSomething |= m_aMySQLSettings.FillItemSet( _rSet );
 
-        if ( m_aUserName.GetText() != OUString(m_aUserName.GetSavedValue()) )
+        if ( m_aUserName.GetText() != m_aUserName.GetSavedValue() )
         {
             _rSet.Put( SfxStringItem( DSID_USER, m_aUserName.GetText() ) );
             _rSet.Put( SfxStringItem( DSID_PASSWORD, String()));

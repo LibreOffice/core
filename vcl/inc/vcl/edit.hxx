@@ -63,7 +63,7 @@ private:
     Impl_IMEInfos*      mpIMEInfos;
     XubString           maText;
     OUString            maPlaceholderText;
-    XubString           maSaveValue;
+    OUString            maSaveValue;
     XubString           maUndoText;
     XubString           maRedoText;
     long                mnXOffset;
@@ -214,7 +214,7 @@ public:
     virtual OUString    GetPlaceholderText() const;
 
     void                SaveValue() { maSaveValue = GetText(); }
-    const XubString&    GetSavedValue() const { return maSaveValue; }
+    const OUString&     GetSavedValue() const { return maSaveValue; }
 
     virtual void        SetModifyHdl( const Link& rLink ) { maModifyHdl = rLink; }
     virtual const Link& GetModifyHdl() const { return maModifyHdl; }

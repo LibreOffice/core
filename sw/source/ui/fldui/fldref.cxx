@@ -940,8 +940,8 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
     }
 
     if (!IsFldEdit() || bModified ||
-        OUString(aNameED.GetSavedValue()) != aNameED.GetText() ||
-        OUString(aValueED.GetSavedValue()) != aValueED.GetText() ||
+        aNameED.GetSavedValue() != aNameED.GetText() ||
+        aValueED.GetSavedValue() != aValueED.GetText() ||
         aTypeLB.GetSavedValue() != aTypeLB.GetSelectEntryPos() ||
         aSelectionLB.GetSavedValue() != aSelectionLB.GetSelectEntryPos() ||
         aFormatLB.GetSavedValue() != aFormatLB.GetSelectEntryPos())

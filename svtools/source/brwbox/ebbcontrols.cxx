@@ -129,7 +129,7 @@ namespace svt
     //------------------------------------------------------------------
     sal_Bool ComboBoxCellController::IsModified() const
     {
-        return OUString(GetComboBox().GetSavedValue()) != GetComboBox().GetText();
+        return GetComboBox().GetSavedValue() != GetComboBox().GetText();
     }
 
     //------------------------------------------------------------------

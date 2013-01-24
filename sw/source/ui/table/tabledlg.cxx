@@ -398,8 +398,8 @@ sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
 
     if(bModified)
     {
-        if( m_pBottomMF->GetText() != OUString(m_pBottomMF->GetSavedValue()) ||
-            m_pTopMF->GetText() != OUString(m_pTopMF->GetSavedValue()) )
+        if( m_pBottomMF->GetText() != m_pBottomMF->GetSavedValue() ||
+            m_pTopMF->GetText() != m_pTopMF->GetSavedValue() )
         {
             SvxULSpaceItem aULSpace(RES_UL_SPACE);
             aULSpace.SetUpper( (sal_uInt16) m_pTopMF->Denormalize(
@@ -410,7 +410,7 @@ sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
         }
 
     }
-    if(m_pNameED->GetText() != OUString(m_pNameED->GetSavedValue()))
+    if(m_pNameED->GetText() != m_pNameED->GetSavedValue())
     {
         rCoreSet.Put(SfxStringItem( FN_PARAM_TABLE_NAME, m_pNameED->GetText()));
         bModified = sal_True;

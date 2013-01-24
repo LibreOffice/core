@@ -35,7 +35,7 @@ class VCL_DLLPUBLIC VclMultiLineEdit : public Edit
 private:
     ImpVclMEdit*    pImpVclMEdit;
 
-    XubString       aSaveValue;
+    OUString        aSaveValue;
     Link            aModifyHdlLink;
 
     Timer*          pUpdateDataTimer;
@@ -104,7 +104,7 @@ public:
     sal_Bool            IsRightToLeft() const;
 
     void            SaveValue()                         { aSaveValue = GetText(); }
-    const XubString&    GetSavedValue() const               { return aSaveValue; }
+    const OUString&    GetSavedValue() const            { return aSaveValue; }
 
     void            SetModifyHdl( const Link& rLink )   { aModifyHdlLink = rLink; }
     const Link&     GetModifyHdl() const                { return aModifyHdlLink; }

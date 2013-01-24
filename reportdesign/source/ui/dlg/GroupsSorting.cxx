@@ -1102,7 +1102,7 @@ void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
         sal_Int16 nGroupOn = static_cast<sal_Int16>(reinterpret_cast<sal_IntPtr>(m_aGroupOnLst.GetEntryData(m_aGroupOnLst.GetSelectEntryPos())));
         xGroup->setGroupOn( nGroupOn );
     }
-    if ( m_aGroupIntervalEd.GetSavedValue().ToInt32() != m_aGroupIntervalEd.GetValue() )
+    if ( m_aGroupIntervalEd.GetSavedValue().toInt32() != m_aGroupIntervalEd.GetValue() )
     {
         xGroup->setGroupInterval( static_cast<sal_Int32>(m_aGroupIntervalEd.GetValue()) );
         m_aGroupIntervalEd.SaveValue();

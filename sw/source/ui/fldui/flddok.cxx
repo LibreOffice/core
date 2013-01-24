@@ -618,9 +618,9 @@ sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
         nOldSel != aSelectionLB.GetSelectEntryPos() ||
         nOldFormat != nFormat ||
         aFixedCB.GetState() != aFixedCB.GetSavedValue() ||
-        aValueED.GetText() != OUString(aValueED.GetSavedValue()) ||
-        aLevelED.GetText() != OUString(aLevelED.GetSavedValue()) ||
-        aDateOffsetED.GetText() != OUString(aDateOffsetED.GetSavedValue()))
+        aValueED.GetText() != aValueED.GetSavedValue() ||
+        aLevelED.GetText() != aLevelED.GetSavedValue() ||
+        aDateOffsetED.GetText() != aDateOffsetED.GetSavedValue())
     {
         InsertFld( nTypeId, nSubType, aEmptyStr, aVal, nFormat, ' ', aNumFormatLB.IsAutomaticLanguage() );
     }

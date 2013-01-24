@@ -73,7 +73,7 @@ SvxFmAbsRecWin::~SvxFmAbsRecWin()
 // -----------------------------------------------------------------------
 void SvxFmAbsRecWin::FirePosition( sal_Bool _bForce )
 {
-    if ( _bForce || ( GetText() != OUString(GetSavedValue()) ) )
+    if ( _bForce || ( GetText() != GetSavedValue() ) )
     {
         sal_Int64 nRecord = GetValue();
         if (nRecord < GetMin() || nRecord > GetMax())

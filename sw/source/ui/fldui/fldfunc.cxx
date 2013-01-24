@@ -593,11 +593,11 @@ sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
     }
 
     if (!IsFldEdit() ||
-        OUString(aNameED.GetSavedValue()) != aNameED.GetText() ||
-        OUString(aValueED.GetSavedValue()) != aValueED.GetText() ||
-        OUString(aCond1ED.GetSavedValue()) != aCond1ED.GetText() ||
-        OUString(aCond2ED.GetSavedValue()) != aCond2ED.GetText() ||
-        OUString(aListNameED.GetSavedValue()) != aListNameED.GetText() ||
+        aNameED.GetSavedValue() != aNameED.GetText() ||
+        aValueED.GetSavedValue() != aValueED.GetText() ||
+        aCond1ED.GetSavedValue() != aCond1ED.GetText() ||
+        aCond2ED.GetSavedValue() != aCond2ED.GetText() ||
+        aListNameED.GetSavedValue() != aListNameED.GetText() ||
         bDropDownLBChanged ||
         nOldFormat != nFormat)
     {

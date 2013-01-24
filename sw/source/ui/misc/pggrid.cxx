@@ -184,14 +184,14 @@ sal_Bool    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
     sal_Bool bRet = sal_False;
     if(aNoGridRB.GetSavedValue() != aNoGridRB.IsChecked()||
         aLinesGridRB.GetSavedValue() != aLinesGridRB.IsChecked()||
-        aLinesPerPageNF.GetSavedValue().ToInt32()
+        aLinesPerPageNF.GetSavedValue().toInt32()
            != aLinesPerPageNF.GetValue()||
-        aTextSizeMF.GetSavedValue().ToInt32() != aTextSizeMF.GetValue()||
-        aCharsPerLineNF.GetSavedValue().ToInt32()
+        aTextSizeMF.GetSavedValue().toInt32() != aTextSizeMF.GetValue()||
+        aCharsPerLineNF.GetSavedValue().toInt32()
            != aCharsPerLineNF.GetValue()||
         aSnapToCharsCB.GetSavedValue() != aSnapToCharsCB.IsChecked() ||
-        aRubySizeMF.GetSavedValue().ToInt32() != aRubySizeMF.GetValue()||
-        aCharWidthMF.GetSavedValue().ToInt32() != aCharWidthMF.GetValue()||
+        aRubySizeMF.GetSavedValue().toInt32() != aRubySizeMF.GetValue()||
+        aCharWidthMF.GetSavedValue().toInt32() != aCharWidthMF.GetValue()||
         aRubyBelowCB.GetSavedValue() != aRubyBelowCB.IsChecked()||
         aDisplayCB.GetSavedValue() != aDisplayCB.IsChecked()||
         aPrintCB.GetSavedValue() != aPrintCB.IsChecked()||

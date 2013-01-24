@@ -189,7 +189,7 @@ sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         bRet = sal_True;
     }
 
-    if(aTabMF.IsVisible() && aTabMF.GetText() != OUString(aTabMF.GetSavedValue()))
+    if(aTabMF.IsVisible() && aTabMF.GetText() != aTabMF.GetSavedValue())
     {
         rSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
                     (sal_uInt16)aTabMF.Denormalize(aTabMF.GetValue(FUNIT_TWIP))));
@@ -205,7 +205,7 @@ sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         bRet = sal_True;
     }
 
-    if (aWordCountED.GetText() != OUString(aWordCountED.GetSavedValue()))
+    if (aWordCountED.GetText() != aWordCountED.GetSavedValue())
     {
         boost::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());

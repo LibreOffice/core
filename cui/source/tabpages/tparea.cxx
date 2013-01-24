@@ -340,7 +340,7 @@ sal_Bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
     {
         // linear transparence
         sal_uInt16 nPos = (sal_uInt16)aMtrTransparent.GetValue();
-        if(nPos != (sal_uInt16)aMtrTransparent.GetSavedValue().ToInt32() || !bLinearActive)
+        if(nPos != (sal_uInt16)aMtrTransparent.GetSavedValue().toInt32() || !bLinearActive)
         {
             XFillTransparenceItem aItem(nPos);
             SdrShadowTransparenceItem aShadowItem(nPos);
@@ -359,12 +359,12 @@ sal_Bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
         // transparence gradient, fill ItemSet from values
         if(!bGradActive
             || (XGradientStyle)aLbTrgrGradientType.GetSelectEntryPos() != (XGradientStyle)aLbTrgrGradientType.GetSavedValue()
-            || (sal_uInt16)aMtrTrgrAngle.GetValue() != (sal_uInt16)aMtrTrgrAngle.GetSavedValue().ToInt32()
-            || (sal_uInt16)aMtrTrgrCenterX.GetValue() != (sal_uInt16)aMtrTrgrCenterX.GetSavedValue().ToInt32()
-            || (sal_uInt16)aMtrTrgrCenterY.GetValue() != (sal_uInt16)aMtrTrgrCenterY.GetSavedValue().ToInt32()
-            || (sal_uInt16)aMtrTrgrBorder.GetValue() != (sal_uInt16)aMtrTrgrBorder.GetSavedValue().ToInt32()
-            || (sal_uInt16)aMtrTrgrStartValue.GetValue() != (sal_uInt16)aMtrTrgrStartValue.GetSavedValue().ToInt32()
-            || (sal_uInt16)aMtrTrgrEndValue.GetValue() != (sal_uInt16)aMtrTrgrEndValue.GetSavedValue().ToInt32() )
+            || (sal_uInt16)aMtrTrgrAngle.GetValue() != (sal_uInt16)aMtrTrgrAngle.GetSavedValue().toInt32()
+            || (sal_uInt16)aMtrTrgrCenterX.GetValue() != (sal_uInt16)aMtrTrgrCenterX.GetSavedValue().toInt32()
+            || (sal_uInt16)aMtrTrgrCenterY.GetValue() != (sal_uInt16)aMtrTrgrCenterY.GetSavedValue().toInt32()
+            || (sal_uInt16)aMtrTrgrBorder.GetValue() != (sal_uInt16)aMtrTrgrBorder.GetSavedValue().toInt32()
+            || (sal_uInt16)aMtrTrgrStartValue.GetValue() != (sal_uInt16)aMtrTrgrStartValue.GetSavedValue().toInt32()
+            || (sal_uInt16)aMtrTrgrEndValue.GetValue() != (sal_uInt16)aMtrTrgrEndValue.GetSavedValue().toInt32() )
         {
             sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)aMtrTrgrStartValue.GetValue() * 255) / 100);
             sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)aMtrTrgrEndValue.GetValue() * 255) / 100);
@@ -1168,7 +1168,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 if( !aNumFldStepCount.GetText().isEmpty() )
                 {
                     nValue = (sal_uInt16) aNumFldStepCount.GetValue();
-                    if( nValue != (sal_uInt16) aNumFldStepCount.GetSavedValue().ToInt32() )
+                    if( nValue != (sal_uInt16) aNumFldStepCount.GetSavedValue().toInt32() )
                         bValueModified = sal_True;
                 }
             }
@@ -1266,7 +1266,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             }
             else if( aTsbOriginal.IsEnabled() &&
                      aTsbOriginal.GetState() == STATE_CHECK &&
-                     aMtrFldXSize.GetSavedValue().Len() > 0 )
+                     !aMtrFldXSize.GetSavedValue().isEmpty() )
                 pItem = new XFillBmpSizeXItem( 0 );
 
             if( pItem )
@@ -1303,7 +1303,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             }
             else if( aTsbOriginal.IsEnabled() &&
                      aTsbOriginal.GetState() == STATE_CHECK &&
-                     aMtrFldYSize.GetSavedValue().Len() > 0 )
+                     !aMtrFldYSize.GetSavedValue().isEmpty() )
                 pItem = new XFillBmpSizeYItem( 0 );
 
             if( pItem )

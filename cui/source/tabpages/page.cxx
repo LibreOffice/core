@@ -685,13 +685,13 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_ULSPACE );
     SvxULSpaceItem aTopMargin( (const SvxULSpaceItem&)rOldSet.Get( nWhich ) );
 
-    if ( aLeftMarginEdit.GetText() != OUString(aLeftMarginEdit.GetSavedValue()) )
+    if ( aLeftMarginEdit.GetText() != aLeftMarginEdit.GetSavedValue() )
     {
         aMargin.SetLeft( (sal_uInt16)GetCoreValue( aLeftMarginEdit, eUnit ) );
         bModified |= sal_True;
     }
 
-    if ( aRightMarginEdit.GetText() != OUString(aRightMarginEdit.GetSavedValue()) )
+    if ( aRightMarginEdit.GetText() != aRightMarginEdit.GetSavedValue() )
     {
         aMargin.SetRight( (sal_uInt16)GetCoreValue( aRightMarginEdit, eUnit ) );
         bModified |= sal_True;
@@ -710,13 +710,13 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
     sal_Bool bMod = sal_False;
 
-    if ( aTopMarginEdit.GetText() != OUString(aTopMarginEdit.GetSavedValue()) )
+    if ( aTopMarginEdit.GetText() != aTopMarginEdit.GetSavedValue() )
     {
         aTopMargin.SetUpper( (sal_uInt16)GetCoreValue( aTopMarginEdit, eUnit ) );
         bMod |= sal_True;
     }
 
-    if ( aBottomMarginEdit.GetText() != OUString(aBottomMarginEdit.GetSavedValue()) )
+    if ( aBottomMarginEdit.GetText() != aBottomMarginEdit.GetSavedValue() )
     {
         aTopMargin.SetLower( (sal_uInt16)GetCoreValue( aBottomMarginEdit, eUnit ) );
         bMod |= sal_True;
@@ -1630,7 +1630,7 @@ bool SvxPageDescPage::IsPrinterRangeOverflow(
     long nValue = static_cast<long>(rField.GetValue());
     if ( bCheck &&
          (  nValue < nFirstMargin || nValue > nLastMargin ) &&
-         rField.GetText() != OUString(rField.GetSavedValue()) )
+         rField.GetText() != rField.GetSavedValue() )
     {
         rField.SetValue( nValue < nFirstMargin ? nFirstMargin : nLastMargin );
          bRet = true;
@@ -1664,19 +1664,19 @@ void SvxPageDescPage::CheckMarginEdits( bool _bClear )
 bool SvxPageDescPage::IsMarginOutOfRange()
 {
     bool bRet = ( ( ( !( pImpl->m_nPos & MARGIN_LEFT ) &&
-                      ( aLeftMarginEdit.GetText() != OUString(aLeftMarginEdit.GetSavedValue()) ) ) &&
+                      ( aLeftMarginEdit.GetText() != aLeftMarginEdit.GetSavedValue() ) ) &&
                     ( aLeftMarginEdit.GetValue() < nFirstLeftMargin ||
                       aLeftMarginEdit.GetValue() > nLastLeftMargin ) ) ||
                   ( ( !( pImpl->m_nPos & MARGIN_RIGHT ) &&
-                      ( aRightMarginEdit.GetText() != OUString(aRightMarginEdit.GetSavedValue()) ) ) &&
+                      ( aRightMarginEdit.GetText() != aRightMarginEdit.GetSavedValue() ) ) &&
                     ( aRightMarginEdit.GetValue() < nFirstRightMargin ||
                       aRightMarginEdit.GetValue() > nLastRightMargin ) ) ||
                   ( ( !( pImpl->m_nPos & MARGIN_TOP ) &&
-                      ( aTopMarginEdit.GetText() != OUString(aTopMarginEdit.GetSavedValue()) ) ) &&
+                      ( aTopMarginEdit.GetText() != aTopMarginEdit.GetSavedValue() ) ) &&
                     ( aTopMarginEdit.GetValue() < nFirstTopMargin ||
                       aTopMarginEdit.GetValue() > nLastTopMargin ) ) ||
                   ( ( !( pImpl->m_nPos & MARGIN_BOTTOM ) &&
-                      ( aBottomMarginEdit.GetText() != OUString(aBottomMarginEdit.GetSavedValue()) ) ) &&
+                      ( aBottomMarginEdit.GetText() != aBottomMarginEdit.GetSavedValue() ) ) &&
                     ( aBottomMarginEdit.GetValue() < nFirstBottomMargin ||
                       aBottomMarginEdit.GetValue() > nLastBottomMargin ) ) );
     return bRet;

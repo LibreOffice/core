@@ -701,7 +701,7 @@ namespace svx
     //-------------------------------------------------------------------------
     IMPL_LINK_NOARG(HangulHanjaConversionDialog, OnSuggestionModified)
     {
-        m_aFind.Enable( OUString(m_pPlayground->GetWordInputControl().GetSavedValue()) != m_pPlayground->GetWordInputControl().GetText() );
+        m_aFind.Enable( m_pPlayground->GetWordInputControl().GetSavedValue() != m_pPlayground->GetWordInputControl().GetText() );
 
         bool bSameLen = m_pPlayground->GetWordInputControl().GetText().getLength() == m_pPlayground->GetCurrentText().Len();
         m_pPlayground->EnableButton( SvxCommonLinguisticControl::eChange, m_bDocumentMode && bSameLen );

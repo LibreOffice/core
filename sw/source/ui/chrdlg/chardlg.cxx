@@ -248,9 +248,9 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 
     SwFmtINetFmt aINetFmt(sURL, m_pTargetFrmLB->GetText());
     aINetFmt.SetName(m_pNameED->GetText());
-    bModified |= m_pURLED->GetText() != OUString(m_pURLED->GetSavedValue());
+    bModified |= m_pURLED->GetText() != m_pURLED->GetSavedValue();
     bModified |= m_pNameED->IsModified();
-    bModified |= OUString(m_pTargetFrmLB->GetSavedValue()) != m_pTargetFrmLB->GetText();
+    bModified |= m_pTargetFrmLB->GetSavedValue() != m_pTargetFrmLB->GetText();
 
     // set valid settings first
     String sEntry = m_pVisitedLB->GetSelectEntry();

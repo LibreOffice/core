@@ -1215,14 +1215,14 @@ sal_Bool SwFldVarPage::FillItemSet(SfxItemSet& )
     }
 
     if (!IsFldEdit() ||
-        OUString(aNameED.GetSavedValue()) != aNameED.GetText() ||
-        OUString(aValueED.GetSavedValue()) != aValueED.GetText() ||
+        aNameED.GetSavedValue() != aNameED.GetText() ||
+        aValueED.GetSavedValue() != aValueED.GetText() ||
         aSelectionLB.GetSavedValue() != aSelectionLB.GetSelectEntryPos() ||
         aFormatLB.GetSavedValue() != aFormatLB.GetSelectEntryPos() ||
         nOldFormat != aNumFormatLB.GetFormat() ||
         aInvisibleCB.GetState() != aInvisibleCB.GetSavedValue() ||
         aChapterLevelLB.GetSavedValue() != aChapterLevelLB.GetSelectEntryPos() ||
-        OUString(aSeparatorED.GetSavedValue()) != aSeparatorED.GetText())
+        aSeparatorED.GetSavedValue() != aSeparatorED.GetText())
     {
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat,
                     cSeparator, aNumFormatLB.IsAutomaticLanguage() );

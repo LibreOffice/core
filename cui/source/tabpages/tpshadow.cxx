@@ -346,7 +346,7 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
 
         // transparency
         sal_uInt16 nVal = (sal_uInt16)aMtrTransparent.GetValue();
-        if( nVal != (sal_uInt16)aMtrTransparent.GetSavedValue().ToInt32() )
+        if( nVal != (sal_uInt16)aMtrTransparent.GetSavedValue().toInt32() )
         {
             SdrShadowTransparenceItem aItem( nVal );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOWTRANSPARENCE );

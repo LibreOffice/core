@@ -763,7 +763,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
     SfxItemState eOldItemState = rCoreSet.GetItemState(nSlot, sal_False);
     const SfxItemSet& rOldSet = GetItemSet();
 
-    sal_Bool bGraphTransparencyChanged = bGraphTransparency && (m_pGraphTransMF->GetText() != OUString(m_pGraphTransMF->GetSavedValue()));
+    sal_Bool bGraphTransparencyChanged = bGraphTransparency && (m_pGraphTransMF->GetText() != m_pGraphTransMF->GetSavedValue());
     if ( pOld )
     {
         const SvxBrushItem& rOldItem    = (const SvxBrushItem&)*pOld;

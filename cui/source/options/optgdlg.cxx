@@ -894,7 +894,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         bAppearanceChanged = sal_True;
     }
 
-    if ( aAAPointLimit.GetValue() != aAAPointLimit.GetSavedValue().ToInt32() )
+    if ( aAAPointLimit.GetValue() != aAAPointLimit.GetSavedValue().toInt32() )
     {
         pAppearanceCfg->SetFontAntialiasingMinPixelHeight( aAAPointLimit.GetValue() );
         bAppearanceChanged = sal_True;
@@ -1478,7 +1478,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     // Configured date acceptance patterns, for example Y-M-D;M-D or empty for
     // locale default.
-    if (aDatePatternsED.GetText() != OUString(aDatePatternsED.GetSavedValue()))
+    if (aDatePatternsED.GetText() != aDatePatternsED.GetSavedValue())
         pLangConfig->aSysLocaleOptions.SetDatePatternsConfigString( aDatePatternsED.GetText());
 
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();

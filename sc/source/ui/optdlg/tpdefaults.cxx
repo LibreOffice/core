@@ -89,8 +89,8 @@ sal_Bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreSet)
     OUString aSheetPrefix = aEdSheetPrefix.GetText();
 
 
-    if ( OUString(aEdNSheets.GetSavedValue()) != aEdNSheets.GetText()
-         || static_cast<OUString>(aEdSheetPrefix.GetSavedValue()) != aSheetPrefix )
+    if ( aEdNSheets.GetSavedValue() != aEdNSheets.GetText()
+         || aEdSheetPrefix.GetSavedValue() != aSheetPrefix )
     {
         aOpt.SetInitTabCount( nTabCount );
         aOpt.SetInitTabPrefix( aSheetPrefix );

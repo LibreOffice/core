@@ -310,7 +310,7 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
         bModified |= sal_True;
     }
 
-    if ( aAutoSaveEdit.GetText() != OUString(aAutoSaveEdit.GetSavedValue()) )
+    if ( aAutoSaveEdit.GetText() != aAutoSaveEdit.GetSavedValue() )
     {
         rSet.Put( SfxUInt16Item( GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
                                  (sal_uInt16)aAutoSaveEdit.GetValue() ) );

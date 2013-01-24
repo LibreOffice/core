@@ -1059,7 +1059,7 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
     aReadOnlyCB.Check(rDesc.IsReadonly());
-    if(aTitleED.GetText() == OUString(aTitleED.GetSavedValue()))
+    if(aTitleED.GetText() == aTitleED.GetSavedValue())
     {
         if(rDesc.GetTitle())
             aTitleED.SetText(*rDesc.GetTitle());

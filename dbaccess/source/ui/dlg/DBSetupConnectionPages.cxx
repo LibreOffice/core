@@ -182,7 +182,7 @@ DBG_NAME(OTextConnectionPageSetup)
         fillString(_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN, bChangedSomething);
         fillInt32(_rSet,&m_aNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
 
-        if ( m_aETHostServer.GetText() != OUString(m_aETHostServer.GetSavedValue()) )
+        if ( m_aETHostServer.GetText() != m_aETHostServer.GetSavedValue() )
         {
             DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
             ::dbaccess::ODsnTypeCollection* pCollection = NULL;
@@ -825,7 +825,7 @@ DBG_NAME(OAuthentificationPageSetup)
     {
         sal_Bool bChangedSomething = sal_False;
 
-        if (m_aETUserName.GetText() != OUString(m_aETUserName.GetSavedValue()))
+        if (m_aETUserName.GetText() != m_aETUserName.GetSavedValue())
         {
             _rSet.Put(SfxStringItem(DSID_USER, m_aETUserName.GetText()));
             _rSet.Put(SfxStringItem(DSID_PASSWORD, String()));

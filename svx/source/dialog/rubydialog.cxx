@@ -409,8 +409,8 @@ void SvxRubyDialog::GetText()
     for(int i = 0; i < 8; i+=2)
     {
         if(aEditArr[i]->IsEnabled() &&
-           (aEditArr[i]->GetText() != OUString(aEditArr[i]->GetSavedValue()) ||
-            aEditArr[i + 1]->GetText() != OUString(aEditArr[i + 1]->GetSavedValue())))
+           (aEditArr[i]->GetText() != aEditArr[i]->GetSavedValue() ||
+            aEditArr[i + 1]->GetText() != aEditArr[i + 1]->GetSavedValue()))
         {
             Sequence<PropertyValues>& aRubyValues = pImpl->GetRubyValues();
             DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index" );

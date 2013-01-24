@@ -324,49 +324,49 @@ sal_Bool SvxConnectionPage::FillItemSet( SfxItemSet& rAttrs)
     sal_Bool     bModified = sal_False;
     sal_Int32    nValue;
 
-    if( aMtrFldHorz1.GetText() != OUString(aMtrFldHorz1.GetSavedValue()) )
+    if( aMtrFldHorz1.GetText() != aMtrFldHorz1.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldHorz1, eUnit );
         rAttrs.Put( SdrEdgeNode1HorzDistItem( nValue ) );
         bModified = sal_True;
     }
 
-    if( aMtrFldHorz2.GetText() != OUString(aMtrFldHorz2.GetSavedValue()) )
+    if( aMtrFldHorz2.GetText() != aMtrFldHorz2.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldHorz2, eUnit );
         rAttrs.Put( SdrEdgeNode2HorzDistItem( nValue ) );
         bModified = sal_True;
     }
 
-    if( aMtrFldVert1.GetText() != OUString(aMtrFldVert1.GetSavedValue()) )
+    if( aMtrFldVert1.GetText() != aMtrFldVert1.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldVert1, eUnit );
         rAttrs.Put( SdrEdgeNode1VertDistItem( nValue ) );
         bModified = sal_True;
     }
 
-    if( aMtrFldVert2.GetText() != OUString(aMtrFldVert2.GetSavedValue()) )
+    if( aMtrFldVert2.GetText() != aMtrFldVert2.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldVert2, eUnit );
         rAttrs.Put( SdrEdgeNode2VertDistItem( nValue ) );
         bModified = sal_True;
     }
 
-    if( aMtrFldLine1.GetText() != OUString(aMtrFldLine1.GetSavedValue()) )
+    if( aMtrFldLine1.GetText() != aMtrFldLine1.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldLine1, eUnit );
         rAttrs.Put( SdrEdgeLine1DeltaItem( nValue ) );
         bModified = sal_True;
     }
 
-    if( aMtrFldLine2.GetText() != OUString(aMtrFldLine2.GetSavedValue()) )
+    if( aMtrFldLine2.GetText() != aMtrFldLine2.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldLine2, eUnit );
         rAttrs.Put( SdrEdgeLine2DeltaItem( nValue ) );
         bModified = sal_True;
     }
 
-    if( aMtrFldLine3.GetText() != OUString(aMtrFldLine3.GetSavedValue()) )
+    if( aMtrFldLine3.GetText() != aMtrFldLine3.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldLine3, eUnit );
         rAttrs.Put( SdrEdgeLine3DeltaItem( nValue ) );

@@ -228,7 +228,7 @@ namespace dbaui
     // -----------------------------------------------------------------------
     void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,sal_uInt16 _nID,sal_Bool& _bChangedSomething)
     {
-        if( (_pEdit != NULL) && (_pEdit->GetValue() != _pEdit->GetSavedValue().ToInt32()) )
+        if( (_pEdit != NULL) && (_pEdit->GetValue() != _pEdit->GetSavedValue().toInt32()) )
         {
             _rSet.Put(SfxInt32Item(_nID, static_cast<sal_Int32>(_pEdit->GetValue())));
             _bChangedSomething = sal_True;
@@ -237,7 +237,7 @@ namespace dbaui
     // -----------------------------------------------------------------------
     void OGenericAdministrationPage::fillString(SfxItemSet& _rSet,Edit* _pEdit,sal_uInt16 _nID,sal_Bool& _bChangedSomething)
     {
-        if( (_pEdit != NULL) && (_pEdit->GetText() != OUString(_pEdit->GetSavedValue())) )
+        if( (_pEdit != NULL) && (_pEdit->GetText() != _pEdit->GetSavedValue()) )
         {
             _rSet.Put(SfxStringItem(_nID, _pEdit->GetText()));
             _bChangedSomething = sal_True;

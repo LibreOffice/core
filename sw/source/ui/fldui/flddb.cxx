@@ -232,8 +232,8 @@ sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
         sal_Bool bDBListBoxChanged = sOldDBName != sTempDBName ||
             sOldTableName != sTempTableName || sOldColumnName != sTempColumnName;
         if (!IsFldEdit() ||
-            OUString(aConditionED.GetSavedValue()) != aConditionED.GetText() ||
-            OUString(aValueED.GetSavedValue()) != aValueED.GetText() ||
+            aConditionED.GetSavedValue() != aConditionED.GetText() ||
+            aValueED.GetSavedValue() != aValueED.GetText() ||
              bDBListBoxChanged ||
              nOldFormat != nFormat || nOldSubType != nSubType)
         {

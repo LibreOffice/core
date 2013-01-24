@@ -631,11 +631,11 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
     String sLabel       =  aLabelBox   .GetText();
     String sIdx         =  aIdxBox     .GetText();
 
-    bool bStandardHeightChanged = OUString(aStandardHeightLB.GetSavedValue()) != aStandardHeightLB.GetText();
-    bool bTitleHeightChanged = OUString(aTitleHeightLB.GetSavedValue()) != aTitleHeightLB.GetText();
-    bool bListHeightChanged = OUString(aListHeightLB.GetSavedValue()) != aListHeightLB.GetText() && (!bListHeightDefault || !bSetListHeightDefault );
-    bool bLabelHeightChanged = OUString(aLabelHeightLB.GetSavedValue()) != aLabelHeightLB.GetText() && (!bLabelHeightDefault || !bSetLabelHeightDefault );
-    bool bIndexHeightChanged = OUString(aIndexHeightLB.GetSavedValue()) != aIndexHeightLB.GetText() && (!bIndexHeightDefault || !bSetIndexHeightDefault );
+    bool bStandardHeightChanged = aStandardHeightLB.GetSavedValue() != aStandardHeightLB.GetText();
+    bool bTitleHeightChanged = aTitleHeightLB.GetSavedValue() != aTitleHeightLB.GetText();
+    bool bListHeightChanged = aListHeightLB.GetSavedValue() != aListHeightLB.GetText() && (!bListHeightDefault || !bSetListHeightDefault );
+    bool bLabelHeightChanged = aLabelHeightLB.GetSavedValue() != aLabelHeightLB.GetText() && (!bLabelHeightDefault || !bSetLabelHeightDefault );
+    bool bIndexHeightChanged = aIndexHeightLB.GetSavedValue() != aIndexHeightLB.GetText() && (!bIndexHeightDefault || !bSetIndexHeightDefault );
     if(bNotDocOnly)
     {
         pFontConfig->SetFontStandard(sStandard, nFontGroup);

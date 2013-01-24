@@ -906,7 +906,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     }
 
     if ( !bChanged )
-        bChanged = !pNameBox->GetSavedValue().Len();
+        bChanged = pNameBox->GetSavedValue().isEmpty();
 
     if ( !bChanged && pExampleSet &&
          pExampleSet->GetItemState( nWhich, sal_False, &pItem ) == SFX_ITEM_SET &&
@@ -946,7 +946,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
 
     if ( !bChanged )
     {
-        bChanged = !pStyleBox->GetSavedValue().Len();
+        bChanged = pStyleBox->GetSavedValue().isEmpty();
 
         if ( m_pImpl->m_bInSearchMode && bChanged &&
              aInfo.GetWeight() == WEIGHT_NORMAL && aInfo.GetItalic() != ITALIC_NONE )
@@ -995,7 +995,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
 
     if ( !bChanged )
     {
-        bChanged = !pStyleBox->GetSavedValue().Len();
+        bChanged = pStyleBox->GetSavedValue().isEmpty();
 
         if ( m_pImpl->m_bInSearchMode && bChanged &&
              aInfo.GetItalic() == ITALIC_NONE && aInfo.GetWeight() != WEIGHT_NORMAL )
@@ -1023,7 +1023,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
 
     if ( pSizeBox->GetText().isEmpty() )   // GetValue() returns the min-value
         nSize = 0;
-    long nSavedSize = pSizeBox->GetSavedValue().ToInt32();
+    long nSavedSize = pSizeBox->GetSavedValue().toInt32();
     bool bRel = true;
 
     if ( !pSizeBox->IsRelative() )
@@ -3197,7 +3197,7 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 
     if ( !bChanged &&
          ( m_pKerningLB->GetSavedValue() == LISTBOX_ENTRY_NOTFOUND ||
-           ( !m_pKerningMF->GetSavedValue().Len() && m_pKerningMF->IsEnabled() ) ) )
+           ( m_pKerningMF->GetSavedValue().isEmpty() && m_pKerningMF->IsEnabled() ) ) )
         bChanged = sal_True;
 
     if ( bChanged && nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -3223,7 +3223,7 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
-    if ( m_pScaleWidthMF->GetText() != OUString(m_pScaleWidthMF->GetSavedValue()) )
+    if ( m_pScaleWidthMF->GetText() != m_pScaleWidthMF->GetSavedValue() )
     {
         rSet.Put( SvxCharScaleWidthItem( (sal_uInt16)m_pScaleWidthMF->GetValue(), nWhich ) );
         bModified = sal_True;

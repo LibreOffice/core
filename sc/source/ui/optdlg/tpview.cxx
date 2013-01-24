@@ -463,7 +463,7 @@ sal_Bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
         bRet = sal_True;
     }
 
-    if(aTabMF.GetText() != OUString(aTabMF.GetSavedValue()))
+    if(aTabMF.GetText() != aTabMF.GetSavedValue())
     {
         rCoreSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
                     sal::static_int_cast<sal_uInt16>( aTabMF.Denormalize(aTabMF.GetValue(FUNIT_TWIP)) )));
