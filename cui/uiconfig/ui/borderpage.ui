@@ -71,6 +71,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_User-defined</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">framesel</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -86,6 +87,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Default</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">presets</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -153,6 +155,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">St_yle</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">linestylelb</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -168,6 +171,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Width</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">linewidthmf:0.00pt</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -183,6 +187,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Color</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">linecolorlb</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -342,6 +347,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Left</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">leftmf:0.00mm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -356,6 +362,8 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Right</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">rightmf:0.00mm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -371,6 +379,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Top</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">topmf:0.00mm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -386,6 +395,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Bottom</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">bottommf:0.00mm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -467,6 +477,7 @@
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Position</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">shadows</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -482,6 +493,7 @@
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Distan_ce</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">distancemf:0.00mm</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -497,6 +509,7 @@
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">C_olor</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">shadowcolorlb</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
