@@ -58,6 +58,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Name</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">name</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -73,6 +74,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">W_idth</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">widthmf:0.00cm</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -189,6 +191,7 @@
                             <property name="xpad">1</property>
                             <property name="label" translatable="yes">Lef_t</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">leftmf:0.00cm</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -204,6 +207,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">Ri_ght</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">rightmf:0.00cm</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -221,6 +225,7 @@
                             <property name="ypad">1</property>
                             <property name="label" translatable="yes">_Above</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">abovemf:0.00cm</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -237,6 +242,7 @@
                             <property name="xpad">1</property>
                             <property name="label" translatable="yes">_Below</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">belowmf:0.00cm</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -521,6 +527,7 @@
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Text _direction</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">textdirection</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
