@@ -652,6 +652,7 @@
 #define SC_UNONAME_HIDDENVALUES         "HiddenValues"
 #define SC_UNONAME_INCLUDEHIDDENCELLS   "IncludeHiddenCells"
 #define SC_UNONAME_HIDDENVALUES     "HiddenValues"
+#define SC_UNONAME_USE_INTERNAL_DATA_PROVIDER "UseInternalDataProvider"
 
 // Solver
 #define SC_UNONAME_TIMEOUT          "Timeout"
