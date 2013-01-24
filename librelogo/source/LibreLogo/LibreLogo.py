@@ -25,7 +25,7 @@ else:
     __lngpath__ = unohelper.fileUrlToSystemPath(re.sub("program/(fundamental.ini|fundamentalrc)$", "", urebootstrap))
 __lngpath__ = __lngpath__ + "share/Scripts/python/LibreLogo/".replace("/", os.sep)
 
-__translang__ = "am|ca|cs|de|dk|el|en|eo|es|et|fr|hu|it|ja|nl|no|pl|pt|ro|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
+__translang__ = "am|ca|cs|de|dk|el|en|eo|es|et|fr|hu|it|ja|nl|no|pl|pt|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
 __lng__ = {}
 __docs__ = {}
 __prevcode__ = None
