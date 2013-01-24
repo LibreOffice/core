@@ -54,7 +54,7 @@ bool TestZipImpl::test_directory()
     ZipFile::DirectoryPtr_t contents = zipFile.GetDirectory();
     vector<string> &stringVector = *contents.get();
     sort(stringVector.begin(), stringVector.end());
-    return expectedContents == expectedContents;
+    return expectedContents == stringVector;
 }
 
 bool TestZipImpl::test_hasContentCaseInSensitive()
