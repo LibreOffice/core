@@ -357,7 +357,7 @@ namespace drawinglayer
                 }
             }
 
-            if(!getRightLine().isEmpty() && getRightIsOutside())
+            if(!getRightLine().isEmpty())
             {
                 // create right line from top to bottom
                 const basegfx::B2DPoint aStart(getTransform() * basegfx::B2DPoint(1.0, 0.0));
@@ -622,9 +622,11 @@ namespace sdr
 
                                     // get basic lines
                                     impGetLine(aLeftLine, rTableLayouter, nX, nY, false, nColCount, nRowCount, bIsRTL);
-                                    impGetLine(aBottomLine, rTableLayouter, nX, nYBottom, true, nColCount, nRowCount, bIsRTL);
+                                    //To resolve the bug fdo#59117
+                                    //In RTL table as BottomLine & TopLine are drawn from Left Side to Right, nX should be nX-1
+                                    impGetLine(aBottomLine, rTableLayouter, bIsRTL?nX-1:nX, nYBottom, true, nColCount, nRowCount, bIsRTL);
                                     impGetLine(aRightLine, rTableLayouter, nXRight, nY, false, nColCount, nRowCount, bIsRTL);
-                                    impGetLine(aTopLine, rTableLayouter, nX, nY, true, nColCount, nRowCount, bIsRTL);
+                                    impGetLine(aTopLine, rTableLayouter, bIsRTL?nX-1:nX, nY, true, nColCount, nRowCount, bIsRTL);
 
                                     // get the neighbor cells' borders
                                     impGetLine(aLeftFromTLine, rTableLayouter, nX, nY - 1, false, nColCount, nRowCount, bIsRTL);
