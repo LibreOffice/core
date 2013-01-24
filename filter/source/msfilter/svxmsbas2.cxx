@@ -26,11 +26,11 @@
 using namespace com::sun::star;
 
 sal_uLong SvxImportMSVBasic::SaveOrDelMSVBAStorage( sal_Bool bSaveInto,
-                                                const String& rStorageName )
+                                                const OUString& rStorageName )
 {
     sal_uLong nRet = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
-    String aDstStgName( GetMSBasicStorageName() );
+    OUString aDstStgName( GetMSBasicStorageName() );
     SotStorageRef xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName,
                                 STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYALL ) );
     if( xVBAStg.Is() && !xVBAStg->GetError() )
@@ -70,9 +70,9 @@ sal_uLong SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS
                     : ERRCODE_NONE;
 }
 
-String SvxImportMSVBasic::GetMSBasicStorageName()
+OUString SvxImportMSVBasic::GetMSBasicStorageName()
 {
-    return String( RTL_CONSTASCII_USTRINGPARAM( "_MS_VBA_Macros" ) );
+    return OUString( "_MS_VBA_Macros" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
