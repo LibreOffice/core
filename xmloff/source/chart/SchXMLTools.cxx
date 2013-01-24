@@ -383,7 +383,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
     {
         try
         {
-            sal_Bool bVal;
+            sal_Bool bVal = sal_False;
             uno::Any any = xPropSet->getPropertyValue("UseInternalDataProvider");
             if (any >>= bVal)
                 bUseInternal = static_cast<bool>(bVal);
