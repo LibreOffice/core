@@ -156,18 +156,18 @@ sub get_productname_for_property_table($$)
     my $version = $allvariables->{'PRODUCTVERSION'};
     my $productname = $name . " " . $version;
 
-    my $postversionextension = "";
-    if ( $allvariables->{'POSTVERSIONEXTENSION'} )
-    {
-        $postversionextension = $allvariables->{'POSTVERSIONEXTENSION'};
-        $productname = $productname . " " . $postversionextension;
-    }
-
     my $productextension = "";
     if ( $allvariables->{'PRODUCTEXTENSION'} )
     {
         $productextension = $allvariables->{'PRODUCTEXTENSION'};
         $productname = $productname . $productextension;
+    }
+
+    my $postversionextension = "";
+    if ( $allvariables->{'POSTVERSIONEXTENSION'} )
+    {
+        $postversionextension = $allvariables->{'POSTVERSIONEXTENSION'};
+        $productname = $productname . " " . $postversionextension;
     }
 
     if ( $installer::globals::languagepack )
