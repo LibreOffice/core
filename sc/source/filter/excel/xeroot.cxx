@@ -44,6 +44,9 @@
 #include "document.hxx"
 #include "scextopt.hxx"
 
+#include "formulabase.hxx"
+#include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
+
 using namespace ::com::sun::star;
 
 // Global data ================================================================
@@ -164,6 +167,12 @@ XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
     return *mrExpData.mxPTableMgr;
 }
 
+ScCompiler::OpCodeMapPtr XclExpRoot::GetOpCodeMap() const
+{
+    OSL_ENSURE( mrExpData.mxPTableMgr, "XclExpRoot::GetOpCodeMap - missing object (wrong BIFF?)" );
+    return mrExpData.mxOpCodeMap;
+}
+
 void XclExpRoot::InitializeConvert()
 {
     mrExpData.mxTabInfo.reset( new XclExpTabInfo( GetRoot() ) );
@@ -197,6 +206,48 @@ void XclExpRoot::InitializeGlobals()
         // BIFF8: only one link manager for all sheets
         mrExpData.mxLocLinkMgr = mrExpData.mxGlobLinkMgr;
         mrExpData.mxDxfs.reset( new XclExpDxfs( GetRoot() ) );
+    }
+
+    if( GetOutput() == EXC_OUTPUT_XML_2007 )
+    {
+        do
+        {
+            ScDocument& rDoc = GetDoc();
+            // Pass the model factory to OpCodeProvider, not the process
+            // service factory, otherwise a FormulaOpCodeMapperObj would be
+            // instanciated intead of a ScFormulaOpCodeMapperObj and the
+            // ScCompiler virtuals not be called! Which would be the case with
+            // the current (2013-01-24) rDoc.GetServiceManager()
+            const SfxObjectShell* pShell = rDoc.GetDocumentShell();
+            if (!pShell)
+            {
+                SAL_WARN( "sc", "XclExpRoot::InitializeGlobals - no object shell");
+                break;
+            }
+            uno::Reference< lang::XComponent > xComponent( pShell->GetModel(), uno::UNO_QUERY);
+            if (!xComponent.is())
+            {
+                SAL_WARN( "sc", "XclExpRoot::InitializeGlobals - no component");
+                break;
+            }
+            uno::Reference< lang::XMultiServiceFactory > xModelFactory( xComponent, uno::UNO_QUERY);
+            // OOXML is also BIFF8 function-wise
+            oox::xls::OpCodeProvider aOpCodeProvider( xModelFactory,
+                    oox::xls::FILTER_OOXML, oox::xls::BIFF8, false, true);
+            // Compiler mocks about non-matching ctor or conversion from
+            // Sequence<...> to Sequence<const ...> if directly created or passed,
+            // conversion through Any works around.
+            uno::Any aAny( aOpCodeProvider.getOoxParserMap());
+            uno::Sequence< const sheet::FormulaOpCodeMapEntry > aOpCodeMapping;
+            if (!(aAny >>= aOpCodeMapping))
+            {
+                SAL_WARN( "sc", "XclExpRoot::InitializeGlobals - no OpCodeMap");
+                break;
+            }
+            ScCompiler aCompiler( &rDoc, ScAddress());
+            aCompiler.SetGrammar( rDoc.GetGrammar());
+            mrExpData.mxOpCodeMap = aCompiler.CreateOpCodeMap( aOpCodeMapping, true);
+        } while(0);
     }
 
     GetXFBuffer().Initialize();
