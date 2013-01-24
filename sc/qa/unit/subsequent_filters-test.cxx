@@ -188,8 +188,8 @@ public:
     CPPUNIT_TEST(testHardRecalcODS);
     CPPUNIT_TEST(testFunctionsODS);
     CPPUNIT_TEST(testCachedFormulaResultsODS);
-    //CPPUNIT_TEST(testVolatileFunctionsODS);
-    //CPPUNIT_TEST(testCachedMatrixFormulaResultsODS);
+    CPPUNIT_TEST(testVolatileFunctionsODS);
+    CPPUNIT_TEST(testCachedMatrixFormulaResultsODS);
     CPPUNIT_TEST(testDatabaseRangesODS);
     CPPUNIT_TEST(testDatabaseRangesXLS);
     CPPUNIT_TEST(testDatabaseRangesXLSX);
@@ -428,26 +428,40 @@ void ScFiltersTest::testFunctionsODS()
 
 void ScFiltersTest::testCachedFormulaResultsODS()
 {
-    ScDocShellRef xDocSh = loadDoc("functions.", ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
+    {
+        ScDocShellRef xDocSh = loadDoc("functions.", ODS);
+        CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    rtl::OUString aCSVFileName;
+        ScDocument* pDoc = xDocSh->GetDocument();
+        rtl::OUString aCSVFileName;
 
-    //test cached formula results of logical functions
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
-    testFile(aCSVFileName, pDoc, 0);
-    //test cached formula results of spreadsheet functions
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("spreadsheet-functions.")), aCSVFileName);
-    testFile(aCSVFileName, pDoc, 1);
-    //test cached formula results of mathematical functions
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
-    testFile(aCSVFileName, pDoc, 2, PureString);
-    //test cached formula results of informations functions
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
-    testFile(aCSVFileName, pDoc, 3);
+        //test cached formula results of logical functions
+        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
+        testFile(aCSVFileName, pDoc, 0);
+        //test cached formula results of spreadsheet functions
+        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("spreadsheet-functions.")), aCSVFileName);
+        testFile(aCSVFileName, pDoc, 1);
+        //test cached formula results of mathematical functions
+        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
+        testFile(aCSVFileName, pDoc, 2, PureString);
+        //test cached formula results of informations functions
+        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
+        testFile(aCSVFileName, pDoc, 3);
 
-    xDocSh->DoClose();
+        xDocSh->DoClose();
+    }
+
+    {
+        ScDocShellRef xDocSh = loadDoc("cachedValue.", ODS);
+        CPPUNIT_ASSERT_MESSAGE("Failed to load cachedValue.*", xDocSh.Is());
+
+        ScDocument* pDoc = xDocSh->GetDocument();
+        rtl::OUString aCSVFileName;
+        createCSVPath("cachedValue.", aCSVFileName);
+        testFile(aCSVFileName, pDoc, 0);
+
+        xDocSh->DoClose();
+    }
 }
 
 void ScFiltersTest::testVolatileFunctionsODS()

@@ -141,7 +141,7 @@ public:
                 std::cout << "result: " << (int)(aCSVString == aString) << std::endl;
 #endif //DEBUG_CSV_HANDLER
 
-            CPPUNIT_ASSERT_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab, aCSVString, aString).getStr(), aString == aCSVString);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab, aCSVString, aString).getStr(), aString, aCSVString);
         }
         else
         {
@@ -169,7 +169,7 @@ public:
                 std::cout << "result: " << (int)(aCSVString == aString) << std::endl;
 #endif //DEBUG_CSV_HANDLER
 
-                CPPUNIT_ASSERT_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab, aCSVString, aString).getStr(), aString == aCSVString);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab, aCSVString, aString).getStr(), aString, aCSVString);
             }
             else
             {
