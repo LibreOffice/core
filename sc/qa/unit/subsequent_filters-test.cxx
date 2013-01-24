@@ -1328,19 +1328,7 @@ void ScFiltersTest::testPasswordOld()
 
 void ScFiltersTest::testControlImport()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("singlecontrol."));
-    rtl::OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
-
-    unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
-        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
-
+    ScDocShellRef xDocSh = loadDoc("singlecontrol.", XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load cell-value.xlsx", xDocSh.Is());
 
     uno::Reference< frame::XModel > xModel = xDocSh->GetModel();
