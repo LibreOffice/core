@@ -931,12 +931,14 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
     if(!IsTextRule(eOperation) && !IsTopBottomRule(eOperation))
     {
         rWorksheet->startElement( XML_formula, FSEND );
-        rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 0 ) ));
+        rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(),
+                    mrFormatEntry.CreateTokenArry( 0 ), GetRoot().GetOpCodeMap() ));
         rWorksheet->endElement( XML_formula );
         if (bFmla2)
         {
             rWorksheet->startElement( XML_formula, FSEND );
-            rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 1 ) ));
+            rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(),
+                        mrFormatEntry.CreateTokenArry( 1 ), GetRoot().GetOpCodeMap() ));
             rWorksheet->endElement( XML_formula );
         }
     }
@@ -1076,7 +1078,8 @@ void XclExpCfvo::SaveXml( XclExpXmlStream& rStrm )
     rtl::OString aValue;
     if(mrEntry.GetType() == COLORSCALE_FORMULA)
     {
-        rtl::OUString aFormula = XclXmlUtils::ToOUString( GetRoot().GetDoc(), maSrcPos, mrEntry.GetFormula()->Clone() );
+        rtl::OUString aFormula = XclXmlUtils::ToOUString( GetRoot().GetDoc(), maSrcPos,
+                mrEntry.GetFormula()->Clone(), GetRoot().GetOpCodeMap() );
         aValue = rtl::OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8 );
     }
     else
@@ -1584,14 +1587,16 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         Formula compiler supports this by offering two different functions
                         CreateDataValFormula() and CreateListValFormula(). */
                     mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_LISTVAL, *xScTokArr );
-                    msFormula1 = XclXmlUtils::ToOUString( GetDoc(), pValData->GetSrcPos(), xScTokArr.get() );
+                    msFormula1 = XclXmlUtils::ToOUString( GetDoc(), pValData->GetSrcPos(),
+                            xScTokArr.get(), GetRoot().GetOpCodeMap() );
                 }
             }
             else
             {
                 // no list validation -> convert the formula
                 mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );
-                msFormula1 = XclXmlUtils::ToOUString( GetDoc(), pValData->GetSrcPos(), xScTokArr.get() );
+                msFormula1 = XclXmlUtils::ToOUString( GetDoc(), pValData->GetSrcPos(),
+                        xScTokArr.get(), GetRoot().GetOpCodeMap() );
             }
         }
 
@@ -1600,7 +1605,8 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
         if( xScTokArr.get() )
         {
             mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );
-            msFormula2 = XclXmlUtils::ToOUString( GetDoc(), pValData->GetSrcPos(), xScTokArr.get() );
+            msFormula2 = XclXmlUtils::ToOUString( GetDoc(), pValData->GetSrcPos(),
+                    xScTokArr.get(), GetRoot().GetOpCodeMap() );
         }
     }
     else

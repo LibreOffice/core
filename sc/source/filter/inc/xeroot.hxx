@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include "xlroot.hxx"
+#include "compiler.hxx"
 #include <boost/shared_ptr.hpp>
 
 // Forward declarations of objects in public use ==============================
@@ -89,6 +90,8 @@ struct XclExpRootData : public XclRootData
     XclExpPTableMgrRef  mxPTableMgr;        /// All pivot tables and pivot caches.
     XclExpDxfsRef       mxDxfs;             /// All delta formatting entries
 
+    ScCompiler::OpCodeMapPtr  mxOpCodeMap;  /// mapping between op-codes and names
+
     bool                mbRelUrl;           /// true = Store URLs relative.
 
     explicit            XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
@@ -142,6 +145,8 @@ public:
     XclExpPivotTableManager& GetPivotTableManager() const;
     /** Returns the differential formatting list */
     XclExpDxfs&          GetDxfs() const;
+    /** Returns the op-code mapping */
+    ScCompiler::OpCodeMapPtr  GetOpCodeMap() const;
 
     /** Is called when export filter starts to create the Excel document (all BIFF versions). */
     void                InitializeConvert();

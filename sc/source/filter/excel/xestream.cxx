@@ -849,13 +849,27 @@ OUString XclXmlUtils::ToOUString( const String& s )
     return OUString( s.GetBuffer(), s.Len() );
 }
 
-OUString XclXmlUtils::ToOUString( ScDocument& rDocument, const ScAddress& rAddress, ScTokenArray* pTokenArray )
+OUString XclXmlUtils::ToOUString( ScDocument& rDocument, const ScAddress& rAddress,
+        ScTokenArray* pTokenArray, const FormulaCompiler::OpCodeMapPtr & xOpCodeMap )
 {
     ScCompiler aCompiler( &rDocument, rAddress, *pTokenArray);
-    aCompiler.SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_A1);
-    String s;
-    aCompiler.CreateStringFromTokenArray( s );
-    return ToOUString( s );
+    if (xOpCodeMap)
+    {
+        aCompiler.SetFormulaLanguage( xOpCodeMap );
+        /* TODO: The correct ref convention would be CONV_XL_OOX but that would
+         * need aCompiler.SetExternalLinks() and so far we don't have the links
+         * mapping. */
+        aCompiler.SetRefConvention( formula::FormulaGrammar::CONV_XL_A1 );
+    }
+    else
+    {
+        SAL_WARN( "sc", "XclXmlUtils::ToOUString - no opcodemap, dumb fallback to PODF");
+        aCompiler.SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_A1);
+    }
+
+    OUStringBuffer aBuffer( pTokenArray->GetLen() * 5 );
+    aCompiler.CreateStringFromTokenArray( aBuffer );
+    return aBuffer.makeStringAndClear();
 }
 
 OUString XclXmlUtils::ToOUString( const XclExpString& s )
