@@ -20,7 +20,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <identifier value="UPDATED_IDENTIFIER"/>
-    <version value="#VERSION#" />
+    <version value="1.0.1" />
     <platform value="UPDATED_SUPPORTED_PLATFORM" />
     <display-name>
         <name lang="en-US">MySQL Connector</name>

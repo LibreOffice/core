@@ -7759,12 +7759,18 @@ AC_MSG_CHECKING([whether to build the MySQL Connector extension])
 if test "x$enable_ext_mysql_connector" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     AC_MSG_RESULT([yes])
     ENABLE_MYSQLC=YES
+    MYSQLC_MAJOR=1
+    MYSQLC_MINOR=0
+    MYSQLC_MICRO=1
     BUILD_TYPE="$BUILD_TYPE MYSQLC"
 else
     AC_MSG_RESULT([no])
     ENABLE_MYSQLC=NO
 fi
 AC_SUBST(ENABLE_MYSQLC)
+AC_SUBST(MYSQLC_MAJOR)
+AC_SUBST(MYSQLC_MINOR)
+AC_SUBST(MYSQLC_MICRO)
 
 if test "$ENABLE_MYSQLC" = "YES"; then
 

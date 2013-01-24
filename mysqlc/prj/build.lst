@@ -1,3 +1,2 @@
 mc	mysqlc	:	solenv MYSQLCPPCONN:mysqlcppconn offapi cppu soltools cppuhelper readlicense_oo NULL
-ch	mysqlc              usr1    -	all mc_mkout NULL
-mc	mysqlc\source       nmake   -   all mc_source NULL
+mc	mysqlc\prj       nmake   -   all mc_mysqlc NULL

@@ -1,4 +1,0 @@
-# Extensions
-
-..\%__SRC%\bin\*.oxt %_DEST%\bin\*.oxt
-
