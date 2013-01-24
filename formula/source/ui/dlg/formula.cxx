@@ -1744,9 +1744,8 @@ FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                                             , this, _pFunctionMgr, _pDlg))
 {
     FreeResource();
-    if(GetHelpId().isEmpty())    //Hack which hides the HelpId for a model Dialog in SfxModelessDialog
-        SetHelpId(GetUniqueId());   //and will be changed in a UniqueId,
-                                    //at this point we reverse it.
+    //undo SfxModelessDialog HelpId clear hack
+    reverseUniqueHelpIdHack(*this);
     SetText(m_pImpl->aTitle1);
 }
 

@@ -24,6 +24,7 @@
 #include <svl/eitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
+#include <sfx2/basedlgs.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/msgbox.hxx>
@@ -162,6 +163,8 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
 {
     aCtlDisplay.SetAccessibleName(String (SdResId(STR_DISPLAY)));
     FreeResource();
+    //undo SfxDockingWindow HelpId clear hack
+    reverseUniqueHelpIdHack(*this);
 
     // neues Dokument mit Seite erzeugen
     pMyDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, NULL);
