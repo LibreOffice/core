@@ -44,9 +44,9 @@ class SfxObjectShell;
  * probably what the user expects to see when viewing the code
  */
 
-typedef boost::unordered_map< sal_Int32, String >  ObjIdToName;
+typedef boost::unordered_map< sal_Int32, OUString >  ObjIdToName;
 
-typedef std::map< String, ObjIdToName >  ControlAttributeInfo;
+typedef std::map< OUString, ObjIdToName >  ControlAttributeInfo;
 
 class MSFILTER_DLLPUBLIC SvxImportMSVBasic
 {
@@ -58,13 +58,13 @@ public:
     // form the ObjectShell
     // - returns a warning code if a modified basic exist, in all other
     //   cases return ERRCODE_NONE.
-    sal_uLong SaveOrDelMSVBAStorage( sal_Bool bSaveInto, const String& rStorageName );
+    sal_uLong SaveOrDelMSVBAStorage( sal_Bool bSaveInto, const OUString& rStorageName );
 
     // check if the MS-VBA-Storage exist in the RootStorage of the DocShell.
     // If it exist, then return the WarningId for loosing the information.
     static sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 
-    static String GetMSBasicStorageName();
+    static OUString GetMSBasicStorageName();
 private:
     SotStorageRef xRoot;
     SfxObjectShell &rDocSh;
