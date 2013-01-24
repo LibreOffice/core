@@ -73,6 +73,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Remaining space </property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">space-nospin:0.00cm</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -227,6 +229,7 @@
                     <property name="can_focus">False</property>
                     <property name="label">_6</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width6:0.00cm</property>
                   </object>
                   <packing>
                     <property name="left_attach">6</property>
@@ -242,6 +245,7 @@
                     <property name="can_focus">False</property>
                     <property name="label">_1</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width1:0.00cm</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -257,6 +261,7 @@
                     <property name="can_focus">False</property>
                     <property name="label">_2</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width2:0.0cm</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -272,6 +277,7 @@
                     <property name="can_focus">False</property>
                     <property name="label">_3</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width3:0.00cm</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -287,6 +293,7 @@
                     <property name="can_focus">False</property>
                     <property name="label">_5</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width5:0.00cm</property>
                   </object>
                   <packing>
                     <property name="left_attach">5</property>
@@ -302,6 +309,7 @@
                     <property name="can_focus">False</property>
                     <property name="label">_4</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width4:0.00cm</property>
                   </object>
                   <packing>
                     <property name="left_attach">4</property>
