@@ -116,7 +116,8 @@ void SAL_CALL Acceptor::run()
                 rtl::OUString() ,m_aProtocol ,rConnection ,rInstanceProvider );
             osl::MutexGuard g(m_aMutex);
             m_bridges.add(rBridge);
-        } catch (const Exception&) {
+        } catch (const Exception& e) {
+            SAL_WARN("desktop", "caught Exception \"" << e.Message << "\"");
             // connection failed...
             // something went wrong during connection setup.
             // just wait for a new connection to accept
