@@ -2076,7 +2076,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
             /// draw poly-polygon transparent
             pOutDev->DrawTransparent( aDrawPoly, nTransparencyPercent );
         }
-        else
+        else if (!pBrush || pBrush->GetFillStyle() != drawing::FillStyle_GRADIENT)
         {
             SwRegionRects aRegion( rOut, 4 );
             if ( !bGrfIsTransparent )
@@ -2089,6 +2089,8 @@ void DrawGraphic( const SvxBrushItem *pBrush,
                 pOutDev->DrawRect( aRegion[i].SVRect() );
             }
         }
+        else
+            pOutDev->DrawGradient(rOut.SVRect(), pBrush->GetGradient());
        pOutDev ->Pop();
     }
 
@@ -7065,7 +7067,7 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
         if ( !rBack.GetColor().GetTransparency() ||
              rBack.GetGraphicPos() != GPOS_NONE ||
              rpCol ||
-             (bConsiderBackgroundTransparency && (rBack.GetColor() != COL_TRANSPARENT))
+             (bConsiderBackgroundTransparency && (rBack.GetColor() != COL_TRANSPARENT || rBack.GetFillStyle() == drawing::FillStyle_GRADIENT))
            )
         {
             rpBrush = &rBack;
