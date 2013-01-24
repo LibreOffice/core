@@ -289,6 +289,15 @@ void DrawingFragment::onEndElement()
                         convertEmuToHmm( aShapeRectEmu.X ), convertEmuToHmm( aShapeRectEmu.Y ),
                         convertEmuToHmm( aShapeRectEmu.Width ), convertEmuToHmm( aShapeRectEmu.Height ) );
                     extendShapeBoundingBox( aShapeRectHmm );
+                    // set cell Anchoring
+                    if ( mxAnchor->getEditAs() != ShapeAnchor::ANCHOR_ABSOLUTE )
+                    {
+                        SdrObject* pObj = SdrObject::getSdrObjectFromXShape( mxShape->getXShape() );
+                        if ( pObj )
+                        {
+                             ScDrawLayer::SetCellAnchoredFromPosition( *pObj, getScDocument(), static_cast<SCTAB>( getSheetIndex() ) );
+                        }
+                    }
                 }
             }
             mxShape.reset();

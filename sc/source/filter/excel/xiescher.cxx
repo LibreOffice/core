@@ -3407,11 +3407,17 @@ void XclImpDffConverter::ProcessClientAnchor2( SvStream& rDffStrm,
         OSL_ENSURE( rHeader.nRecType == DFF_msofbtClientAnchor, "XclImpDffConverter::ProcessClientAnchor2 - no client anchor record" );
         XclObjAnchor aAnchor;
         rHeader.SeekToContent( rDffStrm );
-        rDffStrm.SeekRel( 2 );  // flags
+        sal_uInt8 nFlags(0);
+        rDffStrm >> nFlags;
+        rDffStrm.SeekRel( 1 );  // flags
         rDffStrm >> aAnchor;    // anchor format equal to BIFF5 OBJ records
+
         pDrawObj->SetAnchor( aAnchor );
         rObjData.aChildAnchor = rConvData.mrDrawing.CalcAnchorRect( aAnchor, true );
         rObjData.bChildAnchor = sal_True;
+        // page anchoring is the best approximation we have if mbMove
+        // is set
+        rObjData.bPageAnchor = ( nFlags & 0x1 );
     }
 }
 
@@ -3479,6 +3485,10 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     // process the SdrObject
     if( xSdrObj.is() )
     {
+        // cell anchoring
+        if ( !rDffObjData.bPageAnchor )
+            ScDrawLayer::SetCellAnchoredFromPosition( *xSdrObj,  GetDoc(), xDrawObj->GetTab() );
+
         // filled without color -> set system window color
         if( GetPropertyBool( DFF_Prop_fFilled ) && !IsProperty( DFF_Prop_fillColor ) )
             xSdrObj->SetMergedItem( XFillColorItem( EMPTY_STRING, GetPalette().GetColor( EXC_COLOR_WINDOWBACK ) ) );
