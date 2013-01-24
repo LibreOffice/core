@@ -184,8 +184,8 @@ public:
     CPPUNIT_TEST(testHardRecalcODS);
     CPPUNIT_TEST(testFunctionsODS);
     CPPUNIT_TEST(testCachedFormulaResultsODS);
-    CPPUNIT_TEST(testVolatileFunctionsODS);
-    CPPUNIT_TEST(testCachedMatrixFormulaResultsODS);
+    //CPPUNIT_TEST(testVolatileFunctionsODS);
+    //CPPUNIT_TEST(testCachedMatrixFormulaResultsODS);
     CPPUNIT_TEST(testDatabaseRangesODS);
     CPPUNIT_TEST(testDatabaseRangesXLS);
     CPPUNIT_TEST(testDatabaseRangesXLSX);
