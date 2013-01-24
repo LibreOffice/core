@@ -709,6 +709,7 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
             {
                 // no help found -> try with parent help id.
                 Window* pParent = pWindow->GetParent();
+                bool bTriedTabPage = false;
                 while ( pParent )
                 {
                     OString aHelpId = pParent->GetHelpId();
@@ -720,10 +721,22 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
                     else
                     {
                         pParent = pParent->GetParent();
-                        if ( !pParent )
+                        if (!pParent)
                         {
                             // create help url of start page ( helpid == 0 -> start page)
                             aHelpURL = CreateHelpURL( String(), aHelpModuleName );
+                        }
+                        else if (pParent->IsDialog() && !bTriedTabPage)
+                        {
+                            //During help fallback, before we ask a dialog for its help
+                            //see if it has a TabControl and ask the active tab of
+                            //that for help
+                            bTriedTabPage = true;
+                            TabControl *pCtrl = ((Dialog*)pParent)->get<TabControl>("tabcontrol");
+                            TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : NULL;
+                            Window *pTabChild = pTabPage ? pTabPage->GetWindow(WINDOW_FIRSTCHILD) : NULL;
+                            if (pTabChild)
+                                pParent = pTabChild;
                         }
                     }
                 }
