@@ -27,6 +27,8 @@
 #include <com/sun/star/awt/Size.idl>
 #include <com/sun/star/util/Color.idl>
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+#include <com/sun/star/drawing/FillStyle.idl>
+#include <com/sun/star/awt/Gradient.idl>
 
 
  module com {  module sun {  module star {  module text {
@@ -295,6 +297,20 @@ published service BaseFrameProperties
             @since OOo 3.2
         */
         [optional, property] string Description;
+        /** This enumeration selects the style the area will be filled with.
+
+            <p>Currently only set for gradients.</p>
+
+            @since LibreOffice 4.1
+        */
+        [optional, property] com::sun::star::drawing::FillStyle FillStyle;
+        /** If the property <member>FillStyle</member> is set to <const>
+            FillStyle::GRADIENT</const>, this describes the gradient used.
+
+            @since LibreOffice 4.1
+        */
+        [optional, property] com::sun::star::awt::Gradient FillGradient;
+
 };
 
 

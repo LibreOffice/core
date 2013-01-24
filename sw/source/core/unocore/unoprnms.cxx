@@ -786,6 +786,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0754 UNO_NAME_INITIALS */            {MAP_CHAR_LEN("TableBorder2")},
 /* 0755 UNO_NAME_REPLACEMENT_GRAPHIC_URL */ {MAP_CHAR_LEN("ReplacementGraphicURL")},
 /* 0756 UNO_NAME_HIDDEN */              {MAP_CHAR_LEN("Hidden")},
+/* 0757 UNO_NAME_FILL_STYLE */              {MAP_CHAR_LEN("FillStyle")},
+/* 0758 UNO_NAME_FILL_GRADIENT */              {MAP_CHAR_LEN("FillGradient")},
 
 // new items in this array must match enum SwPropNameIds
 };

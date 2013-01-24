@@ -816,8 +816,10 @@ enum SwPropNameIds
 
 /* 0755 */  UNO_NAME_REPLACEMENT_GRAPHIC_URL,
 /* 0756 */  UNO_NAME_HIDDEN,
+/* 0757 */  UNO_NAME_FILL_STYLE,
+/* 0758 */  UNO_NAME_FILL_GRADIENT,
 
-/* 0757 */  SW_PROPNAME_END
+/* 0759 */  SW_PROPNAME_END
 
 // new items in this array must match SwPropNameTab aPropNameTab
 };

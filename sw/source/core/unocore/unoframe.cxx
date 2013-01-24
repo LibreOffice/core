@@ -173,6 +173,10 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         GetProperty(RES_BACKGROUND, MID_BACK_COLOR_R_G_B, pRGBCol );
         const ::uno::Any* pColTrans = 0;
         GetProperty(RES_BACKGROUND, MID_BACK_COLOR_TRANSPARENCY, pColTrans);
+        const ::uno::Any* pFillStyle = 0;
+        GetProperty(RES_BACKGROUND, MID_FILL_STYLE, pFillStyle);
+        const ::uno::Any* pGradient = 0;
+        GetProperty(RES_BACKGROUND, MID_FILL_GRADIENT, pGradient);
         const ::uno::Any* pTrans = 0;
         GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT, pTrans );
         const ::uno::Any* pGrLoc = 0;
@@ -185,13 +189,17 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY, pGrTranparency     );
 
         if(pCol || pTrans || pGrURL || pGrFilter || pGrLoc ||
-                            pGrTranparency || pColTrans || pRGBCol)
+                            pGrTranparency || pColTrans || pRGBCol || pFillStyle || pGradient)
         {
             SvxBrushItem aBrush ( static_cast < const :: SvxBrushItem & > ( rFromSet.Get ( RES_BACKGROUND ) ) );
             if(pCol )
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pCol,MID_BACK_COLOR    );
             if(pColTrans)
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
+            if(pFillStyle)
+                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pFillStyle, MID_FILL_STYLE);
+            if(pGradient)
+                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGradient, MID_FILL_GRADIENT);
             if(pRGBCol)
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pRGBCol, MID_BACK_COLOR_R_G_B);
             if(pTrans)

@@ -120,6 +120,8 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -219,6 +221,8 @@ namespace comphelper
             case CPPUTYPE_TABLEBORDERDISTANCES:     pType = &::getCppuType( (table::TableBorderDistances*)0 ); break;
             case CPPUTPYE_REFEMBEDDEDOBJECT:        pType = &embed::XEmbeddedObject::static_type(); break;
             case CPPUTYPE_LINESTYLE:        pType = &::getCppuType( (drawing::LineStyle*)0 ); break;
+            case CPPUTYPE_FILLSTYLE:        pType = &::getCppuType( (drawing::FillStyle*)0 ); break;
+            case CPPUTYPE_GRADIENT:         pType = &::getCppuType( (awt::Gradient*)0 ); break;
             default:
                 OSL_FAIL( "Unknown CPPU type" );
         }
