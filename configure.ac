@@ -4967,8 +4967,8 @@ find_msms()
     fi
 
     if test "$BUILD_X64" = TRUE; then
-        if test -e $msmdir/Microsoft_VC${VCVER}_CRT_x86_x64.msm; then
-            msms="$msms Microsoft_VC${VCVER}_CRT_x86_x64.msm"
+        if test -e $msmdir/Microsoft_VC${VCVER}_CRT_x64.msm; then
+            msms="$msms Microsoft_VC${VCVER}_CRT_x64.msm"
         else
             AC_MSG_ERROR([Failed to copy x64 merge modules])
         fi
