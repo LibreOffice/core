@@ -152,6 +152,8 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
         aFtAdjustment       ( this, SdResId( FT_ADJUSTMENT ) ),
         aLbAdjustment       ( this, SdResId( LB_ADJUSTMENT ) ),
         aBtnCreateGroup     ( this, SdResId( BTN_CREATE_GROUP ) ),
+        aBtnHelp            ( this, SdResId( BTN_HELP ) ),
+
 
         pWin                ( pParent ),
         m_nCurrentFrame     ( EMPTY_FRAMELIST ),
