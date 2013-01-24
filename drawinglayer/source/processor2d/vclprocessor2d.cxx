@@ -464,7 +464,12 @@ namespace drawinglayer
             {
                 // parts will be uncovered, extend aBitmapEx with a mask bitmap
                 const Bitmap aContent(aBitmapEx.GetBitmap());
-                aBitmapEx = BitmapEx(aContent, Bitmap(aContent.GetSizePixel(), 1));
+#if defined(MACOSX)
+                const AlphaMask aMaskBmp( aContent.GetSizePixel());
+#else
+                const Bitmap aMaskBmp( aContent.GetSizePixel(), 1);
+#endif
+                aBitmapEx = BitmapEx(aContent, aMaskBmp);
             }
 
             // draw using OutputDevice'sDrawTransformedBitmapEx

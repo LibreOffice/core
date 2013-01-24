@@ -179,7 +179,11 @@ namespace
 
                 // create BitmapEx
                 Bitmap aMainBitmap = aVirtualDevice.GetBitmap(Point(), aVirtualDevice.GetOutputSizePixel());
-                Bitmap aMaskBitmap = aVirtualDeviceMask.GetBitmap(Point(), aVirtualDeviceMask.GetOutputSizePixel());
+#if defined(MACOSX)
+                AlphaMask aMaskBitmap( aVirtualDeviceMask.GetBitmap( Point(), aVirtualDeviceMask.GetOutputSizePixel()));
+#else
+                Bitmap aMaskBitmap = aVirtualDeviceMask.GetBitmap( Point(), aVirtualDeviceMask.GetOutputSizePixel());
+#endif
                 aNextStep.maBitmapEx = BitmapEx(aMainBitmap, aMaskBitmap);
 
                 // add to vector
