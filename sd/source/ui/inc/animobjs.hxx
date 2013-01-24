@@ -127,6 +127,9 @@ private:
     ListBox         aLbAdjustment;
     PushButton      aBtnCreateGroup;
 
+    HelpButton      aBtnHelp;
+
+
     ::Window*       pWin;
     ::std::vector< ::std::pair<BitmapEx*, Time*> > m_FrameList;
     static const size_t EMPTY_FRAMELIST = ULONG_MAX;

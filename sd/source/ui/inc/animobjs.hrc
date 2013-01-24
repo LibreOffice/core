@@ -27,6 +27,7 @@
 #define BTN_REMOVE_BITMAP 8
 #define BTN_REMOVE_ALL 9
 #define BTN_CREATE_GROUP 10
+#define BTN_HELP 1
 #define NUM_FLD_BITMAP 1
 #define TIME_FIELD 1
 #define FT_COUNT 1

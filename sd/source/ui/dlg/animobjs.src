@@ -298,6 +298,12 @@ DockingWindow FLT_WIN_ANIMATION
         TabStop = TRUE ;
         Text [ en-US ] = "Create" ;
     };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 60 , 216 ) ;
+        Size = MAP_APPFONT ( 41 , 14 ) ;
+        TabStop = TRUE ;
+    };
     FixedLine GRP_ANIMATION_GROUP
     {
         Pos = MAP_APPFONT ( 6 , 155 ) ;
