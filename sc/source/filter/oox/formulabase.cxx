@@ -856,6 +856,7 @@ FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, 
     // bCallerKnowsAboutMacroExport, to suppress this warning then.
     OSL_ENSURE( bImportFilter || bCallerKnowsAboutMacroExport,
             "FunctionProviderImpl::FunctionProviderImpl - need special handling for macro call functions" );
+    (void)bCallerKnowsAboutMacroExport;
     sal_uInt8 nMaxParam = 0;
     switch( eFilter )
     {
