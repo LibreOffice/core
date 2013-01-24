@@ -35,9 +35,6 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 
-// header for class SvxForbiddenCharactersTable
-#include <editeng/forbiddencharacterstable.hxx>
-
 #include <svx/svxids.hrc>
 
 // header for class SvxShape
