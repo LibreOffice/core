@@ -239,7 +239,6 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(Window* pParent,
     get(m_pLbLanguage, "languagelb");
     get(m_pCbSourceFormat, "sourceformat");
     get(m_pWndPreview, "preview");
-    m_pWndPreview->set_height_request(GetTextHeight()*3);
     get(m_pFtOptions, "optionsft");
     get(m_pFtDecimals, "decimalsft");
     get(m_pEdDecimals, "decimalsed");
@@ -254,6 +253,9 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(Window* pParent,
     get(m_pIbRemove, "delete");
     get(m_pFtComment, "commentft");
     get(m_pEdComment, "commented");
+
+    m_pLbCategory->SetDropDownLineCount(8);
+    m_pWndPreview->set_height_request(GetTextHeight()*3);
 
     Init_Impl();
     SetExchangeSupport(); // this page needs ExchangeSupport
