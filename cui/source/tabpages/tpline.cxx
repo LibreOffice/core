@@ -867,29 +867,6 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
     }
 
-    // Width line start
-    if( aMtrStartWidth.GetText() != aMtrStartWidth.GetSavedValue() )
-    {
-        XLineStartWidthItem aItem( GetCoreValue( aMtrStartWidth, ePoolUnit ) );
-        pOld = GetOldItem( rAttrs, XATTR_LINESTARTWIDTH );
-        if ( !pOld || !( *(const XLineStartWidthItem*)pOld == aItem ) )
-        {
-            rAttrs.Put( aItem );
-            bModified = sal_True;
-        }
-    }
-    // Width line end
-    if( aMtrEndWidth.GetText() != aMtrEndWidth.GetSavedValue() )
-    {
-        XLineEndWidthItem aItem( GetCoreValue( aMtrEndWidth, ePoolUnit ) );
-        pOld = GetOldItem( rAttrs, XATTR_LINEENDWIDTH );
-        if ( !pOld || !( *(const XLineEndWidthItem*)pOld == aItem ) )
-        {
-            rAttrs.Put( aItem );
-            bModified = sal_True;
-        }
-    }
-
     // Transparency
     sal_uInt16 nVal = (sal_uInt16)aMtrTransparent.GetValue();
     if( nVal != (sal_uInt16)aMtrTransparent.GetSavedValue().toInt32() )
