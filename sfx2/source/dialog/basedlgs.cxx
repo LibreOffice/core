@@ -776,7 +776,6 @@ SfxSingleTabDialog::~SfxSingleTabDialog()
     delete pOKBtn;
     delete pCancelBtn;
     delete pHelpBtn;
-    delete pImpl->m_pTabPage;
     delete pImpl->m_pSfxPage;
     delete pImpl->m_pLine;
     delete pImpl;
@@ -804,10 +803,7 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
     if ( !pHelpBtn )
         pHelpBtn = new HelpButton( this );
 
-    if ( pImpl->m_pTabPage )
-        delete pImpl->m_pTabPage;
-    if ( pImpl->m_pSfxPage )
-        delete pImpl->m_pSfxPage;
+    delete pImpl->m_pSfxPage;
     pImpl->m_pSfxPage = pTabPage;
     fnGetRanges = pRangesFunc;
 

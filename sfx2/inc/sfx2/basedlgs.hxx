@@ -153,14 +153,16 @@ public:
 
 struct SingleTabDlgImpl
 {
-    TabPage*                    m_pTabPage;
     SfxTabPage*                 m_pSfxPage;
     FixedLine*                  m_pLine;
     String                      m_sInfoURL;
     Link                        m_aInfoLink;
 
-    SingleTabDlgImpl() :
-        m_pTabPage( NULL ), m_pSfxPage( NULL ), m_pLine( NULL ) {}
+    SingleTabDlgImpl()
+        : m_pSfxPage(NULL)
+        , m_pLine(NULL)
+    {
+    }
 };
 
 typedef sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
