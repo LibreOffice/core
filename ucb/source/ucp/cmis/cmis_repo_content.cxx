@@ -41,6 +41,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
+#include <ucbhelper/proxydecider.hxx>
 
 #include "auth_provider.hxx"
 #include "cmis_content.hxx"
@@ -138,6 +139,14 @@ namespace cmis
 
     void RepoContent::getRepositories( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     {
+        // Set the proxy if needed. We are doing that all times as the proxy data shouldn't be cached.
+        ucbhelper::InternetProxyDecider aProxyDecider( m_xContext );
+        INetURLObject aBindingUrl( m_aURL.getBindingUrl( ) );
+        const ucbhelper::InternetProxyServer& rProxy = aProxyDecider.getProxy(
+                INetURLObject::GetScheme( aBindingUrl.GetProtocol( ) ), aBindingUrl.GetHost(), aBindingUrl.GetPort() );
+        rtl::OUString sProxy = rProxy.aName + ":" + rtl::OUString::valueOf( rProxy.nPort );
+        libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), string(), string(), string() );
+
         if ( m_aRepositories.empty() )
         {
             // Get the auth credentials
