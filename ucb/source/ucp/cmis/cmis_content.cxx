@@ -60,6 +60,7 @@
 #include <ucbhelper/std_inputstream.hxx>
 #include <ucbhelper/std_outputstream.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
+#include <ucbhelper/proxydecider.hxx>
 
 #include "auth_provider.hxx"
 #include "cmis_content.hxx"
@@ -256,6 +257,14 @@ namespace cmis
 
     libcmis::Session* Content::getSession( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
+        // Set the proxy if needed. We are doing that all times as the proxy data shouldn't be cached.
+        ucbhelper::InternetProxyDecider aProxyDecider( m_xContext );
+        INetURLObject aBindingUrl( m_aURL.getBindingUrl( ) );
+        const ucbhelper::InternetProxyServer& rProxy = aProxyDecider.getProxy(
+                INetURLObject::GetScheme( aBindingUrl.GetProtocol( ) ), aBindingUrl.GetHost(), aBindingUrl.GetPort() );
+        rtl::OUString sProxy = rProxy.aName + ":" + rtl::OUString::valueOf( rProxy.nPort );
+        libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), string(), string(), string() );
+
         // Look for a cached session, key is binding url + repo id
         rtl::OUString sSessionId = m_aURL.getBindingUrl( ) + m_aURL.getRepositoryId( );
         if ( NULL == m_pSession )
