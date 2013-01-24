@@ -222,7 +222,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 
 $(call gb_LinkTarget_add_defs,$(1),\
-	-DSYSTEM_MYSQL_CPPCONN` \
+	-DSYSTEM_MYSQL_CPPCONN \
 )
 endef
 
@@ -234,9 +234,13 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 
 define gb_LinkTarget__use_mysqlcppconn
 
-$(call gb_LinkTarget_use_libraries,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	mysqlcppconn \
 )
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DCPPCONN_LIB_BUILD \
+)
+
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,mysqlcppconn) \
 	-I$(call gb_UnpackedTarball_get_dir,mysqlcppconn)/cppconn \

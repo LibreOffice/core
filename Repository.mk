@@ -572,6 +572,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     migrationoo3 \
     msforms \
     mtfrenderer \
+    mysqlc \
     nullcanvas \
     OGLTrans \
     passwordcontainer \

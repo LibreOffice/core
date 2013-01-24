@@ -131,6 +131,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	$(call gb_Helper_optional,MDDS,mdds) \
 	Mesa \
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
+	$(call gb_Helper_optional,MYSQLC,mysqlc) \
 	$(call gb_Helper_optional,MYSQLCPPCONN,mysqlcppconn) \
 	$(call gb_Helper_optional,MYTHES,mythes) \
 	$(call gb_Helper_optional,NEON,neon) \

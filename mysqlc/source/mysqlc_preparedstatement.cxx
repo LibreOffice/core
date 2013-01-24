@@ -35,6 +35,10 @@
 
 #include <stdio.h>
 
+#ifdef _MSC_VER
+#define snprintf _snprintf
+#endif
+
 using namespace connectivity::mysqlc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
