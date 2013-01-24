@@ -125,6 +125,7 @@ public:
     /** Additional processing for the passed SdrObject after insertion into the
         drawing page (calls virtual DoPostProcessSdrObj() function). */
     void                PostProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
+    SCTAB               GetTab() const { return mnTab; }
 
 protected:
     /** Reads the object name in a BIFF5 OBJ record. */
@@ -167,7 +168,6 @@ protected:
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
     /** Derived classes may perform additional processing for the passed SdrObject after insertion. */
     virtual void        DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
-    SCTAB               GetTab() const { return mnTab; }
 private:
     /** Reads the contents of a BIFF3 OBJ record. */
     void                ImplReadObj3( XclImpStream& rStrm );
