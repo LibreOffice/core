@@ -792,12 +792,16 @@ bool VclBuilder::extractButtonImage(const OString &id, stringmap &rMap, bool bRa
     return false;
 }
 
-void VclBuilder::extractMnemonicWidget(const OString &id, stringmap &rMap)
+void VclBuilder::extractMnemonicWidget(const OString &rLabelID, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("mnemonic-widget"));
     if (aFind != rMap.end())
     {
-        m_pParserState->m_aMnemonicWidgetMaps.push_back(MnemonicWidgetMap(id, aFind->second));
+        OString sID = aFind->second;
+        sal_Int32 nDelim = sID.indexOf(':');
+        if (nDelim != -1)
+            sID = sID.copy(0, nDelim);
+        m_pParserState->m_aMnemonicWidgetMaps.push_back(MnemonicWidgetMap(rLabelID, sID));
         rMap.erase(aFind);
     }
 }
