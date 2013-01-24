@@ -76,7 +76,8 @@ const SfxItemPropertyMapEntry* lcl_GetDataProviderPropertyMap()
 {
     static SfxItemPropertyMapEntry aDataProviderPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_INCLUDEHIDDENCELLS), 0,        &getBooleanCppuType(),                  0, 0 },
+        { MAP_CHAR_LEN(SC_UNONAME_INCLUDEHIDDENCELLS), 0, &getBooleanCppuType(), 0, 0 },
+        { MAP_CHAR_LEN(SC_UNONAME_USE_INTERNAL_DATA_PROVIDER), 0, &getBooleanCppuType(), 0, 0 },
         {0,0,0,0,0,0}
     };
     return aDataProviderPropertyMap_Impl;
@@ -2327,6 +2328,11 @@ uno::Any SAL_CALL ScChart2DataProvider::getPropertyValue(
     uno::Any aRet;
     if ( rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS )
         aRet <<= m_bIncludeHiddenCells;
+    else if (rPropertyName == SC_UNONAME_USE_INTERNAL_DATA_PROVIDER)
+    {
+        // This is a read-only property.
+        aRet <<= static_cast<sal_Bool>(m_pDocument->PastingDrawFromOtherDoc());
+    }
     else
         throw beans::UnknownPropertyException();
     return aRet;
