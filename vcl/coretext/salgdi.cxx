@@ -27,7 +27,6 @@
 
 #include "coretext/salgdi.h"
 #include "coretext/salcoretextstyle.hxx"
-#include "coretext/salcoretextlayout.hxx"
 
 QuartzSalGraphics::QuartzSalGraphics()
     : mpFrame( NULL )
@@ -239,14 +238,6 @@ SystemFontData QuartzSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) con
 
     SAL_INFO( "vcl.coretext.gr", "<--" );
     return aSysFontData;
-}
-
-SalLayout* QuartzSalGraphics::GetTextLayout( ImplLayoutArgs&, int /*nFallbackLevel*/ )
-{
-    SAL_INFO( "vcl.coretext.gr", "-->" );
-    CoreTextLayout* layout = new CoreTextLayout( this, m_style );
-    SAL_INFO( "vcl.coretext.gr", "layout:" << layout << " <--" );
-    return layout;
 }
 
 sal_uInt16 QuartzSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
