@@ -160,7 +160,7 @@ sub get_productname_for_property_table($$)
     if ( $allvariables->{'PRODUCTEXTENSION'} )
     {
         $productextension = $allvariables->{'PRODUCTEXTENSION'};
-        $productname = $productname . " " . $productextension;
+        $productname = $productname . $productextension;
     }
 
     if ( $installer::globals::languagepack )
