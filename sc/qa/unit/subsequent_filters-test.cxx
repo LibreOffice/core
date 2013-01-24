@@ -39,6 +39,7 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
 #include "svx/svdpage.hxx"
+#include "svx/svdoole2.hxx"
 
 #include "editeng/wghtitem.hxx"
 #include "editeng/postitem.hxx"
@@ -64,6 +65,8 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 
 #define CALC_DEBUG_OUTPUT 0
 #define TEST_BUG_FILES 0
@@ -166,6 +169,7 @@ public:
 
     //test shape import
     void testControlImport();
+    void testChartImportODS();
 
     void testNumberFormatHTML();
     void testNumberFormatCSV();
@@ -207,6 +211,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testCellValueXLSX);
     CPPUNIT_TEST(testControlImport);
+    CPPUNIT_TEST(testChartImportODS);
 
     //CPPUNIT_TEST(testColorScaleODS);
     //CPPUNIT_TEST(testColorScaleXLSX);
@@ -1329,7 +1334,7 @@ void ScFiltersTest::testPasswordOld()
 void ScFiltersTest::testControlImport()
 {
     ScDocShellRef xDocSh = loadDoc("singlecontrol.", XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load cell-value.xlsx", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load singlecontrol.xlsx", xDocSh.Is());
 
     uno::Reference< frame::XModel > xModel = xDocSh->GetModel();
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(xModel, UNO_QUERY_THROW);
@@ -1339,6 +1344,76 @@ void ScFiltersTest::testControlImport()
     uno::Reference< drawing::XControlShape > xControlShape(xIA_DrawPage->getByIndex(0), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT(xControlShape.is());
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testChartImportODS()
+{
+    ScDocShellRef xDocSh = loadDoc("chart-import-basic.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load chart-import-basic.ods.", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // Ensure that the document contains "Empty", "Chart", "Data" and "Title" sheets in this exact order.
+    CPPUNIT_ASSERT_MESSAGE("There should be 4 sheets in this document.", pDoc->GetTableCount() == 4);
+    OUString aName;
+    pDoc->GetName(0, aName);
+    CPPUNIT_ASSERT_EQUAL(OUString("Empty"), aName);
+    pDoc->GetName(1, aName);
+    CPPUNIT_ASSERT_EQUAL(OUString("Chart"), aName);
+    pDoc->GetName(2, aName);
+    CPPUNIT_ASSERT_EQUAL(OUString("Data"), aName);
+    pDoc->GetName(3, aName);
+    CPPUNIT_ASSERT_EQUAL(OUString("Title"), aName);
+
+    // Retrieve the chart object instance from the 2nd page (for the 2nd sheet).
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve the drawing layer object.", pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(1); // for the 2nd sheet.
+    CPPUNIT_ASSERT_MESSAGE("Failed to retreive the page object.", pPage);
+    CPPUNIT_ASSERT_MESSAGE("This page should contain one drawing object.", pPage->GetObjCount() == 1);
+    const SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retreive the drawing object.", pObj);
+    CPPUNIT_ASSERT_MESSAGE("This is not an OLE2 object.", pObj->GetObjIdentifier() == OBJ_OLE2);
+    const SdrOle2Obj& rOleObj = static_cast<const SdrOle2Obj&>(*pObj);
+    CPPUNIT_ASSERT_MESSAGE("This should be a chart object.", rOleObj.IsChart());
+
+    // Make sure the chart object has correct range references.
+    Reference<frame::XModel> xModel = rOleObj.getXModel();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the embedded object interface.", xModel.is());
+    Reference<chart2::XChartDocument> xChartDoc(xModel, UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the chart document interface.", xChartDoc.is());
+    Reference<chart2::data::XDataSource> xDataSource(xChartDoc, UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the data source interface.", xDataSource.is());
+    Sequence<Reference<chart2::data::XLabeledDataSequence> > xDataSeqs = xDataSource->getDataSequences();
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one data sequences.", xDataSeqs.getLength() > 0);
+    Reference<chart2::data::XDataReceiver> xDataRec(xChartDoc, UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the data receiver interface.", xDataRec.is());
+    Sequence<OUString> aRangeReps = xDataRec->getUsedRangeRepresentations();
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one range representations.", aRangeReps.getLength() > 0);
+
+    ScRangeList aRanges;
+    for (sal_Int32 i = 0, n = aRangeReps.getLength(); i < n; ++i)
+    {
+        ScRange aRange;
+        sal_uInt16 nRes = aRange.Parse(aRangeReps[i], pDoc, pDoc->GetAddressConvention());
+        if (nRes & SCA_VALID)
+            // This is a range address.
+            aRanges.Append(aRange);
+        else
+        {
+            // Parse it as a single cell address.
+            ScAddress aAddr;
+            nRes = aAddr.Parse(aRangeReps[i], pDoc, pDoc->GetAddressConvention());
+            CPPUNIT_ASSERT_MESSAGE("Failed to parse a range representation.", (nRes & SCA_VALID));
+            aRanges.Append(aAddr);
+        }
+    }
+
+    CPPUNIT_ASSERT_MESSAGE("Data series title cell not found.", aRanges.In(ScAddress(1,0,3))); // B1 on Title
+    CPPUNIT_ASSERT_MESSAGE("Data series label range not found.", aRanges.In(ScRange(0,1,2,0,3,2))); // A2:A4 on Data
+    CPPUNIT_ASSERT_MESSAGE("Data series value range not found.", aRanges.In(ScRange(1,1,2,1,3,2))); // B2:B4 on Data
+
     xDocSh->DoClose();
 }
 

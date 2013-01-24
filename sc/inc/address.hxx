@@ -456,7 +456,7 @@ public:
     inline bool In( const ScAddress& ) const;   ///< is Address& in Range?
     inline bool In( const ScRange& ) const;     ///< is Range& in Range?
 
-    sal_uInt16 Parse( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 Parse( const String&, ScDocument* = NULL,
                   const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
                   ScAddress::ExternalInfo* pExtInfo = NULL,
                   const ::com::sun::star::uno::Sequence<
