@@ -94,7 +94,7 @@ static sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr
         LanguageType aLang =
             rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript );
 
-        if (MsLangId::isKorean(aLang))
+        if (!MsLangId::isKorean(aLang))
         {
             const SwLinePortion* pPor = rPor.GetPortion();
             if ( pPor && ( pPor->IsKernPortion() ||
@@ -202,7 +202,7 @@ static sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr
             LanguageType aLang =
                 rInf.GetTxtFrm()->GetTxtNode()->GetLang( nPos, 1, nNextScript );
 
-            if (MsLangId::isKorean(aLang))
+            if (!MsLangId::isKorean(aLang))
                 ++nCnt;
         }
     }

@@ -1077,7 +1077,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if ( ( SW_CJK == nActual || SW_LATIN == nActual ) && nSpaceAdd )
                     {
                         LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
-                        if (MsLangId::isKorean(aLang))
+                        if (!MsLangId::isKorean(aLang))
                         {
                             long nSpaceSum = nSpaceAdd;
                             for ( sal_uInt16 nI = 0; nI < rInf.GetLen(); ++nI )
@@ -1253,7 +1253,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
 
-                    if (MsLangId::isKorean(aLang))
+                    if (!MsLangId::isKorean(aLang))
                     {
                         long nSpaceSum = nSpaceAdd;
                         for ( sal_uInt16 nI = 0; nI < rInf.GetLen(); ++nI )
@@ -1464,7 +1464,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             {
                 LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
 
-                if (MsLangId::isKorean(aLang))
+                if (!MsLangId::isKorean(aLang))
                 {
                     long nSpaceSum = nSpaceAdd;
                     for ( sal_uInt16 nI = 0; nI < rInf.GetLen(); ++nI )
@@ -2028,7 +2028,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         {
             LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
 
-            if (MsLangId::isKorean(aLang))
+            if (!MsLangId::isKorean(aLang))
             {
                 long nSpaceSum = nSpaceAdd;
                 for ( sal_uInt16 nI = 0; nI < rInf.GetLen(); ++nI )
