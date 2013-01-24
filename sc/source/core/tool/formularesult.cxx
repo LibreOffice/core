@@ -268,9 +268,8 @@ bool ScFormulaResult::IsEmptyDisplayedAsString() const
 bool ScFormulaResult::IsValue() const
 {
     formula::StackVar sv = GetCellResultType();
-    if( sv == formula::svHybridValueCell )
-        return true;
-    return sv == formula::svDouble || sv == formula::svError || sv == formula::svEmptyCell;
+    return sv == formula::svDouble || sv == formula::svError
+        || sv == formula::svEmptyCell || sv == formula::svHybridValueCell;
 }
 
 bool ScFormulaResult::IsMultiline() const
@@ -334,7 +333,6 @@ double ScFormulaResult::GetDouble() const
             {
                 case formula::svHybridCell:
                 case formula::svHybridValueCell:
-                    return mpToken->GetDouble();
                     return mpToken->GetDouble();
                 case formula::svMatrixCell:
                     {
