@@ -112,7 +112,7 @@ void Button::Click()
 
 // -----------------------------------------------------------------------
 
-XubString Button::GetStandardText( StandardButtonType eButton )
+OUString Button::GetStandardText( StandardButtonType eButton )
 {
     static struct
     {
@@ -134,27 +134,25 @@ XubString Button::GetStandardText( StandardButtonType eButton )
         { SV_BUTTONTEXT_RESET, "R~eset" }
     };
 
-    String aText;
     ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-    {
-        sal_uInt32 nResId = aResIdAry[(sal_uInt16)eButton].nResId;
-        aText = ResId(nResId, *pResMgr).toString();
 
-        if (nResId == SV_BUTTONTEXT_OK || nResId == SV_BUTTONTEXT_CANCEL)
-        {
-#ifndef WNT
-            // Windows (apparently) has some magic auto-accelerator evil around
-            // ok / cancel so add accelerators only for Unix
-            if (aText.Search('~') == STRING_NOTFOUND)
-                aText.Insert(rtl::OUString("~"), 0);
-#endif
-        }
-    }
-    else
+    if (!pResMgr)
     {
-        rtl::OString aT( aResIdAry[(sal_uInt16)eButton].pDefText );
-        aText = rtl::OStringToOUString(aT, RTL_TEXTENCODING_ASCII_US);
+        OString aT( aResIdAry[(sal_uInt16)eButton].pDefText );
+        return OStringToOUString(aT, RTL_TEXTENCODING_ASCII_US);
+    }
+
+    sal_uInt32 nResId = aResIdAry[(sal_uInt16)eButton].nResId;
+    OUString aText = ResId(nResId, *pResMgr).toString();
+
+    if (nResId == SV_BUTTONTEXT_OK || nResId == SV_BUTTONTEXT_CANCEL)
+    {
+#ifndef WNT
+        // Windows (apparently) has some magic auto-accelerator evil around
+        // ok / cancel so add accelerators only for Unix
+        if (aText.indexOf('~') == -1)
+            return "~" + aText;
+#endif
     }
     return aText;
 }
