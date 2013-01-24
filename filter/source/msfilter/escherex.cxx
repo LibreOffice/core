@@ -679,7 +679,8 @@ void EscherPropertyContainer::CreateTextProperties(
 
     // n#404221: In case of rotation we need to write the txtflTextFlow
     // attribute too.
-    if (bIsTextFrame)
+    // fdo#58204: not custom shapes (TODO: other cases when it doesn't work?)
+    if (bIsTextFrame && !bIsCustomShape)
     {
         sal_uInt16 nAngle = EscherPropertyValueHelper::GetPropertyValue(
             aAny, rXPropSet, OUString( "RotateAngle" ), sal_True ) ?
