@@ -64,6 +64,7 @@ protected:
 
     String&             GetExtraData()      { return aExtraData; }
     sal_uInt32          GetUniqId() const   { return nUniqId; }
+    void                SetUniqId(sal_uInt32 nSettingsId)  { nUniqId = nSettingsId; }
     SfxItemSet*         GetItemSet()        { return pOutputSet; }
     void                CreateOutputItemSet( SfxItemPool& rPool );
     void                CreateOutputItemSet( const SfxItemSet& rInput );
@@ -167,21 +168,24 @@ struct SingleTabDlgImpl
 
 typedef sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
 
-class SFX2_DLLPUBLIC SfxNoLayoutSingleTabDialog : public SfxModalDialog
+class SFX2_DLLPUBLIC SfxSingleTabDialogBase : public SfxModalDialog
 {
 public:
-    SfxNoLayoutSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, sal_uInt16 nUniqueId );
-    SfxNoLayoutSingleTabDialog( Window* pParent, sal_uInt16 nUniqueId, const SfxItemSet* pInSet = 0 );
+    //layout ctor
+    SfxSingleTabDialogBase(Window* pParent, const SfxItemSet& rOptionsSet);
 
-    virtual             ~SfxNoLayoutSingleTabDialog();
+    //non-layout ctors
+    SfxSingleTabDialogBase( Window* pParent, const SfxItemSet& rOptionsSet, sal_uInt16 nUniqueId );
+    SfxSingleTabDialogBase( Window* pParent, sal_uInt16 nUniqueId, const SfxItemSet* pInSet = 0 );
 
-    void                SetTabPage( SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0 );
+    virtual             ~SfxSingleTabDialogBase();
+
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
 
     OKButton*           GetOKButton() const { return pOKBtn; }
     CancelButton*       GetCancelButton() const { return pCancelBtn; }
 
-private:
+protected:
     GetTabPageRanges    fnGetRanges;
 
     OKButton*           pOKBtn;
@@ -191,6 +195,32 @@ private:
     SingleTabDlgImpl*   pImpl;
 
     DECL_DLLPRIVATE_LINK(OKHdl_Impl, void *);
+};
+
+class SFX2_DLLPUBLIC SfxSingleTabDialog : public SfxSingleTabDialogBase
+{
+public:
+    SfxSingleTabDialog(Window* pParent, const SfxItemSet& rOptionsSet)
+        : SfxSingleTabDialogBase(pParent, rOptionsSet)
+    {
+    }
+    void setTabPage(SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0, sal_uInt32 nSettingsId = 0);
+};
+
+//Old school deprecated non-layout aware version
+class SFX2_DLLPUBLIC SfxNoLayoutSingleTabDialog : public SfxSingleTabDialogBase
+{
+public:
+    SfxNoLayoutSingleTabDialog(Window* pParent, const SfxItemSet& rOptionsSet, sal_uInt16 nUniqueId)
+        : SfxSingleTabDialogBase(pParent, rOptionsSet, nUniqueId)
+    {
+    }
+    SfxNoLayoutSingleTabDialog(Window* pParent, sal_uInt16 nUniqueId, const SfxItemSet* pInSet = 0)
+        : SfxSingleTabDialogBase(pParent, nUniqueId, pInSet)
+    {
+    }
+    ~SfxNoLayoutSingleTabDialog();
+    void SetTabPage(SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0);
 };
 
 #endif

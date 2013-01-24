@@ -668,9 +668,9 @@ void SfxFloatingWindow::FillInfo(SfxChildWinInfo& rInfo) const
         rInfo.nFlags |= SFX_CHILDWIN_ZOOMIN;
 }
 
-// SfxNoLayoutSingleTabDialog ----------------------------------------------------
+// SfxSingleTabDialogBase ----------------------------------------------------
 
-IMPL_LINK_NOARG(SfxNoLayoutSingleTabDialog, OKHdl_Impl)
+IMPL_LINK_NOARG(SfxSingleTabDialogBase, OKHdl_Impl)
 
 /*  [Description]
 
@@ -718,7 +718,7 @@ IMPL_LINK_NOARG(SfxNoLayoutSingleTabDialog, OKHdl_Impl)
 
 // -----------------------------------------------------------------------
 
-SfxNoLayoutSingleTabDialog::SfxNoLayoutSingleTabDialog
+SfxSingleTabDialogBase::SfxSingleTabDialogBase
 (
     Window *pParent,
     const SfxItemSet& rSet,
@@ -744,7 +744,7 @@ SfxNoLayoutSingleTabDialog::SfxNoLayoutSingleTabDialog
 
 // -----------------------------------------------------------------------
 
-SfxNoLayoutSingleTabDialog::SfxNoLayoutSingleTabDialog
+SfxSingleTabDialogBase::SfxSingleTabDialogBase
 (
     Window* pParent,
     sal_uInt16 nUniqueId,
@@ -769,16 +769,63 @@ SfxNoLayoutSingleTabDialog::SfxNoLayoutSingleTabDialog
     SetInputSet( pInSet );
 }
 
+SfxSingleTabDialogBase::SfxSingleTabDialogBase(Window *pParent, const SfxItemSet& rSet)
+    : SfxModalDialog(pParent, "SingleTabDialog", "sfx/ui/singletabdialog.ui")
+    , pImpl(new SingleTabDlgImpl)
+{
+    get(pOKBtn, "ok");
+    pOKBtn->SetClickHdl( LINK( this, SfxSingleTabDialogBase, OKHdl_Impl ) );
+    get(pCancelBtn, "cancel");
+    get(pHelpBtn, "help");
+    SetInputSet( &rSet );
+}
+
 // -----------------------------------------------------------------------
 
-SfxNoLayoutSingleTabDialog::~SfxNoLayoutSingleTabDialog()
+SfxSingleTabDialogBase::~SfxSingleTabDialogBase()
 {
-    delete pOKBtn;
-    delete pCancelBtn;
-    delete pHelpBtn;
     delete pImpl->m_pSfxPage;
     delete pImpl->m_pLine;
     delete pImpl;
+}
+
+void SfxSingleTabDialog::setTabPage(SfxTabPage* pTabPage,
+    GetTabPageRanges pRangesFunc, sal_uInt32 nSettingsId)
+/*  [Description]
+
+    Insert a (new) TabPage; an existing page is deleted.
+    The passed on page is initialized with the initially given Itemset
+    through calling Reset().
+*/
+
+{
+    SetUniqId(nSettingsId);
+    delete pImpl->m_pSfxPage;
+    pImpl->m_pSfxPage = pTabPage;
+    fnGetRanges = pRangesFunc;
+
+    if ( pImpl->m_pSfxPage )
+    {
+        // First obtain the user data, only then Reset()
+        SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( GetUniqId() ) );
+        String sUserData;
+        Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
+        OUString aTemp;
+        if ( aUserItem >>= aTemp )
+            sUserData = String( aTemp );
+        pImpl->m_pSfxPage->SetUserData( sUserData );
+        pImpl->m_pSfxPage->Reset( *GetInputItemSet() );
+        pImpl->m_pSfxPage->Show();
+
+        pHelpBtn->Show(Help::IsContextHelpEnabled());
+
+        // Set TabPage text in the Dialog
+        SetText( pImpl->m_pSfxPage->GetText() );
+
+        // Dialog recieves the HelpId of TabPage
+        SetHelpId( pImpl->m_pSfxPage->GetHelpId() );
+        SetUniqueId( pImpl->m_pSfxPage->GetUniqueId() );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -796,7 +843,7 @@ void SfxNoLayoutSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
     if ( !pOKBtn )
     {
         pOKBtn = new OKButton( this, WB_DEFBUTTON );
-        pOKBtn->SetClickHdl( LINK( this, SfxNoLayoutSingleTabDialog, OKHdl_Impl ) );
+        pOKBtn->SetClickHdl( LINK( this, SfxSingleTabDialogBase, OKHdl_Impl ) );
     }
     if ( !pCancelBtn )
         pCancelBtn = new CancelButton( this );
@@ -845,6 +892,13 @@ void SfxNoLayoutSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
         SetHelpId( pImpl->m_pSfxPage->GetHelpId() );
         SetUniqueId( pImpl->m_pSfxPage->GetUniqueId() );
     }
+}
+
+SfxNoLayoutSingleTabDialog::~SfxNoLayoutSingleTabDialog()
+{
+    delete pOKBtn;
+    delete pCancelBtn;
+    delete pHelpBtn;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

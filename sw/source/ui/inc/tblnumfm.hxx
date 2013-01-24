@@ -24,12 +24,10 @@
 class Window;
 class SfxItemSet;
 
-class SwNumFmtDlg : public SfxNoLayoutSingleTabDialog
+class SwNumFmtDlg : public SfxSingleTabDialog
 {
 public:
-
      SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet);
-    ~SwNumFmtDlg();
 };
 
 #endif

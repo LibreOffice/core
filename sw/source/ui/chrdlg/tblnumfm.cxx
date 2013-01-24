@@ -30,7 +30,7 @@
 #include <sfx2/tabdlg.hxx>
 
 SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)
-    : SfxNoLayoutSingleTabDialog( pParent, rSet, 0 )
+    : SfxSingleTabDialog(pParent, rSet)
 {
     // Create TabPage
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -39,17 +39,12 @@ SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)
 
     if ( fnCreatePage )
     {
-        SfxTabPage* pNewPage = (*fnCreatePage)( this, rSet );
+        SfxTabPage* pNewPage = (*fnCreatePage)( get_content_area(), rSet );
         SfxAllItemSet aSet(*(rSet.GetPool()));
         aSet.Put ( SvxNumberInfoItem( (const SvxNumberInfoItem&)pNewPage->GetItemSet().Get( SID_ATTR_NUMBERFORMAT_INFO )));
         pNewPage->PageCreated(aSet);
-        SetTabPage(pNewPage);
+        setTabPage(pNewPage);
     }
 }
-
-SwNumFmtDlg::~SwNumFmtDlg()
-{
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
