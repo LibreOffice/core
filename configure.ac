@@ -4962,21 +4962,27 @@ find_msms()
         if test -e $msmdir/policy_9_0_Microsoft_VC90_CRT_x86.msm; then
             msms="$msms policy_9_0_Microsoft_VC90_CRT_x86.msm"
         else
-            AC_MSG_ERROR([Merge modules not found])
+            AC_MSG_ERROR([Merge module policy_9_0_Microsoft_VC90_CRT_x86.msm not found])
         fi
     fi
 
     if test "$BUILD_X64" = TRUE; then
-        if test -e $msmdir/Microsoft_VC${VCVER}_CRT_x64.msm; then
-            msms="$msms Microsoft_VC${VCVER}_CRT_x64.msm"
-        else
-            AC_MSG_ERROR([Failed to copy x64 merge modules])
-        fi
         if test "$VCVER" = "90"; then
             if test -e $msmdir/policy_9_0_Microsoft_VC90_CRT_x86_x64.msm; then
                 msms="$msms policy_9_0_Microsoft_VC90_CRT_x86_x64.msm"
             else
-                AC_MSG_ERROR([Merge modules not found])
+                AC_MSG_ERROR([Merge module policy_9_0_Microsoft_VC90_CRT_x86_x64.msm not found])
+            fi
+            if test -e $msmdir/Microsoft_VC90_CRT_x86_x64.msm; then
+                msms="$msms Microsoft_VC90_CRT_x86_x64.msm"
+            else
+                AC_MSG_ERROR([Merge module Microsoft_VC90_CRT_x86_x64.msm not found])
+            fi
+        else
+            if test -e $msmdir/Microsoft_VC${VCVER}_CRT_x64.msm; then
+                msms="$msms Microsoft_VC${VCVER}_CRT_x64.msm"
+            else
+                AC_MSG_ERROR([Merge module Microsoft_VC${VCVER}_CRT_x64.msm not found])
             fi
         fi
     fi
