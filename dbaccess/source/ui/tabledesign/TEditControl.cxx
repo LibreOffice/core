@@ -1299,13 +1299,13 @@ sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
         switch(m_eChildFocus)
         {
             case DESCRIPTION:
-                bIsCutAllowed = pDescrCell->GetSelected().Len() != 0;
+                bIsCutAllowed = !pDescrCell->GetSelected().isEmpty();
                 break;
             case HELPTEXT:
-                bIsCutAllowed = pHelpTextCell->GetSelected().Len() != 0;
+                bIsCutAllowed = !pHelpTextCell->GetSelected().isEmpty();
                 break;
             case NAME:
-                bIsCutAllowed = pNameCell->GetSelected().Len() != 0;
+                bIsCutAllowed = !pNameCell->GetSelected().isEmpty();
                 break;
             case ROW:
                 bIsCutAllowed = IsCopyAllowed(nRow);
@@ -1325,15 +1325,15 @@ sal_Bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     sal_Bool bIsCopyAllowed = sal_False;
     if(m_eChildFocus == DESCRIPTION )
-        bIsCopyAllowed = pDescrCell->GetSelected().Len() != 0;
+        bIsCopyAllowed = !pDescrCell->GetSelected().isEmpty();
     else if(HELPTEXT == m_eChildFocus )
-        bIsCopyAllowed = pHelpTextCell->GetSelected().Len() != 0;
+        bIsCopyAllowed = !pHelpTextCell->GetSelected().isEmpty();
     else if(m_eChildFocus == NAME)
-        bIsCopyAllowed = pNameCell->GetSelected().Len() != 0;
+        bIsCopyAllowed = !pNameCell->GetSelected().isEmpty();
     else if(m_eChildFocus == ROW)
     {
         Reference<XPropertySet> xTable = GetView()->getController().getTable();
-        if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"))))
+        if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == "VIEW"))
             return sal_False;
 
         //////////////////////////////////////////////////////////////////////
@@ -1500,9 +1500,9 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
     Reference<XPropertySet> xTable = rController.getTable();
     //////////////////////////////////////////////////////////////
     // Key darf nicht veraendert werden
-    // Dies gilt jedoch nur, wenn die Tabelle nicht neu ist und keine ::com::sun::star::sdbcx::View. Ansonsten wird kein DROP ausgef�hrt
+    // Dies gilt jedoch nur, wenn die Tabelle nicht neu ist und keine ::com::sun::star::sdbcx::View. Ansonsten wird kein DROP ausgefuehrt
 
-    if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")))
+    if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == "VIEW")
         return sal_False;
     //////////////////////////////////////////////////////////////
     // Wenn leeres Feld, kein PrimKey

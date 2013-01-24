@@ -84,7 +84,7 @@ long OTableDesignHelpBar::PreNotify( NotifyEvent& rNEvt )
 // -----------------------------------------------------------------------------
 sal_Bool OTableDesignHelpBar::isCopyAllowed()
 {
-    return m_pTextWin && m_pTextWin->GetSelected().Len();
+    return m_pTextWin && !m_pTextWin->GetSelected().isEmpty();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableDesignHelpBar::isCutAllowed()

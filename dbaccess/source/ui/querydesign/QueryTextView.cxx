@@ -111,7 +111,7 @@ void OQueryTextView::copy()
 // -----------------------------------------------------------------------------
 sal_Bool OQueryTextView::isCutAllowed()
 {
-    return m_pEdit->GetSelected().Len() != 0;
+    return !m_pEdit->GetSelected().isEmpty();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryTextView::isPasteAllowed()

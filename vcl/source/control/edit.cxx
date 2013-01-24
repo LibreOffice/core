@@ -122,14 +122,14 @@ struct DDInfo
 
 struct Impl_IMEInfos
 {
-    String      aOldTextAfterStartPos;
-    sal_uInt16*     pAttribs;
-    xub_StrLen  nPos;
-    xub_StrLen  nLen;
-    sal_Bool        bCursor;
-    sal_Bool        bWasCursorOverwrite;
+    OUString      aOldTextAfterStartPos;
+    sal_uInt16*   pAttribs;
+    xub_StrLen    nPos;
+    xub_StrLen    nLen;
+    sal_Bool      bCursor;
+    sal_Bool      bWasCursorOverwrite;
 
-                Impl_IMEInfos( xub_StrLen nPos, const String& rOldTextAfterStartPos );
+                Impl_IMEInfos( xub_StrLen nPos, const OUString& rOldTextAfterStartPos );
                 ~Impl_IMEInfos();
 
     void        CopyAttribs( const xub_StrLen* pA, xub_StrLen nL );
@@ -138,7 +138,7 @@ struct Impl_IMEInfos
 
 // -----------------------------------------------------------------------
 
-Impl_IMEInfos::Impl_IMEInfos( xub_StrLen nP, const String& rOldTextAfterStartPos )
+Impl_IMEInfos::Impl_IMEInfos( xub_StrLen nP, const OUString& rOldTextAfterStartPos )
  : aOldTextAfterStartPos( rOldTextAfterStartPos )
 {
     nPos = nP;
@@ -484,7 +484,7 @@ long Edit::ImplGetExtraOffset() const
 
 // -----------------------------------------------------------------------
 
-XubString Edit::ImplGetText() const
+OUString Edit::ImplGetText() const
 {
     if ( mcEchoChar || (GetStyle() & WB_PASSWORD) )
     {
@@ -494,11 +494,11 @@ XubString Edit::ImplGetText() const
         else
             cEchoChar = '*';
         rtl::OUStringBuffer aText;
-        comphelper::string::padToLength(aText, maText.Len(), cEchoChar);
+        comphelper::string::padToLength(aText, maText.getLength(), cEchoChar);
         return aText.makeStringAndClear();
     }
     else
-        return maText;
+        return maText.toString();
 }
 
 // -----------------------------------------------------------------------
@@ -534,19 +534,19 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
     if ( !IsReallyVisible() )
         return;
 
-    XubString aText = ImplGetText();
+    OUString aText = ImplGetText();
     nStart = 0;
-    nEnd = aText.Len();
+    nEnd = aText.getLength();
 
     sal_Int32   nDXBuffer[256];
     sal_Int32*  pDXBuffer = NULL;
     sal_Int32*  pDX = nDXBuffer;
 
-    if( aText.Len() )
+    if( !aText.isEmpty() )
     {
-        if( 2*aText.Len() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
+        if( 2*aText.getLength() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
         {
-            pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
+            pDXBuffer = new sal_Int32[2*(aText.getLength()+1)];
             pDX = pDXBuffer;
         }
 
@@ -578,7 +578,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
     ImplClearBackground( 0, GetOutputSizePixel().Width() );
 
-    bool bPaintPlaceholderText = aText.Len() == 0 && !maPlaceholderText.isEmpty();
+    bool bPaintPlaceholderText = aText.isEmpty() && !maPlaceholderText.isEmpty();
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if ( IsEnabled() )
@@ -628,7 +628,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         aTmpSel.Justify();
         // selection is highlighted
         int i;
-        for( i = 0; i < aText.Len(); i++ )
+        for( i = 0; i < aText.getLength(); i++ )
         {
             Rectangle aRect( aPos, Size( 10, nTH ) );
             aRect.Left() = pDX[2*i] + mnXOffset + ImplGetExtraOffset();
@@ -758,12 +758,12 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
 void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode )
 {
-    XubString aText = ImplGetText();
+    OUString aText = ImplGetText();
 
     // loeschen moeglich?
     if ( !rSelection.Len() &&
          (((rSelection.Min() == 0) && (nDirection == EDIT_DEL_LEFT)) ||
-          ((rSelection.Max() == aText.Len()) && (nDirection == EDIT_DEL_RIGHT))) )
+          ((rSelection.Max() == aText.getLength()) && (nDirection == EDIT_DEL_RIGHT))) )
         return;
 
     ImplClearLayoutData();
@@ -778,10 +778,10 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
         {
             if ( nMode == EDIT_DELMODE_RESTOFWORD )
             {
-                i18n::Boundary aBoundary = xBI->getWordBoundary( maText, aSelection.Min(),
+                i18n::Boundary aBoundary = xBI->getWordBoundary( maText.toString(), aSelection.Min(),
                         GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
                 if ( aBoundary.startPos == aSelection.Min() )
-                    aBoundary = xBI->previousWord( maText, aSelection.Min(),
+                    aBoundary = xBI->previousWord( maText.toString(), aSelection.Min(),
                             GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
                 aSelection.Min() = aBoundary.startPos;
             }
@@ -792,7 +792,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
             else
             {
                 sal_Int32 nCount = 1;
-                aSelection.Min() = xBI->previousCharacters( maText, aSelection.Min(),
+                aSelection.Min() = xBI->previousCharacters( maText.toString(), aSelection.Min(),
                         GetSettings().GetLanguageTag().getLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
             }
         }
@@ -800,24 +800,24 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
         {
             if ( nMode == EDIT_DELMODE_RESTOFWORD )
             {
-                i18n::Boundary aBoundary = xBI->nextWord( maText, aSelection.Max(),
+                i18n::Boundary aBoundary = xBI->nextWord( maText.toString(), aSelection.Max(),
                         GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
                 aSelection.Max() = aBoundary.startPos;
             }
             else if ( nMode == EDIT_DELMODE_RESTOFCONTENT )
             {
-                aSelection.Max() = aText.Len();
+                aSelection.Max() = aText.getLength();
             }
             else
             {
                 sal_Int32 nCount = 1;
-                aSelection.Max() = xBI->nextCharacters( maText, aSelection.Max(),
+                aSelection.Max() = xBI->nextCharacters( maText.toString(), aSelection.Max(),
                         GetSettings().GetLanguageTag().getLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
             }
         }
     }
 
-    maText.Erase( (xub_StrLen)aSelection.Min(), (xub_StrLen)aSelection.Len() );
+    maText.remove( static_cast<sal_Int32>(aSelection.Min()), static_cast<sal_Int32>(aSelection.Len()) );
     maSelection.Min() = aSelection.Min();
     maSelection.Max() = aSelection.Min();
     ImplAlignAndPaint();
@@ -826,7 +826,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
 
 // -----------------------------------------------------------------------
 
-String Edit::ImplGetValidString( const String& rString ) const
+OUString Edit::ImplGetValidString( const OUString& rString ) const
 {
     rtl::OUString aValidString( rString );
     aValidString = comphelper::string::remove(aValidString, _LF);
@@ -883,10 +883,10 @@ bool Edit::ImplTruncateToMaxLen( rtl::OUString& rStr, sal_uInt32 nSelectionLen )
 {
     bool bWasTruncated = false;
     const sal_uInt32 nMaxLen = mnMaxTextLen < 65534 ? mnMaxTextLen : 65534;
-    sal_uInt32 nLenAfter = static_cast<sal_uInt32>(maText.Len()) + rStr.getLength() - nSelectionLen;
+    sal_uInt32 nLenAfter = static_cast<sal_uInt32>(maText.getLength()) + rStr.getLength() - nSelectionLen;
     if ( nLenAfter > nMaxLen )
     {
-        sal_uInt32 nErasePos = nMaxLen - static_cast<sal_uInt32>(maText.Len()) + nSelectionLen;
+        sal_uInt32 nErasePos = nMaxLen - static_cast<sal_uInt32>(maText.getLength()) + nSelectionLen;
         rStr = rStr.copy( 0, nErasePos );
         bWasTruncated = true;
     }
@@ -895,20 +895,20 @@ bool Edit::ImplTruncateToMaxLen( rtl::OUString& rStr, sal_uInt32 nSelectionLen )
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSel, sal_Bool bIsUserInput )
+void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, sal_Bool bIsUserInput )
 {
     Selection aSelection( maSelection );
     aSelection.Justify();
 
-    rtl::OUString aNewText( ImplGetValidString( rStr ) );
+    OUString aNewText( ImplGetValidString( rStr ) );
     ImplTruncateToMaxLen( aNewText, aSelection.Len() );
 
     ImplClearLayoutData();
 
     if ( aSelection.Len() )
-        maText.Erase( (xub_StrLen)aSelection.Min(), (xub_StrLen)aSelection.Len() );
-    else if ( !mbInsertMode && (aSelection.Max() < maText.Len()) )
-        maText.Erase( (xub_StrLen)aSelection.Max(), 1 );
+        maText.remove( static_cast<sal_Int32>(aSelection.Min()), static_cast<sal_Int32>(aSelection.Len()) );
+    else if ( !mbInsertMode && (aSelection.Max() < maText.getLength()) )
+        maText.remove( static_cast<sal_Int32>(aSelection.Max()), 1 );
 
     // take care of input-sequence-checking now
     if (bIsUserInput && !rStr.isEmpty())
@@ -969,13 +969,13 @@ void Edit::ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSel, 
         if (bIsInputSequenceChecking && (xISC = ImplGetInputSequenceChecker()).is())
         {
             sal_Unicode cChar = rStr[0];
-            xub_StrLen nTmpPos = static_cast< xub_StrLen >( aSelection.Min() );
+            sal_Int32 nTmpPos = static_cast< sal_Int32 >( aSelection.Min() );
             sal_Int16 nCheckMode = bCTLSequenceCheckingRestricted ?
                     i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
             // the text that needs to be checked is only the one
             // before the current cursor position
-            rtl::OUString aOldText( maText.Copy(0, nTmpPos) );
+            OUString aOldText( maText.toString().copy(0, nTmpPos) );
             rtl::OUString aTmpText( aOldText );
             if (bCTLSequenceCheckingTypeAndReplace)
             {
@@ -991,24 +991,24 @@ void Edit::ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSel, 
                         pOldTxt[nChgPos] == pTmpTxt[nChgPos] )
                     ++nChgPos;
 
-                String aChgText( aTmpText.copy( nChgPos ) );
+                OUString aChgText( aTmpText.copy( nChgPos ) );
 
                 // remove text from first pos to be changed to current pos
-                maText.Erase( static_cast< xub_StrLen >( nChgPos ), static_cast< xub_StrLen >( nTmpPos - nChgPos ) );
+                maText.remove( nChgPos, nTmpPos - nChgPos );
 
-                if (aChgText.Len())
+                if (!aChgText.isEmpty())
                 {
                     aNewText = aChgText;
                     aSelection.Min() = nChgPos; // position for new text to be inserted
                 }
                 else
-                    aNewText = String::EmptyString();
+                    aNewText = "";
             }
             else
             {
                 // should the character be ignored (i.e. not get inserted) ?
                 if (!xISC->checkInputSequence( aOldText, nTmpPos - 1, cChar, nCheckMode ))
-                    aNewText = String::EmptyString();
+                    aNewText = "";
             }
         }
 
@@ -1016,7 +1016,7 @@ void Edit::ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSel, 
     }
 
     if ( !aNewText.isEmpty() )
-        maText.Insert( String( aNewText ), (xub_StrLen)aSelection.Min() );
+        maText.insert( static_cast<sal_Int32>(aSelection.Min()), aNewText );
 
     if ( !pNewSel )
     {
@@ -1026,10 +1026,10 @@ void Edit::ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSel, 
     else
     {
         maSelection = *pNewSel;
-        if ( maSelection.Min() > maText.Len() )
-            maSelection.Min() = maText.Len();
-        if ( maSelection.Max() > maText.Len() )
-            maSelection.Max() = maText.Len();
+        if ( maSelection.Min() > maText.getLength() )
+            maSelection.Min() = maText.getLength();
+        if ( maSelection.Max() > maText.getLength() )
+            maSelection.Max() = maText.getLength();
     }
 
     ImplAlignAndPaint();
@@ -1038,14 +1038,15 @@ void Edit::ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSel, 
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplSetText( const XubString& rText, const Selection* pNewSelection )
+void Edit::ImplSetText( const OUString& rText, const Selection* pNewSelection )
 {
     // we delete text by "selecting" the old text completely then calling InsertText; this is flicker free
-    if ( ( rText.Len() <= mnMaxTextLen ) && ( (rText != maText) || (pNewSelection && (*pNewSelection != maSelection)) ) )
+    if ( ( rText.getLength() <= mnMaxTextLen ) &&
+         ( (rText != maText.toString()) || (pNewSelection && (*pNewSelection != maSelection)) ) )
     {
         ImplClearLayoutData();
         maSelection.Min() = 0;
-        maSelection.Max() = maText.Len();
+        maSelection.Max() = maText.getLength();
         if ( mnXOffset || HasPaintEvent() )
         {
             mnXOffset = 0;
@@ -1209,7 +1210,7 @@ void Edit::ImplShowCursor( sal_Bool bOnlyIfVisible )
         return;
 
     Cursor*     pCursor = GetCursor();
-    XubString   aText = ImplGetText();
+    OUString    aText = ImplGetText();
 
     long nTextPos = 0;
 
@@ -1217,24 +1218,24 @@ void Edit::ImplShowCursor( sal_Bool bOnlyIfVisible )
     sal_Int32*  pDXBuffer = NULL;
     sal_Int32*  pDX = nDXBuffer;
 
-    if( aText.Len() )
+    if( !aText.isEmpty() )
     {
-        if( 2*aText.Len() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
+        if( 2*aText.getLength() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
         {
-            pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
+            pDXBuffer = new sal_Int32[2*(aText.getLength()+1)];
             pDX = pDXBuffer;
         }
 
-        GetCaretPositions( aText, pDX, 0, aText.Len() );
+        GetCaretPositions( aText, pDX, 0, aText.getLength() );
 
-        if( maSelection.Max() < aText.Len() )
+        if( maSelection.Max() < aText.getLength() )
             nTextPos = pDX[ 2*maSelection.Max() ];
         else
-            nTextPos = pDX[ 2*aText.Len()-1 ];
+            nTextPos = pDX[ 2*aText.getLength()-1 ];
     }
 
     long nCursorWidth = 0;
-    if ( !mbInsertMode && !maSelection.Len() && (maSelection.Max() < aText.Len()) )
+    if ( !mbInsertMode && !maSelection.Len() && (maSelection.Max() < aText.getLength()) )
         nCursorWidth = GetTextWidth( aText, (xub_StrLen)maSelection.Max(), 1 );
     long nCursorPosX = nTextPos + mnXOffset + ImplGetExtraOffset();
 
@@ -1337,20 +1338,20 @@ void Edit::ImplAlignAndPaint()
 xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
 {
     xub_StrLen nIndex = STRING_LEN;
-    String aText = ImplGetText();
+    OUString aText = ImplGetText();
 
     sal_Int32   nDXBuffer[256];
     sal_Int32*  pDXBuffer = NULL;
     sal_Int32*  pDX = nDXBuffer;
-    if( 2*aText.Len() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
+    if( 2*aText.getLength() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
     {
-        pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
+        pDXBuffer = new sal_Int32[2*(aText.getLength()+1)];
         pDX = pDXBuffer;
     }
 
-    GetCaretPositions( aText, pDX, 0, aText.Len() );
+    GetCaretPositions( aText, pDX, 0, aText.getLength() );
     long nX = rWindowPos.X() - mnXOffset - ImplGetExtraOffset();
-    for( int i = 0; i < aText.Len(); i++ )
+    for( int i = 0; i < aText.getLength(); i++ )
     {
         if( (pDX[2*i] >= nX && pDX[2*i+1] <= nX) ||
             (pDX[2*i+1] >= nX && pDX[2*i] <= nX))
@@ -1373,7 +1374,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
     {
         nIndex = 0;
         long nDiff = Abs( pDX[0]-nX );
-        for( int i = 1; i < aText.Len(); i++ )
+        for( int i = 1; i < aText.getLength(); i++ )
         {
             long nNewDiff = Abs( pDX[2*i]-nX );
 
@@ -1383,7 +1384,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
                 nDiff = nNewDiff;
             }
         }
-        if( nIndex == aText.Len()-1 && Abs( pDX[2*nIndex+1] - nX ) < nDiff )
+        if( nIndex == aText.getLength()-1 && Abs( pDX[2*nIndex+1] - nX ) < nDiff )
             nIndex = STRING_LEN;
     }
 
@@ -1497,7 +1498,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
         else if ( rMEvt.GetClicks() == 2 )
         {
             uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
-             i18n::Boundary aBoundary = xBI->getWordBoundary( maText, aSelection.Max(),
+            i18n::Boundary aBoundary = xBI->getWordBoundary( maText.toString(), aSelection.Max(),
                      GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
             ImplSetSelection( Selection( aBoundary.startPos, aBoundary.endPos ) );
             ImplCopyToSelectionClipboard();
@@ -1629,7 +1630,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
     {
         if ( nCode == KEY_A )
         {
-            ImplSetSelection( Selection( 0, maText.Len() ) );
+            ImplSetSelection( Selection( 0, maText.getLength() ) );
             bDone = sal_True;
         }
         else if ( rKEvt.GetKeyCode().IsShift() && (nCode == KEY_S) )
@@ -1655,7 +1656,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
         {
             case com::sun::star::awt::Key::SELECT_ALL:
             {
-                ImplSetSelection( Selection( 0, maText.Len() ) );
+                ImplSetSelection( Selection( 0, maText.getLength() ) );
                 bDone = sal_True;
             }
             break;
@@ -1731,32 +1732,32 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     {
                         if ( bWord )
                         {
-                            i18n::Boundary aBoundary = xBI->getWordBoundary( maText, aSel.Max(),
+                            i18n::Boundary aBoundary = xBI->getWordBoundary( maText.toString(), aSel.Max(),
                                     GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
                             if ( aBoundary.startPos == aSel.Max() )
-                                aBoundary = xBI->previousWord( maText, aSel.Max(),
+                                aBoundary = xBI->previousWord( maText.toString(), aSel.Max(),
                                         GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
                             aSel.Max() = aBoundary.startPos;
                         }
                         else
                         {
                             sal_Int32 nCount = 1;
-                            aSel.Max() = xBI->previousCharacters( maText, aSel.Max(),
+                            aSel.Max() = xBI->previousCharacters( maText.toString(), aSel.Max(),
                                     GetSettings().GetLanguageTag().getLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
                         }
                     }
-                    else if ( bGoRight && ( aSel.Max() < maText.Len() ) )
+                    else if ( bGoRight && ( aSel.Max() < maText.getLength() ) )
                     {
                         if ( bWord )
                            {
-                            i18n::Boundary aBoundary = xBI->nextWord( maText, aSel.Max(),
+                            i18n::Boundary aBoundary = xBI->nextWord( maText.toString(), aSel.Max(),
                                     GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
                             aSel.Max() = aBoundary.startPos;
                         }
                         else
                         {
                             sal_Int32 nCount = 1;
-                            aSel.Max() = xBI->nextCharacters( maText, aSel.Max(),
+                            aSel.Max() = xBI->nextCharacters( maText.toString(), aSel.Max(),
                                     GetSettings().GetLanguageTag().getLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
                         }
                     }
@@ -1780,7 +1781,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
 
                     if ( bGoEnd && maAutocompleteHdl.IsSet() && !rKEvt.GetKeyCode().GetModifier() )
                     {
-                        if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.Len()) )
+                        if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
                         {
                             meAutocompleteAction = AUTOCOMPLETE_KEYINPUT;
                             maAutocompleteHdl.Call( this );
@@ -1825,9 +1826,9 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         break;
                     default: break;
                     }
-                    xub_StrLen nOldLen = maText.Len();
+                    xub_StrLen nOldLen = maText.getLength();
                     ImplDelete( maSelection, nDel, nMode );
-                    if ( maText.Len() != nOldLen )
+                    if ( maText.getLength() != nOldLen )
                         ImplModified();
                     bDone = sal_True;
                 }
@@ -1880,7 +1881,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         ImplInsertText(rtl::OUString(rKEvt.GetCharCode()), 0, sal_True);
                         if ( maAutocompleteHdl.IsSet() )
                         {
-                            if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.Len()) )
+                            if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
                             {
                                 meAutocompleteAction = AUTOCOMPLETE_KEYINPUT;
                                 maAutocompleteHdl.Call( this );
@@ -2050,7 +2051,7 @@ void Edit::GetFocus()
         mpSubEdit->ImplGrabFocus( GetGetFocusFlags() );
     else if ( !mbActivePopup )
     {
-        maUndoText = maText;
+        maUndoText = maText.toString();
 
         sal_uLong nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
         if ( !( GetStyle() & (WB_NOHIDESELECTION|WB_READONLY) )
@@ -2058,13 +2059,13 @@ void Edit::GetFocus()
         {
             if ( nSelOptions & SELECTION_OPTION_SHOWFIRST )
             {
-                maSelection.Min() = maText.Len();
+                maSelection.Min() = maText.getLength();
                 maSelection.Max() = 0;
             }
             else
             {
                 maSelection.Min() = 0;
-                maSelection.Max() = maText.Len();
+                maSelection.Max() = maText.getLength();
             }
             if ( mbIsSubEdit )
                 ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
@@ -2178,9 +2179,9 @@ void Edit::Command( const CommandEvent& rCEvt )
             pPopup->EnableItem( SV_MENU_EDIT_PASTE, bData );
         }
 
-        if ( maUndoText == maText )
+        if ( maUndoText == maText.toString() )
             pPopup->EnableItem( SV_MENU_EDIT_UNDO, sal_False );
-        if ( ( maSelection.Min() == 0 ) && ( maSelection.Max() == maText.Len() ) )
+        if ( ( maSelection.Min() == 0 ) && ( maSelection.Max() == maText.getLength() ) )
             pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, sal_False );
         if ( !pImplFncGetSpecialChars )
         {
@@ -2223,7 +2224,7 @@ void Edit::Command( const CommandEvent& rCEvt )
                 ImplModified();
                 break;
             case SV_MENU_EDIT_SELECTALL:
-                ImplSetSelection( Selection( 0, maText.Len() ) );
+                ImplSetSelection( Selection( 0, maText.getLength() ) );
                 break;
             case SV_MENU_EDIT_INSERTSYMBOL:
                 {
@@ -2279,8 +2280,8 @@ void Edit::Command( const CommandEvent& rCEvt )
     {
         DeleteSelected();
         delete mpIMEInfos;
-        xub_StrLen nPos = (xub_StrLen)maSelection.Max();
-        mpIMEInfos = new Impl_IMEInfos( nPos, maText.Copy( nPos ) );
+        sal_Int32 nPos = static_cast<sal_Int32>(maSelection.Max());
+        mpIMEInfos = new Impl_IMEInfos( nPos, maText.toString().copy( nPos ) );
         mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
     else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
@@ -2299,7 +2300,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         // #i25161# call auto complete handler for ext text commit also
         if ( maAutocompleteHdl.IsSet() )
         {
-            if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.Len()) )
+            if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
             {
                 meAutocompleteAction = AUTOCOMPLETE_KEYINPUT;
                 maAutocompleteHdl.Call( this );
@@ -2310,27 +2311,27 @@ void Edit::Command( const CommandEvent& rCEvt )
     {
         const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
 
-        maText.Erase( mpIMEInfos->nPos, mpIMEInfos->nLen );
-        maText.Insert( pData->GetText(), mpIMEInfos->nPos );
+        maText.remove( mpIMEInfos->nPos, mpIMEInfos->nLen );
+        maText.insert( mpIMEInfos->nPos, pData->GetText() );
         if ( mpIMEInfos->bWasCursorOverwrite )
         {
             sal_uInt16 nOldIMETextLen = mpIMEInfos->nLen;
             sal_uInt16 nNewIMETextLen = pData->GetText().Len();
             if ( ( nOldIMETextLen > nNewIMETextLen ) &&
-                 ( nNewIMETextLen < mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                 ( nNewIMETextLen < mpIMEInfos->aOldTextAfterStartPos.getLength() ) )
             {
                 // restore old characters
                 sal_uInt16 nRestore = nOldIMETextLen - nNewIMETextLen;
-                maText.Insert( mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ), mpIMEInfos->nPos + nNewIMETextLen );
+                maText.insert( mpIMEInfos->nPos + nNewIMETextLen, mpIMEInfos->aOldTextAfterStartPos.copy( nNewIMETextLen, nRestore ) );
             }
             else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
-                      ( nOldIMETextLen < mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                      ( nOldIMETextLen < mpIMEInfos->aOldTextAfterStartPos.getLength() ) )
             {
                 // overwrite
                 sal_uInt16 nOverwrite = nNewIMETextLen - nOldIMETextLen;
-                if ( ( nOldIMETextLen + nOverwrite ) > mpIMEInfos->aOldTextAfterStartPos.Len() )
-                    nOverwrite = mpIMEInfos->aOldTextAfterStartPos.Len() - nOldIMETextLen;
-                maText.Erase( mpIMEInfos->nPos + nNewIMETextLen, nOverwrite );
+                if ( ( nOldIMETextLen + nOverwrite ) > mpIMEInfos->aOldTextAfterStartPos.getLength() )
+                    nOverwrite = mpIMEInfos->aOldTextAfterStartPos.getLength() - nOldIMETextLen;
+                maText.remove( mpIMEInfos->nPos + nNewIMETextLen, nOverwrite );
             }
         }
 
@@ -2360,8 +2361,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         if ( mpIMEInfos )
         {
             xub_StrLen nCursorPos = (sal_uInt16)GetSelection().Max();
-            SetCursorRect( NULL, GetTextWidth(
-                maText, nCursorPos, mpIMEInfos->nPos+mpIMEInfos->nLen-nCursorPos ) );
+            SetCursorRect( NULL, GetTextWidth( maText.toString(), nCursorPos, mpIMEInfos->nPos+mpIMEInfos->nLen-nCursorPos ) );
         }
         else
         {
@@ -2434,7 +2434,7 @@ void Edit::StateChanged( StateChangedType nType )
             mnAlign = EDIT_ALIGN_RIGHT;
         else if ( nStyle & WB_CENTER )
             mnAlign = EDIT_ALIGN_CENTER;
-        if ( maText.Len() && ( mnAlign != nOldAlign ) )
+        if ( maText.getLength() && ( mnAlign != nOldAlign ) )
         {
             ImplAlign();
             Invalidate();
@@ -2505,7 +2505,7 @@ void Edit::ImplShowDDCursor()
 {
     if ( !mpDDInfo->bVisCursor )
     {
-        long nTextWidth = GetTextWidth( maText, 0, mpDDInfo->nDropPos );
+        long nTextWidth = GetTextWidth( maText.toString(), 0, mpDDInfo->nDropPos );
         long nTextHeight = GetTextHeight();
         Rectangle aCursorRect( Point( nTextWidth + mnXOffset, (GetOutputSize().Height()-nTextHeight)/2 ), Size( 2, nTextHeight ) );
         mpDDInfo->aCursor.SetWindow( this );
@@ -2657,8 +2657,8 @@ void Edit::SetMaxTextLen( xub_StrLen nMaxLen )
         mpSubEdit->SetMaxTextLen( mnMaxTextLen );
     else
     {
-        if ( maText.Len() > mnMaxTextLen )
-            ImplDelete( Selection( mnMaxTextLen, maText.Len() ), EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
+        if ( maText.getLength() > mnMaxTextLen )
+            ImplDelete( Selection( mnMaxTextLen, maText.getLength() ), EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
     }
 }
 
@@ -2689,10 +2689,10 @@ void Edit::ImplSetSelection( const Selection& rSelection, sal_Bool bPaint )
             Selection aOld( maSelection );
             Selection aNew( rSelection );
 
-            if ( aNew.Min() > maText.Len() )
-                aNew.Min() = maText.Len();
-            if ( aNew.Max() > maText.Len() )
-                aNew.Max() = maText.Len();
+            if ( aNew.Min() > maText.getLength() )
+                aNew.Min() = maText.getLength();
+            if ( aNew.Max() > maText.getLength() )
+                aNew.Max() = maText.getLength();
             if ( aNew.Min() < 0 )
                 aNew.Min() = 0;
             if ( aNew.Max() < 0 )
@@ -2704,7 +2704,7 @@ void Edit::ImplSetSelection( const Selection& rSelection, sal_Bool bPaint )
                 maSelection = aNew;
 
                 if ( bPaint && ( aOld.Len() || aNew.Len() || IsPaintTransparent() ) )
-                    ImplInvalidateOrRepaint( 0, maText.Len() );
+                    ImplInvalidateOrRepaint( 0, maText.getLength() );
                 ImplShowCursor();
                 if ( mbIsSubEdit )
                     ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
@@ -2730,7 +2730,7 @@ const Selection& Edit::GetSelection() const
 
 // -----------------------------------------------------------------------
 
-void Edit::ReplaceSelected( const XubString& rStr )
+void Edit::ReplaceSelected( const OUString& rStr )
 {
     if ( mpSubEdit )
         mpSubEdit->ReplaceSelected( rStr );
@@ -2753,7 +2753,7 @@ void Edit::DeleteSelected()
 
 // -----------------------------------------------------------------------
 
-XubString Edit::GetSelected() const
+OUString Edit::GetSelected() const
 {
     if ( mpSubEdit )
         return mpSubEdit->GetSelected();
@@ -2761,7 +2761,7 @@ XubString Edit::GetSelected() const
     {
         Selection aSelection( maSelection );
         aSelection.Justify();
-        return maText.Copy( (xub_StrLen)aSelection.Min(), (xub_StrLen)aSelection.Len() );
+        return maText.toString().copy( static_cast<sal_Int32>(aSelection.Min()), static_cast<sal_Int32>(aSelection.Len()) );
     }
 }
 
@@ -2803,10 +2803,10 @@ void Edit::Undo()
         mpSubEdit->Undo();
     else
     {
-        XubString aText( maText );
-        ImplDelete( Selection( 0, aText.Len() ), EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
+        OUString aText( maText.toString() );
+        ImplDelete( Selection( 0, aText.getLength() ), EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
         ImplInsertText( maUndoText );
-        ImplSetSelection( Selection( 0, maUndoText.Len() ) );
+        ImplSetSelection( Selection( 0, maUndoText.getLength() ) );
         maUndoText = aText;
     }
 }
@@ -2841,7 +2841,7 @@ OUString Edit::GetText() const
     if ( mpSubEdit )
         return mpSubEdit->GetText();
     else
-        return maText;
+        return maText.toString();
 }
 
 // -----------------------------------------------------------------------
@@ -3217,11 +3217,11 @@ void Edit::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEv
     }
 }
 
-rtl::OUString Edit::GetSurroundingText() const
+OUString Edit::GetSurroundingText() const
 {
     if (mpSubEdit)
         return mpSubEdit->GetSurroundingText();
-    return maText;
+    return maText.toString();
 }
 
 Selection Edit::GetSurroundingTextSelection() const
