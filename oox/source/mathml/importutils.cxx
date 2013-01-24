@@ -37,9 +37,6 @@
 #include <oox/token/namespaces.hxx>
 #include <rtl/ustring.hxx>
 
-// *sigh*
-#define STR( str ) OUString( RTL_CONSTASCII_USTRINGPARAM( str ))
-
 #define OPENING( token ) XML_STREAM_OPENING( token )
 #define CLOSING( token ) XML_STREAM_CLOSING( token )
 
@@ -82,33 +79,33 @@ static OUString tokenToString( int token )
 {
     OUString tokenname = StaticTokenMap::get().getUnicodeTokenName( token & TOKEN_MASK );
     if( tokenname.isEmpty())
-        tokenname = STR( "???" );
+        tokenname = "???";
     int nmsp = ( token & NMSP_MASK & ~( TAG_OPENING | TAG_CLOSING ));
 #if 0 // this is awfully long
     OUString namespacename = StaticNamespaceMap::get().count( nmsp ) != 0
-        ? StaticNamespaceMap::get()[ nmsp ] : STR( "???" );
+        ? StaticNamespaceMap::get()[ nmsp ] : OUString( "???" );
 #else
     OUString namespacename;
     // only few are needed actually
     switch( nmsp )
     {
         case NMSP_officeMath:
-            namespacename = STR( "m" );
+            namespacename = "m";
             break;
         case NMSP_doc:
-            namespacename = STR( "w" );
+            namespacename = "w";
             break;
         default:
-            namespacename = STR( "?" );
+            namespacename = "?";
             break;
     }
 #endif
     if( token == OPENING( token ))
-        return STR( "<" ) + namespacename + STR( ":" ) + tokenname + STR ( ">" );
+        return "<" + namespacename + ":" + tokenname + ">";
     if( token == CLOSING( token ))
-        return STR( "</" ) + namespacename + STR( ":" ) + tokenname + STR ( ">" );
+        return "</" + namespacename + ":" + tokenname + ">";
     // just the name itself, not specified whether opening or closing
-    return namespacename + STR( ":" ) + tokenname;
+    return namespacename + ":" + tokenname;
 }
 
 } // namespace
