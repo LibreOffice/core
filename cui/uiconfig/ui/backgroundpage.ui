@@ -27,7 +27,6 @@
             <property name="no_show_all">True</property>
             <property name="label" translatable="yes">A_s</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">selectlb</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -174,7 +173,6 @@
                         <property name="no_show_all">True</property>
                         <property name="label" translatable="yes">_Transparency</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">transparencymf:0%</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

@@ -1530,7 +1530,6 @@ void SvxBackgroundTabPage::ShowTblControl()
     m_pTblLBox->SelectEntryPos(0);
     m_pTblDesc->Show();
     m_pTblLBox->Show();
-    m_pTblDesc->set_mnemonic_widget(m_pTblLBox);
 }
 
 //-----------------------------------------------------------------------
@@ -1539,11 +1538,10 @@ void SvxBackgroundTabPage::ShowParaControl(sal_Bool bCharOnly)
 {
     m_pParaLBox->SetSelectHdl(HDL(ParaDestinationHdl_Impl));
     m_pParaLBox->SelectEntryPos(0);
-    if (!bCharOnly)
+    if(!bCharOnly)
     {
         m_pTblDesc->Show();
         m_pParaLBox->Show();
-        m_pTblDesc->set_mnemonic_widget(m_pParaLBox);
     }
     m_pParaLBox->SetData(m_pParaLBox); // here it can be recognized that this mode is turned on
 }
