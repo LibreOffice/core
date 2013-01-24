@@ -312,7 +312,7 @@ struct DffObjData
     sal_Bool bOpt2          : 1;
     sal_Bool bIsAutoText    : 1;
     sal_Bool bRotateTextWithShape : 1;
-
+    bool     bPageAnchor;
     int nCalledByGroup;
 
     DffObjData( const DffRecordHeader& rObjHd,
@@ -331,6 +331,7 @@ struct DffObjData
         bOpt2( sal_False ),
         bIsAutoText( sal_False ),
         bRotateTextWithShape( sal_True ),
+        bPageAnchor( true ),
         nCalledByGroup( nClByGroup ){}
 };
 

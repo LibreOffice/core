@@ -79,7 +79,7 @@ ShapeAnchor::ShapeAnchor( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
     meAnchorType( ANCHOR_INVALID ),
     meCellAnchorType( CELLANCHOR_EMU ),
-    mnEditAs( XML_twoCell )
+    meEditAs( ANCHOR_TWOCELL )
 {
 }
 
@@ -94,8 +94,17 @@ void ShapeAnchor::importAnchor( sal_Int32 nElement, const AttributeList& rAttrib
             meAnchorType = ANCHOR_ONECELL;
         break;
         case XDR_TOKEN( twoCellAnchor ):
+        {
             meAnchorType = ANCHOR_TWOCELL;
-            mnEditAs = rAttribs.getToken( XML_editAs, XML_twoCell );
+            OUString sEditAs = rAttribs.getXString( XML_editAs, OUString() );
+            if ( !sEditAs.isEmpty() )
+            {
+                if ( sEditAs.equalsIgnoreAsciiCaseAscii("absolute" ) )
+                    meEditAs = ANCHOR_ABSOLUTE;
+                else if ( sEditAs.equalsIgnoreAsciiCaseAscii("oneCell") )
+                    meEditAs = ANCHOR_ONECELL;
+            }
+        }
         break;
         default:
             OSL_ENSURE( false, "ShapeAnchor::importAnchor - unexpected element" );

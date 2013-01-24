@@ -79,6 +79,14 @@ struct AnchorClientDataModel
 class ShapeAnchor : public WorksheetHelper
 {
 public:
+    enum AnchorType
+    {
+        ANCHOR_INVALID,         /// Anchor type is unknown.
+        ANCHOR_ABSOLUTE,        /// Absolute anchor (top-left corner and size in absolute units).
+        ANCHOR_ONECELL,         /// One-cell anchor (top-left corner at cell, size in absolute units).
+        ANCHOR_TWOCELL,         /// Two-cell anchor (top-left and bottom-right corner at cell).
+        ANCHOR_VML
+    };
     explicit            ShapeAnchor( const WorksheetHelper& rHelper );
 
     /** Imports the shape anchor (one of the elements xdr:absoluteAnchor, xdr:oneCellAnchor, xdr:twoCellAnchor). */
@@ -100,19 +108,13 @@ public:
     /** Calculates the resulting shape anchor in 1/100 mm. */
     ::com::sun::star::awt::Rectangle calcAnchorRectHmm(
                             const ::com::sun::star::awt::Size& rPageSizeHmm ) const;
+    AnchorType          getEditAs() const { return meEditAs; }
 private:
     /** Converts the passed anchor to an absolute position in EMUs. */
     ::oox::drawingml::EmuPoint calcCellAnchorEmu( const CellAnchorModel& rModel ) const;
 
 private:
-    enum AnchorType
-    {
-        ANCHOR_INVALID,         /// Anchor type is unknown.
-        ANCHOR_ABSOLUTE,        /// Absolute anchor (top-left corner and size in absolute units).
-        ANCHOR_ONECELL,         /// One-cell anchor (top-left corner at cell, size in absolute units).
-        ANCHOR_TWOCELL,         /// Two-cell anchor (top-left and bottom-right corner at cell).
-        ANCHOR_VML
-    };
+
 
     /** Specifies how cell positions from CellAnchorModel have to be processed. */
     enum CellAnchorType
@@ -129,7 +131,7 @@ private:
     CellAnchorModel     maFrom;             /// Top-left position, if anchor is not of type absolute.
     CellAnchorModel     maTo;               /// Bottom-right position, if anchor is of type two-cell.
     AnchorClientDataModel maClientData;     /// Shape client data.
-    sal_Int32           mnEditAs;           /// Anchor mode as shown in the UI.
+    AnchorType          meEditAs;           /// Anchor mode as shown in the UI.
 };
 
 // ============================================================================

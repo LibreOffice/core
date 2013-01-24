@@ -257,9 +257,11 @@ XclExpDffSheetAnchor::XclExpDffSheetAnchor( const XclExpRoot& rRoot ) :
 
 void XclExpDffSheetAnchor::ImplSetFlags( const SdrObject& rSdrObj )
 {
-    // Special case "page anchor" (X==0,Y==1) -> lock pos and size.
-    const Point& rPos = rSdrObj.GetAnchorPos();
-    mnFlags = ((rPos.X() == 0) && (rPos.Y() == 1)) ? EXC_ESC_ANCHOR_LOCKED : 0;
+    // set flags for cell/page anchoring
+    if ( ScDrawLayer::GetAnchorType( rSdrObj ) == SCA_CELL )
+        mnFlags = 0;
+    else
+        mnFlags = EXC_ESC_ANCHOR_LOCKED;
 }
 
 void XclExpDffSheetAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit )
