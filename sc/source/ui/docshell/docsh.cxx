@@ -470,8 +470,10 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
     if (bHardRecalc)
         DoHardRecalc(false);
     else
+    {
         // still need to recalc volatile formula cells.
-        aDocument.CalcFormulaTree(false, true, false);
+        aDocument.Broadcast( SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS, NULL );
+    }
 
     bool bAdjustHeightOld = aDocument.IsAdjustHeightEnabled();
     aDocument.EnableAdjustHeight(false);

@@ -352,7 +352,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
 
             ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
 
-            if( ((nCellType == util::NumberFormat::TEXT) || pOUFormula) )
+            if( ((nCellType == util::NumberFormat::TEXT) || pOUFormula || bFormulaTextResult) )
             {
                 if ( pOUFormula )
                 {
