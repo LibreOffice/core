@@ -52,7 +52,7 @@ static sal_uInt16 aWrapPageRg[] = {
 };
 
 SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode) :
-    SfxSingleTabDialog(pParent, rSet, 0),
+    SfxNoLayoutSingleTabDialog(pParent, rSet, 0),
     pWrtShell(pSh)
 
 {

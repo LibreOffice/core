@@ -502,7 +502,7 @@ void SwDropCapsPict::_InitPrinter()
 
 SwDropCapsDlg::SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet ) :
 
-    SfxSingleTabDialog(pParent, rSet, 0)
+    SfxNoLayoutSingleTabDialog(pParent, rSet, 0)
 
 {
     SwDropCapsPage* pNewPage = (SwDropCapsPage*) SwDropCapsPage::Create(this, rSet);

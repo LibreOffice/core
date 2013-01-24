@@ -30,7 +30,7 @@
 #include <sfx2/tabdlg.hxx>
 
 SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)
-    : SfxSingleTabDialog( pParent, rSet, 0 )
+    : SfxNoLayoutSingleTabDialog( pParent, rSet, 0 )
 {
     // Create TabPage
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();

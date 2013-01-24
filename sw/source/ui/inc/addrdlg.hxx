@@ -21,7 +21,7 @@
 
 #include <sfx2/basedlgs.hxx>
 
-class SwAddrDlg : public SfxSingleTabDialog
+class SwAddrDlg : public SfxNoLayoutSingleTabDialog
 {
 public:
 

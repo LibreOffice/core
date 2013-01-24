@@ -67,7 +67,7 @@ public:
     SvxDistributeVertical GetDistributeVer() const { return meDistributeVer; }
 };
 
-class SvxDistributeDialog : public SfxSingleTabDialog
+class SvxDistributeDialog : public SfxNoLayoutSingleTabDialog
 {
     SvxDistributePage*          mpPage;
 

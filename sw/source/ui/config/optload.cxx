@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)
 }
 
 SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet) :
-    SfxSingleTabDialog(pParent, rSet, 0)
+    SfxNoLayoutSingleTabDialog(pParent, rSet, 0)
 {
     // create TabPage
     SetTabPage((SwCaptionOptPage*) SwCaptionOptPage::Create(this, rSet));
@@ -794,7 +794,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
 {
     String sFldTypeName = aCategoryBox.GetText();
 
-    SfxSingleTabDialog *pDlg = dynamic_cast<SfxSingleTabDialog*>(GetParent());
+    SfxNoLayoutSingleTabDialog *pDlg = dynamic_cast<SfxNoLayoutSingleTabDialog*>(GetParent());
     PushButton *pBtn = pDlg ? pDlg->GetOKButton() : NULL;
     if (pBtn)
         pBtn->Enable(sFldTypeName.Len() != 0);

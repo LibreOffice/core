@@ -353,7 +353,7 @@ OUString SdAbstractSfxDialog_Impl::GetText() const
     return pDlg->GetText();
 }
 
-//AbstractSfxSingleTabDialog_Impl end
+//AbstractSfxNoLayoutSingleTabDialog_Impl end
 
 //AbstractSdVectorizeDlg_Impl begin
 const GDIMetaFile& AbstractSdVectorizeDlg_Impl::GetGDIMetaFile() const

@@ -497,8 +497,8 @@ void SpellDialog::StartSpellOptDlg_Impl()
     };
     SfxItemSet aSet( SFX_APP()->GetPool(), aSpellInfos);
     aSet.Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
-    SfxSingleTabDialog* pDlg =
-        new SfxSingleTabDialog( this, aSet, RID_SFXPAGE_LINGU );
+    SfxNoLayoutSingleTabDialog* pDlg =
+        new SfxNoLayoutSingleTabDialog( this, aSet, RID_SFXPAGE_LINGU );
     SfxTabPage* pPage = SvxLinguTabPage::Create( pDlg, aSet );
     ( (SvxLinguTabPage*)pPage )->HideGroups( GROUP_MODULES );
     pDlg->SetTabPage( pPage );

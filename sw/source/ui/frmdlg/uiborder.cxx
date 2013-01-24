@@ -34,7 +34,7 @@
 
 SwBorderDlg::SwBorderDlg(Window* pParent, SfxItemSet& rSet, sal_uInt16 nType) :
 
-    SfxSingleTabDialog(pParent, rSet, 0)
+    SfxNoLayoutSingleTabDialog(pParent, rSet, 0)
 
 {
     SetText(SW_RESSTR(STR_FRMUI_BORDER));

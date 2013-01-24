@@ -880,7 +880,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     aCropDlgAttr.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(),
                                                     aRBSize.Width(), aRBSize.Height() ) );
 
-                    SfxSingleTabDialog  aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
+                    SfxNoLayoutSingleTabDialog  aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
                                                     aCropDlgAttr, 950 );
                     const String        aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
 

@@ -77,7 +77,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
-class SwCaptionOptDlg : public SfxSingleTabDialog
+class SwCaptionOptDlg : public SfxNoLayoutSingleTabDialog
 {
 public:
      SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet);

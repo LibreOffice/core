@@ -950,7 +950,7 @@ SvxMacroAssignSingleTabDialog::~SvxMacroAssignSingleTabDialog()
 
 // -----------------------------------------------------------------------
 
-// According to SfxSingleTabDialog
+// According to SfxNoLayoutSingleTabDialog
 void SvxMacroAssignSingleTabDialog::SetTabPage( SfxTabPage* pTabPage )
 {
     pFixedLine = new FixedLine( this );

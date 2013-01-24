@@ -50,7 +50,7 @@
 SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(
             Window *pParent,
             const SfxItemSet& rOptionsSet, sal_Int32 nInitialFlags ) :
-    SfxSingleTabDialog  ( pParent, rOptionsSet, RID_SVXPAGE_JSEARCH_OPTIONS ),
+    SfxNoLayoutSingleTabDialog  ( pParent, rOptionsSet, RID_SVXPAGE_JSEARCH_OPTIONS ),
     nInitialTlFlags( nInitialFlags )
 {
     pPage = (SvxJSearchOptionsPage *)
@@ -63,7 +63,7 @@ SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(
 SvxJSearchOptionsDialog::~SvxJSearchOptionsDialog()
 {
     // pPage will be implicitly destroyed by the
-    // SfxSingleTabDialog destructor
+    // SfxNoLayoutSingleTabDialog destructor
 }
 
 

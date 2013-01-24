@@ -1653,7 +1653,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
                                                                         sal_uInt32 nResId
                                                                         )
 {
-    SfxSingleTabDialog* pDlg=NULL;
+    SfxNoLayoutSingleTabDialog* pDlg=NULL;
     switch ( nResId )
     {
         case RID_SVXPAGE_MEASURE :

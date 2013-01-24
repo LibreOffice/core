@@ -55,7 +55,7 @@ static sal_uInt16 pRanges[] =
 
 SvxMeasureDialog::SvxMeasureDialog( Window* pParent, const SfxItemSet& rInAttrs,
                                 const SdrView* pSdrView ) :
-        SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_MEASURE )
+        SfxNoLayoutSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_MEASURE )
 {
     SvxMeasurePage* _pPage = new SvxMeasurePage( this, rInAttrs );
 

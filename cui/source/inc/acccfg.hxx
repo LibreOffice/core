@@ -197,7 +197,7 @@ public:
     void ExpandEntry ( sal_uInt16 nPos, const String &rStr );
 };
 
-class SvxShortcutAssignDlg : public SfxSingleTabDialog
+class SvxShortcutAssignDlg : public SfxNoLayoutSingleTabDialog
 {
 public:
     SvxShortcutAssignDlg(

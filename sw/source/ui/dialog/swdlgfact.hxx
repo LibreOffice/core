@@ -22,7 +22,7 @@
 #include "swabstdlg.hxx"
 
 class SwInsertAbstractDlg;
-class SfxSingleTabDialog;
+class SfxNoLayoutSingleTabDialog;
 class SwAsciiFilterDlg;
 class Dialog;
 class SwBreakDlg;
@@ -85,7 +85,7 @@ class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
 //add for SwInsertAbstractDlg end
 
 // add for SwAddrDlg, SwDropCapsDlg, SwBackgroundDlg SwNumFmtDlg  SwWrapDlg SwBorderDlg, SwFldEditDlg  begin
-class SfxSingleTabDialog;
+class SfxNoLayoutSingleTabDialog;
 class SwAbstractSfxDialog_Impl :public SfxAbstractDialog
 {
     DECL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl,SfxModalDialog)

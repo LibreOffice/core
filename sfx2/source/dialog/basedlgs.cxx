@@ -668,9 +668,9 @@ void SfxFloatingWindow::FillInfo(SfxChildWinInfo& rInfo) const
         rInfo.nFlags |= SFX_CHILDWIN_ZOOMIN;
 }
 
-// SfxSingleTabDialog ----------------------------------------------------
+// SfxNoLayoutSingleTabDialog ----------------------------------------------------
 
-IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
+IMPL_LINK_NOARG(SfxNoLayoutSingleTabDialog, OKHdl_Impl)
 
 /*  [Description]
 
@@ -718,7 +718,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
 
 // -----------------------------------------------------------------------
 
-SfxSingleTabDialog::SfxSingleTabDialog
+SfxNoLayoutSingleTabDialog::SfxNoLayoutSingleTabDialog
 (
     Window *pParent,
     const SfxItemSet& rSet,
@@ -744,7 +744,7 @@ SfxSingleTabDialog::SfxSingleTabDialog
 
 // -----------------------------------------------------------------------
 
-SfxSingleTabDialog::SfxSingleTabDialog
+SfxNoLayoutSingleTabDialog::SfxNoLayoutSingleTabDialog
 (
     Window* pParent,
     sal_uInt16 nUniqueId,
@@ -771,7 +771,7 @@ SfxSingleTabDialog::SfxSingleTabDialog
 
 // -----------------------------------------------------------------------
 
-SfxSingleTabDialog::~SfxSingleTabDialog()
+SfxNoLayoutSingleTabDialog::~SfxNoLayoutSingleTabDialog()
 {
     delete pOKBtn;
     delete pCancelBtn;
@@ -783,7 +783,7 @@ SfxSingleTabDialog::~SfxSingleTabDialog()
 
 // -----------------------------------------------------------------------
 
-void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
+void SfxNoLayoutSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
                                      GetTabPageRanges pRangesFunc )
 /*  [Description]
 
@@ -796,7 +796,7 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
     if ( !pOKBtn )
     {
         pOKBtn = new OKButton( this, WB_DEFBUTTON );
-        pOKBtn->SetClickHdl( LINK( this, SfxSingleTabDialog, OKHdl_Impl ) );
+        pOKBtn->SetClickHdl( LINK( this, SfxNoLayoutSingleTabDialog, OKHdl_Impl ) );
     }
     if ( !pCancelBtn )
         pCancelBtn = new CancelButton( this );

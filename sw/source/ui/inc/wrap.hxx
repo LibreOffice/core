@@ -34,7 +34,7 @@ class Window;
 class SfxItemSet;
 class SwWrtShell;
 
-class SwWrapDlg : public SfxSingleTabDialog
+class SwWrapDlg : public SfxNoLayoutSingleTabDialog
 {
     SwWrtShell*         pWrtShell;
 

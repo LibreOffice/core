@@ -36,7 +36,7 @@ class SwWrtShell;
 
 // class SwDropCapsDlg ******************************************************
 
-class SwDropCapsDlg : public SfxSingleTabDialog
+class SwDropCapsDlg : public SfxNoLayoutSingleTabDialog
 {
 
 public:

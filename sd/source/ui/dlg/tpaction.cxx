@@ -86,7 +86,7 @@ using namespace com::sun::star::lang;
 
 SdActionDlg::SdActionDlg (
     ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView ) :
-        SfxSingleTabDialog  ( pParent, *pAttr, TP_ANIMATION_ACTION ),
+        SfxNoLayoutSingleTabDialog  ( pParent, *pAttr, TP_ANIMATION_ACTION ),
         rOutAttrs           ( *pAttr )
 {
     // FreeResource();

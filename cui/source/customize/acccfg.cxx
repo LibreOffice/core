@@ -1541,7 +1541,7 @@ css::uno::Reference< css::frame::XModel > SfxAcceleratorConfigPage::SearchForAlr
 }
 
 SvxShortcutAssignDlg::SvxShortcutAssignDlg( Window* pParent, const uno::Reference< frame::XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
-    : SfxSingleTabDialog( pParent, rSet, 0 )
+    : SfxNoLayoutSingleTabDialog( pParent, rSet, 0 )
 {
     SfxTabPage* pPage = SfxAcceleratorConfigPage::Create( this, rSet );
     pPage->SetFrame( rxDocumentFrame );

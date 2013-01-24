@@ -76,7 +76,7 @@ RegistrationItemSetHolder::~RegistrationItemSetHolder()
 
 DatabaseRegistrationDialog::DatabaseRegistrationDialog( Window* pParent, const SfxItemSet& rInAttrs )
     :RegistrationItemSetHolder( rInAttrs )
-    ,SfxSingleTabDialog( pParent, getRegistrationItems(), RID_SFXPAGE_DBREGISTER )
+    ,SfxNoLayoutSingleTabDialog( pParent, getRegistrationItems(), RID_SFXPAGE_DBREGISTER )
 {
     SfxTabPage* page = DbRegistrationOptionsPage::Create( this, getRegistrationItems() );
 
@@ -90,7 +90,7 @@ DatabaseRegistrationDialog::~DatabaseRegistrationDialog()
 
 short DatabaseRegistrationDialog::Execute()
 {
-    short result = SfxSingleTabDialog::Execute();
+    short result = SfxNoLayoutSingleTabDialog::Execute();
     if ( result == RET_OK )
     {
         DBG_ASSERT( GetOutputItemSet(), "DatabaseRegistrationDialog::Execute: no output items!" );

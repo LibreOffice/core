@@ -44,7 +44,7 @@ SvxDistributeDialog::SvxDistributeDialog(
     const SfxItemSet& rInAttrs,
     SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
-:   SfxSingleTabDialog(pParent, rInAttrs, RID_SVXPAGE_DISTRIBUTE ),
+:   SfxNoLayoutSingleTabDialog(pParent, rInAttrs, RID_SVXPAGE_DISTRIBUTE ),
     mpPage(0L)
 {
     mpPage = new SvxDistributePage(this, rInAttrs, eHor, eVer);

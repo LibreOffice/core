@@ -431,7 +431,7 @@ void SwTestAccountSettingsDialog::Test()
 }
 
 SwMailConfigDlg::SwMailConfigDlg(Window* pParent, SfxItemSet& rSet ) :
-    SfxSingleTabDialog(pParent, rSet, 0)
+    SfxNoLayoutSingleTabDialog(pParent, rSet, 0)
 {
     // create TabPage
     SetTabPage(SwMailConfigPage::Create( this, rSet ));

@@ -119,7 +119,7 @@ public:
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
 
-class SFX2_DLLPUBLIC SfxMacroAssignDlg : public SfxSingleTabDialog
+class SFX2_DLLPUBLIC SfxMacroAssignDlg : public SfxNoLayoutSingleTabDialog
 {
 public:
     SfxMacroAssignDlg(

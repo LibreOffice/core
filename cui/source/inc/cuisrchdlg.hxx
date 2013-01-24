@@ -34,7 +34,7 @@
 
 class SvxJSearchOptionsPage;
 
-class SvxJSearchOptionsDialog : public SfxSingleTabDialog
+class SvxJSearchOptionsDialog : public SfxNoLayoutSingleTabDialog
 {
     sal_Int32                   nInitialTlFlags;
     SvxJSearchOptionsPage  *pPage;

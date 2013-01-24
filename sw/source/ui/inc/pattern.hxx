@@ -24,7 +24,7 @@
 class Window;
 class SfxItemSet;
 
-class SwBackgroundDlg : public SfxSingleTabDialog
+class SwBackgroundDlg : public SfxNoLayoutSingleTabDialog
 {
 public:
 

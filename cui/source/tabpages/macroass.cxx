@@ -487,7 +487,7 @@ SfxTabPage* SfxMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet
 }
 
 SfxMacroAssignDlg::SfxMacroAssignDlg( Window* pParent, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
-    : SfxSingleTabDialog( pParent, rSet, 0 )
+    : SfxNoLayoutSingleTabDialog( pParent, rSet, 0 )
 {
     SfxTabPage* pPage = SfxMacroTabPage::Create( this, rSet );
     pPage->SetFrame( rxDocumentFrame );

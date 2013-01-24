@@ -53,7 +53,7 @@ namespace swui
 }
 
 SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
-    SfxSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), 0, 0),
+    SfxNoLayoutSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), 0, 0),
     pSh         (rVw.GetWrtShellPtr()),
     aPrevBT     (this, SW_RES(BTN_FLDEDT_PREV)),
     aNextBT     (this, SW_RES(BTN_FLDEDT_NEXT)),

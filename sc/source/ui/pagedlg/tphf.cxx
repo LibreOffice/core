@@ -228,7 +228,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
     else
     {
         String              aText;
-        SfxSingleTabDialog* pDlg = new SfxSingleTabDialog( this, aDataSet, 42 );
+        SfxNoLayoutSingleTabDialog* pDlg = new SfxNoLayoutSingleTabDialog( this, aDataSet, 42 );
         sal_Bool bRightPage =   aCntSharedBox.IsChecked()
                          || ( SVX_PAGE_LEFT != SvxPageUsage(nPageUsage) );
 

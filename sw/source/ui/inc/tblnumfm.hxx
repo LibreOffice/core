@@ -24,7 +24,7 @@
 class Window;
 class SfxItemSet;
 
-class SwNumFmtDlg : public SfxSingleTabDialog
+class SwNumFmtDlg : public SfxNoLayoutSingleTabDialog
 {
 public:
 

@@ -23,7 +23,7 @@
 
 SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxSingleTabDialog(pParent, rSet, 0)
+    SfxNoLayoutSingleTabDialog(pParent, rSet, 0)
 
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();

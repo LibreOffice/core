@@ -1135,7 +1135,7 @@ IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvxFontListBox*, pLb )
         }
         else
         {
-            SfxSingleTabDialog* pParent = dynamic_cast< SfxSingleTabDialog* >( GetParent() );
+            SfxNoLayoutSingleTabDialog* pParent = dynamic_cast< SfxNoLayoutSingleTabDialog* >( GetParent() );
             OKButton* pOKButton = pParent ? pParent->GetOKButton() : NULL;
             if ( pOKButton )
                 pOKButton->Click();

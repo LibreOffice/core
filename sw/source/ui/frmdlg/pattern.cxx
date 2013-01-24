@@ -32,7 +32,7 @@ Ctor
 
 SwBackgroundDlg::SwBackgroundDlg(Window* pParent, const SfxItemSet& rSet) :
 
-    SfxSingleTabDialog(pParent, rSet, 0)
+    SfxNoLayoutSingleTabDialog(pParent, rSet, 0)
 
 {
     SetText(SW_RESSTR(STR_FRMUI_PATTERN));

@@ -149,7 +149,7 @@ public:
 
 };
 
-// class SfxSingleTabDialog --------------------------------------------------
+// class SfxNoLayoutSingleTabDialog --------------------------------------------------
 
 struct SingleTabDlgImpl
 {
@@ -167,13 +167,13 @@ struct SingleTabDlgImpl
 
 typedef sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
 
-class SFX2_DLLPUBLIC SfxSingleTabDialog : public SfxModalDialog
+class SFX2_DLLPUBLIC SfxNoLayoutSingleTabDialog : public SfxModalDialog
 {
 public:
-    SfxSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, sal_uInt16 nUniqueId );
-    SfxSingleTabDialog( Window* pParent, sal_uInt16 nUniqueId, const SfxItemSet* pInSet = 0 );
+    SfxNoLayoutSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, sal_uInt16 nUniqueId );
+    SfxNoLayoutSingleTabDialog( Window* pParent, sal_uInt16 nUniqueId, const SfxItemSet* pInSet = 0 );
 
-    virtual             ~SfxSingleTabDialog();
+    virtual             ~SfxNoLayoutSingleTabDialog();
 
     void                SetTabPage( SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0 );
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }

@@ -92,9 +92,9 @@ public:
     virtual void PageCreated (SfxAllItemSet aSet);
 };
 
-/* Derived from SfxSingleTabDialog, in order to be able to be
+/* Derived from SfxNoLayoutSingleTabDialog, in order to be able to be
    informed about virtual methods by the control. */
-class SvxMeasureDialog : public SfxSingleTabDialog
+class SvxMeasureDialog : public SfxNoLayoutSingleTabDialog
 {
 public:
     SvxMeasureDialog( Window* pParent, const SfxItemSet& rAttr,

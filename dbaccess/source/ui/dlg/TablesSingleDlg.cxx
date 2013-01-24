@@ -47,7 +47,7 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
             ,SfxItemSet* _pItems
             ,const Reference< XComponentContext >& _rxORB
             ,const ::com::sun::star::uno::Any& _aDataSourceName)
-    :SfxSingleTabDialog(pParent,DLG_TABLE_FILTER,_pItems)
+    :SfxNoLayoutSingleTabDialog(pParent,DLG_TABLE_FILTER,_pItems)
     ,m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, pParent, this ) )
     ,m_bStopExecution(sal_False)
     ,m_pOutSet(_pItems)
@@ -76,7 +76,7 @@ short OTableSubscriptionDialog::Execute()
     short nRet = RET_CANCEL;
     if ( !m_bStopExecution )
     {
-        nRet = SfxSingleTabDialog::Execute();
+        nRet = SfxNoLayoutSingleTabDialog::Execute();
         if ( nRet == RET_OK )
         {
             m_pOutSet->Put(*GetOutputItemSet());

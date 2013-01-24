@@ -77,7 +77,7 @@ public:
 
 };
 
-class SwMailConfigDlg : public SfxSingleTabDialog
+class SwMailConfigDlg : public SfxNoLayoutSingleTabDialog
 {
 public:
 

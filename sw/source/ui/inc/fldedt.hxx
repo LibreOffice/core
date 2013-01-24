@@ -24,7 +24,7 @@
 class SwView;
 class SwWrtShell;
 
-class SwFldEditDlg : public SfxSingleTabDialog
+class SwFldEditDlg : public SfxNoLayoutSingleTabDialog
 {
     SwWrtShell* pSh;
     ImageButton aPrevBT;

@@ -42,7 +42,7 @@ class SdDrawDocument;
 |* Effekte-SingleTab-Dialog
 |*
 \************************************************************************/
-class SdActionDlg : public SfxSingleTabDialog
+class SdActionDlg : public SfxNoLayoutSingleTabDialog
 {
 private:
     const SfxItemSet&   rOutAttrs;

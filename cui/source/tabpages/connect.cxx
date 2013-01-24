@@ -55,7 +55,7 @@ static sal_uInt16 pRanges[] =
 
 SvxConnectionDialog::SvxConnectionDialog( Window* pParent, const SfxItemSet& rInAttrs,
                                 const SdrView* pSdrView ) :
-        SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_CONNECTION )
+        SfxNoLayoutSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_CONNECTION )
 {
     SvxConnectionPage* _pPage = new SvxConnectionPage( this, rInAttrs );
 
