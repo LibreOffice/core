@@ -37,7 +37,7 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlCustomShapes, SfxBoolItem);
 
 SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    m_aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ) )
+    m_aSubTbxResName( "private:resource/toolbar/" )
 {
     switch( nSlotId )
     {
@@ -47,40 +47,40 @@ SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( sal_uInt16 nSlotId, sal_uInt16 nId
         }
         case SID_DRAWTBX_CS_BASIC :
         {
-            m_aCommand = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BasicShapes.diamond" ) );
-            m_aSubTbName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "basicshapes" ) );
+            m_aCommand = ".uno:BasicShapes.diamond";
+            m_aSubTbName = "basicshapes";
         }
         break;
 
         case SID_DRAWTBX_CS_SYMBOL :
         {
-            m_aCommand = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SymbolShapes.smiley" ) );
-            m_aSubTbName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "symbolshapes" ) );
+            m_aCommand = ".uno:SymbolShapes.smiley";
+            m_aSubTbName = "symbolshapes";
         }
         break;
 
         case SID_DRAWTBX_CS_ARROW :
         {
-            m_aCommand = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ArrowShapes.left-right-arrow" ) );
-            m_aSubTbName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "arrowshapes" ) );
+            m_aCommand = ".uno:ArrowShapes.left-right-arrow";
+            m_aSubTbName = "arrowshapes";
         }
         break;
         case SID_DRAWTBX_CS_FLOWCHART :
         {
-            m_aCommand = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FlowChartShapes.flowchart-internal-storage" ) );
-            m_aSubTbName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "flowchartshapes" ) );
+            m_aCommand = ".uno:FlowChartShapes.flowchart-internal-storage";
+            m_aSubTbName = "flowchartshapes";
         }
         break;
         case SID_DRAWTBX_CS_CALLOUT :
         {
-            m_aCommand = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CalloutShapes.round-rectangular-callout" ) );
-            m_aSubTbName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calloutshapes" ) );
+            m_aCommand = ".uno:CalloutShapes.round-rectangular-callout";
+            m_aSubTbName = "calloutshapes";
         }
         break;
         case SID_DRAWTBX_CS_STAR :
         {
-            m_aCommand = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StarShapes.star5" ) );
-            m_aSubTbName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "starshapes" ) );
+            m_aCommand = ".uno:StarShapes.star5";
+            m_aSubTbName = "starshapes";
         }
         break;
     }

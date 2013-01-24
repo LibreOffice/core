@@ -78,9 +78,9 @@ void EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( EnhancedCustomShape
     rParameter.Value <<= nNewValue;
 }
 
-rtl::OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_Int16 nP1, sal_Int16 nP2, sal_Int16 nP3 )
+OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_Int16 nP1, sal_Int16 nP2, sal_Int16 nP3 )
 {
-    rtl::OUString aEquation;
+    OUString aEquation;
     sal_Bool b1Special = ( nFlags & 0x2000 ) != 0;
     sal_Bool b2Special = ( nFlags & 0x4000 ) != 0;
     sal_Bool b3Special = ( nFlags & 0x8000 ) != 0;
@@ -144,41 +144,41 @@ rtl::OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_I
         break;
         case 2 :
         {
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "(" ) );
+            aEquation += "(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "+" ) );
+            aEquation += "+";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")/2" ) );
+            aEquation += ")/2";
         }
         break;
         case 3 :
         {
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "abs(" ) );
+            aEquation += "abs(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ) );
+            aEquation += ")";
         }
         break;
         case 4 :
         {
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "min(" ) );
+            aEquation += "min(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
+            aEquation += ",";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ) );
+            aEquation += ")";
         }
         break;
         case 5 :
         {
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "max(" ) );
+            aEquation += "max(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
+            aEquation += ",";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ) );
+            aEquation += ")";
         }
         break;
         case 6 :
         {
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "if(" ) );
+            aEquation += "if(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
             aEquation += rtl::OUString( (sal_Unicode)',' );
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
@@ -189,135 +189,133 @@ rtl::OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_I
         break;
         case 7 :
         {
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "sqrt(" ) );
+            aEquation += "sqrt(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
+            aEquation += "*";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "+" ) );
+            aEquation += "+";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
+            aEquation += "*";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "+" ) );
+            aEquation += "+";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
+            aEquation += "*";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
             aEquation += rtl::OUString( (sal_Unicode)')' );
         }
         break;
         case 8 :
         {
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "atan2(" ) );
+            aEquation += "atan2(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
+            aEquation += ",";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")/(pi/180)" ) );
+            aEquation += ")/(pi/180)";
         }
         break;
         case 9 :
         {
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*sin(" ) );
+            aEquation += "*sin(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(pi/180))" ) );
+            aEquation += "*(pi/180))";
         }
         break;
         case 10 :
         {
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*cos(" ) );
+            aEquation += "*cos(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(pi/180))" ) );
+            aEquation += "*(pi/180))";
         }
         break;
         case 11 :
         {
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "cos(atan2(" ) );
+            aEquation += "*cos(atan2(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
+            aEquation += ",";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "))" ) );
+            aEquation += "))";
         }
         break;
         case 12 :
         {
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "sin(atan2(" ) );
+            aEquation += "*sin(atan2(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
+            aEquation += ",";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "))" ) );
+            aEquation += "))";
         }
         break;
         case 13 :
         {
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "sqrt(" ) );
+            aEquation += "sqrt(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ) );
+            aEquation += ")";
         }
         break;
         case 15 :
         {
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*sqrt(1-(" ) );
+            aEquation += "*sqrt(1-(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
+            aEquation += "/";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ) );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(" ) );
+            aEquation += ")";
+            aEquation += "*(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
+            aEquation += "/";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "))" ) );
+            aEquation += "))";
         }
         break;
         case 16 :
         {
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*tan(" ) );
+            aEquation += "*tan(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ) );
+            aEquation += ")";
         }
         break;
         case 0x80 :
         {
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "sqrt(" ) );
+            aEquation += "sqrt(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
+            aEquation += "*";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "-" ) );
+            aEquation += "-";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
+            aEquation += "*";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
             aEquation += rtl::OUString( (sal_Unicode)')' );
         }
         break;
         case 0x81 :
         {
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "(cos(" ) );
+            aEquation += "(cos(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(pi/180))*(" ) );
+            aEquation += "*(pi/180))*(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "-10800)+sin(" ) );
+            aEquation += "-10800)+sin(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(pi/180))*(" ) );
+            aEquation += "*(pi/180))*(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "-10800))+10800" ) );
+            aEquation += "-10800))+10800";
         }
         break;
         case 0x82 :
         {
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "-(sin(" ) );
+            aEquation += "-(sin(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(pi/180))*(" ) );
+            aEquation += "*(pi/180))*(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "-10800)-cos(" ) );
+            aEquation += "-10800)-cos(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(pi/180))*(" ) );
+            aEquation += "*(pi/180))*(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "-10800))+10800" ) );
+            aEquation += "-10800))+10800";
         }
         break;
     }
@@ -330,9 +328,9 @@ void EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( rtl::OUS
     {
         if ( nPara & 0x400 )
         {
-            rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "?" ) );
+            rParameter += "?";
             rParameter += rtl::OUString::valueOf( (sal_Int32)( nPara & 0xff ) );
-            rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+            rParameter += " ";
         }
         else
         {
@@ -349,29 +347,29 @@ void EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( rtl::OUS
                 case DFF_Prop_adjust9Value :
                 case DFF_Prop_adjust10Value :
                 {
-                    rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "$" ) );
+                    rParameter += "$";
                     rParameter += rtl::OUString::valueOf( (sal_Int32)( nPara - DFF_Prop_adjustValue ) );
-                    rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+                    rParameter += " ";
                 }
                 break;
                 case DFF_Prop_geoLeft :
                 {
-                    rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "left" ) );
+                    rParameter += "left";
                 }
                 break;
                 case DFF_Prop_geoTop :
                 {
-                    rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "top" ) );
+                    rParameter += "top";
                 }
                 break;
                 case DFF_Prop_geoRight :
                 {
-                    rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "right" ) );
+                    rParameter += "right";
                 }
                 break;
                 case DFF_Prop_geoBottom :
                 {
-                    rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "bottom" ) );
+                    rParameter += "bottom";
                 }
                 break;
             }
@@ -446,28 +444,28 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
         {
             const com::sun::star::beans::PropertyValue& rPropVal = rHandleProperties[ i ];
 
-            const rtl::OUString sPosition           ( RTL_CONSTASCII_USTRINGPARAM( "Position" ) );
-            const rtl::OUString sMirroredX          ( RTL_CONSTASCII_USTRINGPARAM( "MirroredX" ) );
-            const rtl::OUString sMirroredY          ( RTL_CONSTASCII_USTRINGPARAM( "MirroredY" ) );
-            const rtl::OUString sSwitched           ( RTL_CONSTASCII_USTRINGPARAM( "Switched" ) );
-            const rtl::OUString sPolar              ( RTL_CONSTASCII_USTRINGPARAM( "Polar" ) );
-            const rtl::OUString sRefX               ( RTL_CONSTASCII_USTRINGPARAM( "RefX" ) );
-            const rtl::OUString sRefY               ( RTL_CONSTASCII_USTRINGPARAM( "RefY" ) );
-            const rtl::OUString sRefAngle           ( RTL_CONSTASCII_USTRINGPARAM( "RefAngle" ) );
-            const rtl::OUString sRefR               ( RTL_CONSTASCII_USTRINGPARAM( "RefR" ) );
-            const rtl::OUString sRadiusRangeMinimum ( RTL_CONSTASCII_USTRINGPARAM( "RadiusRangeMinimum" ) );
-            const rtl::OUString sRadiusRangeMaximum ( RTL_CONSTASCII_USTRINGPARAM( "RadiusRangeMaximum" ) );
-            const rtl::OUString sRangeXMinimum      ( RTL_CONSTASCII_USTRINGPARAM( "RangeXMinimum" ) );
-            const rtl::OUString sRangeXMaximum      ( RTL_CONSTASCII_USTRINGPARAM( "RangeXMaximum" ) );
-            const rtl::OUString sRangeYMinimum      ( RTL_CONSTASCII_USTRINGPARAM( "RangeYMinimum" ) );
-            const rtl::OUString sRangeYMaximum      ( RTL_CONSTASCII_USTRINGPARAM( "RangeYMaximum" ) );
+            const rtl::OUString sPosition           ( "Position" );
+            const rtl::OUString sMirroredX          ( "MirroredX" );
+            const rtl::OUString sMirroredY          ( "MirroredY" );
+            const rtl::OUString sSwitched           ( "Switched" );
+            const rtl::OUString sPolar              ( "Polar" );
+            const rtl::OUString sRefX               ( "RefX" );
+            const rtl::OUString sRefY               ( "RefY" );
+            const rtl::OUString sRefAngle           ( "RefAngle" );
+            const rtl::OUString sRefR               ( "RefR" );
+            const rtl::OUString sRadiusRangeMinimum ( "RadiusRangeMinimum" );
+            const rtl::OUString sRadiusRangeMaximum ( "RadiusRangeMaximum" );
+            const rtl::OUString sRangeXMinimum      ( "RangeXMinimum" );
+            const rtl::OUString sRangeXMaximum      ( "RangeXMaximum" );
+            const rtl::OUString sRangeYMinimum      ( "RangeYMinimum" );
+            const rtl::OUString sRangeYMaximum      ( "RangeYMaximum" );
 
-            if ( rPropVal.Name.equals( sPosition ) )
+            if ( rPropVal.Name == sPosition )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aPosition )
                     bRetValue = sal_True;
             }
-            else if ( rPropVal.Name.equals( sMirroredX ) )
+            else if ( rPropVal.Name == sMirroredX )
             {
                 sal_Bool bMirroredX = sal_Bool();
                 if ( rPropVal.Value >>= bMirroredX )
@@ -476,7 +474,7 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
                         rDestinationHandle.nFlags |= HANDLE_FLAGS_MIRRORED_X;
                 }
             }
-            else if ( rPropVal.Name.equals( sMirroredY ) )
+            else if ( rPropVal.Name == sMirroredY )
             {
                 sal_Bool bMirroredY = sal_Bool();
                 if ( rPropVal.Value >>= bMirroredY )
@@ -485,7 +483,7 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
                         rDestinationHandle.nFlags |= HANDLE_FLAGS_MIRRORED_Y;
                 }
             }
-            else if ( rPropVal.Name.equals( sSwitched ) )
+            else if ( rPropVal.Name == sSwitched )
             {
                 sal_Bool bSwitched = sal_Bool();
                 if ( rPropVal.Value >>= bSwitched )
@@ -494,57 +492,57 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
                         rDestinationHandle.nFlags |= HANDLE_FLAGS_SWITCHED;
                 }
             }
-            else if ( rPropVal.Name.equals( sPolar ) )
+            else if ( rPropVal.Name == sPolar )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aPolar )
                     rDestinationHandle.nFlags |= HANDLE_FLAGS_POLAR;
             }
-            else if ( rPropVal.Name.equals( sRefX ) )
+            else if ( rPropVal.Name == sRefX )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.nRefX )
                     rDestinationHandle.nFlags |= HANDLE_FLAGS_REFX;
             }
-            else if ( rPropVal.Name.equals( sRefY ) )
+            else if ( rPropVal.Name == sRefY )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.nRefY )
                     rDestinationHandle.nFlags |= HANDLE_FLAGS_REFY;
             }
-            else if ( rPropVal.Name.equals( sRefAngle ) )
+            else if ( rPropVal.Name == sRefAngle )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.nRefAngle )
                     rDestinationHandle.nFlags |= HANDLE_FLAGS_REFANGLE;
             }
-            else if ( rPropVal.Name.equals( sRefR ) )
+            else if ( rPropVal.Name == sRefR )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.nRefR )
                     rDestinationHandle.nFlags |= HANDLE_FLAGS_REFR;
             }
-            else if ( rPropVal.Name.equals( sRadiusRangeMinimum ) )
+            else if ( rPropVal.Name == sRadiusRangeMinimum )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aRadiusRangeMinimum )
                     rDestinationHandle.nFlags |= HANDLE_FLAGS_RADIUS_RANGE_MINIMUM;
             }
-            else if ( rPropVal.Name.equals( sRadiusRangeMaximum ) )
+            else if ( rPropVal.Name == sRadiusRangeMaximum )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aRadiusRangeMaximum )
                     rDestinationHandle.nFlags |= HANDLE_FLAGS_RADIUS_RANGE_MAXIMUM;
             }
-            else if ( rPropVal.Name.equals( sRangeXMinimum ) )
+            else if ( rPropVal.Name == sRangeXMinimum )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aXRangeMinimum )
                     rDestinationHandle.nFlags |= HANDLE_FLAGS_RANGE_X_MINIMUM;
             }
-            else if ( rPropVal.Name.equals( sRangeXMaximum ) )
+            else if ( rPropVal.Name == sRangeXMaximum )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aXRangeMaximum )
                     rDestinationHandle.nFlags |= HANDLE_FLAGS_RANGE_X_MAXIMUM;
             }
-            else if ( rPropVal.Name.equals( sRangeYMinimum ) )
+            else if ( rPropVal.Name == sRangeYMinimum )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aYRangeMinimum )
                     rDestinationHandle.nFlags |= HANDLE_FLAGS_RANGE_Y_MINIMUM;
             }
-            else if ( rPropVal.Name.equals( sRangeYMaximum ) )
+            else if ( rPropVal.Name == sRangeYMaximum )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.aYRangeMaximum )
                     rDestinationHandle.nFlags |= HANDLE_FLAGS_RANGE_Y_MAXIMUM;
@@ -564,7 +562,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     //////////////////////
     // AdjustmentValues //
     //////////////////////
-    const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM ( "AdjustmentValues" ) );
+    const rtl::OUString sAdjustmentValues( "AdjustmentValues" );
     const Any* pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sAdjustmentValues );
     if ( pAny )
         *pAny >>= seqAdjustmentValues;
@@ -572,7 +570,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     ///////////////
     // Coordsize //
     ///////////////
-    const rtl::OUString sViewBox( RTL_CONSTASCII_USTRINGPARAM ( "ViewBox" ) );
+    const rtl::OUString sViewBox( "ViewBox" );
     const Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sViewBox );
     com::sun::star::awt::Rectangle aViewBox;
     if ( pViewBox && (*pViewBox >>= aViewBox ) )
@@ -582,12 +580,12 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
         nCoordWidthG  = labs( aViewBox.Width );
         nCoordHeightG = labs( aViewBox.Height);
     }
-    const rtl::OUString sPath( RTL_CONSTASCII_USTRINGPARAM ( "Path" ) );
+    const rtl::OUString sPath( "Path" );
 
     //////////////////////
     // Path/Coordinates //
     //////////////////////
-    const rtl::OUString sCoordinates( RTL_CONSTASCII_USTRINGPARAM ( "Coordinates" ) );
+    const rtl::OUString sCoordinates( "Coordinates" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sCoordinates );
     if ( pAny )
         *pAny >>= seqCoordinates;
@@ -595,7 +593,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     /////////////////////
     // Path/GluePoints //
     /////////////////////
-    const rtl::OUString sGluePoints( RTL_CONSTASCII_USTRINGPARAM ( "GluePoints" ) );
+    const rtl::OUString sGluePoints( "GluePoints" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sGluePoints );
     if ( pAny )
         *pAny >>= seqGluePoints;
@@ -603,7 +601,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     ///////////////////
     // Path/Segments //
     ///////////////////
-    const rtl::OUString sSegments( RTL_CONSTASCII_USTRINGPARAM ( "Segments" ) );
+    const rtl::OUString sSegments( "Segments" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sSegments );
     if ( pAny )
         *pAny >>= seqSegments;
@@ -611,7 +609,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     //////////////////////
     // Path/SubViewSize //
     //////////////////////
-    const rtl::OUString sSubViewSize( RTL_CONSTASCII_USTRINGPARAM ( "SubViewSize" ) );
+    const rtl::OUString sSubViewSize( "SubViewSize" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sSubViewSize );
     if ( pAny )
         *pAny >>= seqSubViewSize;
@@ -619,7 +617,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     ///////////////////
     // Path/StretchX //
     ///////////////////
-    const rtl::OUString sStretchX( RTL_CONSTASCII_USTRINGPARAM ( "StretchX" ) );
+    const rtl::OUString sStretchX( "StretchX" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sStretchX );
     if ( pAny )
     {
@@ -631,7 +629,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     ///////////////////
     // Path/StretchY //
     ///////////////////
-    const rtl::OUString sStretchY( RTL_CONSTASCII_USTRINGPARAM ( "StretchY" ) );
+    const rtl::OUString sStretchY( "StretchY" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sStretchY );
     if ( pAny )
     {
@@ -643,7 +641,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     /////////////////////
     // Path/TextFrames //
     /////////////////////
-    const rtl::OUString sTextFrames( RTL_CONSTASCII_USTRINGPARAM ( "TextFrames" ) );
+    const rtl::OUString sTextFrames( "TextFrames" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sTextFrames );
     if ( pAny )
         *pAny >>= seqTextFrames;
@@ -651,7 +649,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     ///////////////
     // Equations //
     ///////////////
-    const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM( "Equations" ) );
+    const rtl::OUString sEquations( "Equations" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sEquations );
     if ( pAny )
         *pAny >>= seqEquations;
@@ -659,7 +657,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     /////////////
     // Handles //
     /////////////
-    const rtl::OUString sHandles( RTL_CONSTASCII_USTRINGPARAM( "Handles" ) );
+    const rtl::OUString sHandles( "Handles" );
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sHandles );
     if ( pAny )
         *pAny >>= seqHandles;
@@ -763,9 +761,9 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     aP.Y() -= aS.Height() / 2;
     aLogicRect = Rectangle( aP, aS );
 
-    const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
-    const rtl::OUString sMirroredX( RTL_CONSTASCII_USTRINGPARAM ( "MirroredX" ) );
-    const rtl::OUString sMirroredY( RTL_CONSTASCII_USTRINGPARAM ( "MirroredY" ) );
+    const rtl::OUString sType( "Type" );
+    const rtl::OUString sMirroredX( "MirroredX" );
+    const rtl::OUString sMirroredY( "MirroredY" );
 
     rtl::OUString sShapeType;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
@@ -814,7 +812,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         case mso_sptNil :
         {
             if( sShapeType.getLength() > 4 &&
-                sShapeType.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "col-" )))
+                sShapeType.match( "col-" ))
             {
                 nColorData = sShapeType.copy( 4 ).toInt32( 16 );
             }
@@ -1383,7 +1381,7 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
             // and writing them back into the GeometryItem
             SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)
                 (const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-            const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM ( "AdjustmentValues" ) );
+            const rtl::OUString sAdjustmentValues( "AdjustmentValues" );
             com::sun::star::beans::PropertyValue aPropVal;
             aPropVal.Name = sAdjustmentValues;
             aPropVal.Value <<= seqAdjustmentValues;
@@ -1848,8 +1846,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 case UNKNOWN :
                 default :
                 {
-                    rtl::OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM(
-                        "CustomShapes::unknown PolyFlagValue :"));
+                    rtl::OStringBuffer aString("CustomShapes::unknown PolyFlagValue :");
                     aString.append(static_cast<sal_Int32>(nCommand));
                     OSL_FAIL(aString.getStr());
                 }

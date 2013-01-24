@@ -2248,7 +2248,7 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
         const SearchAttrItem& rItem = pList->GetObject(i);
 
         if ( rStr.Len() )
-            rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+            rStr.AppendAscii( ", " );
 
         if ( !IsInvalidItem( rItem.pItem ) )
         {

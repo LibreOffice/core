@@ -50,7 +50,7 @@
 rtl::OUString EnhancedCustomShapeEngine_getImplementationName()
     throw( NMSP_UNO::RuntimeException )
 {
-    return B2UCONST( "com.sun.star.drawing.EnhancedCustomShapeEngine" );
+    return OUString( "com.sun.star.drawing.EnhancedCustomShapeEngine" );
 }
 sal_Bool SAL_CALL EnhancedCustomShapeEngine_supportsService( const rtl::OUString& ServiceName )
     throw( NMSP_UNO::RuntimeException )
@@ -62,7 +62,7 @@ SEQ( rtl::OUString ) SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames
 {
     SEQ( rtl::OUString ) aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = B2UCONST( "com.sun.star.drawing.CustomShapeEngine" );
+    pArray[0] = "com.sun.star.drawing.CustomShapeEngine";
     return aRet;
 }
 
@@ -245,7 +245,7 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
         SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)
             pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
         sal_Bool bTextPathOn = sal_False;
-        const rtl::OUString sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
+        const rtl::OUString sTextPath( "TextPath" );
         com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
         if ( pAny )
             *pAny >>= bTextPathOn;

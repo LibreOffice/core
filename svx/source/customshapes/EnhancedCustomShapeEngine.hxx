@@ -44,7 +44,6 @@
 
 #define REF( _def_Obj )         NMSP_UNO::Reference< _def_Obj >
 #define SEQ( _def_Obj )         NMSP_UNO::Sequence< _def_Obj >
-#define B2UCONST( _def_pChar )  (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(_def_pChar )))
 
 // ---------------------------
 // - EnhancedCustomShapeEngine -

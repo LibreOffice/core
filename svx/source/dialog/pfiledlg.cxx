@@ -130,9 +130,9 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
                 }
 
                 // build filterdescription
-                aStrPlugName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "  (" ) );
+                aStrPlugName.AppendAscii( "  (" );
                 aStrPlugName.Append( aStrPlugExtension );
-                aStrPlugName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
+                aStrPlugName.AppendAscii( ")" );
 
                 // use a own description for the video-formate avi, mov and mpeg
                 // the descriptions of these MIME-types are not very meaningful

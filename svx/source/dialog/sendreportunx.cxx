@@ -201,7 +201,7 @@ namespace svx{
 
         bool ErrorRepSendDialog::SendReport()
         {
-            rtl::OUString sSubEnvVar(RTL_CONSTASCII_USTRINGPARAM("ERRORREPORT_SUBJECT"));
+            rtl::OUString sSubEnvVar("ERRORREPORT_SUBJECT");
             rtl::OUString strSubject(GetDocType());
             osl_setEnvironment(sSubEnvVar.pData, strSubject.pData);
 
@@ -216,16 +216,14 @@ namespace svx{
                 OSL_VERIFY(nWritten == static_cast<size_t>(strUTF8.getLength()));
                 fclose( fp );
 
-                rtl::OUString sBodyEnvVar(RTL_CONSTASCII_USTRINGPARAM("ERRORREPORT_BODYFILE"));
+                rtl::OUString sBodyEnvVar("ERRORREPORT_BODYFILE");
                 rtl::OUString strBodyFile(rtl::OStringToOUString(rtl::OString(szBodyFile),
                     osl_getThreadTextEncoding()));
                 osl_setEnvironment(sBodyEnvVar.pData, strBodyFile.pData);
             }
 
             int ret = -1;
-            rtl::OUString path1(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "$BRAND_BASE_DIR/program/crashrep"));
+            rtl::OUString path1("$BRAND_BASE_DIR/program/crashrep");
             rtl::Bootstrap::expandMacros(path1);
             rtl::OString path2;
             if ((osl::FileBase::getSystemPathFromFileURL(path1, path1) ==
@@ -237,7 +235,7 @@ namespace svx{
             {
                 rtl::OStringBuffer cmd;
                 tools::appendUnixShellWord(&cmd, path2);
-                cmd.append(RTL_CONSTASCII_STRINGPARAM(" -debug -load -send -noui"));
+                cmd.append(" -debug -load -send -noui");
                 ret = system(cmd.getStr());
             }
 

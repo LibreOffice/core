@@ -304,9 +304,9 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
                     Sequence< PropertyValue > aProperties(2);
                     PropertyValue* pProperties = aProperties.getArray();
-                    pProperties[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingType"));
+                    pProperties[0].Name = rtl::OUString("NumberingType");
                     pProperties[0].Value <<= aNumberingTypes[i];
-                    pProperties[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
+                    pProperties[1].Name = rtl::OUString("Value");
                     pProperties[1].Value <<= (sal_Int32)1;
                     try
                     {
@@ -319,7 +319,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
                     aLeft.Y() -= (pDev->GetTextHeight()/2);
                     if(!sPrefixes[i].isEmpty() &&
-                        !sPrefixes[i].equalsAsciiL(" ", 1) &&
+                        sPrefixes[i] != " " &&
                         sPrefixes[i].getStr()[0] != 0)
                     {
                         pVDev->SetFont(aFont);

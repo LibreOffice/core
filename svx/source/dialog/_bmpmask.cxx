@@ -1214,19 +1214,19 @@ void SvxBmpMask::SetAccessibleNames (void)
     String sSourceColorN;
 
     sSourceColorN = sSourceColor;
-    sSourceColorN.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
+    sSourceColorN.AppendAscii (" 1");
     aCbx1.SetAccessibleName (sSourceColorN);
 
     sSourceColorN = sSourceColor;
-    sSourceColorN.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
+    sSourceColorN.AppendAscii (" 2");
     aCbx2.SetAccessibleName (sSourceColorN);
 
     sSourceColorN = sSourceColor;
-    sSourceColorN.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 3"));
+    sSourceColorN.AppendAscii (" 3");
     aCbx3.SetAccessibleName (sSourceColorN);
 
     sSourceColorN = sSourceColor;
-    sSourceColorN.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 4"));
+    sSourceColorN.AppendAscii (" 4");
     aCbx4.SetAccessibleName (sSourceColorN);
 }
 
