@@ -115,8 +115,8 @@ class ScFormatRangeStyles;
 
 class ScMyDefaultStyles
 {
-    ScMyDefaultStyleList* pRowDefaults;
-    ScMyDefaultStyleList* pColDefaults;
+    ScMyDefaultStyleList maRowDefaults;
+    ScMyDefaultStyleList maColDefaults;
 
     sal_Int32 GetStyleNameIndex(const ScFormatRangeStyles* pCellStyles,
         const sal_Int32 nTable, const sal_Int32 nPos,
@@ -126,15 +126,13 @@ class ScMyDefaultStyles
         const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc,
         const bool bRow);
 public:
-    ScMyDefaultStyles() : pRowDefaults(NULL), pColDefaults(NULL) {}
-    ~ScMyDefaultStyles();
 
     void FillDefaultStyles(const sal_Int32 nTable,
         const sal_Int32 nLastRow, const sal_Int32 nLastCol,
         const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc);
 
-    const ScMyDefaultStyleList* GetRowDefaults() const { return pRowDefaults; }
-    const ScMyDefaultStyleList* GetColDefaults() const { return pColDefaults; }
+    const ScMyDefaultStyleList* GetRowDefaults() const { return &maRowDefaults; }
+    const ScMyDefaultStyleList* GetColDefaults() const { return &maColDefaults; }
 };
 
 struct ScMyRowFormatRange

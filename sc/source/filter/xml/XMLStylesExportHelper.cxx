@@ -477,12 +477,12 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
         ScMyDefaultStyleList* pDefaults;
         if (bRow)
         {
-            pDefaults = pRowDefaults;
+            pDefaults = &maRowDefaults;
             nLast = nLastRow;
         }
         else
         {
-            pDefaults = pColDefaults;
+            pDefaults = &maColDefaults;
             nLast = nLastCol;
         }
         bool bPrevAutoStyle(false);
@@ -561,20 +561,12 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
     const sal_Int32 nLastRow, const sal_Int32 nLastCol,
     const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc)
 {
-    delete pRowDefaults;
-    pRowDefaults = new ScMyDefaultStyleList(nLastRow + 1);
+    maRowDefaults.clear();
+    maRowDefaults.resize(nLastRow + 1);
     FillDefaultStyles(nTable, nLastRow, nLastCol, pCellStyles, pDoc, true);
-    delete pColDefaults;
-    pColDefaults = new ScMyDefaultStyleList(nLastCol + 1);
+    maColDefaults.clear();
+    maColDefaults.resize(nLastCol + 1);
     FillDefaultStyles(nTable, nLastRow, nLastCol, pCellStyles, pDoc, false);
-}
-
-ScMyDefaultStyles::~ScMyDefaultStyles()
-{
-    if (pRowDefaults)
-        delete pRowDefaults;
-    if (pColDefaults)
-        delete pColDefaults;
 }
 
 ScMyRowFormatRange::ScMyRowFormatRange()
