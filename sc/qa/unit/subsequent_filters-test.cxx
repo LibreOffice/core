@@ -133,7 +133,6 @@ public:
     void testHardRecalcODS();
     void testFunctionsODS();
     void testCachedFormulaResultsODS();
-    void testVolatileFunctionsODS();
     void testCachedMatrixFormulaResultsODS();
     void testDatabaseRangesODS();
     void testDatabaseRangesXLS();
@@ -188,7 +187,6 @@ public:
     CPPUNIT_TEST(testHardRecalcODS);
     CPPUNIT_TEST(testFunctionsODS);
     CPPUNIT_TEST(testCachedFormulaResultsODS);
-    CPPUNIT_TEST(testVolatileFunctionsODS);
     CPPUNIT_TEST(testCachedMatrixFormulaResultsODS);
     CPPUNIT_TEST(testDatabaseRangesODS);
     CPPUNIT_TEST(testDatabaseRangesXLS);
@@ -460,29 +458,40 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         createCSVPath("cachedValue.", aCSVFileName);
         testFile(aCSVFileName, pDoc, 0);
 
+        //we want to me sure that volatile functions are always recalculated
+        //regardless of cached results.  if you update the ods file, you must
+        //update the values here.
+        //if NOW() is recacluated, then it should never equal sTodayCache
+        OUString sTodayCache("01/25/13 01:06 PM");
+        OUString sTodayRecalc(pDoc->GetString(0,0,1));
+
+        CPPUNIT_ASSERT(sTodayCache != sTodayRecalc);
+
+        OUString sTodayRecalcRef(pDoc->GetString(1,0,1));
+        CPPUNIT_ASSERT_EQUAL(sTodayRecalc, sTodayRecalcRef);
+
+        // make sure that error values are not being treated as string values
+        for(SCCOL nCol = 0; nCol < 4; ++nCol)
+        {
+            for(SCROW nRow = 0; nRow < 2; ++nRow)
+            {
+                OUStringBuffer aIsErrorFormula("=ISERROR(");
+                aIsErrorFormula.append((char)('A'+nCol)).append(OUString::number(nRow));
+                aIsErrorFormula.append(")");
+                OUString aFormula = aIsErrorFormula.makeStringAndClear();
+                pDoc->SetString(nCol, nRow + 2, 2, aFormula);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr(), pDoc->GetString(nCol, nRow +2, 2), OUString("TRUE"));
+
+                OUStringBuffer aIsTextFormula("=ISTEXT(");
+                aIsTextFormula.append((char)('A'+nCol)).append(OUString::number(nRow));
+                aIsTextFormula.append(")");
+                pDoc->SetString(nCol, nRow + 4, 2, aIsTextFormula.makeStringAndClear());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("", pDoc->GetString(nCol, nRow +4, 2), OUString("FALSE"));
+            }
+        }
+
         xDocSh->DoClose();
     }
-}
-
-void ScFiltersTest::testVolatileFunctionsODS()
-{
-    ScDocShellRef xDocSh = loadDoc("volatile.", ODS);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load volatile.ods", xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
-
-    //we want to me sure that volatile functions are always recalculated
-    //regardless of cached results.  if you update the ods file, you must
-    //update the values here.
-    //if NOW() is recacluated, then it should never equal sTodayCache
-    OUString sTodayCache("07/11/12 12:28 AM");
-    OUString sTodayRecalc(pDoc->GetString(0,1,0));
-    CPPUNIT_ASSERT(sTodayCache != sTodayRecalc);
-
-    OUString sTodayRecalcRef(pDoc->GetString(2,1,0));
-    CPPUNIT_ASSERT(sTodayCache != sTodayRecalcRef);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testCachedMatrixFormulaResultsODS()
