@@ -78,6 +78,8 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/document/XActionLockable.hpp>
 
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
@@ -310,10 +312,10 @@ void ScXMLTableRowCellContext::SetCursorOnTextImport(const rtl::OUString& rOUTem
         uno::Reference<table::XCellRange> xCellRange(rXMLImport.GetTables().GetCurrentXCellRange());
         if (xCellRange.is())
         {
-            xBaseCell.set( xCellRange->getCellByPosition(nCol, nRow) );
+            com::sun::star::uno::Reference<com::sun::star::table::XCell> xBaseCell( xCellRange->getCellByPosition(nCol, nRow) );
             if (xBaseCell.is())
             {
-                xLockable.set(xBaseCell, uno::UNO_QUERY);
+                com::sun::star::uno::Reference<com::sun::star::document::XActionLockable> xLockable(xBaseCell, uno::UNO_QUERY);
                 if (xLockable.is())
                     xLockable->addActionLock();
                 uno::Reference<text::XText> xText(xBaseCell, uno::UNO_QUERY);

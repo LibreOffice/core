@@ -24,13 +24,6 @@
 #include "XMLCellRangeSourceContext.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/document/XActionLockable.hpp>
 
 #include "formula/grammar.hxx"
 #include <boost/optional.hpp>
@@ -42,8 +35,6 @@ struct ScXMLAnnotationData;
 class ScXMLTableRowCellContext : public SvXMLImportContext
 {
     typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > FormulaWithNamespace;
-    com::sun::star::uno::Reference<com::sun::star::table::XCell> xBaseCell;
-    com::sun::star::uno::Reference<com::sun::star::document::XActionLockable> xLockable;
     ::boost::optional< rtl::OUString > pOUTextValue;
     ::boost::optional< rtl::OUString > pOUTextContent;
     ::boost::optional< FormulaWithNamespace > pOUFormula;
