@@ -516,6 +516,8 @@ ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, const
     {
         maLbStyle.SelectEntryPos(1);
     }
+
+    StyleSelectHdl(NULL);
 }
 
 void ScFormulaFrmtEntry::Init()
@@ -1173,6 +1175,8 @@ ScDateFrmtEntry::ScDateFrmtEntry( Window* pParent, ScDocument* pDoc, const ScCon
         rtl::OUString aStyleName = pFormat->GetStyleName();
         maLbStyle.SelectEntry(aStyleName);
     }
+
+    StyleSelectHdl(NULL);
 }
 
 void ScDateFrmtEntry::Init()
