@@ -166,6 +166,7 @@ public:
     String          GetNewGraphicName( long* pnCounter = NULL ) const;
     void            EnsureGraphicNames();
 
+    static bool IsCellAnchored( const SdrObject& rObj );
     static void             SetPageAnchored( SdrObject& );
     static void             SetCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
     // Updates rAnchor based on position of rObj
