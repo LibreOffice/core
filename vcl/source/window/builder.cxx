@@ -109,6 +109,7 @@ void VclBuilder::loadTranslations(const com::sun::star::lang::Locale &rLocale, c
         {
             xmlreader::XmlReader reader(sTransUri);
             handleTranslations(reader);
+            break;
         }
         catch (const ::com::sun::star::uno::Exception &)
         {
