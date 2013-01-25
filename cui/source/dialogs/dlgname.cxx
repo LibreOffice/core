@@ -46,20 +46,6 @@ SvxNameDialog::SvxNameDialog( Window* pWindow, const String& rName, const String
     pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
     ModifyHdl(&pEdtName);
     pEdtName->SetModifyHdl(LINK(this, SvxNameDialog, ModifyHdl));
-
-    // dynamic height of the description field
-    Size aSize = pFtDescription->GetSizePixel();
-    long nTxtWidth = pFtDescription->GetCtrlTextWidth( rDesc );
-    if ( nTxtWidth > aSize.Width() )
-    {
-        long nLines = Min( ( nTxtWidth / (aSize.Width()+1) + 1 ), MAX_DESCRIPTION_LINES );
-        long nHeight = aSize.Height();
-        aSize.Height() = nHeight * nLines;
-        pFtDescription->SetSizePixel( aSize );
-        Point aPnt = pEdtName->GetPosPixel();
-        aPnt.Y() += ( aSize.Height() - nHeight );
-        pEdtName->SetPosPixel( aPnt );
-    }
 }
 
 IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl)
@@ -130,8 +116,9 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
 |*
 \************************************************************************/
 
-SvxMessDialog::SvxMessDialog( Window* pWindow, const String& rText, const String& rDesc, Image* pImg ) :
-    ModalDialog     ( pWindow, "MessBox", "cui/ui/messbox.ui" )
+SvxMessDialog::SvxMessDialog( Window* pWindow, const String& rText, const String& rDesc, Image* pImg )
+    : ModalDialog(pWindow, "MessBox", "cui/ui/messbox.ui")
+    , pImage(NULL)
 {
     get(pBtn1, "mess_box_btn1");
     get(pBtn2, "mess_box_btn2");
@@ -142,8 +129,6 @@ SvxMessDialog::SvxMessDialog( Window* pWindow, const String& rText, const String
         pImage = new Image( *pImg );
         pFtImage->SetImage( *pImage );
         pFtImage->SetStyle( ( pFtImage->GetStyle()/* | WB_NOTABSTOP */) & ~WB_3DLOOK );
-        pFtImage->SetPosSizePixel( LogicToPixel( Point( 3, 6 ), MAP_APPFONT ),
-                                  pFtImage->GetImage().GetSizePixel() );
         pFtImage->Show();
     }
 
@@ -156,8 +141,7 @@ SvxMessDialog::SvxMessDialog( Window* pWindow, const String& rText, const String
 
 SvxMessDialog::~SvxMessDialog()
 {
-    if( pImage )
-        delete pImage;
+    delete pImage;
 }
 
 /*************************************************************************/
