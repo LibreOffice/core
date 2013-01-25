@@ -36,10 +36,12 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <cppuhelper/weakref.hxx>
 
+#include <boost/noncopyable.hpp>
+
 namespace chart
 {
 
-class VDataSequence
+class VDataSequence : boost::noncopyable
 {
 public:
     void init( const ::com::sun::star::uno::Reference<
@@ -57,7 +59,7 @@ public:
     mutable ::com::sun::star::uno::Sequence< double > Doubles;
 };
 
-class VDataSeries
+class VDataSeries : boost::noncopyable
 {
 public:
     VDataSeries( const ::com::sun::star::uno::Reference<
