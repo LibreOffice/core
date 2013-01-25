@@ -2715,11 +2715,11 @@ void CellStyle::createCellStyle()
     if( !mbCreated )
         mbCreated = maFinalName.isEmpty();
 
-    ::ScDocument& rDoc = getScDocument();
     if( !mbCreated && !mpStyleSheet )
     {
         bool bCreatePattern = false;
         Xf* pXF = getStyles().getStyleXf( maModel.mnXfId ).get();
+        ::ScDocument& rDoc = getScDocument();
 
         bool bDefStyle = maModel.isDefaultStyle();
         if( bDefStyle )
