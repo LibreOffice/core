@@ -27,7 +27,6 @@
 #define _SVX_ZOOM_CXX
 
 #include <cuires.hrc>
-#include "zoom.hrc"
 
 #include "zoom.hxx"
 #include <sfx2/zoomitem.hxx>
