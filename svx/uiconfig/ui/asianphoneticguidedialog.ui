@@ -84,6 +84,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Base text </property>
+                    <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -97,6 +98,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Ruby text</property>
+                    <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -247,6 +249,8 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Alignment </property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">adjustlb</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -261,6 +265,8 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Position </property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">positionlb</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -275,6 +281,8 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Character Style for ruby text</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">stylelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -366,7 +374,9 @@
                 <property name="can_focus">False</property>
                 <property name="margin_top">6</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Preview:</property>
+                <property name="label" translatable="yes">Preview</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">preview</property>
               </object>
               <packing>
                 <property name="expand">False</property>
