@@ -941,11 +941,9 @@ gb_ICU_suffix:=
 endif
 
 define gb_LinkTarget__use_icu_headers
-$(call gb_LinkTarget_use_unpacked,$(1),icu)
+$(call gb_LinkTarget_use_package,$(1),icu)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,icu)/source \
-	-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
-	-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
+	-I$(OUTDIR)/inc/external \
 	$$(INCLUDE) \
 )
 
