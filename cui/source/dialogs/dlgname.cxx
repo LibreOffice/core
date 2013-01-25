@@ -24,7 +24,6 @@
 
 #include "dlgname.hxx"
 #include "defdlgname.hxx"
-#include "dlgname.hrc"
 #include <dialmgr.hxx>
 
 #define MAX_DESCRIPTION_LINES   ((long)5)
@@ -36,40 +35,37 @@
 \************************************************************************/
 
 SvxNameDialog::SvxNameDialog( Window* pWindow, const String& rName, const String& rDesc ) :
-    ModalDialog     ( pWindow, CUI_RES( RID_SVXDLG_NAME ) ),
-    aFtDescription      ( this, CUI_RES( FT_DESCRIPTION ) ),
-    aEdtName            ( this, CUI_RES( EDT_STRING ) ),
-    aBtnOK              ( this, CUI_RES( BTN_OK ) ),
-    aBtnCancel          ( this, CUI_RES( BTN_CANCEL ) ),
-    aBtnHelp            ( this, CUI_RES( BTN_HELP ) )
+    ModalDialog     ( pWindow, "NameDialog", "cui/ui/namedialog.ui" )
 {
-    FreeResource();
+    get(pBtnOK, "ok");
+    get(pFtDescription, "description_label");
+    get(pEdtName, "name_entry");
 
-    aFtDescription.SetText( rDesc );
-    aEdtName.SetText( rName );
-    aEdtName.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    ModifyHdl(&aEdtName);
-    aEdtName.SetModifyHdl(LINK(this, SvxNameDialog, ModifyHdl));
+    pFtDescription->SetText( rDesc );
+    pEdtName->SetText( rName );
+    pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
+    ModifyHdl(&pEdtName);
+    pEdtName->SetModifyHdl(LINK(this, SvxNameDialog, ModifyHdl));
 
     // dynamic height of the description field
-    Size aSize = aFtDescription.GetSizePixel();
-    long nTxtWidth = aFtDescription.GetCtrlTextWidth( rDesc );
+    Size aSize = pFtDescription->GetSizePixel();
+    long nTxtWidth = pFtDescription->GetCtrlTextWidth( rDesc );
     if ( nTxtWidth > aSize.Width() )
     {
-        long nLines = Min( ( nTxtWidth / aSize.Width() + 1 ), MAX_DESCRIPTION_LINES );
+        long nLines = Min( ( nTxtWidth / (aSize.Width()+1) + 1 ), MAX_DESCRIPTION_LINES );
         long nHeight = aSize.Height();
         aSize.Height() = nHeight * nLines;
-        aFtDescription.SetSizePixel( aSize );
-        Point aPnt = aEdtName.GetPosPixel();
+        pFtDescription->SetSizePixel( aSize );
+        Point aPnt = pEdtName->GetPosPixel();
         aPnt.Y() += ( aSize.Height() - nHeight );
-        aEdtName.SetPosPixel( aPnt );
+        pEdtName->SetPosPixel( aPnt );
     }
 }
 
 IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl)
 {
     if(aCheckNameHdl.IsSet())
-        aBtnOK.Enable(aCheckNameHdl.Call(this) > 0);
+        pBtnOK->Enable(aCheckNameHdl.Call(this) > 0);
     return 0;
 }
 
@@ -80,31 +76,25 @@ IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl)
 
 SvxObjectNameDialog::SvxObjectNameDialog(
     Window* pWindow,
-    const String& rName)
-:   ModalDialog(pWindow, CUI_RES(RID_SVXDLG_OBJECT_NAME)),
-    aFtName(this, CUI_RES(NTD_FT_NAME)),
-    aEdtName(this, CUI_RES(NTD_EDT_NAME)),
-    aFlSeparator(this, CUI_RES(FL_SEPARATOR_A)),
-    aBtnHelp(this, CUI_RES(BTN_HELP)),
-    aBtnOK(this, CUI_RES(BTN_OK)),
-    aBtnCancel(this, CUI_RES(BTN_CANCEL))
+    const String& rName) :
+    ModalDialog     ( pWindow, "ObjectNameDialog", "cui/ui/namedialog.ui" )
 {
-    FreeResource();
-
+    get(pBtnOK, "object_name_ok");
+    get(pEdtName, "object_name_entry");
     // set name
-    aEdtName.SetText(rName);
+    pEdtName->SetText(rName);
 
     // activate name
-    aEdtName.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    ModifyHdl(&aEdtName);
-    aEdtName.SetModifyHdl(LINK(this, SvxObjectNameDialog, ModifyHdl));
+    pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
+    ModifyHdl(&pEdtName);
+    pEdtName->SetModifyHdl(LINK(this, SvxObjectNameDialog, ModifyHdl));
 }
 
 IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl)
 {
     if(aCheckNameHdl.IsSet())
     {
-        aBtnOK.Enable(aCheckNameHdl.Call(this) > 0);
+        pBtnOK->Enable(aCheckNameHdl.Call(this) > 0);
     }
 
     return 0;
@@ -117,25 +107,17 @@ IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl)
 SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
     Window* pWindow,
     const String& rTitle,
-    const String& rDescription)
-:   ModalDialog(pWindow, CUI_RES(RID_SVXDLG_OBJECT_TITLE_DESC)),
-    aFtTitle(this, CUI_RES(NTD_FT_TITLE)),
-    aEdtTitle(this, CUI_RES(NTD_EDT_TITLE)),
-    aFtDescription(this, CUI_RES(NTD_FT_DESC)),
-    aEdtDescription(this, CUI_RES(NTD_EDT_DESC)),
-    aFlSeparator(this, CUI_RES(FL_SEPARATOR_B)),
-    aBtnHelp(this, CUI_RES(BTN_HELP)),
-    aBtnOK(this, CUI_RES(BTN_OK)),
-    aBtnCancel(this, CUI_RES(BTN_CANCEL))
+    const String& rDescription) :
+    ModalDialog     ( pWindow, "ObjectTitleDescDialog", "cui/ui/namedialog.ui" )
 {
-    FreeResource();
-
+    get(pEdtTitle, "object_title_entry");
+    get(pEdtDescription, "desc_entry");
     // set title & desc
-    aEdtTitle.SetText(rTitle);
-    aEdtDescription.SetText(rDescription);
+    pEdtTitle->SetText(rTitle);
+    pEdtDescription->SetText(rDescription);
 
     // activate title
-    aEdtTitle.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
+    pEdtTitle->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,30 +129,27 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
 \************************************************************************/
 
 SvxMessDialog::SvxMessDialog( Window* pWindow, const String& rText, const String& rDesc, Image* pImg ) :
-    ModalDialog     ( pWindow, CUI_RES( RID_SVXDLG_MESSBOX ) ),
-    aFtDescription      ( this, CUI_RES( FT_DESCRIPTION ) ),
-    aBtn1               ( this, CUI_RES( BTN_1 ) ),
-    aBtn2               ( this, CUI_RES( BTN_2 ) ),
-    aBtnCancel          ( this, CUI_RES( BTN_CANCEL ) ),
-    aFtImage            ( this )
+    ModalDialog     ( pWindow, "MessBox", "cui/ui/namedialog.ui" )
 {
-    FreeResource();
-
+    get(pBtn1, "mess_box_btn1");
+    get(pBtn2, "mess_box_btn2");
+    get(pFtDescription, "mess_box_description");
+    get(pFtImage, "mess_box_image");
     if( pImg )
     {
         pImage = new Image( *pImg );
-        aFtImage.SetImage( *pImage );
-        aFtImage.SetStyle( ( aFtImage.GetStyle()/* | WB_NOTABSTOP */) & ~WB_3DLOOK );
-        aFtImage.SetPosSizePixel( LogicToPixel( Point( 3, 6 ), MAP_APPFONT ),
-                                  aFtImage.GetImage().GetSizePixel() );
-        aFtImage.Show();
+        pFtImage->SetImage( *pImage );
+        pFtImage->SetStyle( ( pFtImage->GetStyle()/* | WB_NOTABSTOP */) & ~WB_3DLOOK );
+        pFtImage->SetPosSizePixel( LogicToPixel( Point( 3, 6 ), MAP_APPFONT ),
+                                  pFtImage->GetImage().GetSizePixel() );
+        pFtImage->Show();
     }
 
     SetText( rText );
-    aFtDescription.SetText( rDesc );
+    pFtDescription->SetText( rDesc );
 
-    aBtn1.SetClickHdl( LINK( this, SvxMessDialog, Button1Hdl ) );
-    aBtn2.SetClickHdl( LINK( this, SvxMessDialog, Button2Hdl ) );
+    pBtn1->SetClickHdl( LINK( this, SvxMessDialog, Button1Hdl ) );
+    pBtn2->SetClickHdl( LINK( this, SvxMessDialog, Button2Hdl ) );
 }
 
 SvxMessDialog::~SvxMessDialog()
@@ -204,15 +183,15 @@ void SvxMessDialog::SetButtonText( sal_uInt16 nBtnId, const String& rNewTxt )
     switch ( nBtnId )
     {
         case MESS_BTN_1:
-            aBtn1.SetText( rNewTxt );
+            pBtn1->SetText( rNewTxt );
             break;
 
         case MESS_BTN_2:
-            aBtn2.SetText( rNewTxt );
+            pBtn2->SetText( rNewTxt );
             break;
 
         default:
-            OSL_FAIL( "Falsche Button-Nummer!!!" );
+            OSL_FAIL( "Invalid button number!!!" );
     }
 }
 

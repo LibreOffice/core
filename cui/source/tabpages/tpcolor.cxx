@@ -43,6 +43,7 @@
 #include "cuitabarea.hxx"
 #include "tabarea.hrc"
 #include "defdlgname.hxx"
+#include "dlgname.hxx"
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include <cuitabline.hxx>
@@ -525,8 +526,7 @@ long SvxColorTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( GetParentDialog(), RID_SVXDLG_MESSBOX,
+            SvxMessDialog* aMessDlg = new SvxMessDialog(GetParentDialog(),
                                                         SVX_RESSTR( RID_SVXSTR_COLOR ),
                                                         String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ) ),
                                                         &aWarningBoxImage );

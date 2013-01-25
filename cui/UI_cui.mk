@@ -20,6 +20,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/insertplugin \
 	cui/uiconfig/ui/insertrowcolumn \
 	cui/uiconfig/ui/macroselectordialog \
+	cui/uiconfig/ui/namedialog \
 	cui/uiconfig/ui/numberingformatpage \
 	cui/uiconfig/ui/numberingoptionspage \
 	cui/uiconfig/ui/numberingpositionpage \

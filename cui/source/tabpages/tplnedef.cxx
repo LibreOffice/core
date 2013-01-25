@@ -38,6 +38,7 @@
 
 #include "svx/drawitem.hxx"
 #include "cuitabline.hxx"
+#include "dlgname.hxx"
 #include "defdlgname.hxx"
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
@@ -232,9 +233,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
     {
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
-        AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( GetParentDialog(), RID_SVXDLG_MESSBOX,
+        SvxMessDialog* aMessDlg = new SvxMessDialog(GetParentDialog(),
                                                     SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
                                                     String( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
                                                     &aWarningBoxImage );

@@ -1475,22 +1475,11 @@ AbstractSvxObjectTitleDescDialog* AbstractDialogFactory_Impl::CreateSvxObjectTit
     return new AbstractSvxObjectTitleDescDialog_Impl(new SvxObjectTitleDescDialog(pParent, rTitle, rDescription));
 }
 
-AbstractSvxMessDialog * AbstractDialogFactory_Impl::CreateSvxMessDialog( Window* pParent, sal_uInt32 nResId,
+AbstractSvxMessDialog * AbstractDialogFactory_Impl::CreateSvxMessDialog( Window* pParent, sal_uInt32,
                                     const String& rText, const String& rDesc, Image* pImg )
 {
-    SvxMessDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case RID_SVXDLG_MESSBOX :
-            pDlg = new SvxMessDialog( pParent, rText, rDesc, pImg );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSvxMessDialog_Impl( pDlg );
-    return 0;
+    SvxMessDialog* pDlg = new SvxMessDialog( pParent, rText, rDesc, pImg );
+    return new AbstractSvxMessDialog_Impl( pDlg );
 }
 
 AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed )

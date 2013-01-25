@@ -58,7 +58,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/commonlingui.src \
     cui/source/dialogs/cuiimapdlg.src \
     cui/source/dialogs/cuires.src \
-    cui/source/dialogs/dlgname.src \
     cui/source/dialogs/fmsearch.src \
     cui/source/dialogs/gallery.src \
     cui/source/dialogs/grfflt.src \

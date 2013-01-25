@@ -245,12 +245,6 @@
 #define RID_SVX_IMAPDLG_START               (RID_SVX_START + 100)
 #define RID_SVXDLG_IMAPURL                  (RID_SVX_IMAPDLG_START + 2)
 
-// name dialog
-#define RID_SVXDLG_NAME                     (RID_SVX_START +  62)
-#define RID_SVXDLG_MESSBOX                  (RID_SVX_START +  63)
-#define RID_SVXDLG_OBJECT_NAME              (RID_SVX_START +  64)
-#define RID_SVXDLG_OBJECT_TITLE_DESC        (RID_SVX_START +  67)
-
 // hangulhanja
 #define RID_SVX_MDLG_HANGULHANJA            (RID_SVX_START +  1 )
 #define RID_SVX_MDLG_HANGULHANJA_OPT        ( RID_SVX_START +  4 )
