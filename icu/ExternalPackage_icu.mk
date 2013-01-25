@@ -9,6 +9,18 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,icu,icu))
 
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libcdr,inc/external/layout,\
+	source/layout/*.h \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libcdr,inc/external/unicode,\
+	source/common/unicode/*.h \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libcdr,inc/external/unicode,\
+	source/i18n/unicode/*.h \
+))
+
 $(eval $(call gb_ExternalPackage_use_external_project,icu,icu))
 ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
