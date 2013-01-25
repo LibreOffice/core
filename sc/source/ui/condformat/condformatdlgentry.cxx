@@ -1398,7 +1398,7 @@ void ScIconSetFrmtEntry::SetActive()
 {
     maLbColorFormat.Show();
     maLbIconSetType.Show();
-    for(ScIconSetFrmtDateEntriesType::iterator itr = maEntries.begin(),
+    for(ScIconSetFrmtDataEntriesType::iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {
         itr->Show();
@@ -1411,7 +1411,7 @@ void ScIconSetFrmtEntry::SetInactive()
 {
     maLbColorFormat.Hide();
     maLbIconSetType.Hide();
-    for(ScIconSetFrmtDateEntriesType::iterator itr = maEntries.begin(),
+    for(ScIconSetFrmtDataEntriesType::iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {
         itr->Hide();
@@ -1426,7 +1426,7 @@ ScFormatEntry* ScIconSetFrmtEntry::GetEntry() const
 
     ScIconSetFormatData* pData = new ScIconSetFormatData;
     pData->eIconSetType = static_cast<ScIconSetType>(maLbIconSetType.GetSelectEntryPos());
-    for(ScIconSetFrmtDateEntriesType::const_iterator itr = maEntries.begin(),
+    for(ScIconSetFrmtDataEntriesType::const_iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {
         pData->maEntries.push_back(itr->CreateEntry(mpDoc, maPos));

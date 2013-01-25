@@ -250,8 +250,8 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
     // icon set ui elements
     ListBox maLbIconSetType;
 
-    typedef boost::ptr_vector<ScIconSetFrmtDataEntry> ScIconSetFrmtDateEntriesType;
-    ScIconSetFrmtDateEntriesType maEntries;
+    typedef boost::ptr_vector<ScIconSetFrmtDataEntry> ScIconSetFrmtDataEntriesType;
+    ScIconSetFrmtDataEntriesType maEntries;
 
     virtual rtl::OUString GetExpressionString();
 
