@@ -561,14 +561,12 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
     const sal_Int32 nLastRow, const sal_Int32 nLastCol,
     const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc)
 {
-    if (pRowDefaults)
-        delete pRowDefaults;
+    delete pRowDefaults;
     pRowDefaults = new ScMyDefaultStyleList(nLastRow + 1);
-     FillDefaultStyles(nTable, nLastRow, nLastCol, pCellStyles, pDoc, true);
-    if (pColDefaults)
-        delete pColDefaults;
+    FillDefaultStyles(nTable, nLastRow, nLastCol, pCellStyles, pDoc, true);
+    delete pColDefaults;
     pColDefaults = new ScMyDefaultStyleList(nLastCol + 1);
-     FillDefaultStyles(nTable, nLastRow, nLastCol, pCellStyles, pDoc, false);
+    FillDefaultStyles(nTable, nLastRow, nLastCol, pCellStyles, pDoc, false);
 }
 
 ScMyDefaultStyles::~ScMyDefaultStyles()
