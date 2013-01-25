@@ -631,28 +631,26 @@ sal_Int32 XMLFilter::impl_Export(
             xServiceFactory->createInstanceWithArguments(
                 C2U("com.sun.star.comp.Svx.GraphicExportHelper"), aGraphicResolverArgs ), uno::UNO_QUERY );
 
-        uno::Reference< beans::XPropertySet > xInfoSet;
+        // property map for export info set
+        comphelper::PropertyMapEntry aExportInfoMap[] =
         {
-            // property map for export info set
-            comphelper::PropertyMapEntry aExportInfoMap[] =
-            {
-                { MAP_LEN("UsePrettyPrinting"), 0, &::getBooleanCppuType(), beans::PropertyAttribute::MAYBEVOID, 0},
-                { MAP_LEN("BaseURI"), 0, &::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
-                { MAP_LEN("StreamRelPath"), 0, &::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
-                { MAP_LEN("StreamName"), 0, &::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
-                { MAP_LEN("ExportTableNumberList"), 0, &::getBooleanCppuType(), beans::PropertyAttribute::MAYBEVOID, 0 },
-                { NULL, 0, 0, NULL, 0, 0 }
-            };
+            { MAP_LEN("UsePrettyPrinting"), 0, &::getBooleanCppuType(), beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN("BaseURI"), 0, &::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN("StreamRelPath"), 0, &::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN("StreamName"), 0, &::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN("ExportTableNumberList"), 0, &::getBooleanCppuType(), beans::PropertyAttribute::MAYBEVOID, 0 },
+            { NULL, 0, 0, NULL, 0, 0 }
+        };
 
-            xInfoSet = comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) );
+        uno::Reference< beans::XPropertySet > xInfoSet =
+            comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) );
 
-            SvtSaveOptions aSaveOpt;
-            OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting"));
-            sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
-            xInfoSet->setPropertyValue( sUsePrettyPrinting, uno::makeAny( bUsePrettyPrinting ) );
-            if( ! bOasis )
-                xInfoSet->setPropertyValue( C2U("ExportTableNumberList"), uno::makeAny( true ));
-        }
+        SvtSaveOptions aSaveOpt;
+        OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting"));
+        sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
+        xInfoSet->setPropertyValue( sUsePrettyPrinting, uno::makeAny( bUsePrettyPrinting ) );
+        if( ! bOasis )
+            xInfoSet->setPropertyValue( C2U("ExportTableNumberList"), uno::makeAny( true ));
 
         sal_Int32 nArgs = 2;
         if( xGraphicObjectResolver.is())
