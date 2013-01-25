@@ -1165,9 +1165,9 @@ void ScXMLTableRowCellContext::HasSpecialCaseFormulaText()
 {
     if(  pOUTextContent )
     {
-        if ( pOUTextContent->isEmpty()  || (pOUTextContent->indexOf("Err:")  > -1) )
+        if ( pOUTextContent->isEmpty() || pOUTextContent->startsWith("Err:") )
             mbPossibleErrorCell = true;
-        else if (pOUTextContent->indexOf("#") > -1)
+        else if (pOUTextContent->startsWith("#"))
             mbCheckWithCompilerForError = true;
     }
 }
