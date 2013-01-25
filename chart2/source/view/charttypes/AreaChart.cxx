@@ -97,9 +97,9 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
     {
         if( m_xChartTypeModelProps.is() )
         {
-            m_xChartTypeModelProps->getPropertyValue( C2U( "CurveStyle" ) ) >>= m_eCurveStyle;
-            m_xChartTypeModelProps->getPropertyValue( C2U( "CurveResolution" ) ) >>= m_nCurveResolution;
-            m_xChartTypeModelProps->getPropertyValue( C2U( "SplineOrder" ) ) >>= m_nSplineOrder;
+            m_xChartTypeModelProps->getPropertyValue("CurveStyle") >>= m_eCurveStyle;
+            m_xChartTypeModelProps->getPropertyValue("CurveResolution") >>= m_nCurveResolution;
+            m_xChartTypeModelProps->getPropertyValue("SplineOrder") >>= m_nSplineOrder;
         }
     }
     catch( uno::Exception& e )
@@ -377,7 +377,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
         //because of this name this line will be used for marking
-        m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
+        m_pShapeFactory->setShapeName(xShape, "MarkHandles");
     }
     return true;
 }
@@ -458,7 +458,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     //because of this name this line will be used for marking
-    m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
+    m_pShapeFactory->setShapeName(xShape, "MarkHandles");
     return true;
 }
 
@@ -814,8 +814,8 @@ void AreaChart::createShapes()
                         {
                             bool bShowPositive = false;
                             bool bShowNegative = false;
-                            xErrorBarProp->getPropertyValue( C2U( "ShowPositiveError" )) >>= bShowPositive;
-                            xErrorBarProp->getPropertyValue( C2U( "ShowNegativeError" )) >>= bShowNegative;
+                            xErrorBarProp->getPropertyValue("ShowPositiveError") >>= bShowPositive;
+                            xErrorBarProp->getPropertyValue("ShowNegativeError") >>= bShowNegative;
                             bCreateYErrorBar = bShowPositive || bShowNegative;
                         }
 
@@ -824,8 +824,8 @@ void AreaChart::createShapes()
                         {
                             bool bShowPositive = false;
                             bool bShowNegative = false;
-                            xErrorBarProp->getPropertyValue( C2U( "ShowPositiveError" )) >>= bShowPositive;
-                            xErrorBarProp->getPropertyValue( C2U( "ShowNegativeError" )) >>= bShowNegative;
+                            xErrorBarProp->getPropertyValue("ShowPositiveError") >>= bShowPositive;
+                            xErrorBarProp->getPropertyValue("ShowNegativeError") >>= bShowNegative;
                             bCreateXErrorBar = bShowPositive || bShowNegative;
                         }
                     }
