@@ -248,6 +248,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Name</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">name</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -261,6 +263,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Shortcut</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">shortname</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
