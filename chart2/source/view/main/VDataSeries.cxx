@@ -304,7 +304,7 @@ void VDataSeries::doSortByXValues()
         }
 
         //do sort
-        std::sort( aTmp.begin(), aTmp.end(), lcl_LessXOfPoint() );
+        std::stable_sort( aTmp.begin(), aTmp.end(), lcl_LessXOfPoint() );
 
         //fill the sorted points back to the members
         m_aValues_X.Doubles.realloc( m_nPointCount );
