@@ -517,7 +517,7 @@ void ScFiltersTest::testCachedMatrixFormulaResultsODS()
     //Import works around this by setting these cells as text cells so that
     //the blank text is used for display instead of the number 0.
     //If this is working properly, the following cell should NOT have value data.
-    // CPPUNIT_ASSERT(!pDoc->GetCell(ScAddress(3,0,2))->HasValueData());
+    CPPUNIT_ASSERT_EQUAL(pDoc->GetString(3,0,2), OUString());
 
     // fdo#59293 with cached value import error formulas require special
     // treatment
