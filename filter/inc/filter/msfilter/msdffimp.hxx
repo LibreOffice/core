@@ -412,7 +412,7 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
 protected :
     typedef std::map<sal_uInt32, sal_uInt32> OffsetMap;
 
-    String          maBaseURL;
+    OUString        maBaseURL;
     sal_uInt32      mnCurMaxShapeId;    // we need this information to
     sal_uInt32      mnDrawingsSaved;    // access the right drawing
     sal_uInt32      mnIdClusters;       // while only knowing the shapeid
@@ -502,11 +502,11 @@ protected :
 
     // Fontwork objects use a new implementation of ReadObjText because the old
     // one does not properly import multiple paragraphs.
-    void ReadObjText( const String& rText, SdrObject* pObj ) const;
+    void ReadObjText( const OUString& rText, SdrObject* pObj ) const;
 
 // the following method needs to be overridden for the import of OLE objects
     virtual sal_Bool GetOLEStorageName( long nOLEId,
-                                        String& rStorageName,
+                                        OUString& rStorageName,
                                         SotStorageRef& rSrcStorage,
                       com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg
                                     ) const;
@@ -520,7 +520,7 @@ protected :
 
 public:
     DffPropertyReader* pSecPropSet;
-    std::map<sal_uInt32,rtl::OString> aEscherBlipCache;
+    std::map<sal_uInt32,OString> aEscherBlipCache;
 
     DffRecordManager    maShapeRecords;
     ColorData           mnDefaultColor;
@@ -544,7 +544,7 @@ public:
                      DffRecordHeader* pRecHd = NULL,
                      sal_uLong nSkipCount = 0 ) const;
 
-    static rtl::OUString MSDFFReadZString( SvStream& rIn,
+    static OUString MSDFFReadZString( SvStream& rIn,
                                            sal_uInt32 nMaxLen,
                                            bool bUniCode = sal_False);
 
@@ -576,7 +576,7 @@ public:
         @param pStData2_           ???
     */
     SvxMSDffManager( SvStream& rStCtrl,
-                     const String& rBaseURL,
+                     const OUString& rBaseURL,
                      sal_uInt32 nOffsDgg,
                      SvStream* pStData,
                      SdrModel* pSdrModel_           =  0,
@@ -587,7 +587,7 @@ public:
 
     // in PPT the parameters DGGContainerOffset and PicStream are provided by an
     // init method
-    SvxMSDffManager( SvStream& rStCtrl, const String& rBaseURL );
+    SvxMSDffManager( SvStream& rStCtrl, const OUString& rBaseURL );
     void InitSvxMSDffManager( sal_uInt32 nOffsDgg_,
                               SvStream* pStData_,
                               sal_uInt32 nSvxMSDffOLEConvFlags);
@@ -700,7 +700,7 @@ public:
 
     sal_uInt32  GetConvertFlags() const { return nSvxMSDffOLEConvFlags; }
 
-    static SdrOle2Obj* CreateSdrOLEFromStorage( const String& rStorageName,
+    static SdrOle2Obj* CreateSdrOLEFromStorage( const OUString& rStorageName,
                                                 SotStorageRef& rSrcStorage,
                                                 const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg,
                                                 const Graphic& rGraf,
@@ -722,7 +722,7 @@ public:
     static sal_Bool SetPropValue(
         const ::com::sun::star::uno::Any& rAny,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-        const String& rPropertyName,
+        const OUString& rPropertyName,
         sal_Bool bTestPropertyAvailability = sal_False
     );
 
