@@ -1787,6 +1787,13 @@ void ScDrawLayer::UpdateCellAnchorFromPositionEnd( SdrObject &rObj, const ScDocu
         pAnchor->maEndOffset.X() = aCellRect.Right()-aObjRect.Left();
 }
 
+bool ScDrawLayer::IsCellAnchored( const SdrObject& rObj )
+{
+    // Cell anchored object always has a user data, to store the anchor cell
+    // info. If it doesn't then it's page-anchored.
+    return GetFirstUserDataOfType(&rObj, SC_UD_OBJDATA) != NULL;
+}
+
 void ScDrawLayer::SetPageAnchored( SdrObject &rObj )
 {
     DeleteFirstUserDataOfType(&rObj, SC_UD_OBJDATA);
