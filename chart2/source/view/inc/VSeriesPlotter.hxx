@@ -39,10 +39,7 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-//.............................................................................
-namespace chart
-{
-//.............................................................................
+namespace chart {
 
 class NumberFormatterWrapper;
 
@@ -73,17 +70,12 @@ private:
     tNumberFormatMap m_aNumberFormatMap;
 };
 
-//-----------------------------------------------------------------------------
 /**
-*/
-
-//enum StackType { STACK_NORMAL, STACK_NONE, STACK_BESIDES, STACK_ONTOP, STACK_BEHIND };
-
+ * A list of series that have the same CoordinateSystem. They are used to be
+ * plotted maybe in a stacked manner by a plotter.
+ */
 class VDataSeriesGroup
 {
-    //a list of series that have the same CoordinateSystem
-    //they are used to be plotted maybe in a stacked manner by a plotter
-
 public:
     VDataSeriesGroup();
     VDataSeriesGroup( VDataSeries* pSeries );
@@ -127,9 +119,6 @@ private:
 
 class VSeriesPlotter : public PlotterBase, public MinimumAndMaximumSupplier, public LegendEntryProvider
 {
-    //-------------------------------------------------------------------------
-    // public methods
-    //-------------------------------------------------------------------------
 public:
     virtual ~VSeriesPlotter();
 
@@ -245,9 +234,6 @@ public:
 
     ::std::vector< VDataSeries* > getAllSeries();
 
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-
     static VSeriesPlotter* createSeriesPlotter( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::chart2::XChartType >& xChartTypeModel
                                 , sal_Int32 nDimensionCount
@@ -282,14 +268,11 @@ public:
     bool WantToPlotInFrontOfAxisLine();
     virtual bool shouldSnapRectToUsedArea();
 
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-private: //methods
+private:
     //no default constructor
     VSeriesPlotter();
 
-protected: //methods
+protected:
 
     VSeriesPlotter( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartType >& xChartTypeModel
@@ -408,7 +391,7 @@ protected: //methods
 
     VDataSeries* getFirstSeries() const;
 
-protected: //member
+protected:
     PlottingPositionHelper*    m_pMainPosHelper;
 
     ::com::sun::star::uno::Reference<
@@ -434,7 +417,7 @@ protected: //member
     ::com::sun::star::uno::Sequence< sal_Int32 >    m_aCoordinateSystemResolution;
     bool m_bPointsWereSkipped;
 
-private: //member
+private:
     typedef std::map< sal_Int32 , ExplicitScaleData > tSecondaryValueScales;
     tSecondaryValueScales   m_aSecondaryValueScales;
 
@@ -443,9 +426,7 @@ private: //member
     ::com::sun::star::awt::Size      m_aPageReferenceSize;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
