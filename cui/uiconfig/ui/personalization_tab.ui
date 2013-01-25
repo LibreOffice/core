@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="2.24"/>
-  <!-- interface-naming-policy project-wide -->
-  <object class="GtkVBox" id="vbox1">
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkVBox" id="PersonalizationTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -23,7 +22,6 @@
                 <child>
                   <object class="GtkRadioButton" id="no_background">
                     <property name="label" translatable="yes">Plain look, do not use background images</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -40,7 +38,6 @@
                 <child>
                   <object class="GtkRadioButton" id="default_background">
                     <property name="label" translatable="yes">Pre-installed background image (if available)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -62,7 +59,6 @@
                     <child>
                       <object class="GtkRadioButton" id="own_background">
                         <property name="label" translatable="yes">Own image</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -79,14 +75,13 @@
                     <child>
                       <object class="GtkButton" id="select_background">
                         <property name="label" translatable="yes">Select Background Image</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="fill">True</property>
+                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -137,7 +132,6 @@
                 <child>
                   <object class="GtkRadioButton" id="no_persona">
                     <property name="label" translatable="yes">Plain look, do not use Personas</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -154,7 +148,6 @@
                 <child>
                   <object class="GtkRadioButton" id="default_persona">
                     <property name="label" translatable="yes">Pre-installed Persona (if available)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -176,7 +169,6 @@
                     <child>
                       <object class="GtkRadioButton" id="own_persona">
                         <property name="label" translatable="yes">Own Persona</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -193,14 +185,13 @@
                     <child>
                       <object class="GtkButton" id="select_persona">
                         <property name="label" translatable="yes">Select Persona</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="fill">True</property>
+                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -236,5 +227,11 @@
     <child>
       <placeholder/>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="select_background"/>
+      <widget name="select_persona"/>
+    </widgets>
   </object>
 </interface>
