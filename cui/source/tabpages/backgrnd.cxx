@@ -147,8 +147,6 @@ sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
 class BackgroundPreviewImpl : public Window
 {
 public:
-    BackgroundPreviewImpl( Window* pParent,
-                           const ResId& rResId, sal_Bool bIsBmpPreview );
     BackgroundPreviewImpl(Window* pParent);
     void setBmp(bool bBmp);
     ~BackgroundPreviewImpl();
@@ -172,27 +170,6 @@ private:
     Rectangle       aDrawRect;
     sal_uInt8            nTransparency;
 };
-
-//-----------------------------------------------------------------------
-
-BackgroundPreviewImpl::BackgroundPreviewImpl
-(
-    Window* pParent,
-    const ResId& rResId,
-    sal_Bool bIsBmpPreview
-) :
-
-    Window( pParent, rResId ),
-
-    bIsBmp   ( bIsBmpPreview ),
-    pBitmap  ( NULL ),
-    aDrawRect( Point(0,0), GetOutputSizePixel() ),
-    nTransparency(0)
-
-{
-    SetBorderStyle(WINDOW_BORDER_MONO);
-    Paint( aDrawRect );
-}
 
 BackgroundPreviewImpl::BackgroundPreviewImpl(Window* pParent)
     : Window(pParent, WB_BORDER)

@@ -1,16 +1,20 @@
 Application::GetDisplayScreenName(unsigned int)
+BackgroundPreviewImpl::BackgroundPreviewImpl(Window*, ResId const&, unsigned char)
 EditTextObject::RemoveParaAttribs(unsigned short)
 EditTextObject::SetParaAttribs(unsigned long, SfxItemSet const&)
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 Line::Intersection(Rectangle const&, Line&) const
 PoHeader::PoHeader()
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
+ScFiltersTest::testCachedMatrixFormulaResultsODS()
 ScFiltersTest::testColorScaleODS()
 ScFiltersTest::testColorScaleXLSX()
+ScFiltersTest::testVolatileFunctionsODS()
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 StyleSettings::GetPersonaFooter() const
 TemplateAbstractView::deselectOverlayItem(unsigned short)
+Test::test1Table1Page()
 TextEngine::GetLeftMargin() const
 XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
 apitest::XCellRangesQuery::testQueryFormulaCells()
@@ -30,6 +34,7 @@ apitest::XPropertySet::testAddPropertyChangeListener()
 apitest::XPropertySet::testAddVetoableChangeListener()
 apitest::XPropertySet::testRemovePropertyChangeListener()
 apitest::XPropertySet::testRemoveVetoableChangeListener()
+apitest::XSheetOutline::testAutoOutline()
 apitest::XSpreadsheetDocument::testGetSheets()
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
