@@ -104,6 +104,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">Databases in Use</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">inuselb</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -119,6 +120,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Available Databases</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">availablelb</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
