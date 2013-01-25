@@ -215,26 +215,26 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
         {
             try
             {
-                uno::Any aARole = xProp->getPropertyValue( C2U( "Role" ) );
+                uno::Any aARole = xProp->getPropertyValue("Role");
                 rtl::OUString aRole;
                 aARole >>= aRole;
 
-                if( aRole.equals(C2U("values-x")) )
+                if (aRole == "values-x")
                 {
                     m_aValues_X.init( xDataSequence );
                     lcl_clearIfNoValuesButTextIsContained( m_aValues_X, xDataSequence );
                 }
-                else if( aRole.equals(C2U("values-y")) )
+                else if (aRole =="values-y")
                     m_aValues_Y.init( xDataSequence );
-                else if( aRole.equals(C2U("values-min")) )
+                else if (aRole == "values-min")
                     m_aValues_Y_Min.init( xDataSequence );
-                else if( aRole.equals(C2U("values-max")) )
+                else if (aRole == "values-max")
                     m_aValues_Y_Max.init( xDataSequence );
-                else if( aRole.equals(C2U("values-first")) )
+                else if (aRole == "values-first")
                     m_aValues_Y_First.init( xDataSequence );
-                else if( aRole.equals(C2U("values-last")) )
+                else if (aRole == "values-last")
                     m_aValues_Y_Last.init( xDataSequence );
-                else if( aRole.equals(C2U("values-size")) )
+                else if (aRole == "values-size")
                     m_aValues_Bubble_Size.init( xDataSequence );
             }
             catch( const uno::Exception& e )
@@ -265,11 +265,11 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
         try
         {
             //get AttributedDataPoints
-            xProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= m_aAttributedDataPointIndexList;
+            xProp->getPropertyValue("AttributedDataPoints") >>= m_aAttributedDataPointIndexList;
 
-            xProp->getPropertyValue( C2U( "StackingDirection" ) ) >>= m_eStackingDirection;
+            xProp->getPropertyValue("StackingDirection") >>= m_eStackingDirection;
 
-            xProp->getPropertyValue( C2U( "AttachedAxisIndex" ) ) >>= m_nAxisIndex;
+            xProp->getPropertyValue("AttachedAxisIndex") >>= m_nAxisIndex;
             if(m_nAxisIndex<0)
                 m_nAxisIndex=0;
         }
@@ -390,7 +390,7 @@ rtl::OUString VDataSeries::getErrorBarsCID(bool bYError) const
 {
     rtl::OUString aChildParticle( ObjectIdentifier::getStringForType(
                                       bYError ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X ) );
-    aChildParticle+=(C2U("="));
+    aChildParticle += "=";
 
     return ObjectIdentifier::createClassifiedIdentifierForParticles(
             m_aSeriesParticle, aChildParticle );
@@ -398,7 +398,7 @@ rtl::OUString VDataSeries::getErrorBarsCID(bool bYError) const
 rtl::OUString VDataSeries::getLabelsCID() const
 {
     rtl::OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
-    aChildParticle+=(C2U("="));
+    aChildParticle += "=";
 
     return ObjectIdentifier::createClassifiedIdentifierForParticles(
             m_aSeriesParticle, aChildParticle );
@@ -538,7 +538,7 @@ double VDataSeries::getBubble_Size( sal_Int32 index ) const
 
 bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
 {
-    rtl::OUString aPropName( bForPercentage ? C2U( "PercentageNumberFormat" ) : C2U( "NumberFormat" ) );
+    OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : OUString("NumberFormat");
     bool bHasNumberFormat = false;
     uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( nPointIndex ));
     sal_Int32 nNumberFormat = -1;
@@ -548,7 +548,7 @@ bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPerce
 }
 sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
 {
-    rtl::OUString aPropName( bForPercentage ? C2U( "PercentageNumberFormat" ) : C2U( "NumberFormat" ) );
+    OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : OUString("NumberFormat");
     sal_Int32 nNumberFormat = -1;
     uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( nPointIndex ));
     if( xPointProp.is() )
@@ -557,19 +557,19 @@ sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bFor
 }
 void VDataSeries::setRoleOfSequenceForDataLabelNumberFormatDetection( const rtl::OUString& rRole )
 {
-    if( rRole.equals(C2U("values-y")) )
+    if (rRole == "values-y")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y;
-    else if( rRole.equals(C2U("values-size")) )
+    else if (rRole == "values-size")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Bubble_Size;
-    else if( rRole.equals(C2U("values-min")) )
+    else if (rRole == "values-min")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_Min;
-    else if( rRole.equals(C2U("values-max")) )
+    else if (rRole == "values-max")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_Max;
-    else if( rRole.equals(C2U("values-first")) )
+    else if (rRole == "values-first")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_First;
-    else if( rRole.equals(C2U("values-last")) )
+    else if (rRole == "values-last")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_Last;
-    else if( rRole.equals(C2U("values-x")) )
+    else if (rRole == "values-x")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_X;
 }
 bool VDataSeries::shouldLabelNumberFormatKeyBeDetectedFromYAxis() const
@@ -595,7 +595,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
     {
         uno::Reference< beans::XPropertySet > xPointProps( this->getPropertiesOfPoint( nPointIndex ) );
         if( xPointProps.is() )
-            xPointProps->getPropertyValue( C2U( "LabelPlacement" ) ) >>= nLabelPlacement;
+            xPointProps->getPropertyValue("LabelPlacement") >>= nLabelPlacement;
 
         //ensure that the set label placement is supported by this charttype
 
@@ -737,7 +737,8 @@ double VDataSeries::getYMeanValue() const
 {
     if( ::rtl::math::isNan( m_fYMeanValue ) )
     {
-        uno::Reference< XRegressionCurveCalculator > xCalculator( RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( C2U("com.sun.star.chart2.MeanValueRegressionCurve") ) );
+        uno::Reference< XRegressionCurveCalculator > xCalculator(
+            RegressionCurveHelper::createRegressionCurveCalculatorByServiceName("com.sun.star.chart2.MeanValueRegressionCurve"));
         uno::Sequence< double > aXValuesDummy;
         xCalculator->recalculateRegression( aXValuesDummy, getAllY() );
         double fXDummy = 1.0;
@@ -829,7 +830,7 @@ uno::Reference< beans::XPropertySet > VDataSeries::getXErrorBarProperties( sal_I
 
     uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( index ));
     if( xPointProp.is() )
-        xPointProp->getPropertyValue( C2U( "ErrorBarX" )) >>= xErrorBarProp;
+        xPointProp->getPropertyValue("ErrorBarX") >>= xErrorBarProp;
     return xErrorBarProp;
 }
 
@@ -839,7 +840,7 @@ uno::Reference< beans::XPropertySet > VDataSeries::getYErrorBarProperties( sal_I
 
     uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( index ));
     if( xPointProp.is() )
-        xPointProp->getPropertyValue( C2U( "ErrorBarY" )) >>= xErrorBarProp;
+        xPointProp->getPropertyValue("ErrorBarY") >>= xErrorBarProp;
     return xErrorBarProp;
 }
 
@@ -851,7 +852,7 @@ bool VDataSeries::hasPointOwnColor( sal_Int32 index ) const
     try
     {
         uno::Reference< beans::XPropertyState > xPointState( this->getPropertiesOfPoint(index), uno::UNO_QUERY_THROW );
-        return (xPointState->getPropertyState( C2U("Color")) != beans::PropertyState_DEFAULT_VALUE );
+        return (xPointState->getPropertyState("Color") != beans::PropertyState_DEFAULT_VALUE );
     }
     catch(const uno::Exception& e)
     {
@@ -878,7 +879,7 @@ bool VDataSeries::isVaryColorsByPoint() const
     bool bVaryColorsByPoint = false;
     Reference< beans::XPropertySet > xSeriesProp( this->getPropertiesOfSeries() );
     if( xSeriesProp.is() )
-        xSeriesProp->getPropertyValue( C2U("VaryColorsByPoint") ) >>= bVaryColorsByPoint;
+        xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint;
     return bVaryColorsByPoint;
 }
 
@@ -901,7 +902,7 @@ DataPointLabel* getDataPointLabelFromPropertySet( const uno::Reference< beans::X
     SAL_WNODEPRECATED_DECLARATIONS_POP
     try
     {
-        if( !(xProp->getPropertyValue( C2U( "Label" ) ) >>= *apLabel) )
+        if( !(xProp->getPropertyValue("Label") >>= *apLabel) )
             apLabel.reset();
     }
     catch(const uno::Exception &e)
