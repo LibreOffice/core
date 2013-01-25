@@ -42,7 +42,7 @@
     <mkdir dir="${outdir}/HelloWorld"/>
 
     <javac srcdir="HelloWorld" destdir="${outdir}/HelloWorld"
-           includes="**/*.java" classpathref="idlclasspath"
+           includes="**/*.java" classpathref="idlclasspath" includeantruntime="false"
            debug="${debug}" optimize="${optimize}" deprecation="on"/>
 
     <copy file="HelloWorld/HelloWorld.java" todir="${outdir}/HelloWorld"/>
@@ -64,7 +64,7 @@
     <mkdir dir="${outdir}/Highlight"/>
 
     <javac srcdir="Highlight" destdir="${outdir}/Highlight"
-           includes="**/*.java" classpathref="idlclasspath"
+           includes="**/*.java" classpathref="idlclasspath" includeantruntime="false"
            debug="${debug}" optimize="${optimize}" deprecation="on"/>
 
     <copy file="Highlight/HighlightText.java" todir="${outdir}/Highlight"/>
@@ -86,7 +86,7 @@
     <mkdir dir="${outdir}/MemoryUsage"/>
 
     <javac srcdir="MemoryUsage" destdir="${outdir}/MemoryUsage"
-           includes="**/*.java" classpathref="idlclasspath"
+           includes="**/*.java" classpathref="idlclasspath" includeantruntime="false"
            debug="${debug}" optimize="${optimize}" deprecation="on"/>
 
     <copy file="MemoryUsage/MemoryUsage.java" todir="${outdir}/MemoryUsage"/>

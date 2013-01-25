@@ -102,7 +102,7 @@
   <!-- ======================== Compile Classes ========================== -->
   <target name="compile" depends="prepare, eval_environment">
     <javac srcdir="com" destdir="${jardir}"
-         includes="**/*.java" classpathref="idlclasspath"
+         includes="**/*.java" classpathref="idlclasspath" includeantruntime="false"
          debug="${debug}" optimize="${optimize}" deprecation="off">
       <exclude name="**/provider/javascript/*.java" unless="with_rhino" />
       <exclude name="**/provider/beanshell/*.java" unless="with_beanshell" />
@@ -110,7 +110,7 @@
     </javac>
     <javac srcdir="Framework/" destdir="${jardir}"
          includes="**/*.java" classpathref="idlclasspath" debug="${debug}"
-         optimize="${optimize}" deprecation="off">
+         optimize="${optimize}" deprecation="off" includeantruntime="false">
      <compilerarg value="-Xbootclasspath:${toString:my.bootstrap.classpath}"/>
     </javac>
   </target>
