@@ -112,6 +112,8 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
 {
     get(pEdtTitle, "object_title_entry");
     get(pEdtDescription, "desc_entry");
+    //lock height to initial height
+    pEdtDescription->set_height_request(pEdtDescription->get_preferred_size().Height());
     // set title & desc
     pEdtTitle->SetText(rTitle);
     pEdtDescription->SetText(rDescription);

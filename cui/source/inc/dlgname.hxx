@@ -24,9 +24,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-
-// #i68101#
-#include <svtools/svmedit.hxx>
+#include <vcl/vclmedit.hxx> // #i68101#
 
 /// Dialog for editing a name
 class SvxNameDialog : public ModalDialog
@@ -115,7 +113,7 @@ private:
     Edit*           pEdtTitle;
 
     // description
-    MultiLineEdit*  pEdtDescription;
+    VclMultiLineEdit*  pEdtDescription;
 
     // buttons
     OKButton*       pBtnOK;
