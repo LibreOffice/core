@@ -18,13 +18,30 @@
 
 #include <svids.hrc>
 
+//http://lists.freedesktop.org/archives/libreoffice/2013-January/044513.html
+//Special OK/Cancel handling
+
 String SV_BUTTONTEXT_OK
 {
-    Text [ en-US ] = "OK";
+    Text [ x-comment ] = "This is used on buttons for platforms other than windows, there should be a ~ mnemonic in this string";
+    Text [ en-US ] = "~OK";
 };
 
 String SV_BUTTONTEXT_CANCEL
 {
+    Text [ x-comment ] = "This is used on buttons for platforms other than windows, there should be a ~ mnemonic in this string";
+    Text [ en-US ] = "~Cancel";
+};
+
+String SV_BUTTONTEXT_OK_NOMNEMONIC
+{
+    Text [ x-comment ] = "This is used on buttons for Windows, there should be no ~ mnemonic in this string";
+    Text [ en-US ] = "OK";
+};
+
+String SV_BUTTONTEXT_CANCEL_NOMNEMONIC
+{
+    Text [ x-comment ] = "This is used on buttons for Windows, there should be no ~ mnemonic in this string";
     Text [ en-US ] = "Cancel";
 };
 

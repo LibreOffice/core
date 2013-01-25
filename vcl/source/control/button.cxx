@@ -143,18 +143,16 @@ OUString Button::GetStandardText( StandardButtonType eButton )
     }
 
     sal_uInt32 nResId = aResIdAry[(sal_uInt16)eButton].nResId;
-    OUString aText = ResId(nResId, *pResMgr).toString();
-
-    if (nResId == SV_BUTTONTEXT_OK || nResId == SV_BUTTONTEXT_CANCEL)
-    {
-#ifndef WNT
-        // Windows (apparently) has some magic auto-accelerator evil around
-        // ok / cancel so add accelerators only for Unix
-        if (aText.indexOf('~') == -1)
-            return "~" + aText;
+#ifdef WNT
+    // http://lists.freedesktop.org/archives/libreoffice/2013-January/044513.html
+    // Under windows we don't want accelerators on ok/cancel but do on other
+    // buttons
+    if (nResId == SV_BUTTONTEXT_OK)
+        nResId = SV_BUTTONTEXT_OK_NOMNEMONIC;
+    else if (nResId == SV_BUTTONTEXT_CANCEL)
+        nResId = SV_BUTTONTEXT_CANCEL_NOMNEMONIC;
 #endif
-    }
-    return aText;
+    return ResId(nResId, *pResMgr).toString();
 }
 
 // -----------------------------------------------------------------------
