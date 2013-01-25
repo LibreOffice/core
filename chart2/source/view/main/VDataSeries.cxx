@@ -39,10 +39,8 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 
-//.............................................................................
-namespace chart
-{
-//.............................................................................
+namespace chart {
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
@@ -748,17 +746,17 @@ double VDataSeries::getYMeanValue() const
     return m_fYMeanValue;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr< Symbol > getSymbolPropertiesFromPropertySet(
-        const uno::Reference< beans::XPropertySet >& xProp )
+Symbol* getSymbolPropertiesFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< Symbol > apSymbolProps( new Symbol() );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     try
     {
-        if( xProp->getPropertyValue( C2U( "Symbol" ) ) >>= *apSymbolProps )
+        if( xProp->getPropertyValue("Symbol") >>= *apSymbolProps )
         {
             //use main color to fill symbols
-            xProp->getPropertyValue( C2U( "Color" ) ) >>= apSymbolProps->FillColor;
+            xProp->getPropertyValue("Color") >>= apSymbolProps->FillColor;
             // border of symbols always same as fill color
             apSymbolProps->BorderColor = apSymbolProps->FillColor;
         }
@@ -769,9 +767,8 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     {
         ASSERT_EXCEPTION( e );
     }
-    return apSymbolProps;
+    return apSymbolProps.release();
 }
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 
 Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
 {
@@ -779,22 +776,22 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
     if( isAttributedDataPoint( index ) )
     {
         adaptPointCache( index );
-        if(!m_apSymbolProperties_AttributedPoint.get())
-            m_apSymbolProperties_AttributedPoint = getSymbolPropertiesFromPropertySet( this->getPropertiesOfPoint( index ) );
+        if (!m_apSymbolProperties_AttributedPoint)
+            m_apSymbolProperties_AttributedPoint.reset(
+                getSymbolPropertiesFromPropertySet(this->getPropertiesOfPoint(index)));
         pRet = m_apSymbolProperties_AttributedPoint.get();
         //if a single data point does not have symbols but the dataseries itself has symbols
         //we create an invisible symbol shape to enable selection of that point
         if( !pRet || pRet->Style == SymbolStyle_NONE )
         {
-            if(!m_apSymbolProperties_Series.get())
-                m_apSymbolProperties_Series = getSymbolPropertiesFromPropertySet( this->getPropertiesOfSeries() );
+            if (!m_apSymbolProperties_Series)
+                m_apSymbolProperties_Series.reset(
+                    getSymbolPropertiesFromPropertySet(this->getPropertiesOfSeries()));
             if( m_apSymbolProperties_Series.get() && m_apSymbolProperties_Series->Style != SymbolStyle_NONE )
             {
-                if(!m_apSymbolProperties_InvisibleSymbolForSelection.get())
+                if (!m_apSymbolProperties_InvisibleSymbolForSelection)
                 {
-                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                    m_apSymbolProperties_InvisibleSymbolForSelection = ::std::auto_ptr< Symbol >( new Symbol() );
-                    SAL_WNODEPRECATED_DECLARATIONS_POP
+                    m_apSymbolProperties_InvisibleSymbolForSelection.reset(new Symbol);
                     m_apSymbolProperties_InvisibleSymbolForSelection->Style = SymbolStyle_STANDARD;
                     m_apSymbolProperties_InvisibleSymbolForSelection->StandardSymbol = 0;//square
                     m_apSymbolProperties_InvisibleSymbolForSelection->Size = m_apSymbolProperties_Series->Size;
@@ -807,8 +804,9 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
     }
     else
     {
-        if(!m_apSymbolProperties_Series.get())
-            m_apSymbolProperties_Series = getSymbolPropertiesFromPropertySet( this->getPropertiesOfSeries() );
+        if (!m_apSymbolProperties_Series)
+            m_apSymbolProperties_Series.reset(
+                getSymbolPropertiesFromPropertySet(this->getPropertiesOfSeries()));
         pRet = m_apSymbolProperties_Series.get();
     }
 
@@ -896,11 +894,11 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfSeries() const
     return  uno::Reference<beans::XPropertySet>(m_xDataSeries, uno::UNO_QUERY );
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr< DataPointLabel > getDataPointLabelFromPropertySet(
-        const uno::Reference< beans::XPropertySet >& xProp )
+DataPointLabel* getDataPointLabelFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< DataPointLabel > apLabel( new DataPointLabel() );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     try
     {
         if( !(xProp->getPropertyValue( C2U( "Label" ) ) >>= *apLabel) )
@@ -910,9 +908,8 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     {
         ASSERT_EXCEPTION( e );
     }
-    return apLabel;
+    return apLabel.release();
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void VDataSeries::adaptPointCache( sal_Int32 nNewPointIndex ) const
 {
@@ -933,13 +930,15 @@ DataPointLabel* VDataSeries::getDataPointLabel( sal_Int32 index ) const
     {
         adaptPointCache( index );
         if( !m_apLabel_AttributedPoint.get() )
-            m_apLabel_AttributedPoint = getDataPointLabelFromPropertySet( this->getPropertiesOfPoint( index ) );
+            m_apLabel_AttributedPoint.reset(
+                getDataPointLabelFromPropertySet(this->getPropertiesOfPoint(index)));
         pRet = m_apLabel_AttributedPoint.get();
     }
     else
     {
-        if(!m_apLabel_Series.get())
-            m_apLabel_Series = getDataPointLabelFromPropertySet( this->getPropertiesOfPoint( index ) );
+        if (!m_apLabel_Series)
+            m_apLabel_Series.reset(
+                getDataPointLabelFromPropertySet(this->getPropertiesOfPoint(index)));
         pRet = m_apLabel_Series.get();
     }
     if( !m_bAllowPercentValueInDataLabel )
@@ -969,16 +968,13 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
     if( isAttributedDataPoint( index ) )
     {
         adaptPointCache( index );
-        if(!m_apLabelPropValues_AttributedPoint.get())
+        if (!m_apLabelPropValues_AttributedPoint)
         {
-            pPropNames = new tNameSequence();
-            pPropValues = new tAnySequence();
+            m_apLabelPropNames_AttributedPoint.reset(new tNameSequence);
+            m_apLabelPropValues_AttributedPoint.reset(new tAnySequence);
             xTextProp.set( this->getPropertiesOfPoint( index ));
-            PropertyMapper::getTextLabelMultiPropertyLists( xTextProp, *pPropNames, *pPropValues );
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            m_apLabelPropNames_AttributedPoint = ::std::auto_ptr< tNameSequence >(pPropNames);
-            m_apLabelPropValues_AttributedPoint = ::std::auto_ptr< tAnySequence >(pPropValues);
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            PropertyMapper::getTextLabelMultiPropertyLists(
+                xTextProp, *m_apLabelPropNames_AttributedPoint, *m_apLabelPropValues_AttributedPoint);
             bDoDynamicFontResize = true;
         }
         pPropNames = m_apLabelPropNames_AttributedPoint.get();
@@ -986,16 +982,13 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
     }
     else
     {
-        if(!m_apLabelPropValues_Series.get())
+        if (!m_apLabelPropValues_Series)
         {
-            pPropNames = new tNameSequence();
-            pPropValues = new tAnySequence();
+            m_apLabelPropNames_Series.reset(new tNameSequence);
+            m_apLabelPropValues_Series.reset(new tAnySequence);
             xTextProp.set( this->getPropertiesOfPoint( index ));
-            PropertyMapper::getTextLabelMultiPropertyLists( xTextProp, *pPropNames, *pPropValues );
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            m_apLabelPropNames_Series = ::std::auto_ptr< tNameSequence >(pPropNames);
-            m_apLabelPropValues_Series = ::std::auto_ptr< tAnySequence >(pPropValues);
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            PropertyMapper::getTextLabelMultiPropertyLists(
+                xTextProp, *m_apLabelPropNames_Series, *m_apLabelPropValues_Series);
             bDoDynamicFontResize = true;
         }
         pPropNames = m_apLabelPropNames_Series.get();
@@ -1023,8 +1016,6 @@ sal_Int32 VDataSeries::getMissingValueTreatment() const
     return m_nMissingValueTreatment;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

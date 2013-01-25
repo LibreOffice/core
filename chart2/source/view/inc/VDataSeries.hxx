@@ -21,9 +21,6 @@
 
 #include "PropertyMapper.hxx"
 
-#include <vector>
-//for auto_ptr
-#include <memory>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
@@ -36,7 +33,9 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <cppuhelper/weakref.hxx>
 
+#include <vector>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace chart
 {
@@ -233,23 +232,21 @@ private: //member
     sal_Int32               m_nGlobalSeriesIndex;
 
     //some cached values for data labels as they are very expensive
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    mutable ::std::auto_ptr< ::com::sun::star::chart2::DataPointLabel >
+    mutable boost::scoped_ptr<com::sun::star::chart2::DataPointLabel>
                                                     m_apLabel_Series;
-    mutable ::std::auto_ptr< tNameSequence >        m_apLabelPropNames_Series;
-    mutable ::std::auto_ptr< tAnySequence >         m_apLabelPropValues_Series;
-    mutable ::std::auto_ptr< ::com::sun::star::chart2::Symbol >
+    mutable boost::scoped_ptr<tNameSequence>        m_apLabelPropNames_Series;
+    mutable boost::scoped_ptr<tAnySequence>         m_apLabelPropValues_Series;
+    mutable boost::scoped_ptr<com::sun::star::chart2::Symbol>
                                                     m_apSymbolProperties_Series;
 
-    mutable ::std::auto_ptr< ::com::sun::star::chart2::DataPointLabel >
+    mutable boost::scoped_ptr<com::sun::star::chart2::DataPointLabel>
                                                     m_apLabel_AttributedPoint;
-    mutable ::std::auto_ptr< tNameSequence >        m_apLabelPropNames_AttributedPoint;
-    mutable ::std::auto_ptr< tAnySequence >         m_apLabelPropValues_AttributedPoint;
-    mutable ::std::auto_ptr< ::com::sun::star::chart2::Symbol >
+    mutable boost::scoped_ptr<tNameSequence>        m_apLabelPropNames_AttributedPoint;
+    mutable boost::scoped_ptr<tAnySequence>         m_apLabelPropValues_AttributedPoint;
+    mutable boost::scoped_ptr<com::sun::star::chart2::Symbol>
                                                     m_apSymbolProperties_AttributedPoint;
-    mutable ::std::auto_ptr< ::com::sun::star::chart2::Symbol >
+    mutable boost::scoped_ptr<com::sun::star::chart2::Symbol>
                                                     m_apSymbolProperties_InvisibleSymbolForSelection;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     mutable sal_Int32                               m_nCurrentAttributedPoint;
     ::com::sun::star::awt::Size                     m_aReferenceSize;
 
