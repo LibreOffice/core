@@ -77,9 +77,9 @@ IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl)
 SvxObjectNameDialog::SvxObjectNameDialog(
     Window* pWindow,
     const String& rName) :
-    ModalDialog     ( pWindow, "ObjectNameDialog", "cui/ui/namedialog.ui" )
+    ModalDialog     ( pWindow, "ObjectNameDialog", "cui/ui/objectnamedialog.ui" )
 {
-    get(pBtnOK, "object_name_ok");
+    get(pBtnOK, "ok");
     get(pEdtName, "object_name_entry");
     // set name
     pEdtName->SetText(rName);
@@ -108,7 +108,7 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
     Window* pWindow,
     const String& rTitle,
     const String& rDescription) :
-    ModalDialog     ( pWindow, "ObjectTitleDescDialog", "cui/ui/namedialog.ui" )
+    ModalDialog     ( pWindow, "ObjectTitleDescDialog", "cui/ui/objecttitledescdialog.ui" )
 {
     get(pEdtTitle, "object_title_entry");
     get(pEdtDescription, "desc_entry");
@@ -131,7 +131,7 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
 \************************************************************************/
 
 SvxMessDialog::SvxMessDialog( Window* pWindow, const String& rText, const String& rDesc, Image* pImg ) :
-    ModalDialog     ( pWindow, "MessBox", "cui/ui/namedialog.ui" )
+    ModalDialog     ( pWindow, "MessBox", "cui/ui/messbox.ui" )
 {
     get(pBtn1, "mess_box_btn1");
     get(pBtn2, "mess_box_btn2");
