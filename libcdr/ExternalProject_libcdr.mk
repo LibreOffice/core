@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,libcdr,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libcdr,\
-    icu_headers \
+	icu \
 	lcms2 \
 	wpd \
 	wpg \

@@ -909,7 +909,7 @@ endif # SYSTEM_GRAPHITE
 ifeq ($(SYSTEM_ICU),YES)
 
 gb_LinkTarget__use_icu_headers:=
-gb_ExternalProject__use_icu_headers:=
+gb_ExternalProject__use_icu:=
 
 define gb_LinkTarget__use_icudata
 $(call gb_LinkTarget_add_libs,$(1),-licudata)
@@ -951,14 +951,8 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
-define gb_ExternalProject__use_icu_headers
-$(call gb_ExternalProject_get_preparation_target,$(1)) :| $(call gb_UnpackedTarball_get_final_target,icu)
-$(call gb_ExternalProject_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,icu)/source \
-	-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
-	-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
-	$$(INCLUDE) \
-)
+define gb_ExternalProject__use_icu
+$(call gb_ExternalProject_use_package,$(1),icu)
 
 endef
 
