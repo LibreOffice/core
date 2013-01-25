@@ -35,7 +35,7 @@ class SwFldVarPage;
 
 class SelectionListBox : public ListBox
 {
-    sal_Bool            bCallAddSelection;
+    bool            bCallAddSelection;
 
     virtual long        PreNotify( NotifyEvent& rNEvt );
 
@@ -43,8 +43,8 @@ public:
     SelectionListBox( SwFldVarPage* pDialog, const ResId& rResId );
 
     //  detect selection via Ctrl or Alt and evaluate with SelectHdl
-    sal_Bool            IsCallAddSelection() const {return bCallAddSelection;}
-    void            ResetCallAddSelection() {bCallAddSelection = sal_False;}
+    bool            IsCallAddSelection() const {return bCallAddSelection;}
+    void            ResetCallAddSelection() {bCallAddSelection = false;}
 };
 
 class SwFldVarPage : public SwFldPage

@@ -35,7 +35,7 @@ class SwFldPage : public SfxTabPage
     sal_uInt16              m_nPageId;
     sal_uInt16              m_nTypeSel;
     sal_uInt16              m_nSelectionSel;
-    sal_Bool                m_bFldEdit;
+    bool                m_bFldEdit;
     sal_Bool                m_bInsert;
     sal_Bool                m_bFldDlgHtmlMode;
     sal_Bool                m_bRefresh;
@@ -62,7 +62,7 @@ protected:
     void                RestorePos( ListBox* pLst1, ListBox* pLst2 = 0,
                                     ListBox* pLst3 = 0 );
     void                EnableInsert(sal_Bool bEnable = sal_True);
-    inline sal_Bool         IsFldEdit() const   { return m_bFldEdit; }
+    inline bool         IsFldEdit() const   { return m_bFldEdit; }
 
     // insert field
     sal_Bool                InsertFld(  sal_uInt16 nTypeId,

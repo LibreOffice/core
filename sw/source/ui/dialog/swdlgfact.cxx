@@ -462,7 +462,7 @@ sal_Bool AbstractJavaEditDialog_Impl::IsNew()
 {
     return pDlg->IsNew();
 }
-sal_Bool AbstractJavaEditDialog_Impl::IsUpdate()
+bool AbstractJavaEditDialog_Impl::IsUpdate()
 {
     return pDlg->IsUpdate();
 }

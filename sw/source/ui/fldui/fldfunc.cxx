@@ -199,7 +199,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
         // fill Format-Listbox
         aFormatLB.Clear();
 
-        sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, sal_False, IsFldDlgHtmlMode());
+        sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, false, IsFldDlgHtmlMode());
 
         for (sal_uInt16 i = 0; i < nSize; i++)
         {

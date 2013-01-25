@@ -103,7 +103,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
     Window *pMDI = &GetView().GetViewFrame()->GetWindow();
     sal_Bool bMore = sal_False;
-    sal_Bool bIsText = sal_True;
+    bool bIsText = true;
     sal_uInt16 nInsertType = 0;
     sal_uInt16 nInsertSubType = 0;
     sal_uLong nInsertFormat = 0;
@@ -494,7 +494,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             {
                 rtl::OUString aType, aText;
                 sal_Bool bIsUrl=sal_False;
-                sal_Bool bNew=sal_False, bUpdate=sal_False;
+                sal_Bool bNew=sal_False;
+                bool bUpdate = false;
                 SwFldMgr* pMgr = new SwFldMgr;
                 if ( pItem )
                 {
@@ -550,21 +551,21 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
             case FN_INSERT_FLD_DATE    :
                 nInsertType = TYP_DATEFLD;
-                bIsText = sal_False;
+                bIsText = false;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_TIME    :
                 nInsertType = TYP_TIMEFLD;
-                bIsText = sal_False;
+                bIsText = false;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_PGNUMBER:
                 nInsertType = TYP_PAGENUMBERFLD;
                 nInsertFormat = SVX_NUM_PAGEDESC; // wie Seitenvorlage
-                bIsText = sal_False;
+                bIsText = false;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_PGCOUNT :
                 nInsertType = TYP_DOCSTATFLD;
                 nInsertSubType = 0;
-                bIsText = sal_False;
+                bIsText = false;
                 nInsertFormat = SVX_NUM_PAGEDESC;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_TOPIC   :

@@ -49,7 +49,7 @@ SwFldPage::SwFldPage( Window *pParent, const ResId &rId,
     m_nPageId       ( static_cast< sal_uInt16 >(rId.GetId()) ),
     m_nTypeSel      (LISTBOX_ENTRY_NOTFOUND),
     m_nSelectionSel (LISTBOX_ENTRY_NOTFOUND),
-    m_bFldEdit      (sal_False),
+    m_bFldEdit      (false),
     m_bInsert           (sal_True),
     m_bFldDlgHtmlMode   (sal_False),
     m_bRefresh          (sal_False),
@@ -148,7 +148,7 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
                 pView->GetViewFrame()->GetBindings().GetRecorder();
         if ( xRecorder.is() )
         {
-            sal_Bool bRecordDB = TYP_DBFLD == nTypeId ||
+            bool bRecordDB = TYP_DBFLD == nTypeId ||
                             TYP_DBSETNUMBERFLD == nTypeId ||
                             TYP_DBNUMSETFLD == nTypeId ||
                             TYP_DBNEXTSETFLD == nTypeId ||

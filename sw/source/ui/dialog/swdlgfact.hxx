@@ -315,7 +315,7 @@ class AbstractJavaEditDialog_Impl : public AbstractJavaEditDialog
     virtual String              GetType();
     virtual sal_Bool                IsUrl();
     virtual sal_Bool                IsNew();
-    virtual sal_Bool                IsUpdate();
+    virtual bool                IsUpdate();
 };
 //for SwJavaEditDialog end
 

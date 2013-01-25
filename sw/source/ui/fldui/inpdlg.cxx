@@ -144,7 +144,7 @@ void SwFldInputDlg::Apply()
     rtl::OUString aTmp(comphelper::string::remove(aEditED.GetText(), '\r'));
 
     rSh.StartAllAction();
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     if(pInpFld)
     {
         if(pUsrType)
@@ -153,21 +153,21 @@ void SwFldInputDlg::Apply()
             {
                 pUsrType->SetContent(aTmp);
                 pUsrType->UpdateFlds();
-                bModified = sal_True;
+                bModified = true;
             }
         }
         else if( !aTmp.equals(pInpFld->GetPar1()) )
         {
             pInpFld->SetPar1(aTmp);
             rSh.SwEditShell::UpdateFlds(*pInpFld);
-            bModified = sal_True;
+            bModified = true;
         }
     }
     else if( !aTmp.equals(pSetFld->GetPar2()) )
     {
         pSetFld->SetPar2(aTmp);
         rSh.SwEditShell::UpdateFlds(*pSetFld);
-        bModified = sal_True;
+        bModified = true;
     }
 
     if( bModified )

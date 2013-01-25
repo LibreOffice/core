@@ -386,7 +386,7 @@ sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
     }
     else
     {
-        nSize = GetFldMgr().GetFormatCount(nTypeId, sal_False, IsFldDlgHtmlMode());
+        nSize = GetFldMgr().GetFormatCount(nTypeId, false, IsFldDlgHtmlMode());
         for (sal_uInt16 i = 0; i < nSize; i++)
         {
             sal_uInt16 nPos = aSelectionLB.InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));

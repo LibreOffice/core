@@ -466,7 +466,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     }
 
 
-    nCount = pMgr->GetFormatCount(TYP_SEQFLD, sal_False);
+    nCount = pMgr->GetFormatCount(TYP_SEQFLD, false);
     for ( i = 0; i < nCount; ++i )
     {
         aFormatBox.InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );

@@ -273,9 +273,9 @@ SwFldMgr::~SwFldMgr()
     Description: organise RefMark by names
  --------------------------------------------------------------------*/
 
-sal_Bool  SwFldMgr::CanInsertRefMark( const String& rStr )
+bool  SwFldMgr::CanInsertRefMark( const String& rStr )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwWrtShell *pSh = pWrtShell ? pWrtShell : lcl_GetShell();
     OSL_ENSURE(pSh, "no SwWrtShell found");
     if(pSh)
@@ -490,9 +490,9 @@ sal_uInt16 SwFldMgr::GetPos(sal_uInt16 nTypeId)
     Description: localise subtypes of a field
  --------------------------------------------------------------------*/
 
-sal_Bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<rtl::OUString>& rToFill)
+bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<rtl::OUString>& rToFill)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwWrtShell *pSh = pWrtShell ? pWrtShell : lcl_GetShell();
     OSL_ENSURE(pSh, "no SwWrtShell found");
     if(pSh)
@@ -589,7 +589,7 @@ sal_Bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<rtl::OUString>& r
                 }
             }
         }
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
@@ -600,7 +600,7 @@ sal_Bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<rtl::OUString>& r
  --------------------------------------------------------------------*/
 
 
-sal_uInt16 SwFldMgr::GetFormatCount(sal_uInt16 nTypeId, sal_Bool bIsText, sal_Bool bHtmlMode) const
+sal_uInt16 SwFldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bIsText, sal_Bool bHtmlMode) const
 {
     OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
 
@@ -843,9 +843,9 @@ sal_uInt16 SwFldMgr::GetCurTypeId() const
 sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
 {
     SwField* pFld   = 0;
-    sal_Bool bExp = sal_False;
-    sal_Bool bTbl = sal_False;
-    sal_Bool bPageVar = sal_False;
+    bool bExp = false;
+    bool bTbl = false;
+    bool bPageVar = false;
     sal_uLong nFormatId = rData.nFormatId;
     sal_uInt16 nSubType = rData.nSubType;
     sal_Unicode cSeparator = rData.cSeparator;
@@ -981,7 +981,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             SwHiddenTxtFieldType* pTyp =
                 (SwHiddenTxtFieldType*)pCurShell->GetFldType(0, RES_HIDDENTXTFLD);
             pFld = new SwHiddenTxtField(pTyp, sal_True, rData.sPar1, rData.sPar2, sal_False, rData.nTypeId);
-            bExp = sal_True;
+            bExp = true;
             break;
         }
         case TYP_HIDDENPARAFLD:
@@ -989,7 +989,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             SwHiddenParaFieldType* pTyp =
                 (SwHiddenParaFieldType*)pCurShell->GetFldType(0, RES_HIDDENPARAFLD);
             pFld = new SwHiddenParaField(pTyp, rData.sPar1);
-            bExp = sal_True;
+            bExp = true;
             break;
         }
         case TYP_SETREFFLD:
@@ -1007,7 +1007,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                 (SwGetRefFieldType*)pCurShell->GetFldType(0, RES_GETREFFLD);
             sal_uInt16 nSeqNo = (sal_uInt16)rData.sPar2.ToInt32();
             pFld = new SwGetRefField(pTyp, rData.sPar1, nSubType, nSeqNo, nFormatId);
-            bExp = sal_True;
+            bExp = true;
             break;
         }
         case TYP_DDEFLD:
@@ -1107,7 +1107,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             }
             pFld->ChangeFormat( nFormatId );
 
-            bExp = sal_True;
+            bExp = true;
             break;
         }
         case TYP_DBSETNUMBERFLD:
@@ -1156,7 +1156,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                     SwDBNextSetFieldType* pTyp = (SwDBNextSetFieldType*)pCurShell->GetFldType(
                                                     0, RES_DBNEXTSETFLD);
                     pFld = new SwDBNextSetField(pTyp, sPar1, rData.sPar2, aDBData);
-                    bExp = sal_True;
+                    bExp = true;
                     break;
                 }
                 case TYP_DBNUMSETFLD:
@@ -1164,7 +1164,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                     SwDBNumSetFieldType* pTyp = (SwDBNumSetFieldType*)pCurShell->GetFldType(
                                                     0, RES_DBNUMSETFLD);
                     pFld = new SwDBNumSetField( pTyp, sPar1, rData.sPar2, aDBData);
-                    bExp = sal_True;
+                    bExp = true;
                     break;
                 }
                 case TYP_DBSETNUMBERFLD:
@@ -1172,7 +1172,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                     SwDBSetNumberFieldType* pTyp = (SwDBSetNumberFieldType*)
                                                 pCurShell->GetFldType(0, RES_DBSETNUMBERFLD);
                     pFld = new SwDBSetNumberField( pTyp, aDBData, nFormatId);
-                    bExp = sal_True;
+                    bExp = true;
                     break;
                 }
             }
@@ -1194,7 +1194,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             pFld = new SwUserField(pTyp, 0, nFormatId);
             if (pFld->GetSubType() != nSubType)
                 pFld->SetSubType(nSubType);
-            bTbl = sal_True;
+            bTbl = true;
             break;
         }
         case TYP_INPUTFLD:
@@ -1216,7 +1216,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
 
                     pExpFld->SetPromptText(rData.sPar2);
                     pExpFld->SetInputFlag(sal_True) ;
-                    bExp = sal_True;
+                    bExp = true;
                     pFld = pExpFld;
                 }
                 else
@@ -1247,7 +1247,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             SwSetExpField* pExpFld = new SwSetExpField( pTyp, rData.sPar2, nFormatId);
             pExpFld->SetSubType(nSubType);
             pExpFld->SetPar2(rData.sPar2);
-            bExp = sal_True;
+            bExp = true;
             pFld = pExpFld;
             break;
         }
@@ -1264,7 +1264,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
 
             pTyp->SetDelimiter(rtl::OUString(cSeparator));
             SwSetExpField* pExpFld = new SwSetExpField(pTyp, rData.sPar2, nFormatId);
-            bExp = sal_True;
+            bExp = true;
             pFld = pExpFld;
             nSubType = nsSwGetSetExpType::GSE_SEQ;
             break;
@@ -1281,7 +1281,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                                                 0, RES_GETEXPFLD);
                 pFld = new SwGetExpField(pTyp, rData.sPar1, pSetTyp->GetType(), nFormatId);
                 pFld->SetSubType(nSubType | pSetTyp->GetType());
-                bExp = sal_True;
+                bExp = true;
             }
             else
                 return sal_False;
@@ -1325,7 +1325,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                                             pCurShell->GetFldType(0, RES_GETEXPFLD);
                 pFld = new SwGetExpField(pTyp, rData.sPar2, nsSwGetSetExpType::GSE_FORMULA, nFormatId);
                 pFld->SetSubType(nSubType);
-                bExp = sal_True;
+                bExp = true;
             }
             break;
         }
@@ -1333,13 +1333,13 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             pFld = new SwRefPageSetField( (SwRefPageSetFieldType*)
                                 pCurShell->GetFldType( 0, RES_REFPAGESETFLD ),
                                 (short)rData.sPar2.ToInt32(), 0 != nSubType  );
-            bPageVar = sal_True;
+            bPageVar = true;
             break;
 
         case TYP_GETREFPAGEFLD:
             pFld = new SwRefPageGetField( (SwRefPageGetFieldType*)
                             pCurShell->GetFldType( 0, RES_REFPAGEGETFLD ), nFormatId );
-            bPageVar = sal_True;
+            bPageVar = true;
             break;
         case TYP_DROPDOWN :
         {
@@ -1433,8 +1433,8 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
         return;
     pSh->StartAllAction();
 
-    sal_Bool bSetPar2 = sal_True;
-    sal_Bool bSetPar1 = sal_True;
+    bool bSetPar2 = true;
+    bool bSetPar1 = true;
     String sPar1( rPar1 );
     String sPar2( rPar2 );
 
@@ -1457,7 +1457,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             nByte = Min(nByte, sal_uInt16(MAXLEVEL));
             nByte -= 1;
             ((SwChapterField*)pTmpFld)->SetLevel((sal_uInt8)nByte);
-            bSetPar2 = sal_False;
+            bSetPar2 = false;
             break;
         }
 
@@ -1505,7 +1505,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
 
         case TYP_GETREFFLD:
             {
-                bSetPar2 = sal_False;
+                bSetPar2 = false;
                 ((SwGetRefField*)pTmpFld)->SetSubType( (sal_uInt16)rPar2.ToInt32() );
                 sal_uInt16 nPos = rPar2.Search( '|' );
                 if( STRING_NOTFOUND != nPos )
@@ -1521,7 +1521,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
                 pArray[nToken] = sPar2.GetToken(nToken, DB_DELIM);
             ((SwDropDownField*)pTmpFld)->SetItems(aEntries);
             ((SwDropDownField*)pTmpFld)->SetName(sPar1);
-            bSetPar1 = bSetPar2 = sal_False;
+            bSetPar1 = bSetPar2 = false;
         }
         break;
         case TYP_AUTHORITY :
@@ -1541,8 +1541,8 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
 
             if( aTempEntry.GetAuthorField( AUTH_FIELD_IDENTIFIER ) ==
                 pAuthorityField->GetFieldText( AUTH_FIELD_IDENTIFIER ) )
-                bSetPar1 = sal_False; //otherwise it's a new or changed entry, the field needs to be updated
-            bSetPar2 = sal_False;
+                bSetPar1 = false; //otherwise it's a new or changed entry, the field needs to be updated
+            bSetPar2 = false;
         }
         break;
     }
@@ -1699,7 +1699,7 @@ void SwFldMgr::SetMacroPath(const String& rPath)
     }
 }
 
-sal_uLong SwFldMgr::GetDefaultFormat(sal_uInt16 nTypeId, sal_Bool bIsText, SvNumberFormatter* pFormatter, double* pVal)
+sal_uLong SwFldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter, double* pVal)
 {
     double fValue;
     short  nDefFormat;

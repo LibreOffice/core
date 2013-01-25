@@ -109,7 +109,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
 
     aFormatLB.Clear();
 
-    sal_uInt16 nSize = GetFldMgr().GetFormatCount(TYP_DBSETNUMBERFLD, sal_False, IsFldDlgHtmlMode());
+    sal_uInt16 nSize = GetFldMgr().GetFormatCount(TYP_DBSETNUMBERFLD, false, IsFldDlgHtmlMode());
     for( i = 0; i < nSize; ++i )
     {
         sal_uInt16 nEntryPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));

@@ -697,7 +697,7 @@ sal_uInt16 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
             }
             else
             {
-                nSize = GetFldMgr().GetFormatCount( nTypeId, sal_False, IsFldDlgHtmlMode() );
+                nSize = GetFldMgr().GetFormatCount( nTypeId, false, IsFldDlgHtmlMode() );
             }
             break;
     }

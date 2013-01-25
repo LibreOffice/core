@@ -166,7 +166,7 @@ public:
                                         sal_Bool bIsTable, const String& rFldName);
 
     // organise RefMark with names
-    sal_Bool            CanInsertRefMark( const String& rStr );
+    bool            CanInsertRefMark( const String& rStr );
 
 
     // access to field types via ResId
@@ -193,13 +193,13 @@ public:
     static sal_uInt16   GetPos(sal_uInt16 nTypeId);
 
     // subtypes to a type
-    sal_Bool            GetSubTypes(sal_uInt16 nId, std::vector<rtl::OUString>& rToFill);
+    bool            GetSubTypes(sal_uInt16 nId, std::vector<rtl::OUString>& rToFill);
 
     // format to a type
-    sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, sal_Bool bIsText, sal_Bool bHtmlMode = sal_False) const;
+    sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, bool bIsText, sal_Bool bHtmlMode = sal_False) const;
     String          GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
     sal_uInt16          GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
-    sal_uLong           GetDefaultFormat(sal_uInt16 nTypeId, sal_Bool bIsText, SvNumberFormatter* pFormatter, double* pVal = 0L);
+    sal_uLong           GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter, double* pVal = 0L);
 
     // turn off evaluation of expression fields for insertation
     // of many expressino fields (see labels)

@@ -86,7 +86,7 @@ void SwFldDokPage::Reset(const SfxItemSet& )
     aTypeLB.Clear();
 
     sal_uInt16 nPos, nTypeId;
-    sal_Bool bPage = sal_False;
+    bool bPage = false;
 
     if (!IsFldEdit())
     {
@@ -104,7 +104,7 @@ void SwFldDokPage::Reset(const SfxItemSet& )
                     {
                         nPos = aTypeLB.InsertEntry(SW_RESSTR(FMT_REF_PAGE));
                         aTypeLB.SetEntryData(nPos, (void*)USHRT_MAX);
-                        bPage = sal_True;
+                        bPage = true;
                     }
                     break;
 
@@ -207,7 +207,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
             if (nTypeId != TYP_AUTHORFLD)
                 nCount = aLst.size();
             else
-                nCount = GetFldMgr().GetFormatCount(nTypeId, sal_False, IsFldDlgHtmlMode());
+                nCount = GetFldMgr().GetFormatCount(nTypeId, false, IsFldDlgHtmlMode());
 
             size_t nPos;
 
@@ -224,7 +224,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
                 }
                 else
                 {
-                    sal_Bool bInsert = sal_False;
+                    bool bInsert = false;
 
                     switch (nTypeId)
                     {
@@ -257,7 +257,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
                         default:
                             if (aLst[i] == GetCurField()->GetPar1())
-                                bInsert = sal_True;
+                                bInsert = true;
                             break;
                     }
                     if (bInsert)
@@ -477,7 +477,7 @@ sal_uInt16 SwFldDokPage::FillFormatLB(sal_uInt16 nTypeId)
     if (nTypeId == TYP_AUTHORFLD)
         return aFormatLB.GetEntryCount();
 
-    sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, sal_False, IsFldDlgHtmlMode());
+    sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, false, IsFldDlgHtmlMode());
 
     for( sal_uInt16 i = 0; i < nSize; ++i )
     {

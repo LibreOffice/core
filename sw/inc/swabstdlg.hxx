@@ -142,7 +142,7 @@ public:
     virtual String              GetType() = 0;
     virtual sal_Bool                IsUrl() = 0;
     virtual sal_Bool                IsNew() = 0;
-    virtual sal_Bool                IsUpdate() = 0;
+    virtual bool                IsUpdate() = 0;
 };
 
 class AbstractMailMergeDlg : public VclAbstractDialog  //add for SwMailMergeDlg

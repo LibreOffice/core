@@ -88,7 +88,7 @@ public:
 
     sal_Bool                IsUrl() { return bIsUrl; }
     sal_Bool                IsNew() { return bNew; }
-    sal_Bool                IsUpdate();
+    bool                IsUpdate();
 };
 
 

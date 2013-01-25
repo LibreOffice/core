@@ -777,7 +777,7 @@ sal_uInt16 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
             aNumFormatLB.SelectEntry(sOldSel);
     }
 
-    sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, sal_False, IsFldDlgHtmlMode());
+    sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, false, IsFldDlgHtmlMode());
 
     for (sal_uInt16 i = 0; i < nSize; i++)
     {
@@ -1246,7 +1246,7 @@ sal_uInt16 SwFldVarPage::GetGroup()
 
 SelectionListBox::SelectionListBox( SwFldVarPage* pDialog, const ResId& rResId ) :
     ListBox (pDialog, rResId),
-    bCallAddSelection(sal_False)
+    bCallAddSelection(false)
 {
 }
 
@@ -1259,14 +1259,14 @@ long SelectionListBox::PreNotify( NotifyEvent& rNEvt )
         const KeyCode aKeyCode = pKEvt->GetKeyCode();
         const sal_uInt16 nModifier = aKeyCode.GetModifier();
         if( aKeyCode.GetCode() == KEY_SPACE && !nModifier)
-            bCallAddSelection = sal_True;
+            bCallAddSelection = true;
     }
     if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
     {
         const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
 
         if (pMEvt && (pMEvt->IsMod1() || pMEvt->IsMod2()))  // Alt or Ctrl
-            bCallAddSelection = sal_True;
+            bCallAddSelection = true;
     }
 
     return nHandled;

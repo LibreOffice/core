@@ -273,7 +273,7 @@ void SwFldDlg::Activate()
     SwView* pView = ::GetActiveView();
     if( pView )
     {
-        sal_Bool bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
+        bool bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
         const SwWrtShell& rSh = pView->GetWrtShell();
         GetOKButton().Enable( !rSh.IsReadOnlyAvailable() ||
                               !rSh.HasReadonlySel() );
