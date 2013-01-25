@@ -172,8 +172,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                     pDestPage->InsertObject( pNeuObj );
                     pScDrawView->AddUndo(new SdrUndoInsertObj( *pNeuObj ));
 
-                    //  Chart braucht nicht mehr getrennt behandelt zu werden,
-                    //  weil es seine Daten jetzt selber hat
+                    if (ScDrawLayer::IsCellAnchored(*pNeuObj))
+                        ScDrawLayer::SetCellAnchoredFromPosition(*pNeuObj, *GetViewData()->GetDocument(), nTab);
                 }
             }
 
@@ -238,6 +238,10 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             {
                 if ( pObject->ISA(SdrUnoObj) && pObject->GetLayer() != SC_LAYER_CONTROLS )
                     pObject->NbcSetLayer(SC_LAYER_CONTROLS);
+
+                if (ScDrawLayer::IsCellAnchored(*pObject))
+                    ScDrawLayer::SetCellAnchoredFromPosition(*pObject, *GetViewData()->GetDocument(), nTab);
+
                 pObject = aIter.Next();
             }
         }
