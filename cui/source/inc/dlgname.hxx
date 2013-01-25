@@ -32,11 +32,9 @@
 class SvxNameDialog : public ModalDialog
 {
 private:
-    FixedText       aFtDescription;
-    Edit            aEdtName;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    FixedText*      pFtDescription;
+    Edit*           pEdtName;
+    OKButton*       pBtnOK;
 
     Link            aCheckNameHdl;
 
@@ -45,7 +43,7 @@ private:
 public:
     SvxNameDialog( Window* pWindow, const String& rName, const String& rDesc );
 
-    void    GetName( String& rName ){rName = aEdtName.GetText();}
+    void    GetName( String& rName ){rName = pEdtName->GetText();}
 
     /** add a callback Link that is called whenever the content of the edit
         field is changed.  The Link result determines whether the OK
@@ -66,29 +64,23 @@ public:
     {
         aCheckNameHdl = rLink;
         if ( bCheckImmediately )
-            aBtnOK.Enable( rLink.Call( this ) > 0 );
+            pBtnOK->Enable( rLink.Call( this ) > 0 );
     }
 
-    void    SetEditHelpId( const rtl::OString& aHelpId) {aEdtName.SetHelpId(aHelpId);}
+    void    SetEditHelpId( const rtl::OString& aHelpId) {pEdtName->SetHelpId(aHelpId);}
 };
 
 /** #i68101#
-    Dialog for editing Object Title and Description
+    Dialog for editing Object name
     plus uniqueness-callback-linkHandler */
 class SvxObjectNameDialog : public ModalDialog
 {
 private:
     // name
-    FixedText       aFtName;
-    Edit            aEdtName;
-
-    // separator
-    FixedLine       aFlSeparator;
+    Edit*           pEdtName;
 
     // buttons
-    HelpButton      aBtnHelp;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
+    OKButton*       pBtnOK;
 
     // callback link for name uniqueness
     Link            aCheckNameHdl;
@@ -100,7 +92,7 @@ public:
     SvxObjectNameDialog(Window* pWindow, const String& rName);
 
     // data access
-    void GetName(String& rName) {rName = aEdtName.GetText(); }
+    void GetName(String& rName) {rName = pEdtName->GetText(); }
 
     // set handler
     void SetCheckNameHdl(const Link& rLink, bool bCheckImmediately = false)
@@ -109,7 +101,7 @@ public:
 
         if(bCheckImmediately)
         {
-            aBtnOK.Enable(rLink.Call(this) > 0);
+            pBtnOK->Enable(rLink.Call(this) > 0);
         }
     }
 };
@@ -120,39 +112,31 @@ class SvxObjectTitleDescDialog : public ModalDialog
 {
 private:
     // title
-    FixedText       aFtTitle;
-    Edit            aEdtTitle;
+    Edit*           pEdtTitle;
 
     // description
-    FixedText       aFtDescription;
-    MultiLineEdit   aEdtDescription;
-
-    // separator
-    FixedLine       aFlSeparator;
+    MultiLineEdit*  pEdtDescription;
 
     // buttons
-    HelpButton      aBtnHelp;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
+    OKButton*       pBtnOK;
 
 public:
     // constructor
     SvxObjectTitleDescDialog(Window* pWindow, const String& rTitle, const String& rDesc);
 
     // data access
-    void GetTitle(String& rTitle) {rTitle = aEdtTitle.GetText(); }
-    void GetDescription(String& rDescription) {rDescription = aEdtDescription.GetText(); }
+    void GetTitle(String& rTitle) {rTitle = pEdtTitle->GetText(); }
+    void GetDescription(String& rDescription) {rDescription = pEdtDescription->GetText(); }
 };
 
 /// Dialog to cancel, save, or add
 class SvxMessDialog : public ModalDialog
 {
 private:
-    FixedText       aFtDescription;
-    PushButton      aBtn1;
-    PushButton      aBtn2;
-    CancelButton    aBtnCancel;
-    FixedImage      aFtImage;
+    FixedText*      pFtDescription;
+    PushButton*     pBtn1;
+    PushButton*     pBtn2;
+    FixedImage*     pFtImage;
     Image*          pImage;
 
     DECL_LINK(Button1Hdl, void *);

@@ -37,6 +37,7 @@
 #include "svx/drawitem.hxx"
 #include "cuitabarea.hxx"
 #include "defdlgname.hxx"
+#include "dlgname.hxx"
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
@@ -238,9 +239,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
     {
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
-        AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( GetParentDialog(), RID_SVXDLG_MESSBOX,
+        SvxMessDialog* aMessDlg = new SvxMessDialog(GetParentDialog(),
                                                         SVX_RESSTR( RID_SVXSTR_HATCH ),
                                                         CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_HATCH ),
                                                         &aWarningBoxImage );

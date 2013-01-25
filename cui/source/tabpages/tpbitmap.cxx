@@ -43,6 +43,7 @@
 #include "cuitabarea.hxx"
 #include "tabarea.hrc"
 #include "defdlgname.hxx"
+#include "dlgname.hxx"
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include "sfx2/opengrf.hxx"
@@ -512,9 +513,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
-            AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( GetParentDialog(), RID_SVXDLG_MESSBOX,
+            SvxMessDialog* aMessDlg = new SvxMessDialog(GetParentDialog(),
                                                         String( SVX_RES( RID_SVXSTR_BITMAP ) ),
                                                         String( CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ) ),
                                                         &aWarningBoxImage  );
