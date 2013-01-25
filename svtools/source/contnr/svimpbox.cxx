@@ -348,6 +348,9 @@ IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar )
 
 void SvImpLBox::CursorDown()
 {
+    if (!pStartEntry)
+        return;
+
     SvTreeListEntry* pNextFirstToDraw = pView->NextVisible(pStartEntry);
     if( pNextFirstToDraw )
     {
@@ -366,6 +369,9 @@ void SvImpLBox::CursorDown()
 
 void SvImpLBox::CursorUp()
 {
+    if (!pStartEntry)
+        return;
+
     SvTreeListEntry* pPrevFirstToDraw = pView->PrevVisible(pStartEntry);
     if( pPrevFirstToDraw )
     {
@@ -389,6 +395,9 @@ void SvImpLBox::PageDown( sal_uInt16 nDelta )
     sal_uInt16 nRealDelta = nDelta;
 
     if( !nDelta )
+        return;
+
+    if (!pStartEntry)
         return;
 
     SvTreeListEntry* pNext = pView->NextVisible(pStartEntry, nRealDelta);
@@ -426,6 +435,9 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
 {
     sal_uInt16 nRealDelta = nDelta;
     if( !nDelta )
+        return;
+
+    if (!pStartEntry)
         return;
 
     SvTreeListEntry* pPrev = pView->PrevVisible(pStartEntry, nRealDelta);
