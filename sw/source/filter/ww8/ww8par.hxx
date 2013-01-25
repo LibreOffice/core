@@ -659,7 +659,7 @@ private:
     SvStream *pFallbackStream;
     std::map<sal_uInt32,rtl::OString> aOldEscherBlipCache;
 
-    virtual sal_Bool GetOLEStorageName( long nOLEId, String& rStorageName,
+    virtual sal_Bool GetOLEStorageName( long nOLEId, OUString& rStorageName,
         SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const;
     virtual sal_Bool ShapeHasText( sal_uLong nShapeId, sal_uLong nFilePos ) const;
     // #i32596# - new parameter <_nCalledByGroup>, which

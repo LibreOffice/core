@@ -303,7 +303,7 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
     }
 
     SdrObject* pRet = 0;
-    String sStorageName;
+    OUString sStorageName;
     SotStorageRef xSrcStg;
     uno::Reference < embed::XStorage > xDstStg;
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
@@ -5654,7 +5654,7 @@ sal_Bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, sal_Bool bSaveRelFiles
     return bRet ? true : false;
 }
 
-sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
+sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
     SvStorageRef& rSrcStorage, uno::Reference < embed::XStorage >& rDestStorage) const
 {
     bool bRet = false;
@@ -5726,7 +5726,7 @@ sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
 
     if( bRet )
     {
-        rStorageName = '_';
+        rStorageName = OUString('_');
         rStorageName += rtl::OUString::valueOf(nPictureId);
         rSrcStorage = rReader.pStg->OpenSotStorage(rtl::OUString(
             SL::aObjectPool));
