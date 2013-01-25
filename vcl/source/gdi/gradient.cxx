@@ -339,15 +339,15 @@ sal_Bool Gradient::operator==( const Gradient& rGradient ) const
     if ( mpImplGradient == rGradient.mpImplGradient )
         return sal_True;
 
-    if ( (mpImplGradient->meStyle           == rGradient.mpImplGradient->meStyle)           ||
-         (mpImplGradient->mnAngle           == rGradient.mpImplGradient->mnAngle)           ||
-         (mpImplGradient->mnBorder          == rGradient.mpImplGradient->mnBorder)          ||
-         (mpImplGradient->mnOfsX            == rGradient.mpImplGradient->mnOfsX)            ||
-         (mpImplGradient->mnOfsY            == rGradient.mpImplGradient->mnOfsY)            ||
-         (mpImplGradient->mnStepCount       == rGradient.mpImplGradient->mnStepCount)       ||
-         (mpImplGradient->mnIntensityStart  == rGradient.mpImplGradient->mnIntensityStart)  ||
-         (mpImplGradient->mnIntensityEnd    == rGradient.mpImplGradient->mnIntensityEnd)    ||
-         (mpImplGradient->maStartColor      == rGradient.mpImplGradient->maStartColor)      ||
+    if ( (mpImplGradient->meStyle           == rGradient.mpImplGradient->meStyle)           &&
+         (mpImplGradient->mnAngle           == rGradient.mpImplGradient->mnAngle)           &&
+         (mpImplGradient->mnBorder          == rGradient.mpImplGradient->mnBorder)          &&
+         (mpImplGradient->mnOfsX            == rGradient.mpImplGradient->mnOfsX)            &&
+         (mpImplGradient->mnOfsY            == rGradient.mpImplGradient->mnOfsY)            &&
+         (mpImplGradient->mnStepCount       == rGradient.mpImplGradient->mnStepCount)       &&
+         (mpImplGradient->mnIntensityStart  == rGradient.mpImplGradient->mnIntensityStart)  &&
+         (mpImplGradient->mnIntensityEnd    == rGradient.mpImplGradient->mnIntensityEnd)    &&
+         (mpImplGradient->maStartColor      == rGradient.mpImplGradient->maStartColor)      &&
          (mpImplGradient->maEndColor        == rGradient.mpImplGradient->maEndColor) )
          return sal_True;
     else
