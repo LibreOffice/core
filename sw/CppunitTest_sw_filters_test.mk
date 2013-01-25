@@ -29,11 +29,9 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_filters_test))
 
-ifeq ($(SYSTEM_LIBXML),YES)
-$(eval $(call gb_CppunitTest_add_cxxflags,sw_filters_test,\
-	$(LIBXML_CFLAGS) \
+$(eval $(call gb_CppunitTest_use_externals,sw_filters_test,
+	libxml2 \
 ))
-endif
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_filters_test, \
     sw/qa/core/filters-test \
