@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,libcdr,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libcdr,\
+    icu_headers \
 	lcms2 \
 	wpd \
 	wpg \
@@ -30,6 +31,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LCMS2_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+	&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& $(COMPATH)/vcpackages/vcbuild.exe libcdr.vcproj "Release|Win32" \
 	&& touch $@
 else ifeq ($(VCVER),100)
@@ -39,6 +41,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LCMS2_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+	&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& msbuild.exe libcdr.vcxproj /p:Configuration=Release \
 	&& touch $@
 else
@@ -48,6 +51,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LCMS2_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+	&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& msbuild.exe libcdr.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release \
 	&& touch $@
 endif
@@ -56,8 +60,10 @@ else
 
 $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	cd $(EXTERNAL_WORKDIR) \
-	&& PKG_CONFIG="" \
-	./configure \
+	&& export PKG_CONFIG="" \
+	&& export ICU_LIBS=" " \
+	&& export ICU_CFLAGS="-I$(OUTDIR)/inc/external" \
+	&& ./configure \
 		--with-pic \
 		--enable-static \
 		--disable-shared \
