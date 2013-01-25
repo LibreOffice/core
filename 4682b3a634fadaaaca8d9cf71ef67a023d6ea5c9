@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAT3///9I\u003d",
+        "filename": "sw/source/ui/inc/swruler.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-01-25T16:19:47Z",
+      "side": 1,
+      "message": "For brand new files without code copied from other files, you should use this header\n/*\n * This file is part of the LibreOffice project.\n *\n * This Source Code Form is subject to the terms of the Mozilla Public\n * License, v. 2.0. If a copy of the MPL was not distributed with this\n * file, You can obtain one at http://mozilla.org/MPL/2.0/.\n */",
+      "revId": "4682b3a634fadaaaca8d9cf71ef67a023d6ea5c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAT3///8o\u003d",
+        "filename": "sw/source/ui/misc/swruler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-01-25T16:19:47Z",
+      "side": 1,
+      "message": "Same here, if all the content has been written by you, then use this header:\n/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */\n/*\n * This file is part of the LibreOffice project.\n *\n * This Source Code Form is subject to the terms of the Mozilla Public\n * License, v. 2.0. If a copy of the MPL was not distributed with this\n * file, You can obtain one at http://mozilla.org/MPL/2.0/.\n */",
+      "revId": "4682b3a634fadaaaca8d9cf71ef67a023d6ea5c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAT3///8k\u003d",
+        "filename": "sw/source/ui/misc/swruler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-01-25T16:19:47Z",
+      "side": 1,
+      "message": "// To vertically center, get text height and compute the offset\n    long nTextHeight \u003d maVirDev.GetTextHeight( );\n    aLabelPos.Y() \u003d ( aControlRect.GetHeight( ) - nTextHeight ) / 2;",
+      "revId": "4682b3a634fadaaaca8d9cf71ef67a023d6ea5c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
