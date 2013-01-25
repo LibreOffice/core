@@ -169,7 +169,7 @@ static const char ITEM_DESCRIPTOR_LABEL[] = "Label";
 
 bool MigrationImpl::alreadyMigrated()
 {
-    rtl::OUString MIGRATION_STAMP_NAME(RTL_CONSTASCII_USTRINGPARAM("/MIGRATED"));
+    rtl::OUString MIGRATION_STAMP_NAME(RTL_CONSTASCII_USTRINGPARAM("/MIGRATED4"));
     rtl::OUString aStr = m_aInfo.userdata + MIGRATION_STAMP_NAME;
     File aFile(aStr);
     // create migration stamp, and/or check its existence
