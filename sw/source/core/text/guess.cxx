@@ -250,7 +250,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         sal_Unicode cFldChr = 0;
 
 #if OSL_DEBUG_LEVEL > 0
-        XubString aDebugString;
+        OUString aDebugString;
 #endif
 
         // be careful: a field portion can be both: 0x01 (common field)

@@ -208,7 +208,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
 MenuButton* SwAnnotationWin::CreateMenuButton()
 {
     mpButtonPopup = new PopupMenu(SW_RES(MN_ANNOTATION_BUTTON));
-    XubString aText = mpButtonPopup->GetItemText( FN_DELETE_NOTE_AUTHOR );
+    OUString aText = mpButtonPopup->GetItemText( FN_DELETE_NOTE_AUTHOR );
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1,GetAuthor());
     aText = aRewriter.Apply(aText);

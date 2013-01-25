@@ -1049,7 +1049,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
     rArgs.aConvText = rtl::OUString();
 
     // modify string according to redline information and hidden text
-    const XubString aOldTxt( m_Text );
+    const OUString aOldTxt( m_Text );
     const bool bRestoreString =
         lcl_MaskRedlinesAndHiddenText( *this, m_Text, 0, m_Text.Len() ) > 0;
 

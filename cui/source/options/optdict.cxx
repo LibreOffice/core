@@ -590,13 +590,13 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
     if(pBtn == &aNewReplacePB || aNewReplacePB.IsEnabled())
     {
         SvTreeListEntry* _pEntry = aWordsLB.FirstSelected();
-        XubString aNewWord(aWordED.GetText());
-        String sEntry(aNewWord);
-        XubString aReplaceStr(aReplaceED.GetText());
+        OUString aNewWord(aWordED.GetText());
+        OUString sEntry(aNewWord);
+        OUString aReplaceStr(aReplaceED.GetText());
 
         sal_Int16 nAddRes = DIC_ERR_UNKNOWN;
         sal_uInt16 nPos = aAllDictsLB.GetSelectEntryPos();
-        if ( nPos != LISTBOX_ENTRY_NOTFOUND && aNewWord.Len() > 0)
+        if ( nPos != LISTBOX_ENTRY_NOTFOUND && !aNewWord.isEmpty())
         {
             DBG_ASSERT(nPos < aDics.getLength(), "invalid dictionary index");
             Reference< XDictionary >  xDic( aDics.getConstArray()[ nPos ], UNO_QUERY );
@@ -625,7 +625,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
         if (DIC_ERR_NONE != nAddRes)
             SvxDicError( this, nAddRes );
 
-        if(DIC_ERR_NONE == nAddRes && sEntry.Len())
+        if(DIC_ERR_NONE == nAddRes && !sEntry.isEmpty())
         {
             // insert new entry in list-box etc...
 
@@ -634,7 +634,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 
             if(aReplaceFT.IsVisible())
             {
-                sEntry += '\t';
+                sEntry += "\t";
                 sEntry += aReplaceStr;
             }
 
