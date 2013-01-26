@@ -65,13 +65,13 @@ Dependencies::Dependencies(
                 }
             }
             if (tc != RT_TYPE_ENUM) {
-                {for (sal_Int16 i = 0; i < reader.getFieldCount(); ++i) {
+                for (sal_Int16 i = 0; i < reader.getFieldCount(); ++i) {
                     if ((reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE)
                         == 0)
                     {
                         insert(reader.getFieldTypeName(i), false);
                     }
-                }}
+                }
             }
             for (sal_Int16 i = 0; i < reader.getMethodCount(); ++i) {
                 insert(reader.getMethodReturnTypeName(i), false);
@@ -249,11 +249,11 @@ void Dependencies::insert(rtl::OString const & type, bool base) {
 
     case UnoType::SORT_COMPLEX:
         {
-            {for (std::vector< rtl::OString >::iterator i(args.begin());
-                  i != args.end(); ++i)
+            for (std::vector< rtl::OString >::iterator i(args.begin());
+                 i != args.end(); ++i)
             {
                 insert(*i, false);
-            }}
+            }
             Map::iterator i(m_map.find(t));
             if (i == m_map.end()) {
                 m_map.insert(

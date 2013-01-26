@@ -173,8 +173,8 @@ sal_Bool AstService::dump(RegistryKey& rKey)
     sal_uInt16 constructors = 0;
     sal_uInt16 properties = 0;
     sal_uInt16 references = 0;
-    {for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd();
-          ++i)
+    for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd();
+         ++i)
     {
         switch ((*i)->getNodeType()) {
         case NT_interface:
@@ -212,7 +212,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
             OSL_ASSERT(false);
             break;
         }
-    }}
+    }
     OSL_ASSERT(constructors == 0 || !m_defaultConstructor);
     if (m_defaultConstructor) {
         constructors = 1;

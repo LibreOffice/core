@@ -450,19 +450,19 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
             TYPEREG_VERSION_1);
         sal_Int32 count = 0;
         sal_uInt16 methodCount = reader.getMethodCount();
-        {for (sal_uInt16 i = 0; i < methodCount; ++i) {
+        for (sal_uInt16 i = 0; i < methodCount; ++i) {
             RTMethodMode flags = reader.getMethodFlags(i);
             if (flags != RT_MODE_ATTRIBUTE_GET
                 && flags != RT_MODE_ATTRIBUTE_SET)
             {
                 ++count;
             }
-        }}
+        }
         sal_uInt16 fieldCount = reader.getFieldCount();
         count += fieldCount;
         _members.realloc(count);
         sal_Int32 index = 0;
-        {for (sal_uInt16 i = 0; i < fieldCount; ++i) {
+        for (sal_uInt16 i = 0; i < fieldCount; ++i) {
             rtl::OUString name(reader.getFieldName(i));
             rtl::OUStringBuffer typeName(getName());
             typeName.appendAscii(RTL_CONSTASCII_STRINGPARAM("::"));
@@ -504,8 +504,8 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
                 (flags & RT_ACCESS_BOUND) != 0, getter, setter,
                 _nBaseOffset + index);
             ++index;
-        }}
-        {for (sal_uInt16 i = 0; i < methodCount; ++i) {
+        }
+        for (sal_uInt16 i = 0; i < methodCount; ++i) {
             RTMethodMode flags = reader.getMethodFlags(i);
             if (flags != RT_MODE_ATTRIBUTE_GET
                 && flags != RT_MODE_ATTRIBUTE_SET)
@@ -520,7 +520,7 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
                     _aBytes, i, flags == RT_MODE_ONEWAY, _nBaseOffset + index);
                 ++index;
             }
-        }}
+        }
         _membersInit = true;
     }
     return _members;

@@ -4741,7 +4741,8 @@ bool INetURLObject::setFSysPath(rtl::OUString const & rFSysPath,
 
         case FSYS_MAC:
             aSynAbsURIRef.append(sal_Unicode('/'));
-            {for (sal_Unicode const * p = pFSysBegin; p != pFSysEnd; ++p)
+            for (sal_Unicode const * p = pFSysBegin; p != pFSysEnd; ++p)
+            {
                 switch (*p)
                 {
                     case ':':

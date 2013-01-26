@@ -118,11 +118,11 @@ void Includes::add(rtl::OString const & registryType) {
         m_map.insert(
             codemaker::Dependencies::Map::value_type(
                 type, codemaker::Dependencies::KIND_NO_BASE));
-        {for (std::vector< rtl::OString >::iterator i(args.begin());
-              i != args.end(); ++i)
+        for (std::vector< rtl::OString >::iterator i(args.begin());
+             i != args.end(); ++i)
         {
             add(*i);
-        }}
+        }
         break;
 
     default:

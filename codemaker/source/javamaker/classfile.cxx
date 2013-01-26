@@ -245,29 +245,29 @@ void ClassFile::Code::instrLookupswitch(
     Position pos1 = m_code.size();
     appendU1(m_code, 0xAB);
     int pad = (pos1 + 1) % 4;
-    {for (int i = 0; i < pad; ++i) {
+    for (int i = 0; i < pad; ++i) {
         appendU1(m_code, 0);
-    }}
+    }
     Position pos2 = pos1 + 1 + pad + 8 + blocks.size() * 8; //FIXME: overflow
     appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1)); //FIXME: overflow
     pos2 += defaultBlock->m_code.size(); //FIXME: overflow
     appendU4(m_code, static_cast< sal_uInt32 >(size));
-    {for (std::list< std::pair< sal_Int32, Code * > >::const_iterator i(
-              blocks.begin());
-          i != blocks.end(); ++i)
+    for (std::list< std::pair< sal_Int32, Code * > >::const_iterator i(
+             blocks.begin());
+         i != blocks.end(); ++i)
     {
         appendU4(m_code, static_cast< sal_uInt32 >(i->first));
         appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1));
             //FIXME: overflow
         pos2 += i->second->m_code.size(); //FIXME: overflow
-    }}
+    }
     appendStream(m_code, defaultBlock->m_code);
-    {for (std::list< std::pair< sal_Int32, Code * > >::const_iterator i(
-              blocks.begin());
-          i != blocks.end(); ++i)
+    for (std::list< std::pair< sal_Int32, Code * > >::const_iterator i(
+             blocks.begin());
+         i != blocks.end(); ++i)
     {
         appendStream(m_code, i->second->m_code);
-    }}
+    }
 }
 
 void ClassFile::Code::instrNew(rtl::OString const & type) {
@@ -330,9 +330,9 @@ void ClassFile::Code::instrTableswitch(
     Position pos1 = m_code.size();
     appendU1(m_code, 0xAA);
     int pad = (pos1 + 1) % 4;
-    {for (int i = 0; i < pad; ++i) {
+    for (int i = 0; i < pad; ++i) {
         appendU1(m_code, 0);
-    }}
+    }
     std::list< Code * >::size_type size = blocks.size();
     Position pos2 = pos1 + 1 + pad + 12 + size * 4; //FIXME: overflow
     sal_uInt32 defaultOffset = static_cast< sal_uInt32 >(pos2 - pos1);
@@ -341,8 +341,8 @@ void ClassFile::Code::instrTableswitch(
     pos2 += defaultBlock->m_code.size(); //FIXME: overflow
     appendU4(m_code, static_cast< sal_uInt32 >(low));
     appendU4(m_code, static_cast< sal_uInt32 >(low + (size - 1)));
-    {for (std::list< Code * >::const_iterator i(blocks.begin());
-          i != blocks.end(); ++i)
+    for (std::list< Code * >::const_iterator i(blocks.begin());
+         i != blocks.end(); ++i)
     {
         if (*i == 0) {
             appendU4(m_code, defaultOffset);
@@ -351,15 +351,15 @@ void ClassFile::Code::instrTableswitch(
                 //FIXME: overflow
             pos2 += (*i)->m_code.size(); //FIXME: overflow
         }
-    }}
+    }
     appendStream(m_code, defaultBlock->m_code);
-    {for (std::list< Code * >::const_iterator i(blocks.begin());
-          i != blocks.end(); ++i)
+    for (std::list< Code * >::const_iterator i(blocks.begin());
+         i != blocks.end(); ++i)
     {
         if (*i != 0) {
             appendStream(m_code, (*i)->m_code);
         }
-    }}
+    }
 }
 
 void ClassFile::Code::loadIntegerConstant(sal_Int32 value) {

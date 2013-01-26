@@ -1725,8 +1725,9 @@ void Document::notifyVisibleRangeChanges(
 {
     // XXX  Replace this code that determines which paragraphs have changed from
     // invisible to visible or vice versa with a better algorithm.
-    {for (Paragraphs::iterator aIt(rOldVisibleBegin); aIt != rOldVisibleEnd;
-          ++aIt)
+    for (Paragraphs::iterator aIt(rOldVisibleBegin); aIt != rOldVisibleEnd;
+         ++aIt)
+    {
         if (aIt != rInserted
             && (aIt < m_aVisibleBegin || aIt >= m_aVisibleEnd))
             NotifyAccessibleEvent(
@@ -1735,8 +1736,9 @@ void Document::notifyVisibleRangeChanges(
                 ::css::uno::makeAny(getAccessibleChild(aIt)),
                 ::css::uno::Any());
     }
-    {for (Paragraphs::iterator aIt(m_aVisibleBegin); aIt != m_aVisibleEnd;
-          ++aIt)
+    for (Paragraphs::iterator aIt(m_aVisibleBegin); aIt != m_aVisibleEnd;
+         ++aIt)
+    {
         if (aIt == rInserted
             || aIt < rOldVisibleBegin || aIt >= rOldVisibleEnd)
             NotifyAccessibleEvent(
@@ -1829,8 +1831,9 @@ void Document::handleParagraphNotifications()
                 ::sal_uLong n = aHint.GetValue();
                 if (n == TEXT_PARA_ALL)
                 {
-                    {for (Paragraphs::iterator aIt(m_aVisibleBegin);
-                          aIt != m_aVisibleEnd; ++aIt)
+                    for (Paragraphs::iterator aIt(m_aVisibleBegin);
+                         aIt != m_aVisibleEnd; ++aIt)
+                    {
                         NotifyAccessibleEvent(
                             ::css::accessibility::AccessibleEventId::
                             CHILD,

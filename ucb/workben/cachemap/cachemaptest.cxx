@@ -53,11 +53,13 @@ sal_uInt32 test(Obj *)
                       + rtl::OUString::valueOf(static_cast< sal_Int32 >(
                                                    i % 100)));
         rtl::Reference< Obj > xObj01(xCont->get(aKey0));
-        {for (int j = 0; j < 50; ++j)
+        for (int j = 0; j < 50; ++j)
+        {
             rtl::Reference< Obj > xRef(xObj01);
         }
         rtl::Reference< Obj > xObj02(xCont->get(aKey0));
-        {for (int j = 0; j < 50; ++j)
+        for (int j = 0; j < 50; ++j)
+        {
             rtl::Reference< Obj > xRef(xObj02);
         }
 
@@ -66,11 +68,13 @@ sal_uInt32 test(Obj *)
                       + rtl::OUString::valueOf(static_cast< sal_Int32 >(
                                                    (i + 1) % 100)));
         rtl::Reference< Obj > xObj11(xCont->get(aKey1));
-        {for (int j = 0; j < 50; ++j)
+        for (int j = 0; j < 50; ++j)
+        {
             rtl::Reference< Obj > xRef(xObj11);
         }
         rtl::Reference< Obj > xObj12(xCont->get(aKey1));
-        {for (int j = 0; j < 50; ++j)
+        for (int j = 0; j < 50; ++j)
+        {
             rtl::Reference< Obj > xRef(xObj12);
         }
 
@@ -79,11 +83,13 @@ sal_uInt32 test(Obj *)
                       + rtl::OUString::valueOf(static_cast< sal_Int32 >(
                                                    (i + 2) % 100)));
         rtl::Reference< Obj > xObj21(xCont->get(aKey2));
-        {for (int j = 0; j < 50; ++j)
+        for (int j = 0; j < 50; ++j)
+        {
             rtl::Reference< Obj > xRef(xObj21);
         }
         rtl::Reference< Obj > xObj22(xCont->get(aKey2));
-        {for (int j = 0; j < 50; ++j)
+        for (int j = 0; j < 50; ++j)
+        {
             rtl::Reference< Obj > xRef(xObj22);
         }
 
@@ -92,11 +98,13 @@ sal_uInt32 test(Obj *)
                       + rtl::OUString::valueOf(static_cast< sal_Int32 >(
                                                    (i + 3) % 100)));
         rtl::Reference< Obj > xObj31(xCont->get(aKey3));
-        {for (int j = 0; j < 50; ++j)
+        for (int j = 0; j < 50; ++j)
+        {
             rtl::Reference< Obj > xRef(xObj31);
         }
         rtl::Reference< Obj > xObj32(xCont->get(aKey3));
-        {for (int j = 0; j < 50; ++j)
+        for (int j = 0; j < 50; ++j)
+        {
             rtl::Reference< Obj > xRef(xObj32);
         }
 
@@ -105,11 +113,13 @@ sal_uInt32 test(Obj *)
                       + rtl::OUString::valueOf(static_cast< sal_Int32 >(
                                                    (i + 4) % 100)));
         rtl::Reference< Obj > xObj41(xCont->get(aKey4));
-        {for (int j = 0; j < 50; ++j)
+        for (int j = 0; j < 50; ++j)
+        {
             rtl::Reference< Obj > xRef(xObj41);
         }
         rtl::Reference< Obj > xObj42(xCont->get(aKey4));
-        {for (int j = 0; j < 50; ++j)
+        for (int j = 0; j < 50; ++j)
+        {
             rtl::Reference< Obj > xRef(xObj42);
         }
     }

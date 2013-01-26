@@ -783,12 +783,12 @@ sal_Bool FTPDirectoryParser::parseVMS (
 
         // Parse <year> part and set entry date's year:
         sal_uInt16 nYear = 0;
-        {for (int i = 0; i < 2; ++i)
+        for (int i = 0; i < 2; ++i)
         {
             if (*p < '0' || *p > '9')
                 return sal_False;
             nYear = 10 * nYear + (*p++ - '0');
-        }}
+        }
         if (*p >= '0' && *p <= '9')
         {
             nYear = 10 * nYear + (*p++ - '0');

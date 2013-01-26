@@ -1186,8 +1186,8 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
         sal_Int32 n = 0;
 
         BaseList::List const & rList = aBaseList.getList();
-        {for (BaseList::List::const_iterator i(rList.begin()); i != rList.end();
-              ++i)
+        for (BaseList::List::const_iterator i(rList.begin()); i != rList.end();
+             ++i)
         {
             typelib_InterfaceTypeDescription const * pBase = i->base;
             typelib_InterfaceTypeDescription const * pDirectBase
@@ -1210,7 +1210,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
                     aName.pData);
                 pITD->ppAllMembers[n++] = pDerivedMember;
             }
-        }}
+        }
 
         if( nMembers )
         {
@@ -1218,11 +1218,11 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
         }
 
         // add own members
-        {for( sal_Int32 i = 0; i < nMembers; i++ )
+        for( sal_Int32 i = 0; i < nMembers; i++ )
         {
             typelib_typedescriptionreference_acquire( ppMembers[i] );
             pITD->ppAllMembers[n++] = ppMembers[i];
-        }}
+        }
     }
 
     typelib_TypeDescription * pTmp = (typelib_TypeDescription *)pITD;
@@ -1507,18 +1507,18 @@ static inline void typelib_typedescription_destructExtendedMembers(
     case typelib_TypeClass_INTERFACE:
     {
         typelib_InterfaceTypeDescription * pITD = (typelib_InterfaceTypeDescription*)pTD;
-        {for( sal_Int32 i = 0; i < pITD->nAllMembers; i++ )
+        for( sal_Int32 i = 0; i < pITD->nAllMembers; i++ )
         {
             typelib_typedescriptionreference_release( pITD->ppAllMembers[i] );
-        }}
+        }
         delete [] pITD->ppAllMembers;
         delete [] pITD->pMapMemberIndexToFunctionIndex;
         delete [] pITD->pMapFunctionIndexToMemberIndex;
-        {for (sal_Int32 i = 0; i < pITD->nBaseTypes; ++i) {
+        for (sal_Int32 i = 0; i < pITD->nBaseTypes; ++i) {
             typelib_typedescription_release(
                 reinterpret_cast< typelib_TypeDescription * >(
                     pITD->ppBaseTypes[i]));
-        }}
+        }
         delete[] pITD->ppBaseTypes;
         break;
     }

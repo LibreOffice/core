@@ -856,7 +856,7 @@ void handleEnumType(
             rtl::OString()));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     rtl::OString classDescriptor("L" + className + ";");
-    {for (sal_uInt16 i = 0; i < fields; ++i) {
+    for (sal_uInt16 i = 0; i < fields; ++i) {
         RTConstValue fieldValue(reader.getFieldValue(i));
         if (fieldValue.m_type != RT_TYPE_INT32
             || reader.getFieldFlags(i) != RT_ACCESS_CONST
@@ -880,7 +880,7 @@ void handleEnumType(
             fieldName + rtl::OString(RTL_CONSTASCII_STRINGPARAM("_value")),
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("I")),
             cf->addIntegerInfo(fieldValue.m_value.aLong), rtl::OString());
-    }}
+    }
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(cf->newCode());
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -914,14 +914,14 @@ void handleEnumType(
     std::map< sal_Int32, rtl::OString > map;
     sal_Int32 min = SAL_MAX_INT32;
     sal_Int32 max = SAL_MIN_INT32;
-    {for (sal_uInt16 i = 0; i < fields; ++i) {
+    for (sal_uInt16 i = 0; i < fields; ++i) {
         sal_Int32 value = reader.getFieldValue(i).m_value.aLong;
         min = std::min(min, value);
         max = std::max(max, value);
         map.insert(
             std::map< sal_Int32, rtl::OString >::value_type(
                 value, codemaker::convertString(reader.getFieldName(i))));
-    }}
+    }
     sal_uInt64 size = static_cast< sal_uInt64 >(map.size());
     if ((static_cast< sal_uInt64 >(max) - static_cast< sal_uInt64 >(min)
          <= 2 * size)
@@ -954,11 +954,11 @@ void handleEnumType(
             blockCode.release();
         }
         code->instrTableswitch(defCode.get(), min, blocks);
-        {for (std::list< ClassFile::Code * >::iterator i(blocks.begin());
+        for (std::list< ClassFile::Code * >::iterator i(blocks.begin());
               i != blocks.end(); ++i)
         {
             delete *i;
-        }}
+        }
     } else{
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< ClassFile::Code > defCode(cf->newCode());
@@ -979,12 +979,12 @@ void handleEnumType(
             blockCode.release();
         }
         code->instrLookupswitch(defCode.get(), blocks);
-        {for (std::list< std::pair< sal_Int32, ClassFile::Code * > >::iterator
-                  i(blocks.begin());
-              i != blocks.end(); ++i)
+        for (std::list< std::pair< sal_Int32, ClassFile::Code * > >::iterator
+                 i(blocks.begin());
+             i != blocks.end(); ++i)
         {
             delete i->second;
-        }}
+        }
     }
     code->setMaxStackAndLocals(1, 1);
     cf->addMethod(
@@ -994,7 +994,7 @@ void handleEnumType(
         rtl::OString(RTL_CONSTASCII_STRINGPARAM("(I)")) + classDescriptor,
         code.get(), std::vector< rtl::OString >(), rtl::OString());
     code.reset(cf->newCode());
-    {for (sal_uInt16 i = 0; i < fields; ++i) {
+    for (sal_uInt16 i = 0; i < fields; ++i) {
         code->instrNew(className);
         code->instrDup();
         code->loadIntegerConstant(reader.getFieldValue(i).m_value.aLong);
@@ -1005,7 +1005,7 @@ void handleEnumType(
             className,
             codemaker::convertString(reader.getFieldName(i)),
             classDescriptor);
-    }}
+    }
     code->instrReturn();
     code->setMaxStackAndLocals(3, 0);
     cf->addMethod(
@@ -1924,7 +1924,7 @@ void handleAggregatingType(
             className, superClass, sig));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     std::vector< TypeInfo > typeInfo;
-    {for (sal_uInt16 i = firstField; i < fields; ++i) {
+    for (sal_uInt16 i = firstField; i < fields; ++i) {
         RTFieldAccess flags = reader.getFieldFlags(i);
         if ((flags != RT_ACCESS_READWRITE
              && flags != (RT_ACCESS_READWRITE | RT_ACCESS_PARAMETERIZED_TYPE))
@@ -1954,7 +1954,7 @@ void handleAggregatingType(
         addField(
             manager, dependencies, cf.get(), &typeInfo, typeParameterIndex,
             type, codemaker::convertString(reader.getFieldName(i)), i - firstField);
-    }}
+    }
     if (runtimeException) {
         addField(
             manager, dependencies, cf.get(), &typeInfo, -1,
@@ -1970,7 +1970,7 @@ void handleAggregatingType(
         superClass, rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
         rtl::OString(RTL_CONSTASCII_STRINGPARAM("()V")));
     sal_uInt16 stack = 0;
-    {for (sal_uInt16 i = firstField; i < fields; ++i) {
+    for (sal_uInt16 i = firstField; i < fields; ++i) {
         stack = std::max(
             stack,
             addFieldInit(
@@ -1979,7 +1979,7 @@ void handleAggregatingType(
                 (reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) != 0,
                 codemaker::convertString(reader.getFieldTypeName(i)),
                 dependencies, code.get()));
-    }}
+    }
     if (runtimeException) {
         stack = std::max(
             stack,
@@ -2055,7 +2055,7 @@ void handleAggregatingType(
         superClass, rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
         desc.getDescriptor());
     sal_uInt16 maxSize = index;
-    {for (sal_uInt16 i = firstField; i < fields; ++i) {
+    for (sal_uInt16 i = firstField; i < fields; ++i) {
         maxSize = std::max(
             maxSize,
             addDirectArgument(
@@ -2063,7 +2063,7 @@ void handleAggregatingType(
                 codemaker::convertString(reader.getFieldName(i)),
                 (reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) != 0,
                 codemaker::convertString(reader.getFieldTypeName(i))));
-    }}
+    }
     if (runtimeException) {
         maxSize = std::max(
             maxSize,
@@ -2139,11 +2139,11 @@ void handleInterfaceType(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
             rtl::OString()));
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    {for (sal_uInt16 i = 0; i < superTypes; ++i) {
+    for (sal_uInt16 i = 0; i < superTypes; ++i) {
         rtl::OString t(codemaker::convertString(reader.getSuperTypeName(i)));
         dependencies->insert(t);
         cf->addInterface(t);
-    }}
+    }
     // As a special case, let com.sun.star.lang.XEventListener extend
     // java.util.EventListener ("A tagging interface that all event listener
     // interfaces must extend"):
@@ -2157,7 +2157,7 @@ void handleInterfaceType(
     }
     std::vector< TypeInfo > typeInfo;
     sal_Int32 index = 0;
-    {for (sal_uInt16 i = 0; i < fields; ++i) {
+    for (sal_uInt16 i = 0; i < fields; ++i) {
         RTFieldAccess flags = reader.getFieldFlags(i);
         //TODO: ok if both READONLY and BOUND?
         if (((((flags & RT_ACCESS_READWRITE) != 0)
@@ -2244,8 +2244,8 @@ void handleInterfaceType(
                        ? 0 : TypeInfo::FLAG_BOUND)),
                 index, polymorphicUnoType));
         index += ((flags & RT_ACCESS_READONLY) == 0 ? 2 : 1);
-    }}
-    {for (sal_uInt16 i = 0; i < methods; ++i) {
+    }
+    for (sal_uInt16 i = 0; i < methods; ++i) {
         RTMethodMode flags = reader.getMethodFlags(i);
         switch (flags) {
         case RT_MODE_ONEWAY:
@@ -2344,7 +2344,7 @@ void handleInterfaceType(
                 rtl::OString(
                     RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
         }
-    }}
+    }
     addTypeInfo(className, typeInfo, dependencies, cf.get());
     writeClassFile(options, className, *cf.get());
 }

@@ -1015,12 +1015,12 @@ void CppuType::dumpType(FileStream& o, const OString& type,
 
     if (bConst) o << "const ";
 
-    {for (sal_Int32 i = 0; i < seqNum; ++i) {
+    for (sal_Int32 i = 0; i < seqNum; ++i) {
         if (cppuUnoType)
             o << "::cppu::UnoSequenceType< ";
         else
             o << "::com::sun::star::uno::Sequence< ";
-    }}
+    }
 
     switch (typeClass)
     {
@@ -1067,9 +1067,9 @@ void CppuType::dumpType(FileStream& o, const OString& type,
             break;
     }
 
-    {for (sal_Int32 i = 0; i < seqNum; ++i) {
+    for (sal_Int32 i = 0; i < seqNum; ++i) {
         o << " >";
-    }}
+    }
 
     if (bRef) o << "&";
 }
@@ -1850,21 +1850,21 @@ void InterfaceType::dumpCppuMethodRefs(FileStream& o, sal_uInt32& index)
 sal_uInt32 InterfaceType::getMemberCount() {
     sal_uInt16 count = 0;
     sal_uInt16 methodCount = m_reader.getMethodCount();
-    {for (sal_uInt16 i = 0; i < methodCount; ++i) {
+    for (sal_uInt16 i = 0; i < methodCount; ++i) {
         RTMethodMode flags = m_reader.getMethodFlags(i);
         if (flags != RT_MODE_ATTRIBUTE_GET && flags != RT_MODE_ATTRIBUTE_SET) {
             m_hasMethods = true;
             ++count;
         }
-    }}
+    }
     sal_uInt16 fieldCount = m_reader.getFieldCount();
-    {for (sal_uInt16 i = 0; i < fieldCount; ++i) {
+    for (sal_uInt16 i = 0; i < fieldCount; ++i) {
         RTFieldAccess flags = m_reader.getFieldFlags(i);
         if (flags != RT_ACCESS_CONST && flags != RT_ACCESS_INVALID) {
             m_hasAttributes = true;
             ++count;
         }
-    }}
+    }
     return count;
 }
 
@@ -1912,20 +1912,20 @@ void BaseOffset::calculate(typereg::Reader const & reader) {
         .second)
     {
         calculateBases(reader);
-        {for (sal_uInt16 i = 0; i < reader.getMethodCount(); ++i) {
+        for (sal_uInt16 i = 0; i < reader.getMethodCount(); ++i) {
             RTMethodMode flags = reader.getMethodFlags(i);
             if (flags != RT_MODE_ATTRIBUTE_GET
                 && flags != RT_MODE_ATTRIBUTE_SET)
             {
                 ++offset;
             }
-        }}
-        {for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
+        }
+        for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
             RTFieldAccess flags = reader.getFieldFlags(i);
             if (flags != RT_ACCESS_CONST && flags != RT_ACCESS_INVALID) {
                 ++offset;
             }
-        }}
+        }
     }
 }
 
@@ -2975,7 +2975,7 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
     typedef std::map< rtl::OString, sal_uInt32 > Map;
     Map parameters;
     Map types;
-    {for (sal_uInt16 i = 0; i < fields; ++i) {
+    for (sal_uInt16 i = 0; i < fields; ++i) {
         rtl::OString type(
             rtl::OUStringToOString(
                 m_reader.getFieldTypeName(i), RTL_TEXTENCODING_UTF8));
@@ -3027,10 +3027,10 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
                 m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8).replace(
                     '/', '.')
             << "\" );\n";
-    }}
+    }
     out << indent() << "::typelib_StructMember_Init the_members[] = {\n";
     inc();
-    {for (sal_uInt16 i = 0; i < fields; ++i) {
+    for (sal_uInt16 i = 0; i < fields; ++i) {
         out << indent() << "{ { ";
         rtl::OString type(
             rtl::OUStringToOString(
@@ -3046,7 +3046,7 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
             << ((m_reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) == 0
                 ? "false" : "true")
             << " }" << (i == fields - 1 ? " };" : ",") << "\n";
-    }}
+    }
     dec();
     out << indent() << "::typelib_TypeDescription * the_newType = 0;\n";
     out << indent()

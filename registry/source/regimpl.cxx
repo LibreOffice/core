@@ -191,17 +191,17 @@ void dumpType(typereg::Reader const & reader, rtl::OString const & indent) {
         printf(
             "%ssuper type count: %u\n", indent.getStr(),
             static_cast< unsigned int >(reader.getSuperTypeCount()));
-        {for (sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i) {
+        for (sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i) {
             printf(
                 "%ssuper type name %u: ", indent.getStr(),
                 static_cast< unsigned int >(i));
             printString(reader.getSuperTypeName(i));
             printf("\n");
-        }}
+        }
         printf(
             "%sfield count: %u\n", indent.getStr(),
             static_cast< unsigned int >(reader.getFieldCount()));
-        {for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
+        for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
             printf(
                 "%sfield %u:\n", indent.getStr(),
                 static_cast< unsigned int >(i));
@@ -285,11 +285,11 @@ void dumpType(typereg::Reader const & reader, rtl::OString const & indent) {
                 break;
             }
             printf("\n");
-        }}
+        }
         printf(
             "%smethod count: %u\n", indent.getStr(),
             static_cast< unsigned int >(reader.getMethodCount()));
-        {for (sal_uInt16 i = 0; i < reader.getMethodCount(); ++i) {
+        for (sal_uInt16 i = 0; i < reader.getMethodCount(); ++i) {
             printf(
                 "%smethod %u:\n", indent.getStr(),
                 static_cast< unsigned int >(i));
@@ -378,11 +378,11 @@ void dumpType(typereg::Reader const & reader, rtl::OString const & indent) {
                 printString(reader.getMethodExceptionTypeName(i, j));
                 printf("\n");
             }
-        }}
+        }
         printf(
             "%sreference count: %u\n", indent.getStr(),
             static_cast< unsigned int >(reader.getReferenceCount()));
-        {for (sal_uInt16 i = 0; i < reader.getReferenceCount(); ++i) {
+        for (sal_uInt16 i = 0; i < reader.getReferenceCount(); ++i) {
             printf(
                 "%sreference %u:\n", indent.getStr(),
                 static_cast< unsigned int >(i));
@@ -416,7 +416,7 @@ void dumpType(typereg::Reader const & reader, rtl::OString const & indent) {
             printf("%s    type name: ", indent.getStr());
             printString(reader.getReferenceTypeName(i));
             printf("\n");
-        }}
+        }
     } else {
         printf("<invalid>\n");
     }

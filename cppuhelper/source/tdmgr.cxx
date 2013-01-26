@@ -418,13 +418,13 @@ inline static typelib_TypeDescription * createCTD(
         // is also the typelib_TypeDescriptionReference for that type:
         boost::scoped_array< typelib_TypeDescription * > aBaseTypes(
             new typelib_TypeDescription *[nBases]);
-        {for (sal_Int32 i = 0; i < nBases; ++i) {
+        for (sal_Int32 i = 0; i < nBases; ++i) {
             typelib_TypeDescription * p = createCTD(access, aBases[i]);
             OSL_ASSERT(
                 !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(p->eTypeClass));
             typelib_typedescription_register(&p);
             aBaseTypes[i] = p;
-        }}
+        }
         typelib_TypeDescriptionReference ** pBaseTypeRefs
             = reinterpret_cast< typelib_TypeDescriptionReference ** >(
                 aBaseTypes.get());
@@ -461,9 +461,9 @@ inline static typelib_TypeDescription * createCTD(
             nMembers, ppMemberRefs );
 
         // cleanup refs and base type
-        {for (int i = 0; i < nBases; ++i) {
+        for (int i = 0; i < nBases; ++i) {
             typelib_typedescription_release(aBaseTypes[i]);
-        }}
+        }
 
         for ( nPos = nMembers; nPos--; )
         {

@@ -472,19 +472,19 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
         {
             sal_uInt16 n = aReader.getSuperTypeCount();
             com::sun::star::uno::Sequence< rtl::OUString > aBaseTypeNames(n);
-            {for (sal_uInt16 i = 0; i < n; ++i) {
+            for (sal_uInt16 i = 0; i < n; ++i) {
                 aBaseTypeNames[i] = aReader.getSuperTypeName(i).replace(
                     '/', '.');
-            }}
+            }
             sal_uInt16 n2 = aReader.getReferenceCount();
             com::sun::star::uno::Sequence< rtl::OUString >
                 aOptionalBaseTypeNames(n2);
-            {for (sal_uInt16 i = 0; i < n2; ++i) {
+            for (sal_uInt16 i = 0; i < n2; ++i) {
                 OSL_ASSERT(
                     aReader.getReferenceSort(i) == RT_REF_SUPPORTS
                     && aReader.getReferenceFlags(i) == RT_ACCESS_OPTIONAL);
                 aOptionalBaseTypeNames[i] = aReader.getReferenceTypeName(i);
-            }}
+            }
             return com::sun::star::uno::Reference< XTypeDescription >(
                 new InterfaceTypeDescriptionImpl( xNameAccess,
                                                   aName,

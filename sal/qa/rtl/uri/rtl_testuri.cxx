@@ -68,9 +68,9 @@ void Test::test_Uri() {
             "\0x70\0x71\0x72\0x73\0x74\0x75\0x76\0x77"
             "\0x78\0x79\0x7A\0x7B\0x7C\0x7D\0x7E\0x7F"));
     aText2 = aText1;
-    {for (rtl_UriCharClass eCharClass = eFirstCharClass;
-          eCharClass <= eLastCharClass;
-          eCharClass = static_cast< rtl_UriCharClass >(eCharClass + 1))
+    for (rtl_UriCharClass eCharClass = eFirstCharClass;
+         eCharClass <= eLastCharClass;
+         eCharClass = static_cast< rtl_UriCharClass >(eCharClass + 1))
     {
         CPPUNIT_ASSERT_MESSAGE(
             "failure 1",
@@ -120,7 +120,7 @@ void Test::test_Uri() {
                     RTL_TEXTENCODING_ISO_8859_1),
                 rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8)
              == aText2));
-    }}
+    }
 
     aText1 = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM(
@@ -157,9 +157,9 @@ void Test::test_Uri() {
             "\0xF0\0xF1\0xF2\0xF3\0xF4\0xF5\0xF6\0xF7"
             "\0xF8\0xF9\0xFA\0xFB\0xFC\0xFD\0xFE\0xFF"));
     aText2 = aText1;
-    {for (rtl_UriCharClass eCharClass = eFirstCharClass;
-          eCharClass <= eLastCharClass;
-          eCharClass = static_cast< rtl_UriCharClass >(eCharClass + 1))
+    for (rtl_UriCharClass eCharClass = eFirstCharClass;
+         eCharClass <= eLastCharClass;
+         eCharClass = static_cast< rtl_UriCharClass >(eCharClass + 1))
     {
         CPPUNIT_ASSERT_MESSAGE(
             "failure 7",
@@ -193,7 +193,7 @@ void Test::test_Uri() {
                     RTL_TEXTENCODING_UTF8),
                 rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8)
              == aText2));
-    }}
+    }
 
     // Check surrogate handling:
 
