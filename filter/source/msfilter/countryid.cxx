@@ -84,7 +84,7 @@ static const CountryEntry pTable[] =
     { COUNTRY_CANADA,               LANGUAGE_ENGLISH_CAN,                   true    },
     { COUNTRY_CANADA,               LANGUAGE_FRENCH_CANADIAN,               true    },
     { COUNTRY_RUSSIA,               LANGUAGE_RUSSIAN,                       false   },
-    { COUNTRY_KAZAKHSTAN,           LANGUAGE_KAZAK,                         false   },
+    { COUNTRY_KAZAKHSTAN,           LANGUAGE_KAZAKH,                        false   },
     { COUNTRY_TATARSTAN,            LANGUAGE_TATAR,                         false   },
     { COUNTRY_EGYPT,                LANGUAGE_ARABIC_EGYPT,                  true    },
     { COUNTRY_SOUTH_AFRICA,         LANGUAGE_AFRIKAANS,                     false   },

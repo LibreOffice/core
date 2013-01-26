@@ -519,7 +519,7 @@ LCID LocaleSetToLCID( const LocaleSet_t & Locale )
             usSubLang = SUBLANG_DEFAULT;                       //default sub language
     }
     else if ( wsLanguage == L"kk" )
-        usPrimaryLang = LANG_KAZAK;                       //Kazak
+        usPrimaryLang = LANG_KAZAK;                       //Kazakh
     else if ( wsLanguage == L"ky" )
         usPrimaryLang = LANG_KYRGYZ;                      //Kyrgyz
     else if ( wsLanguage == L"sw" )

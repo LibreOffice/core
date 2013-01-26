@@ -389,7 +389,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 /*
 #define LANGUAGE_ARMENIAN                   0x042B
 #define LANGUAGE_INDONESIAN                 0x0421
-#define LANGUAGE_KAZAK                      0x043F
+#define LANGUAGE_KAZAKH                     0x043F
 #define LANGUAGE_KONKANI                    0x0457
 #define LANGUAGE_MACEDONIAN                 0x042F
 #define LANGUAGE_TATAR                      0x0444
