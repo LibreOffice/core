@@ -115,27 +115,24 @@ namespace dbaccess
             return true;
         }
 
-        // .........................................................................
-        static const ::rtl::OUString& lcl_getRecoveryDataSubStorageName()
+        static const OUString& lcl_getRecoveryDataSubStorageName()
         {
-            static const ::rtl::OUString s_sRecDataStorName( RTL_CONSTASCII_USTRINGPARAM( "recovery" ) );
+            static const OUString s_sRecDataStorName( "recovery" );
             return s_sRecDataStorName;
         }
-        // .........................................................................
-        static const ::rtl::OUString& lcl_getObjectMapStreamName()
+
+        static const OUString& lcl_getObjectMapStreamName()
         {
-            static const ::rtl::OUString s_sObjectMapStreamName( RTL_CONSTASCII_USTRINGPARAM( "storage-component-map.ini" ) );
+            static const OUString s_sObjectMapStreamName( "storage-component-map.ini" );
             return s_sObjectMapStreamName;
         }
 
-        // .........................................................................
-        static const ::rtl::OUString& lcl_getMapStreamEncodingName()
+        static const OUString& lcl_getMapStreamEncodingName()
         {
-            static const ::rtl::OUString s_sMapStreamEncodingName( RTL_CONSTASCII_USTRINGPARAM( "UTF-8" ) );
+            static const OUString s_sMapStreamEncodingName( "UTF-8" );
             return s_sMapStreamEncodingName;
         }
 
-        // .........................................................................
         static void lcl_writeObjectMap_throw( const ::comphelper::ComponentContext& i_rContext, const Reference< XStorage >& i_rStorage,
             const MapStringToCompDesc& i_mapStorageToCompDesc )
         {
@@ -145,7 +142,7 @@ namespace dbaccess
 
             StorageTextOutputStream aTextOutput( i_rContext, i_rStorage, lcl_getObjectMapStreamName() );
 
-            aTextOutput.writeLine( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "[storages]" ) ) );
+            aTextOutput.writeLine( "[storages]" );
 
             for (   MapStringToCompDesc::const_iterator stor = i_mapStorageToCompDesc.begin();
                     stor != i_mapStorageToCompDesc.end();

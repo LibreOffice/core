@@ -301,24 +301,24 @@ bool ODsnTypeCollection::isEmbeddedDatabase( const ::rtl::OUString& _sURL ) cons
     return aWildCard.Matches(_sURL);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ODsnTypeCollection::getEmbeddedDatabase() const
+OUString ODsnTypeCollection::getEmbeddedDatabase() const
 {
-    ::rtl::OUString sEmbeddedDatabaseURL;
-    static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess")); ///Installed
+    OUString sEmbeddedDatabaseURL;
+    static const OUString s_sNodeName("org.openoffice.Office.DataAccess"); ///Installed
     const ::utl::OConfigurationTreeRoot aInstalled = ::utl::OConfigurationTreeRoot::createWithComponentContext(m_xContext, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
     if ( aInstalled.isValid() )
     {
         if ( aInstalled.hasByName("EmbeddedDatabases/DefaultEmbeddedDatabase/Value") )
         {
-            static const ::rtl::OUString s_sValue(RTL_CONSTASCII_USTRINGPARAM("EmbeddedDatabases/DefaultEmbeddedDatabase/Value"));
+            static const OUString s_sValue("EmbeddedDatabases/DefaultEmbeddedDatabase/Value");
 
             aInstalled.getNodeValue(s_sValue) >>= sEmbeddedDatabaseURL;
             if ( !sEmbeddedDatabaseURL.isEmpty() )
-                aInstalled.getNodeValue(s_sValue + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sEmbeddedDatabaseURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/URL"))) >>= sEmbeddedDatabaseURL;
+                aInstalled.getNodeValue(s_sValue + "/" + sEmbeddedDatabaseURL + "/URL") >>= sEmbeddedDatabaseURL;
         }
     }
     if ( sEmbeddedDatabaseURL.isEmpty() )
-        sEmbeddedDatabaseURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:embedded:hsqldb"));
+        sEmbeddedDatabaseURL = "sdbc:embedded:hsqldb";
     return sEmbeddedDatabaseURL;
 }
 //-------------------------------------------------------------------------

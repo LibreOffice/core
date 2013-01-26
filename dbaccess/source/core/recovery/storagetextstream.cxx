@@ -62,9 +62,9 @@ namespace dbaccess
     namespace
     {
         //--------------------------------------------------------------------------------------------------------------
-        static const ::rtl::OUString& lcl_getTextStreamEncodingName()
+        static const OUString& lcl_getTextStreamEncodingName()
         {
-            static const ::rtl::OUString s_sMapStreamEncodingName( RTL_CONSTASCII_USTRINGPARAM( "UTF-8" ) );
+            static const OUString s_sMapStreamEncodingName( "UTF-8" );
             return s_sMapStreamEncodingName;
         }
 

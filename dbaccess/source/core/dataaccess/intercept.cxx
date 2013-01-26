@@ -86,12 +86,12 @@ OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder )
 
     OSL_ENSURE(DISPATCH_RELOAD < m_aInterceptedURL.getLength(),"Illegal size.");
 
-    m_aInterceptedURL[DISPATCH_SAVEAS]      = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAs"));
-    m_aInterceptedURL[DISPATCH_SAVE]        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save"));
-    m_aInterceptedURL[DISPATCH_CLOSEDOC]    = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc"));
-    m_aInterceptedURL[DISPATCH_CLOSEWIN]    = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));
-    m_aInterceptedURL[DISPATCH_CLOSEFRAME]  = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
-    m_aInterceptedURL[DISPATCH_RELOAD]      = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Reload"));
+    m_aInterceptedURL[DISPATCH_SAVEAS]      = ".uno:SaveAs";
+    m_aInterceptedURL[DISPATCH_SAVE]        = ".uno:Save";
+    m_aInterceptedURL[DISPATCH_CLOSEDOC]    = ".uno:CloseDoc";
+    m_aInterceptedURL[DISPATCH_CLOSEWIN]    = ".uno:CloseWin";
+    m_aInterceptedURL[DISPATCH_CLOSEFRAME]  = ".uno:CloseFrame";
+    m_aInterceptedURL[DISPATCH_RELOAD]      = ".uno:Reload";
 }
 
 
@@ -159,12 +159,11 @@ void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyVal
             if ( nInd == aNewArgs.getLength() )
             {
                 aNewArgs.realloc( nInd + 1 );
-                aNewArgs[nInd].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveTo"));
+                aNewArgs[nInd].Name = "SaveTo";
                 aNewArgs[nInd].Value <<= sal_True;
             }
 
-            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                _URL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")), 0 );
+            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(_URL, "_self", 0 );
             if ( xDispatch.is() )
                 xDispatch->dispatch( _URL, aNewArgs );
         }
@@ -191,8 +190,7 @@ IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher )
     {
         if ( m_pContentHolder && m_pContentHolder->prepareClose() && m_xSlaveDispatchProvider.is() )
         {
-            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                pHelper->aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")), 0 );
+            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(pHelper->aURL, "_self", 0 );
             if ( xDispatch.is() )
             {
                 Reference< ::com::sun::star::document::XEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
@@ -230,10 +228,10 @@ void SAL_CALL OInterceptor::addStatusListener(
         {
             FeatureStateEvent aStateEvent;
             aStateEvent.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVEAS];
-            aStateEvent.FeatureDescriptor = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveCopyTo"));
+            aStateEvent.FeatureDescriptor = "SaveCopyTo";
             aStateEvent.IsEnabled = sal_True;
             aStateEvent.Requery = sal_False;
-            aStateEvent.State <<= (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("($3)")));
+            aStateEvent.State <<= OUString("($3)");
             Control->statusChanged(aStateEvent);
         }
 
@@ -249,7 +247,7 @@ void SAL_CALL OInterceptor::addStatusListener(
     {   // Save
         FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVE];
-        aStateEvent.FeatureDescriptor = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Update"));
+        aStateEvent.FeatureDescriptor = "Update";
         aStateEvent.IsEnabled = m_pContentHolder != NULL && m_pContentHolder->isModified();
         aStateEvent.Requery = sal_False;
 
@@ -275,8 +273,7 @@ void SAL_CALL OInterceptor::addStatusListener(
         {   // Close and return
             FeatureStateEvent aStateEvent;
             aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
-            aStateEvent.FeatureDescriptor = rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Close and Return"));
+            aStateEvent.FeatureDescriptor = "Close and Return";
             aStateEvent.IsEnabled = sal_True;
             aStateEvent.Requery = sal_False;
             Control->statusChanged(aStateEvent);
@@ -409,14 +406,14 @@ void SAL_CALL OInterceptor::setMasterDispatchProvider(
 void SAL_CALL OInterceptor::notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
     osl::ResettableMutexGuard _rGuard(m_aMutex);
-    if ( m_pStatCL &&   Event.EventName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnModifyChanged")) )
+    if ( m_pStatCL &&   Event.EventName == "OnModifyChanged" )
     {
         OInterfaceContainerHelper* pListener = m_pStatCL->getContainer(m_aInterceptedURL[DISPATCH_SAVE]);
         if ( pListener )
         {
             FeatureStateEvent aEvt;
             aEvt.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVE];
-            aEvt.FeatureDescriptor = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Update"));
+            aEvt.FeatureDescriptor = "Update";
             Reference<XModifiable> xModel(Event.Source,UNO_QUERY);
             aEvt.IsEnabled = xModel.is() && xModel->isModified();
             aEvt.Requery = sal_False;

@@ -57,13 +57,11 @@ namespace dbaccess
     {
     }
 
-    //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL SettingsImport::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL SettingsImport::release()
     {
         oslInterlockedCount newCount = osl_atomic_decrement( &m_refCount );
@@ -72,29 +70,25 @@ namespace dbaccess
         return newCount;
     }
 
-    //--------------------------------------------------------------------
     void SettingsImport::startElement( const Reference< XAttributeList >& i_rAttributes )
     {
         // find the name of the setting
         if ( i_rAttributes.is() )
         {
-            m_sItemName = i_rAttributes->getValueByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "config:name" ) ) );
-            m_sItemType = i_rAttributes->getValueByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "config:type" ) ) );
+            m_sItemName = i_rAttributes->getValueByName( "config:name" );
+            m_sItemType = i_rAttributes->getValueByName( "config:type" );
         }
     }
 
-    //--------------------------------------------------------------------
     void SettingsImport::endElement()
     {
     }
 
-    //--------------------------------------------------------------------
     void SettingsImport::characters( const ::rtl::OUString& i_rCharacters )
     {
         m_aCharacters.append( i_rCharacters );
     }
 
-    //--------------------------------------------------------------------
     void SettingsImport::split( const ::rtl::OUString& i_rElementName, ::rtl::OUString& o_rNamespace, ::rtl::OUString& o_rLocalName )
     {
         o_rNamespace = ::rtl::OUString();

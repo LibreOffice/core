@@ -90,10 +90,10 @@ namespace dbaccess
         // .........................................................................
         static const ::rtl::OUString& lcl_getComponentStorageBaseName( const SubComponentType i_eType )
         {
-            static const ::rtl::OUString s_sFormBaseName( RTL_CONSTASCII_USTRINGPARAM( "form" ) );
-            static const ::rtl::OUString s_sReportBaseName( RTL_CONSTASCII_USTRINGPARAM( "report" ) );
-            static const ::rtl::OUString s_sTableBaseName( RTL_CONSTASCII_USTRINGPARAM( "table" ) );
-            static const ::rtl::OUString s_sQueryBaseName( RTL_CONSTASCII_USTRINGPARAM( "query" ) );
+            static const OUString s_sFormBaseName( "form" );
+            static const OUString s_sReportBaseName( "report" );
+            static const OUString s_sTableBaseName( "table" );
+            static const OUString s_sQueryBaseName( "query" );
 
             switch ( i_eType )
             {
@@ -176,17 +176,15 @@ namespace dbaccess
             return xCommandProcessor;
         }
 
-        // .........................................................................
-        static const ::rtl::OUString& lcl_getSettingsStreamName()
+        static const OUString& lcl_getSettingsStreamName()
         {
-            static const ::rtl::OUString s_sStatementStreamName( RTL_CONSTASCII_USTRINGPARAM( "settings.xml" ) );
+            static const OUString s_sStatementStreamName( "settings.xml" );
             return s_sStatementStreamName;
         }
 
-        // .........................................................................
-        static const ::rtl::OUString& lcl_getCurrentQueryDesignName()
+        static const OUString& lcl_getCurrentQueryDesignName()
         {
-            static const ::rtl::OUString s_sQuerySettingsName( RTL_CONSTASCII_USTRINGPARAM( "ooo:current-query-design" ) );
+            static const OUString s_sQuerySettingsName( "ooo:current-query-design" );
             return s_sQuerySettingsName;
         }
     }
@@ -249,7 +247,7 @@ namespace dbaccess
     void SettingsExportContext::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const sal_Bool i_bIgnoreWhitespace )
     {
         if ( i_bIgnoreWhitespace )
-            m_rDelegator.ignorableWhitespace( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) ) );
+            m_rDelegator.ignorableWhitespace( " " );
 
         m_rDelegator.startElement( impl_prefix( i_eName ) );
     }
@@ -258,7 +256,7 @@ namespace dbaccess
     void SettingsExportContext::EndElement( const sal_Bool i_bIgnoreWhitespace )
     {
         if ( i_bIgnoreWhitespace )
-            m_rDelegator.ignorableWhitespace( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) ) );
+            m_rDelegator.ignorableWhitespace( " " );
         m_rDelegator.endElement();
     }
 
@@ -398,11 +396,11 @@ namespace dbaccess
     //--------------------------------------------------------------------
     const ::rtl::OUString SubComponentRecovery::getComponentsStorageName( const SubComponentType i_eType )
     {
-        static const ::rtl::OUString s_sFormsStorageName( RTL_CONSTASCII_USTRINGPARAM( "forms" ) );
-        static const ::rtl::OUString s_sReportsStorageName( RTL_CONSTASCII_USTRINGPARAM( "reports" ) );
-        static const ::rtl::OUString s_sTablesStorageName( RTL_CONSTASCII_USTRINGPARAM( "tables" ) );
-        static const ::rtl::OUString s_sQueriesStorageName( RTL_CONSTASCII_USTRINGPARAM( "queries" ) );
-        static const ::rtl::OUString s_sRelationsStorageName( RTL_CONSTASCII_USTRINGPARAM( "relations" ) );
+        static const OUString s_sFormsStorageName( "forms" );
+        static const OUString s_sReportsStorageName( "reports" );
+        static const OUString s_sTablesStorageName( "tables" );
+        static const OUString s_sQueriesStorageName( "queries" );
+        static const OUString s_sRelationsStorageName( "relations" );
 
         switch ( i_eType )
         {
@@ -487,11 +485,11 @@ namespace dbaccess
         switch ( m_eType )
         {
         case TABLE:
-            m_aCompDesc.bForEditing = sModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.TableDesign" ) );
+            m_aCompDesc.bForEditing = sModuleIdentifier == "com.sun.star.sdb.TableDesign";
             break;
 
         case QUERY:
-            m_aCompDesc.bForEditing = sModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.QueryDesign" ) );
+            m_aCompDesc.bForEditing = sModuleIdentifier == "com.sun.star.sdb.QueryDesign";
             break;
 
         case REPORT:
@@ -534,15 +532,15 @@ namespace dbaccess
         // the latter is updated only upon successful save of the design)
         Reference< XPropertySet > xDesignerProps( m_xComponent, UNO_QUERY_THROW );
         Sequence< PropertyValue > aCurrentQueryDesign;
-        OSL_VERIFY( xDesignerProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CurrentQueryDesign" ) ) ) >>= aCurrentQueryDesign );
+        OSL_VERIFY( xDesignerProps->getPropertyValue( "CurrentQueryDesign" ) >>= aCurrentQueryDesign );
 
         // write the query design
         StorageXMLOutputStream aDesignOutput( m_rContext, i_rObjectStorage, lcl_getSettingsStreamName() );
         SettingsExportContext aSettingsExportContext( m_rContext, aDesignOutput );
 
-        const ::rtl::OUString sWhitespace( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) ) );
+        const OUString sWhitespace( " " );
 
-        aDesignOutput.startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "office:settings" ) ) );
+        aDesignOutput.startElement( "office:settings" );
         aDesignOutput.ignorableWhitespace( sWhitespace );
 
         XMLSettingsExportHelper aSettingsExporter( aSettingsExportContext );

@@ -159,16 +159,16 @@ ODefinitionContainer::~ODefinitionContainer()
 IMPLEMENT_FORWARD_XINTERFACE2( ODefinitionContainer,OContentHelper,ODefinitionContainer_Base)
 IMPLEMENT_TYPEPROVIDER2(ODefinitionContainer,OContentHelper,ODefinitionContainer_Base);
 // XServiceInfo
-::rtl::OUString SAL_CALL ODefinitionContainer::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL ODefinitionContainer::getImplementationName(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ODefinitionContainer"));
+    return OUString("com.sun.star.sdb.ODefinitionContainer");
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ODefinitionContainer::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL ODefinitionContainer::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aReturn(2);
-    aReturn.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DefinitionContainer"));
-    aReturn.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.Content"));
+    Sequence< OUString > aReturn(2);
+    aReturn.getArray()[0] = "com.sun.star.sdb.DefinitionContainer";
+    aReturn.getArray()[1] = "com.sun.star.ucb.Content";
     return aReturn;
 }
 

@@ -66,7 +66,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
     m_EscapeProcessing(sal_True),
     m_ApplyFilter(sal_True)
 {
-    m_xInternal.set( m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart.InternalDataProvider")),m_xContext ), uno::UNO_QUERY );
+    m_xInternal.set( m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.chart.InternalDataProvider",m_xContext ), uno::UNO_QUERY );
     m_xRangeConversion.set(m_xInternal,uno::UNO_QUERY);
     m_xComplexDescriptionAccess.set(m_xInternal,uno::UNO_QUERY);
 
@@ -105,15 +105,12 @@ uno::Any DatabaseDataProvider::queryInterface(uno::Type const & type) throw (uno
 {
     return TDatabaseDataProvider::queryInterface(type);
 }
-// -----------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-rtl::OUString DatabaseDataProvider::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString DatabaseDataProvider::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dbaccess.DatabaseDataProvider"));
+    return OUString("com.sun.star.comp.dbaccess.DatabaseDataProvider");
 }
-// -----------------------------------------------------------------------------
-// -------------------------------------------------------------------------
+
 // XServiceInfo
 ::rtl::OUString SAL_CALL DatabaseDataProvider::getImplementationName(  ) throw(uno::RuntimeException)
 {
@@ -127,10 +124,10 @@ sal_Bool SAL_CALL DatabaseDataProvider::supportsService( const ::rtl::OUString& 
 }
 // -----------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > DatabaseDataProvider::getSupportedServiceNames_Static(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > DatabaseDataProvider::getSupportedServiceNames_Static(  ) throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DatabaseDataProvider"));
+    uno::Sequence< OUString > aSNS( 1 );
+    aSNS[0] = "com.sun.star.chart2.data.DatabaseDataProvider";
     return aSNS;
 }
 // -----------------------------------------------------------------------------
@@ -177,9 +174,9 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
         }
         else if ( pArgIter->Name == "CellRangeRepresentation" )
         {
-            ::rtl::OUString sRange;
+            OUString sRange;
             pArgIter->Value >>= sRange;
-            if ( !sRange.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("all")) )
+            if ( sRange != "all" )
                 return sal_False;
         }
         else if ( pArgIter->Name == "FirstCellAsLabel" )
@@ -237,7 +234,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             if ( xIni.is() )
             {
                 uno::Sequence< uno::Any > aInitArgs(1);
-                beans::NamedValue aParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDefaultData")),uno::makeAny(sal_True));
+                beans::NamedValue aParam("CreateDefaultData",uno::makeAny(sal_True));
                 aInitArgs[0] <<= aParam;
                 xIni->initialize(aInitArgs);
             }
@@ -251,7 +248,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
 uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArguments(const uno::Reference< chart2::data::XDataSource > & _xDataSource) throw (uno::RuntimeException)
 {
     ::comphelper::NamedValueCollection aArguments;
-    aArguments.put( "CellRangeRepresentation", uno::Any( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "all" ) ) ) );
+    aArguments.put( "CellRangeRepresentation", uno::Any( OUString( "all" ) ) );
     aArguments.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
     // internal data always contains labels and categories
     aArguments.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
@@ -266,9 +263,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArgum
             if( aSequences[nIdx].is() )
             {
                 uno::Reference< beans::XPropertySet > xSeqProp( aSequences[nIdx]->getValues(), uno::UNO_QUERY );
-                ::rtl::OUString aRole;
+                OUString aRole;
                 if  (   xSeqProp.is()
-                    &&  ( xSeqProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" ) ) ) >>= aRole )
+                    &&  ( xSeqProp->getPropertyValue( "Role" ) >>= aRole )
                     &&  aRole == "categories"
                     )
                 {
@@ -301,7 +298,7 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::cre
     osl::MutexGuard g(m_aMutex);
     uno::Reference< chart2::data::XDataSequence > xData = m_xInternal->createDataSequenceByRangeRepresentation(_sRangeRepresentation);
     uno::Reference<beans::XPropertySet> xProp(xData,uno::UNO_QUERY);
-    const static ::rtl::OUString s_sNumberFormatKey(RTL_CONSTASCII_USTRINGPARAM("NumberFormatKey"));
+    const static OUString s_sNumberFormatKey("NumberFormatKey");
     if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(s_sNumberFormatKey) )
     {
         xProp->setPropertyValue(s_sNumberFormatKey,impl_getNumberFormatKey_nothrow(_sRangeRepresentation));
@@ -439,13 +436,11 @@ void SAL_CALL DatabaseDataProvider::addVetoableChangeListener(const ::rtl::OUStr
 {
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::addVetoableChangeListener(aPropertyName, xListener);
 }
-// -----------------------------------------------------------------------------
 
 void SAL_CALL DatabaseDataProvider::removeVetoableChangeListener(const ::rtl::OUString & aPropertyName, const uno::Reference< beans::XVetoableChangeListener > & xListener) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::WrappedTargetException)
 {
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::removeVetoableChangeListener(aPropertyName, xListener);
 }
-// -----------------------------------------------------------------------------
 
 // chart2::data::XDatabaseDataProvider:
 uno::Sequence< ::rtl::OUString > SAL_CALL DatabaseDataProvider::getMasterFields() throw (uno::RuntimeException)
@@ -453,27 +448,24 @@ uno::Sequence< ::rtl::OUString > SAL_CALL DatabaseDataProvider::getMasterFields(
     osl::MutexGuard g(m_aMutex);
     return m_MasterFields;
 }
-// -----------------------------------------------------------------------------
 
 void SAL_CALL DatabaseDataProvider::setMasterFields(const uno::Sequence< ::rtl::OUString > & the_value) throw (uno::RuntimeException)
 {
     impl_invalidateParameter_nothrow();
-    set(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MasterFields")),the_value,m_MasterFields);
+    set(OUString("MasterFields"),the_value,m_MasterFields);
 }
-// -----------------------------------------------------------------------------
 
 uno::Sequence< ::rtl::OUString > SAL_CALL DatabaseDataProvider::getDetailFields() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_DetailFields;
 }
-// -----------------------------------------------------------------------------
 
 void SAL_CALL DatabaseDataProvider::setDetailFields(const uno::Sequence< ::rtl::OUString > & the_value) throw (uno::RuntimeException)
 {
-    set(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DetailFields")),the_value,m_DetailFields);
+    set("DetailFields",the_value,m_DetailFields);
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::OUString SAL_CALL DatabaseDataProvider::getCommand() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
@@ -584,37 +576,34 @@ void SAL_CALL DatabaseDataProvider::setOrder( const ::rtl::OUString& the_value )
     }
     set(PROPERTY_ORDER,the_value,m_Order);
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL DatabaseDataProvider::getEscapeProcessing() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_EscapeProcessing;
 }
-// -----------------------------------------------------------------------------
 
 void SAL_CALL DatabaseDataProvider::setEscapeProcessing(::sal_Bool the_value) throw (uno::RuntimeException)
 {
     set(PROPERTY_ESCAPE_PROCESSING,the_value,m_EscapeProcessing);
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Int32 SAL_CALL DatabaseDataProvider::getRowLimit() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_RowLimit;
 }
-// -----------------------------------------------------------------------------
 
 void SAL_CALL DatabaseDataProvider::setRowLimit(::sal_Int32 the_value) throw (uno::RuntimeException)
 {
-    set(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowLimit")),the_value,m_RowLimit);
+    set("RowLimit",the_value,m_RowLimit);
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< sdbc::XConnection > SAL_CALL DatabaseDataProvider::getActiveConnection() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_xActiveConnection;
 }
-// -----------------------------------------------------------------------------
 
 void SAL_CALL DatabaseDataProvider::setActiveConnection(const uno::Reference< sdbc::XConnection > & the_value) throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
@@ -622,26 +611,24 @@ void SAL_CALL DatabaseDataProvider::setActiveConnection(const uno::Reference< sd
         throw lang::IllegalArgumentException();
     set(PROPERTY_ACTIVE_CONNECTION,the_value,m_xActiveConnection);
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::OUString SAL_CALL DatabaseDataProvider::getDataSourceName() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_DataSourceName;
 }
-// -----------------------------------------------------------------------------
 
 void SAL_CALL DatabaseDataProvider::setDataSourceName(const ::rtl::OUString& the_value) throw (uno::RuntimeException)
 {
     set(PROPERTY_DATASOURCENAME,the_value,m_DataSourceName);
 }
-// -----------------------------------------------------------------------------
+
 void DatabaseDataProvider::impl_executeRowSet_throw(::osl::ResettableMutexGuard& _rClearForNotifies)
 {
     if ( impl_fillParameters_nothrow(_rClearForNotifies) )
         m_xRowSet->execute();
 }
 
-// -----------------------------------------------------------------------------
 namespace
 {
     struct ColumnDescription
@@ -681,7 +668,6 @@ namespace
     };
 }
 
-// -----------------------------------------------------------------------------
 void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories,const uno::Sequence< ::rtl::OUString >& i_aColumnNames)
 {
     // clear the data before fill the new one

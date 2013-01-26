@@ -131,8 +131,7 @@ namespace dbaccess
         try
         {
             Reference< XPropertySet > xStorageProps( _rxStorage, UNO_QUERY_THROW );
-            xStorageProps->getPropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" ) ) ) >>= nMode;
+            xStorageProps->getPropertyValue( "OpenMode" ) >>= nMode;
         }
         catch( const Exception& )
         {
