@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1</property>
+    <property name="upper">65535</property>
+    <property name="value">60</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="lower">1</property>
+    <property name="upper">65535</property>
+    <property name="value">5</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkGrid" id="InternetInfoPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -10,11 +24,9 @@
     <child>
       <object class="GtkRadioButton" id="noautoupdate">
         <property name="label" translatable="yes">Do not refresh automatically</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="active">True</property>
@@ -31,11 +43,9 @@
     <child>
       <object class="GtkRadioButton" id="reloadupdate">
         <property name="label" translatable="yes">Refresh this document</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
         <property name="group">forwardupdate</property>
@@ -50,11 +60,9 @@
     <child>
       <object class="GtkRadioButton" id="forwardupdate">
         <property name="label" translatable="yes">Redirect from this document</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
         <property name="group">noautoupdate</property>
@@ -73,6 +81,8 @@
         <property name="margin_left">12</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">every </property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">reloadnf</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -103,6 +113,8 @@
         <property name="margin_left">12</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">to URL </property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">forwarded</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -118,6 +130,8 @@
         <property name="margin_left">12</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">to frame</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">framecb</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -169,12 +183,10 @@
         <child>
           <object class="GtkButton" id="browse">
             <property name="label">...</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="halign">end</property>
-            <property name="use_action_appearance">False</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -276,19 +288,5 @@
         <property name="height">1</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">1</property>
-    <property name="upper">65535</property>
-    <property name="value">60</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment2">
-    <property name="lower">1</property>
-    <property name="upper">65535</property>
-    <property name="value">5</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
 </interface>
