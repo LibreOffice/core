@@ -51,7 +51,7 @@ ScMyStyleRanges::~ScMyStyleRanges()
 
 void ScMyStyleRanges::AddRange(const ScRange& rRange,
     const rtl::OUString* /*pStyleName*/, const sal_Int16 nType,
-    ScXMLImport& /*rImport*/, const sal_uInt32 /*nMaxRanges*/)
+    ScXMLImport& /*rImport*/)
 {
     switch (nType)
     {
@@ -114,7 +114,7 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange,
 
 void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange,
     const rtl::OUString* /*pStyleName*/, const rtl::OUString* pCurrency,
-    ScXMLImport& /*rImport*/, const sal_uInt32 /*nMaxRanges*/)
+    ScXMLImport& /*rImport*/)
 {
     if (!pCurrencyList)
         pCurrencyList = new ScMyCurrencyStylesSet();
@@ -248,7 +248,6 @@ ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
     pPrevStyleName(NULL),
     pCurrency(NULL),
     pPrevCurrency(NULL),
-    nMaxRanges(0),
     bPrevRangeAdded(true)
 {
 }
@@ -351,17 +350,15 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
 
 void ScMyStylesImportHelper::AddSingleRange(const ScRange& rRange)
 {
-    if (nMaxRanges == 0)
-        nMaxRanges = aColDefaultStyles.size();
     ScMyStylesSet::iterator aItr(GetIterator(pPrevStyleName));
     if (aItr != aCellStyles.end())
     {
         if (nPrevCellType != util::NumberFormat::CURRENCY)
             aItr->xRanges->AddRange(rRange, pPrevStyleName, nPrevCellType,
-                rImport, nMaxRanges);
+                rImport);
         else
             aItr->xRanges->AddCurrencyRange(rRange, pPrevStyleName, pPrevCurrency,
-                rImport, nMaxRanges);
+                rImport);
     }
 }
 
@@ -472,7 +469,6 @@ void ScMyStylesImportHelper::EndTable()
         AddRange();
         bPrevRangeAdded = true;
     }
-    nMaxRanges = 0;
 }
 
 void ScMyStylesImportHelper::SetStylesToRanges()
@@ -486,7 +482,6 @@ void ScMyStylesImportHelper::SetStylesToRanges()
     }
     aColDefaultStyles.clear();
     aCellStyles.clear();
-    nMaxRanges = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

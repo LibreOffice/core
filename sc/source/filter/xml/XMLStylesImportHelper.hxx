@@ -102,10 +102,10 @@ public:
     ~ScMyStyleRanges();
     void AddRange(const ScRange& rRange,
         const rtl::OUString* pStyleName, const sal_Int16 nType,
-        ScXMLImport& rImport, const sal_uInt32 nMaxRanges);
+        ScXMLImport& rImport);
     void AddCurrencyRange(const ScRange& rRange,
         const rtl::OUString* pStyleName, const rtl::OUString* pCurrency,
-        ScXMLImport& rImport, const sal_uInt32 nMaxRanges);
+        ScXMLImport& rImport);
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc);
     void SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLImport& rImport);
 };
