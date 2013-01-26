@@ -355,17 +355,17 @@ void ScMarkData::MarkFromRangeList( const ScRangeList& rList, bool bReset )
     size_t nCount = rList.size();
     if ( nCount == 1 && !bMarked && !bMultiMarked )
     {
-        ScRange aRange = *rList[ 0 ];
-        SetMarkArea( aRange );
-        SelectTable( aRange.aStart.Tab(), true );
+        const ScRange& rRange = *rList[ 0 ];
+        SetMarkArea( rRange );
+        SelectTable( rRange.aStart.Tab(), true );
     }
     else
     {
         for (size_t i=0; i < nCount; i++)
         {
-            ScRange aRange = *rList[ i ];
-            SetMultiMarkArea( aRange, true );
-            SelectTable( aRange.aStart.Tab(), true );
+            const ScRange& rRange = *rList[ i ];
+            SetMultiMarkArea( rRange, true );
+            SelectTable( rRange.aStart.Tab(), true );
         }
     }
 }
