@@ -127,7 +127,7 @@ bool BluetoothServer::isDiscoverable()
         return false;
     }
 
-    GHashTable* aProperties;
+    GHashTable* aProperties = NULL;
     aResult = dbus_g_proxy_call( aAdapter, "GetProperties", &aError,
                                 G_TYPE_INVALID,
                                 DBUS_TYPE_G_STRING_ANY_HASHTABLE, &aProperties,
@@ -144,7 +144,7 @@ bool BluetoothServer::isDiscoverable()
     gboolean aIsDiscoverable = g_value_get_boolean( (GValue*) g_hash_table_lookup(
                 aProperties, "Discoverable" ) );
 
-    g_free( aProperties );
+    g_hash_table_unref( aProperties );
     return aIsDiscoverable;
 #else // defined(LINUX) && defined(ENABLE_DBUS)
     return false;
@@ -196,7 +196,7 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
     gboolean aPowered = g_value_get_boolean( (GValue*) g_hash_table_lookup(
                 aProperties, "Powered" ) );
 
-    g_free( aProperties );
+    g_hash_table_unref( aProperties );
     if ( !aPowered )
     {
         SAL_INFO( "sdremote.bluetooth", "Bluetooth adapter not powered, returning" );
