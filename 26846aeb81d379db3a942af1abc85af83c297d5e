@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUX///8Q\u003d",
+        "filename": "pyuno/source/loader/pythonloader.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-26T23:23:53Z",
+      "side": 1,
+      "message": "Instead of comparing the unparsed string value it may be better to use sys.version_info, see http://docs.python.org/3/library/sys#sys.version",
+      "revId": "26846aeb81d379db3a942af1abc85af83c297d5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
