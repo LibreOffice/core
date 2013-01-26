@@ -1,18 +1,17 @@
 Application::GetDisplayScreenName(unsigned int)
-BackgroundPreviewImpl::BackgroundPreviewImpl(Window*, ResId const&, unsigned char)
 EditTextObject::RemoveParaAttribs(unsigned short)
 EditTextObject::SetParaAttribs(unsigned long, SfxItemSet const&)
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 Line::Intersection(Rectangle const&, Line&) const
 PoHeader::PoHeader()
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
-ScFiltersTest::testCachedMatrixFormulaResultsODS()
 ScFiltersTest::testColorScaleODS()
 ScFiltersTest::testColorScaleXLSX()
-ScFiltersTest::testVolatileFunctionsODS()
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 StyleSettings::GetPersonaFooter() const
+SvxBrushItem::SetFillStyle(com::sun::star::drawing::FillStyle)
+SvxBrushItem::SetGradient(Gradient&)
 TemplateAbstractView::deselectOverlayItem(unsigned short)
 Test::test1Table1Page()
 TextEngine::GetLeftMargin() const
