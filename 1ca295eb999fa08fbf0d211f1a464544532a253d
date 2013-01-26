@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUX///8g\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-26T22:17:53Z",
+      "side": 0,
+      "message": "Do not remove this, please check your rebase.",
+      "revId": "1ca295eb999fa08fbf0d211f1a464544532a253d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

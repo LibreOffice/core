@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAUX///88\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3392,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-26T22:17:53Z",
+      "side": 1,
+      "message": "cDecimalSeparator needs to be initialized with 0 here, so comparison if(cDecimalSeparator\u0026\u0026...) below works.",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX///80\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3423,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-26T22:17:53Z",
+      "side": 1,
+      "message": "Why only do these checks if there was nGlobalError?",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX///8w\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3434,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-26T22:17:53Z",
+      "side": 1,
+      "message": "Better would be to have\n\n if (nGlobalError)\n {\n     PushError( nGlobalError);\n     return;\n }\n if (aInputString.isEmpty())\n {\n     if (GetGlobalConfig().mbEmptyStringAsZero)\n         PushDouble(0);\n     else\n         PushNoValue();\n     return;\n }",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATn///8s\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 3
@@ -19,6 +70,58 @@
     },
     {
       "key": {
+        "uuid": "AAAAUX///9A\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3442,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-26T22:17:53Z",
+      "side": 1,
+      "message": "Performance wise it is better to search for group separators in the string because usually there\u0027s only one separator. Instead of replaceAt() use replaceAll() that replaces all occurrences, for this just copy the string to a temporary not including the decimal separator and the fractional part and operate on the temporary copy, and when done concatenate the result with the decimal separator plus fractional part again. Also, aGroupSeparator.iterateCodePoints() should be used to obtain one separator at a time and create the string to be searched, to allow for full UTF-16 characters, like this:\n\n sal_Int32 nDecSep \u003d aInputString.indexOf( cDecimalSeparator);\n if (nDecSep !\u003d 0)\n {\n     OUString aTemporary( nDecSep \u003e\u003d 0 ? aInputString.copy( 0, nDecSep) : aInputString);\n     sal_Int32 nIndex \u003d 0;\n     do\n     {\n         sal_uInt32 nChar \u003d aGroupSeparator.iterateCodePoints( nIndex);\n         aTemporary \u003d aTemporary.replaceAll( OUString( \u0026nChar, 1), \"\");\n     } while (nIndex \u003c aGroupSeparator.getLength());\n     if (nDecSep \u003e\u003d 0)\n         aInputString \u003d aTemporary + aInputString.copy( nDecSep);\n     else\n         aInputString \u003d aTemporary;\n }\n\nAll unchecked, may contain errors ;-)",
+      "parentUuid": "AAAATn///8s\u003d",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX///8s\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3451,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-26T22:17:53Z",
+      "side": 1,
+      "message": "The condition needs to be swapped so it doesn\u0027t access [-1] memory\n\n i \u003e\u003d 0 \u0026\u0026 aInputString[ i ] \u003d\u003d 0x0025",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX///8o\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3453,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-26T22:17:53Z",
+      "side": 1,
+      "message": "There is no need to check this again, the condition of the for loop already did this.",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAATn///8w\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 3
@@ -30,6 +133,58 @@
       "writtenOn": "2013-01-17T17:27:45Z",
       "side": 1,
       "message": "I kept my ::rtl::math::stringToDouble(..) as changing it caused some compiler complaints and in interpr4.cxx this function is also used in ScInterpreter::ConvertStringToValue(...)",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX///84\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3462,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-26T22:17:53Z",
+      "side": 1,
+      "message": "Yes, correct. Sorry, my bad, I was confusing with the underlying rtl_math_stringToDouble() function that takes the sal_int32**",
+      "parentUuid": "AAAATn///8w\u003d",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX///8k\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-26T22:17:53Z",
+      "side": 1,
+      "message": "Oops, this IFNA should not be here, probably due to your rebase.",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX///8c\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-26T22:17:53Z",
+      "side": 1,
+      "message": "Should be FUNCFLAG_MACROCALL instead of FUNCFLAG_MACROCALLODF and have the \"NUMBERVALUE\" name instead of 0\n\nHowever, with my latest change in commit 1162738c6fbd8505ffa27b28118318cc522a5368 that now should be FUNCFLAG_MACROCALL_NEW instead.",
       "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
