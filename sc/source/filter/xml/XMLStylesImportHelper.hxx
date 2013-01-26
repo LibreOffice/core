@@ -156,8 +156,8 @@ class ScMyStylesImportHelper
     {
         return ((pFirst && pSecond && pFirst->equals(*pSecond)) ||
                 (!pFirst && !pSecond) ||
-                (!pFirst && pSecond && !pSecond->getLength()) ||
-                (!pSecond &&  pFirst && !pFirst->getLength()));
+                (!pFirst && pSecond && pSecond->isEmpty()) ||
+                (!pSecond && pFirst && pFirst->isEmpty()));
     }
 public:
     ScMyStylesImportHelper(ScXMLImport& rImport);

@@ -19,7 +19,6 @@
 #ifndef SC_XMLCELLI_HXX
 #define SC_XMLCELLI_HXX
 
-#include <memory>
 #include "XMLDetectiveContext.hxx"
 #include "XMLCellRangeSourceContext.hxx"
 #include <xmloff/xmlictxt.hxx>
@@ -27,6 +26,7 @@
 
 #include "formula/grammar.hxx"
 #include <boost/optional.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScXMLImport;
 class ScFormulaCell;
@@ -39,7 +39,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     ::boost::optional< rtl::OUString > pOUTextContent;
     ::boost::optional< FormulaWithNamespace > pOUFormula;
     rtl::OUString* pContentValidationName;
-    ::std::auto_ptr< ScXMLAnnotationData > mxAnnotationData;
+    boost::scoped_ptr< ScXMLAnnotationData > mxAnnotationData;
     ScMyImpDetectiveObjVec* pDetectiveObjVec;
     ScMyImpCellRangeSource* pCellRangeSource;
     double      fValue;
