@@ -10824,14 +10824,16 @@ if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
 fi
 
 WITH_THEMES=""
-for theme in $with_theme; do
-    case $theme in
-        crystal|default|galaxy|hicontrast|human|industrial|oxygen|tango|tango_testing) : ;;
-        *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
-    esac
-    WITH_THEMES="$WITH_THEMES $theme"
-    SCPDEFS="$SCPDEFS -DTHEME_`echo $theme|tr '[[:lower:]]' '[[:upper:]]'`"
-done
+if test "x$with_theme" != "xno"; then
+    for theme in $with_theme; do
+        case $theme in
+            crystal|default|galaxy|hicontrast|human|industrial|oxygen|tango|tango_testing) : ;;
+            *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
+        esac
+        WITH_THEMES="$WITH_THEMES $theme"
+        SCPDEFS="$SCPDEFS -DTHEME_`echo $theme|tr '[[:lower:]]' '[[:upper:]]'`"
+    done
+fi
 AC_MSG_RESULT([$WITH_THEMES])
 AC_SUBST([WITH_THEMES])
 
