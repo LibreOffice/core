@@ -49,9 +49,7 @@ ScMyStyleRanges::~ScMyStyleRanges()
     delete pCurrencyList;
 }
 
-void ScMyStyleRanges::AddRange(const ScRange& rRange,
-    const rtl::OUString* /*pStyleName*/, const sal_Int16 nType,
-    ScXMLImport& /*rImport*/)
+void ScMyStyleRanges::AddRange(const ScRange& rRange, const sal_Int16 nType)
 {
     switch (nType)
     {
@@ -112,9 +110,7 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange,
     }
 }
 
-void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange,
-    const rtl::OUString* /*pStyleName*/, const rtl::OUString* pCurrency,
-    ScXMLImport& /*rImport*/)
+void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const rtl::OUString* pCurrency)
 {
     if (!pCurrencyList)
         pCurrencyList = new ScMyCurrencyStylesSet();
@@ -354,11 +350,9 @@ void ScMyStylesImportHelper::AddSingleRange(const ScRange& rRange)
     if (aItr != aCellStyles.end())
     {
         if (nPrevCellType != util::NumberFormat::CURRENCY)
-            aItr->xRanges->AddRange(rRange, pPrevStyleName, nPrevCellType,
-                rImport);
+            aItr->xRanges->AddRange(rRange, nPrevCellType);
         else
-            aItr->xRanges->AddCurrencyRange(rRange, pPrevStyleName, pPrevCurrency,
-                rImport);
+            aItr->xRanges->AddCurrencyRange(rRange, pPrevCurrency);
     }
 }
 

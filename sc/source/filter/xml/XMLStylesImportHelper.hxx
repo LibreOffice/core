@@ -100,12 +100,8 @@ class ScMyStyleRanges : public SvRefBase
 public:
     ScMyStyleRanges();
     ~ScMyStyleRanges();
-    void AddRange(const ScRange& rRange,
-        const rtl::OUString* pStyleName, const sal_Int16 nType,
-        ScXMLImport& rImport);
-    void AddCurrencyRange(const ScRange& rRange,
-        const rtl::OUString* pStyleName, const rtl::OUString* pCurrency,
-        ScXMLImport& rImport);
+    void AddRange(const ScRange& rRange, const sal_Int16 nType);
+    void AddCurrencyRange(const ScRange& rRange, const rtl::OUString* pCurrency);
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc);
     void SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLImport& rImport);
 };
