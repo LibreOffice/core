@@ -234,7 +234,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_KANURI_NIGERIA             0x0471
 #define LANGUAGE_KASHMIRI                   0x0460
 #define LANGUAGE_KASHMIRI_INDIA             0x0860
-#define LANGUAGE_KAZAK                      0x043F
+#define LANGUAGE_KAZAKH                     0x043F
 #define LANGUAGE_KHMER                      0x0453
 #define LANGUAGE_KICHE_GUATEMALA            0x0486  /* AKA K'iche', West Central Quiche,  */
 #define LANGUAGE_KINYARWANDA_RWANDA         0x0487  /* obsoletes LANGUAGE_USER_KINYARWANDA 0x0621 */
