@@ -36,7 +36,6 @@ public:
     inline void ShowBrackets(sal_Bool bShow)        { bBrackets = bShow; }
 
     inline void SetDropEnable( sal_Bool bFlag )     { bEnableDrop = bFlag; }
-    inline sal_Bool IsDropEnable() const            { return bEnableDrop; }
 };
 
 #endif
