@@ -29,15 +29,8 @@
 class SvxNewTableDialog : public SvxAbstractNewTableDialog, public ModalDialog
 {
 private:
-    FixedText           maFtColumns;
-    NumericField        maNumColumns;
-    FixedText           maFtRows;
-    NumericField        maNumRows;
-
-    FixedLine           maFlSep;
-    HelpButton          maHelpButton;
-    OKButton            maOkButton;
-    CancelButton        maCancelButton;
+    NumericField*       mpNumColumns;
+    NumericField*       mpNumRows;
 
 public:
     SvxNewTableDialog( Window* pWindow );

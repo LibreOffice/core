@@ -22,6 +22,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/macroselectordialog \
 	cui/uiconfig/ui/messbox \
 	cui/uiconfig/ui/namedialog \
+	cui/uiconfig/ui/newtabledialog \
 	cui/uiconfig/ui/numberingformatpage \
 	cui/uiconfig/ui/numberingoptionspage \
 	cui/uiconfig/ui/numberingpositionpage \
