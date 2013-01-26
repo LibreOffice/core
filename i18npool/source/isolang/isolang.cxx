@@ -248,7 +248,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_BENGALI_BANGLADESH,          "bn", "BD" },
     { LANGUAGE_BENGALI,                     "bn", "IN" },
     { LANGUAGE_BURMESE,                     "my", "MM" },
-    { LANGUAGE_KAZAK,                       "kk", "KZ" },
+    { LANGUAGE_KAZAKH,                      "kk", "KZ" },
     { LANGUAGE_ENGLISH_INDIA,               "en", "IN" },
     { LANGUAGE_URDU,                        "ur", ""   },
     { LANGUAGE_URDU_INDIA,                  "ur", "IN" },
