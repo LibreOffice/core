@@ -35,11 +35,6 @@ $(eval $(call gb_Library_Library,msforms))
 # in case UNO services are exported: declare location of component file
 $(eval $(call gb_Library_set_componentfile,msforms,vbahelper/util/msforms))
 
-# add any additional include paths for this library here
-$(eval $(call gb_Library_set_include,msforms,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_external,msforms,boost_headers))
 
 $(eval $(call gb_Library_use_api,msforms,\

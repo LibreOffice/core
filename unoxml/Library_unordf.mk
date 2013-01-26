@@ -21,10 +21,6 @@ $(eval $(call gb_Library_Library,unordf))
 
 $(eval $(call gb_Library_set_componentfile,unordf,unoxml/source/rdf/unordf))
 
-$(eval $(call gb_Library_set_include,unordf,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_sdk_api,unordf))
 
 $(eval $(call gb_Library_use_libraries,unordf,\

@@ -23,10 +23,6 @@ $(eval $(call gb_Library_use_external,ipx,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,ipx))
 
-$(eval $(call gb_Library_set_include,ipx,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_libraries,ipx,\
 	vcl \
 	tl \

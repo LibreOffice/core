@@ -33,11 +33,6 @@ $(eval $(call gb_Library_use_package,vbahelper,vbahelper_inc))
 # in case UNO services are exported: declare location of component file
 #$(eval $(call gb_Library_set_componentfile,vbahelper,vbahelper/COMPONENT_FILE))
 
-# add any additional include paths for this library here
-$(eval $(call gb_Library_set_include,vbahelper,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_add_defs,vbahelper,\
     -DVBAHELPER_DLLIMPLEMENTATION \
 ))

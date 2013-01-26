@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Executable_Executable,ui-previewer))
 
-$(eval $(call gb_Executable_set_include,ui-previewer,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_use_external,ui-previewer,boost_headers))
 
 $(eval $(call gb_Executable_use_api,ui-previewer,\

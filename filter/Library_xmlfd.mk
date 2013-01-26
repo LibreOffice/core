@@ -23,10 +23,6 @@ $(eval $(call gb_Library_set_componentfile,xmlfd,filter/source/xmlfilterdetect/x
 
 $(eval $(call gb_Library_use_sdk_api,xmlfd))
 
-$(eval $(call gb_Library_set_include,xmlfd,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_libraries,xmlfd,\
 	ucbhelper \
 	cppuhelper \

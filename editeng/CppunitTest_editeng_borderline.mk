@@ -51,10 +51,6 @@ $(eval $(call gb_CppunitTest_use_externals,editeng_borderline,\
     icuuc \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,editeng_borderline,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_api,editeng_borderline,\
     offapi \
     udkapi \

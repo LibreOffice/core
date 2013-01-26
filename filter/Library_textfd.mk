@@ -34,10 +34,6 @@ $(eval $(call gb_Library_set_componentfile,textfd,filter/source/textfilterdetect
 
 $(eval $(call gb_Library_use_sdk_api,textfd))
 
-$(eval $(call gb_Library_set_include,textfd,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_libraries,textfd,\
 	ucbhelper \
 	cppuhelper \

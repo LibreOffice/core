@@ -32,10 +32,6 @@ $(eval $(call gb_Library_use_package,i18nsearch,i18npool_inc))
 
 $(eval $(call gb_Library_set_componentfile,i18nsearch,i18npool/source/search/i18nsearch))
 
-$(eval $(call gb_Library_set_include,i18nsearch,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_sdk_api,i18nsearch))
 
 $(eval $(call gb_Library_use_externals,i18nsearch,\

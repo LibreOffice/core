@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Library_Library,lwpft))
 
-$(eval $(call gb_Library_set_include,lwpft,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_sdk_api,lwpft))
 
 $(eval $(call gb_Library_use_libraries,lwpft,\

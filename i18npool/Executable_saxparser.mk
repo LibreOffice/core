@@ -28,10 +28,6 @@
 
 $(eval $(call gb_Executable_Executable,saxparser))
 
-$(eval $(call gb_Executable_set_include,saxparser,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_use_sdk_api,saxparser))
 
 $(eval $(call gb_Executable_use_libraries,saxparser,\

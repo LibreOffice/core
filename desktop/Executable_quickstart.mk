@@ -29,10 +29,6 @@ $(eval $(call gb_Executable_Executable,quickstart))
 
 $(eval $(call gb_Executable_set_targettype_gui,quickstart,YES))
 
-$(eval $(call gb_Executable_set_include,quickstart,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_use_system_win32_libs,quickstart,\
     comdlg32 \
     gdi32 \

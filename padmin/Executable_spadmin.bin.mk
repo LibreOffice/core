@@ -19,10 +19,6 @@
 
 $(eval $(call gb_Executable_Executable,spadmin.bin))
 
-$(eval $(call gb_Executable_set_include,spadmin.bin,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_use_external,spadmin.bin,boost_headers))
 
 $(eval $(call gb_Executable_use_static_libraries,spadmin.bin,\

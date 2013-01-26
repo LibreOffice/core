@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Library_Library,hwp))
 
-$(eval $(call gb_Library_set_include,hwp,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_sdk_api,hwp))
 
 $(eval $(call gb_Library_use_libraries,hwp,\

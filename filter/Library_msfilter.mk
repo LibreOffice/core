@@ -27,10 +27,6 @@ $(eval $(call gb_Library_use_external,msfilter,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,msfilter))
 
-$(eval $(call gb_Library_set_include,msfilter,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_add_defs,msfilter,\
 	-DMSFILTER_DLLIMPLEMENTATION \
 ))

@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Executable_Executable,unoinfo))
 
-$(eval $(call gb_Executable_set_include,unoinfo,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_use_static_libraries,unoinfo,\
     ooopathutils \
 ))

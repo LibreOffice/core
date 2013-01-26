@@ -50,10 +50,6 @@ $(eval $(call gb_CppunitTest_use_externals,editeng_lookuptree,\
     icuuc \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,editeng_lookuptree,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_api,editeng_lookuptree,\
     offapi \
     udkapi \

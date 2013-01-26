@@ -29,10 +29,6 @@ $(eval $(call gb_Executable_Executable,oosplash))
 
 $(eval $(call gb_Executable_set_targettype_gui,oosplash,YES))
 
-$(eval $(call gb_Executable_set_include,oosplash,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_use_libraries,oosplash,\
     sal \
 ))

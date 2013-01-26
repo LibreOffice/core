@@ -21,10 +21,6 @@ $(eval $(call gb_Library_Library,unoxml))
 
 $(eval $(call gb_Library_set_componentfile,unoxml,unoxml/source/service/unoxml))
 
-$(eval $(call gb_Library_set_include,unoxml,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_sdk_api,unoxml))
 
 $(eval $(call gb_Library_use_libraries,unoxml,\

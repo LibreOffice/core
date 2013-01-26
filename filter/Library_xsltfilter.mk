@@ -23,10 +23,6 @@ $(eval $(call gb_Library_set_componentfile,xsltfilter,filter/source/xsltfilter/x
 
 $(eval $(call gb_Library_use_sdk_api,xsltfilter))
 
-$(eval $(call gb_Library_set_include,xsltfilter,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_libraries,xsltfilter,\
 	xo \
 	tl \

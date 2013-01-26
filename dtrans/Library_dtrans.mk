@@ -30,10 +30,6 @@ $(eval $(call gb_Library_Library,dtrans))
 
 $(eval $(call gb_Library_set_componentfile,dtrans,dtrans/source/generic/dtrans))
 
-$(eval $(call gb_Library_set_include,dtrans,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_sdk_api,dtrans))
 
 $(eval $(call gb_Library_use_libraries,dtrans,\

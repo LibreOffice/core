@@ -12,10 +12,6 @@ $(eval $(call gb_Executable_use_externals,Viewer,\
     zlib \
 ))
 
-$(eval $(call gb_Executable_set_include,Viewer,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_use_system_darwin_frameworks,Viewer,\
     Foundation \
     CoreFoundation \

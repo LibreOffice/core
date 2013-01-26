@@ -30,10 +30,6 @@ $(eval $(call gb_Library_Library,mcnttype))
 
 $(eval $(call gb_Library_set_componentfile,mcnttype,dtrans/util/mcnttype))
 
-$(eval $(call gb_Library_set_include,mcnttype,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_sdk_api,mcnttype))
 
 $(eval $(call gb_Library_use_libraries,mcnttype,\

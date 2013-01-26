@@ -25,10 +25,6 @@ $(eval $(call gb_Library_use_external,xmlfa,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,xmlfa))
 
-$(eval $(call gb_Library_set_include,xmlfa,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_libraries,xmlfa,\
 	tl \
 	comphelper \

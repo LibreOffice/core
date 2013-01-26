@@ -30,10 +30,6 @@ $(eval $(call gb_Library_Library,ftransl))
 
 $(eval $(call gb_Library_set_componentfile,ftransl,dtrans/util/ftransl))
 
-$(eval $(call gb_Library_set_include,ftransl,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_sdk_api,ftransl))
 
 $(eval $(call gb_Library_use_libraries,ftransl,\

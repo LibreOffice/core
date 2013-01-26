@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Library_Library,OGLTrans))
 
-$(eval $(call gb_Library_set_include,OGLTrans,\
-    $$(INCLUDE) \
-))
-
 ifeq ($(strip $(VERBOSE)),TRUE)
 $(eval $(call gb_Library_add_defs,OGLTrans,\
     -DVERBOSE \

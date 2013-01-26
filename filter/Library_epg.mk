@@ -23,10 +23,6 @@ $(eval $(call gb_Library_use_external,epg,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,epg))
 
-$(eval $(call gb_Library_set_include,epg,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_libraries,epg,\
 	svt \
 	vcl \

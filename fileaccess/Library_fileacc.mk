@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Library_Library,fileacc))
 
-$(eval $(call gb_Library_set_include,fileacc,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_sdk_api,fileacc))
 
 $(eval $(call gb_Library_use_libraries,fileacc,\

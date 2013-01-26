@@ -29,10 +29,6 @@ $(eval $(call gb_Executable_Executable,crashrep_com))
 
 $(eval $(call gb_Executable_set_targettype_gui,crashrep_com,NO))
 
-$(eval $(call gb_Executable_set_include,crashrep_com,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_add_defs,crashrep_com,\
     $(LFS_CFLAGS) \
 ))

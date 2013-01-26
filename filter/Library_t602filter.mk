@@ -23,10 +23,6 @@ $(eval $(call gb_Library_set_componentfile,t602filter,filter/source/t602/t602fil
 
 $(eval $(call gb_Library_use_sdk_api,t602filter))
 
-$(eval $(call gb_Library_set_include,t602filter,\
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_libraries,t602filter,\
 	xo \
 	tl \
