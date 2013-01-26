@@ -14,14 +14,14 @@ ifeq ($(ENABLE_CRASHDUMP),TRUE)
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,crashrep,\
 	CustomTarget_crashrep_res \
-	Executable_crashrep \
 	WinResTarget_crashrep \
 ))
-else ifneq ($(PRODUCT),)
+endif # WNT
+
 $(eval $(call gb_Module_add_targets,crashrep,\
 	Executable_crashrep \
 ))
-endif
-endif
+
+endif # ENABLE_CRASHDUMP
 
 # vim: set noet sw=4 ts=4:
