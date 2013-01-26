@@ -20,22 +20,12 @@
 #include "cuires.hrc"
 #include "dialmgr.hxx"
 #include "newtabledlg.hxx"
-#include "newtabledlg.hrc"
 
 SvxNewTableDialog::SvxNewTableDialog( Window* pParent )
-: ModalDialog( pParent, CUI_RES( RID_SVX_NEWTABLE_DLG ) )
-, maFtColumns( this, CUI_RES( FT_COLUMNS ) )
-, maNumColumns( this, CUI_RES( NF_COLUMNS ) )
-, maFtRows( this, CUI_RES( FT_ROWS ) )
-, maNumRows( this, CUI_RES( NF_ROWS ) )
-, maFlSep( this, CUI_RES( FL_SEP ) )
-, maHelpButton( this, CUI_RES( BTN_HELP ) )
-, maOkButton( this, CUI_RES( BTN_OK ) )
-, maCancelButton( this, CUI_RES( BTN_CANCEL ) )
+: ModalDialog( pParent, "NewTableDialog", "cui/ui/newtabledialog.ui" )
 {
-    maNumRows.SetValue(2);
-    maNumColumns.SetValue(5);
-    FreeResource();
+    get(mpNumRows, "rows");
+    get(mpNumColumns, "columns");
 }
 
 short SvxNewTableDialog::Execute(void)
@@ -49,12 +39,12 @@ void SvxNewTableDialog::Apply(void)
 
 sal_Int32 SvxNewTableDialog::getRows() const
 {
-    return sal::static_int_cast< sal_Int32 >( maNumRows.GetValue() );
+    return sal::static_int_cast< sal_Int32 >( mpNumRows->GetValue() );
 }
 
 sal_Int32 SvxNewTableDialog::getColumns() const
 {
-    return sal::static_int_cast< sal_Int32 >( maNumColumns.GetValue() );
+    return sal::static_int_cast< sal_Int32 >( mpNumColumns->GetValue() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
