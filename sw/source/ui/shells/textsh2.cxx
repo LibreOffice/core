@@ -74,8 +74,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
-#define DB_DD_DELIM 0x0b
-
 struct DBTextStruct_Impl
 {
     SwDBData aDBData;

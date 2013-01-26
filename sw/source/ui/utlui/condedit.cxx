@@ -25,7 +25,6 @@
 using namespace ::svx;
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
-#define DB_DD_DELIM 0x0b
 
 // STATIC DATA -----------------------------------------------------------
 
