@@ -257,6 +257,9 @@
             <property name="invisible_char">•</property>
             <property name="invisible_char_set">True</property>
             <property name="adjustment">adjustment1</property>
+            <accessibility>
+              <relation type="flows-to" target="seconds1ft"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left_attach">0</property>
