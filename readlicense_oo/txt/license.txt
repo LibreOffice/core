@@ -1,4 +1,3 @@
-
                        Licensing and Legal information
 
    This product is made available subject to the terms of GNU Lesser
@@ -24,10 +23,9 @@
    Note: Do not translate or localize this document. Only English version
    is legally binding.
 
-
        Third Party Code Additional Copyright Notices and License Terms
 
-   Libraries
+                                   Libraries
 
 Apache Commons
 
@@ -246,6 +244,18 @@ Cairo
    using cairo itself. Other files might be available under the GNU
    General Public License (GPL), for example. Again, please see the
    opening comment of each file for copyright and licensing information.
+
+CLucene
+
+   The following software may be included in this product: CLucene. Use of
+   any of this software is governed by the terms of the license below:
+
+   CLucene is distributed under the GNU Lesser General Public License
+   (LGPL) or the Apache License, Version 2.0
+
+   See LGPL Version 2.1 below
+
+   See Apache License Version 2.0 below
 
 expat XML Parser Toolkit
 
@@ -524,6 +534,31 @@ License.  */
 /* Locate the FDE entry for a given address, using PT_GNU_EH_FRAME ELF
    segment and dl_iterate_phdr to avoid register/deregister calls at
    DSO load/unload.  */
+
+fontconfig
+
+   The following software may be included in this product: fontconfig. Use
+   of any of this software is governed by the terms of the license below:
+
+   Copyright © 2002 Keith Packard
+
+   Permission to use, copy, modify, distribute, and sell this software and
+   its documentation for any purpose is hereby granted without fee,
+   provided that the above copyright notice appear in all copies and that
+   both that copyright notice and this permission notice appear in
+   supporting documentation, and that the name of the author(s) not be
+   used in advertising or publicity pertaining to distribution of the
+   software without specific, written prior permission. The authors make
+   no representations about the suitability of this software for any
+   purpose. It is provided "as is" without express or implied warranty.
+
+   THE AUTHOR(S) DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+   INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO
+   EVENT SHALL THE AUTHOR(S) BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+   CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF
+   USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+   OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+   PERFORMANCE OF THIS SOFTWARE.
 
 Graphite2
 
@@ -967,6 +1002,43 @@ liblangtag
 
    See LGPL Version 3 below
 
+libmspub
+
+   The following software may be included in this product: libmspub. Use
+   of any of this software is governed by the terms of the license below:
+
+   MPL 1.1 / LGPL v2+ / GPL v2+
+
+   See GPL Version 2 below
+
+   See LGPL Version 2 below
+
+   See MPL Version 1.1 below
+
+liborcus
+
+   The following software may be included in this product: liborcus. Use
+   of any of this software is governed by the terms of the license below:
+
+   Permission is hereby granted, free of charge, to any person obtaining a
+   copy of this software and associated documentation files (the
+   "Software"), to deal in the Software without restriction, including
+   without limitation the rights to use, copy, modify, merge, publish,
+   distribute, sublicense, and/or sell copies of the Software, and to
+   permit persons to whom the Software is furnished to do so, subject to
+   the following conditions:
+
+   The above copyright notice and this permission notice shall be included
+   in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 libpng
 
    The following software may be included in this product: libpng. Use of
@@ -1201,29 +1273,39 @@ libxslt
    be used in advertising or otherwise to promote the sale, use or other
    dealings in this Software without prior written authorization from him.
 
+Little CMS (lcms2)
+
+   The following software may be included in this product: Little CMS
+   (lcms2). Use of any of this software is governed by the terms of the
+   license below:
+
+   Copyright (c) 1998-2011 Marti Maria Saguer
+
+   Permission is hereby granted, free of charge, to any person obtaining a
+   copy of this software and associated documentation files (the
+   "Software"), to deal in the Software without restriction, including
+   without limitation the rights to use, copy, modify, merge, publish,
+   distribute, sublicense, and/or sell copies of the Software, and to
+   permit persons to whom the Software is furnished to do so, subject to
+   the following conditions:
+
+   The above copyright notice and this permission notice shall be included
+   in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 lpsolve
 
    The following software may be included in this product: lpsolve. Use of
    any of this software is governed by the terms of the license below:
 
    See LGPL Version 2.1 below
-
-Lucene
-
-   The following software may be included in this product: Lucene. Use of
-   any of this software is governed by the terms of the license below:
-
-   Apache Lucene
-   Copyright 2006 The Apache Software Foundation
-
-   This product includes software developed by The Apache Software
-   Foundation (http://www.apache.org/).
-
-   The snowball stemmers in contrib/snowball/src/java/net/sf/snowball were
-   developed by Martin Porter and Richard Boulton. The full snowball
-   package is available from http://snowball.tartarus.org/
-
-   See Apache License Version 2.0 below
 
 mdds
 
@@ -1251,29 +1333,73 @@ mdds
    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Microsoft Visual C++ 2008 Runtime Libraries
+Mesa
+
+   The following software may be included in this product: The Mesa 3D
+   Graphics Library. The default Mesa license is as follows:
+
+   Copyright (C) 1999-2007 Brian Paul All Rights Reserved.
+
+   Permission is hereby granted, free of charge, to any person obtaining a
+   copy of this software and associated documentation files (the
+   "Software"), to deal in the Software without restriction, including
+   without limitation the rights to use, copy, modify, merge, publish,
+   distribute, sublicense, and/or sell copies of the Software, and to
+   permit persons to whom the Software is furnished to do so, subject to
+   the following conditions:
+
+   The above copyright notice and this permission notice shall be included
+   in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL BRIAN PAUL BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+   DEALINGS IN THE SOFTWARE.
+
+  Ext headers
+
+   Copyright (c) 2007 The Khronos Group Inc.
+
+   Permission is hereby granted, free of charge, to any person obtaining a
+   copy of this software and/or associated documentation files (the
+   "Materials"), to deal in the Materials without restriction, including
+   without limitation the rights to use, copy, modify, merge, publish,
+   distribute, sublicense, and/or sell copies of the Materials, and to
+   permit persons to whom the Materials are furnished to do so, subject to
+   the following conditions:
+
+   The above copyright notice and this permission notice shall be included
+   in all copies or substantial portions of the Materials.
+
+   THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
+
+Microsoft Visual C++ 2010 Runtime Libraries
 
    The following software may be included in this product: Microsoft
-   Visual C++ 2008 Runtime Libraries. Use of any of this software is
+   Visual C++ 2010 Runtime Libraries. Use of any of this software is
    governed by the terms of the license below:
 
    MICROSOFT SOFTWARE LICENSE TERMS
 
-   MICROSOFT VISUAL C++ 2008 RUNTIME LIBRARIES (X86, IA64 AND X64),
-   SERVICE PACK 1
+   MICROSOFT VISUAL C++ 2010 RUNTIME LIBRARIES WITH SERVICE PACK 1
 
    These license terms are an agreement between Microsoft Corporation (or
    based on where you live, one of its affiliates) and you. Please read
    them. They apply to the software named above, which includes the media
    on which you received it, if any. The terms also apply to any Microsoft
-
-   • updates,
-
-   • supplements,
-
-   • Internet-based services, and
-
-   • support services
+     * updates,
+     * supplements,
+     * Internet-based services, and
+     * support services
 
    for this software, unless other terms accompany those items. If so,
    those terms apply.
@@ -1282,96 +1408,81 @@ Microsoft Visual C++ 2008 Runtime Libraries
    THEM, DO NOT USE THE SOFTWARE.
 
    If you comply with these license terms, you have the rights below.
+    1. INSTALLATION AND USE RIGHTS. You may install and use any number of
+       copies of the software on your devices.
+    2. SCOPE OF LICENSE. The software is licensed, not sold. This
+       agreement only gives you some rights to use the software. Microsoft
+       reserves all other rights. Unless applicable law gives you more
+       rights despite this limitation, you may use the software only as
+       expressly permitted in this agreement. In doing so, you must comply
+       with any technical limitations in the software that only allow you
+       to use it in certain ways. You may not
 
-   1. INSTALLATION AND USE RIGHTS. You may install and use any number of
-   copies of the software on your devices.
+     * disclose the results of any benchmark tests of the software to any
+       third party without Microsoft’s prior written approval;
+     * work around any technical limitations in the software;
+     * reverse engineer, decompile or disassemble the software, except and
+       only to the extent that applicable law expressly permits, despite
+       this limitation;
+     * make more copies of the software than specified in this agreement
+       or allowed by applicable law, despite this limitation;
+     * publish the software for others to copy;
+     * rent, lease or lend the software;
+     * transfer the software or this agreement to any third party; or
+     * use the software for commercial software hosting services.
 
-   2. SCOPE OF LICENSE. The software is licensed, not sold. This agreement
-   only gives you some rights to use the software. Microsoft reserves all
-   other rights. Unless applicable law gives you more rights despite this
-   limitation, you may use the software only as expressly permitted in
-   this agreement. In doing so, you must comply with any technical
-   limitations in the software that only allow you to use it in certain
-   ways. You may not
+    3. BACKUP COPY. You may make one backup copy of the software. You may
+       use it only to reinstall the software.
+    4. DOCUMENTATION. Any person that has valid access to your computer or
+       internal network may copy and use the documentation for your
+       internal, reference purposes.
+    5. EXPORT RESTRICTIONS. The software is subject to United States
+       export laws and regulations. You must comply with all domestic and
+       international export laws and regulations that apply to the
+       software. These laws include restrictions on destinations, end
+       users and end use. For additional information, see
+       www.microsoft.com/exporting.
+    6. SUPPORT SERVICES. Because this software is “as is,” we may not
+       provide support services for it.
+    7. ENTIRE AGREEMENT. This agreement, and the terms for supplements,
+       updates, Internet-based services and support services that you use,
+       are the entire agreement for the software and support services.
+    8. APPLICABLE LAW.
 
-   • disclose the results of any benchmark tests of the software to any
-   third party without Microsoft’s prior written approval;
+    a. United States. If you acquired the software in the United States,
+       Washington state law governs the interpretation of this agreement
+       and applies to claims for breach of it, regardless of conflict of
+       laws principles. The laws of the state where you live govern all
+       other claims, including claims under state consumer protection
+       laws, unfair competition laws, and in tort.
+    b. Outside the United States. If you acquired the software in any
+       other country, the laws of that country apply.
 
-   • work around any technical limitations in the software;
-
-   • reverse engineer, decompile or disassemble the software, except and
-   only to the extent that applicable law expressly permits, despite this
-   limitation;
-
-   • make more copies of the software than specified in this agreement or
-   allowed by applicable law, despite this limitation;
-
-   • publish the software for others to copy;
-
-   • rent, lease or lend the software;
-
-   • transfer the software or this agreement to any third party; or
-
-   • use the software for commercial software hosting services.
-
-   3. BACKUP COPY. You may make one backup copy of the software. You may
-   use it only to reinstall the software.
-
-   4. DOCUMENTATION. Any person that has valid access to your computer or
-   internal network may copy and use the documentation for your internal,
-   reference purposes.
-
-   5. EXPORT RESTRICTIONS. The software is subject to United States export
-   laws and regulations. You must comply with all domestic and
-   international export laws and regulations that apply to the software.
-   These laws include restrictions on destinations, end users and end use.
-   For additional information, see www.microsoft.com/exporting.
-
-   6. SUPPORT SERVICES. Because this software is “as is,” we may not
-   provide support services for it.
-
-   7. ENTIRE AGREEMENT. This agreement, and the terms for supplements,
-   updates, Internet-based services and support services that you use, are
-   the entire agreement for the software and support services.
-
-   8. APPLICABLE LAW.
-
-   a. United States. If you acquired the software in the United States,
-   Washington state law governs the interpretation of this agreement and
-   applies to claims for breach of it, regardless of conflict of laws
-   principles. The laws of the state where you live govern all other
-   claims, including claims under state consumer protection laws, unfair
-   competition laws, and in tort.
-
-   b. Outside the United States. If you acquired the software in any other
-   country, the laws of that country apply.
-
-   9. LEGAL EFFECT. This agreement describes certain legal rights. You may
-   have other rights under the laws of your country. You may also have
-   rights with respect to the party from whom you acquired the software.
-   This agreement does not change your rights under the laws of your
-   country if the laws of your country do not permit it to do so.
-
+    9. LEGAL EFFECT. This agreement describes certain legal rights. You
+       may have other rights under the laws of your country. You may also
+       have rights with respect to the party from whom you acquired the
+       software. This agreement does not change your rights under the laws
+       of your country if the laws of your country do not permit it to do
+       so.
    10. DISCLAIMER OF WARRANTY. THE SOFTWARE IS LICENSED “AS-IS.” YOU BEAR
-   THE RISK OF USING IT. MICROSOFT GIVES NO EXPRESS WARRANTIES, GUARANTEES
-   OR CONDITIONS. YOU MAY HAVE ADDITIONAL CONSUMER RIGHTS UNDER YOUR LOCAL
-   LAWS WHICH THIS AGREEMENT CANNOT CHANGE. TO THE EXTENT PERMITTED UNDER
-   YOUR LOCAL LAWS, MICROSOFT EXCLUDES THE IMPLIED WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
-
+       THE RISK OF USING IT. MICROSOFT GIVES NO EXPRESS WARRANTIES,
+       GUARANTEES OR CONDITIONS. YOU MAY HAVE ADDITIONAL CONSUMER RIGHTS
+       UNDER YOUR LOCAL LAWS WHICH THIS AGREEMENT CANNOT CHANGE. TO THE
+       EXTENT PERMITTED UNDER YOUR LOCAL LAWS, MICROSOFT EXCLUDES THE
+       IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+       PURPOSE AND NON-INFRINGEMENT.
    11. LIMITATION ON AND EXCLUSION OF REMEDIES AND DAMAGES. YOU CAN
-   RECOVER FROM MICROSOFT AND ITS SUPPLIERS ONLY DIRECT DAMAGES UP TO U.S.
-   $5.00. YOU CANNOT RECOVER ANY OTHER DAMAGES, INCLUDING CONSEQUENTIAL,
-   LOST PROFITS, SPECIAL, INDIRECT OR INCIDENTAL DAMAGES.
+       RECOVER FROM MICROSOFT AND ITS SUPPLIERS ONLY DIRECT DAMAGES UP TO
+       U.S. $5.00. YOU CANNOT RECOVER ANY OTHER DAMAGES, INCLUDING
+       CONSEQUENTIAL, LOST PROFITS, SPECIAL, INDIRECT OR INCIDENTAL
+       DAMAGES.
 
    This limitation applies to
-
-   • anything related to the software, services, content (including code)
-   on third party Internet sites, or third party programs; and
-
-   • claims for breach of contract, breach of warranty, guarantee or
-   condition, strict liability, negligence, or other tort to the extent
-   permitted by applicable law.
+     * anything related to the software, services, content (including
+       code) on third party Internet sites, or third party programs; and
+     * claims for breach of contract, breach of warranty, guarantee or
+       condition, strict liability, negligence, or other tort to the
+       extent permitted by applicable law.
 
    It also applies even if Microsoft knew or should have known about the
    possibility of the damages. The above limitation or exclusion may not
@@ -1456,6 +1567,57 @@ Network Security Services (NSS)
    terms of the license below:
 
    See MPL 1.1 below
+
+OpenLDAP
+
+   The following software may be included in this product: OpenLDAP. Use
+   of any of this software is governed by the terms of the license below:
+
+  The OpenLDAP Public License
+
+   Version 2.8, 17 August 2003
+
+   Redistribution and use of this software and associated documentation
+   ("Software"), with or without modification, are permitted provided that
+   the following conditions are met:
+    1. Redistributions in source form must retain copyright statements and
+       notices,
+    2. Redistributions in binary form must reproduce applicable copyright
+       statements and notices, this list of conditions, and the following
+       disclaimer in the documentation and/or other materials provided
+       with the distribution, and
+    3. Redistributions must contain a verbatim copy of this document.
+
+   The OpenLDAP Foundation may revise this license from time to time. Each
+   revision is distinguished by a version number. You may use this
+   Software under terms of this license revision or under the terms of any
+   subsequent revision of the license.
+
+   THIS SOFTWARE IS PROVIDED BY THE OPENLDAP FOUNDATION AND ITS
+   CONTRIBUTORS ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES,
+   INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+   NO EVENT SHALL THE OPENLDAP FOUNDATION, ITS CONTRIBUTORS, OR THE
+   AUTHOR(S) OR OWNER(S) OF THE SOFTWARE BE LIABLE FOR ANY DIRECT,
+   INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+   (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+   SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+   HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+   IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+   POSSIBILITY OF SUCH DAMAGE.
+
+   The names of the authors and copyright holders must not be used in
+   advertising or otherwise to promote the sale, use or other dealing in
+   this Software without specific, written prior permission. Title to
+   copyright in this Software shall at all times remain with copyright
+   holders.
+
+   OpenLDAP is a registered trademark of the OpenLDAP Foundation.
+
+   Copyright 1999-2003 The OpenLDAP Foundation, Redwood City, California,
+   USA. All Rights Reserved. Permission to copy and distribute verbatim
+   copies of this document is granted.
 
 OpenSSL
 
@@ -2029,14 +2191,6 @@ STLPort
      supporting documentation. Moscow Center for SPARC Technology makes
      no representations about the suitability of this software for any
      purpose. It is provided "as is" without express or implied warranty.
-
-The Gimp Toolkit (GTK+)
-
-   The following software may be included in this product: GTK+ (The Gimp
-   Toolkit). Use of any of this software is governed by the terms of the
-   license below:
-
-   See LGPL Version 2.1 below
 
 TWAIN
 
@@ -2764,10 +2918,11 @@ Liberation
    fonts. Use of any of this software is governed by the terms of the
    license below:
 
-   This font set had been released under GNU Public License version 2
-   ("GPLv2") with exceptions.
+   This Font Software is licensed under the SIL Open Font License, Version
+   1.1. This license is copied below, and is also available with a
+   FAQ at: http://scripts.sil.org/OFL
 
-   See GPL Version 2 below
+   See SIL Open Font License, Version 1.1 below
 
   LICENSE AGREEMENT AND LIMITED PRODUCT WARRANTY
   LIBERATION FONT SOFTWARE
