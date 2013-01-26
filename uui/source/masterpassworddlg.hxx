@@ -30,20 +30,15 @@
 //============================================================================
 class MasterPasswordDialog : public ModalDialog
 {
-    FixedText       aFTMasterPassword;
-    Edit            aEDMasterPassword;
-    FixedLine       aFL;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-
+    Edit*     m_pEDMasterPassword;
+    OKButton* m_pOKBtn;
 
     DECL_LINK(OKHdl_Impl, void *);
 
 public:
     MasterPasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );
 
-    String          GetMasterPassword() const { return aEDMasterPassword.GetText(); }
+    OUString        GetMasterPassword() const { return m_pEDMasterPassword->GetText(); }
 
 private:
     ::com::sun::star::task::PasswordRequestMode     nDialogMode;

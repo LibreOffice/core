@@ -20,7 +20,6 @@
 #include <vcl/msgbox.hxx>
 
 #include <ids.hrc>
-#include <masterpassworddlg.hrc>
 #include <masterpassworddlg.hxx>
 
 // MasterPasswordDialog---------------------------------------------------
@@ -40,19 +39,13 @@ MasterPasswordDialog::MasterPasswordDialog
     Window*                                     pParent,
     ::com::sun::star::task::PasswordRequestMode aDialogMode,
     ResMgr*                                     pResMgr
-) :
-
-    ModalDialog( pParent, ResId( DLG_UUI_MASTERPASSWORD, *pResMgr ) ),
-
-    aFTMasterPassword       ( this, ResId( FT_MASTERPASSWORD, *pResMgr ) ),
-    aEDMasterPassword       ( this, ResId( ED_MASTERPASSWORD, *pResMgr ) ),
-    aFL ( this, ResId( FL_FIXED_LINE, *pResMgr ) ),
-    aOKBtn                  ( this, ResId( BTN_MASTERPASSWORD_OK, *pResMgr ) ),
-    aCancelBtn              ( this, ResId( BTN_MASTERPASSWORD_CANCEL, *pResMgr ) ),
-    aHelpBtn                ( this, ResId( BTN_MASTERPASSWORD_HELP, *pResMgr ) ),
-    nDialogMode             ( aDialogMode ),
-    pResourceMgr            ( pResMgr )
+)
+    : ModalDialog(pParent, "MasterPasswordDialog", "uui/ui/masterpassworddlg.ui")
+    , nDialogMode(aDialogMode)
+    , pResourceMgr(pResMgr)
 {
+    get(m_pEDMasterPassword, "password");
+    get(m_pOKBtn, "ok");
     if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
     {
         String aErrorMsg( ResId( STR_ERROR_MASTERPASSWORD_WRONG, *pResourceMgr ));
@@ -60,9 +53,7 @@ MasterPasswordDialog::MasterPasswordDialog
         aErrorBox.Execute();
     }
 
-    FreeResource();
-
-    aOKBtn.SetClickHdl( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );
+    m_pOKBtn->SetClickHdl( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
