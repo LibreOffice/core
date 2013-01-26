@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Category first</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Numbering first</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkDialog" id="CaptionOptionsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -71,7 +85,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Level</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">_Level</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">level</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -85,7 +102,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Separator</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">_Separator</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">separator</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -143,7 +163,10 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="margin_right">12</property>
+                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Character style</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">style</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -167,13 +190,12 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="border_and_shadow">
-                            <property name="label" translatable="yes">Apply border and shadow</property>
-                            <property name="use_action_appearance">False</property>
+                            <property name="label" translatable="yes">_Apply border and shadow</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="halign">start</property>
-                            <property name="use_action_appearance">False</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -233,7 +255,10 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="margin_right">12</property>
+                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Caption order</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">caption_order</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -292,13 +317,11 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -310,11 +333,9 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -326,11 +347,9 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -354,19 +373,5 @@
       <action-widget response="0">cancel</action-widget>
       <action-widget response="0">help</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Category first</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Numbering first</col>
-      </row>
-    </data>
   </object>
 </interface>
