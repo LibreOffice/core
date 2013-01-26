@@ -141,11 +141,10 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 
     if ( getResult( nIndex ) )
     {
-        rtl::OUString aId
-            = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
+        OUString aId = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
 
         if ( !aId.isEmpty() )
-            aId += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            aId += "/";
 
         aId += m_pImpl->m_aResults[ nIndex ]->rData.aTitle;
 

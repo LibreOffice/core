@@ -88,7 +88,7 @@ namespace dbaccess
                 if ( i_rData.xDocDefCommands.is() )
                 {
                     Command aCommandOpen;
-                    aCommandOpen.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "show" ) );
+                    aCommandOpen.Name = "show";
 
                     const sal_Int32 nCommandIdentifier = i_rData.xDocDefCommands->createCommandIdentifier();
                     i_rData.xDocDefCommands->execute( aCommandOpen, nCommandIdentifier, NULL );

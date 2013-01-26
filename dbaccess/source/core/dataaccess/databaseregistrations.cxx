@@ -53,21 +53,21 @@ namespace dbaccess
     using ::com::sun::star::uno::XAggregation;
     /** === end UNO using === **/
 
-    static const ::rtl::OUString& getConfigurationRootPath()
+    static const OUString& getConfigurationRootPath()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/RegisteredNames"));
+        static OUString s_sNodeName("org.openoffice.Office.DataAccess/RegisteredNames");
         return s_sNodeName;
     }
 
-    const ::rtl::OUString& getLocationNodeName()
+    const OUString& getLocationNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Location"));
+        static OUString s_sNodeName("Location");
         return s_sNodeName;
     }
 
-    const ::rtl::OUString& getNameNodeName()
+    const OUString& getNameNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Name"));
+        static OUString s_sNodeName("Name");
         return s_sNodeName;
     }
 

@@ -204,10 +204,9 @@ ODatabaseContext::~ODatabaseContext()
 }
 
 // Helper
-rtl::OUString ODatabaseContext::getImplementationName_static() throw( RuntimeException )
-
+OUString ODatabaseContext::getImplementationName_static() throw( RuntimeException )
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.ODatabaseContext"));
+    return OUString("com.sun.star.comp.dba.ODatabaseContext");
 }
 
 Reference< XInterface > ODatabaseContext::Create(const Reference< XComponentContext >& _rxContext)

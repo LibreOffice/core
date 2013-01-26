@@ -733,7 +733,7 @@ void SAL_CALL ODocumentContainer::removeByName( const OUString& _rName ) throw(N
     {
         Command aCommand;
 
-        aCommand.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("delete"));
+        aCommand.Name = "delete";
         xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
     }
 
