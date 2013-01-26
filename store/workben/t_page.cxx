@@ -1305,60 +1305,58 @@ void MappedPageAccess::unmapFile (sal_uInt8 * pData, sal_uInt32 nSize)
 
 int SAL_CALL main (int argc, char ** argv)
 {
-  OSL_PRECOND(argc >= 1, "t_page: error: insufficient number of arguments.");
-  if (argc < 1)
-    return 0;
+    OSL_PRECOND(argc >= 1, "t_page: error: insufficient number of arguments.");
+    if (argc < 1)
+        return 0;
 
-  {
-    void *a = (void*)1, *b = (void*)2;
-    swap<void*>(a, b);
-  }
-  {
-    PageObject a;
-    PageObject b (a);
-    PageObject c;
-
-    c = b;
-    a = a;
-
-  }
-  {
-      TestBIOS aBIOS;
-      TestClient aClient;
-      aClient.dwim (aBIOS);
-  }
-
-  if (argc > 1)
-  {
-    rtl_uString * pFilename = 0;
-    rtl_uString_newFromAscii (&pFilename, argv[1]);
-    storeAccessMode eAccessMode = store_AccessReadOnly;
-
-    // Acquire file handle.
-    ResourceHolder<FileHandle> h1;
-    oslFileError result = h1.get().initialize (pFilename, FilePageAccess::MODE_TO_NATIVE(eAccessMode));
-    if (result == osl_File_E_None)
     {
-      ResourceHolder<FileHandle> h2 (h1);
-      h1 = h2;
-
-      if (eAccessMode == store_AccessReadOnly)
-      {
-    ResourceHolder<FileMapping> m1;
-    result = m1.get().initialize (h1.get());
-
-    const sal_uInt32 nSize = sal::static_int_cast<sal_uInt32>(m1.get().m_uSize);
-    (void) nSize; // UNUSED
-
-    ResourceHolder<FileMapping> m2 (m1);
-    m1 = m2;
-
-    result = osl_File_E_None;
-      }
+        void *a = (void*)1, *b = (void*)2;
+        swap<void*>(a, b);
     }
-  }
+    {
+        PageObject a;
+        PageObject b (a);
+        PageObject c;
 
-  return 0;
+        c = b;
+        a = a;
+    }
+    {
+        TestBIOS aBIOS;
+        TestClient aClient;
+        aClient.dwim (aBIOS);
+    }
+
+    if (argc > 1)
+    {
+        rtl_uString * pFilename = 0;
+        rtl_uString_newFromAscii (&pFilename, argv[1]);
+        storeAccessMode eAccessMode = store_AccessReadOnly;
+
+        // Acquire file handle.
+        ResourceHolder<FileHandle> h1;
+        oslFileError result = h1.get().initialize (pFilename, FilePageAccess::MODE_TO_NATIVE(eAccessMode));
+        if (result == osl_File_E_None)
+        {
+            ResourceHolder<FileHandle> h2 (h1);
+            h1 = h2;
+
+            if (eAccessMode == store_AccessReadOnly)
+            {
+                ResourceHolder<FileMapping> m1;
+                result = m1.get().initialize (h1.get());
+
+                const sal_uInt32 nSize = sal::static_int_cast<sal_uInt32>(m1.get().m_uSize);
+                (void) nSize; // UNUSED
+
+                ResourceHolder<FileMapping> m2 (m1);
+                m1 = m2;
+
+                return result;
+            }
+        }
+    }
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
