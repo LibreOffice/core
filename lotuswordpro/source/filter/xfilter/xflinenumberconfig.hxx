@@ -103,6 +103,7 @@ private:
 
 inline XFLineNumberConfig::XFLineNumberConfig()
 {
+    m_ePosition = enumXFLineNumberLeft;
     m_fOffset = 0;
     m_nIncrement = 5;
     m_nSepIncrement = 3;
