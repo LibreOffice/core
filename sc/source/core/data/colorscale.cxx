@@ -293,7 +293,7 @@ std::vector<double>& ScColorFormat::getValues() const
             SCTAB nTab = pRange->aStart.Tab();
             for(SCCOL nCol = pRange->aStart.Col(); nCol <= pRange->aEnd.Col(); ++nCol)
             {
-                for(SCCOL nRow = pRange->aStart.Row(); nRow <= pRange->aEnd.Row(); ++nRow)
+                for(SCROW nRow = pRange->aStart.Row(); nRow <= pRange->aEnd.Row(); ++nRow)
                 {
                     ScAddress aAddr(nCol, nRow, nTab);
                     CellType eType = mpDoc->GetCellType(aAddr);
