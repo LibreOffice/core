@@ -291,9 +291,21 @@ std::vector<double>& ScColorFormat::getValues() const
         {
             const ScRange* pRange = aRanges[i];
             SCTAB nTab = pRange->aStart.Tab();
-            for(SCCOL nCol = pRange->aStart.Col(); nCol <= pRange->aEnd.Col(); ++nCol)
+
+            SCCOL nColStart = pRange->aStart.Col();
+            SCROW nRowStart = pRange->aStart.Row();
+            SCCOL nColEnd = pRange->aEnd.Col();
+            SCROW nRowEnd = pRange->aEnd.Row();
+
+            if(nRowEnd == MAXROW)
             {
-                for(SCROW nRow = pRange->aStart.Row(); nRow <= pRange->aEnd.Row(); ++nRow)
+                bool bShrunk = false;
+                mpDoc->ShrinkToUsedDataArea(bShrunk, nTab, nColStart, nRowStart,
+                        nColEnd, nRowEnd, false);
+            }
+            for(SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
+            {
+                for(SCROW nRow = nRowStart; nRow <= nRowEnd; ++nRow)
                 {
                     ScAddress aAddr(nCol, nRow, nTab);
                     CellType eType = mpDoc->GetCellType(aAddr);
