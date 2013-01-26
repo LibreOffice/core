@@ -14,6 +14,7 @@
         <property name="xalign">0</property>
         <property name="label" translatable="yes">_Created:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">showcreate</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -29,6 +30,7 @@
         <property name="xalign">0</property>
         <property name="label" translatable="yes">_Modified:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">showmodify</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -44,6 +46,7 @@
         <property name="xalign">0</property>
         <property name="label" translatable="yes">_Digitally signed:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">showsigned</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -59,6 +62,7 @@
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Last pri_nted:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">showprint</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -74,6 +78,7 @@
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Total _editing time:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">showedittime</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -89,6 +94,7 @@
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Re_vision number:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">showrevision</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -203,11 +209,9 @@
     <child>
       <object class="GtkCheckButton" id="userdatacb">
         <property name="label" translatable="yes">_Apply user data</property>
-        <property name="use_action_appearance">False</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="no_show_all">True</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
@@ -222,11 +226,9 @@
     <child>
       <object class="GtkButton" id="reset">
         <property name="label" translatable="yes">Reset</property>
-        <property name="use_action_appearance">False</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="no_show_all">True</property>
-        <property name="use_action_appearance">False</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -238,11 +240,9 @@
     <child>
       <object class="GtkButton" id="signature">
         <property name="label" translatable="yes">Di_gital Signature...</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
       </object>
       <packing>
@@ -258,6 +258,8 @@
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Template:</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">showtemplate</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -287,6 +289,7 @@
         <property name="xalign">0</property>
         <property name="label" translatable="yes">_Size:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">showsize</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -317,6 +320,7 @@
         <property name="xalign">0</property>
         <property name="label" translatable="yes">_Location:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">showlocation</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -347,6 +351,7 @@
         <property name="xpad">1</property>
         <property name="label" translatable="yes">_Type:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">showtype</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -372,11 +377,9 @@
     <child>
       <object class="GtkButton" id="changepass">
         <property name="label" translatable="yes">Change _Password</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
       </object>
       <packing>
@@ -457,11 +460,9 @@
     <child>
       <object class="GtkCheckButton" id="readonlycb">
         <property name="label" translatable="yes">_Read-only</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
