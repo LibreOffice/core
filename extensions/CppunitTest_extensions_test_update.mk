@@ -32,6 +32,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,extensions_test_update, \
 	extensions/qa/update/test_update \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,extensions_test_update,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_libraries,extensions_test_update, \
 	updchk \
 	cppu \
