@@ -57,7 +57,7 @@ protected:
 
     inline SwView&      GetView()                       { return rView; }
     inline void         SetGetStateSet( SfxItemSet* p ) { pGetStateSet = p; }
-    inline sal_Bool     AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.insert( nSlot ).second; }
+    inline bool     AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.insert( nSlot ).second; }
 
     DECL_STATIC_LINK(   SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl* );
 

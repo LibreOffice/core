@@ -271,7 +271,7 @@ void SwCaptionDialog::Apply()
     aOpt.SetSeparator( m_pSepEdit->IsEnabled() ? m_pSepEdit->GetText() : OUString() );
     aOpt.SetCaption( m_pTextEdit->GetText() );
     aOpt.SetPos( m_pPosBox->GetSelectEntryPos() );
-    aOpt.IgnoreSeqOpts() = sal_True;
+    aOpt.IgnoreSeqOpts() = true;
     aOpt.CopyAttributes() = bCopyAttributes;
     aOpt.SetCharacterStyle( sCharacterStyle );
     rView.InsertCaption( &aOpt );
@@ -465,7 +465,7 @@ void SwSequenceOptionDialog::Apply()
     sal_Int8 nLvl = (sal_Int8)( m_pLbLevel->GetSelectEntryPos() - 1);
     sal_Unicode cDelim = m_pEdDelim->GetText()[0];
 
-    sal_Bool bUpdate = sal_True;
+    bool bUpdate = true;
     if( pFldType )
     {
         pFldType->SetDelimiter( rtl::OUString(cDelim) );
@@ -480,7 +480,7 @@ void SwSequenceOptionDialog::Apply()
         rSh.InsertFldType( aFldType );
     }
     else
-        bUpdate = sal_False;
+        bUpdate = false;
 
     if( bUpdate )
         rSh.UpdateExpFlds();

@@ -68,7 +68,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
     aCancelPB( this, SW_RES( PB_CANCEL )),
     aHelpPB( this, SW_RES( PB_HELP )),
     sSystemCharSet( SW_RES( STR_SYS_CHARSET )),
-    bSaveLineStatus( sal_True )
+    bSaveLineStatus( true )
 {
     FreeResource();
 
@@ -387,7 +387,7 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
         }
     }
 
-    bSaveLineStatus = sal_False;
+    bSaveLineStatus = false;
     if( eEnd != (LineEnd)-1 )       // changed?
     {
         if( eOldEnd != eEnd )
@@ -400,7 +400,7 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
         aCR_RB.Check( aCR_RB.GetSavedValue() );
         aLF_RB.Check( aLF_RB.GetSavedValue() );
     }
-    bSaveLineStatus = sal_True;
+    bSaveLineStatus = true;
 
     if( nOldLng != nLng && aFontLB.IsVisible() )
         aLanguageLB.SelectLanguage( nLng );

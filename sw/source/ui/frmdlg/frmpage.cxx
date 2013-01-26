@@ -463,7 +463,7 @@ static void lcl_InsertVectors(ListBox& rBox,
 
 // --> OD 2009-08-31 #mongolianlayout#
 // add input parameter
-static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString::StringId eStringId, sal_Bool bVertical, sal_Bool bVerticalL2R, sal_Bool bRTL)
+static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString::StringId eStringId, bool bVertical, sal_Bool bVerticalL2R, sal_Bool bRTL)
 {
     //special handling of STR_FROMLEFT
     if ( SwFPos::FROMLEFT == eStringId )
@@ -657,7 +657,7 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     bNoModifyHdl(sal_True),
     // --> OD 2009-08-31 #mongolianlayout# - no used
 //    bVerticalChanged(sal_False),
-    bIsVerticalFrame(sal_False),
+    bIsVerticalFrame(false),
     bIsVerticalL2R(sal_False),
     bIsInRightToLeft(sal_False),
     bHtmlMode(sal_False),
@@ -817,7 +817,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
             String sHLabel = aHorizontalFT.GetText();
             aHorizontalFT.SetText(aVerticalFT.GetText());
             aVerticalFT.SetText(sHLabel);
-            bIsVerticalFrame = sal_True;
+            bIsVerticalFrame = true;
         }
     }
 
@@ -1056,11 +1056,11 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
     const SwFmtFrmSize& rOldSize = (const SwFmtFrmSize& )rOldSet.Get(RES_FRM_SIZE);
     SwFmtFrmSize aSz( rOldSize );
 
-    sal_Bool bValueModified = (aWidthED.IsValueModified() || aHeightED.IsValueModified());
-    sal_Bool bCheckChanged = (aRelWidthCB.GetSavedValue() != aRelWidthCB.IsChecked()
+    bool bValueModified = (aWidthED.IsValueModified() || aHeightED.IsValueModified());
+    bool bCheckChanged = (aRelWidthCB.GetSavedValue() != aRelWidthCB.IsChecked()
                         || aRelHeightCB.GetSavedValue() != aRelHeightCB.IsChecked());
 
-    sal_Bool bLegalValue = !(!rOldSize.GetWidth () && !rOldSize.GetHeight() &&
+    bool bLegalValue = !(!rOldSize.GetWidth () && !rOldSize.GetHeight() &&
                             aWidthED .GetValue() == aWidthED .GetMin() &&
                             aHeightED.GetValue() == aHeightED.GetMin());
 
@@ -1714,7 +1714,7 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
     aVal.nHPos = nAtHorzPosVal;
     aVal.nVPos = nAtVertPosVal;
 
-    aMgr.ValidateMetrics(aVal, mpToCharCntntPos, sal_True);   // one time, to get reference values for percental values
+    aMgr.ValidateMetrics(aVal, mpToCharCntntPos, true);   // one time, to get reference values for percental values
 
     // set reference values for percental values (100%) ...
     aWidthED.SetRefValue(aVal.aPercentSize.Width());
@@ -1821,7 +1821,7 @@ IMPL_LINK_NOARG(SwFrmPage, AnchorTypeHdl)
 
 IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
 {
-    sal_Bool bHori = pLB == &aHorizontalDLB;
+    bool bHori = pLB == &aHorizontalDLB;
     ListBox *pRelLB = bHori ? &aHoriRelationLB : &aVertRelationLB;
     FixedText *pRelFT = bHori ? &aHoriRelationFT : &aVertRelationFT;
     FrmMap *pMap = bHori ? pHMap : pVMap;
@@ -1867,7 +1867,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
     // special treatment for HTML-Mode with horizonal-vertical-dependencies
     if(bHtmlMode && (FLY_AT_CHAR == GetAnchor()))
     {
-        sal_Bool bSet = sal_False;
+        bool bSet = false;
         if(bHori)
         {
             // right is allowed only above - from the left only above
@@ -1879,17 +1879,17 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
                     aVerticalDLB.SelectEntryPos(1);
                 else
                     aVerticalDLB.SelectEntryPos(0);
-                bSet = sal_True;
+                bSet = true;
             }
             else if(text::HoriOrientation::LEFT == nAlign && 1 == aVerticalDLB.GetSelectEntryPos())
             {
                 aVerticalDLB.SelectEntryPos(0);
-                bSet = sal_True;
+                bSet = true;
             }
             else if(text::HoriOrientation::NONE == nAlign && 1 == aVerticalDLB.GetSelectEntryPos())
             {
                 aVerticalDLB.SelectEntryPos(0);
-                bSet = sal_True;
+                bSet = true;
             }
             if(bSet)
                 PosHdl(&aVerticalDLB);
@@ -1901,7 +1901,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
                 if(1 == aHorizontalDLB.GetSelectEntryPos())
                 {
                     aHorizontalDLB.SelectEntryPos(0);
-                    bSet = sal_True;
+                    bSet = true;
                 }
                 aHoriRelationLB.SelectEntryPos(1);
             }
@@ -1910,7 +1910,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
                 if(2 == aHorizontalDLB.GetSelectEntryPos())
                 {
                     aHorizontalDLB.SelectEntryPos(0);
-                    bSet = sal_True;
+                    bSet = true;
                 }
                 aHoriRelationLB.SelectEntryPos(0) ;
             }
@@ -1927,7 +1927,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
  --------------------------------------------------------------------*/
 IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
 {
-    sal_Bool bHori = pLB == &aHoriRelationLB;
+    bool bHori = pLB == &aHoriRelationLB;
 
     UpdateExample();
 
@@ -2410,11 +2410,11 @@ sal_Bool SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
     {
         bModified = sal_True;
 
-        sal_Bool bHori = sal_False;
+        bool bHori = false;
 
         if (aMirrorHorzBox.IsChecked() &&
                 !aLeftPagesRB.IsChecked())
-            bHori = sal_True;
+            bHori = true;
 
         MirrorGraph eMirror;
         eMirror = aMirrorVertBox.IsChecked() && bHori ?
@@ -2523,7 +2523,7 @@ BmpWindow::BmpWindow( Window* pPar, sal_uInt16 nId,
     bHorz(sal_False),
     bVert(sal_False),
     bGraphic(sal_False),
-    bLeftAlign(sal_False)
+    bLeftAlign(false)
 {
     SetBackground();
     SetPaintTransparent(sal_True);
@@ -3100,7 +3100,7 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
     SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
     if (pFmt)
     {
-        sal_Bool bNextBox = &aNextLB == pBox;
+        bool bNextBox = &aNextLB == pBox;
         ListBox& rChangeLB = bNextBox ? aPrevLB : aNextLB;
         for(sal_uInt16 nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
             rChangeLB.RemoveEntry(nEntry - 1);

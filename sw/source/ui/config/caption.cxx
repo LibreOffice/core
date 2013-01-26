@@ -31,7 +31,7 @@ InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleI
     nPos(1),
     nLevel(0),
     sSeparator( rtl::OUString(": ") ),
-    bIgnoreSeqOpts(sal_False),
+    bIgnoreSeqOpts(false),
     bCopyAttributes(sal_False)
 {
     if (pOleId)

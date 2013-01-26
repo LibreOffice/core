@@ -360,10 +360,10 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
     long nLength = aLogSize.Height() - 2 * aTL.Y();
     Point aUp( aTL );
     Point aDown( aTL.X(), nLength );
-    sal_Bool bLines = sal_False;
+    bool bLines = false;
     if(m_aCols.GetLineAdj() != COLADJ_NONE)
     {
-        bLines = sal_True;
+        bLines = true;
 
         sal_uInt16 nPercent = m_aCols.GetLineHeight();
         if( nPercent != 100 )
@@ -540,7 +540,7 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
             m_bVertical ? aCharRect.Move(nRubyHeight, 0) : aCharRect.Move(0, nRubyHeight);
 
         //vertical lines
-        sal_Bool bBothLines = pGridItem->GetGridType() == GRID_LINES_CHARS;
+        bool bBothLines = pGridItem->GetGridType() == GRID_LINES_CHARS;
         SetFillColor( Color( COL_TRANSPARENT ) );
         sal_Int32 nXMove = m_bVertical ? nLineHeight : 0;
         sal_Int32 nYMove = m_bVertical ? 0 : nLineHeight;

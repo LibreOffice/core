@@ -71,7 +71,7 @@ class SwTextGridPage: public SfxTabPage
     sal_Int32       m_nRubyUserValue;
     sal_Bool        m_bRubyUserValue;
     Size            m_aPageSize;
-    sal_Bool        m_bVertical;
+    bool        m_bVertical;
     sal_Bool        m_bSquaredMode;
     sal_Bool        m_bHRulerChanged;
     sal_Bool        m_bVRulerChanged;

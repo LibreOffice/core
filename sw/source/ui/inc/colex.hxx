@@ -51,7 +51,7 @@ class SwTextGridItem;
 class SW_DLLPUBLIC SwPageGridExample : public SwPageExample
 {
     SwTextGridItem*     pGridItem;
-    sal_Bool            m_bVertical;
+    bool            m_bVertical;
 protected:
     virtual void DrawPage( const Point& rPoint,
                            const sal_Bool bSecond,
@@ -60,7 +60,7 @@ public:
     SwPageGridExample(Window* pPar, const ResId& rResId ) :
                                 SwPageExample(pPar, rResId ),
                                 pGridItem(0),
-                                m_bVertical(sal_False){}
+                                m_bVertical(false){}
     ~SwPageGridExample();
     void UpdateExample( const SfxItemSet& rSet );
 };

@@ -27,7 +27,7 @@ class SwToolbarConfigItem : public utl::ConfigItem
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
 
 public:
-    SwToolbarConfigItem( sal_Bool bWeb );
+    SwToolbarConfigItem( bool bWeb );
     ~SwToolbarConfigItem();
 
     virtual void Commit();

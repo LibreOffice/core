@@ -79,8 +79,8 @@ SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     sOldValueFT = aValueFT.GetText();
     sOldNameFT = aNameFT.GetText();
 
-    aCond1ED.ShowBrackets(sal_False);
-    aCond2ED.ShowBrackets(sal_False);
+    aCond1ED.ShowBrackets(false);
+    aCond2ED.ShowBrackets(false);
 
 }
 
@@ -245,7 +245,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
         aListNameFT.Show(bDropDown);
         aListNameED.Show(bDropDown);
 
-        aNameED.SetDropEnable(sal_False);
+        aNameED.SetDropEnable(false);
 
         if (IsFldEdit())
         {
@@ -299,7 +299,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
 
             case TYP_HIDDENPARAFLD:
                 aNameFT.SetText(SW_RESSTR(STR_COND));
-                aNameED.SetDropEnable(sal_True);
+                aNameED.SetDropEnable(true);
                 bName = sal_True;
                 aNameED.SetAccessibleName(aNameFT.GetText());
                 aValueED.SetAccessibleName(aValueFT.GetText());
@@ -308,7 +308,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
             case TYP_HIDDENTXTFLD:
             {
                 aNameFT.SetText(SW_RESSTR(STR_COND));
-                aNameED.SetDropEnable(sal_True);
+                aNameED.SetDropEnable(true);
                 aValueFT.SetText(SW_RESSTR(STR_INSTEXT));
                 SwWrtShell* pSh = GetActiveWrtShell();
                 if (!IsFldEdit() && pSh )
@@ -321,7 +321,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
 
             case TYP_CONDTXTFLD:
                 aNameFT.SetText(SW_RESSTR(STR_COND));
-                aNameED.SetDropEnable(sal_True);
+                aNameED.SetDropEnable(true);
                 if (IsFldEdit())
                 {
                     aCond1ED.SetText(GetCurField()->GetPar2().getToken(0, '|'));
@@ -351,7 +351,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
             case TYP_COMBINED_CHARS:
                 {
                     aNameFT.SetText(SW_RESSTR(STR_COMBCHRS_FT));
-                    aNameED.SetDropEnable(sal_True);
+                    aNameED.SetDropEnable(true);
                     bName = sal_True;
 
                     const sal_Int32 nLen = aNameED.GetText().getLength();

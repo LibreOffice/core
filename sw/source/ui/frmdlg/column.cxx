@@ -76,10 +76,10 @@ using namespace ::com::sun::star;
 
 static const sal_uInt16 nVisCols = 3;
 
-inline sal_Bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
+inline bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
 {
     rWrtSh.SwapPam();
-    sal_Bool bRet = pSect == rWrtSh.GetCurrSection();
+    bool bRet = pSect == rWrtSh.GetCurrSection();
     rWrtSh.SwapPam();
     return bRet;
 }
@@ -93,10 +93,10 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh)
     , pFrameSet(0)
     , nOldSelection(0)
     , nSelectionWidth(0)
-    , bPageChanged(sal_False)
-    , bSectionChanged(sal_False)
-    , bSelSectionChanged(sal_False)
-    , bFrameChanged(sal_False)
+    , bPageChanged(false)
+    , bSectionChanged(false)
+    , bSelSectionChanged(false)
+    , bFrameChanged(false)
 {
     SwRect aRect;
     rWrtShell.CalcBoundRect(aRect, FLY_AS_CHAR);
@@ -233,19 +233,19 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
         break;
         case LISTBOX_SECTION    :
             pSet = pSectionSet;
-            bSectionChanged = sal_True;
+            bSectionChanged = true;
         break;
         case LISTBOX_SECTIONS   :
             pSet = pSectionSet;
-            bSelSectionChanged = sal_True;
+            bSelSectionChanged = true;
         break;
         case LISTBOX_PAGE       :
             pSet = pPageSet;
-            bPageChanged = sal_True;
+            bPageChanged = true;
         break;
         case LISTBOX_FRAME:
             pSet = pFrameSet;
-            bFrameChanged = sal_True;
+            bFrameChanged = true;
         break;
     }
     if(pBox)
@@ -297,19 +297,19 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
         break;
         case LISTBOX_SECTION    :
             pSet = pSectionSet;
-            bSectionChanged = sal_True;
+            bSectionChanged = true;
         break;
         case LISTBOX_SECTIONS   :
             pSet = pSectionSet;
-            bSelSectionChanged = sal_True;
+            bSelSectionChanged = true;
         break;
         case LISTBOX_PAGE       :
             pSet = pPageSet;
-            bPageChanged = sal_True;
+            bPageChanged = true;
         break;
         case LISTBOX_FRAME:
             pSet = pFrameSet;
-            bFrameChanged = sal_True;
+            bFrameChanged = true;
         break;
     }
     pTabPage->FillItemSet(*pSet);
@@ -410,7 +410,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     , bFormat(sal_False)
     , bFrm(sal_False)
     , bHtmlMode(sal_False)
-    , bLockUpdate(sal_False)
+    , bLockUpdate(false)
 {
     get(m_pCLNrEdt, "colsnf");
     get(m_pBalanceColsCB, "balance");
@@ -1285,7 +1285,7 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
     }
     else
     {
-        bLockUpdate = sal_True;
+        bLockUpdate = true;
         m_pCLNrEdt->SetValue( 2 );
         m_pAutoWidthBox->Check(sal_False);
         aDistEd1.SetPrcntValue(0);
@@ -1302,7 +1302,7 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
             aEd1.SetPrcntValue(aEd1.NormalizePercent(long(nSmall)), FUNIT_TWIP);
             pModifiedField = &aEd1;
         }
-        bLockUpdate = sal_False;
+        bLockUpdate = false;
         Timeout();
 
     }

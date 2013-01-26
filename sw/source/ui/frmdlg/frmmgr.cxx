@@ -256,7 +256,7 @@ void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         const SwPosition* pToCharCntntPos,
-        sal_Bool bOnlyPercentRefValue )
+        bool bOnlyPercentRefValue )
 {
     if (!bOnlyPercentRefValue)
     {

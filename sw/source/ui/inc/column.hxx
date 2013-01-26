@@ -57,10 +57,10 @@ class SwColumnDlg : public SfxModalDialog
     long                nSelectionWidth;
     long                nPageWidth;
 
-    sal_Bool                bPageChanged : 1;
-    sal_Bool                bSectionChanged : 1;
-    sal_Bool                bSelSectionChanged : 1;
-    sal_Bool                bFrameChanged : 1;
+    bool                bPageChanged : 1;
+    bool                bSectionChanged : 1;
+    bool                bSelSectionChanged : 1;
+    bool                bFrameChanged : 1;
 
 
     DECL_LINK(ObjectHdl, ListBox*);
@@ -138,7 +138,7 @@ class SwColumnPage : public SfxTabPage
     sal_Bool            bFormat;
     sal_Bool            bFrm;
     sal_Bool            bHtmlMode;
-    sal_Bool            bLockUpdate;
+    bool            bLockUpdate;
 
     // Handler
     DECL_LINK( ColModify, NumericField * );

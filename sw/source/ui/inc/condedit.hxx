@@ -25,7 +25,7 @@
 
 class SW_DLLPUBLIC ConditionEdit : public Edit, public DropTargetHelper
 {
-    sal_Bool bBrackets, bEnableDrop;
+    bool bBrackets, bEnableDrop;
 
     SW_DLLPRIVATE virtual sal_Int8  AcceptDrop( const AcceptDropEvent& rEvt );
     SW_DLLPRIVATE virtual sal_Int8  ExecuteDrop( const ExecuteDropEvent& rEvt );
@@ -33,9 +33,9 @@ class SW_DLLPUBLIC ConditionEdit : public Edit, public DropTargetHelper
 public:
     ConditionEdit( Window* pParent, const ResId& rResId );
 
-    inline void ShowBrackets(sal_Bool bShow)        { bBrackets = bShow; }
+    inline void ShowBrackets(bool bShow)        { bBrackets = bShow; }
 
-    inline void SetDropEnable( sal_Bool bFlag )     { bEnableDrop = bFlag; }
+    inline void SetDropEnable( bool bFlag )     { bEnableDrop = bFlag; }
 };
 
 #endif

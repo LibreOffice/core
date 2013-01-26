@@ -43,7 +43,7 @@ public:
     inline sal_Bool         IsAutoWidth() const;
     void                SetAutoWidth(sal_Bool bOn = sal_True, sal_uInt16 lGutterWidth = 0);
 
-    inline sal_Bool         HasLine() const;
+    inline bool         HasLine() const;
     inline void         SetNoLine();
 
     void                SetLineWidthAndColor(::editeng::SvxBorderStyle eStyle, sal_uLong nWidth, const Color& rCol);
@@ -114,7 +114,7 @@ inline void SwColMgr::NoCols()
 {
     aFmtCol.GetColumns().clear();
 }
-inline sal_Bool SwColMgr::HasLine() const
+inline bool SwColMgr::HasLine() const
 {
     return GetAdjust() != COLADJ_NONE;
 }

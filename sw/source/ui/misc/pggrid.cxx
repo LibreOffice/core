@@ -71,7 +71,7 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     m_nRubyUserValue(0),
     m_bRubyUserValue(sal_False),
     m_aPageSize(MM50, MM50),
-    m_bVertical(sal_False),
+    m_bVertical(false),
     m_bSquaredMode(sal_False),
     m_bHRulerChanged( sal_False ),
     m_bVRulerChanged( sal_False )

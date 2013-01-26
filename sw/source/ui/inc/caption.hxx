@@ -39,7 +39,7 @@ private:
     String          sSeparator;
     String          sCharacterStyle;
 
-    sal_Bool         bIgnoreSeqOpts;    // is not being saved
+    bool         bIgnoreSeqOpts;    // is not being saved
     sal_Bool         bCopyAttributes;   //          -""-
 
 public:
@@ -81,8 +81,8 @@ public:
     void                    SetCharacterStyle(const String& rStyle)
                                     { sCharacterStyle = rStyle; }
 
-    inline sal_Bool&            IgnoreSeqOpts()                 { return bIgnoreSeqOpts; }
-    inline sal_Bool             IgnoreSeqOpts() const           { return bIgnoreSeqOpts; }
+    inline bool&            IgnoreSeqOpts()                 { return bIgnoreSeqOpts; }
+    inline bool             IgnoreSeqOpts() const           { return bIgnoreSeqOpts; }
 
     inline sal_Bool&            CopyAttributes()                { return bCopyAttributes; }
     inline sal_Bool             CopyAttributes() const          { return bCopyAttributes; }

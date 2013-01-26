@@ -201,7 +201,7 @@ IMPL_LINK_NOARG(SwFldVarPage, TypeHdl)
             aValueED.SetText(aEmptyStr);
         }
 
-        aValueED.SetDropEnable(sal_False);
+        aValueED.SetDropEnable(false);
         UpdateSubType();    // initialise selection-listboxes
     }
 
@@ -279,7 +279,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             }
             bValue = bName = bNumFmt = bInvisible = sal_True;
 
-            aValueED.SetDropEnable(sal_True);
+            aValueED.SetDropEnable(true);
             break;
         }
 
@@ -330,7 +330,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 // (instead of test2 = test + 1)
                 aValueED.SetText(((SwSetExpField*)GetCurField())->GetFormula());
             }
-            aValueED.SetDropEnable(sal_True);
+            aValueED.SetDropEnable(true);
             break;
 
         case TYP_FORMELFLD:
@@ -338,7 +338,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 bValue = sal_True;
                 bNumFmt = sal_True;
                 aValueFT.SetText(SW_RESSTR(STR_FORMULA));
-                aValueED.SetDropEnable(sal_True);
+                aValueED.SetDropEnable(true);
             }
             break;
 

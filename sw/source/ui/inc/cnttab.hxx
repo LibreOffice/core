@@ -48,7 +48,7 @@ struct CurTOXType
     TOXTypes    eType;
     sal_uInt16      nIndex; //for TOX_USER only
 
-    sal_Bool operator==(const CurTOXType aCmp)
+    bool operator==(const CurTOXType aCmp)
        {
         return eType == aCmp.eType && nIndex == aCmp.nIndex;
        }

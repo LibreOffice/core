@@ -184,8 +184,8 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     pModuleConfig = new SwModuleOptions;
 
     // We need them anyways
-    pToolbarConfig = new SwToolbarConfigItem( sal_False );
-    pWebToolbarConfig = new SwToolbarConfigItem( sal_True );
+    pToolbarConfig = new SwToolbarConfigItem( false );
+    pWebToolbarConfig = new SwToolbarConfigItem( true );
 
     pStdFontConfig = new SwStdFontConfig;
 

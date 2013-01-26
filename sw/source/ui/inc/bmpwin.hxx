@@ -36,7 +36,7 @@ private:
     sal_Bool        bHorz : 1;
     sal_Bool        bVert : 1;
     sal_Bool        bGraphic : 1;
-    sal_Bool        bLeftAlign : 1;
+    bool        bLeftAlign : 1;
 
     void Paint(const Rectangle& rRect);
 
@@ -45,7 +45,7 @@ public:
                 const Graphic& rGraphic, const BitmapEx& rBmp);
     BmpWindow(Window* pParent, const ResId rResId) :
         Window(pParent, rResId),
-        bHorz(sal_False), bVert(sal_False),bGraphic(sal_False), bLeftAlign(sal_True) {}
+        bHorz(sal_False), bVert(sal_False),bGraphic(sal_False), bLeftAlign(true) {}
     ~BmpWindow();
     void MirrorVert(sal_Bool bMirror) { bVert = bMirror; Invalidate(); }
     void MirrorHorz(sal_Bool bMirror) { bHorz = bMirror; Invalidate(); }

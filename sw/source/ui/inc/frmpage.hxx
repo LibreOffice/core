@@ -97,7 +97,7 @@ class SwFrmPage: public SfxTabPage
     sal_Bool            bFormat;
     sal_Bool            bNew;
     sal_Bool            bNoModifyHdl;
-    sal_Bool            bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
+    bool            bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
     // --> OD 2009-08-31 #mongolianlayou#
     sal_Bool            bIsVerticalL2R;
     sal_Bool            bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
