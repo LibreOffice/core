@@ -55,4 +55,4 @@ $(eval $(call gb_Library_add_cobjects,jpipe,\
 
 endif
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

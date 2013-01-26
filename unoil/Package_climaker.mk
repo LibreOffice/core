@@ -31,4 +31,4 @@ $(eval $(call gb_Package_add_file,unoil_climaker,bin/cli_oootypes.config,cli_ooo
 $(eval $(call gb_Package_add_file,unoil_climaker,bin/cli_oootypes.dll,cli_oootypes.dll))
 $(eval $(call gb_Package_add_file,unoil_climaker,bin/policy.1.0.cli_oootypes.dll,policy.1.0.cli_oootypes.dll))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

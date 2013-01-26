@@ -29,4 +29,4 @@ $(eval $(call gb_Package_Package,ure_uretest,$(patsubst %/,%,$(dir $(call gb_Zip
 
 $(eval $(call gb_Package_add_file,ure_uretest,bin/uretest.zip,uretest.zip))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

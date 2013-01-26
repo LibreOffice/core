@@ -44,4 +44,4 @@ $(eval $(call gb_Library_add_exception_objects,invocadapt,\
     stoc/source/invocation_adapterfactory/iafactory \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

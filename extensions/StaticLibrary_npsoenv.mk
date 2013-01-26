@@ -35,4 +35,4 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,npsoenv,\
 	extensions/source/nsplugin/source/so_env \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

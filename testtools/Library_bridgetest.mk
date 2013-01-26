@@ -52,4 +52,4 @@ $(eval $(call gb_Library_add_exception_objects,testtools_bridgetest,\
     testtools/source/bridgetest/bridgetest \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

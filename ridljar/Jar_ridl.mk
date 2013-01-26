@@ -66,4 +66,4 @@ $(eval $(call gb_Jar_add_sourcefiles,ridl,\
     ridljar/com/sun/star/uno/UnoRuntime \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

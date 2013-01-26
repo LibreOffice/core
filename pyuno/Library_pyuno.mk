@@ -64,4 +64,4 @@ $(eval $(call gb_Library_add_exception_objects,pyuno,\
     pyuno/source/module/pyuno_gc \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

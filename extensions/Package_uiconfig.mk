@@ -32,4 +32,4 @@ $(eval $(call gb_Package_Package,extensions_uiconfig,$(SRCDIR)/extensions/source
 
 $(eval $(call gb_Package_add_file,extensions_uiconfig,xml/uiconfig/modules/sbibliography/menubar/menubar.xml,menubar.xml))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

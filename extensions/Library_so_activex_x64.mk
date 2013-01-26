@@ -78,4 +78,4 @@ $(eval $(call gb_Library_add_libs,so_activex_x64,\
 ))
 endif
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -35,4 +35,4 @@ $(eval $(call gb_Zip_add_file,mdibundle,Info.plist,$(SRCDIR)/extensions/source/m
 $(eval $(call gb_Zip_add_file,mdibundle,en.lproj/schema.strings,$(SRCDIR)/extensions/source/macosx/spotlight/mdimporter/en.lproj/schema.strings))
 $(eval $(call gb_Zip_add_file,mdibundle,MacOS/OOoSpotlightImporter,$(OUTDIR)/lib/libOOoSpotlightImporter.dylib))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

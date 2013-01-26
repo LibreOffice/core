@@ -46,4 +46,4 @@ $(eval $(call gb_JunitTest_add_classes,jurt_java_remote,\
     com.sun.star.lib.uno.bridges.java_remote.java_remote_bridge_Test \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

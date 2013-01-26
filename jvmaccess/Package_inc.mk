@@ -32,4 +32,4 @@ $(eval $(call gb_Package_add_file,jvmaccess_inc,inc/jvmaccess/jvmaccessdllapi.h,
 $(eval $(call gb_Package_add_file,jvmaccess_inc,inc/jvmaccess/unovirtualmachine.hxx,unovirtualmachine.hxx))
 $(eval $(call gb_Package_add_file,jvmaccess_inc,inc/jvmaccess/virtualmachine.hxx,virtualmachine.hxx))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

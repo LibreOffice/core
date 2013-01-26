@@ -29,4 +29,4 @@ $(eval $(call gb_Package_Package,desktop_soffice_sh,$(call gb_CustomTarget_get_w
 
 $(eval $(call gb_Package_add_file,desktop_soffice_sh,bin/soffice,soffice.sh))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -44,4 +44,4 @@ $(eval $(call gb_InternalUnoApi_add_idlfiles,cppu,cppu/qa/cppumaker,\
     types \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

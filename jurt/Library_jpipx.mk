@@ -36,4 +36,4 @@ $(eval $(call gb_Library_add_cobjects,jpipx,\
     jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

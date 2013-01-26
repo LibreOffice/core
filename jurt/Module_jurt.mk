@@ -63,4 +63,4 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,jurt,\
 
 endif
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

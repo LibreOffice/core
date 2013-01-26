@@ -67,4 +67,4 @@ $(eval $(call gb_Jar_add_sourcefiles,juh,\
     javaunohelper/com/sun/star/lib/uno/helper/WeakBase \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

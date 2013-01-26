@@ -44,4 +44,4 @@ $(eval $(call gb_Executable_add_exception_objects,xpdfimport,\
     sdext/source/pdfimport/xpdfwrapper/wrapper_gpl \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

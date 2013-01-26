@@ -61,4 +61,4 @@ $(eval $(call gb_Library_use_libraries,log,\
 	$(gb_UWINAPI) \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

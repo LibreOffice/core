@@ -47,4 +47,4 @@ $(eval $(call gb_Library_add_exception_objects,java_uno_accessbridge,\
     accessibility/bridge/source/java/WindowsAccessBridgeAdapter \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -30,4 +30,4 @@ $(eval $(call gb_Package_Package,jvmfwk_jreproperties,$(call gb_CustomTarget_get
 $(eval $(call gb_Package_add_file,jvmfwk_jreproperties,bin/JREProperties.class,JREProperties.class))
 $(eval $(call gb_Package_add_file,jvmfwk_jreproperties,lib/JREProperties.class,JREProperties.class))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

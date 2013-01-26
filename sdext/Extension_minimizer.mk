@@ -49,4 +49,4 @@ $(eval $(call gb_Extension_add_files,presentation-minimizer,registry/data/org/op
 
 $(eval $(call gb_Extension_add_file,presentation-minimizer,registry/data/org/openoffice/Office/extension/SunPresentationMinimizer.xcu,$(call gb_XcuFile_for_extension,sdext/source/minimizer/registry/data/org/openoffice/Office/extension/SunPresentationMinimizer.xcu)))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

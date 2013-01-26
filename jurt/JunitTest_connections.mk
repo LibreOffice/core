@@ -41,4 +41,4 @@ $(eval $(call gb_JunitTest_add_classes,jurt_connections,\
     com.sun.star.comp.connections.PipedConnection_Test \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -31,4 +31,4 @@ $(eval $(call gb_StaticLibrary_add_noexception_objects,winextendloaderenv,\
     desktop/win32/source/extendloaderenvironment \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

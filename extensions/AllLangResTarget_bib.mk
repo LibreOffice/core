@@ -53,4 +53,4 @@ $(eval $(call gb_SrsTarget_add_files,bib/res,\
 	extensions/source/bibliography/toolbar.src \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

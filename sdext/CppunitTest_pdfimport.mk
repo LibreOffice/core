@@ -76,4 +76,4 @@ $(eval $(call gb_CppunitTest_use_components,sdext_pdfimport,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sdext_pdfimport))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

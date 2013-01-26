@@ -41,4 +41,4 @@ $(eval $(call gb_Pyuno_add_files,letter,\
 ))
 $(eval $(call gb_Pyuno_set_componentfile_full,letter,wizards/com/sun/star/wizards/letter/letter,vnd.openoffice.pymodule:wizards.letter,.CallWizard))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

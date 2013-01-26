@@ -46,4 +46,4 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,OOoSpotlightImporter,\
 
 $(eval $(call gb_Library_use_external,OOoSpotlightImporter,zlib))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

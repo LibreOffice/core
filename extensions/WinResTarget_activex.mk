@@ -47,4 +47,4 @@ $(eval $(call gb_WinResTarget_add_defs,activex_res,\
 	-DSO_ACTIVEX_TLB_DIR=$(subst /,\\,$(subst $(SRCDIR),../../..,$(WORKDIR)/CustomTarget/extensions/source/activex/idl)) \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

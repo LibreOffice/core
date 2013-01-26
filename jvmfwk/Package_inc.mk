@@ -32,4 +32,4 @@ $(eval $(call gb_Package_add_file,jvmfwk_inc,inc/jvmfwk/jvmfwkdllapi.h,jvmfwkdll
 $(eval $(call gb_Package_add_file,jvmfwk_inc,inc/jvmfwk/jvmfwkplugindllapi.h,jvmfwkplugindllapi.h))
 $(eval $(call gb_Package_add_file,jvmfwk_inc,inc/jvmfwk/vendorplugin.h,vendorplugin.h))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -53,4 +53,4 @@ $(eval $(call gb_Executable_add_cxxflags,cppumaker,\
 ))
 endif
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

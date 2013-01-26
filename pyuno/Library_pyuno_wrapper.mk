@@ -56,4 +56,4 @@ $(eval $(call gb_Library_add_cobjects,pyuno_wrapper,\
     pyuno/source/module/pyuno_dlopenwrapper \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

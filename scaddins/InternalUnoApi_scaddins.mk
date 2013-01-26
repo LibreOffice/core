@@ -53,4 +53,4 @@ $(eval $(call gb_InternalUnoApi_add_idlfiles,scaddins,scaddins/idl/com/sun/star/
     XMiscFunctions \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

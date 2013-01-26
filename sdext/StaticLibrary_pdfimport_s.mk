@@ -78,4 +78,4 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,pdfimport_s,\
     sdext/source/pdfimport/wrapper/wrapper \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

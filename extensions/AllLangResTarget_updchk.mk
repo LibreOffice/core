@@ -40,4 +40,4 @@ $(eval $(call gb_SrsTarget_add_nonlocalized_files,updchk/res,\
 	extensions/source/update/ui/updatecheckui.src \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

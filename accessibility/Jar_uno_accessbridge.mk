@@ -95,4 +95,4 @@ $(eval $(call gb_Jar_add_generated_sourcefiles,java_uno_accessbridge,\
     CustomTarget/accessibility/bridge/org/openoffice/java/accessibility/Build \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

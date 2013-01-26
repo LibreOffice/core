@@ -96,4 +96,4 @@ $(eval $(call gb_Jar_add_sourcefiles,jurt,\
     jurt/com/sun/star/uno/WeakReference \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

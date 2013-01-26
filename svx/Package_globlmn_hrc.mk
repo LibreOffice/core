@@ -29,4 +29,4 @@ $(eval $(call gb_Package_Package,svx_globlmn_hrc,$(call gb_SrsTemplateTarget_get
 
 $(eval $(call gb_Package_add_file,svx_globlmn_hrc,inc/svx/globlmn.hrc,globlmn.hrc))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

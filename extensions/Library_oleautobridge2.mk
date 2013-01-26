@@ -91,4 +91,4 @@ $(eval $(call gb_Library_add_generated_exception_objects,oleautobridge2,\
 	CustomTarget/extensions/source/ole/windata \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

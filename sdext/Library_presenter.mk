@@ -80,4 +80,4 @@ $(eval $(call gb_Library_add_exception_objects,PresenterScreen,\
     sdext/source/presenter/PresenterWindowManager \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

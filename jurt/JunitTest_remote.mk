@@ -50,4 +50,4 @@ $(eval $(call gb_JunitTest_add_classes,jurt_remote,\
     com.sun.star.lib.uno.environments.remote.ThreadPool_Test \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

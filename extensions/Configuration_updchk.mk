@@ -45,4 +45,4 @@ $(eval $(call gb_Configuration_add_localized_datas,updchk,extensions/source/upda
 	org/openoffice/Office/Addons.xcu \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -14,4 +14,4 @@ $(eval $(call gb_Module_add_targets,idlc,Executable_idlc))
 $(eval $(call gb_Module_add_check_targets,idlc,CustomTarget_parser_test))
 endif
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -36,4 +36,4 @@ $(eval $(call gb_Jar_add_sourcefiles,unoloader,\
     ridljar/source/unoloader/com/sun/star/lib/unoloader/UnoLoader \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -40,4 +40,4 @@ $(eval $(call gb_Pyuno_add_files,fax,\
 ))
 $(eval $(call gb_Pyuno_set_componentfile_full,fax,wizards/com/sun/star/wizards/fax/fax,vnd.openoffice.pymodule:wizards.fax,.CallWizard))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

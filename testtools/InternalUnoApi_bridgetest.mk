@@ -43,4 +43,4 @@ $(eval $(call gb_InternalUnoApi_add_idlfiles,bridgetest,testtools/source/bridget
     XPerformanceTest \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -19,4 +19,4 @@ $(eval $(call gb_Executable_add_cobjects,javadep,\
     soltools/javadep/javadep \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

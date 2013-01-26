@@ -59,4 +59,4 @@ $(eval $(call gb_Library_add_exception_objects,ctl,\
     UnoControls/source/controls/statusindicator \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -39,4 +39,4 @@ $(eval $(call gb_JunitTest_add_classes,ridljar_typedesc,\
     com.sun.star.lib.uno.typedesc.TypeDescription_Test \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

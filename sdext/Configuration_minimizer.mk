@@ -40,4 +40,4 @@ $(eval $(call gb_Configuration_add_localized_datas,presentation-minimizer,sdext/
     org/openoffice/Office/extension/SunPresentationMinimizer.xcu \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

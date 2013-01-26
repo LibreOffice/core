@@ -41,4 +41,4 @@ $(eval $(call gb_JunitTest_add_classes,jurt_java,\
     com.sun.star.lib.uno.environments.java.java_environment_Test \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

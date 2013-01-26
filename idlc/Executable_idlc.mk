@@ -79,4 +79,4 @@ $(eval $(call gb_Executable_add_exception_objects,idlc,\
     idlc/source/astservice \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

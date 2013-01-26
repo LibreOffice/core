@@ -71,4 +71,4 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     ui/event/UnoDataAware.py \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

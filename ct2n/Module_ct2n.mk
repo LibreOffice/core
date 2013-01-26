@@ -18,4 +18,4 @@ $(eval $(call gb_Module_add_targets,ConvertTextToNumber,\
 
 endif
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -46,4 +46,4 @@ $(eval $(call gb_SrsTarget_add_files,scn/res,\
 	extensions/source/scanner/sanedlg.src \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

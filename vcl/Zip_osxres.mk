@@ -103,4 +103,4 @@ $(eval $(call gb_Zip_add_files,osxres,\
     cursors/vtext.png \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

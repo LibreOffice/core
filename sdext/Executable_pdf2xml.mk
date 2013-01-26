@@ -55,4 +55,4 @@ $(eval $(call gb_Executable_add_exception_objects,pdf2xml,\
     sdext/source/pdfimport/test/pdf2xml \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -57,4 +57,4 @@ else
 $(call gb_Output_error,Unsupported platform)
 endif
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

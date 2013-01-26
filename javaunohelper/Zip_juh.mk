@@ -53,4 +53,4 @@ $(eval $(call gb_Zip_add_files,juh_src,\
     com/sun/star/lib/uno/helper/WeakBase.java \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:

@@ -35,4 +35,4 @@ $(eval $(call gb_Package_add_file,ure_distribution,bin/ure/startup.sh,startup.sh
 $(eval $(call gb_Package_add_file,ure_distribution,bin/ure/uno.ini,uno.ini))
 $(eval $(call gb_Package_add_file,ure_distribution,bin/ure/unorc,unorc))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set noet sw=4 ts=4:
