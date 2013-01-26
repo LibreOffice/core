@@ -49,6 +49,8 @@ $(eval $(call gb_Library_add_defs,directx9canvas,\
 ))
 endif
 
+$(eval $(call gb_Library_use_external,directx9canvas,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,directx9canvas,\
 	cppu \
 	tk \

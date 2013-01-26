@@ -67,6 +67,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_gtk3,\
 ))
 
 $(eval $(call gb_Library_use_externals,vclplug_gtk3,\
+	boost_headers \
 	dbus \
 ))
 

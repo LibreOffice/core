@@ -74,7 +74,10 @@ $(eval $(call gb_Library_use_libraries,sfx,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_external,sfx,libxml2))
+$(eval $(call gb_Library_use_externals,sfx,\
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/app \

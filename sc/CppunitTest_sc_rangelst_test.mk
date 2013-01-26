@@ -27,6 +27,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_rangelst_test))
 
+$(eval $(call gb_CppunitTest_use_external,sc_rangelst_test,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_rangelst_test, \
     sc/qa/unit/rangelst_test \
 ))

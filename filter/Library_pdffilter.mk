@@ -21,6 +21,8 @@ $(eval $(call gb_Library_Library,pdffilter))
 
 $(eval $(call gb_Library_set_componentfile,pdffilter,filter/source/pdf/pdffilter))
 
+$(eval $(call gb_Library_use_external,pdffilter,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,pdffilter))
 
 $(eval $(call gb_Library_set_include,pdffilter,\

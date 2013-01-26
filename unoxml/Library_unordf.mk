@@ -36,6 +36,7 @@ $(eval $(call gb_Library_use_libraries,unordf,\
 ))
 
 $(eval $(call gb_Library_use_externals,unordf,\
+	boost_headers \
 	librdf \
 	redland_headers \
 	raptor_headers \

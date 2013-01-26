@@ -34,6 +34,8 @@ $(eval $(call gb_Library_set_include,emboleobj,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_external,emboleobj,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,emboleobj))
 
 $(eval $(call gb_Library_use_libraries,emboleobj,\

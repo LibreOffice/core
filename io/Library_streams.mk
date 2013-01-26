@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,streams))
 
+$(eval $(call gb_Library_use_external,streams,boost_headers))
+
 $(eval $(call gb_Library_use_udk_api,streams))
 
 $(eval $(call gb_Library_use_libraries,streams,\

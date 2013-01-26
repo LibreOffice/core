@@ -32,6 +32,8 @@ $(eval $(call gb_Library_set_include,vbaobj,\
 
 $(eval $(call gb_Library_set_componentfile,vbaobj,sc/util/vbaobj))
 
+$(eval $(call gb_Library_use_external,vbaobj,boost_headers))
+
 $(eval $(call gb_Library_use_api,vbaobj,\
     offapi \
     oovbaapi \

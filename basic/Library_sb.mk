@@ -29,6 +29,8 @@ $(eval $(call gb_Library_set_include,sb,\
 	-I$(SRCDIR)/basic/source/inc \
 ))
 
+$(eval $(call gb_Library_use_external,sb,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,sb))
 $(eval $(call gb_Library_use_api,sb,oovbaapi))
 

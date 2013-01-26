@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_static_libraries,wpftwriter,\
 ))
 
 $(eval $(call gb_Library_use_externals,wpftwriter,\
+	boost_headers \
 	wpd \
 	wpg \
 	wps \

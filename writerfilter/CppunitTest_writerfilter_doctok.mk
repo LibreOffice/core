@@ -28,6 +28,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,writerfilter_doctok))
 
+$(eval $(call gb_CppunitTest_use_external,writerfilter_doctok,boost_headers))
+k
 $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_doctok, \
 	writerfilter/qa/cppunittests/doctok/testdoctok \
 ))

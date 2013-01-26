@@ -38,6 +38,8 @@ $(eval $(call gb_Library_add_defs,cppuhelper,\
 	-DCPPUHELPER_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_use_external,cppuhelper,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,cppuhelper,\
 	cppu \
 	reg \

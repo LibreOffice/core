@@ -60,7 +60,10 @@ $(eval $(call gb_Library_add_exception_objects,updchk,\
 ))
 endif # OS WNT
 
-$(eval $(call gb_Library_use_external,updchk,curl))
+$(eval $(call gb_Library_use_external,updchk,\
+	boost_headers \
+    curl \
+))
 
 $(eval $(call gb_Library_add_exception_objects,updchk,\
 	extensions/source/update/check/download \

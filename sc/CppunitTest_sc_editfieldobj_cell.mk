@@ -30,6 +30,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_editfieldobj_cell))
 
+$(eval $(call gb_CppunitTest_use_external,sc_editfieldobj_cell,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_editfieldobj_cell, \
     sc/qa/extras/sceditfieldobj-cell \
 ))

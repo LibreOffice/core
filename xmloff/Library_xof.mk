@@ -26,6 +26,8 @@ $(eval $(call gb_Library_set_include,xof,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_external,xof,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,xof))
 
 $(eval $(call gb_Library_use_libraries,xof,\

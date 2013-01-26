@@ -16,7 +16,7 @@ $(eval $(call gb_StaticLibrary_add_defs,boostthread,\
 	-DBOOST_ALL_NO_LIB \
 ))
 
-$(eval $(call gb_StaticLibrary_use_unpacked,boostthread,boost))
+$(eval $(call gb_StaticLibrary_use_external,boostthread,boost_headers))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boostthread,cpp))
 

@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,i18npool,\
 ))
 
 $(eval $(call gb_Library_use_externals,i18npool,\
+	boost_headers \
 	icui18n \
 	icuuc \
 	icu_headers \

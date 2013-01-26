@@ -32,6 +32,8 @@ $(eval $(call gb_CppunitTest_set_include,starmath_qa_cppunit,\
     -I$(SRCDIR)/starmath/inc \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,starmath_qa_cppunit,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_api,starmath_qa_cppunit,\
     offapi \
     udkapi \

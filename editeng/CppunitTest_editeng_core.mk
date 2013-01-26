@@ -61,6 +61,7 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_core, \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,editeng_core,\
+	boost_headers \
     icuuc \
 ))
 

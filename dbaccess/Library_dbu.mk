@@ -49,7 +49,10 @@ $(eval $(call gb_Library_add_cxxflags,dbu,\
 ))
 endif
 
-$(eval $(call gb_Library_use_external,dbu,odbc_headers))
+$(eval $(call gb_Library_use_externals,dbu,\
+	boost_headers \
+	odbc_headers \
+))
 
 $(eval $(call gb_Library_use_libraries,dbu,\
     comphelper \

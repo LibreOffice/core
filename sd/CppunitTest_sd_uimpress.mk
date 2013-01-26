@@ -82,6 +82,7 @@ $(eval $(call gb_CppunitTest_use_system_win32_libs,sd_uimpress,\
 endif
 
 $(eval $(call gb_CppunitTest_use_externals,sd_uimpress,\
+	boost_headers \
     gtk \
     dbus \
 ))

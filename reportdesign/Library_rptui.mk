@@ -34,6 +34,8 @@ $(eval $(call gb_Library_set_include,rptui,\
     -I$(SRCDIR)/reportdesign/source/ui/inc \
 ))
 
+$(eval $(call gb_Library_use_external,rptui,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,rptui))
 
 $(eval $(call gb_Library_use_libraries,rptui,\

@@ -476,6 +476,10 @@ endef
 
 define gb_LinkTarget__use_boost_headers
 $(call gb_LinkTarget_use_unpacked,$(1),boost)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,boost) \
+	$$(INCLUDE) \
+)
 
 endef
 

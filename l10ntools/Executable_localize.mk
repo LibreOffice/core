@@ -44,6 +44,7 @@ $(eval $(call gb_Executable_add_exception_objects,localize,\
 ))
 
 $(eval $(call gb_Executable_use_externals,localize,\
+    boost_headers \
     icuuc \
     icui18n \
 ))

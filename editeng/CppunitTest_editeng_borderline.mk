@@ -47,6 +47,7 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_borderline, \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,editeng_borderline,\
+	boost_headers \
     icuuc \
 ))
 

@@ -37,6 +37,8 @@ $(eval $(call gb_Library_add_defs,reg,\
 	-DREG_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_use_external,reg,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,reg,\
 	sal \
 	store \

@@ -23,6 +23,8 @@ $(eval $(call gb_Library_add_defs,spa,\
     -DSPA_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_use_external,spa,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,spa))
 
 $(eval $(call gb_Library_use_libraries,spa,\

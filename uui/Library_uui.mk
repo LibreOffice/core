@@ -30,6 +30,8 @@ $(eval $(call gb_Library_Library,uui))
 
 $(eval $(call gb_Library_set_componentfile,uui,uui/util/uui))
 
+$(eval $(call gb_Library_use_external,uui,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,uui))
 
 $(eval $(call gb_Library_use_libraries,uui,\

@@ -109,8 +109,9 @@ $(eval $(call gb_Library_use_libraries,sd,\
 ))
 
 $(eval $(call gb_Library_use_externals,sd,\
- libxml2 \
- dbus \
+	boost_headers \
+	libxml2 \
+	dbus \
 ))
 
 ifeq ($(OS),WNT)

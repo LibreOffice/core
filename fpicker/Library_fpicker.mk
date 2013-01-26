@@ -29,6 +29,8 @@ $(eval $(call gb_Library_Library,fpicker))
 
 $(eval $(call gb_Library_set_componentfile,fpicker,fpicker/source/generic/fpicker))
 
+$(eval $(call gb_Library_use_external,fpicker,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,fpicker))
 
 $(eval $(call gb_Library_use_libraries,fpicker,\

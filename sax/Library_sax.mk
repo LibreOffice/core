@@ -18,6 +18,8 @@ $(eval $(call gb_Library_set_include,sax,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_external,sax,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,sax))
 
 $(eval $(call gb_Library_use_libraries,sax,\

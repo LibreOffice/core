@@ -42,7 +42,10 @@ $(eval $(call gb_StaticLibrary_use_packages,plugcon,\
     vcl_inc \
 ))
 
-$(eval $(call gb_StaticLibrary_use_external,plugcon,npapi_headers))
+$(eval $(call gb_StaticLibrary_use_externals,plugcon,\
+    boost_headers \
+    npapi_headers \
+))
 
 $(eval $(call gb_StaticLibrary_set_include,plugcon,\
 	$$(INCLUDE) \

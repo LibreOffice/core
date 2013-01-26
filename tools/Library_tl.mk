@@ -102,7 +102,10 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
 ))
 endif
 
-$(eval $(call gb_Library_use_external,tl,zlib))
+$(eval $(call gb_Library_use_externals,tl,\
+	boost_headers \
+	zlib \
+))
 
 ifeq ($(OS),WNT)
 

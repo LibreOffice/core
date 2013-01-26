@@ -42,6 +42,8 @@ $(eval $(call gb_Library_set_include,bootstrap,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_external,bootstrap,boost_headers))
+
 $(eval $(call gb_Library_use_internal_bootstrap_api,bootstrap,\
     udkapi \
 ))

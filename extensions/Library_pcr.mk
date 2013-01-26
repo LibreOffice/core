@@ -37,6 +37,8 @@ $(eval $(call gb_Library_set_include,pcr,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_external,pcr,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,pcr,\
 	svx \
 	svxcore \

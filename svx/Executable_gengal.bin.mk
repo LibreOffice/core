@@ -39,6 +39,8 @@ $(eval $(call gb_Executable_add_cxxflags,$(svx_GENGALBIN),\
     $$(CXXFLAGS) \
 ))
 
+$(eval $(call gb_Executable_use_external,$(svx_GENGALBIN),boost_headers))
+
 $(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
     sal \
     tl \

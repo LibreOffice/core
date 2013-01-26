@@ -33,6 +33,8 @@ $(eval $(call gb_Library_set_include,rptxml,\
     -I$(SRCDIR)/reportdesign/source/inc \
 ))
 
+$(eval $(call gb_Library_use_external,rptxml,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,rptxml))
 
 $(eval $(call gb_Library_use_libraries,rptxml,\

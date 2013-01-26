@@ -32,6 +32,8 @@ $(eval $(call gb_Library_set_include,dbaxml,\
     -I$(SRCDIR)/dbaccess/source/inc \
 ))
 
+$(eval $(call gb_Library_use_external,dbaxml,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,dbaxml))
 
 $(eval $(call gb_Library_use_libraries,dbaxml,\

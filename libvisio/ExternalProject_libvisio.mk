@@ -26,6 +26,7 @@ ifeq ($(OS)$(COM),WNTMSC)
 ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/external \
@@ -35,6 +36,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 else ifeq ($(VCVER),100)
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/extrenal \
@@ -44,6 +46,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 else
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/external \
@@ -64,7 +67,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 		--without-docs \
 		--disable-debug \
 		--disable-werror \
-		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(OUTDIR)/inc/external) \
+		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(call gb_UnpackedTarball_get_dir,boost)) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
 	&& touch $@

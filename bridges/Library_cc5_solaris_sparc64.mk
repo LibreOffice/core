@@ -14,6 +14,8 @@ bridges_SELECTED_BRIDGE := cc5_solaris_sparc64
 
 $(eval $(call gb_Library_Library,sunpro5_uno))
 
+$(eval $(call gb_Library_use_external,sunpro5_uno,boost_headers))
+
 $(eval $(call gb_Library_use_internal_comprehensive_api,sunpro5_uno,\
 	udkapi \
 ))

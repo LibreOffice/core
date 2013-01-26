@@ -42,6 +42,7 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 ))
 
 $(eval $(call gb_Library_use_externals,ucpdav1,\
+	boost_headers \
 	libxml2 \
 	neon \
 	openssl \

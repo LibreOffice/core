@@ -53,6 +53,8 @@ $(eval $(call gb_Library_add_defs,abp,\
 	-DCOMPMOD_RESPREFIX=abp \
 ))
 
+$(eval $(call gb_Library_use_external,abp,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,abp))
 
 $(eval $(call gb_Library_add_exception_objects,abp,\

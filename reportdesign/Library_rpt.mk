@@ -38,6 +38,8 @@ $(eval $(call gb_Library_add_defs,rpt,\
     -DREPORTDESIGN_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_use_external,rpt,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,rpt))
 
 $(eval $(call gb_Library_use_libraries,rpt,\

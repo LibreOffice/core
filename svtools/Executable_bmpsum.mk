@@ -25,6 +25,8 @@ $(eval $(call gb_Executable_set_include,bmpsum,\
     -I$(SRCDIR)/svtools/inc/svtools \
 ))
 
+$(eval $(call gb_Executable_use_external,bmpsum,boost_headers))
+
 $(eval $(call gb_Executable_use_sdk_api,bmpsum))
 
 $(eval $(call gb_Executable_use_libraries,bmpsum,\

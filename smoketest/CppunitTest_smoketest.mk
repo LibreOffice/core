@@ -33,6 +33,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,smoketest,\
 	smoketest/smoketest_too \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,smoketest,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_api,smoketest,\
 	offapi \
 	udkapi \

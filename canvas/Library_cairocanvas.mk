@@ -90,6 +90,7 @@ $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 ))
 
 $(eval $(call gb_Library_use_externals,cairocanvas,\
+	boost_headers \
 	cairo \
 ))
 

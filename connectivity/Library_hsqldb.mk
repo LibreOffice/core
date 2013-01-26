@@ -33,6 +33,7 @@ $(eval $(call gb_Library_set_include,hsqldb,\
 ))
 
 $(eval $(call gb_Library_use_externals,hsqldb,\
+	boost_headers \
 	hsqldb \
 ))
 

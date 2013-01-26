@@ -36,6 +36,8 @@ $(eval $(call gb_Library_add_defs,test,\
 $(eval $(call gb_Library_use_sdk_api,test))
 
 $(eval $(call gb_Library_use_externals,test,\
+	boost_headers \
+	cppunit \
 	libxml2 \
 ))
 
@@ -59,8 +61,6 @@ $(call gb_Library_get_target,test) : \
     $(call gb_Library_get_target,vclplug_svp) \
 
 endif
-
-$(eval $(call gb_Library_use_external,test,cppunit))
 
 $(eval $(call gb_Library_add_exception_objects,test,\
     test/source/bootstrapfixture \

@@ -30,6 +30,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_cellrangesbase))
 
+$(eval $(call gb_CppunitTest_use_external,sc_cellrangesbase,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_cellrangesbase, \
     sc/qa/extras/sccellrangeobj\
 ))

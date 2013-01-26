@@ -37,7 +37,10 @@ $(eval $(call gb_Executable_use_libraries,cppunit/cppunittester,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_use_external,cppunit/cppunittester,cppunit))
+$(eval $(call gb_Executable_use_externals,cppunit/cppunittester,\
+	boost_headers \
+	cppunit \
+))
 
 $(eval $(call gb_Executable_add_exception_objects,cppunit/cppunittester,\
 	sal/cppunittester/cppunittester \

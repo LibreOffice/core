@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_static_libraries,spell,\
 ))
 
 $(eval $(call gb_Library_use_externals,spell,\
+	boost_headers \
 	hunspell \
 	icuuc \
 ))

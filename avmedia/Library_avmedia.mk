@@ -44,6 +44,8 @@ $(eval $(call gb_Library_add_defs,avmedia,\
 	-DAVMEDIA_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_use_external,avmedia,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,avmedia,\
 	comphelper \
 	ucbhelper \

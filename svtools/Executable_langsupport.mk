@@ -36,6 +36,8 @@ $(eval $(call gb_Executable_set_include,langsupport,\
     -I$(SRCDIR)/svtools/source/inc \
 ))
 
+$(eval $(call gb_Executable_use_external,langsupport,boost_headers))
+
 $(eval $(call gb_Executable_use_sdk_api,langsupport))
 
 $(eval $(call gb_Executable_use_libraries,langsupport,\

@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,unotest,\
 ))
 
 $(eval $(call gb_Library_use_externals,unotest,\
+	boost_headers \
 	cppunit \
 ))
 

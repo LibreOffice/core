@@ -29,6 +29,7 @@ $(eval $(call gb_Executable_add_exception_objects,renewpo,\
 ))
 
 $(eval $(call gb_Executable_use_externals,renewpo,\
+    boost_headers \
     icuuc \
     icui18n \
 ))

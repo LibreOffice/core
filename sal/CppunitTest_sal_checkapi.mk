@@ -36,6 +36,8 @@ $(eval $(call gb_CppunitTest_set_include,sal_checkapi,\
 	-I$(SRCDIR)/sal/inc \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,sal_checkapi,boost_headers))
+
 # strings.cxx includes generated strings.hxx
 $(call gb_CxxObject_get_target,sal/qa/checkapi/strings) : \
 	INCLUDE += -I$(call gb_CustomTarget_get_workdir,sal/allheaders)

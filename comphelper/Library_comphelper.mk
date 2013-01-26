@@ -35,6 +35,8 @@ $(eval $(call gb_Library_add_defs,comphelper,\
        -DCOMPHELPER_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_use_external,comphelper,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,comphelper,\
     cppu \
     cppuhelper \

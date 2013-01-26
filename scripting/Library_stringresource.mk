@@ -35,6 +35,8 @@ $(eval $(call gb_Library_set_include,stringresource,\
 	-I$(SRCDIR)/scripting/source/inc \
 ))
 
+$(eval $(call gb_Library_use_external,stringresource,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,stringresource))
 
 $(eval $(call gb_Library_use_libraries,stringresource,\

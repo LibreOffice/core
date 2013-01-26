@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,helplinker,\
 ))
 
 $(eval $(call gb_Library_use_externals,helplinker,\
+    boost_headers \
     expat_utf8 \
     libxslt \
     libxml2 \

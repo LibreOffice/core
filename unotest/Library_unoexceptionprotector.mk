@@ -39,6 +39,7 @@ $(eval $(call gb_Library_use_libraries,unoexceptionprotector,\
 ))
 
 $(eval $(call gb_Library_use_externals,unoexceptionprotector,\
+	boost_headers \
 	cppunit \
 ))
 

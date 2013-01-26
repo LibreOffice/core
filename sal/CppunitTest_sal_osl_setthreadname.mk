@@ -32,6 +32,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_setthreadname, \
 	sal/qa/osl/setthreadname/test-setthreadname \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,sal_osl_setthreadname,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_libraries,sal_osl_setthreadname, \
     sal \
 	$(gb_UWINAPI) \

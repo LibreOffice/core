@@ -27,6 +27,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,filter_tga_test))
 
+$(eval $(call gb_CppunitTest_use_external,filter_tga_test,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,filter_tga_test, \
     filter/qa/cppunit/filters-tga-test \
 ))

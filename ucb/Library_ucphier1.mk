@@ -29,6 +29,8 @@ $(eval $(call gb_Library_Library,ucphier1))
 
 $(eval $(call gb_Library_set_componentfile,ucphier1,ucb/source/ucp/hierarchy/ucphier1))
 
+$(eval $(call gb_Library_use_external,ucphier1,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,ucphier1))
 
 $(eval $(call gb_Library_use_libraries,ucphier1,\

@@ -33,6 +33,8 @@ $(eval $(call gb_Library_set_include,deploymentmisc,\
     -I$(SRCDIR)/desktop/source/deployment/inc \
 ))
 
+$(eval $(call gb_Library_use_external,deploymentmisc,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,deploymentmisc))
 
 $(eval $(call gb_Library_add_defs,deploymentmisc,\

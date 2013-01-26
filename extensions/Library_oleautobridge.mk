@@ -42,6 +42,8 @@ $(eval $(call gb_Library_add_ldflags,oleautobridge,\
 	-LIBPATH:$(ATL_LIB) \
 ))
 
+$(eval $(call gb_Library_use_external,oleautobridge,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,oleautobridge,\
 	comphelper \
 	cppuhelper \

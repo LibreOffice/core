@@ -97,6 +97,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
 endif
 
 $(eval $(call gb_Library_use_externals,vcl,\
+	boost_headers \
 	icule \
 	icuuc \
 	icu_headers \

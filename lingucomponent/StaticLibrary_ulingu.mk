@@ -50,6 +50,7 @@ $(eval $(call gb_StaticLibrary_add_defs,ulingu,\
 endif
 
 $(eval $(call gb_StaticLibrary_use_externals,ulingu,\
+	boost_headers \
 	hunspell \
 ))
 

@@ -29,6 +29,8 @@ $(eval $(call gb_Library_Library,mysql))
 
 $(eval $(call gb_Library_set_componentfile,mysql,connectivity/source/drivers/mysql/mysql))
 
+$(eval $(call gb_Library_use_external,mysql,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,mysql))
 
 $(eval $(call gb_Library_set_include,mysql,\

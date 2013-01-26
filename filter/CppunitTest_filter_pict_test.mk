@@ -8,6 +8,8 @@
 #
 $(eval $(call gb_CppunitTest_CppunitTest,filter_pict_test))
 
+$(eval $(call gb_CppunitTest_use_external,filter_pict_test,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,filter_pict_test, \
     filter/qa/cppunit/filters-pict-test \
 ))

@@ -34,6 +34,7 @@ $(eval $(call gb_Library_use_packages,tdebe1,\
 $(eval $(call gb_Library_use_sdk_api,tdebe1))
 
 $(eval $(call gb_Library_use_externals,tdebe1,\
+	boost_headers \
 	tde \
 ))
 

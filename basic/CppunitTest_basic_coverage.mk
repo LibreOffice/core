@@ -8,6 +8,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,basic_coverage))
 
+$(eval $(call gb_CppunitTest_use_external,basic_coverage,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,basic_coverage, \
     basic/qa/cppunit/basic_coverage \
 ))

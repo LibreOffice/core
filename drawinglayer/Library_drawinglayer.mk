@@ -43,10 +43,7 @@ $(eval $(call gb_Library_set_componentfile,drawinglayer,drawinglayer/drawinglaye
 $(eval $(call gb_Library_use_sdk_api,drawinglayer))
 
 $(eval $(call gb_Library_use_externals,drawinglayer,\
-	libxml2 \
-))
-
-$(eval $(call gb_Library_use_externals,drawinglayer,\
+	boost_headers \
 	libxml2 \
 ))
 

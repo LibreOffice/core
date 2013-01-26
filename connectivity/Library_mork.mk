@@ -20,6 +20,8 @@ $(eval $(call gb_Library_set_include,mork,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_external,mork,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,mork, \
     comphelper \
     cppu \

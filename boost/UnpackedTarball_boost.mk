@@ -62,8 +62,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,boost,\
 	$(foreach patch,$(boost_patches),boost/$(patch)) \
 ))
 
-$(eval $(call gb_UnpackedTarball_copy_header_files,boost,\
-	boost \
-))
-
 # vim: set noet sw=4 ts=4:

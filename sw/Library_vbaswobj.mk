@@ -58,6 +58,7 @@ $(eval $(call gb_Library_use_libraries,vbaswobj,\
 ))
 
 $(eval $(call gb_Library_use_externals,vbaswobj,\
+	boost_headers \
 	libxml2 \
 ))
 

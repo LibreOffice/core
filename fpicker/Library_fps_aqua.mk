@@ -33,6 +33,8 @@ $(eval $(call gb_Library_use_packages,fps_aqua,\
 	vcl_inc \
 ))
 
+$(eval $(call gb_Library_use_external,fps_aqua,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,fps_aqua))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,fps_aqua,\

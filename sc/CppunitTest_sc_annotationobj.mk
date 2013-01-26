@@ -30,6 +30,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_annotationobj))
 
+$(eval $(call gb_CppunitTest_use_external,sc_annotationobj,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_annotationobj, \
     sc/qa/extras/scannotationobj \
 ))

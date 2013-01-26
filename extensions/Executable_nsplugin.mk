@@ -36,6 +36,8 @@ $(eval $(call gb_Executable_use_packages,nsplugin,\
     tools_inc \
 ))
 
+$(eval $(call gb_Executable_use_external,nsplugin,boost_headers))
+
 $(eval $(call gb_Executable_use_sdk_api,nsplugin))
 
 $(eval $(call gb_Executable_add_exception_objects,nsplugin,\

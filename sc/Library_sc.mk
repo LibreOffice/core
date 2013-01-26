@@ -49,6 +49,7 @@ $(eval $(call gb_Library_use_packages,sc,\
 $(eval $(call gb_Library_use_sdk_api,sc))
 
 $(eval $(call gb_Library_use_externals,sc,\
+	boost_headers \
 	mdds_headers \
 ))
 

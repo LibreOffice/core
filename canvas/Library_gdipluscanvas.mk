@@ -35,6 +35,8 @@ $(eval $(call gb_Library_set_include,gdipluscanvas,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
+$(eval $(call gb_Library_use_external,gdipluscanvas,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,gdipluscanvas))
 
 # clear NOMINMAX because GdiplusTypes.h uses those macros :(

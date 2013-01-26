@@ -35,6 +35,8 @@ $(eval $(call gb_Library_set_include,protocolhandler,\
 	-I$(SRCDIR)/scripting/source/inc \
 ))
 
+$(eval $(call gb_Library_use_external,protocolhandler,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,protocolhandler))
 
 $(eval $(call gb_Library_use_libraries,protocolhandler,\

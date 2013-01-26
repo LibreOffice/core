@@ -28,6 +28,8 @@
 
 $(eval $(call gb_Executable_Executable,svidl))
 
+$(eval $(call gb_Executable_use_external,svidl,boost_headers))
+
 $(eval $(call gb_Executable_set_include,svidl,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/idl/inc \

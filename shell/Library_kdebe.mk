@@ -38,6 +38,7 @@ $(eval $(call gb_Library_add_libs,kdebe1,\
 $(eval $(call gb_Library_use_sdk_api,kdebe1))
 
 $(eval $(call gb_Library_use_externals,kdebe1,\
+	boost_headers \
 	kde \
 ))
 

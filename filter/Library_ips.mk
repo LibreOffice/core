@@ -19,6 +19,8 @@
 
 $(eval $(call gb_Library_Library,ips))
 
+$(eval $(call gb_Library_use_external,ips,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,ips))
 
 $(eval $(call gb_Library_set_include,ips,\

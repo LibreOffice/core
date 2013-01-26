@@ -35,6 +35,8 @@ $(eval $(call gb_Library_set_include,xmlsecurity,\
 	-I$(SRCDIR)/xmlsecurity/inc \
 ))
 
+$(eval $(call gb_Library_use_external,xmlsecurity,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,xmlsecurity))
 
 $(eval $(call gb_Library_use_libraries,xmlsecurity,\

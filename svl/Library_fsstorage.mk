@@ -37,6 +37,8 @@ $(eval $(call gb_Library_set_include,fsstorage,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_external,fsstorage,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,fsstorage))
 
 $(eval $(call gb_Library_use_libraries,fsstorage,\

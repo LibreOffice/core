@@ -39,6 +39,8 @@ $(eval $(call gb_Library_set_include,canvasfactory,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
+$(eval $(call gb_Library_use_external,canvasfactory,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,canvasfactory))
 
 $(eval $(call gb_Library_use_libraries,canvasfactory,\

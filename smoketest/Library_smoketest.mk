@@ -42,7 +42,10 @@ $(eval $(call gb_Library_use_libraries,smoketest,\
 	unotest \
 ))
 
-$(eval $(call gb_Library_use_external,smoketest,cppunit))
+$(eval $(call gb_Library_use_externals,smoketest,\
+	boost_headers \
+	cppunit \
+))
 
 $(eval $(call gb_Library_add_exception_objects,smoketest,\
 	smoketest/smoketest \

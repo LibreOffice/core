@@ -50,6 +50,7 @@ $(eval $(call gb_Executable_add_exception_objects,transex3,\
 ))
 
 $(eval $(call gb_Executable_use_externals,transex3,\
+    boost_headers \
     icuuc \
     icui18n \
     icu_headers \

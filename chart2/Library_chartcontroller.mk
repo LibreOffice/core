@@ -33,6 +33,8 @@ $(eval $(call gb_Library_set_include,chartcontroller,\
     -I$(SRCDIR)/chart2/source/inc \
 ))
 
+$(eval $(call gb_Library_use_external,chartcontroller,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,chartcontroller))
 
 $(eval $(call gb_Library_use_libraries,chartcontroller,\

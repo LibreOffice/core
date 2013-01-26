@@ -31,6 +31,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_file,\
     sal/qa/osl/file/osl_File \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,sal_osl_file,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_libraries,sal_osl_file,\
     sal \
 	$(gb_UWINAPI) \

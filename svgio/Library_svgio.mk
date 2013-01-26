@@ -25,6 +25,8 @@ $(eval $(call gb_Library_set_include,svgio,\
     -I$(SRCDIR)/svgio/inc \
 ))
 
+$(eval $(call gb_Library_use_external,svgio,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,svgio))
 
 $(eval $(call gb_Library_use_libraries,svgio,\

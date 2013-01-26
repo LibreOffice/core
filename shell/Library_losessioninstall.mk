@@ -24,6 +24,7 @@ $(eval $(call gb_Library_use_libraries,losessioninstall,\
 ))
 
 $(eval $(call gb_Library_use_externals,losessioninstall,\
+	boost_headers \
     dbus \
     gio \
 ))

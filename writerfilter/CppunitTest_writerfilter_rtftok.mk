@@ -30,6 +30,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,writerfilter_rtftok))
 
+$(eval $(call gb_CppunitTest_use_external,writerfilter_rtftok,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_rtftok, \
 	writerfilter/qa/cppunittests/rtftok/testrtftok \
 ))

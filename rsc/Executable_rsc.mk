@@ -28,6 +28,8 @@
 
 $(eval $(call gb_Executable_Executable,rsc))
 
+$(eval $(call gb_Executable_use_external,rsc,boost_headers))
+
 $(eval $(call gb_Executable_set_include,rsc,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/rsc/inc \

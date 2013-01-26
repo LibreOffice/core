@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,namingservice))
 
+$(eval $(call gb_Library_use_external,namingservice,boost_headers))
+
 $(eval $(call gb_Library_use_udk_api,namingservice))
 
 $(eval $(call gb_Library_use_libraries,namingservice,\

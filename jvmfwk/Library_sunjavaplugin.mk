@@ -66,6 +66,7 @@ $(eval $(call gb_Library_use_system_win32_libs,sunjavaplugin,\
 endif
 
 $(eval $(call gb_Library_use_externals,sunjavaplugin,\
+	boost_headers \
     valgrind \
 ))
 

@@ -54,7 +54,10 @@ $(eval $(call gb_Library_use_libraries,svgfilter,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_externals,svgfilter,libxml2))
+$(eval $(call gb_Library_use_externals,svgfilter,\
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_Library_add_exception_objects,svgfilter,\
 	filter/source/svg/b2dellipse \

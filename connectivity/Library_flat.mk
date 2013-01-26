@@ -29,6 +29,8 @@ $(eval $(call gb_Library_Library,flat))
 
 $(eval $(call gb_Library_set_componentfile,flat,connectivity/source/drivers/flat/flat))
 
+$(eval $(call gb_Library_use_external,flat,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,flat))
 
 $(eval $(call gb_Library_set_precompiled_header,flat,$(SRCDIR)/connectivity/inc/pch/precompiled_flat))

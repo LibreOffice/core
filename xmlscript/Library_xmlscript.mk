@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Library_Library,xmlscript))
 
+$(eval $(call gb_Library_use_external,xmlscript,boost_headers))
+
 $(eval $(call gb_Library_use_packages,xmlscript,\
 	tools_inc \
 	xmlscript_inc \

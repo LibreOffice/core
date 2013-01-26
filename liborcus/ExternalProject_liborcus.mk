@@ -22,7 +22,7 @@ ifeq ($(OS)$(COM),WNTMSC)
 ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static-nozip \
-	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
 	&& $(COMPATH)/vcpackages/vcbuild.exe liborcus-static-nozip.vcproj "Release|Win32" \
@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 else ifeq ($(VCVER),100)
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static-nozip \
-	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
 	&& MSBuild.exe liborcus-static-nozip.vcxproj /p:Configuration=Release /p:OutDir=Release/ /p:TargetName=orcus /p:WholeProgramOptimization=no \
@@ -38,7 +38,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 else
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static-nozip \
-	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
 	&& MSBuild.exe liborcus-static-nozip.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release /p:OutDir=Release/ /p:TargetName=orcus /p:WholeProgramOptimization=no \
@@ -60,7 +60,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		--disable-spreadsheet-model \
 		--disable-werror \
 		$(if $(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID,$(OS)),$(if $(gb_ENABLE_DBGUTIL),CPPFLAGS=-D_GLIBCXX_DEBUG)) \
-		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(OUTDIR)/inc/external) \
+		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(call gb_UnpackedTarball_get_dir,boost)) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& $(MAKE) \
 	&& touch $@

@@ -29,6 +29,8 @@ $(eval $(call gb_Library_set_include,swd,\
     -I$(SRCDIR)/sw/source/ui/inc \
 ))
 
+$(eval $(call gb_Library_use_external,swd,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,swd))
 
 $(eval $(call gb_Library_add_defs,swd,\

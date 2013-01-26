@@ -32,6 +32,8 @@ $(eval $(call gb_Executable_set_include,idlc,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Executable_use_external,idlc,boost_headers))
+
 $(eval $(call gb_Executable_use_libraries,idlc,\
     reg \
     sal \

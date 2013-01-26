@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,basegfx_cpputest))
 
+$(eval $(call gb_CppunitTest_use_external,basegfx_cpputest,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_api,basegfx_cpputest,\
     offapi \
     udkapi \

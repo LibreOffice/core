@@ -24,6 +24,8 @@ $(eval $(call gb_CppunitTest_set_include,salhelper_testapi,\
 	-I$(SRCDIR)/salhelper/inc \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,salhelper_testapi,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_libraries,salhelper_testapi,\
     salhelper \
     sal \

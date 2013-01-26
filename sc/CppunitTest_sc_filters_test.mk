@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_add_defs,sc_filters_test,\
 endif
 
 $(eval $(call gb_CppunitTest_use_externals,sc_filters_test, \
+	boost_headers \
 	mdds_headers \
 	orcus \
 ))

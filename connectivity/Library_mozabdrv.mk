@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,mozabdrv,\
 ))
 
 $(eval $(call gb_Library_use_externals,mozabdrv,\
+	boost_headers \
 	mozilla \
 	nss3 \
 ))

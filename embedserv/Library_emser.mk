@@ -39,6 +39,8 @@ $(eval $(call gb_Library_add_defs,emser,\
 	-UNOMINMAX \
 ))
 
+$(eval $(call gb_Library_use_external,emser,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,emser))
 
 $(eval $(call gb_Library_use_libraries,emser,\

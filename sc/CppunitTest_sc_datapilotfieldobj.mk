@@ -30,6 +30,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_datapilotfieldobj))
 
+$(eval $(call gb_CppunitTest_use_external,sc_datapilotfieldobj,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_datapilotfieldobj, \
     sc/qa/extras/scdatapilotfieldobj \
 ))

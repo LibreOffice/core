@@ -34,6 +34,8 @@ $(eval $(call gb_Library_use_packages,updatecheckui,\
     sfx2_inc \
 ))
 
+$(eval $(call gb_Library_use_external,updatecheckui,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,updatecheckui))
 
 $(eval $(call gb_Library_use_libraries,updatecheckui,\

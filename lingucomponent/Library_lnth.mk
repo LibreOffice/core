@@ -53,6 +53,7 @@ $(eval $(call gb_Library_use_static_libraries,lnth,\
 ))
 
 $(eval $(call gb_Library_use_externals,lnth,\
+	boost_headers \
 	hunspell \
 	mythes \
 ))

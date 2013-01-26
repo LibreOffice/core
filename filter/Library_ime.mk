@@ -19,6 +19,8 @@
 
 $(eval $(call gb_Library_Library,ime))
 
+$(eval $(call gb_Library_use_external,ime,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,ime))
 
 $(eval $(call gb_Library_set_include,ime,\

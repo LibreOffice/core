@@ -25,6 +25,8 @@ $(eval $(call gb_Executable_set_include,g2g,\
     -I$(SRCDIR)/svtools/inc/svtools \
 ))
 
+$(eval $(call gb_Executable_use_external,g2g,boost_headers))
+
 $(eval $(call gb_Executable_use_sdk_api,g2g))
 
 $(eval $(call gb_Executable_use_libraries,g2g,\

@@ -85,7 +85,10 @@ $(eval $(call gb_Library_use_libraries,writerfilter,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_external,writerfilter,libxml2))
+$(eval $(call gb_Library_use_externals,writerfilter,\
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_Library_add_exception_objects,writerfilter,\
 	writerfilter/source/rtftok/rtfcharsets \

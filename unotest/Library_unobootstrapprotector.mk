@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,unobootstrapprotector,\
 ))
 
 $(eval $(call gb_Library_use_externals,unobootstrapprotector,\
+	boost_headers \
 	cppunit \
 ))
 

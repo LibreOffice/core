@@ -32,6 +32,8 @@ $(eval $(call gb_Library_Library,res))
 
 $(eval $(call gb_Library_set_componentfile,res,extensions/source/resource/res))
 
+$(eval $(call gb_Library_use_external,res,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,res))
 
 $(eval $(call gb_Library_use_libraries,res,\

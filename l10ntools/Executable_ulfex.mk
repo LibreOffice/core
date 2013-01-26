@@ -35,8 +35,6 @@ $(eval $(call gb_Executable_use_libraries,ulfex,\
     sal \
 ))
 
-$(eval $(call gb_Executable_use_external,ulfex,boost_headers))
-
 $(eval $(call gb_Executable_use_static_libraries,ulfex,\
     transex \
 ))
@@ -47,6 +45,7 @@ $(eval $(call gb_Executable_add_exception_objects,ulfex,\
 ))
 
 $(eval $(call gb_Executable_use_externals,ulfex,\
+    boost_headers \
     icuuc \
     icui18n \
 ))

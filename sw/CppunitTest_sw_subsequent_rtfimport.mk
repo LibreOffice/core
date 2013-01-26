@@ -50,6 +50,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_rtfimport, \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_subsequent_rtfimport,\
+	boost_headers \
     libxml2 \
 ))
 

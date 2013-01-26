@@ -27,6 +27,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,salhelper_checkapi))
 
+$(eval $(call gb_CppunitTest_use_external,salhelper_checkapi,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,salhelper_checkapi,\
     salhelper/qa/checkapi/strings \
 ))

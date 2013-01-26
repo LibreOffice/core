@@ -29,6 +29,7 @@ $(eval $(call gb_Executable_add_exception_objects,stringex,\
 ))
 
 $(eval $(call gb_Executable_use_externals,stringex,\
+    boost_headers \
     libxml2 \
     icuuc \
     icui18n \

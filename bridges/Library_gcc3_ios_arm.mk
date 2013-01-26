@@ -14,6 +14,8 @@ bridges_SELECTED_BRIDGE := gcc3_ios_arm
 
 $(eval $(call gb_Library_Library,gcc3_uno))
 
+$(eval $(call gb_Library_use_external,gcc3_uno,boost_headers))
+
 $(eval $(call gb_Library_use_custom_headers,gcc3_uno,\
 	bridges/source/cpp_uno/gcc3_ios_arm \
 ))

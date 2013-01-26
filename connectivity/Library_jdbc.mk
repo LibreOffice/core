@@ -29,6 +29,8 @@ $(eval $(call gb_Library_Library,jdbc))
 
 $(eval $(call gb_Library_set_componentfile,jdbc,connectivity/source/drivers/jdbc/jdbc))
 
+$(eval $(call gb_Library_use_external,jdbc,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,jdbc))
 
 $(eval $(call gb_Library_set_include,jdbc,\

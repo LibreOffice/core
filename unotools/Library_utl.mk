@@ -29,6 +29,8 @@
 # utl is the name of the library as it is found in Repository.mk
 $(eval $(call gb_Library_Library,utl))
 
+$(eval $(call gb_Library_use_external,utl,boost_headers))
+
 # declare packages that will be delivered before compilation of utl
 # learn more about TYPE in the Package.mk template
 $(eval $(call gb_Library_use_package,utl,unotools_inc))

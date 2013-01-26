@@ -35,8 +35,6 @@ $(eval $(call gb_Executable_use_libraries,xrmex,\
     sal \
 ))
 
-$(eval $(call gb_Executable_use_external,xrmex,boost_headers))
-
 $(eval $(call gb_Executable_add_scanners,xrmex,\
     l10ntools/source/xrmlex \
 ))
@@ -50,6 +48,7 @@ $(eval $(call gb_Executable_add_exception_objects,xrmex,\
 ))
 
 $(eval $(call gb_Executable_use_externals,xrmex,\
+    boost_headers \
     libxml2 \
     icuuc \
     icui18n \

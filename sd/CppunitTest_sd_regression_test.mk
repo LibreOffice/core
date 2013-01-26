@@ -29,6 +29,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sd_regression_test))
 
+$(eval $(call gb_CppunitTest_use_external,sd_regression_test,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_regression_test, \
     sd/qa/unit/regression-test \
 ))

@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_kde4,\
 ))
 
 $(eval $(call gb_Library_use_externals,vclplug_kde4,\
+	boost_headers \
 	icule \
 	icuuc \
 	kde4 \

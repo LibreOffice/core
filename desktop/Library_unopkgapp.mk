@@ -34,6 +34,8 @@ $(eval $(call gb_Library_set_include,unopkgapp,\
     -I$(SRCDIR)/desktop/source/inc \
 ))
 
+$(eval $(call gb_Library_use_external,unopkgapp,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,unopkgapp))
 
 $(eval $(call gb_Library_add_defs,unopkgapp,\

@@ -35,6 +35,7 @@ $(eval $(call gb_StaticLibrary_set_include,writerperfect,\
 ))
 
 $(eval $(call gb_StaticLibrary_use_externals,writerperfect,\
+	boost_headers \
 	wpd \
 	wpg \
 ))

@@ -35,6 +35,8 @@ $(eval $(call gb_Library_set_include,simplecanvas,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
+$(eval $(call gb_Library_use_external,simplecanvas,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,simplecanvas))
 
 $(eval $(call gb_Library_use_libraries,simplecanvas,\

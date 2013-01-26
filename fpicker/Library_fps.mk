@@ -35,6 +35,8 @@ $(eval $(call gb_Library_use_packages,fps,\
 	vcl_inc \
 ))
 
+$(eval $(call gb_Library_use_external,fps,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,fps))
 
 $(eval $(call gb_Library_add_defs,fps,\

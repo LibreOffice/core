@@ -36,6 +36,8 @@ $(eval $(call gb_Library_set_include,avmediagst_0_10,\
 	$(GSTREAMER_0_10_CFLAGS) \
 ))
 
+$(eval $(call gb_Library_use_external,avmediagst_0_10,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,avmediagst_0_10))
 
 ifeq ($(OS),WNT)

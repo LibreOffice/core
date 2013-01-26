@@ -54,7 +54,10 @@ $(call gb_Library_get_target,subsequenttest) : \
 
 endif
 
-$(eval $(call gb_Library_use_external,subsequenttest,cppunit))
+$(eval $(call gb_Library_use_externals,subsequenttest,\
+	boost_headers \
+	cppunit \
+))
 
 $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/unoapi_test \

@@ -145,6 +145,7 @@ $(eval $(call gb_Library_use_libraries,editeng,\
 ))
 
 $(eval $(call gb_Library_use_externals,editeng,\
+	boost_headers \
 	icuuc \
 	icu_headers \
 ))

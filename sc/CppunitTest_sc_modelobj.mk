@@ -30,6 +30,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_modelobj))
 
+$(eval $(call gb_CppunitTest_use_external,sc_modelobj,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_modelobj, \
     sc/qa/extras/scmodelobj \
 ))

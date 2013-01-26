@@ -32,9 +32,7 @@ $(eval $(call gb_Library_use_package,sot,sot_inc))
 
 $(eval $(call gb_Library_set_componentfile,sot,sot/util/sot))
 
-$(eval $(call gb_Library_set_include,sot,\
-    $$(INCLUDE) \
-))
+$(eval $(call gb_Library_use_external,sot,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,sot))
 

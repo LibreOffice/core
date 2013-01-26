@@ -35,6 +35,8 @@ $(eval $(call gb_Library_set_include,xstor,\
 	-I$(SRCDIR)/package/inc \
 ))
 
+$(eval $(call gb_Library_use_external,xstor,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,xstor))
 
 $(eval $(call gb_Library_use_libraries,xstor,\

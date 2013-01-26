@@ -19,6 +19,8 @@
 
 $(eval $(call gb_Library_Library,itg))
 
+$(eval $(call gb_Library_use_external,itg,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,itg))
 
 $(eval $(call gb_Library_set_include,itg,\

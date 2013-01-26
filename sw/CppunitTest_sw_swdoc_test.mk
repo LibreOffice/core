@@ -71,6 +71,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_swdoc_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_swdoc_test,\
+	boost_headers \
 	icuuc \
 	libxml2 \
 ))

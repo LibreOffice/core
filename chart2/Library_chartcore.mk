@@ -22,6 +22,8 @@ $(eval $(call gb_Library_add_defs,chartcore,\
     -DOOO_DLLIMPLEMENTATION_CHARTVIEW \
 ))
 
+$(eval $(call gb_Library_use_external,chartcore,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,chartcore))
 
 $(eval $(call gb_Library_use_libraries,chartcore,\

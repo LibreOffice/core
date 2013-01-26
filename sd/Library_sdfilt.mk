@@ -42,6 +42,8 @@ $(eval $(call gb_Library_add_defs,sdfilt,\
 ))
 endif
 
+$(eval $(call gb_Library_use_external,sdfilt,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,sdfilt))
 
 $(eval $(call gb_Library_use_libraries,sdfilt,\

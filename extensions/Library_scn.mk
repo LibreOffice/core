@@ -29,6 +29,7 @@
 $(eval $(call gb_Library_Library,scn))
 
 $(eval $(call gb_Library_use_externals,scn,\
+	boost_headers \
     sane_headers \
 ))
 

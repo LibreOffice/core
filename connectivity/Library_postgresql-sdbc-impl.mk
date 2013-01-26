@@ -58,6 +58,7 @@ endif
 endif
 
 $(eval $(call gb_Library_use_externals,postgresql-sdbc-impl,\
+	boost_headers \
 	postgresql \
 ))
 

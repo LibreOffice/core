@@ -29,6 +29,7 @@ $(eval $(call gb_Executable_add_exception_objects,propex,\
 ))
 
 $(eval $(call gb_Executable_use_externals,propex,\
+    boost_headers \
     icuuc \
     icui18n \
 ))

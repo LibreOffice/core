@@ -36,6 +36,8 @@ $(eval $(call gb_Library_use_packages,log,\
 
 $(eval $(call gb_Library_set_componentfile,log,extensions/source/logging/log))
 
+$(eval $(call gb_Library_use_external,log,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,log))
 
 $(eval $(call gb_Library_add_exception_objects,log,\

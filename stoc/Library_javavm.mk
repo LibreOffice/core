@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,javavm))
 
+$(eval $(call gb_Library_use_external,javavm,boost_headers))
+
 $(eval $(call gb_Library_use_udk_api,javavm))
 
 $(eval $(call gb_Library_use_libraries,javavm,\

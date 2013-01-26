@@ -30,6 +30,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,lotuswordpro_test_lotuswordpro))
 
+$(eval $(call gb_CppunitTest_use_external,lotuswordpro_test_lotuswordpro,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,lotuswordpro_test_lotuswordpro, \
     lotuswordpro/qa/cppunit/test_lotuswordpro \
 ))

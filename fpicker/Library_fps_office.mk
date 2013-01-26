@@ -29,6 +29,8 @@ $(eval $(call gb_Library_Library,fps_office))
 
 $(eval $(call gb_Library_set_componentfile,fps_office,fpicker/source/office/fps_office))
 
+$(eval $(call gb_Library_use_external,fps_office,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,fps_office))
 
 $(eval $(call gb_Library_set_include,fps_office,\

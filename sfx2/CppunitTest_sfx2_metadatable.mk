@@ -33,8 +33,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sfx2_metadatable, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sfx2_metadatable,\
-    $$(INCLUDE) \
-))
+$(eval $(call gb_CppunitTest_use_external,sfx2_metadatable,boost_headers))
 
 # vim: set noet sw=4 ts=4:

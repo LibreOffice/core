@@ -41,6 +41,8 @@ $(eval $(call gb_Library_add_defs,canvastools,\
 	-DCANVASTOOLS_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_use_external,canvastools,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,canvastools,\
 	basegfx \
 	comphelper \

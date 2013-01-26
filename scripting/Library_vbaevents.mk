@@ -35,6 +35,8 @@ $(eval $(call gb_Library_set_include,vbaevents,\
 	-I$(SRCDIR)/scripting/source/inc \
 ))
 
+$(eval $(call gb_Library_use_external,vbaevents,boost_headers))
+
 $(eval $(call gb_Library_use_api,vbaevents,\
 	offapi \
 	oovbaapi \

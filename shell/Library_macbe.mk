@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,macbe1))
 
+$(eval $(call gb_Library_use_external,macbe1,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,macbe1))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,macbe1,\

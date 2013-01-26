@@ -14,6 +14,8 @@ bridges_SELECTED_BRIDGE := gcc3_solaris_intel
 
 $(eval $(call gb_Library_Library,gcc3_uno))
 
+$(eval $(call gb_Library_use_external,gcc3_uno,boost_headers))
+
 $(eval $(call gb_Library_use_internal_comprehensive_api,gcc3_uno,\
 	udkapi \
 ))

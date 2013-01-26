@@ -28,6 +28,8 @@ $(eval $(call gb_Library_set_include,swui,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_external,swui,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,swui))
 
 ifeq ($(SYSTEM_LIBXML),YES)

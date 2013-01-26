@@ -41,7 +41,10 @@ $(eval $(call gb_Library_add_defs,odbcbase,\
 	-DOOO_DLLIMPLEMENTATION_ODBCBASE \
 ))
 
-$(eval $(call gb_Library_use_external,odbcbase,odbc_headers))
+$(eval $(call gb_Library_use_externals,odbcbase,\
+	boost_headers \
+	odbc_headers \
+))
 
 $(eval $(call gb_Library_use_libraries,odbcbase,\
 	cppu \

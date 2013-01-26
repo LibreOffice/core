@@ -33,6 +33,8 @@ $(eval $(call gb_Library_set_include,fwi,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_external,fwi,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,fwi,\
     comphelper \
     cppu \

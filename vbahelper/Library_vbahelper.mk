@@ -42,6 +42,8 @@ $(eval $(call gb_Library_add_defs,vbahelper,\
     -DVBAHELPER_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_use_external,vbahelper,boost_headers))
+
 $(eval $(call gb_Library_use_api,vbahelper,\
 	udkapi \
 	offapi \

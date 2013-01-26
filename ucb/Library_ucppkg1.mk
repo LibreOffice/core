@@ -29,6 +29,8 @@ $(eval $(call gb_Library_Library,ucppkg1))
 
 $(eval $(call gb_Library_set_componentfile,ucppkg1,ucb/source/ucp/package/ucppkg1))
 
+$(eval $(call gb_Library_use_external,ucppkg1,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,ucppkg1))
 
 $(eval $(call gb_Library_use_libraries,ucppkg1,\

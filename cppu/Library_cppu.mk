@@ -37,6 +37,8 @@ $(eval $(call gb_Library_add_defs,cppu,\
 	-DCPPU_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_use_external,cppu,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,cppu,\
 	sal \
 	salhelper \

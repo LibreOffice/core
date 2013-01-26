@@ -41,6 +41,8 @@ $(eval $(call gb_StaticLibrary_use_packages,headless,\
 	unotools_inc \
 ))
 
+$(eval $(call gb_StaticLibrary_use_external,headless,boost_headers))
+
 $(eval $(call gb_StaticLibrary_use_api,headless,\
     offapi \
     udkapi \

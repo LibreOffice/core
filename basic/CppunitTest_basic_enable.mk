@@ -8,6 +8,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,basic_enable))
 
+$(eval $(call gb_CppunitTest_use_external,basic_enable,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,basic_enable, \
     basic/qa/cppunit/test_append \
 ))

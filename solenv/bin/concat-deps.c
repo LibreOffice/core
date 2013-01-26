@@ -717,8 +717,7 @@ static inline void eat_space(char ** token)
  * gnumake startup time, and shrink the disk-space footprint.
  */
 static inline int
-elide_dependency(const char* key, int key_len,
-        int *boost_count, const char **unpacked_end)
+elide_dependency(const char* key, int key_len, const char **unpacked_end)
 {
 #if 0
     {
@@ -733,30 +732,12 @@ elide_dependency(const char* key, int key_len,
 
     /* boost brings a plague of header files */
     int i;
-    int boost = 0;
     int unpacked = 0;
     /* walk down path elements */
     for (i = 0; i < key_len - 1; i++)
     {
         if (key[i] == '/')
         {
-            if (internal_boost)
-            {
-                if (0 == boost)
-                {
-                    if (!PATHNCMP(key + i + 1, "solver/", 7))
-                    {
-                        boost++;
-                        continue;
-                    }
-                }
-                else if (!PATHNCMP(key + i + 1, "inc/external/boost/", 19))
-                {
-                    if (boost_count)
-                        (*boost_count)++;
-                    return 1;
-                }
-            }
             if (0 == unpacked)
             {
                 if (!PATHNCMP(key + i + 1, "workdir/", 8))
@@ -826,22 +807,29 @@ static inline void print_fullpaths(char* line)
         }
         int token_len = end - token;
         if (target_seen &&
-            elide_dependency(token, token_len, &boost_count, &unpacked_end))
+            elide_dependency(token, token_len, &unpacked_end))
         {
             if (unpacked_end)
             {
-                emit_unpacked_target(token, unpacked_end);
+                if (internal_boost && !PATHNCMP(unpacked_end - 5, "boost", 5))
+                {
+                    ++boost_count;
+                    if (boost_count == 1)
+                        emit_single_boost_header();
+                    else
+                    {
+                        /* don't output, and swallow trailing \\\n if any */
+                        token = end;
+                        eat_space(&token);
+                        if (token[0] == '\\' && token[1] == '\n')
+                            end = token + 2;
+                    }
+                }
+                else
+                {
+                    emit_unpacked_target(token, unpacked_end);
+                }
                 unpacked_end = 0;
-            }
-            else if (boost_count == 1)
-                emit_single_boost_header();
-            else
-            {
-                /* don't output, and swallow trailing \\\n if any */
-                token = end;
-                eat_space(&token);
-                if (token[0] == '\\' && token[1] == '\n')
-                    end = token + 2;
             }
         }
         else
@@ -938,7 +926,7 @@ off_t size;
                              * duplicate out
                              */
                             int key_len = eat_space_at_end(cursor_out) - base;
-                            if (!elide_dependency(base,key_len + 1, NULL, NULL)
+                            if (!elide_dependency(base,key_len + 1, NULL)
                                 && hash_store(dep_hash, base, key_len))
                             {
                                 /* DO NOT modify base after it has been added
@@ -984,7 +972,7 @@ off_t size;
             if(last_ns == ':')
             {
                 int key_len = eat_space_at_end(cursor_out) - base;
-                if (!elide_dependency(base,key_len + 1, NULL, NULL) &&
+                if (!elide_dependency(base,key_len + 1, NULL) &&
                     hash_store(dep_hash, base, key_len))
                 {
                     puts(base);

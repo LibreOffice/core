@@ -51,6 +51,7 @@ $(eval $(call gb_Library_use_libraries,lwpft,\
 ))
 
 $(eval $(call gb_Library_use_externals,lwpft,\
+	boost_headers \
     icui18n \
     icuuc \
     icu_headers \

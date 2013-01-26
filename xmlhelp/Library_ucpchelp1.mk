@@ -56,6 +56,7 @@ $(eval $(call gb_Library_set_include,ucpchelp1,\
 $(eval $(call gb_Library_use_sdk_api,ucpchelp1))
 
 $(eval $(call gb_Library_use_externals,ucpchelp1,\
+	boost_headers \
 	clucene \
 	expat_utf8 \
 	libxml2 \

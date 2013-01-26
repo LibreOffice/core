@@ -15,6 +15,8 @@ $(eval $(call gb_CppunitTest_set_include,connectivity_mork,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,connectivity_mork,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_api,connectivity_mork,\
     udkapi \
     offapi \

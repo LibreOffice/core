@@ -29,6 +29,8 @@ $(eval $(call gb_Library_Library,java_uno_accessbridge))
 
 $(eval $(call gb_Library_use_custom_headers,java_uno_accessbridge,accessibility/bridge/inc))
 
+$(eval $(call gb_Library_use_external,java_uno_accessbridge,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,java_uno_accessbridge,))
 
 $(eval $(call gb_Library_use_libraries,java_uno_accessbridge,\

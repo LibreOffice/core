@@ -36,6 +36,7 @@ $(eval $(call gb_Executable_use_libraries,HelpLinker,\
 ))
 
 $(eval $(call gb_Executable_use_externals,HelpLinker,\
+    boost_headers \
     expat_utf8 \
     libxslt \
     libxml2 \

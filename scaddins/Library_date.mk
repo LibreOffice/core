@@ -30,6 +30,8 @@ $(eval $(call gb_Library_Library,date))
 
 $(eval $(call gb_Library_set_componentfile,date,scaddins/source/datefunc/date))
 
+$(eval $(call gb_Library_use_external,date,boost_headers))
+
 $(eval $(call gb_Library_use_internal_comprehensive_api,date,\
 	offapi \
 	scaddins \

@@ -31,6 +31,8 @@ $(eval $(call gb_Library_add_defs,fwe,\
 
 $(eval $(call gb_Library_use_sdk_api,fwe))
 
+$(eval $(call gb_Library_use_external,fwe,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,fwe,\
     comphelper \
     cppu \

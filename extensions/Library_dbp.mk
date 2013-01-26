@@ -42,6 +42,8 @@ $(eval $(call gb_Library_add_defs,dbp,\
 	-DCOMPMOD_NAMESPACE=dbp \
 ))
 
+$(eval $(call gb_Library_use_external,dbp,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,dbp))
 
 $(eval $(call gb_Library_add_exception_objects,dbp,\

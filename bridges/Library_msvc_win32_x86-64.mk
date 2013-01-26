@@ -14,6 +14,8 @@ bridges_SELECTED_BRIDGE := msvc_win32_x86-64
 
 $(eval $(call gb_Library_Library,mscx_uno))
 
+$(eval $(call gb_Library_use_external,mscx_uno,boost_headers))
+
 $(eval $(call gb_Library_use_internal_comprehensive_api,mscx_uno,\
 	udkapi \
 ))

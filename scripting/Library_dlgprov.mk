@@ -35,6 +35,8 @@ $(eval $(call gb_Library_set_include,dlgprov,\
 	-I$(SRCDIR)/scripting/source/inc \
 ))
 
+$(eval $(call gb_Library_use_external,dlgprov,boost_headers))
+
 $(eval $(call gb_Library_use_api,dlgprov,\
 	offapi \
 	oovbaapi \

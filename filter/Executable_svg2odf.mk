@@ -29,6 +29,8 @@ $(eval $(call gb_Executable_Executable,svg2odf))
 
 $(eval $(call gb_Executable_set_targettype_gui,svg2odf,YES))
 
+$(eval $(call gb_Executable_use_external,svg2odf,boost_headers))
+
 $(eval $(call gb_Executable_use_sdk_api,svg2odf))
 
 $(eval $(call gb_Executable_set_include,svg2odf,\

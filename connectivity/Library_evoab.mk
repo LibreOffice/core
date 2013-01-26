@@ -33,6 +33,7 @@ $(eval $(call gb_Library_set_include,evoab,\
 ))
 
 $(eval $(call gb_Library_use_externals,evoab,\
+	boost_headers \
 	gtk \
 	gobject \
 ))

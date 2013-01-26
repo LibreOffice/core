@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Library_Library,java_uno))
 
+$(eval $(call gb_Library_use_external,java_uno,boost_headers))
+
 ifeq ($(OS)$(COM),WNTGCC)
 ifeq ($(EXCEPTIONS),sjlj)
 $(eval $(call gb_Library_add_defs,java_uno,\

@@ -23,6 +23,8 @@ $(eval $(call gb_Library_use_package,msfilter,filter_inc))
 
 $(eval $(call gb_Library_set_componentfile,msfilter,filter/source/msfilter/msfilter))
 
+$(eval $(call gb_Library_use_external,msfilter,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,msfilter))
 
 $(eval $(call gb_Library_set_include,msfilter,\

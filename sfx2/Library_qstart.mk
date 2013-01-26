@@ -56,6 +56,7 @@ $(eval $(call gb_Library_use_libraries,qstart_gtk,\
 ))
 
 $(eval $(call gb_Library_use_externals,qstart_gtk,\
+	boost_headers \
 	gio \
 	gtk \
 	libxml2 \

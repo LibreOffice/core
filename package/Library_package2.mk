@@ -54,6 +54,7 @@ $(eval $(call gb_Library_use_libraries,package2,\
 ))
 
 $(eval $(call gb_Library_use_externals,package2,\
+	boost_headers \
 	zlib \
 ))
 

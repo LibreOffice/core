@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,basic_nested_struct))
 
+$(eval $(call gb_CppunitTest_use_external,basic_nested_struct,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,basic_nested_struct, \
     basic/qa/cppunit/test_nested_struct \
 ))

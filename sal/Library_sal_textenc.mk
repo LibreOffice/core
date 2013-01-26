@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,sal_textenc))
 
+$(eval $(call gb_Library_use_external,sal_textenc,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,sal_textenc,\
 	sal \
 	$(gb_UWINAPI) \

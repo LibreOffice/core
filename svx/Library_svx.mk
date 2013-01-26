@@ -62,6 +62,7 @@ $(eval $(call gb_Library_use_libraries,svx,\
 ))
 
 $(eval $(call gb_Library_use_externals,svx,\
+	boost_headers \
 	icuuc \
 	icu_headers \
 ))

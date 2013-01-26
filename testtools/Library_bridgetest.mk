@@ -40,6 +40,8 @@ $(eval $(call gb_Library_use_static_libraries,testtools_bridgetest,\
     testtools_bridgetest_s \
 ))
 
+$(eval $(call gb_Library_use_external,testtools_bridgetest,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,testtools_bridgetest,\
     cppu \
     cppuhelper \

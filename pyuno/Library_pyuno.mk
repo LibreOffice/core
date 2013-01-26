@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,pyuno,\
 ))
 
 $(eval $(call gb_Library_use_externals,pyuno,\
+	boost_headers \
     python \
 ))
 

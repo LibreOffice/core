@@ -37,6 +37,8 @@ $(eval $(call gb_CppunitTest_add_defs,vcl_filters_test,\
 ))
 endif
 
+$(eval $(call gb_CppunitTest_use_external,vcl_filters_test,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_libraries,vcl_filters_test, \
 	comphelper \
 	cppu \

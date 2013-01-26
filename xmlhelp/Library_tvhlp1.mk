@@ -32,6 +32,7 @@ $(eval $(call gb_Library_set_componentfile,tvhlp1,xmlhelp/source/treeview/tvhlp1
 $(eval $(call gb_Library_use_sdk_api,tvhlp1))
 
 $(eval $(call gb_Library_use_externals,tvhlp1,\
+	boost_headers \
 	expat_utf8 \
 ))
 

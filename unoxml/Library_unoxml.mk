@@ -37,7 +37,10 @@ $(eval $(call gb_Library_use_libraries,unoxml,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_external,unoxml,libxml2))
+$(eval $(call gb_Library_use_externals,unoxml,\
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_Library_add_exception_objects,unoxml,\
     unoxml/source/dom/node \

@@ -19,6 +19,7 @@ $(eval $(call gb_Library_set_include,fastsax,\
 $(eval $(call gb_Library_use_sdk_api,fastsax))
 
 $(eval $(call gb_Library_use_externals,fastsax,\
+	boost_headers \
 	expat_utf8 \
 	zlib \
 ))

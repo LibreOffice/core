@@ -42,6 +42,8 @@ $(eval $(call gb_Library_add_defs,dba,\
     -DOOO_DLLIMPLEMENTATION_DBA \
 ))
 
+$(eval $(call gb_Library_use_external,dba,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,dba))
 
 $(eval $(call gb_Library_use_libraries,dba,\

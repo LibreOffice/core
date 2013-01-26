@@ -41,7 +41,10 @@ $(eval $(call gb_Library_use_libraries,hwp,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_external,hwp,zlib))
+$(eval $(call gb_Library_use_externals,hwp,\
+	boost_headers \
+	zlib \
+))
 
 ifeq ($(OS),WNT)
 

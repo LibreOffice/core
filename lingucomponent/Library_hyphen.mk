@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_static_libraries,hyphen,\
 ))
 
 $(eval $(call gb_Library_use_externals,hyphen,\
+	boost_headers \
 	hunspell \
 	hyphen \
 ))

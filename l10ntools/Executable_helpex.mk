@@ -39,6 +39,9 @@ $(eval $(call gb_Executable_use_externals,helpex,\
 	expat_utf8 \
 	boost_headers \
 	icu_headers \
+    libxml2 \
+    icuuc \
+    icui18n \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,helpex,\
@@ -49,12 +52,6 @@ $(eval $(call gb_Executable_add_exception_objects,helpex,\
     l10ntools/source/helpex \
     l10ntools/source/xmlparse \
     l10ntools/source/helpmerge \
-))
-
-$(eval $(call gb_Executable_use_externals,helpex,\
-    libxml2 \
-    icuuc \
-    icui18n \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

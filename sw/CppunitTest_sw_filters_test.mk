@@ -29,7 +29,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_filters_test))
 
-$(eval $(call gb_CppunitTest_use_externals,sw_filters_test,
+$(eval $(call gb_CppunitTest_use_externals,sw_filters_test,\
+	boost_headers \
 	libxml2 \
 ))
 

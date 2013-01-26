@@ -26,6 +26,8 @@
 
 $(eval $(call gb_Executable_Executable,uno-skeletonmaker))
 
+$(eval $(call gb_Executable_use_external,uno-skeletonmaker,boost_headers))
+
 $(eval $(call gb_Executable_use_api,uno-skeletonmaker,\
     udkapi \
 ))
