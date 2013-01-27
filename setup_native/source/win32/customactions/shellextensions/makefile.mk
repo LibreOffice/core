@@ -34,6 +34,7 @@ USE_DEFFILE=TRUE
 .IF "$(OS)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
 UWINAPILIB=
+CFLAGS+=-I$(WORKDIR)/UnpackedTarball/boost
 
 SLOFILES = \
     $(SLO)$/startmenuicon.obj \
