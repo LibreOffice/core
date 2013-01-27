@@ -53,7 +53,6 @@ class SfxPoolItem;
 class SwUndoTblMerge;
 class SwUndo;
 class SwPaM;
-class SwTableBox_Impl;
 class SwUndoTblCpyTbl;
 class SwBoxSelection;
 struct SwSaveRowSpan;
@@ -391,7 +390,10 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrmFmt.
     SwTableLines aLines;
     const SwStartNode * pSttNd;
     SwTableLine *pUpper;
-    SwTableBox_Impl* pImpl;
+
+    Color *pSaveUserColor, *pSaveNumFmtColor;
+    long nRowSpan;
+    bool bDummyFlag;
 
     // In case Format contains formulas/values already,
     // a new one must be created for the new box.
@@ -400,7 +402,7 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrmFmt.
 public:
     TYPEINFO();
 
-    SwTableBox() : pSttNd(0), pUpper(0), pImpl(0) {}
+    SwTableBox() : pSttNd(0), pUpper(0), pSaveUserColor(0), pSaveNumFmtColor(0), nRowSpan(1), bDummyFlag(false) {}
 
     SwTableBox( SwTableBoxFmt*, sal_uInt16 nLines, SwTableLine *pUp = 0 );
     SwTableBox( SwTableBoxFmt*, const SwStartNode&, SwTableLine *pUp = 0 );
@@ -457,15 +459,15 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBox)
 
     // Access on internal data - currently used for the NumFormatter.
-    inline const Color* GetSaveUserColor()  const;
-    inline const Color* GetSaveNumFmtColor() const;
+    inline const Color* GetSaveUserColor()  const { return pSaveUserColor; }
+    inline const Color* GetSaveNumFmtColor() const { return pSaveNumFmtColor; }
     inline void SetSaveUserColor(const Color* p );
     inline void SetSaveNumFmtColor( const Color* p );
 
-    long getRowSpan() const;
-    void setRowSpan( long nNewRowSpan );
-    bool getDummyFlag() const;
-    void setDummyFlag( bool bDummy );
+    long getRowSpan() const {return nRowSpan;}
+    void setRowSpan( long nNewRowSpan ) { nRowSpan = nNewRowSpan;}
+    bool getDummyFlag() const { return bDummyFlag;}
+    void setDummyFlag( bool bDummy ) { bDummyFlag = bDummy;}
 
     SwTableBox& FindStartOfRowSpan( const SwTable&, sal_uInt16 nMaxStep = USHRT_MAX );
     const SwTableBox& FindStartOfRowSpan( const SwTable& rTable,

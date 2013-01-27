@@ -81,86 +81,18 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
                     sal_Bool bChgAlign,sal_uLong nNdPos );
 //----------------------------------
 
-class SwTableBox_Impl
-{
-    Color *mpUserColor, *mpNumFmtColor;
-    long mnRowSpan;
-    bool mbDummyFlag;
-
-    void SetNewCol( Color** ppCol, const Color* pNewCol );
-public:
-    SwTableBox_Impl() : mpUserColor(0), mpNumFmtColor(0), mnRowSpan(1),
-        mbDummyFlag( false ) {}
-    ~SwTableBox_Impl() { delete mpUserColor; delete mpNumFmtColor; }
-
-    const Color* GetSaveUserColor() const       { return mpUserColor; }
-    const Color* GetSaveNumFmtColor() const     { return mpNumFmtColor; }
-    void SetSaveUserColor(const Color* p )      { SetNewCol( &mpUserColor, p ); }
-    void SetSaveNumFmtColor( const Color* p )   { SetNewCol( &mpNumFmtColor, p ); }
-    long getRowSpan() const { return mnRowSpan; }
-    void setRowSpan( long nNewRowSpan ) { mnRowSpan = nNewRowSpan; }
-    bool getDummyFlag() const { return mbDummyFlag; }
-    void setDummyFlag( bool bDummy ) { mbDummyFlag = bDummy; }
-};
+static void lcl_SetNewColor(Color** ppCol, const Color* pNewCol);
 
 // ----------- Inlines -----------------------------
 
-inline const Color* SwTableBox::GetSaveUserColor() const
+inline void SwTableBox::SetSaveUserColor(const Color* pNewColor )
 {
-    return pImpl ? pImpl->GetSaveUserColor() : 0;
+    lcl_SetNewColor(&pSaveUserColor, pNewColor);
 }
 
-inline const Color* SwTableBox::GetSaveNumFmtColor() const
+inline void SwTableBox::SetSaveNumFmtColor( const Color* pNewColor )
 {
-    return pImpl ? pImpl->GetSaveNumFmtColor() : 0;
-}
-
-inline void SwTableBox::SetSaveUserColor(const Color* p )
-{
-    if( pImpl )
-        pImpl->SetSaveUserColor( p );
-    else if( p )
-        ( pImpl = new SwTableBox_Impl ) ->SetSaveUserColor( p );
-}
-
-inline void SwTableBox::SetSaveNumFmtColor( const Color* p )
-{
-    if( pImpl )
-        pImpl->SetSaveNumFmtColor( p );
-    else if( p )
-        ( pImpl = new SwTableBox_Impl )->SetSaveNumFmtColor( p );
-}
-
-long SwTableBox::getRowSpan() const
-{
-    return pImpl ? pImpl->getRowSpan() : 1;
-}
-
-void SwTableBox::setRowSpan( long nNewRowSpan )
-{
-    if( !pImpl )
-    {
-        if( nNewRowSpan == 1 )
-            return;
-        pImpl = new SwTableBox_Impl();
-    }
-    pImpl->setRowSpan( nNewRowSpan );
-}
-
-bool SwTableBox::getDummyFlag() const
-{
-    return pImpl ? pImpl->getDummyFlag() : false;
-}
-
-void SwTableBox::setDummyFlag( bool bDummy )
-{
-    if( !pImpl )
-    {
-        if( !bDummy )
-            return;
-        pImpl = new SwTableBox_Impl();
-    }
-    pImpl->setDummyFlag( bDummy );
+    lcl_SetNewColor(&pSaveNumFmtColor, pNewColor);
 }
 
 //JP 15.09.98: Bug 55741 - Keep tabs (front and rear)
@@ -1681,7 +1613,10 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, sal_uInt16 nLines, SwTableLine *pUp
     aLines(),
     pSttNd( 0 ),
     pUpper( pUp ),
-    pImpl( 0 )
+    pSaveUserColor(0),
+    pSaveNumFmtColor(0),
+    nRowSpan(1),
+    bDummyFlag(false)
 {
     aLines.reserve( (sal_uInt8)nLines );
     CheckBoxFmt( pFmt )->Add( this );
@@ -1692,7 +1627,10 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwNodeIndex &rIdx,
     : SwClient( 0 ),
     aLines(),
     pUpper( pUp ),
-    pImpl( 0 )
+    pSaveUserColor(0),
+    pSaveNumFmtColor(0),
+    nRowSpan(1),
+    bDummyFlag(false)
 {
     CheckBoxFmt( pFmt )->Add( this );
 
@@ -1712,7 +1650,10 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwStartNode& rSttNd, SwTableL
     aLines(),
     pSttNd( &rSttNd ),
     pUpper( pUp ),
-    pImpl( 0 )
+    pSaveUserColor(0),
+    pSaveNumFmtColor(0),
+    nRowSpan(1),
+    bDummyFlag(false)
 {
     CheckBoxFmt( pFmt )->Add( this );
 
@@ -1753,7 +1694,8 @@ SwTableBox::~SwTableBox()
     if( !pMod->GetDepends() )
         delete pMod;    // and delete
 
-    delete pImpl;
+    delete pSaveUserColor;
+    delete pSaveNumFmtColor;
 }
 
 SwTableBoxFmt* SwTableBox::CheckBoxFmt( SwTableBoxFmt* pFmt )
@@ -2608,7 +2550,7 @@ void SwTableBox::ActualiseValueBox()
     }
 }
 
-void SwTableBox_Impl::SetNewCol( Color** ppCol, const Color* pNewCol )
+static void lcl_SetNewColor( Color** ppCol, const Color* pNewCol )
 {
     if( *ppCol != pNewCol )
     {
