@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUX///6k\u003d",
+        "filename": "sc/source/filter/xml/xmlcelli.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-27T02:30:26Z",
+      "side": 1,
+      "message": "Why should this be mbPossibleErrorCell\u003dtrue just because of an empty string?",
+      "revId": "0e3e2af67dc347b14f17ea41b9c2a734654e0a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX///6g\u003d",
+        "filename": "sc/source/filter/xml/xmlcelli.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-27T02:30:26Z",
+      "side": 1,
+      "message": "I think instead of scanning for \u0027#\u0027 anywhere it would be sufficient to check the very first character. Just a tad faster and not needing a check with compiler for # somewhere.",
+      "revId": "0e3e2af67dc347b14f17ea41b9c2a734654e0a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
