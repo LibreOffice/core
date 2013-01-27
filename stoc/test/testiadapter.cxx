@@ -329,8 +329,8 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
         sal_uInt32 nULong;
         sal_Int64 nHyper;
         sal_uInt64 nUHyper;
-        float fFloat;
-        double fDouble;
+        float fFloat = 0.0;
+        double fDouble = 0.0;
         TestEnum eEnum;
         OUString aString;
         Reference< XInterface > xInterface;
