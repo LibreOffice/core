@@ -352,6 +352,20 @@ Color WinMtf::ReadColor()
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
 
+Point WinMtfOutput::ImplScale( const Point& rPt)//Hack to set varying defaults for incompletely defined files.
+{
+        if (mbIsMapDevSet && mbIsMapWinSet)
+        {
+            return Point((rPt.X())*mnWinExtX/mnDevWidth-mrclFrame.Left(),(rPt.Y())*mnWinExtY/mnDevHeight-mrclFrame.Top());
+        }
+        else
+        {
+            return Point((rPt.X())*32-mrclFrame.Left(),(rPt.Y())*32-mrclFrame.Top());
+        }
+}
+
+//-----------------------------------------------------------------------------------
+
 Point WinMtfOutput::ImplMap( const Point& rPt )
 {
     if ( mnWinExtX && mnWinExtY )
@@ -395,6 +409,16 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
                     fY2  = mnWinOrgY-fY2;
                     fX2 *= 2.540;
                     fY2 *= 2.540;
+                    fX2 += mnDevOrgX;
+                    fY2 += mnDevOrgY;
+                }
+                break;
+                case MM_TWIPS:
+                {
+                    fX2 -= mnWinOrgX;
+                    fY2  = mnWinOrgY-fY2;
+                    fX2 *= 1.7639;
+                    fY2 *= 1.7639;
                     fX2 += mnDevOrgX;
                     fY2 += mnDevOrgY;
                 }
@@ -486,6 +510,12 @@ Size WinMtfOutput::ImplMap( const Size& rSz )
                     fHeight *= -1;
                 }
                 break;
+                case MM_TWIPS:
+                {
+                    fWidth *= 1.7639;
+                    fHeight*=-1.7639;
+                }
+                break;
                 default :
                 {
                     fWidth /= mnWinExtX;
@@ -539,6 +569,27 @@ Polygon& WinMtfOutput::ImplMap( Polygon& rPolygon )
         rPolygon[ i ] = ImplMap( rPolygon[ i ] );
     }
     return rPolygon;
+}
+
+//-----------------------------------------------------------------------------------
+
+Polygon& WinMtfOutput::ImplScale( Polygon& rPolygon )
+{
+    sal_uInt16 nPoints = rPolygon.GetSize();
+    for ( sal_uInt16 i = 0; i < nPoints; i++ )
+    {
+        rPolygon[ i ] = ImplScale( rPolygon[ i ] );
+    }
+    return rPolygon;
+}
+
+//-----------------------------------------------------------------------------------
+
+PolyPolygon& WinMtfOutput::ImplScale( PolyPolygon& rPolyPolygon )
+{
+    sal_uInt16 nPolys = rPolyPolygon.Count();
+    for ( sal_uInt16 i = 0; i < nPolys; ImplScale( rPolyPolygon[ i++ ] ) ) ;
+    return rPolyPolygon;
 }
 
 //-----------------------------------------------------------------------------------
@@ -838,6 +889,10 @@ void WinMtfOutput::DeleteObject( sal_Int32 nIndex )
 void WinMtfOutput::IntersectClipRect( const Rectangle& rRect )
 {
     mbClipNeedsUpdate=true;
+    if ((rRect.Left()-rRect.Right()==0) && (rRect.Top()-rRect.Bottom()==0))
+    {
+        return; // empty rectangles cause trouble
+    }
     aClipPath.intersectClipRect( ImplMap( rRect ) );
 }
 
@@ -859,9 +914,13 @@ void WinMtfOutput::MoveClipRegion( const Size& rSize )
 
 void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, sal_Bool bIsMapped )
 {
+    PolyPolygon xPolyPolygon(rPolyPolygon);
     mbClipNeedsUpdate=true;
     if ( bIsMapped )
-        aClipPath.setClipPath( rPolyPolygon, nClippingMode );
+    {
+        PolyPolygon aPP( rPolyPolygon );
+        aClipPath.setClipPath( ImplScale( aPP ), nClippingMode );
+    }
     else
     {
         PolyPolygon aPP( rPolyPolygon );
@@ -906,6 +965,8 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mnMillY             ( 1 ),
     mpGDIMetaFile       ( &rGDIMetaFile )
 {
+    mbIsMapWinSet = sal_False;
+    mbIsMapDevSet = sal_False;
     mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );      // The original clipregion has to be on top
                                                                             // of the stack so it can always be restored
                                                                             // this is necessary to be able to support
@@ -1116,7 +1177,6 @@ void WinMtfOutput::MoveTo( const Point& rPoint, sal_Bool bRecordPath )
 void WinMtfOutput::LineTo( const Point& rPoint, sal_Bool bRecordPath )
 {
     UpdateClipRegion();
-
     Point aDest( ImplMap( rPoint ) );
     if ( bRecordPath )
         aPathObj.AddPoint( aDest );
@@ -1896,7 +1956,7 @@ void WinMtfOutput::SetDevOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SetDevExt( const Size& rSize )
+void WinMtfOutput::SetDevExt( const Size& rSize ,sal_Bool regular)
 {
     if ( rSize.Width() && rSize.Height() )
     {
@@ -1908,6 +1968,10 @@ void WinMtfOutput::SetDevExt( const Size& rSize )
                 mnDevWidth = rSize.Width();
                 mnDevHeight = rSize.Height();
             }
+        }
+        if (regular)
+        {
+            mbIsMapDevSet=sal_True;
         }
     }
 }
@@ -1922,10 +1986,15 @@ void WinMtfOutput::ScaleDevExt( double fX, double fY )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SetWinOrg( const Point& rPoint )
+void WinMtfOutput::SetWinOrg( const Point& rPoint , sal_Bool bIsEMF)
 {
     mnWinOrgX = rPoint.X();
     mnWinOrgY = rPoint.Y();
+    if (bIsEMF)
+    {
+        SetDevByWin();
+    }
+    mbIsMapWinSet=sal_True;
 }
 
 //-----------------------------------------------------------------------------------
@@ -1938,9 +2007,21 @@ void WinMtfOutput::SetWinOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SetWinExt( const Size& rSize )
+void WinMtfOutput::SetDevByWin() //mnWinExt...-stuff has to be assigned before.
 {
+    if (!mbIsMapDevSet)
+    {
+        if ((mnMapMode == MM_ISOTROPIC) ) //TODO: HOW ABOUT ANISOTROPIC???
+        {
+            SetDevExt(Size((mnWinExtX+mnWinOrgX)>>4,-((mnWinExtY-mnWinOrgY)>>4)),sal_False);
+        }
+    }
+}
 
+//-----------------------------------------------------------------------------------
+
+void WinMtfOutput::SetWinExt( const Size& rSize, sal_Bool bIsEMF )
+{
     if( rSize.Width() && rSize.Height() )
     {
         switch( mnMapMode )
@@ -1950,6 +2031,11 @@ void WinMtfOutput::SetWinExt( const Size& rSize )
             {
                 mnWinExtX = rSize.Width();
                 mnWinExtY = rSize.Height();
+                if (bIsEMF)
+                {
+                    SetDevByWin();
+                }
+                mbIsMapWinSet=sal_True;
             }
         }
     }
