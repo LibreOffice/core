@@ -28,7 +28,7 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#include <../tools/msiprop.hxx>
+#include <msiquery.h>
 #include <shellapi.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
@@ -48,9 +48,27 @@
 #include <string>
 
 
+static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
+{
+    std::_tstring result;
+    TCHAR szDummy[1] = TEXT("");
+    DWORD nChars = 0;
+
+    if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
+    {
+        DWORD nBytes = ++nChars * sizeof(TCHAR);
+        LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
+        ZeroMemory( buffer, nBytes );
+        MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
+        result = buffer;
+    }
+
+    return result;
+}
+
 extern "C" UINT __stdcall copyExtensionData(MSIHANDLE handle) {
 
-    std::_tstring sSourceDir = GetMsiPropValue( handle, TEXT("SourceDir") );
+    std::_tstring sSourceDir = GetMsiProperty( handle, TEXT("SourceDir") );
     std::_tstring sExtensionDir = sSourceDir + TEXT("extension\\");
     std::_tstring sPattern = sExtensionDir + TEXT("*.oxt");
 
@@ -65,7 +83,7 @@ extern "C" UINT __stdcall copyExtensionData(MSIHANDLE handle) {
         bool fNextFile = false;
         bool bFailIfExist = true;
 
-        std::_tstring sDestDir = GetMsiPropValue( handle, TEXT("INSTALLLOCATION") );
+        std::_tstring sDestDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
         std::_tstring sShareInstallDir = sDestDir + TEXT("share\\extension\\install\\");
 
         // creating directories

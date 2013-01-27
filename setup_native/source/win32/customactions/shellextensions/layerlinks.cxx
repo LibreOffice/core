@@ -27,7 +27,7 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <../tools/msiprop.hxx>
+#include <msiquery.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -45,6 +45,38 @@ using namespace std;
 
 namespace
 {
+    string GetMsiProperty(MSIHANDLE handle, const string& sProperty)
+    {
+        string  result;
+        TCHAR   szDummy[1] = TEXT("");
+        DWORD   nChars = 0;
+
+        if (MsiGetProperty(handle, sProperty.c_str(), szDummy, &nChars) == ERROR_MORE_DATA)
+        {
+            DWORD nBytes = ++nChars * sizeof(TCHAR);
+            LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
+            ZeroMemory( buffer, nBytes );
+            MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
+            result = buffer;
+        }
+        return result;
+    }
+
+    inline bool IsSetMsiProperty(MSIHANDLE handle, const string& sProperty)
+    {
+        return (GetMsiProperty(handle, sProperty).length() > 0);
+    }
+
+    inline void UnsetMsiProperty(MSIHANDLE handle, const string& sProperty)
+    {
+        MsiSetProperty(handle, sProperty.c_str(), NULL);
+    }
+
+    inline void SetMsiProperty(MSIHANDLE handle, const string& sProperty, const string&)
+    {
+        MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
+    }
+
     void stripFinalBackslash(std::string * path) {
         std::string::size_type i = path->size();
         if (i > 1) {
@@ -58,13 +90,13 @@ namespace
 
 extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
 {
-    string sInstallPath = GetMsiPropValue(handle, TEXT("INSTALLLOCATION"));
+    string sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
 
     string sUreInstallPath = sInstallPath + TEXT("URE");
 
     string sUreLinkPath = sInstallPath + TEXT("ure-link");
 
-    if ( GetMsiPropValue(handle, TEXT("ADMININSTALL")).length() > 0 )
+    if ( IsSetMsiProperty(handle, TEXT("ADMININSTALL")) )
     {
         sUreInstallPath = TEXT("..\\URE");
     }
@@ -117,7 +149,7 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
 
 extern "C" UINT __stdcall RemoveLayerLinks(MSIHANDLE handle)
 {
-    string sInstallPath = GetMsiPropValue(handle, TEXT("INSTALLLOCATION"));
+    string sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
 
     string sUreLinkPath = sInstallPath + TEXT("ure-link");
     string sUreDirName = sInstallPath + TEXT("URE\\bin");

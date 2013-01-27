@@ -24,7 +24,7 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <../tools/msiprop.hxx>
+#include <msiquery.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -53,7 +53,7 @@ static void SetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty)
 
 extern "C" UINT __stdcall SetAdminInstallProperty(MSIHANDLE handle)
 {
-    MsiSetProperty(handle, TEXT("ADMININSTALL"), TEXT("1"));
+    SetMsiProperty(handle, TEXT("ADMININSTALL"));
     return ERROR_SUCCESS;
 }
 

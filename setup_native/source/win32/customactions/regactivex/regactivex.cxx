@@ -23,7 +23,7 @@
 #pragma warning(push, 1) /* disable warnings within system headers */
 #endif
 #include <windows.h>
-#include <../tools/msiprop.hxx>
+#include <msiquery.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -122,10 +122,29 @@ void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallF
 }
 
 //----------------------------------------------------------
+BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
+{
+    DWORD sz = 0;
+       if ( MsiGetProperty( hMSI, pPropName, L"", &sz ) == ERROR_MORE_DATA )
+       {
+           sz++;
+           DWORD nbytes = sz * sizeof( wchar_t );
+           wchar_t* buff = reinterpret_cast<wchar_t*>( malloc( nbytes ) );
+           ZeroMemory( buff, nbytes );
+           MsiGetProperty( hMSI, pPropName, buff, &sz );
+           *ppValue = buff;
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+//----------------------------------------------------------
 BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
 {
     wchar_t* pProgPath = NULL;
-    if ( GetMsiProp( hMSI, L"INSTALLLOCATION", &pProgPath ) )
+    if ( GetMsiProp( hMSI, L"INSTALLLOCATION", &pProgPath ) && pProgPath )
        {
         char* pCharProgPath = UnicodeToAnsiString( pProgPath );
 
@@ -252,7 +271,7 @@ BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
     wchar_t* pVal = NULL;
-    if ( GetMsiProp( hMSI, L"ALLUSERS", &pVal ) )
+    if ( GetMsiProp( hMSI, L"ALLUSERS", &pVal ) && pVal )
     {
         bResult = UnicodeEquals( pVal , L"1" );
         free( pVal );
@@ -266,7 +285,7 @@ BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
     wchar_t* pVal = NULL;
-    if ( GetMsiProp( hMSI, L"VersionNT64", &pVal ) )
+    if ( GetMsiProp( hMSI, L"VersionNT64", &pVal ) && pVal )
     {
         bResult = TRUE;
         free( pVal );

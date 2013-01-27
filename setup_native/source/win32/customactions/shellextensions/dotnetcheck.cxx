@@ -27,7 +27,7 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <../tools/msiprop.hxx>
+#include <msiquery.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -45,6 +45,28 @@ using namespace std;
 
 namespace
 {
+    string GetMsiProperty(MSIHANDLE handle, const string& sProperty)
+    {
+        string  result;
+        TCHAR   szDummy[1] = TEXT("");
+        DWORD   nChars = 0;
+
+        if (MsiGetProperty(handle, sProperty.c_str(), szDummy, &nChars) == ERROR_MORE_DATA)
+        {
+            DWORD nBytes = ++nChars * sizeof(TCHAR);
+            LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
+            ZeroMemory( buffer, nBytes );
+            MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
+            result = buffer;
+        }
+        return result;
+    }
+
+    inline void SetMsiProperty(MSIHANDLE handle, const string& sProperty, const string& sValue)
+    {
+        MsiSetProperty(handle, sProperty.c_str(), sValue.c_str());
+    }
+
     void stripFinalBackslash(std::string * path) {
         std::string::size_type i = path->size();
         if (i > 1) {
@@ -104,20 +126,20 @@ Order compareVersions(string const & version1, string const & version2) {
 } // namespace
 
 extern "C" UINT __stdcall DotNetCheck(MSIHANDLE handle) {
-    string present(GetMsiPropValue(handle, TEXT("MsiNetAssemblySupport")));
-    string required(GetMsiPropValue(handle, TEXT("REQUIRED_DOTNET_VERSION")));
+    string present(GetMsiProperty(handle, TEXT("MsiNetAssemblySupport")));
+    string required(GetMsiProperty(handle, TEXT("REQUIRED_DOTNET_VERSION")));
 
     // string myText1 = TEXT("MsiNetAssemblySupport: ") + present;
     // string myText2 = TEXT("REQUIRED_DOTNET_VERSION: ") + required;
     // MessageBox(NULL, myText1.c_str(), "DEBUG", MB_OK);
     // MessageBox(NULL, myText2.c_str(), "DEBUG", MB_OK);
 
-    MsiSetProperty(
+    SetMsiProperty(
         handle, TEXT("DOTNET_SUFFICIENT"),
         (present.empty() || compareVersions(present, required) == ORDER_LESS ?
          TEXT("0") : TEXT("1")));
 
-    // string result(GetMsiPropValue(handle, TEXT("DOTNET_SUFFICIENT")));
+    // string result(GetMsiProperty(handle, TEXT("DOTNET_SUFFICIENT")));
     // string myText3 = TEXT("DOTNET_SUFFICIENT: ") + result;
     // MessageBox(NULL, myText3.c_str(), "DEBUG", MB_OK);
 
@@ -127,23 +149,23 @@ extern "C" UINT __stdcall DotNetCheck(MSIHANDLE handle) {
 
 extern "C" UINT __stdcall ShowProperties(MSIHANDLE handle)
 {
-    string property = GetMsiPropValue(handle, TEXT("INSTALLLOCATION"));
+    string property = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
     string myText = TEXT("INSTALLLOCATION: ") + property;
     MessageBox(NULL, myText.c_str(), "INSTALLLOCATION", MB_OK);
 
-    property = GetMsiPropValue(handle, TEXT("Installed"));
+    property = GetMsiProperty(handle, TEXT("Installed"));
     myText = TEXT("Installed: ") + property;
     MessageBox(NULL, myText.c_str(), "Installed", MB_OK);
 
-    property = GetMsiPropValue(handle, TEXT("PATCH"));
+    property = GetMsiProperty(handle, TEXT("PATCH"));
     myText = TEXT("PATCH: ") + property;
     MessageBox(NULL, myText.c_str(), "PATCH", MB_OK);
 
-    property = GetMsiPropValue(handle, TEXT("REMOVE"));
+    property = GetMsiProperty(handle, TEXT("REMOVE"));
     myText = TEXT("REMOVE: ") + property;
     MessageBox(NULL, myText.c_str(), "REMOVE", MB_OK);
 
-    property = GetMsiPropValue(handle, TEXT("ALLUSERS"));
+    property = GetMsiProperty(handle, TEXT("ALLUSERS"));
     myText = TEXT("ALLUSERS: ") + property;
     MessageBox(NULL, myText.c_str(), "ALLUSERS", MB_OK);
 
