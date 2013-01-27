@@ -184,10 +184,6 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, sal_Bool
     get(m_pPrevBT, "prev");
     get(m_pNextBT, "next");
 
-    m_pNumberCharEdit->SetAccessibleName(String(SW_RES(STR_FOOTNOTE_DIALOG_CHAR)));
-    m_pNumberExtChar->SetAccessibleRelationMemberOf(m_pNumberFrame->get_label_widget());
-    m_pNumberCharEdit->SetAccessibleRelationLabeledBy(m_pNumberCharBtn);
-
     m_pNumberAutoBtn->SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberAutoBtnHdl));
     m_pNumberExtChar->SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberExtCharHdl));
     m_pNumberCharBtn->SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberCharHdl));

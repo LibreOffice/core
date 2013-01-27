@@ -91,7 +91,6 @@
 #define STR_OUTLINE_NUMBERING           (RC_APP_BEGIN + 104)
 #define STR_FDLG_OUTLINE_LEVEL          (RC_APP_BEGIN + 105)
 #define STR_FDLG_STYLE                  (RC_APP_BEGIN + 106)
-#define STR_SYMBOL                      (RC_APP_BEGIN + 107)
 
 // Status bar strings
 #define STR_STATUSBAR_WORDCOUNT_NO_SELECTION (RC_APP_BEGIN + 110)

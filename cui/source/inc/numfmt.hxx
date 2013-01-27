@@ -106,7 +106,7 @@ private:
     NumericField*           m_pEdLeadZeroes;
     CheckBox*               m_pBtnThousand;
 
-    FixedText*              m_pFtEdFormat;
+    VclContainer*           m_pFormatCodeFrame;
     Edit*                   m_pEdFormat;
     PushButton*             m_pIbAdd;
     PushButton*             m_pIbInfo;

@@ -119,9 +119,6 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     get(mpBorderCB, "bordercb");
     get(mpAutoFmtBtn, "autofmt");
 
-    mpOtherEd->SetAccessibleName(String(SW_RES(STR_SYMBOL)));
-    mpOtherEd->SetAccessibleRelationLabeledBy(mpOtherBtn);
-
     if(nSaveButtonState > -1)
     {
         switch (nSaveButtonState)

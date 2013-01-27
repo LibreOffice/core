@@ -196,12 +196,9 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet )
     m_pUserEdit->SetLast( nMax );
     m_pUserEdit->SetValue( nValue );
 
-    m_pUserEdit->SetAccessibleRelationLabeledBy(m_pUserBtn);
     m_pUserEdit->SetAccessibleName(m_pUserBtn->GetText());
-    m_pColumnsEdit->SetAccessibleRelationLabeledBy(m_pColumnsBtn);
     m_pColumnsEdit->SetAccessibleName(m_pColumnsBtn->GetText());
     m_pColumnsEdit->SetAccessibleRelationMemberOf(m_pColumnsBtn);
-    m_pBookModeChk->SetAccessibleRelationLabeledBy(m_pColumnsBtn);
     m_pBookModeChk->SetAccessibleRelationMemberOf(m_pColumnsBtn);
 
     const SfxPoolItem& rItem = rSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_ZOOM ) );

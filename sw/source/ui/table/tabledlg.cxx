@@ -1312,7 +1312,6 @@ SwTextFlowPage::SwTextFlowPage(Window* pParent, const SfxItemSet& rSet)
     m_pColBrkRB->SetAccessibleRelationMemberOf(m_pPgBrkCB);
     m_pPgBrkBeforeRB->SetAccessibleRelationMemberOf(m_pPgBrkCB);
     m_pPgBrkAfterRB->SetAccessibleRelationMemberOf(m_pPgBrkCB);
-    m_pPageCollLB->SetAccessibleRelationLabeledBy(m_pPageCollCB);
     m_pPageCollLB->SetAccessibleName(m_pPageCollCB->GetText());
 
     m_pPgBrkCB->SetClickHdl(LINK(this, SwTextFlowPage, PageBreakHdl_Impl));

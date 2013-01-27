@@ -379,9 +379,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rC
     FillColorValueSets_Impl();
 
     m_pBackgroundColorSet->SetSelectHdl( HDL(BackgroundColorHdl_Impl) );
-
-    m_pWndPosition->SetAccessibleRelationLabeledBy(m_pBtnPosition);
-    m_pBackgroundColorSet->SetAccessibleRelationLabeledBy(m_pBackGroundColorFrame->get_label_widget());
 }
 
 //------------------------------------------------------------------------

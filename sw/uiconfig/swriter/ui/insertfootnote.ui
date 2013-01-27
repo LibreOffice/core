@@ -18,13 +18,11 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -36,11 +34,9 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -52,11 +48,9 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -72,10 +66,8 @@
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkButton" id="prev">
-                    <property name="use_action_appearance">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="image">image1</property>
                     <property name="image_position">right</property>
                   </object>
@@ -88,10 +80,8 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="next">
-                    <property name="use_action_appearance">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="image">image2</property>
                   </object>
                   <packing>
@@ -142,11 +132,9 @@
                         <child>
                           <object class="GtkRadioButton" id="automatic">
                             <property name="label" translatable="yes">Automatic</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -162,14 +150,15 @@
                         <child>
                           <object class="GtkRadioButton" id="character">
                             <property name="label" translatable="yes">Character</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">automatic</property>
+                            <accessibility>
+                              <relation type="label-for" target="characterentry"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -187,6 +176,14 @@
                             <property name="width_chars">2</property>
                             <property name="progress_fraction">0.0099999997764825821</property>
                             <property name="progress_pulse_step">0.090000003576278687</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="character"/>
+                            </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="characterentry-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Character</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -198,12 +195,10 @@
                         <child>
                           <object class="GtkButton" id="choosecharacter">
                             <property name="label" translatable="yes">Choose ...</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="halign">start</property>
-                            <property name="use_action_appearance">False</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -258,11 +253,9 @@
                         <child>
                           <object class="GtkRadioButton" id="footnote">
                             <property name="label" translatable="yes">Footnote</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -277,11 +270,9 @@
                         <child>
                           <object class="GtkRadioButton" id="endnote">
                             <property name="label" translatable="yes">Endnote</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">footnote</property>

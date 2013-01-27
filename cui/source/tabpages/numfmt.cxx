@@ -246,7 +246,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(Window* pParent,
     get(m_pFtLeadZeroes, "leadzerosft");
     get(m_pEdLeadZeroes, "leadzerosed");
     get(m_pBtnThousand, "thousands");
-    get(m_pFtEdFormat, "formatft");
+    get(m_pFormatCodeFrame, "formatcode");
     get(m_pEdFormat, "formated");
     get(m_pIbAdd, "add");
     get(m_pIbInfo, "edit");
@@ -324,13 +324,6 @@ void SvxNumberFormatTabPage::Init_Impl()
     {
         m_pLbLanguage->InsertLanguage( xLang[i] );
     }
-
-    m_pIbAdd->SetAccessibleRelationLabeledBy(m_pFtEdFormat);
-    m_pIbInfo->SetAccessibleRelationLabeledBy(m_pFtEdFormat);
-    m_pIbRemove->SetAccessibleRelationLabeledBy(m_pFtEdFormat);
-    m_pIbAdd->SetAccessibleRelationMemberOf(m_pIbAdd);
-    m_pIbInfo->SetAccessibleRelationMemberOf(m_pIbInfo);
-    m_pIbRemove->SetAccessibleRelationMemberOf(m_pIbRemove);
 }
 
 /*************************************************************************
@@ -657,13 +650,7 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     m_pBtnNegRed->Enable( bEnable );
     m_pBtnThousand->Enable( bEnable );
     m_pFtOptions->Enable( bEnable );
-    m_pFtEdFormat->Enable( bEnable );
-    m_pEdFormat->Enable( bEnable );
-    m_pIbAdd->Enable( bEnable );
-    m_pIbRemove->Enable( bEnable );
-    m_pIbInfo->Enable( bEnable );
-    m_pFtComment->Enable( bEnable );
-    m_pEdComment->Enable( bEnable );
+    m_pFormatCodeFrame->Enable( bEnable );
     m_pLbFormat->Invalidate(); // #i43322#
 }
 

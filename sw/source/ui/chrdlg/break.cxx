@@ -140,7 +140,6 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS )
     get(m_pPageNumBox, "pagenumcb");
     get(m_pPageNumEdit, "pagenumsb");
 
-    m_pPageNumEdit->SetAccessibleRelationLabeledBy(m_pPageNumBox);
     m_pPageNumEdit->SetAccessibleName(m_pPageNumBox->GetText());
 
     Link aLk = LINK(this,SwBreakDlg,ClickHdl);

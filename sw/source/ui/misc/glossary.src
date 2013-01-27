@@ -44,10 +44,6 @@ String STR_GLOSSARY
 {
     Text [ en-US ] = "AutoText :" ;
 };
-String STR_ACCESS_SW_CATEGORY
-{
-    Text [ en-US ] = "Category" ;
-};
 ModalDialog DLG_RENAME_GLOS
 {
     OutputSize = TRUE ;

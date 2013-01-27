@@ -204,6 +204,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">_Decimal places</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">decimalsed</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -218,6 +219,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Leading _zeroes</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">leadzerosed</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

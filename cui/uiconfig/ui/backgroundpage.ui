@@ -417,6 +417,9 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
+                              <accessibility>
+                                <relation type="labelled-by" target="positionrb"/>
+                              </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -441,6 +444,9 @@
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">arearb</property>
+                                <accessibility>
+                                  <relation type="label-for" target="windowpos"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>

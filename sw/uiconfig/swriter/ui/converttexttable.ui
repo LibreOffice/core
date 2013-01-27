@@ -25,12 +25,10 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -42,11 +40,9 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -58,11 +54,9 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -114,6 +108,14 @@
                             <property name="width_chars">1</property>
                             <property name="text" translatable="yes">,</property>
                             <property name="invisible_char_set">True</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="other"/>
+                            </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="othered-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Symbol</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -125,15 +127,16 @@
                         <child>
                           <object class="GtkRadioButton" id="other">
                             <property name="label" translatable="yes">Other:</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="valign">end</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">tabs</property>
+                            <accessibility>
+                              <relation type="label-for" target="othered"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -145,12 +148,10 @@
                         <child>
                           <object class="GtkRadioButton" id="semicolons">
                             <property name="label" translatable="yes">Semicolons</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="valign">end</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">other</property>
@@ -165,12 +166,10 @@
                         <child>
                           <object class="GtkRadioButton" id="paragraph">
                             <property name="label" translatable="yes">Paragraph</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="valign">end</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">semicolons</property>
@@ -185,13 +184,11 @@
                         <child>
                           <object class="GtkRadioButton" id="tabs">
                             <property name="label" translatable="yes">Tabs</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="halign">start</property>
                             <property name="valign">end</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="relief">half</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
@@ -208,10 +205,8 @@
                         <child>
                           <object class="GtkCheckButton" id="keepcolumn">
                             <property name="label" translatable="yes">Equal width for all columns</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -264,11 +259,9 @@
                         <child>
                           <object class="GtkCheckButton" id="headingcb">
                             <property name="label" translatable="yes">Heading</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -282,12 +275,10 @@
                         <child>
                           <object class="GtkCheckButton" id="repeatheading">
                             <property name="label" translatable="yes">Repeat heading</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="margin_left">25</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -302,11 +293,9 @@
                         <child>
                           <object class="GtkCheckButton" id="dontsplitcb">
                             <property name="label" translatable="yes">Don't split table</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -320,11 +309,9 @@
                         <child>
                           <object class="GtkCheckButton" id="bordercb">
                             <property name="label" translatable="yes">Border</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -347,6 +334,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">The first </property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">repeatheadersb</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -397,10 +386,8 @@
                         <child>
                           <object class="GtkButton" id="autofmt">
                             <property name="label" translatable="yes">AutoFormat...</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="use_action_appearance">False</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>

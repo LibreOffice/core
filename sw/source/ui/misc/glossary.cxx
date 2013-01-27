@@ -241,13 +241,10 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     if( bIsDocReadOnly )
         m_pInsertBtn->Enable(sal_False);
     m_pNameED->GrabFocus();
-    m_pCategoryBox->SetHelpId(HID_MD_GLOS_CATEGORY);
     m_pCategoryBox->SetStyle(m_pCategoryBox->GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL|WB_VSCROLL|WB_CLIPCHILDREN|WB_SORT);
     m_pCategoryBox->GetModel()->SetSortMode(SortAscending);
     m_pCategoryBox->SetHighlightRange();   // select over full width
     m_pCategoryBox->SetNodeDefaultImages( );
-    m_pCategoryBox->SetAccessibleName(SW_RES(STR_ACCESS_SW_CATEGORY));
-    m_pCategoryBox->SetAccessibleRelationLabeledBy(m_pInsertTipCB);
 
     Init();
 }
