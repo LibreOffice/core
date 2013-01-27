@@ -18,20 +18,11 @@
  */
 
 #include <optaccessibility.hxx>
-#include <optaccessibility.hrc>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include <svtools/accessibilityoptions.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-
-static void MovePosY( Window& _rWin, long _nDelta )
-{
-    Point   aPoint = _rWin.GetPosPixel();
-    aPoint.Y() += _nDelta;
-
-    _rWin.SetPosPixel( aPoint );
-}
 
 struct SvxAccessibilityOptionsTabPage_Impl
 {
@@ -40,66 +31,29 @@ struct SvxAccessibilityOptionsTabPage_Impl
             : m_aConfig(){}
 };
 
-SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage( Window* pParent, const SfxItemSet& rSet )
-    :SfxTabPage(pParent, CUI_RES( RID_SVXPAGE_ACCESSIBILITYCONFIG ), rSet)
-    ,m_aMiscellaneousLabel      (this, CUI_RES(FL_MISCELLANEOUS     ))
-    ,m_aAccessibilityTool       (this, CUI_RES(CB_ACCESSIBILITY_TOOL    ))
-    ,m_aTextSelectionInReadonly (this, CUI_RES(CB_TEXTSELECTION     ))
-    ,m_aAnimatedGraphics        (this, CUI_RES(CB_ANIMATED_GRAPHICS ))
-    ,m_aAnimatedTexts           (this, CUI_RES(CB_ANIMATED_TEXTS        ))
-    ,m_aTipHelpCB               (this, CUI_RES(CB_TIPHELP               ))
-    ,m_aTipHelpNF               (this, CUI_RES(NF_TIPHELP               ))
-    ,m_aTipHelpFT               (this, CUI_RES(FT_TIPHELP               ))
-    ,m_aHCOptionsLabel          (this, CUI_RES(FL_HC_OPTIONS            ))
-    ,m_aAutoDetectHC            (this, CUI_RES(CB_AUTO_DETECT_HC        ))
-    ,m_aAutomaticFontColor      (this, CUI_RES(CB_AUTOMATIC_FONT_COLOR))
-    ,m_aPagePreviews            (this, CUI_RES(CB_PAGE_PREVIEWS       ))
-    ,m_pImpl(new SvxAccessibilityOptionsTabPage_Impl)
+SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(Window* pParent,
+    const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "OptAccessibilityPage",
+        "cui/ui/optaccessibilitypage.ui", rSet)
+    , m_pImpl(new SvxAccessibilityOptionsTabPage_Impl)
 {
-    FreeResource();
-    m_aTipHelpCB.SetClickHdl(LINK(this, SvxAccessibilityOptionsTabPage, TipHelpHdl));
+    get(m_pAccessibilityTool, "acctool");
+    get(m_pTextSelectionInReadonly, "textselinreadonly");
+    get(m_pAnimatedGraphics, "animatedgraphics");
+    get(m_pAnimatedTexts, "animatedtext");
+    get(m_pTipHelpCB, "tiphelptimeout");
+    get(m_pTipHelpNF, "tiphelptimeoutnf");
 
-    long nHeightDelta = 0;      // to correct positions _under_ m_aAccessibilityTool
+    get(m_pAutoDetectHC, "autodetecthc");
+    get(m_pAutomaticFontColor, "autofontcolor");
+    get(m_pPagePreviews, "systempagepreviewcolor");
+
+    m_pTipHelpCB->SetClickHdl(LINK(this, SvxAccessibilityOptionsTabPage, TipHelpHdl));
 
 #ifdef UNX
-    {
-        // UNIX: read the gconf2 setting instead to use the checkbox
-        m_aAccessibilityTool.Hide();
-        nHeightDelta = -( ROWA_2 - ROWA_1 );
-    }
-#else
-    // calculate the height of the checkbox. Do we need two (default in resource) or only one line
-    String aText = m_aAccessibilityTool.GetText();
-    long nWidth = m_aAccessibilityTool.GetTextWidth( aText );
-    long nCtrlWidth = m_aAccessibilityTool.GetSizePixel().Width() - ( COL2 - COL1 );
-    if ( nWidth > nCtrlWidth )
-    {
-        long nDelta = 2 * RSC_CD_FIXEDLINE_HEIGHT + LINESPACE - RSC_CD_CHECKBOX_HEIGHT;
-        nHeightDelta = nDelta;
-        Size aSize = m_aAccessibilityTool.LogicToPixel( Size( 0, nDelta ), MAP_APPFONT );
-        nDelta = aSize.Height();
-        aSize = m_aAccessibilityTool.GetSizePixel();
-        aSize.Height() += nDelta;
-        m_aAccessibilityTool.SetSizePixel( aSize );
-    }
+    // UNIX: read the gconf2 setting instead to use the checkbox
+    m_pAccessibilityTool->Hide();
 #endif
-
-    if( nHeightDelta )
-    {   //adjust positions of controls under m_aAccessibilityTool
-        Size aSize = m_aAccessibilityTool.LogicToPixel( Size( 0, nHeightDelta ), MAP_APPFONT );
-        nHeightDelta = aSize.Height();
-
-        MovePosY( m_aTextSelectionInReadonly, nHeightDelta );
-        MovePosY( m_aAnimatedGraphics, nHeightDelta );
-        MovePosY( m_aAnimatedTexts, nHeightDelta );
-        MovePosY( m_aTipHelpCB, nHeightDelta );
-        MovePosY( m_aTipHelpNF, nHeightDelta );
-        MovePosY( m_aTipHelpFT, nHeightDelta );
-        MovePosY( m_aHCOptionsLabel, nHeightDelta );
-        MovePosY( m_aAutoDetectHC, nHeightDelta );
-        MovePosY( m_aAutomaticFontColor, nHeightDelta );
-        MovePosY( m_aPagePreviews, nHeightDelta );
-    }
 }
 
 SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
@@ -116,14 +70,14 @@ sal_Bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
 {
     //aConfig.Set... from controls
 
-    m_pImpl->m_aConfig.SetIsForPagePreviews( m_aPagePreviews.IsChecked() );
-    m_pImpl->m_aConfig.SetIsHelpTipsDisappear( m_aTipHelpCB.IsChecked() );
-    m_pImpl->m_aConfig.SetHelpTipSeconds( (short)m_aTipHelpNF.GetValue() );
-    m_pImpl->m_aConfig.SetIsAllowAnimatedGraphics( m_aAnimatedGraphics.IsChecked() );
-    m_pImpl->m_aConfig.SetIsAllowAnimatedText( m_aAnimatedTexts.IsChecked() );
-    m_pImpl->m_aConfig.SetIsAutomaticFontColor( m_aAutomaticFontColor.IsChecked() );
-    m_pImpl->m_aConfig.SetSelectionInReadonly( m_aTextSelectionInReadonly.IsChecked());
-    m_pImpl->m_aConfig.SetAutoDetectSystemHC( m_aAutoDetectHC.IsChecked());
+    m_pImpl->m_aConfig.SetIsForPagePreviews( m_pPagePreviews->IsChecked() );
+    m_pImpl->m_aConfig.SetIsHelpTipsDisappear( m_pTipHelpCB->IsChecked() );
+    m_pImpl->m_aConfig.SetHelpTipSeconds( (short)m_pTipHelpNF->GetValue() );
+    m_pImpl->m_aConfig.SetIsAllowAnimatedGraphics( m_pAnimatedGraphics->IsChecked() );
+    m_pImpl->m_aConfig.SetIsAllowAnimatedText( m_pAnimatedTexts->IsChecked() );
+    m_pImpl->m_aConfig.SetIsAutomaticFontColor( m_pAutomaticFontColor->IsChecked() );
+    m_pImpl->m_aConfig.SetSelectionInReadonly( m_pTextSelectionInReadonly->IsChecked());
+    m_pImpl->m_aConfig.SetAutoDetectSystemHC( m_pAutoDetectHC->IsChecked());
 
     if(m_pImpl->m_aConfig.IsModified())
         m_pImpl->m_aConfig.Commit();
@@ -131,7 +85,7 @@ sal_Bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
     AllSettings aAllSettings = Application::GetSettings();
     MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
 #ifndef UNX
-    aMiscSettings.SetEnableATToolSupport( m_aAccessibilityTool.IsChecked() );
+    aMiscSettings.SetEnableATToolSupport(m_pAccessibilityTool->IsChecked());
 #endif
     aAllSettings.SetMiscSettings(aMiscSettings);
     Application::MergeSystemSettings( aAllSettings );
@@ -144,32 +98,32 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet& )
 {
     //set controls from aConfig.Get...
 
-    m_aPagePreviews.Check(            m_pImpl->m_aConfig.GetIsForPagePreviews() );
+    m_pPagePreviews->Check(            m_pImpl->m_aConfig.GetIsForPagePreviews() );
     EnableTipHelp(                    m_pImpl->m_aConfig.GetIsHelpTipsDisappear() );
-    m_aTipHelpNF.SetValue(            m_pImpl->m_aConfig.GetHelpTipSeconds() );
-    m_aAnimatedGraphics.Check(        m_pImpl->m_aConfig.GetIsAllowAnimatedGraphics() );
-    m_aAnimatedTexts.Check(           m_pImpl->m_aConfig.GetIsAllowAnimatedText() );
-    m_aAutomaticFontColor.Check(      m_pImpl->m_aConfig.GetIsAutomaticFontColor() );
-    m_aTextSelectionInReadonly.Check( m_pImpl->m_aConfig.IsSelectionInReadonly() );
-    m_aAutoDetectHC.Check(            m_pImpl->m_aConfig.GetAutoDetectSystemHC() );
+    m_pTipHelpNF->SetValue(            m_pImpl->m_aConfig.GetHelpTipSeconds() );
+    m_pAnimatedGraphics->Check(        m_pImpl->m_aConfig.GetIsAllowAnimatedGraphics() );
+    m_pAnimatedTexts->Check(           m_pImpl->m_aConfig.GetIsAllowAnimatedText() );
+    m_pAutomaticFontColor->Check(      m_pImpl->m_aConfig.GetIsAutomaticFontColor() );
+    m_pTextSelectionInReadonly->Check( m_pImpl->m_aConfig.IsSelectionInReadonly() );
+    m_pAutoDetectHC->Check(            m_pImpl->m_aConfig.GetAutoDetectSystemHC() );
 
 
     AllSettings aAllSettings = Application::GetSettings();
     MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
-    m_aAccessibilityTool.Check( aMiscSettings.GetEnableATToolSupport() );
+    m_pAccessibilityTool->Check(aMiscSettings.GetEnableATToolSupport());
 }
 
 IMPL_LINK(SvxAccessibilityOptionsTabPage, TipHelpHdl, CheckBox*, pBox)
 {
     sal_Bool bChecked = pBox->IsChecked();
-    m_aTipHelpNF.Enable(bChecked);
+    m_pTipHelpNF->Enable(bChecked);
     return 0;
 }
 
 void SvxAccessibilityOptionsTabPage::EnableTipHelp(sal_Bool bCheck)
 {
-    m_aTipHelpCB.Check(bCheck);
-    m_aTipHelpNF.Enable(bCheck);
+    m_pTipHelpCB->Check(bCheck);
+    m_pTipHelpNF->Enable(bCheck);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

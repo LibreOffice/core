@@ -27,6 +27,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/numberingpositionpage \
 	cui/uiconfig/ui/objectnamedialog \
 	cui/uiconfig/ui/objecttitledescdialog \
+	cui/uiconfig/ui/optaccessibilitypage \
 	cui/uiconfig/ui/personalization_tab \
 	cui/uiconfig/ui/pickbulletpage \
 	cui/uiconfig/ui/pickgraphicpage \

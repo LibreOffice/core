@@ -25,18 +25,15 @@
 struct SvxAccessibilityOptionsTabPage_Impl;
 class SvxAccessibilityOptionsTabPage : public SfxTabPage
 {
-    FixedLine       m_aMiscellaneousLabel;      // FL_MISCELLANEOUS
-    CheckBox        m_aAccessibilityTool;       // CB_ACCESSIBILITY_TOOL
-    CheckBox        m_aTextSelectionInReadonly; // CB_TEXTSELECTION
-    CheckBox        m_aAnimatedGraphics;        // CB_ANIMATED_GRAPHICS
-    CheckBox        m_aAnimatedTexts;           // CB_ANIMATED_TEXTS
-    CheckBox        m_aTipHelpCB;               // CB_TIPHELP
-    NumericField    m_aTipHelpNF;               // NF_TIPHELP
-    FixedText       m_aTipHelpFT;               // FT_TIPHELP
-    FixedLine       m_aHCOptionsLabel;          // FL_HC_OPTIONS
-    CheckBox        m_aAutoDetectHC;            // CB_AUTO_DETECT_HC
-    CheckBox        m_aAutomaticFontColor;      // CB_AUTOMATIC_FONT_COLOR
-    CheckBox        m_aPagePreviews;            // CB_PAGEPREVIEWS
+    CheckBox*       m_pAccessibilityTool;
+    CheckBox*       m_pTextSelectionInReadonly;
+    CheckBox*       m_pAnimatedGraphics;
+    CheckBox*       m_pAnimatedTexts;
+    CheckBox*       m_pTipHelpCB;
+    NumericField*   m_pTipHelpNF;
+    CheckBox*       m_pAutoDetectHC;
+    CheckBox*       m_pAutomaticFontColor;
+    CheckBox*       m_pPagePreviews;
 
     DECL_LINK(TipHelpHdl, CheckBox*);
     void EnableTipHelp(sal_Bool bCheck);
