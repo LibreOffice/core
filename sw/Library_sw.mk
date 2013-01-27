@@ -116,6 +116,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/attr/swatrset \
     sw/source/core/bastyp/SwSmartTagMgr \
     sw/source/core/bastyp/bparr \
+    sw/source/core/bastyp/bplustree \
     sw/source/core/bastyp/breakit \
     sw/source/core/bastyp/calc \
     sw/source/core/bastyp/checkit \
