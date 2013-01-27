@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
@@ -26,6 +27,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <svx/svxids.hrc>
+#include <svx/xfillit0.hxx>
 #include <editeng/memberids.hrc>
 
 #include <swtypes.hxx>
@@ -173,8 +175,6 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         GetProperty(RES_BACKGROUND, MID_BACK_COLOR_R_G_B, pRGBCol );
         const ::uno::Any* pColTrans = 0;
         GetProperty(RES_BACKGROUND, MID_BACK_COLOR_TRANSPARENCY, pColTrans);
-        const ::uno::Any* pFillStyle = 0;
-        GetProperty(RES_BACKGROUND, MID_FILL_STYLE, pFillStyle);
         const ::uno::Any* pGradient = 0;
         GetProperty(RES_BACKGROUND, MID_FILL_GRADIENT, pGradient);
         const ::uno::Any* pTrans = 0;
@@ -189,15 +189,13 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY, pGrTranparency     );
 
         if(pCol || pTrans || pGrURL || pGrFilter || pGrLoc ||
-                            pGrTranparency || pColTrans || pRGBCol || pFillStyle || pGradient)
+                            pGrTranparency || pColTrans || pRGBCol || pGradient)
         {
             SvxBrushItem aBrush ( static_cast < const :: SvxBrushItem & > ( rFromSet.Get ( RES_BACKGROUND ) ) );
             if(pCol )
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pCol,MID_BACK_COLOR    );
             if(pColTrans)
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
-            if(pFillStyle)
-                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pFillStyle, MID_FILL_STYLE);
             if(pGradient)
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGradient, MID_FILL_GRADIENT);
             if(pRGBCol)
@@ -218,6 +216,16 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrTranparency, MID_GRAPHIC_TRANSPARENCY);
 
             rToSet.Put(aBrush);
+        }
+    }
+    {
+        const ::uno::Any* pFillStyle = 0;
+        GetProperty(RES_FILL_STYLE, 0, pFillStyle);
+        if (pFillStyle)
+        {
+            XFillStyleItem aFillStyle( static_cast <const :: XFillStyleItem & > ( rFromSet.Get ( RES_FILL_STYLE ) ) );
+            bRet &= ((SfxPoolItem&)aFillStyle).PutValue(*pFillStyle);
+            rToSet.Put(aFillStyle);
         }
     }
     {

@@ -3328,9 +3328,8 @@ public:
     Link            aDoneLink;
     SvStream*       pStream;
     Gradient aGradient;
-    drawing::FillStyle eFillStyle;
 
-    SvxBrushItem_Impl( GraphicObject* p ) : pGraphicObject( p ), nGraphicTransparency(0), pStream(0), eFillStyle(drawing::FillStyle_NONE) {}
+    SvxBrushItem_Impl( GraphicObject* p ) : pGraphicObject( p ), nGraphicTransparency(0), pStream(0) {}
 };
 
 // -----------------------------------------------------------------------
@@ -3643,9 +3642,6 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_GRAPHIC_TRANSPARENCY :
             rVal <<= pImpl->nGraphicTransparency;
         break;
-        case MID_FILL_STYLE:
-            rVal <<= pImpl->eFillStyle;
-        break;
         case MID_FILL_GRADIENT:
         {
             awt::Gradient aGradient;
@@ -3777,9 +3773,6 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
         }
         break;
-        case MID_FILL_STYLE:
-            rVal >>= pImpl->eFillStyle;
-        break;
         case MID_FILL_GRADIENT:
         {
             awt::Gradient aGradient;
@@ -3867,7 +3860,6 @@ SvxBrushItem& SvxBrushItem::operator=( const SvxBrushItem& rItem )
         }
     }
     pImpl->nGraphicTransparency = rItem.pImpl->nGraphicTransparency;
-    pImpl->eFillStyle = rItem.pImpl->eFillStyle;
     pImpl->aGradient = rItem.pImpl->aGradient;
     return *this;
 }
@@ -3881,7 +3873,6 @@ int SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
     SvxBrushItem& rCmp = (SvxBrushItem&)rAttr;
     sal_Bool bEqual = ( aColor == rCmp.aColor && eGraphicPos == rCmp.eGraphicPos &&
         pImpl->nGraphicTransparency == rCmp.pImpl->nGraphicTransparency &&
-        pImpl->eFillStyle == rCmp.pImpl->eFillStyle &&
         pImpl->aGradient == rCmp.pImpl->aGradient);
 
     if ( bEqual )
@@ -4194,19 +4185,9 @@ void  SvxBrushItem::ApplyGraphicTransparency_Impl()
     }
 }
 
-drawing::FillStyle SvxBrushItem::GetFillStyle() const
-{
-    return pImpl->eFillStyle;
-}
-
 const Gradient& SvxBrushItem::GetGradient() const
 {
     return pImpl->aGradient;
-}
-
-void SvxBrushItem::SetFillStyle(drawing::FillStyle eNew)
-{
-    pImpl->eFillStyle = eNew;
 }
 
 void SvxBrushItem::SetGradient(Gradient& rNew)

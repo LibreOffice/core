@@ -74,6 +74,7 @@ class SwFmtHoriOrient;
 class SwFmtAnchor;
 class SvxBoxItem;
 class SvxBrushItem;
+class XFillStyleItem;
 class SvxShadowItem;
 class SwFmtPageDesc;
 class SvxFmtBreakItem;
@@ -270,6 +271,7 @@ public:
     inline const SvxBoxItem               &GetBox( sal_Bool = sal_True ) const;
     inline const SvxFmtKeepItem         &GetKeep( sal_Bool = sal_True ) const;
     inline const SvxBrushItem           &GetBackground( sal_Bool = sal_True ) const;
+    inline const XFillStyleItem           &GetFillStyle( sal_Bool = sal_True ) const;
     inline const SvxShadowItem            &GetShadow( sal_Bool = sal_True ) const;
     inline const SwFmtPageDesc            &GetPageDesc( sal_Bool = sal_True ) const;
     inline const SvxFmtBreakItem      &GetBreak( sal_Bool = sal_True ) const;

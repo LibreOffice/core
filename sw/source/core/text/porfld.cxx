@@ -1021,7 +1021,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 
     if( bDraw && aTmp.HasArea() )
-        DrawGraphic( pBrush, (OutputDevice*)rInf.GetOut(),
+        DrawGraphic( pBrush, 0, (OutputDevice*)rInf.GetOut(),
             aTmp, aRepaint, bReplace ? GRFNUM_REPLACE : GRFNUM_YES );
 }
 

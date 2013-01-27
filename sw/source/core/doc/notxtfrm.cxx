@@ -209,10 +209,10 @@ static void lcl_ClearArea( const SwFrm &rFrm,
 
     if ( !aRegion.empty() )
     {
-        const SvxBrushItem *pItem; const Color *pCol; SwRect aOrigRect;
-        if ( rFrm.GetBackgroundBrush( pItem, pCol, aOrigRect, sal_False ) )
+        const SvxBrushItem *pItem; const XFillStyleItem* pFillStyleItem; const Color *pCol; SwRect aOrigRect;
+        if ( rFrm.GetBackgroundBrush( pItem, pFillStyleItem, pCol, aOrigRect, sal_False ) )
             for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
-                ::DrawGraphic( pItem, &rOut, aOrigRect, aRegion[i] );
+                ::DrawGraphic( pItem, pFillStyleItem, &rOut, aOrigRect, aRegion[i] );
         else
         {
             rOut.Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );

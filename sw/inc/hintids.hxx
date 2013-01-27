@@ -220,6 +220,7 @@ RES_FRMATR_BEGIN = RES_PARATR_LIST_END,
     RES_AUTO_STYLE,                                 // 119
     RES_FRMATR_STYLE_NAME,                          // 120
     RES_FRMATR_CONDITIONAL_STYLE_NAME,              // 121
+    RES_FILL_STYLE,
 RES_FRMATR_END
 };
 

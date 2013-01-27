@@ -110,6 +110,7 @@
 #include <rtl/instance.hxx>
 #include <svl/macitem.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/xfillit0.hxx>
 #include <swcalwrp.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <tblafmt.hxx>
@@ -379,6 +380,7 @@ SfxItemInfo aSlotTab[] =
     { 0, 0 },                                           // RES_AUTO_STYLE
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_STYLE_NAME
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_CONDITIONAL_STYLE_NAME
+    { 0, SFX_ITEM_POOLABLE },                           // RES_FILL_STYLE
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_MIRRORGRF
     { SID_ATTR_GRAF_CROP, SFX_ITEM_POOLABLE },          // RES_GRFATR_CROPGRF
@@ -594,6 +596,7 @@ void _InitCore()
     aAttrTab[ RES_AUTO_STYLE - POOLATTR_BEGIN ] =           new SwFmtAutoFmt( RES_AUTO_STYLE );
     aAttrTab[ RES_FRMATR_STYLE_NAME - POOLATTR_BEGIN ] =    new SfxStringItem( RES_FRMATR_STYLE_NAME, aEmptyStr );
     aAttrTab[ RES_FRMATR_CONDITIONAL_STYLE_NAME - POOLATTR_BEGIN ] = new SfxStringItem( RES_FRMATR_CONDITIONAL_STYLE_NAME, aEmptyStr );
+    aAttrTab[ RES_FILL_STYLE - POOLATTR_BEGIN ] = new XFillStyleItem(XFILL_SOLID, RES_FILL_STYLE);
 
     aAttrTab[ RES_GRFATR_MIRRORGRF- POOLATTR_BEGIN ] =      new SwMirrorGrf;
     aAttrTab[ RES_GRFATR_CROPGRF- POOLATTR_BEGIN ] =        new SwCropGrf;

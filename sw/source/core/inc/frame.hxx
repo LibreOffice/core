@@ -48,6 +48,7 @@ class Color;
 class SwBorderAttrs;
 class SwCache;
 class SvxBrushItem;
+class XFillStyleItem;
 class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
@@ -501,6 +502,7 @@ public:
     void Retouche( const SwPageFrm *pPage, const SwRect &rRect ) const;
 
     sal_Bool GetBackgroundBrush( const SvxBrushItem*& rpBrush,
+                             const XFillStyleItem* & rpFillStyle,
                              const Color*& rpColor,
                              SwRect &rOrigRect,
                              sal_Bool bLowerMode ) const;

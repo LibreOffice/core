@@ -44,6 +44,8 @@ inline const SvxFmtKeepItem &SwAttrSet::GetKeep(sal_Bool bInP) const
     { return (const SvxFmtKeepItem&)Get( RES_KEEP,bInP); }
 inline const SvxBrushItem &SwAttrSet::GetBackground(sal_Bool bInP) const
     { return (const SvxBrushItem&)Get( RES_BACKGROUND,bInP); }
+inline const XFillStyleItem &SwAttrSet::GetFillStyle(sal_Bool bInP) const
+    { return (const XFillStyleItem&)Get( RES_FILL_STYLE,bInP); }
 inline const SvxShadowItem &SwAttrSet::GetShadow(sal_Bool bInP) const
     { return (const SvxShadowItem&)Get( RES_SHADOW,bInP); }
 inline const SvxFmtBreakItem &SwAttrSet::GetBreak(sal_Bool bInP) const

@@ -913,10 +913,11 @@ static bool lcl_GetBackgroundColor( Color & rColor,
                              SwCrsrShell* pCrsrSh )
 {
     const SvxBrushItem* pBackgrdBrush = 0;
+    const XFillStyleItem* pFillStyleItem = 0;
     const Color* pSectionTOXColor = 0;
     SwRect aDummyRect;
     if ( pFrm &&
-         pFrm->GetBackgroundBrush( pBackgrdBrush, pSectionTOXColor, aDummyRect, false ) )
+         pFrm->GetBackgroundBrush( pBackgrdBrush, pFillStyleItem, pSectionTOXColor, aDummyRect, false ) )
     {
         if ( pSectionTOXColor )
         {
