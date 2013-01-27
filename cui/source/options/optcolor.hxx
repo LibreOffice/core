@@ -31,19 +31,15 @@ class SvxColorOptionsTabPage : public SfxTabPage
 {
     using SfxTabPage::DeactivatePage;
 
-    FixedLine               aColorSchemeFL;
-    FixedText               aColorSchemeFT;
-    ListBox                 aColorSchemeLB;
-    PushButton              aSaveSchemePB;
-    PushButton              aDeleteSchemePB;
+    ListBox* m_pColorSchemeLB;
+    PushButton* m_pSaveSchemePB;
+    PushButton* m_pDeleteSchemePB;
+    ColorConfigCtrl_Impl* m_pColorConfigCT;
 
-    FixedLine               aCustomColorsFL;
-
-    sal_Bool                    bFillItemSetCalled;
+    sal_Bool bFillItemSetCalled;
 
     svtools::EditableColorConfig* pColorConfig;
     svtools::EditableExtendedColorConfig* pExtColorConfig;
-    ColorConfigCtrl_Impl*   pColorConfigCT;
 
     DECL_LINK(SchemeChangedHdl_Impl, ListBox*);
     DECL_LINK(SaveDeleteHdl_Impl, PushButton*);

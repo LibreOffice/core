@@ -32,7 +32,6 @@
 #include <dialmgr.hxx>
 #include "optcolor.hxx"
 #include <cuires.hrc>
-#include "optcolor.hrc"
 #include <svx/dlgutil.hxx>
 
 using namespace ::com::sun::star;
@@ -58,21 +57,16 @@ enum Group
 };
 
 // group data
-struct
-{
-    // resource id for the title text
-    int nTextResId;
-}
-const vGroupInfo[] =
+const char* vGroupNames[]
 {
     // the groups are in the same order as in enum Group above
-    { FT_GENERAL },
-    { FT_WRITER },
-    { FT_HTML },
-    { FT_CALC },
-    { FT_DRAW },
-    { FT_BASIC },
-    { FT_SQL_COMMAND }, // FIXME
+    "general",
+    "writer",
+    "html",
+    "calc",
+    "draw",
+    "basic",
+    "sql"
 };
 
 // color config entry data (see ColorConfigWindow_Impl::Entry below)
@@ -80,180 +74,123 @@ struct
 {
     // group
     Group eGroup;
-
-    // help id for ...
-    //     color listbox
-    char const* sColorListHid;
-    //     checkbox
-    char const* sCheckBoxHid;
-
-    // resource id for ...
-    //     checkbox (or simple text)
-    int nTextResId;
-    //     color listbox
-    int nColorListResId;
-    //     preview box
-    int nPreviewResId;
-
+    //checkbox (or simple text)
+    const char *pText;
+    //color listbox
+    const char *pColor;
+    //preview box
+    const char *pPreview;
     // has checkbox?
     bool bCheckBox;
 }
 const vEntryInfo[] =
 {
-    // These macros simplify the list of constants.
-    // There is a unique name that is the same in the ids of the same entry
-    // (except one).
-    // Entries with and without checkboxes need different macros:
     #define IDS(Name) \
-        HID_COLORPAGE_##Name##_LB, HID_COLORPAGE_##Name##_CB, \
-        FT_##Name, LB_##Name, WN_##Name, false
-    #define IDS_CB(Name) \
-        HID_COLORPAGE_##Name##_LB, HID_COLORPAGE_##Name##_CB, \
-        CB_##Name, LB_##Name, WN_##Name, true
+        SAL_STRINGIFY(Name), SAL_STRINGIFY(Name##_lb), SAL_STRINGIFY(Name##_wn), false
 
-    // resolve different names
-    #define CB_DOCBOUNDARIES CB_DOCBOUND
-    #define LB_DOCBOUNDARIES LB_DOCBOUND
-    #define WN_DOCBOUNDARIES WN_DOCBOUND
-    #define FT_CALCPAGEBREAKAUTOMATIC FT_CALCPAGEBREAKAUTO
-    #define LB_CALCPAGEBREAKAUTOMATIC LB_CALCPAGEBREAKAUTO
-    #define WN_CALCPAGEBREAKAUTOMATIC WN_CALCPAGEBREAKAUTO
+    #define IDS_CB(Name) \
+        SAL_STRINGIFY(Name), SAL_STRINGIFY(Name##_lb), SAL_STRINGIFY(Name##_wn), true
 
     // The list of these entries (enum ColorConfigEntry) are in colorcfg.hxx.
 
-    { Group_General, IDS(DOCCOLOR) },
-    { Group_General, IDS_CB(DOCBOUNDARIES) },
-    { Group_General, IDS(APPBACKGROUND) },
-    { Group_General, IDS_CB(OBJECTBOUNDARIES) },
-    { Group_General, IDS_CB(TABLEBOUNDARIES) },
-    { Group_General, IDS(FONTCOLOR) },
-    { Group_General, IDS_CB(LINKS) },
-    { Group_General, IDS_CB(LINKSVISITED) },
-    { Group_General, IDS(SPELL) },
-    { Group_General, IDS(SMARTTAGS) },
-    { Group_General, IDS_CB(SHADOWCOLOR) },
-    { Group_Writer,  IDS(WRITERTEXTGRID) },
-    { Group_Writer,  IDS_CB(WRITERFIELDSHADINGS) },
-    { Group_Writer,  IDS_CB(WRITERIDXSHADINGS) },
-    { Group_Writer,  IDS(WRITERDIRECTCURSOR) },
-    { Group_Writer,  IDS(WRITERSCRIPTINDICATOR) },
-    { Group_Writer,  IDS_CB(WRITERSECTIONBOUNDARIES) },
-    { Group_Writer,  IDS(WRITERHEADERFOOTERMARK) },
-    { Group_Writer,  IDS(WRITERPAGEBREAKS) },
-    { Group_Html,    IDS(HTMLSGML) },
-    { Group_Html,    IDS(HTMLCOMMENT) },
-    { Group_Html,    IDS(HTMLKEYWORD) },
-    { Group_Html,    IDS(HTMLUNKNOWN) },
-    { Group_Calc,    IDS(CALCGRID) },
-    { Group_Calc,    IDS(CALCPAGEBREAK) },
-    { Group_Calc,    IDS(CALCPAGEBREAKMANUAL) },
-    { Group_Calc,    IDS(CALCPAGEBREAKAUTOMATIC) },
-    { Group_Calc,    IDS(CALCDETECTIVE) },
-    { Group_Calc,    IDS(CALCDETECTIVEERROR) },
-    { Group_Calc,    IDS(CALCREFERENCE) },
-    { Group_Calc,    IDS(CALCNOTESBACKGROUND) },
-    { Group_Draw,    IDS(DRAWGRID) },
-    { Group_Basic,   IDS(BASICIDENTIFIER) },
-    { Group_Basic,   IDS(BASICCOMMENT) },
-    { Group_Basic,   IDS(BASICNUMBER) },
-    { Group_Basic,   IDS(BASICSTRING) },
-    { Group_Basic,   IDS(BASICOPERATOR) },
-    { Group_Basic,   IDS(BASICKEYWORD) },
-    { Group_Basic,   IDS(BASICERROR) },
-    { Group_Sql,     IDS(SQLIDENTIFIER) },
-    { Group_Sql,     IDS(SQLNUMBER) },
-    { Group_Sql,     IDS(SQLSTRING) },
-    { Group_Sql,     IDS(SQLOPERATOR) },
-    { Group_Sql,     IDS(SQLKEYWORD) },
-    { Group_Sql,     IDS(SQLPARAMETER) },
-    { Group_Sql,     IDS(SQLCOMMENT) },
+    { Group_General, IDS(doccolor) },
+    { Group_General, IDS_CB(docboundaries) },
+    { Group_General, IDS(appback) },
+    { Group_General, IDS_CB(objboundaries) },
+    { Group_General, IDS_CB(tblboundaries) },
+    { Group_General, IDS(font) },
+    { Group_General, IDS_CB(unvisitedlinks) },
+    { Group_General, IDS_CB(visitedlinks) },
+    { Group_General, IDS(autospellcheck) },
+    { Group_General, IDS(smarttags) },
+    { Group_General, IDS_CB(shadows) },
 
-    #undef IDS_CB
+    { Group_Writer,  IDS(writergrid) },
+    { Group_Writer,  IDS_CB(field) },
+    { Group_Writer,  IDS_CB(index) },
+    { Group_Writer,  IDS(direct) },
+    { Group_Writer,  IDS(script) },
+    { Group_Writer,  IDS_CB(section) },
+    { Group_Writer,  IDS(hdft) },
+    { Group_Writer,  IDS(pagebreak) },
+
+    { Group_Html,    IDS(sgml) },
+    { Group_Html,    IDS(htmlcomment) },
+    { Group_Html,    IDS(htmlkeyword) },
+    { Group_Html,    IDS(unknown) },
+
+    { Group_Calc,    IDS(calcgrid) },
+    { Group_Calc,    IDS(brk) },
+    { Group_Calc,    IDS(brkmanual) },
+    { Group_Calc,    IDS(brkauto) },
+    { Group_Calc,    IDS(det) },
+    { Group_Calc,    IDS(deterror) },
+    { Group_Calc,    IDS(ref) },
+    { Group_Calc,    IDS(notes) },
+
+    { Group_Draw,    IDS(drawgrid) },
+
+    { Group_Basic,   IDS(basicid) },
+    { Group_Basic,   IDS(basiccomment) },
+    { Group_Basic,   IDS(basicnumber) },
+    { Group_Basic,   IDS(basicstring) },
+    { Group_Basic,   IDS(basicop) },
+    { Group_Basic,   IDS(basickeyword) },
+    { Group_Basic,   IDS(error) },
+
+    { Group_Sql,     IDS(sqlid) },
+    { Group_Sql,     IDS(sqlnumber) },
+    { Group_Sql,     IDS(sqlstring) },
+    { Group_Sql,     IDS(sqlop) },
+    { Group_Sql,     IDS(sqlkeyword) },
+    { Group_Sql,     IDS(sqlparam) },
+    { Group_Sql,     IDS(sqlcomment) }
+
     #undef IDS
 };
 
 } // namespace
 
-
-//
-// SvxExtFixedText_Impl
-//
-
-class SvxExtFixedText_Impl : public FixedText
-{
-private:
-    long m_nGroupHeight;
-
-protected:
-    virtual void DataChanged (DataChangedEvent const& rDCEvt);
-
-public:
-    SvxExtFixedText_Impl (Window* pParent, ResId const& rResId) :
-        FixedText(pParent, rResId), m_nGroupHeight(0)
-    { }
-
-    long GetGroupHeight () const { return m_nGroupHeight; }
-    void SetGroupHeight (long nHeight) { m_nGroupHeight = nHeight; }
-};
-
-void SvxExtFixedText_Impl::DataChanged (DataChangedEvent const& rDCEvt)
-{
-    FixedText::DataChanged(rDCEvt);
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-    {
-        Font aFont = GetFont();
-        aFont.SetWeight(WEIGHT_BOLD);
-        SetFont(aFont);
-        SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
-    }
-}
-
-
 //
 // ColorConfigWindow_Impl
 //
 
-class ColorConfigWindow_Impl : public Window
+class ColorConfigWindow_Impl
+    : public VclContainer
+    , public VclBuilderContainer
 {
 public:
-    ColorConfigWindow_Impl (Window* pParent, ResId const& rResId);
-    ~ColorConfigWindow_Impl ();
+    ColorConfigWindow_Impl(Window* pParent);
+    ~ColorConfigWindow_Impl();
 
 public:
     void SetLinks (Link const&, Link const&, Link const&);
     unsigned GetEntryHeight () const { return vEntries[0]->GetHeight(); }
     void Update (EditableColorConfig const*, EditableExtendedColorConfig const*);
-    void ScrollHdl (long& nScrollPos, ScrollBar const&);
+    void ScrollHdl(const ScrollBar&);
     void ClickHdl (EditableColorConfig*, CheckBox*);
     void ColorHdl (EditableColorConfig*, EditableExtendedColorConfig*, ColorListBox*);
-    void SetHeaderBar (HeaderBar&, ScrollBar const&, ResMgr&);
-    void SetScrollBar (ScrollBar&);
-
+    void Init(ScrollBar *pVScroll, HeaderBar *m_pHeaderHB);
+    void AdjustScrollBar();
+    void AdjustHeaderBar();
 
 private:
     // Chapter -- horizontal group separator stripe with text
     class Chapter
     {
-        // parent window
-        ColorConfigWindow_Impl& rParent;
-        // gray (?) stripe
-        Window aBackground;
         // text
-        SvxExtFixedText_Impl aText;
-
+        bool m_bOwnsWidget;
+        FixedText *m_pText;
     public:
-        Chapter (ColorConfigWindow_Impl& rParent, Group, ResMgr&);
-        Chapter (ColorConfigWindow_Impl& rParent, ResMgr&, unsigned nYPos, rtl::OUString const& sDisplayName);
+        Chapter(FixedText *pText);
+        Chapter(Window *pGrid, unsigned nYPos, const rtl::OUString& sDisplayName);
+        ~Chapter();
     public:
-        void Show (Wallpaper const& rBackWall);
-        void Hide ();
-        void MoveVertically (long nOffset);
-        void SetBackground (Wallpaper const& W) { aBackground.SetBackground(W); }
-        long GetHeight () const { return aText.GetGroupHeight(); }
-        void SetHeight (long nHeight) { aText.SetGroupHeight(nHeight); }
-        long GetLeft () const { return aText.GetPosPixel().X(); }
-        long GetTop () const { return aText.GetPosPixel().Y(); }
+        void SetBackground(const Wallpaper& W) { m_pText->SetBackground(W); }
+        long GetHeight() const { return m_pText->GetSizePixel().Height(); }
+        long GetLeft() const { return m_pText->GetPosPixel().X(); }
+        void Show(const Wallpaper& rBackWall);
+        void Hide();
     };
 
     // Entry -- a color config entry:
@@ -261,40 +198,39 @@ private:
     class Entry
     {
     public:
-        Entry (Window& rParent, unsigned iEntry, ResMgr&);
-        Entry (Window& rParent, ResMgr&, unsigned nYPos, ExtendedColorConfigValue const& aColorEntry);
+        Entry(ColorConfigWindow_Impl& rParent, unsigned iEntry, long nCheckBoxLabelOffset);
+        Entry(Window* pGrid, unsigned nYPos, const ExtendedColorConfigValue& aColorEntry,
+            long nCheckBoxLabelOffset);
+        ~Entry();
     public:
-        void MoveVertically (long nOffset);
-        bool MoveAndShow (long nOffset, long nMaxVisible, bool bShow);
         void Show ();
         void Hide ();
-        void SetAppearance (unsigned iEntry, Wallpaper const& aTextWall, ColorListBox const& aSampleList);
-        void SetTextColor (Color C) { pText->SetTextColor(C); }
+        void SetAppearance(Wallpaper const& aTextWall, ColorListBox const& aSampleList);
+        void SetTextColor (Color C) { m_pText->SetTextColor(C); }
     public:
         void SetLinks (Link const&, Link const&, Link const&);
-        void SetHeader (ColorConfigWindow_Impl const& rParent, HeaderBar&, ResMgr&) const;
         void Update (ColorConfigEntry, ColorConfigValue const&);
         void Update (ExtendedColorConfigValue const&);
         void ColorChanged (ColorConfigEntry, ColorConfigValue&);
         void ColorChanged (ExtendedColorConfigValue&);
     public:
-        long GetTop () const { return aPreview.GetPosPixel().Y(); }
-        long GetBottom () const { return GetTop() + aPreview.GetSizePixel().Height(); }
-        unsigned GetHeight () const { return aColorList.GetSizePixel().Height(); }
+        long GetTop () const { return m_pPreview->GetPosPixel().Y(); }
+        long GetBottom () const { return GetTop() + m_pPreview->GetSizePixel().Height(); }
+        unsigned GetHeight () const { return m_pColorList->GetSizePixel().Height(); }
     public:
-        bool Is (CheckBox* pBox) const { return pText.get() == pBox; }
-        bool Is (ColorListBox* pBox) const { return &aColorList == pBox; }
+        bool Is (CheckBox* pBox) const { return m_pText == pBox; }
+        bool Is (ColorListBox* pBox) const { return m_pColorList == pBox; }
 
     private:
+        bool m_bOwnsWidgets;
         // checkbox (CheckBox) or simple text (FixedText)
-        boost::shared_ptr<Control> pText;
+        Control* m_pText;
         // color list box
-        ColorListBox aColorList;
+        ColorListBox* m_pColorList;
         // color preview box
-        Window aPreview;
+        Window* m_pPreview;
         // default color
-        Color aDefaultColor;
-
+        Color m_aDefaultColor;
     private:
         void SetColor (Color);
     };
@@ -309,15 +245,20 @@ private:
 
 
 private:
+    VclGrid *m_pGrid;
+    ScrollBar *m_pVScroll;
+    HeaderBar *m_pHeaderHB;
+
     // initialization
-    void CreateEntries (ResMgr&);
-    void SetAppearance ();
+    void CreateEntries();
+    void SetAppearance();
 
 private:
-    long GetDeltaAbove (Group) const;
-
     virtual void Command (CommandEvent const& rCEvt);
     virtual void DataChanged (DataChangedEvent const& rDCEvt);
+
+    virtual Size calculateRequisition() const;
+    virtual void setAllocation(const Size &rAllocation);
 
     unsigned GetPosBehindLastChapter () const;
 
@@ -335,31 +276,6 @@ Group GetGroup (unsigned nEntry)
     return vEntryInfo[nEntry].eGroup;
 }
 
-// moves a window vertically
-void MoveVertically (Window& rWin, long nOffset)
-{
-    if (nOffset)
-    {
-        Point aPos = rWin.GetPosPixel();
-        aPos.Y() += nOffset;
-        rWin.SetPosPixel(aPos);
-    }
-}
-
-// moves a window vertically and optionally shows it
-bool MoveAndShow (Window& rWin, long nOffset, long nMaxVisible, bool bShow)
-{
-    // moves
-    Point aPos = rWin.GetPosPixel();
-    aPos.Y() += nOffset;
-    rWin.SetPosPixel(aPos);
-    // shows only if it is really visible
-    if (bShow)
-        bShow = aPos.Y() <= nMaxVisible && aPos.Y() + rWin.GetSizePixel().Height() >= 0;
-    rWin.Show(bShow);
-    return bShow;
-}
-
 } // namespace
 
 
@@ -372,223 +288,143 @@ bool MoveAndShow (Window& rWin, long nOffset, long nMaxVisible, bool bShow)
 // rParent: parent window (ColorConfigWindow_Impl)
 // eGroup: which group is this?
 // rResMgr: resource manager
-ColorConfigWindow_Impl::Chapter::Chapter (
-    ColorConfigWindow_Impl& Parent, Group eGroup, ResMgr& rResMgr
-) :
-    rParent(Parent),
-    aBackground(&rParent),
-    aText(&rParent, ResId(vGroupInfo[eGroup].nTextResId, rResMgr))
-{ }
-
-// ctor for extended groups
-ColorConfigWindow_Impl::Chapter::Chapter (
-    ColorConfigWindow_Impl& Parent, ResMgr& rResMgr,
-    unsigned nYPos, rtl::OUString const& sDisplayName
-) :
-    rParent(Parent),
-    aBackground(&rParent),
-    aText(&rParent, ResId(FT_SQL_COMMAND, rResMgr))
+ColorConfigWindow_Impl::Chapter::Chapter(FixedText* pText)
+    : m_bOwnsWidget(false)
+    , m_pText(pText)
 {
-    Point const aTextPos = rParent.LogicToPixel(Point(FT_XPOS, nYPos), MAP_APPFONT);
-    Size const aTextSize = rParent.LogicToPixel(Size(FT_WIDTH, SEP_HEIGHT), MAP_APPFONT);
-    aText.SetPosSizePixel(aTextPos, aTextSize);
-    aText.SetText(sDisplayName);
 }
 
-
-void ColorConfigWindow_Impl::Chapter::Show (Wallpaper const& rBackWall)
+// ctor for extended groups
+ColorConfigWindow_Impl::Chapter::Chapter(Window *pGrid,
+    unsigned nYPos, const OUString& rDisplayName)
+    : m_bOwnsWidget(true)
 {
-    { // background
-        Point const aBgPos(
-            rParent.LogicToPixel(Point(0, 0), MAP_APPFONT).X(),
-            aText.GetPosPixel().Y()
-        );
-        Size const aBgSize(
-            rParent.GetSizePixel().Width(),
-            rParent.LogicToPixel(Size(0, SEP_HEIGHT), MAP_APPFONT).Height()
-        );
-        aBackground.SetPosSizePixel(aBgPos, aBgSize);
-        aBackground.SetBackground(rBackWall);
-        aBackground.Show();
-    }
+    m_pText = new FixedText(pGrid, WB_LEFT|WB_VCENTER|WB_3DLOOK);
+    m_pText->set_font_attribute("weight", "bold");
+    m_pText->set_grid_width(3);
+    m_pText->set_grid_left_attach(0);
+    m_pText->set_grid_top_attach(nYPos);
+    m_pText->SetText(rDisplayName);
+}
 
-    { // text
-        Font aFont = aText.GetFont();
-        aFont.SetWeight(WEIGHT_BOLD);
-        aText.SetFont(aFont);
-        aText.SetBackground(rBackWall);
-        aText.Show();
-        aText.SetZOrder(0, WINDOW_ZORDER_FIRST);
-    }
+ColorConfigWindow_Impl::Chapter::~Chapter()
+{
+    if (m_bOwnsWidget)
+        delete m_pText;
+}
+
+void ColorConfigWindow_Impl::Chapter::Show(Wallpaper const& rBackWall)
+{
+    // background
+    m_pText->SetBackground(rBackWall);
+    m_pText->Show();
 }
 
 void ColorConfigWindow_Impl::Chapter::Hide ()
 {
-    aBackground.Hide();
-    aText.Hide();
+    m_pText->Hide();
 }
-
-// moves the chapter title vertically by nOffset pixels
-void ColorConfigWindow_Impl::Chapter::MoveVertically (long nOffset)
-{
-    ::MoveVertically(aBackground, nOffset);
-    ::MoveVertically(aText, nOffset);
-}
-
 
 //
 // ColorConfigWindow_Impl::Entry
 //
 
-// ctor for default entries
-// pParent: parent window (ColorConfigWindow_Impl)
-// iEntry: which entry is this? (in the vEntryInfo[] array above)
-// rResMgr: resource manager
-ColorConfigWindow_Impl::Entry::Entry (
-    Window& rParent, unsigned iEntry, ResMgr& rResMgr
-) :
-    aColorList(&rParent, ResId(vEntryInfo[iEntry].nColorListResId, rResMgr)),
-    aPreview(&rParent, ResId(vEntryInfo[iEntry].nPreviewResId, rResMgr)),
-    aDefaultColor(ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(iEntry)))
+ColorConfigWindow_Impl::Entry::Entry(ColorConfigWindow_Impl& rParent, unsigned iEntry,
+    long nCheckBoxLabelOffset)
+    : m_bOwnsWidgets(false)
+    , m_aDefaultColor(ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(iEntry)))
 {
-    // has checkbox?
-    if (vEntryInfo[iEntry].bCheckBox)
+    rParent.get(m_pText, vEntryInfo[iEntry].pText);
+    if (!vEntryInfo[iEntry].bCheckBox)
     {
-        pText = boost::shared_ptr<CheckBox>( new CheckBox (
-            &rParent, ResId(vEntryInfo[iEntry].nTextResId, rResMgr)
-        ) );
+        m_pText->set_margin_left(m_pText->get_margin_left() +
+            nCheckBoxLabelOffset);
     }
-    else
-    {
-        pText = boost::shared_ptr<FixedText>( new FixedText (
-            &rParent, ResId(vEntryInfo[iEntry].nTextResId, rResMgr)
-        ) );
-    }
+    rParent.get(m_pColorList, vEntryInfo[iEntry].pColor);
+    rParent.get(m_pPreview, vEntryInfo[iEntry].pPreview);
 }
 
 // ctor for extended entries
-ColorConfigWindow_Impl::Entry::Entry (
-    Window& rParent, ResMgr& rResMgr,
-    unsigned nYPos, ExtendedColorConfigValue const& aColorEntry
-) :
-    pText(boost::shared_ptr<FixedText>(new FixedText (&rParent, ResId(FT_BASICERROR, rResMgr)))),
-    aColorList(&rParent, ResId(LB_BASICERROR, rResMgr)),
-    aPreview(&rParent, ResId(WN_BASICERROR, rResMgr)),
-    aDefaultColor(aColorEntry.getDefaultColor())
+ColorConfigWindow_Impl::Entry::Entry( Window *pGrid, unsigned nYPos,
+    ExtendedColorConfigValue const& rColorEntry, long nCheckBoxLabelOffset)
+    : m_bOwnsWidgets(true)
+    , m_aDefaultColor(rColorEntry.getDefaultColor())
 {
-    { // text (no checkbox)
-        FixedText* const pFixedText = static_cast<FixedText*>(pText.get());
-        Point const aTextPos = rParent.LogicToPixel(Point(FT_XPOS, nYPos), MAP_APPFONT);
-        Size const aTextSize = rParent.LogicToPixel(Size(FT_WIDTH, FT_HEIGHT), MAP_APPFONT);
-        pFixedText->SetPosSizePixel(aTextPos, aTextSize);
-        pFixedText->SetText(aColorEntry.getDisplayName());
-    }
-    { // color listbox
-        Point const aListPos = rParent.LogicToPixel(Point(LB_XPOS, nYPos), MAP_APPFONT);
-        Size const aListSize = rParent.LogicToPixel(Size(LB_WIDTH, LB_HEIGHT), MAP_APPFONT);
-        aColorList.SetPosSizePixel(aListPos, aListSize);
-    }
-    { // preview box
-        Point const aPreviewPos = rParent.LogicToPixel(Point(WN_XPOS, nYPos), MAP_APPFONT);
-        Size const aPreviewSize = rParent.LogicToPixel(Size(WN_WIDTH, WN_HEIGHT), MAP_APPFONT);
-        aPreview.SetPosSizePixel(aPreviewPos, aPreviewSize);
-    }
+    m_pText = new FixedText(pGrid, WB_LEFT|WB_VCENTER|WB_3DLOOK);
+    m_pText->set_grid_width(3);
+    m_pText->set_grid_left_attach(0);
+    m_pText->set_grid_top_attach(nYPos);
+    m_pText->set_margin_left(6 + nCheckBoxLabelOffset);
+    m_pText->SetText(rColorEntry.getDisplayName());
+    m_pText->Show();
+
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|WB_DROPDOWN;
+    m_pColorList = new ColorListBox(pGrid, nWinBits);
+    m_pColorList->EnableAutoSize(true);
+    m_pColorList->set_grid_left_attach(1);
+    m_pColorList->set_grid_top_attach(nYPos);
+    m_pColorList->Show();
+
+    m_pPreview = new Window(pGrid, WB_BORDER);
+    m_pPreview->set_grid_left_attach(2);
+    m_pPreview->set_grid_top_attach(nYPos);
+    m_pPreview->set_margin_right(6);
+    m_pPreview->Show();
 }
 
-// moves entry vertically by nOffset pixels
-void ColorConfigWindow_Impl::Entry::MoveVertically (long nOffset)
+ColorConfigWindow_Impl::Entry::~Entry()
 {
-    // moving all components
-    ::MoveVertically(*pText, nOffset);
-    ::MoveVertically(aColorList, nOffset);
-    ::MoveVertically(aPreview, nOffset);
-}
-
-// moves and shows
-bool ColorConfigWindow_Impl::Entry::MoveAndShow (long nOffset, long nMaxVisible, bool bShow)
-{
-    // if any of the items on the current line is visible, the
-    // whole line should be visible
-    bool bRes = false;
-    bRes = ::MoveAndShow(*pText,     nOffset, nMaxVisible, bShow) || bRes;
-    bRes = ::MoveAndShow(aColorList, nOffset, nMaxVisible, bShow) || bRes;
-    bRes = ::MoveAndShow(aPreview,   nOffset, nMaxVisible, bShow) || bRes;
-    return bRes;
+    if (m_bOwnsWidgets)
+    {
+        delete m_pText;
+        delete m_pColorList;
+        delete m_pPreview;
+    }
 }
 
 void ColorConfigWindow_Impl::Entry::Show ()
 {
-    pText->Show();
-    aColorList.Show();
-    aPreview.Show();
+    m_pText->Show();
+    m_pColorList->Show();
+    m_pPreview->Show();
 }
 
 void ColorConfigWindow_Impl::Entry::Hide ()
 {
-    pText->Hide();
-    aColorList.Hide();
-    aPreview.Hide();
+    m_pText->Hide();
+    m_pColorList->Hide();
+    m_pPreview->Hide();
 }
 
 // SetAppearance()
 // iEntry: which entry is this?
 // aTextWall: background of the text (transparent)
 // aSampleList: sample color listbox (to copy from)
-void ColorConfigWindow_Impl::Entry::SetAppearance (
-    unsigned iEntry, Wallpaper const& aTextWall,
-    ColorListBox const& aSampleList
-) {
+void ColorConfigWindow_Impl::Entry::SetAppearance(
+    Wallpaper const& aTextWall,
+    ColorListBox const& aSampleList)
+{
     // text (and optionally checkbox)
-    pText->SetBackground(aTextWall);
-    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(pText.get()))
-        pCheckBox->SetHelpId(vEntryInfo[iEntry].sCheckBoxHid);
+    m_pText->SetBackground(aTextWall);
     // preview
-    aPreview.SetBorderStyle(WINDOW_BORDER_MONO);
+    m_pPreview->SetBorderStyle(WINDOW_BORDER_MONO);
     // color list
-    aColorList.CopyEntries(aSampleList);
-    aColorList.InsertAutomaticEntryColor(aDefaultColor);
-    if (iEntry < ColorConfigEntryCount)
-        aColorList.SetHelpId(vEntryInfo[iEntry].sColorListHid);
+    m_pColorList->CopyEntries(aSampleList);
+    m_pColorList->InsertAutomaticEntryColor(m_aDefaultColor);
 }
 
 // SetLinks()
-void ColorConfigWindow_Impl::Entry::SetLinks (
-    Link const& aCheckLink, Link const& aColorLink, Link const& aGetFocusLink
-) {
-    aColorList.SetSelectHdl(aColorLink);
-    aColorList.SetGetFocusHdl(aGetFocusLink);
-    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(pText.get()))
+void ColorConfigWindow_Impl::Entry::SetLinks(
+    Link const& aCheckLink, Link const& aColorLink,
+    Link const& aGetFocusLink)
+{
+    m_pColorList->SetSelectHdl(aColorLink);
+    m_pColorList->SetGetFocusHdl(aGetFocusLink);
+    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(m_pText))
     {
         pCheckBox->SetClickHdl(aCheckLink);
         pCheckBox->SetGetFocusHdl(aGetFocusLink);
     }
-}
-
-// fills the header bar
-void ColorConfigWindow_Impl::Entry::SetHeader (
-    ColorConfigWindow_Impl const& rParent,
-    HeaderBar& rHeader, ResMgr& rResMgr
-) const {
-    // title strings
-    String const sTitle[] =
-    {
-        ResId(ST_ON, rResMgr),
-        ResId(ST_UIELEM, rResMgr),
-        ResId(ST_COLSET, rResMgr),
-        ResId(ST_PREVIEW, rResMgr),
-    };
-    // horizontal positions
-    unsigned const nX0 = 0;
-    unsigned const nX1 = rParent.vChapters.front()->GetLeft();
-    unsigned const nX2 = aColorList.GetPosPixel().X();
-    unsigned const nX3 = aPreview.GetPosPixel().X();
-    unsigned const nX4 = rHeader.GetSizePixel().Width();
-    // filling
-    WinBits const nHeadBits = HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS;
-    rHeader.InsertItem(1, sTitle[0], nX1 - nX0, nHeadBits | HIB_CENTER);
-    rHeader.InsertItem(2, sTitle[1], nX2 - nX1, nHeadBits | HIB_LEFT);
-    rHeader.InsertItem(3, sTitle[2], nX3 - nX2, nHeadBits | HIB_LEFT);
-    rHeader.InsertItem(4, sTitle[3], nX4 - nX3, nHeadBits | HIB_LEFT);
 }
 
 // updates a default color config entry
@@ -599,15 +435,15 @@ void ColorConfigWindow_Impl::Entry::Update (
     if ((unsigned)rValue.nColor == COL_AUTO)
     {
         aColor = ColorConfig::GetDefaultColor(aColorEntry);
-        aColorList.SelectEntryPos(0);
+        m_pColorList->SelectEntryPos(0);
     }
     else
     {
         aColor = Color(rValue.nColor);
-        aColorList.SelectEntry(aColor);
+        m_pColorList->SelectEntry(aColor);
     }
-    aPreview.SetBackground(Wallpaper(aColor));
-    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(pText.get()))
+    m_pPreview->SetBackground(Wallpaper(aColor));
+    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(m_pText))
         pCheckBox->Check(rValue.bIsVisible);
 }
 
@@ -617,9 +453,9 @@ void ColorConfigWindow_Impl::Entry::Update (
 ) {
     Color aColor(rValue.getColor());
     if (rValue.getColor() == rValue.getDefaultColor())
-        aColorList.SelectEntryPos(0);
+        m_pColorList->SelectEntryPos(0);
     else
-        aColorList.SelectEntry(aColor);
+        m_pColorList->SelectEntry(aColor);
     SetColor(aColor);
 }
 
@@ -629,14 +465,14 @@ void ColorConfigWindow_Impl::Entry::ColorChanged (
     ColorConfigValue& rValue
 ) {
     Color aColor;
-    if (aColorList.IsAutomaticSelected())
+    if (m_pColorList->IsAutomaticSelected())
     {
         aColor = ColorConfig::GetDefaultColor(aColorEntry);
         rValue.nColor = COL_AUTO;
     }
     else
     {
-        aColor = aColorList.GetSelectEntryColor();
+        aColor = m_pColorList->GetSelectEntryColor();
         rValue.nColor = aColor.GetColor();
     }
     SetColor(aColor);
@@ -646,10 +482,10 @@ void ColorConfigWindow_Impl::Entry::ColorChanged (
 void ColorConfigWindow_Impl::Entry::ColorChanged (
     ExtendedColorConfigValue& rValue
 ) {
-    Color aColor = aColorList.GetSelectEntryColor();
+    Color aColor = m_pColorList->GetSelectEntryColor();
     rValue.setColor(aColor.GetColor());
     // automatic?
-    if (aColorList.GetSelectEntryPos() == 0)
+    if (m_pColorList->GetSelectEntryPos() == 0)
     {
         rValue.setColor(rValue.getDefaultColor());
         aColor.SetColor(rValue.getColor());
@@ -659,8 +495,8 @@ void ColorConfigWindow_Impl::Entry::ColorChanged (
 
 void ColorConfigWindow_Impl::Entry::SetColor (Color aColor)
 {
-    aPreview.SetBackground(Wallpaper(aColor));
-    aPreview.Invalidate();
+    m_pPreview->SetBackground(Wallpaper(aColor));
+    m_pPreview->Invalidate();
 }
 
 
@@ -668,51 +504,74 @@ void ColorConfigWindow_Impl::Entry::SetColor (Color aColor)
 // ColorConfigWindow_Impl
 //
 
-ColorConfigWindow_Impl::ColorConfigWindow_Impl (Window* pParent, ResId const& rResId) :
-    Window(pParent, rResId)
+ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent)
+    : VclContainer(pParent)
 {
-    CreateEntries(*rResId.GetResMgr());
-    Resource::FreeResource();
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "cui/ui/colorconfigwin.ui");
+    get(m_pGrid, "ColorConfigWindow");
+    CreateEntries();
     SetAppearance();
 }
 
-void ColorConfigWindow_Impl::CreateEntries (ResMgr& rResMgr)
+Size ColorConfigWindow_Impl::calculateRequisition() const
+{
+    return getLayoutRequisition(*m_pGrid);
+}
+
+void ColorConfigWindow_Impl::setAllocation(const Size &rAllocation)
+{
+    Point aChildPos(0, 0);
+    Size aChildSize(getLayoutRequisition(*m_pGrid));
+    aChildSize.Width() = rAllocation.Width();
+    setLayoutPosSize(*m_pGrid, aChildPos, aChildSize);
+    AdjustScrollBar();
+    AdjustHeaderBar();
+    ScrollHdl(*m_pVScroll);
+}
+
+void ColorConfigWindow_Impl::CreateEntries()
 {
     // creating group headers
     vChapters.reserve(nGroupCount);
     for (unsigned i = 0; i != nGroupCount; ++i)
     {
-        vChapters.push_back(boost::shared_ptr<Chapter> (
-            new Chapter( *this, static_cast<Group>(i), rResMgr ) ) );
+        vChapters.push_back(boost::shared_ptr<Chapter>(
+            new Chapter(get<FixedText>(vGroupNames[i]))));
+    }
+
+    //Here we want to get the amount to add to the position
+    //of a FixedText to get it to align its contents
+    //with that of a CheckBox
+    //We should have something like a Control::getTextOrigin
+    //Ideally we could use something like GetCharacterBounds,
+    //but I think that only works on truly visible controls
+    long nCheckBoxLabelOffset = 0;
+    {
+        OUString sSampleText("X");
+        CheckBox aCheckBox(this);
+        FixedText aFixedText(this);
+        aCheckBox.SetText(sSampleText);
+        aFixedText.SetText(sSampleText);
+        Size aCheckSize(aCheckBox.CalcMinimumSize(0x7fffffff));
+        Size aFixedSize(aFixedText.CalcMinimumSize(0x7fffffff));
+        nCheckBoxLabelOffset = aCheckSize.Width() - aFixedSize.Width();
     }
 
     // creating entries
     vEntries.reserve(ColorConfigEntryCount);
-    for (unsigned i = 0; i != ColorConfigEntryCount; ++i)
-        vEntries.push_back( boost::shared_ptr<Entry>(new Entry (*this, i, rResMgr) ) );
-
-    // calculate heights of groups which can be hidden
-    {
-        unsigned nNextY = GetPosBehindLastChapter(); // next Y coordinate
-        for (int i = nGroupCount - 1; i >= 0; --i)
-        {
-            unsigned nY = vChapters[i]->GetTop();
-            vChapters[i]->SetHeight(nNextY - nY);
-            nNextY = nY;
-        }
-    }
+    for (unsigned i = 0; i < SAL_N_ELEMENTS(vEntryInfo); ++i)
+        vEntries.push_back(boost::shared_ptr<Entry>(new Entry(*this, i, nCheckBoxLabelOffset)));
 
     // extended entries
     ExtendedColorConfig aExtConfig;
     if (unsigned const nExtGroupCount = aExtConfig.GetComponentCount())
     {
-        unsigned nLineNum = ( GetPosBehindLastChapter() /
-            LogicToPixel(Size(0, LINE_HEIGHT), MAP_APPFONT).Height() ) + 1;
+        size_t nLineNum = vChapters.size() + vEntries.size() + 1;
         for (unsigned j = 0; j != nExtGroupCount; ++j)
         {
             rtl::OUString const sComponentName = aExtConfig.GetComponentName(j);
-            vChapters.push_back(boost::shared_ptr<Chapter>(new Chapter (
-                *this, rResMgr, nLineNum * LINE_HEIGHT,
+            vChapters.push_back(boost::shared_ptr<Chapter>(new Chapter(
+                m_pGrid, nLineNum,
                 aExtConfig.GetComponentDisplayName(sComponentName)
             )));
             ++nLineNum;
@@ -722,7 +581,7 @@ void ColorConfigWindow_Impl::CreateEntries (ResMgr& rResMgr)
                 ExtendedColorConfigValue const aColorEntry =
                     aExtConfig.GetComponentColorConfigValue(sComponentName, i);
                 vEntries.push_back(boost::shared_ptr<Entry>( new Entry (
-                    *this, rResMgr, nLineNum * LINE_HEIGHT, aColorEntry
+                    m_pGrid, nLineNum, aColorEntry, nCheckBoxLabelOffset
                 )));
                 ++nLineNum;
             }
@@ -738,15 +597,9 @@ void ColorConfigWindow_Impl::SetAppearance ()
     Color const aBackColor = rStyleSettings.GetHighContrastMode() ?
         rStyleSettings.GetShadowColor() : Color(COL_LIGHTGRAY);
     Wallpaper const aBackWall(aBackColor);
-    for (unsigned i = 0; i != vChapters.size(); ++i)
-    {
-        if (IsGroupVisible(static_cast<Group>(i)))
-            vChapters[i]->Show(aBackWall);
-        else
-            vChapters[i]->Hide();
-    }
+    for (size_t i = 0; i != vChapters.size(); ++i)
+        vChapters[i]->Show(aBackWall);
     SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
-    SetHelpId(HID_OPTIONS_COLORCONFIG_COLORLIST_WIN);
 
     // #104195# when the window color is the same as the text color it has to be changed
     Color aWinCol = rStyleSettings.GetWindowColor();
@@ -758,7 +611,7 @@ void ColorConfigWindow_Impl::SetAppearance ()
         if (aRCheckCol == aWinCol)
             aRCheckCol = Color(COL_BLACK);
         // setting new text color for each entry
-        for (unsigned i = 0; i != vEntries.size(); ++i)
+        for (size_t i = 0; i != vEntries.size(); ++i)
             vEntries[i]->SetTextColor(aRCheckCol);
     }
 
@@ -775,77 +628,47 @@ void ColorConfigWindow_Impl::SetAppearance ()
         }
     }
 
-    // positioning and appearance
-    Group eGroup = Group_Unknown;
-    for (unsigned i = 0; i != vEntries.size(); ++i)
+    // appearance
+    for (size_t i = 0; i != vEntries.size(); ++i)
     {
-        Group const eNewGroup = GetGroup(i);
-        bool const bShow = IsGroupVisible(eNewGroup);
-        long const nDelta = bShow ? -GetDeltaAbove(eNewGroup) : 0;
-
-        // new group?
-        if (eNewGroup > eGroup)
-        {
-            eGroup = eNewGroup;
-            if (bShow)
-                vChapters[eGroup]->MoveVertically(nDelta);
-        }
-        // positioning
-        if (bShow)
-            vEntries[i]->MoveVertically(nDelta);
-        else
-            vEntries[i]->Hide();
         // appearance
-        vEntries[i]->SetAppearance(i, aTransparentWall, aSampleColorList);
+        vEntries[i]->SetAppearance(aTransparentWall, aSampleColorList);
     }
 }
-
 
 ColorConfigWindow_Impl::~ColorConfigWindow_Impl ()
 { }
 
-void ColorConfigWindow_Impl::SetHeaderBar (
-    HeaderBar& rHeaderBar, ScrollBar const& rVScroll, ResMgr& rResMgr
-) {
-    rHeaderBar.SetPosSizePixel(
-        Point(0, 0),
-        Size(GetParent()->GetOutputSizePixel().Width(), rVScroll.GetPosPixel().Y())
-    );
-    vEntries.front()->SetHeader(*this, rHeaderBar, rResMgr);
-    rHeaderBar.Show();
+void ColorConfigWindow_Impl::AdjustHeaderBar()
+{
+    // horizontal positions
+    unsigned const nX0 = 0;
+    unsigned const nX1 = get<Window>("doccolor")->GetPosPixel().X();
+    unsigned const nX2 = get<Window>("doccolor_lb")->GetPosPixel().X();
+    unsigned const nX3 = get<Window>("doccolor_wn")->GetPosPixel().X();
+    unsigned const nX4 = m_pHeaderHB->GetSizePixel().Width();
+    m_pHeaderHB->SetItemSize(1, nX1 - nX0);
+    m_pHeaderHB->SetItemSize(2, nX2 - nX1);
+    m_pHeaderHB->SetItemSize(3, nX3 - nX2);
+    m_pHeaderHB->SetItemSize(4, nX4 - nX3);
 }
 
-void ColorConfigWindow_Impl::SetScrollBar (ScrollBar& rVScroll)
+void ColorConfigWindow_Impl::AdjustScrollBar()
 {
-    rVScroll.EnableDrag();
-    rVScroll.Show();
-    rVScroll.SetRangeMin(0);
     unsigned const nScrollOffset =
         vEntries[1]->GetTop() - vEntries[0]->GetTop();
     unsigned const nVisibleEntries = GetSizePixel().Height() / nScrollOffset;
+    m_pVScroll->SetPageSize(nVisibleEntries - 1);
+    m_pVScroll->SetVisibleSize(nVisibleEntries);
+}
 
-    rVScroll.SetRangeMax(vEntries.size() + vChapters.size());
-    { // dynamic: calculate the hidden lines
-        unsigned nInvisibleLines = 0;
-        Group eGroup = Group_Unknown;
-        for (unsigned i = 0; i != vEntries.size(); ++i)
-        {
-            Group const eNewGroup = GetGroup(i);
-            bool const bVisible = IsGroupVisible(eNewGroup);
-            if (!bVisible)
-                nInvisibleLines++;
-            if (eNewGroup > eGroup)
-            {
-                eGroup = eNewGroup;
-                if (!bVisible)
-                    nInvisibleLines++;
-            }
-        }
-        rVScroll.SetRangeMax(rVScroll.GetRangeMax() - nInvisibleLines);
-    }
-
-    rVScroll.SetPageSize(nVisibleEntries - 1);
-    rVScroll.SetVisibleSize(nVisibleEntries);
+void ColorConfigWindow_Impl::Init(ScrollBar *pVScroll, HeaderBar *pHeaderHB)
+{
+    m_pHeaderHB = pHeaderHB;
+    m_pVScroll = pVScroll;
+    m_pVScroll->EnableDrag();
+    m_pVScroll->SetRangeMin(0);
+    m_pVScroll->SetRangeMax(vEntries.size() + vChapters.size());
 }
 
 // SetLinks()
@@ -859,8 +682,8 @@ void ColorConfigWindow_Impl::SetLinks (
 // Update()
 void ColorConfigWindow_Impl::Update (
     EditableColorConfig const* pConfig,
-    EditableExtendedColorConfig const* pExtConfig
-) {
+    EditableExtendedColorConfig const* pExtConfig)
+{
     // updating default entries
     for (unsigned i = 0; i != ColorConfigEntryCount; ++i)
     {
@@ -885,45 +708,12 @@ void ColorConfigWindow_Impl::Update (
 }
 
 // ScrollHdl()
-void ColorConfigWindow_Impl::ScrollHdl (long& nScrollPos, ScrollBar const& rVScroll)
+void ColorConfigWindow_Impl::ScrollHdl(const ScrollBar& rVScroll)
 {
     SetUpdateMode(true);
-    long const nOffset =
-        (vEntries[1]->GetTop() - vEntries[0]->GetTop()) *
-        (nScrollPos - rVScroll.GetThumbPos());
-    nScrollPos = rVScroll.GetThumbPos();
-    long const nWindowHeight = GetSizePixel().Height();
-    int nFirstVisible = -1, nLastVisible = -1;
-    for (unsigned i = 0; i != vEntries.size(); ++i)
-    {
-        //controls outside of the view need to be hidden to speed up accessibility tools
-        bool const bShowCtrl = IsGroupVisible(GetGroup(i));
-        if (vEntries[i]->MoveAndShow(nOffset, nWindowHeight, bShowCtrl))
-        {
-            if (nFirstVisible == -1)
-                nFirstVisible = i;
-            else
-                nLastVisible = i;
-        }
-    }
-
-    // show the one prior to the first visible and the first after the last visble control
-    // to enable KEY_TAB travelling
-    if(nFirstVisible > 0)
-    {
-        --nFirstVisible;
-        if (IsGroupVisible(GetGroup(nFirstVisible)))
-            vEntries[nFirstVisible]->Show();
-    }
-    if (nLastVisible != -1 && (unsigned)nLastVisible < vEntries.size() - 1)
-    {
-        ++nLastVisible;
-        if (IsGroupVisible(GetGroup(nLastVisible)))
-            vEntries[nLastVisible]->Show();
-    }
-
-    for (unsigned i = 0; i != vChapters.size(); ++i)
-        vChapters[i]->MoveVertically(nOffset);
+    const long nRowHeight = (vEntries[1]->GetTop() - vEntries[0]->GetTop());
+    Point aPos(0, 0 - rVScroll.GetThumbPos() * nRowHeight);
+    m_pGrid->SetPosPixel(aPos);
     SetUpdateMode(true);
 }
 
@@ -993,18 +783,14 @@ bool ColorConfigWindow_Impl::IsGroupVisible (Group eGroup) const
         case Group_Writer:
         case Group_Html:
             return aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SWRITER);
-
         case Group_Calc:
             return aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SCALC);
-
         case Group_Draw:
             return
                 aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SDRAW) ||
                 aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SIMPRESS);
-
         case Group_Sql:
             return aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SDATABASE);
-
         default:
             return true;
     }
@@ -1016,16 +802,6 @@ unsigned ColorConfigWindow_Impl::GetPosBehindLastChapter () const
     int nLastY = vEntries.back()->GetBottom();
     nLastY += LogicToPixel( Size(0, 3), MAP_APPFONT ).Height();
     return nLastY;
-}
-
-// calculates the overall height of the invisible groups above eGroup
-long ColorConfigWindow_Impl::GetDeltaAbove (Group eGroup) const
-{
-    long nDelta = 0;
-    for (int i = 0; i != eGroup; ++i)
-        if (!IsGroupVisible(static_cast<Group>(i)))
-            nDelta += vChapters[i]->GetHeight();
-    return nDelta;
 }
 
 void ColorConfigWindow_Impl::DataChanged (DataChangedEvent const& rDCEvt)
@@ -1049,21 +825,15 @@ void ColorConfigWindow_Impl::Command( const CommandEvent& rCEvt )
     GetParent()->Command(rCEvt);
 }
 
-//
-// ColorConfigCtrl_Impl
-//
-
-class ColorConfigCtrl_Impl : public Control
+class ColorConfigCtrl_Impl : public VclVBox
 {
-    HeaderBar               aHeaderHB;
-    ScrollBar               aVScroll;
-
-    ColorConfigWindow_Impl  aScrollWindow;
+    HeaderBar*              m_pHeaderHB;
+    VclHBox*                m_pBody;
+    ColorConfigWindow_Impl* m_pScrollWindow;
+    ScrollBar*              m_pVScroll;
 
     EditableColorConfig*            pColorConfig;
     EditableExtendedColorConfig*    pExtColorConfig;
-
-    long nScrollPos;
 
     DECL_LINK(ScrollHdl, ScrollBar*);
     DECL_LINK(ClickHdl, CheckBox*);
@@ -1074,61 +844,96 @@ class ColorConfigCtrl_Impl : public Control
     virtual void Command (CommandEvent const& rCEvt);
     virtual void DataChanged (DataChangedEvent const& rDCEvt);
 public:
-    ColorConfigCtrl_Impl (Window* pParent, ResId const& rResId);
-    ~ColorConfigCtrl_Impl ();
+    ColorConfigCtrl_Impl(Window* pParent);
+    ~ColorConfigCtrl_Impl();
 
+    void InitHeaderBar(const OUString &rOn, const OUString &rUIElems,
+        const OUString &rColorSetting, const OUString &rPreview);
     void SetConfig (EditableColorConfig& rConfig) { pColorConfig = &rConfig; }
     void SetExtendedConfig (EditableExtendedColorConfig& rConfig) { pExtColorConfig = &rConfig; }
     void Update ();
-    long GetScrollPosition () { return aVScroll.GetThumbPos(); }
+    long GetScrollPosition ()
+    {
+        return m_pVScroll->GetThumbPos();
+    }
     void SetScrollPosition (long nSet)
     {
-        aVScroll.SetThumbPos(nSet);
-        ScrollHdl(&aVScroll);
+        m_pVScroll->SetThumbPos(nSet);
+        ScrollHdl(m_pVScroll);
     }
 };
 
-ColorConfigCtrl_Impl::ColorConfigCtrl_Impl (
-    Window* pParent, ResId const& rResId
-) :
-    Control(pParent, rResId),
-
-    aHeaderHB(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
-    aVScroll(this,      ResId(VB_VSCROLL, *rResId.GetResMgr())),
-    aScrollWindow(this, ResId(WN_SCROLL,  *rResId.GetResMgr())),
-
-    pColorConfig(0),
-    pExtColorConfig(0),
-    nScrollPos(0)
+ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(Window* pParent)
+    : VclVBox(pParent)
+    , pColorConfig(0)
+    , pExtColorConfig(0)
 {
-    aScrollWindow.SetHeaderBar(aHeaderHB, aVScroll, *rResId.GetResMgr());
-    aScrollWindow.SetScrollBar(aVScroll);
+    m_pHeaderHB = new HeaderBar(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
 
-    Resource::FreeResource();
+    m_pBody = new VclHBox(this);
+    m_pScrollWindow = new ColorConfigWindow_Impl(m_pBody);
+    m_pVScroll = new ScrollBar(m_pBody, WB_VERT);
+    m_pScrollWindow->Init(m_pVScroll, m_pHeaderHB);
+
+    m_pBody->set_hexpand(true);
+    m_pBody->set_vexpand(true);
+    m_pBody->set_expand(true);
+    m_pBody->set_fill(true);
+
+    m_pScrollWindow->set_hexpand(true);
+    m_pScrollWindow->set_vexpand(true);
+    m_pScrollWindow->set_expand(true);
+    m_pScrollWindow->set_fill(true);
 
     Link aScrollLink = LINK(this, ColorConfigCtrl_Impl, ScrollHdl);
-    aVScroll.SetScrollHdl(aScrollLink);
-    aVScroll.SetEndScrollHdl(aScrollLink);
+    m_pVScroll->SetScrollHdl(aScrollLink);
+    m_pVScroll->SetEndScrollHdl(aScrollLink);
 
     Link aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
     Link aColorLink = LINK(this, ColorConfigCtrl_Impl, ColorHdl);
     Link aGetFocusLink = LINK(this, ColorConfigCtrl_Impl, ControlFocusHdl);
-    aScrollWindow.SetLinks(aCheckLink, aColorLink, aGetFocusLink);
+    m_pScrollWindow->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
+
+    m_pHeaderHB->Show();
+    m_pVScroll->Show();
+    m_pBody->Show();
+    m_pScrollWindow->Show();
+}
+
+void ColorConfigCtrl_Impl::InitHeaderBar(const OUString &rOn, const OUString &rUIElems,
+    const OUString &rColorSetting, const OUString &rPreview)
+{
+    // filling
+    const WinBits nHeadBits = HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS;
+    m_pHeaderHB->InsertItem(1, rOn, 0, nHeadBits | HIB_CENTER);
+    m_pHeaderHB->InsertItem(2, rUIElems, 0, nHeadBits | HIB_LEFT);
+    m_pHeaderHB->InsertItem(3, rColorSetting, 0, nHeadBits | HIB_LEFT);
+    m_pHeaderHB->InsertItem(4, rPreview, 0, nHeadBits | HIB_LEFT);
+    m_pHeaderHB->set_height_request(GetTextHeight() + 6);
 }
 
 ColorConfigCtrl_Impl::~ColorConfigCtrl_Impl()
 {
+    delete m_pVScroll;
+    delete m_pScrollWindow;
+    delete m_pBody;
+    delete m_pHeaderHB;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorConfigCtrl(Window *pParent, VclBuilder::stringmap &)
+{
+    return new ColorConfigCtrl_Impl(pParent);
 }
 
 void ColorConfigCtrl_Impl::Update ()
 {
     DBG_ASSERT(pColorConfig, "Configuration not set");
-    aScrollWindow.Update(pColorConfig, pExtColorConfig);
+    m_pScrollWindow->Update(pColorConfig, pExtColorConfig);
 }
 
 IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
 {
-    aScrollWindow.ScrollHdl(nScrollPos, *pScrollBar);
+    m_pScrollWindow->ScrollHdl(*pScrollBar);
     return 0;
 }
 
@@ -1144,7 +949,7 @@ long ColorConfigCtrl_Impl::PreNotify( NotifyEvent& rNEvt )
             return 1;
         }
     }
-    return Control::PreNotify(rNEvt);
+    return VclVBox::PreNotify(rNEvt);
 }
 
 void ColorConfigCtrl_Impl::Command( const CommandEvent& rCEvt )
@@ -1159,12 +964,12 @@ void ColorConfigCtrl_Impl::Command( const CommandEvent& rCEvt )
             const CommandWheelData* pWheelData = rCEvt.GetWheelData();
             if(pWheelData && !pWheelData->IsHorz() && COMMAND_WHEEL_ZOOM != pWheelData->GetMode())
             {
-                HandleScrollCommand( rCEvt, 0, &aVScroll );
+                HandleScrollCommand(rCEvt, 0, m_pVScroll);
             }
         }
         break;
         default:
-            Control::Command(rCEvt);
+            VclVBox::Command(rCEvt);
     }
 }
 
@@ -1182,7 +987,7 @@ void ColorConfigCtrl_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, CheckBox*, pBox)
 {
     DBG_ASSERT(pColorConfig, "Configuration not set");
-    aScrollWindow.ClickHdl(pColorConfig, pBox);
+    m_pScrollWindow->ClickHdl(pColorConfig, pBox);
     return 0;
 }
 
@@ -1191,7 +996,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
 {
     DBG_ASSERT(pColorConfig, "Configuration not set" );
     if (pBox)
-        aScrollWindow.ColorHdl(pColorConfig, pExtColorConfig, pBox);
+        m_pScrollWindow->ColorHdl(pColorConfig, pExtColorConfig, pBox);
     return 0;
 }
 IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
@@ -1199,12 +1004,12 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
     // determine whether a control is completely visible
     // and make it visible
     long aCtrlPosY = pCtrl->GetPosPixel().Y();
-    unsigned const nWinHeight = aScrollWindow.GetSizePixel().Height();
-    unsigned const nEntryHeight = aScrollWindow.GetEntryHeight();
+    unsigned const nWinHeight = m_pScrollWindow->GetSizePixel().Height();
+    unsigned const nEntryHeight = m_pScrollWindow->GetEntryHeight();
     if (0 != (GETFOCUS_TAB & pCtrl->GetGetFocusFlags()) &&
         (aCtrlPosY < 0 || nWinHeight < aCtrlPosY + nEntryHeight)
     ) {
-        long nThumbPos = aVScroll.GetThumbPos();
+        long nThumbPos = m_pVScroll->GetThumbPos();
         if (nWinHeight < aCtrlPosY + nEntryHeight)
         {
             //scroll down
@@ -1217,8 +1022,8 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
             if(nThumbPos < 0)
                 nThumbPos = 0;
         }
-        aVScroll.SetThumbPos(nThumbPos);
-        ScrollHdl(&aVScroll);
+        m_pVScroll->SetThumbPos(nThumbPos);
+        ScrollHdl(m_pVScroll);
     }
     return 0;
 };
@@ -1229,40 +1034,43 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
 //
 
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(
-    Window* pParent, const SfxItemSet& rCoreSet) :
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_COLORCONFIG ), rCoreSet ),
-       aColorSchemeFL(  this, CUI_RES( FL_COLORSCHEME ) ),
-       aColorSchemeFT(  this, CUI_RES( FT_COLORSCHEME ) ),
-       aColorSchemeLB(  this, CUI_RES( LB_COLORSCHEME ) ),
-       aSaveSchemePB(   this, CUI_RES( PB_SAVESCHEME) ),
-       aDeleteSchemePB( this, CUI_RES( PB_DELETESCHEME ) ),
-       aCustomColorsFL( this, CUI_RES( FL_CUSTOMCOLORS ) ),
-       bFillItemSetCalled(sal_False),
-       pColorConfig(0),
-       pExtColorConfig(0),
-       pColorConfigCT(  new ColorConfigCtrl_Impl(this, CUI_RES( CT_COLORCONFIG ) ))
+    Window* pParent, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pParent, "OptColorPage", "cui/ui/optcolorpage.ui", rCoreSet)
+    , bFillItemSetCalled(false)
+    , pColorConfig(0)
+    , pExtColorConfig(0)
 {
-    FreeResource();
-    aColorSchemeLB.SetSelectHdl(LINK(this, SvxColorOptionsTabPage, SchemeChangedHdl_Impl));
+    get(m_pColorSchemeLB, "colorschemelb");
+    m_pColorSchemeLB->SetStyle(m_pColorSchemeLB->GetStyle() | WB_SORT);
+    get(m_pSaveSchemePB, "save");
+    get(m_pDeleteSchemePB, "delete");
+    get(m_pColorConfigCT, "colorconfig");
+
+    m_pColorConfigCT->InitHeaderBar(
+        get<Window>("on")->GetText(),
+        get<Window>("uielements")->GetText(),
+        get<Window>("colorsetting")->GetText(),
+        get<Window>("preview")->GetText());
+
+    m_pColorSchemeLB->SetSelectHdl(LINK(this, SvxColorOptionsTabPage, SchemeChangedHdl_Impl));
     Link aLk = LINK(this, SvxColorOptionsTabPage, SaveDeleteHdl_Impl );
-    aSaveSchemePB.SetClickHdl(aLk);
-    aDeleteSchemePB.SetClickHdl(aLk);
+    m_pSaveSchemePB->SetClickHdl(aLk);
+    m_pDeleteSchemePB->SetClickHdl(aLk);
 }
 
 SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
 {
     //when the dialog is cancelled but the color scheme ListBox has been changed these
     //changes need to be undone
-    if(!bFillItemSetCalled && aColorSchemeLB.GetSavedValue() != aColorSchemeLB.GetSelectEntryPos())
+    if(!bFillItemSetCalled && m_pColorSchemeLB->GetSavedValue() != m_pColorSchemeLB->GetSelectEntryPos())
     {
-        rtl::OUString sOldScheme =  aColorSchemeLB.GetEntry(aColorSchemeLB.GetSavedValue());
+        rtl::OUString sOldScheme =  m_pColorSchemeLB->GetEntry(m_pColorSchemeLB->GetSavedValue());
         if(!sOldScheme.isEmpty())
         {
             pColorConfig->SetCurrentSchemeName(sOldScheme);
             pExtColorConfig->SetCurrentSchemeName(sOldScheme);
         }
     }
-    delete pColorConfigCT;
     pColorConfig->ClearModified();
     pColorConfig->EnableBroadcast();
     delete pColorConfig;
@@ -1279,7 +1087,7 @@ SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet& r
 sal_Bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
 {
     bFillItemSetCalled = sal_True;
-    if(aColorSchemeLB.GetSavedValue() != aColorSchemeLB.GetSelectEntryPos())
+    if(m_pColorSchemeLB->GetSavedValue() != m_pColorSchemeLB->GetSelectEntryPos())
     {
         pColorConfig->SetModified();
         pExtColorConfig->SetModified();
@@ -1300,7 +1108,7 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet& )
         delete pColorConfig;
     }
     pColorConfig = new EditableColorConfig;
-    pColorConfigCT->SetConfig(*pColorConfig);
+    m_pColorConfigCT->SetConfig(*pColorConfig);
 
     if(pExtColorConfig)
     {
@@ -1309,19 +1117,19 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet& )
         delete pExtColorConfig;
     }
     pExtColorConfig = new EditableExtendedColorConfig;
-    pColorConfigCT->SetExtendedConfig(*pExtColorConfig);
+    m_pColorConfigCT->SetExtendedConfig(*pExtColorConfig);
 
     String sUser = GetUserData();
     //has to be called always to speed up accessibility tools
-    pColorConfigCT->SetScrollPosition(sUser.ToInt32());
-    aColorSchemeLB.Clear();
+    m_pColorConfigCT->SetScrollPosition(sUser.ToInt32());
+    m_pColorSchemeLB->Clear();
     uno::Sequence< ::rtl::OUString >  aSchemes = pColorConfig->GetSchemeNames();
     const rtl::OUString* pSchemes = aSchemes.getConstArray();
     for(sal_Int32 i = 0; i < aSchemes.getLength(); i++)
-        aColorSchemeLB.InsertEntry(pSchemes[i]);
-    aColorSchemeLB.SelectEntry(pColorConfig->GetCurrentSchemeName());
-    aColorSchemeLB.SaveValue();
-    aDeleteSchemePB.Enable( aSchemes.getLength() > 1 );
+        m_pColorSchemeLB->InsertEntry(pSchemes[i]);
+    m_pColorSchemeLB->SelectEntry(pColorConfig->GetCurrentSchemeName());
+    m_pColorSchemeLB->SaveValue();
+    m_pDeleteSchemePB->Enable( aSchemes.getLength() > 1 );
     UpdateColorConfig();
 }
 
@@ -1335,7 +1143,7 @@ int SvxColorOptionsTabPage::DeactivatePage( SfxItemSet* pSet_ )
 void SvxColorOptionsTabPage::UpdateColorConfig()
 {
     //update the color config control
-    pColorConfigCT->Update();
+    m_pColorConfigCT->Update();
 }
 
 IMPL_LINK(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, ListBox*, pBox)
@@ -1348,7 +1156,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, ListBox*, pBox)
 
 IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
 {
-    if(&aSaveSchemePB == pButton)
+    if (m_pSaveSchemePB == pButton)
     {
         String sName;
 
@@ -1367,29 +1175,29 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
             aNameDlg->GetName(sName);
             pColorConfig->AddScheme(sName);
             pExtColorConfig->AddScheme(sName);
-            aColorSchemeLB.InsertEntry(sName);
-            aColorSchemeLB.SelectEntry(sName);
-            aColorSchemeLB.GetSelectHdl().Call(&aColorSchemeLB);
+            m_pColorSchemeLB->InsertEntry(sName);
+            m_pColorSchemeLB->SelectEntry(sName);
+            m_pColorSchemeLB->GetSelectHdl().Call(m_pColorSchemeLB);
         }
         delete aNameDlg;
     }
     else
     {
-        DBG_ASSERT(aColorSchemeLB.GetEntryCount() > 1, "don't delete the last scheme");
+        DBG_ASSERT(m_pColorSchemeLB->GetEntryCount() > 1, "don't delete the last scheme");
         QueryBox aQuery(pButton, CUI_RES(RID_SVXQB_DELETE_COLOR_CONFIG));
         aQuery.SetText(String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE)));
         if(RET_YES == aQuery.Execute())
         {
-            rtl::OUString sDeleteScheme(aColorSchemeLB.GetSelectEntry());
-            aColorSchemeLB.RemoveEntry(aColorSchemeLB.GetSelectEntryPos());
-            aColorSchemeLB.SelectEntryPos(0);
-            aColorSchemeLB.GetSelectHdl().Call(&aColorSchemeLB);
+            rtl::OUString sDeleteScheme(m_pColorSchemeLB->GetSelectEntry());
+            m_pColorSchemeLB->RemoveEntry(m_pColorSchemeLB->GetSelectEntryPos());
+            m_pColorSchemeLB->SelectEntryPos(0);
+            m_pColorSchemeLB->GetSelectHdl().Call(m_pColorSchemeLB);
             //first select the new scheme and then delete the old one
             pColorConfig->DeleteScheme(sDeleteScheme);
             pExtColorConfig->DeleteScheme(sDeleteScheme);
         }
     }
-    aDeleteSchemePB.Enable( aColorSchemeLB.GetEntryCount() > 1 );
+    m_pDeleteSchemePB->Enable( m_pColorSchemeLB->GetEntryCount() > 1 );
     return 0;
 }
 
@@ -1397,12 +1205,12 @@ IMPL_LINK(SvxColorOptionsTabPage, CheckNameHdl_Impl, AbstractSvxNameDialog*, pDi
 {
     String sName;
     pDialog->GetName(sName);
-    return sName.Len() && LISTBOX_ENTRY_NOTFOUND == aColorSchemeLB.GetEntryPos( sName );
+    return sName.Len() && LISTBOX_ENTRY_NOTFOUND == m_pColorSchemeLB->GetEntryPos( sName );
 }
 
 void SvxColorOptionsTabPage::FillUserData()
 {
-    SetUserData(OUString::number(pColorConfigCT->GetScrollPosition()));
+    SetUserData(OUString::number(m_pColorConfigCT->GetScrollPosition()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
