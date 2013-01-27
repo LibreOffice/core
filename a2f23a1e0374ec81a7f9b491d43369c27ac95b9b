@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUX///7M\u003d",
+        "filename": "svtools/source/misc/langtab.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-01-27T00:38:53Z",
+      "side": 1,
+      "message": "A question: does the l10n process cope with renaming the identifier here? Note that this is a paired list, so what happens nowadays if an existing l10n that has translation for the old identifier name is applied?",
+      "revId": "a2f23a1e0374ec81a7f9b491d43369c27ac95b9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
