@@ -33,6 +33,18 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkImage" id="image7">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-go-back</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image8">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-go-forward</property>
+    <property name="icon-size">1</property>
+  </object>
   <object class="GtkGrid" id="ColumnPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -308,6 +320,10 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Column</property>
+                    <accessibility>
+                      <relation type="label-for" target="back"/>
+                      <relation type="label-for" target="next"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -323,6 +339,7 @@
                     <property name="hexpand">True</property>
                     <property name="label">_1</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width1mf:0.00cm</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -338,6 +355,7 @@
                     <property name="hexpand">True</property>
                     <property name="label">_2</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width2mf:0.00cm</property>
                     <attributes>
                       <attribute name="background" value="#ffffffffffff"/>
                     </attributes>
@@ -356,6 +374,7 @@
                     <property name="hexpand">True</property>
                     <property name="label">_3</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width3mf:0.00cm</property>
                   </object>
                   <packing>
                     <property name="left_attach">4</property>
@@ -370,6 +389,11 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Width</property>
+                    <accessibility>
+                      <relation type="label-for" target="width3mf:0.00cm"/>
+                      <relation type="label-for" target="width2mf:0.00cm"/>
+                      <relation type="label-for" target="width1mf:0.00cm"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -388,6 +412,9 @@
                     <property name="invisible_char_set">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="widthft"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">4</property>
@@ -406,6 +433,9 @@
                     <property name="invisible_char_set">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="widthft"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -424,6 +454,9 @@
                     <property name="invisible_char_set">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="widthft"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -438,6 +471,10 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Spacing</property>
+                    <accessibility>
+                      <relation type="label-for" target="spacing1mf:0.00cm"/>
+                      <relation type="label-for" target="spacing2mf:0.00cm"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -461,6 +498,9 @@
                         <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="distft"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -478,6 +518,9 @@
                         <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="distft"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -517,6 +560,9 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">image7</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="columnft"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -531,6 +577,9 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">image8</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="columnft"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">5</property>
@@ -782,18 +831,6 @@
         <property name="height">1</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkImage" id="image7">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-go-back</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image8">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-go-forward</property>
-    <property name="icon-size">1</property>
   </object>
   <object class="GtkListStore" id="liststore1">
     <columns>

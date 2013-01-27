@@ -423,7 +423,6 @@
 #define HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION               "SW_HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION"
 #define HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE                     "SW_HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE"
 
-#define HID_COLUMN_VALUESET                                     "SW_HID_COLUMN_VALUESET"
 #define HID_PVIEW_ZOOM_LB                                       "SW_HID_PVIEW_ZOOM_LB"
 #define HID_MAIL_MERGE_SELECT                                   "SW_HID_MAIL_MERGE_SELECT"
 #define HID_MAIL_MERGE_CREATE_FROM                              "SW_HID_MAIL_MERGE_CREATE_FROM"

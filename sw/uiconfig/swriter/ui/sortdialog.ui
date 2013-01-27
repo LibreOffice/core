@@ -100,6 +100,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Column</property>
+                            <accessibility>
+                              <relation type="label-for" target="colsb1"/>
+                              <relation type="label-for" target="colsb2"/>
+                              <relation type="label-for" target="colsb3"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -113,6 +118,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Key type</property>
+                            <accessibility>
+                              <relation type="label-for" target="typelb1"/>
+                              <relation type="label-for" target="typelb2"/>
+                              <relation type="label-for" target="typelb3"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -339,6 +349,9 @@
                             <property name="invisible_char">•</property>
                             <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="column"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -355,6 +368,9 @@
                             <property name="invisible_char">•</property>
                             <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="column"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -371,6 +387,9 @@
                             <property name="invisible_char">•</property>
                             <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="column"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -385,6 +404,9 @@
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="entry_text_column">0</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="keytype"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -400,6 +422,9 @@
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="button_sensitivity">off</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="keytype"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -413,6 +438,9 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="keytype"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -572,6 +600,10 @@
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">tabs</property>
+                                <accessibility>
+                                  <relation type="label-for" target="separator"/>
+                                  <relation type="label-for" target="delimpb"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -592,6 +624,9 @@
                                     <property name="invisible_char">•</property>
                                     <property name="width_chars">1</property>
                                     <property name="invisible_char_set">True</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="character"/>
+                                    </accessibility>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -606,6 +641,9 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="character"/>
+                                    </accessibility>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>

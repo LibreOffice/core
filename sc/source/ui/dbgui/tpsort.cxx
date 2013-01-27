@@ -530,11 +530,8 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
     Init();
     SetExchangeSupport();
 
-    m_pLbOutPos->SetAccessibleRelationLabeledBy(m_pBtnCopyResult);
     m_pLbOutPos->SetAccessibleName(m_pBtnCopyResult->GetText());
-    m_pEdOutPos->SetAccessibleRelationLabeledBy(m_pBtnCopyResult);
     m_pEdOutPos->SetAccessibleName(m_pBtnCopyResult->GetText());
-    m_pLbSortUser->SetAccessibleRelationLabeledBy(m_pBtnSortUser);
     m_pLbSortUser->SetAccessibleName(m_pBtnSortUser->GetText());
 }
 

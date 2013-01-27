@@ -453,20 +453,6 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     VclFrame *pSpacing = get<VclFrame>("spacing");
     m_pBtnNext->SetAccessibleRelationMemberOf(pSpacing->get_label_widget());
 
-    Window *pWidth = get<Window>("widthft");
-    pEd1->SetAccessibleRelationLabeledBy(pWidth);
-    pEd2->SetAccessibleRelationLabeledBy(pWidth);
-    pEd3->SetAccessibleRelationLabeledBy(pWidth);
-
-    Window *pDist = get<Window>("distft");
-    pDistEd1->SetAccessibleRelationLabeledBy(pDist);
-    pDistEd2->SetAccessibleRelationLabeledBy(pDist);
-
-    Window *pColumn = get<Window>("columnft");
-    m_pBtnBack->SetAccessibleRelationLabeledBy(pColumn);
-    m_pBtnNext->SetAccessibleRelationLabeledBy(pColumn);
-
-    m_pDefaultVS->SetHelpId(HID_COLUMN_VALUESET);
     m_pDefaultVS->SetColCount( 5 );
 
     for (int i = 0; i < 5; ++i)

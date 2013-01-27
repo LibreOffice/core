@@ -238,24 +238,16 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell)
         m_pColEdt3->SetMax(nMax);
     }
 
-    m_pDelimEdt->SetAccessibleRelationLabeledBy(m_pDelimFreeRB);
-    m_pDelimPB->SetAccessibleRelationLabeledBy(m_pDelimFreeRB);
     m_pDelimPB->SetAccessibleRelationMemberOf(m_pDelimFreeRB);
 
     m_pColEdt1->SetAccessibleRelationMemberOf(m_pKeyCB1);
-    m_pColEdt1->SetAccessibleRelationLabeledBy(m_pColLbl);
     m_pTypDLB1->SetAccessibleRelationMemberOf(m_pKeyCB1);
-    m_pTypDLB1->SetAccessibleRelationLabeledBy(m_pTypLbl);
 
     m_pColEdt2->SetAccessibleRelationMemberOf(m_pKeyCB2);
-    m_pColEdt2->SetAccessibleRelationLabeledBy(m_pColLbl);
     m_pTypDLB2->SetAccessibleRelationMemberOf(m_pKeyCB2);
-    m_pTypDLB2->SetAccessibleRelationLabeledBy(m_pTypLbl);
 
     m_pColEdt3->SetAccessibleRelationMemberOf(m_pKeyCB3);
-    m_pColEdt3->SetAccessibleRelationLabeledBy(m_pColLbl);
     m_pTypDLB3->SetAccessibleRelationMemberOf(m_pKeyCB3);
-    m_pTypDLB3->SetAccessibleRelationLabeledBy(m_pTypLbl);
 }
 
 SwSortDlg::~SwSortDlg()
