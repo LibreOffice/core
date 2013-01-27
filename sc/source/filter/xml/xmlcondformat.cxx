@@ -567,12 +567,10 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
     rtl::OUString aExpr2;
     ScConditionMode eMode;
     GetConditionData(sExpression, eMode, aExpr1, aExpr2);
-    ScAddress aPos;
-    sal_Int32 nIndex = 0;
-    ScRangeStringConverter::GetAddressFromString(aPos, sAddress, GetScImport().GetDocument(), formula::FormulaGrammar::CONV_ODF, nIndex);
 
-    ScCondFormatEntry* pFormatEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, GetScImport().GetDocument(), aPos, sStyle,
+    ScCondFormatEntry* pFormatEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, GetScImport().GetDocument(), ScAddress(), sStyle,
                                                         rtl::OUString(), rtl::OUString(), formula::FormulaGrammar::GRAM_ODFF, formula::FormulaGrammar::GRAM_ODFF);
+    pFormatEntry->SetSrcString(sAddress);
 
     pFormat->AddEntry(pFormatEntry);
 }
