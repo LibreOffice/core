@@ -1423,8 +1423,6 @@ sal_Bool Printer::EndJob()
 
         mnCurPage = 0;
 
-        bRet = sal_True;
-
         mbPrinting      = sal_False;
         mnCurPrintPage  = 0;
         maJobName = rtl::OUString();

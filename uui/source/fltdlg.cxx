@@ -53,12 +53,13 @@ namespace uui
 *//*-*************************************************************************************************************/
 FilterDialog::FilterDialog( Window* pParentWindow ,
                             ResMgr* pResMgr       )
-    :   ModalDialog  ( pParentWindow, ResId( DLG_FILTER_SELECT, *pResMgr ) )
-    ,   m_ftURL      ( this, ResId( FT_URL, *pResMgr            )                   )
-    ,   m_lbFilters  ( this, ResId( LB_FILTERS, *pResMgr        )                   )
-    ,   m_btnOK      ( this, ResId( BTN_OK, *pResMgr            )                   )
-    ,   m_btnCancel  ( this, ResId( BTN_CANCEL, *pResMgr        )                   )
-    ,   m_btnHelp    ( this, ResId( BTN_HELP, *pResMgr          )                   )
+    :   ModalDialog  (pParentWindow, ResId( DLG_FILTER_SELECT, *pResMgr ) )
+    ,   m_ftURL      (this, ResId( FT_URL, *pResMgr))
+    ,   m_lbFilters  (this, ResId( LB_FILTERS, *pResMgr))
+    ,   m_btnOK      (this, ResId( BTN_OK, *pResMgr))
+    ,   m_btnCancel  (this, ResId( BTN_CANCEL, *pResMgr))
+    ,   m_btnHelp    (this, ResId( BTN_HELP, *pResMgr))
+    ,   m_pFilterNames(NULL)
 {
     FreeResource();
 }

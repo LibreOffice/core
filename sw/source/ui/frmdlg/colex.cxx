@@ -42,14 +42,13 @@
  -----------------------------------------------------------------------*/
 void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
-    const SvxPageItem* pPage = 0;
     SfxItemPool* pPool = rSet.GetPool();
     sal_uInt16 nWhich = pPool->GetWhich( SID_ATTR_PAGE );
 
     if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
         // alignment
-        pPage = (const SvxPageItem*)&rSet.Get( nWhich );
+        const SvxPageItem* pPage = (const SvxPageItem*)&rSet.Get( nWhich );
 
         if ( pPage )
             SetUsage( pPage->GetPageUsage() );

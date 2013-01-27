@@ -70,7 +70,7 @@ protected:
 
 public:
     WW8StructBase(sal_Int32 nLength)
-    : mSequence(nLength)
+    : mSequence(nLength), mpParent(NULL), mpDocument(NULL)
     {
     }
 

@@ -625,16 +625,16 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
         else if( pEdit == &maNumericEdit )
         {
             double fValue;
-            char pBuf[256];
             rtl::OString aContents(rtl::OUStringToOString(maNumericEdit.GetText(),
                 osl_getThreadTextEncoding()));
             fValue = atof(aContents.getStr());
             if( mfMin != mfMax && ( fValue < mfMin || fValue > mfMax ) )
             {
+                char pBuf[256];
                 if( fValue < mfMin )
                     fValue = mfMin;
                 else if( fValue > mfMax )
-                fValue = mfMax;
+                    fValue = mfMax;
                 sprintf( pBuf, "%g", fValue );
                 maNumericEdit.SetText( String( pBuf, osl_getThreadTextEncoding() ) );
             }

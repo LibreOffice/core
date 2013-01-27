@@ -91,6 +91,7 @@ struct SfxInterface_Impl
     SfxInterface_Impl() :
         aPopupRes(0,*SfxApplication::GetOrCreate()->GetSfxResManager()),
         aStatBarRes(0,*SfxApplication::GetOrCreate()->GetSfxResManager())
+    , pModule(NULL)
     , bRegistered(sal_False)
     {
         pObjectBars   = new SfxObjectUIArr_Impl;

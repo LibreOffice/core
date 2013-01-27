@@ -50,6 +50,7 @@ BaseContainer::BaseContainer()
     : BaseLock     (       )
     , m_rCache     (       )
     , m_pFlushCache(NULL   )
+    , m_eType()
     , m_lListener  (m_aLock)
 {
     m_rCache->load(FilterCache::E_CONTAINS_STANDARD);

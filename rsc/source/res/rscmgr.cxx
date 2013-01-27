@@ -132,15 +132,12 @@ sal_Bool RscMgr::IsDefault( const RSCINST & rInst ){
 |*
 *************************************************************************/
 sal_Bool RscMgr::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
-    RscMgrInst * pClassData;
-    RscMgrInst * pDfltData;
-
     if( !RscClass::IsValueDefault( rInst, pDef ) )
         return sal_False;
 
     if( pDef ){
-        pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
-        pDfltData  = (RscMgrInst *)(pDef + RscClass::Size());
+        RscMgrInst * pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
+        RscMgrInst * pDfltData  = (RscMgrInst *)(pDef + RscClass::Size());
 
         if( !pClassData->aRefId.IsId() && !pDfltData->aRefId.IsId() ){
             return sal_True;
