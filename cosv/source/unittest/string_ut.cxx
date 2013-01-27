@@ -46,8 +46,6 @@ check_value( const String & a, const char * b )
 bool
 classtest_String( csv::SimpleString & rSimpleString )
 {
-    bool ret = true;
-
     String x1;
     UT_CHECK( String(), check_value(x1,"") )
 
@@ -61,9 +59,9 @@ classtest_String( csv::SimpleString & rSimpleString )
 
 
     bool ret = ftest_Read( rSimpleString );
-    ret = ftest_Write( rSimpleString ) AND ret;
-    ret = ftest_SeekBack( rSimpleString ) AND ret;
-    ret = ftest_SeekRelative( rSimpleString ) AND ret;
+    ret &= ftest_Write( rSimpleString ) AND ret;
+    ret &= ftest_SeekBack( rSimpleString ) AND ret;
+    ret &= ftest_SeekRelative( rSimpleString ) AND ret;
 
     rSimpleString.Close();
 
