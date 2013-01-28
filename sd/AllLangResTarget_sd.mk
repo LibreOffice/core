@@ -63,7 +63,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/animations/CustomAnimation.src \
     sd/source/ui/animations/SlideTransitionPane.src \
     sd/source/ui/annotations/annotations.src \
-    sd/source/ui/app/app.src \
     sd/source/ui/app/popup.src \
     sd/source/ui/app/res_bmp.src \
     sd/source/ui/app/sdstring.src \
