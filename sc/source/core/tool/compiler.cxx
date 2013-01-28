@@ -3718,7 +3718,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     return true;
 }
 
-void ScCompiler::CreateStringFromXMLTokenArray( String& rFormula, String& rFormulaNmsp )
+void ScCompiler::CreateStringFromXMLTokenArray( rtl::OUString& rFormula, rtl::OUString& rFormulaNmsp )
 {
     bool bExternal = GetGrammar() == FormulaGrammar::GRAM_EXTERNAL;
     sal_uInt16 nExpectedCount = bExternal ? 2 : 1;
@@ -3731,14 +3731,6 @@ void ScCompiler::CreateStringFromXMLTokenArray( String& rFormula, String& rFormu
         if( bExternal )
             rFormulaNmsp = ppTokens[ 1 ]->GetString();
     }
-}
-
-void ScCompiler::CreateStringFromXMLTokenArray( rtl::OUString& rFormula, rtl::OUString& rFormulaNmsp )
-{
-    String sFormula, aFormulaNmsp;
-    CreateStringFromXMLTokenArray(sFormula, aFormulaNmsp);
-    rFormula = sFormula;
-    rFormulaNmsp = aFormulaNmsp;
 }
 
 namespace {
