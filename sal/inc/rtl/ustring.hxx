@@ -2031,62 +2031,14 @@ public:
     }
 
     /**
-      Returns the string representation of the sal_Bool argument.
-
-      If the sal_Bool is true, the string "true" is returned.
-      If the sal_Bool is false, the string "false" is returned.
-      This function can't be used for language specific conversion.
-
-      @param    b   a sal_Bool.
-      @return   a string with the string representation of the argument.
-      @deprecated there is no replacement, just code your own
-    */
-    SAL_DEPRECATED_INTERNAL("just code your own") static OUString valueOf( sal_Bool b ) SAL_THROW(())
-    {
-        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFBOOLEAN];
-        rtl_uString* pNewData = 0;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfBoolean( aBuf, b ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
-    }
-
-    /**
-      Returns the string representation of the char argument.
-
-      @param    c   a character.
-      @return   a string with the string representation of the argument.
-      @deprecated just use the '+' or '+'; operator
-    */
-    SAL_DEPRECATED_INTERNAL("just use the '+' or '+'; operator") static OUString valueOf( sal_Unicode c ) SAL_THROW(())
-    {
-        return OUString( &c, 1 );
-    }
-
-    /**
-      Returns the string representation of the int argument.
+      Returns the string representation of the integer argument.
 
       This function can't be used for language specific conversion.
 
-      @param    i           a int32.
+      @param    i           an integer value
       @param    radix       the radix (between 2 and 36)
       @return   a string with the string representation of the argument.
-      @deprecated use number(sal_Int64,sal_Int16)
-    */
-    SAL_DEPRECATED_INTERNAL("use number") static OUString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
-    {
-        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT32];
-        rtl_uString* pNewData = 0;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt32( aBuf, i, radix ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
-    }
-
-    /**
-      Returns the string representation of the int argument.
-
-      This function can't be used for language specific conversion.
-
-      @param    i           a int32.
-      @param    radix       the radix (between 2 and 36)
-      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
     */
     static OUString number( int i, sal_Int16 radix = 10 )
     {
@@ -2095,82 +2047,24 @@ public:
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt32( aBuf, i, radix ) );
         return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
     }
-
-    /**
-      Returns the string representation of the int argument.
-
-      This function can't be used for language specific conversion.
-
-      @param    i           a int32.
-      @param    radix       the radix (between 2 and 36)
-      @return   a string with the string representation of the argument.
-    */
+    /// @overload
+    /// @since LibreOffice 4.1
     static OUString number( unsigned int i, sal_Int16 radix = 10 )
     {
-        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT64];
-        rtl_uString* pNewData = 0;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt64( aBuf, i, radix ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return number( static_cast< unsigned long long >( i ), radix );
     }
-
-    /**
-      Returns the string representation of the long argument.
-
-      This function can't be used for language specific conversion.
-
-      @param    ll          a int64.
-      @param    radix       the radix (between 2 and 36)
-      @return   a string with the string representation of the argument.
-      @deprecated use number(sal_Int64,sal_Int16)
-    */
-    SAL_DEPRECATED_INTERNAL("use number") static OUString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
+    /// @overload
+    /// @since LibreOffice 4.1
+    static OUString number( long i, sal_Int16 radix = 10)
     {
-        return number( ll, radix );
+        return number( static_cast< long long >( i ), radix );
     }
-
-    /**
-      Returns the string representation of the long argument.
-      This is here because when choosing which conversion for overloaded
-      functions is better, the standard treats all integer conversions the same.
-
-      This function can't be used for language specific conversion.
-
-      @param    ll          a int64.
-      @param    radix       the radix (between 2 and 36)
-      @return   a string with the string representation of the argument.
-      @since LibreOffice 4.1
-    */
-    static OUString number( long ll, sal_Int16 radix = 10)
+    /// @overload
+    /// @since LibreOffice 4.1
+    static OUString number( unsigned long i, sal_Int16 radix = 10 )
     {
-        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT64];
-        rtl_uString* pNewData = 0;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt64( aBuf, ll, radix ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return number( static_cast< unsigned long long >( i ), radix );
     }
-
-    /**
-      Returns the string representation of the long argument.
-      This is here because when choosing which conversion for overloaded
-      functions is better, the standard treats all integer conversions the same.
-
-      This function can't be used for language specific conversion.
-
-      @param    ll          a int64.
-      @param    radix       the radix (between 2 and 36)
-      @return   a string with the string representation of the argument.
-      @since LibreOffice 4.1
-    */
-    static OUString number( unsigned long ll, sal_Int16 radix = 10 )
-    {
-#if SAL_TYPES_SIZEOFLONG == 8
-        assert( ll <= SAL_MAX_INT64 ); // valueOfInt64 may not be able to handle the highest bit
-#endif
-        sal_Unicode aBuf[RTL_STR_MAX_VALUEOFINT64];
-        rtl_uString* pNewData = 0;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt64( aBuf, ll, radix ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
-    }
-
     /// @overload
     /// @since LibreOffice 4.1
     static OUString number( long long ll, sal_Int16 radix = 10 )
@@ -2180,30 +2074,14 @@ public:
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt64( aBuf, ll, radix ) );
         return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
     }
-
     /// @overload
     /// @since LibreOffice 4.1
     static OUString number( unsigned long long ll, sal_Int16 radix = 10 )
     {
-        assert( ll <= SAL_MAX_INT64 ); // valueOfInt64 may not be able to handle the highest bit
-        sal_Unicode aBuf[RTL_STR_MAX_VALUEOFINT64];
+        sal_Unicode aBuf[RTL_STR_MAX_VALUEOFUINT64];
         rtl_uString* pNewData = 0;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt64( aBuf, ll, radix ) );
+        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfUInt64( aBuf, ll, radix ) );
         return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
-    }
-
-    /**
-      Returns the string representation of the float argument.
-
-      This function can't be used for language specific conversion.
-
-      @param    f           a float.
-      @return   a string with the string representation of the argument.
-      @deprecated use number(float)
-    */
-    SAL_DEPRECATED_INTERNAL("use number") static OUString valueOf( float f ) SAL_THROW(())
-    {
-        return number(f);
     }
 
     /**
@@ -2230,11 +2108,92 @@ public:
 
       @param    d           a double.
       @return   a string with the string representation of the argument.
-      @deprecated use number(double)
+      @since LibreOffice 4.1
     */
-    SAL_DEPRECATED_INTERNAL("use number") static OUString valueOf( double d ) SAL_THROW(())
+    static OUString number( double d )
     {
-        return number(d);
+        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFDOUBLE];
+        rtl_uString* pNewData = 0;
+        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfDouble( aBuf, d ) );
+        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the sal_Bool argument.
+
+      If the sal_Bool is true, the string "true" is returned.
+      If the sal_Bool is false, the string "false" is returned.
+      This function can't be used for language specific conversion.
+
+      @param    b   a sal_Bool.
+      @return   a string with the string representation of the argument.
+      @deprecated there is no replacement, use 'condition ? OString( "true" ) : OString( "false" )'
+    */
+    SAL_DEPRECATED_INTERNAL("write explicit condition") static OUString valueOf( sal_Bool b ) SAL_THROW(())
+    {
+        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFBOOLEAN];
+        rtl_uString* pNewData = 0;
+        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfBoolean( aBuf, b ) );
+        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the char argument.
+
+      @param    c   a character.
+      @return   a string with the string representation of the argument.
+      @deprecated use operator, function or constructor taking char or sal_Unicode argument
+    */
+    SAL_DEPRECATED_INTERNAL("convert to OUString or use directly") static OUString valueOf( sal_Unicode c ) SAL_THROW(())
+    {
+        return OUString( &c, 1 );
+    }
+
+    /**
+      Returns the string representation of the int argument.
+
+      This function can't be used for language specific conversion.
+
+      @param    i           a int32.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+      @deprecated use number()
+    */
+    SAL_DEPRECATED_INTERNAL("use number()") static OUString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
+    {
+        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT32];
+        rtl_uString* pNewData = 0;
+        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt32( aBuf, i, radix ) );
+        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+    }
+
+    /**
+      Returns the string representation of the long argument.
+
+      This function can't be used for language specific conversion.
+
+      @param    ll          a int64.
+      @param    radix       the radix (between 2 and 36)
+      @return   a string with the string representation of the argument.
+      @deprecated use number()
+    */
+    SAL_DEPRECATED_INTERNAL("use number()") static OUString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
+    {
+        return number( ll, radix );
+    }
+
+    /**
+      Returns the string representation of the float argument.
+
+      This function can't be used for language specific conversion.
+
+      @param    f           a float.
+      @return   a string with the string representation of the argument.
+      @deprecated use number()
+    */
+    SAL_DEPRECATED_INTERNAL("use number()") static OUString valueOf( float f ) SAL_THROW(())
+    {
+        return number(f);
     }
 
     /**
@@ -2244,14 +2203,11 @@ public:
 
       @param    d           a double.
       @return   a string with the string representation of the argument.
-      @since LibreOffice 4.1
+      @deprecated use number()
     */
-    static OUString number( double d )
+    SAL_DEPRECATED_INTERNAL("use number()") static OUString valueOf( double d ) SAL_THROW(())
     {
-        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFDOUBLE];
-        rtl_uString* pNewData = 0;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfDouble( aBuf, d ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return number(d);
     }
 
     /**
