@@ -24,6 +24,8 @@
 #include <osl/diagnose.h>
 #include <swdllapi.h>
 
+template < class Key, class Value > struct BPlusTreeNode;
+
 /** B+ Tree implementation (to replace the original BigPtrArray).
 
 For more information about B+ Tree, please see eg. wikipedia:
@@ -51,25 +53,28 @@ public:
     Key Count() const;
 
     /// Insert entry at the specified position.
-    void Insert( const Value& r, Key pos );
+    void Insert( const Value& rValue, Key nPos );
 
-    /// Remove n entries starting with the position pos.
-    void Remove( Key pos, Key n = 1 );
+    /// Remove nNumber entries starting at the position nPos.
+    void Remove( Key nPos, Key nNumber = 1 );
 
-    /// Insert the value of 'from' to the position 'to', and remove the original value.
-    void Move( Key from, Key to );
+    /// Insert the value of 'nFrom' to the position 'nTo', and remove the original value.
+    void Move( Key nFrom, Key nTo );
 
     /// Exchange the value on position pos with the new one.
-    void Replace( Key pos, const Value& r);
+    void Replace( Key nPos, const Value& rValue );
 
     /// Field access.
-    const Value& operator[]( Key ) const;
+    const Value& operator[]( Key nPos ) const;
 
     /// Traverse over the entire data, and call fn on the data.
     void ForEach( FnForEach fn, void* pArgs = NULL );
 
     /// Traverse over the specified range, and call fn on the data.
     void ForEach( Key nStart, Key nEnd, FnForEach fn, void* pArgs = NULL );
+
+private:
+    BPlusTreeNode< Key, Value > *m_pRoot;
 };
 
 #endif // SW_BPLUSTREE_HXX
