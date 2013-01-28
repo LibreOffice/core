@@ -136,7 +136,7 @@ public:
 
     void            SetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any& rVal);
     bool            GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any*& pAny );
-    bool FillBaseProperties(SfxItemSet& rToSet, const SfxItemSet &rFromSet, bool& rSizeFound);
+    bool FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSet, const SfxItemSet &rFromSet, bool& rSizeFound);
 
     virtual bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, bool& rSizeFound) = 0;
 
@@ -156,7 +156,7 @@ bool BaseFrameProperties_Impl::GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId,
     return aAnyMap.FillValue( nWID, nMemberId, rpAny );
 }
 
-bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxItemSet& rFromSet, bool& rSizeFound)
+bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSet, const SfxItemSet& rFromSet, bool& rSizeFound)
 {
     bool bRet = true;
     //Anker kommt auf jeden Fall in den Set
@@ -229,11 +229,24 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     {
         const ::uno::Any* pFillGradient = 0;
         GetProperty(RES_FILL_GRADIENT, MID_FILLGRADIENT, pFillGradient);
-        if (pFillGradient)
+        const ::uno::Any* pName = 0;
+        GetProperty(RES_FILL_GRADIENT, MID_NAME, pName);
+        if (pFillGradient || pName)
         {
             XFillGradientItem aFillGradient( static_cast <const :: XFillGradientItem & > ( rFromSet.Get ( RES_FILL_GRADIENT ) ) );
-            bRet &= ((SfxPoolItem&)aFillGradient).PutValue(*pFillGradient, MID_FILLGRADIENT);
-            rToSet.Put(aFillGradient);
+            XFillGradientItem* pItem = &aFillGradient;
+            if (pFillGradient)
+                bRet &= ((SfxPoolItem*)pItem)->PutValue(*pFillGradient, MID_FILLGRADIENT);
+            if (pName)
+                bRet &= ((SfxPoolItem*)pItem)->PutValue(*pName, MID_NAME);
+            SdrModel* pModel = pDoc->GetDrawModel();
+            pItem = pItem->checkForUniqueItem( pModel );
+            if (pItem)
+            {
+                rToSet.Put(*pItem);
+                if(pItem != &aFillGradient)
+                    delete pItem;
+            }
         }
     }
     {
@@ -578,13 +591,13 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
     {
         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *pStyle ) );
         const :: SfxItemSet *pItemSet = &xStyle->GetItemSet();
-           bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
+           bRet = FillBaseProperties( pDoc, rSet, *pItemSet, rSizeFound );
         lcl_FillCol ( rSet, *pItemSet, pColumns );
     }
     else
     {
         const :: SfxItemSet *pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME )->GetAttrSet();
-           bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
+           bRet = FillBaseProperties( pDoc, rSet, *pItemSet, rSizeFound );
         lcl_FillCol ( rSet, *pItemSet, pColumns );
     }
     const ::uno::Any* pEdit;
@@ -659,13 +672,13 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
     {
         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet(*pStyle) );
         const :: SfxItemSet *pItemSet = &xStyle->GetItemSet();
-        bRet = FillBaseProperties(rFrmSet, *pItemSet, rSizeFound);
+        bRet = FillBaseProperties(pDoc, rFrmSet, *pItemSet, rSizeFound);
         lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
     }
     else
     {
         const :: SfxItemSet *pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC )->GetAttrSet();
-        bRet = FillBaseProperties(rFrmSet, *pItemSet, rSizeFound);
+        bRet = FillBaseProperties(pDoc, rFrmSet, *pItemSet, rSizeFound);
         lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
     }
 
