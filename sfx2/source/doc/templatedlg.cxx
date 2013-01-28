@@ -963,6 +963,8 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
 
     mpSearchEdit->Show(!bVisible);
     mpSearchEdit->SetText(OUString());
+    if (!bVisible)
+        mpSearchEdit->GrabFocus();
 
     // display all templates if we hide the search bar
     if (bVisible && mpCurView->isOverlayVisible())
