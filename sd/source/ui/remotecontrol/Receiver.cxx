@@ -30,13 +30,35 @@ using namespace std;
 Receiver::Receiver( Transmitter *aTransmitter )
 {
     pTransmitter = aTransmitter;
+    SetTimeout( 0 );
 }
 
 Receiver::~Receiver()
 {
 }
 
-void Receiver::parseCommand( std::vector<OString> aCommand )
+// Bounce the commands to the main thread to avoid threading woes
+void Receiver::pushCommand( const std::vector<OString> &rCommand )
+{
+    SolarMutexGuard aGuard;
+    maExecQueue.push_back( rCommand );
+    Start();
+}
+
+void Receiver::Timeout()
+{
+    if( maExecQueue.size() )
+    {
+        std::vector< rtl::OString > aCommands( maExecQueue.front() );
+        maExecQueue.pop_front();
+        executeCommand( aCommands );
+        Start();
+    }
+    else
+        Stop();
+}
+
+void Receiver::executeCommand( const std::vector<OString> &aCommand )
 {
     uno::Reference<presentation::XSlideShowController> xSlideShowController;
     uno::Reference<presentation::XPresentation2> xPresentation;

@@ -10,11 +10,12 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
-
 #include <rtl/strbuf.hxx>
+#include <vcl/svapp.hxx>
 
 #include "Listener.hxx"
 #include "ImagePreparer.hxx"
+
 
 using namespace sd;
 using namespace ::com::sun::star::presentation;
@@ -53,8 +54,10 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
         pTransmitter->addMessage( aBuffer.makeStringAndClear(),
                                   Transmitter::PRIORITY_HIGH );
 
-        ImagePreparer* pPreparer = new ImagePreparer( aController, pTransmitter );
-        pPreparer->create();
+        {
+            SolarMutexGuard aGuard;
+            /* ImagePreparer* pPreparer = */ new ImagePreparer( aController, pTransmitter );
+        }
     }
     else
     {
