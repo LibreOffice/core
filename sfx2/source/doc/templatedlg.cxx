@@ -226,6 +226,8 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
 void SfxTemplateManagerDlg::setSaveMode(bool bMode)
 {
     mbIsSaveMode = bMode;
+    maTabControl.Clear();
+    mpCurView->filterTemplatesByApp(FILTER_APP_NONE);
 
     if (bMode)
     {
