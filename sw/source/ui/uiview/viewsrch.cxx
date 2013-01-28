@@ -37,6 +37,8 @@
 #include <sal/macros.h>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 #include "editeng/unolingu.hxx"
@@ -85,6 +87,21 @@ inline Window* GetParentWindow( SvxSearchDialog* pSrchDlg )
     else
         pWin = 0;
     return pWin;
+}
+
+inline void ShowNotFoundInfoBox( SvxSearchDialog* pSrchDlg )
+{
+    Window* pParentWindow = GetParentWindow( pSrchDlg );
+    InfoBox aBox( pParentWindow, SW_RES(MSG_NOT_FOUND));
+    if (pParentWindow)
+    {
+        aBox.SetText(pParentWindow->GetText());
+    }
+    else
+    {
+        aBox.SetText(SVX_RESSTR(RID_SVXSTR_FINDBAR_FIND));
+    }
+    aBox.Execute();
 }
 
 void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
@@ -211,8 +228,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                 {
                     if( !bApi )
                     {
-                        Window* pParentWindow = GetParentWindow( pSrchDlg );
-                        InfoBox( pParentWindow, SW_RES(MSG_NOT_FOUND)).Execute();
+                        ShowNotFoundInfoBox( pSrchDlg );
                     }
                     bFound = sal_False;
                 }
@@ -311,8 +327,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     {
                         if( !bApi )
                         {
-                            Window* pParentWindow = GetParentWindow( pSrchDlg );
-                            InfoBox( pParentWindow, SW_RES(MSG_NOT_FOUND)).Execute();
+                            ShowNotFoundInfoBox( pSrchDlg );
                         }
                         bFound = sal_False;
                         return;
@@ -483,8 +498,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
         pWrtShell->EndAllAction();
         if( !bApi )
         {
-            Window* pParentWindow = GetParentWindow( pSrchDlg );
-            InfoBox( pParentWindow, SW_RES(MSG_NOT_FOUND)).Execute();
+            ShowNotFoundInfoBox( pSrchDlg );
         }
         bFound = sal_False;
         pWrtShell->Pop();
@@ -528,8 +542,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
         return bFound;
     if(!bApi)
     {
-        Window* pParentWindow = GetParentWindow( pSrchDlg );
-        InfoBox( pParentWindow, SW_RES(MSG_NOT_FOUND)).Execute();
+        ShowNotFoundInfoBox( pSrchDlg );
     }
     return bFound = sal_False;
 }
