@@ -53,21 +53,21 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNam
 }
 
 // ----------------------------------------------------------
-::rtl::OUString SAL_CALL OSimpleLogRing::getImplementationName_static()
+OUString SAL_CALL OSimpleLogRing::getImplementationName_static()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.logging.SimpleLogRing" ) );
+    return OUString( "com.sun.star.comp.logging.SimpleLogRing" );
 }
 
 // ----------------------------------------------------------
-::rtl::OUString SAL_CALL OSimpleLogRing::getSingletonName_static()
+OUString SAL_CALL OSimpleLogRing::getSingletonName_static()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.logging.DocumentIOLogRing" ) );
+    return OUString( "com.sun.star.logging.DocumentIOLogRing" );
 }
 
 // ----------------------------------------------------------
-::rtl::OUString SAL_CALL OSimpleLogRing::getServiceName_static()
+OUString SAL_CALL OSimpleLogRing::getServiceName_static()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.logging.SimpleLogRing" ) );
+    return OUString( "com.sun.star.logging.SimpleLogRing" );
 }
 
 // ----------------------------------------------------------
@@ -127,7 +127,7 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
         m_aMessages.realloc( nLen );
     else
         throw lang::IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Nonnull size is expected as the first argument!" ) ),
+                OUString( "Nonnull size is expected as the first argument!" ),
                 uno::Reference< uno::XInterface >(),
                 0 );
 

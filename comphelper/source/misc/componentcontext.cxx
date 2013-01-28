@@ -103,9 +103,9 @@ namespace comphelper
     }
 
     //------------------------------------------------------------------------
-    Reference< XInterface > ComponentContext::getSingleton( const ::rtl::OUString& _rInstanceName ) const
+    Reference< XInterface > ComponentContext::getSingleton( const OUString& _rInstanceName ) const
     {
-        ::rtl::OUString sKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/" ) ) );
+        OUString sKey( "/singletons/" );
         sKey += _rInstanceName;
         return Reference< XInterface >( getContextValueByName( sKey ), UNO_QUERY );
     }

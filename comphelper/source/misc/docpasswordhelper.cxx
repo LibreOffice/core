@@ -82,13 +82,13 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
     if ( aNewHash.getLength() )
     {
         aResult.realloc( 4 );
-        aResult[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "algorithm-name" ) );
-        aResult[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PBKDF2" ) );
-        aResult[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "salt" ) );
+        aResult[0].Name = "algorithm-name";
+        aResult[0].Value <<= OUString( "PBKDF2" );
+        aResult[1].Name = "salt";
         aResult[1].Value <<= aSalt;
-        aResult[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "iteration-count" ) );
+        aResult[2].Name = "iteration-count";
         aResult[2].Value <<= nCount;
-        aResult[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hash" ) );
+        aResult[3].Name = "hash";
         aResult[3].Value <<= aNewHash;
     }
 

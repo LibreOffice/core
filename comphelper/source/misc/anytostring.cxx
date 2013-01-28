@@ -32,18 +32,17 @@ namespace {
 void appendTypeError(
     rtl::OUStringBuffer & buf, typelib_TypeDescriptionReference * typeRef )
 {
-    buf.appendAscii(
-        RTL_CONSTASCII_STRINGPARAM("<cannot get type description of type ") );
-    buf.append( rtl::OUString::unacquired( &typeRef->pTypeName ) );
+    buf.append( "<cannot get type description of type " );
+    buf.append( OUString::unacquired( &typeRef->pTypeName ) );
     buf.append( static_cast< sal_Unicode >('>') );
 }
 
 inline void appendChar( rtl::OUStringBuffer & buf, sal_Unicode c )
 {
     if (c < ' ' || c > '~') {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\\X") );
-        rtl::OUString const s(
-            rtl::OUString::valueOf( static_cast< sal_Int32 >(c), 16 ) );
+        buf.append( "\\X" );
+        OUString const s(
+            OUString::valueOf( static_cast< sal_Int32 >(c), 16 ) );
         for ( sal_Int32 f = 4 - s.getLength(); f > 0; --f )
             buf.append( static_cast< sal_Unicode >('0') );
         buf.append( s );
@@ -59,7 +58,7 @@ void appendValue( rtl::OUStringBuffer & buf,
                   bool prependType )
 {
     if (typeRef->eTypeClass == typelib_TypeClass_VOID) {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("void") );
+        buf.append( "void" );
         return;
     }
     OSL_ASSERT( val != 0 );
@@ -70,8 +69,8 @@ void appendValue( rtl::OUStringBuffer & buf,
         typeRef->eTypeClass != typelib_TypeClass_BOOLEAN)
     {
         buf.append( static_cast< sal_Unicode >('(') );
-        buf.append( rtl::OUString::unacquired( &typeRef->pTypeName ) );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(") ") );
+        buf.append( OUString::unacquired( &typeRef->pTypeName ) );
+        buf.append( ") " );
     }
 
     switch (typeRef->eTypeClass) {
@@ -83,16 +82,15 @@ void appendValue( rtl::OUStringBuffer & buf,
             *static_cast< uno::XInterface * const * >(val),
             uno::UNO_QUERY );
         if (xServiceInfo.is()) {
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                 " (ImplementationName = \"") );
+            buf.append( " (ImplementationName = \"" );
             buf.append( xServiceInfo->getImplementationName() );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\")") );
+            buf.append( "\")" );
         }
         break;
     }
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION: {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
+        buf.append( "{ " );
         typelib_TypeDescription * typeDescr = 0;
         typelib_typedescriptionreference_getDescription( &typeDescr, typeRef );
         if (typeDescr == 0 || !typelib_typedescription_complete( &typeDescr )) {
@@ -110,7 +108,7 @@ void appendValue( rtl::OUStringBuffer & buf,
                     typelib_TypeDescription * >(
                         compType->pBaseTypeDescription)->pWeakRef, false );
                 if (nDescr > 0)
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
+                    buf.append( ", " );
             }
 
             typelib_TypeDescriptionReference ** ppTypeRefs =
@@ -121,7 +119,7 @@ void appendValue( rtl::OUStringBuffer & buf,
             for ( sal_Int32 nPos = 0; nPos < nDescr; ++nPos )
             {
                 buf.append( ppMemberNames[ nPos ] );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" = ") );
+                buf.append( " = " );
                 typelib_TypeDescription * memberType = 0;
                 TYPELIB_DANGER_GET( &memberType, ppTypeRefs[ nPos ] );
                 if (memberType == 0) {
@@ -135,10 +133,10 @@ void appendValue( rtl::OUStringBuffer & buf,
                     TYPELIB_DANGER_RELEASE( memberType );
                 }
                 if (nPos < (nDescr - 1))
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
+                    buf.append( ", " );
             }
         }
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
+        buf.append( " }" );
         if (typeDescr != 0)
             typelib_typedescription_release( typeDescr );
         break;
@@ -168,7 +166,7 @@ void appendValue( rtl::OUStringBuffer & buf,
 
                 if (nElements > 0)
                 {
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
+                    buf.append( "{ " );
                     char const * pElements = seq->elements;
                     for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
                     {
@@ -176,13 +174,13 @@ void appendValue( rtl::OUStringBuffer & buf,
                             buf, pElements + (nElementSize * nPos),
                             elementTypeDescr->pWeakRef, false );
                         if (nPos < (nElements - 1))
-                            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
+                            buf.append( ", " );
                     }
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
+                    buf.append( " }" );
                 }
                 else
                 {
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{}") );
+                    buf.append( "{}" );
                 }
                 TYPELIB_DANGER_RELEASE( elementTypeDescr );
             }
@@ -191,10 +189,10 @@ void appendValue( rtl::OUStringBuffer & buf,
         break;
     }
     case typelib_TypeClass_ANY: {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
+        buf.append( "{ " );
         uno_Any const * pAny = static_cast< uno_Any const * >(val);
         appendValue( buf, pAny->pData, pAny->pType, true );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
+        buf.append( " }" );
         break;
     }
     case typelib_TypeClass_TYPE:
@@ -211,9 +209,9 @@ void appendValue( rtl::OUStringBuffer & buf,
         {
             sal_Unicode c = str[ pos ];
             if (c == '\"')
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\\\"") );
+                buf.append( "\\\"" );
             else if (c == '\\')
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\\\\") );
+                buf.append( "\\\\" );
             else
                 appendChar( buf, c );
         }
@@ -245,8 +243,7 @@ void appendValue( rtl::OUStringBuffer & buf,
             }
             else
             {
-                buf.appendAscii(
-                    RTL_CONSTASCII_STRINGPARAM("?unknown enum value?") );
+                buf.append( "?unknown enum value?" );
             }
         }
         if (typeDescr != 0)
@@ -255,17 +252,17 @@ void appendValue( rtl::OUStringBuffer & buf,
     }
     case typelib_TypeClass_BOOLEAN:
         if (*static_cast< sal_Bool const * >(val) != sal_False)
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("true") );
+            buf.append( "true" );
         else
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("false") );
+            buf.append( "false" );
         break;
     case typelib_TypeClass_CHAR: {
         buf.append( static_cast< sal_Unicode >('\'') );
         sal_Unicode c = *static_cast< sal_Unicode const * >(val);
         if (c == '\'')
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\\\'") );
+            buf.append( "\\\'" );
         else if (c == '\\')
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\\\\") );
+            buf.append( "\\\\" );
         else
             appendChar( buf, c );
         buf.append( static_cast< sal_Unicode >('\'') );

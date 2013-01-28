@@ -39,16 +39,16 @@ namespace comphelper
     }
 
     //----------------------------------------------------------------------------------------------------
-    uno::Sequence< ::rtl::OUString > SAL_CALL OIHWrapNoFilterDialog::impl_staticGetSupportedServiceNames()
+    uno::Sequence< OUString > SAL_CALL OIHWrapNoFilterDialog::impl_staticGetSupportedServiceNames()
     {
-        uno::Sequence< ::rtl::OUString > aRet(1);
-        aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandlerWrapper"));
+        uno::Sequence< OUString > aRet(1);
+        aRet[0] = "com.sun.star.task.InteractionHandlerWrapper";
         return aRet;
     }
 
-    ::rtl::OUString SAL_CALL OIHWrapNoFilterDialog::impl_staticGetImplementationName()
+    OUString SAL_CALL OIHWrapNoFilterDialog::impl_staticGetImplementationName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.task.InteractionHandlerWrapper"));
+        return OUString("com.sun.star.comp.task.InteractionHandlerWrapper");
     }
 
     //----------------------------------------------------------------------------------------------------

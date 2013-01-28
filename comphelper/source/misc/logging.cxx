@@ -150,12 +150,12 @@ namespace comphelper
         const OptionalString& _rArgument5, const OptionalString& _rArgument6 ) const
     {
         // (if ::rtl::OUString had an indexOfAscii, we could save those ugly statics ...)
-        static ::rtl::OUString sPH1( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$1$" ) ) );
-        static ::rtl::OUString sPH2( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$2$" ) ) );
-        static ::rtl::OUString sPH3( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$3$" ) ) );
-        static ::rtl::OUString sPH4( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$4$" ) ) );
-        static ::rtl::OUString sPH5( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$5$" ) ) );
-        static ::rtl::OUString sPH6( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$6$" ) ) );
+        static ::rtl::OUString sPH1( "$1$" );
+        static ::rtl::OUString sPH2( "$2$" );
+        static ::rtl::OUString sPH3( "$3$" );
+        static ::rtl::OUString sPH4( "$4$" );
+        static ::rtl::OUString sPH5( "$5$" );
+        static ::rtl::OUString sPH6( "$6$" );
 
         ::rtl::OUString sMessage( _rMessage );
         if ( !!_rArgument1 )

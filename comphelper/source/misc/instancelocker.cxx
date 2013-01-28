@@ -141,13 +141,13 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
         sal_Int32 nLen = aArguments.getLength();
         if ( nLen < 2 || nLen > 3 )
             throw lang::IllegalArgumentException(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Wrong count of parameters!" ) ),
+                            OUString( "Wrong count of parameters!" ),
                             uno::Reference< uno::XInterface >(),
                             0 );
 
         if ( !( aArguments[0] >>= xInstance ) || !xInstance.is() )
             throw lang::IllegalArgumentException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Nonempty reference is expected as the first argument!" ) ),
+                    OUString( "Nonempty reference is expected as the first argument!" ),
                     uno::Reference< uno::XInterface >(),
                     0 );
 
@@ -160,15 +160,14 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
            )
         {
             throw lang::IllegalArgumentException(
-                    ::rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM("The correct modes set is expected as the second argument!" ) ),
+                    OUString("The correct modes set is expected as the second argument!"),
                     uno::Reference< uno::XInterface >(),
                     0 );
         }
 
         if ( nLen == 3 && !( aArguments[2] >>= xApproval ) )
             throw lang::IllegalArgumentException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("If the third argument is provided, it must be XActionsApproval implementation!" ) ),
+                    OUString( "If the third argument is provided, it must be XActionsApproval implementation!" ),
                     uno::Reference< uno::XInterface >(),
                     0 );
 
@@ -219,16 +218,16 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OInstanceLocker::getSupportedServiceNa
 
 // Static methods
 // --------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames_static()
+uno::Sequence< OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames_static()
 {
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.InstanceLocker" ) );
-    return uno::Sequence< rtl::OUString >( &aServiceName, 1 );
+    const OUString aServiceName( "com.sun.star.embed.InstanceLocker" );
+    return uno::Sequence< OUString >( &aServiceName, 1 );
 }
 
 // --------------------------------------------------------
-::rtl::OUString SAL_CALL OInstanceLocker::getImplementationName_static()
+OUString SAL_CALL OInstanceLocker::getImplementationName_static()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.embed.InstanceLocker" ) );
+    return OUString( "com.sun.star.comp.embed.InstanceLocker" );
 }
 
 // --------------------------------------------------------

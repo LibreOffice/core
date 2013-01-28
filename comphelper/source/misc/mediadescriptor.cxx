@@ -52,43 +52,43 @@ namespace comphelper{
 
 const ::rtl::OUString& MediaDescriptor::PROP_ABORTED()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Aborted"));
+    static const ::rtl::OUString sProp("Aborted");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_ASTEMPLATE()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+    static const ::rtl::OUString sProp("AsTemplate");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_COMPONENTDATA()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("ComponentData"));
+    static const ::rtl::OUString sProp("ComponentData");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_DOCUMENTSERVICE()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("DocumentService"));
+    static const ::rtl::OUString sProp("DocumentService");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_ENCRYPTIONDATA()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("EncryptionData"));
+    static const ::rtl::OUString sProp("EncryptionData");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_FILENAME()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("FileName"));
+    static const ::rtl::OUString sProp("FileName");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_FILTERNAME()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
+    static const ::rtl::OUString sProp("FilterName");
     return sProp;
 }
 
@@ -100,55 +100,55 @@ const OUString& MediaDescriptor::PROP_FILTERPROVIDER()
 
 const ::rtl::OUString& MediaDescriptor::PROP_FILTEROPTIONS()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("FilterOptions"));
+    static const ::rtl::OUString sProp("FilterOptions");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_FRAME()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Frame"));
+    static const ::rtl::OUString sProp("Frame");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_FRAMENAME()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("FrameName"));
+    static const ::rtl::OUString sProp("FrameName");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_HIDDEN()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+    static const ::rtl::OUString sProp("Hidden");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_INPUTSTREAM()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
+    static const ::rtl::OUString sProp("InputStream");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_INTERACTIONHANDLER()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler"));
+    static const ::rtl::OUString sProp("InteractionHandler");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_JUMPMARK()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("JumpMark"));
+    static const ::rtl::OUString sProp("JumpMark");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_MACROEXECUTIONMODE()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
+    static const ::rtl::OUString sProp("MacroExecutionMode");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_MEDIATYPE()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
+    static const ::rtl::OUString sProp("MediaType");
     return sProp;
 }
 
@@ -160,31 +160,31 @@ const ::rtl::OUString& MediaDescriptor::PROP_MINIMIZED()
 
 const ::rtl::OUString& MediaDescriptor::PROP_NOAUTOSAVE()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("NoAutoSave"));
+    static const ::rtl::OUString sProp("NoAutoSave");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_OPENNEWVIEW()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("OpenNewView"));
+    static const ::rtl::OUString sProp("OpenNewView");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_OUTPUTSTREAM()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("OutputStream"));
+    static const ::rtl::OUString sProp("OutputStream");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_POSTDATA()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("PostData"));
+    static const ::rtl::OUString sProp("PostData");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_PREVIEW()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Preview"));
+    static const ::rtl::OUString sProp("Preview");
     return sProp;
 }
 
@@ -196,31 +196,31 @@ const ::rtl::OUString& MediaDescriptor::PROP_READONLY()
 
 const ::rtl::OUString& MediaDescriptor::PROP_REFERRER()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+    static const ::rtl::OUString sProp("Referer");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_STATUSINDICATOR()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"));
+    static const ::rtl::OUString sProp("StatusIndicator");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_STREAM()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Stream"));
+    static const ::rtl::OUString sProp("Stream");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_STREAMFOROUTPUT()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("StreamForOutput"));
+    static const ::rtl::OUString sProp("StreamForOutput");
     return sProp;
 }
 
 const ::rtl::OUString& MediaDescriptor::PROP_TEMPLATENAME()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("TemplateName"));
+    static const ::rtl::OUString sProp("TemplateName");
     return sProp;
 }
 

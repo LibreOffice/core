@@ -30,7 +30,7 @@ namespace comphelper{
 
 //-----------------------------------------------
 css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                                            const ::rtl::OUString&                                    sPackage,
+                                                                            const OUString&                                    sPackage,
                                                                                   sal_Int32                                           eMode   )
 {
     css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
@@ -40,21 +40,21 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     css::beans::PropertyValue                       aParam ;
 
     // set root path
-    aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+    aParam.Name    = "nodepath";
     aParam.Value <<= sPackage;
     lParams.push_back(css::uno::makeAny(aParam));
 
     // enable all locales mode
     if ((eMode & ConfigurationHelper::E_ALL_LOCALES)==ConfigurationHelper::E_ALL_LOCALES)
     {
-        aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("locale"));
-        aParam.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+        aParam.Name    = "locale";
+        aParam.Value <<= OUString("*");
         lParams.push_back(css::uno::makeAny(aParam));
     }
 
     // enable lazy writing
     sal_Bool bLazy = ((eMode & ConfigurationHelper::E_LAZY_WRITE)==ConfigurationHelper::E_LAZY_WRITE);
-    aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite"));
+    aParam.Name    = "lazywrite";
     aParam.Value   = css::uno::makeAny(bLazy);
     lParams.push_back(css::uno::makeAny(aParam));
 
@@ -64,11 +64,11 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     sal_Bool bReadOnly = ((eMode & ConfigurationHelper::E_READONLY)==ConfigurationHelper::E_READONLY);
     if (bReadOnly)
         xCFG = xConfigProvider->createInstanceWithArguments(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                OUString("com.sun.star.configuration.ConfigurationAccess"),
                 lParams.getAsConstList());
     else
         xCFG = xConfigProvider->createInstanceWithArguments(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess")),
+                OUString("com.sun.star.configuration.ConfigurationUpdateAccess"),
                 lParams.getAsConstList());
 
     return xCFG;
