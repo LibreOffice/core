@@ -2937,7 +2937,7 @@ void  GraphiteWinLayout::AdjustLayout(ImplLayoutArgs& rArgs)
 void GraphiteWinLayout::DrawText(SalGraphics &sal_graphics) const
 {
     HFONT hOrigFont = DisableFontScaling();
-    HDC aHDC = static_cast<WinSalGraphics&>(sal_graphics).mhDC;
+    const HDC aHDC = static_cast<WinSalGraphics&>(sal_graphics).getHDC();
     maImpl.DrawBase() = WinLayout::maDrawBase;
     maImpl.DrawOffset() = WinLayout::maDrawOffset;
     const int MAX_GLYPHS = 2;
@@ -2956,7 +2956,7 @@ void GraphiteWinLayout::DrawText(SalGraphics &sal_graphics) const
                       NULL, (LPCWSTR)&(glyphWStr), nGlyphs, NULL);
     } while (nGlyphs);
     if( hOrigFont )
-          DeleteFont( SelectFont( mhDC, hOrigFont ) );
+          DeleteFont( SelectFont( aHDC, hOrigFont ) );
 }
 
 int GraphiteWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
@@ -3017,7 +3017,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     {
 #ifdef ENABLE_GRAPHITE
         if (rFontFace.SupportsGraphite())
-            pWinLayout = new GraphiteWinLayout(mhDC, rFontFace, rFontInstance);
+            pWinLayout = new GraphiteWinLayout( getHDC(), rFontFace, rFontInstance);
         else
 #endif // ENABLE_GRAPHITE
         // script complexity is determined in upper layers
@@ -3044,7 +3044,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
             eCharSet = mpLogFont->lfCharSet;
 #ifdef ENABLE_GRAPHITE
         if (rFontFace.SupportsGraphite())
-            pWinLayout = new GraphiteWinLayout(mhDC, rFontFace, rFontInstance);
+            pWinLayout = new GraphiteWinLayout( getHDC(), rFontFace, rFontInstance);
         else
 #endif // ENABLE_GRAPHITE
             pWinLayout = new SimpleWinLayout( getHDC(), eCharSet, rFontFace, rFontInstance );
