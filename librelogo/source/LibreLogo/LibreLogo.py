@@ -633,6 +633,8 @@ def home(arg=None):
     __removeshape__(__ACTUAL__)
 
 def clearscreen(arg=None):
+    if __thread__:
+        return None
     __getdocument__()
     turtle = __getshape__(__TURTLE__)
     if not turtle:
