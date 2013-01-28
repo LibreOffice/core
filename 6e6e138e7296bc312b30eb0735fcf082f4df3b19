@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAUn///+4\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3392,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-28T15:20:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAUX///88\u003d",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAUX///80\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAUn///5Q\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3423,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-28T15:20:57Z",
+      "side": 1,
+      "message": "Good question, I have no idea why I did that. And also how it didn\u0027t show in my testing.\nBTW, I haven\u0027t been able to find where the \u0027treat empty cell as zero\u0027 is set (by user) and during testing I both had true and false as result, depending on the cell.",
+      "parentUuid": "AAAAUX///80\u003d",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAUX///8w\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2013-01-26T22:17:53Z",
       "side": 1,
       "message": "Better would be to have\n\n if (nGlobalError)\n {\n     PushError( nGlobalError);\n     return;\n }\n if (aInputString.isEmpty())\n {\n     if (GetGlobalConfig().mbEmptyStringAsZero)\n         PushDouble(0);\n     else\n         PushNoValue();\n     return;\n }",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///5M\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3434,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-28T15:20:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAUX///8w\u003d",
       "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -88,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAUn///+0\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3442,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-28T15:20:57Z",
+      "side": 1,
+      "message": "Done.\nI\u0027m not that performance-knowledgeable, what you say makes sense.\nMade one little change to make it work.",
+      "parentUuid": "AAAAUX///9A\u003d",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAUX///8s\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 3
@@ -105,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAUn///+w\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3451,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-28T15:20:57Z",
+      "side": 1,
+      "message": "Oops, should have prevented that... Done",
+      "parentUuid": "AAAAUX///8s\u003d",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAUX///8o\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 3
@@ -116,6 +206,24 @@
       "writtenOn": "2013-01-26T22:17:53Z",
       "side": 1,
       "message": "There is no need to check this again, the condition of the for loop already did this.",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///+s\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3453,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-28T15:20:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAUX///8o\u003d",
       "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -174,6 +282,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAUn////A\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-28T15:20:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAUX///8k\u003d",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAUX///8c\u003d",
         "filename": "sc/source/filter/oox/formulabase.cxx",
         "patchSetId": 3
@@ -185,6 +311,24 @@
       "writtenOn": "2013-01-26T22:17:53Z",
       "side": 1,
       "message": "Should be FUNCFLAG_MACROCALL instead of FUNCFLAG_MACROCALLODF and have the \"NUMBERVALUE\" name instead of 0\n\nHowever, with my latest change in commit 1162738c6fbd8505ffa27b28118318cc522a5368 that now should be FUNCFLAG_MACROCALL_NEW instead.",
+      "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn////E\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-01-28T15:20:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAUX///8c\u003d",
       "revId": "6e6e138e7296bc312b30eb0735fcf082f4df3b19",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
