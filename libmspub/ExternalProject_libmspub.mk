@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,libmspub,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libmspub,\
+	boost_headers \
 	icu \
 	wpd \
 	wpg \
@@ -26,6 +27,7 @@ ifeq ($(OS)$(COM),WNTMSC)
 ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,libmspub,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
@@ -35,6 +37,7 @@ $(call gb_ExternalProject_get_state_target,libmspub,build) :
 else ifeq ($(VCVER),100)
 $(call gb_ExternalProject_get_state_target,libmspub,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
@@ -44,6 +47,7 @@ $(call gb_ExternalProject_get_state_target,libmspub,build) :
 else
 $(call gb_ExternalProject_get_state_target,libmspub,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
@@ -67,6 +71,7 @@ $(call gb_ExternalProject_get_state_target,libmspub,build) :
 		--without-docs \
 		--disable-debug \
 		--disable-werror \
+        $(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(call gb_UnpackedTarball_get_dir,boost)) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
 	&& touch $@
