@@ -700,7 +700,10 @@ namespace svt
             SetFont( aFont );
             RoadmapTypes::ItemId curItemID = GetCurrentRoadmapItemID();
             RoadmapItem* pLabelItem = GetByID( curItemID );
-            pLabelItem->ToggleBackgroundColor(rStyleSettings.GetHighlightColor());
+            if (pLabelItem != NULL)
+            {
+                pLabelItem->ToggleBackgroundColor(rStyleSettings.GetHighlightColor());
+            }
             Invalidate();
         }
     }
