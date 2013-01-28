@@ -9679,7 +9679,7 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_telepathy" = "yes"; 
     ENABLE_TELEPATHY="TRUE"
     AC_DEFINE(ENABLE_TELEPATHY)
     AC_MSG_RESULT([yes])
-    PKG_CHECK_MODULES( TELEPATHY, telepathy-glib >= 0.18.0 glib-2.0 gobject-2.0 gthread-2.0 gio-2.0 )
+    PKG_CHECK_MODULES( TELEPATHY, telepathy-glib >= 0.18.0 glib-2.0 gobject-2.0 gthread-2.0 gio-2.0 gtk+-2.0 >= 2.4 )
 else
     AC_MSG_RESULT([no])
 fi
