@@ -7,12 +7,21 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,libmspub_inc,mspub))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libmspub,mspub))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,libmspub_inc,inc/external/libmspub,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libmspub,inc/external/libmspub,\
 	src/lib/libmspub.h \
 	src/lib/MSPUBDocument.h \
 	src/lib/MSPUBStringVector.h \
 ))
+
+$(eval $(call gb_ExternalPackage_use_external_project,libmspub,libmspub))
+
+ifeq ($(OS)$(COM),WNTMSC)
+$(eval $(call gb_ExternalPackage_add_file,libmspub,lib/mspub-0.0.lib,build/win32/Release/lib/libmspub-0.0.lib))
+else
+$(eval $(call gb_ExternalPackage_add_file,libmspub,lib/libmspub-0.0.a,src/lib/.libs/libmspub-0.0.a))
+endif
+
 
 # vim: set noet sw=4 ts=4:
