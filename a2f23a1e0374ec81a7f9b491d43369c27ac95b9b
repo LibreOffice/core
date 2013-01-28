@@ -16,6 +16,24 @@
       "revId": "a2f23a1e0374ec81a7f9b491d43369c27ac95b9b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUX///6I\u003d",
+        "filename": "svtools/source/misc/langtab.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-01-28T09:28:42Z",
+      "side": 1,
+      "message": "I\u0027ll push a follow-up commit to translations, and I\u0027ll update Pootle. Pootle users will not notice the change.",
+      "parentUuid": "AAAAUX///7M\u003d",
+      "revId": "a2f23a1e0374ec81a7f9b491d43369c27ac95b9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
