@@ -169,7 +169,7 @@ XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
 
 ScCompiler::OpCodeMapPtr XclExpRoot::GetOpCodeMap() const
 {
-    OSL_ENSURE( mrExpData.mxPTableMgr, "XclExpRoot::GetOpCodeMap - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxOpCodeMap, "XclExpRoot::GetOpCodeMap - missing object (wrong BIFF?)" );
     return mrExpData.mxOpCodeMap;
 }
 
