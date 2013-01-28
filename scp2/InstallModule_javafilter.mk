@@ -27,6 +27,12 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/javafilter))
 
+$(eval $(call gb_InstallModule_add_defs,scp2/javafilter,\
+	$(if $(WINDOWS_SDK_HOME),\
+		-DHAVE_WINDOWS_SDK \
+	) \
+))
+
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/javafilter,\
     scp2/source/javafilter/file_javafilter \
 ))
