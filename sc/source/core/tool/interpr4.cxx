@@ -3969,6 +3969,7 @@ StackVar ScInterpreter::Interpret()
                 case ocT                : ScT();                        break;
                 case ocClean            : ScClean();                    break;
                 case ocValue            : ScValue();                    break;
+                case ocNumberValue      : ScNumberValue();              break;
                 case ocChar             : ScChar();                     break;
                 case ocArcTan2          : ScArcTan2();                  break;
                 case ocMod              : ScMod();                      break;

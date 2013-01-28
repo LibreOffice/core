@@ -730,6 +730,7 @@ static const FunctionData saFuncTableOox[] =
 static const FunctionData saFuncTable2013[] =
 {
     { "IFNA",                   "IFNA",                 NOID,   NOID,   2,  2,  V, { VO, RO }, FUNCFLAG_MACROCALL_NEW },
+    { "NUMBERVALUE",            "NUMBERVALUE",          NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW }
 };
 
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */

@@ -405,7 +405,7 @@ static const XclFunctionInfo saFuncTable_Odf[] =
     EXC_FUNCENTRY_ODF( ocIsFormula,     1,  1,  0,  "ISFORMULA" ),
     EXC_FUNCENTRY_ODF( ocWeek,          1,  2,  0,  "ISOWEEKNUM" ),
     EXC_FUNCENTRY_ODF( ocMatrixUnit,    1,  1,  0,  "MUNIT" ),
-    EXC_FUNCENTRY_ODF( ocNumberValue,   2,  2,  0,  "NUMBERVALUE" ),
+    EXC_FUNCENTRY_ODF( ocNumberValue,   1,  3,  0,  "NUMBERVALUE" ),
     EXC_FUNCENTRY_ODF( ocLaufz,         3,  3,  0,  "PDURATION" ),
     EXC_FUNCENTRY_ODF( ocVariationen2,  2,  2,  0,  "PERMUTATIONA" ),
     EXC_FUNCENTRY_ODF( ocPhi,           1,  1,  0,  "PHI" ),
