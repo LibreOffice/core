@@ -7,15 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,libvisio))
+$(eval $(call gb_ExternalProject_ExternalProject,libmspub))
 
-$(eval $(call gb_ExternalProject_use_unpacked,libvisio,visio))
+$(eval $(call gb_ExternalProject_use_unpacked,libmspub,mspub))
 
-$(eval $(call gb_ExternalProject_register_targets,libvisio,\
+$(eval $(call gb_ExternalProject_register_targets,libmspub,\
 	build \
 ))
 
-$(eval $(call gb_ExternalProject_use_externals,libvisio,\
+$(eval $(call gb_ExternalProject_use_externals,libmspub,\
 	boost_headers \
 	wpd \
 	wpg \
@@ -24,50 +24,54 @@ $(eval $(call gb_ExternalProject_use_externals,libvisio,\
 ifeq ($(OS)$(COM),WNTMSC)
 
 ifeq ($(VCVER),90)
-$(call gb_ExternalProject_get_state_target,libvisio,build) :
+$(call gb_ExternalProject_get_state_target,libmspub,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-	&& $(COMPATH)/vcpackages/vcbuild.exe libvisio.vcproj "Release|Win32" \
+	&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& $(COMPATH)/vcpackages/vcbuild.exe libmspub.vcproj "Release|Win32" \
 	&& touch $@
 else ifeq ($(VCVER),100)
-$(call gb_ExternalProject_get_state_target,libvisio,build) :
+$(call gb_ExternalProject_get_state_target,libmspub,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/extrenal \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-	&& msbuild.exe libvisio.vcxproj /p:Configuration=Release \
+	&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& msbuild.exe libmspub.vcxproj /p:Configuration=Release \
 	&& touch $@
 else
-$(call gb_ExternalProject_get_state_target,libvisio,build) :
+$(call gb_ExternalProject_get_state_target,libmspub,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-	&& msbuild.exe libvisio.vcxproj /p:PlatformToolset=v110 /p:Configuration=Release \
+	&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& msbuild.exe libmspub.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release \
 	&& touch $@
 endif
 
 else
 
-$(call gb_ExternalProject_get_state_target,libvisio,build) :
+$(call gb_ExternalProject_get_state_target,libmspub,build) :
 	cd $(EXTERNAL_WORKDIR) \
-	&& PKG_CONFIG="" \
-	./configure \
+	&& export PKG_CONFIG="" \
+	&& export ICU_LIBS=" " && export ICU_CFLAGS="-I$(OUTDIR)/inc/external" \
+	&& export LIBMSPUB_CFLAGS="$(WPG_CFLAGS) $(WPD_CFLAGS)" \
+	&& export LIBMSPUB_LIBS="$(WPG_LIBS) $(WPD_LIBS)" \
+	&& ./configure \
 		--with-pic \
 		--enable-static \
 		--disable-shared \
 		--without-docs \
 		--disable-debug \
 		--disable-werror \
-		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(OUTDIR)/inc/external) \
+		--disable-weffc \
+        $(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(OUTDIR)/inc/external) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
 	&& touch $@

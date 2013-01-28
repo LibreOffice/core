@@ -13,7 +13,7 @@ ifeq ($(SYSTEM_LIBMSPUB),NO)
 
 $(eval $(call gb_Module_add_targets,libmspub,\
 	ExternalPackage_libmspub \
-	StaticLibrary_mspub \
+	ExternalProject_libmspub \
 	UnpackedTarball_mspub \
 ))
 
