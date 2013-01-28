@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUn///20\u003d",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-28T20:38:22Z",
+      "side": 1,
+      "message": "we used to add $(MYSQL_DEFINES) in mysqlc/makefile.mk",
+      "revId": "217dd6eb91e15befb6900c39786e409379a627a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///2c\u003d",
+        "filename": "mysqlc/Extension_mysql-connector-ooo.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-28T20:38:22Z",
+      "side": 1,
+      "message": "there\u0027s a N missing here",
+      "revId": "217dd6eb91e15befb6900c39786e409379a627a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
