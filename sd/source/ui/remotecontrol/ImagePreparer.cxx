@@ -50,36 +50,29 @@ ImagePreparer::ImagePreparer(
  :  xController( rxController ),
     pTransmitter( aTransmitter )
 {
+    SetTimeout( 50 );
+    mnSendingSlide = 0;
+    Start();
 }
 
 ImagePreparer::~ImagePreparer()
 {
+    Stop();
 }
 
-void SAL_CALL ImagePreparer::run()
+void ImagePreparer::Timeout()
 {
     sal_uInt32 aSlides = xController->getSlideCount();
-    for ( sal_uInt32 i = 0; i < aSlides; i++ )
+    if ( xController->isRunning() && // not stopped/disposed of.
+         mnSendingSlide < aSlides )
     {
-        if ( !xController->isRunning() ) // stopped/disposed of.
-        {
-            break;
-        }
-        sendPreview( i );
+        sendPreview( mnSendingSlide );
+        sendNotes( mnSendingSlide );
+        mnSendingSlide++;
+        Start();
     }
-    for ( sal_uInt32 i = 0; i < aSlides; i++ )
-    {
-        if ( !xController->isRunning() ) // stopped/disposed of.
-        {
-            break;
-        }
-        sendNotes( i );
-    }
-}
-
-void SAL_CALL ImagePreparer::onTerminated()
-{
-    delete this;
+    else
+        Stop();
 }
 
 void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )
