@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUn///48\u003d",
+        "filename": "svl/source/items/flagitem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-28T16:34:44Z",
+      "side": 0,
+      "message": "this changes the string from \"0\"/\"1\" to \"true/\"\"false but i\u0027m not sure if anything cares about that",
+      "revId": "e1669188e2832cf0cc1caf111f70aff7ba17757a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///4c\u003d",
+        "filename": "svx/source/svdraw/svdattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-28T16:34:44Z",
+      "side": 0,
+      "message": "this space appears to be gone in the new code?",
+      "revId": "e1669188e2832cf0cc1caf111f70aff7ba17757a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

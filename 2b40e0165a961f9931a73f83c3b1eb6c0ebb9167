@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUn///4k\u003d",
+        "filename": "svx/source/svdraw/svdattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-28T16:34:44Z",
+      "side": 1,
+      "message": "there is also a \"truncate\" method (without length parameter)",
+      "revId": "2b40e0165a961f9931a73f83c3b1eb6c0ebb9167",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///4g\u003d",
+        "filename": "svx/source/svdraw/svdattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-28T16:34:44Z",
+      "side": 1,
+      "message": "and an \"append\" method too",
+      "revId": "2b40e0165a961f9931a73f83c3b1eb6c0ebb9167",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///4Q\u003d",
+        "filename": "sw/source/ui/utlui/attrdesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-28T16:34:44Z",
+      "side": 1,
+      "message": "where did that \" s\" come from? should be just \" \" ?",
+      "revId": "2b40e0165a961f9931a73f83c3b1eb6c0ebb9167",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
