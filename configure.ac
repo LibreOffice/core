@@ -11840,7 +11840,7 @@ AC_SUBST(GIT_LINK_SRC)
 AC_MSG_CHECKING([for custom 'intro' progress bar color])
 PROGRESSBARCOLOR=
 if test -z "$with_intro_progressbar_color"; then
-   PROGRESSBARCOLOR="255,255,255"
+   PROGRESSBARCOLOR="128,128,128"
    AC_MSG_RESULT([none])
 else
    PROGRESSBARCOLOR="$with_intro_progressbar_color"
@@ -11851,7 +11851,7 @@ AC_SUBST(PROGRESSBARCOLOR)
 AC_MSG_CHECKING([for custom 'intro' progress bar size])
 PROGRESSSIZE=
 if test -z "$with_intro_progressbar_size"; then
-   PROGRESSSIZE="407,6"
+   PROGRESSSIZE="409,8"
    AC_MSG_RESULT([none])
 else
    PROGRESSSIZE="$with_intro_progressbar_size"
@@ -11862,7 +11862,7 @@ AC_SUBST(PROGRESSSIZE)
 AC_MSG_CHECKING([for custom 'intro' progress bar position])
 PROGRESSPOSITION=
 if test -z "$with_intro_progressbar_position"; then
-   PROGRESSPOSITION="61,317"
+   PROGRESSPOSITION="72,189"
    AC_MSG_RESULT([none])
 else
    PROGRESSPOSITION="$with_intro_progressbar_position"
@@ -11873,7 +11873,7 @@ AC_SUBST(PROGRESSPOSITION)
 AC_MSG_CHECKING([for custom 'intro' progress bar frame color])
 PROGRESSFRAMECOLOR=
 if test -z "$with_intro_progressbar_frame_color"; then
-   PROGRESSFRAMECOLOR="20,136,3"
+   PROGRESSFRAMECOLOR="245,245,245"
    AC_MSG_RESULT([none])
 else
    PROGRESSFRAMECOLOR="$with_intro_progressbar_frame_color"
@@ -11884,7 +11884,7 @@ AC_SUBST(PROGRESSFRAMECOLOR)
 AC_MSG_CHECKING([for custom 'intro' progress text color])
 PROGRESSTEXTCOLOR=
 if test -z "$with_intro_progressbar_text_color"; then
-   PROGRESSTEXTCOLOR="255,255,255"
+   PROGRESSTEXTCOLOR="128,128,128"
    AC_MSG_RESULT([none])
 else
    PROGRESSTEXTCOLOR="$with_intro_progressbar_text_color"
@@ -11895,7 +11895,7 @@ AC_SUBST(PROGRESSTEXTCOLOR)
 AC_MSG_CHECKING([for custom 'intro' progress text baseline])
 PROGRESSTEXTBASELINE=
 if test -z "$with_intro_progressbar_text_baseline"; then
-   PROGRESSTEXTBASELINE="287"
+   PROGRESSTEXTBASELINE="173"
    AC_MSG_RESULT([none])
 else
    PROGRESSTEXTBASELINE="$with_intro_progressbar_text_baseline"
