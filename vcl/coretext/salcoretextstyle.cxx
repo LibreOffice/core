@@ -32,12 +32,13 @@ CoreTextStyleInfo::CoreTextStyleInfo() :
     m_color(NULL),
     m_font_face(NULL)
 {
-    SAL_INFO( "vcl.coretext.style", "create <-->" );
+    SAL_INFO( "vcl.coretext.style", "CoreTextStyleInfo::CoreTextStyleInfo() " << this );
 }
 
 CoreTextStyleInfo::~CoreTextStyleInfo()
 {
-    SAL_INFO( "vcl.coretext.style", "destroy (font:" << m_CTFont << ") <-->" );
+    SAL_INFO( "vcl.coretext.style", "~CoreTextStyleInfo(" << this << "), font=" << m_CTFont );
+
     SafeCFRelease(m_CTFont);
     SafeCFRelease(m_CTParagraphStyle);
     SafeCFRelease(m_color);
@@ -51,7 +52,7 @@ long CoreTextStyleInfo::GetFontStretchedSize() const
 
 void CoreTextStyleInfo::SetFont(FontSelectPattern* requested_font)
 {
-    SAL_INFO( "vcl.coretext.style", "req(" << requested_font << ") release font " << m_CTFont << " -->" );
+    SAL_INFO( "vcl.coretext.style", "SetFont(" << this );
 
     if(!requested_font)
     {
@@ -92,12 +93,14 @@ void CoreTextStyleInfo::SetFont(FontSelectPattern* requested_font)
     /* FIXME: pass attribute to take into accout 'VerticalStyle' */
     /* FIXME: how to deal with 'rendering options' i.e anti-aliasing, does it even matter in CoreText ? */
     m_CTFont = CTFontCreateCopyWithAttributes(m_font_face->GetCTFont(), font_size, &m_matrix, NULL);
-    SAL_INFO( "vcl.coretext.style", "font " << m_CTFont << " <--" );
+
+    SAL_INFO( "vcl.coretext.style", "  font=" << m_CTFont );
 }
 
 void CoreTextStyleInfo::SetColor(SalColor color)
 {
-    SAL_INFO( "vcl.coretext.style", "r:" << SALCOLOR_RED(color) << ",g:" << SALCOLOR_GREEN(color) << ",b:" << SALCOLOR_BLUE(color) );
+    SAL_INFO( "vcl.coretext.style", "SetColor(" << this << ",color={" << SALCOLOR_RED(color) << "," << SALCOLOR_GREEN(color) << "," << SALCOLOR_BLUE(color) << "})" );
+
     SafeCFRelease(m_color);
 #ifdef IOS
     // No CGColorCreateGenericRGB on iOS
@@ -108,14 +111,13 @@ void CoreTextStyleInfo::SetColor(SalColor color)
 #else
     m_color = CGColorCreateGenericRGB(SALCOLOR_RED(color) / 255.0, SALCOLOR_GREEN(color) / 255.0, SALCOLOR_BLUE(color) / 255.0, 1.0);
 #endif
-    SAL_INFO( "vcl.coretext.style", "color=" << m_color << " <--" );
 }
 
 void CoreTextStyleInfo::SetColor(void)
 {
-    SAL_INFO( "vcl.coretext.style",  "null -->" );
+    SAL_INFO( "vcl.coretext.style",  "SetColor(" << this << ",none)" );
+
     SafeCFRelease(m_color);
-    SAL_INFO( "vcl.coretext.style", "color=" << m_color << " <--" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

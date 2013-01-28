@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <iostream>
+#include <iomanip>
+
 #include "coretext/common.h"
 #include "coretext/salcoretextstyle.hxx"
 #include "coretext/salgdi.h"
@@ -44,8 +47,8 @@ public:
     virtual void Simplify( bool bIsBase );
 
 private:
-    void Clean();
-    bool InitGIA() const;
+    void InvalidateMeasurements();
+    bool InitGIA( ImplLayoutArgs &rArgs ) const;
 
     QuartzSalGraphics* mpGraphics;
     CoreTextStyleInfo* mpStyle;
@@ -55,7 +58,6 @@ private:
     // cached details about the resulting layout
     // mutable members since these details are all lazy initialized
     mutable int mnGlyphCount;           // glyph count
-    mutable CGFloat mnCachedWidth;      // cached value of resulting typographical width
 
     mutable CGGlyph* mpGlyphs;          // glyphs
     mutable int* mpCharWidths;          // map relative charpos to charwidth
@@ -65,8 +67,8 @@ private:
     mutable int* mpGlyphAdvances;       // glyph widths for the justified layout
 
     mutable CGPoint* mpGlyphPositions; 
-    CTTypesetterRef mpTypesetter;
-    CTLineRef mpLine;
+    mutable CTTypesetterRef mpTypesetter;
+    mutable CTLineRef mpLine;
     mutable bool mbHasBoundRectangle;
     mutable Rectangle maBoundRectangle;
 
@@ -85,7 +87,6 @@ CoreTextLayout::CoreTextLayout(QuartzSalGraphics* graphics, CoreTextStyleInfo* s
     mpStyle(style),
     mnCharCount(-1),
     mnGlyphCount(-1),
-    mnCachedWidth(0.0F),
     mpGlyphs(NULL),
     mpCharWidths(NULL),
     mpChars2Glyphs(NULL),
@@ -101,23 +102,90 @@ CoreTextLayout::CoreTextLayout(QuartzSalGraphics* graphics, CoreTextStyleInfo* s
     mnCurrentGlyphRunIndex(0),
     mpRuns(NULL)
 {
+    SAL_INFO( "vcl.coretext.layout", "CoreTextLayout::CoreTextLayout() " << this );
 }
 
 CoreTextLayout::~CoreTextLayout()
 {
-    Clean();
+    InvalidateMeasurements();
+    SAL_INFO( "vcl.coretext.layout", "~CoreTextLayout(" << this << ")" );
 }
 
-void CoreTextLayout::AdjustLayout( ImplLayoutArgs& /*rArgs*/ )
+std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
 {
-    SAL_INFO( "vcl.coretext.layout", "-->" );
-    SAL_INFO( "vcl.coretext.layout", "<--" );
-    /* TODO */
+#ifndef SAL_LOG_INFO
+    (void) rArgs;
+    return s;
+#else
+    s << "ImplLayoutArgs{";
+
+    s << "Flags=";
+    if (rArgs.mnFlags == 0)
+        s << 0;
+    else {
+        bool need_or = false;
+        s << "{";
+#define TEST(x) if (rArgs.mnFlags & SAL_LAYOUT_##x) { if (need_or) s << "|"; s << #x; need_or = true; }
+        TEST(BIDI_RTL);
+        TEST(BIDI_STRONG);
+        TEST(RIGHT_ALIGN);
+        TEST(KERNING_PAIRS);
+        TEST(KERNING_ASIAN);
+        TEST(VERTICAL);
+        TEST(COMPLEX_DISABLED);
+        TEST(ENABLE_LIGATURES);
+        TEST(SUBSTITUTE_DIGITS);
+        TEST(KASHIDA_JUSTIFICATON);
+        TEST(DISABLE_GLYPH_PROCESSING);
+        TEST(FOR_FALLBACK);
+#undef TEST
+        s << "}";
+    }
+
+    s << ",Length=" << rArgs.mnLength;
+    s << ",MinCharPos=" << rArgs.mnMinCharPos;
+    s << ",EndCharPos=" << rArgs.mnEndCharPos;
+
+    s << ",Str=\"";
+    int lim = rArgs.mnLength;
+    if (lim > 10)
+        lim = 7;
+    for (int i = 0; i < lim; i++) {
+        if (rArgs.mpStr[i] == '\n')
+            s << "\\n";
+        else if (rArgs.mpStr[i] < ' ' || (rArgs.mpStr[i] >= 0x7F && rArgs.mpStr[i] <= 0xFF))
+            s << "\\0x" << std::hex << std::setw(2) << std::setfill('0') << (int) rArgs.mpStr[i] << std::setfill(' ') << std::setw(1) << std::dec;
+        else if (rArgs.mpStr[i] < 0x7F)
+            s << (char) rArgs.mpStr[i];
+        else
+            s << "\\u" << std::hex << std::setw(4) << std::setfill('0') << (int) rArgs.mpStr[i] << std::setfill(' ') << std::setw(1) << std::dec;
+    }
+    if (rArgs.mnLength > lim)
+        s << "...";
+    s << "\"";
+
+    s << ",LayoutWidth=" << rArgs.mnLayoutWidth;
+
+    s << "}";
+
+    return s;
+#endif
 }
 
-void CoreTextLayout::Clean()
+void CoreTextLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
-    SAL_INFO( "vcl.coretext.layout", "-->" );
+    SAL_INFO( "vcl.coretext.layout", "AdjustLayout(" << this << ",rArgs=" << rArgs << ")" );
+
+    InvalidateMeasurements();
+    SalLayout::AdjustLayout( rArgs );
+    mnCharCount = mnEndCharPos - mnMinCharPos;
+    InitGIA( rArgs );
+}
+
+void CoreTextLayout::InvalidateMeasurements()
+{
+    SAL_INFO( "vcl.coretext.layout", "InvalidateMeasurements(" << this << ")" );
+
     if(mpGlyphs)
     {
         delete[] mpGlyphs;
@@ -151,28 +219,28 @@ void CoreTextLayout::Clean()
     SafeCFRelease(mpTypesetter);
     SafeCFRelease(mpLine);
     mbHasBoundRectangle = false;
-    SAL_INFO( "vcl.coretext.layout", "<--" );
 }
 
 void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
 {
-    SAL_INFO( "vcl.coretext.layout", "-->" );
+    SAL_INFO( "vcl.coretext.layout", "DrawText(" << this << ")" );
+
     QuartzSalGraphics& gr = static_cast<QuartzSalGraphics&>(rGraphics);
     if(mnCharCount <= 0 || !gr.CheckContext())
-    {
         return;
-    }
+
     CGContextSaveGState( gr.mrContext );
     Point pos = GetDrawPosition(Point(0,0));
 #if 0
     SAL_INFO( "vcl.coretext.layout", "at pos (" << pos.X() << "," << pos.Y() << ")" );
+
     CGContextSetTextMatrix(gr.mrContext, CGAffineTransformMakeScale(1.0, -1.0));
     CGContextSetShouldAntialias( gr.mrContext, !gr.mbNonAntialiasedText );
     CGContextSetTextPosition(gr.mrContext, pos.X(), pos.Y());
     CTLineDraw(mpLine, gr.mrContext);
 #else
-    InitGIA();
     SAL_INFO( "vcl.coretext.layout", "at pos (" << pos.X() << "," << pos.Y() <<") ctfont=" << mpStyle->GetFont() );
+
     CGFontRef cg_font = CTFontCopyGraphicsFont(mpStyle->GetFont(), NULL);
     if(!cg_font)
     {
@@ -200,46 +268,47 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
 #endif
     // restore the original graphic context transformations
     CGContextRestoreGState( gr.mrContext );
-    SAL_INFO( "vcl.coretext.layout", "<--" );
-
 }
 
 // not needed. CoreText manage fallback directly
-void CoreTextLayout::DropGlyph( int /*nStart*/ ) {}
+void CoreTextLayout::DropGlyph( int /*nStart*/ )
+{
+}
 
 long CoreTextLayout::FillDXArray( sal_Int32* pDXArray ) const
 {
-    SAL_INFO( "vcl.coretext.layout", "-->" );
+    SAL_INFO( "vcl.coretext.layout", "FillDXArray(" << this << ")" );
+
     // short circuit requests which don't need full details
-    if( !pDXArray )
-    {
+    if( !pDXArray ) {
+        SAL_INFO( "vcl.coretext.layout", "FillDXArray() returning GetTextWidth()" );
         return GetTextWidth();
     }
-
-    // initialize details about the resulting layout
-    InitGIA();
 
     // distribute the widths among the string elements
     long width = 0;
     float scale = mpStyle->GetFontStretchFactor();
-    mnCachedWidth = 0;
+    CGFloat accumulated_width = 0;
 
     for( int i = 0; i < mnCharCount; ++i )
     {
         // convert and adjust for accumulated rounding errors
-        mnCachedWidth += mpCharWidths[i];
+        accumulated_width += mpCharWidths[i];
         const long old_width = width;
-        width = round_to_long(mnCachedWidth * scale);
+        width = round_to_long(accumulated_width * scale);
         pDXArray[i] = width - old_width;
     }
-    SAL_INFO( "vcl.coretext.layout", " width=" << width << " <--" );
+
+    SAL_INFO( "vcl.coretext.layout", "FillDXArrar() returning " << width );
+
     return width;
 }
 
 bool CoreTextLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 {
 
-    SAL_INFO( "vcl.coretext.layout", "-->" );
+    SAL_INFO( "vcl.coretext.layout", "GetBoundRect(" << this << ")" );
+
     if ( !mbHasBoundRectangle )
     {
         QuartzSalGraphics& gr = static_cast<QuartzSalGraphics&>(rGraphics);
@@ -254,14 +323,17 @@ bool CoreTextLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect )
         }
         mbHasBoundRectangle = true;
     }
+
     rVCLRect = maBoundRectangle;
-    SAL_INFO( "vcl.coretext.layout", "<--" );
+    SAL_INFO( "vcl.coretext.layout", "GetBoundRect() returning with rVCLRect={" << rVCLRect << "}" );
+
     return true;
 }
 
-void CoreTextLayout::GetCaretPositions( int max_index, sal_Int32* caret_position) const
+void CoreTextLayout::GetCaretPositions( int max_index, sal_Int32* caret_position ) const
 {
-    SAL_INFO( "vcl.coretext.layout", "max_index " << max_index << " -->" );
+    SAL_INFO( "vcl.coretext.layout", "GetCaretPositions(" << this << ",max_index=" << max_index << ")" );
+
     int local_max = max_index < mnCharCount * 2 ? max_index : mnCharCount;
     for(int i = 0 ; i < max_index - 1; i+=2)
     {
@@ -275,17 +347,17 @@ void CoreTextLayout::GetCaretPositions( int max_index, sal_Int32* caret_position
     {
         caret_position[i] = -1;
     }
-    SAL_INFO( "vcl.coretext.layout", "<--" );
 }
 
-bool CoreTextLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const { return false; }
+bool CoreTextLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const
+{
+    return false;
+}
 
 int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int& nStart,
                                    sal_Int32* pGlyphAdvances, int* pCharIndexes ) const
 {
-    SAL_INFO( "vcl.coretext.layout", "nLen=" << nLen << " nStart=" << nStart << " -->");
-    // get glyph measurements
-    InitGIA();
+    SAL_INFO( "vcl.coretext.layout", "GetNextGlyphs(" << this << ",nLen=" << nLen << ",nStart=" << nStart << ")" );
 
     if( nStart < 0 )                // first glyph requested?
     {
@@ -347,46 +419,146 @@ int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos
         i += 1;
         nStart += 1;
     }
-    SAL_INFO( "vcl.coretext.layout", "i=" << i << " <--" );
+
+    SAL_INFO( "vcl.coretext.layout", "GetNextGlyphs() returning " << i );
+
     return i;
 }
 
-int CoreTextLayout::GetTextBreak( long /*nMaxWidth*/, long /*nCharExtra*/, int /*nFactor*/ ) const
+int CoreTextLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
-    /* TODO */
-    return false;
+    SAL_INFO( "vcl.coretext.layout", "GetTextBreak(" << this << ",nMaxWidth=" << nMaxWidth << ",nCharExtra=" << nCharExtra << ",nFactor=" << nFactor << ")" );
+
+    if( !mpLine ) {
+        SAL_INFO( "vcl.coretext.layout", "GetTextBreak() returning STRING_LEN" );
+        return STRING_LEN;
+    }
+
+    // the semantics of the legacy use case (nCharExtra!=0) cannot be mapped to ATSUBreakLine()
+    if( nCharExtra != 0 )
+    {
+#if 0
+        // prepare the measurement by layouting and measuring the un-expanded/un-condensed text
+        if( !InitGIA() )
+            return STRING_LEN;
+
+        // TODO: use a better way than by testing each the char position
+        ATSUTextMeasurement nATSUSumWidth = 0;
+        const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nMaxWidth / nFactor );
+        const ATSUTextMeasurement nATSUExtraWidth = Vcl2Fixed( nCharExtra ) / nFactor;
+        for( int i = 0; i < mnCharCount; ++i )
+        {
+            nATSUSumWidth += mpCharWidths[i];
+            if( nATSUSumWidth >= nATSUMaxWidth )
+                return (mnMinCharPos + i);
+            nATSUSumWidth += nATSUExtraWidth;
+            if( nATSUSumWidth >= nATSUMaxWidth )
+                if( i+1 < mnCharCount )
+                    return (mnMinCharPos + i);
+        }
+
+        return STRING_LEN;
+#endif
+    }
+
+    // get a quick overview on what could fit
+    const CGFloat nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
+    if( nPixelWidth <= 0 ) {
+        SAL_INFO( "vcl.coretext.layout", "GetTextBreak(): nPixelWidth=" << nPixelWidth << ", returning mnMinCharPos=" << mnMinCharPos );
+        return mnMinCharPos;
+    }
+
+    CFIndex nBreakPos = CTTypesetterSuggestLineBreak( mpTypesetter, 0, nPixelWidth ) + mnMinCharPos;
+
+    // upper layers expect STRING_LEN if everything fits
+    if( nBreakPos >= mnEndCharPos ) {
+        SAL_INFO( "vcl.coretext.layout", "GetTextBreak(): nBreakPos=" << nBreakPos << " >= mnEndCharPos=" << mnEndCharPos << ", returning STRING_LEN" );
+        return STRING_LEN;
+    }
+
+    SAL_INFO( "vcl.coretext.layout", "GetTextBreak() returning nBreakPos=" << nBreakPos );
+
+    return nBreakPos;
 }
 
 long CoreTextLayout::GetTextWidth() const
 {
-    SAL_INFO( "vcl.coretext.layout", "-->" );
-
     CGRect bound_rect = CTLineGetImageBounds(mpLine, mpGraphics->GetContext());
     long w = round_to_long(bound_rect.size.width * mpStyle->GetFontStretchFactor());
-    SAL_INFO( "vcl.coretext.layout", "w=" << w << " <--" );
+
+    SAL_INFO( "vcl.coretext.layout", "GetTextWidth(" << this << ") returning " << w );
+
     return w;
 }
 
 // not needed. CoreText manage fallback directly
 void CoreTextLayout::InitFont() const
 {
-    SAL_INFO( "vcl.coretext.layout", "<-->" );
+    SAL_INFO( "vcl.coretext.layout", "InitFont(" << this << ")" );
 }
 
-bool CoreTextLayout::InitGIA() const
+bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
 {
-    SAL_INFO( "vcl.coretext.layout", "count=" << mnCharCount << "-->" );
+    SAL_INFO( "vcl.coretext.layout", "InitGIA(" << this << "): " << mnCharCount << ":" << rArgs.mnMinCharPos << "--" << mnEndCharPos );
 
-    if( mnCharCount <= 0)
-    {
+    if( mnCharCount <= 0) {
+        SAL_INFO( "vcl.coretext.layout", "InitGIA(): mnCharCount is non-positive, returning false" );
         return false;
     }
-    if(mpGlyphs)
-    {
+
+    if( mpGlyphs ) {
+        SAL_INFO( "vcl.coretext.layout", "InitGIA(): mpGlyphs is non-NULL, returning true" );
         return true;
     }
 
-    mpGlyphs = new CGGlyph[mnGlyphCount];
+    // Note that unlike the ATSUI code, we store only the part of the
+    // buffer addressed by mnMinCharPos--mnEndCharPos. Not the whole
+    // buffer. I.e. all indexing of the string as referenced to by
+    // mpTypesetter should be relative to mnMinCharPos.
+    CFStringRef string = CFStringCreateWithCharacters( NULL, &(rArgs.mpStr[rArgs.mnMinCharPos]), mnCharCount );
+    if ( !string ) {
+        SAL_INFO( "vcl.coretext.layout", "InitGIA(): CFStringCreateWithCharacter() returned NULL, returning false" );
+        return false;
+    }
+
+    CFStringRef keys[6];
+    CFTypeRef values[6];
+
+    keys[0] = kCTFontAttributeName;
+    values[0] = CFRetain( mpStyle->GetFont() );
+
+    CFDictionaryRef attributes = CFDictionaryCreate( kCFAllocatorDefault,
+                                                     (const void**)&keys,
+                                                     (const void**)&values,
+                                                     1,
+                                                     &kCFTypeDictionaryKeyCallBacks,
+                                                     &kCFTypeDictionaryValueCallBacks );
+
+    CFAttributedStringRef attributed_string = CFAttributedStringCreate( NULL, string, attributes );
+    CFRelease( string );
+    CFRelease( attributes );
+    if ( !attributed_string ) {
+        SAL_INFO( "vcl.coretext.layout", "InitGIA(): CFAttributedStringCreate() returned NULL, returning false" );
+        return false;
+    }
+
+    mpTypesetter = CTTypesetterCreateWithAttributedString( attributed_string );
+    CFRelease( attributed_string );
+    if( !mpTypesetter ) {
+        SAL_INFO( "vcl.coretext.layout", "InitGIA(): CTTypesetterCreateWithAttributedString() returned NULL, returning false" );
+        return false;
+    }
+
+    mpLine = CTTypesetterCreateLine( mpTypesetter, CFRangeMake( 0, 0 ) );
+    if( !mpLine ) {
+        SAL_INFO( "vcl.coretext.layout", "InitGIA(): CTTypesetterCreateLine() returned NULL, returning false" );
+        return false;
+    }
+
+    mnGlyphCount = CTLineGetGlyphCount( mpLine );
+    SAL_INFO( "vcl.coretext.layout", "InitGIA(): CTLineGetGlyphCount() returned " << mnGlyphCount );
+
+    mpGlyphs = new CGGlyph[ mnGlyphCount ];
     mpCharWidths = new int[ mnCharCount ];
     mpChars2Glyphs = new int[ mnCharCount ];
     for( int i = 0; i < mnCharCount; ++i)
@@ -394,13 +566,13 @@ bool CoreTextLayout::InitGIA() const
         mpCharWidths[i] = 0.0;
         mpChars2Glyphs[i] = -1;
     }
-    mpGlyphs2Chars = new int[mnGlyphCount];
-    mpGlyphAdvances = new int[mnGlyphCount];
-    mpGlyphPositions = new CGPoint[mnGlyphCount];
-
+    mpGlyphs2Chars = new int[ mnGlyphCount ];
+    mpGlyphAdvances = new int[ mnGlyphCount ];
+    mpGlyphPositions = new CGPoint[ mnGlyphCount ];
 
     CFArrayRef runs = CTLineGetGlyphRuns( mpLine );
     CFIndex nb_runs = CFArrayGetCount( runs );
+
     int p = 0;
     for( CFIndex i = 0; i < nb_runs; ++i )
     {
@@ -428,10 +600,12 @@ bool CoreTextLayout::InitGIA() const
 
                     for (CFIndex j = 0 ; j < nb_glyphs; ++p, ++j )
                     {
+                        assert ( p < mnGlyphCount );
                         mpGlyphs[ p ] = glyphs[ j ];
-                        SAL_INFO( "vcl.coretext.layout", "m_glyphys[" << p << "]=glyphs[" << j << "] run " << i << " : 0x" << std::hex << glyphs[j] << std::dec );
+                        // SAL_INFO( "vcl.coretext.layout", "  mpGlyphs[" << p << "]=glyphs[" << j << "]=0x" << std::hex << glyphs[j] << std::dec );
                         CFIndex k = indices[ j ];
                         mpGlyphs2Chars[p] = k;
+                        assert( k < mnCharCount );
                         mpChars2Glyphs[k] = p;
 
                         if ( j < nb_glyphs - 1 )
@@ -447,28 +621,28 @@ bool CoreTextLayout::InitGIA() const
 			}
         }
     }
-    SAL_INFO( "vcl.coretext.layout", "<--" );
+
+    SAL_INFO( "vcl.coretext.layout", "InitGIA() returning normally true" );
     return true;
 }
 
-bool CoreTextLayout::LayoutText(ImplLayoutArgs& args)
+bool CoreTextLayout::LayoutText( ImplLayoutArgs& rArgs)
 {
-    SAL_INFO( "vcl.coretext.layout", "mpStyle=" << mpStyle << " font=" << mpStyle->GetFont() << " -->" );
-    Clean();
-    mpStyle->SetColor();
-    /* retreive MinCharPos EndCharPos Flags and Orientation */
-    SalLayout::AdjustLayout(args);
-    mnCharCount = mnEndCharPos - mnMinCharPos;
+    SAL_INFO( "vcl.coretext.layout", "LayoutText(" << this << ",rArgs=" << rArgs << ")" );
 
-    /* don't layout emptty (or worse negative size) strings */
-    if(mnCharCount <= 0)
-    {
+    mpStyle->SetColor();
+
+    AdjustLayout( rArgs );
+
+    /* don't layout empty (or worse negative size) strings */
+    if(mnCharCount <= 0) {
+        SAL_INFO( "vcl.coretext.layout", "LayoutText(): mnCharCount non-positive, returning false!" );
         return false;
     }
 
 #ifdef IOS
-    // This might be caused by some red herring and be unnecessary
-    // once the CoreText code actually works;)
+    // This might be a red herring and unnecessary once the CoreText
+    // code actually works;)
 
     // If the string contains U+FFFD ("REPLACEMENT CHARACTER"), which
     // happens at least for the ooo80484-1.slk document in
@@ -478,73 +652,30 @@ bool CoreTextLayout::LayoutText(ImplLayoutArgs& args)
     // but play it safe.)
     for (int i = 0; i < mnCharCount; i++)
     {
-        if (args.mpStr[args.mnMinCharPos+i] == 0xFFFD)
+        if ( rArgs.mpStr[rArgs.mnMinCharPos+i] == 0xFFFD)
             return false;
     }
 #endif
 
-    /* c0 and c1 are construction objects */
-    CFStringRef c0 = CFStringCreateWithCharactersNoCopy( NULL, &(args.mpStr[args.mnMinCharPos]), mnCharCount, kCFAllocatorNull );
-    if ( !c0 )
-    {
-        Clean();
-        return false;
-    }
+    SAL_INFO( "vcl.coretext.layout", "LayoutText() returning,  mnGlyphCount=" << mnGlyphCount );
 
-    CFStringRef keys[6];
-    CFTypeRef   values[6];
-    int nb_attributes = 0;
-
-    keys[nb_attributes]= kCTFontAttributeName;
-    values[nb_attributes] = mpStyle->GetFont();
-    nb_attributes += 1;
-
-    CFDictionaryRef attributes = CFDictionaryCreate(kCFAllocatorDefault,
-                                                    (const void**)&keys,
-                                                    (const void**)&values,
-                                                    nb_attributes,
-                                                    &kCFTypeDictionaryKeyCallBacks,
-                                                    &kCFTypeDictionaryValueCallBacks);
-
-
-    CFAttributedStringRef string = CFAttributedStringCreate( NULL, c0, attributes );
-    CFRelease( c0 );
-    CFRelease( attributes );
-    if ( !string )
-    {
-        Clean();
-        return false;
-    }
-    mpTypesetter = CTTypesetterCreateWithAttributedString(string);
-    CFRelease(string);
-    if(!mpTypesetter)
-    {
-        Clean();
-        return false;
-    }
-    mpLine = CTTypesetterCreateLine(mpTypesetter, CFRangeMake(0, 0));
-    if(!mpLine)
-    {
-        Clean();
-        return false;
-    }
-    mnGlyphCount = CTLineGetGlyphCount(mpLine);
-
-    SAL_INFO( "vcl.coretext.layout", "glyph_count=" << mnGlyphCount << " <--" );
     return true;
 }
 
 // not needed. CoreText manage fallback directly
-void CoreTextLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
+void CoreTextLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ )
+{
+}
 
 // not needed. CoreText manage fallback directly
-void CoreTextLayout::Simplify( bool /*bIsBase*/ ) {}
+void CoreTextLayout::Simplify( bool /*bIsBase*/ )
+{
+}
 
 SalLayout* QuartzSalGraphics::GetTextLayout( ImplLayoutArgs&, int /*nFallbackLevel*/ )
 {
-    SAL_INFO( "vcl.coretext.gr", "-->" );
     CoreTextLayout* layout = new CoreTextLayout( this, m_style );
-    SAL_INFO( "vcl.coretext.gr", "layout:" << layout << " <--" );
+
     return layout;
 }
 

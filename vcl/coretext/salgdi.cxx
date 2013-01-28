@@ -48,20 +48,20 @@ QuartzSalGraphics::QuartzSalGraphics()
     , mbVirDev( false )
     , mbWindow( false )
 {
-    SAL_INFO( "vcl.coretext.gr", "-->" );
+    SAL_INFO( "vcl.coretext.gr", "QuartzSalGraphics::QuartzSalGraphics() " << this );
+
     m_style = new CoreTextStyleInfo();
-    SAL_INFO( "vcl.coretext.gr", "m_style=" << m_style << " <--" );
 }
 
 QuartzSalGraphics::~QuartzSalGraphics()
 {
-    SAL_INFO( "vcl.coretext.gr", "-->" );
+    SAL_INFO( "vcl.coretext.gr", "~QuartzSalGraphics(" << this << ")" );
+
     if(m_style)
     {
         delete m_style;
         m_style = NULL;
     }
-    SAL_INFO( "vcl.coretext.gr", "<--" );
 }
 
 inline bool QuartzSalGraphics::AddTempDevFont( ImplDevFontList*,
@@ -140,7 +140,14 @@ void QuartzSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbac
     pMetric->mnExtLeading   = nExtDescent + pMetric->mnDescent;
     pMetric->mnIntLeading   = 0;
     pMetric->mnWidth = m_style->GetFontStretchedSize();
-    SAL_INFO( "vcl.coretext.gr", "ascent=" << pMetric->mnAscent<< ", descent=" << pMetric->mnDescent << ", extleading=" << pMetric->mnExtLeading << ", intleading=" << pMetric->mnIntLeading << ", w=" << pMetric->mnWidth );
+
+    SAL_INFO( "vcl.coretext.gr",
+              "GetFontMetric(" << this << ") returning: {ascent=" << pMetric->mnAscent <<
+              ",descent=" << pMetric->mnDescent <<
+              ",extleading=" << pMetric->mnExtLeading <<
+              ",intleading=" << pMetric->mnIntLeading <<
+              ",width=" << pMetric->mnWidth <<
+              "}" );
 }
 
 sal_Bool QuartzSalGraphics::GetGlyphBoundRect( sal_GlyphId /*nGlyphId*/, Rectangle& /*rRect*/ )
@@ -203,7 +210,6 @@ bool QuartzSalGraphics::GetRawFontData( const PhysicalFontFace* pFontFace,
 
 SystemFontData QuartzSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
-    SAL_INFO( "vcl.coretext.gr", "-->" );
     SystemFontData aSysFontData;
     aSysFontData.nSize = sizeof( SystemFontData );
     aSysFontData.bAntialias = true;
@@ -236,23 +242,19 @@ SystemFontData QuartzSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) con
     aSysFontData.bVerticalCharacterType = vertical_font ? true : false;
     SafeCFRelease(vertical_font);
 
-    SAL_INFO( "vcl.coretext.gr", "<--" );
     return aSysFontData;
 }
 
 sal_uInt16 QuartzSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
 {
-    SAL_INFO( "vcl.coretext.gr", "m_style=" << m_style << " -->" );
     m_style->SetFont(pReqFont);
-    SAL_INFO( "vcl.coretext.gr", "<--" );
+
     return 0;
 }
 
 void QuartzSalGraphics::SetTextColor( SalColor nSalColor )
 {
-    SAL_INFO( "vcl.coretext.gr", "m_style=" << m_style << " -->" );
     m_style->SetColor(nSalColor);
-    SAL_INFO( "vcl.coretext.gr", "<--" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
