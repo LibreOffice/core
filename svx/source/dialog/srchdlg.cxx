@@ -25,6 +25,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/style.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <unotools/searchopt.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -693,29 +694,31 @@ void SvxSearchDialog::InitControls_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+namespace
+{
+    SvtModuleOptions::EFactory getModule(SfxBindings& rBindings)
+    {
+        SvtModuleOptions::EFactory eFactory(SvtModuleOptions::E_UNKNOWN_FACTORY);
+        try
+        {
+            const uno::Reference< frame::XFrame > xFrame =
+                rBindings.GetActiveFrame();
+            uno::Reference< frame::XModuleManager2 > xModuleManager(
+                frame::ModuleManager::create(::comphelper::getProcessComponentContext()));
+
+            OUString aModuleIdentifier = xModuleManager->identify( xFrame );
+            eFactory = SvtModuleOptions::ClassifyFactoryByServiceName(aModuleIdentifier);
+        }
+        catch (const uno::Exception&)
+        {
+        }
+        return eFactory;
+    }
+}
 
 void SvxSearchDialog::CalculateDelta_Impl()
 {
     DBG_ASSERT( pSearchItem, "no search item" );
-
-    bool bDrawApp = false;
-    bool bCalcApp = false;
-    bool bWriterApp = false;
-    bool bImpressApp = false;
-    const uno::Reference< frame::XFrame > xFrame = rBindings.GetActiveFrame();
-    uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(::comphelper::getProcessComponentContext()) );
-    try
-    {
-        ::rtl::OUString aModuleIdentifier = xModuleManager->identify( xFrame );
-        bCalcApp = aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument";
-        bDrawApp = aModuleIdentifier == "com.sun.star.drawing.DrawingDocument";
-        bImpressApp = aModuleIdentifier == "com.sun.star.presentation.PresentationDocument";
-        bWriterApp = aModuleIdentifier == "com.sun.star.text.TextDocument";
-    }
-    catch ( uno::Exception& )
-    {
-    }
 
     if ( pImpl->bDeltaCalculated )
         return;
@@ -726,7 +729,17 @@ void SvxSearchDialog::CalculateDelta_Impl()
     SvtCJKOptions aCJKOptions;
 
     pMoreBtn->AddWindow( &aOptionsFL );
-    if ( !bDrawApp )
+
+    SvtModuleOptions::EFactory eFactory = getModule(rBindings);
+    bool bDrawApp = eFactory == SvtModuleOptions::E_DRAW;
+    bool bWriterApp =
+        eFactory == SvtModuleOptions::E_WRITER ||
+        eFactory == SvtModuleOptions::E_WRITERWEB ||
+        eFactory == SvtModuleOptions::E_WRITERGLOBAL;
+    bool bImpressApp = eFactory == SvtModuleOptions::E_IMPRESS;
+    bool bCalcApp = eFactory == SvtModuleOptions::E_CALC;
+
+    if (!bDrawApp)
         pMoreBtn->AddWindow( &aLayoutBtn );
     if ( bWriterApp )
         pMoreBtn->AddWindow( &aNotesBtn );
@@ -1987,24 +2000,6 @@ void SvxSearchDialog::SetItem_Impl( const SvxSearchItem* pItem )
 IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
 {
     sal_Int32 nTxtLen;
-    bool bDrawApp = false;
-    bool bCalcApp = false;
-    bool bWriterApp = false;
-    bool bImpressApp = false;
-    const uno::Reference< frame::XFrame > xFrame = rBindings.GetActiveFrame();
-    uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(::comphelper::getProcessComponentContext()) );
-    try
-    {
-        ::rtl::OUString aModuleIdentifier = xModuleManager->identify( xFrame );
-        bCalcApp = aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument";
-        bDrawApp = aModuleIdentifier == "com.sun.star.drawing.DrawingDocument";
-        bImpressApp = aModuleIdentifier == "com.sun.star.presentation.PresentationDocument";
-        bWriterApp = aModuleIdentifier == "com.sun.star.text.TextDocument";
-    }
-    catch ( uno::Exception& )
-    {
-    }
-
     if ( !pImpl->bMultiLineEdit )
         nTxtLen = aSearchAttrText.GetText().getLength();
     else
@@ -2041,16 +2036,28 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
     aSearchLB.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
     ModifyHdl_Impl( (ComboBox*)pCtrl );
-    
-    if(bWriterApp)    
-        aLayoutBtn.SetText( bFormat && nTxtLen ? aLayoutStr : aLayoutWriterStr );
+
+    if (bFormat && nTxtLen)
+        aLayoutBtn.SetText(aLayoutStr);
     else
-        {
-        if(bCalcApp)
-            aLayoutBtn.SetText( bFormat && nTxtLen ? aLayoutStr : aLayoutCalcStr );
+    {
+        SvtModuleOptions::EFactory eFactory = getModule(rBindings);
+        bool bWriterApp =
+            eFactory == SvtModuleOptions::E_WRITER ||
+            eFactory == SvtModuleOptions::E_WRITERWEB ||
+            eFactory == SvtModuleOptions::E_WRITERGLOBAL;
+        bool bCalcApp = eFactory == SvtModuleOptions::E_CALC;
+
+        if (bWriterApp)
+            aLayoutBtn.SetText(aLayoutWriterStr);
         else
-            aLayoutBtn.SetText( bFormat && nTxtLen ? aLayoutStr : aStylesStr );
+        {
+            if (bCalcApp)
+                aLayoutBtn.SetText(aLayoutCalcStr);
+            else
+                aLayoutBtn.SetText(aStylesStr);
         }
+    }
     return 0;
 }
 
@@ -2162,35 +2169,23 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
 
 IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
 {   
-    bool bDrawApp = false;
-    bool bCalcApp = false;
-    bool bWriterApp = false;
-    bool bImpressApp = false;
-    const uno::Reference< frame::XFrame > xFrame = rBindings.GetActiveFrame();
-    uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(::comphelper::getProcessComponentContext()) );
-    try
-    {
-        ::rtl::OUString aModuleIdentifier = xModuleManager->identify( xFrame );
-        bCalcApp = aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument";
-        bDrawApp = aModuleIdentifier == "com.sun.star.drawing.DrawingDocument";
-        bImpressApp = aModuleIdentifier == "com.sun.star.presentation.PresentationDocument";
-        bWriterApp = aModuleIdentifier == "com.sun.star.text.TextDocument";
-    }
-    catch ( uno::Exception& )
-    {
-    }
+    SvtModuleOptions::EFactory eFactory = getModule(rBindings);
+    bool bWriterApp =
+        eFactory == SvtModuleOptions::E_WRITER ||
+        eFactory == SvtModuleOptions::E_WRITERWEB ||
+        eFactory == SvtModuleOptions::E_WRITERGLOBAL;
+    bool bCalcApp = eFactory == SvtModuleOptions::E_CALC;
 
-    if(bCalcApp)
+    if (bCalcApp)
         aLayoutBtn.SetText( aLayoutCalcStr );
     else 
     {
-        if(bWriterApp)
+        if (bWriterApp)
             aLayoutBtn.SetText( aLayoutWriterStr);
         else
             aLayoutBtn.SetText( aStylesStr );        
     }
-        
-        
+
     bFormat = sal_False;
     aLayoutBtn.Check( sal_False );
 
