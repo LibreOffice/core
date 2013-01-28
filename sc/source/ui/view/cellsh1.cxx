@@ -1261,29 +1261,63 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             pDlg->SetOtherDoc( bOtherDoc );
                             // if ChangeTrack MoveMode disable
                             pDlg->SetChangeTrack( pDoc->GetChangeTrack() != NULL );
-                            // cut/move references may disable shift
-                            // directions if source and destination ranges intersect
-                            if ( !bOtherDoc )
+                            // fdo#56098  disable shift if necessary
+                            if ( !bOtherDoc  && pOwnClip )
                             {
-                                if ( pOwnClip && pOwnClip->GetDocument()->IsCutMode() )
+                                ScViewData* pData = GetViewData();
+                                if ( pData->GetMarkData().GetTableSelect( pData->GetTabNo() ) )
                                 {
-                                    ScViewData* pData = GetViewData();
-                                    if ( pData->GetMarkData().GetTableSelect(
-                                            pData->GetTabNo() ) )
+                                    SCCOL nStartX, nEndX, nClipStartX, nClipSizeX, nRangeSizeX;
+                                    SCROW nStartY, nEndY, nClipStartY, nClipSizeY, nRangeSizeY;
+                                    SCTAB nStartTab, nEndTab;
+                                    pOwnClip->GetDocument()->GetClipStart( nClipStartX, nClipStartY );
+                                    pOwnClip->GetDocument()->GetClipArea( nClipSizeX, nClipSizeY, sal_True );
+
+                                    if ( !( pData->GetSimpleArea( nStartX, nStartY, nStartTab,
+                                                   nEndX, nEndY, nEndTab ) == SC_MARK_SIMPLE &&
+                                                   nStartTab == nEndTab ) )
                                     {
-                                        SCCOL nPosX = pData->GetCurX();
-                                        SCROW nPosY = pData->GetCurY();
-                                        SCCOL nClipSizeX;
-                                        SCROW  nClipSizeY;
-                                        // for CutMode, filtered rows can always be included
-                                        pOwnClip->GetDocument()->GetClipArea( nClipSizeX, nClipSizeY, sal_True );
-                                        int nDisableShift = 0;
-                                        if ( nPosX + 2 * nClipSizeX + 1 > MAXCOL )  // fdo#56098
-                                             nDisableShift |= SC_CELL_SHIFT_DISABLE_RIGHT;
-                                        if ( nPosY + 2 * nClipSizeY + 1 > MAXROW )  // fdo#56098
-                                            nDisableShift |= SC_CELL_SHIFT_DISABLE_DOWN;
-                                        if ( nDisableShift )
-                                            pDlg->SetCellShiftDisabled( nDisableShift );
+                                        // the destination is not a simple range,
+                                        // assume the destination as the current cell
+                                        nStartX = nEndX = pData->GetCurX();
+                                        nStartY = nEndY = pData->GetCurY();
+                                        nStartTab = pData->GetTabNo();
+                                    }
+                                    // we now have clip- and range dimensions
+                                    // the size of the destination area is the larger of the two
+                                    nRangeSizeX = nClipSizeX >= nEndX - nStartX ? nClipSizeX : nEndX - nStartX;
+                                    nRangeSizeY = nClipSizeY >= nEndY - nStartY ? nClipSizeY : nEndY - nStartY;
+                                    // When the source and destination areas intersect things may go wrong,
+                                    // especially if the area contains references. This may produce data loss
+                                    // (e.g. formulas that get wrong references), this scenario _must_ be avoided.
+                                    ScRange aSource( nClipStartX, nClipStartY, nStartTab,
+                                                     nClipStartX + nClipSizeX, nClipStartY + nClipSizeY, nStartTab );
+                                    ScRange aDest( nStartX, nStartY, nStartTab,
+                                                   nStartX + nRangeSizeX, nStartY + nRangeSizeY, nStartTab );
+                                    if ( aSource.Intersects( aDest ) )
+                                        pDlg->SetCellShiftDisabled( SC_CELL_SHIFT_DISABLE_DOWN | SC_CELL_SHIFT_DISABLE_RIGHT );
+                                    else
+                                    {
+                                        //no conflict with intersecting ranges,
+                                        //check if paste plus shift will fit on sheet
+                                        //and disable shift-option if no fit
+                                        int nDisableShiftX = 0;
+                                        int nDisableShiftY = 0;
+
+                                        //check if horizontal shift will fit
+                                        if ( !pData->GetDocument()->IsBlockEmpty( nStartTab,
+                                                    MAXCOL - nRangeSizeX, nStartY,
+                                                    MAXCOL, nStartY + nRangeSizeY, false ) )
+                                            nDisableShiftX = SC_CELL_SHIFT_DISABLE_RIGHT;
+
+                                        //check if vertical shift will fit
+                                        if ( !pData->GetDocument()->IsBlockEmpty( nStartTab,
+                                                    nStartX, MAXROW - nRangeSizeY,
+                                                    nStartX + nRangeSizeX, MAXROW, false ) )
+                                            nDisableShiftY = SC_CELL_SHIFT_DISABLE_DOWN;
+
+                                        if ( nDisableShiftX || nDisableShiftY )
+                                            pDlg->SetCellShiftDisabled( nDisableShiftX | nDisableShiftY );
                                     }
                                 }
                             }
