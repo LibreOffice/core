@@ -801,7 +801,7 @@ static const FunctionData saFuncTable2013[] =
      * import. */
     { 0/*"ISOWEEKNUM"*/,        "ISOWEEKNUM",           NOID,   NOID,   1,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "MUNIT",                  "MUNIT",                NOID,   NOID,   1,  1,  A, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { 0/*"NUMBERVALUE"*/,       "NUMBERVALUE",          NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "NUMBERVALUE",            "NUMBERVALUE",          NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "PDURATION",              "PDURATION",            NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "PERMUTATIONA",           "PERMUTATIONA",         NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "PHI",                    "PHI",                  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
