@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUn///3E\u003d",
+        "filename": "mysqlcppconn/UnpackedTarball_mysqlcppconn.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-28T19:34:36Z",
+      "side": 1,
+      "message": "should this patch only be added if $(SYSTEM_MYSQL) is NO ?",
+      "revId": "0984f04b88bd5780ce8b186291470bb4c92601ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
