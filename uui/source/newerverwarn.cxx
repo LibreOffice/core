@@ -88,12 +88,12 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         if (  !sNotifyURL.isEmpty()  &&  !m_sVersion.isEmpty() )
         {
-            uno::Reference< system::XSystemShellExecute > xSystemShell( system::SystemShellExecute::create(xContext) );
+            uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell( com::sun::star::system::SystemShellExecute::create(xContext) );
             sNotifyURL += m_sVersion;
             if ( !sNotifyURL.isEmpty() )
             {
                 xSystemShell->execute(
-                    sNotifyURL, ::rtl::OUString(), system::SystemShellExecuteFlags::URIS_ONLY );
+                    sNotifyURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
             }
         }
         else
