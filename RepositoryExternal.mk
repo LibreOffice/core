@@ -228,15 +228,15 @@ endef
 
 else
 
-$(eval $(call gb_Helper_register_libraries,OOOLIBS,\
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,\
 	mysqlcppconn \
 ))
 
+# note: this does not link mysqlcppconn, it is loaded via osl_loadModuleRelative
 define gb_LinkTarget__use_mysqlcppconn
 
-$(call gb_LinkTarget_use_libraries,$(1),\
-	mysqlcppconn \
-)
+$(call gb_LinkTarget_use_unpacked,$(1),mysqlcppconn)
+
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DCPPCONN_LIB_BUILD \
 )

@@ -17,10 +17,8 @@ $(eval $(call gb_Extension_add_files,mysql-connector-ooo,images,\
     $(SRCDIR)/icon-themes/galaxy/desktop/res/extension_32.png \
 ))
 
-ifeq ($(SYSTEM_MYSQL_CPPCON),NO)
-$(eval $(call gb_Extension_add_files,mysql-connector-ooo,,\
-	$(call gb_Library_get_target,mysqlcppcon) \
-))
+ifeq ($(SYSTEM_MYSQL_CPPCONN),NO)
+$(eval $(call gb_Extension_add_library,mysql-connector-ooo,mysqlcppconn))
 endif
 
 # HACK: comes from Library_mysql.mk

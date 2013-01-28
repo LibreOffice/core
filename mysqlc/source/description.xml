@@ -19,9 +19,9 @@
 <description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
-    <identifier value="UPDATED_IDENTIFIER"/>
+    <identifier value="com.sun.star.mysql-connector-ooo-@PLATFORM@"/>
     <version value="1.0.1" />
-    <platform value="UPDATED_SUPPORTED_PLATFORM" />
+    <platform value="@PLATFORM@" />
     <display-name>
         <name lang="en-US">MySQL Connector</name>
     </display-name>

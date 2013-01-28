@@ -572,7 +572,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     migrationoo3 \
     msforms \
     mtfrenderer \
-    mysqlc \
     nullcanvas \
     OGLTrans \
     passwordcontainer \
@@ -643,6 +642,7 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 
 $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
 	SunPresentationMinimizer \
+    mysqlc \
 ))
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
