@@ -146,12 +146,18 @@ ATSLayout::ATSLayout( ATSUStyle& rATSUStyle, float fFontScale )
     mpDeltaY( NULL ),
     mpFallbackInfo( NULL ),
     mnBaseAdv( 0 )
-{}
+{
+    SAL_INFO("vcl.atsui.layout", "ATSLayout(): FontScale=" << mfFontScale << " " << this);
+}
 
 // -----------------------------------------------------------------------
 
 ATSLayout::~ATSLayout()
 {
+    SAL_INFO("vcl.atsui.layout", "~ATSLayout(" << this << ")" <<
+             (maATSULayout == NULL ? " LayoutText() (or AdjustLayout()) never got called!" : "") <<
+             (mnGlyphCount < 0 ? " InitGIA() never got called!" : "" ) );
+
     if( mpDeltaY )
         ATSUDirectReleaseLayoutDataArrayPtr( NULL,
             kATSUDirectDataBaselineDeltaFixedArray, (void**)&mpDeltaY );
@@ -208,6 +214,9 @@ inline Fixed ATSLayout::Vcl2Fixed( int nPixel ) const
 **/
 bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
+    SAL_INFO("vcl.atsui.layout", "LayoutText(" << this << "): " <<
+             rArgs.mnLength << ":" << rArgs.mnMinCharPos << "--" << rArgs.mnEndCharPos);
+
     if( maATSULayout )
         ATSUDisposeTextLayout( maATSULayout );
 
@@ -295,6 +304,8 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
 **/
 void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
+    SAL_INFO("vcl.atsui.layout", "AdjustLayout(" << this << "): " <<
+             rArgs.mnLength << ":" << rArgs.mnMinCharPos << "--" << rArgs.mnEndCharPos << ", width=" << rArgs.mnLayoutWidth);
     int nOrigWidth = GetTextWidth();
     int nPixelWidth = rArgs.mnLayoutWidth;
     if( !nPixelWidth && rArgs.mpDXArray ) {
@@ -611,6 +622,9 @@ int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int
 **/
 long ATSLayout::GetTextWidth() const
 {
+    SAL_INFO("vcl.atsui.layout", "GetTextWidth(" << this << "): CharCount=" << mnCharCount <<
+             (maATSULayout == NULL ? " null layout!?" : ""));
+
     if( mnCharCount <= 0 )
         return 0;
 
@@ -627,9 +641,12 @@ long ATSLayout::GetTextWidth() const
         ItemCount nMaxBounds = 0;
         OSStatus err = ATSUGetGlyphBounds( maATSULayout, 0, 0, mnMinCharPos, mnCharCount,
             eTypeOfBounds, 0, NULL, &nMaxBounds );
-        if( (err != noErr)
-        ||  (nMaxBounds <= 0) )
+        if( (err != noErr) ||  (nMaxBounds <= 0) ) {
+            SAL_INFO("vcl.atsui.layout", "GetTextWidth(): " <<
+                     (err != noErr ? "ATSUGetGlyphBounds() failed" : "nMaxBounds <= 0") <<
+                     ", returning 0");
             return 0;
+        }
 
         // get the trapezoids
         typedef std::vector<ATSTrapezoid> TrapezoidVector;
@@ -637,8 +654,10 @@ long ATSLayout::GetTextWidth() const
         ItemCount nBoundsCount = 0;
         err = ATSUGetGlyphBounds( maATSULayout, 0, 0, mnMinCharPos, mnCharCount,
             eTypeOfBounds, nMaxBounds, &aTrapezoidVector[0], &nBoundsCount );
-        if( err != noErr )
+        if( err != noErr ) {
+            SAL_INFO("vcl.atsui.layout", "GetTextWidth(): ATSUGetGlyphBounds() failed case 2, returning 0");
             return 0;
+        }
 
         DBG_ASSERT( (nBoundsCount <= nMaxBounds), "ATSLayout::GetTextWidth() : too many trapezoids !\n");
 
@@ -661,6 +680,8 @@ long ATSLayout::GetTextWidth() const
 
     int nScaledWidth = Fixed2Vcl( mnCachedWidth );
     nScaledWidth += mnTrailingSpaceWidth;
+
+    SAL_INFO("vcl.atsui.layout", "GetTextWidth() returning nScaledWidth=" << nScaledWidth);
     return nScaledWidth;
 }
 
@@ -716,6 +737,9 @@ long ATSLayout::FillDXArray( sal_Int32* pDXArray ) const
 **/
 int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
+    SAL_INFO("vcl.atsui.layout", "GetTextBreak(" << this << "," << nCharExtra << "," << nFactor << ")" <<
+             (maATSULayout == NULL ? " no layout" : ""));
+
     if( !maATSULayout )
         return STRING_LEN;
 
@@ -746,8 +770,10 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
 
     // get a quick overview on what could fit
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
-    if( nPixelWidth <= 0 )
+    if( nPixelWidth <= 0 ) {
+        SAL_INFO("vcl.atsui.layout", "GetTextBreak(): nPixelWidth=" << nPixelWidth << ", returning mnMinCharPos=" << mnMinCharPos);
         return mnMinCharPos;
+    }
 
     // check assumptions
     DBG_ASSERT( !mnTrailingSpaceWidth, "ATSLayout::GetTextBreak() with nTSW!=0" );
@@ -755,8 +781,14 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
     // initial measurement of text break position
     UniCharArrayOffset nBreakPos = mnMinCharPos;
     const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nPixelWidth );
-    if( nATSUMaxWidth <= 0xFFFF ) // #i108584# avoid ATSU rejecting the parameter
-        return mnMinCharPos;      //           or do ATSUMaxWidth=0x10000;
+    if( nATSUMaxWidth <= 0xFFFF ) {
+        // #i108584# avoid ATSU rejecting the parameter
+        //           or do ATSUMaxWidth=0x10000;
+        SAL_INFO("vcl.atsui.layout", "GetTextBreak(): nATSUMaxWidth=" << std::hex << nATSUMaxWidth << std::dec <<
+                 ", returning mnMinCharPos=" << mnMinCharPos);
+        return mnMinCharPos;
+    }
+
     OSStatus eStatus = ATSUBreakLine( maATSULayout, mnMinCharPos,
         nATSUMaxWidth, false, &nBreakPos );
     if( (eStatus != noErr) && (eStatus != kATSULineBreakInWord) )
@@ -780,13 +812,23 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
     ATSUTextMeasurement nLeft, nRight, nDummy;
     eStatus = ATSUGetUnjustifiedBounds( maATSULayout, mnMinCharPos, nBreakPos-mnMinCharPos,
         &nLeft, &nRight, &nDummy, &nDummy );
-    if( eStatus != noErr )
+    if( eStatus != noErr ) {
+        SAL_INFO("vcl.atsui.layout", "GetTextBreak(): ATSUGetUnjustifiedBounds() failed, returning nBreakPos=" << nBreakPos);
         return nBreakPos;
+    }
+
     const ATSUTextMeasurement nATSURemWidth = nATSUMaxWidth - (nRight - nLeft);
-    if( nATSURemWidth <= 0xFFFF ) // #i108584# avoid ATSU rejecting the parameter
+    if( nATSURemWidth <= 0xFFFF ) {
+        // #i108584# avoid ATSU rejecting the parameter
+        SAL_INFO("vcl.atsui.layout", "GetTextBreak(): nATSURemWidth=" << std::hex << nATSURemWidth << std::dec <<
+                 ", returning nBreakPos=" << nBreakPos);
         return nBreakPos;
+    }
+
     UniCharArrayOffset nBreakPosInWord = nBreakPos;
     eStatus = ATSUBreakLine( maATSULayout, nBreakPos, nATSURemWidth, false, &nBreakPosInWord );
+
+    SAL_INFO("vcl.atsui.layout", "GetTextBreak() returning nBreakPosInWord=" << nBreakPosInWord);
     return nBreakPosInWord;
 }
 
@@ -904,6 +946,8 @@ bool ATSLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) cons
 **/
 bool ATSLayout::InitGIA( ImplLayoutArgs* pArgs ) const
 {
+    SAL_INFO("vcl.atsui.layout", "InitGIA(" << this << "): GlyphCount=" << mnGlyphCount << ",CharCount=" << mnCharCount);
+
     // no need to run InitGIA more than once on the same ATSLayout object
     if( mnGlyphCount >= 0 )
         return true;
