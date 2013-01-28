@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUn///6A\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 1853,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-28T13:50:11Z",
+      "side": 1,
+      "message": "there are some traling spaces in this paragraph",
+      "revId": "e08b06896c56eb8a77917c5289e7ff3caf77eb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///58\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 11802,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-28T13:50:11Z",
+      "side": 1,
+      "message": "some spurious whitespace here too",
+      "revId": "e08b06896c56eb8a77917c5289e7ff3caf77eb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///54\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 11811,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-01-28T13:50:11Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "e08b06896c56eb8a77917c5289e7ff3caf77eb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
