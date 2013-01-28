@@ -371,6 +371,8 @@ void SvxSearchDialog::Construct_Impl()
     aCalcStr += aWordBtn.GetText();
 
     aLayoutStr = SVX_RESSTR( RID_SVXSTR_SEARCH_STYLES );
+    aLayoutWriterStr = SVX_RESSTR( RID_SVXSTR_WRITER_STYLES );
+    aLayoutCalcStr = SVX_RESSTR( RID_SVXSTR_CALC_STYLES );
     aStylesStr = aLayoutBtn.GetText();
 
     // Get stored search-strings from the application
@@ -1985,6 +1987,23 @@ void SvxSearchDialog::SetItem_Impl( const SvxSearchItem* pItem )
 IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
 {
     sal_Int32 nTxtLen;
+    bool bDrawApp = false;
+    bool bCalcApp = false;
+    bool bWriterApp = false;
+    bool bImpressApp = false;
+    const uno::Reference< frame::XFrame > xFrame = rBindings.GetActiveFrame();
+    uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(::comphelper::getProcessComponentContext()) );
+    try
+    {
+        ::rtl::OUString aModuleIdentifier = xModuleManager->identify( xFrame );
+        bCalcApp = aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument";
+        bDrawApp = aModuleIdentifier == "com.sun.star.drawing.DrawingDocument";
+        bImpressApp = aModuleIdentifier == "com.sun.star.presentation.PresentationDocument";
+        bWriterApp = aModuleIdentifier == "com.sun.star.text.TextDocument";
+    }
+    catch ( uno::Exception& )
+    {
+    }
 
     if ( !pImpl->bMultiLineEdit )
         nTxtLen = aSearchAttrText.GetText().getLength();
@@ -2022,8 +2041,16 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
     aSearchLB.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
     ModifyHdl_Impl( (ComboBox*)pCtrl );
-
-    aLayoutBtn.SetText( bFormat && nTxtLen ? aLayoutStr : aStylesStr );
+    
+    if(bWriterApp)    
+        aLayoutBtn.SetText( bFormat && nTxtLen ? aLayoutStr : aLayoutWriterStr );
+    else
+        {
+        if(bCalcApp)
+            aLayoutBtn.SetText( bFormat && nTxtLen ? aLayoutStr : aLayoutCalcStr );
+        else
+            aLayoutBtn.SetText( bFormat && nTxtLen ? aLayoutStr : aStylesStr );
+        }
     return 0;
 }
 
@@ -2134,8 +2161,36 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
 // -----------------------------------------------------------------------
 
 IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
-{
-    aLayoutBtn.SetText( aStylesStr );
+{   
+    bool bDrawApp = false;
+    bool bCalcApp = false;
+    bool bWriterApp = false;
+    bool bImpressApp = false;
+    const uno::Reference< frame::XFrame > xFrame = rBindings.GetActiveFrame();
+    uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(::comphelper::getProcessComponentContext()) );
+    try
+    {
+        ::rtl::OUString aModuleIdentifier = xModuleManager->identify( xFrame );
+        bCalcApp = aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument";
+        bDrawApp = aModuleIdentifier == "com.sun.star.drawing.DrawingDocument";
+        bImpressApp = aModuleIdentifier == "com.sun.star.presentation.PresentationDocument";
+        bWriterApp = aModuleIdentifier == "com.sun.star.text.TextDocument";
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
+    if(bCalcApp)
+        aLayoutBtn.SetText( aLayoutCalcStr );
+    else 
+    {
+        if(bWriterApp)
+            aLayoutBtn.SetText( aLayoutWriterStr);
+        else
+            aLayoutBtn.SetText( aStylesStr );        
+    }
+        
+        
     bFormat = sal_False;
     aLayoutBtn.Check( sal_False );
 
