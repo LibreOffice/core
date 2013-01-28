@@ -38,7 +38,7 @@ public:
             XFillGradientItem() : NameOrIndex(XATTR_FILLGRADIENT, -1) {}
             XFillGradientItem(sal_uInt16 nWhich_) : NameOrIndex(nWhich_, -1) {}
             XFillGradientItem(sal_Int32 nIndex, const XGradient& rTheGradient);
-            XFillGradientItem(const UniString& rName, const XGradient& rTheGradient);
+            XFillGradientItem(const UniString& rName, const XGradient& rTheGradient, sal_uInt16 nWhich_ = XATTR_FILLGRADIENT);
             XFillGradientItem(const XGradient& rTheGradient);
             XFillGradientItem(const XFillGradientItem& rItem);
             XFillGradientItem(SvStream& rIn, sal_uInt16 nVer = 0);

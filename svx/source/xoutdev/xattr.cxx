@@ -3163,8 +3163,8 @@ XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
 *************************************************************************/
 
 XFillGradientItem::XFillGradientItem(const XubString& rName,
-                                   const XGradient& rTheGradient) :
-    NameOrIndex(XATTR_FILLGRADIENT, rName),
+                                   const XGradient& rTheGradient, sal_uInt16 nWhich_) :
+    NameOrIndex(nWhich_, rName),
     aGradient(rTheGradient)
 {
 }
@@ -3601,7 +3601,7 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-            return new XFillGradientItem( aUniqueName, aGradient );
+            return new XFillGradientItem( aUniqueName, aGradient, Which() );
     }
 
     return (XFillGradientItem*)this;
