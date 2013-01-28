@@ -60,7 +60,7 @@ ImagePreparer::~ImagePreparer()
     Stop();
 }
 
-void SAL_CALL ImagePreparer::Timeout()
+void ImagePreparer::Timeout()
 {
     sal_uInt32 aSlides = xController->getSlideCount();
 //    fprintf( stderr, "ImagePreparer: %d %d %d\n", xController->isRunning(),
