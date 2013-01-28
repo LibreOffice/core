@@ -547,6 +547,7 @@ class SwXDocumentPropertyHelper : public SvxUnoForbiddenCharsTable
 {
     css::uno::Reference < css::uno::XInterface > xDashTable;
     css::uno::Reference < css::uno::XInterface > xGradientTable;
+    css::uno::Reference < css::uno::XInterface > xTextGradientTable;
     css::uno::Reference < css::uno::XInterface > xHatchTable;
     css::uno::Reference < css::uno::XInterface > xBitmapTable;
     css::uno::Reference < css::uno::XInterface > xTransGradientTable;

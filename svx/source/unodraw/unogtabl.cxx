@@ -35,8 +35,10 @@ using namespace ::cppu;
 
 class SvxUnoGradientTable : public SvxUnoNameItemTable
 {
+    bool m_bTextWhich;
 public:
     SvxUnoGradientTable( SdrModel* pModel ) throw();
+    SvxUnoGradientTable( SdrModel* pModel, sal_uInt16 nWhich ) throw();
     virtual ~SvxUnoGradientTable() throw();
 
     virtual NameOrIndex* createItem() const throw();
@@ -50,7 +52,12 @@ public:
 };
 
 SvxUnoGradientTable::SvxUnoGradientTable( SdrModel* pModel ) throw()
-    : SvxUnoNameItemTable( pModel, XATTR_FILLGRADIENT, MID_FILLGRADIENT )
+    : SvxUnoNameItemTable( pModel, XATTR_FILLGRADIENT, MID_FILLGRADIENT ), m_bTextWhich(false)
+{
+}
+
+SvxUnoGradientTable::SvxUnoGradientTable( SdrModel* pModel, sal_uInt16 nWhich ) throw()
+    : SvxUnoNameItemTable( pModel, nWhich, MID_FILLGRADIENT ), m_bTextWhich(true)
 {
 }
 
@@ -60,14 +67,20 @@ SvxUnoGradientTable::~SvxUnoGradientTable() throw()
 
 OUString SAL_CALL SvxUnoGradientTable::getImplementationName() throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoGradientTable") );
+    if (m_bTextWhich)
+        return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoTextGradientTable") );
+    else
+        return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoGradientTable") );
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoGradientTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable" ));
+    if (m_bTextWhich)
+        aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GradientTable" ));
+    else
+        aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable" ));
     return aSNS;
 }
 
@@ -91,6 +104,11 @@ uno::Type SAL_CALL SvxUnoGradientTable::getElementType(  )
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoGradientTable_createInstance( SdrModel* pModel )
 {
     return *new SvxUnoGradientTable(pModel);
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextGradientTable_createInstance( SdrModel* pModel, sal_uInt16 nWhich )
+{
+    return *new SvxUnoGradientTable(pModel, nWhich);
 }
 
 

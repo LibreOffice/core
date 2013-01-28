@@ -1540,43 +1540,55 @@ void SvXMLExport::_ExportFontDecls()
         mxFontAutoStylePool->exportXML();
 }
 
+void lcl_ExportGradientStyle(SvXMLExport& rExport, uno::Reference< lang::XMultiServiceFactory > xFact, OUString aServiceName, std::vector<OUString>& rGradientNames)
+{
+    try
+    {
+        uno::Reference< container::XNameAccess > xGradient( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
+        if( xGradient.is() )
+        {
+            XMLGradientStyleExport aGradientStyle( rExport );
+
+            if( xGradient->hasElements() )
+            {
+                uno::Sequence< OUString > aNamesSeq ( xGradient->getElementNames() );
+                sal_Int32 nCount = aNamesSeq.getLength();
+                for( sal_Int32 i=0; i<nCount; i++ )
+                {
+                    const OUString& rStrName = aNamesSeq[ i ];
+
+                    // Avoid duplicated style names.
+                    if (std::find(rGradientNames.begin(), rGradientNames.end(), rStrName) != rGradientNames.end())
+                        continue;
+
+                    try
+                    {
+                        uno::Any aValue = xGradient->getByName( rStrName );
+
+                        aGradientStyle.exportXML( rStrName, aValue );
+                        rGradientNames.push_back(rStrName);
+                    }
+                    catch(const container::NoSuchElementException&)
+                    {
+                    }
+                }
+            }
+        }
+    }
+    catch(const lang::ServiceNotRegisteredException&)
+    {
+    }
+}
+
 void SvXMLExport::_ExportStyles( sal_Bool )
 {
     uno::Reference< lang::XMultiServiceFactory > xFact( GetModel(), uno::UNO_QUERY );
     if( xFact.is())
     {
         // export (fill-)gradient-styles
-        try
-        {
-            uno::Reference< container::XNameAccess > xGradient( xFact->createInstance( OUString("com.sun.star.drawing.GradientTable" ) ), uno::UNO_QUERY );
-            if( xGradient.is() )
-            {
-                XMLGradientStyleExport aGradientStyle( *this );
-
-                if( xGradient->hasElements() )
-                {
-                    uno::Sequence< OUString > aNamesSeq ( xGradient->getElementNames() );
-                    sal_Int32 nCount = aNamesSeq.getLength();
-                    for( sal_Int32 i=0; i<nCount; i++ )
-                    {
-                        const OUString& rStrName = aNamesSeq[ i ];
-
-                        try
-                        {
-                            uno::Any aValue = xGradient->getByName( rStrName );
-
-                            aGradientStyle.exportXML( rStrName, aValue );
-                        }
-                        catch(const container::NoSuchElementException&)
-                        {
-                        }
-                    }
-                }
-            }
-        }
-        catch(const lang::ServiceNotRegisteredException&)
-        {
-        }
+        std::vector<OUString> aGradientNames;
+        lcl_ExportGradientStyle(*this, xFact, "com.sun.star.drawing.GradientTable", aGradientNames);
+        lcl_ExportGradientStyle(*this, xFact, "com.sun.star.text.GradientTable", aGradientNames);
 
         // export (fill-)hatch-styles
         try
