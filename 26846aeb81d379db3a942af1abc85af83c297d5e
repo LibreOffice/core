@@ -16,6 +16,24 @@
       "revId": "26846aeb81d379db3a942af1abc85af83c297d5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///6I\u003d",
+        "filename": "pyuno/source/loader/pythonloader.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-01-28T13:49:18Z",
+      "side": 1,
+      "message": "\"git grep -F sys.version\" on current master shows that scripting/source/pyprov/mailmerge.py also uses sys.version while l10ntools/scripts/po2lo uses sys.version_info.  What little Python I know, I guess both work in practice; but you might want to clean this up for consistency on master.",
+      "parentUuid": "AAAAUX///8Q\u003d",
+      "revId": "26846aeb81d379db3a942af1abc85af83c297d5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
