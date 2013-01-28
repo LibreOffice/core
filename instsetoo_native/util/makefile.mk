@@ -173,7 +173,6 @@ oxygenofficelanguagepack : $(foreach,i,$(alllangiso) oxygenofficelanguagepack_$i
 oxygenofficehelppack : $(foreach,i,$(allhelplangiso) oxygenofficehelppack_$i)
 
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
-MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSIHELPPACKTEMPLATESOURCE=$(PRJ)$/inc_ooohelppack$/windows$/msi_templates
 MSISDKOOTEMPLATESOURCE=$(PRJ)$/inc_sdkoo$/windows$/msi_templates
 MSITESTTEMPLATESOURCE=$(PRJ)$/inc_lotest$/windows$/msi_templates
@@ -182,7 +181,6 @@ MSICOMMONTEMPLATESOURCE=$(PRJ)$/inc_common$/windows$/msi_templates
 NOLOGOSPLASH:=$(BIN)$/intro.zip
 DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
-MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
 MSIHELPPACKTEMPLATEDIR=$(MISC)$/ooohelppack$/msi_templates
 MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
 MSITESTTEMPLATEDIR=$(MISC)$/lotest$/msi_templates
@@ -241,11 +239,11 @@ openofficedev_%{$(PKGFORMAT:^".")} :
 
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 ooolanguagepack_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice -u $(OUT) -buildid $(BUILD) -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 ooodevlanguagepack_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Dev -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Dev -u $(OUT) -buildid $(BUILD) -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 $(foreach,i,$(allhelplangiso) ooohelppack_$i) : $$@{$(PKGFORMAT:^".")}
 ooohelppack_%{$(PKGFORMAT:^".")} :
@@ -320,31 +318,25 @@ $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/brand_dev$/intro.zip
 
 hack_msitemplates .PHONY:
     -$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)
-    -$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)
     -$(MKDIRHIER) $(MSIHELPPACKTEMPLATEDIR)
     -$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)
     -$(MKDIRHIER) $(MSITESTTEMPLATEDIR)
     -$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)$/Binary
-    -$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)$/Binary
     -$(MKDIRHIER) $(MSIHELPPACKTEMPLATEDIR)$/Binary
     -$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)$/Binary
     -$(MKDIRHIER) $(MSITESTTEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSIOFFICETEMPLATESOURCE)$/*.* $(MSIOFFICETEMPLATEDIR)
-    $(GNUCOPY) -u $(MSILANGPACKTEMPLATESOURCE)$/*.* $(MSILANGPACKTEMPLATEDIR)
     $(GNUCOPY) -u $(MSIHELPPACKTEMPLATESOURCE)$/*.* $(MSIHELPPACKTEMPLATEDIR)
     $(GNUCOPY) -u $(MSISDKOOTEMPLATESOURCE)$/*.* $(MSISDKOOTEMPLATEDIR)
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSIOFFICETEMPLATEDIR)$/Binary
-    $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSILANGPACKTEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSIHELPPACKTEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSISDKOOTEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSITESTTEMPLATEDIR)$/Binary
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
-    $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSITESTTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Banner.bmp
-    $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSITESTTEMPLATEDIR)$/Binary$/Banner.bmp

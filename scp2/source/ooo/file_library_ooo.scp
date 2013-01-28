@@ -731,17 +731,6 @@ End
 
 #endif
 
-#ifdef WNT
-
-File gid_File_Lib_Lngpckinsthlp
-    LIB_FILE_BODY;
-    Styles = (PACKED, LANGUAGEPACK, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "lngpckinsthlp.dll";
-End
-
-#endif
-
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_sn_tools

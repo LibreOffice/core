@@ -244,16 +244,6 @@ WindowsCustomAction gid_Customaction_Patch_Regpatchactivex_Patchactivexcontrol
 	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=3", "end");
 End
 
-WindowsCustomAction gid_Customaction_Langpack_Register_Extensions
-	Name = "RegisterExtensions";
-	Typ = "65";
-	Source = "lngpckinsthlp.dll";
-	Target = "RegisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "end");
-	Assignment2 = ("AdminExecuteSequence", "", "end");
-End
-
 WindowsCustomAction gid_Customaction_CheckPatchList
 	Name = "CheckPatchList";
 	Typ = "65";
@@ -261,24 +251,6 @@ WindowsCustomAction gid_Customaction_CheckPatchList
 	Target = "CheckPatchList";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "PATCH", "Patch1NotInstalled");
-End
-
-WindowsCustomAction gid_Customaction_Langpack_SetUserInstallMode
-	Name = "SetUserInstallMode";
-	Typ = "65";
-	Source = "lngpckinsthlp.dll";
-	Target = "GetUserInstallMode";
-	Inbinarytable = 1;
-	Assignment1 = ("ControlEvent", "InstallWelcome", "Next", "DoAction", "SetUserInstallMode", "1", "1");
-	Assignment2 = ("ControlEvent", "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "8");
-	Assignment3 = ("ControlCondition", "DestinationFolder", "Next", "Enable", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
-	Assignment4 = ("ControlCondition", "DestinationFolder", "Next", "Disable", "INVALIDDIRECTORY Or ISWRONGPRODUCT");
-	Assignment5 = ("ControlCondition", "DestinationFolder", "LabelStartInstall", "Show", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
-	Assignment6 = ("ControlCondition", "DestinationFolder", "LabelInvalidDir", "Show", "INVALIDDIRECTORY");
-	Assignment7 = ("ControlCondition", "DestinationFolder", "LabelWrongProduct", "Show", "ISWRONGPRODUCT");
-	Assignment8 = ("ControlCondition", "DestinationFolder", "LabelStartInstall2", "Show", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
-	Assignment9 = ("ControlCondition", "DestinationFolder", "LabelInvalidDir2", "Show", "INVALIDDIRECTORY");
-	Assignment10 = ("ControlCondition", "DestinationFolder", "LabelWrongProduct2", "Show", "ISWRONGPRODUCT");
 End
 
 WindowsCustomAction gid_Customaction_MigrateInstallPath
