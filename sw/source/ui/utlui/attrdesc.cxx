@@ -380,7 +380,7 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
             {
                 const sal_uInt16 nId = ATT_FIX_SIZE == eFrmHeightType ?
                                         STR_FRM_FIXEDHEIGHT : STR_FRM_MINHEIGHT;
-                rText = rText + ", " + SW_RESSTR( nId ) + " s";
+                rText = rText + ", " + SW_RESSTR( nId ) + " ";
                 if ( GetHeightPercent() )
                 {
                     rText = rText + OUString::valueOf(GetHeightPercent()) + "%";

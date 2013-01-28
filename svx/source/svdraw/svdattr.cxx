@@ -901,6 +901,7 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
+        aText.insert(0, ' ');
         aText.insert(0, aStr);
     }
 

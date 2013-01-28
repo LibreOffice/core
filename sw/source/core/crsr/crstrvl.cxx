@@ -1467,7 +1467,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     {
                         if( !IsInvalidItem( pItem ))
                         {
-                            String aStr;
+                            OUString aStr;
                             GetDoc()->GetAttrPool().GetPresentation( *pItem,
                                             SFX_ITEM_PRESENTATION_COMPLETE,
                                             SFX_MAPUNIT_CM, aStr );
