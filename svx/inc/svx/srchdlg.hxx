@@ -203,6 +203,8 @@ private:
     sal_uIntPtr         nModifyFlag;
     String          aStylesStr;
     String          aLayoutStr;
+    String          aLayoutWriterStr;
+    String          aLayoutCalcStr;
     String aCalcStr;
 
     std::vector<rtl::OUString> aSearchStrings;

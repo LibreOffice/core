@@ -28,6 +28,14 @@ String RID_SVXSTR_SEARCH_STYLES
 {
     Text [ en-US ] = "Including Styles" ;
 };
+String RID_SVXSTR_WRITER_STYLES
+{
+    Text [ en-US ] = "Search for Paragraph St~yles" ;
+};
+String RID_SVXSTR_CALC_STYLES
+{
+    Text [ en-US ] = "Search for Cell St~yles" ;
+};
 String RID_SVXSTR_SEARCH
 {
     Text [ en-US ] = "(Search)" ;
