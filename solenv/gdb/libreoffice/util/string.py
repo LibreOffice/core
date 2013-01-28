@@ -41,9 +41,9 @@ class StringPrinterHelper(object):
         self.encoding = encoding
 
     def to_string(self):
-        data = self.data()
-        len = self.length()
         if self.valid():
+            data = self.data()
+            len = self.length()
             return self.make_string(data, self.encoding, len)
         else:
             return "unintialized %s" % self.typename
