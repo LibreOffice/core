@@ -556,6 +556,8 @@ namespace
             return (VclResId(SV_BUTTONTEXT_EDIT).toString());
         else if (rType == "gtk-apply")
             return (VclResId(SV_BUTTONTEXT_APPLY).toString());
+        else if (rType == "gtk-save")
+            return (VclResId(SV_BUTTONTEXT_SAVE).toString());
         SAL_WARN("vcl.layout", "unknown stock type: " << rType.getStr());
         return OUString();
     }

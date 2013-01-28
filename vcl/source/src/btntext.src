@@ -119,3 +119,8 @@ String SV_BUTTONTEXT_APPLY
 {
     Text [ en-US ] = "~Apply";
 };
+
+String SV_BUTTONTEXT_SAVE
+{
+    Text [ en-US ] = "~Save";
+};
