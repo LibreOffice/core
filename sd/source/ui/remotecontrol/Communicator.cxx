@@ -79,7 +79,7 @@ void Communicator::execute()
         }
         else
         {
-            aReceiver.parseCommand( aCommand );
+            aReceiver.pushCommand( aCommand );
             aCommand.clear();
         }
     }

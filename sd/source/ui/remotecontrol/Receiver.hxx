@@ -16,6 +16,8 @@
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <osl/socket.hxx>
 #include <stdlib.h>
+#include <vcl/timer.hxx>
+#include <vcl/svapp.hxx>
 
 #include <vector>
 
@@ -24,12 +26,16 @@
 namespace sd
 {
 
-class Receiver
+// Timer is protected by the solar mutex => so are we.
+class Receiver : Timer
 {
+    std::deque< std::vector< rtl::OString > > maExecQueue;
 public:
     Receiver( Transmitter *aTransmitter );
     ~Receiver();
-    void parseCommand( std::vector<rtl::OString> aCommand );
+    virtual void Timeout();
+    void pushCommand( const std::vector<rtl::OString> &rCommand );
+    void executeCommand( const std::vector<rtl::OString> &aCommand );
 
 private:
     Transmitter *pTransmitter;

@@ -2131,7 +2131,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
 
 void SlideShowImpl::notifySlideTransitionEnded( bool bPaintSlide )
 {
-    osl::MutexGuard const guard( m_aMutex );
+    osl::ResettableMutexGuard guard( m_aMutex );
 
     OSL_ENSURE( !isDisposed(), "### already disposed!" );
     OSL_ENSURE( mpCurrentSlide,
@@ -2144,6 +2144,10 @@ void SlideShowImpl::notifySlideTransitionEnded( bool bPaintSlide )
         // the chance to register SlideStartEvents
         const bool bBackgroundLayerRendered( !bPaintSlide );
         mpCurrentSlide->show( bBackgroundLayerRendered );
+
+        uno::Reference<presentation::XSlideShow> xThis(
+                static_cast< presentation::XSlideShow * >( this ), uno::UNO_QUERY_THROW );
+        guard.reset(); // unlock
         maEventMultiplexer.notifySlideStartEvent();
     }
 }
