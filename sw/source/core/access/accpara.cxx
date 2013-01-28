@@ -914,10 +914,11 @@ static bool lcl_GetBackgroundColor( Color & rColor,
 {
     const SvxBrushItem* pBackgrdBrush = 0;
     const XFillStyleItem* pFillStyleItem = 0;
+    const XFillGradientItem* pFillGradientItem = 0;
     const Color* pSectionTOXColor = 0;
     SwRect aDummyRect;
     if ( pFrm &&
-         pFrm->GetBackgroundBrush( pBackgrdBrush, pFillStyleItem, pSectionTOXColor, aDummyRect, false ) )
+         pFrm->GetBackgroundBrush( pBackgrdBrush, pFillStyleItem, pFillGradientItem, pSectionTOXColor, aDummyRect, false ) )
     {
         if ( pSectionTOXColor )
         {

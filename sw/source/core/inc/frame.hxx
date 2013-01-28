@@ -49,6 +49,7 @@ class SwBorderAttrs;
 class SwCache;
 class SvxBrushItem;
 class XFillStyleItem;
+class XFillGradientItem;
 class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
@@ -503,6 +504,7 @@ public:
 
     sal_Bool GetBackgroundBrush( const SvxBrushItem*& rpBrush,
                              const XFillStyleItem* & rpFillStyle,
+                             const XFillGradientItem* & rpFillGradient,
                              const Color*& rpColor,
                              SwRect &rOrigRect,
                              sal_Bool bLowerMode ) const;

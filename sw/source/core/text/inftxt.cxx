@@ -514,13 +514,14 @@ static sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
     {
         const SvxBrushItem* pItem;
         const XFillStyleItem* pFillStyleItem;
+        const XFillGradientItem* pFillGradientItem;
         SwRect aOrigBackRect;
 
         // Consider, that [GetBackgroundBrush(...)] can set <pCol>
         // See implementation in /core/layout/paintfrm.cxx
         // There is a background color, if there is a background brush and
         // its color is *not* "no fill"/"auto fill".
-        if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pFillStyleItem, pCol, aOrigBackRect, sal_False ) )
+        if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pFillStyleItem, pFillGradientItem, pCol, aOrigBackRect, sal_False ) )
         {
             if ( !pCol )
                 pCol = &pItem->GetColor();
@@ -885,7 +886,7 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, sal_Bool bNoGraphic,
         else
         {
             OSL_ENSURE( ((SvxBrushItem*)-1) != pBrushItem, "DrawRect: Uninitialized BrushItem!" );
-            ::DrawGraphic( pBrushItem, 0, pOut, aItemRect, rRect );
+            ::DrawGraphic( pBrushItem, 0, 0, pOut, aItemRect, rRect );
         }
     }
 }

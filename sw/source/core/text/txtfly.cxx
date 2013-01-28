@@ -658,7 +658,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
         {
             OSL_ENSURE( ((SvxBrushItem*)-1) != rInf.GetBrushItem(),
                     "DrawRect: Uninitialized BrushItem!" );
-            ::DrawGraphic( rInf.GetBrushItem(), 0, pOut, rInf.GetBrushRect(),
+            ::DrawGraphic( rInf.GetBrushItem(), 0, 0, pOut, rInf.GetBrushRect(),
                        aRegion[i] );
         }
     }

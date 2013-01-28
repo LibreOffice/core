@@ -20,6 +20,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <hintids.hxx>
 #include <vcl/lazydelete.hxx>
+#include <vcl/gradient.hxx>
 #include <tools/poly.hxx>
 #include <svx/xoutbmp.hxx>
 #include <sfx2/progress.hxx>
@@ -30,6 +31,7 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svx/framelink.hxx>
+#include <svx/xflgrit.hxx>
 #include <vcl/graph.hxx>
 #include <svx/svdpagv.hxx>
 #include <tgrditem.hxx>
@@ -1786,6 +1788,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
 
 void DrawGraphic( const SvxBrushItem *pBrush,
                               const XFillStyleItem* pFillStyleItem,
+                              const XFillGradientItem* pFillGradientItem,
                               OutputDevice *pOutDev,
                               const SwRect &rOrg,
                               const SwRect &rOut,
@@ -2077,7 +2080,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
             /// draw poly-polygon transparent
             pOutDev->DrawTransparent( aDrawPoly, nTransparencyPercent );
         }
-        else if (!pFillStyleItem || pFillStyleItem->GetValue() != XFILL_GRADIENT)
+        else if (!pFillStyleItem || pFillStyleItem->GetValue() != XFILL_GRADIENT || !pFillGradientItem)
         {
             SwRegionRects aRegion( rOut, 4 );
             if ( !bGrfIsTransparent )
@@ -2091,7 +2094,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
             }
         }
         else
-            pOutDev->DrawGradient(rOut.SVRect(), pBrush->GetGradient());
+            pOutDev->DrawGradient(rOut.SVRect(), pFillGradientItem->GetGradientValue().VclGradient());
        pOutDev ->Pop();
     }
 
@@ -3712,9 +3715,10 @@ sal_Bool SwFlyFrm::IsBackgroundTransparent() const
     {
         const SvxBrushItem* pBackgrdBrush = 0;
         const XFillStyleItem* pFillStyleItem = 0;
+        const XFillGradientItem* pFillGradientItem = 0;
         const Color* pSectionTOXColor = 0;
         SwRect aDummyRect;
-        if ( GetBackgroundBrush( pBackgrdBrush, pFillStyleItem, pSectionTOXColor, aDummyRect, false) )
+        if ( GetBackgroundBrush( pBackgrdBrush, pFillStyleItem, pFillGradientItem, pSectionTOXColor, aDummyRect, false) )
         {
             if ( pSectionTOXColor &&
                  (pSectionTOXColor->GetTransparency() != 0) &&
@@ -6086,6 +6090,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
 
     const SvxBrushItem* pItem;
     const XFillStyleItem* pFillStyleItem;
+    const XFillGradientItem* pFillGradientItem;
     /// OD 05.09.2002 #102912#
     /// temporary background brush for a fly frame without a background brush
     SvxBrushItem* pTmpBackBrush = 0;
@@ -6094,7 +6099,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     const bool bPageFrm = IsPageFrm();
     sal_Bool bLowMode = sal_True;
 
-    sal_Bool bBack = GetBackgroundBrush( pItem, pFillStyleItem, pCol, aOrigBackRect, bLowerMode );
+    sal_Bool bBack = GetBackgroundBrush( pItem, pFillStyleItem, pFillGradientItem, pCol, aOrigBackRect, bLowerMode );
     //- Output if a separate background is used.
     bool bNoFlyBackground = !bFlyMetafile && !bBack && IsFlyFrm();
     if ( bNoFlyBackground )
@@ -6104,7 +6109,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
         // <GetBackgroundBrush> disabled this option with the parameter <bLowerMode>
         if ( bLowerMode )
         {
-            bBack = GetBackgroundBrush( pItem, pFillStyleItem, pCol, aOrigBackRect, false );
+            bBack = GetBackgroundBrush( pItem, pFillStyleItem, pFillGradientItem, pCol, aOrigBackRect, false );
         }
         // If still no background found for the fly frame, initialize the
         // background brush <pItem> with global retouche color and set <bBack>
@@ -6195,7 +6200,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                         ///     Set missing 5th parameter to the default value GRFNUM_NO
                         ///         - see declaration in /core/inc/frmtool.hxx.
                         if (IsTxtFrm() || !bOnlyTxtBackground)
-                            ::DrawGraphic( pItem, pFillStyleItem, pOut, aOrigBackRect, aRegion[i], GRFNUM_NO,
+                            ::DrawGraphic( pItem, pFillStyleItem, pFillGradientItem, pOut, aOrigBackRect, aRegion[i], GRFNUM_NO,
                                     bConsiderBackgroundTransparency );
                     }
                 }
@@ -6873,9 +6878,10 @@ const Color& SwPageFrm::GetDrawBackgrdColor() const
 {
     const SvxBrushItem* pBrushItem;
     const XFillStyleItem* pFillStyleItem;
+    const XFillGradientItem* pFillGradientItem;
     const Color* pDummyColor;
     SwRect aDummyRect;
-    if ( GetBackgroundBrush( pBrushItem, pFillStyleItem, pDummyColor, aDummyRect, true) )
+    if ( GetBackgroundBrush( pBrushItem, pFillStyleItem, pFillGradientItem, pDummyColor, aDummyRect, true) )
         return pBrushItem->GetColor();
     else
         return aGlobalRetoucheColor;
@@ -7003,6 +7009,9 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
     @param rpFillStyle
     output parameter - constant reference pointer the found background fill style
 
+    @param rpFillGradient
+    output parameter - constant reference pointer the found background fill gradient
+
     @param rpCol
     output parameter - constant reference pointer to the color of the index shading
     set under special conditions, if background brush is taken from an index section.
@@ -7020,6 +7029,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
 */
 sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
                                     const XFillStyleItem* & rpFillStyle,
+                                    const XFillGradientItem* & rpFillGradient,
                                 const Color*& rpCol,
                                 SwRect &rOrigRect,
                                 sal_Bool bLowerMode ) const
@@ -7029,6 +7039,7 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
     const SwViewOption *pOpt = pSh->GetViewOptions();
     rpBrush = 0;
     rpFillStyle = 0;
+    rpFillGradient = 0;
     rpCol = NULL;
     do
     {   if ( pFrm->IsPageFrm() && !pOpt->IsPageBack() )
@@ -7036,6 +7047,7 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
 
         const SvxBrushItem &rBack = pFrm->GetAttrSet()->GetBackground();
         const XFillStyleItem &rFillStyle = pFrm->GetAttrSet()->GetFillStyle();
+        const XFillGradientItem &rFillGradient = pFrm->GetAttrSet()->GetFillGradient();
         if( pFrm->IsSctFrm() )
         {
             const SwSection* pSection = ((SwSectionFrm*)pFrm)->GetSection();
@@ -7082,6 +7094,7 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
         {
             rpBrush = &rBack;
             rpFillStyle = &rFillStyle;
+            rpFillGradient = &rFillGradient;
             if ( pFrm->IsPageFrm() &&
                  pSh->GetViewOptions()->getBrowseMode() )
                 rOrigRect = pFrm->Frm();

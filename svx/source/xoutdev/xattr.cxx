@@ -50,6 +50,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/tools/unotools.hxx>
+#include <vcl/gradient.hxx>
 
 #include <stdio.h>
 
@@ -3119,6 +3120,21 @@ bool XGradient::operator==(const XGradient& rGradient) const
              nStepCount     == rGradient.nStepCount );
 }
 
+Gradient XGradient::VclGradient() const
+{
+    Gradient aGradient;
+    aGradient.SetStyle((GradientStyle)eStyle);
+    aGradient.SetStartColor(aStartColor);
+    aGradient.SetEndColor(aEndColor);
+    aGradient.SetAngle(nAngle);
+    aGradient.SetBorder(nBorder);
+    aGradient.SetOfsX(nOfsX);
+    aGradient.SetOfsY(nOfsY);
+    aGradient.SetStartIntensity(nIntensStart);
+    aGradient.SetEndIntensity(nIntensEnd);
+    aGradient.SetSteps(nStepCount);
+    return aGradient;
+}
 
 // -----------------------
 // class XFillGradientItem

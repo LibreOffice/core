@@ -37,6 +37,7 @@ class SdrObject;
 class BigInt;
 class SvxBrushItem;
 class XFillStyleItem;
+class XFillGradientItem;
 class SdrMarkList;
 class SwNodeIndex;
 class OutputDevice;
@@ -51,7 +52,7 @@ class SwPageDesc;
 // draw background with brush or graphics
 // The 6th parameter indicates that the method should consider background
 // transparency, saved in the color of the brush item.
-void DrawGraphic( const SvxBrushItem *, const XFillStyleItem*, OutputDevice *,
+void DrawGraphic( const SvxBrushItem *, const XFillStyleItem*, const XFillGradientItem*, OutputDevice *,
                   const SwRect &rOrg, const SwRect &rOut, const sal_uInt8 nGrfNum = GRFNUM_NO,
                   const sal_Bool bConsiderBackgroundTransparency = sal_False );
 
