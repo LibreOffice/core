@@ -126,7 +126,7 @@ public:
 // ::com::sun::star::uno::XInterface
     DECLARE_XINTERFACE( )
 
-// ::com::sun::star::lang::XServiceInfo
+    // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -136,9 +136,9 @@ public:
         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
     // XInitialization
-    void initialize( com::sun::star::uno::Sequence< com::sun::star::uno::Any > const & rArguments) throw (com::sun::star::uno::Exception);
+    virtual void SAL_CALL initialize( com::sun::star::uno::Sequence< com::sun::star::uno::Any > const & rArguments) throw (com::sun::star::uno::Exception);
 
-// ::com::sun::star::beans::XPropertySet
+    // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XColumnsSupplier
