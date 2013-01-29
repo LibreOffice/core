@@ -129,11 +129,6 @@ using ::std::vector;
 
 // STATIC DATA -----------------------------------------------------------
 
-//  Stream-Namen im Storage
-
-const sal_Char ScDocShell::pStarCalcDoc[] = STRING_SCSTREAM;        // "StarCalcDocument"
-const sal_Char ScDocShell::pStyleName[] = "SfxStyleSheets";
-
 //  Filter-Namen (wie in sclib.cxx)
 
 static const sal_Char pFilterSc50[]     = "StarCalc 5.0";

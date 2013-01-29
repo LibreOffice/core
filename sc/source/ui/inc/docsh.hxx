@@ -83,9 +83,6 @@ typedef ::boost::unordered_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
 
 class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 {
-    static const sal_Char pStarCalcDoc[];
-    static const sal_Char pStyleName[];
-
     ScDocument          aDocument;
 
     String              aDdeTextFmt;
