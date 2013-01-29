@@ -79,6 +79,7 @@
 #include "externalrefmgr.hxx"
 #include "undorangename.hxx"
 #include "progress.hxx"
+#include "dpobject.hxx"
 
 #include <memory>
 #include <basic/basmgr.hxx>
@@ -1346,7 +1347,182 @@ sal_Bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const String& rStyleNam
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+namespace {
+
+/**
+ * Check if this insertion attempt would end up cutting one or more pivot
+ * tables in half, which is not desirable.
+ *
+ * @return true if this insertion can be done safely without shearing any
+ *         existing pivot tables, false otherwise.
+ */
+bool canInsertCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, InsCellCmd eCmd, const ScDocument* pDoc)
+{
+    if (!pDoc->HasPivotTable())
+        // This document has no pivot tables.
+        return true;
+
+    const ScDPCollection* pDPs = pDoc->GetDPCollection();
+    ScMarkData::const_iterator itBeg = rMarkData.begin(), itEnd = rMarkData.end();
+
+    ScRange aRange(rRange); // local copy
+    switch (eCmd)
+    {
+        case INS_INSROWS:
+        {
+            aRange.aStart.SetCol(0);
+            aRange.aEnd.SetCol(MAXCOL);
+            // Continue below.
+        }
+        case INS_CELLSDOWN:
+        {
+            for (ScMarkData::const_iterator it = itBeg; it != itEnd; ++it)
+            {
+                if (pDPs->IntersectsTableByColumns(aRange.aStart.Col(), aRange.aEnd.Col(), aRange.aStart.Row(), *it))
+                    // This column range cuts through at least one pivot table.  Not good.
+                    return false;
+            }
+
+            // Start row must be either at the top or above any pivot tables.
+            if (aRange.aStart.Row() < 0)
+                // I don't know how to handle this case.
+                return false;
+
+            if (aRange.aStart.Row() == 0)
+                // First row is always allowed.
+                return true;
+
+            ScRange aTest(aRange);
+            aTest.aStart.IncRow(-1); // Test one row up.
+            aTest.aEnd.SetRow(aTest.aStart.Row());
+            for (ScMarkData::const_iterator it = itBeg; it != itEnd; ++it)
+            {
+                aTest.aStart.SetTab(*it);
+                aTest.aEnd.SetTab(*it);
+                if (pDPs->HasTable(aTest))
+                    return false;
+            }
+        }
+        break;
+        case INS_INSCOLS:
+        {
+            aRange.aStart.SetRow(0);
+            aRange.aEnd.SetRow(MAXROW);
+            // Continue below.
+        }
+        case INS_CELLSRIGHT:
+        {
+            for (ScMarkData::const_iterator it = itBeg; it != itEnd; ++it)
+            {
+                if (pDPs->IntersectsTableByRows(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Row(), *it))
+                    // This column range cuts through at least one pivot table.  Not good.
+                    return false;
+            }
+
+            // Start row must be either at the top or above any pivot tables.
+            if (aRange.aStart.Col() < 0)
+                // I don't know how to handle this case.
+                return false;
+
+            if (aRange.aStart.Col() == 0)
+                // First row is always allowed.
+                return true;
+
+            ScRange aTest(aRange);
+            aTest.aStart.IncCol(-1); // Test one column to the left.
+            aTest.aEnd.SetCol(aTest.aStart.Col());
+            for (ScMarkData::const_iterator it = itBeg; it != itEnd; ++it)
+            {
+                aTest.aStart.SetTab(*it);
+                aTest.aEnd.SetTab(*it);
+                if (pDPs->HasTable(aTest))
+                    return false;
+            }
+        }
+        break;
+        default:
+            ;
+    }
+    return true;
+}
+
+/**
+ * Check if this deletion attempt would end up cutting one or more pivot
+ * tables in half, which is not desirable.
+ *
+ * @return true if this deletion can be done safely without shearing any
+ *         existing pivot tables, false otherwise.
+ */
+bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, DelCellCmd eCmd, const ScDocument* pDoc)
+{
+    if (!pDoc->HasPivotTable())
+        // This document has no pivot tables.
+        return true;
+
+    const ScDPCollection* pDPs = pDoc->GetDPCollection();
+    ScMarkData::const_iterator itBeg = rMarkData.begin(), itEnd = rMarkData.end();
+
+    ScRange aRange(rRange); // local copy
+
+    switch (eCmd)
+    {
+        case DEL_DELROWS:
+        {
+            aRange.aStart.SetCol(0);
+            aRange.aEnd.SetCol(MAXCOL);
+            // Continue below.
+        }
+        case DEL_CELLSUP:
+        {
+            for (ScMarkData::const_iterator it = itBeg; it != itEnd; ++it)
+            {
+                if (pDPs->IntersectsTableByColumns(aRange.aStart.Col(), aRange.aEnd.Col(), aRange.aStart.Row(), *it))
+                    // This column range cuts through at least one pivot table.  Not good.
+                    return false;
+            }
+
+            ScRange aTest(aRange);
+            for (ScMarkData::const_iterator it = itBeg; it != itEnd; ++it)
+            {
+                aTest.aStart.SetTab(*it);
+                aTest.aEnd.SetTab(*it);
+                if (pDPs->HasTable(aTest))
+                    return false;
+            }
+        }
+        break;
+        case DEL_DELCOLS:
+        {
+            aRange.aStart.SetRow(0);
+            aRange.aEnd.SetRow(MAXROW);
+            // Continue below.
+        }
+        case DEL_CELLSLEFT:
+        {
+            for (ScMarkData::const_iterator it = itBeg; it != itEnd; ++it)
+            {
+                if (pDPs->IntersectsTableByRows(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Row(), *it))
+                    // This column range cuts through at least one pivot table.  Not good.
+                    return false;
+            }
+
+            ScRange aTest(aRange);
+            for (ScMarkData::const_iterator it = itBeg; it != itEnd; ++it)
+            {
+                aTest.aStart.SetTab(*it);
+                aTest.aEnd.SetTab(*it);
+                if (pDPs->HasTable(aTest))
+                    return false;
+            }
+        }
+        break;
+        default:
+            ;
+    }
+    return true;
+}
+
+}
 
 bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, InsCellCmd eCmd,
                              bool bRecord, bool bApi, bool bPartOfPaste )
@@ -1460,6 +1636,14 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     {
         if (!bApi)
             rDocShell.ErrorMessage(aTester.GetMessageId());
+        return false;
+    }
+
+    // Check if this insertion is allowed with respect to pivot table.
+    if (!canInsertCellsByPivot(rRange, aMark, eCmd, pDoc))
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE);
         return false;
     }
 
@@ -1880,6 +2064,12 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         return false;
     }
 
+    if (!canDeleteCellsByPivot(rRange, aMark, eCmd, pDoc))
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE);
+        return false;
+    }
                     // Test zusammengefasste
 
     SCCOL nMergeTestEndCol = (eCmd==DEL_CELLSLEFT) ? MAXCOL : nUndoEndCol;

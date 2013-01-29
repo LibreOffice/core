@@ -561,6 +561,86 @@ public:
     }
 };
 
+class FindIntersectingTable : std::unary_function<ScDPObject, bool>
+{
+    ScRange maRange;
+public:
+    FindIntersectingTable(const ScRange& rRange) : maRange(rRange) {}
+
+    bool operator() (const ScDPObject& rObj) const
+    {
+        return maRange.Intersects(rObj.GetOutRange());
+    }
+};
+
+class FindIntersetingTableByColumns : std::unary_function<ScDPObject, bool>
+{
+    SCCOL mnCol1;
+    SCCOL mnCol2;
+    SCROW mnRow;
+    SCTAB mnTab;
+public:
+    FindIntersetingTableByColumns(SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab) :
+        mnCol1(nCol1), mnCol2(nCol2), mnRow(nRow), mnTab(nTab) {}
+
+    bool operator() (const ScDPObject& rObj) const
+    {
+        const ScRange& rRange = rObj.GetOutRange();
+        if (mnTab != rRange.aStart.Tab())
+            // Not on this sheet.
+            return false;
+
+        if (rRange.aEnd.Row() < mnRow)
+            // This table is above the row.  It's safe.
+            return false;
+
+        if (mnCol1 <= rRange.aStart.Col() && rRange.aEnd.Col() <= mnCol2)
+            // This table is fully enclosed in this column range.
+            return false;
+
+        if (rRange.aEnd.Col() < mnCol1 || mnCol2 < rRange.aStart.Col())
+            // This table is entirely outside this column range.
+            return false;
+
+        // This table must be intersected by this column range.
+        return true;
+    }
+};
+
+class FindIntersectingTableByRows : std::unary_function<ScDPObject, bool>
+{
+    SCCOL mnCol;
+    SCROW mnRow1;
+    SCROW mnRow2;
+    SCTAB mnTab;
+public:
+    FindIntersectingTableByRows(SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab) :
+        mnCol(nCol), mnRow1(nRow1), mnRow2(nRow2), mnTab(nTab) {}
+
+    bool operator() (const ScDPObject& rObj) const
+    {
+        const ScRange& rRange = rObj.GetOutRange();
+        if (mnTab != rRange.aStart.Tab())
+            // Not on this sheet.
+            return false;
+
+        if (rRange.aEnd.Col() < mnCol)
+            // This table is to the left of the column.  It's safe.
+            return false;
+
+        if (mnRow1 <= rRange.aStart.Row() && rRange.aEnd.Row() <= mnRow2)
+            // This table is fully enclosed in this row range.
+            return false;
+
+        if (rRange.aEnd.Row() < mnRow1 || mnRow2 < rRange.aStart.Row())
+            // This table is entirely outside this row range.
+            return false;
+
+        // This table must be intersected by this row range.
+        return true;
+    }
+};
+
 }
 
 ScDPTableData* ScDPObject::GetTableData()
@@ -3396,6 +3476,24 @@ ScDPCollection::NameCaches& ScDPCollection::GetNameCaches()
 ScDPCollection::DBCaches& ScDPCollection::GetDBCaches()
 {
     return maDBCaches;
+}
+
+bool ScDPCollection::IntersectsTableByColumns( SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab ) const
+{
+    return std::find_if(
+        maTables.begin(), maTables.end(), FindIntersetingTableByColumns(nCol1, nCol2, nRow, nTab)) != maTables.end();
+}
+
+bool ScDPCollection::IntersectsTableByRows( SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab ) const
+{
+    return std::find_if(
+        maTables.begin(), maTables.end(), FindIntersectingTableByRows(nCol, nRow1, nRow2, nTab)) != maTables.end();
+}
+
+bool ScDPCollection::HasTable( const ScRange& rRange ) const
+{
+    return std::find_if(
+        maTables.begin(), maTables.end(), FindIntersectingTable(rRange)) != maTables.end();
 }
 
 void ScDPCollection::RemoveCache(const ScDPCache* pCache)

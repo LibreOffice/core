@@ -302,10 +302,20 @@ ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nC
         return NULL;
 }
 
+bool ScDocument::HasPivotTable() const
+{
+    return pDPCollection && pDPCollection->GetCount();
+}
+
 ScDPCollection* ScDocument::GetDPCollection()
 {
     if (!pDPCollection)
         pDPCollection = new ScDPCollection(this);
+    return pDPCollection;
+}
+
+const ScDPCollection* ScDocument::GetDPCollection() const
+{
     return pDPCollection;
 }
 

@@ -395,6 +395,10 @@ public:
     NameCaches& GetNameCaches();
     DBCaches& GetDBCaches();
 
+    bool IntersectsTableByColumns( SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab ) const;
+    bool IntersectsTableByRows( SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab ) const;
+    bool HasTable( const ScRange& rRange ) const;
+
 private:
     /** Only to be called from ScDPCache::RemoveReference(). */
     void RemoveCache(const ScDPCache* pCache);

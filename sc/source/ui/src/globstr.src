@@ -2017,5 +2017,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Always perform this without prompt in the future.";
     };
+
+    String STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE
+    {
+        Text [ en-US ] = "You cannot insert or delete cells when the affected range intersects with pivot table.";
+    };
 };
 

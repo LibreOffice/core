@@ -634,6 +634,8 @@
 #define STR_QUERY_FORMULA_RECALC_ONLOAD_XLS 507
 #define STR_ALWAYS_PERFORM_SELECTED 508
 
-#define STR_COUNT                   509
+#define STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE 509
+
+#define STR_COUNT                   510
 
 #endif
