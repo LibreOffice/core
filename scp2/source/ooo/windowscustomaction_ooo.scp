@@ -226,15 +226,6 @@ WindowsCustomAction gid_Customaction_CopyExtensionData
     Assignment2 = ("AdminExecuteSequence", "", "end");
 End
 
-WindowsCustomAction gid_Customaction_RegCleanOld
-	Name = "RegCleanOld";
-	Typ = "65";
-	Source = "regcleanold.dll";
-	Target = "CleanCurUserOldSystemRegistryFromSetup";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH And Not ALLUSERS=\"\"", "end");
-End
-
 WindowsCustomAction gid_Customaction_Patch_Regpatchactivex_Patchactivexcontrol
 	Name = "PatchActiveXControl";
 	Typ = "65";
