@@ -1858,7 +1858,7 @@ void SwTabFrm::MakeAll()
     // gets set to true when the Frm is split
     bool bSplit = false;
     const bool bFtnsInDoc = !GetFmt()->GetDoc()->GetFtnIdxs().empty();
-    sal_Bool bMoveable;
+    bool bMoveable;
     const sal_Bool bFly     = IsInFly();
 
     SwBorderAttrAccess  *pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
@@ -1943,7 +1943,7 @@ void SwTabFrm::MakeAll()
     SWRECTFN( this )
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
-        if ( sal_True == (bMoveable = IsMoveable()) )
+        if ( (bMoveable = IsMoveable()) )
             if ( CheckMoveFwd( bMakePage, bKeep && KEEPTAB, bMovedBwd ) )
             {
                 bMovedFwd = true;

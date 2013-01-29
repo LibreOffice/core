@@ -241,14 +241,14 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
     ::rtl::OUString const sEntry(pUserData->sGroupName);
     // if the name to be deleted is among the new ones - get rid of it
-    sal_Bool bDelete = sal_True;
+    bool bDelete = true;
     for (OUVector_t::iterator it(m_InsertedArr.begin());
             it != m_InsertedArr.end(); ++it)
     {
         if (*it == sEntry)
         {
             m_InsertedArr.erase(it);
-            bDelete = sal_False;
+            bDelete = false;
             break;
         }
 
@@ -263,7 +263,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
                     == sEntry)
             {
                 m_RenamedArr.erase(it);
-                bDelete = sal_False;
+                bDelete = false;
                 break;
             }
         }

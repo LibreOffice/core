@@ -55,20 +55,20 @@ class SwOutlineContent : public SwContent
 {
     sal_uInt16  nOutlinePos;
     sal_uInt8   nOutlineLevel;
-    sal_Bool    bIsMoveable;
+    bool    bIsMoveable;
     public:
         SwOutlineContent(   const SwContentType* pCnt,
                             const String& rName,
                             sal_uInt16 nArrPos,
                             sal_uInt8 nLevel,
-                            sal_Bool bMove,
+                            bool bMove,
                             long nYPos) :
             SwContent(pCnt, rName, nYPos),
             nOutlinePos(nArrPos), nOutlineLevel(nLevel), bIsMoveable(bMove) {}
 
     sal_uInt16  GetPos(){return nOutlinePos;}
     sal_uInt8   GetOutlineLevel(){return nOutlineLevel;}
-    sal_Bool    IsMoveable(){return bIsMoveable;};
+    bool    IsMoveable(){return bIsMoveable;};
 };
 
 //----------------------------------------------------------------------------
@@ -177,9 +177,9 @@ class SwContentType : public SwTypeNumber
     sal_uInt16              nMemberCount;       // content count
     sal_uInt16              nContentType;       // content type's Id
     sal_uInt8               nOutlineLevel;
-    sal_Bool                bDataValid :    1;  //
-    sal_Bool                bEdit:          1;  // can this type be edited?
-    sal_Bool                bDelete:        1;  // can this type be deleted?
+    bool                bDataValid :    1;  //
+    bool                bEdit:          1;  // can this type be edited?
+    bool                bDelete:        1;  // can this type be deleted?
 protected:
         void            RemoveNewline(String&);
 public:
@@ -204,8 +204,8 @@ public:
 
         void                Invalidate(); // only nMemberCount is read again
 
-        sal_Bool                IsEditable() const {return bEdit;}
-        sal_Bool                IsDeletable() const {return bDelete;}
+        bool                IsEditable() const {return bEdit;}
+        bool                IsDeletable() const {return bDelete;}
 };
 
 #endif

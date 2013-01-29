@@ -43,9 +43,9 @@
 ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
                                 SwView* pSwView )
     : SwDrawBase( pWrtShell, pEditWin, pSwView ),
-    bMarquee(sal_False),
+    bMarquee(false),
     // #93382#
-    mbVertical(sal_False)
+    mbVertical(false)
 {
 }
 
@@ -151,8 +151,8 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
  */
 void ConstRectangle::Activate(const sal_uInt16 nSlotId)
 {
-    bMarquee = bCapVertical = sal_False;
-    mbVertical = sal_False;
+    bMarquee = bCapVertical = false;
+    mbVertical = false;
 
     switch (nSlotId)
     {
@@ -169,12 +169,12 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
         break;
 
     case SID_DRAW_TEXT_MARQUEE:
-        bMarquee = sal_True;
+        bMarquee = true;
         m_pWin->SetSdrDrawMode(OBJ_TEXT);
         break;
 
     case SID_DRAW_TEXT_VERTICAL:
-        mbVertical = sal_True;
+        mbVertical = true;
         m_pWin->SetSdrDrawMode(OBJ_TEXT);
         break;
 
@@ -183,7 +183,7 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
         break;
 
     case SID_DRAW_CAPTION_VERTICAL:
-        bCapVertical = sal_True;
+        bCapVertical = true;
         // no break
     case SID_DRAW_CAPTION:
         m_pWin->SetSdrDrawMode(OBJ_CAPTION);

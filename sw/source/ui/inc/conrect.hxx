@@ -30,11 +30,11 @@
 
 class ConstRectangle : public SwDrawBase
 {
-    sal_Bool bMarquee;
-    sal_Bool bCapVertical;
+    bool bMarquee;
+    bool bCapVertical;
 
     // #93382#
-    sal_Bool                    mbVertical;
+    bool mbVertical;
 
  public:
     ConstRectangle(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);

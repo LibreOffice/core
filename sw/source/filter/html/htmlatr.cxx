@@ -1579,14 +1579,14 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, xub_StrLen nStart,
             if( pItem->Which() == nWhich &&
                 HTML_ON_VALUE == GetHTMLItemState( *pItem ) )
             {
-                sal_Bool bDelete = sal_True;
+                bool bDelete = true;
 
                 if( nTestStart < nStart )
                 {
                     // der Start des neuen Attribut entspricht
                     // dem neuen Ende des Attribts
                     FixSplittedItem( pTest, nStart, i );
-                    bDelete = sal_False;
+                    bDelete = false;
                 }
                 else
                 {

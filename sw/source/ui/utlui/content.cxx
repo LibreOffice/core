@@ -104,29 +104,29 @@ public:
     ~SwContentArr() { DeleteAndDestroyAll(); }
 };
 
-sal_Bool SwContentTree::bIsInDrag = sal_False;
+bool SwContentTree::bIsInDrag = false;
 
 namespace
 {
-    static sal_Bool lcl_IsContent(const SvTreeListEntry* pEntry)
+    static bool lcl_IsContent(const SvTreeListEntry* pEntry)
     {
         return ((const SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CNT;
     }
 
-    static sal_Bool lcl_IsContentType(const SvTreeListEntry* pEntry)
+    static bool lcl_IsContentType(const SvTreeListEntry* pEntry)
     {
         return ((const SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CTT;
     }
 
-    static sal_Bool lcl_FindShell(SwWrtShell* pShell)
+    static bool lcl_FindShell(SwWrtShell* pShell)
     {
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         SwView *pView = SwModule::GetFirstView();
         while (pView)
         {
             if(pShell == &pView->GetWrtShell())
             {
-                bFound = sal_True;
+                bFound = true;
                 break;
             }
             pView = SwModule::GetNextView(pView);
@@ -201,9 +201,9 @@ SwContentType::SwContentType(SwWrtShell* pShell, sal_uInt16 nType, sal_uInt8 nLe
     nMemberCount(0),
     nContentType(nType),
     nOutlineLevel(nLevel),
-    bDataValid(sal_False),
-    bEdit(sal_False),
-    bDelete(sal_True)
+    bDataValid(false),
+    bEdit(false),
+    bDelete(true)
 {
     Init();
 }
@@ -232,14 +232,14 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                         nMemberCount --;
                 }
             }
-            bDelete = sal_False;
+            bDelete = false;
         }
         break;
 
         case CONTENT_TYPE_TABLE     :
             sTypeToken = rtl::OUString::createFromAscii(pMarkToTable);
             nMemberCount = pWrtShell->GetTblFrmFmtCount(true);
-            bEdit = sal_True;
+            bEdit = true;
         break;
 
         case CONTENT_TYPE_FRAME     :
@@ -259,7 +259,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 sTypeToken = rtl::OUString::createFromAscii(pMarkToGraphic);
             }
             nMemberCount = pWrtShell->GetFlyCount(eType);
-            bEdit = sal_True;
+            bEdit = true;
         }
         break;
         case CONTENT_TYPE_BOOKMARK:
@@ -270,7 +270,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 pMarkAccess->getBookmarksEnd(),
                 &lcl_IsUiVisibleBookmark));
             sTypeToken = aEmptyStr;
-            bEdit = sal_True;
+            bEdit = true;
         }
         break;
         case CONTENT_TYPE_REGION :
@@ -325,8 +325,8 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
             }
             nMemberCount = pMember->size();
             sTypeToken = rtl::OUString::createFromAscii(pMarkToRegion);
-            bEdit = sal_True;
-            bDelete = sal_False;
+            bEdit = true;
+            bDelete = false;
             if(pOldMember)
             {
                 pOldMember->DeleteAndDestroyAll();
@@ -339,14 +339,14 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         case CONTENT_TYPE_INDEX:
         {
             nMemberCount = pWrtShell->GetTOXCount();
-            bEdit = sal_True;
-            bDelete = sal_False;
+            bEdit = true;
+            bDelete = false;
         }
         break;
         case CONTENT_TYPE_REFERENCE:
         {
             nMemberCount = pWrtShell->GetRefMarks( 0 );
-            bDelete = sal_False;
+            bDelete = false;
         }
         break;
         case CONTENT_TYPE_URLFIELD:
@@ -374,9 +374,9 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                                     n );
                 pMember->insert( pCnt );
             }
-            bEdit = sal_True;
+            bEdit = true;
             nOldMemberCount = nMemberCount;
-            bDelete = sal_False;
+            bDelete = false;
         }
         break;
         case CONTENT_TYPE_POSTIT:
@@ -412,7 +412,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 }
             }
             sTypeToken = aEmptyStr;
-            bEdit = sal_True;
+            bEdit = true;
             nOldMemberCount = nMemberCount;
         }
         break;
@@ -440,7 +440,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
     // abgesehen von denen, die schon korrigiert wurden, dann ist
     // nOldMemberCount doch nicht so old
     if( nOldMemberCount != nMemberCount )
-        bDataValid = sal_False;
+        bDataValid = false;
 }
 
 SwContentType::~SwContentType()
@@ -467,7 +467,7 @@ const SwContent* SwContentType::GetMember(sal_uInt16 nIndex)
 
 void    SwContentType::Invalidate()
 {
-    bDataValid = sal_False;
+    bDataValid = false;
 }
 
 /***************************************************************************
@@ -785,7 +785,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
         }
         break;
     }
-    bDataValid = sal_True;
+    bDataValid = true;
     if(pOldMember)
         pOldMember->DeleteAndDestroyAll();
 
@@ -822,17 +822,17 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         nLastSelType(USHRT_MAX),
         nOutlineLevel(MAXLEVEL),
 
-        bIsActive(sal_True),
-        bIsConstant(sal_False),
-        bIsHidden(sal_False),
-        bDocChgdInDragging(sal_False),
-        bIsInternalDrag(sal_False),
-        bIsRoot(sal_False),
-        bIsIdleClear(sal_False),
+        bIsActive(true),
+        bIsConstant(false),
+        bIsHidden(false),
+        bDocChgdInDragging(false),
+        bIsInternalDrag(false),
+        bIsRoot(false),
+        bIsIdleClear(false),
         bIsLastReadOnly(sal_False),
-        bIsOutlineMoveable(sal_True),
-        bViewHasChanged(sal_False),
-        bIsImageListInitialized(sal_False)
+        bIsOutlineMoveable(true),
+        bViewHasChanged(false),
+        bIsImageListInitialized(false)
 {
     sal_uInt16 i;
 
@@ -861,7 +861,7 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
 SwContentTree::~SwContentTree()
 {
     Clear(); // vorher gfs. Inhaltstypen loeschen
-    bIsInDrag = sal_False;
+    bIsInDrag = false;
 }
 
 /***************************************************************************
@@ -880,7 +880,7 @@ void SwContentTree::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
         sal_Int8 nDragMode = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
         if( FillTransferData( *pContainer, nDragMode ))
         {
-            SwContentTree::SetInDrag(sal_True);
+            SwContentTree::SetInDrag(true);
             pContainer->StartDrag( this, nDragMode, GetDragFinishedHdl() );
         }
     }
@@ -893,8 +893,8 @@ void SwContentTree::DragFinished( sal_Int8 nAction )
     //to prevent the removing of the selected entry in external drag and drop
     // the drag action mustn't be MOVE
     SvTreeListBox::DragFinished( bIsInternalDrag ? nAction : DND_ACTION_COPY );
-    SwContentTree::SetInDrag(sal_False);
-    bIsInternalDrag = sal_False;
+    SwContentTree::SetInDrag(false);
+    bIsInternalDrag = false;
 }
 
 /***************************************************************************
@@ -1032,11 +1032,11 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
         sal_Bool bReadonly = pActiveShell->GetView().GetDocShell()->IsReadOnly();
         sal_Bool bVisible = !((SwContent*)pEntry->GetUserData())->IsInvisible();
         sal_Bool bProtected = ((SwContent*)pEntry->GetUserData())->IsProtect();
-        sal_Bool bEditable = pContType->IsEditable() &&
+        bool bEditable = pContType->IsEditable() &&
             ((bVisible && !bProtected) ||CONTENT_TYPE_REGION == nContentType);
-        sal_Bool bDeletable = pContType->IsDeletable() &&
+        bool bDeletable = pContType->IsDeletable() &&
             ((bVisible && !bProtected) ||CONTENT_TYPE_REGION == nContentType);
-        sal_Bool bRenamable = bEditable && !bReadonly &&
+        bool bRenamable = bEditable && !bReadonly &&
             (CONTENT_TYPE_TABLE == nContentType ||
                 CONTENT_TYPE_FRAME == nContentType ||
                 CONTENT_TYPE_GRAPHIC == nContentType ||
@@ -1047,10 +1047,10 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
 
         if(!bReadonly && (bEditable || bDeletable))
         {
-            sal_Bool bSubPop4 = sal_False;
+            bool bSubPop4 = false;
             if(CONTENT_TYPE_INDEX == nContentType)
             {
-                bSubPop4 = sal_True;
+                bSubPop4 = true;
                 pSubPop4->InsertItem(401, sRemoveIdx);
                 pSubPop4->InsertItem(402, sUpdateIdx);
 
@@ -1064,7 +1064,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
             }
             else if(CONTENT_TYPE_TABLE == nContentType && !bReadonly)
             {
-                bSubPop4 = sal_True;
+                bSubPop4 = true;
                 pSubPop4->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
                 pSubPop4->InsertItem(404, sUnprotTbl);
                 sal_Bool bFull = sal_False;
@@ -1081,7 +1081,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
                 {
                     pSubPop4->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
                     pSubPop4->InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
-                    bSubPop4 = sal_True;
+                    bSubPop4 = true;
                 }
                 else if(bEditable)
                     pPop->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
@@ -1246,7 +1246,7 @@ sal_Bool  SwContentTree::Expand( SvTreeListEntry* pParent )
                 nHiddenBlock |= nOr;
             if((pCntType->GetType() == CONTENT_TYPE_OUTLINE))
             {
-                std::map< void*, sal_Bool > mCurrOutLineNodeMap;
+                std::map< void*, bool > mCurrOutLineNodeMap;
 
                 SwWrtShell* pShell = GetWrtShell();
                 sal_Bool bBool = SvTreeListBox::Expand(pParent);
@@ -1257,11 +1257,11 @@ sal_Bool  SwContentTree::Expand( SvTreeListEntry* pParent )
                     {
                         sal_Int32 nPos = ((SwContent*)pChild->GetUserData())->GetYPos();
                         void* key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
-                        mCurrOutLineNodeMap.insert(std::map<void*, sal_Bool>::value_type( key, sal_False ) );
-                        std::map<void*,sal_Bool>::iterator iter = mOutLineNodeMap.find( key );
+                        mCurrOutLineNodeMap.insert(std::map<void*, bool>::value_type( key, false ) );
+                        std::map<void*, bool>::iterator iter = mOutLineNodeMap.find( key );
                         if( iter != mOutLineNodeMap.end() && mOutLineNodeMap[key])
                         {
-                            mCurrOutLineNodeMap[key] = sal_True;
+                            mCurrOutLineNodeMap[key] = true;
                             SvTreeListBox::Expand(pChild);
                         }
                     }
@@ -1277,7 +1277,7 @@ sal_Bool  SwContentTree::Expand( SvTreeListEntry* pParent )
             SwWrtShell* pShell = GetWrtShell();
             sal_Int32 nPos = ((SwContent*)pParent->GetUserData())->GetYPos();
             void* key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
-            mOutLineNodeMap[key] = sal_True;
+            mOutLineNodeMap[key] = true;
         }
     }
     return SvTreeListBox::Expand(pParent);
@@ -1312,7 +1312,7 @@ sal_Bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
             SwWrtShell* pShell = GetWrtShell();
             sal_Int32 nPos = ((SwContent*)pParent->GetUserData())->GetYPos();
             void* key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
-            mOutLineNodeMap[key] = sal_False;
+            mOutLineNodeMap[key] = false;
         }
             bRet = SvTreeListBox::Collapse(pParent);
     }
@@ -1353,12 +1353,12 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl)
 /***************************************************************************
     Beschreibung:   Anzeigen der Datei
 ***************************************************************************/
-void SwContentTree::Display( sal_Bool bActive )
+void SwContentTree::Display( bool bActive )
 {
     if(!bIsImageListInitialized)
     {
         aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
-        bIsImageListInitialized = sal_True;
+        bIsImageListInitialized = true;
     }
     // erst den selektierten Eintrag auslesen, um ihn spaeter evtl. wieder
     // zu selektieren -> die UserDaten sind hier nicht mehr gueltig!
@@ -1558,14 +1558,14 @@ void SwContentTree::Clear()
     SetUpdateMode(sal_True);
 }
 
-sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
+bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                                             sal_Int8& rDragMode )
 {
     SwWrtShell* pWrtShell = GetWrtShell();
     OSL_ENSURE(pWrtShell, "no Shell!");
     SvTreeListEntry* pEntry = GetCurEntry();
     if(!pEntry || lcl_IsContentType(pEntry) || !pWrtShell)
-        return sal_False;
+        return false;
     String sEntry;
     SwContent* pCnt = ((SwContent*)pEntry->GetUserData());
 
@@ -1627,7 +1627,7 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
             sEntry = GetEntryText(pEntry);
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if(sEntry.Len())
     {
         const SwDocShell* pDocShell = pWrtShell->GetView().GetDocShell();
@@ -1638,14 +1638,14 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                 SfxMedium* pMedium = pDocShell->GetMedium();
                 sUrl = pMedium->GetURLObject().GetURLNoMark();
                 // nur, wenn primaer ein Link eingefuegt werden soll
-                bRet = sal_True;
+                bRet = true;
             }
             else if(    nActType == CONTENT_TYPE_REGION ||
                         nActType == CONTENT_TYPE_BOOKMARK )
             {
                 // fuer Bereich und Textmarken ist ein Link auch ohne
                 // Dateiname ins eigene Dokument erlaubt
-                bRet = sal_True;
+                bRet = true;
             }
             else if(bIsConstant &&
                     ( !::GetActiveView() ||
@@ -1653,7 +1653,7 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
             {
                 // Urls von inaktiven Views ohne Dateinamen koennen auch nicht
                 // gedraggt werden
-                bRet = sal_False;
+                bRet = false;
             }
             else
             {
@@ -1671,7 +1671,7 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
             }
         }
         else
-            bRet = sal_True;
+            bRet = true;
 
         if( bRet )
         {
@@ -1701,7 +1701,7 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
 /***************************************************************************
     Beschreibung:   Umschalten der Anzeige auf Root
 ***************************************************************************/
-sal_Bool SwContentTree::ToggleToRoot()
+bool SwContentTree::ToggleToRoot()
 {
     if(!bIsRoot)
     {
@@ -1714,26 +1714,26 @@ sal_Bool SwContentTree::ToggleToRoot()
             else
                 pCntType = ((SwContent*)pEntry->GetUserData())->GetParent();
             nRootType = pCntType->GetType();
-            bIsRoot = sal_True;
+            bIsRoot = true;
             Display(bIsActive || bIsConstant);
         }
     }
     else
     {
         nRootType = USHRT_MAX;
-        bIsRoot = sal_False;
+        bIsRoot = false;
         FindActiveTypeAndRemoveUserData();
         Display(bIsActive || bIsConstant);
     }
     pConfig->SetRootType( nRootType );
-    GetParentWindow()->aContentToolBox.CheckItem(FN_SHOW_ROOT, bIsRoot);
+    GetParentWindow()->aContentToolBox.CheckItem(FN_SHOW_ROOT, bIsRoot ? sal_True : sal_False);
     return bIsRoot;
 }
 
 /***************************************************************************
     Beschreibung:   Angezeigten Inhalt auf Gueltigkeit pruefen
 ***************************************************************************/
-sal_Bool SwContentTree::HasContentChanged()
+bool SwContentTree::HasContentChanged()
 {
 /*
     -Parallel durch das lokale Array und die Treelistbox laufen.
@@ -1748,7 +1748,7 @@ sal_Bool SwContentTree::HasContentChanged()
 
 */
 
-    sal_Bool bRepaint = sal_False;
+    bool bRepaint = false;
     sal_Bool bInvalidate = sal_False;
 
     if(!bIsActive && ! bIsConstant)
@@ -1761,17 +1761,17 @@ sal_Bool SwContentTree::HasContentChanged()
     }
     else if(bIsRoot)
     {
-        sal_Bool bOutline = sal_False;
+        bool bOutline = false;
         SvTreeListEntry* pEntry = First();
         if(!pEntry)
-            bRepaint = sal_True;
+            bRepaint = true;
         else
         {
             sal_uInt16 nType = ((SwContentType*)pEntry->GetUserData())->GetType();
             bOutline = nRootType == CONTENT_TYPE_OUTLINE;
             SwContentType* pArrType = aActiveContentArr[nType];
             if(!pArrType)
-                bRepaint = sal_True;
+                bRepaint = true;
             else
             {
                 sal_uInt16 nSelLevel = USHRT_MAX;
@@ -1784,8 +1784,9 @@ sal_Bool SwContentTree::HasContentChanged()
                     nSelLevel = ((SwOutlineContent*)pFirstSel->GetUserData())->GetOutlineLevel();
                     SwWrtShell* pSh = GetWrtShell();
                     sal_uInt16 nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
-                    bRepaint |= nOutlinePos != USHRT_MAX &&
-                                pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos) != nSelLevel;
+                    if (nOutlinePos != USHRT_MAX &&
+                        pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos) != nSelLevel)
+                        bRepaint = true;
                 }
 
                 pArrType->Init(&bInvalidate);
@@ -1794,7 +1795,7 @@ sal_Bool SwContentTree::HasContentChanged()
                 if(!bRepaint)
                 {
                     if(GetChildCount(pEntry) != pArrType->GetMemberCount())
-                            bRepaint = sal_True;
+                            bRepaint = true;
                     else
                     {
                         sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
@@ -1806,7 +1807,7 @@ sal_Bool SwContentTree::HasContentChanged()
                             String sEntryText = GetEntryText(pEntry);
                             if( sEntryText != pCnt->GetName() &&
                                 !(sEntryText == sSpace && !pCnt->GetName().Len()))
-                                bRepaint = sal_True;
+                                bRepaint = true;
                         }
                     }
                 }
@@ -1838,13 +1839,13 @@ sal_Bool SwContentTree::HasContentChanged()
         SvTreeListEntry* pEntry = First();
         while ( pEntry )
         {
-            sal_Bool bNext = sal_True; // mindestens ein Next muss sein
+            bool bNext = true; // mindestens ein Next muss sein
             SwContentType* pTreeType = (SwContentType*)pEntry->GetUserData();
             sal_uInt16 nType = pTreeType->GetType();
             sal_uInt16 nTreeCount = pTreeType->GetMemberCount();
             SwContentType* pArrType = aActiveContentArr[nType];
             if(!pArrType)
-                bRepaint = sal_True;
+                bRepaint = true;
             else
             {
                 pArrType->Init(&bInvalidate);
@@ -1858,24 +1859,24 @@ sal_Bool SwContentTree::HasContentChanged()
                     pArrType->FillMemberList(&bLevelOrVisibiblityChanged);
                     sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
                     if((nType == CONTENT_TYPE_OUTLINE) && bLevelOrVisibiblityChanged)
-                        bRepaint = sal_True;
+                        bRepaint = true;
                     if(bLevelOrVisibiblityChanged)
                         bInvalidate = sal_True;
 
                     if(nChildCount != pArrType->GetMemberCount())
-                        bRepaint = sal_True;
+                        bRepaint = true;
                     else
                     {
                         for(sal_uInt16 j = 0; j < nChildCount; j++)
                         {
                             pEntry = Next(pEntry);
-                            bNext = sal_False;
+                            bNext = false;
                             const SwContent* pCnt = pArrType->GetMember(j);
                             pEntry->SetUserData((void*)pCnt);
                             String sEntryText = GetEntryText(pEntry);
                             if( sEntryText != pCnt->GetName() &&
                                 !(sEntryText == sSpace && !pCnt->GetName().Len()))
-                                bRepaint = sal_True;
+                                bRepaint = true;
                         }
                     }
 
@@ -1931,14 +1932,14 @@ sal_Bool SwContentTree::HasContentChanged()
                 else if((nTreeCount != 0)
                             != (pArrType->GetMemberCount()!=0))
                 {
-                    bRepaint = sal_True;
+                    bRepaint = true;
                 }
             }
             //hier muss noch der naechste Root-Entry gefunden werden
             while( pEntry && (bNext || GetParent(pEntry ) ))
             {
                 pEntry = Next(pEntry);
-                bNext = sal_False;
+                bNext = false;
             }
         }
     }
@@ -1980,8 +1981,8 @@ void SwContentTree::FindActiveTypeAndRemoveUserData()
 void SwContentTree::SetHiddenShell(SwWrtShell* pSh)
 {
     pHiddenShell = pSh;
-    bIsHidden = sal_True;
-    bIsActive = bIsConstant = sal_False;
+    bIsHidden = true;
+    bIsActive = bIsConstant = false;
     FindActiveTypeAndRemoveUserData();
     for(sal_uInt16 i=0; i < CONTENT_TYPE_MAX; i++)
     {
@@ -1997,7 +1998,7 @@ void SwContentTree::SetHiddenShell(SwWrtShell* pSh)
 void SwContentTree::SetActiveShell(SwWrtShell* pSh)
 {
     if(bIsInternalDrag)
-        bDocChgdInDragging = sal_True;
+        bDocChgdInDragging = true;
     sal_Bool bClear = pActiveShell != pSh;
     if(bIsActive && bClear)
     {
@@ -2010,8 +2011,8 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
         if(!lcl_FindShell(pActiveShell))
         {
             pActiveShell = pSh;
-            bIsActive = sal_True;
-            bIsConstant = sal_False;
+            bIsActive = true;
+            bIsConstant = false;
             bClear = sal_True;
         }
     }
@@ -2024,7 +2025,7 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
         {
             DELETEZ(aActiveContentArr[i]);
         }
-        Display(sal_True);
+        Display(true);
     }
 }
 
@@ -2034,14 +2035,14 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
 void SwContentTree::SetConstantShell(SwWrtShell* pSh)
 {
     pActiveShell = pSh;
-    bIsActive       = sal_False;
-    bIsConstant     = sal_True;
+    bIsActive       = false;
+    bIsConstant     = true;
     FindActiveTypeAndRemoveUserData();
     for(sal_uInt16 i=0; i < CONTENT_TYPE_MAX; i++)
     {
         DELETEZ(aActiveContentArr[i]);
     }
-    Display(sal_True);
+    Display(true);
 }
 
 /***************************************************************************
@@ -2180,7 +2181,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
                 pShell->EndAllAction();
                 if(aActiveContentArr[CONTENT_TYPE_OUTLINE])
                     aActiveContentArr[CONTENT_TYPE_OUTLINE]->Invalidate();
-                Display(sal_True);
+                Display(true);
                 if(!bIsRoot)
                 {
                     const sal_uInt16 nCurrPos = pShell->GetOutlinePos(MAXLEVEL);
@@ -2227,8 +2228,8 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate)
          !bIsInDrag && !bIsInternalDrag && pView &&
          pView->GetWrtShellPtr() && !pView->GetWrtShellPtr()->ActionPend() )
     {
-        bViewHasChanged = sal_False;
-        bIsIdleClear = sal_False;
+        bViewHasChanged = false;
+        bIsIdleClear = false;
         SwWrtShell* pActShell = pView->GetWrtShellPtr();
         if( bIsConstant && !lcl_FindShell( pActiveShell ) )
         {
@@ -2242,7 +2243,7 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate)
                     HasContentChanged())
         {
             FindActiveTypeAndRemoveUserData();
-            Display(sal_True);
+            Display(true);
         }
     }
     else if(!pView && bIsActive && !bIsIdleClear)
@@ -2250,7 +2251,7 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate)
         if(pActiveShell)
             SetActiveShell(0);
         Clear();
-        bIsIdleClear = sal_True;
+        bIsIdleClear = true;
     }
     return 0;
 }
@@ -2269,8 +2270,8 @@ DragDropMode SwContentTree::NotifyStartDrag(
 
     sal_Int8 nDragMode;
     FillTransferData( rContainer, nDragMode );
-    bDocChgdInDragging = sal_False;
-    bIsInternalDrag = sal_True;
+    bDocChgdInDragging = false;
+    bIsInternalDrag = true;
     return eMode;
 }
 
@@ -2307,7 +2308,7 @@ sal_Bool  SwContentTree::NotifyMoving( SvTreeListEntry*  pTarget,
                                     sal_True);
 
         aActiveContentArr[CONTENT_TYPE_OUTLINE]->Invalidate();
-        Display(sal_True);
+        Display(true);
     }
     //TreeListBox will be reloaded from the document
     return sal_False;
@@ -2346,7 +2347,7 @@ sal_Bool  SwContentTree::NotifyCopying( SvTreeListEntry*  pTarget,
 
         //TreeListBox wird aus dem Dokument neu geladen
         aActiveContentArr[CONTENT_TYPE_OUTLINE]->Invalidate();
-        Display(sal_True);
+        Display(true);
     }
     return sal_False;
 }
@@ -2392,7 +2393,7 @@ void  SwContentTree::GetFocus()
         else if( (bIsActive || (bIsConstant && pActShell == GetWrtShell())) &&
                     HasContentChanged())
         {
-            Display(sal_True);
+            Display(true);
         }
     }
     else if(bIsActive)
@@ -2440,7 +2441,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                     !pActiveShell->GetView().GetDocShell()->IsReadOnly())
         {
             EditEntry(pEntry, EDIT_MODE_DELETE);
-            bViewHasChanged = sal_True;
+            bViewHasChanged = true;
             GetParentWindow()->UpdateListBox();
             TimerUpdate(&aUpdTimer);
             GrabFocus();
@@ -2648,7 +2649,7 @@ void    SwContentTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry
             if(nSelectedPopupEntry)
             {
                 bViewHasChanged = bIsActive = nSelectedPopupEntry == 1;
-                bIsConstant = sal_False;
+                bIsConstant = false;
                 Display(nSelectedPopupEntry == 1);
             }
         }
@@ -2678,9 +2679,9 @@ void SwContentTree::ShowHiddenShell()
 {
     if(pHiddenShell)
     {
-        bIsConstant = sal_False;
-        bIsActive = sal_False;
-        Display(sal_False);
+        bIsConstant = false;
+        bIsActive = false;
+        Display(false);
     }
 }
 
@@ -2689,9 +2690,9 @@ void SwContentTree::ShowHiddenShell()
 ***************************************************************************/
 void SwContentTree::ShowActualView()
 {
-    bIsActive = sal_True;
-    bIsConstant = sal_False;
-    Display(sal_True);
+    bIsActive = true;
+    bIsConstant = false;
+    Display(true);
     GetParentWindow()->UpdateListBox();
 }
 
@@ -2725,7 +2726,7 @@ sal_Bool  SwContentTree::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
 void SwContentTree::SetRootType(sal_uInt16 nType)
 {
     nRootType = nType;
-    bIsRoot = sal_True;
+    bIsRoot = true;
     pConfig->SetRootType( nRootType );
 }
 
@@ -3164,7 +3165,7 @@ void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
     {
         aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
         FindActiveTypeAndRemoveUserData();
-        Display(sal_True);
+        Display(true);
     }
     SvTreeListBox::DataChanged( rDCEvt );
 }

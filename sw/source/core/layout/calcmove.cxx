@@ -1155,7 +1155,7 @@ void SwCntntFrm::MakeAll()
                                             // this flag is set. If it turns out that it
                                             // didn't keep it's promise, we can act in a
                                             // controlled fashion.
-    sal_Bool bMoveable;
+    bool bMoveable;
     const sal_Bool bFly = IsInFly();
     const sal_Bool bTab = IsInTab();
     const sal_Bool bFtn = IsInFtn();
@@ -1265,7 +1265,7 @@ void SwCntntFrm::MakeAll()
         // - loop prevention
         SwRect aOldFrm_StopFormat( Frm() );
         SwRect aOldPrt_StopFormat( Prt() );
-        if ( sal_True == (bMoveable = IsMoveable()) )
+        if ( (bMoveable = IsMoveable()) )
         {
             SwFrm *pPre = GetIndPrev();
             if ( CheckMoveFwd( bMakePage, bKeep, bMovedBwd ) )

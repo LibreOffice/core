@@ -69,7 +69,7 @@ class SwContentTree : public SvTreeListBox
     SwWrtShell*         pActiveShell;   // the active or a const. open view
     SwNavigationConfig* pConfig;
 
-    std::map< void*, sal_Bool > mOutLineNodeMap;
+    std::map< void*, bool > mOutLineNodeMap;
 
     sal_Int32           nActiveBlock;
     sal_uInt16              nHiddenBlock;
@@ -77,19 +77,19 @@ class SwContentTree : public SvTreeListBox
     sal_uInt16              nLastSelType;
     sal_uInt8               nOutlineLevel;
 
-    sal_Bool                bIsActive           :1;
-    sal_Bool                bIsConstant         :1;
-    sal_Bool                bIsHidden           :1;
-    sal_Bool                bDocChgdInDragging  :1;
-    sal_Bool                bIsInternalDrag     :1;
-    sal_Bool                bIsRoot             :1;
-    sal_Bool                bIsIdleClear        :1;
+    bool                bIsActive           :1;
+    bool                bIsConstant         :1;
+    bool                bIsHidden           :1;
+    bool                bDocChgdInDragging  :1;
+    bool                bIsInternalDrag     :1;
+    bool                bIsRoot             :1;
+    bool                bIsIdleClear        :1;
     sal_Bool                bIsLastReadOnly     :1;
-    sal_Bool                bIsOutlineMoveable  :1;
-    sal_Bool                bViewHasChanged     :1;
-    sal_Bool                bIsImageListInitialized : 1;
+    bool                bIsOutlineMoveable  :1;
+    bool                bViewHasChanged     :1;
+    bool                bIsImageListInitialized : 1;
 
-    static sal_Bool         bIsInDrag;
+    static bool         bIsInDrag;
 
     void                FindActiveTypeAndRemoveUserData();
 
@@ -113,9 +113,9 @@ protected:
 
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-    sal_Bool        FillTransferData( TransferDataContainer& rTransfer,
+    bool        FillTransferData( TransferDataContainer& rTransfer,
                                             sal_Int8& rDragMode );
-    sal_Bool            HasContentChanged();
+    bool            HasContentChanged();
 
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData,
                                         SvTreeListEntry* );
@@ -136,7 +136,7 @@ protected:
     void            EditEntry( SvTreeListEntry* pEntry, sal_uInt8 nMode );
 
     void            GotoContent(SwContent* pCnt);
-    static void     SetInDrag(sal_Bool bSet) {bIsInDrag = bSet;}
+    static void     SetInDrag(bool bSet) {bIsInDrag = bSet;}
 
     virtual PopupMenu* CreateContextMenu( void );
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
@@ -145,11 +145,11 @@ public:
     SwContentTree(Window* pParent, const ResId& rResId);
     ~SwContentTree();
 
-    sal_Bool            ToggleToRoot();
-    sal_Bool            IsRoot() const {return bIsRoot;}
+    bool            ToggleToRoot();
+    bool            IsRoot() const {return bIsRoot;}
     sal_uInt16          GetRootType() const {return nRootType;}
     void            SetRootType(sal_uInt16 nType);
-    void            Display( sal_Bool bActiveView );
+    void            Display( bool bActiveView );
     void            Clear();
     void            SetHiddenShell(SwWrtShell* pSh);
     void            ShowHiddenShell();
@@ -162,8 +162,8 @@ public:
                                     pActiveShell :
                                         pHiddenShell;}
 
-    static sal_Bool     IsInDrag() {return bIsInDrag;}
-    sal_Bool            IsInternalDrag() const {return bIsInternalDrag != 0;}
+    static bool     IsInDrag() {return bIsInDrag;}
+    bool            IsInternalDrag() const {return bIsInternalDrag;}
 
     sal_Int32       GetActiveBlock() const {return nActiveBlock;}
 
@@ -179,9 +179,9 @@ public:
     void            ShowTree();
     void            HideTree();
 
-    sal_Bool            IsConstantView() {return bIsConstant;}
-    sal_Bool            IsActiveView()   {return bIsActive;}
-    sal_Bool            IsHiddenView()   {return bIsHidden;}
+    bool            IsConstantView() {return bIsConstant;}
+    bool            IsActiveView()   {return bIsActive;}
+    bool            IsHiddenView()   {return bIsHidden;}
 
     const SwWrtShell*   GetActiveWrtShell() {return pActiveShell;}
     SwWrtShell*         GetHiddenWrtShell() {return pHiddenShell;}
@@ -236,9 +236,9 @@ private:
     SwGlblDocContent*       pDocContent;
     sfx2::DocumentInserter* pDocInserter;
 
-    sal_Bool                bIsInternalDrag     :1;
-    sal_Bool                bLastEntryEmphasis  :1; // Drag'n Drop
-    sal_Bool                bIsImageListInitialized : 1;
+    bool                bIsInternalDrag     :1;
+    bool                bLastEntryEmphasis  :1; // Drag'n Drop
+    bool                bIsImageListInitialized : 1;
 
     static const SfxObjectShell* pShowShell;
 
@@ -292,7 +292,7 @@ protected:
     DECL_LINK(      Timeout, void* );
     DECL_LINK(      DoubleClickHdl, void* );
 
-    sal_Bool            IsInternalDrag() const {return bIsInternalDrag != 0;}
+    bool            IsInternalDrag() const {return bIsInternalDrag;}
     SwNavigationPI* GetParentWindow()
                         { return (SwNavigationPI*)Window::GetParent(); }
 
@@ -321,7 +321,7 @@ public:
 
     void                ExecCommand(sal_uInt16 nCmd);
 
-    void                Display(sal_Bool bOnlyUpdateUserData = sal_False);
+    void                Display(bool bOnlyUpdateUserData = false);
 
     sal_Bool                Update(sal_Bool bHard);
 };

@@ -155,9 +155,9 @@ SwGlobalTree::SwGlobalTree(Window* pParent, const ResId& rResId) :
     pDocContent         ( NULL ),
     pDocInserter        ( NULL ),
 
-    bIsInternalDrag         ( sal_False ),
-    bLastEntryEmphasis      ( sal_False ),
-    bIsImageListInitialized ( sal_False )
+    bIsInternalDrag         ( false ),
+    bLastEntryEmphasis      ( false ),
+    bIsImageListInitialized ( false )
 
 {
     SetDragDropMode(SV_DRAGDROP_APP_COPY  |
@@ -258,7 +258,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
             }
         }
     }
-    bLastEntryEmphasis = sal_False;
+    bLastEntryEmphasis = false;
     return nRet;
 
 }
@@ -281,7 +281,7 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
         {
             ImplShowTargetEmphasis( pLast, sal_False);
         }
-        bLastEntryEmphasis = sal_False;
+        bLastEntryEmphasis = false;
     }
     else
     {
@@ -307,7 +307,7 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
         else if(pLast && bLastEntryEmphasis  && pDropEntry)
         {
             ImplShowTargetEmphasis( pLast, sal_False);
-            bLastEntryEmphasis = sal_False;
+            bLastEntryEmphasis = false;
         }
 
         if(pDropEntry)
@@ -315,7 +315,7 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
         else if(pLast)
         {
             ImplShowTargetEmphasis( pLast, DND_ACTION_NONE != nRet );
-            bLastEntryEmphasis = sal_True;
+            bLastEntryEmphasis = true;
         }
         pEmphasisEntry = pDropEntry;
     }
@@ -455,7 +455,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
 {
     sal_Bool bParent = sal_True;
     Update(sal_True);
-    Display(sal_True);
+    Display(true);
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
@@ -526,7 +526,7 @@ void     SwGlobalTree::DeselectHdl()
 DragDropMode SwGlobalTree::NotifyStartDrag( TransferDataContainer& ,
                                                 SvTreeListEntry* pEntry )
 {
-    bIsInternalDrag = sal_True;
+    bIsInternalDrag = true;
     pDDSource = pEntry;
     return SV_DRAGDROP_CTRL_MOVE;
 }
@@ -576,7 +576,7 @@ void SwGlobalTree::StartDrag( sal_Int8 nAction, const Point& rPt )
 void SwGlobalTree::DragFinished( sal_Int8 nAction )
 {
     SvTreeListBox::DragFinished( nAction );
-    bIsInternalDrag = sal_False;
+    bIsInternalDrag = false;
 }
 
 /***************************************************************************
@@ -623,12 +623,12 @@ void SwGlobalTree::Clear()
     SvTreeListBox::Clear();
 }
 
-void    SwGlobalTree::Display(sal_Bool bOnlyUpdateUserData)
+void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
 {
     if(!bIsImageListInitialized)
     {
         aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
-        bIsImageListInitialized = sal_True;
+        bIsImageListInitialized = true;
     }
     sal_uInt16 nCount = pSwGlblDocContents->size();
     if(bOnlyUpdateUserData && GetEntryCount() == pSwGlblDocContents->size())

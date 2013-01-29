@@ -354,15 +354,15 @@ namespace
 
 ////////////////////////////////////////////////////////////
 
-static sal_Bool DeleteTmpFile_Impl(
+static bool DeleteTmpFile_Impl(
         Reference< frame::XModel > &rxModel,
         SfxObjectShellRef &rxDocSh,
         const String &rTmpFileURL )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (rTmpFileURL.Len())
     {
-        sal_Bool bDelete = sal_True;
+        bool bDelete = true;
         if ( eVetoed == CloseModelAndDocSh( rxModel, rxDocSh ) )
         {
             // somebody vetoed the closing, and took the ownership of the document
@@ -370,7 +370,7 @@ static sal_Bool DeleteTmpFile_Impl(
             Reference< XEventListener > xEnsureDelete( new DelayedFileDeletion( rxModel, rTmpFileURL ) );
                 // note: as soon as #106931# is fixed, the whole DelayedFileDeletion is to be superseeded by
                 // a better solution
-            bDelete = sal_False;
+            bDelete = false;
         }
 
         rxModel = 0;
@@ -385,7 +385,7 @@ static sal_Bool DeleteTmpFile_Impl(
             }
         }
         else
-            bRes = sal_True;    // file will be deleted delayed
+            bRes = true;    // file will be deleted delayed
     }
     return bRes;
 }
