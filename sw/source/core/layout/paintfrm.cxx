@@ -17,23 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/text/HoriOrientation.hpp>
-#include <hintids.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/gradient.hxx>
-#include <tools/poly.hxx>
-#include <svx/xoutbmp.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/prntitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
-#include <editeng/ulspitem.hxx>
 #include <svx/framelink.hxx>
 #include <svx/xflgrit.hxx>
-#include <vcl/graph.hxx>
-#include <svx/svdpagv.hxx>
 #include <tgrditem.hxx>
 #include <switerator.hxx>
 #include <fmtsrnd.hxx>
@@ -42,11 +35,8 @@
 #include <swmodule.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
-#include <cntfrm.hxx>
-#include <viewsh.hxx>
 #include <section.hxx>
 #include <sectfrm.hxx>
-#include <doc.hxx>
 #include <viewimp.hxx>
 #include <dflyobj.hxx>
 #include <flyfrm.hxx>
@@ -60,7 +50,6 @@
 #include <rowfrm.hxx>
 #include <cellfrm.hxx>
 #include <notxtfrm.hxx>
-#include <swregion.hxx>
 #include <layact.hxx>
 #include <pagedesc.hxx>
 #include <ptqueue.hxx>
@@ -68,7 +57,6 @@
 #include <virtoutp.hxx>
 #include <lineinfo.hxx>
 #include <dbg_lay.hxx>
-#include <accessibilityoptions.hxx>
 #include <docsh.hxx>
 #include <svx/svdogrp.hxx>
 #include <sortedobjs.hxx>
@@ -76,7 +64,6 @@
 #include <bodyfrm.hxx>
 #include <hffrm.hxx>
 #include <colfrm.hxx>
-#include <PageBreakWin.hxx>
 // <--
 // --> OD #i76669#
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
@@ -94,11 +81,8 @@
 #define COL_NOTES_SIDEPANE_SCROLLAREA       RGB_COLORDATA(230,230,220)
 
 #include <svtools/borderhelper.hxx> //Need for svtools::DrawLine
-#include <swtable.hxx> //Need for svtools::DrawLine
 
 #include "pagefrm.hrc"
-#include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
@@ -108,9 +92,7 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <svx/unoapi.hxx>
 #include <comphelper/sequenceasvector.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
 #include <vector>
