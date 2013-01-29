@@ -19,22 +19,20 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <editeng/eeitem.hxx>
 
-#include "svx/svdstr.hrc"   // Namen aus der Resource
-#include "svx/svdglob.hxx"  // StringCache
+#include <editeng/eeitem.hxx>
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdedxv.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdopath.hxx> // fuer GetContext
-#include <svx/svdograf.hxx> // fuer GetContext
-#include <svx/svdomedia.hxx> // fuer GetContext
-#include <svx/svdetc.hxx>   // Fuer SdrEngineDefaults
+#include <svx/svdopath.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdomedia.hxx>
+#include <svx/svdetc.hxx>
 
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
@@ -42,8 +40,8 @@
 
 #include "svx/svdoutl.hxx"
 #include "svx/svdview.hxx"
-#include "editeng/editview.hxx" // fuer GetField
-#include "editeng/flditem.hxx"  // fuer URLField
+#include "editeng/editview.hxx"
+#include "editeng/flditem.hxx"
 #include "svx/obj3d.hxx"
 #include "svx/svddrgmt.hxx"
 #include "svx/svdoutl.hxx"
@@ -54,6 +52,8 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrhittesthelper.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <drawinglayer/processor2d/contourextractor2d.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -96,7 +96,9 @@ SdrViewEvent::~SdrViewEvent()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // helper class for all D&D overlays
 
-void SdrDropMarkerOverlay::ImplCreateOverlays(const SdrView& rView, const basegfx::B2DPolyPolygon& rPolyPolygon)
+void SdrDropMarkerOverlay::ImplCreateOverlays(
+    const SdrView& rView,
+    const basegfx::B2DPolyPolygon& rLinePolyPolygon)
 {
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
@@ -105,8 +107,9 @@ void SdrDropMarkerOverlay::ImplCreateOverlays(const SdrView& rView, const basegf
 
         if(pTargetOverlay)
         {
-            ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(
-                rPolyPolygon);
+            ::sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                rLinePolyPolygon);
+
             pTargetOverlay->add(*pNew);
             maObjects.append(*pNew);
         }
@@ -115,35 +118,37 @@ void SdrDropMarkerOverlay::ImplCreateOverlays(const SdrView& rView, const basegf
 
 SdrDropMarkerOverlay::SdrDropMarkerOverlay(const SdrView& rView, const SdrObject& rObject)
 {
-    ImplCreateOverlays(rView, rObject.TakeXorPoly());
+    ImplCreateOverlays(
+        rView,
+        rObject.TakeXorPoly());
 }
 
 SdrDropMarkerOverlay::SdrDropMarkerOverlay(const SdrView& rView, const Rectangle& rRectangle)
 {
     basegfx::B2DPolygon aB2DPolygon;
+
     aB2DPolygon.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()));
     aB2DPolygon.append(basegfx::B2DPoint(rRectangle.Right(), rRectangle.Top()));
     aB2DPolygon.append(basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()));
     aB2DPolygon.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
     aB2DPolygon.setClosed(true);
 
-    basegfx::B2DPolyPolygon aB2DPolyPolygon;
-    aB2DPolyPolygon.append(aB2DPolygon);
-
-    ImplCreateOverlays(rView, aB2DPolyPolygon);
+    ImplCreateOverlays(
+        rView,
+        basegfx::B2DPolyPolygon(aB2DPolygon));
 }
 
 SdrDropMarkerOverlay::SdrDropMarkerOverlay(const SdrView& rView, const Point& rStart, const Point& rEnd)
 {
     basegfx::B2DPolygon aB2DPolygon;
+
     aB2DPolygon.append(basegfx::B2DPoint(rStart.X(), rStart.Y()));
     aB2DPolygon.append(basegfx::B2DPoint(rEnd.X(), rEnd.Y()));
     aB2DPolygon.setClosed(true);
 
-    basegfx::B2DPolyPolygon aB2DPolyPolygon;
-    aB2DPolyPolygon.append(aB2DPolygon);
-
-    ImplCreateOverlays(rView, aB2DPolyPolygon);
+    ImplCreateOverlays(
+        rView,
+        basegfx::B2DPolyPolygon(aB2DPolygon));
 }
 
 SdrDropMarkerOverlay::~SdrDropMarkerOverlay()

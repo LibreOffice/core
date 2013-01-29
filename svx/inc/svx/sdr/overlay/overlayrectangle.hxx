@@ -21,11 +21,10 @@
 
 
 
-#ifndef _SDR_OVERLAY_OVERLAYHATCHRECT_HXX
-#define _SDR_OVERLAY_OVERLAYHATCHRECT_HXX
+#ifndef _SDR_OVERLAY_OVERLAYRECTANGLE_HXX
+#define _SDR_OVERLAY_OVERLAYRECTANGLE_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
-#include <vcl/hatch.hxx>
 #include <tools/gen.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -36,42 +35,59 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlayHatchRect : public OverlayObjectWithBasePosition
+        class OverlayRectangle : public OverlayObjectWithBasePosition
         {
             // geometric definitions
             basegfx::B2DPoint               maSecondPosition;
+            const double                    mfTransparence;
             const double                    mfDiscreteGrow;
             const double                    mfDiscreteShrink;
-            const double                    mfHatchRotation;
             const double                    mfRotation;
+
+            // #i53216# added CursorBlinkTime (in ms)
+            sal_uInt32                      mnBlinkTime;
+
+            /// bitfield
+            // Flag to remember which state to draw. Inited with false (0)
+            bool                            mbOverlayState : 1;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
-            OverlayHatchRect(
+            OverlayRectangle(
                 const basegfx::B2DPoint& rBasePosition,
                 const basegfx::B2DPoint& rSecondPosition,
                 const Color& rHatchColor,
+                double fTransparence,
                 double fDiscreteGrow,
                 double fDiscreteShrink,
-                double fHatchRotation,
-                double fRotation);
+                double fRotation,
+                sal_uInt32 nBlinkTime,
+                bool bAnimate);
 
             const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
             void setSecondPosition(const basegfx::B2DPoint&);
 
             // data read access
+            double getTransparence() const { return mfTransparence; }
             double getDiscreteGrow() const { return mfDiscreteGrow; }
             double getDiscreteShrink() const { return mfDiscreteShrink; }
-            double getHatchRotation() const { return mfHatchRotation; }
             double getRotation() const { return mfRotation; }
+
+            // added CursorBlinkTime (in ms)
+            sal_uInt32 getBlinkTime() const { return mnBlinkTime; }
+            void setBlinkTime(sal_uInt32 nNew);
+
+            // execute event from base class ::sdr::animation::Event. Default
+            // implementation does nothing and does not create a new event.
+            virtual void Trigger(sal_uInt32 nTime);
         };
     } // end of namespace overlay
 } // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDR_OVERLAY_OVERLAYHATCHRECT_HXX
+#endif //_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
 
 // eof

@@ -185,7 +185,7 @@ $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/overlay/overlayobjectcell.
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/overlay/overlaymanager.hxx,svx/sdr/overlay/overlaymanager.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx,svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/overlay/overlayobjectlist.hxx,svx/sdr/overlay/overlayobjectlist.hxx))
-$(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/overlay/overlayhatchrect.hxx,svx/sdr/overlay/overlayhatchrect.hxx))
+$(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/overlay/overlayrectangle.hxx,svx/sdr/overlay/overlayrectangle.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/overlay/overlaytools.hxx,svx/sdr/overlay/overlaytools.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/overlay/overlayselection.hxx,svx/sdr/overlay/overlayselection.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/overlay/overlaytriangle.hxx,svx/sdr/overlay/overlaytriangle.hxx))
