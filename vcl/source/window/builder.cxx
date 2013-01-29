@@ -1092,7 +1092,10 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkNotebook")
         pWindow = new TabControl(pParent, WB_STDTABCONTROL|WB_3DLOOK);
     else if (name == "GtkDrawingArea")
-        pWindow = new Window(pParent);
+    {
+        OString sBorder = extractCustomProperty(rMap);
+        pWindow = new Window(pParent, sBorder.isEmpty() ? 0 : WB_BORDER);
+    }
     else if (name == "GtkTextView")
     {
         extractBuffer(id, rMap);
