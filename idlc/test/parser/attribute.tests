@@ -220,3 +220,13 @@ EXPECT SUCCESS "attribute.tests 27":
 interface I1 {
     [attribute, bound, readonly] long a;
 };
+
+
+EXPECT SUCCESS "atribute.tests 28":
+exception E1 {};
+interface I1 {
+    [attribute, bound] long a {
+        get raises (E1);
+        set raises (E1);
+    };
+};
