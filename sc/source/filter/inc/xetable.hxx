@@ -917,6 +917,8 @@ public:
     virtual void        Save( XclExpStream& rStrm );
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 
+    inline sal_uInt32   GetXclRowRpt() const { return mnXclRowRpt; }
+    inline void         SetXclRowRpt( sal_uInt32 nRpt ){ mnXclRowRpt = nRpt; }
 private:
     /** Initializes the record data. Called from constructors. */
     void                Init( sal_uInt16 nXclRow, XclExpRowOutlineBuffer* pOutlineBfr );
@@ -935,6 +937,7 @@ private:
     sal_uInt16          mnFlags;            /// Flags for the ROW record.
     sal_uInt16          mnXFIndex;          /// Default row formatting.
     sal_uInt16          mnOutlineLevel;     /// Outline Level (for OOXML)
+    sal_uInt32          mnXclRowRpt;
     bool                mbAlwaysEmpty;      /// true = Do not add blank cells in Finalize().
     bool                mbEnabled;          /// true = Write this ROW record.
 };

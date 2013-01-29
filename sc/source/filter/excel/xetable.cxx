@@ -1708,6 +1708,7 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
     mnFlags( EXC_ROW_DEFAULTFLAGS ),
     mnXFIndex( EXC_XF_DEFAULTCELL ),
     mnOutlineLevel( 0 ),
+    mnXclRowRpt( 1 ),
     mbAlwaysEmpty( bAlwaysEmpty ),
     mbEnabled( true )
 {
@@ -2002,7 +2003,7 @@ void XclExpRowBuffer::AppendCell( XclExpCellRef xCell, bool bIsMergedBase )
 void XclExpRowBuffer::CreateRows( SCROW nFirstFreeScRow )
 {
     if( nFirstFreeScRow > 0 )
-        GetOrCreateRow( static_cast< sal_uInt16 >( nFirstFreeScRow - 1 ), true );
+        GetOrCreateRow(  ::std::max ( nFirstFreeScRow - 1, GetMaxPos().Row() ), true );
 }
 
 void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt16Vec& rColXFIndexes )
@@ -2023,6 +2024,9 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     XclExpDefaultRowData aMaxDefData;
     size_t nMaxDefCount = 0;
     // only look for default format in existing rows, if there are more than unused
+    XclExpRow* pPrev = NULL;
+    typedef std::vector< XclExpRow* > XclRepeatedRows;
+    XclRepeatedRows aRepeated;
     for (itr = itrBeg; itr != itrEnd; ++itr)
     {
         const RowRef& rRow = itr->second;
@@ -2037,10 +2041,36 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
                 aMaxDefData = aDefData;
             }
         }
+        if ( pPrev )
+        {
+            sal_uInt32 nRpt =  rRow->GetXclRow() - pPrev->GetXclRow();
+            pPrev->SetXclRowRpt( nRpt );
+            if ( nRpt > 1 )
+                aRepeated.push_back( pPrev );
+            if ( pPrev->IsDefaultable())
+            {
+                XclExpDefaultRowData aDefData( *pPrev );
+                size_t& rnDefCount = aDefRowMap[ aDefData ];
+                rnDefCount += ( pPrev->GetXclRowRpt() - 1 );
+                if( rnDefCount > nMaxDefCount )
+                {
+                    nMaxDefCount = rnDefCount;
+                    aMaxDefData = aDefData;
+                }
+            }
+        }
+        pPrev = rRow.get();
     }
-
     // return the default row format to caller
     rDefRowData = aMaxDefData;
+
+    // now disable repeating extra (empty) rows that are equal to
+    // default row height
+    for ( XclRepeatedRows::iterator it = aRepeated.begin(), it_end = aRepeated.end(); it != it_end; ++it)
+    {
+        if ( (*it)->GetXclRowRpt() > 1 && (*it)->GetHeight() == rDefRowData.mnHeight )
+            (*it)->SetXclRowRpt( 1 );
+    }
 
     // *** Disable unused ROW records, find used area *** ---------------------
 
