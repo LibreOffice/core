@@ -1708,6 +1708,8 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
     mnFlags( EXC_ROW_DEFAULTFLAGS ),
     mnXFIndex( EXC_XF_DEFAULTCELL ),
     mnOutlineLevel( 0 ),
+    mnXclRowRpt( 1 ),
+    mnCurrentRow( nXclRow ),
     mbAlwaysEmpty( bAlwaysEmpty ),
     mbEnabled( true )
 {
@@ -1921,7 +1923,11 @@ void XclExpRow::WriteCellList( XclExpStream& rStrm )
 void XclExpRow::Save( XclExpStream& rStrm )
 {
     if( mbEnabled )
-        XclExpRecord::Save( rStrm );
+    {
+        mnCurrentRow = mnXclRow;
+        for ( sal_uInt32 i = 0; i < mnXclRowRpt; ++i, ++mnCurrentRow )
+            XclExpRecord::Save( rStrm );
+    }
 }
 
 void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase )
@@ -1950,7 +1956,7 @@ void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase
 
 void XclExpRow::WriteBody( XclExpStream& rStrm )
 {
-    rStrm   << static_cast< sal_uInt16 >(mnXclRow)
+    rStrm   << static_cast< sal_uInt16 >(mnCurrentRow)
             << GetFirstUsedXclCol()
             << GetFirstFreeXclCol()
             << mnHeight
@@ -1965,23 +1971,27 @@ void XclExpRow::SaveXml( XclExpXmlStream& rStrm )
         return;
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     bool haveFormat = ::get_flag( mnFlags, EXC_ROW_USEDEFXF );
-    rWorksheet->startElement( XML_row,
-            XML_r,              OString::valueOf( (sal_Int32) (mnXclRow+1) ).getStr(),
-            // OOXTODO: XML_spans,          optional
-            XML_s,              haveFormat ? lcl_GetStyleId( rStrm, mnXFIndex ).getStr() : NULL,
-            XML_customFormat,   XclXmlUtils::ToPsz( haveFormat ),
-            XML_ht,             OString::valueOf( (double) mnHeight / 20.0 ).getStr(),
-            XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_HIDDEN ) ),
-            XML_customHeight,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_UNSYNCED ) ),
-            XML_outlineLevel,   OString::valueOf( (sal_Int32) mnOutlineLevel ).getStr(),
-            XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_COLLAPSED ) ),
-            // OOXTODO: XML_thickTop,       bool
-            // OOXTODO: XML_thickBot,       bool
-            // OOXTODO: XML_ph,             bool
-            FSEND );
-    // OOXTODO: XML_extLst
-    maCellList.SaveXml( rStrm );
-    rWorksheet->endElement( XML_row );
+    mnCurrentRow = mnXclRow + 1;
+    for ( sal_uInt32 i=0; i<mnXclRowRpt; ++i )
+    {
+        rWorksheet->startElement( XML_row,
+                XML_r,              OString::valueOf( (sal_Int32) (mnCurrentRow++) ).getStr(),
+                // OOXTODO: XML_spans,          optional
+                XML_s,              haveFormat ? lcl_GetStyleId( rStrm, mnXFIndex ).getStr() : NULL,
+                XML_customFormat,   XclXmlUtils::ToPsz( haveFormat ),
+                XML_ht,             OString::valueOf( (double) mnHeight / 20.0 ).getStr(),
+                XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_HIDDEN ) ),
+                XML_customHeight,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_UNSYNCED ) ),
+                XML_outlineLevel,   OString::valueOf( (sal_Int32) mnOutlineLevel ).getStr(),
+                XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_COLLAPSED ) ),
+                // OOXTODO: XML_thickTop,       bool
+                // OOXTODO: XML_thickBot,       bool
+                // OOXTODO: XML_ph,             bool
+                FSEND );
+        // OOXTODO: XML_extLst
+        maCellList.SaveXml( rStrm );
+        rWorksheet->endElement( XML_row );
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -2002,7 +2012,7 @@ void XclExpRowBuffer::AppendCell( XclExpCellRef xCell, bool bIsMergedBase )
 void XclExpRowBuffer::CreateRows( SCROW nFirstFreeScRow )
 {
     if( nFirstFreeScRow > 0 )
-        GetOrCreateRow( static_cast< sal_uInt16 >( nFirstFreeScRow - 1 ), true );
+        GetOrCreateRow(  ::std::max ( nFirstFreeScRow - 1, GetMaxPos().Row() ), true );
 }
 
 void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt16Vec& rColXFIndexes )
@@ -2023,6 +2033,9 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     XclExpDefaultRowData aMaxDefData;
     size_t nMaxDefCount = 0;
     // only look for default format in existing rows, if there are more than unused
+    XclExpRow* pPrev = NULL;
+    typedef std::vector< XclExpRow* > XclRepeatedRows;
+    XclRepeatedRows aRepeated;
     for (itr = itrBeg; itr != itrEnd; ++itr)
     {
         const RowRef& rRow = itr->second;
@@ -2037,10 +2050,36 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
                 aMaxDefData = aDefData;
             }
         }
+        if ( pPrev )
+        {
+            sal_uInt32 nRpt =  rRow->GetXclRow() - pPrev->GetXclRow();
+            pPrev->SetXclRowRpt( nRpt );
+            if ( nRpt > 1 )
+                aRepeated.push_back( pPrev );
+            if ( pPrev->IsDefaultable())
+            {
+                XclExpDefaultRowData aDefData( *pPrev );
+                size_t& rnDefCount = aDefRowMap[ aDefData ];
+                rnDefCount += ( pPrev->GetXclRowRpt() - 1 );
+                if( rnDefCount > nMaxDefCount )
+                {
+                    nMaxDefCount = rnDefCount;
+                    aMaxDefData = aDefData;
+                }
+            }
+        }
+        pPrev = rRow.get();
     }
-
     // return the default row format to caller
     rDefRowData = aMaxDefData;
+
+    // now disable repeating extra (empty) rows that are equal to
+    // default row height
+    for ( XclRepeatedRows::iterator it = aRepeated.begin(), it_end = aRepeated.end(); it != it_end; ++it)
+    {
+        if ( (*it)->GetXclRowRpt() > 1 && (*it)->GetHeight() == rDefRowData.mnHeight )
+            (*it)->SetXclRowRpt( 1 );
+    }
 
     // *** Disable unused ROW records, find used area *** ---------------------
 
