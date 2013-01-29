@@ -131,6 +131,7 @@
 
 #include <IMark.hxx>
 #include <doc.hxx>
+#include <txatbase.hxx> // FIXME this sucks
 #include <xmloff/odffields.hxx>
 
 #include <PostItMgr.hxx>
@@ -3216,22 +3217,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             if (aVEvt.eEvent == SDREVENT_EXECUTEURL)
                                 bExecDrawTextLink = sal_True;
                         }
-
-                        SwContentAtPos aFieldAtPos ( SwContentAtPos::SW_FIELD );
-
-                        // Are we selecting a field?
-                        if ( rSh.GetContentAtPos( aDocPos, aFieldAtPos ) )
-                        {
-                            // select work, AdditionalMode if applicable
-                            if ( KEY_MOD1 == rMEvt.GetModifier() && !rSh.IsAddMode() )
-                            {
-                                rSh.EnterAddMode();
-                                rSh.SelWrd( &aDocPos );
-                                rSh.LeaveAddMode();
-                            }
-                            else
-                                rSh.SelWrd( &aDocPos );
-                        }
                         break;
                     }
                     case 2:
@@ -3565,6 +3550,47 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 {
                     rSh.GCAttr();
                     rSh.ClearGCAttr();
+                }
+
+                SwContentAtPos aFieldAtPos(SwContentAtPos::SW_FIELD);
+
+                // Are we clicking on a field?
+                if (rSh.GetContentAtPos(aDocPos, aFieldAtPos))
+                {
+                    bool bAddMode(false); // AdditionalMode if applicable
+                    if (KEY_MOD1 == rMEvt.GetModifier() && !rSh.IsAddMode())
+                    {
+                        bAddMode = true;
+                        rSh.EnterAddMode();
+                    }
+                    rSh.SetCursor(&aDocPos, bOnlyText);
+                    // Select the field. Unfortunately cursor may be on field
+                    // position or on position after field depending on which
+                    // half of the field was clicked on.
+                    SwTxtAttr const*const pTxtFld(aFieldAtPos.pFndTxtAttr);
+                    if (rSh.GetCurrentShellCursor().GetPoint()->nContent
+                            .GetIndex() == *pTxtFld->GetStart())
+                    {
+                        rSh.Right( CRSR_SKIP_CHARS, true, 1, false );
+                        rSh.NormalizePam();
+                    }
+                    else
+                    {
+                        assert(rSh.GetCurrentShellCursor().GetPoint()->nContent
+                                .GetIndex() == (*pTxtFld->GetStart() + 1));
+                        rSh.Left( CRSR_SKIP_CHARS, true, 1, false );
+                    }
+                    // it's a bit of a mystery what this is good for?
+                    // in this case we assume it's valid since we just
+                    // selected a field
+                    bValidCrsrPos = true;
+                    if (bAddMode)
+                    {
+                        rSh.LeaveAddMode();
+                    }
+                    // don't go into the !bOverSelect block below - it moves
+                    // the cursor
+                    break;
                 }
 
                 sal_Bool bOverSelect = rSh.ChgCurrPam( aDocPos ), bOverURLGrf = sal_False;
