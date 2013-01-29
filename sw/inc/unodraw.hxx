@@ -131,8 +131,6 @@ SwXShapeBaseClass;
 class SwXShape : public SwXShapeBaseClass,
     public SwClient
 {
-    friend class SwHTMLImageWatcher;
-    friend class SwHTMLParser;
     friend class SwXGroupShape;
     friend class SwXDrawPage;
 
@@ -148,8 +146,6 @@ class SwXShape : public SwXShapeBaseClass,
     SwShapeDescriptor_Impl*     pImpl;
 
     sal_Bool                        m_bDescriptor;
-
-    SwFrmFmt*               GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 
     SvxShape*               GetSvxShape();
 
@@ -273,6 +269,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getShapeType(  ) throw (::com::sun::star::uno::RuntimeException);
 
     SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl;}
+    SwFrmFmt*               GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >                 GetAggregationInterface() {return xShapeAgg;}
 
     // helper
