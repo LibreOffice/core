@@ -52,6 +52,7 @@ $(eval $(call gb_Library_add_defs,sal,\
 	-DSAL_DLLIMPLEMENTATION \
 	-DRTL_OS="\"$(RTL_OS)"\" \
 	-DRTL_ARCH="\"$(RTL_ARCH)"\" \
+	-DSRCDIR="\"$(SRCDIR)\"" \
 ))
 
 $(eval $(call gb_Library_use_libraries,sal,\

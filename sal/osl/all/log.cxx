@@ -217,8 +217,12 @@ void log(
         s << /*no where*/' ' << message << '\n';
     } else {
         s << area << ':' << OSL_DETAIL_GETPID << ':'
-            << osl::Thread::getCurrentIdentifier() << ':' << where << message
-            << '\n';
+          << osl::Thread::getCurrentIdentifier() << ':';
+        if (strncmp(where, SRCDIR, sizeof(SRCDIR)-1) == 0)
+            s << where+sizeof(SRCDIR);
+        else
+            s << where;
+        s << message << '\n';
     }
 #ifdef HAVE_SYSLOG_H
     if (sal_use_syslog)
