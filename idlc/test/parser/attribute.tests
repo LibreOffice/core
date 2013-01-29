@@ -36,6 +36,14 @@ interface I1 {
 };
 
 
+EXPECT FAILURE "attribute.tests 3a":
+interface I1 {
+    [attribute] long a {
+        set raises ();
+    };
+};
+
+
 EXPECT SUCCESS "attribute.tests 4":
 exception E1 {};
 interface I1 {
