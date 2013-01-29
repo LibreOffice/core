@@ -112,11 +112,11 @@ public:
     virtual sal_Bool        ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
                                         sal_Bool bRecord, sal_Bool bApi );
 
-    virtual sal_Bool        InsertCells( const ScRange& rRange,const ScMarkData* pTabMark,
-                                         InsCellCmd eCmd, sal_Bool bRecord, sal_Bool bApi,
-                                         sal_Bool bPartOfPaste = false );
-    virtual sal_Bool        DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark,
-                                         DelCellCmd eCmd, sal_Bool bRecord, sal_Bool bApi );
+    virtual bool InsertCells( const ScRange& rRange,const ScMarkData* pTabMark,
+                              InsCellCmd eCmd, bool bRecord, bool bApi, bool bPartOfPaste = false );
+
+    virtual bool DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark,
+                              DelCellCmd eCmd, bool bRecord, bool bApi );
 
     virtual sal_Bool        MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                        sal_Bool bCut, sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
