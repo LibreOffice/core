@@ -283,7 +283,7 @@ sub add_assembly_condition_into_component_table
                 {
                     # setting the condition
 
-                    $condition = "DOTNET_SUFFICIENT=1";
+                    $condition = "MsiNetAssemblySupport >= \"4.0.0.0\"";
                     $oneline = $component . "\t" . $componentid . "\t" . $directory . "\t" . $attributes . "\t" . $condition . "\t" . $keypath . "\n";
                     ${$componenttable}[$j] = $oneline;
                     $changed = 1;

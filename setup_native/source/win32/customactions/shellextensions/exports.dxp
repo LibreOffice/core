@@ -7,8 +7,6 @@ MigrateInstallPath
 CheckInstallDirectory
 CreateLayerLinks
 RemoveLayerLinks
-DotNetCheck
-ShowProperties
 copyEditionData
 RenamePrgFolder
 RemovePrgFolder

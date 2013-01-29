@@ -360,10 +360,6 @@ sub set_important_properties
             push(@{$propertyfile}, $onepropertyline);
         }
     }
-
-    # Setting .NET requirements
-    push @{$propertyfile}, "REQUIRED_DOTNET_VERSION" . "\t" . "4.0.0.0" . "\n";
-    push @{$propertyfile}, "DOTNET_SUFFICIENT" . "\t" . "1" . "\n"; # default value for found .NET
 }
 
 #######################################################

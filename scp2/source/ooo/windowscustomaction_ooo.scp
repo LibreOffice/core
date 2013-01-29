@@ -178,16 +178,6 @@ WindowsCustomAction gid_Customaction_Check_Install_Directory
 	Assignment3 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "CheckInstallDirectory", "Not Installed", "2");
 End
 
-WindowsCustomAction gid_Customaction_Dotnetcheck
-	Name = "DotNetCheck";
-	Typ = "321";
-	Source = "shlxtmsi.dll";
-	Target = "DotNetCheck";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "LaunchConditions");
-	Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\"", "LaunchConditions");
-End
-
 WindowsCustomAction gid_Customaction_CopyEditionData
     Name = "CopyEditionData";
     Typ = "1";
