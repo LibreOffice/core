@@ -118,16 +118,15 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class OverlayHatchRectanglePrimitive : public DiscreteMetricDependentPrimitive2D
+        class OverlayRectanglePrimitive : public DiscreteMetricDependentPrimitive2D
         {
         private:
             // the logic rectangle definition
             basegfx::B2DRange               maObjectRange;
 
-            // the hatch definition
-            double                          mfDiscreteHatchDistance;
-            double                          mfHatchRotation;
-            basegfx::BColor                 maHatchColor;
+            // the graphic definition
+            basegfx::BColor                 maColor;
+            double                          mfTransparence;
 
             // the dscrete grow and shrink of the box
             double                          mfDiscreteGrow;
@@ -140,20 +139,18 @@ namespace drawinglayer
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
-            OverlayHatchRectanglePrimitive(
+            OverlayRectanglePrimitive(
                 const basegfx::B2DRange& rObjectRange,
-                double fDiscreteHatchDistance,
-                double fHatchRotation,
-                const basegfx::BColor& rHatchColor,
+                const basegfx::BColor& rColor,
+                double fTransparence,
                 double fDiscreteGrow,
                 double fDiscreteShrink,
                 double fRotation);
 
             // data access
             const basegfx::B2DRange& getObjectRange() const { return maObjectRange; }
-            double getDiscreteHatchDistance() const { return mfDiscreteHatchDistance; }
-            double getHatchRotation() const { return mfHatchRotation; }
-            const basegfx::BColor& getHatchColor() const { return maHatchColor; }
+            const basegfx::BColor& getColor() const { return maColor; }
+            double getTransparence() const { return mfTransparence; }
             double getDiscreteGrow() const { return mfDiscreteGrow; }
             double getDiscreteShrink() const { return mfDiscreteShrink; }
             double getRotation() const { return mfRotation; }

@@ -45,15 +45,12 @@ namespace sdr
             // #i53216# added CursorBlinkTime (in ms)
             sal_uInt32                              mnBlinkTime;
 
-            // bitfield
-            // Flag to remember which state to draw. Inited with sal_False (0)
-            unsigned                                mbOverlayState : 1;
+            /// bitfield
+            // Flag to remember which state to draw. Inited with false (0)
+            bool                                    mbOverlayState : 1;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
-
-            // #i53216# check blink time value range (currently 25 < mnBlinkTime < 10000)
-            void impCheckBlinkTimeValueRange();
 
         public:
             OverlayAnimatedBitmapEx(
