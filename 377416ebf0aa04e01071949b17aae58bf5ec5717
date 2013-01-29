@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUn///0k\u003d",
+        "filename": "vcl/source/control/edit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-01-29T06:46:06Z",
+      "side": 1,
+      "message": "xub_StrLen is not needed here anymore getLength is\nsal_Int32 not xub_Strlen (which is sal_uInt16)",
+      "revId": "377416ebf0aa04e01071949b17aae58bf5ec5717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///0g\u003d",
+        "filename": "vcl/source/control/edit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-01-29T06:46:06Z",
+      "side": 1,
+      "message": "xub_Strlen \u003d\u003e sal_Int32",
+      "revId": "377416ebf0aa04e01071949b17aae58bf5ec5717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///0c\u003d",
+        "filename": "vcl/source/control/edit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2182,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-01-29T06:46:06Z",
+      "side": 1,
+      "message": "maUndoText \u003d\u003d maText.GetStr()\nshould avoid teh allocation of a temp copy of OUString\n(triggered by toString().\nAlthough ti probably would be cleaner to add an overload\nof \u003d\u003d to support OUString \u003d\u003d OUStringBuffer directly",
+      "revId": "377416ebf0aa04e01071949b17aae58bf5ec5717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///0Y\u003d",
+        "filename": "vcl/source/control/edit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2284,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-01-29T06:46:06Z",
+      "side": 1,
+      "message": "toString.copy(nPost) can be substitued by\nOUString(maText.getStr() + nPos)\nwhich will instantiate one temp OUString instead of 2",
+      "revId": "377416ebf0aa04e01071949b17aae58bf5ec5717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUn///0U\u003d",
+        "filename": "vcl/source/control/edit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2764,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-01-29T06:46:06Z",
+      "side": 1,
+      "message": "return OUString(maText.getStr() + aSelection.Min(), aSelection.Len())",
+      "revId": "377416ebf0aa04e01071949b17aae58bf5ec5717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
