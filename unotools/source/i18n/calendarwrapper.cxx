@@ -22,7 +22,6 @@
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <unotools/calendarwrapper.hxx>
-#include <instance.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/LocaleCalendar.hpp>
 

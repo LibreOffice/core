@@ -22,7 +22,6 @@
 #include <tools/debug.hxx>
 #include <i18npool/languagetag.hxx>
 
-#include "instance.hxx"
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/i18n/Transliteration.hpp>
 
