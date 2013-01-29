@@ -138,7 +138,6 @@ class ScMyStylesImportHelper
     rtl::OUString*      pCurrency;
     rtl::OUString*      pPrevCurrency;
     ScRange             aPrevRange;
-    sal_uInt32          nMaxRanges;
     sal_Int16           nCellType;
     sal_Int16           nPrevCellType;
     bool                bPrevRangeAdded;
