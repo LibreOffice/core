@@ -115,9 +115,6 @@ private:
     // description
     VclMultiLineEdit*  pEdtDescription;
 
-    // buttons
-    OKButton*       pBtnOK;
-
 public:
     // constructor
     SvxObjectTitleDescDialog(Window* pWindow, const String& rTitle, const String& rDesc);
