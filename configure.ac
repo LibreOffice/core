@@ -11808,6 +11808,10 @@ for lang in $WITH_LANG; do
         AC_MSG_ERROR([invalid language: $lang; supported languages are: $ALL_LANGS])
     fi
 done
+if test -n "$WITH_LANG" -a "$WITH_LANG" != "ALL"; then
+    echo $WITH_LANG | grep en-US 2>&1 > /dev/null
+    test $? -ne 1 || WITH_LANG=`echo $WITH_LANG en-US`
+fi
 # list with substituted ALL
 WITH_LANG_LIST=`echo $WITH_LANG | sed "s/ALL/$ALL_LANGS/"`
 test -z "$WITH_LANG_LIST" && WITH_LANG_LIST="en-US"
