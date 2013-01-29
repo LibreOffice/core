@@ -176,15 +176,6 @@ WindowsCustomAction gid_Customaction_Shellextensionsdll7
 	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "InstallValidate");
 End
 
-WindowsCustomAction gid_Customaction_Set_Admininstall
-	Name = "SetAdminInstallProperty";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "SetAdminInstallProperty";
-	Inbinarytable = 1;
-	Assignment1 = ("AdminExecuteSequence", "", "InstallInitialize");
-End
-
 WindowsCustomAction gid_Customaction_Check_Install_Directory
 	Name = "CheckInstallDirectory";
 	Typ = "65";

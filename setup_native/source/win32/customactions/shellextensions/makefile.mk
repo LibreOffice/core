@@ -44,7 +44,6 @@ SLOFILES = \
     $(SLO)$/migrateinstallpath.obj \
     $(SLO)$/completeinstallpath.obj \
     $(SLO)$/checkdirectory.obj \
-    $(SLO)$/setadmininstall.obj \
     $(SLO)$/layerlinks.obj \
     $(SLO)$/dotnetcheck.obj \
     $(SLO)$/copyeditiondata.obj \

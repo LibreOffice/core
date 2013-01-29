@@ -6,7 +6,6 @@ ExecutePostUninstallScript
 CompleteInstallPath
 MigrateInstallPath
 CheckInstallDirectory
-SetAdminInstallProperty
 CreateLayerLinks
 RemoveLayerLinks
 DotNetCheck
