@@ -77,6 +77,7 @@ public:
     void test();
     void testPasswordExport();
     void testConditionalFormatExportXLSX();
+    void testMiscRowHeightExport();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -84,6 +85,7 @@ public:
     CPPUNIT_TEST(testPasswordExport);
 #endif
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
+    CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -295,6 +297,78 @@ void ScExportTest::testConditionalFormatExportXLSX()
     rtl::OUString aCSVPath;
     createCSVPath( aCSVFile, aCSVPath );
     testCondFile(aCSVPath, pDoc, 0);
+}
+
+void ScExportTest::testMiscRowHeightExport()
+{
+
+    struct TestParam
+    {
+        struct RowData
+        {
+            SCROW nStartRow;
+            SCROW nEndRow;
+            SCTAB nTab;
+            int nExpectedHeight;
+        };
+        const char* sTestDoc;
+        int nImportType;
+        int nExportType;
+        int nRowData;
+        RowData* pData;
+    };
+
+    TestParam::RowData DfltRowData[] =
+    {
+        { 0, 4, 0, 529 },
+        { 5, 10, 0, 1058 },
+        { 17, 20, 0, 1767 },
+        { 1048573, 1048575, 0, 529 },
+    };
+
+    TestParam::RowData EmptyRepeatRowData[] =
+    {
+        { 0, 4, 0, 529 },
+        { 5, 10, 0, 1058 },
+        { 17, 20, 0, 1767 },
+    };
+
+    TestParam aTestValues[] =
+    {
+        { "miscrowheights.", XLSX, XLSX, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
+        { "miscrowheights.", XLSX, XLS, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
+        { "miscemptyrepeatedrowheights.", ODS, XLSX, SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
+        { "miscemptyrepeatedrowheights.", ODS, XLS, SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
+    };
+
+    for ( unsigned int index=0; index<SAL_N_ELEMENTS(aTestValues); ++index )
+    {
+        OUString sFileName = OUString::createFromAscii( aTestValues[ index ].sTestDoc );
+        printf("aTestValues[%d] %s\n", index, OUStringToOString( sFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        int nImportType =  aTestValues[ index ].nImportType;
+        int nExportType =  aTestValues[ index ].nExportType;
+        ScDocShellRef xShell = loadDocument( sFileName, nImportType );
+        CPPUNIT_ASSERT(xShell.Is());
+
+        ScDocShellRef xDocSh = saveAndReload(&(*xShell), nExportType );
+        CPPUNIT_ASSERT(xDocSh.Is());
+
+        ScDocument* pDoc = xDocSh->GetDocument();
+
+        for (int i=0; i<aTestValues[ index ].nRowData; ++i)
+        {
+            SCROW nRow = aTestValues[ index ].pData[ i].nStartRow;
+            SCROW nEndRow = aTestValues[ index ].pData[ i ].nEndRow;
+            SCTAB nTab = aTestValues[ index ].pData[ i ].nTab;
+            int nExpectedHeight = aTestValues[ index ].pData[ i ].nExpectedHeight;
+            for ( ; nRow <= nEndRow; ++nRow )
+            {
+                printf("\t checking row %d for height %d\n", nRow, nExpectedHeight );
+                int nHeight = sc::TwipsToHMM( pDoc->GetRowHeight(nRow, nTab, false) );
+                CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);
+            }
+        }
+    }
 }
 
 ScExportTest::ScExportTest()

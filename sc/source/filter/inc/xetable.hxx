@@ -938,6 +938,7 @@ private:
     sal_uInt16          mnXFIndex;          /// Default row formatting.
     sal_uInt16          mnOutlineLevel;     /// Outline Level (for OOXML)
     sal_uInt32          mnXclRowRpt;
+    sal_uInt32          mnCurrentRow;
     bool                mbAlwaysEmpty;      /// true = Do not add blank cells in Finalize().
     bool                mbEnabled;          /// true = Write this ROW record.
 };
