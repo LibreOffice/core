@@ -56,3 +56,8 @@ typedef void T;
 EXPECT FAILURE "typedef.tests 7":
 exception E {};
 typedef E T;
+
+
+EXPECT FAILURE "typdef.tests 8":
+constants C {};
+typedef C T;
