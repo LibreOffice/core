@@ -1417,6 +1417,7 @@ void SubsetMap::InitList()
                 case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D:
                     aAllSubsets.push_back( Subset( 0x2B740, 0x2B81F, RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D ) );
                     break;
+#if U_ICU_VERSION_MAJOR_NUM >= 49
                 case UBLOCK_ARABIC_EXTENDED_A:
                     aAllSubsets.push_back( Subset( 0x08A0, 0x08FF, RID_SUBSETSTR_ARABIC_EXTENDED_A ) );
                     break;
@@ -1450,6 +1451,7 @@ void SubsetMap::InitList()
                 case UBLOCK_TAKRI:
                     aAllSubsets.push_back( Subset( 0x11680, 0x116CF, RID_SUBSETSTR_TAKRI ) );
                     break;
+#endif
             }
 
 #if OSL_DEBUG_LEVEL > 0
