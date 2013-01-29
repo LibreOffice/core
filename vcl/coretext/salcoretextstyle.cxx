@@ -99,7 +99,7 @@ void CoreTextStyleInfo::SetFont(FontSelectPattern* requested_font)
 
 void CoreTextStyleInfo::SetColor(SalColor color)
 {
-    SAL_INFO( "vcl.coretext.style", "SetColor(" << this << ",color={" << SALCOLOR_RED(color) << "," << SALCOLOR_GREEN(color) << "," << SALCOLOR_BLUE(color) << "})" );
+    SAL_INFO( "vcl.coretext.style", "SetColor(" << this << ",color={" << (int)SALCOLOR_RED(color) << "," << (int)SALCOLOR_GREEN(color) << "," << (int)SALCOLOR_BLUE(color) << "})" );
 
     SafeCFRelease(m_color);
 #ifdef IOS
