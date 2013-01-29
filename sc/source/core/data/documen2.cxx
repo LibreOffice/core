@@ -206,8 +206,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         mbChangeReadOnlyEnabled( false ),
         mbStreamValidLocked( false ),
         mbUserInteractionEnabled(true),
-        mnNamedRangesLockCount( 0 ),
-        mbIsInTest( false )
+        mnNamedRangesLockCount(0)
 {
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
 

@@ -5150,7 +5150,6 @@ void Test::testMergedCells()
     ScRange aRange(0,2,0,MAXCOL,2,0);
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
-    m_pDoc->SetInTest();
     m_xDocShRef->GetDocFunc().InsertCells(aRange, &aMark, INS_INSROWS, true, true);
     m_pDoc->ExtendMerge(1, 1, nEndCol, nEndRow, 0, false);
     cout << nEndRow << nEndCol;
@@ -5479,7 +5478,6 @@ void Test::testCopyPasteFormulas()
     m_pDoc->SetString(0,4,0, "=$Sheet2.A$1");
 
     // to prevent ScEditableTester in ScDocFunc::MoveBlock
-    m_pDoc->SetInTest();
     ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,0,0), 1.0);
     ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,1,0), 1.0);
     ScDocFunc& rDocFunc = m_xDocShRef->GetDocFunc();
