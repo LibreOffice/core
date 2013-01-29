@@ -26,12 +26,15 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 class Test : public SwModelTestBase
 {
 public:
     void testFdo38244();
     void testFirstHeaderFooter();
+    void testTextframeGradient();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -48,6 +51,7 @@ void Test::run()
     MethodEntry<Test> aMethods[] = {
         {"fdo38244.odt", &Test::testFdo38244},
         {"first-header-footer.odt", &Test::testFirstHeaderFooter},
+        {"textframe-gradient.odt", &Test::testTextframeGradient},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -106,6 +110,27 @@ void Test::testFirstHeaderFooter()
     CPPUNIT_ASSERT_EQUAL(OUString("Right footer2"), parseDump("/root/page[5]/footer/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Left header2"),  parseDump("/root/page[6]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Left footer2"),  parseDump("/root/page[6]/footer/txt/text()"));
+}
+
+void Test::testTextframeGradient()
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+    awt::Gradient aGradient = getProperty<awt::Gradient>(xFrame, "FillGradient");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xC0504D), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD99594), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
+
+    xFrame.set(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+    aGradient = getProperty<awt::Gradient>(xFrame, "FillGradient");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x666666), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
