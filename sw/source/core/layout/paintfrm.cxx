@@ -6181,12 +6181,13 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                 if ( pPage->GetSortedObjs() )
                     ::lcl_SubtractFlys( this, pPage, aRect, aRegion );
 
+                /// OD 06.08.2002 #99657# - determine, if background transparency
+                ///     have to be considered for drawing.
+                ///     --> Status Quo: background transparency have to be
+                ///        considered for fly frames
+                const sal_Bool bConsiderBackgroundTransparency = IsFlyFrm();
+                if (!pFillStyleItem || pFillStyleItem->GetValue() != XFILL_GRADIENT || !pFillGradientItem)
                 {
-                    /// OD 06.08.2002 #99657# - determine, if background transparency
-                    ///     have to be considered for drawing.
-                    ///     --> Status Quo: background transparency have to be
-                    ///        considered for fly frames
-                    const sal_Bool bConsiderBackgroundTransparency = IsFlyFrm();
                     for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
                     {
                         if ( 1 < aRegion.size() )
@@ -6203,6 +6204,11 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                             ::DrawGraphic( pItem, pFillStyleItem, pFillGradientItem, pOut, aOrigBackRect, aRegion[i], GRFNUM_NO,
                                     bConsiderBackgroundTransparency );
                     }
+                }
+                else
+                {
+                    ::DrawGraphic( pItem, pFillStyleItem, pFillGradientItem, pOut, aOrigBackRect, aRect, GRFNUM_NO,
+                            bConsiderBackgroundTransparency );
                 }
                 if( pCol )
                     delete pNewItem;
