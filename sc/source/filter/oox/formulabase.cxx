@@ -729,6 +729,14 @@ static const FunctionData saFuncTableOox[] =
 static const FunctionData saFuncTable2013[] =
 {
     { "IFNA",                   "IFNA",                 NOID,   NOID,   2,  2,  V, { VO, RO }, FUNCFLAG_MACROCALL_NEW },
+    { "IMCOSH",                 "IMCOSH",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "IMCOT",                  "IMCOT",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "IMCSC",                  "IMCSC",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "IMCSCH",                 "IMCSCH",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "IMSEC",                  "IMSEC",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "IMSECH",                 "IMSECH",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "IMSINH",                 "IMSINH",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "IMTAN",                  "IMTAN",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
 };
 
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
