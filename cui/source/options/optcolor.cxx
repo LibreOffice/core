@@ -1020,7 +1020,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
 
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     Window* pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "OptColorPage", "cui/ui/optcolorpage.ui", rCoreSet)
+    : SfxTabPage(pParent, "OptAppearancePage", "cui/ui/optappearancepage.ui", rCoreSet)
     , bFillItemSetCalled(false)
     , pColorConfig(0)
     , pExtColorConfig(0)
@@ -1153,7 +1153,6 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
         aNameDlg->SetText(String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE1)));
         aNameDlg->SetHelpId(HID_OPTIONS_COLORCONFIG_SAVE_SCHEME);
-        aNameDlg->SetEditHelpId(HID_OPTIONS_COLORCONFIG_NAME_SCHEME);
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
         if(RET_OK == aNameDlg->Execute())
         {

@@ -355,7 +355,8 @@ protected:
     void LocalPostPaint();
 
 public:
-    SvxPreviewBase( Window* pParent, const ResId& rResId );
+    SvxPreviewBase(Window* pParent, const ResId& rResId);
+    SvxPreviewBase(Window* pParent);
     virtual ~SvxPreviewBase();
 
     // change support
@@ -409,12 +410,14 @@ private:
     SdrObject*                                      mpRectangleObject;
 
 public:
-    SvxXRectPreview( Window* pParent, const ResId& rResId );
+    SvxXRectPreview(Window* pParent, const ResId& rResId);
+    SvxXRectPreview(Window* pParent);
     virtual ~SvxXRectPreview();
 
     void SetAttributes(const SfxItemSet& rItemSet);
 
     virtual void    Paint( const Rectangle& rRect );
+    virtual void Resize();
 };
 
 /*************************************************************************

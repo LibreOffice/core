@@ -890,6 +890,13 @@ XOBitmap SvxBitmapCtl::GetXBitmap()
     return( aXOBitmap );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorLB(Window *pParent, VclBuilder::stringmap &)
+{
+    ColorLB *pListBox = new ColorLB(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE);
+    pListBox->EnableAutoSize(true);
+    return pListBox;
+}
+
 // Fills the Listbox with color and strings
 
 void ColorLB::Fill( const XColorListRef &pColorTab )
@@ -1609,6 +1616,20 @@ SvxPreviewBase::SvxPreviewBase( Window* pParent, const ResId& rResId )
     mpModel->GetItemPool().FreezeIdRanges();
 }
 
+SvxPreviewBase::SvxPreviewBase(Window* pParent)
+    : Control(pParent, WB_BORDER)
+    , mpModel(new SdrModel())
+    , mpBufferDevice(new VirtualDevice(*this))
+{
+    //  Draw the control's border as a flat thin black line.
+    SetBorderStyle(WINDOW_BORDER_MONO);
+    SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    SetMapMode(MAP_100TH_MM);
+
+    // init model
+    mpModel->GetItemPool().FreezeIdRanges();
+}
+
 SvxPreviewBase::~SvxPreviewBase()
 {
     delete mpModel;
@@ -1808,6 +1829,37 @@ SvxXRectPreview::SvxXRectPreview( Window* pParent, const ResId& rResId )
     const Rectangle aObjectSize(Point(), GetOutputSize());
     mpRectangleObject = new SdrRectObj(aObjectSize);
     mpRectangleObject->SetModel(&getModel());
+}
+
+SvxXRectPreview::SvxXRectPreview(Window* pParent)
+    : SvxPreviewBase(pParent)
+    , mpRectangleObject(0)
+{
+    InitSettings(true, true);
+
+    // create RectangleObject
+    const Rectangle aObjectSize(Point(), GetOutputSize());
+    mpRectangleObject = new SdrRectObj(aObjectSize);
+    mpRectangleObject->SetModel(&getModel());
+}
+
+void SvxXRectPreview::Resize()
+{
+    const Rectangle aObjectSize(Point(), GetOutputSize());
+    SdrObject *pOrigObject = mpRectangleObject;
+    if (pOrigObject)
+    {
+        mpRectangleObject = new SdrRectObj(aObjectSize);
+        mpRectangleObject->SetModel(&getModel());
+        SetAttributes(pOrigObject->GetMergedItemSet());
+        SdrObject::Free(pOrigObject);
+    }
+    SvxPreviewBase::Resize();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxXRectPreview(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxXRectPreview(pParent);
 }
 
 SvxXRectPreview::~SvxXRectPreview()

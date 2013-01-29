@@ -51,29 +51,7 @@
 #include <svx/dialogs.hrc>
 
 
-// Load save embed functionality
-SvxLoadSaveEmbed::SvxLoadSaveEmbed( Window *pParent, Window *pDialog,
-                                    const ResId &rLoad, const ResId &rSave,
-                                    const ResId &rEmbed, const ResId &rTableName,
-                                    XPropertyListType t, XOutdevItemPool* pXPool )
-    : meType( t )
-    , mpXPool( pXPool )
-    , mpTopDlg( pDialog )
-    , maBoxEmbed( pParent, rEmbed )
-    , maBtnLoad( pParent, rLoad )
-    , maBtnSave( pParent, rSave )
-    , maTableName( pParent, rTableName )
-{
-    maBoxEmbed.SetToggleHdl( LINK( this, SvxLoadSaveEmbed, EmbedToggleHdl_Impl ) );
-
-    maBtnLoad.SetClickHdl( LINK( this, SvxLoadSaveEmbed, ClickLoadHdl_Impl ) );
-    maBtnSave.SetClickHdl( LINK( this, SvxLoadSaveEmbed, ClickSaveHdl_Impl ) );
-
-    SetEmbed( GetEmbed() );
-    UpdateTableName();
-}
-
-XPropertyListRef SvxLoadSaveEmbed::GetList()
+XPropertyListRef SvxColorTabPage::GetList()
 {
     SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( mpTopDlg );
     SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( mpTopDlg );
@@ -101,34 +79,34 @@ XPropertyListRef SvxLoadSaveEmbed::GetList()
     return XPropertyListRef( static_cast< XPropertyList * >( pList.get() ) );
 }
 
-void SvxLoadSaveEmbed::SetEmbed( bool bEmbed )
+void SvxColorTabPage::SetEmbed( bool bEmbed )
 {
     XPropertyListRef pList = GetList();
     if( pList.is() )
         pList->SetEmbedInDocument( bEmbed );
-    maBoxEmbed.Check( bEmbed );
+    m_pBoxEmbed->Check( bEmbed );
 }
 
-bool SvxLoadSaveEmbed::GetEmbed()
+bool SvxColorTabPage::GetEmbed()
 {
     XPropertyListRef pList = GetList();
     return pList.is() ? pList->IsEmbedInDocument() : 0;
 }
 
-IMPL_LINK_NOARG(SvxLoadSaveEmbed, EmbedToggleHdl_Impl)
+IMPL_LINK_NOARG(SvxColorTabPage, EmbedToggleHdl_Impl)
 {
-    SetEmbed( maBoxEmbed.IsChecked() );
+    SetEmbed( m_pBoxEmbed->IsChecked() );
     return 0;
 }
 
-void SvxLoadSaveEmbed::HideLoadSaveEmbed()
+void SvxColorTabPage::HideLoadSaveEmbed()
 {
-    maBtnLoad.Hide();
-    maBtnSave.Hide();
-    maBoxEmbed.Hide();
+    m_pBtnLoad->Hide();
+    m_pBtnSave->Hide();
+    m_pBoxEmbed->Hide();
 }
 
-void SvxLoadSaveEmbed::UpdateTableName()
+void SvxColorTabPage::UpdateTableName()
 {
     // Truncate the name if necessary ...
     String aString( CUI_RES( RID_SVXSTR_TABLE ) );
@@ -149,12 +127,12 @@ void SvxLoadSaveEmbed::UpdateTableName()
     else
         aString += String (aURL.getBase());
 
-    maTableName.SetText( aString );
+    m_pTableName->SetText( aString );
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_NOARG(SvxLoadSaveEmbed, ClickLoadHdl_Impl)
+IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
     sal_uInt16 nReturn = RET_YES;
@@ -216,17 +194,17 @@ IMPL_LINK_NOARG(SvxLoadSaveEmbed, ClickLoadHdl_Impl)
     return 0;
 }
 
-void SvxLoadSaveEmbed::EnableSave( bool bCanSave )
+void SvxColorTabPage::EnableSave( bool bCanSave )
 {
     if ( bCanSave )
-        maBtnSave.Enable();
+        m_pBtnSave->Enable();
     else
-        maBtnSave.Disable();
+        m_pBtnSave->Disable();
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_NOARG(SvxLoadSaveEmbed, ClickSaveHdl_Impl)
+IMPL_LINK_NOARG(SvxColorTabPage, ClickSaveHdl_Impl)
 {
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
@@ -281,15 +259,15 @@ void SvxColorTabPage::Update(bool bLoaded)
 
     if (bLoaded)
     {
-        aLbColor.Clear();
-        aValSetColorList.Clear();
+        m_pLbColor->Clear();
+        m_pValSetColorList->Clear();
         Construct();
         Reset( rOutAttrs );
 
-        if( aLbColor.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
-            aLbColor.SelectEntryPos( 0 );
+        if( m_pLbColor->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+            m_pLbColor->SelectEntryPos( 0 );
         else
-            aLbColor.SelectEntryPos( aLbColor.GetSelectEntryPos() );
+            m_pLbColor->SelectEntryPos( m_pLbColor->GetSelectEntryPos() );
 
         ChangeColorHdl_Impl( this );
         SelectColorLBHdl_Impl( this );
@@ -320,59 +298,64 @@ struct SvxColorTabPageShadow
 
 // -----------------------------------------------------------------------
 
-SvxColorTabPage::SvxColorTabPage
-(
-    Window* pParent,
-    const SfxItemSet& rInAttrs
-) :
-
-    SfxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_COLOR ), rInAttrs ),
-    SvxLoadSaveEmbed    ( this, GetParentDialog(),
-                          CUI_RES( BTN_LOAD ), CUI_RES( BTN_SAVE ),
-                          CUI_RES( BTN_EMBED ), CUI_RES( FT_TABLE_NAME ),
-                          XCOLOR_LIST, (XOutdevItemPool*) rInAttrs.GetPool() ),
-
-    pShadow             ( new SvxColorTabPageShadow() ),
-    aFlProp             ( this, CUI_RES( FL_PROP ) ),
-    aFtName             ( this, CUI_RES( FT_NAME ) ),
-    aEdtName            ( this, CUI_RES( EDT_NAME ) ),
-    aFtColor            ( this, CUI_RES( FT_COLOR ) ),
-    aLbColor            ( this, CUI_RES( LB_COLOR ) ),
-
-    aValSetColorList   ( this, CUI_RES( CTL_COLORTABLE ) ),
-
-    aCtlPreviewOld      ( this, CUI_RES( CTL_PREVIEW_OLD ) ),
-    aCtlPreviewNew      ( this, CUI_RES( CTL_PREVIEW_NEW ) ),
-
-    aLbColorModel       ( this, CUI_RES( LB_COLORMODEL ) ),
-    aFtColorModel1      ( this, CUI_RES( FT_1 ) ),
-    aMtrFldColorModel1  ( this, CUI_RES( MTR_FLD_1 ) ),
-    aFtColorModel2      ( this, CUI_RES( FT_2 ) ),
-    aMtrFldColorModel2  ( this, CUI_RES( MTR_FLD_2 ) ),
-    aFtColorModel3      ( this, CUI_RES( FT_3 ) ),
-    aMtrFldColorModel3  ( this, CUI_RES( MTR_FLD_3 ) ),
-    aFtColorModel4      ( this, CUI_RES( FT_4 ) ),
-    aMtrFldColorModel4  ( this, CUI_RES( MTR_FLD_4 ) ),
-    aBtnAdd             ( this, CUI_RES( BTN_ADD ) ),
-    aBtnModify          ( this, CUI_RES( BTN_MODIFY ) ),
-    aBtnWorkOn          ( this, CUI_RES( BTN_WORK_ON ) ),
-    aBtnDelete          ( this, CUI_RES( BTN_DELETE ) ),
-
-    rOutAttrs           ( rInAttrs ),
-
+SvxColorTabPage::SvxColorTabPage(Window* pParent, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pParent, "ColorPage", "cui/ui/colorpage.ui", rInAttrs)
+    , meType( XCOLOR_LIST )
+    , mpXPool( (XOutdevItemPool*) rInAttrs.GetPool() )
+    , mpTopDlg( GetParentDialog() )
+    , pShadow             ( new SvxColorTabPageShadow() )
+    , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
-    pPageType           ( NULL ),
-    pDlgType            ( NULL ),
-    pPos                ( NULL ),
-    pbAreaTP            ( NULL ),
-
-    aXFStyleItem        ( XFILL_SOLID ),
-    aXFillColorItem     ( String(), Color( COL_BLACK ) ),
-    aXFillAttr          ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    rXFSet              ( aXFillAttr.GetItemSet() ),
-    eCM                 ( CM_RGB )
+    , pPageType( NULL )
+    , pDlgType( NULL )
+    , pPos( NULL )
+    , pbAreaTP( NULL )
+    , aXFStyleItem( XFILL_SOLID )
+    , aXFillColorItem( String(), Color( COL_BLACK ) )
+    , aXFillAttr( (XOutdevItemPool*) rInAttrs.GetPool() )
+    , rXFSet( aXFillAttr.GetItemSet() )
+    , eCM( CM_RGB )
 {
-    FreeResource();
+    get(m_pBoxEmbed, "embed");
+    get(m_pBtnLoad, "load");
+    get(m_pBtnSave, "save");
+    get(m_pTableName, "colortableft");
+
+    get(m_pEdtName, "name");
+    get(m_pLbColor, "colorlb");
+    get(m_pValSetColorList, "colorset");
+    Size aSize = LogicToPixel(Size(94 , 117), MAP_APPFONT);
+    m_pValSetColorList->set_width_request(aSize.Width());
+    m_pValSetColorList->set_height_request(aSize.Height());
+    get(m_pCtlPreviewOld, "oldpreview");
+    get(m_pCtlPreviewNew, "newpreview");
+    aSize = LogicToPixel(Size(34 , 25), MAP_APPFONT);
+    m_pCtlPreviewOld->set_width_request(aSize.Width());
+    m_pCtlPreviewOld->set_height_request(aSize.Height());
+    m_pCtlPreviewNew->set_width_request(aSize.Width());
+    m_pCtlPreviewNew->set_height_request(aSize.Height());
+    get(m_pLbColorModel, "modellb");
+    get(m_pRGB, "rgb");
+    get(m_pR, "R");
+    get(m_pG, "G");
+    get(m_pB, "B");
+    get(m_pCYMK, "cymk");
+    get(m_pC, "C");
+    get(m_pY, "Y");
+    get(m_pM, "M");
+    get(m_pK, "K");
+    get(m_pBtnAdd, "add");
+    get(m_pBtnModify, "modify");
+    get(m_pBtnWorkOn, "edit");
+    get(m_pBtnDelete, "delete");
+
+    m_pBoxEmbed->SetToggleHdl( LINK( this, SvxColorTabPage, EmbedToggleHdl_Impl ) );
+
+    m_pBtnLoad->SetClickHdl( LINK( this, SvxColorTabPage, ClickLoadHdl_Impl ) );
+    m_pBtnSave->SetClickHdl( LINK( this, SvxColorTabPage, ClickSaveHdl_Impl ) );
+
+    SetEmbed( GetEmbed() );
+    UpdateTableName();
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -380,43 +363,40 @@ SvxColorTabPage::SvxColorTabPage
     // setting the output device
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXFillColorItem );
-    aCtlPreviewOld.SetAttributes( aXFillAttr.GetItemSet() );
-    aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
     // overload handler
-    aLbColor.SetSelectHdl(
+    m_pLbColor->SetSelectHdl(
         LINK( this, SvxColorTabPage, SelectColorLBHdl_Impl ) );
-    aValSetColorList.SetSelectHdl(
+    m_pValSetColorList->SetSelectHdl(
         LINK( this, SvxColorTabPage, SelectValSetHdl_Impl ) );
-    aLbColorModel.SetSelectHdl(
+    m_pLbColorModel->SetSelectHdl(
         LINK( this, SvxColorTabPage, SelectColorModelHdl_Impl ) );
 
     Link aLink = LINK( this, SvxColorTabPage, ModifiedHdl_Impl );
-    aMtrFldColorModel1.SetModifyHdl( aLink );
-    aMtrFldColorModel2.SetModifyHdl( aLink );
-    aMtrFldColorModel3.SetModifyHdl( aLink );
-    aMtrFldColorModel4.SetModifyHdl( aLink );
+    m_pR->SetModifyHdl( aLink );
+    m_pG->SetModifyHdl( aLink );
+    m_pB->SetModifyHdl( aLink );
+    m_pC->SetModifyHdl( aLink );
+    m_pY->SetModifyHdl( aLink );
+    m_pM->SetModifyHdl( aLink );
+    m_pK->SetModifyHdl( aLink );
 
-    aBtnAdd.SetClickHdl( LINK( this, SvxColorTabPage, ClickAddHdl_Impl ) );
-    aBtnModify.SetClickHdl(
+    m_pBtnAdd->SetClickHdl( LINK( this, SvxColorTabPage, ClickAddHdl_Impl ) );
+    m_pBtnModify->SetClickHdl(
         LINK( this, SvxColorTabPage, ClickModifyHdl_Impl ) );
-    aBtnWorkOn.SetClickHdl(
+    m_pBtnWorkOn->SetClickHdl(
         LINK( this, SvxColorTabPage, ClickWorkOnHdl_Impl ) );
-    aBtnDelete.SetClickHdl(
+    m_pBtnDelete->SetClickHdl(
         LINK( this, SvxColorTabPage, ClickDeleteHdl_Impl ) );
 
     // ValueSet
-    aValSetColorList.SetStyle( aValSetColorList.GetStyle() | WB_VSCROLL | WB_ITEMBORDER );
-    aValSetColorList.SetColCount( 8 );
-    aValSetColorList.SetLineCount( 13 );
-    aValSetColorList.SetExtraSpacing( 0 );
-    aValSetColorList.Show();
-
-    aLbColorModel.SetAccessibleName( String( CUI_RES(STR_CUI_COLORMODEL) ) );
-    aBtnAdd.SetAccessibleRelationMemberOf( &aFlProp );
-    aBtnModify.SetAccessibleRelationMemberOf( &aFlProp );
-    aBtnWorkOn.SetAccessibleRelationMemberOf( &aFlProp );
-    aBtnDelete.SetAccessibleRelationMemberOf( &aFlProp );
+    m_pValSetColorList->SetStyle( m_pValSetColorList->GetStyle() | WB_VSCROLL | WB_ITEMBORDER );
+    m_pValSetColorList->SetColCount( 8 );
+    m_pValSetColorList->SetLineCount( 13 );
+    m_pValSetColorList->SetExtraSpacing( 0 );
+    m_pValSetColorList->Show();
 }
 
 SvxColorTabPage::~SvxColorTabPage()
@@ -428,8 +408,8 @@ SvxColorTabPage::~SvxColorTabPage()
 
 void SvxColorTabPage::Construct()
 {
-    aLbColor.Fill( pColorList );
-    FillValueSet_Impl( aValSetColorList );
+    m_pLbColor->Fill(pColorList);
+    FillValueSet_Impl(*m_pValSetColorList);
     UpdateTableName();
 }
 
@@ -445,9 +425,9 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
         {
             if( *pPageType == PT_COLOR && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
-                aLbColor.SelectEntryPos( *pPos );
-                aValSetColorList.SelectItem( aLbColor.GetSelectEntryPos() + 1 );
-                aEdtName.SetText( aLbColor.GetSelectEntry() );
+                m_pLbColor->SelectEntryPos( *pPos );
+                m_pValSetColorList->SelectItem( m_pLbColor->GetSelectEntryPos() + 1 );
+                m_pEdtName->SetText( m_pLbColor->GetSelectEntry() );
 
                 ChangeColorHdl_Impl( this );
             }
@@ -456,23 +436,23 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
                 const SfxPoolItem* pPoolItem = NULL;
                 if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), sal_True, &pPoolItem ) )
                 {
-                    aLbColorModel.SelectEntryPos( CM_RGB );
+                    m_pLbColorModel->SelectEntryPos( CM_RGB );
 
                     aAktuellColor.SetColor ( ( ( const XFillColorItem* ) pPoolItem )->GetColorValue().GetColor() );
 
-                    aEdtName.SetText( ( ( const XFillColorItem* ) pPoolItem )->GetName() );
+                    m_pEdtName->SetText( ( ( const XFillColorItem* ) pPoolItem )->GetName() );
 
-                    aMtrFldColorModel1.SetValue( ColorToPercent_Impl( aAktuellColor.GetRed() ) );
-                    aMtrFldColorModel2.SetValue( ColorToPercent_Impl( aAktuellColor.GetGreen() ) );
-                    aMtrFldColorModel3.SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
+                    m_pR->SetValue( ColorToPercent_Impl( aAktuellColor.GetRed() ) );
+                    m_pG->SetValue( ColorToPercent_Impl( aAktuellColor.GetGreen() ) );
+                    m_pB->SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
 
                     // fill ItemSet and pass it on to XOut
                     rXFSet.Put( XFillColorItem( String(), aAktuellColor ) );
-                    aCtlPreviewOld.SetAttributes( aXFillAttr.GetItemSet() );
-                    aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
+                    m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
+                    m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
-                    aCtlPreviewNew.Invalidate();
-                    aCtlPreviewOld.Invalidate();
+                    m_pCtlPreviewNew->Invalidate();
+                    m_pCtlPreviewOld->Invalidate();
                 }
             }
 
@@ -510,11 +490,11 @@ long SvxColorTabPage::CheckChanges_Impl()
     if (eCM != CM_RGB)
         ConvertColorValues (aTmpColor, CM_RGB);
 
-    sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbColor->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         Color aColor = pColorList->GetColor( nPos )->GetColor();
-        OUString aString = aLbColor.GetSelectEntry();
+        OUString aString = m_pLbColor->GetSelectEntry();
 
         // aNewColor, because COL_USER != COL_something, even if RGB values are the same
         // Color aNewColor( aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue() );
@@ -522,7 +502,7 @@ long SvxColorTabPage::CheckChanges_Impl()
         if( ColorToPercent_Impl( aTmpColor.GetRed() ) != ColorToPercent_Impl( aColor.GetRed() ) ||
             ColorToPercent_Impl( aTmpColor.GetGreen() ) != ColorToPercent_Impl( aColor.GetGreen() ) ||
             ColorToPercent_Impl( aTmpColor.GetBlue() ) != ColorToPercent_Impl( aColor.GetBlue() ) ||
-            aString != aEdtName.GetText() )
+            aString != m_pEdtName->GetText() )
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
@@ -549,7 +529,7 @@ long SvxColorTabPage::CheckChanges_Impl()
                 case RET_BTN_2:
                 {
                     ClickAddHdl_Impl( this );
-                    nPos = aLbColor.GetSelectEntryPos();
+                    nPos = m_pLbColor->GetSelectEntryPos();
                     aColor = pColorList->GetColor( nPos )->GetColor();
                 }
                 break;
@@ -562,7 +542,7 @@ long SvxColorTabPage::CheckChanges_Impl()
     }
     if( *pDlgType == 0 ) // area dialog
     {
-        nPos = aLbColor.GetSelectEntryPos();
+        nPos = m_pLbColor->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             *pPos = nPos;
@@ -581,11 +561,11 @@ sal_Bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
         String aString;
         Color  aColor;
 
-        sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
+        sal_uInt16 nPos = m_pLbColor->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             aColor  = pColorList->GetColor( nPos )->GetColor();
-            aString = aLbColor.GetSelectEntry();
+            aString = m_pLbColor->GetSelectEntry();
         }
         else
         {
@@ -603,9 +583,9 @@ sal_Bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
 void SvxColorTabPage::UpdateModified()
 {
     bool bEnable = pColorList->Count();
-    aBtnModify.Enable( bEnable );
-    aBtnWorkOn.Enable( bEnable );
-    aBtnDelete.Enable( bEnable );
+    m_pBtnModify->Enable( bEnable );
+    m_pBtnWorkOn->Enable( bEnable );
+    m_pBtnDelete->Enable( bEnable );
     EnableSave( bEnable );
 }
 
@@ -618,19 +598,19 @@ void SvxColorTabPage::Reset( const SfxItemSet& rSet )
     if ( nState >= SFX_ITEM_DEFAULT )
     {
         XFillColorItem aColorItem( (const XFillColorItem&)rSet.Get( XATTR_FILLCOLOR ) );
-        aLbColor.SelectEntry( aColorItem.GetColorValue() );
-        aValSetColorList.SelectItem( aLbColor.GetSelectEntryPos() + 1 );
-        aEdtName.SetText( aLbColor.GetSelectEntry() );
+        m_pLbColor->SelectEntry( aColorItem.GetColorValue() );
+        m_pValSetColorList->SelectItem( m_pLbColor->GetSelectEntryPos() + 1 );
+        m_pEdtName->SetText( m_pLbColor->GetSelectEntry() );
     }
 
     // set color model
     String aStr = GetUserData();
-    aLbColorModel.SelectEntryPos( (sal_uInt16) aStr.ToInt32() );
+    m_pLbColorModel->SelectEntryPos( (sal_uInt16) aStr.ToInt32() );
 
     ChangeColorHdl_Impl( this );
     SelectColorModelHdl_Impl( this );
 
-    aCtlPreviewOld.Invalidate();
+    m_pCtlPreviewOld->Invalidate();
     UpdateModified();
 }
 
@@ -649,20 +629,31 @@ SfxTabPage* SvxColorTabPage::Create( Window* pWindow,
 //
 IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl)
 {
-    // read current MtrFields, if cmyk, then k-value as transparency
-    aAktuellColor.SetColor ( Color( (sal_uInt8)PercentToColor_Impl( (sal_uInt16) aMtrFldColorModel4.GetValue() ),
-                                    (sal_uInt8)PercentToColor_Impl( (sal_uInt16) aMtrFldColorModel1.GetValue() ),
-                                    (sal_uInt8)PercentToColor_Impl( (sal_uInt16) aMtrFldColorModel2.GetValue() ),
-                                    (sal_uInt8)PercentToColor_Impl( (sal_uInt16) aMtrFldColorModel3.GetValue() ) ).GetColor() );
+    if (eCM == CM_RGB)
+    {
+        // read current MtrFields, if cmyk, then k-value as transparency
+        aAktuellColor.SetColor ( Color( (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pR->GetValue() ),
+                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pG->GetValue() ),
+                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pB->GetValue() ) ).GetColor() );
+    }
+    else
+    {
+        // read current MtrFields, if cmyk, then k-value as transparency
+        aAktuellColor.SetColor ( Color( (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pK->GetValue() ),
+                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pC->GetValue() ),
+                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pY->GetValue() ),
+                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pM->GetValue() ) ).GetColor() );
+    }
 
     Color aTmpColor(aAktuellColor);
+
     if (eCM != CM_RGB)
         ConvertColorValues (aTmpColor, CM_RGB);
 
     rXFSet.Put( XFillColorItem( String(), aTmpColor ) );
-    aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
-    aCtlPreviewNew.Invalidate();
+    m_pCtlPreviewNew->Invalidate();
 
     return 0;
 }
@@ -679,7 +670,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 
     ResMgr& rMgr = CUI_MGR();
     String aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
-    String aName( aEdtName.GetText() );
+    String aName( m_pEdtName->GetText() );
     XColorEntry* pEntry;
     long nCount = pColorList->Count();
     sal_Bool bDifferent = sal_True;
@@ -729,11 +720,11 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 
         pColorList->Insert( pEntry, pColorList->Count() );
 
-        aLbColor.Append( pEntry );
-        aValSetColorList.InsertItem( aValSetColorList.GetItemCount() + 1,
+        m_pLbColor->Append( pEntry );
+        m_pValSetColorList->InsertItem( m_pValSetColorList->GetItemCount() + 1,
                 pEntry->GetColor(), pEntry->GetName() );
 
-        aLbColor.SelectEntryPos( aLbColor.GetEntryCount() - 1 );
+        m_pLbColor->SelectEntryPos( m_pLbColor->GetEntryCount() - 1 );
 
         *pnColorListState |= CT_MODIFIED;
 
@@ -748,13 +739,13 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
 {
-    sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbColor->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         ResMgr& rMgr = CUI_MGR();
         String aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
-        String aName( aEdtName.GetText() );
+        String aName( m_pEdtName->GetText() );
         long nCount = pColorList->Count();
         sal_Bool bDifferent = sal_True;
 
@@ -804,14 +795,14 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
             pEntry->SetColor( aTmpColor );
             pEntry->SetName( aName );
 
-            aLbColor.Modify( pEntry, nPos );
-            aLbColor.SelectEntryPos( nPos );
+            m_pLbColor->Modify( pEntry, nPos );
+            m_pLbColor->SelectEntryPos( nPos );
             /////
-            aValSetColorList.SetItemColor( nPos + 1, pEntry->GetColor() );
-            aValSetColorList.SetItemText( nPos + 1, pEntry->GetName() );
-            aEdtName.SetText( aName );
+            m_pValSetColorList->SetItemColor( nPos + 1, pEntry->GetColor() );
+            m_pValSetColorList->SetItemText( nPos + 1, pEntry->GetName() );
+            m_pEdtName->SetText( aName );
 
-            aCtlPreviewOld.Invalidate();
+            m_pCtlPreviewOld->Invalidate();
 
             *pnColorListState |= CT_MODIFIED;
         }
@@ -838,19 +829,26 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
         Color aPreviewColor = pColorDlg->GetColor();
         aAktuellColor = aPreviewColor;
         if (eCM != CM_RGB)
+        {
             ConvertColorValues (aAktuellColor, eCM);
-
-        aMtrFldColorModel1.SetValue( ColorToPercent_Impl( aAktuellColor.GetRed() ) );
-        aMtrFldColorModel2.SetValue( ColorToPercent_Impl( aAktuellColor.GetGreen() ) );
-        aMtrFldColorModel3.SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
-        aMtrFldColorModel4.SetValue( ColorToPercent_Impl( nK ) );
+            m_pC->SetValue( ColorToPercent_Impl( aAktuellColor.GetRed() ) );
+            m_pY->SetValue( ColorToPercent_Impl( aAktuellColor.GetGreen() ) );
+            m_pM->SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
+            m_pK->SetValue( ColorToPercent_Impl( nK ) );
+        }
+        else
+        {
+            m_pR->SetValue( ColorToPercent_Impl( aAktuellColor.GetRed() ) );
+            m_pG->SetValue( ColorToPercent_Impl( aAktuellColor.GetGreen() ) );
+            m_pB->SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
+        }
 
         // fill ItemSet and pass it on to XOut
         rXFSet.Put( XFillColorItem( String(), aPreviewColor ) );
-        //aCtlPreviewOld.SetAttributes( aXFillAttr );
-        aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
+        //m_pCtlPreviewOld->SetAttributes( aXFillAttr );
+        m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
-        aCtlPreviewNew.Invalidate();
+        m_pCtlPreviewNew->Invalidate();
     }
     delete( pColorDlg );
 
@@ -861,7 +859,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
 {
-    sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbColor->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -875,15 +873,15 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
             delete pEntry;
 
             // update Listbox and ValueSet
-            aLbColor.RemoveEntry( nPos );
-            aValSetColorList.Clear();
-            FillValueSet_Impl( aValSetColorList );
+            m_pLbColor->RemoveEntry( nPos );
+            m_pValSetColorList->Clear();
+            FillValueSet_Impl(*m_pValSetColorList);
 
             // positioning
-            aLbColor.SelectEntryPos( nPos );
+            m_pLbColor->SelectEntryPos( nPos );
             SelectColorLBHdl_Impl( this );
 
-            aCtlPreviewOld.Invalidate();
+            m_pCtlPreviewOld->Invalidate();
 
             *pnColorListState |= CT_MODIFIED;
         }
@@ -897,19 +895,19 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
 
 IMPL_LINK_NOARG(SvxColorTabPage, SelectColorLBHdl_Impl)
 {
-    sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbColor->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        aValSetColorList.SelectItem( nPos + 1 );
-        aEdtName.SetText( aLbColor.GetSelectEntry() );
+        m_pValSetColorList->SelectItem( nPos + 1 );
+        m_pEdtName->SetText( m_pLbColor->GetSelectEntry() );
 
         rXFSet.Put( XFillColorItem( String(),
-                                    aLbColor.GetSelectEntryColor() ) );
-        aCtlPreviewOld.SetAttributes( aXFillAttr.GetItemSet() );
-        aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
+                                    m_pLbColor->GetSelectEntryColor() ) );
+        m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
+        m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
-        aCtlPreviewOld.Invalidate();
-        aCtlPreviewNew.Invalidate();
+        m_pCtlPreviewOld->Invalidate();
+        m_pCtlPreviewNew->Invalidate();
 
         ChangeColorHdl_Impl( this );
     }
@@ -920,19 +918,19 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorLBHdl_Impl)
 
 IMPL_LINK_NOARG(SvxColorTabPage, SelectValSetHdl_Impl)
 {
-    sal_uInt16 nPos = aValSetColorList.GetSelectItemId();
+    sal_uInt16 nPos = m_pValSetColorList->GetSelectItemId();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        aLbColor.SelectEntryPos( nPos - 1 );
-        aEdtName.SetText( aLbColor.GetSelectEntry() );
+        m_pLbColor->SelectEntryPos( nPos - 1 );
+        m_pEdtName->SetText( m_pLbColor->GetSelectEntry() );
 
         rXFSet.Put( XFillColorItem( String(),
-                                    aLbColor.GetSelectEntryColor() ) );
-        aCtlPreviewOld.SetAttributes( aXFillAttr.GetItemSet() );
-        aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
+                                    m_pLbColor->GetSelectEntryColor() ) );
+        m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
+        m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
-        aCtlPreviewOld.Invalidate();
-        aCtlPreviewNew.Invalidate();
+        m_pCtlPreviewOld->Invalidate();
+        m_pCtlPreviewNew->Invalidate();
 
         ChangeColorHdl_Impl( this );
     }
@@ -964,7 +962,7 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
 
 IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
 {
-    int nPos = aLbColorModel.GetSelectEntryPos();
+    int nPos = m_pLbColorModel->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if (eCM != (ColorModel) nPos)
@@ -978,110 +976,33 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
         {
             case CM_RGB:
             {
-                String aStr( aLbColorModel.GetSelectEntry() );
-                String aColorStr(rtl::OUString("~X"));
-                xub_StrLen nIdx = 1;
-                aColorStr.SetChar( nIdx, aStr.GetChar( 0 ) );
-                aFtColorModel1.SetText( aColorStr );
-                aColorStr.SetChar( nIdx, aStr.GetChar( 1 ) );
-                aFtColorModel2.SetText( aColorStr );
-                aColorStr.SetChar( nIdx, aStr.GetChar( 2 ) );
-                aFtColorModel3.SetText( aColorStr );
+                m_pRGB->Show();
+                m_pCYMK->Hide();
 
-                aFtColorModel4.Hide();
-                aMtrFldColorModel4.Hide();
-                aMtrFldColorModel4.SetValue( 0L );
+                m_pR->SetValue( ColorToPercent_Impl( aAktuellColor.GetRed() ) );
+                m_pG->SetValue( ColorToPercent_Impl( aAktuellColor.GetGreen() ) );
+                m_pB->SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
 
-                aMtrFldColorModel1.SetHelpId( HID_TPCOLOR_RGB_1 );
-                aMtrFldColorModel2.SetHelpId( HID_TPCOLOR_RGB_2 );
-                aMtrFldColorModel3.SetHelpId( HID_TPCOLOR_RGB_3 );
-
-                // Because the old HelpText is still at the Control
-                // a change of the HelpID alone would not work
-                aMtrFldColorModel1.SetHelpText( String() );
-                aMtrFldColorModel2.SetHelpText( String() );
-                aMtrFldColorModel3.SetHelpText( String() );
-
-                // handle RGB-values (0..255, not in %),
-                // and adjust MetricFields respectively
-                aMtrFldColorModel1.SetUnit(FUNIT_NONE);
-                aMtrFldColorModel1.SetMin(0);
-                aMtrFldColorModel1.SetMax(255);
-                aMtrFldColorModel1.SetLast(255);
-
-                aMtrFldColorModel2.SetUnit(FUNIT_NONE);
-                aMtrFldColorModel2.SetMin(0);
-                aMtrFldColorModel2.SetMax(255);
-                aMtrFldColorModel2.SetLast(255);
-
-                aMtrFldColorModel3.SetUnit(FUNIT_NONE);
-                aMtrFldColorModel3.SetMin(0);
-                aMtrFldColorModel3.SetMax(255);
-                aMtrFldColorModel3.SetLast(255);
             }
             break;
 
             case CM_CMYK:
             {
-                String aStr( aLbColorModel.GetSelectEntry() );
-                String aColorStr(rtl::OUString("~X"));
-                xub_StrLen nIdx = 1;
-                aColorStr.SetChar( nIdx, aStr.GetChar( 0 ) );
-                aFtColorModel1.SetText( aColorStr );
-                aColorStr.SetChar( nIdx, aStr.GetChar( 1 ) );
-                aFtColorModel2.SetText( aColorStr );
-                aColorStr.SetChar( nIdx,aStr.GetChar( 2 ) );
-                aFtColorModel3.SetText( aColorStr );
-                aColorStr.SetChar( nIdx,aStr.GetChar( 3 ) );
-                aFtColorModel4.SetText( aColorStr );
+                m_pCYMK->Show();
+                m_pRGB->Hide();
 
-                aFtColorModel4.Show();
-                aMtrFldColorModel4.Show();
+                m_pC->SetValue( ColorToPercent_Impl( aAktuellColor.GetRed() ) );
+                m_pY->SetValue( ColorToPercent_Impl( aAktuellColor.GetGreen() ) );
+                m_pM->SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
+                m_pK->SetValue( ColorToPercent_Impl( aAktuellColor.GetTransparency() ) );
 
-                aMtrFldColorModel1.SetHelpId( HID_TPCOLOR_CMYK_1 );
-                aMtrFldColorModel2.SetHelpId( HID_TPCOLOR_CMYK_2 );
-                aMtrFldColorModel3.SetHelpId( HID_TPCOLOR_CMYK_3 );
-
-                // s.o.
-                aMtrFldColorModel1.SetHelpText( String() );
-                aMtrFldColorModel2.SetHelpText( String() );
-                aMtrFldColorModel3.SetHelpText( String() );
-
-                // handle CMYK-values (0..100%)
-                // and adjust MetricFields respectively
-                String aStrUnit( " %" );
-
-                aMtrFldColorModel1.SetUnit(FUNIT_CUSTOM);
-                aMtrFldColorModel1.SetCustomUnitText( aStrUnit );
-                aMtrFldColorModel1.SetMin(0);
-                aMtrFldColorModel1.SetMax(100);
-                aMtrFldColorModel1.SetLast(100);
-
-                aMtrFldColorModel2.SetUnit(FUNIT_CUSTOM);
-                aMtrFldColorModel2.SetCustomUnitText( aStrUnit );
-                aMtrFldColorModel2.SetMin(0);
-                aMtrFldColorModel2.SetMax(100);
-                aMtrFldColorModel2.SetLast(100);
-
-                aMtrFldColorModel3.SetUnit(FUNIT_CUSTOM);
-                aMtrFldColorModel3.SetCustomUnitText( aStrUnit );
-                aMtrFldColorModel3.SetMin(0);
-                aMtrFldColorModel3.SetMax(100);
-                aMtrFldColorModel3.SetLast(100);
             }
             break;
         }
 
-        aMtrFldColorModel1.SetValue( ColorToPercent_Impl( aAktuellColor.GetRed() ) );
-        aMtrFldColorModel2.SetValue( ColorToPercent_Impl( aAktuellColor.GetGreen() ) );
-        aMtrFldColorModel3.SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
-        aMtrFldColorModel4.SetValue( ColorToPercent_Impl( aAktuellColor.GetTransparency() ) );
-    }
+        ChangeColorHdl_Impl( this );
 
-    aMtrFldColorModel1.SetAccessibleName( GetNonMnemonicString(aFtColorModel1.GetText()) );
-    aMtrFldColorModel2.SetAccessibleName( GetNonMnemonicString(aFtColorModel2.GetText()) );
-    aMtrFldColorModel3.SetAccessibleName( GetNonMnemonicString(aFtColorModel3.GetText()) );
-    aMtrFldColorModel4.SetAccessibleName( GetNonMnemonicString(aFtColorModel4.GetText()) );
+    }
 
     return 0;
 }
@@ -1090,26 +1011,33 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
 
 long SvxColorTabPage::ChangeColorHdl_Impl( void* )
 {
-    int nPos = aLbColor.GetSelectEntryPos();
+    int nPos = m_pLbColor->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         XColorEntry* pEntry = pColorList->GetColor( nPos );
 
         aAktuellColor.SetColor ( pEntry->GetColor().GetColor() );
         if (eCM != CM_RGB)
+        {
             ConvertColorValues (aAktuellColor, eCM);
-
-        aMtrFldColorModel1.SetValue( ColorToPercent_Impl( aAktuellColor.GetRed() ) );
-        aMtrFldColorModel2.SetValue( ColorToPercent_Impl( aAktuellColor.GetGreen() ) );
-        aMtrFldColorModel3.SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
-        aMtrFldColorModel4.SetValue( ColorToPercent_Impl( aAktuellColor.GetTransparency() ) );
+            m_pC->SetValue( ColorToPercent_Impl( aAktuellColor.GetRed() ) );
+            m_pY->SetValue( ColorToPercent_Impl( aAktuellColor.GetGreen() ) );
+            m_pM->SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
+            m_pK->SetValue( ColorToPercent_Impl( aAktuellColor.GetTransparency() ) );
+        }
+        else
+        {
+            m_pR->SetValue( ColorToPercent_Impl( aAktuellColor.GetRed() ) );
+            m_pG->SetValue( ColorToPercent_Impl( aAktuellColor.GetGreen() ) );
+            m_pB->SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
+        }
 
         // fill ItemSet and pass it on to XOut
         rXFSet.Put( XFillColorItem( String(), pEntry->GetColor() ) );
-        aCtlPreviewOld.SetAttributes( aXFillAttr.GetItemSet() );
-        aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
+        m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
+        m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
-        aCtlPreviewNew.Invalidate();
+        m_pCtlPreviewNew->Invalidate();
     }
     return 0;
 }

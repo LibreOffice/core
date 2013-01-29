@@ -13,6 +13,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/backgroundpage \
 	cui/uiconfig/ui/borderpage \
 	cui/uiconfig/ui/charnamepage \
+	cui/uiconfig/ui/colorpage \
 	cui/uiconfig/ui/colorconfigwin \
 	cui/uiconfig/ui/effectspage \
 	cui/uiconfig/ui/hyphenate \
@@ -30,7 +31,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/objectnamedialog \
 	cui/uiconfig/ui/objecttitledescdialog \
 	cui/uiconfig/ui/optaccessibilitypage \
-	cui/uiconfig/ui/optcolorpage \
+	cui/uiconfig/ui/optappearancepage \
 	cui/uiconfig/ui/personalization_tab \
 	cui/uiconfig/ui/pickbulletpage \
 	cui/uiconfig/ui/pickgraphicpage \

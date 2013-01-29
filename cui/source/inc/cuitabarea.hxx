@@ -635,26 +635,28 @@ public:
     virtual Window* GetParentLabeledBy( const Window* pLabeled ) const;
 };
 
-/// Load save embed functionality
-class SvxLoadSaveEmbed {
+/************************************************************************/
+
+struct SvxColorTabPageShadow;
+class SvxColorTabPage : public SfxTabPage
+{
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
+private:
     XPropertyListType   meType;
     XOutdevItemPool*    mpXPool;
 
     Window             *mpTopDlg;
-    CheckBox            maBoxEmbed;
-    ImageButton         maBtnLoad;
-    ImageButton         maBtnSave;
-    FixedText           maTableName;
+    CheckBox           *m_pBoxEmbed;
+    PushButton         *m_pBtnLoad;
+    PushButton         *m_pBtnSave;
+    FixedText          *m_pTableName;
 
     DECL_LINK( EmbedToggleHdl_Impl, void * );
     DECL_LINK( ClickLoadHdl_Impl, void * );
     DECL_LINK( ClickSaveHdl_Impl, void * );
-public:
-    SvxLoadSaveEmbed( Window *pParent, Window *pDialog,
-                      const ResId &aLoad, const ResId &aSave,
-                      const ResId &aEmbed, const ResId &aTableName,
-                      XPropertyListType t, XOutdevItemPool* mpXPool );
-    virtual ~SvxLoadSaveEmbed() {};
+
     XPropertyListRef GetList();
     void HideLoadSaveEmbed();
     bool GetEmbed();
@@ -662,48 +664,32 @@ public:
     void UpdateTableName();
     void EnableSave( bool bCanSave );
 
-    virtual bool IsModified() = 0;
-    virtual void SetModified(bool bIsModified) = 0;
-    virtual void AddState(ChangeType nState) = 0;
-    virtual void Update(bool bLoaded) = 0;
-};
-
-/************************************************************************/
-
-struct SvxColorTabPageShadow;
-class SvxColorTabPage : public SfxTabPage, public SvxLoadSaveEmbed
-{
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
-private:
     SvxColorTabPageShadow *pShadow;
-    FixedLine           aFlProp;
-    FixedText           aFtName;
-    Edit                aEdtName;
-    FixedText           aFtColor;
-    ColorLB             aLbColor;
+    Edit*               m_pEdtName;
+    ColorLB*            m_pLbColor;
 
-    ValueSet            aValSetColorList;
+    ValueSet*           m_pValSetColorList;
 
-    SvxXRectPreview     aCtlPreviewOld;
-    SvxXRectPreview     aCtlPreviewNew;
+    SvxXRectPreview*    m_pCtlPreviewOld;
+    SvxXRectPreview*    m_pCtlPreviewNew;
 
-    ListBox             aLbColorModel;
-    FixedText           aFtColorModel1;
-    MetricField         aMtrFldColorModel1;
-    FixedText           aFtColorModel2;
-    MetricField         aMtrFldColorModel2;
-    FixedText           aFtColorModel3;
-    MetricField         aMtrFldColorModel3;
+    ListBox*            m_pLbColorModel;
 
-    FixedText           aFtColorModel4;
-    MetricField         aMtrFldColorModel4;
+    VclContainer*       m_pRGB;
+    NumericField*       m_pR;
+    NumericField*       m_pG;
+    NumericField*       m_pB;
 
-    PushButton          aBtnAdd;
-    PushButton          aBtnModify;
-    PushButton          aBtnWorkOn;
-    PushButton          aBtnDelete;
+    VclContainer*       m_pCYMK;
+    MetricField*        m_pC;
+    MetricField*        m_pY;
+    MetricField*        m_pM;
+    MetricField*        m_pK;
+
+    PushButton*         m_pBtnAdd;
+    PushButton*         m_pBtnModify;
+    PushButton*         m_pBtnWorkOn;
+    PushButton*         m_pBtnDelete;
 
     const SfxItemSet&   rOutAttrs;
 
@@ -743,8 +729,6 @@ private:
     DECL_LINK( SelectColorModelHdl_Impl, void * );
     long ChangeColorHdl_Impl( void* p );
     DECL_LINK( ModifiedHdl_Impl, void * );
-    DECL_LINK( ClickLoadHdl_Impl, void * );
-    DECL_LINK( ClickSaveHdl_Impl, void * );
 
     long CheckChanges_Impl();
 #endif
