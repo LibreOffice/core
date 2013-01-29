@@ -3594,7 +3594,7 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
     if( pModel )
     {
         const String aUniqueName = NameOrIndex::CheckNamedItem(
-                this, XATTR_FILLGRADIENT, &pModel->GetItemPool(),
+                this, Which(), &pModel->GetItemPool(),
                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
                 XFillGradientItem::CompareValueFunc, RID_SVXSTR_GRADIENT,
                 pModel->GetPropertyList( XGRADIENT_LIST ) );

@@ -236,11 +236,29 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
             XFillGradientItem aFillGradient( static_cast <const :: XFillGradientItem & > ( rFromSet.Get ( RES_FILL_GRADIENT ) ) );
             XFillGradientItem* pItem = &aFillGradient;
             if (pFillGradient)
+            {
                 bRet &= ((SfxPoolItem*)pItem)->PutValue(*pFillGradient, MID_FILLGRADIENT);
+                // If gradient is set directly, we always generate an associated style name for it.
+                SdrModel* pModel = pDoc->GetDrawModel();
+                pItem = pItem->checkForUniqueItem( pModel );
+            }
             if (pName)
+            {
                 bRet &= ((SfxPoolItem*)pItem)->PutValue(*pName, MID_NAME);
-            SdrModel* pModel = pDoc->GetDrawModel();
-            pItem = pItem->checkForUniqueItem( pModel );
+                // Look up the associated style name.
+                SfxItemPool& rPool = pDoc->GetDrawModel()->GetItemPool();
+                const sal_uInt32 nCount = rPool.GetItemCount2(XATTR_FILLGRADIENT);
+                const XFillGradientItem* pStyleItem;
+                for (sal_uInt32 i = 0; i < nCount; ++i)
+                {
+                    pStyleItem = (XFillGradientItem*)rPool.GetItem2(XATTR_FILLGRADIENT, i);
+                    if (pStyleItem && pStyleItem->GetName() == pItem->GetName())
+                    {
+                        pItem->SetGradientValue(pStyleItem->GetGradientValue());
+                        break;
+                    }
+                }
+            }
             if (pItem)
             {
                 rToSet.Put(*pItem);
