@@ -31,11 +31,10 @@ class ScRange;
 
 class ScEditableTester
 {
-    sal_Bool    bIsEditable;
-    sal_Bool    bOnlyMatrix;
+    bool mbIsEditable;
+    bool mbOnlyMatrix;
 
 public:
-            // no test in ctor
             ScEditableTester();
 
             // calls TestBlock
@@ -56,8 +55,6 @@ public:
             // calls TestView
             ScEditableTester( ScViewFunc* pView );
 
-            ~ScEditableTester() {}
-
             // Several calls to the Test... methods check if *all* of the ranges
             // are editable. For several independent checks, Reset() has to be used.
     void    TestBlock( ScDocument* pDoc, SCTAB nTab,
@@ -69,8 +66,8 @@ public:
     void    TestSelection( ScDocument* pDoc, const ScMarkData& rMark );
     void    TestView( ScViewFunc* pView );
 
-    sal_Bool    IsEditable() const          { return bIsEditable; }
-    sal_Bool    IsFormatEditable() const    { return bIsEditable || bOnlyMatrix; }
+    bool IsEditable() const { return mbIsEditable; }
+    bool IsFormatEditable() const { return mbIsEditable || mbOnlyMatrix; }
     sal_uInt16  GetMessageId() const;
 };
 

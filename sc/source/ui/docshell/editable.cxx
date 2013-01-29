@@ -23,18 +23,16 @@
 #include "globstr.hrc"
 #include "markdata.hxx"
 
-//------------------------------------------------------------------
-
 ScEditableTester::ScEditableTester() :
-    bIsEditable( sal_True ),
-    bOnlyMatrix( sal_True )
+    mbIsEditable(true),
+    mbOnlyMatrix(true)
 {
 }
 
 ScEditableTester::ScEditableTester( ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) :
-    bIsEditable( sal_True ),
-    bOnlyMatrix( sal_True )
+    mbIsEditable(true),
+    mbOnlyMatrix(true)
 {
     TestBlock( pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
 }
@@ -42,29 +40,29 @@ ScEditableTester::ScEditableTester( ScDocument* pDoc, SCTAB nTab,
 ScEditableTester::ScEditableTester( ScDocument* pDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark ) :
-    bIsEditable( sal_True ),
-    bOnlyMatrix( sal_True )
+    mbIsEditable(true),
+    mbOnlyMatrix(true)
 {
     TestSelectedBlock( pDoc, nStartCol, nStartRow, nEndCol, nEndRow, rMark );
 }
 
 ScEditableTester::ScEditableTester( ScDocument* pDoc, const ScRange& rRange ) :
-    bIsEditable( sal_True ),
-    bOnlyMatrix( sal_True )
+    mbIsEditable(true),
+    mbOnlyMatrix(true)
 {
     TestRange( pDoc, rRange );
 }
 
 ScEditableTester::ScEditableTester( ScDocument* pDoc, const ScMarkData& rMark ) :
-    bIsEditable( sal_True ),
-    bOnlyMatrix( sal_True )
+    mbIsEditable(true),
+    mbOnlyMatrix(true)
 {
     TestSelection( pDoc, rMark );
 }
 
 ScEditableTester::ScEditableTester( ScViewFunc* pView ) :
-    bIsEditable( sal_True ),
-    bOnlyMatrix( sal_True )
+    mbIsEditable(true),
+    mbOnlyMatrix(true)
 {
     TestView( pView );
 }
@@ -74,14 +72,14 @@ ScEditableTester::ScEditableTester( ScViewFunc* pView ) :
 void ScEditableTester::TestBlock( ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
-    if ( bIsEditable || bOnlyMatrix )
+    if (mbIsEditable || mbOnlyMatrix)
     {
         bool bThisMatrix;
         if ( !pDoc->IsBlockEditable( nTab, nStartCol, nStartRow, nEndCol, nEndRow, &bThisMatrix ) )
         {
-            bIsEditable = false;
+            mbIsEditable = false;
             if ( !bThisMatrix )
-                bOnlyMatrix = false;
+                mbOnlyMatrix = false;
         }
     }
 }
@@ -110,28 +108,28 @@ void ScEditableTester::TestRange( ScDocument* pDoc, const ScRange& rRange )
 
 void ScEditableTester::TestSelection( ScDocument* pDoc, const ScMarkData& rMark )
 {
-    if ( bIsEditable || bOnlyMatrix )
+    if (mbIsEditable || mbOnlyMatrix)
     {
         bool bThisMatrix;
         if ( !pDoc->IsSelectionEditable( rMark, &bThisMatrix ) )
         {
-            bIsEditable = false;
+            mbIsEditable = false;
             if ( !bThisMatrix )
-                bOnlyMatrix = false;
+                mbOnlyMatrix = false;
         }
     }
 }
 
 void ScEditableTester::TestView( ScViewFunc* pView )
 {
-    if ( bIsEditable || bOnlyMatrix )
+    if (mbIsEditable || mbOnlyMatrix)
     {
         bool bThisMatrix;
         if ( !pView->SelectionEditable( &bThisMatrix ) )
         {
-            bIsEditable = false;
+            mbIsEditable = false;
             if ( !bThisMatrix )
-                bOnlyMatrix = false;
+                mbOnlyMatrix = false;
         }
     }
 }
@@ -140,9 +138,9 @@ void ScEditableTester::TestView( ScViewFunc* pView )
 
 sal_uInt16 ScEditableTester::GetMessageId() const
 {
-    if (bIsEditable)
+    if (mbIsEditable)
         return 0;
-    else if (bOnlyMatrix)
+    else if (mbOnlyMatrix)
         return STR_MATRIXFRAGMENTERR;
     else
         return STR_PROTECTIONERR;
