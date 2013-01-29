@@ -306,7 +306,6 @@ void InitSalMain()
             rtl::OString aResPath( getenv( "STAR_RESOURCEPATH" ) );
             rtl::OString aLibPath( getenv( "DYLD_LIBRARY_PATH" ) );
             rtl::OString aCmdPath( OUStringToOString(OUString(sysWorkDir), RTL_TEXTENCODING_UTF8).getStr() );
-            rtl::OString aTmpPath;
             // Get absolute path of command's directory
             if ( !aCmdPath.isEmpty() ) {
                 DirEntry aCmdDirEntry( aCmdPath );
@@ -316,32 +315,29 @@ void InitSalMain()
             // Assign to PATH environment variable
             if ( !aCmdPath.isEmpty() )
             {
-                aTmpPath = rtl::OString( "PATH=" );
-                aTmpPath += aCmdPath;
+                rtl::OString aTmpPath( aCmdPath );
                 if ( !aPath.isEmpty() )
                     aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
                 aTmpPath += aPath;
-                putenv( (char*)aTmpPath.getStr() );
+                setenv( "PATH", aTmpPath.getStr(), 1 );
             }
             // Assign to STAR_RESOURCEPATH environment variable
             if ( !aCmdPath.isEmpty() )
             {
-                aTmpPath = rtl::OString( "STAR_RESOURCEPATH=" );
-                aTmpPath += aCmdPath;
+                rtl::OString aTmpPath( aCmdPath );
                 if ( !aResPath.isEmpty() )
                     aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
                 aTmpPath += aResPath;
-                putenv( (char*)aTmpPath.getStr() );
+                setenv( "STAR_RESOURCEPATH", aTmpPath.getStr(), 1 );
             }
             // Assign to DYLD_LIBRARY_PATH environment variable
             if ( !aCmdPath.isEmpty() )
             {
-                aTmpPath = rtl::OString( "DYLD_LIBRARY_PATH=" );
-                aTmpPath += aCmdPath;
+                rtl::OString aTmpPath( aCmdPath );
                 if ( !aLibPath.isEmpty() )
                     aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
                 aTmpPath += aLibPath;
-                putenv( (char*)aTmpPath.getStr() );
+                setenv( "DYLD_LIBRARY_PATH", aTmpPath.getStr(), 1 );
             }
         }
     }
