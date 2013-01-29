@@ -358,7 +358,6 @@ class TopicsControl(ControlScroller):
     @param guiRow
     @param column
     '''
-    oldData = []
 
     @classmethod
     def fieldChanged(self, guiRow, column):
@@ -367,13 +366,6 @@ class TopicsControl(ControlScroller):
             data = self.getTopicData(guiRow + ControlScroller.nscrollvalue)
             if data is None:
                 return
-
-            dataValue = [i.Value for i in data]
-            if dataValue == TopicsControl.oldData:
-                return
-            else:
-                TopicsControl.oldData = dataValue
-
             self.updateDocumentCell(
                 guiRow + ControlScroller.nscrollvalue, column, data)
             if self.isRowEmpty(guiRow + ControlScroller.nscrollvalue):
@@ -724,7 +716,7 @@ class TopicsControl(ControlScroller):
     @classmethod
     def updateDocumentCell(self, row, column, data):
         try:
-            ControlScroller.CurUnoDialog.agendaTemplate.topics.writeCell(
+            ControlScroller.CurUnoDialog.agendaTemplate.topics.write(
                 row, column, data)
         except Exception:
             traceback.print_exc()

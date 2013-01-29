@@ -69,7 +69,6 @@ table.self.xTextDocument
 A note about threads:<br/>
 Many methods here are synchronized, in order to avoid colission made by
 events fired too often.
-@author rpiterman
 '''
 class AgendaDocument(TextDocument):
 
@@ -758,8 +757,6 @@ was done out of logic reasons and not design/functionality reasons,
 since there is anyway only one instance of this class at runtime
 it could have also be implemented in the AgendaDocument class
 but for clarity and separation I decided to make a sub class for it.
-
-@author rp143992
 '''
 
 class Topics(object):
@@ -781,26 +778,12 @@ class Topics(object):
     '''
     table = None
     lastRowFormat = []
-    numCell = -1
-    topicCell = -1
-    responsibleCell = -1
-    timeCell = -1
     rowsPerTopic = None
-    topicCells = []
 
     def __init__(self, agenda):
-        self.topicItems = {}
         self.firstRowFormat = []
         self.agenda = agenda
-        '''
-        this is a list which traces which topics were written to the document
-        and which not. When a cell needs to be actualized, it is checked that the
-        whole topic is already present in the document, using this vector.
-        The vector contains nulls for topics which were not written, and
-        empty strings for topics which were written (though any other
-        object would also do - i check only if it is a null or not...);
-        '''
-        self.writtenTopics = []
+        self.writtenTopics = -1
         try:
             Topics.table = self.agenda.getTable(
                 self.agenda.templateConsts.SECTION_TOPICS)
@@ -846,34 +829,10 @@ class Topics(object):
                 cell = Topics.table.getCellByName(cursor.RangeName)
                 # first I store the content and para style of the cell
                 ae = TextElement(cell, cell.String)
-                # if the cell contains a relevant <...>
-                # i add the text element to the hash,
-                # so it's text can be updated later.
-                try:
-                    if items[cell.CellName] is not None:
-                        self.topicItems[cell.String.lower().lstrip()] = ae
-                except KeyError:
-                    pass
+                ae.write()
 
-                Topics.topicCells.append(ae)
                 # goto next cell.
                 cursor.goRight(1, False)
-            '''
-            now - in which cell is every fillin?
-            '''
-
-            Topics.numCell = Topics.topicCells.index(
-                self.topicItems[
-                    self.agenda.templateConsts.FILLIN_TOPIC_NUMBER])
-            Topics.topicCell = Topics.topicCells.index(
-                self.topicItems[
-                    self.agenda.templateConsts.FILLIN_TOPIC_TOPIC])
-            Topics.responsibleCell = Topics.topicCells.index(
-                self.topicItems[
-                    self.agenda.templateConsts.FILLIN_TOPIC_RESPONSIBLE])
-            Topics.timeCell = Topics.topicCells.index(
-                self.topicItems[
-                    self.agenda.templateConsts.FILLIN_TOPIC_TIME])
         except Exception:
             traceback.print_exc()
 
@@ -883,117 +842,42 @@ class Topics(object):
     to the table. 0 or a negative number: no rows added.
     '''
 
-    def write2(self, topic, data):
-        if topic >= len(self.writtenTopics):
-            size = topic - len(self.writtenTopics)
-            self.writtenTopics += [None] * size
-        self.writtenTopics.insert(topic, "")
-        # make sure three are enough rows for me...
-        rows = self.agenda.getRowCount(Topics.table)
-        reqRows = 1 + (topic + 1) * Topics.rowsPerTopic
-        firstRow = reqRows - Topics.rowsPerTopic + 1
-        diff = reqRows - rows
-        if diff > 0:
-            # set the item's text...
-            self.agenda.insertTableRows(Topics.table, rows, diff)
+    def write(self, row, column, data):
+        # if the whole row should be written...
+        if self.writtenTopics < row:
+            self.writtenTopics += 1
+            rows = self.agenda.getRowCount(Topics.table)
+            reqRows = 1 + (row + 1) * Topics.rowsPerTopic
+            firstRow = reqRows - Topics.rowsPerTopic + 1
+            diff = reqRows - rows
+            if diff > 0:
+                # set the item's text...
+                self.agenda.insertTableRows(Topics.table, rows, diff)
+            column = 0
+            cursor = Topics.table.createCursorByCellName("A" + str(firstRow))
+        else:
+            # calculate the table row.
+            firstRow = 1 + (row * Topics.rowsPerTopic) + 1
+            cursor = Topics.table.createCursorByCellName("A" + str(firstRow))
 
-        self.setItemText(Topics.numCell, data[0].Value)
-        self.setItemText(Topics.topicCell, data[1].Value)
-        self.setItemText(Topics.responsibleCell, data[2].Value)
-        self.setItemText(Topics.timeCell, data[3].Value)
-        # now write !
-        cursor = Topics.table.createCursorByCellName("A" + str(firstRow))
-        for i in Topics.topicCells:
-            i.placeHolderText = \
-                Topics.table.getCellByName(cursor.RangeName).String
-            i.write()
-            cursor.goRight(1, False)
-        # now format !
-        cursor.gotoCellByName("A" + str(firstRow), False)
-        return diff
-
-    '''check if the topic with the given index is written to the table.
-    @param topic the topic number (0 base)
-    @return true if the topic is already written to the table. False if not.
-    (false would mean rows must be added to the table in order to
-    be able to write this topic).
-    '''
-
-    def isWritten(self, topic):
-        return (len(self.writtenTopics) > topic \
-            and self.writtenTopics[topic] is not None)
+            # move the cursor to the needed cell...
+            cursor.goRight(column, False)
+            
+        self.writeCell(cursor, column, data)
 
     '''rewrites a single cell containing.
     This is used in order to refresh the topic/responsible/duration data
     in the preview document, in response to a change in the gui (by the user)
     Since the structure of the topics table is flexible,
-    we don't reference a cell number. Rather, we use "what" argument to
-    specify which cell should be redrawn.
     The Topics object, which analyzed the structure of the topics table appon
     initialization, refreshes the approperiate cell.
-    @param topic index of the topic (0 based).
-    @param what 0 for num, 1 for topic, 2 for responsible, 3 for duration
-    @param data the row's data.
-    @throws Exception if something goes wrong (thow nothing should)
     '''
-
-    def writeCell(self, topic, what, data):
-        # if the whole row should be written...
-        if not self.isWritten(topic):
-            self.write(topic, data)
-            # write only the "what" cell.
-        else:
-            # calculate the table row.
-            firstRow = 1 + (topic * Topics.rowsPerTopic) + 1
-            # go to the first cell of this topic.
-            cursor = Topics.table.createCursorByCellName("A" + str(firstRow))
-            te = None
-            cursorMoves = 0
-            if what == 0:
-                te = self.setItemText(Topics.numCell, data[0].Value)
-                cursorMoves = Topics.numCell
-            elif what == 1:
-                te = self.setItemText(Topics.topicCell, data[1].Value)
-                cursorMoves = Topics.topicCell
-            elif what == 2:
-                te = self.setItemText(Topics.responsibleCell, data[2].Value)
-                cursorMoves = Topics.responsibleCell
-            elif what == 3:
-                te = self.setItemText(Topics.timeCell, data[3].Value)
-                cursorMoves = Topics.timeCell
-
-            # move the cursor to the needed cell...
-            cursor.goRight(cursorMoves, False)
-            xc = Topics.table.getCellByName(cursor.RangeName)
-            # and write it !
-            te.placeHolderText = xc.String
-            te.write()
-
-    '''writes the given topic.
-    if the first topic was involved, reformat the
-    first row.
-    If any rows were added to the table, reformat
-    the last row.
-    @param topic the index of the topic to write.
-    @param data the topic's data. (see TopicsControl
-    for explanation about the topics data model)
-    @throws Exception if something goes wrong (though nothing should).
-    '''
-
-    def write(self, topic, data):
-        diff = self.write2(topic, data)
-        '''if the first topic has been written,
-        one needs to reformat the first row.
-        '''
-        if topic == 0:
-            self.formatFirstRow()
-        '''
-        if any rows were added, one needs to format
-        the whole table again.
-        '''
-
-        if diff > 0:
-            self.formatLastRow()
+                       
+    def writeCell(self, cursor, column, data):
+        xc = Topics.table.getCellByName(cursor.RangeName)
+        # and write it !
+        te = TextElement(xc, data[column].Value)
+        te.write()
 
     '''removes obsolete rows, reducing the
     topics table to the given number of topics.
@@ -1022,67 +906,9 @@ class Topics(object):
             tableRows.removeByIndex(
                 targetNumOfRows, tableRows.Count - targetNumOfRows)'''
 
-        self.formatLastRow()
-        while len(self.writtenTopics) > topics:
-            del self.writtenTopics[topics]
-
-    '''reapply the format of the first (header) row.
-    '''
-
-    def formatFirstRow(self):
-        cursor = Topics.table.createCursorByCellName("A1")
-        self.formatTable(cursor, self.firstRowFormat, False)
-
-    '''reaply the format of the last row.
-    '''
-    @classmethod
-    def formatLastRow(self):
-        cursor = Topics.table.createCursorByCellName("A1")
-        cursor.gotoEnd(False)
-        self.formatTable(cursor, Topics.lastRowFormat, True)
-
-    '''returns a text element for the given cell,
-    which will write the given text.
-    @param cell the topics cell number.
-    @param value the value to write.
-    @return a TextElement object which will write the given value
-    to the given cell.
-    '''
-
-    @classmethod
-    def setItemText(self, cell, value):
-        if cell >= 0:
-            te = Topics.topicCells[cell]
-            if te is not None:
-                te.Text = str(value)
-            return te
-
-        return None
-
-    '''formats a series of cells from the given one,
-    using the given List of TableCellFormatter objects,
-    in the given order.
-    This method is used to format the first (header) and the last
-    rows of the table.
-    @param cursor a table cursor, pointing to the start cell to format
-    @param formats a List containing TableCellFormatter objects.
-    Each will format one cell in the direction specified.
-    @param reverse if true the cursor will move left,
-    formatting in reverse order (used for the last row).
-    '''
-    @classmethod
-    def formatTable(self, cursor, formats, reverse):
-        for i in formats:
-            i.format(Topics.table.getCellByName(cursor.RangeName))
-            if reverse:
-                cursor.goLeft(1, False)
-            else:
-                cursor.goRight(1, False)
-
 '''
 A Text element which, if the text to write is empty (null or "")
 inserts a placeholder instead.
-@author rp143992
 '''
 
 class PlaceholderTextElement(TextElement):
@@ -1108,7 +934,6 @@ class PlaceholderTextElement(TextElement):
 '''
 An Agenda element which writes no text, but inserts a placeholder, and formats
 it using a ParaStyleName.
-@author rp143992
 '''
 
 class PlaceholderElement(object):
@@ -1132,7 +957,6 @@ An implementation of AgendaElement which
 gets as a parameter a table cursor, and writes
 a text to the cell marked by this table cursor, and
 a place holder to the next cell.
-@author rp143992
 '''
 
 class AgendaItem(object):

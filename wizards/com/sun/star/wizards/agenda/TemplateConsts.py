@@ -64,15 +64,6 @@ class TemplateConsts:
     FILLIN_RESOURCE_PERSONS = "<resource-persons>"
 
     '''
-    Fillins for the topic table.
-    These strings will be searched inside the topic table as
-    part of detecting its structure.
-    '''
-    FILLIN_TOPIC_NUMBER = "<num>"
-    FILLIN_TOPIC_TOPIC = "<topic>"
-    FILLIN_TOPIC_RESPONSIBLE = "<responsible>"
-    FILLIN_TOPIC_TIME = "<topic-time>"
-    '''
     fillins for minutes.
     These will be searched in the minutes section and will be replaced
     with the appropriate data.
