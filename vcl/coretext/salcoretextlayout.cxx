@@ -186,33 +186,27 @@ void CoreTextLayout::InvalidateMeasurements()
 {
     SAL_INFO( "vcl.coretext.layout", "InvalidateMeasurements(" << this << ")" );
 
-    if(mpGlyphs)
-    {
+    if( mpGlyphs ) {
         delete[] mpGlyphs;
         mpGlyphs = NULL;
     }
-    if(mpChars2Glyphs)
-    {
+    if( mpChars2Glyphs ) {
         delete[] mpChars2Glyphs;
         mpChars2Glyphs = NULL;
     }
-    if(mpGlyphs2Chars)
-    {
+    if( mpGlyphs2Chars ) {
         delete[] mpGlyphs2Chars;
         mpGlyphs2Chars = NULL;
     }
-    if(mpCharWidths)
-    {
+    if( mpCharWidths ) {
         delete[] mpCharWidths;
         mpCharWidths = NULL;
     }
-    if(mpGlyphAdvances)
-    {
+    if( mpGlyphAdvances ) {
         delete[] mpGlyphAdvances;
         mpGlyphAdvances = NULL;
     }
-    if(mpGlyphPositions)
-    {
+    if( mpGlyphPositions ) {
         delete[] mpGlyphPositions;
         mpGlyphPositions = NULL;
     }
@@ -226,7 +220,7 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     SAL_INFO( "vcl.coretext.layout", "DrawText(" << this << ")" );
 
     QuartzSalGraphics& gr = static_cast<QuartzSalGraphics&>(rGraphics);
-    if(mnCharCount <= 0 || !gr.CheckContext())
+    if( mnCharCount <= 0 || !gr.CheckContext() )
         return;
 
     CGContextSaveGState( gr.mrContext );
@@ -242,8 +236,7 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     SAL_INFO( "vcl.coretext.layout", "at pos (" << pos.X() << "," << pos.Y() <<") ctfont=" << mpStyle->GetFont() );
 
     CGFontRef cg_font = CTFontCopyGraphicsFont(mpStyle->GetFont(), NULL);
-    if(!cg_font)
-    {
+    if( !cg_font ) {
         SAL_INFO( "vcl.coretext.layout", "Error cg_font is NULL" );
         return;
     }
@@ -251,13 +244,11 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     CGContextSetFontSize(gr.mrContext, CTFontGetSize(mpStyle->GetFont()));
     CGContextSetTextDrawingMode(gr.mrContext, kCGTextFill);
     CGContextSetShouldAntialias( gr.mrContext, true );
-    if(mpStyle->GetColor())
-    {
+    if( mpStyle->GetColor() ) {
         CGContextSetFillColorWithColor(gr.mrContext, mpStyle->GetColor());
         CGContextSetStrokeColorWithColor(gr.mrContext, mpStyle->GetColor());
     }
-    else
-    {
+    else {
         CGContextSetRGBFillColor(gr.mrContext, 0.0, 0.0, 0.0, 1.0);
     }
     CFRelease(cg_font);
@@ -290,8 +281,7 @@ long CoreTextLayout::FillDXArray( sal_Int32* pDXArray ) const
     float scale = mpStyle->GetFontStretchFactor();
     CGFloat accumulated_width = 0;
 
-    for( int i = 0; i < mnCharCount; ++i )
-    {
+    for( int i = 0; i < mnCharCount; ++i ) {
         // convert and adjust for accumulated rounding errors
         accumulated_width += mpCharWidths[i];
         const long old_width = width;
@@ -309,12 +299,10 @@ bool CoreTextLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect )
 
     SAL_INFO( "vcl.coretext.layout", "GetBoundRect(" << this << ")" );
 
-    if ( !mbHasBoundRectangle )
-    {
+    if ( !mbHasBoundRectangle ) {
         QuartzSalGraphics& gr = static_cast<QuartzSalGraphics&>(rGraphics);
         CGRect bound_rect = CTLineGetImageBounds( mpLine, gr.mrContext );
-        if ( !CGRectIsNull( bound_rect ) )
-        {
+        if ( !CGRectIsNull( bound_rect ) ) {
             maBoundRectangle = Rectangle(
                 Point( round_to_long(bound_rect.origin.x * mpStyle->GetFontStretchFactor()),
                        round_to_long(bound_rect.origin.y - bound_rect.size.height )),
@@ -335,16 +323,14 @@ void CoreTextLayout::GetCaretPositions( int max_index, sal_Int32* caret_position
     SAL_INFO( "vcl.coretext.layout", "GetCaretPositions(" << this << ",max_index=" << max_index << ")" );
 
     int local_max = max_index < mnCharCount * 2 ? max_index : mnCharCount;
-    for(int i = 0 ; i < max_index - 1; i+=2)
-    {
+    for( int i = 0 ; i < max_index - 1; i+=2 ) {
         CGFloat primary, secondary;
         primary = CTLineGetOffsetForStringIndex(mpLine, i >> 1, &secondary);
         caret_position[i] = round_to_long(mnBaseAdvance + primary);
         caret_position[i+1] = round_to_long(mnBaseAdvance + secondary);
         i += 2;
     }
-    for(int i = local_max ; i < max_index ; ++i)
-    {
+    for( int i = local_max ; i < max_index ; ++i ) {
         caret_position[i] = -1;
     }
 }
@@ -359,22 +345,19 @@ int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos
 {
     SAL_INFO( "vcl.coretext.layout", "GetNextGlyphs(" << this << ",nLen=" << nLen << ",nStart=" << nStart << ")" );
 
-    if( nStart < 0 )                // first glyph requested?
-    {
+    if( nStart < 0 ) {              // first glyph requested?
         nStart = 0;
         mnCurrentRunIndex = 0;
         mnCurrentGlyphIndex = 0;
         mnCurrentGlyphRunIndex = 0;
     }
-    else if(nStart >= mnGlyphCount)
-    {
+    else if( nStart >= mnGlyphCount ) {
         mnCurrentRunIndex = 0;
         mnCurrentGlyphIndex = 0;
         mnCurrentGlyphRunIndex = 0;
         return 0;
     }
-    if(!mpRuns)
-    {
+    if( !mpRuns ) {
         mpRuns = CTLineGetGlyphRuns(mpLine);
     }
     CFIndex nb_runs = CFArrayGetCount( mpRuns );
@@ -383,21 +366,17 @@ int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos
 
     int i = 0;
     bool first = true;
-    while(i < nLen)
-    {
-        if(mnCurrentGlyphRunIndex >= nb_glyphs)
-        {
+    while( i < nLen ) {
+        if( mnCurrentGlyphRunIndex >= nb_glyphs ) {
             mnCurrentRunIndex += 1;
-            if(mnCurrentRunIndex >= nb_runs)
-            {
+            if( mnCurrentRunIndex >= nb_runs ) {
                 break;
             }
             run = (CTRunRef)CFArrayGetValueAtIndex( mpRuns, mnCurrentRunIndex );
             nb_glyphs = CTRunGetGlyphCount( run );
             mnCurrentGlyphRunIndex = 0;
         }
-        if(first)
-        {
+        if( first ) {
             CGPoint first_pos;
             CTRunGetPositions(run, CFRangeMake(mnCurrentGlyphRunIndex,1), &first_pos);
             Point pos(first_pos.x, first_pos.y);
@@ -406,12 +385,10 @@ int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos
             first = false;
         }
         pGlyphIDs[i] = mpGlyphs[mnCurrentGlyphIndex];
-        if(pGlyphAdvances)
-        {
+        if( pGlyphAdvances ) {
             pGlyphAdvances[i] = mpGlyphAdvances[mnCurrentGlyphIndex];
         }
-        if(pCharIndexes)
-        {
+        if( pCharIndexes ) {
             pCharIndexes[i] = mpGlyphs2Chars[mnCurrentGlyphIndex];
         }
         mnCurrentGlyphIndex += 1;
@@ -446,8 +423,7 @@ int CoreTextLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
         ATSUTextMeasurement nATSUSumWidth = 0;
         const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nMaxWidth / nFactor );
         const ATSUTextMeasurement nATSUExtraWidth = Vcl2Fixed( nCharExtra ) / nFactor;
-        for( int i = 0; i < mnCharCount; ++i )
-        {
+        for( int i = 0; i < mnCharCount; ++i ) {
             nATSUSumWidth += mpCharWidths[i];
             if( nATSUSumWidth >= nATSUMaxWidth )
                 return (mnMinCharPos + i);
@@ -561,8 +537,7 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
     mpGlyphs = new CGGlyph[ mnGlyphCount ];
     mpCharWidths = new int[ mnCharCount ];
     mpChars2Glyphs = new int[ mnCharCount ];
-    for( int i = 0; i < mnCharCount; ++i)
-    {
+    for( int i = 0; i < mnCharCount; ++i) {
         mpCharWidths[i] = 0.0;
         mpChars2Glyphs[i] = -1;
     }
@@ -574,17 +549,14 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
     CFIndex nb_runs = CFArrayGetCount( runs );
 
     int p = 0;
-    for( CFIndex i = 0; i < nb_runs; ++i )
-    {
+    for( CFIndex i = 0; i < nb_runs; ++i ) {
         CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex( runs, i );
-        if( run )
-        {
+        if( run ) {
+            std::ostringstream glyph_info_line;
 			CFIndex nb_glyphs = CTRunGetGlyphCount( run );
-            if(nb_glyphs)
-            {
+            if( nb_glyphs ) {
                 CFRange text_range = CTRunGetStringRange( run );
-                if( text_range.location != kCFNotFound && text_range.length > 0 )
-                {
+                if( text_range.location != kCFNotFound && text_range.length > 0 ) {
                     CFIndex indices[ nb_glyphs ];
                     CGGlyph glyphs[ nb_glyphs ];
                     CTRunGetStringIndices( run, CFRangeMake( 0, 0 ), indices );
@@ -592,17 +564,20 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
                     CTRunGetPositions( run, CFRangeMake( 0, 0 ), &mpGlyphPositions[p] );
                     bool is_vertical_run = false;
                     CFDictionaryRef aDict = CTRunGetAttributes( run );
-                    if ( aDict )
-                    {
+                    if ( aDict ) {
                         const CFBooleanRef aValue = (const CFBooleanRef)CFDictionaryGetValue( aDict, kCTVerticalFormsAttributeName );
                         is_vertical_run =  (aValue == kCFBooleanTrue) ? true : false;
                     }
 
-                    for (CFIndex j = 0 ; j < nb_glyphs; ++p, ++j )
-                    {
+                    for (CFIndex j = 0 ; j < nb_glyphs; ++p, ++j ) {
                         assert ( p < mnGlyphCount );
                         mpGlyphs[ p ] = glyphs[ j ];
-                        // SAL_INFO( "vcl.coretext.layout", "  mpGlyphs[" << p << "]=glyphs[" << j << "]=0x" << std::hex << glyphs[j] << std::dec );
+#ifdef SAL_LOG_INFO
+                        if (j < 7)
+                            glyph_info_line << " " << glyphs[j] << "@(" << mpGlyphPositions[p].x << "," << mpGlyphPositions[p].y << ")";
+                        else if (j == 7)
+                            glyph_info_line << "...";
+#endif
                         CFIndex k = indices[ j ];
                         mpGlyphs2Chars[p] = k;
                         assert( k < mnCharCount );
@@ -619,6 +594,7 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
                     }
                 }
 			}
+            SAL_INFO( "vcl.coretext.layout", "  run " << run << " glyphs:" << glyph_info_line.str() );
         }
     }
 
