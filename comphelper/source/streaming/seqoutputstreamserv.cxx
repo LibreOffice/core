@@ -81,9 +81,9 @@ SequenceOutputStreamService::SequenceOutputStreamService()
     return getImplementationName_static();
 }
 
-::rtl::OUString SAL_CALL SequenceOutputStreamService::getImplementationName_static()
+OUString SAL_CALL SequenceOutputStreamService::getImplementationName_static()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.SequenceOutputStreamService" ) );
+    return OUString("com.sun.star.comp.SequenceOutputStreamService");
 }
 
 ::sal_Bool SAL_CALL SequenceOutputStreamService::supportsService( ::rtl::OUString const & serviceName ) throw ( uno::RuntimeException )
@@ -101,10 +101,10 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SequenceOutputStreamService::getSuppor
     return getSupportedServiceNames_static();
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames_static()
+uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames_static()
 {
-    uno::Sequence< ::rtl::OUString > s( 1 );
-    s[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.SequenceOutputStream" ) );
+    uno::Sequence< OUString > s( 1 );
+    s[0] = "com.sun.star.io.SequenceOutputStream";
     return s;
 }
 

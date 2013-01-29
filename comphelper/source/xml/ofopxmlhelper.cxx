@@ -41,7 +41,7 @@ namespace comphelper {
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadRelationsInfoSequence( const uno::Reference< io::XInputStream >& xInStream, const ::rtl::OUString aStreamName, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
-    ::rtl::OUString aStringID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels/" ) );
+    OUString aStringID = OUString( "_rels/" );
     aStringID += aStreamName;
     return ReadSequence_Impl( xInStream, aStringID, RELATIONINFO_FORMAT, xContext );
 }
@@ -50,7 +50,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::Read
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadContentTypeSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
-    ::rtl::OUString aStringID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "[Content_Types].xml" ) );
+    OUString aStringID = OUString( "[Content_Types].xml" );
     return ReadSequence_Impl( xInStream, aStringID, CONTENTTYPE_FORMAT, xContext );
 }
 
@@ -65,22 +65,22 @@ void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< i
 
     xWriter->setOutputStream( xOutStream );
 
-    ::rtl::OUString aRelListElement( RTL_CONSTASCII_USTRINGPARAM( "Relationships" ) );
-    ::rtl::OUString aRelElement( RTL_CONSTASCII_USTRINGPARAM( "Relationship" ) );
-    ::rtl::OUString aIDAttr( RTL_CONSTASCII_USTRINGPARAM( "Id" ) );
-    ::rtl::OUString aTypeAttr( RTL_CONSTASCII_USTRINGPARAM( "Type" ) );
-    ::rtl::OUString aTargetModeAttr( RTL_CONSTASCII_USTRINGPARAM( "TargetMode" ) );
-    ::rtl::OUString aTargetAttr( RTL_CONSTASCII_USTRINGPARAM( "Target" ) );
-    ::rtl::OUString aCDATAString( RTL_CONSTASCII_USTRINGPARAM ( "CDATA" ) );
-    ::rtl::OUString aWhiteSpace( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+    OUString aRelListElement( "Relationships" );
+    OUString aRelElement( "Relationship" );
+    OUString aIDAttr( "Id" );
+    OUString aTypeAttr( "Type" );
+    OUString aTargetModeAttr( "TargetMode" );
+    OUString aTargetAttr( "Target" );
+    OUString aCDATAString( "CDATA" );
+    OUString aWhiteSpace( " " );
 
     // write the namespace
     AttributeList* pRootAttrList = new AttributeList;
     uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
     pRootAttrList->AddAttribute(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "xmlns" ) ),
+        OUString( "xmlns" ),
         aCDATAString,
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "http://schemas.openxmlformats.org/package/2006/relationships" ) ) );
+        OUString( "http://schemas.openxmlformats.org/package/2006/relationships" ) );
 
     xWriter->startDocument();
     xWriter->startElement( aRelListElement, xRootAttrList );
@@ -126,22 +126,22 @@ void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOu
 
     xWriter->setOutputStream( xOutStream );
 
-    ::rtl::OUString aTypesElement( RTL_CONSTASCII_USTRINGPARAM( "Types" ) );
-    ::rtl::OUString aDefaultElement( RTL_CONSTASCII_USTRINGPARAM( "Default" ) );
-    ::rtl::OUString aOverrideElement( RTL_CONSTASCII_USTRINGPARAM( "Override" ) );
-    ::rtl::OUString aExtensionAttr( RTL_CONSTASCII_USTRINGPARAM( "Extension" ) );
-    ::rtl::OUString aPartNameAttr( RTL_CONSTASCII_USTRINGPARAM( "PartName" ) );
-    ::rtl::OUString aContentTypeAttr( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) );
-    ::rtl::OUString aCDATAString( RTL_CONSTASCII_USTRINGPARAM ( "CDATA" ) );
-    ::rtl::OUString aWhiteSpace( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+    ::rtl::OUString aTypesElement( "Types" );
+    ::rtl::OUString aDefaultElement( "Default" );
+    ::rtl::OUString aOverrideElement( "Override" );
+    ::rtl::OUString aExtensionAttr( "Extension" );
+    ::rtl::OUString aPartNameAttr( "PartName" );
+    ::rtl::OUString aContentTypeAttr( "ContentType" );
+    ::rtl::OUString aCDATAString( "CDATA" );
+    ::rtl::OUString aWhiteSpace( " " );
 
     // write the namespace
     AttributeList* pRootAttrList = new AttributeList;
     uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
     pRootAttrList->AddAttribute(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "xmlns" ) ),
+        OUString( "xmlns" ),
         aCDATAString,
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "http://schemas.openxmlformats.org/package/2006/content-types" ) ) );
+        OUString( "http://schemas.openxmlformats.org/package/2006/content-types" ) );
 
     xWriter->startDocument();
     xWriter->startElement( aTypesElement, xRootAttrList );
@@ -204,18 +204,18 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::Read
 // -----------------------------------
 OFOPXMLHelper::OFOPXMLHelper( sal_uInt16 nFormat )
 : m_nFormat( nFormat )
-, m_aRelListElement( RTL_CONSTASCII_USTRINGPARAM( "Relationships" ) )
-, m_aRelElement( RTL_CONSTASCII_USTRINGPARAM( "Relationship" ) )
-, m_aIDAttr( RTL_CONSTASCII_USTRINGPARAM( "Id" ) )
-, m_aTypeAttr( RTL_CONSTASCII_USTRINGPARAM( "Type" ) )
-, m_aTargetModeAttr( RTL_CONSTASCII_USTRINGPARAM( "TargetMode" ) )
-, m_aTargetAttr( RTL_CONSTASCII_USTRINGPARAM( "Target" ) )
-, m_aTypesElement( RTL_CONSTASCII_USTRINGPARAM( "Types" ) )
-, m_aDefaultElement( RTL_CONSTASCII_USTRINGPARAM( "Default" ) )
-, m_aOverrideElement( RTL_CONSTASCII_USTRINGPARAM( "Override" ) )
-, m_aExtensionAttr( RTL_CONSTASCII_USTRINGPARAM( "Extension" ) )
-, m_aPartNameAttr( RTL_CONSTASCII_USTRINGPARAM( "PartName" ) )
-, m_aContentTypeAttr( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) )
+, m_aRelListElement( "Relationships" )
+, m_aRelElement( "Relationship" )
+, m_aIDAttr( "Id" )
+, m_aTypeAttr( "Type" )
+, m_aTargetModeAttr( "TargetMode" )
+, m_aTargetAttr( "Target" )
+, m_aTypesElement( "Types" )
+, m_aDefaultElement( "Default" )
+, m_aOverrideElement( "Override" )
+, m_aExtensionAttr( "Extension" )
+, m_aPartNameAttr( "PartName" )
+, m_aContentTypeAttr( "ContentType" )
 {
 }
 

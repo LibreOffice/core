@@ -219,14 +219,14 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
     return getImplementationName_static();
 }
 
-::rtl::OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName_static(  )
+OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName_static(  )
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IndexedPropertyValuesContainer" ) );
+    return OUString( "IndexedPropertyValuesContainer" );
 }
 
 sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.IndexedPropertyValues" ) );
+    OUString aServiceName( "com.sun.star.document.IndexedPropertyValues" );
     return aServiceName == ServiceName;
 }
 
@@ -238,8 +238,8 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const ::rtl::
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames_static(  )
 {
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.IndexedPropertyValues" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    const OUString aServiceName( "com.sun.star.document.IndexedPropertyValues" );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 

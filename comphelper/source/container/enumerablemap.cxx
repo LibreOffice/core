@@ -374,27 +374,27 @@ namespace comphelper
 
         Type aKeyType, aValueType;
         if ( !( _arguments[0] >>= aKeyType ) )
-            throw IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.Type expected.")), *this, 1 );
+            throw IllegalArgumentException( OUString("com.sun.star.uno.Type expected."), *this, 1 );
         if ( !( _arguments[1] >>= aValueType ) )
-            throw IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.Type expected.")), *this, 2 );
+            throw IllegalArgumentException( OUString("com.sun.star.uno.Type expected."), *this, 2 );
 
         Sequence< Pair< Any, Any > > aInitialValues;
         bool bMutable = true;
         if ( nArgumentCount == 3 )
         {
             if ( !( _arguments[2] >>= aInitialValues ) )
-                throw IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[]com.sun.star.beans.Pair<any,any> expected.")), *this, 2 );
+                throw IllegalArgumentException( OUString("[]com.sun.star.beans.Pair<any,any> expected."), *this, 2 );
             bMutable = false;
         }
 
         // for the value, anything is allowed, except VOID
         if ( ( aValueType.getTypeClass() == TypeClass_VOID ) || ( aValueType.getTypeClass() == TypeClass_UNKNOWN ) )
-            throw IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported value type." ) ), *this );
+            throw IllegalTypeException( OUString( "Unsupported value type." ), *this );
 
         // create the comparator for the KeyType, and throw if the type is not supported
         ::std::auto_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, NULL ) );
         if ( !pComparator.get() )
-            throw IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), *this );
+            throw IllegalTypeException( OUString( "Unsupported key type." ), *this );
 
         // init members
         m_aData.m_aKeyType = aKeyType;
@@ -516,7 +516,7 @@ namespace comphelper
             if ( _keyOrValue >>= nValue )
                 if ( ::rtl::math::isNan( nValue ) )
                     throw IllegalArgumentException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NaN (not-a-number) not supported by this implementation." ) ),
+                        OUString( "NaN (not-a-number) not supported by this implementation." ),
                         *const_cast< EnumerableMap* >( this ), 0 );
             // (note that the case of _key not containing a float/double value is handled in the
             // respective IKeyPredicateLess implementation, so there's no need to handle this here.)
@@ -528,7 +528,7 @@ namespace comphelper
     {
         if ( !_key.hasValue() )
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NULL keys not supported by this implementation." ) ),
+                OUString( "NULL keys not supported by this implementation." ),
                 *const_cast< EnumerableMap* >( this ), 0 );
 
         impl_checkNaN_throw( _key, m_aData.m_aKeyType );
@@ -539,7 +539,7 @@ namespace comphelper
     {
         if ( !m_aData.m_bMutable )
             throw NoSupportException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The map is immutable." ) ),
+                    OUString( "The map is immutable." ),
                     *const_cast< EnumerableMap* >( this ) );
     }
 
@@ -712,16 +712,16 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL EnumerableMap::getImplementationName_static(  )
+    OUString SAL_CALL EnumerableMap::getImplementationName_static(  )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.comphelper.EnumerableMap" ) );
+        return OUString( "org.openoffice.comp.comphelper.EnumerableMap" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EnumerableMap::getSupportedServiceNames_static(  )
+    Sequence< OUString > SAL_CALL EnumerableMap::getSupportedServiceNames_static(  )
     {
-        Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.container.EnumerableMap" ) );
+        Sequence< OUString > aServiceNames(1);
+        aServiceNames[0] = "com.sun.star.container.EnumerableMap";
         return aServiceNames;
     }
 
@@ -746,9 +746,9 @@ namespace comphelper
     Any MapEnumerator::nextElement()
     {
         if ( m_disposed )
-            throw DisposedException( ::rtl::OUString(), m_rParent );
+            throw DisposedException( OUString(), m_rParent );
         if ( m_mapPos == m_rMapData.m_pValues->end() )
-            throw NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No more elements." ) ), m_rParent );
+            throw NoSuchElementException( OUString( "No more elements." ), m_rParent );
 
         Any aNextElement;
         switch ( m_eType )

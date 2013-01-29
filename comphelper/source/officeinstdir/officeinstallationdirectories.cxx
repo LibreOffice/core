@@ -91,9 +91,9 @@ static bool makeCanonicalFileURL( rtl::OUString & rURL )
 
 OfficeInstallationDirectories::OfficeInstallationDirectories(
         const uno::Reference< uno::XComponentContext > & xCtx )
-: m_aOfficeBrandDirMacro( RTL_CONSTASCII_USTRINGPARAM( "$(brandbaseurl)" ) ),
-  m_aOfficeBaseDirMacro( RTL_CONSTASCII_USTRINGPARAM( "$(baseinsturl)" ) ),
-  m_aUserDirMacro( RTL_CONSTASCII_USTRINGPARAM( "$(userdataurl)" ) ),
+: m_aOfficeBrandDirMacro( "$(brandbaseurl)" ),
+  m_aOfficeBaseDirMacro( "$(baseinsturl)" ),
+  m_aUserDirMacro( "$(userdataurl)" ),
   m_xCtx( xCtx ),
   m_pOfficeBrandDir( 0 ),
   m_pUserDir( 0 )
@@ -247,29 +247,23 @@ OfficeInstallationDirectories::getSupportedServiceNames()
 rtl::OUString SAL_CALL
 OfficeInstallationDirectories::getImplementationName_static()
 {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.util.OfficeInstallationDirectories" ) );
+    return OUString("com.sun.star.comp.util.OfficeInstallationDirectories");
 }
 
 //=========================================================================
 // static
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 OfficeInstallationDirectories::getSupportedServiceNames_static()
 {
-    const rtl::OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.util.OfficeInstallationDirectories" ) );
-    return uno::Sequence< rtl::OUString >( &aServiceName, 1 );
+    const OUString aServiceName("com.sun.star.util.OfficeInstallationDirectories");
+    return uno::Sequence< OUString >( &aServiceName, 1 );
 }
 
 //=========================================================================
 // static
-rtl::OUString SAL_CALL OfficeInstallationDirectories::getSingletonName_static()
+OUString SAL_CALL OfficeInstallationDirectories::getSingletonName_static()
 {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.util.theOfficeInstallationDirectories" ) );
+    return OUString("com.sun.star.util.theOfficeInstallationDirectories");
 }
 
 //=========================================================================
@@ -299,8 +293,7 @@ void OfficeInstallationDirectories::initDirs()
             uno::Reference< util::XMacroExpander > xExpander;
 
             m_xCtx->getValueByName(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "/singletons/com.sun.star.util.theMacroExpander" ) ) )
+                OUString("/singletons/com.sun.star.util.theMacroExpander"))
             >>= xExpander;
 
             OSL_ENSURE( xExpander.is(),
@@ -310,7 +303,7 @@ void OfficeInstallationDirectories::initDirs()
             {
                 *m_pOfficeBrandDir =
                     xExpander->expandMacros(
-                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR" ) ) );
+                         OUString( "$BRAND_BASE_DIR" ) );
 
                 OSL_ENSURE( !m_pOfficeBrandDir->isEmpty(),
                             "Unable to obtain office brand installation directory!" );
@@ -319,8 +312,7 @@ void OfficeInstallationDirectories::initDirs()
 
                 *m_pUserDir =
                     xExpander->expandMacros(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) ) );
+                        OUString("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) );
 
                 OSL_ENSURE( !m_pUserDir->isEmpty(),
                             "Unable to obtain office user data directory!" );

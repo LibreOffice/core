@@ -98,12 +98,12 @@ const uno::Reference < embed::XStorage >& EmbedImpl::GetReplacements()
         try
         {
             mxImageStorage = mxStorage->openStorageElement(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectReplacements")), embed::ElementModes::READWRITE );
+                OUString("ObjectReplacements"), embed::ElementModes::READWRITE );
         }
         catch (const uno::Exception&)
         {
             mxImageStorage = mxStorage->openStorageElement(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectReplacements")), embed::ElementModes::READ );
+                OUString("ObjectReplacements"), embed::ElementModes::READ );
         }
     }
 
@@ -161,7 +161,7 @@ sal_Bool EmbeddedObjectContainer::CommitImageSubStorage()
             {
                 // get the open mode from the parent storage
                 sal_Int32 nMode = 0;
-                uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode")) );
+                uno::Any aAny = xSet->getPropertyValue( OUString("OpenMode") );
                 if ( aAny >>= nMode )
                     bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
             } // if ( xSet.is() )
@@ -230,15 +230,15 @@ void EmbeddedObjectContainer::CloseEmbeddedObjects()
     }
 }
 
-::rtl::OUString EmbeddedObjectContainer::CreateUniqueObjectName()
+OUString EmbeddedObjectContainer::CreateUniqueObjectName()
 {
-    ::rtl::OUString aPersistName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Object ") );
-    ::rtl::OUString aStr;
+    OUString aPersistName("Object ");
+    OUString aStr;
     sal_Int32 i=1;
     do
     {
         aStr = aPersistName;
-        aStr += ::rtl::OUString::valueOf( i++ );
+        aStr += OUString::valueOf( i++ );
     }
     while( HasEmbeddedObject( aStr ) );
     // TODO/LATER: should we consider deleted objects?
@@ -353,7 +353,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( con
         {
             // get the open mode from the parent storage
             sal_Int32 nMode = 0;
-            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode")) );
+            uno::Any aAny = xSet->getPropertyValue( OUString("OpenMode") );
             if ( aAny >>= nMode )
                 bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
         }
@@ -362,16 +362,16 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( con
         //TODO/LATER: it would be good to detect an error when an object should be created already, but isn't (not an "inside" call)
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence< beans::PropertyValue > aObjDescr( xCopy.is() ? 2 : 1 );
-        aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
+        aObjDescr[0].Name = "Parent";
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
         if ( xCopy.is() )
         {
-            aObjDescr[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CloneFrom" ) );
+            aObjDescr[1].Name = "CloneFrom";
             aObjDescr[1].Value <<= xCopy;
         }
 
         uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-        aMediaDescr[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+        aMediaDescr[0].Name = "ReadOnly";
         aMediaDescr[0].Value <<= bReadOnlyMode;
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitFromEntry(
                 pImpl->mxStorage, rName,
@@ -404,7 +404,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
         uno::Sequence< beans::PropertyValue > aObjDescr( rArgs.getLength() + 1 );
-        aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
+        aObjDescr[0].Name = "Parent";
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
         ::std::copy( rArgs.getConstArray(), rArgs.getConstArray() + rArgs.getLength(), aObjDescr.getArray() + 1 );
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
@@ -582,9 +582,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
             // it is correct so for now, but what if somebody introduces a new stream based embedded object?
             // Probably introducing of such an object must be restricted ( a storage must be used! ).
             uno::Reference< beans::XPropertySet > xProps( xNewStream, uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
-                    uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.oleobject" ) ) ) );
+            xProps->setPropertyValue( OUString( "MediaType" ),
+                    uno::makeAny( OUString( "application/vnd.sun.star.oleobject" ) ) );
         }
         catch (const uno::Exception&)
         {
@@ -620,7 +619,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     {
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
-        aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
+        aObjDescr[0].Name = "Parent";
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitFromMediaDescriptor(
                 pImpl->mxStorage, rNewName, aMedium, aObjDescr ), uno::UNO_QUERY );
@@ -654,7 +653,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     {
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create(::comphelper::getProcessComponentContext());
         uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
-        aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
+        aObjDescr[0].Name = "Parent";
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceLink(
                 pImpl->mxStorage, rNewName, aMedium, aObjDescr ), uno::UNO_QUERY );
@@ -740,10 +739,10 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                         embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
                     uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-                    aMediaDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                    aMediaDescr[0].Name = "URL";
                     aMediaDescr[0].Value <<= aURL;
                     uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
-                    aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
+                    aObjDescr[0].Name = "Parent";
                     aObjDescr[0].Value <<= pImpl->m_xModel.get();
                     xResult = uno::Reference < embed::XEmbeddedObject >(
                                 xCreator->createInstanceLink(
@@ -767,7 +766,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                         embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
                     uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
-                    aObjDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent" ) );
+                    aObjDescr[0].Name = "Parent";
                     aObjDescr[0].Value <<= pImpl->m_xModel.get();
                     xResult = uno::Reference < embed::XEmbeddedObject >(
                                 xCreator->createInstanceInitNew(
@@ -1022,7 +1021,7 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
                     pImpl->mxTempStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
                 uno::Sequence < beans::PropertyValue > aSeq;
 
-                ::rtl::OUString aTmpPersistName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Object ") );
+                ::rtl::OUString aTmpPersistName = ::rtl::OUString( "Object " );
                 aTmpPersistName += ::rtl::OUString::valueOf( (sal_Int32) pImpl->maTempObjectContainer.size() );
 
                 xPersist->storeAsEntry( pImpl->mxTempStorage, aTmpPersistName, aSeq, aSeq );
@@ -1040,7 +1039,7 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
                         //             the media type will be provided with object insertion
                         ::rtl::OUString aOrigStorMediaType;
                         uno::Reference< beans::XPropertySet > xStorProps( pImpl->mxStorage, uno::UNO_QUERY_THROW );
-                        static const ::rtl::OUString s_sMediaType(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
+                        static const OUString s_sMediaType("MediaType");
                         xStorProps->getPropertyValue( s_sMediaType ) >>= aOrigStorMediaType;
 
                         OSL_ENSURE( !aOrigStorMediaType.isEmpty(), "No valuable media type in the storage!\n" );
@@ -1176,7 +1175,7 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
                 uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
                 if ( xSet.is() )
                 {
-                    uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
+                    uno::Any aAny = xSet->getPropertyValue( OUString("MediaType") );
                     aAny >>= *pMediaType;
                 }
             }
@@ -1231,13 +1230,13 @@ sal_Bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno
         if ( !xPropSet.is() )
             throw uno::RuntimeException();
 
-        xPropSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption")),
+        xPropSet->setPropertyValue( OUString("UseCommonStoragePasswordEncryption"),
                                     uno::makeAny( (sal_Bool)sal_True ) );
         uno::Any aAny;
         aAny <<= rMediaType;
-        xPropSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny );
+        xPropSet->setPropertyValue( OUString("MediaType"), aAny );
 
-        xPropSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")),
+        xPropSet->setPropertyValue( OUString("Compressed"),
                                     uno::makeAny( (sal_Bool)sal_True ) );
     }
     catch (const uno::Exception&)
@@ -1259,11 +1258,11 @@ sal_Bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const com::sun::s
 
         // store it into the subfolder
         uno::Sequence< beans::PropertyValue > aProps( 3 );
-        aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+        aProps[0].Name = "MediaType";
         aProps[0].Value <<= rMediaType;
-        aProps[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
+        aProps[1].Name = "UseCommonStoragePasswordEncryption";
         aProps[1].Value <<= (sal_Bool)sal_True;
-        aProps[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) );
+        aProps[2].Name = "Compressed";
         aProps[2].Value <<= (sal_Bool)sal_True;
 
         if ( xReplacement->hasByName( rObjectName ) )
@@ -1306,7 +1305,7 @@ namespace {
         try
         {
             uno::Reference< embed::XStorage > xPictures = xDocStor->openStorageElement(
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ),
+                                        OUString( "Pictures" ),
                                         embed::ElementModes::READWRITE );
             uno::Reference< io::XStream > xObjReplStr = xPictures->openStreamElement(
                                         aStreamName,
@@ -1394,16 +1393,16 @@ sal_Bool EmbeddedObjectContainer::StoreAsChildren(sal_Bool _bOasisFormat,sal_Boo
                 if ( xPersist.is() )
                 {
                     uno::Sequence< beans::PropertyValue > aArgs( _bOasisFormat ? 2 : 3 );
-                    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StoreVisualReplacement" ) );
+                    aArgs[0].Name = "StoreVisualReplacement";
                     aArgs[0].Value <<= (sal_Bool)( !_bOasisFormat );
 
                     // if it is an embedded object or the optimized inserting fails the normal inserting should be done
-                    aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CanTryOptimization" ) );
+                    aArgs[1].Name = "CanTryOptimization";
                     aArgs[1].Value <<= !_bCreateEmbedded;
                     if ( !_bOasisFormat )
                     {
                         // if object has no cached replacement it will use this one
-                        aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VisualReplacement" ) );
+                        aArgs[2].Name = "VisualReplacement";
                         aArgs[2].Value <<= xStream;
                     }
 
@@ -1434,7 +1433,7 @@ sal_Bool EmbeddedObjectContainer::StoreAsChildren(sal_Bool _bOasisFormat,sal_Boo
         try
         {
             // the substorage still can not be locked by the embedded object conteiner
-            ::rtl::OUString aObjReplElement( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
+            OUString aObjReplElement( "ObjectReplacements" );
             if ( _xStorage->hasByName( aObjReplElement ) && _xStorage->isStorageElement( aObjReplElement ) )
                 _xStorage->removeElement( aObjReplElement );
         }
@@ -1532,7 +1531,7 @@ sal_Bool EmbeddedObjectContainer::StoreChildren(sal_Bool _bOasisFormat,sal_Bool 
         try
         {
             ReleaseImageSubStorage();
-            ::rtl::OUString aObjReplElement( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
+            OUString aObjReplElement( "ObjectReplacements" );
             if ( !_bOasisFormat && pImpl->mxStorage->hasByName( aObjReplElement ) && pImpl->mxStorage->isStorageElement( aObjReplElement ) )
                 pImpl->mxStorage->removeElement( aObjReplElement );
         }

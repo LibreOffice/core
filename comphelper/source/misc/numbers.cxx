@@ -42,7 +42,7 @@ sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>
         {
             staruno::Reference<starbeans::XPropertySet> xFormat(xFormats->getByKey(nKey));
             if (xFormat.is())
-                xFormat->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ))) >>= nReturn;
+                xFormat->getPropertyValue(OUString( "Type" )) >>= nReturn;
         }
         catch(...)
         {
@@ -72,7 +72,7 @@ staruno::Any getNumberFormatDecimals(const staruno::Reference<starutil::XNumberF
             staruno::Reference<starbeans::XPropertySet> xFormat( xFormats->getByKey(nKey));
             if (xFormat.is())
             {
-                static ::rtl::OUString PROPERTY_DECIMALS( RTL_CONSTASCII_USTRINGPARAM( "Decimals" ));
+                static ::rtl::OUString PROPERTY_DECIMALS( "Decimals" );
                 return xFormat->getPropertyValue(PROPERTY_DECIMALS);
             }
         }

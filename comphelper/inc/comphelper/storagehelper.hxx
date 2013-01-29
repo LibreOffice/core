@@ -28,13 +28,13 @@
 #include "comphelper/comphelperdllapi.h"
 
 
-#define PACKAGE_STORAGE_FORMAT_STRING   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageFormat" ) )
-#define ZIP_STORAGE_FORMAT_STRING       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ZipFormat" ) )
-#define OFOPXML_STORAGE_FORMAT_STRING   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OFOPXMLFormat" ) )
+#define PACKAGE_STORAGE_FORMAT_STRING   ::rtl::OUString( "PackageFormat" )
+#define ZIP_STORAGE_FORMAT_STRING       ::rtl::OUString( "ZipFormat" )
+#define OFOPXML_STORAGE_FORMAT_STRING   ::rtl::OUString( "OFOPXMLFormat" )
 
-#define PACKAGE_ENCRYPTIONDATA_SHA256UTF8 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSHA256UTF8EncryptionKey" ) )
-#define PACKAGE_ENCRYPTIONDATA_SHA1UTF8   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSHA1UTF8EncryptionKey" ) )
-#define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSHA1MS1252EncryptionKey" ) )
+#define PACKAGE_ENCRYPTIONDATA_SHA256UTF8 ::rtl::OUString( "PackageSHA256UTF8EncryptionKey" )
+#define PACKAGE_ENCRYPTIONDATA_SHA1UTF8   ::rtl::OUString( "PackageSHA1UTF8EncryptionKey" )
+#define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 ::rtl::OUString( "PackageSHA1MS1252EncryptionKey" )
 
 namespace com { namespace sun { namespace star {
     namespace beans { struct NamedValue; }

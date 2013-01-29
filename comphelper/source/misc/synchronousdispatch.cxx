@@ -27,7 +27,6 @@
 #include "comphelper/synchronousdispatch.hxx"
 #include "comphelper/processfactory.hxx"
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 //.........................................................................
 namespace comphelper
@@ -50,7 +49,7 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
     util::URL aURL;
     aURL.Complete = sURL;
     uno::Reference < util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                                   UNISTRING("com.sun.star.util.URLTransformer" )),
+                                                                   "com.sun.star.util.URLTransformer"),
                                                      uno::UNO_QUERY );
     if ( xTrans.is() )
         xTrans->parseStrict( aURL );
@@ -76,7 +75,7 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
         }
         catch ( uno::Exception& )
         {
-            rtl::OUString aMsg = UNISTRING( "SynchronousDispatch::dispatch() Error while dispatching! ");
+            OUString aMsg = "SynchronousDispatch::dispatch() Error while dispatching! ";
             OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
         }
     }

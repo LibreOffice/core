@@ -74,8 +74,7 @@ Reference< XComponentContext > getComponentContext(
     uno::Reference<beans::XPropertySet> const xProps( factory, uno::UNO_QUERY );
     if (xProps.is()) {
         try {
-            xRet.set( xProps->getPropertyValue( rtl::OUString(
-                              RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ),
+            xRet.set( xProps->getPropertyValue( OUString("DefaultContext") ),
                       uno::UNO_QUERY );
         }
         catch (beans::UnknownPropertyException & e) {

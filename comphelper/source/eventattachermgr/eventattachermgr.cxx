@@ -370,7 +370,7 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
     if ( xContext.is() )
     {
         Reference< XInterface > xIFace( xContext->getServiceManager()->createInstanceWithContext(
-             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.EventAttacher" )), xContext)  );
+             OUString( "com.sun.star.script.EventAttacher" ), xContext)  );
         if ( xIFace.is() )
         {
             xAttacher = Reference< XEventAttacher2 >::query( xIFace );
@@ -752,7 +752,7 @@ void SAL_CALL ImplEventAttacherManager::removeScriptListener(const Reference< XS
 OUString SAL_CALL ImplEventAttacherManager::getServiceName(void)
     throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.script.EventAttacherManager") );
+    return OUString( "com.sun.star.uno.script.EventAttacherManager" );
 }
 
 void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStream >& OutStream)

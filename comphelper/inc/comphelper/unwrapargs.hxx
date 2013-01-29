@@ -47,15 +47,14 @@ inline void extract(
 {
     if (nArg >= seq.getLength()) {
         throw ::com::sun::star::lang::IllegalArgumentException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                 "No such argument available!") ),
+            OUString( "No such argument available!"),
             xErrorContext, static_cast<sal_Int16>(nArg) );
     }
     if (! (seq[nArg] >>= v)) {
         ::rtl::OUStringBuffer buf;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("Cannot extract ANY { ") );
+        buf.append( "Cannot extract ANY { " );
         buf.append( seq[nArg].getValueType().getTypeName() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" } to ") );
+        buf.append( " } to " );
         buf.append( ::cppu::UnoType<T>::get().getTypeName() );
         buf.append( static_cast<sal_Unicode>('!') );
         throw ::com::sun::star::lang::IllegalArgumentException(

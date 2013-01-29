@@ -229,8 +229,8 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
 {
     uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
 
-    ::rtl::OUString aMediaType;
-    xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" )) ) >>= aMediaType;
+    OUString aMediaType;
+    xStorProps->getPropertyValue( OUString( "MediaType" ) ) >>= aMediaType;
 
     sal_Int32 nResult = 0;
 
@@ -290,12 +290,12 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
     throw ( uno::Exception )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
-    aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+    aProps[0].Name = "StorageFormat";
     aProps[0].Value <<= aFormat;
     if ( bRepairStorage )
     {
         aProps.realloc( 2 );
-        aProps[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RepairPackage" ) );
+        aProps[1].Name = "RepairPackage";
         aProps[1].Value <<= bRepairStorage;
     }
 
@@ -321,12 +321,12 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
         throw ( uno::Exception )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
-    aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+    aProps[0].Name = "StorageFormat";
     aProps[0].Value <<= aFormat;
     if ( bRepairStorage )
     {
         aProps.realloc( 2 );
-        aProps[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RepairPackage" ) );
+        aProps[1].Name = "RepairPackage";
         aProps[1].Value <<= bRepairStorage;
     }
 
@@ -353,12 +353,12 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
         throw ( uno::Exception )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
-    aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+    aProps[0].Name = "StorageFormat";
     aProps[0].Value <<= aFormat;
     if ( bRepairStorage )
     {
         aProps.realloc( 2 );
-        aProps[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RepairPackage" ) );
+        aProps[1].Name = "RepairPackage";
         aProps[1].Value <<= bRepairStorage;
     }
 
@@ -390,7 +390,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
             if ( !xFactory.is() )
                 throw uno::RuntimeException();
 
-            uno::Reference< xml::crypto::XDigestContextSupplier > xDigestContextSupplier( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.crypto.NSSInitializer" ) ) ), uno::UNO_QUERY_THROW );
+            uno::Reference< xml::crypto::XDigestContextSupplier > xDigestContextSupplier( xFactory->createInstance( OUString( "com.sun.star.xml.crypto.NSSInitializer" ) ), uno::UNO_QUERY_THROW );
             uno::Reference< xml::crypto::XDigestContext > xDigestContext( xDigestContextSupplier->getDigestContext( xml::crypto::DigestID::SHA256, uno::Sequence< beans::NamedValue >() ), uno::UNO_SET_THROW );
 
             ::rtl::OString aUTF8Password( ::rtl::OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 ) );
@@ -481,11 +481,11 @@ sal_Bool OStorageHelper::PathHasSegment( const ::rtl::OUString& aPath, const ::r
 
     if ( !aSegment.isEmpty() && nPathLen >= nSegLen )
     {
-        ::rtl::OUString aEndSegment( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+        OUString aEndSegment( "/" );
         aEndSegment += aSegment;
 
-        ::rtl::OUString aInternalSegment( aEndSegment );
-        aInternalSegment += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+        OUString aInternalSegment( aEndSegment );
+        aInternalSegment += "/";
 
         if ( aPath.indexOf( aInternalSegment ) >= 0 )
             bResult = sal_True;
@@ -496,7 +496,7 @@ sal_Bool OStorageHelper::PathHasSegment( const ::rtl::OUString& aPath, const ::r
                 bResult = sal_True;
         }
 
-        if ( !bResult && nPathLen > nSegLen && aPath.copy( nPathLen - nSegLen - 1, nSegLen + 1 ).equals( aEndSegment ) )
+        if ( !bResult && nPathLen > nSegLen && aPath.copy( nPathLen - nSegLen - 1, nSegLen + 1 ) == aEndSegment )
             bResult = sal_True;
     }
 

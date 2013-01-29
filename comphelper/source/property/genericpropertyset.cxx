@@ -267,14 +267,14 @@ sal_Bool SAL_CALL GenericPropertySet::supportsService( const  OUString& ServiceN
 
 OUString SAL_CALL GenericPropertySet::getImplementationName() throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.comphelper.GenericPropertySet") );
+    return OUString( "com.sun.star.comp.comphelper.GenericPropertySet" );
 }
 
 Sequence< OUString > SAL_CALL GenericPropertySet::getSupportedServiceNames(  )
     throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.XPropertySet" ));
+    aSNS.getArray()[0] = "com.sun.star.beans.XPropertySet";
     return aSNS;
 }
 

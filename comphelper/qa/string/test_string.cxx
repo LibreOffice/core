@@ -62,7 +62,7 @@ public:
 
 void TestString::testDecimalStringToNumber()
 {
-    rtl::OUString s1(RTL_CONSTASCII_USTRINGPARAM("1234"));
+    rtl::OUString s1("1234");
     CPPUNIT_ASSERT_EQUAL((sal_uInt32)1234, comphelper::string::decimalStringToNumber(s1));
     s1 += rtl::OUString(static_cast<sal_Unicode>(0x07C6));
     CPPUNIT_ASSERT_EQUAL((sal_uInt32)12346, comphelper::string::decimalStringToNumber(s1));
@@ -74,10 +74,10 @@ void TestString::testDecimalStringToNumber()
 
 void TestString::testIsdigitAsciiString()
 {
-    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("1234"));
+    rtl::OString s1("1234");
     CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s1), true);
 
-    rtl::OString s2(RTL_CONSTASCII_STRINGPARAM("1A34"));
+    rtl::OString s2("1A34");
     CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s2), false);
 
     rtl::OString s3;
@@ -223,70 +223,70 @@ void TestString::testNatural()
 // --- Some generic tests to ensure we do not alter original behavior
 // outside what we want
     CPPUNIT_ASSERT(
-        compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("ABC"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("ABC"))), xCollator, xBI, lang::Locale()) == 0
+        compareNatural("ABC", "ABC", xCollator, xBI, lang::Locale()) == 0
     );
     // Case sensitivity
     CPPUNIT_ASSERT(
-        compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("ABC"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc"))), xCollator, xBI, lang::Locale()) < 0
+        compareNatural("ABC", "abc", xCollator, xBI, lang::Locale()) < 0
     );
     // Reverse
     CPPUNIT_ASSERT(
-        compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("ABC"))), xCollator, xBI, lang::Locale()) > 0
+        compareNatural("abc", "ABC", xCollator, xBI, lang::Locale()) > 0
     );
     // First shorter
     CPPUNIT_ASSERT(
-        compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("alongstring"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("alongerstring"))), xCollator, xBI, lang::Locale()) > 0
+        compareNatural("alongstring", "alongerstring", xCollator, xBI, lang::Locale()) > 0
     );
     // Second shorter
     CPPUNIT_ASSERT(
-        compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("alongerstring"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("alongstring"))), xCollator, xBI, lang::Locale()) < 0
+        compareNatural("alongerstring", "alongstring", xCollator, xBI, lang::Locale()) < 0
     );
 // -- Here we go on natural order, each one is followed by classic compare and the reverse comparison
     // That's why we originally made the patch
     CPPUNIT_ASSERT(
-        compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("Heading 9"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("Heading 10"))), xCollator, xBI, lang::Locale()) < 0
+        compareNatural("Heading 9", "Heading 10", xCollator, xBI, lang::Locale()) < 0
     );
     // Original behavior
     CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("Heading 9"))).compareTo(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("Heading 10")))) > 0
+        OUString("Heading 9").compareTo("Heading 10") > 0
     );
     CPPUNIT_ASSERT(
-        compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("Heading 10"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("Heading 9"))), xCollator, xBI, lang::Locale()) > 0
+        compareNatural("Heading 10", "Heading 9", xCollator, xBI, lang::Locale()) > 0
     );
     // Harder
     CPPUNIT_ASSERT(
-        compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("July, the 4th"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("July, the 10th"))), xCollator, xBI, lang::Locale()) < 0
+        compareNatural("July, the 4th", "July, the 10th", xCollator, xBI, lang::Locale()) < 0
     );
     CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("July, the 4th"))).compareTo(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("July, the 10th")))) > 0
+        OUString("July, the 4th").compareTo("July, the 10th") > 0
     );
     CPPUNIT_ASSERT(
-        compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("July, the 10th"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("July, the 4th"))), xCollator, xBI, lang::Locale()) > 0
+        compareNatural("July, the 10th", "July, the 4th", xCollator, xBI, lang::Locale()) > 0
     );
     // Hardest
     CPPUNIT_ASSERT(
-        compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc08"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc010"))), xCollator, xBI, lang::Locale()) < 0
+        compareNatural("abc08", "abc010", xCollator, xBI, lang::Locale()) < 0
     );
     CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc08"))).compareTo(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc010")))) > 0
+        OUString("abc08").compareTo("abc010") > 0
     );
     CPPUNIT_ASSERT(
-        compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc010"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc08"))), xCollator, xBI, lang::Locale()) > 0
+        compareNatural("abc010", "abc08", xCollator, xBI, lang::Locale()) > 0
     );
     CPPUNIT_ASSERT(
-        compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("apple10apple"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("apple10apple"))), xCollator, xBI, lang::Locale()) == 0
+        compareNatural("apple10apple", "apple10apple", xCollator, xBI, lang::Locale()) == 0
     );
 }
 
 void TestString::testRemove()
 {
-    ::rtl::OString aIn(RTL_CONSTASCII_STRINGPARAM("abc"));
+    ::rtl::OString aIn("abc");
     ::rtl::OString aOut;
 
     aOut = ::comphelper::string::remove(aIn, 'b');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("ac")));
+    CPPUNIT_ASSERT(aOut == "ac");
 
-    aIn = rtl::OString(RTL_CONSTASCII_STRINGPARAM("aaa"));
+    aIn = "aaa";
 
     aOut = ::comphelper::string::remove(aIn, 'a');
     CPPUNIT_ASSERT(aOut.isEmpty());
@@ -294,80 +294,80 @@ void TestString::testRemove()
 
 void TestString::testStripStart()
 {
-    ::rtl::OString aIn(RTL_CONSTASCII_STRINGPARAM("abc"));
+    ::rtl::OString aIn("abc");
     ::rtl::OString aOut;
 
     aOut = ::comphelper::string::stripStart(aIn, 'b');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("abc")));
+    CPPUNIT_ASSERT(aOut == "abc");
 
     aOut = ::comphelper::string::stripStart(aIn, 'a');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("bc")));
+    CPPUNIT_ASSERT(aOut == "bc");
 
-    aIn = rtl::OString(RTL_CONSTASCII_STRINGPARAM("aaa"));
+    aIn = "aaa";
     aOut = ::comphelper::string::stripStart(aIn, 'a');
     CPPUNIT_ASSERT(aOut.isEmpty());
 
-    aIn = rtl::OString(RTL_CONSTASCII_STRINGPARAM("aba"));
+    aIn = "aba";
     aOut = ::comphelper::string::stripStart(aIn, 'a');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("ba")));
+    CPPUNIT_ASSERT(aOut == "ba");
 }
 
 void TestString::testStripEnd()
 {
-    ::rtl::OString aIn(RTL_CONSTASCII_STRINGPARAM("abc"));
+    ::rtl::OString aIn("abc");
     ::rtl::OString aOut;
 
     aOut = ::comphelper::string::stripEnd(aIn, 'b');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("abc")));
+    CPPUNIT_ASSERT(aOut == "abc");
 
     aOut = ::comphelper::string::stripEnd(aIn, 'c');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("ab")));
+    CPPUNIT_ASSERT(aOut == "ab");
 
-    aIn = rtl::OString(RTL_CONSTASCII_STRINGPARAM("aaa"));
+    aIn = "aaa";
     aOut = ::comphelper::string::stripEnd(aIn, 'a');
     CPPUNIT_ASSERT(aOut.isEmpty());
 
-    aIn = rtl::OString(RTL_CONSTASCII_STRINGPARAM("aba"));
+    aIn = "aba";
     aOut = ::comphelper::string::stripEnd(aIn, 'a');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("ab")));
+    CPPUNIT_ASSERT(aOut == "ab");
 }
 
 void TestString::testStrip()
 {
-    ::rtl::OString aIn(RTL_CONSTASCII_STRINGPARAM("abc"));
+    ::rtl::OString aIn("abc");
     ::rtl::OString aOut;
 
     aOut = ::comphelper::string::strip(aIn, 'b');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("abc")));
+    CPPUNIT_ASSERT(aOut == "abc");
 
     aOut = ::comphelper::string::strip(aIn, 'c');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("ab")));
+    CPPUNIT_ASSERT(aOut == "ab");
 
-    aIn = rtl::OString(RTL_CONSTASCII_STRINGPARAM("aaa"));
+    aIn = "aaa";
     aOut = ::comphelper::string::strip(aIn, 'a');
     CPPUNIT_ASSERT(aOut.isEmpty());
 
-    aIn = rtl::OString(RTL_CONSTASCII_STRINGPARAM("aba"));
+    aIn = "aba";
     aOut = ::comphelper::string::strip(aIn, 'a');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("b")));
+    CPPUNIT_ASSERT(aOut == "b");
 }
 
 void TestString::testToken()
 {
-    ::rtl::OString aIn(RTL_CONSTASCII_STRINGPARAM("10.11.12"));
+    ::rtl::OString aIn("10.11.12");
     ::rtl::OString aOut;
 
     aOut = ::comphelper::string::getToken(aIn, -1, '.');
     CPPUNIT_ASSERT(aOut.isEmpty());
 
     aOut = ::comphelper::string::getToken(aIn, 0, '.');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("10")));
+    CPPUNIT_ASSERT(aOut == "10");
 
     aOut = ::comphelper::string::getToken(aIn, 1, '.');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("11")));
+    CPPUNIT_ASSERT(aOut == "11");
 
     aOut = ::comphelper::string::getToken(aIn, 2, '.');
-    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("12")));
+    CPPUNIT_ASSERT(aOut == "12");
 
     aOut = ::comphelper::string::getToken(aIn, 3, '.');
     CPPUNIT_ASSERT(aOut.isEmpty());
@@ -375,7 +375,7 @@ void TestString::testToken()
 
 void TestString::testTokenCount()
 {
-    ::rtl::OString aIn(RTL_CONSTASCII_STRINGPARAM("10.11.12"));
+    ::rtl::OString aIn("10.11.12");
     sal_Int32 nOut;
 
     nOut = ::comphelper::string::getTokenCount(aIn, '.');

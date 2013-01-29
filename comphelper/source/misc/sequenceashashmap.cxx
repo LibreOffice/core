@@ -76,7 +76,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Any& aSource)
     }
 
     throw css::beans::IllegalTypeException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Any contains wrong type." )),
+            OUString( "Any contains wrong type." ),
             css::uno::Reference< css::uno::XInterface >());
 }
 
@@ -96,7 +96,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
                 (!lP.Value.hasValue())
                )
                 throw css::beans::IllegalTypeException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PropertyValue struct contains no usefull informations." )),
+                        OUString( "PropertyValue struct contains no usefull informations." ),
                         css::uno::Reference< css::uno::XInterface >());
             (*this)[lP.Name] = lP.Value;
             continue;
@@ -110,7 +110,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
                 (!lN.Value.hasValue())
                )
                 throw css::beans::IllegalTypeException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NamedValue struct contains no usefull informations." )),
+                        OUString( "NamedValue struct contains no usefull informations." ),
                         css::uno::Reference< css::uno::XInterface >());
             (*this)[lN.Name] = lN.Value;
             continue;
@@ -119,7 +119,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
         // ignore VOID Any ... but reject wrong filled ones!
         if (lSource[i].hasValue())
             throw css::beans::IllegalTypeException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Any contains wrong type." )),
+                    OUString( "Any contains wrong type." ),
                     css::uno::Reference< css::uno::XInterface >());
     }
 }

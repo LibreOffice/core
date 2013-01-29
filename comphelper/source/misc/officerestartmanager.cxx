@@ -40,21 +40,21 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OOfficeRestartManager::getSupportedSer
 }
 
 // ----------------------------------------------------------
-::rtl::OUString SAL_CALL OOfficeRestartManager::getImplementationName_static()
+OUString SAL_CALL OOfficeRestartManager::getImplementationName_static()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.task.OfficeRestartManager" ) );
+    return OUString( "com.sun.star.comp.task.OfficeRestartManager" );
 }
 
 // ----------------------------------------------------------
-::rtl::OUString SAL_CALL OOfficeRestartManager::getSingletonName_static()
+OUString SAL_CALL OOfficeRestartManager::getSingletonName_static()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) );
+    return OUString( "com.sun.star.task.OfficeRestartManager" );
 }
 
 // ----------------------------------------------------------
-::rtl::OUString SAL_CALL OOfficeRestartManager::getServiceName_static()
+OUString SAL_CALL OOfficeRestartManager::getServiceName_static()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.task.OfficeRestartManager" ) );
+    return OUString( "com.sun.star.comp.task.OfficeRestartManager" );
 }
 
 // ----------------------------------------------------------
@@ -93,7 +93,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
 
         uno::Reference< awt::XRequestCallback > xRequestCallback(
             xFactory->createInstanceWithContext(
-                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AsyncCallback" )),
+                 OUString( "com.sun.star.awt.AsyncCallback" ),
                  m_xContext ),
              uno::UNO_QUERY_THROW );
 
@@ -133,7 +133,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
 
             // Turn Quickstarter veto off
             uno::Reference< beans::XPropertySet > xPropertySet( xDesktop, uno::UNO_QUERY_THROW );
-            ::rtl::OUString aVetoPropName( RTL_CONSTASCII_USTRINGPARAM( "SuspendQuickstartVeto" ) );
+            ::rtl::OUString aVetoPropName( "SuspendQuickstartVeto" );
             uno::Any aValue;
             aValue <<= (sal_Bool)sal_True;
             xPropertySet->setPropertyValue( aVetoPropName, aValue );

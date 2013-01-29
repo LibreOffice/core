@@ -78,10 +78,10 @@ namespace comphelper
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OPropertyBag, OPropertyBag_Base, OPropertyBag_PBase )
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OPropertyBag::getSupportedServiceNames_static() throw( RuntimeException )
+    Sequence< OUString > OPropertyBag::getSupportedServiceNames_static() throw( RuntimeException )
     {
-        Sequence< ::rtl::OUString > aServices(1);
-        aServices[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.PropertyBag" ) );
+        Sequence< OUString > aServices(1);
+        aServices[0] = "com.sun.star.beans.PropertyBag";
         return aServices;
     }
 
@@ -109,9 +109,9 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OPropertyBag::getImplementationName_static() throw( RuntimeException )
+    OUString OPropertyBag::getImplementationName_static() throw( RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.comphelper.OPropertyBag" ) );
+        return OUString( "com.sun.star.comp.comphelper.OPropertyBag" );
     }
 
     //--------------------------------------------------------------------

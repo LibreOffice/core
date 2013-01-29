@@ -139,12 +139,12 @@ OUString SAL_CALL AnyCompareFactory::getImplementationName(  ) throw( RuntimeExc
 
 OUString SAL_CALL AnyCompareFactory::getImplementationName_static(  )
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AnyCompareFactory" ) );
+    return OUString( "AnyCompareFactory" );
 }
 
 sal_Bool SAL_CALL AnyCompareFactory::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.AnyCompareFactory" ) );
+    OUString aServiceName( "com.sun.star.ucb.AnyCompareFactory" );
     return aServiceName == ServiceName;
 }
 
@@ -155,8 +155,8 @@ Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames(  ) th
 
 Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames_static(  )
 {
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.AnyCompareFactory" ) );
-    const Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    const OUString aServiceName( "com.sun.star.ucb.AnyCompareFactory" );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 

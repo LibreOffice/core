@@ -95,9 +95,9 @@ SequenceInputStreamService::SequenceInputStreamService()
     return getImplementationName_static();
 }
 
-::rtl::OUString SAL_CALL SequenceInputStreamService::getImplementationName_static()
+OUString SAL_CALL SequenceInputStreamService::getImplementationName_static()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.SequenceInputStreamService" ) );
+    return OUString( "com.sun.star.comp.SequenceInputStreamService" );
 }
 
 ::sal_Bool SAL_CALL SequenceInputStreamService::supportsService( ::rtl::OUString const & serviceName ) throw ( uno::RuntimeException )
@@ -115,11 +115,10 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SequenceInputStreamService::getSupport
     return getSupportedServiceNames_static();
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL SequenceInputStreamService::getSupportedServiceNames_static()
+uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServiceNames_static()
 {
-    uno::Sequence< ::rtl::OUString > s( 1 );
-    s[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.io.SequenceInputStream" ) );
+    uno::Sequence< OUString > s( 1 );
+    s[0] = "com.sun.star.io.SequenceInputStream";
     return s;
 }
 
@@ -213,7 +212,7 @@ void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< ::com
         throw frame::DoubleInitializationException();
 
     if ( aArguments.getLength() != 1 )
-        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong number of arguments!\n")),
+        throw lang::IllegalArgumentException( OUString("Wrong number of arguments!\n"),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
@@ -229,7 +228,7 @@ void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< ::com
         m_bInitialized = sal_True;
     }
     else
-        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unexpected type of argument!\n")),
+        throw lang::IllegalArgumentException( OUString("Unexpected type of argument!\n"),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 }

@@ -192,14 +192,14 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
     return getImplementationName_static();
 }
 
-::rtl::OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName_static(  )
+OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName_static(  )
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NamedPropertyValuesContainer" ) );
+    return OUString( "NamedPropertyValuesContainer" );
 }
 
-sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.NamedPropertyValues" ) );
+    OUString aServiceName( "com.sun.star.document.NamedPropertyValues" );
     return aServiceName == ServiceName;
 }
 
@@ -211,8 +211,8 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const ::rtl::OU
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames_static(  )
 {
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.NamedPropertyValues" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    const OUString aServiceName( "com.sun.star.document.NamedPropertyValues" );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 

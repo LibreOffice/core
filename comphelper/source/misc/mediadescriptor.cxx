@@ -152,147 +152,147 @@ const ::rtl::OUString& MediaDescriptor::PROP_MEDIATYPE()
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_MINIMIZED()
+const OUString& MediaDescriptor::PROP_MINIMIZED()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Minimized"));
+    static const OUString sProp("Minimized");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_NOAUTOSAVE()
+const OUString& MediaDescriptor::PROP_NOAUTOSAVE()
 {
-    static const ::rtl::OUString sProp("NoAutoSave");
+    static const OUString sProp("NoAutoSave");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_OPENNEWVIEW()
+const OUString& MediaDescriptor::PROP_OPENNEWVIEW()
 {
-    static const ::rtl::OUString sProp("OpenNewView");
+    static const OUString sProp("OpenNewView");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_OUTPUTSTREAM()
+const OUString& MediaDescriptor::PROP_OUTPUTSTREAM()
 {
-    static const ::rtl::OUString sProp("OutputStream");
+    static const OUString sProp("OutputStream");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_POSTDATA()
+const OUString& MediaDescriptor::PROP_POSTDATA()
 {
-    static const ::rtl::OUString sProp("PostData");
+    static const OUString sProp("PostData");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_PREVIEW()
+const OUString& MediaDescriptor::PROP_PREVIEW()
 {
-    static const ::rtl::OUString sProp("Preview");
+    static const OUString sProp("Preview");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_READONLY()
+const OUString& MediaDescriptor::PROP_READONLY()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+    static const OUString sProp("ReadOnly");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_REFERRER()
+const OUString& MediaDescriptor::PROP_REFERRER()
 {
-    static const ::rtl::OUString sProp("Referer");
+    static const OUString sProp("Referer");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_STATUSINDICATOR()
+const OUString& MediaDescriptor::PROP_STATUSINDICATOR()
 {
-    static const ::rtl::OUString sProp("StatusIndicator");
+    static const OUString sProp("StatusIndicator");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_STREAM()
+const OUString& MediaDescriptor::PROP_STREAM()
 {
-    static const ::rtl::OUString sProp("Stream");
+    static const OUString sProp("Stream");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_STREAMFOROUTPUT()
+const OUString& MediaDescriptor::PROP_STREAMFOROUTPUT()
 {
-    static const ::rtl::OUString sProp("StreamForOutput");
+    static const OUString sProp("StreamForOutput");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_TEMPLATENAME()
+const OUString& MediaDescriptor::PROP_TEMPLATENAME()
 {
-    static const ::rtl::OUString sProp("TemplateName");
+    static const OUString sProp("TemplateName");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_TYPENAME()
+const OUString& MediaDescriptor::PROP_TYPENAME()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("TypeName"));
+    static const OUString sProp("TypeName");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_UCBCONTENT()
+const OUString& MediaDescriptor::PROP_UCBCONTENT()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("UCBContent"));
+    static const OUString sProp("UCBContent");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_UPDATEDOCMODE()
+const OUString& MediaDescriptor::PROP_UPDATEDOCMODE()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("UpdateDocMode"));
+    static const OUString sProp("UpdateDocMode");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_URL()
+const OUString& MediaDescriptor::PROP_URL()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("URL"));
+    static const OUString sProp("URL");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_VERSION()
+const OUString& MediaDescriptor::PROP_VERSION()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Version"));
+    static const OUString sProp("Version");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_DOCUMENTTITLE()
+const OUString& MediaDescriptor::PROP_DOCUMENTTITLE()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
+    static const OUString sProp("DocumentTitle");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_MODEL()
+const OUString& MediaDescriptor::PROP_MODEL()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Model"));
+    static const OUString sProp("Model");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_PASSWORD()
+const OUString& MediaDescriptor::PROP_PASSWORD()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Password"));
+    static const OUString sProp("Password");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_TITLE()
+const OUString& MediaDescriptor::PROP_TITLE()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Title"));
+    static const OUString sProp("Title");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_SALVAGEDFILE()
+const OUString& MediaDescriptor::PROP_SALVAGEDFILE()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("SalvagedFile"));
+    static const OUString sProp("SalvagedFile");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_VIEWONLY()
+const OUString& MediaDescriptor::PROP_VIEWONLY()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("ViewOnly"));
+    static const OUString sProp("ViewOnly");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_DOCUMENTBASEURL()
+const OUString& MediaDescriptor::PROP_DOCUMENTBASEURL()
 {
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("DocumentBaseURL"));
+    static const OUString sProp("DocumentBaseURL");
     return sProp;
 }
 
@@ -308,9 +308,9 @@ MediaDescriptor::MediaDescriptor(const css::uno::Sequence< css::beans::PropertyV
 
 sal_Bool MediaDescriptor::isStreamReadOnly() const
 {
-    static ::rtl::OUString CONTENTSCHEME_FILE(     RTL_CONSTASCII_USTRINGPARAM( "file" ));
-    static ::rtl::OUString CONTENTPROP_ISREADONLY( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ));
-    static sal_Bool        READONLY_FALLBACK      = sal_False;
+    static OUString CONTENTSCHEME_FILE( "file" );
+    static OUString CONTENTPROP_ISREADONLY( "IsReadOnly" );
+    static sal_Bool READONLY_FALLBACK = sal_False;
 
     sal_Bool bReadOnly = READONLY_FALLBACK;
 
@@ -460,8 +460,7 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
         // b) ... or we must get it from the given URL
         ::rtl::OUString sURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), ::rtl::OUString());
         if (sURL.isEmpty())
-            throw css::uno::Exception(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Found no URL." )),
+            throw css::uno::Exception( OUString( "Found no URL." ),
                     css::uno::Reference< css::uno::XInterface >());
 
         // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
@@ -488,8 +487,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
     throw(::com::sun::star::uno::RuntimeException)
 {
     if ( !_rxPostData.is() )
-        throw css::lang::IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Found invalid PostData." )),
+        throw css::lang::IllegalArgumentException( OUString( "Found invalid PostData." ),
                 css::uno::Reference< css::uno::XInterface >(), 1);
 
     // PostData can't be used in read/write mode!
@@ -507,12 +505,12 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
     ::rtl::OUString sMediaType = getUnpackedValueOrDefault(MediaDescriptor::PROP_MEDIATYPE(), ::rtl::OUString());
     if (sMediaType.isEmpty())
     {
-        sMediaType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-www-form-urlencoded" ));
+        sMediaType = "application/x-www-form-urlencoded";
         (*this)[MediaDescriptor::PROP_MEDIATYPE()] <<= sMediaType;
     }
 
     // url
-    ::rtl::OUString sURL( getUnpackedValueOrDefault( PROP_URL(), ::rtl::OUString() ) );
+    OUString sURL( getUnpackedValueOrDefault( PROP_URL(), OUString() ) );
 
     css::uno::Reference< css::io::XInputStream > xResultStream;
     try
@@ -533,7 +531,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
         aPostArgument.MediaType = sMediaType;
         aPostArgument.Referer = getUnpackedValueOrDefault( PROP_REFERRER(), ::rtl::OUString() );
 
-        ::rtl::OUString sCommandName( RTL_CONSTASCII_USTRINGPARAM( "post" ) );
+        OUString sCommandName( "post" );
         aContent.executeCommand( sCommandName, css::uno::makeAny( aPostArgument ) );
 
         // get result
@@ -555,7 +553,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
 }
 
 /*-----------------------------------------------*/
-sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, sal_Bool bLockFile )
+sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool bLockFile )
     throw(::com::sun::star::uno::RuntimeException)
 {
     // prepare the environment
@@ -631,7 +629,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
     // or failed by an error - we must try it in readonly mode.
     if (!xInputStream.is())
     {
-        rtl::OUString aScheme;
+        OUString aScheme;
 
         try
         {
@@ -644,12 +642,12 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
             // Only file system content provider is able to provide XStream
             // so for this content impossibility to create XStream triggers
             // switch to readonly mode in case of opening with locking on
-            if( bLockFile && aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("file")) )
+            if( bLockFile && aScheme.equalsIgnoreAsciiCase("file") )
                 bReadOnly = sal_True;
             else
             {
                 sal_Bool bRequestReadOnly = bReadOnly;
-                aContent.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) ) >>= bReadOnly;
+                aContent.getPropertyValue( OUString( "IsReadOnly" ) ) >>= bReadOnly;
                 if ( bReadOnly && !bRequestReadOnly && bModeRequestedExplicitly )
                         return sal_False; // the document is explicitly requested with WRITEABLE mode
             }
@@ -667,7 +665,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
         try
         {
             // all the contents except file-URLs should be opened as usual
-            if ( bLockFile || !aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("file")) )
+            if ( bLockFile || !aScheme.equalsIgnoreAsciiCase("file") )
                 xInputStream = aContent.openStream();
             else
                 xInputStream = aContent.openStreamNoLock();

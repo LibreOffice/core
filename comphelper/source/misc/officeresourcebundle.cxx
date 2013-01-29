@@ -163,8 +163,7 @@ namespace comphelper
         try
         {
             Any aValue( m_xContext->getValueByName(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "/singletons/com.sun.star.resource.OfficeResourceLoader" ) ) ) );
+                OUString( "/singletons/com.sun.star.resource.OfficeResourceLoader" ) ) );
             OSL_VERIFY( aValue >>= xLoader );
         }
         catch( const Exception& )

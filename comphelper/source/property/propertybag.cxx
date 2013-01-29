@@ -82,7 +82,7 @@ namespace comphelper
         {
             if ( !_allowEmpty && _name.isEmpty() )
                 throw IllegalArgumentException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The property name must not be empty." ) ),
+                        OUString( "The property name must not be empty." ),
                         // TODO: resource
                         NULL,
                         1
@@ -93,7 +93,7 @@ namespace comphelper
         {
             if ( _container.hasPropertyByName( _name ) || _container.hasPropertyByHandle( _handle ) )
                 throw PropertyExistException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property name or handle already used." ) ),
+                    OUString( "Property name or handle already used." ),
                     // TODO: resource
                     NULL );
 
@@ -105,7 +105,7 @@ namespace comphelper
     {
         if ( _rType.getTypeClass() == TypeClass_VOID )
             throw IllegalArgumentException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Illegal property type: VOID" ) ),
+                    OUString( "Illegal property type: VOID" ),
                         // TODO: resource
                     NULL,
                     1
@@ -130,7 +130,7 @@ namespace comphelper
         Type aPropertyType = _rInitialValue.getValueType();
         if ( aPropertyType.getTypeClass() == TypeClass_VOID )
             throw IllegalTypeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The initial value must be non-NULL to determine the property type." ) ),
+                OUString( "The initial value must be non-NULL to determine the property type." ),
                 // TODO: resource
                 NULL );
 
