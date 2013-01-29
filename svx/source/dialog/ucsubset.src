@@ -496,6 +496,11 @@ String RID_SUBSETSTR_KATAKANA_PHONETIC
 {
     Text [ en-US ] = "Katakana Phonetics";
     };
+
+String RID_SUBSETSTR_CJK_STROKES
+{
+    Text [ en-US ] = "CJK Strokes";
+    };
 };
 
 // ********************************************************************** EOF

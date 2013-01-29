@@ -868,7 +868,8 @@ void SubsetMap::InitList()
         aAllSubsets.push_back( Subset( 0x3130, 0x318F, RID_SUBSETSTR_HANGUL_COMPAT_JAMO ) );
         aAllSubsets.push_back( Subset( 0x3190, 0x319F, RID_SUBSETSTR_KANBUN ) );
         aAllSubsets.push_back( Subset( 0x31A0, 0x31BF, RID_SUBSETSTR_BOPOMOFO_EXTENDED ) );
-        aAllSubsets.push_back( Subset( 0x31C0, 0x31FF, RID_SUBSETSTR_KATAKANA_PHONETIC ) );
+        aAllSubsets.push_back( Subset( 0x31C0, 0x31EF, RID_SUBSETSTR_CJK_STROKES ) );
+        aAllSubsets.push_back( Subset( 0x31F0, 0x31FF, RID_SUBSETSTR_KATAKANA_PHONETIC ) );
         aAllSubsets.push_back( Subset( 0x3200, 0x32FF, RID_SUBSETSTR_ENCLOSED_CJK_LETTERS ) );
         aAllSubsets.push_back( Subset( 0x3300, 0x33FF, RID_SUBSETSTR_CJK_COMPATIBILITY ) );
 
