@@ -52,6 +52,11 @@ private:
     String          maRangeName;
 };
 
+inline bool operator<(const Subset &rLHS, const Subset &rRHS)
+{
+    return rLHS.GetRangeMin() < rRHS.GetRangeMin();
+}
+
 typedef ::std::list<Subset> SubsetList;
 
 class SVX_DLLPUBLIC SubsetMap : private Resource
