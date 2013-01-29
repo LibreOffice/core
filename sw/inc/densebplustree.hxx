@@ -24,30 +24,46 @@
 #include <osl/diagnose.h>
 #include <swdllapi.h>
 
-template < class Key, class Value > struct BPlusTreeNode;
+#include <stack>
 
-/** B+ Tree implementation (to replace the original BigPtrArray).
+template < class Key, class Value > struct DenseBPlusTreeNode;
 
-For more information about B+ Tree, please see eg. wikipedia:
+/** Dense B+ tree implementation (to replace the original BigPtrArray).
+
+This structure is a modification of a B+ tree, see eg. wikipedia:
 http://en.wikipedia.org/wiki/B%2B_tree
+for the B+ tree implementation.
+
+The problem with 'classic' B+ tree is that it is designed for key/value access
+where the key typically is not a sequence of numbers.  Consequently, it does
+not easily allow inserting in a sense that 'the rest of the values shift to
+the right' - but that is the operation that we need to do effectively.
+
+We do a small modification to the B+ tree implementation to make it 'dense' -
+the keys are supposed to be a sequence, and if you insert a value, all shifts
+to the right.  The trick to achieve it is that the values that are stored in
+the internal nodes are not absolute, but are relative; so whatever is in the
+parents is propagated to the children.  That way, shifting half of the tree by
+1 to the right after insertion is just a matter of adding 1 to the appropriate
+parent.
 
 As part of the removal of BigPtrArray (and consequent refactor of the related
-code), this BPlusTree is supposed to be a drop-in replacement, with some of
+code), this structur is supposed to be a drop-in replacement, with some of
 the functionality templatized for easier use.
 
 Key is sal_uLong in the BigPtrArray implementation.
 Value is supposed to be SwNodePtr initially.
 */
 template < class Key, class Value >
-class SW_DLLPUBLIC BPlusTree
+class SW_DLLPUBLIC DenseBPlusTree
 {
 public:
     /// Callback function to be called during ForEach.
     typedef bool (*FnForEach)( const Value&, void* pArgs );
 
 public:
-    BPlusTree();
-    ~BPlusTree();
+    DenseBPlusTree();
+    ~DenseBPlusTree();
 
     /// Number of elements.
     Key Count() const;
@@ -74,7 +90,25 @@ public:
     void ForEach( Key nStart, Key nEnd, FnForEach fn, void* pArgs = NULL );
 
 private:
-    BPlusTreeNode< Key, Value > *m_pRoot;
+    typedef DenseBPlusTreeNode< Key, Value > TreeNode;
+
+    /// We need to know the exact path from the root to the leaf, including the indexes for various operations
+    struct NodeWithIndex {
+        TreeNode *pNode;
+        Key nIndex;
+
+        NodeWithIndex( TreeNode *p, Key n ) : pNode( p ), nIndex( n ) {}
+    };
+
+    /// Root of the tree.
+    TreeNode *m_pRoot;
+
+    /** Search for the leaf node containing nPos.
+
+        @return the leaf node containing nPos
+        @param pParents stack of parents of the returned tree node so that we can traverse it back to the root
+    */
+    NodeWithIndex searchLeaf( Key nPos, std::stack< NodeWithIndex > *pParents = NULL );
 };
 
 #endif // SW_BPLUSTREE_HXX
