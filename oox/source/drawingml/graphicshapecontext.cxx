@@ -223,6 +223,9 @@ Reference< XFastContextHandler > OleObjectGraphicDataContext::createFastChildCon
             OSL_ENSURE( mrOleObjectInfo.mbLinked, "OleObjectGraphicDataContext::createFastChildContext - unexpected child element" );
             mrOleObjectInfo.mbAutoUpdate = aAttribs.getBool( XML_updateAutomatic, false );
         break;
+        case PPT_TOKEN( pic ):
+            xRet.set( new GraphicShapeContext( *this, mpMasterShapePtr, mpShapePtr ) );
+        break;
     }
     return xRet;
 }
