@@ -63,7 +63,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	&& export PKG_CONFIG="" \
 	&& export ICU_LIBS=" " \
 	$(if $(filter NO,$(SYSTEM_ICU)),&& export ICU_CFLAGS="-I$(OUTDIR)/inc/external") \
-	$(if $(filter YES,$(SYSTEM_ICU)),&& ICU_CFLAGS=" ") \
+	$(if $(filter YES,$(SYSTEM_ICU)),&& export ICU_CFLAGS=" ") \
 	&& ./configure \
 		--with-pic \
 		--enable-static \
