@@ -429,6 +429,9 @@ public:
     virtual void    SetChangeRecording( bool bActivate );
     virtual bool    SetProtectionPassword( const String &rPassword );
     virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
+
+
+    void SnapVisArea( Rectangle& rRect ) const;
 };
 
 

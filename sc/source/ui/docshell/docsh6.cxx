@@ -133,7 +133,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, sal_Bool bModifySt
     //  when loading an ole object, the VisArea is set from the document's
     //  view settings and must be used as-is (document content may not be complete yet).
     if ( !aDocument.IsImportingXML() )
-        aDocument.SnapVisArea( aArea );
+        SnapVisArea( aArea );
 
     //TODO/LATER: it's unclear which IPEnv is used here
     /*
@@ -209,7 +209,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, sal_Bool bSnapSize )
         else
             aNewArea.SetPos( aMMRect.TopLeft() );
         if (bSnapSize)
-            aDocument.SnapVisArea(aNewArea);            // uses the new VisibleTab
+            SnapVisArea(aNewArea);            // uses the new VisibleTab
     }
 
     if (aNewArea != aOldArea)

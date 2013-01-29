@@ -1874,7 +1874,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
         Rectangle aBoundRect = GetVisArea( ASPECT_THUMBNAIL );
         ScViewData aTmpData( this, NULL );
         aTmpData.SetTabNo(nVisTab);
-        aDocument.SnapVisArea( aBoundRect );
+        SnapVisArea( aBoundRect );
         aTmpData.SetScreen( aBoundRect );
         ScPrintFunc::DrawToDev( &aDocument, pDev, 1.0, aBoundRect, &aTmpData, sal_True );
     }
@@ -1883,7 +1883,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
         Rectangle aBoundRect = SfxObjectShell::GetVisArea();
         ScViewData aTmpData( this, NULL );
         aTmpData.SetTabNo(nVisTab);
-        aDocument.SnapVisArea( aBoundRect );
+        SnapVisArea( aBoundRect );
         aTmpData.SetScreen( aBoundRect );
         ScPrintFunc::DrawToDev( &aDocument, pDev, 1.0, aBoundRect, &aTmpData, sal_True );
     }
@@ -1907,7 +1907,7 @@ Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
         sal_Bool bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
         if ( bNegativePage )
             ScDrawLayer::MirrorRectRTL( aArea );
-        aDocument.SnapVisArea( aArea );
+        SnapVisArea( aArea );
         return aArea;
     }
     else if( nAspect == ASPECT_CONTENT && eShellMode != SFX_CREATE_MODE_EMBEDDED )
@@ -1938,6 +1938,88 @@ Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
     }
     else
         return SfxObjectShell::GetVisArea( nAspect );
+}
+
+namespace {
+
+void SnapHor( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCCOL& rStartCol )
+{
+    SCCOL nCol = 0;
+    long nTwips = (long) (rVal / HMM_PER_TWIPS);
+    long nSnap = 0;
+    while ( nCol<MAXCOL )
+    {
+        long nAdd = rDoc.GetColWidth(nCol, nTab);
+        if ( nSnap + nAdd/2 < nTwips || nCol < rStartCol )
+        {
+            nSnap += nAdd;
+            ++nCol;
+        }
+        else
+            break;
+    }
+    rVal = (long) ( nSnap * HMM_PER_TWIPS );
+    rStartCol = nCol;
+}
+
+void SnapVer( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCROW& rStartRow )
+{
+    SCROW nRow = 0;
+    long nTwips = (long) (rVal / HMM_PER_TWIPS);
+    long nSnap = 0;
+
+    bool bFound = false;
+    for (SCROW i = nRow; i <= MAXROW; ++i)
+    {
+        SCROW nLastRow;
+        if (rDoc.RowHidden(i, nTab, NULL, &nLastRow))
+        {
+            i = nLastRow;
+            continue;
+        }
+
+        nRow = i;
+        long nAdd = rDoc.GetRowHeight(i, nTab);
+        if ( nSnap + nAdd/2 < nTwips || nRow < rStartRow )
+        {
+            nSnap += nAdd;
+            ++nRow;
+        }
+        else
+        {
+            bFound = true;
+            break;
+        }
+    }
+    if (!bFound)
+        nRow = MAXROW;  // all hidden down to the bottom
+
+    rVal = (long) ( nSnap * HMM_PER_TWIPS );
+    rStartRow = nRow;
+}
+
+
+}
+
+void ScDocShell::SnapVisArea( Rectangle& rRect ) const
+{
+    SCTAB nTab = aDocument.GetVisibleTab();
+    bool bNegativePage = aDocument.IsNegativePage( nTab );
+    if ( bNegativePage )
+        ScDrawLayer::MirrorRectRTL( rRect );        // calculate with positive (LTR) values
+
+    SCCOL nCol = 0;
+    SnapHor( aDocument, nTab, rRect.Left(), nCol );
+    ++nCol;                                         // mindestens eine Spalte
+    SnapHor( aDocument, nTab, rRect.Right(), nCol );
+
+    SCROW nRow = 0;
+    SnapVer( aDocument, nTab, rRect.Top(), nRow );
+    ++nRow;                                         // mindestens eine Zeile
+    SnapVer( aDocument, nTab, rRect.Bottom(), nRow );
+
+    if ( bNegativePage )
+        ScDrawLayer::MirrorRectRTL( rRect );        // back to real rectangle
 }
 
 void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,

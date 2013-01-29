@@ -467,7 +467,7 @@ void ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
     }
     aLogicRect.SetSize( aLogicSize );
 
-    pDoc->SnapVisArea( aLogicRect );
+    pViewData->GetDocShell()->SnapVisArea( aLogicRect );
 
     rRect.SetSize( pWin->LogicToPixel( aLogicRect.GetSize() ) );
 }
