@@ -299,7 +299,6 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
 IMPL_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
 {
     _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
-    String                  sSel( pImpl->pGroupLB->GetGroup() );
     pImpl->pGroupLB->GroupSelected();
     const String sScriptURI = pImpl->pMacroLB->GetSelectedScriptURI();
     String          aLabelText;

@@ -806,7 +806,6 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<String*>& rEntr
 {
     String*     pEntry;
     String      aTmpString;
-    String      aTmpCatString;
     Font        aFont=m_pLbCategory->GetFont();
     size_t      i = 0;
     short       nTmpCatPos;

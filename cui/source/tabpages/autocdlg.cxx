@@ -2438,7 +2438,6 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
         uno::Reference< smarttags::XSmartTagRecognizer > xRec = rSmartTagMgr.GetRecognizer(i);
 
         const rtl::OUString aName = xRec->getName( aLocale );
-        const rtl::OUString aDesc = xRec->getDescription( aLocale );
         const sal_Int32 nNumberOfSupportedSmartTags = xRec->getSmartTagCount();
 
         for ( sal_Int32 j = 0; j < nNumberOfSupportedSmartTags; ++j )

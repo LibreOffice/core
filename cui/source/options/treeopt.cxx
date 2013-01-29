@@ -1531,7 +1531,6 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         setGroupName( "ProductName", rGeneralArray.GetString(0) );
         nGroup = AddGroup( rGeneralArray.GetString(0), 0, 0, SID_GENERAL_OPTIONS );
         sal_uInt16 nEnd = static_cast< sal_uInt16 >( rGeneralArray.Count() );
-        String sPageTitle;
 
         for ( i = 1; i < nEnd; ++i )
         {

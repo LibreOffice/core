@@ -422,7 +422,6 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
 {
     SfxItemPool* pPool = rSet.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool?" );
-    String aEmpty;
 
     // adjust metric
     FieldUnit eFUnit = GetModuleFieldUnit( rSet );

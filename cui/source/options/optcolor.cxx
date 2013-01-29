@@ -57,7 +57,7 @@ enum Group
 };
 
 // group data
-const char* vGroupNames[]
+const char* vGroupNames[] =
 {
     // the groups are in the same order as in enum Group above
     "general",
