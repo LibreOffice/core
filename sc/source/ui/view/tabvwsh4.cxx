@@ -1545,7 +1545,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
             pDocSh->SetInplace( false );
             GetViewData()->RefreshZoom();           // recalculate PPT
             if (!pDoc->IsEmbedded())
-                pDoc->SetEmbedded( aVisArea );                  // VisArea markieren
+                pDoc->SetEmbedded( pDoc->GetVisibleTab(), aVisArea );                  // VisArea markieren
         }
     }
 

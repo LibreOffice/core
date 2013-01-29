@@ -162,7 +162,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, sal_Bool bModifySt
     {
         ScRange aOld;
         aDocument.GetEmbedded( aOld);
-        aDocument.SetEmbedded( aArea );
+        aDocument.SetEmbedded( aDocument.GetVisibleTab(), aArea );
         ScRange aNew;
         aDocument.GetEmbedded( aNew);
         if (aOld != aNew)

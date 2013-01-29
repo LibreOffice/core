@@ -559,8 +559,7 @@ public:
     void            SetEmbedded( const ScRange& rRange );
     void            ResetEmbedded();
     Rectangle       GetEmbeddedRect() const;                        // 1/100 mm
-    void            SetEmbedded( const Rectangle& rRect );          // from VisArea (1/100 mm)
-    void            SnapVisArea( Rectangle& rRect ) const;          // 1/100 mm
+    void            SetEmbedded( SCTAB nTab, const Rectangle& rRect );          // from VisArea (1/100 mm)
 
     static SC_DLLPUBLIC bool ValidTabName( const rtl::OUString& rName );
 

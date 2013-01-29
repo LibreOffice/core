@@ -1772,10 +1772,10 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect ) const
     return ScRange( nX1,nY1,nTab, nX2,nY2,nTab );
 }
 
-void ScDocument::SetEmbedded( const Rectangle& rRect )          // aus VisArea (1/100 mm)
+void ScDocument::SetEmbedded( SCTAB nTab, const Rectangle& rRect )          // aus VisArea (1/100 mm)
 {
     bIsEmbedded = true;
-    aEmbedRange = GetRange( nVisibleTab, rRect );
+    aEmbedRange = GetRange( nTab, rRect );
 }
 
 ScDocProtection* ScDocument::GetDocProtection() const
