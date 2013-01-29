@@ -2,7 +2,6 @@ InstallStartmenuFolderIcon
 DeinstallStartmenuFolderIcon
 SetProductInstallMode
 RebuildShellIconCache
-ExecutePostUninstallScript
 CompleteInstallPath
 MigrateInstallPath
 CheckInstallDirectory

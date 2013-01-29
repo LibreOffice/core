@@ -167,15 +167,6 @@ WindowsCustomAction gid_Customaction_Shellextensionsdll6
 	Assignment1 = ("InstallExecuteSequence", "Not PATCH", "end");
 End
 
-WindowsCustomAction gid_Customaction_Shellextensionsdll7
-	Name = "Shellextensionsdll7";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "ExecutePostUninstallScript";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "InstallValidate");
-End
-
 WindowsCustomAction gid_Customaction_Check_Install_Directory
 	Name = "CheckInstallDirectory";
 	Typ = "65";

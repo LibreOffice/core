@@ -40,7 +40,6 @@ SLOFILES = \
     $(SLO)$/startmenuicon.obj \
     $(SLO)$/upgrade.obj \
     $(SLO)$/iconcache.obj \
-    $(SLO)$/postuninstall.obj \
     $(SLO)$/migrateinstallpath.obj \
     $(SLO)$/completeinstallpath.obj \
     $(SLO)$/checkdirectory.obj \
