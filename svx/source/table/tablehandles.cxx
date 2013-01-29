@@ -35,7 +35,7 @@
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <svx/sdr/overlay/overlayhatchrect.hxx>
+#include <svx/sdr/overlay/overlayrectangle.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
 namespace sdr { namespace table {
@@ -246,11 +246,13 @@ drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayOb
 
 // ====================================================================
 
-TableBorderHdl::TableBorderHdl( const Rectangle& rRect )
-: SdrHdl( rRect.TopLeft(), HDL_MOVE )
-, maRectangle( rRect )
+TableBorderHdl::TableBorderHdl(
+    const Rectangle& rRect,
+    bool bAnimate)
+:   SdrHdl(rRect.TopLeft(), HDL_MOVE),
+    maRectangle(rRect),
+    mbAnimate(bAnimate)
 {
-
 }
 
 Pointer TableBorderHdl::GetPointer() const
@@ -272,7 +274,6 @@ void TableBorderHdl::CreateB2dIAObject()
         {
             for(sal_uInt32 nWindow = 0; nWindow < pPageView->PageWindowCount(); nWindow++)
             {
-                // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
                 const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(nWindow);
 
                 if(rPageWindow.GetPaintWindow().OutputToWindow())
@@ -281,14 +282,24 @@ void TableBorderHdl::CreateB2dIAObject()
                     if (xManager.is())
                     {
                         const basegfx::B2DRange aRange(vcl::unotools::b2DRectangleFromRectangle(maRectangle));
-                        sdr::overlay::OverlayObject* pOverlayObject = new sdr::overlay::OverlayHatchRect(
+                        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+                        const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+                        const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+
+                        sdr::overlay::OverlayObject* pOverlayObject = new sdr::overlay::OverlayRectangle(
                             aRange.getMinimum(),
                             aRange.getMaximum(),
-                            Color(0x80, 0x80, 0x80),
+                            aHilightColor,
+                            fTransparence,
                             6.0,
                             0.0,
-                            45 * F_PI180,
-                            0.0);
+                            0.0,
+                            500,
+                            // make animation dependent from text edit active, because for tables
+                            // this handle is also used when text edit *is* active for it. This
+                            // interferes too much concerning repaint stuff (at least as long as
+                            // text edit is not yet on the overlay)
+                            getAnimate());
 
                         xManager->add(*pOverlayObject);
                         maOverlayGroup.append(*pOverlayObject);

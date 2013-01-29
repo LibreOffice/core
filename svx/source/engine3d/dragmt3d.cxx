@@ -259,7 +259,8 @@ void E3dDragMethod::CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverl
 
     if(aResult.count())
     {
-        ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aResult);
+        ::sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+            aResult);
         rOverlayManager.add(*pNew);
         addToOverlayObjectList(*pNew);
     }

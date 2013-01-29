@@ -2416,6 +2416,33 @@ SdrObject* SdrObject::GetConnectedNode(bool /*bTail1*/) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void extractLineContourFromPrimitive2DSequence(
+    const drawinglayer::primitive2d::Primitive2DSequence& rxSequence,
+    basegfx::B2DPolygonVector& rExtractedHairlines,
+    basegfx::B2DPolyPolygonVector& rExtractedLineFills)
+{
+    rExtractedHairlines.clear();
+    rExtractedLineFills.clear();
+
+    if(rxSequence.hasElements())
+    {
+        // use neutral ViewInformation
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+
+        // create extractor, process and get result
+        drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
+        aExtractor.process(rxSequence);
+
+        // copy line results
+        rExtractedHairlines = aExtractor.getExtractedHairlines();
+
+        // copy fill rsults
+        rExtractedLineFills = aExtractor.getExtractedLineFills();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash) const
 {
     bool bNoChange(true);
@@ -2428,37 +2455,28 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
 
         if(xSequence.hasElements())
         {
-            // use neutral ViewInformation
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+            basegfx::B2DPolygonVector aExtractedHairlines;
+            basegfx::B2DPolyPolygonVector aExtractedLineFills;
 
-            // create extractor, process and get result
-            drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
-            aExtractor.process(xSequence);
+            extractLineContourFromPrimitive2DSequence(xSequence, aExtractedHairlines, aExtractedLineFills);
 
-            // #i102241# check for line results
-            const basegfx::B2DPolygonVector& rHairlineVector = aExtractor.getExtractedHairlines();
-
-            if(!rHairlineVector.empty())
+            if(!aExtractedHairlines.empty())
             {
                 // for SdrObject creation, just copy all to a single Hairline-PolyPolygon
-                for(sal_uInt32 a(0); a < rHairlineVector.size(); a++)
+                for(sal_uInt32 a(0); a < aExtractedHairlines.size(); a++)
                 {
-                    aMergedHairlinePolyPolygon.append(rHairlineVector[a]);
+                    aMergedHairlinePolyPolygon.append(aExtractedHairlines[a]);
                 }
             }
 
-            // #i102241# check for fill rsults
-            const basegfx::B2DPolyPolygonVector& rLineFillVector(aExtractor.getExtractedLineFills());
-
-            if(!rLineFillVector.empty())
+            // check for fill rsults
+            if(!aExtractedLineFills.empty())
             {
                 // merge to a single PolyPolygon (OR)
-                aMergedLineFillPolyPolygon = basegfx::tools::mergeToSinglePolyPolygon(rLineFillVector);
+                aMergedLineFillPolyPolygon = basegfx::tools::mergeToSinglePolyPolygon(aExtractedLineFills);
             }
         }
 
-        //  || aMergedHairlinePolyPolygon.Count() removed; the conversion is ONLY
-        // useful when new closed filled polygons are created
         if(aMergedLineFillPolyPolygon.count() || (bForceLineDash && aMergedHairlinePolyPolygon.count()))
         {
             SfxItemSet aSet(pRet->GetMergedItemSet());

@@ -50,7 +50,7 @@
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
 #include <svx/sdr/overlay/overlayline.hxx>
 #include <svx/sdr/overlay/overlaytriangle.hxx>
-#include <svx/sdr/overlay/overlayhatchrect.hxx>
+#include <svx/sdr/overlay/overlayrectangle.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <vcl/svapp.hxx>
@@ -1402,7 +1402,8 @@ void E3dVolumeMarker::CreateB2dIAObject()
                         if (xManager.is() && aWireframePoly.count())
                         {
                             ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-                            ::sdr::overlay::OverlayPolyPolygonStriped(aWireframePoly);
+                            ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                                aWireframePoly);
                             DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
                             // OVERLAYMANAGER
@@ -1654,17 +1655,21 @@ void ImpTextframeHdl::CreateB2dIAObject()
                         {
                             const basegfx::B2DPoint aTopLeft(maRect.Left(), maRect.Top());
                             const basegfx::B2DPoint aBottomRight(maRect.Right(), maRect.Bottom());
-                            const svtools::ColorConfig aColorConfig;
-                            const Color aHatchCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+                            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+                            const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+                            const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
 
-                            ::sdr::overlay::OverlayHatchRect* pNewOverlayObject = new ::sdr::overlay::OverlayHatchRect(
+                            ::sdr::overlay::OverlayRectangle* pNewOverlayObject = new ::sdr::overlay::OverlayRectangle(
                                 aTopLeft,
                                 aBottomRight,
-                                aHatchCol,
+                                aHilightColor,
+                                fTransparence,
                                 3.0,
                                 3.0,
-                                45 * F_PI180,
-                                nDrehWink * -F_PI18000);
+                                nDrehWink * -F_PI18000,
+                                500,
+                                true); // allow animation; the Handle is not shown at text edit time
+
                             pNewOverlayObject->setHittable(false);
 
                             // OVERLAYMANAGER

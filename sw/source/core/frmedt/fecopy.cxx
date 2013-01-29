@@ -1452,7 +1452,43 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
         case SW_PASTESDR_SETATTR:
             {
                 SfxItemSet aSet( GetAttrPool() );
-                aSet.Put(pClpObj->GetMergedItemSet());
+                const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pClpObj);
+
+                if(pSdrGrafObj)
+                {
+                    SdrObject* pTarget = 0;
+
+                    if(0 != pView->GetMarkedObjectList().GetMarkCount())
+                    {
+                        // try to get target (if it's at least one, take first)
+                        SdrMark* pMark = pView->GetMarkedObjectList().GetMark(0);
+
+                        if(pMark)
+                        {
+                            pTarget = pMark->GetMarkedSdrObj();
+                        }
+                    }
+
+                    if(pTarget)
+                    {
+                        // copy ItemSet from target
+                        aSet.Set(pTarget->GetMergedItemSet());
+                    }
+
+                    // for SdrGrafObj, use the graphic as fill style argument
+                    const Graphic& rGraphic = pSdrGrafObj->GetGraphic();
+
+                    if(GRAPHIC_NONE != rGraphic.GetType() && GRAPHIC_DEFAULT != rGraphic.GetType())
+                    {
+                        aSet.Put(XFillBitmapItem(String(), rGraphic));
+                        aSet.Put(XFillStyleItem(XFILL_BITMAP));
+                    }
+                }
+                else
+                {
+                    aSet.Put(pClpObj->GetMergedItemSet());
+                }
+
                 pView->SetAttributes( aSet, sal_False );
             }
             break;

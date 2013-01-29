@@ -101,11 +101,11 @@ class SwTransferable : public TransferableHelper
 
     static int _PasteSdrFormat(  TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uInt16 nAction,
-                                    const Point* pPt, sal_uInt8 nActionFlags );
+                                    const Point* pPt, sal_uInt8 nActionFlags, bool bNeedToSelectBeforePaste);
 
     static int _PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 sal_uLong nFmt, sal_uInt16 nAction, const Point* pPt,
-                                sal_uInt8 nActionFlags, sal_Bool bMsg );
+                                sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste);
 
     static int _PasteImageMap( TransferableDataHelper& rData,
                                     SwWrtShell& rSh );

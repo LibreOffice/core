@@ -512,6 +512,12 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
         {
             SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
 
+            if(pDragTransferable && (nDropAction & DND_ACTION_LINK))
+            {
+                // suppress own data when it's intention is to use it as fill information
+                pDragTransferable = 0;
+            }
+
             if( pDragTransferable )
             {
                 const View* pSourceView = pDragTransferable->GetView();
@@ -581,7 +587,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                     }
 
                     if( bHasPickObj && !bIsPresTarget &&
-                        ( !pPickObj->ISA( SdrGrafObj ) || bGraphic || bMtf || bBitmap || ( bXFillExchange && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) ) ) )
+                        ( bGraphic || bMtf || bBitmap || bXFillExchange ) )
                     {
                         if( mpDropMarkerObj != pPickObj )
                         {

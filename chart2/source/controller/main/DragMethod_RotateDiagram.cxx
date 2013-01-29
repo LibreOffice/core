@@ -215,7 +215,8 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManage
         // transform to 2D view coordinates
         aPolyPolygon.transform(rVCScene.getObjectTransformation());
 
-        sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aPolyPolygon);
+        sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+            aPolyPolygon);
         rOverlayManager.add(*pNew);
         addToOverlayObjectList(*pNew);
     }

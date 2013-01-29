@@ -28,6 +28,8 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <vcl/svapp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -178,82 +180,121 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        OverlayHatchRectanglePrimitive::OverlayHatchRectanglePrimitive(
+        OverlayRectanglePrimitive::OverlayRectanglePrimitive(
             const basegfx::B2DRange& rObjectRange,
-            double fDiscreteHatchDistance,
-            double fHatchRotation,
-            const basegfx::BColor& rHatchColor,
+            const basegfx::BColor& rColor,
+            double fTransparence,
             double fDiscreteGrow,
             double fDiscreteShrink,
             double fRotation)
         :   DiscreteMetricDependentPrimitive2D(),
             maObjectRange(rObjectRange),
-            mfDiscreteHatchDistance(fDiscreteHatchDistance),
-            mfHatchRotation(fHatchRotation),
-            maHatchColor(rHatchColor),
+            maColor(rColor),
+            mfTransparence(fTransparence),
             mfDiscreteGrow(fDiscreteGrow),
             mfDiscreteShrink(fDiscreteShrink),
             mfRotation(fRotation)
         {}
 
-        Primitive2DSequence OverlayHatchRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence OverlayRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
+            basegfx::B2DRange aInnerRange(getObjectRange());
 
-            if(basegfx::fTools::more(getDiscreteUnit(), 0.0))
+            if(!aInnerRange.isEmpty() && basegfx::fTools::more(getDiscreteUnit(), 0.0) && getTransparence() <= 1.0)
             {
-                basegfx::B2DRange aInnerRange(getObjectRange());
                 basegfx::B2DRange aOuterRange(getObjectRange());
-                basegfx::B2DPolyPolygon aHatchPolyPolygon;
 
+                // grow/shrink inner/outer polygons
                 aOuterRange.grow(getDiscreteUnit() * getDiscreteGrow());
                 aInnerRange.grow(getDiscreteUnit() * -getDiscreteShrink());
 
-                aHatchPolyPolygon.append(basegfx::tools::createPolygonFromRect(aOuterRange));
+                // convert to polygons
+                const double fFullGrow(getDiscreteGrow() + getDiscreteShrink());
+                const double fRelativeRadiusX(fFullGrow / aOuterRange.getWidth());
+                const double fRelativeRadiusY(fFullGrow / aOuterRange.getHeight());
+                basegfx::B2DPolygon aOuterPolygon(
+                    basegfx::tools::createPolygonFromRect(
+                        aOuterRange,
+                        fRelativeRadiusX,
+                        fRelativeRadiusY));
+                basegfx::B2DPolygon aInnerPolygon(
+                    basegfx::tools::createPolygonFromRect(
+                        aInnerRange));
 
-                if(!aInnerRange.isEmpty())
-                {
-                    aHatchPolyPolygon.append(basegfx::tools::createPolygonFromRect(aInnerRange));
-                }
-
+                // apply evtl. existing rotation
                 if(!basegfx::fTools::equalZero(getRotation()))
                 {
                     const basegfx::B2DHomMatrix aTransform(basegfx::tools::createRotateAroundPoint(
                         getObjectRange().getMinX(), getObjectRange().getMinY(), getRotation()));
 
-                    aHatchPolyPolygon.transform(aTransform);
+                    aOuterPolygon.transform(aTransform);
+                    aInnerPolygon.transform(aTransform);
                 }
 
-                const basegfx::BColor aEmptyColor(0.0, 0.0, 0.0);
-                const drawinglayer::attribute::FillHatchAttribute aFillHatchAttribute(
-                    drawinglayer::attribute::HATCHSTYLE_SINGLE,
-                    getDiscreteHatchDistance() * getDiscreteUnit(),
-                    getHatchRotation() - getRotation(),
-                    getHatchColor(),
-                    3, // same default as VCL, a minimum of three discrete units (pixels) offset
-                    false);
-                const Primitive2DReference aPrimitive(
-                    new PolyPolygonHatchPrimitive2D(
-                        aHatchPolyPolygon,
-                        aEmptyColor,
-                        aFillHatchAttribute));
+                // create filled primitive
+                basegfx::B2DPolyPolygon aPolyPolygon;
 
-                aRetval = Primitive2DSequence(&aPrimitive, 1);
+                aPolyPolygon.append(aOuterPolygon);
+                aPolyPolygon.append(aInnerPolygon);
+
+                if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+                {
+                    // for high contrast, use hatch
+                    const basegfx::BColor aHighContrastLineColor(Application::GetSettings().GetStyleSettings().GetFontColor().getBColor());
+                    const basegfx::BColor aEmptyColor(0.0, 0.0, 0.0);
+                    const double fHatchRotation(45 * F_PI180);
+                    const double fDiscreteHatchDistance(3.0);
+                    const drawinglayer::attribute::FillHatchAttribute aFillHatchAttribute(
+                        drawinglayer::attribute::HATCHSTYLE_SINGLE,
+                        fDiscreteHatchDistance * getDiscreteUnit(),
+                        fHatchRotation - getRotation(),
+                        aHighContrastLineColor,
+                        3, // same default as VCL, a minimum of three discrete units (pixels) offset
+                        false);
+                    const Primitive2DReference aHatch(
+                        new PolyPolygonHatchPrimitive2D(
+                            aPolyPolygon,
+                            aEmptyColor,
+                            aFillHatchAttribute));
+
+                    aRetval = Primitive2DSequence(&aHatch, 1);
+                }
+                else
+                {
+                    // create fill primitive
+                    const Primitive2DReference aFill(
+                        new PolyPolygonColorPrimitive2D(
+                            aPolyPolygon,
+                            getColor()));
+
+                    aRetval = Primitive2DSequence(&aFill, 1);
+
+                    // embed filled to transparency (if used)
+                    if(getTransparence() > 0.0)
+                    {
+                        const Primitive2DReference aFillTransparent(
+                            new UnifiedTransparencePrimitive2D(
+                                aRetval,
+                                getTransparence()));
+
+                        aRetval = Primitive2DSequence(&aFillTransparent, 1);
+                    }
+                }
             }
 
             return aRetval;
         }
 
-        bool OverlayHatchRectanglePrimitive::operator==( const BasePrimitive2D& rPrimitive ) const
+        bool OverlayRectanglePrimitive::operator==( const BasePrimitive2D& rPrimitive ) const
         {
             if(DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
             {
-                const OverlayHatchRectanglePrimitive& rCompare = static_cast< const OverlayHatchRectanglePrimitive& >(rPrimitive);
+                const OverlayRectanglePrimitive& rCompare = static_cast< const OverlayRectanglePrimitive& >(rPrimitive);
 
                 return (getObjectRange() == rCompare.getObjectRange()
-                    && getDiscreteHatchDistance() == rCompare.getDiscreteHatchDistance()
-                    && getHatchRotation() == rCompare.getHatchRotation()
-                    && getHatchColor() == rCompare.getHatchColor()
+                    && getColor() == rCompare.getColor()
+                    && getTransparence() == rCompare.getTransparence()
                     && getDiscreteGrow() == rCompare.getDiscreteGrow()
                     && getDiscreteShrink() == rCompare.getDiscreteShrink()
                     && getRotation() == rCompare.getRotation());
@@ -262,7 +303,7 @@ namespace drawinglayer
             return false;
         }
 
-        ImplPrimitive2DIDBlock(OverlayHatchRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYHATCHRECTANGLEPRIMITIVE)
+        ImplPrimitive2DIDBlock(OverlayRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRECTANGLEPRIMITIVE)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

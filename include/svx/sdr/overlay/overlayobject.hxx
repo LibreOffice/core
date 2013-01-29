@@ -82,6 +82,9 @@ namespace sdr
             // a missing implementation
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
+            // #i53216# check blink time value range (currently 25 < mnBlinkTime < 10000)
+            sal_uInt32 impCheckBlinkTimeValueRange(sal_uInt32 nBlinkTime) const;
+
             // region in logical coordinates
             basegfx::B2DRange                               maBaseRange;
 

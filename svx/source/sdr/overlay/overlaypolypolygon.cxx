@@ -30,7 +30,7 @@ namespace sdr
 {
     namespace overlay
     {
-        drawinglayer::primitive2d::Primitive2DSequence OverlayPolyPolygonStriped::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DSequence OverlayPolyPolygonStripedAndFilled::createOverlayObjectPrimitive2DSequence()
         {
             drawinglayer::primitive2d::Primitive2DSequence aRetval;
 
@@ -39,34 +39,47 @@ namespace sdr
                 const basegfx::BColor aRGBColorA(getOverlayManager()->getStripeColorA().getBColor());
                 const basegfx::BColor aRGBColorB(getOverlayManager()->getStripeColorB().getBColor());
                 const double fStripeLengthPixel(getOverlayManager()->getStripeLengthPixel());
-
-                const drawinglayer::primitive2d::Primitive2DReference aReference(
+                const drawinglayer::primitive2d::Primitive2DReference aStriped(
                     new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
-                        getPolyPolygon(),
+                        getLinePolyPolygon(),
                         aRGBColorA,
                         aRGBColorB,
                         fStripeLengthPixel));
 
-                aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+                aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aStriped, 1);
+
+                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+                const basegfx::BColor aHilightColor(aSvtOptionsDrawinglayer.getHilightColor().getBColor());
+                const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+
+                const drawinglayer::primitive2d::Primitive2DReference aFilled(
+                    new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
+                        getLinePolyPolygon(),
+                        aHilightColor,
+                        fTransparence,
+                        3.0,
+                        false));
+
+                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aFilled);
             }
 
             return aRetval;
         }
 
-        void OverlayPolyPolygonStriped::stripeDefinitionHasChanged()
+        void OverlayPolyPolygonStripedAndFilled::stripeDefinitionHasChanged()
         {
             // react on OverlayManager's stripe definition change
             objectChange();
         }
 
-        OverlayPolyPolygonStriped::OverlayPolyPolygonStriped(
-            const basegfx::B2DPolyPolygon& rPolyPolygon)
+        OverlayPolyPolygonStripedAndFilled::OverlayPolyPolygonStripedAndFilled(
+            const basegfx::B2DPolyPolygon& rLinePolyPolygon)
         :   OverlayObject(Color(COL_BLACK)),
-            maPolyPolygon(rPolyPolygon)
+            maLinePolyPolygon(rLinePolyPolygon)
         {
         }
 
-        OverlayPolyPolygonStriped::~OverlayPolyPolygonStriped()
+        OverlayPolyPolygonStripedAndFilled::~OverlayPolyPolygonStripedAndFilled()
         {
         }
     } // end of namespace overlay

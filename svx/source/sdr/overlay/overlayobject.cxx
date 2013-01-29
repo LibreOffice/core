@@ -63,6 +63,20 @@ namespace sdr
             return drawinglayer::primitive2d::Primitive2DSequence();
         }
 
+        sal_uInt32 OverlayObject::impCheckBlinkTimeValueRange(sal_uInt32 nBlinkTime) const
+        {
+            if(nBlinkTime < 25)
+            {
+                nBlinkTime = 25;
+            }
+            else if(nBlinkTime > 10000)
+            {
+                nBlinkTime = 10000;
+            }
+
+            return nBlinkTime;
+        }
+
         void OverlayObject::allowAntiAliase(bool bNew)
         {
             if(bNew != (bool)mbAllowsAntiAliase)

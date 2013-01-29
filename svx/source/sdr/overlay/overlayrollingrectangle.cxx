@@ -24,7 +24,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -47,14 +47,24 @@ namespace sdr
                 {
                     // view-independent part, create directly
                     const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aRollingRectangle));
-                    const drawinglayer::primitive2d::Primitive2DReference aReference(
-                        new drawinglayer::primitive2d::PolygonMarkerPrimitive2D(
-                            aPolygon,
-                            aRGBColorA,
-                            aRGBColorB,
-                            fStripeLengthPixel));
 
-                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aReference);
+                    aRetval.realloc(2);
+                    aRetval[0] = new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
+                        basegfx::B2DPolyPolygon(aPolygon),
+                        aRGBColorA,
+                        aRGBColorB,
+                        fStripeLengthPixel);
+
+                    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+                    const basegfx::BColor aHilightColor(aSvtOptionsDrawinglayer.getHilightColor().getBColor());
+                    const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+
+                    aRetval[1] = new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
+                        basegfx::B2DPolyPolygon(aPolygon),
+                        aHilightColor,
+                        fTransparence,
+                        3.0,
+                        false);
                 }
 
                 if(getExtendedLines())

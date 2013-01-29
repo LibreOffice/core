@@ -2215,7 +2215,7 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
 
     // add remaining handles
     SdrHdl* pH=0;
-    rHdlList.AddHdl( pH = new TableBorderHdl( aRect ) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new TableBorderHdl( aRect, !IsTextEditActive() ) ); pH->SetMoveOutside( true );
     rHdlList.AddHdl( pH = new SdrHdl(aRect.TopLeft(),HDL_UPLFT) ); pH->SetMoveOutside( true );
     rHdlList.AddHdl( pH = new SdrHdl(aRect.TopCenter(),HDL_UPPER) ); pH->SetMoveOutside( true );
     rHdlList.AddHdl( pH = new SdrHdl(aRect.TopRight(),HDL_UPRGT) ); pH->SetMoveOutside( true );

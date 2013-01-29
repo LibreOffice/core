@@ -407,8 +407,13 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
     {
         SelectionType nSelectionType = pWrtShell->GetSelectionType();
 
-// SEL_GRF comes from ContentType of editsh
-        if( (nsSelectionType::SEL_GRF | nsSelectionType::SEL_DRW_FORM) & nSelectionType )
+        // when pending we will not get the correct type, but nsSelectionType::SEL_TXT
+        // as fallback. This *happens* durning D&D, so we need to check if we are in
+        // the fallback and just try to get a graphic
+        const bool bPending(pWrtShell->BasicActionPend());
+
+        // SEL_GRF kommt vom ContentType der editsh
+        if(bPending || ((nsSelectionType::SEL_GRF | nsSelectionType::SEL_DRW_FORM) & nSelectionType))
         {
             pClpGraphic = new Graphic;
             if( !pWrtShell->GetDrawObjGraphic( FORMAT_GDIMETAFILE, *pClpGraphic ))
@@ -1215,8 +1220,31 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
 
     SwTransferable *pTrans=0, *pTunneledTrans=GetSwTransferable( rData );
 
-    if( pPt && ( bPasteSelection ? 0 != ( pTrans = pMod->pXSelection )
-                                 : 0 != ( pTrans = pMod->pDragDrop) ))
+    // check for private drop
+    bool bPrivateDrop(pPt && (bPasteSelection ? 0 != (pTrans = pMod->pXSelection) : 0 != (pTrans = pMod->pDragDrop)));
+    bool bNeedToSelectBeforePaste(false);
+
+    if(bPrivateDrop && DND_ACTION_LINK == nDropAction)
+    {
+        // internal drop on object, suppress bPrivateDrop to change internal fill
+        bPrivateDrop = false;
+        bNeedToSelectBeforePaste = true;
+    }
+
+    if(bPrivateDrop && pPt && DND_ACTION_MOVE == nDropAction)
+    {
+        // check if dragged over a useful target. If yes, use as content exchange
+        // drop as if from external
+        const SwFrmFmt* pSwFrmFmt = rSh.GetFmtFromObj(*pPt);
+
+        if(pSwFrmFmt && 0 != dynamic_cast< const SwDrawFrmFmt* >(pSwFrmFmt))
+        {
+            bPrivateDrop = false;
+            bNeedToSelectBeforePaste = true;
+        }
+    }
+
+    if(bPrivateDrop)
     {
         // then internal Drag & Drop or XSelection
         nRet = pTrans->PrivateDrop( rSh, *pPt, DND_ACTION_MOVE == nDropAction,
@@ -1267,7 +1295,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
             case SOT_FORMATSTR_ID_DRAWING:
                 nRet = SwTransferable::_PasteSdrFormat( rData, rSh,
                                                 SW_PASTESDR_INSERT, pPt,
-                                                nActionFlags );
+                                                nActionFlags, bNeedToSelectBeforePaste);
                 break;
 
             case SOT_FORMATSTR_ID_HTML:
@@ -1305,7 +1333,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
             case SOT_FORMAT_GDIMETAFILE:
                 nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
                                                 SW_PASTESDR_INSERT,pPt,
-                                                nActionFlags, bMsg );
+                                                nActionFlags, nDropAction, bNeedToSelectBeforePaste);
                 break;
 
             case SOT_FORMATSTR_ID_XFORMS:
@@ -1425,7 +1453,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
             case SOT_FORMATSTR_ID_DRAWING:
                 nRet = SwTransferable::_PasteSdrFormat( rData, rSh,
                                                 SW_PASTESDR_SETATTR, pPt,
-                                                nActionFlags );
+                                                nActionFlags, bNeedToSelectBeforePaste);
                 break;
             case SOT_FORMATSTR_ID_SVXB:
             case SOT_FORMAT_GDIMETAFILE:
@@ -1436,7 +1464,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
             case SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR:
                 nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
                                                 SW_PASTESDR_SETATTR, pPt,
-                                                nActionFlags, bMsg );
+                                                nActionFlags, nDropAction, bNeedToSelectBeforePaste);
                 break;
             default:
                 OSL_FAIL( "unknown format" );
@@ -1447,7 +1475,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_INSERT_DRAWOBJ:
             nRet = SwTransferable::_PasteSdrFormat( rData, rSh,
                                                 SW_PASTESDR_INSERT, pPt,
-                                                nActionFlags );
+                                                nActionFlags, bNeedToSelectBeforePaste);
             break;
         case EXCHG_OUT_ACTION_INSERT_SVXB:
         case EXCHG_OUT_ACTION_INSERT_GDIMETAFILE:
@@ -1455,13 +1483,13 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_INSERT_GRAPH:
             nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
                                                 SW_PASTESDR_INSERT, pPt,
-                                                nActionFlags, bMsg );
+                                                nActionFlags, nDropAction, bNeedToSelectBeforePaste);
             break;
 
         case EXCHG_OUT_ACTION_REPLACE_DRAWOBJ:
             nRet = SwTransferable::_PasteSdrFormat( rData, rSh,
                                                 SW_PASTESDR_REPLACE, pPt,
-                                                nActionFlags );
+                                                nActionFlags, bNeedToSelectBeforePaste);
             break;
 
         case EXCHG_OUT_ACTION_REPLACE_SVXB:
@@ -1470,7 +1498,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_REPLACE_GRAPH:
             nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
                                                 SW_PASTESDR_REPLACE,pPt,
-                                                nActionFlags, bMsg );
+                                                nActionFlags, nDropAction, bNeedToSelectBeforePaste);
             break;
 
         case EXCHG_OUT_ACTION_INSERT_INTERACTIVE:
@@ -2151,13 +2179,21 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
 
 int SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uInt16 nAction,
-                                    const Point* pPt, sal_uInt8 nActionFlags )
+                                    const Point* pPt, sal_uInt8 nActionFlags, bool bNeedToSelectBeforePaste)
 {
     int nRet = 0;
     SotStorageStreamRef xStrm;
     if( rData.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xStrm ))
     {
         xStrm->SetVersion( SOFFICE_FILEFORMAT_50 );
+
+        if(bNeedToSelectBeforePaste && pPt)
+        {
+            // if this is an internal drag, need to set the target right (select it), else
+            // still the source will be selected
+            SwTransferable::SetSelInShell( rSh, sal_True, pPt );
+        }
+
         rSh.Paste( *xStrm, nAction, pPt );
         nRet = 1;
 
@@ -2170,7 +2206,7 @@ int SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
 
 int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 sal_uLong nFmt, sal_uInt16 nAction, const Point* pPt,
-                                sal_uInt8 nActionFlags, sal_Bool /*bMsg*/ )
+                                sal_uInt8 nActionFlags, sal_Int8 /* nDropAction */, bool bNeedToSelectBeforePaste)
 {
     int nRet = 0;
 
@@ -2184,6 +2220,19 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     case SOT_FORMAT_GDIMETAFILE:
         nRet = rData.GetGraphic( nFmt, aGraphic );
         break;
+
+    case SOT_FORMATSTR_ID_SVXB:
+    {
+        SotStorageStreamRef xStm;
+
+        if(rData.GetSotStorageStream(SOT_FORMATSTR_ID_SVXB, xStm))
+        {
+            *xStm >> aGraphic;
+            nRet = (GRAPHIC_NONE != aGraphic.GetType() && GRAPHIC_DEFAULT != aGraphic.GetType());
+        }
+
+        break;
+    }
 
     case SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK:
     case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
@@ -2235,6 +2284,15 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
             nFmt = SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK;
             nRet = sal_True;
         }
+    }
+
+    if(pPt && bNeedToSelectBeforePaste)
+    {
+        // when using internal D&Ds, still the source object is selected and
+        // this is necessary to get the correct source data which is also
+        // dependent from selection. After receiving the drag data it is
+        // now tiime to select the correct target object
+        SwTransferable::SetSelInShell( rSh, sal_True, pPt );
     }
 
     if( nRet )
@@ -2402,10 +2460,10 @@ int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
 int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uLong nFmt,
                                     sal_uInt16 nAction, const Point* pPt,
-                                    sal_uInt8 nActionFlags, sal_Bool bMsg )
+                    sal_uInt8 nActionFlags, sal_Bool /* bMsg */)
 {
     int nRet = SwTransferable::_PasteGrf( rData, rSh, nFmt, nAction,
-                                            pPt, nActionFlags, bMsg );
+                                            pPt, nActionFlags, 0, false);
     if( nRet )
         nRet |= SWTRANSFER_GRAPHIC_INSERTED;
     if( !nRet )

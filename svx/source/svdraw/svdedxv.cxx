@@ -17,14 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/i18n/WordType.hpp>
-
 #include <svtools/accessibilityoptions.hxx>
-
 #include <svx/svdedxv.hxx>
 #include <svl/solar.hrc>
-
 #include <svl/itemiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/hatch.hxx>
@@ -33,7 +29,6 @@
 #include <editeng/editstat.hxx>
 #include <vcl/cursor.hxx>
 #include <editeng/unotext.hxx>
-
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
@@ -46,24 +41,26 @@
 #include "svx/svditer.hxx"
 #include "svx/svdpagv.hxx"
 #include "svx/svdpage.hxx"
-#include "svx/svdetc.hxx"   // for GetDraftFillColor
+#include "svx/svdetc.hxx"
 #include "svx/svdotable.hxx"
 #include <svx/selectioncontroller.hxx>
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
 #endif
-
-#include <svx/svddrgv.hxx>  // for SetSolidDragging()
-#include "svx/svdstr.hrc"   // names taken from the resource
-#include "svx/svdglob.hxx"  // StringCache
+#include <svx/svdoutl.hxx>
+#include <svx/svddrgv.hxx>
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include "svx/globl3d.hxx"
 #include <editeng/outliner.hxx>
 #include <editeng/adjustitem.hxx>
-
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrundomanager.hxx>
+#include <svx/sdr/overlay/overlaytools.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -344,44 +341,36 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
 
     if(bTextFrame && !bFitToSize)
     {
-        aPixRect.Left()--;
-        aPixRect.Top()--;
-        aPixRect.Right()++;
-        aPixRect.Bottom()++;
-        sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
+        // completely reworked to use primitives; this ensures same look and functionality
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
+        drawinglayer::processor2d::BaseProcessor2D* pProcessor = drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
+            rTargetDevice,
+            aViewInformation2D);
+
+        if(pProcessor)
         {
-            // xPixRect Begrenzen, wegen Treiberproblem bei zu weit hinausragenden Pixelkoordinaten
-            Size aMaxXY(rTargetDevice.GetOutputSizePixel());
-            long a(2 * nPixSiz);
-            long nMaxX(aMaxXY.Width() + a);
-            long nMaxY(aMaxXY.Height() + a);
+            const bool bMerk(rTargetDevice.IsMapModeEnabled());
+            const basegfx::B2DRange aRange(aPixRect.Left(), aPixRect.Top(), aPixRect.Right(), aPixRect.Bottom());
+            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+            const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+            const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+            const sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                new drawinglayer::primitive2d::OverlayRectanglePrimitive(
+                    aRange,
+                    aHilightColor.getBColor(),
+                    fTransparence,
+                    std::max(6, nPixSiz - 2), // grow
+                    0.0, // shrink
+                    0.0));
+            const drawinglayer::primitive2d::Primitive2DSequence aSequence(&xReference, 1);
 
-            if (aPixRect.Left  ()<-a) aPixRect.Left()=-a;
-            if (aPixRect.Top   ()<-a) aPixRect.Top ()=-a;
-            if (aPixRect.Right ()>nMaxX) aPixRect.Right ()=nMaxX;
-            if (aPixRect.Bottom()>nMaxY) aPixRect.Bottom()=nMaxY;
+            rTargetDevice.EnableMapMode(false);
+            pProcessor->process(aSequence);
+            rTargetDevice.EnableMapMode(bMerk);
+            delete pProcessor;
         }
-
-        Rectangle aOuterPix(aPixRect);
-        aOuterPix.Left()-=nPixSiz;
-        aOuterPix.Top()-=nPixSiz;
-        aOuterPix.Right()+=nPixSiz;
-        aOuterPix.Bottom()+=nPixSiz;
-
-        bool bMerk(rTargetDevice.IsMapModeEnabled());
-        rTargetDevice.EnableMapMode(sal_False);
-        PolyPolygon aPolyPoly( 2 );
-
-        svtools::ColorConfig aColorConfig;
-        Color aHatchCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-        const Hatch aHatch( HATCH_SINGLE, aHatchCol, 3, 450 );
-
-        aPolyPoly.Insert( aOuterPix );
-        aPolyPoly.Insert( aPixRect );
-        rTargetDevice.DrawHatch( aPolyPoly, aHatch );
-
-        rTargetDevice.EnableMapMode(bMerk);
     }
 
     rOutlView.ShowCursor();
