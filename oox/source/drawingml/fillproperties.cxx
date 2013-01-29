@@ -396,6 +396,9 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             }
         }
 
+        rPropMap[ PROP_Graphic ] <<= xGraphic;
+
+        // do we still need to set GraphicURL as well? (TODO)
         OUString aGraphicUrl = rGraphicHelper.createGraphicObject( xGraphic );
         if( !aGraphicUrl.isEmpty() )
             rPropMap[ PROP_GraphicURL ] <<= aGraphicUrl;

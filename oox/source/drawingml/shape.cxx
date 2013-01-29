@@ -540,7 +540,7 @@ Reference< XShape > Shape::createAndInsert(
         // applying properties
         aShapeProps.assignUsed( getShapeProperties() );
         aShapeProps.assignUsed( maDefaultShapeProperties );
-        if ( bIsEmbMedia || aServiceName == "com.sun.star.drawing.GraphicObjectShape" )
+        if ( bIsEmbMedia || aServiceName == "com.sun.star.drawing.GraphicObjectShape" || aServiceName == "com.sun.star.drawing.OLE2Shape" )
             mpGraphicPropertiesPtr->pushToPropMap( aShapeProps, rGraphicHelper );
         if ( mpTablePropertiesPtr.get() && aServiceName == "com.sun.star.drawing.TableShape" )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
