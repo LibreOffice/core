@@ -91,7 +91,7 @@ void XFormsModelContext::HandleAttribute(
     switch( nToken )
     {
     case XML_ID:
-        mxModel->setPropertyValue( OUSTRING("ID"), makeAny( rValue ) );
+        mxModel->setPropertyValue( "ID", makeAny( rValue ) );
         break;
     case XML_SCHEMA:
         GetImport().SetError( XMLERROR_XFORMS_NO_SCHEMA_SUPPORT );

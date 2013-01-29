@@ -35,9 +35,6 @@ namespace com { namespace sun { namespace star {
 } } }
 class SvXMLNamespaceMap;
 
-
-#define OUSTRING(msg) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(msg))
-
 com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xforms_createXFormsModel();
 
 void xforms_addXFormsModel(

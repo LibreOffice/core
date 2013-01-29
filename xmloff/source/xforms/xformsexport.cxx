@@ -284,16 +284,16 @@ void exportXFormsBinding( SvXMLExport& rExport,
     // name check; generate binding ID if necessary
     {
         OUString sName;
-        xBinding->getPropertyValue( OUSTRING("BindingID") ) >>= sName;
+        xBinding->getPropertyValue( "BindingID" ) >>= sName;
         if( sName.isEmpty() )
         {
             // if we don't have a name yet, generate one on the fly
             OUStringBuffer aBuffer;
-            aBuffer.append( OUSTRING("bind_" ) );
+            aBuffer.append( "bind_" );
             sal_Int64 nId = reinterpret_cast<sal_uInt64>( xBinding.get() );
             aBuffer.append( nId , 16 );
             sName = aBuffer.makeStringAndClear();
-            xBinding->setPropertyValue( OUSTRING("BindingID"), makeAny(sName));
+            xBinding->setPropertyValue( "BindingID", makeAny(sName));
         }
     }
 
@@ -302,14 +302,14 @@ void exportXFormsBinding( SvXMLExport& rExport,
     // handle type attribute
     {
         OUString sTypeName;
-        xBinding->getPropertyValue( OUSTRING("Type") ) >>= sTypeName;
+        xBinding->getPropertyValue( "Type" ) >>= sTypeName;
 
         try
         {
             // now get type, and determine whether its a standard type. If
             // so, export the XSD name
             Reference<com::sun::star::xforms::XModel> xModel(
-                xBinding->getPropertyValue( OUSTRING("Model") ),
+                xBinding->getPropertyValue( "Model" ),
                 UNO_QUERY );
             Reference<XDataTypeRepository> xRepository(
                 xModel.is() ? xModel->getDataTypeRepository() : Reference<XDataTypeRepository>() );
@@ -322,7 +322,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
                 // if it's a basic data type, write out the XSD name
                 // for the XSD type class
                 bool bIsBasic = false;
-                xDataType->getPropertyValue( OUSTRING("IsBasic") ) >>= bIsBasic;
+                xDataType->getPropertyValue( "IsBasic" ) >>= bIsBasic;
                 if( bIsBasic )
                     sTypeName = lcl_getXSDType( rExport, xDataType );
             }
@@ -344,7 +344,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
     // to do so, we will write out all missing namespace declaractions.
     const SvXMLNamespaceMap& rMap = rExport.GetNamespaceMap();
     Reference<XNameAccess> xNamespaces(
-        xBinding->getPropertyValue( OUSTRING("ModelNamespaces") ), UNO_QUERY);
+        xBinding->getPropertyValue( "ModelNamespaces" ), UNO_QUERY);
     if( xNamespaces.is() )
     {
         // iterate over Prefixes for this binding
@@ -364,7 +364,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
             if( nKey == XML_NAMESPACE_UNKNOWN  ||
                 rMap.GetNameByKey( nKey ) != sURI )
             {
-                rExport.AddAttribute( OUSTRING("xmlns:") + rPrefix, sURI );
+                rExport.AddAttribute( "xmlns:" + rPrefix, sURI );
             }
         }
     }
@@ -481,7 +481,7 @@ static OUString lcl_getXSDType( SvXMLExport& rExport,
     XMLTokenEnum eToken = XML_STRING;
 
     sal_uInt16 nDataTypeClass = 0;
-    xType->getPropertyValue( OUSTRING("TypeClass") ) >>= nDataTypeClass;
+    xType->getPropertyValue( "TypeClass" ) >>= nDataTypeClass;
     switch( nDataTypeClass )
     {
     case com::sun::star::xsd::DataTypeClass::STRING:
@@ -540,7 +540,7 @@ static void lcl_exportDataType( SvXMLExport& rExport,
 {
     // we do not need to export basic types; exit if we have one
     bool bIsBasic = false;
-    xType->getPropertyValue( OUSTRING("IsBasic") ) >>= bIsBasic;
+    xType->getPropertyValue( "IsBasic" ) >>= bIsBasic;
     if( bIsBasic )
         return;
 
@@ -548,7 +548,7 @@ static void lcl_exportDataType( SvXMLExport& rExport,
 
     // <xsd:simpleType name="...">
     OUString sName;
-    xType->getPropertyValue( OUSTRING("Name") ) >>= sName;
+    xType->getPropertyValue( "Name" ) >>= sName;
     rExport.AddAttribute( XML_NAMESPACE_NONE, XML_NAME, sName );
     SvXMLElementExport aSimpleType( rExport,
                                     XML_NAMESPACE_XSD, XML_SIMPLETYPE,
@@ -596,7 +596,7 @@ void exportXFormsSchemas( SvXMLExport& rExport,
     if( xPropSet.is() )
     {
         Reference<XDocument> xDocument(
-            xPropSet->getPropertyValue( OUSTRING("ForeignSchema") ),
+            xPropSet->getPropertyValue( "ForeignSchema" ),
             UNO_QUERY );
 
         if( xDocument.is() )
@@ -726,7 +726,7 @@ OUString xforms_whitespace( const Any& rAny )
 /// return name of Binding
 static OUString lcl_getXFormsBindName( const Reference<XPropertySet>& xBinding )
 {
-    OUString sProp( OUSTRING( "BindingID" ) );
+    OUString sProp( "BindingID" );
 
     OUString sReturn;
     if( xBinding.is() &&
@@ -767,7 +767,7 @@ OUString getXFormsSubmissionName( const Reference<XPropertySet>& xBinding )
     {
         Reference<XPropertySet> xPropertySet(
             xSubmissionSupplier->getSubmission(), UNO_QUERY );
-        OUString sProp( OUSTRING("ID") );
+        OUString sProp( "ID" );
         if( xPropertySet.is() &&
             xPropertySet->getPropertySetInfo()->hasPropertyByName( sProp ) )
         {

@@ -90,28 +90,28 @@ void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
     switch( nToken )
     {
     case XML_NODESET:
-        xforms_setValue( mxBinding, OUSTRING("BindingExpression"), rValue );
+        xforms_setValue( mxBinding, "BindingExpression", rValue );
         break;
     case XML_ID:
-        xforms_setValue( mxBinding, OUSTRING("BindingID"), rValue );
+        xforms_setValue( mxBinding, "BindingID", rValue );
         break;
     case XML_READONLY:
-        xforms_setValue( mxBinding, OUSTRING("ReadonlyExpression"), rValue );
+        xforms_setValue( mxBinding, "ReadonlyExpression", rValue );
         break;
     case XML_RELEVANT:
-        xforms_setValue( mxBinding, OUSTRING("RelevantExpression"), rValue );
+        xforms_setValue( mxBinding, "RelevantExpression", rValue );
         break;
     case XML_REQUIRED:
-        xforms_setValue( mxBinding, OUSTRING("RequiredExpression"), rValue );
+        xforms_setValue( mxBinding, "RequiredExpression", rValue );
         break;
     case XML_CONSTRAINT:
-        xforms_setValue( mxBinding, OUSTRING("ConstraintExpression"), rValue );
+        xforms_setValue( mxBinding, "ConstraintExpression", rValue );
         break;
     case XML_CALCULATE:
-        xforms_setValue( mxBinding, OUSTRING("CalculateExpression"), rValue );
+        xforms_setValue( mxBinding, "CalculateExpression", rValue );
         break;
     case XML_TYPE:
-        xforms_setValue( mxBinding, OUSTRING("Type"),
+        xforms_setValue( mxBinding, "Type",
                       makeAny( xforms_getTypeName( mxModel->getDataTypeRepository(),
                                        GetImport().GetNamespaceMap(),
                                        rValue ) ) );
@@ -127,7 +127,7 @@ void XFormsBindContext::StartElement(
 {
     // we need to register the namespaces
     Reference<XNameContainer> xContainer(
-        mxBinding->getPropertyValue( OUSTRING("BindingNamespaces") ),
+        mxBinding->getPropertyValue( "BindingNamespaces" ),
         UNO_QUERY );
 
     DBG_ASSERT( xContainer.is(), "binding should have a namespace container" );

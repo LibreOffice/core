@@ -71,7 +71,7 @@ static Reference<XPropertySet> lcl_createPropertySet( const OUString& rServiceNa
 
 Reference<XPropertySet> xforms_createXFormsModel()
 {
-    return lcl_createPropertySet( OUSTRING( "com.sun.star.xforms.Model" ) );
+    return lcl_createPropertySet( "com.sun.star.xforms.Model" );
 }
 
 void xforms_addXFormsModel(
@@ -88,7 +88,7 @@ void xforms_addXFormsModel(
             if( xForms.is() )
             {
                 OUString sName;
-                xModel->getPropertyValue( OUSTRING("ID")) >>= sName;
+                xModel->getPropertyValue("ID") >>= sName;
                 xForms->insertByName( sName, makeAny( xModel ) );
                 bSuccess = true;
             }
