@@ -21,6 +21,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/fontenum.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/text/FontRelief.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -49,6 +50,7 @@
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
@@ -232,6 +234,16 @@ SvXMLEnumMapEntry const pXML_WrapInfluenceOnPosition_Enum[] =
     { XML_ONCE_SUCCESSIVE, WrapInfluenceOnPosition::ONCE_SUCCESSIVE },
     { XML_ONCE_CONCURRENT, WrapInfluenceOnPosition::ONCE_CONCURRENT },
     { XML_ITERATIVE,       WrapInfluenceOnPosition::ITERATIVE },
+    { XML_TOKEN_INVALID, 0 }
+};
+
+SvXMLEnumMapEntry const pXML_FillStyle_Enum[] =
+{
+    { XML_NONE,     drawing::FillStyle_NONE },
+    { XML_SOLID,    drawing::FillStyle_SOLID },
+    { XML_BITMAP,   drawing::FillStyle_BITMAP },
+    { XML_GRADIENT, drawing::FillStyle_GRADIENT },
+    { XML_HATCH,    drawing::FillStyle_HATCH },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -1418,6 +1430,9 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         break;
     case XML_TYPE_TEXT_NUMBER8_ONE_BASED:
         pHdl = new XMLNumber8OneBasedHdl();
+        break;
+    case XML_TYPE_FILLSTYLE:
+        pHdl = new XMLConstantsPropertyHandler( pXML_FillStyle_Enum, XML_TOKEN_INVALID );
         break;
     }
 
