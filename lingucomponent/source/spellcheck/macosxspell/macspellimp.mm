@@ -450,7 +450,7 @@ OUString SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return A2OU( "Mac OS X Spell Checker" );
+    return OUString( "Mac OS X Spell Checker" );
 }
 
 
@@ -563,7 +563,7 @@ Sequence< OUString > MacSpellChecker::getSupportedServiceNames_Static()
     MutexGuard  aGuard( GetLinguMutex() );
 
     Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
-    aSNS.getArray()[0] = A2OU( SN_SPELLCHECKER );
+    aSNS.getArray()[0] = SN_SPELLCHECKER;
     return aSNS;
 }
 
