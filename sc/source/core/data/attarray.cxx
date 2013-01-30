@@ -1286,7 +1286,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
                         // well it is not true that we found one
                         // but existing one + cell where conditional
                         // formatting does not remove it
-                        // => we have a protected cell
+                        // => we should use the existing protection settting
                         bFoundCond = bFoundTemp;
                     }
                 }
