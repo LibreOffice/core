@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XTextOutputStream.hpp>
+#include <com/sun/star/io/TextOutputStream.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <osl/file.hxx>
@@ -126,17 +126,15 @@ Reference< XOutputStream > InputOutputHelper::openOutputStream(
     return xOutStrm;
 }
 
-Reference< XTextOutputStream > InputOutputHelper::openTextOutputStream(
+Reference< XTextOutputStream2 > InputOutputHelper::openTextOutputStream(
         const Reference< XComponentContext >& rxContext, const Reference< XOutputStream >& rxOutStrm, rtl_TextEncoding eTextEnc )
 {
-    Reference< XTextOutputStream > xTextOutStrm;
+    Reference< XTextOutputStream2 > xTextOutStrm;
     const char* pcCharset = rtl_getMimeCharsetFromTextEncoding( eTextEnc );
     if( rxContext.is() && rxOutStrm.is() && pcCharset ) try
     {
-        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
-        Reference< XActiveDataSource > xDataSource( xFactory->createInstance( "com.sun.star.io.TextOutputStream" ), UNO_QUERY_THROW );
-        xDataSource->setOutputStream( rxOutStrm );
-        xTextOutStrm.set( xDataSource, UNO_QUERY_THROW );
+        xTextOutStrm = TextOutputStream::create(rxContext);
+        xTextOutStrm->setOutputStream( rxOutStrm );
         xTextOutStrm->setEncoding( OUString::createFromAscii( pcCharset ) );
     }
     catch( Exception& )
@@ -145,7 +143,7 @@ Reference< XTextOutputStream > InputOutputHelper::openTextOutputStream(
     return xTextOutStrm;
 }
 
-Reference< XTextOutputStream > InputOutputHelper::openTextOutputStream(
+Reference< XTextOutputStream2 > InputOutputHelper::openTextOutputStream(
         const Reference< XComponentContext >& rxContext, const OUString& rFileName, rtl_TextEncoding eTextEnc )
 {
     return openTextOutputStream( rxContext, openOutputStream( rxContext, rFileName ), eTextEnc );

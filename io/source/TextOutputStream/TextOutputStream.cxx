@@ -23,15 +23,14 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
 #include <rtl/unload.h>
 
-#include <com/sun/star/io/XTextOutputStream.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/io/XTextOutputStream2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 
@@ -52,7 +51,7 @@ namespace io_TextOutputStream
 //===========================================================================
 // Implementation XTextOutputStream
 
-typedef WeakImplHelper3< XTextOutputStream, XActiveDataSource, XServiceInfo > TextOutputStreamHelper;
+typedef WeakImplHelper2< XTextOutputStream2, XServiceInfo > TextOutputStreamHelper;
 
 class OTextOutputStream : public TextOutputStreamHelper
 {

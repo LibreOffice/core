@@ -41,7 +41,7 @@
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
-    namespace io { class XTextOutputStream; }
+    namespace io { class XTextOutputStream2; }
     namespace uno { class XComponentContext; }
 } } }
 
@@ -124,13 +124,13 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::rtl::OUString& rFileName );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream >
+    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream2 >
                         openTextOutputStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxOutStrm,
                             rtl_TextEncoding eTextEnc );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream >
+    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream2 >
                         openTextOutputStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::rtl::OUString& rFileName,
@@ -1072,7 +1072,7 @@ private:
 private:
     typedef ::std::vector< sal_Int32 > StringLenVec;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream > mxStrm;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream2 > mxStrm;
     ::rtl::OUString     maIndent;
     ::rtl::OUStringBuffer maLine;
     ::rtl::OUString     maLastItem;

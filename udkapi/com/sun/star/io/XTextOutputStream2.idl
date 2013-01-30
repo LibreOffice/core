@@ -16,24 +16,29 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_io_TextOutputStream_idl__
-#define __com_sun_star_io_TextOutputStream_idl__
+#ifndef __com_sun_star_io_XTextOutputStream2_idl__
+#define __com_sun_star_io_XTextOutputStream2_idl__
 
-#include <com/sun/star/io/XTextOutputStream2.idl>
+#include <com/sun/star/io/XTextOutputStream.idl>
+#include <com/sun/star/io/XActiveDataSource.idl>
 
 
 
 module com {  module sun {  module star {  module io {
 
-/** provides functionality to write text data to a
-    <type scope="com::sun::star::io">XOutputStream</type>
-    that initially has to be passed to the method
-    <member>XActiveDataSource::setOutputStream()</member>.
+/** Provides a unified interface for the new-style service TextOutputStream.
 
-    <p>For details about the text functionality see
-    <type scope="com::sun::star::io">XTextOutputStream</type>.
+    @since LibreOffice 4.1
  */
-published service TextOutputStream : XTextOutputStream2;
+published interface XTextOutputStream2
+{
+    /// Interface to write text data
+    interface com::sun::star::io::XTextOutputStream;
+
+    /// Interface to specify the used <type scope="com::sun::star::io">XOutputStream</type>
+    interface com::sun::star::io::XActiveDataSource;
+
+};
 
 
 }; }; }; };

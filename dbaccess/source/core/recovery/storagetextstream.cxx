@@ -20,8 +20,7 @@
 
 #include "storagetextstream.hxx"
 
-#include <com/sun/star/io/XTextOutputStream.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/io/TextOutputStream.hpp>
 
 #include <comphelper/componentcontext.hxx>
 #include <tools/diagnose_ex.h>
@@ -44,7 +43,8 @@ namespace dbaccess
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::embed::XStorage;
-    using ::com::sun::star::io::XTextOutputStream;
+    using ::com::sun::star::io::TextOutputStream;
+    using ::com::sun::star::io::XTextOutputStream2;
     using ::com::sun::star::io::XActiveDataSource;
     /** === end UNO using === **/
 
@@ -53,7 +53,7 @@ namespace dbaccess
     //==================================================================================================================
     struct StorageTextOutputStream_Data
     {
-        Reference< XTextOutputStream >  xTextOutput;
+        Reference< XTextOutputStream2 >  xTextOutput;
     };
 
     //==================================================================================================================
@@ -87,11 +87,9 @@ namespace dbaccess
         :StorageOutputStream( i_rContext, i_rParentStorage, i_rStreamName )
         ,m_pData( new StorageTextOutputStream_Data )
     {
-        m_pData->xTextOutput.set( i_rContext.createComponent( "com.sun.star.io.TextOutputStream" ), UNO_QUERY_THROW );
+        m_pData->xTextOutput = TextOutputStream::create( i_rContext.getUNOContext() );
         m_pData->xTextOutput->setEncoding( lcl_getTextStreamEncodingName() );
-
-        Reference< XActiveDataSource > xDataSource( m_pData->xTextOutput, UNO_QUERY_THROW );
-        xDataSource->setOutputStream( getOutputStream() );
+        m_pData->xTextOutput->setOutputStream( getOutputStream() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -102,8 +100,6 @@ namespace dbaccess
     //------------------------------------------------------------------------------------------------------------------
     void StorageTextOutputStream::writeLine( const ::rtl::OUString& i_rLine )
     {
-        ENSURE_OR_RETURN_VOID( m_pData->xTextOutput.is(), "no text output" );
-
         m_pData->xTextOutput->writeString( i_rLine );
         m_pData->xTextOutput->writeString( lcl_getLineFeed() );
     }
@@ -111,8 +107,6 @@ namespace dbaccess
     //------------------------------------------------------------------------------------------------------------------
     void StorageTextOutputStream::writeLine()
     {
-        ENSURE_OR_RETURN_VOID( m_pData->xTextOutput.is(), "no text output" );
-
         m_pData->xTextOutput->writeString( lcl_getLineFeed() );
     }
 

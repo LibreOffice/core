@@ -20,7 +20,7 @@
 #include "stringresource.hxx"
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/TextInputStream.hpp>
-#include <com/sun/star/io/XTextOutputStream.hpp>
+#include <com/sun/star/io/TextOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -2175,7 +2175,7 @@ void implWriteCharToBuffer( ::rtl::OUStringBuffer& aBuf, sal_Unicode cu, bool bK
 }
 
 void implWriteStringWithEncoding( const ::rtl::OUString& aStr,
-    Reference< io::XTextOutputStream > xTextOutputStream, bool bKey )
+    Reference< io::XTextOutputStream2 > xTextOutputStream, bool bKey )
 {
     static sal_Unicode cLineFeed = 0xa;
 
@@ -2208,79 +2208,71 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
         return false;
 
     bool bSuccess = false;
-    Reference< XMultiComponentFactory > xMCF = getMultiComponentFactory();
-    Reference< io::XTextOutputStream > xTextOutputStream( xMCF->createInstanceWithContext
-        ( ::rtl::OUString("com.sun.star.io.TextOutputStream"), m_xContext ), UNO_QUERY );
+    Reference< io::XTextOutputStream2 > xTextOutputStream = io::TextOutputStream::create(m_xContext);
 
-    if( xTextOutputStream.is() )
+    xTextOutputStream->setOutputStream( xOutputStream );
+
+    ::rtl::OUString aEncodingStr = ::rtl::OUString::createFromAscii
+        ( rtl_getMimeCharsetFromTextEncoding( RTL_TEXTENCODING_ISO_8859_1 ) );
+    xTextOutputStream->setEncoding( aEncodingStr );
+
+    xTextOutputStream->writeString( aComment );
+    xTextOutputStream->writeString( aLineFeedStr );
+
+    const IdToStringMap& rHashMap = pLocaleItem->m_aIdToStringMap;
+    if( rHashMap.size() > 0 )
     {
-        Reference< io::XActiveDataSource> xActiveDataSource( xTextOutputStream, UNO_QUERY );
-        if( xActiveDataSource.is() )
+        // Sort ids according to read order
+        const IdToIndexMap& rIndexMap = pLocaleItem->m_aIdToIndexMap;
+        IdToIndexMap::const_iterator it_index;
+
+        // Find max/min index
+        sal_Int32 nMinIndex = -1;
+        sal_Int32 nMaxIndex = -1;
+        for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); ++it_index )
         {
-            xActiveDataSource->setOutputStream( xOutputStream );
-
-            ::rtl::OUString aEncodingStr = ::rtl::OUString::createFromAscii
-                ( rtl_getMimeCharsetFromTextEncoding( RTL_TEXTENCODING_ISO_8859_1 ) );
-            xTextOutputStream->setEncoding( aEncodingStr );
-
-            xTextOutputStream->writeString( aComment );
-            xTextOutputStream->writeString( aLineFeedStr );
-
-            const IdToStringMap& rHashMap = pLocaleItem->m_aIdToStringMap;
-            if( rHashMap.size() > 0 )
-            {
-                // Sort ids according to read order
-                const IdToIndexMap& rIndexMap = pLocaleItem->m_aIdToIndexMap;
-                IdToIndexMap::const_iterator it_index;
-
-                // Find max/min index
-                sal_Int32 nMinIndex = -1;
-                sal_Int32 nMaxIndex = -1;
-                for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); ++it_index )
-                {
-                    sal_Int32 nIndex = (*it_index).second;
-                    if( nMinIndex > nIndex || nMinIndex == -1 )
-                        nMinIndex = nIndex;
-                    if( nMaxIndex < nIndex )
-                        nMaxIndex = nIndex;
-                }
-                sal_Int32 nTabSize = nMaxIndex - nMinIndex + 1;
-
-                // Create sorted array of pointers to the id strings
-                const ::rtl::OUString** pIdPtrs = new const ::rtl::OUString*[nTabSize];
-                sal_Int32 i;
-                for( i = 0 ; i < nTabSize ; i++ )
-                    pIdPtrs[i] = NULL;
-                for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); ++it_index )
-                {
-                    sal_Int32 nIndex = (*it_index).second;
-                    pIdPtrs[nIndex - nMinIndex] = &((*it_index).first);
-                }
-
-                // Write lines in correct order
-                for( i = 0 ; i < nTabSize ; i++ )
-                {
-                    const ::rtl::OUString* pStr = pIdPtrs[i];
-                    if( pStr != NULL )
-                    {
-                        ::rtl::OUString aResourceID = *pStr;
-                        IdToStringMap::const_iterator it = rHashMap.find( aResourceID );
-                        if( !( it == rHashMap.end() ) )
-                        {
-                            implWriteStringWithEncoding( aResourceID, xTextOutputStream, true );
-                            xTextOutputStream->writeString( aAssignmentStr );
-                            ::rtl::OUString aValStr = (*it).second;
-                            implWriteStringWithEncoding( aValStr, xTextOutputStream, false );
-                        }
-                    }
-                }
-
-                delete pIdPtrs;
-            }
-
-            bSuccess = true;
+            sal_Int32 nIndex = (*it_index).second;
+            if( nMinIndex > nIndex || nMinIndex == -1 )
+                nMinIndex = nIndex;
+            if( nMaxIndex < nIndex )
+                nMaxIndex = nIndex;
         }
+        sal_Int32 nTabSize = nMaxIndex - nMinIndex + 1;
+
+        // Create sorted array of pointers to the id strings
+        const ::rtl::OUString** pIdPtrs = new const ::rtl::OUString*[nTabSize];
+        sal_Int32 i;
+        for( i = 0 ; i < nTabSize ; i++ )
+            pIdPtrs[i] = NULL;
+        for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); ++it_index )
+        {
+            sal_Int32 nIndex = (*it_index).second;
+            pIdPtrs[nIndex - nMinIndex] = &((*it_index).first);
+        }
+
+        // Write lines in correct order
+        for( i = 0 ; i < nTabSize ; i++ )
+        {
+            const ::rtl::OUString* pStr = pIdPtrs[i];
+            if( pStr != NULL )
+            {
+                ::rtl::OUString aResourceID = *pStr;
+                IdToStringMap::const_iterator it = rHashMap.find( aResourceID );
+                if( !( it == rHashMap.end() ) )
+                {
+                    implWriteStringWithEncoding( aResourceID, xTextOutputStream, true );
+                    xTextOutputStream->writeString( aAssignmentStr );
+                    ::rtl::OUString aValStr = (*it).second;
+                    implWriteStringWithEncoding( aValStr, xTextOutputStream, false );
+                }
+            }
+        }
+
+        delete pIdPtrs;
     }
+
+    bSuccess = true;
+
     return bSuccess;
 }
 
