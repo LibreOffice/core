@@ -94,7 +94,7 @@
                       <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="column_spacing">5</property>
+                        <property name="column_spacing">12</property>
                         <property name="row_homogeneous">True</property>
                         <child>
                           <object class="GtkLabel" id="label6">
@@ -315,7 +315,7 @@
                           <object class="GtkBox" id="box4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="spacing">5</property>
+                            <property name="spacing">12</property>
                             <child>
                               <object class="GtkLabel" id="FT_PAGE_COUNT">
                                 <property name="visible">True</property>
@@ -372,7 +372,7 @@
                           <object class="GtkBox" id="box5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="spacing">5</property>
+                            <property name="spacing">12</property>
                             <child>
                               <object class="GtkLabel" id="FT_PAGE_PAGES">
                                 <property name="visible">True</property>
