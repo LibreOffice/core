@@ -1406,20 +1406,24 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpScToken& rTokData )
 
 void XclExpFmlaCompImpl::PrepareFunction( XclExpFuncData& rFuncData )
 {
-    switch( rFuncData.GetOpCode() )
+    // For OOXML these are not rewritten anymore.
+    if (GetOutput() != EXC_OUTPUT_XML_2007)
     {
-        case ocCosecant:                // simulate CSC(x) by (1/SIN(x))
-        case ocSecant:                  // simulate SEC(x) by (1/COS(x))
-        case ocCot:                     // simulate COT(x) by (1/TAN(x))
-        case ocCosecantHyp:             // simulate CSCH(x) by (1/SINH(x))
-        case ocSecantHyp:               // simulate SECH(x) by (1/COSH(x))
-        case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
-            AppendIntToken( 1 );
-        break;
-        case ocArcCot:                  // simulate ACOT(x) by (PI/2-ATAN(x))
-            AppendNumToken( F_PI2 );
-        break;
-        default:;
+        switch( rFuncData.GetOpCode() )
+        {
+            case ocCosecant:                // simulate CSC(x) by (1/SIN(x))
+            case ocSecant:                  // simulate SEC(x) by (1/COS(x))
+            case ocCot:                     // simulate COT(x) by (1/TAN(x))
+            case ocCosecantHyp:             // simulate CSCH(x) by (1/SINH(x))
+            case ocSecantHyp:               // simulate SECH(x) by (1/COSH(x))
+            case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
+                AppendIntToken( 1 );
+                break;
+            case ocArcCot:                  // simulate ACOT(x) by (PI/2-ATAN(x))
+                AppendNumToken( F_PI2 );
+                break;
+            default:;
+        }
     }
 }
 
@@ -1468,12 +1472,20 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
             case ocCosecantHyp:             // simulate CSCH(x) by (1/SINH(x))
             case ocSecantHyp:               // simulate SECH(x) by (1/COSH(x))
             case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
-                AppendBinaryOperatorToken( EXC_TOKID_DIV, true );
-                AppendParenToken();
+                // For OOXML not rewritten anymore.
+                if (GetOutput() != EXC_OUTPUT_XML_2007)
+                {
+                    AppendBinaryOperatorToken( EXC_TOKID_DIV, true );
+                    AppendParenToken();
+                }
             break;
             case ocArcCot:                  // simulate ACOT(x) by (PI/2-ATAN(x))
-                AppendBinaryOperatorToken( EXC_TOKID_SUB, true );
-                AppendParenToken();
+                // For OOXML not rewritten anymore.
+                if (GetOutput() != EXC_OUTPUT_XML_2007)
+                {
+                    AppendBinaryOperatorToken( EXC_TOKID_SUB, true );
+                    AppendParenToken();
+                }
             break;
 
             default:;
