@@ -3095,9 +3095,16 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
     {
         // #i66550 HLINK_FOR_SHAPES
         rtl::OUString sHlink;
-        uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-        if ( xProps.is() )
-            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_HYPERLINK ) ) ) >>= sHlink;
+        try
+        {
+            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
+            if ( xProps.is() )
+                xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_HYPERLINK ) ) ) >>= sHlink;
+        }
+        catch ( const beans::UnknownPropertyException& )
+        {
+            // no hyperlink property
+        }
 
         std::auto_ptr< SvXMLElementExport > pDrawA;
         // enlose shapes with <draw:a> element only if sHlink contains something
