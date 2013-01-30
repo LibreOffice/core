@@ -55,12 +55,10 @@ OUString getResource( sal_uInt16 nResourceId,
     OUString sResource = frm::ResourceManager::loadString( nResourceId );
     OSL_ENSURE( !sResource.isEmpty(), "resource not found?" );
 
-    // use old style String class for search and replace, so we don't have to
-    // code this again.
     OUString sString( sResource );
-    sString.replaceAll( "$1", rInfo1 );
-    sString.replaceAll( "$2", rInfo2 );
-    sString.replaceAll( "$3", rInfo3 );
+    sString = sString.replaceAll( "$1", rInfo1 );
+    sString = sString.replaceAll( "$2", rInfo2 );
+    sString = sString.replaceAll( "$3", rInfo3 );
     return sString;
 }
 
