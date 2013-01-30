@@ -37,6 +37,7 @@
 #include <uno/current_context.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
+#include <com/sun/star/reflection/XConstantTypeDescription.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
@@ -477,18 +478,17 @@ static PyObject *getConstantByName(
         {
             OUString typeName ( OUString::createFromAscii( name ) );
             Runtime runtime;
-            Any a = runtime.getImpl()->cargo->xTdMgr->getByHierarchicalName(typeName);
-            if( a.getValueType().getTypeClass() ==
-                com::sun::star::uno::TypeClass_INTERFACE )
+            css::uno::Reference< css::reflection::XConstantTypeDescription > td;
+            if (!(runtime.getImpl()->cargo->xTdMgr->getByHierarchicalName(
+                      typeName)
+                  >>= td))
             {
-                // a idl constant cannot be an instance of an uno-object, thus
-                // this cannot be a constant
                 OUStringBuffer buf;
                 buf.appendAscii( "pyuno.getConstantByName: " ).append( typeName );
                 buf.appendAscii( "is not a constant" );
                 throw RuntimeException(buf.makeStringAndClear(), Reference< XInterface > () );
             }
-            PyRef constant = runtime.any2PyObject( a );
+            PyRef constant = runtime.any2PyObject( td->getConstantValue() );
             ret = constant.getAcquired();
         }
     }
