@@ -3056,7 +3056,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, const c
     // and embed it again.
     // TODO IDocumentSettingAccess::EMBED_SYSTEM_FONTS
     osl::File file( fontUrl );
-    if( file.open( osl_File_OpenFlag_Write ) != osl::File::E_None )
+    if( file.open( osl_File_OpenFlag_Read ) != osl::File::E_None )
         return;
     uno::Reference< com::sun::star::io::XOutputStream > xOutStream = m_rExport.GetFilter().openFragmentStream(
         OUString( "word/fonts/font" ) + OUString::number(m_nextFontId) + ".ttf",
