@@ -100,6 +100,7 @@
 #include "scslots.hxx"
 
 #include "scabstdlg.hxx"
+#include "formula/errorcodes.hxx"
 
 #define SC_IDLE_MIN     150
 #define SC_IDLE_MAX     3000
@@ -998,12 +999,13 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     ScDocShell*             pDocSh  = PTR_CAST(ScDocShell, SfxObjectShell::Current());
     ScDocument*             pDoc    = pDocSh ? pDocSh->GetDocument() : NULL;
     const SfxPoolItem*      pItem   = NULL;
-    sal_Bool                    bRepaint            = false;
-    sal_Bool                    bUpdateMarks        = false;
-    sal_Bool                    bUpdateRefDev       = false;
-    sal_Bool                    bCalcAll            = false;
-    sal_Bool                    bSaveAppOptions     = false;
-    sal_Bool                    bSaveInputOptions   = false;
+    bool bRepaint = false;
+    bool bUpdateMarks = false;
+    bool bUpdateRefDev = false;
+    bool bCalcAll = false;
+    bool bSaveAppOptions = false;
+    bool bSaveInputOptions = false;
+    bool bCompileErrorCells = false;
 
     //--------------------------------------------------------------------------
 
@@ -1064,6 +1066,13 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         if (!pFormulaCfg || (*pFormulaCfg != rOpt))
             // Formula options have changed. Repaint the column headers.
             bRepaint = true;
+
+        if (pFormulaCfg && pFormulaCfg->GetUseEnglishFuncName() != rOpt.GetUseEnglishFuncName())
+        {
+            // Re-compile formula cells with error as the error may have been
+            // caused by unresolved function names.
+            bCompileErrorCells = true;
+        }
 
         SetFormulaOptions( rOpt );
 
@@ -1312,6 +1321,14 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         pInputCfg->OptionsChanged();
 
     // Neuberechnung anstossen?
+
+    if (pDoc && bCompileErrorCells)
+    {
+        // Re-compile cells with name error, and recalc if at least one cell
+        // has been re-compiled.  In the future we may want to find a way to
+        // recalc only those that are affected.
+        bCalcAll = pDoc->CompileErrorCells(ScErrorCodes::errNoName);
+    }
 
     if ( pDoc && bCalcAll )
     {
