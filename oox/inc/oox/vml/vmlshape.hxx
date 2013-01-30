@@ -340,9 +340,9 @@ public:
 
 protected:
     /** Returns the absolute shape rectangle. */
-    virtual ::com::sun::star::awt::Rectangle getAbsRectangle() const;
+    virtual ::com::sun::star::awt::Rectangle getAbsRectangle() const SAL_OVERRIDE;
     /** Returns the rectangle relative to the parent coordinate system. */
-    virtual ::com::sun::star::awt::Rectangle getRelRectangle() const;
+    virtual ::com::sun::star::awt::Rectangle getRelRectangle() const SAL_OVERRIDE;
 };
 
 /** Bezier shape object that supports to, from, control1 and control2
