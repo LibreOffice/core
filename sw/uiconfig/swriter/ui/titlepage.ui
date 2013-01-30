@@ -537,4 +537,14 @@
       <action-widget response="0">PB_HELP</action-widget>
     </action-widgets>
   </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="NF_PAGE_COUNT"/>
+      <widget name="NF_PAGE_START"/>
+      <widget name="NF_RESTART_NUMBERING"/>
+      <widget name="NF_SET_PAGE_NUMBER"/>
+      <widget name="PB_PAGE_PROPERTIES"/>
+    </widgets>
+  </object>
 </interface>
