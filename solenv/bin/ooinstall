@@ -31,17 +31,17 @@ if ($ENV{OS} eq 'WNT') {
     $is_windows = 1;
 }
 
-if( defined($ENV{TMPDIR}) ) {
+if (defined($ENV{TMPDIR})) {
     $tmp_dir = $ENV{TMPDIR};
-} elsif( defined($ENV{TMP}) ) {
-   $tmp_dir = $ENV{TMP};
+} elsif (defined($ENV{TMP})) {
+    $tmp_dir = $ENV{TMP};
 } else {
-   $tmp_dir = '/tmp';
+    $tmp_dir = '/tmp';
 }
 if (!-d $tmp_dir) {die "Set TMP or TMPDIR!\n";}
 
 # Workaround for system Mozilla
-if ( $ENV{'SYSTEM_MOZILLA'} eq 'YES' ) {
+if ($ENV{'SYSTEM_MOZILLA'} eq 'YES') {
     $ENV{'LD_LIBRARY_PATH'} = "$ENV{'MOZ_LIB'}:$ENV{'LD_LIBRARY_PATH'}";
 }
 
@@ -50,15 +50,15 @@ $ENV{'PYTHONPATH'} = "$ENV{'SRC_ROOT'}/instsetoo_native/$ENV{'INPATH'}/bin:$ENV{
 
 for $arg (@ARGV) {
     if ($arg eq '-l' || $arg eq '--link') {
-	$do_link = 1;
+        $do_link = 1;
     } elsif ($arg eq '-s' || $arg eq '--strip') {
-	$strip = "-strip";
+        $strip = "-strip";
     } elsif ($arg eq '-h' || $arg eq '--help') {
-	$help = 1;
+        $help = 1;
     } else {
-		# Cwd::realpath does not work if the path does not exist
-		mkpath($ENV{DESTDIR} . $arg) unless -d $ENV{DESTDIR} . $arg;
-		$path = Cwd::realpath( $ENV{DESTDIR} . $arg );
+        # Cwd::realpath does not work if the path does not exist
+        mkpath($ENV{DESTDIR} . $arg) unless -d $ENV{DESTDIR} . $arg;
+        $path = Cwd::realpath($ENV{DESTDIR} . $arg);
     }
 }
 
@@ -75,10 +75,10 @@ my $BUILD=undef;
 my $LAST_MINOR=undef;
 open MINORMK, "$ENV{'SOLARENV'}/inc/minor.mk";
 while (<MINORMK>) {
-	my $t = "\$" . $_;
-	if(/^BUILD/ || /^LAST_MINOR/) {
-		eval $t;
-	}
+    my $t = "\$" . $_;
+    if (/^BUILD/ || /^LAST_MINOR/) {
+        eval $t;
+    }
 }
 close MINORMK;
 $ENV{LAST_MINOR} = $LAST_MINOR;
@@ -96,8 +96,8 @@ $langs=$ENV{WITH_LANG_LIST};
 $langs = join (",", @larr);
 
 $destdir='';
-if ( defined $ENV{DESTDIR} &&
-     $ENV{DESTDIR} ne "" ) {
+if (defined $ENV{DESTDIR} &&
+    $ENV{DESTDIR} ne "" ) {
     $destdir = "-destdir \"$ENV{DESTDIR}\"";
 }
 
@@ -118,24 +118,30 @@ if ($destdir && "$ENV{DESTDIR}" ne "/" && -d "$ENV{DESTDIR}") {
 
 print "Running LibreOffice installer\n";
 system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
-	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
-	"-f openoffice.lst -l $langs -p LibreOffice " .
-	"-u $tmp_dir " .
-	"-buildid $BUILD $destdir $strip $msi " .
-	"-simple $path") && die "Failed to install: $!";
+        "perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
+        "-f openoffice.lst -l $langs -p LibreOffice " .
+        "-u $tmp_dir " .
+        "-buildid $BUILD $destdir $strip $msi " .
+        "-simple $path") && die "Failed to install: $!";
 
 if ($ENV{BUILD_TYPE} =~ m/ODK/) {
     print "Running SDK installer\n";
     system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
-	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
-	"-f openoffice.lst -l en-US -p LibreOffice_SDK " .
-	"-u $tmp_dir " .
-	"-buildid $BUILD $destdir $strip $msi " .
-	"-simple $path") && die "Failed to install: $!";
+            "perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
+            "-f openoffice.lst -l en-US -p LibreOffice_SDK " .
+            "-u $tmp_dir " .
+            "-buildid $BUILD $destdir $strip $msi " .
+            "-simple $path") && die "Failed to install: $!";
 }
 print "Installer finished\n";
 
 if ($do_link && !$is_windows) {
     system("$ENV{SOLARENV}/bin/linkoo $path $ENV{SRC_ROOT}") &&
-        die "linkoo failed: $!";
+      die "linkoo failed: $!";
 }
+
+# Local Variables:
+# cperl-indent-level: 4
+# indent-tabs-mode: nil
+# End:
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
