@@ -3377,6 +3377,22 @@ void ScDocument::CompileXML()
     SetAutoCalc( bOldAutoCalc );
 }
 
+bool ScDocument::CompileErrorCells(sal_uInt16 nErrCode)
+{
+    bool bCompiled = false;
+    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScTable* pTab = *it;
+        if (!pTab)
+            continue;
+
+        if (pTab->CompileErrorCells(nErrCode))
+            bCompiled = true;
+    }
+
+    return bCompiled;
+}
 
 void ScDocument::CalcAfterLoad()
 {
