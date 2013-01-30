@@ -1508,7 +1508,6 @@ positive_int_expr :
 
 const_type :
 	integer_type
-	| char_type
 	| byte_type
 	| boolean_type
 	| floating_pt_type
