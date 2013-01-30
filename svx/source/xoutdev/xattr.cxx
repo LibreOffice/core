@@ -3169,8 +3169,8 @@ XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
 *************************************************************************/
 
 XFillGradientItem::XFillGradientItem(const OUString& rName,
-                                   const XGradient& rTheGradient, sal_uInt16 nWhich_)
-    : NameOrIndex(nWhich_, rName)
+                                   const XGradient& rTheGradient, sal_uInt16 nWhich)
+    : NameOrIndex(nWhich, rName)
     , aGradient(rTheGradient)
 {
 }
