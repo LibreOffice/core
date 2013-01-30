@@ -222,12 +222,18 @@ void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat, const ScAttrArray*& rp
 {
     if ( rpArr != pNewArr || nAttrEndRow < nRow )
     {
-        SCSIZE nPos;
-        pNewArr->Search( nRow, nPos );  // nPos 0 gueltig wenn nicht gefunden
-        const ScPatternAttr* pPattern = pNewArr->pData[nPos].pPattern;
+        SCROW nRowStart = 0;
+        SCROW nRowEnd = MAXROW;
+        const ScPatternAttr* pPattern;
+        if( !(pPattern = pNewArr->GetPatternRange( nRowStart, nRowEnd, nRow ) ) )
+        {
+            pPattern = pDoc->GetDefPattern();
+            nRowEnd = MAXROW;
+        }
+
         nFormat = pPattern->GetNumberFormat( pDoc->GetFormatTable() );
         rpArr = pNewArr;
-        nAttrEndRow = pNewArr->pData[nPos].nRow;
+        nAttrEndRow = nRowEnd;
     }
 }
 

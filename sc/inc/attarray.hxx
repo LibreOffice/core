@@ -87,9 +87,6 @@ friend class ScDocument;                // for FillInfo
 friend class ScDocumentIterator;
 friend class ScAttrIterator;
 friend class ScHorizontalAttrIterator;
-friend void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat,
-        const ScAttrArray*& rpArr, SCROW& nAttrEndRow,
-        const ScAttrArray* pNewArr, SCROW nRow, ScDocument* pDoc );
 
     bool    ApplyFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
                             SCROW nStartRow, SCROW nEndRow,
