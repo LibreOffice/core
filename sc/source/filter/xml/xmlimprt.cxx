@@ -2100,17 +2100,17 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDataPilotMemberAttrTokenMap;
     delete pConsolidationAttrTokenMap;
 
-        delete pChangeTrackingImportHelper;
-        delete pNumberFormatAttributesExportHelper;
-        delete pStyleNumberFormats;
-        delete pStylesImportHelper;
+    delete pChangeTrackingImportHelper;
+    delete pNumberFormatAttributesExportHelper;
+    delete pStyleNumberFormats;
+    delete pStylesImportHelper;
 
-        delete pSolarMutexGuard;
+    delete pSolarMutexGuard;
 
-        delete pMyNamedExpressions;
-        delete pMyLabelRanges;
-        delete pValidations;
-        delete pDetectiveOpArray;
+    delete pMyNamedExpressions;
+    delete pMyLabelRanges;
+    delete pValidations;
+    delete pDetectiveOpArray;
 }
 
 // ---------------------------------------------------------------------
