@@ -370,12 +370,102 @@ static const XclFunctionInfo saFuncTable_Oox[] =
     { ocIfError,            255,    3,  3,  V, { RO_E, VO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "IFERROR" ) }
 };
 
-/** Functions new in Excel 2013. */
+
+#define EXC_FUNCENTRY_V_VR( opcode, minparam, maxparam, flags, asciiname ) \
+    { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
+    { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
+
+#define EXC_FUNCENTRY_V_VR_IMPORT( opcode, minparam, maxparam, flags, asciiname ) \
+    { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
+
+#define EXC_FUNCENTRY_A_VR( opcode, minparam, maxparam, flags, asciiname ) \
+    { opcode, NOID, minparam,     maxparam,     A, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
+    { opcode,  255, (minparam)+1, (maxparam)+1, A, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
+
+#define EXC_FUNCENTRY_V_RO( opcode, minparam, maxparam, flags, asciiname ) \
+    { opcode, NOID, minparam,     maxparam,     V, { RO },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
+    { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
+
+// implicit maxparam=MX
+#define EXC_FUNCENTRY_V_RX( opcode, minparam, maxparam, flags, asciiname ) \
+    { opcode, NOID, minparam,     MX,           V, { RX },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
+    { opcode,  255, (minparam)+1, MX,           V, { RO_E, RX }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
+
+/** Functions new in Excel 2013.
+
+    See http://office.microsoft.com/en-us/excel-help/new-functions-in-excel-2013-HA103980604.aspx
+    Most functions apparently were added for ODF1.2 ODFF / OpenFormula
+    compatibility.
+
+    Functions with EXC_FUNCENTRY_V_VR_IMPORT are rewritten in
+    sc/source/filter/excel/xeformula.cxx during export for BIFF, OOXML export
+    uses a different mapping but still uses this mapping here to determine the
+    feature set.
+
+    FIXME: either have the exporter determine the feature set from the active
+    mapping, preferred, or enhance this mapping here such that for OOXML the
+    rewrite can be overridden.
+
+    @See sc/source/filter/oox/formulabase.cxx saFuncTable2013 for V,VR,RO,...
+ */
 static const XclFunctionInfo saFuncTable_2013[] =
 {
-    { ocIfNA,               NOID,   2,  2,  V, { VO, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "IFNA" ) },
-    { ocIfNA,               255,    3,  3,  V, { RO_E, VO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "IFNA" ) }
+    EXC_FUNCENTRY_V_VR_IMPORT(  ocArcCot,        1,  1,  0,  "ACOT" ),
+    EXC_FUNCENTRY_V_VR_IMPORT(  ocArcCotHyp,     1,  1,  0,  "ACOTH" ),
+    EXC_FUNCENTRY_V_VR(         ocArabic,        1,  1,  0,  "ARABIC" ),
+    EXC_FUNCENTRY_V_VR(         ocBase,          2,  3,  0,  "BASE" ),
+    EXC_FUNCENTRY_V_VR(         ocB,             3,  4,  0,  "BINOM.DIST.RANGE" ),
+    EXC_FUNCENTRY_V_VR(         ocBitAnd,        2,  2,  0,  "BITAND" ),
+    EXC_FUNCENTRY_V_VR(         ocBitLshift,     2,  2,  0,  "BITLSHIFT" ),
+    EXC_FUNCENTRY_V_VR(         ocBitOr,         2,  2,  0,  "BITOR" ),
+    EXC_FUNCENTRY_V_VR(         ocBitRshift,     2,  2,  0,  "BITRSHIFT" ),
+    EXC_FUNCENTRY_V_VR(         ocBitXor,        2,  2,  0,  "BITXOR" ),
+    /* FIXME: CEILING.MATH is our/ODFF CEILING, but we have special handling
+     * for the weird Excel CEILING behavior, check that and unify or diversify.
+     * */
+    EXC_FUNCENTRY_V_VR(         ocNoName,        1,  3,  0,  "CEILING.MATH" ),
+    EXC_FUNCENTRY_V_VR(         ocKombin2,       2,  2,  0,  "COMBINA" ),
+    EXC_FUNCENTRY_V_VR_IMPORT(  ocCot,           1,  1,  0,  "COT" ),
+    EXC_FUNCENTRY_V_VR_IMPORT(  ocCotHyp,        1,  1,  0,  "COTH" ),
+    EXC_FUNCENTRY_V_VR_IMPORT(  ocCosecant,      1,  1,  0,  "CSC" ),
+    EXC_FUNCENTRY_V_VR_IMPORT(  ocCosecantHyp,   1,  1,  0,  "CSCH" ),
+    EXC_FUNCENTRY_V_VR(         ocGetDiffDate,   2,  2,  0,  "DAYS" ),
+    EXC_FUNCENTRY_V_VR(         ocDecimal,       2,  2,  0,  "DECIMAL" ),
+    EXC_FUNCENTRY_V_VR(         ocNoName,        1,  1,  0,  "ENCODEURL" ),
+    // NOTE: this FDIST is not our LEGACY.FDIST
+    EXC_FUNCENTRY_V_VR(         ocNoName,        3,  4,  0,  "FDIST" ),
+    // NOTE: this FINV is not our LEGACY.FINV
+    EXC_FUNCENTRY_V_VR(         ocNoName,        3,  3,  0,  "FINV" ),
+    EXC_FUNCENTRY_V_VR(         ocNoName,        2,  2,  0,  "FILTERXML" ),
+    /* FIXME: FLOOR.MATH is our/ODFF FLOOR, but we have special handling for
+     * the weird Excel FLOOR behavior, check that and unify or diversify. */
+    EXC_FUNCENTRY_V_VR(         ocNoName,        1,  3,  0,  "FLOOR.MATH" ),
+    EXC_FUNCENTRY_V_RO(         ocFormula,       1,  1,  0,  "FORMULATEXT" ),
+    EXC_FUNCENTRY_V_VR(         ocGamma,         1,  1,  0,  "GAMMA" ),
+    EXC_FUNCENTRY_V_VR(         ocGauss,         1,  1,  0,  "GAUSS" ),
+    {                           ocIfNA,       NOID,  2,  2,  V, { VO, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "IFNA" ) },
+    {                           ocIfNA,        255,  3,  3,  V, { RO_E, VO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "IFNA" ) },
+    // IMCOSH, IMCOT, IMCSC, IMCSCH, IMSEC, IMSECH, IMSINH and IMTAN are
+    // implemented in the Analysis Add-In.
+    EXC_FUNCENTRY_V_RO(         ocIsFormula,     1,  1,  0,  "ISFORMULA" ),
+    EXC_FUNCENTRY_V_VR(         ocWeek,          1,  2,  0,  "ISOWEEKNUM" ),
+    EXC_FUNCENTRY_A_VR(         ocMatrixUnit,    1,  1,  0,  "MUNIT" ),
+    EXC_FUNCENTRY_V_VR(         ocNumberValue,   1,  3,  0,  "NUMBERVALUE" ),
+    EXC_FUNCENTRY_V_VR(         ocLaufz,         3,  3,  0,  "PDURATION" ),
+    EXC_FUNCENTRY_V_VR(         ocVariationen2,  2,  2,  0,  "PERMUTATIONA" ),
+    EXC_FUNCENTRY_V_VR(         ocPhi,           1,  1,  0,  "PHI" ),
+    EXC_FUNCENTRY_V_VR(         ocZGZ,           3,  3,  0,  "RRI" ),
+    EXC_FUNCENTRY_V_VR_IMPORT(  ocSecant,        1,  1,  0,  "SEC" ),
+    EXC_FUNCENTRY_V_VR_IMPORT(  ocSecantHyp,     1,  1,  0,  "SECH" ),
+    EXC_FUNCENTRY_V_RO(         ocTable,         0,  1,  0,  "SHEET" ),
+    EXC_FUNCENTRY_V_RO(         ocTables,        0,  1,  0,  "SHEETS" ),
+    EXC_FUNCENTRY_V_RX(         ocNoName,        1,  MX, 0,  "SKEW.P" ),
+    EXC_FUNCENTRY_V_VR(         ocUnichar,       1,  1,  0,  "UNICHAR" ),
+    EXC_FUNCENTRY_V_VR(         ocUnicode,       1,  1,  0,  "UNICODE" ),
+    EXC_FUNCENTRY_V_VR(         ocNoName,        1,  1,  0,  "WEBSERVICE" ),
+    EXC_FUNCENTRY_V_RX(         ocXor,           1,  MX, 0,  "XOR" )
 };
+
 
 #define EXC_FUNCENTRY_ODF( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }, \
@@ -384,38 +474,8 @@ static const XclFunctionInfo saFuncTable_2013[] =
 /** Functions defined by OpenFormula, but not supported by Calc (ocNoName) or by Excel (defined op-code). */
 static const XclFunctionInfo saFuncTable_Odf[] =
 {
-    EXC_FUNCENTRY_ODF( ocArabic,        1,  1,  0,  "ARABIC" ),
-    EXC_FUNCENTRY_ODF( ocB,             3,  4,  0,  "B" ),
-    EXC_FUNCENTRY_ODF( ocBase,          2,  3,  0,  "BASE" ),
-    EXC_FUNCENTRY_ODF( ocBitAnd,        2,  2,  0,  "BITAND" ),
-    EXC_FUNCENTRY_ODF( ocBitLshift,     2,  2,  0,  "BITLSHIFT" ),
-    EXC_FUNCENTRY_ODF( ocBitOr,         2,  2,  0,  "BITOR" ),
-    EXC_FUNCENTRY_ODF( ocBitRshift,     2,  2,  0,  "BITRSHIFT" ),
-    EXC_FUNCENTRY_ODF( ocBitXor,        2,  2,  0,  "BITXOR" ),
     EXC_FUNCENTRY_ODF( ocChiSqDist,     2,  3,  0,  "CHISQDIST" ),
-    EXC_FUNCENTRY_ODF( ocChiSqInv,      2,  2,  0,  "CHISQINV" ),
-    EXC_FUNCENTRY_ODF( ocKombin2,       2,  2,  0,  "COMBINA" ),
-    EXC_FUNCENTRY_ODF( ocGetDiffDate,   2,  2,  0,  "DAYS" ),
-    EXC_FUNCENTRY_ODF( ocDecimal,       2,  2,  0,  "DECIMAL" ),
-    EXC_FUNCENTRY_ODF( ocFDist,         3,  4,  0,  "FDIST" ),
-    EXC_FUNCENTRY_ODF( ocFInv,          3,  3,  0,  "FINV" ),
-    EXC_FUNCENTRY_ODF( ocFormula,       1,  1,  0,  "FORMULA" ),
-    EXC_FUNCENTRY_ODF( ocGamma,         1,  1,  0,  "GAMMA" ),
-    EXC_FUNCENTRY_ODF( ocGauss,         1,  1,  0,  "GAUSS" ),
-    EXC_FUNCENTRY_ODF( ocIsFormula,     1,  1,  0,  "ISFORMULA" ),
-    EXC_FUNCENTRY_ODF( ocWeek,          1,  2,  0,  "ISOWEEKNUM" ),
-    EXC_FUNCENTRY_ODF( ocMatrixUnit,    1,  1,  0,  "MUNIT" ),
-    EXC_FUNCENTRY_ODF( ocNumberValue,   2,  2,  0,  "NUMBERVALUE" ),
-    EXC_FUNCENTRY_ODF( ocLaufz,         3,  3,  0,  "PDURATION" ),
-    EXC_FUNCENTRY_ODF( ocVariationen2,  2,  2,  0,  "PERMUTATIONA" ),
-    EXC_FUNCENTRY_ODF( ocPhi,           1,  1,  0,  "PHI" ),
-    EXC_FUNCENTRY_ODF( ocZGZ,           3,  3,  0,  "RRI" ),
-    EXC_FUNCENTRY_ODF( ocTable,         0,  1,  0,  "SHEET" ),
-    EXC_FUNCENTRY_ODF( ocTables,        0,  1,  0,  "SHEETS" ),
-    EXC_FUNCENTRY_ODF( ocNoName,        1,  MX, 0,  "SKEWP" ),
-    EXC_FUNCENTRY_ODF( ocUnichar,       1,  1,  0,  "UNICHAR" ),
-    EXC_FUNCENTRY_ODF( ocUnicode,       1,  1,  0,  "UNICODE" ),
-    EXC_FUNCENTRY_ODF( ocXor,           1,  MX, 0,  "XOR" )
+    EXC_FUNCENTRY_ODF( ocChiSqInv,      2,  2,  0,  "CHISQINV" )
 };
 
 #undef EXC_FUNCENTRY_ODF

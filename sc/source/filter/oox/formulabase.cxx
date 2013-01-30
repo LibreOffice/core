@@ -734,16 +734,59 @@ static const FunctionData saFuncTableOox[] =
     { "AVERAGEIFS",             "AVERAGEIFS",           484,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS }
 };
 
-/** Functions new in Excel 2013. */
-/* FIXME: BIFF12 function identifer available? Where to obtain? */
+/** Functions new in Excel 2013.
+
+    See http://office.microsoft.com/en-us/excel-help/new-functions-in-excel-2013-HA103980604.aspx
+    Most functions apparently were added for ODF1.2 ODFF / OpenFormula
+    compatibility.
+
+    Functions with FUNCFLAG_IMPORTONLY are rewritten in
+    sc/source/filter/excel/xeformula.cxx during export for
+    BIFF, OOXML export uses this different mapping here but still uses the
+    mapping there to determine the feature set.
+
+    FIXME: either have the exporter determine the feature set from the active
+    mapping, preferred, or enhance that mapping there such that for OOXML the
+    rewrite can be overridden.
+
+    @See sc/source/filter/excel/xlformula.cxx saFuncTable_2013
+ */
+/* FIXME: BIFF12 function identifiers available? Where to obtain? */
 static const FunctionData saFuncTable2013[] =
 {
     { "ACOT",                   "ACOT",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "ACOTH",                  "ACOTH",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "ARABIC",                 "ARABIC",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "BASE",                   "BASE",                 NOID,   NOID,   2,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "BINOM.DIST.RANGE",       "BINOM.DIST.RANGE",     NOID,   NOID,   3,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "BITAND",                 "BITAND",               NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "BITLSHIFT",              "BITLSHIFT",            NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "BITOR",                  "BITOR",                NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "BITRSHIFT",              "BITRSHIFT",            NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "BITXOR",                 "BITXOR",               NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    /* FIXME: CEILING.MATH is our/ODFF CEILING, but we have special handling
+     * for the weird Excel CEILING behavior, check that and unify or diversify.
+     * */
+    { 0/*"CEILING"*/,           "CEILING.MATH",         NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COMBINA",                "COMBINA",              NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COT",                    "COT",                  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COTH",                   "COTH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "CSC",                    "CSC",                  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "CSCH",                   "CSCH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "DAYS",                   "DAYS",                 NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "DECIMAL",                "DECIMAL",              NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { 0,                        "ENCODEURL",            NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { 0,                        "FILTERXML",            NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    /* FIXME: FLOOR.MATH is our/ODFF FLOOR, but we have special handling for
+     * the weird Excel FLOOR behavior, check that and unify or diversify. */
+    { 0/*"FLOOR"*/,             "FLOOR.MATH",           NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    // NOTE: this FDIST is not our LEGACY.FDIST
+    { 0/*"FDIST"*/,             "FDIST",                NOID,   NOID,   3,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    // NOTE: this FINV is not our LEGACY.FINV
+    { 0/*"FINV"*/,              "FINV",                 NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "FORMULA",                "FORMULATEXT",          NOID,   NOID,   1,  1,  V, { RO }, FUNCFLAG_MACROCALL_NEW },
+    { "GAMMA",                  "GAMMA",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "GAUSS",                  "GAUSS",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "IFNA",                   "IFNA",                 NOID,   NOID,   2,  2,  V, { VO, RO }, FUNCFLAG_MACROCALL_NEW },
     { "IMCOSH",                 "IMCOSH",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
     { "IMCOT",                  "IMCOT",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
@@ -753,45 +796,32 @@ static const FunctionData saFuncTable2013[] =
     { "IMSECH",                 "IMSECH",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
     { "IMSINH",                 "IMSINH",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
     { "IMTAN",                  "IMTAN",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "ISFORMULA",              "ISFORMULA",            NOID,   NOID,   1,  1,  V, { RO }, FUNCFLAG_MACROCALL_NEW },
+    /* FIXME: ISOWEEKNUM vs. WEEKNUM mess needs to be sorted out before we can
+     * import. */
+    { 0/*"ISOWEEKNUM"*/,        "ISOWEEKNUM",           NOID,   NOID,   1,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "MUNIT",                  "MUNIT",                NOID,   NOID,   1,  1,  A, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { 0/*"NUMBERVALUE"*/,       "NUMBERVALUE",          NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "PDURATION",              "PDURATION",            NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "PERMUTATIONA",           "PERMUTATIONA",         NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "PHI",                    "PHI",                  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "RRI",                    "RRI",                  NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "SEC",                    "SEC",                  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "SECH",                   "SECH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW }
+    { "SECH",                   "SECH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "SHEET",                  "SHEET",                NOID,   NOID,   0,  1,  V, { RO }, FUNCFLAG_MACROCALL_NEW },
+    { "SHEETS",                 "SHEETS",               NOID,   NOID,   0,  1,  V, { RO }, FUNCFLAG_MACROCALL_NEW },
+    { 0/*"SKEWP"*/,             "SKEW.P",               NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALL_NEW },
+    { "UNICHAR",                "UNICHAR",              NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "UNICODE",                "UNICODE",              NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { 0,                        "WEBSERVICE",           NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "XOR",                    "XOR",                  NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALL_NEW }
 };
 
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
 static const FunctionData saFuncTableOdf[] =
 {
-    { "ARABIC",                 0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "B",                      0,                      NOID,   NOID,   3,  4,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "BASE",                   0,                      NOID,   NOID,   2,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "BITAND",                 0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "BITLSHIFT",              0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "BITOR",                  0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "BITRSHIFT",              0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "BITXOR",                 0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "CHISQDIST",              0,                      NOID,   NOID,   2,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "CHISQINV",               0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "COMBINA",                0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "DAYS",                   0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "DECIMAL",                0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "FDIST",                  0,                      NOID,   NOID,   3,  4,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "FINV",                   0,                      NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "FORMULA",                0,                      NOID,   NOID,   1,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
-    { "GAMMA",                  0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "GAUSS",                  0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "ISFORMULA",              0,                      NOID,   NOID,   1,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
-    { "ISOWEEKNUM",             0,                      NOID,   NOID,   1,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "MUNIT",                  0,                      NOID,   NOID,   1,  1,  A, { VR }, FUNCFLAG_MACROCALLODF },
-    { "NUMBERVALUE",            0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "PDURATION",              0,                      NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "PERMUTATIONA",           0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "PHI",                    0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "RRI",                    0,                      NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "SHEET",                  0,                      NOID,   NOID,   0,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
-    { "SHEETS",                 0,                      NOID,   NOID,   0,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
-    { "SKEWP",                  0,                      NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALLODF },
-    { "UNICHAR",                0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "UNICODE",                0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "XOR",                    0,                      NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALLODF }
+    { "CHISQINV",               0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF }
 };
 
 // ----------------------------------------------------------------------------
