@@ -1278,6 +1278,8 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
                         const ScProtectionAttr* pCondProtect = static_cast<const ScProtectionAttr*>(pItem);
                         if( pCondProtect->GetProtection() || pProtect->GetHideCell() )
                             bFoundCond = true;
+                        else
+                            break;
                     }
                     else
                     {
@@ -1285,7 +1287,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
                         // but existing one + cell where conditional
                         // formatting does not remove it
                         // => we have a protected cell
-                        bFoundCond = true;
+                        bFoundCond = bFoundTemp;
                     }
                 }
                 bFoundTemp = bFoundCond;
