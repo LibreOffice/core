@@ -2495,12 +2495,12 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                             }
                             else
                             {
-                                sError = "[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, " \
+                                sError = "[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, "
                                          "ITypeInfo::GetNames failed.";
                             }
                         }
                         else
-                            sError = "[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, " \
+                            sError = "[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, "
                                      "ITypeInfo::GetFuncDesc failed.";
                     }
 
@@ -2524,18 +2524,18 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                             }
                             else
                             {
-                                sError = "[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, " \
-                                         "ITypeInfo::GetNames failed.;
+                                sError = "[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, "
+                                         "ITypeInfo::GetNames failed.";
                             }
                         }
                         else
-                            sError = "[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, " \
+                            sError = "[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, "
                                      "ITypeInfo::GetVarDesc failed.";
 
                     }
                 }
                 else
-                    sError = "[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, " \
+                    sError = "[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, "
                              "ITypeInfo::GetTypeAttr failed.";
 
                 if (sError.getLength())

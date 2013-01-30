@@ -643,7 +643,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny,
 
                 throw BridgeRuntimeError(
                     "[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
-                    "Conversion of any with  +
+                    "Conversion of any with " +
                     rAny.getValueType().getTypeName() +
                     " to VARIANT with type: " + OUString::valueOf((sal_Int32) type) +
                     " failed! Error code: " + OUString::valueOf(hr));

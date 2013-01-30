@@ -401,7 +401,7 @@ void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
                 if( FAILED( hr))
                 {
                     throw BridgeRuntimeError(
-                        "[automation bridge] Could not determine " +
+                        "[automation bridge] Could not determine "
                         "if the object has a member \"0\". Error: " +
                         OUString::valueOf(hr));
                 }
@@ -885,7 +885,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
     }
     catch(...)
     {
-        OUString message= "InterfaceOleWrapper_Impl::Invoke : \n" +
+        OUString message= "InterfaceOleWrapper_Impl::Invoke : \n"
                           "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
          ret = DISP_E_EXCEPTION;
@@ -978,7 +978,7 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
     }
     catch( ... )
      {
-        OUString message= "InterfaceOleWrapper_Impl::doInvoke : \n" +
+        OUString message= "InterfaceOleWrapper_Impl::doInvoke : \n"
                           "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
          ret = DISP_E_EXCEPTION;
@@ -1017,8 +1017,8 @@ HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * /*pdispparams*/, V
     }
     catch( ... )
     {
-        OUString message= "InterfaceOleWrapper_Impl::doInvoke : \n" +
-                          "Unexpected exception");
+        OUString message= "InterfaceOleWrapper_Impl::doInvoke : \n"
+                          "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
          ret = DISP_E_EXCEPTION;
     }
@@ -1158,7 +1158,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
 
             if (createUnoTypeWrapper(arg.bstrVal, pvarResult) == false)
             {
-                writeExcepinfo(pexcepinfo, "[automation bridge] InterfaceOleWrapper_Impl::InvokeGeneral\n" +
+                writeExcepinfo(pexcepinfo, "[automation bridge] InterfaceOleWrapper_Impl::InvokeGeneral\n"
                                            "Could not initialize UnoTypeWrapper object!");
                 return DISP_E_EXCEPTION;
             }
@@ -1178,7 +1178,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
     }
     catch( ... )
      {
-        OUString message= "InterfaceOleWrapper_Impl::InvokeGeneral : \n" +
+        OUString message= "InterfaceOleWrapper_Impl::InvokeGeneral : \n"
                           "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
          ret = DISP_E_EXCEPTION;
@@ -1579,7 +1579,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
     }
     catch(...)
     {
-        OUString message= "UnoObjectWrapperRemoteOpt::Invoke : \n" +
+        OUString message= "UnoObjectWrapperRemoteOpt::Invoke : \n"
                           "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
         ret = DISP_E_EXCEPTION;
