@@ -48,8 +48,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
-#define cChar rtl::OUString::createFromAscii(cChar)
-
 
 SmartTagMgr::SmartTagMgr( const rtl::OUString& rApplicationName )
     : maApplicationName( rApplicationName ),

@@ -43,8 +43,6 @@ using namespace com::sun::star::uno;
 
 using ::rtl::OUString;
 
-#define cChar OUString::createFromAscii(cChar)
-
 struct HtmlOptions_Impl
 {
     ::std::list<Link> aList;

@@ -64,7 +64,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::style;
 using rtl::OUString;
 
-#define cChar OUString::createFromAscii(cChar)
 #define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
 #define NUM_PAGETYPE_NUM            2

@@ -43,8 +43,6 @@ using namespace ::com::sun::star;
 #define SERVICE_IMPLEMENTATION_NAME ::rtl::OUString("com.sun.star.comp.linguistic2.ChineseTranslationDialog")
 #define SERVICE_NAME ::rtl::OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
 
-#define cChar rtl::OUString::createFromAscii(cChar)
-
 ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog( const uno::Reference< uno::XComponentContext >& xContext )
                     : m_xCC( xContext )
                     , m_xParentWindow( 0 )

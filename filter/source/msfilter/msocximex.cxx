@@ -30,8 +30,6 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-#define cChar OUString(cChar)
-
 OUString sWW8_form( "WW-Standard" );
 
 SvxMSConvertOCXControls::SvxMSConvertOCXControls( const uno::Reference< frame::XModel >& rxModel) : mxModel(rxModel)

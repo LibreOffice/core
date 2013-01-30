@@ -51,8 +51,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using rtl::OUString;
 
-#define cChar rtl::OUString::createFromAscii(cChar)
-
 SFX_IMPL_CHILDWINDOW( SvxRubyChildWindow, SID_RUBY_DIALOG );
 
 static const sal_Char cRubyBaseText[] = "RubyBaseText";

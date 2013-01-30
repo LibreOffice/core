@@ -41,8 +41,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::linguistic2;
 
-#define cChar OUString::createFromAscii(cChar)
-
 //////////////////////////////////////////////////////////////////////
 
 TextConvWrapper::TextConvWrapper( Window* pWindow,

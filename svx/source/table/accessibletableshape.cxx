@@ -47,8 +47,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::container;
 
-#define x OUString(RTL_CONSTASCII_USTRINGPARAM(x))
-
 namespace accessibility
 {
 

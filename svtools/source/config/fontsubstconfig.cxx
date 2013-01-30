@@ -34,8 +34,6 @@ using namespace com::sun::star::beans;
 
 using ::rtl::OUString;
 
-#define cChar OUString::createFromAscii(cChar)
-
 const sal_Char cReplacement[] = "Replacement";
 const sal_Char cFontPairs[] = "FontPairs";
 

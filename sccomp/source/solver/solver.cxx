@@ -62,8 +62,6 @@ using namespace com::sun::star;
 
 using ::rtl::OUString;
 
-#define constAsciiStr (::rtl::OUString( constAsciiStr  ))
-
 #define STR_NONNEGATIVE   "NonNegative"
 #define STR_INTEGER       "Integer"
 #define STR_TIMEOUT       "Timeout"

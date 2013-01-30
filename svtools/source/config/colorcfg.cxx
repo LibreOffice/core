@@ -48,7 +48,6 @@ using ::rtl::OUString;
 namespace svtools
 {
 
-#define cChar OUString::createFromAscii(cChar)
 static const sal_Char cColor[] = "/Color";
 static const sal_Char cColorSchemes[] = "ColorSchemes/";
 sal_Int32            nColorRefCount_Impl = 0;
