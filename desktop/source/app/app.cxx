@@ -156,7 +156,8 @@ void removeTree(OUString const & url) {
     case osl::FileBase::E_NOENT:
         return; //TODO: SAL_WARN if recursive
     default:
-        SAL_WARN("desktop", "cannot open directory " << url << ": " << +rc);
+        SAL_WARN(
+            "desktop", "cannot open directory " << dir.getURL() << ": " << +rc);
         return;
     }
     for (;;) {
@@ -167,7 +168,8 @@ void removeTree(OUString const & url) {
         }
         if (rc != osl::FileBase::E_None) {
             SAL_WARN(
-                "desktop","cannot iterate directory " << url << ": " << +rc);
+                "desktop",
+                "cannot iterate directory " << dir.getURL() << ": " << +rc);
             break;
         }
         osl::FileStatus stat(
@@ -176,7 +178,8 @@ void removeTree(OUString const & url) {
         rc = i.getFileStatus(stat);
         if (rc != osl::FileBase::E_None) {
             SAL_WARN(
-                "desktop", "cannot stat in directory " << url << ": " << +rc);
+                "desktop",
+                "cannot stat in directory " << dir.getURL() << ": " << +rc);
             continue;
         }
         if (stat.getFileType() == osl::FileStatus::Directory) { //TODO: symlinks
@@ -192,7 +195,7 @@ void removeTree(OUString const & url) {
         rc = dir.close();
         SAL_WARN_IF(
             rc != osl::FileBase::E_None, "desktop",
-            "cannot close directory " << url << ": " << +rc);
+            "cannot close directory " << dir.getURL() << ": " << +rc);
     }
     rc = osl::Directory::remove(url);
     SAL_WARN_IF(
@@ -249,11 +252,11 @@ bool cleanExtensionCache() {
             osl::FileBase::RC rc2 = fr.close();
             SAL_WARN_IF(
                 rc2 != osl::FileBase::E_None, "desktop",
-                "cannot close " << buildIdFile << " after reading: " << +rc2);
+                "cannot close " << fr.getURL() << " after reading: " << +rc2);
             if (rc != osl::FileBase::E_None) {
                 SAL_WARN(
                     "desktop",
-                    "cannot read from " << buildIdFile << ": " << +rc);
+                    "cannot read from " << fr.getURL() << ": " << +rc);
                 break;
             }
             OUString s2(
@@ -271,7 +274,7 @@ bool cleanExtensionCache() {
     default:
         SAL_WARN(
             "desktop",
-            "cannot open " << buildIdFile << " for reading: " << +rc);
+            "cannot open " << fr.getURL() << " for reading: " << +rc);
         break;
     }
     removeTree(extDir);
@@ -292,7 +295,7 @@ bool cleanExtensionCache() {
     if (rc != osl::FileBase::E_None) {
         SAL_WARN(
             "desktop",
-            "cannot open " << buildIdFile << " for writing: " << +rc);
+            "cannot open " << fw.getURL() << " for writing: " << +rc);
         return true;
     }
     OString buf(OUStringToOString(buildId, RTL_TEXTENCODING_UTF8));
@@ -305,11 +308,11 @@ bool cleanExtensionCache() {
         (rc != osl::FileBase::E_None
          || n != static_cast< sal_uInt32 >(buf.getLength())),
         "desktop",
-        "cannot write to " << buildIdFile << ": " << +rc << ", " << n);
+        "cannot write to " << fw.getURL() << ": " << +rc << ", " << n);
     rc = fw.close();
     SAL_WARN_IF(
         rc != osl::FileBase::E_None, "desktop",
-        "cannot close " << buildIdFile << " after writing: " << +rc);
+        "cannot close " << fw.getURL() << " after writing: " << +rc);
     return true;
 }
 

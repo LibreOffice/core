@@ -935,6 +935,15 @@ public:
         close();
     }
 
+    /** Obtain the URL.
+
+        @return
+        the URL with which this File instance was created.
+
+        @since LibreOffice 4.1
+    */
+    inline rtl::OUString getURL() const { return _aPath; }
+
     /** Open a regular file.
 
         Open a file. Only regular files can be openend.
@@ -1672,6 +1681,15 @@ public:
     {
         close();
     }
+
+    /** Obtain the URL.
+
+        @return
+        the URL with which this Directory instance was created.
+
+        @since LibreOffice 4.1
+    */
+    inline rtl::OUString getURL() const { return _aPath; }
 
     /** Open a directory for enumerating its contents.
 
