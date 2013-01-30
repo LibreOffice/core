@@ -642,8 +642,8 @@ double lcl_getErrorBarLogicLength(
             {
                 double fPercent = 0;
                 if( xProp->getPropertyValue( bPositive
-                                             ? "PositiveError"
-                                             : "NegativeError") >>= fPercent )
+                                             ? OUString("PositiveError")
+                                             : OUString("NegativeError") ) >>= fPercent )
                 {
                     if( nIndex >=0 && nIndex < rData.getLength() &&
                         ! ::rtl::math::isNan( rData[nIndex] ) &&
@@ -656,16 +656,16 @@ double lcl_getErrorBarLogicLength(
             break;
             case ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE:
                 xProp->getPropertyValue( bPositive
-                                         ? "PositiveError"
-                                         : "NegativeError") >>= fResult;
+                                         ? OUString("PositiveError")
+                                         : OUString("NegativeError") ) >>= fResult;
                 break;
             case ::com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
             {
                 // todo: check if this is really what's called error-margin
                 double fPercent = 0;
                 if( xProp->getPropertyValue( bPositive
-                                             ? "PositiveError"
-                                             : "NegativeError") >>= fPercent )
+                                             ? OUString("PositiveError")
+                                             : OUString("NegativeError") ) >>= fPercent )
                 {
                     double fMaxValue;
                     ::rtl::math::setInf(&fMaxValue, true);
