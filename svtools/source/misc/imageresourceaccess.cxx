@@ -137,14 +137,14 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    SvStream* GraphicAccess::getImageStream( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rImageResourceURL )
+    SvStream* GraphicAccess::getImageStream( const Reference< XComponentContext >& _rxContext, const ::rtl::OUString& _rImageResourceURL )
     {
         SvStream* pReturn = NULL;
 
         try
         {
             // get a GraphicProvider
-            Reference< XGraphicProvider > xProvider = ::com::sun::star::graphic::GraphicProvider::create(comphelper::getComponentContext(_rxORB));
+            Reference< XGraphicProvider > xProvider = ::com::sun::star::graphic::GraphicProvider::create(_rxContext);
 
             // let it create a graphic from the given URL
             Sequence< PropertyValue > aMediaProperties( 1 );
@@ -181,9 +181,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    Reference< XInputStream > GraphicAccess::getImageXStream( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rImageResourceURL )
+    Reference< XInputStream > GraphicAccess::getImageXStream( const Reference< XComponentContext >& _rxContext, const ::rtl::OUString& _rImageResourceURL )
     {
-        return new OSeekableInputStreamWrapper( getImageStream( _rxORB, _rImageResourceURL ), sal_True );   // take ownership
+        return new OSeekableInputStreamWrapper( getImageStream( _rxContext, _rImageResourceURL ), sal_True );   // take ownership
     }
 
 //........................................................................

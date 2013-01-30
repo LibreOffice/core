@@ -420,7 +420,7 @@ sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const ::rtl::OUString&
 
     if ( ::svt::GraphicAccess::isSupportedURL( _rURL ) )
     {
-        xImageStream = ::svt::GraphicAccess::getImageXStream( getContext().getLegacyServiceFactory(), _rURL );
+        xImageStream = ::svt::GraphicAccess::getImageXStream( getContext().getUNOContext(), _rURL );
     }
     else
     {

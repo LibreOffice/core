@@ -23,7 +23,7 @@
 #include "svtools/svtdllapi.h"
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 class SvStream;
 //........................................................................
@@ -58,7 +58,7 @@ namespace svt
             when you know that the image is small enough.
         */
         SVT_DLLPUBLIC static  SvStream*   getImageStream(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                     const ::rtl::OUString& _rImageResourceURL
                 );
 
@@ -67,7 +67,7 @@ namespace svt
         */
         SVT_DLLPUBLIC static  ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                 getImageXStream(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                     const ::rtl::OUString& _rImageResourceURL
                 );
     };
