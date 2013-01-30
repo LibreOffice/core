@@ -8,6 +8,7 @@ $(eval $(call gb_Executable_use_api,Viewer,\
 ))
 
 $(eval $(call gb_Executable_use_externals,Viewer,\
+    boost_headers \
     iconv \
     zlib \
 ))
