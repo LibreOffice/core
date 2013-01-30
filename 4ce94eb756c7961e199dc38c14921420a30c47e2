@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAU3////c\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 11812,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-01-30T06:44:21Z",
+      "side": 1,
+      "message": "Nitpick: wouldn\u0027t it make more sense to just use \u0027grep -q\u0027 instead of redirecting to /dev/null?",
+      "revId": "4ce94eb756c7961e199dc38c14921420a30c47e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
