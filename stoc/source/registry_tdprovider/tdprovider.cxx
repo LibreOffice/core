@@ -365,9 +365,10 @@ Any ProviderImpl::getByHierarchicalNameImpl( const OUString & rName )
                                     aBytes.getConstArray(), aBytes.getLength(),
                                     false, TYPEREG_VERSION_1);
 
-                                if (aReader.getTypeClass() == RT_TYPE_MODULE ||
-                                    aReader.getTypeClass() == RT_TYPE_CONSTANTS ||
-                                    aReader.getTypeClass() == RT_TYPE_ENUM)
+                                RTTypeClass tc = aReader.getTypeClass();
+                                if (tc == RT_TYPE_MODULE ||
+                                    tc == RT_TYPE_CONSTANTS ||
+                                    tc == RT_TYPE_ENUM)
                                 {
                                     OUString aFieldName( aKey.copy( nIndex+1, aKey.getLength() - nIndex -1 ) );
                                     sal_Int16 nPos = aReader.getFieldCount();
@@ -378,8 +379,18 @@ Any ProviderImpl::getByHierarchicalNameImpl( const OUString & rName )
                                             break;
                                     }
                                     if (nPos >= 0)
+                                    {
                                         aRet = getRTValue(
                                             aReader.getFieldValue(nPos));
+                                        if (tc != RT_TYPE_ENUM)
+                                        {
+                                            aRet = css::uno::makeAny<
+                                                css::uno::Reference<
+                                                    css::reflection::XTypeDescription > >(
+                                                        new ConstantTypeDescriptionImpl(
+                                                            rName, aRet));
+                                        }
+                                    }
                                 }
                             }
                         }

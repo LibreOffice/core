@@ -21,6 +21,7 @@
 #include <cppuhelper/implementationentry.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/reflection/XConstantTypeDescription.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
 
@@ -283,35 +284,42 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
     Any aRet( _aElements.getValue( rName ) );
     if (! aRet.hasValue())
     {
-        // first look for constants exclusivly!
         aRet = _xTDMgr->getByHierarchicalName( rName );
-        if (aRet.getValueTypeClass() == TypeClass_INTERFACE) // if no constant,
-                                                             // i.e. XTypeDescription for a type
+        if (aRet.getValueTypeClass() == TypeClass_INTERFACE)
         {
             // type retrieved from tdmgr
             OSL_ASSERT( (*(Reference< XInterface > *)aRet.getValue())->queryInterface(
                 ::getCppuType( (const Reference< XTypeDescription > *)0 ) ).hasValue() );
 
-            // if you are interested in a type then CALL forName()!!!
-            // this way is NOT recommended for types, because this method looks for constants first
-
-            // if td manager found some type, it will be in the cache (hopefully.. we just got it)
-            // so the second retrieving via c typelib callback chain should succeed...
-
-            // try to get _type_ by name
-            typelib_TypeDescription * pTD = 0;
-            typelib_typedescription_getByName( &pTD, rName.pData );
-
-            aRet.clear(); // kick XTypeDescription interface
-
-            if (pTD)
+            css::uno::Reference< css::reflection::XConstantTypeDescription >
+                ctd;
+            if (aRet >>= ctd)
             {
-                Reference< XIdlClass > xIdlClass( constructClass( pTD ) );
-                aRet.setValue( &xIdlClass, ::getCppuType( (const Reference< XIdlClass > *)0 ) );
-                typelib_typedescription_release( pTD );
+                aRet = ctd->getConstantValue();
+            }
+            else
+            {
+                // if you are interested in a type then CALL forName()!!!
+                // this way is NOT recommended for types, because this method looks for constants first
+
+                // if td manager found some type, it will be in the cache (hopefully.. we just got it)
+                // so the second retrieving via c typelib callback chain should succeed...
+
+                // try to get _type_ by name
+                typelib_TypeDescription * pTD = 0;
+                typelib_typedescription_getByName( &pTD, rName.pData );
+
+                aRet.clear(); // kick XTypeDescription interface
+
+                if (pTD)
+                {
+                    Reference< XIdlClass > xIdlClass( constructClass( pTD ) );
+                    aRet.setValue( &xIdlClass, ::getCppuType( (const Reference< XIdlClass > *)0 ) );
+                    typelib_typedescription_release( pTD );
+                }
             }
         }
-        // else is constant
+        // else is enum member(?)
 
         // update
         if (aRet.hasValue())

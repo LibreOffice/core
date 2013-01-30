@@ -47,9 +47,18 @@ published service TypeDescriptionManager
 {
     /** Interface to retrieve type descriptions.
 
+        In addition to the semantics specified for the corresponding interface
+        of the <type>TypeDescriptionProvider</type> service (which changed
+        slightly for LibreOffice&nbsp;4.1; see there), this interface allows to
+        retrieve the following entities:
         <ul>
-            <li>Names are given in dotted notation, for example
-            <code>"com.sun.star.uno.XInterface"</code>.</li>
+            <li>The simple types are accessible via <code>"void"</code>,
+            <code>"boolean"</code>, <code>"byte"</code>, <code>"short"</code>,
+            <code>"unsigned short"</code>, <code>"long"</code>, <code>"unsigned
+            long"</code>, <code>"hyper"</code>, <code>"unsigned hyper"</code>,
+            <code>"float"</code>, <code>"double"</code>, <code>"char"</code>,
+            <code>"string"</code>, <code>"type"</code>, and
+            <code>"any"</code>.</li>
 
             <li>Sequence types are accessible via
             <code>"[]<var>ComponentType</var>"</code></li>
@@ -62,9 +71,6 @@ published service TypeDescriptionManager
             <li>Members of interface types are accessible via
             <code>"<var>InterfaceType</var>::<var>Member</var>"</code>.</li>
         </ul>
-
-        <p>The returned values are of interface type
-        <type>XTypeDescription</type>.</p>
 
         <p>Even though the name of this interface suggests that the used type
         names are hierarchic, this need not be the case.  (For example, consider

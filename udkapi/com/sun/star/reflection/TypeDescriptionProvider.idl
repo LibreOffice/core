@@ -39,11 +39,16 @@ published service TypeDescriptionProvider
     /** Interface to retrieve type descriptions.
 
         <p>Names are given in dotted notation, for example
-        <code>"com.sun.star.uno.XInterface"</code>.  The returned values are of
-        interface type <type>XTypeDescription</type>.</p>
+        <code>"com.sun.star.uno.XInterface"</code>.</p>
 
-        <p>Even though the name of this interface suggests that the used type
-        names are hierarchic, this need not be the case.</p>
+        </p>The returned values are generally non-null references of type
+        <type>XTypeDescription</type>.  However, before LibreOffice&nbsp;4.1,
+        the value returned for a UNO constant was the value of the constant,
+        rather than a reference to an <type>XConstantTypeDescription</type>
+        object.  (It also appears that some implementations return values for
+        individual UNO enum members, e.g.
+        <code>"com.sun.star.uno.TypeClass.VOID"</code>, though this is probably
+        best treated as an implementation obscurity.)</p>
     */
     interface com::sun::star::container::XHierarchicalNameAccess;
 
