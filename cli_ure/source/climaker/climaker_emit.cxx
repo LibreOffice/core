@@ -1140,7 +1140,7 @@ Assembly ^ TypeEmitter::type_resolve(
         const OUString sType(entry->m_xType->getName());
         const OUString sMemberName(pseq_member_names[i]);
         if ( ! pseq_members[i].is())
-            throw RuntimeException("Missing type description . Check if you need to " +
+            throw RuntimeException("Missing type description . Check if you need to "
             "specify additional RDBs with the --extra option. Type missing for: " +  sType +
             "::" + sMemberName,0);
     }
