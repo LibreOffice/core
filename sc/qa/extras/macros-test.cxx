@@ -29,7 +29,7 @@
  */
 
 #include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 #include <unotest/macros_test.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
@@ -53,15 +53,10 @@ using namespace ::com::sun::star::uno;
 
 /* Implementation of Macros test */
 
-class ScMacrosTest : public test::BootstrapFixture, public unotest::MacrosTest
+class ScMacrosTest : public UnoApiTest
 {
 public:
     ScMacrosTest();
-
-    void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
-
-    virtual void setUp();
-    virtual void tearDown();
 
     void testStarBasic();
     void testVba();
@@ -77,25 +72,13 @@ public:
 
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
-    rtl::OUString m_aBaseString;
 };
-
-
-void ScMacrosTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
-{
-    rtl::OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
-    rtl::OUStringBuffer aBuffer( getSrcRootURL() );
-    aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
-    aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
-    rFilePath = aBuffer.makeStringAndClear();
-}
 
 void ScMacrosTest::testStarBasic()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("StarBasic."));
-    rtl::OUString aFileExtension("ods");
+    const OUString aFileNameBase("StarBasic.ods");
     rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
+    createFileURL(aFileNameBase, aFileName);
     std::cout << "StarBasic test" << std::endl;
     uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
 
@@ -122,7 +105,6 @@ void ScMacrosTest::testStarBasic()
     xDocSh->DoClose();
 }
 
-
 void ScMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
@@ -136,11 +118,10 @@ void ScMacrosTest::testVba()
         }
     };
 
-    rtl::OUString aFileExtension("xls");
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
         rtl::OUString aFileName;
-        createFileURL(testInfo[i].sFileBaseName, aFileExtension, aFileName);
+        createFileURL(testInfo[i].sFileBaseName + "xls", aFileName);
         uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
         rtl::OUString sMsg( "Failed to load " + aFileName );
         CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
@@ -164,27 +145,8 @@ void ScMacrosTest::testVba()
 }
 
 ScMacrosTest::ScMacrosTest()
-      : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data"))
+      : UnoApiTest("/sc/qa/extras/testdocuments")
 {
-}
-
-void ScMacrosTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
-    m_xCalcComponent =
-        getMultiServiceFactory()->createInstance(rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.SpreadsheetDocument")));
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
-    mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
-}
-
-void ScMacrosTest::tearDown()
-{
-    uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
-    test::BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScMacrosTest);

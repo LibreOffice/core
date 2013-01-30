@@ -70,6 +70,7 @@ sal_Int32 ScAnnontationObj::nTest = 0;
 uno::Reference< lang::XComponent > ScAnnontationObj::mxComponent;
 
 ScAnnontationObj::ScAnnontationObj()
+       : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 

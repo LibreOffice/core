@@ -86,7 +86,10 @@ sal_Int32 ScEditFieldObj_Cell::nTest = 0;
 uno::Reference<lang::XComponent> ScEditFieldObj_Cell::mxComponent;
 uno::Reference<text::XTextField> ScEditFieldObj_Cell::mxField;
 
-ScEditFieldObj_Cell::ScEditFieldObj_Cell() {}
+ScEditFieldObj_Cell::ScEditFieldObj_Cell()
+     : UnoApiTest("/sc/qa/extras/testdocuments")
+{
+}
 
 void ScEditFieldObj_Cell::setUp()
 {

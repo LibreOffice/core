@@ -79,10 +79,10 @@ sal_Int32 ScCellRangeObj::nTest = 0;
 uno::Reference< lang::XComponent > ScCellRangeObj::mxComponent;
 
 ScCellRangeObj::ScCellRangeObj():
+        UnoApiTest("/sc/qa/extras/testdocuments"),
         apitest::XSearchable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("15")), 1),
         apitest::XReplaceable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("15")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("35")))
 {
-
 }
 
 uno::Reference< uno::XInterface > ScCellRangeObj::init()

@@ -32,8 +32,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
 
-UnoApiTest::UnoApiTest()
-      : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/extras/testdocuments"))
+UnoApiTest::UnoApiTest(const OUString& path)
+      : m_aBaseString(path)
 {
 }
 
@@ -58,12 +58,7 @@ void UnoApiTest::tearDown()
 
 void UnoApiTest::createFileURL(const rtl::OUString& aFileBase, rtl::OUString& rFilePath)
 {
-    rtl::OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
-    rtl::OUStringBuffer aBuffer( getSrcRootURL() );
-    rtl::OUString aFileExtension(RTL_CONSTASCII_USTRINGPARAM("ods"));
-    aBuffer.append(m_aBaseString).append(aSep);
-    aBuffer.append(aFileBase);
-    rFilePath = aBuffer.makeStringAndClear();
+    rFilePath = getSrcRootURL() + m_aBaseString + "/" + aFileBase;
 }
 
 void UnoApiTest::closeDocument( uno::Reference< lang::XComponent > xDocument )

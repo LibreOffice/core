@@ -73,10 +73,10 @@ sal_Int32 ScNamedRangeObj::nTest = 0;
 uno::Reference< lang::XComponent > ScNamedRangeObj::mxComponent;
 
 ScNamedRangeObj::ScNamedRangeObj():
+        UnoApiTest("/sc/qa/extras/testdocuments"),
         apitest::XNamed(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NamedRange"))),
         apitest::XCellRangeReferrer(table::CellRangeAddress(0,1,7,1,7))
 {
-
 }
 
 uno::Reference< sheet::XNamedRanges > ScNamedRangeObj::init_impl()

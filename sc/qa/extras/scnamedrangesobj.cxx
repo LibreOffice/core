@@ -45,6 +45,8 @@ public:
 
     virtual uno::Reference< uno::XInterface > init(sal_Int32 nSheet);
 
+    ScNamedRangesObj();
+
     CPPUNIT_TEST_SUITE(ScNamedRangesObj);
     CPPUNIT_TEST(testAddNewByName);
     CPPUNIT_TEST(testAddNewFromTitles);
@@ -59,6 +61,11 @@ private:
 
 sal_Int32 ScNamedRangesObj::nTest = 0;
 uno::Reference< lang::XComponent > ScNamedRangesObj::mxComponent;
+
+ScNamedRangesObj::ScNamedRangesObj()
+     : UnoApiTest("/sc/qa/extras/testdocuments")
+{
+}
 
 uno::Reference< uno::XInterface > ScNamedRangesObj::init(sal_Int32 nSheet)
 {
