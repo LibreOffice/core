@@ -5642,6 +5642,39 @@ else
     AC_MSG_RESULT([no (C++11 disabled)])
 fi
 
+dnl ==================================
+dnl Check for C++11 "override" support
+dnl ==================================
+
+AC_MSG_CHECKING([whether $CXX supports C++11 override syntax])
+if test "$HAVE_CXX0X" = "TRUE"; then
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+struct A
+{
+        virtual void test();
+};
+
+struct B : A
+{
+        virtual void test() override;
+};
+]])],[HAVE_CXX11_OVERRIDE=TRUE],[])
+
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+    if test "$HAVE_CXX11_OVERRIDE" = "TRUE"; then
+        AC_MSG_RESULT([yes])
+        AC_DEFINE([HAVE_CXX11_OVERRIDE])
+    else
+        AC_MSG_RESULT([no])
+    fi
+else
+    AC_MSG_RESULT([no (C++11 disabled)])
+fi
+
 dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================

@@ -416,6 +416,19 @@ namespace css = ::com::sun::star;
 #define SAL_DELETED_FUNCTION
 #endif
 
+/** C++11 "override" feature.
+
+    With HAVE_CXX11_OVERRIDE, force the method to override a existing method in
+    parent, error out if the method with the correct signature does not exist.
+
+    @since LibreOffice 4.1
+*/
+#if defined HAVE_CXX11_OVERRIDE
+#define SAL_OVERRIDE override
+#else
+#define SAL_OVERRIDE
+#endif
+
 #endif /* __cplusplus */
 
 #ifdef __cplusplus
