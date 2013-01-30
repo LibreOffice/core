@@ -112,7 +112,7 @@ public:
 #if OSL_DEBUG_LEVEL > 1
     void    TestData() const;
 #endif
-    void    Reset( const ScPatternAttr* pPattern, bool bAlloc = sal_True );
+    void    Reset( const ScPatternAttr* pPattern);
     bool    Concat(SCSIZE nPos);
 
     const ScPatternAttr* GetPattern( SCROW nRow ) const;

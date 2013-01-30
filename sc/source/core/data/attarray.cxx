@@ -112,7 +112,7 @@ void ScAttrArray::TestData() const
 
 //------------------------------------------------------------------------
 
-void ScAttrArray::Reset( const ScPatternAttr* pPattern, bool bAlloc )
+void ScAttrArray::Reset( const ScPatternAttr* pPattern )
 {
     if (pData)
     {
@@ -140,21 +140,13 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern, bool bAlloc )
         if (pDocument->IsStreamValid(nTab))
             pDocument->SetStreamValid(nTab, false);
 
-        if (bAlloc)
+        nCount = nLimit = 1;
+        pData = new ScAttrEntry[1];
+        if (pData)
         {
-            nCount = nLimit = 1;
-            pData = new ScAttrEntry[1];
-            if (pData)
-            {
-                ScPatternAttr* pNewPattern = (ScPatternAttr*) &pDocPool->Put(*pPattern);
-                pData[0].nRow = MAXROW;
-                pData[0].pPattern = pNewPattern;
-            }
-        }
-        else
-        {
-            nCount = nLimit = 0;
-            pData = NULL;        // should be immediately occupied again
+            ScPatternAttr* pNewPattern = (ScPatternAttr*) &pDocPool->Put(*pPattern);
+            pData[0].nRow = MAXROW;
+            pData[0].pPattern = pNewPattern;
         }
     }
 }
