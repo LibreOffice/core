@@ -336,6 +336,12 @@ XColorItem::XColorItem(sal_uInt16 _nWhich, const XubString& rName, const Color& 
 {
 }
 
+XColorItem::XColorItem(sal_uInt16 _nWhich, const Color& rTheColor)
+    : NameOrIndex(_nWhich, OUString())
+    , aColor(rTheColor)
+{
+}
+
 /*************************************************************************
 |*
 |*    XColorItem::XColorItem(const XColorItem& rItem)

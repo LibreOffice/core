@@ -2598,7 +2598,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         }
     }
     if ( IsProperty( DFF_Prop_shadowColor ) )
-        rSet.Put( SdrShadowColorItem( OUString(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_shadowColor ), DFF_Prop_shadowColor ) ) );
+        rSet.Put( SdrShadowColorItem( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_shadowColor ), DFF_Prop_shadowColor ) ) );
     if ( IsProperty( DFF_Prop_shadowOpacity ) )
         rSet.Put( SdrShadowTransparenceItem( (sal_uInt16)( ( 0x10000 - GetPropertyValue( DFF_Prop_shadowOpacity ) ) / 655 ) ) );
     if ( IsProperty( DFF_Prop_shadowOffsetX ) )

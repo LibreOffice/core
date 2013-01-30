@@ -147,8 +147,6 @@ void SdDrawDocument::CreateLayoutTemplates()
     SfxItemSet& rISet = pSheet->GetItemSet();
     SfxItemPool* pPool = rISet.GetPool();
 
-    String   aNullStr;
-
     ::basegfx::B2DPolyPolygon aNullPolyPolygon;
     Color    aNullCol(RGB_Color(COL_DEFAULT_SHAPE_STROKE));
 
@@ -185,7 +183,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
                     // Schattenattribute (Drawing Engine)
     rISet.Put(SdrShadowItem(sal_False));
-    rISet.Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
+    rISet.Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
     rISet.Put(SdrShadowXDistItem(200));         // 3 mm Schattendistanz
     rISet.Put(SdrShadowYDistItem(200));
 
@@ -294,7 +292,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet = &pSheet->GetItemSet();
 
     pISet->Put(SdrShadowItem(sal_True));
-    pISet->Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
+    pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
     pISet->Put(SdrShadowXDistItem(200));        // 3 mm Schattendistanz
     pISet->Put(SdrShadowYDistItem(200));
 
@@ -387,7 +385,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillColorItem(String(), RGB_Color(COL_CYAN)));
 
     pISet->Put(SdrShadowItem(sal_True));
-    pISet->Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
+    pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
     pISet->Put(SdrShadowXDistItem(200));        // 2 mm Schattendistanz
     pISet->Put(SdrShadowYDistItem(200));
 
@@ -411,7 +409,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillColorItem(String(), aOrange4));
 
     pISet->Put(SdrShadowItem(sal_True));
-    pISet->Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
+    pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
     pISet->Put(SdrShadowXDistItem(200));        // 2 mm Schattendistanz
     pISet->Put(SdrShadowYDistItem(200));
 
@@ -555,8 +553,6 @@ void SdDrawDocument::CreateDefaultCellStyles()
     pSheet = &(pSSPool->Make(aDefaultCellStyleName, SD_STYLE_FAMILY_CELL, nMask));
     pSheet->SetHelpId( aHelpFile, HID_SD_CELL_STYLE_DEFAULT );
     SfxItemSet& rISet = pSheet->GetItemSet();
-
-    String   aNullStr;
 
     Color    aNullCol(RGB_Color(COL_BLACK));
 

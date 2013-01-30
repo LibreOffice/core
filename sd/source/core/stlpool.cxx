@@ -475,7 +475,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         pSheet->SetParent(String());
         SfxItemSet& rBackgroundObjectsSet = pSheet->GetItemSet();
         rBackgroundObjectsSet.Put(SdrShadowItem(sal_False));
-        rBackgroundObjectsSet.Put(SdrShadowColorItem(String(), Color(COL_GRAY)));
+        rBackgroundObjectsSet.Put(SdrShadowColorItem(Color(COL_GRAY)));
         rBackgroundObjectsSet.Put(SdrShadowXDistItem(200)); // 3 mm Schattendistanz
         rBackgroundObjectsSet.Put(SdrShadowYDistItem(200));
         // #i16874# enable kerning by default but only for new documents

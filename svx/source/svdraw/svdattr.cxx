@@ -95,7 +95,7 @@ SdrItemPool::SdrItemPool(
 
     // init own PoolDefaults
     mppLocalPoolDefaults[SDRATTR_SHADOW            -SDRATTR_START]=new SdrShadowItem;
-    mppLocalPoolDefaults[SDRATTR_SHADOWCOLOR       -SDRATTR_START]=new SdrShadowColorItem(OUString(),aNullCol);
+    mppLocalPoolDefaults[SDRATTR_SHADOWCOLOR       -SDRATTR_START]=new SdrShadowColorItem(aNullCol);
     mppLocalPoolDefaults[SDRATTR_SHADOWXDIST       -SDRATTR_START]=new SdrShadowXDistItem;
     mppLocalPoolDefaults[SDRATTR_SHADOWYDIST       -SDRATTR_START]=new SdrShadowYDistItem;
     mppLocalPoolDefaults[SDRATTR_SHADOWTRANSPARENCE-SDRATTR_START]=new SdrShadowTransparenceItem;

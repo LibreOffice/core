@@ -25,11 +25,8 @@
 class SdrShadowColorItem: public XColorItem
 {
 public:
-    SdrShadowColorItem()
-    {
-    }
-    SdrShadowColorItem(const String& rName, const Color& rTheColor)
-        : XColorItem(SDRATTR_SHADOWCOLOR, rName, rTheColor)
+    SdrShadowColorItem(const Color& rTheColor)
+        : XColorItem(SDRATTR_SHADOWCOLOR, rTheColor)
     {
     }
 };

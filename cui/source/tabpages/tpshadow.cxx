@@ -334,8 +334,7 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
             nPos != aLbShadowColor.GetSavedValue() )
         {
-            SdrShadowColorItem aItem( aLbShadowColor.GetSelectEntry(),
-                                    aLbShadowColor.GetSelectEntryColor() );
+            SdrShadowColorItem aItem(aLbShadowColor.GetSelectEntryColor());
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOWCOLOR );
             if ( !pOld || !( *(const SdrShadowColorItem*)pOld == aItem ) )
             {
