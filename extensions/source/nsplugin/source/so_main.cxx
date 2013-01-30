@@ -321,9 +321,9 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
 
         // arguments
         OUString args [] = {
-                "--nologo",
-                "--nodefault",
-                "--nolockcheck",
+                OUString("--nologo"),
+                OUString("--nodefault"),
+                OUString("--nolockcheck"),
                 sConnectStartString,
         };
 
