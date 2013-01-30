@@ -111,7 +111,6 @@ SalSystem *AndroidSalInstance::CreateSalSystem()
 void InitSalData()   {}
 void DeInitSalData() {}
 void InitSalMain()   {}
-void DeInitSalMain() {}
 
 void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
 {

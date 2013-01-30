@@ -176,12 +176,6 @@ void InitSalMain()
     // I doubt anything is needed on iOS
 }
 
-// -----------------------------------------------------------------------
-
-void DeInitSalMain()
-{
-}
-
 // =======================================================================
 
 SalYieldMutex::SalYieldMutex()

@@ -82,7 +82,6 @@ public:
 void InitSalData()   {}
 void DeInitSalData() {}
 void InitSalMain()   {}
-void DeInitSalMain() {}
 
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {

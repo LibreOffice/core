@@ -471,10 +471,6 @@ void InitSalMain()
     }
 }
 
-void DeInitSalMain()
-{
-}
-
 // -----------------------------------------------------------------------
 
 SalInstance* CreateSalInstance()

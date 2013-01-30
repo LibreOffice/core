@@ -268,10 +268,6 @@ void InitSalMain()
 {
 }
 
-void DeInitSalMain()
-{
-}
-
 void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
 {
     if( rErrorText.isEmpty() )

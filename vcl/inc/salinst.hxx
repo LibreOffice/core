@@ -199,7 +199,6 @@ void InitSalData();                         // called from Application-Ctor
 void DeInitSalData();                       // called from Application-Dtor
 
 void InitSalMain();
-void DeInitSalMain();
 
 // ----------
 // - SVMain -

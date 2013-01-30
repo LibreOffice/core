@@ -572,8 +572,6 @@ void DeInitVCL()
 
     DeInitTools();
 
-    DeInitSalMain();
-
     if( pOwnSvApp )
     {
         delete pOwnSvApp;
