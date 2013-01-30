@@ -23,6 +23,7 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/io/Pipe.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
@@ -30,6 +31,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/xml/xpath/XPathObjectType.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
@@ -49,6 +51,7 @@ using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
+using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XNode;
 using ::com::sun::star::xml::dom::XDocument;
 using ::com::sun::star::xml::sax::XSAXSerializable;
@@ -57,12 +60,12 @@ using ::com::sun::star::io::XActiveDataSource;
 using ::com::sun::star::xml::dom::NodeType_DOCUMENT_NODE;
 using ::com::sun::star::xml::dom::NodeType_ELEMENT_NODE;
 using ::com::sun::star::xml::dom::XDocumentBuilder;
+using ::com::sun::star::xml::sax::Writer;
 using ::com::sun::star::xml::sax::XDocumentHandler;
 /** === end UNO using === **/
 
 CSerializationAppXML::CSerializationAppXML()
-    : m_xFactory(comphelper::getProcessServiceFactory())
-    , m_xBuffer(CSS::io::Pipe::create(comphelper::getProcessComponentContext()))
+    : m_xBuffer(CSS::io::Pipe::create(comphelper::getProcessComponentContext()))
 {
 }
 
@@ -93,8 +96,7 @@ CSerializationAppXML::serialize_node(const Reference< XNode >& rNode)
                 "CSerializationAppXML::serialize_node: invalid node type!" );
 
             // create a new document
-            Reference< XDocumentBuilder > const xDocBuilder(
-                m_xFactory->createInstance( "com.sun.star.xml.dom.DocumentBuilder" ), UNO_QUERY_THROW );
+            Reference< XDocumentBuilder > const xDocBuilder = DocumentBuilder::create( comphelper::getProcessComponentContext() );
             Reference< XDocument > const xDocument( xDocBuilder->newDocument(), UNO_SET_THROW );
 
             // copy the to-be-serialized node
@@ -109,13 +111,11 @@ CSerializationAppXML::serialize_node(const Reference< XNode >& rNode)
             "CSerializationAppXML::serialize_node: no serialization access to the node/document!" );
 
         // create a SAXWriter to take the serialization events, and connect it to our pipe
-        Reference< XDocumentHandler > const xSaxWriter(
-            m_xFactory->createInstance( "com.sun.star.xml.sax.Writer" ), UNO_QUERY_THROW );
-        Reference< XActiveDataSource > const xDataSource( xSaxWriter, UNO_QUERY_THROW );
-        xDataSource->setOutputStream( Reference< CSS::io::XOutputStream >( m_xBuffer, UNO_QUERY_THROW) );
+        Reference< CSS::xml::sax::XWriter > const xSaxWriter = Writer::create( comphelper::getProcessComponentContext() );
+        xSaxWriter->setOutputStream( Reference< CSS::io::XOutputStream >( m_xBuffer, UNO_QUERY_THROW) );
 
         // do the serialization
-        xSerializer->serialize( xSaxWriter, Sequence< StringPair >() );
+        xSerializer->serialize( Reference< XDocumentHandler >(xSaxWriter, UNO_QUERY_THROW), Sequence< StringPair >() );
     }
     catch( const Exception& )
     {

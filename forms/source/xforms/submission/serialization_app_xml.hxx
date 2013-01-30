@@ -21,16 +21,12 @@
 #define __SERIALIZATION_APP_XML_HXX
 
 #include <com/sun/star/io/XPipe.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "serialization.hxx"
-
-#include <comphelper/componentcontext.hxx>
 
 class CSerializationAppXML : public CSerialization
 {
 private:
-    CSS::uno::Reference< CSS::lang::XMultiServiceFactory > m_xFactory;
     CSS::uno::Reference< CSS::io::XPipe > m_xBuffer;
 
     void serialize_node(const CSS::uno::Reference< CSS::xml::dom::XNode >& aNode);

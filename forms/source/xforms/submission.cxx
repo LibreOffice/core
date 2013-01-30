@@ -99,8 +99,7 @@ Submission::Submission() :
     msCDataSectionElement(),
     msReplace( "none" ),
     msSeparator(),
-    msIncludeNamespacePrefixes(),
-    m_aFactory(comphelper::getProcessServiceFactory())
+    msIncludeNamespacePrefixes()
 {
     initializePropertySet();
 }
@@ -653,7 +652,7 @@ Reference< XDocument > Submission::getInstanceDocument(const Reference< XXPathOb
 Reference< XDocumentFragment > Submission::createSubmissionDocument(const Reference< XXPathObject >& aObj, sal_Bool bRemoveWSNodes)
 {
     using namespace com::sun::star::xml::xpath;
-    Reference< XDocumentBuilder > aDocBuilder(DocumentBuilder::create(comphelper::getComponentContext(m_aFactory)));
+    Reference< XDocumentBuilder > aDocBuilder = DocumentBuilder::create(comphelper::getProcessComponentContext());
     Reference< XDocument > aDocument = aDocBuilder->newDocument();
     Reference< XDocumentFragment > aFragment = aDocument->createDocumentFragment();
 

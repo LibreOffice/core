@@ -35,7 +35,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <computedexpression.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 // forward declaractions
 namespace com { namespace sun { namespace star {
@@ -93,7 +92,6 @@ private:
     com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocument >
         getInstanceDocument(const com::sun::star::uno::Reference< com::sun::star::xml::xpath::XXPathObject >& aObject);
 
-    com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > m_aFactory;
 public:
     Submission();
     virtual ~Submission() throw();

@@ -40,9 +40,7 @@
 
 using rtl::OUString;
 using com::sun::star::beans::NamedValue;
-using com::sun::star::uno::Any;
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::Sequence;
+using namespace com::sun::star::uno;
 using com::sun::star::lang::XInitialization;
 using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::xml::dom::XNode;
@@ -50,9 +48,6 @@ using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::xpath::XXPathAPI;
 using com::sun::star::xml::xpath::XXPathExtension;
 using com::sun::star::xml::xpath::XXPathObject;
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::Exception;
-using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::xml::xpath::XPathObjectType_XPATH_UNDEFINED;
 using com::sun::star::util::SearchOptions;
 using com::sun::star::util::SearchAlgorithms_REGEXP;
@@ -208,9 +203,10 @@ Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationCo
     aValue.Name = "ContextNode";
     aValue.Value <<= aContext.mxContextNode;
     aSequence[1] <<= aValue;
-    Reference<XMultiServiceFactory> aFactory = comphelper::getProcessServiceFactory();
-    Reference< XXPathExtension > aExtension( aFactory->createInstanceWithArguments(
-         "com.sun.star.comp.xml.xpath.XFormsExtension", aSequence), UNO_QUERY_THROW);
+    Reference< XComponentContext > aComponentContext = comphelper::getProcessComponentContext();
+    Reference< XXPathExtension > aExtension(
+        aComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.xml.xpath.XFormsExtension", aSequence, aComponentContext),
+        UNO_QUERY_THROW);
     xXPath->registerExtensionInstance(aExtension);
 
     // register namespaces

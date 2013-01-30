@@ -20,7 +20,6 @@
 #ifndef __SERIALIZATION_URLENCODED_HXX
 #define __SERIALIZATION_URLENCODED_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XPipe.hpp>
 
 #include <rtl/strbuf.hxx>
@@ -30,7 +29,6 @@
 class CSerializationURLEncoded : public CSerialization
 {
 private:
-    CSS::uno::Reference< CSS::lang::XMultiServiceFactory > m_aFactory;
     CSS::uno::Reference< CSS::io::XPipe > m_aPipe;
 
     sal_Bool is_unreserved(sal_Char);

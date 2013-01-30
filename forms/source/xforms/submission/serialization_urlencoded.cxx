@@ -40,8 +40,7 @@ using namespace CSS::xml::xpath;
 using namespace CSS::xml::dom;
 
 CSerializationURLEncoded::CSerializationURLEncoded()
-    : m_aFactory(comphelper::getProcessServiceFactory())
-    , m_aPipe(Pipe::create(comphelper::getProcessComponentContext()))
+    : m_aPipe(Pipe::create(comphelper::getProcessComponentContext()))
 {
 }
 
