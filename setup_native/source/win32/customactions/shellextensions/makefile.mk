@@ -44,7 +44,6 @@ SLOFILES = \
     $(SLO)$/completeinstallpath.obj \
     $(SLO)$/checkdirectory.obj \
     $(SLO)$/layerlinks.obj \
-    $(SLO)$/copyeditiondata.obj \
     $(SLO)$/vistaspecial.obj \
     $(SLO)$/checkpatches.obj
 

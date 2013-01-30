@@ -7,7 +7,6 @@ MigrateInstallPath
 CheckInstallDirectory
 CreateLayerLinks
 RemoveLayerLinks
-copyEditionData
 RenamePrgFolder
 RemovePrgFolder
 CheckPatchList

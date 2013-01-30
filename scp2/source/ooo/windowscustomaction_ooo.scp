@@ -178,16 +178,6 @@ WindowsCustomAction gid_Customaction_Check_Install_Directory
 	Assignment3 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "CheckInstallDirectory", "Not Installed", "2");
 End
 
-WindowsCustomAction gid_Customaction_CopyEditionData
-    Name = "CopyEditionData";
-    Typ = "1";
-    Source = "shlxtmsi.dll";
-    Target = "copyEditionData";
-    Inbinarytable = 1;
-    Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
-    Assignment2 = ("AdminExecuteSequence", "", "end");
-End
-
 WindowsCustomAction gid_Customaction_Patch_Regpatchactivex_Patchactivexcontrol
 	Name = "PatchActiveXControl";
 	Typ = "65";
