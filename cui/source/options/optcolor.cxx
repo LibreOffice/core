@@ -265,21 +265,6 @@ private:
     bool IsGroupVisible (Group) const;
 };
 
-namespace
-{
-
-// entry -> group
-Group GetGroup (unsigned nEntry)
-{
-    if (nEntry >= ColorConfigEntryCount)
-        return nGroupCount; // feature of an extension
-    return vEntryInfo[nEntry].eGroup;
-}
-
-} // namespace
-
-
-
 //
 // ColorConfigWindow_Impl::Chapter
 //
