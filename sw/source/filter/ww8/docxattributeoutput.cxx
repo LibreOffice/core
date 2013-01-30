@@ -4547,6 +4547,14 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     }
 }
 
+void DocxAttributeOutput::FormatFillStyle( const XFillStyleItem& /*rFillStyle*/ )
+{
+}
+
+void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& /*rFillGradient*/ )
+{
+}
+
 void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
     if (m_bTextFrameSyntax)

@@ -496,6 +496,12 @@ protected:
     /// Sfx item RES_BACKGROUND
     virtual void FormatBackground( const SvxBrushItem& );
 
+    /// Sfx item RES_FILL_STYLE
+    virtual void FormatFillStyle( const XFillStyleItem& );
+
+    /// Sfx item RES_FILL_GRADIENT
+    virtual void FormatFillGradient( const XFillGradientItem& );
+
     /// Sfx item RES_BOX
     virtual void FormatBox( const SvxBoxItem& );
 

@@ -2873,6 +2873,14 @@ void RtfAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     }
 }
 
+void RtfAttributeOutput::FormatFillStyle( const XFillStyleItem& /*rFillStyle*/ )
+{
+}
+
+void RtfAttributeOutput::FormatFillGradient( const XFillGradientItem& /*rFillGradient*/ )
+{
+}
+
 void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);

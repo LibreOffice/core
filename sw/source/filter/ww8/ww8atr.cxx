@@ -70,6 +70,8 @@
 #include <editeng/blnkitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/paperinf.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflgrit.hxx>
 #include <fmtfld.hxx>
 #include <fchrfmt.hxx>
 #include <fmtfsize.hxx>
@@ -4020,6 +4022,14 @@ void WW8AttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     }
 }
 
+void WW8AttributeOutput::FormatFillStyle( const XFillStyleItem& /*rFillStyle*/ )
+{
+}
+
+void WW8AttributeOutput::FormatFillGradient( const XFillGradientItem& /*rFillGradient*/ )
+{
+}
+
 WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
     sal_uInt16 nDist, bool bShadow)
 {
@@ -5167,6 +5177,12 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
         case RES_BACKGROUND:
             FormatBackground( static_cast< const SvxBrushItem& >( rHt ) );
             break;
+        case RES_FILL_STYLE:
+            FormatFillStyle( static_cast< const XFillStyleItem& >( rHt ) );
+            break;
+        case RES_FILL_GRADIENT:
+            FormatFillGradient( static_cast< const XFillGradientItem& >( rHt ) );
+            break;
         case RES_BOX:
             FormatBox( static_cast< const SvxBoxItem& >( rHt ) );
             break;
@@ -5187,7 +5203,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
 
         default:
-            OSL_TRACE("Unhandled SfxPoolItem with id %d.", rHt.Which() );
+            SAL_INFO("sw.ww8", "Unhandled SfxPoolItem with id " << rHt.Which() );
             break;
     }
 }

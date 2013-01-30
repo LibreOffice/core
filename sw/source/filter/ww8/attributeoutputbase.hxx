@@ -50,6 +50,8 @@ class SvxWeightItem;
 class SvxAutoKernItem;
 class SvxBlinkItem;
 class SvxBrushItem;
+class XFillStyleItem;
+class XFillGradientItem;
 class SvxFontItem;
 class SvxFontHeightItem;
 class SvxLanguageItem;
@@ -527,6 +529,12 @@ protected:
 
     /// Sfx item RES_BACKGROUND
     virtual void FormatBackground( const SvxBrushItem& ) = 0;
+
+    /// Sfx item RES_FILL_STYLE
+    virtual void FormatFillStyle( const XFillStyleItem& ) = 0;
+
+    /// Sfx item RES_FILL_GRADIENT
+    virtual void FormatFillGradient( const XFillGradientItem& ) = 0;
 
     /// Sfx item RES_BOX
     virtual void FormatBox( const SvxBoxItem& ) = 0;
