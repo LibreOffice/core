@@ -98,7 +98,7 @@ bool ScDocumentIterator::GetThisCol()
         return false;
     }
     ScColumn*       pCol = &pTab->aCol[nCol];
-    ScAttrArray*    pAtt = pCol->pAttrArray;
+    const ScAttrArray* pAtt = pCol->pAttrArray;
 
     bool bFound = false;
     do
@@ -477,7 +477,7 @@ ScBaseCell* ScDBQueryDataIterator::GetCellByColEntryIndex(ScDocument& rDoc, SCTA
     return pCol->maItems[nColRow].pCell;
 }
 
-ScAttrArray* ScDBQueryDataIterator::GetAttrArrayByCol(ScDocument& rDoc, SCTAB nTab, SCCOL nCol)
+const ScAttrArray* ScDBQueryDataIterator::GetAttrArrayByCol(ScDocument& rDoc, SCTAB nTab, SCCOL nCol)
 {
     if (nTab >= rDoc.GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
@@ -1938,7 +1938,7 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
     for (i=nStartCol; i<=nEndCol; i++)
     {
         SCCOL nPos = i - nStartCol;
-        ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray;
+        const ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray;
         OSL_ENSURE( pArray, "pArray == 0" );
 
         SCSIZE nIndex;
@@ -1967,7 +1967,7 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
 
 ScHorizontalAttrIterator::~ScHorizontalAttrIterator()
 {
-    delete[] (ScPatternAttr**)ppPatterns;
+    delete[] ppPatterns;
     delete[] pNextEnd;
     delete[] pIndices;
 }
@@ -2012,7 +2012,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
             SCCOL nPos = i-nStartCol;
             if ( pNextEnd[nPos] < nRow )
             {
-                ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray;
+                const ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray;
 
                 SCSIZE nIndex = ++pIndices[nPos];
                 if ( nIndex < pArray->nCount )
