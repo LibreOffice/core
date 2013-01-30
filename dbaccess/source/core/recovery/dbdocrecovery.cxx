@@ -29,7 +29,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/io/XTextOutputStream.hpp>
-#include <com/sun/star/io/XTextInputStream.hpp>
+#include <com/sun/star/io/TextInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
@@ -59,6 +59,7 @@ namespace dbaccess
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::frame::XController;
     using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
@@ -68,7 +69,8 @@ namespace dbaccess
     using ::com::sun::star::io::XStream;
     using ::com::sun::star::io::XTextOutputStream;
     using ::com::sun::star::io::XActiveDataSource;
-    using ::com::sun::star::io::XTextInputStream;
+    using ::com::sun::star::io::TextInputStream;
+    using ::com::sun::star::io::XTextInputStream2;
     using ::com::sun::star::io::XActiveDataSink;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::util::XModifiable;
@@ -179,7 +181,7 @@ namespace dbaccess
         }
 
         // .........................................................................
-        static void lcl_readObjectMap_throw( const ::comphelper::ComponentContext& i_rContext, const Reference< XStorage >& i_rStorage,
+        static void lcl_readObjectMap_throw( const Reference<XComponentContext> & i_rxContext, const Reference< XStorage >& i_rStorage,
             MapStringToCompDesc& o_mapStorageToObjectName )
         {
             ENSURE_OR_THROW( i_rStorage.is(), "invalid storage" );
@@ -192,11 +194,9 @@ namespace dbaccess
             Reference< XStream > xIniStream( i_rStorage->openStreamElement(
                 lcl_getObjectMapStreamName(), ElementModes::READ ), UNO_SET_THROW );
 
-            Reference< XTextInputStream > xTextInput( i_rContext.createComponent( "com.sun.star.io.TextInputStream" ), UNO_QUERY_THROW );
+            Reference< XTextInputStream2 > xTextInput = TextInputStream::create( i_rxContext );
             xTextInput->setEncoding( lcl_getMapStreamEncodingName() );
-
-            Reference< XActiveDataSink > xDataSink( xTextInput, UNO_QUERY_THROW );
-            xDataSink->setInputStream( xIniStream->getInputStream() );
+            xTextInput->setInputStream( xIniStream->getInputStream() );
 
             ::rtl::OUString sCurrentSection;
             bool bCurrentSectionIsKnownToBeUnsupported = true;
@@ -352,7 +352,7 @@ namespace dbaccess
 
             Reference< XStorage > xComponentsStor( xRecoveryStorage->openStorageElement(
                 SubComponentRecovery::getComponentsStorageName( aKnownTypes[i] ), ElementModes::READ ) );
-            lcl_readObjectMap_throw( m_pData->aContext, xComponentsStor, aMapCompDescs[ aKnownTypes[i] ] );
+            lcl_readObjectMap_throw( m_pData->aContext.getUNOContext(), xComponentsStor, aMapCompDescs[ aKnownTypes[i] ] );
             xComponentsStor->dispose();
         }
 

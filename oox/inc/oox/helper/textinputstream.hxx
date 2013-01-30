@@ -25,7 +25,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }
-    namespace io { class XTextInputStream; }
+    namespace io { class XTextInputStream2; }
     namespace uno { class XComponentContext; }
 } } }
 
@@ -91,7 +91,7 @@ public:
 
     /** Creates a UNO text input stream object from the passed UNO input stream.
      */
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream >
+    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream2 >
                         createXTextInputStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
@@ -108,7 +108,7 @@ private:
     ::rtl::OUString     createFinalString( const ::rtl::OUString& rString );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream >
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream2 >
                         mxTextStrm;
     sal_Unicode         mcPendingChar;
 };

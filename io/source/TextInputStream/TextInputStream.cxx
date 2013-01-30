@@ -25,14 +25,13 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
 
-#include <com/sun/star/io/XTextInputStream.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
+#include <com/sun/star/io/XTextInputStream2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 
@@ -54,7 +53,7 @@ namespace io_TextInputStream
 //===========================================================================
 // Implementation XTextInputStream
 
-typedef WeakImplHelper3< XTextInputStream, XActiveDataSink, XServiceInfo > TextInputStreamHelper;
+typedef WeakImplHelper2< XTextInputStream2, XServiceInfo > TextInputStreamHelper;
 
 #define INITIAL_UNICODE_BUFFER_CAPACITY     0x100
 #define READ_BYTE_COUNT                     0x100

@@ -19,7 +19,7 @@
 
 #include "oox/vml/vmlinputstream.hxx"
 
-#include <com/sun/star/io/XTextInputStream.hpp>
+#include <com/sun/star/io/XTextInputStream2.hpp>
 #include <map>
 #include <string.h>
 #include <rtl/strbuf.hxx>

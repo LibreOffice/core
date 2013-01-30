@@ -20,7 +20,7 @@
 #include "oox/helper/textinputstream.hxx"
 
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/io/XTextInputStream.hpp>
+#include <com/sun/star/io/TextInputStream.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/tencinfo.h>
 #include "oox/helper/binaryinputstream.hxx"
@@ -184,18 +184,16 @@ OUString TextInputStream::readToChar( sal_Unicode cChar, bool bIncludeChar )
     return OUString();
 }
 
-/*static*/ Reference< XTextInputStream > TextInputStream::createXTextInputStream(
+/*static*/ Reference< XTextInputStream2 > TextInputStream::createXTextInputStream(
         const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, rtl_TextEncoding eTextEnc )
 {
-    Reference< XTextInputStream > xTextStrm;
+    Reference< XTextInputStream2 > xTextStrm;
     const char* pcCharset = rtl_getBestMimeCharsetFromTextEncoding( eTextEnc );
     OSL_ENSURE( pcCharset, "TextInputStream::createXTextInputStream - unsupported text encoding" );
     if( rxContext.is() && rxInStrm.is() && pcCharset ) try
     {
-        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
-        Reference< XActiveDataSink > xDataSink( xFactory->createInstance( "com.sun.star.io.TextInputStream" ), UNO_QUERY_THROW );
-        xDataSink->setInputStream( rxInStrm );
-        xTextStrm.set( xDataSink, UNO_QUERY_THROW );
+        xTextStrm = com::sun::star::io::TextInputStream::create( rxContext );
+        xTextStrm->setInputStream( rxInStrm );
         xTextStrm->setEncoding( OUString::createFromAscii( pcCharset ) );
     }
     catch (const Exception&)

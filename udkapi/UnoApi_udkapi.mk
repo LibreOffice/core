@@ -65,7 +65,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/io,\
 	ObjectInputStream \
 	ObjectOutputStream \
 	Pump \
-	TextInputStream \
 	TextOutputStream \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/lang,\
@@ -116,6 +115,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/io,\
 	SequenceInputStream \
 	SequenceOutputStream \
 	TempFile \
+	TextInputStream \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/java,\
 	JavaVirtualMachine \
@@ -321,6 +321,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/io,\
 	XStreamListener \
 	XTempFile \
 	XTextInputStream \
+	XTextInputStream2 \
 	XTextOutputStream \
 	XTruncate \
 	XXMLExtractor \

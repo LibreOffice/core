@@ -19,7 +19,7 @@
 
 #include "stringresource.hxx"
 #include <com/sun/star/io/TempFile.hpp>
-#include <com/sun/star/io/XTextInputStream.hpp>
+#include <com/sun/star/io/TextInputStream.hpp>
 #include <com/sun/star/io/XTextOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -1969,7 +1969,7 @@ sal_Unicode getEscapeChar( const sal_Unicode* pBuf, sal_Int32 nLen, sal_Int32& r
     return cRet;
 }
 
-void CheckContinueInNextLine( Reference< io::XTextInputStream > xTextInputStream,
+void CheckContinueInNextLine( Reference< io::XTextInputStream2 > xTextInputStream,
     ::rtl::OUString& aLine, bool& bEscapePending, const sal_Unicode*& pBuf,
     sal_Int32& nLen, sal_Int32& i )
 {
@@ -1996,127 +1996,118 @@ bool StringResourcePersistenceImpl::implReadPropertiesFile
         return false;
 
     bool bSuccess = false;
-    Reference< XMultiComponentFactory > xMCF = getMultiComponentFactory();
-    Reference< io::XTextInputStream > xTextInputStream( xMCF->createInstanceWithContext
-        ( ::rtl::OUString("com.sun.star.io.TextInputStream"), m_xContext ), UNO_QUERY );
+    Reference< io::XTextInputStream2 > xTextInputStream = io::TextInputStream::create( m_xContext );
 
-    if( xTextInputStream.is() )
+    bSuccess = true;
+
+    xTextInputStream->setInputStream( xInputStream );
+
+    ::rtl::OUString aEncodingStr = ::rtl::OUString::createFromAscii
+        ( rtl_getMimeCharsetFromTextEncoding( RTL_TEXTENCODING_ISO_8859_1 ) );
+    xTextInputStream->setEncoding( aEncodingStr );
+
+    ::rtl::OUString aLine;
+    while( !xTextInputStream->isEOF() )
     {
-        Reference< io::XActiveDataSink> xActiveDataSink( xTextInputStream, UNO_QUERY );
-        if( xActiveDataSink.is() )
+        aLine = xTextInputStream->readLine();
+
+        sal_Int32 nLen = aLine.getLength();
+        if( 0 == nLen )
+            continue;
+        const sal_Unicode* pBuf = aLine.getStr();
+        ::rtl::OUStringBuffer aBuf;
+        sal_Unicode c = 0;
+        sal_Int32 i = 0;
+
+        skipWhites( pBuf, nLen, i );
+        if( i == nLen )
+            continue;   // line contains only white spaces
+
+        // Comment?
+        c = pBuf[i];
+        if( c == '#' || c == '!' )
+            continue;
+
+        // Scan key
+        ::rtl::OUString aResourceID;
+        bool bEscapePending = false;
+        bool bStrComplete = false;
+        while( i < nLen && !bStrComplete )
         {
-            bSuccess = true;
-
-            xActiveDataSink->setInputStream( xInputStream );
-
-            ::rtl::OUString aEncodingStr = ::rtl::OUString::createFromAscii
-                ( rtl_getMimeCharsetFromTextEncoding( RTL_TEXTENCODING_ISO_8859_1 ) );
-            xTextInputStream->setEncoding( aEncodingStr );
-
-            ::rtl::OUString aLine;
-            while( !xTextInputStream->isEOF() )
+            c = pBuf[i];
+            if( bEscapePending )
             {
-                aLine = xTextInputStream->readLine();
-
-                sal_Int32 nLen = aLine.getLength();
-                if( 0 == nLen )
-                    continue;
-                const sal_Unicode* pBuf = aLine.getStr();
-                ::rtl::OUStringBuffer aBuf;
-                sal_Unicode c = 0;
-                sal_Int32 i = 0;
-
-                skipWhites( pBuf, nLen, i );
-                if( i == nLen )
-                    continue;   // line contains only white spaces
-
-                // Comment?
-                c = pBuf[i];
-                if( c == '#' || c == '!' )
-                    continue;
-
-                // Scan key
-                ::rtl::OUString aResourceID;
-                bool bEscapePending = false;
-                bool bStrComplete = false;
-                while( i < nLen && !bStrComplete )
-                {
-                    c = pBuf[i];
-                    if( bEscapePending )
-                    {
-                        aBuf.append( getEscapeChar( pBuf, nLen, i ) );
-                        bEscapePending = false;
-                    }
-                    else
-                    {
-                        if( c == '\\' )
-                        {
-                            bEscapePending = true;
-                        }
-                        else
-                        {
-                            if( c == ':' || c == '=' || isWhiteSpace( c ) )
-                                bStrComplete = true;
-                            else
-                                aBuf.append( c );
-                        }
-                    }
-                    i++;
-
-                    CheckContinueInNextLine( xTextInputStream, aLine, bEscapePending, pBuf, nLen, i );
-                    if( i == nLen )
-                        bStrComplete = true;
-
-                    if( bStrComplete )
-                        aResourceID = aBuf.makeStringAndClear();
-                }
-
-                // Ignore lines with empty keys
-                if( aResourceID.isEmpty() )
-                    continue;
-
-                // Scan value
-                skipWhites( pBuf, nLen, i );
-
-                ::rtl::OUString aValueStr;
+                aBuf.append( getEscapeChar( pBuf, nLen, i ) );
                 bEscapePending = false;
-                bStrComplete = false;
-                while( i < nLen && !bStrComplete )
-                {
-                    c = pBuf[i];
-                    if( c == 0x000a || c == 0x000d )    // line feed/carriage return, not always handled by TextInputStream
-                    {
-                        i++;
-                    }
-                    else
-                    {
-                        if( bEscapePending )
-                        {
-                            aBuf.append( getEscapeChar( pBuf, nLen, i ) );
-                            bEscapePending = false;
-                        }
-                        else if( c == '\\' )
-                            bEscapePending = true;
-                        else
-                            aBuf.append( c );
-                        i++;
-
-                        CheckContinueInNextLine( xTextInputStream, aLine, bEscapePending, pBuf, nLen, i );
-                    }
-                    if( i == nLen )
-                        bStrComplete = true;
-
-                    if( bStrComplete )
-                        aValueStr = aBuf.makeStringAndClear();
-                }
-
-                // Push into table
-                pLocaleItem->m_aIdToStringMap[ aResourceID ] = aValueStr;
-                implScanIdForNumber( aResourceID );
-                IdToIndexMap& rIndexMap = pLocaleItem->m_aIdToIndexMap;
-                rIndexMap[ aResourceID ] = pLocaleItem->m_nNextIndex++;
             }
+            else
+            {
+                if( c == '\\' )
+                {
+                    bEscapePending = true;
+                }
+                else
+                {
+                    if( c == ':' || c == '=' || isWhiteSpace( c ) )
+                        bStrComplete = true;
+                    else
+                        aBuf.append( c );
+                }
+            }
+            i++;
+
+            CheckContinueInNextLine( xTextInputStream, aLine, bEscapePending, pBuf, nLen, i );
+            if( i == nLen )
+                bStrComplete = true;
+
+            if( bStrComplete )
+                aResourceID = aBuf.makeStringAndClear();
         }
+
+        // Ignore lines with empty keys
+        if( aResourceID.isEmpty() )
+            continue;
+
+        // Scan value
+        skipWhites( pBuf, nLen, i );
+
+        ::rtl::OUString aValueStr;
+        bEscapePending = false;
+        bStrComplete = false;
+        while( i < nLen && !bStrComplete )
+        {
+            c = pBuf[i];
+            if( c == 0x000a || c == 0x000d )    // line feed/carriage return, not always handled by TextInputStream
+            {
+                i++;
+            }
+            else
+            {
+                if( bEscapePending )
+                {
+                    aBuf.append( getEscapeChar( pBuf, nLen, i ) );
+                    bEscapePending = false;
+                }
+                else if( c == '\\' )
+                    bEscapePending = true;
+                else
+                    aBuf.append( c );
+                i++;
+
+                CheckContinueInNextLine( xTextInputStream, aLine, bEscapePending, pBuf, nLen, i );
+            }
+            if( i == nLen )
+                bStrComplete = true;
+
+            if( bStrComplete )
+                aValueStr = aBuf.makeStringAndClear();
+        }
+
+        // Push into table
+        pLocaleItem->m_aIdToStringMap[ aResourceID ] = aValueStr;
+        implScanIdForNumber( aResourceID );
+        IdToIndexMap& rIndexMap = pLocaleItem->m_aIdToIndexMap;
+        rIndexMap[ aResourceID ] = pLocaleItem->m_nNextIndex++;
     }
 
     return bSuccess;

@@ -25,7 +25,7 @@
 #include <rtl/string.hxx>
 
 namespace com { namespace sun { namespace star {
-    namespace io { class XTextInputStream; }
+    namespace io { class XTextInputStream2; }
     namespace uno { class XComponentContext; }
 } } }
 
@@ -78,7 +78,7 @@ private:
     ::rtl::OString      readToElementEnd() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream >
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream2 >
                         mxTextStrm;
     ::com::sun::star::uno::Sequence< sal_Unicode > maOpeningBracket;
     ::com::sun::star::uno::Sequence< sal_Unicode > maClosingBracket;

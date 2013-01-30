@@ -46,17 +46,6 @@ using com::sun::star::beans::PropertyAttribute::READONLY;
 using rtl::OUString;
 
 
-Reference<XInterface> xforms::createInstance( const OUString& sServiceName )
-{
-    Reference<XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
-    OSL_ENSURE( xFactory.is(), "can't get service factory" );
-
-    Reference<XInterface> xInstance = xFactory->createInstance( sServiceName );
-    OSL_ENSURE( xInstance.is(), "failed to create instance" );
-
-    return xInstance;
-}
-
 void xforms::copy( const Reference<XPropertySet>& xFrom,
                    Reference<XPropertySet>& xTo )
 {

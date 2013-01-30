@@ -19,11 +19,8 @@
 #ifndef __com_sun_star_io_TextInputStream_idl__
 #define __com_sun_star_io_TextInputStream_idl__
 
-#include <com/sun/star/io/XTextInputStream.idl>
-
+#include <com/sun/star/io/XTextInputStream2.idl>
 #include <com/sun/star/io/XActiveDataSink.idl>
-
-#include <com/sun/star/io/XConnectable.idl>
 
 
 
@@ -37,15 +34,7 @@ module com {  module sun {  module star {  module io {
     <p>For details about the text functionality see
     <type scope="com::sun::star::io">XTextInputStream</type>.
  */
-published service TextInputStream
-{
-    /// Interface to read text data
-    interface com::sun::star::io::XTextInputStream;
-
-    /// Interface to specify the used <type scope="com::sun::star::io">XInputStream</type>
-    interface com::sun::star::io::XActiveDataSink;
-
-};
+published service TextInputStream : XTextInputStream2;
 
 
 }; }; }; };

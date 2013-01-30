@@ -31,6 +31,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
+#include <comphelper/processfactory.hxx>
 
 // UNO classes
 #include <com/sun/star/xml/dom/XNode.hpp>
@@ -42,7 +43,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/io/XTextInputStream.hpp>
+#include <com/sun/star/io/TextInputStream.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -57,7 +58,8 @@ using rtl::OUStringBuffer;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::io::XInputStream;
 using com::sun::star::io::XActiveDataSink;
-using com::sun::star::io::XTextInputStream;
+using com::sun::star::io::TextInputStream;
+using com::sun::star::io::XTextInputStream2;
 using com::sun::star::container::XEnumeration;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xforms::XFormsSupplier;
@@ -838,11 +840,8 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
     aSerialization.serialize();
 
     // copy stream into buffer
-    Reference<XTextInputStream> xTextInputStream(
-        createInstance( "com.sun.star.io.TextInputStream" ),
-        UNO_QUERY );
-    Reference<XActiveDataSink>( xTextInputStream, UNO_QUERY_THROW )
-        ->setInputStream( aSerialization.getInputStream() );
+    Reference<XTextInputStream2> xTextInputStream = TextInputStream::create( comphelper::getProcessComponentContext() );
+    xTextInputStream->setInputStream( aSerialization.getInputStream() );
 
     /* WORK AROUND for problem in serialization: currently, multiple
       XML delarations (<?xml...?>) are being written out and we don't
