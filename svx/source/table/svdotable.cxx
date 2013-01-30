@@ -1841,9 +1841,9 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
             if(nParaAnz == 1)
             {
                 // if its only one paragraph, check if it is empty
-                XubString aStr(rOutl.GetText(p1stPara));
+                OUString aStr(rOutl.GetText(p1stPara));
 
-                if(!aStr.Len())
+                if(aStr.isEmpty())
                 {
                     // gotcha!
                     nParaAnz = 0;

@@ -700,7 +700,7 @@ sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
     ensureAlive();
     String sDescription = SVX_RESSTR( RID_SVXSTR_CHARACTER_CODE );
 
-    sal_Unicode c = mpParent->maText.GetChar(0);
+    sal_Unicode c = mpParent->maText[0];
     char buf[16] = "0x0000";
     sal_Unicode c_Shifted = c;
     for( int i = 0; i < 4; ++i )
@@ -718,18 +718,18 @@ sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleName()
+OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleName()
     throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    String aRet;
+    OUString aRet;
 
     if( mpParent )
     {
         aRet = mpParent->maText;
 
-        if( !aRet.Len() )
+        if (aRet.isEmpty())
             aRet = getAccessibleDescription();
     }
 

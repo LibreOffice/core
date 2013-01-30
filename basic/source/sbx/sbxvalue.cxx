@@ -1420,7 +1420,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxSINGLE:
         {
             // Floats as ASCII
-            XubString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
+            OUString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
                 RTL_TEXTENCODING_ASCII_US);
             double d;
             SbxDataType t;
@@ -1436,7 +1436,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxDOUBLE:
         {
             // Floats as ASCII
-            XubString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
+            OUString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
                 RTL_TEXTENCODING_ASCII_US);
             SbxDataType t;
             if( ImpScan( aVal, aData.nDouble, t, NULL ) != SbxERR_OK )

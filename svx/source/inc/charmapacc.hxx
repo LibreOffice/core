@@ -96,8 +96,8 @@ namespace svx
     struct SvxShowCharSetItem
     {
         SvxShowCharSet&             mrParent;
-        sal_uInt16                      mnId;
-        XubString                   maText;
+        sal_uInt16                  mnId;
+        OUString                    maText;
         Rectangle                   maRect;
         SvxShowCharSetItemAcc*      m_pItem;
         SvxShowCharSetAcc*          m_pParent;
