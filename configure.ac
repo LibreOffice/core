@@ -5558,10 +5558,17 @@ if test "$GCC" = "yes"; then
         AC_MSG_RESULT([no])
     fi
 
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#if __GNUC__ == 4 && __GNUC_MINOR__ == 7 && (__GNUC_PATCHLEVEL__ == 0 || __GNUC_PATCHLEVEL__ == 1)
+#else
+abi ok
+#endif
+]])],[HAVE_BROKEN_ABI=TRUE],[HAVE_BROKEN_ABI=FALSE])
+
     AC_MSG_CHECKING([whether $CXX supports C++11 without Language Defect 757])
     # This should check libstdc++ version, not gcc, but clang has incidentally C++11 support
     # disabled in this case by the __float128 case below.
-    if test "$GCCVER" -ge 040700 -a "$GCCVER" -lt 040702; then
+    if test "$HAVE_BROKEN_ABI" = "TRUE"; then
         AC_MSG_NOTICE([Not using -std=gnu++0x on $CXX version 4.7.0/4.7.1 due to libstdc++ ABI breakage.])
     else
         save_CXXFLAGS=$CXXFLAGS
