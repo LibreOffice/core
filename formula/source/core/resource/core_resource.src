@@ -210,7 +210,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_COLUMN { Text = "COLUMN" ; };
     String SC_OPCODE_ROW { Text = "ROW" ; };
     String SC_OPCODE_TABLE { Text = "SHEET" ; };
-    String SC_OPCODE_ZGZ { Text = "ZGZ" ; };
+    String SC_OPCODE_ZGZ { Text = "RRI" ; };
     String SC_OPCODE_ZW { Text = "FV" ; };
     String SC_OPCODE_ZZR { Text = "NPER" ; };
     String SC_OPCODE_ZINS { Text = "RATE" ; };
