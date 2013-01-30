@@ -22,16 +22,16 @@
 #include <svx/xcolit.hxx>
 #include <svx/svddef.hxx>
 
-//---------------------
-// class SdrShadowColorItem
-//---------------------
-class SdrShadowColorItem: public XColorItem {
+class SdrShadowColorItem: public XColorItem
+{
 public:
-    SdrShadowColorItem() {}
-    SdrShadowColorItem(long nIndex, const Color& rTheColor):          XColorItem(SDRATTR_SHADOWCOLOR,nIndex,rTheColor) {}
-
-    SdrShadowColorItem(const String& rName, const Color& rTheColor):  XColorItem(SDRATTR_SHADOWCOLOR,rName,rTheColor) {}
-
+    SdrShadowColorItem()
+    {
+    }
+    SdrShadowColorItem(const String& rName, const Color& rTheColor)
+        : XColorItem(SDRATTR_SHADOWCOLOR, rName, rTheColor)
+    {
+    }
 };
 
 #endif
