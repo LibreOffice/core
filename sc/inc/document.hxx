@@ -332,7 +332,7 @@ private:
     SCROW               nSrcMaxRow;                     // number of lines to load/save
     sal_uInt16              nFormulaTrackCount;
     bool                bHardRecalcState;               // false: soft, true: hard
-    SCTAB               nVisibleTab;                    // for OLE etc.
+    SCTAB               nVisibleTab;                    // for OLE etc., don't use inside ScDocument
 
     ScLkUpdMode         eLinkMode;
 
