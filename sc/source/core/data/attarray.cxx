@@ -51,15 +51,13 @@ using ::editeng::SvxBorderLine;
 ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc ) :
     nCol( nNewCol ),
     nTab( nNewTab ),
-    pDocument( pDoc )
+    pDocument( pDoc ),
+    nCount(1),
+    nLimit(1),
+    pData(new ScAttrEntry[1])
 {
-    nCount = nLimit = 1;
-    pData = new ScAttrEntry[1];
-    if (pData)
-    {
-        pData[0].nRow = MAXROW;
-        pData[0].pPattern = pDocument->GetDefPattern(); // no put
-    }
+    pData[0].nRow = MAXROW;
+    pData[0].pPattern = pDocument->GetDefPattern(); // no put
 }
 
 //------------------------------------------------------------------------
