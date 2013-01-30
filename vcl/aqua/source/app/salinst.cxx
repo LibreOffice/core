@@ -20,8 +20,6 @@
 
 #include <stdio.h>
 
-#include "tools/fsys.hxx"
-#include "tools/getprocessworkingdir.hxx"
 #include <tools/solarmutex.hxx>
 
 #include "osl/process.h"
@@ -295,52 +293,6 @@ extern "C" {
 
 void InitSalMain()
 {
-    rtl::OUString urlWorkDir;
-    rtl_uString *sysWorkDir = NULL;
-    if (tools::getProcessWorkingDir(urlWorkDir))
-    {
-        oslFileError err2 = osl_getSystemPathFromFileURL(urlWorkDir.pData, &sysWorkDir);
-        if (err2 == osl_File_E_None)
-        {
-            rtl::OString aPath( getenv( "PATH" ) );
-            rtl::OString aResPath( getenv( "STAR_RESOURCEPATH" ) );
-            rtl::OString aLibPath( getenv( "DYLD_LIBRARY_PATH" ) );
-            rtl::OString aCmdPath( OUStringToOString(OUString(sysWorkDir), RTL_TEXTENCODING_UTF8).getStr() );
-            // Get absolute path of command's directory
-            if ( !aCmdPath.isEmpty() ) {
-                DirEntry aCmdDirEntry( aCmdPath );
-                aCmdDirEntry.ToAbs();
-                aCmdPath = rtl::OUStringToOString( aCmdDirEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US );
-            }
-            // Assign to PATH environment variable
-            if ( !aCmdPath.isEmpty() )
-            {
-                rtl::OString aTmpPath( aCmdPath );
-                if ( !aPath.isEmpty() )
-                    aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
-                aTmpPath += aPath;
-                setenv( "PATH", aTmpPath.getStr(), 1 );
-            }
-            // Assign to STAR_RESOURCEPATH environment variable
-            if ( !aCmdPath.isEmpty() )
-            {
-                rtl::OString aTmpPath( aCmdPath );
-                if ( !aResPath.isEmpty() )
-                    aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
-                aTmpPath += aResPath;
-                setenv( "STAR_RESOURCEPATH", aTmpPath.getStr(), 1 );
-            }
-            // Assign to DYLD_LIBRARY_PATH environment variable
-            if ( !aCmdPath.isEmpty() )
-            {
-                rtl::OString aTmpPath( aCmdPath );
-                if ( !aLibPath.isEmpty() )
-                    aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
-                aTmpPath += aLibPath;
-                setenv( "DYLD_LIBRARY_PATH", aTmpPath.getStr(), 1 );
-            }
-        }
-    }
 }
 
 // -----------------------------------------------------------------------
