@@ -250,7 +250,7 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
         Point aOffset( (aSize.Width() - maPreviewSize.Width()) / 2 + nTextHeight,
                        (aSize.Height() - maPreviewSize.Height()) / 2 + nTextHeight );
 
-        Size aVDevSize( maPageVDev.GetOutputSizePixel() );
+        const Size aVDevSize( maPageVDev.GetOutputSizePixel() );
         const Size aLogicSize( maPageVDev.PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
         Size aOrigSize( maOrigSize );
         if( aOrigSize.Width() < 1 )
@@ -271,12 +271,38 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
         aMtf.WindStart();
         aMtf.Scale( fScale, fScale );
         aMtf.WindStart();
+
+        const sal_uInt16 nOriginalAA(maPageVDev.GetAntialiasing());
+        static bool bNicePrintPreview(true);
+
+        if(bNicePrintPreview)
+        {
+            // replay metafile with AntiAliasing
+            maPageVDev.SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
+        }
+
         aMtf.Play( &maPageVDev, Point( 0, 0 ), aLogicSize );
+
+        maPageVDev.SetAntialiasing(nOriginalAA);
         maPageVDev.Pop();
 
         SetMapMode( MAP_PIXEL );
         maPageVDev.SetMapMode( MAP_PIXEL );
-        DrawOutDev( aOffset, maPreviewSize, Point( 0, 0 ), aVDevSize, maPageVDev );
+
+        if(bNicePrintPreview)
+        {
+            // use lanzcos scaling
+            Bitmap aContent(maPageVDev.GetBitmap(Point(0, 0), aVDevSize));
+            aContent.Scale(maPreviewSize, BMP_SCALE_BESTQUALITY);
+            DrawBitmap(aOffset, aContent);
+        }
+        else
+        {
+            // direct paint (copy from OutDev to OutDev) is fast, but does not do
+            // any good scaling at all (currently)
+            DrawOutDev( aOffset, maPreviewSize, Point( 0, 0 ), aVDevSize, maPageVDev );
+        }
+
         maPageVDev.SetDrawMode( nOldDrawMode );
 
         DecorationView aVw( this );
