@@ -643,6 +643,8 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         { "TextDocInOOoFileFormat", sizeof("TextDocInOOoFileFormat")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "SourceStorage", strlen( "SourceStorage" ), 0, &embed::XStorage::static_type(),
+          ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -700,6 +702,8 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LateInitSettings" ) ),
         makeAny( xLateInitSettings )
     );
+
+    xInfoSet->setPropertyValue( "SourceStorage", Any( xStorage ) );
 
     // prepare filter arguments, WARNING: the order is important!
     Sequence<Any> aFilterArgs( 5 );
