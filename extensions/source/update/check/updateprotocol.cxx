@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
+#include <com/sun/star/xml/xpath/XPathAPI.hpp>
 
 #include "updateprotocol.hxx"
 #include "updatecheckconfig.hxx"
@@ -123,9 +123,7 @@ checkForUpdates(
     OSL_ASSERT( rxContext->getServiceManager().is() );
 
     // XPath implementation
-    uno::Reference< xml::xpath::XXPathAPI > xXPath(
-        rxContext->getServiceManager()->createInstanceWithContext( UNISTRING( "com.sun.star.xml.xpath.XPathAPI" ), rxContext ),
-        uno::UNO_QUERY_THROW);
+    uno::Reference< xml::xpath::XXPathAPI > xXPath = xml::xpath::XPathAPI::create(rxContext);
 
     xXPath->registerNS( UNISTRING("inst"), UNISTRING("http://update.libreoffice.org/description") );
 

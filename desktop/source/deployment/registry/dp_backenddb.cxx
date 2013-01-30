@@ -25,7 +25,7 @@
 #include "osl/file.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/xml/dom/DocumentBuilder.hpp"
-#include "com/sun/star/xml/xpath/XXPathAPI.hpp"
+#include "com/sun/star/xml/xpath/XPathAPI.hpp"
 #include "com/sun/star/io/XActiveDataSource.hpp"
 #include "com/sun/star/io/XActiveDataControl.hpp"
 #include "dp_ucb.h"
@@ -111,17 +111,9 @@ Reference<css::xml::xpath::XXPathAPI> BackendDb::getXPathAPI()
 {
     if (!m_xpathApi.is())
     {
-        m_xpathApi = Reference< css::xml::xpath::XXPathAPI >(
-            m_xContext->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.xml.xpath.XPathAPI",
-                m_xContext), css::uno::UNO_QUERY);
+        m_xpathApi = css::xml::xpath::XPathAPI::create( m_xContext );
 
-        if (!m_xpathApi.is())
-            throw css::uno::RuntimeException(
-                " Could not create service com.sun.star.xml.xpath.XPathAPI", 0);
-
-        m_xpathApi->registerNS(
-            getNSPrefix(), getDbNSName());
+        m_xpathApi->registerNS( getNSPrefix(), getDbNSName() );
     }
 
     return m_xpathApi;

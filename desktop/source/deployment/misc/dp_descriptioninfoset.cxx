@@ -43,7 +43,7 @@
 #include "com/sun/star/xml/dom/XNode.hpp"
 #include "com/sun/star/xml/dom/XNodeList.hpp"
 #include "com/sun/star/xml/dom/DocumentBuilder.hpp"
-#include "com/sun/star/xml/xpath/XXPathAPI.hpp"
+#include "com/sun/star/xml/xpath/XPathAPI.hpp"
 #include "com/sun/star/ucb/InteractiveIOException.hpp"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
@@ -349,14 +349,8 @@ DescriptionInfoset::DescriptionInfoset(
     m_context(context),
     m_element(element)
 {
-    css::uno::Reference< css::lang::XMultiComponentFactory > manager(
-        context->getServiceManager(), css::uno::UNO_QUERY_THROW);
     if (m_element.is()) {
-        m_xpath = css::uno::Reference< css::xml::xpath::XXPathAPI >(
-            manager->createInstanceWithContext(
-                "com.sun.star.xml.xpath.XPathAPI",
-                context),
-            css::uno::UNO_QUERY_THROW);
+        m_xpath = css::xml::xpath::XPathAPI::create(context);
         m_xpath->registerNS("desc", element->getNamespaceURI());
         m_xpath->registerNS("xlink", "http://www.w3.org/1999/xlink");
     }

@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/xml/dom/NodeType.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
-#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
+#include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xml/xpath/XXPathExtension.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -45,6 +45,7 @@ using com::sun::star::lang::XInitialization;
 using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::xml::dom::XNode;
 using com::sun::star::container::XNameContainer;
+using com::sun::star::xml::xpath::XPathAPI;
 using com::sun::star::xml::xpath::XXPathAPI;
 using com::sun::star::xml::xpath::XXPathExtension;
 using com::sun::star::xml::xpath::XXPathObject;
@@ -189,10 +190,7 @@ bool ComputedExpression::getBool( bool bDefault ) const
 Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationContext& aContext)
 {
     // create XPath API, then register namespaces
-    Reference<XXPathAPI> xXPath( createInstance(
-                            "com.sun.star.xml.xpath.XPathAPI" ),
-                                 UNO_QUERY_THROW );
-    OSL_ENSURE( xXPath.is(), "cannot get XPath API" );
+    Reference<XXPathAPI> xXPath( XPathAPI::create( comphelper::getProcessComponentContext() ) );
 
     // register xforms extension#
     Sequence< Any > aSequence(2);

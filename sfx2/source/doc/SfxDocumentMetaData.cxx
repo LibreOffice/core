@@ -51,7 +51,7 @@
 #include "com/sun/star/xml/dom/DocumentBuilder.hpp"
 #include "com/sun/star/xml/dom/XSAXDocumentBuilder.hpp"
 #include "com/sun/star/xml/dom/NodeType.hpp"
-#include "com/sun/star/xml/xpath/XXPathAPI.hpp"
+#include "com/sun/star/xml/xpath/XPathAPI.hpp"
 #include "com/sun/star/util/Date.hpp"
 #include "com/sun/star/util/Time.hpp"
 #include "com/sun/star/util/Duration.hpp"
@@ -1144,15 +1144,7 @@ void SAL_CALL SfxDocumentMetaData::init(
         ::rtl::OUString(
                 "SfxDocumentMetaData::init: no DOM tree given"), *this);
 
-    css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
-        m_xContext->getServiceManager());
-    css::uno::Reference<css::xml::xpath::XXPathAPI> xPath(
-        xMsf->createInstanceWithContext(::rtl::OUString(
-                "com.sun.star.xml.xpath.XPathAPI"), m_xContext),
-        css::uno::UNO_QUERY_THROW );
-    if (!xPath.is()) throw css::uno::RuntimeException(
-        ::rtl::OUString("SfxDocumentMetaData::init:"
-                " cannot create XPathAPI service"), *this);
+    css::uno::Reference<css::xml::xpath::XXPathAPI> xPath = css::xml::xpath::XPathAPI::create(m_xContext);
 
     m_isInitialized = false;
     m_xDoc = i_xDoc;

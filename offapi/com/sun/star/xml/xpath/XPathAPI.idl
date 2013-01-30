@@ -24,10 +24,7 @@
 
 module com {  module sun {  module star {  module xml { module xpath {
 
-    service XPathAPI
-    {
-        interface XXPathAPI;
-    };
+service XPathAPI : XXPathAPI;
 
 };};};};};
 #endif

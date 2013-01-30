@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/xml/dom/SAXDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XSAXDocumentBuilder2.hpp>
-#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
+#include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <comphelper/processfactory.hxx>
@@ -151,11 +151,8 @@ lcl_initGenerator(SvXMLImport & rImport,
     uno::Reference< xml::dom::XDocument > const xDoc(xDocBuilder->getDocument(),
         uno::UNO_SET_THROW);
     try {
-        uno::Reference< xml::xpath::XXPathAPI > const xPath(
-            rImport.getServiceFactory()->createInstance(
-                ::rtl::OUString(
-                    "com.sun.star.xml.xpath.XPathAPI")),
-            uno::UNO_QUERY_THROW );
+        uno::Reference< xml::xpath::XXPathAPI > const xPath = xml::xpath::XPathAPI::create(
+            comphelper::getComponentContext(rImport.getServiceFactory()) );
         xPath->registerNS(GetXMLToken(XML_NP_OFFICE),GetXMLToken(XML_N_OFFICE));
         xPath->registerNS(GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META));
 

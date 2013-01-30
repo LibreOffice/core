@@ -368,6 +368,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/sax,\
 	Parser \
     Writer \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/xpath,\
+	XPathAPI \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/xslt,\
 	XSLTTransformer \
 	XSLT2Transformer \
@@ -1539,7 +1542,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/wra
 	XMLElementWrapper \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/xpath,\
-	XPathAPI \
 	XPathExtension \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xsd,\

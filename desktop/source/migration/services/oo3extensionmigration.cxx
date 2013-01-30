@@ -36,7 +36,7 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
+#include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
@@ -228,10 +228,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                 uno::Reference< xml::dom::XElement > xRoot = xDoc->getDocumentElement();
                 if ( xRoot.is() && xRoot->getTagName() == "description" )
                 {
-                    uno::Reference< xml::xpath::XXPathAPI > xPath(
-                        m_ctx->getServiceManager()->createInstanceWithContext( "com.sun.star.xml.xpath.XPathAPI",
-                            m_ctx),
-                        uno::UNO_QUERY);
+                    uno::Reference< xml::xpath::XXPathAPI > xPath = xml::xpath::XPathAPI::create(m_ctx);
 
                     xPath->registerNS("desc", xRoot->getNamespaceURI());
                     xPath->registerNS("xlink", "http://www.w3.org/1999/xlink");

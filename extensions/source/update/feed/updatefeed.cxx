@@ -45,7 +45,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
-#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
+#include <com/sun/star/xml/xpath/XPathAPI.hpp>
 
 #include <rtl/ref.hxx>
 #include <rtl/bootstrap.hxx>
@@ -391,21 +391,13 @@ UpdateInformationProvider::UpdateInformationProvider(
 uno::Reference< uno::XInterface >
 UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "unable to obtain service manager from component context" ),
-            uno::Reference< uno::XInterface > ());
-
     uno::Reference< ucb::XUniversalContentBroker > xUniversalContentBroker =
         ucb::UniversalContentBroker::create(xContext);
 
     uno::Reference< xml::dom::XDocumentBuilder > xDocumentBuilder(
         xml::dom::DocumentBuilder::create(xContext));
 
-    uno::Reference< xml::xpath::XXPathAPI > xXPath(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.xml.xpath.XPathAPI" ), xContext ),
-        uno::UNO_QUERY_THROW);
+    uno::Reference< xml::xpath::XXPathAPI > xXPath = xml::xpath::XPathAPI::create( xContext );
 
     xXPath->registerNS( UNISTRING("atom"), UNISTRING("http://www.w3.org/2005/Atom") );
 
