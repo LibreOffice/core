@@ -113,6 +113,7 @@ public:
     void testN792778();
     void testN793262();
     void testN793998();
+    void testGroupshapeLine();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -178,6 +179,7 @@ void Test::run()
         {"n792778.docx", &Test::testN792778},
         {"n793262.docx", &Test::testN793262},
         {"n793998.docx", &Test::testN793998},
+        {"groupshape-line.docx", &Test::testGroupshapeLine},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1099,6 +1101,37 @@ void Test::testN792778()
 
     xInnerShape.set(xInnerGroupShape->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11684), xInnerShape->getPosition().Y);
+}
+
+void Test::testGroupshapeLine()
+{
+    /*
+     * Another fallout from n#792778, this time first the lines inside a
+     * groupshape wasn't imported, then the fix broke the size/position of
+     * non-groupshape lines. Test both here.
+     *
+     * xray ThisComponent.DrawPage.Count ' 2 shapes
+     * xray ThisComponent.DrawPage(0).Position 'x: 2656, y: 339
+     * xray ThisComponent.DrawPage(0).Size ' width: 3270, height: 1392
+     * xray ThisComponent.DrawPage(1).getByIndex(0).Position 'x: 1272, y: 2286
+     * xray ThisComponent.DrawPage(1).getByIndex(0).Size 'width: 10160, height: 0
+     */
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDrawPage->getCount());
+
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2656), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(339), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3270), xShape->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1392), xShape->getSize().Height);
+
+    uno::Reference<drawing::XShapes> xGroupShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    xShape.set(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1272), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2286), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10160), xShape->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getSize().Height);
 }
 
 void Test::testN793262()
