@@ -1546,6 +1546,18 @@ void ScTable::CompileXML( ScProgress& rProgress )
         mpCondFormatList->CompileXML();
 }
 
+bool ScTable::CompileErrorCells(sal_uInt16 nErrCode)
+{
+    bool bCompiled = false;
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+    {
+        if (aCol[i].CompileErrorCells(nErrCode))
+            bCompiled = true;
+    }
+
+    return bCompiled;
+}
+
 void ScTable::CalcAfterLoad()
 {
     for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].CalcAfterLoad();

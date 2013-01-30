@@ -2135,6 +2135,41 @@ void ScColumn::CompileXML( ScProgress& rProgress )
         }
 }
 
+bool ScColumn::CompileErrorCells(sal_uInt16 nErrCode)
+{
+    if (maItems.empty())
+        return false;
+
+    bool bCompiled = false;
+    std::vector<ColEntry>::iterator it = maItems.begin(), itEnd = maItems.end();
+    for (; it != itEnd; ++it)
+    {
+        ScBaseCell* pCell = it->pCell;
+        if (pCell->GetCellType() != CELLTYPE_FORMULA)
+            // Not a formula cell. Skip it.
+            continue;
+
+        ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+        sal_uInt16 nCurError = pFCell->GetRawError();
+        if (!nCurError)
+            // It's not an error cell. Skip it.
+            continue;
+
+        if (nErrCode && nCurError != nErrCode)
+            // Error code is specified, and it doesn't match. Skip it.
+            continue;
+
+        pFCell->GetCode()->SetCodeError(0);
+        pFCell->SetCompile(true);
+        OUStringBuffer aBuf;
+        pFCell->GetFormula(aBuf, pDocument->GetGrammar());
+        pFCell->Compile(aBuf.makeStringAndClear(), false, pDocument->GetGrammar());
+
+        bCompiled = true;
+    }
+
+    return bCompiled;
+}
 
 void ScColumn::CalcAfterLoad()
 {

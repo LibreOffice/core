@@ -860,6 +860,18 @@ public:
     void            CompileAll();
     void            CompileXML();
 
+    /**
+     * Re-compile formula cells with error.
+     *
+     * @param nErrCode specified error code to match. Only those cells with
+     *                 this error code will be re-compiled.  If this value is
+     *                 0, cells with any error values will be re-compiled.
+     *
+     * @return true if at least one cell is re-compiled, false if no cells are
+     *         re-compiled.
+     */
+    bool CompileErrorCells(sal_uInt16 nErrCode);
+
     ScAutoNameCache* GetAutoNameCache()     { return pAutoNameCache; }
     SC_DLLPUBLIC  void             SetAutoNameCache(  ScAutoNameCache* pCache );
 
