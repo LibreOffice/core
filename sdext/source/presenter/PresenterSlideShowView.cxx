@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -44,8 +45,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
-
-#define A2S(pString) (::rtl::OUString(pString))
 
 namespace sdext { namespace presenter {
 
@@ -167,12 +166,12 @@ void PresenterSlideShowView::LateInit (void)
         PresenterConfigurationAccess::msPresenterScreenRootName,
         PresenterConfigurationAccess::READ_ONLY);
     aConfiguration.GetConfigurationNode(
-        A2S("Presenter/Views/CurrentSlidePreview/"
-            "Strings/ClickToExitPresentationText/String"))
+        "Presenter/Views/CurrentSlidePreview/"
+        "Strings/ClickToExitPresentationText/String")
         >>= msClickToExitPresentationText;
     aConfiguration.GetConfigurationNode(
-        A2S("Presenter/Views/CurrentSlidePreview/"
-            "Strings/ClickToExitPresentationTitle/String"))
+        "Presenter/Views/CurrentSlidePreview/"
+        "Strings/ClickToExitPresentationTitle/String")
         >>= msClickToExitPresentationTitle;
 }
 
@@ -1006,7 +1005,7 @@ void PresenterSlideShowView::impl_addAndConfigureView()
     // Prevent embeded sounds being played twice at the same time by
     // disabling sound for the new slide show view.
     beans::PropertyValue aProperty;
-    aProperty.Name = A2S("IsSoundEnabled");
+    aProperty.Name = "IsSoundEnabled";
     Sequence<Any> aValues (2);
     aValues[0] <<= xView;
     aValues[1] <<= sal_False;

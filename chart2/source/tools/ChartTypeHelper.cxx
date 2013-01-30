@@ -254,7 +254,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
         bool bDonut = false;
         uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY_THROW );
         if(xChartTypeProp.is())
-            xChartTypeProp->getPropertyValue( C2U("UseRings")) >>= bDonut;
+            xChartTypeProp->getPropertyValue( "UseRings") >>= bDonut;
 
         if(!bDonut)
         {
@@ -293,7 +293,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
         {
             uno::Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
             chart2::StackingDirection eStacking = chart2::StackingDirection_NO_STACKING;
-            xSeriesProp->getPropertyValue( C2U("StackingDirection") ) >>= eStacking;
+            xSeriesProp->getPropertyValue( "StackingDirection" ) >>= eStacking;
             bStacked = (chart2::StackingDirection_Y_STACKING == eStacking);
         }
 
@@ -553,7 +553,7 @@ sal_Int32 ChartTypeHelper::getNumberOfDisplayedSeries(
             {
                 uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY_THROW );
                 bool bDonut = false;
-                if( (xChartTypeProp->getPropertyValue( C2U("UseRings")) >>= bDonut)
+                if( (xChartTypeProp->getPropertyValue( "UseRings") >>= bDonut)
                     && !bDonut )
                 {
                     return nNumberOfSeries>0 ? 1 : 0;
@@ -643,7 +643,7 @@ bool ChartTypeHelper::isSeriesInFrontOfAxisLine( const uno::Reference< XChartTyp
 
 rtl::OUString ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( const uno::Reference< XChartType >& xChartType )
 {
-    rtl::OUString aRet( C2U( "values-y" ) );
+    rtl::OUString aRet( "values-y" );
     if( !xChartType.is() )
         return aRet;
     rtl::OUString aChartTypeName = xChartType->getChartType();
@@ -654,7 +654,7 @@ rtl::OUString ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( c
 
 rtl::OUString ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( const uno::Reference< XChartType >& xChartType )
 {
-    rtl::OUString aRet( C2U( "values-y" ) );
+    rtl::OUString aRet( "values-y" );
     if( !xChartType.is() )
         return aRet;
     rtl::OUString aChartTypeName = xChartType->getChartType();

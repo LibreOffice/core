@@ -143,7 +143,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
             aSequences[nBarGroupIndex][nLabeledSeqIdx].realloc( 1 );
             aSequences[nBarGroupIndex][nLabeledSeqIdx][0].set( aData[nSourceIndex] );
             if( aData[nSourceIndex].is())
-                SetRole( aData[nSourceIndex]->getValues(), C2U("values-y"));
+                SetRole( aData[nSourceIndex]->getValues(), "values-y");
             ++nSourceIndex;
         }
 
@@ -153,7 +153,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
             aSequences[nCandleStickGroupIndex][nLabeledSeqIdx].realloc( 4 );
             aSequences[nCandleStickGroupIndex][nLabeledSeqIdx][nSeqIdx].set( aData[nSourceIndex] );
             if( aData[nSourceIndex].is())
-                SetRole( aData[nSourceIndex]->getValues(), C2U("values-first"));
+                SetRole( aData[nSourceIndex]->getValues(), "values-first");
             ++nSourceIndex, ++nSeqIdx;
         }
         else
@@ -161,17 +161,17 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
 
         aSequences[nCandleStickGroupIndex][nLabeledSeqIdx][nSeqIdx].set( aData[nSourceIndex] );
         if( aData[nSourceIndex].is())
-            SetRole( aData[nSourceIndex]->getValues(), C2U("values-min"));
+            SetRole( aData[nSourceIndex]->getValues(), "values-min");
         ++nSourceIndex, ++nSeqIdx;
 
         aSequences[nCandleStickGroupIndex][nLabeledSeqIdx][nSeqIdx].set( aData[nSourceIndex] );
         if( aData[nSourceIndex].is())
-            SetRole( aData[nSourceIndex]->getValues(), C2U("values-max"));
+            SetRole( aData[nSourceIndex]->getValues(), "values-max");
         ++nSourceIndex, ++nSeqIdx;
 
         aSequences[nCandleStickGroupIndex][nLabeledSeqIdx][nSeqIdx].set( aData[nSourceIndex] );
         if( aData[nSourceIndex].is())
-            SetRole( aData[nSourceIndex]->getValues(), C2U("values-last"));
+            SetRole( aData[nSourceIndex]->getValues(), "values-last");
         ++nSourceIndex, ++nSeqIdx;
     }
 
@@ -182,7 +182,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
         aSequences[nBarGroupIndex][nVolumeSeries - 1].realloc( 1 );
         OSL_ASSERT( nDataCount > nSourceIndex );
         if( aData[nSourceIndex].is())
-            SetRole( aData[nSourceIndex]->getValues(), C2U("values-y"));
+            SetRole( aData[nSourceIndex]->getValues(), "values-y");
         aSequences[nBarGroupIndex][nVolumeSeries - 1][0].set( aData[nSourceIndex] );
         ++nSourceIndex;
         --nRemaining;
@@ -201,7 +201,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
         sal_Int32 nSeqIdx( 0 );
         aSequences[nCandleStickGroupIndex][nSeriesIndex][nSeqIdx].set( aData[nSourceIndex] );
         if( aData[nSourceIndex].is())
-            SetRole( aData[nSourceIndex]->getValues(), C2U("values-min"));
+            SetRole( aData[nSourceIndex]->getValues(), "values-min");
         ++nSourceIndex, ++nSeqIdx;
 
         // 2. high
@@ -209,7 +209,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
         {
             aSequences[nCandleStickGroupIndex][nSeriesIndex][nSeqIdx].set( aData[nSourceIndex] );
             if( aData[nSourceIndex].is())
-                SetRole( aData[nSourceIndex]->getValues(), C2U("values-max"));
+                SetRole( aData[nSourceIndex]->getValues(), "values-max");
             ++nSourceIndex, ++nSeqIdx;
         }
 
@@ -219,7 +219,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
         {
             aSequences[nCandleStickGroupIndex][nSeriesIndex][nSeqIdx].set( aData[nSourceIndex] );
             if( aData[nSourceIndex].is())
-                SetRole( aData[nSourceIndex]->getValues(), C2U("values-last"));
+                SetRole( aData[nSourceIndex]->getValues(), "values-last");
             ++nSourceIndex, ++nSeqIdx;
         }
 

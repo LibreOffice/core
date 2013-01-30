@@ -166,7 +166,7 @@ bool ChartModelHelper::isIncludeHiddenCells( const uno::Reference< frame::XModel
 
     try
     {
-        xProp->getPropertyValue(C2U("IncludeHiddenCells")) >>= bIncluded;
+        xProp->getPropertyValue("IncludeHiddenCells") >>= bIncluded;
     }
     catch( const beans::UnknownPropertyException& )
     {
@@ -186,7 +186,7 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, const un
         if (xDiagramProperties.is())
         {
             bool bOldValue = bIncludeHiddenCells;
-            xDiagramProperties->getPropertyValue( C2U("IncludeHiddenCells") ) >>= bOldValue;
+            xDiagramProperties->getPropertyValue( "IncludeHiddenCells" ) >>= bOldValue;
             if( bOldValue == bIncludeHiddenCells )
                 bChanged = true;
 
@@ -201,7 +201,7 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, const un
                 {
                     uno::Reference< beans::XPropertySet > xDataProviderProperties( xChartDoc->getDataProvider(), uno::UNO_QUERY );
                     if( xDataProviderProperties.is() )
-                        xDataProviderProperties->setPropertyValue(C2U("IncludeHiddenCells"), aNewValue );
+                        xDataProviderProperties->setPropertyValue("IncludeHiddenCells", aNewValue );
                 }
             }
             catch( const beans::UnknownPropertyException& )
@@ -220,10 +220,10 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, const un
                     {
                         xProp.set( uno::Reference< beans::XPropertySet >( aData[i]->getValues(), uno::UNO_QUERY ) );
                         if(xProp.is())
-                            xProp->setPropertyValue(C2U("IncludeHiddenCells"), aNewValue );
+                            xProp->setPropertyValue("IncludeHiddenCells", aNewValue );
                         xProp.set( uno::Reference< beans::XPropertySet >( aData[i]->getLabel(), uno::UNO_QUERY ) );
                         if(xProp.is())
-                            xProp->setPropertyValue(C2U("IncludeHiddenCells"), aNewValue );
+                            xProp->setPropertyValue("IncludeHiddenCells", aNewValue );
                     }
                 }
             }
@@ -232,7 +232,7 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, const un
                 //the property is optional!
             }
 
-            xDiagramProperties->setPropertyValue( C2U("IncludeHiddenCells"), aNewValue);
+            xDiagramProperties->setPropertyValue( "IncludeHiddenCells", aNewValue);
         }
     }
     catch (const uno::Exception& e)

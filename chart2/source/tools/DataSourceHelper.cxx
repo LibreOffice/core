@@ -85,11 +85,11 @@ void lcl_addErrorBarRanges(
     try
     {
         uno::Reference< beans::XPropertySet > xErrorBarProp;
-        if( ( xSeriesProp->getPropertyValue( C2U("ErrorBarY")) >>= xErrorBarProp ) &&
+        if( ( xSeriesProp->getPropertyValue( "ErrorBarY") >>= xErrorBarProp ) &&
             xErrorBarProp.is())
         {
             sal_Int32 eStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
-            if( ( xErrorBarProp->getPropertyValue( C2U("ErrorBarStyle")) >>= eStyle ) &&
+            if( ( xErrorBarProp->getPropertyValue( "ErrorBarStyle") >>= eStyle ) &&
                 eStyle == ::com::sun::star::chart::ErrorBarStyle::FROM_DATA )
             {
                 uno::Reference< data::XDataSource > xErrorBarDataSource( xErrorBarProp, uno::UNO_QUERY );
@@ -161,13 +161,13 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
         eRowSource = ::com::sun::star::chart::ChartDataRowSource_COLUMNS;
 
     uno::Sequence< beans::PropertyValue > aArguments(3);
-    aArguments[0] = beans::PropertyValue( C2U("DataRowSource")
+    aArguments[0] = beans::PropertyValue( "DataRowSource"
         , -1, uno::makeAny( eRowSource )
         , beans::PropertyState_DIRECT_VALUE );
-    aArguments[1] = beans::PropertyValue( C2U("FirstCellAsLabel")
+    aArguments[1] = beans::PropertyValue( "FirstCellAsLabel"
         , -1, uno::makeAny( bFirstCellAsLabel )
         , beans::PropertyState_DIRECT_VALUE );
-    aArguments[2] = beans::PropertyValue( C2U("HasCategories")
+    aArguments[2] = beans::PropertyValue( "HasCategories"
         , -1, uno::makeAny( bHasCategories )
         , beans::PropertyState_DIRECT_VALUE );
 
@@ -182,14 +182,14 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
     uno::Sequence< beans::PropertyValue > aArguments( createArguments( bUseColumns, bFirstCellAsLabel, bHasCategories ));
     aArguments.realloc( aArguments.getLength() + 1 );
     aArguments[aArguments.getLength() - 1] =
-        beans::PropertyValue( C2U("CellRangeRepresentation")
+        beans::PropertyValue( "CellRangeRepresentation"
                               , -1, uno::makeAny( rRangeRepresentation )
                               , beans::PropertyState_DIRECT_VALUE );
     if( rSequenceMapping.getLength() )
     {
         aArguments.realloc( aArguments.getLength() + 1 );
         aArguments[aArguments.getLength() - 1] =
-            beans::PropertyValue( C2U("SequenceMapping")
+            beans::PropertyValue( "SequenceMapping"
                                 , -1, uno::makeAny( rSequenceMapping )
                                 , beans::PropertyState_DIRECT_VALUE );
     }
@@ -251,7 +251,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
 
     //the first x-values is always the next sequence //todo ... other x-values get lost for old format
     Reference< chart2::data::XLabeledDataSequence > xXValues(
-        DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values-x") ) );
+        DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x" ) );
     if( xXValues.is() )
         aResultVector.push_back( xXValues );
 
@@ -259,7 +259,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
     for( sal_Int32 nN=0; nN<aDataSeqences.getLength(); nN++ )
     {
         OUString aRole( DataSeriesHelper::GetRole( aDataSeqences[nN] ) );
-        if( !aRole.equals(C2U("values-x")) )
+        if( !aRole.equals("values-x") )
             aResultVector.push_back( aDataSeqences[nN] );
     }
 

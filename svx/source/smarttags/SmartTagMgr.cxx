@@ -48,7 +48,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
+#define cChar rtl::OUString::createFromAscii(cChar)
 
 
 SmartTagMgr::SmartTagMgr( const rtl::OUString& rApplicationName )
@@ -199,7 +199,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
 
             try
             {
-                mxConfigurationSettings->setPropertyValue( C2U("RecognizeSmartTags"), aEnabled );
+                mxConfigurationSettings->setPropertyValue( "RecognizeSmartTags", aEnabled );
                 bCommit = true;
             }
             catch ( ::com::sun::star::uno::Exception& )
@@ -221,7 +221,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
 
             try
             {
-                mxConfigurationSettings->setPropertyValue( C2U("ExcludedSmartTagTypes"), aNewTypes );
+                mxConfigurationSettings->setPropertyValue( "ExcludedSmartTagTypes", aNewTypes );
                 bCommit = true;
             }
             catch ( ::com::sun::star::uno::Exception& )
@@ -296,9 +296,9 @@ void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( Run
         rtl::OUString sTemp;
         pElementChanges[i].Accessor >>= sTemp;
 
-        if ( sTemp == C2U( "ExcludedSmartTagTypes" ) )
+        if ( sTemp == "ExcludedSmartTagTypes" )
             bExcludedTypes = true;
-        else if ( sTemp == C2U( "RecognizeSmartTags" ) )
+        else if ( sTemp == "RecognizeSmartTags" )
             bRecognize = true;
     }
 
@@ -316,7 +316,7 @@ void SmartTagMgr::LoadLibraries()
         return;
 
     // load recognizers: No recognizers -> nothing to do.
-    Reference < container::XEnumeration > rEnum = rContent->createContentEnumeration( C2U("com.sun.star.smarttags.SmartTagRecognizer"));
+    Reference < container::XEnumeration > rEnum = rContent->createContentEnumeration( "com.sun.star.smarttags.SmartTagRecognizer");
     if ( !rEnum.is() || !rEnum->hasMoreElements() )
         return;
 
@@ -343,7 +343,7 @@ void SmartTagMgr::LoadLibraries()
     }
 
     // load actions: No actions -> nothing to do.
-    rEnum = rContent->createContentEnumeration( C2U("com.sun.star.smarttags.SmartTagAction"));
+    rEnum = rContent->createContentEnumeration( "com.sun.star.smarttags.SmartTagAction");
     if ( !rEnum.is() )
         return;
 
@@ -377,9 +377,9 @@ void SmartTagMgr::LoadLibraries()
 */
 void SmartTagMgr::PrepareConfiguration( const rtl::OUString& rConfigurationGroupName )
 {
-    Any aAny = makeAny( C2U( "/org.openoffice.Office.Common/SmartTags/" ) + rConfigurationGroupName );
+    Any aAny = makeAny( "/org.openoffice.Office.Common/SmartTags/" + rConfigurationGroupName );
     beans::PropertyValue aPathArgument;
-    aPathArgument.Name = C2U( "nodepath" );
+    aPathArgument.Name = "nodepath";
     aPathArgument.Value = aAny;
     Sequence< Any > aArguments( 1 );
     aArguments[ 0 ] <<= aPathArgument;
@@ -390,7 +390,7 @@ void SmartTagMgr::PrepareConfiguration( const rtl::OUString& rConfigurationGroup
     try
     {
         xConfigurationAccess = xConfProv->createInstanceWithArguments(
-            C2U("com.sun.star.configuration.ConfigurationUpdateAccess" ), aArguments );
+            "com.sun.star.configuration.ConfigurationUpdateAccess", aArguments );
     }
     catch ( uno::Exception& )
     {
@@ -402,7 +402,7 @@ void SmartTagMgr::PrepareConfiguration( const rtl::OUString& rConfigurationGroup
         try
         {
             xConfigurationAccess = xConfProv->createInstanceWithArguments(
-                C2U("com.sun.star.configuration.ConfigurationAccess" ), aArguments );
+                "com.sun.star.configuration.ConfigurationAccess", aArguments );
         }
         catch ( uno::Exception& )
         {
@@ -424,7 +424,7 @@ void SmartTagMgr::ReadConfiguration( bool bExcludedTypes, bool bRecognize )
         {
             maDisabledSmartTagTypes.clear();
 
-            Any aAny = mxConfigurationSettings->getPropertyValue( C2U("ExcludedSmartTagTypes") );
+            Any aAny = mxConfigurationSettings->getPropertyValue( "ExcludedSmartTagTypes" );
             Sequence< rtl::OUString > aValues;
             aAny >>= aValues;
 
@@ -436,7 +436,7 @@ void SmartTagMgr::ReadConfiguration( bool bExcludedTypes, bool bRecognize )
 
         if ( bRecognize )
         {
-            Any aAny = mxConfigurationSettings->getPropertyValue( C2U("RecognizeSmartTags") );
+            Any aAny = mxConfigurationSettings->getPropertyValue( "RecognizeSmartTags" );
             sal_Bool bValue = sal_True;
             aAny >>= bValue;
 

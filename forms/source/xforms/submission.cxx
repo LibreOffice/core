@@ -97,7 +97,7 @@ Submission::Submission() :
     mbOmitXmlDeclaration(),
     mbStandalone(),
     msCDataSectionElement(),
-    msReplace( OUSTRING("none") ),
+    msReplace( "none" ),
     msSeparator(),
     msIncludeNamespacePrefixes(),
     m_aFactory(comphelper::getProcessServiceFactory())
@@ -293,7 +293,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     }
     else
     {
-        aExpression.setExpression( OUSTRING( "/" ) );
+        aExpression.setExpression( "/" );
         aEvalContext = Model::getModel( mxModel )->getEvaluationContext();
     }
     aExpression.evaluate( aEvalContext );
@@ -482,11 +482,11 @@ sal_Int64 SAL_CALL Submission::getSomething(
 static OUString lcl_message( const OUString& rID, const OUString& rText )
 {
     OUStringBuffer aMessage;
-    aMessage.append( OUSTRING("XForms submission '") );
+    aMessage.append( "XForms submission '" );
     aMessage.append( rID );
-    aMessage.append( OUSTRING("' failed") );
+    aMessage.append( "' failed" );
     aMessage.append( rText );
-    aMessage.append( OUSTRING(".") );
+    aMessage.append( "." );
     return aMessage.makeStringAndClear();
 }
 
@@ -516,7 +516,7 @@ void SAL_CALL Submission::submitWithInteraction(
     if( ! bValid )
     {
         InvalidDataOnSubmitException aInvalidDataException(
-            lcl_message(sID, OUSTRING(" due to invalid data") ), *this );
+            lcl_message(sID, " due to invalid data" ), *this );
 
         if( _rxHandler.is() )
         {
@@ -567,7 +567,7 @@ void SAL_CALL Submission::submitWithInteraction(
     {
         // exception caught: re-throw as wrapped target exception
         throw WrappedTargetException(
-            lcl_message( sID, OUSTRING(" due to exception being thrown") ),
+            lcl_message( sID, " due to exception being thrown" ),
             *this, makeAny( e ) );
     }
 

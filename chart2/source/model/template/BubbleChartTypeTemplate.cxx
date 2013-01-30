@@ -164,7 +164,7 @@ void SAL_CALL BubbleChartTypeTemplate::applyStyle(
     throw (uno::RuntimeException)
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
-    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
 
     try
     {
@@ -279,7 +279,7 @@ Sequence< OUString > BubbleChartTypeTemplate::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
     return aServices;
 }
 

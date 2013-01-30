@@ -73,7 +73,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
     LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
         , rAxisLabelProperties.m_aFontReferenceSize );
 
-    uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,C2U("CharColor"));
+    uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,"CharColor");
     sal_Int32 nColor = Color( COL_AUTO ).GetColor();
     if(pColorAny)
         *pColorAny >>= nColor;
@@ -212,7 +212,7 @@ void VPolarAngleAxis::createShapes()
     uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
             m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
     //because of this name this line will be used for marking the axis
-    m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
+    m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
 
     //-----------------------------------------
     //create labels

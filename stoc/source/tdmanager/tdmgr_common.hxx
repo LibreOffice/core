@@ -24,7 +24,6 @@
 
 #include "com/sun/star/reflection/XTypeDescription.hpp"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define ARLEN(x) (sizeof (x) / sizeof *(x))
 
 

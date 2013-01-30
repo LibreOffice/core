@@ -31,8 +31,6 @@
 #include "com/sun/star/reflection/XSingletonTypeDescription2.hpp"
 #include "com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 namespace climaker
 {

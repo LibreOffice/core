@@ -48,20 +48,20 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "CurveStyle" ),
+        Property( "CurveStyle",
                   PROP_LINECHARTTYPE_CURVE_STYLE,
                   ::getCppuType( reinterpret_cast< const chart2::CurveStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "CurveResolution" ),
+        Property( "CurveResolution",
                   PROP_LINECHARTTYPE_CURVE_RESOLUTION,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "SplineOrder" ),
+        Property( "SplineOrder",
                   PROP_LINECHARTTYPE_SPLINE_ORDER,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -193,14 +193,14 @@ uno::Sequence< ::rtl::OUString > LineChartType::getSupportedServiceNames_Static(
 {
     uno::Sequence< ::rtl::OUString > aServices( 3 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_LINE;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartType" );
-    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
+    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( LineChartType,
-                             C2U( "com.sun.star.comp.chart.LineChartType" ));
+                             OUString("com.sun.star.comp.chart.LineChartType") );
 
 } //  namespace chart
 

@@ -53,7 +53,7 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "SwapXAndYAxis" ),
+        Property( "SwapXAndYAxis",
                   PROP_COORDINATESYSTEM_SWAPXANDYAXIS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
@@ -289,7 +289,7 @@ void SAL_CALL BaseCoordinateSystem::removeChartType( const Reference< chart2::XC
           aIt( ::std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType ));
     if( aIt == m_aChartTypes.end())
         throw container::NoSuchElementException(
-            C2U( "The given chart type is no element of the container" ),
+            "The given chart type is no element of the container",
             static_cast< uno::XWeak * >( this ));
 
     m_aChartTypes.erase( aIt );

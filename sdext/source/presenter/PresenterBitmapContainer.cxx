@@ -33,8 +33,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::std;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace sdext { namespace presenter {
 
 //===== PresenterBitmapContainer ==============================================
@@ -55,7 +53,7 @@ PresenterBitmapContainer::PresenterBitmapContainer (
     // Get access to the configuration.
     PresenterConfigurationAccess aConfiguration (
         rxComponentContext,
-        A2S("org.openoffice.Office.PresenterScreen"),
+        "org.openoffice.Office.PresenterScreen",
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XNameAccess> xBitmapList (
         aConfiguration.GetConfigurationNode(rsConfigurationBase),
@@ -93,7 +91,7 @@ void PresenterBitmapContainer::Initialize (
             return;
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                A2S("com.sun.star.drawing.PresenterHelper"),
+                "com.sun.star.drawing.PresenterHelper",
                 rxComponentContext),
             UNO_QUERY_THROW);
     }
@@ -178,7 +176,7 @@ void PresenterBitmapContainer::ProcessBitmap (
     const Reference<beans::XPropertySet>& rxProperties)
 {
     OUString sName;
-    if ( ! (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("Name")) >>= sName))
+    if ( ! (PresenterConfigurationAccess::GetProperty(rxProperties, "Name") >>= sName))
         sName = rsKey;
 
     maIconContainer[sName] = LoadBitmap(
@@ -205,7 +203,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
     OUString sFileName;
 
     // Load bitmaps.
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("NormalFileName")) >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, "NormalFileName") >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -214,7 +212,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("MouseOverFileName")) >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, "MouseOverFileName") >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -223,7 +221,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("ButtonDownFileName")) >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, "ButtonDownFileName") >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -232,7 +230,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("DisabledFileName")) >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, "DisabledFileName") >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -241,7 +239,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("MaskFileName")) >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, "MaskFileName") >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -251,18 +249,18 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         catch (Exception&)
         {}
 
-    PresenterConfigurationAccess::GetProperty(rxProperties, A2S("XOffset")) >>= pBitmap->mnXOffset;
-    PresenterConfigurationAccess::GetProperty(rxProperties, A2S("YOffset")) >>= pBitmap->mnYOffset;
+    PresenterConfigurationAccess::GetProperty(rxProperties, "XOffset") >>= pBitmap->mnXOffset;
+    PresenterConfigurationAccess::GetProperty(rxProperties, "YOffset") >>= pBitmap->mnYOffset;
 
-    PresenterConfigurationAccess::GetProperty(rxProperties, A2S("XHotSpot")) >>= pBitmap->mnXHotSpot;
-    PresenterConfigurationAccess::GetProperty(rxProperties, A2S("YHotSpot")) >>= pBitmap->mnYHotSpot;
+    PresenterConfigurationAccess::GetProperty(rxProperties, "XHotSpot") >>= pBitmap->mnXHotSpot;
+    PresenterConfigurationAccess::GetProperty(rxProperties, "YHotSpot") >>= pBitmap->mnYHotSpot;
 
-    PresenterConfigurationAccess::GetProperty(rxProperties, A2S("ReplacementColor")) >>= pBitmap->maReplacementColor;
+    PresenterConfigurationAccess::GetProperty(rxProperties, "ReplacementColor") >>= pBitmap->maReplacementColor;
 
     OUString sTexturingMode;
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("HorizontalTexturingMode")) >>= sTexturingMode)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, "HorizontalTexturingMode") >>= sTexturingMode)
         pBitmap->meHorizontalTexturingMode = StringToTexturingMode(sTexturingMode);
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("VerticalTexturingMode")) >>= sTexturingMode)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, "VerticalTexturingMode") >>= sTexturingMode)
         pBitmap->meVerticalTexturingMode = StringToTexturingMode(sTexturingMode);
 
     return pBitmap;
@@ -271,11 +269,11 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
 PresenterBitmapContainer::BitmapDescriptor::TexturingMode
     PresenterBitmapContainer::StringToTexturingMode (const OUString& rsTexturingMode)
 {
-    if (rsTexturingMode == A2S("Once"))
+    if (rsTexturingMode == "Once")
         return PresenterBitmapContainer::BitmapDescriptor::Once;
-    else if (rsTexturingMode == A2S("Repeat"))
+    else if (rsTexturingMode == "Repeat")
         return PresenterBitmapContainer::BitmapDescriptor::Repeat;
-    else if (rsTexturingMode == A2S("Stretch"))
+    else if (rsTexturingMode == "Stretch")
         return PresenterBitmapContainer::BitmapDescriptor::Stretch;
     else
         return PresenterBitmapContainer::BitmapDescriptor::Once;

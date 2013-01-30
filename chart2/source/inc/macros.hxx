@@ -22,7 +22,7 @@
 #include <typeinfo>
 
 /// creates a unicode-string from an ASCII string
-#define C2U(constAsciiStr) (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) ))
+#define constAsciiStr (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) ))
 
 /** shows an error-box for an exception ex
     else-branch necessary to avoid warning

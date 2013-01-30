@@ -158,7 +158,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
         uno::Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
         if( xProps.is() )
         {
-            xProps->setPropertyValue( C2U( "Show" ), uno::makeAny( sal_False ) );
+            xProps->setPropertyValue( "Show", uno::makeAny( sal_False ) );
             xTitled = lcl_getTitleParent( eTitleType, xModel );
         }
     }
@@ -168,7 +168,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
         uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
 
         xTitle.set( xContext->getServiceManager()->createInstanceWithContext(
-                        C2U( "com.sun.star.chart2.Title" ),
+                        "com.sun.star.chart2.Title",
                         xContext ), uno::UNO_QUERY );
 
         if(xTitle.is())
@@ -224,7 +224,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
                             || (bIsVertical && eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE) )
                         {
                             double fNewAngleDegree = 90.0;
-                            xTitleProps->setPropertyValue( C2U( "TextRotation" ), uno::makeAny( fNewAngleDegree ));
+                            xTitleProps->setPropertyValue( "TextRotation", uno::makeAny( fNewAngleDegree ));
                         }
                     }
                 }
@@ -264,7 +264,7 @@ void TitleHelper::setCompleteString( const rtl::OUString& rNewText
     bool bStacked = false;
     uno::Reference< beans::XPropertySet > xTitleProperties( xTitle, uno::UNO_QUERY );
     if( xTitleProperties.is() )
-        xTitleProperties->getPropertyValue( C2U( "StackCharacters" ) ) >>= bStacked;
+        xTitleProperties->getPropertyValue( "StackCharacters" ) >>= bStacked;
 
     if( bStacked )
     {
@@ -302,7 +302,7 @@ void TitleHelper::setCompleteString( const rtl::OUString& rNewText
     {
         uno::Reference< uno::XInterface > xI(
             xContext->getServiceManager()->createInstanceWithContext(
-            C2U( "com.sun.star.chart2.FormattedString" ), xContext ) );
+            "com.sun.star.chart2.FormattedString", xContext ) );
         uno::Reference< XFormattedString > xFormattedString( xI, uno::UNO_QUERY );
 
         if(xFormattedString.is())
@@ -316,9 +316,9 @@ void TitleHelper::setCompleteString( const rtl::OUString& rNewText
                     uno::Reference< beans::XPropertySet > xProp( xFormattedString, uno::UNO_QUERY_THROW );
 
                     uno::Any aFontSize( uno::makeAny( *pDefaultCharHeight ));
-                    xProp->setPropertyValue( C2U("CharHeight"), aFontSize );
-                    xProp->setPropertyValue( C2U("CharHeightAsian"), aFontSize );
-                    xProp->setPropertyValue( C2U("CharHeightComplex"), aFontSize );
+                    xProp->setPropertyValue( "CharHeight", aFontSize );
+                    xProp->setPropertyValue( "CharHeightAsian", aFontSize );
+                    xProp->setPropertyValue( "CharHeightComplex", aFontSize );
                 }
                 catch( const uno::Exception & ex )
                 {

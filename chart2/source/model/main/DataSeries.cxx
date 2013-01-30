@@ -268,9 +268,9 @@ uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
 Sequence< OUString > DataSeries::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.DataSeries" );
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.DataPointProperties" );
-    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 0 ] = "com.sun.star.chart2.DataSeries";
+    aServices[ 1 ] = "com.sun.star.chart2.DataPointProperties";
+    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 
@@ -366,7 +366,7 @@ Reference< beans::XPropertySet >
     }
 
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aValuesSeries(
-        DataSeriesHelper::getAllDataSequencesByRole( aSequences , C2U("values"), true ) );
+        DataSeriesHelper::getAllDataSequencesByRole( aSequences , "values", true ) );
     if( !aValuesSeries.empty() )
     {
         Reference< chart2::data::XDataSequence > xSeq( aValuesSeries.front()->getValues() );
@@ -513,7 +513,7 @@ void SAL_CALL DataSeries::removeRegressionCurve(
             ::std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), xRegressionCurve ) );
         if( aIt == m_aRegressionCurves.end())
             throw container::NoSuchElementException(
-                C2U( "The given regression curve is no element of this series" ),
+                "The given regression curve is no element of this series",
                 static_cast< uno::XWeak * >( this ));
         m_aRegressionCurves.erase( aIt );
     }
@@ -616,7 +616,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( DataSeries, DataSeries_Base, OPropertySet )
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( DataSeries,
-                             C2U( "com.sun.star.comp.chart.DataSeries" ));
+                             OUString("com.sun.star.comp.chart.DataSeries") );
 
 }  // namespace chart
 

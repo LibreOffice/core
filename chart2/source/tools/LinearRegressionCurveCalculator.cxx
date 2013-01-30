@@ -126,7 +126,7 @@ OUString LinearRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
     ::sal_Int32 nNumberFormatKey ) const
 {
-    OUStringBuffer aBuf( C2U( "f(x) = " ));
+    OUStringBuffer aBuf( "f(x) = ");
 
     bool bHaveSlope = false;
 

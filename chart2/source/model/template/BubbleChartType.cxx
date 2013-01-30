@@ -169,17 +169,17 @@ uno::Sequence< ::rtl::OUString > SAL_CALL BubbleChartType::getSupportedMandatory
 {
     uno::Sequence< ::rtl::OUString > aMandRolesSeq(4);
     aMandRolesSeq.realloc( 4 );
-    aMandRolesSeq[0] = C2U( "label" );
-    aMandRolesSeq[1] = C2U( "values-x" );
-    aMandRolesSeq[2] = C2U( "values-y" );
-    aMandRolesSeq[3] = C2U( "values-size" );
+    aMandRolesSeq[0] = "label";
+    aMandRolesSeq[1] = "values-x";
+    aMandRolesSeq[2] = "values-y";
+    aMandRolesSeq[3] = "values-size";
     return aMandRolesSeq;
 }
 
 OUString SAL_CALL BubbleChartType::getRoleOfSequenceForSeriesLabel()
     throw (uno::RuntimeException)
 {
-    return C2U( "values-size" );
+    return OUString("values-size");
 }
 
 // ____ OPropertySet ____
@@ -210,14 +210,14 @@ uno::Sequence< ::rtl::OUString > BubbleChartType::getSupportedServiceNames_Stati
 {
     uno::Sequence< ::rtl::OUString > aServices( 3 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartType" );
-    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
+    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( BubbleChartType,
-                             C2U( "com.sun.star.comp.chart.BubbleChartType" ));
+                             OUString("com.sun.star.comp.chart.BubbleChartType") );
 
 } //  namespace chart
 

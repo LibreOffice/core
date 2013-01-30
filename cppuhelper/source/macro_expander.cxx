@@ -34,7 +34,6 @@
 #include "macro_expander.hxx"
 #include "paths.hxx"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SERVICE_NAME_A "com.sun.star.lang.MacroExpander"
 #define SERVICE_NAME_B "com.sun.star.lang.BootstrapMacroExpander"
 #define IMPL_NAME "com.sun.star.lang.comp.cppuhelper.BootstrapMacroExpander"
@@ -93,8 +92,8 @@ private:
 public:
     ImplNames() : m_aNames(2)
     {
-        m_aNames[0] = OUSTR(SERVICE_NAME_A);
-        m_aNames[1] = OUSTR(SERVICE_NAME_B);
+        m_aNames[0] = SERVICE_NAME_A;
+        m_aNames[1] = SERVICE_NAME_B;
     }
     const Sequence<OUString>& getNames() const { return m_aNames; }
 };
@@ -103,7 +102,7 @@ class theImplNames : public rtl::Static<ImplNames, theImplNames> {};
 
 inline OUString s_impl_name()
 {
-    return OUSTR(IMPL_NAME);
+    return OUString(IMPL_NAME);
 }
 
 inline Sequence< OUString > const & s_get_service_names()

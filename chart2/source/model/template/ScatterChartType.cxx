@@ -52,20 +52,20 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "CurveStyle" ),
+        Property( "CurveStyle",
                   PROP_SCATTERCHARTTYPE_CURVE_STYLE,
                   ::getCppuType( reinterpret_cast< const chart2::CurveStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "CurveResolution" ),
+        Property( "CurveResolution",
                   PROP_SCATTERCHARTTYPE_CURVE_RESOLUTION,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "SplineOrder" ),
+        Property( "SplineOrder",
                   PROP_SCATTERCHARTTYPE_SPLINE_ORDER,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -218,9 +218,9 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScatterChartType::getSupportedMandator
     throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aMandRolesSeq(3);
-    aMandRolesSeq[0] = C2U( "label" );
-    aMandRolesSeq[1] = C2U( "values-x" );
-    aMandRolesSeq[2] = C2U( "values-y" );
+    aMandRolesSeq[0] = "label";
+    aMandRolesSeq[1] = "values-x";
+    aMandRolesSeq[2] = "values-y";
     return aMandRolesSeq;
 }
 
@@ -259,14 +259,14 @@ uno::Sequence< ::rtl::OUString > ScatterChartType::getSupportedServiceNames_Stat
 {
     uno::Sequence< ::rtl::OUString > aServices( 3 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_SCATTER;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartType" );
-    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
+    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( ScatterChartType,
-                             C2U( "com.sun.star.comp.chart.ScatterChartType" ));
+                             OUString("com.sun.star.comp.chart.ScatterChartType") );
 
 } //  namespace chart
 

@@ -38,8 +38,6 @@
 
 #include "vm.hxx"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -83,7 +81,7 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstra
                 {
                     jni_env->ExceptionClear();
                     throw RuntimeException(
-                        OUSTR("index out of bounds?!"), Reference< XInterface >() );
+                        "index out of bounds?!", Reference< XInterface >() );
                 }
                 if (0 != jstr)
                 {
@@ -94,7 +92,7 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstra
                     {
                         jni_env->ExceptionClear();
                         throw RuntimeException(
-                            OUSTR("index out of bounds?!"), Reference< XInterface >() );
+                            "index out of bounds?!", Reference< XInterface >() );
                     }
                     if (0 != jstr)
                     {
@@ -127,8 +125,8 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstra
         xContext = ::javaunohelper::install_vm_singleton( xContext, vm_access );
 
         // get uno envs
-        OUString cpp_env_name = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-        OUString java_env_name = OUSTR(UNO_LB_JAVA);
+        OUString cpp_env_name = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+        OUString java_env_name = UNO_LB_JAVA;
         Environment java_env, cpp_env;
         uno_getEnvironment((uno_Environment **)&cpp_env, cpp_env_name.pData, NULL);
         uno_getEnvironment( (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
@@ -141,7 +139,7 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstra
             if (xComp.is())
                 xComp->dispose();
             throw RuntimeException(
-                OUSTR("cannot get mapping C++ <-> Java!"),
+                "cannot get mapping C++ <-> Java!",
                 Reference< XInterface >() );
         }
 

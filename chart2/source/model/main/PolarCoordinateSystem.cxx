@@ -91,7 +91,7 @@ Sequence< OUString > PolarCoordinateSystem::getSupportedServiceNames_Static()
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem,
-                             C2U( "com.sun.star.comp.chart.PolarCoordinateSystem" ))
+                             OUString("com.sun.star.comp.chart.PolarCoordinateSystem") )
 
 
 // =================================

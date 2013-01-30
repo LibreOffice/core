@@ -47,7 +47,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::container;
 
-#define C2U(x) OUString(RTL_CONSTASCII_USTRINGPARAM(x))
+#define x OUString(RTL_CONSTASCII_USTRINGPARAM(x))
 
 namespace accessibility
 {
@@ -259,7 +259,7 @@ void AccessibleTableShape::Init()
     {
 
         Reference< XPropertySet > xSet( mxShape, UNO_QUERY_THROW );
-        Reference< XTable > xTable( xSet->getPropertyValue(C2U("Model")), UNO_QUERY_THROW );
+        Reference< XTable > xTable( xSet->getPropertyValue("Model"), UNO_QUERY_THROW );
 
         mxImpl->init( this, xTable );
     }

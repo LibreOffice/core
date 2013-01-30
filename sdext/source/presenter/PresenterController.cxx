@@ -69,8 +69,6 @@ namespace {
     const sal_Int32 ConfigurationUpdateEndEventType = 2;
 }
 
-#define A2S(pString) (::rtl::OUString(pString))
-
 namespace sdext { namespace presenter {
 
 PresenterController::InstanceContainer PresenterController::maInstances;
@@ -120,7 +118,7 @@ PresenterController::PresenterController (
 
     if ( ! mxSlideShowController.is())
         throw new lang::IllegalArgumentException(
-            A2S("missing slide show controller"),
+            "missing slide show controller",
             static_cast<XWeak*>(this),
             2);
 
@@ -133,15 +131,15 @@ PresenterController::PresenterController (
     {
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            A2S("ResourceActivation"),
+            "ResourceActivation",
             Any(ResourceActivationEventType));
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            A2S("ResourceDeactivation"),
+            "ResourceDeactivation",
             Any(ResourceDeactivationEventType));
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            A2S("ConfigurationUpdateEnd"),
+            "ConfigurationUpdateEnd",
             Any(ConfigurationUpdateEndEventType));
     }
 
@@ -162,7 +160,7 @@ PresenterController::PresenterController (
         return;
     mxPresenterHelper = Reference<drawing::XPresenterHelper>(
         xFactory->createInstanceWithContext(
-            A2S("com.sun.star.drawing.PresenterHelper"),
+            "com.sun.star.drawing.PresenterHelper",
             rxContext),
         UNO_QUERY_THROW);
 
@@ -173,7 +171,7 @@ PresenterController::PresenterController (
         if (xProperties.is())
         {
             Reference<awt::XWindow> xWindow (
-                xProperties->getPropertyValue(A2S("ParentWindow")), UNO_QUERY);
+                xProperties->getPropertyValue("ParentWindow"), UNO_QUERY);
             if (xWindow.is())
                 xWindow->addKeyListener(this);
         }
@@ -328,12 +326,12 @@ void PresenterController::UpdatePaneTitles (void)
         return;
 
     // Get placeholders and their values.
-    const OUString sCurrentSlideNumberPlaceholder (A2S("CURRENT_SLIDE_NUMBER"));
-    const OUString sCurrentSlideNamePlaceholder (A2S("CURRENT_SLIDE_NAME"));
-    const OUString sSlideCountPlaceholder (A2S("SLIDE_COUNT"));
+    const OUString sCurrentSlideNumberPlaceholder ("CURRENT_SLIDE_NUMBER");
+    const OUString sCurrentSlideNamePlaceholder ("CURRENT_SLIDE_NAME");
+    const OUString sSlideCountPlaceholder ("SLIDE_COUNT");
 
     // Get string for slide count.
-    OUString sSlideCount (A2S("---"));
+    OUString sSlideCount ("---");
     Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
     if (xIndexAccess.is())
         sSlideCount = OUString::valueOf(xIndexAccess->getCount());
@@ -352,7 +350,7 @@ void PresenterController::UpdatePaneTitles (void)
         try
         {
             OUString sName;
-            if (xSlideProperties->getPropertyValue(A2S("LinkDisplayName")) >>= sName)
+            if (xSlideProperties->getPropertyValue("LinkDisplayName") >>= sName)
             {
                 // Find out whether the name of the current slide has been
                 // automatically created or has been set by the user.
@@ -436,7 +434,7 @@ SharedBitmapDescriptor
     if (mpTheme.get() != NULL)
     {
         const OUString sStyleName (mpTheme->GetStyleName(rsViewURL));
-        return mpTheme->GetBitmap(sStyleName, A2S("Background"));
+        return mpTheme->GetBitmap(sStyleName, "Background");
     }
     return SharedBitmapDescriptor();
 }
@@ -1137,7 +1135,7 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
         return;
 
     PresenterTheme::SharedFontDescriptor pFont (
-        mpTheme->GetFont(A2S("PendingSlideNumberFont")));
+        mpTheme->GetFont("PendingSlideNumberFont"));
     if (pFont.get() == NULL)
         return;
 

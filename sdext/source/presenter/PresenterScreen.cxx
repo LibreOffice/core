@@ -48,8 +48,6 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(s) (::rtl::OUString(s))
-
 namespace sdext { namespace presenter {
 
 namespace {
@@ -434,7 +432,7 @@ void PresenterScreen::SwitchMonitors()
         Reference<beans::XPropertySet> xProperties (xPresentation, UNO_QUERY_THROW);
         uno::Any aDisplay;
         aDisplay <<= nNewScreen;
-        xProperties->setPropertyValue(A2S("Display"), aDisplay);
+        xProperties->setPropertyValue("Display", aDisplay);
     } catch (const uno::Exception &) {
     }
 }
@@ -456,7 +454,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
         // Determine the screen on which the full screen presentation is being
         // displayed.
         sal_Int32 nDisplayNumber (-1);
-        if ( ! (xProperties->getPropertyValue(A2S("Display")) >>= nDisplayNumber))
+        if ( ! (xProperties->getPropertyValue("Display") >>= nDisplayNumber))
             return -1;
         if (nDisplayNumber == -1)
         {
@@ -550,7 +548,7 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
     return ResourceId::create(
         Reference<XComponentContext>(mxContextWeak),
         PresenterHelper::msFullScreenPaneURL
-            +A2S("?FullScreen=true&ScreenNumber=")
+                + "?FullScreen=true&ScreenNumber="
                 + OUString::valueOf(nScreen));
 }
 
@@ -714,7 +712,7 @@ void PresenterScreen::ProcessViewDescriptions (
     try
     {
         Reference<container::XNameAccess> xViewDescriptionsNode (
-            rConfiguration.GetConfigurationNode(A2S("Presenter/Views")),
+            rConfiguration.GetConfigurationNode("Presenter/Views"),
             UNO_QUERY_THROW);
 
         ::std::vector<rtl::OUString> aProperties (4);

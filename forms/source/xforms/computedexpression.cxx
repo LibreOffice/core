@@ -195,22 +195,22 @@ Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationCo
 {
     // create XPath API, then register namespaces
     Reference<XXPathAPI> xXPath( createInstance(
-                            OUSTRING( "com.sun.star.xml.xpath.XPathAPI" ) ),
+                            "com.sun.star.xml.xpath.XPathAPI" ),
                                  UNO_QUERY_THROW );
     OSL_ENSURE( xXPath.is(), "cannot get XPath API" );
 
     // register xforms extension#
     Sequence< Any > aSequence(2);
     NamedValue aValue;
-    aValue.Name = OUSTRING("Model");
+    aValue.Name = "Model";
     aValue.Value <<= aContext.mxModel;
     aSequence[0] <<= aValue;
-    aValue.Name = OUSTRING("ContextNode");
+    aValue.Name = "ContextNode";
     aValue.Value <<= aContext.mxContextNode;
     aSequence[1] <<= aValue;
     Reference<XMultiServiceFactory> aFactory = comphelper::getProcessServiceFactory();
     Reference< XXPathExtension > aExtension( aFactory->createInstanceWithArguments(
-        OUSTRING( "com.sun.star.comp.xml.xpath.XFormsExtension"), aSequence), UNO_QUERY_THROW);
+         "com.sun.star.comp.xml.xpath.XFormsExtension", aSequence), UNO_QUERY_THROW);
     xXPath->registerExtensionInstance(aExtension);
 
     // register namespaces

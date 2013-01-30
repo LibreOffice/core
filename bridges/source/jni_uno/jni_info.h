@@ -356,7 +356,7 @@ inline void JNI_info::append_sig(
         break;
     default:
         throw BridgeRuntimeError(
-            OUSTR("unsupported type: ") +
+            "unsupported type: " +
             ::rtl::OUString::unacquired( &type->pTypeName ) );
     }
 }

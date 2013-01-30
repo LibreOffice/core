@@ -37,14 +37,14 @@ namespace
 void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::sun::star::beans::Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "FillStyle" ),
+        Property( "FillStyle",
                   FillProperties::PROP_FILL_STYLE,
                   ::getCppuType( reinterpret_cast< const drawing::FillStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillColor" ),
+        Property( "FillColor",
                   FillProperties::PROP_FILL_COLOR,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -52,14 +52,14 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillTransparence" ),
+        Property( "FillTransparence",
                   FillProperties::PROP_FILL_TRANSPARENCE,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillTransparenceGradientName" ),
+        Property( "FillTransparenceGradientName",
                   FillProperties::PROP_FILL_TRANSPARENCE_GRADIENT_NAME,
                   ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -67,7 +67,7 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillGradientName" ),
+        Property( "FillGradientName",
                   FillProperties::PROP_FILL_GRADIENT_NAME,
                   ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -75,14 +75,14 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        beans::Property( C2U( "FillGradientStepCount" ),
+        beans::Property( "FillGradientStepCount",
                   FillProperties::PROP_FILL_GRADIENT_STEPCOUNT,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillHatchName" ),
+        Property( "FillHatchName",
                   FillProperties::PROP_FILL_HATCH_NAME,
                   ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -92,7 +92,7 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
     //bitmap properties see lcl_AddPropertiesToVector_only_BitmapProperties()
 
     rOutProperties.push_back(
-        Property( C2U( "FillBackground" ),
+        Property( "FillBackground",
                   FillProperties::PROP_FILL_BACKGROUND,
                   ::getCppuType( reinterpret_cast< const sal_Bool * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -102,7 +102,7 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
 void lcl_AddPropertiesToVector_only_BitmapProperties( ::std::vector< ::com::sun::star::beans::Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "FillBitmapName" ),
+        Property( "FillBitmapName",
                   FillProperties::PROP_FILL_BITMAP_NAME,
                   ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -110,28 +110,28 @@ void lcl_AddPropertiesToVector_only_BitmapProperties( ::std::vector< ::com::sun:
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillBitmapOffsetX" ),
+        Property( "FillBitmapOffsetX",
                   FillProperties::PROP_FILL_BITMAP_OFFSETX,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillBitmapOffsetY" ),
+        Property( "FillBitmapOffsetY",
                   FillProperties::PROP_FILL_BITMAP_OFFSETY,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillBitmapPositionOffsetX" ),
+        Property( "FillBitmapPositionOffsetX",
                   FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillBitmapPositionOffsetY" ),
+        Property( "FillBitmapPositionOffsetY",
                   FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -139,35 +139,35 @@ void lcl_AddPropertiesToVector_only_BitmapProperties( ::std::vector< ::com::sun:
 
 
     rOutProperties.push_back(
-        Property( C2U( "FillBitmapRectanglePoint" ),
+        Property( "FillBitmapRectanglePoint",
                   FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT,
                   ::getCppuType( reinterpret_cast< const drawing::RectanglePoint * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillBitmapLogicalSize" ),
+        Property( "FillBitmapLogicalSize",
                   FillProperties::PROP_FILL_BITMAP_LOGICALSIZE,
                   ::getCppuType( reinterpret_cast< const sal_Bool * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillBitmapSizeX" ),
+        Property( "FillBitmapSizeX",
                   FillProperties::PROP_FILL_BITMAP_SIZEX,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillBitmapSizeY" ),
+        Property( "FillBitmapSizeY",
                   FillProperties::PROP_FILL_BITMAP_SIZEY,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "FillBitmapMode" ),
+        Property( "FillBitmapMode",
                   FillProperties::PROP_FILL_BITMAP_MODE,
                   ::getCppuType( reinterpret_cast< const drawing::BitmapMode * >(0)),
                   beans::PropertyAttribute::BOUND

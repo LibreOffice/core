@@ -21,8 +21,6 @@
 #ifndef _COM_SUN_STAR_SCRIPTING_UTIL_UTIL_HXX_
 #define _COM_SUN_STAR_SCRIPTING_UTIL_UTIL_HXX_
 
-#define OUSTR(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x) )
-
 #endif //_COM_SUN_STAR_SCRIPTING_UTIL_UTIL_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -140,7 +140,7 @@ sal_Bool VAxisBase::isAnythingToDraw()
     if( xProps.is() )
     {
         sal_Bool bShow = sal_False;
-        xProps->getPropertyValue( C2U( "Show" ) ) >>= bShow;
+        xProps->getPropertyValue( "Show" ) >>= bShow;
         if( !bShow )
             return false;
     }
@@ -187,7 +187,7 @@ bool VAxisBase::prepareShapeCreation()
 
     //-----------------------------------------
     //create named group shape
-    m_xGroupShape_Shapes = this->createGroupShape( m_xLogicTarget, m_nDimension==2 ? m_aCID : C2U(""));
+    m_xGroupShape_Shapes = this->createGroupShape( m_xLogicTarget, m_nDimension==2 ? m_aCID : "");
 
     if( m_aAxisProperties.m_bDisplayLabels )
         m_xTextTarget = m_pShapeFactory->createGroup2D( m_xFinalTarget, m_aCID );

@@ -41,7 +41,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::linguistic2;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define cChar OUString::createFromAscii(cChar)
 
 //////////////////////////////////////////////////////////////////////
 
@@ -352,8 +352,8 @@ void TextConvWrapper::ReplaceUnit(
     if (!bOK)
         return;
 
-    static OUString aBracketedStart( C2U( "(" ) );
-    static OUString aBracketedEnd( C2U( ")" ) );
+    static OUString aBracketedStart( "(" );
+    static OUString aBracketedEnd( ")" );
 
     // select current unit
     SelectNewUnit_impl( nUnitStart, nUnitEnd );

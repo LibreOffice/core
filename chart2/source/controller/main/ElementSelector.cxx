@@ -256,7 +256,7 @@ APPHELPER_XSERVICEINFO_IMPL( ElementSelectorToolbarController, lcl_aServiceName 
 Sequence< ::rtl::OUString > ElementSelectorToolbarController::getSupportedServiceNames_Static()
 {
     Sequence< ::rtl::OUString > aServices(1);
-    aServices[ 0 ] = C2U( "com.sun.star.frame.ToolbarController" );
+    aServices[ 0 ] = "com.sun.star.frame.ToolbarController";
     return aServices;
 }
 // -----------------------------------------------------------------------------

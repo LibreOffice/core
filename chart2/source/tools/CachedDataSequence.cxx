@@ -123,13 +123,13 @@ CachedDataSequence::~CachedDataSequence()
 
 void CachedDataSequence::registerProperties()
 {
-    registerProperty( C2U( "NumberFormatKey" ),
+    registerProperty( "NumberFormatKey",
                       PROP_NUMBERFORMAT_KEY,
                       0,   // PropertyAttributes
                       & m_nNumberFormatKey,
                       ::getCppuType( & m_nNumberFormatKey ) );
 
-    registerProperty( C2U( "Role" ),
+    registerProperty( "Role",
                       PROP_PROPOSED_ROLE,
                       0,   // PropertyAttributes
                       & m_sRole,
@@ -234,9 +234,9 @@ Sequence< OUString > CachedDataSequence::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.data.DataSequence" );
-    aServices[ 2 ] = C2U( "com.sun.star.chart2.data.NumericalDataSequence" );
-    aServices[ 3 ] = C2U( "com.sun.star.chart2.data.TextualDataSequence" );
+    aServices[ 1 ] = "com.sun.star.chart2.data.DataSequence";
+    aServices[ 2 ] = "com.sun.star.chart2.data.NumericalDataSequence";
+    aServices[ 3 ] = "com.sun.star.chart2.data.TextualDataSequence";
     return aServices;
 }
 

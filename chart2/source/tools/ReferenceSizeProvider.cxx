@@ -81,7 +81,7 @@ void ReferenceSizeProvider::setValuesAtTitle(
         Reference< beans::XPropertySet > xTitleProp( xTitle, uno::UNO_QUERY_THROW );
         awt::Size aOldRefSize;
         bool bHasOldRefSize(
-            xTitleProp->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize );
+            xTitleProp->getPropertyValue( "ReferencePageSize") >>= aOldRefSize );
 
         // set from auto-resize on to off -> adapt font sizes at XFormattedStrings
         if( bHasOldRefSize && ! useAutoScale())
@@ -122,7 +122,7 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
             Sequence< sal_Int32 > aPointIndexes;
             try
             {
-                if( xSeriesProp->getPropertyValue( C2U("AttributedDataPoints")) >>= aPointIndexes )
+                if( xSeriesProp->getPropertyValue( "AttributedDataPoints") >>= aPointIndexes )
                 {
                     for( sal_Int32 i=0; i< aPointIndexes.getLength(); ++i )
                         setValuesAtPropertySet(
@@ -298,7 +298,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
             Sequence< sal_Int32 > aPointIndexes;
             try
             {
-                if( xSeriesProp->getPropertyValue( C2U("AttributedDataPoints")) >>= aPointIndexes )
+                if( xSeriesProp->getPropertyValue( "AttributedDataPoints") >>= aPointIndexes )
                 {
                     for( sal_Int32 i=0; i< aPointIndexes.getLength(); ++i )
                     {

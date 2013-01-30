@@ -160,7 +160,7 @@ EvaluationContext Model::getEvaluationContext()
     if( ! xElement.is() )
     {
         xElement = Reference<XNode>(
-                       xInstance->createElement( OUSTRING("instanceData") ),
+                       xInstance->createElement( "instanceData" ),
                        UNO_QUERY_THROW );
         Reference<XNode>( xInstance, UNO_QUERY_THROW)->appendChild( xElement );
     }

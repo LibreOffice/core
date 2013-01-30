@@ -55,7 +55,7 @@ public:
             return result;
         }
         css::uno::Reference < css::ucb::XSimpleFileAccess3 > xSFA( css::ucb::SimpleFileAccess::create(xCtx) );
-        result = xSFA->getFolderContents( OUSTR("vnd.sun.star.tdoc:/"), true );
+        result = xSFA->getFolderContents( "vnd.sun.star.tdoc:/", true );
     }
     catch ( css::uno::Exception& )
     {
@@ -111,7 +111,7 @@ public:
     try
     {
         ::ucbhelper::Content root( url, NULL, comphelper::getProcessComponentContext() );
-        ::rtl::OUString propName =  OUSTR("DocumentModel");
+        ::rtl::OUString propName =  "DocumentModel";
         result = getUCBProperty( root, propName );
     }
     catch ( css::ucb::ContentCreationException& )

@@ -58,8 +58,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(pString))
-
 namespace sdext { namespace presenter {
 
 //===== PresenterWindowManager ================================================
@@ -167,7 +165,7 @@ void PresenterWindowManager::SetTheme (const ::boost::shared_ptr<PresenterTheme>
 
     if (mpTheme.get() != NULL)
     {
-        mpBackgroundBitmap = mpTheme->GetBitmap(OUString(), A2S("Background"));
+        mpBackgroundBitmap = mpTheme->GetBitmap(OUString(), "Background");
     }
 }
 
@@ -536,7 +534,7 @@ void PresenterWindowManager::RestoreViewMode (void)
         mxComponentContext,
         OUString("/org.openoffice.Office.PresenterScreen/"),
         PresenterConfigurationAccess::READ_ONLY);
-    aConfiguration.GetConfigurationNode(A2S("Presenter/InitialViewMode")) >>= nMode;
+    aConfiguration.GetConfigurationNode("Presenter/InitialViewMode") >>= nMode;
     switch (nMode)
     {
         default:
@@ -562,7 +560,7 @@ void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
             mxComponentContext,
             OUString("/org.openoffice.Office.PresenterScreen/"),
             PresenterConfigurationAccess::READ_WRITE);
-        aConfiguration.GoToChild(A2S("Presenter"));
+        aConfiguration.GoToChild(OUString("Presenter"));
         Any aValue;
         switch (eViewMode)
         {
@@ -580,7 +578,7 @@ void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
                 break;
         }
 
-        aConfiguration.SetProperty (A2S("InitialViewMode"), aValue);
+        aConfiguration.SetProperty ("InitialViewMode", aValue);
         aConfiguration.CommitChanges();
     }
     catch (Exception&)

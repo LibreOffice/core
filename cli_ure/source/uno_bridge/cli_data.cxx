@@ -647,7 +647,7 @@ OUString mapCliTypeName(System::String^ typeName)
         {
             if (!bRightBracket)
                 throw BridgeRuntimeError(
-                    OUSTR("Typename is wrong. No matching brackets for sequence. Name is: ") +
+                    "Typename is wrong. No matching brackets for sequence. Name is: " +
                     mapCliString(typeName));
             bRightBracket = false;
             dims ++;
@@ -656,7 +656,7 @@ OUString mapCliTypeName(System::String^ typeName)
         {
             if (bRightBracket)
                 throw BridgeRuntimeError(
-                    OUSTR("Typename is wrong. No matching brackets for sequence. Name is: ") +
+                    "Typename is wrong. No matching brackets for sequence. Name is: " +
                     mapCliString(typeName));
             break;
         }
@@ -665,7 +665,7 @@ OUString mapCliTypeName(System::String^ typeName)
 
     if (bRightBracket || cur < 0)
         throw BridgeRuntimeError(
-            OUSTR("Typename is wrong. ") +
+            "Typename is wrong. " +
             mapCliString(typeName));
 
     typeName = typeName->Substring(0, cur + 1);

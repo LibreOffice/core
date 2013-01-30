@@ -53,8 +53,8 @@ BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
     {
         if( m_xChartTypeModelProps.is() )
         {
-            m_xChartTypeModelProps->getPropertyValue( C2U( "OverlapSequence" ) ) >>= m_aOverlapSequence;
-            m_xChartTypeModelProps->getPropertyValue( C2U( "GapwidthSequence" ) ) >>= m_aGapwidthSequence;
+            m_xChartTypeModelProps->getPropertyValue( "OverlapSequence" ) >>= m_aOverlapSequence;
+            m_xChartTypeModelProps->getPropertyValue( "GapwidthSequence" ) >>= m_aGapwidthSequence;
         }
     }
     catch( const uno::Exception& e )
@@ -276,7 +276,7 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
         if( xObjectProperties.is() )
         {
             sal_Int16 nPercentDiagonal = 0;
-            xObjectProperties->getPropertyValue( C2U( "PercentDiagonal" ) ) >>= nPercentDiagonal;
+            xObjectProperties->getPropertyValue( "PercentDiagonal" ) >>= nPercentDiagonal;
             if( nPercentDiagonal < 5 )
                 bRoundedEdges = false;
         }
@@ -639,7 +639,7 @@ void BarChart::createShapes()
                     sal_Int32 nGeometry3D = DataPointGeometry3D::CUBOID;
                     if(m_nDimension==3) try
                     {
-                        xDataPointProperties->getPropertyValue( C2U( "Geometry3D" )) >>= nGeometry3D;
+                        xDataPointProperties->getPropertyValue( "Geometry3D") >>= nGeometry3D;
                     }
                     catch( const uno::Exception& e )
                     {

@@ -40,7 +40,6 @@
 
 #include "bootstrapservices.hxx"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SERVICE_NAME "com.sun.star.security.Policy"
 #define IMPL_NAME "com.sun.star.security.comp.stoc.FilePolicy"
 
@@ -236,7 +235,7 @@ OUString PolicyReader::assureQuotedToken()
 {
     OUString token( getQuotedToken() );
     if (token.isEmpty())
-        error( OUSTR("unexpected end of file!") );
+        error( "unexpected end of file!" );
     return token;
 }
 //__________________________________________________________________________________________________
@@ -247,7 +246,7 @@ OUString PolicyReader::getQuotedToken()
     OUStringBuffer buf( 32 );
     sal_Unicode c = get();
     if ('\"' != c)
-        error( OUSTR("expected quoting >\"< character!") );
+        error( "expected quoting >\"< character!" );
     c = get();
     while ('\0' != c && '\"' != c)
     {
@@ -262,7 +261,7 @@ OUString PolicyReader::assureToken()
 {
     OUString token( getToken() );
     if ( token.isEmpty())
-        error( OUSTR("unexpected end of file!") );
+        error( "unexpected end of file!" );
     return token;
 }
 //__________________________________________________________________________________________________
@@ -326,7 +325,7 @@ void PolicyReader::skipWhiteSpace()
         }
         else
         {
-            error( OUSTR("expected C/C++ like comment!") );
+            error( "expected C/C++ like comment!" );
         }
     }
     else if ('#' == c) // script like comment
@@ -364,13 +363,13 @@ sal_Unicode PolicyReader::get()
         sal_Bool eof;
         oslFileError rc = ::osl_isEndOfFile( m_file, &eof );
         if (osl_File_E_None != rc)
-            error( OUSTR("checking eof failed!") );
+            error( "checking eof failed!" );
         if (eof)
             return '\0';
 
         rc = ::osl_readLine( m_file, reinterpret_cast< sal_Sequence ** >( &m_line ) );
         if (osl_File_E_None != rc)
-            error( OUSTR("read line failed!") );
+            error( "read line failed!" );
         ++m_linepos;
         if (! m_line.getLength()) // empty line read
         {
@@ -404,7 +403,7 @@ PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
     , m_pos( 1 ) // force readline
     , m_back( '\0' )
 {
-    ac.checkFilePermission( m_fileName, OUSTR("read") );
+    ac.checkFilePermission( m_fileName, "read" );
     if (osl_File_E_None != ::osl_openFile( m_fileName.pData, &m_file, osl_File_OpenFlag_Read ))
     {
         OUStringBuffer buf( 32 );
@@ -444,11 +443,11 @@ void FilePolicy::refresh()
     // supported, so this is effectively dead code):
     OUString fileName;
     m_xComponentContext->getValueByName(
-        OUSTR("/implementations/" IMPL_NAME "/file-name") ) >>= fileName;
+        "/implementations/" IMPL_NAME "/file-name" ) >>= fileName;
     if ( fileName.isEmpty() )
     {
         throw RuntimeException(
-            OUSTR("name of policy file unknown!"),
+            "name of policy file unknown!",
             (OWeakObject *)this );
     }
 
@@ -462,7 +461,7 @@ void FilePolicy::refresh()
     while (!token.isEmpty())
     {
         if ( token != s_grant )
-            reader.error( OUSTR("expected >grant< token!") );
+            reader.error( "expected >grant< token!" );
         OUString userId;
         token = reader.assureToken();
         if ( token == s_user ) // next token is user-id
@@ -471,13 +470,13 @@ void FilePolicy::refresh()
             token = reader.assureToken();
         }
         if ( token != s_openBrace )
-            reader.error( OUSTR("expected opening brace >{<!") );
+            reader.error( "expected opening brace >{<!" );
         token = reader.assureToken();
         // permissions list
         while ( token != s_closingBrace )
         {
             if ( token != s_permission )
-                reader.error( OUSTR("expected >permission< or closing brace >}<!") );
+                reader.error( "expected >permission< or closing brace >}<!" );
 
             token = reader.assureToken(); // permission type
             Any perm;
@@ -506,7 +505,7 @@ void FilePolicy::refresh()
             }
             else
             {
-                reader.error( OUSTR("expected permission type!") );
+                reader.error( "expected permission type!" );
             }
 
             reader.assureToken( ';' );
@@ -588,7 +587,7 @@ Sequence< OUString > filepolicy_getSupportedServiceNames() SAL_THROW(())
 //--------------------------------------------------------------------------------------------------
 OUString filepolicy_getImplementationName() SAL_THROW(())
 {
-    return OUSTR(IMPL_NAME);
+    return OUString(IMPL_NAME);
 }
 }
 

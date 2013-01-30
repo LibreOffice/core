@@ -382,7 +382,7 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
                     pDrawViewWrapper->SetCreateMode();
                 }
 
-                const ::rtl::OUString sKeyModifier( C2U( "KeyModifier" ) );
+                const ::rtl::OUString sKeyModifier( "KeyModifier" );
                 const beans::PropertyValue* pIter = rArgs.getConstArray();
                 const beans::PropertyValue* pEnd  = pIter + rArgs.getLength();
                 const beans::PropertyValue* pKeyModifier = ::std::find_if(

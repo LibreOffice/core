@@ -50,7 +50,6 @@
 #include "bootstrapservices.hxx"
 
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SERVICE_NAME "com.sun.star.security.AccessController"
 #define IMPL_NAME "com.sun.star.security.comp.stoc.AccessController"
 #define USER_CREDS "access-control.user-credentials"
@@ -70,7 +69,7 @@ extern ::rtl_StandardModuleCount g_moduleCount;
 namespace stoc_sec
 {
 // static stuff initialized when loading lib
-static OUString s_envType = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+static OUString s_envType = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 const char s_acRestriction[] = "access-control.restriction";
 
 //##################################################################################################
@@ -477,7 +476,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
     // to something other than "off" depending on various UNO_AC* bootstrap
     // variables that are no longer supported, so this is mostly dead code now:
     OUString mode;
-    if (m_xComponentContext->getValueByName( OUSTR("/services/" SERVICE_NAME "/mode") ) >>= mode)
+    if (m_xComponentContext->getValueByName( "/services/" SERVICE_NAME "/mode" ) >>= mode)
     {
         if ( mode == "off" )
         {
@@ -494,12 +493,12 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
         else if ( mode == "single-user" )
         {
             m_xComponentContext->getValueByName(
-                OUSTR("/services/" SERVICE_NAME "/single-user-id") ) >>= m_singleUserId;
+                "/services/" SERVICE_NAME "/single-user-id" ) >>= m_singleUserId;
             if (m_singleUserId.isEmpty())
             {
                 throw RuntimeException(
-                    OUSTR("expected a user id in component context entry "
-                          "\"/services/" SERVICE_NAME "/single-user-id\"!"),
+                    "expected a user id in component context entry "
+                    "\"/services/" SERVICE_NAME "/single-user-id\"!",
                     (OWeakObject *)this );
             }
             m_mode = SINGLE_USER;
@@ -515,7 +514,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
     {
         sal_Int32 cacheSize = 0; // multi-user cache size
         if (! (m_xComponentContext->getValueByName(
-            OUSTR("/services/" SERVICE_NAME "/user-cache-size") ) >>= cacheSize))
+            "/services/" SERVICE_NAME "/user-cache-size" ) >>= cacheSize))
         {
             cacheSize = 128; // reasonable default?
         }
@@ -550,14 +549,14 @@ void AccessController::initialize(
     if (SINGLE_USER != m_mode) // only if in single-user mode
     {
         throw RuntimeException(
-            OUSTR("invalid call: ac must be in \"single-user\" mode!"), (OWeakObject *)this );
+            "invalid call: ac must be in \"single-user\" mode!", (OWeakObject *)this );
     }
     OUString userId;
     arguments[ 0 ] >>= userId;
     if ( userId.isEmpty() )
     {
         throw RuntimeException(
-            OUSTR("expected a user-id as first argument!"), (OWeakObject *)this );
+            "expected a user-id as first argument!", (OWeakObject *)this );
     }
     // assured that no sync is necessary: no check happens at this forking time
     m_singleUserId = userId;
@@ -573,7 +572,7 @@ Reference< security::XPolicy > const & AccessController::getPolicy()
     {
         Reference< security::XPolicy > xPolicy;
         m_xComponentContext->getValueByName(
-            OUSTR("/singletons/com.sun.star.security.thePolicy") ) >>= xPolicy;
+            "/singletons/com.sun.star.security.thePolicy" ) >>= xPolicy;
         if (xPolicy.is())
         {
             MutexGuard guard( m_mutex );
@@ -585,7 +584,7 @@ Reference< security::XPolicy > const & AccessController::getPolicy()
         else
         {
             throw SecurityException(
-                OUSTR("cannot get policy singleton!"), (OWeakObject *)this );
+                "cannot get policy singleton!", (OWeakObject *)this );
         }
     }
     return m_xPolicy;
@@ -719,12 +718,12 @@ PermissionCollection AccessController::getEffectivePermissions(
     {
         if (xContext.is())
         {
-            xContext->getValueByName( OUSTR(USER_CREDS ".id") ) >>= userId;
+            xContext->getValueByName( USER_CREDS ".id" ) >>= userId;
         }
         if ( userId.isEmpty() )
         {
             throw SecurityException(
-                OUSTR("cannot determine current user in multi-user ac!"), (OWeakObject *)this );
+                "cannot determine current user in multi-user ac!", (OWeakObject *)this );
         }
 
         // lookup policy for user
@@ -880,7 +879,7 @@ void AccessController::checkPermission(
     if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            OUSTR("checkPermission() call on disposed AccessController!"), (OWeakObject *)this );
+            "checkPermission() call on disposed AccessController!", (OWeakObject *)this );
     }
 
     if (OFF == m_mode)
@@ -910,7 +909,7 @@ Any AccessController::doRestricted(
     if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            OUSTR("doRestricted() call on disposed AccessController!"), (OWeakObject *)this );
+            "doRestricted() call on disposed AccessController!", (OWeakObject *)this );
     }
 
     if (OFF == m_mode) // optimize this way, because no dynamic check will be performed
@@ -943,7 +942,7 @@ Any AccessController::doPrivileged(
     if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            OUSTR("doPrivileged() call on disposed AccessController!"), (OWeakObject *)this );
+            "doPrivileged() call on disposed AccessController!", (OWeakObject *)this );
     }
 
     if (OFF == m_mode) // no dynamic check will be performed
@@ -978,7 +977,7 @@ Reference< security::XAccessControlContext > AccessController::getContext()
     if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            OUSTR("getContext() call on disposed AccessController!"), (OWeakObject *)this );
+            "getContext() call on disposed AccessController!", (OWeakObject *)this );
     }
 
     if (OFF == m_mode) // optimize this way, because no dynamic check will be performed
@@ -1042,7 +1041,7 @@ Sequence< OUString > ac_getSupportedServiceNames() SAL_THROW(())
 //--------------------------------------------------------------------------------------------------
 OUString ac_getImplementationName() SAL_THROW(())
 {
-    return OUSTR(IMPL_NAME);
+    return OUString(IMPL_NAME);
 }
 //--------------------------------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL filepolicy_create(

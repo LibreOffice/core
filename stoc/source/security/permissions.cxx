@@ -35,8 +35,6 @@
 
 #include "permissions.h"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 using namespace ::std;
 using namespace ::osl;
@@ -353,7 +351,7 @@ FilePermission::FilePermission(
         // correct win drive letters
         if (9 < m_url.getLength() && '|' == m_url[ 9 ]) // file:///X|
         {
-            static OUString s_colon = OUSTR(":");
+            static OUString s_colon = ":";
             // common case in API is a ':' (sal), so convert '|' to ':'
             m_url = m_url.replaceAt( 9, 1, s_colon );
         }
@@ -483,7 +481,7 @@ bool AllPermission::implies( Permission const & ) const SAL_THROW(())
 //__________________________________________________________________________________________________
 OUString AllPermission::toString() const SAL_THROW(())
 {
-    return OUSTR("com.sun.star.security.AllPermission");
+    return OUString("com.sun.star.security.AllPermission");
 }
 
 //##################################################################################################

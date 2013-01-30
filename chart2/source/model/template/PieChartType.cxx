@@ -49,7 +49,7 @@ static void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "UseRings" ),
+        Property( "UseRings",
                   PROP_PIECHARTTYPE_USE_RINGS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
@@ -217,14 +217,14 @@ uno::Sequence< ::rtl::OUString > PieChartType::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 3 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_PIE;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartType" );
-    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
+    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( PieChartType,
-                             C2U( "com.sun.star.comp.chart.PieChartType" ));
+                             OUString("com.sun.star.comp.chart.PieChartType") );
 
 } //  namespace chart
 

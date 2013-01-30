@@ -102,7 +102,7 @@ void SAL_CALL Mapping_map_to_uno(
 #if OSL_DEBUG_LEVEL > 0
             OString cstr_msg(
                 OUStringToOString(
-                    OUSTR("[jni_uno bridge error] ") + err.m_message,
+                    "[jni_uno bridge error] " + err.m_message,
                     RTL_TEXTENCODING_ASCII_US ) );
             OSL_FAIL( cstr_msg.getStr() );
 #else
@@ -171,7 +171,7 @@ void SAL_CALL Mapping_map_to_java(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg(
             OUStringToOString(
-                OUSTR("[jni_uno bridge error] ") + err.m_message,
+                "[jni_uno bridge error] " + err.m_message,
                 RTL_TEXTENCODING_ASCII_US ) );
         OSL_FAIL( cstr_msg.getStr() );
 #else
@@ -289,7 +289,7 @@ void JNI_context::java_exc_occurred() const
     if (! jo_exc.is())
     {
         throw BridgeRuntimeError(
-            OUSTR("java exception occurred, but not available!?") +
+            "java exception occurred, but not available!?" +
             get_stack_trace() );
     }
 
@@ -299,7 +299,7 @@ void JNI_context::java_exc_occurred() const
     {
         m_env->ExceptionClear();
         throw BridgeRuntimeError(
-            OUSTR("cannot get class java.lang.Object!") + get_stack_trace() );
+            "cannot get class java.lang.Object!" + get_stack_trace() );
     }
     JLocalAutoRef jo_Object( *this, jo_class );
     // method Object.toString()
@@ -309,7 +309,7 @@ void JNI_context::java_exc_occurred() const
     {
         m_env->ExceptionClear();
         throw BridgeRuntimeError(
-            OUSTR("cannot get method id of java.lang.Object.toString()!") +
+            "cannot get method id of java.lang.Object.toString()!" +
             get_stack_trace() );
     }
     OSL_ASSERT( 0 != method_Object_toString );
@@ -321,7 +321,7 @@ void JNI_context::java_exc_occurred() const
     {
         m_env->ExceptionClear();
         throw BridgeRuntimeError(
-            OUSTR("error examining java exception object!") +
+            "error examining java exception object!" +
             get_stack_trace() );
     }
 
@@ -337,7 +337,7 @@ void JNI_context::java_exc_occurred() const
     {
         m_env->ExceptionClear();
         throw BridgeRuntimeError(
-            OUSTR("invalid java string object!") + get_stack_trace() );
+            "invalid java string object!" + get_stack_trace() );
     }
     ustr->refCount = 1;
     ustr->length = len;
@@ -535,7 +535,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
 #if OSL_DEBUG_LEVEL > 0
             OString cstr_msg(
                 OUStringToOString(
-                    OUSTR("[jni_uno bridge error] ") + err.m_message,
+                    "[jni_uno bridge error] " + err.m_message,
                     RTL_TEXTENCODING_ASCII_US ) );
             OSL_FAIL( cstr_msg.getStr() );
 #else

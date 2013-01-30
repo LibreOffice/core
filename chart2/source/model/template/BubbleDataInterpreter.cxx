@@ -86,7 +86,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
                 xCategories.set( aData[nDataIdx] );
                 if( xCategories.is())
                 {
-                    SetRole( xCategories->getValues(), C2U("categories"));
+                    SetRole( xCategories->getValues(), "categories");
                     if( bUseCategoriesAsX )
                     {
                         bSetXValues = false;
@@ -99,20 +99,20 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
             {
                 xValuesX.set( aData[nDataIdx] );
                 if( xValuesX.is())
-                    SetRole( xValuesX->getValues(), C2U("values-x"));
+                    SetRole( xValuesX->getValues(), "values-x");
             }
             else if( bNextIsYValues )
             {
                 aYValuesVector.push_back( aData[nDataIdx] );
                 if( aData[nDataIdx].is())
-                    SetRole( aData[nDataIdx]->getValues(), C2U("values-y"));
+                    SetRole( aData[nDataIdx]->getValues(), "values-y");
                 bNextIsYValues = false;
             }
             else if( !bNextIsYValues )
             {
                 aSizeValuesVector.push_back( aData[nDataIdx] );
                 if( aData[nDataIdx].is())
-                    SetRole( aData[nDataIdx]->getValues(), C2U("values-size"));
+                    SetRole( aData[nDataIdx]->getValues(), "values-size");
                 bNextIsYValues = (nDataSeqCount-(nDataIdx+1)) >= 2;//two or more left
             }
         }
@@ -179,11 +179,11 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
             Sequence< Reference< data::XLabeledDataSequence > > aNewSequences;
 
             Reference< data::XLabeledDataSequence > xValuesSize(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values-size"), false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-size", false ));
             Reference< data::XLabeledDataSequence > xValuesY(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values-y"), false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y", false ));
             Reference< data::XLabeledDataSequence > xValuesX(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values-x"), false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x", false ));
 
             if( ! xValuesX.is() ||
                 ! xValuesY.is() ||
@@ -191,7 +191,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
             {
                 vector< Reference< data::XLabeledDataSequence > > aValueSeqVec(
                     DataSeriesHelper::getAllDataSequencesByRole(
-                        xSeriesSource->getDataSequences(), C2U("values"), true ));
+                        xSeriesSource->getDataSequences(), "values", true ));
                 if( xValuesX.is())
                     aValueSeqVec.erase( find( aValueSeqVec.begin(), aValueSeqVec.end(), xValuesX ));
                 if( xValuesY.is())
@@ -206,7 +206,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
                 {
                     xValuesSize.set( aValueSeqVec[nIndex++] );
                     if( xValuesSize.is())
-                        SetRole( xValuesSize->getValues(), C2U("values-size"));
+                        SetRole( xValuesSize->getValues(), "values-size");
                 }
 
                 if( ! xValuesY.is() &&
@@ -214,7 +214,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
                 {
                     xValuesY.set( aValueSeqVec[nIndex++] );
                     if( xValuesY.is())
-                        SetRole( xValuesY->getValues(), C2U("values-y"));
+                        SetRole( xValuesY->getValues(), "values-y");
                 }
 
                 if( ! xValuesX.is() &&
@@ -222,7 +222,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
                 {
                     xValuesX.set( aValueSeqVec[nIndex++] );
                     if( xValuesX.is())
-                        SetRole( xValuesY->getValues(), C2U("values-x"));
+                        SetRole( xValuesY->getValues(), "values-x");
                 }
             }
             if( xValuesSize.is())

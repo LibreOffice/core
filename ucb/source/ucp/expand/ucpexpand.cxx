@@ -33,7 +33,6 @@
 #include "com/sun/star/ucb/XContentProvider.hpp"
 
 #define EXPAND_PROTOCOL "vnd.sun.star.expand"
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define ARLEN(x) sizeof (x) / sizeof *(x)
 
 
@@ -70,7 +69,7 @@ public:
           m_xComponentContext( xComponentContext ),
           m_xMacroExpander(
               xComponentContext->getValueByName(
-                  OUSTR("/singletons/com.sun.star.util.theMacroExpander") ),
+                  "/singletons/com.sun.star.util.theMacroExpander" ),
               uno::UNO_QUERY_THROW )
         {}
     virtual ~ExpandContentProviderImpl() throw ();
@@ -101,8 +100,8 @@ inline void ExpandContentProviderImpl::check() const
     if (rBHelper.bInDispose || rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            OUSTR("expand content provider instance has "
-                  "already been disposed!"),
+            "expand content provider instance has "
+            "already been disposed!",
             static_cast< OWeakObject * >(
                 const_cast< ExpandContentProviderImpl * >(this) ) );
     }
@@ -130,15 +129,15 @@ static uno::Reference< uno::XInterface > SAL_CALL create(
 //==============================================================================
 static OUString SAL_CALL implName()
 {
-    return OUSTR("com.sun.star.comp.ucb.ExpandContentProvider");
+    return OUString("com.sun.star.comp.ucb.ExpandContentProvider");
 }
 
 //==============================================================================
 static uno::Sequence< OUString > SAL_CALL supportedServices()
 {
     OUString names [] = {
-        OUSTR("com.sun.star.ucb.ExpandContentProvider"),
-        OUSTR("com.sun.star.ucb.ContentProvider")
+        OUString("com.sun.star.ucb.ExpandContentProvider"),
+        OUString("com.sun.star.ucb.ContentProvider")
     };
     return uno::Sequence< OUString >( names, ARLEN(names) );
 }
@@ -185,7 +184,7 @@ OUString ExpandContentProviderImpl::expandUri(
             RTL_CONSTASCII_STRINGPARAM(EXPAND_PROTOCOL ":") ) != 0)
     {
         throw ucb::IllegalIdentifierException(
-            OUSTR("expected protocol " EXPAND_PROTOCOL "!"),
+            "expected protocol " EXPAND_PROTOCOL "!",
             static_cast< OWeakObject * >(
                 const_cast< ExpandContentProviderImpl * >(this) ) );
     }

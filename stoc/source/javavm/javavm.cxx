@@ -80,7 +80,6 @@
 #include <vector>
 #include "boost/noncopyable.hpp"
 #include "boost/scoped_array.hpp"
-#define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 // Properties of the javavm can be put
 // as a komma separated list in this
@@ -372,15 +371,15 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         }
 
         // read socks settings
-/*      Reference<XRegistryKey> socksProxy_name = xRegistryRootKey->openKey(OUSTR("Settings/ooInetSOCKSProxyName"));
+/*      Reference<XRegistryKey> socksProxy_name = xRegistryRootKey->openKey("Settings/ooInetSOCKSProxyName");
         if (socksProxy_name.is() && httpProxy_name->getStringValue().getLength()) {
-            OUString socksHost = OUSTR("socksProxyHost=");
+            OUString socksHost = "socksProxyHost=";
             socksHost += socksProxy_name->getStringValue();
 
             // read http proxy port
-            Reference<XRegistryKey> socksProxy_port = xRegistryRootKey->openKey(OUSTR("Settings/ooInetSOCKSProxyPort"));
+            Reference<XRegistryKey> socksProxy_port = xRegistryRootKey->openKey("Settings/ooInetSOCKSProxyPort");
             if (socksProxy_port.is() && socksProxy_port->getLongValue()) {
-                OUString socksPort = OUSTR("socksProxyPort=");
+                OUString socksPort = "socksProxyPort=";
                 socksPort += OUString::valueOf(socksProxy_port->getLongValue());
 
                 pjvm->pushProp(socksHost);
@@ -1329,7 +1328,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                     // this code was executed. Maybe it is a security feature. However, all attempts to debug the
                     // SandboxSecurity class (maybe the VM invokes checkPackageAccess)  failed.
 //                  jclass jcSandboxSec= pJNIEnv->FindClass("com.sun.star.lib.sandbox.SandboxSecurity");
-//                  if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUSTR("JNI:FindClass com.sun.star.lib.sandbox.SandboxSecurity"), Reference<XInterface>());
+//                  if(pJNIEnv->ExceptionOccurred()) throw RuntimeException("JNI:FindClass com.sun.star.lib.sandbox.SandboxSecurity", Reference<XInterface>());
 //                  jboolean bIsSand= pJNIEnv->IsInstanceOf( joSecur, jcSandboxSec);
                     // The SecurityManagers class Name must be com.sun.star.lib.sandbox.SandboxSecurity
                     jclass jcSec= pJNIEnv->GetObjectClass( joSecur);

@@ -151,7 +151,7 @@ public:
 
 inline ::rtl::OUString LinguProps::getImplementationName_Static() throw()
 {
-    return A2OU( "com.sun.star.lingu2.LinguProps" );
+    return OUString( "com.sun.star.lingu2.LinguProps" );
 }
 
 

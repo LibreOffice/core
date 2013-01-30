@@ -19,7 +19,6 @@
 
 #include "SelectionHelper.hxx"
 #include "ObjectIdentifier.hxx"
-//for C2U
 #include "macros.hxx"
 #include "DiagramHelper.hxx"
 #include "ChartModelHelper.hxx"
@@ -192,7 +191,7 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
             m_aSelectedOID = ObjectIdentifier( lcl_getObjectName( pNewObj ) );//name of pNewObj
 
             //ignore handle only objects for hit test
-            while( pNewObj && m_aSelectedOID.getObjectCID().match( C2U( "HandlesOnly" ) ) )
+            while( pNewObj && m_aSelectedOID.getObjectCID().match( "HandlesOnly" ) )
             {
                 pNewObj->SetMarkProtect(true);
                 pNewObj = pDrawViewWrapper->getHitObject(rMousePos);
@@ -412,7 +411,7 @@ bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
     aRet = lcl_getObjectName( pNewObj );//name of pNewObj
 
     //ignore handle only objects for hit test
-    while( pNewObj && aRet.match(C2U("HandlesOnly")) )
+    while( pNewObj && aRet.match("HandlesOnly") )
     {
         pNewObj->SetMarkProtect(true);
         pNewObj = rDrawViewWrapper.getHitObject(rMPos);
@@ -499,7 +498,7 @@ SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )
     if(!pObj)
         return 0;
     rtl::OUString aName( lcl_getObjectName( pObj ) );
-    if( aName.match(C2U("MarkHandles")) || aName.match(C2U("HandlesOnly")) )
+    if( aName.match("MarkHandles") || aName.match("HandlesOnly") )
         return pObj;
     if( !aName.isEmpty() )//dont't get the markhandles of a different object
         return 0;

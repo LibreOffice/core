@@ -84,7 +84,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
     if ( aArguments.getLength() &&
          sal_False == ( aArguments[ 0 ] >>= m_xFrame ) )
     {
-        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::initialize: could not extract reference to the frame" );
+        ::rtl::OUString temp = "ScriptProtocolHandler::initialize: could not extract reference to the frame";
         throw RuntimeException( temp, Reference< XInterface >() );
     }
 
@@ -396,12 +396,12 @@ void ScriptProtocolHandler::createScriptProvider()
     }
     catch ( const RuntimeException & e )
     {
-        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createScriptProvider(),  " );
+        ::rtl::OUString temp = "ScriptProtocolHandler::createScriptProvider(),  ";
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
     catch ( const Exception & e )
     {
-        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createScriptProvider: " );
+        ::rtl::OUString temp = "ScriptProtocolHandler::createScriptProvider: ";
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 }

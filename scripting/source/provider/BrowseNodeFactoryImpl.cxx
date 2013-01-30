@@ -312,7 +312,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
     {
         xFac.set(
             xCtx->getValueByName(
-                OUSTR("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
+                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory" ), UNO_QUERY_THROW );
 
         locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString("user") ) ), UNO_QUERY_THROW );
         locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString("share") ) ), UNO_QUERY_THROW );
@@ -687,7 +687,7 @@ BrowseNodeFactoryImpl::createView( sal_Int16 viewType )
         case browse::BrowseNodeFactoryViewTypes::MACROORGANIZER:
             return getOrganizerHierarchy();
         default:
-            throw RuntimeException( OUSTR("Unknown view type" ), Reference< XInterface >() );
+            throw RuntimeException( "Unknown view type", Reference< XInterface >() );
     }
 }
 

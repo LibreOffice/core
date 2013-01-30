@@ -77,7 +77,7 @@ OUString Model::getDefaultServiceNameForNode( const XNode_t& xNode )
     throw( RuntimeException )
 {
     // determine service for control. string/text field is default.
-    OUString sService = OUSTRING("com.sun.star.form.component.TextField");
+    OUString sService = "com.sun.star.form.component.TextField";
 
     // query repository for suitable type
     OSL_ENSURE( mxDataTypes.is(), "no type repository?" );
@@ -90,12 +90,12 @@ OUString Model::getDefaultServiceNameForNode( const XNode_t& xNode )
         switch( mxDataTypes->getDataType( sTypeName )->getTypeClass() )
         {
         case com::sun::star::xsd::DataTypeClass::BOOLEAN:
-            sService = OUSTRING("com.sun.star.form.component.CheckBox");
+            sService = "com.sun.star.form.component.CheckBox";
             break;
         case com::sun::star::xsd::DataTypeClass::DOUBLE:
         case com::sun::star::xsd::DataTypeClass::DECIMAL:
         case com::sun::star::xsd::DataTypeClass::FLOAT:
-            sService = OUSTRING("com.sun.star.form.component.NumericField");
+            sService = "com.sun.star.form.component.NumericField";
             break;
 
         case com::sun::star::xsd::DataTypeClass::STRING:
@@ -178,7 +178,7 @@ static void lcl_OutInstance( OUStringBuffer& rBuffer,
 
     if( xDoc != pModel->getDefaultInstance() )
     {
-        rBuffer.insert( 0, OUSTRING("')") );
+        rBuffer.insert( 0, "')" );
 
         // iterate over instances, and find the right one
         OUString sInstanceName;
@@ -200,7 +200,7 @@ static void lcl_OutInstance( OUStringBuffer& rBuffer,
         }
 
         rBuffer.insert( 0, sInstanceName );
-        rBuffer.insert( 0, OUSTRING("instance('") );
+        rBuffer.insert( 0, "instance('" );
     }
 }
 
@@ -231,7 +231,7 @@ OUString Model::getDefaultBindingExpressionForNode(
 
         case NodeType_TEXT_NODE:
             lcl_OutPosition( aBuffer, xCurrent );
-            aBuffer.insert( 0, OUSTRING("text()") );
+            aBuffer.insert( 0, "text()" );
             break;
 
         case NodeType_ATTRIBUTE_NODE:
@@ -356,17 +356,17 @@ OUString Model::getBindingName( const XPropertySet_t& xBinding,
     throw( RuntimeException )
 {
     OUString sID;
-    xBinding->getPropertyValue( OUSTRING("BindingID" ) ) >>= sID;
+    xBinding->getPropertyValue( "BindingID" ) >>= sID;
     OUString sExpression;
-    xBinding->getPropertyValue( OUSTRING("BindingExpression" ) ) >>= sExpression;
+    xBinding->getPropertyValue( "BindingExpression" ) >>= sExpression;
 
     OUStringBuffer aBuffer;
     if( !sID.isEmpty() )
     {
         aBuffer.append( sID );
-        aBuffer.append( OUSTRING(" (" ));
+        aBuffer.append( " (" );
         aBuffer.append( sExpression );
-        aBuffer.append( OUSTRING(")" ));
+        aBuffer.append( ")" );
     }
     else
         aBuffer.append( sExpression );
@@ -379,7 +379,7 @@ OUString Model::getSubmissionName( const XPropertySet_t& xSubmission,
     throw( RuntimeException )
 {
     OUString sID;
-    xSubmission->getPropertyValue( OUSTRING("ID") ) >>= sID;
+    xSubmission->getPropertyValue( "ID" ) >>= sID;
     return sID;
 }
 
@@ -421,7 +421,7 @@ Model::XDocument_t Model::newInstance( const rtl::OUString& sName,
     DBG_ASSERT( xInstance.is(), "failed to create DOM instance" );
 
     Reference<XNode>( xInstance, UNO_QUERY_THROW )->appendChild(
-        Reference<XNode>( xInstance->createElement( OUSTRING("instanceData") ),
+        Reference<XNode>( xInstance->createElement( "instanceData" ),
                           UNO_QUERY_THROW ) );
 
     Sequence<PropertyValue> aSequence;
@@ -474,13 +474,13 @@ void Model::renameInstance( const rtl::OUString& sFrom,
         PropertyValue* pSeq = aSeq.getArray();
         sal_Int32 nLength = aSeq.getLength();
 
-        sal_Int32 nProp = lcl_findProp( pSeq, nLength, OUSTRING("ID") );
+        sal_Int32 nProp = lcl_findProp( pSeq, nLength, "ID" );
         if( nProp == -1 )
         {
             // add name property
             aSeq.realloc( nLength + 1 );
             pSeq = aSeq.getArray();
-            pSeq[ nLength ].Name = OUSTRING("ID");
+            pSeq[ nLength ].Name = "ID";
             nProp = nLength;
         }
 
@@ -488,12 +488,12 @@ void Model::renameInstance( const rtl::OUString& sFrom,
         pSeq[ nProp ].Value <<= sTo;
 
         // change url
-        nProp = lcl_findProp( pSeq, nLength, OUSTRING("URL") );
+        nProp = lcl_findProp( pSeq, nLength, "URL" );
         if(nProp != -1)
             pSeq[ nProp ].Value <<= sURL;
 
         // change urlonce
-        nProp = lcl_findProp( pSeq, nLength, OUSTRING("URLOnce") );
+        nProp = lcl_findProp( pSeq, nLength, "URLOnce" );
         if(nProp != -1)
             pSeq[ nProp ].Value <<= bURLOnce;
 
@@ -839,7 +839,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
 
     // copy stream into buffer
     Reference<XTextInputStream> xTextInputStream(
-        createInstance( OUSTRING("com.sun.star.io.TextInputStream") ),
+        createInstance( "com.sun.star.io.TextInputStream" ),
         UNO_QUERY );
     Reference<XActiveDataSink>( xTextInputStream, UNO_QUERY_THROW )
         ->setInputStream( aSerialization.getInputStream() );
@@ -884,8 +884,8 @@ static OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult 
     {
     case XPathObjectType_XPATH_BOOLEAN:
         aBuffer.append( xResult->getBoolean()
-                        ? OUSTRING("true")
-                        : OUSTRING("false") );
+                        ? OUString("true")
+                        : OUString("false") );
         break;
 
     case XPathObjectType_XPATH_STRING:
@@ -1044,7 +1044,7 @@ void xforms::setInstanceData(
 #define PROP(NAME) \
     if( p##NAME != NULL ) \
     { \
-        pSequence[ nIndex ].Name = OUSTRING(#NAME); \
+        pSequence[ nIndex ].Name = OUString(#NAME); \
         pSequence[ nIndex ].Value <<= *p##NAME; \
         nIndex++; \
     }

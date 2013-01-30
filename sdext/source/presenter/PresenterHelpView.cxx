@@ -40,8 +40,6 @@ using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 using ::std::vector;
 
-#define A2S(pString) (::rtl::OUString(pString))
-
 namespace sdext { namespace presenter {
 
 namespace {
@@ -171,7 +169,7 @@ PresenterHelpView::PresenterHelpView (
             mpPresenterController->GetTheme(),
             mxWindow,
             mxCanvas,
-            A2S("HelpViewCloser"));
+            "HelpViewCloser");
 
         ReadHelpStrings();
         Resize();
@@ -363,7 +361,7 @@ void PresenterHelpView::ReadHelpStrings (void)
         OUString("/org.openoffice.Office.PresenterScreen/"),
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XNameAccess> xStrings (
-        aConfiguration.GetConfigurationNode(A2S("PresenterScreenSettings/HelpView/HelpStrings")),
+        aConfiguration.GetConfigurationNode("PresenterScreenSettings/HelpView/HelpStrings"),
         UNO_QUERY);
     PresenterConfigurationAccess::ForAll(
         xStrings,
@@ -377,9 +375,9 @@ void PresenterHelpView::ProcessString (
         return;
 
     OUString sLeftText;
-    PresenterConfigurationAccess::GetProperty(rsProperties, A2S("Left")) >>= sLeftText;
+    PresenterConfigurationAccess::GetProperty(rsProperties, "Left") >>= sLeftText;
     OUString sRightText;
-    PresenterConfigurationAccess::GetProperty(rsProperties, A2S("Right")) >>= sRightText;
+    PresenterConfigurationAccess::GetProperty(rsProperties, "Right") >>= sRightText;
     mpTextContainer->push_back(
         ::boost::shared_ptr<Block>(
             new Block(sLeftText, sRightText, mpFont->mxFont, mnMaximalWidth)));
@@ -730,16 +728,16 @@ void LineDescriptorList::FormatText (
             }
         }
         else if (PresenterCanvasHelper::GetTextSize(
-            rxFont, aLineDescriptor.msLine+A2S(", ")+*iPart).Width > nMaximalWidth)
+            rxFont, aLineDescriptor.msLine+", "+*iPart).Width > nMaximalWidth)
         {
-            aLineDescriptor.AddPart(A2S(","), rxFont);
+            aLineDescriptor.AddPart(",", rxFont);
             mpLineDescriptors->push_back(aLineDescriptor);
             aLineDescriptor = LineDescriptor();
             continue;
         }
         else
         {
-            aLineDescriptor.AddPart(A2S(", ")+*iPart, rxFont);
+            aLineDescriptor.AddPart(", "+*iPart, rxFont);
         }
         ++iPart;
     }

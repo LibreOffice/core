@@ -42,7 +42,6 @@
 
 #include "macro_expander.hxx"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define ARLEN(x) sizeof (x) / sizeof *(x)
 
 
@@ -92,7 +91,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         char const * p1 = cppuhelper_detail_findSofficePath();
         if (p1 == NULL) {
             throw BootstrapException(
-                OUSTR("no soffice installation found!"));
+                "no soffice installation found!");
         }
         rtl::OUString p2;
         if (!rtl_convertStringToUString(
@@ -102,40 +101,40 @@ Reference< XComponentContext > SAL_CALL bootstrap()
                  RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
         {
             throw BootstrapException(
-                OUSTR("bad characters in soffice installation path!"));
+                "bad characters in soffice installation path!");
         }
         OUString path;
         if (osl::FileBase::getFileURLFromSystemPath(p2, path) !=
             osl::FileBase::E_None)
         {
             throw BootstrapException(
-                OUSTR("cannot convert soffice installation path to URL!"));
+                "cannot convert soffice installation path to URL!");
         }
         if (!path.isEmpty() && path[path.getLength() - 1] != '/') {
-            path += OUSTR("/");
+            path += "/";
         }
 
         OUString uri;
-        if (!Bootstrap::get(OUSTR("URE_BOOTSTRAP"), uri)) {
+        if (!Bootstrap::get("URE_BOOTSTRAP", uri)) {
             Bootstrap::set(
-                OUSTR("URE_BOOTSTRAP"),
-                Bootstrap::encode(path + OUSTR(SAL_CONFIGFILE("fundamental"))));
+                "URE_BOOTSTRAP",
+                Bootstrap::encode(path + SAL_CONFIGFILE("fundamental")));
         }
 
         // create default local component context
         Reference< XComponentContext > xLocalContext(
             defaultBootstrap_InitialComponentContext() );
         if ( !xLocalContext.is() )
-            throw BootstrapException( OUSTR( "no local component context!" ) );
+            throw BootstrapException( "no local component context!" );
 
         // create a random pipe name
         rtlRandomPool hPool = rtl_random_createPool();
         if ( hPool == 0 )
-            throw BootstrapException( OUSTR( "cannot create random pool!" ) );
+            throw BootstrapException( "cannot create random pool!" );
         sal_uInt8 bytes[ 16 ];
         if ( rtl_random_getBytes( hPool, bytes, ARLEN( bytes ) )
             != rtl_Random_E_None )
-            throw BootstrapException( OUSTR( "random pool error!" ) );
+            throw BootstrapException( "random pool error!" );
         rtl_random_destroyPool( hPool );
         ::rtl::OUStringBuffer buf;
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "uno" ) );
@@ -151,11 +150,11 @@ Reference< XComponentContext > SAL_CALL bootstrap()
 
         // arguments
         OUString args [] = {
-            OUSTR( "--nologo" ),
-            OUSTR( "--nodefault" ),
-            OUSTR( "--norestore" ),
-            OUSTR( "--nocrashreport" ),
-            OUSTR( "--nolockcheck" ),
+            OUString("--nologo"),
+            OUString("--nodefault"),
+            OUString("--norestore"),
+            OUString("--nocrashreport"),
+            OUString("--nolockcheck"),
             buf.makeStringAndClear()
         };
         rtl_uString * ar_args [] = {
@@ -183,16 +182,16 @@ Reference< XComponentContext > SAL_CALL bootstrap()
                 osl_freeProcessHandle( hProcess );
                 break;
             case osl_Process_E_NotFound:
-                throw BootstrapException( OUSTR( "image not found!" ) );
+                throw BootstrapException( "image not found!" );
             case osl_Process_E_TimedOut:
-                throw BootstrapException( OUSTR( "timout occurred!" ) );
+                throw BootstrapException( "timout occurred!" );
             case osl_Process_E_NoPermission:
-                throw BootstrapException( OUSTR( "permission denied!" ) );
+                throw BootstrapException( "permission denied!" );
             case osl_Process_E_Unknown:
-                throw BootstrapException( OUSTR( "unknown error!" ) );
+                throw BootstrapException( "unknown error!" );
             case osl_Process_E_InvalidError:
             default:
-                throw BootstrapException( OUSTR( "unmapped error!" ) );
+                throw BootstrapException( "unmapped error!" );
         }
 
         // create a URL resolver
@@ -228,7 +227,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
     catch ( Exception & e )
     {
         throw BootstrapException(
-            OUSTR( "unexpected UNO exception caught: " ) + e.Message );
+            "unexpected UNO exception caught: " + e.Message );
     }
 
     return xRemoteContext;

@@ -1061,7 +1061,7 @@ void SAL_CALL cli_proxy_dispatch(
                     != demanded_td.get()->eTypeClass)
                 {
                     throw BridgeRuntimeError(
-                    OUSTR("queryInterface() call demands an INTERFACE type!"));
+                    "queryInterface() call demands an INTERFACE type!");
                 }
 
                 uno_Interface * pInterface = 0;
@@ -1139,7 +1139,7 @@ void SAL_CALL cli_proxy_dispatch(
         default:
         {
             throw BridgeRuntimeError(
-                OUSTR("illegal member type description!") );
+                "illegal member type description!" );
         }
         }
     }
@@ -1147,7 +1147,7 @@ void SAL_CALL cli_proxy_dispatch(
     {
         // binary identical struct
         ::com::sun::star::uno::RuntimeException exc(
-            OUSTR("[cli_uno bridge error] ") + err.m_message,
+            "[cli_uno bridge error] " + err.m_message,
             ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XInterface >() );
         ::com::sun::star::uno::Type const & exc_type = ::getCppuType( & exc);

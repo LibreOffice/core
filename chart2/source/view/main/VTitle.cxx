@@ -101,7 +101,7 @@ void VTitle::changePosition( const awt::Point& rPos )
         ::basegfx::B2DHomMatrix aM;
         aM.rotate( -m_fRotationAngleDegree*F_PI/180.0 );//#i78696#->#i80521#
         aM.translate( m_nXPos, m_nYPos);
-        xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
+        xShapeProp->setPropertyValue( "Transformation", uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
     catch( const uno::Exception& e )
     {
@@ -124,8 +124,8 @@ void VTitle::createShapes(
 
         //create shape and add to page
         uno::Reference< drawing::XShape > xShape(
-                m_xShapeFactory->createInstance( C2U(
-                "com.sun.star.drawing.TextShape" ) ), uno::UNO_QUERY );
+                m_xShapeFactory->createInstance(
+                "com.sun.star.drawing.TextShape" ), uno::UNO_QUERY );
         m_xTarget->add(xShape);
         m_xShape = xShape;
 
@@ -152,14 +152,14 @@ void VTitle::createShapes(
             drawing::TextHorizontalAdjust eHorizontalAdjust = drawing::TextHorizontalAdjust_CENTER;
             drawing::TextVerticalAdjust eVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
 
-            aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextHorizontalAdjust"), uno::makeAny(eHorizontalAdjust) ) ); // drawing::TextHorizontalAdjust
-            aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextVerticalAdjust"), uno::makeAny(eVerticalAdjust) ) ); //drawing::TextVerticalAdjust
-            aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextAutoGrowHeight"), uno::makeAny(sal_True) ) ); // sal_Bool
-            aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextAutoGrowWidth"), uno::makeAny(sal_True) ) ); // sal_Bool
+            aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::makeAny(eHorizontalAdjust) ) ); // drawing::TextHorizontalAdjust
+            aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::makeAny(eVerticalAdjust) ) ); //drawing::TextVerticalAdjust
+            aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny(sal_True) ) ); // sal_Bool
+            aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny(sal_True) ) ); // sal_Bool
 
             //set name/classified ObjectID (CID)
             if( !m_aCID.isEmpty() )
-                aValueMap.insert( tPropertyNameValueMap::value_type( C2U("Name"), uno::makeAny( m_aCID ) ) ); //CID rtl::OUString
+                aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( m_aCID ) ) ); //CID rtl::OUString
         }
 
         //set global title properties
@@ -173,7 +173,7 @@ void VTitle::createShapes(
         sal_Bool bStackCharacters(sal_False);
         try
         {
-            xTitleProperties->getPropertyValue( C2U( "StackCharacters" ) ) >>= bStackCharacters;
+            xTitleProperties->getPropertyValue( "StackCharacters" ) >>= bStackCharacters;
         }
         catch( const uno::Exception& e )
         {
@@ -200,7 +200,7 @@ void VTitle::createShapes(
 
                 // adapt font size according to page size
                 awt::Size aOldRefSize;
-                if( xTitleProperties->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
+                if( xTitleProperties->getPropertyValue( "ReferencePageSize") >>= aOldRefSize )
                 {
                     RelativeSizeHelper::adaptFontSizes( xTargetProps, aOldRefSize, rReferenceSize );
                 }
@@ -219,7 +219,7 @@ void VTitle::createShapes(
             }
             awt::Size aOldRefSize;
             bool bHasRefPageSize =
-                ( xTitleProperties->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize );
+                ( xTitleProperties->getPropertyValue( "ReferencePageSize") >>= aOldRefSize );
 
             if( aStringList.getLength()>0 )
             {
@@ -237,23 +237,23 @@ void VTitle::createShapes(
 
         // #i109336# Improve auto positioning in chart
         float fFontHeight = 0.0;
-        if ( xShapeProp.is() && ( xShapeProp->getPropertyValue( C2U( "CharHeight" ) ) >>= fFontHeight ) )
+        if ( xShapeProp.is() && ( xShapeProp->getPropertyValue( "CharHeight" ) >>= fFontHeight ) )
         {
             fFontHeight *= ( 2540.0f / 72.0f );  // pt -> 1/100 mm
             float fXFraction = 0.18f;
             sal_Int32 nXDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * fXFraction ) );
             float fYFraction = 0.30f;
             sal_Int32 nYDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * fYFraction ) );
-            xShapeProp->setPropertyValue( C2U( "TextLeftDistance" ), uno::makeAny( nXDistance ) );
-            xShapeProp->setPropertyValue( C2U( "TextRightDistance" ), uno::makeAny( nXDistance ) );
-            xShapeProp->setPropertyValue( C2U( "TextUpperDistance" ), uno::makeAny( nYDistance ) );
-            xShapeProp->setPropertyValue( C2U( "TextLowerDistance" ), uno::makeAny( nYDistance ) );
+            xShapeProp->setPropertyValue( "TextLeftDistance", uno::makeAny( nXDistance ) );
+            xShapeProp->setPropertyValue( "TextRightDistance", uno::makeAny( nXDistance ) );
+            xShapeProp->setPropertyValue( "TextUpperDistance", uno::makeAny( nYDistance ) );
+            xShapeProp->setPropertyValue( "TextLowerDistance", uno::makeAny( nYDistance ) );
         }
 
         try
         {
             double fAngleDegree = 0;
-            xTitleProperties->getPropertyValue( C2U( "TextRotation" ) ) >>= fAngleDegree;
+            xTitleProperties->getPropertyValue( "TextRotation" ) >>= fAngleDegree;
             m_fRotationAngleDegree += fAngleDegree;
         }
         catch( const uno::Exception& e )
@@ -268,7 +268,7 @@ void VTitle::createShapes(
         ::basegfx::B2DHomMatrix aM;
         aM.rotate( -m_fRotationAngleDegree*F_PI/180.0 );//#i78696#->#i80521#
         aM.translate( m_nXPos, m_nYPos );
-        xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
+        xShapeProp->setPropertyValue( "Transformation", uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
     catch( const uno::Exception& e )
     {

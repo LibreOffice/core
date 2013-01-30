@@ -126,8 +126,8 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         // new configuration entries).
         std::list< SvtLinguConfigDictionaryEntry > aDics;
         uno::Sequence< rtl::OUString > aFormatList;
-        aLinguCfg.GetSupportedDictionaryFormatsFor( A2OU("SpellCheckers"),
-                A2OU("org.openoffice.lingu.MySpellSpellChecker"), aFormatList );
+        aLinguCfg.GetSupportedDictionaryFormatsFor( "SpellCheckers",
+                "org.openoffice.lingu.MySpellSpellChecker", aFormatList );
         sal_Int32 nLen = aFormatList.getLength();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
@@ -295,8 +295,8 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
             {
                 if (!aDicts[i])
                 {
-                    OUString dicpath = aDNames[i] + A2OU(".dic");
-                    OUString affpath = aDNames[i] + A2OU(".aff");
+                    OUString dicpath = aDNames[i] + ".dic";
+                    OUString affpath = aDNames[i] + ".aff";
                     OUString dict;
                     OUString aff;
                     osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
@@ -360,7 +360,7 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
         return sal_True;
 
     // return sal_False to process SPELLML requests (they are longer than the header)
-    if (rWord.match(A2OU(SPELLML_HEADER), 0) && (rWord.getLength() > 10)) return sal_False;
+    if (rWord.match(SPELLML_HEADER, 0) && (rWord.getLength() > 10)) return sal_False;
 
     // Get property values to be used.
     // These are be the default values set in the SN_LINGU_PROPERTIES
@@ -373,7 +373,7 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     rHelper.SetTmpPropVals( rProperties );
 
     sal_Int16 nFailure = GetSpellFailure( rWord, rLocale );
-    if (nFailure != -1 && !rWord.match(A2OU(SPELLML_HEADER), 0))
+    if (nFailure != -1 && !rWord.match(SPELLML_HEADER, 0))
     {
         sal_Int16 nLang = LinguLocaleToLanguage( rLocale );
         // postprocess result for errors that should be ignored
@@ -529,7 +529,7 @@ OUString SAL_CALL SpellChecker::getServiceDisplayName( const Locale& /*rLocale*/
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return A2OU( "Hunspell SpellChecker" );
+    return OUString( "Hunspell SpellChecker" );
 }
 
 
@@ -643,7 +643,7 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
     MutexGuard  aGuard( GetLinguMutex() );
 
     Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
-    aSNS.getArray()[0] = A2OU( SN_SPELLCHECKER );
+    aSNS.getArray()[0] = SN_SPELLCHECKER;
     return aSNS;
 }
 

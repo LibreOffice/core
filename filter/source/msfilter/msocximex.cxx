@@ -30,7 +30,7 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-#define C2U(cChar) OUString(cChar)
+#define cChar OUString(cChar)
 
 OUString sWW8_form( "WW-Standard" );
 
@@ -121,15 +121,15 @@ const uno::Reference< container::XIndexContainer >&
                 return xFormComps;
 
             uno::Reference< uno::XInterface >  xCreate =
-                rServiceFactory->createInstance( C2U(
-                    "com.sun.star.form.component.Form") );
+                rServiceFactory->createInstance(
+                    "com.sun.star.form.component.Form" );
             if( xCreate.is() )
             {
                 uno::Reference< beans::XPropertySet > xFormPropSet( xCreate,
                     uno::UNO_QUERY );
 
                 uno::Any aTmp(&sName,getCppuType((OUString *)0));
-                xFormPropSet->setPropertyValue( C2U("Name"), aTmp );
+                xFormPropSet->setPropertyValue( "Name", aTmp );
 
                 uno::Reference< form::XForm > xForm( xCreate, uno::UNO_QUERY );
                 OSL_ENSURE(xForm.is(), "no Form?");

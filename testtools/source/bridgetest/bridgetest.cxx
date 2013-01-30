@@ -66,7 +66,6 @@ using ::rtl::OUStringToOString;
 #define SERVICENAME     "com.sun.star.test.bridge.BridgeTest"
 #define IMPLNAME        "com.sun.star.comp.bridge.BridgeTest"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define STRING_TEST_CONSTANT "\" paco\' chorizo\\\' \"\'"
 
 namespace bridge_test
@@ -384,7 +383,7 @@ static sal_Bool performTest(
             (TestElement &) aData, true, '@', 17, 0x1234, 0xFEDC, 0x12345678,
             0xFEDCBA98, SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
-            TestEnum_LOLA, OUSTR(STRING_TEST_CONSTANT), xI,
+            TestEnum_LOLA, STRING_TEST_CONSTANT, xI,
             Any(&xI, getCppuType((Reference< XInterface > const *) 0)));
         bRet &= check(aData.Any == xI, "### unexpected any!");
         bRet &= check(!(aData.Any != xI), "### unexpected any!");
@@ -679,19 +678,19 @@ static sal_Bool performTest(
             _arStruct[0], true, '@', 17, 0x1234, 0xFEDC, 0x12345678, 0xFEDCBA98,
             SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
-            TestEnum_LOLA, OUSTR(STRING_TEST_CONSTANT), _arObj[0],
+            TestEnum_LOLA, STRING_TEST_CONSTANT, _arObj[0],
             Any(&_arObj[0], getCppuType((Reference< XInterface > const *) 0)));
         assign(
             _arStruct[1], true, 'A', 17, 0x1234, 0xFEDC, 0x12345678, 0xFEDCBA98,
             SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
-            TestEnum_TWO, OUSTR(STRING_TEST_CONSTANT), _arObj[1],
+            TestEnum_TWO, STRING_TEST_CONSTANT, _arObj[1],
             Any(&_arObj[1], getCppuType((Reference< XInterface > const *) 0)));
         assign(
             _arStruct[2], true, 'B', 17, 0x1234, 0xFEDC, 0x12345678, 0xFEDCBA98,
             SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
-            TestEnum_CHECK, OUSTR(STRING_TEST_CONSTANT), _arObj[2],
+            TestEnum_CHECK, STRING_TEST_CONSTANT, _arObj[2],
             Any(&_arObj[2], getCppuType((Reference< XInterface > const *) 0)));
         {
             Sequence<sal_Bool> arBool(_arBool, 3);
@@ -932,7 +931,7 @@ static sal_Bool performTest(
 static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
 {
     sal_Bool bReturn = sal_True;
-    OUString sCompare = OUSTR(STRING_TEST_CONSTANT);
+    OUString sCompare = STRING_TEST_CONSTANT;
     Reference<XInterface> const x(xLBT->getInterface());
     try
     {
@@ -965,7 +964,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
             {
                 TestData aRet, aRet2;
                 xLBT->raiseException(
-                    5, OUSTR(STRING_TEST_CONSTANT),
+                    5, STRING_TEST_CONSTANT,
                     xLBT->getInterface() );
             }
             catch (const IllegalArgumentException &rExc)
@@ -1118,7 +1117,7 @@ inline bool makeSurrogate(
     if (!cpp2uno.is() || !uno2cpp.is())
     {
         throw RuntimeException(
-            OUSTR("cannot get C++-UNO mappings!"),
+            "cannot get C++-UNO mappings!",
             Reference< XInterface >() );
     }
     cpp2uno.mapInterface(
@@ -1127,7 +1126,7 @@ inline bool makeSurrogate(
     if (! unoI.is())
     {
         throw RuntimeException(
-            OUSTR("mapping C++ to binary UNO failed!"),
+            "mapping C++ to binary UNO failed!",
             Reference< XInterface >() );
     }
     uno2cpp.mapInterface(
@@ -1136,7 +1135,7 @@ inline bool makeSurrogate(
     if (! rOut.is())
     {
         throw RuntimeException(
-            OUSTR("mapping binary UNO to C++ failed!"),
+            "mapping binary UNO to C++ failed!",
             Reference< XInterface >() );
     }
 

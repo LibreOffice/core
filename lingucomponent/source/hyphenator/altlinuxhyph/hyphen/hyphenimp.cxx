@@ -123,8 +123,8 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
         // new configuration entries).
         std::list< SvtLinguConfigDictionaryEntry > aDics;
         uno::Sequence< rtl::OUString > aFormatList;
-        aLinguCfg.GetSupportedDictionaryFormatsFor( A2OU("Hyphenators"),
-                A2OU("org.openoffice.lingu.LibHnjHyphenator"), aFormatList );
+        aLinguCfg.GetSupportedDictionaryFormatsFor( "Hyphenators",
+                "org.openoffice.lingu.LibHnjHyphenator", aFormatList );
         sal_Int32 nLen = aFormatList.getLength();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
@@ -291,7 +291,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const ::rtl::OUStri
         // if this dictinary has not been loaded yet do that
         if (!aDicts[k].aPtr)
         {
-            OUString DictFN = aDicts[k].aName + A2OU(".dic");
+            OUString DictFN = aDicts[k].aName + ".dic";
             OUString dictpath;
 
             osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
@@ -552,7 +552,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         // if this dictioanry has not been loaded yet do that
         if (!aDicts[k].aPtr)
         {
-            OUString DictFN = aDicts[k].aName + A2OU(".dic");
+            OUString DictFN = aDicts[k].aName + ".dic";
             OUString dictpath;
 
             osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
@@ -777,7 +777,7 @@ OUString SAL_CALL Hyphenator::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return A2OU( "Libhyphen Hyphenator" );
+    return OUString( "Libhyphen Hyphenator" );
 }
 
 
@@ -891,7 +891,7 @@ Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
     MutexGuard  aGuard( GetLinguMutex() );
 
     Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
-    aSNS.getArray()[0] = A2OU( SN_HYPHENATOR );
+    aSNS.getArray()[0] = SN_HYPHENATOR;
     return aSNS;
 }
 

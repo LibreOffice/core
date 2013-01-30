@@ -155,7 +155,7 @@ public:
 
 inline ::rtl::OUString ConvDic::getImplementationName_Static() throw()
 {
-    return A2OU( "com.sun.star.lingu2.ConvDic" );
+    return OUString( "com.sun.star.lingu2.ConvDic" );
 }
 
 

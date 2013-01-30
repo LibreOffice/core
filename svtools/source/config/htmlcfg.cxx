@@ -43,7 +43,7 @@ using namespace com::sun::star::uno;
 
 using ::rtl::OUString;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define cChar OUString::createFromAscii(cChar)
 
 struct HtmlOptions_Impl
 {
@@ -98,13 +98,13 @@ const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
         aNames.realloc(nCount);
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
-            pNames[i] = C2U(aPropNames[i]);
+            pNames[i] = OUString::createFromAscii(aPropNames[i]);
     }
     return aNames;
 }
 // -----------------------------------------------------------------------
 SvxHtmlOptions::SvxHtmlOptions() :
-    ConfigItem(C2U("Office.Common/Filter/HTML"))
+    ConfigItem("Office.Common/Filter/HTML")
 {
     pImp = new HtmlOptions_Impl;
     Load( GetPropertyNames() );

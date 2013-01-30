@@ -104,7 +104,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_xInternalDataProvider( 0 )
     , m_xPageBackground( new PageBackground( m_xContext ) )
     , m_xXMLNamespaceMap( createNameContainer( ::getCppuType( (const OUString*) 0 ),
-                C2U( "com.sun.star.xml.NamespaceMap" ), C2U( "com.sun.star.comp.chart.XMLNameSpaceMap" ) ), uno::UNO_QUERY)
+                "com.sun.star.xml.NamespaceMap", "com.sun.star.comp.chart.XMLNameSpaceMap" ), uno::UNO_QUERY)
 {
     OSL_TRACE( "ChartModel: CTOR called" );
 
@@ -120,7 +120,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     {
         ModifyListenerHelper::addListener( m_xPageBackground, this );
         m_xChartTypeManager.set( xContext->getServiceManager()->createInstanceWithContext(
-                C2U( "com.sun.star.chart2.ChartTypeManager" ), m_xContext ), uno::UNO_QUERY );
+                "com.sun.star.chart2.ChartTypeManager", m_xContext ), uno::UNO_QUERY );
     }
     osl_atomic_decrement(&m_refCount);
 }
@@ -273,7 +273,7 @@ void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aV
     if ( xProperties.is() )
     {
         uno::Reference< drawing::XShapes > xShapes;
-        xProperties->getPropertyValue( C2U( "AdditionalShapes" ) ) >>= xShapes;
+        xProperties->getPropertyValue( "AdditionalShapes" ) >>= xShapes;
         if ( xShapes.is() )
         {
             sal_Int32 nCount = xShapes->getCount();
@@ -314,8 +314,8 @@ uno::Sequence< rtl::OUString > ChartModel::getSupportedServiceNames_Static()
 {
     uno::Sequence< rtl::OUString > aSNS( 3 );
     aSNS[0] = CHART_MODEL_SERVICE_NAME;
-    aSNS[1] = C2U( "com.sun.star.document.OfficeDocument" );
-    aSNS[2] = C2U( "com.sun.star.chart.ChartDocument" );
+    aSNS[1] = "com.sun.star.document.OfficeDocument";
+    aSNS[2] = "com.sun.star.chart.ChartDocument";
     //// @todo : add additional services if you support any further
     return aSNS;
 }
@@ -760,8 +760,8 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
             //create data
             uno::Sequence< beans::PropertyValue > aArgs( 4 );
             aArgs[0] = beans::PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellRangeRepresentation" )), -1,
-                uno::makeAny( C2U("all") ), beans::PropertyState_DIRECT_VALUE );
+                OUString( "CellRangeRepresentation" ), -1,
+                uno::makeAny( OUString("all") ), beans::PropertyState_DIRECT_VALUE );
             aArgs[1] = beans::PropertyValue(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasCategories" )), -1,
                 uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
@@ -821,7 +821,7 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
             try
             {
                 sal_Bool bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( Reference< frame::XModel >(this) );
-                xProp->setPropertyValue(C2U("IncludeHiddenCells"), uno::makeAny(bIncludeHiddenCells));
+                xProp->setPropertyValue("IncludeHiddenCells", uno::makeAny(bIncludeHiddenCells));
             }
             catch (const beans::UnknownPropertyException&)
             {
@@ -934,7 +934,7 @@ Reference< chart2::XChartTypeTemplate > ChartModel::impl_createDefaultChartTypeT
     Reference< chart2::XChartTypeTemplate > xTemplate;
     Reference< lang::XMultiServiceFactory > xFact( m_xChartTypeManager, uno::UNO_QUERY );
     if( xFact.is() )
-        xTemplate.set( xFact->createInstance( C2U( "com.sun.star.chart2.template.Column" ) ), uno::UNO_QUERY );
+        xTemplate.set( xFact->createInstance( "com.sun.star.chart2.template.Column" ), uno::UNO_QUERY );
     return xTemplate;
 }
 
@@ -1079,7 +1079,7 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
         if( xTransferable.is() )
         {
             datatransfer::DataFlavor aDataFlavor( lcl_aGDIMetaFileMIMEType,
-                    C2U( "GDIMetaFile" ),
+                    "GDIMetaFile",
                     ::getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
 
             uno::Any aData( xTransferable->getTransferData( aDataFlavor ) );
@@ -1149,7 +1149,7 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
     uno::Sequence< datatransfer::DataFlavor > aRet(1);
 
     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
-        C2U( "GDIMetaFile" ),
+        "GDIMetaFile",
         ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
 
     return aRet;
@@ -1183,13 +1183,13 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
 {
     static tServiceNameMap aServiceNameMap(
         tMakeServiceNameMap
-        ( C2U( "com.sun.star.drawing.DashTable" ),                    SERVICE_DASH_TABLE )
-        ( C2U( "com.sun.star.drawing.GradientTable" ),                SERVICE_GARDIENT_TABLE )
-        ( C2U( "com.sun.star.drawing.HatchTable" ),                   SERVICE_HATCH_TABLE )
-        ( C2U( "com.sun.star.drawing.BitmapTable" ),                  SERVICE_BITMAP_TABLE )
-        ( C2U( "com.sun.star.drawing.TransparencyGradientTable" ),    SERVICE_TRANSP_GRADIENT_TABLE )
-        ( C2U( "com.sun.star.drawing.MarkerTable" ),                  SERVICE_MARKER_TABLE )
-        ( C2U( "com.sun.star.xml.NamespaceMap" ),                     SERVICE_NAMESPACE_MAP )
+        ( "com.sun.star.drawing.DashTable",                    SERVICE_DASH_TABLE )
+        ( "com.sun.star.drawing.GradientTable",                SERVICE_GARDIENT_TABLE )
+        ( "com.sun.star.drawing.HatchTable",                   SERVICE_HATCH_TABLE )
+        ( "com.sun.star.drawing.BitmapTable",                  SERVICE_BITMAP_TABLE )
+        ( "com.sun.star.drawing.TransparencyGradientTable",    SERVICE_TRANSP_GRADIENT_TABLE )
+        ( "com.sun.star.drawing.MarkerTable",                  SERVICE_MARKER_TABLE )
+        ( "com.sun.star.xml.NamespaceMap",                     SERVICE_NAMESPACE_MAP )
         );
     return aServiceNameMap;
 }

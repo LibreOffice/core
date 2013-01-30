@@ -41,8 +41,6 @@ typedef __va_list va_list;
 #include "uno/environment.h"
 #include "typelib/typedescription.h"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 namespace jni_uno
 {
@@ -244,7 +242,7 @@ inline ::std::auto_ptr< rtl_mem > rtl_mem::allocate( ::std::size_t bytes )
 {
     void * p = rtl_allocateMemory( bytes );
     if (0 == p)
-        throw BridgeRuntimeError( OUSTR("out of memory!") );
+        throw BridgeRuntimeError( "out of memory!" );
     return ::std::auto_ptr< rtl_mem >( (rtl_mem *)p );
 }
 
@@ -274,7 +272,7 @@ inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
     if (0 == m_td)
     {
         throw BridgeRuntimeError(
-            OUSTR("cannot get comprehensive type description for ") +
+            "cannot get comprehensive type description for " +
             ::rtl::OUString::unacquired( &td_ref->pTypeName ) );
     }
 }

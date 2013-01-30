@@ -68,7 +68,6 @@ void Chart2ModelContact::setModel( const ::com::sun::star::uno::Reference<
         uno::Reference< container::XNameContainer > xHatchTable( xTableFactory->createInstance("com.sun.star.drawing.HatchTable"), uno::UNO_QUERY );
         uno::Reference< container::XNameContainer > xBitmapTable( xTableFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
         uno::Reference< container::XNameContainer > xTransparencyGradientTable( xTableFactory->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY );
-        //C2U( "com.sun.star.drawing.MarkerTable" )
         m_aTableMap["LineDashName"] = xDashTable;
         m_aTableMap["FillGradientName"] = xGradientTable;
         m_aTableMap["FillHatchName"] = xHatchTable;

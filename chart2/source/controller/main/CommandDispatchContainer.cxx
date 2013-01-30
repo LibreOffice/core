@@ -49,9 +49,9 @@ CommandDispatchContainer::CommandDispatchContainer(
 {
     m_aContainerDocumentCommands =
         ::comphelper::MakeSet< OUString >
-        ( C2U("AddDirect"))    ( C2U("NewDoc"))             ( C2U("Open"))
-        ( C2U("Save"))         ( C2U("SaveAs"))             ( C2U("SendMail"))
-        ( C2U("EditDoc"))      ( C2U("ExportDirectToPDF"))  ( C2U("PrintDefault"))
+        ("AddDirect")    ("NewDoc")             ("Open")
+        ("Save")         ("SaveAs")             ("SendMail")
+        ("EditDoc")      ("ExportDirectToPDF")  ("PrintDefault")
         ;
 }
 
@@ -93,8 +93,8 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
             CommandDispatch * pDispatch = new UndoCommandDispatch( m_xContext, xModel );
             xResult.set( pDispatch );
             pDispatch->initialize();
-            m_aCachedDispatches[ C2U(".uno:Undo") ].set( xResult );
-            m_aCachedDispatches[ C2U(".uno:Redo") ].set( xResult );
+            m_aCachedDispatches[ ".uno:Undo" ].set( xResult );
+            m_aCachedDispatches[ ".uno:Redo" ].set( xResult );
             m_aToBeDisposedDispatches.push_back( xResult );
         }
         else if( xModel.is() && ( rURL.Path == "Context" || rURL.Path == "ModifiedStatus" ) )
@@ -103,8 +103,8 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
             CommandDispatch * pDispatch = new StatusBarCommandDispatch( m_xContext, xModel, xSelSupp );
             xResult.set( pDispatch );
             pDispatch->initialize();
-            m_aCachedDispatches[ C2U(".uno:Context") ].set( xResult );
-            m_aCachedDispatches[ C2U(".uno:ModifiedStatus") ].set( xResult );
+            m_aCachedDispatches[ ".uno:Context" ].set( xResult );
+            m_aCachedDispatches[ ".uno:ModifiedStatus" ].set( xResult );
             m_aToBeDisposedDispatches.push_back( xResult );
         }
         else if( xModel.is() &&
@@ -177,7 +177,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getContainerDispatchForU
         {
             Reference< frame::XDispatchProvider > xDispProv( xFrame->getCreator(), uno::UNO_QUERY );
             if( xDispProv.is())
-                xResult.set( xDispProv->queryDispatch( rURL, C2U("_self"), 0 ));
+                xResult.set( xDispProv->queryDispatch( rURL, "_self", 0 ));
         }
     }
     return xResult;

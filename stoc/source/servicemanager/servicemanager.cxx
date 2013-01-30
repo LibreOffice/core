@@ -59,8 +59,6 @@
 
 #include <bootstrapservices.hxx>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -284,7 +282,7 @@ beans::Property PropertySetInfo_Impl::getPropertyByName( OUString const & name )
             return p[ nPos ];
     }
     throw beans::UnknownPropertyException(
-        OUSTR("unknown property: ") + name, Reference< XInterface >() );
+        "unknown property: " + name, Reference< XInterface >() );
 }
 //__________________________________________________________________________________________________
 sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
@@ -574,7 +572,7 @@ inline void OServiceManager::check_undisposed() const
     if (is_disposed())
     {
         throw lang::DisposedException(
-            OUSTR("service manager instance has already been disposed!"),
+            "service manager instance has already been disposed!",
             (OWeakObject *)this );
     }
 }
@@ -597,7 +595,7 @@ class OServiceManagerWrapper : public OServiceManagerMutex, public t_OServiceMan
         if (! m_root.is())
         {
             throw lang::DisposedException(
-                OUSTR("service manager instance has already been disposed!"),
+                "service manager instance has already been disposed!",
                 Reference< XInterface >() );
         }
         return m_root;
@@ -954,7 +952,7 @@ Reference<XPropertySetInfo > OServiceManager::getPropertySetInfo()
     {
         Sequence< beans::Property > seq( 1 );
         seq[ 0 ] = beans::Property(
-            OUSTR("DefaultContext"), -1, ::getCppuType( &m_xContext ), 0 );
+            "DefaultContext", -1, ::getCppuType( &m_xContext ), 0 );
         Reference< beans::XPropertySetInfo > xInfo( new PropertySetInfo_Impl( seq ) );
 
         MutexGuard aGuard( m_mutex );
@@ -1835,9 +1833,9 @@ Reference<XPropertySetInfo > ORegistryServiceManager::getPropertySetInfo()
     {
         Sequence< beans::Property > seq( 2 );
         seq[ 0 ] = beans::Property(
-            OUSTR("DefaultContext"), -1, ::getCppuType( &m_xContext ), 0 );
+            "DefaultContext", -1, ::getCppuType( &m_xContext ), 0 );
         seq[ 1 ] = beans::Property(
-            OUSTR("Registry"), -1, ::getCppuType( &m_xRegistry ),
+            "Registry", -1, ::getCppuType( &m_xRegistry ),
             beans::PropertyAttribute::READONLY );
         Reference< beans::XPropertySetInfo > xInfo( new PropertySetInfo_Impl( seq ) );
 

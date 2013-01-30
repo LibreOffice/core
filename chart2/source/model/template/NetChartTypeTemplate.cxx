@@ -126,7 +126,7 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
                 drawing::LineStyle eLineStyle;
                 Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY_THROW );
 
-                bool bCurrentHasSymbol = (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp) &&
+                bool bCurrentHasSymbol = (xProp->getPropertyValue( "Symbol") >>= aSymbProp) &&
                     (aSymbProp.Style != chart2::SymbolStyle_NONE);
 
                 if( bCurrentHasSymbol )
@@ -138,7 +138,7 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
                     break;
                 }
 
-                bool bCurrentHasLine = (xProp->getPropertyValue( C2U( "LineStyle" )) >>= eLineStyle) &&
+                bool bCurrentHasLine = (xProp->getPropertyValue( "LineStyle") >>= eLineStyle) &&
                     ( eLineStyle != drawing::LineStyle_NONE );
 
                 if( bCurrentHasLine )
@@ -209,7 +209,7 @@ Sequence< OUString > NetChartTypeTemplate::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
     return aServices;
 }
 

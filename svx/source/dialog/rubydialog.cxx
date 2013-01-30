@@ -51,7 +51,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using rtl::OUString;
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
+#define cChar rtl::OUString::createFromAscii(cChar)
 
 SFX_IMPL_CHILDWINDOW( SvxRubyChildWindow, SID_RUBY_DIALOG );
 
@@ -186,11 +186,11 @@ void  SvxRubyData_Impl::AssertOneEntry()
         Sequence<PropertyValue>& rValues = aRubyValues.getArray()[0];
         rValues.realloc(5);
         PropertyValue* pValues = rValues.getArray();
-        pValues[0].Name = C2U(cRubyBaseText);
-        pValues[1].Name = C2U(cRubyText);
-        pValues[2].Name = C2U(cRubyAdjust);
-        pValues[3].Name = C2U(cRubyIsAbove);
-        pValues[4].Name = C2U(cRubyCharStyleName);
+        pValues[0].Name = cRubyBaseText;
+        pValues[1].Name = cRubyText;
+        pValues[2].Name = cRubyAdjust;
+        pValues[3].Name = cRubyIsAbove;
+        pValues[4].Name = cRubyCharStyleName;
     }
 }
 
@@ -317,13 +317,13 @@ void SvxRubyDialog::Activate()
                 try
                 {
                     Reference<XNameAccess> xFam = xSupplier->getStyleFamilies();
-                    Any aChar = xFam->getByName(C2U(cCharacterStyles));
+                    Any aChar = xFam->getByName(cCharacterStyles);
                     Reference<XNameContainer> xChar;
                     aChar >>= xChar;
                     Reference<XIndexAccess> xCharIdx(xChar, UNO_QUERY);
                     if(xCharIdx.is())
                     {
-                        OUString sUIName(C2U(cDisplayName));
+                        OUString sUIName(cDisplayName);
                         for(sal_Int32 nStyle = 0; nStyle < xCharIdx->getCount(); nStyle++)
                         {
                             Any aStyle = xCharIdx->getByIndex(nStyle);
@@ -488,7 +488,7 @@ void SvxRubyDialog::Update()
     if(nPosition > -1)
         m_pPositionLB->SelectEntryPos(nPosition ? 1 : 0);
     if(!nLen || (bCharStyleEqual && sCharStyleName.isEmpty()))
-        sCharStyleName = C2U(cRubies);
+        sCharStyleName = cRubies;
     if(!sCharStyleName.isEmpty())
     {
         for(sal_uInt16 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)

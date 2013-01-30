@@ -143,8 +143,8 @@ uno::Sequence< OUString > HHConvDic::getSupportedServiceNames_Static()
     throw()
 {
     uno::Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = A2OU( SN_CONV_DICTIONARY );
-    aSNS.getArray()[1] = A2OU( SN_HH_CONV_DICTIONARY );
+    aSNS.getArray()[0] = SN_CONV_DICTIONARY;
+    aSNS.getArray()[1] = SN_HH_CONV_DICTIONARY;
     return aSNS;
 }
 

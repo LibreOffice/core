@@ -97,7 +97,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     }
 
     rtl::OUString aParticleID = ObjectIdentifier::getParticleID( aObjectCID );
-    bool bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
+    bool bAffectsMultipleObjects = aParticleID == "ALLELEMENTS";
     //-------------------------------------------------------------
     if( !bAffectsMultipleObjects )
     {
@@ -211,7 +211,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     uno::Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
                     bool bVaryColorsByPoint = false;
                     if( xSeriesProp.is() &&
-                        (xSeriesProp->getPropertyValue(C2U("VaryColorsByPoint")) >>= bVaryColorsByPoint) &&
+                        (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint) &&
                         bVaryColorsByPoint )
                     {
                         if( !ColorPerPointHelper::hasPointOwnColor( xSeriesProp, nPointIndex, xObjectProperties ) )
@@ -320,7 +320,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 rtl::OUString lcl_getTitleCIDForCommand( const ::rtl::OString& rDispatchCommand, const uno::Reference< frame::XModel > & xChartModel )
 {
     if( rDispatchCommand.equals("AllTitles"))
-        return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_TITLE, C2U("ALLELEMENTS") );
+        return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_TITLE, "ALLELEMENTS" );
 
     TitleHelper::eTitleType nTitleType( TitleHelper::MAIN_TITLE );
     if( rDispatchCommand.equals("SubTitle") )
@@ -343,7 +343,7 @@ rtl::OUString lcl_getTitleCIDForCommand( const ::rtl::OString& rDispatchCommand,
 rtl::OUString lcl_getAxisCIDForCommand( const ::rtl::OString& rDispatchCommand, const uno::Reference< frame::XModel >& xChartModel )
 {
     if( rDispatchCommand.equals("DiagramAxisAll"))
-        return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_AXIS, C2U("ALLELEMENTS") );
+        return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_AXIS, "ALLELEMENTS" );
 
     sal_Int32   nDimensionIndex=0;
     bool        bMainAxis=true;
@@ -378,7 +378,7 @@ rtl::OUString lcl_getGridCIDForCommand( const ::rtl::OString& rDispatchCommand, 
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
 
     if( rDispatchCommand.equals("DiagramGridAll"))
-        return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_GRID, C2U("ALLELEMENTS") );
+        return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_GRID, "ALLELEMENTS" );
 
     sal_Int32   nDimensionIndex=0;
     bool        bMainGrid=true;
@@ -537,8 +537,7 @@ rtl::OUString lcl_getObjectCIDForCommand( const ::rtl::OString& rDispatchCommand
             if( nPointIndex>=0 )
             {
                 OUString aSeriesParticle = ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID );
-                OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
-                aChildParticle+=(C2U("="));
+                OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) + "=" );
                 OUString aLabelsCID = ObjectIdentifier::createClassifiedIdentifierForParticles( aSeriesParticle, aChildParticle );
                 OUString aLabelCID_Stub = ObjectIdentifier::createClassifiedIdentifierWithParent(
                     OBJECTTYPE_DATA_LABEL, ::rtl::OUString(), aLabelsCID );

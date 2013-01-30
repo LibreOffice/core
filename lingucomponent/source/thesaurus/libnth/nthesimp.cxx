@@ -147,8 +147,8 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
         // get list of dictionaries-to-use
         std::list< SvtLinguConfigDictionaryEntry > aDics;
         uno::Sequence< rtl::OUString > aFormatList;
-        aLinguCfg.GetSupportedDictionaryFormatsFor( A2OU("Thesauri"),
-                A2OU("org.openoffice.lingu.new.Thesaurus"), aFormatList );
+        aLinguCfg.GetSupportedDictionaryFormatsFor( "Thesauri",
+                "org.openoffice.lingu.new.Thesaurus", aFormatList );
         sal_Int32 nLen = aFormatList.getLength();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
@@ -334,8 +334,8 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
             // open up and intialize this thesaurus if need be
             if (!aThes[i])
             {
-                OUString datpath = aTNames[i] + A2OU(".dat");
-                OUString idxpath = aTNames[i] + A2OU(".idx");
+                OUString datpath = aTNames[i] + ".dat";
+                OUString idxpath = aTNames[i] + ".idx";
                 OUString ndat;
                 OUString nidx;
                 osl::FileBase::getSystemPathFromFileURL(datpath,ndat);
@@ -391,8 +391,8 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
 
         if (stem)
         {
-            xTmpRes2 = xSpell->spell( A2OU("<?xml?><query type='analyze'><word>") +
-            pTerm + A2OU("</word></query>"), nLanguage, rProperties );
+            xTmpRes2 = xSpell->spell( "<?xml?><query type='analyze'><word>" +
+            pTerm + "</word></query>", nLanguage, rProperties );
             if (xTmpRes2.is())
             {
                 Sequence<OUString>seq = xTmpRes2->getAlternatives();
@@ -422,7 +422,7 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                     if (catpos > 2)
                     {
                         // remove category name for affixation and casing
-                        catst = A2OU(" ") + sTerm.copy(catpos);
+                        catst = " " + sTerm.copy(catpos);
                         sTerm = sTerm.copy(0, catpos);
                         sTerm = sTerm.trim();
                     }
@@ -430,8 +430,8 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                     if (stem && stem2)
                     {
                         Reference< XSpellAlternatives > xTmpRes;
-                        xTmpRes = xSpell->spell( A2OU("<?xml?><query type='generate'><word>") +
-                        sTerm + A2OU("</word>") + codeTerm + A2OU("</query>"), nLanguage, rProperties );
+                        xTmpRes = xSpell->spell( "<?xml?><query type='generate'><word>" +
+                        sTerm + "</word>" + codeTerm + "</query>", nLanguage, rProperties );
                         if (xTmpRes.is())
                         {
                             Sequence<OUString>seq = xTmpRes->getAlternatives();
@@ -485,11 +485,11 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
         stem = 1;
 
         xSpell = uno::Reference< XSpellChecker1 >( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
-        if (!xSpell.is() || !xSpell->isValid( A2OU(SPELLML_SUPPORT), nLanguage, rProperties ))
+        if (!xSpell.is() || !xSpell->isValid( SPELLML_SUPPORT, nLanguage, rProperties ))
             return noMeanings;
         Reference< XSpellAlternatives > xTmpRes;
-        xTmpRes = xSpell->spell( A2OU("<?xml?><query type='stem'><word>") +
-            rTerm + A2OU("</word></query>"), nLanguage, rProperties );
+        xTmpRes = xSpell->spell( "<?xml?><query type='stem'><word>" +
+            rTerm + "</word></query>", nLanguage, rProperties );
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();
@@ -505,8 +505,8 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
         sal_Int32 pos = rTerm.lastIndexOf(' ');
         if (!pos)
             return noMeanings;
-        xTmpRes = xSpell->spell( A2OU("<?xml?><query type='stem'><word>") +
-            rTerm.copy(pos + 1) + A2OU("</word></query>"), nLanguage, rProperties );
+        xTmpRes = xSpell->spell( "<?xml?><query type='stem'><word>" +
+            rTerm.copy(pos + 1) + "</word></query>", nLanguage, rProperties );
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();
@@ -543,7 +543,7 @@ OUString SAL_CALL Thesaurus::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return A2OU( "OpenOffice.org New Thesaurus" );
+    return OUString( "OpenOffice.org New Thesaurus" );
 }
 
 
@@ -689,7 +689,7 @@ Sequence< OUString > Thesaurus::getSupportedServiceNames_Static()
     MutexGuard  aGuard( GetLinguMutex() );
 
     Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
-    aSNS.getArray()[0] = A2OU( SN_THESAURUS );
+    aSNS.getArray()[0] = SN_THESAURUS;
     return aSNS;
 }
 

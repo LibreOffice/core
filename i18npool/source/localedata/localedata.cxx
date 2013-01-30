@@ -1262,11 +1262,6 @@ LocaleData::getReservedWord( const Locale& rLocale  ) throw(RuntimeException)
 }
 
 
-inline OUString C2U( const char* s )
-{
-    return OUString::createFromAscii( s );
-}
-
 Sequence< Sequence<beans::PropertyValue> > SAL_CALL
 LocaleData::getContinuousNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException)
 {
@@ -1304,23 +1299,23 @@ LocaleData::getContinuousNumberingLevels( const lang::Locale& rLocale ) throw(Ru
                 switch( j )
                 {
                     case 0:
-                        rVal.Name = C2U("Prefix");
+                        rVal.Name = "Prefix";
                         rVal.Value <<= sVal;
                         break;
                     case 1:
-                        rVal.Name = C2U("NumberingType");
+                        rVal.Name = "NumberingType";
                         rVal.Value <<= (sal_Int16) sVal.toInt32();
                         break;
                     case 2:
-                        rVal.Name = C2U("Suffix");
+                        rVal.Name = "Suffix";
                         rVal.Value <<= sVal;
                         break;
                     case 3:
-                        rVal.Name = C2U("Transliteration");
+                        rVal.Name = "Transliteration";
                         rVal.Value <<= sVal;
                         break;
                     case 4:
-                        rVal.Name = C2U("NatNum");
+                        rVal.Name = "NatNum";
                         rVal.Value <<= (sal_Int16) sVal.toInt32();
                         break;
                     default:
@@ -1598,29 +1593,29 @@ Any OutlineNumbering::getByIndex( sal_Int32 nIndex )
 
     Sequence<PropertyValue> aOutlineNumbering(12);
     PropertyValue* pValues = aOutlineNumbering.getArray();
-    pValues[0].Name = C2U( "Prefix");
+    pValues[0].Name = "Prefix";
     pValues[0].Value <<= pTemp->sPrefix;
-    pValues[1].Name = C2U("NumberingType");
+    pValues[1].Name = "NumberingType";
     pValues[1].Value <<= pTemp->nNumType;
-    pValues[2].Name = C2U("Suffix");
+    pValues[2].Name = "Suffix";
     pValues[2].Value <<= pTemp->sSuffix;
-    pValues[3].Name = C2U("BulletChar");
+    pValues[3].Name = "BulletChar";
     pValues[3].Value <<= OUString(&pTemp->cBulletChar, 1);
-    pValues[4].Name = C2U("BulletFontName");
-    pValues[4].Value <<= C2U(pTemp->sBulletFontName);
-    pValues[5].Name = C2U("ParentNumbering");
-    pValues[5].Value <<= pTemp->nParentNumbering;
-    pValues[6].Name = C2U("LeftMargin");
+    pValues[4].Name = "BulletFontName";
+    pValues[4].Value <<= OUString::createFromAscii(pTemp->sBulletFontName);
+    pValues[5].Name = "ParentNumbering";
+    pValues[5].Value <<= OUString::number(pTemp->nParentNumbering);
+    pValues[6].Name = "LeftMargin";
     pValues[6].Value <<= pTemp->nLeftMargin;
-    pValues[7].Name = C2U("SymbolTextDistance");
+    pValues[7].Name = "SymbolTextDistance";
     pValues[7].Value <<= pTemp->nSymbolTextDistance;
-    pValues[8].Name = C2U("FirstLineOffset");
+    pValues[8].Name = "FirstLineOffset";
     pValues[8].Value <<= pTemp->nFirstLineOffset;
-    pValues[9].Name = C2U("Adjust");
+    pValues[9].Name = "Adjust";
     pValues[9].Value <<= (sal_Int16)HoriOrientation::LEFT;
-    pValues[10].Name = C2U("Transliteration");
+    pValues[10].Name = "Transliteration";
     pValues[10].Value <<= pTemp->sTransliteration;
-    pValues[11].Name = C2U("NatNum");
+    pValues[11].Name = "NatNum";
     pValues[11].Value <<= pTemp->nNatNum;
     aRet <<= aOutlineNumbering;
     return aRet;

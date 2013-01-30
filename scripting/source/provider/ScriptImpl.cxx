@@ -68,14 +68,14 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException,
     }
     catch ( const lang::IllegalArgumentException & iae )
     {
-        ::rtl::OUString temp = OUSTR( "ScriptImpl::invoke IllegalArgumentException : " );
+        ::rtl::OUString temp = "ScriptImpl::invoke IllegalArgumentException : ";
         throw lang::IllegalArgumentException( temp.concat( iae.Message ),
                                               Reference< XInterface > (),
                                               iae.ArgumentPosition );
     }
     catch ( const script::CannotConvertException & cce )
     {
-        ::rtl::OUString temp = OUSTR( "ScriptImpl::invoke CannotConvertException : " );
+        ::rtl::OUString temp = "ScriptImpl::invoke CannotConvertException : ";
         throw script::CannotConvertException( temp.concat( cce.Message ),
                                               Reference< XInterface > (),
                                               cce.DestinationTypeClass,
@@ -84,14 +84,14 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException,
     }
     catch ( const reflection::InvocationTargetException & ite )
     {
-        ::rtl::OUString temp = OUSTR( "ScriptImpl::invoke InvocationTargetException : " );
+        ::rtl::OUString temp = "ScriptImpl::invoke InvocationTargetException : ";
         throw reflection::InvocationTargetException( temp.concat( ite.Message ),
                 Reference< XInterface > (),
                 ite.TargetException );
     }
     catch ( const RuntimeException & re )
     {
-        ::rtl::OUString temp = OUSTR( "ScriptImpl::invoke RuntimeException : " );
+        ::rtl::OUString temp = "ScriptImpl::invoke RuntimeException : ";
         throw RuntimeException( temp.concat( re.Message ),
                                 Reference< XInterface > () );
     }
@@ -99,7 +99,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException,
     catch ( ... )
     {
         throw RuntimeException(
-            OUSTR( "ScriptImpl::invoke Unknown Exception caught - RuntimeException rethrown" ),
+            "ScriptImpl::invoke Unknown Exception caught - RuntimeException rethrown",
             Reference< XInterface > () );
     }
 #endif

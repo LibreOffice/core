@@ -62,7 +62,7 @@ using namespace com::sun::star;
 
 using ::rtl::OUString;
 
-#define C2U(constAsciiStr) (::rtl::OUString( constAsciiStr  ))
+#define constAsciiStr (::rtl::OUString( constAsciiStr  ))
 
 #define STR_NONNEGATIVE   "NonNegative"
 #define STR_INTEGER       "Integer"
@@ -161,11 +161,11 @@ SolverComponent::SolverComponent( const uno::Reference<uno::XComponentContext>& 
     mfResultValue( 0.0 )
 {
     // for XPropertySet implementation:
-    registerProperty( C2U(STR_NONNEGATIVE),  PROP_NONNEGATIVE,  0, &mbNonNegative,  getCppuType( &mbNonNegative )  );
-    registerProperty( C2U(STR_INTEGER),      PROP_INTEGER,      0, &mbInteger,      getCppuType( &mbInteger )      );
-    registerProperty( C2U(STR_TIMEOUT),      PROP_TIMEOUT,      0, &mnTimeout,      getCppuType( &mnTimeout )      );
-    registerProperty( C2U(STR_EPSILONLEVEL), PROP_EPSILONLEVEL, 0, &mnEpsilonLevel, getCppuType( &mnEpsilonLevel ) );
-    registerProperty( C2U(STR_LIMITBBDEPTH), PROP_LIMITBBDEPTH, 0, &mbLimitBBDepth, getCppuType( &mbLimitBBDepth ) );
+    registerProperty( STR_NONNEGATIVE,  PROP_NONNEGATIVE,  0, &mbNonNegative,  getCppuType( &mbNonNegative )  );
+    registerProperty( STR_INTEGER,      PROP_INTEGER,      0, &mbInteger,      getCppuType( &mbInteger )      );
+    registerProperty( STR_TIMEOUT,      PROP_TIMEOUT,      0, &mnTimeout,      getCppuType( &mnTimeout )      );
+    registerProperty( STR_EPSILONLEVEL, PROP_EPSILONLEVEL, 0, &mnEpsilonLevel, getCppuType( &mnEpsilonLevel ) );
+    registerProperty( STR_LIMITBBDEPTH, PROP_LIMITBBDEPTH, 0, &mbLimitBBDepth, getCppuType( &mbLimitBBDepth ) );
 }
 
 SolverComponent::~SolverComponent()

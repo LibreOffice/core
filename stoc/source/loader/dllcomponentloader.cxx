@@ -45,8 +45,6 @@
 #define SERVICENAME "com.sun.star.loader.SharedLibrary"
 #define IMPLNAME    "com.sun.star.comp.stoc.DLLComponentLoader"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -204,7 +202,7 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
             {
                 aPrefix = xPrefixKey->getAsciiValue();
                 if( !aPrefix.isEmpty() )
-                    aPrefix = aPrefix + OUSTR("_");
+                    aPrefix = aPrefix + "_";
             }
         }
     }

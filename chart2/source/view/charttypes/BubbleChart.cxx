@@ -333,7 +333,7 @@ void BubbleChart::createShapes()
                                                        , pSeries->getPropertiesOfPoint( nIndex )
                                                        , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
 
-                            m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
+                            m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
                         }
 
                         //create data point label

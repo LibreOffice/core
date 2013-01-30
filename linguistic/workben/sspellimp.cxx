@@ -90,9 +90,9 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
     {
         aSuppLocales.realloc( 3 );
         Locale *pLocale = aSuppLocales.getArray();
-        pLocale[0] = Locale( A2OU("en"), A2OU("US"), OUString() );
-        pLocale[1] = Locale( A2OU("de"), A2OU("DE"), OUString() );
-        pLocale[2] = Locale( A2OU("de"), A2OU("CH"), OUString() );
+        pLocale[0] = Locale( "en", "US", OUString() );
+        pLocale[1] = Locale( "de", "DE", OUString() );
+        pLocale[2] = Locale( "de", "CH"), OUString() );
     }
 
     return aSuppLocales;
@@ -218,7 +218,7 @@ Reference< XSpellAlternatives >
 
         if (STRING_NOTFOUND != aTmp.SearchAscii( "liss" ))
         {
-            aTmp.SearchAndReplaceAllAscii( "liss", A2OU("liz") );
+            aTmp.SearchAndReplaceAllAscii( "liss", "liz" );
             xRes = new SpellAlternatives( aTmp, nLang,
                         SpellFailure::IS_NEGATIVE_WORD, ::com::sun::star::uno::Sequence< ::rtl::OUString >() );
         }
@@ -334,7 +334,7 @@ OUString SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return A2OU( "OpenOffice example spellchecker" );
+    return OUString( "OpenOffice example spellchecker" );
 }
 
 
@@ -441,7 +441,7 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
     MutexGuard  aGuard( GetLinguMutex() );
 
     Sequence< OUString > aSNS( 1 ); // more than 1 service possible
-    aSNS.getArray()[0] = A2OU( SN_SPELLCHECKER );
+    aSNS.getArray()[0] = SN_SPELLCHECKER;
     return aSNS;
 }
 

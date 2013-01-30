@@ -58,8 +58,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(pString))
-
 namespace sdext { namespace presenter {
 
 static const sal_Int32 gnGapSize (20);
@@ -644,7 +642,7 @@ void PresenterToolBar::CreateControls (
     if (xToolBarNode.is())
     {
         Reference<container::XNameAccess> xEntries (
-            PresenterConfigurationAccess::GetConfigurationNode(xToolBarNode, A2S("Entries")),
+            PresenterConfigurationAccess::GetConfigurationNode(xToolBarNode, "Entries"),
             UNO_QUERY);
         Context aContext;
         aContext.mxPresenterHelper = mpPresenterController->GetPresenterHelper();
@@ -669,21 +667,21 @@ void PresenterToolBar::ProcessEntry (
 
     // Type has to be present.
     OUString sType;
-    if ( ! (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("Type")) >>= sType))
+    if ( ! (PresenterConfigurationAccess::GetProperty(rxProperties, "Type") >>= sType))
         return;
 
     OUString sName;
-    PresenterConfigurationAccess::GetProperty(rxProperties, A2S("Name")) >>= sName;
+    PresenterConfigurationAccess::GetProperty(rxProperties, "Name") >>= sName;
 
     // Read mode specific values.
     SharedElementMode pNormalMode (new ElementMode());
     SharedElementMode pMouseOverMode (new ElementMode());
     SharedElementMode pSelectedMode (new ElementMode());
     SharedElementMode pDisabledMode (new ElementMode());
-    pNormalMode->ReadElementMode(rxProperties, A2S("Normal"), pNormalMode, rContext);
-    pMouseOverMode->ReadElementMode(rxProperties, A2S("MouseOver"), pNormalMode, rContext);
-    pSelectedMode->ReadElementMode(rxProperties, A2S("Selected"), pNormalMode, rContext);
-    pDisabledMode->ReadElementMode(rxProperties, A2S("Disabled"), pNormalMode, rContext);
+    pNormalMode->ReadElementMode(rxProperties, "Normal", pNormalMode, rContext);
+    pMouseOverMode->ReadElementMode(rxProperties, "MouseOver", pNormalMode, rContext);
+    pSelectedMode->ReadElementMode(rxProperties, "Selected", pNormalMode, rContext);
+    pDisabledMode->ReadElementMode(rxProperties, "Disabled", pNormalMode, rContext);
 
     // Create new element.
     ::rtl::Reference<Element> pElement;
@@ -1093,7 +1091,7 @@ PresenterToolBarView::PresenterToolBarView (
             mxCanvas,
             rpPresenterController,
             PresenterToolBar::Center);
-        mpToolBar->Initialize(A2S("PresenterScreenSettings/ToolBars/ToolBar"));
+        mpToolBar->Initialize("PresenterScreenSettings/ToolBars/ToolBar");
 
         if (mxWindow.is())
         {
@@ -1439,18 +1437,18 @@ void ElementMode::ReadElementMode (
     }
 
     // Read action.
-    if ( ! (PresenterConfigurationAccess::GetProperty(xProperties, A2S("Action")) >>= msAction))
+    if ( ! (PresenterConfigurationAccess::GetProperty(xProperties, "Action") >>= msAction))
         if (rpDefaultMode.get()!=NULL)
             msAction = rpDefaultMode->msAction;
 
     // Read text and font
     OUString sText (rpDefaultMode.get()!=NULL ? rpDefaultMode->maText.GetText() : OUString());
-    PresenterConfigurationAccess::GetProperty(xProperties, A2S("Text")) >>= sText;
+    PresenterConfigurationAccess::GetProperty(xProperties, "Text") >>= sText;
     Reference<container::XHierarchicalNameAccess> xFontNode (
-        PresenterConfigurationAccess::GetProperty(xProperties, A2S("Font")), UNO_QUERY);
+        PresenterConfigurationAccess::GetProperty(xProperties, "Font"), UNO_QUERY);
     PresenterTheme::SharedFontDescriptor pFont (PresenterTheme::ReadFont(
         xFontNode,
-        A2S(""),
+        "",
         rpDefaultMode.get()!=NULL
             ? rpDefaultMode->maText.GetFont()
             : PresenterTheme::SharedFontDescriptor()));
@@ -1458,10 +1456,10 @@ void ElementMode::ReadElementMode (
 
     // Read bitmaps to display as icons.
     Reference<container::XHierarchicalNameAccess> xIconNode (
-        PresenterConfigurationAccess::GetProperty(xProperties, A2S("Icon")), UNO_QUERY);
+        PresenterConfigurationAccess::GetProperty(xProperties, "Icon"), UNO_QUERY);
     mpIcon = PresenterBitmapContainer::LoadBitmap(
         xIconNode,
-        A2S(""),
+        "",
         rContext.mxPresenterHelper,
         rContext.mxCanvas,
         rpDefaultMode.get()!=NULL ? rpDefaultMode->mpIcon : SharedBitmapDescriptor());
@@ -1820,29 +1818,29 @@ OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
         sText.append(OUString::valueOf(
             sal::static_int_cast<sal_Int32>(nHours>12 ? nHours-12 : nHours)));
 
-    sText.append(A2S(":"));
+    sText.append(":");
 
     // Minutes
     const OUString sMinutes (OUString::valueOf(nMinutes));
     if (sMinutes.getLength() == 1)
-        sText.append(A2S("0"));
+        sText.append("0");
     sText.append(sMinutes);
 
     // Seconds
     if (mbIsShowSeconds)
     {
-        sText.append(A2S(":"));
+        sText.append(":");
         const OUString sSeconds (OUString::valueOf(nSeconds));
         if (sSeconds.getLength() == 1)
-            sText.append(A2S("0"));
+            sText.append("0");
         sText.append(sSeconds);
     }
     if (mbIsAmPmFormat)
     {
         if (rTime.Hours < 12)
-            sText.append(A2S("am"));
+            sText.append("am");
         else
-            sText.append(A2S("pm"));
+            sText.append("pm");
     }
     return sText.makeStringAndClear();
 }

@@ -76,14 +76,14 @@ void StatusBarCommandDispatch::fireStatusEvent(
         uno::Any aArg;
         Reference< chart2::XChartDocument > xDoc( m_xModifiable, uno::UNO_QUERY );
         aArg <<= ObjectNameProvider::getSelectedObjectText( m_aSelectedOID.getObjectCID(), xDoc );
-        fireStatusEventForURL( C2U(".uno:Context"), aArg, true, xSingleListener );
+        fireStatusEventForURL( ".uno:Context", aArg, true, xSingleListener );
     }
     if( bFireModified )
     {
         uno::Any aArg;
         if( m_bIsModified )
-            aArg <<= C2U("*");
-        fireStatusEventForURL( C2U(".uno:ModifiedStatus"), aArg, true, xSingleListener );
+            aArg <<= OUString("*");
+        fireStatusEventForURL( ".uno:ModifiedStatus", aArg, true, xSingleListener );
     }
 }
 

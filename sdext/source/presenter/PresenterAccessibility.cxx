@@ -48,8 +48,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(s) (::rtl::OUString(s))
-
 //===== PresenterAccessibleObject =============================================
 
 namespace sdext { namespace presenter {
@@ -432,12 +430,12 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const lang::Locale aLocale)
     {
-        OUString sName (A2S("Presenter Console"));
+        OUString sName ("Presenter Console");
         PresenterConfigurationAccess aConfiguration (
             rxContext,
             OUString("/org.openoffice.Office.PresenterScreen/"),
             PresenterConfigurationAccess::READ_ONLY);
-        aConfiguration.GetConfigurationNode(A2S("Presenter/Accessibility/Console/String"))
+        aConfiguration.GetConfigurationNode("Presenter/Accessibility/Console/String")
             >>= sName;
 
         rtl::Reference<PresenterAccessible::AccessibleObject> pObject (
@@ -461,13 +459,13 @@ public:
         const Reference<awt::XWindow>& rxContentWindow,
         const Reference<awt::XWindow>& rxBorderWindow)
     {
-        OUString sName (A2S("Presenter Notes Window"));
+        OUString sName ("Presenter Notes Window");
         {
             PresenterConfigurationAccess aConfiguration (
                 rxContext,
                 OUString("/org.openoffice.Office.PresenterScreen/"),
                 PresenterConfigurationAccess::READ_ONLY);
-            aConfiguration.GetConfigurationNode(A2S("Presenter/Accessibility/Preview/String"))
+            aConfiguration.GetConfigurationNode("Presenter/Accessibility/Preview/String")
                 >>= sName;
         }
 
@@ -1376,7 +1374,7 @@ void PresenterAccessible::AccessibleObject::ThrowException (
     const sal_Char* pMessage,
     const ExceptionType eExceptionType) const
 {
-    const OUString sMessage (OUString(A2S("PresenterAccessible: ")) + OUString::createFromAscii(pMessage));
+    const OUString sMessage ("PresenterAccessible: " + OUString::createFromAscii(pMessage));
     const Reference<XInterface> xObject (
         const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     switch (eExceptionType)
@@ -1407,7 +1405,7 @@ sal_uInt32 AccessibleStateSet::GetStateMask (const sal_Int16 nState)
 {
     if (nState<0 || nState>=sal_Int16(sizeof(sal_uInt32)*8))
     {
-        throw RuntimeException(A2S("AccessibleStateSet::GetStateMask: invalid state"), NULL);
+        throw RuntimeException("AccessibleStateSet::GetStateMask: invalid state", NULL);
     }
 
     return 1<<nState;
@@ -1882,13 +1880,13 @@ rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
     const Reference<awt::XWindow>& rxBorderWindow,
     const ::boost::shared_ptr<PresenterTextView>& rpTextView)
 {
-    OUString sName (A2S("Presenter Notes Text"));
+    OUString sName ("Presenter Notes Text");
     {
         PresenterConfigurationAccess aConfiguration (
             rxContext,
             OUString("/org.openoffice.Office.PresenterScreen/"),
             PresenterConfigurationAccess::READ_ONLY);
-        aConfiguration.GetConfigurationNode(A2S("Presenter/Accessibility/Notes/String"))
+        aConfiguration.GetConfigurationNode("Presenter/Accessibility/Notes/String")
             >>= sName;
     }
 
@@ -1931,7 +1929,7 @@ void AccessibleNotes::SetTextView (
                 new PresenterAccessible::AccessibleParagraph(
                     css::lang::Locale(),
                     AccessibleRole::PARAGRAPH,
-                    A2S("Paragraph")+OUString::valueOf(nIndex),
+                    "Paragraph"+OUString::valueOf(nIndex),
                     rpTextView->GetParagraph(nIndex),
                     nIndex));
             pParagraph->LateInitialization();

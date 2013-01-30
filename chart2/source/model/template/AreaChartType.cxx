@@ -56,13 +56,13 @@ uno::Sequence< ::rtl::OUString > AreaChartType::getSupportedServiceNames_Static(
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_AREA;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartType" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
     return aServices;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( AreaChartType,
-                             C2U( "com.sun.star.comp.chart.AreaChartType" ));
+                             OUString("com.sun.star.comp.chart.AreaChartType") );
 
 } //  namespace chart
 

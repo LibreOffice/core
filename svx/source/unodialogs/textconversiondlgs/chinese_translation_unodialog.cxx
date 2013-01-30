@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 #define SERVICE_IMPLEMENTATION_NAME ::rtl::OUString("com.sun.star.comp.linguistic2.ChineseTranslationDialog")
 #define SERVICE_NAME ::rtl::OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
+#define cChar rtl::OUString::createFromAscii(cChar)
 
 ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog( const uno::Reference< uno::XComponentContext >& xContext )
                     : m_xCC( xContext )
@@ -233,15 +233,15 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const ::rtl::O
         m_pDialog->getSettings( bDirectionToSimplified, bTranslateCommonTerms );
     }
 
-    if( rPropertyName.equals( C2U("IsDirectionToSimplified") ) )
+    if( rPropertyName.equals( "IsDirectionToSimplified" ) )
     {
         aRet <<= bDirectionToSimplified;
     }
-    else if( rPropertyName.equals( C2U("IsUseCharacterVariants") ) )
+    else if( rPropertyName.equals( "IsUseCharacterVariants" ) )
     {
         aRet <<= bUseCharacterVariants;
     }
-    else if( rPropertyName.equals( C2U("IsTranslateCommonTerms") ) )
+    else if( rPropertyName.equals( "IsTranslateCommonTerms" ) )
     {
         aRet <<= bTranslateCommonTerms;
     }

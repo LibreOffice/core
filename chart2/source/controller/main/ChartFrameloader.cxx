@@ -167,7 +167,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
                 xLoadable->load( aCompleteMediaDescriptor );
 
                 //resize standalone files to get correct size:
-                if( xComponentWindow.is() && aMDHelper.ISSET_FilterName && aMDHelper.FilterName.equals( C2U("StarChart 5.0")) )
+                if( xComponentWindow.is() && aMDHelper.ISSET_FilterName && aMDHelper.FilterName.equals( "StarChart 5.0") )
                 {
                     awt::Rectangle aRect( xComponentWindow->getPosSize() );
                     sal_Int16 nFlags=0;

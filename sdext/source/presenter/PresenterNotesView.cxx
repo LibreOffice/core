@@ -47,8 +47,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 static const sal_Int32 gnSpaceBelowSeparator (10);
 static const sal_Int32 gnSpaceAboveSeparator (10);
 static const sal_Int32 gnPartHeight (128);
@@ -111,7 +109,7 @@ PresenterNotesView::PresenterNotesView (
             mpPresenterController->GetTheme(),
             mxParentWindow,
             mxCanvas,
-            A2S("NotesViewCloser"));
+            "NotesViewCloser");
 
         if (mxParentWindow.is())
         {
@@ -223,15 +221,15 @@ void PresenterNotesView::CreateToolBar (
         rpPresenterController,
         PresenterToolBar::Left);
     mpToolBar->Initialize(
-        A2S("PresenterScreenSettings/ToolBars/NotesToolBar"));
+        "PresenterScreenSettings/ToolBars/NotesToolBar");
 }
 
 void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesPage)
 {
     static const ::rtl::OUString sNotesShapeName (
-        A2S("com.sun.star.presentation.NotesShape"));
+        "com.sun.star.presentation.NotesShape");
     static const ::rtl::OUString sTextShapeName (
-        A2S("com.sun.star.drawing.TextShape"));
+        "com.sun.star.drawing.TextShape");
 
     Reference<container::XIndexAccess> xIndexAccess (rxNotesPage, UNO_QUERY);
     if (xIndexAccess.is())
@@ -660,8 +658,8 @@ void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
             if (pConfiguration.get()==NULL || ! pConfiguration->IsValid())
                 return;
 
-            pConfiguration->GoToChild(A2S("Font"));
-            pConfiguration->SetProperty(A2S("Size"), Any((sal_Int32)(nNewSize+0.5)));
+            pConfiguration->GoToChild(OUString("Font"));
+            pConfiguration->SetProperty("Size", Any((sal_Int32)(nNewSize+0.5)));
             pConfiguration->CommitChanges();
         }
         catch (Exception&)
@@ -703,7 +701,7 @@ void PresenterNotesView::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            A2S("PresenterNotesView object has already been disposed"),
+            "PresenterNotesView object has already been disposed",
             static_cast<uno::XWeak*>(this));
     }
 }

@@ -59,7 +59,6 @@
 #define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
 #define TDMGR_SINGLETON "/singletons/com.sun.star.reflection.theTypeDescriptionManager"
 #define AC_SINGLETON "/singletons/com.sun.star.security.theAccessController"
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
 using namespace ::osl;
@@ -76,7 +75,7 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
 {
     OSL_ASSERT( pVal );
     if (pTypeRef->eTypeClass == typelib_TypeClass_VOID)
-        return OUSTR("void");
+        return "void";
 
     OUStringBuffer buf( 64 );
     buf.append( (sal_Unicode)'(' );
@@ -420,7 +419,7 @@ void ComponentContext::insertByName(
         t_map::value_type( name, entry ) ) );
     if (! insertion.second)
         throw container::ElementExistException(
-            OUSTR("element already exists: ") + name,
+            "element already exists: " + name,
             static_cast<OWeakObject *>(this) );
 }
 
@@ -433,7 +432,7 @@ void ComponentContext::removeByName( OUString const & name )
     t_map::iterator iFind( m_map.find( name ) );
     if (iFind == m_map.end())
         throw container::NoSuchElementException(
-            OUSTR("no such element: ") + name,
+            "no such element: " + name,
             static_cast<OWeakObject *>(this) );
 
     delete iFind->second;
@@ -451,7 +450,7 @@ void ComponentContext::replaceByName(
     t_map::const_iterator const iFind( m_map.find( name ) );
     if (iFind == m_map.end())
         throw container::NoSuchElementException(
-            OUSTR("no such element: ") + name,
+            "no such element: " + name,
             static_cast<OWeakObject *>(this) );
     if (name.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("/singletons/") ) &&
         !element.hasValue())
@@ -551,8 +550,8 @@ Any ComponentContext::lookupMap( OUString const & rName )
 
     try
     {
-        Any usesService( getValueByName( rName + OUSTR("/service") ) );
-        Any args_( getValueByName( rName + OUSTR("/arguments") ) );
+        Any usesService( getValueByName( rName + "/service" ) );
+        Any args_( getValueByName( rName + "/arguments" ) );
         Sequence<Any> args;
         if (args_.hasValue() && !(args_ >>= args))
         {
@@ -617,7 +616,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
     if (! xInstance.is())
     {
         throw RuntimeException(
-            OUSTR("no service object raising singleton ") + rName,
+            "no service object raising singleton " + rName,
             static_cast<OWeakObject *>(this) );
     }
 
@@ -773,7 +772,7 @@ ComponentContext::ComponentContext(
             // singleton entry
             m_map[ rEntry.name ] = new ContextEntry( Any(), true );
             // /service
-            m_map[ rEntry.name + OUSTR("/service") ] = new ContextEntry( rEntry.value, false );
+            m_map[ rEntry.name + "/service" ] = new ContextEntry( rEntry.value, false );
             // /initial-arguments are provided as optional context entry
         }
         else
@@ -795,7 +794,7 @@ ComponentContext::ComponentContext(
                 // create new smgr based on delegate's one
                 m_xSMgr.set(
                     xMgr->createInstanceWithContext(
-                        OUSTR("com.sun.star.comp.stoc.OServiceManagerWrapper"), xDelegate ),
+                        "com.sun.star.comp.stoc.OServiceManagerWrapper", xDelegate ),
                     UNO_QUERY );
                 // patch DefaultContext property of new one
                 Reference< beans::XPropertySet > xProps( m_xSMgr, UNO_QUERY );
@@ -803,7 +802,7 @@ ComponentContext::ComponentContext(
                 if (xProps.is())
                 {
                     Reference< XComponentContext > xThis( this );
-                    xProps->setPropertyValue( OUSTR("DefaultContext"), makeAny( xThis ) );
+                    xProps->setPropertyValue( "DefaultContext", makeAny( xThis ) );
                 }
             }
             catch (...)

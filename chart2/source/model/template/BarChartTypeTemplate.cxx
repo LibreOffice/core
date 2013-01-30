@@ -54,13 +54,13 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "Dimension" ),
+        Property( "Dimension",
                   PROP_BAR_TEMPLATE_DIMENSION,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "Geometry3D" ),
+        Property( "Geometry3D",
                   PROP_BAR_TEMPLATE_GEOMETRY3D,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -264,7 +264,7 @@ void SAL_CALL BarChartTypeTemplate::applyStyle(
     throw (uno::RuntimeException)
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
-    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
     if( getDimension() == 3 )
     {
         try
@@ -272,7 +272,7 @@ void SAL_CALL BarChartTypeTemplate::applyStyle(
             //apply Geometry3D
             uno::Any aAGeometry3D;
             this->getFastPropertyValue( aAGeometry3D, PROP_BAR_TEMPLATE_GEOMETRY3D );
-            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "Geometry3D" ), aAGeometry3D );
+            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "Geometry3D", aAGeometry3D );
         }
         catch( const uno::Exception & ex )
         {
@@ -296,12 +296,12 @@ void SAL_CALL BarChartTypeTemplate::resetStyles(
         if( xState.is())
         {
             if( getDimension() == 3 )
-                xState->setPropertyToDefault( C2U("Geometry3D"));
+                xState->setPropertyToDefault( "Geometry3D");
             Reference< beans::XPropertySet > xProp( xState, uno::UNO_QUERY );
             if( xProp.is() &&
-                xProp->getPropertyValue( C2U("BorderStyle")) == aLineStyleAny )
+                xProp->getPropertyValue( "BorderStyle") == aLineStyleAny )
             {
-                xState->setPropertyToDefault( C2U("BorderStyle"));
+                xState->setPropertyToDefault( "BorderStyle");
             }
         }
     }
@@ -325,7 +325,7 @@ Sequence< OUString > BarChartTypeTemplate::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
     return aServices;
 }
 

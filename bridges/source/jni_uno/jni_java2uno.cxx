@@ -145,7 +145,7 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
     else
     {
         OUString message(
-            OUSTR("thrown exception is no uno exception: ") +
+            "thrown exception is no uno exception: " +
             OUString::unacquired( &uno_exc->pType->pTypeName ) +
             jni.get_stack_trace() );
         uno_any_destruct( uno_exc, 0 );
@@ -433,7 +433,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             if (! jo_type_name.is())
             {
                 throw BridgeRuntimeError(
-                    OUSTR("incomplete type object: no type name!") +
+                    "incomplete type object: no type name!" +
                     jni.get_stack_trace() );
             }
             OUString type_name(
@@ -443,7 +443,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             if (typelib_TypeClass_INTERFACE != info->m_td.get()->eTypeClass)
             {
                 throw BridgeRuntimeError(
-                    OUSTR("queryInterface() call demands an INTERFACE type!") );
+                    "queryInterface() call demands an INTERFACE type!" );
             }
             JNI_interface_type_info const * iface_info =
                 static_cast< JNI_interface_type_info const * >( info );
@@ -674,7 +674,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
     OUString oid( jstring_to_oustring( jni, (jstring) jo_oid.get() ) );
     OString cstr_msg(
         OUStringToOString(
-            OUSTR("freeing java uno proxy: ") + oid,
+            "freeing java uno proxy: " + oid,
             RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( "%s", cstr_msg.getStr() );
     }

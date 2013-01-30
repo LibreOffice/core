@@ -358,8 +358,8 @@ void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
     InvocationInfo info;
     if( ! getInvocationInfoForCall( id, info))
         throw BridgeRuntimeError(
-            OUSTR("[automation bridge]InterfaceOleWrapper_Impl::convertDispparamsArgs \n"
-                  "Could not obtain type information for current call."));
+                  "[automation bridge]InterfaceOleWrapper_Impl::convertDispparamsArgs \n"
+                  "Could not obtain type information for current call.");
 
     for (int i = 0; i < countArgs; i++)
     {
@@ -401,8 +401,8 @@ void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
                 if( FAILED( hr))
                 {
                     throw BridgeRuntimeError(
-                        OUSTR("[automation bridge] Could not determine "
-                              "if the object has a member \"0\". Error: ") +
+                        "[automation bridge] Could not determine " +
+                        "if the object has a member \"0\". Error: " +
                         OUString::valueOf(hr));
                 }
             }
@@ -878,15 +878,15 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
     }
     catch(const Exception& e)
     {
-        OUString message= OUSTR("InterfaceOleWrapper_Impl::Invoke : \n") +
+        OUString message= "InterfaceOleWrapper_Impl::Invoke : \n" +
                                 e.Message;
         writeExcepinfo(pexcepinfo, message);
         ret = DISP_E_EXCEPTION;
     }
     catch(...)
     {
-        OUString message= OUSTR("InterfaceOleWrapper_Impl::Invoke : \n"
-                                "Unexpected exception");
+        OUString message= "InterfaceOleWrapper_Impl::Invoke : \n" +
+                          "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
          ret = DISP_E_EXCEPTION;
     }
@@ -955,7 +955,7 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
         Exception excTarget;
         org >>= excTarget;
         OUString message=
-            org.getValueType().getTypeName() + OUSTR(": ") + excTarget.Message;
+            org.getValueType().getTypeName() + ": " + excTarget.Message;
         writeExcepinfo(pexcepinfo, message);
         ret = DISP_E_EXCEPTION;
     }
@@ -971,15 +971,15 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
     }
     catch(const Exception & e)
     {
-        OUString message= OUSTR("InterfaceOleWrapper_Impl::doInvoke : \n") +
+        OUString message= "InterfaceOleWrapper_Impl::doInvoke : \n" +
                                 e.Message;
         writeExcepinfo(pexcepinfo, message);
         ret = DISP_E_EXCEPTION;
     }
     catch( ... )
      {
-        OUString message= OUSTR("InterfaceOleWrapper_Impl::doInvoke : \n"
-                                "Unexpected exception");
+        OUString message= "InterfaceOleWrapper_Impl::doInvoke : \n" +
+                          "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
          ret = DISP_E_EXCEPTION;
      }
@@ -1011,14 +1011,14 @@ HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * /*pdispparams*/, V
     }
     catch(const Exception& e)
     {
-        OUString message= OUSTR("InterfaceOleWrapper_Impl::doGetProperty : \n") +
+        OUString message= "InterfaceOleWrapper_Impl::doGetProperty : \n" +
                                 e.Message;
         writeExcepinfo(pexcepinfo, message);
     }
     catch( ... )
     {
-        OUString message= OUSTR("InterfaceOleWrapper_Impl::doInvoke : \n"
-                                "Unexpected exception");
+        OUString message= "InterfaceOleWrapper_Impl::doInvoke : \n" +
+                          "Unexpected exception");
         writeExcepinfo(pexcepinfo, message);
          ret = DISP_E_EXCEPTION;
     }
@@ -1151,15 +1151,15 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
             if (getType(arg.bstrVal, type) == false)
             {
                 writeExcepinfo(pexcepinfo,OUString(
-                                   OUSTR("[automation bridge] A UNO type with the name ") +
-                                   OUString(reinterpret_cast<const sal_Unicode*>(arg.bstrVal)) + OUSTR(" does not exist!")));
+                                   "[automation bridge] A UNO type with the name " +
+                                   OUString(reinterpret_cast<const sal_Unicode*>(arg.bstrVal)) + " does not exist!"));
                 return DISP_E_EXCEPTION;
             }
 
             if (createUnoTypeWrapper(arg.bstrVal, pvarResult) == false)
             {
-                writeExcepinfo(pexcepinfo,OUSTR("[automation bridge] InterfaceOleWrapper_Impl::InvokeGeneral\n"
-                                                "Could not initialize UnoTypeWrapper object!"));
+                writeExcepinfo(pexcepinfo, "[automation bridge] InterfaceOleWrapper_Impl::InvokeGeneral\n" +
+                                           "Could not initialize UnoTypeWrapper object!");
                 return DISP_E_EXCEPTION;
             }
         }
@@ -1171,15 +1171,15 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
     }
     catch(const Exception & e)
     {
-        OUString message= OUSTR("InterfaceOleWrapper_Impl::InvokeGeneral : \n") +
+        OUString message= "InterfaceOleWrapper_Impl::InvokeGeneral : \n" +
                                 e.Message;
         writeExcepinfo(pexcepinfo, message);
         ret = DISP_E_EXCEPTION;
     }
     catch( ... )
      {
-        OUString message= OUSTR("InterfaceOleWrapper_Impl::InvokeGeneral : \n"
-                                "Unexpected exception");
+        OUString message= "InterfaceOleWrapper_Impl::InvokeGeneral : \n" +
+                          "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
          ret = DISP_E_EXCEPTION;
      }
@@ -1572,15 +1572,15 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
     }
     catch(const Exception& e)
     {
-        OUString message= OUSTR("UnoObjectWrapperRemoteOpt::Invoke : \n") +
+        OUString message= "UnoObjectWrapperRemoteOpt::Invoke : \n" +
             e.Message;
             writeExcepinfo(pexcepinfo, message);
             ret = DISP_E_EXCEPTION;
     }
     catch(...)
     {
-        OUString message= OUSTR("UnoObjectWrapperRemoteOpt::Invoke : \n"
-                                "Unexpected exception");
+        OUString message= "UnoObjectWrapperRemoteOpt::Invoke : \n" +
+                          "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
         ret = DISP_E_EXCEPTION;
     }

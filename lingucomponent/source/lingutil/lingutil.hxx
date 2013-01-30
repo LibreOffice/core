@@ -30,10 +30,6 @@
 #include <list>
 
 
-#ifndef A2OU
-#  define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
-#endif
-
 #define OU2ENC(rtlOUString, rtlEncoding) \
     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), \
     rtlEncoding, RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr()

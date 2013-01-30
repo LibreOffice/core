@@ -89,7 +89,7 @@ static inline ::System::Object ^ to_cli_constant( Any const & value )
                 value.getValue() ));
     default:
         throw RuntimeException(
-            OUSTR("unexpected constant type ") +
+            "unexpected constant type " +
             value.getValueType().getTypeName(),
             Reference< XInterface >() );
     }
@@ -1030,7 +1030,7 @@ Assembly ^ TypeEmitter::type_resolve(
             // getter
             Emit::MethodBuilder ^ method_builder =
                 type_builder->DefineMethod(
-                    ustring_to_String( OUSTR("get_") +
+                    ustring_to_String( "get_" +
                                        xAttribute->getMemberName() ),
                     c_property_method_attr, attribute_type, parameters );
 
@@ -1049,7 +1049,7 @@ Assembly ^ TypeEmitter::type_resolve(
                 parameters[ 0 ] = attribute_type;
                 method_builder =
                     type_builder->DefineMethod(
-                        ustring_to_String( OUSTR("set_") +
+                        ustring_to_String( "set_" +
                                            xAttribute->getMemberName() ),
                         c_property_method_attr, nullptr, parameters );
                 // define parameter info
@@ -1140,9 +1140,9 @@ Assembly ^ TypeEmitter::type_resolve(
         const OUString sType(entry->m_xType->getName());
         const OUString sMemberName(pseq_member_names[i]);
         if ( ! pseq_members[i].is())
-            throw RuntimeException(OUSTR("Missing type description . Check if you need to " \
-            "specify additional RDBs with the --extra option. Type missing for: ") +  sType +
-            OUSTR("::") + sMemberName,0);
+            throw RuntimeException("Missing type description . Check if you need to " +
+            "specify additional RDBs with the --extra option. Type missing for: " +  sType +
+            "::" + sMemberName,0);
     }
 
     sal_Int32 all_members_length = 0;
@@ -1265,7 +1265,7 @@ Assembly ^ TypeEmitter::type_resolve(
             else
             {
                 throw RuntimeException(
-                    OUSTR("unexpected member type in ") + entry->m_xType->getName(),
+                    "unexpected member type in " + entry->m_xType->getName(),
                     Reference< XInterface >() );
             }
         }
@@ -2153,7 +2153,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
         return nullptr;
     default:
         throw RuntimeException(
-            OUSTR("unexpected type ") + xType->getName(),
+            "unexpected type " + xType->getName(),
             Reference< XInterface >() );
     }
 }
@@ -2287,7 +2287,7 @@ resolveInterfaceTypedef(
         type, UNO_QUERY);
     if (xIndTd.is() == sal_False)
         throw css::uno::Exception(
-            OUSTR("resolveInterfaceTypedef was called with an invalid argument"), 0);
+            "resolveInterfaceTypedef was called with an invalid argument", 0);
 
     return resolveInterfaceTypedef(xIndTd->getReferencedType());
 }

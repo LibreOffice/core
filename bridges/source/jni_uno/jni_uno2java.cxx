@@ -67,7 +67,7 @@ void Bridge::handle_java_exc(
     if (! jo_exc.is())
     {
         throw BridgeRuntimeError(
-            OUSTR("java exception occurred, but no java exception available!?") +
+            "java exception occurred, but no java exception available!?" +
             jni.get_stack_trace() );
     }
 
@@ -547,7 +547,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
 #if OSL_DEBUG_LEVEL > 1
     OString cstr_msg(
         OUStringToOString(
-            OUSTR("freeing binary uno proxy: ") + that->m_oid,
+            "freeing binary uno proxy: " + that->m_oid,
             RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( "%s", cstr_msg.getStr() );
 #endif
@@ -699,8 +699,7 @@ void SAL_CALL UNO_proxy_dispatch(
                       demanded_td.get()->eTypeClass)
                 {
                     throw BridgeRuntimeError(
-                        OUSTR("queryInterface() call demands "
-                              "an INTERFACE type!") );
+                        "queryInterface() call demands an INTERFACE type!" );
                 }
 
                 uno_Interface * pInterface = 0;
@@ -809,7 +808,7 @@ void SAL_CALL UNO_proxy_dispatch(
         default:
         {
             throw BridgeRuntimeError(
-                OUSTR("illegal member type description!") );
+                "illegal member type description!" );
         }
         }
     }
@@ -846,8 +845,7 @@ void SAL_CALL UNO_proxy_dispatch(
     {
         // binary identical struct
         ::com::sun::star::uno::RuntimeException exc(
-            OUSTR("[jni_uno bridge error] attaching current thread "
-                  "to java failed!"),
+            "[jni_uno bridge error] attaching current thread to java failed!",
             ::com::sun::star::uno::Reference<
               ::com::sun::star::uno::XInterface >() );
         ::com::sun::star::uno::Type const & exc_type = ::getCppuType( &exc );

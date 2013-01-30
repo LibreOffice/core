@@ -55,7 +55,7 @@ bool ColorPerPointHelper::hasPointOwnColor(
         if( !xPointState.is() )
             return false;
 
-        return (xPointState->getPropertyState( C2U("Color")) != beans::PropertyState_DEFAULT_VALUE );
+        return (xPointState->getPropertyState( "Color") != beans::PropertyState_DEFAULT_VALUE );
     }
 
     return false;
@@ -69,7 +69,7 @@ bool ColorPerPointHelper::hasPointOwnProperties(
     if( xSeriesProperties.is() )
     {
         uno::Sequence< sal_Int32 > aIndexList;
-        if( xSeriesProperties->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aIndexList )
+        if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aIndexList )
         {
             const sal_Int32 * pBegIt = aIndexList.getConstArray();
             const sal_Int32 * pEndIt = pBegIt + aIndexList.getLength();

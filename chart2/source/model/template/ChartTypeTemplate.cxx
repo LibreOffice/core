@@ -67,7 +67,7 @@ void lcl_applyDefaultStyle(
         Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
         if( xSeriesProp.is() && xColorScheme.is() )
             xSeriesProp->setPropertyValue(
-                C2U("Color"),
+                "Color",
                 uno::makeAny( xColorScheme->getColorByIndex( nIndex )));
     }
 }
@@ -75,7 +75,7 @@ void lcl_applyDefaultStyle(
 void lcl_ensureCorrectLabelPlacement( const Reference< beans::XPropertySet >& xProp, const uno::Sequence < sal_Int32 >& rAvailablePlacements )
 {
     sal_Int32 nLabelPlacement=0;
-    if( xProp.is() && (xProp->getPropertyValue( C2U( "LabelPlacement" ) ) >>= nLabelPlacement) )
+    if( xProp.is() && (xProp->getPropertyValue( "LabelPlacement" ) >>= nLabelPlacement) )
     {
         bool bValid = false;
         for( sal_Int32 nN = 0; nN < rAvailablePlacements.getLength(); nN++ )
@@ -92,7 +92,7 @@ void lcl_ensureCorrectLabelPlacement( const Reference< beans::XPropertySet >& xP
             //otherwise use the first supported one
             if( rAvailablePlacements.getLength() )
                 aNewValue <<=rAvailablePlacements[0];
-            xProp->setPropertyValue( C2U("LabelPlacement"), aNewValue );
+            xProp->setPropertyValue( "LabelPlacement", aNewValue );
         }
     }
 }
@@ -101,10 +101,10 @@ void lcl_resetLabelPlacementIfDefault( const Reference< beans::XPropertySet >& x
 {
 
     sal_Int32 nLabelPlacement=0;
-    if( xProp.is() && (xProp->getPropertyValue( C2U( "LabelPlacement" ) ) >>= nLabelPlacement) )
+    if( xProp.is() && (xProp->getPropertyValue( "LabelPlacement" ) >>= nLabelPlacement) )
     {
         if( nDefaultPlacement == nLabelPlacement )
-            xProp->setPropertyValue( C2U("LabelPlacement"), uno::Any() );
+            xProp->setPropertyValue( "LabelPlacement", uno::Any() );
     }
 }
 
@@ -117,9 +117,9 @@ void lcl_ensureCorrectMissingValueTreatment( const Reference< chart2::XDiagram >
             ::chart::ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
 
         if( aAvailableMissingValueTreatment.getLength() )
-            xDiaProp->setPropertyValue( C2U( "MissingValueTreatment" ), uno::makeAny( aAvailableMissingValueTreatment[0] ) );
+            xDiaProp->setPropertyValue( "MissingValueTreatment", uno::makeAny( aAvailableMissingValueTreatment[0] ) );
         else
-            xDiaProp->setPropertyValue( C2U( "MissingValueTreatment" ), uno::Any() );
+            xDiaProp->setPropertyValue( "MissingValueTreatment", uno::Any() );
     }
 }
 
@@ -152,7 +152,7 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
         // create diagram
         xDia.set(
             GetComponentContext()->getServiceManager()->createInstanceWithContext(
-                C2U( "com.sun.star.chart2.Diagram" ),
+                "com.sun.star.chart2.Diagram",
                 GetComponentContext() ),
             uno::UNO_QUERY_THROW );
 
@@ -221,7 +221,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
             if( aData.Categories.is())
             {
                 aParam.realloc( 1 );
-                aParam[0] = beans::PropertyValue( C2U("HasCategories"), -1, uno::makeAny( true ),
+                aParam[0] = beans::PropertyValue( "HasCategories", -1, uno::makeAny( true ),
                                                   beans::PropertyState_DIRECT_VALUE );
             }
             aData = xInterpreter->interpretDataSource( xSource, aParam, aFlatSeriesSeq );
@@ -404,7 +404,7 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
                 : (eStackMode == StackMode_Z_STACKED )
                 ? chart2::StackingDirection_Z_STACKING
                 : chart2::StackingDirection_NO_STACKING );
-            xSeriesProp->setPropertyValue( C2U("StackingDirection"), aPropValue );
+            xSeriesProp->setPropertyValue( "StackingDirection", aPropValue );
 
             //ensure valid label placement
             {
@@ -413,7 +413,7 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
                 lcl_ensureCorrectLabelPlacement( xSeriesProp, aAvailablePlacements );
 
                 uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+                if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
                     for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                         lcl_ensureCorrectLabelPlacement( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), aAvailablePlacements );
             }
@@ -458,9 +458,9 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
                 if( xAxisProp.is())
                 {
                     // set number format to source format
-                    uno::Any aValue( xAxisProp->getPropertyValue(C2U("NumberFormat")));
+                    uno::Any aValue( xAxisProp->getPropertyValue("NumberFormat"));
                     if( aValue.hasValue())
-                        xAxisProp->setPropertyValue(C2U("NumberFormat"), uno::Any());
+                        xAxisProp->setPropertyValue("NumberFormat", uno::Any());
                 }
             }
         }
@@ -510,7 +510,7 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
                         lcl_resetLabelPlacementIfDefault( xSeriesProp, nDefaultPlacement );
 
                         uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                        if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+                        if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
                             for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                                 lcl_resetLabelPlacementIfDefault( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), nDefaultPlacement );
                     }
@@ -762,9 +762,9 @@ void ChartTypeTemplate::adaptAxes(
                             if( xAxisProp.is())
                             {
                                 // set number format to source format
-                                uno::Any aValue( xAxisProp->getPropertyValue(C2U("NumberFormat")));
+                                uno::Any aValue( xAxisProp->getPropertyValue("NumberFormat"));
                                 if( aValue.hasValue())
-                                    xAxisProp->setPropertyValue(C2U("NumberFormat"), uno::Any());
+                                    xAxisProp->setPropertyValue("NumberFormat", uno::Any());
                             }
                         }
                     }
@@ -915,9 +915,9 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem(
 Sequence< OUString > ChartTypeTemplate::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
-    aServices[ 1 ] = C2U( "com.sun.star.layout.LayoutElement" );
-    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 0 ] = "com.sun.star.chart2.ChartTypeTemplate";
+    aServices[ 1 ] = "com.sun.star.layout.LayoutElement";
+    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 
@@ -930,7 +930,7 @@ Reference< uno::XComponentContext > ChartTypeTemplate::GetComponentContext() con
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( ChartTypeTemplate,
-                             C2U( "com.sun.star.comp.chart.ChartTypeTemplate" ));
+                             OUString("com.sun.star.comp.chart.ChartTypeTemplate") );
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

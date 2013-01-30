@@ -209,12 +209,12 @@ namespace
 
     // ------------------------------------------------------------------------
     OUString lcl_toXSD_bool( const Any& rAny )
-    { bool b = false; rAny >>= b; return b ? OUSTRING("true") : OUSTRING("false"); }
+    { bool b = false; rAny >>= b; return b ? OUString("true") : OUString("false"); }
 
     // ------------------------------------------------------------------------
     Any lcl_toAny_bool( const OUString& rStr )
     {
-        bool b = ( rStr == OUSTRING("true")  ||  rStr == OUSTRING("1") );
+        bool b = ( rStr == "true"  ||  rStr == "1" );
         return makeAny( b );
     }
 

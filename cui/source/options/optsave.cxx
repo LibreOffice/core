@@ -53,8 +53,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace comphelper;
 
-#define C2S(cChar)                  String( RTL_CONSTASCII_USTRINGPARAM(cChar) )
-#define CFG_PAGE_AND_GROUP          C2S("General"), C2S("LoadSave")
+#define CFG_PAGE_AND_GROUP          OUString("General"), OUString("LoadSave")
 // !! you have to update these index, if you changed the list of the child windows !!
 #define WININDEX_AUTOSAVE           ((sal_uInt16)6)
 #define WININDEX_SAVEURL_RELFSYS    ((sal_uInt16)9)
@@ -224,7 +223,7 @@ void SfxSaveTabPage::DetectHiddenControls()
     sal_uInt16 nWinIndex = WININDEX_SAVEURL_RELFSYS;
     SvtOptionsDialogOptions aOptionsDlgOpt;
 
-    if ( aOptionsDlgOpt.IsOptionHidden( C2S("Backup"), CFG_PAGE_AND_GROUP ) )
+    if ( aOptionsDlgOpt.IsOptionHidden( "Backup", CFG_PAGE_AND_GROUP ) )
     {
         // hide controls of "Backup"
         aBackupFI.Hide();
@@ -233,7 +232,7 @@ void SfxSaveTabPage::DetectHiddenControls()
         nDelta = aAutoSaveCB.GetPosPixel().Y() - aBackupCB.GetPosPixel().Y();
     }
 
-    if ( aOptionsDlgOpt.IsOptionHidden( C2S("AutoSave"), CFG_PAGE_AND_GROUP ) )
+    if ( aOptionsDlgOpt.IsOptionHidden( "AutoSave", CFG_PAGE_AND_GROUP ) )
     {
         // hide controls of "AutoSave"
         aAutoSaveCB.Hide();

@@ -107,12 +107,12 @@ void InternalData::createDefaultData()
     m_aRowLabels.clear();
     m_aRowLabels.reserve( m_nRowCount );
     generate_n( back_inserter( m_aRowLabels ), m_nRowCount,
-        lcl_NumberedStringGenerator( aRowName, C2U("%ROWNUMBER") ));
+        lcl_NumberedStringGenerator( aRowName, "%ROWNUMBER" ));
 
     m_aColumnLabels.clear();
     m_aColumnLabels.reserve( m_nColumnCount );
     generate_n( back_inserter( m_aColumnLabels ), m_nColumnCount,
-        lcl_NumberedStringGenerator( aColName, C2U("%COLUMNNUMBER") ));
+        lcl_NumberedStringGenerator( aColName, "%COLUMNNUMBER" ));
 }
 
 bool InternalData::isDefaultData()

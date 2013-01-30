@@ -37,8 +37,6 @@
 
 #include "vm.hxx"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -91,7 +89,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
             // create vm access
             ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
                 ::javaunohelper::create_vm_access( pJEnv, loader ) );
-            OUString java_env_name = OUSTR(UNO_LB_JAVA);
+            OUString java_env_name = UNO_LB_JAVA;
             uno_getEnvironment(
                 (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
 
@@ -185,7 +183,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
             // create vm access
             ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
                 ::javaunohelper::create_vm_access( pJEnv, loader ) );
-            OUString java_env_name = OUSTR(UNO_LB_JAVA);
+            OUString java_env_name = UNO_LB_JAVA;
             uno_getEnvironment(
                 (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
 

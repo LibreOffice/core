@@ -61,19 +61,19 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "CurveStyle" ),
+        Property( "CurveStyle",
                   PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE,
                   ::getCppuType( reinterpret_cast< const chart2::CurveStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "CurveResolution" ),
+        Property( "CurveResolution",
                   PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "SplineOrder" ),
+        Property( "SplineOrder",
                   PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -221,7 +221,7 @@ void SAL_CALL ScatterChartTypeTemplate::applyStyle(
         DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
         DataSeriesHelper::makeLinesThickOrThin( xProp, m_nDim==2 );
         if( m_nDim==3 )
-            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
     }
     catch( const uno::Exception & ex )
     {
@@ -263,7 +263,7 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
                 drawing::LineStyle eLineStyle;
                 Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY_THROW );
 
-                bool bCurrentHasSymbol = (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp) &&
+                bool bCurrentHasSymbol = (xProp->getPropertyValue( "Symbol") >>= aSymbProp) &&
                     (aSymbProp.Style != chart2::SymbolStyle_NONE);
 
                 if( bCurrentHasSymbol )
@@ -275,7 +275,7 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
                     break;
                 }
 
-                bool bCurrentHasLine = (xProp->getPropertyValue( C2U( "LineStyle" )) >>= eLineStyle) &&
+                bool bCurrentHasLine = (xProp->getPropertyValue( "LineStyle") >>= eLineStyle) &&
                     ( eLineStyle != drawing::LineStyle_NONE );
 
                 if( bCurrentHasLine )
@@ -312,9 +312,9 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
             uno::Reference< beans::XPropertySet > xChartTypeProp(
                 DiagramHelper::getChartTypeByIndex( xDiagram, 0 ),
                 uno::UNO_QUERY_THROW );
-            setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE, xChartTypeProp->getPropertyValue(C2U("CurveStyle" )) );
-            setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION, xChartTypeProp->getPropertyValue(C2U("CurveResolution" )) );
-            setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER, xChartTypeProp->getPropertyValue(C2U("SplineOrder" )) );
+            setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE, xChartTypeProp->getPropertyValue("CurveStyle") );
+            setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION, xChartTypeProp->getPropertyValue("CurveResolution") );
+            setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER, xChartTypeProp->getPropertyValue("SplineOrder") );
         }
         catch( const uno::Exception & ex )
         {
@@ -340,11 +340,11 @@ Reference< chart2::XChartType > ScatterChartTypeTemplate::getChartTypeForIndex( 
         if( xCTProp.is())
         {
             xCTProp->setPropertyValue(
-                C2U( "CurveStyle" ), getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
+                "CurveStyle", getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
             xCTProp->setPropertyValue(
-                C2U( "CurveResolution" ), getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+                "CurveResolution", getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
             xCTProp->setPropertyValue(
-                C2U( "SplineOrder" ), getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
+                "SplineOrder", getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
         }
     }
     catch( const uno::Exception & ex )
@@ -374,11 +374,11 @@ Reference< chart2::XChartType > SAL_CALL ScatterChartTypeTemplate::getChartTypeF
         if( xCTProp.is())
         {
             xCTProp->setPropertyValue(
-                C2U( "CurveStyle" ), getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
+                "CurveStyle", getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
             xCTProp->setPropertyValue(
-                C2U( "CurveResolution" ), getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+                "CurveResolution", getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
             xCTProp->setPropertyValue(
-                C2U( "SplineOrder" ), getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
+                "SplineOrder", getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
         }
     }
     catch( const uno::Exception & ex )
@@ -404,7 +404,7 @@ Sequence< OUString > ScatterChartTypeTemplate::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
     return aServices;
 }
 

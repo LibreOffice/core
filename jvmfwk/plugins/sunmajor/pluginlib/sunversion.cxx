@@ -33,8 +33,6 @@ using ::rtl::OString;
 namespace jfw_plugin  { //stoc_javadetect
 
 
-#define OUSTR( x )  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
-
 #if OSL_DEBUG_LEVEL >= 2
 class SelfTest
 {

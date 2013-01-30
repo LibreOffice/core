@@ -46,8 +46,6 @@
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 #define SERVICENAME "com.sun.star.script.InvocationAdapterFactory"
 #define IMPLNAME    "com.sun.star.comp.stoc.InvocationAdapterFactory"
 
@@ -291,7 +289,7 @@ bool AdapterImpl::coerce_assign(
             {
                 // set runtime exception
                 constructRuntimeException(
-                    pOutExc, OUSTR("type coercion failed: ") +
+                    pOutExc, "type coercion failed: " +
                     reinterpret_cast< Exception const * >(
                         p_exc->pData )->Message );
             }
@@ -311,8 +309,8 @@ bool AdapterImpl::coerce_assign(
                 // set runtime exception
                 constructRuntimeException(
                     pOutExc,
-                    OUSTR("type coercion failed: "
-                          "conversion succeeded, but assignment failed?!") );
+                    "type coercion failed: "
+                    "conversion succeeded, but assignment failed?!" );
             }
             return succ;
         }
@@ -362,7 +360,7 @@ static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
         else
         {
             constructRuntimeException(
-                pDest, OUSTR("no exception has been thrown via invocation?!") );
+                pDest, "no exception has been thrown via invocation?!" );
         }
     }
 }
@@ -555,7 +553,7 @@ void AdapterImpl::invoke(
             // set runtime exception
             constructRuntimeException(
                 *ppException,
-                OUSTR("out params lengths differ after invocation call!") );
+                "out params lengths differ after invocation call!" );
         }
         // cleanup invok out params
         ::uno_destructData( &pOutIndices, m_pFactory->m_pShortSeqTD, 0 );
@@ -679,7 +677,7 @@ AdapterImpl::AdapterImpl(
             }
             delete [] m_pInterfaces;
             throw RuntimeException(
-                OUSTR("cannot retrieve all interface type infos!"),
+                "cannot retrieve all interface type infos!",
                 Reference< XInterface >() );
         }
     }
@@ -691,7 +689,7 @@ AdapterImpl::AdapterImpl(
     if (! m_pReceiver)
     {
         throw RuntimeException(
-            OUSTR("cannot map receiver!"), Reference< XInterface >() );
+            "cannot map receiver!", Reference< XInterface >() );
     }
 
     m_pFactory->acquire();
@@ -708,8 +706,8 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
       m_pConvertToTD( 0 )
 {
     // C++/UNO bridge
-    OUString aCppEnvTypeName = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-    OUString aUnoEnvTypeName = OUSTR(UNO_LB_UNO);
+    OUString aCppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+    OUString aUnoEnvTypeName = UNO_LB_UNO;
     m_aUno2Cpp = Mapping( aUnoEnvTypeName, aCppEnvTypeName );
     m_aCpp2Uno = Mapping( aCppEnvTypeName, aUnoEnvTypeName );
     OSL_ENSURE(
@@ -763,7 +761,7 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
         !m_pAnySeqTD || !m_pShortSeqTD)
     {
         throw RuntimeException(
-            OUSTR("missing type descriptions!"), Reference< XInterface >() );
+            "missing type descriptions!", Reference< XInterface >() );
     }
 
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
@@ -888,7 +886,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
         if (! xRet.is())
         {
             throw RuntimeException(
-                OUSTR("mapping UNO to C++ failed!"),
+                "mapping UNO to C++ failed!",
                 Reference< XInterface >() );
         }
     }

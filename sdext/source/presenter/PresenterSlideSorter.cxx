@@ -49,8 +49,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(pString))
-
 namespace {
     const static sal_Int32 gnVerticalGap (10);
     const static sal_Int32 gnVerticalBorder (10);
@@ -316,12 +314,12 @@ PresenterSlideSorter::PresenterSlideSorter (
             mpPresenterController->GetTheme(),
             mxWindow,
             mxCanvas,
-            A2S("SlideSorterCloser"));
+            "SlideSorterCloser");
 
         if (mpPresenterController->GetTheme().get() != NULL)
         {
             PresenterTheme::SharedFontDescriptor pFont (
-                mpPresenterController->GetTheme()->GetFont(A2S("ButtonFont")));
+                mpPresenterController->GetTheme()->GetFont("ButtonFont"));
             if (pFont.get() != NULL)
                 maSeparatorColor = pFont->mnColor;
         }
@@ -1433,12 +1431,12 @@ PresenterSlideSorter::MouseOverManager::MouseOverManager (
         ::boost::shared_ptr<PresenterBitmapContainer> pBitmaps (rpTheme->GetBitmapContainer());
         if (pBitmaps.get() != NULL)
         {
-            mpLeftLabelBitmap = pBitmaps->GetBitmap(A2S("LabelLeft"));
-            mpCenterLabelBitmap = pBitmaps->GetBitmap(A2S("LabelCenter"));
-            mpRightLabelBitmap = pBitmaps->GetBitmap(A2S("LabelRight"));
+            mpLeftLabelBitmap = pBitmaps->GetBitmap("LabelLeft");
+            mpCenterLabelBitmap = pBitmaps->GetBitmap("LabelCenter");
+            mpRightLabelBitmap = pBitmaps->GetBitmap("LabelRight");
         }
 
-        mpFont = rpTheme->GetFont(A2S("SlideSorterLabelFont"));
+        mpFont = rpTheme->GetFont("SlideSorterLabelFont");
     }
 }
 
@@ -1510,10 +1508,10 @@ void PresenterSlideSorter::MouseOverManager::SetSlide (
 
             Reference<beans::XPropertySet> xSlideProperties(mxSlides->getByIndex(nSlideIndex), UNO_QUERY);
             if (xSlideProperties.is())
-                xSlideProperties->getPropertyValue(A2S("LinkDisplayName")) >>= msText;
+                xSlideProperties->getPropertyValue("LinkDisplayName") >>= msText;
 
             if (msText.isEmpty())
-                msText = A2S("Slide ") + OUString::valueOf(nSlideIndex + 1);
+                msText = "Slide " + OUString::valueOf(nSlideIndex + 1);
         }
     }
     else
@@ -1607,7 +1605,7 @@ OUString PresenterSlideSorter::MouseOverManager::GetFittingText (
         double nBestWidth (0);
         OUString sBestCandidate;
         sal_Int32 nLength (round(rsText.getLength() * nMaximalWidth / nTextWidth));
-        const OUString sEllipses (A2S("..."));
+        const OUString sEllipses ("...");
         while (true)
         {
             const OUString sCandidate (rsText.copy(0,nLength) + sEllipses);
@@ -1726,25 +1724,25 @@ PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XHierarchicalNameAccess> xBitmaps (
         aConfiguration.GetConfigurationNode(
-            A2S("PresenterScreenSettings/SlideSorter/CurrentSlideBorderBitmaps")),
+            "PresenterScreenSettings/SlideSorter/CurrentSlideBorderBitmaps"),
         UNO_QUERY);
     if ( ! xBitmaps.is())
         return;
 
     PresenterBitmapContainer aContainer (
-        A2S("PresenterScreenSettings/SlideSorter/CurrentSlideBorderBitmaps"),
+        "PresenterScreenSettings/SlideSorter/CurrentSlideBorderBitmaps",
         ::boost::shared_ptr<PresenterBitmapContainer>(),
         rxContext,
         rxCanvas);
 
-    mpTopLeft = aContainer.GetBitmap(A2S("TopLeft"));
-    mpTop = aContainer.GetBitmap(A2S("Top"));
-    mpTopRight = aContainer.GetBitmap(A2S("TopRight"));
-    mpLeft = aContainer.GetBitmap(A2S("Left"));
-    mpRight = aContainer.GetBitmap(A2S("Right"));
-    mpBottomLeft = aContainer.GetBitmap(A2S("BottomLeft"));
-    mpBottom = aContainer.GetBitmap(A2S("Bottom"));
-    mpBottomRight = aContainer.GetBitmap(A2S("BottomRight"));
+    mpTopLeft = aContainer.GetBitmap("TopLeft");
+    mpTop = aContainer.GetBitmap("Top");
+    mpTopRight = aContainer.GetBitmap("TopRight");
+    mpLeft = aContainer.GetBitmap("Left");
+    mpRight = aContainer.GetBitmap("Right");
+    mpBottomLeft = aContainer.GetBitmap("BottomLeft");
+    mpBottom = aContainer.GetBitmap("Bottom");
+    mpBottomRight = aContainer.GetBitmap("BottomRight");
 
     // Determine size of frame.
     if (mpTop.get() != NULL)

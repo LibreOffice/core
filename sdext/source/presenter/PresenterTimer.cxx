@@ -29,8 +29,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace sdext { namespace presenter {
 
 namespace {
@@ -388,7 +386,7 @@ PresenterClockTimer::PresenterClockTimer (const Reference<XComponentContext>& rx
     if (xFactory.is())
         mxRequestCallback = Reference<awt::XRequestCallback>(
             xFactory->createInstanceWithContext(
-                A2S("com.sun.star.awt.AsyncCallback"),
+                "com.sun.star.awt.AsyncCallback",
                 rxContext),
             UNO_QUERY_THROW);
 }

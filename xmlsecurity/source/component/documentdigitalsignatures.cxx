@@ -53,8 +53,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponentContext >& rxCtx ):
     mxCtx(rxCtx),
     m_sODFVersion(ODFVER_012_TEXT),
@@ -68,7 +66,7 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
 {
     if (aArguments.getLength() > 2)
         throw css::lang::IllegalArgumentException(
-        OUSTR("DocumentDigitalSignatures::initialize requires zero, one, or two arguments"),
+        "DocumentDigitalSignatures::initialize requires zero, one, or two arguments",
         Reference<XInterface>(static_cast<XInitialization*>(this), UNO_QUERY), 0);
 
     m_nArgumentsCount = aArguments.getLength();
@@ -77,13 +75,13 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
     {
         if (!(aArguments[0] >>= m_sODFVersion))
             throw css::lang::IllegalArgumentException(
-                OUSTR("DocumentDigitalSignatures::initialize: the first arguments must be a string"),
+                "DocumentDigitalSignatures::initialize: the first arguments must be a string",
                 Reference<XInterface>(static_cast<XInitialization*>(this), UNO_QUERY), 0);
 
         if (aArguments.getLength() == 2
             && !(aArguments[1] >>= m_bHasDocumentSignature))
             throw css::lang::IllegalArgumentException(
-                OUSTR("DocumentDigitalSignatures::initialize: the second arguments must be a bool"),
+                "DocumentDigitalSignatures::initialize: the second arguments must be a bool",
                 Reference<XInterface>(static_cast<XInitialization*>(this), UNO_QUERY), 1);
 
         //the Version is supported as of ODF1.2, so for and 1.1 document or older we will receive the

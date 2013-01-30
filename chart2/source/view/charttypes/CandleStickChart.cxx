@@ -127,13 +127,13 @@ void CandleStickChart::createShapes()
     {
         if( m_xChartTypeModelProps.is() )
         {
-            m_xChartTypeModelProps->getPropertyValue( C2U( "ShowFirst" ) ) >>= bShowFirst;
+            m_xChartTypeModelProps->getPropertyValue( "ShowFirst" ) >>= bShowFirst;
 
             uno::Reference< beans::XPropertySet > xWhiteDayProps(0);
             uno::Reference< beans::XPropertySet > xBlackDayProps(0);
-            m_xChartTypeModelProps->getPropertyValue( C2U( "Japanese" ) ) >>= bJapaneseStyle;
-            m_xChartTypeModelProps->getPropertyValue( C2U( "WhiteDay" ) ) >>= xWhiteDayProps;
-            m_xChartTypeModelProps->getPropertyValue( C2U( "BlackDay" ) ) >>= xBlackDayProps;
+            m_xChartTypeModelProps->getPropertyValue( "Japanese" ) >>= bJapaneseStyle;
+            m_xChartTypeModelProps->getPropertyValue( "WhiteDay" ) >>= xWhiteDayProps;
+            m_xChartTypeModelProps->getPropertyValue( "BlackDay" ) >>= xBlackDayProps;
 
             tPropertyNameValueMap aWhiteBox_Map;
             PropertyMapper::getValueMap( aWhiteBox_Map, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xWhiteDayProps );
@@ -260,7 +260,7 @@ void CandleStickChart::createShapes()
                             sal_Int32 nLineIndex =0;
                             AddPointToPoly( aPoly, aPosMiddleMinimum, nLineIndex);
                             AddPointToPoly( aPoly, aPosMiddleMaximum, nLineIndex);
-                            xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON ), uno::makeAny( PolyToPointSequence(aPoly) ) );
+                            xProp->setPropertyValue( UNO_NAME_POLYPOLYGON, uno::makeAny( PolyToPointSequence(aPoly) ) );
                         }
                         this->setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                     }
@@ -315,7 +315,7 @@ void CandleStickChart::createShapes()
                             uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
                             if(xProp.is())
                             {
-                                xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON ), uno::makeAny( PolyToPointSequence(aPoly) ) );
+                                xProp->setPropertyValue( UNO_NAME_POLYPOLYGON, uno::makeAny( PolyToPointSequence(aPoly) ) );
                                 this->setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                             }
                         }

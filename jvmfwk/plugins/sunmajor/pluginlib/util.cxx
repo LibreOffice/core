@@ -59,7 +59,6 @@ using ::rtl::OString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OUStringToOString;
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #ifdef WNT
 #define HKEY_SUN_JRE L"Software\\JavaSoft\\Java Runtime Environment"
 #define HKEY_SUN_SDK L"Software\\JavaSoft\\Java Development Kit"
@@ -158,8 +157,8 @@ namespace
             buf.append( getLibraryLocation());
             buf.appendAscii( SAL_CONFIGFILE("/sunjavaplugin") );
             sIni = buf.makeStringAndClear();
-            JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin: "
-                             "Using configuration file \n") +  sIni);
+            JFW_TRACE2("[Java framework] sunjavaplugin: "
+                       "Using configuration file \n" +  sIni);
             return sIni;
         }
    };
@@ -391,14 +390,14 @@ bool getJavaProps(const OUString & exePath,
     //"noaccessibility" to JREProperties.class. This will prevent
     //that it calls   java.awt.Toolkit.getDefaultToolkit();
     OUString sValue;
-    getBootstrap()->getFrom(OUSTR("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY"), sValue);
+    getBootstrap()->getFrom("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY", sValue);
 
     //prepare the arguments
     sal_Int32 cArgs = 3;
     OUString arg1 = OUString(RTL_CONSTASCII_USTRINGPARAM("-classpath"));// + sClassPath;
     OUString arg2 = sClassPath;
     OUString arg3(RTL_CONSTASCII_USTRINGPARAM("JREProperties"));
-    OUString arg4 = OUSTR("noaccessibility");
+    OUString arg4 = "noaccessibility";
     rtl_uString *args[4] = {arg1.pData, arg2.pData, arg3.pData};
 
     // Only add the fourth param if the bootstrap parameter is set.
@@ -415,7 +414,7 @@ bool getJavaProps(const OUString & exePath,
     FileHandleReader stdoutReader(fileOut);
     rtl::Reference< AsynchReader > stderrReader(new AsynchReader(fileErr));
 
-    JFW_TRACE2(OUSTR("\n[Java framework] Executing: ") + exePath + OUSTR(".\n"));
+    JFW_TRACE2("\n[Java framework] Executing: " + exePath + ".\n");
     oslProcessError procErr =
         osl_executeProcess_WithRedirectedIO( exePath.pData,//usExe.pData,
                                              args,
@@ -874,9 +873,10 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                            SameOrSubDirJREMap(sResolvedDir));
     if (entry2 != mapJREs.end())
     {
-        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin" SAL_DLLEXTENSION ": ")
-                   + OUSTR("JRE found again (detected before): ") + sResolvedDir
-                   + OUSTR(".\n"));
+        JFW_TRACE2(OUString("[Java framework] sunjavaplugin")
+                   + SAL_DLLEXTENSION + ": "
+                   + "JRE found again (detected before): " + sResolvedDir
+                   + ".\n");
         return entry2->second;
     }
 
@@ -925,9 +925,10 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             MapIt entry =  mapJREs.find(sFilePath);
             if (entry != mapJREs.end())
             {
-                JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin" SAL_DLLEXTENSION ": ")
-                   + OUSTR("JRE found again (detected before): ") + sFilePath
-                   + OUSTR(".\n"));
+                JFW_TRACE2(OUString("[Java framework] sunjavaplugin")
+                   + SAL_DLLEXTENSION + ": "
+                   + "JRE found again (detected before): " + sFilePath
+                   + ".\n");
 
                 return entry->second;
             }
@@ -1021,9 +1022,10 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         vecBadPaths.push_back(sFilePath);
     else
     {
-        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin" SAL_DLLEXTENSION ": ")
-                   + OUSTR("Found JRE: ") + sResolvedDir
-                   + OUSTR(" \n at: ") + path + OUSTR(".\n"));
+        JFW_TRACE2(OUString("[Java framework] sunjavaplugin")
+                   + SAL_DLLEXTENSION + ": "
+                   + "Found JRE: " + sResolvedDir
+                   + " \n at: " + path + ".\n");
 
         mapJREs.insert(MAPJRE::value_type(sResolvedDir, ret));
         mapJREs.insert(MAPJRE::value_type(sFilePath, ret));
@@ -1135,15 +1137,15 @@ bool makeDriveLetterSame(OUString * fileURL)
 
 void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
-    JFW_TRACE2(OUSTR("\n[Java framework] Checking \"/usr/jdk/latest\"\n"));
-    getJREInfoByPath(OUSTR("file:////usr/jdk/latest"), vecInfos);
+    JFW_TRACE2("\n[Java framework] Checking \"/usr/jdk/latest\"\n");
+    getJREInfoByPath("file:////usr/jdk/latest", vecInfos);
 }
 
 #else
 void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
-    OUString excMessage = OUSTR("[Java framework] sunjavaplugin: "
-                                "Error in function createJavaInfoDirScan in util.cxx.");
+    OUString excMessage = "[Java framework] sunjavaplugin: "
+                          "Error in function createJavaInfoDirScan in util.cxx.";
     int cJavaNames= sizeof(g_arJavaNames) / sizeof(char*);
     boost::scoped_array<OUString> sarJavaNames(new OUString[cJavaNames]);
     OUString *arNames = sarJavaNames.get();
@@ -1193,14 +1195,14 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                     case File::E_NOTDIR:
                         continue;
                     case File::E_ACCES:
-                        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin: "
-                                         "Could not read directory ") + usDir2 +
-                                   OUSTR(" because of missing access rights."));
+                        JFW_TRACE2(OUString("[Java framework] sunjavaplugin: ")
+                                   + "Could not read directory " + usDir2
+                                   + " because of missing access rights.");
                         continue;
                     default:
-                        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin: "
-                                         "Could not read directory ")
-                                   + usDir2 + OUSTR(". Osl file error: ")
+                        JFW_TRACE2(OUString("[Java framework] sunjavaplugin: ")
+                                   + "Could not read directory "
+                                   + usDir2 + ". Osl file error: "
                                    + OUString::valueOf((sal_Int32) openErr));
                         continue;
                     }
@@ -1213,21 +1215,21 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                         File::RC errStatus = File::E_None;
                         if ((errStatus = curIt.getFileStatus(aStatus)) != File::E_None)
                         {
-                            JFW_TRACE2(excMessage + OUSTR("getFileStatus failed with error ")
+                            JFW_TRACE2(excMessage + "getFileStatus failed with error "
                                 + OUString::valueOf((sal_Int32) errStatus));
                             continue;
                         }
-                        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin: "
-                                         "Checking if directory: ") + aStatus.getFileURL() +
-                                   OUSTR(" is a Java. \n"));
+                        JFW_TRACE2(OUString("[Java framework] sunjavaplugin: ") +
+                                   "Checking if directory: " + aStatus.getFileURL() +
+                                   " is a Java. \n");
 
                         getJREInfoByPath(aStatus.getFileURL(),vecInfos);
                     }
 
                     JFW_ENSURE(errNext == File::E_None || errNext == File::E_NOENT,
-                                OUSTR("[Java framework] sunjavaplugin: "
-                                      "Error while iterating over contens of ")
-                                + usDir2 + OUSTR(". Osl file error: ")
+                                OUString("[Java framework] sunjavaplugin: ")
+                                + "Error while iterating over contens of "
+                                + usDir2 + ". Osl file error: "
                                 + OUString::valueOf((sal_Int32) openErr));
                 }
                 else

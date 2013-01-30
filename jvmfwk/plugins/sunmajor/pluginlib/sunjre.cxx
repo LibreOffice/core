@@ -25,7 +25,6 @@
 
 using namespace std;
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 namespace jfw_plugin
 {
 
@@ -92,9 +91,9 @@ int SunInfo::compareVersions(const rtl::OUString& sSecond) const
     rtl::OUString sFirst = getVersion();
 
     SunVersion version1(sFirst);
-    JFW_ENSURE(version1, OUSTR("[Java framework] sunjavaplugin" SAL_DLLEXTENSION
-                               " does not know the version: ")
-               + sFirst + OUSTR(" as valid for a SUN/Oracle JRE."));
+    JFW_ENSURE(version1, "[Java framework] sunjavaplugin" SAL_DLLEXTENSION
+                         " does not know the version: "
+               + sFirst + " as valid for a SUN/Oracle JRE.");
     SunVersion version2(sSecond);
     if ( ! version2)
         throw MalformedVersionException();

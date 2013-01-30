@@ -49,7 +49,6 @@
 #include <rtl/uuid.h>
 
 #define UNO_2_OLE_EXCEPTIONCODE 1001
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::script;

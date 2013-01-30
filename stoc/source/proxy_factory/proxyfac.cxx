@@ -37,7 +37,6 @@
 #include "com/sun/star/reflection/XProxyFactory.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SERVICE_NAME "com.sun.star.reflection.ProxyFactory"
 #define IMPL_NAME "com.sun.star.comp.reflection.ProxyFactory"
 
@@ -54,12 +53,12 @@ static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 static OUString proxyfac_getImplementationName()
 {
-    return OUSTR(IMPL_NAME);
+    return OUString(IMPL_NAME);
 }
 
 static Sequence< OUString > proxyfac_getSupportedServiceNames()
 {
-    OUString str_name = OUSTR(SERVICE_NAME);
+    OUString str_name = SERVICE_NAME;
     return Sequence< OUString >( &str_name, 1 );
 }
 
@@ -402,8 +401,8 @@ Any ProxyRoot::queryAggregation( Type const & rType )
 //______________________________________________________________________________
 FactoryImpl::FactoryImpl()
 {
-    OUString uno = OUSTR(UNO_LB_UNO);
-    OUString cpp = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+    OUString uno = UNO_LB_UNO;
+    OUString cpp = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 
     uno_getEnvironment(
         reinterpret_cast< uno_Environment ** >( &m_uno_env ), uno.pData, 0 );

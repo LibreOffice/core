@@ -40,28 +40,28 @@ void DataSeriesProperties::AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "AttributedDataPoints" ),
+        Property( "AttributedDataPoints",
                   PROP_DATASERIES_ATTRIBUTED_DATA_POINTS,
                   ::getCppuType( reinterpret_cast< const uno::Sequence< sal_Int32 > * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "StackingDirection" ),
+        Property( "StackingDirection",
                   PROP_DATASERIES_STACKING_DIRECTION,
                   ::getCppuType( reinterpret_cast< const chart2::StackingDirection * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "VaryColorsByPoint" ),
+        Property( "VaryColorsByPoint",
                   PROP_DATASERIES_VARY_COLORS_BY_POINT,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "AttachedAxisIndex" ),
+        Property( "AttachedAxisIndex",
                   PROP_DATASERIES_ATTACHED_AXIS_INDEX,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND

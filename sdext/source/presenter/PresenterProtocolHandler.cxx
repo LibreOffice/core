@@ -42,8 +42,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace sdext { namespace presenter {
 
 namespace {
@@ -243,7 +241,7 @@ OUString PresenterProtocolHandler::getImplementationName_static (void)
 
 Sequence<OUString> PresenterProtocolHandler::getSupportedServiceNames_static (void)
 {
-    static const ::rtl::OUString sServiceName(A2S("com.sun.star.frame.ProtocolHandler"));
+    static const ::rtl::OUString sServiceName("com.sun.star.frame.ProtocolHandler");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -375,29 +373,29 @@ Command* PresenterProtocolHandler::Dispatch::CreateCommand (
     if (rsURLPath.getLength() <= 5)
         return NULL;
 
-    if (rsURLPath == A2S("CloseNotes"))
+    if (rsURLPath == "CloseNotes")
         return new SetNotesViewCommand(false, rpPresenterController);
-    if (rsURLPath == A2S("CloseSlideSorter"))
+    if (rsURLPath == "CloseSlideSorter")
         return new SetSlideSorterCommand(false, rpPresenterController);
-    if (rsURLPath == A2S("CloseHelp"))
+    if (rsURLPath == "CloseHelp")
         return new SetHelpViewCommand(false, rpPresenterController);
-    if (rsURLPath == A2S("GrowNotesFont"))
+    if (rsURLPath == "GrowNotesFont")
         return new NotesFontSizeCommand(rpPresenterController, +1);
-    if (rsURLPath == A2S("NextEffect"))
+    if (rsURLPath == "NextEffect")
         return new GotoNextEffectCommand(rpPresenterController);
-    if (rsURLPath == A2S("NextSlide"))
+    if (rsURLPath == "NextSlide")
         return new GotoNextSlideCommand(rpPresenterController);
-    if (rsURLPath == A2S("PrevSlide"))
+    if (rsURLPath == "PrevSlide")
         return new GotoPreviousSlideCommand(rpPresenterController);
-    if (rsURLPath == A2S("SwitchMonitor"))
+    if (rsURLPath == "SwitchMonitor")
         return new SwitchMonitorCommand(rpPresenterController);
-    if (rsURLPath == A2S("ShowNotes"))
+    if (rsURLPath == "ShowNotes")
         return new SetNotesViewCommand(true, rpPresenterController);
-    if (rsURLPath == A2S("ShowSlideSorter"))
+    if (rsURLPath == "ShowSlideSorter")
         return new SetSlideSorterCommand(true, rpPresenterController);
-    if (rsURLPath == A2S("ShowHelp"))
+    if (rsURLPath == "ShowHelp")
         return new SetHelpViewCommand(true, rpPresenterController);
-    if (rsURLPath == A2S("ShrinkNotesFont"))
+    if (rsURLPath == "ShrinkNotesFont")
         return new NotesFontSizeCommand(rpPresenterController, -1);
 
     return NULL;

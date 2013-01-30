@@ -85,100 +85,100 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "Show" ),
+        Property( "Show",
                   PROP_AXIS_SHOW,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "CrossoverPosition" ),
+        Property( "CrossoverPosition",
                   PROP_AXIS_CROSSOVER_POSITION,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisPosition * >(0)),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "CrossoverValue" ),
+        Property( "CrossoverValue",
                   PROP_AXIS_CROSSOVER_VALUE,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "DisplayLabels" ),
+        Property( "DisplayLabels",
                   PROP_AXIS_DISPLAY_LABELS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "NumberFormat" ),
+        Property( "NumberFormat",
                   PROP_AXIS_NUMBER_FORMAT,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "LabelPosition" ),
+        Property( "LabelPosition",
                   PROP_AXIS_LABEL_POSITION,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisLabelPosition * >(0)),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "TextRotation" ),
+        Property( "TextRotation",
                   PROP_AXIS_TEXT_ROTATION,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "TextBreak" ),
+        Property( "TextBreak",
                   PROP_AXIS_TEXT_BREAK,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "TextOverlap" ),
+        Property( "TextOverlap",
                   PROP_AXIS_TEXT_OVERLAP,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "StackCharacters" ),
+        Property( "StackCharacters",
                   PROP_AXIS_TEXT_STACKED,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ArrangeOrder" ),
+        Property( "ArrangeOrder",
                   PROP_AXIS_TEXT_ARRANGE_ORDER,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisArrangeOrderType * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ReferencePageSize" ),
+        Property( "ReferencePageSize",
                   PROP_AXIS_REFERENCE_DIAGRAM_SIZE,
                   ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "MajorTickmarks" ),
+        Property( "MajorTickmarks",
                   PROP_AXIS_MAJOR_TICKMARKS,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "MinorTickmarks" ),
+        Property( "MinorTickmarks",
                   PROP_AXIS_MINOR_TICKMARKS,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "MarkPosition" ),
+        Property( "MarkPosition",
                   PROP_AXIS_MARK_POSITION,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisMarkPosition * >(0)),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -606,8 +606,8 @@ Reference< beans::XPropertySetInfo > SAL_CALL Axis::getPropertySetInfo()
 Sequence< OUString > Axis::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.Axis" );
-    aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 0 ] = "com.sun.star.chart2.Axis";
+    aServices[ 1 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 

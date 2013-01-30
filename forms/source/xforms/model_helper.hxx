@@ -119,7 +119,7 @@ public:
     virtual bool isValid( const T& t ) const
     {
         const com::sun::star::beans::PropertyValue* pValues = t.getConstArray();
-        rtl::OUString sInstance( OUSTRING("Instance") );
+        rtl::OUString sInstance( "Instance" );
         sal_Bool bFound = sal_False;
         for( sal_Int32 i = 0; ( ! bFound ) && ( i < t.getLength() ); i++ )
         {

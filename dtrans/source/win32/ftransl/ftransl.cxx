@@ -39,7 +39,6 @@
 #define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
 #define CPPUTYPE_OUSTR            getCppuType( (const ::rtl::OUString*) 0 )
 #define CPPUTYPE_SALINT32         getCppuType( ( sal_Int32 * ) 0 )
-#define OUSTR( str )              OUString( #str )
 #define EMPTY_OUSTR               OUString()
 
 const rtl::OUString Windows_FormatName ("windows_formatname");
@@ -126,7 +125,7 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
     try
     {
         Reference< XMimeContentTypeFactory > refXMimeCntFactory( m_SrvMgr->createInstance(
-            OUSTR( com.sun.star.datatransfer.MimeContentTypeFactory ) ), UNO_QUERY );
+            "com.sun.star.datatransfer.MimeContentTypeFactory" ), UNO_QUERY );
 
         if ( !refXMimeCntFactory.is( ) )
             throw RuntimeException( );
@@ -140,10 +139,10 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
             // default is CF_TEXT
             aAny <<= static_cast< sal_Int32 >( CF_TEXT );
 
-            if ( refXMimeCntType->hasParameter( OUSTR( charset ) ) )
+            if ( refXMimeCntType->hasParameter( "charset" ) )
             {
                 // but maybe it is unicode text or oem text
-                OUString charset = refXMimeCntType->getParameterValue( OUSTR( charset ) );
+                OUString charset = refXMimeCntType->getParameterValue( "charset" );
                 findStandardFormatIdForCharset( charset, aAny );
             }
         }
@@ -546,7 +545,7 @@ void SAL_CALL CDataFormatTranslator::findDataFlavorForNativeFormatName( const OU
 
 void SAL_CALL CDataFormatTranslator::findStandardFormatIdForCharset( const OUString& aCharset, Any& aAny ) const
 {
-    if ( aCharset.equalsIgnoreAsciiCase( OUSTR( utf-16 ) ) )
+    if ( aCharset.equalsIgnoreAsciiCase( "utf-16" ) )
         aAny <<= static_cast< sal_Int32 >( CF_UNICODETEXT );
     else
     {
@@ -610,7 +609,7 @@ void SAL_CALL CDataFormatTranslator::findStdFormatIdOrNativeFormatNameForFullMed
 
 inline sal_Bool CDataFormatTranslator::isTextPlainMediaType( const OUString& fullMediaType ) const
 {
-    return (fullMediaType.equalsIgnoreAsciiCase(OUSTR(text/plain)));
+    return fullMediaType.equalsIgnoreAsciiCase("text/plain");
 }
 
 // -------------------------------------------------

@@ -39,8 +39,6 @@
 #include <algorithm>
 
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct NamedValue;

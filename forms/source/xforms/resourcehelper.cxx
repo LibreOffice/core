@@ -26,8 +26,6 @@
 
 using rtl::OUString;
 
-#define OUSTRING(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))
-
 namespace xforms
 {
 
@@ -59,11 +57,11 @@ OUString getResource( sal_uInt16 nResourceId,
 
     // use old style String class for search and replace, so we don't have to
     // code this again.
-    String sString( sResource );
-    sString.SearchAndReplaceAll( String(OUSTRING("$1")), String(rInfo1) );
-    sString.SearchAndReplaceAll( String(OUSTRING("$2")), String(rInfo2) );
-    sString.SearchAndReplaceAll( String(OUSTRING("$3")), String(rInfo3) );
-    return OUString( sString );
+    OUString sString( sResource );
+    sString.replaceAll( "$1", rInfo1 );
+    sString.replaceAll( "$2", rInfo2 );
+    sString.replaceAll( "$3", rInfo3 );
+    return sString;
 }
 
 }   // namespace xforms

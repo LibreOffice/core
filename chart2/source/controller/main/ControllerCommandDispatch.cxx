@@ -63,9 +63,9 @@ bool lcl_isStatusBarVisible( const Reference< frame::XController > & xController
         if( xPropSet.is() )
         {
             uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-            xPropSet->getPropertyValue( C2U( "LayoutManager" ) ) >>= xLayoutManager;
+            xPropSet->getPropertyValue( "LayoutManager" ) >>= xLayoutManager;
             if ( xLayoutManager.is() )
-                bIsStatusBarVisible = xLayoutManager->isElementVisible( C2U("private:resource/statusbar/statusbar"));
+                bIsStatusBarVisible = xLayoutManager->isElementVisible( "private:resource/statusbar/statusbar" );
         }
     }
     return bIsStatusBarVisible;
@@ -290,7 +290,7 @@ void ControllerState::update(
                     uno::Reference< beans::XPropertySet > xEqProp(
                         ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel ), uno::UNO_QUERY );
                     if( xEqProp.is())
-                        xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient") ) >>= bHasR2Value;
+                        xEqProp->getPropertyValue( "ShowCorrelationCoefficient" ) >>= bHasR2Value;
                 }
                 catch(const uno::RuntimeException& e)
                 {
@@ -540,7 +540,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
         {
             try
             {
-                xProps->getPropertyValue( C2U( "DisableDataTableDialog" ) ) >>= bDisableDataTableDialog;
+                xProps->getPropertyValue(  "DisableDataTableDialog" ) >>= bDisableDataTableDialog;
             }
             catch( const uno::Exception& e )
             {
@@ -550,146 +550,146 @@ void ControllerCommandDispatch::updateCommandAvailability()
     }
 
     // edit commands
-    m_aCommandAvailability[ C2U(".uno:Cut")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsDeleteableObjectSelected;
-    m_aCommandAvailability[ C2U(".uno:Copy")] = bControllerStateIsValid && m_apControllerState->bHasSelectedObject;
-    m_aCommandAvailability[ C2U(".uno:Paste")] = bIsWritable && bHasSuitableClipboardContent;
+    m_aCommandAvailability[ ".uno:Cut" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsDeleteableObjectSelected;
+    m_aCommandAvailability[ ".uno:Copy" ] = bControllerStateIsValid && m_apControllerState->bHasSelectedObject;
+    m_aCommandAvailability[ ".uno:Paste" ] = bIsWritable && bHasSuitableClipboardContent;
 
     // toolbar commands
-    m_aCommandAvailability[ C2U(".uno:ToggleGridHorizontal")] = bIsWritable;
-    m_aCommandArguments[ C2U(".uno:ToggleGridHorizontal")] = uno::makeAny( m_apModelState->bHasMainYGrid );
+    m_aCommandAvailability[ ".uno:ToggleGridHorizontal" ] = bIsWritable;
+    m_aCommandArguments[ ".uno:ToggleGridHorizontal" ] = uno::makeAny( m_apModelState->bHasMainYGrid );
 
-    m_aCommandAvailability[ C2U(".uno:ToggleLegend")] = bIsWritable;
-    m_aCommandArguments[ C2U(".uno:ToggleLegend")] = uno::makeAny( m_apModelState->bHasLegend );
+    m_aCommandAvailability[ ".uno:ToggleLegend" ] = bIsWritable;
+    m_aCommandArguments[ ".uno:ToggleLegend" ] = uno::makeAny( m_apModelState->bHasLegend );
 
-    m_aCommandAvailability[ C2U(".uno:NewArrangement")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:Update")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:DefaultColors")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:BarWidth")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:NumberOfLines")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:ArrangeRow")] =
+    m_aCommandAvailability[ ".uno:NewArrangement" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:Update" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:DefaultColors" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:BarWidth" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:NumberOfLines" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:ArrangeRow" ] =
         bShapeContext || ( bIsWritable && bControllerStateIsValid && ( m_apControllerState->bMayMoveSeriesForward || m_apControllerState->bMayMoveSeriesBackward ) );
 
     // insert objects
-    m_aCommandAvailability[ C2U(".uno:InsertTitles")] = m_aCommandAvailability[ C2U(".uno:InsertMenuTitles")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:InsertLegend")] = m_aCommandAvailability[ C2U(".uno:InsertMenuLegend")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:DeleteLegend")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:InsertMenuDataLabels")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:InsertRemoveAxes")] = m_aCommandAvailability[ C2U(".uno:InsertMenuAxes")] = bIsWritable && m_apModelState->bSupportsAxes;
-    m_aCommandAvailability[ C2U(".uno:InsertMenuGrids")] = bIsWritable && m_apModelState->bSupportsAxes;
-    m_aCommandAvailability[ C2U(".uno:InsertMenuTrendlines")] = bIsWritable && m_apModelState->bSupportsStatistics;
-    m_aCommandAvailability[ C2U(".uno:InsertMenuMeanValues")] = bIsWritable && m_apModelState->bSupportsStatistics;
-    m_aCommandAvailability[ C2U(".uno:InsertMenuXErrorBars")] = bIsWritable && m_apModelState->bSupportsStatistics;
-    m_aCommandAvailability[ C2U(".uno:InsertMenuYErrorBars")] = bIsWritable && m_apModelState->bSupportsStatistics;
-    m_aCommandAvailability[ C2U(".uno:InsertSymbol")] = bIsWritable && m_apControllerState->bIsTextObject;
+    m_aCommandAvailability[ ".uno:InsertTitles" ] = m_aCommandAvailability[ ".uno:InsertMenuTitles" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:InsertLegend" ] = m_aCommandAvailability[ ".uno:InsertMenuLegend" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:DeleteLegend" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:InsertMenuDataLabels" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:InsertRemoveAxes" ] = m_aCommandAvailability[ ".uno:InsertMenuAxes" ] = bIsWritable && m_apModelState->bSupportsAxes;
+    m_aCommandAvailability[ ".uno:InsertMenuGrids" ] = bIsWritable && m_apModelState->bSupportsAxes;
+    m_aCommandAvailability[ ".uno:InsertMenuTrendlines" ] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ ".uno:InsertMenuMeanValues" ] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ ".uno:InsertMenuXErrorBars" ] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ ".uno:InsertMenuYErrorBars" ] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ ".uno:InsertSymbol" ] = bIsWritable && m_apControllerState->bIsTextObject;
 
     // format objects
     bool bFormatObjectAvailable = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsFormateableObjectSelected;
-    m_aCommandAvailability[ C2U(".uno:FormatSelection")] = bFormatObjectAvailable;
-    m_aCommandAvailability[ C2U(".uno:FormatAxis")] = bFormatObjectAvailable;
-    m_aCommandAvailability[ C2U(".uno:FormatTitle")] = bFormatObjectAvailable;
-    m_aCommandAvailability[ C2U(".uno:FormatDataSeries")] = bFormatObjectAvailable;
-    m_aCommandAvailability[ C2U(".uno:FormatDataPoint")] = bFormatObjectAvailable;
-    m_aCommandAvailability[ C2U(".uno:FormatDataLabels")] = bFormatObjectAvailable;
-    m_aCommandAvailability[ C2U(".uno:FormatDataLabel")] = bFormatObjectAvailable;
-    m_aCommandAvailability[ C2U(".uno:FormatXErrorBars")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatXErrorBars;
-    m_aCommandAvailability[ C2U(".uno:FormatYErrorBars")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatYErrorBars;
-    m_aCommandAvailability[ C2U(".uno:FormatMeanValue")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatMeanValue;
-    m_aCommandAvailability[ C2U(".uno:FormatTrendline")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatTrendline;
-    m_aCommandAvailability[ C2U(".uno:FormatTrendlineEquation")] = bFormatObjectAvailable && bControllerStateIsValid && m_apControllerState->bMayFormatTrendlineEquation;
-    m_aCommandAvailability[ C2U(".uno:FormatStockLoss")] = bFormatObjectAvailable;
-    m_aCommandAvailability[ C2U(".uno:FormatStockGain")] = bFormatObjectAvailable;
+    m_aCommandAvailability[ ".uno:FormatSelection" ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ ".uno:FormatAxis" ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ ".uno:FormatTitle" ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ ".uno:FormatDataSeries" ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ ".uno:FormatDataPoint" ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ ".uno:FormatDataLabels" ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ ".uno:FormatDataLabel" ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ ".uno:FormatXErrorBars" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatXErrorBars;
+    m_aCommandAvailability[ ".uno:FormatYErrorBars" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatYErrorBars;
+    m_aCommandAvailability[ ".uno:FormatMeanValue" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatMeanValue;
+    m_aCommandAvailability[ ".uno:FormatTrendline" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatTrendline;
+    m_aCommandAvailability[ ".uno:FormatTrendlineEquation" ] = bFormatObjectAvailable && bControllerStateIsValid && m_apControllerState->bMayFormatTrendlineEquation;
+    m_aCommandAvailability[ ".uno:FormatStockLoss" ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ ".uno:FormatStockGain" ] = bFormatObjectAvailable;
 
-    m_aCommandAvailability[ C2U(".uno:DiagramType")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:Legend")] = bIsWritable && m_apModelState->bHasLegend;
-    m_aCommandAvailability[ C2U(".uno:DiagramWall")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasWall;
-    m_aCommandAvailability[ C2U(".uno:DiagramArea")] = bIsWritable;
+    m_aCommandAvailability[ ".uno:DiagramType" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:Legend" ] = bIsWritable && m_apModelState->bHasLegend;
+    m_aCommandAvailability[ ".uno:DiagramWall" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasWall;
+    m_aCommandAvailability[ ".uno:DiagramArea" ] = bIsWritable;
 
-    m_aCommandAvailability[ C2U(".uno:TransformDialog")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bHasSelectedObject && m_apControllerState->bIsPositionableObject;
+    m_aCommandAvailability[ ".uno:TransformDialog" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bHasSelectedObject && m_apControllerState->bIsPositionableObject;
 
     // 3d commands
-    m_aCommandAvailability[ C2U(".uno:View3D")] = bIsWritable && bModelStateIsValid && m_apModelState->bIsThreeD;
-    m_aCommandAvailability[ C2U(".uno:DiagramFloor")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasFloor;
+    m_aCommandAvailability[ ".uno:View3D" ] = bIsWritable && bModelStateIsValid && m_apModelState->bIsThreeD;
+    m_aCommandAvailability[ ".uno:DiagramFloor" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasFloor;
 
     //some mor format commands with different ui text
-    m_aCommandAvailability[ C2U(".uno:FormatWall")] = m_aCommandAvailability[ C2U(".uno:DiagramWall")];
-    m_aCommandAvailability[ C2U(".uno:FormatFloor")] = m_aCommandAvailability[ C2U(".uno:DiagramFloor")];
-    m_aCommandAvailability[ C2U(".uno:FormatChartArea")] = m_aCommandAvailability[ C2U(".uno:DiagramArea")];
-    m_aCommandAvailability[ C2U(".uno:FormatLegend")] = m_aCommandAvailability[ C2U(".uno:Legend")];
+    m_aCommandAvailability[ ".uno:FormatWall" ] = m_aCommandAvailability[ ".uno:DiagramWall" ];
+    m_aCommandAvailability[ ".uno:FormatFloor" ] = m_aCommandAvailability[ ".uno:DiagramFloor" ];
+    m_aCommandAvailability[ ".uno:FormatChartArea" ] = m_aCommandAvailability[ ".uno:DiagramArea" ];
+    m_aCommandAvailability[ ".uno:FormatLegend" ] = m_aCommandAvailability[ ".uno:Legend" ];
 
     // depending on own data
-    m_aCommandAvailability[ C2U(".uno:DataRanges")] = bIsWritable && bModelStateIsValid && (! m_apModelState->bHasOwnData);
-    m_aCommandAvailability[ C2U(".uno:DiagramData")] = bIsWritable && bModelStateIsValid &&  m_apModelState->bHasOwnData && !bDisableDataTableDialog;
+    m_aCommandAvailability[ ".uno:DataRanges" ] = bIsWritable && bModelStateIsValid && (! m_apModelState->bHasOwnData);
+    m_aCommandAvailability[ ".uno:DiagramData" ] = bIsWritable && bModelStateIsValid &&  m_apModelState->bHasOwnData && !bDisableDataTableDialog;
 
     // titles
-    m_aCommandAvailability[ C2U(".uno:MainTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainTitle;
-    m_aCommandAvailability[ C2U(".uno:SubTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasSubTitle;
-    m_aCommandAvailability[ C2U(".uno:XTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxisTitle;
-    m_aCommandAvailability[ C2U(".uno:YTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasYAxisTitle;
-    m_aCommandAvailability[ C2U(".uno:ZTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasZAxisTitle;
-    m_aCommandAvailability[ C2U(".uno:SecondaryXTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasSecondaryXAxisTitle;
-    m_aCommandAvailability[ C2U(".uno:SecondaryYTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasSecondaryYAxisTitle;
-    m_aCommandAvailability[ C2U(".uno:AllTitles")] = bIsWritable && bModelStateIsValid && m_apModelState->HasAnyTitle();
+    m_aCommandAvailability[ ".uno:MainTitle" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainTitle;
+    m_aCommandAvailability[ ".uno:SubTitle" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasSubTitle;
+    m_aCommandAvailability[ ".uno:XTitle" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxisTitle;
+    m_aCommandAvailability[ ".uno:YTitle" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasYAxisTitle;
+    m_aCommandAvailability[ ".uno:ZTitle" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasZAxisTitle;
+    m_aCommandAvailability[ ".uno:SecondaryXTitle" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasSecondaryXAxisTitle;
+    m_aCommandAvailability[ ".uno:SecondaryYTitle" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasSecondaryYAxisTitle;
+    m_aCommandAvailability[ ".uno:AllTitles" ] = bIsWritable && bModelStateIsValid && m_apModelState->HasAnyTitle();
 
     // text
-    m_aCommandAvailability[ C2U(".uno:ScaleText")] = bIsWritable && bModelStateIsValid ;
-    m_aCommandArguments[ C2U(".uno:ScaleText")] = uno::makeAny( m_apModelState->bHasAutoScaledText );
+    m_aCommandAvailability[ ".uno:ScaleText" ] = bIsWritable && bModelStateIsValid ;
+    m_aCommandArguments[ ".uno:ScaleText" ] = uno::makeAny( m_apModelState->bHasAutoScaledText );
 
     // axes
-    m_aCommandAvailability[ C2U(".uno:DiagramAxisX")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxis;
-    m_aCommandAvailability[ C2U(".uno:DiagramAxisY")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasYAxis;
-    m_aCommandAvailability[ C2U(".uno:DiagramAxisZ")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasZAxis;
-    m_aCommandAvailability[ C2U(".uno:DiagramAxisA")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasAAxis;
-    m_aCommandAvailability[ C2U(".uno:DiagramAxisB")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasBAxis;
-    m_aCommandAvailability[ C2U(".uno:DiagramAxisAll")] = bIsWritable && bModelStateIsValid && m_apModelState->HasAnyAxis();
+    m_aCommandAvailability[ ".uno:DiagramAxisX" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxis;
+    m_aCommandAvailability[ ".uno:DiagramAxisY" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasYAxis;
+    m_aCommandAvailability[ ".uno:DiagramAxisZ" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasZAxis;
+    m_aCommandAvailability[ ".uno:DiagramAxisA" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasAAxis;
+    m_aCommandAvailability[ ".uno:DiagramAxisB" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasBAxis;
+    m_aCommandAvailability[ ".uno:DiagramAxisAll" ] = bIsWritable && bModelStateIsValid && m_apModelState->HasAnyAxis();
 
     // grids
     // note: x and y are swapped in the commands!
-    m_aCommandAvailability[ C2U(".uno:DiagramGridYMain")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainXGrid;
-    m_aCommandAvailability[ C2U(".uno:DiagramGridXMain")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainYGrid;
-    m_aCommandAvailability[ C2U(".uno:DiagramGridZMain")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainZGrid;
-    m_aCommandAvailability[ C2U(".uno:DiagramGridYHelp")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasHelpXGrid;
-    m_aCommandAvailability[ C2U(".uno:DiagramGridXHelp")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasHelpYGrid;
-    m_aCommandAvailability[ C2U(".uno:DiagramGridZHelp")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasHelpZGrid;
-    m_aCommandAvailability[ C2U(".uno:DiagramGridAll")] = bIsWritable && bModelStateIsValid && m_apModelState->HasAnyGrid();
+    m_aCommandAvailability[ ".uno:DiagramGridYMain" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainXGrid;
+    m_aCommandAvailability[ ".uno:DiagramGridXMain" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainYGrid;
+    m_aCommandAvailability[ ".uno:DiagramGridZMain" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainZGrid;
+    m_aCommandAvailability[ ".uno:DiagramGridYHelp" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasHelpXGrid;
+    m_aCommandAvailability[ ".uno:DiagramGridXHelp" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasHelpYGrid;
+    m_aCommandAvailability[ ".uno:DiagramGridZHelp" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasHelpZGrid;
+    m_aCommandAvailability[ ".uno:DiagramGridAll" ] = bIsWritable && bModelStateIsValid && m_apModelState->HasAnyGrid();
 
     // series arrangement
-    m_aCommandAvailability[ C2U(".uno:Forward")] = ( bShapeContext ? isShapeControllerCommandAvailable( C2U( ".uno:Forward" ) ) :
+    m_aCommandAvailability[ ".uno:Forward" ] = ( bShapeContext ? isShapeControllerCommandAvailable( ".uno:Forward" ) :
         ( bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesForward && !bDisableDataTableDialog ) );
-    m_aCommandAvailability[ C2U(".uno:Backward")] = ( bShapeContext ? isShapeControllerCommandAvailable( C2U( ".uno:Backward" ) ) :
+    m_aCommandAvailability[ ".uno:Backward" ] = ( bShapeContext ? isShapeControllerCommandAvailable( ".uno:Backward" ) :
         ( bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesBackward && !bDisableDataTableDialog ) );
 
-    m_aCommandAvailability[ C2U(".uno:InsertDataLabels")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:InsertDataLabel")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:InsertMeanValue")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddMeanValue;
-    m_aCommandAvailability[ C2U(".uno:InsertTrendline")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendline;
-    m_aCommandAvailability[ C2U(".uno:InsertTrendlineEquation")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendlineEquation;
-    m_aCommandAvailability[ C2U(".uno:InsertTrendlineEquationAndR2")] = m_aCommandAvailability[ C2U(".uno:InsertTrendlineEquation")];
-    m_aCommandAvailability[ C2U(".uno:InsertR2Value")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddR2Value;
-    m_aCommandAvailability[ C2U(".uno:DeleteR2Value")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteR2Value;
+    m_aCommandAvailability[ ".uno:InsertDataLabels" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:InsertDataLabel" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:InsertMeanValue" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddMeanValue;
+    m_aCommandAvailability[ ".uno:InsertTrendline" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendline;
+    m_aCommandAvailability[ ".uno:InsertTrendlineEquation" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendlineEquation;
+    m_aCommandAvailability[ ".uno:InsertTrendlineEquationAndR2" ] = m_aCommandAvailability[ ".uno:InsertTrendlineEquation" ];
+    m_aCommandAvailability[ ".uno:InsertR2Value" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddR2Value;
+    m_aCommandAvailability[ ".uno:DeleteR2Value" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteR2Value;
 
-    m_aCommandAvailability[ C2U(".uno:InsertXErrorBars")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddXErrorBars;
-    m_aCommandAvailability[ C2U(".uno:InsertYErrorBars")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddYErrorBars;
+    m_aCommandAvailability[ ".uno:InsertXErrorBars" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddXErrorBars;
+    m_aCommandAvailability[ ".uno:InsertYErrorBars" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddYErrorBars;
 
-    m_aCommandAvailability[ C2U(".uno:DeleteDataLabels")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:DeleteDataLabel") ] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:DeleteTrendline") ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteTrendline;
-    m_aCommandAvailability[ C2U(".uno:DeleteTrendlineEquation") ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteTrendlineEquation;
-    m_aCommandAvailability[ C2U(".uno:DeleteMeanValue") ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteMeanValue;
-    m_aCommandAvailability[ C2U(".uno:DeleteXErrorBars")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteXErrorBars;
-    m_aCommandAvailability[ C2U(".uno:DeleteYErrorBars") ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteYErrorBars;
+    m_aCommandAvailability[ ".uno:DeleteDataLabels" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:DeleteDataLabel" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:DeleteTrendline" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteTrendline;
+    m_aCommandAvailability[ ".uno:DeleteTrendlineEquation" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteTrendlineEquation;
+    m_aCommandAvailability[ ".uno:DeleteMeanValue" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteMeanValue;
+    m_aCommandAvailability[ ".uno:DeleteXErrorBars" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteXErrorBars;
+    m_aCommandAvailability[ ".uno:DeleteYErrorBars" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteYErrorBars;
 
-    m_aCommandAvailability[ C2U(".uno:ResetDataPoint") ] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:ResetAllDataPoints") ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:ResetDataPoint" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:ResetAllDataPoints" ] = bIsWritable;
 
-    m_aCommandAvailability[ C2U(".uno:InsertAxis") ] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:DeleteAxis") ] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:InsertAxisTitle") ] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:FormatMajorGrid") ] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:InsertMajorGrid") ] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:DeleteMajorGrid") ] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:FormatMinorGrid") ] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:InsertMinorGrid") ] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:DeleteMinorGrid") ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:InsertAxis" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:DeleteAxis" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:InsertAxisTitle" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:FormatMajorGrid" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:InsertMajorGrid" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:DeleteMajorGrid" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:FormatMinorGrid" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:InsertMinorGrid" ] = bIsWritable;
+    m_aCommandAvailability[ ".uno:DeleteMinorGrid" ] = bIsWritable;
 }
 
 bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
@@ -721,7 +721,7 @@ void ControllerCommandDispatch::fireStatusEvent(
     {
         uno::Any aArg;
         aArg <<= m_xController;
-        fireStatusEventForURL( C2U(".uno:ChartElementSelector"), aArg, true, xSingleListener );
+        fireStatusEventForURL( ".uno:ChartElementSelector", aArg, true, xSingleListener );
     }
 
     if( rURL.isEmpty() )
@@ -736,7 +736,7 @@ void ControllerCommandDispatch::fireStatusEvent(
     if( rURL.isEmpty() || rURL == ".uno:StatusBarVisible" )
     {
         bool bIsStatusBarVisible( lcl_isStatusBarVisible( m_xController ));
-        fireStatusEventForURL( C2U(".uno:StatusBarVisible"), uno::makeAny( bIsStatusBarVisible ), true, xSingleListener );
+        fireStatusEventForURL( ".uno:StatusBarVisible", uno::makeAny( bIsStatusBarVisible ), true, xSingleListener );
     }
 }
 

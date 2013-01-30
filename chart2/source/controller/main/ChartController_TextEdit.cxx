@@ -79,7 +79,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     //#i77362 change notification for changes on additional shapes are missing
     uno::Reference< beans::XPropertySet > xChartViewProps( m_xChartView, uno::UNO_QUERY );
     if( xChartViewProps.is() )
-        xChartViewProps->setPropertyValue( C2U("SdrViewIsInEditMode"), uno::makeAny(sal_True) );
+        xChartViewProps->setPropertyValue( "SdrViewIsInEditMode", uno::makeAny(sal_True) );
 
     sal_Bool bEdit = m_pDrawViewWrapper->SdrBeginTextEdit( pTextObj
                     , m_pDrawViewWrapper->GetPageView()
@@ -119,7 +119,7 @@ bool ChartController::EndTextEdit()
     //#i77362 change notification for changes on additional shapes are missing
     uno::Reference< beans::XPropertySet > xChartViewProps( m_xChartView, uno::UNO_QUERY );
     if( xChartViewProps.is() )
-        xChartViewProps->setPropertyValue( C2U("SdrViewIsInEditMode"), uno::makeAny(sal_False) );
+        xChartViewProps->setPropertyValue( "SdrViewIsInEditMode", uno::makeAny(sal_False) );
 
     SdrObject* pTextObject = m_pDrawViewWrapper->getTextEditObject();
     if(!pTextObject)

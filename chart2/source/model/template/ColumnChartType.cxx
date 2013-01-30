@@ -43,14 +43,14 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "OverlapSequence" ),
+        Property( "OverlapSequence",
                   PROP_BARCHARTTYPE_OVERLAP_SEQUENCE,
                   ::getCppuType( reinterpret_cast< const Sequence< sal_Int32 > * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "GapwidthSequence" ),
+        Property( "GapwidthSequence",
                   PROP_BARCHARTTYPE_GAPWIDTH_SEQUENCE,
                   ::getCppuType( reinterpret_cast< const Sequence< sal_Int32 > * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -182,13 +182,13 @@ uno::Sequence< ::rtl::OUString > ColumnChartType::getSupportedServiceNames_Stati
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_COLUMN;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartType" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
     return aServices;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( ColumnChartType,
-                             C2U( "com.sun.star.comp.chart.ColumnChartType" ));
+                             OUString("com.sun.star.comp.chart.ColumnChartType") );
 
 } //  namespace chart
 

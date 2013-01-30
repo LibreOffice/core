@@ -34,8 +34,6 @@ struct _oslMutexImpl
 
 #using <system.dll>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 namespace cli_uno
 {
 System::Type^ loadCliType(System::String ^ typeName);
@@ -133,7 +131,7 @@ inline ::std::auto_ptr< rtl_mem > rtl_mem::allocate( ::std::size_t bytes )
 {
     void * p = rtl_allocateMemory( bytes );
     if (0 == p)
-        throw BridgeRuntimeError(OUSTR("out of memory!") );
+        throw BridgeRuntimeError("out of memory!" );
     return ::std::auto_ptr< rtl_mem >( (rtl_mem *)p );
 }
 
@@ -161,7 +159,7 @@ inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
     if (0 == m_td)
     {
         throw BridgeRuntimeError(
-            OUSTR("cannot get comprehensive type description for ") +
+            "cannot get comprehensive type description for " +
             *reinterpret_cast< ::rtl::OUString const * >( &td_ref->pTypeName ) );
     }
 }

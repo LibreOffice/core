@@ -561,7 +561,7 @@ bool VCoordinateSystem::getPropertySwapXAndYAxis() const
     sal_Bool bSwapXAndY = false;
     if( xProp.is()) try
     {
-        xProp->getPropertyValue( C2U( "SwapXAndYAxis" ) ) >>= bSwapXAndY;
+        xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
     }
     catch( const uno::Exception& e )
     {

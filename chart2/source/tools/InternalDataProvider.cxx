@@ -714,19 +714,19 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
 {
     Sequence< beans::PropertyValue > aArguments( 4 );
     aArguments[0] = beans::PropertyValue(
-        C2U("CellRangeRepresentation"), -1, uno::makeAny( lcl_aCompleteRange ),
+        "CellRangeRepresentation", -1, uno::makeAny( lcl_aCompleteRange ),
         beans::PropertyState_DIRECT_VALUE );
     aArguments[1] = beans::PropertyValue(
-        C2U("DataRowSource"), -1, uno::makeAny(
+        "DataRowSource", -1, uno::makeAny(
             m_bDataInColumns
             ? ::com::sun::star::chart::ChartDataRowSource_COLUMNS
             : ::com::sun::star::chart::ChartDataRowSource_ROWS ),
         beans::PropertyState_DIRECT_VALUE );
     // internal data always contains labels and categories
     aArguments[2] = beans::PropertyValue(
-        C2U("FirstCellAsLabel"), -1, uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+        "FirstCellAsLabel", -1, uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
     aArguments[3] = beans::PropertyValue(
-        C2U("HasCategories"), -1, uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+        "HasCategories", -1, uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
 
     // #i85913# Sequence Mapping is not needed for internal data, as it is
     // applied to the data when the data source is created.
@@ -1038,7 +1038,7 @@ void SAL_CALL InternalDataProvider::insertDataPointForAllSequences( ::sal_Int32 
     }
 
     // notify change to all affected ranges
-    tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( C2U("0")));
+    tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( "0"));
     tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::valueOf( nMaxRep )));
     ::std::for_each( aBegin, aEnd, lcl_setModified());
 
@@ -1062,7 +1062,7 @@ void SAL_CALL InternalDataProvider::deleteDataPointForAllSequences( ::sal_Int32 
     }
 
     // notify change to all affected ranges
-    tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( C2U("0")));
+    tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( "0"));
     tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::valueOf( nMaxRep )));
     ::std::for_each( aBegin, aEnd, lcl_setModified());
 
@@ -1082,7 +1082,7 @@ void SAL_CALL InternalDataProvider::swapDataPointWithNextOneForAllSequences( ::s
                          : m_aInternalData.getRowCount());
 
     // notify change to all affected ranges
-    tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( C2U("0")));
+    tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( "0"));
     tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::valueOf( nMaxRep )));
     ::std::for_each( aBegin, aEnd, lcl_setModified());
 

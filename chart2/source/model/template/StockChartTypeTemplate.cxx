@@ -68,25 +68,25 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "Volume" ),
+        Property( "Volume",
                   PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "Open" ),
+        Property( "Open",
                   PROP_STOCKCHARTTYPE_TEMPLATE_OPEN,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "LowHigh" ),
+        Property( "LowHigh",
                   PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "Japanese" ),
+        Property( "Japanese",
                   PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
@@ -246,12 +246,12 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
 
         Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY );
         if( xProp.is() )
-            xProp->setPropertyValue( C2U("AttachedAxisIndex"), uno::makeAny( nNewAxisIndex ) );
+            xProp->setPropertyValue( "AttachedAxisIndex", uno::makeAny( nNewAxisIndex ) );
 
         if( bHasVolume && nChartTypeIndex==0 )
         {
             //switch lines off for volume bars
-            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
         }
         else
         {
@@ -259,9 +259,9 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
             if( xProp.is() )
             {
                 drawing::LineStyle eStyle = drawing::LineStyle_NONE;
-                xProp->getPropertyValue( C2U("LineStyle") ) >>= eStyle;
+                xProp->getPropertyValue( "LineStyle" ) >>= eStyle;
                 if( eStyle == drawing::LineStyle_NONE )
-                    xProp->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_SOLID ));
+                    xProp->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_SOLID ));
             }
         }
 
@@ -286,7 +286,7 @@ void SAL_CALL StockChartTypeTemplate::resetStyles(
         {
             Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY );
             if( xProp.is() )
-                xProp->setPropertyValue( C2U("AttachedAxisIndex"), uno::makeAny( sal_Int32(0) ) );
+                xProp->setPropertyValue( "AttachedAxisIndex", uno::makeAny( sal_Int32(0) ) );
         }
     }
 
@@ -374,9 +374,9 @@ void StockChartTypeTemplate::createChartTypes(
         Reference< beans::XPropertySet > xCTProp( xCT, uno::UNO_QUERY );
         if( xCTProp.is())
         {
-            xCTProp->setPropertyValue( C2U("Japanese"), uno::makeAny( bJapaneseStyle ));
-            xCTProp->setPropertyValue( C2U("ShowFirst"), uno::makeAny( bShowFirst ));
-            xCTProp->setPropertyValue( C2U("ShowHighLow"), uno::makeAny( bShowHighLow ));
+            xCTProp->setPropertyValue( "Japanese", uno::makeAny( bJapaneseStyle ));
+            xCTProp->setPropertyValue( "ShowFirst", uno::makeAny( bShowFirst ));
+            xCTProp->setPropertyValue( "ShowHighLow", uno::makeAny( bShowHighLow ));
         }
 
         if( aSeriesSeq.getLength() > nSeriesIndex &&
@@ -475,12 +475,12 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
             if( xCTProp.is())
             {
                 sal_Bool bJapaneseProp = sal_False;
-                xCTProp->getPropertyValue( C2U("Japanese")) >>= bJapaneseProp;
+                xCTProp->getPropertyValue( "Japanese") >>= bJapaneseProp;
                 bResult = bResult && ( bHasJapaneseStyle == bJapaneseProp );
 
                 // in old chart japanese == showFirst
                 sal_Bool bShowFirstProp = sal_False;
-                xCTProp->getPropertyValue( C2U("ShowFirst")) >>= bShowFirstProp;
+                xCTProp->getPropertyValue( "ShowFirst") >>= bShowFirstProp;
                 bResult = bResult && ( bHasOpenValue == bShowFirstProp );
             }
         }
@@ -530,7 +530,7 @@ Sequence< OUString > StockChartTypeTemplate::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
     return aServices;
 }
 

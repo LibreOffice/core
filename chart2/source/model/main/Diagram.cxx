@@ -80,88 +80,88 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "RelativePosition" ),
+        Property( "RelativePosition",
                   PROP_DIAGRAM_REL_POS,
                   ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "RelativeSize" ),
+        Property( "RelativeSize",
                   PROP_DIAGRAM_REL_SIZE,
                   ::getCppuType( reinterpret_cast< const chart2::RelativeSize * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "PosSizeExcludeAxes" ),
+        Property( "PosSizeExcludeAxes",
                   PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "SortByXValues" ),
+        Property( "SortByXValues",
                   PROP_DIAGRAM_SORT_BY_X_VALUES,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U("ConnectBars"),
+        Property( "ConnectBars",
                   PROP_DIAGRAM_CONNECT_BARS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U("GroupBarsPerAxis"),
+        Property( "GroupBarsPerAxis",
                   PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U("IncludeHiddenCells"),
+        Property( "IncludeHiddenCells",
                   PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "StartingAngle" ),
+        Property( "StartingAngle",
                   PROP_DIAGRAM_STARTING_ANGLE,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0) ),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U("RightAngledAxes"),
+        Property( "RightAngledAxes",
                   PROP_DIAGRAM_RIGHT_ANGLED_AXES,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U("Perspective"),
+        Property( "Perspective",
                   PROP_DIAGRAM_PERSPECTIVE,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U("RotationHorizontal"),
+        Property( "RotationHorizontal",
                   PROP_DIAGRAM_ROTATION_HORIZONTAL,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U("RotationVertical"),
+        Property( "RotationVertical",
                   PROP_DIAGRAM_ROTATION_VERTICAL,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "MissingValueTreatment" ),
+        Property( "MissingValueTreatment",
                   PROP_DIAGRAM_MISSING_VALUE_TREATMENT,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -425,11 +425,11 @@ void SAL_CALL Diagram::setDiagramData(
         throw (uno::RuntimeException)
 {
     uno::Reference< lang::XMultiServiceFactory > xChartTypeManager( m_xContext->getServiceManager()->createInstanceWithContext(
-            C2U( "com.sun.star.chart2.ChartTypeManager" ), m_xContext ), uno::UNO_QUERY );
+            "com.sun.star.chart2.ChartTypeManager", m_xContext ), uno::UNO_QUERY );
     DiagramHelper::tTemplateWithServiceName aTemplateAndService = DiagramHelper::getTemplateForDiagram( this, xChartTypeManager );
     uno::Reference< chart2::XChartTypeTemplate > xTemplate( aTemplateAndService.first );
     if( !xTemplate.is() )
-        xTemplate.set( xChartTypeManager->createInstance( C2U("com.sun.star.chart2.template.Column") ), uno::UNO_QUERY );
+        xTemplate.set( xChartTypeManager->createInstance( "com.sun.star.chart2.template.Column" ), uno::UNO_QUERY );
     if(!xTemplate.is())
         return;
     xTemplate->changeDiagramData( this, xDataSource, aArguments );
@@ -514,7 +514,7 @@ void SAL_CALL Diagram::removeCoordinateSystem(
               aIt( ::std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys ));
         if( aIt == m_aCoordSystems.end())
             throw container::NoSuchElementException(
-                C2U( "The given coordinate-system is no element of the container" ),
+                "The given coordinate-system is no element of the container",
                 static_cast< uno::XWeak * >( this ));
         m_aCoordSystems.erase( aIt );
     }
@@ -619,9 +619,9 @@ Sequence< OUString > Diagram::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
 
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.Diagram" );
-    aServices[ 1 ] = C2U( "com.sun.star.layout.LayoutElement" );
-    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 0 ] = "com.sun.star.chart2.Diagram";
+    aServices[ 1 ] = "com.sun.star.layout.LayoutElement";
+    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 
@@ -716,7 +716,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( Diagram, Diagram_Base, ::property::OPropertySe
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( Diagram,
-                             C2U( "com.sun.star.comp.chart2.Diagram" ));
+                             OUString("com.sun.star.comp.chart2.Diagram") );
 
 } //  namespace chart
 
