@@ -363,7 +363,7 @@ void ScExportTest::testMiscRowHeightExport()
             int nExpectedHeight = aTestValues[ index ].pData[ i ].nExpectedHeight;
             for ( ; nRow <= nEndRow; ++nRow )
             {
-                printf("\t checking row %d for height %d\n", nRow, nExpectedHeight );
+                printf("\t checking row %ld for height %d\n", nRow, nExpectedHeight );
                 int nHeight = sc::TwipsToHMM( pDoc->GetRowHeight(nRow, nTab, false) );
                 CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);
             }
