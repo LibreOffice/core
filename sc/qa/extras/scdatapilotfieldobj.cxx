@@ -48,6 +48,8 @@ public:
     virtual void tearDown();
     virtual uno::Reference< uno::XInterface > init();
 
+    ScDataPilotFieldObj();
+
     CPPUNIT_TEST_SUITE(ScDataPilotFieldObj);
     CPPUNIT_TEST(testSortInfo);
     CPPUNIT_TEST(testLayoutInfo);
@@ -65,6 +67,11 @@ private:
 
 sal_Int32 ScDataPilotFieldObj::nTest = 0;
 uno::Reference< lang::XComponent > ScDataPilotFieldObj::mxComponent;
+
+ScDataPilotFieldObj::ScDataPilotFieldObj()
+     : UnoApiTest("/sc/qa/extras/testdocuments")
+{
+}
 
 uno::Reference< uno::XInterface > ScDataPilotFieldObj::init()
 {

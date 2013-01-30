@@ -59,8 +59,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 # CppunitTest_sc_annotationshapeobj \
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
-    JunitTest_sc_complex \
-    JunitTest_sc_unoapi \
     CppunitTest_sc_outlineobj \
     CppunitTest_sc_annotationobj \
     CppunitTest_sc_annotationsobj \

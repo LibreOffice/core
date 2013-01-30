@@ -65,6 +65,7 @@ sal_Int32 ScOutlineObj::nTest = 0;
 uno::Reference< lang::XComponent > ScOutlineObj::mxComponent;
 
 ScOutlineObj::ScOutlineObj()
+       : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 

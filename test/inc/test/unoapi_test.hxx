@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
-    UnoApiTest();
+    UnoApiTest(const OUString& path);
 
     void createFileURL(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
 

@@ -82,7 +82,10 @@ uno::Reference<lang::XComponent> ScEditFieldObj_Header::mxComponent;
 uno::Reference<text::XTextField> ScEditFieldObj_Header::mxField;
 uno::Reference<text::XText> ScEditFieldObj_Header::mxRightText;
 
-ScEditFieldObj_Header::ScEditFieldObj_Header() {}
+ScEditFieldObj_Header::ScEditFieldObj_Header()
+     : UnoApiTest("/sc/qa/extras/testdocuments")
+{
+}
 
 void ScEditFieldObj_Header::setUp()
 {

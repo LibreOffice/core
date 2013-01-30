@@ -47,6 +47,8 @@ public:
 
     virtual uno::Reference< uno::XInterface > init( const rtl::OUString& rDBName );
 
+    ScDatabaseRangeObj();
+
     CPPUNIT_TEST_SUITE(ScDatabaseRangeObj);
     CPPUNIT_TEST(testDataArea);
     CPPUNIT_TEST(testGetSortDescriptor);
@@ -63,10 +65,15 @@ private:
 sal_Int32 ScDatabaseRangeObj::nTest = 0;
 uno::Reference< lang::XComponent > ScDatabaseRangeObj::mxComponent;
 
+ScDatabaseRangeObj::ScDatabaseRangeObj()
+      : UnoApiTest("/sc/qa/extras/testdocuments")
+{
+}
+
 uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const rtl::OUString& rDBName )
 {
     rtl::OUString aFileURL;
-    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScDatabaseRangeObj.ods")), aFileURL);
+    createFileURL("ScDatabaseRangeObj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(mxComponent.is());

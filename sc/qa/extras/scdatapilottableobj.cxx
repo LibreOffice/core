@@ -83,15 +83,15 @@ sal_Int32 ScDataPilotTableObj::nTest = 0;
 uno::Reference< lang::XComponent > ScDataPilotTableObj::mxComponent;
 
 ScDataPilotTableObj::ScDataPilotTableObj()
-    : apitest::XNamed(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilotTable")))
+    : UnoApiTest("/sc/qa/extras/testdocuments"),
+      apitest::XNamed(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilotTable")))
 {
-
 }
 
 uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
 {
     rtl::OUString aFileURL;
-    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScDataPilotTableObj.ods")), aFileURL);
+    createFileURL("ScDataPilotTableObj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(mxComponent.is());
