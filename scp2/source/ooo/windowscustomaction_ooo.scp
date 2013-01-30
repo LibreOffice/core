@@ -198,16 +198,6 @@ WindowsCustomAction gid_Customaction_CopyEditionData
     Assignment2 = ("AdminExecuteSequence", "", "end");
 End
 
-WindowsCustomAction gid_Customaction_CopyExtensionData
-    Name = "CopyExtensionData";
-    Typ = "1";
-    Source = "shlxtmsi.dll";
-    Target = "copyExtensionData";
-    Inbinarytable = 1;
-    Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
-    Assignment2 = ("AdminExecuteSequence", "", "end");
-End
-
 WindowsCustomAction gid_Customaction_Patch_Regpatchactivex_Patchactivexcontrol
 	Name = "PatchActiveXControl";
 	Typ = "65";

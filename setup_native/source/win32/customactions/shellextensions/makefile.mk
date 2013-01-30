@@ -47,8 +47,7 @@ SLOFILES = \
     $(SLO)$/dotnetcheck.obj \
     $(SLO)$/copyeditiondata.obj \
     $(SLO)$/vistaspecial.obj \
-    $(SLO)$/checkpatches.obj \
-    $(SLO)$/copyextensiondata.obj
+    $(SLO)$/checkpatches.obj
 
 STDSHL += \
     $(ADVAPI32LIB)\
