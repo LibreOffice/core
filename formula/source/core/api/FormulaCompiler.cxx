@@ -1076,6 +1076,9 @@ void FormulaCompiler::Factor()
                     pArr->SetRecalcModeOnLoad();
                     pArr->SetHyperLink(true);
                 break;
+                case ocDde:
+                    pArr->SetRecalcModeOnLoad();
+                break;
                 default:
                     ;   // nothing
             }
