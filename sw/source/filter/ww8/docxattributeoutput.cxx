@@ -70,6 +70,8 @@
 #include <editeng/editobj.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflgrit.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 
 #include <anchoredobject.hxx>
@@ -315,6 +317,12 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
         m_pSerializer->startElementNS( XML_v, XML_rect, xFlyAttrList );
         lcl_TextFrameShadow(m_pSerializer, rFrmFmt);
+        if (m_pFlyFillAttrList)
+        {
+            XFastAttributeListRef xFlyFillAttrList(m_pFlyFillAttrList);
+            m_pFlyFillAttrList = NULL;
+            m_pSerializer->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
+        }
         m_pSerializer->startElementNS( XML_v, XML_textbox, FSEND );
         m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
         m_rExport.WriteText( );
@@ -4547,12 +4555,37 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     }
 }
 
-void DocxAttributeOutput::FormatFillStyle( const XFillStyleItem& /*rFillStyle*/ )
+void DocxAttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
 {
+    m_oFillStyle.reset(rFillStyle.GetValue());
 }
 
-void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& /*rFillGradient*/ )
+void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGradient )
 {
+    if (*m_oFillStyle == XFILL_GRADIENT)
+    {
+        m_pFlyFillAttrList = m_pSerializer->createAttrList();
+        m_pFlyFillAttrList->add(XML_type, "gradient");
+
+        const XGradient& rGradient = rFillGradient.GetGradientValue();
+        OString sStartColor = impl_ConvertColor(rGradient.GetStartColor());
+        m_pFlyFillAttrList->add(XML_color2, "#" + sStartColor);
+        OString sEndColor = impl_ConvertColor(rGradient.GetEndColor());
+        m_pFlyAttrList->add(XML_fillcolor, "#" + sEndColor);
+
+        switch (rGradient.GetGradientStyle())
+        {
+            case XGRAD_LINEAR: break;
+            case XGRAD_AXIAL:
+                m_pFlyFillAttrList->add(XML_focus, "50%");
+                break;
+            case XGRAD_RADIAL: break;
+            case XGRAD_ELLIPTICAL: break;
+            case XGRAD_SQUARE: break;
+            case XGRAD_RECT: break;
+        }
+    }
+    m_oFillStyle.reset();
 }
 
 void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
@@ -4743,6 +4776,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pParagraphSpacingAttrList( NULL ),
       m_pHyperlinkAttrList( NULL ),
       m_pFlyAttrList( NULL ),
+      m_pFlyFillAttrList( NULL ),
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
       m_footnoteEndnoteRefTag( 0 ),

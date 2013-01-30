@@ -28,11 +28,13 @@
 #include <sax/fshelper.hxx>
 #include <sax/fastattribs.hxx>
 #include <vcl/vclenum.hxx>
+#include <svx/xenum.hxx>
 
 #include <fldbas.hxx>
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>
+#include <boost/optional.hpp>
 #include <oox/export/vmlexport.hxx>
 
 class SwGrfNode;
@@ -558,6 +560,7 @@ private:
     ::sax_fastparser::FastAttributeList *m_pParagraphSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pHyperlinkAttrList;
     ::sax_fastparser::FastAttributeList *m_pFlyAttrList;
+    ::sax_fastparser::FastAttributeList *m_pFlyFillAttrList;
 
     ::docx::FootnotesList *m_pFootnotesList;
     ::docx::FootnotesList *m_pEndnotesList;
@@ -629,6 +632,8 @@ private:
 
     // Remember first cell (used for for default borders/margins) of each table
     std::vector<ww8::WW8TableNodeInfoInner::Pointer_t> tableFirstCells;
+
+    boost::optional<XFillStyle> m_oFillStyle;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
