@@ -199,8 +199,6 @@ public:
 private:
     /** Returns read/write access to a pivot cache field. */
     XclExpPCField*      GetFieldAcc( sal_uInt16 nFieldIdx );
-    /** Returns read/write access to a pivot cache field. */
-    XclExpPCField*      GetFieldAcc( const rtl::OUString& rFieldName );
 
     /** Adds all pivot cache fields. */
     void                AddFields( const ScDPObject& rDPObj );

@@ -100,8 +100,6 @@ public:
 
     void deselectOverlayItems ();
 
-    void deselectOverlayItem (const sal_uInt16 nItemId);
-
     void sortOverlayItems (const boost::function<bool (const ThumbnailViewItem*,
                                                        const ThumbnailViewItem*) > &func);
 

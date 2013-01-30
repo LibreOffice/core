@@ -71,7 +71,6 @@ namespace writerfilter {
             bool erase(Id nKeyword);
             /// Removes elements, which are already in the reference set.
             void deduplicate(RTFSprms& rReference);
-            void swap(RTFSprms& rOther);
             size_t size() const { return m_pSprms->size(); }
             bool empty() const { return m_pSprms->empty(); }
             Entry_t& back() { return m_pSprms->back(); }

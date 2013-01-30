@@ -217,22 +217,6 @@ void BiffDrawingObjectContainer::convertAndInsert( BiffDrawingBase& rDrawing, co
 
 // ============================================================================
 
-BiffDrawingObjectBase::BiffDrawingObjectBase( const WorksheetHelper& rHelper ) :
-    WorksheetHelper( rHelper ),
-    maAnchor( rHelper ),
-    mnObjId( BIFF_OBJ_INVALID_ID ),
-    mnObjType( BIFF_OBJTYPE_UNKNOWN ),
-    mbHidden( false ),
-    mbVisible( true ),
-    mbPrintable( true ),
-    mbAreaObj( false ),
-    mbSimpleMacro( true ),
-    mbProcessShape( true ),
-    mbInsertShape( true ),
-    mbCustomDff( false )
-{
-}
-
 BiffDrawingObjectBase::~BiffDrawingObjectBase()
 {
 }

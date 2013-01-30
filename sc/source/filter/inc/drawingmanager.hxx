@@ -99,7 +99,6 @@ private:
 class BiffDrawingObjectBase : public WorksheetHelper
 {
 public:
-    explicit            BiffDrawingObjectBase( const WorksheetHelper& rHelper );
     virtual             ~BiffDrawingObjectBase();
 
     /** Sets whether this is an area object (then its width and height must be greater than 0). */
