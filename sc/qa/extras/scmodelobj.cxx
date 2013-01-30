@@ -22,6 +22,8 @@ public:
 
     virtual uno::Reference< uno::XInterface > init();
 
+    ScModelObj();
+
     CPPUNIT_TEST_SUITE(ScModelObj);
     CPPUNIT_TEST(testSeekGoal);
     CPPUNIT_TEST_SUITE_END();
@@ -31,6 +33,10 @@ private:
     static uno::Reference< lang::XComponent > mxComponent;
 };
 
+ScModelObj::ScModelObj()
+     : UnoApiTest("/sc/qa/extras/testdocuments")
+{
+}
 
 sal_Int32 ScModelObj::nTest = 0;
 uno::Reference< lang::XComponent > ScModelObj::mxComponent;

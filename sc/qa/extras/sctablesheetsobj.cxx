@@ -74,6 +74,7 @@ uno::Reference< lang::XComponent > ScTableSheetsObj::mxComponent;
 sal_Int32 ScTableSheetsObj::nTest = 0;
 
 ScTableSheetsObj::ScTableSheetsObj():
+            UnoApiTest("/sc/qa/extras/testdocuments"),
             apitest::XNameContainer(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet2")))
 {
 

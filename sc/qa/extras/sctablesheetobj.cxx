@@ -64,10 +64,10 @@ sal_Int32 ScTableSheetObj::nTest = 0;
 uno::Reference< lang::XComponent > ScTableSheetObj::mxComponent;
 
 ScTableSheetObj::ScTableSheetObj():
+    UnoApiTest("/sc/qa/extras/testdocuments"),
     apitest::XSearchable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test")), 4),
     apitest::XReplaceable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("searchReplaceString")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("replaceReplaceString")))
 {
-
 }
 
 

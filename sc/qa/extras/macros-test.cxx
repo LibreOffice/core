@@ -29,7 +29,7 @@
  */
 
 #include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 #include <unotest/macros_test.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
@@ -53,12 +53,10 @@ using namespace ::com::sun::star::uno;
 
 /* Implementation of Macros test */
 
-class ScMacrosTest : public test::BootstrapFixture, public unotest::MacrosTest
+class ScMacrosTest : public UnoApiTest
 {
 public:
     ScMacrosTest();
-
-    void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
 
     virtual void setUp();
     virtual void tearDown();
@@ -77,25 +75,13 @@ public:
 
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
-    rtl::OUString m_aBaseString;
 };
-
-
-void ScMacrosTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
-{
-    rtl::OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
-    rtl::OUStringBuffer aBuffer( getSrcRootURL() );
-    aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
-    aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
-    rFilePath = aBuffer.makeStringAndClear();
-}
 
 void ScMacrosTest::testStarBasic()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("StarBasic."));
-    rtl::OUString aFileExtension("ods");
+    const OUString aFileNameBase("StarBasic.ods");
     rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
+    createFileURL(aFileNameBase, aFileName);
     std::cout << "StarBasic test" << std::endl;
     uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
 
@@ -136,11 +122,10 @@ void ScMacrosTest::testVba()
         }
     };
 
-    rtl::OUString aFileExtension("xls");
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
         rtl::OUString aFileName;
-        createFileURL(testInfo[i].sFileBaseName, aFileExtension, aFileName);
+        createFileURL(testInfo[i].sFileBaseName + "xls", aFileName);
         uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
         rtl::OUString sMsg( "Failed to load " + aFileName );
         CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
@@ -164,7 +149,7 @@ void ScMacrosTest::testVba()
 }
 
 ScMacrosTest::ScMacrosTest()
-      : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data"))
+      : UnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
