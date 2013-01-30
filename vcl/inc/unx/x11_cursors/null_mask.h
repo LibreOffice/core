@@ -22,4 +22,4 @@
 
 #define nullmask_width 4
 #define nullmask_height 4
-static char nullmask_bits[] = { 0x00, 0x00 };
+static const unsigned char nullmask_bits[] = { 0x00, 0x00 };

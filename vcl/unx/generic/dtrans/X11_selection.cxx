@@ -434,34 +434,12 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
 
             if( m_aWindow )
             {
+#define createCursorFromXPM(name) createCursor((const char*)name##curs##_bits, (const char*)name##mask##_bits, name##curs_width, name##curs_height, name##curs_x_hot, name##curs_y_hot );
                 // initialize default cursors
-                m_aMoveCursor = createCursor( movedata_curs_bits,
-                                              movedata_mask_bits,
-                                              movedata_curs_width,
-                                              movedata_curs_height,
-                                              movedata_curs_x_hot,
-                                              movedata_curs_y_hot );
-                m_aCopyCursor = createCursor( copydata_curs_bits,
-                                              copydata_mask_bits,
-                                              copydata_curs_width,
-                                              copydata_curs_height,
-                                              copydata_curs_x_hot,
-                                              copydata_curs_y_hot );
-                m_aLinkCursor = createCursor( linkdata_curs_bits,
-                                              linkdata_mask_bits,
-                                              linkdata_curs_width,
-                                              linkdata_curs_height,
-                                              linkdata_curs_x_hot,
-                                              linkdata_curs_y_hot );
-                m_aNoneCursor = createCursor( nodrop_curs_bits,
-                                              nodrop_mask_bits,
-                                              nodrop_curs_width,
-                                              nodrop_curs_height,
-                                              nodrop_curs_x_hot,
-                                              nodrop_curs_y_hot );
-
-
-
+                m_aMoveCursor = createCursorFromXPM( movedata_);
+                m_aCopyCursor = createCursorFromXPM( copydata_);
+                m_aLinkCursor = createCursorFromXPM( linkdata_);
+                m_aNoneCursor = createCursorFromXPM( nodrop_);
 
                 // just interested in SelectionClear/Notify/Request and PropertyChange
                 XSelectInput( m_pDisplay, m_aWindow, PropertyChangeMask );

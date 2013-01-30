@@ -24,4 +24,4 @@
 #define nullcurs_height 4
 #define nullcurs_x_hot 2
 #define nullcurs_y_hot 2
-static char nullcurs_bits[] = { 0x00, 0x00 };
+static const unsigned char nullcurs_bits[] = { 0x00, 0x00 };
