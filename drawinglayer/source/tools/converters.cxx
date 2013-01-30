@@ -19,10 +19,10 @@
 
 #include <drawinglayer/tools/converters.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <vcl/virdev.hxx>
 
 #ifdef DBG_UTIL
@@ -36,7 +36,7 @@ namespace drawinglayer
 {
     namespace tools
     {
-        BitmapEx DRAWINGLAYER_DLLPUBLIC convertToBitmapEx(
+        BitmapEx convertToBitmapEx(
             const drawinglayer::primitive2d::Primitive2DSequence& rSeq,
             const geometry::ViewInformation2D& rViewInformation2D,
             sal_uInt32 nDiscreteWidth,
@@ -81,42 +81,48 @@ namespace drawinglayer
                 maContent.SetBackground(Wallpaper(Color(COL_WHITE)));
                 maContent.Erase();
 
-                // create processor
-                processor2d::VclPixelProcessor2D aContentProcessor(aViewInformation2D, maContent);
+                // create pixel processor
+                processor2d::BaseProcessor2D* pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(
+                    maContent,
+                    aViewInformation2D);
 
-                // render content
-                aContentProcessor.process(aSequence);
+                if(pContentProcessor)
+                {
+                    // render content
+                    pContentProcessor->process(aSequence);
 
-                // get content
-                maContent.EnableMapMode(false);
-                const Bitmap aContent(maContent.GetBitmap(aEmptyPoint, aSizePixel));
+                    // get content
+                    maContent.EnableMapMode(false);
+                    const Bitmap aContent(maContent.GetBitmap(aEmptyPoint, aSizePixel));
 
-                // prepare for mask creation
-                maContent.SetMapMode(aMapModePixel);
-                maContent.SetAntialiasing(true);
+                    // prepare for mask creation
+                    maContent.SetMapMode(aMapModePixel);
+                    maContent.SetAntialiasing(true);
 
-                // set alpha to all white (fully transparent)
-                maContent.Erase();
+                    // set alpha to all white (fully transparent)
+                    maContent.Erase();
 
-                // embed primitives to paint them black
-                const primitive2d::Primitive2DReference xRef(
-                    new primitive2d::ModifiedColorPrimitive2D(
-                        aSequence,
-                        basegfx::BColorModifier(
-                            basegfx::BColor(0.0, 0.0, 0.0),
-                            0.5,
-                            basegfx::BCOLORMODIFYMODE_REPLACE)));
-                const primitive2d::Primitive2DSequence xSeq(&xRef, 1);
+                    // embed primitives to paint them black
+                    const primitive2d::Primitive2DReference xRef(
+                        new primitive2d::ModifiedColorPrimitive2D(
+                            aSequence,
+                            basegfx::BColorModifier(
+                                basegfx::BColor(0.0, 0.0, 0.0),
+                                0.5,
+                                basegfx::BCOLORMODIFYMODE_REPLACE)));
+                    const primitive2d::Primitive2DSequence xSeq(&xRef, 1);
 
-                // render
-                aContentProcessor.process(xSeq);
+                    // render
+                    pContentProcessor->process(xSeq);
+                    delete pContentProcessor;
 
-                // get alpha cahannel from vdev
-                maContent.EnableMapMode(false);
-                const AlphaMask aAlphaMask(maContent.GetBitmap(aEmptyPoint, aSizePixel));
+                    // get alpha cahannel from vdev
+                    maContent.EnableMapMode(false);
+                    const AlphaMask aAlphaMask(maContent.GetBitmap(aEmptyPoint, aSizePixel));
 
-                // create BitmapEx result
-                aRetval = BitmapEx(aContent, aAlphaMask);
+                    // create BitmapEx result
+                    aRetval = BitmapEx(aContent, aAlphaMask);
+                }
             }
 
 #ifdef DBG_UTIL

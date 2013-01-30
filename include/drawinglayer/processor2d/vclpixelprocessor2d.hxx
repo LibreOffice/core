@@ -37,7 +37,7 @@ namespace drawinglayer
             all feeded primitives to a VCL Window. It is the currently used renderer
             for all VCL editing output from the DrawingLayer.
          */
-        class DRAWINGLAYER_DLLPUBLIC VclPixelProcessor2D : public VclProcessor2D
+        class VclPixelProcessor2D : public VclProcessor2D
         {
         private:
         protected:

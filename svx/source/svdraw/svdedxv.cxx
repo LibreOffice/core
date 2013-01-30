@@ -59,8 +59,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrundomanager.hxx>
 #include <svx/sdr/overlay/overlaytools.hxx>
-#include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -343,8 +342,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
     {
         // completely reworked to use primitives; this ensures same look and functionality
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-
-        drawinglayer::processor2d::BaseProcessor2D* pProcessor = drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
+        drawinglayer::processor2d::BaseProcessor2D* pProcessor = drawinglayer::processor2d::createProcessor2DFromOutputDevice(
             rTargetDevice,
             aViewInformation2D);
 

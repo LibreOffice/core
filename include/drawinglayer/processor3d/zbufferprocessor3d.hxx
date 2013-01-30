@@ -58,7 +58,7 @@ namespace drawinglayer
             raster bitmap using a Z-Buffer based approach. It is able to supersample and to handle
             transparent content.
          */
-        class DRAWINGLAYER_DLLPUBLIC ZBufferProcessor3D : public DefaultProcessor3D
+        class ZBufferProcessor3D : public DefaultProcessor3D
         {
         private:
             /// the raster target, a Z-Buffer

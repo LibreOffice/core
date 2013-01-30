@@ -66,7 +66,7 @@ namespace drawinglayer
             This processor is the base class for VCL-Based processors. It has no
             processBasePrimitive2D implementation and thus is not usable directly.
          */
-        class DRAWINGLAYER_DLLPUBLIC VclProcessor2D : public BaseProcessor2D
+        class VclProcessor2D : public BaseProcessor2D
         {
         protected:
             // the destination OutDev

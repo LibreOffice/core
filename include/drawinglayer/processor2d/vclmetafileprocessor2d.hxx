@@ -69,7 +69,7 @@ namespace drawinglayer
             and the extra-data added to it (which can be seen mostly as 'extensions'
             or simply as 'hacks').
          */
-        class DRAWINGLAYER_DLLPUBLIC VclMetafileProcessor2D : public VclProcessor2D
+        class VclMetafileProcessor2D : public VclProcessor2D
         {
         private:
             /// local helper(s)

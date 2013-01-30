@@ -64,16 +64,14 @@
 #include <accessibilityoptions.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
-
 #include <svtools/embedhlp.hxx>
 #include <svx/charthelper.hxx>
 #include <dview.hxx> // #i99665#
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 
 using namespace com::sun::star;
 
@@ -762,7 +760,7 @@ bool paintUsingPrimitivesHelper(
 
             // get a primitive processor for rendering
             drawinglayer::processor2d::BaseProcessor2D* pProcessor2D =
-                drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
+                drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                                                 rOutputDevice, aViewInformation2D);
 
             if(pProcessor2D)
