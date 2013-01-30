@@ -71,18 +71,16 @@ public class PresentationActivity extends SherlockFragmentActivity {
 
         //((FrameLayout) findViewById(R.id.framelayout)).addView(mLayout);
         setContentView(R.layout.activity_presentation);
-        if (savedInstanceState == null) {
 
-            mPresentationFragment = new PresentationFragment();
+        mPresentationFragment = new PresentationFragment();
 
-            FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-            FragmentTransaction fragmentTransaction = fragmentManager
-                            .beginTransaction();
-            fragmentTransaction.add(R.id.presentation_interceptor,
-                            mPresentationFragment, "fragment_presentation");
-            fragmentTransaction.commit();
-        }
+        FragmentTransaction fragmentTransaction = fragmentManager
+            .beginTransaction();
+        fragmentTransaction.add(R.id.presentation_interceptor,
+                                mPresentationFragment, "fragment_presentation");
+        fragmentTransaction.commit();
         mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
     }
 
