@@ -10,6 +10,10 @@
 #include <densebplustree.hxx>
 
 #include <cassert>
+#include <cstdio>
+#include <vector>
+
+using namespace std;
 
 /** The tree node order
 
@@ -26,7 +30,7 @@ static const int sOrder = 7;
 It has to be able to act as an internal node, as well as the leaf node.
 */
 template < class Key, class Value >
-struct DenseBPlusTreeNode
+struct DBPTreeNode
 {
     /// The number of children / data entries.
     int m_nUsed;
@@ -49,21 +53,75 @@ struct DenseBPlusTreeNode
 
     union {
         /// Internal node, contains only pointers to other nodes
-        DenseBPlusTreeNode m_pChildren[ sOrder ];
+        DBPTreeNode* m_pChildren[ sOrder ];
 
         /// Leaf node, contains data.
         Value m_pValues[ sOrder ];
     };
 
     /// Pointer to the next node (valid only for the leaf nodes).
-    DenseBPlusTreeNode *m_pNext;
+    DBPTreeNode *m_pNext;
 
-    DenseBPlusTreeNode() : m_nUsed( 0 ), m_bIsInternal( false ), m_pNext( NULL ) {}
+    DBPTreeNode() : m_nUsed( 0 ), m_bIsInternal( false ), m_pNext( NULL ) {}
+
+    /// Insert the value (for leaf nodes only).
+    void insert( int nWhere, const Value& rValue )
+    {
+        assert( !m_bIsInternal );
+        assert( nWhere <= m_nUsed );
+        assert( nWhere < sOrder );
+
+        for ( int i = m_nUsed; i > nWhere; --i )
+            m_pValues[ i ] = m_pValues[ i - 1 ];
+
+        m_pValues[ nWhere ] = rValue;
+        ++m_nUsed;
+    }
+
+    /** Split node, and make the original one smaller.
+
+        @return relative key shift of the node.
+    */
+    int copyFromSplitNode( DBPTreeNode *pNode )
+    {
+        assert( pNode->m_nUsed == sOrder );
+
+        const int offset = sOrder / 2;
+        int nKeyShift = 0;
+
+        m_bIsInternal = pNode->m_bIsInternal;
+        if ( m_bIsInternal )
+        {
+            for ( int i = 0; i < sOrder - offset; ++i )
+                m_pChildren[ i ] = pNode->m_pChildren[ i + offset ];
+
+            // we have to 'relativize' the keys
+            nKeyShift = pNode->m_pKeys[ offset - 1 ];
+            for ( int i = 0; i < sOrder - offset - 1; ++i )
+                m_pKeys[ i ] = pNode->m_pKeys[ i + offset ] - nKeyShift;
+        }
+        else
+        {
+            for ( int i = 0; i < sOrder - offset; ++i )
+                m_pValues[ i ] = pNode->m_pValues[ i + offset ];
+
+            nKeyShift = offset;
+
+            m_pNext = pNode->m_pNext;
+            pNode->m_pNext = this;
+        }
+
+        m_nUsed = sOrder - offset;
+        pNode->m_nUsed = offset;
+
+        return nKeyShift;
+    }
 };
 
 template < class Key, class Value >
 DenseBPlusTree< Key, Value >::DenseBPlusTree()
-    : m_pRoot( new TreeNode )
+    : m_pRoot( new DBPTreeNode< Key, Value > ),
+      m_nCount( 0 )
 {
 }
 
@@ -74,15 +132,35 @@ DenseBPlusTree< Key, Value >::~DenseBPlusTree()
 }
 
 template < class Key, class Value >
-Key DenseBPlusTree< Key, Value >::Count() const
-{
-    // TODO
-}
-
-template < class Key, class Value >
 void DenseBPlusTree< Key, Value >::Insert( const Value& rValue, Key nPos )
 {
-    // TODO
+    stack< NodeWithIndex > aParents;
+    NodeWithIndex aLeaf = findLeaf( nPos, &aParents );
+
+    if ( aLeaf.pNode->m_nUsed < sOrder - 1 )
+    {
+        // there's still space in the current node
+        aLeaf.pNode->insert( aLeaf.nIndex, rValue );
+        shiftNodes( aParents, 1 );
+    }
+    else
+    {
+        stack< NodeWithIndex > aNewParents;
+        DBPTreeNode< Key, Value > *pNewLeaf = splitNode( aLeaf.pNode, aParents, aNewParents );
+
+        if ( aLeaf.nIndex < aLeaf.pNode->m_nUsed )
+        {
+            aLeaf.pNode->insert( aLeaf.nIndex, rValue );
+            shiftNodes( aParents, 1 );
+        }
+        else
+        {
+            pNewLeaf->insert( aLeaf.nIndex - pNewLeaf->m_nUsed, rValue );
+            shiftNodes( aNewParents, 1 );
+        }
+    }
+
+    ++m_nCount;
 }
 
 template < class Key, class Value >
@@ -102,7 +180,7 @@ void DenseBPlusTree< Key, Value >::Replace( Key nPos, const Value& rValue )
 {
     assert( m_pRoot->m_nUsed > 0 );
 
-    NodeWithIndex aLeaf = searchLeaf( nPos, NULL );
+    NodeWithIndex aLeaf = findLeaf( nPos, NULL );
 
     aLeaf.pNode->m_pValues[ aLeaf.nIndex ] = rValue;
 }
@@ -112,7 +190,7 @@ const Value& DenseBPlusTree< Key, Value >::operator[]( Key nPos ) const
 {
     assert( m_pRoot->m_nUsed > 0 );
 
-    NodeWithIndex aLeaf = searchLeaf( nPos, NULL );
+    NodeWithIndex aLeaf = findLeaf( nPos, NULL );
 
     return aLeaf.pNode->m_pValues[ aLeaf.nIndex ];
 }
@@ -130,12 +208,40 @@ void DenseBPlusTree< Key, Value >::ForEach( Key nStart, Key nEnd, FnForEach fn, 
 }
 
 template < class Key, class Value >
-typename DenseBPlusTree< Key, Value >::NodeWithIndex DenseBPlusTree< Key, Value >::searchLeaf( Key nPos, std::stack< NodeWithIndex > *pParents )
+void DenseBPlusTree< Key, Value >::dump() const
 {
-    if ( m_pRoot->m_nUsed == 0 )
-        return NodeWithIndex( m_pRoot, -1 );
+    vector< DBPTreeNode< Key, Value >* > aLifo;
+    aLifo.push_back( m_pRoot );
 
-    TreeNode *pNode = m_pRoot;
+    while ( !aLifo.empty() )
+    {
+        DBPTreeNode< Key, Value > *pNode = aLifo.front();
+        aLifo.erase( aLifo.begin() );
+
+        if ( pNode->m_bIsInternal )
+        {
+            printf( "internal node: %p\nchildren: ", pNode );
+            for ( int i = 0; i < pNode->m_nUsed; ++i )
+            {
+                printf( "%p, ", pNode->m_pChildren[ i ] );
+                aLifo.push_back( pNode->m_pChildren[ i ] );
+            }
+            printf( "\n\n" );
+        }
+        else
+        {
+            printf( "leaf node: %p\nvalues: ", pNode );
+            for ( int i = 0; i < pNode->m_nUsed; ++i )
+                printf( "%d, ", pNode->m_pValues[ i ] );
+            printf( "\n\n" );
+        }
+    }
+}
+
+template < class Key, class Value >
+typename DenseBPlusTree< Key, Value >::NodeWithIndex DenseBPlusTree< Key, Value >::findLeaf( Key nPos, std::stack< NodeWithIndex > *pParents )
+{
+    DBPTreeNode< Key, Value > *pNode = m_pRoot;
 
     // recursion is nice for the alg. description, but for implementation, we
     // want to unwind it
@@ -150,15 +256,91 @@ typename DenseBPlusTree< Key, Value >::NodeWithIndex DenseBPlusTree< Key, Value 
             nPos -= pNode->m_pKeys[ i - 1 ];
 
         if ( pParents )
-            pParents->push_back( NodeWithIndex( pNode, i ) );
+            pParents->push( NodeWithIndex( pNode, i ) );
 
         pNode = pNode->m_pChildren[ i ];
     }
 
-    // now we have the leaf node, check that we are not out of bounds
-    assert( nPos < pNode->m_nUsed );
-
     return NodeWithIndex( pNode, nPos );
+}
+
+template < class Key, class Value >
+void DenseBPlusTree< Key, Value >::shiftNodes( const std::stack< NodeWithIndex >& rParents, int nHowMuch )
+{
+    stack< NodeWithIndex > aParents( rParents );
+    while ( !aParents.empty() )
+    {
+        NodeWithIndex aNode = aParents.top();
+        aParents.pop();
+
+        for ( int i = aNode.nIndex; i < aNode.pNode->m_nUsed - 1; ++i )
+            aNode.pNode->m_pKeys[ i ] += nHowMuch;
+    }
+}
+
+template < class Key, class Value >
+DBPTreeNode< Key, Value >* DenseBPlusTree< Key, Value >::splitNode( DBPTreeNode< Key, Value > *pNode, const std::stack< NodeWithIndex > &rParents, std::stack< NodeWithIndex > &rNewParents )
+{
+#if 0
+    stack< NodeWithIndex > aParents( rParents );
+
+    struct Split {
+        NodeWithIndex aOriginal;
+        DBPTreeNode< Key, Value >* pNewNode;
+        int nOffset;
+
+        Split( NodeWithIndex &rOrig, DBPTreeNode< Key, Value > *pNew, int nOff ) : aOriginal( rOrig ), pNewNode( pNew ), nOffset( nOff ) {}
+    };
+
+    stack< Split > aSplit;
+
+    while ( pNode->m_nUsed == sOrder )
+    {
+        DBPTreeNode< Key, Value > *pNewNode = new DBPTreeNode< Key, Value >;
+
+        int offset = pNewNode->copyFromSplitNode( pNode );
+
+        NodeWithIndex aNode = aParents.top();
+        aParents.pop();
+
+        aSplit.push( Split( aNode, pNewNode, offset ) );
+
+        pNode = aNode.pNode;
+    }
+
+    // copy the common (not split) part of parents
+    rNewParents = aParents;
+
+    // create new root if we have split even that
+    if ( rNewParents.empty() )
+    {
+        DBPTreeNode< Key, Value > *pNewNode = new DBPTreeNode< Key, Value >;
+        pNewNode->m_bIsInternal = true;
+        pNewNode->m_pChildren[ 0 ] = m_pRoot;
+        pNewNode->m_nUsed = 1;
+
+        m_pRoot = pNewNode;
+        rNewParents.push( NodeWithIndex( m_pRoot, 1 ) );
+    }
+
+    DBPTreeNode< Key, Value > *pNewNode;
+    while ( !aSplit.empty() )
+    {
+        Split aEntry = aSplit.top();
+        pNewNode = aEntry.pNewNode;
+        aSplit.pop();
+
+        // insert the new node to the parent (there is enough space now)
+        rNewParents.top().pNode->insert( rNewParents.top().nIndex, aEntry.nOffset, aSplit.pNewNode );
+
+        if ( aEntry.aOriginal.nIndex < aEntry.aOriginal.pNode->m_nUsed )
+            rNewParents.push( aEntry.aOriginal );
+        else
+            rNewParents.push( NodeWithIndex( pNewNode, aEntry.aOriginal.nIndex - aEntry.nOffset ) );
+    }
+
+    return pNewNode;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

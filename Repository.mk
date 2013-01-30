@@ -96,6 +96,7 @@ $(eval $(call gb_Helper_register_executables,SDK, \
 endif
 
 $(eval $(call gb_Helper_register_executables,OOO, \
+    dbptree-test \
     gnome-open-url.bin \
     spadmin.bin \
 	$(if $(filter $(GUIBASE)$(ENABLE_TDE),unxTRUE), \

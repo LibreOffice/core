@@ -26,7 +26,7 @@
 
 #include <stack>
 
-template < class Key, class Value > struct DenseBPlusTreeNode;
+template < class Key, class Value > struct DBPTreeNode;
 
 /** Dense B+ tree implementation (to replace the original BigPtrArray).
 
@@ -66,7 +66,7 @@ public:
     ~DenseBPlusTree();
 
     /// Number of elements.
-    Key Count() const;
+    Key Count() const { return m_nCount; }
 
     /// Insert entry at the specified position.
     void Insert( const Value& rValue, Key nPos );
@@ -89,27 +89,40 @@ public:
     /// Traverse over the specified range, and call fn on the data.
     void ForEach( Key nStart, Key nEnd, FnForEach fn, void* pArgs = NULL );
 
-private:
-    typedef DenseBPlusTreeNode< Key, Value > TreeNode;
+    /// For debugging.
+    void dump() const;
 
+private:
     /// We need to know the exact path from the root to the leaf, including the indexes for various operations
     struct NodeWithIndex {
-        TreeNode *pNode;
+        DBPTreeNode< Key, Value > *pNode;
         Key nIndex;
 
-        NodeWithIndex( TreeNode *p, Key n ) : pNode( p ), nIndex( n ) {}
+        NodeWithIndex( DBPTreeNode< Key, Value > *p, Key n ) : pNode( p ), nIndex( n ) {}
     };
 
     /// Root of the tree.
-    TreeNode *m_pRoot;
+    DBPTreeNode< Key, Value > *m_pRoot;
+
+    /// Amount of values that we contain.
+    Key m_nCount;
 
     /** Search for the leaf node containing nPos.
 
         @return the leaf node containing nPos
         @param pParents stack of parents of the returned tree node so that we can traverse it back to the root
     */
-    NodeWithIndex searchLeaf( Key nPos, std::stack< NodeWithIndex > *pParents = NULL );
+    NodeWithIndex findLeaf( Key nPos, std::stack< NodeWithIndex > *pParents = NULL );
+
+    /// Shift the right side of the tree to left or right by nHowMuch.
+    void shiftNodes( const std::stack< NodeWithIndex > &rParents, int nHowMuch );
+
+    /// Split the node, and adjust parents accordingly.
+    DBPTreeNode< Key, Value >* splitNode( DBPTreeNode< Key, Value > *pNode, const std::stack< NodeWithIndex > &rParents, std::stack< NodeWithIndex > &rNewParents );
 };
+
+// include the implementation
+#include <densebplustree.cxx>
 
 #endif // SW_BPLUSTREE_HXX
 
