@@ -64,6 +64,7 @@ class ScSheetSourceDesc;
 struct ScPivotField;
 class ScDPTableData;
 class ScDPDimensionSaveData;
+class ScRangeList;
 
 struct ScDPServiceDesc
 {
@@ -389,12 +390,11 @@ public:
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
 
-    bool HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
-
     SheetCaches& GetSheetCaches();
     NameCaches& GetNameCaches();
     DBCaches& GetDBCaches();
 
+    ScRangeList GetAllTableRanges( SCTAB nTab ) const;
     bool IntersectsTableByColumns( SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab ) const;
     bool IntersectsTableByRows( SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab ) const;
     bool HasTable( const ScRange& rRange ) const;

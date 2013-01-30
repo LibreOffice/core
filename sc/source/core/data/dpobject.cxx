@@ -641,6 +641,27 @@ public:
     }
 };
 
+class AccumulateOutputRanges : std::unary_function<ScDPObject, void>
+{
+    ScRangeList maRanges;
+    SCTAB mnTab;
+public:
+    AccumulateOutputRanges(SCTAB nTab) : mnTab(nTab) {}
+    AccumulateOutputRanges(const AccumulateOutputRanges& r) : maRanges(r.maRanges), mnTab(r.mnTab) {}
+
+    void operator() (const ScDPObject& rObj)
+    {
+        const ScRange& rRange = rObj.GetOutRange();
+        if (mnTab != rRange.aStart.Tab())
+            // Not on this sheet.
+            return;
+
+        maRanges.Join(rRange);
+    }
+
+    ScRangeList getRanges() const { return maRanges; }
+};
+
 }
 
 ScDPTableData* ScDPObject::GetTableData()
@@ -3452,17 +3473,6 @@ bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
     return true;
 }
 
-bool ScDPCollection::HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const
-{
-    const ScMergeFlagAttr* pMergeAttr = static_cast<const ScMergeFlagAttr*>(
-            mpDoc->GetAttr(nCol, nRow, nTab, ATTR_MERGE_FLAG));
-
-    if (!pMergeAttr)
-        return false;
-
-    return pMergeAttr->HasDPTable();
-}
-
 ScDPCollection::SheetCaches& ScDPCollection::GetSheetCaches()
 {
     return maSheetCaches;
@@ -3476,6 +3486,11 @@ ScDPCollection::NameCaches& ScDPCollection::GetNameCaches()
 ScDPCollection::DBCaches& ScDPCollection::GetDBCaches()
 {
     return maDBCaches;
+}
+
+ScRangeList ScDPCollection::GetAllTableRanges( SCTAB nTab ) const
+{
+    return std::for_each(maTables.begin(), maTables.end(), AccumulateOutputRanges(nTab)).getRanges();
 }
 
 bool ScDPCollection::IntersectsTableByColumns( SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab ) const

@@ -668,6 +668,11 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
             return false;
         }
     }
+
+    ScRangeList aPivotRanges;
+    if (pDPCollection)
+        aPivotRanges = pDPCollection->GetAllTableRanges(nTab);
+
     ScHorizontalCellIterator aIter( this, nTab,
                                     rSpellRange.aStart.Col(), nRow,
                                     rSpellRange.aEnd.Col(), rSpellRange.aEnd.Row() );
@@ -678,8 +683,8 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
 
     for (; pCell; pCell = aIter.GetNext(nCol, nRow))
     {
-        if (pDPCollection && pDPCollection->HasDPTable(nCol, nRow, nTab))
-            // Don't spell check within datapilot table.
+        if (!aPivotRanges.empty() && aPivotRanges.In(ScAddress(nCol, nRow, nTab)))
+            // Don't spell check within pivot tables.
             continue;
 
         CellType eType = pCell->GetCellType();
