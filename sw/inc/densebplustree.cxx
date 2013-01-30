@@ -21,9 +21,9 @@ This affects how big are the metadata and data nodes; the higher the value,
 the flatter the structure is.  It is necessary to find a good compromise
 between fragmentation (too low value) and not being too flat (too high value).
 
-50 seems to be a good value so far, but we can change it easily.
+50 seems to be a good value so far, but we can change it easily if necessary.
 */
-static const int sOrder = 7;
+static const int sOrder = 50;
 
 /** B+ tree node implementation.
 
@@ -78,6 +78,29 @@ struct DBPTreeNode
         ++m_nUsed;
     }
 
+    /// Insert a new child node (for internal nodes only).
+    void insert( int nWhere, int nOffset, DBPTreeNode* pNewNode )
+    {
+        assert( m_bIsInternal );
+        assert( nWhere <= m_nUsed );
+        assert( nWhere < sOrder );
+        assert( nWhere > 0 ); // we always add the node to the right when splitting
+
+        for ( int i = m_nUsed; i > nWhere; --i )
+        {
+            m_pChildren[ i ] = m_pChildren[ i - 1 ];
+            m_pKeys[ i - 1 ] = m_pKeys[ i - 2 ];
+        }
+
+        m_pChildren[ nWhere ] = pNewNode;
+        if ( nWhere - 2 >= 0 )
+            m_pKeys[ nWhere - 1 ] = m_pKeys[ nWhere - 2 ] + nOffset;
+        else
+            m_pKeys[ nWhere - 1 ] = nOffset;
+
+        ++m_nUsed;
+    }
+
     /** Split node, and make the original one smaller.
 
         @return relative key shift of the node.
@@ -86,35 +109,35 @@ struct DBPTreeNode
     {
         assert( pNode->m_nUsed == sOrder );
 
-        const int offset = sOrder / 2;
-        int nKeyShift = 0;
+        const int sKeep = sOrder / 2;
+        int offset = 0;
 
         m_bIsInternal = pNode->m_bIsInternal;
         if ( m_bIsInternal )
         {
-            for ( int i = 0; i < sOrder - offset; ++i )
-                m_pChildren[ i ] = pNode->m_pChildren[ i + offset ];
+            for ( int i = sKeep; i < pNode->m_nUsed; ++i )
+                m_pChildren[ i - sKeep ] = pNode->m_pChildren[ i ];
 
             // we have to 'relativize' the keys
-            nKeyShift = pNode->m_pKeys[ offset - 1 ];
-            for ( int i = 0; i < sOrder - offset - 1; ++i )
-                m_pKeys[ i ] = pNode->m_pKeys[ i + offset ] - nKeyShift;
+            offset = pNode->m_pKeys[ sKeep - 1 ];
+            for ( int i = sKeep; i < pNode->m_nUsed - 1; ++i )
+                m_pKeys[ i - sKeep ] = pNode->m_pKeys[ i ] - offset;
         }
         else
         {
-            for ( int i = 0; i < sOrder - offset; ++i )
-                m_pValues[ i ] = pNode->m_pValues[ i + offset ];
+            for ( int i = sKeep; i < pNode->m_nUsed; ++i )
+                m_pValues[ i - sKeep ] = pNode->m_pValues[ i ];
 
-            nKeyShift = offset;
+            offset = sKeep;
 
             m_pNext = pNode->m_pNext;
             pNode->m_pNext = this;
         }
 
-        m_nUsed = sOrder - offset;
-        pNode->m_nUsed = offset;
+        m_nUsed = pNode->m_nUsed - sKeep;
+        pNode->m_nUsed = sKeep;
 
-        return nKeyShift;
+        return offset;
     }
 };
 
@@ -137,7 +160,7 @@ void DenseBPlusTree< Key, Value >::Insert( const Value& rValue, Key nPos )
     stack< NodeWithIndex > aParents;
     NodeWithIndex aLeaf = findLeaf( nPos, &aParents );
 
-    if ( aLeaf.pNode->m_nUsed < sOrder - 1 )
+    if ( aLeaf.pNode->m_nUsed < sOrder )
     {
         // there's still space in the current node
         aLeaf.pNode->insert( aLeaf.nIndex, rValue );
@@ -148,16 +171,15 @@ void DenseBPlusTree< Key, Value >::Insert( const Value& rValue, Key nPos )
         stack< NodeWithIndex > aNewParents;
         DBPTreeNode< Key, Value > *pNewLeaf = splitNode( aLeaf.pNode, aParents, aNewParents );
 
-        if ( aLeaf.nIndex < aLeaf.pNode->m_nUsed )
-        {
+        if ( aLeaf.nIndex <= aLeaf.pNode->m_nUsed )
             aLeaf.pNode->insert( aLeaf.nIndex, rValue );
-            shiftNodes( aParents, 1 );
-        }
         else
         {
-            pNewLeaf->insert( aLeaf.nIndex - pNewLeaf->m_nUsed, rValue );
-            shiftNodes( aNewParents, 1 );
+            pNewLeaf->insert( aLeaf.nIndex - aLeaf.pNode->m_nUsed, rValue );
+            ++aNewParents.top().nIndex;
         }
+
+        shiftNodes( aNewParents, 1 );
     }
 
     ++m_nCount;
@@ -210,6 +232,7 @@ void DenseBPlusTree< Key, Value >::ForEach( Key nStart, Key nEnd, FnForEach fn, 
 template < class Key, class Value >
 void DenseBPlusTree< Key, Value >::dump() const
 {
+    printf( "======================\nCount: %d\n", Count() );
     vector< DBPTreeNode< Key, Value >* > aLifo;
     aLifo.push_back( m_pRoot );
 
@@ -220,7 +243,11 @@ void DenseBPlusTree< Key, Value >::dump() const
 
         if ( pNode->m_bIsInternal )
         {
-            printf( "internal node: %p\nchildren: ", pNode );
+            printf( "internal node: %p\nkeys: ", pNode );
+            for ( int i = 0; i < pNode->m_nUsed - 1; ++i )
+                printf( "%d, ", pNode->m_pKeys[ i ] );
+
+            printf( "\nchildren: " );
             for ( int i = 0; i < pNode->m_nUsed; ++i )
             {
                 printf( "%p, ", pNode->m_pChildren[ i ] );
@@ -273,7 +300,7 @@ void DenseBPlusTree< Key, Value >::shiftNodes( const std::stack< NodeWithIndex >
         NodeWithIndex aNode = aParents.top();
         aParents.pop();
 
-        for ( int i = aNode.nIndex; i < aNode.pNode->m_nUsed - 1; ++i )
+        for ( int i = aNode.nIndex + 1; i < aNode.pNode->m_nUsed - 1; ++i )
             aNode.pNode->m_pKeys[ i ] += nHowMuch;
     }
 }
@@ -281,66 +308,58 @@ void DenseBPlusTree< Key, Value >::shiftNodes( const std::stack< NodeWithIndex >
 template < class Key, class Value >
 DBPTreeNode< Key, Value >* DenseBPlusTree< Key, Value >::splitNode( DBPTreeNode< Key, Value > *pNode, const std::stack< NodeWithIndex > &rParents, std::stack< NodeWithIndex > &rNewParents )
 {
-#if 0
-    stack< NodeWithIndex > aParents( rParents );
+    assert( pNode->m_nUsed == sOrder );
 
-    struct Split {
-        NodeWithIndex aOriginal;
-        DBPTreeNode< Key, Value >* pNewNode;
-        int nOffset;
+    DBPTreeNode< Key, Value > *pNewNode = new DBPTreeNode< Key, Value >;
+    int offset = pNewNode->copyFromSplitNode( pNode );
 
-        Split( NodeWithIndex &rOrig, DBPTreeNode< Key, Value > *pNew, int nOff ) : aOriginal( rOrig ), pNewNode( pNew ), nOffset( nOff ) {}
-    };
-
-    stack< Split > aSplit;
-
-    while ( pNode->m_nUsed == sOrder )
+    if ( rParents.empty() )
     {
-        DBPTreeNode< Key, Value > *pNewNode = new DBPTreeNode< Key, Value >;
+        // we have to create a new root
+        DBPTreeNode< Key, Value > *pNewRoot = new DBPTreeNode< Key, Value >;
+        pNewRoot->m_bIsInternal = true;
+        pNewRoot->m_pChildren[ 0 ] = m_pRoot;
+        pNewRoot->m_nUsed = 1;
+        m_pRoot = pNewRoot;
 
-        int offset = pNewNode->copyFromSplitNode( pNode );
+        m_pRoot->insert( 1, offset, pNewNode );
 
-        NodeWithIndex aNode = aParents.top();
+        rNewParents = stack< NodeWithIndex >();
+        rNewParents.push( NodeWithIndex( m_pRoot, 0 ) );
+    }
+    else
+    {
+        stack< NodeWithIndex > aParents( rParents );
+        NodeWithIndex aParent = aParents.top();
         aParents.pop();
 
-        aSplit.push( Split( aNode, pNewNode, offset ) );
-
-        pNode = aNode.pNode;
-    }
-
-    // copy the common (not split) part of parents
-    rNewParents = aParents;
-
-    // create new root if we have split even that
-    if ( rNewParents.empty() )
-    {
-        DBPTreeNode< Key, Value > *pNewNode = new DBPTreeNode< Key, Value >;
-        pNewNode->m_bIsInternal = true;
-        pNewNode->m_pChildren[ 0 ] = m_pRoot;
-        pNewNode->m_nUsed = 1;
-
-        m_pRoot = pNewNode;
-        rNewParents.push( NodeWithIndex( m_pRoot, 1 ) );
-    }
-
-    DBPTreeNode< Key, Value > *pNewNode;
-    while ( !aSplit.empty() )
-    {
-        Split aEntry = aSplit.top();
-        pNewNode = aEntry.pNewNode;
-        aSplit.pop();
-
-        // insert the new node to the parent (there is enough space now)
-        rNewParents.top().pNode->insert( rNewParents.top().nIndex, aEntry.nOffset, aSplit.pNewNode );
-
-        if ( aEntry.aOriginal.nIndex < aEntry.aOriginal.pNode->m_nUsed )
-            rNewParents.push( aEntry.aOriginal );
+        if ( aParent.pNode->m_nUsed < sOrder )
+        {
+            aParent.pNode->insert( aParent.nIndex + 1, offset, pNewNode );
+            rNewParents = aParents;
+            rNewParents.push( aParent );
+        }
         else
-            rNewParents.push( NodeWithIndex( pNewNode, aEntry.aOriginal.nIndex - aEntry.nOffset ) );
+        {
+            stack< NodeWithIndex > aNewParents;
+            DBPTreeNode< Key, Value > *pNewParent = splitNode( aParent.pNode, aParents, aNewParents );
+
+            if ( aParent.nIndex <= aParent.pNode->m_nUsed )
+            {
+                aParent.pNode->insert( aParent.nIndex + 1, offset, pNewNode );
+                rNewParents = aParents;
+                rNewParents.push( aParent );
+            }
+            else
+            {
+                pNewParent->insert( aParent.nIndex - aParent.pNode->m_nUsed + 1, offset, pNewNode );
+                rNewParents = aParents;
+                rNewParents.push( NodeWithIndex( pNewParent, aParent.nIndex - aParent.pNode->m_nUsed + 1 ) );
+            }
+        }
     }
 
     return pNewNode;
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
