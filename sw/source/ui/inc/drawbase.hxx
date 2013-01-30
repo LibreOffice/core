@@ -27,8 +27,6 @@ class SwEditWin;
 class KeyEvent;
 class MouseEvent;
 
-#define MIN_FREEHAND_DISTANCE   10
-
 /*************************************************************************
 |*
 |* base class for all functions

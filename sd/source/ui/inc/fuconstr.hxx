@@ -38,8 +38,6 @@ class FuConstruct
     : public FuDraw
 {
 public:
-    static const int MIN_FREEHAND_DISTANCE = 10;
-
     TYPEINFO();
 
     virtual void DoExecute( SfxRequest& rReq );

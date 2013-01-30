@@ -23,10 +23,6 @@
 #include "fudraw.hxx"
 
 
-/************************************************************************/
-
-#define MIN_FREEHAND_DISTANCE   10
-
 /** Draw rectangle */
 class FuConstruct : public FuDraw
 {
