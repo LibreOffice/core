@@ -216,6 +216,8 @@ const sal_uInt16 FUNCFLAG_MACROCALL_FN      = 0x0400;   /** Function is stored a
 const sal_uInt16 FUNCFLAG_MACROCALL_NEW     = FUNCFLAG_MACROCALL | FUNCFLAG_MACROCALL_FN;   /** New Excel functions not
                                                             defined in OOXML, _xlfn. prefix in all formats. OOXML name
                                                             must exist. */
+const sal_uInt16 FUNCFLAG_BIFFIMPORTONLY    = 0x0800;   /// Only used in BIFF binary import filter.
+const sal_uInt16 FUNCFLAG_BIFFEXPORTONLY    = 0x1000;   /// Only used in BIFF binary export filter.
 
 /// Converts a function library index (value of enum FunctionLibraryType) to function flags.
 #define FUNCLIB_TO_FUNCFLAGS( funclib_index ) static_cast< sal_uInt16 >( static_cast< sal_uInt8 >( funclib_index ) << 12 )
@@ -236,14 +238,21 @@ struct FunctionData
     FunctionParamInfo   mpParamInfos[ FUNCINFO_PARAMINFOCOUNT ]; /// Information about all parameters.
     sal_uInt16          mnFlags;            /// Additional flags.
 
-    inline bool         isSupported( bool bImportFilter ) const;
+    inline bool         isSupported( bool bImportFilter, FilterType eFilter ) const;
 };
 
-inline bool FunctionData::isSupported( bool bImportFilter ) const
+inline bool FunctionData::isSupported( bool bImportFilter, FilterType eFilter ) const
 {
-    /*  For import filters: the FUNCFLAG_EXPORTONLY flag must not be set,
-        for export filters: the FUNCFLAG_IMPORTONLY flag must not be set. */
-    return !getFlag( mnFlags, bImportFilter ? FUNCFLAG_EXPORTONLY : FUNCFLAG_IMPORTONLY );
+    /*  For import filters: the FUNCFLAG_EXPORTONLY and FUNCFLAG_BIFFEXPORTONLY flag must not be set.
+        For OOXML import:   the FUNCFLAG_BIFFIMPORTONLY flag must not be set.
+        For export filters: the FUNCFLAG_IMPORTONLY and FUNCFLAG_BIFFIMPORTONLY flag must not be set.
+        For OOXML export:   the FUNCFLAG_BIFFEXPORTONLY flag must not be set. */
+    bool bSupported = !getFlag( mnFlags, static_cast<sal_uInt16>(bImportFilter ?
+                (FUNCFLAG_EXPORTONLY | FUNCFLAG_BIFFEXPORTONLY) :
+                (FUNCFLAG_IMPORTONLY | FUNCFLAG_BIFFIMPORTONLY)));
+    if (bSupported && eFilter == FILTER_OOXML)
+        bSupported = !getFlag( mnFlags, bImportFilter ? FUNCFLAG_BIFFIMPORTONLY : FUNCFLAG_BIFFEXPORTONLY );
+    return bSupported;
 }
 
 const sal_uInt16 NOID = SAL_MAX_UINT16;     /// No BIFF function identifier available.
@@ -290,13 +299,13 @@ static const FunctionData saFuncTableBiff2[] =
     { "DOLLAR",                 "DOLLAR",               13,     13,     1,  2,  V, { VR }, 0 },
     { "FIXED",                  "FIXED",                14,     14,     1,  2,  V, { VR, VR, C }, 0 },
     { "SIN",                    "SIN",                  15,     15,     1,  1,  V, { VR }, 0 },
-    { "CSC",                    "SIN",                  15,     15,     1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "CSC",                    "SIN",                  15,     15,     1,  1,  V, { VR }, FUNCFLAG_BIFFEXPORTONLY },
     { "COS",                    "COS",                  16,     16,     1,  1,  V, { VR }, 0 },
-    { "SEC",                    "COS",                  16,     16,     1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "SEC",                    "COS",                  16,     16,     1,  1,  V, { VR }, FUNCFLAG_BIFFEXPORTONLY },
     { "TAN",                    "TAN",                  17,     17,     1,  1,  V, { VR }, 0 },
-    { "COT",                    "TAN",                  17,     17,     1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "COT",                    "TAN",                  17,     17,     1,  1,  V, { VR }, FUNCFLAG_BIFFEXPORTONLY },
     { "ATAN",                   "ATAN",                 18,     18,     1,  1,  V, { VR }, 0 },
-    { "ACOT",                   "ATAN",                 18,     18,     1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "ACOT",                   "ATAN",                 18,     18,     1,  1,  V, { VR }, FUNCFLAG_BIFFEXPORTONLY },
     { "PI",                     "PI",                   19,     19,     0,  0,  V, {}, 0 },
     { "SQRT",                   "SQRT",                 20,     20,     1,  1,  V, { VR }, 0 },
     { "EXP",                    "EXP",                  21,     21,     1,  1,  V, { VR }, 0 },
@@ -452,15 +461,15 @@ static const FunctionData saFuncTableBiff3[] =
     { "MEDIAN",                 "MEDIAN",               227,    227,    1,  MX, V, { RX }, 0 },
     { "SUMPRODUCT",             "SUMPRODUCT",           228,    228,    1,  MX, V, { VA }, 0 },
     { "SINH",                   "SINH",                 229,    229,    1,  1,  V, { VR }, 0 },
-    { "CSCH",                   "SINH",                 229,    229,    1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "CSCH",                   "SINH",                 229,    229,    1,  1,  V, { VR }, FUNCFLAG_BIFFEXPORTONLY },
     { "COSH",                   "COSH",                 230,    230,    1,  1,  V, { VR }, 0 },
-    { "SECH",                   "COSH",                 230,    230,    1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "SECH",                   "COSH",                 230,    230,    1,  1,  V, { VR }, FUNCFLAG_BIFFEXPORTONLY },
     { "TANH",                   "TANH",                 231,    231,    1,  1,  V, { VR }, 0 },
-    { "COTH",                   "TANH",                 231,    231,    1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "COTH",                   "TANH",                 231,    231,    1,  1,  V, { VR }, FUNCFLAG_BIFFEXPORTONLY },
     { "ASINH",                  "ASINH",                232,    232,    1,  1,  V, { VR }, 0 },
     { "ACOSH",                  "ACOSH",                233,    233,    1,  1,  V, { VR }, 0 },
     { "ATANH",                  "ATANH",                234,    234,    1,  1,  V, { VR }, 0 },
-    { "ACOTH",                  "ATANH",                234,    234,    1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "ACOTH",                  "ATANH",                234,    234,    1,  1,  V, { VR }, FUNCFLAG_BIFFEXPORTONLY },
     { "DGET",                   "DGET",                 235,    235,    3,  3,  V, { RO, RR }, 0 },
     { "INFO",                   "INFO",                 244,    244,    1,  1,  V, { VR }, FUNCFLAG_VOLATILE },
 
@@ -729,6 +738,12 @@ static const FunctionData saFuncTableOox[] =
 /* FIXME: BIFF12 function identifer available? Where to obtain? */
 static const FunctionData saFuncTable2013[] =
 {
+    { "ACOT",                   "ACOT",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "ACOTH",                  "ACOTH",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COT",                    "COT",                  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COTH",                   "COTH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "CSC",                    "CSC",                  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "CSCH",                   "CSCH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "IFNA",                   "IFNA",                 NOID,   NOID,   2,  2,  V, { VO, RO }, FUNCFLAG_MACROCALL_NEW },
     { "IMCOSH",                 "IMCOSH",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
     { "IMCOT",                  "IMCOT",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
@@ -738,6 +753,8 @@ static const FunctionData saFuncTable2013[] =
     { "IMSECH",                 "IMSECH",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
     { "IMSINH",                 "IMSINH",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
     { "IMTAN",                  "IMTAN",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "SEC",                    "SEC",                  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "SECH",                   "SECH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW }
 };
 
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
@@ -850,7 +867,7 @@ private:
     /** Initializes the members from the passed function data list. */
     void                initFuncs(
                             const FunctionData* pBeg, const FunctionData* pEnd,
-                            sal_uInt8 nMaxParam, bool bImportFilter );
+                            sal_uInt8 nMaxParam, bool bImportFilter, FilterType eFilter );
 };
 
 // ----------------------------------------------------------------------------
@@ -885,18 +902,18 @@ FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, 
         tables from later BIFF versions may overwrite single functions from
         earlier tables. */
     if( eBiff >= BIFF2 )
-        initFuncs( saFuncTableBiff2, STATIC_ARRAY_END( saFuncTableBiff2 ), nMaxParam, bImportFilter );
+        initFuncs( saFuncTableBiff2, STATIC_ARRAY_END( saFuncTableBiff2 ), nMaxParam, bImportFilter, eFilter );
     if( eBiff >= BIFF3 )
-        initFuncs( saFuncTableBiff3, STATIC_ARRAY_END( saFuncTableBiff3 ), nMaxParam, bImportFilter );
+        initFuncs( saFuncTableBiff3, STATIC_ARRAY_END( saFuncTableBiff3 ), nMaxParam, bImportFilter, eFilter );
     if( eBiff >= BIFF4 )
-        initFuncs( saFuncTableBiff4, STATIC_ARRAY_END( saFuncTableBiff4 ), nMaxParam, bImportFilter );
+        initFuncs( saFuncTableBiff4, STATIC_ARRAY_END( saFuncTableBiff4 ), nMaxParam, bImportFilter, eFilter );
     if( eBiff >= BIFF5 )
-        initFuncs( saFuncTableBiff5, STATIC_ARRAY_END( saFuncTableBiff5 ), nMaxParam, bImportFilter );
+        initFuncs( saFuncTableBiff5, STATIC_ARRAY_END( saFuncTableBiff5 ), nMaxParam, bImportFilter, eFilter );
     if( eBiff >= BIFF8 )
-        initFuncs( saFuncTableBiff8, STATIC_ARRAY_END( saFuncTableBiff8 ), nMaxParam, bImportFilter );
-    initFuncs( saFuncTableOox, STATIC_ARRAY_END( saFuncTableOox ), nMaxParam, bImportFilter );
-    initFuncs( saFuncTable2013, STATIC_ARRAY_END( saFuncTable2013 ), nMaxParam, bImportFilter );
-    initFuncs( saFuncTableOdf, STATIC_ARRAY_END( saFuncTableOdf ), nMaxParam, bImportFilter );
+        initFuncs( saFuncTableBiff8, STATIC_ARRAY_END( saFuncTableBiff8 ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTableOox, STATIC_ARRAY_END( saFuncTableOox ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTable2013, STATIC_ARRAY_END( saFuncTable2013 ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTableOdf, STATIC_ARRAY_END( saFuncTableOdf ), nMaxParam, bImportFilter, eFilter );
 }
 
 void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxParam )
@@ -955,10 +972,11 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
         maMacroFuncs[ xFuncInfo->maBiffMacroName ] = xFuncInfo;
 }
 
-void FunctionProviderImpl::initFuncs( const FunctionData* pBeg, const FunctionData* pEnd, sal_uInt8 nMaxParam, bool bImportFilter )
+void FunctionProviderImpl::initFuncs( const FunctionData* pBeg, const FunctionData* pEnd, sal_uInt8 nMaxParam,
+        bool bImportFilter, FilterType eFilter )
 {
     for( const FunctionData* pIt = pBeg; pIt != pEnd; ++pIt )
-        if( pIt->isSupported( bImportFilter ) )
+        if( pIt->isSupported( bImportFilter, eFilter ) )
             initFunc( *pIt, nMaxParam );
 }
 
