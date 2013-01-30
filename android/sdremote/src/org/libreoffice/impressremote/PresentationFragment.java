@@ -148,7 +148,8 @@ public class PresentationFragment extends SherlockFragment {
         LocalBroadcastManager
                         .getInstance(getActivity().getApplicationContext())
                         .unregisterReceiver(mListener);
-
+        mTopView = null;
+        mContext = null;
     }
 
     private void updateSlideNumberDisplay(int aPosition) {
@@ -259,6 +260,9 @@ public class PresentationFragment extends SherlockFragment {
 
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
+
+            if (mTopView == null || mTopView.getAdapter() == null)
+                return;
             if (aIntent.getAction().equals(
                             CommunicationService.MSG_SLIDE_CHANGED)) {
                 int aSlide = aIntent.getExtras().getInt("slide_number");
@@ -271,10 +275,8 @@ public class PresentationFragment extends SherlockFragment {
                 mTopView.setSelection(aSlide, true);
             } else if (aIntent.getAction().equals(
                             CommunicationService.MSG_SLIDE_PREVIEW)) {
-                // int aNSlide = aIntent.getExtras().getInt("slide_number");
-                ((ThumbnailAdapter) mTopView.getAdapter())
-                                .notifyDataSetChanged();
-                //                mTopView.requestLayout();
+                ThumbnailAdapter aThumbAdaptor = (ThumbnailAdapter) mTopView.getAdapter();
+                aThumbAdaptor.notifyDataSetChanged();
             } else if (aIntent.getAction().equals(
                             CommunicationService.MSG_SLIDE_NOTES)) {
                 int aPosition = aIntent.getExtras().getInt("slide_number");

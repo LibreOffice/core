@@ -155,6 +155,8 @@ public class ThumbnailFragment extends SherlockFragment {
 
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
+            if (mGrid == null)
+                return;
             if (aIntent.getAction().equals(
                             CommunicationService.MSG_SLIDE_CHANGED)) {
                 int aSlide = aIntent.getExtras().getInt("slide_number");
