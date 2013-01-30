@@ -127,12 +127,10 @@ protected:
     ::com::sun::star::awt::Rectangle getCoordSystem() const;
     /** Returns the absolute shape rectangle according to the passed anchor. */
     ::com::sun::star::awt::Rectangle getRectangle( const ShapeParentAnchor* pParentAnchor ) const;
-
-private:
     /** Returns the absolute shape rectangle. */
-    ::com::sun::star::awt::Rectangle getAbsRectangle() const;
+    virtual ::com::sun::star::awt::Rectangle getAbsRectangle() const;
     /** Returns the rectangle relative to the parent coordinate system. */
-    ::com::sun::star::awt::Rectangle getRelRectangle() const;
+    virtual ::com::sun::star::awt::Rectangle getRelRectangle() const;
 
 protected:
     Drawing&            mrDrawing;          ///< The VML drawing page that contains this shape.
@@ -340,11 +338,10 @@ public:
     explicit            LineShape( Drawing& rDrawing );
 
 protected:
-    /** Creates the corresponding XShape and inserts it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        implConvertAndInsert(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
+    /** Returns the absolute shape rectangle. */
+    virtual ::com::sun::star::awt::Rectangle getAbsRectangle() const;
+    /** Returns the rectangle relative to the parent coordinate system. */
+    virtual ::com::sun::star::awt::Rectangle getRelRectangle() const;
 };
 
 /** Bezier shape object that supports to, from, control1 and control2

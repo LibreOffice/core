@@ -295,7 +295,6 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
             according to some imported shape client data (e.g. Excel cell anchor). */
         Rectangle aShapeRect = calcShapeRectangle( pParentAnchor );
 
-        // convert the shape, if the calculated rectangle is not empty
         if( ((aShapeRect.Width > 0) || (aShapeRect.Height > 0)) && rxShapes.is() )
         {
             xShape = implConvertAndInsert( rxShapes, aShapeRect );
@@ -318,6 +317,8 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 mrDrawing.notifyXShapeInserted( xShape, aShapeRect, *this, bGroupChild );
             }
         }
+        else
+            SAL_WARN("oox", "not converting shape, as calculated rectangle is empty");
     }
     return xShape;
 }
@@ -610,10 +611,10 @@ LineShape::LineShape(Drawing& rDrawing)
 {
 }
 
-Reference<XShape> LineShape::implConvertAndInsert(const Reference<XShapes>& rxShapes, const Rectangle& rShapeRect) const
+awt::Rectangle LineShape::getAbsRectangle() const
 {
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
-    Rectangle aShapeRect(rShapeRect);
+    awt::Rectangle aShapeRect;
     sal_Int32 nIndex = 0;
 
     aShapeRect.X = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maFrom.getToken(0, ',', nIndex), 0, true, true);
@@ -621,8 +622,20 @@ Reference<XShape> LineShape::implConvertAndInsert(const Reference<XShapes>& rxSh
     nIndex = 0;
     aShapeRect.Width = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maTo.getToken(0, ',', nIndex), 0, true, true) - aShapeRect.X;
     aShapeRect.Height = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maTo.getToken(0, ',', nIndex), 0, false, true) - aShapeRect.Y;
+    return aShapeRect;
+}
 
-    return SimpleShape::implConvertAndInsert(rxShapes, aShapeRect);
+awt::Rectangle LineShape::getRelRectangle() const
+{
+    awt::Rectangle aShapeRect;
+    sal_Int32 nIndex = 0;
+
+    aShapeRect.X = maShapeModel.maFrom.getToken(0, ',', nIndex).toInt32();
+    aShapeRect.Y = maShapeModel.maFrom.getToken(0, ',', nIndex).toInt32();
+    nIndex = 0;
+    aShapeRect.Width = maShapeModel.maTo.getToken(0, ',', nIndex).toInt32() - aShapeRect.X;
+    aShapeRect.Height = maShapeModel.maTo.getToken(0, ',', nIndex).toInt32() - aShapeRect.Y;
+    return aShapeRect;
 }
 
 // ============================================================================
@@ -860,9 +873,9 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
         xGroupShape = mrDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.GroupShape" ), rxShapes, rShapeRect );
         Reference< XShapes > xChildShapes( xGroupShape, UNO_QUERY_THROW );
         mxChildren->convertAndInsert( xChildShapes, &aParentAnchor );
-        // no child shape has been created - delete the group shape
         if( !xChildShapes->hasElements() )
         {
+            SAL_WARN("oox", "no child shape has been created - deleting the group shape");
             rxShapes->remove( xGroupShape );
             xGroupShape.clear();
         }
