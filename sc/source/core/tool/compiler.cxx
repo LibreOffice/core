@@ -2469,7 +2469,8 @@ bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
             // Renamed old names:
             { "B",              ocB },              // B -> BINOM.DIST.RANGE
             { "TDIST",          ocTDist },          // TDIST -> LEGACY.TDIST
-            { "EASTERSUNDAY",   ocEasterSunday }    // EASTERSUNDAY -> ORG.OPENOFFICE.EASTERSUNDAY
+            { "EASTERSUNDAY",   ocEasterSunday },   // EASTERSUNDAY -> ORG.OPENOFFICE.EASTERSUNDAY
+            { "ZGZ",            ocZGZ }             // ZGZ -> RRI
             // Renamed new names:
             // XXX none currently. Example:
             //{ "ORG.OPENOFFICE.EASTERSUNDAY", ocEasterSunday }
