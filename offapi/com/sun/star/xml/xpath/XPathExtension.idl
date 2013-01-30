@@ -20,14 +20,16 @@
 #ifndef __com_sun_star_xml_xpath_XPathExtension_idl__
 #define __com_sun_star_xml_xpath_XPathExtension_idl__
 
+#include <com/sun/star/xforms/XModel.idl>
 #include <com/sun/star/xml/xpath/XXPathExtension.idl>
+#include <com/sun/star/xml/dom/XNode.idl>
 
 module com {  module sun {  module star {  module xml { module xpath {
 
-    service XPathExtension
-    {
-        interface XXPathExtension;
-    };
+service XPathExtension : XXPathExtension
+{
+    createWithModel([in] com::sun::star::xforms::XModel Model, [in] com::sun::star::xml::dom::XNode ContextNode);
+};
 
 };};};};};
 #endif

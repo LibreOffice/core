@@ -29,7 +29,7 @@
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
-#include <com/sun/star/xml/xpath/XXPathExtension.hpp>
+#include <com/sun/star/xml/xpath/XPathExtension.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -47,6 +47,7 @@ using com::sun::star::xml::dom::XNode;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::xpath::XPathAPI;
 using com::sun::star::xml::xpath::XXPathAPI;
+using com::sun::star::xml::xpath::XPathExtension;
 using com::sun::star::xml::xpath::XXPathExtension;
 using com::sun::star::xml::xpath::XXPathObject;
 using com::sun::star::xml::xpath::XPathObjectType_XPATH_UNDEFINED;
@@ -193,18 +194,8 @@ Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationCo
     Reference<XXPathAPI> xXPath( XPathAPI::create( comphelper::getProcessComponentContext() ) );
 
     // register xforms extension#
-    Sequence< Any > aSequence(2);
-    NamedValue aValue;
-    aValue.Name = "Model";
-    aValue.Value <<= aContext.mxModel;
-    aSequence[0] <<= aValue;
-    aValue.Name = "ContextNode";
-    aValue.Value <<= aContext.mxContextNode;
-    aSequence[1] <<= aValue;
     Reference< XComponentContext > aComponentContext = comphelper::getProcessComponentContext();
-    Reference< XXPathExtension > aExtension(
-        aComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.xml.xpath.XFormsExtension", aSequence, aComponentContext),
-        UNO_QUERY_THROW);
+    Reference< XXPathExtension > aExtension = XPathExtension::createWithModel(aComponentContext, aContext.mxModel, aContext.mxContextNode);
     xXPath->registerExtensionInstance(aExtension);
 
     // register namespaces

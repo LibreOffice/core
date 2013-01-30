@@ -63,6 +63,13 @@ Libxml2ExtensionHandle SAL_CALL CLibxml2XFormsExtension::getLibxml2ExtensionHand
 
 void SAL_CALL CLibxml2XFormsExtension::initialize(const Sequence< Any >& aSequence) throw (RuntimeException)
 {
+    if (aSequence.getLength() == 2
+        && (aSequence[0] >>= m_aModel)
+        && (aSequence[1] >>= m_aContextNode))
+    {
+        return;
+    }
+
     NamedValue aValue;
     for (sal_Int32 i = 0; i < aSequence.getLength(); i++)
     {
