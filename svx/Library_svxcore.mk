@@ -218,7 +218,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/contact/viewcontact \
     svx/source/sdr/contact/viewcontactofsdrole2obj \
     svx/source/sdr/contact/displayinfo \
-    svx/source/sdr/contact/objectcontacttools \
     svx/source/sdr/contact/viewcontactofe3dscene \
     svx/source/sdr/contact/viewcontactofsdrrectobj \
     svx/source/sdr/contact/viewobjectcontactofsdrole2obj \

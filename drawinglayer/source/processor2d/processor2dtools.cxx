@@ -19,20 +19,12 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
+#include "precompiled_drawinglayer.hxx"
 
-#include <svx/sdr/contact/objectcontacttools.hxx>
-#include <vcl/outdev.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/range/b2drange.hxx>
-#include <vcl/gdimtf.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <drawinglayer/processor2d/vclmetafileprocessor2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
-#include <vcl/window.hxx>
+#include <drawinglayer/processor2d/vclmetafileprocessor2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -40,11 +32,19 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace sdr
+namespace drawinglayer
 {
-    namespace contact
+    namespace processor2d
     {
-        drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
+        BaseProcessor2D* createPixelProcessor2DFromOutputDevice(
+            OutputDevice& rTargetOutDev,
+            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
+        {
+            // create Pixel Vcl-Processor
+            return new VclPixelProcessor2D(rViewInformation2D, rTargetOutDev);
+        }
+
+        BaseProcessor2D* createProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
         {
@@ -54,16 +54,18 @@ namespace sdr
             if(bOutputToRecordingMetaFile)
             {
                 // create MetaFile Vcl-Processor and process
-                return new drawinglayer::processor2d::VclMetafileProcessor2D(rViewInformation2D, rTargetOutDev);
+                return new VclMetafileProcessor2D(rViewInformation2D, rTargetOutDev);
             }
             else
             {
                 // create Pixel Vcl-Processor
-                return new drawinglayer::processor2d::VclPixelProcessor2D(rViewInformation2D, rTargetOutDev);
+                return createPixelProcessor2DFromOutputDevice(
+                    rTargetOutDev,
+                    rViewInformation2D);
             }
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace processor2d
+} // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof

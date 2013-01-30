@@ -19,11 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
@@ -71,17 +68,14 @@
 #include <accessibilityoptions.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
-
 #include <svtools/embedhlp.hxx>
 #include <svx/charthelper.hxx>
-// --> OD 2009-03-05 #i99665#
 #include <dview.hxx>
-// <--
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 
 using namespace com::sun::star;
 
@@ -886,7 +880,7 @@ bool paintUsingPrimitivesHelper(
                 uno::Sequence< beans::PropertyValue >());
 
             // get a primitive processor for rendering
-            drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = sdr::contact::createBaseProcessor2DFromOutputDevice(
+            drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                 rOutputDevice,
                 aViewInformation2D);
 

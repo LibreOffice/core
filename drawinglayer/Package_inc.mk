@@ -102,9 +102,7 @@ $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/geometry/vie
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/geometry/viewinformation3d.hxx,drawinglayer/geometry/viewinformation3d.hxx))
 
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/baseprocessor2d.hxx,drawinglayer/processor2d/baseprocessor2d.hxx))
-$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/vclprocessor2d.hxx,drawinglayer/processor2d/vclprocessor2d.hxx))
-$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/vclpixelprocessor2d.hxx,drawinglayer/processor2d/vclpixelprocessor2d.hxx))
-$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/vclmetafileprocessor2d.hxx,drawinglayer/processor2d/vclmetafileprocessor2d.hxx))
+$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/processor2dtools.hxx,drawinglayer/processor2d/processor2dtools.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/contourextractor2d.hxx,drawinglayer/processor2d/contourextractor2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/linegeometryextractor2d.hxx,drawinglayer/processor2d/linegeometryextractor2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/hittestprocessor2d.hxx,drawinglayer/processor2d/hittestprocessor2d.hxx))
@@ -113,10 +111,8 @@ $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/
 
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor3d/baseprocessor3d.hxx,drawinglayer/processor3d/baseprocessor3d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor3d/cutfindprocessor3d.hxx,drawinglayer/processor3d/cutfindprocessor3d.hxx))
-$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor3d/defaultprocessor3d.hxx,drawinglayer/processor3d/defaultprocessor3d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor3d/geometry2dextractor.hxx,drawinglayer/processor3d/geometry2dextractor.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor3d/shadow3dextractor.hxx,drawinglayer/processor3d/shadow3dextractor.hxx))
-$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor3d/zbufferprocessor3d.hxx,drawinglayer/processor3d/zbufferprocessor3d.hxx))
 
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/attribute/fillgradientattribute.hxx,drawinglayer/attribute/fillgradientattribute.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/attribute/fillhatchattribute.hxx,drawinglayer/attribute/fillhatchattribute.hxx))

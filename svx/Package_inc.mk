@@ -241,7 +241,6 @@ $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/primitive3d/sdrattributecr
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/contact/viewcontactofe3dextrude.hxx,svx/sdr/contact/viewcontactofe3dextrude.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/contact/viewcontactofvirtobj.hxx,svx/sdr/contact/viewcontactofvirtobj.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/contact/viewcontactofe3dscene.hxx,svx/sdr/contact/viewcontactofe3dscene.hxx))
-$(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/contact/objectcontacttools.hxx,svx/sdr/contact/objectcontacttools.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/contact/objectcontact.hxx,svx/sdr/contact/objectcontact.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/contact/viewcontactofpageobj.hxx,svx/sdr/contact/viewcontactofpageobj.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdr/contact/viewcontactofe3dcube.hxx,svx/sdr/contact/viewcontactofe3dcube.hxx))

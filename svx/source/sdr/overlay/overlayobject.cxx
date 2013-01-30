@@ -34,7 +34,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <svx/sdr/contact/objectcontacttools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

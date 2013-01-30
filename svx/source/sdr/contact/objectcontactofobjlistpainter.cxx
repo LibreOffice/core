@@ -30,9 +30,8 @@
 #include <svx/svdobj.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdmodel.hxx>
-#include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/unoapi.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -134,8 +133,9 @@ namespace sdr
                     // if there is something to show, use a vclProcessor to render it
                     if(xPrimitiveSequence.hasElements())
                     {
-                        drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = createBaseProcessor2DFromOutputDevice(
-                            *pTargetDevice, getViewInformation2D());
+                        drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+                            *pTargetDevice,
+                            getViewInformation2D());
 
                         if(pProcessor2D)
                         {
