@@ -308,7 +308,8 @@ Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
     if( !xSeriesProp.is())
         return xErrorBar;
 
-    const OUString aPropName( bYError ? "ErrorBarY" : "ErrorBarX");
+    const OUString aPropName(
+            (bYError) ? OUString("ErrorBarY") : OUString("ErrorBarX"));
     if( !( xSeriesProp->getPropertyValue( aPropName ) >>= xErrorBar ) ||
         !xErrorBar.is())
     {
@@ -332,7 +333,8 @@ Reference< beans::XPropertySet > StatisticsHelper::getErrorBars(
 {
     Reference< beans::XPropertySet > xSeriesProp( xDataSeries, uno::UNO_QUERY );
     Reference< beans::XPropertySet > xErrorBar;
-    const OUString aPropName( bYError ? "ErrorBarY" : "ErrorBarX");
+    const OUString aPropName(
+            (bYError) ? OUString("ErrorBarY") : OUString("ErrorBarX"));
 
     if ( xSeriesProp.is())
         xSeriesProp->getPropertyValue( aPropName ) >>= xErrorBar;
