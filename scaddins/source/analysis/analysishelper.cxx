@@ -2075,8 +2075,8 @@ void Complex::Sech(void) THROWDEF_RTE_IAE
             THROW_IAE;
         double fScale =1.0 / ( cosh( 2.0 * r ) + cos( 2.0 * i ));
         double r_;
-        r_ = 2.0 * cosh( 2.0 * r ) * cos( i ) * fScale;
-        i = - (2.0 * sinh( 2.0 * r ) * sin( i ) * fScale );
+        r_ = 2.0 * cosh( r ) * cos( i ) * fScale;
+        i = - (2.0 * sinh( r ) * sin( i ) * fScale );
         r = r_ ;
     }
     else
@@ -2096,8 +2096,8 @@ void Complex::Csch(void) THROWDEF_RTE_IAE
             THROW_IAE;
         double fScale =1.0 / ( cosh( 2.0 * r ) - cos( 2.0 * i ));
         double r_;
-        r_ = 2.0 * sinh( 2.0 * r ) * cos( i ) * fScale;
-        i = - ( 2.0 * cosh( 2.0 * r ) * sin( i ) * fScale );
+        r_ = 2.0 * sinh( r ) * cos( i ) * fScale;
+        i = - ( 2.0 * cosh( r ) * sin( i ) * fScale );
         r = r_ ;
     }
     else
