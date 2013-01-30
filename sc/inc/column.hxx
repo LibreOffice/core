@@ -250,6 +250,8 @@ public:
     void        CompileAll();
     void        CompileXML( ScProgress& rProgress );
 
+    bool CompileErrorCells(sal_uInt16 nErrCode);
+
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 
     bool        UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
