@@ -177,8 +177,8 @@ copy-stuff:
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
 # The indirect command lines...
-	echo "SAL_LOG=+WARN+INFO STAR_RESOURCEPATH=/assets/bin $(APP_DATA_PATH)/lib/libtest_sc_ucalc.so --headless --protector libunoexceptionprotector.so unoexceptionprotector --protector libunobootstrapprotector.so unobootstrapprotector" >assets/unpack/ucalc.cmdline
-	echo "SAL_LOG=+WARN+INFO STAR_RESOURCEPATH=/assets/bin $(APP_DATA_PATH)/lib/libtest_sc_filters_test.so --headless --protector libunoexceptionprotector.so unoexceptionprotector --protector libunobootstrapprotector.so unobootstrapprotector" >assets/unpack/filters_test.cmdline
+	echo "SAL_LOG=+WARN+INFO $(APP_DATA_PATH)/lib/libtest_sc_ucalc.so --headless --protector libunoexceptionprotector.so unoexceptionprotector --protector libunobootstrapprotector.so unobootstrapprotector" >assets/unpack/ucalc.cmdline
+	echo "SAL_LOG=+WARN+INFO $(APP_DATA_PATH)/lib/libtest_sc_filters_test.so --headless --protector libunoexceptionprotector.so unoexceptionprotector --protector libunobootstrapprotector.so unobootstrapprotector" >assets/unpack/filters_test.cmdline
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)

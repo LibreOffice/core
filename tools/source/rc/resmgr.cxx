@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cassert>
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -176,77 +180,40 @@ void ResMgrContainer::release()
 
 void ResMgrContainer::init()
 {
+    assert( m_aResFiles.empty() );
+
     // get resource path
-    std::list< OUString > aDirs;
-    sal_Int32 nIndex = 0;
-
-    // 1. fixed locations
     rtl::OUString uri(
-        RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/resource"));
-    rtl::Bootstrap::expandMacros(uri);
-    aDirs.push_back(uri);
-
-    // 2. in STAR_RESOURCEPATH
-    const sal_Char* pEnv = getenv( "STAR_RESOURCEPATH" );
-    if( pEnv )
-    {
-        OUString aEnvPath( OStringToOUString( OString( pEnv ), osl_getThreadTextEncoding() ) );
-        nIndex = 0;
-        while( nIndex >= 0 )
-        {
-            OUString aPathElement( aEnvPath.getToken( 0, SAL_PATHSEPARATOR, nIndex ) );
-            if( !aPathElement.isEmpty() )
-            {
-                OUString aFileURL;
-                File::getFileURLFromSystemPath( aPathElement, aFileURL );
-                aDirs.push_back( aFileURL);
-            }
-        }
-    }
+        RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/resource/"));
+    rtl::Bootstrap::expandMacros(uri); //TODO: detect failure
 
     // collect all possible resource files
-    for( std::list< OUString >::const_iterator dir_it = aDirs.begin(); dir_it != aDirs.end(); ++dir_it )
+    Directory aDir( uri );
+    if( aDir.open() == FileBase::E_None )
     {
-        Directory aDir( *dir_it );
-        if( aDir.open() == FileBase::E_None )
+        DirectoryItem aItem;
+        while( aDir.getNextItem( aItem ) == FileBase::E_None )
         {
-            DirectoryItem aItem;
-            while( aDir.getNextItem( aItem ) == FileBase::E_None )
+            FileStatus aStatus(osl_FileStatus_Mask_FileName);
+            if( aItem.getFileStatus( aStatus ) == FileBase::E_None )
             {
-                FileStatus aStatus(osl_FileStatus_Mask_FileName);
-                if( aItem.getFileStatus( aStatus ) == FileBase::E_None )
-                {
-                    OUString aFileName = aStatus.getFileName();
-                    if( aFileName.getLength() < 5 )
-                        continue;
-                    if( ! aFileName.endsWithIgnoreAsciiCaseAsciiL( ".res", 4 ) )
-                        continue;
-                    OUString aResName = aFileName.copy( 0, aFileName.getLength()-4 );
-                    if( m_aResFiles.find( aResName ) != m_aResFiles.end() )
-                        continue;
-                    OUStringBuffer aURL( dir_it->getLength() + aFileName.getLength() + 1 );
-                    aURL.append( *dir_it );
-                    if( !dir_it->endsWithIgnoreAsciiCaseAsciiL( "/", 1 ) )
-                        aURL.append( sal_Unicode('/') );
-                    aURL.append( aFileName );
-                    m_aResFiles[ aResName ].aFileURL = aURL.makeStringAndClear();
-                }
+                OUString aFileName = aStatus.getFileName();
+                if( ! aFileName.endsWithIgnoreAsciiCase( ".res" ) )
+                    continue;
+                OUString aResName = aFileName.copy( 0, aFileName.getLength() - strlen(".res") );
+                if( aResName.isEmpty() )
+                    continue;
+                assert( m_aResFiles.find( aResName ) == m_aResFiles.end() );
+                m_aResFiles[ aResName ].aFileURL = uri + aFileName;
+                SAL_INFO(
+                    "tools.rc",
+                    "ResMgrContainer: " << aResName << " -> "
+                        << m_aResFiles[ aResName ].aFileURL );
             }
         }
-        #if OSL_DEBUG_LEVEL > 1
-        else
-            OSL_TRACE( "opening dir %s failed", OUStringToOString( *dir_it, osl_getThreadTextEncoding() ).getStr() );
-        #endif
     }
-    #if OSL_DEBUG_LEVEL > 1
-    for( boost::unordered_map< OUString, ContainerElement, OUStringHash >::const_iterator it =
-            m_aResFiles.begin(); it != m_aResFiles.end(); ++it )
-    {
-        OSL_TRACE( "ResMgrContainer: %s -> %s",
-                 OUStringToOString( it->first, osl_getThreadTextEncoding() ).getStr(),
-                 OUStringToOString( it->second.aFileURL, osl_getThreadTextEncoding() ).getStr() );
-    }
-    #endif
+    else
+        SAL_WARN( "tools.rc", "opening dir " << uri << " failed" );
 
     // set default language
     LanguageType nLang = MsLangId::getSystemUILanguage();

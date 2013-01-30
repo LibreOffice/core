@@ -41,7 +41,6 @@ export LD_LIBRARY_PATH="$thisdir:$java_path:' . $moz_lib . '$LD_LIBRARY_PATH"
 ulimit -c unlimited
 export PATH="$thisdir:$thisdir/../ure-link/bin:$PATH"
 export GNOME_DISABLE_CRASH_DIALOG=1
-export STAR_RESOURCEPATH=$thisdir/resource
 # debugging assistance
 export SAL_DISABLE_FLOATGRAB=1
 export G_SLICE=always-malloc

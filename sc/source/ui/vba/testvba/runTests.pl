@@ -101,7 +101,6 @@ if ( !$failed && open(UNAME, "uname -a|") ) {
       print "$testPath\n";
       $testPath = $ENV{"PATH"};
       print "$testPath\n";
-      $ENV{"STAR_RESOURCEPATH"} = "$officepath/basis3.0/program/resource";
       $ENV{"SAL_ALLOW_LINKOO_SYMLINKS"} = "1";
       $testPath = $ENV{"LANG"};
       print "$testPath\n";

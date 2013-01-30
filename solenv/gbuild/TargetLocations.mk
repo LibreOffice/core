@@ -55,6 +55,8 @@ gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
 gb_Rdb_get_outdir_target_for_build = $(OUTDIR_FOR_BUILD)/xml/$(1).rdb
 gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
+gb_ResTarget_get_unittest_target = \
+    $(OUTDIR)/unittest/install/program/resource/$(1).res
 gb_UnoApi_get_target = $(OUTDIR)/bin/$(1).rdb
 gb_UnoApiMerge_get_target = $(OUTDIR)/bin/$(1).rdb
 gb_UnoApiMerge_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1).rdb
