@@ -142,12 +142,9 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern )
 
         nCount = nLimit = 1;
         pData = new ScAttrEntry[1];
-        if (pData)
-        {
-            ScPatternAttr* pNewPattern = (ScPatternAttr*) &pDocPool->Put(*pPattern);
-            pData[0].nRow = MAXROW;
-            pData[0].pPattern = pNewPattern;
-        }
+        ScPatternAttr* pNewPattern = (ScPatternAttr*) &pDocPool->Put(*pPattern);
+        pData[0].nRow = MAXROW;
+        pData[0].pPattern = pNewPattern;
     }
 }
 
