@@ -494,7 +494,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
         SAL_WNODEPRECATED_DECLARATIONS_POP
 */
 
-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
+#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) || defined(__clang__)
 #define SAL_WNODEPRECATED_DECLARATIONS_PUSH \
     _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic push)) \
     _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic ignored "-Wdeprecated-declarations"))
