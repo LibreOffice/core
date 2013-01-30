@@ -98,6 +98,11 @@ friend void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat,
     void RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
                               const ScPatternAttr* pPattern, ScEditDataArray* pDataArray );
 
+    // prevent the copy c'tor and operator=
+    // this is just to prevent accidental use
+    ScAttrArray(const ScAttrArray&);
+    ScAttrArray& operator=(const ScAttrArray&);
+
 public:
             ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc );
             ~ScAttrArray();
