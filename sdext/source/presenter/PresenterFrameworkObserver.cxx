@@ -26,8 +26,6 @@ using namespace ::com::sun::star::drawing::framework;
 
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace sdext { namespace presenter {
 
 PresenterFrameworkObserver::PresenterFrameworkObserver (
@@ -54,7 +52,7 @@ PresenterFrameworkObserver::PresenterFrameworkObserver (
         }
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            A2S("ConfigurationUpdateEnd"),
+            "ConfigurationUpdateEnd",
             Any());
     }
     else
@@ -124,7 +122,7 @@ void SAL_CALL PresenterFrameworkObserver::notifyConfigurationChange (
 
     Action aAction (maAction);
     Predicate aPredicate (maPredicate);
-    if (rEvent.Type.equals(A2S("ConfigurationUpdateEnd")))
+    if (rEvent.Type.equals("ConfigurationUpdateEnd"))
     {
         Shutdown();
         aAction(aPredicate);

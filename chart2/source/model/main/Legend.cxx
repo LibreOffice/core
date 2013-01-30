@@ -65,41 +65,41 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "AnchorPosition" ),
+        Property( "AnchorPosition",
                   PROP_LEGEND_ANCHOR_POSITION,
                   ::getCppuType( reinterpret_cast< const chart2::LegendPosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "Expansion" ),
+        Property( "Expansion",
                   PROP_LEGEND_EXPANSION,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartLegendExpansion * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "Show" ),
+        Property( "Show",
                   PROP_LEGEND_SHOW,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "ReferencePageSize" ),
+        Property( "ReferencePageSize",
                   PROP_LEGEND_REF_PAGE_SIZE,
                   ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "RelativePosition" ),
+        Property( "RelativePosition",
                   PROP_LEGEND_REL_POS,
                   ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "RelativeSize" ),
+        Property( "RelativeSize",
                   PROP_LEGEND_REL_SIZE,
                   ::getCppuType( reinterpret_cast< const chart2::RelativeSize * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -271,12 +271,12 @@ Sequence< OUString > Legend::getSupportedServiceNames_Static()
     const sal_Int32 nNumServices( 6 );
     sal_Int32 nI = 0;
     Sequence< OUString > aServices( nNumServices );
-    aServices[ nI++ ] = C2U( "com.sun.star.chart2.Legend" );
-    aServices[ nI++ ] = C2U( "com.sun.star.beans.PropertySet" );
-    aServices[ nI++ ] = C2U( "com.sun.star.drawing.FillProperties" );
-    aServices[ nI++ ] = C2U( "com.sun.star.drawing.LineProperties" );
-    aServices[ nI++ ] = C2U( "com.sun.star.style.CharacterProperties" );
-    aServices[ nI++ ] = C2U( "com.sun.star.layout.LayoutElement" );
+    aServices[ nI++ ] = "com.sun.star.chart2.Legend";
+    aServices[ nI++ ] = "com.sun.star.beans.PropertySet";
+    aServices[ nI++ ] = "com.sun.star.drawing.FillProperties";
+    aServices[ nI++ ] = "com.sun.star.drawing.LineProperties";
+    aServices[ nI++ ] = "com.sun.star.style.CharacterProperties";
+    aServices[ nI++ ] = "com.sun.star.layout.LayoutElement";
     OSL_ASSERT( nNumServices == nI );
     return aServices;
 }

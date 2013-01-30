@@ -48,7 +48,7 @@ using ::rtl::OUString;
 namespace svtools
 {
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define cChar OUString::createFromAscii(cChar)
 static const sal_Char cColor[] = "/Color";
 static const sal_Char cColorSchemes[] = "ColorSchemes/";
 sal_Int32            nColorRefCount_Impl = 0;
@@ -161,8 +161,8 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         { RTL_CONSTASCII_USTRINGPARAM("/SQLComment"),  sal_False }
     };
     int nIndex = 0;
-    OUString sColor = C2U(cColor);
-    OUString sBase(C2U(cColorSchemes));
+    OUString sColor = cColor;
+    OUString sBase(cColorSchemes);
     sBase += utl::wrapConfigurationElementName(rScheme);
     const int nCount = ColorConfigEntryCount;
     for(sal_Int32 i = 0; i < 4 * nCount; i+= 4)
@@ -183,9 +183,9 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
 }
 
 ColorConfig_Impl::ColorConfig_Impl(sal_Bool bEditMode) :
-    ConfigItem(C2U("Office.UI/ColorScheme")),
+    ConfigItem("Office.UI/ColorScheme"),
     m_bEditMode(bEditMode),
-    m_sIsVisible(C2U("/IsVisible"))
+    m_sIsVisible("/IsVisible")
 {
     if(!m_bEditMode)
     {
@@ -215,7 +215,7 @@ void ColorConfig_Impl::Load(const rtl::OUString& rScheme)
     {
         //detect current scheme name
         uno::Sequence < ::rtl::OUString > aCurrent(1);
-        aCurrent.getArray()[0] = C2U("CurrentColorScheme");
+        aCurrent.getArray()[0] = "CurrentColorScheme";
         uno::Sequence< uno::Any > aCurrentVal = GetProperties( aCurrent );
         aCurrentVal.getConstArray()[0] >>= sScheme;
     }
@@ -274,7 +274,7 @@ void ColorConfig_Impl::Commit()
              nIndex++;
         }
     }
-    rtl::OUString sNode(C2U("ColorSchemes"));
+    rtl::OUString sNode("ColorSchemes");
     SetSetProperties(sNode, aPropValues);
 
     CommitCurrentSchemeName();
@@ -284,7 +284,7 @@ void ColorConfig_Impl::CommitCurrentSchemeName()
 {
     //save current scheme name
     uno::Sequence < ::rtl::OUString > aCurrent(1);
-    aCurrent.getArray()[0] = C2U("CurrentColorScheme");
+    aCurrent.getArray()[0] = "CurrentColorScheme";
     uno::Sequence< uno::Any > aCurrentVal(1);
     aCurrentVal.getArray()[0] <<= m_sLoadedScheme;
     PutProperties(aCurrent, aCurrentVal);
@@ -301,12 +301,12 @@ void ColorConfig_Impl::SetColorConfigValue(ColorConfigEntry eValue, const ColorC
 
 uno::Sequence< ::rtl::OUString> ColorConfig_Impl::GetSchemeNames()
 {
-    return GetNodeNames(C2U("ColorSchemes"));
+    return GetNodeNames("ColorSchemes");
 }
 
 sal_Bool ColorConfig_Impl::AddScheme(const rtl::OUString& rScheme)
 {
-    if(ConfigItem::AddNode(C2U("ColorSchemes"), rScheme))
+    if(ConfigItem::AddNode("ColorSchemes", rScheme))
     {
         m_sLoadedScheme = rScheme;
         Commit();
@@ -319,7 +319,7 @@ sal_Bool ColorConfig_Impl::RemoveScheme(const rtl::OUString& rScheme)
 {
     uno::Sequence< rtl::OUString > aElements(1);
     aElements.getArray()[0] = rScheme;
-    return ClearNodeElements(C2U("ColorSchemes"), aElements);
+    return ClearNodeElements("ColorSchemes", aElements);
 }
 
 void ColorConfig_Impl::SettingsChanged()

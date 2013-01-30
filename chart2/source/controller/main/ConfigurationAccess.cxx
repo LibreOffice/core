@@ -61,7 +61,7 @@ public:
 };
 
 CalcConfigItem::CalcConfigItem()
-    : ConfigItem( ::rtl::OUString( C2U( "Office.Calc/Layout" )))
+    : ConfigItem( ::rtl::OUString( "Office.Calc/Layout" ))
 {
 }
 
@@ -78,9 +78,9 @@ FieldUnit CalcConfigItem::getFieldUnit()
 
     uno::Sequence< ::rtl::OUString > aNames( 1 );
     if( lcl_IsMetric() )
-        aNames[ 0 ] = ::rtl::OUString( C2U( "Other/MeasureUnit/Metric" ));
+        aNames[ 0 ] = ::rtl::OUString( "Other/MeasureUnit/Metric" );
     else
-        aNames[ 0 ] = ::rtl::OUString( C2U( "Other/MeasureUnit/NonMetric" ));
+        aNames[ 0 ] = ::rtl::OUString( "Other/MeasureUnit/NonMetric" );
 
     uno::Sequence< uno::Any > aResult( GetProperties( aNames ));
     sal_Int32 nValue = 0;

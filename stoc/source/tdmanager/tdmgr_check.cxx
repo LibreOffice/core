@@ -44,12 +44,12 @@ namespace {
 OUString getTypeClassName( TypeClass tc )
 {
     typelib_EnumTypeDescription * typeDescr = 0;
-    OUString name = OUSTR("com.sun.star.uno.TypeClass");
+    OUString name = "com.sun.star.uno.TypeClass";
     typelib_typedescription_getByName(
         reinterpret_cast<typelib_TypeDescription **>(&typeDescr), name.pData );
     OSL_ASSERT( typeDescr != 0 );
     if (typeDescr == 0)
-        return OUSTR("Cannot get type description of ") + name;
+        return "Cannot get type description of " + name;
     typelib_typedescription_complete(
         reinterpret_cast<typelib_TypeDescription **>(&typeDescr) );
 
@@ -63,7 +63,7 @@ OUString getTypeClassName( TypeClass tc )
     if (nPos >= 0)
         name = typeDescr->ppEnumNames[ nPos ];
     else
-        name = OUSTR("unknown TypeClass value: ") +
+        name = "unknown TypeClass value: " +
             OUString::valueOf( (sal_Int32) tc );
 
     typelib_typedescription_release(
@@ -119,7 +119,7 @@ void checkSeq( Sequence< Reference<T> > const & newTypes,
     if (len != existingTypes.getLength())
     {
         if (!optionalMode || len < newTypes.getLength())
-            typeError( OUSTR("Different number of types!"), context );
+            typeError( "Different number of types!", context );
         len = existingTypes.getLength();
     }
 
@@ -141,9 +141,9 @@ void checkEnum(
     Reference<reflection::XEnumTypeDescription> const & xExistingTD )
 {
     if (xNewTD->getEnumNames() != xExistingTD->getEnumNames())
-        typeError( OUSTR("ENUM names don't match!"), xNewTD->getName() );
+        typeError( "ENUM names don't match!", xNewTD->getName() );
     if (xNewTD->getEnumValues() != xExistingTD->getEnumValues())
-        typeError( OUSTR("ENUM values don't match!"), xNewTD->getName() );
+        typeError( "ENUM values don't match!", xNewTD->getName() );
 }
 
 void checkStruct(
@@ -151,12 +151,12 @@ void checkStruct(
     Reference<reflection::XCompoundTypeDescription> const & xExistingTD )
 {
     check( xNewTD->getBaseType(), xExistingTD->getBaseType(),
-           xNewTD->getName() + OUSTR(", base type") );
+           xNewTD->getName() + ", base type" );
     checkSeq( xNewTD->getMemberTypes(), xExistingTD->getMemberTypes(),
-              xNewTD->getName() + OUSTR(", member types") );
+              xNewTD->getName() + ", member types" );
 
     if (xNewTD->getMemberNames() != xExistingTD->getMemberNames())
-        typeError( OUSTR("Different member names!"), xNewTD->getName() );
+        typeError( "Different member names!", xNewTD->getName() );
 
     if (xNewTD->getTypeClass() == TypeClass_STRUCT)
     {
@@ -168,15 +168,15 @@ void checkStruct(
         {
             if (xNewStructTD->getTypeParameters() !=
                 xExistingStructTD->getTypeParameters())
-                typeError( OUSTR("Different type parameters of instantiated "
-                                 "polymorphic STRUCT!"), xNewTD->getName() );
+                typeError( "Different type parameters of instantiated "
+                           "polymorphic STRUCT!", xNewTD->getName() );
             checkSeq( xNewStructTD->getTypeArguments(),
                       xExistingStructTD->getTypeArguments(),
-                      xNewTD->getName() + OUSTR(", argument types") );
+                      xNewTD->getName() + ", argument types" );
         }
         else if (xNewStructTD.is() || xExistingStructTD.is())
-            typeError( OUSTR("Mixing polymorphic STRUCT types "
-                             "with non-polymorphic!"), xNewTD->getName() );
+            typeError( "Mixing polymorphic STRUCT types "
+                       "with non-polymorphic!", xNewTD->getName() );
     }
 }
 
@@ -185,11 +185,11 @@ void checkInterface(
     Reference<reflection::XInterfaceTypeDescription2> const & xExistingTD )
 {
     checkSeq( xNewTD->getBaseTypes(), xExistingTD->getBaseTypes(),
-              xNewTD->getName() + OUSTR(", base types") );
+              xNewTD->getName() + ", base types" );
     checkSeq(xNewTD->getOptionalBaseTypes(),xExistingTD->getOptionalBaseTypes(),
-             xNewTD->getName() + OUSTR(", optional base types") );
+             xNewTD->getName() + ", optional base types" );
     checkSeq( xNewTD->getMembers(), xExistingTD->getMembers(),
-              xNewTD->getName() + OUSTR(", members") );
+              xNewTD->getName() + ", members" );
 }
 
 void checkRestParam( Reference<reflection::XParameter> const & xNewParam,
@@ -197,7 +197,7 @@ void checkRestParam( Reference<reflection::XParameter> const & xNewParam,
                      OUString const & context )
 {
     if (xNewParam->isRestParameter() != xExistingParam->isRestParameter())
-        typeError( OUSTR("Different ... parameters specified!"), context );
+        typeError( "Different ... parameters specified!", context );
 }
 
 void checkRestParam(
@@ -213,7 +213,7 @@ void checkParameters( Sequence< Reference<T> > const & newParams,
 {
     sal_Int32 len = newParams.getLength();
     if (len != existingParams.getLength())
-        typeError( OUSTR("Different number of parameters!"), context_ );
+        typeError( "Different number of parameters!", context_ );
     Reference<T> const * pNewParams = newParams.getConstArray();
     Reference<T> const * pExistingParams = existingParams.getConstArray();
     for ( sal_Int32 pos = 0; pos < len; ++pos )
@@ -240,9 +240,9 @@ void checkParameters( Sequence< Reference<T> > const & newParams,
         check( xNewParam->getType(), xExistingParam->getType(), context );
 
         if (xNewParam->isIn() != xExistingParam->isIn())
-            typeError( OUSTR("IN attribute differs!"), context );
+            typeError( "IN attribute differs!", context );
         if (xNewParam->isOut() != xExistingParam->isOut())
-            typeError( OUSTR("OUT attribute differs!"), context );
+            typeError( "OUT attribute differs!", context );
         checkRestParam( xNewParam, xExistingParam, context );
     }
 }
@@ -255,14 +255,14 @@ static void checkMethod(
            xNewTD->getName() );
 
     if (xNewTD->isOneway() != xExistingTD->isOneway())
-        typeError( OUSTR("Methods have differing OneWay attribute!"),
+        typeError( "Methods have differing OneWay attribute!",
                    xNewTD->getName() );
 
     checkParameters( xNewTD->getParameters(), xExistingTD->getParameters(),
                      xNewTD->getName() );
 
     checkSeq( xNewTD->getExceptions(), xExistingTD->getExceptions(),
-              xNewTD->getName() + OUSTR(", declared exceptions") );
+              xNewTD->getName() + ", declared exceptions" );
 }
 
 void checkAttribute(
@@ -271,18 +271,18 @@ void checkAttribute(
     const & xExistingTD )
 {
     if (xNewTD->isReadOnly() != xExistingTD->isReadOnly())
-        typeError( OUSTR("ReadOnly attribute differs!"), xNewTD->getName() );
+        typeError( "ReadOnly attribute differs!", xNewTD->getName() );
 
     check( xNewTD->getType(), xExistingTD->getType(),
-           xNewTD->getName() + OUSTR(", attribute type") );
+           xNewTD->getName() + ", attribute type" );
 
     if (xNewTD->isBound() != xExistingTD->isBound())
-        typeError( OUSTR("Bound attribute differs!"), xNewTD->getName() );
+        typeError( "Bound attribute differs!", xNewTD->getName() );
 
     checkSeq( xNewTD->getGetExceptions(), xExistingTD->getGetExceptions(),
-              xNewTD->getName() + OUSTR(", getter exceptions") );
+              xNewTD->getName() + ", getter exceptions" );
     checkSeq( xNewTD->getSetExceptions(), xExistingTD->getSetExceptions(),
-              xNewTD->getName() + OUSTR(", setter exceptions") );
+              xNewTD->getName() + ", setter exceptions" );
 }
 
 void checkProperty(
@@ -315,7 +315,7 @@ void checkSingleton(
     sal_Bool ifaceBased = xNewTD->isInterfaceBased();
     if (ifaceBased != xExistingTD->isInterfaceBased())
         typeError(
-            OUSTR("Mixing interface and NON-interface based singletons!"),
+            "Mixing interface and NON-interface based singletons!",
             xNewTD->getName() );
     if (ifaceBased)
         check( xNewTD->getInterface(), xExistingTD->getInterface(),
@@ -331,7 +331,7 @@ void checkService(
 {
     sal_Bool singleIfaceBased = xNewTD->isSingleInterfaceBased();
     if (singleIfaceBased != xExistingTD->isSingleInterfaceBased())
-        typeError( OUSTR("Mixing interface and NON-interface based services!"),
+        typeError( "Mixing interface and NON-interface based services!",
                    xNewTD->getName() );
     if (singleIfaceBased)
     {
@@ -343,7 +343,7 @@ void checkService(
             existingCtors( xExistingTD->getConstructors() );
         sal_Int32 len = newCtors.getLength();
         if (len != existingCtors.getLength())
-            typeError( OUSTR("Different number of service constructors!"),
+            typeError( "Different number of service constructors!",
                        xNewTD->getName() );
         Reference<reflection::XServiceConstructorDescription> const *
             pNewCtors = newCtors.getConstArray();
@@ -377,24 +377,24 @@ void checkService(
                              xExistingCtor->getParameters(),
                              context );
             checkSeq( xNewCtor->getExceptions(), xExistingCtor->getExceptions(),
-                      context + OUSTR(", exceptions") );
+                      context + ", exceptions" );
         }
     }
     else // old-style service descriptions:
     {
         checkSeq( xNewTD->getMandatoryServices(),
                   xExistingTD->getMandatoryServices(),
-                  xNewTD->getName() + OUSTR(", mandatory services") );
+                  xNewTD->getName() + ", mandatory services" );
         checkSeq( xNewTD->getOptionalServices(),
                   xExistingTD->getOptionalServices(),
-                  xNewTD->getName() + OUSTR(", optional services"),
+                  xNewTD->getName() + ", optional services",
                   true /* optionalMode */ );
         checkSeq( xNewTD->getMandatoryInterfaces(),
                   xExistingTD->getMandatoryInterfaces(),
-                  xNewTD->getName() + OUSTR(", mandatory interfaces") );
+                  xNewTD->getName() + ", mandatory interfaces" );
         checkSeq( xNewTD->getOptionalInterfaces(),
                   xExistingTD->getOptionalInterfaces(),
-                  xNewTD->getName() + OUSTR(", optional interfaces"),
+                  xNewTD->getName() + ", optional interfaces",
                   true /* optionalMode */ );
 
         Sequence< Reference<reflection::XPropertyTypeDescription> >
@@ -402,7 +402,7 @@ void checkService(
         Sequence< Reference<reflection::XPropertyTypeDescription> >
             existingProperties( xExistingTD->getProperties() );
         checkSeq( newProperties, existingProperties,
-                  xNewTD->getName() + OUSTR(", properties"),
+                  xNewTD->getName() + ", properties",
                   true /* optionalMode */ );
         if (newProperties.getLength() > existingProperties.getLength())
         {
@@ -414,7 +414,7 @@ void checkService(
             {
                 if ((pNewProperties[pos]->getPropertyFlags() &
                      beans::PropertyAttribute::OPTIONAL) == 0)
-                    typeError( OUSTR("New property is not OPTIONAL!"),
+                    typeError( "New property is not OPTIONAL!",
                                pNewProperties[pos]->getName() );
             }
         }
@@ -521,7 +521,7 @@ void check( Reference<reflection::XTypeDescription> const & xNewTD,
                 xNewTD, UNO_QUERY_THROW )->getConstantValue() !=
             Reference<reflection::XConstantTypeDescription>(
                 xExistingTD, UNO_QUERY_THROW )->getConstantValue())
-            typeError( OUSTR("Different constant value!"), xNewTD->getName() );
+            typeError( "Different constant value!", xNewTD->getName() );
         break;
     case TypeClass_CONSTANTS:
         checkSeq( Reference<reflection::XConstantsTypeDescription>(

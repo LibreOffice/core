@@ -71,7 +71,7 @@ void lcl_setPropetiesToShape(
         ::chart::tAnySequence aPropValues;
         ::chart::PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
 
-        uno::Any* pLineWidthAny = ::chart::PropertyMapper::getValuePointer(aPropValues,aPropNames,C2U("LineWidth"));
+        uno::Any* pLineWidthAny = ::chart::PropertyMapper::getValuePointer(aPropValues,aPropNames,"LineWidth");
         sal_Int32 nLineWidth = 0;
         if( pLineWidthAny && (*pLineWidthAny>>=nLineWidth) )
         {
@@ -104,7 +104,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
         return xResult;
 
     xResult.set( xShapeFactory->createInstance(
-                     C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY );
+                     "com.sun.star.drawing.GroupShape"), uno::UNO_QUERY );
     xSymbolContainer->add( xResult );
     Reference< drawing::XShapes > xResultGroup( xResult, uno::UNO_QUERY );
     if( ! xResultGroup.is())
@@ -120,7 +120,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
         if( eStyle == LegendSymbolStyle_LINE )
         {
             Reference< drawing::XShape > xLine( xShapeFactory->createInstance(
-                    C2U( "com.sun.star.drawing.LineShape" )), uno::UNO_QUERY );
+                    "com.sun.star.drawing.LineShape"), uno::UNO_QUERY );
             if( xLine.is())
             {
                 xResultGroup->add( xLine );
@@ -141,7 +141,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                 if( aSymbol.Style == chart2::SymbolStyle_STANDARD )
                 {
                     // take series color as fill color
-                    xLegendEntryProperties->getPropertyValue( C2U("Color")) >>= aSymbol.FillColor;
+                    xLegendEntryProperties->getPropertyValue( "Color") >>= aSymbol.FillColor;
                     // border of symbols always same as fill color
                     aSymbol.BorderColor = aSymbol.FillColor;
 
@@ -170,7 +170,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
         else if( eStyle == LegendSymbolStyle_CIRCLE )
         {
             Reference< drawing::XShape > xShape( xShapeFactory->createInstance(
-                C2U( "com.sun.star.drawing.EllipseShape" )), uno::UNO_QUERY );
+                "com.sun.star.drawing.EllipseShape"), uno::UNO_QUERY );
             if( xShape.is() )
             {
                 xResultGroup->add( xShape );
@@ -183,7 +183,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
         else // eStyle == LegendSymbolStyle_BOX
         {
             Reference< drawing::XShape > xShape( xShapeFactory->createInstance(
-                C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
+                "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
             if( xShape.is() )
             {
                 xResultGroup->add( xShape );

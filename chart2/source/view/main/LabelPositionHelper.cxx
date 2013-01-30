@@ -66,7 +66,7 @@ void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const
             eHorizontalAdjust = drawing::TextHorizontalAdjust_LEFT;
         else if( LABEL_ALIGN_LEFT==eAlignment || LABEL_ALIGN_LEFT_TOP==eAlignment || LABEL_ALIGN_LEFT_BOTTOM==eAlignment )
             eHorizontalAdjust = drawing::TextHorizontalAdjust_RIGHT;
-        uno::Any* pHorizontalAdjustAny = PropertyMapper::getValuePointer(rPropValues,rPropNames,C2U("TextHorizontalAdjust"));
+        uno::Any* pHorizontalAdjustAny = PropertyMapper::getValuePointer(rPropValues,rPropNames,"TextHorizontalAdjust");
         if(pHorizontalAdjustAny)
             *pHorizontalAdjustAny = uno::makeAny(eHorizontalAdjust);
     }
@@ -78,7 +78,7 @@ void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const
             eVerticalAdjust = drawing::TextVerticalAdjust_BOTTOM;
         else if( LABEL_ALIGN_BOTTOM==eAlignment || LABEL_ALIGN_RIGHT_BOTTOM==eAlignment || LABEL_ALIGN_LEFT_BOTTOM==eAlignment )
             eVerticalAdjust = drawing::TextVerticalAdjust_TOP;
-        uno::Any* pVerticalAdjustAny = PropertyMapper::getValuePointer(rPropValues,rPropNames,C2U("TextVerticalAdjust"));
+        uno::Any* pVerticalAdjustAny = PropertyMapper::getValuePointer(rPropValues,rPropNames,"TextVerticalAdjust");
         if(pVerticalAdjustAny)
             *pVerticalAdjustAny = uno::makeAny(eVerticalAdjust);
     }
@@ -105,13 +105,13 @@ void LabelPositionHelper::doDynamicFontResize( tAnySequence& rPropValues
     //-------------------------
     //handle dynamic font resize:
     awt::Size aOldReferenceSize;
-    if( xAxisModelProps->getPropertyValue( C2U("ReferencePageSize")) >>= aOldReferenceSize )
+    if( xAxisModelProps->getPropertyValue( "ReferencePageSize") >>= aOldReferenceSize )
     {
-        uno::Any* pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, C2U("CharHeight") );
+        uno::Any* pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, "CharHeight" );
         lcl_doDynamicFontResize( pAOldAndNewFontHeightAny, aOldReferenceSize, rNewReferenceSize );
-        pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, C2U("CharHeightAsian") );
+        pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, "CharHeightAsian" );
         lcl_doDynamicFontResize( pAOldAndNewFontHeightAny, aOldReferenceSize, rNewReferenceSize );
-        pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, C2U("CharHeightComplex") );
+        pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, "CharHeightComplex" );
         lcl_doDynamicFontResize( pAOldAndNewFontHeightAny, aOldReferenceSize, rNewReferenceSize );
     }
 }

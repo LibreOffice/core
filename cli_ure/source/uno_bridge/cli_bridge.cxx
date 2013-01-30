@@ -90,7 +90,7 @@ void SAL_CALL Mapping_cli2uno(
 #if OSL_DEBUG_LEVEL >= 1
         OString cstr_msg(
             OUStringToOString(
-                OUSTR("[cli_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
+                "[cli_uno bridge error] " + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_FAIL( cstr_msg.getStr() );
 #else
         (void) err; // unused
@@ -149,7 +149,7 @@ void SAL_CALL Mapping_uno2cli(
 #if OSL_DEBUG_LEVEL >= 1
         rtl::OString cstr_msg(
             rtl::OUStringToOString(
-                OUSTR("[cli_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
+                "[cli_uno bridge error] " + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_FAIL( cstr_msg.getStr() );
 #else
         (void) err; // unused
@@ -329,7 +329,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
 #if OSL_DEBUG_LEVEL >= 1
         OString cstr_msg(
             OUStringToOString(
-                OUSTR("[cli_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
+                "[cli_uno bridge error] " + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_FAIL( cstr_msg.getStr() );
 #else
         (void) err; // unused

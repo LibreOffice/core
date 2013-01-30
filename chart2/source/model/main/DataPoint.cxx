@@ -289,9 +289,9 @@ void DataPoint::fireModifyEvent()
 Sequence< OUString > DataPoint::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.DataPoint" );
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.DataPointProperties" );
-    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 0 ] = "com.sun.star.chart2.DataPoint";
+    aServices[ 1 ] = "com.sun.star.chart2.DataPointProperties";
+    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 
@@ -301,7 +301,7 @@ using impl::DataPoint_Base;
 IMPLEMENT_FORWARD_XINTERFACE2( DataPoint, DataPoint_Base, ::property::OPropertySet )
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( DataPoint, C2U( "com.sun.star.comp.chart.DataPoint" ));
+APPHELPER_XSERVICEINFO_IMPL( DataPoint, OUString("com.sun.star.comp.chart.DataPoint") );
 
 } //  namespace chart
 

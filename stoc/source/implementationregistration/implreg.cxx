@@ -51,8 +51,6 @@
 #include <io.h>
 #endif
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -797,7 +795,7 @@ static void delete_all_singleton_entries(
     {
         Reference< registry::XRegistryKey > const & xSingleton = subkeys[ nPos ];
         Reference< registry::XRegistryKey > xRegisteredImplNames(
-            xSingleton->openKey( OUSTR("REGISTERED_BY") ) );
+            xSingleton->openKey( "REGISTERED_BY" ) );
         if (xRegisteredImplNames.is() && xRegisteredImplNames->isValid())
         {
             Sequence< OUString > registered_implnames;
@@ -833,7 +831,7 @@ static void delete_all_singleton_entries(
                 {
                     // remove whole entry
                     xRegisteredImplNames->closeKey();
-                    xSingleton->deleteKey( OUSTR("REGISTERED_BY") );
+                    xSingleton->deleteKey( "REGISTERED_BY" );
                     // registry key cannot provide its relative name, only absolute :(
                     OUString abs( xSingleton->getKeyName() );
                     xSingletons_section->deleteKey( abs.copy( abs.lastIndexOf( '/' ) +1 ) );
@@ -953,7 +951,7 @@ static void insert_singletons(
     // throw( registry::InvalidRegistryException, registry::CannotRegisterImplementationException, RuntimeException )
 {
     // singletons
-    Reference< registry::XRegistryKey > xKey( xImplKey->openKey( OUSTR("UNO/SINGLETONS") ) );
+    Reference< registry::XRegistryKey > xKey( xImplKey->openKey( "UNO/SINGLETONS" ) );
     if (xKey.is() && xKey->isValid())
     {
         OUString implname( xImplKey->getKeyName().copy( sizeof ("/IMPLEMENTATIONS/") -1 ) );
@@ -968,7 +966,7 @@ static void insert_singletons(
                     implname.getLength() + sizeof ("/IMPLEMENTATIONS//UNO/SINGLETONS/") -1 ) );
             OUString service_name( xSingleton->getStringValue() );
 
-            OUString keyname( OUSTR("/SINGLETONS/") + singleton_name );
+            OUString keyname( "/SINGLETONS/" + singleton_name );
             Reference< registry::XRegistryKey > xKey2( xDest->getRootKey()->openKey( keyname ) );
             if (xKey2.is() && xKey2->isValid())
             {
@@ -979,12 +977,12 @@ static void insert_singletons(
                     {
                         Reference< container::XHierarchicalNameAccess > xTDMgr;
                         OUString the_tdmgr =
-                            OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager");
+                            "/singletons/com.sun.star.reflection.theTypeDescriptionManager";
                         xContext->getValueByName( the_tdmgr ) >>= xTDMgr;
                         if (! xTDMgr.is())
                         {
                             throw RuntimeException(
-                                OUSTR("cannot get singleton ") + the_tdmgr,
+                                "cannot get singleton " + the_tdmgr,
                                 Reference< XInterface >() );
                         }
                         try
@@ -994,7 +992,7 @@ static void insert_singletons(
                             if (! xExistingService_td.is())
                             {
                                 throw RuntimeException(
-                                    OUSTR("cannot get service type description: ") + existing_name,
+                                    "cannot get service type description: " + existing_name,
                                     Reference< XInterface >() );
                             }
 
@@ -1018,7 +1016,7 @@ static void insert_singletons(
                         catch (const container::NoSuchElementException & exc)
                         {
                             throw RuntimeException(
-                                OUSTR("cannot get service type description: ") + exc.Message,
+                                "cannot get service type description: " + exc.Message,
                                 Reference< XInterface >() );
                         }
                     }
@@ -1037,11 +1035,11 @@ static void insert_singletons(
             }
 
             Reference< registry::XRegistryKey > xRegisteredImplNames(
-                xKey2->openKey( OUSTR("REGISTERED_BY") ) );
+                xKey2->openKey( "REGISTERED_BY" ) );
             if (!xRegisteredImplNames.is() || !xRegisteredImplNames->isValid())
             {
                 // create
-                xRegisteredImplNames = xKey2->createKey( OUSTR("REGISTERED_BY") );
+                xRegisteredImplNames = xKey2->createKey( "REGISTERED_BY" );
             }
 
             Sequence< OUString > implnames;
@@ -1776,7 +1774,7 @@ void ImplementationRegistration::doRevoke(
             }
         }
 
-        xKey = xRootKey->openKey( OUSTR("/SINGLETONS") );
+        xKey = xRootKey->openKey( "/SINGLETONS" );
         if (xKey.is() && xKey->isValid())
         {
             delete_all_singleton_entries( xKey, aNames );

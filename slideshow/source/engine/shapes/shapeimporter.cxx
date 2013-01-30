@@ -78,7 +78,7 @@ bool importShapeGraphic(
     uno::Reference<beans::XPropertySet> const& xPropSet )
 {
     rtl::OUString aURL;
-    if( !getPropertyValue( aURL, xPropSet, OUSTR("GraphicURL")) ||
+    if( !getPropertyValue( aURL, xPropSet, "GraphicURL") ||
         aURL.isEmpty() )
     {
         // no or empty property - cannot import shape graphic
@@ -198,7 +198,7 @@ ShapeOfGroup::ShapeOfGroup( ShapeSharedPtr const&                      pGroupSha
     mnPrio(nPrio)
 {
     // read bound rect
-    uno::Any const aTmpRect_( xPropSet->getPropertyValue( OUSTR("BoundRect") ));
+    uno::Any const aTmpRect_( xPropSet->getPropertyValue( "BoundRect" ));
     awt::Rectangle const aTmpRect( aTmpRect_.get<awt::Rectangle>() );
     basegfx::B2DRectangle const groupPosSize( pGroupShape->getBounds() );
     maPosOffset = basegfx::B2DPoint( aTmpRect.X - groupPosSize.getMinX(),
@@ -378,15 +378,15 @@ ShapeSharedPtr ShapeImporter::createShape(
         sal_Int16 nTransparency(0);
         sal_Int32 nRotation(0);
 
-        getPropertyValue( eColorMode, xPropSet, OUSTR("GraphicColorMode") );
-        getPropertyValue( nLuminance, xPropSet, OUSTR("AdjustLuminance") );
-        getPropertyValue( nContrast, xPropSet, OUSTR("AdjustContrast") );
-        getPropertyValue( nRed, xPropSet, OUSTR("AdjustRed") );
-        getPropertyValue( nGreen, xPropSet, OUSTR("AdjustGreen") );
-        getPropertyValue( nBlue, xPropSet, OUSTR("AdjustBlue") );
-        getPropertyValue( nGamma, xPropSet, OUSTR("Gamma") );
-        getPropertyValue( nTransparency, xPropSet, OUSTR("Transparency") );
-        getPropertyValue( nRotation, xPropSet, OUSTR("RotateAngle") );
+        getPropertyValue( eColorMode, xPropSet, "GraphicColorMode" );
+        getPropertyValue( nLuminance, xPropSet, "AdjustLuminance" );
+        getPropertyValue( nContrast, xPropSet, "AdjustContrast" );
+        getPropertyValue( nRed, xPropSet, "AdjustRed" );
+        getPropertyValue( nGreen, xPropSet, "AdjustGreen" );
+        getPropertyValue( nBlue, xPropSet, "AdjustBlue" );
+        getPropertyValue( nGamma, xPropSet, "Gamma" );
+        getPropertyValue( nTransparency, xPropSet, "Transparency" );
+        getPropertyValue( nRotation, xPropSet, "RotateAngle" );
 
         GraphicAttr aGraphAttrs;
         aGraphAttrs.SetDrawMode( (GraphicDrawMode)eColorMode );
@@ -400,7 +400,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         aGraphAttrs.SetRotation( static_cast<sal_uInt16>(nRotation*10) );
 
         text::GraphicCrop aGraphCrop;
-        if( getPropertyValue( aGraphCrop, xPropSet, OUSTR("GraphicCrop") ))
+        if( getPropertyValue( aGraphCrop, xPropSet, "GraphicCrop" ))
         {
             aGraphAttrs.SetCrop( aGraphCrop.Left,
                                  aGraphCrop.Top,
@@ -443,7 +443,7 @@ bool ShapeImporter::isSkip(
     bool bEmpty = false;
     if( getPropertyValue( bEmpty,
                           xPropSet,
-                          OUSTR("IsEmptyPresentationObject")) &&
+                          "IsEmptyPresentationObject") &&
         bEmpty )
     {
         return true;
@@ -487,9 +487,9 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
     drawing::PointSequenceSequence aRetval;
     sal_Int32           nLineColor=0;
     double              fLineWidth;
-    getPropertyValue( aRetval, xPropSet, OUSTR("PolyPolygon") );
-    getPropertyValue( nLineColor, xPropSet, OUSTR("LineColor") );
-    getPropertyValue( fLineWidth, xPropSet, OUSTR("LineWidth") );
+    getPropertyValue( aRetval, xPropSet, "PolyPolygon" );
+    getPropertyValue( nLineColor, xPropSet, "LineColor" );
+    getPropertyValue( fLineWidth, xPropSet, "LineWidth" );
 
     drawing::PointSequence* pOuterSequence = aRetval.getArray();
     awt::Point* pInnerSequence = pOuterSequence->getArray();

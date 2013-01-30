@@ -119,7 +119,7 @@ bool DragMethod_PieSegment::EndSdrDrag(bool /*bCopy*/)
             Reference< beans::XPropertySet > xPointProperties(
                 ObjectIdentifier::getObjectPropertySet( m_aObjectCID, xChartModel ) );
             if( xPointProperties.is() )
-                xPointProperties->setPropertyValue( C2U( "Offset" ), uno::makeAny( m_fAdditionalOffset+m_fInitialOffset ));
+                xPointProperties->setPropertyValue( "Offset", uno::makeAny( m_fAdditionalOffset+m_fInitialOffset ));
         }
     }
     catch( const uno::Exception & ex )

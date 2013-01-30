@@ -207,8 +207,8 @@ Sequence< OUString > FormattedString::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
 
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.FormattedString" );
-    aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 0 ] = "com.sun.star.chart2.FormattedString";
+    aServices[ 1 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 
@@ -248,7 +248,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( FormattedString, FormattedString_Base, ::prope
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( FormattedString,
-                             C2U( "com.sun.star.comp.chart.FormattedString" ));
+                             OUString("com.sun.star.comp.chart.FormattedString") );
 
 } //  namespace chart
 

@@ -32,8 +32,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-#define OUSTRING(msg) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( msg ) )
-
 namespace xforms
 {
 

@@ -132,7 +132,7 @@ public:
 
 inline ::rtl::OUString DicList::getImplementationName_Static() throw()
 {
-    return A2OU( "com.sun.star.lingu2.DicList" );
+    return OUString( "com.sun.star.lingu2.DicList" );
 }
 
 

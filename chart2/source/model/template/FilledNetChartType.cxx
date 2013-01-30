@@ -72,14 +72,14 @@ uno::Sequence< ::rtl::OUString > FilledNetChartType::getSupportedServiceNames_St
 {
     uno::Sequence< ::rtl::OUString > aServices( 3 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartType" );
-    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
+    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( FilledNetChartType,
-                             C2U( "com.sun.star.comp.chart.FilledNetChartType" ));
+                             OUString("com.sun.star.comp.chart.FilledNetChartType") );
 
 } //  namespace chart
 

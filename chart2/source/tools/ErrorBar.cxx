@@ -57,40 +57,40 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "ErrorBarStyle" ),
+        Property( "ErrorBarStyle",
                   PROP_ERROR_BAR_STYLE,
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "PositiveError" ),
+        Property( "PositiveError",
                   PROP_ERROR_BAR_POS_ERROR,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "NegativeError" ),
+        Property( "NegativeError",
                   PROP_ERROR_BAR_NEG_ERROR,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "Weight" ),
+        Property( "Weight",
                   PROP_ERROR_BAR_WEIGHT,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ShowPositiveError" ),
+        Property( "ShowPositiveError",
                   PROP_ERROR_BAR_SHOW_POS_ERROR,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "ShowNegativeError" ),
+        Property( "ShowNegativeError",
                   PROP_ERROR_BAR_SHOW_NEG_ERROR,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
@@ -332,7 +332,7 @@ uno::Sequence< ::rtl::OUString > ErrorBar::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ErrorBar" );
+    aServices[ 1 ] = "com.sun.star.chart2.ErrorBar";
     return aServices;
 }
 

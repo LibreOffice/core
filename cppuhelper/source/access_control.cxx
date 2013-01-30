@@ -25,8 +25,6 @@
 #include <com/sun/star/io/FilePermission.hpp>
 #include <com/sun/star/connection/SocketPermission.hpp>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -37,7 +35,7 @@ namespace
 {
     inline OUString str_ac_singleton()
     {
-        return OUSTR("/singletons/com.sun.star.security.theAccessController");
+        return OUString("/singletons/com.sun.star.security.theAccessController");
     }
 }
 
@@ -50,7 +48,7 @@ AccessControl::AccessControl( Reference< XComponentContext > const & xContext )
     if (! (xContext->getValueByName( str_ac_singleton() ) >>= m_xController))
     {
         throw SecurityException(
-            OUSTR("no access controller!"), Reference< XInterface >() );
+            "no access controller!", Reference< XInterface >() );
     }
 }
 //__________________________________________________________________________________________________
@@ -62,7 +60,7 @@ AccessControl::AccessControl(
     if (! m_xController.is())
     {
         throw SecurityException(
-            OUSTR("no access controller!"), Reference< XInterface >() );
+            "no access controller!", Reference< XInterface >() );
     }
 }
 //__________________________________________________________________________________________________
@@ -73,7 +71,7 @@ AccessControl::AccessControl( AccessControl const & ac )
     if (! m_xController.is())
     {
         throw SecurityException(
-            OUSTR("no access controller!"), Reference< XInterface >() );
+            "no access controller!", Reference< XInterface >() );
     }
 }
 

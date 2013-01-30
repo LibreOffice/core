@@ -25,8 +25,6 @@
 
 #include <vcclr.h>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 namespace uno
 {
@@ -51,12 +49,12 @@ inline ::System::Object ^ to_cli(
     ::com::sun::star::uno::Reference< T > const & x )
 {
     ::com::sun::star::uno::Mapping mapping(
-        OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME), OUSTR(UNO_LB_CLI) );
+        CPPU_CURRENT_LANGUAGE_BINDING_NAME, UNO_LB_CLI );
     OSL_ASSERT( mapping.is() );
     if (! mapping.is())
     {
         throw ::com::sun::star::uno::RuntimeException(
-            OUSTR("cannot get mapping from C++ to CLI!"),
+            "cannot get mapping from C++ to CLI!",
             ::com::sun::star::uno::Reference<
               ::com::sun::star::uno::XInterface >() );
     }
@@ -75,12 +73,12 @@ inline void to_uno(
     ::com::sun::star::uno::Reference< T > * pRet, ::System::Object ^ x )
 {
     ::com::sun::star::uno::Mapping mapping(
-        OUSTR(UNO_LB_CLI), OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+        UNO_LB_CLI, CPPU_CURRENT_LANGUAGE_BINDING_NAME );
     OSL_ASSERT( mapping.is() );
     if (! mapping.is())
     {
         throw ::com::sun::star::uno::RuntimeException(
-            OUSTR("cannot get mapping from CLI to C++!"),
+            "cannot get mapping from CLI to C++!",
             ::com::sun::star::uno::Reference<
               ::com::sun::star::uno::XInterface >() );
     }

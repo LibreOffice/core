@@ -259,11 +259,11 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
     {
         if( AxisHelper::isAxisPositioningEnabled() )
         {
-            xAxisProp->getPropertyValue(C2U( "CrossoverPosition" )) >>= m_eCrossoverType;
+            xAxisProp->getPropertyValue("CrossoverPosition") >>= m_eCrossoverType;
             if( ::com::sun::star::chart::ChartAxisPosition_VALUE == m_eCrossoverType )
             {
                 double fValue = 0.0;
-                xAxisProp->getPropertyValue(C2U( "CrossoverValue" )) >>= fValue;
+                xAxisProp->getPropertyValue("CrossoverValue") >>= fValue;
 
                 if( m_bCrossingAxisIsCategoryAxes )
                     fValue = ::rtl::math::round(fValue);
@@ -272,8 +272,8 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
             else if( ::com::sun::star::chart::ChartAxisPosition_ZERO == m_eCrossoverType )
                 m_pfMainLinePositionAtOtherAxis = new double(0.0);
 
-            xAxisProp->getPropertyValue(C2U( "LabelPosition" )) >>= m_eLabelPos;
-            xAxisProp->getPropertyValue(C2U( "MarkPosition" )) >>= m_eTickmarkPos;
+            xAxisProp->getPropertyValue("LabelPosition") >>= m_eLabelPos;
+            xAxisProp->getPropertyValue("MarkPosition") >>= m_eTickmarkPos;
         }
         else
         {
@@ -350,11 +350,11 @@ void AxisProperties::init( bool bCartesian )
         m_aLineProperties.initFromPropertySet( xProp );
 
         //init display labels
-        xProp->getPropertyValue( C2U( "DisplayLabels" ) ) >>= m_bDisplayLabels;
+        xProp->getPropertyValue( "DisplayLabels" ) >>= m_bDisplayLabels;
 
         //init TickmarkProperties
-        xProp->getPropertyValue( C2U( "MajorTickmarks" ) ) >>= m_nMajorTickmarks;
-        xProp->getPropertyValue( C2U( "MinorTickmarks" ) ) >>= m_nMinorTickmarks;
+        xProp->getPropertyValue( "MajorTickmarks" ) >>= m_nMajorTickmarks;
+        xProp->getPropertyValue( "MinorTickmarks" ) >>= m_nMinorTickmarks;
 
         sal_Int32 nMaxDepth = 0;
         if(m_nMinorTickmarks!=0)
@@ -400,13 +400,13 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
     {
         try
         {
-            xProp->getPropertyValue( C2U( "TextBreak" ) ) >>= this->bLineBreakAllowed;
-            xProp->getPropertyValue( C2U( "TextOverlap" ) ) >>= this->bOverlapAllowed;
-            xProp->getPropertyValue( C2U( "StackCharacters" ) ) >>= this->bStackCharacters;
-            xProp->getPropertyValue( C2U( "TextRotation" ) ) >>= this->fRotationAngleDegree;
+            xProp->getPropertyValue( "TextBreak" ) >>= this->bLineBreakAllowed;
+            xProp->getPropertyValue( "TextOverlap" ) >>= this->bOverlapAllowed;
+            xProp->getPropertyValue( "StackCharacters" ) >>= this->bStackCharacters;
+            xProp->getPropertyValue( "TextRotation" ) >>= this->fRotationAngleDegree;
 
             ::com::sun::star::chart::ChartAxisArrangeOrderType eArrangeOrder;
-            xProp->getPropertyValue( C2U( "ArrangeOrder" ) ) >>= eArrangeOrder;
+            xProp->getPropertyValue( "ArrangeOrder" ) >>= eArrangeOrder;
             switch(eArrangeOrder)
             {
                 case ::com::sun::star::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:

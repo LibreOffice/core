@@ -65,7 +65,7 @@ RegressionEquationItemConverter::RegressionEquationItemConverter(
                                  GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES ));
 
     m_aConverters.push_back( new CharacterPropertyItemConverter(
-                                 rPropertySet, rItemPool, pRefSize, C2U("ReferencePageSize")));
+                                 rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
@@ -126,9 +126,9 @@ bool RegressionEquationItemConverter::ApplySpecialItem(
             uno::Any aValue( static_cast< sal_Int32 >(
                 static_cast< const SfxUInt32Item & >(
                     rItemSet.Get( nWhichId )).GetValue()));
-            if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) != aValue )
+            if( GetPropertySet()->getPropertyValue( "NumberFormat" ) != aValue )
             {
-                GetPropertySet()->setPropertyValue( C2U( "NumberFormat" ), aValue );
+                GetPropertySet()->setPropertyValue( "NumberFormat", aValue );
                 bChanged = true;
             }
         }
@@ -147,7 +147,7 @@ void RegressionEquationItemConverter::FillSpecialItem(
         case SID_ATTR_NUMBERFORMAT_VALUE:
         {
             sal_Int32 nFormatKey = 0;
-            if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) >>= nFormatKey )
+            if( GetPropertySet()->getPropertyValue( "NumberFormat" ) >>= nFormatKey )
             {
                 rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
             }

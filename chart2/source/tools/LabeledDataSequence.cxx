@@ -156,13 +156,13 @@ void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::
 Sequence< OUString > LabeledDataSequence::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 1 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.data.LabeledDataSequence" );
+    aServices[ 0 ] = "com.sun.star.chart2.data.LabeledDataSequence";
     return aServices;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( LabeledDataSequence,
-                             C2U( "com.sun.star.comp.chart2.LabeledDataSequence" ))
+                             OUString("com.sun.star.comp.chart2.LabeledDataSequence") )
 
 // ================================================================================
 

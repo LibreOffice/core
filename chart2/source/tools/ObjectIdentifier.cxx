@@ -51,12 +51,12 @@ using rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-static OUString m_aMultiClick( C2U("MultiClick") );
-static OUString m_aDragMethodEquals( C2U("DragMethod=") );
-static OUString m_aDragParameterEquals( C2U("DragParameter=") );
-static OUString m_aProtocol( C2U("CID/") );
+static OUString m_aMultiClick( "MultiClick" );
+static OUString m_aDragMethodEquals( "DragMethod=" );
+static OUString m_aDragParameterEquals( "DragParameter=" );
+static OUString m_aProtocol( "CID/" );
 static OUString m_aEmptyString;
-static OUString m_aPieSegmentDragMethodServiceName( C2U("PieSegmentDraging") );
+static OUString m_aPieSegmentDragMethodServiceName( "PieSegmentDraging" );
 
 namespace
 {
@@ -103,13 +103,13 @@ const tTitleMap& lcl_getTitleMap()
 {
     //maps the title type to the ParentParticle for that title
     static tTitleMap m_aTitleMap = tTitleMap
-        ( TitleHelper::MAIN_TITLE, C2U("") )
-        ( TitleHelper::SUB_TITLE, C2U("D=0") )
-        ( TitleHelper::X_AXIS_TITLE, C2U("D=0:CS=0:Axis=0,0") )
-        ( TitleHelper::Y_AXIS_TITLE, C2U("D=0:CS=0:Axis=1,0") )
-        ( TitleHelper::Z_AXIS_TITLE, C2U("D=0:CS=0:Axis=2,0") )
-        ( TitleHelper::SECONDARY_X_AXIS_TITLE, C2U("D=0:CS=0:Axis=0,1") )
-        ( TitleHelper::SECONDARY_Y_AXIS_TITLE, C2U("D=0:CS=0:Axis=1,1") )
+        ( TitleHelper::MAIN_TITLE, "" )
+        ( TitleHelper::SUB_TITLE, "D=0" )
+        ( TitleHelper::X_AXIS_TITLE, "D=0:CS=0:Axis=0,0" )
+        ( TitleHelper::Y_AXIS_TITLE, "D=0:CS=0:Axis=1,0" )
+        ( TitleHelper::Z_AXIS_TITLE, "D=0:CS=0:Axis=2,0" )
+        ( TitleHelper::SECONDARY_X_AXIS_TITLE, "D=0:CS=0:Axis=0,1" )
+        ( TitleHelper::SECONDARY_Y_AXIS_TITLE, "D=0:CS=0:Axis=1,1" )
         ;
     return m_aTitleMap;
 }
@@ -191,13 +191,13 @@ sal_Int32 lcl_StringToIndex( const OUString& rIndexString )
 
 void lcl_parseCooSysIndices( sal_Int32& rnDiagram, sal_Int32& rnCooSys, const OUString& rString )
 {
-    rnDiagram = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, C2U("D=") ) );
-    rnCooSys = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, C2U("CS=") ) );
+    rnDiagram = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, "D=" ) );
+    rnCooSys = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, "CS=" ) );
 }
 
 void lcl_parseAxisIndices( sal_Int32& rnDimensionIndex, sal_Int32& rnAxisIndex, const OUString& rString )
 {
-    OUString aAxisIndexString = lcl_getIndexStringAfterString( rString, C2U(":Axis=") );
+    OUString aAxisIndexString = lcl_getIndexStringAfterString( rString, ":Axis=" );
     sal_Int32 nCharacterIndex=0;
     rnDimensionIndex = lcl_StringToIndex( aAxisIndexString.getToken( 0, ',', nCharacterIndex ) );
     rnAxisIndex = lcl_StringToIndex( aAxisIndexString.getToken( 0, ',', nCharacterIndex ) );
@@ -206,14 +206,14 @@ void lcl_parseAxisIndices( sal_Int32& rnDimensionIndex, sal_Int32& rnAxisIndex, 
 void lcl_parseGridIndices( sal_Int32& rnSubGridIndex, const OUString& rString )
 {
     rnSubGridIndex = -1;
-    rnSubGridIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, C2U(":SubGrid=") ) );
+    rnSubGridIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, ":SubGrid=" ) );
 }
 
 void lcl_parseSeriesIndices( sal_Int32& rnChartTypeIndex, sal_Int32& rnSeriesIndex, sal_Int32& rnPointIndex, const OUString& rString )
 {
-    rnChartTypeIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, C2U("CT=") ) );
-    rnSeriesIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, C2U("Series=") ) );
-    rnPointIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, C2U("Point=") ) );
+    rnChartTypeIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, "CT=" ) );
+    rnSeriesIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, "Series=" ) );
+    rnPointIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rString, "Point=" ) );
 }
 
 void lcl_getDiagramAndCooSys( const OUString& rObjectCID
@@ -449,7 +449,7 @@ OUString ObjectIdentifier::createParticleForDiagram(
           const Reference< XDiagram >& /*xDiagram*/
         , const Reference< frame::XModel >& /*xChartModel*/ )
 {
-    static OUString aRet(C2U("D=0"));
+    static OUString aRet("D=0");
     //todo: if more than one diagram is implemeted, add the correct diagram index here
     return aRet;
 }
@@ -486,7 +486,7 @@ OUString ObjectIdentifier::createParticleForAxis(
             sal_Int32 nDimensionIndex
           , sal_Int32 nAxisIndex )
 {
-    OUStringBuffer aRet(C2U("Axis="));
+    OUStringBuffer aRet("Axis=");
 
     aRet.append( OUString::valueOf( nDimensionIndex ) );
     aRet.appendAscii(",");
@@ -499,11 +499,11 @@ OUString ObjectIdentifier::createParticleForGrid(
             sal_Int32 nDimensionIndex
           , sal_Int32 nAxisIndex )
 {
-    OUStringBuffer aRet(C2U("Axis="));
+    OUStringBuffer aRet("Axis=");
     aRet.append( OUString::valueOf( nDimensionIndex ) );
     aRet.appendAscii(",");
     aRet.append( OUString::valueOf( nAxisIndex ) );
-    aRet.append( C2U(":Grid=0") );
+    aRet.append( ":Grid=0" );
 
     return aRet.makeStringAndClear();
 }
@@ -825,76 +825,76 @@ OUString ObjectIdentifier::getStringForType( ObjectType eObjectType )
     switch( eObjectType )
     {
         case OBJECTTYPE_PAGE:
-                aRet=C2U("Page");
+                aRet="Page";
                 break;
         case OBJECTTYPE_TITLE:
-                aRet=C2U("Title");
+                aRet="Title";
                 break;
         case OBJECTTYPE_LEGEND:
-                aRet=C2U("Legend");
+                aRet="Legend";
                 break;
         case OBJECTTYPE_LEGEND_ENTRY:
-                aRet=C2U("LegendEntry");
+                aRet="LegendEntry";
                 break;
         case OBJECTTYPE_DIAGRAM:
-                aRet=C2U("D");
+                aRet="D";
                 break;
         case OBJECTTYPE_DIAGRAM_WALL:
-                aRet=C2U("DiagramWall");
+                aRet="DiagramWall";
                 break;
         case OBJECTTYPE_DIAGRAM_FLOOR:
-                aRet=C2U("DiagramFloor");
+                aRet="DiagramFloor";
                 break;
         case OBJECTTYPE_AXIS:
-                aRet=C2U("Axis");
+                aRet="Axis";
                 break;
         case OBJECTTYPE_AXIS_UNITLABEL:
-                aRet=C2U("AxisUnitLabel");
+                aRet="AxisUnitLabel";
                 break;
         case OBJECTTYPE_GRID:
-                aRet=C2U("Grid");
+                aRet="Grid";
                 break;
         case OBJECTTYPE_SUBGRID:
-                aRet=C2U("SubGrid");
+                aRet="SubGrid";
                 break;
         case OBJECTTYPE_DATA_SERIES:
-                aRet=C2U("Series");
+                aRet="Series";
                 break;
         case OBJECTTYPE_DATA_POINT:
-                aRet=C2U("Point");
+                aRet="Point";
                 break;
         case OBJECTTYPE_DATA_LABELS:
-                aRet=C2U("DataLabels");
+                aRet="DataLabels";
                 break;
         case OBJECTTYPE_DATA_LABEL:
-                aRet=C2U("DataLabel");
+                aRet="DataLabel";
                 break;
         case OBJECTTYPE_DATA_ERRORS_X:
-                aRet=C2U("ErrorsX");
+                aRet="ErrorsX";
                 break;
         case OBJECTTYPE_DATA_ERRORS_Y:
-                aRet=C2U("ErrorsY");
+                aRet="ErrorsY";
                 break;
         case OBJECTTYPE_DATA_ERRORS_Z:
-                aRet=C2U("ErrorsZ");
+                aRet="ErrorsZ";
                 break;
         case OBJECTTYPE_DATA_CURVE:
-                aRet=C2U("Curve");
+                aRet="Curve";
                 break;
         case OBJECTTYPE_DATA_CURVE_EQUATION:
-                aRet=C2U("Equation");
+                aRet="Equation";
                 break;
         case OBJECTTYPE_DATA_AVERAGE_LINE:
-                aRet=C2U("Average");
+                aRet="Average";
                 break;
         case OBJECTTYPE_DATA_STOCK_RANGE:
-                aRet=C2U("StockRange");
+                aRet="StockRange";
                 break;
         case OBJECTTYPE_DATA_STOCK_LOSS:
-                aRet=C2U("StockLoss");
+                aRet="StockLoss";
                 break;
         case OBJECTTYPE_DATA_STOCK_GAIN:
-                aRet=C2U("StockGain");
+                aRet="StockGain";
                 break;
         default: //OBJECTTYPE_UNKNOWN
             ;
@@ -918,53 +918,53 @@ ObjectType ObjectIdentifier::getObjectType( const OUString& rCID )
     if( nLastSign>0 )
         nLastSign++;
 
-    if( rCID.match(C2U("Page"),nLastSign) )
+    if( rCID.match("Page",nLastSign) )
         eRet = OBJECTTYPE_PAGE;
-    else if( rCID.match(C2U("Title"),nLastSign) )
+    else if( rCID.match("Title",nLastSign) )
         eRet = OBJECTTYPE_TITLE;
-    else if( rCID.match(C2U("LegendEntry"),nLastSign) )
+    else if( rCID.match("LegendEntry",nLastSign) )
         eRet = OBJECTTYPE_LEGEND_ENTRY;
-    else if( rCID.match(C2U("Legend"),nLastSign) )
+    else if( rCID.match("Legend",nLastSign) )
         eRet = OBJECTTYPE_LEGEND;
-    else if( rCID.match(C2U("DiagramWall"),nLastSign) )
+    else if( rCID.match("DiagramWall",nLastSign) )
         eRet = OBJECTTYPE_DIAGRAM_WALL;
-    else if( rCID.match(C2U("DiagramFloor"),nLastSign) )
+    else if( rCID.match("DiagramFloor",nLastSign) )
         eRet = OBJECTTYPE_DIAGRAM_FLOOR;
-    else if( rCID.match(C2U("D="),nLastSign) )
+    else if( rCID.match("D=",nLastSign) )
         eRet = OBJECTTYPE_DIAGRAM;
-    else if( rCID.match(C2U("AxisUnitLabel"),nLastSign) )
+    else if( rCID.match("AxisUnitLabel",nLastSign) )
         eRet = OBJECTTYPE_AXIS_UNITLABEL;
-    else if( rCID.match(C2U("Axis"),nLastSign) )
+    else if( rCID.match("Axis",nLastSign) )
         eRet = OBJECTTYPE_AXIS;
-    else if( rCID.match(C2U("Grid"),nLastSign) )
+    else if( rCID.match("Grid",nLastSign) )
         eRet = OBJECTTYPE_GRID;
-    else if( rCID.match(C2U("SubGrid"),nLastSign) )
+    else if( rCID.match("SubGrid",nLastSign) )
         eRet = OBJECTTYPE_SUBGRID;
-    else if( rCID.match(C2U("Series"),nLastSign) )
+    else if( rCID.match("Series",nLastSign) )
         eRet = OBJECTTYPE_DATA_SERIES;
-    else if( rCID.match(C2U("Point"),nLastSign) )
+    else if( rCID.match("Point",nLastSign) )
         eRet = OBJECTTYPE_DATA_POINT;
-    else if( rCID.match(C2U("DataLabels"),nLastSign) )
+    else if( rCID.match("DataLabels",nLastSign) )
         eRet = OBJECTTYPE_DATA_LABELS;
-    else if( rCID.match(C2U("DataLabel"),nLastSign) )
+    else if( rCID.match("DataLabel",nLastSign) )
         eRet = OBJECTTYPE_DATA_LABEL;
-    else if( rCID.match(C2U("ErrorsX"),nLastSign) )
+    else if( rCID.match("ErrorsX",nLastSign) )
         eRet = OBJECTTYPE_DATA_ERRORS_X;
-    else if( rCID.match(C2U("ErrorsY"),nLastSign) )
+    else if( rCID.match("ErrorsY",nLastSign) )
         eRet = OBJECTTYPE_DATA_ERRORS_Y;
-    else if( rCID.match(C2U("ErrorsZ"),nLastSign) )
+    else if( rCID.match("ErrorsZ",nLastSign) )
         eRet = OBJECTTYPE_DATA_ERRORS_Z;
-    else if( rCID.match(C2U("Curve"),nLastSign) )
+    else if( rCID.match("Curve",nLastSign) )
         eRet = OBJECTTYPE_DATA_CURVE;
-    else if( rCID.match(C2U("Equation"),nLastSign) )
+    else if( rCID.match("Equation",nLastSign) )
         eRet = OBJECTTYPE_DATA_CURVE_EQUATION;
-    else if( rCID.match(C2U("Average"),nLastSign) )
+    else if( rCID.match("Average",nLastSign) )
         eRet = OBJECTTYPE_DATA_AVERAGE_LINE;
-    else if( rCID.match(C2U("StockRange"),nLastSign) )
+    else if( rCID.match("StockRange",nLastSign) )
         eRet = OBJECTTYPE_DATA_STOCK_RANGE;
-    else if( rCID.match(C2U("StockLoss"),nLastSign) )
+    else if( rCID.match("StockLoss",nLastSign) )
         eRet = OBJECTTYPE_DATA_STOCK_LOSS;
-    else if( rCID.match(C2U("StockGain"),nLastSign) )
+    else if( rCID.match("StockGain",nLastSign) )
         eRet = OBJECTTYPE_DATA_STOCK_GAIN;
     else
         eRet = OBJECTTYPE_UNKNOWN;
@@ -1031,7 +1031,7 @@ sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( const rtl::OUString& rPar
 {
     sal_Int32 nRet = -1;
 
-    OUString aIndexString = lcl_getIndexStringAfterString( rParticleOrCID, C2U("=") );
+    OUString aIndexString = lcl_getIndexStringAfterString( rParticleOrCID, "=" );
     sal_Int32 nCharacterIndex=0;
     nRet = lcl_StringToIndex( aIndexString.getToken( 0, ',', nCharacterIndex ) );
 
@@ -1044,7 +1044,7 @@ OUString ObjectIdentifier::createSeriesSubObjectStub( ObjectType eSubObjectType
                     , const rtl::OUString& rDragParameterString )
 {
     OUString aChildParticle( getStringForType( eSubObjectType ) );
-    aChildParticle+=(C2U("="));
+    aChildParticle+=("=");
 
     return createClassifiedIdentifierForParticles(
             rSeriesParticle, aChildParticle
@@ -1237,11 +1237,11 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                             OUString errorBar;
 
                             if ( eObjectType == OBJECTTYPE_DATA_ERRORS_X)
-                                errorBar = C2U("ErrorBarX");
+                                errorBar = "ErrorBarX";
                             else if (eObjectType == OBJECTTYPE_DATA_ERRORS_Y)
-                                errorBar = C2U("ErrorBarY");
+                                errorBar = "ErrorBarY";
                             else
-                                errorBar = C2U("ErrorBarZ");
+                                errorBar = "ErrorBarZ";
 
                             xSeriesProp->getPropertyValue( errorBar ) >>= xErrorBarProp;
                             xObjectProperties = Reference< beans::XPropertySet >( xErrorBarProp, uno::UNO_QUERY );
@@ -1277,7 +1277,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                         Reference<XChartType> xChartType( lcl_getFirstStockChartType( xChartModel ) );
                         Reference< beans::XPropertySet > xChartTypeProps( xChartType, uno::UNO_QUERY );
                         if(xChartTypeProps.is())
-                            xChartTypeProps->getPropertyValue( C2U( "BlackDay" ) ) >>= xObjectProperties;
+                            xChartTypeProps->getPropertyValue( "BlackDay" ) >>= xObjectProperties;
                     }
                     break;
             case OBJECTTYPE_DATA_STOCK_GAIN:
@@ -1285,7 +1285,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                         Reference<XChartType> xChartType( lcl_getFirstStockChartType( xChartModel ) );
                         Reference< beans::XPropertySet > xChartTypeProps( xChartType, uno::UNO_QUERY );
                         if(xChartTypeProps.is())
-                            xChartTypeProps->getPropertyValue( C2U( "WhiteDay" ) ) >>= xObjectProperties;
+                            xChartTypeProps->getPropertyValue( "WhiteDay" ) >>= xObjectProperties;
                     }
                     break;
             default: //OBJECTTYPE_UNKNOWN
@@ -1387,10 +1387,10 @@ OUString ObjectIdentifier::getSeriesParticleFromCID( const OUString& rCID )
 
 OUString ObjectIdentifier::getMovedSeriesCID( const ::rtl::OUString& rObjectCID, sal_Bool bForward )
 {
-    sal_Int32 nDiagramIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, C2U("CID/D=") ) );
-    sal_Int32 nCooSysIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, C2U("CS=") ) );
-    sal_Int32 nChartTypeIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, C2U("CT=") ) );
-    sal_Int32 nSeriesIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, C2U("Series=") ) );
+    sal_Int32 nDiagramIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, "CID/D=" ) );
+    sal_Int32 nCooSysIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, "CS=" ) );
+    sal_Int32 nChartTypeIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, "CT=" ) );
+    sal_Int32 nSeriesIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, "Series=" ) );
 
     if( bForward )
         nSeriesIndex--;

@@ -281,9 +281,8 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         // add labels
         DataSeriesHelper::insertDataLabelsToSeriesAndAllPoints( xSeries );
 
-        rtl::OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
-        aChildParticle+=(C2U("="));
-        rtl::OUString aObjectCID = ObjectIdentifier::createClassifiedIdentifierForParticles(
+        OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) + "=" );
+        OUString aObjectCID = ObjectIdentifier::createClassifiedIdentifierForParticles(
             ObjectIdentifier::getSeriesParticleFromCID(m_aSelection.getSelectedCID()), aChildParticle );
 
         bool bSuccess = ChartController::executeDlg_ObjectProperties_withoutUndoGuard( aObjectCID, true );
@@ -585,8 +584,8 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
                 ActionDescriptionProvider::createDescription(
                     ActionDescriptionProvider::INSERT, String( SchResId( STR_OBJECT_CURVE_EQUATION ))),
                 m_xUndoManager );
-            xEqProp->setPropertyValue( C2U("ShowEquation"), uno::makeAny( true ));
-            xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( bInsertR2 ));
+            xEqProp->setPropertyValue( "ShowEquation", uno::makeAny( true ));
+            xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( bInsertR2 ));
             aUndoGuard.commit();
         }
     }
@@ -602,7 +601,7 @@ void ChartController::executeDispatch_InsertR2Value()
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::INSERT, String( SchResId( STR_OBJECT_CURVE_EQUATION ))),
             m_xUndoManager );
-        xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( true ));
+        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( true ));
         aUndoGuard.commit();
     }
 }
@@ -617,7 +616,7 @@ void ChartController::executeDispatch_DeleteR2Value()
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::INSERT, String( SchResId( STR_OBJECT_CURVE_EQUATION ))),
             m_xUndoManager );
-        xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( false ));
+        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( false ));
         aUndoGuard.commit();
     }
 }

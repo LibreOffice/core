@@ -85,8 +85,8 @@ void lcl_getChildOIDs(
                 Reference< beans::XPropertySetInfo > xInfo( xShapeProp->getPropertySetInfo());
                 OUString aName;
                 if( xInfo.is() &&
-                    xInfo->hasPropertyByName( C2U("Name")) &&
-                    (xShapeProp->getPropertyValue( C2U("Name")) >>= aName ) &&
+                    xInfo->hasPropertyByName( "Name") &&
+                    (xShapeProp->getPropertyValue( "Name") >>= aName ) &&
                     !aName.isEmpty() &&
                     ::chart::ObjectIdentifier::isCID( aName ))
                 {
@@ -444,7 +444,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
                     if( DataSeriesHelper::hasDataLabelsAtSeries( xSeries ) )
                     {
                         rtl::OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
-                        aChildParticle+=(C2U("="));
+                        aChildParticle+=("=");
                         aSeriesSubContainer.push_back(
                                     ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForParticles( aSeriesParticle, aChildParticle ) ) );
                     }
@@ -470,11 +470,11 @@ void ImplObjectHierarchy::createDataSeriesTree(
                             Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
                             Reference< beans::XPropertySet > xErrorBarProp;
                             if( xSeriesProp.is() &&
-                                (xSeriesProp->getPropertyValue( C2U("ErrorBarY")) >>= xErrorBarProp) &&
+                                (xSeriesProp->getPropertyValue( "ErrorBarY") >>= xErrorBarProp) &&
                                 xErrorBarProp.is())
                             {
                                 sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
-                                if( ( xErrorBarProp->getPropertyValue( C2U("ErrorBarStyle")) >>= nStyle ) &&
+                                if( ( xErrorBarProp->getPropertyValue( "ErrorBarStyle") >>= nStyle ) &&
                                     ( nStyle != ::com::sun::star::chart::ErrorBarStyle::NONE ) )
                                 {
                                     aSeriesSubContainer.push_back(
@@ -484,11 +484,11 @@ void ImplObjectHierarchy::createDataSeriesTree(
                             }
 
                             if( xSeriesProp.is() &&
-                                (xSeriesProp->getPropertyValue( C2U("ErrorBarX")) >>= xErrorBarProp) &&
+                                (xSeriesProp->getPropertyValue( "ErrorBarX") >>= xErrorBarProp) &&
                                 xErrorBarProp.is())
                             {
                                 sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
-                                if( ( xErrorBarProp->getPropertyValue( C2U("ErrorBarStyle")) >>= nStyle ) &&
+                                if( ( xErrorBarProp->getPropertyValue( "ErrorBarStyle") >>= nStyle ) &&
                                     ( nStyle != ::com::sun::star::chart::ErrorBarStyle::NONE ) )
                                 {
                                     aSeriesSubContainer.push_back(
@@ -636,7 +636,7 @@ ObjectHierarchy::~ObjectHierarchy()
 
 ObjectHierarchy::tOID ObjectHierarchy::getRootNodeOID()
 {
-    return ObjectIdentifier( C2U( "ROOT" ) );
+    return ObjectIdentifier( "ROOT" );
 }
 
 bool ObjectHierarchy::isRootNode( const ObjectHierarchy::tOID& rOID )

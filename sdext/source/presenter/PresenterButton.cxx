@@ -35,8 +35,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(pString))
-
 namespace sdext { namespace presenter {
 
 const static double gnHorizontalBorder (15);
@@ -57,16 +55,16 @@ const static double gnVerticalBorder (5);
     {
         OUString sText;
         OUString sAction;
-        PresenterConfigurationAccess::GetProperty(xProperties, A2S("Text")) >>= sText;
-        PresenterConfigurationAccess::GetProperty(xProperties, A2S("Action")) >>= sAction;
+        PresenterConfigurationAccess::GetProperty(xProperties, "Text") >>= sText;
+        PresenterConfigurationAccess::GetProperty(xProperties, "Action") >>= sAction;
 
         PresenterTheme::SharedFontDescriptor pFont;
         if (rpTheme.get() != NULL)
-            pFont = rpTheme->GetFont(A2S("ButtonFont"));
+            pFont = rpTheme->GetFont("ButtonFont");
 
         PresenterTheme::SharedFontDescriptor pMouseOverFont;
         if (rpTheme.get() != NULL)
-            pMouseOverFont = rpTheme->GetFont(A2S("ButtonMouseOverFont"));
+            pMouseOverFont = rpTheme->GetFont("ButtonMouseOverFont");
 
         rtl::Reference<PresenterButton> pButton (
             new PresenterButton(
@@ -450,9 +448,9 @@ void PresenterButton::SetupButtonBitmaps (void)
         return;
 
     // Get the bitmaps for the button border.
-    SharedBitmapDescriptor pLeftBitmap (mpTheme->GetBitmap(A2S("ButtonFrameLeft")));
-    SharedBitmapDescriptor pCenterBitmap(mpTheme->GetBitmap(A2S("ButtonFrameCenter")));
-    SharedBitmapDescriptor pRightBitmap(mpTheme->GetBitmap(A2S("ButtonFrameRight")));
+    SharedBitmapDescriptor pLeftBitmap (mpTheme->GetBitmap("ButtonFrameLeft"));
+    SharedBitmapDescriptor pCenterBitmap(mpTheme->GetBitmap("ButtonFrameCenter"));
+    SharedBitmapDescriptor pRightBitmap(mpTheme->GetBitmap("ButtonFrameRight"));
 
     maButtonSize = CalculateButtonSize();
 
@@ -497,11 +495,11 @@ Reference<beans::XPropertySet> PresenterButton::GetConfigurationProperties (
     return Reference<beans::XPropertySet>(
         PresenterConfigurationAccess::Find (
             Reference<container::XNameAccess>(
-                aConfiguration.GetConfigurationNode(A2S("PresenterScreenSettings/Buttons")),
+                aConfiguration.GetConfigurationNode("PresenterScreenSettings/Buttons"),
                 UNO_QUERY),
             ::boost::bind(&PresenterConfigurationAccess::IsStringPropertyEqual,
                 rsConfgurationName,
-                A2S("Name"),
+                OUString::createFromAscii("Name"),
                 _2)),
         UNO_QUERY);
 }

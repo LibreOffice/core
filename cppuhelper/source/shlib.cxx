@@ -43,8 +43,6 @@
 #include <osl/detail/ios-bootstrap.h>
 #endif
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -227,10 +225,10 @@ static OUString makeComponentPath(
         if (rPath[ rPath.getLength() -1 ] != '/')
             buf.append( (sal_Unicode) '/' );
     }
-    if (! rLibName.endsWithIgnoreAsciiCase( OUSTR(SAL_DLLEXTENSION) ))
+    if (! rLibName.endsWithIgnoreAsciiCase( SAL_DLLEXTENSION ))
     {
 #if defined SAL_DLLPREFIX
-        if (! rLibName.endsWithIgnoreAsciiCase( OUSTR(".uno") ))
+        if (! rLibName.endsWithIgnoreAsciiCase( ".uno" ))
         {
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLPREFIX) );
         }
@@ -262,7 +260,7 @@ static void getLibEnv(oslModule                lib,
 {
     sal_Char const * pEnvTypeName = NULL;
 
-    OUString aGetEnvNameExt = rPrefix + OUSTR(COMPONENT_GETENVEXT);
+    OUString aGetEnvNameExt = rPrefix + COMPONENT_GETENVEXT;
     component_getImplementationEnvironmentExtFunc pGetImplEnvExt =
         (component_getImplementationEnvironmentExtFunc)osl_getFunctionSymbol(lib, aGetEnvNameExt.pData);
 
@@ -273,7 +271,7 @@ static void getLibEnv(oslModule                lib,
     }
     else
     {
-        OUString aGetEnvName = rPrefix + OUSTR(COMPONENT_GETENV);
+        OUString aGetEnvName = rPrefix + COMPONENT_GETENV;
         component_getImplementationEnvironmentFunc pGetImplEnv =
             (component_getImplementationEnvironmentFunc)osl_getFunctionSymbol(
                 lib, aGetEnvName.pData );
@@ -417,22 +415,22 @@ Reference< XInterface > invokeComponentFactory(
             }
             else
             {
-                rExcMsg = rModulePath;
-                rExcMsg += OUSTR(": cannot get factory of "
-                                 "demanded implementation: ");
-                rExcMsg += OStringToOUString(
+                rExcMsg = rModulePath +
+                          ": cannot get factory of " +
+                          "demanded implementation: " +
+                          OStringToOUString(
                         aImplName, RTL_TEXTENCODING_ASCII_US );
             }
         }
         else
         {
             rExcMsg =
-                OUSTR("cannot get uno mappings: C++ <=> UNO!");
+                "cannot get uno mappings: C++ <=> UNO!";
         }
     }
     else
     {
-        rExcMsg = OUSTR("cannot get uno environments!");
+        rExcMsg = "cannot get uno environments!";
     }
 
     return xRet;
@@ -479,15 +477,15 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString sLibName(rLibName);
 
 #ifdef ANDROID
-    if ( rLibName.equals( OUSTR("bootstrap.uno" SAL_DLLEXTENSION) ) )
-        sLibName = OUSTR("libbootstrap.uno" SAL_DLLEXTENSION);
+    if ( rLibName.equals( "bootstrap.uno" SAL_DLLEXTENSION ) )
+        sLibName = "libbootstrap.uno" SAL_DLLEXTENSION;
 #endif
 
     OUString aModulePath( makeComponentPath( sLibName, rPath ) );
     if (! checkAccessPath( &aModulePath ))
     {
         throw loader::CannotActivateFactoryException(
-            OUSTR("permission denied to load component library: ") +
+            "permission denied to load component library: " +
             aModulePath,
             Reference< XInterface >() );
     }
@@ -497,17 +495,17 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     if (! lib)
     {
         throw loader::CannotActivateFactoryException(
-            OUSTR("loading component library failed: ") + aModulePath,
+            "loading component library failed: " + aModulePath,
             Reference< XInterface >() );
     }
 #else
     (void) rPath;
     oslModule lib;
-    OUString aModulePath(OUSTR("MAIN"));
+    OUString aModulePath("MAIN");
     if (! osl_getModuleHandle( NULL, &lib))
     {
         throw loader::CannotActivateFactoryException(
-            OUSTR("osl_getModuleHandle of the executable: "),
+            "osl_getModuleHandle of the executable: ",
             Reference< XInterface >() );
     }
 #endif
@@ -516,7 +514,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
     OUString aExcMsg;
 
-    OUString aGetFactoryName = rPrefix + OUSTR(COMPONENT_GETFACTORY);
+    OUString aGetFactoryName = rPrefix + COMPONENT_GETFACTORY;
 
     oslGenericFunction pSym = NULL;
 
@@ -600,7 +598,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     else
     {
         aExcMsg = aModulePath;
-        aExcMsg += OUSTR(": cannot get symbol: ");
+        aExcMsg += ": cannot get symbol: ";
         aExcMsg += aGetFactoryName;
     }
 
@@ -633,7 +631,7 @@ Reference< XInterface > SAL_CALL invokeStaticComponentFactory(
 {
     Reference< XInterface > xRet;
     oslModule pExe;
-    OUString aExePath(OUSTR("MAIN"));
+    OUString aExePath("MAIN");
     osl_getModuleHandle( NULL, &pExe );
     OUString aExcMsg;
 
@@ -679,7 +677,7 @@ void SAL_CALL writeSharedLibComponentInfo(
     if (! checkAccessPath( &aModulePath ))
     {
         throw registry::CannotRegisterImplementationException(
-            OUSTR("permission denied to load component library: ") +
+            "permission denied to load component library: " +
             aModulePath,
             Reference< XInterface >() );
     }
@@ -689,7 +687,7 @@ void SAL_CALL writeSharedLibComponentInfo(
     if (! lib)
     {
         throw registry::CannotRegisterImplementationException(
-            OUSTR("loading component library failed: ") + aModulePath,
+            "loading component library failed: " + aModulePath,
             Reference< XInterface >() );
     }
 
@@ -703,7 +701,7 @@ void SAL_CALL writeSharedLibComponentInfo(
 
     getLibEnv(lib, &env, &aEnvTypeName, currentEnv);
 
-    OUString aWriteInfoName = OUSTR(COMPONENT_WRITEINFO);
+    OUString aWriteInfoName = COMPONENT_WRITEINFO;
     oslGenericFunction pSym = osl_getFunctionSymbol( lib, aWriteInfoName.pData );
     if (pSym != 0)
     {
@@ -729,16 +727,16 @@ void SAL_CALL writeSharedLibComponentInfo(
                     if (! bRet)
                     {
                         aExcMsg = aModulePath;
-                        aExcMsg += OUSTR(": component_writeInfo() "
-                                         "returned false!");
+                        aExcMsg += ": component_writeInfo() "
+                                   "returned false!";
                     }
                 }
                 else
                 {
                     // key is mandatory
                     aExcMsg = aModulePath;
-                    aExcMsg += OUSTR(": registry is mandatory to invoke"
-                                     " component_writeInfo()!");
+                    aExcMsg += ": registry is mandatory to invoke"
+                               " component_writeInfo()!";
                 }
 
                 if (pSMgr)
@@ -749,18 +747,18 @@ void SAL_CALL writeSharedLibComponentInfo(
             }
             else
             {
-                aExcMsg = OUSTR("cannot get uno mapping: C++ <=> UNO!");
+                aExcMsg = "cannot get uno mapping: C++ <=> UNO!";
             }
         }
         else
         {
-            aExcMsg = OUSTR("cannot get uno environments!");
+            aExcMsg = "cannot get uno environments!";
         }
     }
     else
     {
         aExcMsg = aModulePath;
-        aExcMsg += OUSTR(": cannot get symbol: ");
+        aExcMsg += ": cannot get symbol: ";
         aExcMsg += aWriteInfoName;
     }
 

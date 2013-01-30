@@ -34,8 +34,8 @@ uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
             , const drawing::Direction3D& rSize )
 {
     uno::Reference< drawing::XShape > xGroup(
-                xShapeFactory->createInstance( C2U(
-                "com.sun.star.drawing.GroupShape" ) ), uno::UNO_QUERY );
+                xShapeFactory->createInstance(
+                "com.sun.star.drawing.GroupShape" ), uno::UNO_QUERY );
     if(xTarget.is())
         xTarget->add(xGroup);
     uno::Reference< drawing::XShapes > xGroupShapes =

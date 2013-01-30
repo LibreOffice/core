@@ -65,7 +65,6 @@
 #define RUNNING_ON_VALGRIND 0
 #endif
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SUN_MICRO "Sun Microsystems Inc."
 
 using namespace osl;
@@ -109,7 +108,7 @@ OString getPluginJarPath(
         }
         if (!sName.isEmpty())
         {
-            sName = sLocation + OUSTR("/lib/") + sName;
+            sName = sLocation + "/lib/" + sName;
             OSL_VERIFY(
                 osl_getSystemPathFromFileURL(sName.pData, & sPath.pData)
                 == osl_File_E_None);
@@ -118,13 +117,13 @@ OString getPluginJarPath(
     else
     {
         char sep[] =  {SAL_PATHSEPARATOR, 0};
-        OUString sName(sLocation + OUSTR("/lib/") + sName1);
+        OUString sName(sLocation + "/lib/" + sName1);
         OUString sPath1;
         OUString sPath2;
         if (osl_getSystemPathFromFileURL(sName.pData, & sPath1.pData)
             == osl_File_E_None)
         {
-            sName = sLocation + OUSTR("/lib/") + sName2;
+            sName = sLocation + "/lib/" + sName2;
             if (osl_getSystemPathFromFileURL(sName.pData, & sPath2.pData)
                 == osl_File_E_None)
             {
@@ -260,9 +259,9 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             {
                 //The minVersion was not recognized as valid for this vendor.
                 JFW_ENSURE(
-                    0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
-                    + ouMinVer + OUSTR(" for vendor: ") + cur->getVendor()
-                    + OUSTR(" .Check minimum Version.") );
+                    0,"[Java framework]sunjavaplugin does not know version: "
+                    + ouMinVer + " for vendor: " + cur->getVendor()
+                    + " .Check minimum Version." );
                 return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
             }
         }
@@ -278,9 +277,9 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             {
                 //The maxVersion was not recognized as valid for this vendor.
                 JFW_ENSURE(
-                    0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
-                    + ouMaxVer + OUSTR(" for vendor: ") + cur->getVendor()
-                    + OUSTR(" .Check maximum Version.") );
+                    0,"[Java framework]sunjavaplugin does not know version: "
+                    + ouMaxVer + " for vendor: " + cur->getVendor()
+                    + " .Check maximum Version." );
                 return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
             }
         }
@@ -301,9 +300,9 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             {
                 //The excluded version was not recognized as valid for this vendor.
                 JFW_ENSURE(
-                    0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
-                    + sExVer + OUSTR(" for vendor: ") + cur->getVendor()
-                    + OUSTR(" .Check excluded versions.") );
+                    0,"[Java framework]sunjavaplugin does not know version: "
+                    + sExVer + " for vendor: " + cur->getVendor()
+                    + " .Check excluded versions." );
                 return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
             }
         }
@@ -384,9 +383,9 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         {
             //The minVersion was not recognized as valid for this vendor.
             JFW_ENSURE(
-                0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
-                + ouMinVer + OUSTR(" for vendor: ") + aVendorInfo->getVendor()
-                + OUSTR(" .Check minimum Version.") );
+                0,"[Java framework]sunjavaplugin does not know version: "
+                + ouMinVer + " for vendor: " + aVendorInfo->getVendor()
+                + " .Check minimum Version." );
             return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
         }
         if (nRes < 0)
@@ -404,9 +403,9 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         {
             //The maxVersion was not recognized as valid for this vendor.
             JFW_ENSURE(
-                0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
-                + ouMaxVer + OUSTR(" for vendor: ") + aVendorInfo->getVendor()
-                + OUSTR(" .Check maximum Version.") );
+                0,"[Java framework]sunjavaplugin does not know version: "
+                + ouMaxVer + " for vendor: " + aVendorInfo->getVendor()
+                + " .Check maximum Version." );
             return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
         }
         if (nRes > 0)
@@ -425,9 +424,9 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         {
             //The excluded version was not recognized as valid for this vendor.
             JFW_ENSURE(
-                0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
-                + sExVer + OUSTR(" for vendor: ") + aVendorInfo->getVendor()
-                + OUSTR(" .Check excluded versions.") );
+                0,"[Java framework]sunjavaplugin does not know version: "
+                + sExVer + " for vendor: " + aVendorInfo->getVendor()
+                + " .Check excluded versions." );
             return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
         }
         if (nRes == 0)
@@ -571,8 +570,8 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     if ( ! isVendorSupported(pInfo->sVendor))
         return JFW_PLUGIN_E_WRONG_VENDOR;
     rtl::OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
-    JFW_TRACE2(OUSTR("[Java framework] Using Java runtime library: ")
-              + sRuntimeLib + OUSTR(".\n"));
+    JFW_TRACE2("[Java framework] Using Java runtime library: "
+              + sRuntimeLib + ".\n");
 
 #ifndef ANDROID
     // On linux we load jvm with RTLD_GLOBAL. This is necessary for debugging, because
@@ -589,12 +588,12 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     if ((moduleRt = osl_loadModule(sRuntimeLib.pData, SAL_LOADMODULE_DEFAULT)) == 0)
 #endif
      {
-         JFW_ENSURE(0, OUSTR("[Java framework]sunjavaplugin" SAL_DLLEXTENSION
-                             " could not load Java runtime library: \n")
-                    + sRuntimeLib + OUSTR("\n"));
-         JFW_TRACE0(OUSTR("[Java framework]sunjavaplugin" SAL_DLLEXTENSION
-                             " could not load Java runtime library: \n")
-                    + sRuntimeLib +  OUSTR("\n"));
+         JFW_ENSURE(0, "[Java framework]sunjavaplugin" SAL_DLLEXTENSION
+                       " could not load Java runtime library: \n"
+                    + sRuntimeLib + "\n");
+         JFW_TRACE0("[Java framework]sunjavaplugin" SAL_DLLEXTENSION
+                    " could not load Java runtime library: \n"
+                    + sRuntimeLib +  "\n");
          return JFW_PLUGIN_E_VM_CREATION_FAILED;
      }
 
@@ -784,28 +783,28 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
     if (ret == JFW_PLUGIN_E_NONE && *exist == sal_True)
     {
         rtl::OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
-        JFW_TRACE2(OUSTR("[Java framework] Checking existence of Java runtime library.\n"));
+        JFW_TRACE2("[Java framework] Checking existence of Java runtime library.\n");
 
         ::osl::DirectoryItem itemRt;
         ::osl::File::RC rc_itemRt = ::osl::DirectoryItem::get(sRuntimeLib, itemRt);
         if (::osl::File::E_None == rc_itemRt)
         {
             *exist = sal_True;
-            JFW_TRACE2(OUSTR("[Java framework] Java runtime library exist: ")
-              + sRuntimeLib + OUSTR("\n"));
+            JFW_TRACE2("[Java framework] Java runtime library exist: "
+              + sRuntimeLib + "\n");
 
         }
         else if (::osl::File::E_NOENT == rc_itemRt)
         {
             *exist = sal_False;
-            JFW_TRACE2(OUSTR("[Java framework] Java runtime library does not exist: ")
-                       + sRuntimeLib + OUSTR("\n"));
+            JFW_TRACE2("[Java framework] Java runtime library does not exist: "
+                       + sRuntimeLib + "\n");
         }
         else
         {
             ret = JFW_PLUGIN_E_ERROR;
-            JFW_TRACE2(OUSTR("[Java framework] Error while looking for Java runtime library: ")
-                       + sRuntimeLib + OUSTR(" \n"));
+            JFW_TRACE2("[Java framework] Error while looking for Java runtime library: "
+                       + sRuntimeLib + " \n");
         }
     }
 #endif

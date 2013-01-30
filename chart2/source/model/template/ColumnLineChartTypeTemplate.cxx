@@ -59,7 +59,7 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "NumberOfLines" ),
+        Property( "NumberOfLines",
                   PROP_COL_LINE_NUMBER_OF_LINES,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -258,7 +258,7 @@ void SAL_CALL ColumnLineChartTypeTemplate::applyStyle(
 
     if( nChartTypeIndex==0 ) // columns
     {
-        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
     }
     else if( nChartTypeIndex==1 ) // lines
     {
@@ -425,7 +425,7 @@ uno::Sequence< ::rtl::OUString > ColumnLineChartTypeTemplate::getSupportedServic
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
     return aServices;
 }
 

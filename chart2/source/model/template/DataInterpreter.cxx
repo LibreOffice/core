@@ -97,14 +97,14 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
             {
                 xCategories.set( aData[i] );
                 if( xCategories.is())
-                    SetRole( xCategories->getValues(), C2U("categories"));
+                    SetRole( xCategories->getValues(), "categories");
                 bCategoriesUsed = true;
             }
             else
             {
                 aSequencesVec.push_back( aData[i] );
                 if( aData[i].is())
-                    SetRole( aData[i]->getValues(), C2U("values-y"));
+                    SetRole( aData[i]->getValues(), "values-y");
             }
         }
         catch( const uno::Exception & ex )
@@ -160,14 +160,14 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
 
             // values-y
             Reference< data::XLabeledDataSequence > xValuesY(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values-y"), false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y", false ));
             // re-use values-... as values-y
             if( ! xValuesY.is())
             {
                 xValuesY.set(
-                    DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values"), true ));
+                    DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values", true ));
                 if( xValuesY.is())
-                    SetRole( xValuesY->getValues(), C2U("values-y"));
+                    SetRole( xValuesY->getValues(), "values-y");
             }
             if( xValuesY.is())
             {
@@ -328,7 +328,7 @@ OUString DataInterpreter::GetRole( const Reference< data::XDataSequence > & xSeq
     try
     {
         Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
-        xProp->getPropertyValue( C2U("Role")) >>= aResult;
+        xProp->getPropertyValue( "Role") >>= aResult;
     }
     catch( const uno::Exception & ex )
     {
@@ -344,7 +344,7 @@ void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, co
     try
     {
         Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
-        xProp->setPropertyValue( C2U("Role"), uno::makeAny( rRole ));
+        xProp->setPropertyValue( "Role", uno::makeAny( rRole ));
     }
     catch( const uno::Exception & ex )
     {
@@ -371,7 +371,7 @@ bool DataInterpreter::HasCategories(
     bool bHasCategories = false;
 
     if( rArguments.getLength() > 0 )
-        GetProperty( rArguments, C2U(("HasCategories"))) >>= bHasCategories;
+        GetProperty( rArguments, "HasCategories" ) >>= bHasCategories;
 
     for( sal_Int32 nLSeqIdx=0; ! bHasCategories && nLSeqIdx<rData.getLength(); ++nLSeqIdx )
         bHasCategories = ( rData[nLSeqIdx].is() && GetRole( rData[nLSeqIdx]->getValues() ) == "categories");
@@ -383,7 +383,7 @@ bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > &
 {
     bool bUseCategoriesAsX = true;
     if( rArguments.getLength() > 0 )
-        GetProperty( rArguments, C2U(("UseCategoriesAsX"))) >>= bUseCategoriesAsX;
+        GetProperty( rArguments, "UseCategoriesAsX" ) >>= bUseCategoriesAsX;
     return bUseCategoriesAsX;
 }
 
@@ -392,12 +392,12 @@ bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > &
 Sequence< OUString > DataInterpreter::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 1 );
-    aServices[0] = C2U( "com.sun.star.chart2.DataInterpreter" );
+    aServices[0] = "com.sun.star.chart2.DataInterpreter";
     return aServices;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( DataInterpreter, C2U("com.sun.star.comp.chart2.DataInterpreter"));
+APPHELPER_XSERVICEINFO_IMPL( DataInterpreter, OUString("com.sun.star.comp.chart2.DataInterpreter") );
 
 } // namespace chart
 
@@ -419,12 +419,12 @@ void lcl_ShowDataSource( const Reference< data::XDataSource > & xSource )
     {
         if( aSequences[k].is())
         {
-            OUString aSourceRepr(C2U("<none>"));
+            OUString aSourceRepr("<none>");
             if( aSequences[k]->getValues().is())
                 aSourceRepr = aSequences[k]->getValues()->getSourceRangeRepresentation();
             xProp.set( aSequences[k]->getValues(), uno::UNO_QUERY );
             if( xProp.is() &&
-                ( xProp->getPropertyValue( C2U( "Role" )) >>= aId ))
+                ( xProp->getPropertyValue( "Role") >>= aId ))
             {
                 OSL_TRACE( "  <data sequence %d> Role: %s, Source: %s", k, U2C( aId ), U2C( aSourceRepr ));
             }
@@ -433,12 +433,12 @@ void lcl_ShowDataSource( const Reference< data::XDataSource > & xSource )
                 OSL_TRACE( "  <data sequence %d> unknown Role, Source: %s", k, U2C( aSourceRepr ) );
             }
 
-            aSourceRepr = C2U("<none>");
+            aSourceRepr = "<none>";
             if( aSequences[k]->getLabel().is())
                 aSourceRepr = OUString( aSequences[k]->getLabel()->getSourceRangeRepresentation());
             xProp.set( aSequences[k]->getLabel(), uno::UNO_QUERY );
             if( xProp.is() &&
-                ( xProp->getPropertyValue( C2U( "Role" )) >>= aId ))
+                ( xProp->getPropertyValue( "Role") >>= aId ))
             {
                 OSL_TRACE( "  <data sequence label %d> Role: %s, Source: %s", k, U2C( aId ), U2C( aSourceRepr ));
             }

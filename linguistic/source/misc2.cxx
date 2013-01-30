@@ -84,7 +84,7 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl(
             aWriteable.AppendAscii( "_writable" );
 
             uno::Reference< beans::XPropertySet > xPathSettings( xMgr->createInstance(
-                    A2OU( "com.sun.star.util.PathSettings" ) ), uno::UNO_QUERY_THROW );
+                    "com.sun.star.util.PathSettings" ), uno::UNO_QUERY_THROW );
             xPathSettings->getPropertyValue( aInternal )  >>= aInternalPaths;
             xPathSettings->getPropertyValue( aUser )      >>= aUserPaths;
             xPathSettings->getPropertyValue( aWriteable ) >>= aWritablePath;
@@ -128,7 +128,7 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl(
 
 rtl::OUString GetDictionaryWriteablePath()
 {
-    uno::Sequence< rtl::OUString > aPaths( GetMultiPaths_Impl( A2OU("Dictionary"), PATH_FLAG_WRITABLE ) );
+    uno::Sequence< rtl::OUString > aPaths( GetMultiPaths_Impl( "Dictionary", PATH_FLAG_WRITABLE ) );
     DBG_ASSERT( aPaths.getLength() == 1, "Dictionary_writable path corrupted?" );
     String aRes;
     if (aPaths.getLength() > 0)
@@ -138,7 +138,7 @@ rtl::OUString GetDictionaryWriteablePath()
 
 uno::Sequence< rtl::OUString > GetDictionaryPaths( sal_Int16 nPathFlags )
 {
-    return GetMultiPaths_Impl( A2OU("Dictionary"), nPathFlags );
+    return GetMultiPaths_Impl( "Dictionary", nPathFlags );
 }
 
 String  GetWritableDictionaryURL( const String &rDicName )

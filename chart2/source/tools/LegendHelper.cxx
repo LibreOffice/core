@@ -42,24 +42,24 @@ Reference< chart2::XLegend > LegendHelper::showLegend( const Reference< frame::X
     uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
     if( xProp.is())
     {
-        xProp->setPropertyValue( C2U("Show"), uno::makeAny(sal_True) );
+        xProp->setPropertyValue( "Show", uno::makeAny(sal_True) );
 
         chart2::RelativePosition aRelativePosition;
-        if( !(xProp->getPropertyValue( C2U( "RelativePosition" )) >>=  aRelativePosition) )
+        if( !(xProp->getPropertyValue( "RelativePosition") >>=  aRelativePosition) )
         {
             chart2::LegendPosition ePos = chart2::LegendPosition_LINE_END;
-            if( !(xProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos ) )
-                xProp->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( ePos ));
+            if( !(xProp->getPropertyValue( "AnchorPosition") >>= ePos ) )
+                xProp->setPropertyValue( "AnchorPosition", uno::makeAny( ePos ));
 
             ::com::sun::star::chart::ChartLegendExpansion eExpansion =
                     ( ePos == chart2::LegendPosition_LINE_END ||
                       ePos == chart2::LegendPosition_LINE_START )
                     ? ::com::sun::star::chart::ChartLegendExpansion_HIGH
                     : ::com::sun::star::chart::ChartLegendExpansion_WIDE;
-            if( !(xProp->getPropertyValue( C2U( "Expansion" )) >>= eExpansion ) )
-                xProp->setPropertyValue( C2U( "Expansion" ), uno::makeAny( eExpansion ));
+            if( !(xProp->getPropertyValue( "Expansion") >>= eExpansion ) )
+                xProp->setPropertyValue( "Expansion", uno::makeAny( eExpansion ));
 
-            xProp->setPropertyValue( C2U( "RelativePosition" ), uno::Any());
+            xProp->setPropertyValue( "RelativePosition", uno::Any());
         }
 
     }
@@ -72,7 +72,7 @@ void LegendHelper::hideLegend( const Reference< frame::XModel >& xModel )
     uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
     if( xProp.is())
     {
-        xProp->setPropertyValue( C2U("Show"), uno::makeAny(sal_False) );
+        xProp->setPropertyValue( "Show", uno::makeAny(sal_False) );
     }
 }
 
@@ -95,7 +95,7 @@ uno::Reference< chart2::XLegend > LegendHelper::getLegend(
                 if( bCreate && !xResult.is() && xContext.is() )
                 {
                     xResult.set( xContext->getServiceManager()->createInstanceWithContext(
-                        C2U( "com.sun.star.chart2.Legend" ), xContext ), uno::UNO_QUERY );
+                        "com.sun.star.chart2.Legend", xContext ), uno::UNO_QUERY );
                     xDia->setLegend( xResult );
                 }
             }
@@ -120,7 +120,7 @@ bool LegendHelper::hasLegend( const uno::Reference< chart2::XDiagram > & xDiagra
     {
         uno::Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );
         if( xLegendProp.is())
-            xLegendProp->getPropertyValue( C2U("Show")) >>= bReturn;
+            xLegendProp->getPropertyValue( "Show") >>= bReturn;
     }
 
     return bReturn;

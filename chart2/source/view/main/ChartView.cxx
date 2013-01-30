@@ -247,46 +247,46 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
 
     // creating the graphic exporter
     uno::Reference< document::XExporter > xExporter( xFactory->createInstance(
-            C2U("com.sun.star.drawing.GraphicExportFilter")), uno::UNO_QUERY);
+            "com.sun.star.drawing.GraphicExportFilter"), uno::UNO_QUERY);
     uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY );
 
     if( !xExporter.is() || !xFilter.is() )
         return;
 
     uno::Sequence< beans::PropertyValue > aProps(3);
-    aProps[0].Name = C2U("FilterName");
-    aProps[0].Value <<= C2U("SVM");
+    aProps[0].Name = "FilterName";
+    aProps[0].Value <<= OUString("SVM");
 
-    aProps[1].Name = C2U("OutputStream");
+    aProps[1].Name = "OutputStream";
     aProps[1].Value <<= xOutStream;
 
     uno::Sequence< beans::PropertyValue > aFilterData(4);
-    aFilterData[0].Name = C2U("ExportOnlyBackground");
+    aFilterData[0].Name = "ExportOnlyBackground";
     aFilterData[0].Value <<= sal_False;
-    aFilterData[1].Name = C2U("HighContrast");
+    aFilterData[1].Name = "HighContrast";
     aFilterData[1].Value <<= bUseHighContrast;
 
-    aFilterData[2].Name = C2U("Version");
+    aFilterData[2].Name = "Version";
     const sal_Int32 nVersion = SOFFICE_FILEFORMAT_50;
     aFilterData[2].Value <<= nVersion;
 
-    aFilterData[3].Name = C2U("CurrentPage");
+    aFilterData[3].Name = "CurrentPage";
     aFilterData[3].Value <<= uno::Reference< uno::XInterface >( m_xDrawPage, uno::UNO_QUERY );
 
     //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
     {
         aFilterData.realloc( aFilterData.getLength()+4 );
-        aFilterData[4].Name = C2U("ScaleXNumerator");
+        aFilterData[4].Name = "ScaleXNumerator";
         aFilterData[4].Value = uno::makeAny( m_nScaleXNumerator );
-        aFilterData[5].Name = C2U("ScaleXDenominator");
+        aFilterData[5].Name = "ScaleXDenominator";
         aFilterData[5].Value = uno::makeAny( m_nScaleXDenominator );
-        aFilterData[6].Name = C2U("ScaleYNumerator");
+        aFilterData[6].Name = "ScaleYNumerator";
         aFilterData[6].Value = uno::makeAny( m_nScaleYNumerator );
-        aFilterData[7].Name = C2U("ScaleYDenominator");
+        aFilterData[7].Name = "ScaleYDenominator";
         aFilterData[7].Value = uno::makeAny( m_nScaleYDenominator );
     }
 
-    aProps[2].Name = C2U("FilterData");
+    aProps[2].Name = "FilterData";
     aProps[2].Value <<= aFilterData;
 
     xExporter->setSourceDocument( uno::Reference< lang::XComponent >( m_xDrawPage, uno::UNO_QUERY) );
@@ -340,10 +340,10 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFla
     uno::Sequence< datatransfer::DataFlavor > aRet(2);
 
     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMEType,
-        C2U( "GDIMetaFile" ),
+        "GDIMetaFile",
         ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     aRet[1] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
-        C2U( "GDIMetaFile" ),
+        "GDIMetaFile",
         ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
 
     return aRet;
@@ -624,11 +624,11 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     try
     {
         uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY_THROW );
-        xDiaProp->getPropertyValue( C2U( "SortByXValues" ) ) >>= bSortByXValues;
-        xDiaProp->getPropertyValue( C2U( "ConnectBars" ) ) >>= bConnectBars;
-        xDiaProp->getPropertyValue( C2U( "GroupBarsPerAxis" ) ) >>= bGroupBarsPerAxis;
-        xDiaProp->getPropertyValue( C2U( "IncludeHiddenCells" ) ) >>= bIncludeHiddenCells;
-        xDiaProp->getPropertyValue( C2U( "StartingAngle" ) ) >>= nStartingAngle;
+        xDiaProp->getPropertyValue( "SortByXValues" ) >>= bSortByXValues;
+        xDiaProp->getPropertyValue( "ConnectBars" ) >>= bConnectBars;
+        xDiaProp->getPropertyValue( "GroupBarsPerAxis" ) >>= bGroupBarsPerAxis;
+        xDiaProp->getPropertyValue( "IncludeHiddenCells" ) >>= bIncludeHiddenCells;
+        xDiaProp->getPropertyValue( "StartingAngle" ) >>= nStartingAngle;
     }
     catch( const uno::Exception & ex )
     {
@@ -881,7 +881,7 @@ void SeriesPlotterContainer::setNumberFormatsFromAxes()
                         if( xAxisProp.is())
                         {
                             sal_Int32 nNumberFormatKey(0);
-                            if( xAxisProp->getPropertyValue( C2U( "NumberFormat" ) ) >>= nNumberFormatKey )
+                            if( xAxisProp->getPropertyValue( "NumberFormat" ) >>= nNumberFormatKey )
                             {
                                 aAxesNumberFormats.setFormat( nNumberFormatKey, nDimensionIndex, nAxisIndex );
                             }
@@ -1096,11 +1096,11 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( const uno::
                 ::com::sun::star::chart::ChartAxisPosition eCrossingMainAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
                 if( xCrossingMainAxis.is() )
                 {
-                    xCrossingMainAxis->getPropertyValue(C2U( "CrossoverPosition" )) >>= eCrossingMainAxisPos;
+                    xCrossingMainAxis->getPropertyValue("CrossoverPosition") >>= eCrossingMainAxisPos;
                     if( ::com::sun::star::chart::ChartAxisPosition_VALUE == eCrossingMainAxisPos )
                     {
                         double fValue = 0.0;
-                        xCrossingMainAxis->getPropertyValue(C2U( "CrossoverValue" )) >>= fValue;
+                        xCrossingMainAxis->getPropertyValue("CrossoverValue") >>= fValue;
                         aExplicitScale.Origin = fValue;
                     }
                     else if( ::com::sun::star::chart::ChartAxisPosition_ZERO == eCrossingMainAxisPos )
@@ -1194,20 +1194,20 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
                     uno::Reference< container::XNameAccess > xStylesFamilies( xStyleFamiliesSupplier->getStyleFamilies() );
                     if( xStylesFamilies.is() )
                     {
-                        if( !xStylesFamilies->hasByName( C2U("PageStyles") ) )
+                        if( !xStylesFamilies->hasByName( "PageStyles" ) )
                         {
                             //draw/impress is parent document
                             uno::Reference< lang::XMultiServiceFactory > xFatcory( xParentProps, uno::UNO_QUERY );
                             if( xFatcory.is() )
                             {
-                                uno::Reference< beans::XPropertySet > xDrawDefaults( xFatcory->createInstance( C2U( "com.sun.star.drawing.Defaults" ) ), uno::UNO_QUERY );
+                                uno::Reference< beans::XPropertySet > xDrawDefaults( xFatcory->createInstance( "com.sun.star.drawing.Defaults" ), uno::UNO_QUERY );
                                 if( xDrawDefaults.is() )
-                                    xDrawDefaults->getPropertyValue( C2U("WritingMode") ) >>= nWritingMode;
+                                    xDrawDefaults->getPropertyValue( "WritingMode" ) >>= nWritingMode;
                             }
                         }
                         else
                         {
-                            uno::Reference< container::XNameAccess > xPageStyles( xStylesFamilies->getByName( C2U("PageStyles") ), uno::UNO_QUERY );
+                            uno::Reference< container::XNameAccess > xPageStyles( xStylesFamilies->getByName( "PageStyles" ), uno::UNO_QUERY );
                             if( xPageStyles.is() )
                             {
                                 rtl::OUString aPageStyle;
@@ -1234,11 +1234,11 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
                                                 {
                                                     static rtl::OUString aChartCLSID = rtl::OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName());
                                                     rtl::OUString aCLSID;
-                                                    xEmbeddedProps->getPropertyValue( C2U("CLSID") ) >>= aCLSID;
+                                                    xEmbeddedProps->getPropertyValue( "CLSID" ) >>= aCLSID;
                                                     if( aCLSID.equals(aChartCLSID) )
                                                     {
                                                         uno::Reference< frame::XModel > xModel;
-                                                        xEmbeddedProps->getPropertyValue( C2U("Model") ) >>= xModel;
+                                                        xEmbeddedProps->getPropertyValue( "Model" ) >>= xModel;
                                                         if( xModel == xChartModel )
                                                         {
                                                             uno::Reference< text::XTextContent > xEmbeddedObject( xEmbeddedProps, uno::UNO_QUERY );
@@ -1250,14 +1250,14 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
                                                                     uno::Reference< beans::XPropertySet > xAnchorProps( xAnchor, uno::UNO_QUERY );
                                                                     if( xAnchorProps.is() )
                                                                     {
-                                                                        xAnchorProps->getPropertyValue( C2U("WritingMode") ) >>= nWritingMode;
+                                                                        xAnchorProps->getPropertyValue( "WritingMode" ) >>= nWritingMode;
                                                                     }
                                                                     uno::Reference< text::XText > xText( xAnchor->getText() );
                                                                     if( xText.is() )
                                                                     {
                                                                         uno::Reference< beans::XPropertySet > xTextCursorProps( xText->createTextCursor(), uno::UNO_QUERY );
                                                                         if( xTextCursorProps.is() )
-                                                                            xTextCursorProps->getPropertyValue( C2U("PageStyleName") ) >>= aPageStyle;
+                                                                            xTextCursorProps->getPropertyValue( "PageStyleName" ) >>= aPageStyle;
                                                                     }
                                                                 }
                                                             }
@@ -1275,22 +1275,22 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
                                         {
                                             uno::Reference< beans::XPropertySet > xTextCursorProps( xText->createTextCursor(), uno::UNO_QUERY );
                                             if( xTextCursorProps.is() )
-                                                xTextCursorProps->getPropertyValue( C2U("PageStyleName") ) >>= aPageStyle;
+                                                xTextCursorProps->getPropertyValue( "PageStyleName" ) >>= aPageStyle;
                                         }
                                     }
                                 }
                                 else
                                 {
                                     //Calc is parent document
-                                    xParentProps->getPropertyValue( C2U("PageStyle") ) >>= aPageStyle;
+                                    xParentProps->getPropertyValue( "PageStyle" ) >>= aPageStyle;
                                     if(aPageStyle.isEmpty())
-                                        aPageStyle = C2U("Default");
+                                        aPageStyle = "Default";
                                 }
                                 if( nWritingMode == -1 || nWritingMode == text::WritingMode2::PAGE )
                                 {
                                     uno::Reference< beans::XPropertySet > xPageStyle( xPageStyles->getByName( aPageStyle ), uno::UNO_QUERY );
                                     if( xPageStyle.is() )
-                                        xPageStyle->getPropertyValue( C2U("WritingMode") ) >>= nWritingMode;
+                                        xPageStyle->getPropertyValue( "WritingMode" ) >>= nWritingMode;
                                 }
                             }
                         }
@@ -1577,7 +1577,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     if(bSnapRectToUsedArea)
     {
         if( bUseFixedInnerSize )
-            m_aResultingDiagramRectangleExcludingAxes = getRectangleOfObject( C2U("PlotAreaExcludingAxes") );
+            m_aResultingDiagramRectangleExcludingAxes = getRectangleOfObject( "PlotAreaExcludingAxes" );
         else
         {
             ::basegfx::B2IRectangle aConsumedInnerRect = aVDiagram.getCurrentRectangle();
@@ -1602,7 +1602,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         bool bPosSizeExcludeAxesProperty = true;
         uno::Reference< beans::XPropertySet > xDiaProps( xDiagram, uno::UNO_QUERY_THROW );
         if( xDiaProps.is() )
-            xDiaProps->getPropertyValue(C2U("PosSizeExcludeAxes")) >>= bPosSizeExcludeAxesProperty;
+            xDiaProps->getPropertyValue("PosSizeExcludeAxes") >>= bPosSizeExcludeAxesProperty;
         if( bUseFixedInnerSize || bPosSizeExcludeAxesProperty )
         {
             aPos = awt::Point( m_aResultingDiagramRectangleExcludingAxes.X, m_aResultingDiagramRectangleExcludingAxes.Y );
@@ -1724,9 +1724,9 @@ awt::Rectangle ChartView::getRectangleOfObject( const rtl::OUString& rObjectCID,
                     SdrObjList* pRootList = pRootSdrObject->GetSubList();
                     if( pRootList )
                     {
-                        OUString aShapeName = C2U("MarkHandles");
+                        OUString aShapeName = "MarkHandles";
                         if( eObjectType == OBJECTTYPE_DIAGRAM )
-                            aShapeName = C2U("PlotAreaIncludingAxes");
+                            aShapeName = "PlotAreaIncludingAxes";
                         SdrObject* pShape = DrawModelWrapper::getNamedSdrObject( aShapeName, pRootList );
                         if( pShape )
                             xShape = uno::Reference< drawing::XShape >( pShape->getUnoShape(), uno::UNO_QUERY);
@@ -1780,7 +1780,7 @@ bool lcl_getPropertySwapXAndYAxis( const uno::Reference< XDiagram >& xDiagram )
             uno::Reference<beans::XPropertySet> xProp(aCooSysList[0], uno::UNO_QUERY );
             if( xProp.is()) try
             {
-                xProp->getPropertyValue( C2U( "SwapXAndYAxis" ) ) >>= bSwapXAndY;
+                xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
             }
             catch( const uno::Exception& e )
             {
@@ -1813,7 +1813,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
     if( !xSeriesOrPointProp.is() )
         return nFormat;
 
-    rtl::OUString aPropName( C2U( "NumberFormat" ) );
+    rtl::OUString aPropName( "NumberFormat" );
     if( !(xSeriesOrPointProp->getPropertyValue(aPropName) >>= nFormat) )
     {
         uno::Reference< chart2::XChartType > xChartType( DataSeriesHelper::getChartTypeOfSeries( xSeries, xDiagram ) );
@@ -1852,7 +1852,7 @@ sal_Int32 ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabe
     sal_Int32 nFormat=0;
     if( !xSeriesOrPointProp.is() )
         return nFormat;
-    if( !(xSeriesOrPointProp->getPropertyValue(C2U( "PercentageNumberFormat" )) >>= nFormat) )
+    if( !(xSeriesOrPointProp->getPropertyValue("PercentageNumberFormat") >>= nFormat) )
     {
         nFormat = DiagramHelper::getPercentNumberFormat( xNumberFormatsSupplier );
     }
@@ -2026,11 +2026,11 @@ bool getAvailablePosAndSizeForDiagram(
 
     bool bPosSizeExcludeAxes = false;
     if( xProp.is() )
-        xProp->getPropertyValue( C2U( "PosSizeExcludeAxes" ) ) >>= bPosSizeExcludeAxes;
+        xProp->getPropertyValue( "PosSizeExcludeAxes" ) >>= bPosSizeExcludeAxes;
 
     //size:
     ::com::sun::star::chart2::RelativeSize aRelativeSize;
-    if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativeSize" ) )>>=aRelativeSize) )
+    if( xProp.is() && (xProp->getPropertyValue( "RelativeSize" )>>=aRelativeSize) )
     {
         rOutAvailableDiagramSize.Height = static_cast<sal_Int32>(aRelativeSize.Secondary*rPageSize.Height);
         rOutAvailableDiagramSize.Width = static_cast<sal_Int32>(aRelativeSize.Primary*rPageSize.Width);
@@ -2041,7 +2041,7 @@ bool getAvailablePosAndSizeForDiagram(
 
     //position:
     chart2::RelativePosition aRelativePosition;
-    if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
+    if( xProp.is() && (xProp->getPropertyValue( "RelativePosition" )>>=aRelativePosition) )
     {
         //@todo decide whether x is primary or secondary
 
@@ -2170,7 +2170,7 @@ boost::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
         awt::Point aNewPosition(0,0);
         chart2::RelativePosition aRelativePosition;
         uno::Reference< beans::XPropertySet > xProp(xTitle, uno::UNO_QUERY);
-        if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
+        if( xProp.is() && (xProp->getPropertyValue( "RelativePosition" )>>=aRelativePosition) )
         {
             rbAutoPosition = false;
 
@@ -2314,7 +2314,7 @@ void formatPage(
         {
             uno::Reference< drawing::XShape > xShape(
                 xShapeFactory->createInstance(
-                    C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
+                    "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
             if( xTarget.is() &&
                 xShape.is())
             {
@@ -2323,7 +2323,7 @@ void formatPage(
                 xPageProp.set( xShape, uno::UNO_QUERY );
                 if( xPageProp.is())
                 {
-                    xPageProp->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_NONE ));
+                    xPageProp->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_NONE ));
                 }
             }
         }
@@ -2335,7 +2335,7 @@ void formatPage(
             PropertyMapper::getValueMap( aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
 
             rtl::OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, rtl::OUString() ) );
-            aNameValueMap.insert( tPropertyNameValueMap::value_type( C2U("Name"), uno::makeAny( aCID ) ) ); //CID rtl::OUString
+            aNameValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( aCID ) ) ); //CID rtl::OUString
 
             tNameSequence aNames;
             tAnySequence aValues;
@@ -2393,11 +2393,11 @@ void ChartView::impl_refreshAddIn()
     if( xProp.is()) try
     {
         uno::Reference< util::XRefreshable > xAddIn;
-        xProp->getPropertyValue( C2U( "AddIn" ) ) >>= xAddIn;
+        xProp->getPropertyValue( "AddIn" ) >>= xAddIn;
         if( xAddIn.is() )
         {
             sal_Bool bRefreshAddInAllowed = sal_True;
-            xProp->getPropertyValue( C2U( "RefreshAddInAllowed" ) ) >>= bRefreshAddInAllowed;
+            xProp->getPropertyValue( "RefreshAddInAllowed" ) >>= bRefreshAddInAllowed;
             if( bRefreshAddInAllowed )
                 xAddIn->refresh();
         }
@@ -2463,11 +2463,11 @@ void ChartView::createShapes()
 
         uno::Reference< drawing::XShape > xDiagram_MarkHandles( ShapeFactory(m_xShapeFactory).createInvisibleRectangle(
                     xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
-        ShapeFactory::setShapeName( xDiagram_MarkHandles, C2U("MarkHandles") );
+        ShapeFactory::setShapeName( xDiagram_MarkHandles, "MarkHandles" );
 
         uno::Reference< drawing::XShape > xDiagram_OuterRect( ShapeFactory(m_xShapeFactory).createInvisibleRectangle(
                     xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
-        ShapeFactory::setShapeName( xDiagram_OuterRect, C2U("PlotAreaIncludingAxes") );
+        ShapeFactory::setShapeName( xDiagram_OuterRect, "PlotAreaIncludingAxes" );
 
         uno::Reference< drawing::XShapes > xDiagramPlusAxes_Shapes( ShapeFactory(m_xShapeFactory).createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes ) );
 
@@ -2625,7 +2625,7 @@ void ChartView::impl_updateView()
         //m_bRefreshAddIn = false;
         try
         {
-            impl_notifyModeChangeListener(C2U("invalid"));
+            impl_notifyModeChangeListener("invalid");
 
             //prepare draw model
             {
@@ -2668,7 +2668,7 @@ void ChartView::impl_updateView()
             m_pDrawModelWrapper->unlockControllers();
         }
 
-        impl_notifyModeChangeListener(C2U("valid"));
+        impl_notifyModeChangeListener("valid");
 
         //m_bRefreshAddIn = bOldRefreshAddIn;
     }
@@ -2682,7 +2682,7 @@ void SAL_CALL ChartView::modified( const lang::EventObject& /* aEvent */ )
     if( m_bInViewUpdate )
         m_bViewUpdatePending = true;
 
-    impl_notifyModeChangeListener(C2U("dirty"));
+    impl_notifyModeChangeListener("dirty");
 }
 
 //SfxListener
@@ -2825,11 +2825,11 @@ void SAL_CALL ChartView::setPropertyValue( const ::rtl::OUString& rPropertyName
     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException
           , lang::WrappedTargetException, uno::RuntimeException)
 {
-    if( rPropertyName.equals(C2U("Resolution")) )
+    if( rPropertyName.equals("Resolution") )
     {
         awt::Size aNewResolution;
         if( ! (rValue >>= aNewResolution) )
-            throw lang::IllegalArgumentException( C2U("Property 'Resolution' requires value of type awt::Size"), 0, 0 );
+            throw lang::IllegalArgumentException( "Property 'Resolution' requires value of type awt::Size", 0, 0 );
 
         if( m_aPageResolution.Width!=aNewResolution.Width || m_aPageResolution.Height!=aNewResolution.Height )
         {
@@ -2842,12 +2842,12 @@ void SAL_CALL ChartView::setPropertyValue( const ::rtl::OUString& rPropertyName
                 this->modified( lang::EventObject(  static_cast< uno::XWeak* >( this )  ) );
         }
     }
-    else if( rPropertyName.equals(C2U("ZoomFactors")) )
+    else if( rPropertyName.equals("ZoomFactors") )
     {
         //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
         uno::Sequence< beans::PropertyValue > aZoomFactors;
         if( ! (rValue >>= aZoomFactors) )
-            throw lang::IllegalArgumentException( C2U("Property 'ZoomFactors' requires value of type Sequence< PropertyValue >"), 0, 0 );
+            throw lang::IllegalArgumentException( "Property 'ZoomFactors' requires value of type Sequence< PropertyValue >", 0, 0 );
 
         sal_Int32 nFilterArgs = aZoomFactors.getLength();
         beans::PropertyValue* pDataValues = aZoomFactors.getArray();
@@ -2865,26 +2865,26 @@ void SAL_CALL ChartView::setPropertyValue( const ::rtl::OUString& rPropertyName
             pDataValues++;
         }
     }
-    else if( rPropertyName.equals(C2U("SdrViewIsInEditMode")) )
+    else if( rPropertyName.equals("SdrViewIsInEditMode") )
     {
         //#i77362 change notification for changes on additional shapes are missing
         if( ! (rValue >>= m_bSdrViewIsInEditMode) )
-            throw lang::IllegalArgumentException( C2U("Property 'SdrViewIsInEditMode' requires value of type sal_Bool"), 0, 0 );
+            throw lang::IllegalArgumentException( "Property 'SdrViewIsInEditMode' requires value of type sal_Bool", 0, 0 );
     }
     else
-        throw beans::UnknownPropertyException( C2U("unknown property was tried to set to chart wizard"), 0 );
+        throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard", 0 );
 }
 
 Any SAL_CALL ChartView::getPropertyValue( const ::rtl::OUString& rPropertyName )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
-    if( rPropertyName.equals(C2U("Resolution")) )
+    if( rPropertyName.equals("Resolution") )
     {
         aRet = uno::makeAny( m_aPageResolution );
     }
     else
-        throw beans::UnknownPropertyException( C2U("unknown property was tried to get from chart wizard"), 0 );
+        throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard", 0 );
     return aRet;
 }
 

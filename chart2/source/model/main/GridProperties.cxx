@@ -54,7 +54,7 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "Show" ),
+        Property( "Show",
                   PROP_GRID_SHOW,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
@@ -247,8 +247,8 @@ void GridProperties::fireModifyEvent()
 Sequence< OUString > GridProperties::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.GridProperties" );
-    aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 0 ] = "com.sun.star.chart2.GridProperties";
+    aServices[ 1 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 

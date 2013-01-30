@@ -48,11 +48,11 @@ void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropert
     {
         if( bUseSeriesPropertyNames ) try
         {
-            this->Color = xProp->getPropertyValue( C2U( "BorderColor" ) );
-            this->LineStyle = xProp->getPropertyValue( C2U( "BorderStyle" ) );
-            this->Transparence = xProp->getPropertyValue( C2U( "BorderTransparency" ) );
-            this->Width = xProp->getPropertyValue( C2U( "BorderWidth" ) );
-            this->DashName = xProp->getPropertyValue( C2U( "BorderDashName" ) );
+            this->Color = xProp->getPropertyValue( "BorderColor" );
+            this->LineStyle = xProp->getPropertyValue( "BorderStyle" );
+            this->Transparence = xProp->getPropertyValue( "BorderTransparency" );
+            this->Width = xProp->getPropertyValue( "BorderWidth" );
+            this->DashName = xProp->getPropertyValue( "BorderDashName" );
         }
         catch( const uno::Exception& e )
         {
@@ -60,11 +60,11 @@ void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropert
         }
         else try
         {
-            this->Color = xProp->getPropertyValue( C2U( "LineColor" ) );
-            this->LineStyle = xProp->getPropertyValue( C2U( "LineStyle" ) );
-            this->Transparence = xProp->getPropertyValue( C2U( "LineTransparence" ) );
-            this->Width = xProp->getPropertyValue( C2U( "LineWidth" ) );
-            this->DashName = xProp->getPropertyValue( C2U( "LineDashName" ) );
+            this->Color = xProp->getPropertyValue( "LineColor" );
+            this->LineStyle = xProp->getPropertyValue( "LineStyle" );
+            this->Transparence = xProp->getPropertyValue( "LineTransparence" );
+            this->Width = xProp->getPropertyValue( "LineWidth" );
+            this->DashName = xProp->getPropertyValue( "LineDashName" );
         }
         catch( const uno::Exception& e )
         {

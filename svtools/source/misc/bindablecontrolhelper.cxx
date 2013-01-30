@@ -36,11 +36,7 @@ namespace svt
 {
 //........................................................................
 
-#ifndef C2U
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
-#endif
-
-    using namespace ::com::sun::star;
+using namespace ::com::sun::star;
 
 bool lcl_isNamedRange( const rtl::OUString& sAddress, const uno::Reference< frame::XModel >& xModel, table::CellRangeAddress& aAddress )
 {
@@ -85,24 +81,24 @@ BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno
          // RefCell - convert from XL
          // pretend we converted the imported string address into the
          // appropriate address structure
-         uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( C2U( "com.sun.star.table.CellAddressConversion" )), uno::UNO_QUERY );
+         uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( "com.sun.star.table.CellAddressConversion"), uno::UNO_QUERY );
          table::CellAddress aAddress;
          if ( xConvertor.is() )
          {
              // we need this service to properly convert XL notation also
              // Should be easy to extend
-             xConvertor->setPropertyValue( C2U( "XL_A1_Representation" ), uno::makeAny( rsCtrlSource ) );
-             xConvertor->getPropertyValue( C2U( "Address" ) ) >>= aAddress;
+             xConvertor->setPropertyValue( "XL_A1_Representation", uno::makeAny( rsCtrlSource ) );
+             xConvertor->getPropertyValue( "Address" ) >>= aAddress;
          }
 
          beans::NamedValue aArg1;
-         aArg1.Name = C2U("BoundCell");
+         aArg1.Name = "BoundCell";
          aArg1.Value <<= aAddress;
 
          uno::Sequence< uno::Any > aArgs(1);
          aArgs[ 0 ]  <<= aArg1;
 
-         uno::Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( C2U("com.sun.star.table.CellValueBinding" ), aArgs ), uno::UNO_QUERY );
+         uno::Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( "com.sun.star.table.CellValueBinding", aArgs ), uno::UNO_QUERY );
          xBindable->setValueBinding( xBinding );
     }
     else if ( xBindable.is() ) // reset it
@@ -115,7 +111,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno
          // RefCell - convert from XL
          // pretend we converted the imported string address into the
          // appropriate address structure
-         uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( C2U( "com.sun.star.table.CellRangeAddressConversion" )), uno::UNO_QUERY );
+         uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( "com.sun.star.table.CellRangeAddressConversion"), uno::UNO_QUERY );
          table::CellRangeAddress aAddress;
          if ( xConvertor.is() )
          {
@@ -123,19 +119,19 @@ BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno
              {
                  // we need this service to properly convert XL notation also
                  // Should be easy to extend
-                 xConvertor->setPropertyValue( C2U( "XL_A1_Representation" ), uno::makeAny( rsRowSource ) );
-                 xConvertor->getPropertyValue( C2U( "Address" ) ) >>= aAddress;
+                 xConvertor->setPropertyValue( "XL_A1_Representation", uno::makeAny( rsRowSource ) );
+                 xConvertor->getPropertyValue( "Address" ) >>= aAddress;
              }
          }
 
          beans::NamedValue aArg1;
-         aArg1.Name = C2U("CellRange");
+         aArg1.Name = "CellRange";
          aArg1.Value <<= aAddress;
 
          uno::Sequence< uno::Any > aArgs(1);
          aArgs[ 0 ]  <<= aArg1;
 
-         uno::Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( C2U("com.sun.star.table.CellRangeListSource" ), aArgs ), uno::UNO_QUERY );
+         uno::Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( "com.sun.star.table.CellRangeListSource", aArgs ), uno::UNO_QUERY );
          xListEntrySink->setListEntrySource( xSource );
     }
     else if (  xListEntrySink.is() ) // reset

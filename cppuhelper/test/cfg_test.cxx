@@ -40,8 +40,6 @@
 
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 using namespace ::cppu;
 using namespace ::rtl;
@@ -101,17 +99,17 @@ ServiceImpl0::ServiceImpl0( Reference< XComponentContext > const & xContext ) SA
 
     // service properties
     OSL_VERIFY( m_xContext->getValueByName(
-        OUSTR("/services/com.sun.star.bootstrap.TestComponent0/context-properties/serviceprop0") ) >>= n );
+        "/services/com.sun.star.bootstrap.TestComponent0/context-properties/serviceprop0" ) >>= n );
     OSL_VERIFY( n == 13 );
     OSL_VERIFY( m_xContext->getValueByName(
-        OUSTR("/services/com.sun.star.bootstrap.TestComponent0/context-properties/serviceprop1") ) >>= val );
+        "/services/com.sun.star.bootstrap.TestComponent0/context-properties/serviceprop1" ) >>= val );
     OSL_VERIFY( val == "value of serviceprop1" );
     // impl properties
     OSL_VERIFY( m_xContext->getValueByName(
-        OUSTR("/implementations/com.sun.star.comp.bootstrap.TestComponent0/context-properties/implprop0") ) >>= n );
+        "/implementations/com.sun.star.comp.bootstrap.TestComponent0/context-properties/implprop0" ) >>= n );
     OSL_VERIFY( n == 15 );
     OSL_VERIFY( m_xContext->getValueByName(
-        OUSTR("/implementations/com.sun.star.comp.bootstrap.TestComponent0/context-properties/implprop1") ) >>= val );
+        "/implementations/com.sun.star.comp.bootstrap.TestComponent0/context-properties/implprop1" ) >>= val );
     OSL_VERIFY( val == "value of implprop1" );
 }
 // XInitialization
@@ -238,32 +236,32 @@ SAL_IMPLEMENT_MAIN()
         Reference< lang::XMultiComponentFactory > xMgr( xContext->getServiceManager() );
 
         // show what is in context
-        xContext->getValueByName( OUSTR("dump_maps") );
+        xContext->getValueByName( "dump_maps" );
 
         sal_Int32 n(0);
-        OSL_VERIFY( xContext->getValueByName( OUSTR("/global-context-properties/TestValue") ) >>= n );
+        OSL_VERIFY( xContext->getValueByName( "/global-context-properties/TestValue" ) >>= n );
         ::fprintf( stderr, "> n=%d\n", n );
 
         Reference< XInterface > x;
-        OSL_VERIFY( !(xContext->getValueByName( OUSTR("/singletons/my_converter") ) >>= x) );
-        OSL_VERIFY( xContext->getValueByName( OUSTR("/singletons/com.sun.star.script.theConverter") ) >>= x );
-        OSL_VERIFY( xContext->getValueByName( OUSTR("/singletons/com.sun.star.bootstrap.theTestComponent0") ) >>= x );
+        OSL_VERIFY( !(xContext->getValueByName( "/singletons/my_converter" ) >>= x) );
+        OSL_VERIFY( xContext->getValueByName( "/singletons/com.sun.star.script.theConverter" ) >>= x );
+        OSL_VERIFY( xContext->getValueByName( "/singletons/com.sun.star.bootstrap.theTestComponent0" ) >>= x );
 
         ::fprintf( stderr, "> registering service...\n");
 #if defined(SAL_W32)
-        OUString libName( OUSTR("cfg_test.dll") );
+        OUString libName( "cfg_test.dll" );
 #elif defined(SAL_UNX)
-        OUString libName( OUSTR("libcfg_test.so") );
+        OUString libName( "libcfg_test.so" );
 #endif
         Reference< registry::XImplementationRegistration > xImplReg( xMgr->createInstanceWithContext(
-            OUSTR("com.sun.star.registry.ImplementationRegistration"), xContext ), UNO_QUERY );
+            "com.sun.star.registry.ImplementationRegistration", xContext ), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
         xImplReg->registerImplementation(
-            OUSTR("com.sun.star.loader.SharedLibrary"), libName,
+            "com.sun.star.loader.SharedLibrary", libName,
             Reference< registry::XSimpleRegistry >() );
 
-        OSL_VERIFY( (x = xMgr->createInstanceWithContext( OUSTR("com.sun.star.bootstrap.TestComponent0"), xContext )).is() );
-        OSL_VERIFY( (x = xMgr->createInstanceWithContext( OUSTR("com.sun.star.bootstrap.TestComponent1"), xContext )).is() );
+        OSL_VERIFY( (x = xMgr->createInstanceWithContext( "com.sun.star.bootstrap.TestComponent0", xContext )).is() );
+        OSL_VERIFY( (x = xMgr->createInstanceWithContext( "com.sun.star.bootstrap.TestComponent1", xContext )).is() );
 
         Reference< lang::XComponent > xComp( xContext, UNO_QUERY );
         if (xComp.is())

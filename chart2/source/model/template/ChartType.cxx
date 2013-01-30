@@ -112,8 +112,8 @@ Sequence< OUString > SAL_CALL ChartType::getSupportedMandatoryRoles()
     throw (uno::RuntimeException)
 {
     Sequence< OUString > aDefaultSeq(2);
-    aDefaultSeq[0] = C2U( "label" );
-    aDefaultSeq[1] = C2U( "values-y" );
+    aDefaultSeq[0] = "label";
+    aDefaultSeq[1] = "values-y";
     return aDefaultSeq;
 }
 
@@ -126,7 +126,7 @@ Sequence< OUString > SAL_CALL ChartType::getSupportedOptionalRoles()
 OUString SAL_CALL ChartType::getRoleOfSequenceForSeriesLabel()
     throw (uno::RuntimeException)
 {
-    return C2U( "values-y" );
+    return OUString("values-y");
 }
 
 void ChartType::impl_addDataSeriesWithoutNotification(
@@ -161,7 +161,7 @@ void SAL_CALL ChartType::removeDataSeries( const Reference< chart2::XDataSeries 
 
     if( aIt == m_aDataSeries.end())
         throw container::NoSuchElementException(
-            C2U( "The given series is no element of this charttype" ),
+            "The given series is no element of this charttype",
             static_cast< uno::XWeak * >( this ));
 
     ModifyListenerHelper::removeListener( xDataSeries, m_xModifyEventForwarder );

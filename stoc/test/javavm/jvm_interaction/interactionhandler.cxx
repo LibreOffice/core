@@ -62,7 +62,6 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
-#define OUSTR( x ) OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 #define INTERACTION_HANDLER_NAME "java-vm.interaction-handler"
 
 class Context: public WeakImplHelper1<XCurrentContext>
@@ -79,7 +78,7 @@ class InteractionHandler: public WeakImplHelper1<XInteractionHandler>
 Any SAL_CALL Context::getValueByName( const OUString& Name) throw (RuntimeException)
 {
     Any retVal;
-    if( Name.equals( OUSTR(INTERACTION_HANDLER_NAME)))
+    if( Name.equals( INTERACTION_HANDLER_NAME))
     {
         Reference<XInteractionHandler> handler( static_cast<XWeak*>(new InteractionHandler()),
                                                 UNO_QUERY);

@@ -77,7 +77,7 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
     {
         try
         {
-            xProp->setPropertyValue( C2U( UNO_NAME_MISC_OBJ_NAME )
+            xProp->setPropertyValue( UNO_NAME_MISC_OBJ_NAME
                 , uno::makeAny( rName ) );
         }
         catch( const uno::Exception& e )
@@ -99,7 +99,7 @@ rtl::OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape 
     {
         try
         {
-            xProp->getPropertyValue( C2U( UNO_NAME_MISC_OBJ_NAME ) ) >>= aRet;
+            xProp->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
         }
         catch( const uno::Exception& e )
         {
@@ -125,7 +125,7 @@ uno::Reference< drawing::XShapes > ShapeFactory::getChartRootShape(
         {
             if( xShapes->getByIndex( nN ) >>= xShape )
             {
-                if( ShapeFactory::getShapeName( xShape ).equals(C2U("com.sun.star.chart2.shapes")) )
+                if( ShapeFactory::getShapeName( xShape ).equals("com.sun.star.chart2.shapes") )
                 {
                     xRet = uno::Reference< drawing::XShapes >( xShape, uno::UNO_QUERY );
                     break;
@@ -147,7 +147,7 @@ uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
         //create the root shape
         xRet = this->createGroup2D(
             uno::Reference<drawing::XShapes>( xDrawPage, uno::UNO_QUERY )
-            , C2U("com.sun.star.chart2.shapes") );
+            , "com.sun.star.chart2.shapes" );
     }
     return xRet;
 }
@@ -442,7 +442,7 @@ uno::Reference<drawing::XShape>
             if( xSourceProp.is() )
             {
                 drawing::LineStyle aLineStyle;
-                xSourceProp->getPropertyValue( C2U( "BorderStyle" ) ) >>= aLineStyle;
+                xSourceProp->getPropertyValue( "BorderStyle" ) >>= aLineStyle;
                 if( aLineStyle == drawing::LineStyle_SOLID )
                     bRounded = false;
             }
@@ -471,8 +471,8 @@ uno::Reference<drawing::XShape>
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.Shape3DExtrudeObject") ), uno::UNO_QUERY );
+        m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.Shape3DExtrudeObject" ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     //set properties
@@ -486,16 +486,16 @@ uno::Reference<drawing::XShape>
             double fDepth = rSize.DirectionZ;
             if(fDepth<0)
                 fDepth*=-1.0;
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
+            xProp->setPropertyValue( UNO_NAME_3D_EXTRUDE_DEPTH
                 , uno::makeAny((sal_Int32)fDepth) );
 
             //PercentDiagonal
             sal_Int16 nPercentDiagonal = bRounded ? 3 : 0;
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
+            xProp->setPropertyValue( UNO_NAME_3D_PERCENT_DIAGONAL
                 , uno::makeAny( nPercentDiagonal ) );
 
             //Polygon
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
+            xProp->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D
                 , createPolyPolygon_Cube( rSize, double(nPercentDiagonal)/200.0,bRounded) );
 
             //Matrix for position
@@ -507,7 +507,7 @@ uno::Reference<drawing::XShape>
                             , rPosition.PositionY
                             , rPosition.PositionZ - (fDepth/2.0));
                 drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
-                xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
+                xProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                     , uno::makeAny(aHM) );
             }
         }
@@ -710,8 +710,8 @@ uno::Reference<drawing::XShape>
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.Shape3DLatheObject") ), uno::UNO_QUERY );
+            m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.Shape3DLatheObject" ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     double fWidth      = rSize.DirectionX/2.0; //The depth will be corrrected within Matrix
@@ -727,7 +727,7 @@ uno::Reference<drawing::XShape>
         {
             //PercentDiagonal
             sal_Int16 nPercentDiagonal = 5;
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
+            xProp->setPropertyValue( UNO_NAME_3D_PERCENT_DIAGONAL
                 , uno::makeAny( nPercentDiagonal ) );
 
             //Polygon
@@ -736,7 +736,7 @@ uno::Reference<drawing::XShape>
                                                 fHeight, fRadius, nVerticalSegmentCount)
                                            : createPolyPolygon_Cone(
                                                 fHeight, fRadius, fTopHeight, nVerticalSegmentCount);
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D ), aPPolygon );
+            xProp->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D, aPPolygon );
 
             //Matrix for position
             {
@@ -747,18 +747,18 @@ uno::Reference<drawing::XShape>
                 aM.scale(1.0,1.0,rSize.DirectionZ/rSize.DirectionX);
                 aM.translate(rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ);
                 drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
-                xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
+                xProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                     , uno::makeAny(aHM) );
             }
 
             //Segments
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_HORZ_SEGS )
+            xProp->setPropertyValue( UNO_NAME_3D_HORZ_SEGS
                 , uno::makeAny(CHART_3DOBJECT_SEGMENTCOUNT) );
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_VERT_SEGS )
+            xProp->setPropertyValue( UNO_NAME_3D_VERT_SEGS
                 , uno::makeAny((sal_Int32)nVerticalSegmentCount) );//depends on point count of the used polygon
 
             //Reduced lines
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_REDUCED_LINE_GEOMETRY )
+            xProp->setPropertyValue( UNO_NAME_3D_REDUCED_LINE_GEOMETRY
                 , uno::makeAny((sal_Bool)sal_True) );
         }
         catch( const uno::Exception& e )
@@ -961,7 +961,7 @@ uno::Reference< drawing::XShape >
     //create shape
     uno::Reference< drawing::XShape > xShape(
             m_xShapeFactory->createInstance(
-                C2U("com.sun.star.drawing.ClosedBezierShape") ), uno::UNO_QUERY );
+                "com.sun.star.drawing.ClosedBezierShape" ), uno::UNO_QUERY );
     xTarget->add(xShape); //need to add the shape before setting of properties
 
     //set properties
@@ -981,7 +981,7 @@ uno::Reference< drawing::XShape >
                 , fUnitCircleStartAngleDegree*F_PI/180.0, fUnitCircleWidthAngleDegree*F_PI/180.0
                 , aTransformationFromUnitCircle, fAngleSubdivisionRadian );
 
-            xProp->setPropertyValue( C2U( "PolyPolygonBezier" ), uno::makeAny( aCoords ) );
+            xProp->setPropertyValue( "PolyPolygonBezier", uno::makeAny( aCoords ) );
         }
         catch( const uno::Exception& e )
         {
@@ -1013,8 +1013,8 @@ uno::Reference< drawing::XShape >
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.Shape3DExtrudeObject") ), uno::UNO_QUERY );
+        m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.Shape3DExtrudeObject" ), uno::UNO_QUERY );
     xTarget->add(xShape); //need to add the shape before setting of properties
 
     //set properties
@@ -1035,36 +1035,36 @@ uno::Reference< drawing::XShape >
                 , aTransformationFromUnitCircle, fAngleSubdivisionRadian );
 
             //depth
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
+            xProp->setPropertyValue( UNO_NAME_3D_EXTRUDE_DEPTH
                 , uno::makeAny((sal_Int32)fDepth) );
 
             //PercentDiagonal
             sal_Int16 nPercentDiagonal = 0;
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
+            xProp->setPropertyValue( UNO_NAME_3D_PERCENT_DIAGONAL
                 , uno::makeAny( nPercentDiagonal ) );
 
             //Polygon
             drawing::PolyPolygonShape3D aPoly( BezierToPoly(aCoords) );
             ShapeFactory::closePolygon( aPoly );
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
+            xProp->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D
                 , uno::makeAny( aPoly ) );
 
             //DoubleSided
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_DOUBLE_SIDED )
+            xProp->setPropertyValue( UNO_NAME_3D_DOUBLE_SIDED
                 , uno::makeAny( (sal_Bool)true) );
 
             //Reduced lines
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_REDUCED_LINE_GEOMETRY )
+            xProp->setPropertyValue( UNO_NAME_3D_REDUCED_LINE_GEOMETRY
                 , uno::makeAny((sal_Bool)sal_True) );
 
             //TextureProjectionMode
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTURE_PROJ_Y )
+            xProp->setPropertyValue( UNO_NAME_3D_TEXTURE_PROJ_Y
                 , uno::makeAny( drawing::TextureProjectionMode_OBJECTSPECIFIC ) );
 
             //TextureProjectionMode
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTURE_PROJ_X )
+            xProp->setPropertyValue( UNO_NAME_3D_TEXTURE_PROJ_X
                 , uno::makeAny( drawing::TextureProjectionMode_PARALLEL ) );
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTURE_PROJ_Y )
+            xProp->setPropertyValue( UNO_NAME_3D_TEXTURE_PROJ_Y
                 , uno::makeAny( drawing::TextureProjectionMode_OBJECTSPECIFIC ) );
         }
         catch( const uno::Exception& e )
@@ -1093,8 +1093,8 @@ uno::Reference< drawing::XShape >
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.Shape3DPolygonObject" ) ), uno::UNO_QUERY );
+            m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.Shape3DPolygonObject" ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     //set properties
@@ -1105,27 +1105,27 @@ uno::Reference< drawing::XShape >
         try
         {
             //Polygon
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
+            xProp->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D
                 , rStripe.getPolyPolygonShape3D() );
 
             //TexturePolygon
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTUREPOLYGON3D )
+            xProp->setPropertyValue( UNO_NAME_3D_TEXTUREPOLYGON3D
                 , rStripe.getTexturePolygon( nRotatedTexture ) );
 
             //Normals Polygon
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALSPOLYGON3D )
+            xProp->setPropertyValue( UNO_NAME_3D_NORMALSPOLYGON3D
                 , rStripe.getNormalsPolygon() );
             //NormalsKind
             if(bFlatNormals)
-                xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALS_KIND )
+                xProp->setPropertyValue( UNO_NAME_3D_NORMALS_KIND
                     , uno::makeAny( drawing::NormalsKind_FLAT ) );
 
             //LineOnly
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_LINEONLY )
+            xProp->setPropertyValue( UNO_NAME_3D_LINEONLY
                 , uno::makeAny( (sal_Bool)false) );
 
             //DoubleSided
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_DOUBLE_SIDED )
+            xProp->setPropertyValue( UNO_NAME_3D_DOUBLE_SIDED
                 , uno::makeAny(bDoubleSided) );
 
             if( xSourceProp.is())
@@ -1152,8 +1152,8 @@ uno::Reference< drawing::XShape >
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.Shape3DExtrudeObject") ), uno::UNO_QUERY );
+        m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.Shape3DExtrudeObject" ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     //set properties
@@ -1164,20 +1164,20 @@ uno::Reference< drawing::XShape >
         try
         {
             //depth
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
+            xProp->setPropertyValue( UNO_NAME_3D_EXTRUDE_DEPTH
                 , uno::makeAny((sal_Int32)fDepth) );
 
             //PercentDiagonal
             sal_Int16 nPercentDiagonal = 0;
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
+            xProp->setPropertyValue( UNO_NAME_3D_PERCENT_DIAGONAL
                 , uno::makeAny( nPercentDiagonal ) );
 
             //Polygon
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
+            xProp->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D
                 , uno::makeAny( rPolyPolygon ) );
 
             //DoubleSided
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_DOUBLE_SIDED )
+            xProp->setPropertyValue( UNO_NAME_3D_DOUBLE_SIDED
                 , uno::makeAny( (sal_Bool)true) );
 
             //the z component of the polygon is now ignored by the drawing layer,
@@ -1191,7 +1191,7 @@ uno::Reference< drawing::XShape >
                             , 0
                             , rPolyPolygon.SequenceZ[0][0] );
                 drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
-                xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
+                xProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                     , uno::makeAny(aHM) );
             }
         }
@@ -1212,8 +1212,8 @@ uno::Reference< drawing::XShape >
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.PolyPolygonShape") ), uno::UNO_QUERY );
+        m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.PolyPolygonShape" ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     //set properties
@@ -1227,12 +1227,12 @@ uno::Reference< drawing::XShape >
             drawing::PointSequenceSequence aPoints( PolyToPointSequence(rPolyPolygon) );
 
             //Polygon
-            xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON )
+            xProp->setPropertyValue( UNO_NAME_POLYPOLYGON
                 , uno::makeAny( aPoints ) );
 
             //ZOrder
             //an area should always be behind other shapes
-            xProp->setPropertyValue( C2U( UNO_NAME_MISC_OBJ_ZORDER )
+            xProp->setPropertyValue( UNO_NAME_MISC_OBJ_ZORDER
                 , uno::makeAny( sal_Int32(0) ) );
         }
         catch( const uno::Exception& e )
@@ -1785,8 +1785,8 @@ uno::Reference< drawing::XShape >
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.PolyPolygonShape") ), uno::UNO_QUERY );
+        m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.PolyPolygonShape" ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     //set properties
@@ -1800,15 +1800,15 @@ uno::Reference< drawing::XShape >
                 createPolyPolygon_Symbol( rPosition, rSize, nStandardSymbol ) ));
 
             //Polygon
-            xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON )
+            xProp->setPropertyValue( UNO_NAME_POLYPOLYGON
                 , uno::makeAny( aPoints ) );
 
             //LineColor
-            xProp->setPropertyValue( C2U( UNO_NAME_LINECOLOR )
+            xProp->setPropertyValue( UNO_NAME_LINECOLOR
                 , uno::makeAny( nBorderColor ) );
 
             //FillColor
-            xProp->setPropertyValue( C2U( UNO_NAME_FILLCOLOR )
+            xProp->setPropertyValue( UNO_NAME_FILLCOLOR
                 , uno::makeAny( nFillColor ) );
         }
         catch( const uno::Exception& e )
@@ -1834,8 +1834,8 @@ uno::Reference< drawing::XShape >
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.GraphicObjectShape") ), uno::UNO_QUERY );
+        m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.GraphicObjectShape" ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     try
@@ -1858,7 +1858,7 @@ uno::Reference< drawing::XShape >
     {
         try
         {
-            xProp->setPropertyValue( C2U("Graphic"), uno::makeAny( xGraphic ));
+            xProp->setPropertyValue( "Graphic", uno::makeAny( xGraphic ));
         }
         catch( const uno::Exception& e )
         {
@@ -1878,8 +1878,8 @@ uno::Reference< drawing::XShapes >
     {
         //create and add to target
         uno::Reference< drawing::XShape > xShape(
-                    m_xShapeFactory->createInstance( C2U(
-                    "com.sun.star.drawing.GroupShape" ) ), uno::UNO_QUERY );
+                    m_xShapeFactory->createInstance(
+                    "com.sun.star.drawing.GroupShape" ), uno::UNO_QUERY );
         xTarget->add(xShape);
 
         //set name
@@ -1913,8 +1913,8 @@ uno::Reference< drawing::XShapes >
     {
         //create shape
         uno::Reference< drawing::XShape > xShape(
-                m_xShapeFactory->createInstance( C2U(
-                "com.sun.star.drawing.Shape3DSceneObject" ) ), uno::UNO_QUERY );
+                m_xShapeFactory->createInstance(
+                "com.sun.star.drawing.Shape3DSceneObject" ), uno::UNO_QUERY );
 
         xTarget->add(xShape);
 
@@ -1930,7 +1930,7 @@ uno::Reference< drawing::XShapes >
                 try
                 {
                     ::basegfx::B3DHomMatrix aM;
-                    xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
+                    xProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                         , uno::makeAny(B3DHomMatrixToHomogenMatrix(aM)) );
                 }
                 catch( const uno::Exception& e )
@@ -1966,8 +1966,8 @@ uno::Reference< drawing::XShape >
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.EllipseShape") ), uno::UNO_QUERY );
+        m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.EllipseShape" ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     try
@@ -1992,7 +1992,7 @@ uno::Reference< drawing::XShape >
         try
         {
             drawing::CircleKind eKind = drawing::CircleKind_FULL;
-            xProp->setPropertyValue( C2U( UNO_NAME_CIRCKIND )
+            xProp->setPropertyValue( UNO_NAME_CIRCKIND
                 , uno::makeAny( eKind ) );
         }
         catch( const uno::Exception& e )
@@ -2016,8 +2016,8 @@ uno::Reference< drawing::XShape >
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.Shape3DPolygonObject") ), uno::UNO_QUERY );
+        m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.Shape3DPolygonObject" ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     //set properties
@@ -2028,31 +2028,31 @@ uno::Reference< drawing::XShape >
         try
         {
             //Polygon
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
+            xProp->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D
                 , uno::makeAny( rPoints ) );
 
             //LineOnly
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_LINEONLY )
+            xProp->setPropertyValue( UNO_NAME_3D_LINEONLY
                 , uno::makeAny( (sal_Bool)true ) );
 
             //Transparency
             if(rLineProperties.Transparence.hasValue())
-                xProp->setPropertyValue( C2U( UNO_NAME_LINETRANSPARENCE )
+                xProp->setPropertyValue( UNO_NAME_LINETRANSPARENCE
                     , rLineProperties.Transparence );
 
             //LineStyle
             if(rLineProperties.LineStyle.hasValue())
-                xProp->setPropertyValue( C2U( UNO_NAME_LINESTYLE )
+                xProp->setPropertyValue( UNO_NAME_LINESTYLE
                     , rLineProperties.LineStyle );
 
             //LineWidth
             if(rLineProperties.Width.hasValue())
-                xProp->setPropertyValue( C2U( UNO_NAME_LINEWIDTH )
+                xProp->setPropertyValue( UNO_NAME_LINEWIDTH
                     , rLineProperties.Width );
 
             //LineColor
             if(rLineProperties.Color.hasValue())
-                xProp->setPropertyValue( C2U( UNO_NAME_LINECOLOR )
+                xProp->setPropertyValue( UNO_NAME_LINECOLOR
                     , rLineProperties.Color );
                     //, uno::makeAny( sal_Int32( Color(COL_RED).GetColor()) ) );
         }
@@ -2077,8 +2077,8 @@ uno::Reference< drawing::XShape >
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
-        m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.PolyLineShape") ), uno::UNO_QUERY );
+        m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.PolyLineShape" ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     //set properties
@@ -2089,34 +2089,34 @@ uno::Reference< drawing::XShape >
         try
         {
             //Polygon
-            xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON )
+            xProp->setPropertyValue( UNO_NAME_POLYPOLYGON
                 , uno::makeAny( rPoints ) );
 
             if(pLineProperties)
             {
                 //Transparency
                 if(pLineProperties->Transparence.hasValue())
-                    xProp->setPropertyValue( C2U( UNO_NAME_LINETRANSPARENCE )
+                    xProp->setPropertyValue( UNO_NAME_LINETRANSPARENCE
                         , pLineProperties->Transparence );
 
                 //LineStyle
                 if(pLineProperties->LineStyle.hasValue())
-                    xProp->setPropertyValue( C2U( UNO_NAME_LINESTYLE )
+                    xProp->setPropertyValue( UNO_NAME_LINESTYLE
                         , pLineProperties->LineStyle );
 
                 //LineWidth
                 if(pLineProperties->Width.hasValue())
-                    xProp->setPropertyValue( C2U( UNO_NAME_LINEWIDTH )
+                    xProp->setPropertyValue( UNO_NAME_LINEWIDTH
                         , pLineProperties->Width );
 
                 //LineColor
                 if(pLineProperties->Color.hasValue())
-                    xProp->setPropertyValue( C2U( UNO_NAME_LINECOLOR )
+                    xProp->setPropertyValue( UNO_NAME_LINECOLOR
                         , pLineProperties->Color );
 
                 //LineDashName
                 if(pLineProperties->DashName.hasValue())
-                    xProp->setPropertyValue( C2U( "LineDashName" )
+                    xProp->setPropertyValue( "LineDashName"
                         , pLineProperties->DashName );
             }
         }
@@ -2148,8 +2148,8 @@ void ShapeFactory::makeShapeInvisible( const uno::Reference< drawing::XShape >& 
     {
         try
         {
-            xShapeProp->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_NONE ));
-            xShapeProp->setPropertyValue( C2U("FillStyle"), uno::makeAny( drawing::FillStyle_NONE ));
+            xShapeProp->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_NONE ));
+            xShapeProp->setPropertyValue( "FillStyle", uno::makeAny( drawing::FillStyle_NONE ));
         }
         catch( const uno::Exception& e )
         {
@@ -2168,7 +2168,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
             return 0;
 
         uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance(
-                C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
+                "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
         if( xTarget.is() && xShape.is())
         {
             xTarget->add( xShape );
@@ -2199,8 +2199,8 @@ uno::Reference< drawing::XShape >
 
     //create shape and add to page
     uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.TextShape" ) ), uno::UNO_QUERY );
+            m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.TextShape" ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     //set text
@@ -2218,7 +2218,7 @@ uno::Reference< drawing::XShape >
         //the matrix needs to be set at the end behind autogrow and such position influencing properties
         try
         {
-            xProp->setPropertyValue( C2U( "Transformation" ), rATransformation );
+            xProp->setPropertyValue( "Transformation", rATransformation );
         }
         catch( const uno::Exception& e )
         {

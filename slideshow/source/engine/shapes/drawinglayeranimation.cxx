@@ -798,14 +798,14 @@ ActivityImpl::ActivityImpl(
     uno::Reference<drawing::XShape> const xShape( mpDrawShape->getXShape() );
     uno::Reference<beans::XPropertySet> const xProps( xShape, uno::UNO_QUERY_THROW );
 
-    getPropertyValue( meAnimKind, xProps, OUSTR("TextAnimationKind") );
+    getPropertyValue( meAnimKind, xProps, "TextAnimationKind" );
     OSL_ASSERT( meAnimKind != drawing::TextAnimationKind_NONE );
     mbAlternate = (meAnimKind == drawing::TextAnimationKind_ALTERNATE);
     mbScrollIn = (meAnimKind == drawing::TextAnimationKind_SLIDE);
 
     // adopted from in AInfoBlinkText::ImplInit():
     sal_Int16 nRepeat(0);
-    getPropertyValue( nRepeat, xProps, OUSTR("TextAnimationCount") );
+    getPropertyValue( nRepeat, xProps, "TextAnimationCount" );
     mnRepeat = nRepeat;
 
     if(mbAlternate)
@@ -817,20 +817,20 @@ ActivityImpl::ActivityImpl(
     else
     {
         getPropertyValue( mbVisibleWhenStarted, xProps,
-                          OUSTR("TextAnimationStartInside") );
+                          "TextAnimationStartInside" );
     }
 
     // set visible when stopped
     getPropertyValue( mbVisibleWhenStopped, xProps,
-                      OUSTR("TextAnimatiogonStopInside") );
+                      "TextAnimatiogonStopInside" );
     // rotation:
     getPropertyValue( mfRotationAngle, xProps,
-                      OUSTR("RotateAngle") );
+                      "RotateAngle" );
     mfRotationAngle /= -100.0; // (switching direction)
 
     // set frequency
     sal_Int16 nDelay(0);
-    getPropertyValue( nDelay, xProps, OUSTR("TextAnimationDelay") );
+    getPropertyValue( nDelay, xProps, "TextAnimationDelay" );
     // set delay if not automatic
     mnFrequency = (nDelay ? nDelay :
                    // default:
@@ -850,10 +850,10 @@ ActivityImpl::ActivityImpl(
     }
 
     // Get animation direction
-    getPropertyValue( meDirection, xProps, OUSTR("TextAnimationDirection") );
+    getPropertyValue( meDirection, xProps, "TextAnimationDirection" );
 
     // Get step width. Negative means pixel, positive logical units
-    getPropertyValue( mnStepWidth, xProps, OUSTR("TextAnimationAmount") );
+    getPropertyValue( mnStepWidth, xProps, "TextAnimationAmount" );
 
     maContext.mpSubsettableShapeManager->addIntrinsicAnimationHandler(
         mpListener );

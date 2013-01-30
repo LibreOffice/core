@@ -185,7 +185,7 @@ public:
 
 inline ::rtl::OUString LngSvcMgr::getImplementationName_Static()
 {
-    return A2OU( "com.sun.star.lingu2.LngSvcMgr" );
+    return OUString( "com.sun.star.lingu2.LngSvcMgr" );
 }
 
 

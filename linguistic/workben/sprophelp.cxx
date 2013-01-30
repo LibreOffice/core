@@ -40,8 +40,6 @@ using namespace linguistic;
 
 using ::rtl::OUString;
 
-#define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
-
 
 
 PropertyChgHelper::PropertyChgHelper(
@@ -191,32 +189,32 @@ PropertyHelper_Spell::PropertyHelper_Spell(
             sal_Bool *pbVal     = NULL,
                  *pbResVal  = NULL;
 
-            if (A2OU( UPN_IS_GERMAN_PRE_REFORM ) == pPropName[i])
+            if (OUString( UPN_IS_GERMAN_PRE_REFORM ) == pPropName[i])
             {
                 pbVal    = &bIsGermanPreReform;
                 pbResVal = &bResIsGermanPreReform;
             }
-            else if (A2OU( UPN_IS_IGNORE_CONTROL_CHARACTERS ) == pPropName[i])
+            else if (OUString( UPN_IS_IGNORE_CONTROL_CHARACTERS ) == pPropName[i])
             {
                 pbVal    = &bIsIgnoreControlCharacters;
                 pbResVal = &bResIsIgnoreControlCharacters;
             }
-            else if (A2OU( UPN_IS_USE_DICTIONARY_LIST ) == pPropName[i])
+            else if (OUString( UPN_IS_USE_DICTIONARY_LIST ) == pPropName[i])
             {
                 pbVal    = &bIsUseDictionaryList;
                 pbResVal = &bResIsUseDictionaryList;
             }
-            else if (A2OU( UPN_IS_SPELL_UPPER_CASE ) == pPropName[i])
+            else if (OUString( UPN_IS_SPELL_UPPER_CASE ) == pPropName[i])
             {
                 pbVal    = &bIsSpellUpperCase;
                 pbResVal = &bResIsSpellUpperCase;
             }
-            else if (A2OU( UPN_IS_SPELL_WITH_DIGITS ) == pPropName[i])
+            else if (OUString( UPN_IS_SPELL_WITH_DIGITS ) == pPropName[i])
             {
                 pbVal    = &bIsSpellWithDigits;
                 pbResVal = &bResIsSpellWithDigits;
             }
-            else if (A2OU( UPN_IS_SPELL_CAPITALIZATION ) == pPropName[i])
+            else if (OUString( UPN_IS_SPELL_CAPITALIZATION ) == pPropName[i])
             {
                 pbVal    = &bIsSpellCapitalization;
                 pbResVal = &bResIsSpellCapitalization;

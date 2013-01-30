@@ -238,14 +238,14 @@ static OUString path_make_absolute_file_url( OUString const & path )
         else
         {
             throw RuntimeException(
-                OUSTR("cannot make absolute: ") + file_url,
+                "cannot make absolute: " + file_url,
                 Reference< XInterface >() );
         }
     }
     else
     {
         throw RuntimeException(
-            OUSTR("cannot get file url from system path: ") + path,
+            "cannot get file url from system path: " + path,
             Reference< XInterface >() );
     }
 }
@@ -258,7 +258,7 @@ Reference< registry::XSimpleRegistry > open_registries(
     if (registries.empty())
     {
         throw RuntimeException(
-            OUSTR("no registries given!"),
+            "no registries given!",
             Reference< XInterface >() );
     }
 
@@ -267,13 +267,13 @@ Reference< registry::XSimpleRegistry > open_registries(
     {
         Reference< registry::XSimpleRegistry > xReg(
             xContext->getServiceManager()->createInstanceWithContext(
-                OUSTR("com.sun.star.registry.SimpleRegistry"), xContext ),
+                "com.sun.star.registry.SimpleRegistry", xContext ),
             UNO_QUERY_THROW );
         xReg->open( registries[ nPos ], sal_True, sal_False );
         if (! xReg->isValid())
         {
             throw RuntimeException(
-                OUSTR("invalid registry: ") + registries[ nPos ],
+                "invalid registry: " + registries[ nPos ],
                 Reference< XInterface >() );
         }
 
@@ -281,7 +281,7 @@ Reference< registry::XSimpleRegistry > open_registries(
         {
             Reference< registry::XSimpleRegistry > xNested(
                 xContext->getServiceManager()->createInstanceWithContext(
-                    OUSTR("com.sun.star.registry.NestedRegistry"), xContext ),
+                    "com.sun.star.registry.NestedRegistry", xContext ),
                 UNO_QUERY_THROW );
             Reference< lang::XInitialization > xInit(
                 xNested, UNO_QUERY_THROW );
@@ -320,33 +320,33 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         OptionInfo const * info_help =
-            get_option_info( OUSTR("help") );
+            get_option_info( "help" );
         OptionInfo const * info_verbose =
-            get_option_info( OUSTR("verbose") );
+            get_option_info( "verbose" );
         OptionInfo const * info_out =
-            get_option_info( OUSTR("out") );
+            get_option_info( "out" );
         OptionInfo const * info_types =
-            get_option_info( OUSTR("types") );
+            get_option_info( "types" );
         OptionInfo const * info_reference =
-            get_option_info( OUSTR("reference") );
+            get_option_info( "reference" );
         OptionInfo const * info_extra =
-            get_option_info( OUSTR("extra") );
+            get_option_info( "extra" );
         OptionInfo const * info_keyfile =
-            get_option_info( OUSTR("keyfile") );
+            get_option_info( "keyfile" );
         OptionInfo const * info_delaySign =
-            get_option_info( OUSTR("delaySign") );
+            get_option_info( "delaySign" );
         OptionInfo const * info_version =
-            get_option_info( OUSTR("assembly-version") );
+            get_option_info( "assembly-version" );
         OptionInfo const * info_product =
-            get_option_info( OUSTR("assembly-product") );
+            get_option_info( "assembly-product" );
         OptionInfo const * info_description =
-            get_option_info( OUSTR("assembly-description") );
+            get_option_info( "assembly-description" );
         OptionInfo const * info_company =
-            get_option_info( OUSTR("assembly-company") );
+            get_option_info( "assembly-company" );
         OptionInfo const * info_copyright =
-            get_option_info( OUSTR("assembly-copyright") );
+            get_option_info( "assembly-copyright" );
         OptionInfo const * info_trademark =
-            get_option_info( OUSTR("assembly-trademark") );
+            get_option_info( "assembly-trademark" );
 
         OUString output;
         vector< OUString > mandatory_registries;
@@ -455,23 +455,23 @@ SAL_IMPLEMENT_MAIN()
         xContext = ::cppu::defaultBootstrap_InitialComponentContext();
         Reference< container::XHierarchicalNameAccess > xTDmgr(
             xContext->getValueByName(
-                OUSTR("/singletons/com.sun.star.reflection."
-                      "theTypeDescriptionManager") ),
+                "/singletons/com.sun.star.reflection."
+                "theTypeDescriptionManager" ),
             UNO_QUERY_THROW );
 
         // get rdb tdprovider factory
         Reference< lang::XSingleComponentFactory > xTDprov_factory(
             ::cppu::loadSharedLibComponentFactory(
-                OUSTR("bootstrap.uno" SAL_DLLEXTENSION), OUString(),
-                OUSTR("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"),
+                "bootstrap.uno" SAL_DLLEXTENSION, OUString(),
+                "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider",
                 Reference< lang::XMultiServiceFactory >(
                     xContext->getServiceManager(), UNO_QUERY ),
                 Reference< registry::XRegistryKey >() ), UNO_QUERY );
         if (! xTDprov_factory.is())
         {
             throw RuntimeException(
-                OUSTR("cannot get registry typedescription provider: "
-                      "bootstrap.uno" SAL_DLLEXTENSION "!"),
+                "cannot get registry typedescription provider: "
+                "bootstrap.uno" SAL_DLLEXTENSION "!",
                 Reference< XInterface >() );
         }
 
@@ -508,7 +508,7 @@ SAL_IMPLEMENT_MAIN()
             }
             else
             {
-                output = OUSTR("cli_unotypes");
+                output = "cli_unotypes";
             }
         }
         output = path_make_absolute_file_url( output );
@@ -518,7 +518,7 @@ SAL_IMPLEMENT_MAIN()
                 output.copy( 0, slash ), sys_output_dir ))
         {
             throw RuntimeException(
-                OUSTR("cannot get system path from file url ") +
+                "cannot get system path from file url " +
                 output.copy( 0, slash ),
                 Reference< XInterface >() );
         }
@@ -526,7 +526,7 @@ SAL_IMPLEMENT_MAIN()
         sal_Int32 dot = filename.lastIndexOf( '.' );
         OUString name( filename );
         if (dot < 0) // has no extension
-            filename += OUSTR(".dll");
+            filename += ".dll";
         else
             name = name.copy( 0, dot );
         ::System::String ^ output_dir = ustring_to_String( sys_output_dir );
@@ -545,7 +545,7 @@ SAL_IMPLEMENT_MAIN()
             }
             catch (System::IO::FileNotFoundException ^ )
             {
-                throw Exception(OUSTR("Could not find the keyfile. Verify the --keyfile argument!"), 0);
+                throw Exception("Could not find the keyfile. Verify the --keyfile argument!", 0);
             }
         }
         else

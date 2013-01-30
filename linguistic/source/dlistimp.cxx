@@ -667,7 +667,7 @@ void DicList::_CreateDicList()
 
     // create IgnoreAllList dictionary with empty URL (non persistent)
     // and add it to list
-    rtl::OUString aDicName( A2OU( "IgnoreAllList" ) );
+    rtl::OUString aDicName( "IgnoreAllList" );
     uno::Reference< XDictionary > xIgnAll(
             createDictionary( aDicName, LinguLanguageToLocale( LANGUAGE_NONE ),
                               DictionaryType_POSITIVE, rtl::OUString() ) );
@@ -772,7 +772,7 @@ uno::Sequence< rtl::OUString > DicList::getSupportedServiceNames_Static() throw(
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     uno::Sequence< rtl::OUString > aSNS( 1 );   // more than 1 service possible
-    aSNS.getArray()[0] = A2OU( SN_DICTIONARY_LIST );
+    aSNS.getArray()[0] = SN_DICTIONARY_LIST;
     return aSNS;
 }
 

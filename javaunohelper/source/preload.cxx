@@ -27,8 +27,6 @@
 // probably because java.lang.System.loadLibrary uses RTLD_LOCAL, so uniqueness
 // of GCC RTTI symbols needed for exception handling would not be guaranteed.
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 #if ! defined SAL_DLLPREFIX
 #define SAL_DLLPREFIX ""
 #endif
@@ -59,7 +57,7 @@ static bool inited_juhx( JNIEnv * jni_env )
 {
     if (s_inited)
         return true;
-    OUString lib_name = OUSTR(SAL_DLLPREFIX "juhx" SAL_DLLEXTENSION);
+    OUString lib_name = SAL_DLLPREFIX "juhx" SAL_DLLEXTENSION;
     oslModule hModule =
         osl_loadModuleRelative( &thisModule, lib_name.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (0 == hModule)
@@ -72,20 +70,20 @@ static bool inited_juhx( JNIEnv * jni_env )
     else
     {
         OUString symbol =
-              OUSTR("Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo");
+              "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo";
         s_writeInfo = (fptr_writeInfo)osl_getFunctionSymbol(
             hModule, symbol.pData );
         symbol =
-            OUSTR("Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory");
+            "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory";
         s_getFactory = (fptr_getFactory)osl_getFunctionSymbol(
             hModule, symbol.pData );
         symbol =
-            OUSTR("Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory");
+            "Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory";
         s_createRegistryServiceFactory =
             (fptr_createRegistryServiceFactory)osl_getFunctionSymbol(
                 hModule, symbol.pData );
         symbol =
-            OUSTR("Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap");
+            "Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap";
         s_bootstrap =
             (fptr_bootstrap)osl_getFunctionSymbol( hModule, symbol.pData );
 

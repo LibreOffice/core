@@ -199,7 +199,7 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
     // creating the graphic exporter
     uno::Reference< document::XExporter > xExporter(
         xFactory->createInstanceWithContext(
-            OUSTR("com.sun.star.drawing.GraphicExportFilter"),
+            "com.sun.star.drawing.GraphicExportFilter",
             rxContext),
         uno::UNO_QUERY );
     uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY );
@@ -209,27 +209,27 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
         return false;
 
     uno::Sequence< beans::PropertyValue > aProps(3);
-    aProps[0].Name = OUSTR("FilterName");
-    aProps[0].Value <<= OUSTR("SVM");
+    aProps[0].Name = "FilterName";
+    aProps[0].Value <<= OUString("SVM");
 
-    aProps[1].Name = OUSTR("GraphicRenderer");
+    aProps[1].Name = "GraphicRenderer";
     aProps[1].Value <<= xRenderer;
 
     uno::Sequence< beans::PropertyValue > aFilterData(4);
-    aFilterData[0].Name = OUSTR("ScrollText");
+    aFilterData[0].Name = "ScrollText";
     aFilterData[0].Value <<= ((mtfLoadFlags & MTF_LOAD_SCROLL_TEXT_MTF) != 0);
 
-    aFilterData[1].Name = OUSTR("ExportOnlyBackground");
+    aFilterData[1].Name = "ExportOnlyBackground";
     aFilterData[1].Value <<= ((mtfLoadFlags & MTF_LOAD_BACKGROUND_ONLY) != 0);
 
-    aFilterData[2].Name = OUSTR("Version");
+    aFilterData[2].Name = "Version";
     aFilterData[2].Value <<= static_cast<sal_Int32>( SOFFICE_FILEFORMAT_50 );
 
-    aFilterData[3].Name = OUSTR("CurrentPage");
+    aFilterData[3].Name = "CurrentPage";
     aFilterData[3].Value <<= uno::Reference< uno::XInterface >( xContainingPage,
                                                                 uno::UNO_QUERY_THROW );
 
-    aProps[2].Name = OUSTR("FilterData");
+    aProps[2].Name = "FilterData";
     aProps[2].Value <<= aFilterData;
 
     xExporter->setSourceDocument( xSource );

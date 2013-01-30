@@ -44,8 +44,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-#define A2S(s) (::rtl::OUString(s))
-
 namespace sdext { namespace presenter {
 
 namespace {
@@ -842,16 +840,16 @@ RendererPaneStyle::RendererPaneStyle (
 {
     if (rpTheme.get() != NULL)
     {
-        mpTopLeft = GetBitmap(rpTheme, rsStyleName, A2S("TopLeft"));
-        mpTop = GetBitmap(rpTheme, rsStyleName,  A2S("Top"));
-        mpTopRight = GetBitmap(rpTheme, rsStyleName,  A2S("TopRight"));
-        mpLeft = GetBitmap(rpTheme, rsStyleName, A2S("Left"));
-        mpRight = GetBitmap(rpTheme, rsStyleName,  A2S("Right"));
-        mpBottomLeft = GetBitmap(rpTheme, rsStyleName, A2S("BottomLeft"));
-        mpBottom = GetBitmap(rpTheme, rsStyleName,  A2S("Bottom"));
-        mpBottomRight = GetBitmap(rpTheme, rsStyleName,  A2S("BottomRight"));
-        mpBottomCallout = GetBitmap(rpTheme, rsStyleName,  A2S("BottomCallout"));
-        mpBackground = GetBitmap(rpTheme, OUString(), A2S("Background"));
+        mpTopLeft = GetBitmap(rpTheme, rsStyleName, "TopLeft");
+        mpTop = GetBitmap(rpTheme, rsStyleName, "Top");
+        mpTopRight = GetBitmap(rpTheme, rsStyleName, "TopRight");
+        mpLeft = GetBitmap(rpTheme, rsStyleName,"Left");
+        mpRight = GetBitmap(rpTheme, rsStyleName, "Right");
+        mpBottomLeft = GetBitmap(rpTheme, rsStyleName, "BottomLeft");
+        mpBottom = GetBitmap(rpTheme, rsStyleName, "Bottom");
+        mpBottomRight = GetBitmap(rpTheme, rsStyleName, "BottomRight");
+        mpBottomCallout = GetBitmap(rpTheme, rsStyleName, "BottomCallout");
+        mpBackground = GetBitmap(rpTheme, OUString(), "Background");
 
         // Get font description.
         mpFont = rpTheme->GetFont(rsStyleName);

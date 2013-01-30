@@ -67,9 +67,9 @@ static const OUString ConversionTypeToText( sal_Int16 nConversionType )
 {
     OUString aRes;
     if (nConversionType == ConversionDictionaryType::HANGUL_HANJA)
-        aRes = A2OU( CONV_TYPE_HANGUL_HANJA );
+        aRes = CONV_TYPE_HANGUL_HANJA;
     else if (nConversionType == ConversionDictionaryType::SCHINESE_TCHINESE)
-        aRes = A2OU( CONV_TYPE_SCHINESE_TCHINESE );
+        aRes = CONV_TYPE_SCHINESE_TCHINESE;
     return aRes;
 }
 
@@ -317,8 +317,8 @@ sal_Bool ConvDicXMLExport::Export()
 
 sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass*/ )
 {
-    _GetNamespaceMap().Add( A2OU( "tcd" ),
-            A2OU( XML_NAMESPACE_TCD_STRING ), XML_NAMESPACE_TCD );
+    _GetNamespaceMap().Add( "tcd",
+            XML_NAMESPACE_TCD_STRING, XML_NAMESPACE_TCD );
 
     GetDocHandler()->startDocument();
 
@@ -389,7 +389,7 @@ void ConvDicXMLExport::_ExportContent()
 ::rtl::OUString SAL_CALL ConvDicXMLExport::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return A2OU( "com.sun.star.lingu2.ConvDicXMLExport" );
+    return OUString( "com.sun.star.lingu2.ConvDicXMLExport" );
 }
 
 
@@ -397,8 +397,8 @@ void SAL_CALL ConvDicXMLImport::startDocument(void)
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
     // register namespace at first possible opportunity
-    GetNamespaceMap().Add( A2OU( "tcd" ),
-            A2OU( XML_NAMESPACE_TCD_STRING ), XML_NAMESPACE_TCD );
+    GetNamespaceMap().Add( "tcd",
+            XML_NAMESPACE_TCD_STRING, XML_NAMESPACE_TCD );
     SvXMLImport::startDocument();
 }
 
@@ -425,7 +425,7 @@ SvXMLImportContext * ConvDicXMLImport::CreateContext(
 OUString SAL_CALL ConvDicXMLImport::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return A2OU( "com.sun.star.lingu2.ConvDicXMLImport" );
+    return OUString( "com.sun.star.lingu2.ConvDicXMLImport" );
 }
 
 

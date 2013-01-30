@@ -60,7 +60,7 @@ public:
 
 inline ::rtl::OUString HHConvDic::getImplementationName_Static() throw()
 {
-    return A2OU( "com.sun.star.lingu2.HHConvDic" );
+    return OUString( "com.sun.star.lingu2.HHConvDic" );
 }
 
 

@@ -41,8 +41,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 const static sal_Int64 CaretBlinkIntervall = 500 * 1000 * 1000;
 
 //#define SHOW_CHARACTER_BOXES
@@ -97,7 +95,7 @@ PresenterTextView::PresenterTextView (
     // portions of the same text direction.
     mxScriptTypeDetector = Reference<i18n::XScriptTypeDetector>(
         xFactory->createInstanceWithContext(
-            A2S("com.sun.star.i18n.ScriptTypeDetector"),
+            "com.sun.star.i18n.ScriptTypeDetector",
             rxContext),
         UNO_QUERY_THROW);
 }
@@ -487,7 +485,7 @@ PresenterTextParagraph::PresenterTextParagraph (
         lang::Locale aLocale;
         try
         {
-            xProperties->getPropertyValue(A2S("CharLocale")) >>= aLocale;
+            xProperties->getPropertyValue("CharLocale") >>= aLocale;
         }
         catch(beans::UnknownPropertyException&)
         {
@@ -495,7 +493,7 @@ PresenterTextParagraph::PresenterTextParagraph (
         }
         try
         {
-            xProperties->getPropertyValue(A2S("ParaAdjust")) >>= meAdjust;
+            xProperties->getPropertyValue("ParaAdjust") >>= meAdjust;
         }
         catch(beans::UnknownPropertyException&)
         {
@@ -503,7 +501,7 @@ PresenterTextParagraph::PresenterTextParagraph (
         }
         try
         {
-            xProperties->getPropertyValue(A2S("WritingMode")) >>= mnWritingMode;
+            xProperties->getPropertyValue("WritingMode") >>= mnWritingMode;
         }
         catch(beans::UnknownPropertyException&)
         {

@@ -25,8 +25,6 @@
 
 #include "mergekeys.hxx"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -56,12 +54,12 @@ static void mergeKeys(
 {
     if (!xSource.is() || !xSource->isValid()) {
         throw registry::InvalidRegistryException(
-            OUSTR("source key is null or invalid!"),
+            "source key is null or invalid!",
             Reference<XInterface>() );
     }
     if (!xDest.is() || !xDest->isValid()) {
         throw registry::InvalidRegistryException(
-            OUSTR("destination key is null or invalid!"),
+            "destination key is null or invalid!",
             Reference<XInterface>() );
     }
 
@@ -151,7 +149,7 @@ void mergeKeys(
 {
     if (!xDest.is() || !xDest->isValid()) {
         throw registry::InvalidRegistryException(
-            OUSTR("destination key is null or invalid!"),
+            "destination key is null or invalid!",
             Reference<XInterface>() );
     }
     if (xDest->isReadOnly())

@@ -43,22 +43,20 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace sdext { namespace presenter {
 
 const ::rtl::OUString PresenterViewFactory::msCurrentSlidePreviewViewURL(
-    A2S("private:resource/view/Presenter/CurrentSlidePreview"));
+    "private:resource/view/Presenter/CurrentSlidePreview");
 const ::rtl::OUString PresenterViewFactory::msNextSlidePreviewViewURL(
-    A2S("private:resource/view/Presenter/NextSlidePreview"));
+    "private:resource/view/Presenter/NextSlidePreview");
 const ::rtl::OUString PresenterViewFactory::msNotesViewURL(
-    A2S("private:resource/view/Presenter/Notes"));
+    "private:resource/view/Presenter/Notes");
 const ::rtl::OUString PresenterViewFactory::msToolBarViewURL(
-    A2S("private:resource/view/Presenter/ToolBar"));
+    "private:resource/view/Presenter/ToolBar");
 const ::rtl::OUString PresenterViewFactory::msSlideSorterURL(
-    A2S("private:resource/view/Presenter/SlideSorter"));
+    "private:resource/view/Presenter/SlideSorter");
 const ::rtl::OUString PresenterViewFactory::msHelpViewURL(
-    A2S("private:resource/view/Presenter/Help"));
+    "private:resource/view/Presenter/Help");
 
 //===== SimpleView ============================================================
 

@@ -182,7 +182,7 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
         if( !rGlyphSet.empty() )
         {
             GlyphSet::const_iterator    aIter( rGlyphSet.begin() );
-            const ::rtl::OUString       aEmbeddedFontStr( B2UCONST( "EmbeddedFont_" ) );
+            const OUString              aEmbeddedFontStr( "EmbeddedFont_" );
 
             {
                 SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
@@ -208,15 +208,15 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
 
                     // Font Weight
                     if( aFont.GetWeight() != WEIGHT_NORMAL )
-                        aFontWeight = B2UCONST( "bold" );
+                        aFontWeight = "bold";
                     else
-                        aFontWeight = B2UCONST( "normal" );
+                        aFontWeight = "normal";
 
                     // Font Italic
                     if( aFont.GetItalic() != ITALIC_NONE )
-                        aFontStyle = B2UCONST( "italic" );
+                        aFontStyle = "italic";
                     else
-                        aFontStyle = B2UCONST( "normal" );
+                        aFontStyle = "normal";
 
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "font-family", GetMappedFontName( rFont.GetName() ) );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "units-per-em", aUnitsPerEM );
@@ -334,7 +334,7 @@ void SVGFontExport::EmbedFonts()
     ::rtl::OUString aRet( rFontName.getToken( 0, ';', nNextTokenPos ) );
 
     if( mnCurFontId )
-        aRet += B2UCONST( " embedded" );
+        aRet += " embedded";
 
     return aRet;
 }

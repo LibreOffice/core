@@ -70,76 +70,76 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "ParaAdjust" ),
+        Property( "ParaAdjust",
                   PROP_TITLE_PARA_ADJUST,
                   ::getCppuType( reinterpret_cast< ::com::sun::star::style::ParagraphAdjust * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ParaLastLineAdjust" ),
+        Property( "ParaLastLineAdjust",
                   PROP_TITLE_PARA_LAST_LINE_ADJUST,
                   ::getCppuType( reinterpret_cast< sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ParaLeftMargin" ),
+        Property( "ParaLeftMargin",
                   PROP_TITLE_PARA_LEFT_MARGIN,
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ParaRightMargin" ),
+        Property( "ParaRightMargin",
                   PROP_TITLE_PARA_RIGHT_MARGIN,
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ParaTopMargin" ),
+        Property( "ParaTopMargin",
                   PROP_TITLE_PARA_TOP_MARGIN,
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ParaBottomMargin" ),
+        Property( "ParaBottomMargin",
                   PROP_TITLE_PARA_BOTTOM_MARGIN,
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ParaIsHyphenation" ),
+        Property( "ParaIsHyphenation",
                   PROP_TITLE_PARA_IS_HYPHENATION,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "TextRotation" ),
+        Property( "TextRotation",
                   PROP_TITLE_TEXT_ROTATION,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "StackCharacters" ),
+        Property( "StackCharacters",
                   PROP_TITLE_TEXT_STACKED,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "RelativePosition" ),
+        Property( "RelativePosition",
                   PROP_TITLE_REL_POS,
                   ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "ReferencePageSize" ),
+        Property( "ReferencePageSize",
                   PROP_TITLE_REF_PAGE_SIZE,
                   ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -377,10 +377,10 @@ void Title::fireModifyEvent()
 uno::Sequence< ::rtl::OUString > Title::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 4 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.Title" );
-    aServices[ 1 ] = C2U( "com.sun.star.style.ParagraphProperties" );
-    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
-    aServices[ 3 ] = C2U( "com.sun.star.layout.LayoutElement" );
+    aServices[ 0 ] = "com.sun.star.chart2.Title";
+    aServices[ 1 ] = "com.sun.star.style.ParagraphProperties";
+    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
+    aServices[ 3 ] = "com.sun.star.layout.LayoutElement";
     return aServices;
 }
 

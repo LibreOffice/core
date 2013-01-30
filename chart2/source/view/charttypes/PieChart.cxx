@@ -124,7 +124,7 @@ PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
     uno::Reference< beans::XPropertySet > xChartTypeProps( xChartTypeModel, uno::UNO_QUERY );
     if( xChartTypeProps.is() ) try
     {
-        xChartTypeProps->getPropertyValue( C2U( "UseRings" )) >>= m_bUseRings;
+        xChartTypeProps->getPropertyValue( "UseRings") >>= m_bUseRings;
         if( m_bUseRings )
         {
             m_pPosHelper->m_fRadiusOffset = 1.0;
@@ -245,14 +245,14 @@ double PieChart::getMaxOffset()
         return m_fMaxOffset;
 
     double fExplodePercentage=0.0;
-    xSeriesProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
+    xSeriesProp->getPropertyValue( "Offset") >>= fExplodePercentage;
     if(fExplodePercentage>m_fMaxOffset)
         m_fMaxOffset=fExplodePercentage;
 
     if(!m_bSizeExcludesLabelsAndExplodedSegments)
     {
         uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-        if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+        if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
         {
             for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
             {
@@ -260,7 +260,7 @@ double PieChart::getMaxOffset()
                 if(xPointProp.is())
                 {
                     fExplodePercentage=0.0;
-                    xPointProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
+                    xPointProp->getPropertyValue( "Offset") >>= fExplodePercentage;
                     if(fExplodePercentage>m_fMaxOffset)
                         m_fMaxOffset=fExplodePercentage;
                 }
@@ -404,7 +404,7 @@ void PieChart::createShapes()
                 bool bDoExplode = ( nExplodeableSlot == static_cast< ::std::vector< VDataSeriesGroup >::size_type >(fSlotX) );
                 if(bDoExplode) try
                 {
-                    xPointProperties->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
+                    xPointProperties->getPropertyValue( "Offset") >>= fExplodePercentage;
                 }
                 catch( const uno::Exception& e )
                 {
@@ -425,7 +425,7 @@ void PieChart::createShapes()
                     if(!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
                     {
                         apOverwritePropertiesMap.reset( new tPropertyNameValueMap() );
-                        (*apOverwritePropertiesMap)[C2U("FillColor")] = uno::makeAny(
+                        (*apOverwritePropertiesMap)["FillColor"] = uno::makeAny(
                             m_xColorScheme->getColorByIndex( nPointIndex ));
                     }
                 }
@@ -857,7 +857,7 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
             if( xProp.is() )
             {
                 sal_Int32 nColor = 0;
-                xProp->getPropertyValue(C2U("CharColor")) >>= nColor;
+                xProp->getPropertyValue("CharColor") >>= nColor;
                 if( nColor != -1 )//automatic font color does not work for lines -> fallback to black
                     aVLineProperties.Color = uno::makeAny(nColor);
             }

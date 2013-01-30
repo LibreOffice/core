@@ -37,14 +37,14 @@ void LineProperties::AddPropertiesToVector(
     // Line Properties see service drawing::LineProperties
     // ---------------
     rOutProperties.push_back(
-        Property( C2U( "LineStyle" ),
+        Property( "LineStyle",
                   PROP_LINE_STYLE,
                   ::getCppuType( reinterpret_cast< const drawing::LineStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
      rOutProperties.push_back(
-         Property( C2U( "LineDash" ),
+         Property( "LineDash",
                    PROP_LINE_DASH,
                    ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
                    beans::PropertyAttribute::BOUND
@@ -52,7 +52,7 @@ void LineProperties::AddPropertiesToVector(
 
 //not in service description
     rOutProperties.push_back(
-        Property( C2U( "LineDashName" ),
+        Property( "LineDashName",
                   PROP_LINE_DASH_NAME,
                   ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -60,28 +60,28 @@ void LineProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "LineColor" ),
+        Property( "LineColor",
                   PROP_LINE_COLOR,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "LineTransparence" ),
+        Property( "LineTransparence",
                   PROP_LINE_TRANSPARENCE,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "LineWidth" ),
+        Property( "LineWidth",
                   PROP_LINE_WIDTH,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "LineJoint" ),
+        Property( "LineJoint",
                   PROP_LINE_JOINT,
                   ::getCppuType( reinterpret_cast< const drawing::LineJoint * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -107,11 +107,11 @@ bool LineProperties::IsLineVisible( const ::com::sun::star::uno::Reference<
         if( xLineProperties.is() )
         {
             drawing::LineStyle aLineStyle(drawing::LineStyle_SOLID);
-            xLineProperties->getPropertyValue( C2U( "LineStyle" ) ) >>= aLineStyle;
+            xLineProperties->getPropertyValue( "LineStyle" ) >>= aLineStyle;
             if( aLineStyle != drawing::LineStyle_NONE )
             {
                 sal_Int16 nLineTransparence=0;
-                xLineProperties->getPropertyValue( C2U( "LineTransparence" ) ) >>= nLineTransparence;
+                xLineProperties->getPropertyValue( "LineTransparence" ) >>= nLineTransparence;
                 if(100!=nLineTransparence)
                 {
                     bRet = true;
@@ -134,14 +134,14 @@ void LineProperties::SetLineVisible( const ::com::sun::star::uno::Reference<
         if( xLineProperties.is() )
         {
             drawing::LineStyle aLineStyle(drawing::LineStyle_SOLID);
-            xLineProperties->getPropertyValue( C2U( "LineStyle" ) ) >>= aLineStyle;
+            xLineProperties->getPropertyValue( "LineStyle" ) >>= aLineStyle;
             if( aLineStyle == drawing::LineStyle_NONE )
-                xLineProperties->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_SOLID ) );
+                xLineProperties->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_SOLID ) );
 
             sal_Int16 nLineTransparence=0;
-            xLineProperties->getPropertyValue( C2U( "LineTransparence" ) ) >>= nLineTransparence;
+            xLineProperties->getPropertyValue( "LineTransparence" ) >>= nLineTransparence;
             if(100==nLineTransparence)
-                xLineProperties->setPropertyValue( C2U( "LineTransparence" ), uno::makeAny( sal_Int16(0) ) );
+                xLineProperties->setPropertyValue( "LineTransparence", uno::makeAny( sal_Int16(0) ) );
         }
     }
     catch( const uno::Exception & ex )
@@ -158,9 +158,9 @@ void LineProperties::SetLineInvisible( const ::com::sun::star::uno::Reference<
         if( xLineProperties.is() )
         {
             drawing::LineStyle aLineStyle(drawing::LineStyle_SOLID);
-            xLineProperties->getPropertyValue( C2U( "LineStyle" ) ) >>= aLineStyle;
+            xLineProperties->getPropertyValue( "LineStyle" ) >>= aLineStyle;
             if( aLineStyle != drawing::LineStyle_NONE )
-                xLineProperties->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+                xLineProperties->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_NONE ) );
         }
     }
     catch( const uno::Exception & ex )

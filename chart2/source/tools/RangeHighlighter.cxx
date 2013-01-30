@@ -228,7 +228,7 @@ void RangeHighlighter::fillRangesForErrorBars(
         sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
         bUsesRangesAsErrorBars =
             ( xErrorBar.is() &&
-              (xErrorBar->getPropertyValue( C2U("ErrorBarStyle")) >>= nStyle) &&
+              (xErrorBar->getPropertyValue( "ErrorBarStyle") >>= nStyle) &&
               nStyle == ::com::sun::star::chart::ErrorBarStyle::FROM_DATA );
     }
     catch( const uno::Exception & ex )

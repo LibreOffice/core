@@ -45,7 +45,6 @@ using namespace com::sun::star;
 using ::rtl::OUString;
 using ::rtl::Uri;
 
-#define A2OU(x)        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 #define EXPAND_PROTOCOL     "vnd.sun.star.expand:"
 #define FILE_PROTOCOL       "file:///"
 
@@ -1185,8 +1184,8 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextSuggestionImage(
     rtl::OUString   aRes;
     if (!rServiceImplName.isEmpty())
     {
-        rtl::OUString aImageName( A2OU( "SpellAndGrammarContextMenuSuggestionImage" ));
-        rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
+        OUString aImageName( "SpellAndGrammarContextMenuSuggestionImage" );
+        OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
         aRes = aPath;
     }
     return aRes;
@@ -1200,8 +1199,8 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
     rtl::OUString   aRes;
     if (!rServiceImplName.isEmpty())
     {
-        rtl::OUString aImageName( A2OU( "SpellAndGrammarContextMenuDictionaryImage" ));
-        rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
+        OUString aImageName( "SpellAndGrammarContextMenuDictionaryImage" );
+        OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
         aRes = aPath;
     }
     return aRes;
@@ -1214,8 +1213,8 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
     rtl::OUString   aRes;
     if (!rServiceImplName.isEmpty())
     {
-        rtl::OUString aImageName( A2OU( "SynonymsContextMenuImage" ));
-        rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
+        OUString aImageName( "SynonymsContextMenuImage" );
+        OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
         aRes = aPath;
     }
     return aRes;

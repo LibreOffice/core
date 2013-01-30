@@ -224,8 +224,8 @@ void PageBackground::fireModifyEvent()
 uno::Sequence< ::rtl::OUString > PageBackground::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.PageBackground" );
-    aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 0 ] = "com.sun.star.chart2.PageBackground";
+    aServices[ 1 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 

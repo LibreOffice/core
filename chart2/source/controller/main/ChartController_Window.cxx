@@ -143,7 +143,7 @@ void lcl_insertMenuCommand(
 
 OUString lcl_getFormatCommandForObjectCID( const OUString& rCID )
 {
-    OUString aDispatchCommand( C2U(".uno:FormatSelection") );
+    OUString aDispatchCommand( ".uno:FormatSelection" );
 
     ObjectType eObjectType = ObjectIdentifier::getObjectType( rCID );
 
@@ -151,71 +151,71 @@ OUString lcl_getFormatCommandForObjectCID( const OUString& rCID )
     {
         case OBJECTTYPE_DIAGRAM:
         case OBJECTTYPE_DIAGRAM_WALL:
-            aDispatchCommand = C2U(".uno:FormatWall");
+            aDispatchCommand = ".uno:FormatWall";
             break;
         case OBJECTTYPE_DIAGRAM_FLOOR:
-            aDispatchCommand = C2U(".uno:FormatFloor");
+            aDispatchCommand = ".uno:FormatFloor";
             break;
         case OBJECTTYPE_PAGE:
-            aDispatchCommand = C2U(".uno:FormatChartArea");
+            aDispatchCommand = ".uno:FormatChartArea";
             break;
         case OBJECTTYPE_LEGEND:
-            aDispatchCommand = C2U(".uno:FormatLegend");
+            aDispatchCommand = ".uno:FormatLegend";
             break;
         case OBJECTTYPE_TITLE:
-            aDispatchCommand = C2U(".uno:FormatTitle");
+            aDispatchCommand = ".uno:FormatTitle";
             break;
         case OBJECTTYPE_LEGEND_ENTRY:
-            aDispatchCommand = C2U(".uno:FormatDataSeries");
+            aDispatchCommand = ".uno:FormatDataSeries";
             break;
         case OBJECTTYPE_AXIS:
         case OBJECTTYPE_AXIS_UNITLABEL:
-            aDispatchCommand = C2U(".uno:FormatAxis");
+            aDispatchCommand = ".uno:FormatAxis";
             break;
         case OBJECTTYPE_GRID:
-            aDispatchCommand = C2U(".uno:FormatMajorGrid");
+            aDispatchCommand = ".uno:FormatMajorGrid";
             break;
         case OBJECTTYPE_SUBGRID:
-            aDispatchCommand = C2U(".uno:FormatMinorGrid");
+            aDispatchCommand = ".uno:FormatMinorGrid";
             break;
         case OBJECTTYPE_DATA_LABELS:
-            aDispatchCommand = C2U(".uno:FormatDataLabels");
+            aDispatchCommand = ".uno:FormatDataLabels";
             break;
         case OBJECTTYPE_DATA_SERIES:
-            aDispatchCommand = C2U(".uno:FormatDataSeries");
+            aDispatchCommand = ".uno:FormatDataSeries";
             break;
         case OBJECTTYPE_DATA_LABEL:
-            aDispatchCommand = C2U(".uno:FormatDataLabel");
+            aDispatchCommand = ".uno:FormatDataLabel";
             break;
         case OBJECTTYPE_DATA_POINT:
-            aDispatchCommand = C2U(".uno:FormatDataPoint");
+            aDispatchCommand = ".uno:FormatDataPoint";
             break;
         case OBJECTTYPE_DATA_AVERAGE_LINE:
-            aDispatchCommand = C2U(".uno:FormatMeanValue");
+            aDispatchCommand = ".uno:FormatMeanValue";
             break;
         case OBJECTTYPE_DATA_ERRORS_X:
-            aDispatchCommand = C2U(".uno:FormatXErrorBars");
+            aDispatchCommand = ".uno:FormatXErrorBars";
             break;
         case OBJECTTYPE_DATA_ERRORS_Y:
-            aDispatchCommand = C2U(".uno:FormatYErrorBars");
+            aDispatchCommand = ".uno:FormatYErrorBars";
             break;
         case OBJECTTYPE_DATA_ERRORS_Z:
-            aDispatchCommand = C2U(".uno:FormatZErrorBars");
+            aDispatchCommand = ".uno:FormatZErrorBars";
             break;
         case OBJECTTYPE_DATA_CURVE:
-            aDispatchCommand = C2U(".uno:FormatTrendline");
+            aDispatchCommand = ".uno:FormatTrendline";
             break;
         case OBJECTTYPE_DATA_CURVE_EQUATION:
-            aDispatchCommand = C2U(".uno:FormatTrendlineEquation");
+            aDispatchCommand = ".uno:FormatTrendlineEquation";
             break;
         case OBJECTTYPE_DATA_STOCK_RANGE:
-            aDispatchCommand = C2U(".uno:FormatSelection");
+            aDispatchCommand = ".uno:FormatSelection";
             break;
         case OBJECTTYPE_DATA_STOCK_LOSS:
-            aDispatchCommand = C2U(".uno:FormatStockLoss");
+            aDispatchCommand = ".uno:FormatStockLoss";
             break;
         case OBJECTTYPE_DATA_STOCK_GAIN:
-            aDispatchCommand = C2U(".uno:FormatStockGain");
+            aDispatchCommand = ".uno:FormatStockGain";
             break;
         default: //OBJECTTYPE_UNKNOWN
             break;
@@ -263,15 +263,15 @@ const short HITPIX=2; //hit-tolerance in pixel
             if( xProp.is() )
             {
                 uno::Sequence< beans::PropertyValue > aZoomFactors(4);
-                aZoomFactors[0].Name = C2U("ScaleXNumerator");
+                aZoomFactors[0].Name = "ScaleXNumerator";
                 aZoomFactors[0].Value = uno::makeAny( nScaleXNumerator );
-                aZoomFactors[1].Name = C2U("ScaleXDenominator");
+                aZoomFactors[1].Name = "ScaleXDenominator";
                 aZoomFactors[1].Value = uno::makeAny( nScaleXDenominator );
-                aZoomFactors[2].Name = C2U("ScaleYNumerator");
+                aZoomFactors[2].Name = "ScaleYNumerator";
                 aZoomFactors[2].Value = uno::makeAny( nScaleYNumerator );
-                aZoomFactors[3].Name = C2U("ScaleYDenominator");
+                aZoomFactors[3].Name = "ScaleYDenominator";
                 aZoomFactors[3].Value = uno::makeAny( nScaleYDenominator );
-                xProp->setPropertyValue( C2U("ZoomFactors"), uno::makeAny( aZoomFactors ));
+                xProp->setPropertyValue( "ZoomFactors", uno::makeAny( aZoomFactors ));
             }
 
             //a correct work area is at least necessary for correct values in the position and  size dialog and for dragging area
@@ -517,7 +517,7 @@ void ChartController::execute_Paint( const Rectangle& rRect )
                     aResolution.Height = m_pChartWindow->GetSizePixel().Height();
                 }
             }
-            xProp->setPropertyValue( C2U("Resolution"), uno::makeAny( aResolution ));
+            xProp->setPropertyValue( "Resolution", uno::makeAny( aResolution ));
         }
         //
 
@@ -1034,7 +1034,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             // todo: the context menu should be specified by an xml file in uiconfig
             uno::Reference< awt::XPopupMenu > xPopupMenu(
                 m_xCC->getServiceManager()->createInstanceWithContext(
-                    C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
+                    "com.sun.star.awt.PopupMenu", m_xCC ), uno::UNO_QUERY );
             uno::Reference< awt::XMenuExtended > xMenuEx( xPopupMenu, uno::UNO_QUERY );
             if( xPopupMenu.is() && xMenuEx.is())
             {
@@ -1073,7 +1073,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     if( xSeriesProperties.is() )
                     {
                         uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                        if( xSeriesProperties->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+                        if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
                         {
                             if( aAttributedDataPointIndexList.hasElements() )
                             {
@@ -1095,17 +1095,17 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     if( bIsPoint )
                     {
                         if( bHasDataLabelAtPoint )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatDataLabel") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatDataLabel" );
                         if( !bHasDataLabelAtPoint )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertDataLabel") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertDataLabel" );
                         else
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteDataLabel") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteDataLabel" );
                         if( bSelectedPointIsFormatted )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:ResetDataPoint"));
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:ResetDataPoint" );
 
                         xPopupMenu->insertSeparator( -1 );
 
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatDataSeries") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatDataSeries" );
                     }
 
                     Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
@@ -1117,12 +1117,12 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                             if( xChartTypeProp.is() )
                             {
                                 bool bJapaneseStyle = false;
-                                xChartTypeProp->getPropertyValue( C2U( "Japanese" ) ) >>= bJapaneseStyle;
+                                xChartTypeProp->getPropertyValue( "Japanese" ) >>= bJapaneseStyle;
 
                                 if( bJapaneseStyle )
                                 {
-                                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatStockLoss") );
-                                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatStockGain") );
+                                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatStockLoss" );
+                                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatStockGain" );
                                 }
                             }
                         }
@@ -1133,62 +1133,62 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     }
 
                     if( bHasDataLabelsAtSeries )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatDataLabels") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatDataLabels" );
                     if( xTrendline.is() )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatTrendline") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatTrendline" );
                     if( bHasEquation )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatTrendlineEquation") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatTrendlineEquation" );
                     if( xMeanValue.is() )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatMeanValue") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatMeanValue" );
                     if( bHasXErrorBars )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatXErrorBars") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatXErrorBars" );
                     if( bHasYErrorBars )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatYErrorBars") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatYErrorBars" );
 
                     xPopupMenu->insertSeparator( -1 );
 
                     if( !bHasDataLabelsAtSeries )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertDataLabels") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertDataLabels" );
                     if( !xTrendline.is() )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendline") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendline" );
                     else if( !bHasEquation )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquation") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendlineEquation" );
                     if( !xMeanValue.is() )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMeanValue") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertMeanValue" );
                     if( !bHasXErrorBars )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertXErrorBars"));
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertXErrorBars" );
                     if( !bHasYErrorBars )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertYErrorBars") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertYErrorBars" );
 
 
                     if( bHasDataLabelsAtSeries || ( bHasDataLabelsAtPoints && bHasFormattedDataPointsOtherThanSelected ) )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteDataLabels") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteDataLabels" );
                     if( xTrendline.is() )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendline") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteTrendline" );
                     if( bHasEquation )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendlineEquation") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteTrendlineEquation" );
                     if( xMeanValue.is() )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMeanValue") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteMeanValue" );
                     if( bHasXErrorBars )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteXErrorBars"));
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteXErrorBars" );
                     if( bHasYErrorBars )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteYErrorBars") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteYErrorBars" );
 
                     if( bHasFormattedDataPointsOtherThanSelected )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:ResetAllDataPoints"));
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:ResetAllDataPoints" );
 
                     xPopupMenu->insertSeparator( -1 );
 
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId, C2U(".uno:ArrangeRow"));
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId, ".uno:ArrangeRow" );
                     uno::Reference< awt::XPopupMenu > xArrangePopupMenu(
                         m_xCC->getServiceManager()->createInstanceWithContext(
-                            C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
+                            "com.sun.star.awt.PopupMenu", m_xCC ), uno::UNO_QUERY );
                     uno::Reference< awt::XMenuExtended > xArrangeMenuEx( xArrangePopupMenu, uno::UNO_QUERY );
                     if( xArrangePopupMenu.is() && xArrangeMenuEx.is())
                     {
                         sal_Int16 nSubId = nUniqueId + 1;
-                        lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId++, C2U(".uno:Forward") );
-                        lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId, C2U(".uno:Backward") );
+                        lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId++, ".uno:Forward" );
+                        lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId, ".uno:Backward" );
                         xPopupMenu->setPopupMenu( nUniqueId, xArrangePopupMenu );
                         nUniqueId = nSubId;
                     }
@@ -1196,17 +1196,17 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 }
                 else if( OBJECTTYPE_DATA_CURVE == eObjectType )
                 {
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatTrendlineEquation") );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquation") );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquationAndR2") );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertR2Value") );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendlineEquation") );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteR2Value") );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTrendlineEquationAndR2" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertR2Value" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteTrendlineEquation" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteR2Value" );
                 }
                 else if( OBJECTTYPE_DATA_CURVE_EQUATION == eObjectType )
                 {
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertR2Value") );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteR2Value") );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertR2Value" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteR2Value" );
                 }
 
                 //some commands for axes: and grids
@@ -1230,38 +1230,38 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                             bHasTitle = !TitleHelper::getCompleteString( xTitled->getTitleObject() ).isEmpty();
 
                         if( OBJECTTYPE_AXIS  != eObjectType && bIsAxisVisible )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatAxis") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatAxis" );
                         if( OBJECTTYPE_GRID != eObjectType && bIsMajorGridVisible && !bIsSecondaryAxis )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatMajorGrid") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatMajorGrid" );
                         if( OBJECTTYPE_SUBGRID != eObjectType && bIsMinorGridVisible && !bIsSecondaryAxis )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatMinorGrid") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatMinorGrid" );
 
                         xPopupMenu->insertSeparator( -1 );
 
                         if( OBJECTTYPE_AXIS  != eObjectType && !bIsAxisVisible )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertAxis") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertAxis" );
                         if( OBJECTTYPE_GRID != eObjectType && !bIsMajorGridVisible && !bIsSecondaryAxis )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMajorGrid") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertMajorGrid" );
                         if( OBJECTTYPE_SUBGRID != eObjectType && !bIsMinorGridVisible && !bIsSecondaryAxis )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMinorGrid") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertMinorGrid" );
                         if( !bHasTitle )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertAxisTitle") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertAxisTitle" );
 
                         if( bIsAxisVisible )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteAxis") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteAxis" );
                         if( bIsMajorGridVisible && !bIsSecondaryAxis )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMajorGrid") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteMajorGrid" );
                         if( bIsMinorGridVisible && !bIsSecondaryAxis )
-                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMinorGrid") );
+                            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteMinorGrid" );
                     }
                 }
 
                 if( OBJECTTYPE_DATA_STOCK_LOSS == eObjectType )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatStockGain") );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatStockGain" );
                 else if( OBJECTTYPE_DATA_STOCK_GAIN == eObjectType )
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatStockLoss") );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:FormatStockLoss" );
 
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:TransformDialog"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:TransformDialog" );
 
                 if( OBJECTTYPE_PAGE == eObjectType || OBJECTTYPE_DIAGRAM == eObjectType
                     || OBJECTTYPE_DIAGRAM_WALL == eObjectType
@@ -1271,24 +1271,24 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     if( OBJECTTYPE_UNKNOWN != eObjectType )
                         xPopupMenu->insertSeparator( -1 );
                     bool bHasLegend = LegendHelper::hasLegend( xDiagram );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTitles") );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertTitles" );
                     if( !bHasLegend )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertLegend") );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertRemoveAxes") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertLegend" );
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:InsertRemoveAxes" );
                     if( bHasLegend )
-                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteLegend") );
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DeleteLegend" );
                 }
                 //-----
 
                 xPopupMenu->insertSeparator( -1 );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramType"));
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DataRanges"));
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramData"));
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:View3D"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DiagramType" );
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DataRanges" );
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:DiagramData" );
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:View3D" );
                 xPopupMenu->insertSeparator( -1 );
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Cut"));
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Copy"));
-                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Paste"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:Cut" );
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:Copy" );
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, ".uno:Paste" );
 
                 ::svt::ContextMenuHelper aContextMenuHelper( m_xFrame );
                 Point aPos( rCEvt.GetMousePosPixel() );
@@ -1553,8 +1553,8 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         uno::Sequence< beans::PropertyValue > aArgs;
         xDispatchHelper->executeDispatch(
             uno::Reference< frame::XDispatchProvider >( m_xFrame, uno::UNO_QUERY ),
-            C2U(".uno:TerminateInplaceActivation"),
-            C2U("_parent"),
+            ".uno:TerminateInplaceActivation",
+            "_parent",
             frame::FrameSearchFlag::PARENT,
             aArgs );
         bReturn = true;
@@ -1764,8 +1764,8 @@ bool ChartController::impl_moveOrResizeObject(
 
         chart2::RelativePosition aRelPos;
         chart2::RelativeSize     aRelSize;
-        bool bDeterminePos  = !(xObjProp->getPropertyValue( C2U("RelativePosition")) >>= aRelPos);
-        bool bDetermineSize = !bNeedResize || !(xObjProp->getPropertyValue( C2U("RelativeSize")) >>= aRelSize);
+        bool bDeterminePos  = !(xObjProp->getPropertyValue( "RelativePosition") >>= aRelPos);
+        bool bDetermineSize = !bNeedResize || !(xObjProp->getPropertyValue( "RelativeSize") >>= aRelSize);
 
         if( ( bDeterminePos || bDetermineSize ) &&
             ( aRefSize.Width > 0 && aRefSize.Height > 0 ) )
@@ -1819,9 +1819,9 @@ bool ChartController::impl_moveOrResizeObject(
             {
                 ControllerLockGuard aCLGuard( xChartModel );
                 if( bNeedShift )
-                    xObjProp->setPropertyValue( C2U("RelativePosition"), uno::makeAny( aRelPos ));
+                    xObjProp->setPropertyValue( "RelativePosition", uno::makeAny( aRelPos ));
                 if( bNeedResize || (eObjectType == OBJECTTYPE_DIAGRAM) )//Also set an explicat size at the diagram when an explicit position is set
-                    xObjProp->setPropertyValue( C2U("RelativeSize"), uno::makeAny( aRelSize ));
+                    xObjProp->setPropertyValue( "RelativeSize", uno::makeAny( aRelSize ));
             }
             aUndoGuard.commit();
         }
@@ -1845,7 +1845,7 @@ bool ChartController::impl_DragDataPoint( const ::rtl::OUString & rCID, double f
             uno::Reference< beans::XPropertySet > xPointProp( xSeries->getDataPointByIndex( nDataPointIndex ));
             double fOffset = 0.0;
             if( xPointProp.is() &&
-                (xPointProp->getPropertyValue( C2U("Offset" )) >>= fOffset ) &&
+                (xPointProp->getPropertyValue( "Offset" ) >>= fOffset ) &&
                 (( fAdditionalOffset > 0.0 && fOffset < 1.0 ) || (fOffset > 0.0)) )
             {
                 fOffset += fAdditionalOffset;
@@ -1853,7 +1853,7 @@ bool ChartController::impl_DragDataPoint( const ::rtl::OUString & rCID, double f
                     fOffset = 1.0;
                 else if( fOffset < 0.0 )
                     fOffset = 0.0;
-                xPointProp->setPropertyValue( C2U("Offset"), uno::makeAny( fOffset ));
+                xPointProp->setPropertyValue( "Offset", uno::makeAny( fOffset ));
                 bResult = true;
             }
         }

@@ -100,7 +100,7 @@ void lcl_addStorageToMediaDescriptor(
 {
     rOutMD.realloc( rOutMD.getLength() + 1 );
     rOutMD[rOutMD.getLength() - 1] = beans::PropertyValue(
-        C2U("Storage"), -1, uno::makeAny( xStorage ), beans::PropertyState_DIRECT_VALUE );
+        "Storage", -1, uno::makeAny( xStorage ), beans::PropertyState_DIRECT_VALUE );
 }
 
 Reference< embed::XStorage > lcl_createStorage(
@@ -157,7 +157,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
         {
             Reference< container::XNameAccess > xFilterFact(
                 m_xContext->getServiceManager()->createInstanceWithContext(
-                    C2U( "com.sun.star.document.FilterFactory" ), m_xContext ),
+                    "com.sun.star.document.FilterFactory", m_xContext ),
                 uno::UNO_QUERY_THROW );
             uno::Any aFilterProps( xFilterFact->getByName( aFilterName ));
             Sequence< beans::PropertyValue > aProps;
@@ -190,7 +190,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
         OSL_TRACE( "No FilterName passed in MediaDescriptor" );
         xFilter.set(
             m_xContext->getServiceManager()->createInstanceWithContext(
-                C2U("com.sun.star.comp.chart2.XMLFilter"), m_xContext ),
+                "com.sun.star.comp.chart2.XMLFilter", m_xContext ),
             uno::UNO_QUERY_THROW );
     }
 
@@ -247,10 +247,10 @@ void SAL_CALL ChartModel::store()
     ::rtl::OUString aLocation = m_aResource;
 
     if( aLocation.isEmpty() )
-        throw io::IOException( C2U( "no location specified" ), static_cast< ::cppu::OWeakObject* >(this));
+        throw io::IOException( "no location specified", static_cast< ::cppu::OWeakObject* >(this));
     //@todo check whether aLocation is something like private:factory...
     if( m_bReadOnly )
-        throw io::IOException( C2U( "document is read only" ), static_cast< ::cppu::OWeakObject* >(this));
+        throw io::IOException( "document is read only", static_cast< ::cppu::OWeakObject* >(this));
 
     aGuard.clear();
 
@@ -411,7 +411,7 @@ void SAL_CALL ChartModel::initNew()
                 if( bSupportsCategories )
                 {
                     aParam.realloc( 1 );
-                    aParam[0] = beans::PropertyValue( C2U("HasCategories"), -1, uno::makeAny( true ),
+                    aParam[0] = beans::PropertyValue( "HasCategories", -1, uno::makeAny( true ),
                                                       beans::PropertyState_DIRECT_VALUE );
                 }
 
@@ -427,17 +427,17 @@ void SAL_CALL ChartModel::initNew()
                 // create and attach legend
                 Reference< chart2::XLegend > xLegend(
                     m_xContext->getServiceManager()->createInstanceWithContext(
-                        C2U( "com.sun.star.chart2.Legend" ), m_xContext ), uno::UNO_QUERY_THROW );
+                        "com.sun.star.chart2.Legend", m_xContext ), uno::UNO_QUERY_THROW );
                 Reference< beans::XPropertySet > xLegendProperties( xLegend, uno::UNO_QUERY );
                 if( xLegendProperties.is() )
                 {
-                    xLegendProperties->setPropertyValue( C2U( "FillStyle" ), uno::makeAny( drawing::FillStyle_NONE ));
-                    xLegendProperties->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_NONE ));
-                    xLegendProperties->setPropertyValue( C2U( "LineColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ));  // gray30
-                    xLegendProperties->setPropertyValue( C2U( "FillColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
+                    xLegendProperties->setPropertyValue( "FillStyle", uno::makeAny( drawing::FillStyle_NONE ));
+                    xLegendProperties->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_NONE ));
+                    xLegendProperties->setPropertyValue( "LineColor", uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ));  // gray30
+                    xLegendProperties->setPropertyValue( "FillColor", uno::makeAny( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
 
                     if( bIsRTL )
-                        xLegendProperties->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( chart2::LegendPosition_LINE_START ));
+                        xLegendProperties->setPropertyValue( "AnchorPosition", uno::makeAny( chart2::LegendPosition_LINE_START ));
                 }
                 if(xDiagram.is())
                     xDiagram->setLegend( xLegend );
@@ -446,8 +446,8 @@ void SAL_CALL ChartModel::initNew()
                 Reference< beans::XPropertySet > xDiagramProperties( xDiagram, uno::UNO_QUERY );
                 if( xDiagramProperties.is() )
                 {
-                    xDiagramProperties->setPropertyValue( C2U("RightAngledAxes"), uno::makeAny( sal_True ));
-                    xDiagramProperties->setPropertyValue( C2U("D3DScenePerspective"), uno::makeAny( drawing::ProjectionMode_PARALLEL ));
+                    xDiagramProperties->setPropertyValue( "RightAngledAxes", uno::makeAny( sal_True ));
+                    xDiagramProperties->setPropertyValue( "D3DScenePerspective", uno::makeAny( drawing::ProjectionMode_PARALLEL ));
                     ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Realistic );
                 }
 
@@ -457,18 +457,18 @@ void SAL_CALL ChartModel::initNew()
                     Reference< beans::XPropertySet > xWall( xDiagram->getWall() );
                     if( xWall.is() )
                     {
-                        xWall->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_SOLID ) );
-                        xWall->setPropertyValue( C2U( "FillStyle" ), uno::makeAny( drawing::FillStyle_NONE ) );
-                        xWall->setPropertyValue( C2U( "LineColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
-                        xWall->setPropertyValue( C2U( "FillColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
+                        xWall->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_SOLID ) );
+                        xWall->setPropertyValue( "FillStyle", uno::makeAny( drawing::FillStyle_NONE ) );
+                        xWall->setPropertyValue( "LineColor", uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
+                        xWall->setPropertyValue( "FillColor", uno::makeAny( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
                     }
                     Reference< beans::XPropertySet > xFloor( xDiagram->getFloor() );
                     if( xFloor.is() )
                     {
-                        xFloor->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
-                        xFloor->setPropertyValue( C2U( "FillStyle" ), uno::makeAny( drawing::FillStyle_SOLID ) );
-                        xFloor->setPropertyValue( C2U( "LineColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
-                        xFloor->setPropertyValue( C2U( "FillColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xcccccc ) ) ); // gray20
+                        xFloor->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_NONE ) );
+                        xFloor->setPropertyValue( "FillStyle", uno::makeAny( drawing::FillStyle_SOLID ) );
+                        xFloor->setPropertyValue( "LineColor", uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
+                        xFloor->setPropertyValue( "FillColor", uno::makeAny( static_cast< sal_Int32 >( 0xcccccc ) ) ); // gray20
                     }
 
                 }
@@ -514,9 +514,9 @@ void SAL_CALL ChartModel::load(
                  aMDHelper.ISSET_InputStream )
         {
             if( aMDHelper.ISSET_FilterName &&
-                (aMDHelper.FilterName.equals( C2U("StarChart 5.0")) ||
-                 aMDHelper.FilterName.equals( C2U("StarChart 4.0")) ||
-                 aMDHelper.FilterName.equals( C2U("StarChart 3.0")) ))
+                (aMDHelper.FilterName.equals( "StarChart 5.0") ||
+                 aMDHelper.FilterName.equals( "StarChart 4.0") ||
+                 aMDHelper.FilterName.equals( "StarChart 3.0") ))
             {
                 attachResource( aMDHelper.URL, rMediaDescriptor );
                 impl_load( rMediaDescriptor, 0 ); // cannot create a storage from binary streams, but I do not need the storage here anyhow
@@ -612,7 +612,7 @@ void ChartModel::impl_loadGraphics(
     try
     {
         const Reference< embed::XStorage >& xGraphicsStorage(
-            xStorage->openStorageElement( C2U( "Pictures" ),
+            xStorage->openStorageElement( "Pictures",
                                           embed::ElementModes::READ ) );
 
         if( xGraphicsStorage.is() )

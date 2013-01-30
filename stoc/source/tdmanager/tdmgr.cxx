@@ -463,7 +463,7 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
                         catch (const container::NoSuchElementException & exc)
                         {
                             throw lang::IllegalArgumentException(
-                                OUSTR("NoSuchElementException occurred: ") +
+                                "NoSuchElementException occurred: " +
                                 exc.Message, static_cast<OWeakObject *>(this),
                                 -1 /* unknown */ );
                         }
@@ -484,8 +484,8 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
                                 catch (const IncompatibleTypeException & exc)
                                 {
                                     throw lang::IllegalArgumentException(
-                                        OUSTR("Rejecting types due to "
-                                              "incompatibility!  ") + exc.m_cause,
+                                        "Rejecting types due to "
+                                              "incompatibility!  " + exc.m_cause,
                                         static_cast<OWeakObject *>(this), 0 );
                                 }
                             }
@@ -499,13 +499,13 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
                 catch (const reflection::NoSuchTypeNameException & exc)
                 {
                     throw lang::IllegalArgumentException(
-                        OUSTR("NoSuchTypeNameException occurred: ") + exc.Message,
+                        "NoSuchTypeNameException occurred: " + exc.Message,
                         static_cast<OWeakObject *>(this), -1 /* unknown */ );
             }
                 catch (const reflection::InvalidTypeNameException & exc)
                 {
                     throw lang::IllegalArgumentException(
-                        OUSTR("InvalidTypeNameException occurred: ") + exc.Message,
+                        "InvalidTypeNameException occurred: " + exc.Message,
                         static_cast<OWeakObject *>(this), -1 /* unknown */ );
                 }
             }

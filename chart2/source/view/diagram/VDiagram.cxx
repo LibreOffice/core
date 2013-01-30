@@ -78,7 +78,7 @@ VDiagram::VDiagram(
                 DiagramHelper::getChartTypeByIndex( m_xDiagram, 0 ) ) )
         {
             if(xSourceProp.is())
-                xSourceProp->getPropertyValue(C2U( "RightAngledAxes" )) >>= m_bRightAngledAxes;
+                xSourceProp->getPropertyValue("RightAngledAxes") >>= m_bRightAngledAxes;
             if( m_bRightAngledAxes )
             {
                 ThreeDHelper::adaptRadAnglesForRightAngledAxes( m_fXAnglePi, m_fYAnglePi );
@@ -167,11 +167,11 @@ void VDiagram::createShapes_2d()
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes = m_pShapeFactory->createGroup2D(m_xLogicTarget);
     m_xOuterGroupShape = uno::Reference<drawing::XShape>( xOuterGroup_Shapes, uno::UNO_QUERY );
 
-    uno::Reference< drawing::XShapes > xGroupForWall( m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,C2U("PlotAreaExcludingAxes")) );
+    uno::Reference< drawing::XShapes > xGroupForWall( m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,"PlotAreaExcludingAxes") );
 
     //create independent group shape as container for datapoints and such things
     {
-        uno::Reference< drawing::XShapes > xShapes = m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,C2U("testonly;CooContainer=XXX_CID"));
+        uno::Reference< drawing::XShapes > xShapes = m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID");
         m_xCoordinateRegionShape = uno::Reference<drawing::XShape>( xShapes, uno::UNO_QUERY );
     }
 
@@ -181,8 +181,8 @@ void VDiagram::createShapes_2d()
     //add back wall
     {
         m_xWall2D = uno::Reference< drawing::XShape >(
-            m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.RectangleShape" ) ), uno::UNO_QUERY );
+            m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.RectangleShape" ), uno::UNO_QUERY );
 
         xGroupForWall->add(m_xWall2D);
         uno::Reference< beans::XPropertySet > xProp( m_xWall2D, uno::UNO_QUERY );
@@ -207,7 +207,7 @@ void VDiagram::createShapes_2d()
                 {
                     //CID for selection handling
                     rtl::OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, rtl::OUString() ) );//@todo read CID from model
-                    xProp->setPropertyValue( C2U( UNO_NAME_MISC_OBJ_NAME ), uno::makeAny( aWallCID ) );
+                    xProp->setPropertyValue( UNO_NAME_MISC_OBJ_NAME, uno::makeAny( aWallCID ) );
                 }
             }
             catch( const uno::Exception& e )
@@ -245,56 +245,56 @@ void lcl_setLightSources(
     const uno::Reference< beans::XPropertySet > & xSource,
     const uno::Reference< beans::XPropertySet > & xDest )
 {
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_1 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_1 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_2 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_2 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_3 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_3 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_4 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_4 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_5 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_5 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_6 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_6 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_7 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_7 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_8 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_8 )));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_1,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_1));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_2,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_2));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_3,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_3));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_4,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_4));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_5,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_5));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_6,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_6));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_7,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_7));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_8,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_8));
 
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_1 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_1 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_2 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_2 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_3 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_3 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_4 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_4 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_5 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_5 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_6 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_6 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_7 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_7 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_8 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_8 )));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_1,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_1));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_2,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_2));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_3,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_3));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_4,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_4));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_5,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_5));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_6,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_6));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_7,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_7));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_8,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_8));
 
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_1 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_1 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_2 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_2 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_3 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_3 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_4 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_4 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_5 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_5 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_6 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_6 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_7 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_7 )));
-    xDest->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_8 ),
-                             xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_8 )));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_1,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_1));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_2,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_2));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_3,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_3));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_4,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_4));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_5,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_5));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_6,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_6));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_7,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_7));
+    xDest->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_8,
+                             xSource->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_8));
 }
 
 namespace
@@ -453,7 +453,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
             // and in it's destructor, calculates a new 2D SnapRect for the scene and it's modified 3D geometry.
             E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
 
-            m_xAspectRatio3D->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
+            m_xAspectRatio3D->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                 , uno::makeAny(BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aResult )) );
         }
         catch( const uno::Exception& e )
@@ -488,9 +488,9 @@ void VDiagram::createShapes_3d()
 
     //create shape
     m_xOuterGroupShape = uno::Reference< drawing::XShape >(
-            m_xShapeFactory->createInstance( C2U(
-            "com.sun.star.drawing.Shape3DSceneObject" ) ), uno::UNO_QUERY );
-    ShapeFactory::setShapeName( m_xOuterGroupShape, C2U("PlotAreaExcludingAxes") );
+            m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.Shape3DSceneObject" ), uno::UNO_QUERY );
+    ShapeFactory::setShapeName( m_xOuterGroupShape, "PlotAreaExcludingAxes" );
     m_xLogicTarget->add(m_xOuterGroupShape);
 
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes =
@@ -591,20 +591,20 @@ void VDiagram::createShapes_3d()
         {
             //ignore distance and focal length from file format and model comcpletely
             //use vrp only to indicate the distance of the camera and thus influence the perspecitve
-            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_DISTANCE ), uno::makeAny(
+            xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_DISTANCE, uno::makeAny(
                                         static_cast<sal_Int32>(ThreeDHelper::getCameraDistance( xSourceProp ))));
-            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_PERSPECTIVE ),
-                                        xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_PERSPECTIVE )));
+            xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE,
+                                        xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE));
         }
 
         //light
         {
-            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE ),
-                                        xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE )));
-            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_AMBIENTCOLOR ),
-                                        xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_AMBIENTCOLOR )));
-            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING ),
-                                        xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING )));
+            xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_SHADE_MODE,
+                                        xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_SHADE_MODE));
+            xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_AMBIENTCOLOR,
+                                        xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_AMBIENTCOLOR));
+            xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING,
+                                        xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING));
             lcl_setLightSources( xSourceProp, xDestProp );
         }
 
@@ -624,7 +624,7 @@ void VDiagram::createShapes_3d()
 
             //#i98497# 3D charts are rendered with wrong size
             E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
-            xDestProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX ),
+            xDestProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX,
                     uno::makeAny( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTranformation ) ) );
         }
     }
@@ -665,7 +665,7 @@ void VDiagram::createShapes_3d()
 
     //create an additional scene for the smaller inner coordinate region:
     {
-        uno::Reference< drawing::XShapes > xShapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes,C2U("testonly;CooContainer=XXX_CID") );
+        uno::Reference< drawing::XShapes > xShapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID" );
         m_xCoordinateRegionShape = uno::Reference< drawing::XShape >( xShapes, uno::UNO_QUERY );
 
         uno::Reference< beans::XPropertySet > xShapeProp( m_xCoordinateRegionShape, uno::UNO_QUERY );
@@ -682,7 +682,7 @@ void VDiagram::createShapes_3d()
                 aM.translate(GRID_TO_WALL_DISTANCE/fXScale, GRID_TO_WALL_DISTANCE/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
                 aM.scale( fXScale, fYScale, fZScale );
                 E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
-                xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
+                xShapeProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                     , uno::makeAny(BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aM)) );
             }
             catch( const uno::Exception& e )

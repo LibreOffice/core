@@ -65,35 +65,35 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "ShowEquation" ),
+        Property( "ShowEquation",
                   PROP_EQUATION_SHOW,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ShowCorrelationCoefficient" ),
+        Property( "ShowCorrelationCoefficient",
                   PROP_EQUATION_SHOW_CORRELATION_COEFF,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ReferencePageSize" ),
+        Property( "ReferencePageSize",
                   PROP_EQUATION_REF_PAGE_SIZE,
                   ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "RelativePosition" ),
+        Property( "RelativePosition",
                   PROP_EQUATION_REL_POS,
                   ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "NumberFormat" ),
+        Property( "NumberFormat",
                   PROP_EQUATION_NUMBER_FORMAT,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -317,10 +317,10 @@ uno::Sequence< ::rtl::OUString > RegressionEquation::getSupportedServiceNames_St
     sal_Int32 nI = 0;
     uno::Sequence< ::rtl::OUString > aServices( nNumServices );
     aServices[ nI++ ] = lcl_aServiceName;
-    aServices[ nI++ ] = C2U( "com.sun.star.beans.PropertySet" );
-    aServices[ nI++ ] = C2U( "com.sun.star.drawing.FillProperties" );
-    aServices[ nI++ ] = C2U( "com.sun.star.drawing.LineProperties" );
-    aServices[ nI++ ] = C2U( "com.sun.star.style.CharacterProperties" );
+    aServices[ nI++ ] = "com.sun.star.beans.PropertySet";
+    aServices[ nI++ ] = "com.sun.star.drawing.FillProperties";
+    aServices[ nI++ ] = "com.sun.star.drawing.LineProperties";
+    aServices[ nI++ ] = "com.sun.star.style.CharacterProperties";
     OSL_ASSERT( nNumServices == nI );
     return aServices;
 }

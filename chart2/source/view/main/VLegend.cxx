@@ -70,12 +70,12 @@ double lcl_CalcViewFontSize(
 
     awt::Size aPropRefSize;
     float fFontHeight( 0.0 );
-    if( xProp.is() && ( xProp->getPropertyValue( C2U( "CharHeight" )) >>= fFontHeight ))
+    if( xProp.is() && ( xProp->getPropertyValue( "CharHeight") >>= fFontHeight ))
     {
         fResult = fFontHeight;
         try
         {
-            if( (xProp->getPropertyValue( C2U( "ReferencePageSize" )) >>= aPropRefSize) &&
+            if( (xProp->getPropertyValue( "ReferencePageSize") >>= aPropRefSize) &&
                 (aPropRefSize.Height > 0))
             {
                 fResult = ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize );
@@ -104,7 +104,7 @@ void lcl_getProperties(
         ::chart::tPropertyNameValueMap aLineFillValueMap;
         ::chart::PropertyMapper::getValueMap( aLineFillValueMap, ::chart::PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xLegendProp );
 
-        aLineFillValueMap[ C2U("LineJoint") ] = uno::makeAny( drawing::LineJoint_ROUND );
+        aLineFillValueMap[ "LineJoint" ] = uno::makeAny( drawing::LineJoint_ROUND );
 
         ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
             rOutLineFillProperties.first, rOutLineFillProperties.second, aLineFillValueMap );
@@ -114,31 +114,31 @@ void lcl_getProperties(
         ::chart::PropertyMapper::getValueMap( aTextValueMap, ::chart::PropertyMapper::getPropertyNameMapForCharacterProperties(), xLegendProp );
 
         drawing::TextHorizontalAdjust eHorizAdjust( drawing::TextHorizontalAdjust_LEFT );
-        aTextValueMap[ C2U("TextAutoGrowHeight") ] = uno::makeAny( sal_True );
-        aTextValueMap[ C2U("TextAutoGrowWidth") ] = uno::makeAny( sal_True );
-        aTextValueMap[ C2U("TextHorizontalAdjust") ] = uno::makeAny( eHorizAdjust );
-        aTextValueMap[ C2U("TextMaximumFrameWidth") ] = uno::makeAny( rReferenceSize.Width ); //needs to be overwritten by actual available space in the legend
+        aTextValueMap[ "TextAutoGrowHeight" ] = uno::makeAny( sal_True );
+        aTextValueMap[ "TextAutoGrowWidth" ] = uno::makeAny( sal_True );
+        aTextValueMap[ "TextHorizontalAdjust" ] = uno::makeAny( eHorizAdjust );
+        aTextValueMap[ "TextMaximumFrameWidth" ] = uno::makeAny( rReferenceSize.Width ); //needs to be overwritten by actual available space in the legend
 
         // recalculate font size
         awt::Size aPropRefSize;
         float fFontHeight( 0.0 );
-        if( (xLegendProp->getPropertyValue( C2U( "ReferencePageSize" )) >>= aPropRefSize) &&
+        if( (xLegendProp->getPropertyValue( "ReferencePageSize") >>= aPropRefSize) &&
             (aPropRefSize.Height > 0) &&
-            (aTextValueMap[ C2U("CharHeight") ] >>= fFontHeight) )
+            (aTextValueMap[ "CharHeight" ] >>= fFontHeight) )
         {
-            aTextValueMap[ C2U("CharHeight") ] = uno::makeAny(
+            aTextValueMap[ "CharHeight" ] = uno::makeAny(
                 static_cast< float >(
                     ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize )));
 
-            if( aTextValueMap[ C2U("CharHeightAsian") ] >>= fFontHeight )
+            if( aTextValueMap[ "CharHeightAsian" ] >>= fFontHeight )
             {
-                aTextValueMap[ C2U("CharHeightAsian") ] = uno::makeAny(
+                aTextValueMap[ "CharHeightAsian" ] = uno::makeAny(
                     static_cast< float >(
                         ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize )));
             }
-            if( aTextValueMap[ C2U("CharHeightComplex") ] >>= fFontHeight )
+            if( aTextValueMap[ "CharHeightComplex" ] >>= fFontHeight )
             {
-                aTextValueMap[ C2U("CharHeightComplex") ] = uno::makeAny(
+                aTextValueMap[ "CharHeightComplex" ] = uno::makeAny(
                     static_cast< float >(
                         ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize )));
             }
@@ -166,7 +166,7 @@ awt::Size lcl_createTextShapes(
             // create label shape
             Reference< drawing::XShape > xEntry(
                 xShapeFactory->createInstance(
-                    C2U( "com.sun.star.drawing.TextShape" )), uno::UNO_QUERY_THROW );
+                    "com.sun.star.drawing.TextShape"), uno::UNO_QUERY_THROW );
             xTarget->add( xEntry );
 
             // set label text
@@ -181,7 +181,7 @@ awt::Size lcl_createTextShapes(
                 OUString aLabelString( aLabelSeq[i]->getString());
                 // workaround for Issue #i67540#
                 if( aLabelString.isEmpty())
-                    aLabelString = C2U(" ");
+                    aLabelString = " ";
                 if( xRange.is())
                     xRange->setString( aLabelString );
 
@@ -300,7 +300,7 @@ awt::Size lcl_placeLegendEntries(
     const sal_Int32 nSymbolToTextDistance = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.22 ) );//minimum 1mm
     const sal_Int32 nSymbolPlusDistanceWidth = rMaxSymbolExtent.Width + nSymbolToTextDistance;
     sal_Int32 nMaxTextWidth = rAvailableSpace.Width - (2 * nXPadding) - nSymbolPlusDistanceWidth;
-    rtl::OUString aPropNameTextMaximumFrameWidth( C2U("TextMaximumFrameWidth") );
+    rtl::OUString aPropNameTextMaximumFrameWidth( "TextMaximumFrameWidth" );
     uno::Any* pFrameWidthAny = PropertyMapper::getValuePointer( rTextProperties.second, rTextProperties.first, aPropNameTextMaximumFrameWidth);
     if(pFrameWidthAny)
     {
@@ -769,7 +769,7 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
             if(xLegendProp.is())
             {
                 sal_Int16 nWritingMode=-1;
-                if( (xLegendProp->getPropertyValue( C2U("WritingMode") ) >>= nWritingMode) )
+                if( (xLegendProp->getPropertyValue( "WritingMode" ) >>= nWritingMode) )
                 {
                     if( nWritingMode == text::WritingMode2::PAGE )
                         nWritingMode = nDefaultWritingMode;
@@ -828,7 +828,7 @@ bool VLegend::isVisible( const Reference< XLegend > & xLegend )
     try
     {
         Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY_THROW );
-        xLegendProp->getPropertyValue( C2U( "Show" )) >>= bShow;
+        xLegendProp->getPropertyValue( "Show") >>= bShow;
     }
     catch( const uno::Exception & ex )
     {
@@ -853,7 +853,7 @@ void VLegend::createShapes(
     {
         //create shape and add to page
         m_xShape.set( m_xShapeFactory->createInstance(
-                          C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY );
+                          "com.sun.star.drawing.GroupShape"), uno::UNO_QUERY );
         m_xTarget->add( m_xShape );
 
         // set name to enable selection
@@ -868,7 +868,7 @@ void VLegend::createShapes(
         {
             Reference< drawing::XShape > xBorder(
                 m_xShapeFactory->createInstance(
-                    C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
+                    "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
 
             // for quickly setting properties
             tPropertyValues aLineFillProperties;
@@ -881,11 +881,11 @@ void VLegend::createShapes(
             if( xLegendProp.is())
             {
                 // get Expansion property
-                xLegendProp->getPropertyValue( C2U( "Expansion" )) >>= eExpansion;
+                xLegendProp->getPropertyValue( "Expansion") >>= eExpansion;
                 if( eExpansion == ::com::sun::star::chart::ChartLegendExpansion_CUSTOM )
                 {
                     RelativeSize aRelativeSize;
-                    if ((xLegendProp->getPropertyValue( C2U( "RelativeSize" )) >>= aRelativeSize))
+                    if ((xLegendProp->getPropertyValue( "RelativeSize") >>= aRelativeSize))
                     {
                         aLegendSize.Width = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Primary * rPageSize.Width ));
                         aLegendSize.Height = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Secondary * rPageSize.Height ));
@@ -906,7 +906,7 @@ void VLegend::createShapes(
                     Reference< beans::XPropertySet >( xBorder, uno::UNO_QUERY ));
 
                 //because of this name this border will be used for marking the legend
-                ShapeFactory(m_xShapeFactory).setShapeName( xBorder, C2U("MarkHandles") );
+                ShapeFactory(m_xShapeFactory).setShapeName( xBorder, "MarkHandles" );
             }
 
             // create entries
@@ -977,10 +977,10 @@ void VLegend::changePosition(
         chart2::RelativePosition aRelativePosition;
 
         bool bAutoPosition =
-            ! (xLegendProp->getPropertyValue( C2U( "RelativePosition" )) >>= aRelativePosition);
+            ! (xLegendProp->getPropertyValue( "RelativePosition") >>= aRelativePosition);
 
         LegendPosition ePos = LegendPosition_CUSTOM;
-        xLegendProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos;
+        xLegendProp->getPropertyValue( "AnchorPosition") >>= ePos;
 
         //calculate position
         if( bAutoPosition )

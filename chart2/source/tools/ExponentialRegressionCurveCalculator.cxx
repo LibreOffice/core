@@ -143,42 +143,42 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
     bool bHasSlope = !rtl::math::approxEqual( fSlope, 1.0 );
     bool bHasIntercept = !rtl::math::approxEqual( fIntercept, 1.0 );
 
-    OUStringBuffer aBuf( C2U( "f(x) = " ));
+    OUStringBuffer aBuf( "f(x) = ");
 
     if ( fIntercept == 0.0)
     {
         // underflow, a true zero is impossible
-        aBuf.append( C2U( "exp( " ));
+        aBuf.append( "exp( ");
         aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
-        aBuf.append( (m_fLogSlope < 0.0) ? C2U( " - " ) : C2U( " + " ));
+        aBuf.append( (m_fLogSlope < 0.0) ? " - " : " + ");
         aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope)) );
-        aBuf.append( C2U( " x )" ));
+        aBuf.append( " x )");
     }
     else
     {
         if (bHasIntercept)
         {
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fIntercept) );
-            aBuf.append( C2U( " exp( " ));
+            aBuf.append( " exp( ");
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogSlope) );
-            aBuf.append( C2U( " x )" ));
+            aBuf.append( " x )");
         }
         else
         {
             // show logarithmic output, if intercept and slope both are near one
             // otherwise drop output of intercept, which is 1 here
-            aBuf.append( C2U( " exp( " ));
+            aBuf.append( " exp( ");
             if (!bHasSlope)
             {
                 aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
-                aBuf.append( (m_fLogSlope < 0.0) ? C2U( " - " ) : C2U( " + " ));
+                aBuf.append( (m_fLogSlope < 0.0) ? " - " : " + ");
                 aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope)) );
             }
             else
             {
                 aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogSlope) );
             }
-            aBuf.append( C2U( " x )" ));
+            aBuf.append( " x )");
         }
     }
 

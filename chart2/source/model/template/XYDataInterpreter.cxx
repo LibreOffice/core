@@ -80,7 +80,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
                 xCategories.set( aData[nDataIdx] );
                 if( xCategories.is())
                 {
-                    SetRole( xCategories->getValues(), C2U("categories"));
+                    SetRole( xCategories->getValues(), "categories");
                     if( bUseCategoriesAsX )
                         bSetXValues = false;
                 }
@@ -90,13 +90,13 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
             {
                 xValuesX.set( aData[nDataIdx] );
                 if( xValuesX.is())
-                    SetRole( xValuesX->getValues(), C2U("values-x"));
+                    SetRole( xValuesX->getValues(), "values-x");
             }
             else
             {
                 aSequencesVec.push_back( aData[nDataIdx] );
                 if( aData[nDataIdx].is())
-                    SetRole( aData[nDataIdx]->getValues(), C2U("values-y"));
+                    SetRole( aData[nDataIdx]->getValues(), "values-y");
             }
         }
         catch( const uno::Exception & ex )
@@ -163,16 +163,16 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
 
             // values-y
             Reference< data::XLabeledDataSequence > xValuesY(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values-y"), false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y", false ));
             Reference< data::XLabeledDataSequence > xValuesX(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values-x"), false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x", false ));
             // re-use values-... as values-x/values-y
             if( ! xValuesX.is() ||
                 ! xValuesY.is())
             {
                 vector< Reference< data::XLabeledDataSequence > > aValueSeqVec(
                     DataSeriesHelper::getAllDataSequencesByRole(
-                        xSeriesSource->getDataSequences(), C2U("values"), true ));
+                        xSeriesSource->getDataSequences(), "values", true ));
                 if( xValuesX.is())
                     aValueSeqVec.erase( find( aValueSeqVec.begin(), aValueSeqVec.end(), xValuesX ));
                 if( xValuesY.is())
@@ -184,7 +184,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
                 {
                     xValuesY.set( aValueSeqVec[nIndex++] );
                     if( xValuesY.is())
-                        SetRole( xValuesY->getValues(), C2U("values-y"));
+                        SetRole( xValuesY->getValues(), "values-y");
                 }
 
                 if( ! xValuesX.is() &&
@@ -192,7 +192,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
                 {
                     xValuesX.set( aValueSeqVec[nIndex++] );
                     if( xValuesX.is())
-                        SetRole( xValuesY->getValues(), C2U("values-x"));
+                        SetRole( xValuesY->getValues(), "values-x");
                 }
             }
             if( xValuesY.is())

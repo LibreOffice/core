@@ -425,7 +425,7 @@ sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist )
             bExists = aContent.isDocument();
             if (bExists)
             {
-                Any aAny( aContent.getPropertyValue( A2OU( "IsReadOnly" ) ) );
+                Any aAny( aContent.getPropertyValue( "IsReadOnly" ) );
                 aAny >>= bRes;
             }
         }
@@ -790,7 +790,7 @@ uno::Reference< XDictionary > GetIgnoreAllList()
     uno::Reference< XDictionary > xRes;
     uno::Reference< XDictionaryList > xDL( GetDictionaryList() );
     if (xDL.is())
-        xRes = xDL->getDictionaryByName( A2OU("IgnoreAllList") );
+        xRes = xDL->getDictionaryByName( "IgnoreAllList" );
     return xRes;
 }
 

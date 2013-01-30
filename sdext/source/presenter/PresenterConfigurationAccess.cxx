@@ -29,12 +29,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace sdext { namespace presenter {
 
 const ::rtl::OUString PresenterConfigurationAccess::msPresenterScreenRootName =
-    A2S("/org.openoffice.Office.PresenterScreen/");
+    "/org.openoffice.Office.PresenterScreen/";
 
 PresenterConfigurationAccess::PresenterConfigurationAccess (
     const Reference<XComponentContext>& rxContext,
@@ -49,26 +47,26 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
         {
             Sequence<Any> aCreationArguments(3);
             aCreationArguments[0] = makeAny(beans::PropertyValue(
-                A2S("nodepath"),
+                "nodepath",
                 0,
                 makeAny(rsRootName),
                 beans::PropertyState_DIRECT_VALUE));
             aCreationArguments[1] = makeAny(beans::PropertyValue(
-                A2S("depth"),
+                "depth",
                 0,
                 makeAny((sal_Int32)-1),
                 beans::PropertyState_DIRECT_VALUE));
             aCreationArguments[2] = makeAny(beans::PropertyValue(
-                A2S("lazywrite"),
+                "lazywrite",
                 0,
                 makeAny(true),
                 beans::PropertyState_DIRECT_VALUE));
 
             OUString sAccessService;
             if (eMode == READ_ONLY)
-                sAccessService = A2S("com.sun.star.configuration.ConfigurationAccess");
+                sAccessService = "com.sun.star.configuration.ConfigurationAccess";
             else
-                sAccessService = A2S("com.sun.star.configuration.ConfigurationUpdateAccess");
+                sAccessService = "com.sun.star.configuration.ConfigurationUpdateAccess";
 
             Reference<lang::XMultiServiceFactory> xProvider =
                 configuration::theDefaultProvider::get( rxContext );

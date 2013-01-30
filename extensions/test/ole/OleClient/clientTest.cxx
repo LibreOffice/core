@@ -40,7 +40,6 @@ CComModule _Module;
 #include <cppuhelper/servicefactory.hxx>
 #include <rtl/string.h>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
@@ -607,15 +606,15 @@ bool doPropertyWithArgumentTest(const Reference<XInvocation> & inv)
 
 
     //hasProperty, hasMethod
-    if (inv->hasProperty(OUSTR("prpMultiArg1")))
+    if (inv->hasProperty("prpMultiArg1"))
         return false;
-    if ( ! inv->hasMethod(OUSTR("prpMultiArg1")))
+    if ( ! inv->hasMethod("prpMultiArg1"))
         return false;
-    if ( ! inv->hasProperty(OUSTR("prprefLong")))
+    if ( ! inv->hasProperty("prprefLong"))
         return false;
-    if (inv->hasMethod(OUSTR("prprefLong")))
+    if (inv->hasMethod("prprefLong"))
         return false;
-    if ( ! inv->hasMethod(OUSTR("inLong")))
+    if ( ! inv->hasMethod("inLong"))
         return false;
 
     return true;

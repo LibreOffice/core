@@ -150,12 +150,12 @@ void DiagramHelper::setVertical(
                 if( xProp.is() )
                 {
                     bool bOldSwap = sal_False;
-                    if( !(xProp->getPropertyValue( C2U("SwapXAndYAxis") ) >>= bOldSwap)
+                    if( !(xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bOldSwap)
                         || bVertical != bOldSwap )
                         bChanged = true;
 
                     if( bChanged )
-                        xProp->setPropertyValue( C2U("SwapXAndYAxis"), aValue );
+                        xProp->setPropertyValue( "SwapXAndYAxis", aValue );
                 }
                 if( xCooSys.is() )
                 {
@@ -179,7 +179,7 @@ void DiagramHelper::setVertical(
                                         if( !xTitleProps.is() )
                                             continue;
                                         double fAngleDegree = 0.0;
-                                        xTitleProps->getPropertyValue( C2U( "TextRotation" ) ) >>= fAngleDegree;
+                                        xTitleProps->getPropertyValue( "TextRotation" ) >>= fAngleDegree;
                                         if( !::rtl::math::approxEqual( fAngleDegree, 0.0 )
                                             && !::rtl::math::approxEqual( fAngleDegree, 90.0 ) )
                                             continue;
@@ -190,7 +190,7 @@ void DiagramHelper::setVertical(
                                         else if( bVertical && nDimIndex == 0 )
                                             fNewAngleDegree = 90.0;
 
-                                        xTitleProps->setPropertyValue( C2U( "TextRotation" ), uno::makeAny( fNewAngleDegree ));
+                                        xTitleProps->setPropertyValue( "TextRotation", uno::makeAny( fNewAngleDegree ));
                                     }
                                 }
                             }
@@ -224,7 +224,7 @@ bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDia
             if( xProp.is())
             {
                 bool bCurrent = false;
-                if( xProp->getPropertyValue( C2U("SwapXAndYAxis") ) >>= bCurrent )
+                if( xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bCurrent )
                 {
                     if( !rbFound )
                     {
@@ -323,7 +323,7 @@ void DiagramHelper::setStackMode(
                 {
                     Reference< beans::XPropertySet > xProp( aSeriesList[nS], uno::UNO_QUERY );
                     if(xProp.is())
-                        xProp->setPropertyValue( C2U( "StackingDirection" ), aNewDirection );
+                        xProp->setPropertyValue( "StackingDirection", aNewDirection );
                 }
             }
         }
@@ -402,7 +402,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
             Reference< beans::XPropertySet > xProp( aSeries[i], uno::UNO_QUERY_THROW );
             chart2::StackingDirection eCurrentDirection = eCommonDirection;
             // property is not MAYBEVOID
-            bool bSuccess = ( xProp->getPropertyValue( C2U("StackingDirection") ) >>= eCurrentDirection );
+            bool bSuccess = ( xProp->getPropertyValue( "StackingDirection" ) >>= eCurrentDirection );
             OSL_ASSERT( bSuccess );
             (void)(bSuccess);  // avoid warning in non-debug builds
             if( ! bDirectionInitialized )
@@ -613,7 +613,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
     {
         try
         {
-            xProp->setPropertyValue( C2U("AttachedAxisIndex"), uno::makeAny( nNewAxisIndex ) );
+            xProp->setPropertyValue( "AttachedAxisIndex", uno::makeAny( nNewAxisIndex ) );
             bChanged = true;
         }
         catch( const uno::Exception & ex )
@@ -935,7 +935,7 @@ Reference< data::XLabeledDataSequence >
                     {
                         try
                         {
-                            xProp->setPropertyValue( C2U( "Role" ), uno::makeAny( C2U("categories") ) );
+                            xProp->setPropertyValue( "Role", uno::makeAny( OUString("categories") ) );
                         }
                         catch( const uno::Exception & ex )
                         {
@@ -1059,7 +1059,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
         if( xAxisProps.is() && xNumberFormatsSupplier.is() )
         {
             sal_Int32 nNumberFormat = -1;
-            xAxisProps->getPropertyValue( C2U("NumberFormat") ) >>= nNumberFormat;
+            xAxisProps->getPropertyValue( "NumberFormat" ) >>= nNumberFormat;
 
             Reference< util::XNumberFormats > xNumberFormats = Reference< util::XNumberFormats >( xNumberFormatsSupplier->getNumberFormats() );
             if( xNumberFormats.is() )
@@ -1075,7 +1075,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                 }
                 sal_Int32 nType = util::NumberFormat::UNDEFINED;
                 if( xKeyProps.is() )
-                    xKeyProps->getPropertyValue( C2U("Type") ) >>= nType;
+                    xKeyProps->getPropertyValue( "Type" ) >>= nType;
                 if( !( nType & util::NumberFormat::DATE ) )
                 {
                     //set a date format to the axis
@@ -1084,7 +1084,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                     Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLanguageTag().getLocale(), bCreate );
                     if( aKeySeq.getLength() )
                     {
-                        xAxisProps->setPropertyValue( C2U("NumberFormat"), uno::makeAny(aKeySeq[0]) );
+                        xAxisProps->setPropertyValue( "NumberFormat", uno::makeAny(aKeySeq[0]) );
                     }
                 }
             }
@@ -1161,7 +1161,7 @@ bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const Reference
     if( xKeyProps.is() )
     {
         sal_Int32 nType = util::NumberFormat::UNDEFINED;
-        xKeyProps->getPropertyValue( C2U("Type") ) >>= nType;
+        xKeyProps->getPropertyValue( "Type" ) >>= nType;
         bIsDate = nType & util::NumberFormat::DATE;
     }
     return bIsDate;
@@ -1522,7 +1522,7 @@ sal_Int32 DiagramHelper::getGeometry3D(
         {
             sal_Int32 nGeom = 0;
             Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY_THROW );
-            if( xProp->getPropertyValue( C2U( "Geometry3D" )) >>= nGeom )
+            if( xProp->getPropertyValue( "Geometry3D") >>= nGeom )
             {
                 if( ! rbFound )
                 {
@@ -1558,7 +1558,7 @@ void DiagramHelper::setGeometry3D(
              aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
     {
         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(
-            *aIt, C2U( "Geometry3D" ), uno::makeAny( nNewGeometry ));
+            *aIt, "Geometry3D", uno::makeAny( nNewGeometry ));
     }
 }
 
@@ -1571,7 +1571,7 @@ sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
                 ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
 
     uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
-    if( xDiaProp.is() && (xDiaProp->getPropertyValue( C2U( "MissingValueTreatment" ) ) >>= nResult) )
+    if( xDiaProp.is() && (xDiaProp->getPropertyValue( "MissingValueTreatment" ) >>= nResult) )
     {
         //ensure that the set value is supported by this charttype
         for( sal_Int32 nN = 0; nN < aAvailableMissingValueTreatments.getLength(); nN++ )
@@ -1598,11 +1598,11 @@ DiagramPositioningMode DiagramHelper::getDiagramPositioningMode( const uno::Refe
     {
         RelativePosition aRelPos;
         RelativeSize aRelSize;
-        if( (xDiaProps->getPropertyValue(C2U("RelativePosition")) >>= aRelPos ) &&
-            (xDiaProps->getPropertyValue(C2U("RelativeSize")) >>= aRelSize ) )
+        if( (xDiaProps->getPropertyValue("RelativePosition") >>= aRelPos ) &&
+            (xDiaProps->getPropertyValue("RelativeSize") >>= aRelSize ) )
         {
             bool bPosSizeExcludeAxes=false;
-            xDiaProps->getPropertyValue(C2U("PosSizeExcludeAxes")) >>= bPosSizeExcludeAxes;
+            xDiaProps->getPropertyValue("PosSizeExcludeAxes") >>= bPosSizeExcludeAxes;
             if( bPosSizeExcludeAxes )
                 eMode = DiagramPositioningMode_EXCLUDING;
             else
@@ -1633,8 +1633,8 @@ bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >
 
     RelativePosition aOldPos;
     RelativeSize aOldSize;
-    xDiaProps->getPropertyValue(C2U("RelativePosition") ) >>= aOldPos;
-    xDiaProps->getPropertyValue(C2U("RelativeSize") ) >>= aOldSize;
+    xDiaProps->getPropertyValue("RelativePosition" ) >>= aOldPos;
+    xDiaProps->getPropertyValue("RelativeSize" ) >>= aOldSize;
 
     RelativePosition aNewPos;
     aNewPos.Anchor = drawing::Alignment_TOP_LEFT;
@@ -1654,8 +1654,8 @@ bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >
     if( (aNewPos.Secondary + aNewSize.Secondary) > 1.0 )
         aNewPos.Secondary = 1.0 - aNewSize.Secondary;
 
-    xDiaProps->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aNewPos) );
-    xDiaProps->setPropertyValue( C2U( "RelativeSize" ), uno::makeAny(aNewSize) );
+    xDiaProps->setPropertyValue( "RelativePosition", uno::makeAny(aNewPos) );
+    xDiaProps->setPropertyValue( "RelativeSize", uno::makeAny(aNewSize) );
 
     bChanged = (aOldPos.Anchor!=aNewPos.Anchor) ||
         (aOldPos.Primary!=aNewPos.Primary) ||
@@ -1677,8 +1677,8 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference
 
     RelativePosition aRelPos;
     RelativeSize aRelSize;
-    xDiaProps->getPropertyValue(C2U("RelativePosition") ) >>= aRelPos;
-    xDiaProps->getPropertyValue(C2U("RelativeSize") ) >>= aRelSize;
+    xDiaProps->getPropertyValue("RelativePosition" ) >>= aRelPos;
+    xDiaProps->getPropertyValue("RelativeSize" ) >>= aRelSize;
 
     awt::Size aAbsSize(
         static_cast< sal_Int32 >( aRelSize.Primary * aPageSize.Width ),

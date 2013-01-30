@@ -34,7 +34,7 @@ using namespace com::sun::star::beans;
 
 using ::rtl::OUString;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define cChar OUString::createFromAscii(cChar)
 
 const sal_Char cReplacement[] = "Replacement";
 const sal_Char cFontPairs[] = "FontPairs";
@@ -59,13 +59,13 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     RTL_LOGFILE_CONTEXT(aLog, "svtools SvtFontSubstConfig::SvtFontSubstConfig()");
 
     Sequence<OUString> aNames(1);
-    aNames.getArray()[0] = C2U(cReplacement);
+    aNames.getArray()[0] = cReplacement;
     Sequence<Any> aValues = GetProperties(aNames);
     DBG_ASSERT(aValues.getConstArray()[0].hasValue(), "no value available");
     if(aValues.getConstArray()[0].hasValue())
         bIsEnabled = *(sal_Bool*)aValues.getConstArray()[0].getValue();
 
-    OUString sPropPrefix(C2U(cFontPairs));
+    OUString sPropPrefix(cFontPairs);
     Sequence<OUString> aNodeNames = GetNodeNames(sPropPrefix, CONFIG_NAME_LOCAL_PATH);
     const OUString* pNodeNames = aNodeNames.getConstArray();
     Sequence<OUString> aPropNames(aNodeNames.getLength() * 4);
@@ -78,10 +78,10 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
         OUString sStart(sPropPrefix);
         sStart += pNodeNames[nNode];
         sStart += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-        pNames[nName] = sStart;     pNames[nName++] += C2U(cReplaceFont);
-        pNames[nName] = sStart;     pNames[nName++] += C2U(cSubstituteFont);
-        pNames[nName] = sStart;     pNames[nName++] += C2U(cAlways);
-        pNames[nName] = sStart;     pNames[nName++] += C2U(cOnScreenOnly);
+        pNames[nName] = sStart;     pNames[nName++] += cReplaceFont;
+        pNames[nName] = sStart;     pNames[nName++] += cSubstituteFont;
+        pNames[nName] = sStart;     pNames[nName++] += cAlways;
+        pNames[nName] = sStart;     pNames[nName++] += cOnScreenOnly;
     }
     Sequence<Any> aNodeValues = GetProperties(aPropNames);
     const Any* pNodeValues = aNodeValues.getConstArray();
@@ -109,12 +109,12 @@ void SvtFontSubstConfig::Notify( const com::sun::star::uno::Sequence< rtl::OUStr
 void SvtFontSubstConfig::Commit()
 {
     Sequence<OUString> aNames(1);
-    aNames.getArray()[0] = C2U(cReplacement);
+    aNames.getArray()[0] = cReplacement;
     Sequence<Any> aValues(1);
     aValues.getArray()[0].setValue(&bIsEnabled, ::getBooleanCppuType());
     PutProperties(aNames, aValues);
 
-    OUString sNode(C2U(cFontPairs));
+    OUString sNode(cFontPairs);
     if(pImpl->aSubstArr.empty())
         ClearNodeSet(sNode);
     else
@@ -123,18 +123,18 @@ void SvtFontSubstConfig::Commit()
         PropertyValue* pSetValues = aSetValues.getArray();
         sal_Int32 nSetValue = 0;
 
-        const OUString sReplaceFont(C2U(cReplaceFont));
-        const OUString sSubstituteFont(C2U(cSubstituteFont));
-        const OUString sAlways(C2U(cAlways));
-        const OUString sOnScreenOnly(C2U(cOnScreenOnly));
+        const OUString sReplaceFont(cReplaceFont);
+        const OUString sSubstituteFont(cSubstituteFont);
+        const OUString sAlways(cAlways);
+        const OUString sOnScreenOnly(cOnScreenOnly);
 
         const uno::Type& rBoolType = ::getBooleanCppuType();
         for(size_t i = 0; i < pImpl->aSubstArr.size(); i++)
         {
             OUString sPrefix(sNode);
-            sPrefix += C2U("/_");
+            sPrefix += "/_";
             sPrefix += OUString::valueOf((sal_Int32)i);
-            sPrefix += C2U("/");
+            sPrefix += "/";
 
             SubstitutionStruct& pSubst = pImpl->aSubstArr[i];
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sReplaceFont;

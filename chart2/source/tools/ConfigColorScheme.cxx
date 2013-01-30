@@ -73,7 +73,7 @@ private:
 };
 
 ChartConfigItem::ChartConfigItem( ConfigItemListener & rListener ) :
-        ::utl::ConfigItem( C2U("Office.Chart/DefaultColor")),
+        ::utl::ConfigItem( "Office.Chart/DefaultColor"),
     m_rListener( rListener )
 {}
 
@@ -180,13 +180,13 @@ void ConfigColorScheme::notify( const OUString & rPropertyName )
 Sequence< OUString > ConfigColorScheme::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 1 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.ColorScheme" );
+    aServices[ 0 ] = "com.sun.star.chart2.ColorScheme";
     return aServices;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( ConfigColorScheme,
-                             C2U( "com.sun.star.comp.chart2.ConfigDefaultColorScheme" ))
+                             OUString("com.sun.star.comp.chart2.ConfigDefaultColorScheme") )
 
 // ================================================================================
 

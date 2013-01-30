@@ -64,7 +64,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::style;
 using rtl::OUString;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define cChar OUString::createFromAscii(cChar)
 #define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
 #define NUM_PAGETYPE_NUM            2
@@ -211,7 +211,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         aOrgRect.TopLeft(), aRectSize,
                         *pVDev );
     // Now comes the text
-    const OUString sValue(C2U(cValue));
+    const OUString sValue(cValue);
     if( NUM_PAGETYPE_SINGLENUM == nPageType ||
             NUM_PAGETYPE_BULLET == nPageType )
     {
@@ -333,7 +333,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         for(sal_Int32 nParentLevel = i - nStartLevel; nParentLevel < i; nParentLevel++)
                         {
                             OUString sTmp(sLevelTexts[nParentLevel]);
-                            sTmp += C2U(".");
+                            sTmp += ".";
                             lcl_PaintLevel(pVDev,
                                     aNumberingTypes[nParentLevel],
                                     sBulletChars[nParentLevel],

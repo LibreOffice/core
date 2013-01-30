@@ -39,8 +39,6 @@ using ::rtl::OUString ;
 using ::com::sun::star::security::XCertificate ;
 using ::com::sun::star::util::DateTime ;
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 /*Resturns the index withing rRawString where sTypeName starts and where it ends.
     The starting index is pair.first. The ending index in pair.second points
     one char after the last character of the type.
@@ -153,12 +151,12 @@ findTypeInDN(const OUString& rRawString, const OUString& sTypeName)
 
 OUString replaceTagSWithTagST(OUString oldDN)
 {
-    std::pair<sal_Int32, sal_Int32 > pairIndex = findTypeInDN(oldDN, OUSTR("S"));
+    std::pair<sal_Int32, sal_Int32 > pairIndex = findTypeInDN(oldDN, "S");
 
     if (pairIndex.first != -1)
     {
         OUString newDN = oldDN.copy(0, pairIndex.first);
-        newDN += OUSTR("ST");
+        newDN += "ST";
         newDN += oldDN.copy(pairIndex.second);
         return newDN;
     }

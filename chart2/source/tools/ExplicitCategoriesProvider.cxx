@@ -383,7 +383,7 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
     {
         aRet.realloc(nMaxCategoryCount);
         aOuterEnd = aComplexCatsPerIndex.end();
-        OUString aSpace(C2U(" "));
+        OUString aSpace(" ");
         for(sal_Int32 nN=0; nN<nMaxCategoryCount; nN++)
         {
             OUString aText;
@@ -445,7 +445,7 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
                 bOwnData = true;
                 Reference< beans::XPropertySet > xAxisProps( xCooSysModel->getAxisByDimension(0,0), uno::UNO_QUERY );
                 sal_Int32 nAxisNumberFormat = 0;
-                if( xAxisProps.is() && (xAxisProps->getPropertyValue( C2U("NumberFormat") ) >>= nAxisNumberFormat) )
+                if( xAxisProps.is() && (xAxisProps->getPropertyValue( "NumberFormat" ) >>= nAxisNumberFormat) )
                 {
                     bOwnDataAnddAxisHasAnyFormat = true;
                     bOwnDataAnddAxisHasDateFormat = DiagramHelper::isDateNumberFormat( nAxisNumberFormat, xNumberFormats );

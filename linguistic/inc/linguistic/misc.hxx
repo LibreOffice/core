@@ -64,9 +64,6 @@ class LocaleDataWrapper;
 namespace linguistic
 {
 
-// ascii to OUString conversion
-#define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
-
 /// Flags to be used with the multi-path related functions
 /// @see GetDictionaryPaths
 #define PATH_FLAG_INTERNAL  0x01

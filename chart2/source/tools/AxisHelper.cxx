@@ -95,7 +95,7 @@ bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
     bool bReturn = false;
     Reference< lang::XServiceName > xServiceName( xScaling, uno::UNO_QUERY );
     bReturn =( xServiceName.is() && (xServiceName->getServiceName()).equals(
-              C2U( "com.sun.star.chart2.LogarithmicScaling" )));
+              "com.sun.star.chart2.LogarithmicScaling"));
     return bReturn;
 }
 
@@ -149,7 +149,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
     Reference< chart2::XChartDocument > xChartDoc( xNumberFormatsSupplier, uno::UNO_QUERY );
 
     Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
-    if( xProp.is() && !( xProp->getPropertyValue( C2U( "NumberFormat" ) ) >>= nNumberFormatKey ) )
+    if( xProp.is() && !( xProp->getPropertyValue( "NumberFormat" ) >>= nNumberFormatKey ) )
     {
         bool bFormatSet = false;
         //check whether we have a percent scale -> use percent format
@@ -190,7 +190,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                     if( xSource.is() )
                     {
                         ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aXValues(
-                            DataSeriesHelper::getAllDataSequencesByRole( xSource->getDataSequences(), C2U("values-x"), true ) );
+                            DataSeriesHelper::getAllDataSequencesByRole( xSource->getDataSequences(), "values-x", true ) );
                         if( aXValues.empty() )
                         {
                             Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
@@ -234,7 +234,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 {
                     ::rtl::OUString aRoleToMatch;
                     if( nDimensionIndex == 0 )
-                        aRoleToMatch = C2U("values-x");
+                        aRoleToMatch = "values-x";
                     Sequence< Reference< XChartType > > aChartTypes( xCTCnt->getChartTypes());
                     for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
                     {
@@ -333,7 +333,7 @@ Reference< XAxis > AxisHelper::createAxis(
         return NULL;
 
     Reference< XAxis > xAxis( xContext->getServiceManager()->createInstanceWithContext(
-                    C2U( "com.sun.star.chart2.Axis" ), xContext ), uno::UNO_QUERY );
+                    "com.sun.star.chart2.Axis", xContext ), uno::UNO_QUERY );
 
     OSL_ASSERT( xAxis.is());
     if( xAxis.is())
@@ -362,7 +362,7 @@ Reference< XAxis > AxisHelper::createAxis(
                 if( xMainProp.is() )
                 {
                     ::com::sun::star::chart::ChartAxisPosition eMainAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
-                    xMainProp->getPropertyValue(C2U( "CrossoverPosition" )) >>= eMainAxisPos;
+                    xMainProp->getPropertyValue("CrossoverPosition") >>= eMainAxisPos;
                     if( ::com::sun::star::chart::ChartAxisPosition_END == eMainAxisPos )
                         eNewAxisPos = ::com::sun::star::chart::ChartAxisPosition_START;
                 }
@@ -370,7 +370,7 @@ Reference< XAxis > AxisHelper::createAxis(
 
             Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
             if( xProp.is() )
-                xProp->setPropertyValue(C2U( "CrossoverPosition" ), uno::makeAny(eNewAxisPos) );
+                xProp->setPropertyValue("CrossoverPosition", uno::makeAny(eNewAxisPos) );
         }
 
         Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
@@ -462,9 +462,9 @@ void AxisHelper::makeAxisVisible( const Reference< XAxis >& xAxis )
     Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
     if( xProps.is() )
     {
-        xProps->setPropertyValue( C2U( "Show" ), uno::makeAny( sal_True ) );
+        xProps->setPropertyValue( "Show", uno::makeAny( sal_True ) );
         LineProperties::SetLineVisible( xProps );
-        xProps->setPropertyValue( C2U( "DisplayLabels" ), uno::makeAny( sal_True ) );
+        xProps->setPropertyValue( "DisplayLabels", uno::makeAny( sal_True ) );
     }
 }
 
@@ -472,7 +472,7 @@ void AxisHelper::makeGridVisible( const Reference< beans::XPropertySet >& xGridP
 {
     if( xGridProperties.is() )
     {
-        xGridProperties->setPropertyValue( C2U( "Show" ), uno::makeAny( sal_True ) );
+        xGridProperties->setPropertyValue( "Show", uno::makeAny( sal_True ) );
         LineProperties::SetLineVisible( xGridProperties );
     }
 }
@@ -488,7 +488,7 @@ void AxisHelper::makeAxisInvisible( const Reference< XAxis >& xAxis )
     Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
     if( xProps.is() )
     {
-        xProps->setPropertyValue( C2U( "Show" ), uno::makeAny( sal_False ) );
+        xProps->setPropertyValue( "Show", uno::makeAny( sal_False ) );
     }
 }
 
@@ -539,7 +539,7 @@ void AxisHelper::makeGridInvisible( const Reference< beans::XPropertySet >& xGri
 {
     if( xGridProperties.is() )
     {
-        xGridProperties->setPropertyValue( C2U( "Show" ), uno::makeAny( sal_False ) );
+        xGridProperties->setPropertyValue( "Show", uno::makeAny( sal_False ) );
     }
 }
 
@@ -621,7 +621,7 @@ Reference< XAxis > AxisHelper::getCrossingMainAxis( const Reference< XAxis >& xA
         nDimensionIndex=1;
         bool bSwapXY = false;
         Reference< beans::XPropertySet > xCooSysProp( xCooSys, uno::UNO_QUERY );
-        if( xCooSysProp.is() && (xCooSysProp->getPropertyValue( C2U("SwapXAndYAxis") ) >>= bSwapXY) && bSwapXY )
+        if( xCooSysProp.is() && (xCooSysProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXY) && bSwapXY )
             nDimensionIndex=0;
     }
     else if( 1==nDimensionIndex )
@@ -664,7 +664,7 @@ sal_Bool AxisHelper::isAxisVisible( const Reference< XAxis >& xAxis )
     Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
     if( xProps.is() )
     {
-        xProps->getPropertyValue( C2U( "Show" ) ) >>= bRet;
+        xProps->getPropertyValue( "Show" ) >>= bRet;
         bRet = bRet && ( LineProperties::IsLineVisible( xProps )
             || areAxisLabelsVisible( xProps ) );
     }
@@ -677,7 +677,7 @@ sal_Bool AxisHelper::areAxisLabelsVisible( const Reference< beans::XPropertySet 
     sal_Bool bRet = false;
     if( xAxisProperties.is() )
     {
-        xAxisProperties->getPropertyValue( C2U( "DisplayLabels" ) ) >>= bRet;
+        xAxisProperties->getPropertyValue( "DisplayLabels" ) >>= bRet;
     }
     return bRet;
 }
@@ -688,7 +688,7 @@ sal_Bool AxisHelper::isGridVisible( const Reference< beans::XPropertySet >& xGri
 
     if( xGridProperies.is() )
     {
-        xGridProperies->getPropertyValue( C2U( "Show" ) ) >>= bRet;
+        xGridProperies->getPropertyValue( "Show" ) >>= bRet;
         bRet = bRet && LineProperties::IsLineVisible( xGridProperies );
     }
 
@@ -813,7 +813,7 @@ std::vector< Reference< XAxis > > AxisHelper::getAllAxesOfCoordinateSystem(
                             {
                                 Reference< beans::XPropertySet > xAxisProp( xAxis, uno::UNO_QUERY );
                                 if( !xAxisProp.is() ||
-                                    !(xAxisProp->getPropertyValue( C2U("Show")) >>= bAddAxis) )
+                                    !(xAxisProp->getPropertyValue( "Show") >>= bAddAxis) )
                                     bAddAxis = false;
                             }
                             if( bAddAxis )
@@ -919,7 +919,7 @@ bool AxisHelper::isSecondaryYAxisNeeded( const Reference< XCoordinateSystem >& x
                 if(xProp.is())
                 {
                     sal_Int32 nAttachedAxisIndex = 0;
-                    if( ( xProp->getPropertyValue( C2U( "AttachedAxisIndex" ) ) >>= nAttachedAxisIndex ) && nAttachedAxisIndex>0 )
+                    if( ( xProp->getPropertyValue( "AttachedAxisIndex" ) >>= nAttachedAxisIndex ) && nAttachedAxisIndex>0 )
                         return true;
                 }
             }
@@ -1074,7 +1074,7 @@ void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys
             bool bVertical = false;
             Reference< beans::XPropertySet > xCooSysProp( xCooSys, uno::UNO_QUERY );
             if( xCooSysProp.is() )
-                xCooSysProp->getPropertyValue( C2U("SwapXAndYAxis") ) >>= bVertical;
+                xCooSysProp->getPropertyValue( "SwapXAndYAxis" ) >>= bVertical;
 
             sal_Int32 nHorizontalAxisDimension = bVertical ? 1 : 0;
             sal_Int32 nVerticalAxisDimension = bVertical ? 0 : 1;

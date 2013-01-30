@@ -149,7 +149,7 @@ private:
 
 inline OUString Thesaurus::getImplementationName_Static() throw()
 {
-    return A2OU( "org.openoffice.lingu.new.Thesaurus" );
+    return OUString( "org.openoffice.lingu.new.Thesaurus" );
 }
 
 

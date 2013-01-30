@@ -103,7 +103,7 @@ using com::sun::star::xsd::XDataType;
 
 
 
-#define EXCEPT(msg) OUSTRING(msg),static_cast<XValueBinding*>(this)
+#define EXCEPT(msg) OUString(msg),static_cast<XValueBinding*>(this)
 
 #define HANDLE_BindingID 0
 #define HANDLE_BindingExpression 1
@@ -473,7 +473,7 @@ bool Binding::getExternalData() const
     {
         Reference< XPropertySet > xModelProps( mxModel, UNO_QUERY_THROW );
         OSL_VERIFY(
-            xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) ) ) >>= bExternalData );
+            xModelProps->getPropertyValue( "ExternalData" ) >>= bExternalData );
     }
     catch( const Exception& )
     {
@@ -524,17 +524,17 @@ static void lcl_addListenerToNode( Reference<XNode> xNode,
     Reference<XEventTarget> xTarget( xNode, UNO_QUERY );
     if( xTarget.is() )
     {
-        xTarget->addEventListener( OUSTRING("DOMCharacterDataModified"),
+        xTarget->addEventListener( "DOMCharacterDataModified",
                                    xListener, false );
-        xTarget->addEventListener( OUSTRING("DOMCharacterDataModified"),
+        xTarget->addEventListener( "DOMCharacterDataModified",
                                    xListener, true );
-        xTarget->addEventListener( OUSTRING("DOMAttrModified"),
+        xTarget->addEventListener( "DOMAttrModified",
                                    xListener, false );
-        xTarget->addEventListener( OUSTRING("DOMAttrModified"),
+        xTarget->addEventListener( "DOMAttrModified",
                                    xListener, true );
-        xTarget->addEventListener( OUSTRING("DOMAttrModified"),
+        xTarget->addEventListener( "DOMAttrModified",
                                    xListener, true );
-        xTarget->addEventListener( OUSTRING("xforms-generic"),
+        xTarget->addEventListener( "xforms-generic",
                                    xListener, true );
     }
 }
@@ -545,15 +545,15 @@ static void lcl_removeListenerFromNode( Reference<XNode> xNode,
     Reference<XEventTarget> xTarget( xNode, UNO_QUERY );
     if( xTarget.is() )
     {
-        xTarget->removeEventListener( OUSTRING("DOMCharacterDataModified"),
+        xTarget->removeEventListener( "DOMCharacterDataModified",
                                       xListener, false );
-        xTarget->removeEventListener( OUSTRING("DOMCharacterDataModified"),
+        xTarget->removeEventListener( "DOMCharacterDataModified",
                                       xListener, true );
-        xTarget->removeEventListener( OUSTRING("DOMAttrModified"),
+        xTarget->removeEventListener( "DOMAttrModified",
                                       xListener, false );
-        xTarget->removeEventListener( OUSTRING("DOMAttrModified"),
+        xTarget->removeEventListener( "DOMAttrModified",
                                       xListener, true );
-        xTarget->removeEventListener( OUSTRING("xforms-generic"),
+        xTarget->removeEventListener( "xforms-generic",
                                       xListener, true );
     }
 }
@@ -1018,8 +1018,7 @@ void Binding::_checkBindingID()
         if( msBindingID.isEmpty() )
         {
             // no binding ID? then make one up!
-            OUString sIDPrefix = getResource( RID_STR_XFORMS_BINDING_UI_NAME );
-            sIDPrefix += rtl::OUString(" ");
+            OUString sIDPrefix = getResource( RID_STR_XFORMS_BINDING_UI_NAME ) + " ";
             sal_Int32 nNumber = 0;
             OUString sName;
             do

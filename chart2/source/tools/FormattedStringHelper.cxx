@@ -46,7 +46,7 @@ Sequence< Reference< chart2::XFormattedString > >
         {
             xFormStr.set(
                 xContext->getServiceManager()->createInstanceWithContext(
-                    C2U("com.sun.star.chart2.FormattedString"), xContext ),
+                    "com.sun.star.chart2.FormattedString", xContext ),
                 uno::UNO_QUERY_THROW );
 
             xFormStr->setString( rString );

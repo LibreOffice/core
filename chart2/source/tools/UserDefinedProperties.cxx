@@ -33,19 +33,19 @@ void UserDefinedProperties::AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "ChartUserDefinedAttributes" ),
+        Property( "ChartUserDefinedAttributes",
                   PROP_XML_USERDEF_CHART,
                   ::getCppuType( reinterpret_cast< const uno::Reference< container::XNameContainer > * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
-        Property( C2U( "TextUserDefinedAttributes" ),
+        Property( "TextUserDefinedAttributes",
                   PROP_XML_USERDEF_TEXT,
                   ::getCppuType( reinterpret_cast< const uno::Reference< container::XNameContainer > * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
-        Property( C2U( "ParaUserDefinedAttributes" ),
+        Property( "ParaUserDefinedAttributes",
                   PROP_XML_USERDEF_PARA,
                   ::getCppuType( reinterpret_cast< const uno::Reference< container::XNameContainer > * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -53,7 +53,7 @@ void UserDefinedProperties::AddPropertiesToVector(
     // UserDefinedAttributesSupplier
     // ----------------------------
     rOutProperties.push_back(
-        Property( C2U( "UserDefinedAttributes" ),
+        Property( "UserDefinedAttributes",
                   PROP_XML_USERDEF,
                   ::getCppuType( reinterpret_cast< const uno::Reference< container::XNameContainer > * >(0)),
                   beans::PropertyAttribute::BOUND

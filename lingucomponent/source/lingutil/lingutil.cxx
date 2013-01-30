@@ -91,31 +91,31 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
 #endif
     if (strcmp( pDicType, "DICT" ) == 0)
     {
-        aFormatName     = A2OU("DICT_SPELL");
-        aDicExtension   = rtl::OUString( ".dic" );
+        aFormatName     = "DICT_SPELL";
+        aDicExtension   = ".dic";
 #ifdef SYSTEM_DICTS
-        aSystemDir      = A2OU( DICT_SYSTEM_DIR );
-        aSystemSuffix       = aDicExtension;
+        aSystemDir      = DICT_SYSTEM_DIR;
+        aSystemSuffix   = aDicExtension;
 #endif
     }
     else if (strcmp( pDicType, "HYPH" ) == 0)
     {
-        aFormatName     = A2OU("DICT_HYPH");
-        aDicExtension   = rtl::OUString( ".dic" );
+        aFormatName     = "DICT_HYPH";
+        aDicExtension   = ".dic";
 #ifdef SYSTEM_DICTS
-        aSystemDir      = A2OU( HYPH_SYSTEM_DIR );
-        aSystemPrefix       = A2OU( "hyph_" );
-        aSystemSuffix       = aDicExtension;
+        aSystemDir      = HYPH_SYSTEM_DIR;
+        aSystemPrefix   = "hyph_";
+        aSystemSuffix   = aDicExtension;
 #endif
     }
     else if (strcmp( pDicType, "THES" ) == 0)
     {
-        aFormatName     = A2OU("DICT_THES");
-        aDicExtension   = rtl::OUString( ".dat" );
+        aFormatName     = "DICT_THES";
+        aDicExtension   = ".dat";
 #ifdef SYSTEM_DICTS
-        aSystemDir      = A2OU( THES_SYSTEM_DIR );
-        aSystemPrefix       = A2OU( "th_" );
-        aSystemSuffix       = A2OU( "_v2.dat" );
+        aSystemDir      = THES_SYSTEM_DIR;
+        aSystemPrefix   = "th_";
+        aSystemSuffix   = "_v2.dat";
 #endif
     }
 

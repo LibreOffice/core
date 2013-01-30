@@ -40,18 +40,18 @@ using ::osl::MutexGuard;
 namespace
 {
 static const OUString lcl_aImplementationName_MeanValue(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.MeanValueRegressionCurve" ));
+    "com.sun.star.comp.chart2.MeanValueRegressionCurve" );
 static const OUString lcl_aImplementationName_Linear(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.LinearRegressionCurve" ));
+    "com.sun.star.comp.chart2.LinearRegressionCurve" );
 static const OUString lcl_aImplementationName_Logarithmic(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.LogarithmicRegressionCurve" ));
+    "com.sun.star.comp.chart2.LogarithmicRegressionCurve" );
 static const OUString lcl_aImplementationName_Exponential(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ExponentialRegressionCurve" ));
+    "com.sun.star.comp.chart2.ExponentialRegressionCurve" );
 static const OUString lcl_aImplementationName_Potential(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.PotentialRegressionCurve" ));
+    "com.sun.star.comp.chart2.PotentialRegressionCurve" );
 
 static const OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.RegressionCurve" ));
+    "com.sun.star.chart2.RegressionCurve" );
 
 struct StaticXXXDefaults_Initializer
 {
@@ -182,15 +182,15 @@ void SAL_CALL RegressionCurveModel::setEquationProperties( const uno::Reference<
     switch( m_eRegressionCurveType )
     {
         case CURVE_TYPE_MEAN_VALUE:
-            return C2U( "com.sun.star.chart2.MeanValueRegressionCurve" );
+            return OUString("com.sun.star.chart2.MeanValueRegressionCurve");
         case CURVE_TYPE_LINEAR:
-            return C2U( "com.sun.star.chart2.LinearRegressionCurve" );
+            return OUString("com.sun.star.chart2.LinearRegressionCurve");
         case CURVE_TYPE_LOGARITHM:
-            return C2U( "com.sun.star.chart2.LogarithmicRegressionCurve" );
+            return OUString("com.sun.star.chart2.LogarithmicRegressionCurve");
         case CURVE_TYPE_EXPONENTIAL:
-            return C2U( "com.sun.star.chart2.ExponentialRegressionCurve" );
+            return OUString("com.sun.star.chart2.ExponentialRegressionCurve");
         case CURVE_TYPE_POWER:
-            return C2U( "com.sun.star.chart2.PotentialRegressionCurve" );
+            return OUString("com.sun.star.chart2.PotentialRegressionCurve");
     }
 
     return ::rtl::OUString();
@@ -303,7 +303,7 @@ uno::Sequence< ::rtl::OUString > MeanValueRegressionCurve::getSupportedServiceNa
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.MeanValueRegressionCurve" );
+    aServices[ 1 ] = "com.sun.star.chart2.MeanValueRegressionCurve";
     return aServices;
 }
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -331,7 +331,7 @@ uno::Sequence< ::rtl::OUString > LinearRegressionCurve::getSupportedServiceNames
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
+    aServices[ 1 ] = "com.sun.star.chart2.LinearRegressionCurve";
     return aServices;
 }
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -359,7 +359,7 @@ uno::Sequence< ::rtl::OUString > LogarithmicRegressionCurve::getSupportedService
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.LogarithmicRegressionCurve" );
+    aServices[ 1 ] = "com.sun.star.chart2.LogarithmicRegressionCurve";
     return aServices;
 }
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -387,7 +387,7 @@ uno::Sequence< ::rtl::OUString > ExponentialRegressionCurve::getSupportedService
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ExponentialRegressionCurve" );
+    aServices[ 1 ] = "com.sun.star.chart2.ExponentialRegressionCurve";
     return aServices;
 }
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -415,7 +415,7 @@ uno::Sequence< ::rtl::OUString > PotentialRegressionCurve::getSupportedServiceNa
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.PotentialRegressionCurve" );
+    aServices[ 1 ] = "com.sun.star.chart2.PotentialRegressionCurve";
     return aServices;
 }
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

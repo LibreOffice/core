@@ -53,7 +53,7 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "Dimension" ),
+        Property( "Dimension",
                   PROP_AREA_TEMPLATE_DIMENSION,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -194,7 +194,7 @@ void SAL_CALL AreaChartTypeTemplate::applyStyle(
     throw (uno::RuntimeException)
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
-    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
 }
 
 void SAL_CALL AreaChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
@@ -211,9 +211,9 @@ void SAL_CALL AreaChartTypeTemplate::resetStyles( const Reference< chart2::XDiag
         Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY );
         if( xState.is() &&
             xProp.is() &&
-            xProp->getPropertyValue( C2U("BorderStyle")) == aLineStyleAny )
+            xProp->getPropertyValue( "BorderStyle") == aLineStyleAny )
         {
-            xState->setPropertyToDefault( C2U("BorderStyle"));
+            xState->setPropertyToDefault( "BorderStyle");
         }
     }
 }
@@ -253,7 +253,7 @@ uno::Sequence< ::rtl::OUString > AreaChartTypeTemplate::getSupportedServiceNames
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
     return aServices;
 }
 

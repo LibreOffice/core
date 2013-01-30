@@ -84,8 +84,6 @@
 #include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
@@ -306,7 +304,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
         ::rtl::OUStringBuffer buf;
         OUString aPath, aPluginPipeName;
 
-        if(!Bootstrap::get(OUSTR("BRAND_BASE_DIR"), aPath))
+        if(!Bootstrap::get("BRAND_BASE_DIR", aPath))
         {
             debug_fprintf(NSP_LOG_APPEND,"failed to get BRAND_BASE_DIR!\n");
             return Reference< lang::XMultiServiceFactory >(NULL);
@@ -323,9 +321,9 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
 
         // arguments
         OUString args [] = {
-                OUSTR( "--nologo" ),
-                OUSTR( "--nodefault" ),
-                OUSTR( "--nolockcheck" ),
+                "--nologo",
+                "--nodefault",
+                "--nolockcheck",
                 sConnectStartString,
         };
 

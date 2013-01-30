@@ -62,13 +62,13 @@ void CharacterProperties::AddPropertiesToVector(
 {
     // CharacterProperties
     rOutProperties.push_back(
-        Property( C2U( "CharFontName" ),
+        Property( "CharFontName",
                   PROP_CHAR_FONT_NAME,
                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "CharFontStyleName" ),
+        Property( "CharFontStyleName",
                   PROP_CHAR_FONT_STYLE_NAME,
                   ::getCppuType( reinterpret_cast< const  OUString * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -76,56 +76,56 @@ void CharacterProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
     // CharFontFamily (see awt.FontFamily)
     rOutProperties.push_back(
-        Property( C2U( "CharFontFamily" ),
+        Property( "CharFontFamily",
                   PROP_CHAR_FONT_FAMILY,
                   ::getCppuType( reinterpret_cast< const  sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontCharSet (see awt.CharSet)
     rOutProperties.push_back(
-        Property( C2U( "CharFontCharSet" ),
+        Property( "CharFontCharSet",
                   PROP_CHAR_FONT_CHAR_SET,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontPitch (see awt.FontPitch)
     rOutProperties.push_back(
-        Property( C2U( "CharFontPitch" ),
+        Property( "CharFontPitch",
                   PROP_CHAR_FONT_PITCH,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharColor
     rOutProperties.push_back(
-        Property( C2U( "CharColor" ),
+        Property( "CharColor",
                   PROP_CHAR_COLOR,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharEscapement
     rOutProperties.push_back(
-        Property( C2U( "CharEscapement" ),
+        Property( "CharEscapement",
                   PROP_CHAR_ESCAPEMENT,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     // CharHeight
     rOutProperties.push_back(
-        Property( C2U( "CharHeight" ),
+        Property( "CharHeight",
                   PROP_CHAR_CHAR_HEIGHT,
                   ::getCppuType( reinterpret_cast< const float * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharUnderline (see awt.FontUnderline)
     rOutProperties.push_back(
-        Property( C2U( "CharUnderline" ),
+        Property( "CharUnderline",
                   PROP_CHAR_UNDERLINE,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharUnderlineColor
     rOutProperties.push_back(
-        Property( C2U( "CharUnderlineColor" ),
+        Property( "CharUnderlineColor",
                   PROP_CHAR_UNDERLINE_COLOR,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -133,21 +133,21 @@ void CharacterProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
     // CharUnderlineHasColor
     rOutProperties.push_back(
-        Property( C2U( "CharUnderlineHasColor" ),
+        Property( "CharUnderlineHasColor",
                   PROP_CHAR_UNDERLINE_HAS_COLOR,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharOverline (see awt.FontUnderline)
     rOutProperties.push_back(
-        Property( C2U( "CharOverline" ),
+        Property( "CharOverline",
                   PROP_CHAR_OVERLINE,
                   ::getCppuType( reinterpret_cast< const sal_Int16* >( 0 ) ),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ) );
     // CharOverlineColor
     rOutProperties.push_back(
-        Property( C2U( "CharOverlineColor" ),
+        Property( "CharOverlineColor",
                   PROP_CHAR_OVERLINE_COLOR,
                   ::getCppuType( reinterpret_cast< const sal_Int32* >( 0 ) ),
                   beans::PropertyAttribute::BOUND
@@ -155,34 +155,34 @@ void CharacterProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ) );
     // CharOverlineHasColor
     rOutProperties.push_back(
-        Property( C2U( "CharOverlineHasColor" ),
+        Property( "CharOverlineHasColor",
                   PROP_CHAR_OVERLINE_HAS_COLOR,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ) );
     // CharWeight (see awt.FontWeight)
     rOutProperties.push_back(
-        Property( C2U( "CharWeight" ),
+        Property( "CharWeight",
                   PROP_CHAR_WEIGHT,
                   ::getCppuType( reinterpret_cast< const float * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharPosture
     rOutProperties.push_back(
-        Property( C2U( "CharPosture" ),
+        Property( "CharPosture",
                   PROP_CHAR_POSTURE,
                   ::getCppuType( reinterpret_cast< const awt::FontSlant * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "CharAutoKerning" ),
+        Property( "CharAutoKerning",
                   PROP_CHAR_AUTO_KERNING,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
-        Property( C2U( "CharKerning" ),
+        Property( "CharKerning",
                   PROP_CHAR_KERNING,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -190,49 +190,49 @@ void CharacterProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
     // CharEscapementHeight
     rOutProperties.push_back(
-        Property( C2U( "CharEscapementHeight" ),
+        Property( "CharEscapementHeight",
                   PROP_CHAR_ESCAPEMENT_HEIGHT,
                   ::getCppuType( reinterpret_cast< const sal_Int8 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     // CharStrikeout (see awt.FontStrikeout)
     rOutProperties.push_back(
-        Property( C2U( "CharStrikeout" ),
+        Property( "CharStrikeout",
                   PROP_CHAR_STRIKE_OUT,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharWordMode
     rOutProperties.push_back(
-        Property( C2U( "CharWordMode" ),
+        Property( "CharWordMode",
                   PROP_CHAR_WORD_MODE,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharLocale
     rOutProperties.push_back(
-        Property( C2U( "CharLocale" ),
+        Property( "CharLocale",
                   PROP_CHAR_LOCALE,
                   ::getCppuType( reinterpret_cast< const lang::Locale * >(0)),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharShadowed
     rOutProperties.push_back(
-        Property( C2U( "CharShadowed" ),
+        Property( "CharShadowed",
                   PROP_CHAR_SHADOWED,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharContoured
     rOutProperties.push_back(
-        Property( C2U( "CharContoured" ),
+        Property( "CharContoured",
                   PROP_CHAR_CONTOURED,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharRelief (see text.FontRelief)
     rOutProperties.push_back(
-        Property( C2U( "CharRelief" ),
+        Property( "CharRelief",
                   PROP_CHAR_RELIEF,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -240,7 +240,7 @@ void CharacterProperties::AddPropertiesToVector(
 
     // CharEmphasize (see text.FontEmphasis)
     rOutProperties.push_back(
-        Property( C2U( "CharEmphasis" ),
+        Property( "CharEmphasis",
                   PROP_CHAR_EMPHASIS,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -249,14 +249,14 @@ void CharacterProperties::AddPropertiesToVector(
     // =====
     // CharFontNameAsian
     rOutProperties.push_back(
-        Property( C2U( "CharFontNameAsian" ),
+        Property( "CharFontNameAsian",
                   PROP_CHAR_ASIAN_FONT_NAME,
                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontStyleNameAsian
     rOutProperties.push_back(
-        Property( C2U( "CharFontStyleNameAsian" ),
+        Property( "CharFontStyleNameAsian",
                   PROP_CHAR_ASIAN_FONT_STYLE_NAME,
                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -264,49 +264,49 @@ void CharacterProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
     // CharFontFamilyAsian (see awt.FontFamily)
     rOutProperties.push_back(
-        Property( C2U( "CharFontFamilyAsian" ),
+        Property( "CharFontFamilyAsian",
                   PROP_CHAR_ASIAN_FONT_FAMILY,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontCharSetAsian (see awt.CharSet)
     rOutProperties.push_back(
-        Property( C2U( "CharFontCharSetAsian" ),
+        Property( "CharFontCharSetAsian",
                   PROP_CHAR_ASIAN_CHAR_SET,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontPitchAsian (see awt.FontPitch)
     rOutProperties.push_back(
-        Property( C2U( "CharFontPitchAsian" ),
+        Property( "CharFontPitchAsian",
                   PROP_CHAR_ASIAN_FONT_PITCH,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharHeightAsian
     rOutProperties.push_back(
-        Property( C2U( "CharHeightAsian" ),
+        Property( "CharHeightAsian",
                   PROP_CHAR_ASIAN_CHAR_HEIGHT,
                   ::getCppuType( reinterpret_cast< const float * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharWeightAsian
     rOutProperties.push_back(
-        Property( C2U( "CharWeightAsian" ),
+        Property( "CharWeightAsian",
                   PROP_CHAR_ASIAN_WEIGHT,
                   ::getCppuType( reinterpret_cast< const float * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharPostureAsian
     rOutProperties.push_back(
-        Property( C2U( "CharPostureAsian" ),
+        Property( "CharPostureAsian",
                   PROP_CHAR_ASIAN_POSTURE,
                   ::getCppuType( reinterpret_cast< const awt::FontSlant * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharLocaleAsian
     rOutProperties.push_back(
-        Property( C2U( "CharLocaleAsian" ),
+        Property( "CharLocaleAsian",
                   PROP_CHAR_ASIAN_LOCALE,
                   ::getCppuType( reinterpret_cast< const lang::Locale * >(0)),
                   //#i111967# no PropertyChangeEvent is fired on change so far
@@ -316,14 +316,14 @@ void CharacterProperties::AddPropertiesToVector(
     // ===
     // CharFontNameComplex
     rOutProperties.push_back(
-        Property( C2U( "CharFontNameComplex" ),
+        Property( "CharFontNameComplex",
                   PROP_CHAR_COMPLEX_FONT_NAME,
                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontStyleNameComplex
     rOutProperties.push_back(
-        Property( C2U( "CharFontStyleNameComplex" ),
+        Property( "CharFontStyleNameComplex",
                   PROP_CHAR_COMPLEX_FONT_STYLE_NAME,
                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -331,49 +331,49 @@ void CharacterProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
     // CharFontFamilyComplex (see awt.FontFamily)
     rOutProperties.push_back(
-        Property( C2U( "CharFontFamilyComplex" ),
+        Property( "CharFontFamilyComplex",
                   PROP_CHAR_COMPLEX_FONT_FAMILY,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontCharSetComplex (see awt.CharSet)
     rOutProperties.push_back(
-        Property( C2U( "CharFontCharSetComplex" ),
+        Property( "CharFontCharSetComplex",
                   PROP_CHAR_COMPLEX_CHAR_SET,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharFontPitchComplex (see awt.FontPitch)
     rOutProperties.push_back(
-        Property( C2U( "CharFontPitchComplex" ),
+        Property( "CharFontPitchComplex",
                   PROP_CHAR_COMPLEX_FONT_PITCH,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharHeightComplex
     rOutProperties.push_back(
-        Property( C2U( "CharHeightComplex" ),
+        Property( "CharHeightComplex",
                   PROP_CHAR_COMPLEX_CHAR_HEIGHT,
                   ::getCppuType( reinterpret_cast< const float * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharWeightComplex
     rOutProperties.push_back(
-        Property( C2U( "CharWeightComplex" ),
+        Property( "CharWeightComplex",
                   PROP_CHAR_COMPLEX_WEIGHT,
                   ::getCppuType( reinterpret_cast< const float * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharPostureComplex
     rOutProperties.push_back(
-        Property( C2U( "CharPostureComplex" ),
+        Property( "CharPostureComplex",
                   PROP_CHAR_COMPLEX_POSTURE,
                   ::getCppuType( reinterpret_cast< const awt::FontSlant * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharLocaleComplex
     rOutProperties.push_back(
-        Property( C2U( "CharLocaleComplex" ),
+        Property( "CharLocaleComplex",
                   PROP_CHAR_COMPLEX_LOCALE,
                   ::getCppuType( reinterpret_cast< const lang::Locale * >(0)),
                   //#i111967# no PropertyChangeEvent is fired on change so far
@@ -381,14 +381,14 @@ void CharacterProperties::AddPropertiesToVector(
 
     // Writing Mode left to right vs right to left
     rOutProperties.push_back(
-        Property( C2U( "WritingMode" ),
+        Property( "WritingMode",
                   PROP_WRITING_MODE,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)), /*com::sun::star::text::WritingMode2*/
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "ParaIsCharacterDistance" ),
+        Property( "ParaIsCharacterDistance",
                   PROP_PARA_IS_CHARACTER_DISTANCE,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
@@ -402,11 +402,11 @@ void CharacterProperties::AddDefaultsToMap(
 
     SvtLinguConfig aLinguConfig;
     lang::Locale aDefaultLocale;
-    aLinguConfig.GetProperty(C2U("DefaultLocale")) >>= aDefaultLocale;
+    aLinguConfig.GetProperty("DefaultLocale") >>= aDefaultLocale;
     lang::Locale aDefaultLocale_CJK;
-    aLinguConfig.GetProperty(C2U("DefaultLocale_CJK")) >>= aDefaultLocale_CJK;
+    aLinguConfig.GetProperty("DefaultLocale_CJK") >>= aDefaultLocale_CJK;
     lang::Locale aDefaultLocale_CTL;
-    aLinguConfig.GetProperty(C2U("DefaultLocale_CTL")) >>= aDefaultLocale_CTL;
+    aLinguConfig.GetProperty("DefaultLocale_CTL") >>= aDefaultLocale_CTL;
 
     using namespace ::com::sun::star::i18n::ScriptType;
     LanguageType nLang;
@@ -480,18 +480,18 @@ awt::FontDescriptor CharacterProperties::createFontDescriptorFromPropertySet(
     awt::FontDescriptor aResult;
     // Note: keep this sorted!
     ::comphelper::MakeVector< OUString > aPropNames
-        ( C2U("CharFontCharSet"));                // CharSet
+        ( "CharFontCharSet");                // CharSet
     aPropNames
-        ( C2U("CharFontFamily"))                  // Family
-        ( C2U("CharFontName"))                    // Name
-        ( C2U("CharFontPitch"))                   // Pitch
-        ( C2U("CharFontStyleName"))               // StyleName
-        ( C2U("CharHeight"))                      // Height
-        ( C2U("CharPosture"))                     // Slant
-        ( C2U("CharStrikeout"))                   // Strikeout
-        ( C2U("CharUnderline"))                   // Underline
-        ( C2U("CharWeight"))                      // Weight
-        ( C2U("CharWordMode"))                    // WordLineMode
+        ( "CharFontFamily")                  // Family
+        ( "CharFontName")                    // Name
+        ( "CharFontPitch")                   // Pitch
+        ( "CharFontStyleName")               // StyleName
+        ( "CharHeight")                      // Height
+        ( "CharPosture")                     // Slant
+        ( "CharStrikeout")                   // Strikeout
+        ( "CharUnderline")                   // Underline
+        ( "CharWeight")                      // Weight
+        ( "CharWordMode")                    // WordLineMode
         ;
 
     uno::Sequence< OUString > aPropNameSeq( ContainerHelper::ContainerToSequence( aPropNames ));

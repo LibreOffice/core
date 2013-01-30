@@ -62,7 +62,7 @@ Reference< XCoordinateSystem > SAL_CALL
 {
     if( DimensionCount != 2 )
         throw lang::IllegalArgumentException(
-            C2U( "NetChart must be two-dimensional" ),
+            "NetChart must be two-dimensional",
             static_cast< ::cppu::OWeakObject* >( this ), 0 );
 
     Reference< XCoordinateSystem > xResult(
@@ -178,14 +178,14 @@ uno::Sequence< ::rtl::OUString > NetChartType::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 3 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_NET;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartType" );
-    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartType";
+    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( NetChartType,
-                             C2U( "com.sun.star.comp.chart.NetChartType" ));
+                             OUString("com.sun.star.comp.chart.NetChartType") );
 
 } //  namespace chart
 

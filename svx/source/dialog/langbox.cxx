@@ -227,17 +227,17 @@ void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
 
             if (LANG_LIST_SPELL_AVAIL & nLangList)
             {
-                aTmp = xAvail->getAvailableLocales( A2OU( SN_SPELLCHECKER ) );
+                aTmp = xAvail->getAvailableLocales( SN_SPELLCHECKER );
                 aSpellAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
             }
             if (LANG_LIST_HYPH_AVAIL  & nLangList)
             {
-                aTmp = xAvail->getAvailableLocales( A2OU( SN_HYPHENATOR ) );
+                aTmp = xAvail->getAvailableLocales( SN_HYPHENATOR );
                 aHyphAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
             }
             if (LANG_LIST_THES_AVAIL  & nLangList)
             {
-                aTmp = xAvail->getAvailableLocales( A2OU( SN_THESAURUS ) );
+                aTmp = xAvail->getAvailableLocales( SN_THESAURUS );
                 aThesAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
             }
         }

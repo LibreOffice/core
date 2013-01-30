@@ -65,25 +65,25 @@ static void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "OffsetMode" ),
+        Property( "OffsetMode",
                   PROP_PIE_TEMPLATE_OFFSET_MODE,
                   ::getCppuType( reinterpret_cast< const chart2::PieChartOffsetMode * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "DefaultOffset" ),
+        Property( "DefaultOffset",
                   PROP_PIE_TEMPLATE_DEFAULT_OFFSET,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "Dimension" ),
+        Property( "Dimension",
                   PROP_PIE_TEMPLATE_DIMENSION,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U( "UseRings" ),
+        Property( "UseRings",
                   PROP_PIE_TEMPLATE_USE_RINGS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
@@ -288,7 +288,7 @@ void PieChartTypeTemplate::createChartTypes(
         if( xCTProp.is())
         {
             xCTProp->setPropertyValue(
-                C2U( "UseRings" ), getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
+                "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
         }
         Reference< chart2::XChartTypeContainer > xCTCnt( rCoordSys[0], uno::UNO_QUERY_THROW );
         xCTCnt->setChartTypes( Sequence< Reference< chart2::XChartType > >( &xCT, 1 ));
@@ -339,11 +339,11 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
                 sal_Int32 nOuterSeriesIndex = 0; //@todo in future this will depend on Orientation of the radius axis scale
                 Reference< chart2::XDataSeries > xSeries( aSeriesVec[nOuterSeriesIndex] );
                 Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
-                xProp->getPropertyValue( C2U( "Offset" )) >>= fOffset;
+                xProp->getPropertyValue( "Offset") >>= fOffset;
 
                 //get AttributedDataPoints
                 uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                if( xProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+                if( xProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
                 {
                     for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                     {
@@ -351,7 +351,7 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
                         if(xPointProp.is())
                         {
                             double fPointOffset=0.0;
-                            if( (xProp->getPropertyValue( C2U( "Offset" )) >>= fPointOffset ) )
+                            if( (xProp->getPropertyValue( "Offset") >>= fPointOffset ) )
                             {
                                 if( ! ::rtl::math::approxEqual( fPointOffset, fOffset ) )
                                 {
@@ -387,7 +387,7 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
         uno::Reference< beans::XPropertySet > xCTProp(
             DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), uno::UNO_QUERY_THROW );
         sal_Bool bUseRings = false;
-        if( xCTProp->getPropertyValue( C2U( "UseRings" )) >>= bUseRings )
+        if( xCTProp->getPropertyValue( "UseRings") >>= bUseRings )
         {
             bResult = ( bTemplateUsesRings == bUseRings );
         }
@@ -410,7 +410,7 @@ Reference< chart2::XChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_
         if( xCTProp.is())
         {
             xCTProp->setPropertyValue(
-                C2U( "UseRings" ), getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
+                "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
         }
 
     }
@@ -439,7 +439,7 @@ Reference< chart2::XChartType > SAL_CALL PieChartTypeTemplate::getChartTypeForNe
         if( xCTProp.is())
         {
             xCTProp->setPropertyValue(
-                C2U( "UseRings" ), getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
+                "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
         }
 
     }
@@ -480,7 +480,7 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
             double fOffsetToSet = fDefaultOffset;
 
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-            xProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList;
+            xProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList;
 
             // determine whether to set the new offset
             bool bSetOffset = ( ePieOffsetMode == chart2::PieChartOffsetMode_ALL_EXPLODED );
@@ -531,10 +531,10 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
         }
 
         // line style
-        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
 
         // vary colors by point
-        xProp->setPropertyValue( C2U("VaryColorsByPoint"), uno::makeAny( true ));
+        xProp->setPropertyValue( "VaryColorsByPoint", uno::makeAny( true ));
     }
     catch( const uno::Exception & ex )
     {
@@ -595,12 +595,12 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
         Reference< beans::XPropertyState > xState( *aIt, uno::UNO_QUERY );
         if( xState.is())
         {
-            xState->setPropertyToDefault( C2U("VaryColorsByPoint"));
+            xState->setPropertyToDefault( "VaryColorsByPoint");
             Reference< beans::XPropertySet > xProp( xState, uno::UNO_QUERY );
             if( xProp.is() &&
-                xProp->getPropertyValue( C2U("BorderStyle")) == aLineStyleAny )
+                xProp->getPropertyValue( "BorderStyle") == aLineStyleAny )
             {
-                xState->setPropertyToDefault( C2U("BorderStyle"));
+                xState->setPropertyToDefault( "BorderStyle");
             }
         }
     }
@@ -625,7 +625,7 @@ uno::Sequence< ::rtl::OUString > PieChartTypeTemplate::getSupportedServiceNames_
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
     return aServices;
 }
 

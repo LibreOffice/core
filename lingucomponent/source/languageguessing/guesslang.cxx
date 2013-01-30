@@ -56,21 +56,19 @@ using namespace ::com::sun::star::linguistic2;
 
 //==================================================================================================
 
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
-
 #define SERVICENAME     "com.sun.star.linguistic2.LanguageGuessing"
 #define IMPLNAME        "com.sun.star.lingu2.LanguageGuessing"
 
 static Sequence< OUString > getSupportedServiceNames_LangGuess_Impl()
 {
     Sequence<OUString> names(1);
-    names[0] = A2OU( SERVICENAME );
+    names[0] = SERVICENAME;
     return names;
 }
 
 static OUString getImplementationName_LangGuess_Impl()
 {
-    return A2OU( IMPLNAME );
+    return OUString( IMPLNAME );
 }
 
 static osl::Mutex &  GetLangGuessMutex()
@@ -200,8 +198,8 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
     {
         OString o( OUStringToOString( rText.copy(nStartPos, nLen), RTL_TEXTENCODING_UTF8 ) );
         Guess g = m_aGuesser.GuessPrimaryLanguage(o.getStr());
-        aRes.Language   = OUString::createFromAscii(g.GetLanguage().c_str());
-        aRes.Country    = OUString::createFromAscii(g.GetCountry().c_str());
+        aRes.Language   = OUString::createFromAscii( g.GetLanguage().c_str() );
+        aRes.Country    = OUString::createFromAscii( g.GetCountry().c_str() );
     }
     else
         throw lang::IllegalArgumentException();
@@ -241,8 +239,8 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
 
     for(size_t i = 0; i < gs.size() ; i++ ){
         com::sun::star::lang::Locale current_aRes;
-        current_aRes.Language   = A2OU( gs[i].GetLanguage().c_str() );
-        current_aRes.Country    = A2OU( gs[i].GetCountry().c_str() );
+        current_aRes.Language   = OUString::createFromAscii( gs[i].GetLanguage().c_str() );
+        current_aRes.Country    = OUString::createFromAscii( gs[i].GetCountry().c_str() );
         pRes[i] = current_aRes;
     }
 
@@ -265,8 +263,8 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
 
     for(size_t i = 0; i < gs.size() ; i++ ){
         com::sun::star::lang::Locale current_aRes;
-        current_aRes.Language   = A2OU( gs[i].GetLanguage().c_str() );
-        current_aRes.Country    = A2OU( gs[i].GetCountry().c_str() );
+        current_aRes.Language   = OUString::createFromAscii( gs[i].GetLanguage().c_str() );
+        current_aRes.Country    = OUString::createFromAscii( gs[i].GetCountry().c_str() );
         pRes[i] = current_aRes;
     }
 
@@ -289,8 +287,8 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
 
     for(size_t i = 0; i < gs.size() ; i++ ){
         com::sun::star::lang::Locale current_aRes;
-        current_aRes.Language   = A2OU( gs[i].GetLanguage().c_str() );
-        current_aRes.Country    = A2OU( gs[i].GetCountry().c_str() );
+        current_aRes.Language   = OUString::createFromAscii( gs[i].GetLanguage().c_str() );
+        current_aRes.Country    = OUString::createFromAscii( gs[i].GetCountry().c_str() );
         pRes[i] = current_aRes;
     }
 
@@ -354,7 +352,7 @@ OUString SAL_CALL LangGuess_Impl::getImplementationName(  )
     throw(RuntimeException)
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
-    return A2OU( IMPLNAME );
+    return OUString( IMPLNAME );
 }
 
 //*************************************************************************
@@ -381,7 +379,7 @@ Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames(  )
 //*************************************************************************
 Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames_Static(  )
 {
-    OUString aName( A2OU( SERVICENAME ) );
+    OUString aName( SERVICENAME );
     return Sequence< OUString >( &aName, 1 );
 }
 

@@ -58,8 +58,6 @@
 #include <unotools/configitem.hxx>
 #include <comphelper/componentcontext.hxx>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 /* HACK: disable some warnings for MS-C */
 #ifdef _MSC_VER
@@ -146,7 +144,7 @@ bool DigitalSignaturesDialog::isXML(const rtl::OUString& rURI )
         }
         if (DocumentSignatureHelper::equalsReferenceUriManifestPath(rURI, sPath))
         {
-            bIsXML = sMediaType.equals(OUSTR("text/xml")) && ! bEncrypted;
+            bIsXML = sMediaType.equals("text/xml") && ! bEncrypted;
             bPropsAvailable = true;
             break;
         }
@@ -272,10 +270,10 @@ void DigitalSignaturesDialog::SetStorage( const com::sun::star::uno::Reference <
 
     //Get the manifest.xml
     Reference < css::embed::XStorage > xSubStore(rxStore->openStorageElement(
-                OUSTR("META-INF"), css::embed::ElementModes::READ), UNO_QUERY_THROW);
+                "META-INF", css::embed::ElementModes::READ), UNO_QUERY_THROW);
 
     Reference< css::io::XInputStream > xStream(
-        xSubStore->openStreamElement(OUSTR("manifest.xml"), css::embed::ElementModes::READ),
+        xSubStore->openStreamElement("manifest.xml", css::embed::ElementModes::READ),
         UNO_QUERY_THROW);
 
     m_manifest = xReader->readManifestSequence(xStream);

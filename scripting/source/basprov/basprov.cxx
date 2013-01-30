@@ -258,7 +258,7 @@ namespace basprov
                 );
             }
 
-            ::rtl::OUString sDoc = OUSTR("vnd.sun.star.tdoc");
+            ::rtl::OUString sDoc = "vnd.sun.star.tdoc";
             if ( m_sScriptingContext.indexOf( sDoc  ) == 0 )
             {
                 xModel = MiscUtils::tDocUrlToModel(  m_sScriptingContext );
@@ -330,7 +330,7 @@ namespace basprov
             errorMsg = errorMsg.concat( scriptURI );
             throw provider::ScriptFrameworkErrorException(
                 errorMsg, Reference< XInterface >(),
-                scriptURI, OUSTR("Basic"),
+                scriptURI, "Basic",
                 provider::ScriptFrameworkErrorType::MALFORMED_URL );
         }
 
@@ -422,7 +422,7 @@ namespace basprov
             throw provider::ScriptFrameworkErrorException(
                 aMessage.makeStringAndClear(),
                 Reference< XInterface >(),
-                scriptURI, OUSTR("Basic"),
+                scriptURI, "Basic",
                 provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT );
         }
 

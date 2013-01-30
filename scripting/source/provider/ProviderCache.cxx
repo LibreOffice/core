@@ -174,9 +174,9 @@ ProviderCache::populateCache() throw ( RuntimeException )
     }
     catch ( const Exception &e )
     {
-        ::rtl::OUString temp = OUSTR(
-            "ProviderCache::populateCache: couldn't obtain XSingleComponentFactory for " );
-        temp = temp.concat( serviceName );
+        OUString temp =
+            "ProviderCache::populateCache: couldn't obtain XSingleComponentFactory for "
+            + serviceName;
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 }

@@ -123,7 +123,7 @@ void ThesDummy_Impl::GetCfgLocales()
     if (!pLocaleSeq)
     {
         SvtLinguConfig aCfg;
-        String  aNode( A2OU( "ServiceManager/ThesaurusList" ) );
+        String  aNode("ServiceManager/ThesaurusList");
         Sequence < OUString > aNodeNames( aCfg.GetNodeNames( aNode ) );
         const OUString *pNodeNames = aNodeNames.getConstArray();
         sal_Int32 nLen = aNodeNames.getLength();
@@ -634,7 +634,7 @@ uno::Reference< XDictionaryList > LinguMgr::GetDicList()
 
     uno::Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
     xDicList = uno::Reference< XDictionaryList > ( xMgr->createInstance(
-                A2OU("com.sun.star.linguistic2.DictionaryList") ), UNO_QUERY );
+                "com.sun.star.linguistic2.DictionaryList" ), UNO_QUERY );
     return xDicList;
 }
 
@@ -648,7 +648,7 @@ uno::Reference< XPropertySet > LinguMgr::GetProp()
 
     uno::Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
     xProp = uno::Reference< XPropertySet > ( xMgr->createInstance(
-                A2OU("com.sun.star.linguistic2.LinguProperties") ), UNO_QUERY );
+                "com.sun.star.linguistic2.LinguProperties" ), UNO_QUERY );
     return xProp;
 }
 
@@ -664,7 +664,7 @@ uno::Reference< XDictionary > LinguMgr::GetIgnoreAll()
     if (xTmpDicList.is())
     {
         xIgnoreAll = uno::Reference< XDictionary > ( xTmpDicList->getDictionaryByName(
-                    A2OU("IgnoreAllList") ), UNO_QUERY );
+                    "IgnoreAllList" ), UNO_QUERY );
     }
     return xIgnoreAll;
 }
@@ -682,7 +682,7 @@ uno::Reference< XDictionary > LinguMgr::GetChangeAll()
     {
         xChangeAll = uno::Reference< XDictionary > (
                         _xDicList->createDictionary(
-                            A2OU("ChangeAllList"),
+                            "ChangeAllList",
                             LanguageTag( LANGUAGE_NONE ).getLocale(),
                             DictionaryType_NEGATIVE, String() ), UNO_QUERY );
     }

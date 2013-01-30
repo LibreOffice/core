@@ -139,7 +139,7 @@ private:
 
 inline OUString Hyphenator::getImplementationName_Static() throw()
 {
-    return A2OU( "org.openoffice.lingu.LibHnjHyphenator" );
+    return OUString( "org.openoffice.lingu.LibHnjHyphenator" );
 }
 
 

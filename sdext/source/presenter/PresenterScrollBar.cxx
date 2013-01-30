@@ -40,8 +40,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(pString))
-
 const static double gnScrollBarGap (10);
 
 namespace sdext { namespace presenter {
@@ -777,14 +775,14 @@ void PresenterVerticalScrollBar::UpdateBitmaps (void)
 {
     if (mpBitmaps.get() != NULL)
     {
-        mpPrevButtonDescriptor = mpBitmaps->GetBitmap(A2S("Up"));
-        mpNextButtonDescriptor = mpBitmaps->GetBitmap(A2S("Down"));
-        mpPagerStartDescriptor = mpBitmaps->GetBitmap(A2S("PagerTop"));
-        mpPagerCenterDescriptor = mpBitmaps->GetBitmap(A2S("PagerVertical"));
-        mpPagerEndDescriptor = mpBitmaps->GetBitmap(A2S("PagerBottom"));
-        mpThumbStartDescriptor = mpBitmaps->GetBitmap(A2S("ThumbTop"));
-        mpThumbCenterDescriptor = mpBitmaps->GetBitmap(A2S("ThumbVertical"));
-        mpThumbEndDescriptor = mpBitmaps->GetBitmap(A2S("ThumbBottom"));
+        mpPrevButtonDescriptor = mpBitmaps->GetBitmap("Up");
+        mpNextButtonDescriptor = mpBitmaps->GetBitmap("Down");
+        mpPagerStartDescriptor = mpBitmaps->GetBitmap("PagerTop");
+        mpPagerCenterDescriptor = mpBitmaps->GetBitmap("PagerVertical");
+        mpPagerEndDescriptor = mpBitmaps->GetBitmap("PagerBottom");
+        mpThumbStartDescriptor = mpBitmaps->GetBitmap("ThumbTop");
+        mpThumbCenterDescriptor = mpBitmaps->GetBitmap("ThumbVertical");
+        mpThumbEndDescriptor = mpBitmaps->GetBitmap("ThumbBottom");
 
         mnScrollBarWidth = 0;
         UpdateWidthOrHeight(mnScrollBarWidth, mpPrevButtonDescriptor);

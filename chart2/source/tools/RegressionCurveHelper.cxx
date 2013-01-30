@@ -53,20 +53,20 @@ OUString lcl_getServiceNameForType( ::chart::RegressionCurveHelper::tRegressionT
     switch( eType )
     {
         case ::chart::RegressionCurveHelper::REGRESSION_TYPE_LINEAR:
-            aServiceName = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
+            aServiceName = "com.sun.star.chart2.LinearRegressionCurve";
             break;
         case ::chart::RegressionCurveHelper::REGRESSION_TYPE_LOG:
-            aServiceName = C2U( "com.sun.star.chart2.LogarithmicRegressionCurve" );
+            aServiceName = "com.sun.star.chart2.LogarithmicRegressionCurve";
             break;
         case ::chart::RegressionCurveHelper::REGRESSION_TYPE_EXP:
-            aServiceName = C2U( "com.sun.star.chart2.ExponentialRegressionCurve" );
+            aServiceName = "com.sun.star.chart2.ExponentialRegressionCurve";
             break;
         case ::chart::RegressionCurveHelper::REGRESSION_TYPE_POWER:
-            aServiceName = C2U( "com.sun.star.chart2.PotentialRegressionCurve" );
+            aServiceName = "com.sun.star.chart2.PotentialRegressionCurve";
             break;
         default:
             OSL_FAIL("unknown regression curve type - use linear instead");
-            aServiceName = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
+            aServiceName = "com.sun.star.chart2.LinearRegressionCurve";
             break;
     }
     return aServiceName;
@@ -250,7 +250,7 @@ bool RegressionCurveHelper::isMeanValueLine(
     uno::Reference< XServiceName > xServName( xRegCurve, uno::UNO_QUERY );
     if( xServName.is() &&
         xServName->getServiceName().equals(
-            C2U( "com.sun.star.chart2.MeanValueRegressionCurve" )))
+            "com.sun.star.chart2.MeanValueRegressionCurve"))
         return true;
     return false;
 }
@@ -298,8 +298,8 @@ void RegressionCurveHelper::addMeanValueLine(
         uno::Reference< XPropertySet > xProp( xCurve, uno::UNO_QUERY );
         if( xProp.is())
         {
-            xProp->setPropertyValue( C2U( "LineColor" ),
-                                     xSeriesProp->getPropertyValue( C2U( "Color" )));
+            xProp->setPropertyValue( "LineColor",
+                                     xSeriesProp->getPropertyValue( "Color"));
         }
     }
 }
@@ -371,10 +371,10 @@ void RegressionCurveHelper::addRegressionCurve(
                 uno::Reference< XPropertySet > xSeriesProp( xRegCnt, uno::UNO_QUERY );
                 if( xSeriesProp.is())
                 {
-                    xProp->setPropertyValue( C2U( "LineColor" ),
-                                             xSeriesProp->getPropertyValue( C2U( "Color" )));
+                    xProp->setPropertyValue( "LineColor",
+                                             xSeriesProp->getPropertyValue( "Color"));
                 }
-//                 xProp->setPropertyValue( C2U( "LineWidth" ), uno::makeAny( sal_Int32( 100 )));
+//                 xProp->setPropertyValue( "LineWidth", uno::makeAny( sal_Int32( 100 )));
             }
         }
     }
@@ -437,8 +437,8 @@ void RegressionCurveHelper::removeEquations(
                         uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties() ) ;
                         if( xEqProp.is())
                         {
-                            xEqProp->setPropertyValue( C2U("ShowEquation"), uno::makeAny( false ));
-                            xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( false ));
+                            xEqProp->setPropertyValue( "ShowEquation", uno::makeAny( false ));
+                            xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( false ));
                         }
                     }
                 }
@@ -669,8 +669,8 @@ bool RegressionCurveHelper::hasEquation( const Reference< chart2::XRegressionCur
         {
             bool bShowEquation = false;
             bool bShowCoefficient = false;
-            xEquationProp->getPropertyValue( C2U("ShowEquation")) >>= bShowEquation;
-            xEquationProp->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCoefficient;
+            xEquationProp->getPropertyValue( "ShowEquation") >>= bShowEquation;
+            xEquationProp->getPropertyValue( "ShowCorrelationCoefficient") >>= bShowCoefficient;
             bHasEquation = bShowEquation || bShowCoefficient;
         }
     }

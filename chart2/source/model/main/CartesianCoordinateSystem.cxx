@@ -91,7 +91,7 @@ Sequence< OUString > CartesianCoordinateSystem::getSupportedServiceNames_Static(
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( CartesianCoordinateSystem,
-                             C2U( "com.sun.star.comp.chart.CartesianCoordinateSystem" ))
+                             OUString("com.sun.star.comp.chart.CartesianCoordinateSystem"))
 
 
 // =================================

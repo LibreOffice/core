@@ -44,8 +44,6 @@
 
 #include <memory>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 using namespace osl;
 using namespace com::sun::star;
@@ -666,7 +664,7 @@ IPropertyArrayHelper & ORegistryFactoryHelper::getInfoHelper()
     if (m_property_array_helper.get() == 0)
     {
         beans::Property prop(
-            OUSTR("ImplementationKey") /* name */,
+            "ImplementationKey" /* name */,
             0 /* handle */,
             ::getCppuType( &xImplementationKey ),
             beans::PropertyAttribute::READONLY |
@@ -692,7 +690,7 @@ void ORegistryFactoryHelper::setFastPropertyValue_NoBroadcast(
     throw (Exception)
 {
     throw beans::PropertyVetoException(
-        OUSTR("unexpected: only readonly properties!"),
+        "unexpected: only readonly properties!",
         static_cast< OWeakObject * >(this) );
 }
 
@@ -708,7 +706,7 @@ void ORegistryFactoryHelper::getFastPropertyValue(
     {
         rValue.clear();
         throw beans::UnknownPropertyException(
-            OUSTR("unknown property!"), static_cast< OWeakObject * >(
+            "unknown property!", static_cast< OWeakObject * >(
                 const_cast< ORegistryFactoryHelper * >(this) ) );
     }
 }
