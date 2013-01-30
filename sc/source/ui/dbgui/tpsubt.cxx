@@ -275,7 +275,7 @@ void ScTpSubTotalGroup::FillListBoxes()
         sal_uInt16 i=0;
         for ( col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
         {
-            pDoc->GetString( col, nFirstRow, nTab, aFieldName );
+            aFieldName = pDoc->GetString(col, nFirstRow, nTab);
             if ( aFieldName.isEmpty() )
             {
                 rtl::OUStringBuffer aBuf;

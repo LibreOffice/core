@@ -170,9 +170,8 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
         {
-            String aDisplText;
-            rDoc.GetString( nScCol, nScRow, nScTab, aDisplText );
-            if( !aDisplText.Len() )
+            OUString aDisplText = rDoc.GetString(nScCol, nScRow, nScTab);
+            if (aDisplText.isEmpty())
                 aDisplText = rUrl;
 
             ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();

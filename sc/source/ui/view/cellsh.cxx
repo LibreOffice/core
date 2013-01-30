@@ -628,8 +628,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_RANGE_TEXTVALUE:
                 {
-                    String aString;
-                    pDoc->GetString( nPosX, nPosY, nTab, aString );
+                    OUString aString = pDoc->GetString(nPosX, nPosY, nTab);
                     rSet.Put( SfxStringItem( nWhich, aString ) );
                 }
                 break;

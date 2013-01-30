@@ -1940,7 +1940,7 @@ void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     for (nRow=nStartRow; nRow<=nEndRow; nRow++)
         for (nCol=nStartCol; nCol<=nEndCol; nCol++)
         {
-            GetString(nCol,nRow,nTab,aCellStr);
+            aCellStr = GetString(nCol, nRow, nTab);
             if (!aCellStr.isEmpty())
             {
                 if (aTotal.getLength())

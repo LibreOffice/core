@@ -366,7 +366,7 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
 
     if (eCellType == CELLTYPE_STRING)
     {
-        pDoc->GetString(nCol, nRow, nTab, sOldText);
+        sOldText = pDoc->GetString(nCol, nRow, nTab);
         pThesaurusEngine->SetText(sOldText);
     }
     else if (eCellType == CELLTYPE_EDIT)

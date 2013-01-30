@@ -528,7 +528,7 @@ void lcl_GetColumnTypes(
         // Typ etc.: L; D; C[,W]; N[,W[,P]]
         if ( bHasFieldNames )
         {
-            pDoc->GetString( nCol, nFirstRow, nTab, aString );
+            aString = pDoc->GetString(nCol, nFirstRow, nTab);
             aString.ToUpperAscii();
             xub_StrLen nToken = comphelper::string::getTokenCount(aString, ',');
             if ( nToken > 1 )
@@ -997,7 +997,7 @@ sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet e
                         break;
 
                     case sdbc::DataType::VARCHAR:
-                        aDocument.GetString( nDocCol, nDocRow, nTab, aString );
+                        aString = aDocument.GetString(nDocCol, nDocRow, nTab);
                         xRowUpdate->updateString( nCol+1, aString );
                         if ( nErr == eERR_OK && pColLengths[nCol] < aString.getLength() )
                             nErr = SCWARN_EXPORT_DATALOST;
@@ -1107,7 +1107,7 @@ sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet e
                         break;
 
                     case sdbc::DataType::VARCHAR:
-                        aDocument.GetString( nDocCol, nDocRow, nTab, aString);
+                        aString = aDocument.GetString(nDocCol, nDocRow, nTab);
                         break;
 
                     // NOTE: length of DECIMAL fields doesn't need to be

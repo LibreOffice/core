@@ -1253,7 +1253,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
                             sal_True );
                 }
                 else
-                    rDoc.GetString( nCol, nRow, nTab, sText );
+                    sText = rDoc.GetString(nCol, nRow, nTab);
                 bContLoop = Append( static_cast<sal_uInt16>(nCol),
                         static_cast<sal_uInt16>(nRow), sText );
             }

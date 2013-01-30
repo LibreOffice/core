@@ -271,7 +271,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         {
             OUString aString, aColStr;
             if (HasColHeaders())
-                pDocument->GetString( aCols[nCol], nStrRow, nTab1, aString );
+                aString = pDocument->GetString(aCols[nCol], nStrRow, nTab1);
             if (aString.isEmpty())
             {
                 OUStringBuffer aBuf;
@@ -297,7 +297,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             if (HasRowHeaders())
             {
                 ScAddress aAddr( nStrCol, aRows[nRow], nTab1 );
-                pDocument->GetString( nStrCol, aRows[nRow], nTab1, aString );
+                aString = pDocument->GetString(nStrCol, aRows[nRow], nTab1);
             }
             if (aString.isEmpty())
             {
@@ -430,8 +430,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             OUString aString, aColStr;
             const ScAddress* pPos = GetPositionMap()->GetColHeaderPosition( static_cast<SCCOL>(nCol) );
             if ( HasColHeaders() && pPos )
-                pDocument->GetString(
-                    pPos->Col(), pPos->Row(), pPos->Tab(), aString );
+                aString = pDocument->GetString(pPos->Col(), pPos->Row(), pPos->Tab());
 
             if (aString.isEmpty())
             {
@@ -459,10 +458,8 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             OUString aString;
             const ScAddress* pPos = GetPositionMap()->GetRowHeaderPosition( nRow );
             if ( HasRowHeaders() && pPos )
-            {
-                pDocument->GetString(
-                    pPos->Col(), pPos->Row(), pPos->Tab(), aString );
-            }
+                aString = pDocument->GetString(pPos->Col(), pPos->Row(), pPos->Tab());
+
             if (aString.isEmpty())
             {
                 OUStringBuffer aBuf(ScGlobal::GetRscString(STR_ROW));

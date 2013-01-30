@@ -369,7 +369,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
 
                 for ( col=nFirstSortCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
                 {
-                    pDoc->GetString( col, nFirstSortRow, nTab, aFieldName );
+                    aFieldName = pDoc->GetString(col, nFirstSortRow, nTab);
                     if ( !bHasHeader || aFieldName.isEmpty() )
                     {
                         rtl::OUStringBuffer aBuf;
@@ -392,7 +392,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
 
                 for ( row=nFirstSortRow; row<=nMaxRow && i<SC_MAXFIELDS; row++ )
                 {
-                    pDoc->GetString( nFirstSortCol, row, nTab, aFieldName );
+                    aFieldName = pDoc->GetString(nFirstSortCol, row, nTab);
                     if ( !bHasHeader || aFieldName.isEmpty() )
                     {
                         rtl::OUStringBuffer aBuf;

@@ -1229,8 +1229,7 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
                 long nPosY = aScrPos.Y();
                 // bLayoutRTL is handled in setBoundingBox
 
-                String aStr;
-                pDoc->GetString(nCol, nRow, nTab, aStr);
+                OUString aStr = pDoc->GetString(nCol, nRow, nTab);
                 aCellBtn.setText(aStr);
                 aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1), bLayoutRTL);
                 aCellBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now

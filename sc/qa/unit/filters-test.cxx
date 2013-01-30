@@ -346,12 +346,11 @@ void testContentImpl(ScDocument* pDoc, sal_Int32 nFormat ) //same code for ods, 
     CPPUNIT_ASSERT_MESSAGE("value not imported correctly", fValue == 1);
     pDoc->GetValue(0,1,0,fValue);
     CPPUNIT_ASSERT_MESSAGE("value not imported correctly", fValue == 2);
-    rtl::OUString aString;
-    pDoc->GetString(1,0,0,aString);
+    OUString aString = pDoc->GetString(1, 0, 0);
 
     //check string import
     CPPUNIT_ASSERT_MESSAGE("string imported not correctly", aString == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("String1")));
-    pDoc->GetString(1,1,0,aString);
+    aString = pDoc->GetString(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("string not imported correctly", aString == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("String2")));
 
     //check basic formula import

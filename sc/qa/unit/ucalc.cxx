@@ -347,8 +347,7 @@ void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
     {
         for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         {
-            rtl::OUString aVal;
-            pDoc->GetString(nCol, nRow, rRange.aStart.Tab(), aVal);
+            rtl::OUString aVal = pDoc->GetString(nCol, nRow, rRange.aStart.Tab());
             printer.set(nRow-nRow1, nCol-nCol1, aVal);
         }
     }
@@ -475,11 +474,11 @@ void Test::testInput()
     OUString test;
 
     m_pDoc->SetString(0, 0, 0, numstr);
-    m_pDoc->GetString(0, 0, 0, test);
+    test = m_pDoc->GetString(0, 0, 0);
     bool bTest = test == "10.5";
     CPPUNIT_ASSERT_MESSAGE("String number should have the first apostrophe stripped.", bTest);
     m_pDoc->SetString(0, 0, 0, str);
-    m_pDoc->GetString(0, 0, 0, test);
+    test = m_pDoc->GetString(0, 0, 0);
     bTest = test == "'apple'";
     CPPUNIT_ASSERT_MESSAGE("Text content should have retained the first apostrophe.", bTest);
 
@@ -489,7 +488,7 @@ void Test::testInput()
     aParam.meSetTextNumFormat = ScSetStringParam::Always;
     aParam.mbHandleApostrophe = false;
     m_pDoc->SetString(0, 0, 0, "000123", &aParam);
-    m_pDoc->GetString(0, 0, 0, test);
+    test = m_pDoc->GetString(0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Text content should have been treated as string, not number.", test == "000123");
 
     m_pDoc->DeleteTab(0);
@@ -744,9 +743,8 @@ void testFuncIFERROR(ScDocument* pDoc)
 
     for (SCROW i = 0; i < nRows; ++i)
     {
-        rtl::OUString aResult;
         SCROW nRow = 20 + i;
-        pDoc->GetString(0, nRow, 0, aResult);
+        OUString aResult = pDoc->GetString(0, nRow, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             aChecks[i].pFormula, OUString::createFromAscii( aChecks[i].pResult), aResult);
     }
@@ -827,8 +825,7 @@ void testFuncVLOOKUP(ScDocument* pDoc)
             // Skip the header row.
             continue;
 
-        rtl::OUString aRes;
-        pDoc->GetString(4, i, 0, aRes);
+        OUString aRes = pDoc->GetString(4, i, 0);
         bool bGood = aRes.equalsAscii(aChecks[i].pRes);
         if (!bGood)
         {
@@ -878,8 +875,7 @@ void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aC
     // verify the results.
     for (size_t i = 0; i < _FormulaSize; ++i)
     {
-        rtl::OUString aStr;
-        pDoc->GetString(2, i, 0, aStr);
+        OUString aStr = pDoc->GetString(2, i, 0);
         if (!aStr.equalsAscii(aChecks[i].pRes))
         {
             cerr << "row " << (i+1) << ": expected='" << aChecks[i].pRes << "' actual='" << aStr << "'"
@@ -1761,8 +1757,7 @@ bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* 
     {
         for (SCCOL nCol = 0; nCol < nOutColSize; ++nCol)
         {
-            OUString aVal;
-            pDoc->GetString(nCol + s.Col(), nRow + s.Row(), s.Tab(), aVal);
+            OUString aVal = pDoc->GetString(nCol + s.Col(), nRow + s.Row(), s.Tab());
             printer.set(nRow, nCol, aVal);
             const char* p = aOutputCheck[nRow][nCol];
             if (p)
@@ -3960,10 +3955,9 @@ void Test::testExternalRef()
 
     // Test external refernces on the main document while the external
     // document is still in memory.
-    OUString test;
     m_pDoc->InsertTab(0, OUString("Test Sheet"));
     m_pDoc->SetString(0, 0, 0, OUString("='file:///extdata.fake'#Data1.A1"));
-    m_pDoc->GetString(0, 0, 0, test);
+    OUString test = m_pDoc->GetString(0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Value is different from the original", test.equals(name));
 
     // After the initial access to the external document, the external ref
@@ -3980,7 +3974,7 @@ void Test::testExternalRef()
     CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[2].equals(aExtSh3Name));
 
     m_pDoc->SetString(1, 0, 0, OUString("='file:///extdata.fake'#Data1.B1"));
-    m_pDoc->GetString(1, 0, 0, test);
+    test = m_pDoc->GetString(1, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Value is different from the original", test.equals(value));
 
     m_pDoc->SetString(0, 1, 0, OUString("='file:///extdata.fake'#Data1.A2"));
@@ -3994,7 +3988,7 @@ void Test::testExternalRef()
         const char* pChecks[] = { "Andy", "Bruce", "Charlie", "David", "0" };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
         {
-            m_pDoc->GetString(0, static_cast<SCROW>(i+1), 0, test);
+            test = m_pDoc->GetString(0, static_cast<SCROW>(i+1), 0);
             CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", test.equalsAscii(pChecks[i]));
         }
     }
@@ -4020,7 +4014,7 @@ void Test::testExternalRef()
         const char* pChecks[] = { "Name", "Edward", "Frank", "George" };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
         {
-            m_pDoc->GetString(2, static_cast<SCROW>(i), 0, test);
+            test = m_pDoc->GetString(2, static_cast<SCROW>(i), 0);
             CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", test.equalsAscii(pChecks[i]));
         }
     }
@@ -4033,7 +4027,7 @@ void Test::testExternalRef()
         const char* pChecks[] = { "Value", "99", "98", "97" };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
         {
-            m_pDoc->GetString(3, static_cast<SCROW>(i), 0, test);
+            test = m_pDoc->GetString(3, static_cast<SCROW>(i), 0);
             CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", test.equalsAscii(pChecks[i]));
         }
     }
@@ -4202,9 +4196,9 @@ void Test::testStreamValid()
     // Put values into Sheet1.
     m_pDoc->SetString(0, 0, 0, a1);
     m_pDoc->SetString(0, 1, 0, a2);
-    m_pDoc->GetString(0, 0, 0, test);
+    test = m_pDoc->GetString(0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet1.A1", test.equals(a1));
-    m_pDoc->GetString(0, 1, 0, test);
+    test = m_pDoc->GetString(0, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet1.A2", test.equals(a2));
 
     // Put formulas into Sheet2 to Sheet4 to reference values from Sheet1.
@@ -4213,13 +4207,13 @@ void Test::testStreamValid()
     m_pDoc->SetString(0, 0, 2, OUString("=Sheet1.A1"));
     m_pDoc->SetString(0, 0, 3, OUString("=Sheet1.A2"));
 
-    m_pDoc->GetString(0, 0, 1, test);
+    test = m_pDoc->GetString(0, 0, 1);
     CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet2.A1", test.equals(a1));
-    m_pDoc->GetString(0, 1, 1, test);
+    test = m_pDoc->GetString(0, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet2.A2", test.equals(a2));
-    m_pDoc->GetString(0, 0, 2, test);
+    test = m_pDoc->GetString(0, 0, 2);
     CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet3.A1", test.equals(a1));
-    m_pDoc->GetString(0, 0, 3, test);
+    test = m_pDoc->GetString(0, 0, 3);
     CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet3.A1", test.equals(a2));
 
     // Set all sheet streams valid after all the initial cell values are in
@@ -4237,9 +4231,9 @@ void Test::testStreamValid()
     // Now, insert a new row at row 2 position on Sheet1.  This will move cell
     // A2 downward but cell A1 remains unmoved.
     m_pDoc->InsertRow(0, 0, MAXCOL, 0, 1, 2);
-    m_pDoc->GetString(0, 0, 0, test);
+    test = m_pDoc->GetString(0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Cell A1 should not have moved.", test.equals(a1));
-    m_pDoc->GetString(0, 3, 0, test);
+    test = m_pDoc->GetString(0, 3, 0);
     CPPUNIT_ASSERT_MESSAGE("the old cell A2 should now be at A4.", test.equals(a2));
     const ScBaseCell* pCell = m_pDoc->GetCell(ScAddress(0, 1, 0));
     CPPUNIT_ASSERT_MESSAGE("Cell A2 should be empty.", pCell == NULL);
@@ -5119,13 +5113,13 @@ void Test::testCopyPaste()
     pUndo->Undo();
     m_pDoc->GetValue(1,1,1, aValue);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", aValue, 0);
-    m_pDoc->GetString(2,1,1, aString);
+    aString = m_pDoc->GetString(2, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("after undo string should be removed", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
 
     pUndo->Redo();
     m_pDoc->GetValue(1,1,1, aValue);
     ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", aValue, 2);
-    m_pDoc->GetString(2,1,1, aString);
+    aString = m_pDoc->GetString(2, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.C2 should contain: test", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test")));
     m_pDoc->GetFormula(1,1,1, aString);
     CPPUNIT_ASSERT_MESSAGE("Formula should be correct again", aString == aFormulaString);
@@ -5745,8 +5739,7 @@ void Test::testSortWithFormulaRefs()
     nEnd = SAL_N_ELEMENTS( aResults );
     for ( SCROW i = nStart; i < nEnd; ++i )
     {
-        rtl::OUString sResult;
-        pDoc->GetString( 0, i + 1, 0, sResult );
+        OUString sResult = pDoc->GetString( 0, i + 1, 0);
         CPPUNIT_ASSERT_EQUAL( rtl::OUString::createFromAscii( aResults[ i ] ), sResult );
     }
     pDoc->DeleteTab(0);

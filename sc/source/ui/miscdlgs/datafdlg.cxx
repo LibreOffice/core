@@ -86,11 +86,10 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
             //find last not blank cell in row
             for (int i=1;i<=MAX_DATAFORM_COLS;i++)
             {
-                String  aColName;
                 nEndCol++;
-                pDoc->GetString( nEndCol, nStartRow, nTab, aColName );
+                OUString aColName = pDoc->GetString(nEndCol, nStartRow, nTab);
                 int nColWidth = pDoc->GetColWidth( nEndCol, nTab );
-                if ( aColName.Len() == 0 && nColWidth)
+                if (aColName.isEmpty() && nColWidth)
                 {
                     nEndCol--;
                     break;
@@ -100,14 +99,13 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
             //find first not blank cell in row
             for (int i=1;i<=MAX_DATAFORM_COLS;i++)
             {
-                String  aColName;
                 if (nStartCol <= 0)
                     break;
                 nStartCol--;
 
-                pDoc->GetString( nStartCol, nStartRow, nTab, aColName );
+                OUString aColName = pDoc->GetString(nStartCol, nStartRow, nTab);
                 int nColWidth = pDoc->GetColWidth( nEndCol, nTab );
-                if ( aColName.Len() == 0 && nColWidth)
+                if (aColName.isEmpty() && nColWidth)
                 {
                     nStartCol++;
                     break;
@@ -129,10 +127,9 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
             //find last not blank cell in row
             for (int i=1;i<=MAX_DATAFORM_ROWS;i++)
             {
-                String  aColName;
                 nEndRow++;
-                pDoc->GetString( nStartCol, nEndRow, nTab, aColName );
-                if ( aColName.Len() == 0 )
+                OUString aColName = pDoc->GetString(nStartCol, nEndRow, nTab);
+                if (aColName.isEmpty())
                 {
                     nEndRow--;
                     break;
@@ -142,13 +139,12 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
             //find first not blank cell in row
             for (int i=1;i<=MAX_DATAFORM_ROWS;i++)
             {
-                String  aColName;
                 if (nStartRow <= 0)
                     break;
                 nStartRow--;
 
-                pDoc->GetString( nStartCol, nStartRow, nTab, aColName );
-                if ( aColName.Len() == 0 )
+                OUString aColName = pDoc->GetString(nStartCol, nStartRow, nTab);
+                if (aColName.isEmpty())
                 {
                     nStartRow++;
                     break;
@@ -181,7 +177,7 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
 
         for(sal_uInt16 nIndex = 0; nIndex < aColLength; nIndex++)
         {
-            pDoc->GetString( nIndex + nStartCol, nStartRow, nTab, aFieldName );
+            aFieldName = pDoc->GetString(nIndex + nStartCol, nStartRow, nTab);
             int nColWidth = pDoc->GetColWidth( nIndex + nStartCol, nTab );
             if (nColWidth)
             {
@@ -253,7 +249,7 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
         {
             if (nCurrentRow<=nEndRow)
             {
-                pDoc->GetString( i + nStartCol, nCurrentRow, nTab, aFieldName );
+                aFieldName = pDoc->GetString(i + nStartCol, nCurrentRow, nTab);
                 maEdits[i].SetText(aFieldName);
             }
             else

@@ -258,13 +258,13 @@ static void lcl_Indent( ScDocument* pDoc, SCROW nStartRow, const ScAddress& rPos
     SCCOL nCol = rPos.Col();
     SCTAB nTab = rPos.Tab();
 
-    String aString;
+    OUString aString;
     for (SCROW nRow = nStartRow; nRow < rPos.Row(); nRow++)
     {
-        pDoc->GetString( nCol, nRow, nTab, aString );
-        if ( aString.Len() )
+        aString = pDoc->GetString(nCol, nRow, nTab);
+        if (!aString.isEmpty())
         {
-            aString.InsertAscii( "  ", 0 );
+            aString = " " + aString;
             pDoc->SetString( nCol, nRow, nTab, aString );
         }
     }

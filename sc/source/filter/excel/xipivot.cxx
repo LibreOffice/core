@@ -1479,8 +1479,7 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
         rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), SC_MF_BUTTON);
 
         sal_uInt16 nMFlag = SC_MF_BUTTON_POPUP;
-        rtl::OUString aName;
-        rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
+        rtl::OUString aName = rDoc.GetString(itr->Col(), itr->Row(), itr->Tab());
         if (rSaveData.HasInvisibleMember(aName))
             nMFlag |= SC_MF_HIDDEN_MEMBER;
 

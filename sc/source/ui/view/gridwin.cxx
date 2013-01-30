@@ -1101,8 +1101,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     else                                                // AutoFilter
     {
         //! wird der Titel ueberhaupt ausgewertet ???
-        String aString;
-        pDoc->GetString( nCol, nRow, nTab, aString );
+        OUString aString = pDoc->GetString(nCol, nRow, nTab);
         pFilterBox->SetText( aString );
 
         long nMaxText = 0;
@@ -1238,8 +1237,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
             if (pData)
             {
                 ScTypedStrData* pNew = NULL;
-                rtl::OUString aDocStr;
-                pDoc->GetString( nCol, nRow, nTab, aDocStr );
+                OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
                 if ( pDoc->HasValueData( nCol, nRow, nTab ) )
                 {
                     double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nTab));

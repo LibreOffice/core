@@ -2948,20 +2948,16 @@ void ScDocument::SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVa
             maTabs[nTab]->SetValue( nCol, nRow, rVal );
 }
 
-
-void ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString )
+OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    if ( VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        maTabs[nTab]->GetString( nCol, nRow, rString );
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    {
+        OUString aStr;
+        maTabs[nTab]->GetString(nCol, nRow, aStr);
+        return aStr;
+    }
     else
-        rString = rtl::OUString();
-}
-
-void ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString )
-{
-    rtl::OUString aString;
-    GetString( nCol, nRow, nTab, aString);
-    rString = aString;
+        return EMPTY_OUSTRING;
 }
 
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString )

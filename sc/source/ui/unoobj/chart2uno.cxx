@@ -2603,11 +2603,7 @@ void ScChart2DataSequence::BuildDataCache()
                         if (pCell->HasStringData())
                             rItem.maString = pCell->GetStringData();
                         else
-                        {
-                            String aStr;
-                            m_pDocument->GetString(nCol, nRow, nTab, aStr);
-                            rItem.maString = aStr;
-                        }
+                            rItem.maString = m_pDocument->GetString(nCol, nRow, nTab);
 
                         switch (pCell->GetCellType())
                         {

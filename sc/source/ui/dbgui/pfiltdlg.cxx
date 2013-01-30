@@ -291,7 +291,7 @@ void ScPivotFilterDlg::FillFieldLists()
 
         for ( col=nFirstCol; col<=nMaxCol; col++ )
         {
-            pDoc->GetString( col, nFirstRow, nTab, aFieldName );
+            aFieldName = pDoc->GetString(col, nFirstRow, nTab);
             if ( aFieldName.isEmpty() )
             {
                rtl::OUStringBuffer aBuf;

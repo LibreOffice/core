@@ -398,7 +398,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
                 {
                     if ( pDoc->HasStringData( col, row, nTab ) )
                     {
-                        pDoc->GetString( col, row, nTab, aStrField );
+                        aStrField = pDoc->GetString(col, row, nTab);
 
                         if ( aStrField.Len() > 0 )
                         {
@@ -422,7 +422,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
                 {
                     if ( pDoc->HasStringData( col, row, nTab ) )
                     {
-                        pDoc->GetString( col, row, nTab, aStrField );
+                        aStrField = pDoc->GetString(col, row, nTab);
 
                         if ( aStrField.Len() > 0 )
                         {

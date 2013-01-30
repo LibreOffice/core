@@ -1604,7 +1604,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         }
                         else
                         {
-                            pDoc->GetString( nCol, nRow, nStartTab, aCell );
+                            aCell = pDoc->GetString(nCol, nRow, nStartTab);
 
                             bool bMultiLineText = ( aCell.Search( _LF ) != STRING_NOTFOUND );
                             if( bMultiLineText )
@@ -1627,7 +1627,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     break;
                     case CELLTYPE_VALUE:
                     {
-                        pDoc->GetString( nCol, nRow, nStartTab, aCell );
+                        aCell = pDoc->GetString(nCol, nRow, nStartTab);
                         lcl_WriteSimpleString( rStrm, aCell );
                     }
                     break;
@@ -1636,7 +1636,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     break;
                     default:
                     {
-                        pDoc->GetString( nCol, nRow, nStartTab, aCell );
+                        aCell = pDoc->GetString(nCol, nRow, nStartTab);
 
                         bool bMultiLineText = ( aCell.Search( _LF ) != STRING_NOTFOUND );
                         if( bMultiLineText )
@@ -1982,7 +1982,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                 case CELLTYPE_STRING:
                 case CELLTYPE_EDIT:
                 hasstring:
-                    pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCellStr );
+                    aCellStr = pDoc->GetString(nCol, nRow, aRange.aStart.Tab());
                     aCellStr.SearchAndReplaceAll( rtl::OUString(_LF), rtl::OUString(SYLK_LF) );
 
                     aBufStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "C;X" ));

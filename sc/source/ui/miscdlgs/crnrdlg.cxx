@@ -526,12 +526,12 @@ void ScColRowNameRangesDlg::UpdateNames()
             strShow.AssignAscii(RTL_CONSTASCII_STRINGPARAM(" ["));
             if(pDoc!=NULL)
             {
-                pDoc->GetString(nCol1, nRow1, nTab1,rString);
+                rString = pDoc->GetString(nCol1, nRow1, nTab1);
                 strShow +=rString;
                 for(SCCOL i=nCol1+1;i<=q;i++)
                 {
                     strShow.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-                    pDoc->GetString(i, nRow1, nTab1,rString);
+                    rString = pDoc->GetString(i, nRow1, nTab1);
                     strShow += rString;
                 }
             }
@@ -572,12 +572,12 @@ void ScColRowNameRangesDlg::UpdateNames()
             strShow.AssignAscii(RTL_CONSTASCII_STRINGPARAM(" ["));
             if(pDoc!=NULL)
             {
-                pDoc->GetString(nCol1, nRow1, nTab1,rString);
+                rString = pDoc->GetString(nCol1, nRow1, nTab1);
                 strShow += rString;
                 for(SCROW i=nRow1+1;i<=q;i++)
                 {
                     strShow.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-                    pDoc->GetString(nCol1, i, nTab1,rString);
+                    rString = pDoc->GetString(nCol1, i, nTab1);
                     strShow += rString;
                 }
             }

@@ -768,7 +768,7 @@ void ScAccessibleCellTextData::GetCellText(const ScAddress& rCellPos, String& rT
     if (pDoc)
     {
         //  #104893#; use the displayed string
-        pDoc->GetString(rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), rText);
+        rText = pDoc->GetString(rCellPos.Col(), rCellPos.Row(), rCellPos.Tab());
         if (mpViewShell)
         {
             const ScViewOptions& aOptions = mpViewShell->GetViewData()->GetOptions();

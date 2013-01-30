@@ -263,7 +263,7 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
     {
         for (SCCOL nCol=nStartCol; nCol<=nCol2; nCol++)
         {
-            pSrcDoc->GetString( nCol, nRow1, nTab, aTitle );
+            aTitle = pSrcDoc->GetString(nCol, nRow1, nTab);
             if (aTitle.Len())
             {
                 sal_Bool bFound = false;
@@ -280,7 +280,7 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
     {
         for (SCROW nRow=nStartRow; nRow<=nRow2; nRow++)
         {
-            pSrcDoc->GetString( nCol1, nRow, nTab, aTitle );
+            aTitle = pSrcDoc->GetString(nCol1, nRow, nTab);
             if (aTitle.Len())
             {
                 sal_Bool bFound = false;
@@ -507,8 +507,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
 
     if ( bColByName && bRowByName )
     {
-        String aThisCorner;
-        pSrcDoc->GetString(nCol1,nRow1,nTab,aThisCorner);
+        String aThisCorner = pSrcDoc->GetString(nCol1, nRow1, nTab);
         if (bCornerUsed)
         {
             if (aCornerText != aThisCorner)
@@ -535,7 +534,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
         pDestCols = new SCCOL[nCol2-nStartCol+1];
         for (nCol=nStartCol; nCol<=nCol2; nCol++)
         {
-            pSrcDoc->GetString(nCol,nRow1,nTab,aTitle);
+            aTitle = pSrcDoc->GetString(nCol, nRow1, nTab);
             SCCOL nPos = SC_CONS_NOTFOUND;
             if (aTitle.Len())
             {
@@ -556,7 +555,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
         pDestRows = new SCROW[nRow2-nStartRow+1];
         for (nRow=nStartRow; nRow<=nRow2; nRow++)
         {
-            pSrcDoc->GetString(nCol1,nRow,nTab,aTitle);
+            aTitle = pSrcDoc->GetString(nCol1, nRow, nTab);
             SCROW nPos = SC_CONS_NOTFOUND;
             if (aTitle.Len())
             {

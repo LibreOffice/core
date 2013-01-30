@@ -132,8 +132,7 @@ public:
         else if (meStringType == PureString)
         {
             rtl::OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
-            rtl::OUString aString;
-            mpDoc->GetString(mnCol, mnRow, mnTab, aString);
+            rtl::OUString aString = mpDoc->GetString(mnCol, mnRow, mnTab);
 
 #if DEBUG_CSV_HANDLER
                 std::cout << "String: " << rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
@@ -154,7 +153,7 @@ public:
                 switch (meStringType)
                 {
                     case StringValue:
-                        mpDoc->GetString(mnCol, mnRow, mnTab, aString);
+                        aString = mpDoc->GetString(mnCol, mnRow, mnTab);
                         break;
                     case FormulaValue:
                         mpDoc->GetFormula(mnCol, mnRow, mnTab, aString);

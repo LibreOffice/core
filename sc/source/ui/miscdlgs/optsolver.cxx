@@ -1026,8 +1026,10 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         //! else error?
 
         // take formatted result from document (result value from component is ignored)
-        String aResultStr;
-        mpDoc->GetString( (SCCOL)aObjective.Column, (SCROW)aObjective.Row, (SCTAB)aObjective.Sheet, aResultStr );
+        OUString aResultStr = mpDoc->GetString(
+            static_cast<SCCOL>(aObjective.Column), static_cast<SCROW>(aObjective.Row),
+            static_cast<SCTAB>(aObjective.Sheet));
+
         ScSolverSuccessDialog aDialog( this, aResultStr );
         if ( aDialog.Execute() == RET_OK )
         {

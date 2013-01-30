@@ -656,12 +656,11 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
         CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(1280), pDoc->GetColWidth(5,1) ); //0.889in
         CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(4153), pDoc->GetColWidth(6,1) ); //2.8839in
         //test case for i53253 where a cell has text with different styles and space between the text.
-        rtl::OUString aTestStr;
-        pDoc->GetString(3,0,1, aTestStr);
+        OUString aTestStr = pDoc->GetString(3,0,1);
         rtl::OUString aKnownGoodStr("text14 space");
         CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
         //test case for cell text with line breaks.
-        pDoc->GetString(3,5,1, aTestStr);
+        aTestStr = pDoc->GetString(3,5,1);
         aKnownGoodStr = "Hello,\nCalc!";
         CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
     }

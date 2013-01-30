@@ -5156,8 +5156,7 @@ void ScCompiler::CreateStringFromSingleRef(rtl::OUStringBuffer& rBuffer,FormulaT
         rRef.CalcAbsIfRel( aPos );
         if ( pDoc->HasStringData( rRef.nCol, rRef.nRow, rRef.nTab ) )
         {
-            String aStr;
-            pDoc->GetString( rRef.nCol, rRef.nRow, rRef.nTab, aStr );
+            String aStr = pDoc->GetString(rRef.nCol, rRef.nRow, rRef.nTab);
             EnQuote( aStr );
             rBuffer.append(aStr);
         }

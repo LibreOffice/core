@@ -1344,8 +1344,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const rtl::OUString& rStri
     if (!pDPObj)
         return;
 
-    rtl::OUString aOldText;
-    pDoc->GetString( rPos.Col(), rPos.Row(), rPos.Tab(), aOldText );
+    OUString aOldText = pDoc->GetString(rPos.Col(), rPos.Row(), rPos.Tab());
 
     if ( aOldText == rString )
     {

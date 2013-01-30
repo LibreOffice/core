@@ -276,8 +276,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
                 }
                 else
                 {
-                    String aText;
-                    pDoc->GetString( nCol, nRow, nTab, aText );
+                    OUString aText = pDoc->GetString(nCol, nRow, nTab);
                     aEngine.SetText(aText);
                 }
             }

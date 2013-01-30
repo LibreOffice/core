@@ -346,7 +346,7 @@ void XclExpPCField::InitStandardField( const ScRange& rRange )
 
     // field name is in top cell of the range
     ScAddress aPos( rRange.aStart );
-    rDoc.GetString( aPos.Col(), aPos.Row(), aPos.Tab(), maFieldInfo.maName );
+    maFieldInfo.maName = rDoc.GetString(aPos.Col(), aPos.Row(), aPos.Tab());
     // #i76047# maximum field name length in pivot cache is 255
     if (maFieldInfo.maName.getLength() > EXC_PC_MAXSTRLEN)
         maFieldInfo.maName = maFieldInfo.maName.copy(0, EXC_PC_MAXSTRLEN);
@@ -367,8 +367,7 @@ void XclExpPCField::InitStandardField( const ScRange& rRange )
         }
         else
         {
-            String aText;
-            rDoc.GetString( aPos.Col(), aPos.Row(), aPos.Tab(), aText );
+            OUString aText = rDoc.GetString(aPos.Col(), aPos.Row(), aPos.Tab());
             InsertOrigTextItem( aText );
         }
     }

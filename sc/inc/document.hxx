@@ -762,9 +762,7 @@ public:
                                   SCCOL nCol1, SCROW nRow1,
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
 
-    SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
-    SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString );
-    SC_DLLPUBLIC rtl::OUString  GetString( SCCOL nCol, SCROW nRow, SCTAB nTab) { rtl::OUString aString; GetString(nCol, nRow, nTab, aString); return aString;}
+    SC_DLLPUBLIC OUString GetString( SCCOL nCol, SCROW nRow, SCTAB nTab );
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString );
     sal_uInt16                  GetStringForFormula( const ScAddress& rPos, rtl::OUString& rString );

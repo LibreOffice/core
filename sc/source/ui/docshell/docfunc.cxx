@@ -4854,8 +4854,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
     ScDocument* pDoc = rDocShell.GetDocument();
     if (!pDoc->HasValueData( nPosX, nPosY, nTab ))
     {
-        String aName;
-        pDoc->GetString( nPosX, nPosY, nTab, aName );
+        String aName = pDoc->GetString(nPosX, nPosY, nTab);
         ScRangeData::MakeValidName(aName);
         if (aName.Len())
         {

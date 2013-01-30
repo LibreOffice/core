@@ -44,21 +44,6 @@
 
 using namespace ::com::sun::star;
 
-// ============================================================================
-
-namespace {
-
-bool lclHasString( ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString )
-{
-    String aCompStr;
-    rDoc.GetString( nCol, nRow, nTab, aCompStr );
-    return aCompStr == rString;      //! case-insensitive?
-}
-
-} // namespace
-
-// ----------------------------------------------------------------------------
-
 ScConversionEngineBase::ScConversionEngineBase(
         SfxItemPool* pEnginePoolP, ScViewData& rViewData,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc ) :
@@ -105,19 +90,18 @@ bool ScConversionEngineBase::FindNextConversionCell()
 
         String aNewStr = GetText();
 
-        sal_Bool bMultiTab = (rMark.GetSelectCount() > 1);
-        String aVisibleStr;
+        bool bMultiTab = (rMark.GetSelectCount() > 1);
+        OUString aVisibleStr;
         if( bMultiTab )
-            mrDoc.GetString( mnCurrCol, mnCurrRow, mnStartTab, aVisibleStr );
+            aVisibleStr = mrDoc.GetString(mnCurrCol, mnCurrRow, mnStartTab);
 
         for( SCTAB nTab = 0, nTabCount = mrDoc.GetTableCount(); nTab < nTabCount; ++nTab )
         {
             //  always change the cell on the visible tab,
             //  on the other selected tabs only if they contain the same text
 
-            if( (nTab == mnStartTab) ||
-                (bMultiTab && rMark.GetTableSelect( nTab ) &&
-                 lclHasString( mrDoc, mnCurrCol, mnCurrRow, nTab, aVisibleStr )) )
+            if ((nTab == mnStartTab) ||
+                (bMultiTab && rMark.GetTableSelect(nTab) && mrDoc.GetString(mnCurrCol, mnCurrRow, nTab) == aVisibleStr))
             {
                 ScAddress aPos( mnCurrCol, mnCurrRow, nTab );
                 CellType eCellType = mrDoc.GetCellType( aPos );
@@ -281,8 +265,7 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     {
         case CELLTYPE_STRING:
         {
-            String aText;
-            mrDoc.GetString( nCol, nRow, nTab, aText );
+            OUString aText = mrDoc.GetString(nCol, nRow, nTab);
             SetText( aText );
         }
         break;
