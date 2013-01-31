@@ -2102,7 +2102,7 @@ void Enumeration::proceed() {
         sal_uInt32 off = positions_.top().position->data.get();
         int v = file_->read8(off);
         bool recurse;
-        bool cgroup;
+        bool cgroup = bool();
         if (v == 0) {
             recurse = true;
             cgroup = false;
