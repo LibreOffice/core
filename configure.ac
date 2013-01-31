@@ -4328,6 +4328,10 @@ AC_SUBST(ASSERT_ALWAYS_ABORT)
 dnl Determine whether to use linkoo for the smoketest installation
 dnl ===================================================================
 AC_MSG_CHECKING([whether to use linkoo for the smoketest installation])
+if test $_os = Darwin; then
+    enable_linkoo=no
+fi
+
 if test "$enable_linkoo" = "no"; then
     DISABLE_LINKOO="TRUE"
     AC_MSG_RESULT([no])
