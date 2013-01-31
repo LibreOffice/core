@@ -136,6 +136,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/inspe
 	DefaultFormComponentInspectorModel \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/runtime,\
+	FormController \
 	FormOperations \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
@@ -840,9 +841,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/in
 	SubmissionPropertyHandler \
 	XMLFormsPropertyHandler \
 	XSDValidationPropertyHandler \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/runtime,\
-	FormController \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/validation,\
 	ValidatableBindableControlModel \

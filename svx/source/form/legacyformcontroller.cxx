@@ -21,11 +21,12 @@
 #include "fmservs.hxx"
 
 #include <com/sun/star/form/XFormController.hpp>
-#include <com/sun/star/form/runtime/XFormController.hpp>
+#include <com/sun/star/form/runtime/FormController.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/implbase2.hxx>
+#include <comphelper/processfactory.hxx>
 
 //........................................................................
 namespace svxform
@@ -44,11 +45,13 @@ namespace svxform
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::awt::XTabControllerModel;
     using ::com::sun::star::awt::XControlContainer;
     using ::com::sun::star::lang::XServiceInfo;
+    using ::com::sun::star::form::runtime::FormController;
     /** === end UNO using === **/
 
     using namespace ::com::sun::star;
@@ -70,12 +73,12 @@ namespace svxform
     public:
         static Reference< XInterface > Create( const Reference< XMultiServiceFactory >& _rxFactory )
         {
-            return *( new LegacyFormController( _rxFactory ) );
+            return *( new LegacyFormController( comphelper::getComponentContext(_rxFactory) ) );
         }
 
     protected:
-        LegacyFormController( const Reference< XMultiServiceFactory >& _rxFactory )
-            :m_xDelegator( _rxFactory->createInstance( FM_FORM_CONTROLLER ), UNO_QUERY_THROW )
+        LegacyFormController( const Reference< XComponentContext >& _rxContext )
+            :m_xDelegator( FormController::create(_rxContext) )
         {
         }
 

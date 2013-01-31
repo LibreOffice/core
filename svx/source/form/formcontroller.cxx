@@ -739,7 +739,7 @@ Sequence< ::rtl::OUString> FormController::getSupportedServiceNames_Static(void)
     if (!aServices.getLength())
     {
         aServices.realloc(2);
-        aServices.getArray()[0] = FM_FORM_CONTROLLER;
+        aServices.getArray()[0] = OUString( "com.sun.star.form.runtime.FormController"  );
         aServices.getArray()[1] = ::rtl::OUString("com.sun.star.awt.control.TabController");
     }
     return aServices;

@@ -59,6 +59,7 @@
 #include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
+#include <com/sun/star/form/runtime/FormController.hpp>
 #include <com/sun/star/form/submission/XSubmissionSupplier.hpp>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -110,6 +111,7 @@ using namespace ::svxform;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::container::XIndexAccess;
     using ::com::sun::star::form::XForm;
+    using ::com::sun::star::form::runtime::FormController;
     using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::script::XEventAttacherManager;
     using ::com::sun::star::awt::XTabControllerModel;
@@ -340,12 +342,7 @@ void FormViewPageWindowAdapter::setController(const Reference< XForm > & xForm, 
     Reference< XTabControllerModel >  xTabOrder(xForm, UNO_QUERY);
 
     // create a form controller
-    Reference< XFormController > xController( m_aContext.createComponent( FM_FORM_CONTROLLER ), UNO_QUERY );
-    if ( !xController.is() )
-    {
-        ShowServiceNotAvailableError( m_pWindow, FM_FORM_CONTROLLER, sal_True );
-        return;
-    }
+    Reference< XFormController > xController( FormController::create(m_aContext.getUNOContext()) );
 
     Reference< XInteractionHandler > xHandler;
     if ( _rxParentController.is() )

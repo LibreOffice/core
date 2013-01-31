@@ -38,6 +38,7 @@
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/form/runtime/FormController.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/io/XDataInputStream.hpp>
@@ -1641,9 +1642,8 @@ uno::Reference< form::runtime::XFormController > BibDataManager::GetFormControll
 {
     if(!m_xFormCtrl.is())
     {
-        Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
-        m_xFormCtrl = uno::Reference< form::runtime::XFormController > (
-            xMgr->createInstance("com.sun.star.form.runtime.FormController"), UNO_QUERY);
+        Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        m_xFormCtrl = form::runtime::FormController::create(xContext);
         m_xFormCtrl->setModel(uno::Reference< awt::XTabControllerModel > (getForm(), UNO_QUERY));
         m_xFormDispatch = uno::Reference< frame::XDispatch > ( m_xFormCtrl, UNO_QUERY);
     }
