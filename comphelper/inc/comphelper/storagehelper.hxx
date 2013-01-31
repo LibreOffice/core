@@ -23,7 +23,6 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include "comphelper/comphelperdllapi.h"
 
@@ -173,9 +172,7 @@ public:
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
         CreatePackageEncryptionData(
-            const ::rtl::OUString& aPassword,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSF
-                = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() );
+            const ::rtl::OUString& aPassword );
 
     static sal_Bool IsValidZipEntryFileName( const ::rtl::OUString& aName, sal_Bool bSlashAllowed );
     static sal_Bool IsValidZipEntryFileName( const sal_Unicode *pChar, sal_Int32 nLength, sal_Bool bSlashAllowed );

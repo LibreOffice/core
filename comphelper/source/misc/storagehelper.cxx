@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
+#include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
@@ -376,7 +377,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
 }
 
 // ----------------------------------------------------------------------
-uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( const ::rtl::OUString& aPassword, const uno::Reference< lang::XMultiServiceFactory >& xSF )
+uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( const ::rtl::OUString& aPassword )
 {
     // TODO/LATER: Should not the method be part of DocPasswordHelper?
     uno::Sequence< beans::NamedValue > aEncryptionData;
@@ -386,11 +387,9 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
         // generate SHA256 start key
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xFactory = xSF.is() ? xSF : ::comphelper::getProcessServiceFactory();
-            if ( !xFactory.is() )
-                throw uno::RuntimeException();
+            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-            uno::Reference< xml::crypto::XDigestContextSupplier > xDigestContextSupplier( xFactory->createInstance( OUString( "com.sun.star.xml.crypto.NSSInitializer" ) ), uno::UNO_QUERY_THROW );
+            uno::Reference< xml::crypto::XNSSInitializer > xDigestContextSupplier = xml::crypto::NSSInitializer::create(xContext);
             uno::Reference< xml::crypto::XDigestContext > xDigestContext( xDigestContextSupplier->getDigestContext( xml::crypto::DigestID::SHA256, uno::Sequence< beans::NamedValue >() ), uno::UNO_SET_THROW );
 
             ::rtl::OString aUTF8Password( ::rtl::OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 ) );
