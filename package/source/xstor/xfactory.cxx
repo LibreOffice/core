@@ -74,7 +74,7 @@ OUString SAL_CALL OStorageFactory::impl_staticGetImplementationName()
 uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
-    return uno::Reference< uno::XInterface >( *new OStorageFactory( xServiceManager ) );
+    return uno::Reference< uno::XInterface >( *new OStorageFactory( comphelper::getComponentContext(xServiceManager) ) );
 }
 
 //-------------------------------------------------------------------------
@@ -84,14 +84,14 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
 {
     // TODO: reimplement TempStream service to support XStream interface
     uno::Reference < io::XStream > xTempStream(
-                        io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+                        io::TempFile::create(m_xContext),
                         uno::UNO_QUERY_THROW );
 
     return uno::Reference< uno::XInterface >(
                 static_cast< OWeakObject* >( new OStorage(  xTempStream,
                                                             embed::ElementModes::READWRITE,
                                                             uno::Sequence< beans::PropertyValue >(),
-                                                            m_xFactory,
+                                                            m_xContext,
                                                             embed::StorageFormats::PACKAGE ) ),
                 uno::UNO_QUERY );
 }
@@ -154,7 +154,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
 
         uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(
             ucb::SimpleFileAccess::create(
-                comphelper::getComponentContext(m_xFactory) ) );
+                m_xContext ) );
 
         if ( nStorageMode & embed::ElementModes::WRITE )
             xStream = xTempAccess->openFileReadWrite( aURL );
@@ -253,7 +253,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             throw io::IOException(); // TODO: this is not a package file
 
         return uno::Reference< uno::XInterface >(
-                    static_cast< OWeakObject* >( new OStorage( xInputStream, nStorageMode, aPropsToSet, m_xFactory, nStorageType ) ),
+                    static_cast< OWeakObject* >( new OStorage( xInputStream, nStorageMode, aPropsToSet, m_xContext, nStorageType ) ),
                     uno::UNO_QUERY );
     }
     else if ( xStream.is() )
@@ -273,7 +273,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             throw io::IOException(); // TODO: this is not a package file
 
         return uno::Reference< uno::XInterface >(
-                    static_cast< OWeakObject* >( new OStorage( xStream, nStorageMode, aPropsToSet, m_xFactory, nStorageType ) ),
+                    static_cast< OWeakObject* >( new OStorage( xStream, nStorageMode, aPropsToSet, m_xContext, nStorageType ) ),
                     uno::UNO_QUERY );
     }
 

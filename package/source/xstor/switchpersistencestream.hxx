@@ -54,7 +54,7 @@ class SwitchablePersistenceStream
 {
     ::osl::Mutex    m_aMutex;
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     SPStreamData_Impl* m_pStreamData;
 
@@ -63,11 +63,11 @@ class SwitchablePersistenceStream
 public:
 
     SwitchablePersistenceStream(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 
     SwitchablePersistenceStream(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
 
     ~SwitchablePersistenceStream();

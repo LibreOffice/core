@@ -140,7 +140,7 @@ class DummyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
 
 //===========================================================================
 
-ZipPackage::ZipPackage ( const uno::Reference < XMultiServiceFactory > &xNewFactory )
+ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
 : m_aMutexHolder( new SotMutexHolder )
 , m_nStartKeyGenerationID( xml::crypto::DigestID::SHA1 )
 , m_nChecksumDigestID( xml::crypto::DigestID::SHA1_1K )
@@ -153,11 +153,11 @@ ZipPackage::ZipPackage ( const uno::Reference < XMultiServiceFactory > &xNewFact
 , m_nFormat( embed::StorageFormats::PACKAGE ) // package is the default format
 , m_bAllowRemoveOnInsert( sal_True )
 , m_eMode ( e_IMode_None )
-, m_xFactory( xNewFactory )
+, m_xContext( xContext )
 , m_pRootFolder( NULL )
 , m_pZipFile( NULL )
 {
-    m_xRootFolder = m_pRootFolder = new ZipPackageFolder( m_xFactory, m_nFormat, m_bAllowRemoveOnInsert );
+    m_xRootFolder = m_pRootFolder = new ZipPackageFolder( m_nFormat, m_bAllowRemoveOnInsert );
 }
 
 ZipPackage::~ZipPackage( void )
@@ -176,7 +176,7 @@ sal_Bool ZipPackage::isLocalFile() const
     OUString aSystemPath;
     uno::Reference< XUniversalContentBroker > xUcb(
         UniversalContentBroker::create(
-            comphelper::getComponentContext( m_xFactory ) ) );
+            m_xContext ) );
     try
     {
         aSystemPath = getSystemPathFromFileURL( xUcb, m_aURL );
@@ -211,7 +211,7 @@ void ZipPackage::parseManifest()
                     uno::Reference < XActiveDataSink > xSink ( xTunnel, UNO_QUERY );
                     if ( xSink.is() )
                     {
-                        uno::Reference < XManifestReader > xReader = ManifestReader::create( comphelper::getComponentContext( m_xFactory ) );
+                        uno::Reference < XManifestReader > xReader = ManifestReader::create( m_xContext );
 
                         const OUString sPropFullPath ("FullPath");
                         const OUString sPropVersion ("Version");
@@ -458,7 +458,7 @@ void ZipPackage::parseContentType()
                     sal_Int32 nInd = 0;
                     // here aContentTypeInfo[0] - Defaults, and aContentTypeInfo[1] - Overrides
                     uno::Sequence< uno::Sequence< beans::StringPair > > aContentTypeInfo =
-                        ::comphelper::OFOPXMLHelper::ReadContentTypeSequence( xInStream, comphelper::getComponentContext(m_xFactory) );
+                        ::comphelper::OFOPXMLHelper::ReadContentTypeSequence( xInStream, m_xContext );
 
                     if ( aContentTypeInfo.getLength() != 2 )
                         throw io::IOException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
@@ -545,7 +545,7 @@ void ZipPackage::getZipFileContents()
                     break;
                 if ( !pCurrent->hasByName( sTemp ) )
                 {
-                    pPkgFolder = new ZipPackageFolder( m_xFactory, m_nFormat, m_bAllowRemoveOnInsert );
+                    pPkgFolder = new ZipPackageFolder( m_nFormat, m_bAllowRemoveOnInsert );
                     pPkgFolder->setName( sTemp );
                     pPkgFolder->doSetParent( pCurrent, sal_True );
                     pCurrent = pPkgFolder;
@@ -561,7 +561,7 @@ void ZipPackage::getZipFileContents()
         {
             nStreamIndex++;
             sTemp = rName.copy( nStreamIndex, rName.getLength() - nStreamIndex );
-            pPkgStream = new ZipPackageStream( *this, m_xFactory, m_bAllowRemoveOnInsert );
+            pPkgStream = new ZipPackageStream( *this, m_xContext, m_bAllowRemoveOnInsert );
             pPkgStream->SetPackageMember( sal_True );
             pPkgStream->setZipEntryOnLoading( rEntry );
             pPkgStream->setName( sTemp );
@@ -629,7 +629,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
 
                     Content aContent(
                         m_aURL, uno::Reference< XCommandEnvironment >(),
-                        comphelper::getComponentContext( m_xFactory ) );
+                        m_xContext );
                     Any aAny = aContent.getPropertyValue("Size");
                     sal_uInt64 aSize = 0;
                     // kind of optimisation: treat empty files as nonexistent files
@@ -729,7 +729,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             if ( m_xContentStream.is() )
             {
                 // the stream must be seekable, if it is not it will be wrapped
-                m_xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( m_xContentStream, comphelper::getComponentContext( m_xFactory ) );
+                m_xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( m_xContentStream, m_xContext );
                 m_xContentSeek = uno::Reference < XSeekable > ( m_xContentStream, UNO_QUERY );
                 if ( ! m_xContentSeek.is() )
                     throw com::sun::star::uno::Exception (OSL_LOG_PREFIX "The package component _requires_ an XSeekable interface!",
@@ -752,7 +752,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         {
             try
             {
-                m_pZipFile = new ZipFile ( m_xContentStream, comphelper::getComponentContext(m_xFactory), sal_True, m_bForceRecovery, xProgressHandler );
+                m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, sal_True, m_bForceRecovery, xProgressHandler );
                 getZipFileContents();
             }
             catch ( IOException & )
@@ -950,7 +950,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
 uno::Reference< XInterface > SAL_CALL ZipPackage::createInstance()
         throw( Exception, RuntimeException )
 {
-    uno::Reference < XInterface > xRef = *( new ZipPackageStream ( *this, m_xFactory, m_bAllowRemoveOnInsert ) );
+    uno::Reference < XInterface > xRef = *( new ZipPackageStream ( *this, m_xContext, m_bAllowRemoveOnInsert ) );
     return xRef;
 }
 //--------------------------------------------------------
@@ -962,9 +962,9 @@ uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( c
     if ( aArguments.getLength() )
         aArguments[0] >>= bArg;
     if ( bArg )
-        xRef = *new ZipPackageFolder ( m_xFactory, m_nFormat, m_bAllowRemoveOnInsert );
+        xRef = *new ZipPackageFolder ( m_nFormat, m_bAllowRemoveOnInsert );
     else
-        xRef = *new ZipPackageStream ( *this, m_xFactory, m_bAllowRemoveOnInsert );
+        xRef = *new ZipPackageStream ( *this, m_xContext, m_bAllowRemoveOnInsert );
 
     return xRef;
 }
@@ -1011,7 +1011,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
 void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Sequence < PropertyValue > >& aManList )
 {
     // Write the manifest
-    uno::Reference < XManifestWriter > xWriter = ManifestWriter::create( comphelper::getComponentContext(m_xFactory) );
+    uno::Reference < XManifestWriter > xWriter = ManifestWriter::create( m_xContext );
     ZipEntry * pEntry = new ZipEntry;
     ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
     uno::Reference < XOutputStream > xManOutStream( *pBuffer, UNO_QUERY );
@@ -1085,7 +1085,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     aOverridesSequence.realloc( nSeqLength );
 
     ::comphelper::OFOPXMLHelper::WriteContentSequence(
-            xConTypeOutStream, aDefaultsSequence, aOverridesSequence, comphelper::getComponentContext(m_xFactory) );
+            xConTypeOutStream, aDefaultsSequence, aOverridesSequence, m_xContext );
 
     sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
     pBuffer->realloc( nBufferLength );
@@ -1107,7 +1107,7 @@ void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream 
     if ( m_pZipFile )
         m_pZipFile->setInputStream( m_xContentStream );
     else
-        m_pZipFile = new ZipFile ( m_xContentStream, comphelper::getComponentContext(m_xFactory), sal_False );
+        m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, sal_False );
 }
 
 //--------------------------------------------------------
@@ -1150,13 +1150,13 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
     if( bUseTemp )
     {
         // create temporary file
-        uno::Reference < io::XStream > xTempFile( io::TempFile::create(comphelper::getComponentContext(m_xFactory)), UNO_QUERY_THROW );
+        uno::Reference < io::XTempFile > xTempFile( io::TempFile::create(m_xContext) );
         xTempOut.set( xTempFile->getOutputStream(), UNO_SET_THROW );
         xTempIn.set( xTempFile->getInputStream(), UNO_SET_THROW );
     }
 
     // Hand it to the ZipOutputStream:
-    ZipOutputStream aZipOut( comphelper::getComponentContext(m_xFactory), xTempOut );
+    ZipOutputStream aZipOut( m_xContext, xTempOut );
     aZipOut.setMethod( DEFLATED );
     aZipOut.setLevel( DEFAULT_COMPRESSION );
 
@@ -1305,7 +1305,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
     // open and truncate the original file
     Content aOriginalContent(
         m_aURL, uno::Reference< XCommandEnvironment >(),
-        comphelper::getComponentContext( m_xFactory ) );
+        m_xContext );
     uno::Reference< XActiveDataStreamer > xSink = new ActiveDataStreamer;
 
     if ( m_eMode == e_IMode_URL )
@@ -1440,7 +1440,7 @@ void SAL_CALL ZipPackage::commitChanges()
             {
                 // write directly in case of local file
                 uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > xSimpleAccess(
-                    SimpleFileAccess::create( comphelper::getComponentContext(m_xFactory) ) );
+                    SimpleFileAccess::create( m_xContext ) );
                 OSL_ENSURE( xSimpleAccess.is(), "Can't instatiate SimpleFileAccess service!\n" );
                 uno::Reference< io::XTruncate > xOrigTruncate;
                 if ( xSimpleAccess.is() )
@@ -1488,7 +1488,7 @@ void SAL_CALL ZipPackage::commitChanges()
                     OUString sTargetFolder = m_aURL.copy ( 0, m_aURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
                     Content aContent(
                         sTargetFolder, uno::Reference< XCommandEnvironment >(),
-                        comphelper::getComponentContext( m_xFactory ) );
+                        m_xContext );
 
                     OUString sTempURL;
                     Any aAny = xPropSet->getPropertyValue ("Uri");
@@ -1605,7 +1605,7 @@ Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges()
 uno::Reference < XInterface >SAL_CALL ZipPackage_createInstance(
     const uno::Reference< XMultiServiceFactory > & xMgr )
 {
-    return uno::Reference< XInterface >( *new ZipPackage( xMgr ) );
+    return uno::Reference< XInterface >( *new ZipPackage( comphelper::getComponentContext(xMgr) ) );
 }
 
 //--------------------------------------------------------

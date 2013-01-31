@@ -49,16 +49,14 @@ class ZipPackageFolder : public cppu::ImplInheritanceHelper2
     ::com::sun::star::container::XEnumerationAccess
 >
 {
-protected:
+private:
     ContentHash maContents;
-    const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
     sal_Int32 m_nFormat;
     ::rtl::OUString m_sVersion;
 
 public:
 
-    ZipPackageFolder( const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xFactory,
-                      sal_Int32 nFormat,
+    ZipPackageFolder( sal_Int32 nFormat,
                       sal_Bool bAllowRemoveOnInsert );
     virtual ~ZipPackageFolder();
 

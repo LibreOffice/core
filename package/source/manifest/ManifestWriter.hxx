@@ -25,7 +25,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace com { namespace sun { namespace star {
-    namespace lang { class XMultiServiceFactory; class XSingleServiceFactory; }
+    namespace lang { class XSingleServiceFactory; }
+    namespace uno { class XComponentContext;  }
 } } }
 
 class ManifestWriter: public ::cppu::WeakImplHelper2
@@ -34,10 +35,10 @@ class ManifestWriter: public ::cppu::WeakImplHelper2
     ::com::sun::star::lang::XServiceInfo
 >
 {
-protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory;
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 public:
-    ManifestWriter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xNewFactory );
+    ManifestWriter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext );
     virtual ~ManifestWriter();
 
     // XManifestWriter

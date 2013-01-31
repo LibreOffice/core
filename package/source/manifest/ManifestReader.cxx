@@ -39,8 +39,8 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::packages::manifest;
 using ::rtl::OUString;
 
-ManifestReader::ManifestReader( const Reference < XMultiServiceFactory > & xNewFactory )
-: xFactory ( xNewFactory )
+ManifestReader::ManifestReader( const Reference < XComponentContext > & xContext )
+: m_xContext ( xContext )
 {
 }
 ManifestReader::~ManifestReader()
@@ -50,7 +50,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
     throw (::com::sun::star::uno::RuntimeException)
 {
     Sequence < Sequence < PropertyValue > > aManifestSequence;
-    Reference < XParser > xParser  = Parser::create(comphelper::getComponentContext(xFactory));
+    Reference < XParser > xParser  = Parser::create(m_xContext);
     try
     {
         vector < Sequence < PropertyValue > > aManVector;
@@ -83,7 +83,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
 
 Reference < XInterface > SAL_CALL ManifestReader_createInstance( Reference< XMultiServiceFactory > const & rServiceFactory )
 {
-    return *new ManifestReader( rServiceFactory );
+    return *new ManifestReader( comphelper::getComponentContext(rServiceFactory) );
 }
 OUString ManifestReader::static_getImplementationName()
 {

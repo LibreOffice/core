@@ -30,13 +30,13 @@
 class OStorageFactory : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XSingleServiceFactory,
                                                 ::com::sun::star::lang::XServiceInfo >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
 public:
-    OStorageFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
-    : m_xFactory( xFactory )
+    OStorageFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
+    : m_xContext( xContext )
     {
-        OSL_ENSURE( xFactory.is(), "No service manager is provided!\n" );
+        OSL_ENSURE( xContext.is(), "No service manager is provided!\n" );
     }
 
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL

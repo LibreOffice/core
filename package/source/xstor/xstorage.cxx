@@ -92,7 +92,7 @@ struct StorInternalData_Impl
 };
 
 //=========================================================
-::rtl::OUString GetNewTempFileURL( const uno::Reference< lang::XMultiServiceFactory > xFactory );
+::rtl::OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext > xContext );
 
 // static
 void OStorage_Impl::completeStorageStreamCopy_Impl(
@@ -142,12 +142,11 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
 }
 
 uno::Reference< io::XInputStream > GetSeekableTempCopy( uno::Reference< io::XInputStream > xInStream,
-                                                        uno::Reference< lang::XMultiServiceFactory > xFactory )
+                                                        uno::Reference< uno::XComponentContext > xContext )
 {
-    uno::Reference < io::XOutputStream > xTempOut(
-                        io::TempFile::create(comphelper::getComponentContext(xFactory)),
-                        uno::UNO_QUERY );
-    uno::Reference < io::XInputStream > xTempIn( xTempOut, uno::UNO_QUERY );
+    uno::Reference < io::XTempFile > xTempFile = io::TempFile::create(xContext);
+    uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
+    uno::Reference < io::XInputStream > xTempIn = xTempFile->getInputStream();
 
     if ( !xTempOut.is() || !xTempIn.is() )
         throw io::IOException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
@@ -190,7 +189,7 @@ SotElement_Impl::~SotElement_Impl()
 OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
                                 sal_Int32 nMode,
                                 uno::Sequence< beans::PropertyValue > xProperties,
-                                uno::Reference< lang::XMultiServiceFactory > xFactory,
+                                uno::Reference< uno::XComponentContext > xContext,
                                 sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
 , m_pAntiImpl( NULL )
@@ -200,7 +199,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 , m_bCommited( sal_False )
 , m_bIsRoot( sal_True )
 , m_bListCreated( sal_False )
-, m_xFactory( xFactory )
+, m_xContext( xContext )
 , m_xProperties( xProperties )
 , m_bHasCommonEncryptionData( sal_False )
 , m_pParent( NULL )
@@ -215,7 +214,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
     // all the checks done below by assertion statements must be done by factory
     OSL_ENSURE( xInputStream.is(), "No input stream is provided!\n" );
 
-    m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xFactory, xInputStream );
+    m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xContext, xInputStream );
     m_xInputStream = m_pSwitchStream->getInputStream();
 
     if ( m_nStorageMode & embed::ElementModes::WRITE )
@@ -230,7 +229,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
                                 sal_Int32 nMode,
                                 uno::Sequence< beans::PropertyValue > xProperties,
-                                uno::Reference< lang::XMultiServiceFactory > xFactory,
+                                uno::Reference< uno::XComponentContext > xContext,
                                 sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
 , m_pAntiImpl( NULL )
@@ -240,7 +239,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 , m_bCommited( sal_False )
 , m_bIsRoot( sal_True )
 , m_bListCreated( sal_False )
-, m_xFactory( xFactory )
+, m_xContext( xContext )
 , m_xProperties( xProperties )
 , m_bHasCommonEncryptionData( sal_False )
 , m_pParent( NULL )
@@ -257,12 +256,12 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 
     if ( m_nStorageMode & embed::ElementModes::WRITE )
     {
-        m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xFactory, xStream );
+        m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xContext, xStream );
         m_xStream = static_cast< io::XStream* >( m_pSwitchStream );
     }
     else
     {
-        m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xFactory,
+        m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xContext,
                                                                                           xStream->getInputStream() );
         m_xInputStream = m_pSwitchStream->getInputStream();
     }
@@ -273,7 +272,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
                                 sal_Int32 nMode,
                                 uno::Reference< container::XNameContainer > xPackageFolder,
                                 uno::Reference< lang::XSingleServiceFactory > xPackage,
-                                uno::Reference< lang::XMultiServiceFactory > xFactory,
+                                uno::Reference< uno::XComponentContext > xContext,
                                 sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
 , m_pAntiImpl( NULL )
@@ -285,7 +284,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_bListCreated( sal_False )
 , m_xPackageFolder( xPackageFolder )
 , m_xPackage( xPackage )
-, m_xFactory( xFactory )
+, m_xContext( xContext )
 , m_bHasCommonEncryptionData( sal_False )
 , m_pParent( pParent ) // can be empty in case of temporary readonly substorages and relation storage
 , m_bControlMediaType( sal_False )
@@ -515,9 +514,8 @@ void OStorage_Impl::OpenOwnPackage()
             }
 
             m_xPackage = uno::Reference< lang::XSingleServiceFactory > (
-                                        GetServiceFactory()->createInstanceWithArguments(
-                                            "com.sun.star.packages.comp.ZipPackage",
-                                            aArguments ),
+                                        GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                            "com.sun.star.packages.comp.ZipPackage", aArguments, GetComponentContext()),
                                         uno::UNO_QUERY );
         }
 
@@ -537,12 +535,12 @@ void OStorage_Impl::OpenOwnPackage()
 }
 
 //-----------------------------------------------
-uno::Reference< lang::XMultiServiceFactory > OStorage_Impl::GetServiceFactory()
+uno::Reference< uno::XComponentContext > OStorage_Impl::GetComponentContext()
 {
-    if ( m_xFactory.is() )
-        return m_xFactory;
+    if ( m_xContext.is() )
+        return m_xContext;
 
-    return ::comphelper::getProcessServiceFactory();
+    return ::comphelper::getProcessComponentContext();
 }
 
 //-----------------------------------------------
@@ -594,7 +592,7 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
             m_aRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                     xRelInfoStream,
                                     "_rels/.rels",
-                                    comphelper::getComponentContext(m_xFactory) );
+                                    m_xContext );
 
         m_nRelInfoStatus = RELINFO_READ;
     }
@@ -607,7 +605,7 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
                 m_aRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                         m_xNewRelInfoStream,
                                         "_rels/.rels",
-                                        comphelper::getComponentContext(m_xFactory) );
+                                        m_xContext );
 
             m_nRelInfoStatus = RELINFO_CHANGED_STREAM_READ;
         }
@@ -1024,7 +1022,7 @@ void OStorage_Impl::CopyLastCommitTo( const uno::Reference< embed::XStorage >& x
                                 embed::ElementModes::READ,
                                 m_xPackageFolder,
                                 m_xPackage,
-                                m_xFactory,
+                                m_xContext,
                                 m_nStorageType);
 
     // TODO/LATER: could use direct copying
@@ -1432,7 +1430,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( ::rtl::OUString aName, sal_Bool bE
 
     // the mode is not needed for storage stream internal implementation
     SotElement_Impl* pNewElement = InsertElement( aName, sal_False );
-    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xFactory, bEncr, m_nStorageType, sal_True );
+    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, bEncr, m_nStorageType, sal_True );
 
     m_aChildrenList.push_back( pNewElement );
     m_bIsModified = sal_True;
@@ -1454,7 +1452,7 @@ SotElement_Impl* OStorage_Impl::InsertRawStream( ::rtl::OUString aName, const un
 
     uno::Reference< io::XSeekable > xSeek( xInStream, uno::UNO_QUERY );
     uno::Reference< io::XInputStream > xInStrToInsert = xSeek.is() ? xInStream :
-                                                                     GetSeekableTempCopy( xInStream, GetServiceFactory() );
+                                                                     GetSeekableTempCopy( xInStream, GetComponentContext() );
 
     uno::Sequence< uno::Any > aSeq( 1 );
     aSeq[0] <<= sal_False;
@@ -1473,7 +1471,7 @@ SotElement_Impl* OStorage_Impl::InsertRawStream( ::rtl::OUString aName, const un
 
     // the mode is not needed for storage stream internal implementation
     SotElement_Impl* pNewElement = InsertElement( aName, sal_False );
-    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xFactory, sal_True, m_nStorageType, sal_False );
+    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, sal_True, m_nStorageType, sal_False );
     // the stream is inserted and must be treated as a commited one
     pNewElement->m_pStream->SetToBeCommited();
 
@@ -1505,7 +1503,7 @@ OStorage_Impl* OStorage_Impl::CreateNewStorageImpl( sal_Int32 nStorageMode )
         throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
     OStorage_Impl* pResult =
-            new OStorage_Impl( this, nStorageMode, xPackageSubFolder, m_xPackage, m_xFactory, m_nStorageType );
+            new OStorage_Impl( this, nStorageMode, xPackageSubFolder, m_xPackage, m_xContext, m_nStorageType );
     pResult->m_bIsModified = sal_True;
 
     return pResult;
@@ -1586,7 +1584,7 @@ void OStorage_Impl::OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorag
         if ( !xPackageSubFolder.is() )
             throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
-        pElement->m_pStorage = new OStorage_Impl( this, nStorageMode, xPackageSubFolder, m_xPackage, m_xFactory, m_nStorageType );
+        pElement->m_pStorage = new OStorage_Impl( this, nStorageMode, xPackageSubFolder, m_xPackage, m_xContext, m_nStorageType );
     }
 }
 
@@ -1612,7 +1610,7 @@ void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
             throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
         // the stream can never be inserted here, because inserted stream element holds the stream till commit or destruction
-        pElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xFactory, sal_False, m_nStorageType, sal_False, GetRelInfoStreamForName( pElement->m_aOriginalName ) );
+        pElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, sal_False, m_nStorageType, sal_False, GetRelInfoStreamForName( pElement->m_aOriginalName ) );
     }
 }
 
@@ -1844,7 +1842,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
                     if ( !xOutStream.is() )
                         throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
-                    ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aRelInfo, comphelper::getComponentContext(m_xFactory) );
+                    ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aRelInfo, m_xContext );
 
                     // set the mediatype
                     uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
@@ -1924,9 +1922,9 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
 OStorage::OStorage( uno::Reference< io::XInputStream > xInputStream,
                     sal_Int32 nMode,
                     uno::Sequence< beans::PropertyValue > xProperties,
-                    uno::Reference< lang::XMultiServiceFactory > xFactory,
+                    uno::Reference< uno::XComponentContext > xContext,
                     sal_Int32 nStorageType )
-: m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xFactory, nStorageType ) )
+: m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xContext, nStorageType ) )
 {
     m_pImpl->m_pAntiImpl = this;
     m_pData = new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, sal_False );
@@ -1936,9 +1934,9 @@ OStorage::OStorage( uno::Reference< io::XInputStream > xInputStream,
 OStorage::OStorage( uno::Reference< io::XStream > xStream,
                     sal_Int32 nMode,
                     uno::Sequence< beans::PropertyValue > xProperties,
-                    uno::Reference< lang::XMultiServiceFactory > xFactory,
+                    uno::Reference< uno::XComponentContext > xContext,
                     sal_Int32 nStorageType )
-: m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xFactory, nStorageType ) )
+: m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xContext, nStorageType ) )
 {
     m_pImpl->m_pAntiImpl = this;
     m_pData = new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, sal_False );
@@ -3797,10 +3795,9 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
         if ( !xRawInStream.is() )
             throw io::IOException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
-        uno::Reference < io::XOutputStream > xTempOut(
-                            io::TempFile::create(comphelper::getComponentContext(m_pImpl->GetServiceFactory())),
-                            uno::UNO_QUERY );
-        xTempIn = uno::Reference < io::XInputStream >( xTempOut, uno::UNO_QUERY );
+        uno::Reference < io::XTempFile > xTempFile = io::TempFile::create( m_pImpl->GetComponentContext() );
+        uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
+        xTempIn = xTempFile->getInputStream();
         uno::Reference < io::XSeekable > xSeek( xTempOut, uno::UNO_QUERY );
 
         if ( !xTempOut.is() || !xTempIn.is() || !xSeek.is() )
@@ -3909,10 +3906,9 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
         if ( !xRawInStream.is() )
             throw io::IOException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
-        uno::Reference < io::XOutputStream > xTempOut(
-                            io::TempFile::create(comphelper::getComponentContext(m_pImpl->GetServiceFactory())),
-                            uno::UNO_QUERY );
-        xTempIn = uno::Reference < io::XInputStream >( xTempOut, uno::UNO_QUERY );
+        uno::Reference < io::XTempFile > xTempFile = io::TempFile::create(m_pImpl->GetComponentContext());
+        uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
+        xTempIn = xTempFile->getInputStream();
         uno::Reference < io::XSeekable > xSeek( xTempOut, uno::UNO_QUERY );
 
         if ( !xTempOut.is() || !xTempIn.is() || !xSeek.is() )
@@ -5936,8 +5932,7 @@ void SAL_CALL OStorage::attachToURL( const ::rtl::OUString& sURL,
         throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
     uno::Reference < ucb::XSimpleFileAccess3 > xAccess(
-        ucb::SimpleFileAccess::create(
-            comphelper::getComponentContext(m_pImpl->m_xFactory) ) );
+        ucb::SimpleFileAccess::create( m_pImpl->m_xContext ) );
 
     try
     {

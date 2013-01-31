@@ -39,7 +39,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable > m_xSeekable;
 
 public:
-    OSelfTerminateFileStream( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory, const ::rtl::OUString& aURL );
+    OSelfTerminateFileStream( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext, const ::rtl::OUString& aURL );
 
     virtual ~OSelfTerminateFileStream();
 

@@ -61,9 +61,9 @@ const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageStream::static_get
 }
 
 ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
-                                    const uno::Reference< XMultiServiceFactory >& xFactory,
+                                    const uno::Reference< XComponentContext >& xContext,
                                     sal_Bool bAllowRemoveOnInsert )
-: m_xFactory( xFactory )
+: m_xContext( xContext )
 , rZipPackage( rNewPackage )
 , bToBeCompressed ( sal_True )
 , bToBeEncrypted ( sal_False )
@@ -81,7 +81,7 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
 , m_bFromManifest( sal_False )
 , m_bUseWinEncoding( false )
 {
-    OSL_ENSURE( m_xFactory.is(), "No factory is provided to ZipPackageStream!\n" );
+    OSL_ENSURE( m_xContext.is(), "No factory is provided to ZipPackageStream!\n" );
 
     this->mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
 
@@ -144,7 +144,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetOwnSeekStream()
         // The only exception is a nonseekable stream that is provided only for storing, if such a stream
         // is accessed before commit it MUST be wrapped.
         // Wrap the stream in case it is not seekable
-        xStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( xStream, comphelper::getComponentContext( m_xFactory ) );
+        xStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( xStream, m_xContext );
         uno::Reference< io::XSeekable > xSeek( xStream, UNO_QUERY );
         if ( !xSeek.is() )
             throw RuntimeException( OSL_LOG_PREFIX "The stream must support XSeekable!",
@@ -176,10 +176,9 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
                     getSalt().getLength() + getDigest().getLength() );
 
     // create temporary stream
-    uno::Reference < io::XOutputStream > xTempOut(
-                        io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
-                        uno::UNO_QUERY_THROW );
-    uno::Reference < io::XInputStream > xTempIn( xTempOut, UNO_QUERY_THROW );
+    uno::Reference < io::XTempFile > xTempFile = io::TempFile::create(m_xContext);
+    uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
+    uno::Reference < io::XInputStream > xTempIn = xTempFile->getInputStream();;
     uno::Reference < io::XSeekable > xTempSeek( xTempOut, UNO_QUERY_THROW );
 
     // copy the raw stream to the temporary file starting from the current position
@@ -282,11 +281,11 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
     {
         // create temporary file
         uno::Reference < io::XStream > xTempStream(
-                            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+                            io::TempFile::create(m_xContext),
                             uno::UNO_QUERY_THROW );
 
         // create a package based on it
-        ZipPackage* pPackage = new ZipPackage( m_xFactory );
+        ZipPackage* pPackage = new ZipPackage( m_xContext );
         uno::Reference< XSingleServiceFactory > xPackageAsFactory( static_cast< XSingleServiceFactory* >( pPackage ) );
         if ( !xPackageAsFactory.is() )
             throw RuntimeException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
@@ -339,7 +338,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
 
         // create another temporary file
         uno::Reference < io::XOutputStream > xTempOut(
-                            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+                            io::TempFile::create(m_xContext),
                             uno::UNO_QUERY_THROW );
         uno::Reference < io::XInputStream > xTempIn( xTempOut, UNO_QUERY_THROW );
         uno::Reference < io::XSeekable > xTempSeek( xTempOut, UNO_QUERY_THROW );
@@ -564,7 +563,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
         return xResult;
     }
     else if ( m_nStreamMode == PACKAGE_STREAM_RAW )
-        return ZipFile::StaticGetDataFromRawStream( comphelper::getComponentContext(m_xFactory), GetOwnSeekStream(), GetEncryptionData() );
+        return ZipFile::StaticGetDataFromRawStream( m_xContext, GetOwnSeekStream(), GetEncryptionData() );
     else if ( GetOwnSeekStream().is() )
     {
         return new WrapStreamForShare( GetOwnSeekStream(), rZipPackage.GetSharedMutexRef() );
@@ -625,7 +624,7 @@ void SAL_CALL ZipPackageStream::setRawStream( const uno::Reference< io::XInputSt
                 RuntimeException )
 {
     // wrap the stream in case it is not seekable
-    uno::Reference< io::XInputStream > xNewStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( aStream, comphelper::getComponentContext( m_xFactory ) );
+    uno::Reference< io::XInputStream > xNewStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( aStream, m_xContext );
     uno::Reference< io::XSeekable > xSeek( xNewStream, UNO_QUERY );
     if ( !xSeek.is() )
         throw RuntimeException(OSL_LOG_PREFIX "The stream must support XSeekable!",

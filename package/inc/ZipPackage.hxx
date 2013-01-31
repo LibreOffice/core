@@ -44,6 +44,7 @@ namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
     namespace io { class XStream; class XOutputStream; class XInputStream; class XSeekable; class XActiveDataStreamer; }
     namespace lang { class XMultiServiceFactory; }
+    namespace uno { class XComponentContext; }
     namespace task { class XInteractionHandler; }
 } } }
 enum SegmentEnum
@@ -101,7 +102,7 @@ protected:
     ::com::sun::star::uno::Reference < com::sun::star::io::XStream > m_xStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > m_xContentStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > m_xContentSeek;
-    const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
 
     ZipPackageFolder *m_pRootFolder;
     ZipFile          *m_pZipFile;
@@ -122,7 +123,7 @@ protected:
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xTempStream );
 
 public:
-    ZipPackage( const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory );
+    ZipPackage( const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > &xContext );
     virtual ~ZipPackage( void );
     ZipFile& getZipFile() { return *m_pZipFile;}
     sal_Int32 getFormat() const { return m_nFormat; }

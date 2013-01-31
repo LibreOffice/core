@@ -39,7 +39,6 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/packages/NoEncryptionException.hpp>
@@ -140,7 +139,7 @@ struct OStorage_Impl
     ::com::sun::star::uno::Reference< ::com::sun::star::logging::XSimpleLogRing >  m_xLogRing;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > m_xPackage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
 
     // valid only for root storage
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream; // ??? may be stored in properties
@@ -176,13 +175,13 @@ struct OStorage_Impl
     OStorage_Impl(  ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
                     sal_Int32 nMode,
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
                     sal_Int32 nStorageType );
 
     OStorage_Impl(  ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream,
                     sal_Int32 nMode,
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
                     sal_Int32 nStorageType );
 
     // constructor for a substorage
@@ -190,7 +189,7 @@ struct OStorage_Impl
                     sal_Int32 nMode,
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xPackageFolder,
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > xPackage,
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
                     sal_Int32 nStorageType );
 
     ~OStorage_Impl();
@@ -204,7 +203,7 @@ struct OStorage_Impl
     void ReadContents();
     void ReadRelInfoIfNecessary();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceFactory();
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > GetComponentContext();
     SotElementList_Impl& GetChildrenList();
     void GetStorageProperties();
 
@@ -311,13 +310,13 @@ public:
     OStorage(   ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
                 sal_Int32 nMode,
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
                 sal_Int32 nStorageType );
 
     OStorage(   ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream,
                 sal_Int32 nMode,
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
                 sal_Int32 nStorageType );
 
     OStorage(   OStorage_Impl* pImpl, sal_Bool bReadOnlyWrap );

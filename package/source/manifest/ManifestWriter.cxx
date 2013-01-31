@@ -40,8 +40,8 @@ using namespace ::com::sun::star::packages;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::packages::manifest;
 
-ManifestWriter::ManifestWriter( const Reference < XMultiServiceFactory > & xNewFactory )
-: xFactory ( xNewFactory )
+ManifestWriter::ManifestWriter( const Reference < XComponentContext > & xContext )
+: m_xContext ( xContext )
 {
 }
 ManifestWriter::~ManifestWriter()
@@ -52,7 +52,7 @@ ManifestWriter::~ManifestWriter()
 void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStream >& rStream, const Sequence< Sequence< PropertyValue > >& rSequence )
         throw (RuntimeException)
 {
-    Reference < XWriter > xSource = Writer::create( comphelper::getComponentContext(xFactory) );
+    Reference < XWriter > xSource = Writer::create( m_xContext );
     xSource->setOutputStream ( rStream );
     try {
         Reference < XDocumentHandler > xHandler ( xSource, UNO_QUERY );
@@ -67,7 +67,7 @@ void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStr
 // Component methods
 Reference < XInterface > SAL_CALL ManifestWriter_createInstance( Reference< XMultiServiceFactory > const & rServiceFactory )
 {
-    return *new ManifestWriter( rServiceFactory );
+    return *new ManifestWriter( comphelper::getComponentContext(rServiceFactory) );
 }
 
 OUString ManifestWriter::static_getImplementationName()

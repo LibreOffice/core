@@ -52,14 +52,10 @@ using namespace ::com::sun::star;
 
 namespace { struct lcl_CachedImplId : public rtl::Static< uno::Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
-ZipPackageFolder::ZipPackageFolder ( const uno::Reference< XMultiServiceFactory >& xFactory,
-                                     sal_Int32 nFormat,
+ZipPackageFolder::ZipPackageFolder ( sal_Int32 nFormat,
                                      sal_Bool bAllowRemoveOnInsert )
-: m_xFactory( xFactory )
-, m_nFormat( nFormat )
+: m_nFormat( nFormat )
 {
-    OSL_ENSURE( m_xFactory.is(), "No factory is provided to the package folder!" );
-
     this->mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
 
     SetFolder ( sal_True );

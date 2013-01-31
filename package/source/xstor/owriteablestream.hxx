@@ -113,7 +113,7 @@ struct OWriteStream_Impl : public PreCreationStruct
     ::com::sun::star::uno::Reference< ::com::sun::star::packages::XDataSinkEncrSupport > m_xPackageStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::logging::XSimpleLogRing >  m_xLogRing;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     OStorage_Impl* m_pParent;
 
@@ -145,8 +145,6 @@ struct OWriteStream_Impl : public PreCreationStruct
 
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceFactory();
-
     ::rtl::OUString GetFilledTempFileIfNo( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream );
     ::rtl::OUString FillTempGetFileName();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >       GetTempFileAsStream();
@@ -167,7 +165,7 @@ public:
                 OStorage_Impl* pParent,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::packages::XDataSinkEncrSupport >& xPackageStream,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >& xPackage,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
                 sal_Bool bForceEncrypted,
                 sal_Int32 nStorageType,
                 sal_Bool bDefaultCompress,

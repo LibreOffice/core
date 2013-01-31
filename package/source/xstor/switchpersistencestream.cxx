@@ -29,8 +29,6 @@ using namespace ::com::sun::star;
 // ========================================================================
 struct SPStreamData_Impl
 {
-    uno::Reference< lang::XMultiServiceFactory > m_xFactory;
-
     sal_Bool m_bInStreamBased;
 
     // the streams below are not visible from outside so there is no need to remember position
@@ -47,7 +45,6 @@ struct SPStreamData_Impl
 
 
     SPStreamData_Impl(
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory,
             sal_Bool bInStreamBased,
             const uno::Reference< io::XStream >& xOrigStream,
             const uno::Reference< io::XTruncate >& xOrigTruncate,
@@ -56,8 +53,7 @@ struct SPStreamData_Impl
             const uno::Reference< io::XOutputStream >& xOrigOutStream,
             sal_Bool bInOpen,
             sal_Bool bOutOpen )
-    : m_xFactory( xFactory )
-    , m_bInStreamBased( bInStreamBased )
+    : m_bInStreamBased( bInStreamBased )
     , m_xOrigStream( xOrigStream )
     , m_xOrigTruncate( xOrigTruncate )
     , m_xOrigSeekable( xOrigSeekable )
@@ -72,9 +68,9 @@ struct SPStreamData_Impl
 // ========================================================================
 // ------------------------------------------------------------------------
 SwitchablePersistenceStream::SwitchablePersistenceStream(
-        const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+        const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< io::XStream >& xStream )
-: m_xFactory( xFactory )
+: m_xContext( xContext )
 , m_pStreamData( NULL )
 {
     SwitchPersistenceTo( xStream );
@@ -82,9 +78,9 @@ SwitchablePersistenceStream::SwitchablePersistenceStream(
 
 // ------------------------------------------------------------------------
 SwitchablePersistenceStream::SwitchablePersistenceStream(
-        const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+        const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< io::XInputStream >& xInputStream )
-: m_xFactory( xFactory )
+: m_xContext( xContext )
 , m_pStreamData( NULL )
 {
     SwitchPersistenceTo( xInputStream );
@@ -126,7 +122,7 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
 
     CloseAll_Impl();
 
-    m_pStreamData = new SPStreamData_Impl( m_xFactory, sal_False,
+    m_pStreamData = new SPStreamData_Impl( sal_False,
                                             xStream, xNewTruncate, xNewSeekable, xNewInStream, xNewOutStream,
                                             bInOpen, bOutOpen );
 }
@@ -161,7 +157,7 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
 
     CloseAll_Impl();
 
-    m_pStreamData = new SPStreamData_Impl( m_xFactory, sal_True,
+    m_pStreamData = new SPStreamData_Impl( sal_True,
                                             xNewStream, xNewTruncate, xNewSeekable, xInputStream, xNewOutStream,
                                             bInOpen, bOutOpen );
 
@@ -176,7 +172,7 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
     if ( !xTargetStream.is() )
     {
         xTargetStream = uno::Reference < io::XStream >(
-            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+            io::TempFile::create(m_xContext),
             uno::UNO_QUERY_THROW );
 
         xTargetSeek = uno::Reference< io::XSeekable >( xTargetStream, uno::UNO_QUERY_THROW );
@@ -209,7 +205,7 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
 
     CloseAll_Impl();
 
-    m_pStreamData = new SPStreamData_Impl( m_xFactory, sal_False,
+    m_pStreamData = new SPStreamData_Impl( sal_False,
                                         xTargetStream, xTargetTruncate, xTargetSeek, xTargetInStream, xTargetOutStream,
                                         bInOpen, bOutOpen );
 }

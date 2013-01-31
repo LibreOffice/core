@@ -26,18 +26,17 @@
 using namespace ::com::sun::star;
 
 //-----------------------------------------------
-OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< lang::XMultiServiceFactory > xFactory, const ::rtl::OUString& aURL )
+OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< uno::XComponentContext > xContext, const ::rtl::OUString& aURL )
 : m_aURL( aURL )
 {
-    uno::Reference< lang::XMultiServiceFactory > xOwnFactory = xFactory;
-    if ( !xOwnFactory.is() )
-        xOwnFactory.set( ::comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
+    uno::Reference< uno::XComponentContext > xOwnContext = xContext;
+    if ( !xOwnContext.is() )
+        xOwnContext.set( ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
 
     // IMPORTANT: The implementation is based on idea that m_xFileAccess, m_xInputStream and m_xSeekable are always set
     // otherwise an exception is thrown in constructor
 
-    m_xFileAccess.set( ucb::SimpleFileAccess::create(
-                comphelper::getComponentContext(xOwnFactory) ) );
+    m_xFileAccess.set( ucb::SimpleFileAccess::create(xOwnContext) );
 
     m_xInputStream.set( m_xFileAccess->openFileRead( aURL ), uno::UNO_SET_THROW );
     m_xSeekable.set( m_xInputStream, uno::UNO_QUERY_THROW );

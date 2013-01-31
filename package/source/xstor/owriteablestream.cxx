@@ -229,12 +229,12 @@ sal_Bool KillFile( const ::rtl::OUString& aURL, const uno::Reference< uno::XComp
 const sal_Int32 n_ConstBufferSize = 32000;
 
 //-----------------------------------------------
-::rtl::OUString GetNewTempFileURL( const uno::Reference< lang::XMultiServiceFactory > xFactory )
+::rtl::OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext > xContext )
 {
     ::rtl::OUString aTempURL;
 
     uno::Reference < beans::XPropertySet > xTempFile(
-            io::TempFile::create(comphelper::getComponentContext(xFactory)),
+            io::TempFile::create(xContext),
             uno::UNO_QUERY_THROW );
 
     try {
@@ -255,12 +255,11 @@ const sal_Int32 n_ConstBufferSize = 32000;
 }
 
 //-----------------------------------------------
-uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< uno::XComponentContext >& xContext )
 {
-    if ( !xFactory.is() )
-        throw uno::RuntimeException();
-
-    return uno::Reference< io::XStream >( xFactory->createInstance ("com.sun.star.comp.MemoryStream"), uno::UNO_QUERY_THROW);
+    return uno::Reference< io::XStream >(
+        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.MemoryStream", xContext),
+        uno::UNO_QUERY_THROW);
 }
 
 } // anonymous namespace
@@ -270,7 +269,7 @@ uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< lang::XM
 OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
                                       const uno::Reference< packages::XDataSinkEncrSupport >& xPackageStream,
                                       const uno::Reference< lang::XSingleServiceFactory >& xPackage,
-                                      const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+                                      const uno::Reference< uno::XComponentContext >& xContext,
                                       sal_Bool bForceEncrypted,
                                       sal_Int32 nStorageType,
                                       sal_Bool bDefaultCompress,
@@ -279,7 +278,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
 , m_bHasDataToFlush( sal_False )
 , m_bFlushed( sal_False )
 , m_xPackageStream( xPackageStream )
-, m_xFactory( xFactory )
+, m_xContext( xContext )
 , m_pParent( pParent )
 , m_bForceEncrypted( bForceEncrypted )
 , m_bUseCommonEncryption( !bForceEncrypted && nStorageType == embed::StorageFormats::PACKAGE )
@@ -295,7 +294,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
 {
     OSL_ENSURE( xPackageStream.is(), "No package stream is provided!\n" );
     OSL_ENSURE( xPackage.is(), "No package component is provided!\n" );
-    OSL_ENSURE( m_xFactory.is(), "No package stream is provided!\n" );
+    OSL_ENSURE( m_xContext.is(), "No package stream is provided!\n" );
     OSL_ENSURE( pParent, "No parent storage is provided!\n" );
     OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML || !m_xOrigRelInfoStream.is(), "The Relations info makes sence only for OFOPXML format!\n" );
 }
@@ -533,20 +532,11 @@ void OWriteStream_Impl::DisposeWrappers()
 }
 
 //-----------------------------------------------
-uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactory()
-{
-    if ( m_xFactory.is() )
-        return m_xFactory;
-
-    return ::comphelper::getProcessServiceFactory();
-}
-
-//-----------------------------------------------
 ::rtl::OUString OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XInputStream >& xStream )
 {
     if ( !m_aTempURL.getLength() )
     {
-        ::rtl::OUString aTempURL = GetNewTempFileURL( GetServiceFactory() );
+        ::rtl::OUString aTempURL = GetNewTempFileURL( m_xContext );
 
         try {
             if ( !aTempURL.isEmpty() && xStream.is() )
@@ -601,7 +591,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
         if ( !xOrigStream.is() )
         {
             // in case of new inserted package stream it is possible that input stream still was not set
-            uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( GetServiceFactory() );
+            uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( m_xContext );
             OSL_ENSURE( xCacheStream.is(), "If the stream can not be created an exception must be thrown!\n" );
             m_xCacheSeek.set( xCacheStream, uno::UNO_QUERY_THROW );
             m_xCacheStream = xCacheStream;
@@ -616,7 +606,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
 
             if ( nRead <= MAX_STORCACHE_SIZE )
             {
-                uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( GetServiceFactory() );
+                uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( m_xContext );
                 OSL_ENSURE( xCacheStream.is(), "If the stream can not be created an exception must be thrown!\n" );
 
                 if ( nRead )
@@ -630,7 +620,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
             }
             else if ( m_aTempURL.isEmpty() )
             {
-                m_aTempURL = GetNewTempFileURL( GetServiceFactory() );
+                m_aTempURL = GetNewTempFileURL( m_xContext );
 
                 try {
                     if ( !m_aTempURL.isEmpty() )
@@ -875,7 +865,7 @@ void OWriteStream_Impl::Commit()
         uno::Reference< io::XInputStream > xInStream;
         try
         {
-            xInStream.set( static_cast< io::XInputStream* >( new OSelfTerminateFileStream( GetServiceFactory(), m_aTempURL ) ), uno::UNO_QUERY );
+            xInStream.set( static_cast< io::XInputStream* >( new OSelfTerminateFileStream( m_xContext, m_aTempURL ) ), uno::UNO_QUERY );
         }
         catch( const uno::Exception& )
         {
@@ -1077,7 +1067,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
                 m_aOrigRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                         m_xOrigRelInfoStream,
                                         "_rels/*.rels",
-                                        comphelper::getComponentContext(m_xFactory) );
+                                        m_xContext );
 
             // in case of success the stream must be thrown away, that means that the OrigRelInfo is initialized
             // the reason for this is that the original stream might not be seekable ( at the same time the new
@@ -1103,7 +1093,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
                 m_aNewRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                         m_xNewRelInfoStream,
                                         "_rels/*.rels",
-                                        comphelper::getComponentContext(m_xFactory) );
+                                        m_xContext );
 
             m_nRelInfoStatus = RELINFO_CHANGED_STREAM_READ;
         }
@@ -1411,7 +1401,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
             if ( m_pParent )
                 m_pParent->m_bIsModified = sal_True;
 
-            xStream = CreateMemoryStream( GetServiceFactory() );
+            xStream = CreateMemoryStream( m_xContext );
             m_xCacheSeek.set( xStream, uno::UNO_QUERY_THROW );
             m_xCacheStream = xStream;
         }
@@ -1505,7 +1495,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
     uno::Reference < io::XStream > xTempFile;
     if ( !xTargetStream.is() )
         xTempFile = uno::Reference < io::XStream >(
-            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+            io::TempFile::create(m_xContext),
             uno::UNO_QUERY );
     else
         xTempFile = xTargetStream;
@@ -1687,7 +1677,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                     if ( !xOutStream.is() )
                         throw uno::RuntimeException();
 
-                    ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aNewRelInfo, comphelper::getComponentContext(m_xFactory) );
+                    ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aNewRelInfo, m_xContext );
 
                     // set the mediatype
                     uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );

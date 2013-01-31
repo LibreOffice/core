@@ -23,6 +23,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <ZipPackageEntry.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -45,9 +46,9 @@ class ZipPackageStream : public cppu::ImplInheritanceHelper2
     ::com::sun::star::packages::XDataSinkEncrSupport
 >
 {
-protected:
+private:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
-    const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     ZipPackage          &rZipPackage;
     sal_Bool            bToBeCompressed, bToBeEncrypted, bHaveOwnKey, bIsEncrypted;
 
@@ -140,7 +141,7 @@ public:
     void CloseOwnStreamIfAny();
 
     ZipPackageStream ( ZipPackage & rNewPackage,
-                        const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xFactory,
+                        const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& xContext,
                         sal_Bool bAllowRemoveOnInsert );
     virtual ~ZipPackageStream( void );
 
