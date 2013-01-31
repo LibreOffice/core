@@ -443,24 +443,6 @@ void SfxConfigGroupListBox_Impl::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
     pStylesInfo = pStyles;
 }
 
-String SfxConfigGroupListBox_Impl::GetGroup()
-/*  Description
-    Returns the name of the selected function group/the selected basic.
-*/
-{
-    SvTreeListEntry *pEntry = FirstSelected();
-    while ( pEntry )
-    {
-        SfxGroupInfo_Impl *pInfo = (SfxGroupInfo_Impl*) pEntry->GetUserData();
-        if ( pInfo->nKind == SFX_CFGGROUP_FUNCTION )
-            return GetEntryText( pEntry );
-
-        pEntry = GetParent( pEntry );
-    }
-
-    return String();
-}
-
 //-----------------------------------------------
 void SfxConfigGroupListBox_Impl::InitModule()
 {

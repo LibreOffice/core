@@ -181,7 +181,6 @@ public:
     void                GroupSelected();
     void                SelectMacro( const SfxMacroInfoItem* );
     void                SelectMacro( const String&, const String& );
-    String              GetGroup();
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 

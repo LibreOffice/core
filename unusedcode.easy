@@ -10,8 +10,6 @@ ScFiltersTest::testColorScaleXLSX()
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 StyleSettings::GetPersonaFooter() const
-SvxBrushItem::SetFillStyle(com::sun::star::drawing::FillStyle)
-SvxBrushItem::SetGradient(Gradient&)
 TemplateAbstractView::deselectOverlayItem(unsigned short)
 Test::test1Table1Page()
 TextEngine::GetLeftMargin() const
