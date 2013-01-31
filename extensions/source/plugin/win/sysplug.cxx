@@ -82,13 +82,12 @@ PluginComm_Impl::PluginComm_Impl( const OUString& /*rMIME*/, const OUString& rNa
 #endif
     DBG_ASSERT( _plDLL, "### loading plugin dll failed!" );
 
-    NPError nErr = NPERR_NO_ERROR;
     NPError (WINAPI * pEntry)( NPPluginFuncs* );
     retrieveFunction( _T("NP_GetEntryPoints"), (void**)&pEntry );
 
     _NPPfuncs.size = sizeof( _NPPfuncs );
     _NPPfuncs.version = 0;
-    nErr = (*pEntry)( &_NPPfuncs );
+    NPError nErr = (*pEntry)( &_NPPfuncs );
 
     DBG_ASSERT( nErr == NPERR_NO_ERROR, "### NP_GetEntryPoints() failed!" );
     DBG_ASSERT( (_NPPfuncs.version >> 8) >= NP_VERSION_MAJOR,

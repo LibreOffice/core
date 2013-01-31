@@ -180,7 +180,6 @@ double BesselJ( double x, sal_Int32 N ) throw (IllegalArgumentException, NoConve
 
 double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException, NoConvergenceException )
 {
-    const double fEpsilon = 1.0E-15;
     const sal_Int32 nMaxIteration = 2000;
     const double fXHalf = x / 2.0;
     if( n < 0 )
@@ -203,6 +202,7 @@ double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException, NoConve
     if( fTerm != 0.0 )
     {
         nK = 1;
+        const double fEpsilon = 1.0E-15;
         do
         {
             /*  Calculation of TERM(n,k) from TERM(n,k-1):
@@ -400,7 +400,6 @@ double Bessely1( double fX ) throw( IllegalArgumentException, NoConvergenceExcep
     const double EulerGamma = 0.57721566490153286060;
     double alpha = 1.0/fX;
     double f_bar = -1.0;
-    double g = 0.0;
     double u = alpha;
     double k = 1.0;
     double m_bar = 0.0;
@@ -409,7 +408,7 @@ double Bessely1( double fX ) throw( IllegalArgumentException, NoConvergenceExcep
     double g_bar = -2.0 / fX;
     double delta_u = g_bar_delta_u / g_bar;
     u = u + delta_u;
-    g = -1.0/g_bar;
+    double g = -1.0/g_bar;
     f_bar = f_bar * g;
     double sign_alpha = -1.0;
     double km1mod2; //will be (k-1) mod 2
