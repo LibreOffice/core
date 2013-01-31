@@ -112,6 +112,9 @@ public:
     {
         mbAsciiOnly = i_bAsciiOnly;
     }
+
+    void ShowMinLengthText(bool bShow);
+
     virtual short Execute();
 };
 
