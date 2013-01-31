@@ -63,7 +63,7 @@ if appropriate.
 
 Rewriters analyse and possibly modify given source files.
 Usage: make COMPILER_PLUGIN_TOOL=<rewriter_name>
-Modifications will be written to files <source_file>.new .
+Modifications will be written directly to the source files.
 
 == Code documentation / howtos ==
 
