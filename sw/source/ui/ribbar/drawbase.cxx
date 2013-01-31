@@ -42,8 +42,6 @@ using namespace ::com::sun::star;
 
 extern bool bNoInterrupt;       // in mainwn.cxx
 
-#define MINMOVE ((sal_uInt16)m_pSh->GetOut()->PixelToLogic(Size(m_pSh->GetDrawView()->GetMarkHdlSizePixel()/2,0)).Width())
-
 
 /*************************************************************************
 |*
