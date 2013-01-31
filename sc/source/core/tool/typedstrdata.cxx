@@ -29,7 +29,7 @@
 #include "typedstrdata.hxx"
 #include "global.hxx"
 
-#include "unotools/transliterationwrapper.hxx"
+#include "unotools/collatorwrapper.hxx"
 
 bool ScTypedStrData::LessCaseSensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
 {
@@ -39,7 +39,7 @@ bool ScTypedStrData::LessCaseSensitive::operator() (const ScTypedStrData& left, 
     if (left.meStrType == Value)
         return left.mfValue < right.mfValue;
 
-    return ScGlobal::GetCaseTransliteration()->compareString(
+    return ScGlobal::GetCaseCollator()->compareString(
         left.maStrValue, right.maStrValue) < 0;
 }
 
@@ -51,7 +51,7 @@ bool ScTypedStrData::LessCaseInsensitive::operator() (const ScTypedStrData& left
     if (left.meStrType == Value)
         return left.mfValue < right.mfValue;
 
-    return ScGlobal::GetpTransliteration()->compareString(
+    return ScGlobal::GetCollator()->compareString(
         left.maStrValue, right.maStrValue) < 0;
 }
 
@@ -63,7 +63,7 @@ bool ScTypedStrData::EqualCaseSensitive::operator() (const ScTypedStrData& left,
     if (left.meStrType == Value && left.mfValue != right.mfValue)
         return false;
 
-    return ScGlobal::GetCaseTransliteration()->compareString(
+    return ScGlobal::GetCaseCollator()->compareString(
         left.maStrValue, right.maStrValue) == 0;
 }
 
@@ -75,7 +75,7 @@ bool ScTypedStrData::EqualCaseInsensitive::operator() (const ScTypedStrData& lef
     if (left.meStrType == Value && left.mfValue != right.mfValue)
         return false;
 
-    return ScGlobal::GetpTransliteration()->compareString(
+    return ScGlobal::GetCollator()->compareString(
         left.maStrValue, right.maStrValue) == 0;
 }
 
