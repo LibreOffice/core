@@ -24,8 +24,6 @@
 #include <osl/diagnose.h>
 #include <swdllapi.h>
 
-#include <stack>
-
 template < class Key, class Value > struct DBPTreeNode;
 
 /** Dense B+ tree implementation (to replace the original BigPtrArray).
@@ -98,6 +96,7 @@ private:
         DBPTreeNode< Key, Value > *pNode;
         Key nIndex;
 
+        NodeWithIndex() : pNode( NULL ), nIndex( 0 ) {}
         NodeWithIndex( DBPTreeNode< Key, Value > *p, Key n ) : pNode( p ), nIndex( n ) {}
     };
 
@@ -107,18 +106,21 @@ private:
     /// Amount of values that we contain.
     Key m_nCount;
 
+    /// Depth of the tree - we need that to be able to store info about parents.
+    int m_nDepth;
+
     /** Search for the leaf node containing nPos.
 
         @return the leaf node containing nPos
-        @param pParents stack of parents of the returned tree node so that we can traverse it back to the root
+        @param pParents array of parents of the returned tree node so that we can traverse it back to the root
     */
-    NodeWithIndex findLeaf( Key nPos, std::stack< NodeWithIndex > *pParents = NULL );
+    NodeWithIndex findLeaf( Key nPos, NodeWithIndex pParents[] = NULL, int &rParentsLength = int() );
 
     /// Shift the right side of the tree to left or right by nHowMuch.
-    void shiftNodes( const std::stack< NodeWithIndex > &rParents, int nHowMuch );
+    void shiftNodes( const NodeWithIndex pParents[], int nParentsLength, int nHowMuch );
 
     /// Split the node, and adjust parents accordingly.
-    DBPTreeNode< Key, Value >* splitNode( DBPTreeNode< Key, Value > *pNode, const std::stack< NodeWithIndex > &rParents, std::stack< NodeWithIndex > &rNewParents );
+    DBPTreeNode< Key, Value >* splitNode( DBPTreeNode< Key, Value > *pNode, const NodeWithIndex pParents[], int nParentsLength, NodeWithIndex *pNewParents, int &rNewParentsLength );
 };
 
 // include the implementation

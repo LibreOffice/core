@@ -11,6 +11,8 @@
 
 #include <cassert>
 #include <cstdio>
+#include <cstring>
+
 #include <vector>
 
 using namespace std;
@@ -144,7 +146,8 @@ struct DBPTreeNode
 template < class Key, class Value >
 DenseBPlusTree< Key, Value >::DenseBPlusTree()
     : m_pRoot( new DBPTreeNode< Key, Value > ),
-      m_nCount( 0 )
+      m_nCount( 0 ),
+      m_nDepth( 1 )
 {
 }
 
@@ -157,29 +160,31 @@ DenseBPlusTree< Key, Value >::~DenseBPlusTree()
 template < class Key, class Value >
 void DenseBPlusTree< Key, Value >::Insert( const Value& rValue, Key nPos )
 {
-    stack< NodeWithIndex > aParents;
-    NodeWithIndex aLeaf = findLeaf( nPos, &aParents );
+    NodeWithIndex pParents[ m_nDepth ];
+    int nParentsLength;
+    NodeWithIndex aLeaf = findLeaf( nPos, pParents, nParentsLength );
 
     if ( aLeaf.pNode->m_nUsed < sOrder )
     {
         // there's still space in the current node
         aLeaf.pNode->insert( aLeaf.nIndex, rValue );
-        shiftNodes( aParents, 1 );
+        shiftNodes( pParents, nParentsLength, 1 );
     }
     else
     {
-        stack< NodeWithIndex > aNewParents;
-        DBPTreeNode< Key, Value > *pNewLeaf = splitNode( aLeaf.pNode, aParents, aNewParents );
+        NodeWithIndex pNewParents[ m_nDepth ];
+        int nNewParentsLength;
+        DBPTreeNode< Key, Value > *pNewLeaf = splitNode( aLeaf.pNode, pParents, nParentsLength, pNewParents, nNewParentsLength );
 
         if ( aLeaf.nIndex <= aLeaf.pNode->m_nUsed )
             aLeaf.pNode->insert( aLeaf.nIndex, rValue );
         else
         {
             pNewLeaf->insert( aLeaf.nIndex - aLeaf.pNode->m_nUsed, rValue );
-            ++aNewParents.top().nIndex;
+            ++pNewParents[ nNewParentsLength - 1 ].nIndex;
         }
 
-        shiftNodes( aNewParents, 1 );
+        shiftNodes( pNewParents, nNewParentsLength, 1 );
     }
 
     ++m_nCount;
@@ -266,9 +271,10 @@ void DenseBPlusTree< Key, Value >::dump() const
 }
 
 template < class Key, class Value >
-typename DenseBPlusTree< Key, Value >::NodeWithIndex DenseBPlusTree< Key, Value >::findLeaf( Key nPos, std::stack< NodeWithIndex > *pParents )
+typename DenseBPlusTree< Key, Value >::NodeWithIndex DenseBPlusTree< Key, Value >::findLeaf( Key nPos, NodeWithIndex pParents[], int &rParentsLength )
 {
     DBPTreeNode< Key, Value > *pNode = m_pRoot;
+    rParentsLength = 0;
 
     // recursion is nice for the alg. description, but for implementation, we
     // want to unwind it
@@ -283,7 +289,7 @@ typename DenseBPlusTree< Key, Value >::NodeWithIndex DenseBPlusTree< Key, Value 
             nPos -= pNode->m_pKeys[ i - 1 ];
 
         if ( pParents )
-            pParents->push( NodeWithIndex( pNode, i ) );
+            pParents[ rParentsLength++ ] = NodeWithIndex( pNode, i );
 
         pNode = pNode->m_pChildren[ i ];
     }
@@ -292,69 +298,73 @@ typename DenseBPlusTree< Key, Value >::NodeWithIndex DenseBPlusTree< Key, Value 
 }
 
 template < class Key, class Value >
-void DenseBPlusTree< Key, Value >::shiftNodes( const std::stack< NodeWithIndex >& rParents, int nHowMuch )
+void DenseBPlusTree< Key, Value >::shiftNodes( const NodeWithIndex pParents[], int nParentsLength, int nHowMuch )
 {
-    stack< NodeWithIndex > aParents( rParents );
-    while ( !aParents.empty() )
+    for ( int p = nParentsLength - 1; p >= 0; --p )
     {
-        NodeWithIndex aNode = aParents.top();
-        aParents.pop();
-
-        for ( int i = aNode.nIndex + 1; i < aNode.pNode->m_nUsed - 1; ++i )
-            aNode.pNode->m_pKeys[ i ] += nHowMuch;
+        const NodeWithIndex &rNode = pParents[ p ];
+        for ( int i = rNode.nIndex + 1; i < rNode.pNode->m_nUsed - 1; ++i )
+            rNode.pNode->m_pKeys[ i ] += nHowMuch;
     }
 }
 
 template < class Key, class Value >
-DBPTreeNode< Key, Value >* DenseBPlusTree< Key, Value >::splitNode( DBPTreeNode< Key, Value > *pNode, const std::stack< NodeWithIndex > &rParents, std::stack< NodeWithIndex > &rNewParents )
+DBPTreeNode< Key, Value >* DenseBPlusTree< Key, Value >::splitNode( DBPTreeNode< Key, Value > *pNode, const NodeWithIndex pParents[], int nParentsLength, NodeWithIndex pNewParents[], int &rNewParentsLength )
 {
     assert( pNode->m_nUsed == sOrder );
 
     DBPTreeNode< Key, Value > *pNewNode = new DBPTreeNode< Key, Value >;
     int offset = pNewNode->copyFromSplitNode( pNode );
 
-    if ( rParents.empty() )
+    if ( nParentsLength == 0 )
     {
         // we have to create a new root
         DBPTreeNode< Key, Value > *pNewRoot = new DBPTreeNode< Key, Value >;
         pNewRoot->m_bIsInternal = true;
         pNewRoot->m_pChildren[ 0 ] = m_pRoot;
         pNewRoot->m_nUsed = 1;
+
         m_pRoot = pNewRoot;
+        ++m_nDepth;
 
         m_pRoot->insert( 1, offset, pNewNode );
 
-        rNewParents = stack< NodeWithIndex >();
-        rNewParents.push( NodeWithIndex( m_pRoot, 0 ) );
+        pNewParents[ 0 ] = NodeWithIndex( m_pRoot, 0 );
+        rNewParentsLength = 1;
     }
     else
     {
-        stack< NodeWithIndex > aParents( rParents );
-        NodeWithIndex aParent = aParents.top();
-        aParents.pop();
+        NodeWithIndex aParent = pParents[ nParentsLength - 1 ];
 
         if ( aParent.pNode->m_nUsed < sOrder )
         {
             aParent.pNode->insert( aParent.nIndex + 1, offset, pNewNode );
-            rNewParents = aParents;
-            rNewParents.push( aParent );
+
+            memcpy( pNewParents, pParents, sizeof( pParents[ 0 ] ) * nParentsLength );
+            rNewParentsLength = nParentsLength;
+            pNewParents[ rNewParentsLength - 1 ] = aParent;
         }
         else
         {
-            stack< NodeWithIndex > aNewParents;
-            DBPTreeNode< Key, Value > *pNewParent = splitNode( aParent.pNode, aParents, aNewParents );
+            NodeWithIndex pRetParents[ m_nDepth ];
+            int nRetParentsLength;
+            DBPTreeNode< Key, Value > *pNewParent = splitNode( aParent.pNode, pParents, nParentsLength - 1, pRetParents, nRetParentsLength );
 
             if ( aParent.nIndex <= aParent.pNode->m_nUsed )
             {
                 aParent.pNode->insert( aParent.nIndex + 1, offset, pNewNode );
-                rNewParents = aParents;
-                rNewParents.push( aParent );
+
+                memcpy( pNewParents, pParents, sizeof( pParents[ 0 ] ) * nParentsLength );
+                rNewParentsLength = nParentsLength;
+                pNewParents[ rNewParentsLength - 1 ] = aParent;
             }
             else
             {
                 pNewParent->insert( aParent.nIndex - aParent.pNode->m_nUsed + 1, offset, pNewNode );
-                rNewParents = aParents;
-                rNewParents.push( NodeWithIndex( pNewParent, aParent.nIndex - aParent.pNode->m_nUsed + 1 ) );
+
+                memcpy( pNewParents, pParents, sizeof( pParents[ 0 ] ) * nParentsLength );
+                rNewParentsLength = nParentsLength;
+                pNewParents[ rNewParentsLength - 1 ] = NodeWithIndex( pNewParent, aParent.nIndex - aParent.pNode->m_nUsed + 1 );
             }
         }
     }
