@@ -1533,6 +1533,31 @@ void SfxTemplateManagerDlg::syncRepositories() const
     }
 }
 
+BitmapEx SfxTemplateManagerDlg::getDefaultThumbnail( const OUString& rPath )
+{
+    INetURLObject aUrl(rPath);
+    OUString aExt = aUrl.getExtension();
+
+    BitmapEx aImg;
+    if ( aExt == "ott" || aExt == "stw" || aExt == "oth" || aExt == "dot" || aExt == "dotx" )
+    {
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_TEXT ) );
+    }
+    else if ( aExt == "ots" || aExt == "stc" || aExt == "xlt" || aExt == "xltm" || aExt == "xltx" )
+    {
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_SHEET ) );
+    }
+    else if ( aExt == "otp" || aExt == "sti" || aExt == "pot" || aExt == "potm" || aExt == "potx" )
+    {
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_PRESENTATION ) );
+    }
+    else if ( aExt == "otg" || aExt == "std" )
+    {
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_DRAWING ) );
+    }
+    return aImg;
+}
+
 static bool lcl_getServiceName ( const OUString &rFileURL, OUString &rName )
 {
     bool bRet = false;
