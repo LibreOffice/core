@@ -146,6 +146,7 @@ struct DBPTreeNode
 template < class Key, class Value >
 DenseBPlusTree< Key, Value >::DenseBPlusTree()
     : m_pRoot( new DBPTreeNode< Key, Value > ),
+      m_pLastLeaf( m_pRoot ),
       m_nCount( 0 ),
       m_nDepth( 1 )
 {
@@ -161,8 +162,12 @@ template < class Key, class Value >
 void DenseBPlusTree< Key, Value >::Insert( const Value& rValue, Key nPos )
 {
     NodeWithIndex pParents[ m_nDepth ];
-    int nParentsLength;
-    NodeWithIndex aLeaf = findLeaf( nPos, pParents, nParentsLength );
+    int nParentsLength = 0;
+    NodeWithIndex aLeaf( m_pLastLeaf, m_pLastLeaf->m_nUsed );
+
+    // if we are lucky, we just append, otherwise do the full job
+    if ( nPos != m_nCount || m_pLastLeaf->m_nUsed == sOrder )
+        aLeaf = findLeaf( nPos, pParents, nParentsLength );
 
     if ( aLeaf.pNode->m_nUsed < sOrder )
     {
@@ -315,6 +320,10 @@ DBPTreeNode< Key, Value >* DenseBPlusTree< Key, Value >::splitNode( DBPTreeNode<
 
     DBPTreeNode< Key, Value > *pNewNode = new DBPTreeNode< Key, Value >;
     int offset = pNewNode->copyFromSplitNode( pNode );
+
+    // update the last leaf if necessary
+    if ( pNode == m_pLastLeaf )
+        m_pLastLeaf = pNewNode;
 
     if ( nParentsLength == 0 )
     {

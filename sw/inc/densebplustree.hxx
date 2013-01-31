@@ -103,6 +103,9 @@ private:
     /// Root of the tree.
     DBPTreeNode< Key, Value > *m_pRoot;
 
+    /// The last leaf node - only a small optimization for appends.
+    DBPTreeNode< Key, Value > *m_pLastLeaf;
+
     /// Amount of values that we contain.
     Key m_nCount;
 
