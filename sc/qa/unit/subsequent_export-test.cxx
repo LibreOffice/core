@@ -81,7 +81,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
-#if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(WNT)
+#if !defined(MACOSX) && !defined(DRAGONFLY)
     CPPUNIT_TEST(testPasswordExport);
 #endif
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
