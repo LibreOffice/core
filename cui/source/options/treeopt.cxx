@@ -484,6 +484,7 @@ struct OptionsGroupInfo
 // -----------------------------------------------------------------------
 
 #define INI_LIST() \
+    pCurrentPageEntry   ( NULL ),\
     aOkPB               ( this, CUI_RES( PB_OK ) ),\
     aCancelPB           ( this, CUI_RES( PB_CANCEL ) ),\
     aHelpPB             ( this, CUI_RES( PB_HELP ) ),\
@@ -492,7 +493,6 @@ struct OptionsGroupInfo
     aTreeLB             ( this, CUI_RES( TLB_PAGES ) ),\
     sTitle              ( GetText() ),\
     sNotLoadedError     (       CUI_RES( ST_LOAD_ERROR ) ),\
-    pCurrentPageEntry   ( NULL ),\
     pColorPageItemSet   ( NULL ),\
     mpColorPage         ( NULL ),\
     bForgetSelection    ( sal_False ),\
@@ -539,6 +539,8 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const rtl::OUString
 
 OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
 {
+    maTreeLayoutTimer.Stop();
+    pCurrentPageEntry = NULL;
     SvTreeListEntry* pEntry = aTreeLB.First();
     // first children
     while(pEntry)
@@ -759,6 +761,9 @@ void OfaTreeOptionsDialog::ApplyItemSets()
 
 void OfaTreeOptionsDialog::InitTreeAndHandler()
 {
+    maTreeLayoutTimer.SetTimeout(50);
+    maTreeLayoutTimer.SetTimeoutHdl( LINK( this, OfaTreeOptionsDialog, ImplHandleTreeLayoutTimerHdl ) );
+
     aTreeLB.SetNodeDefaultImages();
 
     aTreeLB.SetHelpId( HID_OFADLG_TREELISTBOX );
@@ -913,6 +918,31 @@ long    OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
         }
     }
     return SfxModalDialog::Notify(rNEvt);
+}
+
+bool OfaTreeOptionsDialog::hasTreePendingLayout() const
+{
+    return maTreeLayoutTimer.IsActive();
+}
+
+void OfaTreeOptionsDialog::queue_layout()
+{
+    if (hasTreePendingLayout())
+        return;
+    if (IsInClose())
+        return;
+    maTreeLayoutTimer.Start();
+}
+
+IMPL_LINK( OfaTreeOptionsDialog, ImplHandleTreeLayoutTimerHdl, void*, EMPTYARG )
+{
+    if (pCurrentPageEntry && aTreeLB.GetParent(pCurrentPageEntry))
+    {
+        OptionsPageInfo* pPageInfo = (OptionsPageInfo*)pCurrentPageEntry->GetUserData();
+        if (pPageInfo->m_pPage && pPageInfo->m_pPage->isLayoutEnabled())
+            SetPaneSize(pPageInfo->m_pPage);
+    }
+    return 0;
 }
 
 // --------------------------------------------------------------------

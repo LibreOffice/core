@@ -140,6 +140,11 @@ typedef std::vector< ExtensionsTabPage* > VectorOfPages;
 class OfaTreeOptionsDialog : public SfxModalDialog
 {
 private:
+    SvTreeListEntry*    pCurrentPageEntry;
+    Timer           maTreeLayoutTimer;
+    DECL_DLLPRIVATE_LINK( ImplHandleTreeLayoutTimerHdl, void* );
+    bool hasTreePendingLayout() const;
+
     OKButton        aOkPB;
     CancelButton    aCancelPB;
     HelpButton      aHelpPB;
@@ -151,8 +156,6 @@ private:
 
     String          sTitle;
     String          sNotLoadedError;
-
-    SvTreeListEntry*    pCurrentPageEntry;
 
     // for the ColorTabPage
     SfxItemSet*     pColorPageItemSet;
@@ -183,6 +186,7 @@ private:
     VectorOfNodes   LoadNodes( Module* pModule, const rtl::OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
+    virtual void queue_layout();
     void SetPaneSize(Window *pPane);
 
 protected:

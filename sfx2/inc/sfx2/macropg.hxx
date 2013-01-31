@@ -34,7 +34,6 @@ class Edit;
 class String;
 class SfxObjectShell;
 
-class SfxConfigGroupListBox_Impl;
 class SfxConfigFunctionListBox_Impl;
 
 class _HeaderTabListBox;

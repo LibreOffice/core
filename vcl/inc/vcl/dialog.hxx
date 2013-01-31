@@ -95,7 +95,7 @@ public:
     virtual void    Resize();
     bool            isLayoutEnabled() const;
     void            setInitialLayoutSize();
-    void            queue_layout();
+    virtual void queue_layout();
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
     VclButtonBox* get_action_area();
     VclBox* get_content_area();
