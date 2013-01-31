@@ -52,6 +52,7 @@ void print_time( const char* msg, const struct timeval &before, const struct tim
 
 int main( int, char** )
 {
+#if 1
     struct timeval tv_before, tv_after;
 
     gettimeofday( &tv_before, NULL );
@@ -81,6 +82,18 @@ int main( int, char** )
         aTest2.Insert( new BigPtrEntryMock(i), 0 );
     gettimeofday( &tv_after, NULL );
     print_time( "DenseBPlusTree - insert at front", tv_before, tv_after );
+#endif
+
+#if 0
+    DenseBPlusTree< int, int > aNumbers;
+    aNumbers.Insert( 20, 0 );
+    aNumbers.Insert( 10, 0 );
+    aNumbers.Insert( 30, 2 );
+    aNumbers.Insert( 1000, 3 );
+    for ( int i = 0; i < 100; ++i )
+        aNumbers.Insert( i, 3 );//aNumbers.Count() );
+    aNumbers.dump();
+#endif
 
     return 0;
 }

@@ -357,31 +357,23 @@ DBPTreeNode< Key, Value >* DenseBPlusTree< Key, Value >::splitNode( DBPTreeNode<
         {
             aParent.pNode->insert( aParent.nIndex + 1, offset, pNewNode );
 
-            memcpy( pNewParents, pParents, sizeof( pParents[ 0 ] ) * nParentsLength );
+            memcpy( pNewParents, pParents, sizeof( pParents[ 0 ] ) * ( nParentsLength - 1 ) );
             rNewParentsLength = nParentsLength;
             pNewParents[ rNewParentsLength - 1 ] = aParent;
         }
         else
         {
-            NodeWithIndex pRetParents[ m_nDepth ];
-            int nRetParentsLength;
-            DBPTreeNode< Key, Value > *pNewParent = splitNode( aParent.pNode, bIsAppend, pParents, nParentsLength - 1, pRetParents, nRetParentsLength );
+            DBPTreeNode< Key, Value > *pNewParent = splitNode( aParent.pNode, bIsAppend, pParents, nParentsLength - 1, pNewParents, rNewParentsLength );
 
             if ( aParent.nIndex <= aParent.pNode->m_nUsed )
             {
                 aParent.pNode->insert( aParent.nIndex + 1, offset, pNewNode );
-
-                memcpy( pNewParents, pParents, sizeof( pParents[ 0 ] ) * nParentsLength );
-                rNewParentsLength = nParentsLength;
-                pNewParents[ rNewParentsLength - 1 ] = aParent;
+                pNewParents[ rNewParentsLength++ ] = aParent;
             }
             else
             {
                 pNewParent->insert( aParent.nIndex - aParent.pNode->m_nUsed + 1, offset, pNewNode );
-
-                memcpy( pNewParents, pParents, sizeof( pParents[ 0 ] ) * nParentsLength );
-                rNewParentsLength = nParentsLength;
-                pNewParents[ rNewParentsLength - 1 ] = NodeWithIndex( pNewParent, aParent.nIndex - aParent.pNode->m_nUsed + 1 );
+                pNewParents[ rNewParentsLength++ ] = NodeWithIndex( pNewParent, aParent.nIndex - aParent.pNode->m_nUsed + 1 );
             }
         }
     }
