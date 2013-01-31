@@ -625,7 +625,7 @@ void readModule(
                                     reader.getFieldName(j),
                                     reader.getFieldTypeName(j).replace(
                                         '/', '.'),
-                                    acc));
+                                    v));
                         }
                         break;
                     }
