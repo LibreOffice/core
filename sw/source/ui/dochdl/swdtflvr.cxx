@@ -2533,7 +2533,7 @@ int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
 int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uLong nFmt,
                                     sal_uInt16 nAction, const Point* pPt,
-                    sal_uInt8 nActionFlags, sal_Bool /* bMsg */)
+                                    sal_uInt8 nActionFlags, sal_Bool /* bMsg */)
 {
     int nRet = SwTransferable::_PasteGrf( rData, rSh, nFmt, nAction,
                                             pPt, nActionFlags, 0, false);
