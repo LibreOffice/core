@@ -102,7 +102,7 @@ PresetHandler::PresetHandler(const css::uno::Reference< css::lang::XMultiService
     : ThreadHelpBase     (&Application::GetSolarMutex()        )
     , m_xSMGR            (xSMGR                                )
     , m_aSharedStorages  (                                     )
-    , m_lDocumentStorages(xSMGR                                )
+    , m_lDocumentStorages()
     , m_aLocale          (::comphelper::Locale::X_NOTRANSLATE())
 {
 }

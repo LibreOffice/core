@@ -27,8 +27,6 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 
 namespace framework
 {
@@ -72,9 +70,6 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
     private:
 
         /** @short  TODO */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
-
-        /** @short  TODO */
         css::uno::Reference< css::embed::XStorage > m_xRoot;
 
         /** @short  TODO */
@@ -88,11 +83,6 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
         /** @short  TODO
          */
         StorageHolder();
-
-        //---------------------------------------
-        /** @short  TODO
-         */
-        StorageHolder(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 
         //---------------------------------------
         /** @short  TODO

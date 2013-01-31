@@ -39,8 +39,6 @@
 
 #include <com/sun/star/io/XSeekable.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 
 #define PATH_SEPERATOR_ASCII        "/"
 #define PATH_SEPERATOR_UNICODE      ((sal_Unicode)'/')
@@ -53,14 +51,6 @@ namespace framework
 //-----------------------------------------------
 StorageHolder::StorageHolder()
     : ThreadHelpBase(                                        )
-    , m_xSMGR       (::comphelper::getProcessServiceFactory())
-{
-}
-
-//-----------------------------------------------
-StorageHolder::StorageHolder(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
-    : ThreadHelpBase(     )
-    , m_xSMGR       (xSMGR)
 {
 }
 
@@ -469,7 +459,6 @@ void StorageHolder::operator=(const StorageHolder& rCopy)
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    m_xSMGR     = rCopy.m_xSMGR; // ???
     m_xRoot     = rCopy.m_xRoot;
     m_lStorages = rCopy.m_lStorages;
 

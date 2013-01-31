@@ -105,8 +105,8 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                 StorageHolder m_lStoragesUser;
 
                 TSharedStorages()
-                    : m_lStoragesShare(::comphelper::getProcessServiceFactory())
-                    , m_lStoragesUser (::comphelper::getProcessServiceFactory())
+                    : m_lStoragesShare()
+                    , m_lStoragesUser ()
                 {};
 
                 virtual ~TSharedStorages() {};
