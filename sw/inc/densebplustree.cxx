@@ -106,38 +106,46 @@ struct DBPTreeNode
     /** Split node, and make the original one smaller.
 
         @return relative key shift of the node.
+        @param bIsAppend in case we are appending, we deliberately keep most of the data untouched, creating as empty node as possible
     */
-    int copyFromSplitNode( DBPTreeNode *pNode )
+    int copyFromSplitNode( DBPTreeNode *pNode, bool bIsAppend )
     {
+        assert( sOrder > 2 );
         assert( pNode->m_nUsed == sOrder );
 
-        const int sKeep = sOrder / 2;
+        // we optimize for the case of appending
+        // it is expected that we first create the entire structure (so want
+        // it to be dense from the space point of view), but when performing
+        // later, the distribution has to be 'fair', because the access is
+        // more or less random
+        int nHowMuchKeep = bIsAppend? sOrder - 2: sOrder / 2;
+
         int offset = 0;
 
         m_bIsInternal = pNode->m_bIsInternal;
         if ( m_bIsInternal )
         {
-            for ( int i = sKeep; i < pNode->m_nUsed; ++i )
-                m_pChildren[ i - sKeep ] = pNode->m_pChildren[ i ];
+            for ( int i = nHowMuchKeep; i < pNode->m_nUsed; ++i )
+                m_pChildren[ i - nHowMuchKeep ] = pNode->m_pChildren[ i ];
 
             // we have to 'relativize' the keys
-            offset = pNode->m_pKeys[ sKeep - 1 ];
-            for ( int i = sKeep; i < pNode->m_nUsed - 1; ++i )
-                m_pKeys[ i - sKeep ] = pNode->m_pKeys[ i ] - offset;
+            offset = pNode->m_pKeys[ nHowMuchKeep - 1 ];
+            for ( int i = nHowMuchKeep; i < pNode->m_nUsed - 1; ++i )
+                m_pKeys[ i - nHowMuchKeep ] = pNode->m_pKeys[ i ] - offset;
         }
         else
         {
-            for ( int i = sKeep; i < pNode->m_nUsed; ++i )
-                m_pValues[ i - sKeep ] = pNode->m_pValues[ i ];
+            for ( int i = nHowMuchKeep; i < pNode->m_nUsed; ++i )
+                m_pValues[ i - nHowMuchKeep ] = pNode->m_pValues[ i ];
 
-            offset = sKeep;
+            offset = nHowMuchKeep;
 
             m_pNext = pNode->m_pNext;
             pNode->m_pNext = this;
         }
 
-        m_nUsed = pNode->m_nUsed - sKeep;
-        pNode->m_nUsed = sKeep;
+        m_nUsed = pNode->m_nUsed - nHowMuchKeep;
+        pNode->m_nUsed = nHowMuchKeep;
 
         return offset;
     }
@@ -179,7 +187,7 @@ void DenseBPlusTree< Key, Value >::Insert( const Value& rValue, Key nPos )
     {
         NodeWithIndex pNewParents[ m_nDepth ];
         int nNewParentsLength;
-        DBPTreeNode< Key, Value > *pNewLeaf = splitNode( aLeaf.pNode, pParents, nParentsLength, pNewParents, nNewParentsLength );
+        DBPTreeNode< Key, Value > *pNewLeaf = splitNode( aLeaf.pNode, nPos == m_nCount, pParents, nParentsLength, pNewParents, nNewParentsLength );
 
         if ( aLeaf.nIndex <= aLeaf.pNode->m_nUsed )
             aLeaf.pNode->insert( aLeaf.nIndex, rValue );
@@ -314,12 +322,12 @@ void DenseBPlusTree< Key, Value >::shiftNodes( const NodeWithIndex pParents[], i
 }
 
 template < class Key, class Value >
-DBPTreeNode< Key, Value >* DenseBPlusTree< Key, Value >::splitNode( DBPTreeNode< Key, Value > *pNode, const NodeWithIndex pParents[], int nParentsLength, NodeWithIndex pNewParents[], int &rNewParentsLength )
+DBPTreeNode< Key, Value >* DenseBPlusTree< Key, Value >::splitNode( DBPTreeNode< Key, Value > *pNode, bool bIsAppend, const NodeWithIndex pParents[], int nParentsLength, NodeWithIndex pNewParents[], int &rNewParentsLength )
 {
     assert( pNode->m_nUsed == sOrder );
 
     DBPTreeNode< Key, Value > *pNewNode = new DBPTreeNode< Key, Value >;
-    int offset = pNewNode->copyFromSplitNode( pNode );
+    int offset = pNewNode->copyFromSplitNode( pNode, bIsAppend );
 
     // update the last leaf if necessary
     if ( pNode == m_pLastLeaf )
@@ -357,7 +365,7 @@ DBPTreeNode< Key, Value >* DenseBPlusTree< Key, Value >::splitNode( DBPTreeNode<
         {
             NodeWithIndex pRetParents[ m_nDepth ];
             int nRetParentsLength;
-            DBPTreeNode< Key, Value > *pNewParent = splitNode( aParent.pNode, pParents, nParentsLength - 1, pRetParents, nRetParentsLength );
+            DBPTreeNode< Key, Value > *pNewParent = splitNode( aParent.pNode, bIsAppend, pParents, nParentsLength - 1, pRetParents, nRetParentsLength );
 
             if ( aParent.nIndex <= aParent.pNode->m_nUsed )
             {

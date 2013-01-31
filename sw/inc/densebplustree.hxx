@@ -123,7 +123,7 @@ private:
     void shiftNodes( const NodeWithIndex pParents[], int nParentsLength, int nHowMuch );
 
     /// Split the node, and adjust parents accordingly.
-    DBPTreeNode< Key, Value >* splitNode( DBPTreeNode< Key, Value > *pNode, const NodeWithIndex pParents[], int nParentsLength, NodeWithIndex *pNewParents, int &rNewParentsLength );
+    DBPTreeNode< Key, Value >* splitNode( DBPTreeNode< Key, Value > *pNode, bool bIsAppend, const NodeWithIndex pParents[], int nParentsLength, NodeWithIndex *pNewParents, int &rNewParentsLength );
 };
 
 // include the implementation
