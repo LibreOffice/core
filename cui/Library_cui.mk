@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,cui,\
     comphelper \
     cppu \
     cppuhelper \
+    drawinglayer \
     editeng \
     i18nisolang1 \
     jvmfwk \
