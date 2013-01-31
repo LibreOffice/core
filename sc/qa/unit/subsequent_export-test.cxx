@@ -125,7 +125,7 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const rtl:
     aTempFile.EnableKillingFile();
     SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
     sal_uInt32 nExportFormat = 0;
-    if (nFormatType)
+    if (nFormatType == ODS_FORMAT_TYPE)
         nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
     SfxFilter* pExportFilter = new SfxFilter(
         rFilter,
@@ -148,7 +148,7 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const rtl:
     //std::cout << "File: " << aTempFile.GetURL() << std::endl;
 
     sal_uInt32 nFormat = 0;
-    if (nFormatType)
+    if (nFormatType == ODS_FORMAT_TYPE)
         nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
 
     OUString aPass("test");
@@ -163,7 +163,7 @@ ScDocShellRef ScExportTest::saveAndReload(ScDocShell* pShell, const rtl::OUStrin
     aTempFile.EnableKillingFile();
     SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
     sal_uInt32 nExportFormat = 0;
-    if (nFormatType)
+    if (nFormatType == ODS_FORMAT_TYPE)
         nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
     SfxFilter* pExportFilter = new SfxFilter(
         rFilter,
@@ -177,7 +177,7 @@ ScDocShellRef ScExportTest::saveAndReload(ScDocShell* pShell, const rtl::OUStrin
     //std::cout << "File: " << aTempFile.GetURL() << std::endl;
 
     sal_uInt32 nFormat = 0;
-    if (nFormatType)
+    if (nFormatType == ODS_FORMAT_TYPE)
         nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
 
     return load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormat, nFormatType);
