@@ -72,7 +72,6 @@
 #include <svx/charthelper.hxx>
 #include <dview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/sdr/contact/objectcontacttools.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
