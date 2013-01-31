@@ -34,9 +34,6 @@ class SwDrawTextShell: public SfxShell
 
     SdrView     *pSdrView;
 
-    sal_Bool        bRotate : 1;
-    sal_Bool        bSelMove: 1;
-
     void        SetAttrToMarked(const SfxItemSet& rAttr);
     void        InsertSymbol(SfxRequest& rReq);
     sal_Bool        IsTextEdit();

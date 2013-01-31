@@ -31,8 +31,6 @@ class SwDrawBaseShell: public SwBaseShell
     SwDrawBase* pDrawActual;
 
     sal_uInt16      eDrawMode;
-    sal_Bool        bRotate : 1;
-    sal_Bool        bSelMove: 1;
 
     DECL_LINK( CheckGroupShapeNameHdl, AbstractSvxNameDialog* );
     DECL_LINK(ValidatePosition, SvxSwFrameValidation* );
