@@ -51,6 +51,9 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 	$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 	&& $(MAKE) \
+	$(if $(filter MACOSX,$(OS)),&& $(PERL) \
+            $(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
+            $(gb_Package_SOURCEDIR_rasqal)/src/.libs/librasqal-lo.1.dylib) \
 	&& touch $@
 endif
 # vim: set noet sw=4 ts=4:
