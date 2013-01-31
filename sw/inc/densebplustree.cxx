@@ -289,13 +289,28 @@ typename DenseBPlusTree< Key, Value >::NodeWithIndex DenseBPlusTree< Key, Value 
     DBPTreeNode< Key, Value > *pNode = m_pRoot;
     rParentsLength = 0;
 
-    // recursion is nice for the alg. description, but for implementation, we
-    // want to unwind it
+    // traverse from the root to the leaves
     while ( pNode->m_bIsInternal )
     {
-        int i = 0;
-        while ( i < pNode->m_nUsed - 1 && pNode->m_pKeys[ i ] <= nPos )
-            ++i;
+        int i;
+        if ( pNode->m_nUsed < 2 || nPos < pNode->m_pKeys[ 0 ] )  // nPos too small, we continue leftmost
+            i = 0;
+        else if ( pNode->m_pKeys[ pNode->m_nUsed - 2 ] <= nPos ) // nPos is too big, continue rightmost
+            i = pNode->m_nUsed - 1;
+        else
+        {
+            // binary search, the values are ordered
+            i = 1;
+            int max = pNode->m_nUsed - 2;
+            while ( i < max )
+            {
+                int pivot = i + ( max - i ) / 2;
+                if ( pNode->m_pKeys[ pivot ] <= nPos )
+                    i = pivot + 1;
+                else
+                    max = pivot;
+            }
+        }
 
         // m_pKeys in children are relative
         if ( i > 0 )

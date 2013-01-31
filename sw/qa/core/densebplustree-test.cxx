@@ -70,6 +70,13 @@ int main( int, char** )
     print_time( "BigPtrArray - insert at front", tv_before, tv_after );
 
     gettimeofday( &tv_before, NULL );
+    BigPtrArray bparr3;
+    for ( int i = 0; i < 1000000; i++ )
+        bparr3.Insert( new BigPtrEntryMock(i), bparr3.Count() / 2 );
+    gettimeofday( &tv_after, NULL );
+    print_time( "BigPtrArray - insert in the middle", tv_before, tv_after );
+
+    gettimeofday( &tv_before, NULL );
     DenseBPlusTree< int, BigPtrEntryMock* > aTest;
     for ( int i = 0; i < 1000000; ++i )
         aTest.Insert( new BigPtrEntryMock(i), aTest.Count() );
@@ -82,6 +89,13 @@ int main( int, char** )
         aTest2.Insert( new BigPtrEntryMock(i), 0 );
     gettimeofday( &tv_after, NULL );
     print_time( "DenseBPlusTree - insert at front", tv_before, tv_after );
+
+    gettimeofday( &tv_before, NULL );
+    DenseBPlusTree< int, BigPtrEntryMock* > aTest3;
+    for ( int i = 0; i < 1000000; ++i )
+        aTest3.Insert( new BigPtrEntryMock(i), aTest3.Count() / 2 );
+    gettimeofday( &tv_after, NULL );
+    print_time( "DenseBPlusTree - insert in the middle", tv_before, tv_after );
 #endif
 
 #if 0
