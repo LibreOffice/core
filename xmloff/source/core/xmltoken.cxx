@@ -1737,6 +1737,7 @@ namespace xmloff { namespace token {
         TOKEN( "subtotal-field",                  XML_SUBTOTAL_FIELD ),
         TOKEN( "subtotal-rule",                   XML_SUBTOTAL_RULE ),
         TOKEN( "subtotal-rules",                  XML_SUBTOTAL_RULES ),
+        TOKEN( "sub-view-size",                   XML_SUB_VIEW_SIZE ),
         TOKEN( "suffix",                          XML_SUFFIX ),
         TOKEN( "sum",                             XML_SUM ),
         TOKEN( "swiss",                           XML_SWISS ),

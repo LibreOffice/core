@@ -84,6 +84,7 @@ namespace xmloff { namespace EnhancedCustomShapeToken {
         EAS_handle_polar,
         EAS_handle_radius_range_minimum,
         EAS_handle_radius_range_maximum,
+        EAS_sub_view_size,
 
         EAS_CustomShapeEngine,
         EAS_CustomShapeData,
@@ -145,6 +146,7 @@ namespace xmloff { namespace EnhancedCustomShapeToken {
         EAS_SameLetterHeights,
         EAS_Position,
         EAS_AdjustmentValues,
+        EAS_SubViewSize,
 
         EAS_Last,
         EAS_NotFound
