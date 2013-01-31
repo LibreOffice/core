@@ -137,9 +137,9 @@ namespace bib
 
         if( m_xControlContainer.is())
         {
-            uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
+            uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
 
-            if ( m_xGridModel.is() && xMgr.is())
+            if ( m_xGridModel.is())
             {
                 uno::Reference< XPropertySet >  xPropSet( m_xGridModel, UNO_QUERY );
 
@@ -149,10 +149,8 @@ namespace bib
                     rtl::OUString aControlName;
                     aAny >>= aControlName;
 
-                    m_xControl = Reference< awt::XControl > (xMgr->createInstance( aControlName ), UNO_QUERY );
-                    DBG_ASSERT( m_xControl.is(), "no GridControl created" );
-                    if ( m_xControl.is() )
-                        m_xControl->setModel( m_xGridModel );
+                    m_xControl = Reference< awt::XControl > ( xContext->getServiceManager()->createInstanceWithContext(aControlName, xContext), UNO_QUERY_THROW );
+                    m_xControl->setModel( m_xGridModel );
                 }
 
                 if ( m_xControl.is() )

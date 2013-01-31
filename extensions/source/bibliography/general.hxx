@@ -111,9 +111,6 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
                         xCtrlContnr;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        xMgr;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >
                         xCurrentBoundComponent;
 

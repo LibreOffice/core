@@ -279,7 +279,6 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
 
     xCtrlContnr = VCLUnoHelper::CreateControlContainer(&aControlParentWin);
 
-    xMgr = comphelper::getProcessServiceFactory();
     // the control should be a bit smaller than the fixed text
     Size aControlSize(aIdentifierFT.GetSizePixel());
     aControlSize.Width() = aControlSize.Width() * 8 / 10;
@@ -464,7 +463,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     {
         sal_Bool bTypeListBox = sTypeColumnName == rName;
         xCtrModel = pDatMan->loadControlModel(rName, bTypeListBox);
-        if ( xCtrModel.is() && xMgr.is())
+        if ( xCtrModel.is() )
         {
             uno::Reference< beans::XPropertySet >  xPropSet( xCtrModel, UNO_QUERY );
 
@@ -523,7 +522,8 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
 
                 }
 
-                uno::Reference< awt::XControl >  xControl(xMgr->createInstance( aControlName ), UNO_QUERY );
+                uno::Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+                uno::Reference< awt::XControl > xControl( xContext->getServiceManager()->createInstanceWithContext(aControlName, xContext), UNO_QUERY);
                 if ( xControl.is() )
                 {
                     xControl->setModel( xCtrModel);

@@ -564,8 +564,6 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
     aSelectionLB.SetDoubleClickHdl( LINK(this, DBChangeDialog_Impl, DoubleClickHdl));
     try
     {
-        Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-
         ::Size aSize = aSelectionHB.GetSizePixel();
         long nTabs[2];
         nTabs[0] = 1;// Number of Tabs
@@ -1403,8 +1401,8 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             else
                 aInstanceName += getControlName(nFormatKey);
 
-            Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-            Reference< XInterface >  xObject = xMgr->createInstance(aInstanceName);
+            Reference< XComponentContext >  xContext = comphelper::getProcessComponentContext();
+            Reference< XInterface >  xObject = xContext->getServiceManager()->createInstanceWithContext(aInstanceName, xContext);
             xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
             Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
             Any aFieldName; aFieldName <<= aName;
