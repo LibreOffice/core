@@ -1126,7 +1126,7 @@ xub_StrLen VclMultiLineEdit::GetMaxTextLen() const
     return pImpVclMEdit->GetMaxTextLen();
 }
 
-void VclMultiLineEdit::ReplaceSelected( const String& rStr )
+void VclMultiLineEdit::ReplaceSelected( const OUString& rStr )
 {
     pImpVclMEdit->InsertText( rStr );
 }
@@ -1136,12 +1136,12 @@ void VclMultiLineEdit::DeleteSelected()
     pImpVclMEdit->InsertText( String() );
 }
 
-String VclMultiLineEdit::GetSelected() const
+OUString VclMultiLineEdit::GetSelected() const
 {
     return pImpVclMEdit->GetSelected();
 }
 
-String VclMultiLineEdit::GetSelected( LineEnd aSeparator ) const
+OUString VclMultiLineEdit::GetSelected( LineEnd aSeparator ) const
 {
     return pImpVclMEdit->GetSelected( aSeparator );
 }

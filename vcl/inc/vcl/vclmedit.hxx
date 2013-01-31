@@ -84,10 +84,10 @@ public:
     virtual void    SetSelection( const Selection& rSelection );
     virtual const Selection& GetSelection() const;
 
-    virtual void        ReplaceSelected( const XubString& rStr );
+    virtual void        ReplaceSelected( const OUString& rStr );
     virtual void        DeleteSelected();
-    virtual XubString   GetSelected() const;
-    virtual XubString   GetSelected( LineEnd aSeparator ) const;
+    virtual OUString    GetSelected() const;
+    virtual OUString    GetSelected( LineEnd aSeparator ) const;
 
     virtual void    Cut();
     virtual void    Copy();

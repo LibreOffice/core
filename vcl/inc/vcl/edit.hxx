@@ -61,11 +61,11 @@ private:
     Timer*              mpUpdateDataTimer;
     DDInfo*             mpDDInfo;
     Impl_IMEInfos*      mpIMEInfos;
-    XubString           maText;
+    OUStringBuffer      maText;
     OUString            maPlaceholderText;
     OUString            maSaveValue;
-    XubString           maUndoText;
-    XubString           maRedoText;
+    OUString            maUndoText;
+    OUString            maRedoText;
     long                mnXOffset;
     Selection           maSelection;
     sal_uInt16          mnAlign;
@@ -73,7 +73,7 @@ private:
     sal_Int32           mnWidthInChars;
     AutocompleteAction  meAutocompleteAction;
     sal_Unicode         mcEchoChar;
-    sal_Bool                mbModified:1,
+    sal_Bool            mbModified:1,
                         mbInternModified:1,
                         mbReadOnly:1,
                         mbInsertMode:1,
@@ -90,13 +90,13 @@ private:
     SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( rtl::OUString&, sal_uInt32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();
     SAL_DLLPRIVATE void        ImplModified();
-    SAL_DLLPRIVATE XubString   ImplGetText() const;
+    SAL_DLLPRIVATE OUString    ImplGetText() const;
     SAL_DLLPRIVATE void        ImplRepaint( xub_StrLen nStart = 0, xub_StrLen nEnd = STRING_LEN, bool bLayout = false );
     SAL_DLLPRIVATE void        ImplInvalidateOrRepaint( xub_StrLen nStart = 0, xub_StrLen nEnd = STRING_LEN );
     SAL_DLLPRIVATE void        ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode );
-    SAL_DLLPRIVATE void        ImplSetText( const XubString& rStr, const Selection* pNewSelection = 0 );
-    SAL_DLLPRIVATE void        ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSelection = 0, sal_Bool bIsUserInput = sal_False );
-    SAL_DLLPRIVATE String      ImplGetValidString( const String& rString ) const;
+    SAL_DLLPRIVATE void        ImplSetText( const OUString& rStr, const Selection* pNewSelection = 0 );
+    SAL_DLLPRIVATE void        ImplInsertText( const OUString& rStr, const Selection* pNewSelection = 0, sal_Bool bIsUserInput = sal_False );
+    SAL_DLLPRIVATE OUString    ImplGetValidString( const OUString& rString ) const;
     SAL_DLLPRIVATE void        ImplClearBackground( long nXStart, long nXEnd );
     SAL_DLLPRIVATE void        ImplPaintBorder( long nXStart, long nXEnd );
     SAL_DLLPRIVATE void        ImplShowCursor( sal_Bool bOnlyIfVisible = sal_True );
@@ -197,9 +197,9 @@ public:
     virtual void        SetSelection( const Selection& rSelection );
     virtual const Selection&    GetSelection() const;
 
-    virtual void        ReplaceSelected( const XubString& rStr );
+    virtual void        ReplaceSelected( const OUString& rStr );
     virtual void        DeleteSelected();
-    virtual XubString   GetSelected() const;
+    virtual OUString    GetSelected() const;
 
     virtual void        Cut();
     virtual void        Copy();

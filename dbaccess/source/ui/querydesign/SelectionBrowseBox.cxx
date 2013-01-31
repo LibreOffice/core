@@ -2501,10 +2501,10 @@ sal_Bool OSelectionBrowseBox::isCutAllowed()
         case BROW_FUNCTION_ROW:
             break;
         case BROW_FIELD_ROW:
-            bCutAllowed = m_pFieldCell->GetSelected().Len() != 0;
+            bCutAllowed = !m_pFieldCell->GetSelected().isEmpty();
             break;
         default:
-            bCutAllowed = m_pTextCell->GetSelected().Len() != 0;
+            bCutAllowed = !m_pTextCell->GetSelected().isEmpty();
             break;
     }
     return bCutAllowed;
