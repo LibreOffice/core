@@ -633,9 +633,11 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
         return E_UNSUPPORTED_CONTENT;
     }
 
-    // following operatons can work on an internal type name only :-(
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    css::uno::Reference< css::document::XTypeDetection > xDetect(xSMGR->createInstance(SERVICENAME_TYPEDETECTION), css::uno::UNO_QUERY);
+    // following operations can work on an internal type name only :-(
+    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    css::uno::Reference< css::document::XTypeDetection > xDetect(
+         xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_TYPEDETECTION, xContext),
+         css::uno::UNO_QUERY);
 
     ::rtl::OUString sType = xDetect->queryTypeByURL(sURL);
 
@@ -665,7 +667,9 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     lQuery[0].Name    = sPROP_TYPES;
     lQuery[0].Value <<= lTypesReg;
 
-    xContainer = css::uno::Reference< css::container::XContainerQuery >(xSMGR->createInstance(SERVICENAME_FRAMELOADERFACTORY), css::uno::UNO_QUERY);
+    xContainer = css::uno::Reference< css::container::XContainerQuery >(
+         xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FRAMELOADERFACTORY, xContext),
+         css::uno::UNO_QUERY);
     xSet       = xContainer->createSubSetEnumerationByProperties(lQuery);
     // at least one registered frame loader is enough!
     if (xSet->hasMoreElements())
@@ -680,7 +684,9 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     lQuery[0].Name    = sPROP_TYPES;
     lQuery[0].Value <<= lTypesReg;
 
-    xContainer = css::uno::Reference< css::container::XContainerQuery >(xSMGR->createInstance(SERVICENAME_CONTENTHANDLERFACTORY), css::uno::UNO_QUERY);
+    xContainer = css::uno::Reference< css::container::XContainerQuery >(
+         xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_CONTENTHANDLERFACTORY, xContext),
+         css::uno::UNO_QUERY);
     xSet       = xContainer->createSubSetEnumerationByProperties(lQuery);
     // at least one registered content handler is enough!
     if (xSet->hasMoreElements())
@@ -690,7 +696,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     // (v) Last but not least the UCB is used inside office to
     //     load contents. He has a special configuration to know
     //     which URL schemata can be used inside office.
-    css::uno::Reference< css::ucb::XUniversalContentBroker > xUCB(css::ucb::UniversalContentBroker::create(comphelper::getComponentContext(xSMGR)));
+    css::uno::Reference< css::ucb::XUniversalContentBroker > xUCB(css::ucb::UniversalContentBroker::create(xContext));
     if (xUCB->queryContentProvider(sURL).is())
         return E_CAN_BE_LOADED;
 

@@ -313,8 +313,10 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             aSeq[0] <<= bQuickstart;
             aSeq[1] <<= bAutostart;
 
-            Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString("com.sun.star.office.Quickstart")),UNO_QUERY );
+            Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            Reference < XInitialization > xQuickstart(
+                xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Quickstart", xContext),
+                UNO_QUERY );
             if ( xQuickstart.is() )
                 xQuickstart->initialize( aSeq );
 
