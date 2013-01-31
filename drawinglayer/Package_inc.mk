@@ -110,6 +110,7 @@ $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/objectinfoextractor2d.hxx,drawinglayer/processor2d/objectinfoextractor2d.hxx))
 
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor3d/baseprocessor3d.hxx,drawinglayer/processor3d/baseprocessor3d.hxx))
+$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor3d/defaultprocessor3d.hxx,drawinglayer/processor3d/defaultprocessor3d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor3d/cutfindprocessor3d.hxx,drawinglayer/processor3d/cutfindprocessor3d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor3d/geometry2dextractor.hxx,drawinglayer/processor3d/geometry2dextractor.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor3d/shadow3dextractor.hxx,drawinglayer/processor3d/shadow3dextractor.hxx))
