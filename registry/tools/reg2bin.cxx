@@ -1117,7 +1117,7 @@ sal_uInt64 writeMap(
                          j->parameters.begin());
                      k != j->parameters.end(); ++k)
                 {
-                    sal_uInt64 f;
+                    sal_uInt64 f = sal_uInt64();
                     switch (k->mode) {
                     case RT_PARAM_IN:
                         f = 0;
