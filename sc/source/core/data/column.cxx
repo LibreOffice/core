@@ -2103,7 +2103,7 @@ bool ScColumn::CompileErrorCells(sal_uInt16 nErrCode)
             continue;
 
         pFCell->GetCode()->SetCodeError(0);
-        OUStringBuffer aBuf;
+        rtl::OUStringBuffer aBuf;
         pFCell->GetFormula(aBuf, pDocument->GetGrammar());
         pFCell->Compile(aBuf.makeStringAndClear(), false, pDocument->GetGrammar());
 
