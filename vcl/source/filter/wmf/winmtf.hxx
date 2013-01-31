@@ -624,6 +624,8 @@ class WinMtfOutput
     sal_Int32           mnDevWidth, mnDevHeight;
     sal_Int32           mnWinOrgX, mnWinOrgY;       // aktuelles Window-Origin
     sal_Int32           mnWinExtX, mnWinExtY;       // aktuelles Window-Extent
+    sal_Bool            mbIsMapWinSet;
+    sal_Bool            mbIsMapDevSet;
 
     sal_Int32           mnPixX, mnPixY;             // Reference Device in pixel
     sal_Int32           mnMillX, mnMillY;           // Reference Device in Mill
@@ -636,11 +638,14 @@ class WinMtfOutput
     void                UpdateFillStyle();
 
     Point               ImplMap( const Point& rPt );
+    Point               ImplScale( const Point& rPt );
     Size                ImplMap( const Size& rSz );
     Rectangle           ImplMap( const Rectangle& rRectangle );
     void                ImplMap( Font& rFont );
     Polygon&            ImplMap( Polygon& rPolygon );
     PolyPolygon&        ImplMap( PolyPolygon& rPolyPolygon );
+    Polygon&            ImplScale( Polygon& rPolygon );
+    PolyPolygon&        ImplScale( PolyPolygon& rPolyPolygon );
     void                ImplResizeObjectArry( sal_uInt32 nNewEntry );
     void                ImplSetNonPersistentLineColorTransparenz();
     void                ImplDrawClippedPolyPolygon( const PolyPolygon& rPolyPoly );
@@ -648,14 +653,15 @@ class WinMtfOutput
 
 public:
 
+    void                SetDevByWin(); //Hack to set varying defaults for incompletely defined files.
     void                SetDevOrg( const Point& rPoint );
     void                SetDevOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd );
-    void                SetDevExt( const Size& rSize );
+    void                SetDevExt( const Size& rSize ,sal_Bool regular = true);
     void                ScaleDevExt( double fX, double fY );
 
-    void                SetWinOrg( const Point& rPoint );
+    void                SetWinOrg( const Point& rPoint , sal_Bool bIsEMF = false);
     void                SetWinOrgOffset( sal_Int32 nX, sal_Int32 nY );
-    void                SetWinExt( const Size& rSize );
+    void                SetWinExt( const Size& rSize , sal_Bool bIsEMF = false);
     void                ScaleWinExt( double fX, double fY );
 
     void                SetrclBounds( const Rectangle& rRect );
