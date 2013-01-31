@@ -555,10 +555,11 @@ ModuleDescription::getMembers() throw (css::uno::RuntimeException) {
     return s;
 }
 
-class EnumTypeDescription:
-    public cppu::ImplInheritanceHelper1<
-        PublishableDescription, css::reflection::XEnumTypeDescription >
-{
+typedef cppu::ImplInheritanceHelper1<
+    PublishableDescription, css::reflection::XEnumTypeDescription >
+EnumTypeDescription_Base;
+
+class EnumTypeDescription: public EnumTypeDescription_Base {
 public:
     struct Member {
         Member(rtl::OUString const & theName, sal_Int32 theValue):
@@ -572,7 +573,7 @@ public:
     EnumTypeDescription(
         rtl::OUString const & name, bool published,
         std::vector< Member > const & members):
-        ImplInheritanceHelper1(published), name_(name), members_(members)
+        EnumTypeDescription_Base(published), name_(name), members_(members)
     { assert(!members_.empty()); }
 
 private:
@@ -623,10 +624,11 @@ css::uno::Sequence< sal_Int32 > EnumTypeDescription::getEnumValues()
     return s;
 }
 
-class PlainStructTypeDescription:
-    public cppu::ImplInheritanceHelper1<
-        PublishableDescription, css::reflection::XStructTypeDescription >
-{
+typedef cppu::ImplInheritanceHelper1<
+    PublishableDescription, css::reflection::XStructTypeDescription >
+PlainStructTypeDescription_Base;
+
+class PlainStructTypeDescription: public PlainStructTypeDescription_Base {
 public:
     struct Member {
         Member(rtl::OUString const & theName, rtl::OUString const & theType):
@@ -641,8 +643,8 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name, bool published, rtl::OUString const & base,
         std::vector< Member > const & directMembers):
-        ImplInheritanceHelper1(published), context_(context), name_(name),
-        base_(base), directMembers_(directMembers)
+        PlainStructTypeDescription_Base(published), context_(context),
+        name_(name), base_(base), directMembers_(directMembers)
     {}
 
 private:
@@ -736,9 +738,12 @@ private:
     rtl::OUString typeParameterName_;
 };
 
+typedef cppu::ImplInheritanceHelper1<
+    PublishableDescription, css::reflection::XStructTypeDescription >
+PolymorphicStructTypeTemplateDescription_Base;
+
 class PolymorphicStructTypeTemplateDescription:
-    public cppu::ImplInheritanceHelper1<
-        PublishableDescription, css::reflection::XStructTypeDescription >
+    public PolymorphicStructTypeTemplateDescription_Base
 {
 public:
     struct Member {
@@ -758,8 +763,9 @@ public:
         rtl::OUString const & name, bool published,
         std::vector< rtl::OUString > const & typeParameters,
         std::vector< Member > const & members):
-        ImplInheritanceHelper1(published), context_(context), name_(name),
-        typeParameters_(typeParameters), members_(members)
+        PolymorphicStructTypeTemplateDescription_Base(published),
+        context_(context), name_(name), typeParameters_(typeParameters),
+        members_(members)
     {}
 
 private:
@@ -843,10 +849,11 @@ PolymorphicStructTypeTemplateDescription::getTypeParameters()
     return s;
 }
 
-class ExceptionTypeDescription:
-    public cppu::ImplInheritanceHelper1<
-        PublishableDescription, css::reflection::XCompoundTypeDescription >
-{
+typedef cppu::ImplInheritanceHelper1<
+    PublishableDescription, css::reflection::XCompoundTypeDescription >
+ExceptionTypeDescription_Base;
+
+class ExceptionTypeDescription: public ExceptionTypeDescription_Base {
 public:
     struct Member {
         Member(rtl::OUString const & theName, rtl::OUString const & theType):
@@ -861,8 +868,8 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name, bool published, rtl::OUString const & base,
         std::vector< Member > const & directMembers):
-        ImplInheritanceHelper1(published), context_(context), name_(name),
-        base_(base), directMembers_(directMembers)
+        ExceptionTypeDescription_Base(published), context_(context),
+        name_(name), base_(base), directMembers_(directMembers)
     {}
 
 private:
@@ -1234,10 +1241,11 @@ MethodDescription::getExceptions() throw (css::uno::RuntimeException) {
     return s;
 }
 
-class InterfaceTypeDescription:
-    public cppu::ImplInheritanceHelper1<
-        PublishableDescription, css::reflection::XInterfaceTypeDescription2 >
-{
+typedef cppu::ImplInheritanceHelper1<
+    PublishableDescription, css::reflection::XInterfaceTypeDescription2 >
+InterfaceTypeDescription_Base;
+
+class InterfaceTypeDescription: public InterfaceTypeDescription_Base {
 public:
     InterfaceTypeDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
@@ -1246,8 +1254,8 @@ public:
         std::vector< rtl::OUString > const & optionalDirectBases,
         std::vector< Attribute > const & directAttributes,
         std::vector< Method > const & directMethods):
-        ImplInheritanceHelper1(published), context_(context), name_(name),
-        mandatoryDirectBases_(mandatoryDirectBases),
+        InterfaceTypeDescription_Base(published), context_(context),
+        name_(name), mandatoryDirectBases_(mandatoryDirectBases),
         optionalDirectBases_(optionalDirectBases),
         directAttributes_(directAttributes), directMethods_(directMethods)
     {}
@@ -1375,17 +1383,18 @@ private:
     css::uno::Any value_;
 };
 
-class ConstantGroupDescription:
-    public cppu::ImplInheritanceHelper1<
-        PublishableDescription, css::reflection::XConstantsTypeDescription >
-{
+typedef cppu::ImplInheritanceHelper1<
+    PublishableDescription, css::reflection::XConstantsTypeDescription >
+ConstantGroupDescription_Base;
+
+class ConstantGroupDescription: public ConstantGroupDescription_Base {
 public:
     ConstantGroupDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name, bool published,
         std::vector< rtl::OUString > const & constants):
-        ImplInheritanceHelper1(published), context_(context), name_(name),
-        constants_(constants)
+        ConstantGroupDescription_Base(published), context_(context),
+        name_(name), constants_(constants)
     {}
 
 private:
@@ -1423,15 +1432,16 @@ ConstantGroupDescription::getConstants() throw (css::uno::RuntimeException) {
     return s;
 }
 
-class TypedefDescription:
-    public cppu::ImplInheritanceHelper1<
-        PublishableDescription, css::reflection::XIndirectTypeDescription >
-{
+typedef cppu::ImplInheritanceHelper1<
+    PublishableDescription, css::reflection::XIndirectTypeDescription >
+TypedefDescription_Base;
+
+class TypedefDescription: public TypedefDescription_Base {
 public:
     TypedefDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name, bool published, rtl::OUString const & type):
-        ImplInheritanceHelper1(published), context_(context), name_(name),
+        TypedefDescription_Base(published), context_(context), name_(name),
         type_(type)
     {}
 
@@ -1586,17 +1596,20 @@ ConstructorDescription::getExceptions() throw (css::uno::RuntimeException) {
     return s;
 }
 
+typedef cppu::ImplInheritanceHelper1<
+    PublishableDescription, css::reflection::XServiceTypeDescription2 >
+SingleInterfaceBasedServiceDescription_Base;
+
 class SingleInterfaceBasedServiceDescription:
-    public cppu::ImplInheritanceHelper1<
-        PublishableDescription, css::reflection::XServiceTypeDescription2 >
+    public SingleInterfaceBasedServiceDescription_Base
 {
 public:
     SingleInterfaceBasedServiceDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name, bool published, rtl::OUString const & type,
         std::vector< Constructor > const & constructors):
-        ImplInheritanceHelper1(published), context_(context), name_(name),
-        type_(type), constructors_(constructors)
+        SingleInterfaceBasedServiceDescription_Base(published),
+        context_(context), name_(name), type_(type), constructors_(constructors)
     {}
 
 private:
@@ -1737,9 +1750,12 @@ private:
     Property property_;
 };
 
+typedef cppu::ImplInheritanceHelper1<
+    PublishableDescription, css::reflection::XServiceTypeDescription2 >
+AccumulationBasedServiceDescription_Base;
+
 class AccumulationBasedServiceDescription:
-    public cppu::ImplInheritanceHelper1<
-        PublishableDescription, css::reflection::XServiceTypeDescription2 >
+    public AccumulationBasedServiceDescription_Base
 {
 public:
     AccumulationBasedServiceDescription(
@@ -1750,8 +1766,8 @@ public:
         std::vector< rtl::OUString > const & mandatoryDirectBaseInterfaces,
         std::vector< rtl::OUString > const & optionalDirectBaseInterfaces,
         std::vector< Property > const & directProperties):
-        ImplInheritanceHelper1(published), context_(context), name_(name),
-        mandatoryDirectBaseServices_(mandatoryDirectBaseServices),
+        AccumulationBasedServiceDescription_Base(published), context_(context),
+        name_(name), mandatoryDirectBaseServices_(mandatoryDirectBaseServices),
         optionalDirectBaseServices_(optionalDirectBaseServices),
         mandatoryDirectBaseInterfaces_(mandatoryDirectBaseInterfaces),
         optionalDirectBaseInterfaces_(optionalDirectBaseInterfaces),
@@ -1909,16 +1925,19 @@ AccumulationBasedServiceDescription::getProperties()
     return s;
 }
 
+typedef cppu::ImplInheritanceHelper1<
+    PublishableDescription, css::reflection::XSingletonTypeDescription2 >
+InterfaceBasedSingletonDescription_Base;
+
 class InterfaceBasedSingletonDescription:
-    public cppu::ImplInheritanceHelper1<
-        PublishableDescription, css::reflection::XSingletonTypeDescription2 >
+    public InterfaceBasedSingletonDescription_Base
 {
 public:
     InterfaceBasedSingletonDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name, bool published, rtl::OUString const & type):
-        ImplInheritanceHelper1(published), context_(context), name_(name),
-        type_(type)
+        InterfaceBasedSingletonDescription_Base(published), context_(context),
+        name_(name), type_(type)
     {}
 
 private:
@@ -1951,16 +1970,19 @@ private:
     rtl::OUString type_;
 };
 
+typedef cppu::ImplInheritanceHelper1<
+    PublishableDescription, css::reflection::XSingletonTypeDescription2 >
+ServiceBasedSingletonDescription_Base;
+
 class ServiceBasedSingletonDescription:
-    public cppu::ImplInheritanceHelper1<
-        PublishableDescription, css::reflection::XSingletonTypeDescription2 >
+    public ServiceBasedSingletonDescription_Base
 {
 public:
     ServiceBasedSingletonDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name, bool published, rtl::OUString const & type):
-        ImplInheritanceHelper1(published), context_(context), name_(name),
-        type_(type)
+        ServiceBasedSingletonDescription_Base(published), context_(context),
+        name_(name), type_(type)
     {}
 
 private:
@@ -2198,20 +2220,21 @@ void Enumeration::findMatch() {
     }
 }
 
+typedef cppu::WeakComponentImplHelper2<
+    css::container::XHierarchicalNameAccess,
+    css::reflection::XTypeDescriptionEnumerationAccess >
+Provider_Base;
+
 class Provider:
-    private osl::Mutex,
-    public cppu::WeakComponentImplHelper2<
-        css::container::XHierarchicalNameAccess,
-        css::reflection::XTypeDescriptionEnumerationAccess >,
-    private boost::noncopyable
+    private osl::Mutex, public Provider_Base, private boost::noncopyable
 {
 public:
     Provider(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & uri);
 
-    using WeakComponentImplHelper2::acquire;
-    using WeakComponentImplHelper2::release;
+    using Provider_Base::acquire;
+    using Provider_Base::release;
 
 private:
     enum Compare { COMPARE_LESS, COMPARE_GREATER, COMPARE_EQUAL };
@@ -2258,8 +2281,8 @@ private:
 Provider::Provider(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     rtl::OUString const & uri):
-    WeakComponentImplHelper2(*static_cast< osl::Mutex * >(this)),
-    context_(context), file_(new MappedFile(uri))
+    Provider_Base(*static_cast< osl::Mutex * >(this)), context_(context),
+    file_(new MappedFile(uri))
 {
     if (file_->size < 8 || std::memcmp(file_->address, "UNOIDL\0\xFF", 8) != 0)
     {
