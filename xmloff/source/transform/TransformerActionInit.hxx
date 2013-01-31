@@ -36,7 +36,7 @@ struct XMLTransformerActionInit
     sal_uInt32 m_nParam2;
     sal_uInt32 m_nParam3;
 
-    static sal_Int32 QNameParam( sal_uInt16 nPrefix,
+    static sal_uInt32 QNameParam( sal_uInt16 nPrefix,
                                     ::xmloff::token::XMLTokenEnum eLocalName )
     {
         return (static_cast< sal_uInt32 >( nPrefix ) << 16) +
