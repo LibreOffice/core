@@ -57,16 +57,23 @@ enum Group
 };
 
 // group data
-const char* vGroupNames[] =
+struct
+{
+    // group
+    Group eGroup;
+    // .ui group name
+    const char *pGroup;
+}
+const vGroupInfo[] =
 {
     // the groups are in the same order as in enum Group above
-    "general",
-    "writer",
-    "html",
-    "calc",
-    "draw",
-    "basic",
-    "sql"
+    { Group_General, "general" },
+    { Group_Writer, "writer" },
+    { Group_Html, "html" },
+    { Group_Calc, "calc" },
+    { Group_Draw, "draw" },
+    { Group_Basic, "basic" },
+    { Group_Sql, "sql" }
 };
 
 // color config entry data (see ColorConfigWindow_Impl::Entry below)
@@ -182,7 +189,7 @@ private:
         bool m_bOwnsWidget;
         FixedText *m_pText;
     public:
-        Chapter(FixedText *pText);
+        Chapter(FixedText *pText, bool bShow);
         Chapter(Window *pGrid, unsigned nYPos, const rtl::OUString& sDisplayName);
         ~Chapter();
     public:
@@ -198,7 +205,7 @@ private:
     class Entry
     {
     public:
-        Entry(ColorConfigWindow_Impl& rParent, unsigned iEntry, long nCheckBoxLabelOffset);
+        Entry(ColorConfigWindow_Impl& rParent, unsigned iEntry, long nCheckBoxLabelOffset, bool bShow);
         Entry(Window* pGrid, unsigned nYPos, const ExtendedColorConfigValue& aColorEntry,
             long nCheckBoxLabelOffset);
         ~Entry();
@@ -260,8 +267,6 @@ private:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
 
-    unsigned GetPosBehindLastChapter () const;
-
     bool IsGroupVisible (Group) const;
 };
 
@@ -273,10 +278,12 @@ private:
 // rParent: parent window (ColorConfigWindow_Impl)
 // eGroup: which group is this?
 // rResMgr: resource manager
-ColorConfigWindow_Impl::Chapter::Chapter(FixedText* pText)
+ColorConfigWindow_Impl::Chapter::Chapter(FixedText* pText, bool bShow)
     : m_bOwnsWidget(false)
     , m_pText(pText)
 {
+    if (!bShow)
+        Hide();
 }
 
 // ctor for extended groups
@@ -315,7 +322,7 @@ void ColorConfigWindow_Impl::Chapter::Hide ()
 //
 
 ColorConfigWindow_Impl::Entry::Entry(ColorConfigWindow_Impl& rParent, unsigned iEntry,
-    long nCheckBoxLabelOffset)
+    long nCheckBoxLabelOffset, bool bShow)
     : m_bOwnsWidgets(false)
     , m_aDefaultColor(ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(iEntry)))
 {
@@ -327,6 +334,9 @@ ColorConfigWindow_Impl::Entry::Entry(ColorConfigWindow_Impl& rParent, unsigned i
     }
     rParent.get(m_pColorList, vEntryInfo[iEntry].pColor);
     rParent.get(m_pPreview, vEntryInfo[iEntry].pPreview);
+
+    if (!bShow)
+        Hide();
 }
 
 // ctor for extended entries
@@ -341,20 +351,19 @@ ColorConfigWindow_Impl::Entry::Entry( Window *pGrid, unsigned nYPos,
     m_pText->set_grid_top_attach(nYPos);
     m_pText->set_margin_left(6 + nCheckBoxLabelOffset);
     m_pText->SetText(rColorEntry.getDisplayName());
-    m_pText->Show();
 
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|WB_DROPDOWN;
     m_pColorList = new ColorListBox(pGrid, nWinBits);
     m_pColorList->EnableAutoSize(true);
     m_pColorList->set_grid_left_attach(1);
     m_pColorList->set_grid_top_attach(nYPos);
-    m_pColorList->Show();
 
     m_pPreview = new Window(pGrid, WB_BORDER);
     m_pPreview->set_grid_left_attach(2);
     m_pPreview->set_grid_top_attach(nYPos);
     m_pPreview->set_margin_right(6);
-    m_pPreview->Show();
+
+    Show();
 }
 
 ColorConfigWindow_Impl::Entry::~Entry()
@@ -367,14 +376,14 @@ ColorConfigWindow_Impl::Entry::~Entry()
     }
 }
 
-void ColorConfigWindow_Impl::Entry::Show ()
+void ColorConfigWindow_Impl::Entry::Show()
 {
     m_pText->Show();
     m_pColorList->Show();
     m_pPreview->Show();
 }
 
-void ColorConfigWindow_Impl::Entry::Hide ()
+void ColorConfigWindow_Impl::Entry::Hide()
 {
     m_pText->Hide();
     m_pColorList->Hide();
@@ -516,12 +525,15 @@ void ColorConfigWindow_Impl::setAllocation(const Size &rAllocation)
 
 void ColorConfigWindow_Impl::CreateEntries()
 {
+    std::vector<int> aModulesInstalled;
     // creating group headers
     vChapters.reserve(nGroupCount);
+    aModulesInstalled.reserve(nGroupCount);
     for (unsigned i = 0; i != nGroupCount; ++i)
     {
+        aModulesInstalled.push_back(IsGroupVisible(vGroupInfo[i].eGroup));
         vChapters.push_back(boost::shared_ptr<Chapter>(
-            new Chapter(get<FixedText>(vGroupNames[i]))));
+            new Chapter(get<FixedText>(vGroupInfo[i].pGroup), aModulesInstalled[i])));
     }
 
     //Here we want to get the amount to add to the position
@@ -545,7 +557,10 @@ void ColorConfigWindow_Impl::CreateEntries()
     // creating entries
     vEntries.reserve(ColorConfigEntryCount);
     for (unsigned i = 0; i < SAL_N_ELEMENTS(vEntryInfo); ++i)
-        vEntries.push_back(boost::shared_ptr<Entry>(new Entry(*this, i, nCheckBoxLabelOffset)));
+    {
+        vEntries.push_back(boost::shared_ptr<Entry>(new Entry(*this, i, nCheckBoxLabelOffset,
+            aModulesInstalled[vEntryInfo[i].eGroup])));
+    }
 
     // extended entries
     ExtendedColorConfig aExtConfig;
@@ -779,14 +794,6 @@ bool ColorConfigWindow_Impl::IsGroupVisible (Group eGroup) const
         default:
             return true;
     }
-}
-
-// calculate position behind last chapter
-unsigned ColorConfigWindow_Impl::GetPosBehindLastChapter () const
-{
-    int nLastY = vEntries.back()->GetBottom();
-    nLastY += LogicToPixel( Size(0, 3), MAP_APPFONT ).Height();
-    return nLastY;
 }
 
 void ColorConfigWindow_Impl::DataChanged (DataChangedEvent const& rDCEvt)
