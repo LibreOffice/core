@@ -37,3 +37,23 @@ String STR_PASSWD
 {
     Text [ en-US ] = "Password" ;
 };
+
+Bitmap ( SFX_THUMBNAIL_TEXT )
+{
+    File = "odt_48_8.png";
+};
+
+Bitmap ( SFX_THUMBNAIL_SHEET )
+{
+    File = "ods_48_8.png";
+};
+
+Bitmap ( SFX_THUMBNAIL_PRESENTATION )
+{
+    File = "odp_48_8.png";
+};
+
+Bitmap ( SFX_THUMBNAIL_DRAWING )
+{
+    File = "odg_48_8.png";
+};
