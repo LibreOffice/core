@@ -4114,7 +4114,7 @@ if test "$cross_compiling" = "yes"; then
         config_host.mk.in \
         configure \
         Makefile.in \
-        config/config_*.h.in \
+        config_host/config_*.h.in \
         bin/get_config_variables \
         solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
@@ -4170,6 +4170,8 @@ if test "$cross_compiling" = "yes"; then
     test -f ./config_host.mk 2>/dev/null || exit
     cp config_host.mk ../config_build.mk
     cp config.log ../config.Build.log
+    mkdir -p ../config_build
+    cp config_host/*.h ../config_build
     . ./bin/get_config_variables COM GUI OS PATH CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH PYTHON SYSTEM_LIBXSLT OUTDIR SOLARINC SOLARLIB WORKDIR
 
     for V in COM GUI OS CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
@@ -12308,12 +12310,12 @@ else
 fi
 
 AC_CONFIG_FILES([config_host.mk Makefile solenv/inc/minor.mk instsetoo_native/util/openoffice.lst])
-AC_CONFIG_HEADERS([config/config_clang.h])
-AC_CONFIG_HEADERS([config/config_global.h])
-AC_CONFIG_HEADERS([config/config_graphite.h])
-AC_CONFIG_HEADERS([config/config_telepathy.h])
-AC_CONFIG_HEADERS([config/config_vclplug.h])
-AC_CONFIG_HEADERS([config/config_version.h])
+AC_CONFIG_HEADERS([config_host/config_clang.h])
+AC_CONFIG_HEADERS([config_host/config_global.h])
+AC_CONFIG_HEADERS([config_host/config_graphite.h])
+AC_CONFIG_HEADERS([config_host/config_telepathy.h])
+AC_CONFIG_HEADERS([config_host/config_vclplug.h])
+AC_CONFIG_HEADERS([config_host/config_version.h])
 AC_OUTPUT
 
 # touch the config timestamp file

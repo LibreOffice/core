@@ -46,7 +46,7 @@ else # MAKE_RESTARTS
 all: build
 
 ifeq ($(gb_Side),)
-gb_Side:=host
+export gb_Side:=host
 endif
 
 include $(BUILDDIR)/config_$(gb_Side).mk

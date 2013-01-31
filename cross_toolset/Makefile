@@ -6,6 +6,8 @@
 SHELL=/usr/bin/env bash
 include ../config_build.mk
 
+export gb_Side=build
+
 .PHONY : build
 
 build:

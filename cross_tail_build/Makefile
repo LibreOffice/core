@@ -30,6 +30,8 @@ ifeq ($(strip $(SOLARENV)),)
 include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../config_build.mk
 endif
 
+export gb_Side=build
+
 include $(SOLARENV)/gbuild/gbuild.mk
 
 $(eval $(call gb_Module_make_global_targets,$(SRCDIR)/Module_cross_tail_build.mk))
