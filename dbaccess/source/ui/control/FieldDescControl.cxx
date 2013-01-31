@@ -1710,7 +1710,7 @@ sal_Bool OFieldDescControl::isCopyAllowed()
                         m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
                         m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
                         m_pActFocusWindow == m_pAutoIncrementValue) &&
-                        static_cast<Edit*>(m_pActFocusWindow)->GetSelected().Len() != 0;
+                        !static_cast<Edit*>(m_pActFocusWindow)->GetSelected().isEmpty();
 
     return bAllowed;
 }
@@ -1722,7 +1722,7 @@ sal_Bool OFieldDescControl::isCutAllowed()
                         m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
                         m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
                         m_pActFocusWindow == m_pAutoIncrementValue) &&
-                        static_cast<Edit*>(m_pActFocusWindow)->GetSelected().Len() != 0;
+                        !static_cast<Edit*>(m_pActFocusWindow)->GetSelected().isEmpty();
     return bAllowed;
 }
 // -----------------------------------------------------------------------------
