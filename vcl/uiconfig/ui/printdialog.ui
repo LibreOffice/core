@@ -23,6 +23,7 @@
   <object class="GtkDialog" id="PrintDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Print</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -207,6 +208,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
+                                <property name="row_spacing">6</property>
                                 <child>
                                   <object class="GtkExpander" id="expander">
                                     <property name="visible">True</property>
@@ -383,7 +385,8 @@
                           <object class="GtkGrid" id="grid3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="column_spacing">7</property>
+                            <property name="row_spacing">6</property>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkSeparator" id="copyspacer">
                                 <property name="visible">True</property>
@@ -402,6 +405,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
+                                <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkBox" id="box6">
                                     <property name="visible">True</property>
@@ -497,12 +501,14 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
+                                <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkBox" id="box16">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="margin_left">6</property>
                                     <property name="orientation">vertical</property>
+                                    <property name="spacing">6</property>
                                     <child>
                                       <object class="GtkRadioButton" id="printallsheets">
                                         <property name="label" translatable="yes">All sheets</property>
@@ -578,6 +584,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="margin_left">6</property>
                                     <property name="orientation">vertical</property>
+                                    <property name="spacing">6</property>
                                     <child>
                                       <object class="GtkRadioButton" id="printallpages">
                                         <property name="label" translatable="yes">All pages</property>
@@ -773,7 +780,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
-                                <property name="spacing">3</property>
+                                <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkBox" id="box17">
                                     <property name="visible">True</property>
@@ -943,6 +950,7 @@
                               <object class="GtkGrid" id="grid1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="row_spacing">6</property>
                                 <property name="column_spacing">7</property>
                                 <child>
                                   <object class="GtkComboBox" id="paperspersheetlb">
@@ -1289,6 +1297,8 @@
                           <object class="GtkAlignment" id="alignment4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkBox" id="box10">
@@ -1370,6 +1380,7 @@
                           <object class="GtkGrid" id="grid5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="printtofile">
                                 <property name="label" translatable="yes">Print to file</property>
