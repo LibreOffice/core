@@ -118,7 +118,9 @@ if ($destdir && "$ENV{DESTDIR}" ne "/" && -d "$ENV{DESTDIR}") {
 
 print "Running LibreOffice installer\n";
 system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
-        "perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
+        "perl " .
+        (scalar keys(%DB::sub) ? "-d " : "") .
+        "-w $ENV{SOLARENV}/bin/make_installer.pl " .
         "-f openoffice.lst -l $langs -p LibreOffice " .
         "-u $tmp_dir " .
         "-buildid $BUILD $destdir $strip $msi " .
