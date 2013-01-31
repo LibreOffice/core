@@ -23,6 +23,7 @@
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/io/TempFile.hpp>
+#include <com/sun/star/logging/DocumentIOLogRing.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -403,9 +404,8 @@ void OStorage_Impl::AddLog( const ::rtl::OUString& aMessage )
     {
         try
         {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            if ( aContext.is() )
-                m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), uno::UNO_QUERY_THROW );
+            uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            m_xLogRing = logging::DocumentIOLogRing::get(xContext);
         }
         catch( const uno::Exception& )
         {

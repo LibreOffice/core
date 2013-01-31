@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/logging/DocumentIOLogRing.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/IOException.hpp>
@@ -85,12 +86,9 @@ void StaticAddLog( const ::rtl::OUString& aMessage )
 {
     try
     {
-        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        if ( aContext.is() )
-        {
-            uno::Reference< logging::XSimpleLogRing > xLogRing( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), uno::UNO_QUERY_THROW );
-            xLogRing->logString( aMessage );
-        }
+        uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        uno::Reference< logging::XSimpleLogRing > xLogRing( logging::DocumentIOLogRing::get(xContext) );
+        xLogRing->logString( aMessage );
     }
     catch( const uno::Exception& )
     {
@@ -351,9 +349,8 @@ void OWriteStream_Impl::AddLog( const ::rtl::OUString& aMessage )
     {
         try
         {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            if ( aContext.is() )
-                m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            m_xLogRing = logging::DocumentIOLogRing::get(xContext);
         }
         catch( const uno::Exception& )
         {

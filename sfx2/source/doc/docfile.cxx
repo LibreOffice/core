@@ -57,6 +57,7 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
+#include <com/sun/star/logging/DocumentIOLogRing.hpp>
 #include <com/sun/star/logging/XSimpleLogRing.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -387,9 +388,8 @@ void SfxMedium::AddLog( const ::rtl::OUString& aMessage )
     {
         try
         {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            if ( aContext.is() )
-                pImp->m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), UNO_QUERY_THROW );
+            Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            pImp->m_xLogRing.set( logging::DocumentIOLogRing::get(xContext) );
         }
         catch( const uno::Exception& )
         {}

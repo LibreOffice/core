@@ -30,6 +30,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/logging/DocumentIOLogRing.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/script/FinishEngineEvent.hpp>
@@ -2030,9 +2031,8 @@ void SfxObjectShell::AddLog( const ::rtl::OUString& aMessage )
     {
         try
         {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            if ( aContext.is() )
-                pImp->m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), UNO_QUERY_THROW );
+            Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            pImp->m_xLogRing.set( logging::DocumentIOLogRing::get(xContext) );
         }
         catch( uno::Exception& )
         {}
@@ -2066,9 +2066,8 @@ void SfxObjectShell::StoreLog()
     {
         try
         {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            if ( aContext.is() )
-                pImp->m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), UNO_QUERY_THROW );
+            Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            pImp->m_xLogRing.set( logging::DocumentIOLogRing::get(xContext) );
         }
         catch( uno::Exception& )
         {}
