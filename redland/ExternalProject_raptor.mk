@@ -47,7 +47,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 	--without-threestone --with-regex-library=posix --with-decimal=none \
 	--with-www=xml \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-        $(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO)\
+        $(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 	$(if $(filter NO,$(SYSTEM_LIBXSLT)),--with-xslt-config=$(OUTDIR)/bin/xslt-config) \
 	$(if $(filter NO,$(SYSTEM_LIBXML)), \
