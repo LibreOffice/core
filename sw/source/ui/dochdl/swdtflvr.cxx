@@ -2269,7 +2269,7 @@ int SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
 
 int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 sal_uLong nFmt, sal_uInt16 nAction, const Point* pPt,
-                                sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste)
+                                sal_uInt8 nActionFlags, sal_Int8 /* nDropAction */, bool bNeedToSelectBeforePaste)
 {
     int nRet = 0;
 
@@ -2533,7 +2533,7 @@ int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
 int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uLong nFmt,
                                     sal_uInt16 nAction, const Point* pPt,
-                                    sal_uInt8 nActionFlags, sal_Bool bMsg )
+                    sal_uInt8 nActionFlags, sal_Bool /* bMsg */)
 {
     int nRet = SwTransferable::_PasteGrf( rData, rSh, nFmt, nAction,
                                             pPt, nActionFlags, 0, false);
