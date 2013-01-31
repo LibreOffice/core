@@ -157,6 +157,6 @@ class SessionListener :   // interfaces
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_SERVICES_TYPEDETECTION_HXX_
+#endif // #ifndef __FRAMEWORK_SERVICES_SESSIONLISTENER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
