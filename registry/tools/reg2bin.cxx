@@ -215,7 +215,7 @@ typereg::Reader getReader(RegistryKey & key, std::vector< char > * buffer) {
         std::exit(EXIT_FAILURE);
     }
     if (size == 0
-        || size > std::numeric_limits< std::vector< char >::size_type >::max())
+        /* || size > std::numeric_limits< std::vector< char >::size_type >::max() */)
     {
         std::cerr
             << "Bad binary value size " << size << " of key \"" << key.getName()
@@ -482,7 +482,7 @@ void readModule(
                     RTConstValue v(reader.getFieldValue(j));
                     if (v.m_type != RT_TYPE_INT32) {
                         std::cerr
-                            << "Unexpected type " +v.m_type
+                            << "Unexpected type " << +v.m_type
                             << " of value of field \"" << reader.getFieldName(j)
                             << "\" of enum type with key \"" << sub.getName()
                             << "\" in registry \"" << roots[0].getRegistryName()
@@ -852,7 +852,7 @@ void readModule(
                         break;
                     default:
                         std::cerr
-                            << "Unexpected type " +v.m_type
+                            << "Unexpected type " << +v.m_type
                             << " of value of field \"" << reader.getFieldName(j)
                             << "\" of constant group with key \""
                             << sub.getName() << "\" in registry \""
