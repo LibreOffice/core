@@ -908,8 +908,26 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                             for ( i = 0; i < nCount; i++ )
                             {
                                 const beans::PropertyValue& rProp = aPathPropSeq[ i ];
+
                                 switch( EASGet( rProp.Name ) )
                                 {
+                                    case EAS_SubViewSize:
+                                    {
+                                        uno::Sequence< awt::Size > aSubViewSizes;
+                                        rProp.Value >>= aSubViewSizes;
+
+                                        for ( int nIdx = 0; nIdx < aSubViewSizes.getLength(); nIdx++ )
+                                        {
+                                            if ( nIdx )
+                                                aStrBuffer.append(' ');
+                                            ::sax::Converter::convertNumber( aStrBuffer, aSubViewSizes[nIdx].Width );
+                                            aStrBuffer.append(' ');
+                                            ::sax::Converter::convertNumber( aStrBuffer, aSubViewSizes[nIdx].Height );
+                                        }
+                                        aStr = aStrBuffer.makeStringAndClear();
+                                        rExport.AddAttribute( XML_NAMESPACE_DRAW_EXT, XML_SUB_VIEW_SIZE, aStr );
+                                    }
+                                    break;
                                     case EAS_ExtrusionAllowed :
                                     {
                                         sal_Bool bExtrusionAllowed = sal_Bool();
