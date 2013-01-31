@@ -79,6 +79,8 @@ class SwXMLImport: public SvXMLImport
     bool                bInititedXForms : 1;
     sal_Bool                bPreserveRedlineMode;
 
+    SwDoc*      doc; // cached for getDoc()
+
     void                    _InitItemImport();
     void                    _FinitItemImport();
     void                    UpdateTxtCollConditions( SwDoc *pDoc );
@@ -194,6 +196,9 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XDocumentProperties>
             GetDocumentProperties() const;
+
+    const SwDoc* getDoc() const;
+    SwDoc* getDoc();
 };
 
 inline const SvXMLUnitConverter& SwXMLImport::GetTwipUnitConverter() const

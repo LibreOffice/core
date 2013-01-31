@@ -88,6 +88,7 @@ SwXMLExport::SwXMLExport(
     pTableLines( 0 ),
     bBlock( sal_False ),
     bShowProgress( sal_True ),
+    doc( NULL ),
     sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
     sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected")),
     sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
@@ -107,13 +108,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         return ERR_SWG_WRITE_ERROR;
 
     SwPauseThreadStarting aPauseThreadStarting; // #i73788#
-
-    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-    Reference < XText > xText = xTextDoc->getText();
-    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-    if( !xTextTunnel.is() )
-        return ERR_SWG_WRITE_ERROR;
 
     // from here, we use core interfaces -> lock Solar-Mutex
     SolarMutexGuard aGuard;
@@ -135,13 +129,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         }
     }
 
-    SwXText *pText = reinterpret_cast< SwXText * >(
-            sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-    OSL_ENSURE( pText, "SwXText missing" );
-    if( !pText )
-        return ERR_SWG_WRITE_ERROR;
-
-    SwDoc *pDoc = pText->GetDoc();
+    SwDoc *pDoc = getDoc();
 
     sal_Bool bExtended = sal_False;
     if( (getExportFlags() & (EXPORT_FONTDECLS|EXPORT_STYLES|
@@ -377,30 +365,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "Views") );
     pValue[nIndex++].Value <<= Reference < XIndexAccess > ( xBox, UNO_QUERY );
 
-    Reference < XText > xText;
-    SwXText *pText = 0;
-
-    if( GetModel().is() )
-    {
-        Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-        xText = xTextDoc->getText();
-        Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-        OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-        if( xTextTunnel.is() )
-        {
-            pText = reinterpret_cast< SwXText * >(
-                    sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId()) ));
-            OSL_ENSURE( pText, "SwXText missing" );
-        }
-    }
-
-    if( !pText )
-    {
-        aProps.realloc(nIndex);
-        return;
-    }
-
-    SwDoc *pDoc = pText->GetDoc();
+    SwDoc *pDoc = getDoc();
     const Rectangle rRect =
         pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
     sal_Bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MAP_TWIP;
@@ -476,31 +441,16 @@ sal_Int32 SwXMLExport::GetDocumentSpecificSettings( ::std::list< SettingsGroup >
 
 void SwXMLExport::SetBodyAttributes()
 {
-    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-    Reference < XText > xText = xTextDoc->getText();
     // export use of soft page breaks
+    SwDoc *pDoc = getDoc();
+    if( pDoc->GetCurrentViewShell() &&
+        pDoc->GetCurrentViewShell()->GetPageCount() > 1 )
     {
-        Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-        OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-        if( xTextTunnel.is() )
-        {
-            SwXText *pText = reinterpret_cast< SwXText * >(
-                    sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-            OSL_ENSURE( pText, "SwXText missing" );
-            if( pText )
-            {
-                SwDoc *pDoc = pText->GetDoc();
-                if( pDoc && pDoc->GetCurrentViewShell() &&
-                    pDoc->GetCurrentViewShell()->GetPageCount() > 1 )
-                {
-                    sal_Bool bValue = sal_True;
-                    rtl::OUStringBuffer sBuffer;
-                    ::sax::Converter::convertBool(sBuffer, bValue);
-                    AddAttribute(XML_NAMESPACE_TEXT, XML_USE_SOFT_PAGE_BREAKS,
-                        sBuffer.makeStringAndClear());
-                }
-            }
-        }
+        sal_Bool bValue = sal_True;
+        rtl::OUStringBuffer sBuffer;
+        ::sax::Converter::convertBool(sBuffer, bValue);
+        AddAttribute(XML_NAMESPACE_TEXT, XML_USE_SOFT_PAGE_BREAKS,
+            sBuffer.makeStringAndClear());
     }
 }
 
@@ -834,6 +784,27 @@ OUString SAL_CALL SwXMLExport::getImplementationName()
             return OUString( RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.star.comp.Writer.SwXMLExport" ) );
     }
+}
+
+SwDoc* SwXMLExport::getDoc()
+{
+    if( doc != NULL )
+        return doc;
+    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+    Reference < XText > xText = xTextDoc->getText();
+    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
+    assert( xTextTunnel.is());
+    SwXText *pText = reinterpret_cast< SwXText *>(
+            sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
+    assert( pText != NULL );
+    doc = pText->GetDoc();
+    assert( doc != NULL );
+    return doc;
+}
+
+const SwDoc* SwXMLExport::getDoc() const
+{
+    return const_cast< SwXMLExport* >( this )->getDoc();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

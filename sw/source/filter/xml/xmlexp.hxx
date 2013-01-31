@@ -26,6 +26,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <vector>
 
+class SwDoc;
 class SwFmt;
 class SwFrmFmt;
 class SvXMLUnitConverter;
@@ -59,6 +60,8 @@ class SwXMLExport : public SvXMLExport
     sal_Bool                    bBlock : 1;         // export text block?
     sal_Bool                    bShowProgress : 1;
     sal_Bool                    bSavedShowChanges : 1;
+
+    SwDoc*                      doc; // cached for getDoc()
 
     void _InitItemExport();
     void _FinitItemExport();
@@ -144,6 +147,9 @@ public:
     // XServiceInfo (override parent method)
     ::rtl::OUString SAL_CALL getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
+
+    const SwDoc* getDoc() const;
+    SwDoc* getDoc();
 };
 
 inline const SvXMLUnitConverter& SwXMLExport::GetTwipUnitConverter() const

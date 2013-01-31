@@ -425,7 +425,8 @@ SwXMLImport::SwXMLImport(
     bShowProgress( true ),
     bOrganizerMode( false ),
     bInititedXForms( false ),
-    bPreserveRedlineMode( sal_True )
+    bPreserveRedlineMode( sal_True ),
+    doc( NULL )
 {
     _InitItemImport();
 
@@ -1016,20 +1017,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-    Reference < XText > xText = xTextDoc->getText();
-    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-    if( !xTextTunnel.is() )
-        return;
-
-    SwXText *pText = reinterpret_cast< SwXText *>(
-            sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-    OSL_ENSURE( pText, "SwXText missing" );
-    if( !pText )
-        return;
-
-    SwDoc *pDoc = pText->GetDoc();
+    SwDoc *pDoc = getDoc();
     Rectangle aRect;
     if( pDoc->GetDocShell() )
         aRect = pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
@@ -1463,39 +1451,23 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if ( !bTabOverMargin )
         xProps->setPropertyValue("TabOverMargin", makeAny( false ) );
 
-    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-    Reference < XText > xText = xTextDoc->getText();
-    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-    if( xTextTunnel.is() )
+    SwDoc *pDoc = getDoc();
+    SfxPrinter *pPrinter = pDoc->getPrinter( false );
+    if( pPrinter )
     {
-        SwXText *pText = reinterpret_cast< SwXText *>(
-                sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-        OSL_ENSURE( pText, "SwXText missing" );
-        if( pText )
-        {
-            SwDoc *pDoc = pText->GetDoc();
-            if( pDoc )
-            {
-                SfxPrinter *pPrinter = pDoc->getPrinter( false );
-                if( pPrinter )
-                {
-                    // If the printer is known, then the OLE objects will
-                    // already have correct sizes, and we don't have to call
-                    // PrtOLENotify again. Otherwise we have to call it.
-                    // The flag might be set from setting the printer, so it
-                    // it is required to clear it.
-                    pDoc->SetOLEPrtNotifyPending( !pPrinter->IsKnown() );
+        // If the printer is known, then the OLE objects will
+        // already have correct sizes, and we don't have to call
+        // PrtOLENotify again. Otherwise we have to call it.
+        // The flag might be set from setting the printer, so it
+        // it is required to clear it.
+        pDoc->SetOLEPrtNotifyPending( !pPrinter->IsKnown() );
 
-                    // old printer metrics compatibility
-                    if (  pDoc->get(IDocumentSettingAccess::USE_OLD_PRINTER_METRICS ) &&
-                         !pDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
-                    {
-                        pPrinter->Compat_OldPrinterMetrics( true );
-                        pDoc->GetDocShell()->UpdateFontList();
-                    }
-                }
-            }
+        // old printer metrics compatibility
+        if (  pDoc->get(IDocumentSettingAccess::USE_OLD_PRINTER_METRICS ) &&
+             !pDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
+        {
+            pPrinter->Compat_OldPrinterMetrics( true );
+            pDoc->GetDocShell()->UpdateFontList();
         }
     }
 }
@@ -1738,6 +1710,27 @@ void SwXMLImport::initXForms()
         pDoc->initXForms( false );
 
     bInititedXForms = true;
+}
+
+SwDoc* SwXMLImport::getDoc()
+{
+    if( doc != NULL )
+        return doc;
+    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+    Reference < XText > xText = xTextDoc->getText();
+    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
+    assert( xTextTunnel.is());
+    SwXText *pText = reinterpret_cast< SwXText *>(
+            sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
+    assert( pText != NULL );
+    doc = pText->GetDoc();
+    assert( doc != NULL );
+    return doc;
+}
+
+const SwDoc* SwXMLImport::getDoc() const
+{
+    return const_cast< SwXMLImport* >( this )->getDoc();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

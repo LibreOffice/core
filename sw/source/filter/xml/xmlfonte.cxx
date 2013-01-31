@@ -46,20 +46,7 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
     sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                 RES_CHRATR_CTL_FONT };
 
-    Reference < XTextDocument > xTextDoc( _rExport.GetModel(), UNO_QUERY );
-    Reference < XText > xText = xTextDoc->getText();
-    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-    if( !xTextTunnel.is() )
-        return;
-
-    SwXText *pText = reinterpret_cast< SwXText *>(
-            sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-    OSL_ENSURE( pText, "SwXText missing" );
-    if( !pText )
-        return;
-
-    const SfxItemPool& rPool = pText->GetDoc()->GetAttrPool();
+    const SfxItemPool& rPool = _rExport.getDoc()->GetAttrPool();
     const SfxPoolItem* pItem;
     for( sal_uInt16 i=0; i<3; i++ )
     {
