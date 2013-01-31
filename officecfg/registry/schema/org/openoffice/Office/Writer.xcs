@@ -4782,7 +4782,7 @@
 						<desc>Sets the value for the minimum word length.</desc>
 						<label>Min. word length</label>
 					</info>
-                    <value>10</value>
+                    <value>8</value>
 				</prop>
 				<prop oor:name="MaxListLen" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/AutoComplete/Words -->
@@ -4793,7 +4793,7 @@
 						<desc>Sets the maximum number of words to be recalled.</desc>
 						<label>Max. entries</label>
 					</info>
-					<value>500</value>
+					<value>1000</value>
 				</prop>
 				<prop oor:name="CollectWords" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldPath: Writer/AutoComplete/Words -->
@@ -4837,7 +4837,7 @@
 						<desc>Specifies if the suggestions for the automatic word completion function should be displayed as Tip helps.</desc>
 						<label>Show as tip</label>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 				<prop oor:name="AcceptKey" oor:type="xs:int" oor:nillable="false">
 					<!-- OldPath: Writer/AutoComplete/Words -->
