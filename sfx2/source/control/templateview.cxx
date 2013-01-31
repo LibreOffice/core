@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "templatedlg.hxx"
 #include <sfx2/templateview.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -63,6 +64,11 @@ void TemplateView::InsertItems (const std::vector<TemplateItemProperties> &rTemp
         pItem->maTitle = pCur->aName;
         pItem->setPath(pCur->aPath);
         pItem->maPreview1 = pCur->aThumbnail;
+        if ( pCur->aThumbnail.IsEmpty() )
+        {
+            // Use the default thumbnail if we have nothing else
+            pItem->maPreview1 = SfxTemplateManagerDlg::getDefaultThumbnail( pItem->getPath() );
+        }
         pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
         mItemList.push_back(pItem);

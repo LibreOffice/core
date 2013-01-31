@@ -50,6 +50,8 @@ public:
 
     DECL_LINK(ActivatePageHdl, void*);
 
+    static BitmapEx getDefaultThumbnail( const rtl::OUString& rPath );
+
 private:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
