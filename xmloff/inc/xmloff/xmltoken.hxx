@@ -1733,6 +1733,7 @@ namespace xmloff { namespace token {
         XML_SUBTOTAL_FIELD,
         XML_SUBTOTAL_RULE,
         XML_SUBTOTAL_RULES,
+        XML_SUB_VIEW_SIZE,
         XML_SUFFIX,
         XML_SUM,
         XML_SWISS,
