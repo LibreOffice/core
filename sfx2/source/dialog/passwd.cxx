@@ -222,6 +222,11 @@ void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
     EditModifyHdl( NULL );
 }
 
+void SfxPasswordDialog::ShowMinLengthText(bool bShow)
+{
+    maMinLengthFT.Show(bShow);
+}
+
 // -----------------------------------------------------------------------
 
 short SfxPasswordDialog::Execute()

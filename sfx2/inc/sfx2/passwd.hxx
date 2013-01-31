@@ -97,6 +97,8 @@ public:
     void            ShowExtras( sal_uInt16 nExtras ) { mnExtras = nExtras; }
     void            AllowAsciiOnly( bool i_bAsciiOnly = true ) { mbAsciiOnly = i_bAsciiOnly; }
 
+    void ShowMinLengthText(bool bShow);
+
     virtual short   Execute();
 };
 
