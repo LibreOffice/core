@@ -52,6 +52,9 @@ endif
 
 gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
 
+gb_DSHORTSTDC3 := 1
+gb_DSHORTSTDCPP3 := 6
+
 gb_CPPU_ENV := gcc3
 
 gb_AFLAGS := $(AFLAGS)
