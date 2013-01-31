@@ -25,13 +25,12 @@
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
-#include <com/sun/star/awt/XContainerWindowProvider.hpp>
+#include <com/sun/star/awt/ContainerWindowProvider.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -41,7 +40,6 @@
 #include <vcl/image.hxx>
 #include <vcl/msgbox.hxx>
 
-const char SERVICENAME_WINPROVIDER[] = "com.sun.star.awt.ContainerWindowProvider";
 const char EXTERNAL_EVENT[] = "external_event";
 const char INITIALIZE_METHOD[] = "initialize";
 
@@ -197,9 +195,7 @@ FwkTabWindow::FwkTabWindow( Window* pParent ) :
 
     m_aTabCtrl  ( this, FwkResId( TC_TABCONTROL ) )
 {
-    uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    m_xWinProvider = uno::Reference < awt::XContainerWindowProvider >(
-        xFactory->createInstance( rtl::OUString(SERVICENAME_WINPROVIDER) ), uno::UNO_QUERY );
+    m_xWinProvider = awt::ContainerWindowProvider::create( ::comphelper::getProcessComponentContext() );
 
     SetPaintTransparent(true);
 

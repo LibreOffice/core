@@ -52,7 +52,7 @@
 #include "treeopt.hxx"
 
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
-#include <com/sun/star/awt/XContainerWindowProvider.hpp>
+#include <com/sun/star/awt/ContainerWindowProvider.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -1122,11 +1122,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     {
         if ( !m_xContainerWinProvider.is() )
         {
-            Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-            m_xContainerWinProvider = Reference < awt::XContainerWindowProvider >(
-                xFactory->createInstance(
-                "com.sun.star.awt.ContainerWindowProvider" ), UNO_QUERY );
-            DBG_ASSERT( m_xContainerWinProvider.is(), "service com.sun.star.awt.ContainerWindowProvider could not be loaded" );
+            m_xContainerWinProvider = awt::ContainerWindowProvider::create( ::comphelper::getProcessComponentContext() );
         }
 
         pPageInfo->m_pExtPage = new ExtensionsTabPage(
