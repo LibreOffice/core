@@ -96,7 +96,7 @@ private:
         DBPTreeNode< Key, Value > *pNode;
         Key nIndex;
 
-        NodeWithIndex() : pNode( NULL ), nIndex( 0 ) {}
+        NodeWithIndex() {}
         NodeWithIndex( DBPTreeNode< Key, Value > *p, Key n ) : pNode( p ), nIndex( n ) {}
     };
 
