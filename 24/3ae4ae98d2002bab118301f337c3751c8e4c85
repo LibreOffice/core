@@ -1,0 +1,9 @@
+Code-Review+1: Fridrich Strba <fridrich@documentfoundation.org>
+Code-Review+2: Petr Mladek <pmladek@suse.cz>
+Verified+1: Petr Mladek <pmladek@suse.cz>
+Code-Review+1: Tor Lillqvist <tml@iki.fi>
+Submitted-by: Petr Mladek <pmladek@suse.cz>
+Submitted-at: Thu, 31 Jan 2013 10:41:54 +0000
+Reviewed-on: https://gerrit.libreoffice.org/1936
+Project: core
+Branch: refs/heads/libreoffice-4-0-0
