@@ -98,11 +98,10 @@ SoPluginInstance::~SoPluginInstance()
 sal_Bool SoPluginInstance::SetURL(char* aURL)
 {
     debug_fprintf(NSP_LOG_APPEND, "SoPluginInstance::SetURL %s\n", aURL);
-    sal_uInt16 encoding = 11;
 
     rtl_Locale* pLocale = NULL;
     osl_getProcessLocale(&pLocale);
-    encoding = osl_getTextEncodingFromLocale(pLocale);
+    sal_uInt16 encoding = osl_getTextEncodingFromLocale(pLocale);
 
     m_sURL = ::rtl::OUString(aURL, strlen(aURL), encoding);
     debug_fprintf(NSP_LOG_APPEND, "SetURL %s\nencoding is: %d\n", ::rtl::OUStringToOString(m_sURL,

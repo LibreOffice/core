@@ -132,7 +132,7 @@ int main(int argc, const char *argv[])
 
     if( errors )
     {
-        printf( "Number of tests failing: %d\n", errors);
+        printf( "Number of tests failing: %u\n", errors);
         ret = -3;
     }
     else
