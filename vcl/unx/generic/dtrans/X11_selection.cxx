@@ -2725,7 +2725,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
     else if( rMessage.type == XLIB_KeyPress || rMessage.type == KeyRelease )
     {
         bHandled = true;
-        KeySym aKey = XKeycodeToKeysym( m_pDisplay, rMessage.xkey.keycode, 0 );
+        const KeySym aKey = XkbKeycodeToKeysym( m_pDisplay, rMessage.xkey.keycode, 0, 0 );
         if( aKey == XK_Escape )
         {
             // abort drag
