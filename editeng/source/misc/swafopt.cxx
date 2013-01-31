@@ -49,7 +49,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bWithRedlining =
     bAutoCmpltEndless =
     bAutoCmpltAppendBlanc =
-    bAutoCmpltShowAsTip = sal_False;
+    bAutoCmpltShowAsTip = sal_True;
 
     bSetBorder =
     bCreateTable =
@@ -76,8 +76,8 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     cByInputBullet = cBullet;
     aByInputBulletFont = aBulletFont;
 
-    nAutoCmpltWordLen = 10;
-    nAutoCmpltListLen = 500;
+    nAutoCmpltWordLen = 8;
+    nAutoCmpltListLen = 1000;
     m_pAutoCompleteList = 0;
     pSmartTagMgr = 0;
 }
