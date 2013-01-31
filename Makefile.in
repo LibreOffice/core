@@ -334,6 +334,12 @@ ifeq ($(OS_FOR_BUILD),WNT)
 else
 ifeq ($(DISABLE_LINKOO),TRUE)
 	@ooinstall $(DEVINSTALLDIR)/opt
+ifeq ($(OS),MACOSX)
+	identity=`security find-identity -p codesigning -v | grep 'Mac Developer:' | awk '{print $$2}'`; \
+	if test -n "$$identity"; then \
+		codesign --verbose --sign $$identity $(DEVINSTALLDIR)/opt/LibreOffice.app; \
+	fi
+endif
 	@install-gdb-printers -L
 else
 	@ooinstall -l $(DEVINSTALLDIR)/opt
