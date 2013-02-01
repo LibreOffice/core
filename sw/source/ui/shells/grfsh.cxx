@@ -69,7 +69,7 @@
 
 #include "swabstdlg.hxx"
 
-#define TOOLBOX_NAME    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "colorbar" ) )
+#define TOOLBOX_NAME "colorbar"
 
 class SwExternalToolEdit : public ExternalToolEdit
 {
