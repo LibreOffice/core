@@ -60,7 +60,7 @@
 #include <unocrsr.hxx>
 #include <unofield.hxx>
 #include <unoidx.hxx>
-#include <unoflatpara.hxx>
+#include <unocrsrhelper.hxx>
 #include <unotxvw.hxx>
 #include <poolfmt.hxx>
 #include <globdoc.hxx>
@@ -3086,7 +3086,8 @@ uno::Reference< text::XFlatParagraphIterator > SAL_CALL SwXTextDocument::getFlat
                 static_cast<XTextDocument*>(this));
     }
 
-    return new SwXFlatParagraphIterator( *pDocShell->GetDoc(), nTextMarkupType, bAutomatic );
+    return SwUnoCursorHelper::CreateFlatParagraphIterator(
+            *pDocShell->GetDoc(), nTextMarkupType, bAutomatic);
 }
 
 uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::RuntimeException)

@@ -46,6 +46,17 @@
 
 using namespace ::com::sun::star;
 
+namespace SwUnoCursorHelper {
+
+uno::Reference<text::XFlatParagraphIterator>
+CreateFlatParagraphIterator(SwDoc & rDoc, sal_Int32 const nTextMarkupType,
+        bool const bAutomatic)
+{
+    return new SwXFlatParagraphIterator(rDoc, nTextMarkupType, bAutomatic);
+}
+
+}
+
 /******************************************************************************
  * SwXFlatParagraph
  ******************************************************************************/

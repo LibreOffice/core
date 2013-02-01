@@ -54,6 +54,7 @@ namespace com{ namespace sun{ namespace star{
     }
     namespace text {
         class XTextContent;
+        class XFlatParagraphIterator;
     }
 }}}
 
@@ -228,6 +229,10 @@ namespace SwUnoCursorHelper
         OUString & o_rTableName, SwUnoTableCrsr const*& o_rpTableCursor,
         ::sw::mark::IMark const*& o_rpMark,
         std::vector<SdrObject *> & o_rSdrObjects);
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::text::XFlatParagraphIterator>
+            CreateFlatParagraphIterator(SwDoc &, sal_Int32,  bool);
 
 } // namespace SwUnoCursorHelper
 
