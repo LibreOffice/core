@@ -54,6 +54,7 @@
 #include <svx/modctrl.hxx>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/container/XSet.hpp>
+#include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <comphelper/processfactory.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>
@@ -227,14 +228,7 @@ uno::Reference< linguistic2::XLanguageGuessing > SwModule::GetLanguageGuesser()
 {
     if (!m_xLanguageGuesser.is())
     {
-        uno::Reference< lang::XMultiServiceFactory > xMgr ( comphelper::getProcessServiceFactory() );
-        if (xMgr.is())
-        {
-            m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
-                    xMgr->createInstance(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.LanguageGuessing"))),
-                        uno::UNO_QUERY );
-        }
+        m_xLanguageGuesser = linguistic2::LanguageGuessing::create( comphelper::getProcessComponentContext() );
     }
     return m_xLanguageGuesser;
 }

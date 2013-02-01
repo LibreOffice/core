@@ -80,7 +80,7 @@ DEFINE_INIT_SERVICE                     (   LanguageSelectionMenuController, {} 
 LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     svt::PopupMenuControllerBase( xServiceManager ),
     m_bShowMenu( sal_True ),
-    m_aLangGuessHelper( xServiceManager )
+    m_aLangGuessHelper( comphelper::getComponentContext(xServiceManager) )
 {
 }
 

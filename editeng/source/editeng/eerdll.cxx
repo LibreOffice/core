@@ -22,7 +22,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
+#include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
@@ -181,14 +181,7 @@ uno::Reference< linguistic2::XLanguageGuessing > GlobalEditData::GetLanguageGues
 {
     if (!xLanguageGuesser.is())
     {
-        uno::Reference< lang::XMultiServiceFactory > xMgr ( comphelper::getProcessServiceFactory() );
-        if (xMgr.is())
-        {
-            xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
-                    xMgr->createInstance(
-                        rtl::OUString( "com.sun.star.linguistic2.LanguageGuessing" ) ),
-                        uno::UNO_QUERY );
-        }
+        xLanguageGuesser = linguistic2::LanguageGuessing::create( comphelper::getProcessComponentContext() );
     }
     return xLanguageGuesser;
 }

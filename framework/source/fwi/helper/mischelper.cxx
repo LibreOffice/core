@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 
 #include <tools/debug.hxx>
 #include <vcl/settings.hxx>
@@ -53,10 +54,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
     {
         try
         {
-            m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
-                    m_xServiceManager->createInstance(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.LanguageGuessing")) ),
-                        uno::UNO_QUERY );
+            m_xLanguageGuesser = linguistic2::LanguageGuessing::create( m_xContext );
         }
         catch (const uno::Exception &)
         {

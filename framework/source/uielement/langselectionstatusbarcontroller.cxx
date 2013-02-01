@@ -90,7 +90,7 @@ LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::R
     svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), OUString(), 0 ),
     m_bShowMenu( sal_True ),
     m_nScriptType( LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX ),
-    m_aLangGuessHelper( xServiceManager )
+    m_aLangGuessHelper( comphelper::getComponentContext(xServiceManager) )
 {
 }
 

@@ -92,10 +92,10 @@ inline bool IsScriptTypeMatchingToLanguage( sal_Int16 nScriptType, LanguageType 
 class FWI_DLLPUBLIC LanguageGuessingHelper
 {
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
 public:
-    LanguageGuessingHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceManager) : m_xServiceManager(_xServiceManager){}
+    LanguageGuessingHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext) : m_xContext(_xContext){}
 
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >  GetGuesser() const;
 };
