@@ -31,7 +31,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
-#include <com/sun/star/i18n/XOrdinalSuffix.hpp>
+#include <com/sun/star/i18n/OrdinalSuffix.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -442,35 +442,29 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
         sal_Int32 nNum = rTxt.Copy( nSttPos, nNumEnd - nSttPos + 1 ).ToInt32( );
 
         // Check if the characters after that number correspond to the ordinal suffix
-        rtl::OUString sServiceName("com.sun.star.i18n.OrdinalSuffix");
-        uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix(
-                comphelper::getProcessServiceFactory()->createInstance( sServiceName ),
-                uno::UNO_QUERY );
+        uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix
+                = i18n::OrdinalSuffix::create( comphelper::getProcessComponentContext() );
 
-        if ( xOrdSuffix.is( ) )
+        uno::Sequence< rtl::OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix( nNum, rCC.getLanguageTag().getLocale( ) );
+        for ( sal_Int32 nSuff = 0; nSuff < aSuffixes.getLength(); nSuff++ )
         {
-            uno::Sequence< rtl::OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix( nNum, rCC.getLanguageTag().getLocale( ) );
-            for ( sal_Int32 nSuff = 0; nSuff < aSuffixes.getLength(); nSuff++ )
-            {
-                String sSuffix( aSuffixes[ nSuff ] );
-                String sEnd = rTxt.Copy( nNumEnd + 1, nEndPos - nNumEnd - 1 );
+            String sSuffix( aSuffixes[ nSuff ] );
+            String sEnd = rTxt.Copy( nNumEnd + 1, nEndPos - nNumEnd - 1 );
 
-                if ( sSuffix == sEnd )
+            if ( sSuffix == sEnd )
+            {
+                // Check if the ordinal suffix has to be set as super script
+                if ( rCC.isLetter( sSuffix ) )
                 {
-                    // Check if the ordinal suffix has to be set as super script
-                    if ( rCC.isLetter( sSuffix ) )
-                    {
-                        // Do the change
-                        SvxEscapementItem aSvxEscapementItem( DFLT_ESC_AUTO_SUPER,
-                                                            DFLT_ESC_PROP, SID_ATTR_CHAR_ESCAPEMENT );
-                        rDoc.SetAttr( nNumEnd + 1 , nEndPos,
-                                        SID_ATTR_CHAR_ESCAPEMENT,
-                                        aSvxEscapementItem);
-                    }
+                    // Do the change
+                    SvxEscapementItem aSvxEscapementItem( DFLT_ESC_AUTO_SUPER,
+                                                        DFLT_ESC_PROP, SID_ATTR_CHAR_ESCAPEMENT );
+                    rDoc.SetAttr( nNumEnd + 1 , nEndPos,
+                                    SID_ATTR_CHAR_ESCAPEMENT,
+                                    aSvxEscapementItem);
                 }
             }
         }
-
     }
     return bChg;
 }

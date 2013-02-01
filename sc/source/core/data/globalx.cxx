@@ -30,7 +30,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 
-#include <com/sun/star/i18n/XOrdinalSuffix.hpp>
+#include <com/sun/star/i18n/OrdinalSuffix.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -121,39 +121,22 @@ void ScGlobal::InitAddIns()
 
 String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
 {
-    if (!xOrdinalSuffix.is())
+    try
     {
-        try
+        if (!xOrdinalSuffix.is())
         {
-            Reference< lang::XMultiServiceFactory > xServiceManager =
-                ::comphelper::getProcessServiceFactory();
-            Reference< XInterface > xInterface =
-                xServiceManager->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.OrdinalSuffix")));
-            if  (xInterface.is())
-                xOrdinalSuffix = Reference< i18n::XOrdinalSuffix >( xInterface, UNO_QUERY);
+            xOrdinalSuffix = i18n::OrdinalSuffix::create( ::comphelper::getProcessComponentContext() );
         }
-        catch ( Exception& )
-        {
-            OSL_FAIL( "GetOrdinalSuffix: exception caught during init" );
-        }
+        uno::Sequence< rtl::OUString > aSuffixes = xOrdinalSuffix->getOrdinalSuffix( nNumber,
+                ScGlobal::pLocaleData->getLanguageTag().getLocale());
+        if ( aSuffixes.getLength() > 0 )
+            return aSuffixes[0];
+        else
+            return String();
     }
-    OSL_ENSURE( xOrdinalSuffix.is(), "GetOrdinalSuffix: createInstance failed");
-    if (xOrdinalSuffix.is())
+    catch ( Exception& )
     {
-        try
-        {
-            uno::Sequence< rtl::OUString > aSuffixes = xOrdinalSuffix->getOrdinalSuffix( nNumber,
-                    ScGlobal::pLocaleData->getLanguageTag().getLocale());
-            if ( aSuffixes.getLength() > 0 )
-                return aSuffixes[0];
-            else
-                return String();
-        }
-        catch ( Exception& )
-        {
-            OSL_FAIL( "GetOrdinalSuffix: exception caught during getOrdinalSuffix" );
-        }
+        OSL_FAIL( "GetOrdinalSuffix: exception caught during init" );
     }
     return String();
 }
