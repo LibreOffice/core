@@ -866,10 +866,6 @@ Resource RID_SUBSETMAP
     {
         Text [ en-US ] = "Alchemical Symbols";
     };
-    String RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D
-    {
-        Text [ en-US ] = "CJK Unified Ideographs Extension D";
-    };
     String RID_SUBSETSTR_ARABIC_EXTENDED_A
     {
         Text [ en-US ] = "Arabic Extended-A";
