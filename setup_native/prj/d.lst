@@ -39,6 +39,5 @@ mkdir: %_DEST%\bin\userscripts
 ..\scripts\*.txt %_DEST%\bin\*.txt
 ..\scripts\mac_install.script %_DEST%\bin\mac_install.script
 ..\scripts\osx_install_languagepack.applescript %_DEST%\bin\osx_install_languagepack.applescript
-..\scripts\osx_install_patch.applescript %_DEST%\bin\osx_install_patch.applescript
 
 ..\%__SRC%\lib\getuid.so %_DEST%\bin\getuid.so
