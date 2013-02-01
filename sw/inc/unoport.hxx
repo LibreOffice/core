@@ -308,21 +308,21 @@ protected:
 class SwXRedlinePortion : public SwXTextPortion
 {
 private:
-    SwRedline const* pRedline;
+    SwRedline const& m_rRedline;
 
     void Validate() throw (::com::sun::star::uno::RuntimeException);
 
     using SwXTextPortion::GetPropertyValue;
 
+    virtual ~SwXRedlinePortion();
+
 public:
     SwXRedlinePortion(
-        SwRedline const* pRedline,
+        SwRedline const& rRedline,
         SwUnoCrsr const* pPortionCrsr,
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
-            xParent,
-        sal_Bool const bIsStart);
-
-    virtual ~SwXRedlinePortion();
+            const& xParent,
+        bool const bIsStart);
 
     static ::com::sun::star::uno::Any  GetPropertyValue(
             OUString const& PropertyName, SwRedline const& rRedline) throw();

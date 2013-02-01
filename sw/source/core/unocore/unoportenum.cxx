@@ -980,7 +980,7 @@ lcl_ExportRedline(
         else if ( nIndex == nRealIndex )
         {
             rPortions.push_back( new SwXRedlinePortion(
-                        pPtr->m_pRedline, pUnoCrsr, xParent, pPtr->m_bStart) );
+                        *pPtr->m_pRedline, pUnoCrsr, xParent, pPtr->m_bStart));
             rRedlineArr.erase ( aIter++ );
         }
         // MTG: 23/11/05: If we've iterated past nIndex, exit the loop

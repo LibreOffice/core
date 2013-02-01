@@ -183,13 +183,14 @@ sal_Bool SwXRedlineText::hasElements(  ) throw(uno::RuntimeException)
     return sal_True;    // we always have a content index
 }
 
-SwXRedlinePortion::SwXRedlinePortion(   const SwRedline* pRed,
-                        const SwUnoCrsr* pPortionCrsr,
-                        uno::Reference< text::XText >  xParent, sal_Bool bStart) :
-    SwXTextPortion(pPortionCrsr, xParent, bStart ? PORTION_REDLINE_START : PORTION_REDLINE_END),
-    pRedline(pRed)
+SwXRedlinePortion::SwXRedlinePortion(SwRedline const& rRedline,
+        SwUnoCrsr const*const pPortionCrsr,
+        uno::Reference< text::XText > const& xParent, bool const bStart)
+    : SwXTextPortion(pPortionCrsr, xParent,
+            (bStart) ? PORTION_REDLINE_START : PORTION_REDLINE_END)
+    , m_rRedline(rRedline)
 {
-    SetCollapsed(!pRedline->HasMark());
+    SetCollapsed(!m_rRedline.HasMark());
 }
 
 SwXRedlinePortion::~SwXRedlinePortion()
@@ -253,7 +254,7 @@ uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
     uno::Any aRet;
     if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TEXT)))
     {
-        SwNodeIndex* pNodeIdx = pRedline->GetContentIdx();
+        SwNodeIndex* pNodeIdx = m_rRedline.GetContentIdx();
         if(pNodeIdx )
         {
             if ( 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
@@ -269,7 +270,7 @@ uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
     }
     else
     {
-        aRet = GetPropertyValue( rPropertyName, *pRedline);
+        aRet = GetPropertyValue(rPropertyName, m_rRedline);
         if(!aRet.hasValue() &&
            ! rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA)))
             aRet = SwXTextPortion::getPropertyValue(rPropertyName);
@@ -287,7 +288,7 @@ void SwXRedlinePortion::Validate() throw( uno::RuntimeException )
     const SwRedlineTbl& rRedTbl = pDoc->GetRedlineTbl();
     bool bFound = false;
     for(sal_uInt16 nRed = 0; nRed < rRedTbl.size() && !bFound; nRed++)
-        bFound = pRedline == rRedTbl[nRed];
+        bFound = &m_rRedline == rRedTbl[nRed];
     if(!bFound)
         throw uno::RuntimeException();
 }
