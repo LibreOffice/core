@@ -33,8 +33,6 @@
 using namespace                 ::rtl;
 using namespace                 ::com::sun::star;
 
-
-
 #define UNIQUE              sal_False   // function name does not exist in Calc
 #define DOUBLE              sal_True    // function name exists in Calc
 
@@ -1850,8 +1848,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
 
     if( IsImagUnit( *pStr ) && rStr.getLength() == 1)
     {
-        rCompl.r = 0.0;
-        rCompl.i = 1.0;
+        rCompl.Num= double_complex ( 0.0, 1.0 );
         rCompl.c = *pStr;
         return sal_True;
     }
@@ -1872,8 +1869,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
                 rCompl.c = pStr[ 1 ];
                 if( pStr[ 2 ] == 0 )
                 {
-                    rCompl.r = f;
-                    rCompl.i = ( *pStr == '+' )? 1.0 : -1.0;
+                    rCompl.Num = double_complex (f, ( *pStr == '+' )? 1.0 : -1.0 );
                     return sal_True;
                 }
             }
@@ -1883,8 +1879,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
                 pStr++;
                 if( *pStr == 0 )
                 {
-                    rCompl.r = r;
-                    rCompl.i = f;
+                    rCompl.Num = double_complex (r, f);
                     return sal_True;
                 }
             }
@@ -1896,14 +1891,12 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
             pStr++;
             if( *pStr == 0 )
             {
-                rCompl.i = f;
-                rCompl.r = 0.0;
+                rCompl.Num = double_complex (0.0, f);
                 return sal_True;
             }
             break;
         case 0:     // only real-part
-            rCompl.r = f;
-            rCompl.i = 0.0;
+            rCompl.Num = double_complex (f, 0.0);
             return sal_True;
     }
 
@@ -1918,26 +1911,26 @@ STRING Complex::GetString() const THROWDEF_RTE_IAE
     static const String aPlus( '+' );
     static const String aMinus( '-' );
 
-    CHK_FINITE(r);
-    CHK_FINITE(i);
+    CHK_FINITE(Num.real());
+    CHK_FINITE(Num.imag());
     STRING aRet;
 
-    bool bHasImag = i != 0.0;
-    bool bHasReal = !bHasImag || (r != 0.0);
+    bool bHasImag = Num.imag() != 0.0;
+    bool bHasReal = !bHasImag || (Num.real() != 0.0);
 
     if( bHasReal )
-        aRet = ::GetString( r );
+        aRet = ::GetString( Num.real() );
     if( bHasImag )
     {
-        if( i == 1.0 )
+        if( Num.imag() == 1.0 )
         {
             if( bHasReal )
                 aRet += aPlus;
         }
-        else if( i == -1.0 )
+        else if( Num.imag() == -1.0 )
             aRet += aMinus;
         else
-            aRet += ::GetString( i, bHasReal );
+            aRet += ::GetString( Num.imag(), bHasReal );
         aRet += (c != 'j') ? aI : aJ;
     }
 
@@ -1947,12 +1940,12 @@ STRING Complex::GetString() const THROWDEF_RTE_IAE
 
 double Complex::Arg( void ) const THROWDEF_RTE_IAE
 {
-    if( r == 0.0 && i == 0.0 )
+    if( Num.real() == 0.0 && Num.imag() == 0.0 )
         THROW_IAE;
 
-    double  phi = acos( r / Abs() );
+    double  phi = acos( Num.real() / Abs() );
 
-    if( i < 0.0 )
+    if( Num.imag() < 0.0 )
         phi = -phi;
 
     return phi;
@@ -1961,11 +1954,11 @@ double Complex::Arg( void ) const THROWDEF_RTE_IAE
 
 void Complex::Power( double fPower ) THROWDEF_RTE_IAE
 {
-    if( r == 0.0 && i == 0.0 )
+    if( Num.real() == 0.0 && Num.imag() == 0.0 )
     {
         if( fPower > 0 )
         {
-            r = i = 0.0;
+            Num = double_complex ( 0.0, 0.0 );
             return;
         }
         else
@@ -1976,15 +1969,14 @@ void Complex::Power( double fPower ) THROWDEF_RTE_IAE
 
     p = Abs();
 
-    phi = acos( r / p );
-    if( i < 0.0 )
+    phi = acos( Num.real() / p );
+    if( Num.imag() < 0.0 )
         phi = -phi;
 
     p = pow( p, fPower );
     phi *= fPower;
 
-    r = cos( phi ) * p;
-    i = sin( phi ) * p;
+    Num = double_complex (cos( phi ) * p, sin( phi ) * p);
 }
 
 
@@ -1992,15 +1984,15 @@ void Complex::Sqrt( void )
 {
     static const double fMultConst = 0.7071067811865475;    // ...2440084436210485 = 1/sqrt(2)
     double  p = Abs();
-    double  i_ = sqrt( p - r ) * fMultConst;
+    double  i_ = sqrt( p - Num.real() ) * fMultConst;
 
-    r = sqrt( p + r ) * fMultConst;
-    i = ( i < 0.0 )? -i_ : i_;
+    Num = double_complex (sqrt( p + Num.real() ) * fMultConst, ( Num.imag() < 0.0 )? -i_ : i_);
 }
 
 
 void Complex::Sin( void ) THROWDEF_RTE_IAE
 {
+    double r = Num.real(), i = Num.imag() ;
     if( !::rtl::math::isValidArcArg( r ) )
         THROW_IAE;
 
@@ -2014,11 +2006,13 @@ void Complex::Sin( void ) THROWDEF_RTE_IAE
     }
     else
         r = sin( r );
+    Num = double_complex ( r, i );
 }
 
 
 void Complex::Cos( void ) THROWDEF_RTE_IAE
 {
+    double r = Num.real(), i = Num.imag() ;
     if( !::rtl::math::isValidArcArg( r ) )
         THROW_IAE;
 
@@ -2032,23 +2026,23 @@ void Complex::Cos( void ) THROWDEF_RTE_IAE
     }
     else
         r = cos( r );
-}
+    Num = double_complex ( r, i );
 
+}
 
 void Complex::Div( const Complex& z ) THROWDEF_RTE_IAE
 {
-    if( z.r == 0 && z.i == 0 )
+    if( z.Num.real() == 0 && z.Num.imag() == 0 )
         THROW_IAE;
 
-    double  a1 = r;
-    double  a2 = z.r;
-    double  b1 = i;
-    double  b2 = z.i;
+    double  a1 = Num.real();
+    double  a2 = z.Num.real();
+    double  b1 = Num.imag();
+    double  b2 = z.Num.imag();
 
     double  f = 1.0 / ( a2 * a2 + b2 * b2 );
 
-    r = ( a1 * a2 + b1 * b2 ) * f;
-    i = ( a2 * b1 - a1 * b2 ) * f;
+    Num = f * double_complex ( a1 * a2 + b1 * b2 ,  a2 * b1 - a1 * b2 );
 
     if( !c ) c = z.c;
 }
@@ -2056,14 +2050,14 @@ void Complex::Div( const Complex& z ) THROWDEF_RTE_IAE
 
 void Complex::Exp( void )
 {
-    double  fE = exp( r );
-    r = fE * cos( i );
-    i = fE * sin( i );
+    double  fE = exp( Num.real() );
+    Num = fE * double_complex ( cos( Num.imag() ), sin( Num.imag() ) );
 }
 
 
 void Complex::Ln( void ) THROWDEF_RTE_IAE
 {
+    double r = Num.real(), i = Num.imag() ;
     if( r == 0.0 && i == 0.0 )
         THROW_IAE;
 
@@ -2076,6 +2070,7 @@ void Complex::Ln( void ) THROWDEF_RTE_IAE
         i = -i;
 
     r = log( fAbs );
+    Num = double_complex ( r, i );
 }
 
 
@@ -2095,6 +2090,7 @@ void Complex::Log2( void ) THROWDEF_RTE_IAE
 
 void Complex::Tan(void) THROWDEF_RTE_IAE
 {
+    double r = Num.real(), i = Num.imag() ;
     if ( i )
     {
         if( !::rtl::math::isValidArcArg( 2.0 * r ) )
@@ -2109,11 +2105,13 @@ void Complex::Tan(void) THROWDEF_RTE_IAE
             THROW_IAE;
         r = tan( r );
     }
+    Num = double_complex ( r, i );
 }
 
 
 void Complex::Sec( void ) THROWDEF_RTE_IAE
 {
+    double r = Num.real(), i = Num.imag() ;
     if( i )
     {
         if( !::rtl::math::isValidArcArg( 2 * r ) )
@@ -2130,11 +2128,13 @@ void Complex::Sec( void ) THROWDEF_RTE_IAE
             THROW_IAE;
         r = 1.0 / cos( r );
     }
+    Num = double_complex ( r, i );
 }
 
 
 void Complex::Csc( void ) THROWDEF_RTE_IAE
 {
+    double r = Num.real(), i = Num.imag() ;
     if( i )
     {
         if( !::rtl::math::isValidArcArg( 2 * r ) )
@@ -2151,11 +2151,13 @@ void Complex::Csc( void ) THROWDEF_RTE_IAE
             THROW_IAE;
         r = 1.0 / sin( r );
     }
+    Num = double_complex ( r, i );
 }
 
 
 void Complex::Cot(void) THROWDEF_RTE_IAE
 {
+    double r = Num.real(), i = Num.imag() ;
     if ( i )
     {
         if( !::rtl::math::isValidArcArg( 2.0 * r ) )
@@ -2170,11 +2172,13 @@ void Complex::Cot(void) THROWDEF_RTE_IAE
             THROW_IAE;
         r = 1.0 / tan( r );
     }
+    Num = double_complex ( r, i );
 }
 
 
 void Complex::Sinh( void ) THROWDEF_RTE_IAE
 {
+    double r = Num.real(), i = Num.imag() ;
     if( !::rtl::math::isValidArcArg( r ) )
         THROW_IAE;
 
@@ -2187,11 +2191,13 @@ void Complex::Sinh( void ) THROWDEF_RTE_IAE
     }
     else
         r = sinh( r );
+    Num = double_complex ( r, i );
 }
 
 
 void Complex::Cosh( void ) THROWDEF_RTE_IAE
 {
+    double r = Num.real(), i = Num.imag() ;
     if( !::rtl::math::isValidArcArg( r ) )
         THROW_IAE;
 
@@ -2204,11 +2210,13 @@ void Complex::Cosh( void ) THROWDEF_RTE_IAE
     }
     else
         r = cosh( r );
+    Num = double_complex ( r, i );
 }
 
 
 void Complex::Sech(void) THROWDEF_RTE_IAE
 {
+    double r = Num.real(), i = Num.imag() ;
     if ( i )
     {
         if( !::rtl::math::isValidArcArg( 2.0 * r ) )
@@ -2225,11 +2233,13 @@ void Complex::Sech(void) THROWDEF_RTE_IAE
             THROW_IAE;
         r = 1.0 / cosh( r );
     }
+    Num = double_complex ( r, i );
 }
 
 
 void Complex::Csch(void) THROWDEF_RTE_IAE
 {
+    double r = Num.real(), i = Num.imag() ;
     if ( i )
     {
         if( !::rtl::math::isValidArcArg( 2.0 * r ) )
@@ -2246,6 +2256,7 @@ void Complex::Csch(void) THROWDEF_RTE_IAE
             THROW_IAE;
         r = 1.0 / sinh( r );
     }
+    Num = double_complex ( r, i );
 }
 
 
