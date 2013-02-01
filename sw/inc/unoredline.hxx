@@ -16,10 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOREDLINE_HXX
-#define _UNOREDLINE_HXX
+#ifndef SW_UNOREDLINE_HXX
+#define SW_UNOREDLINE_HXX
 
-#include <unoport.hxx>
 #include <unotext.hxx>
 
 
@@ -58,32 +57,6 @@ public:
     //XElementAccess (via XEnumerationAccess)
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
-};
-
-class SwXRedlinePortion : public SwXTextPortion
-{
-    const SwRedline*    pRedline;
-
-    void Validate() throw( ::com::sun::star::uno::RuntimeException );
-
-    using SwXTextPortion::GetPropertyValue;
-
-public:
-    SwXRedlinePortion(  const SwRedline* pRed,
-                        const SwUnoCrsr* pPortionCrsr,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent,
-                        sal_Bool bIsStart);
-
-    ~SwXRedlinePortion();
-
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    //XPropertySet
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-    static ::com::sun::star::uno::Any  GetPropertyValue( const ::rtl::OUString& PropertyName, const SwRedline& rRedline ) throw();
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > CreateRedlineProperties( const SwRedline& rRedline, sal_Bool bIsStart ) throw();
-
 };
 
 typedef

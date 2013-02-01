@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOPORT_HXX
-#define _UNOPORT_HXX
+#ifndef SW_UNOPORT_HXX
+#define SW_UNOPORT_HXX
 
 #include <unocrsr.hxx>
 #include <unoevtlstnr.hxx>
@@ -45,6 +45,7 @@
 
 class SwFmtFld;
 class SwFrmFmt;
+class SwRedline;
 class SwTxtRuby;
 
 
@@ -302,6 +303,42 @@ public:
 protected:
     //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+};
+
+class SwXRedlinePortion : public SwXTextPortion
+{
+private:
+    SwRedline const* pRedline;
+
+    void Validate() throw (::com::sun::star::uno::RuntimeException);
+
+    using SwXTextPortion::GetPropertyValue;
+
+public:
+    SwXRedlinePortion(
+        SwRedline const* pRedline,
+        SwUnoCrsr const* pPortionCrsr,
+        ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
+            xParent,
+        sal_Bool const bIsStart);
+
+    virtual ~SwXRedlinePortion();
+
+    static ::com::sun::star::uno::Any  GetPropertyValue(
+            OUString const& PropertyName, SwRedline const& rRedline) throw();
+    static ::com::sun::star::uno::Sequence<
+        ::com::sun::star::beans::PropertyValue > CreateRedlineProperties(
+                SwRedline const& rRedline, sal_Bool const bIsStart) throw();
+
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        getImplementationId() throw (::com::sun::star::uno::RuntimeException);
+
+    // XPropertySet
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
+            const ::rtl::OUString& rPropertyName)
+        throw (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
 };
 
 #endif

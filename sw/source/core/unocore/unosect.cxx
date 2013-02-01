@@ -34,7 +34,8 @@
 #include <unotextrange.hxx>
 #include <unosection.hxx>
 #include <TextCursorHelper.hxx>
-#include <unoredline.hxx>
+#include <unoevtlstnr.hxx>
+#include <unoport.hxx>
 #include <redline.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>

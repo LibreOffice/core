@@ -51,7 +51,7 @@
 #include <viewsh.hxx>
 #include <tabfrm.hxx>
 #include <redline.hxx>
-#include <unoredline.hxx>
+#include <unoport.hxx>
 #include <unoprnms.hxx>
 #include <unocrsrhelper.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>

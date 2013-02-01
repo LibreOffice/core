@@ -38,6 +38,7 @@
 #include <unocoll.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
+#include <unoport.hxx>
 #include <unoredline.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
