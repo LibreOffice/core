@@ -40,6 +40,7 @@
 #include "svtools/imagemgr.hxx"
 #include "svtools/svtools.hrc"
 #include "svtools/langhelp.hxx"
+#include "svtools/colorcfg.hxx"
 
 #include "comphelper/processfactory.hxx"
 #include "comphelper/sequenceashashmap.hxx"
@@ -660,7 +661,7 @@ void BackingWindow::layoutButton(
 
 void BackingWindow::Paint( const Rectangle& )
 {
-    Wallpaper aBack( GetSettings().GetStyleSettings().GetWorkspaceColor() );
+    Wallpaper aBack( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor );
     Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
     Rectangle aBmpRect(maControlRect);
     aBmpRect.Left()   -= nShadowLeft;
