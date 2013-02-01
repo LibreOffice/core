@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAU3///5g\u003d",
+        "filename": "external/CustomTarget_stdlibs.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-02-01T06:39:05Z",
+      "side": 1,
+      "message": "We prefer $(notdir $@) and $(dir $@). GNU make manual states that $(@F) and $(@D) (and their other variants) are semi-obsolete.",
+      "revId": "29f4e5a7be480bcf536cc43ac90cf4623877278f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
