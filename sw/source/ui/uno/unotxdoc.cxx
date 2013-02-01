@@ -59,7 +59,7 @@
 #include <svtools/txtcmp.hxx>
 #include <unocrsr.hxx>
 #include <unofieldcoll.hxx>
-#include <unoidx.hxx>
+#include <unoidxcoll.hxx>
 #include <unocrsrhelper.hxx>
 #include <unotxvw.hxx>
 #include <poolfmt.hxx>

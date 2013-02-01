@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <unoidx.hxx>
+#include <unoidxcoll.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -50,7 +52,6 @@
 #include <unocrsr.hxx>
 #include <unostyle.hxx>
 #include <ndtxt.hxx>
-#include <unoidx.hxx>
 #include <docsh.hxx>
 #include <chpfld.hxx>
 #include <SwStyleNameMapper.hxx>

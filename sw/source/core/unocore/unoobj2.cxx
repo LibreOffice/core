@@ -89,7 +89,6 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <unoidx.hxx>
 #include <unoframe.hxx>
 #include <fmthdft.hxx>
 #include <osl/mutex.hxx>

@@ -42,6 +42,7 @@
 #include <unoport.hxx>
 #include <unotbl.hxx>
 #include <unoidx.hxx>
+#include <unocoll.hxx>
 #include <unoframe.hxx>
 #include <unofield.hxx>
 #include <unometa.hxx>

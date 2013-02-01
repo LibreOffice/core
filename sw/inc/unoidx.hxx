@@ -19,6 +19,7 @@
 #ifndef SW_UNOIDX_HXX
 #define SW_UNOIDX_HXX
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -31,10 +32,11 @@
 
 #include <sfx2/Metadatable.hxx>
 
-#include <unocoll.hxx>
 #include <toxe.hxx>
+#include <unobaseclass.hxx>
 
 
+class SwDoc;
 class SwTOXBaseSection;
 class SwTOXMark;
 class SwTOXType;
@@ -313,56 +315,6 @@ public:
     virtual rtl::OUString SAL_CALL getMarkEntry()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setMarkEntry(const rtl::OUString& rIndexEntry)
-        throw (::com::sun::star::uno::RuntimeException);
-
-};
-
-class SwXDocumentIndexes
-    : public SwCollectionBaseClass
-    , public SwUnoCollection
-{
-
-private:
-
-    virtual ~SwXDocumentIndexes();
-
-public:
-
-    SwXDocumentIndexes(SwDoc *const pDoc);
-
-    // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService(
-            const ::rtl::OUString& rServiceName)
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-        getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
-
-    // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName(
-            const ::rtl::OUString& rName)
-        throw (::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-        getElementNames() throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName(const ::rtl::OUString& rName)
         throw (::com::sun::star::uno::RuntimeException);
 
 };

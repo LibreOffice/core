@@ -43,6 +43,7 @@
 #include <fmtrfmrk.hxx>
 #include <frmfmt.hxx>
 #include <unoidx.hxx>
+#include <unocoll.hxx>
 #include <redline.hxx>
 #include <crsskip.hxx>
 #include <switerator.hxx>
