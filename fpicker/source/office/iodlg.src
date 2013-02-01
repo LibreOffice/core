@@ -283,11 +283,6 @@ ModalDialog DLG_FPICKER_QUERYFOLDERNAME
 
 // strings *******************************************************************
 
-String RID_FILEOPEN_INVALIDFOLDER
-{
-    Text [ en-US ] = "$name$ does not exist.";
-};
-
 String RID_FILEOPEN_NOTEXISTENTFILE
 {
     Text [ en-US ] = "The file $name$ does not exist.\nMake sure you have entered the correct file name.";
@@ -311,11 +306,6 @@ String STR_SVT_NEW_FOLDER
 String STR_SVT_NOREMOVABLEDEVICE
 {
     Text [ en-US ] = "No removable storage device detected.\nMake sure it is plugged in properly and try again." ;
-};
-
-String STR_SVT_ALLFORMATS
-{
-    Text [ en-US ] = "All Formats" ;
 };
 
 //******************************************************************** EOF
