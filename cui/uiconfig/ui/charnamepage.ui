@@ -32,6 +32,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Family </property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">westfontnamelb-nocjk</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -47,6 +49,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Style</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">weststylelb-nocjk</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -62,6 +66,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Size</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">westsizelb-nocjk</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -78,6 +84,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Language</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">westlanglb-nocjk</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -226,6 +234,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Family </property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">westfontnamelb-cjk</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -241,6 +251,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Style</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">weststylelb-cjk</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -256,6 +268,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Size</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">westsizelb-cjk</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -271,6 +285,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Language</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">westlanglb-cjk</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -404,6 +420,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Family </property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">eastfontnamelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -419,6 +437,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Style</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">eaststylelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -434,6 +454,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Size</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">eastsizelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -449,6 +471,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Language</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">eastlanglb</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -582,6 +606,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Family </property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">ctlfontnamelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -597,6 +623,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Style</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">ctlstylelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -612,6 +640,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Size</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">ctlsizelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -627,6 +657,8 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Language</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">ctllanglb</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -760,6 +792,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Preview</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">preview</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
