@@ -1799,7 +1799,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         eKeyState = KS_End;
                         bTblInsDelMode = sal_True;
                         bTblIsInsMode = sal_False;
-                        bTblIsColMode = sal_True;
                         aKeyInputTimer.Start();
                         bStopKeyInputTimer = false;
                         eAutoCompleteAction = ACA_NoOp;
@@ -1811,7 +1810,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         eKeyState = KS_End;
                         bTblInsDelMode = sal_True;
                         bTblIsInsMode = sal_True;
-                        bTblIsColMode = sal_True;
                         aKeyInputTimer.Start();
                         bStopKeyInputTimer = false;
                         eAutoCompleteAction = ACA_NoOp;
@@ -4798,7 +4796,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     EnableChildTransparentMode();
     SetDialogControlFlags( WINDOW_DLGCTRL_RETURN | WINDOW_DLGCTRL_WANTFOCUS );
 
-    bLinkRemoved = bMBPressed = bInsDraw = bInsFrm =
+    bMBPressed = bInsDraw = bInsFrm =
     bIsInDrag = bOldIdle = bOldIdleSet = bChainMode = bWasShdwCrsr = sal_False;
     // initially use the input language
     bUseInputLanguage = sal_True;

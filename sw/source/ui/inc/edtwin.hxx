@@ -118,8 +118,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     sal_uInt16          eBezierMode;
     sal_uInt16          nInsFrmColCount; // column number for interactive frame
     SdrObjKind      eDrawMode;
-    sal_Bool            bLinkRemoved    : 1,
-                    bMBPressed      : 1,
+    sal_Bool        bMBPressed      : 1,
                     bInsDraw        : 1,
                     bInsFrm         : 1,
                     bIsInMove       : 1,
@@ -128,7 +127,6 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
                     bOldIdleSet     : 1, // during QeueryDrop
                     bTblInsDelMode  : 1, //
                     bTblIsInsMode   : 1, //
-                    bTblIsColMode   : 1, //
                     bChainMode      : 1, // connect frames
                     bWasShdwCrsr    : 1, // ShadowCrsr was on in MouseButtonDown
                     bLockInput      : 1, // lock while calc panel is active
