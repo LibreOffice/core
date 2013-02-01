@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <unofield.hxx>
+#include <unofieldcoll.hxx>
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <doc.hxx>
@@ -52,7 +54,6 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
-#include <unofield.hxx>
 #include <unocrsr.hxx>
 #include <authfld.hxx>
 #include <flddat.hxx>

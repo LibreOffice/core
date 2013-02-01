@@ -58,7 +58,7 @@
 #include <pagedesc.hxx>
 #include <svtools/txtcmp.hxx>
 #include <unocrsr.hxx>
-#include <unofield.hxx>
+#include <unofieldcoll.hxx>
 #include <unoidx.hxx>
 #include <unocrsrhelper.hxx>
 #include <unotxvw.hxx>

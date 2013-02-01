@@ -75,7 +75,6 @@
 #include <unodraw.hxx>
 #include <unocoll.hxx>
 #include <unostyle.hxx>
-#include <unofield.hxx>
 #include <fmtanchr.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/unolingu.hxx>

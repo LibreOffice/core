@@ -16,18 +16,23 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOFIELD_HXX
-#define _UNOFIELD_HXX
+
+#ifndef SW_UNOFIELD_HXX
+#define SW_UNOFIELD_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 
+#include <tools/string.hxx>
+
 #include <calbck.hxx>
-#include <unocoll.hxx>
 #include <RefreshListenerContainer.hxx>
 
 
@@ -198,79 +203,6 @@ public:
     sal_uInt16 GetServiceId();
 };
 
-typedef
-cppu::WeakImplHelper2
-<
-    ::com::sun::star::container::XNameAccess,
-    ::com::sun::star::lang::XServiceInfo
->
-SwXTextFieldMastersBaseClass;
-class SwXTextFieldMasters : public SwXTextFieldMastersBaseClass,
-    public SwUnoCollection
-{
-protected:
-    virtual ~SwXTextFieldMasters();
-public:
-    SwXTextFieldMasters(SwDoc* pDoc);
-
-
-    //XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName(const rtl::OUString& Name) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getElementNames(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL hasByName(const rtl::OUString& Name) throw( ::com::sun::star::uno::RuntimeException );
-
-    //XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
-
-
-    static sal_Bool getInstanceName(const SwFieldType& rFldType, String& rName);
-};
-
-typedef
-cppu::WeakImplHelper3
-<
-    ::com::sun::star::container::XEnumerationAccess,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::util::XRefreshable
->
-SwXTextFieldTypesBaseClass;
-class SwXTextFieldTypes : public SwXTextFieldTypesBaseClass,
-        public SwUnoCollection
-{
-    SwRefreshListenerContainer      aRefreshCont;
-protected:
-    virtual ~SwXTextFieldTypes();
-public:
-    SwXTextFieldTypes(SwDoc* pDoc);
-
-
-    //XEnumerationAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException );
-
-    //XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::util::XRefreshable
-    virtual void SAL_CALL refresh(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addRefreshListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeRefreshListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l ) throw(::com::sun::star::uno::RuntimeException);
-
-    //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
-
-    // SwUnoCollection
-    virtual void    Invalidate();
-};
-
 class SwXFieldEnumeration : public cppu::WeakImplHelper2
 <
     ::com::sun::star::container::XEnumeration,
@@ -301,7 +233,5 @@ public:
 
 };
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
