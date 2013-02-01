@@ -76,6 +76,7 @@
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="spacing">12</property>
             <property name="homogeneous">True</property>
             <child>
               <object class="GtkFrame" id="frame1">
@@ -87,12 +88,14 @@
                   <object class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkBox" id="box2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="optimal">
                             <property name="label" translatable="yes">Optimal</property>
@@ -165,7 +168,7 @@
                           <object class="GtkBox" id="box3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="spacing">5</property>
+                            <property name="spacing">12</property>
                             <child>
                               <object class="GtkRadioButton" id="variable">
                                 <property name="label" translatable="yes">Variable</property>
@@ -239,12 +242,14 @@
                   <object class="GtkAlignment" id="alignment2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkBox" id="box4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="automatic">
                             <property name="label" translatable="yes">Automatic</property>
@@ -283,7 +288,7 @@
                           <object class="GtkBox" id="box5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="spacing">5</property>
+                            <property name="spacing">12</property>
                             <child>
                               <object class="GtkRadioButton" id="columns">
                                 <property name="label" translatable="yes">Columns</property>
@@ -332,7 +337,7 @@
                           <object class="GtkAlignment" id="alignment3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="left_padding">10</property>
+                            <property name="left_padding">12</property>
                             <child>
                               <object class="GtkCheckButton" id="bookmode">
                                 <property name="label" translatable="yes">Book mode</property>
