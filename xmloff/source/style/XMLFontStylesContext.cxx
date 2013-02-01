@@ -18,6 +18,7 @@
  */
 
 #include <xmloff/XMLFontStylesContext.hxx>
+#include "XMLFontStylesContext_impl.hxx"
 
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
