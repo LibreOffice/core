@@ -671,10 +671,10 @@ SAL_IMPLEMENT_MAIN()
     if (xComp.is())
         xComp->dispose();
 
+#if OSL_DEBUG_LEVEL > 1
     out( "\n" );
+#endif
     return nRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
