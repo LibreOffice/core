@@ -267,7 +267,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             }
         }
 
-        if (arExcludeList > 0)
+        if( arExcludeList != NULL)
         {
             bool bExclude = false;
             for (int j = 0; j < nLenList; j++)
@@ -397,7 +397,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
             return JFW_PLUGIN_E_FAILED_VERSION;
     }
 
-    if (arExcludeList > 0)
+    if( arExcludeList != NULL)
     {
         for (int i = 0; i < nLenList; i++)
         {
