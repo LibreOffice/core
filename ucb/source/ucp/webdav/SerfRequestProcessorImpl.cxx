@@ -52,7 +52,7 @@ void SerfRequestProcessorImpl::activateChunkedEncoding()
     mbUseChunkedEncoding = true;
 }
 
-const bool SerfRequestProcessorImpl::useChunkedEncoding() const
+bool SerfRequestProcessorImpl::useChunkedEncoding() const
 {
     return mbUseChunkedEncoding;
 }

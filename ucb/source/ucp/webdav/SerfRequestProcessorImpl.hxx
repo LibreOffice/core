@@ -64,7 +64,7 @@ protected:
     void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket ) = 0;
 
     const char* getPathStr() const;
-    const bool useChunkedEncoding() const;
+    bool useChunkedEncoding() const;
 
 private:
     const char* mPathStr;
