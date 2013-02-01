@@ -294,13 +294,14 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
         bool bFoundValues = false;
         bool bFoundAnything = false;
         FormulaTokenMapMap::const_iterator it1 = rCols.begin();
-        for (SCCOL nCol = 0; !bFoundValues && nCol < nAllColCount; ++nCol)
+        for (SCCOL nCol = 0; nCol < nAllColCount; ++nCol)
         {
             if (it1 != rCols.end() && nCol>=nHeaderColCount)
             {
+                bool bFoundValuesInRow = false;
                 FormulaTokenMap* pCol = it1->second;
                 FormulaTokenMap::const_iterator it2 = pCol->begin();
-                for (SCROW nRow = 0; !bFoundValues && nRow < nSmallestValueRowIndex && it2 != pCol->end(); ++nRow)
+                for (SCROW nRow = 0; !bFoundValuesInRow && nRow < nSmallestValueRowIndex && it2 != pCol->end(); ++nRow)
                 {
                     FormulaToken* pToken = it2->second;
                     if (pToken && nRow>=nHeaderRowCount)
@@ -318,7 +319,7 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
                         aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                         if (pDoc && pDoc->HasValueData( nCol1, nRow1, nTab1 ))
                         {
-                            bFoundValues = bFoundAnything = true;
+                            bFoundValuesInRow = bFoundValues = bFoundAnything = true;
                             nSmallestValueRowIndex = std::min( nSmallestValueRowIndex, nRow );
                         }
                         if( !bFoundAnything )
