@@ -21,8 +21,11 @@
 
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 
+#include <osl/file.hxx>
 #include <rtl/logfile.hxx>
+#include <vcl/temporaryfonts.hxx>
 
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -170,6 +173,127 @@ void XMLFontStyleContext_Impl::FillProperties(
         XMLPropertyState aPropState( nCharsetIdx, aEnc );
         rProps.push_back( aPropState );
     }
+}
+
+SvXMLImportContext * XMLFontStyleContext_Impl::CreateChildContext(
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList )
+{
+    if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_SRC ))
+        return new XMLFontStyleContextFontFaceSrc( GetImport(), nPrefix, rLocalName, *this );
+    return SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+}
+
+OUString XMLFontStyleContext_Impl::familyName() const
+{
+    OUString ret;
+    aFamilyName >>= ret;
+    return ret;
+}
+
+
+TYPEINIT1( XMLFontStyleContextFontFaceSrc, SvXMLImportContext );
+
+XMLFontStyleContextFontFaceSrc::XMLFontStyleContextFontFaceSrc( SvXMLImport& rImport,
+        sal_uInt16 nPrfx, const OUString& rLName,
+        const XMLFontStyleContext_Impl& _font )
+    : SvXMLImportContext( rImport, nPrfx, rLName )
+    , font( _font )
+{
+}
+
+SvXMLImportContext * XMLFontStyleContextFontFaceSrc::CreateChildContext(
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList )
+{
+    if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_URI ))
+        return new XMLFontStyleContextFontFaceUri( GetImport(), nPrefix, rLocalName, xAttrList, font );
+    return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+}
+
+
+TYPEINIT1( XMLFontStyleContextFontFaceUri, SvXMLImportContext );
+
+XMLFontStyleContextFontFaceUri::XMLFontStyleContextFontFaceUri( SvXMLImport& rImport,
+        sal_uInt16 nPrfx, const OUString& rLName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+        const XMLFontStyleContext_Impl& _font )
+    : SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList )
+    , font( _font )
+{
+}
+
+void XMLFontStyleContextFontFaceUri::SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
+    const OUString& rValue )
+{
+    if( nPrefixKey == XML_NAMESPACE_XLINK && IsXMLToken( rLocalName, XML_HREF ))
+        handleEmbeddedFont( rValue );
+    else
+        SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+}
+
+void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
+{
+    OUString fontName = font.familyName();
+    const char* style = "";
+    // OOXML needs to know what kind of style the font is (regular, italic, bold, bold-italic),
+    // and the TemporaryFonts class is modelled after it. But ODF doesn't (need to) include
+    // this information, so try to guess from the name (LO encodes the style), otherwise
+    // go with regular and hope it works.
+    if( url.endsWithIgnoreAsciiCase( "bi.ttf" ))
+        style = "bi";
+    else if( url.endsWithIgnoreAsciiCase( "b.ttf" ))
+        style = "b";
+    else if( url.endsWithIgnoreAsciiCase( "i.ttf" ))
+        style = "i";
+    // If there's any giveMeStreamForThisURL(), then it's well-hidden for me to find it.
+    if( GetImport().IsPackageURL( url ))
+    {
+        uno::Reference< embed::XStorage > storage;
+        storage.set( GetImport().GetSourceStorage(), UNO_QUERY_THROW );
+        if( url.indexOf( '/' ) > -1 ) // TODO what if more levels?
+            storage.set( storage->openStorageElement( url.copy( 0, url.indexOf( '/' )),
+                ::embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
+        OUString fileUrl = TemporaryFonts::fileUrlForFont( fontName, style );
+        osl::File file( fileUrl );
+        switch( file.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write ))
+        {
+            case osl::File::E_None:
+                break; // ok
+            case osl::File::E_EXIST:
+                return; // Assume it's already been added correctly.
+            default:
+                SAL_WARN( "xmloff", "Cannot open file for temporary font" );
+                return;
+        }
+        uno::Reference< io::XInputStream > inputStream;
+        inputStream.set( storage->openStreamElement( url.copy( url.indexOf( '/' ) + 1 ), ::embed::ElementModes::READ ),
+            UNO_QUERY_THROW );
+        for(;;)
+        {
+            uno::Sequence< sal_Int8 > buffer;
+            int read = inputStream->readBytes( buffer, 1024 );
+            sal_uInt64 dummy;
+            if( read > 0 )
+                file.write( buffer.getConstArray(), read, dummy );
+            if( read < 1024 )
+                break;
+        }
+        inputStream->closeInput();
+        if( file.close() != osl::File::E_None )
+        {
+            SAL_WARN( "xmloff", "Writing temporary font file failed" );
+            osl::File::remove( fileUrl );
+            return;
+        }
+        TemporaryFonts::activateFont( fontName, fileUrl );
+        GetImport().NotifyEmbeddedFontRead();
+    }
+    else
+        SAL_WARN( "xmloff", "External URL for font file not handled." );
 }
 
 SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(

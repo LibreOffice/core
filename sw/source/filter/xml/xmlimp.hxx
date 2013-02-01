@@ -197,6 +197,8 @@ public:
         ::com::sun::star::document::XDocumentProperties>
             GetDocumentProperties() const;
 
+    virtual void NotifyEmbeddedFontRead() SAL_OVERRIDE;
+
     const SwDoc* getDoc() const;
     SwDoc* getDoc();
 };

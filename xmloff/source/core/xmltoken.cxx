@@ -2459,6 +2459,8 @@ namespace xmloff { namespace token {
         TOKEN( "scripts",                          XML_SCRIPTS ),
         TOKEN( "font-face-decls",                 XML_FONT_FACE_DECLS ),
         TOKEN( "font-face",                        XML_FONT_FACE ),
+        TOKEN( "font-face-src",                    XML_FONT_FACE_SRC ),
+        TOKEN( "font-face-uri",                    XML_FONT_FACE_URI ),
         TOKEN( "font-adornments",                 XML_FONT_ADORNMENTS ),
         TOKEN( "inch",                             XML_INCH ),
         TOKEN( "space-after",                      XML_SPACE_AFTER ),

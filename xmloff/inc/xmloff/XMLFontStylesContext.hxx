@@ -121,10 +121,49 @@ public:
                          sal_Int32 nPitchIdx,
                          sal_Int32 nCharsetIdx ) const;
 
+    OUString familyName() const;
+
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+};
+
+/// Handles <style:font-face-src>
+class XMLFontStyleContextFontFaceSrc : public SvXMLImportContext
+{
+    const XMLFontStyleContext_Impl& font;
+public:
+
+    TYPEINFO();
+
+    XMLFontStyleContextFontFaceSrc( SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const ::rtl::OUString& rLName,
+            const XMLFontStyleContext_Impl& font );
+
+    virtual SvXMLImportContext * CreateChildContext(
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+};
+
+/// Handles <style:font-face-uri>
+class XMLFontStyleContextFontFaceUri : public SvXMLStyleContext
+{
+    const XMLFontStyleContext_Impl& font;
+    void handleEmbeddedFont( const OUString& url );
+public:
+
+    TYPEINFO();
+
+    XMLFontStyleContextFontFaceUri( SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const ::rtl::OUString& rLName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const XMLFontStyleContext_Impl& font );
+
+    virtual void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
+        const OUString& rValue );
 };
 
 #endif

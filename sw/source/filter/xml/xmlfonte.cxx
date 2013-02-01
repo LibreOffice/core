@@ -25,6 +25,7 @@
 #include <unotext.hxx>
 #include <doc.hxx>
 #include <xmlexp.hxx>
+#include <xmlimp.hxx>
 
 
 using namespace ::com::sun::star::uno;
@@ -35,13 +36,13 @@ class SwXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {
     public:
 
-    SwXMLFontAutoStylePool_Impl( SwXMLExport& rExport );
+    SwXMLFontAutoStylePool_Impl( SwXMLExport& rExport, bool blockFontEmbedding );
 
 };
 
 SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
-    SwXMLExport& _rExport ) :
-    XMLFontAutoStylePool( _rExport )
+    SwXMLExport& _rExport, bool blockFontEmbedding ) :
+    XMLFontAutoStylePool( _rExport, blockFontEmbedding )
 {
     sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                 RES_CHRATR_CTL_FONT };
@@ -75,7 +76,21 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
 
 XMLFontAutoStylePool* SwXMLExport::CreateFontAutoStylePool()
 {
-    return new SwXMLFontAutoStylePool_Impl( *this );
+    bool blockFontEmbedding = false;
+    // We write font info to both content.xml and styles.xml, but they are both
+    // written by different SwXMLExport instance, and would therefore write each
+    // font file twice without complicated checking for duplicates, so handle
+    // the embedding only in one of them.
+    if(( getExportFlags() & EXPORT_CONTENT ) == 0 )
+        blockFontEmbedding = true;
+    if( !getDoc()->get( IDocumentSettingAccess::EMBED_FONTS ))
+        blockFontEmbedding = true;
+    return new SwXMLFontAutoStylePool_Impl( *this, !blockFontEmbedding );
+}
+
+void SwXMLImport::NotifyEmbeddedFontRead()
+{
+    getDoc()->set( IDocumentSettingAccess::EMBED_FONTS, true );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

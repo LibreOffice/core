@@ -25,11 +25,17 @@
 #include "fonthdl.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLFontAutoStylePool.hxx>
+#include <vcl/temporaryfonts.hxx>
+#include <osl/file.hxx>
 
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
@@ -128,9 +134,10 @@ public:
     ~XMLFontAutoStylePool_Impl() { DeleteAndDestroyAll(); }
 };
 
-XMLFontAutoStylePool::XMLFontAutoStylePool( SvXMLExport& rExp ) :
+XMLFontAutoStylePool::XMLFontAutoStylePool( SvXMLExport& rExp, bool _tryToEmbedFonts ) :
     rExport( rExp ),
-    pPool( new XMLFontAutoStylePool_Impl )
+    pPool( new XMLFontAutoStylePool_Impl ),
+    tryToEmbedFonts( _tryToEmbedFonts )
 {
 }
 
@@ -226,6 +233,7 @@ void XMLFontAutoStylePool::exportXML()
     XMLFontEncodingPropHdl aEncHdl;
     const SvXMLUnitConverter& rUnitConv = GetExport().GetMM100UnitConverter();
 
+    std::map< OUString, OUString > fontFilesMap; // our url to document url
     sal_uInt32 nCount = pPool->size();
     for( sal_uInt32 i=0; i<nCount; i++ )
     {
@@ -263,7 +271,106 @@ void XMLFontAutoStylePool::exportXML()
         SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE,
                                   XML_FONT_FACE,
                                   sal_True, sal_True );
+
+        if( tryToEmbedFonts )
+        {
+            std::vector< OUString > fileUrls;
+            static const char* const styles[] = { "", "b", "i", "bi" };
+            for( unsigned int j = 0;
+                 j < SAL_N_ELEMENTS( styles );
+                 ++j )
+            {
+                OUString fileUrl = TemporaryFonts::fileUrlForFont( pEntry->GetFamilyName(), styles[ j ] );
+                if( !fontFilesMap.count( fileUrl ))
+                {
+                    OUString docUrl = embedFontFile( fileUrl, styles[ j ] );
+                    if( !docUrl.isEmpty())
+                        fontFilesMap[ fileUrl ] = docUrl;
+                    else
+                        continue; // --> failed (most probably this font is not embedded)
+                }
+                fileUrls.push_back( fileUrl );
+            }
+            if( !fileUrls.empty())
+            {
+                SvXMLElementExport fontFaceSrc( GetExport(), XML_NAMESPACE_SVG,
+                    XML_FONT_FACE_SRC, true, true );
+                for( std::vector< OUString >::const_iterator it = fileUrls.begin();
+                     it != fileUrls.end();
+                     ++it )
+                {
+                    if( fontFilesMap.count( *it ))
+                    {
+                        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, fontFilesMap[ *it ] );
+                        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, "simple" );
+                        SvXMLElementExport fontFaceUri( GetExport(), XML_NAMESPACE_SVG,
+                            XML_FONT_FACE_URI, true, true );
+                    }
+                }
+            }
+        }
     }
+}
+
+OUString XMLFontAutoStylePool::embedFontFile( const OUString& fileUrl, const char* style )
+{
+    try
+    {
+        osl::File file( fileUrl );
+        if( file.open( osl_File_OpenFlag_Read ) != osl::File::E_None )
+            return OUString();
+        uno::Reference< embed::XStorage > storage;
+        storage.set( GetExport().GetTargetStorage()->openStorageElement( OUString( "Fonts" ),
+            ::embed::ElementModes::WRITE ), uno::UNO_QUERY_THROW );
+        int index = 0;
+        OUString name;
+        do
+        {
+            name = "font" + OUString::number( ++index ) + OUString::createFromAscii( style ) + ".ttf";
+        } while( storage->hasByName( name ) );
+        uno::Reference< io::XOutputStream > outputStream;
+        outputStream.set( storage->openStreamElement( name, ::embed::ElementModes::WRITE ), UNO_QUERY_THROW );
+        uno::Reference < beans::XPropertySet > propertySet( outputStream, uno::UNO_QUERY );
+        assert( propertySet.is());
+        propertySet->setPropertyValue( "MediaType", uno::makeAny( OUString( "application/x-font-ttf" ))); // TODO
+        for(;;)
+        {
+            char buffer[ 4096 ];
+            sal_uInt64 readSize;
+            sal_Bool eof;
+            if( file.isEndOfFile( &eof ) != osl::File::E_None )
+            {
+                SAL_WARN( "xmloff", "Error reading font file " << fileUrl );
+                outputStream->closeOutput();
+                return OUString();
+            }
+            if( eof )
+                break;
+            if( file.read( buffer, 4096, readSize ) != osl::File::E_None )
+            {
+                SAL_WARN( "xmloff", "Error reading font file " << fileUrl );
+                outputStream->closeOutput();
+                return OUString();
+            }
+            if( readSize == 0 )
+                break;
+            outputStream->writeBytes( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), readSize ));
+        }
+        outputStream->closeOutput();
+        if( storage.is() )
+        {
+            Reference< embed::XTransactedObject > transaction( storage, UNO_QUERY );
+            if( transaction.is())
+            {
+                transaction->commit();
+                return "Fonts/" + name;
+            }
+        }
+    } catch( const Exception& e )
+    {
+        SAL_WARN( "xmloff", "Exception when embedding a font file:" << e.Message );
+    }
+    return OUString();
 }
 
 

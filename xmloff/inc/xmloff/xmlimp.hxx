@@ -453,6 +453,8 @@ public:
         @see <member>mbIsGraphicLoadOnDemandSupported</member>
      */
     bool isGraphicLoadOnDemandSupported() const;
+
+    virtual void NotifyEmbeddedFontRead() {};
 };
 
 inline UniReference< XMLTextImportHelper > SvXMLImport::GetTextImport()
