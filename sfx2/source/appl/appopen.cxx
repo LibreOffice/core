@@ -428,7 +428,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String
         TransformItems( SID_OPENDOC, *pNew, aArgs );
         sal_Int32 nLength = aArgs.getLength();
         aArgs.realloc( nLength + 1 );
-        aArgs[nLength].Name = DEFINE_CONST_UNICODE("Title");
+        aArgs[nLength].Name = "Title";
         aArgs[nLength].Value <<= ::rtl::OUString( xDoc->GetTitle( SFX_TITLE_DETECT ) );
         xModel->attachResource( ::rtl::OUString(), aArgs );
         delete pNew;
@@ -554,8 +554,8 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         SfxCallMode eMode = SFX_CALLMODE_SYNCHRON;
 
         const SfxPoolItem *pRet=0;
-        SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
-        SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE("_default") );
+        SfxStringItem aReferer( SID_REFERER, "private:user" );
+        SfxStringItem aTarget( SID_TARGETNAME, "_default" );
         if ( aTemplateFileName.Len() )
         {
             DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
@@ -567,7 +567,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         }
         else
         {
-            SfxStringItem aName( SID_FILE_NAME, DEFINE_CONST_UNICODE("private:factory") );
+            SfxStringItem aName( SID_FILE_NAME, "private:factory" );
             pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, eMode, &aName, &aTarget, &aReferer, 0L );
         }
 

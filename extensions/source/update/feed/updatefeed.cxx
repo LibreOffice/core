@@ -64,7 +64,6 @@ namespace uno = com::sun::star::uno ;
 namespace xml = com::sun::star::xml ;
 namespace sdbc = com::sun::star::sdbc ;
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 //------------------------------------------------------------------------------
 
@@ -255,14 +254,14 @@ public:
             uno::Reference< xml::dom::XNode > xAtomEntryNode( m_xNodeList->item(m_nCount++) );
 
             uno::Reference< xml::dom::XNode > xSummaryNode(
-                m_xUpdateInformationProvider->getChildNode( xAtomEntryNode, UNISTRING( "summary/text()" ) )
+                m_xUpdateInformationProvider->getChildNode( xAtomEntryNode, "summary/text()" )
             );
 
             if( xSummaryNode.is() )
                 aEntry.Description = xSummaryNode->getNodeValue();
 
             uno::Reference< xml::dom::XNode > xContentNode(
-                m_xUpdateInformationProvider->getChildNode( xAtomEntryNode, UNISTRING( "content" ) ) );
+                m_xUpdateInformationProvider->getChildNode( xAtomEntryNode, "content" ) );
 
             if( xContentNode.is() )
                 aEntry.UpdateDocument = m_xUpdateInformationProvider->getDocumentRoot(xContentNode);
@@ -272,14 +271,14 @@ public:
 
         // action has been aborted
         catch( ucb::CommandAbortedException const & e)
-            { throw lang::WrappedTargetException( UNISTRING( "Command aborted" ), *this, uno::makeAny(e) ); }
+            { throw lang::WrappedTargetException( "Command aborted", *this, uno::makeAny(e) ); }
 
         // let runtime exception pass
         catch( uno::RuntimeException const & ) { throw; }
 
         // document not accessible
         catch( uno::Exception const & e)
-            { throw lang::WrappedTargetException( UNISTRING( "Document not accessible" ), *this, uno::makeAny(e) ); }
+            { throw lang::WrappedTargetException( "Document not accessible", *this, uno::makeAny(e) ); }
     }
 
 private:
@@ -333,20 +332,19 @@ UpdateInformationProvider::UpdateInformationProvider(
     rtl::OUString name;
     getConfigurationItem(
         xConfigurationProvider,
-        UNISTRING("org.openoffice.Setup/Product"),
-        UNISTRING("ooName")) >>= name;
+        "org.openoffice.Setup/Product",
+        "ooName") >>= name;
     buf.append(name);
     buf.append(sal_Unicode(' '));
     rtl::OUString version;
     getConfigurationItem(
         xConfigurationProvider,
-        UNISTRING("org.openoffice.Setup/Product"),
-        UNISTRING("ooSetupVersion")) >>= version;
+        "org.openoffice.Setup/Product",
+        "ooSetupVersion") >>= version;
     buf.append(version);
     rtl::OUString edition(
-        UNISTRING(
             "${${BRAND_BASE_DIR}/program/edition/edition.ini:"
-            "EDITIONNAME}"));
+            "EDITIONNAME}");
     rtl::Bootstrap::expandMacros(edition);
     if (!edition.isEmpty()) {
         buf.append(sal_Unicode(' '));
@@ -355,15 +353,15 @@ UpdateInformationProvider::UpdateInformationProvider(
     rtl::OUString extension;
     getConfigurationItem(
         xConfigurationProvider,
-        UNISTRING("org.openoffice.Setup/Product"),
-        UNISTRING("ooSetupExtension")) >>= extension;
+        "org.openoffice.Setup/Product",
+        "ooSetupExtension") >>= extension;
     if (!extension.isEmpty()) {
         buf.append(sal_Unicode(' '));
         buf.append(extension);
     }
     rtl::OUString product(buf.makeStringAndClear());
 
-    rtl::OUString aUserAgent( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" ) );
+    rtl::OUString aUserAgent( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" );
     rtl::Bootstrap::expandMacros( aUserAgent );
 
     for (sal_Int32 i = 0;;) {
@@ -377,12 +375,12 @@ UpdateInformationProvider::UpdateInformationProvider(
         i += product.getLength();
     }
 
-    m_aRequestHeaderList[0].Name = UNISTRING("Accept-Language");
-    m_aRequestHeaderList[0].Value = getConfigurationItem( xConfigurationProvider, UNISTRING("org.openoffice.Setup/L10N"), UNISTRING("ooLocale") );
+    m_aRequestHeaderList[0].Name = "Accept-Language";
+    m_aRequestHeaderList[0].Value = getConfigurationItem( xConfigurationProvider, "org.openoffice.Setup/L10N", "ooLocale" );
     if( !aUserAgent.isEmpty() )
     {
         m_aRequestHeaderList.realloc(2);
-        m_aRequestHeaderList[1].Name = UNISTRING("User-Agent");
+        m_aRequestHeaderList[1].Name = "User-Agent";
         m_aRequestHeaderList[1].Value = uno::makeAny(aUserAgent);
     }
 }
@@ -399,7 +397,7 @@ UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentCo
 
     uno::Reference< xml::xpath::XXPathAPI > xXPath = xml::xpath::XPathAPI::create( xContext );
 
-    xXPath->registerNS( UNISTRING("atom"), UNISTRING("http://www.w3.org/2005/Atom") );
+    xXPath->registerNS( "atom", "http://www.w3.org/2005/Atom" );
 
     return *new UpdateInformationProvider(xContext, xUniversalContentBroker, xDocumentBuilder, xXPath);
 }
@@ -416,7 +414,7 @@ uno::Any
 UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, rtl::OUString const & node, rtl::OUString const & item)
 {
     beans::NamedValue aProperty;
-    aProperty.Name  = UNISTRING("nodepath");
+    aProperty.Name  = "nodepath";
     aProperty.Value = uno::makeAny(node);
 
     uno::Sequence< uno::Any > aArgumentList( 1 );
@@ -424,7 +422,7 @@ UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServi
 
     uno::Reference< container::XNameAccess > xNameAccess(
         configurationProvider->createInstanceWithArguments(
-            UNISTRING("com.sun.star.configuration.ConfigurationAccess"),
+            "com.sun.star.configuration.ConfigurationAccess",
             aArgumentList ),
         uno::UNO_QUERY_THROW);
 
@@ -453,7 +451,7 @@ UpdateInformationProvider::load(const rtl::OUString& rURL)
 
     if( !xId.is() )
         throw uno::RuntimeException(
-            UNISTRING( "unable to obtain universal content id" ), *this);
+            "unable to obtain universal content id", *this);
 
     uno::Reference< ucb::XCommandProcessor > xCommandProcessor(m_xUniversalContentBroker->queryContent(xId), uno::UNO_QUERY_THROW);
     rtl::Reference< ActiveDataSink > aSink(new ActiveDataSink());
@@ -462,7 +460,7 @@ UpdateInformationProvider::load(const rtl::OUString& rURL)
     // instances phone home & clog up servers
     uno::Sequence< beans::NamedValue > aProps( 1 );
     aProps[ 0 ] = beans::NamedValue(
-        UNISTRING("KeepAlive"), uno::makeAny(sal_False));
+        "KeepAlive", uno::makeAny(sal_False));
 
     ucb::OpenCommandArgument3 aOpenArgument;
     aOpenArgument.Mode = ucb::OpenMode::DOCUMENT;
@@ -471,7 +469,7 @@ UpdateInformationProvider::load(const rtl::OUString& rURL)
     aOpenArgument.OpeningFlags = aProps;
 
     ucb::Command aCommand;
-    aCommand.Name = UNISTRING("open");
+    aCommand.Name = "open";
     aCommand.Argument = uno::makeAny(aOpenArgument);
 
     sal_Int32 nCommandId = xCommandProcessor->createCommandIdentifier();
@@ -513,10 +511,10 @@ UpdateInformationProvider::getDocumentRoot(const uno::Reference< xml::dom::XNode
     uno::Reference< xml::dom::XElement > xElement(rxNode, uno::UNO_QUERY_THROW);
 
     // load the document referenced in 'src' attribute ..
-    if( xElement->hasAttribute( UNISTRING("src") ) )
+    if( xElement->hasAttribute( "src" ) )
     {
         uno::Reference< xml::dom::XDocument > xUpdateXML =
-            m_xDocumentBuilder->parse(load(xElement->getAttribute( UNISTRING("src") )));
+            m_xDocumentBuilder->parse(load(xElement->getAttribute( "src" )));
 
         OSL_ASSERT( xUpdateXML.is() );
 
@@ -556,7 +554,7 @@ UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >&
 {
     OSL_ASSERT(m_xXPathAPI.is());
     try {
-        return m_xXPathAPI->selectSingleNode(rxNode, UNISTRING( "./atom:" ) + rName);
+        return m_xXPathAPI->selectSingleNode(rxNode, "./atom:" + rName);
     } catch (const xml::xpath::XPathException &) {
         // ignore
         return 0;
@@ -593,9 +591,9 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
                     rtl::OUString aXPathExpression;
 
                     if( !extensionId.isEmpty() )
-                        aXPathExpression = UNISTRING("//atom:entry/atom:category[@term=\'") + extensionId + UNISTRING("\']/..");
+                        aXPathExpression = "//atom:entry/atom:category[@term=\'" + extensionId + "\']/..";
                     else
-                        aXPathExpression = UNISTRING("//atom:entry");
+                        aXPathExpression = "//atom:entry";
 
                     uno::Reference< xml::dom::XNodeList > xNodeList;
                     try {
@@ -740,7 +738,7 @@ uno::Sequence< rtl::OUString >
 UpdateInformationProvider::getServiceNames()
 {
     uno::Sequence< rtl::OUString > aServiceList(1);
-    aServiceList[0] = UNISTRING( "com.sun.star.deployment.UpdateInformationProvider");
+    aServiceList[0] = "com.sun.star.deployment.UpdateInformationProvider";
     return aServiceList;
 };
 
@@ -749,7 +747,7 @@ UpdateInformationProvider::getServiceNames()
 rtl::OUString
 UpdateInformationProvider::getImplName()
 {
-    return UNISTRING( "vnd.sun.UpdateInformationProvider");
+    return OUString("vnd.sun.UpdateInformationProvider");
 }
 
 //------------------------------------------------------------------------------

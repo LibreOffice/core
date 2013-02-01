@@ -224,7 +224,7 @@ Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 
 {
     Sequence< ::rtl::OUString > aURLList( 1 );
-    aURLList[0] = DEFINE_CONST_UNICODE("vnd.sun.star.help://*");
+    aURLList[0] = "vnd.sun.star.help://*";
     return aURLList;
 }
 
@@ -234,8 +234,8 @@ Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 void SAL_CALL HelpInterceptor_Impl::dispatch(
     const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& ) throw( RuntimeException )
 {
-    sal_Bool bBack = ( String( DEFINE_CONST_UNICODE(".uno:Backward") ) == String( aURL.Complete ) );
-    if ( bBack || String( DEFINE_CONST_UNICODE(".uno:Forward") ) == String( aURL.Complete ) )
+    sal_Bool bBack = ( String( ".uno:Backward" ) == String( aURL.Complete ) );
+    if ( bBack || String( ".uno:Forward" ) == String( aURL.Complete ) )
     {
         if ( m_pHistory )
         {

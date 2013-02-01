@@ -105,8 +105,8 @@ using namespace ExtendedFilePickerElementIds;
 using namespace CommonFilePickerElementIds;
 using namespace InternalFilePickerElementIds;
 
-#define IODLG_CONFIGNAME        String(RTL_CONSTASCII_USTRINGPARAM("FileDialog"))
-#define IMPGRF_CONFIGNAME       String(RTL_CONSTASCII_USTRINGPARAM("ImportGraphicDialog"))
+#define IODLG_CONFIGNAME        OUString("FileDialog")
+#define IMPGRF_CONFIGNAME       OUString("ImportGraphicDialog")
 
 #define GET_DECODED_NAME(aObj) \
     aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET )

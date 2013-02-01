@@ -103,7 +103,6 @@ using com::sun::star::sdbc::SQLException;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 static Any isCurrency( const rtl::OUString & typeName )
 {
@@ -142,7 +141,7 @@ Columns::Columns(
         ConnectionSettings *pSettings,
         const rtl::OUString &schemaName,
         const rtl::OUString &tableName)
-    : Container( refMutex, origin, pSettings,  ASCII_STR( "COLUMN" ) ),
+    : Container( refMutex, origin, pSettings,  "COLUMN" ),
       m_schemaName( schemaName ),
       m_tableName( tableName )
 {}
@@ -421,7 +420,7 @@ void alterColumnByDescriptor(
         if( pastTypeName != futureTypeName )
         {
             throw RuntimeException(
-                ASCII_STR( "Can't modify column types, drop the column and create a new one" ),
+                "Can't modify column types, drop the column and create a new one",
                 Reference< XInterface > () );
         }
 
@@ -599,7 +598,7 @@ ColumnDescriptors::ColumnDescriptors(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings )
-    : Container( refMutex, origin, pSettings,  ASCII_STR( "COLUMN-DESCRIPTOR" ) )
+    : Container( refMutex, origin, pSettings,  "COLUMN-DESCRIPTOR" )
 {}
 
 

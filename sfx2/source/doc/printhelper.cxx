@@ -274,31 +274,31 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
 
     uno::Sequence< beans::PropertyValue > aPrinter(8);
 
-    aPrinter.getArray()[7].Name = DEFINE_CONST_UNICODE( "CanSetPaperSize" );
+    aPrinter.getArray()[7].Name = "CanSetPaperSize";
     aPrinter.getArray()[7].Value <<= ( pPrinter->HasSupport( SUPPORT_SET_PAPERSIZE ) );
 
-    aPrinter.getArray()[6].Name = DEFINE_CONST_UNICODE( "CanSetPaperFormat" );
+    aPrinter.getArray()[6].Name = "CanSetPaperFormat";
     aPrinter.getArray()[6].Value <<= ( pPrinter->HasSupport( SUPPORT_SET_PAPER ) );
 
-    aPrinter.getArray()[5].Name = DEFINE_CONST_UNICODE( "CanSetPaperOrientation" );
+    aPrinter.getArray()[5].Name = "CanSetPaperOrientation";
     aPrinter.getArray()[5].Value <<= ( pPrinter->HasSupport( SUPPORT_SET_ORIENTATION ) );
 
-    aPrinter.getArray()[4].Name = DEFINE_CONST_UNICODE( "IsBusy" );
+    aPrinter.getArray()[4].Name = "IsBusy";
     aPrinter.getArray()[4].Value <<= ( pPrinter->IsPrinting() );
 
-    aPrinter.getArray()[3].Name = DEFINE_CONST_UNICODE( "PaperSize" );
+    aPrinter.getArray()[3].Name = "PaperSize";
     awt::Size aSize = impl_Size_Object2Struct(pPrinter->GetPaperSize() );
     aPrinter.getArray()[3].Value <<= aSize;
 
-    aPrinter.getArray()[2].Name = DEFINE_CONST_UNICODE( "PaperFormat" );
+    aPrinter.getArray()[2].Name = "PaperFormat";
     view::PaperFormat eFormat = convertToPaperFormat(pPrinter->GetPaper());
     aPrinter.getArray()[2].Value <<= eFormat;
 
-    aPrinter.getArray()[1].Name = DEFINE_CONST_UNICODE( "PaperOrientation" );
+    aPrinter.getArray()[1].Name = "PaperOrientation";
     view::PaperOrientation eOrient = (view::PaperOrientation)pPrinter->GetOrientation();
     aPrinter.getArray()[1].Value <<= eOrient;
 
-    aPrinter.getArray()[0].Name = DEFINE_CONST_UNICODE( "Name" );
+    aPrinter.getArray()[0].Name = "Name";
     String sStringTemp = pPrinter->GetName() ;
     aPrinter.getArray()[0].Value <<= ::rtl::OUString( sStringTemp );
 

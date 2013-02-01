@@ -138,7 +138,7 @@ SfxVersionInfo::SfxVersionInfo()
 
 static String ConvertDateTime_Impl(const DateTime& rTime, const LocaleDataWrapper& rWrapper)
 {
-     const String pDelim ( DEFINE_CONST_UNICODE( ", "));
+     const String pDelim (", ");
      String aStr(rWrapper.getDate(rTime));
      aStr += pDelim;
      aStr += rWrapper.getTime(rTime, sal_True, sal_False);
@@ -292,8 +292,8 @@ void SfxVersionDialog::Open_Impl()
     SvTreeListEntry *pEntry = aVersionBox.FirstSelected();
     sal_uIntPtr nPos = aVersionBox.GetModel()->GetRelPos( pEntry );
     SfxInt16Item aItem( SID_VERSION, (short)nPos+1 );
-    SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
-    SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
+    SfxStringItem aTarget( SID_TARGETNAME, "_blank" );
+    SfxStringItem aReferer( SID_REFERER, "private:user" );
     SfxStringItem aFile( SID_FILE_NAME, pObjShell->GetMedium()->GetName() );
 
     uno::Sequence< beans::NamedValue > aEncryptionData;

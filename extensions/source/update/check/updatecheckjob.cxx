@@ -38,8 +38,6 @@ namespace lang = com::sun::star::lang ;
 namespace task = com::sun::star::task ;
 namespace uno = com::sun::star::uno ;
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
 namespace
 {
 
@@ -168,7 +166,7 @@ uno::Sequence< rtl::OUString >
 UpdateCheckJob::getServiceNames()
 {
     uno::Sequence< rtl::OUString > aServiceList(1);
-    aServiceList[0] = UNISTRING( "com.sun.star.setup.UpdateCheck");
+    aServiceList[0] = "com.sun.star.setup.UpdateCheck";
     return aServiceList;
 };
 
@@ -177,7 +175,7 @@ UpdateCheckJob::getServiceNames()
 rtl::OUString
 UpdateCheckJob::getImplName()
 {
-    return UNISTRING( "vnd.sun.UpdateCheck");
+    return "vnd.sun.UpdateCheck";
 }
 
 

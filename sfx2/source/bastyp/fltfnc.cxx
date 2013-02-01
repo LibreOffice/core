@@ -506,7 +506,7 @@ sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
         {
 #ifdef DBG_UTIL
             // Start Setup
-            InfoBox( NULL, DEFINE_CONST_UNICODE("Here should the Setup now be starting!") ).Execute();
+            InfoBox( NULL, "Here should the Setup now be starting!" ).Execute();
 #endif
             // Installation must still give feedback if it worked or not,
             // then the  Filterflag be deleted
@@ -607,7 +607,7 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery > xTypeCFG;
     if( xServiceManager.is() == sal_True )
-        xTypeCFG   = ::com::sun::star::uno::Reference < com::sun::star::container::XContainerQuery >( xServiceManager->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.TypeDetection" ) ), ::com::sun::star::uno::UNO_QUERY );
+        xTypeCFG   = ::com::sun::star::uno::Reference < com::sun::star::container::XContainerQuery >( xServiceManager->createInstance( "com.sun.star.document.TypeDetection" ), ::com::sun::star::uno::UNO_QUERY );
     if ( xTypeCFG.is() )
     {
         // make query for all types matching the properties
@@ -790,8 +790,8 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     xTypeCFG                                                  ;
         if( xServiceManager.is() == sal_True )
         {
-            xFilterCFG = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), ::com::sun::star::uno::UNO_QUERY );
-            xTypeCFG   = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.TypeDetection" ) ), ::com::sun::star::uno::UNO_QUERY );
+            xFilterCFG = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.FilterFactory" ), ::com::sun::star::uno::UNO_QUERY );
+            xTypeCFG   = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.TypeDetection" ), ::com::sun::star::uno::UNO_QUERY );
         }
 
         if( xFilterCFG.is() && xTypeCFG.is() )
@@ -832,8 +832,8 @@ IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, String*, pString )
 {
     const SfxFilter* pFilter = pThis->GetFilter4Extension( *pString, SFX_FILTER_IMPORT );
     if (pFilter && !pFilter->GetWildcard().Matches( String() ) &&
-        !pFilter->GetWildcard().Matches(DEFINE_CONST_UNICODE("*.*")) &&
-        !pFilter->GetWildcard().Matches(rtl::OUString('*'))
+        !pFilter->GetWildcard().Matches(OUString("*.*")) &&
+        !pFilter->GetWildcard().Matches(OUString('*'))
        )
     {
         return sal_True;
@@ -1027,7 +1027,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                             {
                                 ::com::sun::star::uno::Sequence< ::rtl::OUString > lExtensions;
                                 lTypeProperties[nTypeProperty].Value >>= lExtensions;
-                                sExtension = implc_convertStringlistToString( lExtensions, ';', DEFINE_CONST_UNICODE("*.") );
+                                sExtension = implc_convertStringlistToString( lExtensions, ';', "*." );
                             }
                         }
                         else if ( lTypeProperties[nTypeProperty].Name == "URLPattern" )
@@ -1058,7 +1058,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         // register SfxFilter
         // first erase module name from old filter names!
         // e.g: "scalc: DIF" => "DIF"
-        sal_Int32 nStartRealName = sFilterName.indexOf( DEFINE_CONST_UNICODE(": "), 0 );
+        sal_Int32 nStartRealName = sFilterName.indexOf( ": ", 0 );
         if( nStartRealName != -1 )
         {
             OSL_FAIL("Old format, not supported!");
@@ -1125,8 +1125,8 @@ void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     xTypeCFG                                                  ;
         if( xServiceManager.is() == sal_True )
         {
-            xFilterCFG = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), ::com::sun::star::uno::UNO_QUERY );
-            xTypeCFG   = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.TypeDetection" ) ), ::com::sun::star::uno::UNO_QUERY );
+            xFilterCFG = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.FilterFactory" ), ::com::sun::star::uno::UNO_QUERY );
+            xTypeCFG   = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.TypeDetection" ), ::com::sun::star::uno::UNO_QUERY );
         }
 
         if(

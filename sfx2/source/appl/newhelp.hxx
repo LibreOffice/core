@@ -524,7 +524,7 @@ friend class SfxHelpIndexWindow_Impl;
     sal_Bool            bIndex;
     sal_Bool            bGrabFocusToToolBox;
     Point               aWinPos;
-    String              sTitle;
+    OUString            sTitle;
     String              sKeyword;
 
     virtual void        Resize();

@@ -27,8 +27,6 @@
 #include <osl/process.h>
 #include <stdio.h>
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
 namespace task = ::com::sun::star::task;
 namespace uno  = ::com::sun::star::uno;
 

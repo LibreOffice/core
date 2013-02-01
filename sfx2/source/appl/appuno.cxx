@@ -925,8 +925,8 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         else
         {
             // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
-            String sSlotName( DEFINE_CONST_UNICODE( "OptionsTreeDialog" ) );
-            String sPropName( DEFINE_CONST_UNICODE( "OptionsPageURL" ) );
+            String sSlotName( "OptionsTreeDialog" );
+            String sPropName( "OptionsPageURL" );
             if ( sSlotName.EqualsAscii( pSlot->pUnoName ) )
             {
                 for ( sal_uInt16 n = 0; n < nCount; ++n )

@@ -1348,7 +1348,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
             util::RevisionTag& rTag = pImp->aVersions[nVersion];
             {
                 // Open SubStorage for all versions
-                uno::Reference < embed::XStorage > xSub = pImp->xStorage->openStorageElement( DEFINE_CONST_UNICODE( "Versions" ),
+                uno::Reference < embed::XStorage > xSub = pImp->xStorage->openStorageElement( "Versions",
                         embed::ElementModes::READ );
 
                 DBG_ASSERT( xSub.is(), "Version list, but no Versions!" );
@@ -2173,7 +2173,7 @@ void SfxMedium::DoBackup_Impl()
             // save as ".bak" file
             INetURLObject aDest( aBakDir );
             aDest.insertName( aSource.getName() );
-            aDest.setExtension( DEFINE_CONST_UNICODE( "bak" ) );
+            aDest.setExtension( "bak" );
             String aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
             // create a content for the source file
@@ -3162,8 +3162,7 @@ sal_uInt16 SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
             if ( aLongs[nKey] > ( sal_uIntPtr ) nKey+1 )
                 break;
 
-        String aRevName = DEFINE_CONST_UNICODE( "Version" );
-        aRevName += String::CreateFromInt32( nKey + 1 );
+        OUString aRevName = "Version" + OUString::number( nKey + 1 );
         pImp->aVersions.realloc( nLength+1 );
         rRevision.Identifier = aRevName;
         pImp->aVersions[nLength] = rRevision;

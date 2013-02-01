@@ -92,7 +92,7 @@ SfxFilterListener::SfxFilterListener()
     uno::Reference< lang::XMultiServiceFactory > xSmgr = ::comphelper::getProcessServiceFactory();
     if( xSmgr.is() == sal_True )
     {
-        uno::Reference< util::XRefreshable > xNotifier( xSmgr->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.document.FilterConfigRefresh") ), uno::UNO_QUERY );
+        uno::Reference< util::XRefreshable > xNotifier( xSmgr->createInstance( "com.sun.star.document.FilterConfigRefresh" ), uno::UNO_QUERY );
         if( xNotifier.is() == sal_True )
         {
             m_xFilterCache = xNotifier;

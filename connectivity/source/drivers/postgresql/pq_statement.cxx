@@ -132,7 +132,6 @@ using com::sun::star::container::XEnumerationAccess;
 using com::sun::star::container::XEnumeration;
 using com::sun::star::container::XIndexAccess;
 
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 namespace pq_sdbc_driver
 {
 static ::cppu::IPropertyArrayHelper & getStatementPropertyArrayHelper()
@@ -208,7 +207,7 @@ void Statement::checkClosed() throw (SQLException, RuntimeException )
 {
     if( ! m_pSettings || ! m_pSettings->pConnection )
         throw SQLException(
-            ASCII_STR("pq_driver: Statement or connection has already been closed !" ),
+            "pq_driver: Statement or connection has already been closed !",
             *this, OUString(),1,Any());
 }
 
@@ -707,13 +706,12 @@ static Sequence< OUString > getPrimaryKeyColumnNames(
 
     // retrieve the primary key ...
     Reference< XPreparedStatement > stmt = connection->prepareStatement(
-        ASCII_STR(
             "SELECT conkey "              // 7
             "FROM pg_constraint INNER JOIN pg_class ON conrelid = pg_class.oid "
                       "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
                       "LEFT JOIN pg_class AS class2 ON confrelid = class2.oid "
                       "LEFT JOIN pg_namespace AS nmsp2 ON class2.relnamespace=nmsp2.oid "
-            "WHERE pg_class.relname = ? AND pg_namespace.nspname = ? AND pg_constraint.contype='p'" ) );
+            "WHERE pg_class.relname = ? AND pg_namespace.nspname = ? AND pg_constraint.contype='p'" );
     DisposeGuard guard( stmt );
     Reference< XParameters > paras( stmt, UNO_QUERY );
     paras->setString( 1 , tableName );
@@ -735,7 +733,7 @@ static void getAutoValues(
     const OUString & tableName )
 {
     Reference< XPreparedStatement > stmt = connection->prepareStatement(
-        ASCII_STR("SELECT   pg_attribute.attname, pg_attrdef.adsrc "
+                  "SELECT   pg_attribute.attname, pg_attrdef.adsrc "
                   "FROM pg_class, pg_namespace, pg_attribute "
                   "LEFT JOIN pg_attrdef ON pg_attribute.attrelid = pg_attrdef.adrelid AND "
                                         "pg_attribute.attnum = pg_attrdef.adnum "
@@ -746,7 +744,7 @@ static void getAutoValues(
                   // Most probably gives problems if tableName contains '%'
                         "pg_class.relname LIKE ? AND "
                         "pg_attrdef.adsrc != ''"
-            ) );
+            );
     DisposeGuard guard( stmt );
     Reference< XParameters > paras( stmt, UNO_QUERY );
     paras->setString( 1 , schemaName );

@@ -111,9 +111,9 @@ using namespace ::cppu;
 
 //-----------------------------------------------------------------------------
 
-#define IODLG_CONFIGNAME        String(DEFINE_CONST_UNICODE("FilePicker_Save"))
-#define IMPGRF_CONFIGNAME       String(DEFINE_CONST_UNICODE("FilePicker_Graph"))
-#define USERITEM_NAME           ::rtl::OUString("UserItem" )
+#define IODLG_CONFIGNAME        OUString("FilePicker_Save")
+#define IMPGRF_CONFIGNAME       OUString("FilePicker_Graph")
+#define USERITEM_NAME           OUString("UserItem")
 
 //-----------------------------------------------------------------------------
 
@@ -425,7 +425,7 @@ sal_Bool FileDialogHelper_Impl::CheckFilterOptionsCapability( const SfxFilter* _
                    sal_Int32 nPropertyCount = aProps.getLength();
                    for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
                 {
-                       if( aProps[nProperty].Name.equals( DEFINE_CONST_OUSTRING( "UIComponent") ) )
+                       if( aProps[nProperty].Name == "UIComponent" )
                        {
                            aProps[nProperty].Value >>= aServiceName;
                         if( !aServiceName.isEmpty() )
@@ -846,7 +846,7 @@ static bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker >& _rxFP )
         uno::Reference< XServiceInfo > xSI( _rxFP, UNO_QUERY );
         if ( !xSI.is() )
             return true;
-        return xSI->supportsService( DEFINE_CONST_OUSTRING( "com.sun.star.ui.dialogs.SystemFilePicker" ) );
+        return xSI->supportsService( "com.sun.star.ui.dialogs.SystemFilePicker" );
     }
     catch( const Exception& )
     {
@@ -985,7 +985,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 if( xFactory.is() )
                 {
                     mxFilterCFG = uno::Reference< XNameAccess >(
-                        xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.document.FilterFactory" ) ),
+                        xFactory->createInstance( "com.sun.star.document.FilterFactory" ),
                         UNO_QUERY );
                 }
 
@@ -1001,7 +1001,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 if ( mbExport && !mxFilterCFG.is() && xFactory.is() )
                 {
                     mxFilterCFG = uno::Reference< XNameAccess >(
-                        xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.document.FilterFactory" ) ),
+                        xFactory->createInstance( "com.sun.star.document.FilterFactory" ),
                         UNO_QUERY );
                 }
                 break;
@@ -1894,7 +1894,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
 
 #if defined(WNT)
     if ( aExtensions.Len() > 240 )
-        aExtensions = DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL );
+        aExtensions = FILEDIALOG_FILTER_ALL;
 #endif
     sal_Bool bIsInOpenMode = isInOpenMode();
 
@@ -1957,7 +1957,7 @@ void FileDialogHelper_Impl::saveConfig()
     if ( mbHasPreview )
     {
         SvtViewOptions aDlgOpt( E_DIALOG, IMPGRF_CONFIGNAME );
-        String aUserData = DEFINE_CONST_UNICODE( GRF_CONFIG_STR );
+        String aUserData = OUString(GRF_CONFIG_STR);
 
         try
         {
@@ -1984,7 +1984,7 @@ void FileDialogHelper_Impl::saveConfig()
     {
         sal_Bool bWriteConfig = sal_False;
         SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
-        String aUserData = DEFINE_CONST_UNICODE( STD_CONFIG_STR );
+        String aUserData = OUString(STD_CONFIG_STR);
 
         if ( aDlgOpt.Exists() )
         {
@@ -2144,7 +2144,7 @@ void FileDialogHelper_Impl::loadConfig()
         }
 
         if ( ! aUserData.Len() )
-            aUserData = DEFINE_CONST_UNICODE( STD_CONFIG_STR );
+            aUserData = STD_CONFIG_STR;
 
         if ( maPath.isEmpty() )
             displayFolder( getInitPath( aUserData, 1 ) );
@@ -2757,16 +2757,16 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, rtl::OUString& aURL, Sf
 // ------------------------------------------------------------------------
 String EncodeSpaces_Impl( const String& rSource )
 {
-    String sRet( rSource );
-    sRet.SearchAndReplaceAll( DEFINE_CONST_UNICODE( " " ), DEFINE_CONST_UNICODE( "%20" ) );
+    OUString sRet( rSource );
+    sRet = sRet.replaceAll( " ", "%20" );
     return sRet;
 }
 
 // ------------------------------------------------------------------------
 String DecodeSpaces_Impl( const String& rSource )
 {
-    String sRet( rSource );
-    sRet.SearchAndReplaceAll( DEFINE_CONST_UNICODE( "%20" ), DEFINE_CONST_UNICODE( " " ) );
+    OUString sRet( rSource );
+    sRet = sRet.replaceAll( "%20", " " );
     return sRet;
 }
 

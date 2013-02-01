@@ -46,7 +46,6 @@
 
 #define NO_INDEX        ((sal_uInt16)0xFFFF)
 #define CONTENT_HELPER  ::utl::UCBContentHelper
-#define ASCII_STRING(s) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 
 struct SvtExtensionResIdMapping_Impl
 {
@@ -308,11 +307,11 @@ static sal_Bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtool
 
     try
     {
-        bRet = ( ( rContent.getPropertyValue( ASCII_STRING("IsVolume") ) >>= rVolumeInfo.m_bIsVolume ) &&
-                 ( rContent.getPropertyValue( ASCII_STRING("IsRemote") ) >>= rVolumeInfo.m_bIsRemote ) &&
-                 ( rContent.getPropertyValue( ASCII_STRING("IsRemoveable") ) >>= rVolumeInfo.m_bIsRemoveable ) &&
-                 ( rContent.getPropertyValue( ASCII_STRING("IsFloppy") ) >>= rVolumeInfo.m_bIsFloppy ) &&
-                 ( rContent.getPropertyValue( ASCII_STRING("IsCompactDisc") ) >>= rVolumeInfo.m_bIsCompactDisc ) );
+        bRet = ( ( rContent.getPropertyValue( "IsVolume" ) >>= rVolumeInfo.m_bIsVolume ) &&
+                 ( rContent.getPropertyValue( "IsRemote" ) >>= rVolumeInfo.m_bIsRemote ) &&
+                 ( rContent.getPropertyValue( "IsRemoveable" ) >>= rVolumeInfo.m_bIsRemoveable ) &&
+                 ( rContent.getPropertyValue( "IsFloppy" ) >>= rVolumeInfo.m_bIsFloppy ) &&
+                 ( rContent.getPropertyValue( "IsCompactDisc" ) >>= rVolumeInfo.m_bIsCompactDisc ) );
     }
     catch( const ::com::sun::star::uno::RuntimeException& )
     {

@@ -500,7 +500,7 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
             TransformItems( SID_OPENDOC, *pSet, aArgs );
             sal_Int32 nLength = aArgs.getLength();
             aArgs.realloc( nLength + 1 );
-            aArgs[nLength].Name = DEFINE_CONST_UNICODE("Title");
+            aArgs[nLength].Name = "Title";
             aArgs[nLength].Value <<= ::rtl::OUString( GetTitle( SFX_TITLE_DETECT ) );
             xModel->attachResource( ::rtl::OUString(), aArgs );
             impl_addToModelCollection(xModel);
@@ -2142,7 +2142,7 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
 
     uno::Reference< lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
     uno::Reference < lang::XMultiServiceFactory > xFilterFact (
-                xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), uno::UNO_QUERY );
+                xMan->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
 
     uno::Sequence < beans::PropertyValue > aProps;
     uno::Reference < container::XNameAccess > xFilters ( xFilterFact, uno::UNO_QUERY );
@@ -2254,7 +2254,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
     {
         uno::Reference< lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
         uno::Reference < lang::XMultiServiceFactory > xFilterFact (
-                xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), uno::UNO_QUERY );
+                xMan->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
 
         uno::Sequence < beans::PropertyValue > aProps;
         uno::Reference < container::XNameAccess > xFilters ( xFilterFact, uno::UNO_QUERY );

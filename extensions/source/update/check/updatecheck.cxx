@@ -62,16 +62,14 @@ namespace c3s = com::sun::star::system ;
 namespace task = com::sun::star::task ;
 namespace uno = com::sun::star::uno ;
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
-#define PROPERTY_TITLE          UNISTRING("BubbleHeading")
-#define PROPERTY_TEXT           UNISTRING("BubbleText")
-#define PROPERTY_IMAGE          UNISTRING("BubbleImageURL")
-#define PROPERTY_SHOW_BUBBLE    UNISTRING("BubbleVisible")
-#define PROPERTY_CLICK_HDL      UNISTRING("MenuClickHDL")
-#define PROPERTY_DEFAULT_TITLE  UNISTRING("DefaultHeading")
-#define PROPERTY_DEFAULT_TEXT   UNISTRING("DefaultText")
-#define PROPERTY_SHOW_MENUICON  UNISTRING("MenuIconVisible")
+#define PROPERTY_TITLE          "BubbleHeading"
+#define PROPERTY_TEXT           "BubbleText"
+#define PROPERTY_IMAGE          "BubbleImageURL"
+#define PROPERTY_SHOW_BUBBLE    "BubbleVisible"
+#define PROPERTY_CLICK_HDL      "MenuClickHDL"
+#define PROPERTY_DEFAULT_TITLE  "DefaultHeading"
+#define PROPERTY_DEFAULT_TEXT   "DefaultText"
+#define PROPERTY_SHOW_MENUICON  "MenuIconVisible"
 
 extern "C" bool SAL_CALL WNT_hasInternetConnection();
 //------------------------------------------------------------------------------
@@ -103,7 +101,7 @@ namespace
 
 static inline rtl::OUString getBuildId()
 {
-    rtl::OUString aPathVal(UNISTRING("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}"));
+    OUString aPathVal("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}");
     rtl::Bootstrap::expandMacros(aPathVal);
     return aPathVal;
 }
@@ -111,7 +109,7 @@ static inline rtl::OUString getBuildId()
 //------------------------------------------------------------------------------
 static inline rtl::OUString getBaseInstallation()
 {
-    rtl::OUString aPathVal(UNISTRING("$BRAND_BASE_DIR"));
+    rtl::OUString aPathVal("$BRAND_BASE_DIR");
     rtl::Bootstrap::expandMacros(aPathVal);
     return aPathVal;
 }
@@ -136,7 +134,7 @@ rtl::OUString getImageFromFileName(const rtl::OUString& aFile)
         if ( lastIndex > 0 )
         {
             aUnpackPath = aUnpackPath.copy( 0, lastIndex+1 );
-            aUnpackPath  += UNISTRING( "unpack_update" );
+            aUnpackPath  += "unpack_update";
         }
 
         oslFileHandle hOut = NULL;
@@ -208,16 +206,16 @@ static uno::Reference< beans::XPropertySet > createMenuBarUI(
 {
     if( !xContext.is() )
         throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: empty component context" ), uno::Reference< uno::XInterface > () );
+            "UpdateCheckJob: empty component context", uno::Reference< uno::XInterface > () );
 
     uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
     if( !xServiceManager.is() )
         throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: unable to obtain service manager from component context" ), uno::Reference< uno::XInterface > () );
+            "UpdateCheckJob: unable to obtain service manager from component context", uno::Reference< uno::XInterface > () );
 
     uno::Reference< beans::XPropertySet > xMenuBarUI =
         uno::Reference< beans::XPropertySet > (
-            xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.setup.UpdateCheckUI" ), xContext ),
+            xServiceManager->createInstanceWithContext( "com.sun.star.setup.UpdateCheckUI", xContext ),
             uno::UNO_QUERY_THROW);
 
     xMenuBarUI->setPropertyValue( PROPERTY_CLICK_HDL, uno::makeAny( xJob ) );
@@ -716,7 +714,7 @@ ShutdownThread::run()
 
     // Tell QuickStarter not to veto ..
     uno::Reference< beans::XFastPropertySet > xQuickStarter(
-        UpdateCheck::createService(UNISTRING("com.sun.star.office.Quickstart"), m_xContext),
+        UpdateCheck::createService("com.sun.star.office.Quickstart", m_xContext),
         uno::UNO_QUERY
     );
 
@@ -924,7 +922,7 @@ UpdateCheck::install()
         if( !aParameter.isEmpty() )
             osl::FileBase::getSystemPathFromFileURL(aParameter, aParameter);
 
-        aParameter += UNISTRING(" &");
+        aParameter += " &";
 #endif
 
         rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get( m_xContext );
@@ -1483,13 +1481,13 @@ bool
 UpdateCheck::storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL)
 {
     osl::FileBase::RC rc;
-    rtl::OUString aTargetDir( UpdateCheckConfig::getAllUsersDirectory() + UNISTRING( "/sun" ) );
+    rtl::OUString aTargetDir( UpdateCheckConfig::getAllUsersDirectory() + "/sun" );
 
     rc = osl::Directory::createPath( aTargetDir );
 
-    rtl::OUString aFileName = UNISTRING("releasenote") +
+    rtl::OUString aFileName = "releasenote" +
                               rtl::OUString::valueOf( (sal_Int32) nNum ) +
-                              UNISTRING(".url");
+                              ".url";
 
     rtl::OUString aFilePath;
     rc = osl::FileBase::getAbsoluteFileURL( aTargetDir, aFileName, aFilePath );
@@ -1513,7 +1511,7 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL)
 #ifdef WNT
     rc = aFile.write( aLineBuf.getStr(), aLineBuf.getLength(), nWritten );
     if ( rc != osl::FileBase::E_None ) return false;
-    aURL = UNISTRING("URL=") + rURL;
+    aURL = "URL=" + rURL;
 #endif
     aLineBuf = rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 );
     rc = aFile.write( aLineBuf.getStr(), aLineBuf.getLength(), nWritten );
@@ -1526,18 +1524,18 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL)
 //------------------------------------------------------------------------------
 void UpdateCheck::showExtensionDialog()
 {
-    rtl::OUString sServiceName = UNISTRING("com.sun.star.deployment.ui.PackageManagerDialog");
-    rtl::OUString sArguments = UNISTRING("SHOW_UPDATE_DIALOG");
+    rtl::OUString sServiceName = "com.sun.star.deployment.ui.PackageManagerDialog";
+    rtl::OUString sArguments = "SHOW_UPDATE_DIALOG";
     uno::Reference< uno::XInterface > xService;
 
     if( ! m_xContext.is() )
         throw uno::RuntimeException(
-            UNISTRING( "UpdateCheck::showExtensionDialog(): empty component context" ), uno::Reference< uno::XInterface > () );
+            "UpdateCheck::showExtensionDialog(): empty component context", uno::Reference< uno::XInterface > () );
 
     uno::Reference< lang::XMultiComponentFactory > xServiceManager( m_xContext->getServiceManager() );
     if( !xServiceManager.is() )
         throw uno::RuntimeException(
-            UNISTRING( "UpdateCheck::showExtensionDialog(): unable to obtain service manager from component context" ), uno::Reference< uno::XInterface > () );
+            "UpdateCheck::showExtensionDialog(): unable to obtain service manager from component context", uno::Reference< uno::XInterface > () );
 
     xService = xServiceManager->createInstanceWithContext( sServiceName, m_xContext );
     uno::Reference< task::XJobExecutor > xExecuteable( xService, uno::UNO_QUERY );
@@ -1581,14 +1579,14 @@ UpdateCheck::createService(const rtl::OUString& rServiceName,
 {
     if( !xContext.is() )
         throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckConfig: empty component context" ),
+            "UpdateCheckConfig: empty component context",
             uno::Reference< uno::XInterface >() );
 
     const uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
 
     if( !xServiceManager.is() )
         throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckConfig: unable to obtain service manager from component context" ),
+            "UpdateCheckConfig: unable to obtain service manager from component context",
             uno::Reference< uno::XInterface >() );
 
     return xServiceManager->createInstanceWithContext(rServiceName, xContext);

@@ -32,9 +32,8 @@ short ExecuteQuerySaveDocument(Window* _pParent,const String& _rTitle)
     {   // don't block Desktop::terminate() if there's no user to ask
         return RET_NO;
     }
-    String aText( SfxResId(STR_QUERY_SAVE_DOCUMENT).toString() );
-    aText.SearchAndReplace( DEFINE_CONST_UNICODE( "$(DOC)" ),
-                            _rTitle );
+    OUString aText( SfxResId(STR_QUERY_SAVE_DOCUMENT).toString() );
+    aText = aText.replaceFirst( "$(DOC)", _rTitle );
     QueryBox aQBox( _pParent, WB_YES_NO_CANCEL | WB_DEF_YES, aText );
     aQBox.SetText(SfxResId(STR_QUERY_SAVE_DOCUMENT_TITLE).toString()); // Window title
     aQBox.SetButtonText( BUTTONID_NO, SfxResId(STR_NOSAVEANDCLOSE).toString() );

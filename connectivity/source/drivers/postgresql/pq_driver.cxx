@@ -95,7 +95,6 @@ using com::sun::star::sdbcx::XTablesSupplier;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 OUString DriverGetImplementationName()
 {

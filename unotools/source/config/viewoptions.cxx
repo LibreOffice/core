@@ -32,23 +32,17 @@
 
 #include <itemholder1.hxx>
 
-#ifdef CONST_ASCII
-    #error  "Who define CONST_ASCII before! I use it to create const ascii strings ..."
-#else
-    #define CONST_ASCII(SASCIIVALUE)            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SASCIIVALUE))
-#endif
+#define PACKAGE_VIEWS                           "org.openoffice.Office.Views"
 
-#define PACKAGE_VIEWS                           CONST_ASCII("org.openoffice.Office.Views")
+#define LIST_DIALOGS                            "Dialogs"
+#define LIST_TABDIALOGS                         "TabDialogs"
+#define LIST_TABPAGES                           "TabPages"
+#define LIST_WINDOWS                            "Windows"
 
-#define LIST_DIALOGS                            CONST_ASCII("Dialogs"   )
-#define LIST_TABDIALOGS                         CONST_ASCII("TabDialogs")
-#define LIST_TABPAGES                           CONST_ASCII("TabPages"  )
-#define LIST_WINDOWS                            CONST_ASCII("Windows"   )
-
-#define PROPERTY_WINDOWSTATE                    CONST_ASCII("WindowState")
-#define PROPERTY_PAGEID                         CONST_ASCII("PageID"     )
-#define PROPERTY_VISIBLE                        CONST_ASCII("Visible"    )
-#define PROPERTY_USERDATA                       CONST_ASCII("UserData"   )
+#define PROPERTY_WINDOWSTATE                    "WindowState"
+#define PROPERTY_PAGEID                         "PageID"
+#define PROPERTY_VISIBLE                        "Visible"
+#define PROPERTY_USERDATA                       "UserData"
 
 #define DEFAULT_WINDOWSTATE                     ::rtl::OUString()
 #define DEFAULT_USERDATA                        css::uno::Sequence< css::beans::NamedValue >()
