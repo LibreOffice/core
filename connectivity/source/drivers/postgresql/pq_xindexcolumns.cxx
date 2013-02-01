@@ -102,7 +102,6 @@ using com::sun::star::sdbc::SQLException;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 IndexColumns::IndexColumns(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
@@ -112,7 +111,7 @@ IndexColumns::IndexColumns(
         const rtl::OUString &tableName,
         const rtl::OUString &indexName,
         const com::sun::star::uno::Sequence< rtl::OUString > &columns )
-    : Container( refMutex, origin, pSettings,  ASCII_STR( "INDEX_COLUMN" ) ),
+    : Container( refMutex, origin, pSettings,  "INDEX_COLUMN" ),
       m_schemaName( schemaName ),
       m_tableName( tableName ),
       m_indexName( indexName ),
@@ -195,7 +194,7 @@ void IndexColumns::appendByDescriptor(
 {
     OUString name = extractStringProperty( future, getStatics().NAME );
     throw com::sun::star::sdbc::SQLException(
-        ASCII_STR( "SDBC-POSTGRESQL: IndexesColumns.appendByDescriptor not yet implemented" ),
+        "SDBC-POSTGRESQL: IndexesColumns.appendByDescriptor not yet implemented",
         *this, OUString(), 1, Any() );
 //     osl::MutexGuard guard( m_refMutex->mutex );
 //     Statics & st = getStatics();
@@ -213,7 +212,7 @@ void IndexColumns::dropByName( const ::rtl::OUString& elementName )
 {
     (void) elementName;
     throw com::sun::star::sdbc::SQLException(
-        ASCII_STR( "SDBC-POSTGRESQL: IndexesColumns.dropByName not yet implemented" ),
+        "SDBC-POSTGRESQL: IndexesColumns.dropByName not yet implemented",
         *this, OUString(), 1, Any() );
 //     String2IntMap::const_iterator ii = m_name2index.find( elementName );
 //     if( ii == m_name2index.end() )
@@ -239,7 +238,7 @@ void IndexColumns::dropByIndex( sal_Int32 index )
 {
     (void) index;
     throw com::sun::star::sdbc::SQLException(
-        ASCII_STR( "SDBC-POSTGRESQL: IndexesColumns.dropByIndex not yet implemented" ),
+        "SDBC-POSTGRESQL: IndexesColumns.dropByIndex not yet implemented",
         *this, OUString(), 1, Any() );
 //     osl::MutexGuard guard( m_refMutex->mutex );
 //     if( index < 0 ||  index >= m_values.getLength() )

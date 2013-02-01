@@ -1872,7 +1872,7 @@ sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* 
     ::comphelper::SequenceAsHashMap aFactoryProps(
         xModuleManager->getByName( getModuleIdentifier( xModuleManager, i_pObjSh ) ) );
     sal_Int32 nDefault = -1;
-    nFilter = aFactoryProps.getUnpackedValueOrDefault( DEFINE_CONST_UNICODE("ooSetupFactoryStyleFilter"), nDefault );
+    nFilter = aFactoryProps.getUnpackedValueOrDefault( "ooSetupFactoryStyleFilter", nDefault );
 
     return nFilter;
 }
@@ -1883,7 +1883,7 @@ void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter( SfxObjectShell* i_pOb
 {
     OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
     Sequence< PropertyValue > lProps(1);
-    lProps[0].Name = DEFINE_CONST_UNICODE("ooSetupFactoryStyleFilter");
+    lProps[0].Name = "ooSetupFactoryStyleFilter";
     lProps[0].Value = makeAny( i_nFilter );;
     xModuleManager->replaceByName( getModuleIdentifier( xModuleManager, i_pObjSh ), makeAny( lProps ) );
 }

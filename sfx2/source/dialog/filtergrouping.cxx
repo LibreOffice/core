@@ -232,7 +232,7 @@ namespace sfx2
         //================================================================
         // get the list describing the order of all global classes
         Sequence< ::rtl::OUString > aGlobalClasses;
-        _rFilterClassification.getNodeValue( DEFINE_CONST_OUSTRING( "GlobalFilters/Order" ) ) >>= aGlobalClasses;
+        _rFilterClassification.getNodeValue( "GlobalFilters/Order" ) >>= aGlobalClasses;
 
         const ::rtl::OUString* pNames = aGlobalClasses.getConstArray();
         const ::rtl::OUString* pNamesEnd = pNames + aGlobalClasses.getLength();
@@ -258,7 +258,7 @@ namespace sfx2
         //================================================================
         // go for all the single class entries
         OConfigurationNode aFilterClassesNode =
-            _rFilterClassification.openNode( DEFINE_CONST_OUSTRING( "GlobalFilters/Classes" ) );
+            _rFilterClassification.openNode( "GlobalFilters/Classes" );
         Sequence< ::rtl::OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
         ::std::for_each(
             aFilterClasses.getConstArray(),
@@ -300,7 +300,7 @@ namespace sfx2
 
         // the node for the local classes
         OConfigurationNode aFilterClassesNode =
-            _rFilterClassification.openNode( DEFINE_CONST_OUSTRING( "LocalFilters/Classes" ) );
+            _rFilterClassification.openNode( "LocalFilters/Classes" );
         Sequence< ::rtl::OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
 
         ::std::for_each(
@@ -317,7 +317,7 @@ namespace sfx2
         // open our config node
         OConfigurationTreeRoot aFilterClassification = OConfigurationTreeRoot::createWithComponentContext(
             ::comphelper::getProcessComponentContext(),
-            DEFINE_CONST_OUSTRING( "org.openoffice.Office.UI/FilterClassification" ),
+            "org.openoffice.Office.UI/FilterClassification",
             -1,
             OConfigurationTreeRoot::CM_READONLY
         );
@@ -790,7 +790,7 @@ namespace sfx2
             if ( !_rFilters.empty() )
             {
                 FilterGroup& rGlobalClasses = *_rFilters.begin();
-                rGlobalClasses.push_front( FilterDescriptor( sAllFilterName, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) ) );
+                rGlobalClasses.push_front( FilterDescriptor( sAllFilterName, FILEDIALOG_FILTER_ALL ) );
             }
         }
     }
@@ -989,11 +989,11 @@ namespace sfx2
         std::vector< ExportFilter >         aFilterGroup;
         Reference< XFilterGroupManager >    xFilterGroupManager( _rxFilterManager, UNO_QUERY );
         ::rtl::OUString                     sTypeName;
-        const ::rtl::OUString               sWriterHTMLType( DEFINE_CONST_OUSTRING("generic_HTML") );
-        const ::rtl::OUString               sGraphicHTMLType( DEFINE_CONST_OUSTRING("graphic_HTML") );
-        const ::rtl::OUString               sXHTMLType( DEFINE_CONST_OUSTRING("XHTML_File") );
-        const ::rtl::OUString               sPDFType( DEFINE_CONST_OUSTRING("pdf_Portable_Document_Format") );
-        const ::rtl::OUString               sFlashType( DEFINE_CONST_OUSTRING("graphic_SWF") );
+        const ::rtl::OUString               sWriterHTMLType( "generic_HTML" );
+        const ::rtl::OUString               sGraphicHTMLType( "graphic_HTML" );
+        const ::rtl::OUString               sXHTMLType( "XHTML_File" );
+        const ::rtl::OUString               sPDFType( "pdf_Portable_Document_Format" );
+        const ::rtl::OUString               sFlashType( "graphic_SWF" );
 
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {

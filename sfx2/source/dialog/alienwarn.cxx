@@ -49,13 +49,13 @@ SfxAlienWarningDialog::SfxAlienWarningDialog( Window* pParent, const String& _rF
     m_aQueryImage.SetImage( QueryBox::GetStandardImage() );
 
     // replace formatname (text)
-    String sInfoText = m_aInfoText.GetText();
-    sInfoText.SearchAndReplaceAll( DEFINE_CONST_UNICODE("%FORMATNAME"), _rFormatName );
+    OUString sInfoText = m_aInfoText.GetText();
+    sInfoText = sInfoText.replaceAll( "%FORMATNAME", _rFormatName );
     m_aInfoText.SetText( sInfoText );
 
     // replace formatname (button)
     sInfoText = m_aKeepCurrentBtn.GetText();
-    sInfoText.SearchAndReplaceAll( DEFINE_CONST_UNICODE("%FORMATNAME"), _rFormatName );
+    sInfoText = sInfoText.replaceAll( "%FORMATNAME", _rFormatName );
     m_aKeepCurrentBtn.SetText( sInfoText );
 
     // load value of "warning on" checkbox from save options

@@ -486,8 +486,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
                 else
                 {
-                    aURL = DEFINE_CONST_UNICODE( "private:factory/" );
-                    aURL += rtl::OUString::createFromAscii( GetFactory().GetShortName() );
+                    aURL = "private:factory/" + OUString::createFromAscii( GetFactory().GetShortName() );
 
                     aTitle = GetTitle();
                 }

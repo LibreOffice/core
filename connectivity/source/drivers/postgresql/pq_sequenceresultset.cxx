@@ -70,7 +70,6 @@ using com::sun::star::uno::Any;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 void SequenceResultSet::checkClosed()
     throw ( com::sun::star::sdbc::SQLException,
@@ -121,11 +120,11 @@ Reference< XResultSetMetaData > SAL_CALL SequenceResultSet::getMetaData(  )
     {
         // Oh no, not again
         throw ::com::sun::star::sdbc::SQLException(
-            ASCII_STR( "pq_sequenceresultset: no meta supported " ), *this,
+            "pq_sequenceresultset: no meta supported ", *this,
         // I did not find "IM001" in a specific standard,
         // but it seems to be used by other systems (such as ODBC)
         // and some parts of LibreOffice special-case it.
-            OUString( ASCII_STR("IM001") ), 1, Any() );
+            OUString( "IM001" ), 1, Any() );
     }
     return m_meta;
 }

@@ -22,19 +22,19 @@
 
 #include <svx/svdtrans.hxx>
 
-inline String GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
+inline OUString GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
 {
-    String aVal = rtl::OUString::valueOf(static_cast<sal_Int64>(
-        MetricField::ConvertValue(nVal_100, 2, MAP_100TH_MM, eFieldUnit)));
+    OUStringBuffer aVal = OUString::number(
+        MetricField::ConvertValue(nVal_100, 2, MAP_100TH_MM, eFieldUnit));
 
-    while( aVal.Len() < 3 )
-        aVal.Insert( sal_Unicode('0'), 0 );
+    while( aVal.getLength() < 3 )
+        aVal.insert( 0, "0" );
 
-    aVal.Insert( cSep, aVal.Len() - 2 );
-    aVal += sal_Unicode(' ');
-    aVal += SdrFormatter::GetUnitStr( eFieldUnit );
+    aVal.insert( aVal.getLength() - 2, cSep );
+    aVal.append(" ");
+    aVal.append(SdrFormatter::GetUnitStr( eFieldUnit ));
 
-    return aVal;
+    return aVal.makeStringAndClear();
 }
 
 #endif // _SVX_DLG_DLGUNIT_HXX

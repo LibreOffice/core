@@ -191,8 +191,6 @@ namespace pdfi
             com::sun::star::task::XInteractionHandler > const & handler);
 }
 
-#define USTR(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

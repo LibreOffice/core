@@ -143,24 +143,24 @@ using namespace ::comphelper;
 #define TBI_SELECTIONMODE   1010
 #define TBI_ONSTARTUP       1011
 
-#define CONFIGNAME_HELPWIN      DEFINE_CONST_UNICODE("OfficeHelp")
-#define CONFIGNAME_INDEXWIN     DEFINE_CONST_UNICODE("OfficeHelpIndex")
-#define CONFIGNAME_SEARCHPAGE   DEFINE_CONST_UNICODE("OfficeHelpSearch")
-#define IMAGE_URL               DEFINE_CONST_UNICODE("private:factory/")
+#define CONFIGNAME_HELPWIN      "OfficeHelp"
+#define CONFIGNAME_INDEXWIN     "OfficeHelpIndex"
+#define CONFIGNAME_SEARCHPAGE   "OfficeHelpSearch"
+#define IMAGE_URL               "private:factory/"
 
-#define PROPERTY_KEYWORDLIST    DEFINE_CONST_OUSTRING("KeywordList")
-#define PROPERTY_KEYWORDREF     DEFINE_CONST_OUSTRING("KeywordRef")
-#define PROPERTY_ANCHORREF      DEFINE_CONST_OUSTRING("KeywordAnchorForRef")
-#define PROPERTY_TITLEREF       DEFINE_CONST_OUSTRING("KeywordTitleForRef")
-#define PROPERTY_TITLE          DEFINE_CONST_OUSTRING("Title")
-#define HELP_URL                DEFINE_CONST_OUSTRING("vnd.sun.star.help://")
-#define HELP_SEARCH_TAG         DEFINE_CONST_OUSTRING("/?Query=")
-#define USERITEM_NAME           DEFINE_CONST_OUSTRING("UserItem")
+#define PROPERTY_KEYWORDLIST    "KeywordList"
+#define PROPERTY_KEYWORDREF     "KeywordRef"
+#define PROPERTY_ANCHORREF      "KeywordAnchorForRef"
+#define PROPERTY_TITLEREF       "KeywordTitleForRef"
+#define PROPERTY_TITLE          "Title"
+#define HELP_URL                "vnd.sun.star.help://"
+#define HELP_SEARCH_TAG         "/?Query="
+#define USERITEM_NAME           "UserItem"
 
-#define PACKAGE_SETUP           DEFINE_CONST_OUSTRING("/org.openoffice.Setup")
-#define PATH_OFFICE_FACTORIES   DEFINE_CONST_OUSTRING("Office/Factories/")
-#define KEY_HELP_ON_OPEN        DEFINE_CONST_OUSTRING("ooSetupFactoryHelpOnOpen")
-#define KEY_UI_NAME             DEFINE_CONST_OUSTRING("ooSetupFactoryUIName")
+#define PACKAGE_SETUP           "/org.openoffice.Setup"
+#define PATH_OFFICE_FACTORIES   "Office/Factories/"
+#define KEY_HELP_ON_OPEN        "ooSetupFactoryHelpOnOpen"
+#define KEY_UI_NAME             "ooSetupFactoryUIName"
 
 #define PARSE_URL( aURL ) \
     Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) ); \
@@ -311,7 +311,7 @@ ContentListBox_Impl::~ContentListBox_Impl()
 
 void ContentListBox_Impl::InitRoot()
 {
-    String aHelpTreeviewURL( DEFINE_CONST_UNICODE("vnd.sun.star.hier://com.sun.star.help.TreeView/") );
+    String aHelpTreeviewURL( "vnd.sun.star.hier://com.sun.star.help.TreeView/" );
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aList =
         SfxContentHelper::GetHelpTreeViewContents( aHelpTreeviewURL );
 
@@ -1511,7 +1511,7 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
     {
         try
         {
-            Reference< XComponent > xContent = xLoader->loadComponentFromURL(sHelpURL, DEFINE_CONST_UNICODE("_self"), 0, Sequence< PropertyValue >());
+            Reference< XComponent > xContent = xLoader->loadComponentFromURL(sHelpURL, "_self", 0, Sequence< PropertyValue >());
             if (xContent.is())
             {
                 bSuccess = sal_True;
@@ -2019,7 +2019,7 @@ long TextWin_Impl::Notify( NotifyEvent& rNEvt )
 // remove docking area acceptor from layoutmanager, so it will not layout anything further .-)
 static void lcl_disableLayoutOfFrame(const Reference< XFrame >& xFrame)
 {
-    static const ::rtl::OUString PROP_LAYOUT_MANAGER(DEFINE_CONST_UNICODE("LayoutManager"));
+    static const ::rtl::OUString PROP_LAYOUT_MANAGER("LayoutManager");
 
     Reference< XPropertySet > xPropSet(xFrame, UNO_QUERY_THROW);
     xPropSet->setPropertyValue(PROP_LAYOUT_MANAGER, makeAny(Reference< XLayoutManager >()));
@@ -2051,9 +2051,9 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     sfx2::AddToTaskPaneList( &aToolBox );
 
     xFrame = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), UNO_QUERY );
+        "com.sun.star.frame.Frame" ), UNO_QUERY );
     xFrame->initialize( VCLUnoHelper::GetInterface ( pTextWin ) );
-    xFrame->setName( DEFINE_CONST_UNICODE("OFFICE_HELP") );
+    xFrame->setName( "OFFICE_HELP" );
     lcl_disableLayoutOfFrame(xFrame);
 
     aToolBox.SetHelpId( HID_HELP_TOOLBOX );
@@ -2235,7 +2235,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
             aOnStartupCB.SaveValue();
 
             // calculate and set optimal width of the onstartup checkbox
-            String sCBText( DEFINE_CONST_UNICODE( "XXX" ) );
+            String sCBText( "XXX" );
             sCBText += aOnStartupCB.GetText();
             long nTextWidth = aOnStartupCB.GetTextWidth( sCBText );
             Size aSize = aOnStartupCB.GetSizePixel();
@@ -2350,10 +2350,10 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl)
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
                 Reference < XPropertySet > xPropSet( xSrchDesc, UNO_QUERY );
-                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchRegularExpression"),
+                xPropSet->setPropertyValue( "SearchRegularExpression",
                                             makeAny( sal_Bool( sal_True ) ) );
                 if ( bIsFullWordSearch )
-                    xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchWords"),
+                    xPropSet->setPropertyValue( "SearchWords",
                                                 makeAny( sal_Bool( sal_True ) ) );
 
                 String sSearchString = sfx2::PrepareSearchString( aSearchText, GetBreakIterator(), false );
@@ -2412,9 +2412,9 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
                 Reference < XPropertySet > xPropSet( xSrchDesc, UNO_QUERY );
-                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchWords"), makeAny( sal_Bool( pDlg->IsOnlyWholeWords() != false ) ) );
-                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchCaseSensitive"), makeAny( sal_Bool( pDlg->IsMarchCase() != false ) ) );
-                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchBackwards"), makeAny( sal_Bool( pDlg->IsSearchBackwards() != false ) ) );
+                xPropSet->setPropertyValue( "SearchWords", makeAny( sal_Bool( pDlg->IsOnlyWholeWords() != false ) ) );
+                xPropSet->setPropertyValue( "SearchCaseSensitive", makeAny( sal_Bool( pDlg->IsMarchCase() != false ) ) );
+                xPropSet->setPropertyValue( "SearchBackwards", makeAny( sal_Bool( pDlg->IsSearchBackwards() != false ) ) );
                 xSrchDesc->setSearchString( sSearchText );
                 Reference< XInterface > xSelection;
                 Reference< XTextRange > xCursor = getCursor();
@@ -2585,7 +2585,7 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.SetHelpId( TBI_SELECTIONMODE, HID_HELP_TEXT_SELECTION_MODE );
             Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
             URL aURL;
-            aURL.Complete = DEFINE_CONST_UNICODE(".uno:SelectTextMode");
+            aURL.Complete = ".uno:SelectTextMode";
             PARSE_URL( aURL );
             Reference < XDispatch > xDisp = xProv.is() ?
                     xProv->queryDispatch( aURL, rtl::OUString(), 0 ) : Reference < XDispatch >();
@@ -2734,18 +2734,18 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
                     Reference < XText > xText = xRange->getText();
                     Reference < XPropertySet > xProps( xText->createTextCursorByRange( xRange ), UNO_QUERY );
                     ::rtl::OUString sStyleName;
-                    if ( xProps->getPropertyValue( DEFINE_CONST_OUSTRING("PageStyleName") ) >>= sStyleName )
+                    if ( xProps->getPropertyValue( "PageStyleName" ) >>= sStyleName )
                     {
                         Reference < XStyleFamiliesSupplier > xStyles( xController->getModel(), UNO_QUERY );
                         Reference < XNameContainer > xContainer;
-                        if ( xStyles->getStyleFamilies()->getByName( DEFINE_CONST_OUSTRING("PageStyles") )
+                        if ( xStyles->getStyleFamilies()->getByName( "PageStyles" )
                              >>= xContainer )
                         {
                             Reference < XStyle > xStyle;
                             if ( xContainer->getByName( sStyleName ) >>= xStyle )
                             {
                                 Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
-                                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("HeaderIsOn"),
+                                xPropSet->setPropertyValue( "HeaderIsOn",
                                                             makeAny( sal_Bool( sal_False ) ) );
 
                                 Reference< XModifiable > xReset(xStyles, UNO_QUERY);
@@ -2796,7 +2796,7 @@ void SfxHelpTextWindow_Impl::DoSearch()
     if ( !pSrchDlg )
     {
         // create the search dialog
-        pSrchDlg = new sfx2::SearchDialog( pTextWin, DEFINE_CONST_UNICODE("HelpSearchDialog") );
+        pSrchDlg = new sfx2::SearchDialog( pTextWin, "HelpSearchDialog" );
         // set handler
         pSrchDlg->SetFindHdl( LINK( this, SfxHelpTextWindow_Impl, FindHdl ) );
         pSrchDlg->SetCloseHdl( LINK( this, SfxHelpTextWindow_Impl, CloseHdl ) );
@@ -3015,7 +3015,7 @@ void SfxHelpWindow_Impl::SaveConfig()
 void SfxHelpWindow_Impl::ShowStartPage()
 {
     ::rtl::OUString sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
-                                                                DEFINE_CONST_UNICODE("/start"),
+                                                                "/start",
                                                                 ::rtl::OUString(),
                                                                 sal_True);
     loadHelpContent(sHelpURL);
@@ -3080,12 +3080,10 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl)
 
 IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin )
 {
-    if ( sTitle.Len() == 0 )
+    if ( sTitle.isEmpty() )
         sTitle = GetParent()->GetText();
 
-    String aNewTitle = sTitle;
-    aNewTitle += DEFINE_CONST_UNICODE(" - ");
-    aNewTitle += pIndexWin->GetActiveFactoryTitle();
+    OUString aNewTitle = sTitle + " - " + pIndexWin->GetActiveFactoryTitle();
 
     Reference< XTitle > xTitle(xFrame, UNO_QUERY);
     if (xTitle.is ())
@@ -3135,11 +3133,11 @@ void SfxHelpWindow_Impl::openDone(const ::rtl::OUString& sURL    ,
                 Reference < XPropertySet > xViewProps = xSettings->getViewSettings();
                 Reference< XPropertySetInfo > xInfo = xViewProps->getPropertySetInfo();
                 Any aBoolAny = makeAny( sal_Bool( sal_True ) );
-                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("PreventHelpTips"), aBoolAny );
-                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowGraphics"), aBoolAny );
-                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowTables"), aBoolAny );
-                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("HelpURL"), makeAny( DEFINE_CONST_OUSTRING("HID:SFX2_HID_HELP_ONHELP") ) );
-                ::rtl::OUString sProperty( DEFINE_CONST_OUSTRING("IsExecuteHyperlinks") );
+                xViewProps->setPropertyValue( "PreventHelpTips", aBoolAny );
+                xViewProps->setPropertyValue( "ShowGraphics", aBoolAny );
+                xViewProps->setPropertyValue( "ShowTables", aBoolAny );
+                xViewProps->setPropertyValue( "HelpURL", makeAny( OUString("HID:SFX2_HID_HELP_ONHELP") ) );
+                OUString sProperty( "IsExecuteHyperlinks" );
                 if ( xInfo->hasPropertyByName( sProperty ) )
                     xViewProps->setPropertyValue( sProperty, aBoolAny );
                 xController->restoreViewData(pHelpInterceptor->GetViewData());
@@ -3289,9 +3287,9 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
         case TBI_FORWARD :
         {
             URL aURL;
-            aURL.Complete = DEFINE_CONST_UNICODE(".uno:Backward");
+            aURL.Complete = ".uno:Backward";
             if ( TBI_FORWARD == nActionId )
-                aURL.Complete = DEFINE_CONST_UNICODE(".uno:Forward");
+                aURL.Complete = ".uno:Forward";
             PARSE_URL( aURL );
             pHelpInterceptor->dispatch( aURL, Sequence < PropertyValue >() );
             break;
@@ -3313,15 +3311,15 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
             {
                 URL aURL;
                 if ( TBI_PRINT == nActionId )
-                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:Print");
+                    aURL.Complete = ".uno:Print";
                 else if ( TBI_SOURCEVIEW == nActionId )
-                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:SourceView");
+                    aURL.Complete = ".uno:SourceView";
                 else if ( TBI_COPY == nActionId )
-                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:Copy");
+                    aURL.Complete = ".uno:Copy";
                 else if ( TBI_SELECTIONMODE == nActionId )
-                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:SelectTextMode");
+                    aURL.Complete = ".uno:SelectTextMode";
                 else
-                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:SearchDialog");
+                    aURL.Complete = ".uno:SearchDialog";
                 PARSE_URL( aURL );
                 Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, String(), 0 );
                 if ( xDisp.is() )

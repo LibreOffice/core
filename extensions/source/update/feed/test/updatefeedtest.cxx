@@ -37,8 +37,6 @@ namespace lang = ::com::sun::star::lang;
 namespace uno = ::com::sun::star::uno;
 namespace xml = ::com::sun::star::xml;
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
 // -----------------------------------------------------------------------
 
 SAL_IMPLEMENT_MAIN()
@@ -65,9 +63,9 @@ SAL_IMPLEMENT_MAIN()
 
     uno::Sequence< rtl::OUString > theURLs(1);
     osl_getCommandArg( 0, &theURLs[0].pData );
-    // theURLs[0] = UNISTRING( "http://localhost/~olli/atomfeed.xml" );
+    // theURLs[0] = "http://localhost/~olli/atomfeed.xml";
 
-    rtl::OUString aExtension = UNISTRING( "MyExtension" );
+    rtl::OUString aExtension = "MyExtension";
 
     try
     {

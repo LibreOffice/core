@@ -80,7 +80,7 @@ namespace pdfi
     m_bMirrorMapperTried(false)
 {
     FontAttributes aDefFont;
-    aDefFont.familyName = USTR("Helvetica");
+    aDefFont.familyName = "Helvetica";
     aDefFont.isBold     = false;
     aDefFont.isItalic   = false;
     aDefFont.size       = 10*PDFI_OUTDEV_RESOLUTION/72;
@@ -824,26 +824,26 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     PropertyMap aProps;
     // document prolog
     #define OASIS_STR "urn:oasis:names:tc:opendocument:xmlns:"
-    aProps[ USTR( "xmlns:office" ) ]      = USTR( OASIS_STR "office:1.0" );
-    aProps[ USTR( "xmlns:style" ) ]       = USTR( OASIS_STR "style:1.0" );
-    aProps[ USTR( "xmlns:text" ) ]        = USTR( OASIS_STR "text:1.0" );
-    aProps[ USTR( "xmlns:svg" ) ]         = USTR( OASIS_STR "svg-compatible:1.0" );
-    aProps[ USTR( "xmlns:table" ) ]       = USTR( OASIS_STR "table:1.0" );
-    aProps[ USTR( "xmlns:draw" ) ]        = USTR( OASIS_STR "drawing:1.0" );
-    aProps[ USTR( "xmlns:fo" ) ]          = USTR( OASIS_STR "xsl-fo-compatible:1.0" );
-    aProps[ USTR( "xmlns:xlink" )]        = USTR( "http://www.w3.org/1999/xlink" );
-    aProps[ USTR( "xmlns:dc" )]           = USTR( "http://purl.org/dc/elements/1.1/" );
-    aProps[ USTR( "xmlns:number" )]       = USTR( OASIS_STR "datastyle:1.0" );
-    aProps[ USTR( "xmlns:presentation" )] = USTR( OASIS_STR "presentation:1.0" );
-    aProps[ USTR( "xmlns:math" )]         = USTR( "http://www.w3.org/1998/Math/MathML" );
-    aProps[ USTR( "xmlns:form" )]         = USTR( OASIS_STR "form:1.0" );
-    aProps[ USTR( "xmlns:script" )]       = USTR( OASIS_STR "script:1.0" );
-    aProps[ USTR( "xmlns:dom" )]          = USTR( "http://www.w3.org/2001/xml-events" );
-    aProps[ USTR( "xmlns:xforms" )]       = USTR( "http://www.w3.org/2002/xforms" );
-    aProps[ USTR( "xmlns:xsd" )]          = USTR( "http://www.w3.org/2001/XMLSchema" );
-    aProps[ USTR( "xmlns:xsi" )]          = USTR( "http://www.w3.org/2001/XMLSchema-instance" );
-    aProps[ USTR( "office:version" ) ]    = USTR( "1.0" );
-    aProps[ USTR( "office:version" ) ]    = USTR( "1.0" );
+    aProps[ "xmlns:office" ]      = OASIS_STR "office:1.0" ;
+    aProps[ "xmlns:style" ]       = OASIS_STR "style:1.0" ;
+    aProps[ "xmlns:text" ]        = OASIS_STR "text:1.0" ;
+    aProps[ "xmlns:svg" ]         = OASIS_STR "svg-compatible:1.0" ;
+    aProps[ "xmlns:table" ]       = OASIS_STR "table:1.0" ;
+    aProps[ "xmlns:draw" ]        = OASIS_STR "drawing:1.0" ;
+    aProps[ "xmlns:fo" ]          = OASIS_STR "xsl-fo-compatible:1.0" ;
+    aProps[ "xmlns:xlink"]        = "http://www.w3.org/1999/xlink";
+    aProps[ "xmlns:dc"]           = "http://purl.org/dc/elements/1.1/";
+    aProps[ "xmlns:number"]       = OASIS_STR "datastyle:1.0" ;
+    aProps[ "xmlns:presentation"] = OASIS_STR "presentation:1.0" ;
+    aProps[ "xmlns:math"]         = "http://www.w3.org/1998/Math/MathML";
+    aProps[ "xmlns:form"]         = OASIS_STR "form:1.0" ;
+    aProps[ "xmlns:script"]       = OASIS_STR "script:1.0" ;
+    aProps[ "xmlns:dom"]          = "http://www.w3.org/2001/xml-events";
+    aProps[ "xmlns:xforms"]       = "http://www.w3.org/2002/xforms";
+    aProps[ "xmlns:xsd"]          = "http://www.w3.org/2001/XMLSchema";
+    aProps[ "xmlns:xsi"]          = "http://www.w3.org/2001/XMLSchema-instance";
+    aProps[ "office:version" ]    = "1.0";
+    aProps[ "office:version" ]    = "1.0";
 
     aContext.rEmitter.beginTag( "office:document", aProps );
 

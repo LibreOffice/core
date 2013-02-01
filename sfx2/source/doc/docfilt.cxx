@@ -63,13 +63,13 @@ SfxFilter::SfxFilter(  const String &rName,
     String aShort, aLong;
     String aRet;
     sal_uInt16 nMaxLength = USHRT_MAX;
-    String aTest;
+    OUString aTest;
     sal_uInt16 nPos = 0;
     while( ( aRet = aExts.GetToken( nPos++, ';' ) ).Len() )
     {
         aTest = aRet;
-        aTest.SearchAndReplace( DEFINE_CONST_UNICODE( "*." ), String() );
-        if( aTest.Len() <= nMaxLength )
+        aTest = aTest.replaceFirst( "*." , "" );
+        if( aTest.getLength() <= nMaxLength )
         {
             if( aShort.Len() ) aShort += ';';
             aShort += aRet;

@@ -268,7 +268,7 @@ sal_Bool SfxHTMLParser::FinishFileDownload( String& rStr )
 
 void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
 {
-    aScriptType = DEFINE_CONST_UNICODE(SVX_MACRO_LANGUAGE_JAVASCRIPT);
+    aScriptType = SVX_MACRO_LANGUAGE_JAVASCRIPT;
     eScriptType = JAVASCRIPT;
     if( pHTTPHeader )
     {
@@ -299,7 +299,7 @@ void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
                     if( aTmp.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_LG_starbasic ) )
                     {
                         eScriptType = STARBASIC;
-                        aScriptType = DEFINE_CONST_UNICODE(SVX_MACRO_LANGUAGE_STARBASIC);
+                        aScriptType = SVX_MACRO_LANGUAGE_STARBASIC;
                     }
                     if( !aTmp.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_LG_javascript ) )
                     {

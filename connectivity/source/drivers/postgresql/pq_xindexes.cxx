@@ -103,7 +103,6 @@ using com::sun::star::sdbc::XDatabaseMetaData;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 Indexes::Indexes(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
@@ -143,7 +142,6 @@ void Indexes::refresh()
 
         // see XDatabaseMetaData::getIndexInfo()
         Reference< XPreparedStatement > stmt = m_origin->prepareStatement(
-            ASCII_STR(
                 "SELECT nspname, "      // 1
                    "pg_class.relname, " // 2
                    "class2.relname, "   // 3
@@ -154,7 +152,7 @@ void Indexes::refresh()
                 "FROM pg_index INNER JOIN pg_class ON indrelid = pg_class.oid "
                     "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
                     "INNER JOIN pg_class as class2 ON pg_index.indexrelid = class2.oid "
-                "WHERE nspname = ? AND pg_class.relname = ?" ) );
+                "WHERE nspname = ? AND pg_class.relname = ?" );
 
         Reference< XParameters > params( stmt, UNO_QUERY);
         params->setString( 1, m_schemaName );
