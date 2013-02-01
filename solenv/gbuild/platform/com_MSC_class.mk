@@ -162,7 +162,7 @@ gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 gb_LinkTarget_INCLUDE :=\
 	$(subst -I. , ,$(SOLARINC)) \
 	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
-	-I$(BUILDDIR)/config \
+	-I$(BUILDDIR)/config_$(gb_Side) \
 
 gb_LinkTarget_get_pdbfile = $(call gb_LinkTarget_get_target,)pdb/$(1).pdb
 
