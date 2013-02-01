@@ -101,7 +101,7 @@ rtl::OString getElementModified()
 }
 
 
-void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
+void createSettingsStructure( xmlDoc* document, bool* pbNeedsSave)
 {
     rtl::OString sExcMsg("[Java framework] Error in function createSettingsStructure "
                          "(elements.cxx).");
@@ -121,11 +121,11 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     }
     if (bFound)
     {
-        bNeedsSave = false;
+        *pbNeedsSave = false;
         return;
     }
     //We will modify this document
-    *bNeedsSave = true;
+    *pbNeedsSave = true;
     // Now we create the child elements ------------------
     //Get xsi:nil namespace
     xmlNs* nsXsi = xmlSearchNsByHref(
