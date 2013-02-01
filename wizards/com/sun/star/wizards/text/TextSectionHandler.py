@@ -74,7 +74,7 @@ class TextSectionHandler(object):
         try:
             TextSectionCount = self.xTextDocument.TextSections.Count
             xAllTextSections = self.xTextDocument.TextSections
-            for i in xrange(TextSectionCount - 1, -1, -1):
+            for i in range(TextSectionCount - 1, -1, -1):
                 xTextContentTextSection = xAllTextSections.getByIndex(i)
                 self.xText.removeTextContent(xTextContentTextSection)
         except Exception:

@@ -16,6 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
+import os.path
 from .AgendaWizardDialog import AgendaWizardDialog, uno
 from .AgendaWizardDialogConst import HID
 from .AgendaDocument import AgendaDocument
@@ -330,24 +331,22 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         try:
             fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
-            if not self.sPath:
+            if not self.sPath or not os.path.exists(self.sPath):
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
 
-            self.sPath = fileAccess.getURL(self.sPath)
             #first, if the filename was not changed, thus
             #it is coming from a saved session, check if the
             # file exists and warn the user.
             if not self.filenameChanged:
-                if fileAccess.exists(self.sPath, True):
-                    answer = SystemDialog.showMessageBox(
-                        self.xMSF, "MessBox", YES_NO + DEF_NO,
-                        self.resources.resOverwriteWarning,
-                        self.xUnoDialog.Peer)
-                    if answer == 3:
-                        # user said: no, do not overwrite
-                        endWizard = False
-                        return False
+                answer = SystemDialog.showMessageBox(
+                    self.xMSF, "MessBox", YES_NO + DEF_NO,
+                    self.resources.resOverwriteWarning,
+                    self.xUnoDialog.Peer)
+                if answer == 3:
+                    # user said: no, do not overwrite
+                    endWizard = False
+                    return False
             
             xDocProps = self.agendaTemplate.xTextDocument.DocumentProperties
             xDocProps.Title = self.txtTemplateName.Text
@@ -363,7 +362,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
                 self.agendaTemplate.finish(self.topicsControl.scrollfields)
 
-                loadValues = range(2)
+                loadValues = list(range(2))
                 loadValues[0] = uno.createUnoStruct( \
                     'com.sun.star.beans.PropertyValue')
                 loadValues[0].Name = "AsTemplate"
