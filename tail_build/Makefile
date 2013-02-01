@@ -8,7 +8,10 @@
 #
 
 ifeq ($(strip $(SOLARENV)),)
-include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../config_host.mk
+ifeq ($(gb_Side),)
+gb_Side:=host
+endif
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../config_$(gb_Side).mk
 endif
 
 include $(SOLARENV)/gbuild/gbuild.mk
