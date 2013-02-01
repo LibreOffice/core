@@ -207,7 +207,7 @@ bool MigrationImpl::initializeMigration()
 
 void Migration::migrateSettingsIfNecessary()
 {
-    MigrationImpl aImpl( comphelper::getProcessServiceFactory() );
+    MigrationImpl aImpl;
 
     if (! aImpl.initializeMigration() )
         return;
@@ -227,9 +227,8 @@ void Migration::migrateSettingsIfNecessary()
     (void)bResult;
 }
 
-MigrationImpl::MigrationImpl(const uno::Reference< XMultiServiceFactory >& xFactory)
+MigrationImpl::MigrationImpl()
     : m_vrVersions(new strings_v)
-    , m_xFactory(xFactory)
 {
 }
 
@@ -265,10 +264,10 @@ sal_Bool MigrationImpl::doMigration()
             lArgs[0] <<= aOldCfgDataPath + vModulesInfo[i].sModuleShortName;
             lArgs[1] <<= embed::ElementModes::READ;
 
-            uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
-                     embed::FileSystemStorageFactory::create(comphelper::getComponentContext(m_xFactory)));
+            uno::Reference< uno::XComponentContext > xContext(comphelper::getProcessComponentContext());
+            uno::Reference< lang::XSingleServiceFactory > xStorageFactory(embed::FileSystemStorageFactory::create(xContext));
             uno::Reference< embed::XStorage >             xModules(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY);
-            uno::Reference< ui::XUIConfigurationManager > xOldCfgManager( m_xFactory->createInstance("com.sun.star.ui.UIConfigurationManager"), uno::UNO_QUERY );
+            uno::Reference< ui::XUIConfigurationManager > xOldCfgManager(xContext->getServiceManager()->createInstanceWithContext("com.sun.star.ui.UIConfigurationManager", xContext), uno::UNO_QUERY );
             uno::Reference< ui::XUIConfigurationStorage > xOldCfgStorage( xOldCfgManager, uno::UNO_QUERY );
             uno::Reference< ui::XUIConfigurationPersistence > xOldCfgPersistence( xOldCfgManager, uno::UNO_QUERY );
 
@@ -336,8 +335,7 @@ sal_Bool MigrationImpl::doMigration()
 void MigrationImpl::refresh()
 {
     uno::Reference< XRefreshable >(
-        configuration::theDefaultProvider::get(
-            comphelper::getComponentContext(m_xFactory)),
+        configuration::theDefaultProvider::get(comphelper::getProcessComponentContext()),
         uno::UNO_QUERY_THROW)->refresh();
 }
 
@@ -952,6 +950,7 @@ void MigrationImpl::runServices()
     // and execute the migration job
     uno::Reference< XJob > xMigrationJob;
 
+    uno::Reference< uno::XComponentContext > xContext(comphelper::getProcessComponentContext());
     migrations_v::const_iterator i_mig  = m_vrMigrations->begin();
     while (i_mig != m_vrMigrations->end())
     {
@@ -969,8 +968,9 @@ void MigrationImpl::runServices()
                 seqArguments[2] = uno::makeAny(NamedValue("ExtensionBlackList",
                     uno::makeAny( seqExtBlackList )));
 
-                xMigrationJob = uno::Reference< XJob >(m_xFactory->createInstanceWithArguments(
-                    i_mig->service, seqArguments), uno::UNO_QUERY_THROW);
+                xMigrationJob = uno::Reference< XJob >(
+                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext(i_mig->service, seqArguments, xContext),
+                    uno::UNO_QUERY_THROW);
 
                 xMigrationJob->execute(uno::Sequence< NamedValue >());
 
@@ -1007,7 +1007,7 @@ void MigrationImpl::runServices()
     lArgs[1] <<= embed::ElementModes::READ;
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
-                     embed::FileSystemStorageFactory::create(comphelper::getComponentContext(m_xFactory)));
+                     embed::FileSystemStorageFactory::create(comphelper::getProcessComponentContext()));
     uno::Reference< embed::XStorage >             xModules;
 
     xModules = uno::Reference< embed::XStorage >(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY);

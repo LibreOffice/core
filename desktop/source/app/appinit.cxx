@@ -89,12 +89,11 @@ static void configureUcb()
     OUString aDesktopEnvironment;
     if ((aValue >>= aDesktopEnvironment) && aDesktopEnvironment == "GNOME")
     {
-        UniversalContentBroker::create(
-            comphelper::getProcessComponentContext())->
-            registerContentProvider(
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        UniversalContentBroker::create(xContext)
+            ->registerContentProvider(
                 Reference<XContentProvider>(
-                    comphelper::getProcessServiceFactory()->createInstance(
-                        "com.sun.star.ucb.GnomeVFSContentProvider"),
+                    xContext->getServiceManager()->createInstanceWithContext("com.sun.star.ucb.GnomeVFSContentProvider", xContext),
                     UNO_QUERY_THROW),
                 ".*", false);
     }
@@ -174,9 +173,10 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
         Sequence< Any > aSeq( 2 );
         aSeq[0] <<= aAcceptString;
         aSeq[1] <<= bAccept;
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         Reference<XInitialization> rAcceptor(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString("com.sun.star.office.Acceptor" )), UNO_QUERY );
+            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Acceptor", xContext),
+            UNO_QUERY );
         if ( rAcceptor.is() )
         {
             try

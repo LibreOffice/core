@@ -148,7 +148,7 @@ class Desktop : public Application
         bool                    InitializeConfiguration();
         void                    FlushConfiguration();
         static sal_Bool         shouldLaunchQuickstart();
-        sal_Bool                InitializeQuickstartMode( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );
+        sal_Bool                InitializeQuickstartMode( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
         void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
         void                    StartSetup( const ::rtl::OUString& aParameters );

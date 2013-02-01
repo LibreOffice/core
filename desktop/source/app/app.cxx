@@ -1113,10 +1113,10 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
     static ::rtl::OUString COMMAND_RECOVERY("vnd.sun.star.autorecovery:/doAutoRecovery");
     static ::rtl::OUString COMMAND_CRASHREPORT("vnd.sun.star.autorecovery:/doCrashReport");
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
     Reference< css::frame::XSynchronousDispatch > xRecoveryUI(
-        xSMGR->createInstance(SERVICENAME_RECOVERYUI),
+        xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_RECOVERYUI, xContext),
         css::uno::UNO_QUERY_THROW);
 
     Reference< css::util::XURLTransformer > xURLParser =
@@ -1428,7 +1428,6 @@ int Desktop::Main()
     utl::Bootstrap::reloadData();
     SetSplashScreenProgress(20);
 
-    Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
     Reference< XRestartManager > xRestartManager( OfficeRestartManager::get(xContext) );
@@ -1633,7 +1632,7 @@ int Desktop::Main()
 
         if ( !bTerminateRequested && !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoQuickstart() )
-            InitializeQuickstartMode( xSMgr );
+            InitializeQuickstartMode( xContext );
 
         RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.frame.Desktop" );
         try
@@ -1859,7 +1858,7 @@ sal_Bool Desktop::shouldLaunchQuickstart()
 }
 
 
-sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& rSMgr )
+sal_Bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >& rxContext )
 {
     try
     {
@@ -1883,9 +1882,9 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
         {
             Sequence< Any > aSeq( 1 );
             aSeq[0] <<= bQuickstart;
-            Reference < XComponent > xQuickstart( rSMgr->createInstanceWithArguments(
-                                                rtl::OUString( "com.sun.star.office.Quickstart" ), aSeq ),
-                                                UNO_QUERY );
+            Reference < XComponent > xQuickstart(
+                    rxContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.office.Quickstart", aSeq, rxContext),
+                    UNO_QUERY );
         }
         return sal_True;
     }
@@ -2060,7 +2059,6 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
 
 void Desktop::PreloadConfigurationData()
 {
-    Reference< XMultiServiceFactory > rFactory = ::comphelper::getProcessServiceFactory();
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XNameAccess > xNameAccess = css::frame::UICommandDescription::create(xContext);
 
@@ -2181,8 +2179,9 @@ void Desktop::PreloadConfigurationData()
 
     // preload filter configuration
     Sequence< OUString > aSeq;
-    xNameAccess = Reference< XNameAccess >( rFactory->createInstance(
-                    rtl::OUString( "com.sun.star.document.FilterFactory" )), UNO_QUERY );
+    xNameAccess = Reference< XNameAccess >(
+                    xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext),
+                    UNO_QUERY );
     if ( xNameAccess.is() )
     {
         try
@@ -2195,8 +2194,9 @@ void Desktop::PreloadConfigurationData()
     }
 
     // preload type detection configuration
-    xNameAccess = Reference< XNameAccess >( rFactory->createInstance(
-                    rtl::OUString( "com.sun.star.document.TypeDetection" )), UNO_QUERY );
+    xNameAccess = Reference< XNameAccess >(
+                    xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
+                    UNO_QUERY );
     if ( xNameAccess.is() )
     {
         try
@@ -2700,8 +2700,8 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             Sequence< Any > aSeq( 1 );
             aSeq[0] <<= bQuickstart;
 
-            Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                           rtl::OUString( "com.sun.star.office.Quickstart" )),
+            Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            Reference < XInitialization > xQuickstart( xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Quickstart", xContext),
                                                        UNO_QUERY );
             if ( xQuickstart.is() )
                 xQuickstart->initialize( aSeq );
@@ -2787,9 +2787,10 @@ void Desktop::OpenSplashScreen()
         Sequence< Any > aSeq( 2 );
         aSeq[0] <<= bVisible;
         aSeq[1] <<= aAppName;
+        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         m_rSplashScreen = Reference<XStatusIndicator>(
-            comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-            aSplashService, aSeq), UNO_QUERY);
+            xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aSplashService, aSeq, xContext),
+            UNO_QUERY);
 
         if(m_rSplashScreen.is())
                 m_rSplashScreen->start(OUString("SplashScreen"), 100);
@@ -2907,8 +2908,10 @@ void Desktop::CheckFirstRun( )
                 aSeq[0] <<= bQuickstart;
                 aSeq[1] <<= bAutostart;
 
-                Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                               OUString::createFromAscii( "com.sun.star.office.Quickstart" )),UNO_QUERY );
+                css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                Reference < XInitialization > xQuickstart(
+                                                xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Quickstart", xContext),
+                                                UNO_QUERY );
                 if ( xQuickstart.is() )
                     xQuickstart->initialize( aSeq );
                 RegCloseKey( hKey );

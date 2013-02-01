@@ -32,7 +32,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -185,7 +184,6 @@ class MigrationImpl
 
 private:
     strings_vr m_vrVersions;
-    NS_UNO::Reference< NS_CSS::lang::XMultiServiceFactory > m_xFactory;
 
     migrations_available m_vMigrationsAvailable; // list of all available migrations
     migrations_vr        m_vrMigrations;         // list of all migration specs from config
@@ -232,7 +230,7 @@ private:
     bool checkMigrationCompleted();
 
 public:
-    MigrationImpl(const NS_UNO::Reference< NS_CSS::lang::XMultiServiceFactory >&);
+    MigrationImpl();
     ~MigrationImpl();
     bool initializeMigration();
     sal_Bool doMigration();

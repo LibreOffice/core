@@ -70,8 +70,10 @@ void Desktop::DoRestartActionsIfNecessary( sal_Bool bQuickStart )
                 sal_Bool bQuickstart = shouldLaunchQuickstart();
                 aSeq[0] <<= bQuickstart;
 
-                Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                    OUString( "com.sun.star.office.Quickstart"  ) ),UNO_QUERY_THROW );
+                css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                Reference < XInitialization > xQuickstart(
+                    xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Quickstart", xContext),
+                    UNO_QUERY_THROW );
                 xQuickstart->initialize( aSeq );
             }
         }

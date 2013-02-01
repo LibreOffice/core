@@ -22,7 +22,7 @@
 #include "com/sun/star/frame/XSynchronousDispatch.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/util/XURLTransformer.hpp"
+#include "com/sun/star/util/URLTransformer.hpp"
 
 #include "comphelper/synchronousdispatch.hxx"
 #include "comphelper/processfactory.hxx"
@@ -48,11 +48,8 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
 {
     util::URL aURL;
     aURL.Complete = sURL;
-    uno::Reference < util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                                   "com.sun.star.util.URLTransformer"),
-                                                     uno::UNO_QUERY );
-    if ( xTrans.is() )
-        xTrans->parseStrict( aURL );
+    uno::Reference < util::XURLTransformer > xTrans = util::URLTransformer::create( ::comphelper::getProcessComponentContext() );
+    xTrans->parseStrict( aURL );
 
     uno::Reference < frame::XDispatch > xDispatcher;
     uno::Reference < frame::XDispatchProvider > xProvider( xStartPoint, uno::UNO_QUERY );
