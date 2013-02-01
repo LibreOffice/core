@@ -1109,6 +1109,22 @@ AC_ARG_ENABLE(silent-msi,
         [Enable MSI with LIMITUI=1 (silent install).]),
 ,)
 
+AC_ARG_ENABLE(macosx-code-signing,
+    AS_HELP_STRING([--enable-macosx-code-signing<=identity>],
+        [Sign executables, dylibs, frameworks and the app bundle. The
+         default is to do signing if there is a suitable certificate
+         in your keychain, so if you don't want that, use the
+         corresponding --disable option. Experimental work in
+         progress, don't use unless you are working on this.]),
+,)
+
+AC_ARG_ENABLE(macosx-sandbox,
+    AS_HELP_STRING([--enable-macosx-sandbox],
+        [Make the app bundle run in a sandbox. Requires code signing.
+         The default is to not do this. Experimental work in progress,
+         don't use unless you are working on this.]),
+,)
+
 AC_ARG_ENABLE(postgresql-sdbc,
     AS_HELP_STRING([--disable-postgresql-sdbc],
         [Disable the build of the PostgreSQL-SDBC driver.])
@@ -2694,6 +2710,39 @@ if test "$_os" = "Darwin"; then
     fi
     AC_MSG_NOTICE([MAC_OS_X_VERSION_MIN_REQUIRED=$MAC_OS_X_VERSION_MIN_REQUIRED])
     AC_MSG_NOTICE([MAC_OS_X_VERSION_MAX_ALLOWED=$MAC_OS_X_VERSION_MAX_ALLOWED])
+
+    AC_MSG_CHECKING([whether to do code signing])
+
+    if test \( -z "$enable_macosx_code_signing" -o "$enable_macosx_code_signing" = yes \) -a $MACOSX_SDK_VERSION -ge 1070; then
+        # By default use the first suitable certificate. Not sure if should be looking for the
+        # 'Developer ID Application:' ones instead. The code signing stuff could be much better
+        # documented...
+        identity=`security find-identity -p codesigning -v 2>/dev/null | grep 'Mac Developer:' | awk '{print $2}' |head -1`
+        if test -n "$identity"; then
+            MACOSX_CODESIGNING_IDENTITY=$identity
+            pretty_name=`security find-identity -p codesigning -v | grep $MACOSX_CODESIGNING_IDENTITY | sed -e 's/^[[^"]]*"//' -e 's/"//'`
+            AC_MSG_RESULT([yes, using the identity $MACOSX_CODESIGNING_IDENTITY for $pretty_name])
+        fi
+    elif test -n "$enable_macosx_code_signing" -a $MACOSX_SDK_VERSION -lt 1070; then
+        AC_MSG_ERROR([Don't bother trying to use code signing with a SDK older than 10.7])
+    elif test -n "$enable_macosx_code_signing"; then
+        MACOSX_CODESIGNING_IDENTITY=$enable_macosx_code_signing
+        pretty_name=`security find-identity -p codesigning -v | grep $MACOSX_CODESIGNING_IDENTITY | sed -e 's/^[[^"]]*"//' -e 's/"//'`
+        AC_MSG_RESULT([yes, using the identity $MACOSX_CODESIGNING_IDENTITY for $pretty_name])
+    else
+        AC_MSG_RESULT([no])
+    fi
+
+    AC_MSG_CHECKING([whether to sandbox the application])
+
+    if test -z "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
+        AC_MSG_ERROR([OS X sandboxing requires code signing])
+    elif test -n "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
+        ENABLE_MACOSX_SANDBOX=YES
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
 fi
 AC_SUBST(FRAMEWORKSHOME)
 AC_SUBST(MACOSX_SDK_PATH)
@@ -2702,6 +2751,8 @@ AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
 AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
 AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(XCRUN)
+AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
+AC_SUBST(ENABLE_MACOSX_SANDBOX)
 
 dnl ===================================================================
 dnl Windows specific tests and stuff
