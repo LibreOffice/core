@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOCRSRHELPER_HXX
-#define _UNOCRSRHELPER_HXX
+#ifndef SW_UNOCRSRHELPER_HXX
+#define SW_UNOCRSRHELPER_HXX
 
 #include <map>
 
@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <swtypes.hxx>
+#include <flyenum.hxx>
 #include <pam.hxx>
 
 
@@ -32,13 +33,17 @@ class String;
 class SfxItemSet;
 class SfxItemPropertySet;
 struct SfxItemPropertySimpleEntry;
+class SdrObject;
 class SwTxtNode;
 class SwPaM;
 class SwCursor;
 class SwUnoCrsr;
+class SwUnoTableCrsr;
 class SwFmtColl;
 struct SwSortOptions;
 class SwDoc;
+
+namespace sw { namespace mark { class IMark; } }
 
 namespace com{ namespace sun{ namespace star{
     namespace uno{
@@ -211,6 +216,18 @@ namespace SwUnoCursorHelper
             ::com::sun::star::uno::Any const& rValue,
             SwPaM & rPam, SfxItemSet & rItemSet)
         throw (::com::sun::star::lang::IllegalArgumentException);
+
+    /// try to get something that can be selected out of the XInterface
+    /// at most one of the out parameters gets assigned a non-null value
+    /// o_rpPaM is newly allocated and must be deleted; other parameters not
+    SW_DLLPUBLIC void GetSelectableFromAny(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XInterface> const& xIfc,
+        SwDoc & rTargetDoc,
+        SwPaM *& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
+        OUString & o_rTableName, SwUnoTableCrsr const*& o_rpTableCursor,
+        ::sw::mark::IMark const*& o_rpMark,
+        std::vector<SdrObject *> & o_rSdrObjects);
 
 } // namespace SwUnoCursorHelper
 

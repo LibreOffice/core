@@ -65,7 +65,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <editeng/outliner.hxx>
 #include <editeng/editview.hxx>
-#include <unobookmark.hxx>
 #include <unoparagraph.hxx>
 #include <unocrsrhelper.hxx>
 #include <unotextrange.hxx>
@@ -88,12 +87,6 @@ using comphelper::HelperBaseNoState;
 
 using ::rtl::OUString;
 
-static SwPaM* lcl_createPamCopy(const SwPaM& rPam)
-{
-    SwPaM *const pRet = new SwPaM(*rPam.GetPoint());
-    ::sw::DeepCopyPaM(rPam, *pRet);
-    return pRet;
-}
 
 /******************************************************************
  * SwXTextView
@@ -239,244 +232,98 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
 sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
+
     uno::Reference< uno::XInterface >  xInterface;
-    if(GetView() && (aInterface >>= xInterface))
+    if (!GetView() || !(aInterface >>= xInterface))
     {
-        SwWrtShell& rSh = GetView()->GetWrtShell();
-        SwDoc* pDoc = GetView()->GetDocShell()->GetDoc();
-        uno::Reference< lang::XUnoTunnel >  xIfcTunnel(xInterface, uno::UNO_QUERY);
-        uno::Reference< text::XTextCursor >  xCrsr(xInterface, uno::UNO_QUERY);
-        uno::Reference< container::XIndexAccess >   xPosN(xInterface, uno::UNO_QUERY);
-        uno::Reference< text::XTextRange >  xPos(xInterface, uno::UNO_QUERY);
-        SwXFrame* pFrame = xIfcTunnel.is() ? reinterpret_cast<SwXFrame*>(
-            xIfcTunnel->getSomething(SwXFrame::getUnoTunnelId())) : 0;
+        return sal_False;
+    }
 
-        SwXCell* pCell = xIfcTunnel.is() ? reinterpret_cast<SwXCell*>(
-            xIfcTunnel->getSomething(SwXCell::getUnoTunnelId())) : 0;
-
-        SwPaM * pPam = 0;
-        SwXTextRanges* pPosN = 0;
-        if(xCrsr.is())
+    SwWrtShell& rSh = GetView()->GetWrtShell();
+    SwDoc* pDoc = GetView()->GetDocShell()->GetDoc();
+    std::vector<SdrObject *> sdrObjects;
+    uno::Reference<awt::XControlModel> const xCtrlModel(xInterface,
+            UNO_QUERY);
+    if (xCtrlModel.is())
+    {
+        uno::Reference<awt::XControl> xControl;
+        SdrObject *const pSdrObject = GetControl(xCtrlModel, xControl);
+        if (pSdrObject) // hmm... needs view to verify it's in right doc...
         {
-            //
-            OTextCursorHelper* pCursor =
-                xIfcTunnel.is() ?
-                    reinterpret_cast<OTextCursorHelper*>(xIfcTunnel->getSomething(OTextCursorHelper::getUnoTunnelId()))
-                    : 0;
-
-            if(pCursor && pCursor->GetDoc() == GetView()->GetDocShell()->GetDoc())
-            {
-                pPam = lcl_createPamCopy(*pCursor->GetPaM());
-            }
+            sdrObjects.push_back(pSdrObject);
         }
-        else if(xPosN.is() &&
-            xIfcTunnel.is() &&
-                0 != (pPosN = reinterpret_cast<SwXTextRanges*>(xIfcTunnel->getSomething(SwXTextRanges::getUnoTunnelId()))))
-        {
-            const SwUnoCrsr* pUnoCrsr = pPosN->GetCursor();
-            if(pUnoCrsr)
-            {
-                pPam = lcl_createPamCopy(*pUnoCrsr);
-            }
-        }
-        // prevent misinterpretation of text frames that provide a XTextRange interface, too
-        else if(!pFrame && !pCell && xPos.is())
-        {
-            SwUnoInternalPaM aPam(*pDoc);
-            if (::sw::XTextRangeToSwPaM(aPam, xPos))
-            {
-                pPam = lcl_createPamCopy(aPam);
-            }
-        }
-        if(pPam)
+    }
+    else
+    {
+        SwPaM * pPaM(0);
+        std::pair<OUString, FlyCntType> frame;
+        OUString tableName;
+        SwUnoTableCrsr const* pTableCursor(0);
+        ::sw::mark::IMark const* pMark(0);
+        SwUnoCursorHelper::GetSelectableFromAny(xInterface, *pDoc,
+                pPaM, frame, tableName, pTableCursor, pMark, sdrObjects);
+        if (pPaM)
         {
             rSh.EnterStdMode();
-            rSh.SetSelection(*pPam);
-            while( pPam->GetNext() != pPam )
-                delete pPam->GetNext();
-            delete pPam;
+            rSh.SetSelection(*pPaM);
+            // the pPaM has been copied - delete it
+            while (pPaM->GetNext() != pPaM)
+                delete pPaM->GetNext();
+            delete pPaM;
             return sal_True;
         }
-        if(pFrame)
+        else if (!frame.first.isEmpty())
         {
-
-            SwFrmFmt* pFrmFmt = pFrame->GetFrmFmt();
-            if(pFrmFmt && pFrmFmt->GetDoc() == pDoc)
+            bool const bSuccess(rSh.GotoFly(frame.first, frame.second));
+            if (bSuccess)
             {
-                sal_Bool bSuccess = rSh.GotoFly( pFrmFmt->GetName(), pFrame->GetFlyCntType());
-                if (bSuccess)
-                {
-                    rSh.HideCrsr();
-                    rSh.EnterSelFrmMode();
-                }
-                return sal_True;
-            }
-        }
-
-        uno::Reference< text::XTextTable >  xTbl(xInterface, uno::UNO_QUERY);
-
-        if(xTbl.is() && xIfcTunnel.is())
-        {
-            SwXTextTable* pTable = reinterpret_cast<SwXTextTable*>(
-                xIfcTunnel->getSomething(SwXTextTable::getUnoTunnelId()));
-
-            SwFrmFmt* pTblFrmFmt = pTable ? ((SwXTextTable*)pTable)->GetFrmFmt() : 0;
-            if(pTblFrmFmt &&pTblFrmFmt->GetDoc() == pDoc)
-            {
-                rSh.EnterStdMode();
-                rSh.GotoTable(pTblFrmFmt->GetName());
+                rSh.HideCrsr();
+                rSh.EnterSelFrmMode();
             }
             return sal_True;
         }
-
-        if(pCell)
+        else if (!tableName.isEmpty())
         {
-            SwFrmFmt* pTblFrmFmt = pCell->GetFrmFmt();
-            if(pTblFrmFmt && pTblFrmFmt->GetDoc() == pDoc)
-            {
-                SwTableBox* pBox = pCell->GetTblBox();
-                SwTable* pTable = SwTable::FindTable( pTblFrmFmt );
-                pBox = pCell->FindBox(pTable, pBox);
-                if(pBox)
-                {
-                    const SwStartNode* pSttNd = pBox->GetSttNd();
-                    SwPosition aPos(*pSttNd);
-                    SwPaM aPam(aPos);
-                    aPam.Move(fnMoveForward, fnGoNode);
-                    rSh.EnterStdMode();
-                    rSh.SetSelection(aPam);
-                    return sal_True;
-                }
-            }
+            rSh.EnterStdMode();
+            rSh.GotoTable(tableName);
+            return sal_True;
         }
-        SwXCellRange* pRange = xIfcTunnel.is() ? reinterpret_cast<SwXCellRange*>(
-            xIfcTunnel->getSomething(SwXCellRange::getUnoTunnelId())) : 0;
-        if(pRange)
+        else if (pTableCursor)
         {
-           const SwUnoCrsr* pUnoCrsr = pRange->GetTblCrsr();
-           if(pUnoCrsr)
-           {
-                UnoActionRemoveContext aContext(pDoc);
-                rSh.EnterStdMode();
-                rSh.SetSelection(*pUnoCrsr);
-                return sal_True;
-           }
+            UnoActionRemoveContext const aContext(pDoc);
+            rSh.EnterStdMode();
+            rSh.SetSelection(*pTableCursor);
+            return sal_True;
         }
-        uno::Reference< text::XTextContent >  xBkm(xInterface, uno::UNO_QUERY);
-
-        if(xBkm.is() && xIfcTunnel.is())
+        else if (pMark)
         {
-            ::sw::mark::IMark const*const pMark(
-                    SwXBookmark::GetBookmarkInDoc(pDoc, xIfcTunnel) );
-            if (pMark)
-            {
-                rSh.EnterStdMode();
-                rSh.GotoMark(pMark);
-                return sal_True;
-            }
+            rSh.EnterStdMode();
+            rSh.GotoMark(pMark);
+            return sal_True;
         }
-        // IndexMark, Index, TextField, Draw, Section, Footnote, Paragraph
-        //
+        // sdrObjects handled below
+    }
+    sal_Bool bRet(sal_False);
+    if (sdrObjects.size())
+    {
 
-        // detect controls
+        SdrView *const pDrawView = rSh.GetDrawView();
+        SdrPageView *const pPV = pDrawView->GetSdrPageView();
 
-        uno::Reference< awt::XControlModel > xCtrlModel(xInterface, UNO_QUERY);
-        if(xCtrlModel.is())
+        for (size_t i = 0; i < sdrObjects.size(); ++i)
         {
-            uno::Reference<awt::XControl> XControl;
-            SdrObject* pObj = GetControl(xCtrlModel, XControl);
-            if(pObj)
-            {
-                SdrView* pDrawView = rSh.GetDrawView();
-                SdrPageView* pPV = pDrawView->GetSdrPageView();
-                if ( pPV && pObj->GetPage() == pPV->GetPage() )
-                {
-                    pDrawView->SdrEndTextEdit();
-                    pDrawView->UnmarkAll();
-                    pDrawView->MarkObj( pObj, pPV );
-                }
-                return sal_True;
-            }
-        }
-
-        uno::Reference< drawing::XShapes >  xShapeColl( xInterface, uno::UNO_QUERY );
-        uno::Reference< beans::XPropertySet >  xTmpProp(xInterface, uno::UNO_QUERY);
-        SwXShape* pSwXShape = 0;
-        if(xIfcTunnel.is())
-            pSwXShape = reinterpret_cast<SwXShape*>(xIfcTunnel->getSomething(SwXShape::getUnoTunnelId()));
-        SvxShape* pSvxShape = 0;
-        if(pSwXShape)
-        {
-            uno::Reference< uno::XAggregation >     xAgg = pSwXShape->GetAggregationInterface();
-            if(xAgg.is())
-            {
-                pSvxShape = reinterpret_cast<SvxShape*>(xIfcTunnel->getSomething(SvxShape::getUnoTunnelId()));
-            }
-        }
-
-        if ( pSvxShape || xShapeColl.is() )         // Drawing drawing::Layer
-        {
-            SdrView* pDrawView = rSh.GetDrawView();
-            if (pDrawView)
+            SdrObject *const pSdrObject(sdrObjects[i]);
+            // GetSelectableFromAny did not check pSdrObject is in right doc!
+            if (pPV && pSdrObject->GetPage() == pPV->GetPage())
             {
                 pDrawView->SdrEndTextEdit();
                 pDrawView->UnmarkAll();
-
-                if (pSvxShape)      // einzelnes Shape
-                {
-                    SdrObject *pObj = pSvxShape->GetSdrObject();
-                    if (pObj)
-                    {
-                        SdrPageView* pPV = pDrawView->GetSdrPageView();
-                        if ( pPV && pObj->GetPage() == pPV->GetPage() )
-                        {
-                            pDrawView->MarkObj( pObj, pPV );
-                            return sal_True;
-                        }
-                    }
-                }
-                else    // Shape Collection
-                {
-                    sal_Bool bSelected = sal_False;
-                    SdrPageView* pPV = NULL;
-                    long nCount = xShapeColl->getCount();
-                    for ( long i = 0; i < nCount; i++ )
-                    {
-                        uno::Reference< drawing::XShape >  xShapeInt;
-                        uno::Any aAny = xShapeColl->getByIndex(i);
-                        aAny >>= xShapeInt;
-                        if (xShapeInt.is())
-                        {
-                            uno::Reference< lang::XUnoTunnel> xShapeTunnel(xShapeInt, uno::UNO_QUERY);
-
-                            SvxShape* pShape = xShapeTunnel.is() ?
-                                reinterpret_cast<SvxShape*>(xShapeTunnel->getSomething(SvxShape::getUnoTunnelId())) : 0;
-
-                            if (pShape)
-                            {
-                                SdrObject *pObj = pShape->GetSdrObject();
-                                if (pObj)
-                                {
-                                    if (!pPV)               // erstes Objekt
-                                    {
-                                        pPV = pDrawView->GetSdrPageView();
-                                    }
-                                    if ( pPV && pObj->GetPage() == pPV->GetPage() )
-                                    {
-                                        pDrawView->MarkObj( pObj, pPV );
-                                        bSelected = sal_True;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    return bSelected;
-                }
+                pDrawView->MarkObj(pSdrObject, pPV);
+                bRet = sal_True;
             }
         }
     }
-    return sal_False;
-
+    return bRet;
 }
 
 uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )

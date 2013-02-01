@@ -17,12 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svxids.hrc>
-#include <map>
-#include <com/sun/star/text/XTextSection.hpp>
-#include <cmdid.h>
 #include <unocrsrhelper.hxx>
+
+#include <map>
+
+#include <com/sun/star/beans/PropertyState.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/text/XTextSection.hpp>
+
+#include <svx/svxids.hrc>
+#include <svx/unoshape.hxx>
+
+#include <cmdid.h>
+#include <unotextrange.hxx>
+#include <unodraw.hxx>
 #include <unofootnote.hxx>
+#include <unobookmark.hxx>
 #include <unorefmark.hxx>
 #include <unostyle.hxx>
 #include <unoidx.hxx>
@@ -62,15 +73,12 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svl/stritem.hxx>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <SwStyleNameMapper.hxx>
 #include <redline.hxx>
 #include <numrule.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <SwNodeNum.hxx>
 #include <fmtmeta.hxx>
 
@@ -86,6 +94,177 @@ using ::rtl::OUString;
 
 namespace SwUnoCursorHelper
 {
+
+static SwPaM* lcl_createPamCopy(const SwPaM& rPam)
+{
+    SwPaM *const pRet = new SwPaM(*rPam.GetPoint());
+    ::sw::DeepCopyPaM(rPam, *pRet);
+    return pRet;
+}
+
+void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
+        SwDoc & rTargetDoc,
+        SwPaM *& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
+        OUString & o_rTableName, SwUnoTableCrsr const*& o_rpTableCursor,
+        ::sw::mark::IMark const*& o_rpMark,
+        std::vector<SdrObject *> & o_rSdrObjects)
+{
+    uno::Reference<drawing::XShapes> const xShapes(xIfc, UNO_QUERY);
+    if (xShapes.is())
+    {
+        sal_Int32 nShapes(xShapes->getCount());
+        for (sal_Int32 i = 0; i < nShapes; ++i)
+        {
+            uno::Reference<lang::XUnoTunnel> xShape;
+            xShapes->getByIndex(i) >>= xShape;
+            if (xShape.is())
+            {
+                SvxShape *const pSvxShape(
+                        ::sw::UnoTunnelGetImplementation<SvxShape>(xShape));
+                if (pSvxShape)
+                {
+                    SdrObject *const pSdrObject = pSvxShape->GetSdrObject();
+                    if (pSdrObject)
+                    {   // hmm... needs view to verify it's in right doc...
+                        o_rSdrObjects.push_back(pSdrObject);
+                    }
+                }
+            }
+        }
+        return;
+    }
+
+    uno::Reference<lang::XUnoTunnel> const xTunnel(xIfc, UNO_QUERY);
+    if (!xTunnel.is()) // everything below needs tunnel
+    {
+        return;
+    }
+
+    SwXShape *const pShape(::sw::UnoTunnelGetImplementation<SwXShape>(xTunnel));
+    if (pShape)
+    {
+        uno::Reference<uno::XAggregation> const xAgg(
+                pShape->GetAggregationInterface());
+        if (xAgg.is())
+        {
+            SvxShape *const pSvxShape(
+                    ::sw::UnoTunnelGetImplementation<SvxShape>(xTunnel));
+            if (pSvxShape)
+            {
+                SdrObject *const pSdrObject = pSvxShape->GetSdrObject();
+                if (pSdrObject)
+                {   // hmm... needs view to verify it's in right doc...
+                    o_rSdrObjects.push_back(pSdrObject);
+                }
+            }
+        }
+        return;
+    }
+
+    OTextCursorHelper *const pCursor(
+        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xTunnel));
+    if (pCursor)
+    {
+        if (pCursor->GetDoc() == &rTargetDoc)
+        {
+            o_rpPaM = lcl_createPamCopy(*pCursor->GetPaM());
+        }
+        return;
+    }
+
+    SwXTextRanges *const pRanges(
+        ::sw::UnoTunnelGetImplementation<SwXTextRanges>(xTunnel));
+    if (pRanges)
+    {
+        SwUnoCrsr const* pUnoCrsr = pRanges->GetCursor();
+        if (pUnoCrsr->GetDoc() == &rTargetDoc)
+        {
+            o_rpPaM = lcl_createPamCopy(*pUnoCrsr);
+        }
+        return;
+    }
+
+    // check these before Range to prevent misinterpretation of text frames
+    // and cells also implement XTextRange
+    SwXFrame *const pFrame(
+        ::sw::UnoTunnelGetImplementation<SwXFrame>(xTunnel));
+    if (pFrame)
+    {
+        SwFrmFmt *const pFrmFmt(pFrame->GetFrmFmt());
+        if (pFrmFmt && pFrmFmt->GetDoc() == &rTargetDoc)
+        {
+            o_rFrame = std::make_pair(pFrmFmt->GetName(), pFrame->GetFlyCntType());
+        }
+        return;
+    }
+
+    SwXTextTable *const pTextTable(
+        ::sw::UnoTunnelGetImplementation<SwXTextTable>(xTunnel));
+    if (pTextTable)
+    {
+        SwFrmFmt *const pFrmFmt(pTextTable->GetFrmFmt());
+        if (pFrmFmt && pFrmFmt->GetDoc() == &rTargetDoc)
+        {
+            o_rTableName = pFrmFmt->GetName();
+        }
+        return;
+    }
+
+    SwXCell *const pCell(
+        ::sw::UnoTunnelGetImplementation<SwXCell>(xTunnel));
+    if (pCell)
+    {
+        SwFrmFmt *const pFrmFmt(pCell->GetFrmFmt());
+        if (pFrmFmt && pFrmFmt->GetDoc() == &rTargetDoc)
+        {
+            SwTableBox * pBox = pCell->GetTblBox();
+            SwTable *const pTable = SwTable::FindTable(pFrmFmt);
+            // ??? what's the benefit of setting pBox in this convoluted way?
+            pBox = pCell->FindBox(pTable, pBox);
+            if (pBox)
+            {
+                SwPosition const aPos(*pBox->GetSttNd());
+                SwPaM aPam(aPos);
+                aPam.Move(fnMoveForward, fnGoNode);
+                o_rpPaM = lcl_createPamCopy(aPam);
+            }
+        }
+        return;
+    }
+
+    uno::Reference<text::XTextRange> const xTextRange(xTunnel, UNO_QUERY);
+    if (xTextRange.is())
+    {
+        SwUnoInternalPaM aPam(rTargetDoc);
+        if (::sw::XTextRangeToSwPaM(aPam, xTextRange))
+        {
+            o_rpPaM = lcl_createPamCopy(aPam);
+        }
+        return;
+    }
+
+    SwXCellRange *const pCellRange(
+        ::sw::UnoTunnelGetImplementation<SwXCellRange>(xTunnel));
+    if (pCellRange)
+    {
+        SwUnoCrsr const*const pUnoCrsr(pCellRange->GetTblCrsr());
+        if (pUnoCrsr && pUnoCrsr->GetDoc() == &rTargetDoc)
+        {
+            // probably can't copy it to o_rpPaM for this since it's
+            // a SwTableCursor
+            o_rpTableCursor = dynamic_cast<SwUnoTableCrsr const*>(pUnoCrsr);
+        }
+        return;
+    }
+
+    ::sw::mark::IMark const*const pMark(
+            SwXBookmark::GetBookmarkInDoc(& rTargetDoc, xTunnel));
+    if (pMark)
+    {
+        o_rpMark = pMark;
+        return;
+    }
+}
 
 uno::Reference<text::XTextContent>
 GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
