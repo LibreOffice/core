@@ -26,7 +26,7 @@
 
 #include <osl/file.hxx>
 #include <rtl/logfile.hxx>
-//#include <vcl/temporaryfonts.hxx>
+#include <vcl/temporaryfonts.hxx>
 
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -258,7 +258,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
         if( url.indexOf( '/' ) > -1 ) // TODO what if more levels?
             storage.set( storage->openStorageElement( url.copy( 0, url.indexOf( '/' )),
                 ::embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
-        OUString fileUrl = ""; // TemporaryFonts::fileUrlForFont( fontName, style );
+        OUString fileUrl = TemporaryFonts::fileUrlForFont( fontName, style );
         osl::File file( fileUrl );
         switch( file.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write ))
         {
@@ -290,7 +290,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
             osl::File::remove( fileUrl );
             return;
         }
-//        TemporaryFonts::activateFont( fontName, fileUrl );
+        TemporaryFonts::activateFont( fontName, fileUrl );
         GetImport().NotifyEmbeddedFontRead();
     }
     else

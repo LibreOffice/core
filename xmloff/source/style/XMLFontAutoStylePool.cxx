@@ -25,7 +25,7 @@
 #include "fonthdl.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLFontAutoStylePool.hxx>
-//#include <vcl/temporaryfonts.hxx>
+#include <vcl/temporaryfonts.hxx>
 #include <osl/file.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -280,7 +280,7 @@ void XMLFontAutoStylePool::exportXML()
                  j < SAL_N_ELEMENTS( styles );
                  ++j )
             {
-                OUString fileUrl = ""; //TemporaryFonts::fileUrlForFont( pEntry->GetFamilyName(), styles[ j ] );
+                OUString fileUrl = TemporaryFonts::fileUrlForFont( pEntry->GetFamilyName(), styles[ j ] );
                 if( !fontFilesMap.count( fileUrl ))
                 {
                     OUString docUrl = embedFontFile( fileUrl, styles[ j ] );
