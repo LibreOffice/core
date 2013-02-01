@@ -425,6 +425,30 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
                     i += 2;
                 }
                 break;
+            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::DARKEN :
+                if ( bExtended )
+                    aStrBuffer.append( (sal_Unicode)'H' );
+                else
+                    bNeedExtended = true;
+                break;
+            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS :
+                if ( bExtended )
+                    aStrBuffer.append( (sal_Unicode)'I' );
+                else
+                    bNeedExtended = true;
+                break;
+            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN :
+                if ( bExtended )
+                    aStrBuffer.append( (sal_Unicode)'J' );
+                else
+                    bNeedExtended = true;
+                break;
+            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS :
+                if ( bExtended )
+                    aStrBuffer.append( (sal_Unicode)'K' );
+                else
+                    bNeedExtended = true;
+                break;
             default : // ups, seems to be something wrong
             {
                 aSegment.Count = 1;
