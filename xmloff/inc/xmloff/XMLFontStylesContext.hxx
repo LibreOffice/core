@@ -85,7 +85,7 @@ public:
 };
 
 /// Handles <style:font-face>
-class XMLFontStyleContext_Impl : public SvXMLStyleContext
+class XMLFontStyleContextFontFace : public SvXMLStyleContext
 {
     ::com::sun::star::uno::Any aFamilyName;
     ::com::sun::star::uno::Any aStyleName;
@@ -104,12 +104,12 @@ public:
 
     TYPEINFO();
 
-    XMLFontStyleContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
+    XMLFontStyleContextFontFace( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             XMLFontStylesContext& rStyles );
-    virtual ~XMLFontStyleContext_Impl();
+    virtual ~XMLFontStyleContextFontFace();
 
     void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
                        const OUString& rValue );
@@ -132,14 +132,14 @@ public:
 /// Handles <style:font-face-src>
 class XMLFontStyleContextFontFaceSrc : public SvXMLImportContext
 {
-    const XMLFontStyleContext_Impl& font;
+    const XMLFontStyleContextFontFace& font;
 public:
 
     TYPEINFO();
 
     XMLFontStyleContextFontFaceSrc( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
-            const XMLFontStyleContext_Impl& font );
+            const XMLFontStyleContextFontFace& font );
 
     virtual SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
@@ -150,7 +150,7 @@ public:
 /// Handles <style:font-face-uri>
 class XMLFontStyleContextFontFaceUri : public SvXMLStyleContext
 {
-    const XMLFontStyleContext_Impl& font;
+    const XMLFontStyleContextFontFace& font;
     void handleEmbeddedFont( const OUString& url );
 public:
 
@@ -160,7 +160,7 @@ public:
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            const XMLFontStyleContext_Impl& font );
+            const XMLFontStyleContextFontFace& font );
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
         const OUString& rValue );

@@ -80,9 +80,9 @@ static const SvXMLTokenMapEntry* lcl_getFontStyleAttrTokenMap()
     return aFontStyleAttrTokenMap;
 }
 
-TYPEINIT1( XMLFontStyleContext_Impl, SvXMLStyleContext );
+TYPEINIT1( XMLFontStyleContextFontFace, SvXMLStyleContext );
 
-XMLFontStyleContext_Impl::XMLFontStyleContext_Impl( SvXMLImport& rImport,
+XMLFontStyleContextFontFace::XMLFontStyleContextFontFace( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         XMLFontStylesContext& rStyles ) :
@@ -97,7 +97,7 @@ XMLFontStyleContext_Impl::XMLFontStyleContext_Impl( SvXMLImport& rImport,
     aEnc <<= (sal_Int16)rStyles.GetDfltCharset();
 }
 
-void XMLFontStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
+void XMLFontStyleContextFontFace::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rLocalName,
                                         const OUString& rValue )
 {
@@ -136,11 +136,11 @@ void XMLFontStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
-XMLFontStyleContext_Impl::~XMLFontStyleContext_Impl()
+XMLFontStyleContextFontFace::~XMLFontStyleContextFontFace()
 {
 }
 
-void XMLFontStyleContext_Impl::FillProperties(
+void XMLFontStyleContextFontFace::FillProperties(
         ::std::vector< XMLPropertyState > &rProps,
         sal_Int32 nFamilyNameIdx,
         sal_Int32 nStyleNameIdx,
@@ -175,7 +175,7 @@ void XMLFontStyleContext_Impl::FillProperties(
     }
 }
 
-SvXMLImportContext * XMLFontStyleContext_Impl::CreateChildContext(
+SvXMLImportContext * XMLFontStyleContextFontFace::CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList )
@@ -185,7 +185,7 @@ SvXMLImportContext * XMLFontStyleContext_Impl::CreateChildContext(
     return SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 }
 
-OUString XMLFontStyleContext_Impl::familyName() const
+OUString XMLFontStyleContextFontFace::familyName() const
 {
     OUString ret;
     aFamilyName >>= ret;
@@ -197,7 +197,7 @@ TYPEINIT1( XMLFontStyleContextFontFaceSrc, SvXMLImportContext );
 
 XMLFontStyleContextFontFaceSrc::XMLFontStyleContextFontFaceSrc( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
-        const XMLFontStyleContext_Impl& _font )
+        const XMLFontStyleContextFontFace& _font )
     : SvXMLImportContext( rImport, nPrfx, rLName )
     , font( _font )
 {
@@ -220,7 +220,7 @@ XMLFontStyleContextFontFaceUri::XMLFontStyleContextFontFaceUri( SvXMLImport& rIm
         sal_uInt16 nPrfx, const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-        const XMLFontStyleContext_Impl& _font )
+        const XMLFontStyleContextFontFace& _font )
     : SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList )
     , font( _font )
 {
@@ -306,7 +306,7 @@ SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(
     if( XML_NAMESPACE_STYLE == nPrefix &&
         IsXMLToken( rLocalName, XML_FONT_FACE ) )
     {
-        pStyle = new XMLFontStyleContext_Impl( GetImport(), nPrefix,
+        pStyle = new XMLFontStyleContextFontFace( GetImport(), nPrefix,
                                                rLocalName, xAttrList, *this );
     }
     else
@@ -352,7 +352,7 @@ sal_Bool XMLFontStylesContext::FillProperties( const OUString& rName,
                          sal_Int32 nCharsetIdx ) const
 {
     const SvXMLStyleContext* pStyle = FindStyleChildContext( XML_STYLE_FAMILY_FONT, rName, sal_True );
-    const XMLFontStyleContext_Impl *pFontStyle = PTR_CAST( XMLFontStyleContext_Impl,pStyle);// use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
+    const XMLFontStyleContextFontFace *pFontStyle = PTR_CAST( XMLFontStyleContextFontFace,pStyle);// use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
     if( pFontStyle )
         pFontStyle->FillProperties( rProps, nFamilyNameIdx, nStyleNameIdx,
                                     nFamilyIdx, nPitchIdx, nCharsetIdx );
