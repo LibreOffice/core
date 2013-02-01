@@ -313,8 +313,8 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
     {
         SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, SFX_APP()->GetPool() );
         aReq.AppendItem( SfxStringItem( SID_FILE_NAME, pPick->aName ));
-        aReq.AppendItem( SfxStringItem( SID_REFERER, DEFINE_CONST_UNICODE( SFX_REFERER_USER ) ) );
-        aReq.AppendItem( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_default") ) );
+        aReq.AppendItem( SfxStringItem( SID_REFERER, SFX_REFERER_USER ) );
+        aReq.AppendItem( SfxStringItem( SID_TARGETNAME, "_default" ) );
         String aFilter( pPick->aFilter );
         aGuard.clear();
 

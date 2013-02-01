@@ -104,12 +104,11 @@ using namespace svtools;
 #define ICON_POS_MYDOCS     2
 #define ICON_POS_SAMPLES    3
 
-#define ASCII_STR(s)                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
-#define VIEWSETTING_NEWFROMTEMPLATE     ASCII_STR("NewFromTemplate")
-#define VIEWSETTING_SELECTEDGROUP       ASCII_STR("SelectedGroup")
-#define VIEWSETTING_SELECTEDVIEW        ASCII_STR("SelectedView")
-#define VIEWSETTING_SPLITRATIO          ASCII_STR("SplitRatio")
-#define VIEWSETTING_LASTFOLDER          ASCII_STR("LastFolder")
+#define VIEWSETTING_NEWFROMTEMPLATE     "NewFromTemplate"
+#define VIEWSETTING_SELECTEDGROUP       "SelectedGroup"
+#define VIEWSETTING_SELECTEDVIEW        "SelectedView"
+#define VIEWSETTING_SPLITRATIO          "SplitRatio"
+#define VIEWSETTING_LASTFOLDER          "LastFolder"
 
 struct FolderHistory
 {
@@ -156,10 +155,10 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     aDummyHeaderBar( this ),
     aIconCtrl( this, WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /*!WB_NOSELECTION |*/
                      WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN ),
-    aNewDocumentRootURL( ASCII_STR("private:newdoc") ),
+    aNewDocumentRootURL( "private:newdoc" ),
     aMyDocumentsRootURL( SvtPathOptions().GetWorkPath() ),
     aSamplesFolderRootURL( SvtPathOptions().
-        SubstituteVariable( String( ASCII_STR("$(insturl)/share/samples/$(vlang)") ) ) ),
+        SubstituteVariable( String( "$(insturl)/share/samples/$(vlang)" ) ) ),
     nMaxTextLength( 0 )
 
 {
@@ -461,8 +460,8 @@ Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
     ::rtl::OUString aTargetFrame;
 
     sal_uInt32 i, nCount = aDynamicMenuEntries.getLength();
-    ::rtl::OUString sSeparator( ASCII_STR("private:separator") );
-    ::rtl::OUString sSlotURL( ASCII_STR("slot:5500") );
+    ::rtl::OUString sSeparator( "private:separator" );
+    ::rtl::OUString sSlotURL( "slot:5500" );
 
     for ( i = 0; i < nCount; ++i )
     {
@@ -471,7 +470,7 @@ Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
             continue;
         if( aURL == sSeparator )
         {
-            String aSeparator( ASCII_STR( aSeparatorStr ) );
+            String aSeparator( aSeparatorStr );
             ::rtl::OUString* pSeparator = new ::rtl::OUString( aSeparator );
             aNewDocs.push_back( pSeparator );
         }
@@ -610,7 +609,7 @@ SvtFrameWindow_Impl::SvtFrameWindow_Impl( Window* pParent ) :
     pEditWin = new ODocumentInfoPreview( this ,WB_LEFT | WB_VSCROLL | WB_READONLY | WB_BORDER | WB_3DLOOK);
     pTextWin = new Window( this );
     xFrame = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->
-        createInstance( ASCII_STR("com.sun.star.frame.Frame") ), UNO_QUERY );
+        createInstance( "com.sun.star.frame.Frame" ), UNO_QUERY );
     xWindow = VCLUnoHelper::GetInterface( pTextWin );
     xFrame->initialize( xWindow );
 
@@ -710,14 +709,14 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
         String aTarget;
         Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
         if ( bPreview )
-            aTarget = ASCII_STR("_self");
+            aTarget = "_self";
         else
         {
             // can be removed if the database application change its URL
             String sServiceScheme( RTL_CONSTASCII_USTRINGPARAM( "service:" ) );
             if ( rURL.Match( sServiceScheme ) != sServiceScheme.Len() )
                 // service URL has no default target
-                aTarget = ASCII_STR("_default");
+                aTarget = "_default";
             xProv = Reference < XDispatchProvider >( Desktop::create(::comphelper::getProcessComponentContext() ),
                 UNO_QUERY_THROW );
         }
@@ -740,11 +739,11 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
                     {
                         sal_Bool    b = sal_True;
                         Sequence < PropertyValue > aArgs( 4 );
-                        aArgs[0].Name = ASCII_STR("Preview");
+                        aArgs[0].Name = "Preview";
                         aArgs[0].Value.setValue( &b, ::getBooleanCppuType() );
-                        aArgs[1].Name = ASCII_STR("ReadOnly");
+                        aArgs[1].Name = "ReadOnly";
                         aArgs[1].Value.setValue( &b, ::getBooleanCppuType() );
-                        aArgs[2].Name = ASCII_STR("AsTemplate");    // prevents getting an empty URL with getURL()!
+                        aArgs[2].Name = "AsTemplate";    // prevents getting an empty URL with getURL()!
 
                         uno::Reference < task::XInteractionHandler2 > xInteractionHandler(
                             task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
@@ -778,7 +777,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
             else if ( bIsTemplate )
             {
                 Sequence < PropertyValue > aArgs( 1 );
-                aArgs[0].Name = ASCII_STR("AsTemplate");
+                aArgs[0].Name = "AsTemplate";
                 aArgs[0].Value <<= bAsTemplate;
                 xDisp->dispatch( aURL, aArgs );
                 m_aOpenURL = rtl::OUString();
@@ -975,14 +974,14 @@ void SvtTemplateWindow::PrintFile( const String& rURL )
 {
     // open the file readonly and hidden
     Sequence < PropertyValue > aArgs( 2 );
-    aArgs[0].Name = ASCII_STR("ReadOnly");
+    aArgs[0].Name = "ReadOnly";
     aArgs[0].Value <<= sal_True;
-    aArgs[1].Name = ASCII_STR("Hidden");
+    aArgs[1].Name = "Hidden";
     aArgs[1].Value <<= sal_True;
 
     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
     Reference < XModel > xModel( xDesktop->loadComponentFromURL(
-        rURL, ASCII_STR("_blank"), 0, aArgs ), UNO_QUERY );
+        rURL, "_blank", 0, aArgs ), UNO_QUERY );
     if ( xModel.is() )
     {
         // print
@@ -1570,7 +1569,7 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , DoubleClickHdl_Impl)
 IMPL_LINK_NOARG(SvtDocumentTemplateDialog , NewFolderHdl_Impl)
 {
     String aNewTitle( pImpl->aTitle );
-    aNewTitle += String( ASCII_STR(" - ") );
+    aNewTitle += String( " - " );
     aNewTitle += pImpl->pWin->GetFolderTitle();
     SetText( aNewTitle );
 
@@ -1623,7 +1622,7 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , OrganizerHdl_Impl)
         xFrame = Reference < XFrame >( xDesktop, UNO_QUERY );
 
     com::sun::star::util::URL aTargetURL;
-    aTargetURL.Complete = ASCII_STR("slot:5540");
+    aTargetURL.Complete = "slot:5540";
     Reference< com::sun::star::util::XURLTransformer > xTrans(
                 com::sun::star::util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( aTargetURL );
@@ -1636,8 +1635,8 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , OrganizerHdl_Impl)
     {
         Sequence<PropertyValue> aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = ASCII_STR("Referer");
-        pArg[0].Value <<= ASCII_STR("private:user");
+        pArg[0].Name = "Referer";
+        pArg[0].Value <<= OUString("private:user");
         xDisp->dispatch( aTargetURL, aArgs );
     }
 

@@ -41,8 +41,6 @@ namespace container = com::sun::star::container ;
 namespace lang = com::sun::star::lang ;
 namespace uno = com::sun::star::uno ;
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
 
 struct OutData
 {
@@ -188,37 +186,37 @@ Download::getProxyForURL(const rtl::OUString& rURL, rtl::OString& rHost, sal_Int
         com::sun::star::configuration::theDefaultProvider::get( m_xContext ) );
 
     beans::PropertyValue aProperty;
-    aProperty.Name  = UNISTRING( "nodepath" );
-    aProperty.Value = uno::makeAny( UNISTRING("org.openoffice.Inet/Settings") );
+    aProperty.Name  = "nodepath";
+    aProperty.Value = uno::makeAny( OUString("org.openoffice.Inet/Settings") );
 
     uno::Sequence< uno::Any > aArgumentList( 1 );
     aArgumentList[0] = uno::makeAny( aProperty );
 
     uno::Reference< container::XNameAccess > xNameAccess(
         xConfigProvider->createInstanceWithArguments(
-            UNISTRING("com.sun.star.configuration.ConfigurationAccess"), aArgumentList ),
+            "com.sun.star.configuration.ConfigurationAccess", aArgumentList ),
         uno::UNO_QUERY_THROW );
 
-    OSL_ASSERT(xNameAccess->hasByName(UNISTRING("ooInetProxyType")));
-    uno::Any aValue = xNameAccess->getByName(UNISTRING("ooInetProxyType"));
+    OSL_ASSERT(xNameAccess->hasByName("ooInetProxyType"));
+    uno::Any aValue = xNameAccess->getByName("ooInetProxyType");
 
     sal_Int32 nProxyType = aValue.get< sal_Int32 >();
     if( 0 != nProxyType ) // type 0 means "direct connection to the internet
     {
         if( rURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("http:")) )
         {
-            rHost = getStringValue(xNameAccess, UNISTRING("ooInetHTTPProxyName"));
-            rPort = getInt32Value(xNameAccess, UNISTRING("ooInetHTTPProxyPort"));
+            rHost = getStringValue(xNameAccess, "ooInetHTTPProxyName");
+            rPort = getInt32Value(xNameAccess, "ooInetHTTPProxyPort");
         }
         else if( rURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("https:")) )
         {
-            rHost = getStringValue(xNameAccess, UNISTRING("ooInetHTTPSProxyName"));
-            rPort = getInt32Value(xNameAccess, UNISTRING("ooInetHTTPSProxyPort"));
+            rHost = getStringValue(xNameAccess, "ooInetHTTPSProxyName");
+            rPort = getInt32Value(xNameAccess, "ooInetHTTPSProxyPort");
         }
         else if( rURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("ftp:")) )
         {
-            rHost = getStringValue(xNameAccess, UNISTRING("ooInetFTPProxyName"));
-            rPort = getInt32Value(xNameAccess, UNISTRING("ooInetFTPProxyPort"));
+            rHost = getStringValue(xNameAccess, "ooInetFTPProxyName");
+            rPort = getInt32Value(xNameAccess, "ooInetFTPProxyPort");
         }
     }
 }

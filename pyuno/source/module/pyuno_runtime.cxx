@@ -69,7 +69,6 @@ using com::sun::star::beans::Introspection;
 
 namespace pyuno
 {
-#define USTR_ASCII(x) OUString(  x  )
 
 static PyTypeObject RuntimeImpl_Type =
 {
@@ -184,7 +183,7 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
     rtl::Bootstrap bootstrapHandle( fileName );
 
     OUString str;
-    if( bootstrapHandle.getFrom( USTR_ASCII( "PYUNO_LOGLEVEL" ), str ) )
+    if( bootstrapHandle.getFrom( "PYUNO_LOGLEVEL", str ) )
     {
         if ( str == "NONE" )
             *pLevel = LogLevel::NONE;
@@ -201,7 +200,7 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
     if( *pLevel > LogLevel::NONE )
     {
         *ppFile = stdout;
-        if( bootstrapHandle.getFrom( USTR_ASCII( "PYUNO_LOGTARGET" ), str ) )
+        if( bootstrapHandle.getFrom( "PYUNO_LOGTARGET", str ) )
         {
             if ( str == "stdout" )
                 *ppFile = stdout;
@@ -767,7 +766,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             else
             {
                 throw RuntimeException(
-                    USTR_ASCII( "struct or exception wrapper does not support XMaterialHolder" ),
+                    "struct or exception wrapper does not support XMaterialHolder",
                     Reference< XInterface > () );
             }
         }
@@ -785,7 +784,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
                 if (!my_mh.is ())
                 {
                     throw RuntimeException(
-                        USTR_ASCII( "struct wrapper does not support XMaterialHolder" ),
+                        "struct wrapper does not support XMaterialHolder",
                         Reference< XInterface > () );
                 }
                 else

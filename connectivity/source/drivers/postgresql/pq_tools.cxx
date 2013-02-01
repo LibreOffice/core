@@ -106,7 +106,6 @@ using com::sun::star::container::XEnumerationAccess;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 rtl::OUString date2String( const com::sun::star::util::Date & x )
 {
@@ -381,7 +380,7 @@ Reference< XConnection > extractConnectionFromStatement( const Reference< XInter
             ret = myowner->getConnection();
         if( ! ret.is() )
             throw SQLException(
-                ASCII_STR( "PQSDBC: Couldn't retrieve connection from statement" ),
+                "PQSDBC: Couldn't retrieve connection from statement",
                 Reference< XInterface > () , rtl::OUString(), 0 , com::sun::star::uno::Any()  );
     }
 
@@ -842,11 +841,11 @@ void fillAttnum2attnameMap(
     const rtl::OUString &table )
 {
     Reference< XPreparedStatement > prep = conn->prepareStatement(
-        ASCII_STR( "SELECT attname,attnum "
+                   "SELECT attname,attnum "
                    "FROM pg_attribute "
                          "INNER JOIN pg_class ON attrelid = pg_class.oid "
                          "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
-                   "WHERE relname=? AND nspname=?" ) );
+                   "WHERE relname=? AND nspname=?" );
 
     Reference< XParameters > paras( prep, UNO_QUERY_THROW );
     paras->setString( 1 , table );

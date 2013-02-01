@@ -469,10 +469,10 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
     {
         // An empty string for 'No Target'
         rList.push_back( new String() );
-        rList.push_back( new String( DEFINE_CONST_UNICODE( "_top" ) ) );
-        rList.push_back( new String( DEFINE_CONST_UNICODE( "_parent" ) ) );
-        rList.push_back( new String( DEFINE_CONST_UNICODE( "_blank" ) ) );
-        rList.push_back( new String( DEFINE_CONST_UNICODE( "_self" ) ) );
+        rList.push_back( new String( "_top" ) );
+        rList.push_back( new String( "_parent" ) );
+        rList.push_back( new String( "_blank" ) );
+        rList.push_back( new String( "_self" ) );
     }
 
     SfxViewFrame* pView = GetCurrentViewFrame();

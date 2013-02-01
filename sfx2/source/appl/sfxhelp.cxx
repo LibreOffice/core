@@ -327,7 +327,7 @@ String SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const String& rMo
     // create help url
     String aHelpURL = SfxHelp::CreateHelpURL( aCommandURL, rModule );
     // added 'active' parameter
-    aHelpURL.Insert( String( DEFINE_CONST_UNICODE("&Active=true") ), aHelpURL.SearchBackward( '#' ) );
+    aHelpURL.Insert( String( "&Active=true" ), aHelpURL.SearchBackward( '#' ) );
     // load help string
     return SfxContentHelper::GetActiveHelpString( aHelpURL );
 }
@@ -390,21 +390,21 @@ OUString getDefaultModule_Impl()
     OUString sDefaultModule;
     SvtModuleOptions aModOpt;
     if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-        sDefaultModule = DEFINE_CONST_UNICODE("swriter");
+        sDefaultModule = "swriter";
     else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
-        sDefaultModule = DEFINE_CONST_UNICODE("scalc");
+        sDefaultModule = "scalc";
     else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
-        sDefaultModule = DEFINE_CONST_UNICODE("simpress");
+        sDefaultModule = "simpress";
     else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
-        sDefaultModule = DEFINE_CONST_UNICODE("sdraw");
+        sDefaultModule = "sdraw";
     else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
-        sDefaultModule = DEFINE_CONST_UNICODE("smath");
+        sDefaultModule = "smath";
     else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCHART ) )
-        sDefaultModule = DEFINE_CONST_UNICODE("schart");
+        sDefaultModule = "schart";
     else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SBASIC ) )
-        sDefaultModule = DEFINE_CONST_UNICODE("sbasic");
+        sDefaultModule = "sbasic";
     else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
-        sDefaultModule = DEFINE_CONST_UNICODE("sdatabase");
+        sDefaultModule = "sdatabase";
     else
     {
         SAL_WARN( "sfx2.appl", "getDefaultModule_Impl(): no module installed" );
@@ -565,7 +565,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
         Reference< XPropertySet > xProps(xHelpTask, UNO_QUERY);
         if (xProps.is())
             xProps->setPropertyValue(
-                DEFINE_CONST_UNICODE("Title"),
+                "Title",
                 makeAny(SfxResId(STR_HELP_WINDOW_TITLE).toString()));
 
         pHelpWindow->setContainerWindow( xParentWindow );
@@ -615,13 +615,13 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const Window* pWindo
     // add some debug information?
     if ( bIsDebug )
     {
-        sHelpText += DEFINE_CONST_UNICODE("\n-------------\n");
+        sHelpText += "\n-------------\n";
         sHelpText += String( sModuleName );
-        sHelpText += DEFINE_CONST_UNICODE(": ");
+        sHelpText += ": ";
         sHelpText += aCommandURL;
         if ( !aNewHelpId.isEmpty() )
         {
-            sHelpText += DEFINE_CONST_UNICODE(" - ");
+            sHelpText += " - ";
             sHelpText += String(OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8));
         }
     }

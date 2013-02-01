@@ -973,7 +973,7 @@ void TPGalleryThemeProperties::FillFilterList()
 
 #if defined(WNT)
     if ( aExtensions.Len() > 240 )
-        aExtensions = DEFINE_CONST_UNICODE( "*.*" );
+        aExtensions = "*.*";
 #endif
 
     pFilterEntry = new FilterEntry;

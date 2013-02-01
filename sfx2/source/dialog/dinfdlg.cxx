@@ -160,7 +160,7 @@ String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartE
                 rLocaleWrapper.getNumDecimalSep()[0] );
         aSizeStr += aUnitStr;
 
-        aSizeStr += DEFINE_CONST_UNICODE(" (");
+        aSizeStr += " (";
         aSizeStr += rLocaleWrapper.getNum( nSize2, 0 );
         aSizeStr += ' ';
         aSizeStr += SfxResId(STR_BYTES).toString();
@@ -169,7 +169,7 @@ String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartE
     else if ( bGB && bSmartExtraBytes )
     {
         nSize1 = nSize / nMega;
-        aSizeStr = DEFINE_CONST_UNICODE(" (");
+        aSizeStr = " (";
         aSizeStr += rLocaleWrapper.getNum( nSize1, 0 );
         aSizeStr += aUnitStr;
         aSizeStr += ')';
@@ -182,7 +182,7 @@ String ConvertDateTime_Impl( const String& rName,
 {
     Date aD(uDT.Day, uDT.Month, uDT.Year);
     Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
-     const String pDelim ( DEFINE_CONST_UNICODE( ", "));
+     const String pDelim ( ", " );
      String aStr( rWrapper.getDate( aD ) );
      aStr += pDelim;
      aStr += rWrapper.getTime( aT, sal_True, sal_False );

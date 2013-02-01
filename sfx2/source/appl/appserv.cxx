@@ -334,7 +334,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 }
 
                 SfxStringItem aNameItem( SID_FILE_NAME, rtl::OUString("vnd.sun.star.cmd:logout") );
-                SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private/user" ) );
+                SfxStringItem aReferer( SID_REFERER, "private/user" );
                 pAppData_Impl->pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SLOT, &aNameItem, &aReferer, 0L );
                 return;
             }

@@ -34,8 +34,6 @@
 
 namespace framework{
 
-#define UNISTRING(s) rtl::OUString(s)
-
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
@@ -141,7 +139,7 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
     // SAFE {
     ResetableGuard aLock( m_aLock );
 
-    rtl::OUString sServiceName = UNISTRING( "com.sun.star.deployment.ui.PackageManagerDialog" );
+    rtl::OUString sServiceName = "com.sun.star.deployment.ui.PackageManagerDialog";
     css::uno::Sequence< css::uno::Any > lParams(1);
     lParams[0] <<= aURL.Main;
 
@@ -205,7 +203,7 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
     ::rtl::OUString               sURL       = aDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_URL(), ::rtl::OUString() );
 
     long nLength = sURL.getLength();
-    if ( ( nLength > 4 ) && sURL.matchIgnoreAsciiCase( UNISTRING(".oxt"), nLength-4 ) )
+    if ( ( nLength > 4 ) && sURL.matchIgnoreAsciiCase( ".oxt", nLength-4 ) )
     {
         // "IsSoundFile" idffer between different "wav" and "au" file versions ...
         // couldn't return this information ... because: He use the OS to detect it!

@@ -66,15 +66,15 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::dom::events;
 using namespace ::svx;
 
-#define CFGNAME_DATANAVIGATOR       DEFINE_CONST_UNICODE("DataNavigator")
-#define CFGNAME_SHOWDETAILS         DEFINE_CONST_UNICODE("ShowDetails")
-#define MSG_VARIABLE                DEFINE_CONST_UNICODE("%1")
-#define MODELNAME                   DEFINE_CONST_UNICODE("$MODELNAME")
-#define INSTANCENAME                DEFINE_CONST_UNICODE("$INSTANCENAME")
-#define ELEMENTNAME                 DEFINE_CONST_UNICODE("$ELEMENTNAME")
-#define ATTRIBUTENAME               DEFINE_CONST_UNICODE("$ATTRIBUTENAME")
-#define SUBMISSIONNAME              DEFINE_CONST_UNICODE("$SUBMISSIONNAME")
-#define BINDINGNAME                 DEFINE_CONST_UNICODE("$BINDINGNAME")
+#define CFGNAME_DATANAVIGATOR       "DataNavigator"
+#define CFGNAME_SHOWDETAILS         "ShowDetails"
+#define MSG_VARIABLE                "%1"
+#define MODELNAME                   "$MODELNAME"
+#define INSTANCENAME                "$INSTANCENAME"
+#define ELEMENTNAME                 "$ELEMENTNAME"
+#define ATTRIBUTENAME               "$ATTRIBUTENAME"
+#define SUBMISSIONNAME              "$SUBMISSIONNAME"
+#define BINDINGNAME                 "$BINDINGNAME"
 
 //............................................................................
 namespace svxform
@@ -1103,10 +1103,10 @@ namespace svxform
                     css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
                     bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
                     sal_uInt16 nResId = bIsElement ? RID_QRY_REMOVE_ELEMENT : RID_QRY_REMOVE_ATTRIBUTE;
-                    String sVar = bIsElement ? ELEMENTNAME : ATTRIBUTENAME;
+                    OUString sVar = bIsElement ? OUString(ELEMENTNAME) : OUString(ATTRIBUTENAME);
                     QueryBox aQBox( this, SVX_RES( nResId ) );
-                    String sMessText = aQBox.GetMessText();
-                    sMessText.SearchAndReplace(
+                    OUString sMessText = aQBox.GetMessText();
+                    sMessText = sMessText.replaceFirst(
                         sVar, m_xUIHelper->getNodeDisplayName( pNode->m_xNode, sal_False ) );
                     aQBox.SetMessText( sMessText );
                     if ( aQBox.Execute() == RET_YES )
@@ -1135,9 +1135,9 @@ namespace svxform
                 DBG_ASSERT( pNode->m_xPropSet.is(), "XFormsPage::RemoveEntry(): no propset" );
                 bool bSubmission = ( DGTSubmission == m_eGroup );
                 sal_uInt16 nResId = bSubmission ? RID_QRY_REMOVE_SUBMISSION : RID_QRY_REMOVE_BINDING;
-                rtl::OUString sProperty = bSubmission ? PN_SUBMISSION_ID : PN_BINDING_ID;
-                String sSearch = bSubmission ? SUBMISSIONNAME : BINDINGNAME;
-                rtl::OUString sName;
+                OUString sProperty = bSubmission ? OUString(PN_SUBMISSION_ID) : OUString(PN_BINDING_ID);
+                OUString sSearch = bSubmission ? OUString(SUBMISSIONNAME) : OUString(BINDINGNAME);
+                OUString sName;
                 try
                 {
                     pNode->m_xPropSet->getPropertyValue( sProperty ) >>= sName;
@@ -1667,8 +1667,8 @@ namespace svxform
                             {
                                 // error: model name already exists
                                 ErrorBox aErrBox( this, SVX_RES( RID_ERR_DOUBLE_MODELNAME ) );
-                                String sMessText = aErrBox.GetMessText();
-                                sMessText.SearchAndReplace( MSG_VARIABLE, sNewName );
+                                OUString sMessText = aErrBox.GetMessText();
+                                sMessText = sMessText.replaceFirst( MSG_VARIABLE, sNewName );
                                 aErrBox.SetMessText( sMessText );
                                 aErrBox.Execute();
                                 bShowDialog = true;
@@ -1766,8 +1766,8 @@ namespace svxform
                 case MID_MODELS_REMOVE :
                 {
                     QueryBox aQBox( this, SVX_RES( RID_QRY_REMOVE_MODEL ) );
-                    String sText = aQBox.GetMessText();
-                    sText.SearchAndReplace( MODELNAME, sSelectedModel );
+                    OUString sText = aQBox.GetMessText();
+                    sText = sText.replaceFirst( MODELNAME, sSelectedModel );
                     aQBox.SetMessText( sText );
                     if ( aQBox.Execute() == RET_YES )
                     {
@@ -1871,8 +1871,8 @@ namespace svxform
                     {
                         String sInstName = pPage->GetInstanceName();
                         QueryBox aQBox( this, SVX_RES( RID_QRY_REMOVE_INSTANCE ) );
-                        String sMessText = aQBox.GetMessText();
-                        sMessText.SearchAndReplace( INSTANCENAME, sInstName );
+                        OUString sMessText = aQBox.GetMessText();
+                        sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
                         aQBox.SetMessText( sMessText );
                         if ( aQBox.Execute() == RET_YES )
                         {
@@ -2670,8 +2670,8 @@ namespace svxform
         {
             // Error and don't close the dialog
             ErrorBox aErrBox( this, SVX_RES( RID_ERR_INVALID_XMLNAME ) );
-            String sMessText = aErrBox.GetMessText();
-            sMessText.SearchAndReplace( MSG_VARIABLE, sNewName );
+            OUString sMessText = aErrBox.GetMessText();
+            sMessText = sMessText.replaceFirst( MSG_VARIABLE, sNewName );
             aErrBox.SetMessText( sMessText );
             aErrBox.Execute();
             return 0;
@@ -3342,8 +3342,8 @@ namespace svxform
             if ( !m_pConditionDlg->GetUIHelper()->isValidPrefixName( sPrefix ) )
             {
                 ErrorBox aErrBox( this, SVX_RES( RID_ERR_INVALID_XMLPREFIX ) );
-                String sMessText = aErrBox.GetMessText();
-                sMessText.SearchAndReplace( MSG_VARIABLE, sPrefix );
+                OUString sMessText = aErrBox.GetMessText();
+                sMessText = sMessText.replaceFirst( MSG_VARIABLE, sPrefix );
                 aErrBox.SetMessText( sMessText );
                 aErrBox.Execute();
                 return 0;
@@ -3667,9 +3667,9 @@ namespace svxform
             css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
         INetURLObject aFile( SvtPathOptions().GetWorkPath() );
 
-        aDlg.AddFilter( m_sAllFilterName, DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
-        String sFilterName( DEFINE_CONST_UNICODE("XML") );
-        aDlg.AddFilter( sFilterName, DEFINE_CONST_UNICODE("*.xml") );
+        aDlg.AddFilter( m_sAllFilterName, OUString(FILEDIALOG_FILTER_ALL) );
+        String sFilterName( "XML" );
+        aDlg.AddFilter( sFilterName, OUString("*.xml") );
         aDlg.SetCurrentFilter( sFilterName );
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 

@@ -100,7 +100,7 @@ CntItemPool* CntItemPool::_pThePool = NULL;
 
 //-------------------------------------------------------------------------
 CntItemPool::CntItemPool()
-: SfxItemPool( DEFINE_CONST_UNICODE("chaos"), WID_CHAOS_START, WID_CHAOS_START, NULL ),
+: SfxItemPool( "chaos", WID_CHAOS_START, WID_CHAOS_START, NULL ),
   _nRefs( 0 )
 {
     SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );
