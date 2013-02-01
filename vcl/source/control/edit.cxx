@@ -562,7 +562,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         aPos.X() = nPos + mnXOffset + ImplGetExtraOffset();
 
         MetricVector* pVector = &mpControlData->mpLayoutData->m_aUnicodeBoundRects;
-        String* pDisplayText = &mpControlData->mpLayoutData->m_aDisplayText;
+        OUString* pDisplayText = &mpControlData->mpLayoutData->m_aDisplayText;
 
         DrawText( aPos, aText, nStart, nEnd - nStart, pVector, pDisplayText );
 
@@ -1992,7 +1992,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_u
         }
     }
 
-    XubString   aText = ImplGetText();
+    OUString    aText = ImplGetText();
     long        nTextHeight = pDev->GetTextHeight();
     long        nTextWidth = pDev->GetTextWidth( aText );
     long        nOnePixel = GetDrawPixel( pDev, 1 );

@@ -1954,11 +1954,11 @@ void FontSizeBox::SetRelative( sal_Bool bNewRelative )
 
 // -----------------------------------------------------------------------
 
-XubString FontSizeBox::CreateFieldText( sal_Int64 nValue ) const
+OUString FontSizeBox::CreateFieldText( sal_Int64 nValue ) const
 {
-    XubString sRet( MetricBox::CreateFieldText( nValue ) );
-    if ( bRelativeMode && bPtRelative && (0 <= nValue) && sRet.Len() )
-        sRet.Insert( '+', 0 );
+    OUString sRet( MetricBox::CreateFieldText( nValue ) );
+    if ( bRelativeMode && bPtRelative && (0 <= nValue) && !sRet.isEmpty() )
+        sRet = "+" + sRet;
     return sRet;
 }
 

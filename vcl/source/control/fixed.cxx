@@ -264,7 +264,7 @@ void FixedText::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         nTextStyle |= TEXT_DRAW_MONO;
 
     if( bFillLayout )
-        mpControlData->mpLayoutData->m_aDisplayText = String();
+        mpControlData->mpLayoutData->m_aDisplayText = OUString();
 
     Rectangle aRect( Rectangle( aPos, rSize ) );
     DrawControlText( *pDev, aRect, aText, nTextStyle,
@@ -599,7 +599,7 @@ void FixedLine::ImplDraw( bool bLayout )
     String                  aText = GetText();
     WinBits                 nWinStyle = GetStyle();
     MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-    String*                 pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    OUString*               pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
 
     DecorationView aDecoView( this );
     if ( !aText.Len() )

@@ -2808,10 +2808,10 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                     if ( pData->bIsTemporary )
                         nStyle |= TEXT_DRAW_DISABLE;
                     MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
-                    String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+                    OUString* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
                     if( bLayout )
                     {
-                        mpLayoutData->m_aLineIndices.push_back( mpLayoutData->m_aDisplayText.Len() );
+                        mpLayoutData->m_aLineIndices.push_back( mpLayoutData->m_aDisplayText.getLength() );
                         mpLayoutData->m_aLineItemIds.push_back( pData->nId );
                         mpLayoutData->m_aLineItemPositions.push_back( n );
                     }

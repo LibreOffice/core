@@ -5645,7 +5645,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
 
 void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
                              xub_StrLen nIndex, xub_StrLen nLen,
-                             MetricVector* pVector, String* pDisplayText
+                             MetricVector* pVector, OUString* pDisplayText
                              )
 {
     if( mpOutDevData && mpOutDevData->mpRecordLayout )
@@ -5671,7 +5671,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
             aClip.Intersect( Rectangle( Point(), GetOutputSize() ) );
         if( mpOutDevData && mpOutDevData->mpRecordLayout )
         {
-            mpOutDevData->mpRecordLayout->m_aLineIndices.push_back( mpOutDevData->mpRecordLayout->m_aDisplayText.Len() );
+            mpOutDevData->mpRecordLayout->m_aLineIndices.push_back( mpOutDevData->mpRecordLayout->m_aDisplayText.getLength() );
             aClip.Intersect( mpOutDevData->maRecordRect );
         }
         if( ! aClip.IsNull() )
@@ -5698,7 +5698,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
                 {
                     pVector->push_back( *it );
                     if( pDisplayText )
-                        pDisplayText->Append( rStr.GetChar( nIndex ) );
+                        *pDisplayText += OUString(rStr.GetChar( nIndex ));
                     bInserted = true;
                 }
             }
@@ -5707,7 +5707,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
         {
             GetGlyphBoundRects( rStartPt, rStr, nIndex, nLen, nIndex, *pVector );
             if( pDisplayText )
-                pDisplayText->Append( rStr.Copy( nIndex, nLen ) );
+                *pDisplayText += rStr.Copy( nIndex, nLen );
         }
     }
 
@@ -6453,7 +6453,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
 
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                  const String& rOrigStr, sal_uInt16 nStyle,
-                                 MetricVector* pVector, String* pDisplayText,
+                                 MetricVector* pVector, OUString* pDisplayText,
                                  ::vcl::ITextLayout& _rLayout )
 {
     Color aOldTextColor;
@@ -6761,7 +6761,7 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
 // -----------------------------------------------------------------------
 
 void OutputDevice::DrawText( const Rectangle& rRect, const String& rOrigStr, sal_uInt16 nStyle,
-                             MetricVector* pVector, String* pDisplayText,
+                             MetricVector* pVector, OUString* pDisplayText,
                              ::vcl::ITextLayout* _pTextLayout )
 {
     if( mpOutDevData && mpOutDevData->mpRecordLayout )
@@ -7087,7 +7087,7 @@ String OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice, c
 
 void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
                                  xub_StrLen nIndex, xub_StrLen nLen,
-                                 sal_uInt16 nStyle, MetricVector* pVector, String* pDisplayText )
+                                 sal_uInt16 nStyle, MetricVector* pVector, OUString* pDisplayText )
 {
     OSL_TRACE( "OutputDevice::DrawCtrlText()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );

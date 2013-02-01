@@ -57,7 +57,7 @@ namespace vcl
 
     //--------------------------------------------------------------------
     void DefaultTextLayout::DrawText( const Point& _rStartPoint, const XubString& _rText, xub_StrLen _nStartIndex,
-        xub_StrLen _nLength, MetricVector* _pVector, String* _pDisplayText )
+        xub_StrLen _nLength, MetricVector* _pVector, OUString* _pDisplayText )
     {
         m_rTargetDevice.DrawText( _rStartPoint, _rText, _nStartIndex, _nLength, _pVector, _pDisplayText );
     }
@@ -92,7 +92,7 @@ namespace vcl
 
         // ITextLayout
         virtual long        GetTextWidth( const XubString& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const;
-        virtual void        DrawText( const Point& _rStartPoint, const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength, MetricVector* _pVector, String* _pDisplayText );
+        virtual void        DrawText( const Point& _rStartPoint, const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength, MetricVector* _pVector, OUString* _pDisplayText );
         virtual bool        GetCaretPositions( const XubString& _rText, sal_Int32* _pCaretXArray, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
         virtual xub_StrLen  GetTextBreak( const XubString& _rText, long _nMaxTextWidth, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
         virtual bool        DecomposeTextRectAction() const;
@@ -100,7 +100,7 @@ namespace vcl
     public:
         // equivalents to the respective OutputDevice methods, which take the reference device into account
         long        GetTextArray( const XubString& _rText, sal_Int32* _pDXAry, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
-        Rectangle   DrawText( const Rectangle& _rRect, const XubString& _rText, sal_uInt16 _nStyle, MetricVector* _pVector, String* _pDisplayText );
+        Rectangle   DrawText( const Rectangle& _rRect, const XubString& _rText, sal_uInt16 _nStyle, MetricVector* _pVector, OUString* _pDisplayText );
 
     protected:
         void onBeginDrawText()
@@ -230,7 +230,7 @@ namespace vcl
     }
 
     //--------------------------------------------------------------------
-    void ReferenceDeviceTextLayout::DrawText( const Point& _rStartPoint, const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength, MetricVector* _pVector, String* _pDisplayText )
+    void ReferenceDeviceTextLayout::DrawText( const Point& _rStartPoint, const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength, MetricVector* _pVector, OUString* _pDisplayText )
     {
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
             return;
@@ -242,7 +242,7 @@ namespace vcl
             ::std::copy(
                 aGlyphBounds.begin(), aGlyphBounds.end(),
                 ::std::insert_iterator< MetricVector > ( *_pVector, _pVector->end() ) );
-            _pDisplayText->Append( _rText.Copy( _nStartIndex, _nLength ) );
+            *_pDisplayText += _rText.Copy( _nStartIndex, _nLength );
             return;
         }
 
@@ -284,7 +284,7 @@ namespace vcl
     }
 
     //--------------------------------------------------------------------
-    Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const XubString& _rText, sal_uInt16 _nStyle, MetricVector* _pVector, String* _pDisplayText )
+    Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const XubString& _rText, sal_uInt16 _nStyle, MetricVector* _pVector, OUString* _pDisplayText )
     {
         if ( !_rText.Len() )
             return Rectangle();
@@ -351,7 +351,7 @@ namespace vcl
 
     //--------------------------------------------------------------------
     Rectangle ControlTextRenderer::DrawText( const Rectangle& _rRect, const XubString& _rText, sal_uInt16 _nStyle,
-        MetricVector* _pVector, String* _pDisplayText )
+        MetricVector* _pVector, OUString* _pDisplayText )
     {
         return m_pImpl->DrawText( _rRect, _rText, _nStyle, _pVector, _pDisplayText );
     }

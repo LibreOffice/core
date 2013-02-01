@@ -1866,7 +1866,7 @@ void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, sal_Bool bDrawImage, sal_Boo
     if( bDrawText )
     {
         MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-        String* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+        OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
         XubString aStr( mpEntryList->GetEntryText( nPos ) );
         if ( aStr.Len() )
         {
@@ -1886,7 +1886,7 @@ void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, sal_Bool bDrawImage, sal_Boo
             }
 
             if( bLayout )
-                mpControlData->mpLayoutData->m_aLineIndices.push_back( mpControlData->mpLayoutData->m_aDisplayText.Len() );
+                mpControlData->mpLayoutData->m_aLineIndices.push_back( mpControlData->mpLayoutData->m_aDisplayText.getLength() );
 
             // pb: #106948# explicit mirroring for calc
             if ( mbMirroring )
@@ -2942,7 +2942,7 @@ void ImplWin::DrawEntry( sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDraw
         }
 
         MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-        String* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+        OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
         DrawText( aTextRect, maString, nTextStyle, pVector, pDisplayText );
     }
 

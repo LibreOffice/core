@@ -337,13 +337,13 @@ namespace pcr
     IMPL_LINK( OTimeDurationControl, OnCustomConvert, MetricField*, /*pField*/ )
     {
         long nMultiplier = 1;
-        if ( getTypedControlWindow()->GetCurUnitText().EqualsIgnoreCaseAscii( "ms" ) )
+        if ( getTypedControlWindow()->GetCurUnitText().equalsIgnoreAsciiCase( "ms" ) )
             nMultiplier = 1;
-        if ( getTypedControlWindow()->GetCurUnitText().EqualsIgnoreCaseAscii( "s" ) )
+        if ( getTypedControlWindow()->GetCurUnitText().equalsIgnoreAsciiCase( "s" ) )
             nMultiplier = 1000;
-        else if ( getTypedControlWindow()->GetCurUnitText().EqualsIgnoreCaseAscii( "m" ) )
+        else if ( getTypedControlWindow()->GetCurUnitText().equalsIgnoreAsciiCase( "m" ) )
             nMultiplier = 1000 * 60;
-        else if ( getTypedControlWindow()->GetCurUnitText().EqualsIgnoreCaseAscii( "h" ) )
+        else if ( getTypedControlWindow()->GetCurUnitText().equalsIgnoreAsciiCase( "h" ) )
             nMultiplier = 1000 * 60 * 60;
 
         getTypedControlWindow()->SetValue( getTypedControlWindow()->GetLastValue() * nMultiplier );

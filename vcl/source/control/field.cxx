@@ -89,29 +89,29 @@ static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
+static sal_Bool ImplNumericGetValue( const OUString& rStr, double& rValue,
                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrappper,
                                  sal_Bool bCurrency = sal_False )
 {
-    XubString   aStr = rStr;
-    XubString   aStr1;
+    OUString   aStr = rStr;
+    OUString   aStr1;
     rtl::OUStringBuffer aStr2;
     sal_Bool        bNegative = sal_False;
-    xub_StrLen  nDecPos;
+    sal_Int32  nDecPos;
 
     // react on empty string
-    if ( !rStr.Len() )
+    if ( rStr.isEmpty() )
         return sal_False;
 
     // remove leading and trailing spaces
-    aStr = string::strip(aStr, ' ');
+    aStr = aStr.trim();
 
     // find position of decimal point
-    nDecPos = aStr.Search( rLocaleDataWrappper.getNumDecimalSep() );
-    if ( nDecPos != STRING_NOTFOUND )
+    nDecPos = aStr.indexOf( rLocaleDataWrappper.getNumDecimalSep() );
+    if ( nDecPos >= 0)
     {
-        aStr1 = aStr.Copy( 0, nDecPos );
-        aStr2.append(aStr.Copy(nDecPos+1));
+        aStr1 = aStr.copy( 0, nDecPos );
+        aStr2.append(aStr.getStr()+nDecPos+1);
     }
     else
         aStr1 = aStr;
@@ -119,32 +119,32 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
     // negative?
     if ( bCurrency )
     {
-        if ( (aStr.GetChar( 0 ) == '(') && (aStr.GetChar( aStr.Len()-1 ) == ')') )
+        if ( aStr.startsWith("(") && aStr.endsWith(")") )
             bNegative = sal_True;
         if ( !bNegative )
         {
-            for (xub_StrLen i=0; i < aStr.Len(); i++ )
+            for (sal_Int32 i=0; i < aStr.getLength(); i++ )
             {
-                if ( (aStr.GetChar( i ) >= '0') && (aStr.GetChar( i ) <= '9') )
+                if ( (aStr[i] >= '0') && (aStr[i] <= '9') )
                     break;
-                else if ( aStr.GetChar( i ) == '-' )
+                else if ( aStr[i] == '-' )
                 {
                     bNegative = sal_True;
                     break;
                 }
             }
         }
-        if ( !bNegative && bCurrency && aStr.Len() )
+        if ( !bNegative && bCurrency && !aStr.isEmpty() )
         {
             sal_uInt16 nFormat = rLocaleDataWrappper.getCurrNegativeFormat();
-            if ( (nFormat == 3) || (nFormat == 6)  ||
-                 (nFormat == 7) || (nFormat == 10) )
+            if ( (nFormat == 3) || (nFormat == 6)  || // $1- || 1-$
+                 (nFormat == 7) || (nFormat == 10) )  // 1$- || 1 $-
             {
-                for (xub_StrLen i = (xub_StrLen)(aStr.Len()-1); i > 0; i++ )
+                for (sal_Int32 i = aStr.getLength()-1; i > 0; i++ )
                 {
-                    if ( (aStr.GetChar( i ) >= '0') && (aStr.GetChar( i ) <= '9') )
+                    if ( (aStr[i] >= '0') && (aStr[i] <= '9') )
                         break;
-                    else if ( aStr.GetChar( i ) == '-' )
+                    else if ( aStr[i] == '-' )
                     {
                         bNegative = sal_True;
                         break;
@@ -155,18 +155,20 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
     }
     else
     {
-        if ( aStr1.GetChar( 0 ) == '-' )
+        if ( aStr1.startsWith("-"))
             bNegative = sal_True;
     }
 
     // remove all unwanted charaters
-    for (xub_StrLen i=0; i < aStr1.Len(); )
+    OUStringBuffer tmpStr(aStr1);
+    for (sal_Int32 i=0; i < tmpStr.getLength(); )
     {
-        if ( (aStr1.GetChar( i ) >= '0') && (aStr1.GetChar( i ) <= '9') )
+        if ( (tmpStr[i] >= '0') && (tmpStr[i] <= '9') )
             i++;
         else
-            aStr1.Erase( i, 1 );
+            tmpStr.remove( i, 1 );
     }
+    aStr1 = tmpStr.makeStringAndClear();
     for (sal_Int32 i=0; i < aStr2.getLength(); )
     {
         if ((aStr2[i] >= '0') && (aStr2[i] <= '9'))
@@ -175,13 +177,13 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
             aStr2.remove(i, 1);
     }
 
-    if ( !aStr1.Len() && !aStr2.getLength() )
+    if ( aStr1.isEmpty() && !aStr2.getLength() )
         return sal_False;
 
-    if ( !aStr1.Len() )
-        aStr1.Insert( '0' );
+    if ( aStr1.isEmpty() )
+        aStr1 = "0";
     if ( bNegative )
-        aStr1.Insert( '-', 0 );
+        aStr1 = "-" + aStr1;
 
     // prune and round fraction
     bool bRound = false;
@@ -430,8 +432,8 @@ sal_Bool FormatterBase::IsEmptyFieldValue() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool NumericFormatter::ImplNumericReformat( const XubString& rStr, double& rValue,
-                                            XubString& rOutStr )
+sal_Bool NumericFormatter::ImplNumericReformat( const OUString& rStr, double& rValue,
+                                                OUString& rOutStr )
 {
     if ( !ImplNumericGetValue( rStr, rValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() ) )
         return sal_True;
@@ -596,9 +598,9 @@ void NumericFormatter::SetValue( sal_Int64 nNewValue )
 
 // -----------------------------------------------------------------------
 
-XubString NumericFormatter::CreateFieldText( sal_Int64 nValue ) const
+OUString NumericFormatter::CreateFieldText( sal_Int64 nValue ) const
 {
-    return ImplGetLocaleDataWrapper().getNum( nValue, GetDecimalDigits(), IsUseThousandSep(), IsShowTrailingZeros() );
+    return OUString(ImplGetLocaleDataWrapper().getNum( nValue, GetDecimalDigits(), IsUseThousandSep(), IsShowTrailingZeros() ));
 }
 
 // -----------------------------------------------------------------------
@@ -691,7 +693,7 @@ void NumericFormatter::Reformat()
     if ( GetField()->GetText().isEmpty() && ImplGetEmptyFieldValue() )
         return;
 
-    XubString aStr;
+    OUString aStr;
     // caution: precision loss in double cast
     double nTemp = (double)mnLastValue;
     sal_Bool bOK = ImplNumericReformat( GetField()->GetText(), nTemp, aStr );
@@ -699,7 +701,7 @@ void NumericFormatter::Reformat()
     if ( !bOK )
         return;
 
-    if ( aStr.Len() )
+    if ( !aStr.isEmpty() )
         ImplSetText( aStr );
     else
         SetValue( mnLastValue );
@@ -1055,7 +1057,7 @@ void NumericBox::Modify()
 void NumericBox::ReformatAll()
 {
     double nValue;
-    XubString aStr;
+    OUString aStr;
     SetUpdateMode( sal_False );
     sal_uInt16 nEntryCount = GetEntryCount();
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )
@@ -1108,7 +1110,7 @@ static rtl::OUString ImplMetricGetUnitText(const rtl::OUString& rStr)
 
 // #104355# support localized mesaurements
 
-static const String& ImplMetricToString( FieldUnit rUnit )
+static const OUString ImplMetricToString( FieldUnit rUnit )
 {
     FieldUnitStringList* pList = ImplGetFieldUnits();
     if( pList )
@@ -1121,7 +1123,7 @@ static const String& ImplMetricToString( FieldUnit rUnit )
         }
     }
 
-    return String::EmptyString();
+    return OUString();
 }
 
 static FieldUnit ImplStringToMetric(const rtl::OUString &rMetricString)
@@ -1130,11 +1132,11 @@ static FieldUnit ImplStringToMetric(const rtl::OUString &rMetricString)
     if( pList )
     {
         // return FieldUnit
-        rtl::OUString aStr(rMetricString.toAsciiLowerCase());
+        OUString aStr(rMetricString.toAsciiLowerCase());
         aStr = string::remove(aStr, ' ');
         for( FieldUnitStringList::const_iterator it = pList->begin(); it != pList->end(); ++it )
         {
-            if ( it->first.Equals( aStr ) )
+            if ( it->first == aStr )
                 return it->second;
         }
     }
@@ -1437,7 +1439,7 @@ static sal_Bool ImplMetricGetValue( const XubString& rStr, double& rValue, sal_I
 
 // -----------------------------------------------------------------------
 
-sal_Bool MetricFormatter::ImplMetricReformat( const XubString& rStr, double& rValue, XubString& rOutStr )
+sal_Bool MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr )
 {
     if ( !ImplMetricGetValue( rStr, rValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit ) )
         return sal_True;
@@ -1540,9 +1542,9 @@ void MetricFormatter::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 
 // -----------------------------------------------------------------------
 
-XubString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
+OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
 {
-    XubString aStr = NumericFormatter::CreateFieldText( nValue );
+    OUString aStr = NumericFormatter::CreateFieldText( nValue );
 
     if( meUnit == FUNIT_CUSTOM )
         aStr += maCustomUnitText;
@@ -1659,11 +1661,11 @@ void MetricFormatter::Reformat()
     if ( !GetField() )
         return;
 
-    XubString aText = GetField()->GetText();
+    OUString aText = GetField()->GetText();
     if ( meUnit == FUNIT_CUSTOM )
         maCurUnitText = ImplMetricGetUnitText( aText );
 
-    XubString aStr;
+    OUString aStr;
     // caution: precision loss in double cast
     double nTemp = (double)mnLastValue;
     sal_Bool bOK = ImplMetricReformat( aText, nTemp, aStr );
@@ -1672,7 +1674,7 @@ void MetricFormatter::Reformat()
     if ( !bOK )
         return;
 
-    if ( aStr.Len() )
+    if ( !aStr.isEmpty() )
     {
         ImplSetText( aStr );
         if ( meUnit == FUNIT_CUSTOM )
@@ -1680,7 +1682,7 @@ void MetricFormatter::Reformat()
     }
     else
         SetValue( mnLastValue );
-    maCurUnitText.Erase();
+    maCurUnitText = OUString();
 }
 
 // -----------------------------------------------------------------------
@@ -1998,7 +2000,7 @@ void MetricBox::Modify()
 void MetricBox::ReformatAll()
 {
     double nValue;
-    XubString aStr;
+    OUString aStr;
     SetUpdateMode( sal_False );
     sal_uInt16 nEntryCount = GetEntryCount();
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )
@@ -2089,8 +2091,7 @@ inline sal_Bool ImplCurrencyGetValue( const XubString& rStr, double& rValue,
 
 // -----------------------------------------------------------------------
 
-sal_Bool CurrencyFormatter::ImplCurrencyReformat( const XubString& rStr,
-                                              XubString& rOutStr )
+sal_Bool CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr )
 {
     double nValue;
     if ( !ImplNumericGetValue( rStr, nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), sal_True ) )
@@ -2159,7 +2160,7 @@ void CurrencyFormatter::SetValue( sal_Int64 nNewValue )
 
 // -----------------------------------------------------------------------
 
-XubString CurrencyFormatter::CreateFieldText( sal_Int64 nValue ) const
+OUString CurrencyFormatter::CreateFieldText( sal_Int64 nValue ) const
 {
     return ImplGetLocaleDataWrapper().getCurr( nValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
 }
@@ -2192,12 +2193,12 @@ void CurrencyFormatter::Reformat()
     if ( !GetField() )
         return;
 
-    XubString aStr;
+    OUString aStr;
     sal_Bool bOK = ImplCurrencyReformat( GetField()->GetText(), aStr );
     if ( !bOK )
         return;
 
-    if ( aStr.Len() )
+    if ( !aStr.isEmpty() )
     {
         ImplSetText( aStr  );
         // caution: precision loss in double cast
@@ -2385,7 +2386,7 @@ void CurrencyBox::Modify()
 
 void CurrencyBox::ReformatAll()
 {
-    XubString aStr;
+    OUString aStr;
     SetUpdateMode( sal_False );
     sal_uInt16 nEntryCount = GetEntryCount();
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )
