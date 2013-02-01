@@ -244,7 +244,7 @@ $(eval $(call tailbuild_serialize,\
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),dbu) \
 	writerfilter cui chartcontroller oox \
 	$(if $(filter TRUE,$(MERGELIBS)),merged,svxcore) \
-	vcl xo \
+	xo vcl \
 ))
 endif
 
