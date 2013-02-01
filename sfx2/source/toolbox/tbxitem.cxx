@@ -1470,8 +1470,7 @@ sal_Bool Impl_ExistURLInMenu( const PopupMenu *pMenu     ,
 
     if (!bValidFallback)
     {
-        *pFallback  = DEFINE_CONST_UNICODE("private:factory/");
-        *pFallback += String(SvtModuleOptions().GetDefaultModuleName());
+        *pFallback  = "private:factory/" + SvtModuleOptions().GetDefaultModuleName();
     }
 
     return sal_False;

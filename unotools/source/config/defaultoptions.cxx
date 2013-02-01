@@ -40,8 +40,6 @@ using ::rtl::OUString;
 
 // define ----------------------------------------------------------------
 
-#define ASCII_STR(s)                OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
-
 #define DEFAULTPATH__ADDIN          0
 #define DEFAULTPATH__AUTOCORRECT    1
 #define DEFAULTPATH__AUTOTEXT       2
@@ -219,7 +217,7 @@ String SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
 
 // -----------------------------------------------------------------------
 
-SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office.Common/Path/Default") )
+SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Path/Default" )
 {
     Sequence< OUString > aNames = GetDefaultPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );

@@ -65,7 +65,6 @@
 #include <map>
 #include <string.h>
 
-#define USTR(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 #define OASIS_STR "urn:oasis:names:tc:opendocument:xmlns:"
 
 using namespace ::com::sun::star;
@@ -506,10 +505,10 @@ struct AnnotatingVisitor
                 // should the optimizeGradientStops method decide that
                 // this is a three-color gradient, it prolly wanted us
                 // to take axial instead
-                xAttrs->AddAttribute( USTR("draw:style"),
+                xAttrs->AddAttribute( "draw:style",
                                       rState.maFillGradient.maStops.size() == 3 ?
-                                      USTR("axial") :
-                                      USTR("linear") );
+                                      OUString("axial") :
+                                      OUString("linear") );
             }
             else
             {
@@ -1354,7 +1353,7 @@ struct ShapeWritingVisitor
             }
             case XML_PATH:
             {
-                rtl::OUString sPath = xElem->hasAttribute("d") ? xElem->getAttribute("d") : USTR("");
+                rtl::OUString sPath = xElem->hasAttribute("d") ? xElem->getAttribute("d") : "";
                 basegfx::B2DPolyPolygon aPoly;
                 basegfx::tools::importFromSvgD(aPoly, sPath);
 
@@ -1469,7 +1468,7 @@ struct ShapeWritingVisitor
                     }
                 }
 
-                rtl::OUString sValue = xElem->hasAttribute("href") ? xElem->getAttribute("href") : USTR("");
+                rtl::OUString sValue = xElem->hasAttribute("href") ? xElem->getAttribute("href") : "";
                 rtl::OString aValueUtf8( sValue.getStr(), sValue.getLength(), RTL_TEXTENCODING_UTF8 );
                 std::string sLinkValue;
                 parseXlinkHref(aValueUtf8.getStr(), sLinkValue);
@@ -1943,20 +1942,20 @@ sal_Bool SVGReader::parseAndConvert()
     rtl::Reference<SvXMLAttributeList> xAttrs( new SvXMLAttributeList() );
     uno::Reference<xml::sax::XAttributeList> xUnoAttrs( xAttrs.get() );
 
-    xAttrs->AddAttribute( "xmlns:office", USTR( OASIS_STR "office:1.0" ));
-    xAttrs->AddAttribute( "xmlns:style", USTR( OASIS_STR "style:1.0" ));
-    xAttrs->AddAttribute( "xmlns:text", USTR( OASIS_STR "text:1.0" ));
-    xAttrs->AddAttribute( "xmlns:svg", USTR( OASIS_STR "svg-compatible:1.0" ));
-    xAttrs->AddAttribute( "xmlns:table", USTR( OASIS_STR "table:1.0" ));
-    xAttrs->AddAttribute( "xmlns:draw", USTR( OASIS_STR "drawing:1.0" ));
-    xAttrs->AddAttribute( "xmlns:fo", USTR( OASIS_STR "xsl-fo-compatible:1.0" ));
+    xAttrs->AddAttribute( "xmlns:office", OASIS_STR "office:1.0" );
+    xAttrs->AddAttribute( "xmlns:style", OASIS_STR "style:1.0" );
+    xAttrs->AddAttribute( "xmlns:text", OASIS_STR "text:1.0" );
+    xAttrs->AddAttribute( "xmlns:svg", OASIS_STR "svg-compatible:1.0" );
+    xAttrs->AddAttribute( "xmlns:table", OASIS_STR "table:1.0" );
+    xAttrs->AddAttribute( "xmlns:draw", OASIS_STR "drawing:1.0" );
+    xAttrs->AddAttribute( "xmlns:fo", OASIS_STR "xsl-fo-compatible:1.0" );
     xAttrs->AddAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink");
     xAttrs->AddAttribute( "xmlns:dc", "http://purl.org/dc/elements/1.1/");
-    xAttrs->AddAttribute( "xmlns:number", USTR( OASIS_STR "datastyle:1.0" ));
-    xAttrs->AddAttribute( "xmlns:presentation", USTR( OASIS_STR "presentation:1.0" ));
+    xAttrs->AddAttribute( "xmlns:number", OASIS_STR "datastyle:1.0" );
+    xAttrs->AddAttribute( "xmlns:presentation", OASIS_STR "presentation:1.0" );
     xAttrs->AddAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML");
-    xAttrs->AddAttribute( "xmlns:form", USTR( OASIS_STR "form:1.0" ));
-    xAttrs->AddAttribute( "xmlns:script", USTR( OASIS_STR "script:1.0" ));
+    xAttrs->AddAttribute( "xmlns:form", OASIS_STR "form:1.0" );
+    xAttrs->AddAttribute( "xmlns:script", OASIS_STR "script:1.0" );
     xAttrs->AddAttribute( "xmlns:dom", "http://www.w3.org/2001/xml-events");
     xAttrs->AddAttribute( "xmlns:xforms", "http://www.w3.org/2002/xforms");
     xAttrs->AddAttribute( "xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
@@ -2037,10 +2036,8 @@ sal_Bool SVGReader::parseAndConvert()
     xAttrs->AddAttribute( "fo:margin-right", "0mm");
     xAttrs->AddAttribute( "fo:page-width", rtl::OUString::valueOf(fViewPortWidth)+"mm");
     xAttrs->AddAttribute( "fo:page-height", rtl::OUString::valueOf(fViewPortHeight)+"mm");
-    xAttrs->AddAttribute( USTR("style:print-orientation"),
-        fViewPortWidth > fViewPortHeight ?
-        USTR("landscape") :
-        USTR("portrait"));
+    xAttrs->AddAttribute( "style:print-orientation",
+        fViewPortWidth > fViewPortHeight ? OUString("landscape") : OUString("portrait") );
     m_xDocumentHandler->startElement( "style:page-layout-properties", xUnoAttrs );
     m_xDocumentHandler->endElement( "style:page-layout-properties" );
     m_xDocumentHandler->endElement( "style:page-layout" );

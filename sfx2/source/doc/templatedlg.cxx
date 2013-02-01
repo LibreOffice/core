@@ -760,7 +760,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 
     // add "All" filter
     aFileDlg.AddFilter( String(SfxResId( STR_SFX_FILTERNAME_ALL) ),
-                        DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
+                        OUString(FILEDIALOG_FILTER_ALL) );
 
     // add template filter
     OUString sFilterExt;

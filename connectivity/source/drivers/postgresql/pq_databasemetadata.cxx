@@ -131,8 +131,6 @@ std::vector
 > SequenceAnyVector;
 
 
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
 #define QUOTEME(X)  #X
 #define STRINGIFY(X) QUOTEME(X)
 
@@ -177,7 +175,7 @@ DatabaseMetaData::DatabaseMetaData(
   : m_refMutex( refMutex ),
     m_pSettings( pSettings ),
     m_origin( origin ),
-    m_getIntSetting_stmt ( m_origin->prepareStatement(ASCII_STR( "SELECT setting FROM pg_catalog.pg_settings WHERE name=?" )) )
+    m_getIntSetting_stmt ( m_origin->prepareStatement("SELECT setting FROM pg_catalog.pg_settings WHERE name=?") )
 {
     init_getReferences_stmt();
     init_getPrivs_stmt();
@@ -237,7 +235,7 @@ sal_Bool DatabaseMetaData::nullsAreSortedAtEnd(  ) throw (SQLException, RuntimeE
 
 OUString DatabaseMetaData::getDatabaseProductName(  ) throw (SQLException, RuntimeException)
 {
-    return ASCII_STR("PostgreSQL");
+    return OUString("PostgreSQL");
 }
 
 OUString DatabaseMetaData::getDatabaseProductVersion(  ) throw (SQLException, RuntimeException)
@@ -246,12 +244,12 @@ OUString DatabaseMetaData::getDatabaseProductVersion(  ) throw (SQLException, Ru
 }
 OUString DatabaseMetaData::getDriverName(  ) throw (SQLException, RuntimeException)
 {
-    return ASCII_STR( "postgresql-sdbc" );
+    return OUString("postgresql-sdbc");
 }
 
 OUString DatabaseMetaData::getDriverVersion(  ) throw (SQLException, RuntimeException)
 {
-    return ASCII_STR( PQ_SDBC_DRIVER_VERSION );
+    return OUString(PQ_SDBC_DRIVER_VERSION);
 }
 
 sal_Int32 DatabaseMetaData::getDriverMajorVersion(  ) throw (RuntimeException)
@@ -327,7 +325,7 @@ sal_Bool DatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw (SQLExcept
 
 OUString DatabaseMetaData::getIdentifierQuoteString(  ) throw (SQLException, RuntimeException)
 {
-    return ASCII_STR( "\"" );
+    return OUString("\"");
 }
 
 OUString DatabaseMetaData::getSQLKeywords(  ) throw (SQLException, RuntimeException)
@@ -336,7 +334,7 @@ OUString DatabaseMetaData::getSQLKeywords(  ) throw (SQLException, RuntimeExcept
     // In Java 2 v1.4 and as per LibreOffice SDK doc, this is all keywords that are not SQL92
     // I understand this to mean "reserved keywords" only.
     // See http://www.postgresql.org/docs/current/static/sql-keywords-appendix.html
-    return ASCII_STR(
+    return OUString(
         "ANALYSE,"
         "ANALYZE,"
         "ARRAY," //SQL:1999
@@ -372,7 +370,7 @@ OUString DatabaseMetaData::getNumericFunctions(  ) throw (SQLException, RuntimeE
     //           Currently this is just a list of supported functions in PostgreSQL, with PostgreSQL names.
     //           And it is my job to map from Open Group CLI names/syntax to PostgreSQL names/syntax. Where? By parsing the SQL???
     //           Should look at what the JDBC driver is doing.
-    return ASCII_STR(
+    return OUString(
         "abs,"
         "cbrt,"
         "ceil,"
@@ -408,7 +406,7 @@ OUString DatabaseMetaData::getNumericFunctions(  ) throw (SQLException, RuntimeE
 OUString DatabaseMetaData::getStringFunctions(  ) throw (SQLException, RuntimeException)
 {
     // See http://www.postgresql.org/docs/9.1/static/functions-string.html
-    return ASCII_STR(
+    return OUString(
         "bit_length,"
         "char_length,"
         "character_length,"
@@ -463,7 +461,7 @@ OUString DatabaseMetaData::getSystemFunctions(  ) throw (SQLException, RuntimeEx
 {
     // See http://www.postgresql.org/docs/9.1/static/functions-info.html
     // and http://www.postgresql.org/docs/9.1/static/functions-admin.html
-    return ASCII_STR(
+    return OUString(
         "current_catalog,"
         "current_database,"
         "current_query,"
@@ -591,7 +589,7 @@ OUString DatabaseMetaData::getSystemFunctions(  ) throw (SQLException, RuntimeEx
 OUString DatabaseMetaData::getTimeDateFunctions(  ) throw (SQLException, RuntimeException)
 {
     // TODO
-    return ASCII_STR(
+    return OUString(
         "age,"
         "age,"
         "clock_timestamp,"
@@ -619,11 +617,11 @@ OUString DatabaseMetaData::getTimeDateFunctions(  ) throw (SQLException, Runtime
 }
 OUString DatabaseMetaData::getSearchStringEscape(  ) throw (SQLException, RuntimeException)
 {
-    return ASCII_STR( "\\" );
+    return OUString("\\");
 }
 OUString DatabaseMetaData::getExtraNameCharacters(  ) throw (SQLException, RuntimeException)
 {
-    return ASCII_STR( "$" );
+    return OUString("$");
 }
 
 sal_Bool DatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw (SQLException, RuntimeException)
@@ -779,28 +777,27 @@ sal_Bool DatabaseMetaData::supportsLimitedOuterJoins(  ) throw (SQLException, Ru
 
 OUString DatabaseMetaData::getSchemaTerm(  ) throw (SQLException, RuntimeException)
 {
-    return ASCII_STR( "SCHEMA" );
+    return OUString("SCHEMA");
 }
 
 OUString DatabaseMetaData::getProcedureTerm(  ) throw (SQLException, RuntimeException)
 {
-    return ASCII_STR( "function" );
+    return OUString("function");
 }
 
 OUString DatabaseMetaData::getCatalogTerm(  ) throw (SQLException, RuntimeException)
 {
-    return ASCII_STR( "DATABASE" );
+    return OUString("DATABASE");
 }
 
 sal_Bool DatabaseMetaData::isCatalogAtStart(  ) throw (SQLException, RuntimeException)
 {
-
     return sal_True;
 }
 
 OUString DatabaseMetaData::getCatalogSeparator(  ) throw (SQLException, RuntimeException)
 {
-    return ASCII_STR( "." );
+    return OUString(".");
 }
 
 sal_Bool DatabaseMetaData::supportsSchemasInDataManipulation(  ) throw (SQLException, RuntimeException)
@@ -969,7 +966,7 @@ sal_Int32 DatabaseMetaData::getMaxNameLength()
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     if ( m_pSettings->maxNameLen == 0)
-        m_pSettings->maxNameLen = getIntSetting( ASCII_STR("max_identifier_length") );
+        m_pSettings->maxNameLen = getIntSetting( "max_identifier_length" );
     OSL_ENSURE(m_pSettings->maxNameLen, "postgresql-sdbc: maxNameLen is zero");
     return m_pSettings->maxNameLen;
 }
@@ -978,7 +975,7 @@ sal_Int32 DatabaseMetaData::getMaxIndexKeys()
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     if ( m_pSettings->maxIndexKeys == 0)
-        m_pSettings->maxIndexKeys = getIntSetting(ASCII_STR("max_index_keys"));
+        m_pSettings->maxIndexKeys = getIntSetting("max_index_keys");
     OSL_ENSURE(m_pSettings->maxIndexKeys, "postgresql-sdbc: maxIndexKeys is zero");
     return m_pSettings->maxIndexKeys;
 }
@@ -1199,7 +1196,6 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
     // Take "inspiration" from JDBC driver
     // Ah, this is used to create a XResultSet manually... Try to do it directly in SQL
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
-        ASCII_STR(
             "SELECT "
             "DISTINCT ON (pg_namespace.nspname, relname ) " // avoid duplicates (pg_settings !)
             "pg_namespace.nspname, relname, relkind, pg_description.description "
@@ -1209,7 +1205,7 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
             "AND pg_namespace.nspname LIKE ? "
             "AND relname LIKE ? "
 //            "ORDER BY pg_namespace.nspname || relname"
-            ) );
+            );
 
     Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
     parameters->setString( 1 , schemaPattern );
@@ -1310,7 +1306,7 @@ struct SortInternalSchemasLastAndPublicFirst
     // <b>TABLE_SCHEM</b> string =&amp;gt; schema name
     Reference< XStatement > statement = m_origin->createStatement();
     Reference< XResultSet > rs = statement->executeQuery(
-        ASCII_STR("SELECT nspname from pg_namespace") );
+        "SELECT nspname from pg_namespace" );
     // LEM TODO: look at JDBC driver and consider doing the same
     //           in particular, excluding temporary schemas, but maybe better through pg_is_other_temp_schema(oid) OR  == pg_my_temp_schema()
 
@@ -1581,8 +1577,6 @@ static void columnMetaData2DatabaseTypeDescription(
     //               => pg_attribute.attnotnull
 
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
-        ASCII_STR(
-
             "SELECT pg_namespace.nspname, "  // 1
             "pg_class.relname, "             // 2
             "pg_attribute.attname, "         // 3
@@ -1607,7 +1601,7 @@ static void columnMetaData2DatabaseTypeDescription(
                    "AND pg_class.relname LIKE ? "
                    "AND pg_attribute.attname LIKE ? "
             "ORDER BY pg_namespace.nspname, pg_class.relname, pg_attribute.attnum"
-            ) );
+            );
 
     Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
     parameters->setString( 1 , schemaPattern );
@@ -1623,8 +1617,8 @@ static void columnMetaData2DatabaseTypeDescription(
     columnMetaData2DatabaseTypeDescription( domainMap, rs, domainTypeStmt );
 
     sal_uInt32 colNum(0);
-    OUString sSchema( ASCII_STR("#invalid#") );
-    OUString sTable(  ASCII_STR("#invalid#") );
+    OUString sSchema( "#invalid#" );
+    OUString sTable(  "#invalid#" );
 
     while( rs->next() )
     {
@@ -1808,7 +1802,6 @@ static void columnMetaData2DatabaseTypeDescription(
     }
 
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
-        ASCII_STR(
             "SELECT nmsp.nspname, "
                     "cl.relname, "
                     "con.conkey, "
@@ -1816,7 +1809,7 @@ static void columnMetaData2DatabaseTypeDescription(
                     "con.conrelid "
             "FROM pg_constraint as con,pg_class as cl, pg_namespace as nmsp "
             "WHERE con.connamespace = nmsp.oid AND con.conrelid = cl.oid AND con.contype = 'p' "
-                "AND nmsp.nspname LIKE ? AND cl.relname LIKE ?" ) );
+                "AND nmsp.nspname LIKE ? AND cl.relname LIKE ?" );
 
     Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
     parameters->setString( 1 , schema );
@@ -1878,10 +1871,9 @@ static void columnMetaData2DatabaseTypeDescription(
         row[4] >>= tableOid;
         row[3] >>= attnum;
         statement = m_origin->prepareStatement(
-            ASCII_STR(
                 "SELECT att.attname FROM "
                 "pg_attribute AS att, pg_class AS cl WHERE "
-                "att.attrelid = ? AND att.attnum = ?" ));
+                "att.attrelid = ? AND att.attnum = ?" );
 
         parameters = Reference< XParameters >( statement, UNO_QUERY_THROW );
         parameters->setString( 1 , tableOid );
@@ -2049,37 +2041,37 @@ static void columnMetaData2DatabaseTypeDescription(
 
 void DatabaseMetaData::init_getReferences_stmt ()
 {
-    m_getReferences_stmt[0]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_NONE_NONE_NONE ));
-    m_getReferences_stmt[1]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_NONE_NONE_NONE ));
-    m_getReferences_stmt[2]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_SOME_NONE_NONE ));
-    m_getReferences_stmt[3]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_SOME_NONE_NONE ));
-    m_getReferences_stmt[4]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_NONE_SOME_NONE ));
-    m_getReferences_stmt[5]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_NONE_SOME_NONE ));
-    m_getReferences_stmt[6]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_SOME_SOME_NONE ));
-    m_getReferences_stmt[7]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_SOME_SOME_NONE ));
-    m_getReferences_stmt[8]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_NONE_NONE_SOME ));
-    m_getReferences_stmt[9]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_NONE_NONE_SOME ));
-    m_getReferences_stmt[10] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_SOME_NONE_SOME ));
-    m_getReferences_stmt[11] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_SOME_NONE_SOME ));
-    m_getReferences_stmt[12] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_NONE_SOME_SOME ));
-    m_getReferences_stmt[13] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_NONE_SOME_SOME ));
-    m_getReferences_stmt[14] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_SOME_SOME_SOME ));
-    m_getReferences_stmt[15] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_SOME_SOME_SOME ));
+    m_getReferences_stmt[0]  = m_origin->prepareStatement(SQL_GET_REFERENCES_NONE_NONE_NONE_NONE);
+    m_getReferences_stmt[1]  = m_origin->prepareStatement(SQL_GET_REFERENCES_SOME_NONE_NONE_NONE);
+    m_getReferences_stmt[2]  = m_origin->prepareStatement(SQL_GET_REFERENCES_NONE_SOME_NONE_NONE);
+    m_getReferences_stmt[3]  = m_origin->prepareStatement(SQL_GET_REFERENCES_SOME_SOME_NONE_NONE);
+    m_getReferences_stmt[4]  = m_origin->prepareStatement(SQL_GET_REFERENCES_NONE_NONE_SOME_NONE);
+    m_getReferences_stmt[5]  = m_origin->prepareStatement(SQL_GET_REFERENCES_SOME_NONE_SOME_NONE);
+    m_getReferences_stmt[6]  = m_origin->prepareStatement(SQL_GET_REFERENCES_NONE_SOME_SOME_NONE);
+    m_getReferences_stmt[7]  = m_origin->prepareStatement(SQL_GET_REFERENCES_SOME_SOME_SOME_NONE);
+    m_getReferences_stmt[8]  = m_origin->prepareStatement(SQL_GET_REFERENCES_NONE_NONE_NONE_SOME);
+    m_getReferences_stmt[9]  = m_origin->prepareStatement(SQL_GET_REFERENCES_SOME_NONE_NONE_SOME);
+    m_getReferences_stmt[10] = m_origin->prepareStatement(SQL_GET_REFERENCES_NONE_SOME_NONE_SOME);
+    m_getReferences_stmt[11] = m_origin->prepareStatement(SQL_GET_REFERENCES_SOME_SOME_NONE_SOME);
+    m_getReferences_stmt[12] = m_origin->prepareStatement(SQL_GET_REFERENCES_NONE_NONE_SOME_SOME);
+    m_getReferences_stmt[13] = m_origin->prepareStatement(SQL_GET_REFERENCES_SOME_NONE_SOME_SOME);
+    m_getReferences_stmt[14] = m_origin->prepareStatement(SQL_GET_REFERENCES_NONE_SOME_SOME_SOME);
+    m_getReferences_stmt[15] = m_origin->prepareStatement(SQL_GET_REFERENCES_SOME_SOME_SOME_SOME);
 }
 
 void DatabaseMetaData::init_getPrivs_stmt ()
 {
     rtl::OUStringBuffer sSQL(300);
-    sSQL.append( ASCII_STR(
+    sSQL.append(
             " SELECT dp.TABLE_CAT, dp.TABLE_SCHEM, dp.TABLE_NAME, dp.GRANTOR, pr.rolname AS GRANTEE, dp.privilege, dp.is_grantable "
             " FROM ("
             "  SELECT table_catalog AS TABLE_CAT, table_schema AS TABLE_SCHEM, table_name,"
             "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
-            "  FROM information_schema.table_privileges") );
+            "  FROM information_schema.table_privileges");
     if ( PQserverVersion( m_pSettings->pConnection ) < 90200 )
         // information_schema.table_privileges does not fill in default ACLs when no ACL
         // assume default ACL is "owner has all privileges" and add it
-        sSQL.append( ASCII_STR(
+        sSQL.append(
             " UNION "
             "  SELECT current_database() AS TABLE_CAT, pn.nspname AS TABLE_SCHEM, c.relname AS TABLE_NAME,"
             "         ro.rolname AS GRANTOR, rg.rolname AS GRANTEE, p.privilege, 'YES' AS is_grantable"
@@ -2092,24 +2084,24 @@ void DatabaseMetaData::init_getPrivs_stmt ()
             "       ) AS rg (oid, rolname),"
             "       pg_catalog.pg_namespace pn"
             "  WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND pg_has_role(rg.oid, c.relowner, 'USAGE')"
-            "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid") );
-    sSQL.append( ASCII_STR(
+            "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid");
+    sSQL.append(
             " ) dp,"
             " (SELECT oid, rolname FROM pg_catalog.pg_roles UNION ALL VALUES (0, 'PUBLIC')) pr"
             " WHERE table_schem LIKE ? AND table_name LIKE ? AND (dp.grantee = 'PUBLIC' OR pg_has_role(pr.oid, dp.grantee, 'USAGE'))"
-            " ORDER BY table_schem, table_name, privilege" ) );
+            " ORDER BY table_schem, table_name, privilege" );
 
     m_getTablePrivs_stmt = m_origin->prepareStatement( sSQL.makeStringAndClear() );
 
-    sSQL.append( ASCII_STR(
+    sSQL.append(
             " SELECT dp.TABLE_CAT, dp.TABLE_SCHEM, dp.TABLE_NAME, dp.COLUMN_NAME, dp.GRANTOR, pr.rolname AS GRANTEE, dp.PRIVILEGE, dp.IS_GRANTABLE FROM ("
             "  SELECT table_catalog AS TABLE_CAT, table_schema AS TABLE_SCHEM, table_name, column_name,"
             "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
-            "  FROM information_schema.column_privileges") );
+            "  FROM information_schema.column_privileges");
     if ( PQserverVersion( m_pSettings->pConnection ) < 90200 )
         // information_schema.table_privileges does not fill in default ACLs when no ACL
         // assume default ACL is "owner has all privileges" and add it
-        sSQL.append( ASCII_STR(
+        sSQL.append(
             " UNION "
             "  SELECT current_database() AS TABLE_CAT, pn.nspname AS TABLE_SCHEM, c.relname AS TABLE_NAME, a.attname AS column_name,"
             "         ro.rolname AS GRANTOR, rg.rolname AS GRANTEE, p.privilege, 'YES' AS is_grantable"
@@ -2122,12 +2114,12 @@ void DatabaseMetaData::init_getPrivs_stmt ()
             "       ) AS rg (oid, rolname),"
             "       pg_catalog.pg_namespace pn"
             "  WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND pg_has_role(rg.oid, c.relowner, 'USAGE')"
-            "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid AND a.attrelid = c.oid AND a.attnum > 0") );
-    sSQL.append( ASCII_STR(
+            "        AND c.relowner=ro.oid AND c.relnamespace = pn.oid AND a.attrelid = c.oid AND a.attnum > 0");
+    sSQL.append(
             " ) dp,"
             " (SELECT oid, rolname FROM pg_catalog.pg_roles UNION ALL VALUES (0, 'PUBLIC')) pr"
             " WHERE table_schem = ? AND table_name = ? AND column_name LIKE ? AND (dp.grantee = 'PUBLIC' OR pg_has_role(pr.oid, dp.grantee, 'USAGE'))"
-            " ORDER BY column_name, privilege" ) );
+            " ORDER BY column_name, privilege" );
 
     m_getColumnPrivs_stmt = m_origin->prepareStatement( sSQL.makeStringAndClear() );
 }
@@ -2327,12 +2319,12 @@ static void pgTypeInfo2ResultSet(
             //      in postgresql the upper limit is optional, no limit means unlimited
             //      length (=1GB).
             precision = 0x40000000; // about 1 GB, see character type docs in postgresql
-            row[CREATE_PARAMS] <<= ASCII_STR( "length" );
+            row[CREATE_PARAMS] <<= OUString("length");
         }
         else if( dataType == com::sun::star::sdbc::DataType::NUMERIC )
         {
             precision = 1000;
-            row[CREATE_PARAMS] <<= ASCII_STR( "length, scale" );
+            row[CREATE_PARAMS] <<= OUString("length, scale");
         }
 
         row[TYPE_NAME] <<= xRow->getString(1);
@@ -2344,15 +2336,15 @@ static void pgTypeInfo2ResultSet(
         row[NULLABLE] <<= OUString::valueOf(nullable);
         row[CASE_SENSITIVE] <<= OUString::valueOf((sal_Int32)1);
         row[SEARCHABLE] <<= OUString::valueOf( calcSearchable( dataType ) );
-        row[UNSIGNED_ATTRIBUTE] <<= ASCII_STR( "0" ); //
+        row[UNSIGNED_ATTRIBUTE] <<= OUString("0"); //
         if( com::sun::star::sdbc::DataType::INTEGER == dataType ||
             com::sun::star::sdbc::DataType::BIGINT == dataType )
-            row[AUTO_INCREMENT] <<= ASCII_STR( "1" );     // TODO
+            row[AUTO_INCREMENT] <<= OUString("1");     // TODO
         else
-            row[AUTO_INCREMENT] <<= ASCII_STR( "0" );     // TODO
-        row[MINIMUM_SCALE] <<= ASCII_STR( "0" );      // TODO: what is this ?
+            row[AUTO_INCREMENT] <<= OUString("0");     // TODO
+        row[MINIMUM_SCALE] <<= OUString("0");      // TODO: what is this ?
         row[MAXIMUM_SCALE] <<= OUString::valueOf( getMaxScale( dataType ) );
-        row[NUM_PREC_RADIX] <<= ASCII_STR( "10" );    // TODO: what is this ?
+        row[NUM_PREC_RADIX] <<= OUString("10");    // TODO: what is this ?
         (void)FIXED_PREC_SCALE;
         vec.push_back( row );
     }
@@ -2374,7 +2366,6 @@ static void pgTypeInfo2ResultSet(
 
     Reference< XStatement > statement = m_origin->createStatement();
     Reference< XResultSet > rs = statement->executeQuery(
-        ASCII_STR(
           "SELECT pg_type.typname AS typname," //1
           "pg_type.typtype AS typtype,"        //2
           "pg_type.typlen AS typlen,"          //3
@@ -2383,21 +2374,20 @@ static void pgTypeInfo2ResultSet(
           "FROM pg_type "
           "WHERE pg_type.typtype = 'b' "
           "OR pg_type.typtype = 'p'"
-            ) );
+            );
 
     SequenceAnyVector vec;
     pgTypeInfo2ResultSet( vec, rs );
 
     // check for domain types
     rs = statement->executeQuery(
-     ASCII_STR(
         "SELECT t1.typname as typname,"
         "t2.typtype AS typtype,"
         "t2.typlen AS typlen,"
         "t2.typnotnull AS typnotnull,"
         "t2.typname as realtypname "
         "FROM pg_type as t1 LEFT JOIN pg_type AS t2 ON t1.typbasetype=t2.oid "
-        "WHERE t1.typtype = 'd'" ) );
+        "WHERE t1.typtype = 'd'" );
     pgTypeInfo2ResultSet( vec, rs );
 
     std::sort( vec.begin(), vec.end(), TypeInfoByDataTypeSorter() );
@@ -2485,7 +2475,6 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
     static const sal_Int32 R_COLUMN_NAME = 8;
 
     Reference< XPreparedStatement > stmt = m_origin->prepareStatement(
-        ASCII_STR(
             "SELECT nspname, "          // 1
                    "pg_class.relname, " // 2
                    "class2.relname, "   // 3
@@ -2496,7 +2485,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
             "FROM pg_index INNER JOIN pg_class ON indrelid = pg_class.oid "
                           "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
                           "INNER JOIN pg_class as class2 ON pg_index.indexrelid = class2.oid "
-            "WHERE nspname = ? AND pg_class.relname = ?" ) );
+            "WHERE nspname = ? AND pg_class.relname = ?" );
 
     Reference< XParameters > param ( stmt, UNO_QUERY_THROW );
     param->setString( 1, schema );
@@ -2509,12 +2498,11 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
     {
         Sequence< sal_Int32 > columns = parseIntArray( xRow->getString(C_COLUMNS) );
         Reference< XPreparedStatement > columnsStmt = m_origin->prepareStatement(
-            ASCII_STR(
                 "SELECT attnum, attname "
                 "FROM pg_attribute "
                 "     INNER JOIN pg_class ON attrelid = pg_class.oid "
                 "     INNER JOIN pg_namespace ON pg_class.relnamespace=pg_namespace.oid "
-                "     WHERE pg_namespace.nspname=?  AND pg_class.relname=?" ) );
+                "     WHERE pg_namespace.nspname=?  AND pg_class.relname=?" );
         Reference< XParameters > paramColumn ( columnsStmt, UNO_QUERY_THROW );
         OUString currentSchema = xRow->getString( C_SCHEMA );
         OUString currentTable = xRow->getString( C_TABLENAME );

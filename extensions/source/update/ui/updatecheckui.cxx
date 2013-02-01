@@ -51,8 +51,6 @@
 
 #include "updatecheckui.hrc"
 
-#define UNISTRING(s) rtl::OUString(s)
-
 #define MSG_ERR_NO_WEBBROWSER_FOUND  (RID_SFX_APP_START + 7)
 
 #define PROPERTY_TITLE          RTL_CONSTASCII_STRINGPARAM("BubbleHeading")
@@ -69,7 +67,7 @@ using namespace ::com::sun::star;
 static uno::Sequence< rtl::OUString > getServiceNames()
 {
     uno::Sequence< rtl::OUString > aServiceList(1);
-    aServiceList[0] = UNISTRING( "com.sun.star.setup.UpdateCheckUI");
+    aServiceList[0] = "com.sun.star.setup.UpdateCheckUI";
     return aServiceList;
 }
 
@@ -77,7 +75,7 @@ static uno::Sequence< rtl::OUString > getServiceNames()
 
 static rtl::OUString getImplementationName()
 {
-    return UNISTRING( "vnd.sun.UpdateCheckUI");
+    return "vnd.sun.UpdateCheckUI";
 }
 
 //------------------------------------------------------------------------------
@@ -244,7 +242,7 @@ UpdateCheckUI::getGlobalEventBroadcaster() const throw (uno::RuntimeException)
 {
     if( !m_xContext.is() )
         throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckUI: empty component context" ),
+            "UpdateCheckUI: empty component context",
                 uno::Reference< uno::XInterface >() );
 
     return uno::Reference<document::XEventBroadcaster> (
@@ -308,7 +306,7 @@ Image UpdateCheckUI::GetBubbleImage( ::rtl::OUString &rURL )
 
         if( !xContext.is() )
             throw uno::RuntimeException(
-                UNISTRING( "UpdateCheckUI: unable to obtain service manager from component context" ),
+                "UpdateCheckUI: unable to obtain service manager from component context",
                     uno::Reference< uno::XInterface >() );
 
         try

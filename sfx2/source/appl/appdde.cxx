@@ -189,7 +189,7 @@ String ImplDdeService::Topics()
         pShell = SfxObjectShell::GetNext( *pShell, &aType );
     }
     if( sRet.Len() )
-        sRet += DEFINE_CONST_UNICODE("\r\n");
+        sRet += "\r\n";
     return sRet;
 }
 
@@ -203,7 +203,7 @@ class SfxDdeTriggerTopic_Impl : public DdeTopic
 {
 public:
     SfxDdeTriggerTopic_Impl()
-    : DdeTopic( DEFINE_CONST_UNICODE("TRIGGER") )
+    : DdeTopic( "TRIGGER" )
     {}
 
     virtual sal_Bool Execute( const String* );
@@ -307,8 +307,8 @@ long SfxApplication::DdeExecute
 {
     // Print or Open-Event?
     ApplicationEvent aAppEvent;
-    if ( SfxAppEvent_Impl( aAppEvent, rCmd, DEFINE_CONST_UNICODE("Print"), ApplicationEvent::TYPE_PRINT ) ||
-         SfxAppEvent_Impl( aAppEvent, rCmd, DEFINE_CONST_UNICODE("Open"), ApplicationEvent::TYPE_OPEN ) )
+    if ( SfxAppEvent_Impl( aAppEvent, rCmd, "Print", ApplicationEvent::TYPE_PRINT ) ||
+         SfxAppEvent_Impl( aAppEvent, rCmd, "Open", ApplicationEvent::TYPE_OPEN ) )
         GetpApp()->AppEvent( aAppEvent );
     else
     {
@@ -538,7 +538,7 @@ sal_Bool SfxApplication::InitializeDde()
 
         // Config path as a topic becauseof multiple starts
         INetURLObject aOfficeLockFile( SvtPathOptions().GetUserConfigPath() );
-        aOfficeLockFile.insertName( DEFINE_CONST_UNICODE( "soffice.lck" ) );
+        aOfficeLockFile.insertName( "soffice.lck" );
         String aService( SfxDdeServiceName_Impl(
                     aOfficeLockFile.GetMainURL(INetURLObject::DECODE_TO_IURI) ) );
         aService.ToUpperAscii();

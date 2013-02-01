@@ -31,8 +31,6 @@ using namespace pdfi;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
-#define USTR(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
 StyleContainer::StyleContainer() :
     m_nNextId( 1 )
 {
@@ -80,8 +78,8 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
 sal_Int32 StyleContainer::getStandardStyleId( const rtl::OString& rName )
 {
     PropertyMap aProps;
-    aProps[ USTR( "style:family" ) ] = rtl::OStringToOUString( rName, RTL_TEXTENCODING_UTF8 );
-    aProps[ USTR( "style:name" ) ] = USTR( "standard" );
+    aProps[ "style:family" ] = rtl::OStringToOUString( rName, RTL_TEXTENCODING_UTF8 );
+    aProps[ "style:name" ] = "standard";
 
     Style aStyle( "style:style", aProps );
     return getStyleId( aStyle );
@@ -157,12 +155,12 @@ OUString StyleContainer::getStyleName( sal_Int32 nStyle ) const
     {
         const HashedStyle& rStyle = style_it->second;
 
-        PropertyMap::const_iterator name_it = rStyle.Properties.find( USTR("style:name") );
+        PropertyMap::const_iterator name_it = rStyle.Properties.find( "style:name" );
         if( name_it != rStyle.Properties.end() )
             aRet.append( name_it->second );
         else
         {
-            PropertyMap::const_iterator fam_it = rStyle.Properties.find( USTR("style:family" ) );
+            PropertyMap::const_iterator fam_it = rStyle.Properties.find( "style:family" );
             OUString aStyleName;
             if( fam_it != rStyle.Properties.end() )
             {
@@ -194,7 +192,7 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
         const HashedStyle& rStyle = it->second;
             PropertyMap aProps( rStyle.Properties );
         if( !rStyle.IsSubStyle )
-            aProps[ USTR( "style:name" ) ] = getStyleName( nStyleId );
+            aProps[ "style:name" ] = getStyleName( nStyleId );
         rContext.rEmitter.beginTag( rStyle.Name.getStr(), aProps );
 
         for( unsigned int n = 0; n < rStyle.SubStyles.size(); ++n )

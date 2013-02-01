@@ -1941,7 +1941,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
             return SFX_ITEM_DISABLED;
 
         ::com::sun::star::util::URL aURL;
-        ::rtl::OUString aCmd( DEFINE_CONST_UNICODE(".uno:"));
+        OUString aCmd( ".uno:" );
         aURL.Protocol = aCmd;
         aURL.Path = ::rtl::OUString::createFromAscii(pSlot->GetUnoName());
         aCmd += aURL.Path;

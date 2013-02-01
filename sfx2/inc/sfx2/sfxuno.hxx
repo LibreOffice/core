@@ -103,11 +103,6 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
 #define S2U(STRING)                             ::rtl::OStringToOUString(STRING, RTL_TEXTENCODING_UTF8)
 #define U2S(STRING)                             ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
-// Macro to define const unicode a'la "..."
-// It's better then "OUString::createFromAscii(...)" !!!
-#define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
-#define DEFINE_CONST_OUSTRING(CONSTASCII)       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
-
 //________________________________________________________________________________________________________________________
 //  macros for declaration and definition of uno-services
 //________________________________________________________________________________________________________________________

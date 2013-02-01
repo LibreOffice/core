@@ -80,20 +80,19 @@ using com::sun::star::sdbc::XResultSetMetaData;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 void ResultSet::checkClosed()
     throw ( com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException )
 {
     if( ! m_result )
     {
-        throw SQLException( ASCII_STR( "pq_resultset: already closed" ),
+        throw SQLException( "pq_resultset: already closed",
                             *this,  OUString(), 1, Any() );
     }
 
     if( ! m_ppSettings || ! *m_ppSettings || ! (*m_ppSettings)->pConnection )
     {
-        throw SQLException( ASCII_STR( "pq_resultset: statement has been closed already" ),
+        throw SQLException( "pq_resultset: statement has been closed already",
                             *this, OUString(), 1, Any() );
     }
 

@@ -59,8 +59,6 @@ using rtl::OUString;
 using namespace desktop;
 using namespace com::sun::star;
 
-#define UNISTRING(s) OUString(s)
-
 namespace
 {
 //For use with XExtensionManager.synchronize
@@ -219,14 +217,14 @@ static const char aAccessSrvc[] = "com.sun.star.configuration.ConfigurationUpdat
 
 static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContext > &xContext )
 {
-    rtl::OUString sServiceName = UNISTRING("com.sun.star.deployment.ui.UpdateRequiredDialog");
+    rtl::OUString sServiceName = "com.sun.star.deployment.ui.UpdateRequiredDialog";
     uno::Reference< uno::XInterface > xService;
     sal_Int16 nRet = 0;
 
     uno::Reference< lang::XMultiComponentFactory > xServiceManager( xContext->getServiceManager() );
     if( !xServiceManager.is() )
         throw uno::RuntimeException(
-            UNISTRING( "impl_showExtensionDialog(): unable to obtain service manager from component context" ), uno::Reference< uno::XInterface > () );
+            "impl_showExtensionDialog(): unable to obtain service manager from component context", uno::Reference< uno::XInterface > () );
 
     xService = xServiceManager->createInstanceWithContext( sServiceName, xContext );
     uno::Reference< ui::dialogs::XExecutableDialog > xExecuteable( xService, uno::UNO_QUERY );
@@ -346,8 +344,8 @@ static void impl_setNeedsCompatCheck()
 static bool impl_needsCompatCheck()
 {
     bool bNeedsCheck = false;
-    rtl::OUString aLastCheckBuildID;
-    rtl::OUString aCurrentBuildID( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
+    OUString aLastCheckBuildID;
+    OUString aCurrentBuildID( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" );
     rtl::Bootstrap::expandMacros( aCurrentBuildID );
 
     try {

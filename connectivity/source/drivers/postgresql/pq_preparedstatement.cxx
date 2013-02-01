@@ -116,7 +116,6 @@ using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XMultiPropertySet;
 using com::sun::star::beans::XFastPropertySet;
 
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 namespace pq_sdbc_driver
 {
 static ::cppu::IPropertyArrayHelper & getPreparedStatementPropertyArrayHelper()
@@ -258,7 +257,7 @@ void PreparedStatement::checkClosed() throw (SQLException, RuntimeException )
 {
     if( ! m_pSettings || ! m_pSettings->pConnection )
         throw SQLException(
-            ASCII_STR("pq_driver: PreparedStatement or connection has already been closed !" ),
+            "pq_driver: PreparedStatement or connection has already been closed !",
             *this, OUString(),1,Any());
 }
 
@@ -612,7 +611,7 @@ void PreparedStatement::setBytes(
     if( ! escapedString )
     {
         throw SQLException(
-            ASCII_STR("pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string" ),
+            "pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string",
             *this, OUString(), 1, Any() );
     }
     buf.append( (const sal_Char *)escapedString, len -1 );
@@ -649,7 +648,7 @@ void PreparedStatement::setBinaryStream(
 {
     (void) parameterIndex; (void)x; (void) length;
     throw SQLException(
-        ASCII_STR( "pq_preparedstatement: setBinaryStream not implemented" ),
+        "pq_preparedstatement: setBinaryStream not implemented",
         *this, OUString(), 1, Any () );
 }
 
@@ -661,7 +660,7 @@ void PreparedStatement::setCharacterStream(
 {
     (void) parameterIndex; (void)x; (void) length;
     throw SQLException(
-        ASCII_STR( "pq_preparedstatement: setCharacterStream not implemented" ),
+        "pq_preparedstatement: setCharacterStream not implemented",
         *this, OUString(), 1, Any () );
 }
 
@@ -671,7 +670,7 @@ void PreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x )
     if( ! implSetObject( this, parameterIndex, x ))
     {
         OUStringBuffer buf;
-        buf.append( ASCII_STR("pq_preparedstatement::setObject: can't convert value of type " ) );
+        buf.append( "pq_preparedstatement::setObject: can't convert value of type " );
         buf.append( x.getValueTypeName() );
         throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any () );
     }
@@ -706,9 +705,9 @@ void PreparedStatement::setObjectWithInfo(
         else
         {
             OUStringBuffer buf;
-            buf.append( ASCII_STR("pq_preparedstatement::setObjectWithInfo: can't convert value of type " ) );
+            buf.append( "pq_preparedstatement::setObjectWithInfo: can't convert value of type " );
             buf.append( x.getValueTypeName() );
-            buf.append( ASCII_STR(" to type DECIMAL or NUMERIC" ) );
+            buf.append( " to type DECIMAL or NUMERIC" );
             throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any () );
         }
     }
@@ -726,7 +725,7 @@ void PreparedStatement::setRef(
 {
     (void) parameterIndex; (void)x;
     throw SQLException(
-        ASCII_STR( "pq_preparedstatement: setRef not implemented" ),
+        "pq_preparedstatement: setRef not implemented",
         *this, OUString(), 1, Any () );
 }
 
@@ -737,7 +736,7 @@ void PreparedStatement::setBlob(
 {
     (void) parameterIndex; (void)x;
     throw SQLException(
-        ASCII_STR( "pq_preparedstatement: setBlob not implemented" ),
+        "pq_preparedstatement: setBlob not implemented",
         *this, OUString(), 1, Any () );
 }
 
@@ -748,7 +747,7 @@ void PreparedStatement::setClob(
 {
     (void) parameterIndex; (void)x;
     throw SQLException(
-        ASCII_STR( "pq_preparedstatement: setClob not implemented" ),
+        "pq_preparedstatement: setClob not implemented",
         *this, OUString(), 1, Any () );
 }
 

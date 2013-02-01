@@ -57,17 +57,17 @@
 #include "dlgunit.hxx"
 
 #define SELF_TARGET         "_self"
-#define IMAP_ALL_FILTER     "<Alle>"
-#define IMAP_CERN_FILTER    "MAP - CERN"
-#define IMAP_NCSA_FILTER    "MAP - NCSA"
-#define IMAP_BINARY_FILTER  "SIP - StarView ImageMap"
-#define IMAP_ALL_TYPE       "*.*"
-#define IMAP_BINARY_TYPE    "*.sip"
-#define IMAP_CERN_TYPE      "*.map"
-#define IMAP_NCSA_TYPE      "*.map"
-#define IMAP_BINARY_EXT     "sip"
-#define IMAP_CERN_EXT       "map"
-#define IMAP_NCSA_EXT       "map"
+#define IMAP_ALL_FILTER     OUString("<Alle>")
+#define IMAP_CERN_FILTER    OUString("MAP - CERN")
+#define IMAP_NCSA_FILTER    OUString("MAP - NCSA")
+#define IMAP_BINARY_FILTER  OUString("SIP - StarView ImageMap")
+#define IMAP_ALL_TYPE       OUString("*.*")
+#define IMAP_BINARY_TYPE    OUString("*.sip")
+#define IMAP_CERN_TYPE      OUString("*.map")
+#define IMAP_NCSA_TYPE      OUString("*.map")
+#define IMAP_BINARY_EXT     OUString("sip")
+#define IMAP_CERN_EXT       OUString("map")
+#define IMAP_NCSA_EXT       OUString("map")
 
 /******************************************************************************/
 
@@ -166,8 +166,8 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
     SetMinOutputSizePixel( aLastSize = GetOutputSizePixel() );
 
     aStbStatus.InsertItem( 1, 130, SIB_LEFT | SIB_IN | SIB_AUTOSIZE );
-    aStbStatus.InsertItem( 2, 10 + GetTextWidth( DEFINE_CONST_UNICODE( " 9999,99 cm / 9999,99 cm ") ), SIB_CENTER | SIB_IN );
-    aStbStatus.InsertItem( 3, 10 + GetTextWidth( DEFINE_CONST_UNICODE( " 9999,99 cm x 9999,99 cm ") ), SIB_CENTER | SIB_IN );
+    aStbStatus.InsertItem( 2, 10 + GetTextWidth( OUString(" 9999,99 cm / 9999,99 cm ") ), SIB_CENTER | SIB_IN );
+    aStbStatus.InsertItem( 3, 10 + GetTextWidth( OUString(" 9999,99 cm x 9999,99 cm ") ), SIB_CENTER | SIB_IN );
 
     aFtURL.Disable();
     maURLBox.Disable();
@@ -474,12 +474,12 @@ void SvxIMapDlg::DoOpen()
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
     ImageMap        aLoadIMap;
-    const String    aFilter( DEFINE_CONST_UNICODE( IMAP_ALL_FILTER ) );
+    const String    aFilter( IMAP_ALL_FILTER );
 
-    aDlg.AddFilter( aFilter, DEFINE_CONST_UNICODE( IMAP_ALL_TYPE ) );
-    aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ), DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ) );
-    aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ), DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ) );
-    aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ), DEFINE_CONST_UNICODE( IMAP_BINARY_TYPE ) );
+    aDlg.AddFilter( aFilter, IMAP_ALL_TYPE );
+    aDlg.AddFilter( IMAP_CERN_FILTER, IMAP_CERN_TYPE );
+    aDlg.AddFilter( IMAP_NCSA_FILTER, IMAP_NCSA_TYPE );
+    aDlg.AddFilter( IMAP_BINARY_FILTER, IMAP_BINARY_TYPE );
 
     aDlg.SetCurrentFilter( aFilter );
     aDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
@@ -514,16 +514,16 @@ sal_Bool SvxIMapDlg::DoSave()
     ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
 
-    const String    aBinFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ) );
-    const String    aCERNFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ) );
-    const String    aNCSAFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ) );
+    const String    aBinFilter( IMAP_BINARY_FILTER );
+    const String    aCERNFilter( IMAP_CERN_FILTER );
+    const String    aNCSAFilter( IMAP_NCSA_FILTER );
     SdrModel*       pModel = pIMapWnd->GetSdrModel();
     const sal_Bool bChanged = pModel->IsChanged();
     sal_Bool            bRet = false;
 
-    aDlg.AddFilter( aCERNFilter, DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ) );
-    aDlg.AddFilter( aNCSAFilter, DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ) );
-    aDlg.AddFilter( aBinFilter, DEFINE_CONST_UNICODE( IMAP_BINARY_TYPE ) );
+    aDlg.AddFilter( aCERNFilter, IMAP_CERN_TYPE );
+    aDlg.AddFilter( aNCSAFilter, IMAP_NCSA_TYPE );
+    aDlg.AddFilter( aBinFilter, IMAP_BINARY_TYPE );
 
     aDlg.SetCurrentFilter( aCERNFilter );
     aDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
@@ -537,17 +537,17 @@ sal_Bool SvxIMapDlg::DoSave()
         if ( aFilter == aBinFilter )
         {
             nFormat = IMAP_FORMAT_BIN;
-            aExt = DEFINE_CONST_UNICODE( IMAP_BINARY_EXT );
+            aExt = IMAP_BINARY_EXT;
         }
         else if ( aFilter == aCERNFilter )
         {
             nFormat = IMAP_FORMAT_CERN;
-            aExt = DEFINE_CONST_UNICODE( IMAP_CERN_EXT );
+            aExt = IMAP_CERN_EXT;
         }
         else if ( aFilter == aNCSAFilter )
         {
             nFormat = IMAP_FORMAT_NCSA;
-            aExt = DEFINE_CONST_UNICODE( IMAP_NCSA_EXT );
+            aExt = IMAP_NCSA_EXT;
         }
         else
         {
@@ -597,7 +597,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
         aEdtText.SetText( rInfo.aMarkAltText );
 
         if ( !rInfo.aMarkTarget.Len() )
-            maCbbTarget.SetText( DEFINE_CONST_UNICODE( SELF_TARGET ) );
+            maCbbTarget.SetText( SELF_TARGET );
         else
             maCbbTarget.SetText( rInfo.aMarkTarget );
     }
@@ -643,7 +643,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
             aEdtText.SetText( rInfo.aMarkAltText );
 
         if ( !rInfo.aMarkTarget.Len() )
-            maCbbTarget.SetText( DEFINE_CONST_UNICODE( SELF_TARGET ) );
+            maCbbTarget.SetText( SELF_TARGET );
         else
             maCbbTarget.SetText(  rInfo.aMarkTarget );
     }
@@ -653,15 +653,13 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 
 IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
 {
-    String aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
-    aStr.Assign( GetUnitString( rMousePos.X(), eFieldUnit, cSep ) );
-    aStr.Append( DEFINE_CONST_UNICODE( " / " ) );
-    aStr.Append( GetUnitString( rMousePos.Y(), eFieldUnit, cSep ) );
+    OUString aStr = GetUnitString( rMousePos.X(), eFieldUnit, cSep ) +
+                    " / " + GetUnitString( rMousePos.Y(), eFieldUnit, cSep );
 
     aStbStatus.SetItemText( 2, aStr );
 
@@ -670,15 +668,13 @@ IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
 
 IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
 {
-    String aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
-    aStr.Assign( GetUnitString( rSize.Width(), eFieldUnit, cSep ) );
-    aStr.Append( DEFINE_CONST_UNICODE( " x " ) );
-    aStr.Append( GetUnitString( rSize.Height(), eFieldUnit, cSep ) );
+    OUString aStr = GetUnitString( rSize.Width(), eFieldUnit, cSep ) +
+                    " x " + GetUnitString( rSize.Height(), eFieldUnit, cSep );
 
     aStbStatus.SetItemText( 3, aStr );
 
@@ -717,7 +713,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl)
     aNewInfo.aMarkAltText = aEdtText.GetText();
 
     if ( !aTargetText.Len() )
-        aNewInfo.aMarkTarget = DEFINE_CONST_UNICODE( SELF_TARGET );
+        aNewInfo.aMarkTarget = SELF_TARGET;
     else
         aNewInfo.aMarkTarget = aTargetText;
 

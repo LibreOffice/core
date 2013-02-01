@@ -42,8 +42,6 @@ namespace uno = css::uno ;
 namespace task = css::task ;
 namespace xml = css::xml ;
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
 //------------------------------------------------------------------------------
 
 static bool
@@ -52,17 +50,17 @@ getBootstrapData(
     ::rtl::OUString & rGitID,
     ::rtl::OUString & rInstallSetID)
 {
-    rGitID = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" );
+    rGitID = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}";
     rtl::Bootstrap::expandMacros( rGitID );
     if ( rGitID.isEmpty() )
         return false;
 
-    rInstallSetID = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateID}" );
+    rInstallSetID = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateID}";
     rtl::Bootstrap::expandMacros( rInstallSetID );
     if ( rInstallSetID.isEmpty() )
         return false;
 
-    rtl::OUString aValue( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateURL}" ) );
+    OUString aValue( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateURL}" );
     rtl::Bootstrap::expandMacros( aValue );
 
     if( !aValue.isEmpty() )
@@ -89,8 +87,8 @@ checkForUpdates(
     ::rtl::OUString myArch;
     ::rtl::OUString myOS;
 
-    rtl::Bootstrap::get(UNISTRING("_OS"), myOS);
-    rtl::Bootstrap::get(UNISTRING("_ARCH"), myArch);
+    rtl::Bootstrap::get("_OS", myOS);
+    rtl::Bootstrap::get("_ARCH", myArch);
 
     uno::Sequence< ::rtl::OUString > aRepositoryList;
     ::rtl::OUString aGitID;
@@ -118,14 +116,14 @@ checkForUpdates(
 {
     if( !rxContext.is() )
         throw uno::RuntimeException(
-            UNISTRING( "checkForUpdates: empty component context" ), uno::Reference< uno::XInterface >() );
+            "checkForUpdates: empty component context", uno::Reference< uno::XInterface >() );
 
     OSL_ASSERT( rxContext->getServiceManager().is() );
 
     // XPath implementation
     uno::Reference< xml::xpath::XXPathAPI > xXPath = xml::xpath::XPathAPI::create(rxContext);
 
-    xXPath->registerNS( UNISTRING("inst"), UNISTRING("http://update.libreoffice.org/description") );
+    xXPath->registerNS( "inst", "http://update.libreoffice.org/description" );
 
     if( rxInteractionHandler.is() )
         rUpdateInfoProvider->setInteractionHandler(rxInteractionHandler);
@@ -159,7 +157,7 @@ checkForUpdates(
                 uno::Reference< xml::dom::XNodeList > xNodeList;
                 try {
                     xNodeList = xXPath->selectNodeList(xNode, aXPathExpression
-                        + UNISTRING("/inst:update/attribute::src"));
+                        + "/inst:update/attribute::src");
                 } catch (const css::xml::xpath::XPathException &) {
                     // ignore
                 }
@@ -172,7 +170,7 @@ checkForUpdates(
                     if( xNode2.is() )
                     {
                         uno::Reference< xml::dom::XElement > xParent(xNode2->getParentNode(), uno::UNO_QUERY_THROW);
-                        rtl::OUString aType = xParent->getAttribute(UNISTRING("type"));
+                        rtl::OUString aType = xParent->getAttribute("type");
                         bool bIsDirect = ( sal_False == aType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("text/html")) );
 
                         o_rUpdateInfo.Sources.push_back( DownloadSource(bIsDirect, xNode2->getNodeValue()) );
@@ -182,7 +180,7 @@ checkForUpdates(
                 uno::Reference< xml::dom::XNode > xNode2;
                 try {
                     xNode2 = xXPath->selectSingleNode(xNode, aXPathExpression
-                        + UNISTRING("/inst:version/text()"));
+                        + "/inst:version/text()");
                 } catch (const css::xml::xpath::XPathException &) {
                     // ignore
                 }
@@ -192,7 +190,7 @@ checkForUpdates(
 
                 try {
                     xNode2 = xXPath->selectSingleNode(xNode, aXPathExpression
-                        + UNISTRING("/inst:buildid/text()"));
+                        + "/inst:buildid/text()");
                 } catch (const css::xml::xpath::XPathException &) {
                     // ignore
                 }
@@ -205,7 +203,7 @@ checkForUpdates(
                 // Release Notes
                 try {
                     xNodeList = xXPath->selectNodeList(xNode, aXPathExpression
-                        + UNISTRING("/inst:relnote"));
+                        + "/inst:relnote");
                 } catch (const css::xml::xpath::XPathException &) {
                     // ignore
                 }
@@ -215,15 +213,15 @@ checkForUpdates(
                     uno::Reference< xml::dom::XElement > xRelNote(xNodeList->item(i), uno::UNO_QUERY);
                     if( xRelNote.is() )
                     {
-                        sal_Int32 pos = xRelNote->getAttribute(UNISTRING("pos")).toInt32();
+                        sal_Int32 pos = xRelNote->getAttribute("pos").toInt32();
 
-                        ReleaseNote aRelNote((sal_uInt8) pos, xRelNote->getAttribute(UNISTRING("src")));
+                        ReleaseNote aRelNote((sal_uInt8) pos, xRelNote->getAttribute("src"));
 
-                        if( xRelNote->hasAttribute(UNISTRING("src2")) )
+                        if( xRelNote->hasAttribute("src2") )
                         {
-                            pos = xRelNote->getAttribute(UNISTRING("pos2")).toInt32();
+                            pos = xRelNote->getAttribute("pos2").toInt32();
                             aRelNote.Pos2 = (sal_Int8) pos;
-                            aRelNote.URL2 = xRelNote->getAttribute(UNISTRING("src2"));
+                            aRelNote.URL2 = xRelNote->getAttribute("src2");
                         }
 
                         o_rUpdateInfo.ReleaseNotes.push_back(aRelNote);
@@ -272,7 +270,7 @@ bool checkForExtensionUpdates( const uno::Reference< uno::XComponentContext > & 
     try
     {
         uno::Any aValue( rxContext->getValueByName(
-                UNISTRING( "/singletons/com.sun.star.deployment.PackageInformationProvider" ) ) );
+                "/singletons/com.sun.star.deployment.PackageInformationProvider" ) );
         OSL_VERIFY( aValue >>= xInfoProvider );
     }
     catch( const uno::Exception& )
@@ -298,7 +296,7 @@ bool checkForPendingUpdates( const uno::Reference< uno::XComponentContext > & rx
     try
     {
         uno::Any aValue( rxContext->getValueByName(
-                UNISTRING( "/singletons/com.sun.star.deployment.PackageInformationProvider" ) ) );
+                "/singletons/com.sun.star.deployment.PackageInformationProvider" ) );
         OSL_VERIFY( aValue >>= xInfoProvider );
     }
     catch( const uno::Exception& )

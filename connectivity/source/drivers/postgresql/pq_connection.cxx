@@ -127,8 +127,6 @@ using com::sun::star::sdbc::XDatabaseMetaData;
 namespace pq_sdbc_driver
 {
 
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
 
 // ______________________________________________________________________________
 // Helper class for statement lifetime management
@@ -181,7 +179,7 @@ static sal_Int32 readLogLevelFromConfiguration()
     rtl::Bootstrap bootstrapHandle( fileName );
 
     OUString str;
-    if( bootstrapHandle.getFrom( ASCII_STR( "PQ_LOGLEVEL" ), str ) )
+    if( bootstrapHandle.getFrom( "PQ_LOGLEVEL", str ) )
     {
         if ( str == "NONE" )
             loglevel = LogLevel::NONE;
@@ -405,7 +403,7 @@ void Connection::setCatalog( const ::rtl::OUString& )
     MutexGuard guard( m_refMutex->mutex );
     if( m_settings.pConnection == 0 )
     {
-        throw SQLException( ASCII_STR( "pq_connection: connection is closed" ), *this,
+        throw SQLException( "pq_connection: connection is closed", *this,
                             OUString(), 1, Any() );
     }
     char * p = PQdb(m_settings.pConnection );
@@ -665,7 +663,7 @@ void Connection::disposing()
 void Connection::checkClosed() throw ( SQLException, RuntimeException )
 {
     if( !m_settings.pConnection )
-        throw SQLException( ASCII_STR( "pq_connection: Connection already closed" ),
+        throw SQLException( "pq_connection: Connection already closed",
                             *this, OUString(), 1, Any() );
 }
 

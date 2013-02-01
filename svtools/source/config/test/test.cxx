@@ -58,8 +58,6 @@ using namespace ::com::sun::star::lang      ;
 using namespace ::com::sun::star::beans     ;
 using namespace ::com::sun::star::registry  ;
 
-#define ASCII( STEXT )                      OUString( RTL_CONSTASCII_USTRINGPARAM( STEXT ))
-
 class TestApplication : public Application
 {
     //*************************************************************************************************************
@@ -141,18 +139,18 @@ void TestApplication::impl_testDynamicMenuOptions()
 
     if( lNewMenu.getLength() < 1 )
     {
-        aCFG.AppendItem( E_NEWMENU, ASCII("private:factory/swriter"), ASCII("new writer"), ASCII("icon_writer"), ASCII("_blank") );
-        aCFG.AppendItem( E_NEWMENU, ASCII("private:factory/scalc"  ), ASCII("new calc"  ), ASCII("icon_calc"  ), ASCII("_blank") );
-        aCFG.AppendItem( E_NEWMENU, ASCII("private:factory/sdraw"  ), ASCII("new draw"  ), ASCII("icon_draw"  ), ASCII("_blank") );
+        aCFG.AppendItem( E_NEWMENU, "private:factory/swriter", "new writer", "icon_writer", "_blank";
+        aCFG.AppendItem( E_NEWMENU, "private:factory/scalc",   "new calc",   "icon_calc",   "_blank";
+        aCFG.AppendItem( E_NEWMENU, "private:factory/sdraw",   "new draw",   "icon_draw",   "_blank";
 
         lNewMenu = aCFG.GetMenu( E_NEWMENU );
     }
 
     if( lWizardMenu.getLength() < 1 )
     {
-        aCFG.AppendItem( E_WIZARDMENU, ASCII("file://a"), ASCII("system file"), ASCII("icon_file"), ASCII("_self") );
-        aCFG.AppendItem( E_WIZARDMENU, ASCII("ftp://b" ), ASCII("ftp host"   ), ASCII("icon_ftp" ), ASCII("_self") );
-        aCFG.AppendItem( E_WIZARDMENU, ASCII("http://c"), ASCII("www"        ), ASCII("icon_www" ), ASCII("_self") );
+        aCFG.AppendItem( E_WIZARDMENU, "file://a", "system file", "icon_file", "_self";
+        aCFG.AppendItem( E_WIZARDMENU, "ftp://b",  "ftp host",    "icon_ftp",  "_self";
+        aCFG.AppendItem( E_WIZARDMENU, "http://c", "www",         "icon_www",  "_self";
 
         lWizardMenu = aCFG.GetMenu( E_WIZARDMENU );
     }

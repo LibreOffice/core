@@ -103,8 +103,6 @@ using com::sun::star::sdbcx::XDataDescriptorFactory;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
 
 class ReplacedBroadcaster : public EventBroadcastHelper
 {
@@ -296,7 +294,7 @@ com::sun::star::uno::Any ContainerEnumeration::nextElement()
     if( ! hasMoreElements() )
     {
         throw NoSuchElementException(
-            ASCII_STR( "NoSuchElementException during enumeration" ), *this );
+            "NoSuchElementException during enumeration", *this );
     }
     m_index ++;
     return m_vec[m_index];

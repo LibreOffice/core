@@ -45,8 +45,6 @@ namespace lang = com::sun::star::lang ;
 namespace util = com::sun::star::util ;
 namespace uno = com::sun::star::uno ;
 
-#define UNISTRING(s) rtl::OUString(s)
-
 #define LAST_CHECK              "LastCheck"
 #define VERSION_FOUND           "UpdateVersionFound"
 #define UPDATE_VERSION          "UpdateVersion"
@@ -64,7 +62,7 @@ namespace uno = com::sun::star::uno ;
 #define DOWNLOAD_DESTINATION    "DownloadDestination"
 #define RELEASE_NOTE            "ReleaseNote"
 
-#define PROPERTY_VERSION        UNISTRING("Version")
+#define PROPERTY_VERSION        "Version"
 
 static const sal_Char * const aUpdateEntryProperties[] = {
     UPDATE_VERSION,
@@ -259,24 +257,24 @@ UpdateCheckConfig::get(
         com::sun::star::configuration::theDefaultProvider::get( xContext ) );
 
     beans::PropertyValue aProperty;
-    aProperty.Name  = UNISTRING( "nodepath" );
-    aProperty.Value = uno::makeAny( UNISTRING("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments") );
+    aProperty.Name  = "nodepath";
+    aProperty.Value = uno::makeAny( OUString("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments") );
 
     uno::Sequence< uno::Any > aArgumentList( 1 );
     aArgumentList[0] = uno::makeAny( aProperty );
 
     uno::Reference< container::XNameContainer > xContainer(
         xConfigProvider->createInstanceWithArguments(
-            UNISTRING("com.sun.star.configuration.ConfigurationUpdateAccess"), aArgumentList ),
+            "com.sun.star.configuration.ConfigurationUpdateAccess", aArgumentList ),
         uno::UNO_QUERY_THROW );
 
-    aProperty.Value = uno::makeAny( UNISTRING("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates") );
+    aProperty.Value = uno::makeAny( OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates") );
     aArgumentList[0] = uno::makeAny( aProperty );
-    uno::Reference< container::XNameContainer > xIgnoredExt( xConfigProvider->createInstanceWithArguments( UNISTRING("com.sun.star.configuration.ConfigurationUpdateAccess"), aArgumentList ), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameContainer > xIgnoredExt( xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationUpdateAccess", aArgumentList ), uno::UNO_QUERY_THROW );
 
-    aProperty.Value = uno::makeAny( UNISTRING("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/AvailableUpdates") );
+    aProperty.Value = uno::makeAny( OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/AvailableUpdates") );
     aArgumentList[0] = uno::makeAny( aProperty );
-    uno::Reference< container::XNameContainer > xUpdateAvail( xConfigProvider->createInstanceWithArguments( UNISTRING("com.sun.star.configuration.ConfigurationUpdateAccess"), aArgumentList ), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameContainer > xUpdateAvail( xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationUpdateAccess", aArgumentList ), uno::UNO_QUERY_THROW );
 
     return new UpdateCheckConfig( xContainer, xUpdateAvail, xIgnoredExt, rListener );
 }
@@ -287,7 +285,7 @@ bool
 UpdateCheckConfig::isAutoCheckEnabled() const
 {
     sal_Bool nValue = sal_False;
-    const_cast < UpdateCheckConfig *> (this)->getByName( UNISTRING( AUTOCHECK_ENABLED ) ) >>= nValue;
+    const_cast < UpdateCheckConfig *> (this)->getByName( AUTOCHECK_ENABLED ) >>= nValue;
     return nValue;
 }
 
@@ -297,7 +295,7 @@ bool
 UpdateCheckConfig::isAutoDownloadEnabled() const
 {
     sal_Bool nValue = sal_False;
-    const_cast < UpdateCheckConfig *> (this)->getByName( UNISTRING( AUTODOWNLOAD_ENABLED ) ) >>= nValue;
+    const_cast < UpdateCheckConfig *> (this)->getByName( AUTODOWNLOAD_ENABLED ) >>= nValue;
     return nValue;
 }
 
@@ -309,7 +307,7 @@ UpdateCheckConfig::getUpdateEntryVersion() const
     rtl::OUString aValue;
 
     // getByName is defined as non const in XNameAccess
-    const_cast < UpdateCheckConfig *> (this)->getByName( UNISTRING( OLD_VERSION ) ) >>= aValue;
+    const_cast < UpdateCheckConfig *> (this)->getByName( OLD_VERSION ) >>= aValue;
 
     return aValue;
 }
@@ -322,7 +320,7 @@ UpdateCheckConfig::getLastChecked() const
     sal_Int64 nValue = 0;
 
     // getByName is defined as non const in XNameAccess
-    const_cast < UpdateCheckConfig *> (this)->getByName( UNISTRING( LAST_CHECK ) ) >>= nValue;
+    const_cast < UpdateCheckConfig *> (this)->getByName( LAST_CHECK ) >>= nValue;
 
     return nValue;
 }
@@ -335,7 +333,7 @@ UpdateCheckConfig::getCheckInterval() const
     sal_Int64 nValue = 0;
 
     // getByName is defined as non const in XNameAccess
-    const_cast < UpdateCheckConfig *> (this)->getByName( UNISTRING( CHECK_INTERVAL ) ) >>= nValue;
+    const_cast < UpdateCheckConfig *> (this)->getByName( CHECK_INTERVAL ) >>= nValue;
 
     return nValue;
 }
@@ -345,7 +343,7 @@ UpdateCheckConfig::getCheckInterval() const
 rtl::OUString
 UpdateCheckConfig::getLocalFileName() const
 {
-    rtl::OUString aName = UNISTRING(LOCAL_FILE);
+    rtl::OUString aName = LOCAL_FILE;
     rtl::OUString aRet;
 
     if( m_xContainer->hasByName(aName) )
@@ -359,8 +357,8 @@ UpdateCheckConfig::getLocalFileName() const
 rtl::OUString
 UpdateCheckConfig::getDownloadDestination() const
 {
-    rtl::OUString aName = UNISTRING(DOWNLOAD_DESTINATION);
-    rtl::OUString aRet;
+    OUString aName = DOWNLOAD_DESTINATION;
+    OUString aRet;
 
     const_cast <UpdateCheckConfig *> (this)->getByName(aName) >>= aRet;
 
@@ -373,7 +371,7 @@ void
 UpdateCheckConfig::storeLocalFileName(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize)
 {
     const sal_uInt8 nItems = 2;
-    const rtl::OUString aNameList[nItems] = { UNISTRING(LOCAL_FILE), UNISTRING(DOWNLOAD_SIZE) };
+    const OUString aNameList[nItems] = { LOCAL_FILE, DOWNLOAD_SIZE };
     const uno::Any aValueList[nItems] = { uno::makeAny(rLocalFileName), uno::makeAny(nFileSize) };
 
     for( sal_uInt8 i=0; i < nItems; ++i )
@@ -393,7 +391,7 @@ void
 UpdateCheckConfig::clearLocalFileName()
 {
     const sal_uInt8 nItems = 2;
-    const rtl::OUString aNameList[nItems] = { UNISTRING(LOCAL_FILE), UNISTRING(DOWNLOAD_SIZE) };
+    const OUString aNameList[nItems] = { LOCAL_FILE, DOWNLOAD_SIZE };
 
     for( sal_uInt8 i=0; i < nItems; ++i )
     {
@@ -409,7 +407,7 @@ UpdateCheckConfig::clearLocalFileName()
 void
 UpdateCheckConfig::storeDownloadPaused(bool paused)
 {
-    replaceByName(UNISTRING(DOWNLOAD_PAUSED) , uno::makeAny(paused));
+    replaceByName(DOWNLOAD_PAUSED , uno::makeAny(paused));
     commitChanges();
 }
 
@@ -423,7 +421,7 @@ UpdateCheckConfig::updateLastChecked()
 
     sal_Int64 lastCheck = systime.Seconds;
 
-    replaceByName(UNISTRING(LAST_CHECK), uno::makeAny(lastCheck));
+    replaceByName(LAST_CHECK, uno::makeAny(lastCheck));
 }
 
 //------------------------------------------------------------------------------
@@ -498,7 +496,7 @@ uno::Sequence< rtl::OUString >
 UpdateCheckConfig::getServiceNames()
 {
     uno::Sequence< rtl::OUString > aServiceList(1);
-    aServiceList[0] = UNISTRING( "com.sun.star.setup.UpdateCheckConfig");
+    aServiceList[0] = "com.sun.star.setup.UpdateCheckConfig";
     return aServiceList;
 }
 
@@ -507,7 +505,7 @@ UpdateCheckConfig::getServiceNames()
 rtl::OUString
 UpdateCheckConfig::getImplName()
 {
-    return UNISTRING( "vnd.sun.UpdateCheckConfig");
+    return "vnd.sun.UpdateCheckConfig";
 }
 
 //------------------------------------------------------------------------------
