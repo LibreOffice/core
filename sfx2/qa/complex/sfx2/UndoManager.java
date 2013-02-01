@@ -179,7 +179,7 @@ public class UndoManager
         impl_clickButton( buttonModel );
         // the macro is executed asynchronously by the button, so wait at most 2 seconds for the callback to be
         // triggered
-        impl_waitFor( m_callbackCondition, 2000 );
+        impl_waitFor( m_callbackCondition, 20000 );
         // check the callback has actually been called
         assertTrue( "clicking the test button did not work as expected - basic script not called", m_callbackCalled );
 
