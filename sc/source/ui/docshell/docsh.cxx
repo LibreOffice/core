@@ -412,6 +412,7 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
 
     sal_Bool bRet(false);
     ErrCode nError = ERRCODE_NONE;
+    aDocument.EnableAdjustHeight(false);
     if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
         bRet = aImport.Import(false, nError);
     else
@@ -470,14 +471,10 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
         aDocument.Broadcast( SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS, NULL );
     }
 
-    bool bAdjustHeightOld = aDocument.IsAdjustHeightEnabled();
-    aDocument.EnableAdjustHeight(false);
-
     aDocument.SetXMLFromWrapper( false );
     AfterXMLLoading(bRet);
 
-    aDocument.EnableAdjustHeight(bAdjustHeightOld);
-
+    aDocument.EnableAdjustHeight(true);
     return bRet;
 }
 

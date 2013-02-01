@@ -3175,7 +3175,6 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
 
     if(pDoc && bSelfImportingXMLSet)
         ScModelObj::getImplementation(GetModel())->AfterXMLLoading(true);
-    pDoc->EnableAdjustHeight( true );
 }
 
 // XEventListener
