@@ -184,7 +184,8 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         {
             const OString &rTarget = aP->second;
             Window *pTarget = get<Window>(rTarget);
-            SAL_WARN_IF(!pTarget, "vcl", "missing member of a11y relation");
+            SAL_WARN_IF(!pTarget, "vcl", "missing member of a11y relation: "
+                << rTarget.getStr());
             if (!pTarget)
                 continue;
             const OString &rType = aP->first;
@@ -1487,6 +1488,9 @@ void VclBuilder::collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rM
         {
             span = reader.getAttributeValue(false);
             sValue = OString(span.begin, span.length);
+            sal_Int32 nDelim = sValue.indexOf(':');
+            if (nDelim != -1)
+                sValue = sValue.copy(0, nDelim);
         }
     }
 
