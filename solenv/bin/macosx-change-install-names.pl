@@ -74,14 +74,6 @@ sub action($$$)
 @ARGV >= 2 or die 'Usage: app|shl UREBIN|URELIB|OOO|SDKBIN|OXT|NONE <filepath>*';
 $type = shift @ARGV;
 $loc = shift @ARGV;
-if ($type eq "Executable")
-{
-    $type = "app"
-}
-elsif ($type eq "Library" || $type eq "SharedLibrary")
-{
-    $type = "shl"
-}
 foreach $file (@ARGV)
 {
     my $call = "otool -L $file";
