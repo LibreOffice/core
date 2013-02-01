@@ -1819,6 +1819,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
                 else
                 {
+                    checkNeedPap();
                     sal_uInt8 sBreak[] = { 0xc };
                     Mapper().text(sBreak, 1);
                     if (!m_bNeedPap)
