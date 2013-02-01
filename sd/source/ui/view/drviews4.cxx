@@ -335,14 +335,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
             svtools::ColorConfig aColorConfig;
             Color aFillColor;
 
-            if(DOCUMENT_TYPE_IMPRESS == GetDoc()->GetDocumentType())
-            {
-                aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
-            }
-            else
-            {
-                aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
-            }
+            aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
 
             mpDrawView->SetApplicationBackgroundColor(aFillColor);
         }

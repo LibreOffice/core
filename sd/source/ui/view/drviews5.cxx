@@ -435,14 +435,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     svtools::ColorConfig aColorConfig;
     Color aFillColor;
 
-    if(DOCUMENT_TYPE_IMPRESS == GetDoc()->GetDocumentType())
-    {
-        aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
-    }
-    else
-    {
-        aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
-    }
+    aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
 
     /* This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
