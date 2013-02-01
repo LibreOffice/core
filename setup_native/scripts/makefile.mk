@@ -29,7 +29,6 @@ TARGET=install
 
 UNIXTEXT= \
     $(BIN)$/langpackscript.sh \
-    $(BIN)$/linuxpatchscript.sh \
     $(BIN)$/javaloader.sh \
     $(BIN)$/update.sh \
     $(BIN)$/downloadscript.sh

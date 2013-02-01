@@ -15,7 +15,6 @@ mkdir: %_DEST%\bin\userscripts
 ..\%__SRC%\bin\noarch\fake-db-1.0-0.noarch.rpm %_DEST%\bin\openoffice.org-userland-1.0-0.noarch.rpm
 
 ..\%__SRC%\bin\langpackscript.sh %_DEST%\bin\langpackscript.sh
-..\%__SRC%\bin\linuxpatchscript.sh %_DEST%\bin\linuxpatchscript.sh
 ..\%__SRC%\bin\downloadscript.sh %_DEST%\bin\downloadscript.sh
 ..\%__SRC%\bin\unpack_update.sh %_DEST%\bin\unpack_update
 ..\%__SRC%\bin\update.sh %_DEST%\bin\update
