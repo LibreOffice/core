@@ -334,11 +334,36 @@ ifeq ($(OS_FOR_BUILD),WNT)
 else
 ifeq ($(DISABLE_LINKOO),TRUE)
 	@ooinstall $(DEVINSTALLDIR)/opt
-ifeq ($(OS),MACOSX)
-	identity=`security find-identity -p codesigning -v | grep 'Mac Developer:' | awk '{print $$2}'`; \
-	if test -n "$$identity"; then \
-		codesign --verbose --sign $$identity $(DEVINSTALLDIR)/opt/LibreOffice.app; \
-	fi
+ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
+#
+# Sign dylibs
+	find $(DEVINSTALLDIR)/opt/LibreOffice.app \( -name '*.dylib' -or -name '*.dylib.*' \) ! -type l | \
+        while read dylib; do \
+            id=`basename "$$dylib"`; \
+            case $$id in \
+            *.dylib) \
+                ;; \
+            *) \
+                id=`echo $$id | sed -e 's/dylib.*/dylib/'`; \
+                ;; \
+            esac; \
+            codesign --verbose --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$$id --sign $(MACOSX_CODESIGNING_IDENTITY) "$$dylib"; \
+        done
+#
+# Sign frameworks.
+#
+# Yeah, we don't bundle any other framework than our Python one, and
+# it has just one version, so this generic search is mostly for
+# completeness.
+	for framework in `find $(DEVINSTALLDIR)/opt/LibreOffice.app -name '*.framework' -type d`; do \
+        for version in $$framework/Versions/*; do \
+            test -d $$version && codesign --force --verbose --prefix=$(MACOSX_BUNDLE_IDENTIFIER). --sign $(MACOSX_CODESIGNING_IDENTITY) $$version; \
+        done; \
+    done
+#
+# Sign the app bundle as a whole (will sign the soffice binary)
+	codesign --verbose --sign $(MACOSX_CODESIGNING_IDENTITY) $(DEVINSTALLDIR)/opt/LibreOffice.app
+#
 endif
 	@install-gdb-printers -L
 else

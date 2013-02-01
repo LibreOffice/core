@@ -1125,6 +1125,12 @@ AC_ARG_ENABLE(macosx-sandbox,
          don't use unless you are working on this.]),
 ,)
 
+AC_ARG_WITH(macosx-bundle-identifier,
+    AS_HELP_STRING([--with-macosx-bundle-identifier=tld.mumble.orifice.TheOffice],
+        [Define the OS X bundle identifier. Default is the somewhat weird
+         org.libreoffice.script ("script", huh?).]),
+,with_macosx_bundle_identifier=org.libreoffice.script)
+
 AC_ARG_ENABLE(postgresql-sdbc,
     AS_HELP_STRING([--disable-postgresql-sdbc],
         [Disable the build of the PostgreSQL-SDBC driver.])
@@ -2743,6 +2749,12 @@ if test "$_os" = "Darwin"; then
     else
         AC_MSG_RESULT([no])
     fi
+
+    AC_MSG_CHECKING([what OS X app bundle identifier to use])
+
+    MACOSX_BUNDLE_IDENTIFIER=$with_macosx_bundle_identifier
+
+    AC_MSG_RESULT([$MACOSX_BUNDLE_IDENTIFIER])
 fi
 AC_SUBST(FRAMEWORKSHOME)
 AC_SUBST(MACOSX_SDK_PATH)
@@ -2753,6 +2765,7 @@ AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(XCRUN)
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
+AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
 
 dnl ===================================================================
 dnl Windows specific tests and stuff

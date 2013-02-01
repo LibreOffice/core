@@ -223,8 +223,7 @@ sub replace_variables_in_scriptfile
     replace_one_variable_in_shellscript($scriptfile, $allvariables->{'PRODUCTNAME'}, "PRODUCTNAME" );
     replace_one_variable_in_shellscript($scriptfile, $allvariables->{'PRODUCTVERSION'}, "PRODUCTVERSION" );
 
-    my $scriptname = lc($allvariables->{'PRODUCTNAME'}) . "\.script";
-    if ( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) { $scriptname = "org.libreoffice.script"; }
+    my $scriptname = $allvariables->{'BUNDLEIDENTIFIER'};
 
     replace_one_variable_in_shellscript($scriptfile, $scriptname, "SEARCHSCRIPTNAME" );
 }
