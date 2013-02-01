@@ -877,8 +877,8 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
         m_pTextArr[i]->SetText( sEntry );
 
         //added by menghu for SODC_5143,12/12/2006
-        String sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH);
-        sColumnWidth.SearchAndReplace( DEFINE_CONST_UNICODE("%1"), sIndex );
+        OUString sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH);
+        sColumnWidth = sColumnWidth.replaceFirst( "%1", sIndex );
         m_aFieldArr[i].SetAccessibleName( sColumnWidth );
     }
 

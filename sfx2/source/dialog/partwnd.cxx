@@ -107,7 +107,7 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 {
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame(
             ::comphelper::getProcessServiceFactory()->createInstance(
-            DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), ::com::sun::star::uno::UNO_QUERY );
+            "com.sun.star.frame.Frame" ), ::com::sun::star::uno::UNO_QUERY );
     xFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet(

@@ -237,8 +237,7 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
         const SfxSlot* pSlot = SfxSlotPool::GetSlotPool( pBindings->GetDispatcher()->GetFrame() ).GetSlot( nId );
         if ( pSlot && pSlot->pUnoName )
         {
-            aCommand = DEFINE_CONST_UNICODE(".uno:");
-            aCommand += rtl::OUString::createFromAscii( pSlot->GetUnoName() );
+            aCommand = ".uno:" + OUString::createFromAscii( pSlot->GetUnoName() );
         }
     }
 

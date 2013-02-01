@@ -182,7 +182,7 @@ void BindDispatch_Impl::Dispatch( uno::Sequence < beans::PropertyValue > aProps,
     {
         sal_Int32 nLength = aProps.getLength();
         aProps.realloc(nLength+1);
-        aProps[nLength].Name = DEFINE_CONST_UNICODE("SynchronMode");
+        aProps[nLength].Name = "SynchronMode";
         aProps[nLength].Value <<= bForceSynchron ;
         xDisp->dispatch( aURL, aProps );
     }
@@ -270,7 +270,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
 
             // create the dispatch URL from the slot data
             ::com::sun::star::util::URL aURL;
-            ::rtl::OUString aCmd = DEFINE_CONST_UNICODE(".uno:");
+            OUString aCmd = ".uno:";
             aURL.Protocol = aCmd;
             aURL.Path = ::rtl::OUString::createFromAscii( pSlot->GetUnoName() );
             aCmd += aURL.Path;

@@ -64,9 +64,7 @@ SfxStyleDialog::SfxStyleDialog
         SetCurPageId( ID_TABPAGE_MANAGESTYLES );
     else
     {
-        String sTxt( GetText() );
-        sTxt += DEFINE_CONST_UNICODE(": ") ;
-        sTxt += rStyle.GetName();
+        OUString sTxt = GetText() + ": " + rStyle.GetName();
         SetText( sTxt );
     }
     delete pExampleSet; // in SfxTabDialog::Ctor() already created

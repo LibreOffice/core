@@ -34,7 +34,6 @@ using namespace ::com::sun::star::uno;
 
 namespace sfx2 {
 
-#define USERITEM_NAME       DEFINE_CONST_OUSTRING("UserItem")
 #define MAX_SAVE_COUNT      (sal_uInt16)10
 
 // ============================================================================
@@ -84,7 +83,7 @@ void SearchDialog::LoadConfig()
     if ( aViewOpt.Exists() )
     {
         m_sWinState = rtl::OUStringToOString(aViewOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US);
-        Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
+        Any aUserItem = aViewOpt.GetUserItem( "UserItem" );
         ::rtl::OUString aTemp;
         if ( aUserItem >>= aTemp )
         {
@@ -129,7 +128,7 @@ void SearchDialog::SaveConfig()
     sUserData += String::CreateFromInt32( m_aBackwardsBox.IsChecked() ? 1 : 0 );
 
     Any aUserItem = makeAny( ::rtl::OUString( sUserData ) );
-    aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
+    aViewOpt.SetUserItem( "UserItem", aUserItem );
 }
 
 IMPL_LINK_NOARG(SearchDialog, FindHdl)

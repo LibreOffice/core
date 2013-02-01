@@ -1888,7 +1888,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
             }
 
             if ( !xFrame.is() )
-                xFrame.set( xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 ), UNO_SET_THROW );
+                xFrame.set( xDesktop->findFrame( "_blank", 0 ), UNO_SET_THROW );
 
             bOwnFrame = true;
         }
@@ -3104,7 +3104,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
             return;
         Reference < XFrame > xFrame = GetFrame().GetTopFrame().GetFrameInterface();
-        Reference < XFrame > xBeamer( xFrame->findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN ) );
+        Reference < XFrame > xBeamer( xFrame->findFrame( "_beamer", FrameSearchFlag::CHILDREN ) );
         sal_Bool bShow = sal_False;
         sal_Bool bHasChild = xBeamer.is();
         bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
@@ -3207,7 +3207,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         else if ( nSID == SID_BROWSER )
         {
             Reference < XFrame > xFrame = GetFrame().GetTopFrame().GetFrameInterface()->
-                            findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN );
+                            findFrame( "_beamer", FrameSearchFlag::CHILDREN );
             if ( !xFrame.is() )
                 rState.DisableItem( nSID );
             else if ( KnowsChildWindow(nSID) )

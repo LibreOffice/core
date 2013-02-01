@@ -37,7 +37,6 @@ using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::TypeDescription;
 
-#define USTR_ASCII(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 namespace pyuno
 {
 const char *typeClassToString( TypeClass t )
@@ -142,14 +141,14 @@ sal_Unicode PyChar2Unicode( PyObject *obj ) throw ( RuntimeException )
     if( ! PyUnicode_Check( value.get() ) )
     {
         throw RuntimeException(
-            USTR_ASCII( "attribute value of uno.Char is not a unicode string" ),
+            "attribute value of uno.Char is not a unicode string",
             Reference< XInterface > () );
     }
 
     if( PyUnicode_GetSize( value.get() ) < 1 )
     {
         throw RuntimeException(
-            USTR_ASCII( "uno.Char contains an empty unicode string" ),
+            "uno.Char contains an empty unicode string",
             Reference< XInterface > () );
     }
 
@@ -165,7 +164,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
     if( !PyStr_Check( typeName.get() ) || ! PyStr_Check( value.get() ) )
     {
         throw RuntimeException(
-            USTR_ASCII( "attributes typeName and/or value of uno.Enum are not strings" ),
+            "attributes typeName and/or value of uno.Enum are not strings",
             Reference< XInterface > () );
     }
 
@@ -221,7 +220,7 @@ Type PyType2Type( PyObject * o ) throw(RuntimeException )
     if( !PyStr_Check( pyName.get() ) )
     {
         throw RuntimeException(
-            USTR_ASCII( "type object does not have typeName property" ),
+            "type object does not have typeName property",
             Reference< XInterface > () );
     }
 

@@ -158,13 +158,13 @@ std::vector<sal_uInt16>* SfxApplication::GetDisabledSlotList_Impl()
     {
         // Is there a slot file?
         INetURLObject aUserObj( SvtPathOptions().GetUserConfigPath() );
-        aUserObj.insertName( DEFINE_CONST_UNICODE( "slots.cfg" ) );
+        aUserObj.insertName( "slots.cfg" );
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aUserObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
         if ( !pStream || pStream->GetError() == ERRCODE_IO_NOTEXISTS )
         {
             delete pStream;
             INetURLObject aObj( SvtPathOptions().GetConfigPath() );
-            aObj.insertName( DEFINE_CONST_UNICODE( "slots.cfg" ) );
+            aObj.insertName( "slots.cfg" );
             pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
         }
 

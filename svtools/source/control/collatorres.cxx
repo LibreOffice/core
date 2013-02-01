@@ -66,21 +66,20 @@ CollatorResource::CollatorResource()
 {
     mp_Data = new CollatorResourceData[COLLATOR_RESOURCE_COUNT];
 
-    #define ASCSTR(str) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(str))
     #define RESSTR(rid) SvtResId(rid).toString()
 
-    mp_Data[0] = CollatorResourceData (ASCSTR("alphanumeric"), RESSTR(STR_SVT_COLLATE_ALPHANUMERIC));
-    mp_Data[1] = CollatorResourceData (ASCSTR("charset"), RESSTR(STR_SVT_COLLATE_CHARSET));
-    mp_Data[2] = CollatorResourceData (ASCSTR("dict"), RESSTR(STR_SVT_COLLATE_DICTIONARY));
-    mp_Data[3] = CollatorResourceData (ASCSTR("normal"), RESSTR(STR_SVT_COLLATE_NORMAL));
-    mp_Data[4] = CollatorResourceData (ASCSTR("pinyin"), RESSTR(STR_SVT_COLLATE_PINYIN));
-    mp_Data[5] = CollatorResourceData (ASCSTR("radical"), RESSTR(STR_SVT_COLLATE_RADICAL));
-    mp_Data[6] = CollatorResourceData (ASCSTR("stroke"), RESSTR(STR_SVT_COLLATE_STROKE));
-    mp_Data[7] = CollatorResourceData (ASCSTR("unicode"), RESSTR(STR_SVT_COLLATE_UNICODE));
-    mp_Data[8] = CollatorResourceData (ASCSTR("zhuyin"), RESSTR(STR_SVT_COLLATE_ZHUYIN));
-    mp_Data[9] = CollatorResourceData (ASCSTR("phonebook"), RESSTR(STR_SVT_COLLATE_PHONEBOOK));
-    mp_Data[10] = CollatorResourceData (ASCSTR("phonetic (alphanumeric first)"), RESSTR(STR_SVT_COLLATE_PHONETIC_F));
-    mp_Data[11] = CollatorResourceData (ASCSTR("phonetic (alphanumeric last)"), RESSTR(STR_SVT_COLLATE_PHONETIC_L));
+    mp_Data[0] = CollatorResourceData ("alphanumeric", RESSTR(STR_SVT_COLLATE_ALPHANUMERIC));
+    mp_Data[1] = CollatorResourceData ("charset", RESSTR(STR_SVT_COLLATE_CHARSET));
+    mp_Data[2] = CollatorResourceData ("dict", RESSTR(STR_SVT_COLLATE_DICTIONARY));
+    mp_Data[3] = CollatorResourceData ("normal", RESSTR(STR_SVT_COLLATE_NORMAL));
+    mp_Data[4] = CollatorResourceData ("pinyin", RESSTR(STR_SVT_COLLATE_PINYIN));
+    mp_Data[5] = CollatorResourceData ("radical", RESSTR(STR_SVT_COLLATE_RADICAL));
+    mp_Data[6] = CollatorResourceData ("stroke", RESSTR(STR_SVT_COLLATE_STROKE));
+    mp_Data[7] = CollatorResourceData ("unicode", RESSTR(STR_SVT_COLLATE_UNICODE));
+    mp_Data[8] = CollatorResourceData ("zhuyin", RESSTR(STR_SVT_COLLATE_ZHUYIN));
+    mp_Data[9] = CollatorResourceData ("phonebook", RESSTR(STR_SVT_COLLATE_PHONEBOOK));
+    mp_Data[10] = CollatorResourceData ("phonetic (alphanumeric first)", RESSTR(STR_SVT_COLLATE_PHONETIC_F));
+    mp_Data[11] = CollatorResourceData ("phonetic (alphanumeric last)", RESSTR(STR_SVT_COLLATE_PHONETIC_L));
 }
 
 CollatorResource::~CollatorResource()

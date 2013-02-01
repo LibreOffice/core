@@ -746,7 +746,7 @@ void SfxObjectShell::SetTitle
 String X(const String &rRet)
 {
     if ( !rRet.Len() )
-        return DEFINE_CONST_UNICODE( "-empty-" );
+        return String( "-empty-" );
     return rRet;
 }
 #else
@@ -816,7 +816,7 @@ String SfxObjectShell::GetTitle
     {
         static sal_Bool bRecur = sal_False;
         if ( bRecur )
-            return DEFINE_CONST_UNICODE( "-not available-" );
+            return String( "-not available-" );
         bRecur = sal_True;
 
         String aTitle;
@@ -908,7 +908,7 @@ String SfxObjectShell::GetTitle
             String aComplete( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
             if( aComplete.Len() > nMaxLength )
             {
-                String aRet( DEFINE_CONST_UNICODE( "..." ) );
+                String aRet( "..." );
                 aRet += aComplete.Copy( aComplete.Len() - nMaxLength + 3, nMaxLength - 3 );
                 return X( aRet );
             }

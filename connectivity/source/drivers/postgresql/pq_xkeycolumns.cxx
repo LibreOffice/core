@@ -100,7 +100,6 @@ using com::sun::star::sdbc::SQLException;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 KeyColumns::KeyColumns(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
@@ -110,7 +109,7 @@ KeyColumns::KeyColumns(
         const rtl::OUString &tableName,
         const Sequence< rtl::OUString > &columnNames,
         const Sequence< rtl::OUString > &foreignColumnNames )
-    : Container( refMutex, origin, pSettings,  ASCII_STR( "KEY_COLUMN" ) ),
+    : Container( refMutex, origin, pSettings,  "KEY_COLUMN" ),
       m_schemaName( schemaName ),
       m_tableName( tableName ),
       m_columnNames( columnNames ),
@@ -242,7 +241,7 @@ void KeyColumns::refresh()
 //         if( pastTypeName != futureTypeName )
 //         {
 //             throw RuntimeException(
-//                 ASCII_STR( "Can't modify column types, drop the column and create a new one" ),
+//                 "Can't modify column types, drop the column and create a new one",
 //                 Reference< XInterface > () );
 //         }
 
@@ -318,7 +317,7 @@ void KeyColumns::appendByDescriptor(
 {
     (void) future;
     throw com::sun::star::sdbc::SQLException(
-        ASCII_STR( "KeyColumns::appendByDescriptor not implemented yet" ),
+        "KeyColumns::appendByDescriptor not implemented yet",
         *this, OUString(), 1, Any() );
 
 //     osl::MutexGuard guard( m_refMutex->mutex );
@@ -338,7 +337,7 @@ void KeyColumns::dropByIndex( sal_Int32 index )
 {
     (void) index;
     throw com::sun::star::sdbc::SQLException(
-        ASCII_STR( "KeyColumns::dropByIndex not implemented yet" ),
+        "KeyColumns::dropByIndex not implemented yet",
         *this, OUString(), 1, Any() );
 //     osl::MutexGuard guard( m_refMutex->mutex );
 //     if( index < 0 ||  index >= m_values.getLength() )
@@ -399,7 +398,7 @@ KeyColumnDescriptors::KeyColumnDescriptors(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings )
-    : Container( refMutex, origin, pSettings,  ASCII_STR( "KEY_COLUMN" ) )
+    : Container( refMutex, origin, pSettings,  "KEY_COLUMN" )
 {}
 
 Reference< ::com::sun::star::beans::XPropertySet > KeyColumnDescriptors::createDataDescriptor()

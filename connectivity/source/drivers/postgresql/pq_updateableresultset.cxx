@@ -100,8 +100,6 @@ using com::sun::star::beans::XFastPropertySet;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XMultiPropertySet;
 
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
 namespace pq_sdbc_driver
 {
 
@@ -237,7 +235,7 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
     }
     if( ! m_insertRow )
         throw SQLException(
-            ASCII_STR("pq_resultset.insertRow: moveToInsertRow has not been called !" ),
+            "pq_resultset.insertRow: moveToInsertRow has not been called !",
             *this, OUString(), 1, Any() );
 
     OUStringBuffer buf( 128 );
@@ -331,7 +329,7 @@ void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException)
     }
     if( m_insertRow )
         throw SQLException(
-            ASCII_STR("pq_resultset.updateRow: moveToCurrentRow has not been called !" ),
+            "pq_resultset.updateRow: moveToCurrentRow has not been called !",
             *this, OUString(), 1, Any() );
 
     OUStringBuffer buf( 128 );
@@ -380,7 +378,7 @@ void UpdateableResultSet::deleteRow(  ) throw (SQLException, RuntimeException)
     }
     if( m_insertRow )
         throw SQLException(
-            ASCII_STR("pq_resultset.deleteRow: deleteRow cannot be called when on insert row !" ),
+            "pq_resultset.deleteRow: deleteRow cannot be called when on insert row !",
             *this, OUString(), 1, Any() );
 
     if( m_row < 0 || m_row >= m_rowCount )
@@ -529,7 +527,7 @@ void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const ::com::sun::
     if( ! escapedString )
     {
         throw SQLException(
-            ASCII_STR("pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string" ),
+            "pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string",
             *this, OUString(), 1, Any() );
     }
 //     buf.append( (const sal_Char *)escapedString, len -1 );

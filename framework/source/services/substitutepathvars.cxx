@@ -51,13 +51,11 @@
 
 #define STRPOS_NOTFOUND                  (sal_Int32)-1
 
-#define ASCII_STR( val )                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( val ))
-
 #define SEARCHPATH_DELIMITER             ';'
 
 // Variable start/end characters
-#define SIGN_STARTVARIABLE               ASCII_STR("$(")
-#define SIGN_ENDVARIABLE                 ASCII_STR(")")
+#define SIGN_STARTVARIABLE               "$("
+#define SIGN_ENDVARIABLE                 ")"
 
 // Length of SUBSTITUTE_... to replace it with real values.
 #define REPLACELENGTH_INST               7

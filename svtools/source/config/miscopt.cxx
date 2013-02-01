@@ -40,31 +40,30 @@ using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star;
 
-#define ASCII_STR(s)                        OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
-#define ROOTNODE_MISC                       ASCII_STR("Office.Common/Misc")
+#define ROOTNODE_MISC                       "Office.Common/Misc"
 
 // PROPERTYHANDLE defines must be sequential from zero for Commit/Load
-#define PROPERTYNAME_PLUGINSENABLED         ASCII_STR("PluginsEnabled")
+#define PROPERTYNAME_PLUGINSENABLED         "PluginsEnabled"
 #define PROPERTYHANDLE_PLUGINSENABLED           0
-#define PROPERTYNAME_SYMBOLSET              ASCII_STR("SymbolSet")
+#define PROPERTYNAME_SYMBOLSET              "SymbolSet"
 #define PROPERTYHANDLE_SYMBOLSET                1
-#define PROPERTYNAME_TOOLBOXSTYLE           ASCII_STR("ToolboxStyle")
+#define PROPERTYNAME_TOOLBOXSTYLE           "ToolboxStyle"
 #define PROPERTYHANDLE_TOOLBOXSTYLE             2
-#define PROPERTYNAME_USESYSTEMFILEDIALOG    ASCII_STR("UseSystemFileDialog")
+#define PROPERTYNAME_USESYSTEMFILEDIALOG    "UseSystemFileDialog"
 #define PROPERTYHANDLE_USESYSTEMFILEDIALOG      3
-#define PROPERTYNAME_SYMBOLSTYLE            ASCII_STR("SymbolStyle")
+#define PROPERTYNAME_SYMBOLSTYLE            "SymbolStyle"
 #define PROPERTYHANDLE_SYMBOLSTYLE              4
-#define PROPERTYNAME_USESYSTEMPRINTDIALOG   ASCII_STR("UseSystemPrintDialog")
+#define PROPERTYNAME_USESYSTEMPRINTDIALOG   "UseSystemPrintDialog"
 #define PROPERTYHANDLE_USESYSTEMPRINTDIALOG     5
-#define PROPERTYNAME_SHOWLINKWARNINGDIALOG  ASCII_STR("ShowLinkWarningDialog")
+#define PROPERTYNAME_SHOWLINKWARNINGDIALOG  "ShowLinkWarningDialog"
 #define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG    6
-#define PROPERTYNAME_DISABLEUICUSTOMIZATION ASCII_STR("DisableUICustomization")
+#define PROPERTYNAME_DISABLEUICUSTOMIZATION "DisableUICustomization"
 #define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   7
-#define PROPERTYNAME_ALWAYSALLOWSAVE        ASCII_STR("AlwaysAllowSave")
+#define PROPERTYNAME_ALWAYSALLOWSAVE        "AlwaysAllowSave"
 #define PROPERTYHANDLE_ALWAYSALLOWSAVE          8
-#define PROPERTYNAME_EXPERIMENTALMODE       ASCII_STR("ExperimentalMode")
+#define PROPERTYNAME_EXPERIMENTALMODE       "ExperimentalMode"
 #define PROPERTYHANDLE_EXPERIMENTALMODE         9
-#define PROPERTYNAME_MACRORECORDERMODE       ASCII_STR("MacroRecorderMode")
+#define PROPERTYNAME_MACRORECORDERMODE       "MacroRecorderMode"
 #define PROPERTYHANDLE_MACRORECORDERMODE        10
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
@@ -688,17 +687,17 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
     // Build list of configuration key names.
     const OUString pProperties[] =
     {
-        PROPERTYNAME_PLUGINSENABLED,
-        PROPERTYNAME_SYMBOLSET,
-        PROPERTYNAME_TOOLBOXSTYLE,
-        PROPERTYNAME_USESYSTEMFILEDIALOG,
-        PROPERTYNAME_SYMBOLSTYLE,
-        PROPERTYNAME_USESYSTEMPRINTDIALOG,
-        PROPERTYNAME_SHOWLINKWARNINGDIALOG,
-        PROPERTYNAME_DISABLEUICUSTOMIZATION,
-        PROPERTYNAME_ALWAYSALLOWSAVE,
-        PROPERTYNAME_EXPERIMENTALMODE,
-        PROPERTYNAME_MACRORECORDERMODE
+        OUString(PROPERTYNAME_PLUGINSENABLED),
+        OUString(PROPERTYNAME_SYMBOLSET),
+        OUString(PROPERTYNAME_TOOLBOXSTYLE),
+        OUString(PROPERTYNAME_USESYSTEMFILEDIALOG),
+        OUString(PROPERTYNAME_SYMBOLSTYLE),
+        OUString(PROPERTYNAME_USESYSTEMPRINTDIALOG),
+        OUString(PROPERTYNAME_SHOWLINKWARNINGDIALOG),
+        OUString(PROPERTYNAME_DISABLEUICUSTOMIZATION),
+        OUString(PROPERTYNAME_ALWAYSALLOWSAVE),
+        OUString(PROPERTYNAME_EXPERIMENTALMODE),
+        OUString(PROPERTYNAME_MACRORECORDERMODE)
     };
 
     // Initialize return sequence with these list ...

@@ -181,7 +181,7 @@ SfxApplication::SfxApplication()
 {
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SfxApplication" );
 
-    SetName( DEFINE_CONST_UNICODE("StarOffice") );
+    SetName( String(RTL_CONSTASCII_USTRINGPARAM("StarOffice")) );
     SvtViewOptions::AcquireOptions();
 
     pAppData_Impl = new SfxAppData_Impl( this );

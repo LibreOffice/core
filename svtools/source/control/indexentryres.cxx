@@ -66,32 +66,31 @@ IndexEntryResource::IndexEntryResource()
 {
         mp_Data = new IndexEntryResourceData[INDEXENTRY_RESOURCE_COUNT];
 
-        #define ASCSTR(str) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(str))
         #define RESSTR(rid) SvtResId(rid).toString()
 
         mp_Data[STR_SVT_INDEXENTRY_ALPHANUMERIC - STR_SVT_INDEXENTRY_START] =
-        IndexEntryResourceData (ASCSTR("alphanumeric"), RESSTR(STR_SVT_INDEXENTRY_ALPHANUMERIC));
+        IndexEntryResourceData ("alphanumeric", RESSTR(STR_SVT_INDEXENTRY_ALPHANUMERIC));
         mp_Data[STR_SVT_INDEXENTRY_DICTIONARY - STR_SVT_INDEXENTRY_START] =
-        IndexEntryResourceData (ASCSTR("dict"), RESSTR(STR_SVT_INDEXENTRY_DICTIONARY));
+        IndexEntryResourceData ("dict", RESSTR(STR_SVT_INDEXENTRY_DICTIONARY));
         mp_Data[STR_SVT_INDEXENTRY_PINYIN - STR_SVT_INDEXENTRY_START] =
-        IndexEntryResourceData (ASCSTR("pinyin"), RESSTR(STR_SVT_INDEXENTRY_PINYIN));
+        IndexEntryResourceData ("pinyin", RESSTR(STR_SVT_INDEXENTRY_PINYIN));
         mp_Data[STR_SVT_INDEXENTRY_PINYIN - STR_SVT_INDEXENTRY_START] =
-        IndexEntryResourceData (ASCSTR("radical"), RESSTR(STR_SVT_INDEXENTRY_RADICAL));
+        IndexEntryResourceData ("radical", RESSTR(STR_SVT_INDEXENTRY_RADICAL));
         mp_Data[STR_SVT_INDEXENTRY_STROKE - STR_SVT_INDEXENTRY_START] =
-        IndexEntryResourceData (ASCSTR("stroke"), RESSTR(STR_SVT_INDEXENTRY_STROKE));
+        IndexEntryResourceData ("stroke", RESSTR(STR_SVT_INDEXENTRY_STROKE));
         mp_Data[STR_SVT_INDEXENTRY_STROKE - STR_SVT_INDEXENTRY_START] =
-        IndexEntryResourceData (ASCSTR("zhuyin"), RESSTR(STR_SVT_INDEXENTRY_ZHUYIN));
+        IndexEntryResourceData ("zhuyin", RESSTR(STR_SVT_INDEXENTRY_ZHUYIN));
         mp_Data[STR_SVT_INDEXENTRY_ZHUYIN - STR_SVT_INDEXENTRY_START] =
-        IndexEntryResourceData (ASCSTR("phonetic (alphanumeric first) (grouped by syllable)"),
+        IndexEntryResourceData ("phonetic (alphanumeric first) (grouped by syllable)",
                     RESSTR(STR_SVT_INDEXENTRY_PHONETIC_FS));
         mp_Data[STR_SVT_INDEXENTRY_PHONETIC_FS - STR_SVT_INDEXENTRY_START] =
-        IndexEntryResourceData (ASCSTR("phonetic (alphanumeric first) (grouped by consonant)"),
+        IndexEntryResourceData ("phonetic (alphanumeric first) (grouped by consonant)",
                     RESSTR(STR_SVT_INDEXENTRY_PHONETIC_FC));
         mp_Data[STR_SVT_INDEXENTRY_PHONETIC_FC - STR_SVT_INDEXENTRY_START] =
-        IndexEntryResourceData (ASCSTR("phonetic (alphanumeric last) (grouped by syllable)"),
+        IndexEntryResourceData ("phonetic (alphanumeric last) (grouped by syllable)",
                     RESSTR(STR_SVT_INDEXENTRY_PHONETIC_LS));
         mp_Data[STR_SVT_INDEXENTRY_PHONETIC_LS - STR_SVT_INDEXENTRY_START] =
-        IndexEntryResourceData (ASCSTR("phonetic (alphanumeric last) (grouped by consonant)"),
+        IndexEntryResourceData ("phonetic (alphanumeric last) (grouped by consonant)",
                     RESSTR(STR_SVT_INDEXENTRY_PHONETIC_LC));
 }
 
