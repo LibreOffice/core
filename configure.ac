@@ -2608,14 +2608,14 @@ if test "$_os" = "Darwin"; then
             10.4)
                 ;;
             *)
-                AC_MSG_WARN([Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for deliverable build until verified that it really works])
-                add_warning "Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for deliverable build until verified that it really works"
+                AC_MSG_WARN([Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for the TDF build])
+                add_warning "Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for the TDF build"
                 ;;
             esac
             ;;
         *)
-            AC_MSG_WARN([Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for deliverable build])
-            add_warning "Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for deliverable build"
+            AC_MSG_WARN([Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for the TDF build])
+            add_warning "Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for the TDF build"
             ;;
         esac
     fi
