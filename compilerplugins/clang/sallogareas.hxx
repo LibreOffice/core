@@ -24,7 +24,7 @@ class SalLogAreas
     {
     public:
         explicit SalLogAreas( ASTContext& context );
-        void run();
+        virtual void run();
         bool VisitFunctionDecl( FunctionDecl* function );
         bool VisitCallExpr( CallExpr* call );
     private:

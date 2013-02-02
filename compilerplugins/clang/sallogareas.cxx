@@ -131,4 +131,6 @@ void SalLogAreas::readLogAreas()
         report( DiagnosticsEngine::Warning, "error reading log areas [loplugin]" );
     }
 
+static Plugin::Registration< SalLogAreas > X( "sallogareas" );
+
 } // namespace

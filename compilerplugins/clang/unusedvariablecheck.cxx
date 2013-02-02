@@ -100,4 +100,6 @@ bool UnusedVariableCheck::VisitVarDecl( VarDecl* var )
     return true;
     }
 
+static Plugin::Registration< UnusedVariableCheck > X( "unusedvariablecheck" );
+
 } // namespace

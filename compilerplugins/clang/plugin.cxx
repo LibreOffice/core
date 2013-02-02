@@ -55,6 +55,12 @@ bool Plugin::ignoreLocation( SourceLocation loc )
     return true;
     }
 
+void Plugin::registerPlugin( Plugin* (*create)( ASTContext&, Rewriter& ), const char* optionName, bool isRewriter )
+    {
+    PluginHandler::registerPlugin( create, optionName, isRewriter );
+    }
+
+/////
 
 RewritePlugin::RewritePlugin( ASTContext& context, Rewriter& rewriter )
     : Plugin( context )

@@ -49,4 +49,6 @@ bool LclStaticFix::VisitFunctionDecl( FunctionDecl* declaration )
     return true;
     }
 
+static Plugin::Registration< LclStaticFix > X( "lclstaticfix" );
+
 } // namespace

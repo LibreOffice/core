@@ -22,7 +22,7 @@ class BodyNotInBlock
     {
     public:
         explicit BodyNotInBlock( ASTContext& context );
-        void run();
+        virtual void run();
         bool VisitFunctionDecl( FunctionDecl* declaration );
     private:
         typedef vector< const Stmt* > StmtParents;

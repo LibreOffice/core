@@ -16,13 +16,6 @@
 #include <clang/AST/ASTConsumer.h>
 #include <clang/Frontend/FrontendAction.h>
 
-#include "bodynotinblock.hxx"
-#include "lclstaticfix.hxx"
-#include "postfixincrementfix.hxx"
-#include "removeforwardstringdecl.hxx"
-#include "sallogareas.hxx"
-#include "unusedvariablecheck.hxx"
-
 namespace loplugin
 {
 
@@ -34,17 +27,11 @@ class PluginHandler
     {
     public:
         PluginHandler( ASTContext& context, const vector< string >& args );
+        virtual ~PluginHandler();
         virtual void HandleTranslationUnit( ASTContext& context );
+        static void registerPlugin( Plugin* (*create)( ASTContext&, Rewriter& ), const char* optionName, bool isRewriter );
     private:
-        bool isArg( const char* arg ) const;
         Rewriter rewriter;
-        vector< string > args;
-        BodyNotInBlock bodyNotInBlock;
-        LclStaticFix lclStaticFix;
-        PostfixIncrementFix postfixIncrementFix;
-        RemoveForwardStringDecl removeForwardStringDecl;
-        SalLogAreas salLogAreas;
-        UnusedVariableCheck unusedVariableCheck;
     };
 
 /**
@@ -59,14 +46,6 @@ class LibreOfficeAction
     private:
         vector< string > _args;
     };
-
-/////
-
-inline
-bool PluginHandler::isArg( const char* arg ) const
-    {
-    return find( args.begin(), args.end(), arg ) != args.end();
-    }
 
 } // namespace
 

@@ -162,4 +162,6 @@ bool PostfixIncrementFix::shouldDoChange( const Expr* operand )
         }
     }
 
+static Plugin::Registration< PostfixIncrementFix > X( "postfixincrementfix" );
+
 } // namespace

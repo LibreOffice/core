@@ -22,7 +22,7 @@ class LclStaticFix
     {
     public:
         explicit LclStaticFix( ASTContext& context, Rewriter& rewriter );
-        void run();
+        virtual void run();
         bool VisitFunctionDecl( FunctionDecl* declaration );
     };
 

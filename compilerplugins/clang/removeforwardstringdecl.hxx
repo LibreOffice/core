@@ -22,7 +22,7 @@ class RemoveForwardStringDecl
     {
     public:
         explicit RemoveForwardStringDecl( ASTContext& context, Rewriter& rewriter );
-        void run();
+        virtual void run();
         bool VisitNamespaceDecl( NamespaceDecl* declaration );
     private:
         bool tryRemoveStringForwardDecl( const Decl* decl );

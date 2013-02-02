@@ -73,4 +73,6 @@ bool RemoveForwardStringDecl::tryRemoveStringForwardDecl( const Decl* decl )
     return false;
     }
 
+static Plugin::Registration< RemoveForwardStringDecl > X( "removeforwardstringdecl" );
+
 } // namespace

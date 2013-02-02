@@ -22,7 +22,7 @@ class UnusedVariableCheck
     {
     public:
         explicit UnusedVariableCheck( ASTContext& context );
-        void run();
+        virtual void run();
         bool VisitVarDecl( VarDecl* var );
     };
 

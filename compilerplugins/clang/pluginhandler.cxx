@@ -19,39 +19,80 @@
 namespace loplugin
 {
 
+struct PluginData
+    {
+    Plugin* (*create)( ASTContext&, Rewriter& );
+    Plugin* object;
+    const char* optionName;
+    bool isRewriter;
+    };
+
+const int MAX_PLUGINS = 100;
+static PluginData plugins[ MAX_PLUGINS ];
+static int pluginCount = 0;
+static bool pluginObjectsCreated = false;
+
 PluginHandler::PluginHandler( ASTContext& context, const vector< string >& args )
     : rewriter( context.getSourceManager(), context.getLangOpts())
-    , args( args )
-    , bodyNotInBlock( context )
-    , lclStaticFix( context, rewriter )
-    , postfixIncrementFix( context, rewriter )
-    , removeForwardStringDecl( context, rewriter )
-    , salLogAreas( context )
-    , unusedVariableCheck( context )
     {
+    bool wasCreated = false;
+    for( int i = 0;
+         i < pluginCount;
+         ++i )
+        {
+        bool create = false;
+        if( args.empty()) // no args -> create non-writer plugins
+            create = !plugins[ i ].isRewriter;
+        else // create only the given plugin(s)
+            {
+            if( find( args.begin(), args.end(), plugins[ i ].optionName ) != args.end())
+                create = true;
+            }
+        if( create )
+            {
+            plugins[ i ].object = plugins[ i ].create( context, rewriter );
+            wasCreated = true;
+            }
+        }
+    pluginObjectsCreated = true;
+    if( !args.empty() && !wasCreated )
+        {
+        DiagnosticsEngine& diag = context.getDiagnostics();
+        diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Fatal,
+            "unknown plugin tool %0 [loplugin]" )) << args.front();
+        }
+    }
+
+PluginHandler::~PluginHandler()
+    {
+    for( int i = 0;
+         i < pluginCount;
+         ++i )
+        if( plugins[ i ].object != NULL )
+            delete plugins[ i ].object;
+    }
+
+void PluginHandler::registerPlugin( Plugin* (*create)( ASTContext&, Rewriter& ), const char* optionName, bool isRewriter )
+    {
+    assert( !pluginObjectsCreated );
+    assert( pluginCount < MAX_PLUGINS );
+    plugins[ pluginCount ].create = create;
+    plugins[ pluginCount ].object = NULL;
+    plugins[ pluginCount ].optionName = optionName;
+    plugins[ pluginCount ].isRewriter = isRewriter;
+    ++pluginCount;
     }
 
 void PluginHandler::HandleTranslationUnit( ASTContext& context )
     {
     if( context.getDiagnostics().hasErrorOccurred())
         return;
-    if( isArg( "lclstaticfix" ))
-        lclStaticFix.run();
-    else if( isArg( "postfixincrementfix" ))
-        postfixIncrementFix.run();
-    else if( isArg( "removeforwardstringdecl" ))
-        removeForwardStringDecl.run();
-    else if( args.empty())
+    for( int i = 0;
+         i < pluginCount;
+         ++i )
         {
-        bodyNotInBlock.run();
-        salLogAreas.run();
-        unusedVariableCheck.run();
-        }
-    else
-        {
-        DiagnosticsEngine& diag = context.getDiagnostics();
-        diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Fatal,
-            "unknown plugin tool %0 [loplugin]" )) << args.front();
+        if( plugins[ i ].object != NULL )
+            plugins[ i ].object->run();
         }
     for( Rewriter::buffer_iterator it = rewriter.buffer_begin();
          it != rewriter.buffer_end();

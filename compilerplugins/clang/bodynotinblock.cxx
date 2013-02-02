@@ -139,4 +139,6 @@ void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, c
         }
     }
 
+static Plugin::Registration< BodyNotInBlock > X( "bodynotinblock" );
+
 } // namespace

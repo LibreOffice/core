@@ -28,18 +28,36 @@ using namespace std;
 namespace loplugin
 {
 
+/**
+    Base class for plugins.
+
+    If you want to create a non-rewriter action, inherit from this class. Remember to also
+    use Plugin::Registration.
+*/
 class Plugin
     {
     public:
         explicit Plugin( ASTContext& context );
+        virtual ~Plugin();
+        virtual void run() = 0;
+        template< typename T > class Registration;
     protected:
         DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
         bool ignoreLocation( SourceLocation loc );
         bool ignoreLocation( const Decl* decl );
         bool ignoreLocation( const Stmt* stmt );
         ASTContext& context;
+    private:
+        static void registerPlugin( Plugin* (*create)( ASTContext&, Rewriter& ), const char* optionName, bool isRewriter );
+        template< typename T > static Plugin* createHelper( ASTContext& context, Rewriter& rewriter );
+        enum { isRewriter = false };
     };
 
+/**
+    Base class for rewriter plugins.
+
+    Remember to also use Plugin::Registration.
+*/
 class RewritePlugin
     : public Plugin
     {
@@ -85,9 +103,43 @@ class RewritePlugin
         bool replaceText( SourceRange range, SourceRange replacementRange );
         Rewriter& rewriter;
     private:
+        template< typename T > friend class Plugin::Registration;
+        template< typename T > static Plugin* createHelper( ASTContext& context, Rewriter& rewriter );
+        enum { isRewriter = true };
         bool reportEditFailure( SourceLocation loc );
         bool adjustForWholeStatement( SourceRange* range );
     };
+
+/**
+    Plugin registration helper.
+
+    If you create a new helper class, create also an instance of this class to automatically register it.
+    The passed argument is name of the plugin, used for explicitly invoking rewriter plugins
+    (it is ignored for non-rewriter plugins).
+
+    @code
+    static Plugin::Registration< NameOfClass > X( "nameofclass" );
+    @endcode
+*/
+template< typename T >
+class Plugin::Registration
+    {
+    public:
+        Registration( const char* optionName );
+    };
+
+class RegistrationCreate
+    {
+    public:
+        template< typename T, bool > static T* create( ASTContext& context, Rewriter& rewriter );
+    };
+
+/////
+
+inline
+Plugin::~Plugin()
+    {
+    }
 
 inline
 bool Plugin::ignoreLocation( const Decl* decl )
@@ -99,6 +151,25 @@ inline
 bool Plugin::ignoreLocation( const Stmt* stmt )
     {
     return ignoreLocation( stmt->getLocStart());
+    }
+
+template< typename T >
+Plugin* Plugin::createHelper( ASTContext& context, Rewriter& )
+    {
+    return new T( context );
+    }
+
+template< typename T >
+Plugin* RewritePlugin::createHelper( ASTContext& context, Rewriter& rewriter )
+    {
+    return new T( context, rewriter );
+    }
+
+template< typename T >
+inline
+Plugin::Registration< T >::Registration( const char* optionName )
+    {
+    registerPlugin( &T::template createHelper< T >, optionName, T::isRewriter );
     }
 
 } // namespace
