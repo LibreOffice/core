@@ -10,7 +10,6 @@
 
 #include "plugin.hxx"
 
-#include <clang/AST/ASTContext.h>
 #include <clang/Basic/FileManager.h>
 
 #include "pluginhandler.hxx"

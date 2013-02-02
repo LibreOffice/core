@@ -10,9 +10,6 @@
 
 #include "postfixincrementfix.hxx"
 
-#include <clang/AST/ASTContext.h>
-#include <clang/Basic/SourceManager.h>
-
 /*
 This is a rewriter.
 

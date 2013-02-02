@@ -10,7 +10,6 @@
 
 #include "pluginhandler.hxx"
 
-#include <clang/AST/ASTContext.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <stdio.h>
