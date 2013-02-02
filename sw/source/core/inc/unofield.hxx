@@ -33,7 +33,7 @@
 #include <tools/string.hxx>
 
 #include <calbck.hxx>
-#include <unoevtlstnr.hxx>
+#include <unobaseclass.hxx>
 
 
 class SwFieldType;
@@ -52,7 +52,11 @@ class SwXFieldMaster : public cppu::WeakImplHelper4
 >,
     public SwClient
 {
-    SwEventListenerContainer    aLstnrCntnr;
+
+private:
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
+
     sal_uInt16                  nResTypeId;
     SwDoc*                      m_pDoc;
 
@@ -126,7 +130,11 @@ class SwXTextField : public cppu::WeakImplHelper5
 >,
             public SwClient
 {
-    SwEventListenerContainer    aLstnrCntnr;
+
+private:
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
+
     const SwFmtFld*             pFmtFld;
     SwDoc*                      m_pDoc;
     SwTextAPIObject*            m_pTextObject;

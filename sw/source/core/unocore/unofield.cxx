@@ -386,6 +386,18 @@ static sal_uInt16 lcl_GetPropertyMapOfService( sal_uInt16 nServiceId )
 /******************************************************************
  * SwXFieldMaster
  ******************************************************************/
+
+class SwXFieldMaster::Impl
+{
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+
+public:
+    ::cppu::OInterfaceContainerHelper m_EventListeners;
+
+    Impl() : m_EventListeners(m_Mutex) { }
+};
+
 TYPEINIT1(SwXFieldMaster, SwClient);
 
 namespace
@@ -469,8 +481,9 @@ uno::Sequence< OUString > SwXFieldMaster::getSupportedServiceNames(void) throw( 
     return aRet;
 }
 
-SwXFieldMaster::SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId) :
-    aLstnrCntnr( (XPropertySet*)this),
+SwXFieldMaster::SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId)
+    : m_pImpl(new Impl)
+    ,
     nResTypeId(nResId),
     m_pDoc(pDoc),
     m_bIsDescriptor(sal_True),
@@ -482,9 +495,10 @@ SwXFieldMaster::SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId) :
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
-SwXFieldMaster::SwXFieldMaster(SwFieldType& rType, SwDoc* pDoc) :
-    SwClient(&rType),
-    aLstnrCntnr( (XPropertySet*)this),
+SwXFieldMaster::SwXFieldMaster(SwFieldType& rType, SwDoc* pDoc)
+    : SwClient(&rType)
+    , m_pImpl(new Impl)
+    ,
     nResTypeId(rType.Which()),
     m_pDoc(pDoc),
     m_bIsDescriptor(sal_False),
@@ -932,19 +946,20 @@ void SwXFieldMaster::dispose(void)          throw( uno::RuntimeException )
         throw uno::RuntimeException();
 }
 
-void SwXFieldMaster::addEventListener(const uno::Reference< lang::XEventListener > & aListener)
-                                            throw( uno::RuntimeException )
+void SAL_CALL SwXFieldMaster::addEventListener(
+        const uno::Reference<lang::XEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn())
-        throw uno::RuntimeException();
-    aLstnrCntnr.AddListener(aListener);
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
-void SwXFieldMaster::removeEventListener(const uno::Reference< lang::XEventListener > & aListener)
-                                                    throw( uno::RuntimeException )
+void SAL_CALL SwXFieldMaster::removeEventListener(
+        const uno::Reference<lang::XEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn() || !aLstnrCntnr.RemoveListener(aListener))
-        throw uno::RuntimeException();
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 void SwXFieldMaster::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -952,8 +967,9 @@ void SwXFieldMaster::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
     {
-        aLstnrCntnr.Disposing();
         m_pDoc = 0;
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
+        m_pImpl->m_EventListeners.disposeAndClear(ev);
     }
 }
 OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc)
@@ -1064,6 +1080,17 @@ struct SwFieldProperties_Impl
 
 };
 
+class SwXTextField::Impl
+{
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+
+public:
+    ::cppu::OInterfaceContainerHelper m_EventListeners;
+
+    Impl() : m_EventListeners(m_Mutex) { }
+};
+
 TYPEINIT1(SwXTextField, SwClient);
 
 namespace
@@ -1088,8 +1115,9 @@ sal_Int64 SAL_CALL SwXTextField::getSomething( const uno::Sequence< sal_Int8 >& 
     return 0;
 }
 
-SwXTextField::SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc) :
-    aLstnrCntnr( (XTextContent*)this),
+SwXTextField::SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc)
+    : m_pImpl(new Impl)
+    ,
     pFmtFld(0),
     m_pDoc(pDoc),
     m_pTextObject(0),
@@ -1111,8 +1139,9 @@ SwXTextField::SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc) :
 
 }
 
-SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc) :
-    aLstnrCntnr( (XTextContent*)this),
+SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc)
+    : m_pImpl(new Impl)
+    ,
     pFmtFld(&rFmt),
     m_pDoc(pDc),
     m_pTextObject(0),
@@ -1843,17 +1872,20 @@ void SwXTextField::dispose(void) throw( uno::RuntimeException )
     }
 }
 
-void SwXTextField::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SAL_CALL SwXTextField::addEventListener(
+        const uno::Reference<lang::XEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn())
-        throw uno::RuntimeException();
-    aLstnrCntnr.AddListener(aListener);
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
-void SwXTextField::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SAL_CALL SwXTextField::removeEventListener(
+        const uno::Reference<lang::XEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn() || !aLstnrCntnr.RemoveListener(aListener))
-        throw uno::RuntimeException();
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXTextField::getPropertySetInfo(void)
@@ -2351,9 +2383,10 @@ void SwXTextField::Invalidate()
     if (GetRegisteredIn())
     {
         ((SwModify*)GetRegisteredIn())->Remove(this);
-        aLstnrCntnr.Disposing();
         pFmtFld = 0;
         m_pDoc = 0;
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
+        m_pImpl->m_EventListeners.disposeAndClear(ev);
     }
 }
 
