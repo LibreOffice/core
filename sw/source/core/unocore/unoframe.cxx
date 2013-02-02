@@ -754,6 +754,19 @@ bool SwOLEProperties_Impl::AnyToItemSet(
     return sal_True;
 }
 
+
+class SwXFrame::Impl
+{
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+
+public:
+    ::cppu::OInterfaceContainerHelper m_EventListeners;
+
+    Impl() : m_EventListeners(m_Mutex) { }
+};
+
+
 namespace
 {
     class theSwXFrameUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXFrameUnoTunnelId > {};
@@ -800,8 +813,9 @@ uno::Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( uno::R
     return aRet;
 }
 
-SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pDoc) :
-    aLstnrCntnr( (container::XNamed*)this),
+SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pDoc)
+    : m_pImpl(new Impl)
+    ,
     m_pPropSet(pSet),
     m_pDoc ( pDoc ),
     eType(eSet),
@@ -851,9 +865,10 @@ SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pD
     }
 }
 
-SwXFrame::SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet, const :: SfxItemPropertySet* pSet) :
-    SwClient( &rFrmFmt ),
-    aLstnrCntnr( (container::XNamed*)this),
+SwXFrame::SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet, const :: SfxItemPropertySet* pSet)
+    : SwClient( &rFrmFmt )
+    , m_pImpl(new Impl)
+    ,
     m_pPropSet(pSet),
     m_pDoc( 0 ),
     eType(eSet),
@@ -1989,17 +2004,20 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
     return aRet;
 }
 
-void SwXFrame::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SAL_CALL SwXFrame::addEventListener(
+        const uno::Reference<lang::XEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn())
-        throw uno::RuntimeException();
-    aLstnrCntnr.AddListener(aListener);
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
-void SwXFrame::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SAL_CALL SwXFrame::removeEventListener(
+        const uno::Reference<lang::XEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn() || !aLstnrCntnr.RemoveListener(aListener))
-        throw uno::RuntimeException();
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 void    SwXFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -2010,7 +2028,8 @@ void    SwXFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
         mxStyleData.clear();
         mxStyleFamily.clear();
         m_pDoc = 0;
-        aLstnrCntnr.Disposing();
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
+        m_pImpl->m_EventListeners.disposeAndClear(ev);
     }
 }
 

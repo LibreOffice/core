@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOFRAME_HXX
-#define _UNOFRAME_HXX
+#ifndef SW_UNOFRAME_HXX
+#define SW_UNOFRAME_HXX
 
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -37,7 +37,6 @@
 
 #include <flyenum.hxx>
 #include <frmfmt.hxx>
-#include <unoevtlstnr.hxx>
 #include <unotext.hxx>
 
 class SdrObject;
@@ -57,7 +56,10 @@ class SwXFrame : public cppu::WeakImplHelper6
 >,
     public SwClient
 {
-    SwEventListenerContainer        aLstnrCntnr;
+private:
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
+
     const SfxItemPropertySet*       m_pPropSet;
     SwDoc*                          m_pDoc;
 
