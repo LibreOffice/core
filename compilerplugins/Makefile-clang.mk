@@ -8,18 +8,6 @@
 
 # Make sure variables in this Makefile do not conflict with other variables (e.g. from gbuild).
 
-# The list of source files.
-CLANGSRC= \
-    plugin.cxx \
-    pluginhandler.cxx \
-    bodynotinblock.cxx \
-    lclstaticfix.cxx \
-    postfixincrementfix.cxx \
-    removeforwardstringdecl.cxx \
-    sallogareas.cxx \
-    unusedvariablecheck.cxx \
-
-
 # You may occassionally want to override some of these
 
 # Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin)
@@ -40,6 +28,24 @@ CLANGINDIR=$(SRCDIR)/compilerplugins/clang
 # Cannot use $(WORKDIR), the plugin should survive even 'make clean', otherwise the rebuilt
 # plugin will cause cache misses with ccache.
 CLANGOUTDIR=$(BUILDDIR)/compilerplugins/obj
+
+# The list of source files, generated automatically (all files in clang/, but not subdirs).
+CLANGSRC=$(foreach src,$(wildcard $(CLANGINDIR)/*.cxx), $(notdir $(src)))
+# Remember the sources and if they have changed, force plugin relinking.
+CLANGSRCCHANGED= \
+    $(shell echo $(CLANGSRC) | sort > $(CLANGOUTDIR)/sources-new.txt; \
+            if diff $(CLANGOUTDIR)/sources.txt $(CLANGOUTDIR)/sources-new.txt >/dev/null 2>/dev/null; then \
+                echo 0; \
+            else \
+                mv $(CLANGOUTDIR)/sources-new.txt $(CLANGOUTDIR)/sources.txt; \
+                echo 1; \
+            fi; \
+    )
+ifeq ($(CLANGSRCCHANGED),1)
+.PHONY: CLANGFORCE
+CLANGFORCE:
+$(CLANGOUTDIR)/plugin.so: CLANGFORCE
+endif
 
 compilerplugins: $(CLANGOUTDIR) $(CLANGOUTDIR)/plugin.so
 
