@@ -2881,7 +2881,6 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
         {
             // make sure that the root storage object has been created before substorages will be created
             INetURLObject aFolderObj( pImp->m_aURL );
-            String aName = aFolderObj.GetName();
             aFolderObj.removeSegment();
 
             Content aFolder( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
