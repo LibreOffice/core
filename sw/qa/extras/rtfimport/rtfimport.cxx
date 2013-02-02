@@ -138,6 +138,7 @@ public:
     void testFdo58933();
     void testFdo44053();
     void testFdo48440();
+    void testFdo58646();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -247,6 +248,7 @@ void Test::run()
         {"fdo58933.rtf", &Test::testFdo58933},
         {"fdo44053.rtf", &Test::testFdo44053},
         {"fdo48440.rtf", &Test::testFdo48440},
+        {"fdo58646.rtf", &Test::testFdo58646},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1067,6 +1069,12 @@ void Test::testFdo44053()
 void Test::testFdo48440()
 {
     // Page break was ignored.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+void Test::testFdo58646()
+{
+    // Page break was ignored inside a continous section, on title page.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
