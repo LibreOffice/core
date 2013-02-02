@@ -342,9 +342,9 @@
      inkscape:current-layer="g22"
      showgrid="false"
      inkscape:snap-global="false"
-     showborder="false"
+     showborder="true"
      inkscape:window-width="681"
-     inkscape:window-height="716"
+     inkscape:window-height="713"
      inkscape:window-x="683"
      inkscape:window-y="28"
      inkscape:window-maximized="0"
@@ -365,7 +365,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
