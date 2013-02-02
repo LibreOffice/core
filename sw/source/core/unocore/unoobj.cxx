@@ -73,7 +73,7 @@
 #include <unomap.hxx>
 #include <unosett.hxx>
 #include <unoprnms.hxx>
-#include <unotbl.hxx>
+#include <unoevtlstnr.hxx>
 #include <unodraw.hxx>
 #include <unocoll.hxx>
 #include <unostyle.hxx>

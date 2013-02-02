@@ -122,6 +122,18 @@ lcl_SendChartEvent(::cppu::OWeakObject & rSource,
             & chart::XChartDataChangeEventListener::chartDataChanged, event);
 }
 
+static void
+lcl_SendChartEvent(::cppu::OWeakObject & rSource,
+        ::cppu::OMultiTypeInterfaceContainerHelper & rListeners)
+{
+    ::cppu::OInterfaceContainerHelper *const pContainer(rListeners.getContainer(
+            chart::XChartDataChangeEventListener::static_type()));
+    if (pContainer)
+    {
+        lcl_SendChartEvent(rSource, *pContainer);
+    }
+}
+
 static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
 {
     rSvxLine.SetColor(Color(rLine.Color));
@@ -1893,9 +1905,18 @@ void SwXTextTableCursor::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNe
 /******************************************************************
  * SwXTextTable
  ******************************************************************/
-/****************************************************************************
-    Tabellenbeschreibung
-****************************************************************************/
+
+class SwXTextTable::Impl
+{
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+
+public:
+    ::cppu::OMultiTypeInterfaceContainerHelper m_Listeners;
+
+    Impl() : m_Listeners(m_Mutex) { }
+};
+
 class SwTableProperties_Impl
 {
     SwUnoCursorHelper::SwAnyMapHelper aAnyMap;
@@ -2129,9 +2150,8 @@ sal_Int64 SAL_CALL SwXTextTable::getSomething( const uno::Sequence< sal_Int8 >& 
 TYPEINIT1(SwXTextTable, SwClient)
 
 SwXTextTable::SwXTextTable()
-    : m_ChartListeners(m_Mutex)
+    : m_pImpl(new Impl)
     ,
-    aLstnrCntnr( (text::XTextTable*)this),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE)),
     pTableProps(new SwTableProperties_Impl),
     bIsDescriptor(sal_True),
@@ -2144,9 +2164,8 @@ SwXTextTable::SwXTextTable()
 
 SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt)
     : SwClient( &rFrmFmt )
-    , m_ChartListeners(m_Mutex)
+    , m_pImpl(new Impl)
     ,
-    aLstnrCntnr( (text::XTextTable*)this),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE)),
     pTableProps(0),
     bIsDescriptor(sal_False),
@@ -2386,17 +2405,22 @@ void SwXTextTable::dispose(void) throw( uno::RuntimeException )
         throw uno::RuntimeException();
 }
 
-void SwXTextTable::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SAL_CALL SwXTextTable::addEventListener(
+        const uno::Reference<lang::XEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn())
-        throw uno::RuntimeException();
-    aLstnrCntnr.AddListener(aListener);
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_Listeners.addInterface(
+            lang::XEventListener::static_type(), xListener);
 }
 
-void SwXTextTable::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SAL_CALL SwXTextTable::removeEventListener(
+        const uno::Reference< lang::XEventListener > & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn() || !aLstnrCntnr.RemoveListener(aListener))
-        throw uno::RuntimeException();
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_Listeners.removeInterface(
+            lang::XEventListener::static_type(), xListener);
 }
 
 uno::Reference< table::XCell >  SwXTextTable::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
@@ -2738,7 +2762,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
         }
         if ( bChanged )
         {
-            lcl_SendChartEvent(*this, m_ChartListeners);
+            lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
         }
     }
 }
@@ -2901,7 +2925,8 @@ void SAL_CALL SwXTextTable::addChartDataChangeEventListener(
 throw (uno::RuntimeException)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_ChartListeners.addInterface(xListener);
+    m_pImpl->m_Listeners.addInterface(
+            chart::XChartDataChangeEventListener::static_type(), xListener);
 }
 
 void SAL_CALL SwXTextTable::removeChartDataChangeEventListener(
@@ -2909,7 +2934,8 @@ void SAL_CALL SwXTextTable::removeChartDataChangeEventListener(
 throw (uno::RuntimeException)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_ChartListeners.removeInterface(xListener);
+    m_pImpl->m_Listeners.removeInterface(
+            chart::XChartDataChangeEventListener::static_type(), xListener);
 }
 
 sal_Bool SwXTextTable::isNotANumber(double nNumber) throw( uno::RuntimeException )
@@ -3033,7 +3059,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstRowAsLabel != bTmp)
                     {
-                        lcl_SendChartEvent(*this, m_ChartListeners);
+                        lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
                         bFirstRowAsLabel = bTmp;
                     }
                 }
@@ -3043,7 +3069,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstColumnAsLabel != bTmp)
                     {
-                        lcl_SendChartEvent(*this, m_ChartListeners);
+                        lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
                         bFirstColumnAsLabel = bTmp;
                     }
                 }
@@ -3617,13 +3643,12 @@ void SwXTextTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
         ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
     {
-        aLstnrCntnr.Disposing();
         lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
-        m_ChartListeners.disposeAndClear(ev);
+        m_pImpl->m_Listeners.disposeAndClear(ev);
     }
     else
     {
-        lcl_SendChartEvent(*this, m_ChartListeners);
+        lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
     }
 }
 

@@ -44,7 +44,6 @@
 
 #include <calbck.hxx>
 #include <TextCursorHelper.hxx>
-#include <unoevtlstnr.hxx>
 #include <unotext.hxx>
 
 
@@ -289,9 +288,10 @@ class SwXTextTable : public cppu::WeakImplHelper10
 >,
     public SwClient
 {
-    ::osl::Mutex m_Mutex;
-    ::cppu::OInterfaceContainerHelper m_ChartListeners;
-    SwEventListenerContainer        aLstnrCntnr;
+private:
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
+
     const SfxItemPropertySet*       m_pPropSet;
 
     // Descriptor-interface
