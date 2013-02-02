@@ -324,7 +324,13 @@ install-strip:
 	echo "Installation finished, you can now execute:" && \
 	echo "$(INSTALLDIR)/program/soffice"
 
-dev-install: build
+ifeq ($(ENABLE_MACOSX_SANDBOX),YES)
+entitlements:=--entitlements $(SRC_ROOT)/lo.xcent
+endif
+
+dev-install: build do-dev-install
+
+do-dev-install:
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
@@ -363,6 +369,7 @@ ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
 # Yeah, we don't bundle any other framework than our Python one, and
 # it has just one version, so this generic search is mostly for
 # completeness.
+#
 	for framework in `find $(DEVINSTALLDIR)/opt/LibreOffice.app -name '*.framework' -type d`; do \
         for version in $$framework/Versions/*; do \
             test -d $$version && codesign --force --verbose --prefix=$(MACOSX_BUNDLE_IDENTIFIER). --sign $(MACOSX_CODESIGNING_IDENTITY) $$version; \
@@ -374,7 +381,10 @@ ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
 # The soffice binary will have been signed after linking but it needs
 # to be re-signed as it has been renamed, or modified, or something
 # after linking.
-	codesign --force --verbose --sign $(MACOSX_CODESIGNING_IDENTITY) $(DEVINSTALLDIR)/opt/LibreOffice.app
+#
+# At this stage we also attach the entitlements in the sandboxing case
+#
+	codesign --force --verbose --sign $(MACOSX_CODESIGNING_IDENTITY) $(entitlements) $(DEVINSTALLDIR)/opt/LibreOffice.app
 #
 endif
 	@install-gdb-printers -L

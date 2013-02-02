@@ -12381,7 +12381,7 @@ else
     echo > config_host.mk.last
 fi
 
-AC_CONFIG_FILES([config_host.mk Makefile solenv/inc/minor.mk instsetoo_native/util/openoffice.lst])
+AC_CONFIG_FILES([config_host.mk Makefile lo.xcent solenv/inc/minor.mk instsetoo_native/util/openoffice.lst])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
