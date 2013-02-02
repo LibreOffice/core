@@ -32,30 +32,7 @@ class ConfigSet(ConfigGroup):
 
     def __init__(self, topic):
         self.topic = topic
-        self.childrenMap = {}
         self.childrenList = []
-        self.noNulls = False
-
-    def add2(self, name, o):
-        self.childrenMap[name] = o
-        if isinstance(name, int):
-            i = name
-            self.childrenList.insert(i, o)
-        else:
-            try:
-                i = o.cp_Index
-                oldSize = self.getSize()
-                if oldSize <= i:
-                    newSize = i - oldSize
-                    self.childrenList += [None] * newSize
-                    self.noNulls = True
-                else:
-                    self.noNulls = False
-                self.childrenList.insert(i, o);
-                if oldSize > i:
-                    oldSize = i
-            except Exception:
-                self.childrenList.append(o)
 
     def add(self, name, o):
         self.childrenList.append(o)
