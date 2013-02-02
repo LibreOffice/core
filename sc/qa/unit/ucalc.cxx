@@ -779,7 +779,7 @@ void testFuncNUMBERVALUE( ScDocument* pDoc )
     } aChecks[] = {
         { "=NUMBERVALUE(A1;\"b\";\"ag\")",  "199.9" },
         { "=NUMBERVALUE(A2;\"b\";\"ag\")",  "134.56789" },
-        { "=NUMBERVALUE(A2;\"b\";\"g\")",   "Err:502" },
+        { "=NUMBERVALUE(A2;\"b\";\"g\")",   "#VALUE!" },
         { "=NUMBERVALUE(A3;\"d\")",         "12.3456" },
         { "=NUMBERVALUE(A4;\"d\";\"foo\")", "0.4" },
         { "=NUMBERVALUE(A4;)",              "Err:502" },

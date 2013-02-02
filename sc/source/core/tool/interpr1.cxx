@@ -3472,7 +3472,7 @@ void ScInterpreter::ScNumberValue()
         PushDouble(fVal);
         return;
     }
-    PushIllegalArgument();
+    PushNoValue();
 }
 
 
