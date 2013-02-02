@@ -337,13 +337,21 @@ ifeq ($(DISABLE_LINKOO),TRUE)
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
 #
 # Sign dylibs
-	find $(DEVINSTALLDIR)/opt/LibreOffice.app \( -name '*.dylib' -or -name '*.dylib.*' \) ! -type l | \
+#
+# Executables get signed right after linking, see
+# solenv/gbuild/platform/macosx.mk. But many of our dylibs are built
+# by ad-hoc or 3rd-party mechanisms, so we can't easily sign them
+# right after linking. So do it here.
+#
+# The dylibs in the Python framework are called *.so. Go figure
+#
+	find $(DEVINSTALLDIR)/opt/LibreOffice.app \( -name '*.dylib' -or -name '*.dylib.*' -or -name '*.so' \) ! -type l | \
         while read dylib; do \
             id=`basename "$$dylib"`; \
             case $$id in \
-            *.dylib) \
+            *.dylib|*.so) \
                 ;; \
-            *) \
+            *.dylib.*) \
                 id=`echo $$id | sed -e 's/dylib.*/dylib/'`; \
                 ;; \
             esac; \
@@ -362,7 +370,8 @@ ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
     done
 #
 # Sign the app bundle as a whole (will sign the soffice binary)
-	codesign --verbose --sign $(MACOSX_CODESIGNING_IDENTITY) $(DEVINSTALLDIR)/opt/LibreOffice.app
+# Not necessary as the soffice binary will have been signed after linking.
+#	codesign --verbose --sign $(MACOSX_CODESIGNING_IDENTITY) $(DEVINSTALLDIR)/opt/LibreOffice.app
 #
 endif
 	@install-gdb-printers -L

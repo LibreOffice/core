@@ -174,6 +174,9 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(filter Library Bundle CppunitTest,$(TARGETTYPE)),\
 		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl shl $(LAYER) $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) && \
 		ln -sf $(notdir $(1)) $(basename $(1)).jnilib &&) \
+	$(if $(MACOSX_CODESIGNING_IDENTITY), \
+		$(if $(filter Executable,$(TARGETTYPE)), \
+			codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) $(1) &&)) \
 	rm -f $${DYLIB_FILE})
 endef
 
