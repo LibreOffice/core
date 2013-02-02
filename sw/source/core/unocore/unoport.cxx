@@ -17,13 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <unoport.hxx>
+
 #include <cmdid.h>
 #include <osl/mutex.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
 
 #include <unocrsrhelper.hxx>
-#include <unoport.hxx>
 #include <unoparaframeenum.hxx>
 #include <unotextrange.hxx>
 #include <unomap.hxx>
@@ -50,6 +52,18 @@ using namespace ::com::sun::star;
 /******************************************************************
  * SwXTextPortion
  ******************************************************************/
+
+class SwXTextPortion::Impl
+{
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+
+public:
+    ::cppu::OInterfaceContainerHelper m_EventListeners;
+
+    Impl() : m_EventListeners(m_Mutex) { }
+};
+
 void SwXTextPortion::init(const SwUnoCrsr* pPortionCursor)
 {
     SwUnoCrsr* pUnoCursor =
@@ -65,7 +79,7 @@ void SwXTextPortion::init(const SwUnoCrsr* pPortionCursor)
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
         uno::Reference< text::XText > const& rParent,
         SwTextPortionType eType)
-    : m_ListenerContainer( static_cast<text::XTextRange*>(this) )
+    : m_pImpl(new Impl)
     , m_pPropSet(aSwMapProvider.GetPropertySet(
         (PORTION_REDLINE_START == eType ||
          PORTION_REDLINE_END   == eType)
@@ -87,7 +101,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
         uno::Reference< text::XText > const& rParent,
         SwFrmFmt& rFmt )
-    : m_ListenerContainer( static_cast<text::XTextRange*>(this) )
+    : m_pImpl(new Impl)
     , m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(rParent)
@@ -107,7 +121,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
                     SwTxtRuby const& rAttr,
                     uno::Reference< text::XText > const& xParent,
                     sal_Bool bIsEnd )
-    : m_ListenerContainer( static_cast<text::XTextRange*>(this) )
+    : m_pImpl(new Impl)
     , m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(xParent)
@@ -847,20 +861,20 @@ throw( uno::RuntimeException )
     pUnoCrsr->Remove(this);
 }
 
-void SwXTextPortion::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SAL_CALL SwXTextPortion::addEventListener(
+        const uno::Reference<lang::XEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    if(!GetRegisteredIn())
-        throw uno::RuntimeException();
-
-    m_ListenerContainer.AddListener(aListener);
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
-void SwXTextPortion::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SAL_CALL SwXTextPortion::removeEventListener(
+        const uno::Reference<lang::XEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    if (!GetRegisteredIn() || !m_ListenerContainer.RemoveListener(aListener))
-        throw uno::RuntimeException();
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumeration(const OUString& /*aServiceName*/)

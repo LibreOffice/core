@@ -19,9 +19,8 @@
 #ifndef SW_UNOPORT_HXX
 #define SW_UNOPORT_HXX
 
-#include <unocrsr.hxx>
-#include <unoevtlstnr.hxx>
-#include <calbck.hxx>
+#include <memory>
+#include <deque>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -35,12 +34,15 @@
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+
 #include <cppuhelper/implbase8.hxx>
 #include <cppuhelper/implbase3.hxx>
+
 #include <svl/itemprop.hxx>
 
-#include <memory>
-#include <deque>
+#include <unocrsr.hxx>
+#include <calbck.hxx>
+#include <unobaseclass.hxx>
 
 
 class SwFmtFld;
@@ -92,7 +94,9 @@ class SwXTextPortion : public cppu::WeakImplHelper8
 {
 private:
 
-    SwEventListenerContainer    m_ListenerContainer;
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
+
     const SfxItemPropertySet *  m_pPropSet;
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
         m_xParentText;

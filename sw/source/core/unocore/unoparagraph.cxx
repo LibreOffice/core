@@ -24,6 +24,7 @@
 #include <unotext.hxx>
 #include <unotextrange.hxx>
 #include <unoport.hxx>
+#include <unoevtlstnr.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
 #include <unoprnms.hxx>
