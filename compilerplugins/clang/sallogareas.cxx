@@ -22,7 +22,9 @@ namespace loplugin
 /*
 This is a compile check.
 
-Check that areas used in SAL_LOG/SAL_WARN are listed in sal/inc/sal/log-areas.dox .
+Check area used in SAL_INFO/SAL_WARN macros against the list in sal/inc/sal/log-areas.dox and
+report if the area is not listed there. The fix is either use a proper area or add it to the list
+if appropriate.
 */
 
 SalLogAreas::SalLogAreas( ASTContext& context )

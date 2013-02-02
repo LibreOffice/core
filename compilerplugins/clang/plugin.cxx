@@ -15,6 +15,9 @@
 
 #include "pluginhandler.hxx"
 
+/*
+Base classes for plugin actions.
+*/
 namespace loplugin
 {
 

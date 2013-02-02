@@ -16,6 +16,10 @@
 #include <stdio.h>
 #include <unistd.h>
 
+/*
+This source file manages all plugin actions. It is not necessary to modify this
+file when adding new actions.
+*/
 namespace loplugin
 {
 

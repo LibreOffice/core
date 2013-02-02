@@ -18,10 +18,12 @@ are found or explicitly using --enable-compiler-plugins.
 
 == Functionality ==
 
-There are two kinds of modules:
+There are two kinds of plugin actions:
 - compile checks - these are run during normal compilation
 - rewriters - these must be run manually and modify source files
 
+Each source has a comment saying whether it's compile check or a rewriter
+and description of functionality.
 
 === Compile checks ===
 
@@ -29,41 +31,12 @@ Used during normal compilation to perform additional checks.
 All warnings and errors are marked '[loplugin]' in the message.
 
 
-==== Unused variable check ====
-
-- unused parameter 'foo' [loplugin]
-- unused variable 'foo' [loplugin]
-
-Additional check for unused variables.
-
-
-==== Body of if/while/for not in {} ====
-
-- statement aligned as second statement in if/while/for body but not in a statement block [loplugin]
-
-Warn about the following construct:
-
-    if( a != 0 )
-        b = 2;
-        c = 3;
-        
-Here either both statements should be inside {} or the second statement in indented wrong.
-
-
-==== Sal log areas ====
-
-- unknown log area 'foo' (check or extend sal/inc/sal/log-areas.dox) [loplugin]
-
-Check area used in SAL_INFO/SAL_WARN macros against the list in sal/inc/sal/log-areas.dox and
-report if the area is not listed there. The fix is either use a proper area or add it to the list
-if appropriate.
-
-
 === Rewriters ===
 
 Rewriters analyse and possibly modify given source files.
 Usage: make COMPILER_PLUGIN_TOOL=<rewriter_name>
 Modifications will be written directly to the source files.
+
 
 == Code documentation / howtos ==
 

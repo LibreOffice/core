@@ -13,6 +13,12 @@
 #include <clang/AST/ASTContext.h>
 #include <clang/Basic/SourceManager.h>
 
+/*
+This is a rewriter.
+
+Change all postfix ++ operators of non-trivial types to prefix if possible.
+*/
+
 namespace loplugin
 {
 

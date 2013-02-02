@@ -21,6 +21,14 @@ This is a compile check.
 
 Check for two statements that are both indented to look like a body of if/while/for
 but are not inside a compound statement and thus the second one is unrelated.
+
+For example:
+
+    if( a != 0 )
+        b = 2;
+        c = 3;
+
+Here either both statements should be inside {} or the second statement in indented wrong.
 */
 
 BodyNotInBlock::BodyNotInBlock( ASTContext& context )
