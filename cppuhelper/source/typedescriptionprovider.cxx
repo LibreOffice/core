@@ -2483,6 +2483,14 @@ css::uno::Any Provider::getByHierarchicalName(rtl::OUString const & aName)
                 for (sal_uInt32 i = 0; i != n; ++i) {
                     params.push_back(file_->readNameLen(off, &off));
                 }
+                n = file_->read32(off + 1);
+                if (n > SAL_MAX_INT32) {
+                    throw css::uno::DeploymentException(
+                        ("broken UNOIDL file: too many members of polymorphic"
+                         " struct type template " + aName),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
+                off += 4;
                 std::vector< PolymorphicStructTypeTemplateDescription::Member >
                     mems;
                 for (sal_uInt32 i = 0; i != n; ++i) {
