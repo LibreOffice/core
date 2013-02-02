@@ -2720,9 +2720,13 @@ if test "$_os" = "Darwin"; then
     AC_MSG_CHECKING([whether to do code signing])
 
     if test \( -z "$enable_macosx_code_signing" -o "$enable_macosx_code_signing" = yes \) -a $MACOSX_SDK_VERSION -ge 1070; then
-        # By default use the first suitable certificate. Not sure if should be looking for the
-        # 'Developer ID Application:' ones instead. The code signing stuff could be much better
-        # documented...
+        # By default use the first suitable certificate (?).
+
+        # http://stackoverflow.com/questions/13196291/difference-between-mac-developer-and-3rd-party-mac-developer-application
+        # says that the "Mac Developer" certificate is useful just for self-testing. For distribution
+        # outside the Mac App Store, use the "Developer ID Application" one, and for distribution in
+        # the App Store, the "3rd Party Mac Developer" one.
+
         identity=`security find-identity -p codesigning -v 2>/dev/null | grep 'Mac Developer:' | awk '{print $2}' |head -1`
         if test -n "$identity"; then
             MACOSX_CODESIGNING_IDENTITY=$identity
