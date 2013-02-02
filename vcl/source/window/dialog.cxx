@@ -670,7 +670,8 @@ void Dialog::setInitialLayoutSize()
     const DialogStyle& rDialogStyle =
         GetSettings().GetStyleSettings().GetDialogStyle();
     pBox->set_border_width(rDialogStyle.content_area_border);
-    pBox->set_spacing(rDialogStyle.content_area_spacing);
+    pBox->set_spacing(pBox->get_spacing() +
+        rDialogStyle.content_area_spacing);
 
     VclButtonBox *pActionArea = getActionArea(this);
     if (pActionArea)
