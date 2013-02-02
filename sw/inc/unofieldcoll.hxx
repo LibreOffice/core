@@ -20,10 +20,11 @@
 #ifndef SW_UNOFIELDCOLL_HXX
 #define SW_UNOFIELDCOLL_HXX
 
+#include <boost/scoped_ptr.hpp>
+
 #include <com/sun/star/util/XRefreshable.hpp>
 
 #include <unocoll.hxx>
-#include <RefreshListenerContainer.hxx>
 
 class SwFieldType;
 
@@ -84,7 +85,8 @@ class SwXTextFieldTypes
     , public SwUnoCollection
 {
 private:
-    SwRefreshListenerContainer      aRefreshCont;
+    class Impl;
+    ::boost::scoped_ptr<Impl> m_pImpl; // currently does not need UnoImplPtr
 
 protected:
     virtual ~SwXTextFieldTypes();

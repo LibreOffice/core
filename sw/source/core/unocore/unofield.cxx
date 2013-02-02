@@ -2609,6 +2609,21 @@ sal_Bool SwXTextFieldMasters::hasElements(void) throw( uno::RuntimeException )
     return sal_True;
 }
 
+/******************************************************************
+ * SwXFieldTypes
+ ******************************************************************/
+
+class SwXTextFieldTypes::Impl
+{
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+
+public:
+    ::cppu::OInterfaceContainerHelper m_RefreshListeners;
+
+    Impl() : m_RefreshListeners(m_Mutex) { }
+};
+
 OUString SwXTextFieldTypes::getImplementationName(void) throw( uno::RuntimeException )
 {
     return OUString("SwXTextFieldTypes");
@@ -2627,9 +2642,9 @@ uno::Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames(void) thro
     return aRet;
 }
 
-SwXTextFieldTypes::SwXTextFieldTypes(SwDoc* _pDoc) :
-    SwUnoCollection (_pDoc),
-    aRefreshCont    ( static_cast< XEnumerationAccess * >(this) )
+SwXTextFieldTypes::SwXTextFieldTypes(SwDoc* _pDoc)
+    : SwUnoCollection (_pDoc)
+    , m_pImpl(new Impl)
 {
 }
 
@@ -2640,7 +2655,8 @@ SwXTextFieldTypes::~SwXTextFieldTypes()
 void SwXTextFieldTypes::Invalidate()
 {
     SwUnoCollection::Invalidate();
-    aRefreshCont.Disposing();
+    lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
+    m_pImpl->m_RefreshListeners.disposeAndClear(ev);
 }
 
 uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration(void)
@@ -2662,38 +2678,39 @@ sal_Bool SwXTextFieldTypes::hasElements(void) throw( uno::RuntimeException )
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    //es gibt sie immer
-    return sal_True;
+    return sal_True; // they always exist
 }
 
-void SwXTextFieldTypes::refresh(void)  throw( uno::RuntimeException )
+void SAL_CALL SwXTextFieldTypes::refresh() throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    if(!IsValid())
-        throw uno::RuntimeException();
-    UnoActionContext aContext(GetDoc());
-    GetDoc()->UpdateDocStat();
-    GetDoc()->UpdateFlds(0, sal_False);
-
-    // call refresh listeners
-    aRefreshCont.Refreshed();
+    {
+        SolarMutexGuard aGuard;
+        if (!IsValid())
+            throw uno::RuntimeException();
+        UnoActionContext aContext(GetDoc());
+        GetDoc()->UpdateDocStat();
+        GetDoc()->UpdateFlds(0, sal_False);
+    }
+    // call refresh listeners (without SolarMutex locked)
+    lang::EventObject const event(static_cast< ::cppu::OWeakObject*>(this));
+    m_pImpl->m_RefreshListeners.notifyEach(
+            & util::XRefreshListener::refreshed, event);
 }
 
-void SwXTextFieldTypes::addRefreshListener(const uno::Reference< util::XRefreshListener > & l)
-    throw( uno::RuntimeException )
+void SAL_CALL SwXTextFieldTypes::addRefreshListener(
+        const uno::Reference<util::XRefreshListener> & xListener)
+throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    if ( !IsValid() )
-        throw uno::RuntimeException();
-    aRefreshCont.AddListener ( reinterpret_cast < const uno::Reference < lang::XEventListener > &> ( l ));
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_RefreshListeners.addInterface(xListener);
 }
 
-void SwXTextFieldTypes::removeRefreshListener(const uno::Reference< util::XRefreshListener > & l)
-     throw( uno::RuntimeException )
+void SAL_CALL SwXTextFieldTypes::removeRefreshListener(
+        const uno::Reference<util::XRefreshListener> & xListener)
+throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    if ( !IsValid() || !aRefreshCont.RemoveListener ( reinterpret_cast < const uno::Reference < lang::XEventListener > &> ( l ) ) )
-        throw uno::RuntimeException();
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_RefreshListeners.removeInterface(xListener);
 }
 
 /******************************************************************
