@@ -36,7 +36,7 @@ static void ImplCopyAsciiStr( sal_Unicode* pDest, const sal_Char* pSrc,
                               sal_Int32 nLen )
 {
     DBG_ASSERT( ImplDbgCheckAsciiStr( pSrc, nLen ),
-                "UniString::CopyAsciiStr() - pAsciiStr include characters > 127" );
+                "String::CopyAsciiStr() - pAsciiStr include characters > 127" );
 
     while ( nLen )
     {
@@ -148,10 +148,10 @@ static sal_Int32 ImplStringICompareAscii( const sal_Unicode* pStr1, const sal_Ch
     return nRet;
 }
 
-UniString& UniString::AssignAscii( const sal_Char* pAsciiStr )
+String& String::AssignAscii( const sal_Char* pAsciiStr )
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( pAsciiStr, "UniString::AssignAscii() - pAsciiStr is NULL" );
+    DBG_CHKTHIS( String, DbgCheckUniString );
+    DBG_ASSERT( pAsciiStr, "String::AssignAscii() - pAsciiStr is NULL" );
 
     // Determine string length
     xub_StrLen nLen = ImplStringLen( pAsciiStr );
@@ -179,10 +179,10 @@ UniString& UniString::AssignAscii( const sal_Char* pAsciiStr )
     return *this;
 }
 
-UniString& UniString::AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
+String& String::AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( pAsciiStr, "UniString::AssignAscii() - pAsciiStr is NULL" );
+    DBG_CHKTHIS( String, DbgCheckUniString );
+    DBG_ASSERT( pAsciiStr, "String::AssignAscii() - pAsciiStr is NULL" );
 
     if ( nLen == STRING_LEN )
         nLen = ImplStringLen( pAsciiStr );
@@ -194,7 +194,7 @@ UniString& UniString::AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
         {
             if ( !pAsciiStr[i] )
             {
-                OSL_FAIL( "UniString::AssignAscii() : nLen is wrong" );
+                OSL_FAIL( "String::AssignAscii() : nLen is wrong" );
             }
         }
     }
@@ -223,10 +223,10 @@ UniString& UniString::AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
     return *this;
 }
 
-UniString& UniString::AppendAscii( const sal_Char* pAsciiStr )
+String& String::AppendAscii( const sal_Char* pAsciiStr )
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( pAsciiStr, "UniString::AppendAscii() - pAsciiStr is NULL" );
+    DBG_CHKTHIS( String, DbgCheckUniString );
+    DBG_ASSERT( pAsciiStr, "String::AppendAscii() - pAsciiStr is NULL" );
 
     // determine string length
     sal_Int32 nCopyLen = ImplStringLen( pAsciiStr );
@@ -252,10 +252,10 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr )
     return *this;
 }
 
-UniString& UniString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
+String& String::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( pAsciiStr, "UniString::AppendAscii() - pAsciiStr is NULL" );
+    DBG_CHKTHIS( String, DbgCheckUniString );
+    DBG_ASSERT( pAsciiStr, "String::AppendAscii() - pAsciiStr is NULL" );
 
     if ( nLen == STRING_LEN )
         nLen = ImplStringLen( pAsciiStr );
@@ -267,7 +267,7 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
         {
             if ( !pAsciiStr[i] )
             {
-                OSL_FAIL( "UniString::AppendAscii() : nLen is wrong" );
+                OSL_FAIL( "String::AppendAscii() : nLen is wrong" );
             }
         }
     }
@@ -294,10 +294,10 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
     return *this;
 }
 
-UniString& UniString::InsertAscii( const char* pAsciiStr, xub_StrLen nIndex )
+String& String::InsertAscii( const char* pAsciiStr, xub_StrLen nIndex )
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( pAsciiStr, "UniString::InsertAscii() - pAsciiStr is NULL" );
+    DBG_CHKTHIS( String, DbgCheckUniString );
+    DBG_ASSERT( pAsciiStr, "String::InsertAscii() - pAsciiStr is NULL" );
 
     // Determine string length
     sal_Int32 nCopyLen = ImplStringLen( pAsciiStr );
@@ -329,11 +329,11 @@ UniString& UniString::InsertAscii( const char* pAsciiStr, xub_StrLen nIndex )
     return *this;
 }
 
-UniString& UniString::ReplaceAscii( xub_StrLen nIndex, xub_StrLen nCount,
+String& String::ReplaceAscii( xub_StrLen nIndex, xub_StrLen nCount,
                                     const sal_Char* pAsciiStr, xub_StrLen nStrLen )
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( pAsciiStr, "UniString::ReplaceAscii() - pAsciiStr is NULL" );
+    DBG_CHKTHIS( String, DbgCheckUniString );
+    DBG_ASSERT( pAsciiStr, "String::ReplaceAscii() - pAsciiStr is NULL" );
 
     // Use append if index >= length
     if ( nIndex >= mpData->mnLen )
@@ -386,12 +386,12 @@ UniString& UniString::ReplaceAscii( xub_StrLen nIndex, xub_StrLen nCount,
     return *this;
 }
 
-StringCompare UniString::CompareToAscii( const sal_Char* pAsciiStr,
+StringCompare String::CompareToAscii( const sal_Char* pAsciiStr,
                                          xub_StrLen nLen ) const
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
+    DBG_CHKTHIS( String, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, nLen ),
-                "UniString::CompareToAscii() - pAsciiStr include characters > 127" );
+                "String::CompareToAscii() - pAsciiStr include characters > 127" );
 
     // String vergleichen
     sal_Int32 nCompare = ImplStringCompareAscii( mpData->maStr, pAsciiStr, nLen );
@@ -405,12 +405,12 @@ StringCompare UniString::CompareToAscii( const sal_Char* pAsciiStr,
         return COMPARE_GREATER;
 }
 
-StringCompare UniString::CompareIgnoreCaseToAscii( const sal_Char* pAsciiStr,
+StringCompare String::CompareIgnoreCaseToAscii( const sal_Char* pAsciiStr,
                                                    xub_StrLen nLen ) const
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
+    DBG_CHKTHIS( String, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, nLen ),
-                "UniString::CompareIgnoreCaseToAscii() - pAsciiStr include characters > 127" );
+                "String::CompareIgnoreCaseToAscii() - pAsciiStr include characters > 127" );
 
     // compare strings
     sal_Int32 nCompare = ImplStringICompareAscii( mpData->maStr, pAsciiStr, nLen );
@@ -423,30 +423,30 @@ StringCompare UniString::CompareIgnoreCaseToAscii( const sal_Char* pAsciiStr,
         return COMPARE_GREATER;
 }
 
-sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr ) const
+sal_Bool String::EqualsAscii( const sal_Char* pAsciiStr ) const
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
+    DBG_CHKTHIS( String, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "UniString::EqualsAscii() - pAsciiStr include characters > 127" );
+                "String::EqualsAscii() - pAsciiStr include characters > 127" );
 
     return (ImplStringCompareAscii( mpData->maStr, pAsciiStr ) == 0);
 }
 
-sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const
+sal_Bool String::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
+    DBG_CHKTHIS( String, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "UniString::EqualsIgnoreCaseAscii() - pAsciiStr include characters > 127" );
+                "String::EqualsIgnoreCaseAscii() - pAsciiStr include characters > 127" );
 
     return (ImplStringICompareAscii( mpData->maStr, pAsciiStr ) == 0);
 }
 
-sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr,
+sal_Bool String::EqualsAscii( const sal_Char* pAsciiStr,
                              xub_StrLen nIndex, xub_StrLen nLen ) const
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
+    DBG_CHKTHIS( String, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, nLen ),
-                "UniString::EqualsAscii() - pAsciiStr include characters > 127" );
+                "String::EqualsAscii() - pAsciiStr include characters > 127" );
 
     // Are there enough codes for comparing?
     if ( nIndex > mpData->mnLen )
@@ -455,12 +455,12 @@ sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr,
     return (ImplStringCompareAscii( mpData->maStr+nIndex, pAsciiStr, nLen ) == 0);
 }
 
-sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
+sal_Bool String::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
                                        xub_StrLen nIndex, xub_StrLen nLen ) const
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
+    DBG_CHKTHIS( String, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, nLen ),
-                "UniString::EqualsIgnoreCaseAscii() - pAsciiStr include characters > 127" );
+                "String::EqualsIgnoreCaseAscii() - pAsciiStr include characters > 127" );
 
     // Are there enough codes for comparing?
     if ( nIndex > mpData->mnLen )
@@ -469,11 +469,11 @@ sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
     return (ImplStringICompareAscii( mpData->maStr+nIndex, pAsciiStr, nLen ) == 0);
 }
 
-xub_StrLen UniString::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex ) const
+xub_StrLen String::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex ) const
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
+    DBG_CHKTHIS( String, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "UniString::SearchAscii() - pAsciiStr include characters > 127" );
+                "String::SearchAscii() - pAsciiStr include characters > 127" );
 
     sal_Int32 nLen = mpData->mnLen;
     xub_StrLen nStrLen  = ImplStringLen( pAsciiStr );
@@ -512,12 +512,12 @@ xub_StrLen UniString::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex 
     return STRING_NOTFOUND;
 }
 
-xub_StrLen UniString::SearchAndReplaceAscii( const sal_Char* pAsciiStr, const UniString& rRepStr,
+xub_StrLen String::SearchAndReplaceAscii( const sal_Char* pAsciiStr, const String& rRepStr,
                                              xub_StrLen nIndex )
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
+    DBG_CHKTHIS( String, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "UniString::SearchAndReplaceAscii() - pAsciiStr include characters > 127" );
+                "String::SearchAndReplaceAscii() - pAsciiStr include characters > 127" );
 
     xub_StrLen nSPos = SearchAscii( pAsciiStr, nIndex );
     if ( nSPos != STRING_NOTFOUND )
@@ -526,11 +526,11 @@ xub_StrLen UniString::SearchAndReplaceAscii( const sal_Char* pAsciiStr, const Un
     return nSPos;
 }
 
-void UniString::SearchAndReplaceAllAscii( const sal_Char* pAsciiStr, const UniString& rRepStr )
+void String::SearchAndReplaceAllAscii( const sal_Char* pAsciiStr, const String& rRepStr )
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
+    DBG_CHKTHIS( String, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "UniString::SearchAndReplaceAllAscii() - pAsciiStr include characters > 127" );
+                "String::SearchAndReplaceAllAscii() - pAsciiStr include characters > 127" );
 
     xub_StrLen nCharLen = ImplStringLen( pAsciiStr );
     xub_StrLen nSPos = SearchAscii( pAsciiStr, 0 );

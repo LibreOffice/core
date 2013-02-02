@@ -1565,8 +1565,8 @@ void FmXFormShell::ExecuteSearch()
 
     // wenn der Dialog initial den Text des aktiven Controls anbieten soll, muss dieses ein XTextComponent-Interface habe,
     // ausserdem macht das nur Sinn, wenn das aktuelle Feld auch an ein Tabellen- (oder was-auch-immer-)Feld gebunden ist
-    UniString strActiveField;
-    UniString strInitialText;
+    OUString strActiveField;
+    OUString strInitialText;
     // ... das bekomme ich von meinem FormController
     DBG_ASSERT(m_xActiveController.is(), "FmXFormShell::ExecuteSearch : no active controller !");
     Reference< XControl> xActiveControl( m_xActiveController->getCurrentControl());
@@ -2393,7 +2393,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
 
     // --------------------------------------------------------------------------------------------
     // assemble the list of fields to involve (that is, the ControlSources of all fields that have such a property)
-    UniString strFieldList, sFieldDisplayNames;
+    OUString strFieldList, sFieldDisplayNames;
     m_arrSearchedControls.clear();
     m_arrRelativeGridColumn.clear();
 
@@ -2497,11 +2497,11 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         // the cursor has a field matching the control source ?
                         if (xValidFormFields->hasByName(aName))
                         {
-                            strFieldList += aName.getStr();
-                            strFieldList += ';';
+                            strFieldList = strFieldList + OUString(aName.getStr()) + ";";
 
-                            sFieldDisplayNames += ::comphelper::getString(xCurrentColModel->getPropertyValue(FM_PROP_LABEL)).getStr();
-                            sFieldDisplayNames += ';';
+                            sFieldDisplayNames = sFieldDisplayNames +
+                                    OUString(::comphelper::getString(xCurrentColModel->getPropertyValue(FM_PROP_LABEL)).getStr()) +
+                                    ";";
 
                             pfmscContextInfo->arrFields.push_back(xCurrentColumn);
 
@@ -2527,12 +2527,12 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                     if (IsSearchableControl(xControl))
                     {
                         // all tests passed -> take along in the list
-                        strFieldList += sControlSource.getStr();
-                        strFieldList += ';';
+                        strFieldList = strFieldList + OUString(sControlSource.getStr()) + ";";
 
                         // the label which should appear for the control :
-                        sFieldDisplayNames += getLabelName(Reference< XPropertySet>(xControlModel, UNO_QUERY)).getStr();
-                        sFieldDisplayNames += ';';
+                        sFieldDisplayNames = sFieldDisplayNames +
+                                OUString(getLabelName(Reference< XPropertySet>(xControlModel, UNO_QUERY)).getStr()) +
+                                ";";
 
                         // mark the SdrObject (accelerates the treatment in OnFoundData)
                         m_arrSearchedControls.push_back(pCurrent);

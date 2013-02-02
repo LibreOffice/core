@@ -117,10 +117,10 @@ private:
     // the next two methods are needed to prevent the string hook called
     // with the res mgr mutex locked
     // like GetString, but doesn't call the string hook
-    TOOLS_DLLPRIVATE static sal_uInt32 GetStringWithoutHook( UniString& rStr,
+    TOOLS_DLLPRIVATE static sal_uInt32 GetStringWithoutHook( OUString& rStr,
                                                              const sal_uInt8* pStr );
     // like ReadString but doesn't call the string hook
-    TOOLS_DLLPRIVATE UniString ReadStringWithoutHook();
+    TOOLS_DLLPRIVATE OUString ReadStringWithoutHook();
 
     static ResMgr* ImplCreateResMgr( InternalResMgr* pImpl ) { return new ResMgr( pImpl ); }
 
@@ -163,7 +163,7 @@ public:
                             { return( pHT->GetGlobOff() ); }
 
     /// Return a string and its length out of the resource
-    static sal_uInt32   GetString( UniString& rStr, const sal_uInt8* pStr );
+    static sal_uInt32   GetString( OUString& rStr, const sal_uInt8* pStr );
     /// Return a byte string and its length out of the resource
     static sal_uInt32   GetByteString( rtl::OString& rStr, const sal_uInt8* pStr );
 
@@ -190,7 +190,7 @@ public:
 
     sal_Int16           ReadShort();
     sal_Int32           ReadLong();
-    UniString           ReadString();
+    OUString            ReadString();
     rtl::OString        ReadByteString();
 
     /// Generate auto help ID for current resource stack

@@ -488,7 +488,7 @@ InternalResMgr::~InternalResMgr()
         const sal_Char* pLogFile = getenv( "STAR_RESOURCE_LOGGING" );
         if ( pLogFile )
         {
-            SvFileStream aStm( UniString( pLogFile, RTL_TEXTENCODING_ASCII_US ), STREAM_WRITE );
+            SvFileStream aStm( OUString( pLogFile, RTL_TEXTENCODING_ASCII_US ), STREAM_WRITE );
             aStm.Seek( STREAM_SEEK_TO_END );
             rtl::OStringBuffer aLine(RTL_CONSTASCII_STRINGPARAM("FileName: "));
             aLine.append(rtl::OUStringToOString(aFileName,
@@ -665,7 +665,7 @@ void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
 
 #ifdef DBG_UTIL
 
-UniString GetTypeRes_Impl( const ResId& rTypeId )
+OUString GetTypeRes_Impl( const ResId& rTypeId )
 {
     // Return on resource errors
     static int bInUse = sal_False;
@@ -1236,11 +1236,11 @@ sal_uInt64 ResMgr::GetUInt64( void* pDatum )
             (sal_uInt64(*((sal_uInt8*)pDatum + 7)) <<  0)   );
 }
 
-sal_uInt32 ResMgr::GetStringWithoutHook( UniString& rStr, const sal_uInt8* pStr )
+sal_uInt32 ResMgr::GetStringWithoutHook( OUString& rStr, const sal_uInt8* pStr )
 {
     sal_uInt32 nLen=0;
     sal_uInt32 nRet = GetStringSize( pStr, nLen );
-    UniString aString( (sal_Char*)pStr, RTL_TEXTENCODING_UTF8,
+    OUString aString( (sal_Char*)pStr, RTL_TEXTENCODING_UTF8,
                        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |
                        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
                        RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT );
@@ -1248,9 +1248,9 @@ sal_uInt32 ResMgr::GetStringWithoutHook( UniString& rStr, const sal_uInt8* pStr 
     return nRet;
 }
 
-sal_uInt32 ResMgr::GetString( UniString& rStr, const sal_uInt8* pStr )
+sal_uInt32 ResMgr::GetString( OUString& rStr, const sal_uInt8* pStr )
 {
-    UniString aString;
+    OUString aString;
     sal_uInt32 nRet =  GetStringWithoutHook( aString, pStr );
     if ( pImplResHookProc )
         aString = pImplResHookProc( aString );
@@ -1613,20 +1613,20 @@ sal_Int32 ResMgr::ReadLong()
     return n;
 }
 
-UniString ResMgr::ReadStringWithoutHook()
+OUString ResMgr::ReadStringWithoutHook()
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     if( pFallbackResMgr )
         return pFallbackResMgr->ReadStringWithoutHook();
 
-    UniString aRet;
+    OUString aRet;
 
     const ImpRCStack& rTop = aStack[nCurStack];
     if( (rTop.Flags & RC_NOTFOUND) )
     {
         #if OSL_DEBUG_LEVEL > 0
-        aRet = OUString( RTL_CONSTASCII_USTRINGPARAM( "<resource not found>" ) );
+        aRet = OUString("<resource not found>");
         #endif
     }
     else
@@ -1635,9 +1635,9 @@ UniString ResMgr::ReadStringWithoutHook()
     return aRet;
 }
 
-UniString ResMgr::ReadString()
+OUString ResMgr::ReadString()
 {
-    UniString aRet = ReadStringWithoutHook();
+    OUString aRet = ReadStringWithoutHook();
     if ( pImplResHookProc )
         aRet = pImplResHookProc( aRet );
     return aRet;
@@ -1827,7 +1827,7 @@ rtl::OUString SimpleResMgr::ReadString( sal_uInt32 nId )
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::ReadString : have no impl class !" );
     // perhaps constructed with an invalid filename ?
 
-    UniString sReturn;
+    OUString sReturn;
     if ( !m_pResImpl )
         return sReturn;
 

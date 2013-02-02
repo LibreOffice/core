@@ -487,7 +487,7 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
             }
 
             // if such a template already exists: delete!
-            String aOldName(pHisSheet->GetName());
+            OUString aOldName(pHisSheet->GetName());
             SfxStyleFamily eOldFamily = pHisSheet->GetFamily();
 
             SfxStyleSheetBase* pExist = pMyPool->Find(aOldName, eOldFamily);
@@ -600,8 +600,8 @@ sal_Bool SfxObjectShell::Remove
         SetOrganizerSearchMask(pMyPool);
 
         SfxStyleSheetBase* pMySheet =  (*pMyPool)[nIdx2];
-        String aName(pMySheet->GetName());
-        String aEmpty;
+        OUString aName(pMySheet->GetName());
+        OUString aEmpty;
         SfxStyleFamily  eFamily = pMySheet->GetFamily();
         pMyPool->Remove(pMySheet);
         bRet = sal_True;
