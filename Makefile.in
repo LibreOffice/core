@@ -370,8 +370,11 @@ ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
     done
 #
 # Sign the app bundle as a whole (will sign the soffice binary)
-# Not necessary as the soffice binary will have been signed after linking.
-#	codesign --verbose --sign $(MACOSX_CODESIGNING_IDENTITY) $(DEVINSTALLDIR)/opt/LibreOffice.app
+#
+#  The soffice binary will have been signed after linking but it needs
+# to be re-signed as it has been renamed, or modified, or something
+# after linking.
+	codesign --force --verbose --sign $(MACOSX_CODESIGNING_IDENTITY) $(DEVINSTALLDIR)/opt/LibreOffice.app
 #
 endif
 	@install-gdb-printers -L
