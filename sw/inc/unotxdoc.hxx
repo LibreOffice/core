@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOTXDOC_HXX
-#define _UNOTXDOC_HXX
+#ifndef SW_UNOTXDOC_HXX
+#define SW_UNOTXDOC_HXX
 
 #include "swdllapi.h"
 #include <sfx2/sfxbasemodel.hxx>
@@ -67,8 +67,8 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase4.hxx> // helper for implementations
-#include <RefreshListenerContainer.hxx>
 
+#include <unobaseclass.hxx>
 #include <viewopt.hxx>
 
 #define __IFC32 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
@@ -163,8 +163,11 @@ class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
     public SfxBaseModel
 {
+private:
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
+
     ActionContextArr        aActionArr;
-    SwRefreshListenerContainer  aRefreshCont;
 
     const SfxItemPropertySet* pPropSet;
 
@@ -234,7 +237,7 @@ protected:
 public:
     SwXTextDocument(SwDocShell* pShell);
 
-    inline void notifyRefreshListeners() { aRefreshCont.Refreshed(); }
+    void NotifyRefreshListeners();
     virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
     virtual void SAL_CALL release(  ) throw();

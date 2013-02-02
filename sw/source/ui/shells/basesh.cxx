@@ -586,7 +586,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 Reference < XModel > xModel = GetView().GetDocShell()->GetModel();
                 Reference < XUnoTunnel > xDocTunnel ( xModel, UNO_QUERY );
                 SwXTextDocument *pDoc = reinterpret_cast < SwXTextDocument * > ( xDocTunnel->getSomething ( SwXTextDocument::getUnoTunnelId() ) );
-                pDoc->notifyRefreshListeners();
+                pDoc->NotifyRefreshListeners();
                 rSh.CalcLayout();
             }
             break;

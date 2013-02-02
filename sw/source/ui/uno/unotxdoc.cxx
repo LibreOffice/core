@@ -221,6 +221,18 @@ static void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
     }
 }
 
+class SwXTextDocument::Impl
+{
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+
+public:
+    ::cppu::OInterfaceContainerHelper m_RefreshListeners;
+
+    Impl() : m_RefreshListeners(m_Mutex) { }
+
+};
+
 namespace
 {
     class theSwXTextDocumentUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextDocumentUnoTunnelId > {};
@@ -341,11 +353,10 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes() throw(RuntimeExceptio
     return aBaseTypes;
 }
 
-SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
-    SfxBaseModel(pShell),
-
-    aRefreshCont ( static_cast < XTextDocument* > ( this ) ),
-
+SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
+    : SfxBaseModel(pShell)
+    , m_pImpl(new Impl)
+    ,
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_DOCUMENT)),
 
     pDocShell(pShell),
@@ -1404,7 +1415,8 @@ void SwXTextDocument::Invalidate()
     }
     InitNewDoc();
     pDocShell = 0;
-    aRefreshCont.Disposing();
+    lang::EventObject const ev(static_cast<SwXTextDocumentBaseClass &>(*this));
+    m_pImpl->m_RefreshListeners.disposeAndClear(ev);
 }
 
 void SwXTextDocument::Reactivate(SwDocShell* pNewDocShell)
@@ -2196,32 +2208,40 @@ Reference< XEnumerationAccess > SwXTextDocument::getRedlines(  ) throw(RuntimeEx
     return *pxXRedlines;
 }
 
+void SwXTextDocument::NotifyRefreshListeners()
+{
+    // why does SwBaseShell not just call refresh? maybe because it's rSh is
+    // (sometimes) a different shell than GetWrtShell()?
+    lang::EventObject const ev(static_cast<SwXTextDocumentBaseClass &>(*this));
+    m_pImpl->m_RefreshListeners.notifyEach(
+            & util::XRefreshListener::refreshed, ev);
+}
+
 void SwXTextDocument::refresh(void) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw RuntimeException();
     ViewShell *pViewShell = pDocShell->GetWrtShell();
-    notifyRefreshListeners();
+    NotifyRefreshListeners();
     if(pViewShell)
         pViewShell->CalcLayout();
 }
 
-void SwXTextDocument::addRefreshListener(const Reference< util::XRefreshListener > & l)
-    throw( RuntimeException )
+void SAL_CALL SwXTextDocument::addRefreshListener(
+        const Reference<util::XRefreshListener> & xListener)
+throw (RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    if ( !IsValid() )
-        throw RuntimeException();
-    aRefreshCont.AddListener ( reinterpret_cast < const Reference < lang::XEventListener > &> ( l ));
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_RefreshListeners.addInterface(xListener);
 }
 
-void SwXTextDocument::removeRefreshListener(const Reference< util::XRefreshListener > & l)
-    throw( RuntimeException )
+void SAL_CALL SwXTextDocument::removeRefreshListener(
+        const Reference<util::XRefreshListener> & xListener)
+throw (RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    if ( !IsValid() || !aRefreshCont.RemoveListener ( reinterpret_cast < const Reference < lang::XEventListener > &> ( l ) ) )
-        throw RuntimeException();
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_RefreshListeners.removeInterface(xListener);
 }
 
 void SwXTextDocument::updateLinks(  ) throw(RuntimeException)
