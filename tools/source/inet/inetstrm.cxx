@@ -1188,9 +1188,9 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
             if (aContentType.Len())
             {
                 // Determine default Content-Type.
-                UniString aDefaultType = pMsg->GetDefaultContentType();
+                OUString aDefaultType = pMsg->GetDefaultContentType();
 
-                if (aDefaultType.CompareIgnoreCaseToAscii (
+                if (aDefaultType.compareTo(
                     aContentType, aContentType.Len()) == 0)
                 {
                     // No need to specify default.

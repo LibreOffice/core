@@ -37,7 +37,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-typedef ::std::vector< UniString* > UniStringList;
+typedef ::std::vector< OUString* > OUStringList;
 
 #define INITCONTROL( p, ControlClass, nBits, aPos, aSize, aTitel, rHelpId ) \
     p = new ControlClass( GetPathDialog(), WinBits( nBits ) ); \
@@ -413,14 +413,14 @@ void ImpPathDialog::UpdateEntries( const sal_Bool )
     sal_uInt16 nEntries = aDir.Count();
     if( nEntries )
     {
-        UniStringList aSortDirList;
+        OUStringList aSortDirList;
         const comphelper::string::NaturalStringSorter& rSorter =
             ::vcl::unohelper::getNaturalStringSorterForAppLocale();
         for ( sal_uInt16 n = 0; n < nEntries; n++ )
         {
             DirEntry& rEntry = aDir[n];
-            UniString aName( rEntry.GetName() );
-            if( aName.Len() && ( aName.GetChar(0) != '.' ) && rEntry.Exists() )
+            OUString aName( rEntry.GetName() );
+            if( aName.getLength() && ( aName[0] != '.' ) && rEntry.Exists() )
             {
                 if( FileStat( rEntry ).GetKind() & FSYS_KIND_DIR )
                 {
@@ -429,11 +429,11 @@ void ImpPathDialog::UpdateEntries( const sal_Bool )
                         if( rSorter.compare( *aSortDirList[ l ], aName ) > 0 )
                             break;
                     if ( l < aSortDirList.size() ) {
-                        UniStringList::iterator it = aSortDirList.begin();
+                        OUStringList::iterator it = aSortDirList.begin();
                         ::std::advance( it, l );
-                        aSortDirList.insert( it, new UniString( aName ) );
+                        aSortDirList.insert( it, new OUString( aName ) );
                     } else {
-                        aSortDirList.push_back( new UniString( aName ) );
+                        aSortDirList.push_back( new OUString( aName ) );
                     }
                 }
             }
@@ -441,8 +441,7 @@ void ImpPathDialog::UpdateEntries( const sal_Bool )
 
         for( size_t l = 0; l < aSortDirList.size(); l++ )
         {
-            UniString aEntryStr( aTabString );
-            aEntryStr += *aSortDirList[ l ];
+            OUString aEntryStr = aTabString + *aSortDirList[ l ];
             pDirList->InsertEntry( aEntryStr );
             delete aSortDirList[ l ];
         }
@@ -624,7 +623,7 @@ void ImpPathDialog::PostExecute()
 {
 }
 
-void ImpPathDialog::SetPath( UniString const & rPath )
+void ImpPathDialog::SetPath( OUString const & rPath )
 {
     aPath = DirEntry( rPath );
 
@@ -644,7 +643,7 @@ void ImpPathDialog::SetPath( UniString const & rPath )
     pSvPathDialog->LeaveWait();
 }
 
-UniString ImpPathDialog::GetPath() const
+OUString ImpPathDialog::GetPath() const
 {
     DirEntry aFile( pEdit->GetText() );
     aFile.ToAbs();

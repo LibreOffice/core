@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-UniString::UniString( const char* pByteStr,
+String::String( const char* pByteStr,
                       rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
 {
-    DBG_CTOR( UniString, DbgCheckUniString );
-    DBG_ASSERT( pByteStr, "UniString::UniString() - pByteStr is NULL" );
+    DBG_CTOR( String, DbgCheckUniString );
+    DBG_ASSERT( pByteStr, "String::String() - pByteStr is NULL" );
 
     mpData = NULL;
     rtl_string2UString( (rtl_uString **)(&mpData),
@@ -29,11 +29,11 @@ UniString::UniString( const char* pByteStr,
                         eTextEncoding, nCvtFlags );
 }
 
-UniString::UniString( const char* pByteStr, xub_StrLen nLen,
+String::String( const char* pByteStr, xub_StrLen nLen,
                       rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
 {
-    DBG_CTOR( UniString, DbgCheckUniString );
-    DBG_ASSERT( pByteStr, "UniString::UniString() - pByteStr is NULL" );
+    DBG_CTOR( String, DbgCheckUniString );
+    DBG_ASSERT( pByteStr, "String::String() - pByteStr is NULL" );
 
     if ( nLen == STRING_LEN )
         nLen = ImplStringLen( pByteStr );
@@ -44,13 +44,13 @@ UniString::UniString( const char* pByteStr, xub_StrLen nLen,
                         eTextEncoding, nCvtFlags );
 }
 
-UniString::UniString( const rtl::OUString& rStr )
+String::String( const rtl::OUString& rStr )
     : mpData(NULL)
 {
-    DBG_CTOR( UniString, DbgCheckUniString );
+    DBG_CTOR( String, DbgCheckUniString );
 
     OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
-               "Overflowing rtl::OUString -> UniString cut to zero length");
+               "Overflowing rtl::OUString -> String cut to zero length");
 
 
     if (rStr.pData->length < STRING_MAXLEN)
@@ -64,12 +64,12 @@ UniString::UniString( const rtl::OUString& rStr )
     }
 }
 
-UniString& UniString::Assign( const rtl::OUString& rStr )
+String& String::Assign( const rtl::OUString& rStr )
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
+    DBG_CHKTHIS( String, DbgCheckUniString );
 
     OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
-               "Overflowing rtl::OUString -> UniString cut to zero length");
+               "Overflowing rtl::OUString -> String cut to zero length");
 
     if (rStr.pData->length < STRING_MAXLEN)
     {
@@ -90,15 +90,15 @@ UniString& UniString::Assign( const rtl::OUString& rStr )
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 
-UniString::UniString( const ResId& rResId )
+String::String( const ResId& rResId )
     : mpData(NULL)
 {
     rtl::OUString sStr(rResId.toString());
 
-    DBG_CTOR( UniString, DbgCheckUniString );
+    DBG_CTOR( String, DbgCheckUniString );
 
     OSL_ENSURE(sStr.pData->length < STRING_MAXLEN,
-               "Overflowing rtl::OUString -> UniString cut to zero length");
+               "Overflowing rtl::OUString -> String cut to zero length");
 
     if (sStr.pData->length < STRING_MAXLEN)
     {

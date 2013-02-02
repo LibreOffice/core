@@ -1262,10 +1262,7 @@ static long ImplHandleExtTextInput( Window* pWindow,
     if ( !pChild->ImplGetWindowImpl()->mbExtTextInput )
     {
         pChild->ImplGetWindowImpl()->mbExtTextInput = sal_True;
-        if ( !pWinData->mpExtOldText )
-            pWinData->mpExtOldText = new UniString;
-        else
-            pWinData->mpExtOldText->Erase();
+        pWinData->mpExtOldText = new OUString;
         if ( pWinData->mpExtOldAttrAry )
         {
             delete [] pWinData->mpExtOldAttrAry;
@@ -1281,11 +1278,11 @@ static long ImplHandleExtTextInput( Window* pWindow,
 
     // Test for changes
     sal_Bool        bOnlyCursor = sal_False;
-    xub_StrLen  nMinLen = Min( pWinData->mpExtOldText->Len(), rText.Len() );
+    xub_StrLen  nMinLen = Min( pWinData->mpExtOldText->getLength(), sal_Int32(rText.Len()) );
     xub_StrLen  nDeltaStart = 0;
     while ( nDeltaStart < nMinLen )
     {
-        if ( pWinData->mpExtOldText->GetChar( nDeltaStart ) != rText.GetChar( nDeltaStart ) )
+        if ( (*pWinData->mpExtOldText)[nDeltaStart] != rText.GetChar( nDeltaStart ) )
             break;
         nDeltaStart++;
     }
@@ -1308,13 +1305,13 @@ static long ImplHandleExtTextInput( Window* pWindow,
         }
     }
     if ( (nDeltaStart >= nMinLen) &&
-         (pWinData->mpExtOldText->Len() == rText.Len()) )
+         (pWinData->mpExtOldText->getLength() == rText.Len()) )
         bOnlyCursor = sal_True;
 
     // Call Event and store the information
     CommandExtTextInputData aData( rText, pTextAttr,
                                    (xub_StrLen)nCursorPos, nCursorFlags,
-                                   nDeltaStart, pWinData->mpExtOldText->Len(),
+                                   nDeltaStart, pWinData->mpExtOldText->getLength(),
                                    bOnlyCursor );
     *pWinData->mpExtOldText = rText;
     if ( pWinData->mpExtOldAttrAry )
@@ -2279,20 +2276,19 @@ static long ImplHandleShowDialog( Window* pWindow, int nDialogId )
 // -----------------------------------------------------------------------
 
 static void ImplHandleSurroundingTextRequest( Window *pWindow,
-                          XubString& rText,
+                          OUString& rText,
                           Selection &rSelRange )
 {
     Window* pChild = ImplGetKeyInputWindow( pWindow );
 
     if ( !pChild )
     {
-    rText = XubString::EmptyString();
+    rText = OUString();
     rSelRange.setMin( 0 );
     rSelRange.setMax( 0 );
     }
     else
     {
-
     rText = pChild->GetSurroundingText();
     Selection aSel = pChild->GetSurroundingTextSelection();
     rSelRange.setMin( aSel.Min() );
@@ -2312,15 +2308,15 @@ static void ImplHandleSalSurroundingTextRequest( Window *pWindow,
 
     if( aSelRange.Min() < 0 )
         pEvt->mnStart = 0;
-    else if( aSelRange.Min() > pEvt->maText.Len() )
-        pEvt->mnStart = pEvt->maText.Len();
+    else if( aSelRange.Min() > pEvt->maText.getLength() )
+        pEvt->mnStart = pEvt->maText.getLength();
     else
         pEvt->mnStart = aSelRange.Min();
 
     if( aSelRange.Max() < 0 )
         pEvt->mnStart = 0;
-    else if( aSelRange.Max() > pEvt->maText.Len() )
-        pEvt->mnEnd = pEvt->maText.Len();
+    else if( aSelRange.Max() > pEvt->maText.getLength() )
+        pEvt->mnEnd = pEvt->maText.getLength();
     else
         pEvt->mnEnd = aSelRange.Max();
 }
