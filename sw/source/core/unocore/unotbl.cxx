@@ -106,6 +106,22 @@ extern void sw_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
 
 #define UNO_TABLE_COLUMN_SUM    10000
 
+static void
+lcl_SendChartEvent(::cppu::OWeakObject & rSource,
+        ::cppu::OInterfaceContainerHelper & rListeners)
+{
+    //TODO: find appropriate settings of the Event
+    chart::ChartDataChangeEvent event;
+    event.Source = & rSource;
+    event.Type = chart::ChartDataChangeType_ALL;
+    event.StartColumn = 0;
+    event.EndColumn = 1;
+    event.StartRow = 0;
+    event.EndRow = 1;
+    rListeners.notifyEach(
+            & chart::XChartDataChangeEventListener::chartDataChanged, event);
+}
+
 static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
 {
     rSvxLine.SetColor(Color(rLine.Color));
@@ -2112,9 +2128,10 @@ sal_Int64 SAL_CALL SwXTextTable::getSomething( const uno::Sequence< sal_Int8 >& 
 
 TYPEINIT1(SwXTextTable, SwClient)
 
-SwXTextTable::SwXTextTable() :
+SwXTextTable::SwXTextTable()
+    : m_ChartListeners(m_Mutex)
+    ,
     aLstnrCntnr( (text::XTextTable*)this),
-    aChartLstnrCntnr( (text::XTextTable*)this),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE)),
     pTableProps(new SwTableProperties_Impl),
     bIsDescriptor(sal_True),
@@ -2125,10 +2142,11 @@ SwXTextTable::SwXTextTable() :
 {
 }
 
-SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt) :
-    SwClient( &rFrmFmt ),
+SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt)
+    : SwClient( &rFrmFmt )
+    , m_ChartListeners(m_Mutex)
+    ,
     aLstnrCntnr( (text::XTextTable*)this),
-    aChartLstnrCntnr( (text::XTextTable*)this),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE)),
     pTableProps(0),
     bIsDescriptor(sal_False),
@@ -2719,7 +2737,9 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
             }
         }
         if ( bChanged )
-            aChartLstnrCntnr.ChartDataChanged();
+        {
+            lcl_SendChartEvent(*this, m_ChartListeners);
+        }
     }
 }
 
@@ -2876,21 +2896,20 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColum
         throw uno::RuntimeException();
 }
 
-void SwXTextTable::addChartDataChangeEventListener(
-    const uno::Reference< chart::XChartDataChangeEventListener > & aListener)
-        throw( uno::RuntimeException )
+void SAL_CALL SwXTextTable::addChartDataChangeEventListener(
+    const uno::Reference<chart::XChartDataChangeEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn())
-        throw uno::RuntimeException();
-    aChartLstnrCntnr.AddListener(aListener.get());
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_ChartListeners.addInterface(xListener);
 }
 
-void SwXTextTable::removeChartDataChangeEventListener(
-    const uno::Reference< chart::XChartDataChangeEventListener > & aListener)
-        throw( uno::RuntimeException )
+void SAL_CALL SwXTextTable::removeChartDataChangeEventListener(
+    const uno::Reference<chart::XChartDataChangeEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn() || !aChartLstnrCntnr.RemoveListener(aListener.get()))
-        throw uno::RuntimeException();
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_ChartListeners.removeInterface(xListener);
 }
 
 sal_Bool SwXTextTable::isNotANumber(double nNumber) throw( uno::RuntimeException )
@@ -3014,7 +3033,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstRowAsLabel != bTmp)
                     {
-                        aChartLstnrCntnr.ChartDataChanged();
+                        lcl_SendChartEvent(*this, m_ChartListeners);
                         bFirstRowAsLabel = bTmp;
                     }
                 }
@@ -3024,7 +3043,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstColumnAsLabel != bTmp)
                     {
-                        aChartLstnrCntnr.ChartDataChanged();
+                        lcl_SendChartEvent(*this, m_ChartListeners);
                         bFirstColumnAsLabel = bTmp;
                     }
                 }
@@ -3599,10 +3618,13 @@ void SwXTextTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     if(!GetRegisteredIn())
     {
         aLstnrCntnr.Disposing();
-        aChartLstnrCntnr.Disposing();
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
+        m_ChartListeners.disposeAndClear(ev);
     }
     else
-        aChartLstnrCntnr.ChartDataChanged();
+    {
+        lcl_SendChartEvent(*this, m_ChartListeners);
+    }
 }
 
 OUString SAL_CALL SwXTextTable::getImplementationName(void) throw( uno::RuntimeException )
@@ -3676,10 +3698,10 @@ uno::Sequence< OUString > SwXCellRange::getSupportedServiceNames(void) throw( un
 
 SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
     SwRangeDescriptor& rDesc)
-    :
-    SwClient(&rFrmFmt),
-    aCursorDepend(this, pCrsr),
-    aChartLstnrCntnr((cppu::OWeakObject*)this),
+    : SwClient(&rFrmFmt)
+    , aCursorDepend(this, pCrsr)
+    , m_ChartListeners(m_Mutex)
+    ,
     aRgDesc(rDesc),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_RANGE)),
     pTblCrsr(pCrsr),
@@ -3880,7 +3902,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstRowAsLabel != bTmp)
                     {
-                        aChartLstnrCntnr.ChartDataChanged();
+                        lcl_SendChartEvent(*this, m_ChartListeners);
                         bFirstRowAsLabel = bTmp;
                     }
                 }
@@ -3890,7 +3912,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstColumnAsLabel != bTmp)
                     {
-                        aChartLstnrCntnr.ChartDataChanged();
+                        lcl_SendChartEvent(*this, m_ChartListeners);
                         bFirstColumnAsLabel = bTmp;
                     }
                 }
@@ -4517,17 +4539,20 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& Column
     }
 }
 
-void SwXCellRange::addChartDataChangeEventListener(const uno::Reference< chart::XChartDataChangeEventListener > & aListener) throw( uno::RuntimeException )
+void SAL_CALL SwXCellRange::addChartDataChangeEventListener(
+        const uno::Reference<chart::XChartDataChangeEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn())
-        throw uno::RuntimeException();
-    aChartLstnrCntnr.AddListener(aListener.get());
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_ChartListeners.addInterface(xListener);
 }
 
-void SwXCellRange::removeChartDataChangeEventListener(const uno::Reference< chart::XChartDataChangeEventListener > & aListener) throw( uno::RuntimeException )
+void SAL_CALL SwXCellRange::removeChartDataChangeEventListener(
+        const uno::Reference<chart::XChartDataChangeEventListener> & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn() || !aChartLstnrCntnr.RemoveListener(aListener.get()))
-        throw uno::RuntimeException();
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_ChartListeners.removeInterface(xListener);
 }
 
 sal_Bool SwXCellRange::isNotANumber(double /*fNumber*/) throw( uno::RuntimeException )
@@ -4597,10 +4622,13 @@ void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
             delete pTblCrsr;
          */
         pTblCrsr = 0;
-        aChartLstnrCntnr.Disposing();
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
+        m_ChartListeners.disposeAndClear(ev);
     }
     else
-        aChartLstnrCntnr.ChartDataChanged();
+    {
+        lcl_SendChartEvent(*this, m_ChartListeners);
+    }
 }
 
 /******************************************************************
@@ -5026,35 +5054,6 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
 void SwXTableColumns::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
-}
-
-void SwChartEventListenerContainer::ChartDataChanged()
-{
-    if(pListenerArr)
-    {
-        //TODO: find appropriate settings of the Event
-        lang::EventObject aObj(pxParent);
-        chart::ChartDataChangeEvent aEvent;
-        aEvent.Type = chart::ChartDataChangeType_ALL;
-        aEvent.StartColumn = 0;
-        aEvent.EndColumn = 1;
-        aEvent.StartRow = 0;
-        aEvent.EndRow = 1;
-
-        for(sal_uInt16 i = 0; i < pListenerArr->size(); i++)
-        {
-            try
-            {
-                XEventListenerPtr pElem = (*pListenerArr)[i];
-                uno::Reference<lang::XEventListener> xEventListener = *pElem;
-                uno::Reference<chart::XChartDataChangeEventListener> xChartEventListener = (chart::XChartDataChangeEventListener*)(*pElem).get();
-                xChartEventListener->chartDataChanged( aEvent );
-            }
-            catch(uno::Exception const &)
-            {
-            }
-        }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

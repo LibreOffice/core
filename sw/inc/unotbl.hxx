@@ -37,6 +37,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase7.hxx>
 #include <cppuhelper/implbase10.hxx>
+#include <cppuhelper/interfacecontainer.h>
 
 #include <comphelper/uno3.hxx>
 #include <tools/string.hxx>
@@ -56,14 +57,6 @@ class SwTableBoxFmt;
 class SwChartDataProvider;
 class SwFrmFmt;
 
-
-class SwChartEventListenerContainer : public SwEventListenerContainer
-{
-    public:
-        SwChartEventListenerContainer( ::com::sun::star::uno::XInterface* pxParentL) :
-            SwEventListenerContainer(pxParentL){}
-        void ChartDataChanged();
-};
 
 typedef
 cppu::WeakImplHelper4
@@ -296,8 +289,9 @@ class SwXTextTable : public cppu::WeakImplHelper10
 >,
     public SwClient
 {
+    ::osl::Mutex m_Mutex;
+    ::cppu::OInterfaceContainerHelper m_ChartListeners;
     SwEventListenerContainer        aLstnrCntnr;
-    SwChartEventListenerContainer   aChartLstnrCntnr;
     const SfxItemPropertySet*       m_pPropSet;
 
     // Descriptor-interface
@@ -416,7 +410,8 @@ class SwXCellRange : public cppu::WeakImplHelper7
     public SwClient
 {
     SwDepend                        aCursorDepend; //the cursor is removed after the doc has been removed
-    SwChartEventListenerContainer   aChartLstnrCntnr;
+    ::osl::Mutex m_Mutex;
+    ::cppu::OInterfaceContainerHelper m_ChartListeners;
 
     SwRangeDescriptor           aRgDesc;
     const SfxItemPropertySet*   m_pPropSet;
