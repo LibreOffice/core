@@ -17,10 +17,10 @@
 #
 import traceback
 import inspect
-from .ConfigNode import ConfigNode
+from .ConfigGroup import ConfigGroup
 from .Configuration import Configuration
 
-class ConfigSet(ConfigNode):
+class ConfigSet(ConfigGroup):
     '''
     After reading the configuration set items,
     the ConfigSet checks this field.

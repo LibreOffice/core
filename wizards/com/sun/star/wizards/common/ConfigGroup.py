@@ -16,10 +16,9 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import inspect
-from .ConfigNode import ConfigNode
 from .Configuration import Configuration
 
-class ConfigGroup(ConfigNode):
+class ConfigGroup(object):
 
     def writeConfiguration(self, configurationView, param):
         for name,data in inspect.getmembers(self):
@@ -29,7 +28,7 @@ class ConfigGroup(ConfigNode):
     def writeField(self, field, configView, prefix):
         propertyName = field[len(prefix):]
         child = getattr(self, field)
-        if isinstance(child, ConfigNode):
+        if isinstance(child, ConfigGroup):
             child.writeConfiguration(configView.getByName(propertyName),
                 prefix)
         else:
@@ -43,7 +42,7 @@ class ConfigGroup(ConfigNode):
     def readField(self, field, configView, prefix):
         propertyName = field[len(prefix):]
         child = getattr(self, field)
-        if isinstance(child, ConfigNode):
+        if isinstance(child, ConfigGroup):
             child.readConfiguration(configView.getByName(propertyName),
                 prefix)
         else:
