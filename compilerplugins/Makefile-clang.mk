@@ -11,6 +11,7 @@
 # The list of source files.
 CLANGSRC= \
     plugin.cxx \
+    pluginhandler.cxx \
     bodynotinblock.cxx \
     lclstaticfix.cxx \
     postfixincrementfix.cxx \
