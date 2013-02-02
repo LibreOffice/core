@@ -20,25 +20,27 @@ from ..common.ConfigSet import ConfigSet
 from .CGTopic import CGTopic
 
 class CGAgenda(ConfigGroup):
-    cp_AgendaType = int()
-    cp_IncludeMinutes = bool()
-    cp_Title = ""
-    cp_Date = str()
-    cp_Time = str()
-    cp_Location = ""
-    cp_ShowMeetingType = bool()
-    cp_ShowRead = bool()
-    cp_ShowBring = bool()
-    cp_ShowNotes = bool()
-    cp_ShowCalledBy = bool()
-    cp_ShowFacilitator = bool()
-    cp_ShowNotetaker = bool()
-    cp_ShowTimekeeper = bool()
-    cp_ShowAttendees = bool()
-    cp_ShowObservers = bool()
-    cp_ShowResourcePersons = bool()
-    cp_TemplateName = str()
-    cp_TemplatePath = str()
-    cp_ProceedMethod = int()
 
-    cp_Topics = ConfigSet(CGTopic())
+    def __init__(self):
+        self.cp_AgendaType = int()
+        self.cp_IncludeMinutes = bool()
+        self.cp_Title = ""
+        self.cp_Date = str()
+        self.cp_Time = str()
+        self.cp_Location = ""
+        self.cp_ShowMeetingType = bool()
+        self.cp_ShowRead = bool()
+        self.cp_ShowBring = bool()
+        self.cp_ShowNotes = bool()
+        self.cp_ShowCalledBy = bool()
+        self.cp_ShowFacilitator = bool()
+        self.cp_ShowNotetaker = bool()
+        self.cp_ShowTimekeeper = bool()
+        self.cp_ShowAttendees = bool()
+        self.cp_ShowObservers = bool()
+        self.cp_ShowResourcePersons = bool()
+        self.cp_TemplateName = str()
+        self.cp_TemplatePath = str()
+        self.cp_ProceedMethod = int()
+
+        self.cp_Topics = ConfigSet(CGTopic())

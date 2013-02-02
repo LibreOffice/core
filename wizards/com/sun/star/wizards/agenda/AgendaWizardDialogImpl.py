@@ -72,13 +72,24 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             #Number of steps on WizardDialog
             self.nMaxStep = 6
 
-            # initialize the agenda template
             self.agenda = CGAgenda()
-            
+
+            # read configuration data before we initialize the topics
+            root = Configuration.getConfigurationRoot(
+                self.xMSF, "/org.openoffice.Office.Writer/Wizards/Agenda",
+                False)
+            self.agenda.readConfiguration(root, "cp_")
+
             self.templateConsts = TemplateConsts
+                        
+            # initialize the agenda template
             self.agendaTemplate = AgendaDocument(
                 self.xMSF, self.agenda, self.resources,
                 self.templateConsts, self)
+            self.initializeTemplates()                
+
+            self.agendaTemplate.load(
+                self.agendaTemplates[1][self.agenda.cp_AgendaType], [])
 
             # build the dialog.
             self.drawNaviBar()
@@ -96,8 +107,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             #special Control for setting the save Path:
             self.insertPathSelectionControl()
 
-            self.initializeTemplates()
-
             # synchronize GUI and CGAgenda object.
             self.initConfiguration()
 
@@ -110,8 +119,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
             # initialize roadmap
             self.insertRoadmap()
-
-            self.pageDesignChanged()
 
             self.executeDialogFromComponent(self.agendaTemplate.xFrame)
             self.removeTerminateListener()
@@ -150,11 +157,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
     '''
 
     def initConfiguration(self):
-        # read configuration data.
-        root = Configuration.getConfigurationRoot(
-            self.xMSF, "/org.openoffice.Office.Writer/Wizards/Agenda", False)
-        self.agenda.readConfiguration(root, "cp_")
-
         self.xDialogModel.listPageDesign.StringItemList = \
             tuple(self.agendaTemplates[0])
         UnoDataAware.attachListBox(

@@ -44,7 +44,6 @@ class ConfigGroup(ConfigNode):
         propertyName = field[len(prefix):]
         child = getattr(self, field)
         if isinstance(child, ConfigNode):
-            child.root = self.root
             child.readConfiguration(configView.getByName(propertyName),
                 prefix)
         else:

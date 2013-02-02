@@ -105,6 +105,7 @@ class TopicsControl(ControlScroller):
         try:
             super(TopicsControl, self).__init__(
                 dialog, xmsf, 5, 92, 38, 212, 5, 18, HID + 32)
+            self.dialog = dialog
             self.initializeScrollFields(agenda)
             # set some focus listeners for TAB scroll down and up...
             # prepare scroll down on tab press...
@@ -127,9 +128,9 @@ class TopicsControl(ControlScroller):
 
     def initializeScrollFields(self, agenda):
         # create a row for each topic with the given values....
-        for i  in range(agenda.cp_Topics.getSize()):
+        for i  in range(len(agenda.cp_Topics.childrenList)):
             row = self.newRow(i)
-            agenda.cp_Topics.getElementAt(i).setDataToRow(row)
+            agenda.cp_Topics.childrenList[i].setDataToRow(row)
             # a parent class method
             self.registerControlGroup(row, i)
             self.updateDocumentRow(i)
@@ -313,7 +314,7 @@ class TopicsControl(ControlScroller):
 
     @classmethod
     def newRow(self, i):
-        pv = [None] * 4
+        pv = list(range(4))
         pv[0] = Properties.createProperty(
             TopicsControl.LABEL + str(i), "" + str(i + 1) + ".")
         pv[1] = Properties.createProperty(TopicsControl.TOPIC + str(i), "")
@@ -699,8 +700,9 @@ class TopicsControl(ControlScroller):
         if data is None:
             data = ControlScroller.scrollfields[row]
         try:
-            ControlScroller.CurUnoDialog.agendaTemplate.topics.write(
-                row, data)
+            for i in range(len(data)):
+                ControlScroller.CurUnoDialog.agendaTemplate.topics.writeCell(
+                    row, i, data)
         except Exception:
             traceback.print_exc()
 
@@ -716,7 +718,7 @@ class TopicsControl(ControlScroller):
     @classmethod
     def updateDocumentCell(self, row, column, data):
         try:
-            ControlScroller.CurUnoDialog.agendaTemplate.topics.write(
+            ControlScroller.CurUnoDialog.agendaTemplate.topics.writeCell(
                 row, column, data)
         except Exception:
             traceback.print_exc()

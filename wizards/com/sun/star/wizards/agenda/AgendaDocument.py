@@ -836,13 +836,14 @@ class Topics(object):
         except Exception:
             traceback.print_exc()
 
-    '''@param topic the topic number to write
-    @param data the data of the topic.
-    @return the number of rows that have been added
-    to the table. 0 or a negative number: no rows added.
+    '''rewrites a single cell containing.
+    This is used in order to refresh the topic/responsible/duration data
+    in the preview document, in response to a change in the gui (by the user)
+    Since the structure of the topics table is flexible,
+    The Topics object, which analyzed the structure of the topics table appon
+    initialization, refreshes the approperiate cell.
     '''
-
-    def write(self, row, column, data):
+    def writeCell(self, row, column, data):
         # if the whole row should be written...
         if self.writtenTopics < row:
             self.writtenTopics += 1
@@ -863,21 +864,10 @@ class Topics(object):
             # move the cursor to the needed cell...
             cursor.goRight(column, False)
             
-        self.writeCell(cursor, column, data)
-
-    '''rewrites a single cell containing.
-    This is used in order to refresh the topic/responsible/duration data
-    in the preview document, in response to a change in the gui (by the user)
-    Since the structure of the topics table is flexible,
-    The Topics object, which analyzed the structure of the topics table appon
-    initialization, refreshes the approperiate cell.
-    '''
-                       
-    def writeCell(self, cursor, column, data):
         xc = Topics.table.getCellByName(cursor.RangeName)
         # and write it !
         te = TextElement(xc, data[column].Value)
-        te.write()
+        te.write()                       
 
     '''removes obsolete rows, reducing the
     topics table to the given number of topics.

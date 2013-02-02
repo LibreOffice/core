@@ -27,11 +27,6 @@ and vice versa (setDataToRow method - used when loading the last session...)
 
 class CGTopic(ConfigGroup):
 
-    cp_Index = int()
-    cp_Topic = str()
-    cp_Responsible = str()
-    cp_Time = str()
-
     '''
     create a new CGTopic object with data from the given row.
     the row object is a PropertyValue array, as used
@@ -41,12 +36,16 @@ class CGTopic(ConfigGroup):
 
     def __init__(self, row=None):
         if row is None:
-            return
-        num = row[0].Value
-        CGTopic.cp_Index = int(row[0].Value[:-1])
-        CGTopic.cp_Topic = row[1].Value
-        CGTopic.cp_Responsible = row[2].Value
-        CGTopic.cp_Time = row[3].Value
+            self.cp_Index = int()
+            self.cp_Topic = str()
+            self.cp_Responsible = str()
+            self.cp_Time = str()        
+        else:
+            num = row[0].Value
+            self.cp_Index = int(row[0].Value[:-1])
+            self.cp_Topic = row[1].Value
+            self.cp_Responsible = row[2].Value
+            self.cp_Time = row[3].Value
 
     '''
     copies the data in this CGTopic object
@@ -56,7 +55,7 @@ class CGTopic(ConfigGroup):
     '''
 
     def setDataToRow(self, row):
-        row[0].Value = "" + str(CGTopic.cp_Index) + "."
-        row[1].Value = CGTopic.cp_Topic
-        row[2].Value = CGTopic.cp_Responsible
-        row[3].Value = CGTopic.cp_Time
+        row[0].Value = "" + str(self.cp_Index) + "."
+        row[1].Value = self.cp_Topic
+        row[2].Value = self.cp_Responsible
+        row[3].Value = self.cp_Time
