@@ -40,13 +40,13 @@ Menu MN_SPELL_POPUP
             SubMenu = Menu
             {
             };
-            Text [ en-US ] = "~Add to dictionary" ;
+            Text [ en-US ] = "~Add to Dictionary" ;
         };
         MenuItem
         {
             Identifier = MN_ADD_TO_DIC_SINGLE ;
             HelpID = HID_LINGU_ADD_WORD ;
-            Text [ en-US ] = "~Add to dictionary" ;
+            Text [ en-US ] = "~Add to Dictionary" ;
         };
         MenuItem
         {
@@ -80,16 +80,6 @@ Menu MN_SPELL_POPUP
             };
             Text [ en-US ] = "Set Language for Paragraph" ;
         };
-/*
-       MenuItem
-        {
-            Identifier = MN_SET_LANGUAGE_ALL_TEXT ;
-            SubMenu = Menu
-            {
-            };
-            Text [ en-US ] = "Set Language for all Text" ;
-        };
-*/
     };
 };
 String STR_WORD
