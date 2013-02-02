@@ -1071,10 +1071,9 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
     {
         SetAttrListLevel(nNewLevel);
     }
-
+    if (pDoc)
     {
-        if (pDoc)
-            pDoc->GetNodes().UpdateOutlineNode(*this);
+        pDoc->GetNodes().UpdateOutlineNode(*this);
     }
 
 
@@ -3575,9 +3574,9 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
 
 SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
 {
-    OSL_ENSURE( pNewColl,"ChgFmtColl: Collectionpointer ist 0." );
+    OSL_ENSURE( pNewColl,"ChgFmtColl: Collectionpointer has value 0." );
     OSL_ENSURE( HAS_BASE( SwTxtFmtColl, pNewColl ),
-                "ChgFmtColl: ist kein Text-Collectionpointer." );
+                "ChgFmtColl: is not a Text Collection pointer." );
 
     SwTxtFmtColl *pOldColl = GetTxtColl();
     if( pNewColl != pOldColl )
