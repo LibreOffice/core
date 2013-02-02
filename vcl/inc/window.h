@@ -116,7 +116,7 @@ long ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, co
 
 struct ImplWinData
 {
-    UniString*          mpExtOldText;
+    OUString*           mpExtOldText;
     sal_uInt16*             mpExtOldAttrAry;
     Rectangle*          mpCursorRect;
     long                mnCursorExtWidth;

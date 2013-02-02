@@ -989,24 +989,23 @@ void FmSearchEngine::SearchNextImpl()
         if (!m_bWildcard)
         {   // da natuerlich in allen anderen Faellen auch * und ? im Suchstring erlaubt sind, aber nicht als WildCards zaehlen
             // sollen, muss ich normieren
-            UniString aTmp(strSearchExpression);
-            const rtl::OUString s_sStar("\\*");
-            const rtl::OUString s_sQuotation("\\?");
-            aTmp.SearchAndReplaceAll(rtl::OUString('*'), s_sStar);
-            aTmp.SearchAndReplaceAll(rtl::OUString('?'), s_sQuotation);
+            OUString aTmp(strSearchExpression);
+            const OUString s_sStar("\\*");
+            const OUString s_sQuotation("\\?");
+            aTmp = aTmp.replaceAll("*", s_sStar);
+            aTmp = aTmp.replaceAll("?", s_sQuotation);
             strSearchExpression = aTmp;
 
             switch (m_nPosition)
             {
                 case MATCHING_ANYWHERE :
-                    strSearchExpression = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) + strSearchExpression
-                    + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+                    strSearchExpression = "*" + strSearchExpression + "*";
                     break;
                 case MATCHING_BEGINNING :
-                    strSearchExpression = strSearchExpression + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+                    strSearchExpression = strSearchExpression + "*";
                     break;
                 case MATCHING_END :
-                    strSearchExpression = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) + strSearchExpression;
+                    strSearchExpression = "*" + strSearchExpression;
                     break;
                 case MATCHING_WHOLETEXT :
                     break;

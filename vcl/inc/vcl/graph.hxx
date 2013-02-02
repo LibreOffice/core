@@ -142,7 +142,7 @@ public:
     void                Draw( OutputDevice* pOutDev,
                               const Point& rDestPt,
                               const Size& rDestSize ) const;
-    static void         DrawEx( OutputDevice* pOutDev, const String& rText,
+    static void         DrawEx( OutputDevice* pOutDev, const OUString& rText,
                               Font& rFont, const BitmapEx& rBitmap,
                               const Point& rDestPt, const Size& rDestSize );
 

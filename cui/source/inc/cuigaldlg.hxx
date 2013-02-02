@@ -51,7 +51,7 @@ class SearchProgress;
 class TakeProgress;
 class TPGalleryThemeProperties;
 
-typedef ::std::vector< UniString* > StringList;
+typedef ::std::vector< OUString* > StringList;
 typedef ::std::vector< sal_uLong > TokenList_impl;
 
 // ---------------

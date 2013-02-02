@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 // - Default-Drawmethode -
 // -----------------------
 
-static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
+static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
                              Font* pFont, const Bitmap* pBitmap, const BitmapEx* pBitmapEx,
                              const Point& rDestPt, const Size& rDestSize )
 {
@@ -92,7 +92,7 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
         }
     }
 
-    if ( aSize.Width() > 0 && aSize.Height() > 0 && pFont && pText && pText->Len()
+    if ( aSize.Width() > 0 && aSize.Height() > 0 && pFont && pText && pText->getLength()
          && !(!pOutDev->IsOutputEnabled() /*&& pOutDev->GetConnectMetaFile() */) )
     {
         MapMode aMapMode( MAP_POINT );
@@ -122,25 +122,25 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
                     sal_uInt16 nStart = 0;
                     sal_uInt16 nLen = 0;
 
-                    while( nStart < pText->Len() && pText->GetChar( nStart ) == ' ' )
+                    while( nStart < pText->getLength() && (*pText)[nStart] == ' ' )
                         nStart++;
-                    while( nStart+nLen < pText->Len() && pText->GetChar( nStart+nLen ) != ' ' )
+                    while( nStart+nLen < pText->getLength() && (*pText)[nStart+nLen] != ' ' )
                         nLen++;
-                    while( nStart < pText->Len() && nLines-- )
+                    while( nStart < pText->getLength() && nLines-- )
                     {
                         sal_uInt16 nNext = nLen;
                         do
                         {
-                            while ( nStart+nNext < pText->Len() && pText->GetChar( nStart+nNext ) == ' ' )
+                            while ( nStart+nNext < pText->getLength() && (*pText)[nStart+nNext] == ' ' )
                                 nNext++;
-                            while ( nStart+nNext < pText->Len() && pText->GetChar( nStart+nNext ) != ' ' )
+                            while ( nStart+nNext < pText->getLength() && (*pText)[nStart+nNext] != ' ' )
                                 nNext++;
                             nTextWidth = pOutDev->GetTextWidth( *pText, nStart, nNext );
                             if ( nTextWidth > aSize.Width() )
                                 break;
                             nLen = nNext;
                         }
-                        while ( nStart+nNext < pText->Len() );
+                        while ( nStart+nNext < pText->getLength() );
 
                         sal_uInt16 n = nLen;
                         nTextWidth = pOutDev->GetTextWidth( *pText, nStart, n );
@@ -151,7 +151,7 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
                         aPoint.Y() += nTextHeight;
                         nStart      = sal::static_int_cast<sal_uInt16>(nStart + nLen);
                         nLen        = nNext-nLen;
-                        while( nStart < pText->Len() && pText->GetChar( nStart ) == ' ' )
+                        while( nStart < pText->getLength() && (*pText)[nStart] == ' ' )
                         {
                             nStart++;
                             nLen--;
@@ -542,7 +542,7 @@ void Graphic::Draw( OutputDevice* pOutDev,
 
 // ------------------------------------------------------------------------
 
-void Graphic::DrawEx( OutputDevice* pOutDev, const String& rText,
+void Graphic::DrawEx( OutputDevice* pOutDev, const OUString& rText,
                     Font& rFont, const BitmapEx& rBitmap,
                     const Point& rDestPt, const Size& rDestSz )
 {

@@ -44,9 +44,9 @@ rtl_TextEncoding ImplSalGetSystemEncoding()
 
 // -----------------------------------------------------------------------
 
-UniString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen )
+OUString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen )
 {
-    return UniString( pStr, nLen, ImplSalGetSystemEncoding(),
+    return OUString( pStr, nLen, ImplSalGetSystemEncoding(),
                       RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
                       RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
                       RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT );

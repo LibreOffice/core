@@ -31,11 +31,11 @@
 
 #include <tools/debug.hxx>
 
-DBG_NAME( UniString )
+DBG_NAME( String )
 
 #define STRCODE         sal_Unicode
 #define STRCODEU        sal_Unicode
-#define STRING          UniString
+#define STRING          String
 #define STRINGDATA      UniStringData
 #define DBGCHECKSTRING  DbgCheckUniString
 #define STRING_TYPE     rtl_uString
@@ -47,30 +47,30 @@ DBG_NAME( UniString )
 #include <strucvt.cxx>
 #include <strascii.cxx>
 
-UniString::UniString(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
+String::String(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
 
-UniString UniString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
+String String::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
 {
     return rtl::OUString::valueOf(n, nRadix);
 }
 
-namespace { struct Empty : public rtl::Static< const UniString, Empty> {}; }
+namespace { struct Empty : public rtl::Static< const String, Empty> {}; }
 
-const UniString& UniString::EmptyString()
+const String& String::EmptyString()
 {
     return Empty::get();
 }
 
-sal_Int32 UniString::ToInt32() const
+sal_Int32 String::ToInt32() const
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
+    DBG_CHKTHIS( String, DbgCheckUniString );
 
     return rtl_ustr_toInt32( mpData->maStr, 10 );
 }
 
-sal_Int64 UniString::ToInt64() const
+sal_Int64 String::ToInt64() const
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
+    DBG_CHKTHIS( String, DbgCheckUniString );
 
     return rtl_ustr_toInt64( mpData->maStr, 10 );
 }

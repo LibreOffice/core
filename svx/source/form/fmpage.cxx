@@ -173,16 +173,16 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
     if ( !pFormObject )
         return sal_False;
 
-    UniString aHelpText;
+    OUString aHelpText;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet( pFormObject->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY );
     if (xSet.is())
     {
         if (::comphelper::hasProperty(FM_PROP_HELPTEXT, xSet))
             aHelpText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_HELPTEXT)).getStr();
 
-        if (!aHelpText.Len() && ::comphelper::hasProperty(FM_PROP_TARGET_URL, xSet))
+        if (!aHelpText.getLength() && ::comphelper::hasProperty(FM_PROP_TARGET_URL, xSet))
         {
-            ::rtl::OUString aText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_TARGET_URL));
+            OUString aText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_TARGET_URL));
             INetURLObject aUrl(aText);
 
             // testen, ob es ein Protokoll-Typ ist, den ich anzeigen will
@@ -200,7 +200,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                 }
         }
     }
-    if ( aHelpText.Len() != 0 )
+    if ( aHelpText.getLength() != 0 )
     {
         // Hilfe anzeigen
         Rectangle aItemRect = pObj->GetCurrentBoundRect();

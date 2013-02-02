@@ -179,7 +179,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                             SolarMutexGuard aGuard;
 
                             mpBrowser->aFoundList.push_back(
-                                new String( aFoundURL.GetMainURL( INetURLObject::NO_DECODE ) )
+                                new OUString( aFoundURL.GetMainURL( INetURLObject::NO_DECODE ) )
                             );
                             mpBrowser->aLbxFound.InsertEntry(
                                 GetReducedString( aFoundURL, 50 ),
@@ -397,7 +397,7 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
     mpBrowser->aFoundList.clear();
 
     for( i = 0, nCount = aRemainingVector.size(); i < nCount; ++i )
-        mpBrowser->aFoundList.push_back( new String( aRemainingVector[ i ] ) );
+        mpBrowser->aFoundList.push_back( new OUString( aRemainingVector[ i ] ) );
 
     aRemainingVector.clear();
 

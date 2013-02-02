@@ -336,7 +336,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
     {
         // ListBox loeschen
         pListBox->Clear();
-        UniString aTitle(SVX_RES(RID_STR_FIELDSELECTION));
+        OUString aTitle(SVX_RES(RID_STR_FIELDSELECTION));
         SetText(aTitle);
 
         if (!xForm.is())
@@ -370,7 +370,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
         }
 
         // Prefix setzen
-        UniString  aPrefix;
+        OUString  aPrefix;
         StringListResource aPrefixes( SVX_RES( RID_RSC_TABWIN_PREFIX ) );
 
         switch (m_nObjectType)
@@ -399,10 +399,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
         m_pChangeListener->addProperty(FM_PROP_COMMANDTYPE);
 
         // Titel setzen
-        aTitle.AppendAscii(" ");
-        aTitle += aPrefix;
-        aTitle.AppendAscii(" ");
-        aTitle += m_aObjectName.getStr();
+        aTitle = aTitle + " " + aPrefix + " " + OUString(m_aObjectName.getStr());
         SetText( aTitle );
     }
     catch( const Exception& )
