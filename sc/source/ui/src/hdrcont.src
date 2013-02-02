@@ -77,19 +77,19 @@ Menu RID_POPUP_ROWHEADER
         {
             Identifier = FID_INS_ROW ;
             HelpId = CMD_FID_INS_ROW ;
-            Text [ en-US ] = "~Insert Rows" ;
+            Text [ en-US ] = "~Insert Rows Above" ;
         };
         MenuItem
         {
             Identifier = SID_DEL_ROWS ;
             HelpId = CMD_SID_DEL_ROWS ;
-            Text [ en-US ] = "~Delete Rows" ;
+            Text [ en-US ] = "~Delete Selected Rows" ;
         };
         MenuItem
         {
             Identifier = SID_DELETE ;
             HelpId = CMD_SID_DELETE ;
-            Text [ en-US ] = "De~lete Contents..." ;
+            Text [ en-US ] = "De~lete Row Contents..." ;
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -148,19 +148,19 @@ Menu RID_POPUP_COLHEADER
         {
             Identifier = FID_INS_COLUMN ;
             HelpId = CMD_FID_INS_COLUMN ;
-            Text [ en-US ] = "~Insert Columns" ;
+            Text [ en-US ] = "~Insert Columns Left" ;
         };
         MenuItem
         {
             Identifier = SID_DEL_COLS ;
             HelpId = CMD_SID_DEL_COLS ;
-            Text [ en-US ] = "~Delete Columns" ;
+            Text [ en-US ] = "~Delete Selected Columns" ;
         };
         MenuItem
         {
             Identifier = SID_DELETE ;
             HelpId = CMD_SID_DELETE ;
-            Text [ en-US ] = "D~elete Contents..." ;
+            Text [ en-US ] = "D~elete Column Contents..." ;
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
