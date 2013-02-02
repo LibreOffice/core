@@ -162,8 +162,6 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 ))
 
 ifneq ($(SYSTEM_LIBXSLT),YES)
-include $(OUTDIR)/inc/libxsltversion.mk
-
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	-DLIBXSLT_MAJOR=$(LIBXSLT_MAJOR) \
 ))

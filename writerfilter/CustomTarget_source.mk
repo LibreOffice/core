@@ -56,6 +56,8 @@ writerfilter_ALL = \
 	$(writerfilter_GEN_ooxml_NamespaceIds_hxx) \
 	$(writerfilter_GEN_ooxml_QNameToStr_cxx) \
 	$(writerfilter_GEN_ooxml_ResourceIds_hxx) \
+	$(writerfilter_GEN_ooxml_Model_processed) \
+	$(writerfilter_GEN_model_SprmCodeToStr_tmp) \
 	$(patsubst %,$(writerfilter_WORK)/OOXMLFactory_%.hxx,$(writerfilter_OOXMLNAMESPACES)) \
 	$(patsubst %,$(writerfilter_WORK)/OOXMLFactory_%.cxx,$(writerfilter_OOXMLNAMESPACES)) \
 

@@ -694,6 +694,11 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_libxslt
+$(call gb_LinkTarget_use_package,$(1),xslt)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I$(call gb_UnpackedTarball_get_dir,xslt) \
+)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	xslt \
 )
@@ -701,6 +706,12 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 endef
 
 define gb_LinkTarget__use_libexslt
+$(call gb_LinkTarget_use_package,$(1),xslt)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I$(call gb_UnpackedTarball_get_dir,xslt) \
+)
+
 $(call gb_LinkTarget_use_libraries,$(1),\
 	exslt \
 )
@@ -2696,6 +2707,7 @@ else # ! SYSTEM_LIBXSLT_FOR_BUILD
 
 define gb_ExternalExecutable__register_xsltproc
 $(call gb_ExternalExecutable_set_internal,xsltproc)
+$(call gb_ExternalExecutable_add_dependencies,xsltproc,$(call gb_Package_get_target,xslt))
 
 endef
 
