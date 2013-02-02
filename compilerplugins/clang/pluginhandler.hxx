@@ -31,6 +31,8 @@ class PluginHandler
         virtual void HandleTranslationUnit( ASTContext& context );
         static void registerPlugin( Plugin* (*create)( ASTContext&, Rewriter& ), const char* optionName, bool isRewriter );
     private:
+        DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
+        ASTContext& context;
         Rewriter rewriter;
     };
 

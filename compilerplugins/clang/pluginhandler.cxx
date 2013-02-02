@@ -37,7 +37,8 @@ static int pluginCount = 0;
 static bool pluginObjectsCreated = false;
 
 PluginHandler::PluginHandler( ASTContext& context, const vector< string >& args )
-    : rewriter( context.getSourceManager(), context.getLangOpts())
+    : context( context )
+    , rewriter( context.getSourceManager(), context.getLangOpts())
     {
     bool wasCreated = false;
     for( int i = 0;
@@ -60,11 +61,7 @@ PluginHandler::PluginHandler( ASTContext& context, const vector< string >& args 
         }
     pluginObjectsCreated = true;
     if( !args.empty() && !wasCreated )
-        {
-        DiagnosticsEngine& diag = context.getDiagnostics();
-        diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Fatal,
-            "unknown plugin tool %0 [loplugin]" )) << args.front();
-        }
+        report( DiagnosticsEngine::Fatal, "unknown plugin tool %0 [loplugin]" ) << args.front();
     }
 
 PluginHandler::~PluginHandler()
@@ -87,6 +84,11 @@ void PluginHandler::registerPlugin( Plugin* (*create)( ASTContext&, Rewriter& ),
     ++pluginCount;
     }
 
+DiagnosticBuilder PluginHandler::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )
+    {
+    return Plugin::report( level, message, context, loc );
+    }
+
 void PluginHandler::HandleTranslationUnit( ASTContext& context )
     {
     if( context.getDiagnostics().hasErrorOccurred())
@@ -103,7 +105,6 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
          ++it )
         {
         const FileEntry* e = context.getSourceManager().getFileEntryForID( it->first );
-        DiagnosticsEngine& diag = context.getDiagnostics();
         /* Check where the file actually is, and warn about cases where modification
            most probably doesn't matter (generated files in workdir).
            The order here is important, as OUTDIR and WORKDIR are often in SRCDIR/BUILDDIR,
@@ -125,21 +126,18 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
                     }
                 }
             if( modifyFile.empty())
-                diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Warning,
-                    "modified source in solver/ : %0 [loplugin]" )) << e->getName();
+                report( DiagnosticsEngine::Warning, "modified source in solver/ : %0 [loplugin]" ) << e->getName();
             }
         else if( strncmp( e->getName(), WORKDIR, strlen( WORKDIR )) == 0 )
-            diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Warning,
-                "modified source in workdir/ : %0 [loplugin]" )) << e->getName();
+            report( DiagnosticsEngine::Warning, "modified source in workdir/ : %0 [loplugin]" ) << e->getName();
         else if( strcmp( SRCDIR, BUILDDIR ) != 0 && strncmp( e->getName(), BUILDDIR, strlen( BUILDDIR )) == 0 )
-            diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Warning,
-                "modified source in build dir : %0 [loplugin]" )) << e->getName();
+            report( DiagnosticsEngine::Warning, "modified source in build dir : %0 [loplugin]" ) << e->getName();
         else if( strncmp( e->getName(), SRCDIR, strlen( SRCDIR )) == 0 )
             ; // ok
         else
             {
-            diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Warning,
-                "modified source in unknown location, not modifying : %0 [loplugin]" )) << e->getName();
+            report( DiagnosticsEngine::Warning, "modified source in unknown location, not modifying : %0 [loplugin]" )
+                 << e->getName();
             continue; // --->
             }
         if( modifyFile.empty())
@@ -159,8 +157,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         ostream.clear_error();
         unlink( filename );
         if( !ok )
-            diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Error,
-                "cannot write modified source to %0 (%1) [loplugin]" )) << modifyFile << error;
+            report( DiagnosticsEngine::Error, "cannot write modified source to %0 (%1) [loplugin]" ) << modifyFile << error;
         delete[] filename;
         }
     }

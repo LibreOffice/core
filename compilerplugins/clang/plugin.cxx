@@ -28,6 +28,12 @@ Plugin::Plugin( ASTContext& context )
 
 DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )
     {
+    return report( level, message, context, loc );
+    }
+
+DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef message, ASTContext& context,
+    SourceLocation loc )
+    {
     DiagnosticsEngine& diag = context.getDiagnostics();
 #if 0
     // Do some mappings (e.g. for -Werror) that clang does not do for custom messages for some reason.
@@ -168,9 +174,7 @@ bool RewritePlugin::replaceText( SourceRange range, SourceRange replacementRange
 
 bool RewritePlugin::reportEditFailure( SourceLocation loc )
     {
-    DiagnosticsEngine& diag = context.getDiagnostics();
-    diag.Report( loc, diag.getCustomDiagID( DiagnosticsEngine::Warning,
-        "cannot perform source modification (macro expansion involved?) [loplugin]" ));
+    report( DiagnosticsEngine::Warning, "cannot perform source modification (macro expansion involved?) [loplugin]", loc );
     return false;
     }
 

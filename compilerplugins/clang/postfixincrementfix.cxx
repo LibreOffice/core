@@ -119,10 +119,8 @@ bool PostfixIncrementFix::canChangePostfixToPrefix( const CXXOperatorCallExpr* o
             return canChangeInConditionStatement( op, dyn_cast< ForStmt >( parents[ parent_pos ] )->getCond(),
                 parents, parent_pos );
         default:
-            DiagnosticsEngine& diag = context.getDiagnostics();
-            unsigned diagid = diag.getCustomDiagID( DiagnosticsEngine::Fatal,
-                "cannot analyze operator++ (plugin needs fixing) [loplugin]" );
-            diag.Report( op->getLocStart(), diagid ) << parents[ parent_pos ]->getSourceRange();
+            report( DiagnosticsEngine::Fatal, "cannot analyze operator++ (plugin needs fixing) [loplugin]",
+                op->getLocStart()) << parents[ parent_pos ]->getSourceRange();
 //            parents[ parent_pos ]->dump();
 //            parents[ std::max( parent_pos - 3, 0 ) ]->dump();
             return false;
@@ -157,10 +155,8 @@ bool PostfixIncrementFix::shouldDoChange( const Expr* operand )
             return true;
         default:
             {
-            DiagnosticsEngine& diag = context.getDiagnostics();
-            unsigned diagid = diag.getCustomDiagID( DiagnosticsEngine::Fatal,
-                "cannot analyze operator++ (plugin needs fixing) [loplugin]" );
-            diag.Report( expr->getLocStart(), diagid ) << operand->getSourceRange();
+            report( DiagnosticsEngine::Fatal, "cannot analyze operator++ (plugin needs fixing) [loplugin]",
+                expr->getLocStart()) << operand->getSourceRange();
             expr->dump();
             operand->dump();
             return false;

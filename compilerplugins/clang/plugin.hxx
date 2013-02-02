@@ -41,8 +41,10 @@ class Plugin
         virtual ~Plugin();
         virtual void run() = 0;
         template< typename T > class Registration;
-    protected:
         DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
+        static DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message,
+            ASTContext& context, SourceLocation loc = SourceLocation());
+    protected:
         bool ignoreLocation( SourceLocation loc );
         bool ignoreLocation( const Decl* decl );
         bool ignoreLocation( const Stmt* stmt );
