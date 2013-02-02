@@ -471,10 +471,6 @@ oslSocket __osl_createSocketImpl(int Socket)
     pSocket->m_nLastError = 0;
     pSocket->m_nRefCount = 1;
 
-#if defined(LINUX)
-    pSocket->m_bIsAccepting = sal_False;
-#endif
-
 #if OSL_DEBUG_LEVEL > 1
     g_nSocketImpl ++;
 #endif
@@ -1478,13 +1474,6 @@ void SAL_CALL osl_releaseSocket( oslSocket pSocket )
 {
     if( pSocket && 0 == osl_atomic_decrement( &(pSocket->m_nRefCount) ) )
     {
-#if defined(LINUX)
-    if ( pSocket->m_bIsAccepting == sal_True )
-    {
-        OSL_FAIL("osl_destroySocket : attempt to destroy socket while accepting\n");
-        return;
-    }
-#endif /* LINUX */
         osl_closeSocket( pSocket );
         __osl_destroySocketImpl( pSocket );
     }
@@ -1511,48 +1500,6 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
         return;
 
     pSocket->m_Socket = OSL_INVALID_SOCKET;
-
-#if defined(LINUX)
-    pSocket->m_bIsInShutdown = sal_True;
-
-    if ( pSocket->m_bIsAccepting == sal_True )
-    {
-        int nConnFD;
-        union {
-            struct sockaddr aSockAddr;
-            struct sockaddr_in aSockAddrIn;
-        } s;
-        socklen_t nSockLen = sizeof(s.aSockAddr);
-
-        nRet = getsockname(nFD, &s.aSockAddr, &nSockLen);
-        if ( nRet < 0 )
-        {
-            OSL_TRACE("getsockname call failed with error: %s", strerror(errno));
-        }
-
-        if ( s.aSockAddr.sa_family == AF_INET )
-        {
-            if ( s.aSockAddrIn.sin_addr.s_addr == htonl(INADDR_ANY) )
-            {
-                s.aSockAddrIn.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-            }
-
-            nConnFD = socket(AF_INET, SOCK_STREAM, 0);
-            if ( nConnFD < 0 )
-            {
-                OSL_TRACE("socket call failed with error: %s", strerror(errno));
-            }
-
-            nRet = connect(nConnFD, &s.aSockAddr, sizeof(s.aSockAddr));
-            if ( nRet < 0 )
-            {
-                OSL_TRACE("connect call failed with error: %s", strerror(errno));
-            }
-            close(nConnFD);
-        }
-        pSocket->m_bIsAccepting = sal_False;
-    }
-#endif /* LINUX */
 
     nRet=close(nFD);
     if ( nRet != 0 )
@@ -1827,9 +1774,6 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     }
 
     pSocket->m_nLastError=0;
-#if defined(LINUX)
-    pSocket->m_bIsAccepting = sal_True;
-#endif /* LINUX */
 
     if( ppAddr && *ppAddr )
     {
@@ -1850,24 +1794,10 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
         pSocket->m_nLastError=errno;
         OSL_TRACE("osl_acceptConnectionOnSocket : accept error '%s'",strerror(errno));
 
-#if defined(LINUX)
-        pSocket->m_bIsAccepting = sal_False;
-#endif /* LINUX */
         return 0;
     }
 
     OSL_ASSERT(AddrLen == sizeof(struct sockaddr));
-
-
-#if defined(LINUX)
-    if ( pSocket->m_bIsInShutdown == sal_True )
-    {
-        close(Connection);
-        OSL_TRACE("osl_acceptConnectionOnSocket : close while accept");
-        return 0;
-    }
-#endif /* LINUX */
-
 
     if(ppAddr)
     {
@@ -1893,11 +1823,6 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
 
     pConnectionSockImpl->m_Socket           = Connection;
     pConnectionSockImpl->m_nLastError       = 0;
-#if defined(LINUX)
-    pConnectionSockImpl->m_bIsAccepting     = sal_False;
-
-    pSocket->m_bIsAccepting = sal_False;
-#endif /* LINUX */
     return pConnectionSockImpl;
 }
 
