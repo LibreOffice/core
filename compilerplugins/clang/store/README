@@ -1,0 +1,3 @@
+This plugin actions are not used. They are still kept in case they would be useful again
+(they can be activated again by simply moving them back in the clang/ source directory)
+or simply as a reference when writing new plugins.
