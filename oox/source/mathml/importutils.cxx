@@ -41,7 +41,6 @@
 #define CLOSING( token ) XML_STREAM_CLOSING( token )
 
 using namespace com::sun::star;
-using rtl::OUString;
 
 namespace oox
 {
@@ -117,7 +116,7 @@ OUString& XmlStream::AttributeList::operator[] (int token)
 
 rtl::OUString XmlStream::AttributeList::attribute( int token, const rtl::OUString& def ) const
 {
-    std::map< int, rtl::OUString >::const_iterator find = attrs.find( token );
+    std::map< int, OUString >::const_iterator find = attrs.find( token );
     if( find != attrs.end())
         return find->second;
     return def;
@@ -125,19 +124,19 @@ rtl::OUString XmlStream::AttributeList::attribute( int token, const rtl::OUStrin
 
 bool XmlStream::AttributeList::attribute( int token, bool def ) const
 {
-    std::map< int, rtl::OUString >::const_iterator find = attrs.find( token );
+    std::map< int, OUString >::const_iterator find = attrs.find( token );
     if( find != attrs.end())
     {
-        const rtl::OUString sValue = find->second;
-        if( sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ||
-            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("on")) ||
-            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("t")) ||
-            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("1")) )
+        const OUString sValue = find->second;
+        if( sValue.equalsIgnoreAsciiCaseAscii("true") ||
+            sValue.equalsIgnoreAsciiCaseAscii("on") ||
+            sValue.equalsIgnoreAsciiCaseAscii("t") ||
+            sValue.equalsIgnoreAsciiCaseAscii("1") )
             return true;
-        if( sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("false")) ||
-            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("off")) ||
-            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("f")) ||
-            sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("0")) )
+        if( sValue.equalsIgnoreAsciiCaseAscii("false") ||
+            sValue.equalsIgnoreAsciiCaseAscii("off") ||
+            sValue.equalsIgnoreAsciiCaseAscii("f") ||
+            sValue.equalsIgnoreAsciiCaseAscii("0") )
             return false;
         SAL_WARN( "oox.xmlstream", "Cannot convert \'" << sValue << "\' to bool." );
     }
@@ -146,7 +145,7 @@ bool XmlStream::AttributeList::attribute( int token, bool def ) const
 
 sal_Unicode XmlStream::AttributeList::attribute( int token, sal_Unicode def ) const
 {
-    std::map< int, rtl::OUString >::const_iterator find = attrs.find( token );
+    std::map< int, OUString >::const_iterator find = attrs.find( token );
     if( find != attrs.end())
     {
         if( !find->second.isEmpty() )
