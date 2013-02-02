@@ -667,7 +667,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/uiview/viewsrch \
     sw/source/ui/uiview/viewstat \
     sw/source/ui/uiview/viewtab \
-    sw/source/ui/uno/RefreshListenerContainer \
     sw/source/ui/uno/SwXDocumentSettings \
     sw/source/ui/uno/SwXFilterOptions \
     sw/source/ui/uno/dlelstnr \

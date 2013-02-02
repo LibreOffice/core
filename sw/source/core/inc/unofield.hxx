@@ -33,7 +33,7 @@
 #include <tools/string.hxx>
 
 #include <calbck.hxx>
-#include <RefreshListenerContainer.hxx>
+#include <unoevtlstnr.hxx>
 
 
 class SwFieldType;
