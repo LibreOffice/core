@@ -4275,7 +4275,7 @@ void ImpEditEngine::ImplInitDigitMode(OutputDevice* pOutDev, LanguageType eCurLa
 void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara, sal_uInt16 nIndex )
 {
     sal_Bool bCTL = sal_False;
-    sal_uInt8 bR2L = sal_False;
+    sal_Bool bR2L = sal_False;
     if ( nIndex == 0xFFFF )
     {
         bCTL = HasScriptType( nPara, i18n::ScriptType::COMPLEX );
@@ -4286,8 +4286,9 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara,
         ContentNode* pNode = GetEditDoc().GetObject( nPara );
         short nScriptType = GetScriptType( EditPaM( pNode, nIndex+1 ) );
         bCTL = nScriptType == i18n::ScriptType::COMPLEX;
-        bR2L = GetRightToLeft( nPara, nIndex + 1);  // this change was discussed in issue 37190
-                                                    // it also works for issue 55927
+        // this change was discussed in issue 37190
+        bR2L = GetRightToLeft( nPara, nIndex + 1) == 1 /*RTL*/ ? true : false;
+        // it also works for issue 55927
     }
 
     sal_uLong nLayoutMode = pOutDev->GetLayoutMode();
