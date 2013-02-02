@@ -46,6 +46,10 @@ ifeq ($(CLANGSRCCHANGED),1)
 CLANGFORCE:
 $(CLANGOUTDIR)/plugin.so: CLANGFORCE
 endif
+# Make the .so also explicitly depend on the sources list, to force update in case CLANGSRCCHANGED was e.g. during 'make clean'.
+$(CLANGOUTDIR)/plugin.so: $(CLANGOUTDIR)/sources.txt
+$(CLANGOUTDIR)/sources.txt:
+	touch $@
 
 compilerplugins: $(CLANGOUTDIR) $(CLANGOUTDIR)/plugin.so
 
