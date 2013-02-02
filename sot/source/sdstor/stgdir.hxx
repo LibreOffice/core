@@ -43,46 +43,46 @@ class StgDirEntry : public StgAvlNode
     StgTmpStrm*  pCurStrm;                  // temp stream after commit
     sal_Int32        nEntry;                    // entry # in TOC stream (temp)
     sal_Int32        nPos;                      // current position
-    sal_Bool         bDirty;                    // dirty directory entry
-    sal_Bool         bCreated;                  // newly created entry
-    sal_Bool         bRemoved;                  // removed per Invalidate()
-    sal_Bool         bRenamed;                  // renamed
+    bool         bDirty;                    // dirty directory entry
+    bool         bCreated;                  // newly created entry
+    bool         bRemoved;                  // removed per Invalidate()
+    bool         bRenamed;                  // renamed
     void         InitMembers();             // ctor helper
     virtual short Compare( const StgAvlNode* ) const;
-    sal_Bool         StoreStream( StgIo& );     // store the stream
-    sal_Bool         StoreStreams( StgIo& );    // store all streams
+    bool         StoreStream( StgIo& );     // store the stream
+    bool         StoreStreams( StgIo& );    // store all streams
     void         RevertAll();               // revert the whole tree
-    sal_Bool         Strm2Tmp();                // copy stgstream to temp file
-    sal_Bool         Tmp2Strm();                // copy temp file to stgstream
+    bool         Strm2Tmp();                // copy stgstream to temp file
+    bool         Tmp2Strm();                // copy temp file to stgstream
 public:
     StgEntry     aEntry;                    // entry data
     sal_Int32        nRefCnt;                   // reference count
     StreamMode   nMode;                     // open mode
-    sal_Bool         bTemp;                     // sal_True: delete on dir flush
-    sal_Bool         bDirect;                   // sal_True: direct mode
-    sal_Bool         bZombie;                   // sal_True: Removed From StgIo
-    sal_Bool         bInvalid;                  // sal_True: invalid entry
-    StgDirEntry( const void* pBuffer, sal_uInt32 nBufferLen, sal_Bool * pbOk );
+    bool         bTemp;                     // true: delete on dir flush
+    bool         bDirect;                   // true: direct mode
+    bool         bZombie;                   // true: Removed From StgIo
+    bool         bInvalid;                  // true: invalid entry
+    StgDirEntry( const void* pBuffer, sal_uInt32 nBufferLen, bool * pbOk );
     StgDirEntry( const StgEntry& );
     ~StgDirEntry();
 
-    void Invalidate( sal_Bool=sal_False );          // invalidate all open entries
+    void Invalidate( bool=false );          // invalidate all open entries
     void Enum( sal_Int32& );                    // enumerate entries for iteration
-    void DelTemp( sal_Bool );                   // delete temporary entries
-    sal_Bool Store( StgDirStrm& );              // save entry into dir strm
-    sal_Bool IsContained( StgDirEntry* );       // check if subentry
+    void DelTemp( bool );                   // delete temporary entries
+    bool Store( StgDirStrm& );              // save entry into dir strm
+    bool IsContained( StgDirEntry* );       // check if subentry
 
-    void SetDirty()  { bDirty = sal_True; }
-    sal_Bool IsDirty();
+    void SetDirty()  { bDirty = true; }
+    bool IsDirty();
     void ClearDirty();
 
-    sal_Bool Commit();
-    sal_Bool Revert();
+    bool Commit();
+    bool Revert();
 
-    void  OpenStream( StgIo&, sal_Bool=sal_False );     // set up an approbiate stream
+    void  OpenStream( StgIo&, bool=false );     // set up an approbiate stream
     void  Close();
     sal_Int32 GetSize();
-    sal_Bool  SetSize( sal_Int32 );
+    bool  SetSize( sal_Int32 );
     sal_Int32 Seek( sal_Int32 );
     sal_Int32 Tell() { return nPos; }
     sal_Int32 Read( void*, sal_Int32 );
@@ -99,15 +99,15 @@ class StgDirStrm : public StgDataStrm
 public:
     StgDirStrm( StgIo& );
     ~StgDirStrm();
-    virtual sal_Bool SetSize( sal_Int32 );              // change the size
-    sal_Bool         Store();
-    void*        GetEntry( sal_Int32 n, sal_Bool=sal_False );// get an entry
+    virtual bool SetSize( sal_Int32 );              // change the size
+    bool         Store();
+    void*        GetEntry( sal_Int32 n, bool=false );// get an entry
     StgDirEntry* GetRoot() { return pRoot; }
     StgDirEntry* Find( StgDirEntry&, const String& );
     StgDirEntry* Create( StgDirEntry&, const String&, StgEntryType );
-    sal_Bool         Remove( StgDirEntry&, const String& );
-    sal_Bool         Rename( StgDirEntry&, const String&, const String& );
-    sal_Bool         Move( StgDirEntry&, StgDirEntry&, const String& );
+    bool         Remove( StgDirEntry&, const String& );
+    bool         Rename( StgDirEntry&, const String&, const String& );
+    bool         Move( StgDirEntry&, StgDirEntry&, const String& );
 };
 
 class StgIterator : public StgAvlIterator

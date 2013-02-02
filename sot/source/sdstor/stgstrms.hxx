@@ -30,7 +30,7 @@ class StgPage;
 class StgDirEntry;
 
 // The FAT class performs FAT operations on an underlying storage stream.
-// This stream is either the physical FAT stream (bPhys == sal_True ) or a normal
+// This stream is either the physical FAT stream (bPhys == true ) or a normal
 // storage stream, which then holds the FAT for small data allocations.
 
 class StgFAT
@@ -41,16 +41,16 @@ class StgFAT
     short nEntries;                     // FAT entries per page
     short nOffset;                      // current offset within page
     sal_Int32 nLimit;                       // search limit recommendation
-    sal_Bool  bPhys;                        // sal_True: physical FAT
+    bool  bPhys;                        // true: physical FAT
     rtl::Reference< StgPage > GetPhysPage( sal_Int32 nPage );
-    sal_Bool  MakeChain( sal_Int32 nStart, sal_Int32 nPages );
-    sal_Bool  InitNew( sal_Int32 nPage1 );
+    bool  MakeChain( sal_Int32 nStart, sal_Int32 nPages );
+    bool  InitNew( sal_Int32 nPage1 );
 public:
-    StgFAT( StgStrm& rStrm, sal_Bool bMark );
+    StgFAT( StgStrm& rStrm, bool bMark );
     sal_Int32 FindBlock( sal_Int32& nPages );
     sal_Int32 GetNextPage( sal_Int32 nPg );
     sal_Int32 AllocPages( sal_Int32 nStart, sal_Int32 nPages );
-    sal_Bool  FreePages( sal_Int32 nStart, sal_Bool bAll );
+    bool  FreePages( sal_Int32 nStart, bool bAll );
     sal_Int32 GetMaxPage() { return nMaxPage; }
     void  SetLimit( sal_Int32 n ) { nLimit = n; }
 };
@@ -72,7 +72,7 @@ protected:
     short nPageSize;                    // logical page size
     std::vector<sal_Int32> m_aPagesCache;
     void scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize = NULL);
-    sal_Bool  Copy( sal_Int32 nFrom, sal_Int32 nBytes );
+    bool  Copy( sal_Int32 nFrom, sal_Int32 nBytes );
     StgStrm( StgIo& );
 public:
     virtual ~StgStrm();
@@ -85,12 +85,12 @@ public:
     sal_Int32   GetPages() const;
     short   GetOffset() const { return nOffset;}
     void    SetEntry( StgDirEntry& );
-    virtual sal_Bool SetSize( sal_Int32 );
-    virtual sal_Bool Pos2Page( sal_Int32 nBytePos );
+    virtual bool SetSize( sal_Int32 );
+    virtual bool Pos2Page( sal_Int32 nBytePos );
     virtual sal_Int32 Read( void*, sal_Int32 )        { return 0; }
     virtual sal_Int32 Write( const void*, sal_Int32 ) { return 0; }
-    virtual rtl::Reference< StgPage > GetPhysPage( sal_Int32 nBytePos, sal_Bool bForce = sal_False );
-    virtual sal_Bool IsSmallStrm() const { return sal_False; }
+    virtual rtl::Reference< StgPage > GetPhysPage( sal_Int32 nBytePos, bool bForce = false );
+    virtual bool IsSmallStrm() const { return false; }
 };
 
 // The FAT stream class provides physical access to the master FAT.
@@ -98,15 +98,15 @@ public:
 // FAT allocator.
 
 class StgFATStrm : public StgStrm {     // the master FAT stream
-    virtual sal_Bool Pos2Page( sal_Int32 nBytePos );
-    sal_Bool  SetPage( short, sal_Int32 );
+    virtual bool Pos2Page( sal_Int32 nBytePos );
+    bool  SetPage( short, sal_Int32 );
 public:
     StgFATStrm( StgIo& );
     virtual ~StgFATStrm() {}
     using StgStrm::GetPage;
-    sal_Int32 GetPage( short, sal_Bool, sal_uInt16 *pnMasterAlloc = 0);
-    virtual sal_Bool SetSize( sal_Int32 );
-    virtual rtl::Reference< StgPage > GetPhysPage( sal_Int32 nBytePos, sal_Bool bForce = sal_False );
+    sal_Int32 GetPage( short, bool, sal_uInt16 *pnMasterAlloc = 0);
+    virtual bool SetSize( sal_Int32 );
+    virtual rtl::Reference< StgPage > GetPhysPage( sal_Int32 nBytePos, bool bForce = false );
 };
 
 // The stream has a size increment which normally is 1, but which can be
@@ -119,9 +119,9 @@ class StgDataStrm : public StgStrm      // a physical data stream
 public:
     StgDataStrm( StgIo&, sal_Int32 nBgn, sal_Int32 nLen=-1 );
     StgDataStrm( StgIo&, StgDirEntry& );
-    void* GetPtr( sal_Int32 nPos, sal_Bool bForce, sal_Bool bDirty );
+    void* GetPtr( sal_Int32 nPos, bool bForce, bool bDirty );
     void SetIncrement( short n ) { nIncr = n ; }
-    virtual sal_Bool SetSize( sal_Int32 );
+    virtual bool SetSize( sal_Int32 );
     virtual sal_Int32 Read( void*, sal_Int32 );
     virtual sal_Int32 Write( const void*, sal_Int32 );
 };
@@ -140,7 +140,7 @@ public:
     StgSmallStrm( StgIo&, StgDirEntry& );
     virtual sal_Int32 Read( void*, sal_Int32 );
     virtual sal_Int32 Write( const void*, sal_Int32 );
-    virtual sal_Bool IsSmallStrm() const { return sal_True; }
+    virtual bool IsSmallStrm() const { return true; }
 };
 
 class StgTmpStrm : public SvMemoryStream
@@ -156,7 +156,7 @@ class StgTmpStrm : public SvMemoryStream
 public:
     StgTmpStrm( sal_uLong=16 );
    ~StgTmpStrm();
-    sal_Bool Copy( StgTmpStrm& );
+    bool Copy( StgTmpStrm& );
     void SetSize( sal_uLong );
     sal_uLong GetSize() const;
 };
