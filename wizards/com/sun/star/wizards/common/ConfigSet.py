@@ -16,9 +16,9 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-import inspect
 from .ConfigGroup import ConfigGroup
 from .Configuration import Configuration
+from ..agenda.CGTopic import CGTopic
 
 class ConfigSet(ConfigGroup):
     '''
@@ -30,12 +30,8 @@ class ConfigSet(ConfigGroup):
     to avoid this "deletion" of nulls.
     '''
 
-    def __init__(self, topic):
-        self.topic = topic
+    def __init__(self):
         self.childrenList = []
-
-    def add(self, name, o):
-        self.childrenList.append(o)
 
     def writeConfiguration(self, configView, param):
         names = self.childrenMap.keys()
@@ -68,8 +64,9 @@ class ConfigSet(ConfigGroup):
         if names:
             for i in names:
                 try:
-                    self.topic.readConfiguration(
+                    topic = CGTopic()
+                    topic.readConfiguration(
                         configurationView.getByName(i), param)
-                    self.add(i, self.topic)
+                    self.childrenList.append(topic)
                 except Exception:
                     traceback.print_exc()

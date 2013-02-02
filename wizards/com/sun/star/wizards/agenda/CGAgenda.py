@@ -17,7 +17,6 @@
 #
 from ..common.ConfigGroup import ConfigGroup
 from ..common.ConfigSet import ConfigSet
-from .CGTopic import CGTopic
 
 class CGAgenda(ConfigGroup):
 
@@ -43,4 +42,4 @@ class CGAgenda(ConfigGroup):
         self.cp_TemplatePath = str()
         self.cp_ProceedMethod = int()
 
-        self.cp_Topics = ConfigSet(CGTopic())
+        self.cp_Topics = ConfigSet()
