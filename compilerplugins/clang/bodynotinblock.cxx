@@ -122,10 +122,10 @@ void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, c
                     if( bodyColumn == nextStatementColumn )
                         {
                         report( DiagnosticsEngine::Warning,
-                            "statement aligned as second statement in %select{if|while|for}0 body but not in a statement block [loplugin]",
+                            "statement aligned as second statement in %select{if|while|for}0 body but not in a statement block",
                             (*it)->getLocStart()) << stmtType;
                         report( DiagnosticsEngine::Note,
-                            "%select{if|while|for}0 body statement is here [loplugin]",
+                            "%select{if|while|for}0 body statement is here",
                             body->getLocStart()) << stmtType;
                         }
                     return;

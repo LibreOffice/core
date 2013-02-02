@@ -89,11 +89,11 @@ bool UnusedVariableCheck::VisitVarDecl( VarDecl* var )
                 if( const FunctionDecl* func = dyn_cast_or_null< FunctionDecl >( param->getParentFunctionOrMethod()))
                     if( !func->doesThisDeclarationHaveABody())
                         return true;
-                report( DiagnosticsEngine::Warning, "unused parameter %0 [loplugin]",
+                report( DiagnosticsEngine::Warning, "unused parameter %0",
                     var->getLocation()) << var->getDeclName();
                 }
             else
-                report( DiagnosticsEngine::Warning, "unused variable %0 [loplugin]",
+                report( DiagnosticsEngine::Warning, "unused variable %0",
                     var->getLocation()) << var->getDeclName();
             }
         }

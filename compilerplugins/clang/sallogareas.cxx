@@ -70,7 +70,7 @@ bool SalLogAreas::VisitCallExpr( CallExpr* call )
                     if( area->getKind() == StringLiteral::Ascii )
                         checkArea( area->getBytes(), area->getExprLoc());
                     else
-                        report( DiagnosticsEngine::Warning, "unsupported string literal kind (plugin needs fixing?) [loplugin]",
+                        report( DiagnosticsEngine::Warning, "unsupported string literal kind (plugin needs fixing?)",
                             area->getLocStart());
                     return true;
                     }
@@ -87,11 +87,11 @@ bool SalLogAreas::VisitCallExpr( CallExpr* call )
                         if( inMacro == "SAL_DEBUG" )
                             return true; // ok
                         }
-                    report( DiagnosticsEngine::Warning, "missing log area [loplugin]",
+                    report( DiagnosticsEngine::Warning, "missing log area",
                         call->getArg( 1 )->IgnoreParenImpCasts()->getLocStart());
                     return true;
                     }
-                report( DiagnosticsEngine::Warning, "cannot analyse log area argument (plugin needs fixing?) [loplugin]",
+                report( DiagnosticsEngine::Warning, "cannot analyse log area argument (plugin needs fixing?)",
                     call->getLocStart());
                 }
             }
@@ -105,7 +105,7 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
         readLogAreas();
     if( !logAreas.count( area ))
         {
-        report( DiagnosticsEngine::Warning, "unknown log area '%0' (check or extend sal/inc/sal/log-areas.dox) [loplugin]",
+        report( DiagnosticsEngine::Warning, "unknown log area '%0' (check or extend sal/inc/sal/log-areas.dox)",
             location ) << area;
         }
     }
@@ -130,7 +130,7 @@ void SalLogAreas::readLogAreas()
         }
     // If you get this error message, you possibly have too old icecream (ICECC_EXTRAFILES is needed).
     if( logAreas.empty())
-        report( DiagnosticsEngine::Warning, "error reading log areas [loplugin]" );
+        report( DiagnosticsEngine::Warning, "error reading log areas" );
     }
 
 static Plugin::Registration< SalLogAreas > X( "sallogareas" );

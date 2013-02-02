@@ -61,7 +61,7 @@ PluginHandler::PluginHandler( ASTContext& context, const vector< string >& args 
         }
     pluginObjectsCreated = true;
     if( !args.empty() && !wasCreated )
-        report( DiagnosticsEngine::Fatal, "unknown plugin tool %0 [loplugin]" ) << args.front();
+        report( DiagnosticsEngine::Fatal, "unknown plugin tool %0" ) << args.front();
     }
 
 PluginHandler::~PluginHandler()
@@ -126,17 +126,17 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
                     }
                 }
             if( modifyFile.empty())
-                report( DiagnosticsEngine::Warning, "modified source in solver/ : %0 [loplugin]" ) << e->getName();
+                report( DiagnosticsEngine::Warning, "modified source in solver/ : %0" ) << e->getName();
             }
         else if( strncmp( e->getName(), WORKDIR, strlen( WORKDIR )) == 0 )
-            report( DiagnosticsEngine::Warning, "modified source in workdir/ : %0 [loplugin]" ) << e->getName();
+            report( DiagnosticsEngine::Warning, "modified source in workdir/ : %0" ) << e->getName();
         else if( strcmp( SRCDIR, BUILDDIR ) != 0 && strncmp( e->getName(), BUILDDIR, strlen( BUILDDIR )) == 0 )
-            report( DiagnosticsEngine::Warning, "modified source in build dir : %0 [loplugin]" ) << e->getName();
+            report( DiagnosticsEngine::Warning, "modified source in build dir : %0" ) << e->getName();
         else if( strncmp( e->getName(), SRCDIR, strlen( SRCDIR )) == 0 )
             ; // ok
         else
             {
-            report( DiagnosticsEngine::Warning, "modified source in unknown location, not modifying : %0 [loplugin]" )
+            report( DiagnosticsEngine::Warning, "modified source in unknown location, not modifying : %0" )
                  << e->getName();
             continue; // --->
             }
@@ -157,7 +157,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         ostream.clear_error();
         unlink( filename );
         if( !ok )
-            report( DiagnosticsEngine::Error, "cannot write modified source to %0 (%1) [loplugin]" ) << modifyFile << error;
+            report( DiagnosticsEngine::Error, "cannot write modified source to %0 (%1)" ) << modifyFile << error;
         delete[] filename;
         }
     }

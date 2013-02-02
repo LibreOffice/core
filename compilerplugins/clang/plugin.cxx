@@ -42,10 +42,11 @@ DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef mess
     if( level == DiagnosticsEngine::Error && diag.getErrorsAsFatal())
         level = DiagnosticsEngine::Fatal;
 #endif
+    string fullMessage = ( message + " [loplugin]" ).str();
     if( loc.isValid())
-        return diag.Report( loc, diag.getCustomDiagID( level, message ));
+        return diag.Report( loc, diag.getCustomDiagID( level, fullMessage ));
     else
-        return diag.Report( diag.getCustomDiagID( level, message ));
+        return diag.Report( diag.getCustomDiagID( level, fullMessage ));
     }
 
 bool Plugin::ignoreLocation( SourceLocation loc )
@@ -174,7 +175,7 @@ bool RewritePlugin::replaceText( SourceRange range, SourceRange replacementRange
 
 bool RewritePlugin::reportEditFailure( SourceLocation loc )
     {
-    report( DiagnosticsEngine::Warning, "cannot perform source modification (macro expansion involved?) [loplugin]", loc );
+    report( DiagnosticsEngine::Warning, "cannot perform source modification (macro expansion involved?)", loc );
     return false;
     }
 
