@@ -4182,6 +4182,7 @@ if test "$cross_compiling" = "yes"; then
         config_host.mk.in \
         configure \
         Makefile.in \
+        lo.xcent.in \
         config_host/config_*.h.in \
         bin/get_config_variables \
         solenv/bin/getcompver.awk \
