@@ -409,7 +409,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             break;
                                         pHyperlink->nStartPos = pHyperlink->nEndPos = -1;
 
-                                        if ( pHyperlink->aSubAdress.Len() ) // get the converted subadress
+                                        if ( !pHyperlink->aSubAdress.isEmpty() ) // get the converted subadress
                                         {
                                             sal_uInt32 nPageNumber = 0;
                                             String aString( pHyperlink->aSubAdress );
@@ -480,11 +480,11 @@ sal_Bool ImplSdPPTImport::Import()
                                             {
                                                 if ( nPageNumber < maSlideNameList.size() )
                                                     pHyperlink->aConvSubString = maSlideNameList[ nPageNumber ];
-                                                if ( !pHyperlink->aConvSubString.Len() )
+                                                if ( pHyperlink->aConvSubString.isEmpty() )
                                                 {
-                                                    pHyperlink->aConvSubString = String( SdResId( STR_PAGE ) );
-                                                    pHyperlink->aConvSubString.Append( sal_Unicode( ' ' ) );
-                                                    pHyperlink->aConvSubString.Append( mpDoc->CreatePageNumValue( (sal_uInt16)nPageNumber + 1 ) );
+                                                    pHyperlink->aConvSubString = OUString( SdResId( STR_PAGE ) );
+                                                    pHyperlink->aConvSubString += " ";
+                                                    pHyperlink->aConvSubString += ( mpDoc->CreatePageNumValue( (sal_uInt16)nPageNumber + 1 ) );
                                                 }
                                             }
                                         }
@@ -646,9 +646,9 @@ sal_Bool ImplSdPPTImport::Import()
 
                         for ( nLevel = 0; nLevel < 9; nLevel++ )
                         {
-                            String aName( pPage->GetLayoutName() );
-                            aName.Append( (sal_Unicode)( ' ' ) );
-                            aName.Append( String::CreateFromInt32( nLevel + 1 ) );
+                            OUString aName( pPage->GetLayoutName() );
+                            aName += " ";
+                            aName += OUString::number( nLevel + 1 );
                             SfxStyleSheet* pOutlineSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE );
                             DBG_ASSERT( pOutlineSheet, "Vorlage fuer Gliederungsobjekt nicht gefunden" );
                             if ( pOutlineSheet )
@@ -2087,7 +2087,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                     case 9:
                     case 8:                                         // hyperlink : URL
                     {
-                        if ( pPtr->aTarget.Len() )
+                        if ( !pPtr->aTarget.isEmpty() )
                         {
                             ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
                             if ( pDocShell )
@@ -2111,7 +2111,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
 
                     case 7:                                         // hyperlink auf eine Seite
                     {
-                        if ( pPtr->aConvSubString.Len() )
+                        if ( !pPtr->aConvSubString.isEmpty() )
                         {
                             pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_BOOKMARK;
                             pInfo->SetBookmark( pPtr->aConvSubString );
@@ -2203,9 +2203,9 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         {
             for ( sal_uInt16 nLevel = 9; nLevel; nLevel-- )
             {
-                String aName( pPage->GetLayoutName() );
-                aName.Append( (sal_Unicode)( ' ' ) );
-                aName.Append( String::CreateFromInt32( nLevel ) );
+                OUString aName( pPage->GetLayoutName() );
+                aName += " ";
+                aName += OUString::number( nLevel );
                 pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE );
                 if ( pSheet )
                     pText->StartListening( *pSheet );

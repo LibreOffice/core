@@ -169,6 +169,101 @@ sal_Bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlig
     return bRetValue;
 }
 
+sal_Bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, sal_Bool bAlign )
+{
+    sal_uInt32  i, nItemSize, nType, nItemPos;
+    sal_Bool    bRetValue = sal_False;
+
+    nItemPos = Tell();
+
+    if ( nStringType == VT_EMPTY )
+        *this >> nType;
+    else
+        nType = nStringType & VT_TYPEMASK;
+
+    *this >> nItemSize;
+
+    switch( nType )
+    {
+        case VT_LPSTR :
+        {
+            if ( nItemSize )
+            {
+                try
+                {
+                    sal_Char* pString = new sal_Char[ nItemSize ];
+                    if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
+                    {
+                        nItemSize >>= 1;
+                        if ( nItemSize > 1 )
+                        {
+                            sal_Unicode* pWString = (sal_Unicode*)pString;
+                            for ( i = 0; i < nItemSize; i++ )
+                                *this >> pWString[ i ];
+                            rString = OUString(pWString, lcl_getMaxSafeStrLen(nItemSize));
+                        }
+                        else
+                            rString = OUString();
+                        bRetValue = sal_True;
+                    }
+                    else
+                    {
+                        SvMemoryStream::Read( pString, nItemSize );
+                        if ( pString[ nItemSize - 1 ] == 0 )
+                        {
+                            if ( nItemSize > 1 )
+                                rString = OUString(pString, rtl_str_getLength(pString), mnTextEnc);
+                            else
+                                rString = OUString();
+                            bRetValue = sal_True;
+                        }
+                    }
+                    delete[] pString;
+                }
+                catch( const std::bad_alloc& )
+                {
+                    OSL_FAIL( "sd PropItem::Read bad alloc" );
+                }
+            }
+            if ( bAlign )
+                SeekRel( ( 4 - ( nItemSize & 3 ) ) & 3 );       // dword align
+        }
+        break;
+
+        case VT_LPWSTR :
+        {
+            if ( nItemSize )
+            {
+                try
+                {
+                    sal_Unicode* pString = new sal_Unicode[ nItemSize ];
+                    for ( i = 0; i < nItemSize; i++ )
+                        *this >> pString[ i ];
+                    if ( pString[ i - 1 ] == 0 )
+                    {
+                        if ( (sal_uInt16)nItemSize > 1 )
+                            rString = OUString(pString, lcl_getMaxSafeStrLen(nItemSize));
+                        else
+                            rString = OUString();
+                        bRetValue = sal_True;
+                    }
+                    delete[] pString;
+                }
+                catch( const std::bad_alloc& )
+                {
+                    OSL_FAIL( "sd PropItem::Read bad alloc" );
+                }
+            }
+            if ( bAlign && ( nItemSize & 1 ) )
+                SeekRel( 2 );                           // dword align
+        }
+        break;
+    }
+    if ( !bRetValue )
+        Seek( nItemPos );
+    return bRetValue;
+}
+
 //  -----------------------------------------------------------------------
 
 PropItem& PropItem::operator=( PropItem& rPropItem )
