@@ -27,16 +27,16 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sw_swdoc_test))
+$(eval $(call gb_CppunitTest_CppunitTest,sw_uwriter))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sw_swdoc_test, \
-    sw/qa/core/swdoc-test \
+$(eval $(call gb_CppunitTest_add_exception_objects,sw_uwriter, \
+    sw/qa/core/uwriter \
     sw/qa/core/Test-BigPtrArray \
 ))
 
-$(eval $(call gb_CppunitTest_use_library_objects,sw_swdoc_test,sw))
+$(eval $(call gb_CppunitTest_use_library_objects,sw_uwriter,sw))
 
-$(eval $(call gb_CppunitTest_use_libraries,sw_swdoc_test, \
+$(eval $(call gb_CppunitTest_use_libraries,sw_uwriter, \
     avmedia \
     basegfx \
     comphelper \
@@ -70,27 +70,27 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_swdoc_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sw_swdoc_test,\
+$(eval $(call gb_CppunitTest_use_externals,sw_uwriter,\
 	boost_headers \
 	icuuc \
 	libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sw_swdoc_test,\
+$(eval $(call gb_CppunitTest_set_include,sw_uwriter,\
     -I$(SRCDIR)/sw/source/ui/inc \
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sw_swdoc_test,\
+$(eval $(call gb_CppunitTest_use_api,sw_uwriter,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sw_swdoc_test))
+$(eval $(call gb_CppunitTest_use_ure,sw_uwriter))
 
-$(eval $(call gb_CppunitTest_use_components,sw_swdoc_test,\
+$(eval $(call gb_CppunitTest_use_components,sw_uwriter,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     fileaccess/source/fileacc \
@@ -105,6 +105,6 @@ $(eval $(call gb_CppunitTest_use_components,sw_swdoc_test,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sw_swdoc_test))
+$(eval $(call gb_CppunitTest_use_configuration,sw_uwriter))
 
 # vim: set noet sw=4 ts=4:
