@@ -26,7 +26,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svtools/fontsubstconfig.hxx>
-#include "fontsubs.hrc"
 #include "fontsubs.hxx"
 #include <dialmgr.hxx>
 #include "helpid.hrc"
@@ -39,111 +38,81 @@
 /*********************************************************************/
 
 SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
-                                const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, CUI_RES(RID_SVX_FONT_SUBSTITUTION), rSet),
-    aUseTableCB         (this,  CUI_RES(CB_USETABLE)),
-    aFont1FT            (this,  CUI_RES(FT_FONT1)),
-    aFont1CB            (this,  CUI_RES(CB_FONT1)),
-    aFont2FT            (this,  CUI_RES(FT_FONT2)),
-    aFont2CB            (this,  CUI_RES(CB_FONT2)),
-    aNewDelTBX          (this,  CUI_RES(TBX_SUBSTNEWDEL)),
-    m_aCheckLBContainer(this, CUI_RES(CLB_SUBSTITUTES)),
-    aCheckLB(m_aCheckLBContainer),
-
-    aSourceViewFontsFL (this,  CUI_RES(FL_SOURCEVIEW  )),
-    aFontNameFT        (this,  CUI_RES(FT_FONTNAME    )),
-    aFontNameLB        (this,  CUI_RES(LB_FONTNAME    )),
-    aNonPropFontsOnlyCB(this,  CUI_RES(CB_NONPROP     )),
-    aFontHeightFT      (this,  CUI_RES(FT_FONTHEIGHT  )),
-    aFontHeightLB      (this,  CUI_RES(LB_FONTHEIGHT  )),
-
-    aImageList          (CUI_RES(IL_ICON)),
-
-    sAutomatic          (CUI_RES( STR_AUTOMATIC  )),
-    pConfig(new SvtFontSubstConfig),
-
-    sHeader1            (CUI_RES( STR_HEADER1       )),
-    sHeader2            (CUI_RES( STR_HEADER2       )),
-    sHeader3            (CUI_RES( STR_HEADER3       )),
-    sHeader4            (CUI_RES( STR_HEADER4       )),
-
-    pCheckButtonData(0)
+                                const SfxItemSet& rSet )
+    : SfxTabPage(pParent, "OptFontsPage", "cui/ui/optfontspage.ui", rSet)
+    , pConfig(new SvtFontSubstConfig)
+    , pCheckButtonData(0)
 {
-    FreeResource();
+    get(m_pUseTableCB, "usetable");
+    get(m_pReplacements, "replacements");
+    get(m_pFont1CB, "font1");
+    get(m_pFont2CB, "font2");
+    m_pFont1CB->SetStyle(m_pFont1CB->GetStyle() | WB_SORT);
+    m_pFont2CB->SetStyle(m_pFont2CB->GetStyle() | WB_SORT);
+    get(m_pApply, "apply");
+    get(m_pDelete, "delete");
+    get(m_pFontNameLB, "fontname");
+    m_sAutomatic = m_pFontNameLB->GetEntry(0);
+    assert(!m_sAutomatic.isEmpty());
+    get(m_pNonPropFontsOnlyCB, "nonpropfontonly");
+    get(m_pFontHeightLB, "fontheight");
 
-    aTextColor = aCheckLB.GetTextColor();
+    SvxSimpleTableContainer *pCheckLBContainer = get<SvxSimpleTableContainer>("checklb");
+    Size aControlSize(248, 75);
+    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    pCheckLBContainer->set_width_request(aControlSize.Width());
+    pCheckLBContainer->set_height_request(aControlSize.Height());
 
-    for(sal_uInt16 k = 0; k < aNewDelTBX.GetItemCount(); k++)
-        aNewDelTBX.SetItemImage(aNewDelTBX.GetItemId(k),
-            aImageList.GetImage(aNewDelTBX.GetItemId(k)));
+    m_pCheckLB = new SvxFontSubstCheckListBox(*pCheckLBContainer);
+    m_pCheckLB->SetHelpId(HID_OFA_FONT_SUBST_CLB);
 
-    aNewDelTBX.SetSizePixel( aNewDelTBX.CalcWindowSizePixel() );
+    m_pCheckLB->SetStyle(m_pCheckLB->GetStyle()|WB_HSCROLL|WB_VSCROLL);
+    m_pCheckLB->SetSelectionMode(MULTIPLE_SELECTION);
+    m_pCheckLB->SortByCol(2);
+    long aStaticTabs[] = { 4, 0, 0, 0, 0 };
+    m_pCheckLB->SvxSimpleTable::SetTabs(&aStaticTabs[0]);
 
-    long nDelta = ( aFont1CB.GetSizePixel().Height() -
-                    aNewDelTBX.GetSizePixel().Height() ) / 2;
-    Point aNewPnt = aNewDelTBX.GetPosPixel();
-    aNewPnt.Y() += nDelta;
-    aNewDelTBX.SetPosPixel( aNewPnt );
+    OUString sHeader1(get<FixedText>("always")->GetText());
+    OUString sHeader2(get<FixedText>("screenonly")->GetText());
+    OUStringBuffer sHeader;
+    sHeader.append(sHeader1).append("\t").append(sHeader2)
+        .append("\t ").append(get<FixedText>("font")->GetText())
+        .append("\t ").append(get<FixedText>("replacewith")->GetText());
+    m_pCheckLB->InsertHeaderEntry(sHeader.makeStringAndClear());
 
-    aCheckLB.SetHelpId(HID_OFA_FONT_SUBST_CLB);
-    aCheckLB.SetStyle(aCheckLB.GetStyle()|WB_HSCROLL|WB_VSCROLL);
-    aCheckLB.SetSelectionMode(MULTIPLE_SELECTION);
-    aCheckLB.SortByCol(2);
-
-    Link aLink(LINK(this, SvxFontSubstTabPage, SelectHdl));
-
-    aCheckLB.SetSelectHdl(aLink);
-    aUseTableCB.SetClickHdl(aLink);
-    aFont1CB.SetSelectHdl(aLink);
-    aFont1CB.SetModifyHdl(aLink);
-    aFont2CB.SetSelectHdl(aLink);
-    aFont2CB.SetModifyHdl(aLink);
-    aNewDelTBX.SetClickHdl(aLink);
-
-    aNonPropFontsOnlyCB.SetClickHdl(LINK(this, SvxFontSubstTabPage, NonPropFontsHdl));
-
-    static long aStaticTabs[] = { 4, 0, 0, 0, 0 };
-    long nW1 = GetTextWidth( sHeader1 );
-    long nW2 = GetTextWidth( sHeader2 );
-    long nMax = Max( nW1, nW2 ) + 6; // width of the longest header + a little offset
-    long nMin = aFontNameFT.LogicToPixel( Size( 30, 0 ), MAP_APPFONT ).Width();
-    nMax = Max( nMax, nMin );
-    const long nDoubleMax = 2*nMax;
-    const long nRest = aCheckLB.GetSizePixel().Width() - nDoubleMax;
-    aStaticTabs[2] = nMax;
-    aStaticTabs[3] = nDoubleMax;
-    aStaticTabs[4] = nDoubleMax + nRest/2;
-    aCheckLB.SvxSimpleTable::SetTabs( aStaticTabs, MAP_PIXEL );
-
-    String sHeader(sHeader1);
-    rtl::OUString sTab("\t");
-    rtl::OUString sTabSpace("\t ");
-    sHeader += sTab;
-    sHeader += sHeader2;
-    sHeader += sTabSpace;
-    sHeader += sHeader3;
-    sHeader += sTabSpace;
-    sHeader += sHeader4;
-    aCheckLB.InsertHeaderEntry(sHeader);
-
-    HeaderBar &rBar = aCheckLB.GetTheHeaderBar();
-
+    HeaderBar &rBar = m_pCheckLB->GetTheHeaderBar();
     HeaderBarItemBits nBits = rBar.GetItemBits(1) | HIB_FIXEDPOS | HIB_FIXED;
     nBits &= ~HIB_CLICKABLE;
     rBar.SetItemBits(1, nBits);
     rBar.SetItemBits(2, nBits);
 
+    m_pCheckLB->setColSizes();
+
+    aTextColor = m_pCheckLB->GetTextColor();
+    Link aLink(LINK(this, SvxFontSubstTabPage, SelectHdl));
+
+    m_pCheckLB->SetSelectHdl(aLink);
+    m_pUseTableCB->SetClickHdl(aLink);
+    m_pFont1CB->SetSelectHdl(aLink);
+    m_pFont1CB->SetModifyHdl(aLink);
+    m_pFont2CB->SetSelectHdl(aLink);
+    m_pFont2CB->SetModifyHdl(aLink);
+    m_pApply->SetClickHdl(aLink);
+    m_pDelete->SetClickHdl(aLink);
+
+    m_pNonPropFontsOnlyCB->SetClickHdl(LINK(this, SvxFontSubstTabPage, NonPropFontsHdl));
+
     sal_uInt16 nHeight;
     for(nHeight = 6; nHeight <= 16; nHeight++)
-        aFontHeightLB.InsertEntry(OUString::number(nHeight));
+        m_pFontHeightLB->InsertEntry(OUString::number(nHeight));
     for(nHeight = 18; nHeight <= 28; nHeight+= 2)
-        aFontHeightLB.InsertEntry(OUString::number(nHeight));
+        m_pFontHeightLB->InsertEntry(OUString::number(nHeight));
     for(nHeight = 32; nHeight <= 48; nHeight+= 4)
-        aFontHeightLB.InsertEntry(OUString::number(nHeight));
+        m_pFontHeightLB->InsertEntry(OUString::number(nHeight));
     for(nHeight = 54; nHeight <= 72; nHeight+= 6)
-        aFontHeightLB.InsertEntry(OUString::number(nHeight));
+        m_pFontHeightLB->InsertEntry(OUString::number(nHeight));
     for(nHeight = 80; nHeight <= 96; nHeight+= 8)
-        aFontHeightLB.InsertEntry(OUString::number(nHeight));
+        m_pFontHeightLB->InsertEntry(OUString::number(nHeight));
 }
 
 SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(String& rFont1, String& rFont2)
@@ -151,7 +120,7 @@ SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(String& rFont1, String& rFont2
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
     if( !pCheckButtonData )
-        pCheckButtonData = new SvLBoxButtonData( &aCheckLB );
+        pCheckButtonData = new SvLBoxButtonData( m_pCheckLB );
 
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
 
@@ -168,10 +137,11 @@ SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(String& rFont1, String& rFont2
     return pEntry;
 }
 
- SvxFontSubstTabPage::~SvxFontSubstTabPage()
+SvxFontSubstTabPage::~SvxFontSubstTabPage()
 {
     delete pCheckButtonData;
     delete pConfig;
+    delete m_pCheckLB;
 }
 
 SfxTabPage*  SvxFontSubstTabPage::Create( Window* pParent,
@@ -184,37 +154,37 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
 {
     pConfig->ClearSubstitutions();// remove all entries
 
-    pConfig->Enable(aUseTableCB.IsChecked());
+    pConfig->Enable(m_pUseTableCB->IsChecked());
 
-    SvTreeListEntry* pEntry = aCheckLB.First();
+    SvTreeListEntry* pEntry = m_pCheckLB->First();
 
     while (pEntry)
     {
         SubstitutionStruct aAdd;
-        aAdd.sFont = aCheckLB.GetEntryText(pEntry, 0);
-        aAdd.sReplaceBy = aCheckLB.GetEntryText(pEntry, 1);
-        aAdd.bReplaceAlways = aCheckLB.IsChecked(pEntry, 0);
-        aAdd.bReplaceOnScreenOnly = aCheckLB.IsChecked(pEntry, 1);
+        aAdd.sFont = m_pCheckLB->GetEntryText(pEntry, 0);
+        aAdd.sReplaceBy = m_pCheckLB->GetEntryText(pEntry, 1);
+        aAdd.bReplaceAlways = m_pCheckLB->IsChecked(pEntry, 0);
+        aAdd.bReplaceOnScreenOnly = m_pCheckLB->IsChecked(pEntry, 1);
         pConfig->AddSubstitution(aAdd);
-        pEntry = aCheckLB.Next(pEntry);
+        pEntry = m_pCheckLB->Next(pEntry);
     }
     if(pConfig->IsModified())
         pConfig->Commit();
     pConfig->Apply();
     boost::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
-    if(aFontHeightLB.GetSavedValue() != aFontHeightLB.GetSelectEntryPos())
+    if(m_pFontHeightLB->GetSavedValue() != m_pFontHeightLB->GetSelectEntryPos())
         officecfg::Office::Common::Font::SourceViewFont::FontHeight::set(
-            static_cast< sal_Int16 >(aFontHeightLB.GetSelectEntry().ToInt32()),
+            static_cast< sal_Int16 >(m_pFontHeightLB->GetSelectEntry().ToInt32()),
             batch);
-    if(aNonPropFontsOnlyCB.GetSavedValue() != aNonPropFontsOnlyCB.IsChecked())
+    if(m_pNonPropFontsOnlyCB->GetSavedValue() != m_pNonPropFontsOnlyCB->IsChecked())
         officecfg::Office::Common::Font::SourceViewFont::
             NonProportionalFontsOnly::set(
-                aNonPropFontsOnlyCB.IsChecked(), batch);
+                m_pNonPropFontsOnlyCB->IsChecked(), batch);
     //font name changes cannot be detected by saved values
     rtl::OUString sFontName;
-    if(aFontNameLB.GetSelectEntryPos())
-        sFontName = aFontNameLB.GetSelectEntry();
+    if(m_pFontNameLB->GetSelectEntryPos())
+        sFontName = m_pFontNameLB->GetSelectEntry();
     officecfg::Office::Common::Font::SourceViewFont::FontName::set(
         boost::optional< rtl::OUString >(sFontName), batch);
     batch->commit();
@@ -224,124 +194,118 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
 
 void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
 {
-    aCheckLB.SetUpdateMode(sal_False);
-    aCheckLB.Clear();
+    m_pCheckLB->SetUpdateMode(sal_False);
+    m_pCheckLB->Clear();
 
     FontList aFntLst( Application::GetDefaultDevice() );
-    aFont1CB.Fill( &aFntLst );
-    aFont2CB.Fill( &aFntLst );
+    m_pFont1CB->Fill( &aFntLst );
+    m_pFont2CB->Fill( &aFntLst );
 
     sal_Int32 nCount = pConfig->SubstitutionCount();
     if (nCount)
-        aUseTableCB.Check(pConfig->IsEnabled());
+        m_pUseTableCB->Check(pConfig->IsEnabled());
 
-    for (sal_Int32  i = 0; i < nCount; i++)
+    for (sal_Int32  i = 0; i < nCount; ++i)
     {
         const SubstitutionStruct* pSubs = pConfig->GetSubstitution(i);
         String aTmpStr1(pSubs->sFont);
         String aTmpStr2(pSubs->sReplaceBy);
         SvTreeListEntry* pEntry = CreateEntry(aTmpStr1, aTmpStr2);
-        aCheckLB.Insert(pEntry);
-        aCheckLB.CheckEntry(pEntry, 0, pSubs->bReplaceAlways);
-        aCheckLB.CheckEntry(pEntry, 1, pSubs->bReplaceOnScreenOnly);
+        m_pCheckLB->Insert(pEntry);
+        m_pCheckLB->CheckEntry(pEntry, 0, pSubs->bReplaceAlways);
+        m_pCheckLB->CheckEntry(pEntry, 1, pSubs->bReplaceOnScreenOnly);
     }
 
     CheckEnable();
-    aCheckLB.SetUpdateMode(sal_True);
+    m_pCheckLB->SetUpdateMode(sal_True);
 
     //fill font name box first
-    aNonPropFontsOnlyCB.Check(
+    m_pNonPropFontsOnlyCB->Check(
         officecfg::Office::Common::Font::SourceViewFont::
         NonProportionalFontsOnly::get());
-    NonPropFontsHdl(&aNonPropFontsOnlyCB);
+    NonPropFontsHdl(m_pNonPropFontsOnlyCB);
     rtl::OUString sFontName(
         officecfg::Office::Common::Font::SourceViewFont::FontName::get().
         get_value_or(rtl::OUString()));
     if(!sFontName.isEmpty())
-        aFontNameLB.SelectEntry(sFontName);
+        m_pFontNameLB->SelectEntry(sFontName);
     else
-        aFontNameLB.SelectEntryPos(0);
-    aFontHeightLB.SelectEntry(
+        m_pFontNameLB->SelectEntryPos(0);
+    m_pFontHeightLB->SelectEntry(
         OUString::number(
             officecfg::Office::Common::Font::SourceViewFont::FontHeight::
             get()));
-    aNonPropFontsOnlyCB.SaveValue();
-    aFontHeightLB.SaveValue();
+    m_pNonPropFontsOnlyCB->SaveValue();
+    m_pFontHeightLB->SaveValue();
 }
 
 IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
 {
-    if (pWin == &aNewDelTBX)
+    if (pWin == m_pApply || pWin == m_pDelete)
     {
         SvTreeListEntry* pEntry;
         // nCol is stupidly the nCol'th text column, not counted!
         // Therefor "0" as column.
-        sal_uLong nPos = aCheckLB.GetEntryPos(aFont1CB.GetText(), 0);
+        sal_uLong nPos = m_pCheckLB->GetEntryPos(m_pFont1CB->GetText(), 0);
 
-        switch (aNewDelTBX.GetCurItemId())
+        if (pWin == m_pApply)
         {
-            case BT_SUBSTAPPLY:
+            if (nPos != 0xffffffff)
             {
-                if (nPos != 0xffffffff)
-                {
-                    // change entry
-                    aCheckLB.SetEntryText(aFont2CB.GetText(), nPos, 1);
-                    pEntry = aCheckLB.GetEntry(nPos);
-                }
-                else
-                {
-                    // new entry
-                    String sFont1 = aFont1CB.GetText();
-                    String sFont2 = aFont2CB.GetText();
-
-                    pEntry = CreateEntry(sFont1, sFont2);
-                    aCheckLB.Insert(pEntry);
-                }
-                aCheckLB.SelectAll(sal_False);
-                aCheckLB.Select(pEntry);
+                // change entry
+                m_pCheckLB->SetEntryText(m_pFont2CB->GetText(), nPos, 1);
+                pEntry = m_pCheckLB->GetEntry(nPos);
             }
-            break;
-
-            case BT_SUBSTDELETE:
+            else
             {
-                if (nPos != 0xffffffff)
+                // new entry
+                String sFont1 = m_pFont1CB->GetText();
+                String sFont2 = m_pFont2CB->GetText();
+
+                pEntry = CreateEntry(sFont1, sFont2);
+                m_pCheckLB->Insert(pEntry);
+            }
+            m_pCheckLB->SelectAll(sal_False);
+            m_pCheckLB->Select(pEntry);
+        }
+        else if (pWin == m_pDelete)
+        {
+            if (nPos != 0xffffffff)
+            {
+                pEntry = m_pCheckLB->FirstSelected();
+                while (pEntry)
                 {
-                    pEntry = aCheckLB.FirstSelected();
-                    while (pEntry)
-                    {
-                        SvTreeListEntry* pDelEntry = pEntry;
-                        pEntry = aCheckLB.NextSelected(pEntry);
-                        aCheckLB.RemoveEntry(pDelEntry);
-                    }
+                    SvTreeListEntry* pDelEntry = pEntry;
+                    pEntry = m_pCheckLB->NextSelected(pEntry);
+                    m_pCheckLB->RemoveEntry(pDelEntry);
                 }
             }
-            break;
         }
     }
 
-    if (pWin == &aCheckLB)
+    if (pWin == m_pCheckLB)
     {
-        SvTreeListEntry* pEntry = aCheckLB.FirstSelected();
+        SvTreeListEntry* pEntry = m_pCheckLB->FirstSelected();
 
-        if (aCheckLB.NextSelected(pEntry) == 0)
+        if (m_pCheckLB->NextSelected(pEntry) == 0)
         {
-            aFont1CB.SetText(aCheckLB.GetEntryText(pEntry, 0));
-            aFont2CB.SetText(aCheckLB.GetEntryText(pEntry, 1));
+            m_pFont1CB->SetText(m_pCheckLB->GetEntryText(pEntry, 0));
+            m_pFont2CB->SetText(m_pCheckLB->GetEntryText(pEntry, 1));
         }
     }
 
-    if (pWin == &aFont1CB)
+    if (pWin == m_pFont1CB)
     {
-        sal_uLong nPos = aCheckLB.GetEntryPos(aFont1CB.GetText(), 0);
+        sal_uLong nPos = m_pCheckLB->GetEntryPos(m_pFont1CB->GetText(), 0);
 
         if (nPos != 0xffffffff)
         {
-            SvTreeListEntry* pEntry = aCheckLB.GetEntry(nPos);
+            SvTreeListEntry* pEntry = m_pCheckLB->GetEntry(nPos);
 
-            if (pEntry != aCheckLB.FirstSelected())
+            if (pEntry != m_pCheckLB->FirstSelected())
             {
-                aCheckLB.SelectAll(sal_False);
-                aCheckLB.Select(pEntry);
+                m_pCheckLB->SelectAll(sal_False);
+                m_pCheckLB->Select(pEntry);
             }
         }
     }
@@ -354,79 +318,99 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
 //--------------------------------------------------------------------------
 IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, CheckBox*, pBox)
 {
-    String sFontName = aFontNameLB.GetSelectEntry();
+    String sFontName = m_pFontNameLB->GetSelectEntry();
     sal_Bool bNonPropOnly = pBox->IsChecked();
-    aFontNameLB.Clear();
+    m_pFontNameLB->Clear();
     FontList aFntLst( Application::GetDefaultDevice() );
-    aFontNameLB.InsertEntry(sAutomatic);
+    m_pFontNameLB->InsertEntry(m_sAutomatic);
     sal_uInt16 nFontCount = aFntLst.GetFontNameCount();
     for(sal_uInt16 nFont = 0; nFont < nFontCount; nFont++)
     {
         const FontInfo& rInfo = aFntLst.GetFontName( nFont );
         if(!bNonPropOnly || rInfo.GetPitch() == PITCH_FIXED)
-            aFontNameLB.InsertEntry(rInfo.GetName());
+            m_pFontNameLB->InsertEntry(rInfo.GetName());
     }
-    aFontNameLB.SelectEntry(sFontName);
+    m_pFontNameLB->SelectEntry(sFontName);
     return 0;
 }
 
 void SvxFontSubstTabPage::CheckEnable()
 {
-    sal_Bool bEnableAll = aUseTableCB.IsChecked();
-
+    sal_Bool bEnableAll = m_pUseTableCB->IsChecked();
+    m_pReplacements->Enable(bEnableAll);
     if (bEnableAll)
     {
         sal_Bool bApply, bDelete;
 
-        SvTreeListEntry* pEntry = aCheckLB.FirstSelected();
+        SvTreeListEntry* pEntry = m_pCheckLB->FirstSelected();
 
-        String sEntry = aFont1CB.GetText();
+        String sEntry = m_pFont1CB->GetText();
         sEntry += '\t';
-        sEntry += aFont2CB.GetText();
+        sEntry += m_pFont2CB->GetText();
 
         // because of OS/2 optimization error (Bug #56267) a bit more intricate:
-        if (aFont1CB.GetText().isEmpty() || aFont2CB.GetText().isEmpty())
+        if (m_pFont1CB->GetText().isEmpty() || m_pFont2CB->GetText().isEmpty())
             bApply = sal_False;
-        else if(aFont1CB.GetText() == aFont2CB.GetText())
+        else if(m_pFont1CB->GetText() == m_pFont2CB->GetText())
             bApply = sal_False;
-        else if(aCheckLB.GetEntryPos(sEntry) != 0xffffffff)
+        else if(m_pCheckLB->GetEntryPos(sEntry) != 0xffffffff)
             bApply = sal_False;
-        else if(pEntry != 0 && aCheckLB.NextSelected(pEntry) != 0)
+        else if(pEntry != 0 && m_pCheckLB->NextSelected(pEntry) != 0)
             bApply = sal_False;
         else
             bApply = sal_True;
 
         bDelete = pEntry != 0;
 
-        aNewDelTBX.EnableItem(BT_SUBSTAPPLY, bApply);
-        aNewDelTBX.EnableItem(BT_SUBSTDELETE, bDelete);
+        m_pApply->Enable(bApply);
+        m_pDelete->Enable(bDelete);
     }
 
     if (bEnableAll)
     {
-        if (!aCheckLB.IsEnabled())
+        if (!m_pCheckLB->IsEnabled())
         {
-            aCheckLB.EnableTable();
-            aCheckLB.SetTextColor(aTextColor);
-            aCheckLB.Invalidate();
-            SelectHdl(&aFont1CB);
+            m_pCheckLB->EnableTable();
+            m_pCheckLB->SetTextColor(aTextColor);
+            m_pCheckLB->Invalidate();
+            SelectHdl(m_pFont1CB);
         }
     }
     else
     {
-        if (aCheckLB.IsEnabled())
+        if (m_pCheckLB->IsEnabled())
         {
-            aCheckLB.DisableTable();
-            aCheckLB.SetTextColor(Color(COL_GRAY));
-            aCheckLB.Invalidate();
-            aCheckLB.SelectAll(sal_False);
+            m_pCheckLB->DisableTable();
+            m_pCheckLB->SetTextColor(Color(COL_GRAY));
+            m_pCheckLB->Invalidate();
+            m_pCheckLB->SelectAll(sal_False);
         }
     }
-    aNewDelTBX.Enable(bEnableAll);
-    aFont1FT.Enable(bEnableAll);
-    aFont1CB.Enable(bEnableAll);
-    aFont2FT.Enable(bEnableAll);
-    aFont2CB.Enable(bEnableAll);
+}
+
+void SvxFontSubstCheckListBox::setColSizes()
+{
+    HeaderBar &rBar = GetTheHeaderBar();
+    if (rBar.GetItemCount() < 4)
+        return;
+    long nW1 = rBar.GetTextWidth(rBar.GetItemText(3));
+    long nW2 = rBar.GetTextWidth(rBar.GetItemText(4));
+    long nMax = Max( nW1, nW2 ) + 6; // width of the longest header + a little offset
+    long nMin = rBar.LogicToPixel(Size(10, 0), MAP_APPFONT).Width();
+    nMax = Max( nMax, nMin );
+    const long nDoubleMax = 2*nMax;
+    const long nRest = GetSizePixel().Width() - nDoubleMax;
+    long aStaticTabs[] = { 4, 0, 0, 0, 0 };
+    aStaticTabs[2] = nMax;
+    aStaticTabs[3] = nDoubleMax;
+    aStaticTabs[4] = nDoubleMax + nRest/2;
+    SvxSimpleTable::SetTabs(&aStaticTabs[0], MAP_PIXEL);
+}
+
+void SvxFontSubstCheckListBox::Resize()
+{
+    SvxSimpleTable::Resize();
+    setColSizes();
 }
 
 void SvxFontSubstCheckListBox::SetTabs()

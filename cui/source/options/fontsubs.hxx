@@ -38,6 +38,7 @@ class SvxFontSubstCheckListBox : public SvxSimpleTable
     protected:
         virtual void    SetTabs();
         virtual void    KeyInput( const KeyEvent& rKEvt );
+        virtual void    Resize();
 
     public:
         SvxFontSubstCheckListBox(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER)
@@ -54,37 +55,30 @@ class SvxFontSubstCheckListBox : public SvxSimpleTable
         void            CheckEntry(SvTreeListEntry* pEntry, sal_uInt16 nCol, sal_Bool bChecked);
         SvButtonState   GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol ) const;
         void            SetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol, SvButtonState );
+
+        void setColSizes();
 };
 
 // class SvxFontSubstTabPage ----------------------------------------------------
 class SvtFontSubstConfig;
 class SvxFontSubstTabPage : public SfxTabPage
 {
-    CheckBox                    aUseTableCB;
-    FixedText                   aFont1FT;
-    FontNameBox                 aFont1CB;
-    FixedText                   aFont2FT;
-    FontNameBox                 aFont2CB;
-    ToolBox                     aNewDelTBX;
-    SvxSimpleTableContainer m_aCheckLBContainer;
-    SvxFontSubstCheckListBox    aCheckLB;
+    CheckBox*                   m_pUseTableCB;
+    VclContainer*               m_pReplacements;
+    FontNameBox*                m_pFont1CB;
+    FontNameBox*                m_pFont2CB;
+    PushButton*                 m_pApply;
+    PushButton*                 m_pDelete;
 
-    FixedLine                   aSourceViewFontsFL;
-    FixedText                   aFontNameFT;
-    ListBox                     aFontNameLB;
-    CheckBox                    aNonPropFontsOnlyCB;
-    FixedText                   aFontHeightFT;
-    ListBox                     aFontHeightLB;
+    SvxFontSubstCheckListBox*   m_pCheckLB;
 
-    ImageList                   aImageList;
-    String                      sAutomatic;
+    ListBox*                    m_pFontNameLB;
+    CheckBox*                   m_pNonPropFontsOnlyCB;
+    ListBox*                    m_pFontHeightLB;
+
+    OUString                    m_sAutomatic;
 
     SvtFontSubstConfig*         pConfig;
-
-    String          sHeader1;
-    String          sHeader2;
-    String          sHeader3;
-    String          sHeader4;
 
     Color           aTextColor;
 
