@@ -43,7 +43,7 @@ namespace oox { namespace ppt {
 class ExtDrawingFragmentHandler : public ::oox::core::FragmentHandler
 {
 public:
-    ExtDrawingFragmentHandler( oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath,
+    ExtDrawingFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath,
         const oox::ppt::SlidePersistPtr pSlidePersistPtr,
         const oox::ppt::ShapeLocation eShapeLocation,
         oox::drawingml::ShapePtr pMasterShapePtr,

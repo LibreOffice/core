@@ -28,9 +28,6 @@ namespace oox {
 // ============================================================================
 
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OString;
-using ::rtl::OUString;
-
 // ============================================================================
 
 namespace {
@@ -67,7 +64,7 @@ TokenMap::TokenMap() :
         OString aUtf8Name = OUStringToOString( maTokenNames[ nToken ].maUniName, RTL_TEXTENCODING_UTF8 );
         struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
         bOk = pToken && (pToken->nToken == nToken);
-        OSL_ENSURE( bOk, ::rtl::OStringBuffer( "TokenMap::TokenMap - token list broken, #" ).
+        OSL_ENSURE( bOk, OStringBuffer( "TokenMap::TokenMap - token list broken, #" ).
             append( nToken ).append( ", '" ).append( aUtf8Name ).append( '\'' ).getStr() );
     }
 #endif

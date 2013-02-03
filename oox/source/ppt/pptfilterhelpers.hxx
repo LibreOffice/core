@@ -86,7 +86,7 @@ namespace oox { namespace ppt {
 
 
     // BEGIN CUT&PASTE from sd pptinanimation.cxx
-    bool convertMeasure( ::rtl::OUString& rString );
+    bool convertMeasure( OUString& rString );
     // END CUT&PASTE from sd pptinanimation.cxx
 
 

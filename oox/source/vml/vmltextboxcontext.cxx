@@ -30,7 +30,6 @@ namespace vml {
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
-using ::rtl::OUString;
 
 // ============================================================================
 

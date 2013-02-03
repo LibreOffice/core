@@ -35,7 +35,6 @@ using namespace ::com::sun::star;
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -283,7 +282,7 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& r
     mrTypeModel.maFillModel.moColor = rAttribs.getString( XML_fillcolor );
 
     // For roundrect we may have a arcsize attribute to read
-    mrTypeModel.maArcsize = rAttribs.getString( XML_arcsize,rtl::OUString( ) );
+    mrTypeModel.maArcsize = rAttribs.getString( XML_arcsize,OUString( ) );
 }
 
 ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -381,8 +380,8 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
             else if( aName == "mso-fit-shape-to-text" )           mrTypeModel.mbAutoHeight = sal_True;
             else if( aName == "rotation" )       mrTypeModel.maRotation = aValue;
             else if( aName == "flip" )       mrTypeModel.maFlip = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "visibility" ) ) )
-                mrTypeModel.mbVisible = !aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("hidden") );
+            else if( aName.equalsAscii( "visibility" ) )
+                mrTypeModel.mbVisible = !aValue.equalsAscii( "hidden" );
             else if( aName == "mso-wrap-style" ) mrTypeModel.maWrapStyle = aValue;
         }
     }

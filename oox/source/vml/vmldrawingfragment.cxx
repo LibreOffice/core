@@ -33,8 +33,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
-using ::rtl::OUString;
-
 // ============================================================================
 
 DrawingFragment::DrawingFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, Drawing& rDrawing ) :

@@ -35,7 +35,7 @@ PropertyNameVector::PropertyNameVector()
     size_t nArraySize = SAL_N_ELEMENTS(sppcPropertyNames) - 1;
     reserve( nArraySize );
     for( size_t nIndex = 0; nIndex < nArraySize; ++nIndex )
-        push_back( ::rtl::OUString::createFromAscii( sppcPropertyNames[ nIndex ] ) );
+        push_back( OUString::createFromAscii( sppcPropertyNames[ nIndex ] ) );
 }
 
 // ============================================================================

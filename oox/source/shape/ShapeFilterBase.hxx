@@ -63,7 +63,7 @@ public:
 
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
-    virtual rtl::OUString implGetImplementationName() const;
+    virtual OUString implGetImplementationName() const;
     virtual GraphicHelper* implCreateGraphicHelper() const;
 
     ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;

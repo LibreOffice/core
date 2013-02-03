@@ -31,8 +31,6 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
-
 // ============================================================================
 
 namespace {

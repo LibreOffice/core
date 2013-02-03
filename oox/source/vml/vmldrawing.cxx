@@ -47,7 +47,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
-using ::rtl::OUString;
 
 // ============================================================================
 

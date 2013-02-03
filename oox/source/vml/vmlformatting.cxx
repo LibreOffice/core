@@ -41,8 +41,6 @@ using ::oox::drawingml::FillProperties;
 using ::oox::drawingml::LineArrowProperties;
 using ::oox::drawingml::LineProperties;
 using ::oox::drawingml::ShapePropertyMap;
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
 using ::com::sun::star::awt::Point;
 using ::com::sun::star::drawing::PolygonFlags;
 using ::com::sun::star::drawing::PolygonFlags_NORMAL;

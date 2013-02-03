@@ -72,8 +72,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
 using ::oox::core::XmlFilterBase;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -584,7 +582,7 @@ Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>&
 
     // default: try to create a rectangle shape
     Reference<XShape> xShape = SimpleShape::implConvertAndInsert(rxShapes, rShapeRect);
-    rtl::OUString sArcsize = maTypeModel.maArcsize;
+    OUString sArcsize = maTypeModel.maArcsize;
     if ( !sArcsize.isEmpty( ) )
     {
         sal_Unicode cLastChar = sArcsize[sArcsize.getLength() - 1];

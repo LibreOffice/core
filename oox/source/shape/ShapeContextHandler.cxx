@@ -31,15 +31,15 @@ using namespace ::com::sun::star;
 using namespace core;
 using namespace drawingml;
 
-::rtl::OUString SAL_CALL ShapeContextHandler_getImplementationName()
+OUString SAL_CALL ShapeContextHandler_getImplementationName()
 {
     return OUString( "com.sun.star.comp.oox.ShapeContextHandler" );
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 ShapeContextHandler_getSupportedServiceNames()
 {
-    uno::Sequence< ::rtl::OUString > s(1);
+    uno::Sequence< OUString > s(1);
     s[0] = "com.sun.star.xml.sax.FastShapeContextHandler";
     return s;
 }
@@ -154,8 +154,8 @@ void SAL_CALL ShapeContextHandler::startFastElement
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    static const ::rtl::OUString sInputStream
-        (RTL_CONSTASCII_USTRINGPARAM ("InputStream"));
+    static const OUString sInputStream
+        ("InputStream");
 
     uno::Sequence<beans::PropertyValue> aSeq(1);
     aSeq[0].Name = sInputStream;
@@ -170,7 +170,7 @@ void SAL_CALL ShapeContextHandler::startFastElement
         if (!msRelationFragmentPath.isEmpty())
         {
             FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
-            rtl::OUString aThemeFragmentPath = rFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
+            OUString aThemeFragmentPath = rFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
             uno::Reference<xml::sax::XFastSAXSerializable> xDoc(mxFilterBase->importFragment(aThemeFragmentPath), uno::UNO_QUERY_THROW);
             mxFilterBase->importFragment(new ThemeFragmentHandler(*mxFilterBase, aThemeFragmentPath, *mpThemePtr ), xDoc);
             ShapeFilterBase* pShapeFilterBase(dynamic_cast<ShapeFilterBase*>(mxFilterBase.get()));
@@ -193,7 +193,7 @@ void SAL_CALL ShapeContextHandler::startFastElement
 }
 
 void SAL_CALL ShapeContextHandler::startUnknownElement
-(const ::rtl::OUString & Namespace, const ::rtl::OUString & Name,
+(const OUString & Namespace, const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -216,8 +216,8 @@ void SAL_CALL ShapeContextHandler::endFastElement(::sal_Int32 Element)
 }
 
 void SAL_CALL ShapeContextHandler::endUnknownElement
-(const ::rtl::OUString & Namespace,
- const ::rtl::OUString & Name)
+(const OUString & Namespace,
+ const OUString & Name)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     uno::Reference<XFastContextHandler> xContextHandler(getContextHandler());
@@ -244,8 +244,8 @@ ShapeContextHandler::createFastChildContext
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 ShapeContextHandler::createUnknownChildContext
-(const ::rtl::OUString & Namespace,
- const ::rtl::OUString & Name,
+(const OUString & Namespace,
+ const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -258,7 +258,7 @@ ShapeContextHandler::createUnknownChildContext
     return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
-void SAL_CALL ShapeContextHandler::characters(const ::rtl::OUString & aChars)
+void SAL_CALL ShapeContextHandler::characters(const OUString & aChars)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     uno::Reference<XFastContextHandler> xContextHandler(getContextHandler());
@@ -296,10 +296,10 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
             else
             {
                 // Prerendered diagram output is available, then use that, and throw away the original result.
-                for (std::vector<rtl::OUString>::const_iterator aIt = mpShape->getExtDrawings().begin(); aIt != mpShape->getExtDrawings().end(); ++aIt)
+                for (std::vector<OUString>::const_iterator aIt = mpShape->getExtDrawings().begin(); aIt != mpShape->getExtDrawings().end(); ++aIt)
                 {
                     DiagramGraphicDataContext* pDiagramGraphicDataContext = dynamic_cast<DiagramGraphicDataContext*>(mxDiagramShapeContext.get());
-                    rtl::OUString aFragmentPath(pDiagramGraphicDataContext->getFragmentPathFromRelId(*aIt));
+                    OUString aFragmentPath(pDiagramGraphicDataContext->getFragmentPathFromRelId(*aIt));
                     oox::drawingml::ShapePtr pShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) );
                     mxFilterBase->importFragment(new ShapeDrawingFragmentHandler(*mxFilterBase, aFragmentPath, pShapePtr));
                     pShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix );
@@ -365,14 +365,14 @@ void SAL_CALL ShapeContextHandler::setInputStream
     mxInputStream = the_value;
 }
 
-::rtl::OUString SAL_CALL ShapeContextHandler::getRelationFragmentPath()
+OUString SAL_CALL ShapeContextHandler::getRelationFragmentPath()
     throw (uno::RuntimeException)
 {
     return msRelationFragmentPath;
 }
 
 void SAL_CALL ShapeContextHandler::setRelationFragmentPath
-(const ::rtl::OUString & the_value)
+(const OUString & the_value)
     throw (uno::RuntimeException)
 {
     msRelationFragmentPath = the_value;
@@ -390,22 +390,22 @@ void SAL_CALL ShapeContextHandler::setStartToken( ::sal_Int32 _starttoken ) thro
 
 }
 
-::rtl::OUString ShapeContextHandler::getImplementationName()
+OUString ShapeContextHandler::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     return ShapeContextHandler_getImplementationName();
 }
 
-uno::Sequence< ::rtl::OUString > ShapeContextHandler::getSupportedServiceNames()
+uno::Sequence< OUString > ShapeContextHandler::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     return ShapeContextHandler_getSupportedServiceNames();
 }
 
 ::sal_Bool SAL_CALL ShapeContextHandler::supportsService
-(const ::rtl::OUString & ServiceName) throw (css::uno::RuntimeException)
+(const OUString & ServiceName) throw (css::uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSeq = getSupportedServiceNames();
+    uno::Sequence< OUString > aSeq = getSupportedServiceNames();
 
     if (aSeq[0].equals(ServiceName))
         return sal_True;
