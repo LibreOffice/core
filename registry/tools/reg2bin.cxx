@@ -974,9 +974,19 @@ sal_uInt64 writeNameNul(osl::File & file, rtl::OUString const & name) {
 }
 
 void writeNameLen(osl::File & file, rtl::OUString const & name) {
-    rtl::OString ascii(toAscii(name));
-    write32(file, ascii.getLength());
-    write(file, ascii.getStr(), ascii.getLength());
+    static std::map< rtl::OUString, sal_uInt64 > reuse;
+    std::map< rtl::OUString, sal_uInt64 >::iterator i(reuse.find(name));
+    if (i == reuse.end()) {
+        reuse.insert(std::make_pair(name, getOffset(file)));
+        rtl::OString ascii(toAscii(name));
+        assert(
+            (static_cast< sal_uInt64 >(ascii.getLength()) & 0x80000000) == 0);
+        write32(
+            file, static_cast< sal_uInt64 >(ascii.getLength()) | 0x80000000);
+        write(file, ascii.getStr(), ascii.getLength());
+    } else {
+        write32(file, i->second);
+    }
 }
 
 void writeType(osl::File & file, Item const & item, bool flag = false) {

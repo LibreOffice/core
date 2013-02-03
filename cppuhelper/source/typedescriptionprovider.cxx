@@ -70,7 +70,10 @@
 // * UInt64: 8-byte value, LSB first
 // * Offset: UInt32 value, counting bytes from start of file
 // * NUL-Name: zero or more non-NUL US-ASCII bytes followed by a NUL byte
-// * Len-Name: UInt32 number of characters followed by that many US-ASCII bytes
+// * Len-Name: UInt32 number of characters, with 0x80000000 bit 1, followed by
+//    that many (- 0x80000000) US-ASCII bytes
+// * Idx-Name: either an Offset (with 0x80000000 bit 0) of a Len-Name, or a
+//    Len-Name
 // * Entry: Offset of NUL-Name followed by Offset of payload
 // * Map: zero or more Entries
 //
@@ -90,62 +93,62 @@
 // ***** followed by:
 // ****** UInt32 number N1 of members
 // ****** N1 * tuple of:
-// ******* Offset of Len-Name
+// ******* Offset of Idx-Name
 // ******* UInt32
 // **** 2: plain struct type (with base if flag is 1)
 // ***** followed by:
-// ****** if "with base": Offset of Len-Name
+// ****** if "with base": Offset of Idx-Name
 // ****** UInt32 number N1 of direct members
 // ****** N1 * tuple of:
-// ******* Offset of Len-Name name
-// ******* Offset of Len-Name type
+// ******* Offset of Idx-Name name
+// ******* Offset of Idx-Name type
 // **** 3: polymorphic struct type template
 // ***** followed by:
 // ****** UInt32 number N1 of type parameters
-// ****** N1 * Offset of Len-Name
+// ****** N1 * Offset of Idx-Name
 // ****** UInt32 number N2 of members
 // ****** N2 * tuple of:
 // ******* kind byte: 0x01 bit is 1 if parameterized type
-// ******* Offset of Len-Name name
-// ******* Offset of Len-Name type
+// ******* Offset of Idx-Name name
+// ******* Offset of Idx-Name type
 // **** 4: exception type (with base if flag is 1)
 // ***** followed by:
-// ****** if "with base": Offset of Len-Name
+// ****** if "with base": Offset of Idx-Name
 // ****** UInt32 number N1 of direct members
 // ****** N1 * tuple of:
-// ******* Offset of Len-Name name
-// ******* Offset of Len-Name type
+// ******* Offset of Idx-Name name
+// ******* Offset of Idx-Name type
 // **** 5: interface type
 // ***** followed by:
 // ****** UInt32 number N1 of direct mandatory bases
-// ****** N1 * Offset of Len-Name
+// ****** N1 * Offset of Idx-Name
 // ****** UInt32 number N2 of direct optional bases
-// ****** N2 * Offset of Len-Name
+// ****** N2 * Offset of Idx-Name
 // ****** UInt32 number N3 of direct attributes
 // ****** N3 * tuple of:
 // ******* kind byte:
 // ******** 0x02 bit: 1 if read-only
 // ******** 0x01 bit: 1 if bound
-// ******* Offset of Len-Name name
-// ******* Offset of Len-Name type
+// ******* Offset of Idx-Name name
+// ******* Offset of Idx-Name type
 // ******* UInt32 number N4 of get exceptions
-// ******* N4 * Offset of Len-Name
+// ******* N4 * Offset of Idx-Name
 // ******* UInt32 number N5 of set exceptions
-// ******* N5 * Offset of Len-Name
+// ******* N5 * Offset of Idx-Name
 // ****** UInt32 number N6 of direct methods
 // ****** N6 * tuple of:
-// ******* Offset of Len-Name name
-// ******* Offset of Len-Name return type
+// ******* Offset of Idx-Name name
+// ******* Offset of Idx-Name return type
 // ******* UInt32 number N7 of parameters
 // ******* N7 * tuple of:
 // ******** direction byte: 0 for in, 1 for out, 2 for in-out
-// ******** Offset of Len-Name name
-// ******** Offset of Len-Name type
+// ******** Offset of Idx-Name name
+// ******** Offset of Idx-Name type
 // ******* UInt32 number N8 of exceptions
-// ******* N8 * Offset of Len-Name
+// ******* N8 * Offset of Idx-Name
 // **** 6: typedef
 // ***** followed by:
-// ****** Offset of Len-Name
+// ****** Offset of Idx-Name
 // **** 7: constant group
 // ***** followed by:
 // ****** UInt32 number N1 of entries of Map
@@ -153,28 +156,28 @@
 // **** 8: single-interface--based service (with default constructor if flag is
 //       1)
 // ***** followed by:
-// ****** Offset of Len-Name
+// ****** Offset of Idx-Name
 // ****** if not "with default constructor":
 // ******* UInt32 number N1 of constructors
 // ******* N1 * tuple of:
-// ******** Offset of Len-Name
+// ******** Offset of Idx-Name
 // ******** UInt32 number N2 of parameters
 // ******** N2 * tuple of
 // ********* kind byte: 0x04 bit is 1 if rest parameter
-// ********* Offset of Len-Name name
-// ********* Offset of Len-Name type
+// ********* Offset of Idx-Name name
+// ********* Offset of Idx-Name type
 // ******** UInt32 number N3 of exceptions
-// ******** N3 * Offset of Len-Name
+// ******** N3 * Offset of Idx-Name
 // **** 9: accumulation-based service
 // ***** followed by:
 // ****** UInt32 number N1 of direct mandatory base services
-// ****** N1 * Offset of Len-Name
+// ****** N1 * Offset of Idx-Name
 // ****** UInt32 number N2 of direct optional base services
-// ****** N2 * Offset of Len-Name
+// ****** N2 * Offset of Idx-Name
 // ****** UInt32 number N3 of direct mandatory base interfaces
-// ****** N3 * Offset of Len-Name
+// ****** N3 * Offset of Idx-Name
 // ****** UInt32 number N4 of direct optional base interfaces
-// ****** N4 * Offset of Len-Name
+// ****** N4 * Offset of Idx-Name
 // ****** UInt32 number N5 of direct properties
 // ****** N5 * tuple of:
 // ******* UInt16 kind:
@@ -187,14 +190,14 @@
 // ******** 0x0004 bit: 1 if constrained
 // ******** 0x0002 bit: 1 if bound
 // ******** 0x0001 bit: 1 if maybevoid
-// ******* Offset of Len-Name name
-// ******* Offset of Len-Name type
+// ******* Offset of Idx-Name name
+// ******* Offset of Idx-Name type
 // **** 10: interface-based singleton
 // ***** followed by:
-// ****** Offset of Len-Name
+// ****** Offset of Idx-Name
 // **** 11: service-based singleton
 // ***** followed by:
-// ****** Offset of Len-Name
+// ****** Offset of Idx-Name
 //
 // Layout of per-entry payload in a constant group Map:
 //
@@ -416,6 +419,24 @@ rtl::OUString MappedFile::readNameLen(sal_uInt32 offset, sal_uInt32 * newOffset)
     const
 {
     sal_uInt32 len = read32(offset);
+    if ((len & 0x80000000) == 0) {
+        if (newOffset != 0) {
+            *newOffset = offset + 4;
+        }
+        offset = len;
+        len = read32(offset);
+        if ((len & 0x80000000) == 0) {
+            throw css::uno::DeploymentException(
+                "broken UNOIDL file: name length high bit unset",
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        len &= ~0x80000000;
+    } else {
+        len &= ~0x80000000;
+        if (newOffset != 0) {
+            *newOffset = offset + 4 + len;
+        }
+    }
     if (len > SAL_MAX_INT32 || len > size - offset - 4) {
         throw css::uno::DeploymentException(
             "broken UNOIDL file: size of name is too large",
@@ -432,9 +453,6 @@ rtl::OUString MappedFile::readNameLen(sal_uInt32 offset, sal_uInt32 * newOffset)
         throw css::uno::DeploymentException(
             "broken UNOIDL file: name is not ASCII",
             css::uno::Reference< css::uno::XInterface >());
-    }
-    if (newOffset != 0) {
-        *newOffset = offset + 4 + len;
     }
     return name;
 }
