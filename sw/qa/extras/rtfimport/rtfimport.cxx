@@ -139,6 +139,7 @@ public:
     void testFdo44053();
     void testFdo48440();
     void testFdo58646();
+    void testFdo59419();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -249,6 +250,7 @@ void Test::run()
         {"fdo44053.rtf", &Test::testFdo44053},
         {"fdo48440.rtf", &Test::testFdo48440},
         {"fdo58646.rtf", &Test::testFdo58646},
+        {"fdo59419.rtf", &Test::testFdo59419},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1076,6 +1078,14 @@ void Test::testFdo58646()
 {
     // Page break was ignored inside a continous section, on title page.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+void Test::testFdo59419()
+{
+    // Junk to be ignored broke import of the table.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
