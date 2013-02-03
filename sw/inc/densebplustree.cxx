@@ -27,6 +27,12 @@ between fragmentation (too low value) and not being too flat (too high value).
 */
 static const int sOrder = 50;
 
+/** Minimum fill of a node.
+
+Nodes except the rightmost ones will never have less than this number.
+*/
+static const int sMinFill = ( sOrder / 2 ) - 1;
+
 /** B+ tree node implementation.
 
 It has to be able to act as an internal node, as well as the leaf node.
@@ -103,6 +109,30 @@ struct DBPTreeNode
         ++m_nUsed;
     }
 
+    /// Remove the given amount of content (regardless of the node type).
+    void remove( int nWhere, int nCount )
+    {
+        assert( nWhere < m_nUsed );
+        assert( nCount > 0 );
+        assert( nWhere + nCount <= m_nUsed );
+
+        if ( m_bIsInternal )
+        {
+            for ( int i = nWhere; i < m_nUsed - nCount; ++i )
+                m_pChildren[ i ] = m_pChildren[ i + nCount ];
+
+            for ( int i = nWhere - 1; i < m_nUsed - nCount - 1; ++i )
+                m_pKeys[ i ] = m_pKeys[ i + nCount ];
+        }
+        else
+        {
+            for ( int i = nWhere; i < m_nUsed - nCount; ++i )
+                m_pValues[ i ] = m_pValues[ i + nCount ];
+        }
+
+        m_nUsed -= nCount;
+    }
+
     /** Split node, and make the original one smaller.
 
         @return relative key shift of the node.
@@ -158,6 +188,7 @@ DenseBPlusTree< Key, Value >::DenseBPlusTree()
       m_nCount( 0 ),
       m_nDepth( 1 )
 {
+    assert( sMinFill > 0 ); // just to be sure ;-)
 }
 
 template < class Key, class Value >
@@ -206,7 +237,45 @@ void DenseBPlusTree< Key, Value >::Insert( const Value& rValue, Key nPos )
 template < class Key, class Value >
 void DenseBPlusTree< Key, Value >::Remove( Key nPos, Key nNumber )
 {
-    // TODO
+    assert( nNumber > 0 );
+    assert( nPos + nNumber <= m_nCount );
+
+    NodeWithIndex pParents[ m_nDepth ];
+    int nParentsLength = 0;
+    NodeWithIndex aLeaf = findLeaf( nPos, pParents, nParentsLength );
+
+    if ( aLeaf.pNode->m_nUsed - nNumber >= sMinFill )
+    {
+        aLeaf.pNode->remove( aLeaf.nIndex, nNumber );
+        shiftNodes( pParents, nParentsLength, -nNumber );
+    }
+    else
+    {
+        // let's find the first node that we are not removing, and use the
+        // m_pNext chains to delete everything in between on every level
+        NodeWithIndex pAfterParents[ m_nDepth ];
+        int nAfterParentsLength = 0;
+        NodeWithIndex aAfter = findLeaf( nPos + nNumber, pAfterParents, nAfterParentsLength );
+
+        // we do the operation the same way on every level, regardless it is a
+        // leaf, or an internal node
+        pParents[ nParentsLength ] = aLeaf;
+        pAfterParents[ nAfterParentsLength ] = aAfter;
+
+        // remove it
+        assert( nParentsLength == nAfterParentsLength );
+        removeBetween( pParents, pAfterParents, nParentsLength + 1 );
+
+        // update indexes
+        shiftNodes( pParents, nParentsLength, aAfter.nIndex - nNumber );
+        if ( pParents[ nParentsLength - 1 ].nIndex < pParents[ nParentsLength - 1 ].pNode->m_nUsed - 1 )
+            ++pParents[ nParentsLength - 1 ].nIndex;
+        shiftNodes( pParents, nParentsLength, -aAfter.nIndex );
+
+        // FIXME now make sure every node contains at least sMinFill data
+    }
+
+    m_nCount -= nNumber;
 }
 
 template < class Key, class Value >
@@ -220,7 +289,7 @@ void DenseBPlusTree< Key, Value >::Replace( Key nPos, const Value& rValue )
 {
     assert( m_pRoot->m_nUsed > 0 );
 
-    NodeWithIndex aLeaf = findLeaf( nPos, NULL );
+    NodeWithIndex aLeaf = findLeaf( nPos );
 
     aLeaf.pNode->m_pValues[ aLeaf.nIndex ] = rValue;
 }
@@ -230,7 +299,7 @@ const Value& DenseBPlusTree< Key, Value >::operator[]( Key nPos ) const
 {
     assert( m_pRoot->m_nUsed > 0 );
 
-    NodeWithIndex aLeaf = findLeaf( nPos, NULL );
+    NodeWithIndex aLeaf = findLeaf( nPos );
 
     return aLeaf.pNode->m_pValues[ aLeaf.nIndex ];
 }
@@ -395,5 +464,49 @@ DBPTreeNode< Key, Value >* DenseBPlusTree< Key, Value >::splitNode( DBPTreeNode<
 
     return pNewNode;
 }
+
+template < class Key, class Value >
+void DenseBPlusTree< Key, Value >::removeBetween( const NodeWithIndex pFrom[], const NodeWithIndex pTo[], int nLength )
+{
+    for ( int p = 0; p < nLength; ++p )
+    {
+        const NodeWithIndex &rLeaf = pFrom[ p ];
+        const NodeWithIndex &rAfter = pTo[ p ];
+
+        if ( rLeaf.pNode == rAfter.pNode )
+        {
+            // we need to keep parents of the 'from' branch too
+            if ( rLeaf.pNode->m_bIsInternal )
+            {
+                if ( rAfter.nIndex - rLeaf.nIndex - 1 > 0 )
+                    rLeaf.pNode->remove( rLeaf.nIndex + 1, rAfter.nIndex - rLeaf.nIndex - 1 );
+            }
+            else
+                rLeaf.pNode->remove( rLeaf.nIndex, rAfter.nIndex - rLeaf.nIndex );
+        }
+        else
+        {
+            // remove rest of the content of the node where the deletion starts
+            rLeaf.pNode->remove( rLeaf.nIndex, rLeaf.pNode->m_nUsed - rLeaf.nIndex );
+
+            // delete all nodes between from and to on the given level
+            for ( DBPTreeNode< Key, Value > *pNode = rLeaf.pNode->m_pNext; pNode != rAfter.pNode; )
+            {
+                DBPTreeNode< Key, Value > *pToDelete = pNode;
+                pNode = pNode->m_pNext;
+                delete pToDelete;
+            }
+
+            // remove the remaining data in the node after the deleted range
+            if ( rAfter.nIndex > 0 )
+                rAfter.pNode->remove( 0, rAfter.nIndex );
+
+            // reconnect
+            rLeaf.pNode->m_pNext = rAfter.pNode;
+        }
+    }
+}
+
+// method name: balanceOrMerge()
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

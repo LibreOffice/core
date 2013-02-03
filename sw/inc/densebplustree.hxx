@@ -124,6 +124,13 @@ private:
 
     /// Split the node, and adjust parents accordingly.
     DBPTreeNode< Key, Value >* splitNode( DBPTreeNode< Key, Value > *pNode, bool bIsAppend, const NodeWithIndex pParents[], int nParentsLength, NodeWithIndex *pNewParents, int &rNewParentsLength );
+
+    /** Remove nodes between two arrays of NodeWithIndex.
+
+        @param pFrom Where the deletion starts - it includes the nIndex.
+        @param pTo Where the deletion ends - nIndex is the first non-deleted item.
+    */
+    void removeBetween( const NodeWithIndex pFrom[], const NodeWithIndex pTo[], int nLength );
 };
 
 // include the implementation
