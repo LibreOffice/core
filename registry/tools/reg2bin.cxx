@@ -1395,6 +1395,14 @@ SAL_IMPLEMENT_MAIN() {
     write32(f, 0); // root map offset
     write32(f, 0); // root map size
     sal_uInt64 off = writeMap(f, map, true);
+    e2 = f.setSize(getOffset(f)); // truncate in case it already existed
+    if (e2 != osl::FileBase::E_None) {
+        std::cerr
+            << "Cannot set size of \"" << f.getURL() << "\", error code "
+            << +e2 << "\n";
+        std::exit(EXIT_FAILURE);
+    }
+
     e2 = f.setPos(osl_Pos_Absolut, 8);
     if (e2 != osl::FileBase::E_None) {
         std::cerr
