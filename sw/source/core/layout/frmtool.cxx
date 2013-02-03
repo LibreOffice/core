@@ -17,23 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <tools/bigint.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/brshitem.hxx>
-#include <editeng/keepitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <sfx2/printer.hxx>
 #include <editeng/lspcitem.hxx>
 
 #include <fmtornt.hxx>
-#include <fmtanchr.hxx>
 #include <fmthdft.hxx>
-#include <fmtcntnt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtsrnd.hxx>
 #include <docary.hxx>
@@ -41,15 +35,12 @@
 #include <swmodule.hxx>
 #include "pagefrm.hxx"
 #include "colfrm.hxx"
-#include "doc.hxx"
 #include "fesh.hxx"
 #include "viewimp.hxx"
 #include "viewopt.hxx"
-#include "pam.hxx"
 #include "dflyobj.hxx"
 #include "dcontact.hxx"
 #include "frmtool.hxx"
-#include "docsh.hxx"
 #include "tabfrm.hxx"
 #include "rowfrm.hxx"
 #include "ftnfrm.hxx"
@@ -62,14 +53,10 @@
 #include "sectfrm.hxx"
 #include "node2lay.hxx"
 #include "ndole.hxx"
-#include "ndtxt.hxx"
-#include "swtable.hxx"
 #include "hints.hxx"
 #include <layhelp.hxx>
 #include <laycache.hxx>
 #include <rootfrm.hxx>
-#include "mdiexp.hxx"
-#include "statstr.hrc"
 #include <paratr.hxx>
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
@@ -3359,7 +3346,6 @@ const SwFrm* FindPage( const SwRect &rRect, const SwFrm *pPage )
     return pPage;
 }
 
-#include <svl/smplhint.hxx>
 class SwFrmHolder : private SfxListener
 {
     SwFrm* pFrm;
