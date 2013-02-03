@@ -73,7 +73,6 @@
 #include <unomap.hxx>
 #include <unosett.hxx>
 #include <unoprnms.hxx>
-#include <unoevtlstnr.hxx>
 #include <unodraw.hxx>
 #include <unocoll.hxx>
 #include <unostyle.hxx>
@@ -707,15 +706,12 @@ class SwXTextCursor::Impl
 {
 
 public:
-
     const SfxItemPropertySet &  m_rPropSet;
     const enum CursorType       m_eType;
     const uno::Reference< text::XText > m_xParentText;
-    SwEventListenerContainer    m_ListenerContainer;
     bool                        m_bIsDisposed;
 
-    Impl(   SwXTextCursor & rThis,
-            SwDoc & rDoc,
+    Impl(   SwDoc & rDoc,
             const enum CursorType eType,
             uno::Reference<text::XText> xParent,
             SwPosition const& rPoint, SwPosition const*const pMark)
@@ -723,7 +719,6 @@ public:
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eType(eType)
         , m_xParentText(xParent)
-        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
         , m_bIsDisposed(false)
     {
         if (pMark)
@@ -754,7 +749,6 @@ public:
 
     void Invalidate() {
         m_bIsDisposed = true;
-        m_ListenerContainer.Disposing();
     }
 protected:
     // SwClient
@@ -810,14 +804,13 @@ SwXTextCursor::SwXTextCursor(
         const enum CursorType eType,
         const SwPosition& rPos,
         SwPosition const*const pMark)
-    : m_pImpl( new SwXTextCursor::Impl(*this, rDoc, eType, xParent,
-                rPos, pMark ) )
+    : m_pImpl( new Impl(rDoc, eType, xParent, rPos, pMark) )
 {
 }
 
 SwXTextCursor::SwXTextCursor(uno::Reference< text::XText > const& xParent,
         SwPaM const& rSourceCursor, const enum CursorType eType)
-    : m_pImpl( new SwXTextCursor::Impl(*this, *rSourceCursor.GetDoc(), eType,
+    : m_pImpl( new Impl(*rSourceCursor.GetDoc(), eType,
                 xParent, *rSourceCursor.GetPoint(),
                 rSourceCursor.HasMark() ? rSourceCursor.GetMark() : 0) )
 {
