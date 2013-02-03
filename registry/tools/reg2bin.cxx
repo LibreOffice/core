@@ -1092,7 +1092,7 @@ sal_uInt64 writeMap(
                 if (j->bound) {
                     f |= 0x01;
                 }
-                if (!j->readOnly) {
+                if (j->readOnly) {
                     f |= 0x02;
                 }
                 write8(file, f);
