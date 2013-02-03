@@ -18,7 +18,7 @@
 import unohelper
 import traceback
 
-from .FaxWizardDialogImpl import FaxWizardDialogImpl
+from ..agenda.AgendaWizardDialogImpl import AgendaWizardDialogImpl
 
 from com.sun.star.task import XJobExecutor
 
@@ -31,7 +31,7 @@ class CallWizard(unohelper.Base, XJobExecutor):
 
     def trigger(self, args):
         try:
-            fw = FaxWizardDialogImpl(self.ctx.ServiceManager)
+            fw = AgendaWizardDialogImpl(self.ctx.ServiceManager)
             fw.startWizard(self.ctx.ServiceManager)
         except Exception as e:
             print ("Wizard failure exception " + str(type(e)) +
