@@ -975,7 +975,7 @@ sal_uInt64 writeNameNul(osl::File & file, rtl::OUString const & name) {
 
 void writeNameLen(osl::File & file, rtl::OUString const & name) {
     rtl::OString ascii(toAscii(name));
-    write32(file, name.getLength());
+    write32(file, ascii.getLength());
     write(file, ascii.getStr(), ascii.getLength());
 }
 
