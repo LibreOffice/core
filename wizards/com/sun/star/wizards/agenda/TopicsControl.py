@@ -351,7 +351,7 @@ class TopicsControl(ControlScroller):
     def isRowEmpty(self, row):
         data = self.getTopicData(row)
         # now - is this row empty?
-        return data[1].Value  and data[2].Value and data[3].Value
+        return data[1].Value or data[2].Value or data[3].Value
 
     '''
     update the preview document and
@@ -369,7 +369,7 @@ class TopicsControl(ControlScroller):
                 return
             self.updateDocumentCell(
                 guiRow + ControlScroller.nscrollvalue, column, data)
-            if self.isRowEmpty(guiRow + ControlScroller.nscrollvalue):
+            if not self.isRowEmpty(guiRow + ControlScroller.nscrollvalue):
                 '''
                 if this is the row before the last one
                 (the last row is always empty)
@@ -384,16 +384,17 @@ class TopicsControl(ControlScroller):
                     because the last one is always empty...
                     '''
                     while len(ControlScroller.scrollfields) > 1 \
-                            and self.isRowEmpty(len(ControlScroller.scrollfields) - 2):
+                            and not self.isRowEmpty(
+                                len(ControlScroller.scrollfields) - 2):
                         self.removeLastRow()
                     cr = self.ControlGroupVector[
-                        len(ControlScroller.scrollfields) - ControlScroller.nscrollvalue - 1]
+                        len(ControlScroller.scrollfields) - \
+                            ControlScroller.nscrollvalue - 1]
                     # if a remove was performed, set focus
                     #to the last row with some data in it...
-                    self.focus(self.getControl(cr, column))
+                    self.focus(self.getControlByIndex(cr, column))
                     # update the preview document.
                     self.reduceDocumentToTopics()
-
             else:
                 # row contains data
                 # is this the last row?
@@ -610,8 +611,9 @@ class TopicsControl(ControlScroller):
         elif (row1 + ControlScroller.nscrollvalue) + \
                 (row2 + ControlScroller.nscrollvalue) \
                 == (len(ControlScroller.scrollfields) * 2 - 5):
-            if self.isRowEmpty(len(ControlScroller.scrollfields) - 2) \
-                    and self.isRowEmpty(len(ControlScroller.scrollfields) - 1):
+            if not self.isRowEmpty(len(ControlScroller.scrollfields) - 2) \
+                    and not self.isRowEmpty(
+                        len(ControlScroller.scrollfields) - 1):
                 self.removeLastRow()
                 self.reduceDocumentToTopics()
 
@@ -729,6 +731,7 @@ class TopicsControl(ControlScroller):
     according to the data model.
     '''
 
+    @classmethod
     def reduceDocumentToTopics(self):
         try:
             ControlScroller.CurUnoDialog.agendaTemplate.topics.reduceDocumentTo(
