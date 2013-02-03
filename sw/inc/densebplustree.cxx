@@ -331,7 +331,7 @@ void DenseBPlusTree< Key, Value >::shiftNodes( const NodeWithIndex pParents[], i
     for ( int p = nParentsLength - 1; p >= 0; --p )
     {
         const NodeWithIndex &rNode = pParents[ p ];
-        for ( int i = rNode.nIndex + 1; i < rNode.pNode->m_nUsed - 1; ++i )
+        for ( int i = rNode.nIndex; i < rNode.pNode->m_nUsed - 1; ++i )
             rNode.pNode->m_pKeys[ i ] += nHowMuch;
     }
 }
