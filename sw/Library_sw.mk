@@ -431,7 +431,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/unocore/unocrsrhelper \
     sw/source/core/unocore/unodraw \
     sw/source/core/unocore/unoevent \
-    sw/source/core/unocore/unoevtlstnr \
     sw/source/core/unocore/unofield \
     sw/source/core/unocore/unoflatpara \
     sw/source/core/unocore/unoframe \
