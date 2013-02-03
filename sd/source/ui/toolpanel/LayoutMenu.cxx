@@ -857,13 +857,15 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
             {
                 if (GetShellManager() != NULL)
                     GetShellManager()->MoveToTop(this);
+                Point aPosition (0,0);
                 if (rEvent.IsMouseEvent())
                 {
                     // Do not show the context menu when the mouse was not
                     // pressed over an item.
+                    // We have to explicitly specify the location of the menu
+                    // when the LayoutMenu is undocked
                     if (GetItemId(rEvent.GetMousePosPixel()) > 0)
-                        mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
-                            SdResId(RID_TASKPANE_LAYOUTMENU_POPUP));
+                        aPosition = rEvent.GetMousePosPixel();
                 }
                 else
                 {
@@ -873,13 +875,13 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                     if (GetSelectItemId() != (sal_uInt16)-1)
                     {
                         Rectangle aBBox (GetItemRect(GetSelectItemId()));
-                        Point aPosition (aBBox.Center());
-                        mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
+                        aPosition = aBBox.Center();
+                    }
+                }
+                mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
                             SdResId(RID_TASKPANE_LAYOUTMENU_POPUP),
                             this,
                             &aPosition);
-                    }
-                }
             }
             break;
 
