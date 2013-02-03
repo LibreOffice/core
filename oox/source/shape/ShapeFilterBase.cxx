@@ -67,9 +67,9 @@ const ::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles
     return new ::oox::ole::VbaProject( getComponentContext(), getModel(), "Writer" );
 }
 
-::rtl::OUString ShapeFilterBase::implGetImplementationName() const
+OUString ShapeFilterBase::implGetImplementationName() const
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
 /// Graphic helper for shapes, that can manage color schemes.

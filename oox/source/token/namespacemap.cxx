@@ -33,7 +33,7 @@ NamespaceMap::NamespaceMap()
     };
 
     for( const NamespaceUrl* pNamespaceUrl = spNamespaceUrls; pNamespaceUrl->mnId != -1; ++pNamespaceUrl )
-        operator[]( pNamespaceUrl->mnId ) = ::rtl::OUString::createFromAscii( pNamespaceUrl->mpcUrl );
+        operator[]( pNamespaceUrl->mnId ) = OUString::createFromAscii( pNamespaceUrl->mpcUrl );
 }
 
 }

@@ -34,9 +34,6 @@ namespace vml {
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-
 // ============================================================================
 
 namespace {

@@ -29,7 +29,6 @@
 #include "ShapeDrawingFragmentHandler.hxx"
 
 using namespace com::sun::star;
-using rtl::OUString;
 
 namespace oox { namespace shape {
 
