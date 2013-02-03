@@ -55,7 +55,6 @@
 #include <docsh.hxx>
 #include <chpfld.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <unoevtlstnr.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 
@@ -319,15 +318,14 @@ lcl_TypeToPropertyMap_Index(const TOXTypes eType)
 class SwXDocumentIndex::Impl
     : public SwClient
 {
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
-
     SwXDocumentIndex &          m_rThis;
+    ::cppu::OMultiTypeInterfaceContainerHelper m_Listeners;
     SfxItemPropertySet const&   m_rPropSet;
     const TOXTypes              m_eTOXType;
-    SwEventListenerContainer    m_ListenerContainer;
-    osl::Mutex                  m_Mutex; // just for OInterfaceContainerHelper
-    ::cppu::OInterfaceContainerHelper m_RefreshListeners;
     bool                        m_bIsDescriptor;
     SwDoc *                     m_pDoc;
     ::std::auto_ptr<SwDocIndexDescriptorProperties_Impl> m_pProps;
@@ -340,11 +338,10 @@ public:
             SwTOXBaseSection const*const pBaseSection)
         : SwClient((pBaseSection) ? pBaseSection->GetFmt() : 0)
         , m_rThis(rThis)
+        , m_Listeners(m_Mutex)
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Index(eType)))
         , m_eTOXType(eType)
-        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
-        , m_RefreshListeners(m_Mutex)
         // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
         , m_bIsDescriptor((0 == pBaseSection) ? true : false)
         , m_pDoc(&rDoc)
@@ -394,9 +391,8 @@ void SwXDocumentIndex::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *
 
     if (!GetRegisteredIn())
     {
-        m_ListenerContainer.Disposing();
         lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
-        m_RefreshListeners.disposeAndClear(ev);
+        m_Listeners.disposeAndClear(ev);
     }
 }
 
@@ -1263,9 +1259,14 @@ void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException)
         pTOXBase->UpdatePageNum();
     }
 
-    lang::EventObject const event(static_cast< ::cppu::OWeakObject*>(this));
-    m_pImpl->m_RefreshListeners.notifyEach(
-            & util::XRefreshListener::refreshed, event);
+    ::cppu::OInterfaceContainerHelper *const pContainer(
+        m_pImpl->m_Listeners.getContainer(
+            util::XRefreshListener::static_type()));
+    if (pContainer)
+    {
+        lang::EventObject const event(static_cast< ::cppu::OWeakObject*>(this));
+        pContainer->notifyEach(& util::XRefreshListener::refreshed, event);
+    }
 }
 
 void SAL_CALL SwXDocumentIndex::addRefreshListener(
@@ -1273,7 +1274,8 @@ void SAL_CALL SwXDocumentIndex::addRefreshListener(
 throw (uno::RuntimeException)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_RefreshListeners.addInterface(xListener);
+    m_pImpl->m_Listeners.addInterface(
+            util::XRefreshListener::static_type(), xListener);
 }
 
 void SAL_CALL SwXDocumentIndex::removeRefreshListener(
@@ -1281,7 +1283,8 @@ void SAL_CALL SwXDocumentIndex::removeRefreshListener(
 throw (uno::RuntimeException)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_RefreshListeners.removeInterface(xListener);
+    m_pImpl->m_Listeners.removeInterface(
+            util::XRefreshListener::static_type(), xListener);
 }
 
 void SAL_CALL
@@ -1390,13 +1393,9 @@ SwXDocumentIndex::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->GetRegisteredIn())
-    {
-        throw uno::RuntimeException();
-    }
-    m_pImpl->m_ListenerContainer.AddListener(xListener);
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_Listeners.addInterface(
+            lang::XEventListener::static_type(), xListener);
 }
 
 void SAL_CALL
@@ -1404,13 +1403,9 @@ SwXDocumentIndex::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->GetRegisteredIn() ||
-        !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
-    {
-        throw uno::RuntimeException();
-    }
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_Listeners.removeInterface(
+            lang::XEventListener::static_type(), xListener);
 }
 
 OUString SAL_CALL SwXDocumentIndex::getName() throw (uno::RuntimeException)
@@ -1503,13 +1498,15 @@ class SwXDocumentIndexMark::Impl
     : public SwClient
 {
 private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    SwXDocumentIndexMark & m_rThis;
     bool m_bInReplaceMark;
 
 public:
 
     SfxItemPropertySet const&   m_rPropSet;
     const TOXTypes              m_eTOXType;
-    SwEventListenerContainer    m_ListenerContainer;
+    ::cppu::OInterfaceContainerHelper m_EventListeners;
     bool                        m_bIsDescriptor;
     SwDepend                    m_TypeDepend;
     const SwTOXMark *           m_pTOXMark;
@@ -1530,11 +1527,12 @@ public:
             const enum TOXTypes eType,
             SwTOXType *const pType, SwTOXMark const*const pMark)
         : SwClient(const_cast<SwTOXMark*>(pMark))
+        , m_rThis(rThis)
         , m_bInReplaceMark(false)
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
         , m_eTOXType(eType)
-        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
+        , m_EventListeners(m_Mutex)
 // #i112513#: unxsols4 (Sun C++ 5.9 SunOS_sparc) generates wrong code for this
 //        , m_bIsDescriptor(0 == pMark)
         , m_bIsDescriptor((0 == pMark) ? true : false)
@@ -1569,7 +1567,9 @@ public:
             InsertTOXMark(rTOXType, rMark, rPam, 0);
         } catch (...) {
             OSL_FAIL("ReplaceTOXMark() failed!");
-            m_ListenerContainer.Disposing();
+            lang::EventObject const ev(
+                    static_cast< ::cppu::OWeakObject&>(m_rThis));
+            m_EventListeners.disposeAndClear(ev);
             throw;
         }
     }
@@ -1593,7 +1593,8 @@ void SwXDocumentIndexMark::Impl::Invalidate()
     }
     if (!m_bInReplaceMark) // #i109983# only dispose on delete, not on replace!
     {
-        m_ListenerContainer.Disposing();
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
+        m_EventListeners.disposeAndClear(ev);
     }
     m_pDoc = 0;
     m_pTOXMark = 0;
@@ -2036,13 +2037,8 @@ SwXDocumentIndexMark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->GetRegisteredIn())
-    {
-        throw uno::RuntimeException();
-    }
-    m_pImpl->m_ListenerContainer.AddListener(xListener);
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
 void SAL_CALL
@@ -2050,13 +2046,8 @@ SwXDocumentIndexMark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->GetRegisteredIn() ||
-        !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
-    {
-        throw uno::RuntimeException();
-    }
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
