@@ -74,7 +74,7 @@ static xub_StrLen lcl_getMaxSafeStrLen(sal_uInt32 nSize)
     return static_cast< xub_StrLen >( nSize );
 }
 
-sal_Bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
+sal_Bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, sal_Bool bAlign )
 {
     sal_uInt32  i, nItemSize, nType, nItemPos;
     sal_Bool    bRetValue = sal_False;
@@ -105,10 +105,10 @@ sal_Bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlig
                             sal_Unicode* pWString = (sal_Unicode*)pString;
                             for ( i = 0; i < nItemSize; i++ )
                                 *this >> pWString[ i ];
-                            rString = rtl::OUString(pWString, lcl_getMaxSafeStrLen(nItemSize));
+                            rString = OUString(pWString, lcl_getMaxSafeStrLen(nItemSize));
                         }
                         else
-                            rString = String();
+                            rString = OUString();
                         bRetValue = sal_True;
                     }
                     else
@@ -117,9 +117,9 @@ sal_Bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlig
                         if ( pString[ nItemSize - 1 ] == 0 )
                         {
                             if ( nItemSize > 1 )
-                                rString = rtl::OUString(pString, rtl_str_getLength(pString), mnTextEnc);
+                                rString = OUString(pString, rtl_str_getLength(pString), mnTextEnc);
                             else
-                                rString = String();
+                                rString = OUString();
                             bRetValue = sal_True;
                         }
                     }
@@ -147,9 +147,9 @@ sal_Bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlig
                     if ( pString[ i - 1 ] == 0 )
                     {
                         if ( (sal_uInt16)nItemSize > 1 )
-                            rString = rtl::OUString(pString, lcl_getMaxSafeStrLen(nItemSize));
+                            rString = OUString(pString, lcl_getMaxSafeStrLen(nItemSize));
                         else
-                            rString = String();
+                            rString = OUString();
                         bRetValue = sal_True;
                     }
                     delete[] pString;
@@ -295,10 +295,10 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
                         sal_Unicode* pWString = (sal_Unicode*)pString;
                         for ( i = 0; i < nSize; i++ )
                             aStream >> pWString[ i ];
-                        aString = rtl::OUString(pWString, lcl_getMaxSafeStrLen(nSize));
+                        aString = OUString(pWString, lcl_getMaxSafeStrLen(nSize));
                     }
                     else
-                        aString = rtl::OUString(pString, lcl_getMaxSafeStrLen(nSize), mnTextEnc);
+                        aString = OUString(pString, lcl_getMaxSafeStrLen(nSize), mnTextEnc);
                     delete[] pString;
                 }
                 catch( const std::bad_alloc& )
