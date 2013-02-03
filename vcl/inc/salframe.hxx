@@ -22,6 +22,7 @@
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
+#include <vcl/event.hxx>
 
 #ifdef __cplusplus
 
@@ -247,6 +248,9 @@ public:
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
     // done setting up the clipregion
     virtual void                    EndSetClipRegion() = 0;
+
+    // start dragging the frame on the desktop
+    virtual void StartDragFrame     (long x, long y, sal_uInt16 button, sal_uLong nTime) = 0;
 
     // Callbacks (indepent part in vcl/source/window/winproc.cxx)
     // for default message handling return 0

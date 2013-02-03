@@ -328,6 +328,7 @@ public:
     SalX11Screen getXScreenNumber() const { return m_nXScreen; }
     int          GetDisplayScreen() const { return maGeometry.nDisplayScreenNumber; }
     void updateScreenNumber();
+    void StartDragFrame (long x, long y, sal_uInt16 button, sal_uLong nTime);
 
 #if GTK_CHECK_VERSION(3,0,0)
     // only for gtk3 ...

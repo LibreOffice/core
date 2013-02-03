@@ -251,6 +251,8 @@ public:
     virtual void                SetScreenNumber( unsigned int );
     virtual void                SetApplicationID( const rtl::OUString &rWMClass );
 
+    void StartDragFrame (long x, long y, sal_uInt16 button, sal_uLong nTime) ;
+
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
     virtual void                    ResetClipRegion();
@@ -265,6 +267,7 @@ public:
 
     /// @internal
     void setPendingSizeEvent();
+
 };
 
 #ifdef _SV_SALDISP_HXX

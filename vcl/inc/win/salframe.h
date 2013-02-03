@@ -133,6 +133,7 @@ public:
     virtual void                BeginSetClipRegion( sal_uIntPtr nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                EndSetClipRegion();
+    virtual void StartDragFrame (long x, long y, sal_uInt16 button, sal_uLong nTime) ;
 };
 
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );

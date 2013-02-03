@@ -47,6 +47,7 @@ class KDESalFrame : public X11SalFrame
         virtual void updateGraphics( bool bClear );
         virtual void UpdateSettings( AllSettings& rSettings );
         virtual void Show( sal_Bool bVisible, sal_Bool bNoActivate );
+        virtual void StartDragFrame (long x, long y, sal_uInt16 button, sal_uLong nTime) ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

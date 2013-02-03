@@ -6126,6 +6126,9 @@ sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall )
         return TRUE;
 }
 
+void WinSalFrameStartDragFrame (long /*x*/, long /*y*/, sal_uInt16 /*button*/, sal_uLong /*nTime*/) {
+
+}
 // -----------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

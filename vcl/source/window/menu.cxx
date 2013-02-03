@@ -5395,10 +5395,14 @@ void MenuBarWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
         ChangeHighlightItem( nEntry, sal_False );
     }
-    else
+    else if (pActivePopup)
     {
         KillActivePopup();
         ChangeHighlightItem( ITEMPOS_INVALID, sal_False );
+    }
+    else
+    {
+        StartDragWindow(rMEvt);
     }
 }
 

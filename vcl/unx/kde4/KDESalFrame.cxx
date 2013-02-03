@@ -387,4 +387,9 @@ SalGraphics* KDESalFrame::GetGraphics()
     return NULL;
 }
 
+void KDESalFrame::StartDragFrame ( long /*x*/, long /*y*/, sal_uInt16 /*button*/, sal_uLong /*nTime*/)
+{
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

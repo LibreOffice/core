@@ -9663,6 +9663,17 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     mnDPIY = nOldDPIY;
 }
 
+void Window::StartDragWindow( const MouseEvent& rMouseEvent )
+{
+    SalFrame* frame = ImplGetFrame();
+    if (frame)
+    {
+        long x = rMouseEvent.GetPosPixel().X();
+        long y = rMouseEvent.GetPosPixel().Y();
+        frame->StartDragFrame(x, y, rMouseEvent.GetButtons(), mpWindowImpl->mpFrameData->mnMouseDownTime);
+    }
+}
+
 void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /*rSize*/ )
 {
     // FIXME: scaling: currently this is for pixel copying only

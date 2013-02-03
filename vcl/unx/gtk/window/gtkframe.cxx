@@ -125,7 +125,7 @@ static sal_uInt16 GetKeyModCode( guint state )
 
 static sal_uInt16 GetMouseModCode( guint state )
 {
-    sal_uInt16 nCode = GetKeyModCode( state );
+    sal_uInt16 nCode = GetKeyModCode(state);
     if( (state & GDK_BUTTON1_MASK) )
         nCode |= MOUSE_LEFT;
     if( (state & GDK_BUTTON2_MASK) )
@@ -134,6 +134,18 @@ static sal_uInt16 GetMouseModCode( guint state )
         nCode |= MOUSE_RIGHT;
 
     return nCode;
+}
+
+static gint GetGdkMouseButton( sal_uInt16 code )
+{
+    gint gdkMouseCode = 0;
+    if (code & MOUSE_LEFT)
+        gdkMouseCode |= GDK_BUTTON1_MASK;
+    if (code & MOUSE_MIDDLE)
+        gdkMouseCode |= GDK_BUTTON2_MASK;
+    if (code & MOUSE_RIGHT)
+        gdkMouseCode |= GDK_BUTTON3_MASK;
+    return gdkMouseCode;
 }
 
 static sal_uInt16 GetKeyCode( guint keyval )
@@ -4269,6 +4281,14 @@ Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
 {
     Rectangle aRect = m_pSys->GetDisplayScreenPosSizePixel( nDisplayScreen );
     return Size( aRect.GetWidth(), aRect.GetHeight() );
+}
+
+void GtkSalFrame::StartDragFrame (long x, long y, sal_uInt16 button, sal_uLong nTime)
+{
+    if( ! isChild() && m_pWindow)
+    {
+        gtk_window_begin_move_drag( GTK_WINDOW(m_pWindow), GetGdkMouseButton(button), x + maGeometry.nX, y + maGeometry.nY, nTime);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

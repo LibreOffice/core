@@ -980,6 +980,8 @@ public:
     void                StartAutoScroll( sal_uInt16 nFlags );
     void                EndAutoScroll();
 
+    void                StartDragWindow( const MouseEvent& rMouseEvent );
+
     sal_Bool                HandleScrollCommand( const CommandEvent& rCmd,
                                              ScrollBar* pHScrl = NULL,
                                              ScrollBar* pVScrl = NULL );

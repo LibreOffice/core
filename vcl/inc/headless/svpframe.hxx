@@ -127,7 +127,7 @@ public:
     bool IsVisible() { return m_bVisible; }
 
     static SvpSalFrame*         GetFocusFrame() { return s_pFocusFrame; }
-
+    void StartDragFrame (long x, long y, sal_uInt16 button, sal_uLong nTime) ;
 };
 #endif // _SVP_SVPFRAME_HXX
 
