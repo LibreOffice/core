@@ -437,7 +437,7 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
         cData[ i ] = ( nTemp >> 8 ) | ( nTemp << 8 );
 #endif
     }
-    rAtom.aName = rtl::OUString(cData, i);
+    rAtom.aName = OUString(cData, i);
     OutputDevice* pDev = (OutputDevice*)Application::GetDefaultDevice();
     rAtom.bAvailable = pDev->IsFontAvailable( rAtom.aName );
     aHd.SeekToEndOfRecord( rIn );
@@ -502,7 +502,7 @@ PptSlidePersistEntry::~PptSlidePersistEntry()
     delete[] pPresentationObjects;
 };
 
-SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const String& rBaseURL ) :
+SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const OUString& rBaseURL ) :
     SvxMSDffManager         ( rParam.rDocStream, rBaseURL ),
     pFonts                  ( NULL ),
     nStreamLen              ( 0 ),
@@ -531,7 +531,7 @@ const PptSlideLayoutAtom* SdrEscherImport::GetSlideLayoutAtom() const
     return NULL;
 }
 
-sal_Bool SdrEscherImport::ReadString( rtl::OUString& rStr ) const
+sal_Bool SdrEscherImport::ReadString( OUString& rStr ) const
 {
     sal_Bool bRet = sal_False;
     DffRecordHeader aStrHd;
@@ -1255,7 +1255,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     return pRet;
 }
 
-SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const String& rBaseURL ) :
+SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const OUString& rBaseURL ) :
     SdrEscherImport     ( rParam, rBaseURL ),
     bOk                 ( rStCtrl.GetErrorCode() == SVSTREAM_OK ),
     pPersistPtr         ( NULL ),
@@ -1830,7 +1830,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                             }
                             if ( bGetItAsOle )
                             {
-                                ::rtl::OUString aNm;
+                                OUString aNm;
                                 // if ( nSvxMSDffOLEConvFlags )
                                 {
                                     uno::Reference < embed::XStorage > xDestStorage( pOe->pShell->GetStorage() );
@@ -1843,7 +1843,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                         svt::EmbeddedObjectRef aObj( xObj, pOe->nAspect );
 
                                         // TODO/LATER: need MediaType for Graphic
-                                        aObj.SetGraphic( rGraf, ::rtl::OUString() );
+                                        aObj.SetGraphic( rGraf, OUString() );
                                         pRet = new SdrOle2Obj( aObj, aNm, rBoundRect, sal_False );
                                     }
                                 }
@@ -1902,7 +1902,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                         svt::EmbeddedObjectRef aObj( xObj, pOe->nAspect );
 
                                         // TODO/LATER: need MediaType for Graphic
-                                        aObj.SetGraphic( aGraphic, ::rtl::OUString() );
+                                        aObj.SetGraphic( aGraphic, OUString() );
 
                                         pRet = new SdrOle2Obj( aObj, aNm, rBoundRect, sal_False );
                                     }
@@ -2131,15 +2131,15 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
 
                 // following block is necessary, because our old PowerPoint export did not set the
                 // correct charset
-                if ( pFont->aName.EqualsIgnoreCaseAscii( "Wingdings" ) ||
-                    pFont->aName.EqualsIgnoreCaseAscii( "Wingdings 2" ) ||
-                        pFont->aName.EqualsIgnoreCaseAscii( "Wingdings 3" ) ||
-                            pFont->aName.EqualsIgnoreCaseAscii( "Monotype Sorts" ) ||
-                                pFont->aName.EqualsIgnoreCaseAscii( "Monotype Sorts 2" ) ||
-                                    pFont->aName.EqualsIgnoreCaseAscii( "Webdings" ) ||
-                                        pFont->aName.EqualsIgnoreCaseAscii( "StarBats" ) ||
-                                            pFont->aName.EqualsIgnoreCaseAscii( "StarMath" ) ||
-                                                pFont->aName.EqualsIgnoreCaseAscii( "ZapfDingbats" ) )
+                if ( pFont->aName.equalsIgnoreAsciiCase( "Wingdings" ) ||
+                     pFont->aName.equalsIgnoreAsciiCase( "Wingdings 2" ) ||
+                     pFont->aName.equalsIgnoreAsciiCase( "Wingdings 3" ) ||
+                     pFont->aName.equalsIgnoreAsciiCase( "Monotype Sorts" ) ||
+                     pFont->aName.equalsIgnoreAsciiCase( "Monotype Sorts 2" ) ||
+                     pFont->aName.equalsIgnoreAsciiCase( "Webdings" ) ||
+                     pFont->aName.equalsIgnoreAsciiCase( "StarBats" ) ||
+                     pFont->aName.equalsIgnoreAsciiCase( "StarMath" ) ||
+                     pFont->aName.equalsIgnoreAsciiCase( "ZapfDingbats" ) )
                 {
                     pFont->eCharSet = RTL_TEXTENCODING_SYMBOL;
                 };
@@ -2220,7 +2220,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                     else
                     {
                         sal_Int32 nCharacters = pPortion->Count();
-                        const sal_Unicode* pSource = pPortion->maString.GetBuffer();
+                        const sal_Unicode* pSource = pPortion->maString.getStr();
                         sal_Unicode* pDest = pParaText + nCurrentIndex;
 
                         sal_uInt32 nFont;
@@ -2247,7 +2247,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
 
                 ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
                 rOutliner.Insert( String(), nParaIndex, pPara->pParaSet->mnDepth );
-                rOutliner.QuickInsertText( rtl::OUString(pParaText, nCurrentIndex), aSelection );
+                rOutliner.QuickInsertText( OUString(pParaText, nCurrentIndex), aSelection );
                 rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
                 if ( pS )
                     rOutliner.SetStyleSheet( nParaIndex, pS );
@@ -2264,8 +2264,8 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                     }
                     else
                     {
-                        const sal_Unicode *pF, *pPtr = pPortion->maString.GetBuffer();
-                        const sal_Unicode *pMax = pPtr + pPortion->maString.Len();
+                        const sal_Unicode *pF, *pPtr = pPortion->maString.getStr();
+                        const sal_Unicode *pMax = pPtr + pPortion->maString.getLength();
                         sal_Int32 nLen;
                         for ( pF = pPtr; pPtr < pMax; pPtr++ )
                         {
@@ -2632,9 +2632,9 @@ SdrPage* SdrPowerPointImport::MakeBlancPage( sal_Bool bMaster ) const
 
 void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, DffRecordHeader& rComment10Hd )
 {
-    rtl::OUString   sAuthor;
-    rtl::OUString   sText;
-    rtl::OUString   sInitials;
+    OUString        sAuthor;
+    OUString        sText;
+    OUString        sInitials;
 
     sal_Int32       nIndex = 0;
     util::DateTime  aDateTime;
@@ -2649,7 +2649,7 @@ void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, 
         {
             case PPT_PST_CString :
             {
-                rtl::OUString aString = SvxMSDffManager::MSDFFReadZString( rStCtrl,
+                OUString aString = SvxMSDffManager::MSDFFReadZString( rStCtrl,
                     aCommentHd.nRecLen, sal_True );
                 switch ( aCommentHd.nRecInstance )
                 {
@@ -4749,14 +4749,14 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
 }
 
 void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& rMan, const DffRecordHeader& rTextHeader,
-                                            const String& aString, PPTTextRulerInterpreter& rRuler,
+                                            const OUString& aString, PPTTextRulerInterpreter& rRuler,
                                             sal_uInt32& nCharCount, sal_Bool& bTextPropAtom )
 {
     sal_uInt32  nMask = 0; //TODO: nMask initialized here to suppress warning for now, see corresponding TODO below
     sal_uInt32  nCharAnzRead = 0;
     sal_uInt16  nDummy16;
 
-    sal_uInt16 nStringLen = aString.Len();
+    sal_uInt16 nStringLen = aString.getLength();
 
     DffRecordHeader aTextHd2;
     rTextHeader.SeekToContent( rIn );
@@ -4876,7 +4876,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
         if ( nCharCount )
         {
             sal_uInt32   nCount;
-            const sal_Unicode* pDat = aString.GetBuffer() + nCharAnzRead;
+            const sal_Unicode* pDat = aString.getStr() + nCharAnzRead;
             for ( nCount = 0; nCount < nCharCount; nCount++ )
             {
                 if ( pDat[ nCount ] == 0xd )
@@ -4891,7 +4891,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
     }
 }
 
-void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aCharPropSet, const String& aString,
+void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aCharPropSet, const OUString& aString,
                                             sal_uInt32& nCharCount, sal_uInt32 nCharAnzRead,
                                             sal_Bool& bTextPropAtom, sal_uInt32 nExtParaPos,
                                             const std::vector< StyleTextProp9 >& aStyleTextProp9,
@@ -4901,7 +4901,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     sal_uInt32  nMask = 0; //TODO: nMask initialized here to suppress warning for now, see corresponding TODO below
     sal_uInt16  nDummy16;
     sal_Int32   nCharsToRead;
-    sal_uInt16 nStringLen = aString.Len();
+    sal_uInt16  nStringLen = aString.getLength();
 
     rIn >> nDummy16;
     nCharCount = nDummy16;
@@ -5003,7 +5003,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
         rIn.Seek( nMerk );
     }
 
-    String aString;
+    OUString aString;
     DffRecordHeader aTextHd;
     rIn >> aTextHd;
     sal_uInt32 nMaxLen = aTextHd.nRecLen;
@@ -5044,7 +5044,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
             }
         }
         if ( i )
-            aString = rtl::OUString(pBuf, i);
+            aString = OUString(pBuf, i);
         delete[] pBuf;
     }
     else if( aTextHd.nRecType == PPT_PST_TextBytesAtom )
@@ -5069,7 +5069,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
         }
         xub_StrLen nLen = sal::static_int_cast< xub_StrLen >( pPtr - pBuf );
         if ( nLen )
-            aString = String( pBuf, nLen, RTL_TEXTENCODING_MS_1252 );
+            aString = OUString( pBuf, nLen, RTL_TEXTENCODING_MS_1252 );
         delete[] pBuf;
     }
     else
@@ -5097,7 +5097,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
         }
     }
 
-    if ( aString.Len() )
+    if ( !aString.isEmpty() )
     {
         sal_uInt32  nCharCount;
         sal_Bool    bTextPropAtom = sal_False;
@@ -5109,7 +5109,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
         sal_uInt32 nCurrentPara = 0;
         size_t i = 1;                   // points to the next element to process
         sal_uInt32 nCurrentSpecMarker = aSpecMarkerList.empty() ? 0 : aSpecMarkerList[0];
-        sal_uInt32 nStringLen = aString.Len();
+        sal_uInt32 nStringLen = aString.getLength();
 
         while ( nCharAnzRead < nStringLen )
         {
@@ -5119,7 +5119,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
             PPTCharPropSet aCharPropSet( nCurrentPara );
             if ( bTextPropAtom )
             {
-                if( nCharAnzRead == ( nStringLen - 1 ) && aString.GetChar( nCharAnzRead ) == '\r' )
+                if( nCharAnzRead == ( nStringLen - 1 ) && aString[nCharAnzRead] == '\r' )
                 {
                     /* n#782833: Seems like the new line character at end of the para
                      * has two char properties and we would need to use the next one.
@@ -5161,9 +5161,9 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
                     {
                         nLen = ( nCurrentSpecMarker & 0xffff ) - nCharAnzRead;
                         if ( nLen )
-                            aCharPropSet.maString = String( aString, (sal_uInt16)nCharAnzRead, (sal_uInt16)nLen );
+                            aCharPropSet.maString = aString.copy( nCharAnzRead, nLen );
                         else if ( bEmptyParaPossible )
-                            aCharPropSet.maString = String();
+                            aCharPropSet.maString = OUString();
                         if ( nLen || bEmptyParaPossible )
                             aCharPropList.push_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
                         nCurrentPara++;
@@ -5177,13 +5177,13 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
                         if ( ( nCurrentSpecMarker & 0xffff ) != nCharAnzRead )
                         {
                             nLen = ( nCurrentSpecMarker & 0xffff ) - nCharAnzRead;
-                            aCharPropSet.maString = String( aString, (sal_uInt16)nCharAnzRead, (sal_uInt16)nLen );
+                            aCharPropSet.maString = aString.copy(nCharAnzRead, nLen);
                             aCharPropList.push_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
                             nCharCount -= nLen;
                             nCharAnzRead += nLen;
                         }
                         PPTCharPropSet* pCPropSet = new PPTCharPropSet( aCharPropSet, nCurrentPara );
-                        pCPropSet->maString = aString.GetChar( (sal_uInt16)nCharAnzRead );
+                        pCPropSet->maString = aString.copy(nCharAnzRead, 1);
                         if ( aCharPropSet.pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_Symbol ) )
                             pCPropSet->SetFont( aCharPropSet.pCharSet->mnSymbolFont );
                         aCharPropList.push_back( pCPropSet );
@@ -5195,7 +5195,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
                 }
                 else
                 {
-                    aCharPropSet.maString = String( aString, (sal_uInt16)nCharAnzRead, (sal_uInt16)nCharCount );
+                    aCharPropSet.maString = aString.copy(nCharAnzRead, nLen);
                     aCharPropList.push_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
                     nCharAnzRead += nCharCount;
                     bEmptyParaPossible = sal_False;
@@ -5206,7 +5206,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
         if ( !aCharPropList.empty() && ( aCharPropList.back()->mnParagraph != nCurrentPara ) )
         {
             PPTCharPropSet* pCharPropSet = new PPTCharPropSet( *aCharPropList.back(), nCurrentPara );
-            pCharPropSet->maString = String();
+            pCharPropSet->maString = OUString();
             pCharPropSet->mnOriginalTextPos = nStringLen - 1;
             aCharPropList.push_back( pCharPropSet );
         }
@@ -5277,8 +5277,8 @@ sal_Bool PPTPortionObj::HasTabulator()
 {
     sal_Bool bRetValue =    sal_False;
     sal_Int32           nCount;
-    const sal_Unicode*  pPtr = maString.GetBuffer();
-    for ( nCount = 0; nCount < maString.Len(); nCount++ )
+    const sal_Unicode*  pPtr = maString.getStr();
+    for ( nCount = 0; nCount < maString.getLength(); nCount++ )
     {
         if ( pPtr[ nCount ] == 0x9 )
         {
@@ -6492,18 +6492,18 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                 pSet->mnLanguage[ 1 ] = pSpecInfo->nLanguage[ 1 ];
                                                 pSet->mnLanguage[ 2 ] = pSpecInfo->nLanguage[ 2 ];
                                                 // test if the current portion needs to be splitted
-                                                if ( pSet->maString.Len() > 1 )
+                                                if ( pSet->maString.getLength() > 1 )
                                                 {
-                                                    sal_Int32 nIndexOfNextPortion = pSet->maString.Len() + pSet->mnOriginalTextPos;
+                                                    sal_Int32 nIndexOfNextPortion = pSet->maString.getLength() + pSet->mnOriginalTextPos;
                                                     sal_Int32 nNewLen = nIndexOfNextPortion - nCharIdx;
-                                                    sal_Int32 nOldLen = pSet->maString.Len() - nNewLen;
+                                                    sal_Int32 nOldLen = pSet->maString.getLength() - nNewLen;
 
                                                     if ( ( nNewLen > 0 ) && ( nOldLen > 0 ) )
                                                     {
-                                                        String aString( pSet->maString );
+                                                        OUString aString( pSet->maString );
                                                         PPTCharPropSet* pNew = new PPTCharPropSet( *pSet );
-                                                        pSet->maString = String( aString, 0, (sal_uInt16)nOldLen );
-                                                        pNew->maString = String( aString, (sal_uInt16)nOldLen, (sal_uInt16)nNewLen );
+                                                        pSet->maString = aString.copy( 0, nOldLen);
+                                                        pNew->maString = aString.copy( nOldLen, nNewLen);
                                                         pNew->mnOriginalTextPos += nOldLen;
                                                         aStyleTextPropReader.aCharPropList.insert( aStyleTextPropReader.aCharPropList.begin() + nI + 1, pNew );
                                                     }
@@ -6572,7 +6572,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             if ( rPersistEntry.pHeaderFooterEntry->nAtom & 0x20000 )    // auto date time
                                                 pEntry->SetDateTime( rPersistEntry.pHeaderFooterEntry->nAtom & 0xff );
                                             else
-                                                pEntry->pString = new String( rPersistEntry.pHeaderFooterEntry->pPlaceholder[ nVal ] );
+                                                pEntry->pString = new OUString( rPersistEntry.pHeaderFooterEntry->pPlaceholder[ nVal ] );
                                         }
                                     }
                                     break;
@@ -6625,7 +6625,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             else if (!n)
                                                             {
                                                                 // End of format string
-                                                                pEntry->pString = new String( aStr );
+                                                                pEntry->pString = new OUString( aStr );
                                                                 break;
                                                             }
                                                             else if (!inquote)
@@ -6681,11 +6681,11 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             pEntry = new PPTFieldEntry;
                                                             pEntry->nPos = (sal_uInt16)nStartPos;
                                                             pEntry->nTextRangeEnd = (sal_uInt16)nEndPos;
-                                                            String aTarget( pHyperlink->aTarget );
-                                                            if ( pHyperlink->aConvSubString.Len() )
+                                                            OUString aTarget( pHyperlink->aTarget );
+                                                            if ( !pHyperlink->aConvSubString.isEmpty() )
                                                             {
-                                                                aTarget.Append( (sal_Unicode)'#' );
-                                                                aTarget.Append( pHyperlink->aConvSubString );
+                                                                aTarget += "#";
+                                                                aTarget += pHyperlink->aConvSubString;
                                                             }
                                                             pEntry->pField1 = new SvxFieldItem( SvxURLField( aTarget, String(), SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
                                                         }
@@ -6727,8 +6727,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 while( ( FE < FieldList.end() ) && ( n >= 0 ) && ( i >= 0 ) )
                                 {
                                     PPTCharPropSet* pSet  = aCharPropList[n];
-                                    String aString( pSet->maString );
-                                    sal_uInt32 nCount = aString.Len();
+                                    OUString aString( pSet->maString );
+                                    sal_uInt32 nCount = aString.getLength();
                                     sal_uInt32 nPos = pSet->mnOriginalTextPos + nCount;
                                     while ( ( FE < FieldList.end() ) && nCount-- )
                                     {
@@ -6740,14 +6740,14 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
                                         if ( (*FE)->nPos == nPos )
                                         {
-                                            if ( aString.GetChar( (sal_uInt16)nCount ) == 0x2a )
+                                            if ( aString[nCount] == 0x2a )
                                             {
-                                                sal_uInt32 nBehind = aString.Len() - ( nCount + 1 );
-                                                pSet->maString = String();
+                                                sal_uInt32 nBehind = aString.getLength() - ( nCount + 1 );
+                                                pSet->maString = OUString();
                                                 if ( nBehind )
                                                 {
                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                    pNewCPS->maString = String( aString, (sal_uInt16)nCount + 1, (sal_uInt16)nBehind );
+                                                    pNewCPS->maString = aString.copy( nCount + 1, nBehind );
                                                     aCharPropList.insert( aCharPropList.begin() + n + 1, pNewCPS );
                                                 }
                                                 if ( (*FE)->pField2 )
@@ -6757,13 +6757,13 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     aCharPropList.insert( aCharPropList.begin() + n + 1, pNewCPS );
 
                                                     pNewCPS = new PPTCharPropSet( *pSet );
-                                                    pNewCPS->maString = String( String( RTL_CONSTASCII_USTRINGPARAM( " " ) ) );
+                                                    pNewCPS->maString = " ";
                                                     aCharPropList.insert( aCharPropList.begin() + n + 1, pNewCPS );
                                                 }
                                                 if ( nCount )
                                                 {
                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                    pNewCPS->maString = String( aString, (sal_uInt16)0, (sal_uInt16)nCount );
+                                                    pNewCPS->maString = aString.copy( 0, nCount );
                                                     aCharPropList.insert( aCharPropList.begin() + n++, pNewCPS );
                                                 }
                                                 if ( (*FE)->pField1 )
@@ -6784,7 +6784,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                         if ( nCount )
                                                         {
                                                             pBefCPS = new PPTCharPropSet( *pSet );
-                                                            pSet->maString = String( pSet->maString, (sal_uInt16)nCount, (sal_uInt16)( pSet->maString.Len() - nCount ) );
+                                                            pSet->maString = pSet->maString.copy(nCount, pSet->maString.getLength() - nCount);
                                                         }
                                                         sal_uInt32  nIdx = n;
                                                         sal_Int32   nHyperLenLeft = nHyperLen;
@@ -6795,7 +6795,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             // the solution here is to clone the hyperlink...
 
                                                             PPTCharPropSet* pCurrent = aCharPropList[ nIdx ];
-                                                            sal_Int32       nNextStringLen = pCurrent->maString.Len();
+                                                            sal_Int32       nNextStringLen = pCurrent->maString.getLength();
 
                                                             DBG_ASSERT( (*FE)->pField1, "missing field!" );
                                                             if (!(*FE)->pField1)
@@ -6832,13 +6832,13 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                 else
                                                                 {
                                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pCurrent );
-                                                                    pNewCPS->maString = String( pCurrent->maString, (sal_uInt16)nHyperLenLeft, (sal_uInt16)( nNextStringLen - nHyperLenLeft ) );
+                                                                    pNewCPS->maString = pCurrent->maString.copy( nHyperLenLeft,( nNextStringLen - nHyperLenLeft ) );
                                                                     aCharPropList.insert( aCharPropList.begin() + nIdx + 1, pNewCPS );
-                                                                    String aRepresentation( pCurrent->maString, 0, (sal_uInt16)nHyperLenLeft );
+                                                                    OUString aRepresentation = pCurrent->maString.copy( 0, nHyperLenLeft );
                                                                     pCurrent->mpFieldItem = new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
                                                                     nHyperLenLeft = 0;
                                                                 }
-                                                                pCurrent->maString = String();
+                                                                pCurrent->maString = OUString();
                                                                 pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
                                                             }
                                                             nIdx++;
@@ -6847,7 +6847,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
                                                         if ( pBefCPS )
                                                         {
-                                                            pBefCPS->maString = String( aString, (sal_uInt16)0, (sal_uInt16)nCount );
+                                                            pBefCPS->maString = aString.copy( 0, nCount );
                                                             aCharPropList.insert( aCharPropList.begin() + n, pBefCPS );
                                                             n++;
                                                         }
