@@ -17,9 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <unosection.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/SectionFileLink.hpp>
+
+#include <cppuhelper/interfacecontainer.h>
 
 #include <cmdid.h>
 #include <hintids.hxx>
@@ -32,9 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <fmtclds.hxx>
 #include <unotextrange.hxx>
-#include <unosection.hxx>
 #include <TextCursorHelper.hxx>
-#include <unoevtlstnr.hxx>
 #include <unoport.hxx>
 #include <redline.hxx>
 #include <unomap.hxx>
@@ -103,12 +104,13 @@ struct SwTextSectionProperties_Impl
 class SwXTextSection::Impl
     : public SwClient
 {
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
-
     SwXTextSection &            m_rThis;
     const SfxItemPropertySet &  m_rPropSet;
-    SwEventListenerContainer    m_ListenerContainer;
+    ::cppu::OInterfaceContainerHelper m_EventListeners;
     const bool                  m_bIndexHeader;
     bool                        m_bIsDescriptor;
     ::rtl::OUString             m_sName;
@@ -121,7 +123,7 @@ public:
         : SwClient(pFmt)
         , m_rThis(rThis)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_SECTION))
-        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
+        , m_EventListeners(m_Mutex)
         , m_bIndexHeader(bIndexHeader)
         // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
         , m_bIsDescriptor((0 == pFmt) ? true : false)
@@ -166,7 +168,8 @@ void SwXTextSection::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *p
     ClientModify(this, pOld, pNew);
     if (!GetRegisteredIn())
     {
-        m_ListenerContainer.Disposing();
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
+        m_EventListeners.disposeAndClear(ev);
     }
 }
 
@@ -470,26 +473,16 @@ void SAL_CALL SwXTextSection::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->GetSectionFmt())
-    {
-        throw uno::RuntimeException();
-    }
-    m_pImpl->m_ListenerContainer.AddListener(xListener);
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
 void SAL_CALL SwXTextSection::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->GetSectionFmt() ||
-        !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
-    {
-        throw uno::RuntimeException();
-    }
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
