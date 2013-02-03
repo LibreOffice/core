@@ -20,13 +20,13 @@
 
 #include <unobookmark.hxx>
 #include <osl/mutex.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <vcl/svapp.hxx>
 
 #include <TextCursorHelper.hxx>
 #include <unotextrange.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
-#include <unoevtlstnr.hxx>
 #include <IMark.hxx>
 #include <crossrefbookmark.hxx>
 #include <doc.hxx>
@@ -62,9 +62,12 @@ namespace
 class SwXBookmark::Impl
     : public SwClient
 {
+private:
+    SwXBookmark & m_rThis;
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
-    SwEventListenerContainer    m_ListenerContainer;
+    ::cppu::OInterfaceContainerHelper m_EventListeners;
     SwDoc *                     m_pDoc;
     ::sw::mark::IMark *         m_pRegisteredBookmark;
     ::rtl::OUString             m_sMarkName;
@@ -73,11 +76,12 @@ public:
     Impl(   SwXBookmark & rThis,
             SwDoc *const pDoc, ::sw::mark::IMark *const /*pBookmark*/)
         : SwClient()
-        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
+        , m_rThis(rThis)
+        , m_EventListeners(m_Mutex)
         , m_pDoc(pDoc)
         , m_pRegisteredBookmark(0)
     {
-        // DO NOT regiserInMark here! (because SetXBookmark would delete rThis)
+        // DO NOT registerInMark here! (because SetXBookmark would delete rThis)
     }
 
     void registerInMark(SwXBookmark & rThis, ::sw::mark::IMark *const pBkmk);
@@ -94,7 +98,8 @@ void SwXBookmark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
     {
         m_pRegisteredBookmark = NULL;
         m_pDoc = NULL;
-        m_ListenerContainer.Disposing();
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
+        m_EventListeners.disposeAndClear(ev);
     }
 }
 
@@ -309,26 +314,16 @@ void SAL_CALL SwXBookmark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->m_pRegisteredBookmark)
-    {
-        throw uno::RuntimeException();
-    }
-    m_pImpl->m_ListenerContainer.AddListener(xListener);
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
 void SAL_CALL SwXBookmark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->m_pRegisteredBookmark ||
-        !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
-    {
-        throw uno::RuntimeException();
-    }
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 OUString SAL_CALL SwXBookmark::getName()
