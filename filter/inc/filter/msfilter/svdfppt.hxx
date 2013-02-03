@@ -63,7 +63,7 @@ struct MSFILTER_DLLPUBLIC PptCurrentUserAtom
     sal_uInt16  nDocFileVersion;
     sal_uInt8   nMajorVersion;
     sal_uInt8   nMinorVersion;
-    String      aCurrentUser;
+    OUString    aCurrentUser;
 
 public:
 
@@ -92,13 +92,13 @@ struct SdHyperlinkEntry
     sal_Int32   nPrivate2;
     sal_Int32   nPrivate3;
     sal_Int32   nInfo;
-    String      aTarget;
-    String      aSubAdress;
+    OUString    aTarget;
+    OUString    aSubAdress;
 
     sal_Int32   nStartPos;
     sal_Int32   nEndPos;
 
-    String      aConvSubString;
+    OUString    aConvSubString;
     ESelection  aESelection;
     sal_Bool    bSelection;
 };
@@ -260,7 +260,7 @@ public:
 
 struct PptFontEntityAtom
 {
-    String              aName;
+    OUString            aName;
     double              fScaling;
     sal_uInt8           lfClipPrecision;
     sal_uInt8           lfQuality;
@@ -416,7 +416,7 @@ protected:
     sal_Bool            bTimesNewRomanChecked   : 1;
     sal_Bool            bTimesNewRomanAvailable : 1;
 
-    sal_Bool            ReadString( rtl::OUString& rStr ) const;
+    sal_Bool            ReadString( OUString& rStr ) const;
     // nur fuer PowerPoint-Filter:
     virtual const PptSlideLayoutAtom* GetSlideLayoutAtom() const;
 
@@ -425,7 +425,7 @@ public:
 
     PowerPointImportParam& rImportParam;
 
-                        SdrEscherImport( PowerPointImportParam&, const String& rBaseURL );
+                        SdrEscherImport( PowerPointImportParam&, const OUString& rBaseURL );
     virtual             ~SdrEscherImport();
     virtual bool        GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const;
     virtual sal_Bool    SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const;
@@ -453,7 +453,7 @@ struct MSFILTER_DLLPUBLIC PPTFieldEntry
     sal_uInt16          nTextRangeEnd;
     SvxFieldItem*       pField1;
     SvxFieldItem*       pField2;
-    String*             pString;
+    OUString*           pString;
 
     PPTFieldEntry() : nPos( 0 ), nTextRangeEnd( 0 ), pField1( NULL ), pField2( NULL ), pString( NULL ) {};
     ~PPTFieldEntry();
@@ -471,7 +471,7 @@ struct MSFILTER_DLLPUBLIC PPTFieldEntry
 struct MSFILTER_DLLPUBLIC HeaderFooterEntry
 {
     const PptSlidePersistEntry* pMasterPersist;
-    String              pPlaceholder[ 4 ];
+    OUString            pPlaceholder[ 4 ];
     sal_uInt32          nAtom;
 
     sal_uInt32          GetMaskForInstance( sal_uInt32 nInstance );
@@ -575,7 +575,7 @@ protected:
     void                    SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOptions );
 
 public:
-                            SdrPowerPointImport( PowerPointImportParam&, const String& rBaseURL );
+                            SdrPowerPointImport( PowerPointImportParam&, const OUString& rBaseURL );
     virtual                 ~SdrPowerPointImport();
     sal_uInt16              GetPageCount( PptPageKind eKind = PPT_SLIDEPAGE ) const;
     void                    SetPageNum( sal_uInt16 nPageNum, PptPageKind = PPT_SLIDEPAGE );
@@ -916,7 +916,7 @@ struct PPTCharPropSet
 
     sal_uInt32          mnOriginalTextPos;
     sal_uInt32          mnParagraph;
-    String              maString;
+    OUString            maString;
     SvxFieldItem*       mpFieldItem;
     sal_uInt16          mnLanguage[ 3 ];
 
@@ -1049,7 +1049,7 @@ struct PPTStyleTextPropReader
                 SvStream& rIn,
                 SdrPowerPointImport& rMan,
                 const DffRecordHeader& rTextHeader,
-                const String& aString,
+                const OUString& aString,
                 PPTTextRulerInterpreter& rRuler,
                 sal_uInt32& nCharCount,
                 sal_Bool& bTextPropAtom
@@ -1057,7 +1057,7 @@ struct PPTStyleTextPropReader
     void    ReadCharProps(
                 SvStream& rIn,
                 PPTCharPropSet& aCharPropSet,
-                const String& aString,
+                const OUString& aString,
                 sal_uInt32& nCharCount,
                 sal_uInt32 nCharAnzRead,
                 sal_Bool& bTextPropAtom,
@@ -1107,7 +1107,7 @@ public:
                         sal_uInt32 nInstanceInSheet,
                         const PPTTextObj* pTextObj
                     );
-    sal_uInt32      Count() const { return ( mpFieldItem ) ? 1 : maString.Len(); };
+    sal_uInt32      Count() const { return ( mpFieldItem ) ? 1 : maString.getLength(); };
     sal_Bool        HasTabulator();
 };
 

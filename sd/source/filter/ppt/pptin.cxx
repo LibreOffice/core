@@ -113,9 +113,9 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
             PropItem aPropItem;
             if ( pSection->GetProperty( PID_COMMENTS, aPropItem ) )
             {
-                String aComment;
+                OUString aComment;
                 aPropItem.Read( aComment );
-                if ( aComment.Search( String( "Applixware"  ), 0 ) != STRING_NOTFOUND )
+                if ( aComment.indexOf( "Applixware", 0 ) != STRING_NOTFOUND )
                 {
                     nImportFlags |= PPT_IMPORTFLAGS_NO_TEXT_ASSERT;
                 }
@@ -286,7 +286,7 @@ sal_Bool ImplSdPPTImport::Import()
                         sal_uInt32  nSlideTitleIndex = 0, nSlideTitleCount = 0;
                         sal_uInt32  i, nTemp;
 
-                        String aUString;
+                        OUString aUString;
 
                         aPropItem >> nType
                                   >> nVecCount;
@@ -303,7 +303,7 @@ sal_Bool ImplSdPPTImport::Import()
                                 if ( ( nType != VT_I4 ) && ( nType != VT_UI4 ) )
                                     break;
                                 aPropItem >> nTemp;
-                                if ( aUString.EqualsAscii("Slide Titles") || aUString.EqualsAscii("Folientitel") )
+                                if ( aUString == "Slide Titles" || aUString == "Folientitel" )
                                 {
                                     nSlideTitleCount = nTemp;
                                     nSlideTitleIndex = nEntryCount;
@@ -329,16 +329,16 @@ sal_Bool ImplSdPPTImport::Import()
                                     if ( !aPropItem.Read( aUString, nType, sal_False ) )
                                         break;
 
-                                    String aString( aUString );
-                                    if ( aString.EqualsAscii( "No Slide Title" ))
-                                        aString = String();
+                                    OUString aString( aUString );
+                                    if ( aString == "No Slide Title" )
+                                        aString = OUString();
                                     else
                                     {
                                         std::vector<String>::const_iterator pIter =
                                                 std::find(maSlideNameList.begin(),maSlideNameList.end(),aString);
 
                                         if (pIter != maSlideNameList.end())
-                                            aString = String();
+                                            aString = OUString();
                                     }
                                     maSlideNameList.push_back( aString );
                                 }
@@ -409,17 +409,17 @@ sal_Bool ImplSdPPTImport::Import()
                                             break;
                                         pHyperlink->nStartPos = pHyperlink->nEndPos = -1;
 
-                                        if ( pHyperlink->aSubAdress.Len() ) // get the converted subadress
+                                        if ( !pHyperlink->aSubAdress.isEmpty() ) // get the converted subadress
                                         {
                                             sal_uInt32 nPageNumber = 0;
-                                            String aString( pHyperlink->aSubAdress );
+                                            OUString aString( pHyperlink->aSubAdress );
                                             rtl::OString aStringAry[ 3 ];
                                             sal_uInt16 nTokenCount = comphelper::string::getTokenCount(aString, ',');
                                             if ( nTokenCount > 3 )
                                                 nTokenCount = 3;
                                             sal_uInt16 nToken;
                                             for( nToken = 0; nToken < nTokenCount; nToken++ )
-                                                aStringAry[nToken] = rtl::OUStringToOString(aString.GetToken( nToken, (sal_Unicode)',' ), RTL_TEXTENCODING_UTF8);
+                                                aStringAry[nToken] = rtl::OUStringToOString(aString.getToken( nToken, (sal_Unicode)',' ), RTL_TEXTENCODING_UTF8);
 
                                             sal_Bool bSucceeded = sal_False;
 
@@ -449,7 +449,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             {   // second pass, searching for a SlideName
                                                 for ( nToken = 0; nToken < nTokenCount; nToken++ )
                                                 {
-                                                    String aToken( aString.GetToken( nToken, (sal_Unicode)',' ) );
+                                                    String aToken( aString.getToken( nToken, (sal_Unicode)',' ) );
                                                     std::vector<String>::const_iterator pIter =
                                                             std::find(maSlideNameList.begin(),maSlideNameList.end(),aToken);
 
@@ -480,11 +480,11 @@ sal_Bool ImplSdPPTImport::Import()
                                             {
                                                 if ( nPageNumber < maSlideNameList.size() )
                                                     pHyperlink->aConvSubString = maSlideNameList[ nPageNumber ];
-                                                if ( !pHyperlink->aConvSubString.Len() )
+                                                if ( pHyperlink->aConvSubString.isEmpty() )
                                                 {
-                                                    pHyperlink->aConvSubString = String( SdResId( STR_PAGE ) );
-                                                    pHyperlink->aConvSubString.Append( sal_Unicode( ' ' ) );
-                                                    pHyperlink->aConvSubString.Append( mpDoc->CreatePageNumValue( (sal_uInt16)nPageNumber + 1 ) );
+                                                    pHyperlink->aConvSubString = OUString( SdResId( STR_PAGE ) );
+                                                    pHyperlink->aConvSubString += " ";
+                                                    pHyperlink->aConvSubString += ( mpDoc->CreatePageNumValue( (sal_uInt16)nPageNumber + 1 ) );
                                                 }
                                             }
                                         }
@@ -646,9 +646,9 @@ sal_Bool ImplSdPPTImport::Import()
 
                         for ( nLevel = 0; nLevel < 9; nLevel++ )
                         {
-                            String aName( pPage->GetLayoutName() );
-                            aName.Append( (sal_Unicode)( ' ' ) );
-                            aName.Append( OUString::number( nLevel + 1 ) );
+                            OUString aName( pPage->GetLayoutName() );
+                            aName += " ";
+                            aName += OUString::number( nLevel + 1 );
                             SfxStyleSheet* pOutlineSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE );
                             DBG_ASSERT( pOutlineSheet, "Vorlage fuer Gliederungsobjekt nicht gefunden" );
                             if ( pOutlineSheet )
@@ -2087,7 +2087,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                     case 9:
                     case 8:                                         // hyperlink : URL
                     {
-                        if ( pPtr->aTarget.Len() )
+                        if ( !pPtr->aTarget.isEmpty() )
                         {
                             ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
                             if ( pDocShell )
@@ -2111,7 +2111,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
 
                     case 7:                                         // hyperlink auf eine Seite
                     {
-                        if ( pPtr->aConvSubString.Len() )
+                        if ( !pPtr->aConvSubString.isEmpty() )
                         {
                             pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_BOOKMARK;
                             pInfo->SetBookmark( pPtr->aConvSubString );
@@ -2203,9 +2203,9 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         {
             for ( sal_uInt16 nLevel = 9; nLevel; nLevel-- )
             {
-                String aName( pPage->GetLayoutName() );
-                aName.Append( (sal_Unicode)( ' ' ) );
-                aName.Append( OUString::number( nLevel ) );
+                OUString aName( pPage->GetLayoutName() );
+                aName += " ";
+                aName += OUString::number( nLevel );
                 pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE );
                 if ( pSheet )
                     pText->StartListening( *pSheet );
