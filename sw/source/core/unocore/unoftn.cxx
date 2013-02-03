@@ -19,6 +19,7 @@
 
 
 #include <osl/mutex.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -30,7 +31,6 @@
 #include <unoparagraph.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
-#include <unoevtlstnr.hxx>
 #include <doc.hxx>
 #include <ftnidx.hxx>
 #include <fmtftn.hxx>
@@ -49,12 +49,14 @@ using ::rtl::OUString;
 class SwXFootnote::Impl
     : public SwClient
 {
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
 
     SwXFootnote &               m_rThis;
     const bool                  m_bIsEndnote;
-    SwEventListenerContainer    m_ListenerContainer;
+    ::cppu::OInterfaceContainerHelper m_EventListeners;
     bool                        m_bIsDescriptor;
     const SwFmtFtn *            m_pFmtFtn;
     ::rtl::OUString             m_sLabel;
@@ -65,7 +67,7 @@ public:
         : SwClient((pDoc) ? pDoc->GetUnoCallBack() : 0)
         , m_rThis(rThis)
         , m_bIsEndnote(bIsEndnote)
-        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
+        , m_EventListeners(m_Mutex)
 // #i111177#: unxsols4 (Sun C++ 5.9 SunOS_sparc) generates wrong code for this
 //        , m_bIsDescriptor(0 == pFootnote)
         , m_bIsDescriptor((0 == pFootnote) ? true : false)
@@ -99,9 +101,10 @@ void SwXFootnote::Impl::Invalidate()
     {
         const_cast<SwModify*>(GetRegisteredIn())->Remove(this);
     }
-    m_ListenerContainer.Disposing();
     m_pFmtFtn = 0;
     m_rThis.SetDoc(0);
+    lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
+    m_EventListeners.disposeAndClear(ev);
 }
 
 void SwXFootnote::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
@@ -399,13 +402,8 @@ SwXFootnote::addEventListener(
     const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->GetFootnoteFormat())
-    {
-        throw uno::RuntimeException();
-    }
-    m_pImpl->m_ListenerContainer.AddListener(xListener);
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
 void SAL_CALL
@@ -413,13 +411,8 @@ SwXFootnote::removeEventListener(
     const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->GetFootnoteFormat() ||
-        !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
-    {
-        throw uno::RuntimeException();
-    }
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 const SwStartNode *SwXFootnote::GetStartNode() const
