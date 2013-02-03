@@ -944,6 +944,14 @@ void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
 
 void RTFDocumentImpl::text(OUString& rString)
 {
+    if (rString.getLength() == 1 && m_aStates.top().nDestinationState != DESTINATION_DOCCOMM)
+    {
+        // No cheating! Tokenizer ignores bare \r and \n, their hex \'0d / \'0a form doesn't count, either.
+        sal_Unicode ch = rString.getStr()[0];
+        if (ch == 0x0d || ch == 0x0a)
+            return;
+    }
+
     bool bRet = true;
     switch (m_aStates.top().nDestinationState)
     {
