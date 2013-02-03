@@ -18,13 +18,15 @@
  */
 
 #include <unoparagraph.hxx>
+
+#include <cppuhelper/interfacecontainer.h>
+
 #include <cmdid.h>
 #include <unomid.h>
 #include <unoparaframeenum.hxx>
 #include <unotext.hxx>
 #include <unotextrange.hxx>
 #include <unoport.hxx>
-#include <unoevtlstnr.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
 #include <unoprnms.hxx>
@@ -101,10 +103,12 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
 class SwXParagraph::Impl
     : public SwClient
 {
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
     SwXParagraph &              m_rThis;
-    SwEventListenerContainer    m_ListenerContainer;
+    ::cppu::OInterfaceContainerHelper m_EventListeners;
     SfxItemPropertySet const&   m_rPropSet;
     bool                        m_bIsDescriptor;
     sal_Int32                   m_nSelectionStartPos;
@@ -118,7 +122,7 @@ public:
             const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = -1)
         : SwClient(pTxtNode)
         , m_rThis(rThis)
-        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
+        , m_EventListeners(m_Mutex)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH))
         // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
         , m_bIsDescriptor((0 == pTxtNode) ? true : false)
@@ -175,7 +179,8 @@ void SwXParagraph::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNe
     ClientModify(this, pOld, pNew);
     if (!GetRegisteredIn())
     {
-        m_ListenerContainer.Disposing();
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
+        m_EventListeners.disposeAndClear(ev);
     }
 }
 
@@ -1116,7 +1121,8 @@ void SAL_CALL SwXParagraph::dispose() throw (uno::RuntimeException)
             SwParaSelection aParaSel( aCursor );
             pTxtNode->GetDoc()->DelFullPara(aCursor);
         }
-        m_pImpl->m_ListenerContainer.Disposing();
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
+        m_pImpl->m_EventListeners.disposeAndClear(ev);
     }
 }
 
@@ -1124,26 +1130,16 @@ void SAL_CALL SwXParagraph::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->GetTxtNode())
-    {
-        throw uno::RuntimeException();
-    }
-    m_pImpl->m_ListenerContainer.AddListener(xListener);
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
 void SAL_CALL SwXParagraph::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->GetTxtNode() ||
-        !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
-    {
-        throw uno::RuntimeException();
-    }
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 uno::Reference< container::XEnumeration >  SAL_CALL
