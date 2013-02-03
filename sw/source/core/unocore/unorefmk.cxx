@@ -19,6 +19,7 @@
 
 
 #include <osl/mutex.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <vcl/svapp.hxx>
 
 #include <unomid.h>
@@ -27,7 +28,6 @@
 #include <unotextcursor.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
-#include <unoevtlstnr.hxx>
 #include <unocrsrhelper.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
@@ -46,9 +46,12 @@ using ::rtl::OUString;
 class SwXReferenceMark::Impl
     : public SwClient
 {
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    SwXReferenceMark & m_rThis;
 
 public:
-    SwEventListenerContainer    m_ListenerContainer;
+    ::cppu::OInterfaceContainerHelper m_EventListeners;
     bool                        m_bIsDescriptor;
     SwDoc *                     m_pDoc;
     const SwFmtRefMark *        m_pMarkFmt;
@@ -57,7 +60,8 @@ public:
     Impl(   SwXReferenceMark & rThis,
             SwDoc *const pDoc, SwFmtRefMark const*const pRefMark)
         : SwClient((pDoc) ? pDoc->GetUnoCallBack() : 0)
-        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
+        , m_rThis(rThis)
+        , m_EventListeners(m_Mutex)
         // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
         , m_bIsDescriptor((0 == pRefMark) ? true : false)
         , m_pDoc(pDoc)
@@ -84,9 +88,10 @@ void SwXReferenceMark::Impl::Invalidate()
     {
         const_cast<SwModify*>(GetRegisteredIn())->Remove(this);
     }
-    m_ListenerContainer.Disposing();
     m_pDoc = 0;
     m_pMarkFmt = 0;
+    lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
+    m_EventListeners.disposeAndClear(ev);
 }
 
 void SwXReferenceMark::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -374,26 +379,16 @@ void SAL_CALL SwXReferenceMark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->IsValid())
-    {
-        throw uno::RuntimeException();
-    }
-    m_pImpl->m_ListenerContainer.AddListener(xListener);
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
 void SAL_CALL SwXReferenceMark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->IsValid() ||
-        !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
-    {
-        throw uno::RuntimeException();
-    }
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 OUString SAL_CALL SwXReferenceMark::getName()
@@ -662,10 +657,11 @@ SwXMetaText::createTextCursorByRange(
 class SwXMeta::Impl
     : public SwClient
 {
+private:
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
-
-    SwEventListenerContainer m_ListenerContainer;
+    ::cppu::OInterfaceContainerHelper m_EventListeners;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<const TextRangeList_t> m_pTextPortions;
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -680,7 +676,7 @@ public:
             uno::Reference<text::XText> const& xParentText,
             TextRangeList_t const * const pPortions)
         : SwClient(pMeta)
-        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
+        , m_EventListeners(m_Mutex)
         , m_pTextPortions( pPortions )
         , m_bIsDisposed( false )
         // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
@@ -713,8 +709,10 @@ void SwXMeta::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
     if (!GetRegisteredIn()) // removed => dispose
     {
-        m_ListenerContainer.Disposing();
         m_bIsDisposed = true;
+        lang::EventObject const ev(
+                static_cast< ::cppu::OWeakObject&>(m_Text.GetXMeta()));
+        m_EventListeners.disposeAndClear(ev);
         m_Text.Invalidate();
     }
 }
@@ -936,13 +934,8 @@ SwXMeta::addEventListener(
         uno::Reference< lang::XEventListener> const & xListener )
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    m_pImpl->m_ListenerContainer.AddListener(xListener);
-    if (m_pImpl->m_bIsDisposed)
-    {
-        m_pImpl->m_ListenerContainer.Disposing();
-    }
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
 void SAL_CALL
@@ -950,12 +943,8 @@ SwXMeta::removeEventListener(
         uno::Reference< lang::XEventListener> const & xListener )
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    if (!m_pImpl->m_bIsDisposed)
-    {
-        m_pImpl->m_ListenerContainer.RemoveListener(xListener);
-    }
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 void SAL_CALL
@@ -966,7 +955,8 @@ SwXMeta::dispose() throw (uno::RuntimeException)
     if (m_pImpl->m_bIsDescriptor)
     {
         m_pImpl->m_pTextPortions.reset();
-        m_pImpl->m_ListenerContainer.Disposing();
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
+        m_pImpl->m_EventListeners.disposeAndClear(ev);
         m_pImpl->m_bIsDisposed = true;
         m_pImpl->m_Text.Invalidate();
     }
