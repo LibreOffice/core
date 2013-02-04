@@ -1262,9 +1262,9 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_compareToAscii(
 
 
 //------------------------------------------------------------------------
-//       testing the method valueOf( sal_Bool b )
+//       testing the method boolean( sal_Bool b )
 //------------------------------------------------------------------------
-extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_valueOf_sal_Bool(
+extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_boolean(
     hTestResult hRtlTestResult )
 {
     c_rtl_tres_state_start( hRtlTestResult, "Bool");
@@ -1300,7 +1300,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_valueOf_sal_Bool(
     for(i=0;i<(sizeof(arrTestCase))/(sizeof(TestCase));i++)
     {
         sal_Bool lastRes=(*arrTestCase[i].expVal==
-                          OUString::valueOf(arrTestCase[i].input1)
+                          OUString::boolean(arrTestCase[i].input1)
 
                           );
 
@@ -3347,7 +3347,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString( hTestResult hRtlTestR
     test_rtl_OUString_equalsAscii( hRtlTestResult );
     test_rtl_OUString_equalsAsciiL( hRtlTestResult );
     test_rtl_OUString_compareToAscii( hRtlTestResult );
-    test_rtl_OUString_valueOf_sal_Bool( hRtlTestResult );
+    test_rtl_OUString_boolean( hRtlTestResult );
     test_rtl_OUString_valueOf_sal_Unicode( hRtlTestResult );
     test_rtl_OUString_valueOf( hRtlTestResult );
     test_rtl_OUString_createFromAscii( hRtlTestResult );

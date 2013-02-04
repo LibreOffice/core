@@ -1490,9 +1490,25 @@ public:
 
       @param    b   a sal_Bool.
       @return   a string with the string representation of the argument.
-      @deprecated there is no replacement, use 'condition ? OString( "true" ) : OString( "false" )'
+      @deprecated use boolean()
     */
-    SAL_DEPRECATED_INTERNAL("write explicit code") static OString valueOf( sal_Bool b ) SAL_THROW(())
+    SAL_DEPRECATED_INTERNAL("use boolean()") static OString valueOf( sal_Bool b ) SAL_THROW(())
+    {
+        return boolean(b);
+    }
+
+    /**
+      Returns the string representation of the boolean argument.
+
+      If the sal_Bool is true, the string "true" is returned.
+      If the sal_Bool is false, the string "false" is returned.
+      This function can't be used for language specific conversion.
+
+      @param    b   a sal_Bool.
+      @return   a string with the string representation of the argument.
+      @since LibreOffice 4.1
+    */
+    static OString boolean( sal_Bool b ) SAL_THROW(())
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFBOOLEAN];
         rtl_String* pNewData = 0;
