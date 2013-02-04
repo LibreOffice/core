@@ -544,7 +544,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
     if( !aText.isEmpty() )
     {
-        if( 2*aText.getLength() > SAL_N_ELEMENTS(nDXBuffer) )
+        if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
         {
             pDXBuffer = new sal_Int32[2*(aText.getLength()+1)];
             pDX = pDXBuffer;
@@ -1220,7 +1220,7 @@ void Edit::ImplShowCursor( sal_Bool bOnlyIfVisible )
 
     if( !aText.isEmpty() )
     {
-        if( 2*aText.getLength() > SAL_N_ELEMENTS(nDXBuffer) )
+        if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
         {
             pDXBuffer = new sal_Int32[2*(aText.getLength()+1)];
             pDX = pDXBuffer;
@@ -1343,7 +1343,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
     sal_Int32   nDXBuffer[256];
     sal_Int32*  pDXBuffer = NULL;
     sal_Int32*  pDX = nDXBuffer;
-    if( 2*aText.getLength() > SAL_N_ELEMENTS(nDXBuffer) )
+    if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
     {
         pDXBuffer = new sal_Int32[2*(aText.getLength()+1)];
         pDX = pDXBuffer;
