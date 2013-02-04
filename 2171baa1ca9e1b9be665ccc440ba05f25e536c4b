@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///98\u003d",
+        "filename": "oox/source/shape/ShapeContextHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T05:45:18Z",
+      "side": 1,
+      "message": "we might as well put that on the same line",
+      "revId": "2171baa1ca9e1b9be665ccc440ba05f25e536c4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
