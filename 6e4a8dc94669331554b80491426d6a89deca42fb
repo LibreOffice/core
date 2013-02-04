@@ -1,0 +1,276 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///88\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5051,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "why dropping the \u0027i\u0027 here ?",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///80\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5126,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "That is wrong the original code is aString[nCharAnzRead] \u003d (sal_Unicode)\u0027\\r\u0027",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///84\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5168,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "that doesn\u0027t look right either",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///8o\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5184,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "that seems wrong based on the original code",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///8s\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5190,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "That is completely wrong. that create a string where the indice of the a character is used a unicode value",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///8w\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5202,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "see line 5184",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///8k\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6509,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "nack",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///8g\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6510,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "nack",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///8c\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6689,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "use isEmpty() for these (well ! isEmpty() here)",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///8Y\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6747,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "no need to cast nCount",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///8U\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6754,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "nack",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///8Q\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6770,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "nack, hint nCount is not a constant equal to the len of aString",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///8M\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6791,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "nack",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///8I\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6839,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "nack",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///8E\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6841,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "nack",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///78\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6854,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-04T07:36:09Z",
+      "side": 1,
+      "message": "nack",
+      "revId": "6e4a8dc94669331554b80491426d6a89deca42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
