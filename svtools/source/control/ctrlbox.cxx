@@ -1296,7 +1296,6 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         long nVertAdjust = nDesiredGap - aTextRect.Top();
         Point aPos( nX, aTopLeft.Y() + nVertAdjust );
         rUDEvt.GetDevice()->DrawText( aPos, sFontName );
-        Rectangle aHack(aPos.X(), aTopLeft.Y() + nH/2 - 5, aPos.X() + 40, aTopLeft.Y() + nH/2 + 5);
         long nTextX = aPos.X() + aTextRect.GetWidth() + GAPTOEXTRAPREVIEW;
 
         if (!bUsingCorrectFont)
