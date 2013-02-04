@@ -40,6 +40,7 @@
 
 #include "oox/helper/helper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include  "sal/log.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::beans;
@@ -88,7 +89,7 @@ namespace oox { namespace ppt {
                 sServiceName = "com.sun.star.animations.Audio";
                 break;
             default:
-                OSL_TRACE( "OOX: uhandled type %x", nNodeType );
+                SAL_INFO("oox.ppt","OOX: uhandled type " << nNodeType );
                 break;
             }
             return sServiceName;
@@ -170,7 +171,7 @@ namespace oox { namespace ppt {
         catch( Exception& e )
         {
             (void)e;
-            OSL_TRACE("fixMainSequenceTiming(), exception caught!" );
+            SAL_INFO("oox.ppt","fixMainSequenceTiming(), exception caught!" );
         }
     }
 
@@ -196,7 +197,7 @@ namespace oox { namespace ppt {
         catch( Exception& e )
         {
             (void)e;
-            OSL_TRACE("fixInteractiveSequenceTiming(), exception caught!" );
+            SAL_INFO("oox.ppt","fixInteractiveSequenceTiming(), exception caught!" );
         }
     }
 
@@ -211,14 +212,14 @@ namespace oox { namespace ppt {
         }
         catch( const Exception& e )
         {
-            OSL_TRACE( "OOX: exception raised in TimeNode::addNode() - %s",
+            SAL_INFO("oox.ppt","OOX: exception raised in TimeNode::addNode() - " <<
                                  OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         }
     }
 
     void TimeNode::setNode( const XmlFilterBase& rFilter, const Reference< XAnimationNode >& xNode, const SlidePersistPtr & pSlide )
     {
-        OSL_ENSURE( xNode.is(), "null node passed" );
+        SAL_WARN_IF( !xNode.is(), "oox.ppt", "null node passed" );
 
         try {
             if( !msId.isEmpty() )
@@ -331,7 +332,7 @@ namespace oox { namespace ppt {
                                 xAnimate->setSubItem( nInt16 );
                             else
                             {
-                                OSL_TRACE( "any >>= failed %d", __LINE__ );
+                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                             }
                         }
                         break;
@@ -342,7 +343,7 @@ namespace oox { namespace ppt {
                                 xAnimate->setAttributeName( sString );
                             else
                             {
-                                OSL_TRACE( "any >>= failed %d", __LINE__ );
+                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                             }
                         }
                         break;
@@ -353,7 +354,7 @@ namespace oox { namespace ppt {
                                 xAnimate->setCalcMode( nInt16 );
                             else
                             {
-                                OSL_TRACE( "any >>= failed %d", __LINE__ );
+                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                             }
                         }
                         break;
@@ -365,7 +366,7 @@ namespace oox { namespace ppt {
                                 xAnimate->setKeyTimes(aKeyTimes);
                             else
                             {
-                                OSL_TRACE( "any >>= failed %d", __LINE__ );
+                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                             }
                         }
                         break;
@@ -377,7 +378,7 @@ namespace oox { namespace ppt {
                                 xAnimate->setValues(aValues);
                             else
                             {
-                                OSL_TRACE( "any >>= failed %d", __LINE__ );
+                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                             }
                         }
                         break;
@@ -388,7 +389,7 @@ namespace oox { namespace ppt {
                                 xAnimate->setFormula(sString);
                             else
                             {
-                                OSL_TRACE( "any >>= failed %d", __LINE__ );
+                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                             }
                         }
                         break;
@@ -399,7 +400,7 @@ namespace oox { namespace ppt {
                                 xAnimateColor->setColorInterpolation( nInt16 );
                             else
                             {
-                                OSL_TRACE( "any >>= failed %d", __LINE__ );
+                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                             }
                         }
                         break;
@@ -410,7 +411,7 @@ namespace oox { namespace ppt {
                                 xAnimateColor->setDirection( bBool );
                             else
                             {
-                                OSL_TRACE( "any >>= failed %d", __LINE__ );
+                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                             }
                         }
                         break;
@@ -425,7 +426,7 @@ namespace oox { namespace ppt {
                                 xAnimateTransform->setTransformType( nInt16 );
                             else
                             {
-                                OSL_TRACE( "any >>= failed %d", __LINE__ );
+                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                             }
                         }
                         break;
@@ -434,7 +435,7 @@ namespace oox { namespace ppt {
                             xNode->setUserData( aSeq );
                         else
                         {
-                            OSL_TRACE( "any >>= failed %d", __LINE__ );
+                            SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                         }
                         break;
                     case NP_ACCELERATION:
@@ -442,7 +443,7 @@ namespace oox { namespace ppt {
                             xNode->setAcceleration( fDouble );
                         else
                         {
-                            OSL_TRACE( "any >>= failed %d", __LINE__ );
+                            SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                         }
                         break;
                     case NP_DECELERATE:
@@ -450,7 +451,7 @@ namespace oox { namespace ppt {
                             xNode->setDecelerate( fDouble );
                         else
                         {
-                            OSL_TRACE( "any >>= failed %d", __LINE__ );
+                            SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                         }
                         break;
                     case NP_AUTOREVERSE:
@@ -458,7 +459,7 @@ namespace oox { namespace ppt {
                             xNode->setAutoReverse( bBool );
                         else
                         {
-                            OSL_TRACE( "any >>= failed %d", __LINE__ );
+                            SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                         }
                         break;
                     case NP_DURATION:
@@ -469,7 +470,7 @@ namespace oox { namespace ppt {
                             xNode->setFill( nInt16 );
                         else
                         {
-                            OSL_TRACE( "any >>= failed %d", __LINE__ );
+                            SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                         }
                         break;
                     case NP_REPEATCOUNT:
@@ -483,7 +484,7 @@ namespace oox { namespace ppt {
                             xNode->setRestart( nInt16 );
                         else
                         {
-                            OSL_TRACE( "any >>= failed %d", __LINE__ );
+                            SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                         }
                         break;
                     case NP_COMMAND:
@@ -493,7 +494,7 @@ namespace oox { namespace ppt {
                                 xCommand->setCommand( nInt16 );
                             else
                             {
-                                OSL_TRACE( "any >>= failed %d", __LINE__ );
+                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                             }
                         }
                         break;
@@ -508,7 +509,7 @@ namespace oox { namespace ppt {
                                 xIterateContainer->setIterateType( nInt16 );
                             else
                             {
-                                OSL_TRACE( "any >>= failed %d", __LINE__ );
+                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                             }
                         }
                         break;
@@ -519,12 +520,12 @@ namespace oox { namespace ppt {
                                 xIterateContainer->setIterateInterval( fDouble );
                             else
                             {
-                                OSL_TRACE( "any >>= failed %d", __LINE__ );
+                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                             }
                         }
                         break;
                     default:
-                        OSL_TRACE( "ERR-OOX: unknown prop index %d", i );
+                        SAL_INFO("oox.ppt","ERR-OOX: unknown prop index " << i );
                         break;
                     }
                 }
@@ -566,8 +567,7 @@ namespace oox { namespace ppt {
         }
         catch( const Exception& e )
         {
-            OSL_TRACE( "OOX: exception raised in TimeNode::setNode() - %s",
-                                 OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            SAL_INFO("oox.ppt","OOX: exception raised in TimeNode::setNode() - " << OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         }
     }
 
@@ -586,9 +586,7 @@ namespace oox { namespace ppt {
         }
         catch( const Exception& e )
         {
-            OSL_TRACE( "OOX: exception raised in TimeNode::createAndInsert() trying to create a service %s = %s",
-                                 OUStringToOString( rServiceName, RTL_TEXTENCODING_ASCII_US ).getStr(),
-                                 OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            SAL_INFO("oox.ppt","OOX: exception raised in TimeNode::createAndInsert() trying to create a service " <<  OUStringToOString( rServiceName, RTL_TEXTENCODING_ASCII_US).getStr() << " = " << OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         }
 
         return Reference< XAnimationNode >();
