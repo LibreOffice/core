@@ -1045,10 +1045,14 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
                 bSelect = sal_False;
             else
             {
-                aFmtLb.MakeVisible( pEntry );
-                aFmtLb.Select( pEntry );
-                bWaterDisabled = (aFmtLb.GetSelectionCount() <=1 ? sal_False : sal_True);
-                FmtSelectHdl( NULL );
+                if (!aFmtLb.IsSelected(pEntry))
+                {
+                    aFmtLb.MakeVisible( pEntry );
+                    aFmtLb.SelectAll(false);
+                    aFmtLb.Select( pEntry );
+                    bWaterDisabled = (aFmtLb.GetSelectionCount() <=1 ? sal_False : sal_True);
+                    FmtSelectHdl( NULL );
+                }
             }
         }
 
