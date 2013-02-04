@@ -21,7 +21,7 @@
 #define _XMLOFF_XMLBASICI_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/document/XXMLOasisBasicImporter.hpp>
 #include <xmloff/xmlictxt.hxx>
 
 
@@ -33,7 +33,7 @@ class XMLBasicImportContext : public SvXMLImportContext
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xHandler;
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XXMLOasisBasicImporter >    m_xHandler;
 
 public:
     XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,

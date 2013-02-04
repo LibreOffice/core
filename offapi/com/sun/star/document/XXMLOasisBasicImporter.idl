@@ -16,27 +16,33 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_document_XMLOasisBasicImporter_idl__
-#define __com_sun_star_document_XMLOasisBasicImporter_idl__
+#ifndef __com_sun_star_document_XXMLOasisBasicImporter_idl__
+#define __com_sun_star_document_XXMLOasisBasicImporter_idl__
 
-#include <com/sun/star/document/XXMLOasisBasicImporter.idl>
+#include <com/sun/star/document/XImporter.idl>
+#include <com/sun/star/xml/sax/XDocumentHandler.idl>
 
 
 
 module com { module sun { module star { module document {
 
 
-/** Filter for importing Basic macros from the OASIS Open Office file format.
-
-    <p>The <method>XImporter::setTargetDocument</method> method must be
-    called in order to provide the import component with the target document
-    to which the data should be imported.
-    The <type scope="com::sun::star::xml::sax">XDocumentHandler</type>
-    interface is used to stream the XML data into the filter.</p>
-
-    @since OOo 2.0
+/**
+    @since LibreOffice 4.1
  */
-published service XMLOasisBasicImporter : XXMLOasisBasicImporter;
+published interface XXMLOasisBasicImporter
+{
+
+    /** sets the target document for this filter.
+     */
+    interface com::sun::star::document::XImporter;
+
+
+    /** receives notification of general document events.
+     */
+    interface com::sun::star::xml::sax::XDocumentHandler;
+
+};
 
 
 }; }; }; };

@@ -20,15 +20,14 @@
 #ifndef XMLSCRIPT_XMLBAS_IMPORT_HXX
 #define XMLSCRIPT_XMLBAS_IMPORT_HXX
 
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/document/XXMLOasisBasicImporter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/input/XRoot.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -245,10 +244,9 @@ namespace xmlscript
     // class XMLBasicImporterBase
     // =============================================================================
 
-    typedef ::cppu::WeakImplHelper3<
+    typedef ::cppu::WeakImplHelper2<
         ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::document::XImporter,
-        ::com::sun::star::xml::sax::XDocumentHandler > XMLBasicImporterBase_BASE;
+        ::com::sun::star::document::XXMLOasisBasicImporter > XMLBasicImporterBase_BASE;
 
     class XMLBasicImporterBase : public XMLBasicImporterBase_BASE
     {

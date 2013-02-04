@@ -21,6 +21,8 @@
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <com/sun/star/document/XMLOasisBasicImporter.hpp>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -36,22 +38,10 @@ XMLBasicImportContext::XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 n
     ,m_xModel( rxModel )
 {
     Reference< lang::XMultiServiceFactory > xMSF = GetImport().getServiceFactory();
-    if ( xMSF.is() )
-    {
-        m_xHandler.set( xMSF->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLOasisBasicImporter" ) ) ),
-            UNO_QUERY );
-    }
+    m_xHandler = document::XMLOasisBasicImporter::create( comphelper::getComponentContext(xMSF) );
 
-    if ( m_xHandler.is() )
-    {
-        Reference< document::XImporter > xImporter( m_xHandler, UNO_QUERY );
-        if ( xImporter.is() )
-        {
-            Reference< lang::XComponent > xComp( m_xModel, UNO_QUERY );
-            xImporter->setTargetDocument( xComp );
-        }
-    }
+    Reference< lang::XComponent > xComp( m_xModel, UNO_QUERY );
+    m_xHandler->setTargetDocument( xComp );
 }
 
 // -----------------------------------------------------------------------------
@@ -69,7 +59,8 @@ SvXMLImportContext* XMLBasicImportContext::CreateChildContext(
     SvXMLImportContext* pContext = 0;
 
     if ( m_xHandler.is() )
-        pContext = new XMLBasicImportChildContext( GetImport(), nPrefix, rLocalName, m_xHandler );
+        pContext = new XMLBasicImportChildContext( GetImport(), nPrefix, rLocalName,
+                          Reference<xml::sax::XDocumentHandler>(m_xHandler, UNO_QUERY_THROW) );
 
     if ( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
