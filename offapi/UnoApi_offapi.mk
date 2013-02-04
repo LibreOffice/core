@@ -31,6 +31,7 @@ $(eval $(call gb_UnoApi_set_include,offapi,\
 
 
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/animations,\
+	SequenceTimeContainer \
 	TargetPropertiesCreator \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/auth,\

@@ -26,6 +26,7 @@
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
+#include <com/sun/star/animations/SequenceTimeContainer.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/animations/XAnimateMotion.hpp>
 #include <com/sun/star/animations/XAnimateColor.hpp>
@@ -75,19 +76,10 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::xml::sax::XAttributeList;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::makeAny;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::uno::Type;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::text::XTextCursor;
@@ -1267,7 +1259,7 @@ SvXMLImportContext * AnimationNodeContext::CreateChildContext( sal_uInt16 nPrefi
 class AnimationsImport: public SvXMLImport, public XAnimationNodeSupplier
 {
 public:
-    AnimationsImport( const Reference< XMultiServiceFactory > & rSMgr );
+    AnimationsImport( const Reference< XComponentContext > & rxContext );
     ~AnimationsImport() throw ();
 
     SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList);
@@ -1289,8 +1281,8 @@ private:
     Reference< XAnimationNode > mxRootNode;
 };
 
-AnimationsImport::AnimationsImport( const Reference< XMultiServiceFactory > & rSMgr )
-: SvXMLImport( rSMgr, true )
+AnimationsImport::AnimationsImport( const Reference< XComponentContext > & rxContext )
+: SvXMLImport( Reference<XMultiServiceFactory>(rxContext->getServiceManager(), UNO_QUERY_THROW) , true )
 {
     // add namespaces
     GetNamespaceMap().Add(
@@ -1308,8 +1300,7 @@ AnimationsImport::AnimationsImport( const Reference< XMultiServiceFactory > & rS
         GetXMLToken(XML_N_ANIMATION),
         XML_NAMESPACE_ANIMATION);
 
-    mxRootNode = Reference< XAnimationNode >::query(rSMgr->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.SequenceTimeContainer"))));
+    mxRootNode = Reference<XAnimationNode>( SequenceTimeContainer::create(rxContext), UNO_QUERY_THROW );
 }
 
 AnimationsImport::~AnimationsImport() throw ()
@@ -1456,8 +1447,7 @@ OUString SAL_CALL AnimationsImport_getImplementationName() throw()
 
 Reference< XInterface > SAL_CALL AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
 {
-    return (cppu::OWeakObject*)new xmloff::AnimationsImport( rSMgr );
-
+    return (cppu::OWeakObject*)new xmloff::AnimationsImport( comphelper::getComponentContext(rSMgr) );
 }
 
 namespace xmloff

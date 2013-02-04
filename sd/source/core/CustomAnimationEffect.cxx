@@ -20,6 +20,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
+#include <com/sun/star/animations/SequenceTimeContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
@@ -3208,7 +3209,7 @@ void SAL_CALL AnimationChangeListener::disposing( const ::com::sun::star::lang::
 // ====================================================================
 
 MainSequence::MainSequence()
-: mxTimingRootNode( ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.animations.SequenceTimeContainer"), UNO_QUERY )
+: mxTimingRootNode( SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() ) )
 , mbRebuilding( false )
 , mnRebuildLockGuard( 0 )
 , mbPendingRebuildRequest( false )
@@ -3312,22 +3313,20 @@ void MainSequence::createMainSequence()
         // see if we have a mainsequence at all. if not, create one...
         if( !mxSequenceRoot.is() )
         {
-            mxSequenceRoot = Reference< XTimeContainer >::query(::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.animations.SequenceTimeContainer"));
-            if( mxSequenceRoot.is() )
-            {
-                uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-                aUserData[0].Name = "node-type";
-                aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE;
-                mxSequenceRoot->setUserData( aUserData );
+            mxSequenceRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
-                // empty sequence until now, set duration to 0.0
-                // explicitly (otherwise, this sequence will never
-                // end)
-                mxSequenceRoot->setDuration( makeAny((double)0.0) );
+            uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
+            aUserData[0].Name = "node-type";
+            aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE;
+            mxSequenceRoot->setUserData( aUserData );
 
-                Reference< XAnimationNode > xMainSequenceNode( mxSequenceRoot, UNO_QUERY_THROW );
-                mxTimingRootNode->appendChild( xMainSequenceNode );
-            }
+            // empty sequence until now, set duration to 0.0
+            // explicitly (otherwise, this sequence will never
+            // end)
+            mxSequenceRoot->setDuration( makeAny((double)0.0) );
+
+            Reference< XAnimationNode > xMainSequenceNode( mxSequenceRoot, UNO_QUERY_THROW );
+            mxTimingRootNode->appendChild( xMainSequenceNode );
         }
 
         updateTextGroups();
@@ -3377,20 +3376,18 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun
     InteractiveSequencePtr pIS;
 
     // create a new interactive sequence container
-    Reference< XTimeContainer > xISRoot( ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.animations.SequenceTimeContainer"), UNO_QUERY );
-    DBG_ASSERT( xISRoot.is(), "sd::MainSequence::createInteractiveSequence(), could not create \"com.sun.star.animations.SequenceTimeContainer\"!");
-    if( xISRoot.is() )
-    {
-        uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-        aUserData[0].Name = "node-type";
-        aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::INTERACTIVE_SEQUENCE ;
-        xISRoot->setUserData( aUserData );
+    Reference< XTimeContainer > xISRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
-        Reference< XChild > xChild( mxSequenceRoot, UNO_QUERY_THROW );
-        Reference< XAnimationNode > xISNode( xISRoot, UNO_QUERY_THROW );
-        Reference< XTimeContainer > xParent( xChild->getParent(), UNO_QUERY_THROW );
-        xParent->appendChild( xISNode );
-    }
+    uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
+    aUserData[0].Name = "node-type";
+    aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::INTERACTIVE_SEQUENCE ;
+    xISRoot->setUserData( aUserData );
+
+    Reference< XChild > xChild( mxSequenceRoot, UNO_QUERY_THROW );
+    Reference< XAnimationNode > xISNode( xISRoot, UNO_QUERY_THROW );
+    Reference< XTimeContainer > xParent( xChild->getParent(), UNO_QUERY_THROW );
+    xParent->appendChild( xISNode );
+
     pIS.reset( new InteractiveSequence( xISRoot, this) );
     pIS->setTriggerShape( xShape );
     pIS->addListener( this );
