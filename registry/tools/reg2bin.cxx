@@ -191,8 +191,10 @@ void insert(
     std::map< rtl::OUString, Item > * map)
 {
     assert(map != 0);
-    bool b = map->insert(std::make_pair(name, item)).second;
-    assert(b);
+    if(!map->insert(std::make_pair(name, item)).second)
+    {
+        assert(false);
+    }
 }
 
 typereg::Reader getReader(RegistryKey & key, std::vector< char > * buffer) {
