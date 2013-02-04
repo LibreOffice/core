@@ -254,6 +254,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
 
     sal_Bool bRepairPackage = false;
     sal_Bool bRepairAllowed = false;
+    bool bDeepDetection = false;
 
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
@@ -310,6 +311,8 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
             lDescriptor[nProperty].Value >>= bRepairPackage;
         else if ( lDescriptor[nProperty].Name == "DocumentTitle" )
             nIndexOfDocumentTitle = nProperty;
+        else if (lDescriptor[nProperty].Name == "DeepDetection")
+            bDeepDetection = lDescriptor[nProperty].Value.get<sal_Bool>();
     }
 
     // can't check the type for external filters, so set the "dont" flag accordingly
@@ -392,6 +395,10 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                     }
                     catch( const lang::WrappedTargetException& aWrap )
                     {
+                        if (!bDeepDetection)
+                            // Bail out early unless it's a deep detection.
+                            return OUString();
+
                         packages::zip::ZipIOException aZipException;
 
                         // repairing is done only if this type is requested from outside
@@ -434,9 +441,8 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                         aTypeName.Erase();
                     }
 
-                       if ( aTypeName.Len() )
-                           pFilter = SfxFilterMatcher( String::CreateFromAscii("scalc") ).GetFilter4EA( aTypeName );
-
+                    if ( aTypeName.Len() )
+                        pFilter = SfxFilterMatcher( rtl::OUString("scalc") ).GetFilter4EA( aTypeName );
                 }
             }
             else

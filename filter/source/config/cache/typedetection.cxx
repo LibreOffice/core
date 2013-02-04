@@ -318,6 +318,8 @@ struct EqualByName : public std::binary_function<FlatDetectionInfo, FlatDetectio
             (bAllowDeep        )
            )
         {
+            // Let's the detection service know we are in a deep detection phase.
+            stlDescriptor[comphelper::MediaDescriptor::PROP_DEEPDETECTION()] <<= sal_True;
             sType = impl_detectTypeDeepOnly(stlDescriptor, lUsedDetectors);
         }
 

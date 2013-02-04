@@ -306,9 +306,12 @@ const ::rtl::OUString& MediaDescriptor::PROP_DOCUMENTBASEURL()
     return sProp;
 }
 
-/*-----------------------------------------------
-    10.03.2004 08:09
------------------------------------------------*/
+const rtl::OUString& MediaDescriptor::PROP_DEEPDETECTION()
+{
+    static const rtl::OUString aProp("DeepDetection");
+    return aProp;
+}
+
 MediaDescriptor::MediaDescriptor()
     : SequenceAsHashMap()
 {

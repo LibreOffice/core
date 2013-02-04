@@ -107,6 +107,7 @@ SwFilterDetect::~SwFilterDetect()
 
     sal_Bool bRepairPackage = sal_False;
     sal_Bool bRepairAllowed = sal_False;
+    bool bDeepDetection = false;
 
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
@@ -161,6 +162,8 @@ SwFilterDetect::~SwFilterDetect()
             lDescriptor[nProperty].Value >>= bRepairPackage;
         else if ( lDescriptor[nProperty].Name == "DocumentTitle" )
             nIndexOfDocumentTitle = nProperty;
+        else if (lDescriptor[nProperty].Name == "DeepDetection")
+            bDeepDetection = lDescriptor[nProperty].Value.get<sal_Bool>();
     }
 
     SolarMutexGuard aGuard;
@@ -249,6 +252,10 @@ SwFilterDetect::~SwFilterDetect()
                     }
                     catch (const lang::WrappedTargetException& aWrap)
                     {
+                        if (!bDeepDetection)
+                            // Bail out early unless it's a deep detection.
+                            return OUString();
+
                         packages::zip::ZipIOException aZipException;
 
                         // repairing is done only if this type is requested from outside
