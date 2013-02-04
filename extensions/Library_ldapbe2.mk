@@ -61,6 +61,7 @@ else # 0S!=WNT
 $(eval $(call gb_Library_use_externals,ldapbe2,\
 	nss3 \
 	openldap \
+	plc4 \
 ))
 endif
 
