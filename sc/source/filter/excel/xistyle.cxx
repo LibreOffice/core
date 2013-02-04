@@ -1967,6 +1967,7 @@ void XclImpXFRangeBuffer::Finalize()
             }
 
             size_t nAttrSize = aAttrs.size();
+            assert(nAttrSize > 0);
             ScAttrEntry* pData = new ScAttrEntry[nAttrSize];
             list<ScAttrEntry>::const_iterator itr = aAttrs.begin(), itrEnd = aAttrs.end();
             for (size_t i = 0; itr != itrEnd; ++itr, ++i)
