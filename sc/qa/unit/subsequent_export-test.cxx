@@ -165,55 +165,40 @@ void ScExportTest::testMiscRowHeightExport()
 {
     TestParam::RowData DfltRowData[] =
     {
-        { 0, 4, 0, 529 },
-        { 5, 10, 0, 1058 },
-        { 17, 20, 0, 1767 },
-        { 1048573, 1048575, 0, 529 },
+        { 0, 4, 0, 529, 0, false },
+        { 5, 10, 0, 1058, 0, false },
+        { 17, 20, 0, 1767, 0, false },
+        // check last couple of row in document to ensure
+        // they are 5.29mm ( effective default row xlsx height )
+        { 1048573, 1048575, 0, 529, 0, false },
     };
 
     TestParam::RowData EmptyRepeatRowData[] =
     {
-        { 0, 4, 0, 529 },
-        { 5, 10, 0, 1058 },
-        { 17, 20, 0, 1767 },
+        // rows 0-4, 5-10, 17-20 are all set at various
+        // heights, there is no content in the rows, there
+        // was a bug where only the first row ( of repeated rows )
+        // was set after export
+        { 0, 4, 0, 529, 0, false },
+        { 5, 10, 0, 1058, 0, false },
+        { 17, 20, 0, 1767, 0, false },
     };
 
     TestParam aTestValues[] =
     {
+        // Checks that some distributed ( non-empty ) heights remain set after export (roundtrip)
+        // additionally there is effectively a default row height ( 5.29 mm ). So we test the
+        // unset rows at the end of the document to ensure the effective xlsx default height
+        // is set there too.
         { "miscrowheights.", XLSX, XLSX, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
+        // Checks that some distributed ( non-empty ) heights remain set after export (to xls)
         { "miscrowheights.", XLSX, XLS, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
+        // Checks that repreated rows ( of various heights ) remain set after export ( to xlsx )
         { "miscemptyrepeatedrowheights.", ODS, XLSX, SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
+        // Checks that repreated rows ( of various heights ) remain set after export ( to xls )
         { "miscemptyrepeatedrowheights.", ODS, XLS, SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
     };
-
-    for ( unsigned int index=0; index<SAL_N_ELEMENTS(aTestValues); ++index )
-    {
-        OUString sFileName = OUString::createFromAscii( aTestValues[ index ].sTestDoc );
-        printf("aTestValues[%d] %s\n", index, OUStringToOString( sFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
-        int nImportType =  aTestValues[ index ].nImportType;
-        int nExportType =  aTestValues[ index ].nExportType;
-        ScDocShellRef xShell = loadDoc( sFileName, nImportType );
-        CPPUNIT_ASSERT(xShell.Is());
-
-        xShell = saveAndReload(&(*xShell), nExportType );
-        CPPUNIT_ASSERT(xShell.Is());
-
-        ScDocument* pDoc = xShell->GetDocument();
-
-        for (int i=0; i<aTestValues[ index ].nRowData; ++i)
-        {
-            SCROW nRow = aTestValues[ index ].pData[ i].nStartRow;
-            SCROW nEndRow = aTestValues[ index ].pData[ i ].nEndRow;
-            SCTAB nTab = aTestValues[ index ].pData[ i ].nTab;
-            int nExpectedHeight = aTestValues[ index ].pData[ i ].nExpectedHeight;
-            for ( ; nRow <= nEndRow; ++nRow )
-            {
-                printf("\t checking row %" SAL_PRIdINT32 " for height %d\n", nRow, nExpectedHeight );
-                int nHeight = sc::TwipsToHMM( pDoc->GetRowHeight(nRow, nTab, false) );
-                CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);
-            }
-        }
-    }
+    miscRowHeightsTest( aTestValues, SAL_N_ELEMENTS(aTestValues) );
 }
 
 ScExportTest::ScExportTest()

@@ -62,6 +62,8 @@ struct FileFormat {
     const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
 };
 
+#define CHECK_OPTIMAL 0x1
+
 // data format for row height tests
 struct TestParam
 {
@@ -70,11 +72,13 @@ struct TestParam
         SCROW nStartRow;
         SCROW nEndRow;
         SCTAB nTab;
-        int nExpectedHeight;
+        int nExpectedHeight; // -1 for default height
+        int nCheck; // currently only CHECK_OPTIMAL ( we could add CHECK_MANUAL etc.)
+        bool bOptimal;
     };
     const char* sTestDoc;
     int nImportType;
-    int nExportType;
+    int nExportType; // -1 for import test, otherwise this is an export test
     int nRowData;
     RowData* pData;
 };
@@ -227,7 +231,47 @@ public:
         return xDocSh;
     }
 
+    void miscRowHeightsTest( TestParam* aTestValues, unsigned int numElems )
+    {
+        for ( unsigned int index=0; index<numElems; ++index )
+        {
+            OUString sFileName = OUString::createFromAscii( aTestValues[ index ].sTestDoc );
+            printf("aTestValues[%d] %s\n", index, OUStringToOString( sFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
+            int nImportType =  aTestValues[ index ].nImportType;
+            int nExportType =  aTestValues[ index ].nExportType;
+            ScDocShellRef xShell = loadDoc( sFileName, nImportType );
+            CPPUNIT_ASSERT(xShell.Is());
 
+            if ( nExportType != -1 )
+                xShell = saveAndReload(&(*xShell), nExportType );
+
+            CPPUNIT_ASSERT(xShell.Is());
+
+            ScDocument* pDoc = xShell->GetDocument();
+
+            for (int i=0; i<aTestValues[ index ].nRowData; ++i)
+            {
+                SCROW nRow = aTestValues[ index ].pData[ i].nStartRow;
+                SCROW nEndRow = aTestValues[ index ].pData[ i ].nEndRow;
+                SCTAB nTab = aTestValues[ index ].pData[ i ].nTab;
+                int nExpectedHeight = aTestValues[ index ].pData[ i ].nExpectedHeight;
+                if ( nExpectedHeight == -1 )
+                    nExpectedHeight =  sc::TwipsToHMM( ScGlobal::nStdRowHeight );
+                bool bCheckOpt = ( ( aTestValues[ index ].pData[ i ].nCheck & CHECK_OPTIMAL ) == CHECK_OPTIMAL );
+                for ( ; nRow <= nEndRow; ++nRow )
+                {
+                    printf("\t checking row %" SAL_PRIdINT32 " for height %d\n", nRow, nExpectedHeight );
+                    int nHeight = sc::TwipsToHMM( pDoc->GetRowHeight(nRow, nTab, false) );
+                    if ( bCheckOpt )
+                    {
+                        bool bOpt = !(pDoc->GetRowFlags( nRow, nTab ) & CR_MANUALSIZE);
+                        CPPUNIT_ASSERT_EQUAL(aTestValues[ index ].pData[ i ].bOptimal, bOpt);
+                    }
+                    CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);
+                }
+            }
+        }
+    }
 };
 
 void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat = StringValue)

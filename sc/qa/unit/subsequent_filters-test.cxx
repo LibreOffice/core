@@ -145,6 +145,7 @@ public:
 
     void testRowHeightODS();
     void testRichTextContentODS();
+    void testMiscRowHeights();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testRangeNameXLS);
@@ -203,6 +204,7 @@ public:
     CPPUNIT_TEST(testBugFilesXLS);
     CPPUNIT_TEST(testBugFilesXLSX);
 #endif
+    CPPUNIT_TEST(testMiscRowHeights);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1858,6 +1860,40 @@ void ScFiltersTest::testFormulaDependency()
     // CPPUNIT_ASSERT_EQUAL(pDoc->GetString(0,4,0), pDoc->GetString(0,5,0));
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testMiscRowHeights()
+{
+    TestParam::RowData DfltRowData[] =
+    {
+        // check rows at the begining and end of document
+        // and make sure they are reported as the default row
+        // height ( indicated by -1 )
+        { 2, 4, 0, -1, 0, false  },
+        { 1048573, 1048575, 0, -1, 0, false  },
+    };
+
+    TestParam::RowData MultiLineOptData[] =
+    {
+        // Row 0 is 12.63 mm and optimal flag is set
+        { 0, 0, 0, 1263, CHECK_OPTIMAL, true  },
+        // Row 1 is 11.99 mm and optimal flag is NOT set
+        { 1, 1, 0, 1199, CHECK_OPTIMAL, false  },
+    };
+
+    TestParam aTestValues[] =
+    {
+        /* Checks that a document saved to ods with default rows does indeed
+           have default row heights ( there was a problem where the optimal
+           height was being calcuated after import if no hard height )
+        */
+        { "alldefaultheights.", ODS, -1, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
+        /* Checks the imported height of some multiline input, additionally checks
+           that the optimal height flag is set ( or not )
+        */
+        { "multilineoptimal.", ODS, -1, SAL_N_ELEMENTS(MultiLineOptData), MultiLineOptData },
+    };
+    miscRowHeightsTest( aTestValues, SAL_N_ELEMENTS(aTestValues) );
 }
 
 ScFiltersTest::ScFiltersTest()

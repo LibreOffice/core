@@ -570,7 +570,7 @@ public:
     static ScDocShellRef*   pDrawClipDocShellRef;
 
     static sal_uInt16           nDefFontHeight;
-    static sal_uInt16           nStdRowHeight;
+    SC_DLLPUBLIC static sal_uInt16           nStdRowHeight;
 
     SC_DLLPUBLIC static long                nLastRowHeightExtra;
     static long             nLastColWidthExtra;
