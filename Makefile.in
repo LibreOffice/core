@@ -197,6 +197,7 @@ endif
         $(BUILDDIR)/config_host/*.h \
         $(BUILDDIR)/configure \
         $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
+        $(BUILDDIR)/lo.xcent \
         $(BUILDDIR)/solenv/inc/minor.mk \
         $(BUILDDIR)/warn
 	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
