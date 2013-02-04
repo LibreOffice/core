@@ -147,6 +147,7 @@
 			<p id="rpminstall5" xml:lang="en-US">For Fedora-based systems: su -c 'yum install *.rpm'</p>
 			<p id="rpminstall6" xml:lang="en-US">For Mandriva-based systems: sudo urpmi *.rpm</p>
 			<p id="rpminstall7" xml:lang="en-US">For other RPM-based systems (Suse, etc.): rpm -Uvh *.rpm</p>
+			<p id="rpminstall7a" xml:lang="en-US">Alternatively, you can use the 'install' script, located in the toplevel directory of this archive to perform an installation as a user. The script will set up ${PRODUCTNAME} to have its own profile for this installation, separated from your normal ${PRODUCTNAME} profile.</p>
 			<p id="rpminstall8" xml:lang="en-US">The above command does the first part of the installation process. To complete the process, you also need to install the desktop integration packages. To do this, change directory to the "desktop-integration" directory that is within the "RPMS" directory, using the following command:</p>
 			<p id="rpminstall9" xml:lang="en-US">cd desktop-integration</p>
 			<p id="rpminstallA" xml:lang="en-US">Now run the installation command again:</p>
