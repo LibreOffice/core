@@ -190,11 +190,11 @@ endif
         $(BUILDDIR)/autom4te.cache \
         $(BUILDDIR)/config.log \
         $(BUILDDIR)/config.status \
-        $(BUILDDIR)/config/*.h \
         $(BUILDDIR)/config_build.mk \
         $(BUILDDIR)/config_host.mk \
         $(BUILDDIR)/config_host.mk.last \
         $(BUILDDIR)/config_host.mk.stamp \
+        $(BUILDDIR)/config_host/*.h \
         $(BUILDDIR)/configure \
         $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
         $(BUILDDIR)/solenv/inc/minor.mk \
