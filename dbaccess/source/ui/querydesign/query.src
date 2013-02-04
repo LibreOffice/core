@@ -217,6 +217,11 @@ String STR_QUERY_HANDLETEXT
     Text [ en-US ] = "Field;Alias;Table;Sort;Visible;Function;Criterion;Or;Or";
 };
 
+String STR_QUERY_LIMIT_ALL
+{
+    Text [ en-US ] = "All";
+};
+
 String STR_QRY_TOO_MANY_COLUMNS
 {
     Text [ en-US ] = "There are too many columns.";
