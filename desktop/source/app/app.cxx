@@ -596,7 +596,27 @@ void Desktop::Init()
         // start ipc thread only for non-remote offices
         RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
         OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
-        if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
+        if ( aStatus == OfficeIPCThread::IPC_STATUS_PIPE_ERROR )
+        {
+#ifdef MACOSX
+            // In a sandboxed LO, on 10.8.2 at least, creating the
+            // Unix domain socket fails. Ignore that as hopefully
+            // people running a sandboxed LO won't attempt starting it
+            // from the command-line or otherwise in tricky ways, so
+            // the normal OS X mechanism that prevents multiple
+            // instances of an app from being started should work
+            // fine. I hope.
+#else
+            // Keep using this oddly named BE_PATHINFO_MISSING value
+            // for pipe-related errors on other platforms. Of course
+            // this crack with two (if not more) levels of our own
+            // error codes hiding the actual system error code is
+            // broken, but that is done all over the code, let's leave
+            // re-enginering that to another year.
+            SetBootstrapError( BE_PATHINFO_MISSING, OUString() );
+#endif
+        }
+        else if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
         {
             SetBootstrapError( BE_PATHINFO_MISSING, OUString() );
         }

@@ -525,7 +525,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         {
             oslPipeError eReason = pThread->maPipe.getError();
             if ((eReason == osl_Pipe_E_ConnectionRefused) || (eReason == osl_Pipe_E_invalidError))
-                return IPC_STATUS_BOOTSTRAP_ERROR;
+                return IPC_STATUS_PIPE_ERROR;
 
             // Wait for second office to be ready
             TimeValue aTimeValue;
