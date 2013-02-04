@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///3g\u003d",
+        "filename": "cui/source/inc/cuigaldlg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-02-04T15:31:40Z",
+      "side": 1,
+      "message": "Have you tried using simply OUString (no pointer) here? I see this was in the original code, so the conversion is correct, but OUString itself already is a pointer, in a way, so this seems a bit weird (it\u0027s almost like storing pointers to allocated integers rather than integers directly). But maybe that\u0027s better for a separate patch.",
+      "revId": "b9e876f3c8dfef4c1403cfdc8e0526550b4843ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///3c\u003d",
+        "filename": "svtools/source/dialogs/filedlg2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-02-04T15:31:40Z",
+      "side": 1,
+      "message": "Similarly here.",
+      "revId": "b9e876f3c8dfef4c1403cfdc8e0526550b4843ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///3Y\u003d",
+        "filename": "svx/source/form/filtnav.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-02-04T15:31:40Z",
+      "side": 1,
+      "message": "All the cases comparing length to 0 can be more simply written using isEmpty().",
+      "revId": "b9e876f3c8dfef4c1403cfdc8e0526550b4843ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///3Q\u003d",
+        "filename": "tools/source/inet/inetstrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-02-04T15:31:40Z",
+      "side": 1,
+      "message": "This is no longer case-insensitive. Use equalsIgnoreAsciiCase().",
+      "revId": "b9e876f3c8dfef4c1403cfdc8e0526550b4843ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
