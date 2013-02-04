@@ -296,6 +296,12 @@ const OUString& MediaDescriptor::PROP_DOCUMENTBASEURL()
     return sProp;
 }
 
+const OUString& MediaDescriptor::PROP_DEEPDETECTION()
+{
+    static const OUString aProp("DeepDetection");
+    return aProp;
+}
+
 MediaDescriptor::MediaDescriptor()
     : SequenceAsHashMap()
 {

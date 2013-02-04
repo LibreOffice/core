@@ -329,6 +329,8 @@ void printFlatDetectionList(const char* caption, const FlatDetection& types)
             (bAllowDeep        )
            )
         {
+            // Let's the detection service know we are in a deep detection phase.
+            stlDescriptor[comphelper::MediaDescriptor::PROP_DEEPDETECTION()] <<= sal_True;
             sType = impl_detectTypeDeepOnly(stlDescriptor, lUsedDetectors);
         }
 
