@@ -719,7 +719,7 @@ void SAL_CALL ORowSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, R
 
 void SAL_CALL ORowSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(SQLException, RuntimeException)
 {
-    updateValue(columnIndex,x);
+    updateValue(columnIndex, static_cast<bool>(x));
 }
 
 void SAL_CALL ORowSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
@@ -2475,7 +2475,7 @@ void ORowSet::setParameter(sal_Int32 parameterIndex, const ORowSetValue& x)
 
 void SAL_CALL ORowSet::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(SQLException, RuntimeException)
 {
-    setParameter(parameterIndex,x);
+    setParameter(parameterIndex, static_cast<bool>(x));
 }
 
 void SAL_CALL ORowSet::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
