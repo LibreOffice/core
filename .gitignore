@@ -49,6 +49,7 @@
 /config_build/config_*.h
 /config_build.mk
 /configure
+/lo.xcent
 /Makefile
 /NEWS
 /TODO
