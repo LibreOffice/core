@@ -42,7 +42,7 @@
 #define STR_QUERY_NOTABLE                   RID_STR_QRY_START + 21
 #define STR_QRY_ORDERBY_UNRELATED           RID_STR_QRY_START + 22
 #define STR_QUERY_HANDLETEXT                RID_STR_QRY_START + 23
-// free
+#define STR_QUERY_LIMIT_ALL                 RID_STR_QRY_START + 24
 // free
 #define STR_QRY_TOO_MANY_COLUMNS            RID_STR_QRY_START + 26
 #define STR_SVT_SQL_SYNTAX_ERROR            RID_STR_QRY_START + 27

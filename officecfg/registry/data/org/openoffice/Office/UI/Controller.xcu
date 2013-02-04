@@ -187,6 +187,17 @@
           <value>com.sun.star.sdb.ApplicationToolboxController</value>
         </prop>
       </node>
+      <node oor:name="org.libreoffice.comp.dbu.LimitBoxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBLimit</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>org.libreoffice.comp.dbu.LimitBoxController</value>
+        </prop>
+      </node>
       <node oor:name="c2" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:Refresh</value>

@@ -83,6 +83,7 @@
 #define SID_APP_NEW_FOLDER              ( SID_DBACCESS_START +  53 )
 #define SID_APP_NEW_FORM                ( SID_DBACCESS_START +  54 )
 #define SID_DB_APP_PASTE_SPECIAL        ( SID_DBACCESS_START +  55 )
+#define SID_QUERY_LIMIT                 ( SID_DBACCESS_START +  56 )
 
 // status information
 #define SID_DB_APP_STATUS_TYPE          ( SID_DBACCESS_START +  57 )

@@ -78,6 +78,8 @@ namespace dbaui
         mutable ::rtl::OUString
                         m_sName;                // name of the query
 
+        sal_Int64       m_nLimit;           // the limit of the query result (All==-1)
+
         sal_Int32       m_nVisibleRows;     // which rows the selection browse should show
         sal_Int32       m_nSplitPos;        // the position of the splitter
         sal_Int32       m_nCommandType;     // the type of the object we're designing
@@ -143,12 +145,14 @@ namespace dbaui
         sal_Bool        isEsacpeProcessing()    const { return m_bEscapeProcessing; }
         sal_Bool        isGraphicalDesign()     const { return m_bGraphicalDesign; }
         sal_Bool        isDistinct()            const { return m_bDistinct; }
+        sal_Int64       getLimit()              const { return m_nLimit; }
 
         ::rtl::OUString getStatement()          const { return m_sStatement; }
         sal_Int32       getSplitPos()           const { return m_nSplitPos;}
         sal_Int32       getVisibleRows()        const { return m_nVisibleRows; }
 
         void            setDistinct(sal_Bool _bDistinct)        { m_bDistinct = _bDistinct;}
+        void            setLimit(const sal_Int64 _nLimit)       { m_nLimit = _nLimit;}
         void            setSplitPos(sal_Int32 _nSplitPos)       { m_nSplitPos = _nSplitPos;}
         void            setVisibleRows(sal_Int32 _nVisibleRows) { m_nVisibleRows = _nVisibleRows;}
 
