@@ -190,11 +190,7 @@ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 gb_LinkTarget_LDFLAGS := \
 	-MACHINE:IX86 \
 	-NODEFAULTLIB \
-	-OPT:NOREF \
 	-SUBSYSTEM:CONSOLE \
-	-safeseh \
-	-nxcompat \
-	-dynamicbase \
 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
 
 ifneq ($(ENABLE_CRASHDUMP),)
@@ -438,7 +434,7 @@ endef
 # Library class
 
 gb_Library_DEFS := -D_DLL
-gb_Library_TARGETTYPEFLAGS := -DLL
+gb_Library_TARGETTYPEFLAGS := -DLL -OPT:NOREF -SAFESEH -NXCOMPAT -DYNAMICBASE
 gb_Library_get_rpath :=
 
 gb_Library_SYSPRE := i
@@ -588,7 +584,7 @@ endef
 # Executable class
 
 gb_Executable_EXT := .exe
-gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG
+gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG -SAFESEH -NXCOMPAT -DYNAMICBASE
 gb_Executable_get_rpath :=
 
 define gb_Executable_Executable_platform
