@@ -462,47 +462,70 @@ void SdrTableObjImpl::dispose()
 
 void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset )
 {
-    if( (nEdge > 0) && mxTable.is()) try
+    if( (nEdge >= 0) && mxTable.is()) try
     {
         const OUString sSize( RTL_CONSTASCII_USTRINGPARAM( "Size" ) );
-        nEdge--;
         if( mbHorizontal )
         {
-            if( (nEdge >= 0) && (nEdge < getRowCount()) )
+            if( (nEdge >= 0) && (nEdge <= getRowCount()) )
             {
-                sal_Int32 nHeigth = mpLayouter->getRowHeight( nEdge );
-                nHeigth += nOffset;
+                sal_Int32 nHeigth = mpLayouter->getRowHeight( (!nEdge)?nEdge:(nEdge-1) );
+                if(nEdge==0)
+                    nHeigth -= nOffset;
+                else
+                    nHeigth += nOffset;
                 Reference< XIndexAccess > xRows( mxTable->getRows(), UNO_QUERY_THROW );
-                Reference< XPropertySet > xRowSet( xRows->getByIndex( nEdge ), UNO_QUERY_THROW );
+                Reference< XPropertySet > xRowSet( xRows->getByIndex( (!nEdge)?nEdge:(nEdge-1) ), UNO_QUERY_THROW );
                 xRowSet->setPropertyValue( sSize, Any( nHeigth ) );
             }
         }
         else
         {
-            if( (nEdge >= 0) && (nEdge < getColumnCount()) )
+            /*
+            fixes fdo#59889 and resizing of table in edge dragging
+            Total vertical edges in a NxN table is N+1, indexed from 0 to N and total Columns is N, indexed from 0 to N-1
+            In LTR table vertical edge responsible for dragging of column x(x=0 to N-1) is, Edge x+1
+            But in RTL table vertical edge responisble for dragging of column x(x=0 to N-1, but from right to left)is, Edge x
+            In LTR table dragging of edge 0(for RTL table edge N) does nothing.
+            */
+            //Todo: Implement Dragging functionality for leftmost edge of table.
+            if( (nEdge >= 0) && (nEdge <= getColumnCount()) )
             {
-                sal_Int32 nWidth = mpLayouter->getColumnWidth( nEdge );
-                nWidth += nOffset;
-
+                const bool bRTL = mpLayouter->GetWritingMode() == WritingMode_RL_TB;
+                sal_Int32 nWidth;
+                if(bRTL)
+                {
+                    nWidth = mpLayouter->getColumnWidth( nEdge );
+                }
+                else
+                {
+                    nWidth = mpLayouter->getColumnWidth( (!nEdge)?nEdge:(nEdge-1) );
+                }
                 Reference< XIndexAccess > xCols( mxTable->getColumns(), UNO_QUERY_THROW );
-                Reference< XPropertySet > xColSet( xCols->getByIndex( nEdge ), UNO_QUERY_THROW );
-                xColSet->setPropertyValue( sSize, Any( nWidth ) );
-
+                nWidth += nOffset;
+                if(bRTL && nEdge<getColumnCount())
+                {
+                    Reference< XPropertySet > xColSet( xCols->getByIndex( nEdge ), UNO_QUERY_THROW );
+                    xColSet->setPropertyValue( sSize, Any( nWidth ) );
+                }
+                else if(!bRTL && nEdge>0)
+                {
+                    Reference< XPropertySet > xColSet( xCols->getByIndex( (nEdge-1) ), UNO_QUERY_THROW );
+                    xColSet->setPropertyValue( sSize, Any( nWidth ) );
+                }
+                /* To prevent the table resizing on edge dragging */
                 if( nEdge > 0 && nEdge < mxTable->getColumnCount() )
                 {
-                    const bool bRTL = mpLayouter->GetWritingMode() == WritingMode_RL_TB;
 
                     if( bRTL )
                         nEdge--;
-                    else
-                        nEdge++;
 
                     if( (bRTL && (nEdge >= 0)) || (!bRTL && (nEdge < mxTable->getColumnCount())) )
                     {
                         nWidth = mpLayouter->getColumnWidth( nEdge );
                         nWidth = std::max( (sal_Int32)(nWidth - nOffset), (sal_Int32)0 );
 
-                        xColSet = Reference< XPropertySet >( xCols->getByIndex( nEdge ), UNO_QUERY_THROW );
+                        Reference< XPropertySet > xColSet( xCols->getByIndex( nEdge ), UNO_QUERY_THROW );
                         xColSet->setPropertyValue( sSize, Any( nWidth ) );
                     }
                 }
