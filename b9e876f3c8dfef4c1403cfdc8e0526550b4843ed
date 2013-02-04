@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVH///3A\u003d",
+        "filename": "cui/source/inc/cuigaldlg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000243
+      },
+      "writtenOn": "2013-02-04T21:37:49Z",
+      "side": 1,
+      "message": "I see what you mean. Done.",
+      "parentUuid": "AAAAVH///3g\u003d",
+      "revId": "b9e876f3c8dfef4c1403cfdc8e0526550b4843ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVH///3c\u003d",
         "filename": "svtools/source/dialogs/filedlg2.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-04T15:31:40Z",
       "side": 1,
       "message": "Similarly here.",
+      "revId": "b9e876f3c8dfef4c1403cfdc8e0526550b4843ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///20\u003d",
+        "filename": "svtools/source/dialogs/filedlg2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000243
+      },
+      "writtenOn": "2013-02-04T21:37:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVH///3c\u003d",
       "revId": "b9e876f3c8dfef4c1403cfdc8e0526550b4843ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVH///3E\u003d",
+        "filename": "svx/source/form/filtnav.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1000243
+      },
+      "writtenOn": "2013-02-04T21:37:49Z",
+      "side": 1,
+      "message": "This one escaped my attention. Done.",
+      "parentUuid": "AAAAVH///3Y\u003d",
+      "revId": "b9e876f3c8dfef4c1403cfdc8e0526550b4843ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVH///3Q\u003d",
         "filename": "tools/source/inet/inetstrm.cxx",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2013-02-04T15:31:40Z",
       "side": 1,
       "message": "This is no longer case-insensitive. Use equalsIgnoreAsciiCase().",
+      "revId": "b9e876f3c8dfef4c1403cfdc8e0526550b4843ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///3I\u003d",
+        "filename": "tools/source/inet/inetstrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1000243
+      },
+      "writtenOn": "2013-02-04T21:37:49Z",
+      "side": 1,
+      "message": "Ok, second argument is useless. Done.",
+      "parentUuid": "AAAAVH///3Q\u003d",
       "revId": "b9e876f3c8dfef4c1403cfdc8e0526550b4843ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
