@@ -2004,7 +2004,7 @@ namespace
             }
 
             const OSQLParseNode* pTableExp = pParseTree->getChild(3);
-            if ( pTableExp->getChild(6)->count() > 0 || pTableExp->getChild(7)->count() > 0 || pTableExp->getChild(8)->count() > 0)
+            if ( pTableExp->getChild(7)->count() > 0 || pTableExp->getChild(8)->count() > 0)
             {
                 eErrorCode = eStatementTooComplex;
                 break;
@@ -2102,6 +2102,19 @@ namespace
                     {
                         rController.setDistinct(sal_False);
                     }
+
+                    ///check if query has a limit
+                    if( pTableExp->getChild(6)->count() >= 2 && pTableExp->getChild(6)->getChild(1) )
+                    {
+                        const OUString sLimit =
+                            pTableExp->getChild(6)->getChild(1)->getTokenValue();
+                        rController.setLimit( sLimit );
+                    }
+                    else
+                    {
+                        rController.setLimit( ModuleRes(STR_QUERY_LIMIT_ALL) );
+                    }
+
                     if ( (eErrorCode = InstallFields(_pView,pParseTree, pTableView->GetTabWinMap())) == eOk )
                     {
                         // GetSelectionCriteria must be called before GetHavingCriteria
@@ -2933,7 +2946,7 @@ sal_Bool OQueryDesignView::checkStatement()
     }
     // ----------------- Statement aufbauen ----------------------
     ::rtl::OUStringBuffer aSqlCmd(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")));
-    if(static_cast<OQueryController&>(getController()).isDistinct())
+    if(rController.isDistinct())
         aSqlCmd.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DISTINCT ")));
     aSqlCmd.append(aFieldListStr);
     aSqlCmd.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM ")));
@@ -2970,6 +2983,11 @@ sal_Bool OQueryDesignView::checkStatement()
             m_rController.appendError( getParseErrorMessage( eErrorCode ) );
 
         m_rController.displayError();
+    }
+    // --------------------- Limit Clause -------------------
+    if( rController.getLimit() != ModuleRes(STR_QUERY_LIMIT_ALL).toString() )
+    {
+        aSqlCmd.append(" LIMIT " + rController.getLimit());
     }
 
     ::rtl::OUString sSQL = aSqlCmd.makeStringAndClear();
