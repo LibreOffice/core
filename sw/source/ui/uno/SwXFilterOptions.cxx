@@ -37,9 +37,9 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
 
-#define SWFILTEROPTIONSOBJ_SERVICE      RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FilterOptionsDialog")
-#define SWFILTEROPTIONSOBJ_IMPLNAME     RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.FilterOptionsDialog")
-#define FILTER_OPTIONS_NAME             RTL_CONSTASCII_USTRINGPARAM("FilterOptions")
+#define SWFILTEROPTIONSOBJ_SERVICE      "com.sun.star.ui.dialogs.FilterOptionsDialog"
+#define SWFILTEROPTIONSOBJ_IMPLNAME     "com.sun.star.comp.Writer.FilterOptionsDialog"
+#define FILTER_OPTIONS_NAME             "FilterOptions"
 
 SwXFilterOptions::SwXFilterOptions() :
     bExport( sal_False )
