@@ -50,11 +50,6 @@
 #include <postmac.h>
 #endif
 
-#define MY_STRING_(x) # x
-#define MY_STRING(x) MY_STRING_(x)
-
-//----------------------------------------------------------------------------
-
 using osl::DirectoryItem;
 using osl::FileStatus;
 
@@ -509,7 +504,8 @@ bool Bootstrap_Impl::getValue(
     if (key == "_CPPU_ENV") {
         rtl_uString_assign(
             value,
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MY_STRING(CPPU_ENV))).
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(SAL_STRINGIFY(CPPU_ENV))).
              pData));
         return true;
     }
