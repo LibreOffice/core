@@ -114,6 +114,9 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     /// an STL functor which ensures that a SdbcDriver described by a DriverAccess is loaded
     struct EnsureDriver : public ::std::unary_function< DriverAccess, DriverAccess >
     {
+        EnsureDriver( const Reference< XComponentContext > &rxContext )
+            : mxContext( rxContext ) {}
+
         const DriverAccess& operator()( const DriverAccess& _rDescriptor ) const
         {
             if ( !_rDescriptor.xDriver.is() )
@@ -121,9 +124,12 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
                 if ( _rDescriptor.xComponentFactory.is() )
                     // we have a factory for it
                     const_cast< DriverAccess& >( _rDescriptor ).xDriver = _rDescriptor.xDriver.query(
-                        _rDescriptor.xComponentFactory->createInstanceWithContext( _rDescriptor.xUNOContext ) );
+                        _rDescriptor.xComponentFactory->createInstanceWithContext( mxContext ) );
             return _rDescriptor;
         }
+
+    private:
+        Reference< XComponentContext > mxContext;
     };
 
     /// an STL functor which extracts a SdbcDriver from a DriverAccess
@@ -139,7 +145,8 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     /// an STL functor which loads a driver described by a DriverAccess, and extracts the SdbcDriver
     struct ExtractAfterLoad : public ExtractAfterLoad_BASE
     {
-        ExtractAfterLoad() : ExtractAfterLoad_BASE( ExtractDriverFromAccess(), EnsureDriver() ) { }
+        ExtractAfterLoad( const Reference< XComponentContext > &rxContext )
+            : ExtractAfterLoad_BASE( ExtractDriverFromAccess(), EnsureDriver( rxContext ) ) {}
     };
 
     struct ExtractDriverFromCollectionElement : public ::std::unary_function< DriverCollection::value_type, Reference<XDriver> >
@@ -287,7 +294,6 @@ void OSDBCDriverManager::bootstrapDrivers()
                 {   // yes -> no need to load the driver immediately (load it later when needed)
                     aDriverDescriptor.sImplementationName = xSI->getImplementationName();
                     aDriverDescriptor.xComponentFactory = xFactory;
-                    aDriverDescriptor.xUNOContext = m_xContext;
                     bValidDescriptor = sal_True;
 
                     m_aEventLogger.log( LogLevel::CONFIG,
@@ -475,7 +481,7 @@ Reference< XEnumeration > SAL_CALL OSDBCDriverManager::createEnumeration(  ) thr
     ODriverEnumeration::DriverArray aDrivers;
 
     // ensure that all our bootstrapped drivers are instantiated
-    ::std::for_each( m_aDriversBS.begin(), m_aDriversBS.end(), EnsureDriver() );
+    ::std::for_each( m_aDriversBS.begin(), m_aDriversBS.end(), EnsureDriver( m_xContext ) );
 
     // copy the bootstrapped drivers
     ::std::transform(
@@ -655,13 +661,13 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
             aFind = ::std::find_if(
                 m_aDriversBS.begin(),       // begin of search range
                 m_aDriversBS.end(),         // end of search range
-                o3tl::unary_compose< AcceptsURL, ExtractAfterLoad >( AcceptsURL( _rURL ), ExtractAfterLoad() )
+                o3tl::unary_compose< AcceptsURL, ExtractAfterLoad >( AcceptsURL( _rURL ), ExtractAfterLoad( m_xContext ) )
                                             // compose two functors: extract the driver from the access, then ask the resulting driver for acceptance
             );
         } // if ( m_aDriversBS.find(sDriverFactoryName ) == m_aDriversBS.end() )
         else
         {
-            EnsureDriver aEnsure;
+            EnsureDriver aEnsure( m_xContext );
             aEnsure(*aFind);
         }
 

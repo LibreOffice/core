@@ -47,7 +47,6 @@ namespace drivermanager
         OUString           sImplementationName;        /// the implementation name of the driver
         css::uno::Reference< css::sdbc::XDriver >                  xDriver;                    /// the driver itself
         css::uno::Reference< css::lang::XSingleComponentFactory >  xComponentFactory;          /// the factory to create the driver component (if not already done so)
-        css::uno::Reference<css::uno::XComponentContext>           xUNOContext;                /// ensure UNO context propagation
     };
 
     //==========================================================================
