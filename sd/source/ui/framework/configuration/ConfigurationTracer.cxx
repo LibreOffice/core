@@ -21,6 +21,7 @@
 #include "ConfigurationTracer.hxx"
 
 #include <cstdio>
+#include "sal/log.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -32,16 +33,16 @@ void ConfigurationTracer::TraceConfiguration (
     const char* pMessage)
 {
 #ifdef DEBUG
-    OSL_TRACE("%s at %p {", pMessage, rxConfiguration.get());
+    SAL_INFO("sd.ui","" << pMessage << " at " << rxConfiguration.get() << " {");
     if (rxConfiguration.is())
     {
         TraceBoundResources(rxConfiguration, NULL, 0);
     }
     else
     {
-        OSL_TRACE("    empty");
+        SAL_INFO("sd.ui","    empty");
     }
-    OSL_TRACE("}");
+    SAL_INFO("sd.ui","}");
 #else
     (void)rxConfiguration;
     (void)pMessage;
@@ -65,7 +66,7 @@ void ConfigurationTracer::TraceBoundResources (
         ::rtl::OUString sLine (aResourceList[nIndex]->getResourceURL());
         for (int i=0; i<nIndentation; ++i)
             sLine = sIndentation + sLine;
-        OSL_TRACE("%s", OUStringToOString(sLine, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO("sd.ui","" << OUStringToOString(sLine, RTL_TEXTENCODING_UTF8).getStr());
         TraceBoundResources(rxConfiguration, aResourceList[nIndex], nIndentation+1);
     }
 }

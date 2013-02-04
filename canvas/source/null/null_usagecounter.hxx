@@ -22,6 +22,7 @@
 
 #include <osl/interlck.h>
 #include <boost/current_function.hpp>
+#include "sal/log.hxx"
 
 namespace nullcanvas
 {
@@ -36,9 +37,7 @@ namespace nullcanvas
     public:
         UsageCounter()
         {
-            OSL_TRACE( "%s, %d objects currently in use.\n",
-                       BOOST_CURRENT_FUNCTION,
-                       osl_atomic_increment( &s_nCount ) );
+            SAL_INFO("canvas.null","" << BOOST_CURRENT_FUNCTION << ", " << osl_atomic_increment( &s_nCount ) << " objects currently in use.\n");
         }
 
         ~UsageCounter()
@@ -47,14 +46,11 @@ namespace nullcanvas
 
             if( !nCount )
             {
-                OSL_TRACE( "%s, last instance deleted.\n",
-                           BOOST_CURRENT_FUNCTION );
+                SAL_INFO("canvas.null", "" << BOOST_CURRENT_FUNCTION << ", last instance deleted.\n");
             }
             else
             {
-                OSL_TRACE( "%s, %d instances left.\n",
-                           BOOST_CURRENT_FUNCTION,
-                           nCount );
+                SAL_INFO("canvas.null", "" << BOOST_CURRENT_FUNCTION << ", " << nCount << " instances left.\n");
             }
         }
 
