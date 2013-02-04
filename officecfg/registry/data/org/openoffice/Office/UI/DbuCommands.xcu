@@ -72,6 +72,11 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:DBLimit" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Limit</value>
+                </prop>
+            </node>
             <node oor:name=".uno:PasteSpecial" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Paste ~Special...</value>

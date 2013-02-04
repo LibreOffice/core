@@ -2003,7 +2003,7 @@ namespace
             }
 
             const OSQLParseNode* pTableExp = pParseTree->getChild(3);
-            if ( pTableExp->getChild(6)->count() > 0 || pTableExp->getChild(7)->count() > 0 || pTableExp->getChild(8)->count() > 0)
+            if ( pTableExp->getChild(7)->count() > 0 || pTableExp->getChild(8)->count() > 0)
             {
                 eErrorCode = eStatementTooComplex;
                 break;
@@ -2101,6 +2101,18 @@ namespace
                     {
                         rController.setDistinct(sal_False);
                     }
+
+                    ///check if query has a limit
+                    if( pTableExp->getChild(6)->count() >= 2 && pTableExp->getChild(6)->getChild(1) )
+                    {
+                        rController.setLimit(
+                            pTableExp->getChild(6)->getChild(1)->getTokenValue().toInt64() );
+                    }
+                    else
+                    {
+                        rController.setLimit(-1);
+                    }
+
                     if ( (eErrorCode = InstallFields(_pView,pParseTree, pTableView->GetTabWinMap())) == eOk )
                     {
                         // GetSelectionCriteria must be called before GetHavingCriteria
@@ -2932,7 +2944,7 @@ OUString OQueryDesignView::getStatement()
     }
     // ----------------- Statement aufbauen ----------------------
     OUStringBuffer aSqlCmd(OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")));
-    if(static_cast<OQueryController&>(getController()).isDistinct())
+    if(rController.isDistinct())
         aSqlCmd.append(OUString(RTL_CONSTASCII_USTRINGPARAM(" DISTINCT ")));
     aSqlCmd.append(aFieldListStr);
     aSqlCmd.append(OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM ")));
@@ -2969,6 +2981,14 @@ OUString OQueryDesignView::getStatement()
             m_rController.appendError( getParseErrorMessage( eErrorCode ) );
 
         m_rController.displayError();
+    }
+    // --------------------- Limit Clause -------------------
+    {
+        const sal_Int64 nLimit = rController.getLimit();
+        if( nLimit != -1 )
+        {
+            aSqlCmd.append( " LIMIT " + OUString::number(nLimit) );
+        }
     }
 
     OUString sSQL = aSqlCmd.makeStringAndClear();

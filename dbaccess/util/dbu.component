@@ -104,4 +104,7 @@
   <implementation name="org.openoffice.comp.dbu.OViewDesign">
     <service name="com.sun.star.sdb.ViewDesign"/>
   </implementation>
+  <implementation name="org.libreoffice.comp.dbu.LimitBoxController">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
 </component>

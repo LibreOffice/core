@@ -24,4 +24,5 @@
  <toolbar:toolbaritem xlink:href=".uno:DBViewTableNames" toolbar:helpid="helpid:12298" toolbar:text="" toolbar:style="" />
  <toolbar:toolbaritem xlink:href=".uno:DBViewAliases" toolbar:helpid="helpid:12299" toolbar:text="" toolbar:style="" />
  <toolbar:toolbaritem xlink:href=".uno:DBDistinctValues" toolbar:helpid="helpid:12300" toolbar:text="" toolbar:style="" />
+ <toolbar:toolbaritem xlink:href=".uno:DBLimit" />
 </toolbar:toolbar>
