@@ -69,13 +69,12 @@ namespace abp
         // On Linux:
         // - EVOLUTION, EVOLUTION_GROUPWISE, EVOLUTION_LDAP (if applicable)
         // - MORK (via mork driver, which is built unconditionally)
-        // - THUNDERBIRD (via mork driver?, which is built unconditionally)
         // - KAB (if applicable)
-        // - LDAP (via mork driver?, which is built unconditionally)
         // - OTHER
         //
         // On Mac OS X:
         // - MACAB (if applicable)
+        // - MORK (via mork driver, which is built unconditionally)
         // - OTHER
         //
         // On Windows:
@@ -83,22 +82,18 @@ namespace abp
         //   if WITH_MOZILLA)
         // - OTHER
 
-        bool bWithMozilla = false, bWindows = false;
-        bool bHaveEvolution = false, bHaveKab = false;
+        bool bWithMozilla = false;
+        bool bHaveEvolution = false;
+        bool bHaveKab = false;
         bool bHaveMacab = false;
+        bool bWithMork = false;
 
 #if defined WNT
-
 #if defined WITH_MOZILLA
         bWithMozilla = true;
 #endif
-        bWindows = true;
-
 #else
-
-#if !defined MACOSX
-        bWithMozilla = true;
-#endif
+        bWithMork = true;
 
         Reference< XDriverManager2 > xManager = DriverManager::create( comphelper::getComponentContext( _pParent->getORB() ) );
 
@@ -141,13 +136,13 @@ namespace abp
         m_aAllTypes.push_back( ButtonItem( &m_aEvolution, AST_EVOLUTION, bHaveEvolution ) );
         m_aAllTypes.push_back( ButtonItem( &m_aEvolutionGroupwise, AST_EVOLUTION_GROUPWISE, bHaveEvolution ) );
         m_aAllTypes.push_back( ButtonItem( &m_aEvolutionLdap, AST_EVOLUTION_LDAP, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aMORK, AST_MORK, bWithMozilla ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aThunderbird, AST_THUNDERBIRD, bWithMozilla ) );
+        m_aAllTypes.push_back( ButtonItem( &m_aMORK, AST_MORK, bWithMozilla || bWithMork) );
+        m_aAllTypes.push_back( ButtonItem( &m_aThunderbird, AST_THUNDERBIRD, bWithMozilla || bWithMork) );
         m_aAllTypes.push_back( ButtonItem( &m_aKab, AST_KAB, bHaveKab ) );
         m_aAllTypes.push_back( ButtonItem( &m_aMacab, AST_MACAB, bHaveMacab ) );
         m_aAllTypes.push_back( ButtonItem( &m_aLDAP, AST_LDAP, bWithMozilla ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aOutlook, AST_OUTLOOK, bWithMozilla && bWindows ) );
-        m_aAllTypes.push_back( ButtonItem( &m_aOE, AST_OE, bWithMozilla && bWindows ) );
+        m_aAllTypes.push_back( ButtonItem( &m_aOutlook, AST_OUTLOOK, bWithMozilla ) );
+        m_aAllTypes.push_back( ButtonItem( &m_aOE, AST_OE, bWithMozilla ) );
         m_aAllTypes.push_back( ButtonItem( &m_aOther, AST_OTHER, true ) );
 
         Link aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
