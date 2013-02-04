@@ -2729,11 +2729,14 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
             {
                 rDesc.GetFirst().SetFmtAttr( rDesc.GetMaster().GetHeader() );
                 rDesc.GetFirst().SetFmtAttr( rDesc.GetMaster().GetFooter() );
+                // fdo#60250 copy margins for mirrored pages
+                rDesc.GetFirst().SetFmtAttr( rDesc.GetMaster().GetLRSpace() );
             }
             else
             {
                 rDesc.GetFirst().SetFmtAttr( rDesc.GetLeft().GetHeader() );
                 rDesc.GetFirst().SetFmtAttr( rDesc.GetLeft().GetFooter() );
+                rDesc.GetFirst().SetFmtAttr( rDesc.GetLeft().GetLRSpace() );
             }
         }
         pFmt = rDesc.GetFirstFmt();
