@@ -28,11 +28,11 @@ using namespace ::rtl;
 const char aBlockList[] =  "_block-list";
 
 SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
-    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< uno::XComponentContext > xContext,
     SvxAutocorrWordList *pNewAutocorr_List,
     SvxAutoCorrect &rNewAutoCorrect,
     const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rNewStorage)
-:   SvXMLImport( xServiceFactory ),
+:   SvXMLImport( xContext ),
     pAutocorr_List (pNewAutocorr_List),
     rAutoCorrect ( rNewAutoCorrect ),
     xStorage ( rNewStorage )
@@ -143,9 +143,9 @@ SvXMLWordContext::~SvXMLWordContext ( void )
 }
 
 SvXMLExceptionListImport::SvXMLExceptionListImport(
-    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< uno::XComponentContext > xContext,
     SvStringsISortDtor & rNewList )
-:   SvXMLImport( xServiceFactory ),
+:   SvXMLImport( xContext ),
     rList (rNewList)
 {
     GetNamespaceMap().Add(

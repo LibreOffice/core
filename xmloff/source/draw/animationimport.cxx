@@ -1282,7 +1282,7 @@ private:
 };
 
 AnimationsImport::AnimationsImport( const Reference< XComponentContext > & rxContext )
-: SvXMLImport( Reference<XMultiServiceFactory>(rxContext->getServiceManager(), UNO_QUERY_THROW) , true )
+: SvXMLImport( rxContext , true )
 {
     // add namespaces
     GetNamespaceMap().Add(

@@ -1001,9 +1001,9 @@ SdXMLStylesContext::SdXMLStylesContext(
 :   SvXMLStylesContext(rImport, nPrfx, rLName, xAttrList),
     mbIsAutoStyle(bIsAutoStyle)
 {
-    Reference< lang::XMultiServiceFactory > xMSF = rImport.getServiceFactory();
-    mpNumFormatter = new SvNumberFormatter( comphelper::getComponentContext(xMSF), LANGUAGE_SYSTEM );
-    mpNumFmtHelper = new SvXMLNumFmtHelper( mpNumFormatter, comphelper::getComponentContext(xMSF) );
+    Reference< uno::XComponentContext > xContext = rImport.GetComponentContext();
+    mpNumFormatter = new SvNumberFormatter( xContext, LANGUAGE_SYSTEM );
+    mpNumFmtHelper = new SvXMLNumFmtHelper( mpNumFormatter, xContext );
 }
 
 //////////////////////////////////////////////////////////////////////////////

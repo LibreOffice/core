@@ -642,7 +642,8 @@ namespace xmloff
         Reference< XPropertySet > xReturn;
         if (!m_sServiceName.isEmpty())
         {
-            Reference< XInterface > xPure = m_rFormImport.getGlobalContext().getServiceFactory()->createInstance(m_sServiceName);
+            Reference< XComponentContext > xContext = m_rFormImport.getGlobalContext().GetComponentContext();
+            Reference< XInterface > xPure = xContext->getServiceManager()->createInstanceWithContext(m_sServiceName, xContext);
             OSL_ENSURE(xPure.is(),
                         ::rtl::OStringBuffer("OElementImport::createElement: service factory gave me no object (service name: ").append(rtl::OUStringToOString(m_sServiceName, RTL_TEXTENCODING_ASCII_US)).append(")!").getStr());
             xReturn = Reference< XPropertySet >(xPure, UNO_QUERY);

@@ -461,8 +461,7 @@ XMLConfigBaseContext::XMLConfigBaseContext(SvXMLImport& rImport, sal_uInt16 nPrf
         const rtl::OUString& rLName, com::sun::star::uno::Any& rTempAny,
         XMLConfigBaseContext* pTempBaseContext)
     : SvXMLImportContext( rImport, nPrfx, rLName ),
-    // #110680#
-    maProps( comphelper::getComponentContext(rImport.getServiceFactory())),
+    maProps( rImport.GetComponentContext() ),
     maProp(),
     mrAny(rTempAny),
     mpBaseContext(pTempBaseContext)
@@ -679,9 +678,9 @@ void XMLConfigItemContext::ManipulateConfigItem()
     else if( (mrItemName == "ColorTableURL") || (mrItemName == "LineEndTableURL") || (mrItemName == "HatchTableURL")
           || (mrItemName == "DashTableURL") || (mrItemName == "GradientTableURL") || (mrItemName == "BitmapTableURL") )
     {
-        if( GetImport().getServiceFactory().is() ) try
+        try
         {
-            uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(GetImport().getServiceFactory()) );
+            uno::Reference< uno::XComponentContext > xContext( GetImport().GetComponentContext() );
             uno::Reference< util::XStringSubstitution > xStringSubsitution( util::PathSubstitution::create(xContext) );
 
             rtl::OUString aURL;

@@ -87,7 +87,7 @@ public:
 
     //!!  see comment for pDic member
     ConvDicXMLImport( ConvDic *pConvDic, const rtl::OUString /*&rFileName*/ ) :
-        SvXMLImport ( comphelper::getProcessServiceFactory(), IMPORT_ALL ),
+        SvXMLImport ( comphelper::getProcessComponentContext(), IMPORT_ALL ),
         pDic        ( pConvDic )
     {
         nLanguage       = LANGUAGE_NONE;

@@ -36,7 +36,7 @@ class SvxXMLXTableImport : public SvXMLImport
 public:
     // #110680#
     SvxXMLXTableImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & rTable,
         com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& xGrfResolver);
 

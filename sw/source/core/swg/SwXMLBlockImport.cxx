@@ -31,11 +31,10 @@ sal_Char const sXML_np__block_list[] = "_block-list";
 sal_Char const sXML_np__office[] = "_ooffice";
 sal_Char const sXML_np__text[] = "_otext";
 
-// #110680#
 SwXMLBlockListImport::SwXMLBlockListImport(
-    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< uno::XComponentContext > xContext,
     SwXMLTextBlocks &rBlocks )
-:   SvXMLImport( xServiceFactory, 0 ),
+:   SvXMLImport( xContext, 0 ),
     rBlockList (rBlocks)
 {
     GetNamespaceMap().Add( OUString ( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__block_list ) ),
@@ -63,13 +62,12 @@ SvXMLImportContext *SwXMLBlockListImport::CreateContext(
     return pContext;
 }
 
-// #110680#
 SwXMLTextBlockImport::SwXMLTextBlockImport(
-    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< uno::XComponentContext > xContext,
     SwXMLTextBlocks &rBlocks,
     String & rNewText,
     sal_Bool bNewTextOnly )
-:   SvXMLImport(xServiceFactory, IMPORT_ALL ),
+:   SvXMLImport(xContext, IMPORT_ALL ),
     rBlockList ( rBlocks ),
     bTextOnly ( bNewTextOnly ),
     m_rText ( rNewText )

@@ -109,7 +109,7 @@ class SvxXMLXTextImportComponent : public SvXMLImport
 {
 public:
     SvxXMLXTextImportComponent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         const uno::Reference< XText > & xText );
 
     virtual ~SvxXMLXTextImportComponent() throw ();
@@ -125,9 +125,9 @@ private:
 // --------------------------------------------------------------------
 
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const uno::Reference< XText > & xText )
-:   SvXMLImport(xServiceFactory),
+:   SvXMLImport(xContext),
     mxText( xText )
 {
     GetTextImport()->SetCursor( mxText->createTextCursor() );
@@ -160,13 +160,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
     {
         do
         {
-            uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
             uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-            if( !xServiceFactory.is() )
-            {
-                OSL_FAIL( "SvxXMLXTableImport::load: got no service manager" );
-                break;
-            }
 
             uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
@@ -206,7 +200,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
 */
 
             // uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xText ) );
-            uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xServiceFactory, xText ) );
+            uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xContext, xText ) );
 
             xParser->setDocumentHandler( xHandler );
 

@@ -150,11 +150,11 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
 
     Sequence<Any> aArgs( 0 );
 
-    Reference< XMultiServiceFactory > xServiceFactory = GetImport().getServiceFactory();
+    Reference< XComponentContext > xContext( GetImport().GetComponentContext() );
 
     xHandler = Reference < XDocumentHandler >(
-        xServiceFactory->createInstanceWithArguments( sFilterService, aArgs),
-                                               UNO_QUERY);
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sFilterService, aArgs, xContext),
+        UNO_QUERY);
 
     if( !xHandler.is() )
         return sal_False;

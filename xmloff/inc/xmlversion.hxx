@@ -68,9 +68,8 @@ protected:
 
 public:
 
-    // #110897#
     XMLVersionListImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions );
     ~XMLVersionListImport() throw();
 

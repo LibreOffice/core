@@ -19,6 +19,7 @@
 
 
 #include <osl/thread.h>
+#include <comphelper/processfactory.hxx>
 
 #include <xmloff/xmlscripti.hxx>
 #include "sdxmlimp_impl.hxx"
@@ -295,7 +296,7 @@ OUString SAL_CALL classname##_getImplementationName() throw()\
 }\
 uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )\
 {\
-    return (cppu::OWeakObject*)new SdXMLImport( rSMgr, draw, flags );\
+    return (cppu::OWeakObject*)new SdXMLImport( comphelper::getComponentContext(rSMgr), draw, flags );\
 }
 
 SERVICE( XMLImpressImportOasis, "com.sun.star.comp.Impress.XMLOasisImporter", "XMLImpressImportOasis", sal_False, IMPORT_ALL )
@@ -317,9 +318,9 @@ SERVICE( XMLDrawSettingsImportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsImp
 
 // #110680#
 SdXMLImport::SdXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
     sal_Bool bIsDraw, sal_uInt16 nImportFlags )
-:   SvXMLImport( xServiceFactory, nImportFlags ),
+:   SvXMLImport( xContext, nImportFlags ),
     mpMasterStylesContext(0L),
     mpDocElemTokenMap(0L),
     mpBodyElemTokenMap(0L),

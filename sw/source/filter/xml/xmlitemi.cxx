@@ -336,7 +336,7 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
 
 void SwXMLImport::_InitItemImport()
 {
-    pTwipUnitConv = new SvXMLUnitConverter( comphelper::getComponentContext(getServiceFactory()),
+    pTwipUnitConv = new SvXMLUnitConverter( GetComponentContext(),
             util::MeasureUnit::TWIP, util::MeasureUnit::TWIP );
 
     xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );

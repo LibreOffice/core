@@ -65,6 +65,7 @@
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xformsimport.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 using ::rtl::OUString;
 
@@ -408,9 +409,9 @@ SvXMLImportContext *SwXMLImport::CreateContext(
 }
 
 SwXMLImport::SwXMLImport(
-    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< uno::XComponentContext > xContext,
     sal_uInt16 nImportFlags)
-:   SvXMLImport( xServiceFactory, nImportFlags ),
+:   SvXMLImport( xContext, nImportFlags ),
     pSttNdIdx( 0 ),
     pTableItemMapper( 0 ),
     pDocElemTokenMap( 0 ),
@@ -1560,7 +1561,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport( rSMgr, IMPORT_ALL );
+    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_ALL );
 }
 
 OUString SAL_CALL SwXMLImportStyles_getImplementationName() throw()
@@ -1582,7 +1583,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(
     throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SwXMLImport(
-        rSMgr,
+        comphelper::getComponentContext(rSMgr),
         IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
         IMPORT_FONTDECLS );
 }
@@ -1606,7 +1607,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(
     throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SwXMLImport(
-        rSMgr,
+        comphelper::getComponentContext(rSMgr),
         IMPORT_AUTOSTYLES | IMPORT_CONTENT | IMPORT_SCRIPTS |
         IMPORT_FONTDECLS );
 }
@@ -1629,7 +1630,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport( rSMgr, IMPORT_META );
+    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_META );
 }
 
 OUString SAL_CALL SwXMLImportSettings_getImplementationName() throw()
@@ -1650,7 +1651,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport( rSMgr, IMPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_SETTINGS );
 }
 
 

@@ -357,8 +357,8 @@ sal_Int32 ReadThroughComponent(
 // -------------
 DBG_NAME(ODBFilter)
 
-ODBFilter::ODBFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF )
-    :SvXMLImport(_rxMSF)
+ODBFilter::ODBFilter( const uno::Reference< XComponentContext >& _rxContext )
+    :SvXMLImport(_rxContext)
     ,m_bNewFormat(false)
 {
     DBG_CTOR(ODBFilter,NULL);
@@ -382,7 +382,16 @@ ODBFilter::~ODBFilter() throw()
     DBG_DTOR(ODBFilter,NULL);
 }
 // -----------------------------------------------------------------------------
-IMPLEMENT_SERVICE_INFO1_STATIC( ODBFilter, "com.sun.star.comp.sdb.DBFilter", "com.sun.star.document.ImportFilter")
+IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(ODBFilter, "com.sun.star.comp.sdb.DBFilter")
+IMPLEMENT_SERVICE_INFO_SUPPORTS(ODBFilter)
+IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(ODBFilter, "com.sun.star.document.ImportFilter")
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    SAL_CALL ODBFilter::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+{
+    return static_cast< XServiceInfo* >(new ODBFilter( comphelper::getComponentContext(_rxORB)));
+}
+
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
@@ -446,7 +455,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         uno::Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
         m_xDataSource.set(xOfficeDoc->getDataSource(),UNO_QUERY_THROW);
-        uno::Reference<beans::XPropertyChangeListener> xListener = new DatasourceURLListener( comphelper::getComponentContext(getServiceFactory()));
+        uno::Reference<beans::XPropertyChangeListener> xListener = new DatasourceURLListener( GetComponentContext());
         m_xDataSource->addPropertyChangeListener(PROPERTY_URL,xListener);
         uno::Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
         SetNumberFormatsSupplier(xNum);
@@ -456,7 +465,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xModel
                                     ,"settings.xml"
                                     ,"Settings.xml"
-                                    ,comphelper::getComponentContext(getServiceFactory())
+                                    ,GetComponentContext()
                                     ,this
                                     );
 
@@ -465,7 +474,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xModel
                                     ,"content.xml"
                                     ,"Content.xml"
-                                    ,comphelper::getComponentContext(getServiceFactory())
+                                    ,GetComponentContext()
                                     ,this
                                     );
 
@@ -871,7 +880,7 @@ void ODBFilter::setPropertyInfo()
     if ( !xDataSource.is() )
         return;
 
-    ::connectivity::DriversConfig aDriverConfig(comphelper::getComponentContext(getServiceFactory()));
+    ::connectivity::DriversConfig aDriverConfig(GetComponentContext());
     const ::rtl::OUString sURL = ::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_URL));
     ::comphelper::NamedValueCollection aDataSourceSettings = aDriverConfig.getProperties( sURL );
 

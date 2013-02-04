@@ -211,7 +211,7 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
-    const uno::Reference<XMultiServiceFactory> & rFactory,
+    const uno::Reference<XComponentContext> & rxContext,
     const Reference< document::XGraphicObjectResolver > & _xGraphicObjectResolver,
     const Reference<document::XEmbeddedObjectResolver>& _xEmbeddedObjectResolver,
     const ::rtl::OUString& _sFilterName
@@ -278,14 +278,14 @@ sal_Int32 ReadThroughComponent(
             aFilterCompArgs[ nArgs++ ] <<= _xProp;
 
         Reference< xml::sax::XDocumentHandler > xDocHandler(
-            rFactory->createInstanceWithArguments( _sFilterName, aFilterCompArgs ),
+            rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(_sFilterName, aFilterCompArgs, rxContext),
             uno::UNO_QUERY_THROW );
         uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
         // read from the stream
         return ReadThroughComponent( xInputStream
                                     ,xModelComponent
                                     ,pStreamName
-                                    ,comphelper::getComponentContext(rFactory)
+                                    ,rxContext
                                     ,xDocHandler
                                     ,bEncrypted );
     }
@@ -297,7 +297,7 @@ sal_Int32 ReadThroughComponent(
 //---------------------------------------------------------------------
 uno::Reference< uno::XInterface > ORptImportHelper::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
-    return static_cast< XServiceInfo* >(new ORptFilter(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY),IMPORT_SETTINGS ));
+    return static_cast< XServiceInfo* >(new ORptFilter(xContext, IMPORT_SETTINGS ));
 }
 //---------------------------------------------------------------------
 ::rtl::OUString ORptImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -314,7 +314,7 @@ Sequence< ::rtl::OUString > ORptImportHelper::getSupportedServiceNames_Static(  
 //---------------------------------------------------------------------
 Reference< XInterface > ORptContentImportHelper::create(const Reference< XComponentContext > & xContext)
 {
-    return static_cast< XServiceInfo* >(new ORptFilter(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY),IMPORT_AUTOSTYLES |   IMPORT_CONTENT | IMPORT_SCRIPTS |
+    return static_cast< XServiceInfo* >(new ORptFilter(xContext,IMPORT_AUTOSTYLES |   IMPORT_CONTENT | IMPORT_SCRIPTS |
         IMPORT_FONTDECLS ));
 }
 //---------------------------------------------------------------------
@@ -333,7 +333,7 @@ Sequence< ::rtl::OUString > ORptContentImportHelper::getSupportedServiceNames_St
 //---------------------------------------------------------------------
 Reference< XInterface > ORptStylesImportHelper::create(Reference< XComponentContext > const & xContext)
 {
-    return static_cast< XServiceInfo* >(new ORptFilter(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY),
+    return static_cast< XServiceInfo* >(new ORptFilter(xContext,
         IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
         IMPORT_FONTDECLS ));
 }
@@ -353,7 +353,7 @@ Sequence< ::rtl::OUString > ORptStylesImportHelper::getSupportedServiceNames_Sta
 //---------------------------------------------------------------------
 Reference< XInterface > ORptMetaImportHelper::create(Reference< XComponentContext > const & xContext)
 {
-    return static_cast< XServiceInfo* >(new ORptFilter(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY),
+    return static_cast< XServiceInfo* >(new ORptFilter(xContext,
         IMPORT_META));
 }
 //---------------------------------------------------------------------
@@ -373,8 +373,8 @@ Sequence< ::rtl::OUString > ORptMetaImportHelper::getSupportedServiceNames_Stati
 // - ORptFilter -
 // -------------
 DBG_NAME(rpt_ORptFilter)
-ORptFilter::ORptFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nImportFlags )
-    :SvXMLImport(_rxMSF,nImportFlags)
+ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext,sal_uInt16 nImportFlags )
+    :SvXMLImport(_rxContext,nImportFlags)
 {
     DBG_CTOR(rpt_ORptFilter,NULL);
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_100TH);
@@ -403,7 +403,7 @@ ORptFilter::~ORptFilter() throw()
 //------------------------------------------------------------------------------
 uno::Reference< XInterface > ORptFilter::create(uno::Reference< XComponentContext > const & xContext)
 {
-    return *(new ORptFilter(uno::Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY)));
+    return *(new ORptFilter(xContext));
 }
 
 // -----------------------------------------------------------------------------
@@ -527,19 +527,17 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         Reference< document::XGraphicObjectResolver > xGraphicObjectResolver;
         uno::Reference<document::XEmbeddedObjectResolver> xEmbeddedObjectResolver;
-        uno::Reference< lang::XMultiServiceFactory > xServiceFactory( getServiceFactory(), uno::UNO_QUERY);
-        if( xServiceFactory.is())
-        {
-            uno::Sequence< uno::Any > aArgs(1);
-            aArgs[0] <<= xStorage;
-            xGraphicObjectResolver.set(
-                xServiceFactory->createInstanceWithArguments(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Svx.GraphicImportHelper")), aArgs ), uno::UNO_QUERY );
+        uno::Reference< uno::XComponentContext > xContext = GetComponentContext();
 
-            uno::Reference< lang::XMultiServiceFactory > xReportServiceFactory( m_xReportDefinition, uno::UNO_QUERY);
-            aArgs[0] <<= beans::NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Storage")),uno::makeAny(xStorage));
-            xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver")),aArgs) , uno::UNO_QUERY);
-        }
+        uno::Sequence< uno::Any > aArgs(1);
+        aArgs[0] <<= xStorage;
+        xGraphicObjectResolver.set(
+                xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.Svx.GraphicImportHelper", aArgs, xContext),
+                uno::UNO_QUERY );
+
+        uno::Reference< lang::XMultiServiceFactory > xReportServiceFactory( m_xReportDefinition, uno::UNO_QUERY);
+        aArgs[0] <<= beans::NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Storage")),uno::makeAny(xStorage));
+        xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver")),aArgs) , uno::UNO_QUERY);
 
         static const ::rtl::OUString s_sOld(RTL_CONSTASCII_USTRINGPARAM("OldFormat"));
         static comphelper::PropertyMapEntry pMap[] =
@@ -566,7 +564,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xModel
                                     ,"meta.xml"
                                     ,"Meta.xml"
-                                    ,getServiceFactory()
+                                    ,GetComponentContext()
                                     ,xGraphicObjectResolver
                                     ,xEmbeddedObjectResolver
                                     ,SERVICE_METAIMPORTER
@@ -590,7 +588,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xModel
                                     ,"settings.xml"
                                     ,"Settings.xml"
-                                    ,getServiceFactory()
+                                    ,GetComponentContext()
                                     ,xGraphicObjectResolver
                                     ,xEmbeddedObjectResolver
                                     ,SERVICE_SETTINGSIMPORTER
@@ -604,7 +602,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xModel
                                     ,"styles.xml"
                                     ,"Styles.xml"
-                                    ,getServiceFactory()
+                                    ,GetComponentContext()
                                     ,xGraphicObjectResolver
                                     ,xEmbeddedObjectResolver
                                     ,SERVICE_STYLESIMPORTER
@@ -618,7 +616,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xModel
                                     ,"content.xml"
                                     ,"Content.xml"
-                                    ,getServiceFactory()
+                                    ,GetComponentContext()
                                     ,xGraphicObjectResolver
                                     ,xEmbeddedObjectResolver
                                     ,SERVICE_CONTENTIMPORTER

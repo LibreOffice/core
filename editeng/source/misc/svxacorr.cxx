@@ -1961,14 +1961,8 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
             }
             else
             {
-                uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
-                    comphelper::getProcessServiceFactory();
-                OSL_ENSURE( xServiceFactory.is(),
-                    "XMLReader::Read: got no service manager" );
-                if( !xServiceFactory.is() )
-                {
-                    // Throw an exception ?
-                }
+                uno::Reference< uno::XComponentContext > xContext =
+                    comphelper::getProcessComponentContext();
 
                 xml::sax::InputSource aParserInput;
                 aParserInput.sSystemId = sStrmName;
@@ -1978,10 +1972,10 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                 aParserInput.aInputStream = new utl::OInputStreamWrapper( *xStrm );
 
                 // get filter
-                uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLExceptionListImport ( xServiceFactory, *rpLst );
+                uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLExceptionListImport ( xContext, *rpLst );
 
                 // connect parser and filter
-                uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( comphelper::getComponentContext(xServiceFactory) );
+                uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
                 xParser->setDocumentHandler( xFilter );
 
                 // parse
@@ -2083,7 +2077,6 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetStorageFromURL( sShareAutoCorrFile, embed::ElementModes::READ );
         String aXMLWordListName( pXMLImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
         uno::Reference < io::XStream > xStrm = xStg->openStreamElement( aXMLWordListName, embed::ElementModes::READ );
-        uno::Reference< lang::XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
 
         xml::sax::InputSource aParserInput;
@@ -2093,7 +2086,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         // get parser
         uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
         RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "AutoCorrect Import" );
-        uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xServiceFactory, pAutocorr_List, rAutoCorrect, xStg );
+        uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xContext, pAutocorr_List, rAutoCorrect, xStg );
 
         // connect parser and filter
         xParser->setDocumentHandler( xFilter );

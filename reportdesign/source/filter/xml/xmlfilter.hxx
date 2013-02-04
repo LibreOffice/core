@@ -120,7 +120,7 @@ protected:
     virtual ~ORptFilter()  throw();
 public:
 
-    ORptFilter( const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nImportFlags = IMPORT_ALL );
+    ORptFilter( const Reference< XComponentContext >& _rxContext, sal_uInt16 nImportFlags = IMPORT_ALL );
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException);
@@ -135,7 +135,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
-    inline Reference< XMultiServiceFactory > getORB() { return SvXMLImport::getServiceFactory(); }
+    inline Reference< XComponentContext > getORB() { return SvXMLImport::GetComponentContext(); }
     inline Reference<XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
     /** return the SdrModel of the real model
     *

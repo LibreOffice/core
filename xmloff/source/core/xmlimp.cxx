@@ -289,7 +289,7 @@ public:
 
     std::auto_ptr< DocumentInfo > mpDocumentInfo;
 
-    SvXMLImport_Impl()
+    SvXMLImport_Impl( const uno::Reference< uno::XComponentContext >& rxContext)
         : hBatsFontConv( 0 )
         , hMathFontConv( 0 )
         , mbOwnGraphicResolver( false )
@@ -298,7 +298,7 @@ public:
         // Convert drawing object positions from OOo file format to OASIS (#i28749#)
         , mbShapePositionInHoriL2R( sal_False )
         , mbTextDocInOOoFileFormat( sal_False )
-        , mxComponentContext( ::comphelper::getProcessComponentContext() )
+        , mxComponentContext( rxContext )
         , mpRDFaHelper() // lazy
         , mpDocumentInfo() // lazy
     {
@@ -381,7 +381,7 @@ void SvXMLImport::_InitCtor()
     msPackageProtocol = "vnd.sun.star.Package:";
 
     if (mxNumberFormatsSupplier.is())
-        mpNumImport = new SvXMLNumFmtHelper(mxNumberFormatsSupplier, comphelper::getComponentContext(getServiceFactory()));
+        mpNumImport = new SvXMLNumFmtHelper(mxNumberFormatsSupplier, GetComponentContext());
 
     if (mxModel.is() && !mxEventListener.is())
     {
@@ -393,14 +393,13 @@ void SvXMLImport::_InitCtor()
 
 }
 
-// #110680#
 SvXMLImport::SvXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
     sal_uInt16 nImportFlags ) throw ()
-:   mpImpl( new SvXMLImport_Impl() ),
+:   mpImpl( new SvXMLImport_Impl(xContext) ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
-    mpUnitConv( new SvXMLUnitConverter( comphelper::getComponentContext(xServiceFactory),
+    mpUnitConv( new SvXMLUnitConverter( xContext,
                 util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH) ),
 
     mpContexts( new SvXMLImportContexts_Impl ),
@@ -411,13 +410,11 @@ SvXMLImport::SvXMLImport(
     mpStyleMap(0),
     mnImportFlags( nImportFlags ),
     mnErrorFlags(0),
-    // #110680#
-    mxServiceFactory(xServiceFactory),
     mbIsFormsSupported( sal_True ),
     mbIsTableShapeSupported( false ),
     mbIsGraphicLoadOnDemandSupported( true )
 {
-    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
+    DBG_ASSERT( xContext.is(), "got no service manager" );
     _InitCtor();
 }
 
@@ -1649,7 +1646,7 @@ void SvXMLImport::_CreateDataStylesImport()
     uno::Reference<util::XNumberFormatsSupplier> xNum =
         GetNumberFormatsSupplier();
     if ( xNum.is() )
-        mpNumImport = new SvXMLNumFmtHelper(xNum, comphelper::getComponentContext(getServiceFactory()));
+        mpNumImport = new SvXMLNumFmtHelper(xNum, GetComponentContext() );
 }
 
 
@@ -1770,12 +1767,6 @@ void SvXMLImport::DisposingModel()
 ::comphelper::UnoInterfaceToUniqueIdentifierMapper& SvXMLImport::getInterfaceToIdentifierMapper()
 {
     return mpImpl->maInterfaceToIdentifierMapper;
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SvXMLImport::getServiceFactory()
-{
-    // #110680#
-    return mxServiceFactory;
 }
 
 uno::Reference< uno::XComponentContext >

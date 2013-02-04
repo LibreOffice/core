@@ -39,6 +39,7 @@
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/weak.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/shapeimport.hxx>
@@ -50,7 +51,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 
 namespace com { namespace sun { namespace star {
-    namespace uno { class XComponentContext; }
     namespace frame { class XModel; }
     namespace io { class XOutputStream; }
     namespace rdf { class XMetadatable; }
@@ -140,8 +140,6 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
     sal_uInt16  mnErrorFlags;
 
 protected:
-    // #110680#
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
 
     ::com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
     sal_Bool                    mbIsFormsSupported;
@@ -184,7 +182,7 @@ public:
     // #110680#
     // SvXMLImport( sal_uInt16 nImportFlags = IMPORT_ALL ) throw();
     SvXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         sal_uInt16 nImportFlags = IMPORT_ALL ) throw();
 
     virtual ~SvXMLImport() throw();
@@ -371,9 +369,6 @@ public:
     virtual void DisposingModel();
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
-
-    // #110680#
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceFactory();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
     GetComponentContext() const;

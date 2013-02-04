@@ -27,6 +27,7 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <tools/debug.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 
@@ -50,8 +51,8 @@ const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
 
 // #110680#
 XMLAutoTextEventImport::XMLAutoTextEventImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory) throw()
-:   SvXMLImport(xServiceFactory)
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext) throw()
+:   SvXMLImport(xContext)
 {
 }
 
@@ -126,9 +127,7 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventImport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new XMLAutoTextEventImport;
-    return (cppu::OWeakObject*)new XMLAutoTextEventImport(rSMgr);
+    return (cppu::OWeakObject*)new XMLAutoTextEventImport( comphelper::getComponentContext(rSMgr) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

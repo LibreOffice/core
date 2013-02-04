@@ -165,7 +165,7 @@ protected:
 public:
     // #110680#
     SchXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         sal_uInt16 nImportFlags = IMPORT_ALL );
 
     virtual ~SchXMLImport() throw ();

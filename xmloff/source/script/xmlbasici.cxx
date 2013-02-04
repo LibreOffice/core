@@ -37,8 +37,8 @@ XMLBasicImportContext::XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 n
     :SvXMLImportContext( rImport, nPrfx, rLName )
     ,m_xModel( rxModel )
 {
-    Reference< lang::XMultiServiceFactory > xMSF = GetImport().getServiceFactory();
-    m_xHandler = document::XMLOasisBasicImporter::create( comphelper::getComponentContext(xMSF) );
+    Reference< uno::XComponentContext > xContext = GetImport().GetComponentContext();
+    m_xHandler = document::XMLOasisBasicImporter::create( xContext );
 
     Reference< lang::XComponent > xComp( m_xModel, UNO_QUERY );
     m_xHandler->setTargetDocument( xComp );

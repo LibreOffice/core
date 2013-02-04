@@ -537,9 +537,9 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
 
 // #110680#
 SchXMLImport::SchXMLImport(
-    const Reference< lang::XMultiServiceFactory >& xServiceFactory,
+    const Reference< uno::XComponentContext >& xContext,
     sal_uInt16 nImportFlags ) :
-        SvXMLImport( xServiceFactory, nImportFlags )
+        SvXMLImport( xContext, nImportFlags )
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
@@ -709,7 +709,7 @@ OUString SAL_CALL SchXMLImport_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
-    return (cppu::OWeakObject*)new SchXMLImport(rSMgr);
+    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr));
 }
 
 // ============================================================
@@ -731,7 +731,7 @@ OUString SAL_CALL SchXMLImport_Styles_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
-    return (cppu::OWeakObject*)new SchXMLImport( rSMgr, IMPORT_STYLES );
+    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_STYLES );
 }
 
 // ------------------------------------------------------------
@@ -751,7 +751,7 @@ OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
-    return (cppu::OWeakObject*)new SchXMLImport( rSMgr, IMPORT_CONTENT | IMPORT_AUTOSTYLES | IMPORT_FONTDECLS );
+    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_CONTENT | IMPORT_AUTOSTYLES | IMPORT_FONTDECLS );
 }
 
 // ------------------------------------------------------------
@@ -771,7 +771,7 @@ OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
-    return (cppu::OWeakObject*)new SchXMLImport( rSMgr, IMPORT_META );
+    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_META );
 }
 
 // XServiceInfo

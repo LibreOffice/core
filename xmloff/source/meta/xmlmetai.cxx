@@ -152,7 +152,7 @@ lcl_initGenerator(SvXMLImport & rImport,
         uno::UNO_SET_THROW);
     try {
         uno::Reference< xml::xpath::XXPathAPI > const xPath = xml::xpath::XPathAPI::create(
-            comphelper::getComponentContext(rImport.getServiceFactory()) );
+            rImport.GetComponentContext() );
         xPath->registerNS(GetXMLToken(XML_NP_OFFICE),GetXMLToken(XML_N_OFFICE));
         xPath->registerNS(GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META));
 

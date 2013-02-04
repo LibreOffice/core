@@ -24,6 +24,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -33,8 +34,8 @@ using namespace ::xmloff::token;
 
 // #110680#
 XMLMetaImportComponent::XMLMetaImportComponent(
-    const uno::Reference< lang::XMultiServiceFactory >& xServiceFactory) throw()
-    :   SvXMLImport(xServiceFactory), mxDocProps()
+    const uno::Reference< uno::XComponentContext >& xContext) throw()
+    :   SvXMLImport(xContext), mxDocProps()
 {
 }
 
@@ -96,7 +97,7 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaImportComponent_createInstance
     throw( uno::Exception )
 {
     // #110680#
-    return (cppu::OWeakObject*)new XMLMetaImportComponent(rSMgr);
+    return (cppu::OWeakObject*)new XMLMetaImportComponent( comphelper::getComponentContext(rSMgr));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

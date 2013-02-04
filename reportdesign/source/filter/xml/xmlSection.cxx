@@ -116,12 +116,11 @@ SvXMLImportContext* OXMLSection::CreateChildContext(
     SvXMLImportContext *pContext = 0;
     ORptFilter& rImport = GetOwnImport();
     const SvXMLTokenMap&    rTokenMap   = rImport.GetSectionElemTokenMap();
-    uno::Reference<lang::XMultiServiceFactory> xFactor = rImport.getServiceFactory();
 
     switch( rTokenMap.Get( _nPrefix, _rLocalName ) )
     {
         case XML_TOK_TABLE:
-            pContext = new OXMLTable( rImport, _nPrefix, _rLocalName,xAttrList,m_xSection);
+            pContext = new OXMLTable( rImport, _nPrefix, _rLocalName, xAttrList, m_xSection);
             break;
         default:
             break;

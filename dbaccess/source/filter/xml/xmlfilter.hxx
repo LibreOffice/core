@@ -112,7 +112,7 @@ protected:
     virtual ~ODBFilter()  throw();
 public:
 
-    ODBFilter( const Reference< XMultiServiceFactory >& _rxMSF );
+    ODBFilter( const Reference< XComponentContext >& _rxContext );
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException);

@@ -106,11 +106,10 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 }
 
 // ------------------------------------------------------------------------
-// #110897#
 XMLVersionListImport::XMLVersionListImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions )
-:   SvXMLImport(xServiceFactory),
+:   SvXMLImport(xContext),
     maVersions( rVersions )
 {
     GetNamespaceMap().AddAtIndex( XML_NAMESPACE_FRAMEWORK_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),
@@ -396,9 +395,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
     try {
         if ( xRootNames.is() && xRootNames->hasByName( sDocName ) && xRoot->isStreamElement( sDocName ) )
         {
-            Reference< lang::XMultiServiceFactory > xServiceFactory =
-                    comphelper::getProcessServiceFactory();
-            DBG_ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
+            Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
 
             InputSource aParserInput;
 
@@ -426,10 +423,10 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
                 throw uno::RuntimeException();
 
             // get filter
-            Reference< XDocumentHandler > xFilter = new XMLVersionListImport( xServiceFactory, aVersions );
+            Reference< XDocumentHandler > xFilter = new XMLVersionListImport( xContext, aVersions );
 
             // connect parser and filter
-            Reference< XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(xServiceFactory));
+            Reference< XParser > xParser = xml::sax::Parser::create(xContext);
             xParser->setDocumentHandler( xFilter );
 
             // parse

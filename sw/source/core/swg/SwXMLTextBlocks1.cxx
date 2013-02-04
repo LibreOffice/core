@@ -98,13 +98,8 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
             uno::Reference < io::XStream > xStream = xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );
 
-            uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
-                comphelper::getProcessServiceFactory();
-            OSL_ENSURE( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
-            if( !xServiceFactory.is() )
-            {
-                // Throw an exception ?
-            }
+            uno::Reference< uno::XComponentContext > xContext =
+                comphelper::getProcessComponentContext();
 
             xml::sax::InputSource aParserInput;
             aParserInput.sSystemId = aNames[nIdx]->aPackageName;
@@ -112,12 +107,11 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             aParserInput.aInputStream = xStream->getInputStream();
 
             // get filter
-            // #110680#
             // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, aCur, sal_True );
-            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xServiceFactory, *this, aCur, sal_True );
+            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, aCur, sal_True );
 
             // connect parser and filter
-            uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(xServiceFactory));
+            uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
             xParser->setDocumentHandler( xFilter );
 
             // parse
@@ -305,15 +299,8 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
         }
 
         uno::Reference < io::XStream > xContents = xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );
-        uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
-            comphelper::getProcessServiceFactory();
         uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
-        OSL_ENSURE( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
-        if( !xServiceFactory.is() )
-        {
-            // Throw an exception ?
-        }
 
         xml::sax::InputSource aParserInput;
         aParserInput.sSystemId = aName;
@@ -322,7 +309,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
         // get filter
         // #110680#
         // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, rText, bTextOnly );
-        uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xServiceFactory, *this, rText, bTextOnly );
+        uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, rText, bTextOnly );
 
         // connect parser and filter
         uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
@@ -439,8 +426,6 @@ void SwXMLTextBlocks::ReadInfo( void )
     uno::Reference < container::XNameAccess > xAccess( xBlkRoot, uno::UNO_QUERY );
     if ( xAccess.is() && xAccess->hasByName( sDocName ) && xBlkRoot->isStreamElement( sDocName ) )
     {
-        uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
-                comphelper::getProcessServiceFactory();
         uno::Reference< uno::XComponentContext > xContext =
                 comphelper::getProcessComponentContext();
 
@@ -451,7 +436,7 @@ void SwXMLTextBlocks::ReadInfo( void )
         aParserInput.aInputStream = xDocStream->getInputStream();
 
         // get filter
-        uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( xServiceFactory, *this );
+        uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( xContext, *this );
 
         // connect parser and filter
         uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );

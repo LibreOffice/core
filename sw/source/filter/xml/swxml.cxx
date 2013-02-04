@@ -1051,8 +1051,6 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
 size_t XMLReader::GetSectionList( SfxMedium& rMedium,
                                   std::vector<String*>& rStrings ) const
 {
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
-            comphelper::getProcessServiceFactory();
     uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
     uno::Reference < embed::XStorage > xStg2;
@@ -1069,7 +1067,7 @@ size_t XMLReader::GetSectionList( SfxMedium& rMedium,
             aParserInput.aInputStream = xStm->getInputStream();
 
             // get filter
-            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
+            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xContext, rStrings );
 
             // connect parser and filter
             uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);

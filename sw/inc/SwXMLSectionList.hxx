@@ -35,7 +35,7 @@ public:
     std::vector<String*> &rSectionList;
 
     SwXMLSectionList(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         std::vector<String*> &rNewSectionList );
 
     virtual ~SwXMLSectionList ( )

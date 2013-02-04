@@ -328,10 +328,10 @@ void SvxXMLTableImportContext::importBitmap( sal_uInt16 nPrfx, const OUString& r
 
 // #110680#
 SvxXMLXTableImport::SvxXMLXTableImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const uno::Reference< XNameContainer > & rTable,
     uno::Reference< XGraphicObjectResolver >& xGrfResolver )
-:   SvXMLImport(xServiceFactory, 0),
+:   SvXMLImport(xContext, 0),
     mrTable( rTable )
 {
     SetGraphicResolver( xGrfResolver );
@@ -383,13 +383,7 @@ bool SvxXMLXTableImport::load( const rtl::OUString &rPath,
 
     try
     {
-        uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
         uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-        if( !xServiceFactory.is() )
-        {
-            OSL_FAIL( "SvxXMLXTableImport::load: got no service manager" );
-            return false;
-        }
 
         uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
@@ -448,7 +442,7 @@ bool SvxXMLXTableImport::load( const rtl::OUString &rPath,
         {
         }
 
-        uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTableImport( xServiceFactory, xTable, xGrfResolver ) );
+        uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTableImport( xContext, xTable, xGrfResolver ) );
         xParser->setDocumentHandler( xHandler );
         xParser->parseStream( aParserInput );
 

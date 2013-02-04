@@ -87,7 +87,7 @@ class SmXMLImport : public SvXMLImport
 
 public:
     SmXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         sal_uInt16 nImportFlags=IMPORT_ALL);
     virtual ~SmXMLImport() throw ();
 

@@ -42,7 +42,7 @@ public:
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStorage;
 
     SvXMLAutoCorrectImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         SvxAutocorrWordList *pNewAutocorr_List,
         SvxAutoCorrect &rNewAutoCorrect,
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rNewStorage);
@@ -95,7 +95,7 @@ public:
     SvStringsISortDtor  &rList;
 
     SvXMLExceptionListImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         SvStringsISortDtor & rNewList );
 
     ~SvXMLExceptionListImport ( void ) throw ();

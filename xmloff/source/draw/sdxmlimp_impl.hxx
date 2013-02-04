@@ -227,9 +227,8 @@ protected:
         com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
 public:
-    // #110680#
     SdXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         sal_Bool bIsDraw, sal_uInt16 nImportFlags = IMPORT_ALL );
     ~SdXMLImport() throw ();
 

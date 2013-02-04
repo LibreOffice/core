@@ -130,7 +130,6 @@ SvXMLImportContext* OXMLTable::CreateChildContext(
     SvXMLImportContext *pContext = 0;
     ORptFilter& rImport = GetOwnImport();
     const SvXMLTokenMap&    rTokenMap   = rImport.GetColumnTokenMap();
-    Reference<XMultiServiceFactory> xFactor = rImport.getServiceFactory();
 
     switch( rTokenMap.Get( _nPrefix, _rLocalName ) )
     {

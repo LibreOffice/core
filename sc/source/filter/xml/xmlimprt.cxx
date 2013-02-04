@@ -121,7 +121,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_ALL);
-    return (cppu::OWeakObject*)new ScXMLImport( rSMgr, IMPORT_ALL );
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_ALL );
 }
 
 OUString SAL_CALL ScXMLImport_Meta_getImplementationName() throw()
@@ -140,7 +140,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META);
-    return (cppu::OWeakObject*)new ScXMLImport( rSMgr, IMPORT_META );
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_META );
 }
 
 OUString SAL_CALL ScXMLImport_Styles_getImplementationName() throw()
@@ -159,7 +159,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
-    return (cppu::OWeakObject*)new ScXMLImport( rSMgr, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
 }
 
 OUString SAL_CALL ScXMLImport_Content_getImplementationName() throw()
@@ -178,7 +178,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS);
-    return (cppu::OWeakObject*)new ScXMLImport( rSMgr, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS);
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS);
 }
 
 OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw()
@@ -197,7 +197,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_SETTINGS);
-    return (cppu::OWeakObject*)new ScXMLImport( rSMgr, IMPORT_SETTINGS );
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_SETTINGS );
 }
 
 const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
@@ -1922,11 +1922,10 @@ SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
     return pContext;
 }
 
-// #110680#
 ScXMLImport::ScXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const sal_uInt16 nImportFlag)
-:   SvXMLImport( xServiceFactory, nImportFlag ),
+:   SvXMLImport( xContext, nImportFlag ),
     pDoc( NULL ),
     pChangeTrackingImportHelper(NULL),
     pStylesImportHelper(NULL),
