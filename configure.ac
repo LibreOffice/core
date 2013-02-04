@@ -2725,9 +2725,10 @@ if test "$_os" = "Darwin"; then
         # http://stackoverflow.com/questions/13196291/difference-between-mac-developer-and-3rd-party-mac-developer-application
         # says that the "Mac Developer" certificate is useful just for self-testing. For distribution
         # outside the Mac App Store, use the "Developer ID Application" one, and for distribution in
-        # the App Store, the "3rd Party Mac Developer" one.
+        # the App Store, the "3rd Party Mac Developer" one. I think it works best to the the
+        # "Developer ID Application" one.
 
-        identity=`security find-identity -p codesigning -v 2>/dev/null | grep 'Mac Developer:' | awk '{print $2}' |head -1`
+        identity=`security find-identity -p codesigning -v 2>/dev/null | grep 'Developer ID Application:' | awk '{print $2}' |head -1`
         if test -n "$identity"; then
             MACOSX_CODESIGNING_IDENTITY=$identity
             pretty_name=`security find-identity -p codesigning -v | grep $MACOSX_CODESIGNING_IDENTITY | sed -e 's/^[[^"]]*"//' -e 's/"//'`
