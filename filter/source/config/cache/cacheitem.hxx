@@ -206,26 +206,21 @@ typedef ::boost::unordered_map< ::rtl::OUString                    ,
             structure can decide then, if a deep detection should be
             suppressed e.g. if an URLPattern was used.
  */
-struct  FlatDetectionInfo
+struct FlatDetectionInfo
 {
     // the internal type name
     ::rtl::OUString sType;
 
     // this type was found by a matching the URL extension
-    sal_Bool bMatchByExtension;
+    bool bMatchByExtension;
 
     // this type was found by a matching URL Pattern
-    sal_Bool bMatchByPattern;
+    bool bMatchByPattern;
 
     // the user selected this type implicit by selecting a corresponding office module
-    sal_Bool bPreselectedByDocumentService;
+    bool bPreselectedByDocumentService;
 
-    FlatDetectionInfo()
-        : sType                        (::rtl::OUString())
-        , bMatchByExtension            (sal_False        )
-        , bMatchByPattern              (sal_False        )
-        , bPreselectedByDocumentService(sal_False        )
-    {}
+    FlatDetectionInfo();
 };
 
 typedef ::std::list< FlatDetectionInfo > FlatDetection;

@@ -34,6 +34,13 @@
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
 
+#define DEBUG_TYPE_DETECTION 0
+
+#if DEBUG_TYPE_DETECTION
+#include <iostream>
+using std::cout;
+using std::endl;
+#endif
 
 namespace filter{
     namespace config{
@@ -225,6 +232,22 @@ struct EqualByName : public std::binary_function<FlatDetectionInfo, FlatDetectio
         return r1.sType == r2.sType;
     }
 };
+
+#if DEBUG_TYPE_DETECTION
+void printFlatDetectionList(const char* caption, const FlatDetection& types)
+{
+    cout << "-- " << caption << endl;
+    FlatDetection::const_iterator it = types.begin(), itEnd = types.end();
+    for (; it != itEnd; ++it)
+    {
+        const FlatDetectionInfo& item = *it;
+        cout << "  type='" << item.sType << "'; match by extension (" << item.bMatchByExtension
+            << "); match by pattern (" << item.bMatchByPattern << "); pre-selected by doc service ("
+            << item.bPreselectedByDocumentService << ")" << endl;
+    }
+    cout << "--" << endl;
+}
+#endif
 
 }
 

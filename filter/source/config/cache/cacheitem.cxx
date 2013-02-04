@@ -389,6 +389,9 @@ sal_Bool CacheItem::dontHaveProps(const CacheItem& lProps) const
     return sal_True;
 }
 
+FlatDetectionInfo::FlatDetectionInfo() :
+    bMatchByExtension(false), bMatchByPattern(false), bPreselectedByDocumentService(false) {}
+
     } // namespace config
 } // namespace filter
 
