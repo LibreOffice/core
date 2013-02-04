@@ -334,6 +334,7 @@ OUString DatabaseMetaData::getSQLKeywords(  ) throw (SQLException, RuntimeExcept
     // In Java 2 v1.4 and as per LibreOffice SDK doc, this is all keywords that are not SQL92
     // I understand this to mean "reserved keywords" only.
     // See http://www.postgresql.org/docs/current/static/sql-keywords-appendix.html
+    // LEM TODO: consider using pg_get_keywords(), filter on catcode
     return OUString(
         "ANALYSE,"
         "ANALYZE,"
