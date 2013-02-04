@@ -1500,8 +1500,8 @@ public:
     /**
       Returns the string representation of the boolean argument.
 
-      If the sal_Bool is true, the string "true" is returned.
-      If the sal_Bool is false, the string "false" is returned.
+      If the argument is true, the string "true" is returned.
+      If the argument is false, the string "false" is returned.
       This function can't be used for language specific conversion.
 
       @param    b   a bool.
