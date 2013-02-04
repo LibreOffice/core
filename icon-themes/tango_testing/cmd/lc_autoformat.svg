@@ -287,16 +287,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
+     inkscape:zoom="11.313708"
      inkscape:cx="17.009645"
      inkscape:cy="13.641463"
      inkscape:document-units="px"
      inkscape:current-layer="layer1-8"
-     showgrid="false"
+     showgrid="true"
      inkscape:snap-global="true"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
-     inkscape:window-x="65"
+     inkscape:window-width="1366"
+     inkscape:window-height="722"
+     inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
      showborder="true"
@@ -344,7 +344,7 @@
            id="layer1-8"
            inkscape:label="Ebene 1">
           <g
-             transform="translate(31.198004,-1.7345651)"
+             transform="translate(31.198004,-2.7345651)"
              id="layer1-9"
              inkscape:label="Ebene 1">
             <g

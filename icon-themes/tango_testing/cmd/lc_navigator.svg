@@ -52,7 +52,7 @@
          offset="0"
          id="stop4217" />
       <stop
-         style="stop-color:#6c6c6c;stop-opacity:1;"
+         style="stop-color:#dbdbdb;stop-opacity:1;"
          offset="1"
          id="stop4219" />
     </linearGradient>
@@ -179,19 +179,19 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
+     inkscape:window-width="1366"
+     inkscape:window-height="714"
      id="namedview4"
      showgrid="false"
      showborder="false"
      inkscape:showpageshadow="false"
      inkscape:zoom="1"
-     inkscape:cx="28.958404"
-     inkscape:cy="-3.031546"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:cx="12.489654"
+     inkscape:cy="11.968454"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g4225">
+     inkscape:current-layer="svg2">
     <inkscape:grid
        type="xygrid"
        id="grid2987"
