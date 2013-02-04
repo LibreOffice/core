@@ -74,7 +74,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
 
-ScFilterDetect::ScFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& /* xFactory */ )
+ScFilterDetect::ScFilterDetect( const uno::Reference<lang::XMultiServiceFactory>& /*xFactory*/ )
 {
 }
 
@@ -224,11 +224,12 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     return ( 0x0d == nEndFlag );
 }
 
-::rtl::OUString SAL_CALL ScFilterDetect::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
+::rtl::OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
+    throw( uno::RuntimeException )
 {
-    REFERENCE< XInputStream > xStream;
-    REFERENCE< XContent > xContent;
-    REFERENCE< XInteractionHandler > xInteraction;
+    uno::Reference< XInputStream > xStream;
+    uno::Reference< XContent > xContent;
+    uno::Reference< XInteractionHandler > xInteraction;
     String aURL;
     ::rtl::OUString sTemp;
     String aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
@@ -355,18 +356,18 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                     // error during storage creation means _here_ that the medium
                     // is broken, but we can not handle it in medium since unpossibility
                     // to create a storage does not _always_ means that the medium is broken
-                    aMedium.SetError( aMedium.GetLastStorageCreationState(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                    aMedium.SetError(aMedium.GetLastStorageCreationState(), OUString(OSL_LOG_PREFIX));
                     if ( xInteraction.is() )
                     {
                         OUString empty;
                         try
                         {
                             InteractiveAppException xException( empty,
-                                                            REFERENCE< XInterface >(),
+                                                            uno::Reference< XInterface >(),
                                                             InteractionClassification_ERROR,
                                                             aMedium.GetError() );
 
-                            REFERENCE< XInteractionRequest > xRequest(
+                            uno::Reference< XInteractionRequest > xRequest(
                                 new ucbhelper::SimpleInteractionRequest( makeAny( xException ),
                                                                       ucbhelper::CONTINUATION_APPROVE ) );
                             xInteraction->handle( xRequest );

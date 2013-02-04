@@ -50,22 +50,19 @@ namespace com
 
 #include <sfx2/sfxuno.hxx>
 
-#define REFERENCE ::com::sun::star::uno::Reference
-#define SEQUENCE ::com::sun::star::uno::Sequence
-#define RUNTIME_EXCEPTION ::com::sun::star::uno::RuntimeException
-
 class ScFilterDetect : public ::cppu::WeakImplHelper2< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
 {
 public:
-                            ScFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
-    virtual                 ~ScFilterDetect();
+    ScFilterDetect( const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xFactory );
+    virtual ~ScFilterDetect();
 
     SFX_DECL_XSERVICEINFO_NOFACTORY
 
     //----------------------------------------------------------------------------------
     // XExtendedFilterDetect
     //----------------------------------------------------------------------------------
-    virtual ::rtl::OUString SAL_CALL detect( SEQUENCE< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( RUNTIME_EXCEPTION );
+    virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& lDescriptor )
+        throw(com::sun::star::uno::RuntimeException);
 };
 
 #endif
