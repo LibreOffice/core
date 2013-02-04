@@ -55,6 +55,23 @@ NativeNumberWrapper::getNativeNumberString(
     return ::rtl::OUString();
 }
 
+sal_Bool
+NativeNumberWrapper::isValidNatNum(
+                    const ::com::sun::star::lang::Locale& rLocale,
+                    sal_Int16 nNativeNumberMode ) const
+{
+    try
+    {
+        if ( xNNS.is() )
+            return xNNS->isValidNatNum( rLocale, nNativeNumberMode );
+    }
+    catch ( const uno::Exception& )
+    {
+        SAL_WARN( "unotools.i18n", "isValidNatNum: Exception caught!" );
+    }
+    return sal_False;
+}
+
 
 i18n::NativeNumberXmlAttributes
 NativeNumberWrapper::convertToXmlAttributes(
