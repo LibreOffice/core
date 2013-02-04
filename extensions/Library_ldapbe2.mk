@@ -62,6 +62,7 @@ $(eval $(call gb_Library_use_externals,ldapbe2,\
 	nss3 \
 	openldap \
 	plc4 \
+	ssl3 \
 ))
 endif
 

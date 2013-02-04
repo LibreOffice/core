@@ -2317,6 +2317,11 @@ $(call gb_LinkTarget__use_nss3,$(1))
 
 endef
 
+define gb_LinkTarget__use_ssl3
+$(call gb_LinkTarget__use_nss3,$(1))
+
+endef
+
 else
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
@@ -2324,6 +2329,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
     nss3 \
     plc4 \
     smime3 \
+	ssl3 \
 ))
 
 define gb_LinkTarget__use_nss3
@@ -2346,6 +2352,14 @@ define gb_LinkTarget__use_plc4
 $(call gb_LinkTarget_use_package,$(1),nss)
 $(call gb_LinkTarget_use_libraries,$(1),\
     plc4 \
+)
+
+endef
+
+define gb_LinkTarget__use_ssl3
+$(call gb_LinkTarget_use_package,$(1),nss)
+$(call gb_LinkTarget_use_libraries,$(1),\
+	ssl3 \
 )
 
 endef
