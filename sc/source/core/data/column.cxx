@@ -425,7 +425,7 @@ void ScColumn::ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
 
     const ScPatternAttr* pPattern = pAttrArray->GetPattern( nRow );
 
-    //  true = alten Eintrag behalten
+    //  true = keep old content
 
     ScPatternAttr* pNewPattern = (ScPatternAttr*) &aCache.ApplyTo( *pPattern, true );
     ScDocumentPool::CheckRef( *pPattern );
@@ -548,7 +548,7 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, bool& 
     rFound = false;
     if (!rMark.IsMultiMarked())
     {
-        OSL_FAIL("ScColumn::GetSelectionStyle ohne Selektion");
+        OSL_FAIL("No selection in ScColumn::GetSelectionStyle");
         return NULL;
     }
 
@@ -571,7 +571,7 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, bool& 
             pNewStyle = pPattern->GetStyleSheet();
             rFound = true;
             if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )
-                bEqual = false;                                             // unterschiedliche
+                bEqual = false;                                             // difference
             pStyle = pNewStyle;
         }
     }
@@ -598,7 +598,7 @@ const ScStyleSheet* ScColumn::GetAreaStyle( bool& rFound, SCROW nRow1, SCROW nRo
         pNewStyle = pPattern->GetStyleSheet();
         rFound = true;
         if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )
-            bEqual = false;                                             // unterschiedliche
+            bEqual = false;                                             // difference
         pStyle = pNewStyle;
     }
 
@@ -649,8 +649,8 @@ void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
 
 void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
 {
-    //  um nur ein neues SetItem zu erzeugen, brauchen wir keinen SfxItemPoolCache.
-    //! Achtung: der SfxItemPoolCache scheint zuviele Refs fuer das neue SetItem zu erzeugen ??
+    //  in order to only create a new SetItem, we don't need SfxItemPoolCache.
+    //! Warning: SfxItemPoolCache seems to create to many Refs for the new SetItem ??
 
     ScDocumentPool* pDocPool = pDocument->GetPool();
 
@@ -662,11 +662,9 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
     if ( pNewPattern != pOldPattern )
         pAttrArray->SetPattern( nRow, pNewPattern );
     else
-        pDocPool->Remove( *pNewPattern );       // ausser Spesen nichts gewesen
+        pDocPool->Remove( *pNewPattern );       // free up resources
 
     delete pTemp;
-
-        // alte Version mit SfxItemPoolCache:
 }
 
 bool ScColumn::Search( SCROW nRow, SCSIZE& nIndex ) const
@@ -775,7 +773,6 @@ void ScColumn::ReserveSize( SCSIZE nSize )
     maItems.reserve(nSize);
 }
 
-//  SwapRow zum Sortieren
 
 namespace {
 
@@ -793,6 +790,7 @@ void lclTakeBroadcaster( ScBaseCell*& rpCell, SvtBroadcaster* pBC )
 
 } // namespace
 
+//  SwapRow for sorting
 void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
 {
     /*  Simple swap of cell pointers does not work if broadcasters exist (crash
@@ -887,7 +885,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         ScTokenArray* pCode1 = pFmlaCell1->GetCode();
         ScTokenArray* pCode2 = pFmlaCell2->GetCode();
 
-        if (pCode1->GetLen() == pCode2->GetLen())       // nicht-UPN
+        if (pCode1->GetLen() == pCode2->GetLen())       // not-UPN
         {
             bool bEqual = true;
             sal_uInt16 nLen = pCode1->GetLen();
@@ -971,10 +969,10 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
 
     if ( pCell2 )
     {
-        // Tauschen
+        // swap
         maItems[nIndex1].pCell = pCell2;
         rCol.maItems[nIndex2].pCell = pCell1;
-        // Referenzen aktualisieren
+        // update references
         SCsCOL dx = rCol.nCol - nCol;
         if ( pFmlaCell1 )
         {
@@ -993,9 +991,9 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
     }
     else
     {
-        // Loeschen
+        // remove
         maItems.erase(maItems.begin() + nIndex1);
-        // Referenzen aktualisieren
+        // update references
         SCsCOL dx = rCol.nCol - nCol;
         if ( pFmlaCell1 )
         {
@@ -1004,7 +1002,7 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
             pFmlaCell1->aPos.SetCol( rCol.nCol );
             pFmlaCell1->UpdateReference(URM_MOVE, aRange, dx, 0, 0);
         }
-        // Einfuegen
+        // insert
         rCol.Insert(nRow, pCell1);
     }
 }
@@ -1020,12 +1018,12 @@ bool ScColumn::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
                 bTest = (maItems[i].nRow < nStartRow) || (maItems[i].nRow > nEndRow)
                         || maItems[i].pCell->IsBlank();
 
-        //  AttrArray testet nur zusammengefasste
+        //  AttrArray only looks for merged cells
 
         if ((bTest) && (pAttrArray))
             bTest = pAttrArray->TestInsertCol(nStartRow, nEndRow);
 
-        //!     rausgeschobene Attribute bei Undo beruecksichtigen
+        //!     consider the removed Attribute at Undo
 
         return bTest;
     }
@@ -1061,7 +1059,7 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
         return ;
 
     bool bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( false );    // Mehrfachberechnungen vermeiden
+    pDocument->SetAutoCalc( false );    // avoid recalculations
 
     SCSIZE nNewCount = maItems.size();
     bool bCountChanged = false;
@@ -1169,8 +1167,7 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKee
             nEndIndex = i;
             ++nBlockCount;
 
-            //  im Clipboard muessen interpretierte Zellen stehen, um andere Formate
-            //  (Text, Grafik...) erzueugen zu koennen
+            //  put interpreted cells in the clipboard in order to create other formats (text, graphics, ...)
 
             if ( maItems[i].pCell->GetCellType() == CELLTYPE_FORMULA )
             {
@@ -1338,8 +1335,8 @@ void ScColumn::CopyToColumn(
     if ( (nFlags & IDF_ATTRIB) != 0 )
     {
         if ( (nFlags & IDF_STYLES) != IDF_STYLES )
-        {   // StyleSheets im Zieldokument bleiben erhalten
-            // z.B. DIF und RTF Clipboard-Import
+        {   // keep the StyleSheets in the target document
+            // e.g. DIF and RTF Clipboard-Import
             for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
             {
                 const ScStyleSheet* pStyle =
@@ -1443,7 +1440,7 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
 
 void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 {
-    //  Dies ist die Szenario-Tabelle, die Daten werden hineinkopiert
+    //  This is the scenario table, the data is copied into it
 
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
     SCROW nStart = -1, nEnd = -1;
@@ -1456,7 +1453,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
             ((ScColumn&)rSrcCol).
                 CopyToColumn( nStart, nEnd, IDF_CONTENTS, false, *this );
 
-            //  UpdateUsed nicht noetig, schon in TestCopyScenario passiert
+            //  UpdateUsed not needed, already done in TestCopyScenario (obsolete comment ?)
 
             SCsTAB nDz = nTab - rSrcCol.nTab;
             UpdateReference(URM_COPY, nCol, nStart, nTab,
@@ -1465,7 +1462,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
             UpdateCompile();
         }
 
-        //! CopyToColumn "const" machen !!!
+        //! make CopyToColumn "const" !!! (obsolete comment ?)
 
         pPattern = aAttrIter.Next( nStart, nEnd );
     }
@@ -1474,7 +1471,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 
 void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 {
-    //  Dies ist die Szenario-Tabelle, die Daten werden in die andere kopiert
+    //  This is the scenario table, the data is copied to the other
 
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
     SCROW nStart = -1, nEnd = -1;
@@ -1487,7 +1484,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
             ((ScColumn*)this)->
                 CopyToColumn( nStart, nEnd, IDF_CONTENTS, false, rDestCol );
 
-            //  UpdateUsed nicht noetig, schon in TestCopyScenario passiert
+            //  UpdateUsed not needed, is already done in TestCopyScenario (obsolete comment ?)
 
             SCsTAB nDz = rDestCol.nTab - nTab;
             rDestCol.UpdateReference(URM_COPY, rDestCol.nCol, nStart, rDestCol.nTab,
@@ -1496,7 +1493,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
             rDestCol.UpdateCompile();
         }
 
-        //! CopyToColumn "const" machen !!!
+        //! make CopyToColumn "const" !!! (obsolete comment ?)
 
         pPattern = aAttrIter.Next( nStart, nEnd );
     }
@@ -1550,7 +1547,7 @@ void ScColumn::SwapCol(ScColumn& rCol)
     rCol.pAttrArray = pAttrArray;
     pAttrArray = pTempAttr;
 
-    // AttrArray muss richtige Spaltennummer haben
+    // AttrArray needs to have the right column number
     pAttrArray->SetCol(nCol);
     rCol.pAttrArray->SetCol(rCol.nCol);
 
@@ -1652,7 +1649,7 @@ bool ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
         ScRange aRange( ScAddress( nCol1, nRow1, nTab1 ),
                         ScAddress( nCol2, nRow2, nTab2 ) );
         if ( eUpdateRefMode == URM_COPY && nRow1 == nRow2 )
-        {   // z.B. eine einzelne Zelle aus dem Clipboard eingefuegt
+        {   // e.g. put a single cell in the clipboard
             SCSIZE nIndex;
             if ( Search( nRow1, nIndex ) )
             {
@@ -1724,7 +1721,7 @@ void ScColumn::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                 SCROW nRow = maItems[i].nRow;
                 ((ScFormulaCell*)pCell)->UpdateTranspose( rSource, rDest, pUndoDoc );
                 if ( nRow != maItems[i].nRow )
-                    Search( nRow, i );              // Listener geloescht/eingefuegt?
+                    Search( nRow, i );              // Listener deleted/inserted?
             }
         }
 }
@@ -1741,7 +1738,7 @@ void ScColumn::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
                 SCROW nRow = maItems[i].nRow;
                 ((ScFormulaCell*)pCell)->UpdateGrow( rArea, nGrowX, nGrowY );
                 if ( nRow != maItems[i].nRow )
-                    Search( nRow, i );              // Listener geloescht/eingefuegt?
+                    Search( nRow, i );              // Listener deleted/inserted?
             }
         }
 }
@@ -1844,7 +1841,7 @@ void ScColumn::UpdateDeleteTab(SCTAB nDelPos, bool bIsMove, ScColumn* pRefUndo, 
 
                 bool bChanged = pOld->UpdateDeleteTab(nDelPos, bIsMove, nSheets);
                 if ( nRow != maItems[i].nRow )
-                    Search( nRow, i );      // Listener geloescht/eingefuegt?
+                    Search( nRow, i );      // Listener deleted/inserted?
 
                 if (pRefUndo)
                 {
@@ -1911,7 +1908,7 @@ void ScColumn::UpdateCompile( bool bForceIfNameInUse )
                 SCROW nRow = maItems[i].nRow;
                 p->UpdateCompile( bForceIfNameInUse );
                 if ( nRow != maItems[i].nRow )
-                    Search( nRow, i );      // Listener geloescht/eingefuegt?
+                    Search( nRow, i );      // Listener deleted/inserted?
             }
         }
 }
@@ -1953,9 +1950,9 @@ void ScColumn::SetDirtyVar()
 
 void ScColumn::SetDirty()
 {
-    // wird nur dokumentweit verwendet, kein FormulaTrack
+    // is only done documentwide, no FormulaTracking
     bool bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( false );    // Mehrfachberechnungen vermeiden
+    pDocument->SetAutoCalc( false );    // no multiple recalculation
     for (SCSIZE i=0; i<maItems.size(); i++)
     {
         ScFormulaCell* p = (ScFormulaCell*) maItems[i].pCell;
@@ -1971,11 +1968,11 @@ void ScColumn::SetDirty()
 
 
 void ScColumn::SetDirty( const ScRange& rRange )
-{   // broadcastet alles innerhalb eines Range, mit FormulaTrack
+{   // broadcasts everything within the range, with FormulaTracking
     if ( maItems.empty() )
         return ;
     bool bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( false );    // Mehrfachberechnungen vermeiden
+    pDocument->SetAutoCalc( false );    // no multiple recalculation
     SCROW nRow2 = rRange.aEnd.Row();
     ScAddress aPos( nCol, 0, nTab );
     ScHint aHint( SC_HINT_DATACHANGED, aPos, NULL );
@@ -2031,7 +2028,7 @@ void ScColumn::SetTableOpDirty( const ScRange& rRange )
 void ScColumn::SetDirtyAfterLoad()
 {
     bool bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( false );    // Mehrfachberechnungen vermeiden
+    pDocument->SetAutoCalc( false );    // no multiple recalculation
     for (SCSIZE i=0; i<maItems.size(); i++)
     {
         ScFormulaCell* p = (ScFormulaCell*) maItems[i].pCell;
@@ -2064,7 +2061,7 @@ void ScColumn::SetDirtyAfterLoad()
 void ScColumn::SetRelNameDirty()
 {
     bool bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( false );    // Mehrfachberechnungen vermeiden
+    pDocument->SetAutoCalc( false );    // no multiple recalculation
     for (SCSIZE i=0; i<maItems.size(); i++)
     {
         ScFormulaCell* p = (ScFormulaCell*) maItems[i].pCell;
@@ -2084,7 +2081,7 @@ void ScColumn::CalcAll()
             if (pCell->GetCellType() == CELLTYPE_FORMULA)
             {
 #if OSL_DEBUG_LEVEL > 1
-                // nach F9 ctrl-F9: ueberprueft die Berechnung per FormulaTree
+                // after F9 ctrl-F9: check the calculation for each FormulaTree
                 ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
                 double nOldVal, nNewVal;
                 nOldVal = pFCell->GetValue();
@@ -2111,13 +2108,13 @@ void ScColumn::CompileAll()
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             {
                 SCROW nRow = maItems[i].nRow;
-                // fuer unbedingtes kompilieren
-                // bCompile=true und pCode->nError=0
+                // for unconditional compilation
+                // bCompile=true and pCode->nError=0
                 ((ScFormulaCell*)pCell)->GetCode()->SetCodeError( 0 );
                 ((ScFormulaCell*)pCell)->SetCompile( true );
                 ((ScFormulaCell*)pCell)->CompileTokenArray();
                 if ( nRow != maItems[i].nRow )
-                    Search( nRow, i );      // Listener geloescht/eingefuegt?
+                    Search( nRow, i );      // Listener deleted/inserted?
             }
         }
 }
@@ -2134,7 +2131,7 @@ void ScColumn::CompileXML( ScProgress& rProgress )
                 SCROW nRow = maItems[i].nRow;
                 ((ScFormulaCell*)pCell)->CompileXML( rProgress );
                 if ( nRow != maItems[i].nRow )
-                    Search( nRow, i );      // Listener geloescht/eingefuegt?
+                    Search( nRow, i );      // Listener deleted/inserted?
             }
         }
 }
