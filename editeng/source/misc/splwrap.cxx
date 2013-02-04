@@ -506,7 +506,7 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic() const
 {
     Reference< XDictionary >  xDic;
 
-    Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
+    Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
     {
         Sequence< Reference< XDictionary >  > aDics( xDicList->getDictionaries() );

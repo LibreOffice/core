@@ -458,7 +458,7 @@ SwSpellPopup::SwSpellPopup(
 
     pMenu = GetPopupMenu(MN_ADD_TO_DIC);
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);     //! necessary to retrieve the correct dictionary name in 'Execute' below
-    uno::Reference< linguistic2::XDictionaryList >    xDicList( SvxGetDictionaryList() );
+    uno::Reference< linguistic2::XSearchableDictionaryList >    xDicList( SvxGetDictionaryList() );
     sal_uInt16 nItemId = MN_DICTIONARIES_START;
     if (xDicList.is())
     {
@@ -801,7 +801,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         }
         pSh->Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
         {
-            uno::Reference<linguistic2::XDictionaryList> xDictionaryList( SvxGetDictionaryList() );
+            uno::Reference<linguistic2::XSearchableDictionaryList> xDictionaryList( SvxGetDictionaryList() );
             SvxDicListChgClamp aClamp( xDictionaryList );
             pSh->GetView().GetViewFrame()->GetDispatcher()->
                 Execute( FN_SPELL_GRAMMAR_DIALOG, SFX_CALLMODE_ASYNCHRON );
@@ -845,7 +845,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                 aDicName = aDicNameSingle;
 
             uno::Reference< linguistic2::XDictionary >      xDic;
-            uno::Reference< linguistic2::XDictionaryList >  xDicList( SvxGetDictionaryList() );
+            uno::Reference< linguistic2::XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
             if (xDicList.is())
                 xDic = xDicList->getDictionaryByName( aDicName );
 

@@ -247,7 +247,7 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
 SpellDialog::~SpellDialog()
 {
     // save possibly modified user-dictionaries
-    Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
+    Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
     {
         linguistic::SaveDictionaries( xDicList );
@@ -824,7 +824,7 @@ int SpellDialog::InitUserDicts()
     const Reference< XDictionary >  *pDic = 0;
 
     // get list of dictionaries
-    Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
+    Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
     {
         // add active, positive dictionary to dic-list (if not already done).
@@ -914,7 +914,7 @@ int SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
     String aDicName ( pMenu->GetItemText( nItemId ) );
 
     uno::Reference< linguistic2::XDictionary >      xDic;
-    uno::Reference< linguistic2::XDictionaryList >  xDicList( SvxGetDictionaryList() );
+    uno::Reference< linguistic2::XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
         xDic = xDicList->getDictionaryByName( aDicName );
 

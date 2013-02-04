@@ -185,7 +185,7 @@ class LngSvcMgrListenerHelper :
 
     ::cppu::OInterfaceContainerHelper           aLngSvcMgrListeners;
     ::cppu::OInterfaceContainerHelper           aLngSvcEvtBroadcasters;
-    uno::Reference< linguistic2::XDictionaryList >               xDicList;
+    uno::Reference< linguistic2::XSearchableDictionaryList >           xDicList;
 
     sal_Int16   nCombinedLngSvcEvt;
 
@@ -199,7 +199,7 @@ class LngSvcMgrListenerHelper :
 
 public:
     LngSvcMgrListenerHelper( LngSvcMgr &rLngSvcMgr,
-        const uno::Reference< linguistic2::XDictionaryList > &rxDicList );
+        const uno::Reference< linguistic2::XSearchableDictionaryList > &rxDicList );
 
     // lang::XEventListener
     virtual void SAL_CALL
@@ -233,7 +233,7 @@ public:
 
 LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
         LngSvcMgr &rLngSvcMgr,
-        const uno::Reference< linguistic2::XDictionaryList > &rxDicList  ) :
+        const uno::Reference< linguistic2::XSearchableDictionaryList > &rxDicList  ) :
     rMyManager              ( rLngSvcMgr ),
     aLngSvcMgrListeners     ( GetLinguMutex() ),
     aLngSvcEvtBroadcasters  ( GetLinguMutex() ),

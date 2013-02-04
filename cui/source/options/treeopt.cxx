@@ -564,7 +564,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
             if (pPageInfo->m_nPageId == RID_SFXPAGE_LINGU)
             {
                 // write personal dictionaries
-                Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
+                Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
                 if (xDicList.is())
                 {
                     linguistic::SaveDictionaries( xDicList );
@@ -2275,7 +2275,7 @@ short OfaTreeOptionsDialog::Execute()
     if ( !bIsFromExtensionManager )
     {
         // collect all DictionaryList Events while the dialog is executed
-        Reference<com::sun::star::linguistic2::XDictionaryList> xDictionaryList(SvxGetDictionaryList());
+        Reference<com::sun::star::linguistic2::XSearchableDictionaryList> xDictionaryList(SvxGetDictionaryList());
         pClamp = ::std::auto_ptr< SvxDicListChgClamp >( new SvxDicListChgClamp( xDictionaryList ) );
     }
     short nRet = SfxModalDialog::Execute();

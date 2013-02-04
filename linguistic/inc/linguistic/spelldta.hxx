@@ -23,6 +23,7 @@
 #include <vector>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSetSpellAlternatives.hpp>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 #include <tools/solar.h>
 
@@ -51,7 +52,7 @@ namespace linguistic
 void    SeqRemoveNegEntries(
                 ::com::sun::star::uno::Sequence< ::rtl::OUString > &rSeq,
                 ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XDictionaryList > &rxDicList,
+                    ::com::sun::star::linguistic2::XSearchableDictionaryList > &rxDicList,
                 sal_Int16 nLanguage );
 
 sal_Bool    SeqHasEntry(
@@ -62,7 +63,7 @@ sal_Bool    SeqHasEntry(
 
 void SearchSimilarText( const rtl::OUString &rText, sal_Int16 nLanguage,
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XDictionaryList > &xDicList,
+            ::com::sun::star::linguistic2::XSearchableDictionaryList > &xDicList,
         std::vector< rtl::OUString > & rDicListProps );
 
 ///////////////////////////////////////////////////////////////////////////

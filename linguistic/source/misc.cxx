@@ -37,7 +37,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
-#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
+#include <com/sun/star/linguistic2/DictionaryList.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
@@ -273,7 +273,7 @@ static sal_Bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry 
 
 
 uno::Reference< XDictionaryEntry > SearchDicList(
-        const uno::Reference< XDictionaryList > &xDicList,
+        const uno::Reference< XSearchableDictionaryList > &xDicList,
         const OUString &rWord, sal_Int16 nLanguage,
         sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry )
 {
@@ -321,7 +321,7 @@ uno::Reference< XDictionaryEntry > SearchDicList(
 }
 
 
-sal_Bool SaveDictionaries( const uno::Reference< XDictionaryList > &xDicList )
+sal_Bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xDicList )
 {
     if (!xDicList.is())
         return sal_True;
@@ -747,21 +747,15 @@ uno::Reference< XInterface > GetOneInstanceService( const char *pServiceName )
 {
     uno::Reference< XInterface > xRef;
 
-    if (pServiceName)
+    uno::Reference< XMultiServiceFactory > xMgr(
+        comphelper::getProcessServiceFactory() );
+    try
     {
-        uno::Reference< XMultiServiceFactory > xMgr(
-            comphelper::getProcessServiceFactory() );
-        if (xMgr.is())
-        {
-            try
-            {
-                xRef = xMgr->createInstance( ::rtl::OUString::createFromAscii( pServiceName ) );
-            }
-            catch (uno::Exception &)
-            {
-                DBG_ASSERT( 0, "createInstance failed" );
-            }
-        }
+        xRef = xMgr->createInstance( ::rtl::OUString::createFromAscii( pServiceName ) );
+    }
+    catch (const uno::Exception &)
+    {
+        DBG_ASSERT( 0, "createInstance failed" );
     }
 
     return xRef;
@@ -773,22 +767,26 @@ uno::Reference< XPropertySet > GetLinguProperties()
         GetOneInstanceService( SN_LINGU_PROPERTIES ), UNO_QUERY );
 }
 
-uno::Reference< XSearchableDictionaryList > GetSearchableDictionaryList()
+uno::Reference< XSearchableDictionaryList > GetDictionaryList()
 {
-    return uno::Reference< XSearchableDictionaryList > (
-        GetOneInstanceService( SN_DICTIONARY_LIST ), UNO_QUERY );
-}
+    uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    uno::Reference< XSearchableDictionaryList > xRef;
+    try
+    {
+        xRef = DictionaryList::create(xContext);
+    }
+    catch (const uno::Exception &)
+    {
+        DBG_ASSERT( 0, "createInstance failed" );
+    }
 
-uno::Reference< XDictionaryList > GetDictionaryList()
-{
-    return uno::Reference< XDictionaryList > (
-        GetOneInstanceService( SN_DICTIONARY_LIST ), UNO_QUERY );
+    return xRef;
 }
 
 uno::Reference< XDictionary > GetIgnoreAllList()
 {
     uno::Reference< XDictionary > xRes;
-    uno::Reference< XDictionaryList > xDL( GetDictionaryList() );
+    uno::Reference< XSearchableDictionaryList > xDL( GetDictionaryList() );
     if (xDL.is())
         xRes = xDL->getDictionaryByName( "IgnoreAllList" );
     return xRes;

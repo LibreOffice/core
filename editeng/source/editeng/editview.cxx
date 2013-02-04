@@ -996,7 +996,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 
         SvtLinguConfig aCfg;
 
-        Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
+        Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
         Sequence< Reference< XDictionary >  > aDics;
         if (xDicList.is())
         {

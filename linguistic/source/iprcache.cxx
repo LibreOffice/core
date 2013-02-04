@@ -111,7 +111,7 @@ FlushListener::~FlushListener()
 }
 
 
-void FlushListener::SetDicList( Reference<XDictionaryList> &rDL )
+void FlushListener::SetDicList( Reference<XSearchableDictionaryList> &rDL )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -206,7 +206,7 @@ SpellCache::SpellCache()
 {
     pFlushLstnr = new FlushListener( this );
     xFlushLstnr = pFlushLstnr;
-    Reference<XDictionaryList> aDictionaryList(GetDictionaryList());
+    Reference<XSearchableDictionaryList> aDictionaryList(GetDictionaryList());
     pFlushLstnr->SetDicList( aDictionaryList ); //! after reference is established
     Reference<XPropertySet> aPropertySet(GetLinguProperties());
     pFlushLstnr->SetPropSet( aPropertySet );    //! after reference is established
@@ -214,7 +214,7 @@ SpellCache::SpellCache()
 
 SpellCache::~SpellCache()
 {
-    Reference<XDictionaryList>  aEmptyList;
+    Reference<XSearchableDictionaryList>  aEmptyList;
     Reference<XPropertySet>     aEmptySet;
     pFlushLstnr->SetDicList( aEmptyList );
     pFlushLstnr->SetPropSet( aEmptySet );

@@ -19,12 +19,10 @@
 #ifndef __com_sun_star_linguistic2_DictionaryList_idl__
 #define __com_sun_star_linguistic2_DictionaryList_idl__
 
-#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.idl>
 
 
 module com { module sun { module star { module linguistic2 {
-
- published interface XSearchableDictionaryList;
 
 /** is the list of personal dictionaries.
 
@@ -35,11 +33,7 @@ module com { module sun { module star { module linguistic2 {
     @see <type scope="com::sun::star::linguistic2">XDictionaryList</type>
     @see <type scope="com::sun::star::linguistic2">XSearchableDictionaryList</type>
 */
-published service DictionaryList
-{
-    interface com::sun::star::linguistic2::XSearchableDictionaryList;
-    interface com::sun::star::lang::XComponent;
-};
+published service DictionaryList : XSearchableDictionaryList;
 
 
 }; }; }; };

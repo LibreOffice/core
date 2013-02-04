@@ -57,7 +57,7 @@ class HyphenatorDispatcher :
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >                     xPropSet;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList >  xDicList;
+        ::com::sun::star::linguistic2::XSearchableDictionaryList > xDicList;
 
     LngSvcMgr      &rMgr;
 
@@ -152,7 +152,7 @@ inline ::com::sun::star::uno::Reference<
         HyphenatorDispatcher::GetDicList()
 {
     return xDicList.is() ?
-                xDicList : xDicList = ::linguistic::GetSearchableDictionaryList();
+                xDicList : xDicList = ::linguistic::GetDictionaryList();
 }
 
 

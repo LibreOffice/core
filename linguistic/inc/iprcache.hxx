@@ -29,7 +29,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
-#include <com/sun/star/linguistic2/XDictionaryList.hpp>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 #include <rtl/string.hxx>
 #include <i18npool/lang.h>
@@ -59,7 +59,7 @@ class FlushListener :
     >
 {
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryList >    xDicList;
+        ::com::sun::star::linguistic2::XSearchableDictionaryList >    xDicList;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >             xPropSet;
     Flushable                                              *pFlushObj;
@@ -74,7 +74,7 @@ public:
 
     inline void SetFlushObj( Flushable *pFO)    { pFlushObj = pFO; }
 
-    void        SetDicList( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > &rDL );
+    void        SetDicList( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > &rDL );
     void        SetPropSet( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &rPS );
 
     //XEventListener

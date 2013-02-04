@@ -58,7 +58,6 @@ class LocaleDataWrapper;
 #define SN_HYPHENATOR               "com.sun.star.linguistic2.Hyphenator"
 #define SN_THESAURUS                "com.sun.star.linguistic2.Thesaurus"
 #define SN_LINGU_PROPERTIES         "com.sun.star.linguistic2.LinguProperties"
-#define SN_DICTIONARY_LIST          "com.sun.star.linguistic2.DictionaryList"
 
 
 namespace linguistic
@@ -153,8 +152,7 @@ LNG_DLLPUBLIC sal_Bool      IsNumeric( const String &rText );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > GetOneInstanceService( const char *pServiceName );
 LNG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GetLinguProperties();
-::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > GetSearchableDictionaryList();
-::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > GetDictionaryList();
+::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > GetDictionaryList();
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary > GetIgnoreAllList();
 
 
@@ -169,7 +167,7 @@ sal_Bool IsIgnoreControlChars( const ::com::sun::star::beans::PropertyValues &rP
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionaryEntry >
         SearchDicList(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList >& rDicList,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList >& rDicList,
             const ::rtl::OUString& rWord, sal_Int16 nLanguage,
             sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry );
 
@@ -179,7 +177,7 @@ LNG_DLLPUBLIC sal_uInt8 AddEntryToDic(
     const ::rtl::OUString &rRplcTxt, sal_Int16 nRplcLang,
     sal_Bool bStripDot = sal_True );
 
-LNG_DLLPUBLIC sal_Bool SaveDictionaries( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > &xDicList );
+LNG_DLLPUBLIC sal_Bool SaveDictionaries( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > &xDicList );
 
 // AppExitLstnr:
 // virtual base class that calls it AtExit function when the application

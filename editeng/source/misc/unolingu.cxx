@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/linguistic2/DictionaryList.hpp>
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
@@ -518,7 +519,7 @@ uno::Reference< XLinguServiceManager2 >  LinguMgr::xLngSvcMgr    = 0;
 uno::Reference< XSpellChecker1 >    LinguMgr::xSpell        = 0;
 uno::Reference< XHyphenator >       LinguMgr::xHyph         = 0;
 uno::Reference< XThesaurus >        LinguMgr::xThes         = 0;
-uno::Reference< XDictionaryList >   LinguMgr::xDicList      = 0;
+uno::Reference< XSearchableDictionaryList >   LinguMgr::xDicList      = 0;
 uno::Reference< XPropertySet >      LinguMgr::xProp         = 0;
 uno::Reference< XDictionary >       LinguMgr::xIgnoreAll    = 0;
 uno::Reference< XDictionary >       LinguMgr::xChangeAll    = 0;
@@ -554,7 +555,7 @@ uno::Reference< XThesaurus > LinguMgr::GetThesaurus()
     return xThes.is() ? xThes : GetThes();
 }
 
-uno::Reference< XDictionaryList > LinguMgr::GetDictionaryList()
+uno::Reference< XSearchableDictionaryList > LinguMgr::GetDictionaryList()
 {
     return xDicList.is() ? xDicList : GetDicList();
 }
@@ -624,7 +625,7 @@ uno::Reference< XThesaurus > LinguMgr::GetThes()
     return xThes;
 }
 
-uno::Reference< XDictionaryList > LinguMgr::GetDicList()
+uno::Reference< XSearchableDictionaryList > LinguMgr::GetDicList()
 {
     if (bExiting)
         return 0;
@@ -632,9 +633,7 @@ uno::Reference< XDictionaryList > LinguMgr::GetDicList()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    uno::Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
-    xDicList = uno::Reference< XDictionaryList > ( xMgr->createInstance(
-                "com.sun.star.linguistic2.DictionaryList" ), UNO_QUERY );
+    xDicList = linguistic2::DictionaryList::create( getProcessComponentContext() );
     return xDicList;
 }
 
@@ -660,7 +659,7 @@ uno::Reference< XDictionary > LinguMgr::GetIgnoreAll()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    uno::Reference< XDictionaryList >  xTmpDicList( GetDictionaryList() );
+    uno::Reference< XSearchableDictionaryList >  xTmpDicList( GetDictionaryList() );
     if (xTmpDicList.is())
     {
         xIgnoreAll = uno::Reference< XDictionary > ( xTmpDicList->getDictionaryByName(
@@ -677,7 +676,7 @@ uno::Reference< XDictionary > LinguMgr::GetChangeAll()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    uno::Reference< XDictionaryList > _xDicList( GetDictionaryList() , UNO_QUERY );
+    uno::Reference< XSearchableDictionaryList > _xDicList( GetDictionaryList() , UNO_QUERY );
     if (_xDicList.is())
     {
         xChangeAll = uno::Reference< XDictionary > (
@@ -697,7 +696,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
     if (bExiting)
         return 0;
 
-    uno::Reference< XDictionaryList >  xTmpDicList( GetDictionaryList() );
+    uno::Reference< XSearchableDictionaryList >  xTmpDicList( GetDictionaryList() );
     if (!xTmpDicList.is())
         return NULL;
 
@@ -755,7 +754,7 @@ uno::Reference< XThesaurus >  SvxGetThesaurus()
     return LinguMgr::GetThesaurus();
 }
 
-uno::Reference< XDictionaryList >  SvxGetDictionaryList()
+uno::Reference< XSearchableDictionaryList >  SvxGetDictionaryList()
 {
     return LinguMgr::GetDictionaryList();
 }
@@ -767,7 +766,7 @@ uno::Reference< XPropertySet >  SvxGetLinguPropertySet()
 
 //TODO: remove argument or provide SvxGetIgnoreAllList with the same one
 uno::Reference< XDictionary >  SvxGetOrCreatePosDic(
-        uno::Reference< XDictionaryList >  /* xDicList */ )
+        uno::Reference< XSearchableDictionaryList >  /* xDicList */ )
 {
     return LinguMgr::GetStandardDic();
 }
@@ -825,7 +824,7 @@ SvxAlternativeSpelling SvxGetAltSpelling(
 }
 
 
-SvxDicListChgClamp::SvxDicListChgClamp( uno::Reference< XDictionaryList >  &rxDicList ) :
+SvxDicListChgClamp::SvxDicListChgClamp( uno::Reference< XSearchableDictionaryList >  &rxDicList ) :
     xDicList    ( rxDicList )
 {
     if (xDicList.is())

@@ -261,7 +261,7 @@ static Reference< XDictionaryEntry > lcl_GetRulingDictionaryEntry(
         xRes = xIgnoreAll->getEntry( rWord );
     if (!xRes.is())
     {
-        Reference< XDictionaryList > xDList( GetDictionaryList() );
+        Reference< XSearchableDictionaryList > xDList( GetDictionaryList() );
         Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDList,
                 rWord, nLanguage, sal_False, sal_True ) );
         if (xNegEntry.is())
@@ -646,9 +646,9 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             aProposalList.Append( xRes->getAlternatives() );
             eFailureType = xRes->getFailureType();
         }
-        Reference< XDictionaryList > xDList;
+        Reference< XSearchableDictionaryList > xDList;
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
-            xDList = Reference< XDictionaryList >( GetDicList(), UNO_QUERY );
+            xDList = GetDicList();
 
         // cross-check against results from user-dictionaries which have precedence!
         if (bCheckDics  &&  xDList.is())

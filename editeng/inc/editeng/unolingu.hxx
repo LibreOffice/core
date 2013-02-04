@@ -27,7 +27,7 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/linguistic2/XDictionaryList.hpp>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "editeng/editengdllapi.h"
 
@@ -50,7 +50,7 @@ class EDITENG_DLLPUBLIC LinguMgr
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XThesaurus >     xThes;
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryList > xDicList;
+        ::com::sun::star::linguistic2::XSearchableDictionaryList > xDicList;
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >         xProp;
 
@@ -69,7 +69,7 @@ class EDITENG_DLLPUBLIC LinguMgr
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XThesaurus >     GetThes();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryList > GetDicList();
+        ::com::sun::star::linguistic2::XSearchableDictionaryList > GetDicList();
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >         GetProp();
     static ::com::sun::star::uno::Reference<
@@ -92,7 +92,7 @@ public:
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XThesaurus >     GetThesaurus();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryList > GetDictionaryList();
+        ::com::sun::star::linguistic2::XSearchableDictionaryList > GetDictionaryList();
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >         GetLinguPropertySet();
 
@@ -143,7 +143,7 @@ class EDITENG_DLLPUBLIC SvxDicListChgClamp
 {
 private:
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryList >    xDicList;
+        ::com::sun::star::linguistic2::XSearchableDictionaryList >    xDicList;
 
     // disallow access to copy-constructor and assignment-operator
     EDITENG_DLLPRIVATE SvxDicListChgClamp(const SvxDicListChgClamp &);
@@ -151,7 +151,7 @@ private:
 
 public:
     SvxDicListChgClamp( ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryList >  &rxDicList );
+        ::com::sun::star::linguistic2::XSearchableDictionaryList >  &rxDicList );
     ~SvxDicListChgClamp();
 };
 
@@ -165,14 +165,14 @@ EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XThesaurus >     SvxGetThesaurus();
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionaryList > SvxGetDictionaryList();
+    ::com::sun::star::linguistic2::XSearchableDictionaryList > SvxGetDictionaryList();
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >         SvxGetLinguPropertySet();
 //TODO: remove argument or provide SvxGetIgnoreAllList with the same one
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionary >    SvxGetOrCreatePosDic(
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XDictionaryList >  xDicList );
+                ::com::sun::star::linguistic2::XSearchableDictionaryList >  xDicList );
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionary >    SvxGetIgnoreAllList();
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<

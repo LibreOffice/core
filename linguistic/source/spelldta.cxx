@@ -62,7 +62,7 @@ sal_Bool SeqHasEntry(
 
 
 void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
-        Reference< XDictionaryList > &xDicList,
+        Reference< XSearchableDictionaryList > &xDicList,
         std::vector< OUString > & rDicListProps )
 {
     if (!xDicList.is())
@@ -108,7 +108,7 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
 
 
 void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
-        Reference< XDictionaryList > &rxDicList,
+        Reference< XSearchableDictionaryList > &rxDicList,
         sal_Int16 nLanguage )
 {
     static const OUString aEmpty;

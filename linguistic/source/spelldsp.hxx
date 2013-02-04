@@ -150,7 +150,7 @@ inline ::com::sun::star::uno::Reference<
         SpellCheckerDispatcher::GetDicList()
 {
     return xDicList.is() ?
-        xDicList : xDicList = linguistic::GetSearchableDictionaryList();
+        xDicList : xDicList = linguistic::GetDictionaryList();
 }
 
 

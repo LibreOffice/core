@@ -122,7 +122,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
     // add extension for personal dictionaries
     sDict.AppendAscii(".dic");
 
-    Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
+    Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
 
     Sequence< Reference< XDictionary >  > aDics;
     if (xDicList.is())
