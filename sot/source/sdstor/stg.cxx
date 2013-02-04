@@ -578,12 +578,12 @@ BaseStorage* Storage::OpenOLEStorage( const String& rName, StreamMode m, sal_Boo
     return OpenStorage( rName, m, bDirect );
 }
 
-BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, sal_Bool bDirect )
+BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, bool bDirect )
 {
     if( !Validate() || !ValidateMode( m ) )
         return new Storage( pIo, NULL, m );
     if( bDirect && !pEntry->bDirect )
-        bDirect = sal_False;
+        bDirect = false;
 
     StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
     if( !p )

@@ -910,7 +910,7 @@ SotStorage * SotStorage::OpenSotStorage( const String & rEleName,
         nMode |= STREAM_SHARE_DENYALL;
         ErrCode nE = m_pOwnStg->GetError();
         BaseStorage * p = m_pOwnStg->OpenStorage( rEleName, nMode,
-                        (nStorageMode & STORAGE_TRANSACTED) ? sal_False : sal_True );
+                        (nStorageMode & STORAGE_TRANSACTED) ? false : true );
         if( p )
         {
             pStor = new SotStorage( p );

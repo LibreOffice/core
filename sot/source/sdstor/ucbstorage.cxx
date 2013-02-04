@@ -504,7 +504,7 @@ public:
     sal_Int16                   Commit();
     sal_Bool                        Revert();
     sal_Bool                        Insert( ::ucbhelper::Content *pContent );
-    UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, sal_Bool bDirect );
+    UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect );
     UCBStorageStream_Impl*      OpenStream( UCBStorageElement_Impl*, StreamMode, sal_Bool, const rtl::OString* pKey=0 );
     void                        SetProps( const Sequence < Sequence < PropertyValue > >& rSequence, const String& );
     void                        GetProps( sal_Int32&, Sequence < Sequence < PropertyValue > >& rSequence, const String& );
@@ -2785,7 +2785,7 @@ BaseStorage* UCBStorage::OpenOLEStorage( const String& rEleName, StreamMode nMod
     return OpenStorage_Impl( rEleName, nMode, bDirect, sal_False );
 }
 
-BaseStorage* UCBStorage::OpenStorage( const String& rEleName, StreamMode nMode, sal_Bool bDirect )
+BaseStorage* UCBStorage::OpenStorage( const String& rEleName, StreamMode nMode, bool bDirect )
 {
     if( !rEleName.Len() )
         return NULL;
@@ -2906,7 +2906,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
     return NULL;
 }
 
-UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, sal_Bool bDirect )
+UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect )
 {
     UCBStorage_Impl* pRet = NULL;
     String aName( m_aURL );

@@ -116,7 +116,7 @@ public:
                                   sal_Bool bDirect = sal_True, const rtl::OString* pKey=0 ) = 0;
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
-                                   sal_Bool bDirect = sal_False ) = 0;
+                                   bool bDirect = false ) = 0;
     virtual BaseStorage*        OpenUCBStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
                                    sal_Bool bDirect = sal_False ) = 0;
@@ -216,7 +216,7 @@ public:
                                   sal_Bool bDirect = sal_True, const rtl::OString* pKey=0 );
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                        StreamMode = STREAM_STD_READWRITE,
-                                       sal_Bool bDirect = sal_False );
+                                       bool bDirect = false );
     virtual BaseStorage*        OpenUCBStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
                                    sal_Bool bDirect = sal_False );
@@ -332,7 +332,7 @@ public:
                                   sal_Bool bDirect = sal_True, const rtl::OString* pKey=0 );
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                        StreamMode = STREAM_STD_READWRITE,
-                                       sal_Bool bDirect = sal_False );
+                                       bool bDirect = false );
     virtual BaseStorage*        OpenUCBStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
                                    sal_Bool bDirect = sal_False );
