@@ -1785,9 +1785,9 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_trim(
 
 
 //------------------------------------------------------------------------
-// testing the method valueOf( sal_Bool b )
+// testing the method boolean( sal_Bool b )
 //------------------------------------------------------------------------
-sal_Bool SAL_CALL test_rtl_OString_valueOf_sal_Bool(
+sal_Bool SAL_CALL test_rtl_OString_boolean(
                                                 hTestResult hRtlTestResult )
 {
     sal_Char methName[MAXBUFLENGTH];
@@ -1813,7 +1813,7 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_sal_Bool(
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         ::rtl::OString aStr1;
-        aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
+        aStr1 = aStr1.boolean( arrTestCase[i].input1 );
         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
 
         c_rtl_tres_state
@@ -2446,7 +2446,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_valueOf(
                                                 hTestResult hRtlTestResult )
 {
     c_rtl_tres_state_start(hRtlTestResult, "valueOf");
-    sal_Bool bTState = test_rtl_OString_valueOf_sal_Bool( hRtlTestResult );
+    sal_Bool bTState = test_rtl_OString_boolean( hRtlTestResult );
 
     bTState &= test_rtl_OString_valueOf_sal_Char( hRtlTestResult );
 
