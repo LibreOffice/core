@@ -17,12 +17,16 @@ namespace test { namespace strings {
 
 class valueX : public CppUnit::TestFixture {
 public:
+    void testOBoolean();
+    void testOUBoolean();
     void testOUInt();
     void testOInt();
     void testOUFloat();
     void testOFloat();
 
     CPPUNIT_TEST_SUITE(valueX);
+    CPPUNIT_TEST(testOBoolean);
+    CPPUNIT_TEST(testOUBoolean);
     CPPUNIT_TEST(testOUInt);
     CPPUNIT_TEST(testOInt);
     CPPUNIT_TEST(testOUFloat);
@@ -33,6 +37,26 @@ public:
 } }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::strings::valueX);
+
+namespace {
+
+template< typename T >
+void testBoolean() {
+    CPPUNIT_ASSERT_EQUAL( T( "false" ), T::boolean( false ) );
+    CPPUNIT_ASSERT_EQUAL( T( "false" ), T::boolean( sal_False ) );
+    CPPUNIT_ASSERT_EQUAL( T( "true" ), T::boolean( true ) );
+    CPPUNIT_ASSERT_EQUAL( T( "true" ), T::boolean( sal_True ) );
+}
+
+}
+
+void test::strings::valueX::testOBoolean() {
+    testBoolean<rtl::OString>();
+}
+
+void test::strings::valueX::testOUBoolean() {
+    testBoolean<rtl::OString>();
+}
 
 template< typename T >
 void testInt() {

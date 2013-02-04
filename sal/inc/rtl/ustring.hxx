@@ -2155,11 +2155,11 @@ public:
       If the sal_Bool is false, the string "false" is returned.
       This function can't be used for language specific conversion.
 
-      @param    b   a sal_Bool.
+      @param    b   a bool.
       @return   a string with the string representation of the argument.
       @since LibreOffice 4.1
     */
-    static OUString boolean( sal_Bool b ) SAL_THROW(())
+    static OUString boolean( bool b ) SAL_THROW(())
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFBOOLEAN];
         rtl_uString* pNewData = 0;
