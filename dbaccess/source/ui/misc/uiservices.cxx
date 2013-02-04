@@ -58,6 +58,7 @@ extern "C" void SAL_CALL createRegistryInfo_OToolboxController();
 extern "C" void SAL_CALL createRegistryInfo_OStatusbarController();
 extern "C" void SAL_CALL createRegistryInfo_CopyTableWizard();
 extern "C" void SAL_CALL createRegistryInfo_OTextConnectionSettingsDialog();
+extern "C" void SAL_CALL createRegistryInfo_LimitBoxController();
 
 //***************************************************************************************
 extern "C" void SAL_CALL createRegistryInfo_DBU()
@@ -90,6 +91,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_OStatusbarController();
         createRegistryInfo_CopyTableWizard();
         createRegistryInfo_OTextConnectionSettingsDialog();
+        createRegistryInfo_LimitBoxController();
         bInit = sal_True;
     }
 }

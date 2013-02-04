@@ -63,6 +63,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
+#include <com/sun/star/ui/XUIElement.hpp>
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/extract.hxx>
@@ -246,6 +247,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::awt;
 using namespace ::dbtools;
@@ -274,6 +276,27 @@ namespace
             }
             xLayoutManager->unlock();
             xLayoutManager->doLayout();
+        }
+    }
+
+    /**
+     * The value of m_nLimit is updated when LimitBox loose its focus
+     * So in those case when execution needs recent data, grab the focus
+     * (e.g. execute SQL statment, change views)
+     */
+    void grabFocusFromLimitBox( OQueryController& _rController )
+    {
+        static const OUString sResourceURL( "private:resource/toolbar/designobjectbar" );
+        Reference< XLayoutManager > xLayoutManager = _rController.getLayoutManager( _rController.getFrame() );
+        Reference< XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
+        if (xUIElement.is())
+        {
+            Reference< XWindow > xWindow(xUIElement->getRealInterface(), css::uno::UNO_QUERY);
+            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+            if( pWindow || pWindow->HasChildPathFocus() )
+            {
+                pWindow->GrabFocusToDocument();
+            }
         }
     }
 }
@@ -314,6 +337,7 @@ OQueryController::OQueryController(const Reference< XComponentContext >& _rM)
     ,m_pParseContext( new svxform::OSystemParseContext )
     ,m_aSqlParser( _rM, m_pParseContext )
     ,m_pSqlIterator(NULL)
+    ,m_nLimit(-1)
     ,m_nVisibleRows(0x400)
     ,m_nSplitPos(-1)
     ,m_nCommandType( CommandType::QUERY )
@@ -522,6 +546,11 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = m_bGraphicalDesign && isEditable();
             aReturn.bChecked = m_bDistinct;
             break;
+        case SID_QUERY_LIMIT:
+            aReturn.bEnabled = m_bGraphicalDesign;
+            if( aReturn.bEnabled )
+                aReturn.aValue = makeAny( m_nLimit );
+            break;
         case ID_BROWSER_QUERY_EXECUTE:
             aReturn.bEnabled = sal_True;
             break;
@@ -561,6 +590,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             break;
         case ID_BROWSER_SAVEASDOC:
         case ID_BROWSER_SAVEDOC:
+            grabFocusFromLimitBox(*this);
             doSaveAsDoc(ID_BROWSER_SAVEASDOC == _nId);
             break;
         case SID_RELATION_ADD_RELATION:
@@ -583,6 +613,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             break;
         case ID_BROWSER_SQL:
         {
+            grabFocusFromLimitBox(*this);
             if ( !getContainer()->checkStatement() )
                 break;
             SQLExceptionInfo aError;
@@ -689,7 +720,15 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             m_bDistinct = !m_bDistinct;
             setModified(sal_True);
             break;
+        case SID_QUERY_LIMIT:
+            if ( aArgs.getLength() >= 1 && aArgs[0].Name == "DBLimit.Value" )
+            {
+                aArgs[0].Value >>= m_nLimit;
+                setModified(sal_True);
+            }
+            break;
         case ID_BROWSER_QUERY_EXECUTE:
+            grabFocusFromLimitBox(*this);
             if ( getContainer()->checkStatement() )
                 executeQuery();
             break;
@@ -1120,6 +1159,7 @@ void OQueryController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:SbaExecuteSql",     ID_BROWSER_QUERY_EXECUTE,   CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBAddRelation",     SID_RELATION_ADD_RELATION,  CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBQueryPreview",    SID_DB_QUERY_PREVIEW,       CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBLimit",           SID_QUERY_LIMIT,            CommandGroup::FORMAT );
 
 #if OSL_DEBUG_LEVEL > 1
     implDescribeSupportedFeature( ".uno:DBShowParseTree",   ID_EDIT_QUERY_SQL );
