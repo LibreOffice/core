@@ -50,12 +50,10 @@ namespace drivermanager
     DECLARE_STL_USTRINGACCESS_MAP( SdbcDriver, DriverCollection );
 
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >     DriverFactory;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            UNOContext;
     struct DriverAccess
     {
         ::rtl::OUString     sImplementationName;        /// the implementation name of the driver
         DriverFactory       xComponentFactory;          /// the factory to create the driver component (if not already done so)
-        UNOContext          xUNOContext;                /// ensure UNO context propagation
         SdbcDriver          xDriver;                    /// the driver itself
     };
 
