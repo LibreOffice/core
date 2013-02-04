@@ -97,8 +97,7 @@
 const int indeterminate = 2;
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
+
 using ::std::cout;
 using ::std::cerr;
 using ::std::endl;
@@ -347,7 +346,7 @@ void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
     {
         for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         {
-            rtl::OUString aVal = pDoc->GetString(nCol, nRow, rRange.aStart.Tab());
+            OUString aVal = pDoc->GetString(nCol, nRow, rRange.aStart.Tab());
             printer.set(nRow-nRow1, nCol-nCol1, aVal);
         }
     }
@@ -465,7 +464,7 @@ void Test::testRangeList()
 
 void Test::testInput()
 {
-    rtl::OUString aTabName("foo");
+    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
@@ -500,7 +499,7 @@ void testFuncSUM(ScDocument* pDoc)
     double result;
     pDoc->SetValue (0, 0, 0, val);
     pDoc->SetValue (0, 1, 0, val);
-    pDoc->SetString (0, 2, 0, rtl::OUString("=SUM(A1:A2)"));
+    pDoc->SetString (0, 2, 0, OUString("=SUM(A1:A2)"));
     pDoc->CalcAll();
     pDoc->GetValue (0, 2, 0, result);
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
@@ -622,7 +621,7 @@ void testFuncCOUNTIF(ScDocument* pDoc)
 
     SCROW nRows = SAL_N_ELEMENTS(aData);
     for (SCROW i = 0; i < nRows; ++i)
-        pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i]));
+        pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
 
     printRange(pDoc, ScRange(0, 0, 0, 0, 8, 0), "data range for COUNTIF");
 
@@ -647,7 +646,7 @@ void testFuncCOUNTIF(ScDocument* pDoc)
     for (SCROW i = 0; i < nRows; ++i)
     {
         SCROW nRow = 20 + i;
-        pDoc->SetString(0, nRow, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
+        pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aChecks[i].pFormula));
     }
     pDoc->CalcAll();
 
@@ -670,8 +669,8 @@ void testFuncCOUNTIF(ScDocument* pDoc)
     // Clear A1:A2.
     clearRange(pDoc, ScRange(0, 0, 0, 0, 1, 0));
 
-    pDoc->SetString(0, 0, 0, rtl::OUString("=\"\""));
-    pDoc->SetString(0, 1, 0, rtl::OUString("=COUNTIF(A1;1)"));
+    pDoc->SetString(0, 0, 0, OUString("=\"\""));
+    pDoc->SetString(0, 1, 0, OUString("=COUNTIF(A1;1)"));
     pDoc->CalcAll();
 
     double result = pDoc->GetValue(0, 1, 0);
@@ -703,7 +702,7 @@ void testFuncIFERROR(ScDocument* pDoc)
 
     SCROW nRows = SAL_N_ELEMENTS(aData);
     for (SCROW i = 0; i < nRows; ++i)
-        pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i]));
+        pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
 
     printRange(pDoc, ScRange(0, 0, 0, 0, nRows-1, 0), "data range for IFERROR/IFNA");
 
@@ -730,7 +729,7 @@ void testFuncIFERROR(ScDocument* pDoc)
     for (SCROW i = 0; i < nRows-2; ++i)
     {
         SCROW nRow = 20 + i;
-        pDoc->SetString(0, nRow, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
+        pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aChecks[i].pFormula));
     }
 
     // Create a matrix range in last two rows of the range above, actual data
@@ -833,8 +832,8 @@ void testFuncVLOOKUP(ScDocument* pDoc)
     // Insert raw data into A1:B14.
     for (SCROW i = 0; aData[i][0]; ++i)
     {
-        pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i][0]));
-        pDoc->SetString(1, i, 0, rtl::OUString::createFromAscii(aData[i][1]));
+        pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i][0]));
+        pDoc->SetString(1, i, 0, OUString::createFromAscii(aData[i][1]));
     }
 
     printRange(pDoc, ScRange(0, 0, 0, 1, 13, 0), "raw data for VLOOKUP");
@@ -866,8 +865,8 @@ void testFuncVLOOKUP(ScDocument* pDoc)
     // Insert formula data into D1:E18.
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
-        pDoc->SetString(3, i, 0, rtl::OUString::createFromAscii(aChecks[i].pLookup));
-        pDoc->SetString(4, i, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
+        pDoc->SetString(3, i, 0, OUString::createFromAscii(aChecks[i].pLookup));
+        pDoc->SetString(4, i, 0, OUString::createFromAscii(aChecks[i].pFormula));
     }
     pDoc->CalcAll();
     printRange(pDoc, ScRange(3, 0, 0, 4, 17, 0), "formula data for VLOOKUP");
@@ -905,13 +904,13 @@ void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aC
 {
     size_t nDataSize = _DataSize;
     for (size_t i = 0; i < nDataSize; ++i)
-        pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i]));
+        pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
 
     for (size_t i = 0; i < _FormulaSize; ++i)
     {
-        pDoc->SetString(1, i, 0, rtl::OUString::createFromAscii(aChecks[i].pVal));
+        pDoc->SetString(1, i, 0, OUString::createFromAscii(aChecks[i].pVal));
 
-        rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         aBuf.appendAscii("=MATCH(B");
         aBuf.append(static_cast<sal_Int32>(i+1));
         aBuf.appendAscii(";A1:A");
@@ -919,7 +918,7 @@ void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aC
         aBuf.appendAscii(";");
         aBuf.append(static_cast<sal_Int32>(_Type));
         aBuf.appendAscii(")");
-        rtl::OUString aFormula = aBuf.makeStringAndClear();
+        OUString aFormula = aBuf.makeStringAndClear();
         pDoc->SetString(2, i, 0, aFormula);
     }
 
@@ -1032,7 +1031,7 @@ void testFuncCELL(ScDocument* pDoc)
 
     {
         const char* pContent = "Some random text";
-        pDoc->SetString(2, 9, 0, rtl::OUString::createFromAscii(pContent)); // Set this value to C10.
+        pDoc->SetString(2, 9, 0, OUString::createFromAscii(pContent)); // Set this value to C10.
         double val = 1.2;
         pDoc->SetValue(2, 0, 0, val); // Set numeric value to C1;
 
@@ -1051,12 +1050,12 @@ void testFuncCELL(ScDocument* pDoc)
         };
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
-            pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aChecks[i].pVal));
+            pDoc->SetString(0, i, 0, OUString::createFromAscii(aChecks[i].pVal));
         pDoc->CalcAll();
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
-            rtl::OUString aVal = pDoc->GetString(0, i, 0);
+            OUString aVal = pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for CELL", aVal.equalsAscii(aChecks[i].pRes));
         }
     }
@@ -1092,8 +1091,8 @@ void testFuncDATEDIF( ScDocument* pDoc )
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aData); ++i)
     {
-        rtl::OUString aVal = pDoc->GetString( 4, i, 0);
-        //std::cout << "row "<< i << ": " << rtl::OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr() << ", expected " << aData[i][3] << std::endl;
+        OUString aVal = pDoc->GetString( 4, i, 0);
+        //std::cout << "row "<< i << ": " << OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr() << ", expected " << aData[i][3] << std::endl;
         CPPUNIT_ASSERT_MESSAGE("Unexpected result for DATEDIF", aVal.equalsAscii( aData[i][3]));
     }
 }
@@ -1101,17 +1100,17 @@ void testFuncDATEDIF( ScDocument* pDoc )
 void testFuncINDIRECT(ScDocument* pDoc)
 {
     clearRange(pDoc, ScRange(0, 0, 0, 0, 10, 0)); // Clear A1:A11
-    rtl::OUString aTabName;
+    OUString aTabName;
     bool bGood = pDoc->GetName(0, aTabName);
     CPPUNIT_ASSERT_MESSAGE("failed to get sheet name.", bGood);
 
-    rtl::OUString aTest = "Test", aRefErr = "#REF!";
+    OUString aTest = "Test", aRefErr = "#REF!";
     pDoc->SetString(0, 10, 0, aTest);
     CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", pDoc->GetString(0,10,0) == aTest);
 
-    rtl::OUString aPrefix = "=INDIRECT(\"";
+    OUString aPrefix = "=INDIRECT(\"";
 
-    rtl::OUString aFormula = aPrefix + aTabName + ".A11\")"; // Calc A1
+    OUString aFormula = aPrefix + aTabName + ".A11\")"; // Calc A1
     pDoc->SetString(0, 0, 0, aFormula);
     aFormula = aPrefix + aTabName + "!A11\")"; // Excel A1
     pDoc->SetString(0, 1, 0, aFormula);
@@ -1123,13 +1122,13 @@ void testFuncINDIRECT(ScDocument* pDoc)
     pDoc->CalcAll();
     {
         // Default is to use the current formula syntax, which is Calc A1.
-        const rtl::OUString* aChecks[] = {
+        const OUString* aChecks[] = {
             &aTest, &aRefErr, &aRefErr, &aTest
         };
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
-            rtl::OUString aVal = pDoc->GetString(0, i, 0);
+            OUString aVal = pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
         }
     }
@@ -1140,13 +1139,13 @@ void testFuncINDIRECT(ScDocument* pDoc)
     pDoc->CalcAll();
     {
         // Explicit Calc A1 syntax
-        const rtl::OUString* aChecks[] = {
+        const OUString* aChecks[] = {
             &aTest, &aRefErr, &aRefErr, &aTest
         };
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
-            rtl::OUString aVal = pDoc->GetString(0, i, 0);
+            OUString aVal = pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
         }
     }
@@ -1156,13 +1155,13 @@ void testFuncINDIRECT(ScDocument* pDoc)
     pDoc->CalcAll();
     {
         // Excel A1 syntax
-        const rtl::OUString* aChecks[] = {
+        const OUString* aChecks[] = {
             &aRefErr, &aTest, &aRefErr, &aTest
         };
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
-            rtl::OUString aVal = pDoc->GetString(0, i, 0);
+            OUString aVal = pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
         }
     }
@@ -1172,13 +1171,13 @@ void testFuncINDIRECT(ScDocument* pDoc)
     pDoc->CalcAll();
     {
         // Excel R1C1 syntax
-        const rtl::OUString* aChecks[] = {
+        const OUString* aChecks[] = {
             &aRefErr, &aRefErr, &aTest, &aTest
         };
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
-            rtl::OUString aVal = pDoc->GetString(0, i, 0);
+            OUString aVal = pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
         }
     }
@@ -1186,7 +1185,7 @@ void testFuncINDIRECT(ScDocument* pDoc)
 
 void Test::testCellFunctions()
 {
-    rtl::OUString aTabName("foo");
+    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
@@ -1235,8 +1234,8 @@ void Test::testCopyToDocument()
 
 void Test::testSheetsFunc()
 {
-    rtl::OUString aTabName1("test1");
-    rtl::OUString aTabName2("test2");
+    OUString aTabName1("test1");
+    OUString aTabName2("test2");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (SC_TAB_APPEND, aTabName1));
 
@@ -1268,7 +1267,7 @@ void Test::testSheetsFunc()
 
 void Test::testVolatileFunc()
 {
-    rtl::OUString aTabName("foo");
+    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
@@ -1430,7 +1429,7 @@ void Test::testFormulaDepTracking2()
 
 void Test::testFuncParam()
 {
-    rtl::OUString aTabName("foo");
+    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
@@ -1454,7 +1453,7 @@ void Test::testFuncParam()
     m_pDoc->SetString(0, 2, 0, OUString("=\" 4 \"+3")); // number in blanks
     m_pDoc->SetString(0, 3, 0, OUString("=\" x \"+3")); // non-numeric => #VALUE! error
 
-    rtl::OUString aVal;
+    OUString aVal;
     ScCalcConfig aConfig;
 
     // With "Empty string as zero" option.
@@ -1507,8 +1506,8 @@ void Test::testNamedRange()
     {
         ScRangeData* pNew = new ScRangeData(
             m_pDoc,
-            rtl::OUString::createFromAscii(aNames[i].pName),
-            rtl::OUString::createFromAscii(aNames[i].pExpr),
+            OUString::createFromAscii(aNames[i].pName),
+            OUString::createFromAscii(aNames[i].pExpr),
             aA1, 0, formula::FormulaGrammar::GRAM_ENGLISH);
         pNew->SetIndex(aNames[i].nIndex);
         bool bSuccess = pNewRanges->insert(pNew);
@@ -1520,13 +1519,13 @@ void Test::testNamedRange()
     {
         const ScRangeData* p = pNewRanges->findByIndex(aNames[i].nIndex);
         CPPUNIT_ASSERT_MESSAGE("lookup of range name by index failed.", p);
-        rtl::OUString aName = p->GetName();
+        OUString aName = p->GetName();
         CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved.", aName.equalsAscii(aNames[i].pName));
     }
 
     // Test usage in formula expression.
     m_pDoc->SetRangeName(pNewRanges);
-    m_pDoc->SetString (1, 0, 0, rtl::OUString("=A1/Divisor"));
+    m_pDoc->SetString (1, 0, 0, OUString("=A1/Divisor"));
     m_pDoc->CalcAll();
 
     double result;
@@ -1541,7 +1540,7 @@ void Test::testNamedRange()
     {
         const ScRangeData* p = pCopiedRanges->findByIndex(aNames[i].nIndex);
         CPPUNIT_ASSERT_MESSAGE("lookup of range name by index failed with the copied instance.", p);
-        rtl::OUString aName = p->GetName();
+        OUString aName = p->GetName();
         CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved with the copied instance.", aName.equalsAscii(aNames[i].pName));
     }
 
@@ -1571,7 +1570,7 @@ void Test::testCSV()
         { "1.000.00",  European, false, 0.0 }
     };
     for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aTests); i++) {
-        rtl::OUString aStr(aTests[i].pStr, strlen (aTests[i].pStr), RTL_TEXTENCODING_UTF8);
+        OUString aStr(aTests[i].pStr, strlen (aTests[i].pStr), RTL_TEXTENCODING_UTF8);
         double nValue = 0.0;
         bool bResult = ScStringUtil::parseSimpleNumber
                 (aStr, aTests[i].eSep == English ? '.' : ',',
@@ -1713,7 +1712,7 @@ void Test::testMatrix()
 
     pMat->PutBoolean(true, 1, 1);
     pMat->PutDouble(-12.5, 4, 5);
-    rtl::OUString aStr("Test");
+    OUString aStr("Test");
     pMat->PutString(aStr, 8, 2);
     pMat->PutEmptyPath(8, 11);
     checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
@@ -1862,7 +1861,7 @@ ScDPObject* createDPFromSourceDesc(
     // Set the dimension information.
     for (size_t i = 0; i < nFieldCount; ++i)
     {
-        OUString aDimName = rtl::OUString::createFromAscii(aFields[i].pName);
+        OUString aDimName = OUString::createFromAscii(aFields[i].pName);
         ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(aDimName);
         pDim->SetOrientation(static_cast<sal_uInt16>(aFields[i].eOrient));
         pDim->SetUsedHierarchy(0);
@@ -2321,7 +2320,7 @@ void Test::testPivotTableFilters()
     ScAddress aFormulaAddr = aOutRange.aEnd;
     aFormulaAddr.IncRow(2);
     m_pDoc->SetString(aFormulaAddr.Col(), aFormulaAddr.Row(), aFormulaAddr.Tab(),
-                      rtl::OUString("=B6"));
+                      OUString("=B6"));
     double fTest = m_pDoc->GetValue(aFormulaAddr);
     CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 80.0);
 
@@ -2438,11 +2437,11 @@ void Test::testPivotTableNamedSource()
 
     // Insert the raw data.
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
-    rtl::OUString aRangeStr;
+    OUString aRangeStr;
     aSrcRange.Format(aRangeStr, SCR_ABS_3D, m_pDoc);
 
     // Name this range.
-    rtl::OUString aRangeName("MyData");
+    OUString aRangeName("MyData");
     ScRangeName* pNames = m_pDoc->GetRangeName();
     CPPUNIT_ASSERT_MESSAGE("Failed to get global range name container.", pNames);
     ScRangeData* pName = new ScRangeData(
@@ -2486,7 +2485,7 @@ void Test::testPivotTableNamedSource()
 
     // Move the table with pivot table to the left of the source data sheet.
     m_pDoc->MoveTab(1, 0);
-    rtl::OUString aTabName;
+    OUString aTabName;
     m_pDoc->GetName(0, aTabName);
     CPPUNIT_ASSERT_MESSAGE( "Wrong sheet name.", aTabName == "Table" );
     CPPUNIT_ASSERT_MESSAGE("Pivot table output is on the wrong sheet!",
@@ -2535,7 +2534,7 @@ void Test::testPivotTableCache()
     aCache.InitFromDoc(m_pDoc, aDataRange);
     long nDimCount = aCache.GetColumnCount();
     CPPUNIT_ASSERT_MESSAGE("wrong dimension count.", nDimCount == 3);
-    rtl::OUString aDimName = aCache.GetDimensionName(0);
+    OUString aDimName = aCache.GetDimensionName(0);
     CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F1"));
     aDimName = aCache.GetDimensionName(1);
     CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F2"));
@@ -2637,7 +2636,7 @@ void Test::testPivotTableCache()
             for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
             {
                 pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
-                aTest.SetString(rtl::OUString::createFromAscii(aChecks[i]));
+                aTest.SetString(OUString::createFromAscii(aChecks[i]));
                 CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
             }
 
@@ -2653,7 +2652,7 @@ void Test::testPivotTableCache()
             for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
             {
                 pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
-                aTest.SetString(rtl::OUString::createFromAscii(aChecks[i]));
+                aTest.SetString(OUString::createFromAscii(aChecks[i]));
                 CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
             }
         }
@@ -2856,21 +2855,21 @@ void Test::testPivotTableNormalGrouping()
     ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();
     CPPUNIT_ASSERT_MESSAGE("Failed to create dimension data.", pDimData);
 
-    rtl::OUString aGroupPrefix("Group");
-    rtl::OUString aBaseDimName("Name");
-    rtl::OUString aGroupDimName =
+    OUString aGroupPrefix("Group");
+    OUString aBaseDimName("Name");
+    OUString aGroupDimName =
         pDimData->CreateGroupDimName(aBaseDimName, *pDPObj, false, NULL);
 
     {
         // Group A, B and C together.
         ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
-        rtl::OUString aGroupName = aGroupDim.CreateGroupName(aGroupPrefix);
+        OUString aGroupName = aGroupDim.CreateGroupName(aGroupPrefix);
         CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName.equalsAscii("Group1"));
 
         ScDPSaveGroupItem aGroup(aGroupName);
-        aGroup.AddElement(rtl::OUString("A"));
-        aGroup.AddElement(rtl::OUString("B"));
-        aGroup.AddElement(rtl::OUString("C"));
+        aGroup.AddElement(OUString("A"));
+        aGroup.AddElement(OUString("B"));
+        aGroup.AddElement(OUString("C"));
         aGroupDim.AddGroupItem(aGroup);
         pDimData->AddGroupDimension(aGroupDim);
 
@@ -2906,13 +2905,13 @@ void Test::testPivotTableNormalGrouping()
         // Group D, E, F together.
         ScDPSaveGroupDimension* pGroupDim = pDimData->GetGroupDimAccForBase(aBaseDimName);
         CPPUNIT_ASSERT_MESSAGE("There should be an existing group dimension.", pGroupDim);
-        rtl::OUString aGroupName = pGroupDim->CreateGroupName(aGroupPrefix);
+        OUString aGroupName = pGroupDim->CreateGroupName(aGroupPrefix);
         CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName.equalsAscii("Group2"));
 
         ScDPSaveGroupItem aGroup(aGroupName);
-        aGroup.AddElement(rtl::OUString("D"));
-        aGroup.AddElement(rtl::OUString("E"));
-        aGroup.AddElement(rtl::OUString("F"));
+        aGroup.AddElement(OUString("D"));
+        aGroup.AddElement(OUString("E"));
+        aGroup.AddElement(OUString("F"));
         pGroupDim->AddGroupItem(aGroup);
     }
 
@@ -3009,7 +3008,7 @@ void Test::testPivotTableNumberGrouping()
         aInfo.mfStart = 30;
         aInfo.mfEnd = 60;
         aInfo.mfStep = 10;
-        ScDPSaveNumGroupDimension aGroup(rtl::OUString("Order"), aInfo);
+        ScDPSaveNumGroupDimension aGroup(OUString("Order"), aInfo);
         pDimData->AddNumGroupDimension(aGroup);
     }
 
@@ -3084,7 +3083,7 @@ void Test::testPivotTableDateGrouping()
     ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();
     CPPUNIT_ASSERT_MESSAGE("No dimension data !?", pDimData);
 
-    rtl::OUString aBaseDimName("Date");
+    OUString aBaseDimName("Date");
 
     ScDPNumGroupInfo aInfo;
     aInfo.mbEnable = true;
@@ -3100,7 +3099,7 @@ void Test::testPivotTableDateGrouping()
 
     {
         // Add quarter dimension.  This will be an additional dimension.
-        rtl::OUString aGroupDimName =
+        OUString aGroupDimName =
             pDimData->CreateDateGroupDimName(
                 sheet::DataPilotFieldGroupBy::QUARTERS, *pDPObj, true, NULL);
         ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
@@ -3115,7 +3114,7 @@ void Test::testPivotTableDateGrouping()
 
     {
         // Add year dimension.  This is a new dimension also.
-        rtl::OUString aGroupDimName =
+        OUString aGroupDimName =
             pDimData->CreateDateGroupDimName(
                 sheet::DataPilotFieldGroupBy::YEARS, *pDPObj, true, NULL);
         ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
@@ -3151,9 +3150,9 @@ void Test::testPivotTableDateGrouping()
     {
         // Let's hide year 2012.
         pSaveData = pDPObj->GetSaveData();
-        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(rtl::OUString("Years"));
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(OUString("Years"));
         CPPUNIT_ASSERT_MESSAGE("Years dimension should exist.", pDim);
-        ScDPSaveMember* pMem = pDim->GetMemberByName(rtl::OUString("2012"));
+        ScDPSaveMember* pMem = pDim->GetMemberByName(OUString("2012"));
         CPPUNIT_ASSERT_MESSAGE("Member should exist.", pMem);
         pMem->SetIsVisible(false);
     }
@@ -3860,7 +3859,7 @@ void Test::testSheetMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount(), static_cast<SCTAB>(2));
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
-    rtl::OUString aName;
+    OUString aName;
     m_pDoc->GetName(0, aName);
     CPPUNIT_ASSERT_MESSAGE( "sheets should have changed places", aName == "TestTab1" );
 
@@ -4122,15 +4121,15 @@ void testExtRefFuncT(ScDocument* pDoc, ScDocument* pExtDoc)
     clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
     clearRange(pExtDoc, ScRange(0, 0, 0, 1, 9, 0));
 
-    pExtDoc->SetString(0, 0, 0, rtl::OUString("'1.2"));
-    pExtDoc->SetString(0, 1, 0, rtl::OUString("Foo"));
+    pExtDoc->SetString(0, 0, 0, OUString("'1.2"));
+    pExtDoc->SetString(0, 1, 0, OUString("Foo"));
     pExtDoc->SetValue(0, 2, 0, 12.3);
-    pDoc->SetString(0, 0, 0, rtl::OUString("=T('file:///extdata.fake'#Data.A1)"));
-    pDoc->SetString(0, 1, 0, rtl::OUString("=T('file:///extdata.fake'#Data.A2)"));
-    pDoc->SetString(0, 2, 0, rtl::OUString("=T('file:///extdata.fake'#Data.A3)"));
+    pDoc->SetString(0, 0, 0, OUString("=T('file:///extdata.fake'#Data.A1)"));
+    pDoc->SetString(0, 1, 0, OUString("=T('file:///extdata.fake'#Data.A2)"));
+    pDoc->SetString(0, 2, 0, OUString("=T('file:///extdata.fake'#Data.A3)"));
     pDoc->CalcAll();
 
-    rtl::OUString aRes = pDoc->GetString(0, 0, 0);
+    OUString aRes = pDoc->GetString(0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE( "Unexpected result with T.", aRes == "1.2" );
     aRes = pDoc->GetString(0, 1, 0);
     CPPUNIT_ASSERT_MESSAGE( "Unexpected result with T.", aRes == "Foo" );
@@ -4156,7 +4155,7 @@ void Test::testExternalRefFunctions()
 
     // Populate the external source document.
     ScDocument* pExtDoc = xExtDocSh->GetDocument();
-    pExtDoc->InsertTab(0, rtl::OUString("Data"));
+    pExtDoc->InsertTab(0, OUString("Data"));
     double val = 1;
     pExtDoc->SetValue(0, 0, 0, val);
     // leave cell B1 empty.
@@ -4170,7 +4169,7 @@ void Test::testExternalRefFunctions()
     pExtDoc->SetValue(0, 3, 0, val);
     pExtDoc->SetValue(1, 3, 0, val);
 
-    m_pDoc->InsertTab(0, rtl::OUString("Test"));
+    m_pDoc->InsertTab(0, OUString("Test"));
 
     struct {
         const char* pFormula; double fResult;
@@ -4185,7 +4184,7 @@ void Test::testExternalRefFunctions()
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
-        m_pDoc->SetString(0, 0, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
+        m_pDoc->SetString(0, 0, 0, OUString::createFromAscii(aChecks[i].pFormula));
         m_pDoc->CalcAll();
         m_pDoc->GetValue(0, 0, 0, val);
         CPPUNIT_ASSERT_MESSAGE("unexpected result involving external ranges.", val == aChecks[i].fResult);
@@ -4785,8 +4784,8 @@ void Test::testGraphicsInGroup()
 
 void Test::testGraphicsOnSheetMove()
 {
-    m_pDoc->InsertTab(0, rtl::OUString("Tab1"));
-    m_pDoc->InsertTab(1, rtl::OUString("Tab2"));
+    m_pDoc->InsertTab(0, OUString("Tab1"));
+    m_pDoc->InsertTab(1, OUString("Tab2"));
     CPPUNIT_ASSERT_MESSAGE("There should be only 2 sheets to begin with", m_pDoc->GetTableCount() == 2);
 
     m_pDoc->InitDrawLayer();
@@ -4813,7 +4812,7 @@ void Test::testGraphicsOnSheetMove()
 
     // Insert a new sheet at left-end, and make sure the object has moved to
     // the 2nd page.
-    m_pDoc->InsertTab(0, rtl::OUString("NewTab"));
+    m_pDoc->InsertTab(0, OUString("NewTab"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 3 sheets.", m_pDoc->GetTableCount(), static_cast<SCTAB>(3));
     pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("1st sheet should have no object.", pPage && pPage->GetObjCount() == 0);
@@ -4859,10 +4858,10 @@ void Test::testGraphicsOnSheetMove()
 
 void Test::testPostIts()
 {
-    rtl::OUString aHello("Hello world");
-    rtl::OUString aJimBob("Jim Bob");
-    rtl::OUString aTabName("PostIts");
-    rtl::OUString aTabName2("Table2");
+    OUString aHello("Hello world");
+    OUString aJimBob("Jim Bob");
+    OUString aTabName("PostIts");
+    OUString aTabName2("Table2");
     m_pDoc->InsertTab(0, aTabName);
 
     ScAddress rAddr(2, 2, 0); // cell C3
@@ -5021,7 +5020,7 @@ void Test::testAutofilter()
     for (SCROW i = 0; i < nRows; ++i)
         for (SCCOL j = 0; j < nCols; ++j)
             if (aData[i][j])
-                m_pDoc->SetString(j, i, 0, rtl::OUString::createFromAscii(aData[i][j]));
+                m_pDoc->SetString(j, i, 0, OUString::createFromAscii(aData[i][j]));
 
     ScDBData* pDBData = new ScDBData(aDBName, 0, 0, 0, nCols-1, nRows-1);
     m_pDoc->SetAnonymousDBData(0,pDBData);
@@ -5107,7 +5106,7 @@ void Test::testCopyPaste()
     ScAddress aAdr (0, 0, 0);
 
     //create some range names, local and global
-    ScRangeData* pLocal1 = new ScRangeData(m_pDoc, rtl::OUString("local1"), aAdr);
+    ScRangeData* pLocal1 = new ScRangeData(m_pDoc, OUString("local1"), aAdr);
     ScRangeData* pLocal2 = new ScRangeData(m_pDoc, OUString("local2"), aAdr);
     ScRangeData* pGlobal = new ScRangeData(m_pDoc, OUString("global"), aAdr);
     ScRangeName* pGlobalRangeName = new ScRangeName();
@@ -5119,7 +5118,7 @@ void Test::testCopyPaste()
     m_pDoc->SetRangeName(0, pLocalRangeName1);
 
     //add formula
-    rtl::OUString aFormulaString("=local1+global+SUM($C$1:$D$4)");
+    OUString aFormulaString("=local1+global+SUM($C$1:$D$4)");
     m_pDoc->SetString(1, 0, 0, aFormulaString);
 
     double aValue = 0;
@@ -5147,7 +5146,7 @@ void Test::testCopyPaste()
     m_pDoc->CopyFromClip(aRange, aMarkData2, nFlags, NULL, pClipDoc);
 
     //check values after copying
-    rtl::OUString aString;
+    OUString aString;
     m_pDoc->GetValue(1,1,1, aValue);
     m_pDoc->GetFormula(1,1,1, aString);
     ASSERT_DOUBLES_EQUAL_MESSAGE("copied formula should return 2", aValue, 2);
@@ -5191,7 +5190,7 @@ void Test::testMergedCells()
 {
     //test merge and unmerge
     //TODO: an undo/redo test for this would be a good idea
-    m_pDoc->InsertTab(0, rtl::OUString("Sheet1"));
+    m_pDoc->InsertTab(0, OUString("Sheet1"));
     m_pDoc->DoMerge(0, 1, 1, 3, 3, false);
     SCCOL nEndCol = 1;
     SCROW nEndRow = 1;
@@ -5218,19 +5217,19 @@ void Test::testRenameTable()
     m_pDoc->InsertTab(1, "Sheet2");
 
     //test case 1 , rename table2 to sheet 1, it should return error
-    rtl::OUString nameToSet = "Sheet1";
+    OUString nameToSet = "Sheet1";
     ScDocFunc& rDocFunc = m_xDocShRef->GetDocFunc();
     CPPUNIT_ASSERT_MESSAGE("name same as another table is being set", !rDocFunc.RenameTable(1,nameToSet,false,true) );
 
     //test case 2 , simple rename to check name
     nameToSet = "test1";
     m_xDocShRef->GetDocFunc().RenameTable(0,nameToSet,false,true);
-    rtl::OUString nameJustSet;
+    OUString nameJustSet;
     m_pDoc->GetName(0,nameJustSet);
     CPPUNIT_ASSERT_MESSAGE("table not renamed", nameToSet == nameJustSet);
 
     //test case 3 , rename again
-    rtl::OUString anOldName;
+    OUString anOldName;
     m_pDoc->GetName(0,anOldName);
 
     nameToSet = "test2";
@@ -5290,10 +5289,10 @@ void Test::testUpdateReference()
 {
     //test that formulas are correctly updated during sheet delete
     //TODO: add tests for relative references, updating of named ranges, ...
-    rtl::OUString aSheet1("Sheet1");
-    rtl::OUString aSheet2("Sheet2");
-    rtl::OUString aSheet3("Sheet3");
-    rtl::OUString aSheet4("Sheet4");
+    OUString aSheet1("Sheet1");
+    OUString aSheet2("Sheet2");
+    OUString aSheet3("Sheet3");
+    OUString aSheet4("Sheet4");
     m_pDoc->InsertTab(0, aSheet1);
     m_pDoc->InsertTab(1, aSheet2);
     m_pDoc->InsertTab(2, aSheet3);
@@ -5302,8 +5301,8 @@ void Test::testUpdateReference()
     m_pDoc->SetValue(0,0,2, 1);
     m_pDoc->SetValue(1,0,2, 2);
     m_pDoc->SetValue(1,1,3, 4);
-    m_pDoc->SetString(2,0,2, rtl::OUString("=A1+B1"));
-    m_pDoc->SetString(2,1,2, rtl::OUString("=Sheet4.B2+A1"));
+    m_pDoc->SetString(2,0,2, OUString("=A1+B1"));
+    m_pDoc->SetString(2,1,2, OUString("=Sheet4.B2+A1"));
 
     double aValue;
     m_pDoc->GetValue(2,0,2, aValue);
@@ -5344,14 +5343,14 @@ void Test::testUpdateReference()
     m_pDoc->GetValue(2, 1, 0, aValue);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 5);
 
-    std::vector<rtl::OUString> aSheets;
+    std::vector<OUString> aSheets;
     aSheets.push_back(aSheet1);
     aSheets.push_back(aSheet2);
     m_pDoc->InsertTabs(0, aSheets, false, true);
     m_pDoc->GetValue(2, 0, 2, aValue);
-    rtl::OUString aFormula;
+    OUString aFormula;
     m_pDoc->GetFormula(2,0,2, aFormula);
-    std::cout << "formel: " << rtl::OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << "formel: " << OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     std::cout << std::endl << aValue << std::endl;
     ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2, 1, 2, aValue);
@@ -5408,10 +5407,10 @@ void Test::testJumpToPrecedentsDependents()
 {
     // Precedent is another cell that the cell references, while dependent is
     // another cell that references it.
-    m_pDoc->InsertTab(0, rtl::OUString("Test"));
+    m_pDoc->InsertTab(0, OUString("Test"));
 
-    m_pDoc->SetString(2, 0, 0, rtl::OUString("=A1+A2+B3")); // C1
-    m_pDoc->SetString(2, 1, 0, rtl::OUString("=A1"));       // C2
+    m_pDoc->SetString(2, 0, 0, OUString("=A1+A2+B3")); // C1
+    m_pDoc->SetString(2, 1, 0, OUString("=A1"));       // C2
     m_pDoc->CalcAll();
 
     std::vector<ScTokenRef> aRefTokens;
@@ -5500,10 +5499,10 @@ void Test::testAutoFill()
     // test auto fill user data lists
     m_pDoc->SetString( 0, 100, 0, "January" );
     m_pDoc->Fill( 0, 100, 0, 100, NULL, aMarkData, 2, FILL_TO_BOTTOM, FILL_AUTO );
-    rtl::OUString aTestValue = m_pDoc->GetString( 0, 101, 0 );
-    CPPUNIT_ASSERT_EQUAL( aTestValue, rtl::OUString("February") );
+    OUString aTestValue = m_pDoc->GetString( 0, 101, 0 );
+    CPPUNIT_ASSERT_EQUAL( aTestValue, OUString("February") );
     aTestValue = m_pDoc->GetString( 0, 102, 0 );
-    CPPUNIT_ASSERT_EQUAL( aTestValue, rtl::OUString("March") );
+    CPPUNIT_ASSERT_EQUAL( aTestValue, OUString("March") );
 
     // test that two same user data list entries will not result in incremental fill
     m_pDoc->SetString( 0, 101, 0, "January" );
@@ -5511,7 +5510,7 @@ void Test::testAutoFill()
     for ( SCROW i = 102; i <= 103; ++i )
     {
         aTestValue = m_pDoc->GetString( 0, i, 0 );
-        CPPUNIT_ASSERT_EQUAL( aTestValue, rtl::OUString("January") );
+        CPPUNIT_ASSERT_EQUAL( aTestValue, OUString("January") );
     }
     m_pDoc->DeleteTab(0);
 }
@@ -5537,22 +5536,22 @@ void Test::testCopyPasteFormulas()
     CPPUNIT_ASSERT(bMoveDone);
     ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,10,0), 1.0);
     ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,11,0), 1.0);
-    rtl::OUString aFormula;
+    OUString aFormula;
     m_pDoc->GetFormula(10,10,0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=COLUMN($A$1)"));
+    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=COLUMN($A$1)"));
     m_pDoc->GetFormula(10,11,0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$A$1+L12"));
+    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$A$1+L12"));
     m_pDoc->GetFormula(10,12,0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$Sheet2.K11"));
+    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$Sheet2.K11"));
     m_pDoc->GetFormula(10,13,0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$Sheet2.$A$1"));
+    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$Sheet2.$A$1"));
     m_pDoc->GetFormula(10,14,0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$Sheet2.K$1"));
+    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$Sheet2.K$1"));
 }
 
 void Test::testCopyPasteFormulasExternalDoc()
 {
-    rtl::OUString aDocName("file:///source.fake");
+    OUString aDocName("file:///source.fake");
     SfxMedium* pMedium = new SfxMedium(aDocName, STREAM_STD_READWRITE);
     m_xDocShRef->DoInitNew(pMedium);
     m_pDoc = m_xDocShRef->GetDocument();
@@ -5593,22 +5592,22 @@ void Test::testCopyPasteFormulasExternalDoc()
     aMarkData2.SetMarkArea(aRange);
     pExtDoc->CopyFromClip(aRange, aMarkData2, nFlags, NULL, pClipDoc);
 
-    rtl::OUString aFormula;
+    OUString aFormula;
     pExtDoc->GetFormula(1,1,1, aFormula);
     //adjust absolute refs pointing to the copy area
-    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=COLUMN($B$2)"));
+    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=COLUMN($B$2)"));
     pExtDoc->GetFormula(1,2,1, aFormula);
     //adjust absolute refs and keep relative refs
-    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$B$2+C3"));
+    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$B$2+C3"));
     pExtDoc->GetFormula(1,3,1, aFormula);
     // make absolute sheet refs external refs
-    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("='file:///source.fake'#$Sheet2.B2"));
+    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("='file:///source.fake'#$Sheet2.B2"));
     pExtDoc->GetFormula(1,4,1, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("='file:///source.fake'#$Sheet2.$A$1"));
+    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("='file:///source.fake'#$Sheet2.$A$1"));
     pExtDoc->GetFormula(1,5,1, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("='file:///source.fake'#$Sheet2.B$1"));
+    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("='file:///source.fake'#$Sheet2.B$1"));
     pExtDoc->GetFormula(1,6,1, aFormula);
-    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$ExtSheet2.$B$2"));
+    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$ExtSheet2.$B$2"));
 }
 
 void Test::testFindAreaPosRowDown()
@@ -5623,7 +5622,7 @@ void Test::testFindAreaPosRowDown()
         { "1", "1" }, };
 
     ScDocument* pDoc = m_xDocShRef->GetDocument();
-    rtl::OUString aTabName1("test1");
+    OUString aTabName1("test1");
     pDoc->InsertTab(0, aTabName1);
     clearRange( pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
     ScAddress aPos(0,0,0);
@@ -5684,7 +5683,7 @@ void Test::testFindAreaPosColRight()
         { "", "", "1", "1", "1", "", "1" }, };
 
     ScDocument* pDoc = m_xDocShRef->GetDocument();
-    rtl::OUString aTabName1("test1");
+    OUString aTabName1("test1");
     pDoc->InsertTab(0, aTabName1);
     clearRange( pDoc, ScRange(0, 0, 0, 7, SAL_N_ELEMENTS(aData), 0));
     ScAddress aPos(0,0,0);
@@ -5743,8 +5742,8 @@ void Test::testFindAreaPosColRight()
 void Test::testSortWithFormulaRefs()
 {
     ScDocument* pDoc = m_xDocShRef->GetDocument();
-    rtl::OUString aTabName1("List1");
-    rtl::OUString aTabName2("List2");
+    OUString aTabName1("List1");
+    OUString aTabName2("List2");
     pDoc->InsertTab(0, aTabName1);
     pDoc->InsertTab(1, aTabName2);
 
@@ -5775,12 +5774,12 @@ void Test::testSortWithFormulaRefs()
     // insert data to sort
     SCROW nStart = 1, nEnd = 4;
     for ( SCROW i = nStart; i <= nEnd; ++i )
-        pDoc->SetString( 0, i, 0, rtl::OUString::createFromAscii(aTextData[i-1]) );
+        pDoc->SetString( 0, i, 0, OUString::createFromAscii(aTextData[i-1]) );
     // insert forumulas
     nStart = 0;
     nEnd = SAL_N_ELEMENTS(aFormulaData);
     for ( SCROW i = nStart; i < nEnd; ++i )
-        pDoc->SetString( 0, i, 1, rtl::OUString::createFromAscii(aFormulaData[i]) );
+        pDoc->SetString( 0, i, 1, OUString::createFromAscii(aFormulaData[i]) );
 
     ScSortParam aSortData;
     aSortData.nCol1 = 0;
@@ -5796,7 +5795,7 @@ void Test::testSortWithFormulaRefs()
     for ( SCROW i = nStart; i < nEnd; ++i )
     {
         OUString sResult = pDoc->GetString( 0, i + 1, 0);
-        CPPUNIT_ASSERT_EQUAL( rtl::OUString::createFromAscii( aResults[ i ] ), sResult );
+        CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aResults[ i ] ), sResult );
     }
     pDoc->DeleteTab(0);
     pDoc->DeleteTab(1);
@@ -5805,7 +5804,7 @@ void Test::testSortWithFormulaRefs()
 void Test::testSort()
 {
     ScDocument* pDoc = m_xDocShRef->GetDocument();
-    rtl::OUString aTabName1("test1");
+    OUString aTabName1("test1");
     pDoc->InsertTab(0, aTabName1);
 
     const char* aData[][2] = {
@@ -5819,8 +5818,8 @@ void Test::testSort()
     ScRange aDataRange = insertRangeData( pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
     CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
 
-    rtl::OUString aHello("Hello");
-    rtl::OUString aJimBob("Jim Bob");
+    OUString aHello("Hello");
+    OUString aJimBob("Jim Bob");
     ScAddress rAddr(1, 1, 0);
     ScPostIt* pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
     pNote->SetText(rAddr, aHello);
@@ -5872,11 +5871,11 @@ void Test::testShiftCells()
 void Test::testDeleteRow()
 {
     ScDocument* pDoc = m_xDocShRef->GetDocument();
-    rtl::OUString aSheet1("Sheet1");
+    OUString aSheet1("Sheet1");
     pDoc->InsertTab(0, aSheet1);
 
-    rtl::OUString aHello("Hello");
-    rtl::OUString aJimBob("Jim Bob");
+    OUString aHello("Hello");
+    OUString aJimBob("Jim Bob");
     ScAddress rAddr(1, 1, 0);
     ScPostIt* pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
     pNote->SetText(rAddr, aHello);
@@ -5891,11 +5890,11 @@ void Test::testDeleteRow()
 void Test::testDeleteCol()
 {
     ScDocument* pDoc = m_xDocShRef->GetDocument();
-    rtl::OUString aSheet1("Sheet1");
+    OUString aSheet1("Sheet1");
     pDoc->InsertTab(0, aSheet1);
 
-    rtl::OUString aHello("Hello");
-    rtl::OUString aJimBob("Jim Bob");
+    OUString aHello("Hello");
+    OUString aJimBob("Jim Bob");
     ScAddress rAddr(1, 1, 0);
     ScPostIt* pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
     pNote->SetText(rAddr, aHello);

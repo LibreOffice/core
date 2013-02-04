@@ -73,56 +73,21 @@
 
 #include "helper/qahelper.hxx"
 
-#define ODS_FORMAT_TYPE 50331943
-#define XLS_FORMAT_TYPE 318767171
-#define XLSX_FORMAT_TYPE 268959811
-#define CSV_FORMAT_TYPE  (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_USESOPTIONS)
-#define HTML_FORMAT_TYPE (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_USESOPTIONS)
-
-#define ODS     0
-#define XLS     1
-#define XLSX    2
-#define CSV     3
-#define HTML    4
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-namespace {
-
-struct FileFormat {
-    const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
-};
-
-FileFormat aFileFormats[] = {
-    { "ods" , "calc8", "", ODS_FORMAT_TYPE },
-    { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
-    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE },
-    { "csv" , "Text - txt - csv (StarCalc)", "generic_Text", CSV_FORMAT_TYPE },
-    { "html" , "calc_HTML_WebQuery", "generic_HTML", HTML_FORMAT_TYPE }
-};
-
-}
 
 /* Implementation of Filters test */
 
 class ScFiltersTest
     : public test::FiltersTest
-    , public test::BootstrapFixture
+    , public ScBootstrapFixture
 {
 public:
     ScFiltersTest();
 
-    virtual bool load( const rtl::OUString &rFilter, const rtl::OUString &rURL,
-        const rtl::OUString &rUserData, unsigned int nFilterFlags,
+    virtual bool load( const OUString &rFilter, const OUString &rURL,
+        const OUString &rUserData, unsigned int nFilterFlags,
         unsigned int nClipboardID, unsigned int nFilterVersion);
-
-    ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-        const rtl::OUString &rUserData, const rtl::OUString& rTypeName,
-        unsigned int nFilterFlags, unsigned int nClipboardID, unsigned int nFilterVersion);
-
-    void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
-    void createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
 
     virtual void setUp();
     virtual void tearDown();
@@ -241,60 +206,17 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void testPassword_Impl(const rtl::OUString& rFileNameBase);
-    ScDocShellRef loadDoc(const rtl::OUString& rBaseName, size_t nExt);
+    void testPassword_Impl(const OUString& rFileNameBase);
 
     uno::Reference<uno::XInterface> m_xCalcComponent;
-    ::rtl::OUString m_aBaseString;
 };
 
-ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData, const rtl::OUString& rTypeName,
-    unsigned int nFilterFlags, unsigned int nClipboardID, unsigned int nFilterVersion)
-{
-    SfxFilter* pFilter = new SfxFilter(
-        rFilter,
-        rtl::OUString(), nFilterFlags, nClipboardID, rTypeName, 0, rtl::OUString(),
-        rUserData, rtl::OUString("private:factory/scalc*") );
-    pFilter->SetVersion(nFilterVersion);
-
-    ScDocShellRef xDocShRef = new ScDocShell;
-    xDocShRef->GetDocument()->EnableUserInteraction(false);
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
-    pSrcMed->UseInteractionHandler(false);
-    pSrcMed->SetFilter(pFilter);
-    if (!xDocShRef->DoLoad(pSrcMed))
-    {
-        xDocShRef->DoClose();
-        // load failed.
-        xDocShRef.Clear();
-    }
-
-    return xDocShRef;
-}
-
-ScDocShellRef ScFiltersTest::loadDoc(const OUString& rBaseName, size_t nExt)
-{
-    OUString aFileExt = OUString::createFromAscii(aFileFormats[nExt].pName);
-    OUString aFilterName = OUString::createFromAscii(aFileFormats[nExt].pFilterName);
-    OUString aFilterType = OUString::createFromAscii(aFileFormats[nExt].pTypeName);
-
-    rtl::OUString aFileName;
-    createFileURL(rBaseName, aFileExt, aFileName);
-
-    unsigned int nFormatType = aFileFormats[nExt].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, OUString(), aFilterType, nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
-    CPPUNIT_ASSERT(xDocSh.Is());
-    return xDocSh;
-}
-
-bool ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData, unsigned int nFilterFlags,
+bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
+    const OUString &rUserData, unsigned int nFilterFlags,
         unsigned int nClipboardID, unsigned int nFilterVersion)
 {
-    ScDocShellRef xDocShRef = load(rFilter, rURL, rUserData,
-        rtl::OUString(), nFilterFlags, nClipboardID, nFilterVersion);
+    ScDocShellRef xDocShRef = ScBootstrapFixture::load( rURL, rFilter, rUserData,
+        OUString(), nFilterFlags, nClipboardID, nFilterVersion);
     bool bLoaded = xDocShRef.Is();
     //reference counting of ScDocShellRef is very confused.
     if (bLoaded)
@@ -302,22 +224,6 @@ bool ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
     return bLoaded;
 }
 
-void ScFiltersTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
-{
-    rtl::OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
-    rtl::OUStringBuffer aBuffer( getSrcRootURL() );
-    aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
-    aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
-    rFilePath = aBuffer.makeStringAndClear();
-}
-
-void ScFiltersTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rCSVPath)
-{
-    rtl::OUStringBuffer aBuffer(getSrcRootPath());
-    aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/contentCSV/")));
-    aBuffer.append(aFileBase).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("csv")));
-    rCSVPath = aBuffer.makeStringAndClear();
-}
 
 namespace {
 
@@ -325,16 +231,16 @@ void testRangeNameImpl(ScDocument* pDoc)
 {
     //check one range data per sheet and one global more detailed
     //add some more checks here
-    ScRangeData* pRangeData = pDoc->GetRangeName()->findByUpperName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GLOBAL1")));
+    ScRangeData* pRangeData = pDoc->GetRangeName()->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("GLOBAL1")));
     CPPUNIT_ASSERT_MESSAGE("range name Global1 not found", pRangeData);
     double aValue;
     pDoc->GetValue(1,0,0,aValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Global1 should reference Sheet1.A1", 1.0, aValue);
-    pRangeData = pDoc->GetRangeName(0)->findByUpperName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL1")));
+    pRangeData = pDoc->GetRangeName(0)->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL1")));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 not found", pRangeData);
     pDoc->GetValue(1,2,0,aValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet1.Local1 should reference Sheet1.A3", 3.0, aValue);
-    pRangeData = pDoc->GetRangeName(1)->findByUpperName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL2")));
+    pRangeData = pDoc->GetRangeName(1)->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL2")));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 not found", pRangeData);
     pDoc->GetValue(1,1,1,aValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet2.Local2 should reference Sheet2.A2", 7.0, aValue);
@@ -362,8 +268,8 @@ void ScFiltersTest::testRangeNameXLS()
     ScDocument* pDoc = xDocSh->GetDocument();
     testRangeNameImpl(pDoc);
 
-    rtl::OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("rangeExp_Sheet2."));
-    rtl::OUString aCSVPath;
+    OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("rangeExp_Sheet2."));
+    OUString aCSVPath;
     createCSVPath( aSheet2CSV, aCSVPath );
     // fdo#44587
     testFile( aCSVPath, pDoc, 1);
@@ -389,11 +295,11 @@ void ScFiltersTest::testHardRecalcODS()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load hard-recalc.*", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
-    rtl::OUString aCSVFileName;
+    OUString aCSVFileName;
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hard-recalc.")), aCSVFileName);
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("hard-recalc.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
 
     xDocSh->DoClose();
@@ -406,19 +312,19 @@ void ScFiltersTest::testFunctionsODS()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
-    rtl::OUString aCSVFileName;
+    OUString aCSVFileName;
 
     //test logical functions
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
     //test spreadsheet functions
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("spreadsheet-functions.")), aCSVFileName);
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("spreadsheet-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 1);
     //test mathematical functions
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 2, PureString);
     //test informations functions
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 3);
 
     xDocSh->DoClose();
@@ -431,19 +337,19 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
 
         ScDocument* pDoc = xDocSh->GetDocument();
-        rtl::OUString aCSVFileName;
+        OUString aCSVFileName;
 
         //test cached formula results of logical functions
-        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
+        createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
         testFile(aCSVFileName, pDoc, 0);
         //test cached formula results of spreadsheet functions
-        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("spreadsheet-functions.")), aCSVFileName);
+        createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("spreadsheet-functions.")), aCSVFileName);
         testFile(aCSVFileName, pDoc, 1);
         //test cached formula results of mathematical functions
-        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
+        createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
         testFile(aCSVFileName, pDoc, 2, PureString);
         //test cached formula results of informations functions
-        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
+        createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
         testFile(aCSVFileName, pDoc, 3);
 
         xDocSh->DoClose();
@@ -454,7 +360,7 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         CPPUNIT_ASSERT_MESSAGE("Failed to load cachedValue.*", xDocSh.Is());
 
         ScDocument* pDoc = xDocSh->GetDocument();
-        rtl::OUString aCSVFileName;
+        OUString aCSVFileName;
         createCSVPath("cachedValue.", aCSVFileName);
         testFile(aCSVFileName, pDoc, 0);
 
@@ -502,7 +408,7 @@ void ScFiltersTest::testCachedMatrixFormulaResultsODS()
     ScDocument* pDoc = xDocSh->GetDocument();
 
     //test matrix
-    rtl::OUString aCSVFileName;
+    OUString aCSVFileName;
     createCSVPath("matrix.", aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
     //test matrices with special cases
@@ -554,14 +460,14 @@ void testDBRanges_Impl(ScDocument* pDoc, sal_Int32 nFormat)
     {
         double aValue;
         pDoc->GetValue(0,10,1, aValue);
-        rtl::OUString aString;
+        OUString aString;
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: A11: formula result is incorrect", 4.0, aValue);
         pDoc->GetValue(1, 10, 1, aValue);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: B11: formula result is incorrect", 2.0, aValue);
     }
     double aValue;
     pDoc->GetValue(3,10,1, aValue);
-    rtl::OUString aString;
+    OUString aString;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: D11: formula result is incorrect", 4.0, aValue);
     pDoc->GetValue(4, 10, 1, aValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: E11: formula result is incorrect", 2.0, aValue);
@@ -608,8 +514,8 @@ namespace {
 void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 nFormat)
 {
     //test Sheet1 with csv file
-    rtl::OUString aCSVFileName;
-    pFiltersTest->createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("numberFormat.")), aCSVFileName);
+    OUString aCSVFileName;
+    pFiltersTest->createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("numberFormat.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0, PureString);
     //need to test the color of B3
     //it's not a font color!
@@ -657,7 +563,7 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
         CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(4153), pDoc->GetColWidth(6,1) ); //2.8839in
         //test case for i53253 where a cell has text with different styles and space between the text.
         OUString aTestStr = pDoc->GetString(3,0,1);
-        rtl::OUString aKnownGoodStr("text14 space");
+        OUString aKnownGoodStr("text14 space");
         CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
         //test case for cell text with line breaks.
         aTestStr = pDoc->GetString(3,5,1);
@@ -681,8 +587,8 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
     //test Sheet3 only for ods
     if ( nFormat == ODS || nFormat == XLSX )
     {
-        rtl::OUString aCondString = getConditionalFormatString(pDoc, 3,0,2);
-        pFiltersTest->createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
+        OUString aCondString = getConditionalFormatString(pDoc, 3,0,2);
+        pFiltersTest->createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
         testCondFile(aCSVFileName, pDoc, 2);
         // test parent cell style import ( fdo#55198 )
         if ( nFormat == XLSX )
@@ -690,8 +596,8 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
             pPattern = pDoc->GetPattern(1,1,3);
             ScStyleSheet* pStyleSheet = (ScStyleSheet*)pPattern->GetStyleSheet();
             // check parent style name
-            rtl::OUString sExpected("Excel Built-in Date");
-            rtl::OUString sResult = pStyleSheet->GetName();
+            OUString sExpected("Excel Built-in Date");
+            OUString sResult = pStyleSheet->GetName();
             CPPUNIT_ASSERT_EQUAL_MESSAGE("parent style for Sheet4.B2 is 'Excel Built-in Date'", sExpected, sResult);
             // check  align of style
             SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
@@ -699,7 +605,7 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
             CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
             // check date format ( should be just month e.g. 29 )
             sResult =pDoc->GetString( 1,1,3 );
-            sExpected = rtl::OUString("29");
+            sExpected = OUString("29");
             CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should just display month", sExpected, sResult );
 
             // check actual align applied to cell, should be the same as
@@ -764,8 +670,8 @@ void ScFiltersTest::testMatrixODS()
 
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    rtl::OUString aCSVFileName;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
+    OUString aCSVFileName;
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
 
     xDocSh->DoClose();
@@ -779,8 +685,8 @@ void ScFiltersTest::testMatrixXLS()
     CPPUNIT_ASSERT_MESSAGE("Failed to load matrix.*", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    rtl::OUString aCSVFileName;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
+    OUString aCSVFileName;
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
 
     xDocSh->DoClose();
@@ -975,8 +881,8 @@ void ScFiltersTest::testBugFixesODS()
 
     {
         // fdo
-        rtl::OUString aCSVFileName;
-        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bugFix_Sheet2.")), aCSVFileName);
+        OUString aCSVFileName;
+        createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("bugFix_Sheet2.")), aCSVFileName);
         testFile(aCSVFileName, pDoc, 1);
     }
 
@@ -1025,10 +931,10 @@ void checkMergedCells( ScDocument* pDoc, const ScAddress& rStartAddress,
     SCROW nActualEndRow = rStartAddress.Row();
     pDoc->ExtendMerge( rStartAddress.Col(), rStartAddress.Row(),
                        nActualEndCol, nActualEndRow, rStartAddress.Tab(), false );
-    rtl::OString sTab = rtl::OString::valueOf( static_cast<sal_Int32>(rStartAddress.Tab() + 1) );
-    rtl::OString msg = "Merged cells are not correctly imported on sheet" + sTab;
-    rtl::OString msgCol = msg + "; end col";
-    rtl::OString msgRow = msg + "; end row";
+    OString sTab = OString::valueOf( static_cast<sal_Int32>(rStartAddress.Tab() + 1) );
+    OString msg = "Merged cells are not correctly imported on sheet" + sTab;
+    OString msgCol = msg + "; end col";
+    OString msgRow = msg + "; end row";
     CPPUNIT_ASSERT_EQUAL_MESSAGE( msgCol.pData->buffer, rExpectedEndAddress.Col(), nActualEndCol );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( msgRow.pData->buffer, rExpectedEndAddress.Row(), nActualEndRow );
 }
@@ -1041,8 +947,8 @@ void ScFiltersTest::testMergedCellsODS()
     ScDocument* pDoc = xDocSh->GetDocument();
 
     //check sheet1 content
-    rtl::OUString aCSVFileName1;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("merged1.")), aCSVFileName1);
+    OUString aCSVFileName1;
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("merged1.")), aCSVFileName1);
     testFile(aCSVFileName1, pDoc, 0);
 
     //check sheet1 merged cells
@@ -1051,8 +957,8 @@ void ScFiltersTest::testMergedCellsODS()
     checkMergedCells( pDoc, ScAddress( 3, 15, 0 ),  ScAddress( 7, 23, 0 ) );
 
     //check sheet2 content
-    rtl::OUString aCSVFileName2;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("merged2.")), aCSVFileName2);
+    OUString aCSVFileName2;
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("merged2.")), aCSVFileName2);
     testFile(aCSVFileName2, pDoc, 1);
 
     //check sheet2 merged cells
@@ -1067,13 +973,13 @@ void ScFiltersTest::testRepeatedColumnsODS()
     ScDocument* pDoc = xDocSh->GetDocument();
 
     //text
-    rtl::OUString aCSVFileName1;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("repeatedColumns1.")), aCSVFileName1);
+    OUString aCSVFileName1;
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("repeatedColumns1.")), aCSVFileName1);
     testFile(aCSVFileName1, pDoc, 0);
 
     //numbers
-    rtl::OUString aCSVFileName2;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("repeatedColumns2.")), aCSVFileName2);
+    OUString aCSVFileName2;
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("repeatedColumns2.")), aCSVFileName2);
     testFile(aCSVFileName2, pDoc, 1);
 
     xDocSh->DoClose();
@@ -1125,7 +1031,7 @@ void checkValiditationEntries( const ValDataTestParams& rVDTParams )
     sal_Int32 nCol( static_cast<sal_Int32>(rVDTParams.aPosition.Col()) );
     sal_Int32 nRow( static_cast<sal_Int32>(rVDTParams.aPosition.Row()) );
     sal_Int32 nTab( static_cast<sal_Int32>(rVDTParams.aPosition.Tab()) );
-    rtl::OStringBuffer sMsg("Data Validation Entry with base-cell-address: (");
+    OStringBuffer sMsg("Data Validation Entry with base-cell-address: (");
     sMsg.append(nCol).append(",").append(nRow).append(",").append(nTab).append(") was not imported correctly.");
     //check if expected and actual data validation entries are equal
     CPPUNIT_ASSERT_MESSAGE( sMsg.getStr(), pValDataTest && aValData.EqualEntries(*pValDataTest) );
@@ -1153,7 +1059,7 @@ void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, co
                 sal_Int32 nCol = static_cast<const sal_Int32>(i);
                 sal_Int32 nRow = static_cast<const sal_Int32>(j);
                 sal_Int32 nTab32 = static_cast<const sal_Int32>(nTab);
-                rtl::OStringBuffer sMsg("\nData validation entry base-cell-address: (");
+                OStringBuffer sMsg("\nData validation entry base-cell-address: (");
                 sMsg.append( static_cast<const sal_Int32>(nBCol) ).append(",");
                 sMsg.append( static_cast<const sal_Int32>(nBRow) ).append(",");
                 sMsg.append( nTab32 ).append(")\n");
@@ -1205,12 +1111,12 @@ void ScFiltersTest::testDataValidityODS()
     checkCellValidity( aValBaseAddr2, aRange2, pDoc );
 
     //check each sheet's content
-    rtl::OUString aCSVFileName1;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dataValidity1.")), aCSVFileName1);
+    OUString aCSVFileName1;
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("dataValidity1.")), aCSVFileName1);
     testFile(aCSVFileName1, pDoc, 0);
 
-    rtl::OUString aCSVFileName2;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dataValidity2.")), aCSVFileName2);
+    OUString aCSVFileName2;
+    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("dataValidity2.")), aCSVFileName2);
     testFile(aCSVFileName2, pDoc, 1);
 
     xDocSh->DoClose();
@@ -1218,25 +1124,25 @@ void ScFiltersTest::testDataValidityODS()
 
 void ScFiltersTest::testBrokenQuotesCSV()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("fdo48621_broken_quotes."));
-    rtl::OUString aFileExtension(aFileFormats[CSV].pName, strlen(aFileFormats[CSV].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[CSV].pFilterName, strlen(aFileFormats[CSV].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
+    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("fdo48621_broken_quotes."));
+    OUString aFileExtension(aFileFormats[CSV].pName, strlen(aFileFormats[CSV].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(aFileFormats[CSV].pFilterName, strlen(aFileFormats[CSV].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[CSV].pTypeName, strlen(aFileFormats[CSV].pTypeName), RTL_TEXTENCODING_UTF8);
+    OUString aFilterType(aFileFormats[CSV].pTypeName, strlen(aFileFormats[CSV].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[CSV].pName << " Test" << std::endl;
 
     unsigned int nFormatType = aFileFormats[CSV].nFormatType;
     unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load fdo48621_broken_quotes.csv", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
 
-    rtl::OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("fdo48621_broken_quotes_exported."));
-    rtl::OUString aCSVPath;
+    OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("fdo48621_broken_quotes_exported."));
+    OUString aCSVPath;
     createCSVPath( aSheet2CSV, aCSVPath );
     // fdo#48621
     testFile( aCSVPath, pDoc, 0, PureString);
@@ -1246,17 +1152,17 @@ void ScFiltersTest::testBrokenQuotesCSV()
 
 void ScFiltersTest::testSharedFormulaXLSX()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("shared-formula."));
-    rtl::OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
+    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("shared-formula."));
+    OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
+    OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
 
     unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
     unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
     xDocSh->DoHardRecalc(true);
@@ -1265,7 +1171,7 @@ void ScFiltersTest::testSharedFormulaXLSX()
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
 
-    rtl::OUString aCSVPath;
+    OUString aCSVPath;
     createCSVPath( aFileNameBase, aCSVPath );
     testFile( aCSVPath, pDoc, 0 );
 
@@ -1281,49 +1187,49 @@ void ScFiltersTest::testSharedFormulaXLSX()
 
 void ScFiltersTest::testCellValueXLSX()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("cell-value."));
-    rtl::OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
+    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("cell-value."));
+    OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
+    OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
 
     unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
     unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+    ScDocShellRef xDocSh = ScBootstrapFixture::load( aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load cell-value.xlsx", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
 
-    rtl::OUString aCSVPath;
+    OUString aCSVPath;
     createCSVPath( aFileNameBase, aCSVPath );
     testFile( aCSVPath, pDoc, 0 );
 
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testPassword_Impl(const rtl::OUString& aFileNameBase)
+void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
 {
-    rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
+    OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
+    OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
 
     sal_uInt32 nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
     SfxFilter* aFilter = new SfxFilter(
         aFilterName,
-        rtl::OUString(), aFileFormats[0].nFormatType, nFormat, aFilterType, 0, rtl::OUString(),
-        rtl::OUString(), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
+        OUString(), aFileFormats[0].nFormatType, nFormat, aFilterType, 0, OUString(),
+        OUString(), OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocSh = new ScDocShell;
     SfxMedium* pMedium = new SfxMedium(aFileName, STREAM_STD_READWRITE);
     SfxItemSet* pSet = pMedium->GetItemSet();
-    pSet->Put(SfxStringItem(SID_PASSWORD, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test"))));
+    pSet->Put(SfxStringItem(SID_PASSWORD, OUString(RTL_CONSTASCII_USTRINGPARAM("test"))));
     pMedium->SetFilter(aFilter);
     if (!xDocSh->DoLoad(pMedium))
     {
@@ -1342,14 +1248,14 @@ void ScFiltersTest::testPassword_Impl(const rtl::OUString& aFileNameBase)
 void ScFiltersTest::testPasswordNew()
 {
     //tests opening a file with new password algorithm
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("password."));
+    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("password."));
     testPassword_Impl(aFileNameBase);
 }
 
 void ScFiltersTest::testPasswordOld()
 {
     //tests opening a file with old password algorithm
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("passwordOld."));
+    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("passwordOld."));
     testPassword_Impl(aFileNameBase);
 }
 
@@ -1796,45 +1702,45 @@ void ScFiltersTest::testRichTextContentODS()
 
 namespace {
 
-void testColorScaleFormat_Impl(const rtl::OUString& rFilePath, const ScConditionalFormat* pFormat)
+void testColorScaleFormat_Impl(const OUString& rFilePath, const ScConditionalFormat* pFormat)
 {
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     CPPUNIT_ASSERT(pFormat);
     pFormat->dumpInfo(aBuf);
-    rtl::OUString aString = aBuf.makeStringAndClear();
+    OUString aString = aBuf.makeStringAndClear();
     std::string aStdString;
     loadFile(rFilePath, aStdString);
-    rtl::OUString aRefString = rtl::OUString::createFromAscii(aStdString.c_str());
+    OUString aRefString = OUString::createFromAscii(aStdString.c_str());
     CPPUNIT_ASSERT_EQUAL(aRefString, aString);
 }
 
-void testColorScale_Impl(ScDocument* pDoc, const rtl::OUString& aBaseString)
+void testColorScale_Impl(ScDocument* pDoc, const OUString& aBaseString)
 {
     // first color scale
     {
         const ScConditionalFormat* pFormat = pDoc->GetCondFormat(1,1,0);
-        rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_1.txt");
+        OUString aFilePath = aBaseString + OUString("colorScale_1.txt");
         testColorScaleFormat_Impl(aFilePath, pFormat);
     }
 
     // second cond format
     {
         const ScConditionalFormat* pFormat = pDoc->GetCondFormat(4,1,0);
-        rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_2.txt");
+        OUString aFilePath = aBaseString + OUString("colorScale_2.txt");
         testColorScaleFormat_Impl(aFilePath, pFormat);
     }
 
     // third cond format
     {
         const ScConditionalFormat* pFormat = pDoc->GetCondFormat(7,1,0);
-        rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_3.txt");
+        OUString aFilePath = aBaseString + OUString("colorScale_3.txt");
         testColorScaleFormat_Impl(aFilePath, pFormat);
     }
 
     // forth cond format
     {
         const ScConditionalFormat* pFormat = pDoc->GetCondFormat(10,1,0);
-        rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_4.txt");
+        OUString aFilePath = aBaseString + OUString("colorScale_4.txt");
         testColorScaleFormat_Impl(aFilePath, pFormat);
     }
 }
@@ -1843,25 +1749,25 @@ void testColorScale_Impl(ScDocument* pDoc, const rtl::OUString& aBaseString)
 
 void ScFiltersTest::testColorScaleODS()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("colorScale."));
-    rtl::OUString aFileExtension(aFileFormats[ODS].pName, strlen(aFileFormats[ODS].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[ODS].pFilterName, strlen(aFileFormats[ODS].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
+    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("colorScale."));
+    OUString aFileExtension(aFileFormats[ODS].pName, strlen(aFileFormats[ODS].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(aFileFormats[ODS].pFilterName, strlen(aFileFormats[ODS].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[ODS].pTypeName, strlen(aFileFormats[ODS].pTypeName), RTL_TEXTENCODING_UTF8);
+    OUString aFilterType(aFileFormats[ODS].pTypeName, strlen(aFileFormats[ODS].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[ODS].pName << " Test" << std::endl;
 
     unsigned int nFormatType = aFileFormats[ODS].nFormatType;
     unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load colorScale.ods", xDocSh.Is());
 
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    rtl::OUStringBuffer aBuffer(getSrcRootPath());
-    aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/reference/")));
+    OUStringBuffer aBuffer(getSrcRootPath());
+    aBuffer.append(m_aBaseString).append(OUString(RTL_CONSTASCII_USTRINGPARAM("/reference/")));
     testColorScale_Impl(pDoc, aBuffer.makeStringAndClear());
 
     xDocSh->DoClose();
@@ -1869,25 +1775,25 @@ void ScFiltersTest::testColorScaleODS()
 
 void ScFiltersTest::testColorScaleXLSX()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("colorScale."));
-    rtl::OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
+    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("colorScale."));
+    OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
+    OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
 
     unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
     unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load colorScale.xlsx", xDocSh.Is());
 
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    rtl::OUStringBuffer aBuffer(getSrcRootPath());
-    aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/reference/")));
+    OUStringBuffer aBuffer(getSrcRootPath());
+    aBuffer.append(m_aBaseString).append(OUString(RTL_CONSTASCII_USTRINGPARAM("/reference/")));
     testColorScale_Impl(pDoc, aBuffer.makeStringAndClear());
 
     xDocSh->DoClose();
@@ -1899,25 +1805,25 @@ void ScFiltersTest::testDataBarODS()
 
 void ScFiltersTest::testNewCondFormat()
 {
-    const rtl::OUString aFileNameBase("new_cond_format_test.");
-    rtl::OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
+    const OUString aFileNameBase("new_cond_format_test.");
+    OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
+    OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
 
     unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
     unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load new_cond_format_test.xlsx", xDocSh.Is());
 
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    rtl::OUString aCSVFile("new_cond_format_test.");
-    rtl::OUString aCSVPath;
+    OUString aCSVFile("new_cond_format_test.");
+    OUString aCSVPath;
     createCSVPath( aCSVFile, aCSVPath );
     testCondFile(aCSVPath, pDoc, 0);
 
@@ -1926,17 +1832,17 @@ void ScFiltersTest::testNewCondFormat()
 
 void ScFiltersTest::testFormulaDependency()
 {
-    const rtl::OUString aFileNameBase("dependencyTree.");
-    rtl::OUString aFileExtension(aFileFormats[ODS].pName, strlen(aFileFormats[ODS].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[ODS].pFilterName, strlen(aFileFormats[ODS].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
+    const OUString aFileNameBase("dependencyTree.");
+    OUString aFileExtension(aFileFormats[ODS].pName, strlen(aFileFormats[ODS].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(aFileFormats[ODS].pFilterName, strlen(aFileFormats[ODS].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[ODS].pTypeName, strlen(aFileFormats[ODS].pTypeName), RTL_TEXTENCODING_UTF8);
+    OUString aFilterType(aFileFormats[ODS].pTypeName, strlen(aFileFormats[ODS].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[ODS].pName << " Test" << std::endl;
 
     unsigned int nFormatType = aFileFormats[ODS].nFormatType;
     unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -1955,7 +1861,7 @@ void ScFiltersTest::testFormulaDependency()
 }
 
 ScFiltersTest::ScFiltersTest()
-      : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data"))
+      : ScBootstrapFixture( "/sc/qa/unit/data" )
 {
 }
 
@@ -1966,7 +1872,7 @@ void ScFiltersTest::setUp()
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xCalcComponent =
-        getMultiServiceFactory()->createInstance(rtl::OUString(
+        getMultiServiceFactory()->createInstance(OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.SpreadsheetDocument")));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
 }

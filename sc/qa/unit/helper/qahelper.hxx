@@ -36,7 +36,57 @@
 #include <string>
 #include <sstream>
 
+#include <comphelper/documentconstants.hxx>
+
 #include <osl/detail/android-bootstrap.h>
+
+#include <unotools/tempfile.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <sfx2/docfilt.hxx>
+
+#define ODS_FORMAT_TYPE 50331943
+#define XLS_FORMAT_TYPE 318767171
+#define XLSX_FORMAT_TYPE 268959811
+#define LOTUS123_FORMAT_TYPE 268435649
+#define CSV_FORMAT_TYPE  (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_USESOPTIONS)
+#define HTML_FORMAT_TYPE (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_USESOPTIONS)
+
+#define ODS      0
+#define XLS      1
+#define XLSX     2
+#define CSV      3
+#define HTML     4
+#define LOTUS123 5
+
+struct FileFormat {
+    const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
+};
+
+// data format for row height tests
+struct TestParam
+{
+    struct RowData
+    {
+        SCROW nStartRow;
+        SCROW nEndRow;
+        SCTAB nTab;
+        int nExpectedHeight;
+    };
+    const char* sTestDoc;
+    int nImportType;
+    int nExportType;
+    int nRowData;
+    RowData* pData;
+};
+
+FileFormat aFileFormats[] = {
+    { "ods" , "calc8", "", ODS_FORMAT_TYPE },
+    { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
+    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE },
+    { "csv" , "Text - txt - csv (StarCalc)", "generic_Text", CSV_FORMAT_TYPE },
+    { "html" , "calc_HTML_WebQuery", "generic_HTML", HTML_FORMAT_TYPE },
+    { "123" , "Lotus", "calc_Lotus", LOTUS123_FORMAT_TYPE },
+};
 
 // Why is this here and not in osl, and using the already existing file
 // handling APIs? Do we really want to add arbitrary new file handling
@@ -44,9 +94,9 @@
 // eventually perhaps iOS) special cases here, too)?  Please move this to osl,
 // it sure looks gemerally useful. Or am I missing something?
 
-void loadFile(const rtl::OUString& aFileName, std::string& aContent)
+void loadFile(const OUString& aFileName, std::string& aContent)
 {
-    rtl::OString aOFileName = rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
+    OString aOFileName = OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
 
 #ifdef ANDROID
     const char *contents;
@@ -62,7 +112,7 @@ void loadFile(const rtl::OUString& aFileName, std::string& aContent)
 
     std::ifstream aFile(aOFileName.getStr());
 
-    rtl::OStringBuffer aErrorMsg("Could not open csv file: ");
+    OStringBuffer aErrorMsg("Could not open csv file: ");
     aErrorMsg.append(aOFileName);
     CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), aFile);
     std::ostringstream aOStream;
@@ -71,7 +121,116 @@ void loadFile(const rtl::OUString& aFileName, std::string& aContent)
     aContent = aOStream.str();
 }
 
-void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat = StringValue)
+class ScBootstrapFixture : public test::BootstrapFixture
+{
+protected:
+    OUString m_aBaseString;
+    ScDocShellRef load(
+        const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
+        const OUString& rTypeName, unsigned int nFilterFlags, unsigned int nClipboardID,  sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL )
+    {
+        SfxFilter* pFilter = new SfxFilter(
+            rFilter,
+            OUString(), nFilterFlags, nClipboardID, rTypeName, 0, OUString(),
+            rUserData, OUString("private:factory/scalc*"));
+        pFilter->SetVersion(nFilterVersion);
+
+        ScDocShellRef xDocShRef = new ScDocShell;
+        xDocShRef->GetDocument()->EnableUserInteraction(false);
+        SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
+        pSrcMed->SetFilter(pFilter);
+        pSrcMed->UseInteractionHandler(false);
+        if (pPassword)
+        {
+            SfxItemSet* pSet = pSrcMed->GetItemSet();
+            pSet->Put(SfxStringItem(SID_PASSWORD, *pPassword));
+        }
+        printf("about to load %s\n", rtl::OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+        if (!xDocShRef->DoLoad(pSrcMed))
+        {
+            xDocShRef->DoClose();
+            // load failed.
+            xDocShRef.Clear();
+        }
+
+        return xDocShRef;
+    }
+
+    ScDocShellRef loadDoc(const OUString& rFileName, sal_Int32 nFormat)
+    {
+        OUString aFileExtension(aFileFormats[nFormat].pName, strlen(aFileFormats[nFormat].pName), RTL_TEXTENCODING_UTF8 );
+        OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+        OUString aFileName;
+        createFileURL( rFileName, aFileExtension, aFileName );
+        OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+        unsigned int nFormatType = aFileFormats[nFormat].nFormatType;
+        unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+
+        return load(aFileName, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, nFormatType);
+    }
+
+
+public:
+    ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}
+    void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
+    {
+        OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
+        OUStringBuffer aBuffer( getSrcRootURL() );
+        aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
+        aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
+        rFilePath = aBuffer.makeStringAndClear();
+    }
+
+    void createCSVPath(const OUString& aFileBase, OUString& rCSVPath)
+    {
+        OUStringBuffer aBuffer( getSrcRootPath());
+        aBuffer.append(m_aBaseString).append(OUString("/contentCSV/"));
+        aBuffer.append(aFileBase).append(OUString("csv"));
+        rCSVPath = aBuffer.makeStringAndClear();
+    }
+
+    ScDocShellRef saveAndReload(ScDocShell* pShell, const OUString &rFilter,
+    const OUString &rUserData, const OUString& rTypeName, sal_uLong nFormatType)
+    {
+
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
+        sal_uInt32 nExportFormat = 0;
+        if (nFormatType == ODS_FORMAT_TYPE)
+            nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
+        SfxFilter* pExportFilter = new SfxFilter(
+            rFilter,
+            OUString(), nFormatType, nExportFormat, rTypeName, 0, OUString(),
+            rUserData, OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
+        pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        aStoreMedium.SetFilter(pExportFilter);
+        pShell->DoSaveAs( aStoreMedium );
+        pShell->DoClose();
+
+        //std::cout << "File: " << aTempFile.GetURL() << std::endl;
+
+        sal_uInt32 nFormat = 0;
+        if (nFormatType == ODS_FORMAT_TYPE)
+            nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
+
+        return load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat );
+    }
+    ScDocShellRef saveAndReload( ScDocShell* pShell, sal_Int32 nFormat )
+    {
+        OUString aFileExtension(aFileFormats[nFormat].pName, strlen(aFileFormats[nFormat].pName), RTL_TEXTENCODING_UTF8 );
+        OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+        OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+        ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
+
+        CPPUNIT_ASSERT(xDocSh.Is());
+        return xDocSh;
+    }
+
+
+};
+
+void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat = StringValue)
 {
     csv_handler aHandler(pDoc, nTab, aStringFormat);
     orcus::csv_parser_config aConfig;
@@ -91,14 +250,14 @@ void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType
     catch (const orcus::csv_parse_error& e)
     {
         std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        rtl::OStringBuffer aErrorMsg("csv parser error: ");
+        OStringBuffer aErrorMsg("csv parser error: ");
         aErrorMsg.append(e.what());
         CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
     }
 }
 
 //need own handler because conditional formatting strings must be generated
-void testCondFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
+void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
 {
     conditional_format_handler aHandler(pDoc, nTab);
     orcus::csv_parser_config aConfig;
@@ -115,7 +274,7 @@ void testCondFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
     catch (const orcus::csv_parse_error& e)
     {
         std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        rtl::OStringBuffer aErrorMsg("csv parser error: ");
+        OStringBuffer aErrorMsg("csv parser error: ");
         aErrorMsg.append(e.what());
         CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
     }
