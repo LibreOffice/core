@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///5o\u003d",
+        "filename": "sal/inc/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-02-04T12:22:11Z",
+      "side": 1,
+      "message": "Outdated.",
+      "revId": "cb1ccacb3afe01412ab63edcff9a94bc2e0eb7f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///5k\u003d",
+        "filename": "sal/inc/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1501,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-02-04T12:22:11Z",
+      "side": 1,
+      "message": "sal_Bool -\u003e boolean",
+      "revId": "cb1ccacb3afe01412ab63edcff9a94bc2e0eb7f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///5g\u003d",
+        "filename": "sal/inc/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2130,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-02-04T12:22:11Z",
+      "side": 1,
+      "message": "Outdated.",
+      "revId": "cb1ccacb3afe01412ab63edcff9a94bc2e0eb7f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///5c\u003d",
+        "filename": "sal/inc/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2138,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-02-04T12:22:11Z",
+      "side": 1,
+      "message": "boolean",
+      "revId": "cb1ccacb3afe01412ab63edcff9a94bc2e0eb7f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
