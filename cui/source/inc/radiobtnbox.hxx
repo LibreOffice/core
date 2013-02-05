@@ -44,6 +44,8 @@ public:
     void                HandleEntryChecked( SvTreeListEntry* _pEntry );
 
     const Point&        GetCurMousePoint() const;
+
+    long                GetControlColumnWidth() const;
 };
 
 } // end of namespace ::svx

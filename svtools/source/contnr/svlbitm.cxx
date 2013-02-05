@@ -564,4 +564,18 @@ void SvLBoxContextBmp::Clone( SvLBoxItem* pSource )
     m_pImpl->m_bExpanded = static_cast<SvLBoxContextBmp*>(pSource)->m_pImpl->m_bExpanded;
 }
 
+long SvLBoxButtonData::Width()
+{
+    if ( !bDataOk )
+        SetWidthAndHeight();
+    return nWidth;
+}
+
+long SvLBoxButtonData::Height()
+{
+    if ( !bDataOk )
+        SetWidthAndHeight();
+    return nHeight;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

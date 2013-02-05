@@ -83,100 +83,110 @@ bool areListsEqual( const Sequence< ::rtl::OUString >& rListA, const Sequence< :
     return bRet;
 }
 
+class SvxJavaListBox : public svx::SvxRadioButtonListBox
+{
+private:
+    const OUString m_sAccessibilityText;
+public:
+    SvxJavaListBox(SvxSimpleTableContainer& rParent, const OUString &rAccessibilityText)
+        : SvxRadioButtonListBox(rParent)
+        , m_sAccessibilityText(rAccessibilityText)
+    {
+    }
+    void setColSizes()
+    {
+        HeaderBar &rBar = GetTheHeaderBar();
+        if (rBar.GetItemCount() < 4)
+            return;
+        long nCheckWidth = std::max(GetControlColumnWidth() + 12,
+            rBar.LogicToPixel(Size(15, 0), MAP_APPFONT).Width());
+        long nVersionWidth = 12 +
+            std::max(rBar.GetTextWidth(rBar.GetItemText(3)),
+            GetTextWidth(OUString("0.0.0_00-icedtea")));
+        long nFeatureWidth = 12 +
+            std::max(rBar.GetTextWidth(rBar.GetItemText(4)),
+            GetTextWidth(m_sAccessibilityText));
+        long nVendorWidth =
+            std::max(GetSizePixel().Width() - (nCheckWidth + nVersionWidth + nFeatureWidth),
+            6 + std::max(rBar.GetTextWidth(rBar.GetItemText(2)),
+            GetTextWidth(OUString("Sun Microsystems Inc."))));
+        long aStaticTabs[]= { 4, 0, 0, 0, 0, 0 };
+        aStaticTabs[2] = nCheckWidth;
+        aStaticTabs[3] = aStaticTabs[2] + nVendorWidth;
+        aStaticTabs[4] = aStaticTabs[3] + nVersionWidth;
+        SvxSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+    }
+    virtual void Resize()
+    {
+        svx::SvxRadioButtonListBox::Resize();
+        setColSizes();
+    }
+};
+
 // class SvxJavaOptionsPage ----------------------------------------------
 
-SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
-
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_OPTIONS_JAVA ), rSet ),
-
-    m_aJavaLine         ( this, CUI_RES( FL_JAVA ) ),
-    m_aJavaEnableCB     ( this, CUI_RES( CB_JAVA_ENABLE ) ),
-    m_aJavaFoundLabel   ( this, CUI_RES( FT_JAVA_FOUND ) ),
-    m_aJavaListContainer(this, CUI_RES(LB_JAVA)),
-    m_aJavaList(m_aJavaListContainer),
-    m_aJavaPathText     ( this, CUI_RES( FT_JAVA_PATH ) ),
-    m_aAddBtn           ( this, CUI_RES( PB_ADD ) ),
-    m_aParameterBtn     ( this, CUI_RES( PB_PARAMETER ) ),
-    m_aClassPathBtn     ( this, CUI_RES( PB_CLASSPATH ) ),
-
-    m_pParamDlg         ( NULL ),
-    m_pPathDlg          ( NULL ),
-    m_parJavaInfo       ( NULL ),
-    m_parParameters     ( NULL ),
-    m_pClassPath        ( NULL ),
-    m_nInfoSize         ( 0 ),
-    m_nParamSize        ( 0 ),
-    m_sInstallText      (       CUI_RES( STR_INSTALLED_IN ) ),
-    m_sAccessibilityText(       CUI_RES( STR_ACCESSIBILITY ) ),
-    m_sAddDialogText    (       CUI_RES( STR_ADDDLGTEXT ) ),
-
-    m_aExperimental     ( this, CUI_RES( FL_EXPERIMENTAL ) ),
-    m_aExperimentalCB   ( this, CUI_RES( CB_EXPERIMENTAL ) ),
-    m_aMacroCB          ( this, CUI_RES( CB_MACRO ) ),
-
-    xDialogListener     ( new ::svt::DialogClosedListener() )
+SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet )
+    : SfxTabPage(pParent, "OptAdvancedPage", "cui/ui/optadvancedpage.ui", rSet)
+    , m_pParamDlg(NULL)
+    , m_pPathDlg(NULL)
+    , m_parJavaInfo(NULL)
+    , m_parParameters(NULL)
+    , m_pClassPath(NULL)
+    , m_nInfoSize(0)
+    , m_nParamSize(0)
+    , xDialogListener(new ::svt::DialogClosedListener())
 {
-    m_aJavaEnableCB.SetClickHdl( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
-    m_aJavaList.SetCheckButtonHdl( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
-    m_aJavaList.SetSelectHdl( LINK( this, SvxJavaOptionsPage, SelectHdl_Impl ) );
-    m_aAddBtn.SetClickHdl( LINK( this, SvxJavaOptionsPage, AddHdl_Impl ) );
-    m_aParameterBtn.SetClickHdl( LINK( this, SvxJavaOptionsPage, ParameterHdl_Impl ) );
-    m_aClassPathBtn.SetClickHdl( LINK( this, SvxJavaOptionsPage, ClassPathHdl_Impl ) );
+    get(m_pJavaEnableCB, "javaenabled");
+    get(m_pJavaBox, "javabox");
+    get(m_pJavaPathText, "javapath");
+    m_sInstallText = m_pJavaPathText->GetText();
+    get(m_pAddBtn, "add");
+    get(m_pParameterBtn, "parameters");
+    get(m_pClassPathBtn, "classpath");
+    get(m_pExperimentalCB, "experimental");
+    get(m_pMacroCB, "macrorecording");
+    m_sAccessibilityText = get<FixedText>("a11y")->GetText();
+    m_sAddDialogText = get<FixedText>("selectruntime")->GetText();
+
+    SvxSimpleTableContainer *pJavaListContainer = get<SvxSimpleTableContainer>("javas");
+    Size aControlSize(177, 60);
+    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    pJavaListContainer->set_width_request(aControlSize.Width());
+    pJavaListContainer->set_height_request(aControlSize.Height());
+    m_pJavaList = new SvxJavaListBox(*pJavaListContainer, m_sAccessibilityText);
+
+    long aStaticTabs[]= { 4, 0, 0, 0, 0 };
+
+    m_pJavaList->SvxSimpleTable::SetTabs( aStaticTabs );
+
+    OUStringBuffer sHeader;
+    sHeader.append("\t").append(get<FixedText>("vendor")->GetText())
+        .append("\t").append(get<FixedText>("version")->GetText())
+        .append("\t").append(get<FixedText>("features")->GetText())
+        .append("\t");
+    m_pJavaList->InsertHeaderEntry(sHeader.makeStringAndClear(), HEADERBAR_APPEND, HIB_LEFT);
+    m_pJavaList->setColSizes();
+
+    m_pJavaEnableCB->SetClickHdl( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
+    m_pJavaList->SetCheckButtonHdl( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
+    m_pJavaList->SetSelectHdl( LINK( this, SvxJavaOptionsPage, SelectHdl_Impl ) );
+    m_pAddBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, AddHdl_Impl ) );
+    m_pParameterBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, ParameterHdl_Impl ) );
+    m_pClassPathBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, ClassPathHdl_Impl ) );
     m_aResetTimer.SetTimeoutHdl( LINK( this, SvxJavaOptionsPage, ResetHdl_Impl ) );
     m_aResetTimer.SetTimeout( RESET_TIMEOUT );
 
-    static long aStaticTabs[]=
-    {
-        5, 0, 15, 90, 130, 300
-    };
-
-    m_aJavaList.SvxSimpleTable::SetTabs( aStaticTabs );
-    rtl::OUStringBuffer sHeader;
-    sHeader.append('\t');
-    sHeader.append(CUI_RESSTR(STR_HEADER_VENDOR));
-    sHeader.append('\t');
-    sHeader.append(CUI_RESSTR(STR_HEADER_VERSION));
-    sHeader.append('\t');
-    sHeader.append(CUI_RESSTR(STR_HEADER_FEATURES));
-    sHeader.append('\t');
-    m_aJavaList.InsertHeaderEntry( sHeader.makeStringAndClear(), HEADERBAR_APPEND, HIB_LEFT );
-
-    m_aJavaList.SetHelpId( HID_OPTIONS_JAVA_LIST );
-
-    FreeResource();
-
     xDialogListener->SetDialogClosedLink( LINK( this, SvxJavaOptionsPage, DialogClosedHdl ) );
 
-    EnableHdl_Impl( &m_aJavaEnableCB );
+    EnableHdl_Impl(m_pJavaEnableCB);
     jfw_lock();
-
-    //check if the text fits into the class path button
-    Size aButtonSize = m_aClassPathBtn.GetOutputSizePixel();
-    sal_Int32 nTextWidth = m_aClassPathBtn.GetTextWidth(m_aClassPathBtn.GetText());
-    //add some additional space
-    sal_Int32 nDiff = nTextWidth + 4 - aButtonSize.Width();
-    if( nDiff > 0)
-    {
-        Point aPos(m_aClassPathBtn.GetPosPixel());
-        aPos.X() -= nDiff;
-        aButtonSize.Width() += nDiff;
-        m_aClassPathBtn.SetPosSizePixel(aPos, aButtonSize);
-        aPos = m_aAddBtn.GetPosPixel();
-        aPos.X() -= nDiff;
-        m_aAddBtn.SetPosSizePixel(aPos, aButtonSize);
-        aPos = m_aParameterBtn.GetPosPixel();
-        aPos.X() -= nDiff;
-        m_aParameterBtn.SetPosSizePixel(aPos, aButtonSize);
-        Size aSize = m_aJavaListContainer.GetSizePixel();
-        aSize.Width() -= nDiff;
-        m_aJavaListContainer.SetSizePixel(aSize);
-    }
 }
 
 // -----------------------------------------------------------------------
 
 SvxJavaOptionsPage::~SvxJavaOptionsPage()
 {
+    delete m_pJavaList;
     delete m_pParamDlg;
     delete m_pPathDlg;
     ClearJavaInfo();
@@ -194,15 +204,9 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl)
 {
-    sal_Bool bEnable = m_aJavaEnableCB.IsChecked();
-    m_aJavaFoundLabel.Enable( bEnable );
-    m_aJavaPathText.Enable( bEnable );
-    m_aAddBtn.Enable( bEnable );
-    m_aParameterBtn.Enable( bEnable );
-    m_aClassPathBtn.Enable( bEnable );
-
-    bEnable ? m_aJavaList.EnableTable() : m_aJavaList.DisableTable();
-
+    sal_Bool bEnable = m_pJavaEnableCB->IsChecked();
+    m_pJavaBox->Enable(bEnable);
+    bEnable ? m_pJavaList->EnableTable() : m_pJavaList->DisableTable();
     return 0;
 }
 
@@ -210,10 +214,10 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl)
 
 IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvxSimpleTable *, pList )
 {
-    SvTreeListEntry* pEntry = pList ? m_aJavaList.GetEntry( m_aJavaList.GetCurMousePoint() )
-                                : m_aJavaList.FirstSelected();
+    SvTreeListEntry* pEntry = pList ? m_pJavaList->GetEntry( m_pJavaList->GetCurMousePoint() )
+                                : m_pJavaList->FirstSelected();
     if ( pEntry )
-        m_aJavaList.HandleEntryChecked( pEntry );
+        m_pJavaList->HandleEntryChecked( pEntry );
     return 0;
 }
 
@@ -222,14 +226,14 @@ IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvxSimpleTable *, pList )
 IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl)
 {
     // set installation directory info
-    SvTreeListEntry* pEntry = m_aJavaList.FirstSelected();
+    SvTreeListEntry* pEntry = m_pJavaList->FirstSelected();
     DBG_ASSERT( pEntry, "SvxJavaOptionsPage::SelectHdl_Impl(): no entry" );
     String* pLocation = static_cast< String* >( pEntry->GetUserData() );
     DBG_ASSERT( pLocation, "invalid location string" );
     String sInfo = m_sInstallText;
     if ( pLocation )
         sInfo += *pLocation;
-    m_aJavaPathText.SetText( sInfo );
+    m_pJavaPathText->SetText(sInfo);
     return 0;
 }
 
@@ -416,21 +420,21 @@ void SvxJavaOptionsPage::ClearJavaInfo()
 
 void SvxJavaOptionsPage::ClearJavaList()
 {
-    SvTreeListEntry* pEntry = m_aJavaList.First();
+    SvTreeListEntry* pEntry = m_pJavaList->First();
     while ( pEntry )
     {
         String* pLocation = static_cast< String* >( pEntry->GetUserData() );
         delete pLocation;
-        pEntry = m_aJavaList.Next( pEntry );
+        pEntry = m_pJavaList->Next( pEntry );
     }
-    m_aJavaList.Clear();
+    m_pJavaList->Clear();
 }
 
 // -----------------------------------------------------------------------
 
 void SvxJavaOptionsPage::LoadJREs()
 {
-    WaitObject aWaitObj( &m_aJavaList );
+    WaitObject aWaitObj(m_pJavaList);
     javaFrameworkError eErr = jfw_findAllJREs( &m_parJavaInfo, &m_nInfoSize );
     if ( JFW_E_NONE == eErr && m_parJavaInfo )
     {
@@ -459,9 +463,9 @@ void SvxJavaOptionsPage::LoadJREs()
             JavaInfo* pCmpInfo = *parInfo++;
             if ( jfw_areEqualJavaInfo( pCmpInfo, pSelectedJava ) )
             {
-                SvTreeListEntry* pEntry = m_aJavaList.GetEntry(i);
+                SvTreeListEntry* pEntry = m_pJavaList->GetEntry(i);
                 if ( pEntry )
-                    m_aJavaList.HandleEntryChecked( pEntry );
+                    m_pJavaList->HandleEntryChecked( pEntry );
                 break;
             }
         }
@@ -482,7 +486,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
     sEntry.append('\t');
     if ( ( _pInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE ) == JFW_FEATURE_ACCESSBRIDGE )
         sEntry.append(m_sAccessibilityText);
-    SvTreeListEntry* pEntry = m_aJavaList.InsertEntry(sEntry.makeStringAndClear());
+    SvTreeListEntry* pEntry = m_pJavaList->InsertEntry(sEntry.makeStringAndClear());
     INetURLObject aLocObj( ::rtl::OUString( _pInfo->sLocation ) );
     String* pLocation = new String( aLocObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
     pEntry->SetUserData( pLocation );
@@ -492,22 +496,22 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 
 void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
 {
-    m_aJavaList.Select( _pEntry, sal_True );
-    SvButtonState eState = m_aJavaList.GetCheckButtonState( _pEntry );
+    m_pJavaList->Select( _pEntry, sal_True );
+    SvButtonState eState = m_pJavaList->GetCheckButtonState( _pEntry );
 
     if ( SV_BUTTON_CHECKED == eState )
     {
         // we have radio button behavior -> so uncheck the other entries
-        SvTreeListEntry* pEntry = m_aJavaList.First();
+        SvTreeListEntry* pEntry = m_pJavaList->First();
         while ( pEntry )
         {
             if ( pEntry != _pEntry )
-                m_aJavaList.SetCheckButtonState( pEntry, SV_BUTTON_UNCHECKED );
-            pEntry = m_aJavaList.Next( pEntry );
+                m_pJavaList->SetCheckButtonState( pEntry, SV_BUTTON_UNCHECKED );
+            pEntry = m_pJavaList->Next( pEntry );
         }
     }
     else
-        m_aJavaList.SetCheckButtonState( _pEntry, SV_BUTTON_CHECKED );
+        m_pJavaList->SetCheckButtonState( _pEntry, SV_BUTTON_CHECKED );
 }
 
 // -----------------------------------------------------------------------
@@ -552,14 +556,14 @@ void SvxJavaOptionsPage::AddFolder( const ::rtl::OUString& _rFolder )
             jfw_addJRELocation( pInfo->sLocation );
             AddJRE( pInfo );
             m_aAddedInfos.push_back( pInfo );
-            nPos = m_aJavaList.GetEntryCount() - 1;
+            nPos = m_pJavaList->GetEntryCount() - 1;
         }
         else
             jfw_freeJavaInfo( pInfo );
 
-        SvTreeListEntry* pEntry = m_aJavaList.GetEntry( nPos );
-        m_aJavaList.Select( pEntry );
-        m_aJavaList.SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
+        SvTreeListEntry* pEntry = m_pJavaList->GetEntry( nPos );
+        m_pJavaList->Select( pEntry );
+        m_pJavaList->SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
         HandleCheckEntry( pEntry );
         bStartAgain = false;
     }
@@ -611,17 +615,17 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
         bModified = sal_True;
     }
 
-    if ( m_aExperimentalCB.IsChecked() != m_aExperimentalCB.GetSavedValue() )
+    if ( m_pExperimentalCB->IsChecked() != m_pExperimentalCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetExperimentalMode( m_aExperimentalCB.IsChecked() );
+        aMiscOpt.SetExperimentalMode( m_pExperimentalCB->IsChecked() );
         bModified = sal_True;
     }
 
-    if ( m_aMacroCB.IsChecked() != m_aMacroCB.GetSavedValue() )
+    if ( m_pMacroCB->IsChecked() != m_pMacroCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetMacroRecorderMode( m_aMacroCB.IsChecked() );
+        aMiscOpt.SetMacroRecorderMode( m_pMacroCB->IsChecked() );
         bModified = sal_True;
     }
 
@@ -639,10 +643,10 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
         }
     }
 
-    sal_uLong nCount = m_aJavaList.GetEntryCount();
+    sal_uLong nCount = m_pJavaList->GetEntryCount();
     for ( sal_uLong i = 0; i < nCount; ++i )
     {
-        if ( m_aJavaList.GetCheckButtonState( m_aJavaList.GetEntry(i) ) == SV_BUTTON_CHECKED )
+        if ( m_pJavaList->GetCheckButtonState( m_pJavaList->GetEntry(i) ) == SV_BUTTON_CHECKED )
         {
             JavaInfo* pInfo = NULL;
             if ( i < static_cast< sal_uLong >( m_nInfoSize ) )
@@ -683,9 +687,9 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
     eErr = jfw_getEnabled( &bEnabled );
     DBG_ASSERT( JFW_E_NONE == eErr,
                 "SvxJavaOptionsPage::FillItemSet(): error in jfw_getEnabled" );
-    if ( bEnabled != m_aJavaEnableCB.IsChecked() )
+    if ( bEnabled != m_pJavaEnableCB->IsChecked() )
     {
-        eErr = jfw_setEnabled( m_aJavaEnableCB.IsChecked() );
+        eErr = jfw_setEnabled( m_pJavaEnableCB->IsChecked() );
         DBG_ASSERT( JFW_E_NONE == eErr,
                     "SvxJavaOptionsPage::FillItemSet(): error in jfw_setEnabled" );
         bModified = sal_True;
@@ -707,13 +711,13 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
     javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
     if ( eErr != JFW_E_NONE )
         bEnabled = sal_False;
-    m_aJavaEnableCB.Check( bEnabled );
-    EnableHdl_Impl( &m_aJavaEnableCB );
+    m_pJavaEnableCB->Check( bEnabled );
+    EnableHdl_Impl(m_pJavaEnableCB);
 
-    m_aExperimentalCB.Check( aMiscOpt.IsExperimentalMode() );
-    m_aExperimentalCB.SaveValue();
-    m_aMacroCB.Check( aMiscOpt.IsMacroRecorderMode() );
-    m_aMacroCB.SaveValue();
+    m_pExperimentalCB->Check( aMiscOpt.IsExperimentalMode() );
+    m_pExperimentalCB->SaveValue();
+    m_pMacroCB->Check( aMiscOpt.IsMacroRecorderMode() );
+    m_pMacroCB->SaveValue();
 
     m_aResetTimer.Start();
 }

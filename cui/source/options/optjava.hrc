@@ -20,30 +20,6 @@
 
 // defines ---------------------------------------------------------------
 
-// class SvxJavaOptionsPage ----------------------------------------------
-
-#define FL_JAVA             10
-#define CB_JAVA_ENABLE      11
-#define FT_JAVA_FOUND       12
-#define LB_JAVA             13
-#define FT_JAVA_PATH        14
-
-#define FL_EXPERIMENTAL     15
-#define CB_EXPERIMENTAL     16
-#define CB_MACRO            17
-
-#define PB_ADD              20
-#define PB_PARAMETER        21
-#define PB_CLASSPATH        22
-
-#define STR_INSTALLED_IN    30
-#define STR_ACCESSIBILITY   31
-#define STR_ADDDLGTEXT      32
-
-#define STR_HEADER_VENDOR   40
-#define STR_HEADER_VERSION  41
-#define STR_HEADER_FEATURES 42
-
 // class SvxJavaParameterDlg ---------------------------------------------
 
 #define FT_PARAMETER        10
@@ -73,12 +49,6 @@
 #define PB_PATH_OK          31
 #define PB_PATH_ESC         32
 #define PB_PATH_HLP         33
-
-
-
-
-
-
 
 #endif // #ifndef _SVX_OPTJAVA_HRC
 

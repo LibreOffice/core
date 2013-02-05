@@ -404,7 +404,7 @@ void SvxFontSubstCheckListBox::setColSizes()
     aStaticTabs[2] = nMax;
     aStaticTabs[3] = nDoubleMax;
     aStaticTabs[4] = nDoubleMax + nRest/2;
-    SvxSimpleTable::SetTabs(&aStaticTabs[0], MAP_PIXEL);
+    SvxSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
 }
 
 void SvxFontSubstCheckListBox::Resize()

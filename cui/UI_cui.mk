@@ -32,6 +32,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/objectnamedialog \
 	cui/uiconfig/ui/objecttitledescdialog \
 	cui/uiconfig/ui/optaccessibilitypage \
+	cui/uiconfig/ui/optadvancedpage \
 	cui/uiconfig/ui/optappearancepage \
 	cui/uiconfig/ui/optfontspage \
 	cui/uiconfig/ui/personalization_tab \

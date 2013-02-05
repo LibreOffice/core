@@ -62,8 +62,8 @@ public:
                             ~SvLBoxButtonData();
 
     sal_uInt16                  GetIndex( sal_uInt16 nItemState );
-    inline long             Width();
-    inline long             Height();
+    long                    Width();
+    long                    Height();
     void                    SetLink( const Link& rLink) { aLink=rLink; }
     const Link&             GetLink() const { return aLink; }
      sal_Bool                   IsRadio();
@@ -73,7 +73,11 @@ public:
     void                    StoreButtonState( SvTreeListEntry* pEntry, sal_uInt16 nItemFlags );
     SvButtonState           ConvertToButtonState( sal_uInt16 nItemFlags ) const;
 
-    inline SvButtonState    GetActButtonState() const;
+    SvButtonState GetActButtonState() const
+    {
+        return eState;
+    }
+
     SvTreeListEntry*            GetActEntry() const;
 
     Image aBmps[24];  // Indizes siehe Konstanten BMP_ ....
@@ -83,25 +87,6 @@ public:
                                 // pControlForSettings == NULL: settings are taken from Application
     sal_Bool                    HasDefaultImages( void ) const;
 };
-
-inline long SvLBoxButtonData::Width()
-{
-    if ( !bDataOk )
-        SetWidthAndHeight();
-    return nWidth;
-}
-
-inline long SvLBoxButtonData::Height()
-{
-    if ( !bDataOk )
-        SetWidthAndHeight();
-    return nHeight;
-}
-
-inline SvButtonState SvLBoxButtonData::GetActButtonState() const
-{
-    return eState;
-}
 
 // **********************************************************************
 

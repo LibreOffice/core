@@ -36,21 +36,20 @@ typedef struct _JavaInfo JavaInfo;
 
 class   SvxJavaParameterDlg;
 class   SvxJavaClassPathDlg;
+class   SvxJavaListBox;
 
 // class SvxJavaOptionsPage ----------------------------------------------
 
 class SvxJavaOptionsPage : public SfxTabPage
 {
 private:
-    FixedLine                   m_aJavaLine;
-    CheckBox                    m_aJavaEnableCB;
-    FixedText                   m_aJavaFoundLabel;
-    SvxSimpleTableContainer     m_aJavaListContainer;
-    svx::SvxRadioButtonListBox  m_aJavaList;
-    FixedText                   m_aJavaPathText;
-    PushButton                  m_aAddBtn;
-    PushButton                  m_aParameterBtn;
-    PushButton                  m_aClassPathBtn;
+    CheckBox*                   m_pJavaEnableCB;
+    VclContainer*               m_pJavaBox;
+    SvxJavaListBox*             m_pJavaList;
+    FixedText*                  m_pJavaPathText;
+    PushButton*                 m_pAddBtn;
+    PushButton*                 m_pParameterBtn;
+    PushButton*                 m_pClassPathBtn;
 
     SvxJavaParameterDlg*    m_pParamDlg;
     SvxJavaClassPathDlg*    m_pPathDlg;
@@ -65,9 +64,8 @@ private:
     String                  m_sAddDialogText;
     Timer                   m_aResetTimer;
 
-    FixedLine               m_aExperimental;
-    CheckBox                m_aExperimentalCB;
-    CheckBox                m_aMacroCB;
+    CheckBox*               m_pExperimentalCB;
+    CheckBox*               m_pMacroCB;
 
     ::std::vector< JavaInfo* >
                             m_aAddedInfos;

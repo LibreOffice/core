@@ -89,6 +89,11 @@ const Point& SvxRadioButtonListBox::GetCurMousePoint() const
     return m_aCurMousePoint;
 }
 
+long SvxRadioButtonListBox::GetControlColumnWidth() const
+{
+    return pCheckButtonData->Width();
+}
+
 } // end of namespace ::svx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
