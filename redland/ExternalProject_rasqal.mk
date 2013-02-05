@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalProject_ExternalProject,rasqal))
 
 $(eval $(call gb_ExternalProject_use_unpacked,rasqal,rasqal))
 
+$(eval $(call gb_ExternalProject_use_external,rasqal,libxml2))
+
 $(eval $(call gb_ExternalProject_use_package,rasqal,raptor))
 
 $(eval $(call gb_ExternalProject_register_targets,rasqal,\

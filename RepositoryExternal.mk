@@ -648,6 +648,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),$(LIBXML_LIBS))
 
 endef
+gb_ExternalProject__use_libxml2:=
 
 else # !SYSTEM_LIBXML
 
@@ -656,9 +657,18 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 define gb_LinkTarget__use_libxml2
+$(call gb_LinkTarget_use_package,$(1),xml2)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	xml2 \
 )
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I$(call gb_UnpackedTarball_get_dir,xml2)/include \
+)
+
+endef
+define gb_ExternalProject__use_libxml2
+$(call gb_ExternalProject_use_package,$(1),xml2)
 
 endef
 

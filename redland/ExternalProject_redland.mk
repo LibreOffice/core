@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalProject_ExternalProject,redland))
 
 $(eval $(call gb_ExternalProject_use_unpacked,redland,redland))
 
+$(eval $(call gb_ExternalProject_use_external,redland,libxml2))
+
 $(eval $(call gb_ExternalProject_use_packages,redland, \
     raptor \
     rasqal \
