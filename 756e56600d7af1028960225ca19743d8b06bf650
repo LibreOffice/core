@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///zc\u003d",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-02-05T20:34:53Z",
+      "side": 1,
+      "message": "have to admit, I don\u0027t understand the check here to disable shift :-/ maybe if you could explain the rationale in more detail for me ( who is probably just being stupid )",
+      "revId": "756e56600d7af1028960225ca19743d8b06bf650",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///zQ\u003d",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1297,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-02-05T20:34:53Z",
+      "side": 1,
+      "message": "I don\u0027t like the following loops :-) I don\u0027t think they are performance killers per se but there are already such loops already in the code, you should use those instead, take a look at ScDocument::FindAreaPos, you can use that to find the next cell with content ( in any direction ) from any start point.",
+      "revId": "756e56600d7af1028960225ca19743d8b06bf650",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
