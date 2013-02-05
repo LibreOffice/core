@@ -19,6 +19,7 @@
 
 
 #include "scdetect.hxx"
+#include "exceldetect.hxx"
 #include <cppuhelper/implementationentry.hxx>
 
 namespace {
@@ -29,6 +30,14 @@ static const cppu::ImplementationEntry spServices[] =
         ScFilterDetect::impl_createInstance,
         ScFilterDetect::impl_getStaticImplementationName,
         ScFilterDetect::impl_getStaticSupportedServiceNames,
+        cppu::createSingleComponentFactory,
+        0, 0
+    },
+
+    {
+        ScExcelBiffDetect::impl_createInstance,
+        ScExcelBiffDetect::impl_getStaticImplementationName,
+        ScExcelBiffDetect::impl_getStaticSupportedServiceNames,
         cppu::createSingleComponentFactory,
         0, 0
     },

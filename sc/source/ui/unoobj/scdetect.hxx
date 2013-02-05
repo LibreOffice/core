@@ -53,7 +53,7 @@ public:
     static OUString impl_getStaticImplementationName();
 
     /* Helper for registry */
-    static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
+    static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
         impl_createInstance( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext )
             throw (com::sun::star::uno::Exception);
 

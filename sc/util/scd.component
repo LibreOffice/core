@@ -22,4 +22,7 @@
   <implementation name="com.sun.star.comp.calc.FormatDetector">
     <service name="com.sun.star.frame.ExtendedTypeDetection"/>
   </implementation>
+  <implementation name="com.sun.star.comp.calc.ExcelBiffFormatDetector">
+    <service name="com.sun.star.frame.ExtendedTypeDetection"/>
+  </implementation>
 </component>
