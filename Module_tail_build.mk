@@ -115,6 +115,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	$(call gb_Helper_optional,WPS,libwps) \
 	libxmlsec \
 	$(call gb_Helper_optional,LIBXSLT,libxslt) \
+	$(call gb_Helper_optional,LIBXML2,libxml2) \
 	lingucomponent \
 	linguistic \
 	lotuswordpro \

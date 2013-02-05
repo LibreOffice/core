@@ -1,3 +1,2 @@
 lx	libxml2	: soltools NULL
-lx	libxml2			    usr1	-	all	lx_mkout NULL
-lx	libxml2			    nmake	-	all	lx_libxml2 NULL
+lx	libxml2\prj			    nmake	-	all	lx_libxml2 NULL

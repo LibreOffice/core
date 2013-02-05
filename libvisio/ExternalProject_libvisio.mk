@@ -19,6 +19,7 @@ $(eval $(call gb_ExternalProject_use_externals,libvisio,\
 	boost_headers \
 	wpd \
 	wpg \
+	libxml2 \
 ))
 
 ifeq ($(OS)$(COM),WNTMSC)
@@ -29,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& $(COMPATH)/vcpackages/vcbuild.exe libvisio.vcproj "Release|Win32" \
 	&& touch $@
@@ -39,7 +40,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/extrenal \
+	&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& msbuild.exe libvisio.vcxproj /p:Configuration=Release \
 	&& touch $@
@@ -49,7 +50,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& msbuild.exe libvisio.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release \
 	&& touch $@
@@ -67,7 +68,8 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 		--without-docs \
 		--disable-debug \
 		--disable-werror \
-		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(call gb_UnpackedTarball_get_dir,boost)) \
+		CXXFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost)) \
+		$(if $(filter NO,$(SYSTEM_LIBXML)),-I$(call gb_UnpackedTarball_get_dir,xml2)/include)" \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
 	&& touch $@

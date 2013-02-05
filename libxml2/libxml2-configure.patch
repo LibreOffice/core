@@ -99,7 +99,7 @@
 +
 +prefix=${SOLARVERSION}/${INPATH}
 +exec_prefix=${SOLARVERSION}/${INPATH}
-+includedir=${SOLARVERSION}/${INPATH}/inc${UPDMINOREXT}/external
++includedir=${WORKDIR}/UnpackedTarball/xml2/include
 +libdir=${SOLARVERSION}/${INPATH}/lib${UPDMINOREXT}
  
  usage()
