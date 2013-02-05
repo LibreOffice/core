@@ -33,6 +33,7 @@ class ControlScroller(object):
             _iCompWidth, _nblockincrement, _nlinedistance, _firsthelpindex):
         self.xMSF = _xMSF
         self.scrollfields = []
+        self.ControlGroupVector = []
         ControlScroller.nblockincrement = _nblockincrement
         self.CurUnoDialog = _CurUnoDialog
         self.iStep = _iStep
@@ -50,7 +51,7 @@ class ControlScroller(object):
         self.sincSuffix = Desktop.getIncrementSuffix(
             self.CurUnoDialog.xDialogModel, "imgBackground")
 
-        ControlScroller.xScrollBar = self.CurUnoDialog.insertScrollBar(
+        self.xScrollBar = self.CurUnoDialog.insertScrollBar(
             "TitleScrollBar" + self.sincSuffix,
             ("Border", PropertyNames.PROPERTY_ENABLED,
                 PropertyNames.PROPERTY_HEIGHT,
@@ -65,13 +66,12 @@ class ControlScroller(object):
                     ControlScroller.iScrollBarWidth - 1,
                 self.iCompPosY + 1, self.iStep,
                 ControlScroller.iScrollBarWidth), 0, self)
-        ControlScroller.nscrollvalue = 0
-        ControlScroller.ControlGroupVector = []
+        self.nscrollvalue = 0
         ypos = self.iStartPosY + ControlScroller.SORELFIRSTPOSY
         for i in range(ControlScroller.nblockincrement):
             self.insertControlGroup(i, ypos)
             ypos += self.linedistance
-
+            
     def fillupControls(self, binitialize):
         for i in range(ControlScroller.nblockincrement):
             if i < self.ncurfieldcount:
@@ -79,21 +79,23 @@ class ControlScroller(object):
 
         if binitialize:
             self.CurUnoDialog.repaintDialogStep()
+            
 
     def fillupControl(self, guiRow):
         nameProps = self.scrollfields[guiRow]
-        valueProps = self.scrollfields[guiRow + ControlScroller.nscrollvalue]
+        valueProps = self.scrollfields[guiRow + self.nscrollvalue]
         for index, item in enumerate(nameProps):
             if self.CurUnoDialog.xDialogModel.hasByName(item.Name):
                 self.setControlData(item.Name, valueProps[index].Value)
             else:
                 raise AttributeError("No such control !")
+        self.ControlGroupVector[guiRow].setEnabled(True)
 
     def setScrollValue(self, _nscrollvalue, _ntotfieldcount=None):
         if _ntotfieldcount is not None:
             self.setTotalFieldCount(_ntotfieldcount)
         if _nscrollvalue >= 0:
-            ControlScroller.xScrollBar.Model.ScrollValue = _nscrollvalue
+            self.xScrollBar.Model.ScrollValue = _nscrollvalue
             self.scrollControls()
 
     def setCurFieldCount(self):
@@ -106,11 +108,11 @@ class ControlScroller(object):
         self.ntotfieldcount = _ntotfieldcount
         self.setCurFieldCount()
         if self.ntotfieldcount > ControlScroller.nblockincrement:
-            ControlScroller.xScrollBar.Model.Enabled = True
-            ControlScroller.xScrollBar.Model.ScrollValueMax = \
+            self.xScrollBar.Model.Enabled = True
+            self.xScrollBar.Model.ScrollValueMax = \
                 self.ntotfieldcount - ControlScroller.nblockincrement
         else:
-            ControlScroller.xScrollBar.Model.Enabled = False
+            self.xScrollBar.Model.Enabled = False
 
     def toggleComponent(self, _bdoenable):
         bdoenable = _bdoenable and \
@@ -132,11 +134,11 @@ class ControlScroller(object):
 
     def scrollControls(self):
         try:
-            ControlScroller.nscrollvalue = \
-                int(ControlScroller.xScrollBar.Model.ScrollValue)
-            if ControlScroller.nscrollvalue + ControlScroller.nblockincrement \
+            self.nscrollvalue = \
+                int(self.xScrollBar.Model.ScrollValue)
+            if self.nscrollvalue + ControlScroller.nblockincrement \
                     >= self.ntotfieldcount:
-                ControlScroller.nscrollvalue = \
+                self.nscrollvalue = \
                     self.ntotfieldcount - ControlScroller.nblockincrement
             self.fillupControls(False)
         except Exception:
@@ -152,8 +154,8 @@ class ControlScroller(object):
     '''
 
     def fieldInfo(self, guiRow, column):
-        if guiRow + ControlScroller.nscrollvalue < len(self.scrollfields):
-            valueProp = (self.scrollfields[guiRow + ControlScroller.nscrollvalue])[column]
+        if guiRow + self.nscrollvalue < len(self.scrollfields):
+            valueProp = (self.scrollfields[guiRow + self.nscrollvalue])[column]
             nameProp = (self.scrollfields[guiRow])[column]
             if self.CurUnoDialog.xDialogModel.hasByName(nameProp.Name):
                 valueProp.Value = self.getControlData(nameProp.Name)

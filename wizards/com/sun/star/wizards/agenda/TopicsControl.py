@@ -103,7 +103,10 @@ class TopicsControl(ControlScroller):
             super(TopicsControl, self).__init__(
                 dialog, xmsf, 5, 92, 38, 212, 5, 18, HID + 32)
             self.dialog = dialog
+            #fill preview's table
             self.initializeScrollFields(agenda)
+            #fill gui's table
+            self.fillupControls(True)
             self.nscrollvalue = 0
             self.lastFocusRow = 0
             self.lastFocusControl = None
@@ -314,9 +317,6 @@ class TopicsControl(ControlScroller):
     Implementation of ControlScroller
     This is a UI method which inserts a new row to the control.
     It uses the child-class ControlRow. (see below).
-    @param _index
-    @param npos
-    @see ControlRow
     '''
 
     def insertControlGroup(self, _index, npos):
