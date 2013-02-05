@@ -28,6 +28,7 @@
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultBroadcaster.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
+#include <sal/log.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -114,7 +115,7 @@ void XSecController::addReference( const rtl::OUString& ouUri)
 {
     if (m_vInternalSignatureInformations.empty())
     {
-        OSL_TRACE("XSecController::addReference: no signature");
+        SAL_INFO("xmlsecurity.helper","XSecController::addReference: no signature");
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
@@ -129,7 +130,7 @@ void XSecController::addStreamReference(
 
     if (m_vInternalSignatureInformations.empty())
     {
-        OSL_TRACE("XSecController::addStreamReference: no signature");
+        SAL_INFO("xmlsecurity.helper","XSecController::addStreamReference: no signature");
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
@@ -157,7 +158,7 @@ void XSecController::setReferenceCount() const
 {
     if (m_vInternalSignatureInformations.empty())
     {
-        OSL_TRACE("XSecController::setReferenceCount: no signature");
+        SAL_INFO("xmlsecurity.helper","XSecController::setReferenceCount: no signature");
         return;
     }
     const InternalSignatureInformation &isi =
@@ -191,7 +192,7 @@ void XSecController::setX509IssuerName( rtl::OUString& ouX509IssuerName )
 {
     if (m_vInternalSignatureInformations.empty())
     {
-        OSL_TRACE("XSecController::setX509IssuerName: no signature");
+        SAL_INFO("xmlsecurity.helper","XSecController::setX509IssuerName: no signature");
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
@@ -202,7 +203,7 @@ void XSecController::setX509SerialNumber( rtl::OUString& ouX509SerialNumber )
 {
     if (m_vInternalSignatureInformations.empty())
     {
-        OSL_TRACE("XSecController::setX509SerialNumber: no signature");
+        SAL_INFO("xmlsecurity.helper","XSecController::setX509SerialNumber: no signature");
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
@@ -213,7 +214,7 @@ void XSecController::setX509Certificate( rtl::OUString& ouX509Certificate )
 {
     if (m_vInternalSignatureInformations.empty())
     {
-        OSL_TRACE("XSecController::setX509Certificate: no signature");
+        SAL_INFO("xmlsecurity.helper","XSecController::setX509Certificate: no signature");
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
@@ -224,7 +225,7 @@ void XSecController::setSignatureValue( rtl::OUString& ouSignatureValue )
 {
     if (m_vInternalSignatureInformations.empty())
     {
-        OSL_TRACE("XSecController::setSignatureValue: no signature");
+        SAL_INFO("xmlsecurity.helper","XSecController::setSignatureValue: no signature");
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
@@ -235,13 +236,13 @@ void XSecController::setDigestValue( rtl::OUString& ouDigestValue )
 {
     if (m_vInternalSignatureInformations.empty())
     {
-        OSL_TRACE("XSecController::setDigestValue: no signature");
+        SAL_INFO("xmlsecurity.helper","XSecController::setDigestValue: no signature");
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
     if (isi.signatureInfor.vSignatureReferenceInfors.empty())
     {
-        OSL_TRACE("XSecController::setDigestValue: no signature reference");
+        SAL_INFO("xmlsecurity.helper","XSecController::setDigestValue: no signature reference");
         return;
     }
     SignatureReferenceInformation &reference =
@@ -253,7 +254,7 @@ void XSecController::setDate( rtl::OUString& ouDate )
 {
     if (m_vInternalSignatureInformations.empty())
     {
-        OSL_TRACE("XSecController::setDate: no signature");
+        SAL_INFO("xmlsecurity.helper","XSecController::setDate: no signature");
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
@@ -265,7 +266,7 @@ void XSecController::setId( rtl::OUString& ouId )
 {
     if (m_vInternalSignatureInformations.empty())
     {
-        OSL_TRACE("XSecController::setId: no signature");
+        SAL_INFO("xmlsecurity.helper","XSecController::setId: no signature");
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
@@ -276,7 +277,7 @@ void XSecController::setPropertyId( rtl::OUString& ouPropertyId )
 {
     if (m_vInternalSignatureInformations.empty())
     {
-        OSL_TRACE("XSecController::setPropertyId: no signature");
+        SAL_INFO("xmlsecurity.helper","XSecController::setPropertyId: no signature");
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
