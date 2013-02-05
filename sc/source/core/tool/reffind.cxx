@@ -169,15 +169,20 @@ void ExpandToTextR1C1(const sal_Unicode* p, xub_StrLen nLen, xub_StrLen& rStartP
                     if (c == '\'')
                         break;
                 }
+                if (rStartPos == 0)
+                    break;
             }
             else if (c == ']')
             {
                 // Skip until the opening braket.
                 for (--rStartPos; rStartPos > 0; --rStartPos)
                 {
+                    c = p[rStartPos];
                     if (c == '[')
                         break;
                 }
+                if (rStartPos == 0)
+                    break;
             }
             else if (!IsText(c))
             {
