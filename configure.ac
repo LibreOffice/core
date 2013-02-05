@@ -12237,9 +12237,13 @@ dnl icerun is a wrapper that stops us spawning tens of processes
 dnl locally - for tools that can't be executed on the compile cluster
 dnl this avoids a dozen javac's ganging up on your laptop to kill it.
 dnl ===================================================================
+AC_MSG_CHECKING([whether to use icerun wrapper])
 ICECREAM_RUN=
-if test "$enable_icecream" = "yes"; then
-   ICECREAM_RUN=icerun
+if test "$enable_icecream" = "yes" && which icerun >/dev/null 2>&1 ; then
+    ICECREAM_RUN=icerun
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
 fi
 AC_SUBST(ICECREAM_RUN)
 
