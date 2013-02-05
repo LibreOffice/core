@@ -117,7 +117,7 @@ void SwMacrosTest::testStarBasic()
     rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
+    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
 
@@ -151,7 +151,7 @@ void SwMacrosTest::testVba()
     {
         rtl::OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName, aFileExtension, aFileName);
-        uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
+        uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
         rtl::OUStringBuffer sMsg( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Failed to load ")) );
         sMsg.append ( aFileName );
         CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );

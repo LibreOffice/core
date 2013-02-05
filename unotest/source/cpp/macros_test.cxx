@@ -38,16 +38,25 @@ using namespace com::sun::star;
 
 namespace unotest {
 
-uno::Reference< com::sun::star::lang::XComponent > MacrosTest::loadFromDesktop(const rtl::OUString& rURL)
+uno::Reference< com::sun::star::lang::XComponent > MacrosTest::loadFromDesktop(const OUString& rURL, const char* pDocService)
 {
     uno::Reference< com::sun::star::frame::XComponentLoader> xLoader = uno::Reference< com::sun::star::frame::XComponentLoader >( mxDesktop, uno::UNO_QUERY );
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > args(1);
-    args[0].Name = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
+    args[0].Name = "MacroExecutionMode";
     args[0].Handle = -1;
     args[0].Value <<=
         com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
     args[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+
+    if (pDocService)
+    {
+        args.realloc(2);
+        args[1].Name = "DocumentService";
+        args[1].Handle = -1;
+        args[1].Value <<= OUString::createFromAscii(pDocService);
+        args[1].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+    }
+
     uno::Reference< com::sun::star::lang::XComponent> xComponent= xLoader->loadComponentFromURL(rURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0, args);
     rtl::OUString sMessage = rtl::OUString( "loading failed: " ) + rURL;
     CPPUNIT_ASSERT_MESSAGE(rtl::OUStringToOString( sMessage, RTL_TEXTENCODING_UTF8 ).getStr( ), xComponent.is());

@@ -80,7 +80,7 @@ void ScMacrosTest::testStarBasic()
     rtl::OUString aFileName;
     createFileURL(aFileNameBase, aFileName);
     std::cout << "StarBasic test" << std::endl;
-    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
+    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
 
@@ -122,7 +122,7 @@ void ScMacrosTest::testVba()
     {
         rtl::OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName + "xls", aFileName);
-        uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
+        uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
         rtl::OUString sMsg( "Failed to load " + aFileName );
         CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 

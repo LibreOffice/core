@@ -46,7 +46,7 @@ uno::Reference< uno::XInterface > ScModelObj::init()
     rtl::OUString aFileURL;
     createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScModelObj.ods")), aFileURL);
     if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL);
+        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
 
     return mxComponent;

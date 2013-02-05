@@ -53,7 +53,7 @@ namespace {
 bool hasStream(const uno::Reference<io::XInputStream>& xInStream, const OUString& rName)
 {
     SfxMedium aMedium;
-    aMedium.UseInteractionHandler(true);
+    aMedium.UseInteractionHandler(false);
     aMedium.setStreamToLoadFrom(xInStream, true);
     SvStream* pStream = aMedium.GetInStream();
     if (!pStream)
@@ -77,7 +77,7 @@ bool hasStream(const uno::Reference<io::XInputStream>& xInStream, const OUString
 bool isExcel40(const uno::Reference<io::XInputStream>& xInStream)
 {
     SfxMedium aMedium;
-    aMedium.UseInteractionHandler(true);
+    aMedium.UseInteractionHandler(false);
     aMedium.setStreamToLoadFrom(xInStream, true);
     SvStream* pStream = aMedium.GetInStream();
     if (!pStream)

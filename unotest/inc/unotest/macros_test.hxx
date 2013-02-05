@@ -46,7 +46,7 @@ namespace unotest {
 class OOO_DLLPUBLIC_UNOTEST MacrosTest
 {
 public:
-    com::sun::star::uno::Reference< com::sun::star::lang::XComponent > loadFromDesktop(const rtl::OUString& rURL);
+    com::sun::star::uno::Reference< com::sun::star::lang::XComponent > loadFromDesktop(const OUString& rURL, const char* pDocService = NULL);
 
 protected:
     com::sun::star::uno::Reference< com::sun::star::frame::XDesktop2> mxDesktop;

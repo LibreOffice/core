@@ -243,7 +243,7 @@ protected:
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
         fprintf(stderr, "%s,", pName);
         m_nStartTime = osl_getGlobalTimer();
-        mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName));
+        mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.text.TextDocument");
         calcLayout();
     }
     
@@ -258,7 +258,7 @@ protected:
         xStorable->storeToURL(aTempFile.GetURL(), aArgs);
         uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
         xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL());
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
         if (mpXmlBuffer)
         {
             xmlBufferFree(mpXmlBuffer);

@@ -84,7 +84,7 @@ uno::Reference< sheet::XNamedRanges > ScNamedRangeObj::init_impl()
     rtl::OUString aFileURL;
     createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScNamedRangeObj.ods")), aFileURL);
     if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL);
+        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference< beans::XPropertySet > xPropSet (mxComponent, UNO_QUERY_THROW);

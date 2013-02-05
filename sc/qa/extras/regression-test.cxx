@@ -114,7 +114,7 @@ void ScChartRegressionTest::test()
 {
     rtl::OUString aFileName;
     createFileURL( "testChart.", "ods", aFileName);
-    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
+    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT(xComponent.is());
 

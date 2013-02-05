@@ -89,7 +89,7 @@ void SwLayoutTest::test()
     rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("test."));
     rtl::OUString aExtension(RTL_CONSTASCII_USTRINGPARAM("odt"));
     createFileURL(aFileBase, aExtension, aFilePath);
-    uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFilePath);
+    uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFilePath, "com.sun.star.text.TextDocument");
     CPPUNIT_ASSERT(xComponent.is());
 }
 

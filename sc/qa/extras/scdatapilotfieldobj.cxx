@@ -78,7 +78,7 @@ uno::Reference< uno::XInterface > ScDataPilotFieldObj::init()
     rtl::OUString aFileURL;
     createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scdatapilotfieldobj.ods")), aFileURL);
     if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL);
+        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);

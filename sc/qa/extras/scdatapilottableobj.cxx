@@ -93,7 +93,7 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
     rtl::OUString aFileURL;
     createFileURL("ScDataPilotTableObj.ods", aFileURL);
     if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL);
+        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
@@ -130,7 +130,7 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::initDP2()
     rtl::OUString aFileURL;
     createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScDataPilotTableObj.ods")), aFileURL);
     if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL);
+        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
