@@ -175,22 +175,19 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
         {
             case LoadEnvException::ID_INVALID_MEDIADESCRIPTOR:
                 throw css::lang::IllegalArgumentException(
-                    ::rtl::OUString("Optional list of arguments seem to be corrupted."),
-                    xLoader,
-                    4);
+                    "Optional list of arguments seem to be corrupted.", xLoader, 4);
 
             case LoadEnvException::ID_UNSUPPORTED_CONTENT:
             {
-                rtl::OUStringBuffer aMsg;
-                aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM("Unsupported URL <")).
-                    append(sURL).append('>');
+                OUStringBuffer aMsg;
+                aMsg.appendAscii("Unsupported URL <").append(sURL).append('>');
 
                 if (!ex.m_sMessage.isEmpty())
                 {
-                    aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM(": \"")).
-                        append(rtl::OStringToOUString(
+                    aMsg.appendAscii(": \"").
+                        append(OStringToOUString(
                              ex.m_sMessage, RTL_TEXTENCODING_UTF8)).
-                        appendAscii(RTL_CONSTASCII_STRINGPARAM("\""));
+                        appendAscii("\"");
                 }
 
                 throw css::lang::IllegalArgumentException(aMsg.makeStringAndClear(),
