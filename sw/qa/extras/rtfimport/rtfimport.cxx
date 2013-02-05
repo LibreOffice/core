@@ -136,6 +136,7 @@ public:
     void testFdo45183();
     void testFdo54612();
     void testFdo58933();
+    void testFdo58646line();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -222,6 +223,7 @@ void Test::run()
         {"fdo45183.rtf", &Test::testFdo45183},
         {"fdo54612.rtf", &Test::testFdo54612},
         {"fdo58933.rtf", &Test::testFdo58933},
+        {"fdo58646line.rtf", &Test::testFdo58646line},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1050,6 +1052,12 @@ void Test::testFdo58933()
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     // This was 4.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getCellNames().getLength());
+}
+
+void Test::testFdo58646line()
+{
+    // \line symbol was ignored
+    getParagraph(1, "foo\nbar");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
