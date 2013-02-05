@@ -1196,6 +1196,7 @@ sal_uInt64 writeMap(
                         static_cast< sal_uInt32 >(j->second.constantValue.l));
                     break;
                 case CONSTANT_TYPE_UNSIGNED_LONG:
+                case CONSTANT_TYPE_FLOAT: //access through union for strict-aliasing
                     write32(file, j->second.constantValue.ul);
                     break;
                 case CONSTANT_TYPE_HYPER:
@@ -1204,19 +1205,8 @@ sal_uInt64 writeMap(
                         static_cast< sal_uInt64 >(j->second.constantValue.h));
                     break;
                 case CONSTANT_TYPE_UNSIGNED_HYPER:
+                case CONSTANT_TYPE_DOUBLE: //access through union for strict-aliasing
                     write64(file, j->second.constantValue.uh);
-                    break;
-                case CONSTANT_TYPE_FLOAT:
-                    write32(
-                        file,
-                        *reinterpret_cast< sal_uInt32 const * >(
-                            &j->second.constantValue.f));
-                    break;
-                case CONSTANT_TYPE_DOUBLE:
-                    write64(
-                        file,
-                        *reinterpret_cast< sal_uInt64 const * >(
-                            &j->second.constantValue.d));
                     break;
                 default:
                     std::abort(); // this cannot happen
