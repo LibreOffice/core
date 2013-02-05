@@ -21,9 +21,11 @@ $(eval $(call gb_CppunitTest_use_external,connectivity_commontools,boost_headers
 $(eval $(call gb_CppunitTest_use_sdk_api,connectivity_commontools))
 
 ifeq ($(COM),GCC)
+ifneq ($(COM_GCC_IS_CLANG),TRUE)
 $(eval $(call gb_CppunitTest_add_cxxflags,connectivity_commontools,\
 	-fpermissive \
 ))
+endif
 endif
 
 ifeq ($(WINDOWS_SDK_VERSION),80)
