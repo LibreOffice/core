@@ -1409,12 +1409,13 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                     css::uno::UNO_QUERY_THROW);
             }
         }
-        css::uno::Reference< css::registry::XImplementationRegistration>(
+        css::uno::Reference< css::registry::XImplementationRegistration> impreg(
             context->getServiceManager()->createInstanceWithContext(
                 "com.sun.star.registry.ImplementationRegistration",
                 context),
-            css::uno::UNO_QUERY_THROW)->registerImplementation(
-                m_loader, url, getRDB());
+            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::registry::XSimpleRegistry > rdb(getRDB());
+        impreg->registerImplementation(m_loader, url, rdb);
         // Only write to unorc after successful registration; it may fail if
         // there is no suitable java
         if (m_loader == "com.sun.star.loader.Java2" && !jarManifestHeaderPresent(url, "UNO-Type-Path", xCmdEnv))
@@ -1425,7 +1426,20 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         std::vector< css::uno::Reference< css::uno::XInterface > > factories;
         getComponentInfo(&data, startup ? 0 : &factories, context);
         if (!startup) {
-            componentLiveInsertion(data, factories);
+            try {
+                componentLiveInsertion(data, factories);
+            } catch (css::uno::Exception & e) {
+                SAL_INFO(
+                    "desktop.deployment", "caught Exception " << e.Message);
+                try {
+                    impreg->revokeImplementation(url, rdb);
+                } catch (css::uno::RuntimeException & e2) {
+                    SAL_WARN(
+                        "desktop.deployment",
+                        "ignored RuntimeException " << e2.Message);
+                }
+                throw;
+            }
         }
         m_registered = REG_REGISTERED;
         that->addDataToDb(url, data);
