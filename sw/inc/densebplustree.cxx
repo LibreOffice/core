@@ -169,13 +169,13 @@ struct DBPTreeNode
                 m_pValues[ i - nHowMuchKeep ] = pNode->m_pValues[ i ];
 
             offset = nHowMuchKeep;
-
-            m_pNext = pNode->m_pNext;
-            pNode->m_pNext = this;
         }
 
         m_nUsed = pNode->m_nUsed - nHowMuchKeep;
         pNode->m_nUsed = nHowMuchKeep;
+
+        m_pNext = pNode->m_pNext;
+        pNode->m_pNext = this;
 
         return offset;
     }
@@ -268,11 +268,12 @@ void DenseBPlusTree< Key, Value >::Remove( Key nPos, Key nNumber )
 
         // update indexes
         shiftNodes( pParents, nParentsLength, aAfter.nIndex - nNumber );
+
+        // FIXME we have to create a function that walks up the parents to do
+        // this right even in the case nIndex == m_nUsed
         if ( pParents[ nParentsLength - 1 ].nIndex < pParents[ nParentsLength - 1 ].pNode->m_nUsed - 1 )
             ++pParents[ nParentsLength - 1 ].nIndex;
         shiftNodes( pParents, nParentsLength, -aAfter.nIndex );
-
-        // FIXME now make sure every node contains at least sMinFill data
     }
 
     m_nCount -= nNumber;
@@ -506,7 +507,5 @@ void DenseBPlusTree< Key, Value >::removeBetween( const NodeWithIndex pFrom[], c
         }
     }
 }
-
-// method name: balanceOrMerge()
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
