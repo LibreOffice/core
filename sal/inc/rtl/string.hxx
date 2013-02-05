@@ -1540,10 +1540,7 @@ public:
     */
     SAL_DEPRECATED_INTERNAL("use number()") static OString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
     {
-        sal_Char aBuf[RTL_STR_MAX_VALUEOFINT32];
-        rtl_String* pNewData = 0;
-        rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt32( aBuf, i, radix ) );
-        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return number( i, radix );
     }
 
     /**

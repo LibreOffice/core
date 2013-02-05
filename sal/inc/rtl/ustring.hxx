@@ -2191,10 +2191,7 @@ public:
     */
     SAL_DEPRECATED_INTERNAL("use number()") static OUString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
     {
-        sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT32];
-        rtl_uString* pNewData = 0;
-        rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt32( aBuf, i, radix ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return number( i, radix );
     }
 
     /**
