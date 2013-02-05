@@ -62,7 +62,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/brokenpackageint.hxx>
-#include <sot/storage.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
