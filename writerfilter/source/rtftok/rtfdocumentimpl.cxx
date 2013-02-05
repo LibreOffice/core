@@ -813,12 +813,12 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         // See OOXMLFastContextHandler::positionOffset(), we can't just put values in an RTFValue.
         if (m_aStates.top().aShape.nLeft > 0)
         {
-            writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(MM100_TO_EMU(m_aStates.top().aShape.nLeft)), false);
+            writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::valueOf(sal::static_int_cast<sal_Int32>(MM100_TO_EMU(m_aStates.top().aShape.nLeft))), false);
             aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionH, RTFValue::Pointer_t(new RTFValue(RTFSprms())));
         }
         if (m_aStates.top().aShape.nTop > 0)
         {
-            writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(MM100_TO_EMU(m_aStates.top().aShape.nTop)), true);
+            writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::valueOf(sal::static_int_cast<sal_Int32>(MM100_TO_EMU(m_aStates.top().aShape.nTop))), true);
             aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionV, RTFValue::Pointer_t(new RTFValue(RTFSprms())));
         }
 
