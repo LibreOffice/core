@@ -108,7 +108,7 @@ class SFX2_DLLPUBLIC SfxFilterMatcher : private boost::noncopyable
     friend class SfxFilterMatcherIter;
     SfxFilterMatcher_Impl &m_rImpl;
 public:
-                        SfxFilterMatcher( const String& rFact );
+                        SfxFilterMatcher( const OUString& rFact );
                         SfxFilterMatcher();
                         ~SfxFilterMatcher();
 

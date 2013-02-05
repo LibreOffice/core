@@ -320,7 +320,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     else
     {
         // container for Calc filters
-        SfxFilterMatcher aMatcher( rtl::OUString("scalc") );
+        SfxFilterMatcher aMatcher("scalc");
         if ( aPreselectedFilterName.Len() )
             pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
         else if( aTypeName.Len() )
@@ -425,7 +425,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                     }
 
                     if ( aTypeName.Len() )
-                        pFilter = SfxFilterMatcher( rtl::OUString("scalc") ).GetFilter4EA( aTypeName );
+                        pFilter = SfxFilterMatcher("scalc").GetFilter4EA( aTypeName );
                 }
             }
             else

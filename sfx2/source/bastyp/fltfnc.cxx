@@ -297,7 +297,7 @@ namespace
     }
 }
 
-SfxFilterMatcher::SfxFilterMatcher( const String& rName )
+SfxFilterMatcher::SfxFilterMatcher( const OUString& rName )
     : m_rImpl( getSfxFilterMatcher_Impl(rName) )
 {
     ++nSfxFilterMatcherCount;

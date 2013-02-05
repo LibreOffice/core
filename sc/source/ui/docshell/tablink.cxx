@@ -482,7 +482,7 @@ bool ScDocumentLoader::GetFilterName( const String& rFileName,
         if ( bWithInteraction )
             pMedium->UseInteractionHandler(true);   // #i73992# no longer called from GuessFilter
 
-        SfxFilterMatcher aMatcher( rtl::OUString("scalc") );
+        SfxFilterMatcher aMatcher("scalc");
         if( bWithContent )
             aMatcher.GuessFilter( *pMedium, &pSfxFilter );
         else
