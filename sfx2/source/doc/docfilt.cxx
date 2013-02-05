@@ -124,7 +124,7 @@ const SfxFilter* SfxFilter::GetFilterByName( const String& rName )
     return aMatch.GetFilter4FilterName( rName, 0, 0 );
 }
 
-String SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
+OUString SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
 {
     const char* pType=0;
     if ( rStg.IsStream( rtl::OUString("WordDocument") ) )
@@ -164,26 +164,24 @@ String SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
     return pType ? rtl::OUString::createFromAscii(pType) : rtl::OUString();
 }
 
-String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xStorage, sal_Bool bTemplate,
-                                        String* pFilterName )
-        throw ( beans::UnknownPropertyException,
-                lang::WrappedTargetException,
-                uno::RuntimeException )
+OUString SfxFilter::GetTypeFromStorage(
+    const uno::Reference<embed::XStorage>& xStorage, bool bTemplate, OUString* pFilterName )
+        throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     SfxFilterMatcher aMatcher;
     const char* pType=0;
-    String aName;
+    OUString aName;
     if ( pFilterName )
     {
         aName = *pFilterName;
-        pFilterName->Erase();
+        *pFilterName = OUString();
     }
 
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xProps( xStorage, com::sun::star::uno::UNO_QUERY );
     if ( xProps.is() )
     {
-        ::rtl::OUString aMediaType;
-        xProps->getPropertyValue( ::rtl::OUString("MediaType") ) >>= aMediaType;
+        OUString aMediaType;
+        xProps->getPropertyValue("MediaType") >>= aMediaType;
         if ( !aMediaType.isEmpty() )
         {
             ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
@@ -200,7 +198,7 @@ String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com:
                     nDont |= SFX_FILTER_TEMPLATEPATH;
 
                 const SfxFilter* pFilter = 0;
-                if ( aName.Len() )
+                if (!aName.isEmpty())
                     // get preselected Filter if it matches the desired filter flags
                     pFilter = aMatcher.GetFilter4FilterName( aName, nMust, nDont );
 
@@ -226,10 +224,10 @@ String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com:
 
     //TODO: do it without SfxFilter
     //TODO/LATER: don't yield FilterName, should be done in FWK!
-    String aRet;
+    OUString aRet;
     if ( pType )
     {
-        aRet = rtl::OUString::createFromAscii(pType);
+        aRet = OUString::createFromAscii(pType);
         if ( pFilterName )
             *pFilterName = aMatcher.GetFilter4EA( aRet )->GetName();
     }

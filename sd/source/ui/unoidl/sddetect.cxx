@@ -254,7 +254,7 @@ SdFilterDetect::~SdFilterDetect()
                         // the storage can be corrupted and it will be detected here
                         try
                         {
-                            String sFilterName;
+                            OUString sFilterName;
                             if ( pFilter )
                                 sFilterName = pFilter->GetName();
                             aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : sal_False, &sFilterName );

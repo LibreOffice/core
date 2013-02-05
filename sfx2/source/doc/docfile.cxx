@@ -2933,7 +2933,7 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p ) :
     pImp(new SfxMedium_Impl(this))
 {
-    String aType = SfxFilter::GetTypeFromStorage( rStor );
+    OUString aType = SfxFilter::GetTypeFromStorage(rStor);
     pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( aType );
     DBG_ASSERT( pImp->m_pFilter, "No Filter for storage found!" );
 

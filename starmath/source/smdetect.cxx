@@ -224,7 +224,7 @@ SmFilterDetect::~SmFilterDetect()
                         const SfxFilter* pFilter = aPreselectedFilterName.Len() ?
                                 SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : aTypeName.Len() ?
                                 SfxFilterMatcher(rtl::OUString("smath")).GetFilter4EA( aTypeName ) : 0;
-                        String aTmpFilterName;
+                        OUString aTmpFilterName;
                         if ( pFilter )
                             aTmpFilterName = pFilter->GetName();
                         aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : sal_False, &aTmpFilterName );

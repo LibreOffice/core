@@ -379,7 +379,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                 {
                     try
                     {
-                        String aFilterName;
+                        OUString aFilterName;
                         if ( pFilter )
                             aFilterName = pFilter->GetName();
                         aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : false, &aFilterName );

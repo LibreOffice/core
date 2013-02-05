@@ -231,7 +231,7 @@ SwFilterDetect::~SwFilterDetect()
                                 SfxFilterMatcher(rtl::OUString("swriter")).GetFilter4EA( aTypeName ) : 0;
                         if (!pPreFilter)
                             pPreFilter = SfxFilterMatcher(rtl::OUString("sweb")).GetFilter4EA( aTypeName );
-                        String aFilterName;
+                        OUString aFilterName;
                         if ( pPreFilter )
                         {
                             aFilterName = pPreFilter->GetName();
