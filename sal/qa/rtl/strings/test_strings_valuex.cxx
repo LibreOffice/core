@@ -55,7 +55,7 @@ void test::strings::valueX::testOBoolean() {
 }
 
 void test::strings::valueX::testOUBoolean() {
-    testBoolean<rtl::OString>();
+    testBoolean<rtl::OUString>();
 }
 
 template< typename T >
