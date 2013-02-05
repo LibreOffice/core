@@ -24,6 +24,7 @@
 
 #include <osl/mutex.hxx>
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 
 #include <boost/unordered_map.hpp>
 
@@ -160,9 +161,9 @@ inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::getValue(
         CacheEntry * pEntry = (*iFind).second;
         toFront( pEntry );
 #ifdef __CACHE_DIAGNOSE
-        OSL_TRACE( "> retrieved element \"" );
-        OSL_TRACE( "%s", ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
-        OSL_TRACE( "\" from cache <" );
+        SAL_INFO("stoc.tdmanager", "> retrieved element \"" );
+        SAL_INFO("stoc.tdmanager", "" << pEntry->aKey);
+        SAL_INFO("stoc.tdmanager", "\" from cache <" );
 #endif
         return pEntry->aVal;
     }
@@ -185,9 +186,9 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
 #ifdef __CACHE_DIAGNOSE
             if (pEntry->aKey.getLength())
             {
-                OSL_TRACE( "> kicking element \"" );
-                OSL_TRACE( "%s", ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                OSL_TRACE( "\" from cache <" );
+                SAL_INFO("stoc.tdmanager", "> kicking element \"" );
+                SAL_INFO("stoc.tdmanager", "" << pEntry->aKey);
+                SAL_INFO("stoc.tdmanager", "\" from cache <" );
             }
 #endif
             _aKey2Element.erase( pEntry->aKey );
@@ -197,9 +198,9 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
         {
             pEntry = (*iFind).second;
 #ifdef __CACHE_DIAGNOSE
-            OSL_TRACE( "> replacing element \"" );
-            OSL_TRACE( "%s", ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            OSL_TRACE( "\" in cache <" );
+            SAL_INFO("stoc.tdmanager", "> replacing element \"" );
+            SAL_INFO("stoc.tdmanager", "" << pEntry->aKey);
+            SAL_INFO("stoc.tdmanager", "\" in cache <" );
 #endif
         }
         pEntry->aVal = rValue;
@@ -218,7 +219,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::clear()
         _pBlock[nPos].aVal = t_Val();
     }
 #ifdef __CACHE_DIAGNOSE
-    OSL_TRACE( "> cleared cache <" );
+    SAL_INFO("stoc.tdmanager", "> cleared cache <" );
 #endif
 }
 

@@ -22,6 +22,7 @@
 
 #include "ScriptImpl.hxx"
 #include <util/util.hxx>
+#include "sal/log.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -40,13 +41,13 @@ throw ( RuntimeException ) :
         m_RunTimeManager( runtimeMgr, UNO_SET_THROW ),
         m_ScriptURI( scriptURI )
 {
-    OSL_TRACE( "<!constucting a ScriptImpl>" );
+    SAL_INFO("scripting.provider", "<!constucting a ScriptImpl>" );
 }
 
 //*************************************************************************
 ScriptImpl::~ScriptImpl()
 {
-    OSL_TRACE( "<Destructing a ScriptImpl>" );
+    SAL_INFO("scripting.provider", "<Destructing a ScriptImpl>" );
 }
 
 //*************************************************************************
@@ -56,7 +57,7 @@ ScriptImpl::invoke( const Sequence< Any >& aParams,
 throw ( lang::IllegalArgumentException, script::CannotConvertException,
         reflection::InvocationTargetException, RuntimeException )
 {
-    OSL_TRACE( "<ScriptImpl::invoke>" );
+    SAL_INFO("scripting.provider", "<ScriptImpl::invoke>" );
     Any result;
     Any anyScriptingContext;
 

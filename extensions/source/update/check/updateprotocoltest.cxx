@@ -26,6 +26,7 @@
 #include <sal/main.h>
 #include <osl/process.h>
 #include <stdio.h>
+#include "sal/log.hxx"
 
 namespace task = ::com::sun::star::task;
 namespace uno  = ::com::sun::star::uno;
@@ -58,18 +59,16 @@ SAL_IMPLEMENT_MAIN()
     {
         if( checkForUpdates(rComponentContext, uno::Reference< task::XInteractionHandler > (), aURL, aVersion) )
         {
-            OSL_TRACE( "Update found: %s on %s",
-                rtl::OUStringToOString( aVersion, RTL_TEXTENCODING_UTF8).getStr(),
-                rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_INFO("extensions.update", "Update found: " << aVersion << " on " << aURL);
         }
         else
         {
-            OSL_TRACE( "no updates found" );
+            SAL_INFO("extensions.update", "no updates found" );
         }
     }
     catch( ... )
     {
-        OSL_TRACE( "unhandled exception caught" );
+        SAL_INFO("extensions.update", "unhandled exception caught" );
     }
 
     return 0;

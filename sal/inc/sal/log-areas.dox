@@ -33,6 +33,7 @@ certain functionality.
 
 @li @c canvas
 @li @c canvas.cairo
+@li @c canvas.null
 
 @section connectivity
 
@@ -65,6 +66,7 @@ certain functionality.
 @li @c sd.fwk
 @li @c sd.sls
 @li @c sd.tools
+@li @c sd.ui
 @li @c sd.view
 @li @c sd.slideshow
 @li @c sdremote
@@ -165,6 +167,7 @@ certain functionality.
 @section tools
 
 @li @c tools.debug
+@li @c tools.memtools
 @li @c tools.rc - resource manager
 @li @c tools.stream - SvStream class
 
@@ -183,6 +186,10 @@ certain functionality.
 @li @c rtl.string - ::rtl::OString, ::rtl::OUString, and related functionality
 @li @c salhelper.thread - ::salhelper::Thread class
 
+@section stoc
+
+@li @c stoc.corerefl
+@li @c stoc.tdmanager
 
 @section VCL
 
@@ -220,6 +227,7 @@ certain functionality.
 @section xmlsecurity
 
 @li @c xmlsecurity.dialogs - xml security dialogs
+@li @c xmlsecurity.helper
 @li @c xmlsecurity.xmlsec - xmlsec wrapper
 
 @section other
