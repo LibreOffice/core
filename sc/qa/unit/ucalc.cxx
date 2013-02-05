@@ -4991,6 +4991,41 @@ void Test::testToggleRefFlag()
         CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=R2C1" );
     }
 
+    {
+        // Excel R1C1: Selection at the end of the formula string and does not
+        // overlap the formula string at all (inspired by fdo#39135).
+        OUString aFormula("=R1C1");
+        ScAddress aPos(1, 1, 0);
+        ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+
+        // Original
+        CPPUNIT_ASSERT_EQUAL(aFormula, OUString(aFinder.GetText()));
+
+        // Make the column relative.
+        sal_Int32 n = aFormula.getLength();
+        aFinder.ToggleRel(n, n);
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_EQUAL(OUString("=R1C[-1]"), aFormula);
+
+        // Make the row relative.
+        n = aFormula.getLength();
+        aFinder.ToggleRel(n, n);
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_EQUAL(OUString("=R[-1]C1"), aFormula);
+
+        // Make both relative.
+        n = aFormula.getLength();
+        aFinder.ToggleRel(n, n);
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_EQUAL(OUString("=R[-1]C[-1]"), aFormula);
+
+        // Back to the original.
+        n = aFormula.getLength();
+        aFinder.ToggleRel(n, n);
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_EQUAL(OUString("=R1C1"), aFormula);
+    }
+
     // TODO: Add more test cases esp. for 3D references, Excel A1 syntax, and
     // partial selection within formula string.
 
