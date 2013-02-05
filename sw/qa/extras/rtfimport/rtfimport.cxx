@@ -140,6 +140,7 @@ public:
     void testFdo48440();
     void testFdo58646();
     void testFdo59419();
+    void testFdo58076_2();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -251,6 +252,7 @@ void Test::run()
         {"fdo48440.rtf", &Test::testFdo48440},
         {"fdo58646.rtf", &Test::testFdo58646},
         {"fdo59419.rtf", &Test::testFdo59419},
+        {"fdo58076-2.rtf", &Test::testFdo58076_2},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1086,6 +1088,14 @@ void Test::testFdo59419()
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+}
+
+void Test::testFdo58076_2()
+{
+    // Position of the picture wasn't correct.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(8345)), getProperty<sal_Int32>(xDraws->getByIndex(0), "HoriOrientPosition"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
