@@ -28,7 +28,8 @@
 
 #include <osl/file.h>
 #include <osl/thread.h>
-#include <osl/diagnose.h>
+#include "sal/log.hxx"
+
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -70,9 +71,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             #if OSL_DEBUG_LEVEL > 1
             rtl::OUString aVal( RTL_CONSTASCII_USTRINGPARAM( "<no string>" ) );
             pAttribs[i].Value >>= aVal;
-            OSL_TRACE( "filter: Attrib: %s = %s\n",
-                       rtl::OUStringToOString( pAttribs[i].Name, RTL_TEXTENCODING_UTF8 ).getStr(),
-                       rtl::OUStringToOString( aVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_INFO("sdext.pdfimport", "filter: Attrib: " << pAttribs[i].Name << " = " << aVal << "\n");
             #endif
             if ( pAttribs[i].Name == "EmbeddedSubstream" )
                 pAttribs[i].Value >>= xSubStream;
@@ -105,7 +104,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                 rtl::OUString aURL;
                 if( osl_createTempFile( NULL, &aFile, &aURL.pData ) == osl_File_E_None )
                 {
-                    OSL_TRACE( "created temp file %s", rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    SAL_INFO("sdext.pdfimport", "created temp file " << aURL);
                     const sal_Int32 nBufSize = 4096;
                     uno::Sequence<sal_Int8> aBuf(nBufSize);
                     // copy the bytes
@@ -144,7 +143,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             aArgs[0] <<= m_xModel;
             aArgs[1] <<= xSubStream;
 
-            OSL_TRACE( "try to instantiate subfilter" );
+            SAL_INFO("sdext.pdfimport", "try to instantiate subfilter" );
             uno::Reference< document::XFilter > xSubFilter;
             try {
                 xSubFilter = uno::Reference<document::XFilter>(
@@ -157,11 +156,10 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             catch(const uno::Exception& e)
             {
                 (void)e;
-                OSL_TRACE( "subfilter exception: %s\n",
-                           OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                SAL_INFO("sdext.pdfimport", "subfilter exception: " << e.Message << "\n");
             }
 
-            OSL_TRACE( "subfilter: %p", xSubFilter.get() );
+            SAL_INFO("sdext.pdfimport", "subfilter: " << xSubFilter.get() );
             if( xSubFilter.is() )
             {
                 if( bAddPwdProp )
@@ -183,12 +181,12 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
         }
         #if OSL_DEBUG_LEVEL > 1
         else
-            OSL_TRACE( "PDFIAdaptor::filter: no embedded substream set" );
+            SAL_INFO("sdext.pdfimport", "PDFIAdaptor::filter: no embedded substream set" );
         #endif
     }
     #if OSL_DEBUG_LEVEL > 1
     else
-        OSL_TRACE( "PDFIAdaptor::filter: no model set" );
+        SAL_INFO("sdext.pdfimport", "PDFIAdaptor::filter: no model set" );
     #endif
 
     return bRet;
@@ -201,7 +199,7 @@ void SAL_CALL PDFIHybridAdaptor::cancel() throw()
 //XImporter
 void SAL_CALL PDFIHybridAdaptor::setTargetDocument( const uno::Reference< lang::XComponent >& xDocument ) throw( lang::IllegalArgumentException )
 {
-    OSL_TRACE( "PDFIAdaptor::setTargetDocument" );
+    SAL_INFO("sdext.pdfimport", "PDFIAdaptor::setTargetDocument" );
     m_xModel = uno::Reference< frame::XModel >( xDocument, uno::UNO_QUERY );
     if( xDocument.is() && ! m_xModel.is() )
         throw lang::IllegalArgumentException();
@@ -282,7 +280,7 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
     sal_Int32 nAttribs = rSourceData.getLength();
     for( sal_Int32 i = 0; i < nAttribs; i++, pAttribs++ )
     {
-        OSL_TRACE("importer Attrib: %s", OUStringToOString( pAttribs->Name, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("sdext.pdfimport","importer Attrib: " << OUStringToOString( pAttribs->Name, RTL_TEXTENCODING_UTF8 ).getStr() );
         if ( pAttribs->Name == "InputStream" )
             pAttribs->Value >>= xInput;
         else if ( pAttribs->Name == "URL" )
@@ -310,7 +308,7 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
 //XImporter
 void SAL_CALL PDFIRawAdaptor::setTargetDocument( const uno::Reference< lang::XComponent >& xDocument ) throw( lang::IllegalArgumentException )
 {
-    OSL_TRACE( "PDFIAdaptor::setTargetDocument" );
+    SAL_INFO("sdext.pdfimport", "PDFIAdaptor::setTargetDocument" );
     m_xModel = uno::Reference< frame::XModel >( xDocument, uno::UNO_QUERY );
     if( xDocument.is() && ! m_xModel.is() )
         throw lang::IllegalArgumentException();

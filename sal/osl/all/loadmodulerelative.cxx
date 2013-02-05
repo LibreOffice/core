@@ -22,7 +22,7 @@
 
 #include <cstddef>
 
-#include "osl/diagnose.h"
+#include "sal/log.hxx"
 #include "osl/module.h"
 #include "osl/module.hxx"
 #include "osl/thread.h"
@@ -42,7 +42,7 @@ oslModule SAL_CALL osl_loadModuleRelative(
 {
     ::rtl::OUString base;
     if (!::osl::Module::getUrlFromAddress(baseModule, base)) {
-        OSL_TRACE("osl::Module::getUrlFromAddress failed");
+        SAL_INFO("sal.osl","osl::Module::getUrlFromAddress failed");
         return NULL;
     }
     ::rtl::OUString abs;
@@ -50,10 +50,8 @@ oslModule SAL_CALL osl_loadModuleRelative(
         abs = ::rtl::Uri::convertRelToAbs(base, relativePath);
     } catch (const ::rtl::MalformedUriException & e) {
         (void) e; // avoid warnings
-        OSL_TRACE(
-            "rtl::MalformedUriException <%s>",
-            rtl::OUStringToOString(e.getMessage(), osl_getThreadTextEncoding()).
-                getStr());
+        SAL_INFO("sal.osl",
+            "rtl::MalformedUriException <" << e.getMessage() << ">");
             //TODO: let some OSL_TRACE variant take care of text conversion?
         return NULL;
     }
