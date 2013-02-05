@@ -57,6 +57,7 @@ certain functionality.
 
 @li @c desktop
 @li @c desktop.deployment
+@li @c desktop.migration
 
 @section Draw
 
