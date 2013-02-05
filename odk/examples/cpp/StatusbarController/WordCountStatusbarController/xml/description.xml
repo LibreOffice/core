@@ -25,6 +25,7 @@
     <platform value="#EXTENSION_PLATFORM#"/>
     <dependencies>
         <OpenOffice.org-minimal-version value="#DESCRIPTION_OOO_MIN_VER#" d:name="#DESCRIPTION_DEP_NAME#"/>
+        <OpenOffice.org-maximal-version value="#DESCRIPTION_OOO_MAX_VER#" d:name="#DESCRIPTION_DEP_NAME#"/>
     </dependencies>
     <publisher>
         <name xlink:href="#DESCRIPTION_PUBLISHER_URL#" lang="en">#DESCRIPTION_PUBLISHER_NAME#</name>

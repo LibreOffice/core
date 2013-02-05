@@ -5,9 +5,9 @@ Globals
         variables
         {
             APACHEPROJECTNAME Apache OpenOffice
-            OOOBASEVERSION 3.5
-            OOOPACKAGEVERSION 3.5.0
-            UREPACKAGEVERSION 3.5.0
+            OOOBASEVERSION 4.0
+            OOOPACKAGEVERSION 4.0.0
+            UREPACKAGEVERSION 4.0.0
             URELAYERVERSION 1
             BASISROOTNAME ApacheOpenOffice
             UNIXBASISROOTNAME apacheopenoffice
@@ -17,7 +17,7 @@ Globals
             UREPACKAGEPREFIX apacheopenoffice
             SOLSUREPACKAGEPREFIX apacheopenoffice
             USE_FILEVERSION 1
-            LIBRARYVERSION 9.5.0
+            LIBRARYVERSION 10.0.0
             POOLPRODUCT 1
             PROGRESSBARCOLOR 14,133,205
             PROGRESSSIZE 320,7
@@ -40,9 +40,9 @@ Globals
             OOOXMLFILEFORMATNAME OpenOffice.org XML
             OOOXMLFILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            SERVICETAG_PRODUCTNAME Apache OpenOffice 3.5
-            SERVICETAG_PRODUCTVERSION 3.5
-            SERVICETAG_PARENTNAME Apache OpenOffice 3.5
+            SERVICETAG_PRODUCTNAME Apache OpenOffice 4.0
+            SERVICETAG_PRODUCTVERSION 4.0
+            SERVICETAG_PARENTNAME Apache OpenOffice 4.0
             SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
             SERVICETAG_URN urn:uuid:500061aa-5666-11e0-8e00-080020a9ed93
             REGISTRATION_HOST https://registration.openoffice.org
@@ -59,23 +59,23 @@ Apache_OpenOffice
         variables
         {
             PRODUCTNAME Apache OpenOffice
-            PRODUCTVERSION 3.5.0
+            PRODUCTVERSION 4.0.0
             PRODUCTEXTENSION 
             LONG_PRODUCTEXTENSION 
             SHORT_PRODUCTEXTENSION 
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
-            BRANDPACKAGEVERSION 3
-            USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.5.0
-            BASEPRODUCTVERSION 3.5
+            BRANDPACKAGEVERSION 4
+            USERDIRPRODUCTVERSION 4
+            ABOUTBOXPRODUCTVERSION 4.0.0
+            BASEPRODUCTVERSION 4.0
             PCPFILENAME openoffice.pcp
-            UPDATEURL http://www.openoffice.org/projects/update/aoo35/check.Update
+            UPDATEURL http://www.openoffice.org/projects/update/aoo40/check.Update
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
             REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
             ADDSYSTEMINTEGRATION 1
             EVAL
-            PACKAGEVERSION 3.5.0
+            PACKAGEVERSION 4.0.0
             PACKAGEREVISION {milestone}
             LICENSENAME ALv2
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -90,7 +90,7 @@ Apache_OpenOffice
             STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
             CHANGETARGETDIR 1
             USE_FILEVERSION 1
-            LIBRARYVERSION 9.5.0
+            LIBRARYVERSION 10.0.0
             PATCHCODEFILE ooo_patchcodes.txt
             DOWNLOADBANNER	ooobanner.bmp
             DOWNLOADBITMAP	ooobitmap.bmp
@@ -118,22 +118,22 @@ Apache_OpenOffice_wJRE
         variables
         {
             PRODUCTNAME Apache OpenOffice
-            PRODUCTVERSION 3.5.0
+            PRODUCTVERSION 4.0.0
             PRODUCTEXTENSION 
             LONG_PRODUCTEXTENSION 
             SHORT_PRODUCTEXTENSION 
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
-            BRANDPACKAGEVERSION 3
-            USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.5.0
-            BASEPRODUCTVERSION 3.5
-            UPDATEURL http://www.openoffice.org/projects/update/aoo35/check.Update
+            BRANDPACKAGEVERSION 4
+            USERDIRPRODUCTVERSION 4
+            ABOUTBOXPRODUCTVERSION 4.0.0
+            BASEPRODUCTVERSION 4.0
+            UPDATEURL http://www.openoffice.org/projects/update/aoo40/check.Update
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
             REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
             ADDSYSTEMINTEGRATION 1
             EVAL
-            PACKAGEVERSION 3.5.0
+            PACKAGEVERSION 4.0.0
             PACKAGEREVISION {milestone}
             LICENSENAME ALv2
             WITHJREPRODUCT 1
@@ -149,7 +149,7 @@ Apache_OpenOffice_wJRE
             STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
             CHANGETARGETDIR 1
             USE_FILEVERSION 1
-            LIBRARYVERSION 9.5.0
+            LIBRARYVERSION 10.0.0
             PATCHCODEFILE ooo_patchcodes.txt
             JAVAPRODUCT 1
             DOWNLOADBANNER	ooobanner.bmp
@@ -177,7 +177,7 @@ Apache_OpenOffice_Dev
         variables
         {
             PRODUCTNAME AOO-Developer-Build
-            PRODUCTVERSION 3.5.0
+            PRODUCTVERSION 4.0.0
             PRODUCTEXTENSION 
             LONG_PRODUCTEXTENSION 
             SHORT_PRODUCTEXTENSION 
@@ -185,19 +185,19 @@ Apache_OpenOffice_Dev
             UNIXBASISROOTNAME aoodev
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
-            BRANDPACKAGEVERSION 3
-            USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.5.0
-            BASEPRODUCTVERSION 3.5
+            BRANDPACKAGEVERSION 4
+            USERDIRPRODUCTVERSION 4
+            ABOUTBOXPRODUCTVERSION 4.0.0
+            BASEPRODUCTVERSION 4.0
             DEVELOPMENTPRODUCT 1
             BASISPACKAGEPREFIX aoobasis-dev
             UREPACKAGEPREFIX aoodev
             SOLSUREPACKAGEPREFIX aoodev
             REGISTRYLAYERNAME LayerDev
-            UPDATEURL http://www.openoffice.org/projects/update/aoo35/check.Update
+            UPDATEURL http://www.openoffice.org/projects/update/aoo40/check.Update
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
             EVAL
-            PACKAGEVERSION 3.5.0
+            PACKAGEVERSION 4.0.0
             PACKAGEREVISION {milestone}
             LICENSENAME ALv2
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -213,7 +213,7 @@ Apache_OpenOffice_Dev
             CHANGETARGETDIR 1
             USE_FILEVERSION 1
             JAVAPRODUCT 0
-            LIBRARYVERSION 9.5.0
+            LIBRARYVERSION 10.0.0
             PATCHCODEFILE ooodev_patchcodes.txt
             CODEFILENAME codes_ooodev.txt
             DOWNLOADBANNER	ooobanner.bmp
@@ -245,8 +245,8 @@ URE
         variables
         {
             PRODUCTNAME URE
-            PRODUCTVERSION 3.5.0
-            PACKAGEVERSION 3.5
+            PRODUCTVERSION 4.0.0
+            PACKAGEVERSION 4.0
             PACKAGEREVISION 1
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
@@ -287,19 +287,19 @@ Apache_OpenOffice_SDK
         variables
         {
             PRODUCTNAME Apache OpenOffice
-            PRODUCTVERSION 3.5.0
+            PRODUCTVERSION 4.0.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
-            BRANDPACKAGEVERSION 3
-            PACKAGEVERSION 3.5.0
+            BRANDPACKAGEVERSION 4
+            PACKAGEVERSION 4.0.0
             PACKAGEREVISION {milestone}
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg34sdk
+            DATABASENAME openofficeorg40sdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME ALv2
             IGNOREDIRECTORYLAYER 1
@@ -334,7 +334,7 @@ Apache_OpenOffice_Dev_SDK
         variables
         {
             PRODUCTNAME AOO-Developer-Build
-            PRODUCTVERSION 3.5.0
+            PRODUCTVERSION 4.0.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
@@ -342,8 +342,8 @@ Apache_OpenOffice_Dev_SDK
             UNIXBASISROOTNAME ooo-dev
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
-            BRANDPACKAGEVERSION 3
-            PACKAGEVERSION 3.5.0
+            BRANDPACKAGEVERSION 4
+            PACKAGEVERSION 4.0.0
             PACKAGEREVISION {milestone}
             BASISPACKAGEPREFIX aoobasis-dev
             UREPACKAGEPREFIX aoodev
@@ -353,7 +353,7 @@ Apache_OpenOffice_Dev_SDK
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg35devsdk
+            DATABASENAME openofficeorg40devsdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME ALv2
             IGNOREDIRECTORYLAYER 1
