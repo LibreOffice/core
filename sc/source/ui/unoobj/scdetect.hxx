@@ -20,7 +20,6 @@
 #ifndef _SC_TYPEDETECT_HXX
 #define _SC_TYPEDETECT_HXX
 
-#include <rtl/ustring.hxx>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -30,25 +29,14 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
 
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace lang
-            {
-                class XMultiServiceFactory;
-            }
-            namespace beans
-            {
-                struct PropertyValue;
-            }
-        }
-    }
-}
-
+#include <rtl/ustring.hxx>
 #include <sfx2/sfxuno.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace lang { class XMultiServiceFactory; }
+    namespace beans { struct PropertyValue; }
+}}}
+
 
 class ScFilterDetect : public ::cppu::WeakImplHelper2< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
 {
@@ -56,13 +44,25 @@ public:
     ScFilterDetect( const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xFactory );
     virtual ~ScFilterDetect();
 
-    SFX_DECL_XSERVICEINFO_NOFACTORY
+    /* XServiceInfo */
+    virtual OUString SAL_CALL getImplementationName() throw( com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& sServiceName ) throw( com::sun::star::uno::RuntimeException );
+    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException );
+
+    /* Helper for XServiceInfo */
+    static com::sun::star::uno::Sequence<OUString> impl_getStaticSupportedServiceNames();
+    static OUString impl_getStaticImplementationName();
+
+    /* Helper for registry */
+    static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
+        impl_createInstance( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager )
+            throw (com::sun::star::uno::Exception);
 
     //----------------------------------------------------------------------------------
     // XExtendedFilterDetect
     //----------------------------------------------------------------------------------
     virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& lDescriptor )
-        throw(com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException);
 };
 
 #endif

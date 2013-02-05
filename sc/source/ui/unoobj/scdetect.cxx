@@ -807,7 +807,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
+        lDescriptor[nPropertyCount].Name = "InputStream";
         lDescriptor[nPropertyCount].Value <<= xStream;
         nPropertyCount++;
     }
@@ -816,7 +816,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCBContent"));
+        lDescriptor[nPropertyCount].Name = "UCBContent";
         lDescriptor[nPropertyCount].Value <<= xContent;
         nPropertyCount++;
     }
@@ -826,7 +826,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
         if ( nIndexOfReadOnlyFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+            lDescriptor[nPropertyCount].Name = "ReadOnly";
             lDescriptor[nPropertyCount].Value <<= bReadOnly;
             nPropertyCount++;
         }
@@ -837,7 +837,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     if ( !bRepairPackage && bRepairAllowed )
     {
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage"));
+        lDescriptor[nPropertyCount].Name = "RepairPackage";
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
 
@@ -851,7 +851,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
         if ( nIndexOfTemplateFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+            lDescriptor[nPropertyCount].Name = "AsTemplate";
             lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
             nPropertyCount++;
         }
@@ -865,7 +865,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
+            lDescriptor[nPropertyCount].Name = "DocumentTitle";
             lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
             nPropertyCount++;
         }
@@ -878,7 +878,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
         if ( nIndexOfFilterName == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
+            lDescriptor[nPropertyCount].Name = "FilterName";
             lDescriptor[nPropertyCount].Value <<= rtl::OUString(pFilter->GetName());
             nPropertyCount++;
         }
@@ -893,17 +893,16 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     return aTypeName;
 }
 
-/* XServiceInfo */
-rtl::OUString SAL_CALL ScFilterDetect::getImplementationName() throw( UNORUNTIMEEXCEPTION )
+OUString SAL_CALL ScFilterDetect::getImplementationName() throw (uno::RuntimeException)
 {
     return impl_getStaticImplementationName();
 }
-                                                                                                                                \
-/* XServiceInfo */
-sal_Bool SAL_CALL ScFilterDetect::supportsService( const rtl::OUString& sServiceName ) throw( UNORUNTIMEEXCEPTION )
+
+sal_Bool ScFilterDetect::supportsService( const OUString& sServiceName )
+    throw (uno::RuntimeException)
 {
-    UNOSEQUENCE< rtl::OUString > seqServiceNames(getSupportedServiceNames());
-    const rtl::OUString*         pArray          = seqServiceNames.getConstArray();
+    uno::Sequence<OUString> seqServiceNames(getSupportedServiceNames());
+    const OUString* pArray = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[nCounter] == sServiceName )
@@ -914,28 +913,26 @@ sal_Bool SAL_CALL ScFilterDetect::supportsService( const rtl::OUString& sService
     return false ;
 }
 
-/* XServiceInfo */
-UNOSEQUENCE< rtl::OUString > SAL_CALL ScFilterDetect::getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION )
+com::sun::star::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()
+    throw (uno::RuntimeException)
 {
     return impl_getStaticSupportedServiceNames();
 }
 
-/* Helper for XServiceInfo */
-UNOSEQUENCE< rtl::OUString > ScFilterDetect::impl_getStaticSupportedServiceNames()
+uno::Sequence<OUString> ScFilterDetect::impl_getStaticSupportedServiceNames()
 {
-    UNOSEQUENCE< rtl::OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ExtendedTypeDetection"  ));
-    return seqServiceNames ;
+    uno::Sequence<OUString> seqServiceNames(1);
+    seqServiceNames.getArray()[0] = "com.sun.star.frame.ExtendedTypeDetection";
+    return seqServiceNames;
 }
 
-/* Helper for XServiceInfo */
 OUString ScFilterDetect::impl_getStaticImplementationName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.calc.FormatDetector" ));
+    return OUString("com.sun.star.comp.calc.FormatDetector");
 }
 
-/* Helper for registry */
-UNOREFERENCE< UNOXINTERFACE > SAL_CALL ScFilterDetect::impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION )
+uno::Reference<uno::XInterface> ScFilterDetect::impl_createInstance(
+    const uno::Reference<lang::XMultiServiceFactory>& xServiceManager ) throw (uno::Exception)
 {
     return static_cast< cppu::OWeakObject * >(
         new ScFilterDetect( xServiceManager ) );
