@@ -27,7 +27,7 @@
                         <value xml:lang="en-US">Text documents</value>
                     </prop>
                     <prop oor:name="Filters">
-                                                <value oor:separator=";">AportisDoc Palm DB;HTML (StarWriter);LotusWordPro;MS Word 2003 XML;MS Word 2007 XML;MS Word 2007 XML Template;MS Word 97;MS Word 97 Vorlage;MS_Works;Office Open XML Text;Office Open XML Text Template;OpenDocument Text Flat XML;PocketWord File;Rich Text Format;StarOffice XML (Writer);StarWriter 1.0;StarWriter 2.0;StarWriter 3.0;StarWriter 3.0 Vorlage/Template;StarWriter 4.0;StarWriter 4.0 Vorlage/Template;StarWriter 4.0/GlobalDocument;StarWriter 5.0;StarWriter 5.0 Vorlage/Template;StarWriter 5.0/GlobalDocument;StarWriter DOS;StarWriter/Web 4.0 Vorlage/Template;StarWriter/Web 5.0 Vorlage/Template;Text;WordPerfect;WordPerfect;writer_MIZI_Hwp_97;writer_StarOffice_XML_Writer_Template;writer8;writer8_template;writerglobal8;writerweb8_writer_template</value>
+                                                <value oor:separator=";">AportisDoc Palm DB;HTML (StarWriter);LotusWordPro;MS Word 2003 XML;MS Word 2007 XML;MS Word 2007 XML Template;MS Word 97;MS Word 97 Vorlage;MS_Works;Office Open XML Text;Office Open XML Text Template;OpenDocument Text Flat XML;PocketWord File;Rich Text Format;StarOffice XML (Writer);Text;WordPerfect;WordPerfect;writer_MIZI_Hwp_97;writer_StarOffice_XML_Writer_Template;writer8;writer8_template;writerglobal8;writerweb8_writer_template</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
@@ -36,7 +36,7 @@
                         <value xml:lang="en-US">Spreadsheets</value>
                     </prop>
                     <prop oor:name="Filters">
-                                                <value oor:separator=";">Calc MS Excel 2007 Binary;Calc MS Excel 2007 XML;Calc MS Excel 2007 XML Template;calc_StarOffice_XML_Calc_Template;calc8;calc8_template;chart8;DIF;Lotus;MiniCalc (Palm);MS Excel 2003 XML;MS Excel 97;MS Excel 97 Vorlage/Template;OpenDocument Spreadsheet Flat XML;Pocket Excel;Quattro Pro 6.0;StarCalc 1.0;StarCalc 3.0;StarCalc 3.0 Vorlage/Template;StarCalc 4.0;StarCalc 4.0 Vorlage/Template;StarCalc 5.0;StarCalc 5.0 Vorlage/Template;StarChart 3.0;StarChart 4.0;StarChart 5.0;StarOffice XML (Calc);StarOffice XML (Chart);Text - txt - csv (StarCalc)</value>
+                                                <value oor:separator=";">Calc MS Excel 2007 Binary;Calc MS Excel 2007 XML;Calc MS Excel 2007 XML Template;calc_StarOffice_XML_Calc_Template;calc8;calc8_template;chart8;DIF;Lotus;MiniCalc (Palm);MS Excel 2003 XML;MS Excel 97;MS Excel 97 Vorlage/Template;OpenDocument Spreadsheet Flat XML;Pocket Excel;Quattro Pro 6.0;StarOffice XML (Calc);StarOffice XML (Chart);Text - txt - csv (StarCalc)</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
@@ -45,7 +45,7 @@
                         <value xml:lang="en-US">Presentations</value>
                     </prop>
                     <prop oor:name="Filters">
-                                                <value oor:separator=";">Impress MS PowerPoint 2007 XML;Impress MS PowerPoint 2007 XML AutoPlay;Impress MS PowerPoint 2007 XML Template;impress_StarOffice_XML_Draw;impress_StarOffice_XML_Impress_Template;impress8;impress8_template;MS PowerPoint 97;MS PowerPoint 97 AutoPlay;MS PowerPoint 97 Vorlage;OpenDocument Presentation Flat XML;StarImpress 4.0;StarImpress 4.0 Vorlage;StarImpress 5.0;StarImpress 5.0 (packed);StarImpress 5.0 Vorlage</value>
+                                                <value oor:separator=";">Impress MS PowerPoint 2007 XML;Impress MS PowerPoint 2007 XML AutoPlay;Impress MS PowerPoint 2007 XML Template;impress_StarOffice_XML_Draw;impress_StarOffice_XML_Impress_Template;impress8;impress8_template;MS PowerPoint 97;MS PowerPoint 97 AutoPlay;MS PowerPoint 97 Vorlage;OpenDocument Presentation Flat XML</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
@@ -54,7 +54,7 @@
                         <value xml:lang="en-US">Drawings</value>
                     </prop>
                     <prop oor:name="Filters">
-                                                <value oor:separator=";">draw_StarOffice_XML_Draw_Template;SGV - StarDraw 2.0;StarDraw 3.0;StarDraw 3.0 Vorlage;StarDraw 5.0;StarDraw 5.0 Vorlage;StarOffice XML (Draw);draw8;draw8_template;Visio Document;SVG - Scalable Vector Graphics;Corel Draw Document;Publisher Document</value>
+                                                <value oor:separator=";">draw_StarOffice_XML_Draw_Template;StarOffice XML (Draw);draw8;draw8_template;Visio Document;SVG - Scalable Vector Graphics;Corel Draw Document;Publisher Document</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.text.WebDocument" oor:op="replace">
@@ -63,7 +63,7 @@
                         <value xml:lang="en-US">Web pages</value>
                     </prop>
                     <prop oor:name="Filters">
-                                                <value oor:separator=";">HTML;StarWriter/Web 4.0 Vorlage/Template;StarWriter/Web 5.0 Vorlage/Template;writer_web_StarOffice_XML_Writer_Web_Template;writerweb8_writer_template</value>
+                                                <value oor:separator=";">HTML;writer_web_StarOffice_XML_Writer_Web_Template;writerweb8_writer_template</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace">
@@ -72,7 +72,7 @@
                         <value xml:lang="en-US">Master documents</value>
                     </prop>
                     <prop oor:name="Filters">
-                                                <value oor:separator=";">StarWriter 4.0 (StarWriter/GlobalDocument)/GlobalDocument;StarWriter 5.0 (StarWriter/GlobalDocument)/GlobalDocument;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument;writerglobal8</value>
+                                                <value oor:separator=";">writer_globaldocument_StarOffice_XML_Writer_GlobalDocument;writerglobal8</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.formula.FormularProperties" oor:op="replace">
@@ -81,7 +81,7 @@
                         <value xml:lang="en-US">Formulas</value>
                     </prop>
                     <prop oor:name="Filters">
-                                                <value oor:separator=";">MathML XML (Math);MathType 3.x;StarMath 2.0;StarMath 3.0;StarMath 4.0;StarMath 5.0;StarOffice XML (Math);math8</value>
+                                                <value oor:separator=";">MathML XML (Math);MathType 3.x;StarOffice XML (Math);math8</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace">
@@ -107,24 +107,6 @@
                         <value oor:separator=";">MS Word 95;MS WinWord 6.0</value>
                     </prop>
                 </node>
-                <node oor:name="sw3to5" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarWriter 3.0 - 5.0</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarWriter 5.0;StarWriter 4.0;StarWriter 3.0</value>
-                    </prop>
-                </node>
-                <node oor:name="sw3to5templ" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarWriter 3.0 - 5.0 Templates</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarWriter 5.0 Vorlage/Template;StarWriter 4.0 Vorlage/Template;StarWriter 3.0 Vorlage/Template</value>
-                    </prop>
-                </node>
                 <node oor:name="excel456" oor:op="replace">
                     <prop oor:name="DisplayName">
 
@@ -143,96 +125,6 @@
                         <value oor:separator=";">MS Excel 95 Vorlage/Template;MS Excel 5.0/95 Vorlage/Template;MS Excel 4.0 Vorlage/Template</value>
                     </prop>
                 </node>
-                <node oor:name="sc345" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarCalc 3.0 - 5.0</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarCalc 3.0;StarCalc 4.0;StarCalc 5.0</value>
-                    </prop>
-                </node>
-                <node oor:name="sc345templ" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarCalc 3.0 - 5.0 Templates</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarCalc 3.0 Vorlage/Template;StarCalc 4.0 Vorlage/Template;StarCalc 5.0 Vorlage/Template</value>
-                    </prop>
-                </node>
-                <node oor:name="sd35_i" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarDraw 3.0 / 5.0 (StarImpress)</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarDraw 5.0 (StarImpress);StarDraw 3.0 (StarImpress)</value>
-                    </prop>
-                </node>
-                <node oor:name="sd35_itempl" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarDraw 5.0 Vorlage (StarImpress);StarDraw 3.0 Vorlage (StarImpress)</value>
-                    </prop>
-                </node>
-                <node oor:name="si45" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarImpress 4.0 / 5.0</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarImpress 4.0;StarImpress 5.0;StarImpress 5.0 (packed)</value>
-                    </prop>
-                </node>
-                <node oor:name="si45templ" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarImpress 4.0 / 5.0 Templates</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarImpress 4.0 Vorlage;StarImpress 5.0 Vorlage</value>
-                    </prop>
-                </node>
-                <node oor:name="sd35" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarDraw 3.0 / 5.0</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarDraw 5.0;StarDraw 3.0</value>
-                    </prop>
-                </node>
-                <node oor:name="sd35templ" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarDraw 3.0 / 5.0 Templates</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarDraw 5.0 Vorlage;StarDraw 3.0 Vorlage</value>
-                    </prop>
-                </node>
-                <node oor:name="sww45templ" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarWriter/Web 4.0 / 5.0 Templates</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarWriter/Web 5.0 Vorlage/Template;StarWriter/Web 4.0 Vorlage/Template</value>
-                    </prop>
-                </node>
-                <node oor:name="sww345" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarWriter/Web 3.0 - 5.0</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarWriter 5.0 (StarWriter/Web);StarWriter 4.0 (StarWriter/Web);StarWriter 3.0 (StarWriter/Web)</value>
-                    </prop>
-                </node>
                 <node oor:name="swwtext" oor:op="replace">
                     <prop oor:name="DisplayName">
 
@@ -240,24 +132,6 @@
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">Text (StarWriter/Web);Text DOS (StarWriter/Web);Text Mac (StarWriter/Web);Text Unix (StarWriter/Web)</value>
-                    </prop>
-                </node>
-                <node oor:name="sw45glob" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarWriter 4.0 / 5.0 Master Documents</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarWriter 5.0/GlobalDocument;StarWriter 4.0/GlobalDocument</value>
-                    </prop>
-                </node>
-                <node oor:name="sm2to5" oor:op="replace">
-                    <prop oor:name="DisplayName">
-
-                        <value xml:lang="en-US">StarMath 2.0 - 5.0</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarMath 5.0;StarMath 4.0;StarMath 3.0;StarMath 2.0</value>
                     </prop>
                 </node>
                 <node oor:name="wpw67" oor:op="replace">
