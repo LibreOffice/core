@@ -156,6 +156,10 @@ namespace drawinglayer
                         fRotate,
                         rTextCandidate.getLocale()));
 
+                    // Don't draw fonts without height
+                    if( aFont.GetHeight() <= 0 )
+                        return;
+
                     // handle additional font attributes
                     const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =
                         dynamic_cast<const primitive2d::TextDecoratedPortionPrimitive2D*>( &rTextCandidate );
