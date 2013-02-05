@@ -24,7 +24,9 @@ $(eval $(call gb_ExternalPackage_add_file,xslt,bin/xsltproc,xsltproc/.libs/xsltp
 else ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_ExternalPackage_add_file,xslt,lib/libxslt.a,libxslt/.libs/libxslt.a))
 $(eval $(call gb_ExternalPackage_add_file,xslt,lib/libexslt.a,libexslt/.libs/libexslt.a))
+ifneq ($(CROSS_COMPILING),YES)
 $(eval $(call gb_ExternalPackage_add_file,xslt,bin/xsltproc,xsltproc/xsltproc))
+endif
 else ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 $(eval $(call gb_ExternalPackage_add_file,xslt,lib/libxslt.dll.a,libxslt/.libs/libxslt.dll.a))
