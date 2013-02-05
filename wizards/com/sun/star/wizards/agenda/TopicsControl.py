@@ -214,23 +214,17 @@ class TopicsControl(ControlScroller):
     '''
 
     def enableButtons(self):
-        UnoDialog.setEnabled(
-            self.CurUnoDialog.btnInsert,
-            self.lastFocusRow < len(self.scrollfields))
-        UnoDialog.setEnabled(
-            self.CurUnoDialog.btnRemove,
-            self.lastFocusRow < len(self.scrollfields) - 1)
+        self.CurUnoDialog.btnInsert.Model.Enabled = \
+            self.lastFocusRow < len(self.scrollfields)
+        self.CurUnoDialog.btnRemove.Model.Enabled = \
+            self.lastFocusRow < len(self.scrollfields) - 1
         if self.lastFocusControl is not None:
-            UnoDialog.setEnabled(
-                self.CurUnoDialog.btnUp, self.lastFocusRow > 0)
-            UnoDialog.setEnabled(
-                self.CurUnoDialog.btnDown,
-                self.lastFocusRow < len(self.scrollfields) - 1)
+            self.CurUnoDialog.btnUp.Model.Enabled = self.lastFocusRow > 0
+            self.CurUnoDialog.btnDown.Model.Enabled = \
+                self.lastFocusRow < len(self.scrollfields) - 1
         else:
-            UnoDialog.setEnabled(
-                self.CurUnoDialog.btnUp, False)
-            UnoDialog.setEnabled(
-                self.CurUnoDialog.btnDown, False)
+            self.CurUnoDialog.btnUp.Model.Enabled = False
+            self.CurUnoDialog.btnDown.Model.Enabled =  False
 
     '''
     Removes the current row.
@@ -723,7 +717,6 @@ class TopicsControl(ControlScroller):
             traceback.print_exc()
 
 '''
-@author rp143992
 A class represting a single GUI row.
 Note that the instance methods of this class
 are being called and handle controls of
@@ -821,10 +814,10 @@ class ControlRow(object):
     '''
 
     def setEnabled(self, enabled):
-        self.dialog.setEnabled(self.label, enabled)
-        self.dialog.setEnabled(self.textbox, enabled)
-        self.dialog.setEnabled(self.combobox, enabled)
-        self.dialog.setEnabled(self.timebox, enabled)
+        self.label.Model.Enabled = enabled
+        self.textbox.Model.Enabled = enabled
+        self.combobox.Model.Enabled = enabled
+        self.timebox.Model.Enabled = enabled
 
     '''
     Impelementation of XKeyListener.
