@@ -191,6 +191,7 @@ private:
 
     void            ReleaseFocus_Impl();
     void            EnableControls_Impl();
+    void            CheckAndMarkUnknownFont( const XubString& fontname );
 
 protected:
     virtual void    Select();
@@ -208,6 +209,8 @@ public:
     void            Fill( const FontList* pList )
                         { FontNameBox::Fill( pList );
                           nFtCount = pList->GetFontNameCount(); }
+    virtual void    SetText( const XubString& rStr );
+    virtual void    SetText( const XubString& rStr, const Selection& rNewSelection );
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
@@ -800,6 +803,43 @@ void SvxFontNameBox_Impl::FillList()
     GetDocFontList_Impl( &pFontList, this );
     aCurText = GetText();
     SetSelection( aOldSel );
+}
+
+void SvxFontNameBox_Impl::SetText( const XubString& rStr )
+{
+    CheckAndMarkUnknownFont( rStr );
+    return FontNameBox::SetText( rStr );
+}
+
+void SvxFontNameBox_Impl::SetText( const XubString& rStr, const Selection& rNewSelection )
+{
+    CheckAndMarkUnknownFont( rStr );
+    return FontNameBox::SetText( rStr, rNewSelection );
+}
+
+void SvxFontNameBox_Impl::CheckAndMarkUnknownFont( const XubString& fontname )
+{
+    if( fontname == GetText())
+        return;
+    GetDocFontList_Impl( &pFontList, this );
+    // If the font is unknown, show it in italic.
+    Font font = GetControlFont();
+    if( pFontList != NULL && pFontList->IsAvailable( fontname ))
+    {
+        if( font.GetItalic() != ITALIC_NONE )
+        {
+            font.SetItalic( ITALIC_NONE );
+            SetControlFont( font );
+        }
+    }
+    else
+    {
+        if( font.GetItalic() != ITALIC_NORMAL )
+        {
+            font.SetItalic( ITALIC_NORMAL );
+            SetControlFont( font );
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
