@@ -1161,6 +1161,14 @@ namespace {
 void restartOnMac(bool passArguments) {
 #if defined MACOSX
     OfficeIPCThread::DisableOfficeIPCThread();
+#ifdef ENABLE_MACOSX_SANDBOX
+    (void) passArguments; // avoid warnings
+    ResMgr *resMgr = Desktop::GetDesktopResManager();
+    OUString aMessage = OUString( String( ResId( STR_LO_MUST_BE_RESTARTED, *resMgr )));
+
+    ErrorBox aRestartBox( NULL, WB_OK, aMessage );
+    aRestartBox.Execute();
+#else
     rtl::OUString execUrl;
     OSL_VERIFY(osl_getExecutableFile(&execUrl.pData) == osl_Process_E_None);
     rtl::OUString execPath;
@@ -1223,6 +1231,7 @@ void restartOnMac(bool passArguments) {
         }
     }
     std::abort();
+#endif
 #else
     (void) passArguments; // avoid warnings
 #endif
