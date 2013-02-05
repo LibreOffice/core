@@ -74,7 +74,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
 
-ScFilterDetect::ScFilterDetect( const uno::Reference<lang::XMultiServiceFactory>& /*xFactory*/ )
+ScFilterDetect::ScFilterDetect( const uno::Reference<uno::XComponentContext>& /*xContext*/ )
 {
 }
 
@@ -932,10 +932,9 @@ OUString ScFilterDetect::impl_getStaticImplementationName()
 }
 
 uno::Reference<uno::XInterface> ScFilterDetect::impl_createInstance(
-    const uno::Reference<lang::XMultiServiceFactory>& xServiceManager ) throw (uno::Exception)
+    const uno::Reference<uno::XComponentContext>& xContext ) throw (uno::Exception)
 {
-    return static_cast< cppu::OWeakObject * >(
-        new ScFilterDetect( xServiceManager ) );
+    return static_cast<cppu::OWeakObject*>(new ScFilterDetect(xContext));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

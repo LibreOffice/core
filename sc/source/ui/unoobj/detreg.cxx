@@ -19,54 +19,33 @@
 
 
 #include "scdetect.hxx"
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uno/Sequence.h>
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
+#include <cppuhelper/implementationentry.hxx>
 
-using ::rtl::OUString;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
+namespace {
+
+static const cppu::ImplementationEntry spServices[] =
+{
+    {
+        ScFilterDetect::impl_createInstance,
+        ScFilterDetect::impl_getStaticImplementationName,
+        ScFilterDetect::impl_getStaticSupportedServiceNames,
+        cppu::createSingleComponentFactory,
+        0, 0
+    },
+
+    { 0, 0, 0, 0, 0, 0 }
+};
+
+}
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL scd_component_getFactory( const sal_Char* pImplementationName,
-                                     void* pServiceManager,
-                                     void* /* pRegistryKey */ )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL scd_component_getFactory(
+    const char* pImplName, void* pServiceManager, void* pRegistryKey )
 {
-    // Set default return value for this operation - if it failed.
-    void* pReturn = NULL ;
-
-    if  (
-            ( pImplementationName   !=  NULL ) &&
-            ( pServiceManager       !=  NULL )
-        )
-    {
-        // Define variables which are used in following macros.
-        Reference< XSingleServiceFactory >   xFactory                                                                                                ;
-        Reference< XMultiServiceFactory >    xServiceManager( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-
-        if( ScFilterDetect::impl_getStaticImplementationName().equalsAscii( pImplementationName ) )
-        {
-            xFactory.set(::cppu::createSingleFactory( xServiceManager,
-            ScFilterDetect::impl_getStaticImplementationName(),
-            ScFilterDetect::impl_createInstance,
-            ScFilterDetect::impl_getStaticSupportedServiceNames() ));
-        }
-
-        // Factory is valid - service was found.
-        if ( xFactory.is() )
-        {
-            xFactory->acquire();
-            pReturn = xFactory.get();
-        }
-    }
-
-    // Return with result of this operation.
-    return pReturn ;
+    return ::cppu::component_getFactoryHelper(pImplName, pServiceManager, pRegistryKey, spServices);
 }
+
 } // extern "C"
 
 

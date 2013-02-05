@@ -33,7 +33,6 @@
 #include <sfx2/sfxuno.hxx>
 
 namespace com { namespace sun { namespace star {
-    namespace lang { class XMultiServiceFactory; }
     namespace beans { struct PropertyValue; }
 }}}
 
@@ -41,7 +40,7 @@ namespace com { namespace sun { namespace star {
 class ScFilterDetect : public ::cppu::WeakImplHelper2< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
 {
 public:
-    ScFilterDetect( const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xFactory );
+    ScFilterDetect( const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext );
     virtual ~ScFilterDetect();
 
     /* XServiceInfo */
@@ -55,7 +54,7 @@ public:
 
     /* Helper for registry */
     static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
-        impl_createInstance( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager )
+        impl_createInstance( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext )
             throw (com::sun::star::uno::Exception);
 
     //----------------------------------------------------------------------------------
