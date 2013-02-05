@@ -24,7 +24,7 @@
 #include <osl/diagnose.h>
 #include <swdllapi.h>
 
-template < class Key, class Value > struct DBPTreeNode;
+template < class Key, class Value, int Order > struct DBPTreeNode;
 
 /** Dense B+ tree implementation (to replace the original BigPtrArray).
 
@@ -50,9 +50,16 @@ code), this structur is supposed to be a drop-in replacement, with some of
 the functionality templatized for easier use.
 
 Key is sal_uLong in the BigPtrArray implementation.
+
 Value is supposed to be SwNodePtr initially.
+
+Order affects how big are the metadata and data nodes; the higher the value,
+the flatter the structure is.  It is necessary to find a good compromise
+between fragmentation (too low value) and not being too flat (too high value).
+50 seems to be a good value for production, 5 is great for testing, so that
+the tree becomes deeper quickly.
 */
-template < class Key, class Value >
+template < class Key, class Value, int Order >
 class SW_DLLPUBLIC DenseBPlusTree
 {
 public:
@@ -93,18 +100,18 @@ public:
 private:
     /// We need to know the exact path from the root to the leaf, including the indexes for various operations
     struct NodeWithIndex {
-        DBPTreeNode< Key, Value > *pNode;
+        DBPTreeNode< Key, Value, Order > *pNode;
         Key nIndex;
 
         NodeWithIndex() {}
-        NodeWithIndex( DBPTreeNode< Key, Value > *p, Key n ) : pNode( p ), nIndex( n ) {}
+        NodeWithIndex( DBPTreeNode< Key, Value, Order > *p, Key n ) : pNode( p ), nIndex( n ) {}
     };
 
     /// Root of the tree.
-    DBPTreeNode< Key, Value > *m_pRoot;
+    DBPTreeNode< Key, Value, Order > *m_pRoot;
 
     /// The last leaf node - only a small optimization for appends.
-    DBPTreeNode< Key, Value > *m_pLastLeaf;
+    DBPTreeNode< Key, Value, Order > *m_pLastLeaf;
 
     /// Amount of values that we contain.
     Key m_nCount;
@@ -123,7 +130,7 @@ private:
     void shiftNodes( const NodeWithIndex pParents[], int nParentsLength, int nHowMuch );
 
     /// Split the node, and adjust parents accordingly.
-    DBPTreeNode< Key, Value >* splitNode( DBPTreeNode< Key, Value > *pNode, bool bIsAppend, const NodeWithIndex pParents[], int nParentsLength, NodeWithIndex *pNewParents, int &rNewParentsLength );
+    DBPTreeNode< Key, Value, Order >* splitNode( DBPTreeNode< Key, Value, Order > *pNode, bool bIsAppend, const NodeWithIndex pParents[], int nParentsLength, NodeWithIndex *pNewParents, int &rNewParentsLength );
 
     /** Remove nodes between two arrays of NodeWithIndex.
 
