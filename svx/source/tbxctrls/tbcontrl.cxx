@@ -1314,7 +1314,6 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
 IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
 {
-    ::Color             aColBlack( COL_BLACK );
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     SvxBorderLine       theDefLine;
