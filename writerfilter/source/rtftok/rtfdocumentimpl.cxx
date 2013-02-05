@@ -1604,12 +1604,16 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         checkUnicode();
     setNeedSect();
     RTFSkipDestination aSkip(*this);
-    sal_uInt8 cCh = 0;
 
+    if (RTF_LINE == nKeyword)
+    {   // very special handling since text() will eat lone '\n'
+        singleChar('\n');
+        return 0;
+    }
     // Trivial symbols
+    sal_uInt8 cCh = 0;
     switch (nKeyword)
     {
-        case RTF_LINE: cCh = '\n'; break;
         case RTF_TAB: cCh = '\t'; break;
         case RTF_BACKSLASH: cCh = '\\'; break;
         case RTF_LBRACE: cCh = '{'; break;

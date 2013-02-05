@@ -137,6 +137,7 @@ public:
     void testFdo54612();
     void testFdo58933();
     void testFdo44053();
+    void testFdo58646line();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -224,6 +225,7 @@ void Test::run()
         {"fdo54612.rtf", &Test::testFdo54612},
         {"fdo58933.rtf", &Test::testFdo58933},
         {"fdo44053.rtf", &Test::testFdo44053},
+        {"fdo58646line.rtf", &Test::testFdo58646line},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1063,6 +1065,12 @@ void Test::testFdo44053()
     // The with of the table's A1 and A2 cell should equal.
     CPPUNIT_ASSERT_EQUAL(getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position,
             getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
+}
+
+void Test::testFdo58646line()
+{
+    // \line symbol was ignored
+    getParagraph(1, "foo\nbar");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
