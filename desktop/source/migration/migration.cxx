@@ -319,12 +319,13 @@ sal_Bool MigrationImpl::doMigration()
 
         result = sal_True;
     }
-    catch (...)
+    catch (css::uno::Exception & e)
     {
-        OString aMsg("An unexpected exception was thrown during migration");
-        aMsg += "\nOldVersion: " + OUStringToOString(m_aInfo.productname, RTL_TEXTENCODING_ASCII_US);
-        aMsg += "\nDataPath  : " + OUStringToOString(m_aInfo.userdata, RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(aMsg.getStr());
+        SAL_WARN(
+            "desktop.migration",
+            "ignored Exception \"" << e.Message
+                << "\" while migrating from version \"" << m_aInfo.productname
+                << "\" data \"" << m_aInfo.userdata << "\"");
     }
 
     // prevent running the migration multiple times
