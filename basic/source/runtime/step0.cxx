@@ -388,7 +388,17 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
     if (  aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
     {
         refVar->SetType( SbxOBJECT );
+        SbxError eOldErr = refVar->GetError();
+        // There are some circumstances when calling GetObject
+        // will trigger an error, we need to squash those here.
+        // Alternatively it is possible that the same scenario
+        // could overwrite and existing error. Lets prevent that
         SbxObjectRef xVarObj = (SbxObject*)refVar->GetObject();
+        if ( eOldErr != SbxERR_OK )
+            refVar->SetError( eOldErr );
+        else
+            refVar->ResetError();
+
         SbUnoStructRefObject* pUnoStructObj = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xVarObj);
 
         if ( ( !pUnoVal && !pUnoStructVal ) )
