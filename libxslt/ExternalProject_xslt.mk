@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalProject_ExternalProject,xslt))
 
 $(eval $(call gb_ExternalProject_use_unpacked,xslt,xslt))
 
+$(eval $(call gb_ExternalProject_use_external,xslt,libxml2))
+
 $(eval $(call gb_ExternalProject_register_targets,xslt,\
 	build \
 ))

@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalProject_ExternalProject,raptor))
 
 $(eval $(call gb_ExternalProject_use_unpacked,raptor,raptor))
 
+$(eval $(call gb_ExternalProject_use_external,raptor,libxml2))
+
 $(eval $(call gb_ExternalProject_register_targets,raptor,\
 	build \
 ))

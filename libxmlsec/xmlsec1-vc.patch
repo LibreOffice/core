@@ -19,7 +19,7 @@
  CFLAGS 			= $(CFLAGS) /D "HAVE_STDIO_H" /D "HAVE_STDLIB_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_STRING_H" /D "HAVE_CTYPE_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_MALLOC_H" /D "HAVE_MEMORY_H"
-+CFLAGS 			= $(CFLAGS) $(SOLARINC)
++CFLAGS 			= $(CFLAGS) $(SOLARINC) -I$(WORKDIR)\UnpackedTarball\xml2\include
  
  # Optimisation and debug symbols.
  !if "$(DEBUG)" == "1"
