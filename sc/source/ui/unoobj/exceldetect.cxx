@@ -74,6 +74,41 @@ bool hasStream(const uno::Reference<io::XInputStream>& xInStream, const OUString
     return xStorage->IsStream(rName);
 }
 
+bool isExcel40(const uno::Reference<io::XInputStream>& xInStream)
+{
+    SfxMedium aMedium;
+    aMedium.UseInteractionHandler(true);
+    aMedium.setStreamToLoadFrom(xInStream, true);
+    SvStream* pStream = aMedium.GetInStream();
+    if (!pStream)
+        return false;
+
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_Size nSize = pStream->Tell();
+    pStream->Seek(0);
+
+    if (nSize < 4)
+        return false;
+
+    sal_uInt16 nBofId, nBofSize;
+    *pStream >> nBofId >> nBofSize;
+
+    if (nBofId != 0x0409)
+        // This ID signifies Excel 4.0 format.  It must be 0x0409.
+        return false;
+
+    if (nBofSize < 4 || 16 < nBofSize)
+        // BOF record must be sized between 4 and 16 for Excel 4.0 stream.
+        return false;
+
+    sal_Size nPos = pStream->Tell();
+    if (nSize - nPos < nBofSize)
+        // BOF record doesn't have required bytes.
+        return false;
+
+    return true;
+}
+
 bool isTemplate(const OUString& rType)
 {
     return rType.indexOf("_VorlageTemplate") != -1;
@@ -131,9 +166,11 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
     if (aType == "calc_MS_Excel_40" || aType == "calc_MS_Excel_40_VorlageTemplate")
     {
         // See if this stream is a Excel 4.0 stream.
+        if (!isExcel40(xInStream))
+            return OUString();
 
-        // TODO: Implement this.
-        return OUString();
+        aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= isTemplate(aType) ? OUString("MS Excel 4.0 Vorlage/Template") : OUString("MS Excel 4.0");
+        return aType;
     }
 
     // failed!
