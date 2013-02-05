@@ -60,12 +60,12 @@
 #include <rtl/strbuf.hxx>
 
 #include <deque>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 DBG_NAME(SfxDispatcherFlush)
 DBG_NAME(SfxDispatcherFillState)
 
-typedef boost::ptr_vector<SfxRequest> SfxRequestPtrArray;
+typedef std::vector<SfxRequest*> SfxRequestPtrArray;
 
 DECL_PTRSTACK(SfxShellStack_Impl, SfxShell*, 8, 4 );
 
@@ -110,7 +110,17 @@ struct SfxObjectBars_Impl
 
 struct SfxDispatcher_Impl
 {
-    SfxRequestPtrArray   aReqArr;
+    //When the dispatched is locked, SfxRequests accumulate in aReqArr for
+    //later dispatch when unlocked via Post
+    //
+    //The pointers are typically deleted in Post, only if we never get around
+    //to posting them do we delete the unposted requests.
+    SfxRequestPtrArray aReqArr;
+    ~SfxDispatcher_Impl()
+    {
+        for (SfxRequestPtrArray::iterator aI = aReqArr.begin(), aEnd = aReqArr.end(); aI != aEnd; ++aI)
+            delete *aI;
+    }
     const SfxSlotServer* pCachedServ1;  // last called message
     const SfxSlotServer* pCachedServ2;  // penultimate called Message
     SfxShellStack_Impl   aStack;        // active functionality
@@ -2149,7 +2159,7 @@ void SfxDispatcher::Lock( sal_Bool bLock )
     if ( !bLock )
     {
         for(size_t i = 0; i < pImp->aReqArr.size(); ++i)
-            pImp->xPoster->Post(&pImp->aReqArr[i]);
+            pImp->xPoster->Post(pImp->aReqArr[i]);
         pImp->aReqArr.clear();
     }
 }
