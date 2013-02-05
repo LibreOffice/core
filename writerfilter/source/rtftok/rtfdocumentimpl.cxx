@@ -63,6 +63,7 @@
 #include <ooxml/OOXMLFastTokens.hxx> // ooxml namespace
 #include <oox/token/namespaces.hxx> // oox namespace
 #include <oox/token/tokens.hxx>
+#include <dmapper/GraphicHelpers.hxx>
 
 #include <rtfsdrimport.hxx>
 #include <rtftokenizer.hxx>
@@ -72,6 +73,7 @@
 #include <rtffly.hxx>
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define MM100_TO_EMU(MM100)     (MM100 * 360)
 #define M_TOKEN(token) OOX_TOKEN(officeMath, token)
 #define OPEN_M_TOKEN( rtftok, ooxtok ) \
         case RTF_M##rtftok: \
@@ -807,6 +809,19 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_extent, pExtentValue);
         if (aAnchorWrapAttributes.size())
             aAnchorSprms.set(NS_ooxml::LN_EG_WrapType_wrapSquare, pAnchorWrapValue);
+
+        // See OOXMLFastContextHandler::positionOffset(), we can't just put values in an RTFValue.
+        if (m_aStates.top().aShape.nLeft > 0)
+        {
+            writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(MM100_TO_EMU(m_aStates.top().aShape.nLeft)), false);
+            aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionH, RTFValue::Pointer_t(new RTFValue(RTFSprms())));
+        }
+        if (m_aStates.top().aShape.nTop > 0)
+        {
+            writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(MM100_TO_EMU(m_aStates.top().aShape.nTop)), true);
+            aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionV, RTFValue::Pointer_t(new RTFValue(RTFSprms())));
+        }
+
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_docPr, pDocprValue);
         aAnchorSprms.set(NS_ooxml::LN_graphic_graphic, pGraphicValue);
         // anchor sprm
