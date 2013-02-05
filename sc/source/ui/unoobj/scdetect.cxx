@@ -94,13 +94,6 @@ static const sal_Char pFilterAscii[]        = "Text - txt - csv (StarCalc)";
 static const sal_Char pFilterLotus[]        = "Lotus";
 static const sal_Char pFilterQPro6[]        = "Quattro Pro 6.0";
 static const sal_Char pFilterExcel4[]   = "MS Excel 4.0";
-static const sal_Char pFilterEx4Temp[]  = "MS Excel 4.0 Vorlage/Template";
-static const sal_Char pFilterExcel5[]   = "MS Excel 5.0/95";
-static const sal_Char pFilterEx5Temp[]  = "MS Excel 5.0/95 Vorlage/Template";
-static const sal_Char pFilterExcel95[]  = "MS Excel 95";
-static const sal_Char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
-static const sal_Char pFilterExcel97[]  = "MS Excel 97";
-static const sal_Char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
 static const sal_Char pFilterExcelXML[] = "MS Excel 2003 XML";
 static const sal_Char pFilterDBase[]        = "dBase";
 static const sal_Char pFilterDif[]      = "DIF";
@@ -455,81 +448,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                     // 0-length stream as that would create the compound
                     // document header on the stream and effectively write to
                     // disk!
-                    SotStorageRef aStorage;
                     if (nSize > 0)
-                        aStorage = new SotStorage ( pStream, false );
-                    if ( aStorage.Is() && !aStorage->GetError() )
-                    {
-                        // Excel-5: detect through contained streams
-                        // there are some "excel" formats from 3rd party vendors that need to be distinguished
-                        String aStreamName(RTL_CONSTASCII_USTRINGPARAM("Workbook"));
-                        sal_Bool bExcel97Stream = ( aStorage->IsStream( aStreamName ) );
-
-                        aStreamName = String(RTL_CONSTASCII_USTRINGPARAM("Book"));
-                        sal_Bool bExcel5Stream = ( aStorage->IsStream( aStreamName ) );
-                        if ( bExcel97Stream || bExcel5Stream )
-                        {
-                            if ( bExcel97Stream )
-                            {
-                                String aOldName;
-                                sal_Bool bIsCalcFilter = sal_True;
-                                if ( pPreselectedFilter )
-                                {
-                                    // cross filter; now this should be a type detection only, not a filter detection
-                                    // we can simulate it by preserving the preselected filter if the type matches
-                                    // example: Excel filters for Writer
-                                    aOldName = pPreselectedFilter->GetFilterName();
-                                    bIsCalcFilter = pPreselectedFilter->GetServiceName() == "com.sun.star.sheet.SpreadsheetDocument";
-                                }
-
-                                if ( aOldName.EqualsAscii(pFilterEx97Temp) || !bIsCalcFilter )
-                                {
-                                    //  Excel 97 template selected -> keep selection
-                                }
-                                else if ( bExcel5Stream &&
-                                            ( aOldName.EqualsAscii(pFilterExcel5) || aOldName.EqualsAscii(pFilterEx5Temp) ||
-                                            aOldName.EqualsAscii(pFilterExcel95) || aOldName.EqualsAscii(pFilterEx95Temp) ) )
-                                {
-                                    //  dual format file and Excel 5 selected -> keep selection
-                                }
-                                else
-                                {
-                                    //  else use Excel 97 filter
-                                    pFilter = aMatcher.GetFilter4FilterName( rtl::OUString(pFilterExcel97) );
-                                }
-                            }
-                            else if ( bExcel5Stream )
-                            {
-                                String aOldName;
-                                sal_Bool bIsCalcFilter = sal_True;
-                                if ( pPreselectedFilter )
-                                {
-                                    // cross filter; now this should be a type detection only, not a filter detection
-                                    // we can simulate it by preserving the preselected filter if the type matches
-                                    // example: Excel filters for Writer
-                                    aOldName = pPreselectedFilter->GetFilterName();
-                                    bIsCalcFilter = pPreselectedFilter->GetServiceName() == "com.sun.star.sheet.SpreadsheetDocument";
-                                }
-
-                                if ( aOldName.EqualsAscii(pFilterExcel95) || aOldName.EqualsAscii(pFilterEx95Temp) ||
-                                        aOldName.EqualsAscii(pFilterEx5Temp) || !bIsCalcFilter )
-                                {
-                                    //  Excel 95 oder Vorlage (5 oder 95) eingestellt -> auch gut
-                                }
-                                else if ( aOldName.EqualsAscii(pFilterEx97Temp) )
-                                {
-                                    // auto detection has found template -> return Excel5 template
-                                    pFilter = aMatcher.GetFilter4FilterName( rtl::OUString(pFilterEx5Temp) );
-                                }
-                                else
-                                {
-                                    //  sonst wird als Excel 5-Datei erkannt
-                                    pFilter = aMatcher.GetFilter4FilterName( rtl::OUString(pFilterExcel5) );
-                                }
-                            }
-                        }
-                    }
-                    else if (nSize > 0)
                     {
                         SvStream &rStr = *pStream;
 
@@ -710,16 +629,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 }
                                 else if( nMuster & M_ENDE )
                                 { //                                        Format detected
-                                    if ( pFilterName[nFilter] == pFilterExcel4 && pPreselectedFilter &&
-                                        ( (pPreselectedFilter)->GetFilterName().EqualsAscii(pFilterEx4Temp) || pPreselectedFilter->GetTypeName().EqualsAscii("calc_MS_Excel_40") ) )
-                                    {
-                                        //  Excel 4 erkannt, Excel 4 Vorlage eingestellt -> auch gut
-                                        // oder Excel 4 Filter anderer Applikation (simulated type detection!)
-                                    }
-                                    else
-                                    {   // gefundenen Filter einstellen
-                                        pFilter = aMatcher.GetFilter4FilterName( rtl::OUString::createFromAscii(pFilterName[ nFilter ]) );
-                                    }
+                                    pFilter = aMatcher.GetFilter4FilterName(OUString::createFromAscii(pFilterName[nFilter]));
                                     bSync = false;              // leave inner loop
                                     nFilter = nFilterCount;     // leave outer loop
                                 }
