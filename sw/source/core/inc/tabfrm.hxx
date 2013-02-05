@@ -151,6 +151,8 @@ public:
     //
     sal_Bool HasFollowFlowLine() const { return bHasFollowFlowLine; }
     void SetFollowFlowLine( sal_Bool bNew ) { bHasFollowFlowLine = bNew; }
+    //return the SwTabFrm (if any) that this SwTabFrm is a follow flow line for
+    SwTabFrm* GetFollowFlowLineFor();
 
     sal_Bool IsRebuildLastLine() const { return bIsRebuildLastLine; }
     void SetRebuildLastLine( sal_Bool bNew ) { bIsRebuildLastLine = bNew; }

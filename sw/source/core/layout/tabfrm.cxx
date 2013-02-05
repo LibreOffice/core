@@ -132,8 +132,28 @@ extern const SwTable   *pRowCacheLastTable;
 extern const SwTabFrm  *pRowCacheLastTabFrm;
 extern const SwFrm     *pRowCacheLastCellFrm;
 
+//return the SwTabFrm (if any) that this SwTabFrm is a follow flow line for
+SwTabFrm* SwTabFrm::GetFollowFlowLineFor()
+{
+    SwFlowFrm *pPrec = GetPrecede();
+    if (pPrec && pPrec->GetFrm()->IsTabFrm())
+    {
+        SwTabFrm *pPrevTabFrm = (SwTabFrm*)pPrec;
+        assert(this == pPrevTabFrm->GetFollow());
+        if (pPrevTabFrm->HasFollowFlowLine() && pPrevTabFrm->GetFollow() == this)
+            return pPrevTabFrm;
+    }
+    return NULL;
+}
+
 SwTabFrm::~SwTabFrm()
 {
+    //rhbz#907933, we are a follow flow line for something and have been
+    //deleted, remove ourself as a follow flowline
+    SwTabFrm* pFlowFrameFor = GetFollowFlowLineFor();
+    if (pFlowFrameFor)
+        pFlowFrameFor->RemoveFollowFlowLine();
+
     // There is some terrible code in fetab.cxx, that
     // makes use of these global pointers. Obviously
     // this code did not consider that a TabFrm can be
