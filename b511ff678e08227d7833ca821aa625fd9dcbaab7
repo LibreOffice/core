@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///1g\u003d",
+        "filename": "oox/source/ppt/timenode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-02-05T12:31:27Z",
+      "side": 1,
+      "message": "This is strictly speaking not correct, is() returns a boolean, so you should not compare it to NULL.",
+      "revId": "b511ff678e08227d7833ca821aa625fd9dcbaab7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
