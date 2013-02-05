@@ -669,6 +669,15 @@ void Package::processPackage_impl(
                                  xCmdEnv );
             }
         }
+        catch (lang::IllegalArgumentException &) {
+            Any e(cppu::getCaughtException());
+            throw deployment::DeploymentException(
+                ((doRegisterPackage
+                  ? getResourceString(RID_STR_ERROR_WHILE_REGISTERING)
+                  : getResourceString(RID_STR_ERROR_WHILE_REVOKING))
+                 + getDisplayName()),
+                static_cast< OWeakObject * >(this), e);
+        }
         catch (const RuntimeException &e) {
             SAL_WARN(
                 "desktop.deployment",
