@@ -1131,6 +1131,13 @@ AC_ARG_WITH(macosx-bundle-identifier,
          org.libreoffice.script ("script", huh?).]),
 ,with_macosx_bundle_identifier=org.libreoffice.script)
 
+AC_ARG_ENABLE(readonly-installset,
+    AS_HELP_STRING([--enable-readonly-installset],
+        [Prevents any attempts by LibreOffice to write into its installation. That means
+         at least that no "system-wide" extensions can be added. Experimental work in
+         progress.]),
+,)
+
 AC_ARG_ENABLE(postgresql-sdbc,
     AS_HELP_STRING([--disable-postgresql-sdbc],
         [Disable the build of the PostgreSQL-SDBC driver.])
@@ -2771,6 +2778,20 @@ AC_SUBST(XCRUN)
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
+
+AC_MSG_CHECKING([whether to treat the installation as read-only])
+
+if test \( -z "$enable_readonly_installset" -a "$ENABLE_MACOSX_SANDBOX" = YES \) -o \
+        "$DISABLE_EXTENSIONS" = TRUE; then
+    enable_readonly_installset=yes
+fi
+if test "$enable_readonly_installset" = yes; then
+    AC_MSG_RESULT([yes])
+    ENABLE_READONLY_INSTALLSET=YES
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_READONLY_INSTALLSET)
 
 dnl ===================================================================
 dnl Windows specific tests and stuff
