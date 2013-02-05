@@ -111,7 +111,7 @@ public:
     inline void ResetCursorStack();
     SelectionType   GetSelectionType() const;
 
-    sal_Bool    IsModePushed() const { return 0 != pModeStack; }
+    bool    IsModePushed() const { return 0 != pModeStack; }
     void    PushMode();
     void    PopMode();
 
@@ -125,7 +125,7 @@ public:
     sal_Bool Pop( sal_Bool bOldCrsr = sal_True );
 
     void    EnterStdMode();
-    sal_Bool    IsStdMode() const { return !bExtMode && !bAddMode && !bBlockMode; }
+    bool    IsStdMode() const { return !bExtMode && !bAddMode && !bBlockMode; }
 
     void    EnterExtMode();
     void    LeaveExtMode();
@@ -160,11 +160,11 @@ public:
     inline void EndSelTblCells();
 
     // leave per word or per line selection mode. Is usually called in MB-Up.
-    sal_Bool    IsExtSel() const { return bSelWrd || bSelLn; }
+    bool    IsExtSel() const { return bSelWrd || bSelLn; }
 
     // query whether the active fnDrag pointer is set to BeginDrag
     // is needed for MouseMove to work around bugs 55592/55931
-    inline sal_Bool Is_FnDragEQBeginDrag() const;
+    inline bool Is_FnDragEQBeginDrag() const;
 
     // base requests
     sal_Bool    IsInWrd()           { return IsInWord(); }
@@ -409,7 +409,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
-    sal_Bool SelectNextPrevHyperlink( sal_Bool bNext = sal_True );
+    bool SelectNextPrevHyperlink( bool bNext = true );
 
     // determine corresponding SwView
     const SwView&       GetView() const { return rView; }
@@ -426,11 +426,11 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     // execute the predefined actions.
     void ClickToField( const SwField& rFld );
     void ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter = URLLOAD_NOFILTER );
-    sal_Bool ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter = URLLOAD_NOFILTER );
-    inline sal_Bool IsInClickToEdit() const ;
+    bool ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter = URLLOAD_NOFILTER );
+    inline bool IsInClickToEdit() const ;
 
     // if a URL-Button is selected, return its URL; otherwise an empty string
-    sal_Bool GetURLFromButton( String& rURL, String& rDescr ) const;
+    bool GetURLFromButton( String& rURL, String& rDescr ) const;
 
     void NavigatorPaste( const NaviContentBookmark& rBkmk,
                          const sal_uInt16 nAction );
@@ -452,7 +452,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
                 const SwViewOption *pViewOpt = 0);
     virtual ~SwWrtShell();
 
-    sal_Bool TryRemoveIndent(); // #i23725#
+    bool TryRemoveIndent(); // #i23725#
 
     String GetSelDescr() const;
 
@@ -533,8 +533,8 @@ private:
     SwNavigationMgr aNavigationMgr;
 
     Point   aDest;
-    sal_Bool    bDestOnStack;
-    sal_Bool    HasCrsrStack() const { return 0 != pCrsrStack; }
+    bool    bDestOnStack;
+    bool    HasCrsrStack() const { return 0 != pCrsrStack; }
     SW_DLLPRIVATE sal_Bool  PushCrsr(SwTwips lOffset, sal_Bool bSelect);
     SW_DLLPRIVATE sal_Bool  PopCrsr(sal_Bool bUpdate, sal_Bool bSelect = sal_False);
 
@@ -562,7 +562,7 @@ private:
     sal_Bool    bCopy           :1;
     sal_Bool    bSelWrd         :1;
     sal_Bool    bSelLn          :1;
-    sal_Bool    bIsInClickToEdit:1;
+    bool    bIsInClickToEdit:1;
     sal_Bool    bClearMark      :1;     // don't delete selection for ChartAutoPilot
     sal_Bool    mbRetainSelection :1; // Do not remove selections
 
@@ -634,15 +634,15 @@ inline void SwWrtShell::EndSelTblCells()
     bClearMark = sal_True;
 }
 
-inline sal_Bool SwWrtShell::IsInClickToEdit() const { return bIsInClickToEdit; }
+inline bool SwWrtShell::IsInClickToEdit() const { return bIsInClickToEdit; }
 
-inline sal_Bool SwWrtShell::Is_FnDragEQBeginDrag() const
+inline bool SwWrtShell::Is_FnDragEQBeginDrag() const
 {
 #ifdef __GNUC__
     SELECTFUNC  fnTmp = &SwWrtShell::BeginDrag;
     return fnDrag == fnTmp;
 #else
-    return sal::static_int_cast< sal_Bool >(fnDrag == &SwWrtShell::BeginDrag);
+    return fnDrag == &SwWrtShell::BeginDrag;
 #endif
 }
 

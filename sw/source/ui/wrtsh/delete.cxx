@@ -45,9 +45,9 @@ inline void SwWrtShell::CloseMark( sal_Bool bOkFlag )
 }
 
 // #i23725#
-sal_Bool SwWrtShell::TryRemoveIndent()
+bool SwWrtShell::TryRemoveIndent()
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     SfxItemSet aAttrSet(GetAttrPool(), RES_LR_SPACE, RES_LR_SPACE);
     GetCurAttr(aAttrSet);
@@ -58,19 +58,19 @@ sal_Bool SwWrtShell::TryRemoveIndent()
     if (aOldFirstLineOfst > 0)
     {
         aItem.SetTxtFirstLineOfst(0);
-        bResult = sal_True;
+        bResult = true;
     }
     else if (aOldFirstLineOfst < 0)
     {
         aItem.SetTxtFirstLineOfst(0);
         aItem.SetLeft(aItem.GetLeft() + aOldFirstLineOfst);
 
-        bResult = sal_True;
+        bResult = true;
     }
     else if (aItem.GetLeft() != 0)
     {
         aItem.SetLeft(0);
-        bResult = sal_True;
+        bResult = true;
     }
 
     if (bResult)
@@ -184,7 +184,7 @@ long SwWrtShell::DelLeft()
     }
 
     // JP 29.06.95: nie eine davor stehende Tabelle loeschen.
-    sal_Bool bSwap = sal_False;
+    bool bSwap = false;
     const SwTableNode * pWasInTblNd = SwCrsrShell::IsCrsrInTbl();
 
     if( SwCrsrShell::IsSttPara())
@@ -218,7 +218,7 @@ long SwWrtShell::DelLeft()
         OpenMark();
         SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
         SwCrsrShell::SwapPam();
-        bSwap = sal_True;
+        bSwap = true;
     }
     else
     {

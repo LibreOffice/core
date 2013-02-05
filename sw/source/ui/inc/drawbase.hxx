@@ -42,8 +42,8 @@ protected:
     Point           m_aStartPos;                 // position of BeginCreate
     Point           m_aMDPos;                // position of MouseButtonDown
     sal_uInt16          m_nSlotId;
-    sal_Bool            m_bCreateObj  :1;
-    sal_Bool            m_bInsForm   :1;
+    bool            m_bCreateObj  :1;
+    bool            m_bInsForm   :1;
 
     Point           GetDefaultCenterPos();
 public:
@@ -52,8 +52,8 @@ public:
 
     void         SetDrawPointer();
     void         EnterSelectMode(const MouseEvent& rMEvt);
-    inline sal_Bool  IsInsertForm() const { return m_bInsForm; }
-    inline sal_Bool  IsCreateObj() const { return m_bCreateObj; }
+    inline bool  IsInsertForm() const { return m_bInsForm; }
+    inline bool  IsCreateObj() const { return m_bCreateObj; }
 
     // mouse- & key events; return value=sal_True: event was edited
     virtual sal_Bool KeyInput(const KeyEvent& rKEvt);

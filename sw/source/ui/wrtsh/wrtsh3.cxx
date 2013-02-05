@@ -173,9 +173,9 @@ sal_uInt16 SwWrtShell::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCa
 
     // fall ein util::URL-Button selektiert ist, dessen util::URL returnen, ansonsten
     // einen LeerString
-sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
+bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SdrView *pDView = GetDrawView();
     if( pDView )
     {
@@ -220,7 +220,7 @@ sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
                         {
                             rURL = String(uTmp);
                         }
-                        bRet = sal_True;
+                        bRet = true;
                     }
                 }
             }

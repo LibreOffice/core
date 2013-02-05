@@ -236,7 +236,7 @@ sal_Bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet
 
 void SwWrtShell::ClickToField( const SwField& rFld )
 {
-    bIsInClickToEdit = sal_True;
+    bIsInClickToEdit = true;
     switch( rFld.GetTyp()->Which() )
     {
     case RES_JUMPEDITFLD:
@@ -313,7 +313,7 @@ void SwWrtShell::ClickToField( const SwField& rFld )
     break;
     }
 
-    bIsInClickToEdit = sal_False;
+    bIsInClickToEdit = false;
 }
 
 
@@ -323,7 +323,7 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
     if( !rItem.GetValue().Len() )
         return ;
 
-    bIsInClickToEdit = sal_True;
+    bIsInClickToEdit = true;
 
     // erstmal das evt. gesetzte ObjectSelect Macro ausfuehren
     const SvxMacro* pMac = rItem.GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
@@ -343,20 +343,20 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
         const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( true );
     }
 
-    bIsInClickToEdit = sal_False;
+    bIsInClickToEdit = false;
 }
 
 
 
-sal_Bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
+bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     String sURL;
     String sTargetFrameName;
     const SwFrmFmt* pFnd = IsURLGrfAtPos( rDocPt, &sURL, &sTargetFrameName );
     if( pFnd && sURL.Len() )
     {
-        bRet = sal_True;
+        bRet = true;
         // erstmal das evt. gesetzte ObjectSelect Macro ausfuehren
         const SvxMacro* pMac = &pFnd->GetMacro().GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
         if( pMac )

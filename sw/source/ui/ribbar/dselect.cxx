@@ -34,7 +34,7 @@
 DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
                 SwDrawBase(pWrtShell, pEditWin, pSwView)
 {
-    m_bCreateObj = sal_False;
+    m_bCreateObj = false;
 }
 
 /*************************************************************************

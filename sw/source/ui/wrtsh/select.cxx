@@ -1006,10 +1006,10 @@ int SwWrtShell::IntelligentCut(int nSelection, sal_Bool bCut)
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
-sal_Bool SwWrtShell::SelectNextPrevHyperlink( sal_Bool bNext )
+bool SwWrtShell::SelectNextPrevHyperlink( bool bNext )
 {
     StartAction();
-    sal_Bool bRet = SwCrsrShell::SelectNxtPrvHyperlink( bNext );
+    bool bRet = SwCrsrShell::SelectNxtPrvHyperlink( bNext );
     if( !bRet )
     {
         // will we have this feature?
@@ -1022,8 +1022,8 @@ sal_Bool SwWrtShell::SelectNextPrevHyperlink( sal_Bool bNext )
     }
     EndAction();
 
-    sal_Bool bCreateXSelection = sal_False;
-    const sal_Bool bFrmSelected = IsFrmSelected() || IsObjSelected();
+    bool bCreateXSelection = false;
+    const bool bFrmSelected = IsFrmSelected() || IsObjSelected();
     if( IsSelection() )
     {
         if ( bFrmSelected )
@@ -1033,18 +1033,18 @@ sal_Bool SwWrtShell::SelectNextPrevHyperlink( sal_Bool bNext )
         // bei Cursor setzen
         fnKillSel = &SwWrtShell::ResetSelect;
         fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-        bCreateXSelection = sal_True;
+        bCreateXSelection = true;
     }
     else if( bFrmSelected )
     {
         EnterSelFrmMode();
-        bCreateXSelection = sal_True;
+        bCreateXSelection = true;
     }
     else if( (CNT_GRF | CNT_OLE ) & GetCntType() )
     {
         SelectObj( GetCharRect().Pos() );
         EnterSelFrmMode();
-        bCreateXSelection = sal_True;
+        bCreateXSelection = true;
     }
 
     if( bCreateXSelection )

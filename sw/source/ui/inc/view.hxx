@@ -558,9 +558,9 @@ public:
     sal_Bool            EnterDrawTextMode(const Point& aDocPos);
     void            LeaveDrawCreate()   { nDrawSfxId = nFormSfxId = USHRT_MAX; sDrawCustom.Erase();}
     sal_Bool            IsDrawMode()        { return (nDrawSfxId != USHRT_MAX || nFormSfxId != USHRT_MAX); }
-    sal_Bool            IsFormMode() const;
+    bool            IsFormMode() const;
     sal_Bool            IsBezierEditMode();
-    sal_Bool            AreOnlyFormsSelected() const;
+    bool            AreOnlyFormsSelected() const;
     sal_Bool            HasDrwObj(SdrObject *pSdrObj) const;
     sal_Bool            HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const;
     sal_Bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=NULL,

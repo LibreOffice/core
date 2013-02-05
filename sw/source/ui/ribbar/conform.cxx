@@ -35,7 +35,7 @@ extern bool bNoInterrupt;       // in mainwn.cxx
 ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
     SwDrawBase(pWrtShell, pEditWin, pSwView)
 {
-    m_bInsForm = sal_True;
+    m_bInsForm = true;
 }
 
 /**

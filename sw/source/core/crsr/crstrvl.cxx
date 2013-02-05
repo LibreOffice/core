@@ -2040,7 +2040,7 @@ const SwRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect 
 }
 
 
-sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
+bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
 {
     SwNodes& rNds = GetDoc()->GetNodes();
     const SwNode* pBodyEndNd = &rNds.GetEndOfContent();
@@ -2120,7 +2120,7 @@ sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
     }
 
     // found any URL ?
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwTxtINetFmt* pFndAttr = aCmpPos.GetINetFmt();
     const SwFlyFrmFmt* pFndFmt = aCmpPos.GetFlyFmt();
     if( pFndAttr || pFndFmt )
@@ -2142,7 +2142,7 @@ sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
             {
                 UpdateCrsr( SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|
                                     SwCrsrShell::READONLY );
-                bRet = sal_True;
+                bRet = true;
             }
         }
         // found a draw object ?
@@ -2151,7 +2151,7 @@ sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
             const SdrObject* pSObj = pFndFmt->FindSdrObject();
             ((SwFEShell*)this)->SelectObj( pSObj->GetCurrentBoundRect().Center() );
             MakeSelVisible();
-            bRet = sal_True;
+            bRet = true;
         }
         else // then is it a fly
         {
@@ -2160,7 +2160,7 @@ sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
             {
                 ((SwFEShell*)this)->SelectFlyFrm( *pFly, sal_True );
                 MakeSelVisible();
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }

@@ -464,7 +464,7 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
         aPt.Y() += lOffset;
         aDest = GetCntntPos(aPt,lOffset > 0);
         aDest.X() = aPt.X();
-        bDestOnStack = sal_True;
+        bDestOnStack = true;
     }
 
     //falls wir eine Rahmenselektion hatten, muss diese nach dem
@@ -515,7 +515,7 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
         }
 
             // Zuruecksetzen des Dest. SPoint Flags
-        bDestOnStack = sal_False;
+        bDestOnStack = false;
     }
 
     // Position auf den Stack; bDiff besagt, ob ein Unterschied zwischen
@@ -569,7 +569,7 @@ sal_Bool SwWrtShell::PopCrsr(sal_Bool bUpdate, sal_Bool bSelect)
     if( 0 == pCrsrStack )
     {
         ePageMove = MV_NO;
-        bDestOnStack = sal_False;
+        bDestOnStack = false;
     }
     return bValidPos;
 }
@@ -591,7 +591,7 @@ void SwWrtShell::_ResetCursorStack()
         pCrsrStack = pTmp;
     }
     ePageMove = MV_NO;
-    bDestOnStack = sal_False;
+    bDestOnStack = false;
 }
 /**************
 

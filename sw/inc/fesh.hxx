@@ -477,7 +477,7 @@ public:
     void MoveCreate ( const Point &rPos );
     sal_Bool EndCreate  ( sal_uInt16 eSdrCreateCmd );
     void BreakCreate();
-    sal_Bool IsDrawCreate() const;
+    bool IsDrawCreate() const;
     void CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect, sal_uInt16 nSlotId);
 
     /// Functions for Rubberbox, ti select Draw-Objects

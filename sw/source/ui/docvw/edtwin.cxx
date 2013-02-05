@@ -1867,7 +1867,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_BACKSPACE | KEY_SHIFT:
                     if( !rSh.HasReadonlySel() )
                     {
-                        sal_Bool bDone = sal_False;
+                        bool bDone = false;
                         // try to add comment for code snip:
                         // Remove the paragraph indent, if the cursor is at the
                         // beginning of a paragraph, there is no selection
@@ -1902,13 +1902,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 {
                                     eKeyState = KS_NumUp;
                                     nKS_NUMDOWN_Count = 2;
-                                    bDone = sal_True;
+                                    bDone = true;
                                 }
                                 else if (nKS_NUMINDENTINC_Count > 0)
                                 {
                                     eKeyState = KS_NumIndentDec;
                                     nKS_NUMINDENTINC_Count = 2;
-                                    bDone = sal_True;
+                                    bDone = true;
                                 }
                             }
 

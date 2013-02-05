@@ -55,8 +55,8 @@ SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView* pSwV
     m_pSh(pSwWrtShell),
     m_pWin(pWindow),
     m_nSlotId(USHRT_MAX),
-    m_bCreateObj(sal_True),
-    m_bInsForm(sal_False)
+    m_bCreateObj(true),
+    m_bInsForm(false)
 {
     if ( !m_pSh->HasDrawView() )
         m_pSh->MakeDrawView();

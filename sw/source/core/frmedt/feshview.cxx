@@ -1936,9 +1936,9 @@ void SwFEShell::BreakCreate()
 |*
 *************************************************************************/
 
-sal_Bool SwFEShell::IsDrawCreate() const
+bool SwFEShell::IsDrawCreate() const
 {
-    return Imp()->HasDrawView() ? Imp()->GetDrawView()->IsCreateObj() : sal_False;
+    return Imp()->HasDrawView() ? Imp()->GetDrawView()->IsCreateObj() : false;
 }
 
 /*************************************************************************

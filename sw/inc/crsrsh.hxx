@@ -673,7 +673,7 @@ public:
                                     sal_Bool bOnlyErrors = sal_False );
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
-    sal_Bool SelectNxtPrvHyperlink( sal_Bool bNext = sal_True );
+    bool SelectNxtPrvHyperlink( bool bNext = true );
 
     sal_Bool GotoRefMark( const String& rRefMark, sal_uInt16 nSubType = 0,
                             sal_uInt16 nSeqNo = 0 );

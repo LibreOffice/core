@@ -617,7 +617,7 @@ sal_Bool SwView::IsBezierEditMode()
     return (!IsDrawSelMode() && GetWrtShell().GetDrawView()->HasMarkablePoints());
 }
 
-sal_Bool SwView::IsFormMode() const
+bool SwView::IsFormMode() const
 {
     if (GetDrawFuncPtr() && GetDrawFuncPtr()->IsCreateObj())
     {
@@ -639,12 +639,12 @@ void SwView::SetSelDrawSlot()
     sDrawCustom.Erase();
 }
 
-sal_Bool SwView::AreOnlyFormsSelected() const
+bool SwView::AreOnlyFormsSelected() const
 {
     if ( GetWrtShell().IsFrmSelected() )
-        return sal_False;
+        return false;
 
-    sal_Bool bForm = sal_True;
+    bool bForm = true;
 
     SdrView* pSdrView = GetWrtShell().GetDrawView();
 
@@ -660,13 +660,13 @@ sal_Bool SwView::AreOnlyFormsSelected() const
 
             if (!HasOnlyObj(pSdrObj, FmFormInventor))
             {
-                bForm = sal_False;
+                bForm = false;
                 break;
             }
         }
     }
     else
-        bForm = sal_False;
+        bForm = false;
 
     return bForm;
 }

@@ -117,7 +117,7 @@ using namespace com::sun::star;
         pCrsrStack(0),  \
         rView(rShell),\
         aNavigationMgr(*this), \
-        bDestOnStack(sal_False)
+        bDestOnStack(false)
 
 #define BITFLD_INI_LIST \
         bClearMark = \
@@ -131,8 +131,8 @@ using namespace com::sun::star;
         bNoEdit = \
         bSelWrd = \
         bSelLn = \
-        bIsInClickToEdit = \
-        mbRetainSelection = sal_False;
+        mbRetainSelection = sal_False; \
+        bIsInClickToEdit = false;
 
 
 static SvxAutoCorrect* lcl_IsAutoCorr()

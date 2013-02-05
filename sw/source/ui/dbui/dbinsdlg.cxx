@@ -869,7 +869,7 @@ static void lcl_InsTextInArr( const String& rTxt, _DB_Columns& rColArr )
     }
 }
 
-sal_Bool SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
+bool SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
                                 _DB_Columns& rColArr,
                                 sal_Bool bInsField )
 {
