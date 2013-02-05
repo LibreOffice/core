@@ -59,11 +59,6 @@ protected:
     bool readAll( void);
     void add( ::rtl::OString const & key, ::rtl::OString const & value );
     void flush( void);
-
-#ifndef DISABLE_BDB2PMAP
-    bool importFromBDB( void);
-    ::rtl::OUString m_MapFileName;
-#endif
 };
 
 }

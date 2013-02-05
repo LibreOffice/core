@@ -26,10 +26,6 @@
 #include "dp_persmap.h"
 #include "rtl/strbuf.hxx"
 
-#ifndef DISABLE_BDB2PMAP
-#include <vector>
-#endif
-
 using namespace ::rtl;
 
 // the persistent map is used to manage a handful of key-value string pairs
@@ -52,10 +48,6 @@ PersistentMap::PersistentMap( OUString const & url_, bool readOnly )
 ,   m_bToBeCreated( !readOnly)
 ,   m_bIsDirty( false)
 {
-#ifndef DISABLE_BDB2PMAP
-    m_MapFileName = expandUnoRcUrl( url_);
-#endif
-
     open();
 }
 
@@ -170,11 +162,6 @@ bool PersistentMap::open()
 
     // or create later if needed
     m_bToBeCreated &= (rcOpen == osl::File::E_NOENT) && !m_bIsOpen;
-
-#ifndef DISABLE_BDB2PMAP
-    if( m_bToBeCreated)
-        importFromBDB();
-#endif // DISABLE_BDB2PMAP
 
     if( !m_bIsOpen)
         return m_bToBeCreated;
@@ -339,103 +326,6 @@ t_string2string_map PersistentMap::getEntries() const
     // TODO: return by const reference instead?
     return m_entries;
 }
-
-//______________________________________________________________________________
-#ifndef DISABLE_BDB2PMAP
-bool PersistentMap::importFromBDB()
-{
-    if( m_bReadOnly)
-        return false;
-
-    // get the name of its BDB counterpart
-    rtl::OUString aDBName = m_MapFileName;
-    if( !aDBName.endsWithAsciiL( ".pmap", 5))
-        return false;
-    aDBName = aDBName.replaceAt( aDBName.getLength()-5, 5, OUSTR(".db"));
-
-    // open the corresponding BDB file for reading
-    osl::File aDBFile( aDBName);
-    osl::File::RC rc = aDBFile.open( osl_File_OpenFlag_Read);
-    if( rc != osl::File::E_None)
-        return false;
-    sal_uInt64 nFileSize = 0;
-    if( aDBFile.getSize( nFileSize) != osl::File::E_None)
-        return false;
-
-    // read the BDB file
-    std::vector<sal_uInt8> aRawBDB( nFileSize);
-    for( sal_uInt64 nOfs = 0; nOfs < nFileSize;) {
-        sal_uInt64 nBytesRead = 0;
-        rc = aDBFile.read( (void*)&aRawBDB[nOfs], nFileSize - nOfs, nBytesRead);
-        if( (rc != osl::File::E_None) || !nBytesRead)
-            return false;
-        nOfs += nBytesRead;
-    }
-
-    // check BDB file header for non_encrypted Hash format v4..9
-    if( nFileSize < 0x0100)
-        return false;
-    if( aRawBDB[24] != 0) // only not-encrypted migration
-        return false;
-    if( aRawBDB[25] != 8) // we expect a P_HASHMETA page
-        return false;
-    const bool bLE = (aRawBDB[12]==0x61 && aRawBDB[13]==0x15 && aRawBDB[14]==0x06);
-    const bool bBE = (aRawBDB[15]==0x61 && aRawBDB[14]==0x15 && aRawBDB[13]==0x06);
-    if( bBE == bLE)
-        return false;
-    if( (aRawBDB[16] < 4) || (9 < aRawBDB[16])) // version
-        return false;
-    const sal_uInt64 nPgSize = bLE
-    ?   (aRawBDB[20] + (aRawBDB[21]<<8) + (aRawBDB[22]<<16) + (aRawBDB[23]<<24))
-    :   (aRawBDB[23] + (aRawBDB[22]<<8) + (aRawBDB[21]<<16) + (aRawBDB[20]<<24));
-    const int nPgCount = nFileSize / nPgSize;
-    if( nPgCount * nPgSize != nFileSize)
-        return false;
-
-    // find PackageManager's new_style entries
-    // using a simple heuristic for BDB_Hash pages
-    int nEntryCount = 0;
-    for( int nPgNo = 1; nPgNo < nPgCount; ++nPgNo) {
-        // parse the next _db_page
-        const sal_uInt8* const pPage = &aRawBDB[ nPgNo * nPgSize];
-        const sal_uInt8* const pEnd = pPage + nPgSize;
-        const int nHfOffset = bLE ? (pPage[22] + (pPage[23]<<8)) : (pPage[23] + (pPage[22]<<8));
-        if( nHfOffset <= 0)
-            continue;
-        const sal_uInt8* pCur = pPage + nHfOffset;
-        // iterate through the entries
-        for(; pCur < pEnd; ++pCur) {
-            if( pCur[0] != 0x01)
-                continue;
-            // get the value-candidate
-            const sal_uInt8* pVal = pCur + 1;
-            while( ++pCur < pEnd)
-                if( (*pCur < ' ') || ((*pCur > 0x7F) && (*pCur != 0xFF)))
-                    break;
-            if( pCur >= pEnd)
-                break;
-            if( (pCur[0] != 0x01) || (pCur[1] != 0xFF))
-                continue;
-            const OString aVal( (sal_Char*)pVal, pCur - pVal);
-            // get the key-candidate
-            const sal_uInt8* pKey = pCur + 1;
-            while( ++pCur < pEnd)
-                if( (*pCur < ' ') || ((*pCur > 0x7F) && (*pCur != 0xFF)))
-                    break;
-            if( (pCur < pEnd) && (*pCur > 0x01))
-                continue;
-            const OString aKey( (sal_Char*)pKey, pCur - pKey);
-            --pCur; // prepare for next round by rewinding to end of key-string
-
-            // add the key/value pair
-            add( aKey, aVal);
-            ++nEntryCount;
-        }
-    }
-
-    return (nEntryCount > 0);
-}
-#endif // DISABLE_BDB2PMAP
 
 }
 
