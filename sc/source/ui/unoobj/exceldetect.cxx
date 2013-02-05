@@ -9,7 +9,19 @@
 
 #include "exceldetect.hxx"
 
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
+
+#include "svl/itemset.hxx"
+#include "svl/eitem.hxx"
+#include "sfx2/app.hxx"
+#include "sfx2/docfile.hxx"
+#include "sfx2/sfxsids.hrc"
+#include "comphelper/mediadescriptor.hxx"
+#include "sot/storage.hxx"
+
 using namespace com::sun::star;
+using comphelper::MediaDescriptor;
 
 ScExcelBiffDetect::ScExcelBiffDetect( const uno::Reference<uno::XComponentContext>& /*xContext*/ ) {}
 ScExcelBiffDetect::~ScExcelBiffDetect() {}
@@ -36,9 +48,95 @@ uno::Sequence<OUString> ScExcelBiffDetect::getSupportedServiceNames() throw (uno
     return impl_getStaticSupportedServiceNames();
 }
 
+namespace {
+
+bool hasStream(const uno::Reference<io::XInputStream>& xInStream, const OUString& rName)
+{
+    SfxMedium aMedium;
+    aMedium.UseInteractionHandler(true);
+    aMedium.setStreamToLoadFrom(xInStream, true);
+    SvStream* pStream = aMedium.GetInStream();
+    if (!pStream)
+        return false;
+
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_Size nSize = pStream->Tell();
+    pStream->Seek(0);
+
+    if (!nSize)
+        // 0-size stream.  Failed.
+        return false;
+
+    SotStorageRef xStorage = new SotStorage(pStream, false);
+    if (!xStorage.Is() || xStorage->GetError())
+        return false;
+
+    return xStorage->IsStream(rName);
+}
+
+bool isTemplate(const OUString& rType)
+{
+    return rType.indexOf("_VorlageTemplate") != -1;
+}
+
+}
+
 OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
     throw (uno::RuntimeException)
 {
+    MediaDescriptor aMediaDesc(lDescriptor);
+    OUString aType;
+    aMediaDesc[MediaDescriptor::PROP_TYPENAME()] >>= aType;
+    if (aType.isEmpty())
+        // Type is not given.  We can't proceed.
+        return OUString();
+
+    aMediaDesc.addInputStream();
+    uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY);
+    if (!xInStream.is())
+        // No input stream.
+        return OUString();
+
+    if (aType == "calc_MS_Excel_97" || aType == "calc_MS_Excel_97_VorlageTemplate")
+    {
+        // See if this stream is a Excel 97/XP/2003 (BIFF8) stream.
+        if (!hasStream(xInStream, "Workbook"))
+            // BIFF8 is expected to contain a stream named "Workbook".
+            return OUString();
+
+        aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= isTemplate(aType) ? OUString("MS Excel 97 Vorlage/Template") : OUString("MS Excel 97");
+        return aType;
+    }
+
+    if (aType == "calc_MS_Excel_95" || aType == "calc_MS_Excel_95_VorlageTemplate")
+    {
+        // See if this stream is a Excel 95 (BIFF5) stream.
+        if (!hasStream(xInStream, "Book"))
+            return OUString();
+
+        aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= isTemplate(aType) ? OUString("MS Excel 95 Vorlage/Template") : OUString("MS Excel 95");
+        return aType;
+    }
+
+    if (aType == "calc_MS_Excel_5095" || aType == "calc_MS_Excel_5095_VorlageTemplate")
+    {
+        // See if this stream is a Excel 5.0/95 stream.
+        if (!hasStream(xInStream, "Book"))
+            return OUString();
+
+        aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= isTemplate(aType) ? OUString("MS Excel 5.0/95 Vorlage/Template") : OUString("MS Excel 5.0/95");
+        return aType;
+    }
+
+    if (aType == "calc_MS_Excel_40" || aType == "calc_MS_Excel_40_VorlageTemplate")
+    {
+        // See if this stream is a Excel 4.0 stream.
+
+        // TODO: Implement this.
+        return OUString();
+    }
+
+    // failed!
     return OUString();
 }
 
