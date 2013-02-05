@@ -108,8 +108,11 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     {
         if( !( aArguments[1] >>= nStorageMode ) )
         {
-            OSL_FAIL( "Wrong second argument!\n" );
-            throw uno::Exception(); // TODO: Illegal argument
+            throw lang::IllegalArgumentException(
+                ("second argument to css.embed.FileSystemStorageFactory."
+                 "createInstanceWithArguments must be a"
+                 " css.embed.ElementModes"),
+                static_cast< OWeakObject * >(this), -1);
         }
         // it's allways possible to read written storage in this implementation
         nStorageMode |= embed::ElementModes::READ;
@@ -118,18 +121,13 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     // retrieve storage source URL
     ::rtl::OUString aURL;
 
-    if ( aArguments[0] >>= aURL )
+    if ( !( aArguments[0] >>= aURL ) || aURL.isEmpty() )
     {
-        if ( aURL.isEmpty() )
-        {
-            OSL_FAIL( "Empty URL is provided!\n" );
-            throw uno::Exception(); // TODO: illegal argument
-        }
-    }
-    else
-    {
-        OSL_FAIL( "Wrong first argument!\n" );
-        throw uno::Exception(); // TODO: Illegal argument
+        throw lang::IllegalArgumentException(
+            ("first argument to"
+             " css.embed.FileSystemStorageFactory.createInstanceWithArguments"
+             " must be a (non-empty) URL"),
+            static_cast< OWeakObject * >(this), -1);
     }
 
     // allow to use other ucp's
@@ -138,14 +136,21 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
       || aURL.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip"))
       || ::utl::UCBContentHelper::IsDocument( aURL ) )
     {
-        OSL_FAIL( "File system storages can be based only on file URLs!\n" ); // ???
-        throw uno::Exception(); // TODO: illegal argument
+        throw lang::IllegalArgumentException(
+            ("URL \"" + aURL + "\" passed as first argument to"
+             " css.embed.FileSystemStorageFactory.createInstanceWithArguments"
+             " must be a file URL denoting a directory"),
+            static_cast< OWeakObject * >(this), -1);
     }
 
     if ( ( nStorageMode & embed::ElementModes::WRITE ) && !( nStorageMode & embed::ElementModes::NOCREATE ) )
         FSStorage::MakeFolderNoUI( aURL );
     else if ( !::utl::UCBContentHelper::IsFolder( aURL ) )
-        throw io::IOException(); // there is no such folder
+        throw io::IOException(
+            ("URL \"" + aURL + "\" passed to"
+             " css.embed.FileSystemStorageFactory.createInstanceWithArguments"
+             " does not denote an existing directory"),
+            static_cast< OWeakObject * >(this));
 
     ::ucbhelper::Content aResultContent(
         aURL, uno::Reference< ucb::XCommandEnvironment >(),
