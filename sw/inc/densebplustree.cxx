@@ -163,6 +163,58 @@ struct DBPTreeNode
 
         return offset;
     }
+
+    /** Move nCount data from pNode.
+
+        Join them into one node, in case we fit there.
+
+        @param offset the parent offsed of the pNode
+        @return we have joined the nodes into one, and deleted pNode
+    */
+    bool moveFromNextOrJoin( int nCount, int offset )
+    {
+        assert( nCount > 0 );
+        assert( m_nUsed < Order );
+
+        printf( "moveFromNextOrJoin()\n" );
+
+        if ( m_nUsed + m_pNext->m_nUsed < Order )
+            nCount = m_pNext->m_nUsed;
+
+        if ( m_bIsInternal )
+        {
+            for ( int i = 0; i < nCount; ++i )
+                m_pChildren[ m_nUsed + i ] = m_pNext->m_pChildren[ i ];
+            for ( int i = 0; i < m_pNext->m_nUsed - nCount; ++i )
+                m_pNext->m_pChildren[ i ] = m_pNext->m_pChildren[ i + nCount ];
+
+            m_pKeys[ m_nUsed - 1 ] = offset;
+            for ( int i = 0; i < nCount - 1; ++i )
+                m_pKeys[ m_nUsed + i ] = m_pNext->m_pKeys[ i ] + offset;
+            for ( int i = 0; i < m_pNext->m_nUsed - nCount - 1; ++i )
+                m_pNext->m_pKeys[ i ] = m_pNext->m_pKeys[ i + nCount ];
+        }
+        else
+        {
+            for ( int i = 0; i < nCount; ++i )
+                m_pValues[ m_nUsed + i ] = m_pNext->m_pValues[ i ];
+            for ( int i = 0; i < m_pNext->m_nUsed - nCount; ++i )
+                m_pNext->m_pValues[ i ] = m_pNext->m_pValues[ i + nCount ];
+        }
+
+        bool bJoining = false;
+        m_pNext->m_nUsed -= nCount;
+        if ( m_pNext->m_nUsed == 0 )
+        {
+            DBPTreeNode *pNode = m_pNext;
+            m_pNext = pNode->m_pNext;
+            delete pNode;
+            bJoining = true;
+        }
+
+        m_nUsed += nCount;
+        return bJoining;
+    }
 };
 
 template < class Key, class Value, int Order >
@@ -223,7 +275,7 @@ void DenseBPlusTree< Key, Value, Order >::Remove( Key nPos, Key nNumber )
     assert( nNumber > 0 );
     assert( nPos + nNumber <= m_nCount );
 
-    const int sMinFill = ( Order / 2 ) - 1;
+    const int sMinFill = ( Order / 2 );
 
     NodeWithIndex pParents[ m_nDepth ];
     int nParentsLength = 0;
@@ -252,13 +304,7 @@ void DenseBPlusTree< Key, Value, Order >::Remove( Key nPos, Key nNumber )
         removeBetween( pParents, pAfterParents, nParentsLength + 1 );
 
         // update indexes
-        shiftNodes( pParents, nParentsLength, aAfter.nIndex - nNumber );
-
-        // FIXME we have to create a function that walks up the parents to do
-        // this right even in the case nIndex == m_nUsed
-        if ( pParents[ nParentsLength - 1 ].nIndex < pParents[ nParentsLength - 1 ].pNode->m_nUsed - 1 )
-            ++pParents[ nParentsLength - 1 ].nIndex;
-        shiftNodes( pParents, nParentsLength, -aAfter.nIndex );
+        shiftNodes( pAfterParents, nAfterParentsLength, -nNumber );
     }
 
     m_nCount -= nNumber;
@@ -454,21 +500,42 @@ DBPTreeNode< Key, Value, Order >* DenseBPlusTree< Key, Value, Order >::splitNode
 template < class Key, class Value, int Order >
 void DenseBPlusTree< Key, Value, Order >::removeBetween( const NodeWithIndex pFrom[], const NodeWithIndex pTo[], int nLength )
 {
-    for ( int p = 0; p < nLength; ++p )
+    const int sMinFill = ( Order / 2 );
+    bool bJoined = false;
+
+    for ( int p = nLength - 1; p >= 0; --p )
     {
         const NodeWithIndex &rLeaf = pFrom[ p ];
         const NodeWithIndex &rAfter = pTo[ p ];
 
         if ( rLeaf.pNode == rAfter.pNode )
         {
+            if ( rLeaf.nIndex == rAfter.nIndex && !bJoined )
+                return; // we are done
+
             // we need to keep parents of the 'from' branch too
-            if ( rLeaf.pNode->m_bIsInternal )
+            DBPTreeNode< Key, Value, Order > *pNode = rLeaf.pNode;
+            if ( !rLeaf.pNode->m_bIsInternal || ( rLeaf.pNode->m_bIsInternal && !bJoined ) )
+                rLeaf.pNode->remove( rLeaf.nIndex, rAfter.nIndex - rLeaf.nIndex );
+            else
             {
-                if ( rAfter.nIndex - rLeaf.nIndex - 1 > 0 )
-                    rLeaf.pNode->remove( rLeaf.nIndex + 1, rAfter.nIndex - rLeaf.nIndex - 1 );
+                if ( rLeaf.nIndex + 1 < rLeaf.pNode->m_nUsed )
+                    rLeaf.pNode->remove( rLeaf.nIndex + 1, rAfter.nIndex - rLeaf.nIndex + 1 );
+                else
+                {
+                    pNode = rLeaf.pNode->m_pNext;
+                    pNode->remove( 0, rAfter.nIndex - rLeaf.nIndex + 1 );
+                }
+            }
+
+            if ( pNode->m_nUsed < sMinFill && pNode->m_pNext != NULL && p > 0 )
+            {
+                const NodeWithIndex &rParent = pFrom[ p - 1 ];
+                bJoined = pNode->moveFromNextOrJoin( sMinFill - pNode->m_nUsed,
+                        rParent.pNode->m_pKeys[ rParent.nIndex ] );
             }
             else
-                rLeaf.pNode->remove( rLeaf.nIndex, rAfter.nIndex - rLeaf.nIndex );
+                bJoined = false;
         }
         else
         {
@@ -489,6 +556,8 @@ void DenseBPlusTree< Key, Value, Order >::removeBetween( const NodeWithIndex pFr
 
             // reconnect
             rLeaf.pNode->m_pNext = rAfter.pNode;
+
+            // FIXME not finished - need to moveFromNextOrJoin() too
         }
     }
 }
