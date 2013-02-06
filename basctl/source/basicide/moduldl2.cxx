@@ -49,7 +49,7 @@
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
+#include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainerExport.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -851,10 +851,8 @@ void LibPage::InsertLib()
         OUString aModURL( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( xSFA->exists( aModURL ) )
         {
-            Sequence <Any> aSeqModURL(1);
-            aSeqModURL[0] <<= aModURL;
-            xModLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
-                        "com.sun.star.script.DocumentScriptLibraryContainer", aSeqModURL ), UNO_QUERY );
+            xModLibContImport = Reference< script::XLibraryContainer2 >(
+                        script::DocumentScriptLibraryContainer::createWithURL(xContext, aModURL), UNO_QUERY );
         }
 
         OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );

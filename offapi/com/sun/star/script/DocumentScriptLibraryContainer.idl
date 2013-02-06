@@ -55,6 +55,7 @@ service DocumentScriptLibraryContainer : XStorageBasedLibraryContainer
     create( [in] ::com::sun::star::document::XStorageBasedDocument Document )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
+    createWithURL( [in] string URL );
 };
 
 
