@@ -223,9 +223,10 @@ static String GetImageExtensionByFactory_Impl( const String& rURL )
     try
     {
         // get the TypeDetection service to access all registered types
-        ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >  xFac = ::comphelper::getProcessServiceFactory();
+        ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         ::com::sun::star::uno::Reference < ::com::sun::star::document::XTypeDetection > xTypeDetector(
-            xFac->createInstance( ASCII_STRING("com.sun.star.document.TypeDetection") ), ::com::sun::star::uno::UNO_QUERY );
+            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
+            ::com::sun::star::uno::UNO_QUERY );
 
         ::rtl::OUString aInternalType = xTypeDetector->queryTypeByURL( rURL );
         ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xAccess( xTypeDetector, ::com::sun::star::uno::UNO_QUERY );
