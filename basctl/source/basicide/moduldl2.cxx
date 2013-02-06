@@ -50,6 +50,7 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
+#include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainerExport.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -781,7 +782,6 @@ void LibPage::NewLib()
 
 void LibPage::InsertLib()
 {
-    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     // file open dialog
     Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
@@ -858,10 +858,8 @@ void LibPage::InsertLib()
         OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( xSFA->exists( aDlgURL ) )
         {
-            Sequence <Any> aSeqDlgURL(1);
-            aSeqDlgURL[0] <<= aDlgURL;
-            xDlgLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
-                        "com.sun.star.script.DocumentDialogLibraryContainer", aSeqDlgURL ), UNO_QUERY );
+            xDlgLibContImport = Reference< script::XLibraryContainer2 >(
+                        script::DocumentDialogLibraryContainer::createWithURL(xContext, aDlgURL), UNO_QUERY );
         }
 
         if ( xModLibContImport.is() || xDlgLibContImport.is() )
