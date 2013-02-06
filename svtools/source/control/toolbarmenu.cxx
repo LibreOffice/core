@@ -193,7 +193,6 @@ Reference< XAccessible > ToolbarMenuEntry::getAccessibleChild( sal_Int32 index )
 ToolbarMenu_Impl::ToolbarMenu_Impl( ToolbarMenu& rMenu, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame )
 : mrMenu( rMenu )
 , mxFrame( xFrame )
-, mxServiceManager( ::comphelper::getProcessServiceFactory() )
 , mnCheckPos(0)
 , mnImagePos(0)
 , mnTextPos(0)
@@ -1585,8 +1584,7 @@ void SAL_CALL ToolbarMenu::statusChanged( const ::com::sun::star::frame::Feature
 class ToolbarMenuStatusListener : public svt::FrameStatusListener
 {
 public:
-    ToolbarMenuStatusListener( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager,
-                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+    ToolbarMenuStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
                                ToolbarMenu& rToolbarMenu );
 
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
@@ -1598,10 +1596,9 @@ public:
 // --------------------------------------------------------------------
 
 ToolbarMenuStatusListener::ToolbarMenuStatusListener(
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
     ToolbarMenu& rToolbarMenu )
-: svt::FrameStatusListener( xServiceManager, xFrame )
+: svt::FrameStatusListener( ::comphelper::getProcessComponentContext(), xFrame )
 , mpMenu( &rToolbarMenu )
 {
 }
@@ -1627,7 +1624,7 @@ void SAL_CALL ToolbarMenuStatusListener::statusChanged( const ::com::sun::star::
 void ToolbarMenu::initStatusListener()
 {
     if( !mpImpl->mxStatusListener.is() )
-        mpImpl->mxStatusListener.set( new ToolbarMenuStatusListener( mpImpl->mxServiceManager, mpImpl->mxFrame, *this ) );
+        mpImpl->mxStatusListener.set( new ToolbarMenuStatusListener( mpImpl->mxFrame, *this ) );
 }
 
 // --------------------------------------------------------------------

@@ -124,7 +124,7 @@ class ImageOrientationListener : public svt::FrameStatusListener
 {
     public:
         ImageOrientationListener( const Reference< XStatusListener > rReceiver,
-                                  const Reference< XMultiServiceFactory > rServiceManager,
+                                  const Reference< XComponentContext > rxContext,
                                   const Reference< XFrame > rFrame );
         virtual ~ImageOrientationListener();
 
@@ -136,9 +136,9 @@ class ImageOrientationListener : public svt::FrameStatusListener
 
 ImageOrientationListener::ImageOrientationListener(
     const Reference< XStatusListener > rReceiver,
-    const Reference< XMultiServiceFactory > rServiceManager,
+    const Reference< XComponentContext > rxContext,
     const Reference< XFrame > rFrame ) :
-    FrameStatusListener( rServiceManager, rFrame ),
+    FrameStatusListener( rxContext, rFrame ),
     m_xReceiver( rReceiver )
 {
 }
@@ -1143,7 +1143,7 @@ void ToolBarManager::AddImageOrientationListener()
         m_bImageOrientationRegistered = sal_True;
         ImageOrientationListener* pImageOrientation = new ImageOrientationListener(
             Reference< XStatusListener >( static_cast< ::cppu::OWeakObject *>( this ), UNO_QUERY ),
-            m_xServiceManager,
+            comphelper::getComponentContext(m_xServiceManager),
             m_xFrame );
         m_xImageOrientationListener = Reference< XComponent >( static_cast< ::cppu::OWeakObject *>(
                                         pImageOrientation ), UNO_QUERY );

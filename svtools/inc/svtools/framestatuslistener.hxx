@@ -21,7 +21,7 @@
 #define _SVTOOLS_FRAMESTATUSLISTENER_HXX
 
 #include "svtools/svtdllapi.h"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -43,7 +43,7 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
                             public ::cppu::OWeakObject
 {
     public:
-        FrameStatusListener( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        FrameStatusListener( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
         virtual ~FrameStatusListener();
 
@@ -90,7 +90,7 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
         sal_Bool                                                                            m_bInitialized : 1,
                                                                                             m_bDisposed : 1;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         URLToDispatchMap                                                                    m_aListenerMap;
 };
 

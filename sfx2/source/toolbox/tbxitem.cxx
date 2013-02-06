@@ -1016,10 +1016,10 @@ Window* SfxToolBoxControl::CreateItemWindow( Window * )
 //--------------------------------------------------------------------
 
 SfxFrameStatusListener::SfxFrameStatusListener(
-    const Reference< XMultiServiceFactory >& rServiceManager,
+    const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame,
     SfxStatusListenerInterface* pCallee ) :
-    svt::FrameStatusListener( rServiceManager, xFrame ),
+    svt::FrameStatusListener( rxContext, xFrame ),
     m_pCallee( pCallee )
 {
 }
@@ -1224,7 +1224,7 @@ SfxFrameStatusListener* SfxPopupWindow::GetOrCreateStatusListener()
     if ( !m_xStatusListener.is() )
     {
         m_pStatusListener = new SfxFrameStatusListener(
-                                    ::comphelper::getProcessServiceFactory(),
+                                    ::comphelper::getProcessComponentContext(),
                                     m_xFrame,
                                     this );
         m_xStatusListener = Reference< XComponent >( static_cast< cppu::OWeakObject* >(

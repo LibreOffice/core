@@ -80,7 +80,7 @@ enum SfxPopupWindowType
 class SfxFrameStatusListener : public svt::FrameStatusListener
 {
     public:
-        SfxFrameStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        SfxFrameStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
                                 SfxStatusListenerInterface* pCallee );
         virtual ~SfxFrameStatusListener();

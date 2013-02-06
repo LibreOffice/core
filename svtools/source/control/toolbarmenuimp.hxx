@@ -270,7 +270,6 @@ struct ToolbarMenu_Impl
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              mxFrame;
     rtl::Reference< svt::FrameStatusListener >                                       mxStatusListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceManager;
     rtl::Reference< ToolbarMenuAcc >                                                 mxAccessible;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxOldSelection;
 

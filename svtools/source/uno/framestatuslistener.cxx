@@ -37,13 +37,13 @@ namespace svt
 {
 
 FrameStatusListener::FrameStatusListener(
-    const Reference< XMultiServiceFactory >& rServiceManager,
+    const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame ) :
     OWeakObject()
     ,   m_bInitialized( sal_True )
     ,   m_bDisposed( sal_False )
     ,   m_xFrame( xFrame )
-    ,   m_xServiceManager( rServiceManager )
+    ,   m_xContext( rxContext )
 {
 }
 
@@ -96,7 +96,7 @@ throw (::com::sun::star::uno::RuntimeException)
         try
         {
             Reference< XDispatch > xDispatch( pIter->second );
-            Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) ) );
+            Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( m_xContext ) );
             com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = pIter->first;
             xURLTransformer->parseStrict( aTargetURL );
@@ -181,9 +181,9 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
         {
             // Add status listener directly as intialize has already been called.
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-            if ( m_xServiceManager.is() && xDispatchProvider.is() )
+            if ( m_xContext.is() && xDispatchProvider.is() )
             {
-                Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) ) );
+                Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( m_xContext ) );
                 aTargetURL.Complete = aCommandURL;
                 xURLTransformer->parseStrict( aTargetURL );
                 xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
@@ -235,13 +235,13 @@ void FrameStatusListener::bindListener()
 
         // Collect all registered command URL's and store them temporary
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-        if ( m_xServiceManager.is() && xDispatchProvider.is() )
+        if ( m_xContext.is() && xDispatchProvider.is() )
         {
             xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
             URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
             while ( pIter != m_aListenerMap.end() )
             {
-                Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) ) );
+                Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( m_xContext ) );
                 com::sun::star::util::URL aTargetURL;
                 aTargetURL.Complete = pIter->first;
                 xURLTransformer->parseStrict( aTargetURL );
@@ -304,13 +304,13 @@ void FrameStatusListener::unbindListener()
 
     // Collect all registered command URL's and store them temporary
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-    if ( m_xServiceManager.is() && xDispatchProvider.is() )
+    if ( m_xContext.is() && xDispatchProvider.is() )
     {
         Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
         URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
         while ( pIter != m_aListenerMap.end() )
         {
-            Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) ) );
+            Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( m_xContext ) );
             com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = pIter->first;
             xURLTransformer->parseStrict( aTargetURL );
