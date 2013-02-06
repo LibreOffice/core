@@ -103,7 +103,7 @@ def nsinstall(argv):
       if not os.path.isdir(args[0]):
         sys.stderr.write('nsinstall: ' + args[0] + ' is not a directory\n')
         sys.exit(1)
-      if os.name != 'nt' and options.m:
+      if options.m:
         os.chmod(args[0], options.m)
       sys.exit()
     if options.m:
@@ -121,7 +121,7 @@ def nsinstall(argv):
       dest = os.path.join(target,
                           os.path.basename(os.path.normpath(e)))
       handleTarget(e, dest)
-      if os.name != 'nt' and options.m:
+      if options.m:
         os.chmod(dest, options.m)
 
   # set up handler
@@ -139,7 +139,7 @@ def nsinstall(argv):
         entries = [os.path.join(srcpath, e) for e in os.listdir(srcpath)]
         copy_all_entries(entries, targetpath)
         # options.t is not relevant for directories
-        if os.name != 'nt' and options.m:
+        if options.m:
           os.chmod(targetpath, options.m)
       elif options.t:
         if os.path.exists(targetpath):
