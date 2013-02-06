@@ -49,6 +49,11 @@
 
 sub action($$$)
 {
+    # The @__VIA_LIBRARY_PATH__ thing has no magic meaning anywhere
+    # (here in LO or to the dynamic linker), it is effectively a
+    # comment telling that this library is supposed to have been found
+    # by the dynamic linker already in DYLD_LIBRARY_PATH.
+
     my %action =
         ('app/UREBIN/URELIB' => '@executable_path/../lib',
          'app/OOO/URELIB' => '@executable_path/../ure-link/lib',
