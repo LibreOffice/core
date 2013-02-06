@@ -672,6 +672,7 @@ void SvxFontNameBox_Impl::CheckAndMarkUnknownFont( const XubString& fontname )
         {
             font.SetItalic( ITALIC_NONE );
             SetControlFont( font );
+            SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_CHARFONTNAME ));
         }
     }
     else
@@ -680,6 +681,7 @@ void SvxFontNameBox_Impl::CheckAndMarkUnknownFont( const XubString& fontname )
         {
             font.SetItalic( ITALIC_NORMAL );
             SetControlFont( font );
+            SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE ));
         }
     }
 }

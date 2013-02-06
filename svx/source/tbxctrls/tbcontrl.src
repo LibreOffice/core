@@ -163,5 +163,17 @@ String RID_SVXSTR_TEXTCOLOR
     Text [ en-US ] = "Font color";
 };
 //-----IAccessibility2 Implementation 2009
+
+// This is duplicated in GenericCommands.xcu in officecfg.
+String RID_SVXSTR_CHARFONTNAME
+{
+    Text [ en-US ] = "Font Name";
+};
+
+String RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE
+{
+    Text [ en-US ] = "Font Name. The current font is not available and will be substituted.";
+};
+
 // ********************************************************************** EOF
 
