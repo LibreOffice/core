@@ -2707,6 +2707,7 @@ else # ! SYSTEM_LIBXSLT_FOR_BUILD
 
 define gb_ExternalExecutable__register_xsltproc
 $(call gb_ExternalExecutable_set_internal,xsltproc)
+$(call gb_ExternalExecutable_add_dependencies,xsltproc,$(call gb_Package_get_target,xslt))
 
 endef
 
