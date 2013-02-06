@@ -737,7 +737,7 @@ void SwWrtShell::EnterSelFrmMode(const Point *pPos)
         nStartDragY = pPos->Y();
         bStartDrag = sal_True;
     }
-    bNoEdit = bLayoutMode = sal_True;
+    bLayoutMode = sal_True;
     HideCrsr();
 
         // gleicher Aufruf von BeginDrag an der SwFEShell

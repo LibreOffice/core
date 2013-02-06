@@ -251,7 +251,6 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
 
     void    NoEdit(sal_Bool bHideCrsr = sal_True);
     void    Edit();
-    sal_Bool    IsNoEdit() const { return bNoEdit; }
 
     sal_Bool IsRetainSelection() const { return mbRetainSelection; }
     void SetRetainSelection( sal_Bool bRet ) { mbRetainSelection = bRet; }
@@ -557,7 +556,6 @@ private:
     sal_Bool    bAddMode        :1;
     sal_Bool    bBlockMode      :1;
     sal_Bool    bLayoutMode     :1;
-    sal_Bool    bNoEdit         :1;
     sal_Bool    bCopy           :1;
     sal_Bool    bSelWrd         :1;
     sal_Bool    bSelLn          :1;

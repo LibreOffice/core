@@ -128,7 +128,6 @@ using namespace com::sun::star;
         bInSelect = \
         bCopy = \
         bLayoutMode = \
-        bNoEdit = \
         bSelWrd = \
         bSelLn = \
         mbRetainSelection = sal_False; \
@@ -149,7 +148,6 @@ void SwWrtShell::NoEdit(sal_Bool bHideCrsr)
 {
     if(bHideCrsr)
         HideCrsr();
-    bNoEdit = sal_True;
 }
 
 
@@ -159,7 +157,6 @@ void SwWrtShell::Edit()
     if (CanInsert())
     {
         ShowCrsr();
-        bNoEdit = sal_False;
     }
 }
 
