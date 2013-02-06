@@ -60,9 +60,12 @@ namespace connectivity
             sal_Int64       m_nInt64;
             sal_uInt64      m_uInt64;
 
+            float           m_nFloat;
+            double          m_nDouble;
+
             rtl_uString*    m_pString;
 
-            void*           m_pValue;           // can contains double, etc
+            void*           m_pValue;           // date/time/timestamp/sequence
         } m_aValue;
 
         sal_Int32           m_eTypeKind;        // the database type
