@@ -20,7 +20,6 @@
 #ifndef SC_REFFIND_HXX
 #define SC_REFFIND_HXX
 
-#include <tools/string.hxx>
 #include "address.hxx"
 
 class ScDocument;
