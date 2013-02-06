@@ -26,6 +26,7 @@
 #include "TxtCnvtHlp.hxx"
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include "FmtFilter.hxx"
+#include <comphelper/processfactory.hxx>
 
 #if defined _MSC_VER
 #pragma warning(push,1)
@@ -77,7 +78,7 @@ CXTDataObject::CXTDataObject( const Reference< XMultiServiceFactory >& aServiceM
     , m_XTransferable( aXTransferable )
     , m_bFormatEtcContainerInitialized( sal_False )
     , m_DataFormatTranslator( aServiceManager )
-    , m_FormatRegistrar( m_SrvMgr, m_DataFormatTranslator )
+    , m_FormatRegistrar( comphelper::getComponentContext(m_SrvMgr), m_DataFormatTranslator )
 {
 }
 

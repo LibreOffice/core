@@ -29,6 +29,8 @@
 #include "MimeAttrib.hxx"
 #include "FmtFilter.hxx"
 #include "Fetc.hxx"
+#include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
+#include <comphelper/processfactory.hxx>
 
 #define STR2(x) #x
 #define STR(x) STR2(x)
@@ -491,10 +493,8 @@ sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
 {
     if ( !m_rXMimeCntFactory.is( ) )
     {
-        m_rXMimeCntFactory = Reference< XMimeContentTypeFactory >( m_SrvMgr->createInstance(
-            OUString("com.sun.star.datatransfer.MimeContentTypeFactory") ), UNO_QUERY );
+        m_rXMimeCntFactory = MimeContentTypeFactory::create( comphelper::getComponentContext(m_SrvMgr) );
     }
-    OSL_ASSERT( m_rXMimeCntFactory.is( ) );
 
     sal_Bool bRet = sal_False;
 

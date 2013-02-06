@@ -20,7 +20,7 @@
 #include "ios_clipboard.hxx"
 
 #include "iOSTransferable.hxx"
-
+#include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include "comphelper/makesequence.hxx"
 #include "comphelper/processfactory.hxx"
 
@@ -84,17 +84,10 @@ IosClipboard::IosClipboard(UIPasteboard* pasteboard, bool bUseSystemPasteboard) 
   WeakComponentImplHelper3<XSystemClipboard, XFlushableClipboard, XServiceInfo>(m_aMutex),
   mIsSystemPasteboard(bUseSystemPasteboard)
 {
-    Reference<XMultiServiceFactory> mrServiceMgr = comphelper::getProcessServiceFactory();
+    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
 
-    mrXMimeCntFactory = Reference<XMimeContentTypeFactory>(mrServiceMgr->createInstance(
-     OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory"))), UNO_QUERY);
+    mrXMimeCntFactory = MimeContentTypeFactory::create(xContext);
 
-  if (!mrXMimeCntFactory.is())
-    {
-      throw RuntimeException(OUString(
-            RTL_CONSTASCII_USTRINGPARAM("IosClipboard: Cannot create com.sun.star.datatransfer.MimeContentTypeFactory")),
-            static_cast<XClipboardEx*>(this));
-    }
 #if 0 // ???
   mpDataFlavorMapper = DataFlavorMapperPtr_t(new DataFlavorMapper());
 #endif

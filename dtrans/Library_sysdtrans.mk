@@ -38,6 +38,7 @@ $(eval $(call gb_Library_add_defs,sysdtrans,\
 ))
 
 $(eval $(call gb_Library_use_libraries,sysdtrans,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

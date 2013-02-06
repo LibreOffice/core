@@ -22,7 +22,7 @@
 #include "PictToBmpFlt.hxx"
 #include "com/sun/star/datatransfer/UnsupportedFlavorException.hpp"
 #include "com/sun/star/datatransfer/XMimeContentType.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/datatransfer/MimeContentTypeFactory.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "comphelper/processfactory.hxx"
 
@@ -498,12 +498,8 @@ Any FileListDataProvider::getOOoData()
 
 DataFlavorMapper::DataFlavorMapper()
 {
-    Reference<XMultiServiceFactory> mrServiceManager = comphelper::getProcessServiceFactory();
-    mrXMimeCntFactory = Reference<XMimeContentTypeFactory>(mrServiceManager->createInstance(
-       OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory"))), UNO_QUERY);
-
-  if (!mrXMimeCntFactory.is())
-    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Cannot create com.sun.star.datatransfer.MimeContentTypeFactory")), NULL);
+    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+    mrXMimeCntFactory = MimeContentTypeFactory::create( xContext );
 }
 
 DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(NSString* systemDataFlavor) const

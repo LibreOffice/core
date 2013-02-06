@@ -21,6 +21,8 @@
 
 #include "ftransl.hxx"
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
+#include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include "../misc/ImplHelper.hxx"
 
 #if defined _MSC_VER
@@ -107,8 +109,8 @@ FormatEntry::FormatEntry(
 // ctor
 //------------------------------------------------------------------------
 
-CDataFormatTranslator::CDataFormatTranslator( const Reference< XMultiServiceFactory >& rSrvMgr ) :
-    m_SrvMgr( rSrvMgr )
+CDataFormatTranslator::CDataFormatTranslator( const Reference< XComponentContext >& rxContext ) :
+    m_xContext( rxContext )
 {
     initTranslationTable( );
 }
@@ -124,11 +126,7 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
 
     try
     {
-        Reference< XMimeContentTypeFactory > refXMimeCntFactory( m_SrvMgr->createInstance(
-            "com.sun.star.datatransfer.MimeContentTypeFactory" ), UNO_QUERY );
-
-        if ( !refXMimeCntFactory.is( ) )
-            throw RuntimeException( );
+        Reference< XMimeContentTypeFactory > refXMimeCntFactory = MimeContentTypeFactory::create( m_xContext );
 
         Reference< XMimeContentType >
             refXMimeCntType( refXMimeCntFactory->createMimeContentType( aDataFlavor.MimeType ) );

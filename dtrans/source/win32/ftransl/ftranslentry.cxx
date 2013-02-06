@@ -18,6 +18,7 @@
  */
 
 #include <cppuhelper/factory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>
 
@@ -60,7 +61,7 @@ namespace
 
     Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
     {
-        return Reference< XInterface >( static_cast< XDataFormatTranslator* >( new CDataFormatTranslator( rServiceManager ) ) );
+        return Reference< XInterface >( static_cast< XDataFormatTranslator* >( new CDataFormatTranslator( comphelper::getComponentContext(rServiceManager) ) ) );
     }
 }
 

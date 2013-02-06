@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include "../misc/WinClip.hxx"
 
 #include <vector>
@@ -66,7 +67,7 @@ class CDataFormatTranslator : public
 {
 
 public:
-    CDataFormatTranslator( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSrvMgr );
+    CDataFormatTranslator( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     //------------------------------------------------
     // XDataFormatTranslator
@@ -108,7 +109,7 @@ private:
 
 private:
     std::vector< FormatEntry >  m_TranslTable;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_SrvMgr;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
 };
 
 

@@ -20,7 +20,7 @@
 #include <osl/diagnose.h>
 #include "FetcList.hxx"
 #include "Fetc.hxx"
-#include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
+#include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 
 #include "DataFmtTransl.hxx"
@@ -165,11 +165,11 @@ sal_Bool SAL_CALL CFormatEtcContainer::skipFormatEtc( sal_uInt32 aNum )
 //
 //------------------------------------------------------------------------
 
-CFormatRegistrar::CFormatRegistrar( const Reference< XMultiServiceFactory >& ServiceManager,
+CFormatRegistrar::CFormatRegistrar( const Reference< XComponentContext >& rxContext,
                                     const CDataFormatTranslator& aDataFormatTranslator ) :
     m_DataFormatTranslator( aDataFormatTranslator ),
     m_bHasSynthesizedLocale( sal_False ),
-    m_SrvMgr( ServiceManager )
+    m_xContext( rxContext )
 {
 }
 
@@ -346,17 +346,14 @@ OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& 
 
     try
     {
-        Reference< XMimeContentTypeFactory > xMimeFac(
-            m_SrvMgr->createInstance( OUString( "com.sun.star.datatransfer.MimeContentTypeFactory" ) ), UNO_QUERY );
+        Reference< XMimeContentTypeFactory > xMimeFac =
+            MimeContentTypeFactory::create(m_xContext);
 
-        if( xMimeFac.is( ) )
-        {
-            Reference< XMimeContentType > xMimeType( xMimeFac->createMimeContentType( aFlavor.MimeType ) );
-            if ( xMimeType->hasParameter( TEXTPLAIN_PARAM_CHARSET ) )
-                charset = xMimeType->getParameterValue( TEXTPLAIN_PARAM_CHARSET );
-            else
-                charset = getMimeCharsetFromWinCP( GetACP( ), PRE_WINDOWS_CODEPAGE );
-        }
+        Reference< XMimeContentType > xMimeType( xMimeFac->createMimeContentType( aFlavor.MimeType ) );
+        if ( xMimeType->hasParameter( TEXTPLAIN_PARAM_CHARSET ) )
+            charset = xMimeType->getParameterValue( TEXTPLAIN_PARAM_CHARSET );
+        else
+            charset = getMimeCharsetFromWinCP( GetACP( ), PRE_WINDOWS_CODEPAGE );
     }
     catch(NoSuchElementException&)
     {

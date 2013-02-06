@@ -22,7 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
-#include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
+#include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 
 namespace basctl
 {
@@ -56,21 +56,18 @@ sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, c
     bool bRet = false;
 
     // compare mime content types
-    Reference< lang::XMultiServiceFactory >  xMSF = getProcessServiceFactory();
+    Reference< uno::XComponentContext >  xContext = getProcessComponentContext();
     Reference< datatransfer::XMimeContentTypeFactory >
-        xMCntTypeFactory( xMSF->createInstance( "com.sun.star.datatransfer.MimeContentTypeFactory" ), UNO_QUERY );
+        xMCntTypeFactory = MimeContentTypeFactory::create(xContext);;
 
-    if ( xMCntTypeFactory.is( ) )
-    {
-        // compare full media types
-        Reference< datatransfer::XMimeContentType > xLType = xMCntTypeFactory->createMimeContentType( lFlavor.MimeType );
-        Reference< datatransfer::XMimeContentType > xRType = xMCntTypeFactory->createMimeContentType( rFlavor.MimeType );
+    // compare full media types
+    Reference< datatransfer::XMimeContentType > xLType = xMCntTypeFactory->createMimeContentType( lFlavor.MimeType );
+    Reference< datatransfer::XMimeContentType > xRType = xMCntTypeFactory->createMimeContentType( rFlavor.MimeType );
 
-        OUString aLFullMediaType = xLType->getFullMediaType();
-        OUString aRFullMediaType = xRType->getFullMediaType();
+    OUString aLFullMediaType = xLType->getFullMediaType();
+    OUString aRFullMediaType = xRType->getFullMediaType();
 
-        bRet = aLFullMediaType.equalsIgnoreAsciiCase( aRFullMediaType );
-    }
+    bRet = aLFullMediaType.equalsIgnoreAsciiCase( aRFullMediaType );
 
     return bRet;
 }

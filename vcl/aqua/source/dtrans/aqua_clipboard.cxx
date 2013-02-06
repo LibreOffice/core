@@ -21,7 +21,7 @@
 
 #include "DataFlavorMapping.hxx"
 #include "OSXTransferable.hxx"
-
+#include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include "comphelper/makesequence.hxx"
 #include "comphelper/processfactory.hxx"
 
@@ -85,17 +85,9 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
   WeakComponentImplHelper3<XSystemClipboard, XFlushableClipboard, XServiceInfo>(m_aMutex),
   mIsSystemPasteboard(bUseSystemPasteboard)
 {
-    Reference<XMultiServiceFactory> mrServiceMgr = comphelper::getProcessServiceFactory();
+    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
 
-    mrXMimeCntFactory = Reference<XMimeContentTypeFactory>(mrServiceMgr->createInstance(
-     OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory"))), UNO_QUERY);
-
-  if (!mrXMimeCntFactory.is())
-    {
-      throw RuntimeException(OUString(
-            RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Cannot create com.sun.star.datatransfer.MimeContentTypeFactory")),
-            static_cast<XClipboardEx*>(this));
-    }
+    mrXMimeCntFactory = MimeContentTypeFactory::create(xContext);
 
   mpDataFlavorMapper = DataFlavorMapperPtr_t(new DataFlavorMapper());
 

@@ -43,7 +43,7 @@
 #include <comphelper/seqstream.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
+#include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -212,73 +212,65 @@ static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescripto
 
 static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, const DataFlavorEx& rFlavorEx )
 {
-    Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
-    Reference< XMimeContentTypeFactory >    xMimeFact;
+    Reference< XComponentContext >       xContext( ::comphelper::getProcessComponentContext() );
 
     try
     {
-        if( xFact.is() )
-        {
-            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.datatransfer.MimeContentTypeFactory" )) ),
-                                                              UNO_QUERY );
-        }
+        Reference< XMimeContentTypeFactory >  xMimeFact = MimeContentTypeFactory::create( xContext );
 
-        if( xMimeFact.is() )
-        {
-            Reference< XMimeContentType > xMimeType( xMimeFact->createMimeContentType( rFlavorEx.MimeType ) );
+        Reference< XMimeContentType > xMimeType( xMimeFact->createMimeContentType( rFlavorEx.MimeType ) );
 
-            if( xMimeType.is() )
+        if( xMimeType.is() )
+        {
+            const ::rtl::OUString aClassNameString(RTL_CONSTASCII_USTRINGPARAM( "classname" ));
+            const ::rtl::OUString aTypeNameString(RTL_CONSTASCII_USTRINGPARAM( "typename" ));
+            const ::rtl::OUString aDisplayNameString(RTL_CONSTASCII_USTRINGPARAM( "displayname" ));
+            const ::rtl::OUString aViewAspectString(RTL_CONSTASCII_USTRINGPARAM( "viewaspect" ));
+            const ::rtl::OUString aWidthString(RTL_CONSTASCII_USTRINGPARAM( "width" ));
+            const ::rtl::OUString aHeightString(RTL_CONSTASCII_USTRINGPARAM( "height" ));
+            const ::rtl::OUString aPosXString(RTL_CONSTASCII_USTRINGPARAM( "posx" ));
+            const ::rtl::OUString aPosYString(RTL_CONSTASCII_USTRINGPARAM( "posy" ));
+
+            if( xMimeType->hasParameter( aClassNameString ) )
             {
-                const ::rtl::OUString aClassNameString(RTL_CONSTASCII_USTRINGPARAM( "classname" ));
-                const ::rtl::OUString aTypeNameString(RTL_CONSTASCII_USTRINGPARAM( "typename" ));
-                const ::rtl::OUString aDisplayNameString(RTL_CONSTASCII_USTRINGPARAM( "displayname" ));
-                const ::rtl::OUString aViewAspectString(RTL_CONSTASCII_USTRINGPARAM( "viewaspect" ));
-                const ::rtl::OUString aWidthString(RTL_CONSTASCII_USTRINGPARAM( "width" ));
-                const ::rtl::OUString aHeightString(RTL_CONSTASCII_USTRINGPARAM( "height" ));
-                const ::rtl::OUString aPosXString(RTL_CONSTASCII_USTRINGPARAM( "posx" ));
-                const ::rtl::OUString aPosYString(RTL_CONSTASCII_USTRINGPARAM( "posy" ));
+                rObjDesc.maClassName.MakeId( xMimeType->getParameterValue( aClassNameString ) );
+            }
 
-                if( xMimeType->hasParameter( aClassNameString ) )
-                {
-                    rObjDesc.maClassName.MakeId( xMimeType->getParameterValue( aClassNameString ) );
-                }
+            if( xMimeType->hasParameter( aTypeNameString ) )
+            {
+                rObjDesc.maTypeName = xMimeType->getParameterValue( aTypeNameString );
+            }
 
-                if( xMimeType->hasParameter( aTypeNameString ) )
-                {
-                    rObjDesc.maTypeName = xMimeType->getParameterValue( aTypeNameString );
-                }
+            if( xMimeType->hasParameter( aDisplayNameString ) )
+            {
+                // the display name might contain unacceptable characters, in this case they should be encoded
+                // this seems to be the only parameter currently that might contain such characters
+                rObjDesc.maDisplayName = ::rtl::Uri::decode( xMimeType->getParameterValue( aDisplayNameString ), rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+            }
 
-                if( xMimeType->hasParameter( aDisplayNameString ) )
-                {
-                    // the display name might contain unacceptable characters, in this case they should be encoded
-                    // this seems to be the only parameter currently that might contain such characters
-                    rObjDesc.maDisplayName = ::rtl::Uri::decode( xMimeType->getParameterValue( aDisplayNameString ), rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                }
+            if( xMimeType->hasParameter( aViewAspectString ) )
+            {
+                rObjDesc.mnViewAspect = static_cast< sal_uInt16 >( xMimeType->getParameterValue( aViewAspectString ).toInt32() );
+            }
 
-                if( xMimeType->hasParameter( aViewAspectString ) )
-                {
-                    rObjDesc.mnViewAspect = static_cast< sal_uInt16 >( xMimeType->getParameterValue( aViewAspectString ).toInt32() );
-                }
+            if( xMimeType->hasParameter( aWidthString ) )
+            {
+                rObjDesc.maSize.Width() = xMimeType->getParameterValue( aWidthString ).toInt32();
+            }
 
-                if( xMimeType->hasParameter( aWidthString ) )
-                {
-                    rObjDesc.maSize.Width() = xMimeType->getParameterValue( aWidthString ).toInt32();
-                }
+            if( xMimeType->hasParameter( aHeightString ) )
+            {
+                rObjDesc.maSize.Height() = xMimeType->getParameterValue( aHeightString ).toInt32();
+            }
 
-                if( xMimeType->hasParameter( aHeightString ) )
-                {
-                    rObjDesc.maSize.Height() = xMimeType->getParameterValue( aHeightString ).toInt32();
-                }
+            if( xMimeType->hasParameter( aPosXString ) )
+            {
+                rObjDesc.maDragStartPos.X() = xMimeType->getParameterValue( aPosXString ).toInt32();
+            }
 
-                if( xMimeType->hasParameter( aPosXString ) )
-                {
-                    rObjDesc.maDragStartPos.X() = xMimeType->getParameterValue( aPosXString ).toInt32();
-                }
-
-                if( xMimeType->hasParameter( aPosYString ) )
-                {
-                    rObjDesc.maDragStartPos.Y() = xMimeType->getParameterValue( aPosYString ).toInt32();
-                }
+            if( xMimeType->hasParameter( aPosYString ) )
+            {
+                rObjDesc.maDragStartPos.Y() = xMimeType->getParameterValue( aPosYString ).toInt32();
             }
         }
     }
@@ -1350,14 +1342,11 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
 {
     try
     {
-        Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
-        Reference< XMimeContentTypeFactory >    xMimeFact;
+        Reference< XComponentContext >          xContext( ::comphelper::getProcessComponentContext() );
+        Reference< XMimeContentTypeFactory >    xMimeFact = MimeContentTypeFactory::create( xContext );
         DataFlavorEx                            aFlavorEx;
         const ::rtl::OUString                   aCharsetStr(RTL_CONSTASCII_USTRINGPARAM( "charset" ));
 
-        if( xFact.is() )
-            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.datatransfer.MimeContentTypeFactory" )) ),
-                                                              UNO_QUERY );
 
         for( sal_Int32 i = 0; i < rDataFlavorSeq.getLength(); i++ )
         {
@@ -1366,7 +1355,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
 
             try
             {
-                if( xMimeFact.is() && !rFlavor.MimeType.isEmpty() )
+                if( !rFlavor.MimeType.isEmpty() )
                     xMimeType = xMimeFact->createMimeContentType( rFlavor.MimeType );
             }
             catch( const ::com::sun::star::uno::Exception& )
@@ -2275,52 +2264,46 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
                                           const ::com::sun::star::datatransfer::DataFlavor& rRequestFlavor,
                                           sal_Bool )
 {
-    Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
-    Reference< XMimeContentTypeFactory >    xMimeFact;
+    Reference< XComponentContext >          xContext( ::comphelper::getProcessComponentContext() );
     sal_Bool                                bRet = sal_False;
 
     try
     {
-        if( xFact.is() )
-            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.datatransfer.MimeContentTypeFactory" )) ),
-                                                              UNO_QUERY );
+        Reference< XMimeContentTypeFactory >    xMimeFact = MimeContentTypeFactory::create( xContext );
 
-        if( xMimeFact.is() )
+        Reference< XMimeContentType > xRequestType1( xMimeFact->createMimeContentType( rInternalFlavor.MimeType ) );
+        Reference< XMimeContentType > xRequestType2( xMimeFact->createMimeContentType( rRequestFlavor.MimeType ) );
+
+        if( xRequestType1.is() && xRequestType2.is() )
         {
-            Reference< XMimeContentType > xRequestType1( xMimeFact->createMimeContentType( rInternalFlavor.MimeType ) );
-            Reference< XMimeContentType > xRequestType2( xMimeFact->createMimeContentType( rRequestFlavor.MimeType ) );
-
-            if( xRequestType1.is() && xRequestType2.is() )
+            if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( xRequestType2->getFullMediaType() ) )
             {
-                if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( xRequestType2->getFullMediaType() ) )
+                if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/plain" )) ) )
                 {
-                    if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/plain" )) ) )
-                    {
-                        // special handling for text/plain media types
-                        const ::rtl::OUString aCharsetString(RTL_CONSTASCII_USTRINGPARAM( "charset" ));
+                    // special handling for text/plain media types
+                    const ::rtl::OUString aCharsetString(RTL_CONSTASCII_USTRINGPARAM( "charset" ));
 
-                        if( !xRequestType2->hasParameter( aCharsetString ) ||
-                            xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "utf-16" )) ) ||
-                            xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unicode" )) ) )
-                        {
-                            bRet = sal_True;
-                        }
-                    }
-                    else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice" )) ) )
+                    if( !xRequestType2->hasParameter( aCharsetString ) ||
+                        xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "utf-16" )) ) ||
+                        xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unicode" )) ) )
                     {
-                        // special handling for application/x-openoffice media types
-                        const ::rtl::OUString aFormatString(RTL_CONSTASCII_USTRINGPARAM( "windows_formatname" ));
-
-                        if( xRequestType1->hasParameter( aFormatString ) &&
-                            xRequestType2->hasParameter( aFormatString ) &&
-                            xRequestType1->getParameterValue( aFormatString ).equalsIgnoreAsciiCase( xRequestType2->getParameterValue( aFormatString ) ) )
-                        {
-                            bRet = sal_True;
-                        }
-                    }
-                    else
                         bRet = sal_True;
+                    }
                 }
+                else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice" )) ) )
+                {
+                    // special handling for application/x-openoffice media types
+                    const ::rtl::OUString aFormatString(RTL_CONSTASCII_USTRINGPARAM( "windows_formatname" ));
+
+                    if( xRequestType1->hasParameter( aFormatString ) &&
+                        xRequestType2->hasParameter( aFormatString ) &&
+                        xRequestType1->getParameterValue( aFormatString ).equalsIgnoreAsciiCase( xRequestType2->getParameterValue( aFormatString ) ) )
+                    {
+                        bRet = sal_True;
+                    }
+                }
+                else
+                    bRet = sal_True;
             }
         }
     }

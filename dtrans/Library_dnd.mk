@@ -33,6 +33,7 @@ $(eval $(call gb_Library_set_componentfile,dnd,dtrans/util/dnd))
 $(eval $(call gb_Library_use_sdk_api,dnd))
 
 $(eval $(call gb_Library_use_libraries,dnd,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
