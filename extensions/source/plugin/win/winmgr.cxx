@@ -160,7 +160,7 @@ static void add_IE_Plugins( PluginLocationMap & rPlugins )
 static void add_NS_keys( HKEY hKey, PluginLocationMap & rPlugins )
 {
     TCHAR value[MAX_PATH];
-    DWORD dwType, size = sizeof(value);
+    DWORD dwType, size;
 
     // 4.7
     size = sizeof(value);
@@ -219,7 +219,7 @@ static void add_NS_lookupRecursive( HKEY hKey, PluginLocationMap & rPlugins )
 static void add_MozPlugin( HKEY hKey, PluginLocationMap & rPlugins )
 {
     TCHAR value[MAX_PATH];
-    DWORD dwType, size = sizeof(value);
+    DWORD dwType, size;
 
     size = sizeof(value);
     if (::RegQueryValueEx(
