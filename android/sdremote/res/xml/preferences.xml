@@ -3,7 +3,7 @@
 
     <!-- <SwitchPreference android:defaultValue="false" android:title="@string/options_autodecline" android:key="option_autodecline"/> -->
     <CheckBoxPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="option_volumeswitching"
         android:summary="@string/options_volumeswitching_descripton"
         android:title="@string/options_volumeswitching" />
