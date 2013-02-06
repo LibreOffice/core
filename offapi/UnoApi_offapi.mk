@@ -1277,7 +1277,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text,\
 	GenericTextDocument \
 	GlobalDocument \
 	GlobalSettings \
-	GradientTable \
 	IllustrationsIndex \
 	InContentMetadata \
 	LineNumberingProperties \

@@ -153,7 +153,6 @@ using ::osl::FileBase;
 #define SW_CREATE_TRANSGRADIENT_TABLE   0x05
 #define SW_CREATE_MARKER_TABLE          0x06
 #define SW_CREATE_DRAW_DEFAULTS         0x07
-#define SW_CREATE_TEXT_GRADIENT_TABLE   0x08
 
 extern bool sw_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
 
@@ -1692,8 +1691,6 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
             {
                 if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
                     xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
-                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.GradientTable") ) )
-                    xRet = GetPropertyHelper()->GetDrawTable(SW_CREATE_TEXT_GRADIENT_TABLE);
             }
             else if (sCategory == "chart2" )
             {
@@ -3903,11 +3900,6 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
                 if(!xDrawDefaults.is())
                     xDrawDefaults = (cppu::OWeakObject*)new SwSvxUnoDrawPool(m_pDoc);
                 xRet = xDrawDefaults;
-            break;
-            case SW_CREATE_TEXT_GRADIENT_TABLE     :
-                if(!xTextGradientTable.is())
-                    xTextGradientTable = SvxUnoTextGradientTable_createInstance( m_pDoc->GetOrCreateDrawModel(), RES_FILL_GRADIENT );
-                xRet = xTextGradientTable;
             break;
 #if OSL_DEBUG_LEVEL > 0
             default: OSL_FAIL("which table?");

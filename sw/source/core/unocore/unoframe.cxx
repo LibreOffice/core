@@ -263,7 +263,15 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
             {
                 rToSet.Put(*pItem);
                 if(pItem != &aFillGradient)
+                {
+                    // New name was generated? Then insert it to the drawinglayer style table.
+                    uno::Reference<frame::XModel> xModel(pDoc->GetDocShell()->GetModel());
+                    uno::Reference<lang::XMultiServiceFactory> xServiceFact(xModel, uno::UNO_QUERY);
+                    uno::Reference< container::XNameContainer > xGradients(xServiceFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY);
+                    xGradients->insertByName(pItem->GetName(), *pFillGradient);
+
                     delete pItem;
+                }
             }
         }
     }
