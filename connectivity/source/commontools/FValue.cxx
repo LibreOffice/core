@@ -274,17 +274,6 @@ void ORowSetValue::free()
                 rtl_uString_release(m_aValue.m_pString);
                 m_aValue.m_pString = NULL;
                 break;
-            case DataType::FLOAT:
-                delete (float*)m_aValue.m_pValue;
-                TRACE_FREE( float )
-                m_aValue.m_pValue = NULL;
-                break;
-            case DataType::DOUBLE:
-            case DataType::REAL:
-                delete (double*)m_aValue.m_pValue;
-                TRACE_FREE( double )
-                m_aValue.m_pValue = NULL;
-                break;
             case DataType::DATE:
                 delete (::com::sun::star::util::Date*)m_aValue.m_pValue;
                 TRACE_FREE( Date )
@@ -320,6 +309,9 @@ void ORowSetValue::free()
             case DataType::INTEGER:
             case DataType::BIGINT:
             case DataType::BOOLEAN:
+            case DataType::FLOAT:
+            case DataType::DOUBLE:
+            case DataType::REAL:
                 break;
             default:
                 if ( m_aValue.m_pValue )
@@ -358,15 +350,6 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
             case DataType::LONGVARCHAR:
                 rtl_uString_acquire(_rRH.m_aValue.m_pString);
                 m_aValue.m_pString = _rRH.m_aValue.m_pString;
-                break;
-            case DataType::FLOAT:
-                m_aValue.m_pValue   = new float(*(float*)_rRH.m_aValue.m_pValue);
-                TRACE_ALLOC( float )
-                break;
-            case DataType::DOUBLE:
-            case DataType::REAL:
-                m_aValue.m_pValue   = new double(*(double*)_rRH.m_aValue.m_pValue);
-                TRACE_ALLOC( double )
                 break;
             case DataType::DATE:
                 m_aValue.m_pValue   = new Date(*(Date*)_rRH.m_aValue.m_pValue);
@@ -414,6 +397,13 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 else
                     m_aValue.m_uInt64   = _rRH.m_aValue.m_uInt64;
                 break;
+            case DataType::FLOAT:
+                m_aValue.m_nFloat  = _rRH.m_aValue.m_nFloat;
+                break;
+            case DataType::DOUBLE:
+            case DataType::REAL:
+                m_aValue.m_nDouble  = _rRH.m_aValue.m_nDouble;
+                break;
             default:
                 m_aValue.m_pValue   = new Any(*(Any*)_rRH.m_aValue.m_pValue);
                 TRACE_ALLOC( Any )
@@ -429,13 +419,6 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
                 (*this) = ::rtl::OUString(_rRH.m_aValue.m_pString);
-                break;
-            case DataType::FLOAT:
-                (*this) = *(float*)_rRH.m_aValue.m_pValue;
-                break;
-            case DataType::DOUBLE:
-            case DataType::REAL:
-                (*this) = *(double*)_rRH.m_aValue.m_pValue;
                 break;
             case DataType::DATE:
                 (*this) = *(Date*)_rRH.m_aValue.m_pValue;
@@ -478,6 +461,13 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                     m_aValue.m_nInt64   = _rRH.m_aValue.m_nInt64;
                 else
                     m_aValue.m_uInt64   = _rRH.m_aValue.m_uInt64;
+                break;
+            case DataType::FLOAT:
+                m_aValue.m_nFloat  = _rRH.m_aValue.m_nFloat;
+                break;
+            case DataType::DOUBLE:
+            case DataType::REAL:
+                m_aValue.m_nDouble  = _rRH.m_aValue.m_nDouble;
                 break;
             default:
                 (*(Any*)m_aValue.m_pValue)  = (*(Any*)_rRH.m_aValue.m_pValue);
@@ -564,18 +554,12 @@ ORowSetValue& ORowSetValue::operator=(const ::rtl::OUString& _rRH)
 
 ORowSetValue& ORowSetValue::operator=(const double& _rRH)
 {
-    if( !isStorageCompatible(m_eTypeKind,DataType::DOUBLE) )
+    if(m_eTypeKind != DataType::DOUBLE)
         free();
 
-    if(m_bNull)
-    {
-        m_aValue.m_pValue = new double(_rRH);
-        TRACE_ALLOC( double )
-        m_eTypeKind = DataType::DOUBLE;
-        m_bNull = sal_False;
-    }
-    else
-        *(double*)m_aValue.m_pValue = _rRH;
+    m_aValue.m_nDouble = _rRH;
+    m_eTypeKind = DataType::DOUBLE;
+    m_bNull = sal_False;
 
     return *this;
 }
@@ -585,15 +569,9 @@ ORowSetValue& ORowSetValue::operator=(const float& _rRH)
     if(m_eTypeKind != DataType::FLOAT)
         free();
 
-    if(m_bNull)
-    {
-        m_aValue.m_pValue = new float(_rRH);
-        TRACE_ALLOC( float )
-        m_eTypeKind = DataType::FLOAT;
-        m_bNull = sal_False;
-    }
-    else
-        *(float*)m_aValue.m_pValue = _rRH;
+    m_aValue.m_nFloat = _rRH;
+    m_eTypeKind = DataType::FLOAT;
+    m_bNull = sal_False;
 
     return *this;
 }
@@ -839,11 +817,11 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
             }
             break;
         case DataType::FLOAT:
-            bRet = *(float*)m_aValue.m_pValue == *(float*)_rRH.m_aValue.m_pValue;
+            bRet = m_aValue.m_nFloat == _rRH.m_aValue.m_nFloat;
             break;
         case DataType::DOUBLE:
         case DataType::REAL:
-            bRet = *(double*)m_aValue.m_pValue == *(double*)_rRH.m_aValue.m_pValue;
+            bRet = m_aValue.m_nDouble == _rRH.m_aValue.m_nDouble;
             break;
         case DataType::TINYINT:
             bRet = m_bSigned ? ( m_aValue.m_nInt8 == _rRH.m_aValue.m_nInt8 ) : (m_aValue.m_uInt8 == _rRH.m_aValue.m_uInt8);
@@ -906,13 +884,11 @@ Any ORowSetValue::makeAny() const
                 rValue <<= (::rtl::OUString)m_aValue.m_pString;
                 break;
             case DataType::FLOAT:
-                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
-                rValue <<= *(float*)m_aValue.m_pValue;
+                rValue <<= m_aValue.m_nFloat;
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
-                rValue <<= *(double*)m_aValue.m_pValue;
+                rValue <<= m_aValue.m_nDouble;
                 break;
             case DataType::DATE:
                 OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
@@ -1104,11 +1080,11 @@ bool ORowSetValue::getBool()    const
                 bRet = ::rtl::OUString(m_aValue.m_pString).toInt32() != 0;
                 break;
             case DataType::FLOAT:
-                bRet = *(float*)m_aValue.m_pValue != 0.0;
+                bRet = m_aValue.m_nFloat != 0.0;
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                bRet = *(double*)m_aValue.m_pValue != 0.0;
+                bRet = m_aValue.m_nDouble != 0.0;
                 break;
             case DataType::DATE:
             case DataType::TIME:
@@ -1164,11 +1140,11 @@ sal_Int8 ORowSetValue::getInt8()    const
                 nRet = sal_Int8(::rtl::OUString(m_aValue.m_pString).toInt32());
                 break;
             case DataType::FLOAT:
-                nRet = sal_Int8(*(float*)m_aValue.m_pValue);
+                nRet = sal_Int8(m_aValue.m_nFloat);
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                nRet = sal_Int8(*(double*)m_aValue.m_pValue);
+                nRet = sal_Int8(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
             case DataType::TIME:
@@ -1235,11 +1211,11 @@ sal_uInt8 ORowSetValue::getUInt8()    const
                 nRet = sal_uInt8(::rtl::OUString(m_aValue.m_pString).toInt32());
                 break;
             case DataType::FLOAT:
-                nRet = sal_uInt8(*(float*)m_aValue.m_pValue);
+                nRet = sal_uInt8(m_aValue.m_nFloat);
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                nRet = sal_uInt8(*(double*)m_aValue.m_pValue);
+                nRet = sal_uInt8(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
             case DataType::TIME:
@@ -1310,11 +1286,11 @@ sal_Int16 ORowSetValue::getInt16()  const
                 nRet = sal_Int16(::rtl::OUString(m_aValue.m_pString).toInt32());
                 break;
             case DataType::FLOAT:
-                nRet = sal_Int16(*(float*)m_aValue.m_pValue);
+                nRet = sal_Int16(m_aValue.m_nFloat);
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                nRet = sal_Int16(*(double*)m_aValue.m_pValue);
+                nRet = sal_Int16(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
             case DataType::TIME:
@@ -1381,11 +1357,11 @@ sal_uInt16 ORowSetValue::getUInt16()  const
                 nRet = sal_uInt16(::rtl::OUString(m_aValue.m_pString).toInt32());
                 break;
             case DataType::FLOAT:
-                nRet = sal_uInt16(*(float*)m_aValue.m_pValue);
+                nRet = sal_uInt16(m_aValue.m_nFloat);
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                nRet = sal_uInt16(*(double*)m_aValue.m_pValue);
+                nRet = sal_uInt16(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
             case DataType::TIME:
@@ -1453,11 +1429,11 @@ sal_Int32 ORowSetValue::getInt32()  const
                 nRet = ::rtl::OUString(m_aValue.m_pString).toInt32();
                 break;
             case DataType::FLOAT:
-                nRet = sal_Int32(*(float*)m_aValue.m_pValue);
+                nRet = sal_Int32(m_aValue.m_nFloat);
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                nRet = sal_Int32(*(double*)m_aValue.m_pValue);
+                nRet = sal_Int32(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
                 nRet = dbtools::DBTypeConversion::toDays(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
@@ -1526,11 +1502,11 @@ sal_uInt32 ORowSetValue::getUInt32()  const
                 nRet = ::rtl::OUString(m_aValue.m_pString).toInt32();
                 break;
             case DataType::FLOAT:
-                nRet = sal_uInt32(*(float*)m_aValue.m_pValue);
+                nRet = sal_uInt32(m_aValue.m_nFloat);
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                nRet = sal_uInt32(*(double*)m_aValue.m_pValue);
+                nRet = sal_uInt32(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
                 nRet = dbtools::DBTypeConversion::toDays(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
@@ -1600,11 +1576,11 @@ sal_Int64 ORowSetValue::getLong()   const
                 nRet = ::rtl::OUString(m_aValue.m_pString).toInt64();
                 break;
             case DataType::FLOAT:
-                nRet = sal_Int64(*(float*)m_aValue.m_pValue);
+                nRet = sal_Int64(m_aValue.m_nFloat);
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                nRet = sal_Int64(*(double*)m_aValue.m_pValue);
+                nRet = sal_Int64(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
                 nRet = dbtools::DBTypeConversion::toDays(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
@@ -1673,11 +1649,11 @@ sal_uInt64 ORowSetValue::getULong()   const
                 nRet = static_cast<sal_uInt64>(::rtl::OUString(m_aValue.m_pString).toInt64());
                 break;
             case DataType::FLOAT:
-                nRet = sal_uInt64(*(float*)m_aValue.m_pValue);
+                nRet = sal_uInt64(m_aValue.m_nFloat);
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                nRet = sal_uInt64(*(double*)m_aValue.m_pValue);
+                nRet = sal_uInt64(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
                 nRet = dbtools::DBTypeConversion::toDays(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
@@ -1747,11 +1723,11 @@ float ORowSetValue::getFloat()  const
                 nRet = ::rtl::OUString(m_aValue.m_pString).toFloat();
                 break;
             case DataType::FLOAT:
-                nRet = *(float*)m_aValue.m_pValue;
+                nRet = m_aValue.m_nFloat;
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                nRet = (float)*(double*)m_aValue.m_pValue;
+                nRet = (float)m_aValue.m_nDouble;
                 break;
             case DataType::DATE:
                 nRet = (float)dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
@@ -1826,11 +1802,11 @@ double ORowSetValue::getDouble()    const
                 nRet = ::rtl::OUString(m_aValue.m_pString).toDouble();
                 break;
             case DataType::FLOAT:
-                nRet = *(float*)m_aValue.m_pValue;
+                nRet = m_aValue.m_nFloat;
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                nRet = *(double*)m_aValue.m_pValue;
+                nRet = m_aValue.m_nDouble;
                 break;
             case DataType::DATE:
                 nRet = dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::Date*)m_aValue.m_pValue);

@@ -43,6 +43,9 @@ public:
     void test_Int64();
     void test_uInt64();
 
+    void test_float();
+    void test_double();
+
     CPPUNIT_TEST_SUITE(FValueTest);
 
     CPPUNIT_TEST(test_Bool);
@@ -58,6 +61,9 @@ public:
 
     CPPUNIT_TEST(test_Int64);
     CPPUNIT_TEST(test_uInt64);
+
+    CPPUNIT_TEST(test_float);
+    CPPUNIT_TEST(test_double);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -237,6 +243,44 @@ void FValueTest::test_uInt64()
     trg_saluInt64 = t.getULong();
 
     CPPUNIT_ASSERT_MESSAGE("sal_uInt64 conversion from Any didn't work", src_saluInt64 == trg_saluInt64);
+}
+
+void FValueTest::test_float()
+{
+    float src_float = 1.234f;
+    ORowSetValue v(src_float);
+    float trg_float = v.getFloat();
+
+    std::cerr << "src_float: " << src_float << std::endl;
+    std::cerr << "trg_float: " << trg_float << std::endl;
+
+    CPPUNIT_ASSERT_MESSAGE("float conversion to ORowSetValue didn't work", src_float == trg_float);
+
+    Any any_float = v.makeAny();
+    ORowSetValue t;
+    t.fill(any_float);
+    trg_float = t.getFloat();
+
+    CPPUNIT_ASSERT_MESSAGE("float conversion from Any didn't work", src_float == trg_float);
+}
+
+void FValueTest::test_double()
+{
+    double src_double = 1.23456789;
+    ORowSetValue v(src_double);
+    double trg_double = v.getDouble();
+
+    std::cerr << "src_double: " << src_double << std::endl;
+    std::cerr << "trg_double: " << trg_double << std::endl;
+
+    CPPUNIT_ASSERT_MESSAGE("double conversion to ORowSetValue didn't work", src_double == trg_double);
+
+    Any any_double = v.makeAny();
+    ORowSetValue t;
+    t.fill(any_double);
+    trg_double = t.getDouble();
+
+    CPPUNIT_ASSERT_MESSAGE("double conversion from Any didn't work", src_double == trg_double);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FValueTest);
