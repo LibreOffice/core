@@ -98,63 +98,6 @@ sal_Bool Line::Intersection( const Line& rLine, double& rIntersectionX, double& 
     return bOk;
 }
 
-sal_Bool Line::Intersection( const Rectangle& rRect, Line& rIntersection ) const
-{
-    const sal_Bool  bStartInside = rRect.IsInside( maStart );
-    const sal_Bool  bEndInside = rRect.IsInside( maEnd );
-    sal_Bool        bRet = sal_True;
-
-    if( bStartInside && bEndInside )
-    {
-        // line completely inside rect
-        rIntersection.maStart = maStart;
-        rIntersection.maEnd = maEnd;
-    }
-    else
-    {
-        // calculate intersections
-        const Point aTL( rRect.TopLeft() ), aTR( rRect.TopRight() );
-        const Point aBR( rRect.BottomRight() ), aBL( rRect.BottomLeft() );
-        Point       aIntersect1, aIntersect2;
-        Point*      pCurIntersection = &aIntersect1;
-
-        if( Intersection( Line( aTL, aTR ), *pCurIntersection ) )
-            pCurIntersection = &aIntersect2;
-
-        if( Intersection( Line( aTR, aBR ), *pCurIntersection ) )
-            pCurIntersection = ( pCurIntersection == &aIntersect1 ) ? &aIntersect2 : NULL;
-
-        if( pCurIntersection && Intersection( Line( aBR, aBL ), *pCurIntersection ) )
-            pCurIntersection = ( pCurIntersection == &aIntersect1 ) ? &aIntersect2 : NULL;
-
-        if( pCurIntersection && Intersection( Line( aBL, aTL ), *pCurIntersection ) )
-            pCurIntersection = ( pCurIntersection == &aIntersect1 ) ? &aIntersect2 : NULL;
-
-        if( !pCurIntersection )
-        {
-            // two intersections
-            rIntersection.maStart = aIntersect1;
-            rIntersection.maEnd = aIntersect2;
-        }
-        else if( pCurIntersection == &aIntersect2 )
-        {
-            // one intersection
-            rIntersection.maStart = aIntersect1;
-
-            if( ( maStart != aIntersect1 ) && bStartInside )
-                rIntersection.maEnd = maStart;
-            else if( ( maEnd != aIntersect1 ) && bEndInside )
-                rIntersection.maEnd = maEnd;
-            else
-                rIntersection.maEnd = rIntersection.maStart;
-        }
-        else
-            bRet = sal_False;
-    }
-
-    return bRet;
-}
-
 double Line::GetDistance( const double& rPtX, const double& rPtY ) const
 {
     double fDist;

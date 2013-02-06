@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
- * This file is part of the LibreOffice project.
+ * This file is part of the LibreOffice project.setCertExtn
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -193,32 +193,6 @@ namespace {
         objID = oidString;
     return objID;
 
-}
-
-//Helper method
-void SanExtensionImpl :: setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, sal_Bool critical ) {
-    unsigned int i ;
-    if( value != NULL && vlen != 0 ) {
-        Sequence< sal_Int8 > extnv( vlen ) ;
-        for( i = 0; i < vlen ; i ++ )
-            extnv[i] = *( value + i ) ;
-
-        m_xExtnValue = extnv ;
-    } else {
-        m_xExtnValue = Sequence<sal_Int8>();
-    }
-
-    if( id != NULL && idlen != 0 ) {
-        Sequence< sal_Int8 > extnId( idlen ) ;
-        for( i = 0; i < idlen ; i ++ )
-            extnId[i] = *( id + i ) ;
-
-        m_xExtnId = extnId ;
-    } else {
-        m_xExtnId =  Sequence<sal_Int8>();
-    }
-
-    m_critical = critical ;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

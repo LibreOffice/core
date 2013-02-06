@@ -50,12 +50,6 @@ static ofstream & logger_stream()
 }
 
 
-void logger(string prefix, string message)
-{
-    logger_stream() << prefix <<  ":" << message << endl;
-    logger_stream().flush();
-}
-
 string xmlify(const string & str)
 {
     string result = "";
