@@ -170,7 +170,7 @@ protected:
     void                    FieldLast();
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE sal_Bool     ImplNumericReformat( const XubString& rStr, double& rValue, XubString& rOutStr );
+    SAL_DLLPRIVATE sal_Bool ImplNumericReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( sal_Int64 nNewValue );
     SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSelection = NULL );
 
@@ -204,7 +204,7 @@ public:
     void                    SetUserValue( sal_Int64 nNewValue );
     virtual void            SetValue( sal_Int64 nNewValue );
     virtual sal_Int64       GetValue() const;
-    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
+    virtual OUString        CreateFieldText( sal_Int64 nValue ) const;
     sal_Bool                    IsValueModified() const;
     sal_Int64               GetCorrectedValue() const { return mnCorrectedValue; }
 
@@ -222,8 +222,8 @@ private:
     SAL_DLLPRIVATE  void    ImplInit();
 
 protected:
-    XubString               maCustomUnitText;
-    XubString               maCurUnitText;
+    OUString                maCustomUnitText;
+    OUString                maCurUnitText;
     sal_Int64               mnBaseValue;
     FieldUnit               meUnit;
     Link                    maCustomConvertLink;
@@ -232,7 +232,7 @@ protected:
                             MetricFormatter();
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE sal_Bool     ImplMetricReformat( const XubString& rStr, double& rValue, XubString& rOutStr );
+    SAL_DLLPRIVATE sal_Bool     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
 
 public:
                             ~MetricFormatter();
@@ -243,8 +243,8 @@ public:
     virtual void            SetUnit( FieldUnit meUnit );
     FieldUnit               GetUnit() const { return meUnit; }
     void                    SetCustomUnitText( const XubString& rStr );
-    const XubString&        GetCustomUnitText() const { return maCustomUnitText; }
-    const XubString&        GetCurUnitText() const { return maCurUnitText; }
+    const OUString&         GetCustomUnitText() const { return maCustomUnitText; }
+    const OUString&         GetCurUnitText() const { return maCurUnitText; }
 
     using NumericFormatter::SetMax;
     void                    SetMax( sal_Int64 nNewMax, FieldUnit eInUnit );
@@ -263,7 +263,7 @@ public:
     void                    SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit );
     virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const;
     virtual sal_Int64       GetValue() const;
-    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
+    virtual OUString        CreateFieldText( sal_Int64 nValue ) const;
     using NumericFormatter::GetCorrectedValue;
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
 
@@ -283,7 +283,7 @@ private:
 
 protected:
                             CurrencyFormatter();
-    SAL_DLLPRIVATE sal_Bool     ImplCurrencyReformat( const XubString& rStr, XubString& rOutStr );
+    SAL_DLLPRIVATE sal_Bool     ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
 
 public:
                             ~CurrencyFormatter();
@@ -294,7 +294,7 @@ public:
 
     virtual void            SetValue( sal_Int64 nNewValue );
     virtual sal_Int64       GetValue() const;
-    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
+    virtual OUString        CreateFieldText( sal_Int64 nValue ) const;
 };
 
 
@@ -324,12 +324,12 @@ protected:
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE const Date& ImplGetFieldDate() const    { return maFieldDate; }
-    SAL_DLLPRIVATE sal_Bool     ImplDateReformat( const XubString& rStr, XubString& rOutStr,
+    SAL_DLLPRIVATE sal_Bool     ImplDateReformat( const OUString& rStr, OUString& rOutStr,
                                               const AllSettings& rSettings );
     SAL_DLLPRIVATE void     ImplSetUserDate( const Date& rNewDate,
                                              Selection* pNewSelection = NULL );
-    SAL_DLLPRIVATE XubString ImplGetDateAsText( const Date& rDate,
-                                                const AllSettings& rSettings ) const;
+    SAL_DLLPRIVATE OUString ImplGetDateAsText( const Date& rDate,
+                                               const AllSettings& rSettings ) const;
     SAL_DLLPRIVATE void     ImplNewFieldValue( const Date& rDate );
     CalendarWrapper&        GetCalendarWrapper() const;
 
@@ -419,7 +419,7 @@ protected:
                             TimeFormatter();
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE sal_Bool     ImplTimeReformat( const XubString& rStr, XubString& rOutStr );
+    SAL_DLLPRIVATE sal_Bool     ImplTimeReformat( const OUString& rStr, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( const Time& rTime );
     SAL_DLLPRIVATE void     ImplSetUserTime( const Time& rNewTime, Selection* pNewSelection = NULL );
     SAL_DLLPRIVATE sal_Bool     ImplAllowMalformedInput() const;

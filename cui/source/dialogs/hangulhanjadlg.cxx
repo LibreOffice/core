@@ -118,7 +118,7 @@ namespace svx
     {
         bool            bLayoutOnly  = NULL != _pLayoutData;
         MetricVector*   pTextMetrics = bLayoutOnly ? &_pLayoutData->m_aUnicodeBoundRects : NULL;
-        String*         pDisplayText = bLayoutOnly ? &_pLayoutData->m_aDisplayText       : NULL;
+        OUString*       pDisplayText = bLayoutOnly ? &_pLayoutData->m_aDisplayText       : NULL;
 
         Size aPlaygroundSize( _rRect.GetSize() );
 

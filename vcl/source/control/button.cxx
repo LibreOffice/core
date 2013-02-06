@@ -224,7 +224,7 @@ void Button::ImplSetSeparatorX( long nX )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 Button::ImplGetTextStyle( XubString& rText, WinBits nWinStyle,
+sal_uInt16 Button::ImplGetTextStyle( OUString& rText, WinBits nWinStyle,
                                  sal_uLong nDrawFlags )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -260,9 +260,9 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
                                    sal_uInt16 nTextStyle, Rectangle *pSymbolRect,
                                    bool bAddImageSep )
 {
-    XubString   aText( GetText() );
+    OUString        aText( GetText() );
     sal_Bool        bDrawImage = HasImage() && ! ( ImplGetButtonState() & BUTTON_DRAW_NOIMAGE );
-    sal_Bool        bDrawText  = aText.Len() && ! ( ImplGetButtonState() & BUTTON_DRAW_NOTEXT );
+    sal_Bool        bDrawText  = !aText.isEmpty() && ! ( ImplGetButtonState() & BUTTON_DRAW_NOTEXT );
     sal_Bool        bHasSymbol = pSymbolRect ? sal_True : sal_False;
 
     // No text and no image => nothing to do => return
@@ -272,7 +272,7 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
     WinBits         nWinStyle = GetStyle();
     Rectangle       aOutRect( rPos, rSize );
     MetricVector   *pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-    String         *pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    OUString       *pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
     ImageAlign      eImageAlign = mpButtonData->meImageAlign;
     Size            aImageSize = mpButtonData->maImage.GetSizePixel();
 
@@ -815,9 +815,9 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     Rectangle               aInRect = rRect;
     Color                   aColor;
-    XubString               aText = PushButton::GetText(); // PushButton:: wegen MoreButton
-    sal_uInt16                  nTextStyle = ImplGetTextStyle( nDrawFlags );
-    sal_uInt16                  nStyle;
+    OUString                aText = PushButton::GetText(); // PushButton:: because of MoreButton
+    sal_uInt16              nTextStyle = ImplGetTextStyle( nDrawFlags );
+    sal_uInt16              nStyle;
 
     if( aInRect.Right() < aInRect.Left() || aInRect.Bottom() < aInRect.Top() )
         aInRect.SetEmpty();
@@ -851,7 +851,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
     {
         long nSeparatorX = 0;
         Rectangle aSymbolRect = aInRect;
-        if ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
+        if ( !aText.isEmpty() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
         {
             // calculate symbol size
             long nSymbolSize    = pDev->GetTextHeight() / 2 + 1;
@@ -2136,10 +2136,10 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                             Rectangle& rMouseRect, bool bLayout )
 {
     WinBits                 nWinStyle = GetStyle();
-    XubString               aText( GetText() );
+    OUString                aText( GetText() );
     Rectangle               aRect( rPos, rSize );
     MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-    String*                 pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    OUString*               pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
 
     pDev->Push( PUSH_CLIPREGION );
     pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
@@ -2147,7 +2147,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     // no image radio button
     if ( !maImage )
     {
-        if ( ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) ) ||
+        if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) ) ||
              ( HasImage() &&  ! (ImplGetButtonState() & BUTTON_DRAW_NOIMAGE) ) )
         {
             sal_uInt16 nTextStyle = Button::ImplGetTextStyle( aText, nWinStyle, nDrawFlags );
@@ -2224,14 +2224,14 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     }
     else
     {
-        sal_Bool        bTopImage   = (nWinStyle & WB_TOP) != 0;
+        sal_Bool    bTopImage   = (nWinStyle & WB_TOP) != 0;
         Size        aImageSize  = maImage.GetSizePixel();
         Rectangle   aImageRect( rPos, rSize );
         long        nTextHeight = pDev->GetTextHeight();
         long        nTextWidth  = pDev->GetCtrlTextWidth( aText );
 
         // calculate position and sizes
-        if ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
+        if ( !aText.isEmpty() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
         {
             Size aTmpSize( (aImageSize.Width()+8), (aImageSize.Height()+8) );
             if ( bTopImage )
@@ -3041,8 +3041,8 @@ Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
 
     nMaxWidth -= aSize.Width();
 
-    XubString aText = GetText();
-    if ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
+    OUString aText = GetText();
+    if ( !aText.isEmpty() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
     {
         // subtract what will be added later
         nMaxWidth-=2;
@@ -3235,13 +3235,13 @@ void CheckBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                          Rectangle& rMouseRect, bool bLayout )
 {
     WinBits                 nWinStyle = GetStyle();
-    XubString               aText( GetText() );
+    OUString                aText( GetText() );
 
     pDev->Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
     pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
 
     long nLineY = rPos.Y() + (rSize.Height()-1)/2;
-    if ( ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) ) ||
+    if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) ) ||
          ( HasImage() && !  (ImplGetButtonState() & BUTTON_DRAW_NOIMAGE) ) )
     {
         sal_uInt16 nTextStyle = Button::ImplGetTextStyle( aText, nWinStyle, nDrawFlags );
@@ -3949,8 +3949,8 @@ Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
     Size aSize = ImplGetCheckImageSize();
     nMaxWidth -= aSize.Width();
 
-    XubString aText = GetText();
-    if ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
+    OUString aText = GetText();
+    if ( !aText.isEmpty() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
     {
         // subtract what will be added later
         nMaxWidth-=2;

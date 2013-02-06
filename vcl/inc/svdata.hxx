@@ -223,7 +223,7 @@ struct ImplSVWinData
 // - ImplSVCtrlData -
 // ------------------
 
-typedef std::vector< std::pair< String, FieldUnit > > FieldUnitStringList;
+typedef std::vector< std::pair< OUString, FieldUnit > > FieldUnitStringList;
 
 struct ImplSVCtrlData
 {

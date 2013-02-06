@@ -1189,7 +1189,7 @@ static sal_Bool ImplDateGetValue( const XubString& rStr, Date& rDate, ExtDateFie
 
 // -----------------------------------------------------------------------
 
-sal_Bool DateFormatter::ImplDateReformat( const XubString& rStr, XubString& rOutStr, const AllSettings& rSettings )
+sal_Bool DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr, const AllSettings& rSettings )
 {
     Date aDate( 0, 0, 0 );
     if ( !ImplDateGetValue( rStr, aDate, GetExtDateFormat(sal_True), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
@@ -1220,8 +1220,8 @@ sal_Bool DateFormatter::ImplDateReformat( const XubString& rStr, XubString& rOut
 
 // -----------------------------------------------------------------------
 
-XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
-                                            const AllSettings& ) const
+OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
+                                           const AllSettings& ) const
 {
     sal_Bool bShowCentury = sal_False;
     switch ( GetExtDateFormat() )
@@ -1840,12 +1840,12 @@ void DateFormatter::Reformat()
     if ( GetField()->GetText().isEmpty() && ImplGetEmptyFieldValue() )
         return;
 
-    XubString aStr;
+    OUString aStr;
     sal_Bool bOK = ImplDateReformat( GetField()->GetText(), aStr, GetFieldSettings() );
     if( !bOK )
         return;
 
-    if ( aStr.Len() )
+    if ( !aStr.isEmpty() )
     {
         ImplSetText( aStr );
         ImplDateGetValue( aStr, maLastDate, GetExtDateFormat(sal_True), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
@@ -2139,7 +2139,7 @@ void DateBox::Modify()
 
 void DateBox::ReformatAll()
 {
-    XubString aStr;
+    OUString aStr;
     SetUpdateMode( sal_False );
     sal_uInt16 nEntryCount = GetEntryCount();
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )
@@ -2422,7 +2422,7 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
 
 // -----------------------------------------------------------------------
 
-sal_Bool TimeFormatter::ImplTimeReformat( const XubString& rStr, XubString& rOutStr )
+sal_Bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
 {
     Time aTime( 0, 0, 0 );
     if ( !ImplTimeGetValue( rStr, aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper() ) )
@@ -2458,11 +2458,11 @@ sal_Bool TimeFormatter::ImplTimeReformat( const XubString& rStr, XubString& rOut
         sal_uLong n  = aTempTime.GetHour() * 3600L;
         n       += aTempTime.GetMin()  * 60L;
         n       += aTempTime.GetSec();
-        rOutStr  = String::CreateFromInt32( n );
+        rOutStr  = OUString::number( n );
         rOutStr += ImplGetLocaleDataWrapper().getTime100SecSep();
         if ( aTempTime.Get100Sec() < 10 )
-            rOutStr += '0';
-        rOutStr += String::CreateFromInt32( aTempTime.Get100Sec() );
+            rOutStr += "0";
+        rOutStr += OUString::number( aTempTime.Get100Sec() );
     }
     else if ( mbDuration )
         rOutStr = ImplGetLocaleDataWrapper().getDuration( aTempTime, bSecond, b100Sec );
@@ -2832,12 +2832,12 @@ void TimeFormatter::Reformat()
     if ( GetField()->GetText().isEmpty() && ImplGetEmptyFieldValue() )
         return;
 
-    XubString aStr;
+    OUString aStr;
     sal_Bool bOK = ImplTimeReformat( GetField()->GetText(), aStr );
     if ( !bOK )
         return;
 
-    if ( aStr.Len() )
+    if ( !aStr.isEmpty() )
     {
         ImplSetText( aStr );
         ImplTimeGetValue( aStr, maLastTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper() );
@@ -3126,7 +3126,7 @@ void TimeBox::Modify()
 
 void TimeBox::ReformatAll()
 {
-    XubString aStr;
+    OUString aStr;
     SetUpdateMode( sal_False );
     sal_uInt16 nEntryCount = GetEntryCount();
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )

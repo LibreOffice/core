@@ -880,7 +880,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
     if( bLayout )
     {
         int nLine = mpControlData->mpLayoutData->m_aLineIndices.size();
-        mpControlData->mpLayoutData->m_aLineIndices.push_back( mpControlData->mpLayoutData->m_aDisplayText.Len() );
+        mpControlData->mpLayoutData->m_aLineIndices.push_back( mpControlData->mpLayoutData->m_aDisplayText.getLength() );
         mpTabCtrlData->maLayoutPageIdToLine[ (int)pItem->mnId ] = nLine;
         mpTabCtrlData->maLayoutLineToPageId[ nLine ] = (int)pItem->mnId;
         mpTabCtrlData->maTabRectangles.push_back( aRect );

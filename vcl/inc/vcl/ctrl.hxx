@@ -91,8 +91,8 @@ protected:
         directly at the target device, or taking the reference device into account) when returning.
     */
     void        DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect,
-                                 const XubString& _rStr, sal_uInt16 _nStyle,
-                                 MetricVector* _pVector, String* _pDisplayText ) const;
+                                 const OUString& _rStr, sal_uInt16 _nStyle,
+                                 MetricVector* _pVector, OUString* _pDisplayText ) const;
 
     virtual const Font&
                 GetCanonicalFont( const StyleSettings& _rStyle ) const;

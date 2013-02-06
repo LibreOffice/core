@@ -394,7 +394,7 @@ public:
     static
     SAL_DLLPRIVATE void         ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                               const String& rOrigStr, sal_uInt16 nStyle,
-                                              MetricVector* pVector, String* pDisplayText, ::vcl::ITextLayout& _rLayout );
+                                              MetricVector* pVector, OUString* pDisplayText, ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplDrawTextBackground( const SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, sal_Bool bWordLine, sal_Bool bUnderlineAbove );
     SAL_DLLPRIVATE bool         ImplDrawRotateText( SalLayout& );
@@ -575,7 +575,7 @@ public:
 
     void                DrawText( const Point& rStartPt, const XubString& rStr,
                                   xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
-                                  MetricVector* pVector = NULL, String* pDisplayText = NULL );
+                                  MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
     long                GetTextWidth( const XubString& rStr, xub_StrLen nIndex = 0,
                                       xub_StrLen nLen = STRING_LEN ) const;
     /// Height where any character of the current font fits; in logic coordinates.
@@ -615,7 +615,7 @@ public:
                                             GDIMetaFile&     rMtf );
     void                DrawText( const Rectangle& rRect,
                                   const XubString& rStr, sal_uInt16 nStyle = 0,
-                                  MetricVector* pVector = NULL, String* pDisplayText = NULL,
+                                  MetricVector* pVector = NULL, OUString* pDisplayText = NULL,
                                   ::vcl::ITextLayout* _pTextLayout = NULL );
     Rectangle           GetTextRect( const Rectangle& rRect,
                                      const XubString& rStr, sal_uInt16 nStyle = TEXT_DRAW_WORDBREAK,
@@ -625,7 +625,7 @@ public:
                                            sal_uInt16 nStyle = TEXT_DRAW_ENDELLIPSIS ) const;
     void                DrawCtrlText( const Point& rPos, const XubString& rStr,
                                       xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
-                                      sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC, MetricVector* pVector = NULL, String* pDisplayText = NULL );
+                                      sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC, MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
     long                GetCtrlTextWidth( const XubString& rStr, xub_StrLen nIndex = 0,
                                           xub_StrLen nLen = STRING_LEN,
                                           sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC ) const;

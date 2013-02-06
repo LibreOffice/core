@@ -3016,7 +3016,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
 
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
     MetricVector* pVector = bLayout ? &mpData->m_pLayoutData->m_aUnicodeBoundRects : NULL;
-    String* pDisplayText = bLayout ? &mpData->m_pLayoutData->m_aDisplayText : NULL;
+    OUString* pDisplayText = bLayout ? &mpData->m_pLayoutData->m_aDisplayText : NULL;
 
     if(!pItem->mbEnabled)
         nHighlight = 0;
@@ -3116,7 +3116,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
             bClip = sal_False;
         if( bLayout )
         {
-            mpData->m_pLayoutData->m_aLineIndices.push_back( mpData->m_pLayoutData->m_aDisplayText.Len() );
+            mpData->m_pLayoutData->m_aLineIndices.push_back( mpData->m_pLayoutData->m_aDisplayText.getLength() );
             mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
             mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
         }
@@ -3284,7 +3284,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
             nTextStyle |= TEXT_DRAW_DISABLE;
         if( bLayout )
         {
-            mpData->m_pLayoutData->m_aLineIndices.push_back( mpData->m_pLayoutData->m_aDisplayText.Len() );
+            mpData->m_pLayoutData->m_aLineIndices.push_back( mpData->m_pLayoutData->m_aDisplayText.getLength() );
             mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
             mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
         }

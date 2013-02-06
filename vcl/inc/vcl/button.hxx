@@ -49,7 +49,7 @@ private:
 public:
     SAL_DLLPRIVATE sal_uInt16           ImplGetButtonState() const;
     SAL_DLLPRIVATE sal_uInt16&          ImplGetButtonState();
-    SAL_DLLPRIVATE sal_uInt16           ImplGetTextStyle( XubString& rText, WinBits nWinStyle, sal_uLong nDrawFlags );
+    SAL_DLLPRIVATE sal_uInt16           ImplGetTextStyle( OUString& rText, WinBits nWinStyle, sal_uLong nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos, Size& rSize,
                                               sal_Bool bLayout, sal_uLong nImageSep, sal_uLong nDrawFlags,
                                               sal_uInt16 nTextStyle, Rectangle *pSymbolRect=NULL, bool bAddImageSep = false );
