@@ -701,6 +701,23 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
     if ( pToRemove->IsFlyInCntFrm() )
         return;
 
+    // Don't delete collections just yet. This will happen at the end of the
+    // action in the RemoveSuperfluous of the page, kicked off by a method of
+    // the same name in the root.
+    // The FlyColl might be gone already, because the page's dtor is being
+    // executed.
+    // Remove it _before_ disposing accessible frames to avoid accesses to
+    // the Frm from event handlers.
+    if (pSortedObjs)
+    {
+        pSortedObjs->Remove(*pToRemove);
+        if (!pSortedObjs->Count())
+        {
+            delete pSortedObjs;
+            pSortedObjs = 0;
+        }
+    }
+
     // Notify accessible layout. That's required at this place for
     // frames only where the anchor is moved. Creation of new frames
     // is additionally handled by the SwFrmNotify class.
@@ -712,17 +729,6 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
                                   ->DisposeAccessibleFrm( pToRemove, sal_True );
     }
 
-    // Don't delete collections just yet. This will happen at the end of the
-    // action in the RemoveSuperfluous of the page, kicked off by a method of
-    // the same name in the root.
-    // The FlyColl might be gone already, because the page's dtor is being executed.
-    if ( pSortedObjs )
-    {
-        pSortedObjs->Remove( *pToRemove );
-        if ( !pSortedObjs->Count() )
-        {   DELETEZ( pSortedObjs );
-        }
-    }
     // #i28701# - use new method <SetPageFrm(..)>
     pToRemove->SetPageFrm( 0L );
 }
