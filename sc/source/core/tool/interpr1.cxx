@@ -5045,6 +5045,12 @@ void ScInterpreter::ScMatch()
 
         switch (GetStackType())
         {
+            case svSingleRef:
+                PopSingleRef( nCol1, nRow1, nTab1);
+                nCol2 = nCol1;
+                nRow2 = nRow1;
+                nTab2 = nTab1;
+            break;
             case svDoubleRef:
             {
                 PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
