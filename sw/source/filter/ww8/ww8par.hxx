@@ -1633,6 +1633,15 @@ public:     // eigentlich private, geht aber leider nur public
                                         // Ver8-Listen
 
     void Read_ListLevel(        sal_uInt16 nId, const sal_uInt8* pData, short nLen);
+
+    /**
+     * read and interpret the sprmPIlfo used to determine which list
+     * contains the paragraph.
+     * @param     nId   unused (sprm value, 0x460b for sprmPIlfo).
+     * @param[in] pData operand.
+     * @param[in] nLen  size of the operand (pData) in byte, should be 2.
+     *                  -1 to indicate the actual level is finished.
+     */
     void Read_LFOPosition(      sal_uInt16 nId, const sal_uInt8* pData, short nLen);
     bool SetTxtFmtCollAndListLevel(const SwPaM& rRg, SwWW8StyInf& rStyleInfo);
 

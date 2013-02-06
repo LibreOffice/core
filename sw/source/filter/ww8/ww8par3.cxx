@@ -1881,15 +1881,17 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
 
     if( nLen < 0 )
     {
-        // aktuelle Liste ist hier zu Ende, was ist zu tun ???
+        // the actual level is finished, what should we do ?
         nListLevel = WW8ListManager::nMaxLevel;
         if (pStyles && !bVer67)
             pStyles->nWwNumLevel = 0;
     }
     else
     {
-        // Sicherheitspruefung auf NIL Pointer
-        if( !pData ) return;
+        // security check
+        if( !pData )
+            return;
+
         // die Streamdaten sind hier Null basiert, so wie wir es brauchen
         nListLevel = *pData;
 
@@ -1927,67 +1929,65 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
 
     if( nLen < 0 )
     {
-        // aktueller Level ist hier zu Ende, was ist zu tun ???
+        // the actual level is finished, what should we do ?
         nLFOPosition = USHRT_MAX;
         nListLevel = WW8ListManager::nMaxLevel;
     }
     else
     {
-        // Sicherheitspruefung auf NIL Pointer
+        // security check
         if( !pData )
             return;
+
         short nData = SVBT16ToShort( pData );
         if( 0 >= nData )
         {
+            // disable the numbering/list style apply to the paragraph or the style
+
             /*
             If you have a paragraph in word with left and/or hanging indent
             and remove its numbering, then the indentation appears to get
             reset, but not back to the base style, instead its goes to a blank
             setting.
             Unless its a broken ww6 list in 97 in which case more hackery is
-            required, some more details about that in
+            required, some more details about broken ww6 list in
             ww8par6.cxx#SwWW8ImplReader::Read_LR
             */
 
             if (pAktColl)
             {
-                pAktColl->SetFmtAttr(*GetDfltAttr( RES_PARATR_NUMRULE));
+                // here a "named" style is beeing configured
+
+                // disable the numbering/list in the style currently configured
+                pAktColl->SetFmtAttr(*GetDfltAttr(RES_PARATR_NUMRULE));
+
+                // reset/blank the indent
                 pAktColl->SetFmtAttr(SvxLRSpaceItem(RES_LR_SPACE));
             }
             else if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
             {
-                pTxtNode->ResetAttr( RES_PARATR_NUMRULE ); // #i54393#
-                pTxtNode->SetCountedInList(false);
+                // here a paragraph is being directly formated
 
-                /*
-                #i24553#
-                Hmm, I can't remove outline numbering on a per txtnode basis,
-                but I can set some normal numbering, and that overrides outline
-                numbering, and then I can say when I come to say that I want no
-                number on the normal numbering rule, that should all work out
+                // empty the numbering/list style applied to the current paragraph
+                SwNumRuleItem aEmptyRule( aEmptyStr );
+                pTxtNode->SetAttr( aEmptyRule );
 
-                No special outline number in textnode any more
-                */
-                if (pTxtNode->IsOutline())
-                {
-                    // #i54393#
-                    // It's not needed to call <SetCounted( false )> again - see above.
-                    // #i54393#
-                    // Assure that the numbering rule, which is retrieved at
-                    // the paragraph is the outline numbering rule, instead of
-                    // incorrectly setting the chosen outline rule.
-                    // Note: The chosen outline rule doesn't have to correspond
-                    //       to the outline rule
-                    if ( pTxtNode->GetNumRule() != rDoc.GetOutlineNumRule() )
-                    {
-                        pTxtNode->SetAttr(
-                            SwNumRuleItem( rDoc.GetOutlineNumRule()->GetName() ) );
-                    }
-                }
+                // create an empty SvxLRSpaceItem
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
 
-                pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxLRSpaceItem(RES_LR_SPACE));
-                pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LR_SPACE);
+                // replace it with the one of the current node if it exist
+                const SfxPoolItem* pLR = GetFmtAttr(RES_LR_SPACE);
+                if( pLR )
+                    aLR = *static_cast<const SvxLRSpaceItem*>(pLR);
+
+                // reset/blank the left indent (and only the left)
+                aLR.SetTxtLeft(0);
+                aLR.SetTxtFirstLineOfst(0);
+
+                // apply the modified SvxLRSpaceItem to the current paragraph
+                pTxtNode->SetAttr( aLR );
             }
+
             nLFOPosition = USHRT_MAX;
         }
         else
