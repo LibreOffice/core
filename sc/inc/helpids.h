@@ -530,6 +530,7 @@
 #define HID_FUNC_SUMQUADABW                                     "SC_HID_FUNC_SUMQUADABW"
 #define HID_FUNC_MITTELABW                                      "SC_HID_FUNC_MITTELABW"
 #define HID_FUNC_SCHIEFE                                        "SC_HID_FUNC_SCHIEFE"
+#define HID_FUNC_SKEWP                                          "SC_HID_FUNC_SKEWP"
 #define HID_FUNC_KURT                                           "SC_HID_FUNC_KURT"
 #define HID_FUNC_GEOMITTEL                                      "SC_HID_FUNC_GEOMITTEL"
 #define HID_FUNC_HARMITTEL                                      "SC_HID_FUNC_HARMITTEL"

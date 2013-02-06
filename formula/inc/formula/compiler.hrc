@@ -398,8 +398,9 @@
 #define SC_OPCODE_SUM_IFS           403
 #define SC_OPCODE_AVERAGE_IFS       404
 #define SC_OPCODE_COUNT_IFS         405
-#define SC_OPCODE_STOP_2_PAR        406
-#define SC_OPCODE_LAST_OPCODE_ID    405     /* last OpCode */
+#define SC_OPCODE_SKEWP             406
+#define SC_OPCODE_STOP_2_PAR        407
+#define SC_OPCODE_LAST_OPCODE_ID    406     /* last OpCode */
 
 /*** Internal ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9999

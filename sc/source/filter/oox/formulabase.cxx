@@ -552,6 +552,7 @@ static const FunctionData saFuncTableBiff4[] =
     { "MODE",                   "MODE",                 330,    330,    1,  MX, V, { VA }, 0 },
     { "TRIMMEAN",               "TRIMMEAN",             331,    331,    2,  2,  V, { RX, VR }, 0 },
     { "TINV",                   "TINV",                 332,    332,    2,  2,  V, { VR }, 0 },
+    { "SKEWP",                  "SKEWP",                333,    333,    1,  MX, V, { RX }, 0 },
 
     // *** Analysis add-in ***
 
@@ -810,7 +811,7 @@ static const FunctionData saFuncTable2013[] =
     { "SECH",                   "SECH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "SHEET",                  "SHEET",                NOID,   NOID,   0,  1,  V, { RO }, FUNCFLAG_MACROCALL_NEW },
     { "SHEETS",                 "SHEETS",               NOID,   NOID,   0,  1,  V, { RO }, FUNCFLAG_MACROCALL_NEW },
-    { 0/*"SKEWP"*/,             "SKEW.P",               NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALL_NEW },
+    { "SKEWP",                  "SKEW.P",               NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALL_NEW },
     { "UNICHAR",                "UNICHAR",              NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "UNICODE",                "UNICODE",              NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { 0,                        "WEBSERVICE",           NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },

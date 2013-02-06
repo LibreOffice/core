@@ -328,6 +328,7 @@ enum OpCodeEnum
         ocStandard          = SC_OPCODE_STANDARD,
         ocAveDev            = SC_OPCODE_AVE_DEV,
         ocSchiefe           = SC_OPCODE_SCHIEFE,
+        ocSkewp             = SC_OPCODE_SKEWP,
         ocDevSq             = SC_OPCODE_DEV_SQ,
         ocMedian            = SC_OPCODE_MEDIAN,
         ocModalValue        = SC_OPCODE_MODAL_VALUE,
