@@ -1793,7 +1793,6 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
             for ( sal_Int32 i = 0; i < aFrameList.getLength(); ++i )
             {
-                SaveInData* pData = NULL;
                 uno::Reference < frame::XFrame > xf = aFrameList[i];
 
                 if ( xf.is() && xf != m_xFrame )
@@ -1833,7 +1832,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
                         if ( xDocCfgMgr.is() )
                         {
-                            pData = CreateSaveInData( xDocCfgMgr, xCfgMgr, aModuleId, sal_True );
+                            SaveInData* pData = CreateSaveInData( xDocCfgMgr, xCfgMgr, aModuleId, sal_True );
 
                             if ( pData && !pData->IsReadOnly() )
                             {

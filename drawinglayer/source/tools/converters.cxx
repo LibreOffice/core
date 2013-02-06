@@ -53,9 +53,8 @@ namespace drawinglayer
 
                 if(nViewVisibleArea > nMaxQuadratPixels)
                 {
-                    double fReduceFactor(1.0);
                     // reduce render size
-                    fReduceFactor = sqrt((double)nMaxQuadratPixels / (double)nViewVisibleArea);
+                    double fReduceFactor = sqrt((double)nMaxQuadratPixels / (double)nViewVisibleArea);
                     nDiscreteWidth = basegfx::fround((double)nDiscreteWidth * fReduceFactor);
                     nDiscreteHeight = basegfx::fround((double)nDiscreteHeight * fReduceFactor);
 

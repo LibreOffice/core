@@ -844,13 +844,10 @@ void RscFileTab :: DeleteFileContext( sal_uLong lFileKey ){
 *************************************************************************/
 sal_uLong  RscFileTab :: NewCodeFile( const rtl::OString& rName )
 {
-    sal_uLong       lKey;
-    RscFile *   pFName;
-
-    lKey = Find( rName );
+    sal_uLong lKey = Find( rName );
     if( UNIQUEINDEX_ENTRY_NOTFOUND == lKey )
     {
-        pFName = new RscFile();
+        RscFile * pFName = new RscFile();
         pFName->aFileName = rName;
         pFName->aPathName = rName;
         lKey = Insert( pFName );
@@ -867,13 +864,10 @@ sal_uLong  RscFileTab :: NewCodeFile( const rtl::OString& rName )
 sal_uLong  RscFileTab :: NewIncFile(const rtl::OString& rName,
     const rtl::OString& rPath)
 {
-    sal_uLong         lKey;
-    RscFile * pFName;
-
-    lKey = Find( rName );
+    sal_uLong lKey = Find( rName );
     if( UNIQUEINDEX_ENTRY_NOTFOUND == lKey )
     {
-        pFName = new RscFile();
+        RscFile * pFName = new RscFile();
         pFName->aFileName = rName;
         pFName->aPathName = rPath;
         pFName->SetIncFlag();
