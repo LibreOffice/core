@@ -139,7 +139,7 @@ static sal_Bool ImplNumericGetValue( const OUString& rStr, double& rValue,
             if ( (nFormat == 3) || (nFormat == 6)  || // $1- || 1-$
                  (nFormat == 7) || (nFormat == 10) )  // 1$- || 1 $-
             {
-                for (sal_Int32 i = aStr.getLength()-1; i > 0; i++ )
+                for (sal_Int32 i = aStr.getLength()-1; i > 0; --i )
                 {
                     if ( (aStr[i] >= '0') && (aStr[i] <= '9') )
                         break;
