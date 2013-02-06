@@ -459,7 +459,7 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_VR_IMPORT(  ocSecantHyp,     1,  1,  0,  "SECH" ),
     EXC_FUNCENTRY_V_RO(         ocTable,         0,  1,  0,  "SHEET" ),
     EXC_FUNCENTRY_V_RO(         ocTables,        0,  1,  0,  "SHEETS" ),
-    EXC_FUNCENTRY_V_RX(         ocNoName,        1,  MX, 0,  "SKEW.P" ),
+    EXC_FUNCENTRY_V_RX(         ocSkewp,         1,  MX, 0,  "SKEW.P" ),
     EXC_FUNCENTRY_V_VR(         ocUnichar,       1,  1,  0,  "UNICHAR" ),
     EXC_FUNCENTRY_V_VR(         ocUnicode,       1,  1,  0,  "UNICODE" ),
     EXC_FUNCENTRY_V_VR(         ocNoName,        1,  1,  0,  "WEBSERVICE" ),

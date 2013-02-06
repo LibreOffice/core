@@ -762,6 +762,7 @@ void ScHarMean();
 void ScGeoMean();
 void ScStandard();
 void ScSkew();
+void ScSkewp();
 void ScMedian();
 double GetMedian( ::std::vector<double> & rArray );
 double GetPercentile( ::std::vector<double> & rArray, double fPercentile );

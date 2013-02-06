@@ -4110,6 +4110,7 @@ StackVar ScInterpreter::Interpret()
                 case ocDevSq            : ScDevSq();                    break;
                 case ocKurt             : ScKurt();                     break;
                 case ocSchiefe          : ScSkew();                     break;
+                case ocSkewp            : ScSkewp();                    break;
                 case ocModalValue       : ScModalValue();               break;
                 case ocMedian           : ScMedian();                   break;
                 case ocGeoMean          : ScGeoMean();                  break;
