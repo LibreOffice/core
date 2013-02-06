@@ -153,7 +153,7 @@ namespace svt
     //-------------------------------------------------------------------------
     ::cppu::IPropertyArrayHelper& OAddressBookSourceDialogUno::getInfoHelper()
     {
-        return *const_cast<OAddressBookSourceDialogUno*>(this)->getArrayHelper();
+        return *getArrayHelper();
     }
 
     //------------------------------------------------------------------------------
@@ -174,30 +174,39 @@ namespace svt
                 static_cast< AddressBookSourceDialog* >( m_pDialog )->getFieldMapping( m_aAliases );
     }
     //------------------------------------------------------------------------------
-    void SAL_CALL OAddressBookSourceDialogUno::initialize(const Sequence< Any >& aArguments) throw(Exception, RuntimeException)
+    void SAL_CALL OAddressBookSourceDialogUno::initialize(const Sequence< Any >& rArguments) throw(Exception, RuntimeException)
     {
-        if( aArguments.getLength() == 5 )
+        if( rArguments.getLength() == 5 )
         {
             Reference<com::sun::star::awt::XWindow> xParentWindow;
             Reference<com::sun::star::beans::XPropertySet> xDataSource;
             rtl::OUString sDataSourceName;
             rtl::OUString sCommand;
             rtl::OUString sTitle;
-            if ( (aArguments[0] >>= xParentWindow)
-               && (aArguments[1] >>= xDataSource)
-               && (aArguments[2] >>= sDataSourceName)
-               && (aArguments[3] >>= sCommand)
-               && (aArguments[4] >>= sTitle) )
+            if ( (rArguments[0] >>= xParentWindow)
+               && (rArguments[1] >>= xDataSource)
+               && (rArguments[2] >>= sDataSourceName)
+               && (rArguments[3] >>= sCommand)
+               && (rArguments[4] >>= sTitle) )
             {
-                setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ), makeAny( xParentWindow ) );
-                setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataSource" ) ), makeAny( xDataSource ) );
-                setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataSourceName" ) ), makeAny( sDataSourceName ) );
-                setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Command" ) ), makeAny( sCommand ) );
-                setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), makeAny( sTitle ) );
+
+                // convert the parameters for creating the dialog to PropertyValues
+                Sequence< Any > aArguments(5);
+                Any* pArguments = aArguments.getArray();
+                // the parent window
+                *pArguments++ <<= PropertyValue(OUString( "ParentWindow" ), -1, makeAny( xParentWindow ), PropertyState_DIRECT_VALUE);
+                // the data source to use
+                *pArguments++ <<= PropertyValue(OUString( "DataSource" ), -1, makeAny( xDataSource ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue(OUString( "DataSourceName" ), -1, makeAny( sDataSourceName ), PropertyState_DIRECT_VALUE);
+                // the table to use
+                *pArguments++ <<= PropertyValue(OUString( "Command" ), -1, makeAny( sCommand ), PropertyState_DIRECT_VALUE);
+                // the title
+                *pArguments++ <<= PropertyValue(OUString( "Title" ), -1, makeAny( sTitle ), PropertyState_DIRECT_VALUE);
+                OGenericUnoDialog::initialize(aArguments);
                 return;
             }
         }
-        OGenericUnoDialog::initialize(aArguments);
+        OGenericUnoDialog::initialize(rArguments);
     }
     //------------------------------------------------------------------------------
     void OAddressBookSourceDialogUno::implInitialize(const com::sun::star::uno::Any& _rValue)
