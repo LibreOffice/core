@@ -766,12 +766,6 @@ const BitmapEx StyleSettings::GetPersonaHeader() const
     return mpData->maPersonaHeaderBitmap;
 }
 
-const BitmapEx StyleSettings::GetPersonaFooter() const
-{
-    setupPersonaHeaderFooter( PERSONA_FOOTER, mpData->maPersonaHeaderFooter, mpData->maPersonaFooterBitmap );
-    return mpData->maPersonaFooterBitmap;
-}
-
 // -----------------------------------------------------------------------
 
 void StyleSettings::SetStandardStyles()

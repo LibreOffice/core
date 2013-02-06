@@ -266,19 +266,9 @@ const SfxItemSet& EditTextObject::GetParaAttribs(size_t nPara) const
     return mpImpl->GetParaAttribs(nPara);
 }
 
-void EditTextObject::SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs)
-{
-    mpImpl->SetParaAttribs(nPara, rAttribs);
-}
-
 bool EditTextObject::RemoveCharAttribs( sal_uInt16 nWhich )
 {
     return mpImpl->RemoveCharAttribs(nWhich);
-}
-
-bool EditTextObject::RemoveParaAttribs( sal_uInt16 nWhich )
-{
-    return mpImpl->RemoveParaAttribs(nWhich);
 }
 
 void EditTextObject::GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const

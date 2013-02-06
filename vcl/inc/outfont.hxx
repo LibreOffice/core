@@ -191,8 +191,6 @@ class FontSelectPattern : public FontSelectPatternAttributes
 public:
                         FontSelectPattern( const Font&, const String& rSearchName,
                             const Size&, float fExactHeight );
-                        FontSelectPattern( const PhysicalFontFace&, const Size&,
-                            float fExactHeight, int nOrientation, bool bVertical );
 
 public: // TODO: change to private
     const PhysicalFontFace* mpFontData;         // a matching PhysicalFontFace object

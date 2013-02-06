@@ -163,11 +163,6 @@ void TemplateAbstractView::deselectOverlayItems()
     mpItemView->deselectItems();
 }
 
-void TemplateAbstractView::deselectOverlayItem(const sal_uInt16 nItemId)
-{
-    mpItemView->deselectItem(nItemId);
-}
-
 void TemplateAbstractView::sortOverlayItems(const boost::function<bool (const ThumbnailViewItem*,
                                                                         const ThumbnailViewItem*) > &func)
 {

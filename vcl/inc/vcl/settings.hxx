@@ -867,7 +867,6 @@ public:
                                         { CopyData(); mpData->maFrameStyle = rStyle; }
 
     const BitmapEx                  GetPersonaHeader() const;
-    const BitmapEx                  GetPersonaFooter() const;
 
     void                            SetStandardStyles();
 
