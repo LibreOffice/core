@@ -20,7 +20,7 @@ $(call gb_ExternalProject_get_state_target,languagetool,build) : $(call gb_Jar_g
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
-		-Dbuild.label="build-libreoffice" \
+		-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
 		$(if $(filter yes,$(JAVACISGCJ))\
 			,-Dbuild.compiler=gcj \
 			,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
