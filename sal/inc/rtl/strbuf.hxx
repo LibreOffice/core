@@ -290,6 +290,19 @@ public:
     }
 
     /**
+      Checks if a string buffer is empty.
+
+      @return   true if the string buffer is empty;
+                false, otherwise.
+
+      @since LibreOffice 4.1
+    */
+    bool isEmpty() const SAL_THROW(())
+    {
+        return pData->length == 0;
+    }
+
+    /**
         Returns the current capacity of the String buffer.
 
         The capacity

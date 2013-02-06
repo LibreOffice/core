@@ -284,10 +284,10 @@ public:
     /**
       Checks if a string buffer is empty.
 
-      @return   sal_True if the string buffer is empty;
-                sal_False, otherwise.
+      @return   true if the string buffer is empty;
+                false, otherwise.
 
-      @since LibreOffice 4.0
+      @since LibreOffice 4.1
     */
     bool isEmpty() const SAL_THROW(())
     {

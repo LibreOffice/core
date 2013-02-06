@@ -356,8 +356,8 @@ public:
     /**
       Checks if a string is empty.
 
-      @return   sal_True if the string is empty;
-                sal_False, otherwise.
+      @return   true if the string is empty;
+                false, otherwise.
 
       @since LibreOffice 3.4
     */
