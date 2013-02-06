@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVH///xE\u003d",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-02-06T10:56:22Z",
+      "side": 1,
+      "message": "it was the [1284-1288] test that was causing me confusion.\nOk I can\u0027t comment on whether that rationale for preventing the shift is sensible or not ( and yes I can see the old code does similar ) but now at least I understand what you are trying to do :-) How about though we make the intention even clearer by replacing  [1284-1288] with some range manipulation and some comments e.g.\n\n/* When the source and destination areas intersect things may go wrong especially if the area contains references. This may produce data loss (e.g. formulas that get wrong references), this scenario _must_ be avoided.*/\n\n     ScRange aSource( nStartX, nStartY, nStartTab, nStartX + nRangeSizeX, nStartY + nRangeSizeY, nEndTab );\n    ScRange aDest( nClipStartX, nClipStartY, nStartTab, nClipStartX + nRangeSizeX, nClipStartY + nRangeSizeY, nEndTab );\n    if ( aSource.Intersects( aDest ) )\n        pDlg-\u003eSetCellShiftDisabled( SC_CELL_SHIFT_DISABLE_DOWN | SC_CELL_SHIFT_DISABLE_RIGHT );",
+      "parentUuid": "AAAAVH///x4\u003d",
+      "revId": "756e56600d7af1028960225ca19743d8b06bf650",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVH///zQ\u003d",
         "filename": "sc/source/ui/view/cellsh1.cxx",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "I agree, I don\u0027t like the loops either. But I see no alternative. To check if opy+paste will fit, I must check that every cell that will be shifted off the sheet is empty. \nI looked at your suggestion, and possibly ScTable::FindAreaPos will make the code easier to read (but a row-loop must be maintained when checking the cols and vice versa). It will not make the code more efficient, but probably more robust.\nI don\u0027t have a strong preference for one of the other (perhaps a slight preference for FindAreaPos because of the extra robustness).",
       "parentUuid": "AAAAVH///zQ\u003d",
+      "revId": "756e56600d7af1028960225ca19743d8b06bf650",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///xM\u003d",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1297,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-02-06T10:56:22Z",
+      "side": 1,
+      "message": "Well I did realise that your loop does possibly exit earlier than ScTable::FindAreaPos does but really it shouldn\u0027t matter. ScTable::FindAreaPos should be performant enough. Afterall, it is used when you do cntrl-[up|down|left|right] to navigate to next non-empty cell. If that operation already is apparenly slow to the user ( even when used at the extremes of the sheet ranges ) then imho it should be tweaked. The beauty of code reuse is that any users of that method will benefit from any changes. Also afaik the code here to detect the range limitation is only called from this paste special cntx menu right? I mean its nothing called thousands of times as part of some calculation code or whatever",
+      "parentUuid": "AAAAVH///x0\u003d",
       "revId": "756e56600d7af1028960225ca19743d8b06bf650",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
