@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///xI\u003d",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 2709,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-02-06T10:58:32Z",
+      "side": 1,
+      "message": "Is this really necessary? Note that this line adds _runtime_ dependencies for the xsltproc tool (and it is reserved for dependencies that are not already expressed at build time, which basically means \"data files\").",
+      "revId": "856c075e93683cec7cff02e0cf0d6ed31f937a98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///w8\u003d",
+        "filename": "writerfilter/CustomTarget_source.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-02-06T10:58:32Z",
+      "side": 1,
+      "message": "This change does not belong here, does it?",
+      "revId": "856c075e93683cec7cff02e0cf0d6ed31f937a98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
