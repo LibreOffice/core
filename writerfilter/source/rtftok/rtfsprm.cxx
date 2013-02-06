@@ -192,13 +192,6 @@ RTFSprms& RTFSprms::operator=(const RTFSprms& rOther)
     return *this;
 }
 
-void RTFSprms::swap(RTFSprms& rOther)
-{
-    boost::intrusive_ptr<RTFSprmsImpl> pTmp = rOther.m_pSprms;
-    rOther.m_pSprms = m_pSprms;
-    m_pSprms = pTmp;
-}
-
 void RTFSprms::clear()
 {
     if (m_pSprms->m_nRefCount == 1)

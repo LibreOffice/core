@@ -96,14 +96,12 @@ public:
     void GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     bool RemoveCharAttribs( sal_uInt16 nWhich = 0 );
-    bool RemoveParaAttribs( sal_uInt16 nWhich = 0 );
 
     bool IsFieldObject() const;
     const SvxFieldItem* GetField() const;
     bool HasField( sal_Int32 nType = com::sun::star::text::textfield::Type::UNSPECIFIED ) const;
 
     const SfxItemSet& GetParaAttribs(size_t nPara) const;
-    void SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs);
 
     void GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const;
     void SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& eFamily);

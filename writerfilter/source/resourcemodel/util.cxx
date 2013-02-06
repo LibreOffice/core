@@ -35,26 +35,6 @@ namespace writerfilter
 {
 using namespace com::sun::star;
 using namespace std;
-using text::TextContentAnchorType;
-
-static string & logger_file()
-{
-    static string _logger_file = string(getenv("TEMP")?getenv("TEMP"):"/tmp") + "/writerfilter.ooxml.tmp";
-    return _logger_file;
-}
-
-static ofstream & logger_stream()
-{
-    static ofstream _logger_stream(logger_file().c_str());
-    return _logger_stream;
-}
-
-
-void logger(string prefix, string message)
-{
-    logger_stream() << prefix <<  ":" << message << endl;
-    logger_stream().flush();
-}
 
 string xmlify(const string & str)
 {

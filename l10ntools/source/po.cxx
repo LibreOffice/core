@@ -631,13 +631,6 @@ namespace
     }
 }
 
-//Default Constructor
-PoHeader::PoHeader()
-    : m_pGenPo( 0 )
-    , m_bIsInitialized( false )
-{
-}
-
 //Template Constructor
 PoHeader::PoHeader( const OString& rExtSrc )
     : m_pGenPo( new GenPoEntry() )

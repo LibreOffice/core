@@ -1224,12 +1224,6 @@ unsigned int Application::GetScreenCount()
     return pSys ? pSys->GetDisplayScreenCount() : 0;
 }
 
-rtl::OUString Application::GetDisplayScreenName( unsigned int nScreen )
-{
-    SalSystem* pSys = ImplGetSalSystem();
-    return pSys ? pSys->GetDisplayScreenName( nScreen ) : rtl::OUString();
-}
-
 bool Application::IsUnifiedDisplay()
 {
     SalSystem* pSys = ImplGetSalSystem();

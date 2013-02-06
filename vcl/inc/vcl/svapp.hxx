@@ -287,7 +287,6 @@ public:
     static unsigned int  GetDisplayBuiltInScreen();
     // Practically, this means - Get the screen we should run a presentation on.
     static unsigned int  GetDisplayExternalScreen();
-    SAL_DLLPRIVATE static rtl::OUString GetDisplayScreenName( unsigned int nScreen );
 
     static const LocaleDataWrapper& GetAppLocaleDataWrapper();
 
