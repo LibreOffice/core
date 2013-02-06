@@ -53,7 +53,7 @@ module com { module sun { module star { module document {
 
     @see com::sun::star::beans::PropertyValue
  */
-published service MediaDescriptor
+service MediaDescriptor
 {
     /** May be set by filters or detection services if user has chosen to
         abort loading/saving, e.g. while entering a password.
