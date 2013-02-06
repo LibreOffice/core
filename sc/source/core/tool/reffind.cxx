@@ -26,7 +26,7 @@
 
 namespace {
 
-//  include colon -> duplicate referenced are handled individual
+// Include colon; addresses in range reference are handled individually.
 const sal_Unicode pDelimiters[] = {
     '=','(',')','+','-','*','/','^','&',' ','{','}','<','>',':', 0
 };
