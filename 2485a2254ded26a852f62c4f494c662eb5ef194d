@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///ug\u003d",
+        "filename": "extensions/source/update/check/updatecheckconfig.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-06T14:31:28Z",
+      "side": 1,
+      "message": "makeAny does not like litteral\n\nplease check all other MakeAny changes.",
+      "revId": "2485a2254ded26a852f62c4f494c662eb5ef194d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///uc\u003d",
+        "filename": "extensions/source/update/check/updatecheckconfig.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-06T14:31:28Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "2485a2254ded26a852f62c4f494c662eb5ef194d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///uY\u003d",
+        "filename": "extensions/source/update/check/updatehdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-06T14:31:28Z",
+      "side": 1,
+      "message": "lost return value...",
+      "revId": "2485a2254ded26a852f62c4f494c662eb5ef194d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///uM\u003d",
+        "filename": "extensions/source/update/check/updatehdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-06T14:31:28Z",
+      "side": 1,
+      "message": "makeANy does not like litterals",
+      "revId": "2485a2254ded26a852f62c4f494c662eb5ef194d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///uI\u003d",
+        "filename": "extensions/source/update/check/updatehdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-06T14:31:28Z",
+      "side": 1,
+      "message": "lost return value",
+      "revId": "2485a2254ded26a852f62c4f494c662eb5ef194d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
