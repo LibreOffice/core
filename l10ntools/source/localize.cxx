@@ -99,7 +99,6 @@ bool passesNegativeList(OUString const & url) {
         { RTL_CONSTASCII_STRINGPARAM(
             "/dictionaries/hu_HU/help/hu/"
             "org.openoffice.hu.hunspell.dictionaries/page1.xhp") },
-        { RTL_CONSTASCII_STRINGPARAM("/hidother.src") },
         { RTL_CONSTASCII_STRINGPARAM(
             "/officecfg/registry/data/org/openoffice/Office/"
             "Accelerators.xcu") },

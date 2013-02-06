@@ -794,9 +794,6 @@ IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, CheckBox *, pCheckBox )
 
 void SmDistanceDialog::SetHelpId(MetricField &rField, const rtl::OString& sHelpId)
 {
-    // HelpIDs which are explicitly set in this way have to be defined in the
-    // util directory in the file "hidother.src" with the help of "hidspecial"!
-
     const OUString aEmptyText;
 
     rField.SetHelpId(sHelpId);
