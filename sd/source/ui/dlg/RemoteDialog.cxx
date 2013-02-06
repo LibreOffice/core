@@ -27,8 +27,9 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
 {
     (void) mPreviouslyDiscoverable; // avoid warnings about unused member
 
-#ifdef ENABLE_SDREMOTE
     FreeResource();
+
+#ifdef ENABLE_SDREMOTE
 
 #ifdef ENABLE_SDREMOTE_BLUETOOTH
     mPreviouslyDiscoverable = RemoteServer::isBluetoothDiscoverable();
@@ -45,11 +46,11 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
     {
         mClientBox.addEntry( *aIt );
     }
+#endif
 
     mButtonConnect.SetClickHdl( LINK( this, RemoteDialog, HandleConnectButton ) );
     SetCloseHdl( LINK( this, RemoteDialog, CloseHdl ) );
     mButtonCancel.SetClickHdl( LINK( this, RemoteDialog, CloseHdl ) );
-#endif
 }
 
 RemoteDialog::~RemoteDialog()
@@ -84,8 +85,8 @@ IMPL_LINK_NOARG( RemoteDialog, CloseHdl )
     {
         RemoteServer::setBluetoothDiscoverable( false );
     }
-    Close();
 #endif
+    Close();
     return 0;
 }
 
