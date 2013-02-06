@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///wg\u003d",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-06T12:44:56Z",
+      "side": 1,
+      "message": "aStr[0] \u003d\u003d \u0027(\u0027 \u0026\u0026 aStr[aStr.getLength()-1] \u003d\u003d \u0027)\u0027\n\ncalling startWidth and endsWith here is much more expensive\nas they deal with string not char.",
+      "revId": "8a535871ce038d1db01e98717a21375f1c060074",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///wc\u003d",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-06T12:44:56Z",
+      "side": 1,
+      "message": "nice touch :-)",
+      "revId": "8a535871ce038d1db01e98717a21375f1c060074",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///wY\u003d",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-06T12:44:56Z",
+      "side": 1,
+      "message": "aStr1[0] rather.",
+      "revId": "8a535871ce038d1db01e98717a21375f1c060074",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///wU\u003d",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-06T12:44:56Z",
+      "side": 1,
+      "message": "why not have aStr1 as OUStringBuffer from the beginning, like aStr2 ?",
+      "revId": "8a535871ce038d1db01e98717a21375f1c060074",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
