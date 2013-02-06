@@ -29,6 +29,7 @@ $(eval $(call gb_Pagein_Pagein,common))
 
 # sorted in approx. reverse load order (ld.so.1)
 $(eval $(call gb_Pagein_add_objects,common,\
+    $(if $(MERGELIBS),merged) \
     i18npool \
     $(if $(findstring YES,$(SYSTEM_ICU)),,\
         icui18n \
@@ -81,11 +82,11 @@ $(eval $(call gb_Pagein_add_objects,common,\
     avmedia \
     helplinker \
     sax \
-    gconfbe \
+    gconfbe1 \
     fsstorage \
-    desktopbe \
-    localebe \
-    ucpexpand \
+    desktopbe1 \
+    localebe1 \
+    ucpexpand1 \
     sfx \
     sofficeapp \
 ))
