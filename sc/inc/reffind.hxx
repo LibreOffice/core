@@ -25,31 +25,28 @@
 
 class ScDocument;
 
-// -----------------------------------------------------------------------
-
 class ScRefFinder
 {
-private:
-    String      aFormula;
-    formula::FormulaGrammar::AddressConvention eConv;
-    ScDocument* pDoc;
-    ScAddress   maPos;
-    xub_StrLen  nFound;
-    xub_StrLen  nSelStart;
-    xub_StrLen  nSelEnd;
+    OUString maFormula;
+    formula::FormulaGrammar::AddressConvention meConv;
+    ScDocument* mpDoc;
+    ScAddress maPos;
+    sal_Int32 mnFound;
+    sal_Int32 mnSelStart;
+    sal_Int32 mnSelEnd;
 
 public:
-    ScRefFinder( const String& rFormula, const ScAddress& rPos,
-             ScDocument* pDocument = NULL,
-             formula::FormulaGrammar::AddressConvention eConvP = formula::FormulaGrammar::CONV_OOO );
+    ScRefFinder(
+        const OUString& rFormula, const ScAddress& rPos, ScDocument* pDoc = NULL,
+        formula::FormulaGrammar::AddressConvention eConvP = formula::FormulaGrammar::CONV_OOO );
     ~ScRefFinder();
 
-    const String&   GetText() const     { return aFormula; }
-    xub_StrLen      GetFound() const    { return nFound; }
-    xub_StrLen      GetSelStart() const { return nSelStart; }
-    xub_StrLen      GetSelEnd() const   { return nSelEnd; }
+    const OUString& GetText() const { return maFormula; }
+    sal_Int32 GetFound() const { return mnFound; }
+    sal_Int32 GetSelStart() const { return mnSelStart; }
+    sal_Int32 GetSelEnd() const { return mnSelEnd; }
 
-    void            ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos );
+    void ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos );
 };
 
 

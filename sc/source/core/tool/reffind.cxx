@@ -65,7 +65,7 @@ inline bool IsText( bool& bQuote, sal_Unicode c )
  * considered a text when it's within the ascii range and when it's not a
  * delimiter.
  */
-xub_StrLen FindStartPos(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen nEndPos)
+sal_Int32 FindStartPos(const sal_Unicode* p, sal_Int32 nStartPos, sal_Int32 nEndPos)
 {
     while (nStartPos <= nEndPos && !IsText(p[nStartPos]))
         ++nStartPos;
@@ -73,19 +73,19 @@ xub_StrLen FindStartPos(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen n
     return nStartPos;
 }
 
-xub_StrLen FindEndPosA1(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen nEndPos)
+sal_Int32 FindEndPosA1(const sal_Unicode* p, sal_Int32 nStartPos, sal_Int32 nEndPos)
 {
     bool bQuote = false;
-    xub_StrLen nNewEnd = nStartPos;
+    sal_Int32 nNewEnd = nStartPos;
     while (nNewEnd <= nEndPos && IsText(bQuote, p[nNewEnd]))
         ++nNewEnd;
 
     return nNewEnd;
 }
 
-xub_StrLen FindEndPosR1C1(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen nEndPos)
+sal_Int32 FindEndPosR1C1(const sal_Unicode* p, sal_Int32 nStartPos, sal_Int32 nEndPos)
 {
-    xub_StrLen nNewEnd = nStartPos;
+    sal_Int32 nNewEnd = nStartPos;
     p = &p[nStartPos];
     for (; nNewEnd <= nEndPos; ++p, ++nNewEnd)
     {
@@ -95,6 +95,8 @@ xub_StrLen FindEndPosR1C1(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen
             for (; nNewEnd <= nEndPos; ++p, ++nNewEnd)
                 if (*p == '\'')
                     break;
+            if (nNewEnd > nEndPos)
+                break;
         }
         else if (*p == '[')
         {
@@ -102,6 +104,8 @@ xub_StrLen FindEndPosR1C1(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen
             for (; nNewEnd <= nEndPos; ++p, ++nNewEnd)
                 if (*p == ']')
                     break;
+            if (nNewEnd > nEndPos)
+                break;
         }
         else if (!IsText(*p))
             break;
@@ -114,8 +118,8 @@ xub_StrLen FindEndPosR1C1(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen
  * Find last character position that is considred text, from the specified
  * start position.
  */
-xub_StrLen FindEndPos(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen nEndPos,
-                           formula::FormulaGrammar::AddressConvention eConv)
+sal_Int32 FindEndPos(const sal_Unicode* p, sal_Int32 nStartPos, sal_Int32 nEndPos,
+                     formula::FormulaGrammar::AddressConvention eConv)
 {
     switch (eConv)
     {
@@ -128,7 +132,7 @@ xub_StrLen FindEndPos(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen nEn
     }
 }
 
-void ExpandToTextA1(const sal_Unicode* p, xub_StrLen nLen, xub_StrLen& rStartPos, xub_StrLen& rEndPos)
+void ExpandToTextA1(const sal_Unicode* p, sal_Int32 nLen, sal_Int32& rStartPos, sal_Int32& rEndPos)
 {
     while (rStartPos > 0 && IsText(p[rStartPos - 1]) )
         --rStartPos;
@@ -138,7 +142,7 @@ void ExpandToTextA1(const sal_Unicode* p, xub_StrLen nLen, xub_StrLen& rStartPos
         ++rEndPos;
 }
 
-void ExpandToTextR1C1(const sal_Unicode* p, xub_StrLen nLen, xub_StrLen& rStartPos, xub_StrLen& rEndPos)
+void ExpandToTextR1C1(const sal_Unicode* p, sal_Int32 nLen, sal_Int32& rStartPos, sal_Int32& rEndPos)
 {
     // move back the start position to the first text character.
     if (rStartPos > 0)
@@ -182,7 +186,7 @@ void ExpandToTextR1C1(const sal_Unicode* p, xub_StrLen nLen, xub_StrLen& rStartP
     rEndPos = FindEndPosR1C1(p, rEndPos, nLen-1);
 }
 
-void ExpandToText(const sal_Unicode* p, xub_StrLen nLen, xub_StrLen& rStartPos, xub_StrLen& rEndPos,
+void ExpandToText(const sal_Unicode* p, sal_Int32 nLen, sal_Int32& rStartPos, sal_Int32& rEndPos,
                   formula::FormulaGrammar::AddressConvention eConv)
 {
     switch (eConv)
@@ -200,14 +204,16 @@ void ExpandToText(const sal_Unicode* p, xub_StrLen nLen, xub_StrLen& rStartPos, 
 }
 
 ScRefFinder::ScRefFinder(
-    const String& rFormula, const ScAddress& rPos,
-    ScDocument* pDocument, formula::FormulaGrammar::AddressConvention eConvP) :
-    aFormula( rFormula ),
-    eConv( eConvP ),
-    pDoc( pDocument ),
-    maPos(rPos)
+    const OUString& rFormula, const ScAddress& rPos,
+    ScDocument* pDoc, formula::FormulaGrammar::AddressConvention eConvP) :
+    maFormula(rFormula),
+    meConv(eConvP),
+    mpDoc(pDoc),
+    maPos(rPos),
+    mnFound(0),
+    mnSelStart(0),
+    mnSelEnd(0)
 {
-    nSelStart = nSelEnd = nFound = 0;
 }
 
 ScRefFinder::~ScRefFinder()
@@ -225,50 +231,55 @@ static sal_uInt16 lcl_NextFlags( sal_uInt16 nOld )
     return ( nOld & 0xfff8 ) | nNew;
 }
 
-void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
+void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
 {
-    xub_StrLen nLen = aFormula.Len();
-    if (!nLen)
+    sal_Int32 nLen = maFormula.getLength();
+    if (nLen <= 0)
         return;
-    const sal_Unicode* pSource = aFormula.GetBuffer();      // for quick access
+    const sal_Unicode* pSource = maFormula.getStr();      // for quick access
 
     // expand selection, and instead of selection start- and end-index
 
     if ( nEndPos < nStartPos )
         ::std::swap(nEndPos, nStartPos);
 
-    ExpandToText(pSource, nLen, nStartPos, nEndPos, eConv);
+    ExpandToText(pSource, nLen, nStartPos, nEndPos, meConv);
 
-    String aResult;
-    String aExpr;
-    String aSep;
+    OUString aResult;
+    OUString aExpr;
+    OUString aSep;
     ScAddress aAddr;
-    nFound = 0;
+    mnFound = 0;
 
-    xub_StrLen nLoopStart = nStartPos;
+    sal_Int32 nLoopStart = nStartPos;
     while ( nLoopStart <= nEndPos )
     {
-        // Determine the stard and end positions of a text segment.
-        xub_StrLen nEStart = FindStartPos(pSource, nLoopStart, nEndPos);
-        xub_StrLen nEEnd  = FindEndPos(pSource, nEStart, nEndPos, eConv);
+        // Determine the stard and end positions of a text segment.  Note that
+        // the end position returned from FindEndPos may be one position after
+        // the last character position in case of the last segment.
+        sal_Int32 nEStart = FindStartPos(pSource, nLoopStart, nEndPos);
+        sal_Int32 nEEnd  = FindEndPos(pSource, nEStart, nEndPos, meConv);
 
-        aSep  = aFormula.Copy( nLoopStart, nEStart-nLoopStart );
-        aExpr = aFormula.Copy( nEStart, nEEnd-nEStart );
+        aSep  = maFormula.copy(nLoopStart, nEStart-nLoopStart);
+        if (nEEnd < maFormula.getLength())
+            aExpr = maFormula.copy(nEStart, nEEnd-nEStart);
+        else
+            aExpr = maFormula.copy(nEStart);
 
         // Check the validity of the expression, and toggle the relative flag.
-        ScAddress::Details aDetails(eConv, maPos.Row(), maPos.Col());
-        sal_uInt16 nResult = aAddr.Parse(aExpr, pDoc, aDetails);
+        ScAddress::Details aDetails(meConv, maPos.Row(), maPos.Col());
+        sal_uInt16 nResult = aAddr.Parse(aExpr, mpDoc, aDetails);
         if ( nResult & SCA_VALID )
         {
             sal_uInt16 nFlags = lcl_NextFlags( nResult );
-            aAddr.Format(aExpr, nFlags, pDoc, aDetails);
+            aAddr.Format(aExpr, nFlags, mpDoc, aDetails);
 
-            xub_StrLen nAbsStart = nStartPos+aResult.Len()+aSep.Len();
+            sal_Int32 nAbsStart = nStartPos+aResult.getLength()+aSep.getLength();
 
-            if (!nFound)                            // first reference ?
-                nSelStart = nAbsStart;
-            nSelEnd = nAbsStart+aExpr.Len();        // selection, no indizes
-            ++nFound;
+            if (!mnFound)                            // first reference ?
+                mnSelStart = nAbsStart;
+            mnSelEnd = nAbsStart + aExpr.getLength();        // selection, no indizes
+            ++mnFound;
         }
 
         // assemble
@@ -279,11 +290,12 @@ void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
         nLoopStart = nEEnd;
     }
 
-    String aTotal = aFormula.Copy( 0, nStartPos );
+    OUString aTotal = maFormula.copy(0, nStartPos);
     aTotal += aResult;
-    aTotal += aFormula.Copy( nEndPos+1 );
+    if (nEndPos < maFormula.getLength()-1)
+        aTotal += maFormula.copy(nEndPos);
 
-    aFormula = aTotal;
+    maFormula = aTotal;
 }
 
 

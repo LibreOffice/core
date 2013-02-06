@@ -4973,22 +4973,22 @@ void Test::testToggleRefFlag()
         // column absolute / row absolute -> column relative / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=R2C[-3]" );
+        CPPUNIT_ASSERT_EQUAL(OUString("=R2C[-3]"), aFormula);
 
         // column relative / row absolute - > column absolute / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=R[-4]C1" );
+        CPPUNIT_ASSERT_EQUAL(OUString("=R[-4]C1"), aFormula);
 
         // column absolute / row relative -> column relative / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=R[-4]C[-3]" );
+        CPPUNIT_ASSERT_EQUAL(OUString("=R[-4]C[-3]"), aFormula);
 
         // column relative / row relative -> column absolute / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE( "Wrong conversion.", aFormula == "=R2C1" );
+        CPPUNIT_ASSERT_EQUAL(OUString("=R2C1"), aFormula);
     }
 
     {
@@ -4999,7 +4999,7 @@ void Test::testToggleRefFlag()
         ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 
         // Original
-        CPPUNIT_ASSERT_EQUAL(aFormula, OUString(aFinder.GetText()));
+        CPPUNIT_ASSERT_EQUAL(aFormula, aFinder.GetText());
 
         // Make the column relative.
         sal_Int32 n = aFormula.getLength();
