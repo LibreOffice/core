@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_libraries,tubes,\
 ))
 
 $(eval $(call gb_Library_use_externals,tubes,\
+	boost_headers \
 	gtk \
 	telepathy \
 ))
