@@ -207,7 +207,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     }
 
     MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-    String* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
     DrawControlText( *pDev, aRect, aText, nTextStyle, pVector, pDisplayText );
 }
 

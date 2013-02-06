@@ -187,7 +187,7 @@ long Control::GetIndexForPoint( const Point& rPoint ) const
 long ControlLayoutData::GetLineCount() const
 {
     long nLines = m_aLineIndices.size();
-    if( nLines == 0 && m_aDisplayText.Len() )
+    if( nLines == 0 && !m_aDisplayText.isEmpty() )
         nLines = 1;
     return nLines;
 }
@@ -205,14 +205,14 @@ Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
         if( nLine+1 < nDisplayLines )
             aPair.B() = m_aLineIndices[nLine+1]-1;
         else
-            aPair.B() = m_aDisplayText.Len()-1;
+            aPair.B() = m_aDisplayText.getLength()-1;
     }
-    else if( nLine == 0 && nDisplayLines == 0 && m_aDisplayText.Len() )
+    else if( nLine == 0 && nDisplayLines == 0 && !m_aDisplayText.isEmpty() )
     {
         // special case for single line controls so the implementations
         // in that case do not have to fill in the line indices
         aPair.A() = 0;
-        aPair.B() = m_aDisplayText.Len()-1;
+        aPair.B() = m_aDisplayText.getLength()-1;
     }
     return aPair;
 }
@@ -231,7 +231,7 @@ Pair Control::GetLineStartEnd( long nLine ) const
 long ControlLayoutData::ToRelativeLineIndex( long nIndex ) const
 {
     // is the index sensible at all ?
-    if( nIndex >= 0 && nIndex < m_aDisplayText.Len() )
+    if( nIndex >= 0 && nIndex < m_aDisplayText.getLength() )
     {
         int nDisplayLines = m_aLineIndices.size();
         // if only 1 line exists, then absolute and relative index are
@@ -334,11 +334,11 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
 {
     if( !rSubControl.HasLayoutData() )
         rSubControl.FillLayoutData();
-    if( !rSubControl.HasLayoutData() || !rSubControl.mpControlData->mpLayoutData->m_aDisplayText.Len() )
+    if( !rSubControl.HasLayoutData() || rSubControl.mpControlData->mpLayoutData->m_aDisplayText.isEmpty() )
         return;
 
-    long nCurrentIndex = mpControlData->mpLayoutData->m_aDisplayText.Len();
-    mpControlData->mpLayoutData->m_aDisplayText.Append( rSubControl.mpControlData->mpLayoutData->m_aDisplayText );
+    long nCurrentIndex = mpControlData->mpLayoutData->m_aDisplayText.getLength();
+    mpControlData->mpLayoutData->m_aDisplayText += rSubControl.mpControlData->mpLayoutData->m_aDisplayText;
     int nLines = rSubControl.mpControlData->mpLayoutData->m_aLineIndices.size();
     int n;
     mpControlData->mpLayoutData->m_aLineIndices.push_back( nCurrentIndex );
@@ -520,8 +520,8 @@ void Control::ImplInitSettings( const sal_Bool _bFont, const sal_Bool _bForegrou
 
 // -----------------------------------------------------------------
 
-void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const XubString& _rStr,
-    sal_uInt16 _nStyle, MetricVector* _pVector, String* _pDisplayText ) const
+void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const OUString& _rStr,
+    sal_uInt16 _nStyle, MetricVector* _pVector, OUString* _pDisplayText ) const
 {
 #ifdef FS_DEBUG
     if ( !_pVector )

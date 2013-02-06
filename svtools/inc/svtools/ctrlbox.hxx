@@ -512,7 +512,7 @@ class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 #endif
 
 protected:
-    virtual XubString CreateFieldText( sal_Int64 nValue ) const;
+    virtual OUString CreateFieldText( sal_Int64 nValue ) const;
 
 public:
                     FontSizeBox( Window* pParent, WinBits nWinStyle = 0 );

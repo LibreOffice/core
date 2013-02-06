@@ -35,7 +35,7 @@ struct VCL_DLLPUBLIC ControlLayoutData
     // contains the string really displayed
     // there must be exactly one bounding rectangle in m_aUnicodeBoundRects
     // for every character in m_aDisplayText
-    String                              m_aDisplayText;
+    OUString                            m_aDisplayText;
     // the bounding rectangle of every character
     // where one character may consist of many glyphs
     std::vector< Rectangle >            m_aUnicodeBoundRects;

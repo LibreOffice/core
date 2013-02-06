@@ -42,7 +42,7 @@ namespace vcl
     public:
         virtual long        GetTextWidth( const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
         virtual void        DrawText( const Point& _rStartPoint, const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength,
-                                MetricVector* _pVector, String* _pDisplayText ) = 0;
+                                MetricVector* _pVector, OUString* _pDisplayText ) = 0;
         virtual bool        GetCaretPositions( const XubString& _rText, sal_Int32* _pCaretXArray, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
         virtual xub_StrLen  GetTextBreak( const XubString& _rText, long _nMaxTextWidth, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
         virtual bool        DecomposeTextRectAction() const = 0;
@@ -78,7 +78,7 @@ namespace vcl
                                 xub_StrLen _nStartIndex,
                                 xub_StrLen _nLength,
                                 MetricVector* _pVector,
-                                String* _pDisplayText
+                                OUString* _pDisplayText
                             );
         virtual bool        GetCaretPositions(
                                 const XubString& _rText,
@@ -113,7 +113,7 @@ namespace vcl
 
         Rectangle   DrawText( const Rectangle& _rRect,
                               const XubString& _rText, sal_uInt16 _nStyle = 0,
-                              MetricVector* _pVector = NULL, String* _pDisplayText = NULL );
+                              MetricVector* _pVector = NULL, OUString* _pDisplayText = NULL );
 
     private:
         ControlTextRenderer();                                                  // never implemented
