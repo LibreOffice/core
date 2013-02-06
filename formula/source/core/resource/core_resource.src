@@ -284,6 +284,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_STANDARD { Text = "STANDARDIZE" ; };
     String SC_OPCODE_AVE_DEV { Text = "AVEDEV" ; };
     String SC_OPCODE_SCHIEFE { Text = "SKEW" ; };
+    String SC_OPCODE_SKEWP   { Text = "SKEWP" ; };
     String SC_OPCODE_DEV_SQ { Text = "DEVSQ" ; };
     String SC_OPCODE_MEDIAN { Text = "MEDIAN" ; };
     String SC_OPCODE_MODAL_VALUE { Text = "MODE" ; };
@@ -624,6 +625,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_STANDARD { Text = "STANDARDIZE" ; };
     String SC_OPCODE_AVE_DEV { Text = "AVEDEV" ; };
     String SC_OPCODE_SCHIEFE { Text = "SKEW" ; };
+    String SC_OPCODE_SKEWP   { Text = "SKEWP" ; };
     String SC_OPCODE_DEV_SQ { Text = "DEVSQ" ; };
     String SC_OPCODE_MEDIAN { Text = "MEDIAN" ; };
     String SC_OPCODE_MODAL_VALUE { Text = "MODE" ; };
@@ -1674,6 +1676,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_SCHIEFE
     {
         Text [ en-US ] = "SKEW" ;
+    };
+    String SC_OPCODE_SKEWP
+    {
+        Text [ en-US ] = "SKEWP" ;
     };
     String SC_OPCODE_DEV_SQ
     {

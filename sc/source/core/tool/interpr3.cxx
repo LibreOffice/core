@@ -3038,6 +3038,39 @@ void ScInterpreter::ScSkew()
     PushDouble(((xcube * fCount) / (fCount - 1.0)) / (fCount - 2.0));
 }
 
+//fdo#60322
+void ScInterpreter::ScSkewp()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSkewp" );
+    double fSum,fCount,vSum;
+    std::vector<double> values;
+    if ( !CalculateSkew( fSum, fCount, vSum, values ) )
+        return;
+
+    double fMean = fSum / fCount;
+
+    for ( size_t i = 0; i < values.size(); i++ )
+        vSum += ( values[ i ] - fMean ) * ( values[ i ] - fMean );
+
+    double fStdDevp = sqrt( vSum / fCount );
+    double dx = 0.0;
+    double xcube = 0.0;
+
+    if ( fStdDevp == 0 )
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    for ( size_t i = 0; i < values.size(); i++ )
+    {
+        dx = ( values[ i ] - fMean ) / fStdDevp;
+        xcube = xcube + ( dx * dx * dx );
+    }
+
+    PushDouble( xcube / fCount );
+}
+
 double ScInterpreter::GetMedian( vector<double> & rArray )
 {
     size_t nSize = rArray.size();

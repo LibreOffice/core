@@ -5374,6 +5374,30 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments portraying a sample of the distribution." ;
         };
     };
+     // -=*# Resource for function SKEWP #*=-
+    Resource SC_OPCODE_SKEWP
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the skewness of a distribution using the population of a random variable." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_SKEWP );
+            VAR_ARGS;   0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number " ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments portraying the population." ;
+        };
+    };
      // -=*# Resource for function KURT #*=-
     Resource SC_OPCODE_KURT
     {

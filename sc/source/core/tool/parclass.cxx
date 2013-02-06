@@ -163,6 +163,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocRows,            {{ Reference                                            }, 1 }},
     { ocRSQ,             {{ ForceArray, ForceArray                               }, 0 }},
     { ocSchiefe,         {{ Reference                                            }, 1 }},
+    { ocSkewp,           {{ Reference                                            }, 1 }},
     { ocSlope,           {{ ForceArray, ForceArray                               }, 0 }},
     { ocSmall,           {{ Reference, Value                                     }, 0 }},
     { ocStDev,           {{ Reference                                            }, 1 }},

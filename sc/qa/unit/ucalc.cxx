@@ -4560,6 +4560,7 @@ void Test::testFunctionLists()
         "RANK",
         "RSQ",
         "SKEW",
+        "SKEWP",
         "SLOPE",
         "SMALL",
         "STANDARDIZE",

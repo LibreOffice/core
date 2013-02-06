@@ -810,7 +810,7 @@ static const FunctionData saFuncTable2013[] =
     { "SECH",                   "SECH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "SHEET",                  "SHEET",                NOID,   NOID,   0,  1,  V, { RO }, FUNCFLAG_MACROCALL_NEW },
     { "SHEETS",                 "SHEETS",               NOID,   NOID,   0,  1,  V, { RO }, FUNCFLAG_MACROCALL_NEW },
-    { 0/*"SKEWP"*/,             "SKEW.P",               NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALL_NEW },
+    { "SKEWP",                  "SKEW.P",               NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALL_NEW },
     { "UNICHAR",                "UNICHAR",              NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "UNICODE",                "UNICODE",              NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { 0,                        "WEBSERVICE",           NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
