@@ -71,6 +71,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/configurat
 	Update \
     theDefaultProvider \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/cui,\
+    ColorPicker \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/datatransfer,\
 	DataFormatTranslator \
 	MimeContentTypeFactory \

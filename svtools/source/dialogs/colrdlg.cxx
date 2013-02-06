@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/cui/ColorPicker.hpp>
 
 #include <comphelper/processfactory.hxx>
 
@@ -76,14 +77,11 @@ short SvColorDialog::Execute()
     try
     {
         const OUString sColor( RTL_CONSTASCII_USTRINGPARAM( "Color" ) );
-        Reference< XMultiServiceFactory > xSMGR( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
         Reference< com::sun::star::awt::XWindow > xParent( VCLUnoHelper::GetInterface( mpParent ) );
 
-        Sequence< Any > args(1);
-        args[0] = Any( xParent );
-
-        Reference< XExecutableDialog > xDialog( xSMGR->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.cui.ColorPicker")), args), UNO_QUERY_THROW );
+        Reference< XExecutableDialog > xDialog = com::sun::star::cui::ColorPicker::createWithParent(xContext, xParent);
         Reference< XPropertyAccess > xPropertyAccess( xDialog, UNO_QUERY_THROW );
 
         Sequence< PropertyValue > props( 2 );
