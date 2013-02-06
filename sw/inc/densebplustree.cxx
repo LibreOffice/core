@@ -308,6 +308,15 @@ void DenseBPlusTree< Key, Value, Order >::Remove( Key nPos, Key nNumber )
     }
 
     m_nCount -= nNumber;
+
+    // remove one level, if needed
+    if ( m_pRoot->m_nUsed == 1 )
+    {
+        DBPTreeNode< Key, Value, Order > *pToDelete = m_pRoot;
+        m_pRoot = m_pRoot->m_pChildren[0];
+        delete pToDelete;
+        --m_nDepth;
+    }
 }
 
 template < class Key, class Value, int Order >
