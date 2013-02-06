@@ -306,6 +306,7 @@ SvxColorTabPage::SvxColorTabPage(Window* pParent, const SfxItemSet& rInAttrs)
     , pShadow             ( new SvxColorTabPageShadow() )
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
+    , pnColorListState( 0 )
     , pPageType( NULL )
     , pDlgType( NULL )
     , pPos( NULL )

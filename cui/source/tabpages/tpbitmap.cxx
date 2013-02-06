@@ -79,6 +79,14 @@ SvxBitmapTabPage::SvxBitmapTabPage
     aBitmapCtl          ( this, aCtlPreview.GetSizePixel() ),
     rOutAttrs           ( rInAttrs ),
 
+    pnBitmapListState   ( 0 ),
+    pnColorListState    ( 0 ),
+    pPageType           ( 0 ),
+    pDlgType            ( 0 ),
+    pbAreaTP            ( 0 ),
+
+    bBmpChanged         ( false ),
+
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_BITMAP ),
     aXBitmapItem        ( String(), XOBitmap() ),

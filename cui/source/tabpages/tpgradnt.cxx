@@ -78,6 +78,13 @@ SvxGradientTabPage::SvxGradientTabPage
 
     rOutAttrs           ( rInAttrs ),
 
+    pnGradientListState ( 0 ),
+    pnColorListState    ( 0 ),
+    pPageType           ( 0 ),
+    pDlgType            ( 0 ),
+    pPos                ( 0 ),
+    pbAreaTP            ( 0 ),
+
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_GRADIENT ),
     aXGradientItem      ( String(), XGradient( COL_BLACK, COL_WHITE ) ),

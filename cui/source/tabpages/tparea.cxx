@@ -240,6 +240,8 @@ void SvxTransparenceTabPage::SetControlState_Impl(XGradientStyle eXGS)
 SvxTransparenceTabPage::SvxTransparenceTabPage(Window* pParent, const SfxItemSet& rInAttrs)
 :   SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_TRANSPARENCE ), rInAttrs),
     rOutAttrs           ( rInAttrs ),
+    eRP                 ( RP_LT ),
+
     nPageType(0),
     nDlgType(0),
 
@@ -644,11 +646,23 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     aCtlXRectPreview    ( this, CUI_RES( CTL_COLOR_PREVIEW ) ),
 
     rOutAttrs           ( rInAttrs ),
+    eRP( RP_LT ),
 
     pColorList( NULL ),
     pGradientList( NULL ),
     pHatchingList( NULL ),
     pBitmapList( NULL ),
+
+    pnColorListState( 0 ),
+    pnBitmapListState( 0 ),
+    pnGradientListState( 0 ),
+    pnHatchingListState( 0 ),
+
+    nPageType( 0 ),
+    nDlgType( 0 ),
+    nPos( LISTBOX_ENTRY_NOTFOUND ),
+
+    pbAreaTP( 0 ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFillAttr          ( pXPool ),

@@ -74,6 +74,13 @@ SvxHatchTabPage::SvxHatchTabPage
 
     rOutAttrs           ( rInAttrs ),
 
+    pnHatchingListState ( 0 ),
+    pnColorListState    ( 0 ),
+    pPageType           ( 0 ),
+    pDlgType            ( 0 ),
+    pPos                ( 0 ),
+    pbAreaTP            ( 0 ),
+
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_HATCH ),
     aXHatchItem         ( String(), XHatch() ),
