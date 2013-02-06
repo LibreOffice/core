@@ -89,7 +89,6 @@ sal_Bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
     nPos = aContentColorLB.GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        nPos = aContentColorLB.GetSelectEntryPos();
         if (nPos!=0)
             nNew= aContentColorLB.GetEntryColor(nPos).GetColor();
         else
@@ -101,7 +100,6 @@ sal_Bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
     nPos = aMoveColorLB.GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        nPos = aMoveColorLB.GetSelectEntryPos();
         if (nPos!=0)
             nNew= aMoveColorLB.GetEntryColor(nPos).GetColor();
         else
@@ -113,7 +111,6 @@ sal_Bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
     nPos = aInsertColorLB.GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        nPos = aInsertColorLB.GetSelectEntryPos();
         if (nPos!=0)
             nNew= aInsertColorLB.GetEntryColor(nPos).GetColor();
         else
@@ -125,7 +122,6 @@ sal_Bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
     nPos = aRemoveColorLB.GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        nPos = aRemoveColorLB.GetSelectEntryPos();
         if (nPos!=0)
             nNew= aRemoveColorLB.GetEntryColor(nPos).GetColor();
         else
