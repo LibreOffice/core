@@ -1165,17 +1165,8 @@ void SvxBackgroundTabPage::ShowColorUI_Impl()
 {
     if (!m_pBackGroundColorFrame->IsVisible())
     {
+        HideBitmapUI_Impl();
         m_pBackGroundColorFrame->Show();
-
-        m_pBtnPreview->Hide();
-
-        m_pFileFrame->Hide();
-
-        m_pTypeFrame->Hide();
-
-        m_pPreviewWin2->Hide();
-
-        m_pGraphTransFrame->Hide();
 
         if(bColTransparency)
         {
@@ -1183,6 +1174,11 @@ void SvxBackgroundTabPage::ShowColorUI_Impl()
             m_pColTransMF->Show();
         }
     }
+}
+
+void SvxBackgroundTabPage::HideColorUI_Impl()
+{
+        m_pBackGroundColorFrame->Hide();
 }
 
 //------------------------------------------------------------------------
@@ -1199,7 +1195,7 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
     if (m_pLbSelect->IsVisible() &&
          (m_pBackGroundColorFrame->IsVisible() || !m_pFileFrame->IsVisible()))
     {
-        m_pBackGroundColorFrame->Hide();
+        HideColorUI_Impl();
 
         m_pBtnPreview->Show();
 
@@ -1215,6 +1211,20 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
         m_pColTransMF->Show(sal_False);
     }
 }
+
+void SvxBackgroundTabPage::HideBitmapUI_Impl()
+{
+        m_pBtnPreview->Hide();
+
+        m_pFileFrame->Hide();
+
+        m_pTypeFrame->Hide();
+
+        m_pPreviewWin2->Hide();
+
+        m_pGraphTransFrame->Hide();
+}
+
 
 //------------------------------------------------------------------------
 

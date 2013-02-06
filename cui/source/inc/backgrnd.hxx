@@ -125,7 +125,9 @@ private:
 #ifdef _SVX_BACKGRND_CXX
     void                FillColorValueSets_Impl();
     void                ShowColorUI_Impl();
+    void                HideColorUI_Impl();
     void                ShowBitmapUI_Impl();
+    void                HideBitmapUI_Impl();
     sal_Bool                LoadLinkedGraphic_Impl();
     void                RaiseLoadError_Impl();
     void                SetGraphicPosition_Impl( SvxGraphicPosition ePos );
