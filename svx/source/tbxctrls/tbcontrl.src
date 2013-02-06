@@ -154,3 +154,13 @@ String RID_SVXSTR_TEXTCOLOR
 };
 // ********************************************************************** EOF
 
+// This is duplicated in GenericCommands.xcu in officecfg.
+String RID_SVXSTR_CHARFONTNAME
+{
+    Text [ en-US ] = "Font Name";
+};
+
+String RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE
+{
+    Text [ en-US ] = "Font Name. The current font is not available and will be substituted.";
+};
