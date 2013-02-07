@@ -106,7 +106,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       const bool bTempIsCovered,
                                       const sal_Int32 nTempRepeatedRows ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    pContentValidationName(NULL),
     pDetectiveObjVec(NULL),
     pCellRangeSource(NULL),
     fValue(0.0),
@@ -150,8 +149,9 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 pStyleName = new rtl::OUString(sValue);
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME:
-                OSL_ENSURE(!pContentValidationName, "here should be only one Validation Name");
-                pContentValidationName = new rtl::OUString(sValue);
+                OSL_ENSURE(!maContentValidationName, "here should be only one Validation Name");
+                if (!sValue.isEmpty())
+                    maContentValidationName.reset(sValue);
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS:
                 bIsMerged = true;
@@ -214,8 +214,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             {
                 if (!sValue.isEmpty())
                 {
-                    OSL_ENSURE(!pOUTextValue, "here should be only one string value");
-                    pOUTextValue.reset(sValue);
+                    OSL_ENSURE(!maStringValue, "here should be only one string value");
+                    maStringValue.reset(sValue);
                     bIsEmpty = false;
                 }
             }
@@ -238,10 +238,10 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             {
                 if (!sValue.isEmpty())
                 {
-                    OSL_ENSURE(!pOUFormula, "here should be only one formula");
+                    OSL_ENSURE(!maFormula, "here should be only one formula");
                     rtl::OUString aFormula, aFormulaNmsp;
                     rXMLImport.ExtractFormulaNamespaceGrammar( aFormula, aFormulaNmsp, eGrammar, sValue );
-                    pOUFormula.reset( FormulaWithNamespace( aFormula, aFormulaNmsp ) );
+                    maFormula.reset( FormulaWithNamespace(aFormula, aFormulaNmsp) );
                 }
             }
             break;
@@ -252,7 +252,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 ;
         }
     }
-    if (pOUFormula)
+    if (maFormula)
     {
         if (nCellType == util::NumberFormat::TEXT)
             bFormulaTextResult = true;
@@ -269,7 +269,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
 ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
 {
-    delete pContentValidationName;
     delete pDetectiveObjVec;
     delete pCellRangeSource;
 }
@@ -356,9 +355,9 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
 
             ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
 
-            if( ((nCellType == util::NumberFormat::TEXT) || pOUFormula || bFormulaTextResult) )
+            if (((nCellType == util::NumberFormat::TEXT) || maFormula || bFormulaTextResult))
             {
-                if ( pOUFormula )
+                if (maFormula)
                 {
                     pContext = new ScXMLTextPContext(rXMLImport, nPrefix, rLName, xAttrList, this);
                 }
@@ -515,12 +514,12 @@ ScValidErrorStyle validAlertToValidError( const sheet::ValidationAlertStyle eVAl
 
 void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
 {
-    if( pContentValidationName && !pContentValidationName->isEmpty() )
+    if (maContentValidationName)
     {
         ScDocument* pDoc = rXMLImport.GetDocument();
         ScMyImportValidation aValidation;
         aValidation.eGrammar1 = aValidation.eGrammar2 = pDoc->GetStorageGrammar();
-        if( rXMLImport.GetValidation(*pContentValidationName, aValidation) )
+        if( rXMLImport.GetValidation(*maContentValidationName, aValidation) )
         {
             ScValidationData aScValidationData(
                 validationTypeToMode(aValidation.aValidationType),
@@ -731,11 +730,11 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
 {
     if(pFCell)
     {
-        if( bFormulaTextResult && pOUTextValue )
+        if( bFormulaTextResult && maStringValue )
         {
             if( !IsPossibleErrorString() )
             {
-                pFCell->SetHybridString( *pOUTextValue );
+                pFCell->SetHybridString( *maStringValue );
                 pFCell->ResetDirty();
             }
         }
@@ -765,8 +764,8 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         {
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
             OUString aCellString;
-            if (pOUTextValue && !pOUTextValue->isEmpty())
-                aCellString = *pOUTextValue;
+            if (maStringValue && !maStringValue->isEmpty())
+                aCellString = *maStringValue;
             else if (pOUTextContent && !pOUTextContent->isEmpty())
                 aCellString = *pOUTextContent;
             else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
@@ -800,8 +799,8 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
     {
         ScBaseCell* pNewCell = NULL;
         ScDocument* pDoc = rXMLImport.GetDocument();
-        if (pOUTextValue && !pOUTextValue->isEmpty())
-            pNewCell = ScBaseCell::CreateTextCell( *pOUTextValue, pDoc );
+        if (maStringValue && !maStringValue->isEmpty())
+            pNewCell = ScBaseCell::CreateTextCell( *maStringValue, pDoc );
         else if (pOUTextContent && !pOUTextContent->isEmpty())
             pNewCell = ScBaseCell::CreateTextCell( *pOUTextContent, pDoc );
         else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
@@ -958,8 +957,7 @@ void ScXMLTableRowCellContext::AddTextAndValueCells( const ScAddress& rCellPos,
 
 bool ScXMLTableRowCellContext::HasSpecialContent() const
 {
-    return ( (pContentValidationName && !pContentValidationName->isEmpty()) ||
-              mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource );
+    return (maContentValidationName || mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource);
 }
 
 bool ScXMLTableRowCellContext::CellsAreRepeated() const
@@ -1015,7 +1013,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCells( const ScAddress& rCellPos )
         if( cellExists(rCellPos) && CellsAreRepeated() )
             pOUText.reset( getOutputString(rXMLImport.GetDocument(), rCellPos) );
 
-        if( !pOUTextContent && !pOUText && !pOUTextValue )
+        if( !pOUTextContent && !pOUText && !maStringValue )
                 bIsEmpty = true;
     }
 
@@ -1046,8 +1044,8 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
 {
     ScDocument* pDoc = rXMLImport.GetDocument();
 
-    rtl::OUString aText = pOUFormula->first;
-    rtl::OUString aFormulaNmsp = pOUFormula->second;
+    OUString aText = maFormula->first;
+    OUString aFormulaNmsp = maFormula->second;
 
     ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard (
             new ScExternalRefManager::ApiGuard(pDoc));
@@ -1111,7 +1109,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                         rCellPos.Col(), rCellPos.Row(),
                         std::min<SCCOL>(rCellPos.Col() + nMatrixCols - 1, MAXCOL),
                         std::min<SCROW>(rCellPos.Row() + nMatrixRows - 1, MAXROW),
-                        pOUFormula->first, pOUFormula->second, eGrammar);
+                        maFormula->first, maFormula->second, eGrammar);
 
                 // Set the value/text of the top-left matrix position in its
                 // cached result.  For import, we only need to set the correct
@@ -1121,12 +1119,12 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                     static_cast<ScFormulaCell*>( rXMLImport.GetDocument()->GetCell(rCellPos) );
 
                 ScMatrixRef pMat(new ScMatrix(nMatrixCols, nMatrixRows));
-                if (bFormulaTextResult && pOUTextValue)
+                if (bFormulaTextResult && maStringValue)
                 {
                     if (!IsPossibleErrorString())
                     {
                         pFCell->SetResultMatrix(
-                            nMatrixCols, nMatrixRows, pMat, new formula::FormulaStringToken(*pOUTextValue));
+                            nMatrixCols, nMatrixRows, pMat, new formula::FormulaStringToken(*maStringValue));
                         pFCell->ResetDirty();
                     }
                 }
@@ -1176,7 +1174,7 @@ void ScXMLTableRowCellContext::HasSpecialCaseFormulaText()
 
 bool ScXMLTableRowCellContext::IsPossibleErrorString() const
 {
-     return mbPossibleErrorCell || ( mbCheckWithCompilerForError && GetScImport().IsFormulaErrorConstant(*pOUTextValue) );
+     return mbPossibleErrorCell || ( mbCheckWithCompilerForError && GetScImport().IsFormulaErrorConstant(*maStringValue) );
 }
 
 
@@ -1198,7 +1196,7 @@ void ScXMLTableRowCellContext::EndElement()
     HasSpecialCaseFormulaText();
     if( bFormulaTextResult && (mbPossibleErrorCell || mbCheckWithCompilerForError) )
     {
-        pOUTextValue.reset(*pOUTextContent);
+        maStringValue.reset(*pOUTextContent);
         nCellType = util::NumberFormat::TEXT;
     }
 
@@ -1207,9 +1205,9 @@ void ScXMLTableRowCellContext::EndElement()
         aCellPos.SetRow( aCellPos.Row() - (nRepeatedRows - 1) );
     if( bIsMerged )
         DoMerge( aCellPos, nMergedCols - 1, nMergedRows - 1 );
-    if( !pOUFormula )
+    if (!maFormula)
         AddNonFormulaCells( aCellPos );
-    else // if ( pOUFormula )
+    else
         AddFormulaCell( aCellPos );
 
     UnlockSolarMutex(); //if LockSolarMutex got used, we presumably need to ensure an UnlockSolarMutex

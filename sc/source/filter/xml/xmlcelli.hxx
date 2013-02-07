@@ -34,11 +34,13 @@ struct ScXMLAnnotationData;
 
 class ScXMLTableRowCellContext : public SvXMLImportContext
 {
-    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > FormulaWithNamespace;
-    ::boost::optional< rtl::OUString > pOUTextValue;
+    typedef std::pair<OUString, OUString> FormulaWithNamespace;
+
+    boost::optional<FormulaWithNamespace> maFormula; /// table:formula attribute
+    boost::optional<OUString> maStringValue;         /// office:string-value attribute
+    boost::optional<OUString> maContentValidationName;
+
     ::boost::optional< rtl::OUString > pOUTextContent;
-    ::boost::optional< FormulaWithNamespace > pOUFormula;
-    rtl::OUString* pContentValidationName;
     boost::scoped_ptr< ScXMLAnnotationData > mxAnnotationData;
     ScMyImpDetectiveObjVec* pDetectiveObjVec;
     ScMyImpCellRangeSource* pCellRangeSource;
