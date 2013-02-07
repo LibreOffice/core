@@ -489,22 +489,20 @@ static SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     : private ::boost::noncopyable
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SvXMLTokenMap> m_pTextElemTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> m_pTextPElemTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> m_pTextPAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> m_pTextFieldAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> m_pTextNumberedParagraphAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> m_pTextListBlockAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> m_pTextListBlockElemTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> m_pTextFrameAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> m_pTextContourAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> m_pTextHyperlinkAttrTokenMap;
-    ::std::auto_ptr<SvXMLTokenMap> m_pTextMasterPageElemTokenMap;
-    ::std::auto_ptr< std::vector<OUString> > m_pPrevFrmNames;
-    ::std::auto_ptr< std::vector<OUString> > m_pNextFrmNames;
-    ::std::auto_ptr<XMLTextListsHelper> m_pTextListsHelper;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<SvXMLTokenMap> m_pTextElemTokenMap;
+    boost::scoped_ptr<SvXMLTokenMap> m_pTextPElemTokenMap;
+    boost::scoped_ptr<SvXMLTokenMap> m_pTextPAttrTokenMap;
+    boost::scoped_ptr<SvXMLTokenMap> m_pTextFieldAttrTokenMap;
+    boost::scoped_ptr<SvXMLTokenMap> m_pTextNumberedParagraphAttrTokenMap;
+    boost::scoped_ptr<SvXMLTokenMap> m_pTextListBlockAttrTokenMap;
+    boost::scoped_ptr<SvXMLTokenMap> m_pTextListBlockElemTokenMap;
+    boost::scoped_ptr<SvXMLTokenMap> m_pTextFrameAttrTokenMap;
+    boost::scoped_ptr<SvXMLTokenMap> m_pTextContourAttrTokenMap;
+    boost::scoped_ptr<SvXMLTokenMap> m_pTextHyperlinkAttrTokenMap;
+    boost::scoped_ptr<SvXMLTokenMap> m_pTextMasterPageElemTokenMap;
+    boost::scoped_ptr< std::vector<OUString> > m_pPrevFrmNames;
+    boost::scoped_ptr< std::vector<OUString> > m_pNextFrmNames;
+    boost::scoped_ptr<XMLTextListsHelper> m_pTextListsHelper;
 
     SvXMLImportContextRef m_xAutoStyles;
     SvXMLImportContextRef m_xFontDecls;
@@ -515,9 +513,8 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     UniReference< SvXMLImportPropertyMapper > m_xSectionImpPrMap;
     UniReference< SvXMLImportPropertyMapper > m_xRubyImpPrMap;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SvI18NMap> m_pRenameMap;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<SvI18NMap> m_pRenameMap;
+
     /* Change and extend data structure:
        - data structure contains candidates of paragraph styles, which
          will be assigned to the outline style

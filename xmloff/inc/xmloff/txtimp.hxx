@@ -25,9 +25,9 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <map>
-#include <memory>
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <xmloff/xmltkmap.hxx>
 #include <comphelper/stl_types.hxx>
@@ -371,7 +371,7 @@ class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase,
 {
 private:
     struct Impl;
-    ::std::auto_ptr<Impl> m_pImpl;
+    boost::scoped_ptr<Impl> m_pImpl;
     /// ugly, but implementation of this is in XMLPropertyBackpatcher.cxx
     struct BackpatcherImpl;
     ::boost::shared_ptr<BackpatcherImpl> m_pBackpatcherImpl;
