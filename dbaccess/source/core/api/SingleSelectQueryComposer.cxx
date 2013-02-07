@@ -937,6 +937,18 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
 
     } while ( false );
 
+    bool bMissingSomeColumnLabels = !aNames.empty() && aNames.size() != aSelectColumns->get().size();
+    SAL_WARN_IF(bMissingSomeColumnLabels, "dbaccess", "We have column labels for *some* columns but not all");
+    //^^this happens in the evolution address book where we have real column names of e.g.
+    //first_name, second_name and city. On parsing via
+    //OSQLParseTreeIterator::appendColumns it creates some labels using those real names
+    //but the evo address book gives them proper labels of First Name, Second Name and City
+    //the munge means that here we have e.g. just "City" as a label because it matches
+    //
+    //This is all a horrible mess
+    if (bMissingSomeColumnLabels)
+        aNames.clear();
+
     if ( aNames.empty() )
         m_aCurrentColumns[ SelectColumns ] = OPrivateColumns::createWithIntrinsicNames( aSelectColumns, bCase, *this, m_aMutex );
     else
