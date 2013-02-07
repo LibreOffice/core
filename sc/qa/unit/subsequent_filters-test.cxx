@@ -1922,7 +1922,7 @@ void ScFiltersTest::testOptimalHeightReset()
     ScRange aDelRange(0,0,0,0,0,0);
     ScMarkData aMark;
     aMark.SetMarkArea(aDelRange);
-    rFunc.DeleteContents( aMark, -1, false, true );
+    rFunc.DeleteContents( aMark, IDF_ALL, false, true );
 
     // get the new height of A1
     nHeight =  sc::TwipsToHMM( pDoc->GetRowHeight(nRow, nTab, false) );
