@@ -26,6 +26,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/outlobj.hxx>
+#include <officecfg/Office/Impress.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
 #include <svx/clipfmtitem.hxx>
@@ -995,10 +996,16 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
        rSet.DisableItem(SID_ZOOM_PREV);
     }
 
+    bool bDisableSdremoteForGood = false;
 #ifndef ENABLE_SDREMOTE
-    rSet.ClearItem(SID_REMOTE_DLG);
-    rSet.DisableItem(SID_REMOTE_DLG);
+    bDisableSdremoteForGood = true;
 #endif
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    if ( bDisableSdremoteForGood || ( xContext.is() && !officecfg::Office::Impress::Misc::Start::EnableSdremote::get( xContext ) ) )
+    {
+        rSet.ClearItem(SID_REMOTE_DLG);
+        rSet.DisableItem(SID_REMOTE_DLG);
+    }
 
     // EditText aktiv
     if (GetViewShellBase().GetViewShellManager()->GetShell(RID_DRAW_TEXT_TOOLBOX) != NULL)
