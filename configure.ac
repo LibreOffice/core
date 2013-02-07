@@ -1081,6 +1081,15 @@ AC_ARG_ENABLE(silent-msi,
         [Enable MSI with LIMITUI=1 (silent install).]),
 ,)
 
+AC_ARG_ENABLE(macosx-code-signing,
+    AS_HELP_STRING([--enable-macosx-code-signing<=identity>],
+        [Sign the app bundle being stored in the disk image. The
+         default is to do signing if there is a suitable certificate
+         in your keychain, so if you don't want that, use the
+         corresponding --disable option. Experimental work in
+         progress, don't use unless you are working on this.]),
+,)
+
 AC_ARG_ENABLE(postgresql-sdbc,
     AS_HELP_STRING([--disable-postgresql-sdbc],
         [Disable the build of the PostgreSQL-SDBC driver.])
@@ -2822,6 +2831,31 @@ if test "$_os" = "Darwin"; then
     fi
     AC_MSG_NOTICE([MAC_OS_X_VERSION_MIN_REQUIRED=$MAC_OS_X_VERSION_MIN_REQUIRED])
     AC_MSG_NOTICE([MAC_OS_X_VERSION_MAX_ALLOWED=$MAC_OS_X_VERSION_MAX_ALLOWED])
+
+    AC_MSG_CHECKING([whether to do code signing])
+
+    if test -z "$enable_macosx_code_signing" -o "$enable_macosx_code_signing" = yes; then
+        # By default use the first suitable certificate (?).
+
+        # http://stackoverflow.com/questions/13196291/difference-between-mac-developer-and-3rd-party-mac-developer-application
+        # says that the "Mac Developer" certificate is useful just for self-testing. For distribution
+        # outside the Mac App Store, use the "Developer ID Application" one, and for distribution in
+        # the App Store, the "3rd Party Mac Developer" one. I think it works best to the the
+        # "Developer ID Application" one.
+
+        identity=`security find-identity -p codesigning -v 2>/dev/null | grep 'Developer ID Application:' | awk '{print $2}' |head -1`
+        if test -n "$identity"; then
+            MACOSX_CODESIGNING_IDENTITY=$identity
+            pretty_name=`security find-identity -p codesigning -v | grep $MACOSX_CODESIGNING_IDENTITY | sed -e 's/^[[^"]]*"//' -e 's/"//'`
+            AC_MSG_RESULT([yes, using the identity $MACOSX_CODESIGNING_IDENTITY for $pretty_name])
+        fi
+    elif test -n "$enable_macosx_code_signing"; then
+        MACOSX_CODESIGNING_IDENTITY=$enable_macosx_code_signing
+        pretty_name=`security find-identity -p codesigning -v | grep $MACOSX_CODESIGNING_IDENTITY | sed -e 's/^[[^"]]*"//' -e 's/"//'`
+        AC_MSG_RESULT([yes, using the identity $MACOSX_CODESIGNING_IDENTITY for $pretty_name])
+    else
+        AC_MSG_RESULT([no])
+    fi
 fi
 AC_SUBST(FRAMEWORKSHOME)
 AC_SUBST(MACOSX_SDK_PATH)
@@ -2830,6 +2864,7 @@ AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
 AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
 AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(XCRUN)
+AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 
 dnl ===================================================================
 dnl Windows specific tests and stuff
