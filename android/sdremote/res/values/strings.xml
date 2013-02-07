@@ -41,7 +41,7 @@
     <string name="about_versionstring">Version: {0} (Build ID: {1})</string>
     <string name="about_copyright">Copyright © 2012 LibreOffice Contributors and/or their affiliates.</string>
     <string name="about_licence">This app is released under the Mozilla Public License, v. 2.0.</string>
-    <string name="about_libraries">This app uses android-coverflow\n\tCopyright © 2011, Polidea\n\tAll rights reserved.\n\nThis app uses ActionBarSherlock:\n\tCopyright 2012 Jake Wharton\n\tLicensed under the Apache License, Version 2.0 (the "License")</string>
+    <string name="about_libraries">This app uses android-coverflow\n\tCopyright © 2011, Polidea\n\tNew BSD License.\n\nThis app uses ActionBarSherlock:\n\tCopyright 2012 Jake Wharton\n\tLicensed under the Apache License, Version 2.0 (the "License")</string>
     <string name="addserver">Add Server</string>
     <string name="addserver_entername">Server name:</string>
     <string name="addserver_enteraddress">Server address as IP or hostname:</string>
