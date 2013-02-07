@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///ow\u003d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3071,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-02-07T15:39:51Z",
+      "side": 1,
+      "message": "Just a remark: as calculation of SKEWP differs from SKEW only in\n\n double fStdDevp \u003d sqrt( vSum / fCount );\n\nand the return value calculation here, most code of both ScSkew() and ScSkewp() could possibly be factored out into a common method differentiating by parameters.",
+      "revId": "2264bb17d9920ce97a369781ac70c4761676e98c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///pA\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-02-07T15:39:51Z",
+      "side": 1,
+      "message": "Adding this here is wrong, older Excel versions don\u0027t know SKEWP.",
+      "revId": "2264bb17d9920ce97a369781ac70c4761676e98c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
