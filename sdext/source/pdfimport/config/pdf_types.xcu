@@ -3,7 +3,7 @@
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:package="org.openoffice.TypeDetection" oor:name="Types">
     <node oor:name="Types">
     <node oor:name="pdf_Portable_Document_Format" oor:op="replace" >
-        <prop oor:name="DetectService"><value>com.sun.star.comp.documents.PDFDetector</value></prop>
+        <prop oor:name="DetectService"><value>org.libreoffice.ext.documents.PDFDetector</value></prop>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>pdf</value></prop>
         <prop oor:name="MediaType"><value>application/pdf</value></prop>

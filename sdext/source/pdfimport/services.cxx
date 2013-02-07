@@ -108,11 +108,11 @@ namespace
     static const ComponentDescription* lcl_getComponents()
     {
         static const ComponentDescription aDescriptions[] = {
-            ComponentDescription( "com.sun.star.document.ImportFilter", "com.sun.star.comp.documents.HybridPDFImport", Create_PDFIHybridAdaptor ),
-            ComponentDescription( "com.sun.star.document.ImportFilter", "com.sun.star.comp.documents.WriterPDFImport", Create_PDFIRawAdaptor_Writer ),
-            ComponentDescription( "com.sun.star.document.ImportFilter", "com.sun.star.comp.documents.DrawPDFImport", Create_PDFIRawAdaptor_Draw ),
-            ComponentDescription( "com.sun.star.document.ImportFilter", "com.sun.star.comp.documents.ImpressPDFImport", Create_PDFIRawAdaptor_Impress ),
-            ComponentDescription( "com.sun.star.document.ImportFilter", "com.sun.star.comp.documents.PDFDetector", Create_PDFDetector ),
+            ComponentDescription( "com.sun.star.document.ImportFilter", "org.libreoffice.ext.documents.HybridPDFImport", Create_PDFIHybridAdaptor ),
+            ComponentDescription( "com.sun.star.document.ImportFilter", "org.libreoffice.ext.documents.WriterPDFImport", Create_PDFIRawAdaptor_Writer ),
+            ComponentDescription( "com.sun.star.document.ImportFilter", "org.libreoffice.ext.documents.DrawPDFImport", Create_PDFIRawAdaptor_Draw ),
+            ComponentDescription( "com.sun.star.document.ImportFilter", "org.libreoffice.ext.documents.ImpressPDFImport", Create_PDFIRawAdaptor_Impress ),
+            ComponentDescription( "com.sun.star.document.ImportFilter", "org.libreoffice.ext.documents.PDFDetector", Create_PDFDetector ),
             ComponentDescription()
         };
         return aDescriptions;
