@@ -56,6 +56,8 @@
 #include "dpobject.hxx"
 #include "dpsave.hxx"
 #include "stlsheet.hxx"
+#include "docfunc.hxx"
+#include "markdata.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -146,6 +148,7 @@ public:
     void testRowHeightODS();
     void testRichTextContentODS();
     void testMiscRowHeights();
+    void testOptimalHeightReset();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testRangeNameXLS);
@@ -205,6 +208,7 @@ public:
     CPPUNIT_TEST(testBugFilesXLSX);
 #endif
     CPPUNIT_TEST(testMiscRowHeights);
+    CPPUNIT_TEST(testOptimalHeightReset);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1894,6 +1898,46 @@ void ScFiltersTest::testMiscRowHeights()
         { "multilineoptimal.", ODS, -1, SAL_N_ELEMENTS(MultiLineOptData), MultiLineOptData },
     };
     miscRowHeightsTest( aTestValues, SAL_N_ELEMENTS(aTestValues) );
+}
+
+// regression test at least fdo#59193
+// what we want to test here is that when cell contents are deleted
+// and the optimal flag is set for that row that the row is actually resized
+
+void ScFiltersTest::testOptimalHeightReset()
+{
+    ScDocShellRef xDocSh = loadDoc("multilineoptimal.", ODS, true);
+    SCTAB nTab = 0;
+    SCROW nRow = 0;
+    ScDocument* pDoc = xDocSh->GetDocument();
+    pDoc->EnableAdjustHeight( true );
+    // open document in read/write mode ( otherwise optimal height stuff won't
+    // be triggered ) *and* you can't delete cell contents.
+    int nHeight = sc::TwipsToHMM ( pDoc->GetRowHeight(nRow, nTab, false) );
+    CPPUNIT_ASSERT_EQUAL(1263, nHeight);
+
+    ScDocFunc &rFunc = xDocSh->GetDocFunc();
+
+    // delete content of A1
+    ScRange aDelRange(0,0,0,0,0,0);
+    ScMarkData aMark;
+    aMark.SetMarkArea(aDelRange);
+    rFunc.DeleteContents( aMark, -1, false, true );
+
+    // get the new height of A1
+    nHeight =  sc::TwipsToHMM( pDoc->GetRowHeight(nRow, nTab, false) );
+
+    // set optimal height for empty row 2
+    SCCOLROW nRowArr[2];
+    nRowArr[0] = nRowArr[1] = 2;
+    rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, sal_True, sal_True );
+
+    // retrieve optimal height
+    int nOptimalHeight = sc::TwipsToHMM( pDoc->GetRowHeight( nRowArr[0], nTab, false) );
+
+    // check if the new height of A1 ( after delete ) is now the optimal height of an empty cell
+    CPPUNIT_ASSERT_EQUAL(nOptimalHeight, nHeight );
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()

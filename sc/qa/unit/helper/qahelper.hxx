@@ -129,7 +129,7 @@ class ScBootstrapFixture : public test::BootstrapFixture
 {
 protected:
     OUString m_aBaseString;
-    ScDocShellRef load(
+    ScDocShellRef load( bool bReadWrite,
         const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
         const OUString& rTypeName, unsigned int nFilterFlags, unsigned int nClipboardID,  sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL )
     {
@@ -141,7 +141,7 @@ protected:
 
         ScDocShellRef xDocShRef = new ScDocShell;
         xDocShRef->GetDocument()->EnableUserInteraction(false);
-        SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
+        SfxMedium* pSrcMed = new SfxMedium(rURL, bReadWrite ? STREAM_STD_READWRITE : STREAM_STD_READ );
         pSrcMed->SetFilter(pFilter);
         pSrcMed->UseInteractionHandler(false);
         if (pPassword)
@@ -160,7 +160,14 @@ protected:
         return xDocShRef;
     }
 
-    ScDocShellRef loadDoc(const OUString& rFileName, sal_Int32 nFormat)
+    ScDocShellRef load(
+        const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
+        const OUString& rTypeName, unsigned int nFilterFlags, unsigned int nClipboardID,  sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL )
+    {
+        return load( false, rURL, rFilter, rUserData, rTypeName, nFilterFlags, nClipboardID,  nFilterVersion, pPassword );
+    }
+
+    ScDocShellRef loadDoc(const OUString& rFileName, sal_Int32 nFormat, bool bReadWrite = false )
     {
         OUString aFileExtension(aFileFormats[nFormat].pName, strlen(aFileFormats[nFormat].pName), RTL_TEXTENCODING_UTF8 );
         OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
@@ -170,7 +177,7 @@ protected:
         unsigned int nFormatType = aFileFormats[nFormat].nFormatType;
         unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
 
-        return load(aFileName, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, nFormatType);
+        return load(bReadWrite, aFileName, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, nFormatType);
     }
 
 

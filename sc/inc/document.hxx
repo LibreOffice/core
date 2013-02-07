@@ -1028,7 +1028,7 @@ public:
 
     void            DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             const ScMarkData& rMark, sal_uInt16 nDelFlag);
-    void            DeleteAreaTab(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+    SC_DLLPUBLIC void            DeleteAreaTab(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, sal_uInt16 nDelFlag);
     void            DeleteAreaTab(const ScRange& rRange, sal_uInt16 nDelFlag);
 
