@@ -117,6 +117,7 @@ bool BluetoothServer::isDiscoverable()
 
     if ( aError != NULL ) {
         g_error_free (aError);
+        SAL_INFO( "sdremote.bluetooth", "did not get DBusGConnection" );
         return false;
     }
 
@@ -124,6 +125,7 @@ bool BluetoothServer::isDiscoverable()
     if ( aAdapter == NULL )
     {
         dbus_g_connection_unref( aConnection );
+        SAL_INFO( "sdremote.bluetooth", "did not get default adaptor" );
         return false;
     }
 
@@ -138,6 +140,7 @@ bool BluetoothServer::isDiscoverable()
     {
         if ( aError )
             g_error_free( aError );
+        SAL_INFO( "sdremote.bluetooth", "did not get properties" );
         return false;
     }
 
@@ -145,6 +148,8 @@ bool BluetoothServer::isDiscoverable()
                 aProperties, "Discoverable" ) );
 
     g_hash_table_unref( aProperties );
+
+    SAL_INFO( "sdremote.bluetooth", "BluetoothServer::isDiscoverable() returns " << static_cast< bool >( aIsDiscoverable ) );
     return aIsDiscoverable;
 #else // defined(LINUX) && defined(ENABLE_DBUS)
     return false;

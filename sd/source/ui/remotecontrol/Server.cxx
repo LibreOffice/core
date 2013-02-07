@@ -66,6 +66,7 @@ RemoteServer::RemoteServer() :
     mSocket(),
     mAvailableClients()
 {
+    SAL_INFO( "sdremote", "Instantiated RemoteServer" );
 }
 
 RemoteServer::~RemoteServer()
@@ -229,9 +230,13 @@ void RemoteServer::removeCommunicator( Communicator* mCommunicator )
 
 std::vector<ClientInfo*> RemoteServer::getClients()
 {
+    SAL_INFO( "sdremote", "RemoteServer::getClients() called" );
     std::vector<ClientInfo*> aClients;
     if ( !spServer )
+    {
+        SAL_INFO( "sdremote", "No remote server instance => no clients" );
         return aClients;
+    }
 
     MutexGuard aGuard( sDataMutex );
     aClients.assign( spServer->mAvailableClients.begin(),
