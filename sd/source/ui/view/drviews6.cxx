@@ -625,10 +625,12 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
 
         case SID_REMOTE_DLG:
         {
+#ifdef ENABLE_SDREMOTE
              SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
              VclAbstractDialog* pDlg = pFact ? pFact->CreateRemoteDialog(GetActiveWindow()) : 0;
              if (pDlg)
                  pDlg->Execute();
+#endif
         }
         break;
 
