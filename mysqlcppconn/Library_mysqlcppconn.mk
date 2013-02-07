@@ -26,15 +26,8 @@ $(eval $(call gb_Library_set_include,mysqlcppconn,\
 	-I$(call gb_UnpackedTarball_get_dir,mysqlcppconn)/cppconn \
 ))
 
-# HACK: generate import lib for msvc
-ifeq ($(COM),MSC)
-$(eval $(call gb_Library_add_ldflags,mysqlcppconn,\
-	/EXPORT:sql_mysql_get_driver_instance \
-))
-endif
-
 $(eval $(call gb_Library_add_defs,mysqlcppconn,\
-	-DCPPCONN_LIB_BUILD \
+	-Dmysqlcppconn_EXPORTS \
 	$(if $(filter WNT,$(OS)),\
 	-DCPPDBC_WIN32 \
 	-D_CRT_SECURE_NO_WARNINGS \
