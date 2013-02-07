@@ -285,31 +285,34 @@ void SdrTableObjImpl::init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 n
 
 void SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
 {
-    if( mpLayouter )
+    if (this != &rSource)
     {
-        delete mpLayouter;
-        mpLayouter = 0;
-    }
+        if( mpLayouter )
+        {
+            delete mpLayouter;
+            mpLayouter = 0;
+        }
 
-    if( mxTable.is() )
-    {
+        if( mxTable.is() )
+        {
+            Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
+            mxTable->removeModifyListener( xListener );
+            mxTable->dispose();
+            mxTable.clear();
+        }
+
+        maTableStyle = rSource.maTableStyle;
+
+        mxTable = new TableModel( mpTableObj, rSource.mxTable );
+        mpLayouter = new TableLayouter( mxTable );
         Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
-        mxTable->removeModifyListener( xListener );
-        mxTable->dispose();
-        mxTable.clear();
+        mxTable->addModifyListener( xListener );
+        mxTableStyle = rSource.mxTableStyle;
+        UpdateWritingMode();
+        ApplyCellStyles();
+        mpTableObj->aRect = mpTableObj->maLogicRect;
+        LayoutTable( mpTableObj->aRect, false, false );
     }
-
-    maTableStyle = rSource.maTableStyle;
-
-    mxTable = new TableModel( mpTableObj, rSource.mxTable );
-    mpLayouter = new TableLayouter( mxTable );
-    Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
-    mxTable->addModifyListener( xListener );
-    mxTableStyle = rSource.mxTableStyle;
-    UpdateWritingMode();
-    ApplyCellStyles();
-    mpTableObj->aRect = mpTableObj->maLogicRect;
-    LayoutTable( mpTableObj->aRect, false, false );
 }
 
 // -----------------------------------------------------------------------------
