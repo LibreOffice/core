@@ -1075,6 +1075,15 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
     return xResultSet;
 }
 // -------------------------------------------------------------------------
+static bool isSourceBackend( ESource *pSource, const char *backendname)
+{
+    if (!pSource || e_source_has_extension (pSource, "Address Book")) // E_SOURCE_EXTENSION_ADDRESS_BOOK
+        return false;
+
+    gpointer extension = e_source_get_extension (pSource, "Address Book"); // E_SOURCE_EXTENSION_ADDRESS_BOOK
+    return extension && g_strcmp0 (e_source_backend_get_backend_name (extension), backendname) == 0;
+}
+
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
     const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
     const ::rtl::OUString& /*tableNamePattern*/, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
@@ -1111,41 +1120,31 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 
     ODatabaseMetaDataResultSet::ORows aRows;
 
-    ESourceList *pSourceList;
-    if( !e_book_get_addressbooks (&pSourceList, NULL) )
-            pSourceList = NULL;
+    GSList *pSources;
+    pSources = e_source_registry_list_sources (registry, "Address Book"); // E_SOURCE_EXTENSION_ADDRESS_BOOK
 
-    GSList *g;
-    for( g = e_source_list_peek_groups( pSourceList ); g; g = g->next)
+    GList *liter;
+    for( liter = pSources; liter; liter = liter->next)
     {
-        GSList *s;
-        const char *p = e_source_group_peek_base_uri(E_SOURCE_GROUP(g->data));
+        ESource *pSource = E_SOURCE (liter->data);
+        bool can = false;
 
         switch (m_pConnection->getSDBCAddressType()) {
         case SDBCAddress::EVO_GWISE:
-                    if ( !strncmp( "groupwise://", p, 11 ))
-                        break;
-                    else
-                        continue;
+                can = isSourceBackend( pSource, "groupwise"); // not supported in evo/eds 3.6.x+, somehow
+                break;
         case SDBCAddress::EVO_LOCAL:
-                    if ( !strncmp( "file://", p, 6 ) ||
-                         !strncmp( "local://", p, 6 ) )
-                        break;
-                    else
-                        continue;
+                can = isSourceBackend( pSource, "local");
+                break;
         case SDBCAddress::EVO_LDAP:
-                    if ( !strncmp( "ldap://", p, 6 ))
-                        break;
-                    else
-                        continue;
+                can = isSourceBackend( pSource, "ldap");
+                break;
         case SDBCAddress::Unknown:
             break;
         }
-        for (s = e_source_group_peek_sources (E_SOURCE_GROUP (g->data)); s; s = s->next)
-        {
-            ESource *pSource = E_SOURCE (s->data);
 
-            rtl::OUString aName = rtl::OStringToOUString( e_source_peek_name( pSource ),
+        if (can) {
+            rtl::OUString aName = rtl::OStringToOUString( e_source_get_display_name( pSource ),
                                                           RTL_TEXTENCODING_UTF8 );
 
             ODatabaseMetaDataResultSet::ORow aRow(3);
@@ -1153,10 +1152,12 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
             aRow.push_back(new ORowSetValueDecorator(aName));
             aRow.push_back(new ORowSetValueDecorator(aTable));
             aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+            // add also e_source_get_uid (pSource)
             aRows.push_back(aRow);
         }
     }
 
+    g_slist_free_full (pSources, g_object_unref);
     pResult->setRows(aRows);
 
     return xRef;

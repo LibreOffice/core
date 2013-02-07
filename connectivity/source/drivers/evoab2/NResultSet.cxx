@@ -126,9 +126,11 @@ OEvoabResultSet::~OEvoabResultSet()
 // -------------------------------------------------------------------------
 
 static ESource *
-findSource( const char *name )
+findSource( const char *uid )
 {
-    ESourceList *pSourceList = NULL;
+    //ideally as
+    return e_source_registry_ref_source (registry, uid);
+    /*ESourceList *pSourceList = NULL;
 
     g_return_val_if_fail (name != NULL, NULL);
 
@@ -144,51 +146,48 @@ findSource( const char *name )
                 return pSource;
         }
     }
-    return NULL;
+    return NULL;*/
 }
 
-static EBook *
+static EBookClient *
 openBook( const char *abname )
 {
     ESource *pSource = findSource (abname);
-    EBook *pBook = NULL;
+    EBookClient *pBook = NULL;
     if (pSource)
-            pBook = e_book_new (pSource, NULL);
+            pBook = e_book_client_new (pSource, NULL);
 
-    if (pBook && !e_book_open (pBook, TRUE, NULL))
+    if (pBook && !e_client_open_sync (pBook, TRUE, NULL, NULL))
     {
         g_object_unref (G_OBJECT (pBook));
         pBook = NULL;
     }
 
+    if (pSource)
+        g_object_unref (pSource);
+
     return pBook;
 }
 
-static bool isLDAP( EBook *pBook )
+static bool isBookBackend( EBookClient *pBook, const char *backendname)
 {
-    return pBook && !strncmp( "ldap://", e_book_get_uri( pBook ), 6 );
+    ESource *pSource = e_client_get_source ((EClient *) pBook);
+
+    if (!pSource || e_source_has_extension (pSource, "Address Book")) // E_SOURCE_EXTENSION_ADDRESS_BOOK
+        return false;
+
+    gpointer extension = e_source_get_extension (pSource, "Address Book"); // E_SOURCE_EXTENSION_ADDRESS_BOOK
+    return extension && g_strcmp0 (e_source_backend_get_backend_name (extension), backendname) == 0;
 }
 
-static bool isLocal( EBook *pBook )
+static bool isLDAP( EBookClient *pBook )
 {
-    return pBook && ( !strncmp( "file://", e_book_get_uri( pBook ), 6 ) ||
-                      !strncmp( "local:", e_book_get_uri( pBook ), 6 ) );
+    return pBook && isBookBackend( pBook, "ldap" );
 }
 
-static bool isAuthRequired( EBook *pBook )
+static bool isLocal( EBookClient *pBook )
 {
-    return e_source_get_property( e_book_get_source( pBook ),
-                                  "auth" ) != NULL;
-}
-
-static rtl::OString getUserName( EBook *pBook )
-{
-    rtl::OString aName;
-    if( isLDAP( pBook ) )
-        aName = e_source_get_property( e_book_get_source( pBook ), "binddn" );
-    else
-        aName = e_source_get_property( e_book_get_source( pBook ), "user" );
-    return aName;
+    return pBook && isBookBackend( pBook, "local" );
 }
 
 static ::rtl::OUString
@@ -210,24 +209,17 @@ valueToBool( GValue& _rValue )
 }
 
 static bool
-executeQuery (EBook* pBook, EBookQuery* pQuery, GList **ppList,
+executeQuery (EBookClient* pBook, EBookQuery* pQuery, GList **ppList,
               rtl::OString &rPassword, GError **pError)
 {
-    ESource *pSource = e_book_get_source( pBook );
-    bool bSuccess = false;
-    bool bAuthSuccess = true;
+    bool bSuccess;
+    char *sexp;
 
     *ppList = NULL;
 
-    if( isAuthRequired( pBook ) )
-    {
-        rtl::OString aUser( getUserName( pBook ) );
-        const char *pAuth = e_source_get_property( pSource, "auth" );
-        bAuthSuccess = e_book_authenticate_user( pBook, aUser.getStr(), rPassword.getStr(), pAuth, pError );
-    }
-
-    if (bAuthSuccess)
-        bSuccess = e_book_get_contacts( pBook, pQuery, ppList, pError );
+    sexp = e_book_query_to_string( pQuery );
+    bSuccess = e_book_client_get_contacts_sync( pBook, sexp, ppList, pError );
+    g_free (sexp);
 
     return bSuccess;
 }
@@ -507,7 +499,7 @@ void OEvoabResultSet::construct( const QueryData& _rData )
 {
     ENSURE_OR_THROW( _rData.getQuery(), "internal error: no EBookQuery" );
 
-    EBook *pBook = openBook(::rtl::OUStringToOString(_rData.sTable, RTL_TEXTENCODING_UTF8).getStr());
+    EBookClient *pBook = openBook(::rtl::OUStringToOString(_rData.sTable, RTL_TEXTENCODING_UTF8).getStr());
     if ( !pBook )
         m_pConnection->throwGenericSQLException( STR_CANNOT_OPEN_BOOK, *this );
 
