@@ -186,7 +186,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
                 // LbColorTo
                 nPos = m_pLbColorTo->GetSelectEntryPos();
                 m_pLbColorTo->Clear();
-                m_pLbColorTo->CopyEntries( m_pLbColorFrom );
+                m_pLbColorTo->CopyEntries( *m_pLbColorFrom );
                 nCount = m_pLbColorTo->GetEntryCount();
                 if( nCount == 0 )
                     ; // this case should not occur
