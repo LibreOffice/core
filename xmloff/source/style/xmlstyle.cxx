@@ -56,8 +56,6 @@
 #include <set>
 #include <vector>
 
-using ::std::vector;
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -254,18 +252,15 @@ struct SvXMLStyleIndexCmp_Impl
     }
 };
 
-// ---------------------------------------------------------------------
-
-typedef SvXMLStyleContext *SvXMLStyleContextPtr;
-typedef vector< SvXMLStyleContextPtr > SvXMLStyleContexts_Impl;
-
-typedef std::set<SvXMLStyleIndex_Impl, SvXMLStyleIndexCmp_Impl> SvXMLStyleIndices_Impl;
 
 class SvXMLStylesContext_Impl
 {
-    SvXMLStyleContexts_Impl aStyles;
-    SvXMLStyleIndices_Impl  *pIndices;
-    sal_Bool bAutomaticStyle;
+    typedef std::vector<SvXMLStyleContext*> StylesType;
+    typedef std::set<SvXMLStyleIndex_Impl, SvXMLStyleIndexCmp_Impl> IndicesType;
+
+    StylesType aStyles;
+    IndicesType* pIndices;
+    bool bAutomaticStyle;
 
 #ifdef DBG_UTIL
     sal_uInt32 nIndexCreated;
@@ -274,7 +269,7 @@ class SvXMLStylesContext_Impl
     void FlushIndex() { delete pIndices; pIndices = 0; }
 
 public:
-    SvXMLStylesContext_Impl( sal_Bool bAuto );
+    SvXMLStylesContext_Impl( bool bAuto );
     ~SvXMLStylesContext_Impl();
 
     size_t GetStyleCount() const { return aStyles.size(); }
@@ -298,7 +293,7 @@ public:
     sal_Bool IsAutomaticStyle() const { return bAutomaticStyle; }
 };
 
-SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( sal_Bool bAuto ) :
+SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( bool bAuto ) :
     pIndices( 0 ),
     bAutomaticStyle( bAuto )
 #ifdef DBG_UTIL
@@ -351,7 +346,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
                     "Performance warning: sdbcx::Index created multiple times" );
 #endif
         ((SvXMLStylesContext_Impl *)this)->pIndices =
-            new SvXMLStyleIndices_Impl( aStyles.begin(), aStyles.end() );
+            new IndicesType( aStyles.begin(), aStyles.end() );
         SAL_WARN_IF(pIndices->size() != aStyles.size(), "xmloff", "Here is a duplicate Style");
 #ifdef DBG_UTIL
         ((SvXMLStylesContext_Impl *)this)->nIndexCreated++;
@@ -361,7 +356,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
     if( pIndices )
     {
         SvXMLStyleIndex_Impl aIndex( nFamily, rName );
-        SvXMLStyleIndices_Impl::iterator aFind = pIndices->find(aIndex);
+        IndicesType::iterator aFind = pIndices->find(aIndex);
         if( aFind != pIndices->end() )
             pStyle = aFind->GetStyle();
     }
