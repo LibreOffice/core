@@ -20,7 +20,7 @@ $(eval $(call gb_ExternalPackage_add_file,xml2,lib/libxml2.2.dylib,.libs/libxml2
 $(eval $(call gb_ExternalPackage_add_file,xml2,lib/libxml2.dylib,.libs/libxml2.2.7.6.dylib))
 $(eval $(call gb_ExternalPackage_add_file,xml2,bin/xmllint,.libs/xmllint))
 else ifeq ($(DISABLE_DYNLOADING),TRUE)
-$(eval $(call gb_ExternalPackage_add_file,xml2,lib/libxml2.a,libxml2/.libs/libxml2.a))
+$(eval $(call gb_ExternalPackage_add_file,xml2,lib/libxml2.a,.libs/libxml2.a))
 ifneq ($(CROSS_COMPILING),YES)
 $(eval $(call gb_ExternalPackage_add_file,xml2,bin/xmllint,.libs/xmllint))
 endif
