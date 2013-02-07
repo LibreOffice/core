@@ -324,7 +324,7 @@ void JavaMigration::migrateJavarc()
         return;
 
     OUString sValue;
-    rtl::Bootstrap javaini(m_sUserDir + OUSTR("/user/config/"SAL_CONFIGFILE("java")));
+    rtl::Bootstrap javaini(m_sUserDir + OUSTR( "/user/config/" SAL_CONFIGFILE("java")));
     sal_Bool bSuccess = javaini.getFrom(OUSTR("Home"), sValue);
     OSL_ENSURE(bSuccess, "[Service implementation " IMPL_NAME
                        "] XJob::execute: Could not get Home entry from java.ini/javarc.");

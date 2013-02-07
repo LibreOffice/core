@@ -144,9 +144,9 @@ extern "C" { static void SAL_CALL thisModule() {} }
 TextToPronounce_zh::TextToPronounce_zh(const sal_Char* func_name)
 {
 #ifdef SAL_DLLPREFIX
-    OUString lib=OUString::createFromAscii(SAL_DLLPREFIX"index_data"SAL_DLLEXTENSION);
+    OUString lib=OUString::createFromAscii( SAL_DLLPREFIX "index_data" SAL_DLLEXTENSION);
 #else
-    OUString lib=OUString::createFromAscii("index_data"SAL_DLLEXTENSION);
+    OUString lib=OUString::createFromAscii( "index_data" SAL_DLLEXTENSION);
 #endif
     hModule = osl_loadModuleRelative(
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );

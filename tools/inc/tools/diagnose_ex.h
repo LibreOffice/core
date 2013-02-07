@@ -86,14 +86,14 @@
                                      OSL_ENSURE(c, m); \
                                      throw ::com::sun::star::lang::IllegalArgumentException( \
                                      ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
-                                     ::rtl::OUString::createFromAscii(",\n"m), \
+                                     ::rtl::OUString::createFromAscii( ",\n" m), \
                                      ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(), \
                                      0 ); }
 #define ENSURE_ARG_OR_THROW2(c, m, ifc, arg) if( !(c) ) { \
                                                OSL_ENSURE(c, m); \
                                                throw ::com::sun::star::lang::IllegalArgumentException( \
                                                ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
-                                               ::rtl::OUString::createFromAscii(",\n"m), \
+                                               ::rtl::OUString::createFromAscii( ",\n" m), \
                                                ifc, \
                                                arg ); }
 
@@ -104,13 +104,13 @@
                                      OSL_ENSURE(c, m); \
                                      throw ::com::sun::star::uno::RuntimeException( \
                                      ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
-                                     ::rtl::OUString::createFromAscii(",\n"m), \
+                                     ::rtl::OUString::createFromAscii( ",\n" m), \
                                      ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() ); }
 #define ENSURE_OR_THROW2(c, m, ifc) if( !(c) ) { \
                                           OSL_ENSURE(c, m); \
                                           throw ::com::sun::star::uno::RuntimeException( \
                                           ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
-                                          ::rtl::OUString::createFromAscii(",\n"m), \
+                                          ::rtl::OUString::createFromAscii( ",\n" m), \
                                           ifc ); }
 
 /** This macro asserts the given condition (in debug mode), and

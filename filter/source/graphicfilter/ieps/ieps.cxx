@@ -204,7 +204,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     TempFile aTemp;
     aTemp.EnableKillingFile();
     rtl::OUString fileName =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pstoedit"EXESUFFIX));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "pstoedit" EXESUFFIX));
     rtl::OUString arg1 =
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-f"));
     rtl::OUString arg2 =
@@ -305,7 +305,7 @@ static bool RenderAsPNGThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
     Graphic &rGraphic)
 {
     rtl::OUString fileName =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("convert"EXESUFFIX));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "convert" EXESUFFIX));
     // density in pixel/inch
     rtl::OUString arg1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-density"));
     // since the preview is also used for PDF-Export & printing on non-PS-printers,
@@ -328,10 +328,10 @@ static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 {
 #ifdef WNT
     rtl::OUString fileName =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gswin32c"EXESUFFIX));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "gswin32c" EXESUFFIX));
 #else
     rtl::OUString fileName =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gs"EXESUFFIX));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "gs" EXESUFFIX));
 #endif
     rtl::OUString arg1 =
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-q"));
