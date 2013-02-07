@@ -35,7 +35,8 @@ compilerplugins: compilerplugins-build
 CLANGSRC=$(foreach src,$(wildcard $(CLANGINDIR)/*.cxx), $(notdir $(src)))
 # Remember the sources and if they have changed, force plugin relinking.
 CLANGSRCCHANGED= \
-    $(shell echo $(CLANGSRC) | sort > $(CLANGOUTDIR)/sources-new.txt; \
+    $(shell mkdir -p $(CLANGOUTDIR) ; \
+            echo $(CLANGSRC) | sort > $(CLANGOUTDIR)/sources-new.txt; \
             if diff $(CLANGOUTDIR)/sources.txt $(CLANGOUTDIR)/sources-new.txt >/dev/null 2>/dev/null; then \
                 echo 0; \
             else \
