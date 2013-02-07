@@ -614,7 +614,7 @@
             <desc>Indicates whether to enable the Impress remote controller.</desc>
             <label>Enable remote control</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
       </group>
       <group oor:name="Compatibility">
