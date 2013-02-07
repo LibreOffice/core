@@ -20,13 +20,13 @@
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <identifier value="com.sun.star.mysql-connector-ooo-@PLATFORM@"/>
-    <version value="1.0.1" />
+    <version value="1.0.2" />
     <platform value="@PLATFORM@" />
     <display-name>
         <name lang="en-US">MySQL Connector</name>
     </display-name>
     <dependencies>
-         <OpenOffice.org-minimal-version value="3.1" d:name="OpenOffice.org 3.1"/>
+         <OpenOffice.org-minimal-version value="3.3" d:name="OpenOffice.org 3.3"/>
     </dependencies>
     <publisher>
         <name xlink:href="http://www.documentfoundation.org" lang="en-US">The Document Foundation</name>
