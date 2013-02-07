@@ -1368,7 +1368,7 @@ def __compil__(s):
         # add line breaks before procedure calls
         procedures = set(subnames) - set(functions)
         if len(procedures) > 0:
-            s = re.sub(r"(?<!__def__)(?<![-+=*/])(?<!%s)(?:^|[ \t]+)(" % ")(?<!".join(functions) + "|".join(procedures) + ")", r"\n\1", s)
+            s = re.sub(r"(?<!__def__)(?<![-+=*/])(?<!%s)(?:^|[ \t]+)(" % ")(?<!".join(functions) + "|".join(procedures) + ")(?!\w)", r"\n\1", s)
 
     # compile native Logo
     for i in __comp__[_.lng]:
