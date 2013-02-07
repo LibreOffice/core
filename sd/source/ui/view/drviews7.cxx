@@ -995,6 +995,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
        rSet.DisableItem(SID_ZOOM_PREV);
     }
 
+#ifndef ENABLE_SDREMOTE
+    rSet.ClearItem(SID_REMOTE_DLG);
+    rSet.DisableItem(SID_REMOTE_DLG);
+#endif
+
     // EditText aktiv
     if (GetViewShellBase().GetViewShellManager()->GetShell(RID_DRAW_TEXT_TOOLBOX) != NULL)
     {
