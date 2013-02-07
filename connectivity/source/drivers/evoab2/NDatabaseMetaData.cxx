@@ -1074,13 +1074,22 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
     pResultSet->setRows( getColumnRows( columnNamePattern ) );
     return xResultSet;
 }
-// -------------------------------------------------------------------------
-static bool isSourceBackend( ESource *pSource, const char *backendname)
+
+ESourceRegistry *get_e_source_registry()
 {
-    if (!pSource || e_source_has_extension (pSource, "Address Book")) // E_SOURCE_EXTENSION_ADDRESS_BOOK
+    static ESourceRegistry *theInstance;
+    if (!theInstance)
+        theInstance = e_source_registry_new_sync(NULL, NULL);
+    return theInstance;
+}
+
+// -------------------------------------------------------------------------
+bool isSourceBackend(ESource *pSource, const char *backendname)
+{
+    if (!pSource || !e_source_has_extension (pSource, E_SOURCE_EXTENSION_ADDRESS_BOOK))
         return false;
 
-    gpointer extension = e_source_get_extension (pSource, "Address Book"); // E_SOURCE_EXTENSION_ADDRESS_BOOK
+    gpointer extension = e_source_get_extension (pSource, E_SOURCE_EXTENSION_ADDRESS_BOOK);
     return extension && g_strcmp0 (e_source_backend_get_backend_name (extension), backendname) == 0;
 }
 
@@ -1120,44 +1129,96 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 
     ODatabaseMetaDataResultSet::ORows aRows;
 
-    GSList *pSources;
-    pSources = e_source_registry_list_sources (registry, "Address Book"); // E_SOURCE_EXTENSION_ADDRESS_BOOK
-
-    GList *liter;
-    for( liter = pSources; liter; liter = liter->next)
+    if (eds_check_version(3, 6, 0) == NULL)
     {
-        ESource *pSource = E_SOURCE (liter->data);
-        bool can = false;
+        fprintf(stderr, "OEvoabDatabaseMetaData::getTables\n");
+        GList *pSources = e_source_registry_list_sources(get_e_source_registry(), E_SOURCE_EXTENSION_ADDRESS_BOOK);
 
-        switch (m_pConnection->getSDBCAddressType()) {
-        case SDBCAddress::EVO_GWISE:
-                can = isSourceBackend( pSource, "groupwise"); // not supported in evo/eds 3.6.x+, somehow
-                break;
-        case SDBCAddress::EVO_LOCAL:
-                can = isSourceBackend( pSource, "local");
-                break;
-        case SDBCAddress::EVO_LDAP:
-                can = isSourceBackend( pSource, "ldap");
-                break;
-        case SDBCAddress::Unknown:
-            break;
-        }
-
-        if (can) {
-            rtl::OUString aName = rtl::OStringToOUString( e_source_get_display_name( pSource ),
-                                                          RTL_TEXTENCODING_UTF8 );
+        for (GList* liter = pSources; liter; liter = liter->next)
+        {
+            ESource *pSource = E_SOURCE (liter->data);
+            bool can = false;
+            switch (m_pConnection->getSDBCAddressType())
+            {
+                case SDBCAddress::EVO_GWISE:
+                    can = isSourceBackend( pSource, "groupwise"); // not supported in evo/eds 3.6.x+, somehow
+                    break;
+                case SDBCAddress::EVO_LOCAL:
+                    can = isSourceBackend( pSource, "local");
+                    break;
+                case SDBCAddress::EVO_LDAP:
+                    can = isSourceBackend( pSource, "ldap");
+                    break;
+                case SDBCAddress::Unknown:
+                    can = true;
+                    break;
+            }
+            if (!can)
+                continue;
 
             ODatabaseMetaDataResultSet::ORow aRow(3);
             aRow.reserve(6);
-            aRow.push_back(new ORowSetValueDecorator(aName));
+            OUString aUID = OStringToOUString( e_source_get_uid( pSource ),
+                                                          RTL_TEXTENCODING_UTF8 );
+            aRow.push_back(new ORowSetValueDecorator(aUID));
             aRow.push_back(new ORowSetValueDecorator(aTable));
+            OUString aHumanName = OStringToOUString( e_source_get_display_name( pSource ),
+                                                          RTL_TEXTENCODING_UTF8 );
             aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-            // add also e_source_get_uid (pSource)
             aRows.push_back(aRow);
+        }
+
+        g_list_free_full (pSources, g_object_unref);
+    }
+    else
+    {
+        ESourceList *pSourceList;
+        if( !e_book_get_addressbooks (&pSourceList, NULL) )
+                pSourceList = NULL;
+
+        GSList *g;
+        for( g = e_source_list_peek_groups( pSourceList ); g; g = g->next)
+        {
+            GSList *s;
+            const char *p = e_source_group_peek_base_uri(E_SOURCE_GROUP(g->data));
+
+            switch (m_pConnection->getSDBCAddressType()) {
+            case SDBCAddress::EVO_GWISE:
+                        if ( !strncmp( "groupwise://", p, 11 ))
+                            break;
+                        else
+                            continue;
+            case SDBCAddress::EVO_LOCAL:
+                        if ( !strncmp( "file://", p, 6 ) ||
+                             !strncmp( "local://", p, 6 ) )
+                            break;
+                        else
+                            continue;
+            case SDBCAddress::EVO_LDAP:
+                        if ( !strncmp( "ldap://", p, 6 ))
+                            break;
+                        else
+                            continue;
+            case SDBCAddress::Unknown:
+                break;
+            }
+            for (s = e_source_group_peek_sources (E_SOURCE_GROUP (g->data)); s; s = s->next)
+            {
+                ESource *pSource = E_SOURCE (s->data);
+
+                rtl::OUString aName = rtl::OStringToOUString( e_source_peek_name( pSource ),
+                                                              RTL_TEXTENCODING_UTF8 );
+
+                ODatabaseMetaDataResultSet::ORow aRow(3);
+                aRow.reserve(6);
+                aRow.push_back(new ORowSetValueDecorator(aName));
+                aRow.push_back(new ORowSetValueDecorator(aTable));
+                aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+                aRows.push_back(aRow);
+            }
         }
     }
 
-    g_slist_free_full (pSources, g_object_unref);
     pResult->setRows(aRows);
 
     return xRef;

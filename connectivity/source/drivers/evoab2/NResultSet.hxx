@@ -45,6 +45,24 @@ namespace connectivity
 {
     namespace evoab
     {
+        class ComparisonData;
+
+        class OEvoabVersionHelper
+        {
+        public:
+            virtual EBook* openBook(const char *abname) = 0;
+            virtual bool executeQuery (EBook* pBook, EBookQuery* pQuery, OString &rPassword) = 0;
+            virtual void freeContacts() = 0;
+            virtual bool isLDAP( EBook *pBook ) = 0;
+            virtual bool isLocal( EBook *pBook ) = 0;
+            virtual EContact *getContact(sal_Int32 nIndex) = 0;
+            virtual sal_Int32 getNumContacts() = 0;
+            virtual bool hasContacts() = 0;
+            virtual void sortContacts( const ComparisonData& _rCompData ) = 0;
+            OString getUserName( EBook *pBook );
+            virtual ~OEvoabVersionHelper() {}
+        };
+
         typedef ::cppu::WeakComponentImplHelper8    <   ::com::sun::star::sdbc::XResultSet
                                                     ,   ::com::sun::star::sdbc::XRow
                                                     ,   ::com::sun::star::sdbc::XResultSetMetaDataSupplier
@@ -61,6 +79,8 @@ namespace connectivity
                                 ,public ::comphelper::OPropertyContainer
                                 ,public ::comphelper::OPropertyArrayUsageHelper<OEvoabResultSet>
         {
+        private:
+            OEvoabVersionHelper *m_pVersionHelper;
 
         protected:
 
@@ -79,13 +99,11 @@ namespace connectivity
             // </properties>
 
             // Data & iteration
-            GList    *m_pContacts;
             sal_Int32 m_nIndex;
             sal_Int32 m_nLength;
             EContact *getCur()
             {
-                gpointer pData = g_list_nth_data (m_pContacts, m_nIndex);
-                return pData ? E_CONTACT (pData) : NULL;
+                return m_pVersionHelper->getContact(m_nIndex);
             }
 
             // OPropertyArrayUsageHelper

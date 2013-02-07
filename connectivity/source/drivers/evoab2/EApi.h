@@ -130,6 +130,31 @@ typedef struct {
         char *code;
         char *country;
 } EContactAddress;
+
+#define E_SOURCE_EXTENSION_ADDRESS_BOOK "Address Book"
+typedef void ESourceRegistry;
+typedef void GCancellable;
+typedef void ESourceBackend;
+typedef void EClient;
+typedef EClient EBookClient;
+EAPI_EXTERN ESourceRegistry* (*e_source_registry_new_sync) (GCancellable *cancellable, GError **error);
+EAPI_EXTERN GList* (*e_source_registry_list_sources) (ESourceRegistry *registry, const gchar *extension_name);
+EAPI_EXTERN gboolean (*e_source_has_extension) (ESource *source, const gchar *extension_name);
+EAPI_EXTERN gpointer (*e_source_get_extension) (ESource *source, const gchar *extension_name);
+EAPI_EXTERN const gchar* (*e_source_backend_get_backend_name) (ESourceBackend *extension);
+EAPI_EXTERN const gchar* (*e_source_get_display_name) (ESource *source);
+EAPI_EXTERN const gchar* (*eds_check_version) (guint required_major, guint required_minor, guint required_micro);
+EAPI_EXTERN const gchar* (*e_source_get_uid) (ESource *source);
+EAPI_EXTERN ESource* (*e_source_registry_ref_source) (ESourceRegistry *registry, const gchar *uid);
+EAPI_EXTERN EBookClient* (*e_book_client_new) (ESource *source, GError **error);
+EAPI_EXTERN gboolean (*e_client_open_sync) (EClient *client, gboolean only_if_exists, GCancellable *cancellable, GError **error);
+EAPI_EXTERN ESource* (*e_client_get_source) (EClient *client);
+EAPI_EXTERN gboolean (*e_book_client_get_contacts_sync) (EBookClient *client, const gchar *sexp, GSList **contacts, GCancellable *cancellable, GError **error);
+EAPI_EXTERN void (*e_client_util_free_object_slist) (GSList *objects);
+
+ESourceRegistry *get_e_source_registry();
+bool isSourceBackend(ESource *pSource, const char *backendname);
+
 G_END_DECLS
 #endif
 

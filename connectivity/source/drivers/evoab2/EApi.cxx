@@ -22,6 +22,7 @@
 #define  DECLARE_FN_POINTERS 1
 #include "EApi.h"
 static const char *eBookLibNames[] = {
+    "libebook-1.2.so.14", // bumped again (evolution-3.6)
     "libebook-1.2.so.13", // bumped again (evolution-3.4)
     "libebook-1.2.so.12", // bumped again
     "libebook-1.2.so.10", // bumped again
@@ -34,25 +35,23 @@ static const char *eBookLibNames[] = {
 typedef void (*SymbolFunc) (void);
 
 #define SYM_MAP(a) { #a, (SymbolFunc *)&a }
-    static struct {
+struct ApiMap
+{
     const char *sym_name;
     SymbolFunc *ref_value;
-    } aApiMap[] = {
+};
+
+static ApiMap aCommonApiMap[] =
+{
+    SYM_MAP( eds_check_version ),
     SYM_MAP( e_contact_field_name ),
     SYM_MAP( e_contact_get ),
     SYM_MAP( e_contact_get_type ),
     SYM_MAP( e_contact_field_id ),
-    SYM_MAP( e_source_peek_name ),
-    SYM_MAP( e_source_get_property ),
-    SYM_MAP( e_source_list_peek_groups ),
-    SYM_MAP( e_source_group_peek_sources ),
     SYM_MAP( e_book_new ),
     SYM_MAP( e_book_open ),
-    SYM_MAP( e_book_get_uri ),
     SYM_MAP( e_book_get_source ),
-    SYM_MAP( e_book_get_addressbooks ),
     SYM_MAP( e_book_get_contacts ),
-    SYM_MAP( e_book_authenticate_user ),
     SYM_MAP( e_book_query_field_test ),
     SYM_MAP( e_book_query_and ),
     SYM_MAP( e_book_query_or ),
@@ -61,26 +60,55 @@ typedef void (*SymbolFunc) (void);
     SYM_MAP( e_book_query_unref ),
     SYM_MAP( e_book_query_from_string ),
     SYM_MAP( e_book_query_to_string ),
-    SYM_MAP( e_book_query_field_exists ),
-    SYM_MAP( e_source_group_peek_base_uri)
-    };
+    SYM_MAP( e_book_query_field_exists )
+};
+
+//< 3-6 api
+static ApiMap aOldApiMap[] =
+{
+    SYM_MAP( e_book_get_addressbooks ),
+    SYM_MAP( e_book_get_uri ),
+    SYM_MAP( e_book_authenticate_user ),
+    SYM_MAP( e_source_group_peek_base_uri),
+    SYM_MAP( e_source_peek_name ),
+    SYM_MAP( e_source_get_property ),
+    SYM_MAP( e_source_list_peek_groups ),
+    SYM_MAP( e_source_group_peek_sources )
+};
+
+//>= 3-6 api
+static ApiMap aNewApiMap[] =
+{
+    SYM_MAP( e_source_registry_list_sources ),
+    SYM_MAP( e_source_registry_new_sync ),
+    SYM_MAP( e_source_has_extension ),
+    SYM_MAP( e_source_get_extension ),
+    SYM_MAP( e_source_backend_get_backend_name ),
+    SYM_MAP( e_source_get_display_name ),
+    SYM_MAP( e_source_get_uid ),
+    SYM_MAP( e_source_registry_ref_source),
+    SYM_MAP( e_book_client_new ),
+    SYM_MAP( e_client_open_sync ),
+    SYM_MAP( e_client_get_source ),
+    SYM_MAP( e_book_client_get_contacts_sync ),
+    SYM_MAP( e_client_util_free_object_slist )
+};
 #undef SYM_MAP
 
 static bool
-tryLink( oslModule &aModule, const char *pName )
+tryLink( oslModule &aModule, const char *pName, ApiMap *pMap, guint nEntries )
 {
-    for( guint i = 0; i < G_N_ELEMENTS( aApiMap ); i++ )
+    for (guint i = 0; i < nEntries; ++i)
     {
-    SymbolFunc aMethod;
-    aMethod = (SymbolFunc) osl_getFunctionSymbol
-        ( aModule, rtl::OUString::createFromAscii ( aApiMap[ i ].sym_name ).pData );
-    if( !aMethod )
-    {
-        fprintf( stderr, "Warning: missing symbol '%s' in '%s'",
-             aApiMap[ i ].sym_name, pName );
-        return false;
-    }
-    * aApiMap[ i ].ref_value = aMethod;
+        SymbolFunc aMethod = (SymbolFunc)osl_getFunctionSymbol
+            (aModule, OUString::createFromAscii ( pMap[ i ].sym_name ).pData);
+        if( !aMethod )
+        {
+            fprintf( stderr, "Warning: missing symbol '%s' in '%s'\n",
+                 pMap[ i ].sym_name, pName );
+            return false;
+        }
+        *pMap[ i ].ref_value = aMethod;
     }
     return true;
 }
@@ -96,32 +124,23 @@ bool EApiInit()
                                   SAL_LOADMODULE_DEFAULT );
         if( aModule)
         {
-            if ( tryLink( aModule, eBookLibNames[ j ] ) )
-                return true;
+            if (tryLink( aModule, eBookLibNames[ j ], aCommonApiMap, G_N_ELEMENTS(aCommonApiMap)))
+            {
+                if (eds_check_version(3, 6, 0) == NULL)
+                {
+                    if (tryLink( aModule, eBookLibNames[ j ], aNewApiMap, G_N_ELEMENTS(aNewApiMap)))
+                        return true;
+                }
+                else if (tryLink( aModule, eBookLibNames[ j ], aOldApiMap, G_N_ELEMENTS(aOldApiMap)))
+                {
+                    return true;
+                }
+            }
             osl_unloadModule( aModule );
         }
     }
     fprintf( stderr, "Can find no compliant libebook client libraries\n" );
     return false;
 }
-
-#if 0
-// hjs: SOLARDEF does no longer exist please lookup the required
-// defines in a regular compile line
-/*
- * Test code - enable &
- *
- * Compile with ( after source LinuxIntelEnv.Set.sh )
-   gcc $SOLARDEF -I $SOLARVER/$UPD/$INPATH/inc \
-     -I. `pkg-config --cflags --libs gobject-2.0` \
-     -L $SOLARVER/$UPD/$INPATH/lib -luno_sal -lstdc++ EApi.cxx
- */
-
-int main( int argc, char **argv)
-{
-    return EApiInit();
-}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

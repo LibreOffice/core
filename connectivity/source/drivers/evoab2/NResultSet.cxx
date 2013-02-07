@@ -87,108 +87,17 @@ sal_Bool SAL_CALL OEvoabResultSet::supportsService( const ::rtl::OUString& _rSer
     return pSupported != pEnd;
 }
 
-// -------------------------------------------------------------------------
-OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pConnection )
-    :OResultSet_BASE(m_aMutex)
-    ,::comphelper::OPropertyContainer( OResultSet_BASE::rBHelper )
-    ,m_pStatement(pStmt)
-    ,m_pConnection(pConnection)
-    ,m_xMetaData(NULL)
-    ,m_bWasNull(sal_True)
-    ,m_nFetchSize(0)
-    ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
-    ,m_nFetchDirection(FetchDirection::FORWARD)
-    ,m_nResultSetConcurrency(ResultSetConcurrency::READ_ONLY)
-    ,m_pContacts(NULL)
-    ,m_nIndex(-1)
-    ,m_nLength(0)
+struct ComparisonData
 {
-    #define REGISTER_PROP( id, member ) \
-        registerProperty( \
-            OMetaConnection::getPropMap().getNameByIndex( id ), \
-            id, \
-            PropertyAttribute::READONLY, \
-            &member, \
-            ::getCppuType( &member ) \
-        );
+    const SortDescriptor&   rSortOrder;
+    IntlWrapper             aIntlWrapper;
 
-    REGISTER_PROP( PROPERTY_ID_FETCHSIZE, m_nFetchSize );
-    REGISTER_PROP( PROPERTY_ID_RESULTSETTYPE, m_nResultSetType );
-    REGISTER_PROP( PROPERTY_ID_FETCHDIRECTION, m_nFetchDirection );
-    REGISTER_PROP( PROPERTY_ID_RESULTSETCONCURRENCY, m_nResultSetConcurrency );
-}
-
-// -------------------------------------------------------------------------
-OEvoabResultSet::~OEvoabResultSet()
-{
-}
-
-// -------------------------------------------------------------------------
-
-static ESource *
-findSource( const char *uid )
-{
-    //ideally as
-    return e_source_registry_ref_source (registry, uid);
-    /*ESourceList *pSourceList = NULL;
-
-    g_return_val_if_fail (name != NULL, NULL);
-
-    if (!e_book_get_addressbooks (&pSourceList, NULL))
-        pSourceList = NULL;
-
-    for ( GSList *g = e_source_list_peek_groups (pSourceList); g; g = g->next)
+    ComparisonData( const SortDescriptor& _rSortOrder, const Reference< XComponentContext >& _rxContext )
+        :rSortOrder( _rSortOrder )
+        ,aIntlWrapper( _rxContext, SvtSysLocale().GetLanguageTag() )
     {
-        for (GSList *s = e_source_group_peek_sources (E_SOURCE_GROUP (g->data)); s; s = s->next)
-        {
-            ESource *pSource = E_SOURCE (s->data);
-            if (!strcmp (e_source_peek_name (pSource), name))
-                return pSource;
-        }
     }
-    return NULL;*/
-}
-
-static EBookClient *
-openBook( const char *abname )
-{
-    ESource *pSource = findSource (abname);
-    EBookClient *pBook = NULL;
-    if (pSource)
-            pBook = e_book_client_new (pSource, NULL);
-
-    if (pBook && !e_client_open_sync (pBook, TRUE, NULL, NULL))
-    {
-        g_object_unref (G_OBJECT (pBook));
-        pBook = NULL;
-    }
-
-    if (pSource)
-        g_object_unref (pSource);
-
-    return pBook;
-}
-
-static bool isBookBackend( EBookClient *pBook, const char *backendname)
-{
-    ESource *pSource = e_client_get_source ((EClient *) pBook);
-
-    if (!pSource || e_source_has_extension (pSource, "Address Book")) // E_SOURCE_EXTENSION_ADDRESS_BOOK
-        return false;
-
-    gpointer extension = e_source_get_extension (pSource, "Address Book"); // E_SOURCE_EXTENSION_ADDRESS_BOOK
-    return extension && g_strcmp0 (e_source_backend_get_backend_name (extension), backendname) == 0;
-}
-
-static bool isLDAP( EBookClient *pBook )
-{
-    return pBook && isBookBackend( pBook, "ldap" );
-}
-
-static bool isLocal( EBookClient *pBook )
-{
-    return pBook && isBookBackend( pBook, "local" );
-}
+};
 
 static ::rtl::OUString
 valueToOUString( GValue& _rValue )
@@ -206,22 +115,6 @@ valueToBool( GValue& _rValue )
     bool bResult = g_value_get_boolean( &_rValue );
     g_value_unset( &_rValue );
     return bResult;
-}
-
-static bool
-executeQuery (EBookClient* pBook, EBookQuery* pQuery, GList **ppList,
-              rtl::OString &rPassword, GError **pError)
-{
-    bool bSuccess;
-    char *sexp;
-
-    *ppList = NULL;
-
-    sexp = e_book_query_to_string( pQuery );
-    bSuccess = e_book_client_get_contacts_sync( pBook, sexp, ppList, pError );
-    g_free (sexp);
-
-    return bSuccess;
 }
 
 static int
@@ -360,6 +253,7 @@ handleSplitAddress( EContact *pContact,GValue *pStackValue, int value )
 
     return false;
 }
+
 static bool
 getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackValue, bool& _out_rWasNull )
 {
@@ -410,21 +304,6 @@ getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackV
     }
     _out_rWasNull = false;
     return true;
-}
-
-namespace
-{
-    struct ComparisonData
-    {
-        const SortDescriptor&   rSortOrder;
-        IntlWrapper             aIntlWrapper;
-
-        ComparisonData( const SortDescriptor& _rSortOrder, const Reference< XComponentContext >& _rxContext )
-            :rSortOrder( _rSortOrder )
-            ,aIntlWrapper( _rxContext, SvtSysLocale().GetLanguageTag() )
-        {
-        }
-    };
 }
 
 extern "C"
@@ -485,13 +364,260 @@ int CompareContacts( gconstpointer _lhs, gconstpointer _rhs, gpointer _userData 
     return 0;
 }
 
-static GList*
-sortContacts( GList* _pContactList, const ComparisonData& _rCompData )
+OString OEvoabVersionHelper::getUserName( EBook *pBook )
 {
-    OSL_ENSURE( !_rCompData.rSortOrder.empty(), "sortContacts: no need to call this without any sort order!" );
-    ENSURE_OR_THROW( _rCompData.aIntlWrapper.getCaseCollator(), "no collator for comparing strings" );
+    OString aName;
+    if( isLDAP( pBook ) )
+        aName = e_source_get_property( e_book_get_source( pBook ), "binddn" );
+    else
+        aName = e_source_get_property( e_book_get_source( pBook ), "user" );
+    return aName;
+}
 
-    return g_list_sort_with_data( _pContactList, &CompareContacts, const_cast< gpointer >( static_cast< gconstpointer >( &_rCompData ) ) );
+class OEvoabVersion36Helper : public OEvoabVersionHelper
+{
+private:
+    GSList   *m_pContacts;
+public:
+    OEvoabVersion36Helper()
+        : m_pContacts(NULL)
+    {
+    }
+
+    ~OEvoabVersion36Helper()
+    {
+        freeContacts();
+    }
+
+    virtual EBook* openBook(const char *id)
+    {
+        ESource *pSource = e_source_registry_ref_source(get_e_source_registry(), id);
+        EBookClient *pBook = pSource ? e_book_client_new (pSource, NULL) : NULL;
+        if (pBook && !e_client_open_sync (pBook, TRUE, NULL, NULL))
+        {
+            g_object_unref (G_OBJECT (pBook));
+            pBook = NULL;
+        }
+        if (pSource)
+            g_object_unref (pSource);
+        return pBook;
+    }
+
+    bool isBookBackend( EBookClient *pBook, const char *backendname)
+    {
+        if (!pBook)
+            return false;
+        ESource *pSource = e_client_get_source ((EClient *) pBook);
+        return isSourceBackend(pSource, backendname);
+    }
+
+    virtual bool isLDAP( EBook *pBook )
+    {
+        return isBookBackend(pBook, "ldap");
+    }
+
+    virtual bool isLocal( EBook *pBook )
+    {
+        return isBookBackend(pBook, "local");
+    }
+
+    virtual void freeContacts()
+    {
+        e_client_util_free_object_slist(m_pContacts);
+        m_pContacts = NULL;
+    }
+
+    virtual bool executeQuery (EBook* pBook, EBookQuery* pQuery, OString &/*rPassword*/)
+    {
+        freeContacts();
+        char *sexp = e_book_query_to_string( pQuery );
+        bool bSuccess = e_book_client_get_contacts_sync( pBook, sexp, &m_pContacts, NULL, NULL );
+        g_free (sexp);
+        return bSuccess;
+    }
+
+    virtual EContact *getContact(sal_Int32 nIndex)
+    {
+        gpointer pData = g_slist_nth_data (m_pContacts, nIndex);
+        return pData ? E_CONTACT (pData) : NULL;
+    }
+
+    virtual sal_Int32 getNumContacts()
+    {
+        return g_slist_length( m_pContacts );
+    }
+
+    virtual bool hasContacts()
+    {
+        return m_pContacts != NULL;
+    }
+
+    virtual void sortContacts( const ComparisonData& _rCompData )
+    {
+        OSL_ENSURE( !_rCompData.rSortOrder.empty(), "sortContacts: no need to call this without any sort order!" );
+        ENSURE_OR_THROW( _rCompData.aIntlWrapper.getCaseCollator(), "no collator for comparing strings" );
+
+        m_pContacts = g_slist_sort_with_data( m_pContacts, &CompareContacts,
+            const_cast< gpointer >( static_cast< gconstpointer >( &_rCompData ) ) );
+    }
+};
+
+class OEvoabVersion35Helper : public OEvoabVersionHelper
+{
+private:
+    GList *m_pContacts;
+
+    ESource * findSource( const char *id )
+    {
+        ESourceList *pSourceList = NULL;
+
+        g_return_val_if_fail (id != NULL, NULL);
+
+        if (!e_book_get_addressbooks (&pSourceList, NULL))
+            pSourceList = NULL;
+
+        for ( GSList *g = e_source_list_peek_groups (pSourceList); g; g = g->next)
+        {
+            for (GSList *s = e_source_group_peek_sources (E_SOURCE_GROUP (g->data)); s; s = s->next)
+            {
+                ESource *pSource = E_SOURCE (s->data);
+                if (!strcmp (e_source_peek_name (pSource), id))
+                    return pSource;
+            }
+        }
+        return NULL;
+    }
+
+    bool isAuthRequired( EBook *pBook )
+    {
+        return e_source_get_property( e_book_get_source( pBook ),
+                                      "auth" ) != NULL;
+    }
+
+public:
+    OEvoabVersion35Helper()
+        : m_pContacts(NULL)
+    {
+    }
+
+    ~OEvoabVersion35Helper()
+    {
+        freeContacts();
+    }
+
+    virtual EBook* openBook(const char *abname)
+    {
+        ESource *pSource = findSource (abname);
+        EBook *pBook = pSource ? e_book_new (pSource, NULL) : NULL;
+        if (pBook && !e_book_open (pBook, TRUE, NULL))
+        {
+            g_object_unref (G_OBJECT (pBook));
+            pBook = NULL;
+        }
+        return pBook;
+    }
+
+    virtual bool isLDAP( EBook *pBook )
+    {
+        return pBook && !strncmp( "ldap://", e_book_get_uri( pBook ), 6 );
+    }
+
+    virtual bool isLocal( EBook *pBook )
+    {
+        return pBook && ( !strncmp( "file://", e_book_get_uri( pBook ), 6 ) ||
+                          !strncmp( "local:", e_book_get_uri( pBook ), 6 ) );
+    }
+
+    virtual void freeContacts()
+    {
+        g_list_free(m_pContacts);
+        m_pContacts = NULL;
+    }
+
+    virtual bool executeQuery (EBook* pBook, EBookQuery* pQuery, OString &rPassword)
+    {
+        freeContacts();
+
+        ESource *pSource = e_book_get_source( pBook );
+        bool bSuccess = false;
+        bool bAuthSuccess = true;
+
+        if( isAuthRequired( pBook ) )
+        {
+            rtl::OString aUser( getUserName( pBook ) );
+            const char *pAuth = e_source_get_property( pSource, "auth" );
+            bAuthSuccess = e_book_authenticate_user( pBook, aUser.getStr(), rPassword.getStr(), pAuth, NULL );
+        }
+
+        if (bAuthSuccess)
+            bSuccess = e_book_get_contacts( pBook, pQuery, &m_pContacts, NULL );
+
+        return bSuccess;
+    }
+
+    virtual EContact *getContact(sal_Int32 nIndex)
+    {
+        gpointer pData = g_list_nth_data (m_pContacts, nIndex);
+        return pData ? E_CONTACT (pData) : NULL;
+    }
+
+    virtual sal_Int32 getNumContacts()
+    {
+        return g_list_length( m_pContacts );
+    }
+
+    virtual bool hasContacts()
+    {
+        return m_pContacts != NULL;
+    }
+
+    virtual void sortContacts( const ComparisonData& _rCompData )
+    {
+        OSL_ENSURE( !_rCompData.rSortOrder.empty(), "sortContacts: no need to call this without any sort order!" );
+        ENSURE_OR_THROW( _rCompData.aIntlWrapper.getCaseCollator(), "no collator for comparing strings" );
+
+        m_pContacts = g_list_sort_with_data( m_pContacts, &CompareContacts,
+            const_cast< gpointer >( static_cast< gconstpointer >( &_rCompData ) ) );
+    }
+};
+
+OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pConnection )
+    :OResultSet_BASE(m_aMutex)
+    ,::comphelper::OPropertyContainer( OResultSet_BASE::rBHelper )
+    ,m_pStatement(pStmt)
+    ,m_pConnection(pConnection)
+    ,m_xMetaData(NULL)
+    ,m_bWasNull(sal_True)
+    ,m_nFetchSize(0)
+    ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
+    ,m_nFetchDirection(FetchDirection::FORWARD)
+    ,m_nResultSetConcurrency(ResultSetConcurrency::READ_ONLY)
+    ,m_nIndex(-1)
+    ,m_nLength(0)
+{
+    if (eds_check_version(3, 6, 0) == NULL)
+        m_pVersionHelper  = new OEvoabVersion36Helper;
+    else
+        m_pVersionHelper  = new OEvoabVersion35Helper;
+
+    #define REGISTER_PROP( id, member ) \
+        registerProperty( \
+            OMetaConnection::getPropMap().getNameByIndex( id ), \
+            id, \
+            PropertyAttribute::READONLY, \
+            &member, \
+            ::getCppuType( &member ) \
+        );
+
+    REGISTER_PROP( PROPERTY_ID_FETCHSIZE, m_nFetchSize );
+    REGISTER_PROP( PROPERTY_ID_RESULTSETTYPE, m_nResultSetType );
+    REGISTER_PROP( PROPERTY_ID_FETCHDIRECTION, m_nFetchDirection );
+    REGISTER_PROP( PROPERTY_ID_RESULTSETCONCURRENCY, m_nResultSetConcurrency );
+}
+
+// -------------------------------------------------------------------------
+OEvoabResultSet::~OEvoabResultSet()
+{
 }
 
 // -------------------------------------------------------------------------
@@ -499,17 +625,16 @@ void OEvoabResultSet::construct( const QueryData& _rData )
 {
     ENSURE_OR_THROW( _rData.getQuery(), "internal error: no EBookQuery" );
 
-    EBookClient *pBook = openBook(::rtl::OUStringToOString(_rData.sTable, RTL_TEXTENCODING_UTF8).getStr());
+    EBook *pBook = m_pVersionHelper->openBook(OUStringToOString(_rData.sTable, RTL_TEXTENCODING_UTF8).getStr());
     if ( !pBook )
         m_pConnection->throwGenericSQLException( STR_CANNOT_OPEN_BOOK, *this );
 
-    g_list_free(m_pContacts);
-    m_pContacts = NULL;
+    m_pVersionHelper->freeContacts();
     bool bExecuteQuery = true;
     switch ( _rData.eFilterType )
     {
         case eFilterNone:
-            if ( !isLocal( pBook ) )
+            if ( !m_pVersionHelper->isLocal( pBook ) )
             {
                 SQLError aErrorFactory( comphelper::getComponentContext(m_pConnection->getDriver().getMSFactory()) );
                 SQLException aAsException = aErrorFactory.getSQLException( ErrorCondition::DATA_CANNOT_SELECT_UNFILTERED, *this );
@@ -533,16 +658,16 @@ void OEvoabResultSet::construct( const QueryData& _rData )
     if ( bExecuteQuery )
     {
         rtl::OString aPassword = m_pConnection->getPassword();
-        executeQuery( pBook, _rData.getQuery(), &m_pContacts, aPassword, NULL );
+        m_pVersionHelper->executeQuery(pBook, _rData.getQuery(), aPassword);
         m_pConnection->setPassword( aPassword );
 
-        if ( m_pContacts && !_rData.aSortOrder.empty() )
+        if ( m_pVersionHelper->hasContacts() && !_rData.aSortOrder.empty() )
         {
             ComparisonData aCompData( _rData.aSortOrder, comphelper::getComponentContext(getConnection()->getDriver().getMSFactory()) );
-            m_pContacts = sortContacts( m_pContacts, aCompData );
+            m_pVersionHelper->sortContacts( aCompData );
         }
     }
-    m_nLength = g_list_length( m_pContacts );
+    m_nLength = m_pVersionHelper->getNumContacts();
     OSL_TRACE( "Query return %d records", m_nLength );
     m_nIndex = -1;
 
@@ -559,10 +684,10 @@ void OEvoabResultSet::disposing(void)
     ::comphelper::OPropertyContainer::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    g_list_free(m_pContacts);
-    m_pContacts = NULL;
+    delete m_pVersionHelper;
+    m_pVersionHelper = NULL;
     m_pStatement = NULL;
-m_xMetaData.clear();
+    m_xMetaData.clear();
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
