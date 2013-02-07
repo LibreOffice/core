@@ -825,7 +825,9 @@
                 <it>.*/autotext/.*</it>
                 <it>.*/autocorr/.*</it>
                 <it>.*/config/.*\.so[bcdegh]</it>
-                <it>.*/config/soffice.cfg/modules/.*/toolbar/custom.*\.xml</it>
+                <it>.*/config/soffice.cfg/modules/.*/menubar/.*\.xml</it>
+                <it>.*/config/soffice.cfg/modules/.*/statusbar/.*\.xml</it>
+                <it>.*/config/soffice.cfg/modules/.*/toolbar/.*\.xml</it>
                 <it>.*/config/soffice.cfg/modules/.*/images/.*</it>
                 <it>.*/gallery/.*</it>
                 <it>.*/template/.*</it>
