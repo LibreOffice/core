@@ -11,6 +11,8 @@ $(eval $(call gb_Extension_Extension,mysql-connector-ooo,mysqlc/source))
 
 $(eval $(call gb_Extension_add_library,mysql-connector-ooo,mysqlc))
 
+$(eval $(call gb_Extension_add_file,mysql-connector-ooo,components.rdb,$(call gb_Rdb_get_target,mysqlc)))
+
 $(eval $(call gb_Extension_add_file,mysql-connector-ooo,registry/data/org/openoffice/Office/DataAccess/Drivers.xcu,$(call gb_XcuFile_for_extension,mysqlc/source/registry/data/org/openoffice/Office/DataAccess/Drivers.xcu)))
 
 $(eval $(call gb_Extension_add_files,mysql-connector-ooo,images,\

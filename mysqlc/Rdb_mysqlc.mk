@@ -7,17 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,mysqlc))
+$(eval $(call gb_Rdb_Rdb,mysqlc))
 
-ifeq ($(ENABLE_MYSQLC),YES)
-
-$(eval $(call gb_Module_add_targets,mysqlc,\
-	Configuration_mysql \
-	Library_mysqlc \
-	Rdb_mysqlc \
-	Extension_mysql-connector-ooo \
+$(eval $(call gb_Rdb_add_components,mysqlc,\
+	mysqlc/source/mysqlc \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

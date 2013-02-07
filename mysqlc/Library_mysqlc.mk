@@ -61,4 +61,6 @@ $(eval $(call gb_Library_add_exception_objects,mysqlc,\
 	mysqlc/source/mysqlc_propertyids \
 ))
 
+$(eval $(call gb_Library_set_componentfile,mysqlc,mysqlc/source/mysqlc))
+
 # vim: set noet sw=4 ts=4:
