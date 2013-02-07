@@ -389,8 +389,26 @@ public:
         freeContacts();
     }
 
-    virtual EBook* openBook(const char *id)
+    virtual EBook* openBook(const char *abname)
     {
+        //It would be better if here we had id to begin with, see
+        //NDatabaseMetaData.cxx
+        const char *id = NULL;
+        GList *pSources = e_source_registry_list_sources(get_e_source_registry(), E_SOURCE_EXTENSION_ADDRESS_BOOK);
+        for (GList* liter = pSources; liter; liter = liter->next)
+        {
+            ESource *pSource = E_SOURCE (liter->data);
+
+            if (strcmp(abname, e_source_get_display_name( pSource )) == 0)
+            {
+                id = e_source_get_uid( pSource );
+                break;
+            }
+        }
+        g_list_free_full (pSources, g_object_unref);
+        if (!id)
+            return NULL;
+
         ESource *pSource = e_source_registry_ref_source(get_e_source_registry(), id);
         EBookClient *pBook = pSource ? e_book_client_new (pSource, NULL) : NULL;
         if (pBook && !e_client_open_sync (pBook, TRUE, NULL, NULL))

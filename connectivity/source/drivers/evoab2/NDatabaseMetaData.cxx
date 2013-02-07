@@ -1131,7 +1131,6 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 
     if (eds_check_version(3, 6, 0) == NULL)
     {
-        fprintf(stderr, "OEvoabDatabaseMetaData::getTables\n");
         GList *pSources = e_source_registry_list_sources(get_e_source_registry(), E_SOURCE_EXTENSION_ADDRESS_BOOK);
 
         for (GList* liter = pSources; liter; liter = liter->next)
@@ -1158,13 +1157,16 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 
             ODatabaseMetaDataResultSet::ORow aRow(3);
             aRow.reserve(6);
-            OUString aUID = OStringToOUString( e_source_get_uid( pSource ),
-                                                          RTL_TEXTENCODING_UTF8 );
-            aRow.push_back(new ORowSetValueDecorator(aUID));
-            aRow.push_back(new ORowSetValueDecorator(aTable));
             OUString aHumanName = OStringToOUString( e_source_get_display_name( pSource ),
                                                           RTL_TEXTENCODING_UTF8 );
-            aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+            aRow.push_back(new ORowSetValueDecorator(aHumanName)); //tablename
+            aRow.push_back(new ORowSetValueDecorator(aTable));
+            OUString aUID = OStringToOUString( e_source_get_uid( pSource ),
+                                                          RTL_TEXTENCODING_UTF8 );
+            aRow.push_back(new ORowSetValueDecorator(aUID)); //comment
+            //I'd prefer to swap the comment and the human name and
+            //just use e_source_registry_ref_source(get_e_source_registry(), aUID);
+            //in open book rather than search for the name again
             aRows.push_back(aRow);
         }
 
