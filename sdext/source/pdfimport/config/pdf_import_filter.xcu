@@ -26,7 +26,7 @@
    <prop oor:name="UIComponent"/>
    <prop oor:name="UserData" oor:type="oor:string-list">
     <!-- converter service, ,import service,export service, , ,bool for pretty printing on or off -->
-    <value oor:separator=",">com.sun.star.comp.documents.DrawPDFImport,,com.sun.star.comp.Draw.XMLOasisImporter,,,,true</value>
+    <value oor:separator=",">org.libreoffice.ext.documents.DrawPDFImport,,com.sun.star.comp.Draw.XMLOasisImporter,,,,true</value>
    </prop>
   </node>
 
@@ -55,7 +55,7 @@
    <prop oor:name="UIComponent"/>
    <prop oor:name="UserData" oor:type="oor:string-list">
     <!-- converter service, ,import service,export service, , ,bool for pretty printing on or off -->
-    <value oor:separator=",">com.sun.star.comp.documents.ImpressPDFImport,,com.sun.star.comp.Impress.XMLOasisImporter,,,,true</value>
+    <value oor:separator=",">org.libreoffice.ext.documents.ImpressPDFImport,,com.sun.star.comp.Impress.XMLOasisImporter,,,,true</value>
    </prop>
   </node>
 
@@ -84,7 +84,7 @@
    <prop oor:name="UIComponent"/>
    <prop oor:name="UserData" oor:type="oor:string-list">
     <!-- converter service, ,import service,export service, , ,bool for pretty printing on or off -->
-    <value oor:separator=",">com.sun.star.comp.documents.WriterPDFImport,,com.sun.star.comp.Writer.XMLOasisImporter,,,,true</value>
+    <value oor:separator=",">org.libreoffice.ext.documents.WriterPDFImport,,com.sun.star.comp.Writer.XMLOasisImporter,,,,true</value>
    </prop>
   </node>
 
@@ -96,7 +96,7 @@
     <value>0</value>
    </prop>
    <prop oor:name="FilterService" oor:type="xs:string">
-    <value>com.sun.star.comp.documents.HybridPDFImport</value>
+    <value>org.libreoffice.ext.documents.HybridPDFImport</value>
    </prop>
    <prop oor:name="Flags" oor:type="oor:string-list">
     <value>3RDPARTYFILTER ALIEN IMPORT NOTINFILEDIALOG NOTINCHOOSER</value>
@@ -123,7 +123,7 @@
     <value>0</value>
    </prop>
    <prop oor:name="FilterService" oor:type="xs:string">
-    <value>com.sun.star.comp.documents.HybridPDFImport</value>
+    <value>org.libreoffice.ext.documents.HybridPDFImport</value>
    </prop>
    <prop oor:name="Flags" oor:type="oor:string-list">
     <value>3RDPARTYFILTER ALIEN IMPORT NOTINFILEDIALOG NOTINCHOOSER</value>
@@ -150,7 +150,7 @@
     <value>0</value>
    </prop>
    <prop oor:name="FilterService" oor:type="xs:string">
-    <value>com.sun.star.comp.documents.HybridPDFImport</value>
+    <value>org.libreoffice.ext.documents.HybridPDFImport</value>
    </prop>
    <prop oor:name="Flags" oor:type="oor:string-list">
     <value>3RDPARTYFILTER ALIEN IMPORT NOTINFILEDIALOG NOTINCHOOSER</value>
@@ -177,7 +177,7 @@
     <value>0</value>
    </prop>
    <prop oor:name="FilterService" oor:type="xs:string">
-    <value>com.sun.star.comp.documents.HybridPDFImport</value>
+    <value>org.libreoffice.ext.documents.HybridPDFImport</value>
    </prop>
    <prop oor:name="Flags" oor:type="oor:string-list">
     <value>3RDPARTYFILTER ALIEN IMPORT NOTINFILEDIALOG NOTINCHOOSER</value>
