@@ -693,10 +693,6 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
         xOldExtension );
 
     {
-        bool added = false;
-        OUString sNewExtensionIdentifier;
-        OUString sNewExtensionFileName;
-
         // In this garded section (getMutex) we must not use the argument xCmdEnv
         // because it may bring up dialogs (XInteractionHandler::handle) this
         //may potententially deadlock. See issue
@@ -741,7 +737,6 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                     xNewExtension = xPackageManager->addPackage(
                         url, properties, OUString(), xAbortChannel,
                         Reference<ucb::XCommandEnvironment>());
-                    added = true;
                     //If we add a user extension and there is already one which was
                     //disabled by a user, then the newly installed one is enabled. If we
                     //add to another repository then the user extension remains
@@ -750,8 +745,9 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                     if (repository == "user")
                         bUserDisabled2 = false;
 
-                    sNewExtensionIdentifier = dp_misc::getIdentifier(xNewExtension);
-                    sNewExtensionFileName = xNewExtension->getName();
+                    // pass the two values via variables to workaround gcc-4.3.4 specific bug (bnc#655912)
+                    OUString sNewExtensionIdentifier = dp_misc::getIdentifier(xNewExtension);
+                    OUString sNewExtensionFileName = xNewExtension->getName();
 
                     activateExtension(
                         sNewExtensionIdentifier, sNewExtensionFileName,
@@ -796,18 +792,6 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
             //If the user aborted installation then a ucb::CommandAbortedException
             //is thrown.
             //Use a private AbortChannel so the user cannot interrupt.
-            if (added) {
-                try {
-                    xPackageManager->removePackage(
-                        sNewExtensionIdentifier, sNewExtensionFileName,
-                        css::uno::Reference< css::task::XAbortChannel >(),
-                        css::uno::Reference< css::ucb::XCommandEnvironment >());
-                } catch (css::uno::Exception & e) {
-                    SAL_WARN(
-                        "desktop.deployment",
-                        "ignoring Exception " << e.Message);
-                }
-            }
             try
             {
                 if (xExtensionBackup.is())
