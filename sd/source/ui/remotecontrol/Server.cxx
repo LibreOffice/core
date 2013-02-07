@@ -10,8 +10,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "officecfg/Office/Common.hxx"
-#include "officecfg/Office/Impress.hxx"
+#include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Impress.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -310,12 +310,11 @@ void SdDLL::RegisterRemotes()
     // Disable unless in experimental mode for now
     SAL_INFO( "sdremote", "SdDLL::RegisterRemotes called" );
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    if (!xContext.is() || !officecfg::Office::Impress::Misc::Start::EnableSdremote::get(xContext))
+    if ( xContext.is() && !officecfg::Office::Impress::Misc::Start::EnableSdremote::get( xContext ) )
         return;
 
     sd::RemoteServer::setup();
     sd::DiscoveryService::setup();
-
 }
 
 bool RemoteServer::isBluetoothDiscoverable()
