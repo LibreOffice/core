@@ -1245,8 +1245,11 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
 
     // Determine the range of cells in the original column that need to be copied.
     it = std::find_if(maItems.begin(), maItems.end(), FindInRows(nRow1, nRow2));
-    if (it != maItems.end())
-        itEnd = std::find_if(it, maItems.end(), FindAboveRow(nRow2));
+    if (it == maItems.end())
+        // Nothing to copy.
+        return;
+
+    itEnd = std::find_if(it, maItems.end(), FindAboveRow(nRow2));
 
     // Clone and staticize all cells that need to be copied.
     std::vector<ColEntry> aCopied;
