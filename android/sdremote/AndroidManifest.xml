@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.libreoffice.impressremote"
-    android:versionCode="1"
-    android:versionName="0.1-Alpha" >
+    android:versionCode="2"
+    android:versionName="Impress Remote 1.0.0+" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
