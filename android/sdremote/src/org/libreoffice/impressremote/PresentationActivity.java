@@ -78,8 +78,8 @@ public class PresentationActivity extends SherlockFragmentActivity {
 
         FragmentTransaction fragmentTransaction = fragmentManager
             .beginTransaction();
-        fragmentTransaction.add(R.id.presentation_interceptor,
-                                mPresentationFragment, "fragment_presentation");
+        fragmentTransaction.replace(R.id.presentation_interceptor,
+                                    mPresentationFragment, "fragment_presentation");
         fragmentTransaction.commit();
         mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
     }
