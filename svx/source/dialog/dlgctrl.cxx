@@ -1073,6 +1073,21 @@ GradientLB::GradientLB( Window* pParent, ResId Id, sal_Bool bUserDraw /*= sal_Tr
     EnableUserDraw( mbUserDraw);
 }
 
+GradientLB::GradientLB( Window* pParent, WinBits nWinStyle, sal_Bool bUserDraw /*= sal_True*/ )
+: ListBox( pParent, nWinStyle ),
+  mpList(NULL),
+  mbUserDraw( bUserDraw )
+{
+    EnableUserDraw( mbUserDraw);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGradientLB(Window *pParent, VclBuilder::stringmap &)
+{
+    GradientLB *pListBox = new GradientLB(pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE);
+    pListBox->EnableAutoSize(true);
+    return pListBox;
+}
+
 void GradientLB::Fill( const XGradientListRef &pList )
 {
     mpList = pList;

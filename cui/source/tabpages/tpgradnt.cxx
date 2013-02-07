@@ -49,32 +49,7 @@ SvxGradientTabPage::SvxGradientTabPage
     Window* pParent,
     const SfxItemSet& rInAttrs
 ) :
-    SfxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_GRADIENT ), rInAttrs ),
-
-    aFlProp             ( this, CUI_RES( FL_PROP ) ),
-    aFtType             ( this, CUI_RES( FT_TYPE ) ),
-    aLbGradientType     ( this, CUI_RES( LB_GRADIENT_TYPES ) ),
-    aFtCenterX          ( this, CUI_RES( FT_CENTER_X ) ),
-    aMtrCenterX         ( this, CUI_RES( MTR_CENTER_X ) ),
-    aFtCenterY          ( this, CUI_RES( FT_CENTER_Y ) ),
-    aMtrCenterY         ( this, CUI_RES( MTR_CENTER_Y ) ),
-    aFtAngle            ( this, CUI_RES( FT_ANGLE ) ),
-    aMtrAngle           ( this, CUI_RES( MTR_ANGLE ) ),
-    aFtBorder           ( this, CUI_RES( FT_BORDER ) ),
-    aMtrBorder          ( this, CUI_RES( MTR_BORDER ) ),
-    aFtColorFrom        ( this, CUI_RES( FT_COLOR_FROM ) ),
-    aLbColorFrom        ( this, CUI_RES( LB_COLOR_FROM ) ),
-    aMtrColorFrom       ( this, CUI_RES( MTR_COLOR_FROM ) ),
-    aFtColorTo          ( this, CUI_RES( FT_COLOR_TO ) ),
-    aLbColorTo          ( this, CUI_RES( LB_COLOR_TO ) ),
-    aMtrColorTo         ( this, CUI_RES( MTR_COLOR_TO ) ),
-    aLbGradients        ( this, CUI_RES( LB_GRADIENTS ) ),
-    aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
-    aBtnAdd             ( this, CUI_RES( BTN_ADD ) ),
-    aBtnModify          ( this, CUI_RES( BTN_MODIFY ) ),
-    aBtnDelete          ( this, CUI_RES( BTN_DELETE ) ),
-    aBtnLoad            ( this, CUI_RES( BTN_LOAD ) ),
-    aBtnSave            ( this, CUI_RES( BTN_SAVE ) ),
+    SfxTabPage          ( pParent, "GradientPage", "cui/ui/gradientpage.ui", rInAttrs ),
 
     rOutAttrs           ( rInAttrs ),
 
@@ -91,10 +66,37 @@ SvxGradientTabPage::SvxGradientTabPage
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
-    FreeResource();
+    get(m_pLbGradientType, "gradienttypelb");
+    get(m_pFtCenterX,      "centerxft");
+    get(m_pMtrCenterX,     "centerxmtr");
+    get(m_pFtCenterY,      "centeryft");
+    get(m_pMtrCenterY,     "centerymtr");
+    get(m_pFtAngle,        "angleft");
+    get(m_pMtrAngle,       "anglemtr");
+    m_pMtrAngle->SetUnit(FUNIT_CUSTOM);
+    get(m_pFtAngleDegrees, "anglemtrdegrees");
+    m_pMtrAngle->SetCustomUnitText(m_pFtAngleDegrees->GetText());
+    get(m_pMtrBorder,      "bordermtr");
+    get(m_pLbColorFrom,    "colorfromlb");
+    get(m_pMtrColorFrom,   "colorfrommtr");
+    get(m_pLbColorTo,      "colortolb");
+    get(m_pMtrColorTo,     "colortomtr");
+    get(m_pLbGradients,    "gradientslb");
+    Size aSize = LogicToPixel(Size(88, 110), MAP_APPFONT);
+    m_pLbGradients->set_width_request(aSize.Width());
+    m_pLbGradients->set_height_request(aSize.Height());
+    get(m_pCtlPreview,     "previewctl");
+    aSize = LogicToPixel(Size(88, 42), MAP_APPFONT);
+    m_pCtlPreview->set_width_request(aSize.Width());
+    m_pCtlPreview->set_height_request(aSize.Height());
+    get(m_pBtnAdd,         "add");
+    get(m_pBtnModify,      "modify");
+    get(m_pBtnDelete,      "delete");
+    get(m_pBtnLoad,        "load");
+    get(m_pBtnSave,        "save");
 
-    aCtlPreview.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
-    aLbGradients.SetAccessibleName( GetText());
+    m_pCtlPreview->SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
+    m_pLbGradients->SetAccessibleName( GetText());
 
 
     // this page needs ExchangeSupport
@@ -102,56 +104,51 @@ SvxGradientTabPage::SvxGradientTabPage
 
     // as long as NOT supported by the item
 
-    aMtrColorTo.SetValue( 100 );
-    aMtrColorFrom.SetValue( 100 );
+    m_pMtrColorTo->SetValue( 100 );
+    m_pMtrColorFrom->SetValue( 100 );
 
     // setting the output device
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXGradientItem );
-    aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
     // overload the handler
-    aLbGradients.SetSelectHdl(
+    m_pLbGradients->SetSelectHdl(
         LINK( this, SvxGradientTabPage, ChangeGradientHdl_Impl ) );
-    aBtnAdd.SetClickHdl( LINK( this, SvxGradientTabPage, ClickAddHdl_Impl ) );
-    aBtnModify.SetClickHdl(
+    m_pBtnAdd->SetClickHdl( LINK( this, SvxGradientTabPage, ClickAddHdl_Impl ) );
+    m_pBtnModify->SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickModifyHdl_Impl ) );
-    aBtnDelete.SetClickHdl(
+    m_pBtnDelete->SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickDeleteHdl_Impl ) );
 
     Link aLink = LINK( this, SvxGradientTabPage, ModifiedHdl_Impl );
-    aLbGradientType.SetSelectHdl( aLink );
-    aMtrCenterX.SetModifyHdl( aLink );
-    aMtrCenterY.SetModifyHdl( aLink );
-    aMtrAngle.SetModifyHdl( aLink );
-    aMtrBorder.SetModifyHdl( aLink );
-    aMtrColorFrom.SetModifyHdl( aLink );
-    aLbColorFrom.SetSelectHdl( aLink );
-    aMtrColorTo.SetModifyHdl( aLink );
-    aLbColorTo.SetSelectHdl( aLink );
+    m_pLbGradientType->SetSelectHdl( aLink );
+    m_pMtrCenterX->SetModifyHdl( aLink );
+    m_pMtrCenterY->SetModifyHdl( aLink );
+    m_pMtrAngle->SetModifyHdl( aLink );
+    m_pMtrBorder->SetModifyHdl( aLink );
+    m_pMtrColorFrom->SetModifyHdl( aLink );
+    m_pLbColorFrom->SetSelectHdl( aLink );
+    m_pMtrColorTo->SetModifyHdl( aLink );
+    m_pLbColorTo->SetSelectHdl( aLink );
 
-    aBtnLoad.SetClickHdl(
+    m_pBtnLoad->SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickLoadHdl_Impl ) );
-    aBtnSave.SetClickHdl(
+    m_pBtnSave->SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickSaveHdl_Impl ) );
 
-    aBtnAdd.SetAccessibleRelationMemberOf( &aFlProp );
-    aBtnModify.SetAccessibleRelationMemberOf( &aFlProp );
-    aBtnDelete.SetAccessibleRelationMemberOf( &aFlProp );
-    aLbGradients.SetAccessibleRelationLabeledBy(&aLbGradients);
-
     // #i76307# always paint the preview in LTR, because this is what the document does
-    aCtlPreview.EnableRTL( sal_False );
+    m_pCtlPreview->EnableRTL( sal_False );
 }
 
 // -----------------------------------------------------------------------
 
 void SvxGradientTabPage::Construct()
 {
-    aLbColorFrom.Fill( pColorList );
-    aLbColorTo.CopyEntries( aLbColorFrom );
+    m_pLbColorFrom->Fill( pColorList );
+    m_pLbColorTo->CopyEntries( *m_pLbColorFrom );
 
-    aLbGradients.Fill( pGradientList );
+    m_pLbGradients->Fill( pGradientList );
 }
 
 // -----------------------------------------------------------------------
@@ -175,28 +172,28 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
                     pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewColorList();
 
                 // LbColorFrom
-                nPos = aLbColorFrom.GetSelectEntryPos();
-                aLbColorFrom.Clear();
-                aLbColorFrom.Fill( pColorList );
-                nCount = aLbColorFrom.GetEntryCount();
+                nPos = m_pLbColorFrom->GetSelectEntryPos();
+                m_pLbColorFrom->Clear();
+                m_pLbColorFrom->Fill( pColorList );
+                nCount = m_pLbColorFrom->GetEntryCount();
                 if( nCount == 0 )
                     ; // this case should not occur
                 else if( nCount <= nPos )
-                    aLbColorFrom.SelectEntryPos( 0 );
+                    m_pLbColorFrom->SelectEntryPos( 0 );
                 else
-                    aLbColorFrom.SelectEntryPos( nPos );
+                    m_pLbColorFrom->SelectEntryPos( nPos );
 
                 // LbColorTo
-                nPos = aLbColorTo.GetSelectEntryPos();
-                aLbColorTo.Clear();
-                aLbColorTo.CopyEntries( aLbColorFrom );
-                nCount = aLbColorTo.GetEntryCount();
+                nPos = m_pLbColorTo->GetSelectEntryPos();
+                m_pLbColorTo->Clear();
+                m_pLbColorTo->CopyEntries( m_pLbColorFrom );
+                nCount = m_pLbColorTo->GetEntryCount();
                 if( nCount == 0 )
                     ; // this case should not occur
                 else if( nCount <= nPos )
-                    aLbColorTo.SelectEntryPos( 0 );
+                    m_pLbColorTo->SelectEntryPos( 0 );
                 else
-                    aLbColorTo.SelectEntryPos( nPos );
+                    m_pLbColorTo->SelectEntryPos( nPos );
 
                 ModifiedHdl_Impl( this );
             }
@@ -219,7 +216,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 
             if ( *pPageType == PT_GRADIENT && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
-                aLbGradients.SelectEntryPos( *pPos );
+                m_pLbGradients->SelectEntryPos( *pPos );
             }
             // colors could have been deleted
             ChangeGradientHdl_Impl( this );
@@ -248,21 +245,21 @@ int SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
 long SvxGradientTabPage::CheckChanges_Impl()
 {
     // is used here in order to NOT lose changes
-    XGradient aTmpGradient( aLbColorFrom.GetSelectEntryColor(),
-                          aLbColorTo.GetSelectEntryColor(),
-                          (XGradientStyle) aLbGradientType.GetSelectEntryPos(),
-                          static_cast<long>(aMtrAngle.GetValue() * 10), // should be changed in resource
-                          (sal_uInt16) aMtrCenterX.GetValue(),
-                          (sal_uInt16) aMtrCenterY.GetValue(),
-                          (sal_uInt16) aMtrBorder.GetValue(),
-                          (sal_uInt16) aMtrColorFrom.GetValue(),
-                          (sal_uInt16) aMtrColorTo.GetValue() );
+    XGradient aTmpGradient( m_pLbColorFrom->GetSelectEntryColor(),
+                          m_pLbColorTo->GetSelectEntryColor(),
+                          (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                          static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+                          (sal_uInt16) m_pMtrCenterX->GetValue(),
+                          (sal_uInt16) m_pMtrCenterY->GetValue(),
+                          (sal_uInt16) m_pMtrBorder->GetValue(),
+                          (sal_uInt16) m_pMtrColorFrom->GetValue(),
+                          (sal_uInt16) m_pMtrColorTo->GetValue() );
 
-    sal_uInt16 nPos = aLbGradients.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbGradients->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         XGradient aGradient = pGradientList->GetGradient( nPos )->GetGradient();
-        String aString = aLbGradients.GetSelectEntry();
+        String aString = m_pLbGradients->GetSelectEntry();
 
         if( !( aTmpGradient == aGradient ) )
         {
@@ -292,7 +289,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
                 case RET_BTN_2:
                 {
                     ClickAddHdl_Impl( this );
-                    nPos = aLbGradients.GetSelectEntryPos();
+                    nPos = m_pLbGradients->GetSelectEntryPos();
                     aGradient = pGradientList->GetGradient( nPos )->GetGradient();
                 }
                 break;
@@ -303,7 +300,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
             delete aMessDlg;
         }
     }
-    nPos = aLbGradients.GetSelectEntryPos();
+    nPos = m_pLbGradients->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         *pPos = nPos;
@@ -321,25 +318,25 @@ sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
 
         XGradient*  pXGradient = NULL;
         String      aString;
-        sal_uInt16      nPos = aLbGradients.GetSelectEntryPos();
+        sal_uInt16      nPos = m_pLbGradients->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             pXGradient = new XGradient( pGradientList->GetGradient( nPos )->GetGradient() );
-            aString = aLbGradients.GetSelectEntry();
+            aString = m_pLbGradients->GetSelectEntry();
 
         }
         else
         // gradient was passed (unidentified)
         {
-            pXGradient = new XGradient( aLbColorFrom.GetSelectEntryColor(),
-                        aLbColorTo.GetSelectEntryColor(),
-                        (XGradientStyle) aLbGradientType.GetSelectEntryPos(),
-                        static_cast<long>(aMtrAngle.GetValue() * 10), // should be changed in resource
-                        (sal_uInt16) aMtrCenterX.GetValue(),
-                        (sal_uInt16) aMtrCenterY.GetValue(),
-                        (sal_uInt16) aMtrBorder.GetValue(),
-                        (sal_uInt16) aMtrColorFrom.GetValue(),
-                        (sal_uInt16) aMtrColorTo.GetValue() );
+            pXGradient = new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
+                        m_pLbColorTo->GetSelectEntryColor(),
+                        (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                        static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+                        (sal_uInt16) m_pMtrCenterX->GetValue(),
+                        (sal_uInt16) m_pMtrCenterY->GetValue(),
+                        (sal_uInt16) m_pMtrBorder->GetValue(),
+                        (sal_uInt16) m_pMtrColorFrom->GetValue(),
+                        (sal_uInt16) m_pMtrColorTo->GetValue() );
         }
         DBG_ASSERT( pXGradient, "XGradient konnte nicht erzeugt werden" );
         rSet.Put( XFillStyleItem( XFILL_GRADIENT ) );
@@ -354,21 +351,21 @@ sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
 
 void SvxGradientTabPage::Reset( const SfxItemSet& )
 {
-    // aLbGradients.SelectEntryPos( 0 );
+    // m_pLbGradients->SelectEntryPos( 0 );
     ChangeGradientHdl_Impl( this );
 
     // determine state of the buttons
     if( pGradientList->Count() )
     {
-        aBtnModify.Enable();
-        aBtnDelete.Enable();
-        aBtnSave.Enable();
+        m_pBtnModify->Enable();
+        m_pBtnDelete->Enable();
+        m_pBtnSave->Enable();
     }
     else
     {
-        aBtnModify.Disable();
-        aBtnDelete.Disable();
-        aBtnSave.Disable();
+        m_pBtnModify->Disable();
+        m_pBtnDelete->Disable();
+        m_pBtnSave->Disable();
     }
 }
 
@@ -384,27 +381,27 @@ SfxTabPage* SvxGradientTabPage::Create( Window* pWindow,
 
 IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
 {
-    XGradientStyle eXGS = (XGradientStyle) aLbGradientType.GetSelectEntryPos();
+    XGradientStyle eXGS = (XGradientStyle) m_pLbGradientType->GetSelectEntryPos();
 
-    XGradient aXGradient( aLbColorFrom.GetSelectEntryColor(),
-                          aLbColorTo.GetSelectEntryColor(),
+    XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
+                          m_pLbColorTo->GetSelectEntryColor(),
                           eXGS,
-                          static_cast<long>(aMtrAngle.GetValue() * 10), // should be changed in resource
-                          (sal_uInt16) aMtrCenterX.GetValue(),
-                          (sal_uInt16) aMtrCenterY.GetValue(),
-                          (sal_uInt16) aMtrBorder.GetValue(),
-                          (sal_uInt16) aMtrColorFrom.GetValue(),
-                          (sal_uInt16) aMtrColorTo.GetValue() );
+                          static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+                          (sal_uInt16) m_pMtrCenterX->GetValue(),
+                          (sal_uInt16) m_pMtrCenterY->GetValue(),
+                          (sal_uInt16) m_pMtrBorder->GetValue(),
+                          (sal_uInt16) m_pMtrColorFrom->GetValue(),
+                          (sal_uInt16) m_pMtrColorTo->GetValue() );
 
     // enable/disable controls
-    if( pControl == &aLbGradientType || pControl == this )
+    if( pControl == m_pLbGradientType || pControl == this )
         SetControlState_Impl( eXGS );
 
     // displaying in XOutDev
     rXFSet.Put( XFillGradientItem( String(), aXGradient ) );
-    aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
+    m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
-    aCtlPreview.Invalidate();
+    m_pCtlPreview->Invalidate();
 
     return 0L;
 }
@@ -473,26 +470,26 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 
     if( !nError )
     {
-        XGradient aXGradient( aLbColorFrom.GetSelectEntryColor(),
-                              aLbColorTo.GetSelectEntryColor(),
-                              (XGradientStyle) aLbGradientType.GetSelectEntryPos(),
-                              static_cast<long>(aMtrAngle.GetValue() * 10), // should be changed in resource
-                              (sal_uInt16) aMtrCenterX.GetValue(),
-                              (sal_uInt16) aMtrCenterY.GetValue(),
-                              (sal_uInt16) aMtrBorder.GetValue(),
-                              (sal_uInt16) aMtrColorFrom.GetValue(),
-                              (sal_uInt16) aMtrColorTo.GetValue() );
+        XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
+                              m_pLbColorTo->GetSelectEntryColor(),
+                              (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                              static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+                              (sal_uInt16) m_pMtrCenterX->GetValue(),
+                              (sal_uInt16) m_pMtrCenterY->GetValue(),
+                              (sal_uInt16) m_pMtrBorder->GetValue(),
+                              (sal_uInt16) m_pMtrColorFrom->GetValue(),
+                              (sal_uInt16) m_pMtrColorTo->GetValue() );
         XGradientEntry* pEntry = new XGradientEntry( aXGradient, aName );
 
         pGradientList->Insert( pEntry, nCount );
 
-        aLbGradients.Append( pEntry );
+        m_pLbGradients->Append( pEntry );
 
-        aLbGradients.SelectEntryPos( aLbGradients.GetEntryCount() - 1 );
+        m_pLbGradients->SelectEntryPos( m_pLbGradients->GetEntryCount() - 1 );
 
 #ifdef WNT
         // hack: #31355# W.P.
-        Rectangle aRect( aLbGradients.GetPosPixel(), aLbGradients.GetSizePixel() );
+        Rectangle aRect( m_pLbGradients->GetPosPixel(), m_pLbGradients->GetSizePixel() );
         if( sal_True ) {                // ??? overlapped with pDlg
                                     // and srolling
             Invalidate( aRect );
@@ -507,9 +504,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     // determine button state
     if( pGradientList->Count() )
     {
-        aBtnModify.Enable();
-        aBtnDelete.Enable();
-        aBtnSave.Enable();
+        m_pBtnModify->Enable();
+        m_pBtnDelete->Enable();
+        m_pBtnSave->Enable();
     }
     return 0L;
 }
@@ -518,7 +515,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 {
-    sal_uInt16 nPos = aLbGradients.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbGradients->GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -552,23 +549,23 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
             if( bDifferent )
             {
                 bLoop = sal_False;
-                XGradient aXGradient( aLbColorFrom.GetSelectEntryColor(),
-                                      aLbColorTo.GetSelectEntryColor(),
-                                      (XGradientStyle) aLbGradientType.GetSelectEntryPos(),
-                                      static_cast<long>(aMtrAngle.GetValue() * 10), // should be changed in resource
-                                      (sal_uInt16) aMtrCenterX.GetValue(),
-                                      (sal_uInt16) aMtrCenterY.GetValue(),
-                                      (sal_uInt16) aMtrBorder.GetValue(),
-                                      (sal_uInt16) aMtrColorFrom.GetValue(),
-                                      (sal_uInt16) aMtrColorTo.GetValue() );
+                XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
+                                      m_pLbColorTo->GetSelectEntryColor(),
+                                      (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                                      static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+                                      (sal_uInt16) m_pMtrCenterX->GetValue(),
+                                      (sal_uInt16) m_pMtrCenterY->GetValue(),
+                                      (sal_uInt16) m_pMtrBorder->GetValue(),
+                                      (sal_uInt16) m_pMtrColorFrom->GetValue(),
+                                      (sal_uInt16) m_pMtrColorTo->GetValue() );
 
                 XGradientEntry* pEntry = new XGradientEntry( aXGradient, aName );
 
                 delete pGradientList->Replace( pEntry, nPos );
 
-                aLbGradients.Modify( pEntry, nPos );
+                m_pLbGradients->Modify( pEntry, nPos );
 
-                aLbGradients.SelectEntryPos( nPos );
+                m_pLbGradients->SelectEntryPos( nPos );
 
                 *pnGradientListState |= CT_MODIFIED;
             }
@@ -589,7 +586,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
 {
-    sal_uInt16 nPos = aLbGradients.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbGradients->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -599,10 +596,10 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
         if ( aQueryBox.Execute() == RET_YES )
         {
             delete pGradientList->Remove( nPos );
-            aLbGradients.RemoveEntry( nPos );
-            aLbGradients.SelectEntryPos( 0 );
+            m_pLbGradients->RemoveEntry( nPos );
+            m_pLbGradients->SelectEntryPos( 0 );
 
-            aCtlPreview.Invalidate();
+            m_pCtlPreview->Invalidate();
 
             ChangeGradientHdl_Impl( this );
 
@@ -612,9 +609,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
     // determine button state
     if( !pGradientList->Count() )
     {
-        aBtnModify.Disable();
-        aBtnDelete.Disable();
-        aBtnSave.Disable();
+        m_pBtnModify->Disable();
+        m_pBtnDelete->Disable();
+        m_pBtnSave->Disable();
     }
     return 0L;
 }
@@ -666,8 +663,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
                 ( (SvxAreaTabDialog*) GetParentDialog() )->
                     SetNewGradientList( pGradientList );
 
-                aLbGradients.Clear();
-                aLbGradients.Fill( pGradientList );
+                m_pLbGradients->Clear();
+                m_pLbGradients->Fill( pGradientList );
                 Reset( rOutAttrs );
 
                 pGradientList->SetName( aURL.getName() );
@@ -701,15 +698,15 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
     // determine button state
     if( pGradientList->Count() )
     {
-        aBtnModify.Enable();
-        aBtnDelete.Enable();
-        aBtnSave.Enable();
+        m_pBtnModify->Enable();
+        m_pBtnDelete->Enable();
+        m_pBtnSave->Enable();
     }
     else
     {
-        aBtnModify.Disable();
-        aBtnDelete.Disable();
-        aBtnSave.Disable();
+        m_pBtnModify->Disable();
+        m_pBtnDelete->Disable();
+        m_pBtnSave->Disable();
     }
     return 0L;
 }
@@ -779,7 +776,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
 IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
 {
     XGradient* pGradient = NULL;
-    int nPos = aLbGradients.GetSelectEntryPos();
+    int nPos = m_pLbGradients->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
         pGradient = new XGradient( ( (XGradientEntry*) pGradientList->GetGradient( nPos ) )->GetGradient() );
@@ -796,8 +793,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
         }
         if( !pGradient )
         {
-            aLbGradients.SelectEntryPos( 0 );
-            nPos = aLbGradients.GetSelectEntryPos();
+            m_pLbGradients->SelectEntryPos( 0 );
+            nPos = m_pLbGradients->GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
                 pGradient = new XGradient( ( (XGradientEntry*) pGradientList->GetGradient( nPos ) )->GetGradient() );
         }
@@ -807,43 +804,43 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
     {
         XGradientStyle eXGS = pGradient->GetGradientStyle();
 
-        aLbGradientType.SelectEntryPos(
+        m_pLbGradientType->SelectEntryPos(
             sal::static_int_cast< sal_uInt16 >( eXGS ) );
         // if the entry is not in the listbox ist,
         // colors are added temporarily
-        aLbColorFrom.SetNoSelection();
-        aLbColorFrom.SelectEntry( pGradient->GetStartColor() );
+        m_pLbColorFrom->SetNoSelection();
+        m_pLbColorFrom->SelectEntry( pGradient->GetStartColor() );
 
-        if ( aLbColorFrom.GetSelectEntryCount() == 0 )
+        if ( m_pLbColorFrom->GetSelectEntryCount() == 0 )
         {
-            aLbColorFrom.InsertEntry( pGradient->GetStartColor(),
+            m_pLbColorFrom->InsertEntry( pGradient->GetStartColor(),
                                       String() );
-            aLbColorFrom.SelectEntry( pGradient->GetStartColor() );
+            m_pLbColorFrom->SelectEntry( pGradient->GetStartColor() );
         }
-        aLbColorTo.SetNoSelection();
-        aLbColorTo.SelectEntry( pGradient->GetEndColor() );
+        m_pLbColorTo->SetNoSelection();
+        m_pLbColorTo->SelectEntry( pGradient->GetEndColor() );
 
-        if ( aLbColorTo.GetSelectEntryCount() == 0 )
+        if ( m_pLbColorTo->GetSelectEntryCount() == 0 )
         {
-            aLbColorTo.InsertEntry( pGradient->GetEndColor(), String() );
-            aLbColorTo.SelectEntry( pGradient->GetEndColor() );
+            m_pLbColorTo->InsertEntry( pGradient->GetEndColor(), String() );
+            m_pLbColorTo->SelectEntry( pGradient->GetEndColor() );
         }
 
-        aMtrAngle.SetValue( pGradient->GetAngle() / 10 ); // should be changed in resource
-        aMtrBorder.SetValue( pGradient->GetBorder() );
-        aMtrCenterX.SetValue( pGradient->GetXOffset() );
-        aMtrCenterY.SetValue( pGradient->GetYOffset() );
-        aMtrColorFrom.SetValue( pGradient->GetStartIntens() );
-        aMtrColorTo.SetValue( pGradient->GetEndIntens() );
+        m_pMtrAngle->SetValue( pGradient->GetAngle() / 10 ); // should be changed in resource
+        m_pMtrBorder->SetValue( pGradient->GetBorder() );
+        m_pMtrCenterX->SetValue( pGradient->GetXOffset() );
+        m_pMtrCenterY->SetValue( pGradient->GetYOffset() );
+        m_pMtrColorFrom->SetValue( pGradient->GetStartIntens() );
+        m_pMtrColorTo->SetValue( pGradient->GetEndIntens() );
 
         // disable/enable controls
         SetControlState_Impl( eXGS );
 
         // fill ItemSet and pass it on to aCtlPreview
         rXFSet.Put( XFillGradientItem( String(), *pGradient ) );
-        aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
+        m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
-        aCtlPreview.Invalidate();
+        m_pCtlPreview->Invalidate();
         delete pGradient;
     }
     return 0L;
@@ -857,40 +854,40 @@ void SvxGradientTabPage::SetControlState_Impl( XGradientStyle eXGS )
     {
         case XGRAD_LINEAR:
         case XGRAD_AXIAL:
-            aFtCenterX.Disable();
-            aMtrCenterX.Disable();
-            aFtCenterY.Disable();
-            aMtrCenterY.Disable();
-            aFtAngle.Enable();
-            aMtrAngle.Enable();
+            m_pFtCenterX->Disable();
+            m_pMtrCenterX->Disable();
+            m_pFtCenterY->Disable();
+            m_pMtrCenterY->Disable();
+            m_pFtAngle->Enable();
+            m_pMtrAngle->Enable();
             break;
 
         case XGRAD_RADIAL:
-            aFtCenterX.Enable();
-            aMtrCenterX.Enable();
-            aFtCenterY.Enable();
-            aMtrCenterY.Enable();
-            aFtAngle.Disable();
-            aMtrAngle.Disable();
+            m_pFtCenterX->Enable();
+            m_pMtrCenterX->Enable();
+            m_pFtCenterY->Enable();
+            m_pMtrCenterY->Enable();
+            m_pFtAngle->Disable();
+            m_pMtrAngle->Disable();
             break;
 
         case XGRAD_ELLIPTICAL:
-            aFtCenterX.Enable();
-            aMtrCenterX.Enable();
-            aFtCenterY.Enable();
-            aMtrCenterY.Enable();
-            aFtAngle.Enable();
-            aMtrAngle.Enable();
+            m_pFtCenterX->Enable();
+            m_pMtrCenterX->Enable();
+            m_pFtCenterY->Enable();
+            m_pMtrCenterY->Enable();
+            m_pFtAngle->Enable();
+            m_pMtrAngle->Enable();
             break;
 
         case XGRAD_SQUARE:
         case XGRAD_RECT:
-            aFtCenterX.Enable();
-            aMtrCenterX.Enable();
-            aFtCenterY.Enable();
-            aMtrCenterY.Enable();
-            aFtAngle.Enable();
-            aMtrAngle.Enable();
+            m_pFtCenterX->Enable();
+            m_pMtrCenterX->Enable();
+            m_pFtCenterY->Enable();
+            m_pMtrCenterY->Enable();
+            m_pFtAngle->Enable();
+            m_pMtrAngle->Enable();
             break;
     }
 }

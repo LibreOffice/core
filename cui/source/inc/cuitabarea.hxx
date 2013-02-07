@@ -370,30 +370,26 @@ class SvxGradientTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    FixedLine           aFlProp;
-    FixedText           aFtType;
-    ListBox             aLbGradientType;
-    FixedText           aFtCenterX;
-    MetricField         aMtrCenterX;
-    FixedText           aFtCenterY;
-    MetricField         aMtrCenterY;
-    FixedText           aFtAngle;
-    MetricField         aMtrAngle;
-    FixedText           aFtBorder;
-    MetricField         aMtrBorder;
-    FixedText           aFtColorFrom;
-    ColorLB             aLbColorFrom;
-    MetricField         aMtrColorFrom;
-    FixedText           aFtColorTo;
-    ColorLB             aLbColorTo;
-    MetricField         aMtrColorTo;
-    GradientLB          aLbGradients;
-    SvxXRectPreview     aCtlPreview;
-    PushButton          aBtnAdd;
-    PushButton          aBtnModify;
-    PushButton          aBtnDelete;
-    ImageButton         aBtnLoad;
-    ImageButton         aBtnSave;
+    ListBox*            m_pLbGradientType;
+    FixedText*          m_pFtCenterX;
+    MetricField*        m_pMtrCenterX;
+    FixedText*          m_pFtCenterY;
+    MetricField*        m_pMtrCenterY;
+    FixedText*          m_pFtAngle;
+    MetricField*        m_pMtrAngle;
+    FixedText*          m_pFtAngleDegrees;
+    MetricField*        m_pMtrBorder;
+    ColorLB*            m_pLbColorFrom;
+    MetricField*        m_pMtrColorFrom;
+    ColorLB*            m_pLbColorTo;
+    MetricField*        m_pMtrColorTo;
+    GradientLB*         m_pLbGradients;
+    SvxXRectPreview*    m_pCtlPreview;
+    PushButton*         m_pBtnAdd;
+    PushButton*         m_pBtnModify;
+    PushButton*         m_pBtnDelete;
+    PushButton*         m_pBtnLoad;
+    PushButton*         m_pBtnSave;
 
     const SfxItemSet&   rOutAttrs;
 
