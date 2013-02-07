@@ -234,7 +234,7 @@ public:
 
     void DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset );
 
-    void operator=( const SdrTableObjImpl& rSource );
+    SdrTableObjImpl& operator=( const SdrTableObjImpl& rSource );
 
     // XModifyListener
     virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
@@ -283,7 +283,7 @@ void SdrTableObjImpl::init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 n
 
 // -----------------------------------------------------------------------------
 
-void SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
+SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
 {
     if (this != &rSource)
     {
@@ -313,6 +313,7 @@ void SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
         mpTableObj->aRect = mpTableObj->maLogicRect;
         LayoutTable( mpTableObj->aRect, false, false );
     }
+    return *this;
 }
 
 // -----------------------------------------------------------------------------
