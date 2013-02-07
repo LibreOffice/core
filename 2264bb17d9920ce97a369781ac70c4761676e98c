@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVH///ok\u003d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3071,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-02-07T16:25:14Z",
+      "side": 1,
+      "message": "Well, yes, I thought about that, but there are two differences:\n-stdev vs stdevp\n-the division at the end (N/(N-1)(N-2) vs 1/N)\n\nIt might be nicer if there was one function Skew( bUsePopulation ); I leave that to you.",
+      "parentUuid": "AAAAVH///ow\u003d",
+      "revId": "2264bb17d9920ce97a369781ac70c4761676e98c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVH///pA\u003d",
         "filename": "sc/source/filter/oox/formulabase.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-07T15:39:51Z",
       "side": 1,
       "message": "Adding this here is wrong, older Excel versions don\u0027t know SKEWP.",
+      "revId": "2264bb17d9920ce97a369781ac70c4761676e98c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///og\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-02-07T16:25:14Z",
+      "side": 1,
+      "message": "I knew I still don\u0027t get the finesses of these arrays!\nWill remove the line.",
+      "parentUuid": "AAAAVH///pA\u003d",
       "revId": "2264bb17d9920ce97a369781ac70c4761676e98c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
