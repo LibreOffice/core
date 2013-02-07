@@ -114,7 +114,14 @@ void AtkListener::updateChildList(accessibility::XAccessibleContext* pContext)
          m_aChildList.resize(nChildren);
          for(sal_Int32 n = 0; n < nChildren; n++)
          {
-             m_aChildList[n] = pContext->getAccessibleChild(n);
+             try
+             {
+                 m_aChildList[n] = pContext->getAccessibleChild(n);
+             }
+             catch (lang::IndexOutOfBoundsException const&)
+             {
+                 assert(false); // not consistent with getAccessibleChildCount
+             }
              OSL_ASSERT(m_aChildList[n].is());
          }
      }
