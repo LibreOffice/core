@@ -744,6 +744,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     nLastPasteDestination( 0xFFFF ),
     nLeftBorderDistance( 0 ),
     nRightBorderDistance( 0 ),
+    mbWheelScrollInProgress(false),
     bInMailMerge(sal_False),
     bInDtor(sal_False),
     bOldShellWasPagePreView(sal_False),

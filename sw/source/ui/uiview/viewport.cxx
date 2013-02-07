@@ -692,7 +692,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
         {
 
             //QuickHelp:
-            if( pWrtShell->GetPageCnt() > 1 && Help::IsQuickHelpEnabled() )
+            if( !mbWheelScrollInProgress && pWrtShell->GetPageCnt() > 1 && Help::IsQuickHelpEnabled() )
             {
                 if( !nPgNum || nPgNum != nPhNum )
                 {
@@ -1290,6 +1290,12 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     }
     else
     {
+        if(pWData->GetMode()==COMMAND_WHEEL_SCROLL)
+        {
+            // This influences whether quick help is shown
+            mbWheelScrollInProgress=true;
+        }
+
         if (pWData && (COMMAND_WHEEL_SCROLL==pWData->GetMode()) && (((sal_uLong)0xFFFFFFFF) == pWData->GetScrollLines()))
             {
                         if (pWData->GetDelta()<0)
@@ -1301,6 +1307,9 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
         else
             bOk = pEditWin->HandleScrollCommand( rCEvt,
                             pHScrollbar, pVScrollbar);
+
+        // Restore default state for case when scroll command comes from dragging scrollbar handle
+        mbWheelScrollInProgress=false;
     }
     return bOk;
 }

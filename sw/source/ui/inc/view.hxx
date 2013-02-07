@@ -243,6 +243,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     sal_uInt16          nLeftBorderDistance;
     sal_uInt16          nRightBorderDistance;
 
+    bool mbWheelScrollInProgress;
+
     sal_Bool            bCenterCrsr : 1,
                     bTopCrsr : 1,
                     bAllwaysShowSel : 1,
