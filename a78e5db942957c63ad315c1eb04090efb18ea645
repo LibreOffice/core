@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///mo\u003d",
+        "filename": "libxml2/ExternalPackage_xml2.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-02-07T21:26:41Z",
+      "side": 1,
+      "message": "this one should be libxml2.2.dylib according to d.lst",
+      "revId": "a78e5db942957c63ad315c1eb04090efb18ea645",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
