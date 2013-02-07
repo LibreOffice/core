@@ -259,11 +259,11 @@ class SvXMLStylesContext_Impl
     typedef std::set<SvXMLStyleIndex_Impl, SvXMLStyleIndexCmp_Impl> IndicesType;
 
     StylesType aStyles;
-    IndicesType* pIndices;
+    mutable IndicesType* pIndices;
     bool bAutomaticStyle;
 
 #ifdef DBG_UTIL
-    sal_uInt32 nIndexCreated;
+    mutable sal_uInt32 nIndexCreated;
 #endif
 
     void FlushIndex() { delete pIndices; pIndices = 0; }
@@ -345,11 +345,10 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
         DBG_ASSERT( 0==nIndexCreated,
                     "Performance warning: sdbcx::Index created multiple times" );
 #endif
-        ((SvXMLStylesContext_Impl *)this)->pIndices =
-            new IndicesType( aStyles.begin(), aStyles.end() );
+        pIndices = new IndicesType(aStyles.begin(), aStyles.end());
         SAL_WARN_IF(pIndices->size() != aStyles.size(), "xmloff", "Here is a duplicate Style");
 #ifdef DBG_UTIL
-        ((SvXMLStylesContext_Impl *)this)->nIndexCreated++;
+        ++nIndexCreated;
 #endif
     }
 
