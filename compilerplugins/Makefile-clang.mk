@@ -29,6 +29,8 @@ CLANGINDIR=$(SRCDIR)/compilerplugins/clang
 # plugin will cause cache misses with ccache.
 CLANGOUTDIR=$(BUILDDIR)/compilerplugins/obj
 
+compilerplugins: compilerplugins-build
+
 # The list of source files, generated automatically (all files in clang/, but not subdirs).
 CLANGSRC=$(foreach src,$(wildcard $(CLANGINDIR)/*.cxx), $(notdir $(src)))
 # Remember the sources and if they have changed, force plugin relinking.
@@ -51,7 +53,7 @@ $(CLANGOUTDIR)/plugin.so: $(CLANGOUTDIR)/sources.txt
 $(CLANGOUTDIR)/sources.txt:
 	touch $@
 
-compilerplugins: $(CLANGOUTDIR) $(CLANGOUTDIR)/plugin.so
+compilerplugins-build: $(CLANGOUTDIR) $(CLANGOUTDIR)/plugin.so
 
 compilerplugins-clean:
 	rm -rf $(CLANGOUTDIR)
