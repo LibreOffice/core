@@ -45,7 +45,7 @@ namespace connectivity
 {
     namespace evoab
     {
-        class ComparisonData;
+        struct ComparisonData;
 
         class OEvoabVersionHelper
         {
