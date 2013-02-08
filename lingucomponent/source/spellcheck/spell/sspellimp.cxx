@@ -274,13 +274,23 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
     OUStringBuffer rBuf(rWord);
     sal_Int32 n = rBuf.getLength();
     sal_Unicode c;
+    sal_Int32 extrachar = 0;
+
     for (sal_Int32 ix=0; ix < n; ix++)
     {
         c = rBuf[ix];
         if ((c == 0x201C) || (c == 0x201D))
             rBuf[ix] = (sal_Unicode)0x0022;
-        if ((c == 0x2018) || (c == 0x2019))
+        else if ((c == 0x2018) || (c == 0x2019))
             rBuf[ix] = (sal_Unicode)0x0027;
+
+// recognize words with Unicode ligatures and ZWNJ/ZWJ characters (only
+// with 8-bit encoded dictionaries. For UTF-8 encoded dictionaries
+// set ICONV and IGNORE aff file options, if needed.)
+
+        else if ((c == 0x200C) || (c == 0x200D) ||
+            ((c >= 0xFB00) && (c <= 0xFB04)))
+                extrachar = 1;
     }
     OUString nWord(rBuf.makeStringAndClear());
 
@@ -334,10 +344,31 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
 
                 OString aWrd(OU2ENC(nWord,eEnc));
                 int rVal = pMS->spell((char*)aWrd.getStr());
-                if (rVal != 1)
+                if (rVal != 1) {
+                    if (extrachar && (eEnc != RTL_TEXTENCODING_UTF8)) {
+                        OUStringBuffer mBuf(nWord);
+                        n = mBuf.getLength();
+                        for (sal_Int32 ix=n-1; ix >= 0; ix--)
+                        {
+                          switch (mBuf[ix]) {
+                            case 0xFB00: mBuf.remove(ix, 1); mBuf.insert(ix, "ff"); break;
+                            case 0xFB01: mBuf.remove(ix, 1); mBuf.insert(ix, "fi"); break;
+                            case 0xFB02: mBuf.remove(ix, 1); mBuf.insert(ix, "fl"); break;
+                            case 0xFB03: mBuf.remove(ix, 1); mBuf.insert(ix, "ffi"); break;
+                            case 0xFB04: mBuf.remove(ix, 1); mBuf.insert(ix, "ffl"); break;
+                            case 0x200C:
+                            case 0x200D: mBuf.remove(ix, 1); break;
+                          }
+                        }
+                        OUString mWord(mBuf.makeStringAndClear());
+                        OString bWrd(OU2ENC(mWord, eEnc));
+                        rVal = pMS->spell((char*)bWrd.getStr());
+                        if (rVal == 1) return -1;
+                    }
                     nRes = SpellFailure::SPELLING_ERROR;
-                else
+                } else {
                     return -1;
+                }
                 pMS = NULL;
             }
         }
