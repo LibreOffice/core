@@ -233,7 +233,7 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_INSERT_BREAK_DLG     (FN_INSERT + 4 )  /* Break */
 #define FN_INSERT_COLUMN_BREAK  (FN_INSERT + 5 )  /* Column break */
-#define FN_INSERT_FIELD         (FN_INSERT + 8 )  /* Textbefehl */
+#define FN_INSERT_FIELD         (FN_INSERT + 8 )  /* Textcommand */
 #define FN_CHANGE_DBFIELD       (FN_INSERT + 9 )  /* Change the database field */
 
 #define FN_INSERT_CAPTION       (FN_INSERT + 10)  /* Caption */
@@ -458,7 +458,7 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_TITLE_DESCRIPTION_SHAPE   (FN_FORMAT2 + 15)  /* shape title and description */
 
-#define FN_NUMBER_FORMAT                    (FN_FORMAT2 + 120) /* set Boxen/NumberFormatter */
+#define FN_NUMBER_FORMAT                    (FN_FORMAT2 + 120) /* set Boxes/NumberFormatter */
 #define FN_NUMBER_STANDARD                  (FN_FORMAT2 + 121)
 #define FN_NUMBER_TWODEC                    (FN_FORMAT2 + 123)
 #define FN_NUMBER_SCIENTIFIC                (FN_FORMAT2 + 124)
@@ -701,8 +701,8 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_DELETE_WHOLE_LINE        (FN_SELECTION + 35) /* DeleteLine ??? */
 #define FN_PAGEUP                   (FN_SELECTION + 37) /* PageUpWithCursor */
 #define FN_PAGEDOWN                 (FN_SELECTION + 38) /* PageDownWithCursor */
-#define FN_SET_ADD_MODE             (FN_SELECTION + 39) /* Selektionsmodus */
-#define FN_SET_EXT_MODE             (FN_SELECTION + 40) /* Selektionsmodus */
+#define FN_SET_ADD_MODE             (FN_SELECTION + 39) /* Selectionmode */
+#define FN_SET_EXT_MODE             (FN_SELECTION + 40) /* Selectionmode */
 #define FN_ESCAPE                   (FN_SELECTION + 41) /* Normal */
 #define FN_SHIFT_BACKSPACE          (FN_SELECTION + 42) /* like Backspace */
 #define FN_SELECT_WORD              (FN_SELECTION + 43) /* select word*/
@@ -836,7 +836,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_COND_COLL                    (FN_PARAM2+1) /* Item for conditional templates */
 #define FN_PARAM_SELECTION              (FN_PARAM2+2) /* selected word for format/character/hyperlink */
 
-#define FN_PARAM_ACT_NUMBER             (FN_PARAM2+3) /* PointerItem die aktuelle NumRule */
+#define FN_PARAM_ACT_NUMBER             (FN_PARAM2+3) /* PointerItem the current NumRule */
 
 #define FN_PARAM_NUM_PRESET             (FN_PARAM2+5) /* predefined numbering */
 
