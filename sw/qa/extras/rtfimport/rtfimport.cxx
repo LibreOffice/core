@@ -142,6 +142,7 @@ public:
     void testFdo58646();
     void testFdo59419();
     void testFdo58076_2();
+    void testFdo59953();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -255,6 +256,7 @@ void Test::run()
         {"fdo58646.rtf", &Test::testFdo58646},
         {"fdo59419.rtf", &Test::testFdo59419},
         {"fdo58076-2.rtf", &Test::testFdo58076_2},
+        {"fdo59953.rtf", &Test::testFdo59953},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1104,6 +1106,16 @@ void Test::testFdo58076_2()
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(8345)), getProperty<sal_Int32>(xDraws->getByIndex(0), "HoriOrientPosition"));
+}
+
+void Test::testFdo59953()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // Cell width of A1 was 4998 (e.g. not set / not wide enough, ~50% of total width)
+    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(7650), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
