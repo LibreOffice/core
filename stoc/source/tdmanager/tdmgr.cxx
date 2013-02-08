@@ -314,10 +314,10 @@ void ManagerImpl::initialize(
             {
                 insert( makeAny( xHA ) );
             }
-            catch (IllegalArgumentException &)
+            catch (const IllegalArgumentException &)
             {
             }
-            catch (ElementExistException &)
+            catch (const ElementExistException &)
             {
             }
         }
@@ -490,7 +490,7 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
                                 }
                             }
                         }
-                        catch (container::NoSuchElementException &)
+                        catch (const container::NoSuchElementException &)
                         {
                             // type not in: ok
                         }
@@ -1095,7 +1095,7 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
                         break;
                     }
                 }
-                catch (NoSuchElementException &)
+                catch (const NoSuchElementException &)
                 {
                 }
             }
@@ -1121,7 +1121,7 @@ sal_Bool ManagerImpl::hasByHierarchicalName( const OUString & rName )
     {
         return getByHierarchicalName( rName ).hasValue();
     }
-    catch (NoSuchElementException &)
+    catch (const NoSuchElementException &)
     {
     }
     return sal_False;
