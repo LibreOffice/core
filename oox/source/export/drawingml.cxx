@@ -794,7 +794,6 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
     }
 
     if( ( bComplex && GETAD( CharFontNameComplex ) ) || ( !bComplex && GETAD( CharFontNameAsian ) ) ) {
-        const char* typeface = NULL;
         const char* pitch = NULL;
         const char* charset = NULL;
         OUString usTypeface;
