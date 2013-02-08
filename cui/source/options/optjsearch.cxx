@@ -216,11 +216,9 @@ void SvxJSearchOptionsPage::Reset( const SfxItemSet& )
 
 sal_Bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
 {
-    sal_Bool bModified = sal_False;
-
     sal_Int32 nOldVal = nTransliterationFlags;
     nTransliterationFlags = GetTransliterationFlags_Impl();
-    bModified = nOldVal != nTransliterationFlags;
+    sal_Bool bModified = nOldVal != nTransliterationFlags;
 
     if (!IsSaveOptions())
         return bModified;
