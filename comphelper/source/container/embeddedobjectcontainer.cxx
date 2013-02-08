@@ -380,8 +380,10 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( con
         // insert object into my list
         AddEmbeddedObject( xObj, rName );
     }
-    catch (const uno::Exception&)
+    catch (uno::Exception const& e)
     {
+        SAL_WARN("comphelper", "EmbeddedObjectContainer::Get_Impl: "
+                "exception caught: " << e.Message);
     }
 
     return xObj;
@@ -416,8 +418,10 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
         OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
                     "A freshly create object should be running always!\n" );
     }
-    catch (const uno::Exception&)
+    catch (uno::Exception const& e)
     {
+        SAL_WARN("comphelper", "EmbeddedObjectContainer::CreateEmbeddedObject: "
+                "exception caught: " << e.Message);
     }
 
     return xObj;
@@ -523,8 +527,10 @@ sal_Bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < em
             }
         }
     }
-    catch (const uno::Exception&)
+    catch (uno::Exception const& e)
     {
+        SAL_WARN("comphelper", "EmbeddedObjectContainer::StoreEmbeddedObject: "
+                "exception caught: " << e.Message);
         // TODO/LATER: better error recovery should keep storage intact
         return sal_False;
     }
@@ -585,9 +591,12 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
             xProps->setPropertyValue( OUString( "MediaType" ),
                     uno::makeAny( OUString( "application/vnd.sun.star.oleobject" ) ) );
         }
-        catch (const uno::Exception&)
+        catch (uno::Exception const& e)
         {
             // complete disaster!
+            SAL_WARN("comphelper",
+                    "EmbeddedObjectContainer::InsertEmbeddedObject: "
+                    "exception caught: " << e.Message);
             return uno::Reference < embed::XEmbeddedObject >();
         }
     }
@@ -669,8 +678,10 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
 
         AddEmbeddedObject( xObj, rNewName );
     }
-    catch (const uno::Exception&)
+    catch (uno::Exception const& e)
     {
+        SAL_WARN("comphelper", "EmbeddedObjectContainer::InsertEmbeddedLink: "
+                "exception caught: " << e.Message);
     }
 
     return xObj;
