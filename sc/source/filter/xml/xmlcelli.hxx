@@ -55,7 +55,6 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     bool        bIsMatrix;
     bool        bIsCovered;
     bool        bIsEmpty;
-    bool        bHasTextImport;
     bool        bIsFirstTextImport;
     bool        bSolarMutexLocked;
     bool        bFormulaTextResult;
@@ -108,7 +107,6 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     void PushParagraph(const OUString& rPara);
-    void SetCursorOnTextImport(const rtl::OUString& rOUTempText);
 
     void SetAnnotation( const ScAddress& rPosition );
     void SetDetectiveObj( const ScAddress& rPosition );

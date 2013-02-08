@@ -120,7 +120,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bIsMatrix(false),
     bIsCovered(bTempIsCovered),
     bIsEmpty(true),
-    bHasTextImport(false),
     bIsFirstTextImport(false),
     bSolarMutexLocked(false),
     bFormulaTextResult(false),
@@ -304,42 +303,6 @@ bool cellExists( const ScAddress& rCellPos )
 void ScXMLTableRowCellContext::PushParagraph(const OUString& rPara)
 {
     maParagraphs.push_back(rPara);
-}
-
-void ScXMLTableRowCellContext::SetCursorOnTextImport(const rtl::OUString& rOUTempText)
-{
-    ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
-    if (cellExists(aCellPos))
-    {
-        sal_Int32 nCol = static_cast<sal_Int32>( aCellPos.Col() );
-        sal_Int32 nRow = static_cast<sal_Int32>( aCellPos.Row() );
-        uno::Reference<table::XCellRange> xCellRange(rXMLImport.GetTables().GetCurrentXCellRange());
-        if (xCellRange.is())
-        {
-            com::sun::star::uno::Reference<com::sun::star::table::XCell> xBaseCell( xCellRange->getCellByPosition(nCol, nRow) );
-            if (xBaseCell.is())
-            {
-                com::sun::star::uno::Reference<com::sun::star::document::XActionLockable> xLockable(xBaseCell, uno::UNO_QUERY);
-                if (xLockable.is())
-                    xLockable->addActionLock();
-                uno::Reference<text::XText> xText(xBaseCell, uno::UNO_QUERY);
-                if (xText.is())
-                {
-                    uno::Reference<text::XTextCursor> xTextCursor(xText->createTextCursor());
-                    if (xTextCursor.is())
-                    {
-                        xTextCursor->setString(rOUTempText);
-                        xTextCursor->gotoEnd(false);
-                        rXMLImport.GetTextImport()->SetCursor(xTextCursor);
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        OSL_FAIL("this method should only be called for a existing cell");
-    }
 }
 
 SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -777,7 +740,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
     // so ProgressBarIncrement must be called with bEditCell = FALSE.
     // Formatted text that is put into the cell by the child context
     // is handled in AddCellsToTable() (bIsEmpty is true then).
-    if (bDoIncrement || bHasTextImport)
+    if (bDoIncrement)
         rXMLImport.ProgressBarIncrement(false);
 }
 
@@ -901,11 +864,6 @@ void ScXMLTableRowCellContext::AddTextAndValueCells( const ScAddress& rCellPos,
         }
         else
         {
-            // #i56027# If the child context put formatted text into the cell,
-            // bIsEmpty is true and ProgressBarIncrement has to be called
-            // with bEditCell = TRUE.
-            if (bHasTextImport)
-                rXMLImport.ProgressBarIncrement(true);
             if ((i == 0) && (rCellPos.Col() == 0))
             {
                 for (sal_Int32 j = 1; j < nRepeatedRows; ++j)
@@ -1144,19 +1102,6 @@ bool ScXMLTableRowCellContext::IsPossibleErrorString() const
 
 void ScXMLTableRowCellContext::EndElement()
 {
-    if( bHasTextImport && rXMLImport.GetRemoveLastChar() )
-    {
-        UniReference< XMLTextImportHelper > aTextImport = rXMLImport.GetTextImport();
-        if( aTextImport->GetCursor().is() )
-        {
-            if( aTextImport->GetCursor()->goLeft(1, true) )
-            {
-                aTextImport->GetText()->insertString(
-                    aTextImport->GetCursorAsRange(), rtl::OUString(), true );
-            }
-            aTextImport->ResetCursor();
-        }
-    }
     HasSpecialCaseFormulaText();
     if( bFormulaTextResult && (mbPossibleErrorCell || mbCheckWithCompilerForError) )
     {
