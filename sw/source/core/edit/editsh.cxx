@@ -472,7 +472,7 @@ String SwEditShell::GetCurWord()
 {
     const SwPaM& rPaM = *GetCrsr();
     const SwTxtNode* pNd = rPaM.GetNode()->GetTxtNode();
-    String aString = pNd ?
+    OUString aString = pNd ?
                      pNd->GetCurWord(rPaM.GetPoint()->nContent.GetIndex()) :
                      aEmptyStr;
     return aString;

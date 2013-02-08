@@ -877,7 +877,7 @@ void FmFilterModel::Remove( const ::std::vector<FmFilterData*>::iterator& rPos )
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniString& rErrorMsg) const
+sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUString& rErrorMsg) const
 {
     FmFormItem* pFormItem = PTR_CAST( FmFormItem, pItem->GetParent()->GetParent() );
     try
@@ -1092,14 +1092,14 @@ void FmFilterItemsString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pE
 //========================================================================
 class FmFilterString : public SvLBoxString
 {
-    UniString m_aName;
+    OUString m_aName;
 
 public:
-    FmFilterString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const XubString& rStr, const UniString& aName)
+    FmFilterString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const XubString& rStr, const OUString& aName)
         :SvLBoxString(pEntry,nFlags,rStr)
         ,m_aName(aName)
     {
-        m_aName.AppendAscii(": ");
+        m_aName += ": ";
     }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
@@ -1231,8 +1231,8 @@ sal_Bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const rtl::OUS
     DBG_ASSERT(((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem),
                     "FmFilterNavigator::EditedEntry() wrong entry");
 
-    UniString aText(comphelper::string::strip(rNewText, ' '));
-    if (aText.Len() == 0)
+    OUString aText(comphelper::string::strip(rNewText, ' '));
+    if (aText.isEmpty())
     {
         // deleting the entry asynchron
         sal_uLong nEvent;
@@ -1240,7 +1240,7 @@ sal_Bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const rtl::OUS
     }
     else
     {
-        UniString aErrorMsg;
+        OUString aErrorMsg;
 
         if (m_pModel->ValidateText((FmFilterItem*)pEntry->GetUserData(), aText, aErrorMsg))
         {
@@ -1732,12 +1732,12 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                 case SID_FM_FILTER_IS_NULL:
                 case SID_FM_FILTER_IS_NOT_NULL:
                 {
-                    UniString aErrorMsg;
-                    UniString aText;
+                    OUString aErrorMsg;
+                    OUString aText;
                     if (nSlotId == SID_FM_FILTER_IS_NULL)
-                        aText.AssignAscii("IS NULL");
+                        aText = "IS NULL";
                     else
-                        aText.AssignAscii("IS NOT NULL");
+                        aText = "IS NOT NULL";
 
                     m_pModel->ValidateText((FmFilterItem*)pClicked->GetUserData(),
                                             aText, aErrorMsg);

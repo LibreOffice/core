@@ -179,7 +179,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                             SolarMutexGuard aGuard;
 
                             mpBrowser->aFoundList.push_back(
-                                new String( aFoundURL.GetMainURL( INetURLObject::NO_DECODE ) )
+                                aFoundURL.GetMainURL( INetURLObject::NO_DECODE )
                             );
                             mpBrowser->aLbxFound.InsertEntry(
                                 GetReducedString( aFoundURL, 50 ),
@@ -309,9 +309,9 @@ void TakeThread::execute()
     for( sal_uInt16 i = 0; i < nEntries && schedule(); i++ )
     {
         if( mpBrowser->bTakeAll )
-            aURL = INetURLObject( *mpBrowser->aFoundList[ nPos = i ] );
+            aURL = INetURLObject( mpBrowser->aFoundList[ nPos = i ] );
         else
-            aURL = INetURLObject(*mpBrowser->aFoundList[ nPos = mpBrowser->aLbxFound.GetSelectEntryPos( i ) ]);
+            aURL = INetURLObject( mpBrowser->aFoundList[ nPos = mpBrowser->aLbxFound.GetSelectEntryPos( i ) ]);
 
         mrTakenList.push_back( (sal_uLong)nPos );
 
@@ -390,14 +390,12 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
     // refill found list
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )
         if( !aRemoveEntries[ i ] )
-            aRemainingVector.push_back( *mpBrowser->aFoundList[ i ] );
+            aRemainingVector.push_back( mpBrowser->aFoundList[i] );
 
-    for ( i = 0, nCount = mpBrowser->aFoundList.size(); i < nCount; ++i )
-        delete mpBrowser->aFoundList[ i ];
     mpBrowser->aFoundList.clear();
 
     for( i = 0, nCount = aRemainingVector.size(); i < nCount; ++i )
-        mpBrowser->aFoundList.push_back( new String( aRemainingVector[ i ] ) );
+        mpBrowser->aFoundList.push_back( aRemainingVector[ i ] );
 
     aRemainingVector.clear();
 
@@ -812,9 +810,6 @@ TPGalleryThemeProperties::~TPGalleryThemeProperties()
     xMediaPlayer.clear();
     xDialogListener.clear();
 
-    for ( size_t i = 0, n = aFoundList.size(); i < n; ++i )
-        delete aFoundList[ i ];
-
     for ( size_t i = 0, n = aFilterEntryList.size(); i < n; ++i ) {
         delete aFilterEntryList[ i ];
     }
@@ -1011,10 +1006,7 @@ void TPGalleryThemeProperties::SearchFiles()
 {
     SearchProgress* pProgress = new SearchProgress( this, aURL );
 
-    for ( size_t i = 0, n = aFoundList.size(); i < n; ++i )
-        delete aFoundList[ i ];
     aFoundList.clear();
-
     aLbxFound.Clear();
 
     pProgress->SetFileType( aCbbFileType.GetText() );
@@ -1110,7 +1102,7 @@ void TPGalleryThemeProperties::DoPreview()
 
     if( aString != aPreviewString )
     {
-        INetURLObject   _aURL( *aFoundList[ aLbxFound.GetEntryPos( aString ) ] );
+        INetURLObject   _aURL( aFoundList[ aLbxFound.GetEntryPos( aString ) ] );
         bInputAllowed = sal_False;
 
         if ( !aWndPreview.SetGraphic( _aURL ) )

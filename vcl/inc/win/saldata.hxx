@@ -232,7 +232,7 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont );
 
 // \WIN\SOURCE\APP\SALDATA.CXX
 rtl_TextEncoding ImplSalGetSystemEncoding();
-UniString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen = STRING_LEN );
+OUString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen = STRING_LEN );
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 
 // -----------
