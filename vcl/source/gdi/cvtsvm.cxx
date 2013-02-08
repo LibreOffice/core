@@ -306,7 +306,7 @@ sal_Bool ImplWriteUnicodeComment( SvStream& rOStm, const String& rString )
 
 // ------------------------------------------------------------------------
 
-void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, String& rString )
+void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, OUString& rString )
 {
     sal_uInt32 nOld = rIStm.Tell();
     if ( nStrmPos )
@@ -829,7 +829,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplReadColor( rIStm, aActionColor ); aFont.SetColor( aActionColor );
                     ImplReadColor( rIStm, aActionColor ); aFont.SetFillColor( aActionColor );
                     rIStm.Read( aName, 32 );
-                    aFont.SetName( UniString( aName, rIStm.GetStreamCharSet() ) );
+                    aFont.SetName( String( aName, rIStm.GetStreamCharSet() ) );
                     rIStm >> nWidth >> nHeight;
                     rIStm >> nCharOrient >> nLineOrient;
                     rIStm >> nCharSet >> nFamily >> nPitch >> nAlign >> nWeight >> nUnderline >> nStrikeout;
@@ -871,12 +871,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rIStm >> aPt >> nIndex >> nLen >> nTmp;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
                     {
-                        rtl::OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
+                        OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
                         rIStm >> nTerminator;
                         DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
 
-                        UniString aStr(rtl::OStringToOUString(aByteStr, eActualCharSet));
+                        OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
                         if ( nUnicodeCommentActionNumber == i )
                             ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
                         rMtf.AddAction( new MetaTextAction( aPt, aStr, (sal_uInt16) nIndex, (sal_uInt16) nLen ) );
@@ -898,11 +898,11 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         rIStm >> nTerminator;
                         DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
 
-                        UniString aStr(rtl::OStringToOUString(aByteStr, eActualCharSet));
+                        OUString aStr(rtl::OStringToOUString(aByteStr, eActualCharSet));
 
                         if( nAryLen > 0L )
                         {
-                            sal_Int32 nStrLen( aStr.Len() );
+                            sal_Int32 nStrLen( aStr.getLength() );
 
                             pDXAry = new sal_Int32[ Max( nAryLen, nStrLen ) ];
 
@@ -961,7 +961,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         rIStm >> nTerminator;
                         DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
 
-                        UniString aStr(rtl::OStringToOUString(aByteStr, eActualCharSet));
+                        OUString aStr(rtl::OStringToOUString(aByteStr, eActualCharSet));
                         if ( nUnicodeCommentActionNumber == i )
                             ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
                         rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, (sal_uInt16) nIndex, (sal_uInt16) nLen ) );

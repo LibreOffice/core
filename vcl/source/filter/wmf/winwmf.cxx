@@ -805,7 +805,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 eCharSet = osl_getThreadTextEncoding();
             if ( eCharSet == RTL_TEXTENCODING_SYMBOL )
                 eCharSet = RTL_TEXTENCODING_MS_1252;
-            aLogFont.alfFaceName = UniString( lfFaceName, eCharSet );
+            aLogFont.alfFaceName = String( lfFaceName, eCharSet );
 
             pOut->CreateObject( GDI_FONT, new WinMtfFontStyle( aLogFont ) );
         }

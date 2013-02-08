@@ -135,7 +135,7 @@ public:
     void setOutEdit( MyOutWindow* pOutEdit )
     { m_pOutEdit = pOutEdit; }
     void print( const sal_Char* pText );
-    void print( const UniString& rText );
+    void print( const OUString& rText );
 };
 
 //-------------------------------------------------------------------------
@@ -145,7 +145,7 @@ void MessagePrinter::print( const sal_Char* pText )
 }
 
 //-------------------------------------------------------------------------
-void MessagePrinter::print( const UniString& rText )
+void MessagePrinter::print( const OUString& rText )
 {
     SolarMutexGuard aGuard;
 
@@ -733,11 +733,11 @@ protected:
 
 public:
     static UcbContent* create(
-            Ucb& rUCB, const UniString& rURL, MyOutWindow* pOutEdit );
+            Ucb& rUCB, const OUString& rURL, MyOutWindow* pOutEdit );
     void dispose();
 
-    const UniString getURL() const;
-    const UniString getType() const;
+    const OUString getURL() const;
+    const OUString getType() const;
 
     uno::Sequence< ucb::CommandInfo > getCommands();
     uno::Sequence< beans::Property >    getProperties();
@@ -752,7 +752,7 @@ public:
                                  const rtl::OUString& rValue );
     void addStringProperty( const rtl::OUString& rName,
                             const rtl::OUString& rValue );
-    void open( const rtl::OUString & rName, const UniString& rInput,
+    void open( const rtl::OUString & rName, const OUString& rInput,
                bool bPrint, bool bTiming, bool bSort,
                OpenStack * pStack = 0, sal_uInt32 nLevel = 0,
                sal_Int32 nFetchSize = 0 );
@@ -809,7 +809,7 @@ UcbContent::~UcbContent()
 //-------------------------------------------------------------------------
 // static
 UcbContent* UcbContent::create(
-        Ucb& rUCB, const UniString& rURL, MyOutWindow* pOutEdit )
+        Ucb& rUCB, const OUString& rURL, MyOutWindow* pOutEdit )
 {
     if ( !rURL.Len() )
         return NULL;
@@ -867,20 +867,20 @@ UcbContent* UcbContent::create(
 }
 
 //-------------------------------------------------------------------------
-const UniString UcbContent::getURL() const
+const OUString UcbContent::getURL() const
 {
     uno::Reference< ucb::XContentIdentifier > xId(
         m_xContent->getIdentifier() );
     if ( xId.is() )
-        return UniString( xId->getContentIdentifier() );
+        return OUString( xId->getContentIdentifier() );
 
-    return UniString();
+    return OUString();
 }
 
 //-------------------------------------------------------------------------
-const UniString UcbContent::getType() const
+const OUString UcbContent::getType() const
 {
-    const UniString aType( m_xContent->getContentType() );
+    const OUString aType( m_xContent->getContentType() );
     return aType;
 }
 
@@ -893,7 +893,7 @@ void UcbContent::dispose()
 }
 
 //----------------------------------------------------------------------------
-void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
+void UcbContent::open( const rtl::OUString & rName, const OUString& rInput,
                        bool bPrint, bool bTiming, bool bSort,
                        OpenStack * pStack, sal_uInt32 nLevel,
                        sal_Int32 nFetchSize )
@@ -1704,7 +1704,7 @@ public:
     void Resize( void );
     DECL_LINK ( ToolBarHandler, ToolBox* );
 
-    void print( const UniString& rText );
+    void print( const OUString& rText );
     void print( const sal_Char* pText );
 };
 
@@ -1922,7 +1922,7 @@ void MyWin::print( const sal_Char* pText )
 }
 
 //-------------------------------------------------------------------------
-void MyWin::print( const UniString& rText )
+void MyWin::print( const OUString& rText )
 {
     SolarMutexGuard aGuard;
 

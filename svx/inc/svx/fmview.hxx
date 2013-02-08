@@ -72,7 +72,7 @@ public:
         @deprecated
             This method is deprecated. Use the version with a ODataAccessDescriptor instead.
     */
-    SdrObject*   CreateFieldControl(const UniString& rFieldDesc) const;
+    SdrObject*   CreateFieldControl(const OUString& rFieldDesc) const;
 
     /** create a control pair (label/bound control) for the database field description given.
     */

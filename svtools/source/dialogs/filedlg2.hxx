@@ -99,8 +99,8 @@ public:
                         ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, sal_Bool bCreateDir );
     virtual             ~ImpPathDialog();
 
-    virtual void        SetPath( const String& rPath );
-    virtual String      GetPath() const;
+    virtual void        SetPath( const OUString& rPath );
+    virtual OUString    GetPath() const;
 
     virtual void        PreExecute();
     virtual void        PostExecute();

@@ -584,7 +584,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
     if ( pStyle->HasFollowSupport() && aFollowLb.IsEnabled() )
     {
-        const String aFollowEntry( aFollowLb.GetSelectEntry() );
+        const OUString aFollowEntry( aFollowLb.GetSelectEntry() );
 
         if ( pStyle->GetFollow() != aFollowEntry )
         {
@@ -601,10 +601,10 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
     if ( aBaseLb.IsEnabled() )
     {
-        String aParentEntry( aBaseLb.GetSelectEntry() );
+        OUString aParentEntry( aBaseLb.GetSelectEntry() );
 
         if ( SfxResId(STR_NONE).toString().equals(aParentEntry) || aParentEntry == pStyle->GetName() )
-            aParentEntry.Erase();
+            aParentEntry = OUString();
 
         if ( pStyle->GetParent() != aParentEntry )
         {

@@ -3986,7 +3986,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
         pThis->m_aInputEvent.mnTime             = 0;
         pThis->m_aInputEvent.mpTextAttr         = 0;
         pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
-        pThis->m_aInputEvent.mnCursorPos        = pThis->m_aInputEvent.maText.Len();
+        pThis->m_aInputEvent.mnCursorPos        = pThis->m_aInputEvent.maText.getLength();
         pThis->m_aInputEvent.mnCursorFlags      = 0;
         pThis->m_aInputEvent.mnDeltaStart       = 0;
         pThis->m_aInputEvent.mbOnlyCursor       = False;
@@ -4007,12 +4007,12 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
          */
         bool bSingleCommit = false;
         if( ! bWasPreedit
-            && pThis->m_aInputEvent.maText.Len() == 1
+            && pThis->m_aInputEvent.maText.getLength() == 1
             && ! pThis->m_aPrevKeyPresses.empty()
             )
         {
             const PreviousKeyPress& rKP = pThis->m_aPrevKeyPresses.back();
-            sal_Unicode aOrigCode = pThis->m_aInputEvent.maText.GetChar(0);
+            sal_Unicode aOrigCode = pThis->m_aInputEvent.maText[0];
 
             if( checkSingleKeyCommitHack( rKP.keyval, aOrigCode ) )
             {
@@ -4060,7 +4060,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         // change from nothing to nothing -> do not start preedit
         // e.g. this will activate input into a calc cell without
         // user input
-        if( pThis->m_aInputEvent.maText.Len() == 0 )
+        if( pThis->m_aInputEvent.maText.getLength() == 0 )
         {
             g_free( pText );
             pango_attr_list_unref( pAttrs );
@@ -4078,7 +4078,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     pThis->m_aInputEvent.mnDeltaStart       = 0;
     pThis->m_aInputEvent.mbOnlyCursor       = False;
 
-    pThis->m_aInputFlags = std::vector<sal_uInt16>( std::max( 1, (int)pThis->m_aInputEvent.maText.Len() ), 0 );
+    pThis->m_aInputFlags = std::vector<sal_uInt16>( std::max( 1, (int)pThis->m_aInputEvent.maText.getLength() ), 0 );
 
     PangoAttrIterator *iter = pango_attr_list_get_iterator(pAttrs);
     do

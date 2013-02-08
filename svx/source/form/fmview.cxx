@@ -424,12 +424,12 @@ SdrObject* FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rDesc )
 }
 
 //------------------------------------------------------------------------
-SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
+SdrObject* FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
 {
-    ::rtl::OUString sDataSource     = rFieldDesc.GetToken(0,sal_Unicode(11));
-    ::rtl::OUString sObjectName     = rFieldDesc.GetToken(1,sal_Unicode(11));
-    sal_uInt16 nObjectType          = (sal_uInt16)rFieldDesc.GetToken(2,sal_Unicode(11)).ToInt32();
-    ::rtl::OUString sFieldName      = rFieldDesc.GetToken(3,sal_Unicode(11));
+    OUString sDataSource     = rFieldDesc.getToken(0,sal_Unicode(11));
+    OUString sObjectName     = rFieldDesc.getToken(1,sal_Unicode(11));
+    sal_uInt16 nObjectType   = (sal_uInt16)rFieldDesc.getToken(2,sal_Unicode(11)).toInt32();
+    OUString sFieldName      = rFieldDesc.getToken(3,sal_Unicode(11));
 
     if (sFieldName.isEmpty() || sObjectName.isEmpty() || sDataSource.isEmpty())
         return NULL;

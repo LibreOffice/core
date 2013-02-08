@@ -192,7 +192,7 @@ struct SalMouseActivateEvent
 struct SalExtTextInputEvent
 {
     sal_uLong           mnTime;         // Time in ms, when event is created
-    UniString           maText;         // Text
+    OUString            maText;         // Text
     const sal_uInt16*   mpTextAttr;     // Text-Attribute
     sal_uLong           mnCursorPos;    // Cursor-Position
     sal_uLong           mnDeltaStart;   // Start-Position of last change
@@ -228,7 +228,7 @@ struct SalInputContextChangeEvent
 // SURROUNDINGTEXTREQUEST
 struct SalSurroundingTextRequestEvent
 {
-    UniString       maText;         // Text
+    OUString        maText;         // Text
     sal_uLong       mnStart;        // The beginning index of selected range
     sal_uLong       mnEnd;          // The end index of selected range
 };

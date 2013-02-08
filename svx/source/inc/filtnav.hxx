@@ -176,7 +176,7 @@ public:
 
     void Update(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xCurrent);
     void Clear();
-    sal_Bool ValidateText(FmFilterItem* pItem, UniString& rText, UniString& rErrorMsg) const;
+    sal_Bool ValidateText(FmFilterItem* pItem, OUString& rText, OUString& rErrorMsg) const;
     void Append(FmFilterItems* pItems, FmFilterItem* pFilterItem);
     void SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& rText);
 
