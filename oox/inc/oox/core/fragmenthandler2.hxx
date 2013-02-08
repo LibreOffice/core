@@ -51,6 +51,7 @@ public:
                             bool bEnableTrimSpace = true );
     virtual             ~FragmentHandler2();
 
+
     // resolve ambiguity from base classes
     virtual void SAL_CALL acquire() throw() { FragmentHandler::acquire(); }
     virtual void SAL_CALL release() throw() { FragmentHandler::release(); }

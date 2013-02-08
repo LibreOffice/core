@@ -132,7 +132,6 @@ void SAL_CALL FragmentHandler2::endFastElement( sal_Int32 nElement ) throw( SAXE
             aMceState.pop_back();
             break;
     }
-
     implEndElement( nElement );
 }
 

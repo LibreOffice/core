@@ -32,6 +32,8 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include "oox/core/fragmenthandler.hxx"
 
+#include "oox/ppt/comments.hxx"
+
 #include <list>
 
 namespace oox { namespace vml { class Drawing; } }
@@ -115,6 +117,15 @@ public:
     std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > >& getAnimNodesMap() { return maAnimNodesMap; };
     ::oox::drawingml::ShapePtr getShape( const ::rtl::OUString & id ) { return maShapeMap[ id ]; }
     ::oox::drawingml::ShapeIdMap& getShapeMap() { return maShapeMap; }
+
+    //comments
+private:
+    commentList commentsList;
+    commentAuthorList commentAuthors;
+
+public:
+    commentList* getCommentsList() { return &commentsList; }
+    commentAuthorList* getCommentAuthors() { return &commentAuthors; }
 
 private:
     rtl::OUString                                                           maPath;
