@@ -343,6 +343,7 @@
                                     <property name="height_request">100</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="border_width">10</property>
                                     <child internal-child="selection">
                                       <object class="GtkTreeSelection" id="treeview-selection"/>
                                     </child>
