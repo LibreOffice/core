@@ -3006,20 +3006,21 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
     return true;
 }
 
-void ScInterpreter::ScSkew()
+
+void ScInterpreter::CalculateSkewOrSkewp( bool bSkewp )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSkew" );
-    double fSum,fCount,vSum;
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateSkewOrSkewp" );
+    double fSum, fCount, vSum;
     std::vector<double> values;
-    if ( !CalculateSkew(fSum,fCount,vSum,values) )
+    if (!CalculateSkew( fSum, fCount, vSum, values))
         return;
 
     double fMean = fSum / fCount;
 
-    for (size_t i = 0; i < values.size(); i++)
+    for (size_t i = 0; i < values.size(); ++i)
         vSum += (values[i] - fMean) * (values[i] - fMean);
 
-    double fStdDev = sqrt(vSum / (fCount - 1.0));
+    double fStdDev = sqrt( vSum / (bSkewp ? fCount : (fCount - 1.0)));
     double dx = 0.0;
     double xcube = 0.0;
 
@@ -3029,46 +3030,26 @@ void ScInterpreter::ScSkew()
         return;
     }
 
-    for (size_t i = 0; i < values.size(); i++)
+    for (size_t i = 0; i < values.size(); ++i)
     {
         dx = (values[i] - fMean) / fStdDev;
         xcube = xcube + (dx * dx * dx);
     }
 
-    PushDouble(((xcube * fCount) / (fCount - 1.0)) / (fCount - 2.0));
+    if (bSkewp)
+        PushDouble( xcube / fCount );
+    else
+        PushDouble( ((xcube * fCount) / (fCount - 1.0)) / (fCount - 2.0) );
 }
 
-//fdo#60322
+void ScInterpreter::ScSkew()
+{
+    CalculateSkewOrSkewp( false );
+}
+
 void ScInterpreter::ScSkewp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSkewp" );
-    double fSum,fCount,vSum;
-    std::vector<double> values;
-    if ( !CalculateSkew( fSum, fCount, vSum, values ) )
-        return;
-
-    double fMean = fSum / fCount;
-
-    for ( size_t i = 0; i < values.size(); i++ )
-        vSum += ( values[ i ] - fMean ) * ( values[ i ] - fMean );
-
-    double fStdDevp = sqrt( vSum / fCount );
-    double dx = 0.0;
-    double xcube = 0.0;
-
-    if ( fStdDevp == 0 )
-    {
-        PushIllegalArgument();
-        return;
-    }
-
-    for ( size_t i = 0; i < values.size(); i++ )
-    {
-        dx = ( values[ i ] - fMean ) / fStdDevp;
-        xcube = xcube + ( dx * dx * dx );
-    }
-
-    PushDouble( xcube / fCount );
+    CalculateSkewOrSkewp( true );
 }
 
 double ScInterpreter::GetMedian( vector<double> & rArray )
