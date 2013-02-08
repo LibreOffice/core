@@ -314,7 +314,7 @@ interface BaseTextEditView
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
      //---------------------------------------------------------------------
-     //Ab hier Statusleiste
+     //From here the statusbar
     FN_STAT_PAGE // status()
     [
         ExecMethod = ExecuteStatusLine ;
@@ -336,7 +336,7 @@ interface BaseTextEditView
     ]
     FN_STAT_SELMODE // status(final|play)
     [
-         //Aktueller Selektionsmode: 0 == Normal, 2 == Ergaenzen, 1 == Erweitern
+         //Current Selectionmode: 0 == Normal, 2 == Add, 1 == Enhance
         ExecMethod = ExecuteStatusLine ;
         StateMethod = StateStatusLine ;
     ]
@@ -384,7 +384,7 @@ interface BaseTextEditView
         StateMethod = StateStatusLine ;
     ]
      //----------------------------------------------
-     //End mit Statusleiste
+     //End of the statusbar
      //----------------------------------------------
     SID_ATTR_BORDER_SHADOW // status()
     [
@@ -393,7 +393,7 @@ interface BaseTextEditView
     ]
     /****************************************************/
     /*                                                  */
-    /*       Properties Seitenformat                    */
+    /*       Properties Page Format                      */
     /*                                                  */
     /****************************************************/
     SID_ATTR_PAGE // status()
@@ -435,7 +435,7 @@ interface BaseTextEditView
                 DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
         ]
     /*
-    suchen und ersetzen
+    search and replace
 */
 
 
@@ -478,7 +478,7 @@ interface BaseTextEditView
         StateMethod = StateTabWin ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    // ab hier Export = FALSE;
+    // from here  Export = FALSE;
     FID_SEARCH_ON // status()
     [
         ExecMethod = ExecSearch ;
@@ -640,8 +640,8 @@ interface BaseTextEditView
         StateMethod = StateViewOptions ;
     ]
 
-      //Extra/Optionen/Ansicht
-        //Wird zusammen zum Property ViewSettings
+      //Extra/Options/View
+        //Will be summerized to Property ViewSettings
     FN_VIEW_HIDDEN_PARA
     [
         ExecMethod = ExecViewOptions ;
@@ -655,7 +655,7 @@ interface BaseTextEditView
         StateMethod = StateViewOptions ;
         Export = FALSE;
     ]
-     // alles ab hier kann weg (Export = FALSE;), wenn die vorangehenden funktionieren
+     // Everything from here can be removed (Export = FALSE;), if the previous works
     FN_RULER // status()
     [
         ExecMethod = ExecViewOptions ;
@@ -772,14 +772,14 @@ interface GlobalContents
     [
     ]
 
-    // Bereichsname, Index-Titel oder Leerstring
+    // Areaname, Index-Titel or Empty String
     String  Title FN_COLL_TITLE
     (
         UINT16  Position        FN_COLL_TITLE
     )
     [
     ]
-    // ohne FileName wird ein TextBereich an der Position eingefuegt
+    // Without a FileName an area of the text is inserted at this location.
     BOOL    InsertDocument  FN_COLL_ADD
     (
         UINT16  Position        FN_COLL_ADD,
