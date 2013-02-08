@@ -81,9 +81,9 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     void PutTextCell                ( const ScAddress& rScCurrentPos, const SCCOL nCurrentCol,
                                       const ::boost::optional< rtl::OUString >& pOUText );
     void PutValueCell               ( const ScAddress& rScCurrentPos );
-    void AddTextAndValueCells       ( const ScAddress& rScCellPos,
+    void AddTextAndValueCell       ( const ScAddress& rScCellPos,
                                       const ::boost::optional< rtl::OUString >& pOUText, ScAddress& rScCurrentPos );
-    void AddNonFormulaCells         ( const ScAddress& rScCellPos );
+    void AddNonFormulaCell         ( const ScAddress& rScCellPos );
     void PutFormulaCell             ( const ScAddress& rScCurrentPos );
     void AddFormulaCell             ( const ScAddress& rScCellPos );
 

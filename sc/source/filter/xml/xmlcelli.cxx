@@ -785,7 +785,7 @@ bool isEmptyOrNote( ScDocument* pDoc, const ScAddress& rCurrentPos )
 
 }
 
-void ScXMLTableRowCellContext::AddTextAndValueCells( const ScAddress& rCellPos,
+void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
         const ::boost::optional< rtl::OUString >& pOUText, ScAddress& rCurrentPos )
 {
     ScMyTables& rTables = rXMLImport.GetTables();
@@ -925,7 +925,7 @@ rtl::OUString getOutputString(ScDocument* pDoc, const ScAddress& aCellPos)
 
 }
 
-void ScXMLTableRowCellContext::AddNonFormulaCells( const ScAddress& rCellPos )
+void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
 {
     ::boost::optional< rtl::OUString > pOUText;
 
@@ -942,7 +942,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCells( const ScAddress& rCellPos )
     if( HasSpecialContent() )
         bIsEmpty = false;
 
-    AddTextAndValueCells( rCellPos, pOUText, aCurrentPos );
+    AddTextAndValueCell( rCellPos, pOUText, aCurrentPos );
 
     if( CellsAreRepeated() )
     {
@@ -1114,10 +1114,11 @@ void ScXMLTableRowCellContext::EndElement()
         aCellPos.SetRow( aCellPos.Row() - (nRepeatedRows - 1) );
     if( bIsMerged )
         DoMerge( aCellPos, nMergedCols - 1, nMergedRows - 1 );
-    if (!maFormula)
-        AddNonFormulaCells( aCellPos );
+
+    if (maFormula)
+        AddFormulaCell(aCellPos);
     else
-        AddFormulaCell( aCellPos );
+        AddNonFormulaCell(aCellPos);
 
     UnlockSolarMutex(); //if LockSolarMutex got used, we presumably need to ensure an UnlockSolarMutex
 
