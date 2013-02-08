@@ -19,6 +19,8 @@
 
 #include "oox/core/fragmenthandler2.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "oox/ppt/annotation_buffer.h"
+int is_annotation_text;
 
 namespace oox {
 namespace core {
@@ -115,12 +117,22 @@ Reference< XFastContextHandler > SAL_CALL FragmentHandler2::createFastChildConte
 void SAL_CALL FragmentHandler2::startFastElement(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw( SAXException, RuntimeException )
 {
+    switch( nElement )
+    {
+        case PPT_TOKEN( text ):
+            is_annotation_text = 1; //set to 1 to handle chars
+            break;
+    }
     implStartElement( nElement, rxAttribs );
 }
 
 void SAL_CALL FragmentHandler2::characters( const OUString& rChars ) throw( SAXException, RuntimeException )
 {
     implCharacters( rChars );
+    if ( is_annotation_text == 1)
+    {
+         commentbuffer_chars += rtl::OUStringToOString( rChars , RTL_TEXTENCODING_UTF8).getStr();
+    }
 }
 
 void SAL_CALL FragmentHandler2::endFastElement( sal_Int32 nElement ) throw( SAXException, RuntimeException )
@@ -131,8 +143,10 @@ void SAL_CALL FragmentHandler2::endFastElement( sal_Int32 nElement ) throw( SAXE
         case MCE_TOKEN( AlternateContent ):
             aMceState.pop_back();
             break;
+        case PPT_TOKEN( text ):
+            is_annotation_text =0; // set to 0 as comment chars are handled
+            break;
     }
-
     implEndElement( nElement );
 }
 
