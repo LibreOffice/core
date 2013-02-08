@@ -43,18 +43,10 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 
-/*************************************************************************
-|*
-|*  SwViewImp::Init()
-|*
-|*  Ersterstellung      MA 25. Jul. 94
-|*  Letzte Aenderung    MA 03. Nov. 95
-|*
-|*************************************************************************/
 void SwViewImp::Init( const SwViewOption *pNewOpt )
 {
     OSL_ENSURE( pDrawView, "SwViewImp::Init without DrawView" );
-    //Jetzt die PageView erzeugen wenn sie noch nicht existiert.
+    //Create PageView if it doesn't exist
     SwRootFrm *pRoot = pSh->GetLayout();    //swmod 071108//swmod 071225
     if ( !pSdrPageView )
     {
@@ -95,15 +87,7 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
     pDrawView->SetMarkHdlSizePixel(9);
 }
 
-/*************************************************************************
-|*
-|*  SwViewImp::SwViewImp()  CTor fuer die Core-Internas
-|*
-|*  Ersterstellung      MA 25. Jul. 94
-|*  Letzte Aenderung    MA 06. Sep. 96
-|*
-|*************************************************************************/
-
+// SwViewImp::SwViewImp()  CTor for the core internals
 SwViewImp::SwViewImp( ViewShell *pParent ) :
     pSh( pParent ),
     pDrawView( 0 ),
@@ -118,21 +102,11 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     // OD 12.12.2002 #103492#
     mpPgPrevwLayout( 0 )
 {
-    //bResetXorVisibility =
-    //HMHbShowHdlPaint =
     bResetHdlHiddenPaint =
     bSmoothUpdate = bStopSmooth = bStopPrt = sal_False;
     bFirstPageInvalid = sal_True;
 }
 
-/******************************************************************************
-|*
-|*  SwViewImp::~SwViewImp()
-|*
-|*  Ersterstellung      MA 25. Jul. 94
-|*  Letzte Aenderung    MA 16. Dec. 94
-|*
-******************************************************************************/
 
 SwViewImp::~SwViewImp()
 {
@@ -141,7 +115,7 @@ SwViewImp::~SwViewImp()
     // OD 12.12.2002 #103492#
     delete mpPgPrevwLayout;
 
-    //JP 29.03.96: nach ShowSdrPage muss auch HideSdrPage gemacht werden!!!
+    //JP 29.03.96: after ShowSdrPage  HideSdrPage must also be executed!!!
     if( pDrawView )
          pDrawView->HideSdrPage();
 
@@ -153,28 +127,12 @@ SwViewImp::~SwViewImp()
     OSL_ENSURE( !pIdleAct,"Be idle for the rest of your life." );
 }
 
-/******************************************************************************
-|*
-|*  SwViewImp::DelRegions()
-|*
-|*  Ersterstellung      MA 14. Apr. 94
-|*  Letzte Aenderung    MA 14. Apr. 94
-|*
-******************************************************************************/
 
 void SwViewImp::DelRegion()
 {
     DELETEZ(pRegion);
 }
 
-/******************************************************************************
-|*
-|*  SwViewImp::AddPaintRect()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 27. Jul. 94
-|*
-******************************************************************************/
 
 sal_Bool SwViewImp::AddPaintRect( const SwRect &rRect )
 {
@@ -188,14 +146,6 @@ sal_Bool SwViewImp::AddPaintRect( const SwRect &rRect )
     return sal_False;
 }
 
-/******************************************************************************
-|*
-|*  ViewImp::CheckWaitCrsr()
-|*
-|*  Ersterstellung      MA 10. Aug. 94
-|*  Letzte Aenderung    MA 10. Aug. 94
-|*
-******************************************************************************/
 
 void SwViewImp::CheckWaitCrsr()
 {
@@ -203,14 +153,6 @@ void SwViewImp::CheckWaitCrsr()
         pLayAct->CheckWaitCrsr();
 }
 
-/******************************************************************************
-|*
-|*  ViewImp::IsCalcLayoutProgress()
-|*
-|*  Ersterstellung      MA 12. Aug. 94
-|*  Letzte Aenderung    MA 12. Aug. 94
-|*
-******************************************************************************/
 
 sal_Bool SwViewImp::IsCalcLayoutProgress() const
 {
@@ -219,14 +161,6 @@ sal_Bool SwViewImp::IsCalcLayoutProgress() const
     return sal_False;
 }
 
-/******************************************************************************
-|*
-|*  ViewImp::IsUpdateExpFlds()
-|*
-|*  Ersterstellung      MA 28. Mar. 96
-|*  Letzte Aenderung    MA 28. Mar. 96
-|*
-******************************************************************************/
 
 sal_Bool SwViewImp::IsUpdateExpFlds()
 {
@@ -239,23 +173,14 @@ sal_Bool SwViewImp::IsUpdateExpFlds()
 }
 
 
-/******************************************************************************
-|*
-|*  SwViewImp::SetFirstVisPage(), ImplGetFirstVisPage();
-|*
-|*  Ersterstellung      MA 21. Sep. 93
-|*  Letzte Aenderung    MA 08. Mar. 94
-|*
-******************************************************************************/
 
 void SwViewImp::SetFirstVisPage()
 {
     if ( pSh->bDocSizeChgd && pSh->VisArea().Top() > pSh->GetLayout()->Frm().Height() )
     {
-        //Wir stecken in einer Action und die VisArea sitzt wegen
-        //Loeschoperationen hinter der erste sichtbaren Seite.
-        //Damit nicht zu heftig Formatiert wird, liefern wir die letzte Seite
-        //zurueck.
+        //We are in an action and because of erase actions the VisArea is
+        //after the first visible page.
+        //To avoid excessive formatting, hand back the last page.
         pFirstVisPage = (SwPageFrm*)pSh->GetLayout()->Lower();
         while ( pFirstVisPage && pFirstVisPage->GetNext() )
             pFirstVisPage = (SwPageFrm*)pFirstVisPage->GetNext();
@@ -285,14 +210,6 @@ void SwViewImp::SetFirstVisPage()
     bFirstPageInvalid = sal_False;
 }
 
-/******************************************************************************
-|*
-|*  SwViewImp::MakeDrawView();
-|*
-|*  Ersterstellung      AMA 01. Nov. 95
-|*  Letzte Aenderung    AMA 01. Nov. 95
-|*
-******************************************************************************/
 
 void SwViewImp::MakeDrawView()
 {
@@ -318,7 +235,6 @@ void SwViewImp::MakeDrawView()
 
             if(!pOutDevForDrawView)
             {
-                // pOutDevForDrawView = (OutputDevice*)GetShell()->getIDocumentDeviceAccess()->getPrinter( false );
                 pOutDevForDrawView = GetShell()->GetOut();
             }
 
@@ -341,14 +257,6 @@ void SwViewImp::MakeDrawView()
     }
 }
 
-/******************************************************************************
-|*
-|*  SwViewImp::GetRetoucheColor()
-|*
-|*  Ersterstellung      MA 24. Jun. 98
-|*  Letzte Aenderung    MA 24. Jun. 98
-|*
-******************************************************************************/
 
 Color SwViewImp::GetRetoucheColor() const
 {
@@ -368,12 +276,7 @@ Color SwViewImp::GetRetoucheColor() const
     return aRet;
 }
 
-/** create page preview layout
-
-    OD 12.12.2002 #103492#
-
-    @author OD
-*/
+// create page preview layout
 void SwViewImp::InitPagePreviewLayout()
 {
     OSL_ENSURE( pSh->GetLayout(), "no layout - page preview layout can not be created.");
@@ -476,12 +379,7 @@ void SwViewImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
     } while ( pTmp != pVSh );
 }
 
- /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
-
-    OD 2005-12-01 #i27138#
-
-    @author OD
-*/
+// invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
 void SwViewImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
                                                        const SwTxtFrm* _pToTxtFrm )
 {
@@ -512,12 +410,7 @@ void SwViewImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxt
     } while ( pTmp != pVSh );
 }
 
-/** invalidate text selection for paragraphs
-
-    OD 2005-12-12 #i27301#
-
-    @author OD
-*/
+// invalidate text selection for paragraphs
 void SwViewImp::_InvalidateAccessibleParaTextSelection()
 {
     ViewShell* pVSh = GetShell();
@@ -533,12 +426,7 @@ void SwViewImp::_InvalidateAccessibleParaTextSelection()
     } while ( pTmp != pVSh );
 }
 
-/** invalidate attributes for paragraphs
-
-    OD 2009-01-06 #i88069#
-
-    @author OD
-*/
+// invalidate attributes for paragraphs
 void SwViewImp::_InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
 {
     ViewShell* pVSh = GetShell();
