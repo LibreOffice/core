@@ -676,6 +676,27 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
     }
 }
 
+namespace {
+
+ScBaseCell* createEditCell(ScDocument* pDoc, const std::vector<OUString>& rParagraphs)
+{
+    // Create edit cell.
+    OUStringBuffer aBuf;
+    std::vector<OUString>::const_iterator it = rParagraphs.begin(), itEnd = rParagraphs.end();
+    bool bFirst = true;
+    for (; it != itEnd; ++it)
+    {
+        if (bFirst)
+            bFirst = false;
+        else
+            aBuf.append('\n');
+        aBuf.append(*it);
+    }
+    return ScBaseCell::CreateTextCell(aBuf.makeStringAndClear(), pDoc);
+}
+
+}
+
 void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         const SCCOL nCurrentCol, const ::boost::optional< rtl::OUString >& pOUText )
 {
@@ -728,7 +749,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         if (maStringValue)
             pNewCell = ScBaseCell::CreateTextCell( *maStringValue, pDoc );
         else if (!maParagraphs.empty())
-            pNewCell = ScBaseCell::CreateTextCell(maParagraphs.back(), pDoc);
+            pNewCell = createEditCell(pDoc, maParagraphs);
         else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
             pNewCell = ScBaseCell::CreateTextCell( *pOUText, pDoc );
 
