@@ -873,6 +873,12 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
 
     WriteBlip( xShapeProps, sGraphicURL, pGraphic );
 
+    /*---------------------------------------------------------------------------------------------------*/
+    
+    WriteSrcRect( xShapeProps, sGraphicURL );
+ 
+   /*-----------------------------------------------------------------------------------------------------*/
+
     // now we stretch always when we get pGraphic (when changing that
     // behavior, test n#780830 for regression, where the OLE sheet might get tiled
     bool bStretch = false;
