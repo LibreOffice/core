@@ -7,18 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-PRJ = ../..
-PRJNAME = setup_native
-TARGET = packinfo
+$(eval $(call gb_Package_Package,setup_native/ulf,$(SRCDIR)/setup_native/source/mac))
 
-.INCLUDE: settings.mk
-
-ALLTAR: $(OUT)/inc/spellchecker_selection.hxx
-
-.INCLUDE: target.mk
-
-$(OUT)/inc/spellchecker_selection.hxx .ERRREMOVE : spellchecker_selection.pl \
-        spellchecker_selection.txt
-    $(PERL) -w spellchecker_selection.pl <spellchecker_selection.txt >$@
+$(eval $(call gb_Package_add_file,setup_native/misc,bin/macinstall.ulf,mac/macinstall.ulf))
 
 # vim: set noet sw=4 ts=4:
