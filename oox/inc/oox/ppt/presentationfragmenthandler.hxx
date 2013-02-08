@@ -29,7 +29,7 @@
 #include "oox/core/fragmenthandler2.hxx"
 #include "oox/core/relations.hxx"
 #include "oox/ppt/customshowlistcontext.hxx"
-
+#include "oox/ppt/comments.hxx"
 #include <stack>
 #include <vector>
 
@@ -42,6 +42,9 @@ public:
     virtual ~PresentationFragmentHandler() throw();
     virtual void finalizeImport();
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
+private:
+    commentAuthorList AuthorList;
+    int readCommentAuthors; // read commentAuthors.xml only once
 
 protected:
     bool importSlide( const ::oox::core::FragmentHandlerRef& rxSlideFragmentHandler,

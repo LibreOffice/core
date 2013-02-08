@@ -39,7 +39,7 @@ public:
 
     virtual void finalizeImport();
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
-
+    void        onCharacters( const ::rtl::OUString& rChars );
 protected:
     SlidePersistPtr     mpSlidePersistPtr;
     ShapeLocation       meShapeLocation;
@@ -47,6 +47,11 @@ protected:
 private:
     ::rtl::OUString     maSlideName;
     PropertyMap         maSlideProperties;
+private:
+    ::std::vector< rtl::OUString> charVector; // handle char in OnCharacters
+public:
+    ::std::vector< rtl::OUString> getCharVector(void) { return charVector; }
+
 };
 
 } }
