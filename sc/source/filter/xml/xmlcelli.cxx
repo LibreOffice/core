@@ -690,7 +690,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         {
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
             OUString aCellString;
-            if (maStringValue && !maStringValue->isEmpty())
+            if (maStringValue)
                 aCellString = *maStringValue;
             else if (!maParagraphs.empty())
                 aCellString = maParagraphs.back();
@@ -725,7 +725,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
     {
         ScBaseCell* pNewCell = NULL;
         ScDocument* pDoc = rXMLImport.GetDocument();
-        if (maStringValue && !maStringValue->isEmpty())
+        if (maStringValue)
             pNewCell = ScBaseCell::CreateTextCell( *maStringValue, pDoc );
         else if (!maParagraphs.empty())
             pNewCell = ScBaseCell::CreateTextCell(maParagraphs.back(), pDoc);
@@ -935,7 +935,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
             pOUText.reset( getOutputString(rXMLImport.GetDocument(), rCellPos) );
 
         if (maParagraphs.empty() && !pOUText && !maStringValue)
-                bIsEmpty = true;
+            bIsEmpty = true;
     }
 
     ScAddress aCurrentPos( rCellPos );
