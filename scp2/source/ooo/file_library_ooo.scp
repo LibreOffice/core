@@ -560,7 +560,7 @@ File gid_File_Lib_Cairo
     #ifdef MACOSX
        Name = STRING(CONCAT3(libcairo,.2,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT2(libcairo,UNXSUFFIX));
+       Name = STRING(CONCAT3(libcairo,UNXSUFFIX,.2));
     #endif
   #elif defined(WNT)
     #ifdef _gcc3
@@ -578,7 +578,11 @@ File gid_File_Lib_Pixman
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
+    #ifdef MACOSX
        Name = STRING(CONCAT2(libpixman-1,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT3(libpixman-1,UNXSUFFIX,.0));
+    #endif
   #endif
 End
 
