@@ -386,10 +386,8 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     SvxNumberValueType          eValType        = SVX_VALUE_TYPE_UNDEFINED;
     double                      nValDouble      = 0;
     String                      aValString;
-    SfxItemState                eState          = SFX_ITEM_DONTCARE;
 
-
-    eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_NOLANGUAGE ),sal_True,&pItem);
+    SfxItemState eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_NOLANGUAGE ),sal_True,&pItem);
 
     if(eState==SFX_ITEM_SET)
     {
