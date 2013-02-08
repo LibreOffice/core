@@ -1718,8 +1718,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_NESTROW:
             {
                 // If the right edge of the last cell (row width) is smaller than the width of some other row, mimic the WW8 import: add a fake cell.
-                RTFValue::Pointer_t pLastCellx = m_aStates.top().aTableRowSprms.find(NS_ooxml::LN_CT_TblGridBase_gridCol, false);
-                if (pLastCellx.get() && pLastCellx->getInt() < m_nCellxMax)
+                if (nKeyword == RTF_ROW && m_aStates.top().nCellX < m_nCellxMax)
                     dispatchValue(RTF_CELLX, m_nCellxMax);
 
                 if (m_aStates.top().nCells)
@@ -2139,6 +2138,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_TROWD:
             m_aStates.top().aTableRowSprms = m_aDefaultState.aTableRowSprms;
+            m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, RTFValue::Pointer_t(new RTFValue(-1)), false);
             m_aStates.top().aTableRowAttributes = m_aDefaultState.aTableRowAttributes;
             m_aStates.top().nCellX = 0;
             // In case the table definition is in the middle of the row
