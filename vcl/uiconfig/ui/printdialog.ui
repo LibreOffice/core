@@ -350,7 +350,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkTreeView" id="printers">
+                                  <object class="GtkTreeView" id="printers:border">
                                     <property name="height_request">100</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
