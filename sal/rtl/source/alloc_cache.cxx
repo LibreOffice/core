@@ -937,11 +937,9 @@ rtl_cache_deactivate (
     rtl_cache_type * cache
 )
 {
-    int active = 1;
-
     /* remove from cache list */
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
-    active = QUEUE_STARTED_NAMED(cache, cache_) == 0;
+    int active = QUEUE_STARTED_NAMED(cache, cache_) == 0;
     QUEUE_REMOVE_NAMED(cache, cache_);
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 

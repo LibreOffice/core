@@ -731,9 +731,7 @@ oslFileError SAL_CALL osl_removeFile( rtl_uString* ustrFileURL )
 
 static oslFileError oslDoMoveFile( const sal_Char* pszPath, const sal_Char* pszDestPath)
 {
-    oslFileError tErr=osl_File_E_invalidError;
-
-    tErr = osl_psz_moveFile(pszPath,pszDestPath);
+    oslFileError tErr = osl_psz_moveFile(pszPath,pszDestPath);
     if ( tErr == osl_File_E_None )
     {
         return tErr;
