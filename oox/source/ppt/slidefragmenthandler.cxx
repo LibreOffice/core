@@ -39,6 +39,7 @@
 #include "oox/ppt/pptimport.hxx"
 
 
+using rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
@@ -188,6 +189,34 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
     case PPT_TOKEN( custDataLst ):      // CT_CustomerDataList
     case PPT_TOKEN( tagLst ):           // CT_TagList
         return this;
+
+    //for Comments
+    case PPT_TOKEN( cmLst ):
+    break;
+    case PPT_TOKEN( cm ):
+
+        if(!mpSlidePersistPtr->getCommentsList()->cmLst.empty())
+        {    mpSlidePersistPtr->getCommentsList()->cmLst.back().set_text( getCharVector().back() ); // set comment text for earlier comment
+        }
+        mpSlidePersistPtr->getCommentsList()->cmLst.push_back(comment()); // insert a new comment in vector commentsList
+        mpSlidePersistPtr->getCommentsList()->cmLst.back().setAuthorId(rAttribs.getString(XML_authorId, OUString())); //set AuthorId
+        mpSlidePersistPtr->getCommentsList()->cmLst.back().setdt(rAttribs.getString(XML_dt, OUString())); //set dt
+        mpSlidePersistPtr->getCommentsList()->cmLst.back().setidx(rAttribs.getString(XML_idx, OUString()));  //set idx
+        break;
+
+    case PPT_TOKEN( pos ):
+        mpSlidePersistPtr->getCommentsList()->cmLst.back().set_X(rAttribs.getString(XML_x, OUString())); //set x
+        mpSlidePersistPtr->getCommentsList()->cmLst.back().set_Y(rAttribs.getString(XML_y, OUString())); //set y
+        break;
+   //case PPT_TOKEN( text ):
+
+    case PPT_TOKEN( cmAuthor ):
+        mpSlidePersistPtr->getCommentAuthors()->cmAuthorLst.push_back(commentAuthor()); // insert a new comment Author in cmAuthorList
+        mpSlidePersistPtr->getCommentAuthors()->cmAuthorLst.back().clrIdx = rAttribs.getString(XML_clrIdx, OUString()); //set clrIdx
+        mpSlidePersistPtr->getCommentAuthors()->cmAuthorLst.back().id = rAttribs.getString(XML_id, OUString()); // set id
+        mpSlidePersistPtr->getCommentAuthors()->cmAuthorLst.back().initials = rAttribs.getString(XML_initials, OUString()); // set initials
+        mpSlidePersistPtr->getCommentAuthors()->cmAuthorLst.back().lastIdx = rAttribs.getString(XML_lastIdx, OUString()); // set lastIdx
+        mpSlidePersistPtr->getCommentAuthors()->cmAuthorLst.back().name = rAttribs.getString(XML_name, OUString()); //set name
     }
 
     return this;

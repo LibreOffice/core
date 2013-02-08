@@ -31,6 +31,9 @@
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
+#include <com/sun/star/office/XAnnotation.hpp>
+#include <com/sun/star/office/XAnnotationAccess.hpp> //for comments
+#include <com/sun/star/awt/Point.hpp>
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
@@ -41,6 +44,9 @@
 #include "oox/ppt/layoutfragmenthandler.hxx"
 #include "oox/ppt/pptimport.hxx"
 
+#include "oox/ppt/comments.hxx"
+
+using rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
@@ -132,6 +138,8 @@ void ResolveTextFields( XmlFilterBase& rFilter )
 
 void PresentationFragmentHandler::finalizeImport()
 {
+    commentAuthorList AuthorList;
+    int readCommentAuthors; // read commentAuthors.xml only once
     // todo: localized progress bar text
     const Reference< task::XStatusIndicator >& rxStatusIndicator( getFilter().getStatusIndicator() );
     if ( rxStatusIndicator.is() )
@@ -149,6 +157,7 @@ void PresentationFragmentHandler::finalizeImport()
         Reference< drawing::XDrawPagesSupplier > xDPS( xModel, uno::UNO_QUERY_THROW );
         Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_QUERY_THROW );
 
+        readCommentAuthors = 0; // as commentAuthors.xml has not been read still
         for( nSlide = 0; nSlide < maSlidesVector.size(); nSlide++ )
         {
             if ( rxStatusIndicator.is() )
@@ -162,7 +171,7 @@ void PresentationFragmentHandler::finalizeImport()
             OUString aSlideFragmentPath = getFragmentPathFromRelId( maSlidesVector[ nSlide ] );
             if( !aSlideFragmentPath.isEmpty() )
             {
-                OUString aMasterFragmentPath;
+				OUString aMasterFragmentPath;
                 SlidePersistPtr pMasterPersistPtr;
                 SlidePersistPtr pSlidePersistPtr( new SlidePersist( rFilter, sal_False, sal_False, xSlide,
                                     ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
@@ -171,6 +180,7 @@ void PresentationFragmentHandler::finalizeImport()
 
                 // importing the corresponding masterpage/layout
                 OUString aLayoutFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "slideLayout" ) );
+                OUString aCommentFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "comments" ) );
                 if ( !aLayoutFragmentPath.isEmpty() )
                 {
                     // importing layout
@@ -279,6 +289,50 @@ void PresentationFragmentHandler::finalizeImport()
                         }
                     }
                 }
+
+                if( !aCommentFragmentPath.isEmpty() && readCommentAuthors == 0 )
+                {// Comments are present and commentAuthors.xml has still not been read
+                    readCommentAuthors = 1; //set to true
+                    rtl::OUString aCommentAuthorsFragmentPath = "ppt/commentAuthors.xml";
+                    Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
+                    Reference< XDrawPage > xCommentAuthorsPage( xPresentationPage->getNotesPage() );
+                    SlidePersistPtr pCommentAuthorsPersistPtr( new SlidePersist( rFilter, sal_False, sal_True, xCommentAuthorsPage,
+                                ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
+                    FragmentHandlerRef xCommentAuthorsFragmentHandler( new SlideFragmentHandler( getFilter(), aCommentAuthorsFragmentPath, pCommentAuthorsPersistPtr, Slide ) );
+
+                    pCommentAuthorsPersistPtr->getCommentAuthors()->cmAuthorLst.clear();
+                    importSlide( xCommentAuthorsFragmentHandler, pCommentAuthorsPersistPtr );
+                    AuthorList.cmAuthorLst.clear();
+                    AuthorList.setValues(*(pCommentAuthorsPersistPtr->getCommentAuthors()));
+                }
+                if( !aCommentFragmentPath.isEmpty() )
+                {   Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
+                    Reference< XDrawPage > xCommentsPage( xPresentationPage->getNotesPage() );
+                    SlidePersistPtr pCommentsPersistPtr( new SlidePersist( rFilter, sal_False, sal_True, xCommentsPage,
+                                ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
+                    FragmentHandlerRef xCommentsFragmentHandler( new SlideFragmentHandler( getFilter(), aCommentFragmentPath, pCommentsPersistPtr, Slide ) ); 
+                    pCommentsPersistPtr->getCommentsList()->cmLst.clear();
+                    importSlide( xCommentsFragmentHandler, pCommentsPersistPtr );
+                    FragmentHandler2 *comment_handler = dynamic_cast<FragmentHandler2*>(xCommentsFragmentHandler.get());
+                    pCommentsPersistPtr->getCommentsList()->cmLst.back().set_text( comment_handler->getCharVector().back() );//set comment chars for last comment on slide
+
+                    pCommentsPersistPtr->getCommentAuthors()->setValues(AuthorList);
+                    //insert all comments from commentsList
+                    for(int i=0;   i<pCommentsPersistPtr->getCommentsList()->getSize();   i++)
+                    {
+                        uno::Reference< office::XAnnotationAccess > xAnnotationAccess( xSlide, UNO_QUERY_THROW );
+                        uno::Reference< office::XAnnotation > xAnnotation( xAnnotationAccess->createAndInsertAnnotation() );
+                        int nPosX = pCommentsPersistPtr->getCommentsList()->getCommentAtIndex(i).get_int_X();
+                        int nPosY = pCommentsPersistPtr->getCommentsList()->getCommentAtIndex(i).get_int_Y();
+                        xAnnotation->setPosition( geometry::RealPoint2D( ::oox::drawingml::convertEmuToHmm( nPosX ) * 15.87 , ::oox::drawingml::convertEmuToHmm( nPosY ) * 15.87 ) );
+                        xAnnotation->setAuthor( pCommentsPersistPtr->getCommentsList()->getCommentAtIndex(i).getAuthor(*(pCommentsPersistPtr->getCommentAuthors())).name );
+                        xAnnotation->setDateTime( pCommentsPersistPtr->getCommentsList()->getCommentAtIndex(i).getDateTime() );
+                        uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
+                        xText->setString( pCommentsPersistPtr->getCommentsList()->getCommentAtIndex(i).get_text());
+                    }
+
+                }
+
             }
         }
         ResolveTextFields( rFilter );

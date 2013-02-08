@@ -132,7 +132,6 @@ void SAL_CALL FragmentHandler2::endFastElement( sal_Int32 nElement ) throw( SAXE
             aMceState.pop_back();
             break;
     }
-
     implEndElement( nElement );
 }
 
@@ -164,8 +163,9 @@ void FragmentHandler2::onStartElement( const AttributeList& )
 {
 }
 
-void FragmentHandler2::onCharacters( const OUString& )
+void FragmentHandler2::onCharacters( const OUString& rChars)
 {
+    charVector.push_back(rChars);
 }
 
 void FragmentHandler2::onEndElement()
