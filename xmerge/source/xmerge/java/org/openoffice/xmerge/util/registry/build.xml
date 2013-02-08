@@ -73,7 +73,7 @@
     </target>
 
     <target name="init" depends="solar">
-        <property name="build.compiler" value="classic"/>
+        <property name="build.compiler" value="modern"/>
         <property file="${solar.properties}"/>
         <property file="${build.dir}/class/solar.properties"/>
     </target>
