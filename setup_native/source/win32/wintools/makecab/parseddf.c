@@ -378,6 +378,8 @@ DDFERR ParseDdf(char* ddfFile, PCCAB ccab, DDFSRCFILE ** srcListH, unsigned int 
     ccab->cbFolderThresh = ccab->cb;
     ccab->iDisk = 0;
 
+    fclose(ddf);
+
     return DDF_OK;
 }
 
