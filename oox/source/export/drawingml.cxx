@@ -779,20 +779,15 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
     }
 
     if( GETAD( CharFontName ) ) {
-        const char* typeface = NULL;
         const char* pitch = NULL;
         const char* charset = NULL;
         OUString usTypeface;
 
         mAny >>= usTypeface;
-        String aSubstName( GetSubsFontName( usTypeface, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
-        if( aSubstName.Len() )
-            typeface = USS( aSubstName );
-        else
-            typeface = USS( usTypeface );
+        OUString aSubstName( GetSubsFontName( usTypeface, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
 
         mpFS->singleElementNS( XML_a, XML_latin,
-                               XML_typeface, typeface,
+                               XML_typeface, USS(aSubstName.getLength() ? aSubstName : usTypeface),
                                XML_pitchFamily, pitch,
                                XML_charset, charset,
                                FSEND );
@@ -805,14 +800,10 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
         OUString usTypeface;
 
         mAny >>= usTypeface;
-        String aSubstName( GetSubsFontName( usTypeface, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
-        if( aSubstName.Len() )
-            typeface = USS( aSubstName );
-        else
-            typeface = USS( usTypeface );
+        OUString aSubstName( GetSubsFontName( usTypeface, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
 
         mpFS->singleElementNS( XML_a, bComplex ? XML_cs : XML_ea,
-                               XML_typeface, typeface,
+                               XML_typeface, USS(aSubstName.getLength() ? aSubstName : usTypeface),
                                XML_pitchFamily, pitch,
                                XML_charset, charset,
                                FSEND );
