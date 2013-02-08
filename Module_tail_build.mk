@@ -163,6 +163,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	scripting \
 	sd \
 	sdext \
+	$(call gb_Helper_optional,DESKTOP,setup_native) \
 	sfx2 \
 	shell \
 	slideshow \

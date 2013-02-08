@@ -420,6 +420,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 	cli_cppuhelper \
 	cli_uno \
 	gcc3_uno \
+	getuid \
 	java_uno \
     jpipe \
     juh \
@@ -514,17 +515,28 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     fps \
     ftransl \
     inprocserv \
+    instooofiltmsi \
+    jfregca \
     ooofilt \
     ooofilt_x64 \
     propertyhdl \
     propertyhdl_x64 \
-	raptor \
-	rasqal \
+    qslnkmsi \
+    raptor \
+    rasqal \
+    reg4allmsdoc \
+    regactivex \
+	regpatchactivex \
+    sdqsmsi \
+    sellangmsi \
     shlxthdl \
     shlxthdl_x64 \
+    shlxtmsi \
+    sn_tools \
     so_activex \
     so_activex_x64 \
     sysdtrans \
+	thidxmsi \
 ))
 endif
 
@@ -665,6 +677,10 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     nputils \
     pdfimport_s \
     plugcon \
+	$(if $(filter $(COM),MSC), \
+        quickstarter \
+		seterror \
+    ) \
     ssleay32 \
     ooopathutils \
     sample \

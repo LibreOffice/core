@@ -190,7 +190,7 @@ namespace
 
 // Creates the thesaurus .idx files for all installed .dat
 // thesaurus files
-extern "C" UINT __stdcall CreateIndexes( MSIHANDLE handle )
+extern "C" __declspec(dllexport) UINT __stdcall CreateIndexes( MSIHANDLE handle )
 {
 
     string sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
