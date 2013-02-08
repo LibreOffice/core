@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///g8\u003d",
+        "filename": "sal/osl/all/loadmodulerelative.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-02-08T18:56:09Z",
+      "side": 1,
+      "message": "No need to use OUStringToOString(...)getStr(), one can use OUStrings directly in SAL_INFO.",
+      "revId": "7ff4092474074d2599277b0f7d425b994c6c1fc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
