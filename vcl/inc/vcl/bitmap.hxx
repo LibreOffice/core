@@ -30,6 +30,17 @@
 #include <tools/rc.hxx>
 #include <vcl/region.hxx>
 
+#ifdef WNT
+#define _STLP_HAS_NATIVE_FLOAT_ABS
+#endif
+
+#include <boost/math/special_functions/sinc.hpp>
+
+using namespace boost::math::policies;
+typedef policy<
+    promote_double<false>
+> SincPolicy;
+
 // -----------
 // - Defines -
 // -----------
@@ -261,8 +272,7 @@ public:
         }
 
         x *= M_PI;
-
-        return sin(x) / x;
+        return boost::math::sinc_pi(x, SincPolicy());
     }
 };
 
