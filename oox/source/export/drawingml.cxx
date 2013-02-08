@@ -44,12 +44,14 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
@@ -83,6 +85,7 @@ using ::com::sun::star::beans::XPropertyState;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XIndexAccess;
+using ::com::sun::star::geometry::IntegerRectangle2D;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::style::LineSpacing;
 using ::com::sun::star::text::XText;
@@ -601,6 +604,27 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sUR
         }
 
         mpFS->endElementNS( nXmlNamespace, XML_blipFill );
+    }
+}
+
+void DrawingML::WriteSrcRect( Reference< XPropertySet > rXPropSet, const OUString& rURL )
+{
+    Size aOriginalSize( GraphicObject::CreateGraphicObjectFromURL( rURL ).GetPrefSize() );
+
+    if ( GetProperty( rXPropSet, "GraphicCrop" ) )
+    {
+        ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
+        mAny >>= aGraphicCropStruct;
+
+        if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
+        {
+            mpFS->singleElementNS( XML_a, XML_srcRect,
+                          XML_l, I32S(((aGraphicCropStruct.Left) * 100000)/aOriginalSize.Width()),
+                          XML_t, I32S(((aGraphicCropStruct.Top) * 100000)/aOriginalSize.Height()),
+                          XML_r, I32S(((aGraphicCropStruct.Right) * 100000)/aOriginalSize.Width()),
+                          XML_b, I32S(((aGraphicCropStruct.Bottom) * 100000)/aOriginalSize.Height()),
+                          FSEND );
+        }
     }
 }
 
