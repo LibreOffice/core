@@ -307,16 +307,16 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
 
 namespace
 {
-    OString extractPattern(VclBuilder::stringmap &rMap)
+    OString extractCustomProperty(VclBuilder::stringmap &rMap)
     {
-        OString sPattern;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("pattern"));
+        OString sCustomProperty;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("customproperty"));
         if (aFind != rMap.end())
         {
-            sPattern = aFind->second;
+            sCustomProperty = aFind->second;
             rMap.erase(aFind);
         }
-        return sPattern;
+        return sCustomProperty;
     }
 
     bool extractResizable(VclBuilder::stringmap &rMap)
@@ -688,7 +688,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkSpinButton")
     {
         extractSpinAdjustment(id, rMap);
-        OString sPattern = extractPattern(rMap);
+        OString sPattern = extractCustomProperty(rMap);
         OString sUnit = sPattern;
 
         for (sal_Int32 i = 0; i < sPattern.getLength(); ++i)
@@ -755,7 +755,11 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         //   everything over to SvTreeViewBox
         //d) remove the users of makeSvTreeViewBox
         extractModel(id, rMap);
-        pWindow = new ListBox(pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK);
+        WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+        OString sBorder = extractCustomProperty(rMap);
+        if (!sBorder.isEmpty())
+            nWinStyle |= WB_BORDER;
+        pWindow = new ListBox(pParent, nWinStyle);
     }
     else if (name == "GtkLabel")
         pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
@@ -802,7 +806,10 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkNotebook")
         pWindow = new TabControl(pParent, WB_STDTABCONTROL|WB_3DLOOK);
     else if (name == "GtkDrawingArea")
-        pWindow = new Window(pParent);
+    {
+        OString sBorder = extractCustomProperty(rMap);
+        pWindow = new Window(pParent, sBorder.isEmpty() ? 0 : WB_BORDER);
+    }
     else if (name == "GtkTextView")
     {
         extractBuffer(id, rMap);
@@ -1013,7 +1020,7 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
                         if (nDelim != -1)
                         {
                             OString sPattern = sID.copy(nDelim+1);
-                            aProperties[OString("pattern")] = sPattern;
+                            aProperties[OString("customproperty")] = sPattern;
                             sID = sID.copy(0, nDelim);
                         }
                     }
@@ -1340,7 +1347,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 {
     OString sClass;
     OString sID;
-    OString sPattern;
+    OString sCustomProperty;
 
     xmlreader::Span name;
     int nsId;
@@ -1359,7 +1366,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
             sal_Int32 nDelim = sID.indexOf(':');
             if (nDelim != -1)
             {
-                sPattern = sID.copy(nDelim+1);
+                sCustomProperty = sID.copy(nDelim+1);
                 sID = sID.copy(0, nDelim);
             }
         }
@@ -1375,8 +1382,8 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 
     stringmap aProperties, aPangoAttributes;
 
-    if (!sPattern.isEmpty())
-        aProperties[OString("pattern")] = sPattern;
+    if (!sCustomProperty.isEmpty())
+        aProperties[OString("customproperty")] = sCustomProperty;
 
     Window *pCurrentChild = NULL;
     while(1)
