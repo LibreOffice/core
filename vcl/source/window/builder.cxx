@@ -1031,7 +1031,16 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         //   everything over to SvTreeViewBox
         //d) remove the users of makeSvTreeViewBox
         extractModel(id, rMap);
-        WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+        WinBits nWinStyle;
+        OString sBorder = extractCustomProperty(rMap);
+        if (sBorder.isEmpty())
+        {
+            nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+        }
+        else
+        {
+            nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_BORDER;
+        }
         //ListBox manages its own scrolling,
         Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
         pWindow = new ListBox(pRealParent, nWinStyle);
