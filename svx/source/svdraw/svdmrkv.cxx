@@ -870,11 +870,11 @@ void SdrMarkView::SetMarkHandles()
         // Drehpunkt/Spiegelachse
         AddDragModeHdl(eDragMode);
 
-        // add custom handles (used by other apps, e.g. AnchorPos)
-        AddCustomHdl();
-
         // sort handles
         aHdl.Sort();
+
+        // add custom handles (used by other apps, e.g. AnchorPos)
+        AddCustomHdl();
 
         // #105722# try to restore focus handle index from remembered values
         if(bSaveOldFocus)
