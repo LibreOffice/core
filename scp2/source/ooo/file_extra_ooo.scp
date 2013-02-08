@@ -403,7 +403,27 @@ End
 
 File gid_File_Extra_Wordbook
     Dir = gid_Dir_Wordbook;
+    PACKED_TXT_FILE_BODY;
+    Name = "technical.dic";
+End
+
+File gid_File_Extra_Wordbook_en_US
+    Dir = gid_Dir_Wordbook;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "wordbook.zip";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    Name = "en-US.dic";
+End
+
+File gid_File_Extra_Wordbook_en_GB
+    Dir = gid_Dir_Wordbook;
+    TXT_FILE_BODY;
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    Name = "en-GB.dic";
+End
+
+File gid_File_Extra_Wordbook_sl
+    Dir = gid_Dir_Wordbook;
+    TXT_FILE_BODY;
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    Name = "sl.dic";
 End

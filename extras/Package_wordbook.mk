@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,wordbook,$(SRCDIR)/extras/source/wordbook))
+$(eval $(call gb_Package_Package,extras_wordbook,$(SRCDIR)/extras/source/wordbook))
 
-$(eval $(call gb_Zip_add_files,wordbook,\
+$(eval $(call gb_Package_add_files,extras_wordbook,pck,\
 	en-GB.dic \
 	en-US.dic \
 	sl.dic \

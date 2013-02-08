@@ -14,6 +14,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_autocorr \
 	Package_fonts \
 	Package_newfiles \
+	Package_wordbook \
 	Zip_autocorr \
 	Zip_autotextuser \
 	Zip_cfgsrvbitmapunx \
@@ -38,7 +39,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Zip_tplwizletter \
 	Zip_tplwizreport \
 	Zip_tplwizstyles \
-	Zip_wordbook \
 ))
 
 ifeq ($(WITH_EXTRA_EXTENSIONS),YES)
