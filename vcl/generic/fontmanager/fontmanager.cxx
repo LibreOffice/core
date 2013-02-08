@@ -1049,9 +1049,10 @@ int PrintFontManager::getDirectoryAtom( const OString& rDirectory, bool bCreate 
 std::vector<fontID> PrintFontManager::addFontFile( const ::rtl::OString& rFileName )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    INetURLObject aPath( OStringToOUString( rFileName, aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-    OString aName( OUStringToOString( aPath.GetName(), aEncoding ) );
-    OString aDir( OUStringToOString( aPath.GetPath(), aEncoding ) );
+    INetURLObject aPath( OStringToOUString( rFileName, aEncoding ), INetURLObject::FSYS_DETECT );
+    OString aName( OUStringToOString( aPath.GetName( INetURLObject::DECODE_WITH_CHARSET, aEncoding ), aEncoding ) );
+    OString aDir( OUStringToOString(
+        INetURLObject::decode( aPath.GetPath(), '%', INetURLObject::DECODE_WITH_CHARSET, aEncoding ), aEncoding ) );
 
     int nDirID = getDirectoryAtom( aDir, true );
     std::vector<fontID> aFontIds = findFontFileIDs( nDirID, aName );
