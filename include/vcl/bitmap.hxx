@@ -20,6 +20,7 @@
 #ifndef _SV_BITMAP_HXX
 #define _SV_BITMAP_HXX
 
+#include <boost/math/special_functions/sinc.hpp>
 #include <tools/color.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
@@ -207,7 +208,8 @@ public:
 
 class Lanczos3Kernel : public Kernel
 {
-
+    typedef boost::math::policies::policy<
+        boost::math::policies::promote_double<false> > SincPolicy;
 public:
     Lanczos3Kernel() : Kernel () {}
     virtual double GetWidth() const { return 3.0; }
@@ -223,7 +225,7 @@ public:
             return 1.0;
         }
         x = x * M_PI;
-        return sin(x) / x;
+        return boost::math::sinc_pi(x, SincPolicy());
     }
 };
 
