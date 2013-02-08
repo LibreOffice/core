@@ -2102,18 +2102,27 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 {
                     try
                     {
-                        if ( pProp->isUnoStruct() && maStructInfo.get()  )
+                        if ( maStructInfo.get()  )
                         {
-                            StructRefInfo aMemberStruct = maStructInfo->getStructMember( pProp->GetName() );
-                            if ( aMemberStruct.isEmpty() )
+                            StructRefInfo aMember = maStructInfo->getStructMember( pProp->GetName() );
+                            if ( aMember.isEmpty() )
                             {
                                  StarBASIC::Error( SbERR_PROPERTY_NOT_FOUND );
                             }
                             else
                             {
-                                SbUnoStructRefObject* pSbUnoObject = new SbUnoStructRefObject( pProp->GetName(), aMemberStruct );
-                                SbxObjectRef xWrapper = (SbxObject*)pSbUnoObject;
-                                pVar->PutObject( xWrapper );
+                                if ( pProp->isUnoStruct() )
+                                {
+                                    SbUnoStructRefObject* pSbUnoObject = new SbUnoStructRefObject( pProp->GetName(), aMember );
+                                    SbxObjectRef xWrapper = (SbxObject*)pSbUnoObject;
+                                    pVar->PutObject( xWrapper );
+                                }
+                                else
+                                {
+                                    Any aRetAny = aMember.getValue();
+                                    // take over the value from Uno to Sbx
+                                    unoToSbxValue( pVar, aRetAny );
+                                }
                                 return;
                             }
                         }
@@ -2170,7 +2179,20 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         StarBASIC::Error( SbERR_PROP_READONLY );
                         return;
                     }
-
+                    if (  maStructInfo.get()  )
+                    {
+                        StructRefInfo aMember = maStructInfo->getStructMember( pProp->GetName() );
+                        if ( aMember.isEmpty() )
+                        {
+                            StarBASIC::Error( SbERR_PROPERTY_NOT_FOUND );
+                        }
+                        else
+                        {
+                            Any aAnyValue = sbxToUnoValue( pVar, pProp->aUnoProp.Type, &pProp->aUnoProp );
+                            aMember.setValue( aAnyValue );
+                        }
+                        return;
+                   }
                     // take over the value from Uno to Sbx
                     Any aAnyValue = sbxToUnoValue( pVar, pProp->aUnoProp.Type, &pProp->aUnoProp );
                     try
@@ -2877,7 +2899,9 @@ Any SbUnoObject::getUnoAny( void )
 {
     Any aRetAny;
     if( bNeedIntrospection ) doIntrospection();
-    if( mxMaterialHolder.is() )
+    if ( maStructInfo.get() )
+       aRetAny = maTmpUnoObj;
+    else if( mxMaterialHolder.is() )
         aRetAny = mxMaterialHolder->getMaterial();
     else if( mxInvocation.is() )
         aRetAny <<= mxInvocation;
