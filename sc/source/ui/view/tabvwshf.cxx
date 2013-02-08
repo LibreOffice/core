@@ -109,33 +109,26 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 ScMarkData& rMark = pViewData->GetMarkData();
                 SCTAB nTabSelCount = rMark.GetSelectCount();
                 sal_uInt16 nVis = 0;
-                for ( SCTAB i=0; i < nTabCount && nVis<2; i++ )
+
+                // check to make sure we won't hide all sheets. we need at least one visible at all times.
+                for ( SCTAB i=0; i < nTabCount && nVis<nTabSelCount + 1; i++ )
                     if (pDoc->IsVisible(i))
                         ++nVis;
-                if ( nVis<2 || !pDoc->IsDocEditable() || nTabSelCount > 1 )
+                if ( nVis<=nTabSelCount || !pDoc->IsDocEditable() )
                     break;
 
-
                 rtl::OUString aName;
-                if( pReqArgs != NULL )
-                {
-                    const SfxPoolItem* pItem;
-                    if( pReqArgs->HasItem( FID_TABLE_HIDE, &pItem ) )
-                        aName = ((const SfxStringItem*)pItem)->GetValue();
-                }
-
-                if (aName.isEmpty())
-                {
-                    pDoc->GetName( nCurrentTab, aName );        // aktuelle Tabelle
-                    rReq.AppendItem( SfxStringItem( FID_TABLE_HIDE, aName ) );
-                }
-
                 SCTAB nHideTab;
-                if (pDoc->GetTable( aName, nHideTab ))
-                    HideTable( nHideTab );
+                ScMarkData::MarkedTabsType::const_iterator it;
 
-                if( ! rReq.IsAPI() )
-                    rReq.Done();
+                ScMarkData::MarkedTabsType selectedTabs = rMark.GetSelectedTabs();
+
+                for (it=selectedTabs.begin(); it!=selectedTabs.end(); ++it)
+                {
+                    nHideTab = *it;
+                    if (pDoc->IsVisible( nHideTab ))
+                        HideTable( nHideTab );
+                }
             }
             break;
 
@@ -841,11 +834,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             case FID_TABLE_HIDE:
                 {
                     sal_uInt16 nVis = 0;
-                    for ( SCTAB i=0; i < nTabCount && nVis<2; i++ )
+                    // enable menu : check to make sure we won't hide all sheets. we need at least one visible at all times.
+                    for ( SCTAB i=0; i < nTabCount && nVis<nTabSelCount + 1; i++ )
                         if (pDoc->IsVisible(i))
                             ++nVis;
-
-                    if ( nVis<2 || !pDoc->IsDocEditable() || nTabSelCount > 1 )
+                    if ( nVis<=nTabSelCount || !pDoc->IsDocEditable() )
                         rSet.DisableItem( nWhich );
                 }
                 break;
