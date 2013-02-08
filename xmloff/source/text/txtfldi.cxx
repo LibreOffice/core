@@ -3782,6 +3782,11 @@ void XMLAnnotationImportContext::PrepareField(
         while (xFields->hasMoreElements())
         {
             uno::Reference<beans::XPropertySet> xCurrField(xFields->nextElement(), uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySetInfo> xPropsInfo(xCurrField->getPropertySetInfo());
+
+            if (!xPropsInfo->hasPropertyByName(sPropertyName))
+                continue;
+
             OUString aFieldName;
             xCurrField->getPropertyValue(sPropertyName) >>= aFieldName;
             if (aFieldName == aName)
