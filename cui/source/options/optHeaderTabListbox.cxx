@@ -53,9 +53,8 @@ void OptLBoxString_Impl::Paint(
 }
 // -----------------------------------------------------------------------------
 
-OptHeaderTabListBox::OptHeaderTabListBox( Window* pParent, WinBits nWinStyle ) :
-
-    SvHeaderTabListBox( pParent, nWinStyle )
+OptHeaderTabListBox::OptHeaderTabListBox(SvxSimpleTableContainer& rParent, WinBits nWinStyle)
+    : SvxSimpleTable(rParent, nWinStyle)
 {
 }
 

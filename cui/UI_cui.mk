@@ -35,6 +35,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/optadvancedpage \
 	cui/uiconfig/ui/optappearancepage \
 	cui/uiconfig/ui/optfontspage \
+	cui/uiconfig/ui/optpathspage \
 	cui/uiconfig/ui/personalization_tab \
 	cui/uiconfig/ui/pickbulletpage \
 	cui/uiconfig/ui/pickgraphicpage \

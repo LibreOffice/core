@@ -113,7 +113,6 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     m_aNew          ( this, CUI_RES( BTN_NEW ) ),
     m_aEdit         ( this, CUI_RES( BTN_EDIT ) ),
     m_aDelete       ( this, CUI_RES( BTN_DELETE ) ),
-    pHeaderBar      ( NULL ),
     pPathBox        ( NULL ),
     m_pCurEntry     ( NULL ),
     m_nOldCount     ( 0 ),
@@ -127,41 +126,38 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
 
 
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
-    pPathBox = new ::svx::OptHeaderTabListBox( &aPathCtrl, nBits );
+    pPathBox = new ::svx::OptHeaderTabListBox( aPathCtrl, nBits );
 
-    pHeaderBar = new HeaderBar( &aPathCtrl, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
-    pHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( aBoxSize.Width(), 16 ) );
-    pHeaderBar->SetSelectHdl( LINK( this, DbRegistrationOptionsPage, HeaderSelect_Impl ) );
-    pHeaderBar->SetEndDragHdl( LINK( this, DbRegistrationOptionsPage, HeaderEndDrag_Impl ) );
+    HeaderBar &rBar = pPathBox->GetTheHeaderBar();
+
+    rBar.SetSelectHdl( LINK( this, DbRegistrationOptionsPage, HeaderSelect_Impl ) );
+    rBar.SetEndDragHdl( LINK( this, DbRegistrationOptionsPage, HeaderEndDrag_Impl ) );
     Size aSz;
     aSz.Width() = TAB_WIDTH1;
-    pHeaderBar->InsertItem( ITEMID_TYPE, aTypeText.GetText(),
+    rBar.InsertItem( ITEMID_TYPE, aTypeText.GetText(),
                             LogicToPixel( aSz, MapMode( MAP_APPFONT ) ).Width(),
                             HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
     aSz.Width() = TAB_WIDTH2;
-    pHeaderBar->InsertItem( ITEMID_PATH, aPathText.GetText(),
+    rBar.InsertItem( ITEMID_PATH, aPathText.GetText(),
                             LogicToPixel( aSz, MapMode( MAP_APPFONT ) ).Width(),
                             HIB_LEFT | HIB_VCENTER );
 
-    static long nTabs[] = {3, 0, TAB_WIDTH1, TAB_WIDTH1 + TAB_WIDTH2 };
-    Size aHeadSize = pHeaderBar->GetSizePixel();
+    static long aTabs[] = {3, 0, TAB_WIDTH1, TAB_WIDTH1 + TAB_WIDTH2 };
+    Size aHeadSize = rBar.GetSizePixel();
 
-    aPathCtrl.SetFocusControl( pPathBox );
     pPathBox->SetStyle( pPathBox->GetStyle()|nBits );
     pPathBox->SetDoubleClickHdl( LINK( this, DbRegistrationOptionsPage, EditHdl ) );
     pPathBox->SetSelectHdl( LINK( this, DbRegistrationOptionsPage, PathSelect_Impl ) );
     pPathBox->SetSelectionMode( SINGLE_SELECTION );
     pPathBox->SetPosSizePixel( Point( 0, aHeadSize.Height() ),
                                Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
-    pPathBox->SetTabs( &nTabs[0], MAP_APPFONT );
-    pPathBox->InitHeaderBar( pHeaderBar );
+    pPathBox->SvxSimpleTable::SetTabs( aTabs, MAP_APPFONT );
     pPathBox->SetHighlightRange();
 
     pPathBox->SetHelpId( HID_DBPATH_CTL_PATH );
-    pHeaderBar->SetHelpId( HID_DBPATH_HEADERBAR );
+    rBar.SetHelpId( HID_DBPATH_HEADERBAR );
 
-    pPathBox->Show();
-    pHeaderBar->Show();
+    pPathBox->ShowTable();
 
     FreeResource();
 }
@@ -170,14 +166,9 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
 
 DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 {
-    // #110603# do not grab focus to a destroyed window !!!
-    aPathCtrl.SetFocusControl( NULL );
-
-    pHeaderBar->Hide();
     for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
         delete static_cast< DatabaseRegistration* >( pPathBox->GetEntry(i)->GetUserData() );
     delete pPathBox;
-    delete pHeaderBar;
 }
 
 // -----------------------------------------------------------------------
@@ -240,12 +231,14 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
     String aUserData = GetUserData();
     if ( aUserData.Len() )
     {
+        HeaderBar &rBar = pPathBox->GetTheHeaderBar();
+
         // restore column width
-        pHeaderBar->SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
+        rBar.SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
         HeaderEndDrag_Impl( NULL );
         // restore sort direction
         sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.GetToken(1).ToInt32();
-        HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
+        HeaderBarItemBits nBits = rBar.GetItemBits(ITEMID_TYPE);
 
         if ( bUp )
         {
@@ -257,7 +250,7 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
             nBits &= ~HIB_DOWNARROW;
             nBits |= HIB_UPARROW;
         }
-        pHeaderBar->SetItemBits( ITEMID_TYPE, nBits );
+        rBar.SetItemBits( ITEMID_TYPE, nBits );
         HeaderSelect_Impl( NULL );
     }
 }
@@ -266,8 +259,10 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
 
 void DbRegistrationOptionsPage::FillUserData()
 {
-    OUString aUserData = OUString::number( pHeaderBar->GetItemSize( ITEMID_TYPE ) ) + ";";
-    HeaderBarItemBits nBits = pHeaderBar->GetItemBits( ITEMID_TYPE );
+    HeaderBar &rBar = pPathBox->GetTheHeaderBar();
+
+    OUString aUserData = OUString::number( rBar.GetItemSize( ITEMID_TYPE ) ) + ";";
+    HeaderBarItemBits nBits = rBar.GetItemBits( ITEMID_TYPE );
     sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     aUserData += (bUp ? OUString("1") : OUString("0"));
     SetUserData( aUserData );
@@ -320,7 +315,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
     if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
         return 0;
 
-    HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
+    HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
     sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     SvSortMode eMode = SortAscending;
 
@@ -335,7 +330,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
         nBits &= ~HIB_DOWNARROW;
         nBits |= HIB_UPARROW;
     }
-    pHeaderBar->SetItemBits( ITEMID_TYPE, nBits );
+    pBar->SetItemBits( ITEMID_TYPE, nBits );
     SvTreeList* pModel = pPathBox->GetModel();
     pModel->SetSortMode( eMode );
     pModel->Resort();
@@ -349,22 +344,22 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
     if ( pBar && !pBar->GetCurItemId() )
         return 0;
 
-    if ( !pHeaderBar->IsItemMode() )
+    if ( !pBar->IsItemMode() )
     {
         Size aSz;
-        sal_uInt16 nTabs = pHeaderBar->GetItemCount();
+        sal_uInt16 nTabs = pBar->GetItemCount();
         long nTmpSz = 0;
-        long nWidth = pHeaderBar->GetItemSize(ITEMID_TYPE);
-        long nBarWidth = pHeaderBar->GetSizePixel().Width();
+        long nWidth = pBar->GetItemSize(ITEMID_TYPE);
+        long nBarWidth = pBar->GetSizePixel().Width();
 
         if(nWidth < TAB_WIDTH_MIN)
-            pHeaderBar->SetItemSize( ITEMID_TYPE, TAB_WIDTH_MIN);
+            pBar->SetItemSize( ITEMID_TYPE, TAB_WIDTH_MIN);
         else if ( ( nBarWidth - nWidth ) < TAB_WIDTH_MIN )
-            pHeaderBar->SetItemSize( ITEMID_TYPE, nBarWidth - TAB_WIDTH_MIN );
+            pBar->SetItemSize( ITEMID_TYPE, nBarWidth - TAB_WIDTH_MIN );
 
         for ( sal_uInt16 i = 1; i <= nTabs; ++i )
         {
-            long _nWidth = pHeaderBar->GetItemSize(i);
+            long _nWidth = pBar->GetItemSize(i);
             aSz.Width() =  _nWidth + nTmpSz;
             nTmpSz += _nWidth;
             pPathBox->SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );

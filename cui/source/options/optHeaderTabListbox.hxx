@@ -19,16 +19,16 @@
 #ifndef SVX_OPTHEADERTABLISTBOX_HXX
 #define SVX_OPTHEADERTABLISTBOX_HXX
 
-#include <svtools/svtabbx.hxx>
+#include <svx/simptabl.hxx>
 
 namespace svx
 {
     // class OptHeaderTabListBox ---------------------------------------------
 
-    class OptHeaderTabListBox : public SvHeaderTabListBox
+    class OptHeaderTabListBox : public SvxSimpleTable
     {
     public:
-        OptHeaderTabListBox( Window* pParent, WinBits nBits );
+        OptHeaderTabListBox(SvxSimpleTableContainer& rParent, WinBits nBits);
 
         virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
     };

@@ -37,7 +37,6 @@
 
 #include "optpath.hxx"
 #include <dialmgr.hxx>
-#include "optpath.hrc"
 #include <cuires.hrc>
 #include "helpid.hrc"
 #include <comphelper/configuration.hxx>
@@ -63,9 +62,7 @@ using namespace svx;
 
 // define ----------------------------------------------------------------
 
-#define TAB_WIDTH1      80
 #define TAB_WIDTH_MIN   10
-#define TAB_WIDTH2      1000
 #define ITEMID_TYPE       1
 #define ITEMID_PATH       2
 
@@ -81,11 +78,12 @@ struct OptPath_Impl
 {
     SvtDefaultOptions           m_aDefOpt;
     Image                       m_aLockImage;
-    String                      m_sMultiPathDlg;
+    OUString                    m_sMultiPathDlg;
     Reference< XPropertySet >   m_xPathSettings;
 
-    OptPath_Impl(const ResId& rLockRes)
-        : m_aLockImage(rLockRes)
+    OptPath_Impl(const Image& rLockImage, const OUString& rMultiPathDlg)
+        : m_aLockImage(rLockImage)
+        , m_sMultiPathDlg(rMultiPathDlg)
     {
     }
 };
@@ -200,61 +198,50 @@ sal_Bool IsMultiPath_Impl( const sal_uInt16 nIndex )
 
 // class SvxPathTabPage --------------------------------------------------
 
-SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
-
-    SfxTabPage( pParent, CUI_RES( RID_SFXPAGE_PATH ), rSet ),
-
-    aStdBox         ( this, CUI_RES( GB_STD ) ),
-    aTypeText       ( this, CUI_RES( FT_TYPE ) ),
-    aPathText       ( this, CUI_RES( FT_PATH ) ),
-    aPathCtrl       ( this, CUI_RES( LB_PATH ) ),
-    aStandardBtn    ( this, CUI_RES( BTN_STANDARD ) ),
-    aPathBtn        ( this, CUI_RES( BTN_PATH ) ),
-    pHeaderBar      ( NULL ),
-    pPathBox        ( NULL ),
-    pImpl           ( new OptPath_Impl( CUI_RES(IMG_LOCK) ) ),
-    xDialogListener ( new ::svt::DialogClosedListener() )
-
+SvxPathTabPage::SvxPathTabPage(Window* pParent, const SfxItemSet& rSet)
+    :SfxTabPage( pParent, "OptPathsPage", "cui/ui/optpathspage.ui", rSet)
+    , xDialogListener ( new ::svt::DialogClosedListener() )
 {
-    pImpl->m_sMultiPathDlg = String( CUI_RES( STR_MULTIPATHDLG ) );
-    aStandardBtn.SetClickHdl( LINK( this, SvxPathTabPage, StandardHdl_Impl ) );
+    pImpl = new OptPath_Impl(get<FixedImage>("lock")->GetImage(),
+        get<FixedText>("editpaths")->GetText());
+    get(m_pStandardBtn, "default");
+    get(m_pPathBtn, "edit");
+    get(m_pPathCtrl, "paths");
+
+    m_pStandardBtn->SetClickHdl(LINK(this, SvxPathTabPage, StandardHdl_Impl));
     Link aLink = LINK( this, SvxPathTabPage, PathHdl_Impl );
-    aPathBtn.SetClickHdl( aLink );
-    Size aBoxSize = aPathCtrl.GetOutputSizePixel();
-    pHeaderBar = new HeaderBar( &aPathCtrl, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
-    pHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( aBoxSize.Width(), 16 ) );
-    pHeaderBar->SetSelectHdl( LINK( this, SvxPathTabPage, HeaderSelect_Impl ) );
-    pHeaderBar->SetEndDragHdl( LINK( this, SvxPathTabPage, HeaderEndDrag_Impl ) );
-    Size aSz;
-    aSz.Width() = TAB_WIDTH1;
-    pHeaderBar->InsertItem( ITEMID_TYPE, aTypeText.GetText(),
-                            LogicToPixel( aSz, MapMode( MAP_APPFONT ) ).Width(),
+    m_pPathBtn->SetClickHdl( aLink );
+
+    Size aControlSize(236 , 147);
+    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    m_pPathCtrl->set_width_request(aControlSize.Width());
+    m_pPathCtrl->set_height_request(aControlSize.Height());
+    WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
+    pPathBox = new svx::OptHeaderTabListBox( *m_pPathCtrl, nBits );
+
+    HeaderBar &rBar = pPathBox->GetTheHeaderBar();
+    rBar.SetSelectHdl( LINK( this, SvxPathTabPage, HeaderSelect_Impl ) );
+    rBar.SetEndDragHdl( LINK( this, SvxPathTabPage, HeaderEndDrag_Impl ) );
+
+    rBar.InsertItem( ITEMID_TYPE, get<FixedText>("type")->GetText(),
+                            0,
                             HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
-    aSz.Width() = TAB_WIDTH2;
-    pHeaderBar->InsertItem( ITEMID_PATH, aPathText.GetText(),
-                            LogicToPixel( aSz, MapMode( MAP_APPFONT ) ).Width(),
+    rBar.InsertItem( ITEMID_PATH, get<FixedText>("path")->GetText(),
+                            0,
                             HIB_LEFT | HIB_VCENTER );
 
-    static long nTabs[] = {3, 0, TAB_WIDTH1, TAB_WIDTH1 + TAB_WIDTH2 };
-    Size aHeadSize = pHeaderBar->GetSizePixel();
+    long nWidth1 = rBar.GetTextWidth(rBar.GetItemText(1));
+    long nWidth2 = rBar.GetTextWidth(rBar.GetItemText(2));
 
-    WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
-    pPathBox = new svx::OptHeaderTabListBox( &aPathCtrl, nBits );
-    aPathCtrl.SetFocusControl( pPathBox );
+    long aTabs[] = {3, 0, 0, 0};
+    aTabs[2] = nWidth1 + 12;
+    aTabs[3] = aTabs[2] + nWidth2 + 12;
+    pPathBox->SetTabs(aTabs, MAP_PIXEL);
+
     pPathBox->SetDoubleClickHdl( aLink );
     pPathBox->SetSelectHdl( LINK( this, SvxPathTabPage, PathSelect_Impl ) );
     pPathBox->SetSelectionMode( MULTIPLE_SELECTION );
-    pPathBox->SetPosSizePixel( Point( 0, aHeadSize.Height() ),
-                               Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
-    pPathBox->SetTabs( &nTabs[0], MAP_APPFONT );
-    pPathBox->InitHeaderBar( pHeaderBar );
     pPathBox->SetHighlightRange();
-    pPathBox->SetHelpId( HID_OPTPATH_CTL_PATH );
-    pHeaderBar->SetHelpId( HID_OPTPATH_HEADERBAR );
-    pPathBox->Show();
-    pHeaderBar->Show();
-
-    FreeResource();
 
     xDialogListener->SetDialogClosedLink( LINK( this, SvxPathTabPage, DialogClosedHdl ) );
 }
@@ -263,14 +250,9 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
 SvxPathTabPage::~SvxPathTabPage()
 {
-    // #110603# do not grab focus to a destroyed window !!!
-    aPathCtrl.SetFocusControl( NULL );
-
-    pHeaderBar->Hide();
     for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
         delete (PathUserData_Impl*)pPathBox->GetEntry(i)->GetUserData();
     delete pPathBox;
-    delete pHeaderBar;
     delete pImpl;
 }
 
@@ -304,6 +286,10 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
     pPathBox->Clear();
     SvtPathOptions aPathOpt; //! deprecated
 
+    HeaderBar &rBar = pPathBox->GetTheHeaderBar();
+    long nWidth1 = rBar.GetTextWidth(rBar.GetItemText(1));
+    long nWidth2 = rBar.GetTextWidth(rBar.GetItemText(2));
+
     for( sal_uInt16 i = 0; i <= (sal_uInt16)SvtPathOptions::PATH_WORK; ++i )
     {
         // only writer uses autotext
@@ -327,6 +313,8 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
             case SvtPathOptions::PATH_WORK:
             {
                 String aStr( CUI_RES( RID_SVXSTR_PATH_NAME_START + i ) );
+                nWidth1 = std::max(nWidth1, pPathBox->GetTextWidth(aStr));
+                aStr += '\t';
                 String sInternal, sUser, sWritable;
                 sal_Bool bReadOnly = sal_False;
                 GetPathList( i, sInternal, sUser, sWritable, bReadOnly );
@@ -335,8 +323,9 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
                     sTmpPath += MULTIPATH_DELIMITER;
                 sTmpPath += sWritable;
                 String aValue( sTmpPath );
-                aStr += '\t';
-                aStr += Convert_Impl( aValue );
+                aValue = Convert_Impl( aValue );
+                nWidth2 = std::max(nWidth2, pPathBox->GetTextWidth(aValue));
+                aStr += aValue;
                 SvTreeListEntry* pEntry = pPathBox->InsertEntry( aStr );
                 if ( bReadOnly )
                 {
@@ -350,15 +339,23 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
         }
     }
 
+    long aTabs[] = {3, 0, 0, 0};
+    aTabs[2] = nWidth1 + 12;
+    aTabs[3] = aTabs[2] + nWidth2 + 12;
+    pPathBox->SetTabs(aTabs, MAP_PIXEL);
+
+#if 0
     String aUserData = GetUserData();
     if ( aUserData.Len() )
     {
+        fprintf(stderr, "FOO\n");
+
         // restore column width
-        pHeaderBar->SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
-        HeaderEndDrag_Impl( NULL );
+        rBar.SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
+        HeaderEndDrag_Impl( &rBar );
         // restore sort direction
         sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.GetToken(1).ToInt32();
-        HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
+        HeaderBarItemBits nBits = rBar.GetItemBits(ITEMID_TYPE);
 
         if ( bUp )
         {
@@ -370,9 +367,10 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
             nBits &= ~HIB_DOWNARROW;
             nBits |= HIB_UPARROW;
         }
-        pHeaderBar->SetItemBits( ITEMID_TYPE, nBits );
-        HeaderSelect_Impl( NULL );
+        rBar.SetItemBits( ITEMID_TYPE, nBits );
+        HeaderSelect_Impl( &rBar );
     }
+#endif
     PathSelect_Impl( NULL );
 }
 
@@ -380,8 +378,10 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
 
 void SvxPathTabPage::FillUserData()
 {
-    String aUserData = OUString::number( pHeaderBar->GetItemSize( ITEMID_TYPE ) ) + ";";
-    HeaderBarItemBits nBits = pHeaderBar->GetItemBits( ITEMID_TYPE );
+    HeaderBar &rBar = pPathBox->GetTheHeaderBar();
+
+    String aUserData = OUString::number( rBar.GetItemSize( ITEMID_TYPE ) ) + ";";
+    HeaderBarItemBits nBits = rBar.GetItemBits( ITEMID_TYPE );
     sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     aUserData += bUp ? '1' : '0';
     SetUserData( aUserData );
@@ -405,8 +405,8 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
         pEntry = pPathBox->NextSelected( pEntry );
     }
 
-    aPathBtn.Enable( 1 == nSelCount && bEnable);
-    aStandardBtn.Enable( nSelCount > 0 && bEnable);
+    m_pPathBtn->Enable( 1 == nSelCount && bEnable);
+    m_pStandardBtn->Enable( nSelCount > 0 && bEnable);
     return 0;
 }
 
@@ -645,7 +645,7 @@ IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
     if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
         return 0;
 
-    HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
+    HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
     sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     SvSortMode eMode = SortAscending;
 
@@ -660,7 +660,7 @@ IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
         nBits &= ~HIB_DOWNARROW;
         nBits |= HIB_UPARROW;
     }
-    pHeaderBar->SetItemBits( ITEMID_TYPE, nBits );
+    pBar->SetItemBits( ITEMID_TYPE, nBits );
     SvTreeList* pModel = pPathBox->GetModel();
     pModel->SetSortMode( eMode );
     pModel->Resort();
@@ -674,22 +674,22 @@ IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
     if ( pBar && !pBar->GetCurItemId() )
         return 0;
 
-    if ( !pHeaderBar->IsItemMode() )
+    if ( !pBar->IsItemMode() )
     {
         Size aSz;
-        sal_uInt16 nTabs = pHeaderBar->GetItemCount();
+        sal_uInt16 nTabs = pBar->GetItemCount();
         long nTmpSz = 0;
-        long nWidth = pHeaderBar->GetItemSize(ITEMID_TYPE);
-        long nBarWidth = pHeaderBar->GetSizePixel().Width();
+        long nWidth = pBar->GetItemSize(ITEMID_TYPE);
+        long nBarWidth = pBar->GetSizePixel().Width();
 
         if(nWidth < TAB_WIDTH_MIN)
-            pHeaderBar->SetItemSize( ITEMID_TYPE, TAB_WIDTH_MIN);
+            pBar->SetItemSize( ITEMID_TYPE, TAB_WIDTH_MIN);
         else if ( ( nBarWidth - nWidth ) < TAB_WIDTH_MIN )
-            pHeaderBar->SetItemSize( ITEMID_TYPE, nBarWidth - TAB_WIDTH_MIN );
+            pBar->SetItemSize( ITEMID_TYPE, nBarWidth - TAB_WIDTH_MIN );
 
         for ( sal_uInt16 i = 1; i <= nTabs; ++i )
         {
-            long _nWidth = pHeaderBar->GetItemSize(i);
+            long _nWidth = pBar->GetItemSize(i);
             aSz.Width() =  _nWidth + nTmpSz;
             nTmpSz += _nWidth;
             pPathBox->SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );

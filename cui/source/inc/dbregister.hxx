@@ -26,6 +26,7 @@
 #include <svl/poolitem.hxx>
 #include "ControlFocusHelper.hxx"
 #include <sfx2/basedlgs.hxx>
+#include <svx/simptabl.hxx>
 
 class SvTreeListEntry;
 namespace svx
@@ -46,12 +47,11 @@ namespace svx
         FixedLine           aStdBox;
         FixedText           aTypeText;
         FixedText           aPathText;
-        SvxControlFocusHelper   aPathCtrl;
+        SvxSimpleTableContainer aPathCtrl;
         PushButton          m_aNew;
         PushButton          m_aEdit;
         PushButton          m_aDelete;
 
-        HeaderBar*          pHeaderBar;
         ::svx::OptHeaderTabListBox* pPathBox;
         SvTreeListEntry*        m_pCurEntry;
         sal_uLong               m_nOldCount;

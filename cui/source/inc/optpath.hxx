@@ -20,14 +20,9 @@
 #define _SVX_OPTPATH_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <svx/simptabl.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
-
-#ifdef _SVX_OPTPATH_CXX
-#include <svtools/headbar.hxx>
-#else
-class HeaderBar;
-#endif
 #include "ControlFocusHelper.hxx"
 
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
@@ -47,14 +42,10 @@ class SvxPathTabPage;
 class SvxPathTabPage : public SfxTabPage
 {
 private:
-    FixedLine           aStdBox;
-    FixedText           aTypeText;
-    FixedText           aPathText;
-    SvxControlFocusHelper aPathCtrl;
-    PushButton          aStandardBtn;
-    PushButton          aPathBtn;
+    SvxSimpleTableContainer* m_pPathCtrl;
+    PushButton*         m_pStandardBtn;
+    PushButton*         m_pPathBtn;
 
-    HeaderBar*                  pHeaderBar;
     ::svx::OptHeaderTabListBox* pPathBox;
     OptPath_Impl*               pImpl;
 

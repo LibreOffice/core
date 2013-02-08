@@ -15,79 +15,17 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "optpath.hrc"
 #include <cuires.hrc>
 #include <sfx2/sfx.hrc>
 #include "helpid.hrc"
 
- // RID_SFXPAGE_PATH -----------------------------------------------------
-#define STD_MASKCOLOR Color { Red=0xffff; Green=0x0000; Blue=0xffff; }
-TabPage RID_SFXPAGE_PATH
-{
-    HelpId = HID_OPTIONS_PATH ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    Text [ en-US ] = "Paths" ;
-    FixedText FT_TYPE
-    {
-        Hide = TRUE;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "Type" ;
-    };
-    FixedText FT_PATH
-    {
-        Hide = TRUE;
-        Pos = MAP_APPFONT ( 110 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "Path" ;
-    };
-    Control LB_PATH
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 236 , 147 ) ;
-        Border = TRUE ;
-        TabStop = TRUE;
-    };
-    PushButton BTN_PATH
-    {
-        HelpID = "cui:PushButton:RID_SFXPAGE_PATH:BTN_PATH";
-        Pos = MAP_APPFONT ( 183 , 165 ) ;
-        Size = MAP_APPFONT ( 65 , 14 ) ;
-        Text [ en-US ] = "~Edit..." ;
-    };
-    PushButton BTN_STANDARD
-    {
-        HelpID = "cui:PushButton:RID_SFXPAGE_PATH:BTN_STANDARD";
-        Pos = MAP_APPFONT ( 115 , 165 ) ;
-        Size = MAP_APPFONT ( 65 , 14 ) ;
-        Text [ en-US ] = "~Default" ;
-    };
-    FixedLine GB_STD
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Paths used by %PRODUCTNAME" ;
-    };
-    Image IMG_LOCK
-    {
-        ImageBitmap = Bitmap { File = "lock.bmp"; };
-        MaskColor = STD_MASKCOLOR;
-    };
-    String STR_MULTIPATHDLG
-    {
-        Text [ en-US ] = "Edit Paths: %1" ;
-    };
-};
 ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
     Message [ en-US ] = "The configuration and mail directories must be specified as separate directories.\nPlease choose a new path." ;
 };
- // ******************************************************************* EOF
+
 String RID_SVXSTR_KEY_CONFIG_DIR
 {
     Text [ en-US ] = "Configuration" ;
@@ -108,7 +46,6 @@ String RID_SVXSTR_KEY_BASIC_PATH
 {
     Text = "BASIC" ;
 };
-
 String RID_SVXSTR_KEY_PALETTE_PATH
 {
     Text [ en-US ] = "Palettes" ;
@@ -141,7 +78,6 @@ String RID_SVXSTR_KEY_GALLERY_DIR
 {
     Text [ en-US ] = "Gallery" ;
 };
-
 String RID_SVXSTR_KEY_STORAGE_DIR
 {
     Text [ en-US ] = "Message Storage" ;
