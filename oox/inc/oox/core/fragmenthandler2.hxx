@@ -50,6 +50,11 @@ public:
                             const ::rtl::OUString& rFragmentPath,
                             bool bEnableTrimSpace = true );
     virtual             ~FragmentHandler2();
+private:
+    ::std::vector< rtl::OUString> charVector; // handle char in OnCharacters
+
+public:
+    ::std::vector< rtl::OUString> getCharVector(void) { return charVector; }
 
     // resolve ambiguity from base classes
     virtual void SAL_CALL acquire() throw() { FragmentHandler::acquire(); }
