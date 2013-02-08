@@ -58,6 +58,10 @@ public class PresentationActivity extends SherlockFragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // bind preference defaults
+        PreferenceManager.setDefaultValues(this, R.xml.preferences,
+                                           false /* retain user settings */);
+
         mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
 
         bindService(new Intent(this, CommunicationService.class), mConnection,
