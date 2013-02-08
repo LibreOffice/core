@@ -625,10 +625,12 @@ UDK_3.11 { # AOO 3.4
         osl_setThreadName;
 } UDK_3.10;
 
-UDK_3.12 { # AOO 3.5
+UDK_3.12 { # AOO 4.0
     global:
         osl_loadAsciiModule;
         osl_loadAsciiModuleRelative;
+
+        rtl_math_powr;
 } UDK_3.11;
 
 PRIVATE_1.0 {

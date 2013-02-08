@@ -1113,6 +1113,19 @@ double SAL_CALL rtl_math_expm1( double fValue ) SAL_THROW_EXTERN_C()
     return (fe-1.0) * fValue / log(fe);
 }
 
+double SAL_CALL rtl_math_powr( double fValue,  double fExp ) SAL_THROW_EXTERN_C()
+{
+    if ((fValue == 0.0  && fExp == 0.0) ||
+    (rtl::math::isInf( fExp ) && !rtl::math::isSignBitSet( fExp )) ||
+    (rtl::math::isInf( fValue ) && !rtl::math::isSignBitSet( fValue )))
+    {
+        double fResult;
+        ::rtl::math::setNan( &fResult );
+        return fResult;
+    }
+    return pow(fValue, fExp);
+}
+
 
 double SAL_CALL rtl_math_log1p( double fValue ) SAL_THROW_EXTERN_C()
 {
