@@ -32,31 +32,24 @@ class ConfigSet(ConfigGroup):
 
     def __init__(self):
         self.childrenList = []
+        self.childrenListLen = 0
 
-    def writeConfiguration(self, configView, param):
-        names = self.childrenMap.keys()
-        if isinstance(self.childClass, ConfigNode):
-            #first I remove all the children from the configuration.
-            children = configView.ElementNames
-            if children:
-                for i in children:
-                    try:
-                        Configuration.removeNode(configView, i)
-                    except Exception:
-                        traceback.print_exc()
-
-                # and add them new.
-            for i in names:
-                try:
-                    child = self.getElement(i)
-                    childView = configView.getByName(i)
-                    child.writeConfiguration(childView, param)
-                except Exception:
-                    traceback.print_exc()
-        else:
-            raise AttributeError (
-            "Unable to write primitive sets to configuration (not implemented)")
-
+    def writeConfiguration(self, configurationView, param):
+        for i in range(self.childrenListLen):
+            #remove previous configuration
+            configurationView.removeByName(i)
+        for index,item in enumerate(self.childrenList):
+            try:
+                childView = configurationView.createInstance()
+                configurationView.insertByName(index, childView)
+                topic = CGTopic()
+                topic.cp_Index = item[0].Value
+                topic.cp_Topic = item[1].Value
+                topic.cp_Responsible = item[2].Value
+                topic.cp_Time = item[3].Value
+                topic.writeConfiguration(childView, param)
+            except Exception:
+                traceback.print_exc()
 
     def readConfiguration(self, configurationView, param):
         #each iteration represents a Topic row
@@ -70,3 +63,4 @@ class ConfigSet(ConfigGroup):
                     self.childrenList.append(topic)
                 except Exception:
                     traceback.print_exc()
+        self.childrenListLen = len(self.childrenList)

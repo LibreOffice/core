@@ -131,12 +131,12 @@ class TopicsControl(ControlScroller):
 
     def initializeScrollFields(self, agenda):
         # create a row for each topic with the given values....
-        for i  in range(len(agenda.cp_Topics.childrenList)):
-            row = self.newRow(i)
-            agenda.cp_Topics.childrenList[i].setDataToRow(row)
+        for index,item  in enumerate(agenda.cp_Topics.childrenList):
+            row = self.newRow(index)
+            item.setDataToRow(row)
             # a parent class method
-            self.registerControlGroup(row, i)
-            self.updateDocumentRow(i)
+            self.registerControlGroup(row, index)
+            self.updateDocumentRow(index)
         # inserts a blank row at the end...
         self.insertRowAtEnd()
 
@@ -156,6 +156,10 @@ class TopicsControl(ControlScroller):
         if l - self.nscrollvalue < self.nblockincrement:
             self.ControlGroupVector[l - self.nscrollvalue].\
                 setEnabled(True)
+
+    def saveTopics(self, agenda):
+        #last row is always empty
+        agenda.cp_Topics.childrenList = self.scrollfields[:-1]
 
     '''
     remove the last row
@@ -338,7 +342,7 @@ class TopicsControl(ControlScroller):
     def isRowEmpty(self, row):
         data = self.getTopicData(row)
         # now - is this row empty?
-        return data[1].Value or data[2].Value or data[3].Value
+        return not data[1].Value and not data[2].Value and not data[3].Value
 
     '''
     update the preview document and
@@ -355,7 +359,7 @@ class TopicsControl(ControlScroller):
                 return
             self.updateDocumentCell(
                 guiRow + self.nscrollvalue, column, data)
-            if not self.isRowEmpty(guiRow + self.nscrollvalue):
+            if self.isRowEmpty(guiRow + self.nscrollvalue):
                 '''
                 if this is the row before the last one
                 (the last row is always empty)
@@ -370,7 +374,7 @@ class TopicsControl(ControlScroller):
                     because the last one is always empty...
                     '''
                     while len(self.scrollfields) > 1 \
-                            and not self.isRowEmpty(
+                            and self.isRowEmpty(
                                 len(self.scrollfields) - 2):
                         self.removeLastRow()
                     cr = self.ControlGroupVector[
@@ -593,8 +597,8 @@ class TopicsControl(ControlScroller):
         elif (row1 + self.nscrollvalue) + \
                 (row2 + self.nscrollvalue) \
                 == (len(self.scrollfields) * 2 - 5):
-            if not self.isRowEmpty(len(self.scrollfields) - 2) \
-                    and not self.isRowEmpty(
+            if self.isRowEmpty(len(self.scrollfields) - 2) \
+                    and self.isRowEmpty(
                         len(self.scrollfields) - 1):
                 self.removeLastRow()
                 self.reduceDocumentToTopics()

@@ -208,12 +208,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             self.agenda, "cp_ProceedMethod",
                 (self.optCreateAgenda, self.optMakeChanges), True).updateUI()
 
-    def saveConfiguration(self):
-        root = Configuration.getConfigurationRoot(
-            self.xMSF, "/org.openoffice.Office.Writer/Wizards/Agenda", True)
-        self.agenda.writeConfiguration(root, "cp_")
-        root.commitChanges()
-
     def insertRoadmap(self):
         self.addRoadmap()
 
@@ -360,7 +354,12 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                 "writer8_template")
 
             if bSaveSuccess:
-                self.saveConfiguration()
+                self.topicsControl.saveTopics(self.agenda)
+                root = Configuration.getConfigurationRoot(
+                    self.xMSF, "/org.openoffice.Office.Writer/Wizards/Agenda",
+                    True)
+                self.agenda.writeConfiguration(root, "cp_")
+                root.commitChanges()
 
                 self.agendaTemplate.finish(self.topicsControl.scrollfields)
 
