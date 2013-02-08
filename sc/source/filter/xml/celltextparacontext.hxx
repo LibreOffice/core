@@ -21,7 +21,7 @@ class ScXMLTableRowCellContext;
 class ScXMLCellTextParaContext : public ScXMLImportContext
 {
     ScXMLTableRowCellContext& mrParentCxt;
-    OUStringBuffer maContent;
+    OUString maContent;
 public:
     ScXMLCellTextParaContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLTableRowCellContext& rParent);
 

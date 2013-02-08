@@ -41,6 +41,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     boost::optional<OUString> maContentValidationName;
 
     std::vector<OUString> maParagraphs;
+    OUStringBuffer maParagraph;
 
     boost::scoped_ptr< ScXMLAnnotationData > mxAnnotationData;
     ScMyImpDetectiveObjVec* pDetectiveObjVec;
@@ -106,7 +107,8 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    void PushParagraph(const OUString& rPara);
+    void PushParagraphSpan(const OUString& rSpan);
+    void PushParagraphEnd();
 
     void SetAnnotation( const ScAddress& rPosition );
     void SetDetectiveObj( const ScAddress& rPosition );

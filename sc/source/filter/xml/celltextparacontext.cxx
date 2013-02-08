@@ -28,24 +28,26 @@ void ScXMLCellTextParaContext::StartElement(const uno::Reference<xml::sax::XAttr
 
 void ScXMLCellTextParaContext::EndElement()
 {
-    OUString aPara = maContent.makeStringAndClear();
-    if (aPara.isEmpty())
-        return;
+    if (!maContent.isEmpty())
+        mrParentCxt.PushParagraphSpan(maContent);
 
-    mrParentCxt.PushParagraph(aPara);
+    mrParentCxt.PushParagraphEnd();
 }
 
 void ScXMLCellTextParaContext::Characters(const OUString& rChars)
 {
-    if (rChars.isEmpty())
-        return;
-
-    maContent.append(rChars);
+    maContent = rChars;
 }
 
 SvXMLImportContext* ScXMLCellTextParaContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
+    if (!maContent.isEmpty())
+    {
+        mrParentCxt.PushParagraphSpan(maContent);
+        maContent = OUString();
+    }
+
     const SvXMLTokenMap& rTokenMap = GetScImport().GetCellTextParaElemTokenMap();
     switch (rTokenMap.Get(nPrefix, rLocalName))
     {
@@ -61,10 +63,7 @@ SvXMLImportContext* ScXMLCellTextParaContext::CreateChildContext(
 
 void ScXMLCellTextParaContext::PushSpan(const OUString& rSpan)
 {
-    if (rSpan.isEmpty())
-        return;
-
-    maContent.append(rSpan);
+    mrParentCxt.PushParagraphSpan(rSpan);
 }
 
 ScXMLCellTextSpanContext::ScXMLCellTextSpanContext(

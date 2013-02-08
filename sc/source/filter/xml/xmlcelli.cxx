@@ -300,9 +300,14 @@ bool cellExists( const ScAddress& rCellPos )
 
 }
 
-void ScXMLTableRowCellContext::PushParagraph(const OUString& rPara)
+void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan)
 {
-    maParagraphs.push_back(rPara);
+    maParagraph.append(rSpan);
+}
+
+void ScXMLTableRowCellContext::PushParagraphEnd()
+{
+    maParagraphs.push_back(maParagraph.makeStringAndClear());
 }
 
 SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPrefix,
