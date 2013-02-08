@@ -92,7 +92,7 @@ BOOL APIENTRY DllMain( HANDLE,
     return TRUE;
 }
 
-extern "C" UINT install_jf ( MSIHANDLE hModule ) {
+extern "C" UINT __declspec(dllexport) install_jf ( MSIHANDLE hModule ) {
     bool bMulti = isMulti(hModule);
 #ifdef _JRGREG_DEBUG
     MessageBox(NULL, bMulti ? "Multi" : "Single", "Install", MB_OK);
@@ -103,7 +103,7 @@ extern "C" UINT install_jf ( MSIHANDLE hModule ) {
     return ERROR_SUCCESS;
 }
 
-extern "C" UINT uninstall_jf ( MSIHANDLE hModule ) {
+extern "C" UINT _declspec(dllexport) uninstall_jf ( MSIHANDLE hModule ) {
     bool bMulti = isMulti(hModule);
 #ifdef _JRGREG_DEBUG
     MessageBox(NULL, bMulti ? "Multi" : "Single", "Uninstall", MB_OK);
