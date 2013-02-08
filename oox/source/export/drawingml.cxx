@@ -69,6 +69,7 @@
 #include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
+#include <com/sun/star/text/GraphicCrop.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -604,6 +605,51 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sUR
         mpFS->endElementNS( nXmlNamespace, XML_blipFill );
     }
 }
+
+
+void DrawingML::WriteSrcRect( Reference< XPropertySet > rXPropSet, OUString& rURL )
+{
+    
+    Size aOriginalSize;
+    const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
+
+        rtl::OString aURLBS(rtl::OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
+
+        sal_Int32 index = aURLBS.indexOfL(RTL_CONSTASCII_STRINGPARAM(aURLBegin));
+
+        if ( index != -1 )
+        {
+            DBG(printf ("begin: %ld %s\n", long( sizeof( aURLBegin ) ), USS( rURL ) + RTL_CONSTASCII_LENGTH( aURLBegin ) ));
+            GraphicObject aGraphic = GraphicObject( aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)) );
+
+            aOriginalSize = aGraphic.GetPrefSize();
+        }
+
+    bool bCrop,IsCropped=true;
+    ::com::sun::star::text::GraphicCrop aGraphicCropStruct;    
+
+    if ( ( bCrop= GetProperty( rXPropSet, "GraphicCrop"  ) ) )
+     {      
+        mAny >>= aGraphicCropStruct; 
+        
+        /* element <a:srcRect> should not be written into an xml file if cropping is NOT performed on an image. 
+           IsCropped=false specifies this condition. */
+        if( (0 == aGraphicCropStruct.Left) && (0 == aGraphicCropStruct.Top) && (0 == aGraphicCropStruct.Right) && (0 == aGraphicCropStruct.Bottom) )
+        {    
+            IsCropped=false;
+        }    
+        else
+        {    
+            mpFS->singleElementNS(XML_a, XML_srcRect,
+                          XML_l,I32S(((aGraphicCropStruct.Left) * 100000)/aOriginalSize.Width()),
+                          XML_t,I32S(((aGraphicCropStruct.Top) * 100000)/aOriginalSize.Height()),
+                          XML_r,I32S(((aGraphicCropStruct.Right) * 100000)/aOriginalSize.Width()), 
+                          XML_b,I32S(((aGraphicCropStruct.Bottom) * 100000)/aOriginalSize.Height()),
+                          FSEND);
+        } 
+    }    
+}
+
 
 void DrawingML::WriteStretch()
 {
