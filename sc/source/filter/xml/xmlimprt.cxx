@@ -40,6 +40,7 @@
 
 #include <svl/zformat.hxx>
 #include <svl/languageoptions.hxx>
+#include "editeng/editstat.hxx"
 
 #include "xmlimprt.hxx"
 #include "document.hxx"
@@ -63,6 +64,8 @@
 #include "postit.hxx"
 #include "formulaparserpool.hxx"
 #include "externalrefmgr.hxx"
+#include "editutil.hxx"
+
 #include <comphelper/extract.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -3339,6 +3342,20 @@ bool ScXMLImport::IsFormulaErrorConstant( const OUString& rStr ) const
         return false;
 
     return mpComp->GetErrorConstant(rStr) > 0;
+}
+
+ScEditEngineDefaulter* ScXMLImport::GetEditEngine()
+{
+    if (!mpEditEngine)
+    {
+        mpEditEngine.reset(new ScEditEngineDefaulter(pDoc->GetEnginePool()));
+        mpEditEngine->SetRefMapMode(MAP_100TH_MM);
+        mpEditEngine->SetEditTextObjectPool(pDoc->GetEditPool());
+        mpEditEngine->SetUpdateMode(false);
+        mpEditEngine->EnableUndo(false);
+        mpEditEngine->SetControlWord(mpEditEngine->GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS);
+    }
+    return mpEditEngine.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

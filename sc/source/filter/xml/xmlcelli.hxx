@@ -21,18 +21,17 @@
 
 #include "XMLDetectiveContext.hxx"
 #include "XMLCellRangeSourceContext.hxx"
-#include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlimp.hxx>
-
+#include "importcontext.hxx"
 #include "formula/grammar.hxx"
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 
 class ScXMLImport;
 class ScFormulaCell;
+class ScEditEngineDefaulter;
 struct ScXMLAnnotationData;
 
-class ScXMLTableRowCellContext : public SvXMLImportContext
+class ScXMLTableRowCellContext : public ScXMLImportContext
 {
     typedef std::pair<OUString, OUString> FormulaWithNamespace;
 
@@ -40,7 +39,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     boost::optional<OUString> maStringValue;         /// office:string-value attribute
     boost::optional<OUString> maContentValidationName;
 
-    std::vector<OUString> maParagraphs;
+    ScEditEngineDefaulter* mpEditEngine;
     OUStringBuffer maParagraph;
 
     boost::scoped_ptr< ScXMLAnnotationData > mxAnnotationData;
@@ -61,9 +60,6 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     bool        bFormulaTextResult;
     bool        mbPossibleErrorCell;
     bool        mbCheckWithCompilerForError;
-
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
     sal_Int16 GetCellType(const rtl::OUString& sOUValue) const;
 

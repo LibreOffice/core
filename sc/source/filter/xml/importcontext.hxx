@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef __IMPORTCONTEXT_HXX__
+#define __IMPORTCONTEXT_HXX__
+
 #include "xmloff/xmlictxt.hxx"
 #include "xmloff/xmlimp.hxx"
 
@@ -27,3 +30,5 @@ protected:
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
+#endif

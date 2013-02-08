@@ -105,7 +105,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       const bool bTempIsCovered,
                                       const sal_Int32 nTempRepeatedRows ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext(rImport, nPrfx, rLName),
+    mpEditEngine(GetScImport().GetEditEngine()),
     pDetectiveObjVec(NULL),
     pCellRangeSource(NULL),
     fValue(0.0),
@@ -127,6 +128,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     mbCheckWithCompilerForError(false)
 {
     rtl::math::setNan(&fValue); // NaN by default
+    mpEditEngine->Clear();
 
     rXMLImport.SetRemoveLastChar(false);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
@@ -307,7 +309,8 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan)
 
 void ScXMLTableRowCellContext::PushParagraphEnd()
 {
-    maParagraphs.push_back(maParagraph.makeStringAndClear());
+    mpEditEngine->InsertParagraph(
+        mpEditEngine->GetParagraphCount(), maParagraph.makeStringAndClear());
 }
 
 SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -671,35 +674,14 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
         }
         else if (!rtl::math::isNan(fValue))
         {
-            if (!maParagraphs.empty())
-                pFCell->SetHybridValueString(fValue, maParagraphs.back());
+            if (mpEditEngine->GetParagraphCount())
+                pFCell->SetHybridValueString(fValue, mpEditEngine->GetText(0));
             else
                 pFCell->SetHybridDouble(fValue);
             pFCell->ResetDirty();
         }
         pFCell->StartListeningTo(rXMLImport.GetDocument());
     }
-}
-
-namespace {
-
-ScBaseCell* createEditCell(ScDocument* pDoc, const std::vector<OUString>& rParagraphs)
-{
-    // Create edit cell.
-    OUStringBuffer aBuf;
-    std::vector<OUString>::const_iterator it = rParagraphs.begin(), itEnd = rParagraphs.end();
-    bool bFirst = true;
-    for (; it != itEnd; ++it)
-    {
-        if (bFirst)
-            bFirst = false;
-        else
-            aBuf.append('\n');
-        aBuf.append(*it);
-    }
-    return ScBaseCell::CreateTextCell(aBuf.makeStringAndClear(), pDoc);
-}
-
 }
 
 void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
@@ -718,8 +700,8 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             OUString aCellString;
             if (maStringValue)
                 aCellString = *maStringValue;
-            else if (!maParagraphs.empty())
-                aCellString = maParagraphs.back();
+            else if (mpEditEngine->GetParagraphCount())
+                aCellString = mpEditEngine->GetText(0);
             else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
                 aCellString = *pOUText;
             else
@@ -753,8 +735,8 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         ScDocument* pDoc = rXMLImport.GetDocument();
         if (maStringValue)
             pNewCell = ScBaseCell::CreateTextCell( *maStringValue, pDoc );
-        else if (!maParagraphs.empty())
-            pNewCell = createEditCell(pDoc, maParagraphs);
+        else if (mpEditEngine->GetParagraphCount())
+            pNewCell = new ScEditCell(mpEditEngine->CreateTextObject(), pDoc, pDoc->GetEditPool());
         else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
             pNewCell = ScBaseCell::CreateTextCell( *pOUText, pDoc );
 
@@ -960,7 +942,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
         if( cellExists(rCellPos) && CellsAreRepeated() )
             pOUText.reset( getOutputString(rXMLImport.GetDocument(), rCellPos) );
 
-        if (maParagraphs.empty() && !pOUText && !maStringValue)
+        if (!mpEditEngine->GetParagraphCount() && !pOUText && !maStringValue)
             bIsEmpty = true;
     }
 
@@ -1110,14 +1092,14 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
 // - has an "Err:[###]" (where "[###]" is an error number)
 void ScXMLTableRowCellContext::HasSpecialCaseFormulaText()
 {
-    if (!maParagraphs.empty())
-    {
-        const OUString& rStr = maParagraphs.back();
-        if (rStr.isEmpty() || rStr.startsWith("Err:"))
-            mbPossibleErrorCell = true;
-        else if (rStr.startsWith("#"))
-            mbCheckWithCompilerForError = true;
-    }
+    if (!mpEditEngine->GetParagraphCount())
+        return;
+
+    OUString aStr = mpEditEngine->GetText(0);
+    if (aStr.isEmpty() || aStr.startsWith("Err:"))
+        mbPossibleErrorCell = true;
+    else if (aStr.startsWith("#"))
+        mbCheckWithCompilerForError = true;
 }
 
 bool ScXMLTableRowCellContext::IsPossibleErrorString() const
@@ -1131,7 +1113,7 @@ void ScXMLTableRowCellContext::EndElement()
     HasSpecialCaseFormulaText();
     if( bFormulaTextResult && (mbPossibleErrorCell || mbCheckWithCompilerForError) )
     {
-        maStringValue.reset(maParagraphs.back());
+        maStringValue.reset(mpEditEngine->GetText(0));
         nCellType = util::NumberFormat::TEXT;
     }
 

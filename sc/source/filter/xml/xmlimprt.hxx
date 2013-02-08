@@ -52,6 +52,7 @@
 
 class ScMyStyleNumberFormats;
 class XMLNumberFormatAttributesExportHelper;
+class ScEditEngineDefaulter;
 
 enum ScXMLDocTokens
 {
@@ -756,6 +757,7 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
 
     ScDocument*             pDoc;
     boost::scoped_ptr<ScCompiler> mpComp; // For error-checking of cached string cell values.
+    boost::scoped_ptr<ScEditEngineDefaulter> mpEditEngine;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScMyViewContextList                 aViewContextList;
     ScMyStylesImportHelper*             pStylesImportHelper;
@@ -1163,6 +1165,8 @@ public:
             bool bRestrictToExternalNmsp = false ) const;
 
     bool IsFormulaErrorConstant( const OUString& rStr ) const;
+
+    ScEditEngineDefaulter* GetEditEngine();
 };
 
 #endif
