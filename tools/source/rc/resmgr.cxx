@@ -1240,7 +1240,8 @@ sal_uInt32 ResMgr::GetStringWithoutHook( OUString& rStr, const sal_uInt8* pStr )
 {
     sal_uInt32 nLen=0;
     sal_uInt32 nRet = GetStringSize( pStr, nLen );
-    OUString aString( (sal_Char*)pStr, RTL_TEXTENCODING_UTF8,
+    const sal_Char* str = reinterpret_cast< const sal_Char* >( pStr );
+    OUString aString( str, strlen( str ), RTL_TEXTENCODING_UTF8,
                        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |
                        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
                        RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT );
