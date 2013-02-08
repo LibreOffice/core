@@ -3827,10 +3827,10 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
     SvxLRSpaceItem aLR( RES_LR_SPACE );
     const SfxPoolItem* pLR = GetFmtAttr(RES_LR_SPACE);
     if( pLR )
-        aLR = *(const SvxLRSpaceItem*)pLR;
+        aLR = *static_cast<const SvxLRSpaceItem*>(pLR);
 
     // Fix the regression issue: #i99822#: Discussion?
-    // Since the list lever formatting doesn't apply into paragraph style
+    // Since the list level formatting doesn't apply into paragraph style
     // for list levels of mode LABEL_ALIGNMENT.(see ww8par3.cxx
     // W8ImplReader::RegisterNumFmtOnTxtNode).
     // Need to apply the list format to the paragraph here.
