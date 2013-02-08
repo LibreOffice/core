@@ -19,9 +19,8 @@
 #ifndef __com_sun_star_util_MacroExpander_idl__
 #define __com_sun_star_util_MacroExpander_idl__
 
-#include <com/sun/star/util/XMacroExpander.idl>
 #include <com/sun/star/lang/XComponent.idl>
-
+#include <com/sun/star/util/XMacroExpander.idl>
 
 
 module com {  module sun {  module star {  module util {
@@ -36,6 +35,7 @@ module com {  module sun {  module star {  module util {
     @see theMacroExpander
 
     @since OOo 1.1.2
+    @deprecated rather use the util::theMacroExpander singleton
 */
 published service MacroExpander
 {

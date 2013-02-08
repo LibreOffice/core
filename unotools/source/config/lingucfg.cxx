@@ -24,7 +24,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include "com/sun/star/util/XMacroExpander.hpp"
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <rtl/uri.hxx>
 #include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
@@ -937,15 +937,8 @@ static uno::Reference< util::XMacroExpander > lcl_GetMacroExpander()
     uno::Reference< util::XMacroExpander > xMacroExpander( aG_xMacroExpander );
     if ( !xMacroExpander.is() )
     {
-        if ( !xMacroExpander.is() )
-        {
-            uno::Reference< uno::XComponentContext > xContext(
-                comphelper::getProcessComponentContext() );
-            aG_xMacroExpander =  uno::Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
-                                        OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.util.theMacroExpander"))),
-                                        uno::UNO_QUERY );
-            xMacroExpander = aG_xMacroExpander;
-        }
+        aG_xMacroExpander = util::theMacroExpander::get( comphelper::getProcessComponentContext() );
+        xMacroExpander = aG_xMacroExpander;
     }
 
     return xMacroExpander;
@@ -958,7 +951,7 @@ static bool lcl_GetFileUrlFromOrigin(
     uno::Reference< util::XMacroExpander > &rxMacroExpander )
 {
     bool bSuccess = false;
-    if (!rOrigin.isEmpty() && rxMacroExpander.is())
+    if (!rOrigin.isEmpty())
     {
         rtl::OUString aURL( rOrigin );
         if (( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 ) &&

@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -148,9 +148,8 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
         Reference< XMultiServiceFactory > xServiceFactory(
             xContext->getServiceManager(), UNO_QUERY_THROW );
 
-        uno::Reference< util::XMacroExpander > xMacroExpander(
-            xContext->getValueByName("/singletons/com.sun.star.util.theMacroExpander"),
-            UNO_QUERY );
+        uno::Reference< util::XMacroExpander > xMacroExpander =
+            util::theMacroExpander::get(xContext);
 
         // import ui strings
         Reference< XMultiServiceFactory > xConfigProvider =

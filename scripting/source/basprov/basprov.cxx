@@ -41,7 +41,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -155,12 +155,9 @@ namespace basprov
                         {
                             ::rtl::OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
                             aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                            Reference<util::XMacroExpander> xMacroExpander(
-                                m_xContext->getValueByName(
-                                ::rtl::OUString("/singletons/com.sun.star.util.theMacroExpander") ),
-                                UNO_QUERY );
-                            if ( xMacroExpander.is() )
-                                aFileURL = xMacroExpander->expandMacros( aDecodedURL );
+                            Reference<util::XMacroExpander> xMacroExpander =
+                                util::theMacroExpander::get(m_xContext);
+                            aFileURL = xMacroExpander->expandMacros( aDecodedURL );
                         }
                     }
                 }

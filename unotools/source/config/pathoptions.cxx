@@ -38,7 +38,7 @@
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <rtl/instance.hxx>
 
 #include <itemholder1.hxx>
@@ -416,11 +416,11 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
 SvtPathOptions_Impl::SvtPathOptions_Impl() :
     m_aPathArray( (sal_Int32)SvtPathOptions::PATH_COUNT )
 {
-    Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
+    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
     // Create necessary services
-    m_xPathSettings = Reference< XFastPropertySet >( xSMgr->createInstance(
-                                                    ::rtl::OUString( "com.sun.star.util.PathSettings" )),
+    m_xPathSettings = Reference< XFastPropertySet >( xContext->getServiceManager()->createInstanceWithContext(
+                                                     "com.sun.star.util.PathSettings", xContext),
                                                 UNO_QUERY );
     if ( !m_xPathSettings.is() )
     {
@@ -431,9 +431,8 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
             Reference< XInterface >() );
     }
 
-    ::comphelper::ComponentContext aContext( xSMgr );
-    m_xSubstVariables.set( PathSubstitution::create(aContext.getUNOContext()) );
-    m_xMacroExpander.set( aContext.getSingleton( "com.sun.star.util.theMacroExpander" ), UNO_QUERY_THROW );
+    m_xSubstVariables.set( PathSubstitution::create(xContext) );
+    m_xMacroExpander = theMacroExpander::get(xContext);
 
     // Create temporary hash map to have a mapping between property names and property handles
     Reference< XPropertySet > xPropertySet = Reference< XPropertySet >( m_xPathSettings, UNO_QUERY );
@@ -944,14 +943,9 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Paths ePath )
                 }
                 if ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_EXPAND )
                 {
-                    ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                    Reference< XMacroExpander > xMacroExpander( aContext.getSingleton( "com.sun.star.util.theMacroExpander" ), UNO_QUERY );
-                    OSL_ENSURE( xMacroExpander.is(), "SvtPathOptions::SearchFile: unable to access the MacroExpander singleton!" );
-                    if ( xMacroExpander.is() )
-                    {
-                        const ::rtl::OUString sExpandedPath = xMacroExpander->expandMacros( aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
-                        aObj.SetURL( sExpandedPath );
-                    }
+                    Reference< XMacroExpander > xMacroExpander = theMacroExpander::get( ::comphelper::getProcessComponentContext() );
+                    const ::rtl::OUString sExpandedPath = xMacroExpander->expandMacros( aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
+                    aObj.SetURL( sExpandedPath );
                 }
 
                 sal_Int32 nIniIndex = 0;

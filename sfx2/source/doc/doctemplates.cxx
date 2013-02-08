@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -580,16 +580,9 @@ void SfxDocTplService_Impl::getDirList()
 
     uno::Reference< XComponentContext > xCtx(
         comphelper::getComponentContext( mxFactory ) );
-    uno::Reference< util::XMacroExpander > xExpander;
+    uno::Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(xCtx);
     const rtl::OUString aPrefix(
         "vnd.sun.star.expand:"  );
-
-    xCtx->getValueByName(
-        rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander"  ) )
-        >>= xExpander;
-
-    OSL_ENSURE( xExpander.is(),
-                "Unable to obtain macro expander singleton!" );
 
     for ( sal_uInt16 i=0; i<nCount; i++ )
     {
@@ -2852,7 +2845,7 @@ void SfxURLRelocator_Impl::implExpandURL( ::rtl::OUString& io_url )
         if ( !mxMacroExpander.is() )
         {
             ::comphelper::ComponentContext aContext( mxFactory );
-            mxMacroExpander.set( aContext.getSingleton( "com.sun.star.util.theMacroExpander" ), UNO_QUERY_THROW );
+            mxMacroExpander.set( theMacroExpander::get(aContext.getUNOContext()), UNO_QUERY_THROW );
         }
         io_url = mxMacroExpander->expandMacros( io_url );
     }

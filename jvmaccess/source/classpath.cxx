@@ -31,7 +31,7 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/uri/UriReferenceFactory.hpp"
 #include "com/sun/star/uri/XVndSunStarExpandUrlReference.hpp"
-#include "com/sun/star/util/XMacroExpander.hpp"
+#include "com/sun/star/util/theMacroExpander.hpp"
 #include "osl/diagnose.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -65,15 +65,10 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
                     css::uri::UriReferenceFactory::create(context)->parse(url),
                     css::uno::UNO_QUERY);
             if (expUrl.is()) {
-                css::uno::Reference< css::util::XMacroExpander > expander(
-                    context->getValueByName(
-                        ::rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "/singletons/"
-                                "com.sun.star.util.theMacroExpander"))),
-                    css::uno::UNO_QUERY_THROW);
+                css::uno::Reference< css::util::XMacroExpander > expander =
+                    css::util::theMacroExpander::get(context);
                 try {
-                    url = expUrl->expand(expander);
+                    url = expUrl->expand( expander );
                 } catch (const css::lang::IllegalArgumentException & e) {
                     throw css::uno::RuntimeException(
                         (::rtl::OUString(

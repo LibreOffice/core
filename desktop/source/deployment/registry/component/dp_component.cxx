@@ -42,7 +42,7 @@
 #include "com/sun/star/loader/XImplementationLoader.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/ucb/NameClash.hpp"
-#include "com/sun/star/util/XMacroExpander.hpp"
+#include "com/sun/star/util/theMacroExpander.hpp"
 #include <list>
 #include <boost/unordered_map.hpp>
 #include <vector>
@@ -1083,11 +1083,7 @@ Reference<XComponentContext> raise_uno_process(
 {
     OSL_ASSERT( xContext.is() );
 
-    ::rtl::OUString url(
-        Reference<util::XMacroExpander>(
-            xContext->getValueByName( "/singletons/com.sun.star.util.theMacroExpander" ),
-            UNO_QUERY_THROW )->
-        expandMacros( "$URE_BIN_DIR/uno" ) );
+    ::rtl::OUString url( util::theMacroExpander::get(xContext)->expandMacros( "$URE_BIN_DIR/uno" ) );
 
     ::rtl::OUStringBuffer buf;
     buf.appendAscii( "uno:pipe,name=" );

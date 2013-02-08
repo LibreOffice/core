@@ -48,7 +48,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/util/XMacroExpander.hpp"
+#include "com/sun/star/util/theMacroExpander.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/factory.hxx"
@@ -1624,22 +1624,7 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
 }
 
 void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
-    css::uno::Reference< css::util::XMacroExpander > exp;
-    if (!(m_xContext->getValueByName(
-              rtl::OUString(
-                  RTL_CONSTASCII_USTRINGPARAM(
-                      "/singletons/com.sun.star.util.theMacroExpander")))
-          >>= exp)
-        || !exp.is())
-    {
-        throw css::uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "component context fails to supply singleton"
-                    " com.sun.star.util.theMacroExpander of type"
-                    " com.sun.star.util.XMacroExpander")),
-            m_xContext);
-    }
+    css::uno::Reference< css::util::XMacroExpander > exp = css::util::theMacroExpander::get(m_xContext);
     rtl::OUString baseUrl;
     try {
         baseUrl = exp->expandMacros(

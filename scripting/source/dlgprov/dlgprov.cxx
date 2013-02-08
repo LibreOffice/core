@@ -47,7 +47,7 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 
 #include <util/MiscUtils.hxx>
 
@@ -295,10 +295,8 @@ static ::rtl::OUString aResourceResolverPropName("ResourceResolver");
         // Accept file URL to single dialog
         bool bSingleDialog = false;
 
-        Reference< util::XMacroExpander > xMacroExpander(
-            m_xContext->getValueByName(
-            ::rtl::OUString("/singletons/com.sun.star.util.theMacroExpander") ),
-            UNO_QUERY_THROW );
+        Reference< util::XMacroExpander > xMacroExpander =
+            util::theMacroExpander::get(m_xContext);
 
         Reference< uri::XUriReference > uriRef;
         for (;;)

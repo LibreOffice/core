@@ -31,7 +31,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <comphelper/locale.hxx>
@@ -1281,29 +1281,23 @@ rtl::OUString TreeFileIterator::expandURL( const rtl::OUString& aURL )
     {
         xFac = uri::UriReferenceFactory::create( m_xContext );
 
-        xMacroExpander = Reference< util::XMacroExpander >(
-            m_xContext->getValueByName(
-            ::rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander" ) ),
-            UNO_QUERY_THROW );
+        xMacroExpander = util::theMacroExpander::get(m_xContext);
      }
 
     rtl::OUString aRetURL = aURL;
-    if( xMacroExpander.is() )
+    Reference< uri::XUriReference > uriRef;
+    for (;;)
     {
-        Reference< uri::XUriReference > uriRef;
-        for (;;)
+        uriRef = Reference< uri::XUriReference >( xFac->parse( aRetURL ), UNO_QUERY );
+        if ( uriRef.is() )
         {
-            uriRef = Reference< uri::XUriReference >( xFac->parse( aRetURL ), UNO_QUERY );
-            if ( uriRef.is() )
-            {
-                Reference < uri::XVndSunStarExpandUrl > sxUri( uriRef, UNO_QUERY );
-                if( !sxUri.is() )
-                    break;
+            Reference < uri::XVndSunStarExpandUrl > sxUri( uriRef, UNO_QUERY );
+            if( !sxUri.is() )
+                break;
 
-                aRetURL = sxUri->expand( xMacroExpander );
-            }
+            aRetURL = sxUri->expand( xMacroExpander );
         }
-     }
+    }
     return aRetURL;
 }
 

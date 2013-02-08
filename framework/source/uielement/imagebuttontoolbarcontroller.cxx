@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
-#include "com/sun/star/util/XMacroExpander.hpp"
+#include "com/sun/star/util/theMacroExpander.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 
 #include <rtl/uri.hxx>
@@ -73,9 +73,7 @@ uno::Reference< util::XMacroExpander > GetMacroExpander()
         {
             uno::Reference< uno::XComponentContext > xContext(
                 comphelper::getProcessComponentContext() );
-            m_xMacroExpander =  Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
-                                        UNO_QUERY );
+            m_xMacroExpander =  util::theMacroExpander::get(xContext);
             xMacroExpander = m_xMacroExpander;
         }
     }

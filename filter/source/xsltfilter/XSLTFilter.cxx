@@ -50,7 +50,7 @@
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -181,11 +181,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                 css::uno::Reference<XComponentContext> xContext(
                     comphelper::getComponentContext(m_rServiceFactory));
                 css::uno::Reference<XMacroExpander>
-                        xMacroExpander(
-                                xContext->getValueByName(
-                                        ::rtl::OUString(
-                                                 "/singletons/com.sun.star.util.theMacroExpander" )),
-                                UNO_QUERY_THROW);
+                        xMacroExpander = theMacroExpander::get(xContext);
                 sExpandedUrl = xMacroExpander->expandMacros(sUrl);
                 sal_Int32 nPos = sExpandedUrl.indexOf( "vnd.sun.star.expand:" );
                 if (nPos != -1)

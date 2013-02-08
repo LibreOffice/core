@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -303,9 +303,8 @@ void CustomAnimationPresets::importEffects()
         Reference< XMultiServiceFactory > xServiceFactory(
             xContext->getServiceManager(), UNO_QUERY_THROW );
 
-        uno::Reference< util::XMacroExpander > xMacroExpander(
-            xContext->getValueByName("/singletons/com.sun.star.util.theMacroExpander"),
-            UNO_QUERY );
+        uno::Reference< util::XMacroExpander > xMacroExpander =
+            util::theMacroExpander::get(xContext);
 
         Reference< XMultiServiceFactory > xConfigProvider =
             configuration::theDefaultProvider::get( xContext );

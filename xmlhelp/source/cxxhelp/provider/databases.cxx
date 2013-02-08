@@ -46,7 +46,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
@@ -91,10 +91,7 @@ rtl::OUString Databases::expandURL( const rtl::OUString& aURL, Reference< uno::X
     {
         xFac = uri::UriReferenceFactory::create( xContext );
 
-        xMacroExpander = Reference< util::XMacroExpander >(
-            xContext->getValueByName(
-            ::rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander" ) ),
-            UNO_QUERY_THROW );
+        xMacroExpander = util::theMacroExpander::get(xContext);
      }
 
     rtl::OUString aRetURL = aURL;

@@ -49,7 +49,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 
 #include <vector>
 
@@ -81,7 +81,7 @@ class OCommandEnvironment;
 
 class OFileAccess : public FileAccessHelper
 {
-    Reference< XMultiServiceFactory > mxSMgr;
+    Reference< XComponentContext > m_xContext;
     Reference< XCommandEnvironment > mxEnvironment;
     OCommandEnvironment* mpEnvironment;
 
@@ -93,8 +93,8 @@ class OFileAccess : public FileAccessHelper
         throw ( Exception );
 
 public:
-    OFileAccess( const Reference< XMultiServiceFactory > & xSMgr )
-        : mxSMgr( xSMgr), mpEnvironment( NULL ) {}
+    OFileAccess( const Reference< XComponentContext > & xContext )
+        : m_xContext( xContext), mpEnvironment( NULL ) {}
 
     // Methods
     virtual void SAL_CALL copy( const ::rtl::OUString& SourceURL, const ::rtl::OUString& DestURL ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -252,17 +252,7 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
 
             try
             {
-                Reference< XComponentContext > xCtx(
-                    comphelper::getComponentContext( mxSMgr ) );
-
-                Reference< XMacroExpander > xExpander;
-
-                xCtx->getValueByName(
-                    rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander"  ) )
-                            >>= xExpander;
-
-                OSL_ENSURE( xExpander.is(),
-                            "Unable to obtain macro expander singleton!" );
+                Reference< XMacroExpander > xExpander = theMacroExpander::get(m_xContext);
 
                 aDestURL = xExpander->expandMacros(
                     aDestObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
@@ -791,7 +781,7 @@ void OFileAccess::setHidden( const ::rtl::OUString& FileURL, sal_Bool bHidden )
 
 Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMultiServiceFactory > & xSMgr )
 {
-    return Reference < XInterface >( ( cppu::OWeakObject * ) new OFileAccess( xSMgr ) );
+    return Reference < XInterface >( ( cppu::OWeakObject * ) new OFileAccess( comphelper::getComponentContext(xSMgr) ) );
 }
 
 

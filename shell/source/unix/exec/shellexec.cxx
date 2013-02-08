@@ -27,7 +27,7 @@
 #include "shellexec.hxx"
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -168,19 +168,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         // The url launchers are expected to be in the $BRAND_BASE_DIR/program
         // directory:
         com::sun::star::uno::Reference< com::sun::star::util::XMacroExpander >
-            exp;
-        if (!(m_xContext->getValueByName(
-                  rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander"))
-              >>= exp)
-            || !exp.is())
-        {
-            throw SystemShellExecuteException(
-                rtl::OUString(
-                        "component context fails to supply singleton"
-                        " com.sun.star.util.theMacroExpander of type"
-                        " com.sun.star.util.XMacroExpander"),
-                static_cast< XSystemShellExecute * >(this), ENOENT);
-        }
+            exp = com::sun::star::util::theMacroExpander::get(m_xContext);
         OUString aProgramURL;
         try {
             aProgramURL = exp->expandMacros(

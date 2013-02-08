@@ -24,7 +24,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <sal/macros.h>
 
@@ -169,18 +169,14 @@ rtl::OUString ConfigurationAccess::getPath( const PPPOptimizerTokenEnum eToken )
     try
     {
         static const OUString sProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.expand:" ) );
-        static const OUString stheMacroExpander( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander" ) );
         Reference< container::XNameAccess > xSet( OpenConfiguration( true ), UNO_QUERY_THROW );
         if ( xSet->hasByName( TKGet( eToken ) ) )
             xSet->getByName( TKGet( eToken ) ) >>= aPath;
         if ( aPath.match( sProtocol, 0 ) )
         {
             rtl::OUString aTmp( aPath.copy( 20 ) );
-            Reference< util::XMacroExpander > xExpander;
-            if ( mxMSF->getValueByName( stheMacroExpander ) >>= xExpander )
-            {
-                aPath = xExpander->expandMacros( aTmp );
-            }
+            Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(mxMSF);
+            aPath = xExpander->expandMacros( aTmp );
         }
     }
     catch (const Exception&)

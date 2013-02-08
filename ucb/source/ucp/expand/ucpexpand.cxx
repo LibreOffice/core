@@ -29,7 +29,7 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
-#include "com/sun/star/util/XMacroExpander.hpp"
+#include "com/sun/star/util/theMacroExpander.hpp"
 #include "com/sun/star/ucb/XContentProvider.hpp"
 
 #define EXPAND_PROTOCOL "vnd.sun.star.expand"
@@ -54,7 +54,7 @@ typedef ::cppu::WeakComponentImplHelper2<
 class ExpandContentProviderImpl : protected MutexHolder, public t_impl_helper
 {
     uno::Reference< uno::XComponentContext > m_xComponentContext;
-    uno::Reference< util::XMacroExpander > m_xMacroExpander;
+    uno::Reference< util::XMacroExpander >   m_xMacroExpander;
     OUString expandUri(
         uno::Reference< ucb::XContentIdentifier > const & xIdentifier ) const;
 
@@ -67,10 +67,7 @@ public:
         uno::Reference< uno::XComponentContext > const & xComponentContext )
         : t_impl_helper( m_mutex ),
           m_xComponentContext( xComponentContext ),
-          m_xMacroExpander(
-              xComponentContext->getValueByName(
-                  "/singletons/com.sun.star.util.theMacroExpander" ),
-              uno::UNO_QUERY_THROW )
+          m_xMacroExpander( util::theMacroExpander::get(xComponentContext) )
         {}
     virtual ~ExpandContentProviderImpl() throw ();
 

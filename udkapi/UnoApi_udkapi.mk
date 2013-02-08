@@ -95,8 +95,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/script,
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/util,\
 	BootstrapMacroExpander \
-	MacroExpander \
-	theMacroExpander \
 ))
 
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/beans,\
@@ -148,6 +146,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/uri,\
 	UriSchemeParser_vndDOTsunDOTstarDOTexpand \
 	UriSchemeParser_vndDOTsunDOTstarDOTscript \
 	VndSunStarPkgUrlReferenceFactory \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/util,\
+	MacroExpander \
+	theMacroExpander \
 ))
 
 

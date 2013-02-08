@@ -26,7 +26,7 @@
 #include "documentenumeration.hxx"
 
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -93,6 +93,7 @@ namespace basctl
     using ::com::sun::star::uri::XUriReference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::util::XMacroExpander;
+    using ::com::sun::star::util::theMacroExpander;
     using ::com::sun::star::io::XInputStreamProvider;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::io::XInputStream;
@@ -953,10 +954,7 @@ namespace basctl
                 {
                     OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
                     aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                    Reference< XMacroExpander > xMacroExpander(
-                        xContext->getValueByName(
-                        "/singletons/com.sun.star.util.theMacroExpander" ),
-                        UNO_QUERY_THROW );
+                    Reference< XMacroExpander > xMacroExpander = theMacroExpander::get(xContext);
                     aFileURL = xMacroExpander->expandMacros( aDecodedURL );
                 }
             }

@@ -28,7 +28,7 @@
 
 #include "osl/file.hxx"
 #include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/util/XMacroExpander.hpp"
+#include "com/sun/star/util/theMacroExpander.hpp"
 
 #include "officeinstallationdirectories.hxx"
 
@@ -290,35 +290,25 @@ void OfficeInstallationDirectories::initDirs()
             m_pOfficeBrandDir = new rtl::OUString;
             m_pUserDir        = new rtl::OUString;
 
-            uno::Reference< util::XMacroExpander > xExpander;
+            uno::Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(m_xCtx);
 
-            m_xCtx->getValueByName(
-                OUString("/singletons/com.sun.star.util.theMacroExpander"))
-            >>= xExpander;
+            *m_pOfficeBrandDir =
+                xExpander->expandMacros(
+                     OUString( "$BRAND_BASE_DIR" ) );
 
-            OSL_ENSURE( xExpander.is(),
-                        "Unable to obtain macro expander singleton!" );
+            OSL_ENSURE( !m_pOfficeBrandDir->isEmpty(),
+                        "Unable to obtain office brand installation directory!" );
 
-            if ( xExpander.is() )
-            {
-                *m_pOfficeBrandDir =
-                    xExpander->expandMacros(
-                         OUString( "$BRAND_BASE_DIR" ) );
+            makeCanonicalFileURL( *m_pOfficeBrandDir );
 
-                OSL_ENSURE( !m_pOfficeBrandDir->isEmpty(),
-                            "Unable to obtain office brand installation directory!" );
+            *m_pUserDir =
+                xExpander->expandMacros(
+                    OUString("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) );
 
-                makeCanonicalFileURL( *m_pOfficeBrandDir );
+            OSL_ENSURE( !m_pUserDir->isEmpty(),
+                        "Unable to obtain office user data directory!" );
 
-                *m_pUserDir =
-                    xExpander->expandMacros(
-                        OUString("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) );
-
-                OSL_ENSURE( !m_pUserDir->isEmpty(),
-                            "Unable to obtain office user data directory!" );
-
-                makeCanonicalFileURL( *m_pUserDir );
-            }
+            makeCanonicalFileURL( *m_pUserDir );
         }
     }
 }

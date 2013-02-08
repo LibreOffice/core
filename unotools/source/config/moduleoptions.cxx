@@ -98,8 +98,6 @@ struct FactoryInfo
         FactoryInfo()
         {
             free();
-            // @@@ should be supplied from outside!
-            xSMgr = ::comphelper::getProcessServiceFactory();
         }
 
         //---------------------------------------------------------------------------------------------------------
@@ -262,10 +260,7 @@ struct FactoryInfo
         {
             if ( !xSubstVars.is() )
             {
-                css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getComponentContext(xSMgr) );
-                xSubstVars
-                    = css::uno::Reference< css::util::XStringSubstitution >(
-                        css::util::PathSubstitution::create(xContext) );
+                xSubstVars.set( css::util::PathSubstitution::create(::comphelper::getProcessComponentContext()) );
             }
             return xSubstVars;
         }
@@ -286,7 +281,6 @@ struct FactoryInfo
         sal_Bool            bChangedIcon                :1  ;
         sal_Bool            bDefaultFilterReadonly      :1  ;
 
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMgr;
         css::uno::Reference< css::util::XStringSubstitution >  xSubstVars;
 };
 
@@ -1271,18 +1265,16 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(const 
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::OUString&                                 sURL            ,
                                                                   const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    if (!xSMGR.is())
-        return E_UNKNOWN_FACTORY;
+    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
     css::uno::Reference< css::container::XNameAccess > xFilterCfg;
     css::uno::Reference< css::container::XNameAccess > xTypeCfg ;
     try
     {
         xFilterCfg = css::uno::Reference< css::container::XNameAccess >(
-            xSMGR->createInstance(::rtl::OUString("com.sun.star.document.FilterFactory")), css::uno::UNO_QUERY);
+            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext), css::uno::UNO_QUERY);
         xTypeCfg = css::uno::Reference< css::container::XNameAccess >(
-            xSMGR->createInstance(::rtl::OUString("com.sun.star.document.TypeDetection")), css::uno::UNO_QUERY);
+            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext), css::uno::UNO_QUERY);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }

@@ -58,7 +58,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <comphelper/processfactory.hxx>
 #include <editeng/optitems.hxx>
 #include <editeng/unolingu.hxx>
@@ -824,15 +824,14 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
         }
 
         // MacroExpander to convert "expand"-URL to "file"-URL
-        Reference< XMacroExpander > m_xMacroExpander;
+        Reference< XMacroExpander > xMacroExpander;
         bool bMustExpand = ( INetURLObject( sLastURL ).GetProtocol() == INET_PROT_FILE );
 
         if ( bMustExpand )
         {
             Reference< XComponentContext > xContext(
                 comphelper::getProcessComponentContext() );
-            m_xMacroExpander = Reference< com::sun::star::util::XMacroExpander >(
-                xContext->getValueByName( ::rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander"  ) ), UNO_QUERY );
+            xMacroExpander = theMacroExpander::get(xContext);
         }
 
         SvTreeListEntry* pTemp = aTreeLB.First();
@@ -853,7 +852,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
                     sTemp = ::rtl::Uri::decode(
                         sTemp, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
                     // expand string
-                    sPageURL = m_xMacroExpander->expandMacros( sTemp );
+                    sPageURL = xMacroExpander->expandMacros( sTemp );
                 }
 
                 if ( ( !bIsFromExtensionManager

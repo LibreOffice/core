@@ -24,7 +24,7 @@
 #include <tools/stream.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "com/sun/star/util/XMacroExpander.hpp"
+#include "com/sun/star/util/theMacroExpander.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
@@ -46,6 +46,7 @@ using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star::beans ;
 using namespace ::com::sun::star::lang  ;
+using namespace ::com::sun::star;
 
 #define ROOTNODE_ADDONMENU                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Addons" ))
 #define PATHDELIMITER                                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"             ))
@@ -350,7 +351,7 @@ class AddonsOptions_Impl : public ConfigItem
         AddonToolBars                                     m_aCachedToolBarPartProperties;
         std::vector< rtl::OUString >                      m_aCachedToolBarPartResourceNames;
         Sequence< Sequence< PropertyValue > >             m_aCachedHelpMenuProperties;
-        Reference< com::sun::star::util::XMacroExpander > m_xMacroExpander;
+        Reference< util::XMacroExpander >                 m_xMacroExpander;
         ImageManager                                      m_aImageManager;
         Sequence< Sequence< PropertyValue > >             m_aEmptyAddonToolBar;
         MergeMenuInstructionContainer                     m_aCachedMergeMenuInsContainer;
@@ -407,9 +408,7 @@ AddonsOptions_Impl::AddonsOptions_Impl()
 
     Reference< XComponentContext > xContext(
         comphelper::getProcessComponentContext() );
-    m_xMacroExpander =  Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
-                                UNO_QUERY );
+    m_xMacroExpander =  util::theMacroExpander::get(xContext);
 
     ReadConfigurationData();
 
@@ -1287,8 +1286,7 @@ sal_Bool AddonsOptions_Impl::HasAssociatedImages( const ::rtl::OUString& aURL )
 //*****************************************************************************************************************
 void AddonsOptions_Impl::SubstituteVariables( ::rtl::OUString& aURL )
 {
-    if (( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 ) &&
-        m_xMacroExpander.is() )
+    if (( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 ) )
     {
         // cut protocol
         ::rtl::OUString macro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );

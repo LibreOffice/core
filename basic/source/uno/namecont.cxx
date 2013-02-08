@@ -54,6 +54,7 @@
 #include <com/sun/star/script/vba/VBAScriptEventId.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -2848,14 +2849,7 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
         if( !mxMacroExpander.is() )
         {
             Reference< XComponentContext > xContext(comphelper::getComponentContext( mxMSF ) );
-            Reference< util::XMacroExpander > xExpander;
-            xContext->getValueByName( OUString("/singletons/com.sun.star.util.theMacroExpander") ) >>= xExpander;
-            if(! xExpander.is())
-            {
-                throw uno::DeploymentException(
-                    OUString("no macro expander singleton available!"),
-                    Reference< XInterface >() );
-            }
+            Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(xContext);
             MutexGuard guard( Mutex::getGlobalMutex() );
             if( !mxMacroExpander.is() )
             {
