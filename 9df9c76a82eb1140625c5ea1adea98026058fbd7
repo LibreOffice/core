@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///hU\u003d",
+        "filename": "vcl/source/filter/wmf/winmtf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-02-08T18:38:44Z",
+      "side": 1,
+      "message": "I think it would be nice to use some self-documenting symbolic names for magic values like this 32 here.",
+      "revId": "9df9c76a82eb1140625c5ea1adea98026058fbd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///hQ\u003d",
+        "filename": "vcl/source/filter/wmf/winmtf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-02-08T18:38:44Z",
+      "side": 1,
+      "message": "Sue, I know 2.54 is one inch in centimetres, but stil, a symbolic name for this constant would be nice.",
+      "revId": "9df9c76a82eb1140625c5ea1adea98026058fbd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///hM\u003d",
+        "filename": "vcl/source/filter/wmf/winmtf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-02-08T18:38:44Z",
+      "side": 1,
+      "message": "This I don\u0027t know what it means;)",
+      "revId": "9df9c76a82eb1140625c5ea1adea98026058fbd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///hI\u003d",
+        "filename": "vcl/source/filter/wmf/winmtf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2013,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-02-08T18:38:44Z",
+      "side": 1,
+      "message": "Surely it is cleaner to divide by 16 than right-shift by four? And instead of 16, some symbolic constant please?",
+      "revId": "9df9c76a82eb1140625c5ea1adea98026058fbd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
