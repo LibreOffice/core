@@ -1839,6 +1839,20 @@ const SvXMLTokenMap& ScXMLImport::GetConsolidationAttrTokenMap()
     return *pConsolidationAttrTokenMap;
 }
 
+const SvXMLTokenMap& ScXMLImport::GetCellTextParaElemTokenMap()
+{
+    if (!pCellTextParaElemTokemMap)
+    {
+        static SvXMLTokenMapEntry aMap[] =
+        {
+            { XML_NAMESPACE_TEXT, XML_SPAN, XML_TOK_CELL_TEXT_SPAN },
+            XML_TOKEN_MAP_END
+        };
+
+        pCellTextParaElemTokemMap = new SvXMLTokenMap(aMap);
+    }
+    return *pCellTextParaElemTokemMap;
+}
 
 SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
                                                const OUString& rLocalName,
@@ -1962,6 +1976,7 @@ ScXMLImport::ScXMLImport(
     pDataPilotMembersElemTokenMap( 0 ),
     pDataPilotMemberAttrTokenMap( 0 ),
     pConsolidationAttrTokenMap( 0 ),
+    pCellTextParaElemTokemMap(NULL),
     aTables(*this),
     pMyNamedExpressions(NULL),
     pMyLabelRanges(NULL),
@@ -2099,6 +2114,7 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDataPilotMembersElemTokenMap;
     delete pDataPilotMemberAttrTokenMap;
     delete pConsolidationAttrTokenMap;
+    delete pCellTextParaElemTokemMap;
 
     delete pChangeTrackingImportHelper;
     delete pNumberFormatAttributesExportHelper;

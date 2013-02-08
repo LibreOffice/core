@@ -40,7 +40,8 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     boost::optional<OUString> maStringValue;         /// office:string-value attribute
     boost::optional<OUString> maContentValidationName;
 
-    ::boost::optional< rtl::OUString > pOUTextContent;
+    std::vector<OUString> maParagraphs;
+
     boost::scoped_ptr< ScXMLAnnotationData > mxAnnotationData;
     ScMyImpDetectiveObjVec* pDetectiveObjVec;
     ScMyImpCellRangeSource* pCellRangeSource;
@@ -106,7 +107,7 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    inline void SetString(const rtl::OUString& rOUTempText) { pOUTextContent.reset(rOUTempText); }
+    void PushParagraph(const OUString& rPara);
     void SetCursorOnTextImport(const rtl::OUString& rOUTempText);
 
     void SetAnnotation( const ScAddress& rPosition );

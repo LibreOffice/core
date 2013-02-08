@@ -37,8 +37,8 @@
 #include "docpool.hxx"
 
 #include "XMLTableShapeImportHelper.hxx"
-#include "XMLTextPContext.hxx"
 #include "XMLStylesImportHelper.hxx"
+#include "celltextparacontext.hxx"
 
 #include "arealink.hxx"
 #include <sfx2/linkmgr.hxx>
@@ -301,6 +301,11 @@ bool cellExists( const ScAddress& rCellPos )
 
 }
 
+void ScXMLTableRowCellContext::PushParagraph(const OUString& rPara)
+{
+    maParagraphs.push_back(rPara);
+}
+
 void ScXMLTableRowCellContext::SetCursorOnTextImport(const rtl::OUString& rOUTempText)
 {
     ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
@@ -353,49 +358,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
             bIsEmpty = false;
             bTextP = true;
 
-            ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
-
-            if (((nCellType == util::NumberFormat::TEXT) || maFormula || bFormulaTextResult))
-            {
-                if (maFormula)
-                {
-                    pContext = new ScXMLTextPContext(rXMLImport, nPrefix, rLName, xAttrList, this);
-                }
-                else if (!bHasTextImport)
-                {
-                    bIsFirstTextImport = true;
-                    bHasTextImport = true;
-                    pContext = new ScXMLTextPContext(rXMLImport, nPrefix, rLName, xAttrList, this);
-                }
-                else
-                {
-                    if (cellExists(aCellPos))
-                    {
-                        if (bIsFirstTextImport && !rXMLImport.GetRemoveLastChar())
-                        {
-                            if (pOUTextContent)
-                            {
-                                SetCursorOnTextImport(*pOUTextContent);
-                                pOUTextContent.reset();
-                            }
-                            else
-                                SetCursorOnTextImport(rtl::OUString());
-                            rXMLImport.SetRemoveLastChar(true);
-                            uno::Reference < text::XTextCursor > xTextCursor(rXMLImport.GetTextImport()->GetCursor());
-                            if (xTextCursor.is())
-                            {
-                                uno::Reference < text::XText > xText (xTextCursor->getText());
-                                uno::Reference < text::XTextRange > xTextRange (xTextCursor, uno::UNO_QUERY);
-                                if (xText.is() && xTextRange.is())
-                                    xText->insertControlCharacter(xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, false);
-                            }
-                        }
-                        pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
-                            rXMLImport, nPrefix, rLName, xAttrList);
-                        bIsFirstTextImport = false;
-                    }
-                }
-            }
+            pContext = new ScXMLCellTextParaContext(rXMLImport, nPrefix, rLName, *this);
         }
         break;
         case XML_TOK_TABLE_ROW_CELL_TABLE:
@@ -740,8 +703,8 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
         }
         else if (!rtl::math::isNan(fValue))
         {
-            if( pOUTextContent )
-                pFCell->SetHybridValueString( fValue, *pOUTextContent );
+            if (!maParagraphs.empty())
+                pFCell->SetHybridValueString(fValue, maParagraphs.back());
             else
                 pFCell->SetHybridDouble(fValue);
             pFCell->ResetDirty();
@@ -766,8 +729,8 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             OUString aCellString;
             if (maStringValue && !maStringValue->isEmpty())
                 aCellString = *maStringValue;
-            else if (pOUTextContent && !pOUTextContent->isEmpty())
-                aCellString = *pOUTextContent;
+            else if (!maParagraphs.empty())
+                aCellString = maParagraphs.back();
             else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
                 aCellString = *pOUText;
             else
@@ -801,8 +764,8 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         ScDocument* pDoc = rXMLImport.GetDocument();
         if (maStringValue && !maStringValue->isEmpty())
             pNewCell = ScBaseCell::CreateTextCell( *maStringValue, pDoc );
-        else if (pOUTextContent && !pOUTextContent->isEmpty())
-            pNewCell = ScBaseCell::CreateTextCell( *pOUTextContent, pDoc );
+        else if (!maParagraphs.empty())
+            pNewCell = ScBaseCell::CreateTextCell(maParagraphs.back(), pDoc);
         else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
             pNewCell = ScBaseCell::CreateTextCell( *pOUText, pDoc );
 
@@ -1013,7 +976,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCells( const ScAddress& rCellPos )
         if( cellExists(rCellPos) && CellsAreRepeated() )
             pOUText.reset( getOutputString(rXMLImport.GetDocument(), rCellPos) );
 
-        if( !pOUTextContent && !pOUText && !maStringValue )
+        if (maParagraphs.empty() && !pOUText && !maStringValue)
                 bIsEmpty = true;
     }
 
@@ -1163,11 +1126,12 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
 // - has an "Err:[###]" (where "[###]" is an error number)
 void ScXMLTableRowCellContext::HasSpecialCaseFormulaText()
 {
-    if(  pOUTextContent )
+    if (!maParagraphs.empty())
     {
-        if ( pOUTextContent->isEmpty() || pOUTextContent->startsWith("Err:") )
+        const OUString& rStr = maParagraphs.back();
+        if (rStr.isEmpty() || rStr.startsWith("Err:"))
             mbPossibleErrorCell = true;
-        else if (pOUTextContent->startsWith("#"))
+        else if (rStr.startsWith("#"))
             mbCheckWithCompilerForError = true;
     }
 }
@@ -1196,7 +1160,7 @@ void ScXMLTableRowCellContext::EndElement()
     HasSpecialCaseFormulaText();
     if( bFormulaTextResult && (mbPossibleErrorCell || mbCheckWithCompilerForError) )
     {
-        maStringValue.reset(*pOUTextContent);
+        maStringValue.reset(maParagraphs.back());
         nCellType = util::NumberFormat::TEXT;
     }
 

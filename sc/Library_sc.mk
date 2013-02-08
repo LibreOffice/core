@@ -266,9 +266,10 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/filter/xml/XMLTableShapeResizer \
 	sc/source/filter/xml/XMLTableShapesContext \
 	sc/source/filter/xml/XMLTableSourceContext \
-	sc/source/filter/xml/XMLTextPContext \
 	sc/source/filter/xml/XMLTrackedChangesContext \
 	sc/source/filter/xml/cachedattraccess \
+	sc/source/filter/xml/celltextparacontext \
+	sc/source/filter/xml/importcontext \
 	sc/source/filter/xml/sheetdata \
 	sc/source/filter/xml/xmlannoi \
 	sc/source/filter/xml/xmlbodyi \
