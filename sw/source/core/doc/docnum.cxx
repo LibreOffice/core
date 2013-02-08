@@ -1357,11 +1357,14 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
             pTNd->ResetAttr( RES_PARATR_LIST_ISCOUNTED );
 
             if( RES_CONDTXTFMTCOLL == pTNd->GetFmtColl()->Which() )
+            {
                 pTNd->ChkCondColl();
-
+            }
             else if( !pOutlNd &&
-                ((SwTxtFmtColl*)pTNd->GetFmtColl())->IsAssignedToListLevelOfOutlineStyle() )//<-end,zhaojianwei
+                     static_cast<SwTxtFmtColl*>(pTNd->GetFmtColl())->IsAssignedToListLevelOfOutlineStyle() )//<-end,zhaojianwei
+            {
                 pOutlNd = pTNd;
+            }
         }
     }
 

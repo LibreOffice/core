@@ -2348,9 +2348,7 @@ SwNumRule* SwTxtNode::_GetNumRule(sal_Bool bInParent) const
 
 SwNumRule* SwTxtNode::GetNumRule(sal_Bool bInParent) const
 {
-    SwNumRule * pRet = _GetNumRule(bInParent);
-
-    return pRet;
+    return _GetNumRule(bInParent);
 }
 
 void SwTxtNode::NumRuleChgd()
@@ -4845,9 +4843,7 @@ sal_uInt32 SwTxtNode::GetRsid( xub_StrLen nStt, xub_StrLen nEnd ) const
 
 sal_uInt32 SwTxtNode::GetParRsid() const
 {
-    SvxRsidItem &rItem = ( SvxRsidItem& ) GetAttr( RES_PARATR_RSID );
-
-    return rItem.GetValue();
+    return reinterpret_cast<const SvxRsidItem&>(GetAttr( RES_PARATR_RSID )).GetValue();
 }
 
 bool SwTxtNode::CompareParRsid( const SwTxtNode &rTxtNode ) const
