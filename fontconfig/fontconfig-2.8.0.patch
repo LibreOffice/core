@@ -29,15 +29,6 @@
  
          if test "x$supports_anon_versioning" = xyes; then
            archive_expsym_cmds='echo "{ global:" > $output_objdir/$libname.ver~
-@@ -14073,7 +14073,7 @@
- 		no)
- 			;;
- 		*)
--			EXPAT_LIBS="-L$expat_lib -lexpat"
-+			EXPAT_LIBS="-L$expat_lib -lascii_expat_xmlparse -lexpat_xmltok"
- 			;;
- 		esac
- 
 --- misc/build/fontconfig-2.8.0/src/fcxml.c
 +++ misc/build/fontconfig-2.8.0/src/fcxml.c
 @@ -1123,6 +1123,7 @@
