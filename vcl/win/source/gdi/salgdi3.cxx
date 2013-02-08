@@ -1457,7 +1457,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
                                    LOGFONTW& rLogFont,
                                    bool /*bTestVerticalAvail*/ )
 {
-    OUString   aName;
+    UniString   aName;
     if ( pFont->mpFontData )
         aName = pFont->mpFontData->GetFamilyName();
     else

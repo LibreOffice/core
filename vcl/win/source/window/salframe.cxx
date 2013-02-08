@@ -5170,7 +5170,7 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             delete [] pTextBuf;
         }
 
-        aEvt.mnCursorPos = aEvt.maText.Len();
+        aEvt.mnCursorPos = aEvt.maText.getLength();
         pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
         pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
         ImplUpdateIMECursorPos( pFrame, hIMC );
@@ -5205,7 +5205,7 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
 
             if ( pAttrBuf )
             {
-                xub_StrLen nTextLen2 = aEvt.maText.Len();
+                xub_StrLen nTextLen2 = aEvt.maText.getLength();
                 pSalAttrAry = new sal_uInt16[nTextLen2];
                 memset( pSalAttrAry, 0, nTextLen2*sizeof( sal_uInt16 ) );
                 for ( xub_StrLen i = 0; (i < nTextLen2) && (i < nAttrLen); i++ )
@@ -5468,12 +5468,12 @@ static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
     // Retrieve the surrounding text from the focused control.
     pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );
 
-    if( aEvt.maText.Len() == 0 )
+    if( aEvt.maText.isEmpty())
     {
         return 0;
     }
 
-    nRet = sizeof(RECONVERTSTRING) + (aEvt.maText.Len() + 1) * sizeof(WCHAR);
+    nRet = sizeof(RECONVERTSTRING) + (aEvt.maText.getLength() + 1) * sizeof(WCHAR);
     }
     else
     {
@@ -5481,16 +5481,16 @@ static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
 
     // Retrieve the surrounding text from the focused control.
     pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );
-    nRet = sizeof(RECONVERTSTRING) + (aEvt.maText.Len() + 1) * sizeof(WCHAR);
+    nRet = sizeof(RECONVERTSTRING) + (aEvt.maText.getLength() + 1) * sizeof(WCHAR);
 
     pReconvertString->dwStrOffset = sizeof(RECONVERTSTRING);
-    pReconvertString->dwStrLen = aEvt.maText.Len();
+    pReconvertString->dwStrLen = aEvt.maText.getLength();
     pReconvertString->dwCompStrOffset = aEvt.mnStart * sizeof(WCHAR);
     pReconvertString->dwCompStrLen = aEvt.mnEnd - aEvt.mnStart;
     pReconvertString->dwTargetStrOffset = pReconvertString->dwCompStrOffset;
     pReconvertString->dwTargetStrLen = pReconvertString->dwCompStrLen;
 
-    memcpy( (LPWSTR)(pReconvertString + 1), aEvt.maText.GetBuffer(), (aEvt.maText.Len() + 1) * sizeof(WCHAR) );
+    memcpy( (LPWSTR)(pReconvertString + 1), aEvt.maText.getStr(), (aEvt.maText.getLength() + 1) * sizeof(WCHAR) );
     }
 
     // just return the required size of buffer to reconvert.
