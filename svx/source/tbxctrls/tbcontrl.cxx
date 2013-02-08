@@ -839,7 +839,8 @@ void SvxFontNameBox_Impl::CheckAndMarkUnknownFont( const XubString& fontname )
         {
             font.SetItalic( ITALIC_NORMAL );
             SetControlFont( font );
-            SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE ));
+            SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_CHARFONTNAME )
+                + ". " + SVX_RESSTR( RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE_APPEND ));
         }
     }
 }

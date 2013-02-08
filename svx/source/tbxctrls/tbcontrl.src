@@ -160,7 +160,7 @@ String RID_SVXSTR_CHARFONTNAME
     Text [ en-US ] = "Font Name";
 };
 
-String RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE
+String RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE_APPEND
 {
-    Text [ en-US ] = "Font Name. The current font is not available and will be substituted.";
+    Text [ en-US ] = "The current font is not available and will be substituted.";
 };
