@@ -15,6 +15,8 @@
 
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/RecursiveASTVisitor.h>
+#include <clang/Basic/FileManager.h>
+#include <clang/Basic/SourceManager.h>
 
 #if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
 #include <clang/Rewrite/Rewriter.h>
