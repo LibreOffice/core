@@ -138,6 +138,7 @@ public:
     void testFdo58933();
     void testFdo44053();
     void testFdo58646line();
+    void testFdo59953();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -226,6 +227,7 @@ void Test::run()
         {"fdo58933.rtf", &Test::testFdo58933},
         {"fdo44053.rtf", &Test::testFdo44053},
         {"fdo58646line.rtf", &Test::testFdo58646line},
+        {"fdo59953.rtf", &Test::testFdo59953},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1071,6 +1073,16 @@ void Test::testFdo58646line()
 {
     // \line symbol was ignored
     getParagraph(1, "foo\nbar");
+}
+
+void Test::testFdo59953()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // Cell width of A1 was 4998 (e.g. not set / not wide enough, ~50% of total width)
+    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(7650), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

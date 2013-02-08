@@ -222,7 +222,10 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             break;
             case NS_ooxml::LN_CT_TblGridBase_gridCol:
             {
-                getCurrentGrid()->push_back( ConversionHelper::convertTwipToMM100( nIntValue ) );
+                if (nIntValue == -1)
+                    getCurrentGrid()->clear();
+                else
+                    getCurrentGrid()->push_back( ConversionHelper::convertTwipToMM100( nIntValue ) );
             }
             break;
             case NS_ooxml::LN_CT_TcPrBase_vMerge : //vertical merge
