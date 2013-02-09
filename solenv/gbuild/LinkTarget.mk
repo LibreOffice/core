@@ -122,9 +122,12 @@ gb_Object__command_dep = \
  $(call gb_Output_error,gb_Object__command_dep is only for gb_FULLDEPS)
 endif
 
+ifneq ($(FORCE_COMPILE_ALL),)
 # This one only exists to force .c/.cxx "rebuilds" when running a compiler tool.
-.PHONY: force_compiler_tool_run
-force_compiler_tool_run:
+.PHONY: force_compile_all_target
+force_compile_all_target:
+gb_FORCE_COMPILE_ALL_TARGET := force_compile_all_target
+endif
 
 # CObject class
 
@@ -133,7 +136,7 @@ gb_CObject_get_source = $(1)/$(2).c
 #  gb_CObject__command
 
 ifneq ($(COMPILER_PLUGIN_TOOL),)
-$(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%) force_compiler_tool_run
+$(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_CObject__tool_command,$*,$<)
 else
 $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%)
@@ -183,7 +186,7 @@ endif
 endef
 
 ifneq ($(COMPILER_PLUGIN_TOOL),)
-$(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%) force_compiler_tool_run
+$(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_CxxObject__tool_command,$*,$<)
 else
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
@@ -306,7 +309,7 @@ gb_ObjCxxObject_get_source = $(1)/$(2).mm
 #  gb_ObjCxxObject__command
 
 ifneq ($(COMPILER_PLUGIN_TOOL),)
-$(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%) force_compiler_tool_run
+$(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_ObjCxxObject__tool_command,$*,$<)
 else
 
@@ -330,7 +333,7 @@ gb_ObjCObject_get_source = $(1)/$(2).m
 #  gb_ObjCObject__command
 
 ifneq ($(COMPILER_PLUGIN_TOOL),)
-$(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%) force_compiler_tool_run
+$(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_ObjCObject__tool_command,$*,$<)
 else
 
