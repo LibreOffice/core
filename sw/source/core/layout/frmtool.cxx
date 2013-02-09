@@ -200,7 +200,7 @@ SwFrmNotify::~SwFrmNotify()
         }
     }
 
-    //Fuer Hintergrundgrafiken muss bei Groessenaenderungen ein Repaint her.
+    //For each resize of the background graphics is a repaint necessary.
     const bool bPrtWidth =
             (aPrt.*fnRect->fnGetWidth)() != (pFrm->Prt().*fnRect->fnGetWidth)();
     const bool bPrtHeight =
@@ -470,12 +470,13 @@ SwLayNotify::~SwLayNotify()
             }
             else
             {
-                //Proportionale Anpassung der innenliegenden.
-                //1. Wenn der Formatierte kein Fly ist
-                //2. Wenn er keine Spalten enthaelt
-                //3. Wenn der Fly eine feste Hoehe hat und die Spalten in der
+                //Proportional adoption of the internal.
+                //1. If the formatted is no Fly
+                //2. If he contains no columns
+                //3. If the Fly has a fixed hight and the columns
+                //   are next to be.
                 //   Hoehe danebenliegen.
-                //4. niemals bei SectionFrms.
+                //4. Never at SectionFrms.
                 bool bLow;
                 if( pLay->IsFlyFrm() )
                 {
@@ -530,25 +531,25 @@ SwLayNotify::~SwLayNotify()
                 }
             }
             bNotify = true;
-            //TEUER!! aber wie macht man es geschickter?
+            //EXPENSIVE!! But how we do it more elegant?
             if( bInvaPercent )
                 pLay->InvaPercentLowers( pLay->Prt().Height() - aPrt.Height() );
         }
         if ( pLay->IsTabFrm() )
-            //Damit _nur_ der Shatten bei Groessenaenderungen gemalt wird.
+            //So that _only_ the shadow is drawn while resizing.
             ((SwTabFrm*)pLay)->SetComplete();
         else
         {
             const ViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
             if( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) ||
                   !(pLay->GetType() & (FRM_BODY | FRM_PAGE)) )
-            //Damit die untergeordneten sauber retouchiert werden.
-            //Problembsp: Flys an den Henkeln packen und verkleinern.
-            //Nicht fuer Body und Page, sonst flackerts beim HTML-Laden.
+            //Thereby the subordinates are retouched clean.
+            //Example problem: Take the Flys with the handles and downsize.
+            //Not for body and page, otherwise it flickers when loading HTML.
             pLay->SetCompletePaint();
         }
     }
-    //Lower benachrichtigen wenn sich die Position veraendert hat.
+    //Notify Lower if the position has changed.
     const bool bPrtPos = POS_DIFF( aPrt, pLay->Prt() );
     const bool bPos = bPrtPos || POS_DIFF( aFrm, pLay->Frm() );
     const bool bSize = pLay->Frm().SSize() != aFrm.SSize();
@@ -559,7 +560,7 @@ SwLayNotify::~SwLayNotify()
     if ( bPrtPos )
         pLay->SetCompletePaint();
 
-    //Nachfolger benachrichtigen wenn sich die SSize geaendert hat.
+    //Inform the Follower if the SSize has changed.
     if ( bSize )
     {
         if( pLay->GetNext() )
@@ -646,8 +647,8 @@ SwFlyNotify::~SwFlyNotify()
         SwViewImp *pImp = pSh ? pSh->Imp() : 0;
         if ( !pImp || !pImp->IsAction() || !pImp->GetLayAction().IsAgain() )
         {
-            //Wenn in der LayAction das IsAgain gesetzt ist kann es sein,
-            //dass die alte Seite inzwischen vernichtet wurde!
+            //If in the LayAction the IsAgain is set it can be
+            //that the old page is destroyed in the meantime!
             ::Notify( pFly, pOldPage, aFrmAndSpace, &aPrt );
             // #i35640# - additional notify anchor text frame,
             // if Writer fly frame has changed its page
@@ -660,8 +661,8 @@ SwFlyNotify::~SwFlyNotify()
         pFly->ResetNotifyBack();
     }
 
-    //Haben sich Groesse oder Position geaendert, so sollte die View
-    //das wissen.
+    //Have the size or the positon changed,
+    //so should the view know this.
     SWRECTFN( pFly )
     const bool bPosChgd = POS_DIFF( aFrm, pFly->Frm() );
     const bool bFrmChgd = pFly->Frm().SSize() != aFrm.SSize();
@@ -784,7 +785,7 @@ SwCntntNotify::~SwCntntNotify()
             pCell = pCell->GetUpper();
         OSL_ENSURE( pCell->IsCellFrm(), "Where's my cell?" );
         if ( text::VertOrientation::NONE != pCell->GetFmt()->GetVertOrient().GetVertOrient() )
-            pCell->InvalidatePrt(); //fuer vertikale Ausrichtung.
+            pCell->InvalidatePrt(); //for the vertical allign.
     }
 
     // OD 2004-02-26 #i25029#
@@ -838,8 +839,8 @@ SwCntntNotify::~SwCntntNotify()
 
     if ( pCnt->IsNoTxtFrm() )
     {
-        //Aktive PlugIn's oder OLE-Objekte sollten etwas von der Veraenderung
-        //mitbekommen, damit sie Ihr Window entsprechend verschieben.
+        //Active PlugIn's or OLE-Objects should know something of the change
+        //thereby they move their window appropriate.
         ViewShell *pSh  = pCnt->getRootFrm()->GetCurrShell();
         if ( pSh )
         {
@@ -893,7 +894,7 @@ SwCntntNotify::~SwCntntNotify()
                     pFESh->CalcAndSetScale( xObj );//Client erzeugen lassen.
                 }
             }
-            //dito Animierte Grafiken
+            //dito animated graphics
             if ( Frm().HasArea() && ((SwNoTxtFrm*)pCnt)->HasAnimation() )
             {
                 ((SwNoTxtFrm*)pCnt)->StopAnimation();
@@ -910,15 +911,15 @@ SwCntntNotify::~SwCntntNotify()
         if ( !pDoc->GetSpzFrmFmts()->empty() &&
              !pDoc->IsLoaded() && !pDoc->IsNewDoc() )
         {
-            //Der Frm wurde wahrscheinlich zum ersten mal formatiert.
-            //Wenn ein Filter Flys oder Zeichenobjekte einliest und diese
-            //Seitengebunden sind, hat er ein Problem, weil er i.d.R. die
-            //Seitennummer nicht kennt. Er weiss lediglich welches der Inhalt
-            //(CntntNode) an dieser Stelle ist.
-            //Die Filter stellen dazu das Ankerattribut der Objekte so ein, dass
-            //sie vom Typ zwar Seitengebunden sind, aber der Index des Ankers
-            //auf diesen CntntNode zeigt.
-            //Hier werden diese vorlauefigen Verbindungen aufgeloest.
+            //The Frm has been formatted probably for the first time.
+            //If a filter read Flys or Drawingobjects and these
+            //are bound to the page, he has a problem, because he typically
+            //does not know the number of the page. He knows only wich is the
+            //content (CntntNode) at this position.
+            //The filter provides the anchor attribut of the objects so, that
+            //they are side bound type, but the index of the anchor points
+            //to this CntntNode.
+            //Here these preliminary connections are dissolved.
 
             const SwPageFrm *pPage = 0;
             SwNodeIndex   *pIdx  = 0;
@@ -934,7 +935,7 @@ SwCntntNotify::~SwCntntNotify()
                 if ((FLY_AT_PAGE != rAnch.GetAnchorId()) &&
                     (FLY_AT_PARA != rAnch.GetAnchorId()))
                 {
-                    continue;   //#60878# nicht etwa zeichengebundene.
+                    continue;   //#60878# It's not that character bound.
                 }
 
                 if ( rAnch.GetCntntAnchor() )
@@ -1016,7 +1017,7 @@ void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
              (rAnch.GetCntntAnchor()->nNode.GetIndex() == nIndex) )
         {
             const bool bFlyAtFly = rAnch.GetAnchorId() == FLY_AT_FLY; // LAYER_IMPL
-            //Wird ein Rahmen oder ein SdrObject beschrieben?
+            //Is a frame or a SdrObject described?
             const bool bSdrObj = RES_DRAWFRMFMT == pFmt->Which();
             // OD 23.06.2003 #108784# - append also drawing objects anchored
             // as character.
@@ -1128,11 +1129,11 @@ static bool lcl_InHeaderOrFooter( SwFrmFmt& _rFmt )
 
 void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
 {
-    //Verbinden aller Objekte, die in der SpzTbl beschrieben sind mit dem
-    //Layout.
-    //Wenn sich nix mehr tut hoeren wir auf. Dann koennen noch Formate
-    //uebrigbleiben, weil wir weder zeichengebunde Rahmen verbinden noch
-    //Objecte die in zeichengebundenen verankert sind.
+    //Connecting of all Objects, which are described in the SpzTbl with the
+    //layout.
+    //If nothing happens anymore we can stop. Then formats can still remain,
+    //because we neither use character bound frames nor objects which
+    //are anchored to character bounds.
 
     SwFrmFmts aCpy( *pTbl );
 
@@ -1149,8 +1150,8 @@ void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
             if ((rAnch.GetAnchorId() == FLY_AT_PAGE) ||
                 (rAnch.GetAnchorId() == FLY_AS_CHAR))
             {
-                //Seitengebunde sind bereits verankert, zeichengebundene
-                //will ich hier nicht.
+                //Page bounded are already anchored, character bounded
+                //I don't want here.
                 bRemove = sal_True;
             }
             else if ( sal_False == (bRemove = ::lcl_ObjConnected( pFmt, pSib )) ||
@@ -1159,9 +1160,9 @@ void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
             // OD 23.06.2003 #108784# - correction: for objects in header
             // or footer create frames, in spite of the fact that an connected
             // objects already exists.
-                //Fuer Flys und DrawObjs nur dann ein MakeFrms rufen wenn noch
-                //keine abhaengigen Existieren, andernfalls, oder wenn das
-                //MakeFrms keine abhaengigen erzeugt, entfernen.
+                //Call for Flys and DrawObjs only a MakeFrms if nor
+                //no dependent exists, otherwise, or if the MakeDrms creates no
+                //dependents, remove.
                 pFmt->MakeFrms();
                 bRemove = ::lcl_ObjConnected( pFmt, pSib );
             }
@@ -1204,20 +1205,20 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     if( bOldCallbackActionEnabled )
         pLayout->SetCallbackActionEnabled( sal_False );
 
-    //Bei der Erzeugung des Layouts wird bPages mit sal_True uebergeben. Dann
-    //werden schon mal alle x Absaetze neue Seiten angelegt. Bei umbruechen
-    //und/oder Pagedescriptorwechseln werden gleich die entsprechenden Seiten
-    //angelegt.
-    //Vorteil ist, das einerseits schon eine annaehernd realistische Zahl von
-    //Seiten angelegt wird, vor allem aber gibt es nicht mehr eine schier
-    //lange Kette von Absaetzen teuer verschoben werden muss, bis sie sich auf
-    //ertraegliches mass reduziert hat.
-    //Wir gehen mal davon aus, da? 20 Absaetze auf eine Seite passen
-    //Damit es in extremen Faellen nicht gar so heftig rechenen wir je nach
-    //Node noch etwas drauf.
-    //Wenn in der DocStatistik eine brauchebare Seitenzahl angegeben ist
-    //(wird beim Schreiben gepflegt), so wird von dieser Seitenanzahl
-    //ausgegengen.
+    //In the generation of the Layout will be bPage with sal_True handed over.
+    //Then will be new pages generated all x paragraphs already times in advance.
+    //On breaks and/or pagedescriptorchanges the correspondig will be generated
+    //immediately.
+    //The advantage is, that on one hand already a nearly realistic number of
+    //pages are created, but above all there are no almost endless long chain
+    //of paragraphs, wich must be moved expensively until it reaches a tolarable
+    //reduced level.
+    //We'd like to think that 20 Paragraphs fit on one page.
+    //So that it does not become in extremly situations so violent we calculate depending
+    //on the node something to it.
+    //If in the DocStatistik a usable given pagenumber
+    //(Will be cared for while writing), so it will be presumed that this will be
+    //number of pages.
     const bool bStartPercent = bPages && !nEndIndex;
 
     SwPageFrm *pPage = pLay->FindPageFrm();
@@ -1228,9 +1229,9 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     SwActualSection *pActualSection = 0;
     SwLayHelper *pPageMaker;
 
-    //Wenn das Layout erzeugt wird (bPages == sal_True) steuern wir den Progress
-    //an. Flys und DrawObjekte werden dann nicht gleich verbunden, dies
-    //passiert erst am Ende der Funktion.
+    //If the layout will be created (bPages == sal_True) we do head on the progress
+    //Flys and DrawObjekte are not connected immediately, this
+    //happens only at the end of the function.
     if ( bPages )
     {
         // Attention: the SwLayHelper class uses references to the content-,
@@ -1248,18 +1249,18 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         pPageMaker = NULL;
 
     if( pLay->IsInSct() &&
-        ( pLay->IsSctFrm() || pLay->GetUpper() ) ) // Hierdurch werden Frischlinge
-            // abgefangen, deren Flags noch nicht ermittelt werden koennen,
-            // so z.B. beim Einfuegen einer Tabelle
+        ( pLay->IsSctFrm() || pLay->GetUpper() ) ) // Hereby will newbies
+            // be intercepted, of which flags could not determined yet,
+            // for e.g. while inserting a table
     {
         SwSectionFrm* pSct = pLay->FindSctFrm();
-        // Wenn Inhalt in eine Fussnote eingefuegt wird, die in einem spaltigen
-        // Bereich liegt, so darf der spaltige Bereich nicht aufgebrochen werden.
-        // Nur wenn im Innern der Fussnote ein Bereich liegt, ist dies ein
-        // Kandidat fuer pActualSection.
-        // Gleiches gilt fuer Bereiche in Tabellen, wenn innerhalb einer Tabelle
-        // eingefuegt wird, duerfen nur Bereiche, die ebenfalls im Innern liegen,
-        // aufgebrochen werden.
+        // If content will be inserted in a footnote, which in an column area,
+        // the column area it is not allowed to be broken up.
+        // Only if in the inner of the footnote lies an area, is this a candidate
+        // for pActualSection.
+        // The same applies for areas in tables, if inside the table will be
+        // something inserted, it's only allowed to break up areas, which
+        // lies in the inside also.
         if( ( !pLay->IsInFtn() || pSct->IsInFtn() ) &&
             ( !pLay->IsInTab() || pSct->IsInTab() ) )
         {
@@ -1321,7 +1322,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 AppendObjs( pTbl, nIndex, pFrm, pPage );
         }
         else if ( pNd->IsTableNode() )
-        {   //Sollten wir auf eine Tabelle gestossen sein?
+        {   //Should we have encountered a table?
             SwTableNode *pTblNode = (SwTableNode*)pNd;
 
             // #108116# loading may produce table structures that GCLines
@@ -1362,7 +1363,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             lcl_SetPos( *pFrm, *pLay );
 
             pPrv = pFrm;
-            //Index auf den Endnode der Tabellensection setzen.
+            //Set the index to the endnode of the table section.
             nIndex = pTblNode->EndOfSectionIndex();
 
             SwTabFrm* pTmpFrm = (SwTabFrm*)pFrm;
@@ -1377,7 +1378,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         {
             SwSectionNode *pNode = (SwSectionNode*)pNd;
             if( pNode->GetSection().CalcHiddenFlag() )
-                // ist versteckt, ueberspringe den Bereich
+                // is hidden, skip the area
                 nIndex = pNode->EndOfSectionIndex();
             else
             {
@@ -1386,8 +1387,8 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                                                 (SwSectionFrm*)pFrm, pNode );
                 if ( pActualSection->GetUpper() )
                 {
-                    //Hinter den Upper einsetzen, beim EndNode wird der "Follow"
-                    //des Uppers erzeugt.
+                    //Insert behind the Upper, the "Follow" of the Upper will be
+                    //generated at the EndNode.
                     SwSectionFrm *pTmp = pActualSection->GetUpper()->GetSectionFrm();
                     pFrm->InsertBehind( pTmp->GetUpper(), pTmp );
                     // OD 25.03.2003 #108339# - direct initialization of section
@@ -1466,15 +1467,15 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             OSL_ENSURE( pActualSection->GetSectionNode() == pNd->StartOfSectionNode(),
                             "Sectionende mit falschen Start Node?" );
 
-            //Section schliessen, ggf. die umgebende Section wieder
-            //aktivieren.
+            //Close the section, where appropriate activate the surrounding
+            //section again.
             SwActualSection *pTmp = pActualSection->GetUpper();
             delete pActualSection;
             pLay = pLay->FindSctFrm();
             if ( 0 != (pActualSection = pTmp) )
             {
-                //Koennte noch sein, das der letzte SectionFrm leer geblieben
-                //ist. Dann ist es jetzt an der Zeit ihn zu entfernen.
+                //Could be, that the last SectionFrm remains empty.
+                //Then now is the time to remove them.
                 if ( !pLay->ContainsCntnt() )
                 {
                     SwFrm *pTmpFrm = pLay;
@@ -1509,7 +1510,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                     ((SwSectionFrm*)pFrm)->SetFollow( pFollow );
                 }
 
-                // Wir wollen keine leeren Teile zuruecklassen
+                // We don't want to leave empty parts back.
                 if( ! pOuterSectionFrm->IsColLocked() &&
                     ! pOuterSectionFrm->ContainsCntnt() )
                 {
@@ -1525,8 +1526,8 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             }
             else
             {
-                //Nix mehr mit Sections, es geht direkt hinter dem SectionFrame
-                //weiter.
+                //Nothing more with sections, it goes on right behind
+                //the SectionFrame.
                 pPrv = pLay;
                 pLay = pLay->GetUpper();
             }
@@ -1542,8 +1543,8 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             }
         }
         else
-            // Weder Cntnt noch Tabelle noch Section,
-            // also muessen wir fertig sein.
+            // Neither Cntnt nor table nor section,
+            // so we have to be ready.
             break;
 
         ++nIndex;
