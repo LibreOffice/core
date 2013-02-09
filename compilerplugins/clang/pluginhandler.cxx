@@ -13,6 +13,7 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <stdio.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 /*
@@ -38,29 +39,24 @@ static bool pluginObjectsCreated = false;
 PluginHandler::PluginHandler( ASTContext& context, const vector< string >& args )
     : context( context )
     , rewriter( context.getSourceManager(), context.getLangOpts())
+    , scope( "mainfile" )
     {
-    bool wasCreated = false;
-    for( int i = 0;
-         i < pluginCount;
-         ++i )
+    bool wasPlugin = false;
+    for( vector< string >::const_iterator it = args.begin();
+         it != args.end();
+         ++it )
         {
-        bool create = false;
-        if( args.empty()) // no args -> create non-writer plugins
-            create = !plugins[ i ].isRewriter;
-        else // create only the given plugin(s)
+        if( it->size() >= 2 && (*it)[ 0 ] == '-' && (*it)[ 1 ] == '-' )
+            handleOption( it->substr( 2 ));
+        else
             {
-            if( find( args.begin(), args.end(), plugins[ i ].optionName ) != args.end())
-                create = true;
-            }
-        if( create )
-            {
-            plugins[ i ].object = plugins[ i ].create( context, rewriter );
-            wasCreated = true;
+            createPlugin( *it );
+            wasPlugin = true;
             }
         }
+    if( !wasPlugin )
+        createPlugin( "" ); // = all non-rewriters
     pluginObjectsCreated = true;
-    if( !args.empty() && !wasCreated )
-        report( DiagnosticsEngine::Fatal, "unknown plugin tool %0" ) << args.front();
     }
 
 PluginHandler::~PluginHandler()
@@ -70,6 +66,45 @@ PluginHandler::~PluginHandler()
          ++i )
         if( plugins[ i ].object != NULL )
             delete plugins[ i ].object;
+    }
+
+void PluginHandler::handleOption( const string& option )
+    {
+    if( option.substr( 0, 6 ) == "scope=" )
+        {
+        scope = option.substr( 6 );
+        if( scope == "mainfile" || scope == "all" )
+            ; // ok
+        else
+            {
+            struct stat st;
+            if( stat(( SRCDIR "/" + scope ).c_str(), &st ) != 0 || !S_ISDIR( st.st_mode ))
+                report( DiagnosticsEngine::Fatal, "unknown scope %0 (no such module directory)" ) << scope;
+            }
+        }
+    else
+        report( DiagnosticsEngine::Fatal, "unknown option %0" ) << option;
+    }
+
+void PluginHandler::createPlugin( const string& name )
+    {
+    for( int i = 0;
+         i < pluginCount;
+         ++i )
+        {
+        if( name.empty())  // no plugin given -> create non-writer plugins
+            {
+            if( !plugins[ i ].isRewriter )
+                plugins[ i ].object = plugins[ i ].create( context, rewriter );
+            }
+        else if( plugins[ i ].optionName == name )
+            {
+            plugins[ i ].object = plugins[ i ].create( context, rewriter );
+            return;
+            }
+        }
+    if( !name.empty())
+        report( DiagnosticsEngine::Fatal, "unknown plugin tool %0" ) << name;
     }
 
 void PluginHandler::registerPlugin( Plugin* (*create)( ASTContext&, Rewriter& ), const char* optionName, bool isRewriter )
@@ -109,6 +144,8 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
            The order here is important, as OUTDIR and WORKDIR are often in SRCDIR/BUILDDIR,
            and BUILDDIR is sometimes in SRCDIR. */
         string modifyFile;
+        const char* pathWarning = NULL;
+        bool skip = false;
         if( strncmp( e->getName(), OUTDIR "/", strlen( OUTDIR "/" )) == 0 )
             {
             /* Try to find a matching file for a file in solver/ (include files
@@ -125,22 +162,40 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
                     }
                 }
             if( modifyFile.empty())
-                report( DiagnosticsEngine::Warning, "modified source in solver/ : %0" ) << e->getName();
+                pathWarning = "modified source in solver/ : %0";
             }
         else if( strncmp( e->getName(), WORKDIR "/", strlen( WORKDIR "/" )) == 0 )
-            report( DiagnosticsEngine::Warning, "modified source in workdir/ : %0" ) << e->getName();
+            pathWarning = "modified source in workdir/ : %0";
         else if( strcmp( SRCDIR, BUILDDIR ) != 0 && strncmp( e->getName(), BUILDDIR "/", strlen( BUILDDIR "/" )) == 0 )
-            report( DiagnosticsEngine::Warning, "modified source in build dir : %0" ) << e->getName();
+            pathWarning = "modified source in build dir : %0";
         else if( strncmp( e->getName(), SRCDIR "/", strlen( SRCDIR "/" )) == 0 )
             ; // ok
         else
             {
-            report( DiagnosticsEngine::Warning, "modified source in unknown location, not modifying : %0" )
-                 << e->getName();
-            continue; // --->
+            pathWarning = "modified source in unknown location, not modifying : %0";
+            skip = true;
             }
         if( modifyFile.empty())
             modifyFile = e->getName();
+        // Check whether the modified file is in the wanted scope (done after path checking above), so
+        // that files mapped from OUTDIR to SRCDIR are included.
+        if( scope == "mainfile" )
+            {
+            if( it->first != context.getSourceManager().getMainFileID())
+                continue;
+            }
+        else if( scope == "all" )
+            ; // ok
+        else // scope is module
+            {
+            if( strncmp( modifyFile.c_str(), ( SRCDIR "/" + scope + "/" ).c_str(), ( SRCDIR "/" + scope + "/" ).size()) != 0 )
+                continue;
+            }
+        // Warn only now, so that files not in scope do not cause warnings.
+        if( pathWarning != NULL )
+            report( DiagnosticsEngine::Warning, pathWarning ) << e->getName();
+        if( skip )
+            continue;
         char* filename = new char[ modifyFile.length() + 100 ];
         sprintf( filename, "%s.new.%d", modifyFile.c_str(), getpid());
         string error;
