@@ -144,8 +144,6 @@ protected:
     virtual void                Activate(sal_Bool IsMDIActivate);
     virtual void                Deactivate(sal_Bool IsMDIActivate);
 
-    virtual Size                GetOptimalSizePixel() const;
-
     virtual void                InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void                OuterResizePixel( const Point &rOfs, const Size &rSize );
     virtual void                SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );

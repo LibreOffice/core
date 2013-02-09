@@ -476,18 +476,6 @@ bool DrawViewShell::IsLayerModeActive (void) const
 }
 
 
-
-/**
- * Return size of TabControls and ModeButtons
- */
-
-long DrawViewShell::GetHCtrlWidth()
-{
-    //  return maTabControl.GetSizePixel().Width();
-    return 0;
-}
-
-
 /**
  * Generate horizontal ruler
  */

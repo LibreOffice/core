@@ -435,12 +435,6 @@ void Shell::InitTabBar()
 }
 
 
-Size Shell::GetOptimalSizePixel() const
-{
-    return Size( 400, 300 );
-}
-
-
 
 void Shell::OuterResizePixel( const Point &rPos, const Size &rSize )
 {

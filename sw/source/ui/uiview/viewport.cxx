@@ -1197,27 +1197,6 @@ void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
     SfxViewShell::SetZoomFactor( rX, rY );
 }
 
-Size SwView::GetOptimalSizePixel() const
-{
-    Size aPgSize;
-    if ( pWrtShell->GetViewOptions()->getBrowseMode() )
-        aPgSize = SvxPaperInfo::GetPaperSize(PAPER_A4);
-    else
-    {
-        aPgSize = GetWrtShell().GetAnyCurRect(RECT_PAGE).SSize();
-        aPgSize.Width() += DOCUMENTBORDER * 2;
-
-        const SwPageDesc &rDesc = pWrtShell->GetPageDesc( pWrtShell->GetCurPageDesc() );
-        if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )
-        {
-            const SvxLRSpaceItem &rLRSpace = rDesc.GetMaster().GetLRSpace();
-            const SvxLRSpaceItem &rLeftLRSpace = rDesc.GetLeft().GetLRSpace();
-            aPgSize.Width() += Abs( long(rLeftLRSpace.GetLeft()) - long(rLRSpace.GetLeft()) );
-        }
-    }
-    return GetEditWin().LogicToPixel( aPgSize );
-}
-
 sal_Bool SwView::UpdateScrollbars()
 {
     sal_Bool bRet = sal_False;

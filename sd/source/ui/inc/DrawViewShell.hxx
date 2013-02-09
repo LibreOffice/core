@@ -389,9 +389,7 @@ protected:
     virtual SvxRuler* CreateVRuler(::sd::Window* pWin);
     virtual void    UpdateHRuler();
     virtual void    UpdateVRuler();
-    virtual long    GetHCtrlWidth();
     virtual void    SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY);
-    virtual Size    GetOptimalSizePixel() const;
 
     void            SetupPage( Size &rSize, long nLeft, long nRight, long nUpper, long nLower,
                                sal_Bool bSize, sal_Bool bMargin, sal_Bool bScaleAll );

@@ -935,14 +935,6 @@ SFX_IMPL_NAMED_VIEWFACTORY(SmViewShell, "Default")
 }
 
 
-Size SmViewShell::GetOptimalSizePixel() const
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::GetOptimalSizePixel" );
-
-    return aGraphic.LogicToPixel( ((SmViewShell*)this)->GetDoc()->GetSize() );
-}
-
-
 void SmViewShell::AdjustPosSizePixel(const Point &rPos, const Size &rSize)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::AdjustPosSizePixel" );

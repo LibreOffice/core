@@ -478,42 +478,6 @@ void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY
 
 /*************************************************************************
 |*
-|* Optimale Groesse zurueckgeben
-|*
-\************************************************************************/
-
-Size DrawViewShell::GetOptimalSizePixel() const
-{
-    Size aSize;
-
-    SdrPageView* pPV = mpDrawView->GetSdrPageView();
-    if (pPV)
-    {
-        SdPage* pPage = (SdPage*) pPV->GetPage();
-
-        if (pPage)
-        {
-            if (!mbZoomOnPage)
-            {
-                // Gegenwaertigen MapMode beruecksichtigen
-                aSize = GetActiveWindow()->LogicToPixel( pPage->GetSize() );
-            }
-            else
-            {
-                // 1:1 Darstellung
-                MapMode aMapMode(MAP_100TH_MM);
-                aSize = GetActiveWindow()->LogicToPixel( pPage->GetSize(), aMapMode );
-                const_cast< DrawViewShell* >(this)->mbZoomOnPage = sal_True;
-            }
-        }
-    }
-
-    return(aSize);
-}
-
-
-/*************************************************************************
-|*
 |* Seite wird gehided
 |*
 \************************************************************************/

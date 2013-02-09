@@ -150,9 +150,6 @@ public:
     bool UpdateTitleObject( SdPage* pPage, Paragraph* pPara );
     bool UpdateOutlineObject( SdPage* pPage, Paragraph* pPara );
 
-protected:
-    virtual Size GetOptimalSizePixel() const;
-
 private:
     OutlineView* pOlView;
     SdPage*         pLastPage; // Zur performanten Aufbereitung der Preview

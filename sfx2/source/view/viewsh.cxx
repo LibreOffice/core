@@ -1251,14 +1251,6 @@ void SfxViewShell::SetWindow
 
 //--------------------------------------------------------------------
 
-Size SfxViewShell::GetOptimalSizePixel() const
-{
-    OSL_FAIL( "Useless call!" );
-    return Size();
-}
-
-//------------------------------------------------------------------------
-
 SfxViewShell::SfxViewShell
 (
     SfxViewFrame*   pViewFrame,     /*  <SfxViewFrame>, which will be

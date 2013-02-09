@@ -284,11 +284,6 @@ void ViewShell::UpdateVRuler()
 {
 }
 
-long ViewShell::GetHCtrlWidth()
-{
-    return 0;
-}
-
 /*************************************************************************
 |*
 |* Eine bestimmte Anzahl von Zeilen scrollen (wird beim automatischen

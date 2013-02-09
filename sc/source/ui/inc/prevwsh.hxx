@@ -71,8 +71,6 @@ protected:
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
 
-    virtual Size    GetOptimalSizePixel() const;
-
     virtual String  GetDescription() const;
 
     virtual void    WriteUserData(String &, sal_Bool bBrowse = false);

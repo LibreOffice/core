@@ -305,34 +305,6 @@ sal_uInt16 ScTabViewShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
 
 //------------------------------------------------------------------
 
-Size ScTabViewShell::GetOptimalSizePixel() const
-{
-    Size aOptSize;
-
-    SCTAB               nCurTab     = GetViewData()->GetTabNo();
-    ScDocument*         pDoc        = GetViewData()->GetDocument();
-    ScStyleSheetPool*   pStylePool  = pDoc->GetStyleSheetPool();
-    SfxStyleSheetBase*  pStyleSheet = pStylePool->Find(
-                                        pDoc->GetPageStyle( nCurTab ),
-                                        SFX_STYLE_FAMILY_PAGE );
-
-    OSL_ENSURE( pStyleSheet, "PageStyle not found :-/" );
-
-    if ( pStyleSheet )
-    {
-        const SfxItemSet&  rSet      = pStyleSheet->GetItemSet();
-        const SvxSizeItem& rItem     = (const SvxSizeItem&)rSet.Get( ATTR_PAGE_SIZE );
-        const Size&        rPageSize = rItem.GetSize();
-
-        aOptSize.Width()  = (long) (rPageSize.Width()  * GetViewData()->GetPPTX());
-        aOptSize.Height() = (long) (rPageSize.Height() * GetViewData()->GetPPTY());
-    }
-
-    return aOptSize;
-}
-
-//------------------------------------------------------------------
-
 //  Zoom fuer In-Place berechnen
 //  aus Verhaeltnis von VisArea und Fenstergroesse des GridWin
 

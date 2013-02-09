@@ -1536,38 +1536,6 @@ sal_Bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
 /*************************************************************************
 |*
-|* Return optimal Size
-|*
-\************************************************************************/
-
-Size OutlineViewShell::GetOptimalSizePixel() const
-{
-    Size aResult(200, 200);
-    if (pOlView)
-    {
-        ::Outliner* pOutliner = pOlView->GetOutliner();
-        if (pOutliner)
-        {
-            Size aTemp = pOutliner->CalcTextSize();
-            aTemp = GetActiveWindow()->LogicToPixel(aTemp);
-            aResult.Width() = Max(aResult.Width(), aTemp.Width());
-            aResult.Height() = Max(aResult.Height(), aTemp.Height());
-            if (4 * aResult.Height() > 3 * aResult.Width())
-            {
-                aResult.Height() = 3 * aResult.Width() / 4;
-            }
-        }
-    }
-
-    // now add the default stuff
-    aResult.Width()  += mpVerticalScrollBar->GetSizePixel().Width();
-    aResult.Height() += mpHorizontalScrollBar->GetSizePixel().Height();
-    return aResult;
-}
-
-
-/*************************************************************************
-|*
 |* Return text of the selection
 |*
 \************************************************************************/

@@ -379,7 +379,6 @@ protected:
     virtual void    Deactivate(sal_Bool);
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
-    virtual Size    GetOptimalSizePixel() const;
 
     void            SetImageButtonColor(Color& rColor);
 

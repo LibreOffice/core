@@ -118,7 +118,6 @@ private:
 private:
     virtual void        AdjustPosSizePixel( const Point &rPos, const Size &rSize );
     virtual void        OuterResizePixel( const Point &rPos, const Size &rSize );
-    virtual Size        GetOptimalSizePixel() const;
     sal_uInt16              InsertWindowInTable (BaseWindow* pNewWin);
     virtual sal_uInt16      PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing );
 

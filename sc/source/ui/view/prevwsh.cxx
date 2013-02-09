@@ -211,42 +211,6 @@ String ScPreviewShell::GetDescription() const
     return rtl::OUString(" ** Test ** ");
 }
 
-Size ScPreviewShell::GetOptimalSizePixel() const
-{
-    Size aOptSize(100,100);
-
-    ScTabViewShell*     pViewSh = pDocShell->GetBestViewShell();
-
-    if ( pViewSh )
-    {
-        ScViewData*         pViewData   = pViewSh->GetViewData();
-        SCTAB               nCurTab     = pViewData->GetTabNo();
-        ScDocument*         pDoc        = pDocShell->GetDocument();
-        ScStyleSheetPool*   pStylePool  = pDoc->GetStyleSheetPool();
-        SfxStyleSheetBase*  pStyleSheet = pStylePool->Find(
-                                            pDoc->GetPageStyle( nCurTab ),
-                                            SFX_STYLE_FAMILY_PAGE );
-
-        OSL_ENSURE( pStyleSheet, "PageStyle not found :-/" );
-
-        if ( pStyleSheet )
-        {
-            const SfxItemSet&  rSet      = pStyleSheet->GetItemSet();
-            const SvxSizeItem& rItem     = (const SvxSizeItem&)rSet.Get( ATTR_PAGE_SIZE );
-            const Size&        rPageSize = rItem.GetSize();
-
-            aOptSize.Width()  = (long) (rPageSize.Width()  * pViewData->GetPPTX());
-            aOptSize.Height() = (long) (rPageSize.Height() * pViewData->GetPPTY());
-        }
-    }
-    else
-    {
-        OSL_FAIL( "TabViewShell not found :-/" );
-    }
-
-    return aOptSize;
-}
-
 void ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 {
     Size aOutSize( rSize );

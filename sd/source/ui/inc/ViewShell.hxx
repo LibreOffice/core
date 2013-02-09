@@ -537,10 +537,6 @@ protected:
     virtual void UpdateHRuler();
     virtual void UpdateVRuler();
 
-    // Zeiger auf ein zusaetzliches Control im horizontalen ScrollBar
-    // abgeleiteter Klassen (z.B. ein TabBar) zurueckgeben
-    virtual long GetHCtrlWidth();
-
     virtual void Activate(sal_Bool IsMDIActivate);
     virtual void Deactivate(sal_Bool IsMDIActivate);
 

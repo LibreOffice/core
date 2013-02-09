@@ -1770,12 +1770,6 @@ SfxTabPage*  SwPagePreView::CreatePrintOptionsPage( Window *pParent,
     return ::CreatePrintOptionsPage( pParent, rOptions, !bNormalPrint );
 }
 
-Size  SwPagePreView::GetOptimalSizePixel() const
-{
-    OSL_FAIL( "overloaded virtual method <SwPagePreView::GetOptimalSizePixel()> needed ??" );
-    return Size( -1, -1 );
-}
-
 void SwPagePreViewWin::SetViewShell( ViewShell* pShell )
 {
     mpViewShell = pShell;

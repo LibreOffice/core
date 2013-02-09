@@ -271,7 +271,6 @@ protected:
                                                const SfxItemSet &rOptions);
     virtual void Deactivate(sal_Bool IsMDIActivate);
     virtual void Activate(sal_Bool IsMDIActivate);
-    virtual Size GetOptimalSizePixel() const;
     virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
     virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize);
     virtual void OuterResizePixel(const Point &rOfs, const Size  &rSize);

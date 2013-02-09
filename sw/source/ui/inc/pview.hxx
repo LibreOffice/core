@@ -212,7 +212,6 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
 protected:
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
-    virtual Size    GetOptimalSizePixel() const;
 
     void         SetZoom(SvxZoomType eSet, sal_uInt16 nFactor);
 
