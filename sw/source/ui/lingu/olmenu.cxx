@@ -107,7 +107,7 @@ static LanguageType lcl_CheckLanguage(
     const OUString &rText,
     uno::Reference< linguistic2::XSpellChecker1 > xSpell,
     uno::Reference< linguistic2::XLanguageGuessing > xLangGuess,
-    sal_Bool bIsParaText )
+    bool bIsParaText )
 {
     LanguageType  nLang = LANGUAGE_NONE;
     if (bIsParaText)    // check longer texts with language-guessing...
@@ -444,8 +444,8 @@ SwSpellPopup::SwSpellPopup(
     nGuessLangPara = LANGUAGE_NONE;
     if (xSpellAlt.is() && xLG.is())
     {
-        nGuessLangWord = lcl_CheckLanguage( xSpellAlt->getWord(), ::GetSpellChecker(), xLG, sal_False );
-        nGuessLangPara = lcl_CheckLanguage( rParaText, ::GetSpellChecker(), xLG, sal_True );
+        nGuessLangWord = lcl_CheckLanguage( xSpellAlt->getWord(), ::GetSpellChecker(), xLG, false );
+        nGuessLangPara = lcl_CheckLanguage( rParaText, ::GetSpellChecker(), xLG, true );
     }
     if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
     {
@@ -653,7 +653,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     nGuessLangPara = LANGUAGE_NONE;
     if (xLG.is())
     {
-        nGuessLangPara = lcl_CheckLanguage( rParaText, ::GetSpellChecker(), xLG, sal_True );
+        nGuessLangPara = lcl_CheckLanguage( rParaText, ::GetSpellChecker(), xLG, true );
     }
     if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
     {

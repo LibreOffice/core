@@ -731,7 +731,7 @@ void SwHHCWrapper::ConvEnd_impl( SwConversionArgs *pConversionArgs )
 
 sal_Bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
 {
-    sal_Bool bProgress = !m_bIsDrawObj && !m_bIsSelection;
+    bool bProgress = !m_bIsDrawObj && !m_bIsSelection;
     pConversionArgs->aConvText = OUString();
     pConversionArgs->nConvTextLang = LANGUAGE_NONE;
     uno::Any  aRet = bProgress ?

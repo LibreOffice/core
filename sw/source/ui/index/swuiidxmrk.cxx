@@ -227,30 +227,30 @@ void SwIndexMarkPane::InitControls()
         pSh->SttCrsrMove();
 
         const SwTOXMark* pMoveMark;
-        sal_Bool bShow = sal_False;
+        bool bShow = false;
 
         pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_PRV );
         if( pMoveMark != pMark )
-            pSh->GotoTOXMark( *pMoveMark, TOX_NXT ), bShow = sal_True;
+            pSh->GotoTOXMark( *pMoveMark, TOX_NXT ), bShow = true;
         m_pPrevBT->Enable( pMoveMark != pMark );
         pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_NXT );
         if( pMoveMark != pMark )
-            pSh->GotoTOXMark( *pMoveMark, TOX_PRV ), bShow = sal_True;
+            pSh->GotoTOXMark( *pMoveMark, TOX_PRV ), bShow = true;
         m_pNextBT->Enable( pMoveMark != pMark );
         if( bShow )
         {
             m_pPrevBT->Show();
             m_pNextBT->Show();
-            bShow = sal_False;
+            bShow = false;
         }
 
         pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_SAME_PRV );
         if( pMoveMark != pMark )
-            pSh->GotoTOXMark( *pMoveMark, TOX_SAME_NXT ), bShow = sal_True;
+            pSh->GotoTOXMark( *pMoveMark, TOX_SAME_NXT ), bShow = true;
         m_pPrevSameBT->Enable( pMoveMark != pMark );
         pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_SAME_NXT );
         if( pMoveMark != pMark )
-            pSh->GotoTOXMark( *pMoveMark, TOX_SAME_PRV ), bShow = sal_True;
+            pSh->GotoTOXMark( *pMoveMark, TOX_SAME_PRV ), bShow = true;
         m_pNextSameBT->Enable( pMoveMark != pMark );
         if( bShow )
         {
@@ -723,7 +723,7 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
     }
     else //m_pEntryED  !!m_pEntryED is not a ListBox but a Edit
     {
-        sal_Bool bHasText = (!m_pEntryED->GetText().isEmpty());
+        bool bHasText = (!m_pEntryED->GetText().isEmpty());
         if(!bHasText)
         {
             m_pPhoneticED0->SetText(aEmptyStr);
@@ -964,8 +964,8 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
                 m_pPhoneticED2->SetText(GetDefaultPhoneticReading(pBox->GetText()));
         }
     }
-    sal_Bool    bKey1HasText    = (!m_pKey1DCB->GetText().isEmpty());
-    sal_Bool    bKey2HasText    = (!m_pKey2DCB->GetText().isEmpty());
+    bool    bKey1HasText    = (!m_pKey1DCB->GetText().isEmpty());
+    bool    bKey2HasText    = (!m_pKey2DCB->GetText().isEmpty());
 
     m_pPhoneticFT1->Enable(bKey1HasText&&bIsPhoneticReadingEnabled);
     m_pPhoneticED1->Enable(bKey1HasText&bIsPhoneticReadingEnabled);
@@ -1063,7 +1063,7 @@ public:
                             const String pFields[],
                             SwWrtShell& rSh,
                             sal_Bool bNewEntry,
-                            sal_Bool bCreate);
+                            bool bCreate);
     ~SwCreateAuthEntryDlg_Impl();
 
     String          GetEntryText(ToxAuthorityField eField) const;
@@ -1299,7 +1299,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
 
 IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
 {
-    sal_Bool bCreate = pButton == m_pCreateEntryPB;
+    bool bCreate = pButton == m_pCreateEntryPB;
     String sOldId = m_sCreatedEntry[0];
     for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
         m_sCreatedEntry[i] = bCreate ? aEmptyStr : m_sFields[i];
@@ -1479,7 +1479,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
         const String pFields[],
         SwWrtShell& rSh,
         sal_Bool bNewEntry,
-        sal_Bool bCreate) :
+        bool bCreate) :
     ModalDialog(pParent, SW_RES(DLG_CREATE_AUTH_ENTRY)),
     aEntriesFL(this,    SW_RES(FL_ENTRIES    )),
     pTypeListBox(0),
@@ -1515,7 +1515,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
     aEditSize.Width() = nControlWidth;
 
     sal_uInt16 nOffset = static_cast< sal_uInt16 >(aTmpSz.Width() * 3 / 2);
-    sal_Bool bLeft = sal_True;
+    bool bLeft = true;
     Window* pRefWindow = 0;
     for(sal_uInt16 nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
     {

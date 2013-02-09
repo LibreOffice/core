@@ -92,7 +92,7 @@ static const sal_Unicode aDeliEnd    = ']'; // for the form
 #define IDX_FILE_EXTENSION rtl::OUString("*.sdi")
 
 static String lcl_CreateAutoMarkFileDlg( const String& rURL,
-                                const String& rFileString, sal_Bool bOpen )
+                                const String& rFileString, bool bOpen )
 {
     String sRet;
 
@@ -162,10 +162,10 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     ::svt::CellControllerRef    xCheckController;
 
     long    nCurrentRow;
-    sal_Bool    bModified;
+    bool    bModified;
 
 
-    void                        SetModified() {bModified = sal_True;}
+    void                        SetModified() {bModified = true;}
 
 protected:
     virtual sal_Bool                SeekRow( long nRow );
@@ -197,12 +197,12 @@ class SwAutoMarkDlg_Impl : public ModalDialog
     String              sAutoMarkURL;
     const String        sAutoMarkType;
 
-    sal_Bool                bCreateMode;
+    bool                bCreateMode;
 
     DECL_LINK(OkHdl, void *);
 public:
     SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkURL,
-                        const String& rAutoMarkType, sal_Bool bCreate);
+                        const String& rAutoMarkType, bool bCreate);
     ~SwAutoMarkDlg_Impl();
 
 };
@@ -1554,17 +1554,17 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
     {
         case  MN_AUTOMARK_OPEN:
             sAutoMarkURL = lcl_CreateAutoMarkFileDlg(
-                                    sAutoMarkURL, sAutoMarkType, sal_True);
+                                    sAutoMarkURL, sAutoMarkType, true);
         break;
         case  MN_AUTOMARK_NEW :
             sAutoMarkURL = lcl_CreateAutoMarkFileDlg(
-                                    sAutoMarkURL, sAutoMarkType, sal_False);
+                                    sAutoMarkURL, sAutoMarkType, false);
             if( !sAutoMarkURL.Len() )
                 break;
         //no break
         case  MN_AUTOMARK_EDIT:
         {
-            sal_Bool bNew = pMenu->GetCurItemId()== MN_AUTOMARK_NEW;
+            bool bNew = pMenu->GetCurItemId()== MN_AUTOMARK_NEW;
             SwAutoMarkDlg_Impl* pAutoMarkDlg = new SwAutoMarkDlg_Impl(
                     &aAutoMarkPB, sAutoMarkURL, sAutoMarkType, bNew );
 
@@ -1582,14 +1582,14 @@ class SwTOXEdit : public Edit
 {
     SwFormToken aFormToken;
     Link        aPrevNextControlLink;
-       sal_Bool     bNextControl;
+    bool     bNextControl;
     SwTokenWindow* m_pParent;
 public:
     SwTOXEdit( Window* pParent, SwTokenWindow* pTokenWin,
                 const SwFormToken& aToken)
         : Edit( pParent, WB_BORDER|WB_TABSTOP|WB_CENTER),
         aFormToken(aToken),
-        bNextControl(sal_False),
+        bNextControl(false),
         m_pParent( pTokenWin )
     {
         SetHelpId( HID_TOX_ENTRY_EDIT );
@@ -1598,7 +1598,7 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
-    sal_Bool    IsNextControl() const {return bNextControl;}
+    bool    IsNextControl() const {return bNextControl;}
     void SetPrevNextLink( const Link& rLink )   {aPrevNextControlLink = rLink;}
 
     const SwFormToken&  GetFormToken()
@@ -1629,17 +1629,17 @@ void    SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
     if((rSel.A() == rSel.B() &&
         !rSel.A()) || rSel.A() == (sal_uInt16)nTextLen )
     {
-        sal_Bool bCall = sal_False;
+        bool bCall = false;
         KeyCode aCode = rKEvt.GetKeyCode();
         if(aCode.GetCode() == KEY_RIGHT && rSel.A() == nTextLen)
         {
-            bNextControl = sal_True;
-            bCall = sal_True;
+            bNextControl = true;
+            bCall = true;
         }
         else if(aCode.GetCode() == KEY_LEFT && !rSel.A() )
         {
-            bNextControl = sal_False;
-            bCall = sal_True;
+            bNextControl = false;
+            bCall = true;
         }
 
         if(bCall && aPrevNextControlLink.IsSet())
@@ -1662,14 +1662,14 @@ class SwTOXButton : public PushButton
 {
     SwFormToken aFormToken;
     Link        aPrevNextControlLink;
-    sal_Bool        bNextControl;
+    bool        bNextControl;
     SwTokenWindow* m_pParent;
 public:
     SwTOXButton( Window* pParent, SwTokenWindow* pTokenWin,
                 const SwFormToken& rToken)
         : PushButton(pParent, WB_BORDER|WB_TABSTOP),
         aFormToken(rToken),
-        bNextControl(sal_False),
+        bNextControl(false),
         m_pParent(pTokenWin)
     {
         SetHelpId(HID_TOX_ENTRY_BUTTON);
@@ -1678,7 +1678,7 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
-    sal_Bool IsNextControl() const          {return bNextControl;}
+    bool IsNextControl() const          {return bNextControl;}
     void SetPrevNextLink(const Link& rLink) {aPrevNextControlLink = rLink;}
     const SwFormToken& GetFormToken() const {return aFormToken;}
 
@@ -1753,17 +1753,17 @@ public:
 
 void    SwTOXButton::KeyInput( const KeyEvent& rKEvt )
 {
-    sal_Bool bCall = sal_False;
+    bool bCall = false;
     KeyCode aCode = rKEvt.GetKeyCode();
     if(aCode.GetCode() == KEY_RIGHT)
     {
-        bNextControl = sal_True;
-        bCall = sal_True;
+        bNextControl = true;
+        bCall = true;
     }
     else if(aCode.GetCode() == KEY_LEFT  )
     {
-        bNextControl = sal_False;
-        bCall = sal_True;
+        bNextControl = false;
+        bCall = true;
     }
     else if(aCode.GetCode() == KEY_DELETE)
     {
@@ -2340,7 +2340,7 @@ IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
 
 IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
 {
-    sal_Bool bInsert = pButton == &aAuthInsertPB;
+    bool bInsert = pButton == &aAuthInsertPB;
     if(bInsert)
     {
         sal_uInt16 nSelPos = aAuthFieldsLB.GetSelectEntryPos();
@@ -2634,7 +2634,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
     //table of authorities
     if(aAuthInsertPB.IsVisible())
     {
-        sal_Bool bText = TOKEN_TEXT == pToken->eTokenType;
+        bool bText = TOKEN_TEXT == pToken->eTokenType;
         aAuthInsertPB.Enable(bText && aAuthFieldsLB.GetSelectEntry().Len());
         aAuthRemovePB.Enable(!bText);
     }
@@ -2863,7 +2863,7 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
         // #i21237#
         SwFormTokens aPattern = pForm->GetPattern(nLevel + 1);
         SwFormTokens::iterator aIt = aPattern.begin();
-        sal_Bool bLastWasText = sal_False; //assure alternating text - code - text
+        bool bLastWasText = false; //assure alternating text - code - text
 
         Control* pSetActiveControl = 0;
         while(aIt != aPattern.end()) // #i21237#
@@ -2874,7 +2874,7 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
             {
                 OSL_ENSURE(!bLastWasText, "text following text is invalid");
                 Control* pCtrl = InsertItem(aToken.sText, aToken);
-                bLastWasText = sal_True;
+                bLastWasText = true;
                 if(!GetActiveControl())
                     SetActiveControl(pCtrl);
             }
@@ -2882,7 +2882,7 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
             {
                 if( !bLastWasText )
                 {
-                    bLastWasText = sal_True;
+                    bLastWasText = true;
                     SwFormToken aTemp(TOKEN_TEXT);
                     Control* pCtrl = InsertItem(aEmptyStr, aTemp);
                     if(!pSetActiveControl)
@@ -2905,14 +2905,14 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
                 InsertItem( pTmp ? rtl::OUString::createFromAscii(pTmp)
                                  : rtl::OUString(), aToken );
-                bLastWasText = sal_False;
+                bLastWasText = false;
             }
 
             ++aIt; // #i21237#
         }
         if(!bLastWasText)
         {
-            bLastWasText = sal_True;
+            bLastWasText = true;
             SwFormToken aTemp(TOKEN_TEXT);
             Control* pCtrl = InsertItem(aEmptyStr, aTemp);
             if(!pSetActiveControl)
@@ -3028,8 +3028,8 @@ void    SwTokenWindow::InsertAtSelection(
         //<insert> LS
         //<insert> LE
         //<insert>
-        sal_Bool bPreStartLinkFound = sal_False;
-        sal_Bool bPreEndLinkFound = sal_False;
+        bool bPreStartLinkFound = false;
+        bool bPreEndLinkFound = false;
 
         const Control* pControl = 0;
         const Control* pExchange = 0;
@@ -3046,16 +3046,16 @@ void    SwTokenWindow::InsertAtSelection(
 
                 if( TOKEN_LINK_START == rNewToken.eTokenType )
                 {
-                    bPreStartLinkFound = sal_True;
+                    bPreStartLinkFound = true;
                     pExchange = 0;
                 }
                 else if(TOKEN_LINK_END == rNewToken.eTokenType)
                 {
                     if( bPreStartLinkFound )
-                        bPreStartLinkFound = sal_False;
+                        bPreStartLinkFound = false;
                     else
                     {
-                        bPreEndLinkFound = sal_False;
+                        bPreEndLinkFound = false;
                         pExchange = pControl;
                     }
                 }
@@ -3907,7 +3907,7 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
             sWordOnly(      ResId(ST_WORDONLY, *rId.GetResMgr()     )),
             sYes(           ResId(ST_TRUE, *rId.GetResMgr()             )),
             sNo(            ResId(ST_FALSE, *rId.GetResMgr()            )),
-            bModified(sal_False)
+            bModified(false)
 {
     FreeResource();
     aCellCheckBox.GetBox().EnableTriState(sal_False);
@@ -4155,7 +4155,7 @@ sal_Bool SwEntryBrowseBox::IsModified()const
 }
 
 SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkURL,
-        const String& rAutoMarkType, sal_Bool bCreate) :
+        const String& rAutoMarkType, bool bCreate) :
     ModalDialog(pParent, SW_RES(DLG_CREATE_AUTOMARK)),
     aOKPB(      this, SW_RES(PB_OK      )),
     aCancelPB(  this, SW_RES(PB_CANCEL  )),
@@ -4173,7 +4173,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
     sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM(": "));
     sTitle += sAutoMarkURL;
     SetText(sTitle);
-    sal_Bool bError = sal_False;
+    bool bError = false;
     if( bCreateMode )
         aEntriesBB.RowInserted(0, 1, sal_True);
     else
@@ -4182,7 +4182,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
         if( aMed.GetInStream() && !aMed.GetInStream()->GetError() )
             aEntriesBB.ReadEntries( *aMed.GetInStream() );
         else
-            bError = sal_True;
+            bError = true;
     }
 
     if(bError)
@@ -4195,7 +4195,7 @@ SwAutoMarkDlg_Impl::~SwAutoMarkDlg_Impl()
 
 IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl)
 {
-    sal_Bool bError = sal_False;
+    bool bError = false;
     if(aEntriesBB.IsModified() || bCreateMode)
     {
         SfxMedium aMed( sAutoMarkURL,
@@ -4209,7 +4209,7 @@ IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl)
             aMed.Commit();
         }
         else
-            bError = sal_True;
+            bError = true;
     }
     if( !bError )
         EndDialog(RET_OK);
