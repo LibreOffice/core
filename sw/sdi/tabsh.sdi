@@ -21,8 +21,8 @@ interface TextTable : BaseTextTable
     uuid = "49CE7CA0-111A-101D-9757-6E74207A7520"
 ]
 {
-    // hier sollen die Slots eingefuegt werden, die vom StarWriter/WEB
-    // nicht unterstuetzt werden
+    // Here should the slots be integrated, which are not supported
+    // in StarWriter/WEB
 
     import TextSelection;
 
