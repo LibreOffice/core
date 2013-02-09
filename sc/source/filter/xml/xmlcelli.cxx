@@ -99,9 +99,6 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-using rtl::OUString;
-
-
 ScXMLTableRowCellContext::ParaFormat::ParaFormat(ScEditEngineDefaulter& rEditEngine) :
     maItemSet(rEditEngine.GetEmptyItemSet()) {}
 
