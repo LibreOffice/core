@@ -413,7 +413,8 @@ STD_LIB_FILE(gid_File_Lib_Drawinglayer,drawinglayer)
 
 SPECIAL_LIB_FILE(gid_File_Lib_Embobj,embobj)
 
-#ifndef DISABLE_ATL
+/* fdo#60491 always need emboleobj library on non-WNT platforms */
+#if !defined(WNT) || !defined(DISABLE_ATL)
 SPECIAL_LIB_FILE(gid_File_Lib_Emboleobj,emboleobj)
 #endif
 
