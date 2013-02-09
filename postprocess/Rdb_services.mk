@@ -142,9 +142,12 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(filter headless,$(GUIBASE)), \
 		vcl/vcl.headless \
 	) \
+	$(if $(filter-out WNT,$(OS)), \
+		embeddedobj/source/msole/emboleobj \
+	) \
 	$(if $(DISABLE_ATL),, \
-		embeddedobj/source/msole/emboleobj$(if $(filter WNT,$(OS)),.windows) \
 		$(if $(filter WNT,$(OS)), \
+			embeddedobj/source/msole/emboleobj.windows \
 			embedserv/util/emser \
 			extensions/source/ole/oleautobridge \
 		) \
