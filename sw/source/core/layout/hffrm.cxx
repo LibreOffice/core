@@ -109,7 +109,7 @@ static void lcl_LayoutFrmEnsureMinHeight(SwLayoutFrm & rFrm,
 SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, SwFrm* pSib, sal_uInt16 nTypeIn)
     : SwLayoutFrm( pFmt, pSib )
 {
-    nType = nTypeIn;
+    mnType = nTypeIn;
     SetDerivedVert( sal_False );
 
     const SwFmtCntnt &rCnt = pFmt->GetCntnt();
@@ -187,41 +187,41 @@ void SwHeadFootFrm::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
         // OD 23.01.2003 #106895# - add first parameter to <SwBorderAttrs::CalcRight(..)>
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
 
-        aPrt.Left(pAttrs->CalcLeft(this));
+        maPrt.Left(pAttrs->CalcLeft(this));
 
         if (IsHeaderFrm())
-            aPrt.Top(pAttrs->CalcTop());
+            maPrt.Top(pAttrs->CalcTop());
         else
-            aPrt.Top(nSpace);
+            maPrt.Top(nSpace);
 
-        aPrt.Width(aFrm.Width() - nLR);
+        maPrt.Width(maFrm.Width() - nLR);
 
         SwTwips nNewHeight;
 
-        if (nUL < aFrm.Height())
-            nNewHeight = aFrm.Height() - nUL;
+        if (nUL < maFrm.Height())
+            nNewHeight = maFrm.Height() - nUL;
         else
             nNewHeight = 0;
 
-        aPrt.Height(nNewHeight);
+        maPrt.Height(nNewHeight);
 
     }
     else
     {
         // Set position
-        aPrt.Left( pAttrs->CalcLeft( this ) );
-        aPrt.Top ( pAttrs->CalcTop()  );
+        maPrt.Left( pAttrs->CalcLeft( this ) );
+        maPrt.Top ( pAttrs->CalcTop()  );
 
         // Set sizes - the sizes are given by the surrounding Frm, just
         // subtract the borders.
         // OD 23.01.2003 #106895# - add first parameter to <SwBorderAttrs::CalcRight(..)>
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
-        aPrt.Width ( aFrm.Width() - nLR );
-        aPrt.Height( aFrm.Height()- nUL );
+        maPrt.Width ( maFrm.Width() - nLR );
+        maPrt.Height( maFrm.Height()- nUL );
 
     }
 
-    bValidPrtArea = sal_True;
+    mbValidPrtArea = sal_True;
 }
 
 void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
@@ -230,7 +230,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
     {
         if( !IsColLocked() )
         {
-            bValidSize = bValidPrtArea = sal_True;
+            mbValidSize = mbValidPrtArea = sal_True;
 
             const SwTwips nBorder = nUL;
             SwTwips nMinHeight = lcl_GetFrmMinHeight(*this);
@@ -383,11 +383,11 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                         Prt().SSize().Height() = Frm().Height() - nBorder;
                     }
                 }
-                bValidSize = bValidPrtArea = sal_True;
+                mbValidSize = mbValidPrtArea = sal_True;
             } while( nRemaining<=nMaxHeight && nOldHeight!=Prt().Height() );
             ColUnlock();
         }
-        bValidSize = bValidPrtArea = sal_True;
+        mbValidSize = mbValidPrtArea = sal_True;
     }
     else //if ( GetType() & 0x0018 )
     {
@@ -395,9 +395,9 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
         {
             if ( Frm().Height() != pAttrs->GetSize().Height() )
                 ChgSize( Size( Frm().Width(), pAttrs->GetSize().Height()));
-            bValidSize = sal_True;
+            mbValidSize = sal_True;
             MakePos();
-        } while ( !bValidSize );
+        } while ( !mbValidSize );
     }
 }
 
@@ -405,7 +405,7 @@ void SwHeadFootFrm::Format(const SwBorderAttrs * pAttrs)
 {
     OSL_ENSURE( pAttrs, "SwFooterFrm::Format, pAttrs is 0." );
 
-    if ( bValidPrtArea && bValidSize )
+    if ( mbValidPrtArea && mbValidSize )
         return;
 
     if ( ! GetEatSpacing() && IsHeaderFrm())
@@ -418,10 +418,10 @@ void SwHeadFootFrm::Format(const SwBorderAttrs * pAttrs)
 
         long nUL = pAttrs->CalcTop()  + pAttrs->CalcBottom();
 
-        if ( !bValidPrtArea )
+        if ( !mbValidPrtArea )
             FormatPrt(nUL, pAttrs);
 
-        if ( !bValidSize )
+        if ( !mbValidSize )
             FormatSize(nUL, pAttrs);
     }
 }
@@ -455,9 +455,9 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst,  sal_Bool bInfo )
 
         /* calculate maximum eatable spacing */
         if (IsHeaderFrm())
-            nMaxEat = aFrm.Height() - aPrt.Top() - aPrt.Height() - pAttrs->CalcBottomLine();
+            nMaxEat = maFrm.Height() - maPrt.Top() - maPrt.Height() - pAttrs->CalcBottomLine();
         else
-            nMaxEat = aPrt.Top() - pAttrs->CalcTopLine();
+            nMaxEat = maPrt.Top() - pAttrs->CalcTopLine();
 
         delete pAccess;
 
@@ -488,8 +488,8 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst,  sal_Bool bInfo )
             {
                 if (! IsHeaderFrm())
                 {
-                    aPrt.Top(aPrt.Top() - nEat);
-                    aPrt.Height(aPrt.Height() - nEat);
+                    maPrt.Top(maPrt.Top() - nEat);
+                    maPrt.Height(maPrt.Height() - nEat);
                 }
 
                 InvalidateAll();
@@ -595,7 +595,7 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             SwTwips nShrink = nRest;
 
             /* calculate maximum shrinking */
-            SwTwips nMaxShrink = aPrt.Height() - nMinPrtHeight;
+            SwTwips nMaxShrink = maPrt.Height() - nMinPrtHeight;
 
             /* shrink no more than maximum shrinking */
             if (nShrink > nMaxShrink)
@@ -608,8 +608,8 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             {
                 if (! IsHeaderFrm() )
                 {
-                    aPrt.Top(aPrt.Top() + nShrink);
-                    aPrt.Height(aPrt.Height() - nShrink);
+                    maPrt.Top(maPrt.Top() + nShrink);
+                    maPrt.Height(maPrt.Height() - nShrink);
                 }
 
                 InvalidateAll();

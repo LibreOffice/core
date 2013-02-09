@@ -376,7 +376,7 @@ SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode, SwFrm* pSib )
     , bIsSwapped( false )
     , mbFollowFormatAllowed( true ) // OD 14.03.2003 #i11760#
 {
-    nType = FRMC_TXT;
+    mnType = FRMC_TXT;
 }
 
 /*************************************************************************
@@ -1309,7 +1309,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             if( pOld && pNew )
             {
                 const SwDocPosUpdate *pDocPos = (const SwDocPosUpdate*)pOld;
-                if( pDocPos->nDocPos <= aFrm.Top() )
+                if( pDocPos->nDocPos <= maFrm.Top() )
                 {
                     const SwFmtFld *pFld = (const SwFmtFld *)pNew;
                     InvalidateRange(

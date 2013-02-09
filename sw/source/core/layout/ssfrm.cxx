@@ -117,66 +117,66 @@ void SwFrm::MakeBelowPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify 
 {
     if( pPrv )
     {
-        aFrm.Pos( pPrv->Frm().Pos() );
-        aFrm.Pos().Y() += pPrv->Frm().Height();
+        maFrm.Pos( pPrv->Frm().Pos() );
+        maFrm.Pos().Y() += pPrv->Frm().Height();
     }
     else
     {
-        aFrm.Pos( pUp->Frm().Pos() );
-        aFrm.Pos() += pUp->Prt().Pos();
+        maFrm.Pos( pUp->Frm().Pos() );
+        maFrm.Pos() += pUp->Prt().Pos();
     }
     if( bNotify )
-        aFrm.Pos().Y() += 1;
+        maFrm.Pos().Y() += 1;
 }
 
 void SwFrm::MakeUpperPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify )
 {
     if( pPrv )
     {
-        aFrm.Pos( pPrv->Frm().Pos() );
-        aFrm.Pos().Y() -= Frm().Height();
+        maFrm.Pos( pPrv->Frm().Pos() );
+        maFrm.Pos().Y() -= Frm().Height();
     }
     else
     {
-        aFrm.Pos( pUp->Frm().Pos() );
-        aFrm.Pos() += pUp->Prt().Pos();
-        aFrm.Pos().Y() += pUp->Prt().Height() - aFrm.Height();
+        maFrm.Pos( pUp->Frm().Pos() );
+        maFrm.Pos() += pUp->Prt().Pos();
+        maFrm.Pos().Y() += pUp->Prt().Height() - maFrm.Height();
     }
     if( bNotify )
-        aFrm.Pos().Y() -= 1;
+        maFrm.Pos().Y() -= 1;
 }
 
 void SwFrm::MakeLeftPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify )
 {
     if( pPrv )
     {
-        aFrm.Pos( pPrv->Frm().Pos() );
-        aFrm.Pos().X() -= Frm().Width();
+        maFrm.Pos( pPrv->Frm().Pos() );
+        maFrm.Pos().X() -= Frm().Width();
     }
     else
     {
-        aFrm.Pos( pUp->Frm().Pos() );
-        aFrm.Pos() += pUp->Prt().Pos();
-        aFrm.Pos().X() += pUp->Prt().Width() - aFrm.Width();
+        maFrm.Pos( pUp->Frm().Pos() );
+        maFrm.Pos() += pUp->Prt().Pos();
+        maFrm.Pos().X() += pUp->Prt().Width() - maFrm.Width();
     }
     if( bNotify )
-        aFrm.Pos().X() -= 1;
+        maFrm.Pos().X() -= 1;
 }
 
 void SwFrm::MakeRightPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify )
 {
     if( pPrv )
     {
-        aFrm.Pos( pPrv->Frm().Pos() );
-        aFrm.Pos().X() += pPrv->Frm().Width();
+        maFrm.Pos( pPrv->Frm().Pos() );
+        maFrm.Pos().X() += pPrv->Frm().Width();
     }
     else
     {
-        aFrm.Pos( pUp->Frm().Pos() );
-        aFrm.Pos() += pUp->Prt().Pos();
+        maFrm.Pos( pUp->Frm().Pos() );
+        maFrm.Pos() += pUp->Prt().Pos();
     }
     if( bNotify )
-        aFrm.Pos().X() += 1;
+        maFrm.Pos().X() += 1;
 }
 
 void SwFrm::SetTopBottomMargins( long nTop, long nBot )
@@ -371,11 +371,11 @@ void SwFrm::Destroy()
         }
     }
 
-    if( pDrawObjs )
+    if( mpDrawObjs )
     {
-        for ( sal_uInt32 i = pDrawObjs->Count(); i; )
+        for ( sal_uInt32 i = mpDrawObjs->Count(); i; )
         {
-            SwAnchoredObject* pAnchoredObj = (*pDrawObjs)[--i];
+            SwAnchoredObject* pAnchoredObj = (*mpDrawObjs)[--i];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
                 delete pAnchoredObj;
             else
@@ -391,8 +391,8 @@ void SwFrm::Destroy()
                 }
             }
         }
-        delete pDrawObjs;
-        pDrawObjs = 0;
+        delete mpDrawObjs;
+        mpDrawObjs = 0;
     }
 }
 
@@ -405,7 +405,7 @@ SwFrm::~SwFrm()
 
 #if OSL_DEBUG_LEVEL > 0
     // JP 15.10.2001: for detection of access to deleted frames
-    pDrawObjs = (SwSortedObjs*)0x33333333;
+    mpDrawObjs = (SwSortedObjs*)0x33333333;
 #endif
 }
 

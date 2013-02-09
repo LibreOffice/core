@@ -87,8 +87,8 @@ SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib ):
     // #i26945#
     bConsiderObjsForMinCellHeight = sal_True;
     bObjsDoesFit = sal_True;
-    bFixSize = sal_False;     //Don't fall for import filter again.
-    nType = FRMC_TAB;
+    mbFixSize = sal_False;     //Don't fall for import filter again.
+    mnType = FRMC_TAB;
 
     //Create the lines and insert them.
     const SwTableLines &rLines = rTab.GetTabLines();
@@ -118,8 +118,8 @@ SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
     // #i26945#
     bConsiderObjsForMinCellHeight = sal_True;
     bObjsDoesFit = sal_True;
-    bFixSize = sal_False;     //Don't fall for import filter again.
-    nType = FRMC_TAB;
+    mbFixSize = sal_False;     //Don't fall for import filter again.
+    mnType = FRMC_TAB;
 
     SetFollow( rTab.GetFollow() );
     rTab.SetFollow( this );
@@ -1961,7 +1961,7 @@ void SwTabFrm::MakeAll()
 
     int nUnSplitted = 5; // Just another loop control :-(
     SWRECTFN( this )
-    while ( !bValidPos || !bValidSize || !bValidPrtArea )
+    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
         if ( (bMoveable = IsMoveable()) )
             if ( CheckMoveFwd( bMakePage, bKeep && KEEPTAB, bMovedBwd ) )
@@ -1991,7 +1991,7 @@ void SwTabFrm::MakeAll()
                     pAttrs = pAccess->Get();
                 }
 
-                bValidPrtArea = sal_False;
+                mbValidPrtArea = sal_False;
                 aNotify.SetLowersComplete( sal_False );
             }
             SwFrm *pPre;
@@ -2016,7 +2016,7 @@ void SwTabFrm::MakeAll()
                 n1StLineHeight = (pFrm->Frm().*fnRect->fnGetHeight)();
         }
 
-        if ( !bValidSize || !bValidPrtArea )
+        if ( !mbValidSize || !mbValidPrtArea )
         {
             const long nOldPrtWidth = (Prt().*fnRect->fnGetWidth)();
             const long nOldFrmWidth = (Frm().*fnRect->fnGetWidth)();
@@ -2087,7 +2087,7 @@ void SwTabFrm::MakeAll()
                             pAttrs = pAccess->Get();
                         }
 
-                        bValidPrtArea = sal_False;
+                        mbValidPrtArea = sal_False;
                         Format( pAttrs );
                     }
                     lcl_RecalcTable( *this, 0, aNotify );
@@ -2103,7 +2103,7 @@ void SwTabFrm::MakeAll()
                         // content.
                         if ( 0 != sw_FormatNextCntntForKeep( this ) && !GetNext() )
                         {
-                            bValidPos = sal_False;
+                            mbValidPos = sal_False;
                         }
                     }
                 }
@@ -2111,7 +2111,7 @@ void SwTabFrm::MakeAll()
         }
 
         //Again an invalid value? - do it again...
-        if ( !bValidPos || !bValidSize || !bValidPrtArea )
+        if ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
             continue;
 
         // check, if calculation of table frame is ready.
@@ -2280,7 +2280,7 @@ void SwTabFrm::MakeAll()
                     // In this case we do a magic trick:
                     if ( !bKeep && !GetNext() && pTmpNxt && pTmpNxt->IsValid() )
                     {
-                        bValidPos = sal_False;
+                        mbValidPos = sal_False;
                         bLastRowHasToMoveToFollow = true;
                     }
                 }
@@ -2462,7 +2462,7 @@ void SwTabFrm::MakeAll()
                     if ( bSplitError && bTryToSplit ) // no restart if we did not try to split: i72847, i79426
                     {
                         lcl_RecalcRow( static_cast<SwRowFrm&>(*Lower()), LONG_MAX );
-                        bValidPos = sal_False;
+                        mbValidPos = sal_False;
                         bTryToSplit = false;
                         continue;
                     }
@@ -2619,7 +2619,7 @@ void SwTabFrm::MakeAll()
 #endif
         }
 
-    } //while ( !bValidPos || !bValidSize || !bValidPrtArea )
+    } //while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
 
     //If my direct predecessor is my master now, it can destroy me during the
     //next best opportunity.
@@ -2789,12 +2789,12 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     OSL_ENSURE( pAttrs, "TabFrm::Format, pAttrs ist 0." );
 
     SWRECTFN( this )
-    if ( !bValidSize )
+    if ( !mbValidSize )
     {
         long nDiff = (GetUpper()->Prt().*fnRect->fnGetWidth)() -
                      (Frm().*fnRect->fnGetWidth)();
         if( nDiff )
-            (aFrm.*fnRect->fnAddRight)( nDiff );
+            (maFrm.*fnRect->fnAddRight)( nDiff );
     }
 
     //VarSize is always the height.
@@ -2810,7 +2810,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     long nTmpRight = -1000000,
          nLeftOffset  = 0;
     if( CalcFlyOffsets( nUpper, nLeftOffset, nTmpRight ) )
-        bValidPrtArea = sal_False;
+        mbValidPrtArea = sal_False;
     long nRightOffset = Max( 0L, nTmpRight );
 
     SwTwips nLower = pAttrs->CalcBottomLine();
@@ -2819,8 +2819,8 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
         nLower += GetBottomLineSize();
     // <-- collapsing
 
-    if ( !bValidPrtArea )
-    {   bValidPrtArea = sal_True;
+    if ( !mbValidPrtArea )
+    {   mbValidPrtArea = sal_True;
 
         //The width of the PrtArea is given by the FrmFmt, the borders have to
         //be set accordingly.
@@ -2831,7 +2831,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
         //attributes.
 
         const SwTwips nOldHeight = (Prt().*fnRect->fnGetHeight)();
-        const SwTwips nMax = (aFrm.*fnRect->fnGetWidth)();
+        const SwTwips nMax = (maFrm.*fnRect->fnGetWidth)();
 
         // OD 14.03.2003 #i9040# - adjust variable names.
         const SwTwips nLeftLine  = pAttrs->CalcLeftLine();
@@ -3017,12 +3017,12 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
         }
 
         if ( nOldHeight != (Prt().*fnRect->fnGetHeight)() )
-            bValidSize = sal_False;
+            mbValidSize = sal_False;
     }
 
-    if ( !bValidSize )
+    if ( !mbValidSize )
     {
-        bValidSize = sal_True;
+        mbValidSize = sal_True;
 
         //The size is defined by the content plus the borders.
         SwTwips nRemaining = 0, nDiff;
@@ -3681,7 +3681,7 @@ SwRowFrm::SwRowFrm( const SwTableLine &rLine, SwFrm* pSib, bool bInsertContent )
     bIsRepeatedHeadline( false ),
     mbIsRowSpanLine( false )
 {
-    nType = FRMC_ROW;
+    mnType = FRMC_ROW;
 
     //Create the boxes and insert them.
     const SwTableBoxes &rBoxes = rLine.GetTabBoxes();
@@ -3766,7 +3766,7 @@ void SwRowFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 void SwRowFrm::MakeAll()
 {
     if ( !GetNext() )
-        bValidSize = sal_False;
+        mbValidSize = sal_False;
     SwLayoutFrm::MakeAll();
 }
 
@@ -4123,17 +4123,17 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
     SWRECTFN( this )
     OSL_ENSURE( pAttrs, "SwRowFrm::Format without Attrs." );
 
-    const sal_Bool bFix = bFixSize;
+    const sal_Bool bFix = mbFixSize;
 
-    if ( !bValidPrtArea )
+    if ( !mbValidPrtArea )
     {
         //RowFrms don't have borders and so on therefore the PrtArea always
         //matches the Frm.
-        bValidPrtArea = sal_True;
-        aPrt.Left( 0 );
-        aPrt.Top( 0 );
-        aPrt.Width ( aFrm.Width() );
-        aPrt.Height( aFrm.Height() );
+        mbValidPrtArea = sal_True;
+        maPrt.Left( 0 );
+        maPrt.Top( 0 );
+        maPrt.Width ( maFrm.Width() );
+        maPrt.Height( maFrm.Height() );
 
         // #i29550#
         // Here we calculate the top-printing area for the lower cell frames
@@ -4237,9 +4237,9 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
 // <-- collapsing
     }
 
-    while ( !bValidSize )
+    while ( !mbValidSize )
     {
-        bValidSize = sal_True;
+        mbValidSize = sal_True;
 
 #if OSL_DEBUG_LEVEL > 0
         if ( HasFixSize() )
@@ -4256,12 +4256,12 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
                                     FindTabFrm()->IsConsiderObjsForMinCellHeight() ) );
         if ( nDiff )
         {
-            bFixSize = sal_False;
+            mbFixSize = sal_False;
             if ( nDiff > 0 )
                 Shrink( nDiff, sal_False, sal_True );
             else if ( nDiff < 0 )
                 Grow( -nDiff );
-            bFixSize = bFix;
+            mbFixSize = bFix;
         }
     }
 
@@ -4277,10 +4277,10 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
         } while ( pSibling );
         if ( nDiff > 0 )
         {
-            bFixSize = sal_False;
+            mbFixSize = sal_False;
             Grow( nDiff );
-            bFixSize = bFix;
-            bValidSize = sal_True;
+            mbFixSize = bFix;
+            mbValidSize = sal_True;
         }
     }
 }
@@ -4646,7 +4646,7 @@ SwCellFrm::SwCellFrm( const SwTableBox &rBox, SwFrm* pSib, bool bInsertContent )
     SwLayoutFrm( rBox.GetFrmFmt(), pSib ),
     pTabBox( &rBox )
 {
-    nType = FRMC_CELL;
+    mnType = FRMC_CELL;
 
     if ( !bInsertContent )
         return;
@@ -4923,9 +4923,9 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
     const SwTabFrm* pTab = FindTabFrm();
     SWRECTFN( pTab )
 
-    if ( !bValidPrtArea )
+    if ( !mbValidPrtArea )
     {
-        bValidPrtArea = sal_True;
+        mbValidPrtArea = sal_True;
 
         //Adjust position.
         if ( Lower() )
@@ -4957,9 +4957,9 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
     long nRemaining = GetTabBox()->getRowSpan() >= 1 ?
                       ::lcl_CalcMinCellHeight( this, pTab->IsConsiderObjsForMinCellHeight(), pAttrs ) :
                       0;
-    if ( !bValidSize )
+    if ( !mbValidSize )
     {
-        bValidSize = sal_True;
+        mbValidSize = sal_True;
 
         //The VarSize of the CellFrms is always the width.
         //The width is not variable though, it is defined by the format.
@@ -5054,14 +5054,14 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                 //Validate again if no growth happened. Invalidation is done
                 //through AdjustCells of the row.
                 if ( !Grow( nDiffHeight ) )
-                    bValidSize = bValidPrtArea = sal_True;
+                    mbValidSize = mbValidPrtArea = sal_True;
             }
             else
             {
                 //Only keep invalidated if shrinking was done; this can be
                 //dismissed because all adjoined cells have to be the same size.
                 if ( !Shrink( -nDiffHeight ) )
-                    bValidSize = bValidPrtArea = sal_True;
+                    mbValidSize = mbValidPrtArea = sal_True;
             }
         }
     }

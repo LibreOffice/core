@@ -87,8 +87,8 @@ typedef struct _xmlTextWriter *xmlTextWriterPtr;
 #define FRM_FTNBOSS     0x0006
 #define FRM_ACCESSIBLE (FRM_HEADER|FRM_FOOTER|FRM_FTN|FRM_TXT|FRM_ROOT|FRM_FLY|FRM_TAB|FRM_CELL|FRM_PAGE)
 
-// The type of the frame is internal represented by the 4-bit value nType,
-// which can expanded to the types above by shifting a bit (0x1 << nType)
+// The type of the frame is internal represented by the 4-bit value mnType,
+// which can expanded to the types above by shifting a bit (0x1 << mnType)
 // Here are the corresponding defines for the compressed representation:
 #define FRMC_ROOT        0
 #define FRMC_PAGE        1
@@ -250,7 +250,7 @@ class SwFrm: public SwClient, public SfxBroadcaster
     friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );
 
     // cache for (border) attributes
-    static SwCache *pCache;
+    static SwCache *mpCache;
 
     // #i65250#
     // frame ID is now in general available - used for layout loop control
@@ -258,9 +258,9 @@ class SwFrm: public SwClient, public SfxBroadcaster
     const  sal_uInt32 mnFrmId;
 
     SwRootFrm   *mpRoot;
-    SwLayoutFrm *pUpper;
-    SwFrm       *pNext;
-    SwFrm       *pPrev;
+    SwLayoutFrm *mpUpper;
+    SwFrm       *mpNext;
+    SwFrm       *mpPrev;
 
     SwFrm *_FindNext();
     SwFrm *_FindPrev();
@@ -330,47 +330,47 @@ class SwFrm: public SwClient, public SfxBroadcaster
     const SwLayoutFrm* ImplGetNextLayoutLeaf( bool bFwd ) const;
 
 protected:
-    SwSortedObjs* pDrawObjs;    // draw objects, can be 0
+    SwSortedObjs* mpDrawObjs;    // draw objects, can be 0
 
-    SwRect  aFrm;   // absolute position in document and size of the Frm
-    SwRect  aPrt;   // position relatively to Frm and size of PrtArea
+    SwRect  maFrm;   // absolute position in document and size of the Frm
+    SwRect  maPrt;   // position relatively to Frm and size of PrtArea
 
-    sal_uInt16 bReverse     : 1; // Next line above/at the right side instead
+    sal_uInt16 mbReverse     : 1; // Next line above/at the right side instead
                                  // under/at the left side of the previous line
-    sal_uInt16 bInvalidR2L  : 1;
-    sal_uInt16 bDerivedR2L  : 1;
-    sal_uInt16 bRightToLeft : 1;
-    sal_uInt16 bInvalidVert : 1;
-    sal_uInt16 bDerivedVert : 1;
-    sal_uInt16 bVertical    : 1;
+    sal_uInt16 mbInvalidR2L  : 1;
+    sal_uInt16 mbDerivedR2L  : 1;
+    sal_uInt16 mbRightToLeft : 1;
+    sal_uInt16 mbInvalidVert : 1;
+    sal_uInt16 mbDerivedVert : 1;
+    sal_uInt16 mbVertical    : 1;
     // Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    sal_uInt16 bVertLR      : 1;
-    sal_uInt16 nType        : 4;  //Who am I?
+    sal_uInt16 mbVertLR      : 1;
+    sal_uInt16 mnType        : 4;  //Who am I?
 
-    sal_Bool bValidPos      : 1;
-    sal_Bool bValidPrtArea  : 1;
-    sal_Bool bValidSize     : 1;
-    sal_Bool bValidLineNum  : 1;
-    sal_Bool bFixSize       : 1;
-    sal_Bool bUnUsed1       : 1;
+    sal_Bool mbValidPos      : 1;
+    sal_Bool mbValidPrtArea  : 1;
+    sal_Bool mbValidSize     : 1;
+    sal_Bool mbValidLineNum  : 1;
+    sal_Bool mbFixSize       : 1;
+    sal_Bool mbUnUsed1       : 1;
     // if sal_True, frame will be painted completely even content was changed
     // only partially. For CntntFrms a border (from Action) will exclusively
-    // painted if <bCompletePaint> is sal_True.
-    sal_Bool bCompletePaint : 1;
-    sal_Bool bRetouche      : 1; // frame is responsible for retouching
+    // painted if <mbCompletePaint> is sal_True.
+    sal_Bool mbCompletePaint : 1;
+    sal_Bool mbRetouche      : 1; // frame is responsible for retouching
 
 protected:
-    sal_Bool bInfInvalid    : 1;  // InfoFlags are invalid
-    sal_Bool bInfBody       : 1;  // Frm is in document body
-    sal_Bool bInfTab        : 1;  // Frm is in a table
-    sal_Bool bInfFly        : 1;  // Frm is in a Fly
-    sal_Bool bInfFtn        : 1;  // Frm is in a footnote
-    sal_Bool bInfSct        : 1;  // Frm is in a section
-    sal_Bool bColLocked     : 1;  // lock Grow/Shrink for column-wise section
+    sal_Bool mbInfInvalid    : 1;  // InfoFlags are invalid
+    sal_Bool mbInfBody       : 1;  // Frm is in document body
+    sal_Bool mbInfTab        : 1;  // Frm is in a table
+    sal_Bool mbInfFly        : 1;  // Frm is in a Fly
+    sal_Bool mbInfFtn        : 1;  // Frm is in a footnote
+    sal_Bool mbInfSct        : 1;  // Frm is in a section
+    sal_Bool mbColLocked     : 1;  // lock Grow/Shrink for column-wise section
                                   // or fly frames, will be set in Format
 
-    void ColLock()      { bColLocked = sal_True; }
-    void ColUnlock()    { bColLocked = sal_False; }
+    void ColLock()      { mbColLocked = sal_True; }
+    void ColUnlock()    { mbColLocked = sal_False; }
 
     void Destroy(); // for ~SwRootFrm
 
@@ -431,11 +431,11 @@ protected:
 public:
     TYPEINFO(); // already in base class
 
-    sal_uInt16 GetType() const { return 0x1 << nType; }
+    sal_uInt16 GetType() const { return 0x1 << mnType; }
 
-    static SwCache &GetCache()                { return *pCache; }
-    static SwCache *GetCachePtr()             { return pCache;  }
-    static void     SetCache( SwCache *pNew ) { pCache = pNew;  }
+    static SwCache &GetCache()                { return *mpCache; }
+    static SwCache *GetCachePtr()             { return mpCache;  }
+    static void     SetCache( SwCache *pNew ) { mpCache = pNew;  }
 
     // change PrtArea size and FrmSize
     SwTwips Shrink( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
@@ -443,9 +443,9 @@ public:
 
     // different methods for inserting in layout tree (for performance reasons)
 
-    // insert before pBehind or at the end of the chain below pUpper
+    // insert before pBehind or at the end of the chain below mpUpper
     void InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind );
-    // insert after pBefore or at the beginnig of the chain below pUpper
+    // insert after pBefore or at the beginnig of the chain below mpUpper
     void InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore );
     // insert before pBehind or at the end of the chain while considering
     // the siblings of pSct
@@ -476,8 +476,8 @@ public:
     // work with chain of FlyFrms
     void  AppendFly( SwFlyFrm *pNew );
     void  RemoveFly( SwFlyFrm *pToRemove );
-    const SwSortedObjs *GetDrawObjs() const { return pDrawObjs; }
-          SwSortedObjs *GetDrawObjs()         { return pDrawObjs; }
+    const SwSortedObjs *GetDrawObjs() const { return mpDrawObjs; }
+          SwSortedObjs *GetDrawObjs()         { return mpDrawObjs; }
     // #i28701# - change purpose of method and adjust its name
     void InvalidateObjs( const bool _bInvaPosOnly,
                          const bool _bNoInvaOfAsCharAnchoredObjs = true );
@@ -511,14 +511,14 @@ public:
 
     inline void SetCompletePaint() const;
     inline void ResetCompletePaint() const;
-    inline sal_Bool IsCompletePaint() const { return bCompletePaint; }
+    inline sal_Bool IsCompletePaint() const { return mbCompletePaint; }
 
     inline void SetRetouche() const;
     inline void ResetRetouche() const;
-    inline sal_Bool IsRetouche() const { return bRetouche; }
+    inline sal_Bool IsRetouche() const { return mbRetouche; }
 
     void SetInfFlags();
-    inline void InvalidateInfFlags() { bInfInvalid = sal_True; }
+    inline void InvalidateInfFlags() { mbInfInvalid = sal_True; }
     inline bool IsInDocBody() const;    // use InfoFlags, determine flags
     inline sal_Bool IsInFtn() const;        // if necessary
     inline sal_Bool IsInTab() const;
@@ -535,22 +535,22 @@ public:
 
     bool IsInBalancedSection() const;
 
-    inline sal_Bool IsReverse() const { return bReverse; }
-    inline void SetReverse( sal_Bool bNew ){ bReverse = bNew ? 1 : 0; }
+    inline sal_Bool IsReverse() const { return mbReverse; }
+    inline void SetReverse( sal_Bool bNew ){ mbReverse = bNew ? 1 : 0; }
     inline sal_Bool IsVertical() const;
     //Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     inline sal_Bool IsVertLR() const;
     inline sal_Bool GetVerticalFlag() const;
-    inline void SetVertical( sal_Bool bNew ){ bVertical = bNew ? 1 : 0; }
+    inline void SetVertical( sal_Bool bNew ){ mbVertical = bNew ? 1 : 0; }
     //Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    inline void SetbVertLR( sal_Bool bNew ) { bVertLR = bNew ? 1 : 0; }
-    inline void SetDerivedVert( sal_Bool bNew ){ bDerivedVert = bNew ? 1 : 0; }
-    inline void SetInvalidVert( sal_Bool bNew) { bInvalidVert = bNew ? 1 : 0; }
+    inline void SetbVertLR( sal_Bool bNew ) { mbVertLR = bNew ? 1 : 0; }
+    inline void SetDerivedVert( sal_Bool bNew ){ mbDerivedVert = bNew ? 1 : 0; }
+    inline void SetInvalidVert( sal_Bool bNew) { mbInvalidVert = bNew ? 1 : 0; }
     inline sal_Bool IsRightToLeft() const;
     inline sal_Bool GetRightToLeftFlag() const;
-    inline void SetRightToLeft( sal_Bool bNew ){ bRightToLeft = bNew ? 1 : 0; }
-    inline void SetDerivedR2L( sal_Bool bNew ) { bDerivedR2L  = bNew ? 1 : 0; }
-    inline void SetInvalidR2L( sal_Bool bNew ) { bInvalidR2L  = bNew ? 1 : 0; }
+    inline void SetRightToLeft( sal_Bool bNew ){ mbRightToLeft = bNew ? 1 : 0; }
+    inline void SetDerivedR2L( sal_Bool bNew ) { mbDerivedR2L  = bNew ? 1 : 0; }
+    inline void SetInvalidR2L( sal_Bool bNew ) { mbInvalidR2L  = bNew ? 1 : 0; }
 
     void CheckDirChange();
     // returns upper left frame position for LTR and
@@ -584,16 +584,16 @@ public:
 
     const SwAttrSet *GetAttrSet() const;
 
-    inline sal_Bool HasFixSize() const { return bFixSize; }
-    inline void SetFixSize( sal_Bool bNew ) { bFixSize = bNew; }
+    inline sal_Bool HasFixSize() const { return mbFixSize; }
+    inline void SetFixSize( sal_Bool bNew ) { mbFixSize = bNew; }
 
     // check all pages (starting from the given) and correct them if needed
     static void CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields = sal_True );
 
     // might return 0, with and without const
-    SwFrm               *GetNext()  { return pNext; }
-    SwFrm               *GetPrev()  { return pPrev; }
-    SwLayoutFrm         *GetUpper() { return pUpper; }
+    SwFrm               *GetNext()  { return mpNext; }
+    SwFrm               *GetPrev()  { return mpPrev; }
+    SwLayoutFrm         *GetUpper() { return mpUpper; }
     SwRootFrm           *getRootFrm(){ return mpRoot; }
     SwPageFrm           *FindPageFrm();
     SwFrm               *FindColFrm();
@@ -605,9 +605,9 @@ public:
     SwSectionFrm        *ImplFindSctFrm();
     SwFrm               *FindFooterOrHeader();
     SwFrm               *GetLower();
-    const SwFrm         *GetNext()  const { return pNext; }
-    const SwFrm         *GetPrev()  const { return pPrev; }
-    const SwLayoutFrm   *GetUpper() const { return pUpper; }
+    const SwFrm         *GetNext()  const { return mpNext; }
+    const SwFrm         *GetPrev()  const { return mpPrev; }
+    const SwLayoutFrm   *GetUpper() const { return mpUpper; }
     const SwRootFrm     *getRootFrm()   const { return mpRoot; }
     inline SwTabFrm     *FindTabFrm();
     inline SwFtnFrm     *FindFtnFrm();
@@ -656,10 +656,10 @@ public:
     // #i79774#
     SwFrm* _GetIndPrev() const;
     SwFrm* GetIndPrev() const
-        { return ( pPrev || !IsInSct() ) ? pPrev : _GetIndPrev(); }
+        { return ( mpPrev || !IsInSct() ) ? mpPrev : _GetIndPrev(); }
 
     SwFrm* GetIndNext()
-        { return ( pNext || !IsInSct() ) ? pNext : _GetIndNext(); }
+        { return ( mpNext || !IsInSct() ) ? mpNext : _GetIndNext(); }
     const SwFrm* GetIndNext() const { return ((SwFrm*)this)->GetIndNext(); }
 
     sal_uInt16 GetPhyPageNum() const;   // page number without offset
@@ -678,8 +678,8 @@ public:
                                     // the predecessors are already formatted
 
     inline Point   GetRelPos() const;
-    const  SwRect &Frm() const { return aFrm; }
-    const  SwRect &Prt() const { return aPrt; }
+    const  SwRect &Frm() const { return maFrm; }
+    const  SwRect &Prt() const { return maPrt; }
 
     // PaintArea is the area where content might be displayed.
     // The margin of a page or the space between columns belongs to it.
@@ -692,21 +692,21 @@ public:
     // This should not delude into changing those value randomly; it is the
     // only option to circumvent compiler problems (same method with public
     // and protected).
-    SwRect &Frm() { return aFrm; }
-    SwRect &Prt() { return aPrt; }
+    SwRect &Frm() { return maFrm; }
+    SwRect &Prt() { return maPrt; }
 
     virtual Size ChgSize( const Size& aNewSize );
 
     virtual void Cut() = 0;
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) = 0;
 
-    void ValidateLineNum() { bValidLineNum = sal_True; }
+    void ValidateLineNum() { mbValidLineNum = sal_True; }
 
-    sal_Bool GetValidPosFlag()    const { return bValidPos; }
-    sal_Bool GetValidPrtAreaFlag()const { return bValidPrtArea; }
-    sal_Bool GetValidSizeFlag()   const { return bValidSize; }
-    sal_Bool GetValidLineNumFlag()const { return bValidLineNum; }
-    sal_Bool IsValid() const { return bValidPos && bValidSize && bValidPrtArea; }
+    sal_Bool GetValidPosFlag()    const { return mbValidPos; }
+    sal_Bool GetValidPrtAreaFlag()const { return mbValidPrtArea; }
+    sal_Bool GetValidSizeFlag()   const { return mbValidSize; }
+    sal_Bool GetValidLineNumFlag()const { return mbValidLineNum; }
+    sal_Bool IsValid() const { return mbValidPos && mbValidSize && mbValidPrtArea; }
 
     // Only invalidate Frm
     // #i28701# - add call to method <_ActionOnInvalidation(..)>
@@ -717,42 +717,42 @@ public:
     //            invalidate.
     void _InvalidateSize()
     {
-        if ( bValidSize && _InvalidationAllowed( INVALID_SIZE ) )
+        if ( mbValidSize && _InvalidationAllowed( INVALID_SIZE ) )
         {
-            bValidSize = sal_False;
+            mbValidSize = sal_False;
             _ActionOnInvalidation( INVALID_SIZE );
         }
     }
     void _InvalidatePrt()
     {
-        if ( bValidPrtArea && _InvalidationAllowed( INVALID_PRTAREA ) )
+        if ( mbValidPrtArea && _InvalidationAllowed( INVALID_PRTAREA ) )
         {
-            bValidPrtArea = sal_False;
+            mbValidPrtArea = sal_False;
             _ActionOnInvalidation( INVALID_PRTAREA );
         }
     }
     void _InvalidatePos()
     {
-        if ( bValidPos && _InvalidationAllowed( INVALID_POS ) )
+        if ( mbValidPos && _InvalidationAllowed( INVALID_POS ) )
         {
-            bValidPos = sal_False;
+            mbValidPos = sal_False;
             _ActionOnInvalidation( INVALID_POS );
         }
     }
     void _InvalidateLineNum()
     {
-        if ( bValidLineNum && _InvalidationAllowed( INVALID_LINENUM ) )
+        if ( mbValidLineNum && _InvalidationAllowed( INVALID_LINENUM ) )
         {
-            bValidLineNum = sal_False;
+            mbValidLineNum = sal_False;
             _ActionOnInvalidation( INVALID_LINENUM );
         }
     }
     void _InvalidateAll()
     {
-        if ( ( bValidSize || bValidPrtArea || bValidPos ) &&
+        if ( ( mbValidSize || mbValidPrtArea || mbValidPos ) &&
              _InvalidationAllowed( INVALID_ALL ) )
         {
-            bValidSize = bValidPrtArea = bValidPos = sal_False;
+            mbValidSize = mbValidPrtArea = mbValidPos = sal_False;
             _ActionOnInvalidation( INVALID_ALL );
         }
     }
@@ -827,7 +827,7 @@ public:
     // Fly in ... and footnotes
     sal_Bool IsProtected() const;
 
-    sal_Bool IsColLocked()  const { return bColLocked; }
+    sal_Bool IsColLocked()  const { return mbColLocked; }
 
     virtual ~SwFrm();
 
@@ -886,77 +886,77 @@ public:
 
 inline bool SwFrm::IsInDocBody() const
 {
-    if ( bInfInvalid )
+    if ( mbInfInvalid )
         ((SwFrm*)this)->SetInfFlags();
-    return bInfBody;
+    return mbInfBody;
 }
 inline sal_Bool SwFrm::IsInFtn() const
 {
-    if ( bInfInvalid )
+    if ( mbInfInvalid )
         ((SwFrm*)this)->SetInfFlags();
-    return bInfFtn;
+    return mbInfFtn;
 }
 inline sal_Bool SwFrm::IsInTab() const
 {
-    if ( bInfInvalid )
+    if ( mbInfInvalid )
         ((SwFrm*)this)->SetInfFlags();
-    return bInfTab;
+    return mbInfTab;
 }
 inline sal_Bool SwFrm::IsInFly() const
 {
-    if ( bInfInvalid )
+    if ( mbInfInvalid )
         ((SwFrm*)this)->SetInfFlags();
-    return bInfFly;
+    return mbInfFly;
 }
 inline sal_Bool SwFrm::IsInSct() const
 {
-    if ( bInfInvalid )
+    if ( mbInfInvalid )
         ((SwFrm*)this)->SetInfFlags();
-    return bInfSct;
+    return mbInfSct;
 }
 sal_Bool SwFrm::IsVertical() const
 {
-    if( bInvalidVert )
+    if( mbInvalidVert )
         ((SwFrm*)this)->SetDirFlags( sal_True );
-    return bVertical != 0;
+    return mbVertical != 0;
 }
 //Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
 inline sal_Bool SwFrm::IsVertLR() const
 {
-    return bVertLR != 0;
+    return mbVertLR != 0;
 }
 //End of SCMS
 sal_Bool SwFrm::GetVerticalFlag() const
 {
-    return bVertical != 0;
+    return mbVertical != 0;
 }
 inline sal_Bool SwFrm::IsRightToLeft() const
 {
-    if( bInvalidR2L )
+    if( mbInvalidR2L )
         ((SwFrm*)this)->SetDirFlags( sal_False );
-    return bRightToLeft != 0;
+    return mbRightToLeft != 0;
 }
 sal_Bool SwFrm::GetRightToLeftFlag() const
 {
-    return bRightToLeft != 0;
+    return mbRightToLeft != 0;
 }
 
 inline void SwFrm::SetCompletePaint() const
 {
-    ((SwFrm*)this)->bCompletePaint = sal_True;
+    ((SwFrm*)this)->mbCompletePaint = sal_True;
 }
 inline void SwFrm::ResetCompletePaint() const
 {
-    ((SwFrm*)this)->bCompletePaint = sal_False;
+    ((SwFrm*)this)->mbCompletePaint = sal_False;
 }
 
 inline void SwFrm::SetRetouche() const
 {
-    ((SwFrm*)this)->bRetouche = sal_True;
+    ((SwFrm*)this)->mbRetouche = sal_True;
 }
 inline void SwFrm::ResetRetouche() const
 {
-    ((SwFrm*)this)->bRetouche = sal_False;
+    ((SwFrm*)this)->mbRetouche = sal_False;
 }
 
 inline SwLayoutFrm *SwFrm::GetNextLayoutLeaf()
@@ -978,31 +978,31 @@ inline const SwLayoutFrm *SwFrm::GetPrevLayoutLeaf() const
 
 inline void SwFrm::InvalidateSize()
 {
-    if ( bValidSize )
+    if ( mbValidSize )
         ImplInvalidateSize();
 }
 inline void SwFrm::InvalidatePrt()
 {
-    if ( bValidPrtArea )
+    if ( mbValidPrtArea )
         ImplInvalidatePrt();
 }
 inline void SwFrm::InvalidatePos()
 {
-    if ( bValidPos )
+    if ( mbValidPos )
         ImplInvalidatePos();
 }
 inline void SwFrm::InvalidateLineNum()
 {
-    if ( bValidLineNum )
+    if ( mbValidLineNum )
         ImplInvalidateLineNum();
 }
 inline void SwFrm::InvalidateAll()
 {
     if ( _InvalidationAllowed( INVALID_ALL ) )
     {
-        if ( bValidPrtArea && bValidSize && bValidPos  )
+        if ( mbValidPrtArea && mbValidSize && mbValidPos  )
             ImplInvalidatePos();
-        bValidPrtArea = bValidSize = bValidPos = sal_False;
+        mbValidPrtArea = mbValidSize = mbValidPos = sal_False;
 
         // #i28701#
         _ActionOnInvalidation( INVALID_ALL );
@@ -1010,31 +1010,31 @@ inline void SwFrm::InvalidateAll()
 }
 inline void SwFrm::InvalidateNextPos( sal_Bool bNoFtn )
 {
-    if ( pNext && !pNext->IsSctFrm() )
-        pNext->InvalidatePos();
+    if ( mpNext && !mpNext->IsSctFrm() )
+        mpNext->InvalidatePos();
 #ifndef C30 // maybe it works for C40?
     else
         ImplInvalidateNextPos( bNoFtn );
 #else
-    if ( !pNext )
+    if ( !mpNext )
         ImplInvalidateNextPos( bNoFtn );
 #endif
 }
 
 inline void SwFrm::Calc() const
 {
-    if ( !bValidPos || !bValidPrtArea || !bValidSize )
+    if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
         ((SwFrm*)this)->PrepareMake();
 }
 inline void SwFrm::OptCalc() const
 {
-    if ( !bValidPos || !bValidPrtArea || !bValidSize )
+    if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
         ((SwFrm*)this)->OptPrepareMake();
 }
 
 inline Point SwFrm::GetRelPos() const
 {
-    Point aRet( aFrm.Pos() );
+    Point aRet( maFrm.Pos() );
     // here we cast since SwLayoutFrm is declared only as forwarded
     aRet -= ((SwFrm*)GetUpper())->Prt().Pos();
     aRet -= ((SwFrm*)GetUpper())->Frm().Pos();
@@ -1092,45 +1092,45 @@ inline const SwSectionFrm *SwFrm::FindSctFrm() const
 }
 inline SwFrm *SwFrm::FindNext()
 {
-    if ( pNext )
-        return pNext;
+    if ( mpNext )
+        return mpNext;
     else
         return _FindNext();
 }
 inline const SwFrm *SwFrm::FindNext() const
 {
-    if ( pNext )
-        return pNext;
+    if ( mpNext )
+        return mpNext;
     else
         return ((SwFrm*)this)->_FindNext();
 }
 // #i27138# - add parameter <_bInSameFtn>
 inline SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn )
 {
-    if ( pNext && pNext->IsCntntFrm() )
-        return (SwCntntFrm*)pNext;
+    if ( mpNext && mpNext->IsCntntFrm() )
+        return (SwCntntFrm*)mpNext;
     else
         return _FindNextCnt( _bInSameFtn );
 }
 // #i27138# - add parameter <_bInSameFtn>
 inline const SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn ) const
 {
-    if ( pNext && pNext->IsCntntFrm() )
-        return (SwCntntFrm*)pNext;
+    if ( mpNext && mpNext->IsCntntFrm() )
+        return (SwCntntFrm*)mpNext;
     else
         return ((SwFrm*)this)->_FindNextCnt( _bInSameFtn );
 }
 inline SwFrm *SwFrm::FindPrev()
 {
-    if ( pPrev && !pPrev->IsSctFrm() )
-        return pPrev;
+    if ( mpPrev && !mpPrev->IsSctFrm() )
+        return mpPrev;
     else
         return _FindPrev();
 }
 inline const SwFrm *SwFrm::FindPrev() const
 {
-    if ( pPrev && !pPrev->IsSctFrm() )
-        return pPrev;
+    if ( mpPrev && !mpPrev->IsSctFrm() )
+        return mpPrev;
     else
         return ((SwFrm*)this)->_FindPrev();
 }
@@ -1142,15 +1142,15 @@ inline bool SwFrm::IsLayoutFrm() const
 }
 inline bool SwFrm::IsRootFrm() const
 {
-    return nType == FRMC_ROOT;
+    return mnType == FRMC_ROOT;
 }
 inline bool SwFrm::IsPageFrm() const
 {
-    return nType == FRMC_PAGE;
+    return mnType == FRMC_PAGE;
 }
 inline bool SwFrm::IsColumnFrm() const
 {
-    return nType == FRMC_COLUMN;
+    return mnType == FRMC_COLUMN;
 }
 inline bool SwFrm::IsFtnBossFrm() const
 {
@@ -1158,43 +1158,43 @@ inline bool SwFrm::IsFtnBossFrm() const
 }
 inline bool SwFrm::IsHeaderFrm() const
 {
-    return nType == FRMC_HEADER;
+    return mnType == FRMC_HEADER;
 }
 inline bool SwFrm::IsFooterFrm() const
 {
-    return nType == FRMC_FOOTER;
+    return mnType == FRMC_FOOTER;
 }
 inline bool SwFrm::IsFtnContFrm() const
 {
-    return nType == FRMC_FTNCONT;
+    return mnType == FRMC_FTNCONT;
 }
 inline bool SwFrm::IsFtnFrm() const
 {
-    return nType == FRMC_FTN;
+    return mnType == FRMC_FTN;
 }
 inline bool SwFrm::IsBodyFrm() const
 {
-    return nType == FRMC_BODY;
+    return mnType == FRMC_BODY;
 }
 inline bool SwFrm::IsFlyFrm() const
 {
-    return nType == FRMC_FLY;
+    return mnType == FRMC_FLY;
 }
 inline bool SwFrm::IsSctFrm() const
 {
-    return nType == FRMC_SECTION;
+    return mnType == FRMC_SECTION;
 }
 inline bool SwFrm::IsTabFrm() const
 {
-    return nType == FRMC_TAB;
+    return mnType == FRMC_TAB;
 }
 inline bool SwFrm::IsRowFrm() const
 {
-    return nType == FRMC_ROW;
+    return mnType == FRMC_ROW;
 }
 inline bool SwFrm::IsCellFrm() const
 {
-    return nType == FRMC_CELL;
+    return mnType == FRMC_CELL;
 }
 inline bool SwFrm::IsCntntFrm() const
 {
@@ -1202,11 +1202,11 @@ inline bool SwFrm::IsCntntFrm() const
 }
 inline bool SwFrm::IsTxtFrm() const
 {
-    return nType == FRMC_TXT;
+    return mnType == FRMC_TXT;
 }
 inline bool SwFrm::IsNoTxtFrm() const
 {
-    return nType == FRMC_NOTXT;
+    return mnType == FRMC_NOTXT;
 }
 inline bool SwFrm::IsFlowFrm() const
 {

@@ -70,7 +70,7 @@ SwSectionFrm::SwSectionFrm( SwSection &rSect, SwFrm* pSib )
     , bOwnFtnNum(false)
     , bFtnLock(false)
 {
-    nType = FRMC_SECTION;
+    mnType = FRMC_SECTION;
 
     CalcFtnAtEndFlag();
     CalcEndAtEndFlag();
@@ -86,7 +86,7 @@ SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, sal_Bool bMaster ) :
     bOwnFtnNum( false ),
     bFtnLock( false )
 {
-    nType = FRMC_SECTION;
+    mnType = FRMC_SECTION;
 
     PROTOCOL( this, PROT_SECTION, bMaster ? ACT_CREATE_MASTER : ACT_CREATE_FOLLOW, &rSect )
 
@@ -749,7 +749,7 @@ void SwSectionFrm::MakeAll()
 #ifdef DBG_UTIL
         OSL_ENSURE( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
 #endif
-        if( !bValidPos )
+        if( !mbValidPos )
         {
             if( GetUpper() )
             {
@@ -757,7 +757,7 @@ void SwSectionFrm::MakeAll()
                 (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), sal_False );
             }
         }
-        bValidSize = bValidPos = bValidPrtArea = sal_True;
+        mbValidSize = mbValidPos = mbValidPrtArea = sal_True;
         return;
     }
     LockJoin(); // I don't let myself to be destroyed on the way
@@ -787,8 +787,8 @@ void SwSectionFrm::MakeAll()
 
     // A section with Follow uses all the space until the lower edge of the
     // Upper. If it moves, its size can grow or decrease...
-    if( !bValidPos && ToMaximize( sal_False ) )
-        bValidSize = sal_False;
+    if( !mbValidPos && ToMaximize( sal_False ) )
+        mbValidSize = sal_False;
 
 #if OSL_DEBUG_LEVEL > 1
     const SwFmtCol &rCol = GetFmt()->GetCol();
@@ -1120,7 +1120,7 @@ void SwSectionFrm::SimpleFormat()
         // assure notifications on position changes.
         const SwLayNotify aNotify( this );
         (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), sal_False );
-        bValidPos = sal_True;
+        mbValidPos = sal_True;
     }
     SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
     // OD 22.10.2002 #97265# - call always method <lcl_ColumnRefresh(..)>, in
@@ -1288,14 +1288,14 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 #ifdef DBG_UTIL
         OSL_ENSURE( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
 #endif
-        bValidSize = bValidPos = bValidPrtArea = sal_True;
+        mbValidSize = mbValidPos = mbValidPrtArea = sal_True;
         return;
     }
     SWRECTFN( this )
-    if ( !bValidPrtArea )
+    if ( !mbValidPrtArea )
     {
         PROTOCOL( this, PROT_PRTAREA, 0, 0 )
-        bValidPrtArea = sal_True;
+        mbValidPrtArea = sal_True;
         SwTwips nUpper = CalcUpperSpace();
 
         // #109700# LRSpace for sections
@@ -1304,7 +1304,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 
         if( nUpper != (this->*fnRect->fnGetTopMargin)() )
         {
-            bValidSize = sal_False;
+            mbValidSize = sal_False;
             SwFrm* pOwn = ContainsAny();
             if( pOwn )
                 pOwn->_InvalidatePos();
@@ -1312,14 +1312,14 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         (this->*fnRect->fnSetYMargins)( nUpper, 0 );
     }
 
-    if ( !bValidSize )
+    if ( !mbValidSize )
     {
         PROTOCOL_ENTER( this, PROT_SIZE, 0, 0 )
         const long nOldHeight = (Frm().*fnRect->fnGetHeight)();
         sal_Bool bOldLock = IsColLocked();
         ColLock();
 
-        bValidSize = sal_True;
+        mbValidSize = sal_True;
 
         // The size is only determined by the content, if the SectFrm does not have a
         // Follow. Otherwise it fills (occupies) the Upper down to the lower edge.
@@ -1351,11 +1351,11 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         if( GetUpper() )
         {
             long nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
-            (aFrm.*fnRect->fnSetWidth)( nWidth );
+            (maFrm.*fnRect->fnSetWidth)( nWidth );
 
             // #109700# LRSpace for sections
             const SvxLRSpaceItem& rLRSpace = GetFmt()->GetLRSpace();
-            (aPrt.*fnRect->fnSetWidth)( nWidth - rLRSpace.GetLeft() -
+            (maPrt.*fnRect->fnSetWidth)( nWidth - rLRSpace.GetLeft() -
                                         rLRSpace.GetRight() );
 
             // OD 15.10.2002 #103517# - allow grow in online layout
@@ -1364,7 +1364,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             const ViewShell *pSh = getRootFrm()->GetCurrShell();
             _CheckClipping( pSh && pSh->GetViewOptions()->getBrowseMode(), bMaximize );
             bMaximize = ToMaximize( sal_False );
-            bValidSize = sal_True;
+            mbValidSize = sal_True;
         }
 
         // Check the width of the columns and adjust if necessary
@@ -1492,7 +1492,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                 GetUpper()->Shrink( nDiff );
         }
         if( IsUndersized() )
-            bValidPrtArea = sal_True;
+            mbValidPrtArea = sal_True;
     }
 }
 
@@ -2282,7 +2282,7 @@ SwFrm* SwFrm::_GetIndPrev() const
 
 SwFrm* SwFrm::_GetIndNext()
 {
-    OSL_ENSURE( !pNext && IsInSct(), "Why?" );
+    OSL_ENSURE( !mpNext && IsInSct(), "Why?" );
     SwFrm* pSct = GetUpper();
     if( !pSct )
         return NULL;

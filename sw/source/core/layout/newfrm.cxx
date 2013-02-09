@@ -51,7 +51,7 @@ SwLayVout     *SwRootFrm::pVout = 0;
 bool           SwRootFrm::bInPaint = false;
 sal_Bool           SwRootFrm::bNoVirDev = sal_False;
 
-SwCache *SwFrm::pCache = 0;
+SwCache *SwFrm::mpCache = 0;
 
 long FirstMinusSecond( long nFirst, long nSecond )
     { return nFirst - nSecond; }
@@ -483,7 +483,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     nPhyPageNums( 0 ),
     nAccessibleShells( 0 )
 {
-    nType = FRMC_ROOT;
+    mnType = FRMC_ROOT;
     bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = sal_True;
     bCheckSuperfluous = bBrowseWidthValid = sal_False;
     setRootFrm( this );

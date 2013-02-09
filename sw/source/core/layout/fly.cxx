@@ -102,7 +102,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     bNoShrink( sal_False ),
     bLockDeleteContent( sal_False )
 {
-    nType = FRMC_FLY;
+    mnType = FRMC_FLY;
 
     bInvalid = bNotifyBack = sal_True;
     bLocked  = bMinHeight =
@@ -114,19 +114,19 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
         ((SvxFrameDirectionItem&)pFmt->GetFmtAttr( RES_FRAMEDIR )).GetValue();
     if( FRMDIR_ENVIRONMENT == nDir )
     {
-        bDerivedVert = 1;
-        bDerivedR2L = 1;
+        mbDerivedVert = 1;
+        mbDerivedR2L = 1;
     }
     else
     {
-        bInvalidVert = 0;
-        bDerivedVert = 0;
-        bDerivedR2L = 0;
+        mbInvalidVert = 0;
+        mbDerivedVert = 0;
+        mbDerivedR2L = 0;
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir )
         {
             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-            bVertLR = 0;
-            bVertical = 0;
+            mbVertLR = 0;
+            mbVertical = 0;
         }
         else
         {
@@ -134,25 +134,25 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
                 //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                bVertLR = 0;
-                bVertical = 0;
+                mbVertLR = 0;
+                mbVertical = 0;
             }
             else
             {
-                bVertical = 1;
+                mbVertical = 1;
                 //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 if ( FRMDIR_VERT_TOP_LEFT == nDir )
-                    bVertLR = 1;
+                    mbVertLR = 1;
                 else
-                    bVertLR = 0;
+                    mbVertLR = 0;
             }
         }
 
-        bInvalidR2L = 0;
+        mbInvalidR2L = 0;
         if( FRMDIR_HORI_RIGHT_TOP == nDir )
-            bRightToLeft = 1;
+            mbRightToLeft = 1;
         else
-            bRightToLeft = 0;
+            mbRightToLeft = 0;
     }
 
     Frm().Width( rFrmSize.GetWidth() );
@@ -162,7 +162,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     if ( rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE )
         bMinHeight = sal_True;
     else if ( rFrmSize.GetHeightSizeType() == ATT_FIX_SIZE )
-        bFixSize = sal_True;
+        mbFixSize = sal_True;
 
     // insert columns, if necessary
     InsertColumns();
@@ -225,7 +225,7 @@ void SwFlyFrm::InsertCnt()
         // NoTxt always have a fixed height.
         if ( Lower() && Lower()->IsNoTxtFrm() )
         {
-            bFixSize = sal_True;
+            mbFixSize = sal_True;
             bMinHeight = sal_False;
         }
     }
@@ -705,17 +705,17 @@ sal_Bool SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
     sal_Bool bRet = sal_False;
     SwTwips nDiffHeight = Frm().Height();
     if ( rFrmSize.GetHeightSizeType() == ATT_VAR_SIZE )
-        bFixSize = bMinHeight = sal_False;
+        mbFixSize = bMinHeight = sal_False;
     else
     {
         if ( rFrmSize.GetHeightSizeType() == ATT_FIX_SIZE )
         {
-            bFixSize = sal_True;
+            mbFixSize = sal_True;
             bMinHeight = sal_False;
         }
         else if ( rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE )
         {
-            bFixSize = sal_False;
+            mbFixSize = sal_False;
             bMinHeight = sal_True;
         }
         nDiffHeight -= rFrmSize.GetHeight();
@@ -730,20 +730,20 @@ sal_Bool SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
             const SwRect aOld( GetObjRectWithSpaces() );
             const Size   aOldSz( Prt().SSize() );
             const SwTwips nDiffWidth = Frm().Width() - rFrmSize.GetWidth();
-            aFrm.Height( aFrm.Height() - nDiffHeight );
-            aFrm.Width ( aFrm.Width()  - nDiffWidth  );
+            maFrm.Height( maFrm.Height() - nDiffHeight );
+            maFrm.Width ( maFrm.Width()  - nDiffWidth  );
             // #i68520#
             InvalidateObjRectWithSpaces();
-            aPrt.Height( aPrt.Height() - nDiffHeight );
-            aPrt.Width ( aPrt.Width()  - nDiffWidth  );
+            maPrt.Height( maPrt.Height() - nDiffHeight );
+            maPrt.Width ( maPrt.Width()  - nDiffWidth  );
             ChgLowersProp( aOldSz );
             ::Notify( this, FindPageFrm(), aOld );
-            bValidPos = sal_False;
+            mbValidPos = sal_False;
             bRet = sal_True;
         }
         else if ( Lower()->IsNoTxtFrm() )
         {
-            bFixSize = sal_True;
+            mbFixSize = sal_True;
             bMinHeight = sal_False;
         }
     }
@@ -907,7 +907,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             if ( RES_FMT_CHG == nWhich )
             {
                 SwRect aNew( GetObjRectWithSpaces() );
-                SwRect aOld( aFrm );
+                SwRect aOld( maFrm );
                 const SvxULSpaceItem &rUL = ((SwFmtChg*)pOld)->pChangedFmt->GetULSpace();
                 aOld.Top( Max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
                 aOld.SSize().Height()+= rUL.GetLower();
@@ -997,7 +997,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
                 getRootFrm()->InvalidateBrowseWidth();
             SwRect aNew( GetObjRectWithSpaces() );
-            SwRect aOld( aFrm );
+            SwRect aOld( maFrm );
             if ( RES_UL_SPACE == nWhich )
             {
                 const SvxULSpaceItem &rUL = *(SvxULSpaceItem*)pNew;
@@ -1319,7 +1319,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
 
     ColLock();
 
-    if ( !bValidSize )
+    if ( !mbValidSize )
     {
         if ( Frm().Top() == FAR_AWAY && Frm().Left() == FAR_AWAY )
         {
@@ -1333,7 +1333,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         if ( Lower() && Lower()->IsColumnFrm() )
             AdjustColumns( 0, sal_False );
 
-        bValidSize = sal_True;
+        mbValidSize = sal_True;
 
         const SwTwips nUL = pAttrs->CalcTopLine()  + pAttrs->CalcBottomLine();
         const SwTwips nLR = pAttrs->CalcLeftLine() + pAttrs->CalcRightLine();
@@ -1427,11 +1427,11 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             {
                 InvalidateObjRectWithSpaces();
             }
-            bValidSize = sal_True;
+            mbValidSize = sal_True;
         }
         else
         {
-            bValidSize = sal_True;  //Fixe Frms formatieren sich nicht.
+            mbValidSize = sal_True;  //Fixe Frms formatieren sich nicht.
                                 //Flys stellen ihre Groesse anhand des Attr ein.
             SwTwips nNewSize = bVert ? aRelSize.Width() : aRelSize.Height();
             nNewSize -= nUL;
@@ -1810,9 +1810,9 @@ void CalcCntnt( SwLayoutFrm *pLay,
 //void SwFlyFrm::MakeFlyPos()
 void SwFlyFrm::MakeObjPos()
 {
-    if ( !bValidPos )
+    if ( !mbValidPos )
     {
-        bValidPos = sal_True;
+        mbValidPos = sal_True;
 
         // OD 29.10.2003 #113049# - use new class to position object
         GetAnchorFrm()->Calc();
@@ -1825,8 +1825,8 @@ void SwFlyFrm::MakeObjPos()
         SetCurrRelPos( aObjPositioning.GetRelPos() );
 
         SWRECTFN( GetAnchorFrm() );
-        aFrm.Pos( aObjPositioning.GetRelPos() );
-        aFrm.Pos() += (GetAnchorFrm()->Frm().*fnRect->fnGetPos)();
+        maFrm.Pos( aObjPositioning.GetRelPos() );
+        maFrm.Pos() += (GetAnchorFrm()->Frm().*fnRect->fnGetPos)();
         // #i69335#
         InvalidateObjRectWithSpaces();
     }
@@ -1840,9 +1840,9 @@ void SwFlyFrm::MakeObjPos()
 void SwFlyFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
 
-    if ( !bValidPrtArea )
+    if ( !mbValidPrtArea )
     {
-        bValidPrtArea = sal_True;
+        mbValidPrtArea = sal_True;
 
         // OD 31.07.2003 #110978# - consider vertical layout
         SWRECTFN( this )
@@ -1898,7 +1898,7 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, sal_Bool bTst )
                 // Writer fly frames - inner Writer fly frames format its
                 // anchor, which grows/shrinks the outer Writer fly frame.
                 // Note: position will be invalidated below.
-                bValidPos = sal_True;
+                mbValidPos = sal_True;
                 // #i55416#
                 // Suppress format of width for autowidth frame, because the
                 // format of the width would call <SwTxtFrm::CalcFitToContent()>
@@ -1993,7 +1993,7 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
                 // Writer fly frames - inner Writer fly frames format its
                 // anchor, which grows/shrinks the outer Writer fly frame.
                 // Note: position will be invalidated below.
-                bValidPos = sal_True;
+                mbValidPos = sal_True;
                 // #i55416#
                 // Suppress format of width for autowidth frame, because the
                 // format of the width would call <SwTxtFrm::CalcFitToContent()>
@@ -2121,9 +2121,9 @@ void SwFlyFrm::Cut()
 
 void SwFrm::AppendFly( SwFlyFrm *pNew )
 {
-    if ( !pDrawObjs )
-        pDrawObjs = new SwSortedObjs();
-    pDrawObjs->Insert( *pNew );
+    if ( !mpDrawObjs )
+        mpDrawObjs = new SwSortedObjs();
+    mpDrawObjs->Insert( *pNew );
     pNew->ChgAnchorFrm( this );
 
     //Bei der Seite anmelden; kann sein, dass noch keine da ist - die
@@ -2191,9 +2191,9 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
         }
     }
 
-    pDrawObjs->Remove( *pToRemove );
-    if ( !pDrawObjs->Count() )
-        DELETEZ( pDrawObjs );
+    mpDrawObjs->Remove( *pToRemove );
+    if ( !mpDrawObjs->Count() )
+        DELETEZ( mpDrawObjs );
 
     pToRemove->ChgAnchorFrm( 0 );
 
@@ -2227,9 +2227,9 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
 
     if ( _rNewObj.GetAnchorFrm() != this )
     {
-        if ( !pDrawObjs )
-            pDrawObjs = new SwSortedObjs();
-        pDrawObjs->Insert( _rNewObj );
+        if ( !mpDrawObjs )
+            mpDrawObjs = new SwSortedObjs();
+        mpDrawObjs->Insert( _rNewObj );
         _rNewObj.ChgAnchorFrm( this );
     }
 
@@ -2292,9 +2292,9 @@ void SwFrm::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
     if ( pPage && pPage->GetSortedObjs() )
         pPage->RemoveDrawObjFromPage( _rToRemoveObj );
 
-    pDrawObjs->Remove( _rToRemoveObj );
-    if ( !pDrawObjs->Count() )
-        DELETEZ( pDrawObjs );
+    mpDrawObjs->Remove( _rToRemoveObj );
+    if ( !mpDrawObjs->Count() )
+        DELETEZ( mpDrawObjs );
 
     _rToRemoveObj.ChgAnchorFrm( 0 );
 }

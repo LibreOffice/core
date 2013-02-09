@@ -81,8 +81,8 @@ public:
     inline const SwCntntFrm *FindLastCntnt( sal_uInt8 nMode = 0 ) const;
     inline SwSection* GetSection() { return pSection; }
     inline const SwSection* GetSection() const { return pSection; }
-    inline void ColLock()       { bColLocked = sal_True; }
-    inline void ColUnlock()     { bColLocked = sal_False; }
+    inline void ColLock()       { mbColLocked = sal_True; }
+    inline void ColUnlock()     { mbColLocked = sal_False; }
 
     void CalcFtnCntnt();
     void SimpleFormat();

@@ -149,7 +149,7 @@ void SwFlyFreeFrm::MakeAll()
 
     if ( IsClipped() )
     {
-        bValidSize = bHeightClipped = bWidthClipped = sal_False;
+        mbValidSize = bHeightClipped = bWidthClipped = sal_False;
         // no invalidation of position,
         // if anchored object is anchored inside a Writer fly frame,
         // its position is already locked, and it follows the text flow.
@@ -160,7 +160,7 @@ void SwFlyFreeFrm::MakeAll()
                 GetAnchorFrm()->IsInFly() &&
                 GetFrmFmt().GetFollowTextFlow().GetValue() ) )
         {
-            bValidPos = sal_False;
+            mbValidPos = sal_False;
         }
     }
 
@@ -168,7 +168,7 @@ void SwFlyFreeFrm::MakeAll()
     sal_uInt16 nLoopControlRuns = 0;
     const sal_uInt16 nLoopControlMax = 10;
 
-    while ( !bValidPos || !bValidSize || !bValidPrtArea || bFormatHeightOnly )
+    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea || bFormatHeightOnly )
     {
         SWRECTFN( this )
         const SwFmtFrmSize *pSz;
@@ -179,43 +179,43 @@ void SwFlyFreeFrm::MakeAll()
             pSz = &rAttrs.GetAttrSet().GetFrmSize();
 
             // Only set when the flag is set!
-            if ( !bValidSize )
+            if ( !mbValidSize )
             {
-                bValidPrtArea = sal_False;
+                mbValidPrtArea = sal_False;
             }
 
-            if ( !bValidPrtArea )
+            if ( !mbValidPrtArea )
                 MakePrtArea( rAttrs );
 
-            if ( !bValidSize || bFormatHeightOnly )
+            if ( !mbValidSize || bFormatHeightOnly )
             {
-                bValidSize = sal_False;
+                mbValidSize = sal_False;
                 Format( &rAttrs );
                 bFormatHeightOnly = sal_False;
             }
 
-            if ( !bValidPos )
+            if ( !mbValidPos )
             {
                 const Point aOldPos( (Frm().*fnRect->fnGetPos)() );
                 // #i26791# - use new method <MakeObjPos()>
                 // #i34753# - no positioning, if requested.
                 if ( IsNoMakePos() )
-                    bValidPos = sal_True;
+                    mbValidPos = sal_True;
                 else
                     // #i26791# - use new method <MakeObjPos()>
                     MakeObjPos();
                 if( aOldPos == (Frm().*fnRect->fnGetPos)() )
                 {
-                    if( !bValidPos && GetAnchorFrm()->IsInSct() &&
+                    if( !mbValidPos && GetAnchorFrm()->IsInSct() &&
                         !GetAnchorFrm()->FindSctFrm()->IsValid() )
-                        bValidPos = sal_True;
+                        mbValidPos = sal_True;
                 }
                 else
-                    bValidSize = sal_False;
+                    mbValidSize = sal_False;
             }
         }
 
-        if ( bValidPos && bValidSize )
+        if ( mbValidPos && mbValidSize )
         {
             ++nLoopControlRuns;
 
@@ -340,7 +340,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             bWidthClipped = sal_True;
         }
         if ( bAgain )
-            bValidSize = sal_False;
+            mbValidSize = sal_False;
         else
         {
             // If we reach this branch, the Frm protrudes into forbidden
@@ -458,8 +458,8 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 } while ( pLow );
                 ::CalcCntnt( this );
                 ColUnlock();
-                if ( !bValidSize && !bWidthClipped )
-                    bFormatHeightOnly = bValidSize = sal_True;
+                if ( !mbValidSize && !bWidthClipped )
+                    bFormatHeightOnly = mbValidSize = sal_True;
             }
             else
             {

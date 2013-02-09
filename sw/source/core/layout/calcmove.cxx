@@ -505,9 +505,9 @@ static SwFrm* lcl_NotHiddenPrev( SwFrm* pFrm )
 
 void SwFrm::MakePos()
 {
-    if ( !bValidPos )
+    if ( !mbValidPos )
     {
-        bValidPos = sal_True;
+        mbValidPos = sal_True;
         bool bUseUpper = false;
         SwFrm* pPrv = lcl_Prev( this );
         if ( pPrv &&
@@ -534,36 +534,36 @@ void SwFrm::MakePos()
         SWRECTFN( ( IsCellFrm() && GetUpper() ? GetUpper() : this  ) )
         if ( !bUseUpper && pPrv )
         {
-            aFrm.Pos( pPrv->Frm().Pos() );
+            maFrm.Pos( pPrv->Frm().Pos() );
             if( FRM_NEIGHBOUR & nMyType )
             {
                 sal_Bool bR2L = IsRightToLeft();
                 if( bR2L )
-                    (aFrm.*fnRect->fnSetPosX)( (aFrm.*fnRect->fnGetLeft)() -
-                                               (aFrm.*fnRect->fnGetWidth)() );
+                    (maFrm.*fnRect->fnSetPosX)( (maFrm.*fnRect->fnGetLeft)() -
+                                               (maFrm.*fnRect->fnGetWidth)() );
                 else
-                    (aFrm.*fnRect->fnSetPosX)( (aFrm.*fnRect->fnGetLeft)() +
+                    (maFrm.*fnRect->fnSetPosX)( (maFrm.*fnRect->fnGetLeft)() +
                                           (pPrv->Frm().*fnRect->fnGetWidth)() );
 
                 // cells may now leave their uppers
-                if( bVert && FRM_CELL & nMyType && !bReverse )
-                    aFrm.Pos().X() -= aFrm.Width() -pPrv->Frm().Width();
+                if( bVert && FRM_CELL & nMyType && !mbReverse )
+                    maFrm.Pos().X() -= maFrm.Width() -pPrv->Frm().Width();
             }
             else if( bVert && FRM_NOTE_VERT & nMyType )
             {
-                if( bReverse )
-                    aFrm.Pos().X() += pPrv->Frm().Width();
+                if( mbReverse )
+                    maFrm.Pos().X() += pPrv->Frm().Width();
                 else
                     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 {
                     if ( bVertL2R )
-                           aFrm.Pos().X() += pPrv->Frm().Width();
+                           maFrm.Pos().X() += pPrv->Frm().Width();
                     else
-                           aFrm.Pos().X() -= aFrm.Width();
+                           maFrm.Pos().X() -= maFrm.Width();
                   }
             }
             else
-                aFrm.Pos().Y() += pPrv->Frm().Height();
+                maFrm.Pos().Y() += pPrv->Frm().Height();
         }
         else if ( GetUpper() )
         {
@@ -589,55 +589,55 @@ void SwFrm::MakePos()
             pPrv = lcl_Prev( this, false );
             if ( !bUseUpper && pPrv )
             {
-                aFrm.Pos( pPrv->Frm().Pos() );
+                maFrm.Pos( pPrv->Frm().Pos() );
                 if( FRM_NEIGHBOUR & nMyType )
                 {
                     sal_Bool bR2L = IsRightToLeft();
                     if( bR2L )
-                        (aFrm.*fnRect->fnSetPosX)( (aFrm.*fnRect->fnGetLeft)() -
-                                                 (aFrm.*fnRect->fnGetWidth)() );
+                        (maFrm.*fnRect->fnSetPosX)( (maFrm.*fnRect->fnGetLeft)() -
+                                                 (maFrm.*fnRect->fnGetWidth)() );
                     else
-                        (aFrm.*fnRect->fnSetPosX)( (aFrm.*fnRect->fnGetLeft)() +
+                        (maFrm.*fnRect->fnSetPosX)( (maFrm.*fnRect->fnGetLeft)() +
                                           (pPrv->Frm().*fnRect->fnGetWidth)() );
 
                     // cells may now leave their uppers
-                    if( bVert && FRM_CELL & nMyType && !bReverse )
-                        aFrm.Pos().X() -= aFrm.Width() -pPrv->Frm().Width();
+                    if( bVert && FRM_CELL & nMyType && !mbReverse )
+                        maFrm.Pos().X() -= maFrm.Width() -pPrv->Frm().Width();
                 }
                 else if( bVert && FRM_NOTE_VERT & nMyType )
                 {
-                    if( bReverse )
-                        aFrm.Pos().X() += pPrv->Frm().Width();
+                    if( mbReverse )
+                        maFrm.Pos().X() += pPrv->Frm().Width();
                     else
-                        aFrm.Pos().X() -= aFrm.Width();
+                        maFrm.Pos().X() -= maFrm.Width();
                 }
                 else
-                    aFrm.Pos().Y() += pPrv->Frm().Height();
+                    maFrm.Pos().Y() += pPrv->Frm().Height();
             }
             else
             {
-                aFrm.Pos( GetUpper()->Frm().Pos() );
-                aFrm.Pos() += GetUpper()->Prt().Pos();
+                maFrm.Pos( GetUpper()->Frm().Pos() );
+                maFrm.Pos() += GetUpper()->Prt().Pos();
                 if( FRM_NEIGHBOUR & nMyType && IsRightToLeft() )
                 {
                     if( bVert )
-                        aFrm.Pos().Y() += GetUpper()->Prt().Height()
-                                          - aFrm.Height();
+                        maFrm.Pos().Y() += GetUpper()->Prt().Height()
+                                          - maFrm.Height();
                     else
-                        aFrm.Pos().X() += GetUpper()->Prt().Width()
-                                          - aFrm.Width();
+                        maFrm.Pos().X() += GetUpper()->Prt().Width()
+                                          - maFrm.Width();
                 }
                 //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                else if( bVert && !bVertL2R && FRM_NOTE_VERT & nMyType && !bReverse )
-                    aFrm.Pos().X() -= aFrm.Width() - GetUpper()->Prt().Width();
+                else if( bVert && !bVertL2R && FRM_NOTE_VERT & nMyType && !mbReverse )
+                    maFrm.Pos().X() -= maFrm.Width() - GetUpper()->Prt().Width();
             }
         }
         else
-            aFrm.Pos().X() = aFrm.Pos().Y() = 0;
+            maFrm.Pos().X() = maFrm.Pos().Y() = 0;
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        if( IsBodyFrm() && bVert && !bVertL2R && !bReverse && GetUpper() )
-            aFrm.Pos().X() += GetUpper()->Prt().Width() - aFrm.Width();
-        bValidPos = sal_True;
+        if( IsBodyFrm() && bVert && !bVertL2R && !mbReverse && GetUpper() )
+            maFrm.Pos().X() += GetUpper()->Prt().Width() - maFrm.Width();
+        mbValidPos = sal_True;
     }
 }
 
@@ -686,22 +686,22 @@ void SwPageFrm::MakeAll()
     SwBorderAttrAccess *pAccess = 0;
     const SwBorderAttrs*pAttrs = 0;
 
-    while ( !bValidPos || !bValidSize || !bValidPrtArea )
+    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
-        if ( !bValidPos )
+        if ( !mbValidPos )
         {
             // PAGES01
-            bValidPos = sal_True; // positioning of the pages is taken care of by the root frame
+            mbValidPos = sal_True; // positioning of the pages is taken care of by the root frame
         }
 
-        if ( !bValidSize || !bValidPrtArea )
+        if ( !mbValidSize || !mbValidPrtArea )
         {
             if ( IsEmptyPage() )
             {
                 Frm().Width( 0 );  Prt().Width( 0 );
                 Frm().Height( 0 ); Prt().Height( 0 );
                 Prt().Left( 0 );   Prt().Top( 0 );
-                bValidSize = bValidPrtArea = sal_True;
+                mbValidSize = mbValidPrtArea = sal_True;
             }
             else
             {
@@ -801,7 +801,7 @@ void SwPageFrm::MakeAll()
                     Prt().Width( Frm().Width() - ( Prt().Left()
                         + pAttrs->CalcRightLine() + aBorder.Width() ) );
                     Prt().Height( Frm().Height() - (nTop + nBottom) );
-                    bValidSize = bValidPrtArea = sal_True;
+                    mbValidSize = mbValidPrtArea = sal_True;
                 }
                 else
                 {   // Set FixSize. For pages, this is not done from Upper, but from
@@ -811,14 +811,14 @@ void SwPageFrm::MakeAll()
                 }
             }
         }
-    } //while ( !bValidPos || !bValidSize || !bValidPrtArea )
+    } //while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     delete pAccess;
 
     // PAGES01
     if ( Frm() != aOldRect && GetUpper() )
         static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
 
-    OSL_ENSURE( !GetUpper() || GetUpper()->Prt().Width() >= aFrm.Width(),
+    OSL_ENSURE( !GetUpper() || GetUpper()->Prt().Width() >= maFrm.Width(),
         "Upper (Root) must be wide enough to contain the widest page");
 }
 
@@ -842,9 +842,9 @@ void SwLayoutFrm::MakeAll()
     SwBorderAttrAccess *pAccess = 0;
     const SwBorderAttrs*pAttrs = 0;
 
-    while ( !bValidPos || !bValidSize || !bValidPrtArea )
+    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
-        if ( !bValidPos )
+        if ( !mbValidPos )
             MakePos();
 
         if ( GetUpper() )
@@ -852,15 +852,15 @@ void SwLayoutFrm::MakeAll()
             // NEW TABLES
             if ( IsLeaveUpperAllowed() )
             {
-                if ( !bValidSize )
-                    bValidPrtArea = sal_False;
+                if ( !mbValidSize )
+                    mbValidPrtArea = sal_False;
             }
             else
             {
-                if ( !bValidSize )
+                if ( !mbValidSize )
                 {
                     // Set FixSize; VarSize is set by Format() after calculating the PrtArea
-                    bValidPrtArea = sal_False;
+                    mbValidPrtArea = sal_False;
 
                     SwTwips nPrtWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
                     if( bVert && ( IsBodyFrm() || IsFtnContFrm() ) )
@@ -889,11 +889,11 @@ void SwLayoutFrm::MakeAll()
                     // Don't leave your upper
                     const SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
                     if( (Frm().*fnRect->fnOverStep)( nDeadLine ) )
-                        bValidSize = sal_False;
+                        mbValidSize = sal_False;
                 }
             }
         }
-        if ( !bValidSize || !bValidPrtArea )
+        if ( !mbValidSize || !mbValidPrtArea )
         {
             if ( !pAccess )
             {
@@ -902,7 +902,7 @@ void SwLayoutFrm::MakeAll()
             }
             Format( pAttrs );
         }
-    } //while ( !bValidPos || !bValidSize || !bValidPrtArea )
+    } //while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     delete pAccess;
 }
 
@@ -952,9 +952,9 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
     sal_Bool bSizeChgd = sal_False;
 
-    if ( !bValidPrtArea )
+    if ( !mbValidPrtArea )
     {
-        bValidPrtArea = sal_True;
+        mbValidPrtArea = sal_True;
 
         SWRECTFN( this )
         const bool bTxtFrm = IsTxtFrm();
@@ -1054,7 +1054,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                 nLower=0;
             }
 
-            (Prt().*fnRect->fnSetPosY)( (!bVert || bReverse) ? nUpper : nLower);
+            (Prt().*fnRect->fnSetPosY)( (!bVert || mbReverse) ? nUpper : nLower);
             nUpper += nLower;
             nUpper -= (Frm().*fnRect->fnGetHeight)() -
                       (Prt().*fnRect->fnGetHeight)();
@@ -1087,8 +1087,8 @@ inline void ValidateSz( SwFrm *pFrm )
 {
     if ( pFrm )
     {
-        pFrm->bValidSize = sal_True;
-        pFrm->bValidPrtArea = sal_True;
+        pFrm->mbValidSize = sal_True;
+        pFrm->mbValidPrtArea = sal_True;
     }
 }
 
@@ -1239,7 +1239,7 @@ void SwCntntFrm::MakeAll()
     // OD 08.11.2002 #104840# - check footnote content for forward move.
     // If a content of a footnote is on a prior page/column as its invalid
     // reference, it can be moved forward.
-    if ( bFtn && !bValidPos )
+    if ( bFtn && !mbValidPos )
     {
         SwFtnFrm* pFtn = FindFtnFrm();
         SwCntntFrm* pRefCnt = pFtn ? pFtn->GetRef() : 0;
@@ -1260,7 +1260,7 @@ void SwCntntFrm::MakeAll()
 
     SWRECTFN( this )
 
-    while ( !bValidPos || !bValidSize || !bValidPrtArea )
+    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
         // - loop prevention
         SwRect aOldFrm_StopFormat( Frm() );
@@ -1290,11 +1290,11 @@ void SwCntntFrm::MakeAll()
         aOldFrmPos = (Frm().*fnRect->fnGetPos)();
         aOldPrtPos = (Prt().*fnRect->fnGetPos)();
 
-        if ( !bValidPos )
+        if ( !mbValidPos )
             MakePos();
 
         //Set FixSize. VarSize is being adjusted by Format().
-        if ( !bValidSize )
+        if ( !mbValidSize )
         {
             // #125452#
             // invalidate printing area flag, if the following conditions are hold:
@@ -1309,16 +1309,16 @@ void SwCntntFrm::MakeAll()
             //       triggered by method call <SwCrsrShell::SetCrsr()> after
             //       loading the document.
             const SwTwips nNewFrmWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
-            if ( bValidPrtArea && nNewFrmWidth > 0 &&
+            if ( mbValidPrtArea && nNewFrmWidth > 0 &&
                  (Frm().*fnRect->fnGetWidth)() == 0 &&
                  (Prt().*fnRect->fnGetWidth)() == 0 )
             {
-                bValidPrtArea = sal_False;
+                mbValidPrtArea = sal_False;
             }
 
             (Frm().*fnRect->fnSetWidth)( nNewFrmWidth );
         }
-        if ( !bValidPrtArea )
+        if ( !mbValidPrtArea )
         {
             const long nOldW = (Prt().*fnRect->fnGetWidth)();
             // #i34730# - keep current frame height
@@ -1332,7 +1332,7 @@ void SwCntntFrm::MakeAll()
             // <SwTxtFrm::CalcPreps()>, if the already formatted lines still
             // fit and if not, performs necessary actions.
             // #i40150# - no check, if frame is undersized.
-            if ( bValidSize && !IsUndersized() &&
+            if ( mbValidSize && !IsUndersized() &&
                  nOldH != (Frm().*fnRect->fnGetHeight)() )
             {
                 // #115759# - no PREP_ADJUST_FRM and size
@@ -1347,7 +1347,7 @@ void SwCntntFrm::MakeAll()
                 if ( !bNoPrepAdjustFrm )
                 {
                     Prepare( PREP_ADJUST_FRM );
-                    bValidSize = sal_False;
+                    mbValidSize = sal_False;
                 }
             }
         }
@@ -1364,23 +1364,23 @@ void SwCntntFrm::MakeAll()
                  ( (Frm().*fnRect->fnOverStep)( nDeadLine ) ) ) )
             {
                 Prepare( PREP_WIDOWS_ORPHANS, 0, sal_False );
-                bValidSize = bWidow = sal_False;
+                mbValidSize = bWidow = sal_False;
             }
             if( (Frm().*fnRect->fnGetPos)() != aOldFrmPos ||
                 (Prt().*fnRect->fnGetPos)() != aOldPrtPos )
             {
                 // In this Prepare, an _InvalidateSize() might happen.
-                // bValidSize becomes sal_False and Format() gets called.
+                // mbValidSize becomes sal_False and Format() gets called.
                 Prepare( PREP_POS_CHGD, (const void*)&bFormatted, sal_False );
                 if ( bWidow && GetFollow() )
                 {   Prepare( PREP_WIDOWS_ORPHANS, 0, sal_False );
-                    bValidSize = sal_False;
+                    mbValidSize = sal_False;
                 }
             }
         }
-        if ( !bValidSize )
+        if ( !mbValidSize )
         {
-            bValidSize = bFormatted = sal_True;
+            mbValidSize = bFormatted = sal_True;
             ++nFormatCount;
             if( nFormatCount > STOP_FLY_FORMAT )
                 SetFlyLock( sal_True );
@@ -1426,11 +1426,11 @@ void SwCntntFrm::MakeAll()
                 if( aOldPos != (Frm().*fnRect->fnGetPos)() )
                 {
                     Prepare( PREP_POS_CHGD, (const void*)&bFormatted, sal_False );
-                    if ( !bValidSize )
+                    if ( !mbValidSize )
                     {
                         (Frm().*fnRect->fnSetWidth)( (GetUpper()->
                                                 Prt().*fnRect->fnGetWidth)() );
-                        if ( !bValidPrtArea )
+                        if ( !mbValidPrtArea )
                         {
                             const long nOldW = (Prt().*fnRect->fnGetWidth)();
                             MakePrtArea( rAttrs );
@@ -1439,7 +1439,7 @@ void SwCntntFrm::MakeAll()
                         }
                         if( GetFollow() )
                             Prepare( PREP_WIDOWS_ORPHANS, 0, sal_False );
-                        bValidSize = bFormatted = sal_True;
+                        mbValidSize = bFormatted = sal_True;
                         Format();
                     }
                 }
@@ -1460,17 +1460,17 @@ void SwCntntFrm::MakeAll()
                 if ( pNxt )
                 {
                     pNxt->Calc();
-                    if( bValidPos && !GetIndNext() )
+                    if( mbValidPos && !GetIndNext() )
                     {
                         SwSectionFrm *pSct = FindSctFrm();
                         if( pSct && !pSct->GetValidSizeFlag() )
                         {
                             SwSectionFrm* pNxtSct = pNxt->FindSctFrm();
                             if( pNxtSct && pSct->IsAnFollow( pNxtSct ) )
-                                bValidPos = sal_False;
+                                mbValidPos = sal_False;
                         }
                         else
-                            bValidPos = sal_False;
+                            mbValidPos = sal_False;
                     }
                 }
             }
@@ -1478,7 +1478,7 @@ void SwCntntFrm::MakeAll()
 
         // In footnotes, the TxtFrm may validate itself, which can lead to the
         // situation that it's position is wrong despite being "valid".
-        if ( bValidPos )
+        if ( mbValidPos )
         {
             // #i59341#
             // Workaround for inadequate layout algorithm:
@@ -1491,7 +1491,7 @@ void SwCntntFrm::MakeAll()
                  nFormatCount <= STOP_FLY_FORMAT &&
                  !GetDrawObjs() )
             {
-                bValidPos = sal_False;
+                mbValidPos = sal_False;
                 MakePos();
                 aOldFrmPos = (Frm().*fnRect->fnGetPos)();
                 aOldPrtPos = (Prt().*fnRect->fnGetPos)();
@@ -1512,7 +1512,7 @@ void SwCntntFrm::MakeAll()
         }
 
         // Yet again an invalid value? Repeat from the start...
-        if ( !bValidPos || !bValidSize || !bValidPrtArea )
+        if ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
             continue;
 
         // Done?
@@ -1621,7 +1621,7 @@ void SwCntntFrm::MakeAll()
                 if ( nTmp > 0 && WouldFit( nTmp, bSplit, sal_False ) )
                 {
                     Prepare( PREP_WIDOWS_ORPHANS, 0, sal_False );
-                    bValidSize = sal_False;
+                    mbValidSize = sal_False;
                     bFitPromise = true;
                     continue;
                 }
@@ -1695,7 +1695,7 @@ void SwCntntFrm::MakeAll()
             if ( nConsequetiveFormatsWithoutChange <= cnStopFormat )
             {
                 Prepare( PREP_MUST_FIT, 0, sal_False );
-                bValidSize = sal_False;
+                mbValidSize = sal_False;
                 bMustFit = true;
                 continue;
             }
@@ -1711,7 +1711,7 @@ void SwCntntFrm::MakeAll()
                 ::ValidateSz( pPre );
         }
 
-    } //while ( !bValidPos || !bValidSize || !bValidPrtArea )
+    } //while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
 
 
     // NEW: Looping Louie (Light). Should not be applied in balanced sections.
@@ -1762,7 +1762,7 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
     const sal_Bool bOldPos = pFrm->GetValidPosFlag();
     const sal_Bool bOldSz  = pFrm->GetValidSizeFlag();
     const sal_Bool bOldPrt = pFrm->GetValidPrtAreaFlag();
-    pFrm->bValidPos = pFrm->bValidPrtArea = pFrm->bValidSize = sal_True;
+    pFrm->mbValidPos = pFrm->mbValidPrtArea = pFrm->mbValidSize = sal_True;
 
     // fix(29272): Don't call MakeAll - there, pFrm might be invalidated again, and
     // we recursively end up in here again.
@@ -1796,9 +1796,9 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
         pNxt->Format( &rAttrs );
     }
 
-    pFrm->bValidPos      = bOldPos;
-    pFrm->bValidSize     = bOldSz;
-    pFrm->bValidPrtArea  = bOldPrt;
+    pFrm->mbValidPos      = bOldPos;
+    pFrm->mbValidSize     = bOldSz;
+    pFrm->mbValidPrtArea  = bOldPrt;
 }
 
 // This routine checks whether there are no other FtnBosses

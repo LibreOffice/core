@@ -1468,13 +1468,13 @@ void SwFlyAtCntFrm::RegisterAtCorrectPage()
 void SwFlyAtCntFrm::MakeObjPos()
 {
     // if fly frame position is valid, nothing is to do. Thus, return
-    if ( bValidPos )
+    if ( mbValidPos )
     {
         return;
     }
 
     // #i26791# - validate position flag here.
-    bValidPos = sal_True;
+    mbValidPos = sal_True;
 
     // #i35911# - no calculation of new position, if
     // anchored object is marked that it clears its environment and its

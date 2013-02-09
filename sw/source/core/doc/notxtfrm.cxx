@@ -156,7 +156,7 @@ SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode, SwFrm* pSib )
 
 void SwNoTxtFrm::InitCtor()
 {
-    nType = FRMC_NOTXT;
+    mnType = FRMC_NOTXT;
     // The graphic's weight is 0 if it has not been read,
     // < 0 if we had a read error and we needed to use the replacement and
     // > 0 if it is available
@@ -516,17 +516,17 @@ void SwNoTxtFrm::MakeAll()
     SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
-    while ( !bValidPos || !bValidSize || !bValidPrtArea )
+    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
         MakePos();
 
-        if ( !bValidSize )
+        if ( !mbValidSize )
             Frm().Width( GetUpper()->Prt().Width() );
 
         MakePrtArea( rAttrs );
 
-        if ( !bValidSize )
-        {   bValidSize = sal_True;
+        if ( !mbValidSize )
+        {   mbValidSize = sal_True;
             Format();
         }
     }

@@ -108,8 +108,8 @@ public:
     sal_Bool IsBackMoveLocked() { return bBackMoveLocked; }
 
     // prevents that the last content deletes the SwFtnFrm as well (Cut())
-    inline void ColLock()       { bColLocked = sal_True; }
-    inline void ColUnlock()     { bColLocked = sal_False; }
+    inline void ColLock()       { mbColLocked = sal_True; }
+    inline void ColUnlock()     { mbColLocked = sal_False; }
 
     // #i49383#
     inline void UnlockPosOfLowerObjs()

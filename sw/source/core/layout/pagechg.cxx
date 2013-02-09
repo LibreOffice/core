@@ -82,7 +82,7 @@ using namespace ::com::sun::star;
 SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwLayoutFrm( pFmt, pSib )
 {
-    nType = FRMC_BODY;
+    mnType = FRMC_BODY;
 }
 
 /*************************************************************************
@@ -99,7 +99,7 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
     //Vorsicht ist die Mutter der Robustheit).
     //Die PrtArea ist stets so gross wie der Frm itself.
 
-    if ( !bValidSize )
+    if ( !mbValidSize )
     {
         SwTwips nHeight = GetUpper()->Prt().Height();
         SwTwips nWidth = GetUpper()->Prt().Width();
@@ -173,7 +173,7 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
         Prt().Height( Frm().Height() );
         Prt().Width( Frm().Width() );
     }
-    bValidSize = bValidPrtArea = sal_True;
+    mbValidSize = mbValidPrtArea = sal_True;
 }
 
 void SwBodyFrm::Paint( const SwRect& rRect, const SwPrintData* ) const
@@ -218,7 +218,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
         bHasGrid = sal_False;
     SetMaxFtnHeight( pPgDsc->GetFtnInfo().GetHeight() ?
                      pPgDsc->GetFtnInfo().GetHeight() : LONG_MAX ),
-    nType = FRMC_PAGE;
+    mnType = FRMC_PAGE;
     bInvalidLayout = bInvalidCntnt = bInvalidSpelling = bInvalidSmartTags = bInvalidAutoCmplWrds = bInvalidWordCount = sal_True;
     bInvalidFlyLayout = bInvalidFlyCntnt = bInvalidFlyInCnt = bFtnPage = bEndNotePage = sal_False;
 
@@ -352,8 +352,8 @@ void SwPageFrm::CheckDirection( sal_Bool bVert )
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir )
         {
             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-            bVertLR = 0;
-            bVertical = 0;
+            mbVertLR = 0;
+            mbVertical = 0;
         }
         else
         {
@@ -361,30 +361,30 @@ void SwPageFrm::CheckDirection( sal_Bool bVert )
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
                 //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                bVertLR = 0;
-                bVertical = 0;
+                mbVertLR = 0;
+                mbVertical = 0;
             }
             else
             {
-                bVertical = 1;
+                mbVertical = 1;
                 //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 if(FRMDIR_VERT_TOP_RIGHT == nDir)
-                    bVertLR = 0;
+                    mbVertLR = 0;
                     else if(FRMDIR_VERT_TOP_LEFT==nDir)
-                       bVertLR = 1;
+                       mbVertLR = 1;
             }
         }
 
-        bReverse = 0;
-        bInvalidVert = 0;
+        mbReverse = 0;
+        mbInvalidVert = 0;
     }
     else
     {
         if( FRMDIR_HORI_RIGHT_TOP == nDir )
-            bRightToLeft = 1;
+            mbRightToLeft = 1;
         else
-            bRightToLeft = 0;
-        bInvalidR2L = 0;
+            mbRightToLeft = 0;
+        mbInvalidR2L = 0;
     }
 }
 
@@ -642,7 +642,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             ViewShell *pSh = getRootFrm()->GetCurrShell();
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
-                bValidSize = sal_False;
+                mbValidSize = sal_False;
                 // OD 28.10.2002 #97265# - Don't call <SwPageFrm::MakeAll()>
                 // Calculation of the page is not necessary, because its size is
                 // is invalidated here and further invalidation is done in the
@@ -1691,7 +1691,7 @@ Size SwRootFrm::ChgSize( const Size& aNewSize )
 {
     Frm().SSize() = aNewSize;
     _InvalidatePrt();
-    bFixSize = sal_False;
+    mbFixSize = sal_False;
     return Frm().SSize();
 }
 
@@ -1702,18 +1702,18 @@ Size SwRootFrm::ChgSize( const Size& aNewSize )
 |*************************************************************************/
 void SwRootFrm::MakeAll()
 {
-    if ( !bValidPos )
-    {   bValidPos = sal_True;
-        aFrm.Pos().X() = aFrm.Pos().Y() = DOCUMENTBORDER;
+    if ( !mbValidPos )
+    {   mbValidPos = sal_True;
+        maFrm.Pos().X() = maFrm.Pos().Y() = DOCUMENTBORDER;
     }
-    if ( !bValidPrtArea )
-    {   bValidPrtArea = sal_True;
-        aPrt.Pos().X() = aPrt.Pos().Y() = 0;
-        aPrt.SSize( aFrm.SSize() );
+    if ( !mbValidPrtArea )
+    {   mbValidPrtArea = sal_True;
+        maPrt.Pos().X() = maPrt.Pos().Y() = 0;
+        maPrt.SSize( maFrm.SSize() );
     }
-    if ( !bValidSize )
+    if ( !mbValidSize )
         //SSize wird von den Seiten (Cut/Paste) eingestellt.
-        bValidSize = sal_True;
+        mbValidSize = sal_True;
 }
 
 /*************************************************************************

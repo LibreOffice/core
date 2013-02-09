@@ -440,8 +440,8 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
         pStart->GetUpper()->pLower = 0;
     if ( pStart->GetPrev() )
     {
-        pStart->GetPrev()->pNext = 0;
-        pStart->pPrev = 0;
+        pStart->GetPrev()->mpNext = 0;
+        pStart->mpPrev = 0;
     }
 
     if ( pLay->IsFtnFrm() )
@@ -495,8 +495,8 @@ sal_Bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibl
     // On the way there, we invalidate as required.
     if ( pSibling )
     {
-        if ( 0 != (pStart->pPrev = pSibling->GetPrev()) )
-            pStart->GetPrev()->pNext = pStart;
+        if ( 0 != (pStart->mpPrev = pSibling->GetPrev()) )
+            pStart->GetPrev()->mpNext = pStart;
         else
             pParent->pLower = pStart;
         pSibling->_InvalidatePos();
@@ -504,7 +504,7 @@ sal_Bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibl
     }
     else
     {
-        if ( 0 == (pStart->pPrev = pParent->Lower()) )
+        if ( 0 == (pStart->mpPrev = pParent->Lower()) )
             pParent->pLower = pStart;
         else
         //Modified for #i100782#,04/03/2009
@@ -518,12 +518,12 @@ sal_Bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibl
             SwFrm* pTemp = pParent->pLower;
             while (pTemp)
             {
-                if (pTemp->pNext)
-                    pTemp = pTemp->pNext;
+                if (pTemp->mpNext)
+                    pTemp = pTemp->mpNext;
                 else
                 {
-                    pStart->pPrev = pTemp;
-                    pTemp->pNext = pStart;
+                    pStart->mpPrev = pTemp;
+                    pTemp->mpNext = pStart;
                     break;
                 }
             }
@@ -546,7 +546,7 @@ sal_Bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibl
     SWRECTFN( pParent )
     SwTwips nGrowVal = 0;
     do
-    {   pFloat->pUpper = pParent;
+    {   pFloat->mpUpper = pParent;
         pFloat->_InvalidateAll();
         pFloat->CheckDirChange();
 
@@ -572,8 +572,8 @@ sal_Bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibl
 
     if ( pSibling )
     {
-        pLst->pNext = pSibling;
-        pSibling->pPrev = pLst;
+        pLst->mpNext = pSibling;
+        pSibling->mpPrev = pLst;
         if( pSibling->IsInFtn() )
         {
             if( pSibling->IsSctFrm() )
@@ -2471,7 +2471,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                 {
                     pSectFrm->DelEmpty( sal_True );
                     delete pSectFrm;
-                    rThis.bValidPos = sal_True;
+                    rThis.mbValidPos = sal_True;
                 }
             }
         }

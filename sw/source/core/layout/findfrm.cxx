@@ -1343,27 +1343,27 @@ void SwFrm::SetInfFlags()
     if ( !IsFlyFrm() && !GetUpper() ) //not yet pasted, no information available
         return;
 
-    bInfInvalid = bInfBody = bInfTab = bInfFly = bInfFtn = bInfSct = sal_False;
+    mbInfInvalid = mbInfBody = mbInfTab = mbInfFly = mbInfFtn = mbInfSct = sal_False;
 
     SwFrm *pFrm = this;
     if( IsFtnContFrm() )
-        bInfFtn = sal_True;
+        mbInfFtn = sal_True;
     do
     {
-        // bInfBody is only set in the page body, but not in the column body
-        if ( pFrm->IsBodyFrm() && !bInfFtn && pFrm->GetUpper()
+        // mbInfBody is only set in the page body, but not in the column body
+        if ( pFrm->IsBodyFrm() && !mbInfFtn && pFrm->GetUpper()
              && pFrm->GetUpper()->IsPageFrm() )
-            bInfBody = sal_True;
+            mbInfBody = sal_True;
         else if ( pFrm->IsTabFrm() || pFrm->IsCellFrm() )
         {
-            bInfTab = sal_True;
+            mbInfTab = sal_True;
         }
         else if ( pFrm->IsFlyFrm() )
-            bInfFly = sal_True;
+            mbInfFly = sal_True;
         else if ( pFrm->IsSctFrm() )
-            bInfSct = sal_True;
+            mbInfSct = sal_True;
         else if ( pFrm->IsFtnFrm() )
-            bInfFtn = sal_True;
+            mbInfFtn = sal_True;
 
         pFrm = pFrm->GetUpper();
 
@@ -1383,7 +1383,7 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
     {
         // OD 2004-01-21 #114969# - if derived, valid vertical flag only if
         // vertical flag of upper/anchor is valid.
-        if( bDerivedVert )
+        if( mbDerivedVert )
         {
             const SwFrm* pAsk = IsFlyFrm() ?
                           ((SwFlyFrm*)this)->GetAnchorFrm() : GetUpper();
@@ -1392,13 +1392,13 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
 
             if( pAsk )
             {
-                bVertical = pAsk->IsVertical() ? 1 : 0;
-                bReverse  = pAsk->IsReverse()  ? 1 : 0;
+                mbVertical = pAsk->IsVertical() ? 1 : 0;
+                mbReverse  = pAsk->IsReverse()  ? 1 : 0;
 
-                bVertLR  = pAsk->IsVertLR() ? 1 : 0;
+                mbVertLR  = pAsk->IsVertLR() ? 1 : 0;
                 //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                if ( !pAsk->bInvalidVert )
-                    bInvalidVert = sal_False;
+                if ( !pAsk->mbInvalidVert )
+                    mbInvalidVert = sal_False;
             }
         }
         else
@@ -1407,9 +1407,9 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
     else
     {
         sal_Bool bInv = 0;
-        if( !bDerivedR2L ) // CheckDirection is able to set bDerivedR2L!
+        if( !mbDerivedR2L ) // CheckDirection is able to set bDerivedR2L!
             CheckDirection( bVert );
-        if( bDerivedR2L )
+        if( mbDerivedR2L )
         {
             const SwFrm* pAsk = IsFlyFrm() ?
                           ((SwFlyFrm*)this)->GetAnchorFrm() : GetUpper();
@@ -1417,11 +1417,11 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
             OSL_ENSURE( pAsk != this, "Oops! Stack overflow is about to happen" );
 
             if( pAsk )
-                bRightToLeft = pAsk->IsRightToLeft() ? 1 : 0;
-            if( !pAsk || pAsk->bInvalidR2L )
-                bInv = bInvalidR2L;
+                mbRightToLeft = pAsk->IsRightToLeft() ? 1 : 0;
+            if( !pAsk || pAsk->mbInvalidR2L )
+                bInv = mbInvalidR2L;
         }
-        bInvalidR2L = bInv;
+        mbInvalidR2L = bInv;
     }
 }
 

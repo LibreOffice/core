@@ -185,12 +185,12 @@ inline SwFrm* SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections )
 // Diese SwFrm-inlines sind hier, damit frame.hxx nicht layfrm.hxx includen muss
 inline bool SwFrm::IsColBodyFrm() const
 {
-    return nType == FRMC_BODY && GetUpper()->IsColumnFrm();
+    return mnType == FRMC_BODY && GetUpper()->IsColumnFrm();
 }
 
 inline bool SwFrm::IsPageBodyFrm() const
 {
-    return nType == FRMC_BODY && GetUpper()->IsPageFrm();
+    return mnType == FRMC_BODY && GetUpper()->IsPageFrm();
 }
 
 inline SwFrm* SwLayoutFrm::GetLastLower()

@@ -173,7 +173,7 @@ static sal_uInt16 lcl_ColumnNum( const SwFrm* pBoss )
 SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwLayoutFrm( pFmt, pSib )
 {
-    nType = FRMC_FTNCONT;
+    mnType = FRMC_FTNCONT;
 }
 
 
@@ -225,17 +225,17 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
     const SwTwips nBorder = rInf.GetTopDist() + rInf.GetBottomDist() +
                             rInf.GetLineWidth();
     SWRECTFN( this )
-    if ( !bValidPrtArea )
+    if ( !mbValidPrtArea )
     {
-        bValidPrtArea = sal_True;
+        mbValidPrtArea = sal_True;
         (Prt().*fnRect->fnSetTop)( nBorder );
         (Prt().*fnRect->fnSetWidth)( (Frm().*fnRect->fnGetWidth)() );
         (Prt().*fnRect->fnSetHeight)((Frm().*fnRect->fnGetHeight)() - nBorder );
         if( (Prt().*fnRect->fnGetHeight)() < 0 && !pPage->IsFtnPage() )
-            bValidSize = sal_False;
+            mbValidSize = sal_False;
     }
 
-    if ( !bValidSize )
+    if ( !mbValidSize )
     {
         bool bGrow = pPage->IsFtnPage();
         if( bGrow )
@@ -294,7 +294,7 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
                 }
             }
         }
-        bValidSize = sal_True;
+        mbValidSize = sal_True;
     }
 }
 /*************************************************************************
@@ -489,7 +489,7 @@ SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwCntntFrm *pCnt, SwTxtFtn *pAt
     // #i49383#
     mbUnlockPosOfLowerObjs( true )
 {
-    nType = FRMC_FTN;
+    mnType = FRMC_FTN;
 }
 
 /*************************************************************************

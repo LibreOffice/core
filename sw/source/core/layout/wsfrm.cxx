@@ -81,25 +81,25 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     // #i65250#
     mnFrmId( SwFrm::mnLastFrmId++ ),
     mpRoot( pSib ? pSib->getRootFrm() : 0 ),
-    pUpper( 0 ),
-    pNext( 0 ),
-    pPrev( 0 ),
-    pDrawObjs( 0 ),
-    nType(0),
-    bInfBody( sal_False ),
-    bInfTab ( sal_False ),
-    bInfFly ( sal_False ),
-    bInfFtn ( sal_False ),
-    bInfSct ( sal_False )
+    mpUpper( 0 ),
+    mpNext( 0 ),
+    mpPrev( 0 ),
+    mpDrawObjs( 0 ),
+    mnType(0),
+    mbInfBody( sal_False ),
+    mbInfTab ( sal_False ),
+    mbInfFly ( sal_False ),
+    mbInfFtn ( sal_False ),
+    mbInfSct ( sal_False )
 {
     OSL_ENSURE( pMod, "No frame format passed." );
-    bInvalidR2L = bInvalidVert = 1;
+    mbInvalidR2L = mbInvalidVert = 1;
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    bDerivedR2L = bDerivedVert = bRightToLeft = bVertical = bReverse = bVertLR = 0;
+    mbDerivedR2L = mbDerivedVert = mbRightToLeft = mbVertical = mbReverse = mbVertLR = 0;
 
-    bValidPos = bValidPrtArea = bValidSize = bValidLineNum = bRetouche =
-    bFixSize = bColLocked = sal_False;
-    bCompletePaint = bInfInvalid = sal_True;
+    mbValidPos = mbValidPrtArea = mbValidSize = mbValidLineNum = mbRetouche =
+    mbFixSize = mbColLocked = sal_False;
+    mbCompletePaint = mbInfInvalid = sal_True;
 }
 
 const IDocumentDrawModelAccess* SwFrm::getIDocumentDrawModelAccess()
@@ -121,37 +121,37 @@ void SwFrm::CheckDir( sal_uInt16 nDir, sal_Bool bVert, sal_Bool bOnlyBiDi, sal_B
 {
     if( FRMDIR_ENVIRONMENT == nDir || ( bVert && bOnlyBiDi ) )
     {
-        bDerivedVert = 1;
+        mbDerivedVert = 1;
         if( FRMDIR_ENVIRONMENT == nDir )
-            bDerivedR2L = 1;
+            mbDerivedR2L = 1;
         SetDirFlags( bVert );
     }
     else if( bVert )
     {
-        bInvalidVert = 0;
+        mbInvalidVert = 0;
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir
             || bBrowse )
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         {
-            bVertical = 0;
-            bVertLR = 0;
+            mbVertical = 0;
+            mbVertLR = 0;
         }
         else
            {
-            bVertical = 1;
+            mbVertical = 1;
             if(FRMDIR_VERT_TOP_RIGHT == nDir)
-                bVertLR = 0;
+                mbVertLR = 0;
                else if(FRMDIR_VERT_TOP_LEFT==nDir)
-                       bVertLR = 1;
+                       mbVertLR = 1;
         }
     }
     else
     {
-        bInvalidR2L = 0;
+        mbInvalidR2L = 0;
         if( FRMDIR_HORI_RIGHT_TOP == nDir )
-            bRightToLeft = 1;
+            mbRightToLeft = 1;
         else
-            bRightToLeft = 0;
+            mbRightToLeft = 0;
     }
 }
 
@@ -161,13 +161,13 @@ void SwFrm::CheckDirection( sal_Bool bVert )
     {
         if( !IsHeaderFrm() && !IsFooterFrm() )
         {
-            bDerivedVert = 1;
+            mbDerivedVert = 1;
             SetDirFlags( bVert );
         }
     }
     else
     {
-        bDerivedR2L = 1;
+        mbDerivedR2L = 1;
         SetDirFlags( bVert );
     }
 }
@@ -485,7 +485,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
 |*************************************************************************/
 Size SwFrm::ChgSize( const Size& aNewSize )
 {
-    bFixSize = sal_True;
+    mbFixSize = sal_True;
     const Size aOldSize( Frm().SSize() );
     if ( aNewSize == aOldSize )
         return aOldSize;
@@ -494,19 +494,19 @@ Size SwFrm::ChgSize( const Size& aNewSize )
     {
         SWRECTFN2( this )
         SwRect aNew( Point(0,0), aNewSize );
-        (aFrm.*fnRect->fnSetWidth)( (aNew.*fnRect->fnGetWidth)() );
+        (maFrm.*fnRect->fnSetWidth)( (aNew.*fnRect->fnGetWidth)() );
         long nNew = (aNew.*fnRect->fnGetHeight)();
-        long nDiff = nNew - (aFrm.*fnRect->fnGetHeight)();
+        long nDiff = nNew - (maFrm.*fnRect->fnGetHeight)();
         if( nDiff )
         {
             if ( GetUpper()->IsFtnBossFrm() && HasFixSize() &&
                  NA_GROW_SHRINK !=
                  ((SwFtnBossFrm*)GetUpper())->NeighbourhoodAdjustment( this ) )
             {
-                (aFrm.*fnRect->fnSetHeight)( nNew );
+                (maFrm.*fnRect->fnSetHeight)( nNew );
                 SwTwips nReal = ((SwLayoutFrm*)this)->AdjustNeighbourhood(nDiff);
                 if ( nReal != nDiff )
-                    (aFrm.*fnRect->fnSetHeight)( nNew - nDiff + nReal );
+                    (maFrm.*fnRect->fnSetHeight)( nNew - nDiff + nReal );
             }
             else
             {
@@ -519,19 +519,19 @@ Size SwFrm::ChgSize( const Size& aNewSize )
                     else
                         Shrink( -nDiff );
 
-                    if ( GetUpper() && (aFrm.*fnRect->fnGetHeight)() != nNew )
+                    if ( GetUpper() && (maFrm.*fnRect->fnGetHeight)() != nNew )
                         GetUpper()->_InvalidateSize();
                 }
 
                 // Even if grow/shrink did not yet set the desired width, for
                 // example when called by ChgColumns to set the column width, we
                 // set the right width now.
-                (aFrm.*fnRect->fnSetHeight)( nNew );
+                (maFrm.*fnRect->fnSetHeight)( nNew );
             }
         }
     }
     else
-        aFrm.SSize( aNewSize );
+        maFrm.SSize( aNewSize );
 
     if ( Frm().SSize() != aOldSize )
     {
@@ -553,7 +553,7 @@ Size SwFrm::ChgSize( const Size& aNewSize )
         InvalidatePage( pPage );
     }
 
-    return aFrm.SSize();
+    return maFrm.SSize();
 }
 
 /*************************************************************************
@@ -571,27 +571,27 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
     OSL_ENSURE( (!pBehind || (pBehind && pParent == pBehind->GetUpper())),
             "Frame tree is inconsistent." );
 
-    pUpper = pParent;
-    pNext = pBehind;
+    mpUpper = pParent;
+    mpNext = pBehind;
     if( pBehind )
     {   //Insert before pBehind.
-        if( 0 != (pPrev = pBehind->pPrev) )
-            pPrev->pNext = this;
+        if( 0 != (mpPrev = pBehind->mpPrev) )
+            mpPrev->mpNext = this;
         else
-            pUpper->pLower = this;
-        pBehind->pPrev = this;
+            mpUpper->pLower = this;
+        pBehind->mpPrev = this;
     }
     else
     {   //Insert at the end, or as first node in the sub tree
-        pPrev = pUpper->Lower();
-        if ( pPrev )
+        mpPrev = mpUpper->Lower();
+        if ( mpPrev )
         {
-            while( pPrev->pNext )
-                pPrev = pPrev->pNext;
-            pPrev->pNext = this;
+            while( mpPrev->mpNext )
+                mpPrev = mpPrev->mpNext;
+            mpPrev->mpNext = this;
         }
         else
-            pUpper->pLower = this;
+            mpUpper->pLower = this;
     }
 }
 
@@ -611,21 +611,21 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
     OSL_ENSURE( (!pBefore || (pBefore && pParent == pBefore->GetUpper())),
             "Frame tree is inconsistent." );
 
-    pUpper = pParent;
-    pPrev = pBefore;
+    mpUpper = pParent;
+    mpPrev = pBefore;
     if ( pBefore )
     {
         //Insert after pBefore
-        if ( 0 != (pNext = pBefore->pNext) )
-            pNext->pPrev = this;
-        pBefore->pNext = this;
+        if ( 0 != (mpNext = pBefore->mpNext) )
+            mpNext->mpPrev = this;
+        pBefore->mpNext = this;
     }
     else
     {
         //Insert at the beginning of the chain
-        pNext = pParent->Lower();
+        mpNext = pParent->Lower();
         if ( pParent->Lower() )
-            pParent->Lower()->pPrev = this;
+            pParent->Lower()->mpPrev = this;
         pParent->pLower = this;
     }
 }
@@ -643,8 +643,8 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 |*  siblings) equal to SwFrm::InsertBefore(..)
 |*
 |*  If the third parameter is passed, the following happens:
-|*  - this becomes pNext of pParent
-|*  - pSct becomes pNext of the last one in the this-chain
+|*  - this becomes mpNext of pParent
+|*  - pSct becomes mpNext of the last one in the this-chain
 |*  - pBehind is reconnected from pParent to pSct
 |*  The purpose is: a SectionFrm (this) won't become a child of another
 |*  SectionFrm (pParent), but pParent gets split into two siblings
@@ -659,41 +659,41 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             "Frame tree inconsistent." );
     if( pSct )
     {
-        pUpper = pParent->GetUpper();
+        mpUpper = pParent->GetUpper();
         SwFrm *pLast = this;
         while( pLast->GetNext() )
         {
             pLast = pLast->GetNext();
-            pLast->pUpper = GetUpper();
+            pLast->mpUpper = GetUpper();
         }
         if( pBehind )
         {
-            pLast->pNext = pSct;
-            pSct->pPrev = pLast;
-            pSct->pNext = pParent->GetNext();
+            pLast->mpNext = pSct;
+            pSct->mpPrev = pLast;
+            pSct->mpNext = pParent->GetNext();
         }
         else
         {
-            pLast->pNext = pParent->GetNext();
+            pLast->mpNext = pParent->GetNext();
             if( pLast->GetNext() )
-                pLast->GetNext()->pPrev = pLast;
+                pLast->GetNext()->mpPrev = pLast;
         }
-        pParent->pNext = this;
-        pPrev = pParent;
+        pParent->mpNext = this;
+        mpPrev = pParent;
         if( pSct->GetNext() )
-            pSct->GetNext()->pPrev = pSct;
+            pSct->GetNext()->mpPrev = pSct;
         while( pLast->GetNext() )
         {
             pLast = pLast->GetNext();
-            pLast->pUpper = GetUpper();
+            pLast->mpUpper = GetUpper();
         }
         if( pBehind )
         {   // Insert before pBehind.
             if( pBehind->GetPrev() )
-                pBehind->GetPrev()->pNext = NULL;
+                pBehind->GetPrev()->mpNext = NULL;
             else
                 pBehind->GetUpper()->pLower = NULL;
-            pBehind->pPrev = NULL;
+            pBehind->mpPrev = NULL;
             SwLayoutFrm* pTmp = (SwLayoutFrm*)pSct;
             if( pTmp->Lower() )
             {
@@ -701,12 +701,12 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
                 pTmp = (SwLayoutFrm*)((SwLayoutFrm*)pTmp->Lower())->Lower();
                 OSL_ENSURE( pTmp, "InsertGrp: Missing ColBody" );
             }
-            pBehind->pUpper = pTmp;
+            pBehind->mpUpper = pTmp;
             pBehind->GetUpper()->pLower = pBehind;
             pLast = pBehind->GetNext();
             while ( pLast )
             {
-                pLast->pUpper = pBehind->GetUpper();
+                pLast->mpUpper = pBehind->GetUpper();
                 pLast = pLast->GetNext();
             };
         }
@@ -718,34 +718,34 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
     }
     else
     {
-        pUpper = (SwLayoutFrm*)pParent;
+        mpUpper = (SwLayoutFrm*)pParent;
         SwFrm *pLast = this;
         while( pLast->GetNext() )
         {
             pLast = pLast->GetNext();
-            pLast->pUpper = GetUpper();
+            pLast->mpUpper = GetUpper();
         }
-        pLast->pNext = pBehind;
+        pLast->mpNext = pBehind;
         if( pBehind )
         {   // Insert before pBehind.
-            if( 0 != (pPrev = pBehind->pPrev) )
-                pPrev->pNext = this;
+            if( 0 != (mpPrev = pBehind->mpPrev) )
+                mpPrev->mpNext = this;
             else
-                pUpper->pLower = this;
-            pBehind->pPrev = pLast;
+                mpUpper->pLower = this;
+            pBehind->mpPrev = pLast;
         }
         else
         {
             //Insert at the end, or ... the first node in the subtree
-            pPrev = pUpper->Lower();
-            if ( pPrev )
+            mpPrev = mpUpper->Lower();
+            if ( mpPrev )
             {
-                while( pPrev->pNext )
-                    pPrev = pPrev->pNext;
-                pPrev->pNext = this;
+                while( mpPrev->mpNext )
+                    mpPrev = mpPrev->mpNext;
+                mpPrev->mpNext = this;
             }
             else
-                pUpper->pLower = this;
+                mpUpper->pLower = this;
         }
     }
 }
@@ -757,22 +757,22 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
 |*************************************************************************/
 void SwFrm::Remove()
 {
-    OSL_ENSURE( pUpper, "Remove without upper?" );
+    OSL_ENSURE( mpUpper, "Remove without upper?" );
 
-    if( pPrev )
+    if( mpPrev )
         // one out of the middle is removed
-        pPrev->pNext = pNext;
+        mpPrev->mpNext = mpNext;
     else
     {   // the first in a list is removed //TODO
-        OSL_ENSURE( pUpper->pLower == this, "Layout is inconsistent." );
-        pUpper->pLower = pNext;
+        OSL_ENSURE( mpUpper->pLower == this, "Layout is inconsistent." );
+        mpUpper->pLower = mpNext;
     }
-    if( pNext )
-        pNext->pPrev = pPrev;
+    if( mpNext )
+        mpNext->mpPrev = mpPrev;
 
     // Remove link
-    pNext  = pPrev  = 0;
-    pUpper = 0;
+    mpNext  = mpPrev  = 0;
+    mpUpper = 0;
 }
 /*************************************************************************
 |*
@@ -1484,7 +1484,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
 
                 Frm().SSize().Height() = nOldFrmHeight;
                 Prt().SSize().Height() = nOldPrtHeight;
-                bCompletePaint = bOldComplete;
+                mbCompletePaint = bOldComplete;
             }
             if ( !IsBodyFrm() )
                 pUp->_InvalidateSize();
@@ -1676,7 +1676,7 @@ void SwFrm::ImplInvalidateSize()
 {
     if ( _InvalidationAllowed( INVALID_SIZE ) )
     {
-        bValidSize = sal_False;
+        mbValidSize = sal_False;
         if ( IsFlyFrm() )
             ((SwFlyFrm*)this)->_Invalidate();
         else
@@ -1691,7 +1691,7 @@ void SwFrm::ImplInvalidatePrt()
 {
     if ( _InvalidationAllowed( INVALID_PRTAREA ) )
     {
-        bValidPrtArea = sal_False;
+        mbValidPrtArea = sal_False;
         if ( IsFlyFrm() )
             ((SwFlyFrm*)this)->_Invalidate();
         else
@@ -1706,7 +1706,7 @@ void SwFrm::ImplInvalidatePos()
 {
     if ( _InvalidationAllowed( INVALID_POS ) )
     {
-        bValidPos = sal_False;
+        mbValidPos = sal_False;
         if ( IsFlyFrm() )
         {
             ((SwFlyFrm*)this)->_Invalidate();
@@ -1725,7 +1725,7 @@ void SwFrm::ImplInvalidateLineNum()
 {
     if ( _InvalidationAllowed( INVALID_LINENUM ) )
     {
-        bValidLineNum = sal_False;
+        mbValidLineNum = sal_False;
         OSL_ENSURE( IsTxtFrm(), "line numbers are implemented for text only" );
         InvalidatePage();
 
@@ -1745,7 +1745,7 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
     if ( ATT_VAR_SIZE == rFmtSize.GetHeightSizeType() ||
          ATT_MIN_SIZE == rFmtSize.GetHeightSizeType())
     {
-        bFixSize = sal_False;
+        mbFixSize = sal_False;
         if ( GetType() & (FRM_HEADER | FRM_FOOTER | FRM_ROW) )
         {
             SwFrm *pFrm = ((SwLayoutFrm*)this)->Lower();
@@ -1794,9 +1794,9 @@ void SwFrm::ValidateThisAndAllLowers( const sal_uInt16 nStage )
 
     if ( !bOnlyObject || ISA(SwFlyFrm) )
     {
-        bValidSize = sal_True;
-        bValidPrtArea = sal_True;
-        bValidPos = sal_True;
+        mbValidSize = sal_True;
+        mbValidPrtArea = sal_True;
+        mbValidPos = sal_True;
     }
 
     if ( bIncludeObjects )
@@ -2110,15 +2110,15 @@ void SwCntntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
             }
             _InvalidatePrt();
         }
-        SwFrm* pNextFrm = GetIndNext();
-        if ( pNextFrm && nInvFlags & 0x10)
+        SwFrm* mpNextFrm = GetIndNext();
+        if ( mpNextFrm && nInvFlags & 0x10)
         {
-            pNextFrm->_InvalidatePrt();
-            pNextFrm->InvalidatePage( pPage );
+            mpNextFrm->_InvalidatePrt();
+            mpNextFrm->InvalidatePage( pPage );
         }
-        if ( pNextFrm && nInvFlags & 0x80 )
+        if ( mpNextFrm && nInvFlags & 0x80 )
         {
-            pNextFrm->SetCompletePaint();
+            mpNextFrm->SetCompletePaint();
         }
         if ( nInvFlags & 0x20 )
         {
@@ -2296,7 +2296,7 @@ SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt, SwFrm* pSib ):
 {
     const SwFmtFrmSize &rFmtSize = pFmt->GetFrmSize();
     if ( rFmtSize.GetHeightSizeType() == ATT_FIX_SIZE )
-        bFixSize = sal_True;
+        mbFixSize = sal_True;
 }
 
 // #i28701#
@@ -3094,7 +3094,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 {
     OSL_ENSURE( pAttrs, "LayoutFrm::Format, pAttrs ist 0." );
 
-    if ( bValidPrtArea && bValidSize )
+    if ( mbValidPrtArea && mbValidSize )
         return;
 
     const sal_uInt16 nLeft = (sal_uInt16)pAttrs->CalcLeft( this );
@@ -3105,14 +3105,14 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
     bool bVert = IsVertical() && !IsPageFrm();
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
-    if ( !bValidPrtArea )
+    if ( !mbValidPrtArea )
     {
-        bValidPrtArea = sal_True;
+        mbValidPrtArea = sal_True;
         (this->*fnRect->fnSetXMargins)( nLeft, nRight );
         (this->*fnRect->fnSetYMargins)( nUpper, nLower );
     }
 
-    if ( !bValidSize )
+    if ( !mbValidSize )
     {
         if ( !HasFixSize() )
         {
@@ -3120,7 +3120,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
             const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
             SwTwips nMinHeight = rSz.GetHeightSizeType() == ATT_MIN_SIZE ? rSz.GetHeight() : 0;
             do
-            {   bValidSize = sal_True;
+            {   mbValidSize = sal_True;
 
                 //The size in VarSize is calculated using the content plus the
                 // borders.
@@ -3157,21 +3157,21 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
                     if( (this->*fnRect->fnSetLimit)( nLimit ) &&
                         nOldLeft == (Frm().*fnRect->fnGetLeft)() &&
                         nOldTop  == (Frm().*fnRect->fnGetTop)() )
-                        bValidSize = bValidPrtArea = sal_True;
+                        mbValidSize = mbValidPrtArea = sal_True;
                 }
-            } while ( !bValidSize );
+            } while ( !mbValidSize );
         }
         else if ( GetType() & 0x0018 )
         {
             do
             {   if ( Frm().Height() != pAttrs->GetSize().Height() )
                     ChgSize( Size( Frm().Width(), pAttrs->GetSize().Height()));
-                bValidSize = sal_True;
+                mbValidSize = sal_True;
                 MakePos();
-            } while ( !bValidSize );
+            } while ( !mbValidSize );
         }
         else
-            bValidSize = sal_True;
+            mbValidSize = sal_True;
     }
 }
 
@@ -3464,7 +3464,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             if ( pImp )
                 pImp->CheckWaitCrsr();
 
-            bValidSize = sal_True;
+            mbValidSize = sal_True;
             //First format the column as this will relieve the stack a bit.
             //Also set width and height of the column (if they are wrong)
             //while we are at it.
@@ -3682,7 +3682,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             else
                 bEnd = true;
 
-        } while ( !bEnd || !bValidSize );
+        } while ( !bEnd || !mbValidSize );
     }
     // OD 01.04.2003 #108446# - Don't collect endnotes for sections. Thus, set
     // 2nd parameter to <true>.

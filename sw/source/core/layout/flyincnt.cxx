@@ -90,7 +90,7 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
     if( pNotify )
     {
         InvalidatePage();
-        bValidPos = sal_False;
+        mbValidPos = sal_False;
         bInvalid  = sal_True;
         Calc();
         delete pNotify;
@@ -173,9 +173,9 @@ void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 //void SwFlyInCntFrm::MakeFlyPos()
 void SwFlyInCntFrm::MakeObjPos()
 {
-    if ( !bValidPos )
+    if ( !mbValidPos )
     {
-        bValidPos = sal_True;
+        mbValidPos = sal_True;
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
         //Update the current values in the format if needed, during this we of
@@ -265,23 +265,23 @@ void SwFlyInCntFrm::MakeAll()
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
     if ( IsClipped() )
-        bValidSize = bHeightClipped = bWidthClipped = sal_False;
+        mbValidSize = bHeightClipped = bWidthClipped = sal_False;
 
-    while ( !bValidPos || !bValidSize || !bValidPrtArea )
+    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
         //Only stop, if the flag is set!!
-        if ( !bValidSize )
+        if ( !mbValidSize )
         {
-            bValidPrtArea = sal_False;
+            mbValidPrtArea = sal_False;
         }
 
-        if ( !bValidPrtArea )
+        if ( !mbValidPrtArea )
             MakePrtArea( rAttrs );
 
-        if ( !bValidSize )
+        if ( !mbValidSize )
             Format( &rAttrs );
 
-        if ( !bValidPos )
+        if ( !mbValidPos )
         {
             // OD 2004-03-23 #i26791#
             //MakeFlyPos();
@@ -291,7 +291,7 @@ void SwFlyInCntFrm::MakeAll()
         //
         // re-activate clipping of as-character anchored Writer fly frames
         // depending on compatibility option <ClipAsCharacterAnchoredWriterFlyFrames>
-        if ( bValidPos && bValidSize &&
+        if ( mbValidPos && mbValidSize &&
              GetFmt()->getIDocumentSettingAccess()->get( IDocumentSettingAccess::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME ) )
         {
             SwFrm* pFrm = AnchorFrm();
@@ -299,7 +299,7 @@ void SwFlyInCntFrm::MakeAll()
                  Frm().Width() > pFrm->Prt().Width() )
             {
                 Frm().Width( pFrm->Prt().Width() );
-                bValidPrtArea = sal_False;
+                mbValidPrtArea = sal_False;
                 bWidthClipped = sal_True;
             }
         }

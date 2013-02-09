@@ -70,7 +70,7 @@ void ValidateTxt( SwFrm *pFrm )     // Friend of frame
              pFrm->Frm().Width() == pFrm->GetUpper()->Prt().Width() ) ||
          (   pFrm->IsVertical() &&
              pFrm->Frm().Height() == pFrm->GetUpper()->Prt().Height() ) )
-        pFrm->bValidSize = sal_True;
+        pFrm->mbValidSize = sal_True;
 }
 
 void SwTxtFrm::ValidateFrm()

@@ -49,7 +49,7 @@ void sw_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes 
 SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwFtnBossFrm( pFmt, pSib )
 {
-    nType = FRMC_COLUMN;
+    mnType = FRMC_COLUMN;
     SwBodyFrm* pColBody = new SwBodyFrm( pFmt->GetDoc()->GetDfltFrmFmt(), pSib );
     pColBody->InsertBehind( this, 0 ); // ColumnFrms now with BodyFrm
     SetMaxFtnHeight( LONG_MAX );

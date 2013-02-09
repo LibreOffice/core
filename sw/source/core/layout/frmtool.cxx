@@ -2506,13 +2506,13 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
             if ( pFloat->GetNext()  )
             {
                 if( bGo )
-                    pFloat->pUpper = NULL;
+                    pFloat->mpUpper = NULL;
                 pFloat = pFloat->GetNext();
                 if( !bGo && pFloat == pStart )
                 {
                     bGo = true;
-                    pFloat->pPrev->pNext = NULL;
-                    pFloat->pPrev = NULL;
+                    pFloat->mpPrev->mpNext = NULL;
+                    pFloat->mpPrev = NULL;
                 }
             }
             else
@@ -2523,7 +2523,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
         //Die naechste Teilkette suchen und die Ketten miteinander verbinden.
         SwFrm *pTmp = pFloat->FindNext();
         if( bGo )
-            pFloat->pUpper = NULL;
+            pFloat->mpUpper = NULL;
 
         if( !pLay->IsInFtn() )
             while( pTmp && pTmp->IsInFtn() )
@@ -2534,8 +2534,8 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
 
         if ( pTmp && bGo )
         {
-            pFloat->pNext = pTmp;           //Die beiden Ketten verbinden.
-            pFloat->pNext->pPrev = pFloat;
+            pFloat->mpNext = pTmp;           //Die beiden Ketten verbinden.
+            pFloat->mpNext->mpPrev = pFloat;
         }
         pFloat = pTmp;
         bGo = bGo || ( pStart == pFloat );
@@ -2614,12 +2614,12 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
         pPage->InvalidatePage( pPage ); //Invalides Layout anmelden.
 
     //Vorgaenger festellen und die Verbindung herstellen bzw. initialisieren.
-    pSav->pPrev = pSibling;
+    pSav->mpPrev = pSibling;
     SwFrm* pNxt;
     if ( pSibling )
     {
-        pNxt = pSibling->pNext;
-        pSibling->pNext = pSav;
+        pNxt = pSibling->mpNext;
+        pSibling->mpNext = pSav;
         pSibling->_InvalidatePrt();
         ((SwCntntFrm*)pSibling)->InvalidatePage( pPage );//Invaliden Cntnt anmelden.
         if ( ((SwCntntFrm*)pSibling)->GetFollow() )
@@ -2628,7 +2628,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
     else
     {   pNxt = pParent->pLower;
         pParent->pLower = pSav;
-        pSav->pUpper = pParent;     //Schon mal setzen, sonst ist fuer das
+        pSav->mpUpper = pParent;     //Schon mal setzen, sonst ist fuer das
                                     //invalidate der Parent (z.B. ein Fly) nicht klar.
         //Invaliden Cntnt anmelden.
         if ( pSav->IsCntntFrm() )
@@ -2645,7 +2645,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
     SwTwips nGrowVal = 0;
     SwFrm* pLast;
     do
-    {   pSav->pUpper = pParent;
+    {   pSav->mpUpper = pParent;
         nGrowVal += (pSav->Frm().*fnRect->fnGetHeight)();
         pSav->_InvalidateAll();
 
@@ -2680,8 +2680,8 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
 
     if( pNxt )
     {
-        pLast->pNext = pNxt;
-        pNxt->pPrev = pLast;
+        pLast->mpNext = pNxt;
+        pNxt->mpPrev = pLast;
     }
 
     if ( bGrow )
