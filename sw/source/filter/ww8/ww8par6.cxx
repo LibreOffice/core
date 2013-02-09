@@ -512,7 +512,7 @@ void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) c
     rFmt.SetFmtAttr(aSet);
 }
 
-void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
+void wwSectionManager::GetPageULData(const wwSection &rSection,
     wwSectionManager::wwULSpaceData& rData) const
 {
     sal_Int32 nWWUp = rSection.maSep.dyaTop;
@@ -535,13 +535,8 @@ void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
         nWWUp += rSection.maSep.dzaGutter;
     }
 
-    if( bFirst )
-        rData.bHasHeader = (rSection.maSep.grpfIhdt & WW8_HEADER_FIRST) !=0;
-    else
-    {
-        rData.bHasHeader = (rSection.maSep.grpfIhdt &
-            (WW8_HEADER_EVEN | WW8_HEADER_ODD)) != 0;
-    }
+    rData.bHasHeader = (rSection.maSep.grpfIhdt &
+        (WW8_HEADER_EVEN | WW8_HEADER_ODD | WW8_HEADER_FIRST)) != 0;
 
     if( rData.bHasHeader )
     {
@@ -562,13 +557,8 @@ void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
     else // kein Header -> Up einfach uebernehmen
         rData.nSwUp = Abs(nWWUp);
 
-    if( bFirst )
-        rData.bHasFooter = (rSection.maSep.grpfIhdt &  WW8_FOOTER_FIRST) !=0;
-    else
-    {
-        rData.bHasFooter = (rSection.maSep.grpfIhdt &
-            (WW8_FOOTER_EVEN | WW8_FOOTER_ODD)) != 0;
-    }
+    rData.bHasFooter = (rSection.maSep.grpfIhdt &
+        (WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST)) != 0;
 
     if( rData.bHasFooter )
     {
@@ -766,7 +756,7 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
 }
 
 wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.nNode),
-    mpSection(0), mpTitlePage(0), mpPage(0), meDir(FRMDIR_HORI_LEFT_TOP),
+    mpSection(0), mpPage(0), meDir(FRMDIR_HORI_LEFT_TOP),
     nPgWidth(SvxPaperInfo::GetPaperSize(PAPER_A4).Width()),
     nPgLeft(MM_250), nPgRight(MM_250), mnBorders(0), mbHasFootnote(false)
 {
@@ -1115,10 +1105,14 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         aNewSection.maSep.grpfIhdt = ReadBSprm(pSep, eVer <= ww::eWW2 ? 128 : 153, 0);
     else if (mrReader.pHdFt)
     {
-        aNewSection.maSep.grpfIhdt = WW8_HEADER_ODD | WW8_FOOTER_ODD;
+        aNewSection.maSep.grpfIhdt = WW8_HEADER_ODD | WW8_FOOTER_ODD
+            | WW8_HEADER_FIRST | WW8_FOOTER_FIRST;
 
-        if (aNewSection.HasTitlePage())
-            aNewSection.maSep.grpfIhdt |= WW8_HEADER_FIRST | WW8_FOOTER_FIRST;
+        // It is possible for a first page header to be provided
+        // for this section, but not actually shown in this section.  In this
+        // case (aNewSection.maSep.grpfIhdt & WW8_HEADER_FIRST) will be nonzero
+        // but aNewSection.HasTitlePage() will be false.
+        // Likewise for first page footer.
 
         if (mrReader.pWDop->fFacingPages)
             aNewSection.maSep.grpfIhdt |= WW8_HEADER_EVEN | WW8_FOOTER_EVEN;
@@ -1161,41 +1155,41 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
 void SwWW8ImplReader::CopyPageDescHdFt(const SwPageDesc* pOrgPageDesc,
     SwPageDesc* pNewPageDesc, sal_uInt8 nCode )
 {
-    // copy first header content section
-    if (nCode & WW8_HEADER_FIRST)
-        rDoc.CopyHeader(pOrgPageDesc->GetMaster(), pNewPageDesc->GetMaster());
-
-    // copy first footer content section
-    if( nCode & WW8_FOOTER_FIRST )
-        rDoc.CopyFooter(pOrgPageDesc->GetMaster(), pNewPageDesc->GetMaster());
-
-    if( nCode & (   WW8_HEADER_ODD  | WW8_FOOTER_ODD
-                  | WW8_HEADER_EVEN | WW8_FOOTER_EVEN ) )
+    // copy odd header content section
+    if( nCode & WW8_HEADER_ODD )
     {
-        // copy odd header content section
-        if( nCode & WW8_HEADER_ODD )
-        {
-            rDoc.CopyHeader(pOrgPageDesc->GetMaster(),
-                            pNewPageDesc->GetMaster() );
-        }
-        // copy odd footer content section
-        if( nCode & WW8_FOOTER_ODD )
-        {
-            rDoc.CopyFooter(pOrgPageDesc->GetMaster(),
-                            pNewPageDesc->GetMaster());
-        }
-        // copy even header content section
-        if( nCode & WW8_HEADER_EVEN )
-        {
-            rDoc.CopyHeader(pOrgPageDesc->GetLeft(),
-                            pNewPageDesc->GetLeft());
-        }
-        // copy even footer content section
-        if( nCode & WW8_FOOTER_EVEN )
-        {
-            rDoc.CopyFooter(pOrgPageDesc->GetLeft(),
-                            pNewPageDesc->GetLeft());
-        }
+        rDoc.CopyHeader(pOrgPageDesc->GetMaster(),
+                        pNewPageDesc->GetMaster() );
+    }
+    // copy odd footer content section
+    if( nCode & WW8_FOOTER_ODD )
+    {
+        rDoc.CopyFooter(pOrgPageDesc->GetMaster(),
+                        pNewPageDesc->GetMaster());
+    }
+    // copy even header content section
+    if( nCode & WW8_HEADER_EVEN )
+    {
+        rDoc.CopyHeader(pOrgPageDesc->GetLeft(),
+                        pNewPageDesc->GetLeft());
+    }
+    // copy even footer content section
+    if( nCode & WW8_FOOTER_EVEN )
+    {
+        rDoc.CopyFooter(pOrgPageDesc->GetLeft(),
+                        pNewPageDesc->GetLeft());
+    }
+    // copy first page header content section
+    if( nCode & WW8_HEADER_FIRST )
+    {
+        rDoc.CopyHeader(pOrgPageDesc->GetFirst(),
+                        pNewPageDesc->GetFirst());
+    }
+    // copy first page footer content section
+    if( nCode & WW8_FOOTER_FIRST )
+    {
+        rDoc.CopyFooter(pOrgPageDesc->GetFirst(),
+                        pNewPageDesc->GetFirst());
     }
 }
 
