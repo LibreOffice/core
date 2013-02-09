@@ -702,7 +702,6 @@ public:
     WW8_BRC brc[4];
     SwNodeIndex maStart;
     SwSection *mpSection;
-    SwPageDesc *mpTitlePage;
     SwPageDesc *mpPage;
     SvxFrameDirection meDir;
     short mLinkId;
@@ -758,10 +757,9 @@ private:
         wwULSpaceData() : bHasHeader(false), bHasFooter(false) {}
     };
 
-    void SetSegmentToPageDesc(const wwSection &rSection, bool bTitlePage,
-        bool bIgnoreCols);
+    void SetSegmentToPageDesc(const wwSection &rSection, bool bIgnoreCols);
 
-    void GetPageULData(const wwSection &rNewSection, bool bFirst,
+    void GetPageULData(const wwSection &rNewSection,
         wwULSpaceData& rData) const;
     void SetPageULSpaceItems(SwFrmFmt &rFmt, wwULSpaceData& rData,
         const wwSection &rSection) const;
@@ -1285,7 +1283,7 @@ private:
     SwWW8StyInf *GetStyle(sal_uInt16 nColl) const;
     void AppendTxtNode(SwPosition& rPos);
 
-    void Read_HdFt(bool bIsTitle, int nSect, const SwPageDesc *pPrev,
+    void Read_HdFt(int nSect, const SwPageDesc *pPrev,
         const wwSection &rSection);
     void Read_HdFtText(long nStartCp, long nLen, SwFrmFmt* pHdFtFmt);
     void Read_HdFtTextAsHackedFrame(long nStart, long nLen,

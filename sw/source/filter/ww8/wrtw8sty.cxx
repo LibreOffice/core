@@ -1615,12 +1615,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             }
         }
 
-        // The code above tries to detect if this is first page headers/footers,
-        // but it doesn't work even for quite trivial testcases. As I don't actually
-        // understand that code, I'll keep it. The simple and (at least for me) reliable way
-        // to detect for first page seems to be just RES_POOLPAGE_FIRST.
-        if( pPd->GetPoolFmtId() == RES_POOLPAGE_FIRST )
-            titlePage = true;
         if( titlePage )
             AttrOutput().SectionTitlePage();
 
