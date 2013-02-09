@@ -511,7 +511,7 @@ void Test::ParseAndCheck(const char *formula, const char * expected, const char 
 
 void Test::testBinomInBinHor()
 {
-    String sInput, sExpected, sOutput;
+    String sInput, sExpected;
     SmNode* pTree;
 
     // set up a binom (table) node
@@ -539,7 +539,7 @@ void Test::testBinomInBinHor()
 
 void Test::testBinVerInUnary()
 {
-    String sInput, sExpected, sOutput;
+    String sInput, sExpected;
     SmNode* pTree;
 
     // set up a unary operator with operand
@@ -570,7 +570,7 @@ void Test::testBinVerInUnary()
 
 void Test::testBinHorInSubSup()
 {
-    String sInput, sExpected, sOutput;
+    String sInput, sExpected;
     SmNode* pTree;
 
     // set up a blank formula
@@ -601,7 +601,7 @@ void Test::testBinHorInSubSup()
 
 void Test::testUnaryInMixedNumberAsNumerator()
 {
-    String sInput, sExpected, sOutput;
+    String sInput, sExpected;
     SmNode* pTree;
 
     // set up a unary operator

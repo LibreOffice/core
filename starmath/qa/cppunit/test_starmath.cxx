@@ -209,7 +209,6 @@ void Test::editUndoRedo()
 
     {
         m_xDocShRef->Execute(aUndo);
-        rtl::OUString sFoo = rEditEngine.GetText();
         m_xDocShRef->UpdateText();
         rtl::OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne == sFinalText);
@@ -217,7 +216,6 @@ void Test::editUndoRedo()
 
     {
         m_xDocShRef->Execute(aUndo);
-        rtl::OUString sFoo = rEditEngine.GetText();
         m_xDocShRef->UpdateText();
         rtl::OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Must now be empty", !sFinalText.getLength());
@@ -226,7 +224,6 @@ void Test::editUndoRedo()
     SfxRequest aRedo(SID_REDO, SFX_CALLMODE_SYNCHRON, m_xDocShRef->GetPool());
     {
         m_xDocShRef->Execute(aRedo);
-        rtl::OUString sFoo = rEditEngine.GetText();
         m_xDocShRef->UpdateText();
         rtl::OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne == sFinalText);
