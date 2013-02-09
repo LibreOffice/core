@@ -2689,7 +2689,7 @@ void XclImpChTypeGroup::Finalize()
     maType.Finalize( bStockChart );
 
     // extended type info
-    maTypeInfo.Set( maType.GetTypeInfo(), mxChart3d, false );
+    maTypeInfo.Set( maType.GetTypeInfo(), static_cast< bool >(mxChart3d), false );
 
     // reverse series order for some unstacked 2D chart types
     if( maTypeInfo.mbReverseSeries && !Is3dChart() && !maType.IsStacked() && !maType.IsPercent() )

@@ -78,7 +78,7 @@ public:
 
     operator bool () const
     {
-        return m_aItem;
+        return static_cast< bool >(m_aItem);
     }
 
     virtual ~scoped_disposing_ptr()
