@@ -75,6 +75,11 @@ certain functionality.
 @li @c editeng
 @li @c editeng.items
 
+@section embeddedobj
+
+@li @c embeddedobj - embedded objects
+@li @c embeddedobj.ole - OLE embedded objects
+
 @section extensions
 
 @li @c extensions.plugin

@@ -971,8 +971,11 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                                 m_pImp->m_aScaleHeight = Fraction( aScaledArea.GetHeight(), aNewSize.Height() );
                             }
                         }
-                        catch ( uno::Exception& )
+                        catch (uno::Exception const& e)
                         {
+                            SAL_WARN("embeddedobj", "SfxInPlaceClient::DoVerb:"
+                                " -9 fallback path: exception caught: "
+                                << e.Message);
                             nError = ERRCODE_SO_GENERALERROR;
                         }
                     }
@@ -982,8 +985,10 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                     // TODO/LATER: it would be nice to be able to provide the current target state outside
                     nError = ERRCODE_SO_CANNOT_DOVERB_NOW;
                 }
-                catch ( uno::Exception& )
+                catch (uno::Exception const& e)
                 {
+                    SAL_WARN("embeddedobj", "SfxInPlaceClient::DoVerb:"
+                            " exception caught: " << e.Message);
                     nError = ERRCODE_SO_GENERALERROR;
                     //TODO/LATER: better error handling
                 }

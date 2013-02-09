@@ -854,8 +854,10 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 {
                     throw;
                 }
-                catch( uno::Exception& )
+                catch (uno::Exception const& e)
                 {
+                    SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::doVerb: "
+                        "-9 fallback path: exception caught: " << e.Message);
                 }
             }
 
