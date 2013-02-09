@@ -79,7 +79,6 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Cui,
              gid_File_Res_TextConversionDlgs,
              gid_File_Res_Sw,
-             gid_File_Res_Tab,
              gid_File_Res_Tk,
              gid_File_Res_Acc,
              gid_File_Res_Tpl,
@@ -90,9 +89,6 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Xsltdlg,
              gid_File_Res_AVMedia,
              gid_File_Res_XMLSecurity,
-             gid_File_Res_Gallery,
-             gid_File_Res_Stt,
-             gid_File_Res_Tfu,
              gid_File_Res_Eps,
              gid_File_Res_UpdChk,
              gid_File_Res_Upd);
