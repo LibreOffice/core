@@ -682,7 +682,7 @@ void XclExpChEscherFormat::Convert( const ScfPropertySet& rPropSet, XclChObjectT
 
 bool XclExpChEscherFormat::IsValid() const
 {
-    return maData.mxEscherSet;
+    return static_cast< bool >(maData.mxEscherSet);
 }
 
 void XclExpChEscherFormat::Save( XclExpStream& rStrm )

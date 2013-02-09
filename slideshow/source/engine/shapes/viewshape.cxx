@@ -178,7 +178,7 @@ namespace slideshow
                 }
             }
 
-            return io_rCacheEntry.mpRenderer;
+            return static_cast< bool >(io_rCacheEntry.mpRenderer);
         }
 
         bool ViewShape::draw( const ::cppcanvas::CanvasSharedPtr&   rDestinationCanvas,

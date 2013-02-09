@@ -104,7 +104,7 @@ namespace slideshow
                     maTreeNode );
             }
 
-            return mpSubsetShape;
+            return static_cast< bool >(mpSubsetShape);
         }
 
         void ShapeSubset::disableSubsetShape()
