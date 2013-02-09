@@ -709,7 +709,14 @@ namespace
                 aArgs ), uno::UNO_QUERY_THROW );
 
         uno::Reference< io::XStream > xCONTENTS;
-        xNameContainer->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CONTENTS"))) >>= xCONTENTS;
+        try
+        {
+            xNameContainer->getByName("CONTENTS") >>= xCONTENTS;
+        }
+        catch (container::NoSuchElementException const&)
+        {
+            // ignore
+        }
 
         sal_Bool bCopied = xCONTENTS.is() && lcl_CopyStream(xCONTENTS->getInputStream(), xStream->getOutputStream());
 
