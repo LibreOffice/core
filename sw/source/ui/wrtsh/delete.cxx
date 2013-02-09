@@ -83,7 +83,7 @@ bool SwWrtShell::TryRemoveIndent()
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Zeile loeschen
+ Description: Erase the line
 ------------------------------------------------------------------------*/
 
 
@@ -92,7 +92,7 @@ long SwWrtShell::DelLine()
 {
     SwActContext aActContext(this);
     ResetCursorStack();
-        // alten Cursor merken
+        // remember the old cursor
     Push();
     ClearMark();
     SwCrsrShell::LeftMargin();
@@ -130,7 +130,7 @@ long SwWrtShell::DelToEndOfLine()
 
 long SwWrtShell::DelLeft()
 {
-    // wenns denn ein Fly ist, wech damit
+    // If it's a Fly, throw it away
     int nSelType = GetSelectionType();
     const int nCmp = nsSelectionType::SEL_FRM | nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE | nsSelectionType::SEL_DRW;
     if( nCmp & nSelType )
@@ -156,13 +156,13 @@ long SwWrtShell::DelLeft()
         return 1L;
     }
 
-    // wenn eine Selektion existiert, diese loeschen.
+    // If a selection exists, erase this
     if ( IsSelection() )
     {
         if( !IsBlockMode() || HasSelection() )
         {
-            //OS: wieder einmal Basic: SwActContext muss vor
-            //EnterStdMode verlassen werden!
+            //OS: Once again Basic: SwActContext must be leaved
+            //before EnterStdMode!
             {
                 SwActContext aActContext(this);
                 ResetCursorStack();
@@ -183,7 +183,7 @@ long SwWrtShell::DelLeft()
             EnterStdMode();
     }
 
-    // JP 29.06.95: nie eine davor stehende Tabelle loeschen.
+    // JP 29.06.95: never erase a table wich standing in front of.
     bool bSwap = false;
     const SwTableNode * pWasInTblNd = SwCrsrShell::IsCrsrInTbl();
 
@@ -234,8 +234,8 @@ long SwWrtShell::DelLeft()
 
 long SwWrtShell::DelRight()
 {
-        // werden verodert, wenn Tabellenselektion vorliegt;
-        // wird hier auf nsSelectionType::SEL_TBL umgesetzt.
+        // Will be or'ed, if a tableselection exists;
+        // will here be implemented on nsSelectionType::SEL_TBL
     long nRet = 0;
     int nSelection = GetSelectionType();
     if(nSelection & nsSelectionType::SEL_TBL_CELLS)
@@ -251,13 +251,13 @@ long SwWrtShell::DelRight()
     case nsSelectionType::SEL_TXT:
     case nsSelectionType::SEL_TBL:
     case nsSelectionType::SEL_NUM:
-            //  wenn eine Selektion existiert, diese loeschen.
+            //  If a selection exists, erase it.
         if( IsSelection() )
         {
             if( !IsBlockMode() || HasSelection() )
             {
-                //OS: wieder einmal Basic: SwActContext muss vor
-                //EnterStdMode verlassen werden!
+                //OS: And once again Basic: SwActContext must be
+                //leaved before EnterStdMode !
                 {
                     SwActContext aActContext(this);
                     ResetCursorStack();
@@ -445,9 +445,9 @@ long SwWrtShell::DelToStartOfPara()
     return nRet;
 }
 /*
- * alle Loeschoperationen sollten mit Find statt mit
- * Nxt-/PrvDelim arbeiten, da letzteren mit Wrap Around arbeiten
- * -- das ist wohl nicht gewuenscht.
+ * All erase operations should work with Find instead with
+ * Nxt-/PrvDelim, because the latter works with Wrap Around
+ * -- that's probably not wished.
  */
 
 
