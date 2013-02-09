@@ -190,6 +190,7 @@
                   <object class="GtkBox" id="box3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="border_width">6</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkFrame" id="frame1">
@@ -910,6 +911,7 @@
                   <object class="GtkBox" id="customcontents">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="border_width">6</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <placeholder/>
@@ -934,6 +936,7 @@
                   <object class="GtkBox" id="box9">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="border_width">6</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkFrame" id="frame5">
@@ -1368,6 +1371,7 @@
                   <object class="GtkFrame" id="frame6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="border_width">6</property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">none</property>
                     <child>
