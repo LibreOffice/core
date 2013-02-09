@@ -1932,27 +1932,11 @@ bool SwWW8ImplReader::HasOwnHeaderFooter(sal_uInt8 nWhichItems, sal_uInt8 grpfIh
     return false;
 }
 
-void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
-    const SwPageDesc *pPrev, const wwSection &rSection)
+void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
+    const wwSection &rSection)
 {
-    sal_uInt8 nWhichItems = 0;
-    SwPageDesc *pPD = 0;
-    if (!bIsTitle)
-    {
-        nWhichItems =
-            rSection.maSep.grpfIhdt & ~(WW8_HEADER_FIRST | WW8_FOOTER_FIRST);
-        pPD = rSection.mpPage;
-    }
-    else
-    {
-        // Always read title page header/footer data - it could be used by following sections
-        nWhichItems = ( WW8_HEADER_FIRST | WW8_FOOTER_FIRST );
-
-        pPD = rSection.mpTitlePage;
-    }
-
     sal_uInt8 grpfIhdt = rSection.maSep.grpfIhdt;
-
+    SwPageDesc *pPD = rSection.mpPage;
 
     if( pHdFt )
     {
@@ -1962,7 +1946,7 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
 
         for( sal_uInt8 nI = 0x20; nI; nI >>= 1, nNumber-- )
         {
-            if (nI & nWhichItems)
+            if (nI & grpfIhdt)
             {
                 bool bOk = true;
                 if( bVer67 )
@@ -1975,10 +1959,14 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
 
                 bool bUseLeft
                     = (nI & ( WW8_HEADER_EVEN | WW8_FOOTER_EVEN )) ? true: false;
+                bool bUseFirst
+                    = (nI & ( WW8_HEADER_FIRST | WW8_FOOTER_FIRST )) ? true: false;
                 bool bFooter
                     = (nI & ( WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST )) ? true: false;
 
-                SwFrmFmt& rFmt = bUseLeft ? pPD->GetLeft() : pPD->GetMaster();
+                SwFrmFmt& rFmt = bUseLeft ? pPD->GetLeft()
+                    : bUseFirst ? pPD->GetFirst()
+                    : pPD->GetMaster();
 
                 SwFrmFmt* pHdFtFmt;
                 if (bFooter)
@@ -1989,6 +1977,8 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
                         pPD->GetMaster().SetFmtAttr(SwFmtFooter(true));
                     if (bUseLeft)
                         pPD->GetLeft().SetFmtAttr(SwFmtFooter(true));
+                    if (bUseFirst)
+                        pPD->GetFirst().SetFmtAttr(SwFmtFooter(true));
                     pHdFtFmt = const_cast<SwFrmFmt*>(rFmt.GetFooter().GetFooterFmt());
                 }
                 else
@@ -1999,6 +1989,8 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
                         pPD->GetMaster().SetFmtAttr(SwFmtHeader(true));
                     if (bUseLeft)
                         pPD->GetLeft().SetFmtAttr(SwFmtHeader(true));
+                    if (bUseFirst)
+                        pPD->GetFirst().SetFmtAttr(SwFmtHeader(true));
                     pHdFtFmt = const_cast<SwFrmFmt*>(rFmt.GetHeader().GetHeaderFmt());
                 }
 
@@ -2042,16 +2034,8 @@ void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,
     OSL_ENSURE(rSection.mpPage, "makes no sense to call with a main page");
     if (rSection.mpPage)
     {
-        mrReader.Read_HdFt(false, nSect, pPrevious ? pPrevious->mpPage : 0,
+        mrReader.Read_HdFt(nSect, pPrevious ? pPrevious->mpPage : 0,
                 rSection);
-    }
-
-    if (rSection.mpTitlePage)
-    {
-        // 2 Pagedescs noetig: 1.Seite und folgende
-        // 1. Seite einlesen
-        mrReader.Read_HdFt(true, nSect, pPrevious ? pPrevious->mpTitlePage : 0,
-            rSection);
     }
 
     // Kopf / Fuss - Index Updaten
@@ -3730,9 +3714,9 @@ void SwWW8ImplReader::DeleteStk(SwFltControlStack* pStck)
 }
 
 void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
-    bool bTitlePage, bool bIgnoreCols)
+    bool bIgnoreCols)
 {
-    SwPageDesc &rPage = bTitlePage ? *rSection.mpTitlePage : *rSection.mpPage;
+    SwPageDesc &rPage = *rSection.mpPage;
 
     SetNumberingType(rSection, rPage);
 
@@ -3756,26 +3740,14 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
         }
     }
     wwULSpaceData aULData;
-    GetPageULData(rSection, bTitlePage, aULData);
+    GetPageULData(rSection, aULData);
     SetPageULSpaceItems(rFmt, aULData, rSection);
 
     SetPage(rPage, rFmt, rSection, bIgnoreCols);
 
-    bool bSetBorder = false;
-    switch (rSection.maSep.pgbApplyTo)
-    {
-        case 0:
-        case 3:
-            bSetBorder = true;
-            break;
-        case 1:
-            bSetBorder = bTitlePage;
-            break;
-        case 2:
-            bSetBorder = !bTitlePage;
-            break;
-    }
-    if (bSetBorder)
+    if (rSection.maSep.pgbApplyTo & 1)
+        mrReader.SetPageBorder(rPage.GetFirst(), rSection);
+    if (rSection.maSep.pgbApplyTo & 2)
         mrReader.SetPageBorder(rFmt, rSection);
 
     mrReader.SetDocumentGrid(rFmt, rSection);
@@ -3793,16 +3765,12 @@ void wwSectionManager::SetUseOn(wwSection &rSection)
     UseOnPage eUse = eUseBase;
     if (!bEven)
         eUse = (UseOnPage)(eUse | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE);
-    eUse = (UseOnPage)(eUse | nsUseOnPage::PD_FIRSTSHARE);
+    if (!rSection.HasTitlePage())
+        eUse = (UseOnPage)(eUse | nsUseOnPage::PD_FIRSTSHARE);
 
     OSL_ENSURE(rSection.mpPage, "Makes no sense to call me with no pages to set");
     if (rSection.mpPage)
         rSection.mpPage->WriteUseOn(eUse);
-    if (rSection.mpTitlePage)
-    {
-        rSection.mpTitlePage->WriteUseOn(
-            (UseOnPage) (eUseBase | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_FIRSTSHARE));
-    }
 }
 
 //Set the page descriptor on this node, handle the different cases for a text
@@ -3835,32 +3803,11 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFmtPageDesc &rPgDesc,
     }
 }
 
-//Map a word section with to either one or two writer page descriptors
-//depending on if the word section has a title page
+//Map a word section to a writer page descriptor
 SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     mySegIter &rStart, bool bIgnoreCols)
 {
     SwFmtPageDesc aEmpty;
-    // Always read title page header/footer data - it could be used by following sections
-    {
-        if (IsNewDoc() && rIter == rStart)
-        {
-            rIter->mpTitlePage =
-                mrReader.rDoc.GetPageDescFromPool(RES_POOLPAGE_FIRST);
-        }
-        else
-        {
-            sal_uInt16 nPos = mrReader.rDoc.MakePageDesc(
-                ViewShell::GetShellRes()->GetPageDescName(mnDesc, ShellResource::FIRST_PAGE)
-                , 0, false);
-            rIter->mpTitlePage = &mrReader.rDoc.GetPageDesc(nPos);
-        }
-        OSL_ENSURE(rIter->mpTitlePage, "no page!");
-        if (!rIter->mpTitlePage)
-            return aEmpty;
-
-        SetSegmentToPageDesc(*rIter, true, bIgnoreCols);
-    }
 
     if (IsNewDoc() && rIter == rStart)
     {
@@ -3871,7 +3818,7 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     {
         sal_uInt16 nPos = mrReader.rDoc.MakePageDesc(
             ViewShell::GetShellRes()->GetPageDescName(mnDesc, ShellResource::NORMAL_PAGE),
-                rIter->mpTitlePage, false);
+            0, false);
         rIter->mpPage = &mrReader.rDoc.GetPageDesc(nPos);
     }
     OSL_ENSURE(rIter->mpPage, "no page!");
@@ -3886,17 +3833,11 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     SetUseOn(*rIter);
 
     //Set hd/ft after set page
-    if (rIter->mpTitlePage)
-        SetSegmentToPageDesc(*rIter, true, bIgnoreCols);
-    SetSegmentToPageDesc(*rIter, false, bIgnoreCols);
+    SetSegmentToPageDesc(*rIter, bIgnoreCols);
 
-    SwFmtPageDesc aRet(rIter->HasTitlePage() ?
-        rIter->mpTitlePage : rIter->mpPage);
+    SwFmtPageDesc aRet(rIter->mpPage);
 
     rIter->mpPage->SetFollow(rIter->mpPage);
-
-    if (rIter->mpTitlePage)
-        rIter->mpTitlePage->SetFollow(rIter->mpPage);
 
     if (rIter->PageRestartNo())
         aRet.SetNumOffset(rIter->PageStartAt());
@@ -4077,7 +4018,6 @@ void wwSectionManager::InsertSegments()
                 // #i40766# Need to cache the page descriptor in case there is
                 // no page break in the section
                 SwPageDesc *pOrig = aIter->mpPage;
-                SwPageDesc *pOrigTitle = aIter->mpTitlePage;
                 bool bFailed = true;
                 SwFmtPageDesc aDesc(SetSwFmtPageDesc(aIter, aStart, true));
                 if (aDesc.GetPageDesc())
@@ -4101,7 +4041,6 @@ void wwSectionManager::InsertSegments()
                 if(bFailed)
                 {
                     aIter->mpPage = pOrig;
-                    aIter->mpTitlePage = pOrigTitle;
                 }
             }
         }
