@@ -758,6 +758,7 @@ struct ScMyImportValidation
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
 typedef std::list<SvXMLImportContext*>              ScMyViewContextList;
 class ScMyStylesImportHelper;
+class ScXMLEditAttributeMap;
 
 class ScXMLImport: public SvXMLImport, boost::noncopyable
 {
@@ -769,6 +770,7 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     ScDocument*             pDoc;
     boost::scoped_ptr<ScCompiler> mpComp; // For error-checking of cached string cell values.
     boost::scoped_ptr<ScEditEngineDefaulter> mpEditEngine;
+    mutable boost::scoped_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScMyViewContextList                 aViewContextList;
     ScMyStylesImportHelper*             pStylesImportHelper;
@@ -1180,6 +1182,7 @@ public:
     bool IsFormulaErrorConstant( const OUString& rStr ) const;
 
     ScEditEngineDefaulter* GetEditEngine();
+    const ScXMLEditAttributeMap& GetEditAttributeMap() const;
 };
 
 #endif

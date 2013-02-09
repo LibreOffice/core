@@ -47,6 +47,7 @@
 #include "scerrors.hxx"
 #include "editutil.hxx"
 #include "cell.hxx"
+#include "editattributemap.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -339,6 +340,8 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OU
     if (rProps.empty())
         return;
 
+    const ScXMLEditAttributeMap& rEditAttrMap = GetScImport().GetEditAttributeMap();
+
     maFormats.push_back(new ParaFormat(*mpEditEngine));
     ParaFormat& rFmt = maFormats.back();
     rFmt.maSelection.nStartPara = rFmt.maSelection.nEndPara = mnCurParagraph;
@@ -352,66 +355,48 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OU
             continue;
 
         const OUString& rName = xMapper->GetEntryXMLName(it->mnIndex);
+        const ScXMLEditAttributeMap::Entry* pEntry = rEditAttrMap.getEntry(rName);
+        if (!pEntry)
+            continue;
 
-        if (rName == "font-weight")
+        switch (pEntry->mnItemID)
         {
-            SvxWeightItem aItem(WEIGHT_NORMAL, EE_CHAR_WEIGHT);
-            aItem.PutValue(it->maValue, MID_WEIGHT);
-            rFmt.maItemSet.Put(aItem);
-        }
-        else if (rName == "font-weight-asian")
-        {
-            SvxWeightItem aItem(WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK);
-            aItem.PutValue(it->maValue, MID_WEIGHT);
-            rFmt.maItemSet.Put(aItem);
-        }
-        else if (rName == "font-weight-complex")
-        {
-            SvxWeightItem aItem(WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL);
-            aItem.PutValue(it->maValue, MID_WEIGHT);
-            rFmt.maItemSet.Put(aItem);
-        }
-        else if (rName == "font-size")
-        {
-            SvxFontHeightItem aItem(240, 100, EE_CHAR_FONTHEIGHT);
-            aItem.PutValue(it->maValue, MID_FONTHEIGHT);
-            rFmt.maItemSet.Put(aItem);
-        }
-        else if (rName == "font-size-asian")
-        {
-            SvxFontHeightItem aItem(240, 100, EE_CHAR_FONTHEIGHT_CJK);
-            aItem.PutValue(it->maValue, MID_FONTHEIGHT);
-            rFmt.maItemSet.Put(aItem);
-        }
-        else if (rName == "font-size-complex")
-        {
-            SvxFontHeightItem aItem(240, 100, EE_CHAR_FONTHEIGHT_CTL);
-            aItem.PutValue(it->maValue, MID_FONTHEIGHT);
-            rFmt.maItemSet.Put(aItem);
-        }
-        else if (rName == "font-style")
-        {
-            SvxPostureItem aItem(ITALIC_NONE, EE_CHAR_ITALIC);
-            aItem.PutValue(it->maValue, MID_POSTURE);
-            rFmt.maItemSet.Put(aItem);
-        }
-        else if (rName == "font-style-asian")
-        {
-            SvxPostureItem aItem(ITALIC_NONE, EE_CHAR_ITALIC_CJK);
-            aItem.PutValue(it->maValue, MID_POSTURE);
-            rFmt.maItemSet.Put(aItem);
-        }
-        else if (rName == "font-style-complex")
-        {
-            SvxPostureItem aItem(ITALIC_NONE, EE_CHAR_ITALIC_CTL);
-            aItem.PutValue(it->maValue, MID_POSTURE);
-            rFmt.maItemSet.Put(aItem);
-        }
-        else if (rName == "color")
-        {
-            SvxColorItem aItem(EE_CHAR_COLOR);
-            aItem.PutValue(it->maValue, 0);
-            rFmt.maItemSet.Put(aItem);
+            case EE_CHAR_WEIGHT:
+            case EE_CHAR_WEIGHT_CJK:
+            case EE_CHAR_WEIGHT_CTL:
+            {
+                SvxWeightItem aItem(WEIGHT_NORMAL, pEntry->mnItemID);
+                aItem.PutValue(it->maValue, pEntry->mnFlag);
+                rFmt.maItemSet.Put(aItem);
+            }
+            break;
+            case EE_CHAR_FONTHEIGHT:
+            case EE_CHAR_FONTHEIGHT_CJK:
+            case EE_CHAR_FONTHEIGHT_CTL:
+            {
+                SvxFontHeightItem aItem(240, 100, pEntry->mnItemID);
+                aItem.PutValue(it->maValue, pEntry->mnFlag);
+                rFmt.maItemSet.Put(aItem);
+            }
+            break;
+            case EE_CHAR_ITALIC:
+            case EE_CHAR_ITALIC_CJK:
+            case EE_CHAR_ITALIC_CTL:
+            {
+                SvxPostureItem aItem(ITALIC_NONE, pEntry->mnItemID);
+                aItem.PutValue(it->maValue, pEntry->mnFlag);
+                rFmt.maItemSet.Put(aItem);
+            }
+            break;
+            case EE_CHAR_COLOR:
+            {
+                SvxColorItem aItem(pEntry->mnItemID);
+                aItem.PutValue(it->maValue, pEntry->mnFlag);
+                rFmt.maItemSet.Put(aItem);
+            }
+            break;
+            default:
+                ;
         }
     }
 }

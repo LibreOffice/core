@@ -65,6 +65,7 @@
 #include "formulaparserpool.hxx"
 #include "externalrefmgr.hxx"
 #include "editutil.hxx"
+#include "editattributemap.hxx"
 
 #include <comphelper/extract.hxx>
 
@@ -3373,6 +3374,13 @@ ScEditEngineDefaulter* ScXMLImport::GetEditEngine()
         mpEditEngine->SetControlWord(mpEditEngine->GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS);
     }
     return mpEditEngine.get();
+}
+
+const ScXMLEditAttributeMap& ScXMLImport::GetEditAttributeMap() const
+{
+    if (!mpEditAttrMap)
+        mpEditAttrMap.reset(new ScXMLEditAttributeMap);
+    return *mpEditAttrMap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
