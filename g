@@ -146,6 +146,14 @@ get_configured_submodules()
     fi
 }
 
+get_git_reference()
+{
+    REFERENCED_GIT=""
+    if [ -f config_host.mk ]; then
+	REFERENCED_GIT=$(cat config_host.mk | grep GIT_REFERENCE_SRC | sed -e "s/.*=//")
+    fi
+}
+
 do_shortcut_update()
 {
 local module
@@ -246,6 +254,11 @@ local configured
 	    git submodule init $module || return $?
 	fi
     done
+    if [ -n "$REFERENCED_GIT" ] ; then
+        for module in $SUBMODULES_CONFIGURED ; do
+            git submodule update --reference $REFERENCED_GIT/.git/modules/$module $module || return $?
+        done
+    fi
     return 0
 }
 
@@ -263,6 +276,7 @@ fi
 
 get_active_submodules
 get_configured_submodules
+get_git_reference
 
 
 
@@ -319,7 +333,7 @@ case "$COMMAND" in
 	do_checkout "$@"
 	;;
     clone)
-	do_init_modules && git submodule update && refresh_all_hooks
+	do_init_modules && refresh_all_hooks
         ;;
     fetch)
 	(git fetch "$@" && git submodule foreach git fetch "$@" ) && git submodule update

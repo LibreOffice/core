@@ -1202,6 +1202,14 @@ AC_ARG_WITH(linked-git,
     GIT_LINK_SRC=$withval ,
 )
 
+AC_ARG_WITH(referenced-git,
+    AS_HELP_STRING([--with-referenced-git=<OTHER_CHECKOUT_DIR>],
+        [Specify another checkout directory to reference. This makes use of
+                 git submodule update --reference, and saves a lot of diskspace
+                 when having multiple trees side-by-side.]),
+    GIT_REFERENCE_SRC=$withval ,
+)
+
 AC_ARG_WITH(vba-package-format,
     AS_HELP_STRING([--with-vba-package-format],
         [Specify package format for vba compatibility api. Specifying  "builtin"
@@ -11914,6 +11922,17 @@ if test -n "${GIT_LINK_SRC}"; then
     done
 fi
 AC_SUBST(GIT_LINK_SRC)
+
+dnl git submodule update --reference
+dnl ===================================================================
+if test -n "${GIT_REFERENCE_SRC}"; then
+    for repo in ${GIT_NEEDED_SUBMODULES}; do
+        if ! test -d "${GIT_REFERENCE_SRC}"/${repo}; then
+            AC_MSG_ERROR([referenced git: required repository does not exist: ${GIT_REFERENCE_SRC}/${repo}])
+        fi
+    done
+fi
+AC_SUBST(GIT_REFERENCE_SRC)
 
 dnl branding
 dnl ===================================================================
