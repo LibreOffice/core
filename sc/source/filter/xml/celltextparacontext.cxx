@@ -11,6 +11,8 @@
 #include "xmlimprt.hxx"
 #include "xmlcelli.hxx"
 
+#include "xmloff/nmspmap.hxx"
+
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 using namespace com::sun::star;
@@ -29,7 +31,7 @@ void ScXMLCellTextParaContext::StartElement(const uno::Reference<xml::sax::XAttr
 void ScXMLCellTextParaContext::EndElement()
 {
     if (!maContent.isEmpty())
-        mrParentCxt.PushParagraphSpan(maContent);
+        mrParentCxt.PushParagraphSpan(maContent, OUString());
 
     mrParentCxt.PushParagraphEnd();
 }
@@ -44,7 +46,7 @@ SvXMLImportContext* ScXMLCellTextParaContext::CreateChildContext(
 {
     if (!maContent.isEmpty())
     {
-        mrParentCxt.PushParagraphSpan(maContent);
+        mrParentCxt.PushParagraphSpan(maContent, OUString());
         maContent = OUString();
     }
 
@@ -61,9 +63,9 @@ SvXMLImportContext* ScXMLCellTextParaContext::CreateChildContext(
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }
 
-void ScXMLCellTextParaContext::PushSpan(const OUString& rSpan)
+void ScXMLCellTextParaContext::PushSpan(const OUString& rSpan, const OUString& rStyleName)
 {
-    mrParentCxt.PushParagraphSpan(rSpan);
+    mrParentCxt.PushParagraphSpan(rSpan, rStyleName);
 }
 
 ScXMLCellTextSpanContext::ScXMLCellTextSpanContext(
@@ -75,12 +77,37 @@ ScXMLCellTextSpanContext::ScXMLCellTextSpanContext(
 
 void ScXMLCellTextSpanContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
+    if (!xAttrList.is())
+        return;
+
+    OUString aLocalName;
+    sal_Int16 nAttrCount = xAttrList->getLength();
+
+    const SvXMLTokenMap& rTokenMap = GetScImport().GetCellTextSpanAttrTokenMap();
+    for (sal_Int16 i = 0; i < nAttrCount; ++i)
+    {
+        sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
+            xAttrList->getNameByIndex(i), &aLocalName);
+
+        const OUString& rAttrValue = xAttrList->getValueByIndex(i);
+        sal_uInt16 nToken = rTokenMap.Get(nAttrPrefix, aLocalName);
+        switch (nToken)
+        {
+            case XML_TOK_CELL_TEXT_SPAN_ATTR_STYLE_NAME:
+                maStyleName = rAttrValue;
+            break;
+            default:
+                ;
+        }
+    }
 }
 
 void ScXMLCellTextSpanContext::EndElement()
 {
     if (!maContent.isEmpty())
-        mrParentCxt.PushSpan(maContent);
+    {
+        mrParentCxt.PushSpan(maContent, maStyleName);
+    }
 }
 
 void ScXMLCellTextSpanContext::Characters(const OUString& rChars)

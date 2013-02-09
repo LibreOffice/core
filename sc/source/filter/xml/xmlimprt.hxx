@@ -682,9 +682,20 @@ enum ScXMLConsolidationAttrTokens
     XML_TOK_CONSOLIDATION_ATTR_LINK_TO_SOURCE
 };
 
+/**
+ * Tokens for elements that come under <text:p>
+ */
 enum ScXMLCellTextParaElemTokens
 {
     XML_TOK_CELL_TEXT_SPAN
+};
+
+/**
+ * Tokens for attributes for <text:span>
+ */
+enum ScXMLCellTextSpanAttrTokens
+{
+    XML_TOK_CELL_TEXT_SPAN_ATTR_STYLE_NAME
 };
 
 class SvXMLTokenMap;
@@ -854,6 +865,7 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     SvXMLTokenMap           *pDataPilotMemberAttrTokenMap;
     SvXMLTokenMap           *pConsolidationAttrTokenMap;
     SvXMLTokenMap           *pCellTextParaElemTokemMap;
+    SvXMLTokenMap           *pCellTextSpanAttrTokemMap;
 
     ScMyTables              aTables;
 
@@ -1020,6 +1032,7 @@ public:
     const SvXMLTokenMap& GetDataPilotMemberAttrTokenMap();
     const SvXMLTokenMap& GetConsolidationAttrTokenMap();
     const SvXMLTokenMap& GetCellTextParaElemTokenMap();
+    const SvXMLTokenMap& GetCellTextSpanAttrTokenMap();
 
     void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
     {

@@ -1857,6 +1857,21 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextParaElemTokenMap()
     return *pCellTextParaElemTokemMap;
 }
 
+const SvXMLTokenMap& ScXMLImport::GetCellTextSpanAttrTokenMap()
+{
+    if (!pCellTextSpanAttrTokemMap)
+    {
+        static SvXMLTokenMapEntry aMap[] =
+        {
+            { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_CELL_TEXT_SPAN_ATTR_STYLE_NAME },
+            XML_TOKEN_MAP_END
+        };
+
+        pCellTextSpanAttrTokemMap = new SvXMLTokenMap(aMap);
+    }
+    return *pCellTextSpanAttrTokemMap;
+}
+
 SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
                                                const OUString& rLocalName,
                                                const uno::Reference<xml::sax::XAttributeList>& xAttrList )
@@ -1980,6 +1995,7 @@ ScXMLImport::ScXMLImport(
     pDataPilotMemberAttrTokenMap( 0 ),
     pConsolidationAttrTokenMap( 0 ),
     pCellTextParaElemTokemMap(NULL),
+    pCellTextSpanAttrTokemMap(NULL),
     aTables(*this),
     pMyNamedExpressions(NULL),
     pMyLabelRanges(NULL),
@@ -2118,6 +2134,7 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDataPilotMemberAttrTokenMap;
     delete pConsolidationAttrTokenMap;
     delete pCellTextParaElemTokemMap;
+    delete pCellTextSpanAttrTokemMap;
 
     delete pChangeTrackingImportHelper;
     delete pNumberFormatAttributesExportHelper;

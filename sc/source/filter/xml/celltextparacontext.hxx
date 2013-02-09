@@ -31,7 +31,7 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
-    void PushSpan(const OUString& rSpan);
+    void PushSpan(const OUString& rSpan, const OUString& rStyleName);
 };
 
 /**
@@ -40,6 +40,7 @@ public:
 class ScXMLCellTextSpanContext : public ScXMLImportContext
 {
     ScXMLCellTextParaContext& mrParentCxt;
+    OUString maStyleName;
     OUString maContent;
 public:
     ScXMLCellTextSpanContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);

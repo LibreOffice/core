@@ -55,10 +55,15 @@
 #include <xmloff/families.hxx>
 #include <xmloff/numehelp.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include "xmloff/prstylei.hxx"
 #include <svl/zforlist.hxx>
 #include <svx/svdocapt.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
+#include "editeng/wghtitem.hxx"
+#include "editeng/colritem.hxx"
+#include "editeng/fhgtitem.hxx"
+#include "editeng/postitem.hxx"
 #include <svx/unoapi.hxx>
 #include <svl/languageoptions.hxx>
 #include <sax/tools/converter.hxx>
@@ -96,7 +101,9 @@ using namespace xmloff::token;
 
 using rtl::OUString;
 
-//------------------------------------------------------------------
+
+ScXMLTableRowCellContext::ParaFormat::ParaFormat(ScEditEngineDefaulter& rEditEngine) :
+    maItemSet(rEditEngine.GetEmptyItemSet()) {}
 
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
@@ -107,6 +114,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       const sal_Int32 nTempRepeatedRows ) :
     ScXMLImportContext(rImport, nPrfx, rLName),
     mpEditEngine(GetScImport().GetEditEngine()),
+    mnCurParagraph(0),
     pDetectiveObjVec(NULL),
     pCellRangeSource(NULL),
     fValue(0.0),
@@ -125,7 +133,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bSolarMutexLocked(false),
     bFormulaTextResult(false),
     mbPossibleErrorCell(false),
-    mbCheckWithCompilerForError(false)
+    mbCheckWithCompilerForError(false),
+    mbEditEngineHasText(false)
 {
     rtl::math::setNan(&fValue); // NaN by default
     mpEditEngine->Clear();
@@ -302,15 +311,127 @@ bool cellExists( const ScAddress& rCellPos )
 
 }
 
-void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan)
+void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OUString& rStyleName)
 {
+    sal_Int32 nBegin = maParagraph.getLength();
+    sal_Int32 nEnd = nBegin + rSpan.getLength();
     maParagraph.append(rSpan);
+
+    if (rStyleName.isEmpty())
+        return;
+
+    // Get the style information from xmloff.
+    UniReference<XMLPropertySetMapper> xMapper = GetImport().GetTextImport()->GetTextImportPropertySetMapper()->getPropertySetMapper();
+    if (!xMapper.is())
+        // We can't do anything without the mapper.
+        return;
+
+    sal_Int32 nEntryCount = xMapper->GetEntryCount();
+
+    SvXMLStylesContext* pAutoStyles = GetImport().GetAutoStyles();
+
+    // Style name for text span corresponds with the name of an automatic style.
+    const XMLPropStyleContext* pStyle = dynamic_cast<const XMLPropStyleContext*>(
+        pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TEXT_TEXT, rStyleName));
+
+    if (!pStyle)
+        // No style by that name found.
+        return;
+
+    const std::vector<XMLPropertyState>& rProps = pStyle->GetProperties();
+    if (rProps.empty())
+        return;
+
+    maFormats.push_back(new ParaFormat(*mpEditEngine));
+    ParaFormat& rFmt = maFormats.back();
+    rFmt.maSelection.nStartPara = rFmt.maSelection.nEndPara = mnCurParagraph;
+    rFmt.maSelection.nStartPos = nBegin;
+    rFmt.maSelection.nEndPos = nEnd;
+
+    std::vector<XMLPropertyState>::const_iterator it = rProps.begin(), itEnd = rProps.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->mnIndex == -1 || it->mnIndex >= nEntryCount)
+            continue;
+
+        const OUString& rName = xMapper->GetEntryXMLName(it->mnIndex);
+
+        if (rName == "font-weight")
+        {
+            SvxWeightItem aItem(WEIGHT_NORMAL, EE_CHAR_WEIGHT);
+            aItem.PutValue(it->maValue, MID_WEIGHT);
+            rFmt.maItemSet.Put(aItem);
+        }
+        else if (rName == "font-weight-asian")
+        {
+            SvxWeightItem aItem(WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK);
+            aItem.PutValue(it->maValue, MID_WEIGHT);
+            rFmt.maItemSet.Put(aItem);
+        }
+        else if (rName == "font-weight-complex")
+        {
+            SvxWeightItem aItem(WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL);
+            aItem.PutValue(it->maValue, MID_WEIGHT);
+            rFmt.maItemSet.Put(aItem);
+        }
+        else if (rName == "font-size")
+        {
+            SvxFontHeightItem aItem(240, 100, EE_CHAR_FONTHEIGHT);
+            aItem.PutValue(it->maValue, MID_FONTHEIGHT);
+            rFmt.maItemSet.Put(aItem);
+        }
+        else if (rName == "font-size-asian")
+        {
+            SvxFontHeightItem aItem(240, 100, EE_CHAR_FONTHEIGHT_CJK);
+            aItem.PutValue(it->maValue, MID_FONTHEIGHT);
+            rFmt.maItemSet.Put(aItem);
+        }
+        else if (rName == "font-size-complex")
+        {
+            SvxFontHeightItem aItem(240, 100, EE_CHAR_FONTHEIGHT_CTL);
+            aItem.PutValue(it->maValue, MID_FONTHEIGHT);
+            rFmt.maItemSet.Put(aItem);
+        }
+        else if (rName == "font-style")
+        {
+            SvxPostureItem aItem(ITALIC_NONE, EE_CHAR_ITALIC);
+            aItem.PutValue(it->maValue, MID_POSTURE);
+            rFmt.maItemSet.Put(aItem);
+        }
+        else if (rName == "font-style-asian")
+        {
+            SvxPostureItem aItem(ITALIC_NONE, EE_CHAR_ITALIC_CJK);
+            aItem.PutValue(it->maValue, MID_POSTURE);
+            rFmt.maItemSet.Put(aItem);
+        }
+        else if (rName == "font-style-complex")
+        {
+            SvxPostureItem aItem(ITALIC_NONE, EE_CHAR_ITALIC_CTL);
+            aItem.PutValue(it->maValue, MID_POSTURE);
+            rFmt.maItemSet.Put(aItem);
+        }
+        else if (rName == "color")
+        {
+            SvxColorItem aItem(EE_CHAR_COLOR);
+            aItem.PutValue(it->maValue, 0);
+            rFmt.maItemSet.Put(aItem);
+        }
+    }
 }
 
 void ScXMLTableRowCellContext::PushParagraphEnd()
 {
-    mpEditEngine->InsertParagraph(
-        mpEditEngine->GetParagraphCount(), maParagraph.makeStringAndClear());
+    // EditEngine always has at least one paragraph even when its content is empty.
+
+    if (mbEditEngineHasText)
+        mpEditEngine->InsertParagraph(mpEditEngine->GetParagraphCount(), maParagraph.makeStringAndClear());
+    else
+    {
+        mpEditEngine->SetText(maParagraph.makeStringAndClear());
+        mbEditEngineHasText = true;
+    }
+
+    ++mnCurParagraph;
 }
 
 SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -674,7 +795,7 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
         }
         else if (!rtl::math::isNan(fValue))
         {
-            if (mpEditEngine->GetParagraphCount())
+            if (mbEditEngineHasText)
                 pFCell->SetHybridValueString(fValue, mpEditEngine->GetText(0));
             else
                 pFCell->SetHybridDouble(fValue);
@@ -700,7 +821,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             OUString aCellString;
             if (maStringValue)
                 aCellString = *maStringValue;
-            else if (mpEditEngine->GetParagraphCount())
+            else if (mbEditEngineHasText)
                 aCellString = mpEditEngine->GetText(0);
             else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
                 aCellString = *pOUText;
@@ -735,8 +856,23 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         ScDocument* pDoc = rXMLImport.GetDocument();
         if (maStringValue)
             pNewCell = ScBaseCell::CreateTextCell( *maStringValue, pDoc );
-        else if (mpEditEngine->GetParagraphCount())
-            pNewCell = new ScEditCell(mpEditEngine->CreateTextObject(), pDoc, pDoc->GetEditPool());
+        else if (mbEditEngineHasText)
+        {
+            if (maFormats.empty() && mpEditEngine->GetParagraphCount() == 1)
+            {
+                // This is a normal text without format runs.
+                pNewCell = new ScStringCell(mpEditEngine->GetText());
+            }
+            else
+            {
+                // This text either has format runs, or consists of multiple lines.
+                ParaFormatsType::const_iterator it = maFormats.begin(), itEnd = maFormats.end();
+                for (; it != itEnd; ++it)
+                    mpEditEngine->QuickSetAttribs(it->maItemSet, it->maSelection);
+
+                pNewCell = new ScEditCell(mpEditEngine->CreateTextObject(), pDoc, pDoc->GetEditPool());
+            }
+        }
         else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
             pNewCell = ScBaseCell::CreateTextCell( *pOUText, pDoc );
 
@@ -942,7 +1078,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
         if( cellExists(rCellPos) && CellsAreRepeated() )
             pOUText.reset( getOutputString(rXMLImport.GetDocument(), rCellPos) );
 
-        if (!mpEditEngine->GetParagraphCount() && !pOUText && !maStringValue)
+        if (!mbEditEngineHasText && !pOUText && !maStringValue)
             bIsEmpty = true;
     }
 
@@ -1092,7 +1228,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
 // - has an "Err:[###]" (where "[###]" is an error number)
 void ScXMLTableRowCellContext::HasSpecialCaseFormulaText()
 {
-    if (!mpEditEngine->GetParagraphCount())
+    if (!mbEditEngineHasText)
         return;
 
     OUString aStr = mpEditEngine->GetText(0);

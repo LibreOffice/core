@@ -23,8 +23,12 @@
 #include "XMLCellRangeSourceContext.hxx"
 #include "importcontext.hxx"
 #include "formula/grammar.hxx"
+#include "svl/itemset.hxx"
+#include "editeng/editdata.hxx"
+
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScXMLImport;
 class ScFormulaCell;
@@ -41,6 +45,17 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
     ScEditEngineDefaulter* mpEditEngine;
     OUStringBuffer maParagraph;
+    sal_uInt16 mnCurParagraph;
+
+    struct ParaFormat
+    {
+        SfxItemSet maItemSet;
+        ESelection maSelection;
+
+        ParaFormat(ScEditEngineDefaulter& rEditEngine);
+    };
+    typedef boost::ptr_vector<ParaFormat> ParaFormatsType;
+    ParaFormatsType maFormats;
 
     boost::scoped_ptr< ScXMLAnnotationData > mxAnnotationData;
     ScMyImpDetectiveObjVec* pDetectiveObjVec;
@@ -58,8 +73,9 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     bool        bIsFirstTextImport;
     bool        bSolarMutexLocked;
     bool        bFormulaTextResult;
-    bool        mbPossibleErrorCell;
-    bool        mbCheckWithCompilerForError;
+    bool mbPossibleErrorCell;
+    bool mbCheckWithCompilerForError;
+    bool mbEditEngineHasText;
 
     sal_Int16 GetCellType(const rtl::OUString& sOUValue) const;
 
@@ -103,7 +119,7 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    void PushParagraphSpan(const OUString& rSpan);
+    void PushParagraphSpan(const OUString& rSpan, const OUString& rStyleName);
     void PushParagraphEnd();
 
     void SetAnnotation( const ScAddress& rPosition );
