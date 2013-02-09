@@ -65,6 +65,19 @@
 #include "editeng/colritem.hxx"
 #include "editeng/fhgtitem.hxx"
 #include "editeng/postitem.hxx"
+#include "editeng/fontitem.hxx"
+#include "editeng/udlnitem.hxx"
+#include "editeng/wrlmitem.hxx"
+#include "editeng/crsditem.hxx"
+#include "editeng/charreliefitem.hxx"
+#include "editeng/charscaleitem.hxx"
+#include "editeng/cntritem.hxx"
+#include "editeng/shdditem.hxx"
+#include "editeng/kernitem.hxx"
+#include "editeng/akrnitem.hxx"
+#include "editeng/escpitem.hxx"
+#include "editeng/emphitem.hxx"
+#include "editeng/langitem.hxx"
 #include <svx/unoapi.hxx>
 #include <svl/languageoptions.hxx>
 #include <sax/tools/converter.hxx>
@@ -348,57 +361,193 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OU
     rFmt.maSelection.nStartPos = nBegin;
     rFmt.maSelection.nEndPos = nEnd;
 
+    boost::scoped_ptr<SfxPoolItem> pPoolItem;
+    sal_uInt16 nLastItemID = EE_CHAR_END + 1;
+
     std::vector<XMLPropertyState>::const_iterator it = rProps.begin(), itEnd = rProps.end();
     for (; it != itEnd; ++it)
     {
         if (it->mnIndex == -1 || it->mnIndex >= nEntryCount)
             continue;
 
-        const OUString& rName = xMapper->GetEntryXMLName(it->mnIndex);
+        const OUString& rName = xMapper->GetEntryAPIName(it->mnIndex);
         const ScXMLEditAttributeMap::Entry* pEntry = rEditAttrMap.getEntry(rName);
         if (!pEntry)
             continue;
 
+        if (nLastItemID != pEntry->mnItemID && pPoolItem)
+        {
+            // Flush the last item when the item ID changes.
+            rFmt.maItemSet.Put(*pPoolItem);
+            pPoolItem.reset();
+        }
+
         switch (pEntry->mnItemID)
         {
+            case EE_CHAR_FONTINFO:
+            case EE_CHAR_FONTINFO_CJK:
+            case EE_CHAR_FONTINFO_CTL:
+            {
+                // Font properties need to be consolidated into a single item.
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxFontItem(pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
             case EE_CHAR_WEIGHT:
             case EE_CHAR_WEIGHT_CJK:
             case EE_CHAR_WEIGHT_CTL:
             {
-                SvxWeightItem aItem(WEIGHT_NORMAL, pEntry->mnItemID);
-                aItem.PutValue(it->maValue, pEntry->mnFlag);
-                rFmt.maItemSet.Put(aItem);
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxWeightItem(WEIGHT_NORMAL, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_FONTHEIGHT:
             case EE_CHAR_FONTHEIGHT_CJK:
             case EE_CHAR_FONTHEIGHT_CTL:
             {
-                SvxFontHeightItem aItem(240, 100, pEntry->mnItemID);
-                aItem.PutValue(it->maValue, pEntry->mnFlag);
-                rFmt.maItemSet.Put(aItem);
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxFontHeightItem(240, 100, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_ITALIC:
             case EE_CHAR_ITALIC_CJK:
             case EE_CHAR_ITALIC_CTL:
             {
-                SvxPostureItem aItem(ITALIC_NONE, pEntry->mnItemID);
-                aItem.PutValue(it->maValue, pEntry->mnFlag);
-                rFmt.maItemSet.Put(aItem);
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxPostureItem(ITALIC_NONE, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_UNDERLINE:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxUnderlineItem(UNDERLINE_NONE, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_OVERLINE:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxOverlineItem(UNDERLINE_NONE, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
             }
             break;
             case EE_CHAR_COLOR:
             {
-                SvxColorItem aItem(pEntry->mnItemID);
-                aItem.PutValue(it->maValue, pEntry->mnFlag);
-                rFmt.maItemSet.Put(aItem);
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxColorItem(pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_WLM:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxWordLineModeItem(false, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_STRIKEOUT:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxCrossedOutItem(STRIKEOUT_NONE, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_RELIEF:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxCharReliefItem(RELIEF_NONE, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_OUTLINE:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxContourItem(false, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_SHADOW:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxShadowedItem(false, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_KERNING:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxKerningItem(0, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_PAIRKERNING:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxAutoKernItem(false, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_FONTWIDTH:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxCharScaleWidthItem(100, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_ESCAPEMENT:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxEscapementItem(pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_EMPHASISMARK:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxEmphasisMarkItem(EMPHASISMARK_NONE, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
+            }
+            break;
+            case EE_CHAR_LANGUAGE:
+            case EE_CHAR_LANGUAGE_CJK:
+            case EE_CHAR_LANGUAGE_CTL:
+            {
+                if (!pPoolItem)
+                    pPoolItem.reset(new SvxLanguageItem(LANGUAGE_DONTKNOW, pEntry->mnItemID));
+
+                pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
             }
             break;
             default:
                 ;
         }
+
+        nLastItemID = pEntry->mnItemID;
     }
+
+    if (pPoolItem)
+        rFmt.maItemSet.Put(*pPoolItem);
 }
 
 void ScXMLTableRowCellContext::PushParagraphEnd()
