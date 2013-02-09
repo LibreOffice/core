@@ -151,7 +151,7 @@ namespace slideshow
                 }
             }
 
-            return mpSprite;
+            return static_cast< bool >(mpSprite);
         }
 
         void AnimatedSprite::setPixelOffset( const ::basegfx::B2DSize& rPixelOffset )

@@ -74,7 +74,7 @@ namespace slideshow
 
             SHOW_NODE_TREE( mpRootNode );
 
-            return mpRootNode;
+            return static_cast< bool >(mpRootNode);
         }
 
         bool SlideAnimations::isAnimated() const

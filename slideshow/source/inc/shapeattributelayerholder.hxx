@@ -83,7 +83,7 @@ namespace slideshow
                 if( mpShape )
                     mpAttributeLayer = mpShape->createAttributeLayer();
 
-                return mpAttributeLayer;
+                return static_cast< bool >(mpAttributeLayer);
             }
 
             ShapeAttributeLayerSharedPtr get() const
