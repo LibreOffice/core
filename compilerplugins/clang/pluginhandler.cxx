@@ -109,7 +109,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
            The order here is important, as OUTDIR and WORKDIR are often in SRCDIR/BUILDDIR,
            and BUILDDIR is sometimes in SRCDIR. */
         string modifyFile;
-        if( strncmp( e->getName(), OUTDIR, strlen( OUTDIR )) == 0 )
+        if( strncmp( e->getName(), OUTDIR "/", strlen( OUTDIR "/" )) == 0 )
             {
             /* Try to find a matching file for a file in solver/ (include files
                are usually included from there rather than from the source dir) if possible. */
@@ -127,11 +127,11 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             if( modifyFile.empty())
                 report( DiagnosticsEngine::Warning, "modified source in solver/ : %0" ) << e->getName();
             }
-        else if( strncmp( e->getName(), WORKDIR, strlen( WORKDIR )) == 0 )
+        else if( strncmp( e->getName(), WORKDIR "/", strlen( WORKDIR "/" )) == 0 )
             report( DiagnosticsEngine::Warning, "modified source in workdir/ : %0" ) << e->getName();
-        else if( strcmp( SRCDIR, BUILDDIR ) != 0 && strncmp( e->getName(), BUILDDIR, strlen( BUILDDIR )) == 0 )
+        else if( strcmp( SRCDIR, BUILDDIR ) != 0 && strncmp( e->getName(), BUILDDIR "/", strlen( BUILDDIR "/" )) == 0 )
             report( DiagnosticsEngine::Warning, "modified source in build dir : %0" ) << e->getName();
-        else if( strncmp( e->getName(), SRCDIR, strlen( SRCDIR )) == 0 )
+        else if( strncmp( e->getName(), SRCDIR "/", strlen( SRCDIR "/" )) == 0 )
             ; // ok
         else
             {
