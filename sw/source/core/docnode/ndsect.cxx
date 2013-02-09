@@ -1016,7 +1016,7 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
             if( !pSectFrm->GetLower() )
             {
                 if( pSectFrm->GetPrev() )
-                    pSectFrm->GetPrev()->pNext = pTmp;
+                    pSectFrm->GetPrev()->mpNext = pTmp;
                 else
                     pFrm = pTmp;
                 if( pTmp )
