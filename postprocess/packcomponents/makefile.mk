@@ -223,12 +223,12 @@ my_components += \
 
 .ENDIF
 
-.IF "$(DISABLE_ATL)" == ""
 .IF "$(OS)" == "WNT"
+.IF "$(DISABLE_ATL)" == ""
 my_components += component/embeddedobj/source/msole/emboleobj.windows
+.ENDIF
 .ELSE
 my_components += component/embeddedobj/source/msole/emboleobj
-.ENDIF
 .END
 
 .IF "$(DISABLE_NEON)" != "TRUE"
