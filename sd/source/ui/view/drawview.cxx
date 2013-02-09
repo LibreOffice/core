@@ -77,13 +77,10 @@ namespace sd {
 
 TYPEINIT1(DrawView, View);
 
-/*************************************************************************
-|*
-|* Konstruktor
-|* zeigt die erste Seite des Dokuments auf Position 0,0 an;
-|* falls noch keine Seite vorhanden ist, wird eine erzeugt
-|*
-\************************************************************************/
+/**
+ * Shows the first page of document at position 0,0. In the case
+ * that there is no page a page is created.
+ */
 
 DrawView::DrawView( DrawDocShell* pDocSh, OutputDevice* pOutDev, DrawViewShell* pShell)
 : ::sd::View(*pDocSh->GetDoc(), pOutDev, pShell)
@@ -95,22 +92,14 @@ DrawView::DrawView( DrawDocShell* pDocSh, OutputDevice* pOutDev, DrawViewShell* 
     SetCurrentObj(OBJ_RECT, SdrInventor);
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
 DrawView::~DrawView()
 {
     delete mpVDev;
 }
 
-/*************************************************************************
-|*
-|* virtuelle Methode von SdrView, wird bei Selektionsaenderung gerufen
-|*
-\************************************************************************/
+/**
+ * Virtual method from SdrView, called at selection change.
+ */
 
 void DrawView::MarkListHasChanged()
 {
@@ -120,17 +109,15 @@ void DrawView::MarkListHasChanged()
         mpDrawViewShell->SelectionHasChanged();
 }
 
-/*************************************************************************
-|*
-|* virtuelle Methode von SdrView, wird bei Modelaenderung gerufen
-|*
-\************************************************************************/
+/**
+ * Virtual method from SdrView, called at model change.
+ */
 
 void DrawView::ModelHasChanged()
 {
     ::sd::View::ModelHasChanged();
 
-    // den Gestalter zur Neudarstellung zwingen
+    // force framer to rerender
     SfxStyleSheetBasePool* pSSPool = mrDoc.GetStyleSheetPool();
     pSSPool->Broadcast(SfxStyleSheetPoolHint(SFX_STYLESHEETPOOL_CHANGES));
 
@@ -139,19 +126,17 @@ void DrawView::ModelHasChanged()
 
 }
 
-/*************************************************************************
-|*
-|* Attribute auf Titel- und Gliederungtext und Hintergrundrechteck einer
-|* Masterpage in Vorlagen umlenken, sonst an Basisklasse weitergeben
-|*
-\************************************************************************/
+/**
+ * Redirect attributes onto title and outline text and background
+ * rectangle of a masterpage into templates, otherwise pass on baseclass.
+ */
 
 sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                                             sal_Bool bReplaceAll)
 {
     sal_Bool bOk = sal_False;
 
-    // wird eine Masterpage bearbeitet?
+    // is there a masterpage edit?
     if ( mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE )
     {
         SfxStyleSheetBasePool* pStShPool = mrDoc.GetStyleSheetPool();
@@ -176,7 +161,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                 {
                     // Presentation object (except outline)
                     SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj( ePresObjKind );
-                    DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
+                    DBG_ASSERT(pSheet, "StyleSheet not found");
 
                     SfxItemSet aTempSet( pSheet->GetItemSet() );
                     aTempSet.Put( rSet );
@@ -201,7 +186,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     pOutliner->SetUpdateMode(sal_False);
                     mpDocSh->SetWaitCursor( sal_True );
 
-                    // Platzhalter durch Vorlagennamen ersetzen
+                    // replace placeholder by template name
                     String aComment(SdResId(STR_UNDO_CHANGE_PRES_OBJECT));
                     xub_StrLen nPos = aComment.Search( (sal_Unicode)'$' );
                     aComment.Erase(nPos, 1);
@@ -222,7 +207,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         aName += (sal_Unicode)(' ');
                         aName += String::CreateFromInt32( (nDepth <= 0) ? 1 : nDepth + 1 );
                         SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
-                        DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
+                        DBG_ASSERT(pSheet, "StyleSheet not found");
 
                         SfxItemSet aTempSet( pSheet->GetItemSet() );
                         aTempSet.Put( rSet );
@@ -321,7 +306,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             aName += String::CreateFromInt32( (sal_Int32)nLevel );
                             SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->
                                                 Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
-                            DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
+                            DBG_ASSERT(pSheet, "StyleSheet not found");
 
                             SfxItemSet aTempSet( pSheet->GetItemSet() );
 
@@ -374,7 +359,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                 bOk = ::sd::View::SetAttributes(rSet, bReplaceAll);
         }
     }
-    else    // nicht auf der Masterpage
+    else    // not at masterpage
     {
         bOk = ::sd::View::SetAttributes(rSet, bReplaceAll);
     }
@@ -382,11 +367,9 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
     return (bOk);
 }
 
-/*************************************************************************
-|*
-|* Notify fuer Aenderung der Seitenanordnung
-|*
-\************************************************************************/
+/**
+ * Notify for change of site arragement
+ */
 
 void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
@@ -422,11 +405,9 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     ::sd::View::Notify(rBC, rHint);
 }
 
-/*************************************************************************
-|*
-|* PageOrderChangedHint blockieren/freigeben
-|*
-\************************************************************************/
+/**
+ * Lock/Unlock PageOrderChangedHint
+ */
 
 void DrawView::BlockPageOrderChangedHint(sal_Bool bBlock)
 {
@@ -434,23 +415,21 @@ void DrawView::BlockPageOrderChangedHint(sal_Bool bBlock)
         mnPOCHSmph++;
     else
     {
-        DBG_ASSERT(mnPOCHSmph, "Zaehlerunterlauf");
+        DBG_ASSERT(mnPOCHSmph, "counter overflow");
         mnPOCHSmph--;
     }
 }
 
-/*************************************************************************
-|*
-|* StyleSheet-Setzen auf der Masterpage abfangen, wenn Praesentationsobjekte
-|* selektiert sind
-|*
-\************************************************************************/
+/**
+ * If presentation objects are selected, intercept stylesheet-positing at
+ * masterpage.
+ */
 
 sal_Bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
 {
     sal_Bool bResult = sal_True;
 
-    // wird eine Masterpage bearbeitet?
+    // is there a masterpage edit?
     if (mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE)
     {
         if (IsPresObjSelected(sal_False, sal_True))
@@ -472,11 +451,9 @@ sal_Bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemov
     return bResult;
 }
 
-/*************************************************************************
-|*
-|* Paint-Methode: das Ereignis wird an die View weitergeleitet
-|*
-\************************************************************************/
+/**
+ * Paint-method: Redirect event to the view
+ */
 
 void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
 {
@@ -510,11 +487,9 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::co
     }
 }
 
-/*************************************************************************
-|*
-|* Paint-Event during running slide show
-|*
-\************************************************************************/
+/**
+ * Paint-Event during running slide show
+ */
 
 void DrawView::PresPaint(const Region& rRegion)
 {
@@ -526,21 +501,19 @@ void DrawView::PresPaint(const Region& rRegion)
     }
 }
 
-/*************************************************************************
-|* entscheidet, ob ein Objekt markiert werden kann (z. B. noch nicht
-|* erschienene Animationsobjekte in der Diashow)
-\************************************************************************/
+/**
+ * Decides if an object could get marked (eg. unreleased animation objects
+ * in slide show).
+ */
 
 sal_Bool DrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
 {
     return FmFormView::IsObjMarkable(pObj, pPV);
 }
 
-/*************************************************************************
-|*
-|* Uebergebenen Bereich sichtbar machen (es wird ggf. gescrollt)
-|*
-\************************************************************************/
+/**
+ * Make passed region visible (scrolling if necessary)
+ */
 
 void DrawView::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 {
@@ -549,11 +522,10 @@ void DrawView::MakeVisible(const Rectangle& rRect, ::Window& rWin)
         mpDrawViewShell->MakeVisible(rRect, rWin);
     }
 }
-/*************************************************************************
-|*
-|* Seite wird gehided
-|*
-\************************************************************************/
+
+/**
+ * Hide page.
+ */
 
 void DrawView::HideSdrPage()
 {

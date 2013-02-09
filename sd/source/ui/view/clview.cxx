@@ -19,7 +19,6 @@
 
 #include <sfx2/app.hxx>
 
-
 #include "ClientView.hxx"
 #include "drawview.hxx"
 #include "sdpage.hxx"
@@ -30,12 +29,9 @@ namespace sd {
 
 class DrawViewShell;
 
-
-/*************************************************************************
-|*
-|* Ctor: Die ClientView wird fuer DrawDocShell::Draw() verwendet
-|*
-\************************************************************************/
+/**
+ * ClientView is used for DrawDocShell::Draw()
+ */
 
 ClientView::ClientView(
     DrawDocShell* pDocSh,
@@ -46,22 +42,14 @@ ClientView::ClientView(
 }
 
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
 ClientView::~ClientView()
 {
 }
 
-/*************************************************************************
-|*
-|* Wenn die View kein Invalidate() an den Fenstern durchfuehren soll, muss
-|* man diese Methode ueberladen und entsprechend anders reagieren.
-|*
-\************************************************************************/
+/**
+ * If View should not Invalidate() the windows, this method has
+ * to be overloaded and properly handled.
+ */
 
 void ClientView::InvalidateOneWin(::Window& rWin)
 {
@@ -69,12 +57,10 @@ void ClientView::InvalidateOneWin(::Window& rWin)
     CompleteRedraw(&rWin, aRegion);
 }
 
-/*************************************************************************
-|*
-|* Wenn die View kein Invalidate() an den Fenstern durchfuehren soll, muss
-|* man diese Methode ueberladen und entsprechend anders reagieren.
-|*
-\************************************************************************/
+/**
+ * If View should not Invalidate() the windows, this method has
+ * to be overloaded and properly handled.
+ */
 
 void ClientView::InvalidateOneWin(::Window& rWin, const Rectangle& rRect)
 {

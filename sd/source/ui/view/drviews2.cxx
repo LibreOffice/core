@@ -112,15 +112,13 @@ public:
     }
 };
 
-/*************************************************************************
-|*
-|* SfxRequests fuer temporaere Funktionen
-|*
-\************************************************************************/
+/**
+ * SfxRequests for temporary actions
+ */
 
 void DrawViewShell::FuTemporary(SfxRequest& rReq)
 {
-    // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
+    // during a native slide show nothing gets executed!
     if(SlideShow::IsRunning( GetViewShellBase() ) && (rReq.GetSlot() != SID_NAVIGATOR))
         return;
 
@@ -134,7 +132,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
     sal_uInt16 nSId = rReq.GetSlot();
 
-    // Slot wird gemapped (ToolboxImages/-Slots)
+    // Slot gets mapped (ToolboxImages/-Slots)
     MapSlot( nSId );
 
     switch ( nSId )
@@ -164,9 +162,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
-        // Flaechen und Linien-Attribute:
-        // Sollten (wie StateMethode) eine eigene
-        // Execute-Methode besitzen
+        // area and line attributes: shall have
+        // an own Execute method (like StateMethode)
         case SID_ATTR_FILL_STYLE:
         case SID_ATTR_FILL_COLOR:
         case SID_ATTR_FILL_GRADIENT:
@@ -187,7 +184,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 sal_Bool bMergeUndo = sal_False;
                 ::svl::IUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
 
-                // Anpassungen Start/EndWidth
+                // adjustment Start/EndWidth
                 if(nSId == SID_ATTR_LINE_WIDTH)
                 {
                     SdrObject* pObj = NULL;
@@ -238,7 +235,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 if (nSId == SID_ATTR_FILL_SHADOW)
                 {
-                    // Ggf. werden transparente Objekte wei?gefuellt
+                    // possibly transparent objects are filled white
                     SdrObject* pObj = NULL;
                     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
                     sal_uLong nCount = rMarkList.GetMarkCount();
@@ -262,8 +259,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             {
                                 if( bUndo )
                                 {
-                                    // Vorlage hat keine Fuellung,
-                                    // daher hart attributieren: Fuellung setzen
+                                    // template has no filling, so force
+                                    // filling (hard) attribute
                                     if (!bMergeUndo)
                                     {
                                         bMergeUndo = sal_True;
@@ -327,7 +324,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_HYPHENATION:
         {
             // const SfxPoolItem* pItem = rReq.GetArg( SID_HYPHENATION );
-            //  ^-- Soll so nicht benutzt werden (Defaults sind falsch) !
+            //  ^-- should not be used (defaults are wrong) !
             SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_HYPHENATION, sal_False);
 
             if( pItem )
@@ -337,9 +334,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                 mpDrawView->SetAttributes( aSet );
             }
-            else // nur zum Test
+            else // only for testing purpose
             {
-                OSL_FAIL(" Kein Wert fuer Silbentrennung!");
+                OSL_FAIL(" no value for hyphenation!");
                 SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
                 sal_Bool bValue = sal_True;
                 aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
@@ -494,7 +491,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
-        case SID_PAGESIZE :  // entweder dieses (kein menueeintrag o. ae. !!)
+        case SID_PAGESIZE :  // either this (no menu entries or something else!)
         {
             const SfxItemSet *pArgs = rReq.GetArgs ();
 
@@ -518,7 +515,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             break;
         }
 
-        case SID_PAGEMARGIN :  // oder dieses (kein menueeintrag o. ae. !!)
+        case SID_PAGEMARGIN :  // or this (no menu entries or something else!)
         {
             const SfxItemSet *pArgs = rReq.GetArgs ();
 
@@ -570,7 +567,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             rReq.Done ();
             break;
         }
-        case SID_ZOOMING :  // kein Menueintrag, sondern aus dem Zoomdialog generiert
+        case SID_ZOOMING :  // no menu entry, but generated from zoom dialog
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -639,7 +636,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                // hier den Zoom-Dialog oeffnen
+                // open zoom dialog
                 SetCurrentFunction( FuScale::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             }
             Cancel();
@@ -685,7 +682,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             Cancel();
 
             if( HasCurrentFunction(SID_BEZIER_EDIT) )
-            {   // ggf. die richtige Editfunktion aktivieren
+            {   // where applicable, activate right edit action
                 GetViewFrame()->GetDispatcher()->Execute(SID_SWITCH_POINTEDIT,
                                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
             }
@@ -843,10 +840,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
                 sal_uLong nCount = rMarkList.GetMarkCount();
 
-                // In diese Liste werden fuer jedes Praesentationsobjekt ein SfxItemSet
-                // der harten Attribute sowie der UserCall eingetragen, da diese beim nachfolgenden
-                // mpDrawView->SetAttributes( *pSet, sal_True ) verloren gehen und spaeter restauriert
-                // werden muessen
+                // For every presentation object a SfxItemSet of hard attributes
+                // and the UserCall is stored in this list. This is because
+                // at the following mpDrawView->SetAttributes( *pSet, sal_True )
+                // they get lost and have to be restored.
                 std::vector<std::pair<SfxItemSet*,SdrObjUserCall*> > aAttrList;
                 SdPage* pPresPage = (SdPage*) mpDrawView->GetSdrPageView()->GetPage();
                 sal_uLong i;
@@ -884,13 +881,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
                         {
                             pSheet = mpActualPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
-                            DBG_ASSERT(pSheet, "Vorlage fuer Gliederungsobjekt nicht gefunden");
+                            DBG_ASSERT(pSheet, "Template for outline object not found");
                             if (pSheet)
                             {
                                 pObj->StartListening(*pSheet);
 
                                 if( nLevel == 1 )
-                                    // Textrahmen hoert auf StyleSheet der Ebene1
+                                    // text frame listens on StyleSheet of level1
                                     pObj->NbcSetStyleSheet(pSheet, sal_False);
 
                             }
@@ -1041,9 +1038,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         default:
         {
-            // switch Anweisung wegen CLOOKS aufgeteilt. Alle case-Anweisungen die
-            // eine Fu???? -Funktion aufrufen, sind in die Methode FuTemp01 (drviews8)
-            // gewandert.
+            // Switch statement splitted because of CLOOKS. All case-statements
+            // which call a Fu???? - function, are gone into FuTemp01 (drviews8)
             FuTemp01(rReq);
         }
         break;

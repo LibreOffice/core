@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "BezierObjectBar.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
-
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 
@@ -33,10 +31,7 @@
 #include <svx/svdundo.hxx>
 #include <sfx2/dispatch.hxx>
 
-
 #include "sdresid.hxx"
-
-
 
 #include "res_bmp.hrc"
 #include "glob.hrc"
@@ -57,13 +52,9 @@ using namespace sd;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Standardinterface deklarieren (Die Slotmap darf nicht leer sein)
-|*
-\************************************************************************/
-
-
+/**
+ * Declare default interface (Slotmap must not be empty)
+ */
 
 SFX_IMPL_INTERFACE(BezierObjectBar, ::SfxShell, SdResId(STR_BEZIEROBJECTBARSHELL))
 {
@@ -71,11 +62,6 @@ SFX_IMPL_INTERFACE(BezierObjectBar, ::SfxShell, SdResId(STR_BEZIEROBJECTBARSHELL
 
 TYPEINIT1(BezierObjectBar, ::SfxShell);
 
-/*************************************************************************
-|*
-|* Standard-Konstruktor
-|*
-\************************************************************************/
 
 BezierObjectBar::BezierObjectBar(
     ViewShell* pSdViewShell,
@@ -92,11 +78,6 @@ BezierObjectBar::BezierObjectBar(
     SetHelpId( SD_IF_SDDRAWBEZIEROBJECTBAR );
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 BezierObjectBar::~BezierObjectBar()
 {
@@ -104,17 +85,15 @@ BezierObjectBar::~BezierObjectBar()
 }
 
 
-/*************************************************************************
-|*
-|* Status der Attribut-Items
-|*
-\************************************************************************/
+/**
+ * Status of attribute items.
+ */
 
 void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
 {
     SfxItemSet aAttrSet( mpView->GetDoc().GetPool() );
     mpView->GetAttributes( aAttrSet );
-    rSet.Put(aAttrSet, sal_False); // <- sal_False, damit DontCare-Status uebernommen wird
+    rSet.Put(aAttrSet, sal_False); // <- sal_False, so DontCare-Status gets aquired
 
     FunctionReference xFunc( mpViewSh->GetCurrentFunction() );
 
@@ -221,12 +200,9 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
     }
 }
 
-
-/*************************************************************************
-|*
-|* Bearbeitung der SfxRequests
-|*
-\************************************************************************/
+/**
+ * Process SfxRequests
+ */
 
 void BezierObjectBar::Execute(SfxRequest& rReq)
 {

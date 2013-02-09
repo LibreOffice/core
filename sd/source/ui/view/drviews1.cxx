@@ -114,12 +114,6 @@ void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 }
 
 
-/*************************************************************************
-|*
-|* Deactivate()
-|*
-\************************************************************************/
-
 void DrawViewShell::Deactivate(sal_Bool bIsMDIActivate)
 {
     ViewShell::Deactivate(bIsMDIActivate);
@@ -146,11 +140,10 @@ namespace
     }
 }
 
-/*************************************************************************
-|*
-|* Wird gerufen, wenn sich der Selektionszustand der View aendert
-|*
-\************************************************************************/
+/**
+ * Called, if state of selection of view is changed
+ */
+
 void DrawViewShell::SelectionHasChanged (void)
 {
     Invalidate();
@@ -192,9 +185,7 @@ void DrawViewShell::SelectionHasChanged (void)
         Client* pIPClient = static_cast<Client*>(rBase.GetIPClient());
         if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
         {
-            /**********************************************************************
-            * Ggf. OLE-Objekt beruecksichtigen und deaktivieren
-            **********************************************************************/
+            // as appropriate take ole-objects into account and deactivate
 
             // this means we recently deselected an inplace active ole object so
             // we need to deselect it now
@@ -265,13 +256,9 @@ void DrawViewShell::SelectionHasChanged (void)
     GetViewShellBase().GetDrawController().FireSelectionChangeListener();
 }
 
-
-/*************************************************************************
-|*
-|* Zoomfaktor setzen
-|*
-\************************************************************************/
-
+/**
+ * set zoom factor
+ */
 void DrawViewShell::SetZoom( long nZoom )
 {
     // Make sure that the zoom factor will not be recalculated on
@@ -283,11 +270,9 @@ void DrawViewShell::SetZoom( long nZoom )
     mpViewOverlayManager->onZoomChanged();
 }
 
-/*************************************************************************
-|*
-|* Zoomrechteck fuer aktives Fenster einstellen
-|*
-\************************************************************************/
+/**
+ * Set zoom rectangle for active window
+ */
 
 void DrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
 {
@@ -297,12 +282,10 @@ void DrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
     mpViewOverlayManager->onZoomChanged();
 }
 
-/*************************************************************************
-|*
-|* PrepareClose, ggfs. Texteingabe beenden, damit andere Viewshells ein
-|* aktualisiertes Textobjekt vorfinden
-|*
-\************************************************************************/
+/**
+ * PrepareClose, as appropriate end text input, so other viewshells
+ * discover an refreshed text objext.
+ */
 
 sal_uInt16 DrawViewShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
@@ -329,11 +312,9 @@ sal_uInt16 DrawViewShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* Status (Enabled/Disabled) von Menue-SfxSlots setzen
-|*
-\************************************************************************/
+/**
+ * Set status (enabled/disabled) of menu SfxSlots
+ */
 
 void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 {
@@ -358,7 +339,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
         if (mePageKind == PK_HANDOUT)
         {
-            // Bei Handzetteln nur MasterPage zulassen
+            // at handouts only allow MasterPage
             eEMode = EM_MASTERPAGE;
         }
 
@@ -418,7 +399,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
             if (!mpActualPage)
             {
-                // Sofern es keine mpActualPage gibt, wird die erste genommen
+                // as long as there is no mpActualPage, take first
                 mpActualPage = GetDoc()->GetSdPage(0, mePageKind);
             }
 
@@ -496,12 +477,9 @@ bool DrawViewShell::IsLayerModeActive (void) const
 
 
 
-
-/*************************************************************************
-|*
-|* Groesse des TabControls und der ModeButtons zurueckgeben
-|*
-\************************************************************************/
+/**
+ * Return size of TabControls and ModeButtons
+ */
 
 long DrawViewShell::GetHCtrlWidth()
 {
@@ -510,11 +488,9 @@ long DrawViewShell::GetHCtrlWidth()
 }
 
 
-/*************************************************************************
-|*
-|* Horizontales Lineal erzeugen
-|*
-\************************************************************************/
+/**
+ * Generate horizontal ruler
+ */
 
 SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, sal_Bool bIsFirst)
 {
@@ -544,8 +520,8 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, sal_Bool bIsFirst)
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
-    // ... und auch DefTab am Lineal einstellen
-    pRuler->SetDefTabDist( GetDoc()->GetDefaultTabulator() ); // Neu
+    // ... and also set DefTab at the ruler
+    pRuler->SetDefTabDist( GetDoc()->GetDefaultTabulator() ); // new
 
     Fraction aUIScale(pWin->GetMapMode().GetScaleX());
     aUIScale *= GetDoc()->GetUIScale();
@@ -554,11 +530,9 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, sal_Bool bIsFirst)
     return pRuler;
 }
 
-/*************************************************************************
-|*
-|* Vertikales Lineal erzeugen
-|*
-\************************************************************************/
+/**
+ * Generate vertical ruler
+ */
 
 SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
 {
@@ -585,11 +559,9 @@ SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
     return pRuler;
 }
 
-/*************************************************************************
-|*
-|* Horizontales Lineal aktualisieren
-|*
-\************************************************************************/
+/**
+ * Refresh horizontal ruler
+ */
 
 void DrawViewShell::UpdateHRuler()
 {
@@ -602,11 +574,9 @@ void DrawViewShell::UpdateHRuler()
         mpHorizontalRuler->ForceUpdate();
 }
 
-/*************************************************************************
-|*
-|* Vertikales Lineal aktualisieren
-|*
-\************************************************************************/
+/**
+ * Refresh vertical ruler
+ */
 
 void DrawViewShell::UpdateVRuler()
 {
@@ -618,22 +588,18 @@ void DrawViewShell::UpdateVRuler()
         mpVerticalRuler->ForceUpdate();
 }
 
-/*************************************************************************
-|*
-|* Metrik setzen
-|*
-\************************************************************************/
+/**
+ * Set metric
+ */
 
 void DrawViewShell::SetUIUnit(FieldUnit eUnit)
 {
     ViewShell::SetUIUnit(eUnit);
 }
 
-/*************************************************************************
-|*
-|* TabControl nach Splitteraenderung aktualisieren
-|*
-\************************************************************************/
+/**
+ * Refresh TabControl on splitter change
+ */
 
 IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab )
 {
@@ -677,12 +643,9 @@ SdPage* DrawViewShell::getCurrentPage() const
     }
 }
 
-/*************************************************************************
-|*
-|* neue aktuelle Seite auswaehlen, falls sich die Seitenfolge geaendert
-|* hat (z. B. durch Undo)
-|*
-\************************************************************************/
+/**
+ * Select new refreshed page, in case of a page order change (eg. by undo)
+ */
 
 void DrawViewShell::ResetActualPage()
 {
@@ -699,7 +662,7 @@ void DrawViewShell::ResetActualPage()
     if (meEditMode == EM_PAGE)
     {
 
-        // Update fuer TabControl
+        // Update for TabControl
         maTabControl.Clear();
 
         SdPage* pPage = NULL;
@@ -711,7 +674,7 @@ void DrawViewShell::ResetActualPage()
             aPageName = pPage->GetName();
             maTabControl.InsertPage(i + 1, aPageName);
 
-            // Selektionskennungen der Seiten korrigieren
+            // correct selection recognition of the pages
             GetDoc()->SetSelected(pPage, i == nCurrentPage);
         }
 
@@ -743,12 +706,9 @@ void DrawViewShell::ResetActualPage()
                 SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
 
-/*************************************************************************
-|*
-|* Verb auf OLE-Objekt anwenden
-|*
-\************************************************************************/
-
+/**
+ * Apply "Verb" on OLE-object.
+ */
 
 ErrCode DrawViewShell::DoVerb(long nVerb)
 {
@@ -775,11 +735,9 @@ ErrCode DrawViewShell::DoVerb(long nVerb)
 }
 
 
-/*************************************************************************
-|*
-|* OLE-Object aktivieren
-|*
-\************************************************************************/
+/**
+ * Activate OLE-object
+ */
 
 sal_Bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 {
@@ -800,12 +758,10 @@ sal_Bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     return(bActivated);
 }
 
-/*************************************************************************
-|*
-|* Auf gewuenschte Seite schalten
-|* Der Parameter nSelectedPage bezieht sich auf den aktuellen EditMode
-|*
-\************************************************************************/
+/**
+ * Switch to desired page.
+ * nSelectPage refers to the current EditMode
+ */
 
 void LclResetFlag (bool& rbFlag) {rbFlag = false;}
 
@@ -926,7 +882,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         {
             SdPage* pMaster = GetDoc()->GetMasterSdPage(nSelectedPage, mePageKind);
 
-            // Passt die selektierte Seite zur MasterPage?
+            // does the selected page fit to the masterpage?
             sal_uInt16 nPageCount = GetDoc()->GetSdPageCount(mePageKind);
             for (sal_uInt16 i = 0; i < nPageCount; i++)
             {
@@ -940,7 +896,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
             if (!mpActualPage)
             {
-                // Die erste Seite nehmen, welche zur MasterPage passt
+                // take the first page, that fits to the masterpage
                 for (sal_uInt16 i = 0; i < nPageCount; i++)
                 {
                     SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
@@ -955,24 +911,24 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
         for (sal_uInt16 i = 0; i < GetDoc()->GetSdPageCount(mePageKind); i++)
         {
-            // Alle Seiten deselektieren
+            // deselect all pages
             GetDoc()->SetSelected( GetDoc()->GetSdPage(i, mePageKind), sal_False);
         }
 
         if (!mpActualPage)
         {
-            // Sofern es keine mpActualPage gibt, wird die erste genommen
+            // as far as there is no mpActualPage, take the first
             mpActualPage = GetDoc()->GetSdPage(0, mePageKind);
         }
 
-        // diese Seite auch selektieren (mpActualPage zeigt immer auf Zeichenseite,
-        // nie auf eine Masterpage)
+        // also select this page (mpActualPage always points at a drawing page,
+        // never at a masterpage)
         GetDoc()->SetSelected(mpActualPage, sal_True);
 
         rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
         if( !xSlideshow.is() || !xSlideshow->isRunning() || ( xSlideshow->getAnimationMode() != ANIMATIONMODE_SHOW ) )
         {
-            // VisArea zuziehen, um ggf. Objekte zu deaktivieren
+            // tighten VisArea, to possibly deactivate objects
             // !!! only if we are not in presentation mode (#96279) !!!
             OSL_ASSERT (GetViewShell()!=NULL);
             GetViewShell()->DisconnectAllClients();
@@ -1138,7 +1094,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         VisAreaChanged(aVisAreaWin);
         mpDrawView->VisAreaChanged(GetActiveWindow());
 
-        // Damit der Navigator (und das Effekte-Window) das mitbekommt (/-men)
+        // so navigator (and effect window) notice that
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, sal_True, sal_False);
         rBindings.Invalidate(SID_STATUS_PAGE, sal_True, sal_False);
@@ -1155,11 +1111,9 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 }
 
 
-/*************************************************************************
-|*
-|* Pruefen, ob ein Seitenwechsel erlaubt ist
-|*
-\************************************************************************/
+/**
+ * Check if page change is allowed
+ */
 
 sal_Bool DrawViewShell::IsSwitchPageAllowed() const
 {
@@ -1172,12 +1126,9 @@ sal_Bool DrawViewShell::IsSwitchPageAllowed() const
     return bOK;
 }
 
-/*************************************************************************
-|*
-|* neue aktuelle Seite auswaehlen, falls sich die Seitenfolge geaendert
-|* hat (z. B. durch Undo)
-|*
-\************************************************************************/
+/**
+ * Select new refreshed page, in case of a page order change (eg. by undo)
+ */
 
 void DrawViewShell::ResetActualLayer()
 {
@@ -1190,9 +1141,9 @@ void DrawViewShell::ResetActualLayer()
         sal_uInt16 nOldLayerCnt = pLayerBar->GetPageCount();
         sal_uInt16 nOldLayerId = pLayerBar->GetCurPageId();
 
-        /*************************************************************
-            * Update fuer LayerTab
-            *************************************************************/
+        /**
+         * Update for LayerTab
+         */
         pLayerBar->Clear();
 
         String aName;
@@ -1219,7 +1170,7 @@ void DrawViewShell::ResetActualLayer()
             {
                 if (meEditMode == EM_MASTERPAGE)
                 {
-                    // Layer der Page nicht auf MasterPage anzeigen
+                    // don't show page layer onto the masterpage
                     if (aName != aLayoutLayer   &&
                         aName != aControlsLayer &&
                         aName != aMeasureLinesLayer)
@@ -1231,7 +1182,7 @@ void DrawViewShell::ResetActualLayer()
 
                         if (pPV && !pPV->IsLayerVisible(aName))
                         {
-                            // Unsichtbare Layer werden anders dargestellt
+                            // invisible layers are displayed differently
                             nBits = TPB_SPECIAL;
                         }
 
@@ -1240,7 +1191,7 @@ void DrawViewShell::ResetActualLayer()
                 }
                 else
                 {
-                    // Layer der MasterPage nicht auf Page anzeigen
+                    // don't show masterpage layer onto the page
                     if ( aName != aBackgroundObjLayer )
                     {
                         pLayerBar->InsertPage(nLayer+1, aName);
@@ -1249,7 +1200,7 @@ void DrawViewShell::ResetActualLayer()
 
                         if (!mpDrawView->GetSdrPageView()->IsLayerVisible(aName))
                         {
-                            // Unsichtbare Layer werden anders dargestellt
+                            // invisible layers are displayed differently
                             nBits = TPB_SPECIAL;
                         }
 
@@ -1279,11 +1230,9 @@ void DrawViewShell::ResetActualLayer()
     }
 }
 
-/*************************************************************************
-|*
-|* Verzoegertes Close ausfuehren
-|*
-\************************************************************************/
+/**
+ * Execute a delayed close
+ */
 
 IMPL_LINK( DrawViewShell, CloseHdl, Timer*, pTimer )
 {
@@ -1292,11 +1241,9 @@ IMPL_LINK( DrawViewShell, CloseHdl, Timer*, pTimer )
     return 0L;
 }
 
-/*************************************************************************
-|*
-|* AcceptDrop
-|*
-\************************************************************************/
+/**
+ * AcceptDrop
+ */
 
 sal_Int8 DrawViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
@@ -1314,11 +1261,9 @@ sal_Int8 DrawViewShell::AcceptDrop (
     return mpDrawView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer );
 }
 
-/*************************************************************************
-|*
-|* ExecuteDrop
-|*
-\************************************************************************/
+/**
+ * ExecuteDrop
+ */
 
 sal_Int8 DrawViewShell::ExecuteDrop (
     const ExecuteDropEvent& rEvt,

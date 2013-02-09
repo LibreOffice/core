@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TextObjectBar.hxx"
-
 
 #include <svx/svxids.hrc>
 
@@ -57,7 +55,6 @@
 #include <editeng/frmdiritem.hxx>
 #include <svl/itemiter.hxx>
 
-
 #include "app.hrc"
 
 #include "eetext.hxx"
@@ -73,11 +70,9 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Bearbeitung der SfxRequests
-|*
-\************************************************************************/
+/**
+ * Process SfxRequests
+ */
 
 void TextObjectBar::Execute( SfxRequest &rReq )
 {
@@ -186,10 +181,10 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             }
             else
             {
-                // Der folgende Code kann enabled werden, wenn ich von
-                // JOE einen richtigen Status (DontCare) bekomme;
+                // the following code could be enabled, if I get a correct
+                // DontCare status from JOE.
 
-                // Wird enabled, obwohl es nicht richtig funktioniert (s.o.)
+                // gets enabled, through it doesn't really work (see above)
                 SfxItemSet aEditAttr( mpView->GetDoc().GetPool() );
                 mpView->GetAttributes( aEditAttr );
                 if( aEditAttr.GetItemState( EE_PARA_ULSPACE ) >= SFX_ITEM_AVAILABLE )
@@ -227,8 +222,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             rReq.Done();
 
             Invalidate();
-            // Um die Preview (im Gliederungsmodus) zu aktualisieren muss
-            // der Slot invalidiert werden:
+            // to refresh preview (in outline mode), slot has to be invalidated:
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
         }
         break;
@@ -343,7 +337,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
             if( !pArgs )
             {
-                //aNewAttr.InvalidateAllItems(); <- Macht Probleme (#35465#)
+                //aNewAttr.InvalidateAllItems(); <- produces problems (#35465#)
 
                 switch ( nSlot )
                 {
@@ -472,7 +466,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     }
                     break;
 
-                    // Attribute fuer die TextObjectBar
+                    // attributes for TextObjectBar
                     case SID_ATTR_CHAR_FONT:
                     {
                         if( pArgs )
@@ -556,12 +550,11 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
             mpView->SetAttributes(*pArgs);
 
-            // Aus Performance- und Erweiterungsgruenden wird
-            // jetzt die komplette Shell invalidiert
+            // invalidate entire shell because of performance and
+            // extension reasons
             Invalidate();
 
-            // Um die Preview (im Gliederungsmodus) zu aktualisieren muss
-            // der Slot invalidiert werden:
+            // to refresh preview (in outline mode), slot has to be invalidated:
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
         }
         break;

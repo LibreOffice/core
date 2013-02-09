@@ -74,13 +74,10 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Standardinterface deklarieren (Die Slotmap darf nicht leer sein, also
-|* tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
-|*
-\************************************************************************/
-
+/**
+ * Declare default interface (Slotmap must not be empty, therefore enter
+ * something that (hopefully) never occurs.
+ */
 
 SFX_IMPL_INTERFACE( TextObjectBar, SfxShell, SdResId(STR_TEXTOBJECTBARSHELL) )
 {
@@ -88,11 +85,6 @@ SFX_IMPL_INTERFACE( TextObjectBar, SfxShell, SdResId(STR_TEXTOBJECTBARSHELL) )
 
 TYPEINIT1( TextObjectBar, SfxShell );
 
-/*************************************************************************
-|*
-|* Standard-Konstruktor
-|*
-\************************************************************************/
 
 TextObjectBar::TextObjectBar (
     ViewShell* pSdViewSh,
@@ -129,22 +121,15 @@ TextObjectBar::TextObjectBar (
     // SetHelpId( SD_IF_SDDRAWTEXTOBJECTBAR );
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 TextObjectBar::~TextObjectBar()
 {
     SetRepeatTarget(NULL);
 }
 
-/*************************************************************************
-|*
-|* Status der Attribut-Items
-|*
-\************************************************************************/
+/**
+ * Status of attribute items.
+ */
 
 void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 {
@@ -242,7 +227,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 if (pOLV &&
                     ( pOLV->GetOutliner()->GetMode() == OUTLINERMODE_OUTLINEOBJECT || bOutlineViewSh ) )
                 {
-                    // Outliner im Gliederungsmodus
+                    // Outliner at outline-mode
                     ::Outliner* pOutl = pOLV->GetOutliner();
 
                     std::vector<Paragraph*> aSelList;
@@ -259,7 +244,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         // is a title object (and thus depth==1)
                         if(pOutl->GetAbsPos(pPara) > 1 || ( pOutl->HasParaFlag(pPara,PARAFLAG_ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
                         {
-                            // Nicht ganz oben
+                            // not at top
                             bDisableUp = sal_False;
                         }
                     }
@@ -268,7 +253,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         // old behaviour for OUTLINERMODE_OUTLINEOBJECT
                         if(pOutl->GetAbsPos(pPara) > 0)
                         {
-                            // Nicht ganz oben
+                            // not at top
                             bDisableUp = sal_False;
                         }
                     }
@@ -281,14 +266,14 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                         if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE )) )
                         {
-                            // Nicht minimale Tiefe
+                            // not minimum depth
                             bDisableLeft = sal_False;
                         }
 
                         if( (nDepth < pOLV->GetOutliner()->GetMaxDepth() && ( !bOutlineViewSh || pOutl->GetAbsPos(pPara) != 0 )) ||
                             (bOutlineViewSh && (nDepth <= 0) && pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) && pOutl->GetAbsPos(pPara) != 0) )
                         {
-                            // Nicht maximale Tiefe und nicht ganz oben
+                            // not maximum depth and not at top
                             bDisableRight = sal_False;
                         }
                     }
@@ -296,7 +281,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     if ( ( pOutl->GetAbsPos(pPara) < pOutl->GetParagraphCount() - 1 ) &&
                          ( pOutl->GetParagraphCount() > 1 || !bOutlineViewSh) )
                     {
-                        // Nicht letzter Absatz
+                        // not last paragraph
                         bDisableDown = sal_False;
                     }
 
@@ -394,10 +379,10 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 
-    rSet.Put( aAttrSet, sal_False ); // <- sal_False, damit DontCare-Status uebernommen wird
+    rSet.Put( aAttrSet, sal_False ); // <- sal_False, so DontCare-Status gets aquired
 
 
-    // die sind im Gliederungsmodus disabled
+    // these are disabled in outline-mode
     if (!mpViewShell->ISA(DrawViewShell))
     {
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_LEFT );
@@ -416,7 +401,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     }
     else
     {
-        // Absatzabstand
+        // paragraph spacing
         OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
         if( pOLV )
         {
@@ -441,12 +426,12 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         }
         else
         {
-            // Wird zur Zeit nie disabled !
+            // never disabled at the moment!
             //rSet.DisableItem( SID_PARASPACE_INCREASE );
             //rSet.DisableItem( SID_PARASPACE_DECREASE );
         }
 
-        // Absatzausrichtung
+        // paragraph justification
         SvxAdjust eAdj = ( (const SvxAdjustItem&) aAttrSet.Get( EE_PARA_JUST ) ).GetAdjust();
         switch( eAdj )
         {
@@ -530,7 +515,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         }
     }
 
-    // Ausrichtung (hoch/tief) wird auch im Gliederungsmodus gebraucht
+    // justification (superscript, subscript) is also needed in outline-mode
     SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
                     aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
@@ -540,11 +525,9 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, sal_True ) );
 }
 
-/*************************************************************************
-|*
-|* Command event
-|*
-\************************************************************************/
+/**
+ * Command event
+ */
 
 void TextObjectBar::Command( const CommandEvent& )
 {
