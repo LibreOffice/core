@@ -1230,9 +1230,9 @@ public:
     /** Returns true, if the axis contains caption labels. */
     inline bool         HasLabels() const { return !mxTick || mxTick->HasLabels(); }
     /** Returns true, if the axis shows its major grid lines. */
-    inline bool         HasMajorGrid() const { return mxMajorGrid; }
+    inline bool         HasMajorGrid() const { return static_cast< bool >(mxMajorGrid); }
     /** Returns true, if the axis shows its minor grid lines. */
-    inline bool         HasMinorGrid() const { return mxMinorGrid; }
+    inline bool         HasMinorGrid() const { return static_cast< bool >(mxMinorGrid); }
 
     /** Creates an API axis object. */
     XAxisRef            CreateAxis( const XclImpChTypeGroup& rTypeGroup, const XclImpChAxis* pCrossingAxis ) const;

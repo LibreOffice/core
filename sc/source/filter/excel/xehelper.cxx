@@ -303,7 +303,7 @@ rtl::OUString XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlFie
     if( GetBiff() == EXC_BIFF8 )    // no HLINK records in BIFF2-BIFF7
     {
         // there was/is already a HLINK record
-        mbMultipleUrls = mxLinkRec;
+        mbMultipleUrls = static_cast< bool >(mxLinkRec);
 
         mxLinkRec.reset( new XclExpHyperlink( GetRoot(), rUrlField, maScPos ) );
 

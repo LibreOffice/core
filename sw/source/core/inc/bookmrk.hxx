@@ -75,7 +75,7 @@ namespace sw {
 
             virtual bool IsCoveringPosition(const SwPosition& rPos) const;
             virtual bool IsExpanded() const
-                { return m_pPos2; }
+                { return static_cast< bool >(m_pPos2); }
 
             virtual void SetName(const ::rtl::OUString& rName)
                 { m_aName = rName; }
