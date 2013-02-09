@@ -1525,7 +1525,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     sal_uInt8 nBreakCode = 2;            // default neue Seite beginnen
     bool bOutPgDscSet = true, bLeftRightPgChain = false;
     const SwFrmFmt* pPdFmt = &pPd->GetMaster();
-    const SwFrmFmt* pPdFirstPgFmt = pPdFmt;
     if ( rSepInfo.pSectionFmt )
     {
         // ist pSectionFmt gesetzt, dann gab es einen SectionNode
@@ -1584,7 +1583,15 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         }
     }
 
-    bool titlePage = false;
+    // Libreoffice 4.0 introduces support for page styles (SwPageDesc) with
+    // a different header/footer for the first page.  The same effect can be
+    // achieved by chaining two page styles together (SwPageDesc::GetFollow)
+    // which are identical except for header/footer.
+    // The latter method is still used by the doc/docx import filter.
+    // In both of these cases, we emit a single Word section with different
+    // first page header/footer.
+    const SwFrmFmt* pPdFirstPgFmt = &pPd->GetFirst();
+    bool titlePage = !pPd->IsFirstShared();
     if ( bOutPgDscSet )
     {
         // es ist ein Follow gesetzt und dieser zeigt nicht auf sich
@@ -1600,7 +1607,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         {
             const SwPageDesc *pFollow = pPd->GetFollow();
             const SwFrmFmt& rFollowFmt = pFollow->GetMaster();
-            if ( sw::util::IsPlausableSingleWordSection( *pPdFmt, rFollowFmt ) )
+            if ( sw::util::IsPlausableSingleWordSection( *pPdFirstPgFmt, rFollowFmt ) )
             {
                 if (rSepInfo.pPDNd)
                     pPdFirstPgFmt = pPd->GetPageFmtOfNode( *rSepInfo.pPDNd );
@@ -1629,7 +1636,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         AttrOutput().SectionPageBorders( pPdFmt, pPdFirstPgFmt );
 
         const SfxPoolItem* pItem;
-        if ( pPdFmt != pPdFirstPgFmt && SFX_ITEM_SET ==
+        if ( titlePage && SFX_ITEM_SET ==
                 pPdFirstPgFmt->GetItemState( RES_PAPER_BIN, true, &pItem ) )
         {
             pISet = &pPdFirstPgFmt->GetAttrSet();
@@ -1703,20 +1710,14 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             MSWordSections::SetHeaderFlag( nHeadFootFlags, *pPdFirstPgFmt, WW8_HEADER_FIRST );
             MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdFirstPgFmt, WW8_FOOTER_FIRST );
         }
-        // write other headers/footers only if it's not on the first page - I'm not quite sure
-        // this is technically correct, but it avoids first-page headers/footers
-        // extending to all pages (bnc#654230)
-        if( !titlePage || pPdFmt != pPdFirstPgFmt )
-        {
-            MSWordSections::SetHeaderFlag( nHeadFootFlags, *pPdFmt, WW8_HEADER_ODD );
-            MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdFmt, WW8_FOOTER_ODD );
+        MSWordSections::SetHeaderFlag( nHeadFootFlags, *pPdFmt, WW8_HEADER_ODD );
+        MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdFmt, WW8_FOOTER_ODD );
 
-            if ( !pPd->IsHeaderShared() || bLeftRightPgChain )
-                MSWordSections::SetHeaderFlag( nHeadFootFlags, *pPdLeftFmt, WW8_HEADER_EVEN );
+        if ( !pPd->IsHeaderShared() || bLeftRightPgChain )
+            MSWordSections::SetHeaderFlag( nHeadFootFlags, *pPdLeftFmt, WW8_HEADER_EVEN );
 
-            if ( !pPd->IsFooterShared() || bLeftRightPgChain )
-                MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdLeftFmt, WW8_FOOTER_EVEN );
-        }
+        if ( !pPd->IsFooterShared() || bLeftRightPgChain )
+            MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdLeftFmt, WW8_FOOTER_EVEN );
         AttrOutput().SectionWW6HeaderFooterFlags( nHeadFootFlags );
     }
 
