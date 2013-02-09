@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///cc\u003d",
+        "filename": "setup_native/CustomTarget_mac.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-09T20:15:04Z",
+      "side": 1,
+      "message": "white space",
+      "revId": "2bacc8b8f34096267f0c309b6d8bcbb6d2bb902c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///cY\u003d",
+        "filename": "setup_native/CustomTarget_scripts.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-09T20:15:04Z",
+      "side": 1,
+      "message": "white space",
+      "revId": "2bacc8b8f34096267f0c309b6d8bcbb6d2bb902c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///cU\u003d",
+        "filename": "setup_native/CustomTarget_spell.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-09T20:15:04Z",
+      "side": 1,
+      "message": "white space",
+      "revId": "2bacc8b8f34096267f0c309b6d8bcbb6d2bb902c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
