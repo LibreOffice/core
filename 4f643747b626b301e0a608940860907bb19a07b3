@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///bU\u003d",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-02-09T23:07:44Z",
+      "side": 1,
+      "message": "Why do you use a while loop instead of a for?",
+      "revId": "4f643747b626b301e0a608940860907bb19a07b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///bY\u003d",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-02-09T23:07:44Z",
+      "side": 1,
+      "message": "This should be done outside of the loop.",
+      "revId": "4f643747b626b301e0a608940860907bb19a07b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///bc\u003d",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-02-09T23:07:44Z",
+      "side": 1,
+      "message": "This should be ++it;",
+      "revId": "4f643747b626b301e0a608940860907bb19a07b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
