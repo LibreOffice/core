@@ -1525,7 +1525,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     sal_uInt8 nBreakCode = 2;            // default neue Seite beginnen
     bool bOutPgDscSet = true, bLeftRightPgChain = false;
     const SwFrmFmt* pPdFmt = &pPd->GetMaster();
-    const SwFrmFmt* pPdFirstPgFmt = pPdFmt;
     if ( rSepInfo.pSectionFmt )
     {
         // ist pSectionFmt gesetzt, dann gab es einen SectionNode
@@ -1584,7 +1583,15 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         }
     }
 
-    bool titlePage = false;
+    // Libreoffice 4.0+ introduces support for page styles (SwPageDesc) with
+    // a different header/footer for the first page.  The same effect can be
+    // achieved by chaining two page styles together (SwPageDesc::GetFollow)
+    // which are identical except for header/footer.
+    // The latter method is still used by the doc/docx import filter.
+    // In both of these cases, we emit a single Word section with different
+    // first page header/footer.
+    const SwFrmFmt* pPdFirstPgFmt = &pPd->GetFirst();
+    bool titlePage = pPdFmt != pPdFirstPgFmt;
     if ( bOutPgDscSet )
     {
         // es ist ein Follow gesetzt und dieser zeigt nicht auf sich
@@ -1600,7 +1607,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         {
             const SwPageDesc *pFollow = pPd->GetFollow();
             const SwFrmFmt& rFollowFmt = pFollow->GetMaster();
-            if ( sw::util::IsPlausableSingleWordSection( *pPdFmt, rFollowFmt ) )
+            if ( sw::util::IsPlausableSingleWordSection( *pPdFirstPgFmt, rFollowFmt ) )
             {
                 if (rSepInfo.pPDNd)
                     pPdFirstPgFmt = pPd->GetPageFmtOfNode( *rSepInfo.pPDNd );

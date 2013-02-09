@@ -364,7 +364,7 @@ bool MSWordExportBase::SetAktPageDescFromNode(const SwNode &rNd)
                 bNewPageDesc = true;
             else
             {
-                const SwFrmFmt& rTitleFmt = pAktPageDesc->GetMaster();
+                const SwFrmFmt& rTitleFmt = pAktPageDesc->GetFirst();
                 const SwFrmFmt& rFollowFmt = pCurrent->GetMaster();
 
                 bNewPageDesc = !IsPlausableSingleWordSection(rTitleFmt,
