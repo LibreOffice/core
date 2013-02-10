@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,setup_native/ulf,$(SRCDIR)/setup_native/source/mac))
+$(eval $(call gb_Package_Package,setup_native/ulf,$(SRCDIR)/setup_native/source))
 
 $(eval $(call gb_Package_add_file,setup_native/misc,bin/macinstall.ulf,mac/macinstall.ulf))
 
