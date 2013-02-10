@@ -45,17 +45,11 @@ private:
                 ~ScTabPageProtection();
 
 private:
-    FixedLine   aFlProtect;
-    TriStateBox aBtnHideCell;
-    TriStateBox aBtnProtect;
-    TriStateBox aBtnHideFormula;
-    FixedInfo   aTxtHint;
-
-    FixedLine   aFlPrint;
-    TriStateBox aBtnHidePrint;
-    FixedInfo   aTxtHint2;
-
-                                    // current status:
+    CheckBox*    m_pBtnHideCell;
+    CheckBox*    m_pBtnProtect;
+    CheckBox*    m_pBtnHideFormula;
+    CheckBox*    m_pBtnHidePrint;
+                                        // current status:
     sal_Bool        bTriEnabled;        //  if before - DontCare
     sal_Bool        bDontCare;          //  all in  TriState
     sal_Bool        bProtect;           //  secure individual settings for TriState
@@ -64,7 +58,7 @@ private:
     sal_Bool        bHidePrint;
 
     // Handler:
-    DECL_LINK( ButtonClickHdl, TriStateBox* pBox );
+    DECL_LINK( ButtonClickHdl, CheckBox* pBox );
     void        UpdateButtons();
 };
 

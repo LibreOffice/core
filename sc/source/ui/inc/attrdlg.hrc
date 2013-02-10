@@ -26,15 +26,3 @@
 #define TP_PROTECTION   6
 #define TP_FONTEFF      7
 #define TP_ASIAN        8
-
-//================================================
-// Protected cell TabPage:
-
-#define BTN_PROTECTED           1
-#define BTN_HIDE_FORMULAR       2
-#define BTN_HIDE_ALL            3
-#define FT_HINT                 4
-#define FL_PROTECTION           5
-#define BTN_HIDE_PRINT          6
-#define FT_HINT2                7
-#define FL_PRINT                8
