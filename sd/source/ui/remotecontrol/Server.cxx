@@ -81,18 +81,21 @@ void RemoteServer::execute()
     if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
     {
         SAL_INFO("sdremote", "not in experimental mode, disabling TCP server");
+        spServer = NULL;
         return;
     }
     osl::SocketAddr aAddr( "0", PORT );
     if ( !mSocket.bind( aAddr ) )
     {
         SAL_WARN( "sdremote", "bind failed" << mSocket.getErrorAsString() );
+        spServer = NULL;
         return;
     }
 
     if ( !mSocket.listen(3) )
     {
         SAL_WARN( "sdremote", "listen failed" << mSocket.getErrorAsString() );
+        spServer = NULL;
         return;
     }
     while ( true )
@@ -102,6 +105,7 @@ void RemoteServer::execute()
         if ( mSocket.acceptConnection( aSocket ) == osl_Socket_Error )
         {
             SAL_WARN( "sdremote", "accept failed" << mSocket.getErrorAsString() );
+            spServer = NULL;
             return; // Closed, or other issue.
         }
         BufferedStreamSocket *pSocket = new BufferedStreamSocket( aSocket);
