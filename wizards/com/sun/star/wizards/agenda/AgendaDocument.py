@@ -280,13 +280,10 @@ class AgendaDocument(TextDocument):
         Get the default locale of the document,
         and create the date and time formatters.
         '''
-        AgendaDocument.dateUtils = self.DateUtils(
-            self.xMSF, self.xTextDocument)
-        AgendaDocument.formatter = AgendaDocument.dateUtils.formatter
-        AgendaDocument.dateFormat = \
-            AgendaDocument.dateUtils.getFormat(DATE_SYSTEM_LONG)
-        AgendaDocument.timeFormat = \
-            AgendaDocument.dateUtils.getFormat(TIME_HHMM)
+        self.dateUtils = self.DateUtils(self.xMSF, self.xTextDocument)
+        self.formatter = self.dateUtils.formatter
+        self.dateFormat = self.dateUtils.getFormat(DATE_SYSTEM_LONG)
+        self.timeFormat = self.dateUtils.getFormat(TIME_HHMM)
 
         self.initItemsCache()
         self.allItems = self.searchFillInItems(0)
@@ -306,29 +303,25 @@ class AgendaDocument(TextDocument):
         for i in self.allItems:
             text = i.String.lstrip().lower()
             if text == self.templateConsts.FILLIN_TITLE:
-                AgendaDocument.teTitle = PlaceholderTextElement(
+                self.teTitle = PlaceholderTextElement(
                     i, self.resources.resPlaceHolderTitle,
-                    self.resources.resPlaceHolderHint,
-                    self.xTextDocument)
-                AgendaDocument.trTitle = i
+                    self.resources.resPlaceHolderHint, self.xTextDocument)
+                self.trTitle = i
             elif text == self.templateConsts.FILLIN_DATE:
-                AgendaDocument.teDate = PlaceholderTextElement(
+                self.teDate = PlaceholderTextElement(
                     i, self.resources.resPlaceHolderDate,
-                    self.resources.resPlaceHolderHint,
-                    self.xTextDocument)
-                AgendaDocument.trDate = i
+                    self.resources.resPlaceHolderHint, self.xTextDocument)
+                self.trDate = i
             elif text == self.templateConsts.FILLIN_TIME:
-                AgendaDocument.teTime = PlaceholderTextElement(
+                self.teTime = PlaceholderTextElement(
                     i, self.resources.resPlaceHolderTime,
-                    self.resources.resPlaceHolderHint,
-                    self.xTextDocument)
-                AgendaDocument.trTime = i
+                    self.resources.resPlaceHolderHint, self.xTextDocument)
+                self.trTime = i
             elif text == self.templateConsts.FILLIN_LOCATION:
-                AgendaDocument.teLocation = PlaceholderTextElement(
+                self.teLocation = PlaceholderTextElement(
                     i, self.resources.resPlaceHolderLocation,
-                    self.resources.resPlaceHolderHint,
-                    self.xTextDocument)
-                AgendaDocument.trLocation = i
+                    self.resources.resPlaceHolderHint, self.xTextDocument)
+                self.trLocation = i
             else:
                 auxList.append(i)
         self.allItems = auxList
@@ -367,47 +360,34 @@ class AgendaDocument(TextDocument):
     def redrawTitle(self, controlName):
         try:
             if controlName == "txtTitle":
-                self.writeTitle(
-                    AgendaDocument.teTitle, AgendaDocument.trTitle,
-                    self.agenda.cp_Title)
+                self.teTitle.placeHolderText = self.agenda.cp_Title
+                self.teTitle.write(self.trTitle)
             elif controlName == "txtDate":
-                self.writeTitle(
-                    AgendaDocument.teDate, AgendaDocument.trDate,
-                    self.getDateString(self.agenda.cp_Date))
+                self.teDate.placeHolderText = \
+                    self.getDateString(self.agenda.cp_Date)
+                self.teDate.write(self.trDate)
             elif controlName == "txtTime":
-                self.writeTitle(
-                    AgendaDocument.teTime, AgendaDocument.trTime,
-                    self.getTimeString(self.agenda.cp_Time))
+                self.teTime.placeHolderText = \
+                    self.getTimeString(self.agenda.cp_Time)
+                self.teTime.write(self.trTime)
             elif controlName == "cbLocation":
-                self.writeTitle(
-                    AgendaDocument.teLocation, AgendaDocument.trLocation,
-                    self.agenda.cp_Location)
+                self.teLocation.placeHolderText = self.agenda.cp_Location
+                self.teLocation.write(self.trLocation)
             else:
                 raise IllegalArgumentException ("No such title control...")
         except Exception:
             traceback.print_exc()
 
-    @classmethod
-    def writeTitle(self, te, tr, text):
-        if text is None:
-            te.placeHolderText = ""
-        else:
-            te.placeHolderText = text
-        te.write(tr)
-
-    @classmethod
     def getDateString(self, d):
-        if d is None or d == "":
+        if not d:
             return ""
         date = int(d)
         year = int(date / 10000)
         month = int((date % 10000) / 100)
         day = int(date % 100)
         dateObject = dateTimeObject(year, month, day)
-        return AgendaDocument.dateUtils.format(
-            AgendaDocument.dateFormat, dateObject)
+        return self.dateUtils.format(self.dateFormat, dateObject)
 
-    @classmethod
     def getTimeString(self, s):
         if s is None or s == "":
             return ""
@@ -415,7 +395,7 @@ class AgendaDocument(TextDocument):
         t = ((time / float(1000000)) / float(24)) \
             + ((time % 1000000) / float(1000000)) / float(35)
         return self.formatter.convertNumberToString(
-            AgendaDocument.timeFormat, t)
+            self.timeFormat, t)
 
     def finish(self, topics):
         self.createMinutes(topics)
