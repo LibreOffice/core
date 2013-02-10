@@ -129,8 +129,8 @@ foreach $template (keys %templates) {
             my $translations = $templates{$template}->{'translations'};
             foreach my $locale (keys %{$translations}) {
                 my $value = $translations->{$locale};
-                print "locale is $locale\n";
-                print "value is $value\n";
+                # print "locale is $locale\n";
+                # print "value is $value\n";
                 if ($value) {
                     if ($ext eq "desktop") {
                         print OUTFILE "$outkey\[$locale\]=$value\n";
