@@ -26,7 +26,7 @@ $(scripts_WORKDIR)/fake-db-1.0-0.noarch.rpm: $(SRCDIR)/setup_native/scripts/fake
 	chmod g+w $(scripts_WORKDIR)/fake-db-root
 
 $(scripts_WORKDIR)/install: $(SRCDIR)/setup_native/scripts/install_linux.sh $(scripts_WORKDIR)/fake-db-1.0-0.noarch.rpm
-	$(SRCDIR)/setup_native/scripts/install_create.pl $< $@
+	$(PERL) -w $(SRCDIR)/setup_native/scripts/install_create.pl $< $@
 	chmod 775 $@
 
 $(scripts_WORKDIR)/uninstall: $(SRCDIR)/setup_native/scripts/uninstall_linux.sh
@@ -46,11 +46,11 @@ $(scripts_WORKDIR)/getuid.so.stripped: $(call gb_Library_get_target,getuid)
 	cp $< $@
 	/usr/ccs/bin/strip $@
 $(scripts_WORKDIR)/install: $(SRCDIR)/setup_native/scripts/install_solaris.sh $(scripts_WORKDIR)/getuid.so.stripped
-	$(SRCDIR)/setup_native/scripts/install_create.pl $< $@
+	$(PERL) -w $(SRCDIR)/setup_native/scripts/install_create.pl $< $@
 	chmod 775 $@
 
 $(scripts_WORKDIR)/uninstall: $(SRCDIR)/setup_native/scripts/uninstall_solaris.sh $(scripts_WORKDIR)/getuid.so.stripped
-	$(SRCDIR)/setup_native/scripts/install_create.pl $< $@
+	$(PERL) -w $(SRCDIR)/setup_native/scripts/install_create.pl $< $@
 	chmod 775 $@
 endif
 
