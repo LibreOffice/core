@@ -67,7 +67,6 @@ ScTabPageProtection::ScTabPageProtection( Window*           pParent,
     m_pBtnHideFormula->SetClickHdl( LINK( this, ScTabPageProtection, ButtonClickHdl ) );
     m_pBtnHidePrint->SetClickHdl(   LINK( this, ScTabPageProtection, ButtonClickHdl ) );
 
-    //FreeResource();
 }
 
 // -----------------------------------------------------------------------
