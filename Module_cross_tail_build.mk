@@ -58,6 +58,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	sal \
 	salhelper \
 	sax \
+	setup_native \
 	shell \
 	stoc \
 	store \
