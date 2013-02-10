@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVH///Ws\u003d",
+        "filename": "dbaccess/source/ui/querydesign/limitboxcontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2013-02-10T16:34:50Z",
+      "side": 1,
+      "message": "When using locale with non-ascii native numbers than we have to make sure that the user use only these native numbers and not use ascii digits. It is the reason to return false in this case.\nFor example with Hindi locale \u00271234\u0027 is invalid, because it is expectation to use native numbers.\n\nThis is works if there is no locale with both ascii and non-ascii digits. As I know that is right, but I\u0027m not familiar with these things too much, so I hope an experienced one will shoot a glance at it.",
+      "parentUuid": "AAAAVH///Zw\u003d",
+      "revId": "26450d7d379688387ea65c34949386b3d3b5f302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVH///Zs\u003d",
         "filename": "dbaccess/source/ui/querydesign/limitboxcontroller.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-10T05:36:10Z",
       "side": 1,
       "message": "so 00010 is not valid ? is there a particular reason ?",
+      "revId": "26450d7d379688387ea65c34949386b3d3b5f302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///Wo\u003d",
+        "filename": "dbaccess/source/ui/querydesign/limitboxcontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2013-02-10T16:34:50Z",
+      "side": 1,
+      "message": "1. It is simpler than cut leading 0\u0027s.\n\n2. In Writer, Font Size Box (on Formatting Toolbar) works in the same way.\n\n3. I cant see any reason to allow that.",
+      "parentUuid": "AAAAVH///Zs\u003d",
       "revId": "26450d7d379688387ea65c34949386b3d3b5f302",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
