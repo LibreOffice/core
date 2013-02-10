@@ -319,7 +319,7 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
         SwPosition aNewPos(rNewPos);
         for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
         {
-            // liegt auf der Position ??
+            // lies on the position ??
             lcl_PaMCorrRel1( rTbl[ n ], &rOldNode.GetNode(), aNewPos, aNewPos.nContent.GetIndex() + nOffset );
         }
     }

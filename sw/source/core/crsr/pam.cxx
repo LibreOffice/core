@@ -667,7 +667,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
                     if( pFmt->GetProtect().IsCntntProtected() )
                     {
                         const SwFmtCntnt& rCntnt = pFmt->GetCntnt(sal_False);
-                        OSL_ENSURE( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
+                        OSL_ENSURE( rCntnt.GetCntntIdx(), "where is the SectionNode?" );
                         sal_uLong nIdx = rCntnt.GetCntntIdx()->GetIndex();
                         if( nSttIdx <= nIdx && nEndIdx >= nIdx &&
                             rCntnt.GetCntntIdx()->GetNode().GetNodes().IsDocNodes() )
