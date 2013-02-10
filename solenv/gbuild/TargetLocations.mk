@@ -45,6 +45,7 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/par \
 	$(OUTDIR)/pck \
 	$(OUTDIR)/rdb \
+	$(OUTDIR)/res \
 	$(OUTDIR)/share \
 	$(OUTDIR)/unittest \
 	$(OUTDIR)/xml \
