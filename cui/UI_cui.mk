@@ -11,8 +11,10 @@ $(eval $(call gb_UI_UI,cui))
 
 $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/backgroundpage \
+	cui/uiconfig/ui/alignement \
 	cui/uiconfig/ui/borderpage \
 	cui/uiconfig/ui/charnamepage \
+	cui/uiconfig/ui/cellprotectionpage \
 	cui/uiconfig/ui/colorpage \
 	cui/uiconfig/ui/gradientpage \
 	cui/uiconfig/ui/colorconfigwin \
