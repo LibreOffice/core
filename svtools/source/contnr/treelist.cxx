@@ -1554,6 +1554,7 @@ void SvTreeList::ResortChildren( SvTreeListEntry* pParent )
             // Recursively sort child entries.
             ResortChildren(p);
     }
+    SetListPositions(pParent->maChildren); // correct list position in target list
 }
 
 void SvTreeList::GetInsertionPos( SvTreeListEntry* pEntry, SvTreeListEntry* pParent,
