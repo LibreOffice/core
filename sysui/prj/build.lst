@@ -1,15 +1,2 @@
 su	sysui	:	offapi DESKTOP:l10ntools NULL
-su	sysui\desktop\icons					nmake	-	w	su_iconsw NULL
-su  sysui\desktop\macosx                nmake   -   u   su_dtmacosx su_dtshare.u NULL
-su  sysui\desktop\cleanversion          nmake   -   u   su_dtcleanversion NULL
-su  sysui\desktop\share                 nmake   -   u   su_dtshare su_dtcleanversion.u NULL
-su	sysui\desktop\menus					get     -   all su_dtmenus NULL
-su	sysui\desktop\mimetypes				get     -   all su_dtmime NULL
-su  sysui\desktop\suse                  nmake   -   u   su_dtsuse su_dtshare.u NULL
-su  sysui\desktop\mandriva              nmake   -   u   su_dtmdk su_dtshare.u NULL
-su  sysui\desktop\freedesktop           nmake   -   u   su_dtfreedesktop su_dtshare.u NULL
-su  sysui\desktop\debian                nmake   -   u   su_dtdebian su_dtshare.u NULL
-su  sysui\desktop\slackware             nmake   -   u   su_dtslackware su_dtshare.u NULL
-su  sysui\desktop\solaris               nmake   -   u   su_dtsolaris su_dtshare.u NULL
-su  sysui\desktop\util                  nmake   -   u   su_desktop su_dtsuse.u su_dtmdk.u su_dtfreedesktop.u su_dtdebian.u su_dtslackware.u NULL
-su  sysui\util		                    nmake   -   all su_util su_dtsolaris.u su_desktop.u su_iconsw.w NULL
+su	sysui\prj					nmake	-	w	su_iconsw NULL
