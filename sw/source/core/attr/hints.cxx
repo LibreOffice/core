@@ -108,7 +108,7 @@ SwAttrSetChg::~SwAttrSetChg()
 #ifdef DBG_UTIL
 void SwAttrSetChg::ClearItem( sal_uInt16 nWhch )
 {
-    OSL_ENSURE( bDelSet, "der Set darf nicht veraendert werden!" );
+    OSL_ENSURE( bDelSet, "The Set may not be changed!" );
     pChgSet->ClearItem( nWhch );
 }
 #endif
@@ -121,13 +121,13 @@ SwMsgPoolItem::SwMsgPoolItem( sal_uInt16 nWhch )
 // "Overhead" of SfxPoolItem
 int SwMsgPoolItem::operator==( const SfxPoolItem& ) const
 {
-    OSL_FAIL( "SwMsgPoolItem kennt kein ==" );
+    OSL_FAIL( "SwMsgPoolItem knows no ==" );
     return 0;
 }
 
 SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
 {
-    OSL_FAIL( "SwMsgPoolItem kennt kein Clone" );
+    OSL_FAIL( "SwMsgPoolItem knows no Clone" );
     return 0;
 }
 
