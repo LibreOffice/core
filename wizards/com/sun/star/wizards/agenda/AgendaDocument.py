@@ -662,7 +662,6 @@ class ItemsTable(object):
         # should this section be visible?
         visible = False
         # write items
-        # ===========
         cellName = ""
         '''
         now go through all items that belong to this
@@ -689,8 +688,6 @@ class ItemsTable(object):
         if not visible:
             return
             '''
-            remove obsolete rows
-            ====================
             if the cell that was last written is the current cell,
             it means this is the end of the table, so we end here.
             (because after getting the cellName above,
@@ -889,6 +886,7 @@ class PlaceholderTextElement(TextElement):
         self.text = placeHolderText_
         self.hint = hint_
         self.xmsf = xmsf_
+        self.xTextContentList = []
 
     def write(self, textRange):
         textRange.String = self.placeHolderText
@@ -896,11 +894,16 @@ class PlaceholderTextElement(TextElement):
             try:
                 xTextContent = AgendaDocument.createPlaceHolder(
                     self.xmsf, self.text, self.hint)
+                self.xTextContentList.append(xTextContent)
                 textRange.Text.insertTextContent(
                     textRange.Start, xTextContent, True)
             except Exception:
                 traceback.print_exc()
-
+        else:
+            if self.xTextContentList:
+                for i in self.xTextContentList:
+                    textRange.Text.removeTextContent(i)
+                self.xTextContentList = []
 '''
 An Agenda element which writes no text, but inserts a placeholder, and formats
 it using a ParaStyleName.
