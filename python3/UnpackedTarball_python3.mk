@@ -32,7 +32,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	python3/python-3.3.0-ffi-clang.patch.1 \
 ))
 
-ifeq ($(OS),MACOSX)
+ifneq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	python3/python-3.3.0-15833.patch.1 \
 ))
