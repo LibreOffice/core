@@ -283,8 +283,8 @@ enum PrepareHint
                             // for it and sends a PREP_WIDOWS to its predecessor
                             // (Master/Follow).
     PREP_QUOVADIS,          // If a footnote has to be split between two paragraphs
-                            // the last on the page has to receive a QUOVADIS in or-
-                            // der to format the text into it.
+                            // the last on the page has to receive a QUOVADIS in
+                            // order to format the text into it.
     PREP_BOSS_CHGD,         // If a Frm changes its column/page this additional
                             // Prepare is sended to POS_CHGD in MoveFwd/Bwd
                             // (join Ftn-numbers etc.)
