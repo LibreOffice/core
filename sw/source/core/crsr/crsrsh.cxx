@@ -2017,7 +2017,7 @@ void SwCrsrShell::HideCrsr()
     if( !bBasicHideCrsr )
     {
         bSVCrsrVis = sal_False;
-        // evt. die sel. Bereiche aufheben !!
+        // possibly reverse selected areas!!
         SET_CURR_SHELL( this );
         pVisCrsr->Hide();
     }
@@ -2529,7 +2529,7 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     SwNodes& rNds = rDoc.GetNodes();
 
     SwNodeIndex aNodeIdx( *rNds.GetEndOfContent().StartOfSectionNode() );
-    SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); // gehe zum 1. ContentNode
+    SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); // go to the first ContentNode
 
     pCurCrsr = new SwShellCrsr( *this, SwPosition( aNodeIdx, SwIndex( pCNd, 0 )));
 

@@ -1221,7 +1221,7 @@ bool sw_GetPostIts(
     bool bHasPostIts = false;
 
     SwFieldType* pFldType = pIDFA->GetSysFldType( RES_POSTITFLD );
-    OSL_ENSURE( pFldType, "kein PostItType ? ");
+    OSL_ENSURE( pFldType, "no PostItType ? ");
 
     if( pFldType->GetDepends() )
     {
@@ -1575,7 +1575,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     sal_Int32 i = 0;
     for ( i = 1; pStPage && i < nDocPageCount; ++i )
         pStPage = (SwPageFrm*)pStPage->GetNext();
-    if ( !pStPage )          // dann wars das
+    if ( !pStPage )          // Then it was that
         return;
 
     // currently for prospect printing all pages are valid to be printed
@@ -2486,7 +2486,7 @@ bool SwDoc::LinksUpdated() const
     return mbLinksUpdated;
 }
 
-// embedded alle lokalen Links (Bereiche/Grafiken)
+// embedded all local links (Areas/Graphics)
 static ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
 {
     for( sal_uInt16 n = 0; n < rLinks.size(); ++n )

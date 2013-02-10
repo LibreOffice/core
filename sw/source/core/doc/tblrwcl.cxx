@@ -1214,7 +1214,7 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
     for (size_t n = 0; n < aSelBoxes.size(); ++n)
     {
         SwTableBox* pSelBox = aSelBoxes[n];
-        OSL_ENSURE( pSelBox, "Box steht nicht in der Tabelle" );
+        OSL_ENSURE( pSelBox, "Box is not in the table" );
 
         // We don't want to split small table cells into very very small cells
         if( pSelBox->GetFrmFmt()->GetFrmSize().GetWidth()/( nCnt + 1 ) < 10 )
@@ -1610,7 +1610,7 @@ static void lcl_Merge_MoveLine(_FndLine& rFndLine, _InsULPara *const pULPara)
 
     SwTableLine* pNewLine = new SwTableLine(
         (SwTableLineFmt*)rFndLine.GetLine()->GetFrmFmt(), 0, pULPara->pInsBox );
-    _InsULPara aPara( *pULPara );       // kopieren
+    _InsULPara aPara( *pULPara );       // copying
     aPara.pInsLine = pNewLine;
     _FndBoxes & rLineBoxes = rFndLine.GetBoxes();
     for (_FndBoxes::iterator it = rLineBoxes.begin() + nStt;
@@ -2823,7 +2823,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                 SwTwips nDiff;
                 if( TBLFIX_CHGPROP == rParam.nMode )        // Table fixed, proportional
                 {
-                    // relativ berechnen
+                    // calculate relatively
                     nDiff = nWidth;
                     nDiff *= rParam.nDiff;
                     nDiff /= rParam.nRemainWidth;

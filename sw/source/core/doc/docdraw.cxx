@@ -523,7 +523,7 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
                 nOrdNum = pContact->GetMaster()->GetOrdNum();
     }
     else {
-        OSL_ENSURE( !this, "was ist das fuer ein Format?" );
+        OSL_ENSURE( !this, "what is that for a format?" );
     }
 }
 
