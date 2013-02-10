@@ -268,8 +268,8 @@ namespace drawinglayer
 
                     if(rTextCandidate.getFontAttribute().getRTL())
                     {
-                        sal_uInt32 nRTLLayoutMode(nOldLayoutMode & ~(TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG));
-                        nRTLLayoutMode |= TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_TEXTORIGIN_LEFT;
+                        sal_uInt32 nRTLLayoutMode(nOldLayoutMode & ~(TEXT_LAYOUT_COMPLEX_DISABLED));
+                        nRTLLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_TEXTORIGIN_LEFT;
                         mpOutputDevice->SetLayoutMode(nRTLLayoutMode);
                     }
 
