@@ -28,8 +28,8 @@ interface WebText : BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
         Cachable ;
     ]
-    // hier sollen die Slots eingefuegt werden, die n u r vom StarWriter/WEB
-    // unterstuetzt werden
+    // Here should the slots are be inserted, but O N L Y those that are supported
+    // by StarWriter/WEB
     import TextSelection;
 }
 
