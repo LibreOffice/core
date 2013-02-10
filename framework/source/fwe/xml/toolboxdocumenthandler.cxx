@@ -423,6 +423,23 @@ throw(  SAXException, RuntimeException )
                     aToolbarItemProp[5].Name = m_aIsVisible;
                     aToolbarItemProp[6].Name = m_aTooltip;
 
+                    //fix for fdo#39370
+                    /// check whether RTL interface or not
+                    if(Application::GetSettings().GetLayoutRTL()){
+                        if (aCommandURL.compareTo(".uno:ParaLeftToRight") == 0)
+                            aCommandURL = ".uno:ParaRightToLeft";
+                        else if (aCommandURL.compareTo(".uno:ParaRightToLeft") == 0)
+                            aCommandURL = ".uno:ParaLeftToRight";
+                        else if (aCommandURL.compareTo(".uno:LeftPara") == 0)
+                            aCommandURL = ".uno:RightPara";
+                        else if (aCommandURL.compareTo(".uno:RightPara") == 0)
+                            aCommandURL = ".uno:LeftPara";
+                        else if (aCommandURL.compareTo(".uno:AlignLeft") == 0)
+                            aCommandURL = ".uno:AlignRight";
+                        else if (aCommandURL.compareTo(".uno:AlignRight") == 0)
+                            aCommandURL = ".uno:AlignLeft";
+                    }
+
                     aToolbarItemProp[0].Value <<= aCommandURL;
                     aToolbarItemProp[1].Value <<= aHelpURL;
                     aToolbarItemProp[2].Value <<= aLabel;
