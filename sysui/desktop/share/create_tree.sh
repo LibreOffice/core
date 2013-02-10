@@ -1,4 +1,3 @@
-#!/bin/sh
 #
 # This file is part of the LibreOffice project.
 #
@@ -33,7 +32,7 @@ if [ "${KDEMAINDIR}" ]; then
 
   mkdir -p "${DESTDIR}/${KDEMAINDIR}/share/mimelnk/application"
   for i in `cat mimelnklist`; do
-    cp "${i}" "${DESTDIR}/${KDEMAINDIR}/share/mimelnk/application/${PREFIX}-${i}"
+    cp "${i}" "${DESTDIR}/${KDEMAINDIR}/share/mimelnk/application/${PREFIX}-`basename ${i}`"
   done
   chmod 0644 "${DESTDIR}/${KDEMAINDIR}/share/mimelnk/application/"*
 fi
