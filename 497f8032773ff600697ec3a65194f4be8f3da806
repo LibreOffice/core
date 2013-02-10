@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///aI\u003d",
+        "filename": "sw/source/ui/table/tablepg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-10T05:16:11Z",
+      "side": 1,
+      "message": "the width ?",
+      "revId": "497f8032773ff600697ec3a65194f4be8f3da806",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
