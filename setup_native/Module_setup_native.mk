@@ -20,6 +20,7 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,setup_native,\
 	CustomTarget_mac \
+	Package_ulf \
 ))
 endif
 
