@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkWindow" id="window1">
-    <property name="can_focus">False</property>
-    <property name="margin_left">6</property>
-    <property name="margin_top">15</property>
-    <property name="border_width">6</property>
-    <child>
       <object class="GtkGrid" id="ProtectionPage">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -210,6 +204,4 @@ Select 'Protect Document' from the 'Tools' menu, and specify 'Sheet'.</property>
           </packing>
         </child>
       </object>
-    </child>
-  </object>
 </interface>
