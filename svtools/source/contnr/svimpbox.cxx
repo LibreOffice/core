@@ -1315,8 +1315,8 @@ void SvImpLBox::InitScrollBarBox()
 
 void SvImpLBox::Resize()
 {
-    Size aSize( pView->Control::GetOutputSizePixel());
-    if( aSize.Width() <= 0 || aSize.Height() <= 0 )
+    aOutputSize = pView->Control::GetOutputSizePixel();
+    if( aOutputSize.Width() <= 0 || aOutputSize.Height() <= 0 )
         return;
     nFlags |= F_IN_RESIZE;
     InitScrollBarBox();
@@ -1324,7 +1324,7 @@ void SvImpLBox::Resize()
     if( pView->GetEntryHeight())
     {
         AdjustScrollBars( aOutputSize );
-        FillView();
+        UpdateAll(false);
     }
     // HACK, as in floating and docked windows the scrollbars might not be drawn
     // correctly/not be drawn at all after resizing!
