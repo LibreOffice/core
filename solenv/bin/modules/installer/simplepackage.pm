@@ -365,7 +365,7 @@ sub create_package
             my $scripthelperref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$scripthelpersolverfilename, $includepatharrayref, 0);
             if ($$scripthelperref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script $scripthelpersolverfilename!", "create_package"); }
             my $translationfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$translationfilename, $includepatharrayref, 0);
-            if ($$translationfileref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script translation file $translationfilename!", "create_package"); }
+            if ($$translationfileref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script translation file $translationfilename ( includepatharrayref = $includepatharrayref )", "create_package"); }
 
             $scriptfilename = $contentsfolder . "/" . $scriptrealfilename;
             $scripthelperrealfilename = $contentsfolder . "/" . $scripthelperrealfilename;
