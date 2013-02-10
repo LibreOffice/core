@@ -872,9 +872,9 @@ class Topics(object):
 
         tableRows = Topics.table.Rows
         targetNumOfRows = topics * Topics.rowsPerTopic + 1
-        '''if tableRows.Count > targetNumOfRows:
+        if tableRows.Count > targetNumOfRows:
             tableRows.removeByIndex(
-                targetNumOfRows, tableRows.Count - targetNumOfRows)'''
+                targetNumOfRows, tableRows.Count - targetNumOfRows)
 
 '''
 A Text element which, if the text to write is empty (null or "")
