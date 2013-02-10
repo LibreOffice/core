@@ -903,6 +903,13 @@ void ScFiltersTest::testBugFixesODS()
         CPPUNIT_ASSERT(!pDBData->HasHeader());
     }
 
+    {
+        // fdo#59240
+        OUString aCSVFileName;
+        createCSVPath("bugFix_Sheet4.", aCSVFileName);
+        testFile(aCSVFileName, pDoc, 3);
+    }
+
     xDocSh->DoClose();
 }
 
