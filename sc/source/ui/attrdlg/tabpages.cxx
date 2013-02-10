@@ -21,7 +21,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 
-
 #include "global.hxx"
 #include "document.hxx"
 #include "attrib.hxx"
@@ -47,30 +46,27 @@ static sal_uInt16 pProtectionRanges[] =
 ScTabPageProtection::ScTabPageProtection( Window*           pParent,
                                           const SfxItemSet& rCoreAttrs )
     :   SfxTabPage          ( pParent,
-                              ScResId( RID_SCPAGE_PROTECTION ),
-                              rCoreAttrs ),
-        //
-        aFlProtect          ( this, ScResId( FL_PROTECTION      ) ),
-        aBtnHideCell        ( this, ScResId( BTN_HIDE_ALL       ) ),
-        aBtnProtect         ( this, ScResId( BTN_PROTECTED      ) ),
-        aBtnHideFormula     ( this, ScResId( BTN_HIDE_FORMULAR  ) ),
-        aTxtHint            ( this, ScResId( FT_HINT            ) ),
-        aFlPrint            ( this, ScResId( FL_PRINT           ) ),
-        aBtnHidePrint       ( this, ScResId( BTN_HIDE_PRINT     ) ),
-        aTxtHint2           ( this, ScResId( FT_HINT2           ) )
-{
-    // diese Page braucht ExchangeSupport
+                              "ProtectionPage",
+                              "cui/ui/cellprotectionpage.ui",
+                              rCoreAttrs )
+
+    {
+    get(m_pBtnHideCell,"checkHideAll");
+    get(m_pBtnProtect,"checkProtected");
+    get(m_pBtnHideFormula,"checkHideFormula");
+    get(m_pBtnHidePrint,"checkHidePrinting");
+
+    // This Page need ExchangeSupport
     SetExchangeSupport();
 
-    //  States werden in Reset gesetzt
+    //  States will be set in Reset
     bTriEnabled = bDontCare = bProtect = bHideForm = bHideCell = bHidePrint = false;
 
-    aBtnProtect.SetClickHdl(     LINK( this, ScTabPageProtection, ButtonClickHdl ) );
-    aBtnHideCell.SetClickHdl(    LINK( this, ScTabPageProtection, ButtonClickHdl ) );
-    aBtnHideFormula.SetClickHdl( LINK( this, ScTabPageProtection, ButtonClickHdl ) );
-    aBtnHidePrint.SetClickHdl(   LINK( this, ScTabPageProtection, ButtonClickHdl ) );
+    m_pBtnProtect->SetClickHdl(     LINK( this, ScTabPageProtection, ButtonClickHdl ) );
+    m_pBtnHideCell->SetClickHdl(    LINK( this, ScTabPageProtection, ButtonClickHdl ) );
+    m_pBtnHideFormula->SetClickHdl( LINK( this, ScTabPageProtection, ButtonClickHdl ) );
+    m_pBtnHidePrint->SetClickHdl(   LINK( this, ScTabPageProtection, ButtonClickHdl ) );
 
-    FreeResource();
 }
 
 // -----------------------------------------------------------------------
@@ -88,8 +84,7 @@ sal_uInt16* ScTabPageProtection::GetRanges()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* ScTabPageProtection::Create( Window*            pParent,
-                                                  const SfxItemSet& rAttrSet )
+SfxTabPage* ScTabPageProtection::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new ScTabPageProtection( pParent, rAttrSet ) );
 }
@@ -98,25 +93,26 @@ SfxTabPage* ScTabPageProtection::Create( Window*            pParent,
 
 void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
 {
-    //  Variablen initialisieren
+    //  Initialize variables
 
     sal_uInt16 nWhich = GetWhich( SID_SCATTR_PROTECTION );
     const ScProtectionAttr* pProtAttr = NULL;
     SfxItemState eItemState = rCoreAttrs.GetItemState( nWhich, false,
                                           (const SfxPoolItem**)&pProtAttr );
 
-    // handelt es sich um ein Default-Item?
+    // Is this a Default-Item?
     if ( eItemState == SFX_ITEM_DEFAULT )
         pProtAttr = (const ScProtectionAttr*)&(rCoreAttrs.Get(nWhich));
-    // bei SFX_ITEM_DONTCARE auf 0 lassen
+    // At SFX_ITEM_DONTCARE let to 0
 
-    bTriEnabled = ( pProtAttr == NULL );                // TriState, wenn DontCare
+    bTriEnabled = ( pProtAttr == NULL );                // TriState, when DontCare
     bDontCare = bTriEnabled;
     if (bTriEnabled)
     {
-        //  Defaults, die erscheinen wenn ein TriState weggeklickt wird:
-        //  (weil alles zusammen ein Attribut ist, kann auch nur alles zusammen
-        //  auf DontCare stehen - #38543#)
+       //  Defaults wich appear when a TriState will be clicked away:
+       //  (because everything combined is an attribute, and also only
+       //   everything combined as DontCare can be available - #38543#)
+
         bProtect = sal_True;
         bHideForm = bHideCell = bHidePrint = false;
     }
@@ -128,12 +124,12 @@ void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
         bHidePrint = pProtAttr->GetHidePrint();
     }
 
-    //  Controls initialisieren
+    //  Start Controls
 
-    aBtnProtect     .EnableTriState( bTriEnabled );
-    aBtnHideCell    .EnableTriState( bTriEnabled );
-    aBtnHideFormula .EnableTriState( bTriEnabled );
-    aBtnHidePrint   .EnableTriState( bTriEnabled );
+    m_pBtnProtect->EnableTriState( bTriEnabled );
+    m_pBtnHideCell->EnableTriState( bTriEnabled );
+    m_pBtnHideFormula->EnableTriState( bTriEnabled );
+    m_pBtnHidePrint->EnableTriState( bTriEnabled );
 
     UpdateButtons();
 }
@@ -157,7 +153,7 @@ sal_Bool ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
         aProtAttr.SetHidePrint( bHidePrint );
 
         if ( bTriEnabled )
-            bAttrsChanged = sal_True;                   // DontCare -> richtiger Wert
+            bAttrsChanged = sal_True;                   // DontCare -> properly value
         else
             bAttrsChanged = !pOldItem || !( aProtAttr == *(const ScProtectionAttr*)pOldItem );
     }
@@ -184,23 +180,23 @@ int ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
+IMPL_LINK( ScTabPageProtection, ButtonClickHdl, CheckBox*, pBox )
 {
     TriState eState = pBox->GetState();
     if ( eState == STATE_DONTKNOW )
-        bDontCare = sal_True;                           // alles zusammen auf DontCare
+        bDontCare = sal_True;                           // everything combined at DontCare
     else
     {
-        bDontCare = false;                          // DontCare ueberall aus
-        sal_Bool bOn = ( eState == STATE_CHECK );       // ausgewaehlter Wert
+        bDontCare = false;                          // DontCare from everywhere
+        sal_Bool bOn = ( eState == STATE_CHECK );       // from a selected value
 
-        if ( pBox == &aBtnProtect )
+        if ( pBox == m_pBtnProtect )
             bProtect = bOn;
-        else if ( pBox == &aBtnHideCell )
+        else if ( pBox == m_pBtnHideCell )
             bHideCell = bOn;
-        else if ( pBox == &aBtnHideFormula )
+        else if ( pBox == m_pBtnHideFormula )
             bHideForm = bOn;
-        else if ( pBox == &aBtnHidePrint )
+        else if ( pBox == m_pBtnHidePrint )
             bHidePrint = bOn;
         else
         {
@@ -208,7 +204,7 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
         }
     }
 
-    UpdateButtons();        // TriState und Enable-Logik
+    UpdateButtons();        // TriState and Logic-Enable
 
     return 0;
 }
@@ -219,23 +215,23 @@ void ScTabPageProtection::UpdateButtons()
 {
     if ( bDontCare )
     {
-        aBtnProtect.SetState( STATE_DONTKNOW );
-        aBtnHideCell.SetState( STATE_DONTKNOW );
-        aBtnHideFormula.SetState( STATE_DONTKNOW );
-        aBtnHidePrint.SetState( STATE_DONTKNOW );
+        m_pBtnProtect->SetState( STATE_DONTKNOW );
+        m_pBtnHideCell->SetState( STATE_DONTKNOW );
+        m_pBtnHideFormula->SetState( STATE_DONTKNOW );
+        m_pBtnHidePrint->SetState( STATE_DONTKNOW );
     }
     else
     {
-        aBtnProtect.SetState( bProtect ? STATE_CHECK : STATE_NOCHECK );
-        aBtnHideCell.SetState( bHideCell ? STATE_CHECK : STATE_NOCHECK );
-        aBtnHideFormula.SetState( bHideForm ? STATE_CHECK : STATE_NOCHECK );
-        aBtnHidePrint.SetState( bHidePrint ? STATE_CHECK : STATE_NOCHECK );
+        m_pBtnProtect->SetState( bProtect ? STATE_CHECK : STATE_NOCHECK );
+        m_pBtnHideCell->SetState( bHideCell ? STATE_CHECK : STATE_NOCHECK );
+        m_pBtnHideFormula->SetState( bHideForm ? STATE_CHECK : STATE_NOCHECK );
+        m_pBtnHidePrint->SetState( bHidePrint ? STATE_CHECK : STATE_NOCHECK );
     }
 
-    sal_Bool bEnable = ( aBtnHideCell.GetState() != STATE_CHECK );
+    sal_Bool bEnable = ( m_pBtnHideCell->GetState() != STATE_CHECK );
     {
-        aBtnProtect.Enable( bEnable );
-        aBtnHideFormula.Enable( bEnable );
+        m_pBtnProtect->Enable( bEnable );
+        m_pBtnHideFormula->Enable( bEnable );
     }
 }
 
