@@ -22,7 +22,7 @@
 
 #define IMAGE_MASK_COLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
 // ----------------------------------------------------------------
-// Bereiche fuer die UI-Verzeichnisse
+// Areas for the UI-Directories
 // ----------------------------------------------------------------
 
 #define RC_BASE                     RID_SW_START    // From solar.hrc
@@ -71,14 +71,14 @@
 #define RC_IDXTXT                   (RC_BASE + 4350)
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Bereiche ausspannen
+    Description: areas unharness
  --------------------------------------------------------------------*/
 
-// App-Verzeichnis
+// App-Directory
 #define RC_APP_BEGIN                RC_APP
 #define RC_APP_END                  (RC_APP_BEGIN + 199)
 
-// Dialog-Verzeichnis
+// Dialog-Directory
 #define RC_DIALOG_BEGIN             RC_DIALOG
 #define RC_DIALOG_END               (RC_DIALOG_BEGIN + 99)
 
@@ -106,15 +106,15 @@
 #define RC_VIEW_BEGIN               RC_VIEW
 #define RC_VIEW_END                 (RC_VIEW_BEGIN + 99)
 
-// Zeichen Absatz Tab-Dialog
+// Character Paragraph Tab-Dialog
 #define RC_CHRDLG_BEGIN             RC_CHRDLG
 #define RC_CHRDLG_END               (RC_CHRDLG_BEGIN + 19)
 
-// Unsere Shell
+// Our Shell
 #define RC_WRTSH_BEGIN              RC_WRTSH
 #define RC_WRTSH_END                (RC_WRTSH_BEGIN + 49)
 
-// Verzeichnisse
+// Directories
 #define RC_INDEX_BEGIN              RC_INDEX
 //      RC_INDEX_END                (RC_INDEX + 99)
 
@@ -122,15 +122,15 @@
 #define RC_RIBBAR_BEGIN             RC_RIBBAR
 #define RC_RIBBAR_END               (RC_RIBBAR_BEGIN + 79)
 
-// globale Resourcen
+// Global Resources
 #define RC_GLOBALS_BEGIN            RC_GLOBALS
 #define RC_GLOBALS_END              (RC_GLOBALS_BEGIN + 120)
 
-// Format-Vorlagen
+// Format-Templates
 #define RC_FMTUI_BEGIN              RC_FMTUI
 #define RC_FMTUI_END                (RC_FMTUI_BEGIN + 69)
 
-// Grafik Dialoge
+// Graphic Dialogues
 #define RC_GRFDLG_BEGIN             RC_GRFDLG
 //      RC_GRFDLG_END               (RC_GRFDLG_BEGIN + 99)
 
@@ -138,11 +138,11 @@
 #define RC_FSTDLG_BEGIN             RC_FSTDLG
 //      RC_FSTDLG_END               (RC_FSTDLG_BEGIN + 99)
 
-// Rahmen Dialoge
+// Frame Dialogue
 #define RC_FRMDLG_BEGIN             RC_FRMDLG
 #define RC_FRMDLG_END               (RC_FRMDLG_BEGIN + 99)
 
-// Feld Dialoge
+// Field Dialogue
 #define RC_FLDDLG_BEGIN             RC_FLDDLG
 //      RC_FLDDLG_END               (RC_FLDDLG_BEGIN + 149)
 
@@ -150,20 +150,20 @@
 #define RC_UTLUI_BEGIN              RC_UTLUI
 #define RC_UTLUI_END                (RC_UTLUI + 99)
 
-// Utilities UI-Attribute
+// Utilities UI-Attributes
 #define RC_ATTR_BEGIN               RC_ATTR
 #define RC_ATTR_END                 (RC_ATTR + 99)
 
-// Tabellen
+// Tables
 #define RC_TABLE_BEGIN              RC_TABLE
 #define RC_TABLE_END                (RC_TABLE + 99)
 
-// Konfiguration
+// Configuration
 #define RC_CONFIG_BEGIN             RC_CONFIG
 #define RC_CONFIG_END               (RC_CONFIG + 99)
 
 
-// Verschiedenes
+// Miscellaneous
 #define RC_MISC_BEGIN               RC_MISC
 #define RC_MISC_END                 (RC_MISC + 99)
 
@@ -171,18 +171,18 @@
 #define RC_DBUI_BEGIN               RC_DBUI
 //      RC_DBUI_END                 (RC_DBUI + 99)
 
-// Der Rest der Imp-Klassen
+// The rest of the Imp-Classes
 #define RC_DOCHDL_BEGIN             RC_DOCHDL
 #define RC_DOCHDL_END               (RC_DOCHDL + 99)
 
-// Zeichenvorlagen
+// Drawing Templates
 #define RC_POOLCHRFMT_BEGIN         RC_POOLCHRFMT
 //      RC_POOLCHRFMT_END           (RC_POOLCHRFMT + 29)
 #define RC_POOLCHRFMT_HTML_BEGIN    RC_POOLHTMLCHRFMT
 //      RC_POOLCHRFMT_HTML_END      (RC_POOLHTMLCHRFMT+ 30)
 
 
-// Rahmenvorlagen
+// Frame-Templates
 #define RC_POOLFRMFMT_BEGIN         RC_POOLFRMFMT
 //      RC_POOLFRMFMT_END           (RC_POOLFRMFMT + 20)
 
@@ -202,27 +202,27 @@
 #define RC_POOLCOLL_HTML_END        (RC_POOLTXTCOLL + 169)
 
 
-// Poolvorlagen Seite
+// Pooltemplates Page
 #define RC_POOLPAGEDESC_BEGIN       RC_POOLPAGEDESC
 //      RC_POOLPAGEDESC_END         (RC_POOLPAGEDESC + 10)
 
-// Poolvorlagen Numerierung
+// Pooltemplates Numbering
 #define RC_POOLNUMRULE_BEGIN        RC_POOLNUMRULE
 //      RC_POOLNUMRULE_END          (RC_POOLNUMRULE + 10)
 
 // free: STR_POOLPARSTYLE to (STR_POOLPARSTYLE + 9)
 
-// Envelp-Verzeichnis
+// Envelp-Directory
 #define RC_ENVELP_BEGIN             (RC_ENVELP     )
 //      RC_ENVELP_END               (RC_ENVELP + 99)
 
 // free: RC_STATLIN_STR_BEGIN to (RC_STATLIN_STR + 49)
 
-// Gemeinsame Core-Strings
+// Common Core-Strings
 #define RC_COMCORE_BEGIN            (RC_COMMON_CORE)
 //      RC_COMCORE_END              (RC_COMMON_CORE + 59)
 
-// Shell-Verzeichnis
+// Shell-Directory
 #define RC_SHELLS_BEGIN             RC_SHELLS
 #define RC_SHELLS_END               (RC_SHELLS + 99)
 
