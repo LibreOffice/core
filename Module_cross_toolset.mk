@@ -25,9 +25,9 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,cross_tail_build))
+$(eval $(call gb_Module_Module,cross_toolset))
 
-$(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
+$(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	autodoc \
 	basegfx \
 	binaryurp \
@@ -38,7 +38,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	cosv \
 	cppu \
 	cppuhelper \
-	cppunit \
+	external \
 	i18npool \
 	i18nutil \
 	idl \
@@ -62,6 +62,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	sax \
 	setup_native \
 	shell \
+	soltools \
 	stoc \
 	store \
 	tools \
@@ -75,12 +76,16 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	xmlreader \
 	$(call gb_Helper_optional,BOOST,boost) \
 	$(call gb_Helper_optional,CLUCENE,clucene) \
+	$(call gb_Helper_optional,CPPUNIT,cppunit) \
 	$(call gb_Helper_optional_for_host,DESKTOP, \
 		helpcompiler \
 		xmlhelp \
 	) \
 	$(call gb_Helper_optional,EXPAT,expat) \
+	$(call gb_Helper_optional,ICU,icu) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
+	$(call gb_Helper_optional,LIBXML2,libxml2) \
+	$(call gb_Helper_optional,LIBXSLT,libxslt) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 	$(call gb_Helper_optional,UCPP,ucpp) \
 	$(call gb_Helper_optional,ZLIB,zlib) \

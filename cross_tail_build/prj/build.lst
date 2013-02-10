@@ -1,2 +1,0 @@
-ctb	cross_tail_build	::	CPPUNIT:cppunit EXPAT:expat external ICU:icu LIBXML2:libxml2 LIBXSLT:libxslt solenv soltools NULL
-ctb tail_build\prj nmake - all ctb_prj   NULL

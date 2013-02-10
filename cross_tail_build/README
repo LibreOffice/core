@@ -1,4 +1,0 @@
-This is "tail build" for the build side of cross-compilation
-
-See [git:tail_build/README] for details what it is good for and how to
-add a module to it.

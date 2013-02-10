@@ -46,7 +46,7 @@ else # MAKE_RESTARTS
 all: build
 
 ifeq ($(gb_Side),)
-export gb_Side:=host
+gb_Side:=host
 endif
 
 include $(BUILDDIR)/config_$(gb_Side).mk
@@ -291,13 +291,11 @@ endif
 build-nocheck : export SKIP_TESTS := YES
 build-nocheck : build
 
+# Ideally solenv would be also in Module_cross_toolset.mk
+# but one would need to chase and add missing dependencies.
 cross-toolset: bootstrap fetch
-# We need to build icu for the build platform, as building icu for the host
-# platform requires tools built as part of icu that can run on the build
-# platform. see --with-cross-build in icu/ExternalProject_icu.mk
-	$(GNUMAKE) gb_Side=build icu
-#
-	cd cross_tail_build && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
+	$(GNUMAKE) gb_Side=build solenv
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.cross
 
 #
 # Install
