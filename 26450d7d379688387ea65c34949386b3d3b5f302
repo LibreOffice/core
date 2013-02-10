@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///Zw\u003d",
+        "filename": "dbaccess/source/ui/querydesign/limitboxcontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-10T05:36:10Z",
+      "side": 1,
+      "message": "I must be confused... shouldn\u0027t you translate to ascii _before_\niterating over it as if it was ascii to start with ?\n\nlooks to me that the while loop above should not be there at all\nand the while loop later should do the job fine.",
+      "revId": "26450d7d379688387ea65c34949386b3d3b5f302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///Zs\u003d",
+        "filename": "dbaccess/source/ui/querydesign/limitboxcontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-10T05:36:10Z",
+      "side": 1,
+      "message": "so 00010 is not valid ? is there a particular reason ?",
+      "revId": "26450d7d379688387ea65c34949386b3d3b5f302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
