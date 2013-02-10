@@ -20,19 +20,19 @@ $(eval $(call gb_CustomTarget_register_targets,setup_native/wintools,\
 	msitran.exe \
 ))
 
-$(wintools_WORKDIR)/makecab.exe: $(wintools_SRCDIR)/makecab.c $(wintools_SRCDIR)/parseddf.c
+$(wintools_WORKDIR)/makecab.exe: $(wintools_SRCDIR)/makecab/makecab.c $(wintools_SRCDIR)/makecab/parseddf.c
 	$(WINEGCC) -o $@ $< -m32 -mconsole -lmsi
 
-$(wintools_WORKDIR)/msidb.exe: $(wintools_SRCDIR)/msidb.c
+$(wintools_WORKDIR)/msidb.exe: $(wintools_SRCDIR)/msidb/msidb.c
 	$(WINEGCC) -o $@ $< -m32 -municode -lmsi
 
-$(wintools_WORKDIR)/msiinfo.exe: $(wintools_SRCDIR)/msiinfo.c
+$(wintools_WORKDIR)/msiinfo.exe: $(wintools_SRCDIR)/msiinfo/msiinfo.c
 	$(WINEGCC) -o $@ $< -m32 -mconsole -municode -lmsi
 
-$(wintools_WORKDIR)/msimsp.exe: $(wintools_SRCDIR)/msimsp.c
+$(wintools_WORKDIR)/msimsp.exe: $(wintools_SRCDIR)/msimsp/msimsp.c
 	$(WINEGCC) -o $@ $< -m32 -mconsole -lmsi
 
-$(wintools_WORKDIR)/msitran.exe: $(wintools_SRCDIR)/msitran.c
+$(wintools_WORKDIR)/msitran.exe: $(wintools_SRCDIR)/msitran/msitran.c
 	$(WINEGCC) -o $@ $< -m32 -mconsole -lmsi
 
 # vim: set noet sw=4 ts=4:
