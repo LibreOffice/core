@@ -886,7 +886,7 @@ void ScFiltersTest::testBugFixesODS()
     ScDocument* pDoc = xDocSh->GetDocument();
 
     {
-        // fdo
+        // fdo#40967
         OUString aCSVFileName;
         createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("bugFix_Sheet2.")), aCSVFileName);
         testFile(aCSVFileName, pDoc, 1);
