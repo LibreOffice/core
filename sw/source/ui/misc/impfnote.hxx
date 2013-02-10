@@ -56,8 +56,8 @@ class SwEndNoteOptionPage : public SfxTabPage
     String aNumPage;
     String aNumChapter;
     SwWrtShell *pSh;
-    sal_Bool    bPosDoc;
-    sal_Bool    bEndNote;
+    bool    bPosDoc;
+    bool    bEndNote;
 
     inline void SelectNumbering(int eNum);
     int GetNumbering() const;
@@ -68,7 +68,7 @@ class SwEndNoteOptionPage : public SfxTabPage
 
 
 public:
-    SwEndNoteOptionPage( Window *pParent, sal_Bool bEndNote,
+    SwEndNoteOptionPage( Window *pParent, bool bEndNote,
                          const SfxItemSet &rSet );
     ~SwEndNoteOptionPage();
 

@@ -191,7 +191,7 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
         GlosBibUserData* pUserData = (GlosBibUserData*)pFirstEntry->GetUserData();
         String sEntry(pUserData->sGroupName);
         String sName(m_pNameED->GetText());
-        sal_Bool bExists = sal_False;
+        bool bExists = false;
         sal_uLong nPos = m_pGroupTLB->GetEntryPos(sName, 0);
         if( 0xffffffff > nPos)
         {
@@ -298,7 +298,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
     OSL_ENSURE(!pGlosHdl->FindGroupName(sNewName), "group already available!");
 
     // if the name to be renamed is among the new ones - replace
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
     for (OUVector_t::iterator it(m_InsertedArr.begin());
             it != m_InsertedArr.end(); ++it)
     {
@@ -306,7 +306,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
         {
             m_InsertedArr.erase(it);
             m_InsertedArr.push_back(sNewName);
-            bDone = sal_True;
+            bDone = true;
             break;
         }
     }
@@ -342,7 +342,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
     sal_Bool bEnableDel = sal_False;
     sal_uLong nCaseReadonly =
             (sal_uLong)m_pPathLB->GetEntryData(m_pPathLB->GetSelectEntryPos());
-    sal_Bool bDirReadonly = 0 != (nCaseReadonly&PATH_READONLY);
+    bool bDirReadonly = 0 != (nCaseReadonly&PATH_READONLY);
 
     if(!sEntry.Len() || bDirReadonly)
         bEnableNew = sal_False;
@@ -358,7 +358,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
                 String sTemp = m_pGroupTLB->GetEntryText( i, 0 );
                 nCaseReadonly = (sal_uLong)m_pPathLB->GetEntryData(
                     m_pPathLB->GetEntryPos(m_pGroupTLB->GetEntryText(i,1)));
-                sal_Bool bCase = 0 != (nCaseReadonly & PATH_CASE_SENSITIVE);
+                bool bCase = 0 != (nCaseReadonly & PATH_CASE_SENSITIVE);
 
                 if( !bCase && rSCmp.isEqual( sTemp, sEntry ))
                 {

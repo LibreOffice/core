@@ -77,14 +77,14 @@ IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
 //----------------------------------------------------------------------
 
 
-SwEndNoteOptionPage::SwEndNoteOptionPage(Window *pParent, sal_Bool bEN,
+SwEndNoteOptionPage::SwEndNoteOptionPage(Window *pParent, bool bEN,
     const SfxItemSet &rSet)
     : SfxTabPage(pParent,
         bEN ? OString("EndnotePage") : OString("FootnotePage"),
         bEN ? OUString("modules/swriter/ui/endnotepage.ui") : OUString("modules/swriter/ui/footnotepage.ui"),
         rSet)
     , pSh(0)
-    , bPosDoc(sal_False)
+    , bPosDoc(false)
     , bEndNote(bEN)
 {
     get(m_pNumViewBox, "numberinglb");
@@ -131,7 +131,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
     if ( bEndNote )
     {
-        bPosDoc = sal_True;
+        bPosDoc = true;
     }
     else
     {
@@ -148,7 +148,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
             m_pPosChapterBox->Check();
             m_pNumCountBox->RemoveEntry(aNumPage);
             m_pNumCountBox->RemoveEntry(aNumChapter);
-            bPosDoc = sal_True;
+            bPosDoc = true;
         }
             // reference tests
         m_pContEdit->SetText(rInf.aQuoVadis);
@@ -229,7 +229,7 @@ SwEndNoteOptionPage::~SwEndNoteOptionPage()
 
 SfxTabPage *SwEndNoteOptionPage::Create( Window *pParent, const SfxItemSet &rSet )
 {
-    return new SwEndNoteOptionPage( pParent, sal_True, rSet );
+    return new SwEndNoteOptionPage( pParent, true, rSet );
 }
 
 /*------------------------------------------------------------------------
@@ -290,7 +290,7 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl)
 {
     const SwFtnNum eNum = (const SwFtnNum)GetNumbering();
-    bPosDoc = sal_False;
+    bPosDoc = false;
     if(LISTBOX_ENTRY_NOTFOUND == m_pNumCountBox->GetEntryPos(aNumPage))
     {
         m_pNumCountBox->InsertEntry(aNumPage, FTNNUM_PAGE);
@@ -328,7 +328,7 @@ IMPL_LINK_NOARG_INLINE_START(SwEndNoteOptionPage, PosChapterHdl)
     if ( !bPosDoc )
         SelectNumbering(FTNNUM_DOC);
 
-    bPosDoc = sal_True;
+    bPosDoc = true;
     m_pNumCountBox->RemoveEntry(aNumPage);
     m_pNumCountBox->RemoveEntry(aNumChapter);
     m_pPageTemplLbl->Enable();
@@ -410,7 +410,7 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
 }
 
 SwFootNoteOptionPage::SwFootNoteOptionPage( Window *pParent, const SfxItemSet &rSet ) :
-    SwEndNoteOptionPage( pParent, sal_False, rSet )
+    SwEndNoteOptionPage( pParent, false, rSet )
 {
 }
 

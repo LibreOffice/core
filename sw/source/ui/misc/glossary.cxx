@@ -105,11 +105,11 @@ struct GroupUserData
 {
     String      sGroupName;
     sal_uInt16  nPathIdx;
-    sal_Bool        bReadonly;
+    bool        bReadonly;
 
     GroupUserData()
         : nPathIdx(0),
-          bReadonly(sal_False)  {}
+          bReadonly(false)  {}
 };
 
 /*------------------------------------------------------------------------
@@ -353,7 +353,7 @@ SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
 IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
 {
     String aName(m_pNameED->GetText());
-    sal_Bool bNameED = pEdit == m_pNameED;
+    bool bNameED = pEdit == m_pNameED;
     if( !aName.Len() )
     {
         if(bNameED)
@@ -364,7 +364,7 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
     String sShortSearch;
     if(!bNameED)
         sShortSearch = pEdit->GetText();
-    sal_Bool bNotFound = !DoesBlockExist(aName, sShortSearch);
+    bool bNotFound = !DoesBlockExist(aName, sShortSearch);
     if(bNameED)
     {
             // did the text get in to the Listbbox in the Edit with a click?
@@ -407,9 +407,9 @@ IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
     SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
 
     const String aEditText(m_pNameED->GetText());
-    const sal_Bool bHasEntry = aEditText.Len() && !m_pShortNameEdit->GetText().isEmpty();
-    const sal_Bool bExists = 0 != DoesBlockExist(aEditText, m_pShortNameEdit->GetText());
-    const sal_Bool bIsGroup = pEntry && !m_pCategoryBox->GetParent(pEntry);
+    const bool bHasEntry = aEditText.Len() && !m_pShortNameEdit->GetText().isEmpty();
+    const bool bExists = 0 != DoesBlockExist(aEditText, m_pShortNameEdit->GetText());
+    const bool bIsGroup = pEntry && !m_pCategoryBox->GetParent(pEntry);
     pMn->EnableItem("new", bSelection && bHasEntry && !bExists);
     pMn->EnableItem("newtext", bSelection && bHasEntry && !bExists);
     pMn->EnableItem("copy", bExists && !bIsGroup);
@@ -613,7 +613,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
         SvtPathOptions aPathOpt;
         String sGlosPath( aPathOpt.GetAutoTextPath() );
         sal_uInt16 nPaths = comphelper::string::getTokenCount(sGlosPath, ';');
-        sal_Bool bIsWritable = sal_False;
+        bool bIsWritable = false;
         for(sal_uInt16 nPath = 0; nPath < nPaths; nPath++)
         {
             String sPath = URIHelper::SmartRel2Abs(

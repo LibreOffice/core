@@ -245,7 +245,7 @@ void SwInsFootNoteDlg::Init()
     }
     m_pNumberCharEdit->SetFont(aFont);
 
-    sal_Bool bNumChar = sNumStr.Len() != 0;
+    bool bNumChar = sNumStr.Len() != 0;
 
     m_pNumberCharEdit->SetText(sNumStr);
     m_pNumberCharBtn->Check(bNumChar);

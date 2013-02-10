@@ -716,7 +716,7 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFmtHdl)
 {
     String sEntry = m_pCharFmtLB->GetSelectEntry();
     sal_uInt16 nMask = 1;
-    sal_Bool bFormatNone = sEntry == ViewShell::GetShellRes()->aStrNone;
+    bool bFormatNone = sEntry == ViewShell::GetShellRes()->aStrNone;
     SwCharFmt* pFmt = 0;
     if(!bFormatNone)
     {
@@ -855,8 +855,8 @@ SfxTabPage* SwOutlineSettingsTabPage::Create( Window* pParent,
 
 void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)
 {
-    sal_Bool bIsNull = m_pStartEdit->GetValue() == 0;
-    sal_Bool bNoZeroAllowed = nNumberingType < SVX_NUM_ARABIC ||
+    bool bIsNull = m_pStartEdit->GetValue() == 0;
+    bool bNoZeroAllowed = nNumberingType < SVX_NUM_ARABIC ||
                         SVX_NUM_CHARS_UPPER_LETTER_N == nNumberingType ||
                         SVX_NUM_CHARS_LOWER_LETTER_N == nNumberingType;
     m_pStartEdit->SetMin(bNoZeroAllowed ? 1 : 0);

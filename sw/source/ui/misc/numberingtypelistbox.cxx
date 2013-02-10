@@ -98,7 +98,7 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
     for(sal_uInt16 i = 0; i < rNames.Count(); i++)
     {
         long nValue = rNames.GetValue(i);
-        sal_Bool bInsert = sal_True;
+        bool bInsert = true;
         sal_uInt16 nPos = LISTBOX_APPEND;
         switch(nValue)
         {
@@ -113,14 +113,14 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
                 if (nValue >  style::NumberingType::CHARS_LOWER_LETTER_N)
                 {
                     // Insert only if offered by i18n framework per configuration.
-                    bInsert = sal_False;
+                    bInsert = false;
                     if (pTypes)
                     {
                         for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
                         {
                             if (pTypes[nType] == nValue)
                             {
-                                bInsert = sal_True;
+                                bInsert = true;
                                 break;  // for
                             }
                         }

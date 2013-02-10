@@ -694,14 +694,14 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
 IMPL_LINK( SwNumPositionTabPage, RelativeHdl, CheckBox *, pBox )
 {
     sal_Bool bOn = pBox->IsChecked();
-    sal_Bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 && USHRT_MAX != nActNumLvl;
-    sal_Bool bSetValue = sal_False;
+    bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 && USHRT_MAX != nActNumLvl;
+    bool bSetValue = false;
     long nValue = 0;
     if(bOn || bSingleSelection)
     {
         sal_uInt16 nMask = 1;
-        sal_Bool bFirst = sal_True;
-        bSetValue = sal_True;
+        bool bFirst = true;
+        bSetValue = true;
         for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         {
             if(nActNumLvl & nMask)
@@ -715,7 +715,7 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, CheckBox *, pBox )
                 }
                 else
                     bSetValue = nValue == rNumFmt.GetAbsLSpace() - pActNum->Get(i - 1).GetAbsLSpace();
-                bFirst = sal_False;
+                bFirst = false;
             }
             nMask <<= 1;
         }

@@ -64,7 +64,7 @@ static String lcl_CheckFileName( const String& rNewFilePath,
     }
     sRet = comphelper::string::strip(sRet, ' ');
 
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
     if( sRet.Len() )
     {
         String sTmpDir(rNewFilePath);
@@ -334,7 +334,7 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const String &rName, sal_Bool bCreate ) 
         if (bCreate || bExist)
         {
             pTmp = new SwTextBlocks( sFileURL );
-            sal_Bool bOk = sal_True;
+            bool bOk = true;
             if( pTmp->GetError() )
             {
                 ErrorHandler::HandleError( pTmp->GetError() );
@@ -399,19 +399,19 @@ SwGlossaries::SwGlossaries()
 /* --------------------------------------------------
 *   #61050# double paths cause irritation - get rid of it
  * --------------------------------------------------*/
-static sal_Bool lcl_FindSameEntry(const std::vector<String*>& rDirArr, const String& rEntryURL)
+static bool lcl_FindSameEntry(const std::vector<String*>& rDirArr, const String& rEntryURL)
 {
     for(std::vector<String*>::const_iterator it(rDirArr.begin()); it != rDirArr.end(); ++it)
         if( **it == rEntryURL )
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 
 void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
 {
     SvtPathOptions aPathOpt;
     String aNewPath( aPathOpt.GetAutoTextPath() );
-    sal_Bool bPathChanged = m_aPath != aNewPath;
+    bool bPathChanged = m_aPath != aNewPath;
     if (bFull || bPathChanged)
     {
         m_aPath = aNewPath;
@@ -544,7 +544,7 @@ String SwGlossaries::GetCompleteGroupName( const rtl::OUString& GroupName )
     String sGroup(GroupName);
     String sGroupName(sGroup.GetToken(0, GLOS_DELIM));
     String sPath = sGroup.GetToken(1, GLOS_DELIM);
-    sal_Bool bPathLen = sPath.Len() > 0;
+    bool bPathLen = sPath.Len() > 0;
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
         String sGrpName = GetGroupName(i);
