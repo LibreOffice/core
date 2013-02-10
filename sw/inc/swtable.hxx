@@ -141,7 +141,7 @@ public:
     virtual ~SwTable();
 
     // @@@ public copy ctor, but no copy assignment?
-    SwTable( const SwTable& rTable );       // kein Copy der Lines !!
+    SwTable( const SwTable& rTable );       // no copy of the lines !!
 private:
     // @@@ public copy ctor, but no copy assignment?
     SwTable & operator= (const SwTable &);
