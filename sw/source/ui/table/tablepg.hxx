@@ -110,7 +110,7 @@ class SwTableColumnPage : public SfxTabPage
     SwTwips         nMinWidth;
     sal_uInt16          nNoOfCols;
     sal_uInt16          nNoOfVisibleCols;
-    //Remember the with, when switching to autoalign
+    //Remember the width, when switching to autoalign
     sal_uInt16          aValueTbl[MET_FIELDS];//primary assignment of the MetricFields
     sal_Bool            bModified:1;
     sal_Bool            bModifyTbl:1;
