@@ -32,6 +32,9 @@ public:
         sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     void PushSpan(const OUString& rSpan, const OUString& rStyleName);
+    void PushFieldSheetName();
+    void PushFieldDate(const OUString& rOutput);
+    void PushFieldTitle(const OUString& rTitle);
 };
 
 /**
@@ -44,6 +47,59 @@ class ScXMLCellTextSpanContext : public ScXMLImportContext
     OUString maContent;
 public:
     ScXMLCellTextSpanContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+
+    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+    virtual void EndElement();
+    virtual void Characters(const OUString& rChars);
+    virtual SvXMLImportContext* CreateChildContext(
+        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+};
+
+/**
+ * This context handles <text:sheet-name> element inside <text:p>.
+ *
+ */
+class ScXMLCellFieldSheetNameContext : public ScXMLImportContext
+{
+    ScXMLCellTextParaContext& mrParentCxt;
+public:
+    ScXMLCellFieldSheetNameContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+
+    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+    virtual void EndElement();
+    virtual void Characters(const OUString& rChars);
+    virtual SvXMLImportContext* CreateChildContext(
+        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+};
+
+/**
+ * This context handles <text:date> element inside <text:p>.
+ *
+ */
+class ScXMLCellFieldDateContext : public ScXMLImportContext
+{
+    ScXMLCellTextParaContext& mrParentCxt;
+    OUString maDate;
+public:
+    ScXMLCellFieldDateContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+
+    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+    virtual void EndElement();
+    virtual void Characters(const OUString& rChars);
+    virtual SvXMLImportContext* CreateChildContext(
+        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+};
+
+/**
+ * This context handles <text:title> element inside <text:p>.
+ *
+ */
+class ScXMLCellFieldTitleContext : public ScXMLImportContext
+{
+    ScXMLCellTextParaContext& mrParentCxt;
+    OUString maTitle;
+public:
+    ScXMLCellFieldTitleContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
 
     virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual void EndElement();

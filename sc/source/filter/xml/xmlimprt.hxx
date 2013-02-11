@@ -687,7 +687,10 @@ enum ScXMLConsolidationAttrTokens
  */
 enum ScXMLCellTextParaElemTokens
 {
-    XML_TOK_CELL_TEXT_SPAN
+    XML_TOK_CELL_TEXT_SPAN,
+    XML_TOK_CELL_TEXT_SHEET_NAME,
+    XML_TOK_CELL_TEXT_DATE,
+    XML_TOK_CELL_TEXT_TITLE
 };
 
 /**

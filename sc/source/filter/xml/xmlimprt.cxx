@@ -1850,6 +1850,9 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextParaElemTokenMap()
         static SvXMLTokenMapEntry aMap[] =
         {
             { XML_NAMESPACE_TEXT, XML_SPAN, XML_TOK_CELL_TEXT_SPAN },
+            { XML_NAMESPACE_TEXT, XML_SHEET_NAME, XML_TOK_CELL_TEXT_SHEET_NAME },
+            { XML_NAMESPACE_TEXT, XML_DATE, XML_TOK_CELL_TEXT_DATE },
+            { XML_NAMESPACE_TEXT, XML_TITLE, XML_TOK_CELL_TEXT_TITLE },
             XML_TOKEN_MAP_END
         };
 

@@ -78,6 +78,7 @@
 #include "editeng/escpitem.hxx"
 #include "editeng/emphitem.hxx"
 #include "editeng/langitem.hxx"
+#include "editeng/flditem.hxx"
 #include <svx/unoapi.hxx>
 #include <svl/languageoptions.hxx>
 #include <sax/tools/converter.hxx>
@@ -145,7 +146,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bFormulaTextResult(false),
     mbPossibleErrorCell(false),
     mbCheckWithCompilerForError(false),
-    mbEditEngineHasText(false)
+    mbEditEngineHasText(false),
+    mbEditEngineHasField(false)
 {
     rtl::math::setNan(&fValue); // NaN by default
     mpEditEngine->Clear();
@@ -548,6 +550,13 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OU
 
     if (pPoolItem)
         rFmt.maItemSet.Put(*pPoolItem);
+}
+
+void ScXMLTableRowCellContext::PushParagraphFieldSheetName()
+{
+    SvxTableField aField(0);
+    mpEditEngine->QuickInsertField(SvxFieldItem(aField, EE_FEATURE_FIELD), ESelection(EE_PARA_APPEND, EE_PARA_APPEND));
+    mbEditEngineHasField = true;
 }
 
 void ScXMLTableRowCellContext::PushParagraphEnd()
@@ -989,7 +998,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             pNewCell = ScBaseCell::CreateTextCell( *maStringValue, pDoc );
         else if (mbEditEngineHasText)
         {
-            if (maFormats.empty() && mpEditEngine->GetParagraphCount() == 1)
+            if (!mbEditEngineHasField && maFormats.empty() && mpEditEngine->GetParagraphCount() == 1)
             {
                 // This is a normal text without format runs.
                 pNewCell = new ScStringCell(mpEditEngine->GetText());

@@ -76,6 +76,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     bool mbPossibleErrorCell;
     bool mbCheckWithCompilerForError;
     bool mbEditEngineHasText;
+    bool mbEditEngineHasField;
 
     sal_Int16 GetCellType(const rtl::OUString& sOUValue) const;
 
@@ -120,6 +121,7 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     void PushParagraphSpan(const OUString& rSpan, const OUString& rStyleName);
+    void PushParagraphFieldSheetName();
     void PushParagraphEnd();
 
     void SetAnnotation( const ScAddress& rPosition );
