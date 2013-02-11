@@ -21,9 +21,6 @@ mkdir: %_DEST%\bin\userscripts
 ..\%__SRC%\bin\update.sh %_DEST%\bin\update
 ..\%__SRC%\bin\javaloader.sh %_DEST%\bin\javaloader.sh
 ..\%__SRC%\misc\mac_ulffiles_dest\*.ulf %_DEST%\bin\*.ulf
-..\source\win32\patchlist.txt %_DEST%\bin\patchlist.txt
-..\source\win32\desktophelper.txt %_DEST%\bin\desktophelper.txt
-..\source\win32\get_retval.bat %_DEST%\bin\get_retval.bat
 ..\source\linux\*.dat %_DEST%\bin\*.dat
 ..\source\mac\*.icns %_DEST%\bin\*.icns
 ..\source\mac\Info.plist.langpack %_DEST%\bin\Info.plist.langpack

@@ -379,8 +379,6 @@ sub run {
 
         installer::setupscript::add_predefined_folder($folderitemsinproductarrayref, $folderinproductarrayref);
 
-        installer::setupscript::prepare_non_advertised_files($folderitemsinproductarrayref, $filesinproductarrayref);
-
         installer::logger::print_message( "... analyzing registryitems ... \n" );
 
         $registryitemsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "RegistryItem");

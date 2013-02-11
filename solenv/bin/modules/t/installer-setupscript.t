@@ -38,7 +38,6 @@ BEGIN {
         add_predefined_folder
         get_all_items_from_script
         get_all_scriptvariables_from_installation_object
-        prepare_non_advertised_files
         replace_all_setupscriptvariables_in_script
         replace_preset_properties
         resolve_lowercase_productname_setupscriptvariable

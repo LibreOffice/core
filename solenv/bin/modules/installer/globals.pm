@@ -198,8 +198,6 @@ BEGIN
     $include_paths_read = 0;
     @patchfilecollector = ();
     $nopatchfilecollector = "";
-    @userregistrycollector = ();
-    $addeduserregitrykeys = 0;
     $desktoplinkexists = 0;
     $analyze_spellcheckerlanguage = 0;
     %spellcheckerlanguagehash = ();

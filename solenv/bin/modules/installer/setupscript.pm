@@ -43,7 +43,6 @@ our @EXPORT_OK = qw(
     add_predefined_folder
     get_all_items_from_script
     get_all_scriptvariables_from_installation_object
-    prepare_non_advertised_files
     replace_all_setupscriptvariables_in_script
     replace_preset_properties
     resolve_lowercase_productname_setupscriptvariable
@@ -402,36 +401,6 @@ sub add_predefined_folder
             Name => "",
             gid => $folderid,
         };
-    }
-}
-
-#####################################################################################
-# If folderitems are non-advertised, the component needs to have a registry key
-# below HKCU as key path. Therefore it is required, to mark the file belonging
-# to a non-advertised shortcut, that a special userreg_xxx registry key can be
-# created during packing process.
-#####################################################################################
-
-sub prepare_non_advertised_files
-{
-    my ( $folderitemref, $filesref ) = @_;
-
-    for ( my $i = 0; $i <= $#{$folderitemref}; $i++ )
-    {
-        my $folderitem = ${$folderitemref}[$i];
-        my $styles = "";
-        if ( $folderitem->{'Styles'} ) { $styles = $folderitem->{'Styles'}; }
-
-        if ( $styles =~ /\bNON_ADVERTISED\b/ )
-        {
-            my $fileid = $folderitem->{'FileID'};
-            if ( $folderitem->{'ComponentIDFile'} ) { $fileid = $folderitem->{'ComponentIDFile'}; }
-            my $onefile = installer::worker::find_file_by_id($filesref, $fileid);
-
-            # Attention: If $onefile with "FileID" is not found, this is not always an error.
-            # FileID can also contain an executable file, for example msiexec.exe.
-            if ( $onefile ne "" ) { $onefile->{'needs_user_registry_key'} = 1; }
-        }
     }
 }
 

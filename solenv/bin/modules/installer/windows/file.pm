@@ -681,22 +681,6 @@ sub get_language_for_file
 }
 
 ####################################################################
-# Creating a new KeyPath for components in TemplatesFolder.
-####################################################################
-
-sub generate_registry_keypath
-{
-    my ($onefile) = @_;
-
-    my $keypath = $onefile->{'Name'};
-    $keypath =~ s/\.//g;
-    $keypath = lc($keypath);
-    $keypath = "userreg_" . $keypath;
-
-    return $keypath;
-}
-
-####################################################################
 # Check, if in an update process files are missing. No removal
 # of files allowed for Windows Patch creation.
 # Also logging all new files, that have to be included in extra
@@ -1014,14 +998,6 @@ sub create_files_table
 
         my $destdir = "";
         if ( $onefile->{'Dir'} ) { $destdir = $onefile->{'Dir'}; }
-
-        if ( $onefile->{'needs_user_registry_key'} )
-        {
-            my $keypath = generate_registry_keypath($onefile);
-            $onefile->{'userregkeypath'} = $keypath;
-            push(@installer::globals::userregistrycollector, $onefile);
-            $installer::globals::addeduserregitrykeys = 1;
-        }
     }
 
     # putting content from %allfilecomponents to $allfilecomponentsref for later usage

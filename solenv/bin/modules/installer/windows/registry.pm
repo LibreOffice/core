@@ -306,38 +306,6 @@ sub get_registry_component
 }
 
 ######################################################
-# Adding the content of
-# @installer::globals::userregistrycollector
-# to the registry table. The content was collected
-# in create_files_table() in file.pm.
-######################################################
-
-sub add_userregs_to_registry_table
-{
-    my ( $registrytable, $allvariables ) = @_;
-
-    for ( my $i = 0; $i <= $#installer::globals::userregistrycollector; $i++ )
-    {
-        my $onefile = $installer::globals::userregistrycollector[$i];
-
-        my %registry = ();
-
-        $registry{'Registry'} = $onefile->{'userregkeypath'};
-        $registry{'Root'} = "1";  # always HKCU
-        $registry{'Key'} = "Software\\$allvariables->{'MANUFACTURER'}\\$allvariables->{'PRODUCTNAME'} $allvariables->{'PRODUCTVERSION'}\\";
-        if ( $onefile->{'needs_user_registry_key'} ) { $registry{'Key'} = $registry{'Key'} . "StartMenu"; }
-        $registry{'Name'} = $onefile->{'Name'};
-        $registry{'Value'} = "1";
-        $registry{'Component_'} = $onefile->{'componentname'};
-
-        my $oneline = $registry{'Registry'} . "\t" . $registry{'Root'} . "\t" . $registry{'Key'} . "\t"
-                    . $registry{'Name'} . "\t" . $registry{'Value'} . "\t" . $registry{'Component_'} . "\n";
-
-        push(@{$registrytable}, $oneline);
-    }
-}
-
-######################################################
 # Creating the file Registry.idt dynamically
 # Content:
 # Registry Root Key Name Value Component_
@@ -408,12 +376,6 @@ sub create_registry_table
 
             push(@registrytable, $oneline);
         }
-
-        # If there are added user registry keys for files collected in
-        # @installer::globals::userregistrycollector (file.pm), then
-        # this registry keys have to be added now.
-
-        if ( $installer::globals::addeduserregitrykeys ) { add_userregs_to_registry_table(\@registrytable, $allvariableshashref); }
 
         # Saving the file
 

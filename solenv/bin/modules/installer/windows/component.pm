@@ -227,11 +227,6 @@ sub get_file_component_attributes
         $attributes = 0;    # Assembly files cannot run from source
     }
 
-    if ( $onefile->{'needs_user_registry_key'} )
-    {
-        $attributes = 4;    # Files in non advertised startmenu entries must have user registry key as KeyPath
-    }
-
     # Setting msidbComponentAttributes64bit, if this is a 64 bit installation set.
     if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 )) { $attributes |= 256; }
 
@@ -364,8 +359,6 @@ sub get_component_keypath
             push(@installer::globals::logfileinfo, $infoline);
         }
     }
-
-    if ( $oneitem->{'userregkeypath'} ) { $keypath = $oneitem->{'userregkeypath'}; }
 
     # saving it in the file and registry collection
     $oneitem->{'keypath'} = $keypath;
