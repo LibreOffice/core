@@ -570,6 +570,11 @@ void ScXMLTableRowCellContext::PushParagraphField(SvxFieldData* pData)
     rField.maSelection.nEndPos = nPos+1;
 }
 
+void ScXMLTableRowCellContext::PushParagraphFieldDate()
+{
+    PushParagraphField(new SvxDateField);
+}
+
 void ScXMLTableRowCellContext::PushParagraphFieldSheetName()
 {
     SCTAB nTab = GetScImport().GetTables().GetCurrentCellPos().Tab();

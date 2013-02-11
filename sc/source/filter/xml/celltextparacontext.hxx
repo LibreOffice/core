@@ -33,7 +33,7 @@ public:
 
     void PushSpan(const OUString& rSpan, const OUString& rStyleName);
     void PushFieldSheetName();
-    void PushFieldDate(const OUString& rOutput);
+    void PushFieldDate();
     void PushFieldTitle();
 };
 
@@ -79,7 +79,6 @@ public:
 class ScXMLCellFieldDateContext : public ScXMLImportContext
 {
     ScXMLCellTextParaContext& mrParentCxt;
-    OUString maDate;
 public:
     ScXMLCellFieldDateContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
 
@@ -97,7 +96,6 @@ public:
 class ScXMLCellFieldTitleContext : public ScXMLImportContext
 {
     ScXMLCellTextParaContext& mrParentCxt;
-    OUString maTitle;
 public:
     ScXMLCellFieldTitleContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
 

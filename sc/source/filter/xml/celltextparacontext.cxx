@@ -78,8 +78,9 @@ void ScXMLCellTextParaContext::PushFieldSheetName()
     mrParentCxt.PushParagraphFieldSheetName();
 }
 
-void ScXMLCellTextParaContext::PushFieldDate(const OUString& rOutput)
+void ScXMLCellTextParaContext::PushFieldDate()
 {
+    mrParentCxt.PushParagraphFieldDate();
 }
 
 void ScXMLCellTextParaContext::PushFieldTitle()
@@ -180,11 +181,11 @@ void ScXMLCellFieldDateContext::StartElement(const uno::Reference<xml::sax::XAtt
 
 void ScXMLCellFieldDateContext::EndElement()
 {
+    mrParentCxt.PushFieldDate();
 }
 
-void ScXMLCellFieldDateContext::Characters(const OUString& rChars)
+void ScXMLCellFieldDateContext::Characters(const OUString& /*rChars*/)
 {
-    maDate = rChars;
 }
 
 SvXMLImportContext* ScXMLCellFieldDateContext::CreateChildContext(
@@ -209,9 +210,8 @@ void ScXMLCellFieldTitleContext::EndElement()
     mrParentCxt.PushFieldTitle();
 }
 
-void ScXMLCellFieldTitleContext::Characters(const OUString& rChars)
+void ScXMLCellFieldTitleContext::Characters(const OUString& /*rChars*/)
 {
-    maTitle = rChars;
 }
 
 SvXMLImportContext* ScXMLCellFieldTitleContext::CreateChildContext(

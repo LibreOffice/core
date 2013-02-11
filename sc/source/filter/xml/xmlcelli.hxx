@@ -136,6 +136,7 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     void PushParagraphSpan(const OUString& rSpan, const OUString& rStyleName);
+    void PushParagraphFieldDate();
     void PushParagraphFieldSheetName();
     void PushParagraphFieldDocTitle();
     void PushParagraphEnd();
