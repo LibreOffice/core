@@ -32,6 +32,7 @@
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -639,8 +640,18 @@ sal_Bool SfxDocTplService_Impl::setTitleForURL( const OUString& rURL, const OUSt
         try
         {
             m_xDocProps->loadFromMedium(rURL, Sequence<PropertyValue>());
-            m_xDocProps->setTitle(aTitle );
-            m_xDocProps->storeToMedium(rURL, Sequence<PropertyValue>());
+            m_xDocProps->setTitle(aTitle);
+
+            uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
+                    rURL, embed::ElementModes::READWRITE);
+
+            uno::Sequence<beans::PropertyValue> medium(2);
+            medium[0].Name = ::rtl::OUString("DocumentBaseURL");
+            medium[0].Value <<= rURL;
+            medium[1].Name = ::rtl::OUString("URL");
+            medium[1].Value <<= rURL;
+
+            m_xDocProps->storeToStorage(xStorage, medium);
             return true;
         }
         catch ( Exception& )
