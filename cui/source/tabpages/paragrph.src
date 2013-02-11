@@ -692,43 +692,6 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Left = TRUE ;
     };
 };
-
-// Asian typography
-TabPage RID_SVXPAGE_PARA_ASIAN
-{
-    HelpId = HID_SVXPAGE_PARA_ASIAN ;
-    Hide = TRUE ;
-    Text [ en-US ] = "Asian Typography";
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    FixedLine FL_AS_OPTIONS
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Line change";
-    };
-    TriStateBox CB_AS_FORBIDDEN
-    {
-        HelpID = "cui:TriStateBox:RID_SVXPAGE_PARA_ASIAN:CB_AS_FORBIDDEN";
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ en-US ] = "Apply list of forbidden characters to the beginning and end of lines";
-    };
-    TriStateBox CB_AS_HANG_PUNC
-    {
-        HelpID = "cui:TriStateBox:RID_SVXPAGE_PARA_ASIAN:CB_AS_HANG_PUNC";
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ en-US ] = "Allow hanging punctuation";
-    };
-    TriStateBox CB_AS_SCRIPT_SPACE
-    {
-        HelpID = "cui:TriStateBox:RID_SVXPAGE_PARA_ASIAN:CB_AS_SCRIPT_SPACE";
-        Pos = MAP_APPFONT ( 12 , 42 ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ en-US ] = "Apply spacing between Asian, Latin and Complex text";
-    };
-};
-
 String STR_EXAMPLE
 {
     Text [ en-US ] = "Example" ;
