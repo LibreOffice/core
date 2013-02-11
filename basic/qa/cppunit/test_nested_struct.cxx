@@ -288,15 +288,16 @@ void Nested_Struct::testUnfixedVarAssignAlt()
     bool bRes = aRet >>= aResult;
     CPPUNIT_ASSERT_EQUAL(true, bRes );
 
+    int result = aResult.getLength();
     // should have 2 elements in a sequence returned
-    CPPUNIT_ASSERT_EQUAL(2, aResult.getLength() );
+    CPPUNIT_ASSERT_EQUAL(2, result );
 
     table::TableBorder aBorder;
     aResult[0] >>= aBorder;
 
     table::BorderLine aBorderLine;
     aResult[1] >>= aBorderLine;
-    int result = aBorder.HorizontalLine.OuterLineWidth;
+    result = aBorder.HorizontalLine.OuterLineWidth;
     CPPUNIT_ASSERT_EQUAL(9, result );
     result = aBorderLine.OuterLineWidth;
     CPPUNIT_ASSERT_EQUAL(4, result );
@@ -341,15 +342,16 @@ void Nested_Struct::testFixedVarAssignAlt()
     bool bRes = aRet >>= aResult;
     CPPUNIT_ASSERT_EQUAL(true, bRes );
 
+    int result = aResult.getLength();
     // should have 2 elements in a sequence returned
-    CPPUNIT_ASSERT_EQUAL(2, aResult.getLength() );
+    CPPUNIT_ASSERT_EQUAL(2, result );
 
     table::TableBorder aBorder;
     aResult[0] >>= aBorder;
 
     table::BorderLine aBorderLine;
     aResult[1] >>= aBorderLine;
-    int result = aBorder.HorizontalLine.OuterLineWidth;
+    result = aBorder.HorizontalLine.OuterLineWidth;
     CPPUNIT_ASSERT_EQUAL(9, result );
     result = aBorderLine.OuterLineWidth;
     CPPUNIT_ASSERT_EQUAL(4, result );
@@ -374,7 +376,8 @@ void Nested_Struct::testUnoAccess()
     awt::WindowDescriptor aWinDesc;
     aRet >>= aWinDesc;
 
-    CPPUNIT_ASSERT_EQUAL(200, aWinDesc.Bounds.X );
+    int result = aWinDesc.Bounds.X;
+    CPPUNIT_ASSERT_EQUAL(200, result );
 }
 
   // Put the test suite in the registry
