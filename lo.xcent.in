@@ -11,6 +11,10 @@
 	<!-- usb needed for the apple_remote thingie... -->
 	<key>com.apple.security.device.usb</key>
 	<true/>
+	<key>com.apple.security.temporary-exception.apple-events</key>
+	<array>
+		<string>mac.remotecontrols</string>
+	</array>
 	<key>com.apple.security.print</key>
 	<true/>
 </dict>
