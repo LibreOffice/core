@@ -21,7 +21,7 @@
 #include <doc.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <fldbas.hxx>           // UpdateFlds der KapitelNummerierung
+#include <fldbas.hxx>           // UpdateFlds of the chapter numbering
 #include <docary.hxx>
 
 bool CompareSwOutlineNodes::operator()( SwNode* const& lhs, SwNode* const& rhs) const
@@ -67,20 +67,20 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
 
         pTxtNd->UpdateOutlineState();
 
-        // die Gliederungs-Felder Updaten
+        // update the structure fields
         GetDoc()->GetSysFldType( RES_CHAPTERFLD )->UpdateFlds();
     }
 }
 
 void SwNodes::UpdtOutlineIdx( const SwNode& rNd )
 {
-    if( pOutlineNds->empty() )     // keine OutlineNodes vorhanden ?
+    if( pOutlineNds->empty() )     // no OutlineNodes present ?
         return;
 
     const SwNodePtr pSrch = (SwNodePtr)&rNd;
     sal_uInt16 nPos;
     pOutlineNds->Seek_Entry( pSrch, &nPos );
-    if( nPos == pOutlineNds->size() )      // keine zum Updaten vorhanden ?
+    if( nPos == pOutlineNds->size() )      // none present for updating ?
         return;
 
     if( nPos )
