@@ -835,6 +835,7 @@
             </prop>
             <prop oor:name="IncludedNodes">
               <value>
+                <it>/org.openoffice.Office.Accelerators</it>
                 <it>/org.openoffice.Office.Compatibility</it>
                 <it>/org.openoffice.Office.Custom</it>
                 <it>/org.openoffice.Office.Embedding</it>
