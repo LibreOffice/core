@@ -182,13 +182,16 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/adodb,\
     CursorOptionEnum \
     CursorTypeEnum \
     DataTypeEnum \
+    EditModeEnum \
     ErrorValueEnum \
     EventReasonEnum \
     EventStatusEnum \
     ExecuteOptionEnum \
+    FieldAttributeEnum \
     FilterGroupEnum \
     GetRowsOptionEnum \
     IsolationLevelEnum \
+    LockTypeEnum a
     MarshalOptionsEnum \
     ObjectStateEnum \
     ParameterAttributesEnum \
@@ -196,6 +199,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/adodb,\
     PersistFormatEnum \
     PositionEnum \
     PropertyAttributesEnum \
+    RecordStatusEnum \
     ResyncEnum \
     SchemaEnum \
     SearchDirectionEnum \
