@@ -76,10 +76,10 @@ namespace
 //------------------------------------------------------------------------
 
 CDOTransferable::CDOTransferable(
-    const Reference< XMultiServiceFactory >& ServiceManager, IDataObjectPtr rDataObject ) :
+    const Reference< XComponentContext >& rxContext, IDataObjectPtr rDataObject ) :
     m_rDataObject( rDataObject ),
-    m_SrvMgr( ServiceManager ),
-    m_DataFormatTranslator( m_SrvMgr ),
+    m_xContext( rxContext ),
+    m_DataFormatTranslator( rxContext ),
     m_bUnicodeRegistered( sal_False ),
     m_TxtFormatOnClipboard( CF_INVALID )
 {
@@ -493,7 +493,7 @@ sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
 {
     if ( !m_rXMimeCntFactory.is( ) )
     {
-        m_rXMimeCntFactory = MimeContentTypeFactory::create( comphelper::getComponentContext(m_SrvMgr) );
+        m_rXMimeCntFactory = MimeContentTypeFactory::create( m_xContext );
     }
 
     sal_Bool bRet = sal_False;

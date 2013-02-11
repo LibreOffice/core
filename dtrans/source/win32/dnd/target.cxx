@@ -46,7 +46,7 @@ extern Reference< XTransferable > g_XTransferable;
 extern rtl_StandardModuleCount g_moduleCount;
 DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams);
 
-DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf):
+DropTarget::DropTarget( const Reference<XComponentContext>& rxContext):
     WeakComponentImplHelper3<XInitialization,XDropTarget, XServiceInfo>(m_mutex),
     m_hWnd( NULL),
     m_threadIdWindow(0),
@@ -54,7 +54,7 @@ DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf):
     m_hOleThread(0),
     m_oleThreadId( 0),
     m_pDropTarget( NULL),
-    m_serviceFactory( sf),
+    m_xContext( rxContext ),
     m_bActive(sal_True),
     m_nDefaultActions(ACTION_COPY|ACTION_MOVE|ACTION_LINK|ACTION_DEFAULT),
     m_nCurrentDropAction( ACTION_NONE),
@@ -340,7 +340,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
         {
             // Convert the IDataObject to a XTransferable
             m_currentData= m_aDataConverter.createTransferableFromDataObj(
-                                            m_serviceFactory, IDataObjectPtr(pDataObj));
+                                            m_xContext, IDataObjectPtr(pDataObj));
         }
 
         //<-- TRA

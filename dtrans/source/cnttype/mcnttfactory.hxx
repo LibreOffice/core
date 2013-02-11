@@ -33,7 +33,7 @@ class CMimeContentTypeFactory : public
 {
 
 public:
-    CMimeContentTypeFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSrvMgr );
+    CMimeContentTypeFactory();
 
     //------------------------------------------------
     // XMimeContentTypeFactory
@@ -57,7 +57,6 @@ public:
 
 private:
     ::osl::Mutex                                                                           m_aMutex;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_SrvMgr;
 };
 
 

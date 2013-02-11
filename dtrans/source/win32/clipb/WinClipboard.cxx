@@ -59,9 +59,9 @@ namespace
 // ctor
 //------------------------------------------------------------------------
 /*XEventListener,*/
-CWinClipboard::CWinClipboard( const Reference< XMultiServiceFactory >& rServiceManager, const OUString& aClipboardName ) :
+CWinClipboard::CWinClipboard( const Reference< XComponentContext >& rxContext, const OUString& aClipboardName ) :
     WeakComponentImplHelper3< XSystemClipboard, XFlushableClipboard, XServiceInfo >( m_aCbListenerMutex ),
-    m_SrvMgr( rServiceManager )
+    m_xContext( rxContext )
 {
     m_pImpl.reset( new CWinClipbImpl( aClipboardName, this ) );
 }

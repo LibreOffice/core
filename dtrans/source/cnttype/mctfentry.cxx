@@ -57,9 +57,9 @@ namespace
     // so we should give it to every UNO-Implementation component
     //-----------------------------------------------------------------------------------------------------------
 
-    Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
+    Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >&  )
     {
-        return Reference< XInterface >( static_cast< XMimeContentTypeFactory* >( new CMimeContentTypeFactory( rServiceManager ) ) );
+        return Reference< XInterface >( static_cast< XMimeContentTypeFactory* >( new CMimeContentTypeFactory() ) );
     }
 }
 

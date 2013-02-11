@@ -52,8 +52,7 @@ namespace
 // ctor
 //------------------------------------------------------------------------
 
-CMimeContentTypeFactory::CMimeContentTypeFactory( const Reference< XMultiServiceFactory >& rSrvMgr ) :
-    m_SrvMgr( rSrvMgr )
+CMimeContentTypeFactory::CMimeContentTypeFactory()
 {
 }
 

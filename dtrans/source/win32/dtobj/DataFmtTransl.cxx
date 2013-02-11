@@ -27,6 +27,8 @@
 #include "DTransHelper.hxx"
 #include <rtl/string.h>
 #include "Fetc.hxx"
+#include <com/sun/star/datatransfer/DataFormatTranslator.hpp>
+
 
 #if defined _MSC_VER
 #pragma warning(push,1)
@@ -66,11 +68,9 @@ const OUString HTML_FORMAT_NAME_SOFFICE ("HTML (HyperText Markup Language)");
 //
 //------------------------------------------------------------------------
 
-CDataFormatTranslator::CDataFormatTranslator( const Reference< XMultiServiceFactory >& aServiceManager ) :
-    m_SrvMgr( aServiceManager )
+CDataFormatTranslator::CDataFormatTranslator( const Reference< XComponentContext >& rxContext )
 {
-    m_XDataFormatTranslator = Reference< XDataFormatTranslator >(
-        m_SrvMgr->createInstance( OUString("com.sun.star.datatransfer.DataFormatTranslator") ), UNO_QUERY );
+    m_XDataFormatTranslator = DataFormatTranslator::create( rxContext );
 }
 
 //------------------------------------------------------------------------

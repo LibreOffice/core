@@ -35,16 +35,16 @@ using namespace com::sun::star::lang;
 // implementation
 //------------------------------------------------------------------------
 
-IDataObjectPtr SAL_CALL CDTransObjFactory::createDataObjFromTransferable(const Reference<XMultiServiceFactory>& aServiceManager,
+IDataObjectPtr SAL_CALL CDTransObjFactory::createDataObjFromTransferable(const Reference<XComponentContext>& rxContext,
                                                                        const Reference< XTransferable >& refXTransferable)
 {
-    return (IDataObjectPtr(new CXTDataObject(aServiceManager, refXTransferable)));
+    return (IDataObjectPtr(new CXTDataObject(rxContext, refXTransferable)));
 }
 
-Reference< XTransferable > SAL_CALL CDTransObjFactory::createTransferableFromDataObj( const Reference< XMultiServiceFactory >& aServiceManager,
+Reference< XTransferable > SAL_CALL CDTransObjFactory::createTransferableFromDataObj( const Reference< XComponentContext >& rxContext,
                                                                                      IDataObjectPtr pIDataObject )
 {
-    CDOTransferable* pTransf = new CDOTransferable(aServiceManager, pIDataObject);
+    CDOTransferable* pTransf = new CDOTransferable(rxContext, pIDataObject);
     Reference<XTransferable> refDOTransf(pTransf);
 
     pTransf->acquire();

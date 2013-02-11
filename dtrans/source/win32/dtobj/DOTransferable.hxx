@@ -63,7 +63,7 @@ public:
 private:
     // should be created only by CDTransObjFactory
     explicit CDOTransferable(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ServiceManager,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         IDataObjectPtr rDataObject );
 
     //------------------------------------------------------------------------
@@ -97,7 +97,7 @@ private:
 private:
     IDataObjectPtr                                                                          m_rDataObject;
     com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor >               m_FlavorList;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_SrvMgr;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
     CDataFormatTranslator                                                                   m_DataFormatTranslator;
     com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentTypeFactory > m_rXMimeCntFactory;
     ::osl::Mutex                                                                            m_aMutex;

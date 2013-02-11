@@ -18,6 +18,7 @@
  */
 
 #include <cppuhelper/factory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>
 
@@ -34,13 +35,13 @@ rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 Reference< XInterface > SAL_CALL createDragSource( const Reference< XMultiServiceFactory >& rServiceManager )
 {
-    DragSource* pSource= new DragSource( rServiceManager );
+    DragSource* pSource= new DragSource( comphelper::getComponentContext(rServiceManager) );
     return Reference<XInterface>( static_cast<XInitialization*>(pSource), UNO_QUERY);
 }
 
 Reference< XInterface > SAL_CALL createDropTarget( const Reference< XMultiServiceFactory >& rServiceManager )
 {
-    DropTarget* pTarget= new DropTarget( rServiceManager );
+    DropTarget* pTarget= new DropTarget( comphelper::getComponentContext(rServiceManager) );
     return Reference<XInterface>( static_cast<XInitialization*>(pTarget), UNO_QUERY);
 }
 

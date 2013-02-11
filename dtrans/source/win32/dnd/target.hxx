@@ -85,7 +85,7 @@ private:
     // this class.
     IDropTarget* m_pDropTarget;
 
-    Reference<XMultiServiceFactory> m_serviceFactory;
+    Reference<XComponentContext> m_xContext;
     // If m_bActive == sal_True then events are fired to XDropTargetListener s,
     // none otherwise. The default value is sal_True.
     sal_Bool m_bActive;
@@ -116,7 +116,7 @@ private:
     DropTarget &operator= (DropTarget&);
 
 public:
-    DropTarget(const Reference<XMultiServiceFactory>& sf);
+    DropTarget(const Reference<XComponentContext>& rxContext);
     virtual ~DropTarget();
 
     // Overrides WeakComponentImplHelper::disposing which is called by

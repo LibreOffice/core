@@ -32,6 +32,7 @@
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/conditn.hxx>
 
 #include <memory>
@@ -68,7 +69,7 @@ class CWinClipboard :
         ::com::sun::star::lang::XServiceInfo >
 {
 public:
-    CWinClipboard( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+    CWinClipboard( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                    const ::rtl::OUString& aClipboardName );
 
     //------------------------------------------------
@@ -134,8 +135,8 @@ private:
     void SAL_CALL notifyAllClipboardListener( );
 
 private:
-    ::std::auto_ptr< CWinClipbImpl >                                                  m_pImpl;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_SrvMgr;
+    ::std::auto_ptr< CWinClipbImpl >                                              m_pImpl;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
 
     friend class CWinClipbImpl;
 };

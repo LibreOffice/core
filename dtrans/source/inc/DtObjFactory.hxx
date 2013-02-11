@@ -22,17 +22,17 @@
 #define _DTOBJFACTORY_HXX_
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <systools/win32/comtools.hxx>
 
 class CDTransObjFactory
 {
 public:
-    virtual IDataObjectPtr SAL_CALL createDataObjFromTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager,
+    virtual IDataObjectPtr SAL_CALL createDataObjFromTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                                                                    const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& refXTransferable );
     virtual com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > SAL_CALL createTransferableFromDataObj(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager, IDataObjectPtr pIDataObject );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, IDataObjectPtr pIDataObject );
 };
 
 #endif

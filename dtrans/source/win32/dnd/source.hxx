@@ -51,7 +51,7 @@ class DragSource:
       public IDropSource
 
 {
-    Reference<XMultiServiceFactory> m_serviceFactory;
+    Reference<XComponentContext> m_xContext;
     HWND m_hAppWindow;
 
     // The mouse button that set off the drag and drop operation
@@ -89,7 +89,7 @@ public:
     sal_Int8 m_sourceActions;
 
 public:
-    DragSource(const Reference<XMultiServiceFactory>& sf);
+    DragSource(const Reference<XComponentContext>& rxContext);
     virtual ~DragSource();
 
   // XInitialization

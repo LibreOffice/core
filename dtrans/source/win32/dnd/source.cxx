@@ -67,9 +67,9 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams);
 //----------------------------------------------------
 /** Ctor
 */
-DragSource::DragSource( const Reference<XMultiServiceFactory>& sf):
+DragSource::DragSource( const Reference<XComponentContext>& rxContext):
     WeakComponentImplHelper3< XDragSource, XInitialization, XServiceInfo >(m_mutex),
-    m_serviceFactory( sf),
+    m_xContext( rxContext ),
 //  m_pcurrentContext_impl(0),
     m_hAppWindow(0),
     m_MouseButton(0),
@@ -131,7 +131,7 @@ void DragSource::StartDragImpl(
     //<-- TRA
 
     m_spDataObject= m_aDataConverter.createDataObjFromTransferable(
-                    m_serviceFactory, trans);
+                    m_xContext, trans);
 
     // Obtain the id of the thread that created the window
     DWORD processId;

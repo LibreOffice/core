@@ -120,7 +120,7 @@ Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( Runtime
         CDTransObjFactory objFactory;
 
         // remeber pIDo destroys itself due to the smart pointer
-        rClipContent = objFactory.createTransferableFromDataObj( m_pWinClipboard->m_SrvMgr, pIDo );
+        rClipContent = objFactory.createTransferableFromDataObj( m_pWinClipboard->m_xContext, pIDo );
     }
 
     return rClipContent;
@@ -143,7 +143,7 @@ void SAL_CALL CWinClipbImpl::setContents(
         ClearableMutexGuard aGuard( m_ClipContentMutex );
 
         m_pCurrentClipContent = new CXNotifyingDataObject(
-            objFactory.createDataObjFromTransferable( m_pWinClipboard->m_SrvMgr , xTransferable ),
+            objFactory.createDataObjFromTransferable( m_pWinClipboard->m_xContext , xTransferable ),
             xTransferable,
             xClipboardOwner,
             this );

@@ -71,14 +71,13 @@ public:
 // ctor
 //------------------------------------------------------------------------
 
-CXTDataObject::CXTDataObject( const Reference< XMultiServiceFactory >& aServiceManager,
+CXTDataObject::CXTDataObject( const Reference< XComponentContext >& rxContext,
                               const Reference< XTransferable >& aXTransferable )
     : m_nRefCnt( 0 )
-    , m_SrvMgr( aServiceManager )
     , m_XTransferable( aXTransferable )
     , m_bFormatEtcContainerInitialized( sal_False )
-    , m_DataFormatTranslator( aServiceManager )
-    , m_FormatRegistrar( comphelper::getComponentContext(m_SrvMgr), m_DataFormatTranslator )
+    , m_DataFormatTranslator( rxContext )
+    , m_FormatRegistrar( rxContext, m_DataFormatTranslator )
 {
 }
 

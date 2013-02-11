@@ -63,7 +63,7 @@ class CStgTransferHelper;
 class CXTDataObject : public IDataObject
 {
 public:
-    CXTDataObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager,
+    CXTDataObject( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& aXTransferable );
     virtual ~CXTDataObject() {}
 
@@ -120,7 +120,6 @@ private:
 
 private:
     LONG m_nRefCnt;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_SrvMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >      m_XTransferable;
     CFormatEtcContainer                                                                    m_FormatEtcContainer;
     sal_Bool                                                                               m_bFormatEtcContainerInitialized;

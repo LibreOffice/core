@@ -40,10 +40,10 @@ typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::su
 namespace dtrans
 {
 
-    class ClipboardManager : public ::cppu::WeakComponentImplHelper3 < \
-    ::com::sun::star::datatransfer::clipboard::XClipboardManager, \
-    ::com::sun::star::lang::XEventListener, \
-    ::com::sun::star::lang::XServiceInfo >
+    class ClipboardManager : public ::cppu::WeakComponentImplHelper3 <
+      ::com::sun::star::datatransfer::clipboard::XClipboardManager,
+      ::com::sun::star::lang::XEventListener,
+      ::com::sun::star::lang::XServiceInfo >
     {
         ClipboardMap m_aClipboardMap;
         ::osl::Mutex m_aMutex;
