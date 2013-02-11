@@ -586,6 +586,11 @@ void ScXMLTableRowCellContext::PushParagraphFieldDocTitle()
     PushParagraphField(new SvxFileField);
 }
 
+void ScXMLTableRowCellContext::PushParagraphFieldURL(const OUString& rURL, const OUString& rRep)
+{
+    PushParagraphField(new SvxURLField(rURL, rRep, SVXURLFORMAT_REPR));
+}
+
 void ScXMLTableRowCellContext::PushParagraphEnd()
 {
     // EditEngine always has at least one paragraph even when its content is empty.

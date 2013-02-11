@@ -690,7 +690,8 @@ enum ScXMLCellTextParaElemTokens
     XML_TOK_CELL_TEXT_SPAN,
     XML_TOK_CELL_TEXT_SHEET_NAME,
     XML_TOK_CELL_TEXT_DATE,
-    XML_TOK_CELL_TEXT_TITLE
+    XML_TOK_CELL_TEXT_TITLE,
+    XML_TOK_CELL_TEXT_URL
 };
 
 /**
@@ -699,6 +700,12 @@ enum ScXMLCellTextParaElemTokens
 enum ScXMLCellTextSpanAttrTokens
 {
     XML_TOK_CELL_TEXT_SPAN_ATTR_STYLE_NAME
+};
+
+enum ScXMLCellTextURLAttrTokens
+{
+    XML_TOK_CELL_TEXT_URL_ATTR_UREF,
+    XML_TOK_CELL_TEXT_URL_ATTR_TYPE,
 };
 
 class SvXMLTokenMap;
@@ -869,8 +876,9 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     SvXMLTokenMap           *pDataPilotMembersElemTokenMap;
     SvXMLTokenMap           *pDataPilotMemberAttrTokenMap;
     SvXMLTokenMap           *pConsolidationAttrTokenMap;
-    SvXMLTokenMap           *pCellTextParaElemTokemMap;
-    SvXMLTokenMap           *pCellTextSpanAttrTokemMap;
+    SvXMLTokenMap           *pCellTextParaElemTokenMap;
+    SvXMLTokenMap           *pCellTextSpanAttrTokenMap;
+    SvXMLTokenMap           *pCellTextURLAttrTokenMap;
 
     ScMyTables              aTables;
 
@@ -1038,6 +1046,7 @@ public:
     const SvXMLTokenMap& GetConsolidationAttrTokenMap();
     const SvXMLTokenMap& GetCellTextParaElemTokenMap();
     const SvXMLTokenMap& GetCellTextSpanAttrTokenMap();
+    const SvXMLTokenMap& GetCellTextURLAttrTokenMap();
 
     void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
     {

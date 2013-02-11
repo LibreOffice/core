@@ -1845,7 +1845,7 @@ const SvXMLTokenMap& ScXMLImport::GetConsolidationAttrTokenMap()
 
 const SvXMLTokenMap& ScXMLImport::GetCellTextParaElemTokenMap()
 {
-    if (!pCellTextParaElemTokemMap)
+    if (!pCellTextParaElemTokenMap)
     {
         static SvXMLTokenMapEntry aMap[] =
         {
@@ -1853,17 +1853,18 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextParaElemTokenMap()
             { XML_NAMESPACE_TEXT, XML_SHEET_NAME, XML_TOK_CELL_TEXT_SHEET_NAME },
             { XML_NAMESPACE_TEXT, XML_DATE, XML_TOK_CELL_TEXT_DATE },
             { XML_NAMESPACE_TEXT, XML_TITLE, XML_TOK_CELL_TEXT_TITLE },
+            { XML_NAMESPACE_TEXT, XML_A, XML_TOK_CELL_TEXT_URL },
             XML_TOKEN_MAP_END
         };
 
-        pCellTextParaElemTokemMap = new SvXMLTokenMap(aMap);
+        pCellTextParaElemTokenMap = new SvXMLTokenMap(aMap);
     }
-    return *pCellTextParaElemTokemMap;
+    return *pCellTextParaElemTokenMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetCellTextSpanAttrTokenMap()
 {
-    if (!pCellTextSpanAttrTokemMap)
+    if (!pCellTextSpanAttrTokenMap)
     {
         static SvXMLTokenMapEntry aMap[] =
         {
@@ -1871,9 +1872,25 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextSpanAttrTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pCellTextSpanAttrTokemMap = new SvXMLTokenMap(aMap);
+        pCellTextSpanAttrTokenMap = new SvXMLTokenMap(aMap);
     }
-    return *pCellTextSpanAttrTokemMap;
+    return *pCellTextSpanAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetCellTextURLAttrTokenMap()
+{
+    if (!pCellTextURLAttrTokenMap)
+    {
+        static SvXMLTokenMapEntry aMap[] =
+        {
+            { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_CELL_TEXT_URL_ATTR_UREF },
+            { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_CELL_TEXT_URL_ATTR_TYPE },
+            XML_TOKEN_MAP_END
+        };
+
+        pCellTextURLAttrTokenMap = new SvXMLTokenMap(aMap);
+    }
+    return *pCellTextURLAttrTokenMap;
 }
 
 SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
@@ -1998,8 +2015,9 @@ ScXMLImport::ScXMLImport(
     pDataPilotMembersElemTokenMap( 0 ),
     pDataPilotMemberAttrTokenMap( 0 ),
     pConsolidationAttrTokenMap( 0 ),
-    pCellTextParaElemTokemMap(NULL),
-    pCellTextSpanAttrTokemMap(NULL),
+    pCellTextParaElemTokenMap(NULL),
+    pCellTextSpanAttrTokenMap(NULL),
+    pCellTextURLAttrTokenMap(NULL),
     aTables(*this),
     pMyNamedExpressions(NULL),
     pMyLabelRanges(NULL),
@@ -2137,8 +2155,9 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDataPilotMembersElemTokenMap;
     delete pDataPilotMemberAttrTokenMap;
     delete pConsolidationAttrTokenMap;
-    delete pCellTextParaElemTokemMap;
-    delete pCellTextSpanAttrTokemMap;
+    delete pCellTextParaElemTokenMap;
+    delete pCellTextSpanAttrTokenMap;
+    delete pCellTextURLAttrTokenMap;
 
     delete pChangeTrackingImportHelper;
     delete pNumberFormatAttributesExportHelper;

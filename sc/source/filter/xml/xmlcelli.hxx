@@ -139,6 +139,7 @@ public:
     void PushParagraphFieldDate();
     void PushParagraphFieldSheetName();
     void PushParagraphFieldDocTitle();
+    void PushParagraphFieldURL(const OUString& rURL, const OUString& rRep);
     void PushParagraphEnd();
 
     void SetAnnotation( const ScAddress& rPosition );
