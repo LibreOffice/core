@@ -130,6 +130,8 @@ class FileAccess(object):
 
     @classmethod
     def getParentDir(self, url):
+        while url[-1] == "/":
+            url = url[:-1]
         return url[:url.rfind("/")]
 
     @classmethod
