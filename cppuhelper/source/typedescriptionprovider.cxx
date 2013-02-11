@@ -259,20 +259,23 @@ struct Memory32 {
     }
 
     float getIso60599Binary32() const {
-        // Create a copy in either case, for alingment:
-        unsigned char buf[4];
+        // Create a copy in either case, for alignment:
+        union {
+            unsigned char buf[4];
+            float f;
+        } sa;
 #if defined OSL_LITENDIAN
-        buf[0] = byte[0];
-        buf[1] = byte[1];
-        buf[2] = byte[2];
-        buf[3] = byte[3];
+        sa.buf[0] = byte[0];
+        sa.buf[1] = byte[1];
+        sa.buf[2] = byte[2];
+        sa.buf[3] = byte[3];
 #else
-        buf[0] = byte[3];
-        buf[1] = byte[2];
-        buf[2] = byte[1];
-        buf[3] = byte[0];
+        sa.buf[0] = byte[3];
+        sa.buf[1] = byte[2];
+        sa.buf[2] = byte[1];
+        sa.buf[3] = byte[0];
 #endif
-        return *reinterpret_cast< float * >(buf);
+        return sa.f;
             // assuming float is ISO 60599 binary32
     }
 };
@@ -293,28 +296,31 @@ struct Memory64 {
         }
 
     double getIso60599Binary64() const {
-        // Create a copy in either case, for alingment:
-        unsigned char buf[8];
+        // Create a copy in either case, for alignment:
+        union {
+            unsigned char buf[8];
+            double d;
+        } sa;
 #if defined OSL_LITENDIAN
-        buf[0] = byte[0];
-        buf[1] = byte[1];
-        buf[2] = byte[2];
-        buf[3] = byte[3];
-        buf[4] = byte[4];
-        buf[5] = byte[5];
-        buf[6] = byte[6];
-        buf[7] = byte[7];
+        sa.buf[0] = byte[0];
+        sa.buf[1] = byte[1];
+        sa.buf[2] = byte[2];
+        sa.buf[3] = byte[3];
+        sa.buf[4] = byte[4];
+        sa.buf[5] = byte[5];
+        sa.buf[6] = byte[6];
+        sa.buf[7] = byte[7];
 #else
-        buf[0] = byte[7];
-        buf[1] = byte[6];
-        buf[2] = byte[5];
-        buf[3] = byte[4];
-        buf[4] = byte[3];
-        buf[5] = byte[2];
-        buf[6] = byte[1];
-        buf[7] = byte[0];
+        sa.buf[0] = byte[7];
+        sa.buf[1] = byte[6];
+        sa.buf[2] = byte[5];
+        sa.buf[3] = byte[4];
+        sa.buf[4] = byte[3];
+        sa.buf[5] = byte[2];
+        sa.buf[6] = byte[1];
+        sa.buf[7] = byte[0];
 #endif
-        return *reinterpret_cast< double * >(buf);
+        return sa.d;
             // assuming double is ISO 60599 binary64
     }
 };
