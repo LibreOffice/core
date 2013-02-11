@@ -40,7 +40,7 @@ public:
 
     void setCloseHdl (const Link &rLink) { maAllButton.SetClickHdl(rLink); }
     void setMasterView(TemplateAbstractView* pMasterView) { mpMasterView = pMasterView; }
-    virtual void renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle);
+    virtual bool renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle);
 
 protected:
 

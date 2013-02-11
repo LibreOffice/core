@@ -105,10 +105,11 @@ void TemplateView::OnItemDblClicked(ThumbnailViewItem *pItem)
     maDblClickHdl.Call(pItem);
 }
 
-void TemplateView::renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle)
+bool TemplateView::renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle)
 {
     if (mpMasterView)
-        mpMasterView->renameItem(pItem, sNewTitle);
+        return mpMasterView->renameItem(pItem, sNewTitle);
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
