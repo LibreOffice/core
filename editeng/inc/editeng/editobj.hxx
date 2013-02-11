@@ -28,6 +28,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
 #include "editeng/editengdllapi.h"
+#include "editeng/macros.hxx"
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -118,6 +119,10 @@ public:
     bool isWrongListEqual(const EditTextObject& rCompare) const;
 
     virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool);
+
+#if DEBUG_EDIT_ENGINE
+    void Dump() const;
+#endif
 };
 
 #endif  // _EDITOBJ_HXX

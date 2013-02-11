@@ -83,6 +83,7 @@ $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/langitem.hxx,editeng/l
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/lcolitem.hxx,editeng/lcolitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/lrspitem.hxx,editeng/lrspitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/lspcitem.hxx,editeng/lspcitem.hxx))
+$(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/macros.hxx,editeng/macros.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/measfld.hxx,editeng/measfld.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/memberids.hrc,editeng/memberids.hrc))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/mutxhelp.hxx,editeng/mutxhelp.hxx))

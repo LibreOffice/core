@@ -27,6 +27,7 @@
 #include <tools/stream.hxx>
 
 #include "editeng/fieldupdater.hxx"
+#include "editeng/macros.hxx"
 #include <editobj2.hxx>
 #include <editeng/editdata.hxx>
 #include <editattr.hxx>
@@ -39,10 +40,17 @@
 #include <editeng/bulitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/brshitem.hxx>
+
 #include <vcl/graph.hxx>
 #include <svl/intitem.hxx>
 #include <unotools/fontcvt.hxx>
 #include <tools/tenccvt.hxx>
+
+#if DEBUG_EDIT_ENGINE
+#include <iostream>
+using std::cout;
+using std::endl;
+#endif
 
 using namespace com::sun::star;
 
@@ -153,6 +161,24 @@ bool ContentInfo::isWrongListEqual(const ContentInfo& rCompare) const
 
     return (*GetWrongList() == *rCompare.GetWrongList());
 }
+
+#if DEBUG_EDIT_ENGINE
+void ContentInfo::Dump() const
+{
+    cout << "--" << endl;
+    cout << "text: '" << aText << "'" << endl;
+    cout << "style: '" << aStyle << "'" << endl;
+
+    XEditAttributesType::const_iterator it = aAttribs.begin(), itEnd = aAttribs.end();
+    for (; it != itEnd; ++it)
+    {
+        const XEditAttribute& rAttr = *it;
+        cout << "attribute: " << endl;
+        cout << "  span: [begin=" << rAttr.GetStart() << ", end=" << rAttr.GetEnd() << "]" << endl;
+        cout << "  feature: " << (rAttr.IsFeature() ? "yes":"no") << endl;
+    }
+}
+#endif
 
 bool ContentInfo::operator==( const ContentInfo& rCompare ) const
 {
@@ -393,6 +419,13 @@ void EditTextObject::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
     mpImpl->ObjectInDestruction(rSfxItemPool);
 }
 
+#if DEBUG_EDIT_ENGINE
+void EditTextObject::Dump() const
+{
+    mpImpl->Dump();
+}
+#endif
+
 // from SfxItemPoolUser
 void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
 {
@@ -421,6 +454,15 @@ void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
         bOwnerOfPool = true;
     }
 }
+
+#if DEBUG_EDIT_ENGINE
+void EditTextObjectImpl::Dump() const
+{
+    ContentInfosType::const_iterator it = aContents.begin(), itEnd = aContents.end();
+    for (; it != itEnd; ++it)
+        it->Dump();
+}
+#endif
 
 EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
 {

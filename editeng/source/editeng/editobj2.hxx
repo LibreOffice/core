@@ -149,6 +149,10 @@ public:
 
     // #i102062#
     bool isWrongListEqual(const ContentInfo& rCompare) const;
+
+#if DEBUG_EDIT_ENGINE
+    void Dump() const;
+#endif
 };
 
 class EditTextObjectImpl : boost::noncopyable
@@ -245,6 +249,10 @@ public:
 
     // from SfxItemPoolUser
     void ObjectInDestruction(const SfxItemPool& rSfxItemPool);
+
+#if DEBUG_EDIT_ENGINE
+    void Dump() const;
+#endif
 };
 
 #endif  // _EDITOBJ2_HXX
