@@ -121,7 +121,7 @@ namespace svt { namespace table
             ,nCurrentRow( ROW_INVALID )
             ,bUseGridLines( true )
             ,aSortIndicator( )
-            ,aStringConverter( ::comphelper::ComponentContext( ::comphelper::getProcessServiceFactory() ) )
+            ,aStringConverter()
         {
         }
     };

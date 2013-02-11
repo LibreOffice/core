@@ -21,13 +21,9 @@
 #define SVTOOLS_CELLVALUECONVERSION_HXX
 
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <boost/scoped_ptr.hpp>
-
-namespace comphelper
-{
-    class ComponentContext;
-}
 
 //......................................................................................................................
 namespace svt
@@ -41,7 +37,7 @@ namespace svt
     class CellValueConversion
     {
     public:
-        CellValueConversion( ::comphelper::ComponentContext const & i_context );
+        CellValueConversion();
         ~CellValueConversion();
 
         ::rtl::OUString convertToString( const ::com::sun::star::uno::Any& i_cellValue );

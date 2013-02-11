@@ -27,13 +27,13 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <comphelper/componentcontext.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/syslocale.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
@@ -44,30 +44,16 @@ namespace svt
 //......................................................................................................................
 
     /** === begin UNO using === **/
-    using ::com::sun::star::uno::Any;
+    using namespace ::com::sun::star::uno;
     using ::com::sun::star::util::XNumberFormatter;
     using ::com::sun::star::util::XNumberFormatter2;
     using ::com::sun::star::util::NumberFormatter;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::NumberFormatsSupplier;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::lang::Locale;
-    using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Exception;
     using ::com::sun::star::util::DateTime;
-    using ::com::sun::star::uno::TypeClass;
     using ::com::sun::star::util::XNumberFormatTypes;
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::makeAny;
-    using ::com::sun::star::uno::Type;
-    using ::com::sun::star::uno::TypeClass_BYTE;
-    using ::com::sun::star::uno::TypeClass_SHORT;
-    using ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT;
-    using ::com::sun::star::uno::TypeClass_LONG;
-    using ::com::sun::star::uno::TypeClass_UNSIGNED_LONG;
-    using ::com::sun::star::uno::TypeClass_HYPER;
     /** === end UNO using === **/
     namespace NumberFormat = ::com::sun::star::util::NumberFormat;
 
@@ -120,14 +106,12 @@ namespace svt
     //==================================================================================================================
     struct CellValueConversion_Data
     {
-        ::comphelper::ComponentContext const    aContext;
         Reference< XNumberFormatter >           xNumberFormatter;
         bool                                    bAttemptedFormatterCreation;
         NormalizerCache                         aNormalizers;
 
-        CellValueConversion_Data( ::comphelper::ComponentContext const & i_context )
-            :aContext( i_context )
-            ,xNumberFormatter()
+        CellValueConversion_Data()
+            :xNumberFormatter()
             ,bAttemptedFormatterCreation( false )
             ,aNormalizers()
         {
@@ -338,14 +322,15 @@ namespace svt
 
             try
             {
+                Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 // a number formatter
-                Reference< XNumberFormatter > const xFormatter( NumberFormatter::create( io_data.aContext.getUNOContext() ), UNO_QUERY_THROW );
+                Reference< XNumberFormatter > const xFormatter( NumberFormatter::create( xContext ), UNO_QUERY_THROW );
 
                 // a supplier of number formats
                 Locale aLocale = SvtSysLocale().GetLanguageTag().getLocale();
 
                 Reference< XNumberFormatsSupplier > const xSupplier =
-                    NumberFormatsSupplier::createWithLocale( io_data.aContext.getUNOContext(), aLocale );
+                    NumberFormatsSupplier::createWithLocale( xContext, aLocale );
 
                 // ensure a NullDate we will assume later on
                 UnoDate const aNullDate( 1, 1, 1900 );
@@ -428,8 +413,8 @@ namespace svt
     //= CellValueConversion
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    CellValueConversion::CellValueConversion( ::comphelper::ComponentContext const & i_context )
-        :m_pData( new CellValueConversion_Data( i_context ) )
+    CellValueConversion::CellValueConversion()
+        :m_pData( new CellValueConversion_Data )
     {
     }
 
