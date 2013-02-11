@@ -25,10 +25,12 @@
 #include "formula/grammar.hxx"
 #include "svl/itemset.hxx"
 #include "editeng/editdata.hxx"
+#include "editeng/flditem.hxx"
 
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/noncopyable.hpp>
 
 class ScXMLImport;
 class ScFormulaCell;
@@ -37,6 +39,25 @@ struct ScXMLAnnotationData;
 
 class ScXMLTableRowCellContext : public ScXMLImportContext
 {
+    struct ParaFormat
+    {
+        SfxItemSet maItemSet;
+        ESelection maSelection;
+
+        ParaFormat(ScEditEngineDefaulter& rEditEngine);
+    };
+
+    struct Field : boost::noncopyable
+    {
+        SvxFieldData* mpItem;
+        ESelection maSelection;
+
+        Field();
+        ~Field();
+    };
+
+    typedef boost::ptr_vector<ParaFormat> ParaFormatsType;
+    typedef boost::ptr_vector<Field> FieldsType;
     typedef std::pair<OUString, OUString> FormulaWithNamespace;
 
     boost::optional<FormulaWithNamespace> maFormula; /// table:formula attribute
@@ -47,15 +68,8 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     OUStringBuffer maParagraph;
     sal_uInt16 mnCurParagraph;
 
-    struct ParaFormat
-    {
-        SfxItemSet maItemSet;
-        ESelection maSelection;
-
-        ParaFormat(ScEditEngineDefaulter& rEditEngine);
-    };
-    typedef boost::ptr_vector<ParaFormat> ParaFormatsType;
     ParaFormatsType maFormats;
+    FieldsType maFields;
 
     boost::scoped_ptr< ScXMLAnnotationData > mxAnnotationData;
     ScMyImpDetectiveObjVec* pDetectiveObjVec;
@@ -76,7 +90,6 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     bool mbPossibleErrorCell;
     bool mbCheckWithCompilerForError;
     bool mbEditEngineHasText;
-    bool mbEditEngineHasField;
 
     sal_Int16 GetCellType(const rtl::OUString& sOUValue) const;
 

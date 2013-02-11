@@ -78,7 +78,6 @@
 #include "editeng/escpitem.hxx"
 #include "editeng/emphitem.hxx"
 #include "editeng/langitem.hxx"
-#include "editeng/flditem.hxx"
 #include <svx/unoapi.hxx>
 #include <svl/languageoptions.hxx>
 #include <sax/tools/converter.hxx>
@@ -117,6 +116,13 @@ using namespace xmloff::token;
 ScXMLTableRowCellContext::ParaFormat::ParaFormat(ScEditEngineDefaulter& rEditEngine) :
     maItemSet(rEditEngine.GetEmptyItemSet()) {}
 
+ScXMLTableRowCellContext::Field::Field() : mpItem(NULL) {}
+
+ScXMLTableRowCellContext::Field::~Field()
+{
+    delete mpItem;
+}
+
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
@@ -146,8 +152,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bFormulaTextResult(false),
     mbPossibleErrorCell(false),
     mbCheckWithCompilerForError(false),
-    mbEditEngineHasText(false),
-    mbEditEngineHasField(false)
+    mbEditEngineHasText(false)
 {
     rtl::math::setNan(&fValue); // NaN by default
     mpEditEngine->Clear();
@@ -554,9 +559,16 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OU
 
 void ScXMLTableRowCellContext::PushParagraphFieldSheetName()
 {
-    SvxTableField aField(0);
-    mpEditEngine->QuickInsertField(SvxFieldItem(aField, EE_FEATURE_FIELD), ESelection(EE_PARA_APPEND, EE_PARA_APPEND));
-    mbEditEngineHasField = true;
+    SCTAB nTab = GetScImport().GetTables().GetCurrentCellPos().Tab();
+    maFields.push_back(new Field);
+    Field& rField = maFields.back();
+    rField.mpItem = new SvxTableField(nTab);
+    sal_Int32 nPos = maParagraph.getLength();
+    maParagraph.append(sal_Unicode('\1'));
+    rField.maSelection.nStartPara = mnCurParagraph;
+    rField.maSelection.nEndPara = mnCurParagraph;
+    rField.maSelection.nStartPos = nPos;
+    rField.maSelection.nEndPos = nPos+1;
 }
 
 void ScXMLTableRowCellContext::PushParagraphEnd()
@@ -998,17 +1010,25 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             pNewCell = ScBaseCell::CreateTextCell( *maStringValue, pDoc );
         else if (mbEditEngineHasText)
         {
-            if (!mbEditEngineHasField && maFormats.empty() && mpEditEngine->GetParagraphCount() == 1)
+            if (maFields.empty() && maFormats.empty() && mpEditEngine->GetParagraphCount() == 1)
             {
                 // This is a normal text without format runs.
                 pNewCell = new ScStringCell(mpEditEngine->GetText());
             }
             else
             {
-                // This text either has format runs, or consists of multiple lines.
-                ParaFormatsType::const_iterator it = maFormats.begin(), itEnd = maFormats.end();
-                for (; it != itEnd; ++it)
-                    mpEditEngine->QuickSetAttribs(it->maItemSet, it->maSelection);
+                // This text either has format runs, has field(s), or consists of multiple lines.
+                {
+                    ParaFormatsType::const_iterator it = maFormats.begin(), itEnd = maFormats.end();
+                    for (; it != itEnd; ++it)
+                        mpEditEngine->QuickSetAttribs(it->maItemSet, it->maSelection);
+                }
+
+                {
+                    FieldsType::const_iterator it = maFields.begin(), itEnd = maFields.end();
+                    for (; it != itEnd; ++it)
+                        mpEditEngine->QuickInsertField(SvxFieldItem(*it->mpItem, EE_FEATURE_FIELD), it->maSelection);
+                }
 
                 pNewCell = new ScEditCell(mpEditEngine->CreateTextObject(), pDoc, pDoc->GetEditPool());
             }
