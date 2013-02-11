@@ -37,6 +37,7 @@ TemplateLocalView::TemplateLocalView ( Window* pParent, const ResId& rResId, boo
       mpDocTemplates(new SfxDocumentTemplates)
 {
     mpItemView->SetColor(GetSettings().GetStyleSettings().GetFieldColor());
+    mpItemView->setMasterView(this);
 }
 
 TemplateLocalView::~TemplateLocalView()
@@ -63,7 +64,7 @@ void TemplateLocalView::Populate ()
             OUString aName = mpDocTemplates->GetName(i,j);
             OUString aURL = mpDocTemplates->GetPath(i,j);
 
-            TemplateItemProperties aProperties;;
+            TemplateItemProperties aProperties;
             aProperties.nId = j+1;
             aProperties.nDocId = j;
             aProperties.nRegionId = i;
@@ -602,6 +603,24 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
     mpItemView->filterItems(ViewFilter_Application(meFilterOption));
 
     showOverlay(true);
+}
+
+void TemplateLocalView::renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle)
+{
+    sal_uInt16 nRegionId = 0;
+    sal_uInt16 nDocId = USHRT_MAX;
+    TemplateViewItem* pDocItem = dynamic_cast<TemplateViewItem*>( pItem );
+    TemplateContainerItem* pContainerItem = dynamic_cast<TemplateContainerItem*>( pItem );
+    if ( pDocItem )
+    {
+        nRegionId = pDocItem->mnRegionId;
+        nDocId = pDocItem->mnDocId;
+    }
+    else if ( pContainerItem )
+    {
+        nRegionId = pContainerItem->mnId - 1;
+    }
+    mpDocTemplates->SetName( sNewTitle, nRegionId, nDocId );
 }
 
 static void lcl_updateThumbnails (TemplateContainerItem *pItem)

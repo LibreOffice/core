@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/vclmedit.hxx>
 #include "sfx2/dllapi.h"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -88,12 +89,17 @@ public:
 
     void setHighlight (bool state);
 
+    void setEditTitle (bool edit, bool bChangeFocus = true);
+    void updateTitleEditSize ();
+    virtual void setTitle (const rtl::OUString& rTitle);
+
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );
 
     void setDrawArea (const Rectangle &area);
 
     const Rectangle& getDrawArea () const { return maDrawArea; }
+    Rectangle getTextArea () const;
 
     virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
                                          const long nPadding, sal_uInt32 nMaxTextLenght,
@@ -118,6 +124,9 @@ protected:
     Point maPrev1Pos;
     Rectangle maDrawArea;
     Link maClickHdl;
+    bool mbEditTitle;
+    VclMultiLineEdit* mpTitleED;
+    Rectangle maTextEditMaxArea;
 };
 
 #endif // THUMBNAILVIEWITEM_HXX

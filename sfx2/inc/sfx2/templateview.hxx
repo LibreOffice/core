@@ -39,6 +39,8 @@ public:
     void setDblClickHdl (const Link &rLink) { maDblClickHdl = rLink; }
 
     void setCloseHdl (const Link &rLink) { maAllButton.SetClickHdl(rLink); }
+    void setMasterView(TemplateAbstractView* pMasterView) { mpMasterView = pMasterView; }
+    virtual void renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle);
 
 protected:
 
@@ -47,6 +49,7 @@ protected:
     virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
 
 private:
+    TemplateAbstractView* mpMasterView;
 
     Control    maButtons;
     PushButton maAllButton;

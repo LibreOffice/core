@@ -28,7 +28,9 @@ using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
 TemplateViewItem::TemplateViewItem (ThumbnailView &rView)
-    : ThumbnailViewItem(rView)
+    : ThumbnailViewItem(rView),
+      mnRegionId(USHRT_MAX),
+      mnDocId(USHRT_MAX)
 {
 }
 
