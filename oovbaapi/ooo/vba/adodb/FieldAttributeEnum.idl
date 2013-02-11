@@ -1,0 +1,27 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module ooo { module vba { module adodb {
+    constants FieldAttributeEnum {
+        const long adFldCacheDeferred = 4096;
+        const long adFldFixed = 16;
+        const long adFldIsNullable = 32;
+        const long adFldKeyColumn = 32768;
+        const long adFldLong = 128;
+        const long adFldMayBeNull = 64;
+        const long adFldMayDefer = 2;
+        const long adFldNegativeScale = 16384;
+        const long adFldRowID = 256;
+        const long adFldRowVersion = 512;
+        const long adFldUnknownUpdatable = 8;
+        const long adFldUnspecified = -1;
+        const long adFldUpdatable = 4;
+    };
+}; }; };
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
