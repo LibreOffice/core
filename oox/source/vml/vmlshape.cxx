@@ -429,6 +429,7 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
         {
             // Map to as-character by default, that fixes vertical position of some textframes.
             rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_CHARACTER);
+            rPropSet.setProperty(PROP_Title,rTypeModel.maZindex);
         }
 
         if ( rTypeModel.maPositionVerticalRelative == "page" )

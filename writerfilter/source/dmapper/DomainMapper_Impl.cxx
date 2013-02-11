@@ -71,7 +71,7 @@
 
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/stlunosequence.hxx>
-
+ rtl::OUString zIndexValue;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 namespace writerfilter {
@@ -1634,11 +1634,23 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         xProps->getPropertyValue(rPropNameSupplier.GetName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
         if (nAnchorType == text::TextContentAnchorType_AT_PAGE)
             bIsGraphic = false;
-
+      
         if (nAnchorType != text::TextContentAnchorType_AT_PAGE)
-            xProps->setPropertyValue(
-                    rPropNameSupplier.GetName( PROP_OPAQUE ),
-                    uno::makeAny( true ) );
+{           if(xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_TITLE)) != rtl::OUString(""))
+        	{
+        		xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_TITLE)) >>= zIndexValue;
+        		sal_Bool zIndexBool = zIndexValue.match(::rtl::OUString("-"),0);
+        		if(zIndexBool)
+
+        		                 xProps->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ),uno::makeAny( false ) );
+        	}
+        	else
+        	{
+
+        		                 xProps->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ),uno::makeAny( true ) );
+        	} 
+            
+            }
         if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
         {
             uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);

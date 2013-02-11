@@ -84,7 +84,7 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     sal_Bool            mbVisible;              ///< Visible or Hidden
     ::rtl::OUString     maWrapStyle;            ///< Wrapping mode for text.
     ::rtl::OUString     maArcsize;              ///< round rectangles arc size
-
+    ::rtl::OUString     maZindex;               ///< Zindex value.
     StrokeModel         maStrokeModel;          ///< Border line formatting.
     FillModel           maFillModel;            ///< Shape fill formatting.
     ShadowModel         maShadowModel;          ///< Shape shadow formatting.
