@@ -191,7 +191,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/adodb,\
     FilterGroupEnum \
     GetRowsOptionEnum \
     IsolationLevelEnum \
-    LockTypeEnum a
+    LockTypeEnum \
     MarshalOptionsEnum \
     ObjectStateEnum \
     ParameterAttributesEnum \
