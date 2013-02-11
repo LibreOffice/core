@@ -686,9 +686,9 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
     sw::mark::IMark* pB = NULL;
     bool bUnhandledMark = false;
     bool bCommentrangeMark = false;
+    const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
     if ( pDoc )
     {
-        const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess( );
         pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
         pB = GetMark( ) ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
 
@@ -729,6 +729,24 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
     {
         bRet = !( pA == pB && pA != NULL );
     }
+
+    // Don't allow inserting characters between the 'field mark end' and
+    // the 'comment anchor'.
+    if (!bRet)
+    {
+        if (!pA && GetPoint() && GetPoint()->nNode.GetNode().IsTxtNode() && GetPoint()->nContent.GetIndex() > 0)
+        {
+            // getFieldmarkFor() searches for >= start and < end, so check for
+            // the previous character, to also get the fieldmark, if we're
+            // exactly at the end.
+            SwPosition aPrevChar(*GetPoint());
+            aPrevChar.nContent--;
+            sw::mark::IFieldmark* pFieldmark = pMarksAccess->getFieldmarkFor(aPrevChar);
+            if (pFieldmark && pFieldmark->GetMarkEnd() == *GetPoint())
+                bRet = true;
+        }
+    }
+
     return bRet;
 }
 

@@ -45,6 +45,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 
+#include <xmloff/odffields.hxx>
+
 #include "breakit.hxx"
 #include "doc.hxx"
 #include "docsh.hxx"
@@ -88,6 +90,7 @@ public:
     void testSwScanner();
     void testUserPerceivedCharCount();
     void testGraphicAnchorDeletion();
+    void testFdo59573();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(randomTest);
@@ -98,6 +101,7 @@ public:
     CPPUNIT_TEST(testSwScanner);
     CPPUNIT_TEST(testUserPerceivedCharCount);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
+    CPPUNIT_TEST(testFdo59573);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -876,6 +880,26 @@ void SwDocTest::randomTest()
         xmlFreeTextWriter( writer );
 #endif
     }
+}
+
+void SwDocTest::testFdo59573()
+{
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    // Insert "abc" and create a fieldmark around "b".
+    OUString aTest("abc");
+    m_pDoc->InsertString(aPaM, aTest);
+    aPaM.SetMark();
+    aPaM.GetPoint()->nContent = 1;
+    aPaM.GetMark()->nContent = 2;
+    IDocumentMarkAccess* pMarksAccess = m_pDoc->getIDocumentMarkAccess();
+    pMarksAccess->makeFieldBookmark(aPaM, "", ODF_COMMENTRANGE);
+    aPaM.GetPoint()->nContent = 4;
+    aPaM.GetMark()->nContent = 4;
+    // The problem was that the position after the fieldmark end and before the
+    // annotation anchor wasn't read-only.
+    CPPUNIT_ASSERT_EQUAL(sal_True, aPaM.HasReadonlySel(false));
 }
 
 void SwDocTest::setUp()
