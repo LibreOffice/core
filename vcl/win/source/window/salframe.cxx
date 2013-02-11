@@ -3259,7 +3259,9 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
 
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
-            aMouseEvt.mnX = pFrame->maGeometry.nWidth-1-aMouseEvt.mnX;
+            // this is for disable the mirroring in Presenter console
+            if(!(pFrame->mbFullScreen && !pFrame->mbPresentation))
+                aMouseEvt.mnX = pFrame->maGeometry.nWidth-1-aMouseEvt.mnX;
 
         nRet = pFrame->CallCallback( nEvent, &aMouseEvt );
         if ( nMsg == WM_MOUSEMOVE )
@@ -3353,7 +3355,9 @@ static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
 
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
-            aWheelEvt.mnX = pFrame->maGeometry.nWidth-1-aWheelEvt.mnX;
+            // this is for disable the mirroring in Presenter console
+            if(!(pFrame->mbFullScreen && !pFrame->mbPresentation))
+                aWheelEvt.mnX = pFrame->maGeometry.nWidth-1-aWheelEvt.mnX;
 
         nRet = pFrame->CallCallback( SALEVENT_WHEELMOUSE, &aWheelEvt );
     }
