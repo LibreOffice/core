@@ -43,10 +43,10 @@ namespace comphelper
 //.........................................................................
 
 //========================================================================
-// comparisation functions
+// comparison functors
 
 //------------------------------------------------------------------------
-    struct UStringLess : public ::std::binary_function< OUString, OUString, bool>
+struct UStringLess : public ::std::binary_function< OUString, OUString, bool>
 {
     bool operator() (const OUString& x, const OUString& y) const { return x < y ? true : false;}      // construct prevents a MSVC6 warning
 };
