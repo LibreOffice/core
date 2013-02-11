@@ -116,11 +116,11 @@ using namespace xmloff::token;
 ScXMLTableRowCellContext::ParaFormat::ParaFormat(ScEditEngineDefaulter& rEditEngine) :
     maItemSet(rEditEngine.GetEmptyItemSet()) {}
 
-ScXMLTableRowCellContext::Field::Field() : mpItem(NULL) {}
+ScXMLTableRowCellContext::Field::Field(SvxFieldData* pData) : mpData(pData) {}
 
 ScXMLTableRowCellContext::Field::~Field()
 {
-    delete mpItem;
+    delete mpData;
 }
 
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
@@ -557,18 +557,28 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OU
         rFmt.maItemSet.Put(*pPoolItem);
 }
 
-void ScXMLTableRowCellContext::PushParagraphFieldSheetName()
+void ScXMLTableRowCellContext::PushParagraphField(SvxFieldData* pData)
 {
-    SCTAB nTab = GetScImport().GetTables().GetCurrentCellPos().Tab();
-    maFields.push_back(new Field);
+    maFields.push_back(new Field(pData));
     Field& rField = maFields.back();
-    rField.mpItem = new SvxTableField(nTab);
+
     sal_Int32 nPos = maParagraph.getLength();
-    maParagraph.append(sal_Unicode('\1'));
+    maParagraph.append(sal_Unicode('\1')); // Placeholder text for inserted field item.
     rField.maSelection.nStartPara = mnCurParagraph;
     rField.maSelection.nEndPara = mnCurParagraph;
     rField.maSelection.nStartPos = nPos;
     rField.maSelection.nEndPos = nPos+1;
+}
+
+void ScXMLTableRowCellContext::PushParagraphFieldSheetName()
+{
+    SCTAB nTab = GetScImport().GetTables().GetCurrentCellPos().Tab();
+    PushParagraphField(new SvxTableField(nTab));
+}
+
+void ScXMLTableRowCellContext::PushParagraphFieldDocTitle()
+{
+    PushParagraphField(new SvxFileField);
 }
 
 void ScXMLTableRowCellContext::PushParagraphEnd()
@@ -1027,7 +1037,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                 {
                     FieldsType::const_iterator it = maFields.begin(), itEnd = maFields.end();
                     for (; it != itEnd; ++it)
-                        mpEditEngine->QuickInsertField(SvxFieldItem(*it->mpItem, EE_FEATURE_FIELD), it->maSelection);
+                        mpEditEngine->QuickInsertField(SvxFieldItem(*it->mpData, EE_FEATURE_FIELD), it->maSelection);
                 }
 
                 pNewCell = new ScEditCell(mpEditEngine->CreateTextObject(), pDoc, pDoc->GetEditPool());

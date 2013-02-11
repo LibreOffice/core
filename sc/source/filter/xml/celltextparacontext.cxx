@@ -82,8 +82,9 @@ void ScXMLCellTextParaContext::PushFieldDate(const OUString& rOutput)
 {
 }
 
-void ScXMLCellTextParaContext::PushFieldTitle(const OUString& rTitle)
+void ScXMLCellTextParaContext::PushFieldTitle()
 {
+    mrParentCxt.PushParagraphFieldDocTitle();
 }
 
 ScXMLCellTextSpanContext::ScXMLCellTextSpanContext(
@@ -205,6 +206,7 @@ void ScXMLCellFieldTitleContext::StartElement(const uno::Reference<xml::sax::XAt
 
 void ScXMLCellFieldTitleContext::EndElement()
 {
+    mrParentCxt.PushFieldTitle();
 }
 
 void ScXMLCellFieldTitleContext::Characters(const OUString& rChars)

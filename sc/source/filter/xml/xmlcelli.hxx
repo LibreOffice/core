@@ -49,10 +49,10 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
     struct Field : boost::noncopyable
     {
-        SvxFieldData* mpItem;
+        SvxFieldData* mpData;
         ESelection maSelection;
 
-        Field();
+        Field(SvxFieldData* pData);
         ~Field();
     };
 
@@ -118,6 +118,8 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
     bool IsPossibleErrorString() const;
 
+    void PushParagraphField(SvxFieldData* pData);
+
 public:
 
     ScXMLTableRowCellContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
@@ -135,6 +137,7 @@ public:
 
     void PushParagraphSpan(const OUString& rSpan, const OUString& rStyleName);
     void PushParagraphFieldSheetName();
+    void PushParagraphFieldDocTitle();
     void PushParagraphEnd();
 
     void SetAnnotation( const ScAddress& rPosition );

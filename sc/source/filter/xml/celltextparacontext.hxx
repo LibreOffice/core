@@ -34,7 +34,7 @@ public:
     void PushSpan(const OUString& rSpan, const OUString& rStyleName);
     void PushFieldSheetName();
     void PushFieldDate(const OUString& rOutput);
-    void PushFieldTitle(const OUString& rTitle);
+    void PushFieldTitle();
 };
 
 /**
