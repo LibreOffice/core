@@ -123,8 +123,7 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (Ru
                         m_xContext);
 
             if ( xI.is() ) {
-                Reference< XExtendedInputSequenceChecker > xISC;
-                xI->queryInterface( getCppuType((const Reference< XExtendedInputSequenceChecker>*)0) ) >>= xISC;
+                Reference< XExtendedInputSequenceChecker > xISC( xI, uno::UNO_QUERY );
                 if (xISC.is()) {
                     lookupTable.push_back(cachedItem = new lookupTableItem(rLanguage, xISC));
                     return cachedItem->xISC;

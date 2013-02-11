@@ -38,7 +38,7 @@
 
 #include <com/sun/star/i18n/WordType.hpp>
 
-#include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
+#include <com/sun/star/i18n/InputSequenceChecker.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
@@ -637,13 +637,8 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > TextEngine::GetInputSeque
     uno::Reference < i18n::XExtendedInputSequenceChecker > xISC;
 //    if ( !xISC.is() )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        uno::Reference< uno::XInterface > xI = xMSF->createInstance( OUString( "com.sun.star.i18n.InputSequenceChecker" ) );
-        if ( xI.is() )
-        {
-            Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XExtendedInputSequenceChecker >*)0) );
-            x >>= xISC;
-        }
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        xISC = i18n::InputSequenceChecker::create(xContext);
     }
     return xISC;
 }

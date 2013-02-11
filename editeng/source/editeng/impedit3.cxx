@@ -63,6 +63,7 @@
 #include <vcl/metric.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/InputSequenceChecker.hpp>
 #include <com/sun/star/text/CharacterCompressionType.hpp>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <i18npool/mslangid.hxx>
@@ -4344,13 +4345,8 @@ Reference < i18n::XExtendedInputSequenceChecker > ImpEditEngine::ImplGetInputSeq
 {
     if ( !xISC.is() )
     {
-        Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance( OUString( "com.sun.star.i18n.InputSequenceChecker" ) );
-        if ( xI.is() )
-        {
-            Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XExtendedInputSequenceChecker >*)0) );
-            x >>= xISC;
-        }
+        Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        xISC = i18n::InputSequenceChecker::create( xContext );
     }
     return xISC;
 }

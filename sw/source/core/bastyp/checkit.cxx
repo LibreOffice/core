@@ -19,22 +19,15 @@
 
 #include <checkit.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/i18n/InputSequenceChecker.hpp>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 
 SwCheckIt::SwCheckIt()
 {
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    Reference < XInterface > xI = xMSF->createInstance(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.InputSequenceChecker")) );
-    if ( xI.is() )
-    {
-        Any x = xI->queryInterface( ::getCppuType((const Reference< XExtendedInputSequenceChecker >*)0) );
-        x >>= xCheck;
-    }
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    xCheck = InputSequenceChecker::create(xContext);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

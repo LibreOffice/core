@@ -49,7 +49,7 @@
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 
-#include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
+#include <com/sun/star/i18n/InputSequenceChecker.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -854,13 +854,8 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenc
     uno::Reference < i18n::XExtendedInputSequenceChecker > xISC;
 //    if ( !xISC.is() )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        uno::Reference < XInterface > xI = xMSF->createInstance( OUString("com.sun.star.i18n.InputSequenceChecker") );
-        if ( xI.is() )
-        {
-            Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XExtendedInputSequenceChecker >*)0) );
-            x >>= xISC;
-        }
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        xISC = i18n::InputSequenceChecker::create(xContext);
     }
     return xISC;
 }
