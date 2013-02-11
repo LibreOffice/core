@@ -44,7 +44,7 @@ $(foreach lang,$(1),$(call android_translation_rules,$(lang)))
 endef
 
 define android_get_langlist
-$(foreach lang,$(filter-out en-US,$(WITH_LANG_LIST)),$(subst -,-r,$(lang)))
+$(foreach lang,$(filter-out en-US sat sid mai ast mni brx dgo qtz nso kok,$(WITH_LANG_LIST)),$(subst -,-r,$(lang)))
 endef
 
 $(eval $(call android_translations_rules,$(call android_get_langlist)))
