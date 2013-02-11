@@ -504,16 +504,9 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 pInfo->pShadowAttr  = pShadowAttr;
                                 //  nWidth wird nicht mehr einzeln gesetzt
 
-                                bool bEmbed = false;
-
                                 if (bScenario)
                                 {
                                     pInfo->pBackground = ScGlobal::GetButtonBrushItem();
-                                    pThisRowInfo->bEmptyBack = false;
-                                }
-                                else if (bEmbed)
-                                {
-                                    pInfo->pBackground = ScGlobal::GetEmbeddedBrushItem();
                                     pThisRowInfo->bEmptyBack = false;
                                 }
 
