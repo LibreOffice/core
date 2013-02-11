@@ -99,7 +99,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.buildStep4()
             self.buildStep5()
             self.buildStep6()
-            self.__initializePaths()
+            
+            self.initializePaths()
             self.initializeSalutation()
             self.initializeGreeting()
 
@@ -768,19 +769,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         else:
             return None
 
-    def __initializePaths(self):
-        try:
-            self.sTemplatePath = \
-                FileAccess.getOfficePath2(
-                    self.xMSF, "Template", "share", "/wizard")
-            self.sUserTemplatePath = \
-                FileAccess.getOfficePath2(self.xMSF, "Template", "user", "")
-        except NoValidPathException:
-            traceback.print_exc()
-
     def initializeTemplates(self, xMSF):
-        sLetterPath = FileAccess.combinePaths(
-            xMSF, self.sTemplatePath, "/../common/wizard/letter")
+        sLetterPath = self.sTemplatePath + "/../common/wizard/letter"
         self.BusinessFiles = \
             FileAccess.getFolderTitles(
                 xMSF, "bus", sLetterPath, self.resources.dictBusinessTemplate)

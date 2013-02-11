@@ -102,6 +102,15 @@ class WizardDialog(UnoDialog2):
             traceback.print_exc()
             return -1
 
+
+    def initializePaths(self):
+        xPropertySet = \
+            self.xMSF.createInstance("com.sun.star.util.PathSettings")
+        self.sTemplatePath = \
+            xPropertySet.getPropertyValue("Template_user")[0]
+        self.sUserTemplatePath = \
+            xPropertySet.getPropertyValue("Template_writable")
+            
     def addRoadmap(self):
         try:
             iDialogHeight = self.xDialogModel.Height
@@ -352,8 +361,6 @@ class WizardDialog(UnoDialog2):
                 self.switchToStep()
         except Exception:
             traceback.print_exc()
-
-    #TODO discuss with rp
 
     def getNextAvailableStep(self):
         if self.isRoadmapComplete():

@@ -81,7 +81,8 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             self.agenda.readConfiguration(root, "cp_")
 
             self.templateConsts = TemplateConsts
-                        
+
+            self.initializePaths()
             # initialize the agenda template
             self.agendaTemplate = AgendaDocument(
                 self.xMSF, self.agenda, self.resources,
@@ -103,7 +104,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
             self.topicsControl = TopicsControl(self, self.xMSF, self.agenda)
 
-            self.initializePaths()
             #special Control for setting the save Path:
             self.insertPathSelectionControl()
 
@@ -142,15 +142,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         self.myPathSelection.sDefaultName = "myAgendaTemplate.ott"
         self.myPathSelection.sDefaultFilter = "writer8_template"
         self.myPathSelection.addSelectionListener(self)
-
-    def initializePaths(self):
-        try:
-            self.sTemplatePath = FileAccess.getOfficePath2(
-                self.xMSF, "Template", "share", "/wizard")
-            self.sUserTemplatePath = FileAccess.getOfficePath2(
-                self.xMSF, "Template", "user", "")
-        except NoValidPathException:
-            traceback.print_exc()
 
     '''
     bind controls to the agenda member (DataAware model)
@@ -227,10 +218,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
     def initializeTemplates(self):
         try:
-            self.sTemplatePath = FileAccess.getOfficePath2(
-                self.xMSF, "Template", "share", "/wizard")
-            sAgendaPath = FileAccess.combinePaths(
-                self.xMSF, self.sTemplatePath, "/wizard/agenda")
+            sAgendaPath = self.sTemplatePath + "/wizard/agenda"
             self.agendaTemplates = FileAccess.getFolderTitles(
                 self.xMSF, "aw", sAgendaPath)
             return True

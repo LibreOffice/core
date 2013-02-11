@@ -59,8 +59,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.lstPrivateStylePos = None
         self.bSaveSuccess = False
         self.filenameChanged = False
-        self.UserTemplatePath = ""
-        self.sTemplatePath = ""
 
     @classmethod
     def main(self):
@@ -97,7 +95,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.initializeSalutation()
             self.initializeGreeting()
             self.initializeCommunication()
-            self.__initializePaths()
+            self.initializePaths()
 
             #special Control for setting the save Path:
             self.insertPathSelectionControl()
@@ -251,25 +249,14 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             5, 97, 70, 205, 45, self.resources.reslblTemplatePath_value,
             True, HelpIds.getHelpIdString(HID + 34),
             HelpIds.getHelpIdString(HID + 35))
-        self.myPathSelection.sDefaultDirectory = self.UserTemplatePath
+        self.myPathSelection.sDefaultDirectory = self.sUserTemplatePath
         self.myPathSelection.sDefaultName = "myFaxTemplate.ott"
         self.myPathSelection.sDefaultFilter = "writer8_template"
         self.myPathSelection.addSelectionListener(self)
 
-    def __initializePaths(self):
-        try:
-            self.sTemplatePath = FileAccess.getOfficePath2(self.xMSF,
-                "Template", "share", "/wizard")
-            self.UserTemplatePath = FileAccess.getOfficePath2(self.xMSF,
-                "Template", "user", "")
-        except NoValidPathException:
-            traceback.print_exc()
-
     def initializeTemplates(self, xMSF):
         try:
-            self.sFaxPath = FileAccess.combinePaths(xMSF, self.sTemplatePath,
-                "/wizard/fax")
-            self.sWorkPath = FileAccess.getOfficePath2(xMSF, "Work", "", "")
+            self.sFaxPath = self.sTemplatePath + "/wizard/fax"
             self.BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus",
                 self.sFaxPath, self.resources.dictBusinessTemplate)
             self.PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri",

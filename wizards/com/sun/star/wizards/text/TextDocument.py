@@ -148,7 +148,7 @@ class TextDocument(object):
         myFieldHandler = TextFieldHandler(self.xMSF, self.xTextDocument)
         myFieldHandler.updateDocInfoFields()
         return self.xTextDocument
-
+            
     def getPageSize(self):
         try:
             xNameAccess = self.xTextDocument.StyleFamilies
