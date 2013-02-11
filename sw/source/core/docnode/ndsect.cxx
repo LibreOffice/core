@@ -1227,7 +1227,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     // In which array am I: Nodes, UndoNodes?
     const SwNodes& rNds = GetNodes();
 
-    // Copy the das SectionFrmFmt
+    // Copy the SectionFrmFmt
     SwSectionFmt* pSectFmt = pDoc->MakeSectionFmt( 0 );
     pSectFmt->CopyAttrs( *GetSection().GetFmt() );
 
