@@ -38,7 +38,7 @@ void ScXMLCellTextParaContext::EndElement()
 
 void ScXMLCellTextParaContext::Characters(const OUString& rChars)
 {
-    maContent = rChars;
+    maContent += rChars;
 }
 
 SvXMLImportContext* ScXMLCellTextParaContext::CreateChildContext(
