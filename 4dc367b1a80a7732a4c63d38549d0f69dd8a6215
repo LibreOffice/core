@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAVH///Ro\u003d",
+        "filename": "sw/source/core/draw/dpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-11T22:01:02Z",
+      "side": 1,
+      "message": "s/sides/pages/",
+      "revId": "4dc367b1a80a7732a4c63d38549d0f69dd8a6215",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///Rk\u003d",
+        "filename": "sw/source/core/draw/dpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-11T22:01:02Z",
+      "side": 1,
+      "message": "s/sides/pages/",
+      "revId": "4dc367b1a80a7732a4c63d38549d0f69dd8a6215",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///Rc\u003d",
+        "filename": "sw/source/core/draw/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-11T22:01:02Z",
+      "side": 1,
+      "message": "s/thereupon returns a pointer back/returns pointer to it back/",
+      "revId": "4dc367b1a80a7732a4c63d38549d0f69dd8a6215",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVH///R4\u003d",
         "filename": "sw/source/core/draw/drawdoc.cxx",
         "patchSetId": 1
@@ -13,6 +64,23 @@
       "writtenOn": "2013-02-11T21:44:11Z",
       "side": 1,
       "message": "typo \u0027unsing\u0027 -\u003e \u0027using\u0027 :-)",
+      "revId": "4dc367b1a80a7732a4c63d38549d0f69dd8a6215",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///Rg\u003d",
+        "filename": "sw/source/core/draw/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-11T22:01:02Z",
+      "side": 1,
+      "message": "s/derivations of the/inherited from/",
       "revId": "4dc367b1a80a7732a4c63d38549d0f69dd8a6215",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
