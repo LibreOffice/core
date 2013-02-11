@@ -956,27 +956,34 @@ void write64(osl::File & file, sal_uInt64 value) {
 }
 
 void writeIso60599Binary32(osl::File & file, float value) {
-    unsigned char buf[4];
-    *reinterpret_cast< float * >(buf) = value;
+    union {
+        unsigned char buf[4];
+        float f;
+    } sa;
+    sa.f = value;
         // assuming float is ISO 60599 binary32
 #if defined OSL_BIGENDIAN
-    std::swap(buf[0], buf[3]);
-    std::swap(buf[1], buf[2]);
+    std::swap(sa.buf[0], sa.buf[3]);
+    std::swap(sa.buf[1], sa.buf[2]);
 #endif
-    write(file, buf, SAL_N_ELEMENTS(buf));
+    write(file, sa.buf, SAL_N_ELEMENTS(sa.buf));
 }
 
 void writeIso60599Binary64(osl::File & file, double value) {
-    unsigned char buf[8];
-    *reinterpret_cast< double * >(buf) = value;
+    union
+    {
+        unsigned char buf[8];
+        float d;
+    } sa;
+    sa.d = value;
         // assuming double is ISO 60599 binary64
 #if defined OSL_BIGENDIAN
-    std::swap(buf[0], buf[7]);
-    std::swap(buf[1], buf[6]);
-    std::swap(buf[2], buf[5]);
-    std::swap(buf[3], buf[4]);
+    std::swap(sa.buf[0], sa.buf[7]);
+    std::swap(sa.buf[1], sa.buf[6]);
+    std::swap(sa.buf[2], sa.buf[5]);
+    std::swap(sa.buf[3], sa.buf[4]);
 #endif
-    write(file, buf, SAL_N_ELEMENTS(buf));
+    write(file, sa.buf, SAL_N_ELEMENTS(sa.buf));
 }
 
 rtl::OString toAscii(rtl::OUString const & name) {
