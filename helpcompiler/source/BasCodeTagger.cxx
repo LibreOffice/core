@@ -187,7 +187,7 @@ void BasicCodeTagger::tagBasicCodes()
     }
     catch (TaggerException ex)
     {
-          std::cout << "Some kind of error occured." << std::endl;
+          std::cout << "BasCodeTagger error occured. Error code:" << ex << std::endl;
     }
 
     //tag basic code paragraphs in <bascode> tag
