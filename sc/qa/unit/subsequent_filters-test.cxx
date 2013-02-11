@@ -95,6 +95,7 @@ public:
     virtual void tearDown();
 
     //ods, xls, xlsx filter tests
+    void testBasicCellContentODS();
     void testRangeNameXLS();
     void testRangeNameXLSX();
     void testHardRecalcODS();
@@ -151,6 +152,7 @@ public:
     void testOptimalHeightReset();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testBasicCellContentODS);
     CPPUNIT_TEST(testRangeNameXLS);
     CPPUNIT_TEST(testRangeNameXLSX);
     CPPUNIT_TEST(testHardRecalcODS);
@@ -264,6 +266,22 @@ void testRangeNameImpl(ScDocument* pDoc)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("formula Global5 should reference Global6 ( which is evaluated as local1 )", 5.0, aValue);
 }
 
+}
+
+void ScFiltersTest::testBasicCellContentODS()
+{
+    ScDocShellRef xDocSh = loadDoc("basic-cell-content.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load basic-cell-content.ods", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    OUString aStr = pDoc->GetString(1, 1, 0); // B2
+    CPPUNIT_ASSERT_EQUAL(OUString("LibreOffice Calc"), aStr);
+    double fVal = pDoc->GetValue(1, 2, 0); // B3
+    CPPUNIT_ASSERT_EQUAL(12345.0, fVal);
+    aStr = pDoc->GetString(1, 3, 0); // B4
+    CPPUNIT_ASSERT_EQUAL(OUString("A < B"), aStr);
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testRangeNameXLS()
