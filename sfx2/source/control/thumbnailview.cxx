@@ -969,9 +969,10 @@ void ThumbnailView::sortItems (const boost::function<bool (const ThumbnailViewIt
     Invalidate();
 }
 
-void ThumbnailView::renameItem(ThumbnailViewItem*, rtl::OUString)
+bool ThumbnailView::renameItem(ThumbnailViewItem*, rtl::OUString)
 {
     // Do nothing by default
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

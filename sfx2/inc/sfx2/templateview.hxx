@@ -43,7 +43,7 @@ public:
     void setOpenHdl (const Link &rLink) { maOpenHdl = rLink; }
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) { maOpenHdl.Call(pItem); }
     void setMasterView(TemplateAbstractView* pMasterView) { mpMasterView = pMasterView; }
-    virtual void renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle);
+    virtual bool renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle);
 
 protected:
 

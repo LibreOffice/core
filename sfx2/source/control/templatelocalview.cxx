@@ -571,7 +571,7 @@ bool TemplateLocalView::isTemplateNameUnique(const sal_uInt16 nRegionItemId, con
     return true;
 }
 
-void TemplateLocalView::renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle)
+bool TemplateLocalView::renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle)
 {
     sal_uInt16 nRegionId = 0;
     sal_uInt16 nDocId = USHRT_MAX;
@@ -586,7 +586,7 @@ void TemplateLocalView::renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewT
     {
         nRegionId = pContainerItem->mnId - 1;
     }
-    mpDocTemplates->SetName( sNewTitle, nRegionId, nDocId );
+    return mpDocTemplates->SetName( sNewTitle, nRegionId, nDocId );
 }
 
 static void lcl_updateThumbnails (TemplateContainerItem *pItem)

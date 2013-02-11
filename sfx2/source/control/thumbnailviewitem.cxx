@@ -187,8 +187,8 @@ void ThumbnailViewItem::updateTitleEditSize()
 
 void ThumbnailViewItem::setTitle (const rtl::OUString& rTitle)
 {
-    mrParent.renameItem(this, rTitle);
-    maTitle = rTitle;
+    if (mrParent.renameItem(this, rTitle))
+        maTitle = rTitle;
 }
 
 uno::Reference< accessibility::XAccessible > ThumbnailViewItem::GetAccessible( bool bIsTransientChildrenDisabled )
