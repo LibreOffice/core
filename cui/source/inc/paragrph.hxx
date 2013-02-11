@@ -278,17 +278,15 @@ private:
 //--------------------------------------------------------------------------
 class SvxAsianTabPage : public SfxTabPage
 {
-    FixedLine       aOptionsFL;
 
-    TriStateBox     aForbiddenRulesCB;
-    TriStateBox     aHangingPunctCB;
-
-    TriStateBox     aScriptSpaceCB;
+    CheckBox*     m_pForbiddenRulesCB;
+    CheckBox*     m_pHangingPunctCB;
+    CheckBox*     m_pScriptSpaceCB;
 
     SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet );
 
 #ifdef _SVX_PARAGRPH_CXX
-    DECL_LINK( ClickHdl_Impl, TriStateBox* );
+    DECL_LINK( ClickHdl_Impl, CheckBox* );
 #endif
 public:
     ~SvxAsianTabPage();

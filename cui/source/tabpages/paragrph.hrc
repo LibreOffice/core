@@ -100,14 +100,6 @@
 #define LB_TEXTDIRECTION                92
 
 
-//asian typography
-#define FL_AS_OPTIONS                   1
-#define CB_AS_HANG_PUNC                 2
-
-#define CB_AS_FORBIDDEN                 4
-
-#define CB_AS_SCRIPT_SPACE              7
-
 #define STR_EXAMPLE                     5010
 #define STR_PAGE_STYLE                  5011
 #endif

@@ -2221,19 +2221,17 @@ void SvxExtParagraphTabPage::PageCreated(SfxAllItemSet aSet)
 }
 
 SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, CUI_RES( RID_SVXPAGE_PARA_ASIAN ), rSet),
-    aOptionsFL(         this, CUI_RES(FL_AS_OPTIONS       )),
-    aForbiddenRulesCB(  this, CUI_RES(CB_AS_FORBIDDEN     )),
-    aHangingPunctCB(    this, CUI_RES(CB_AS_HANG_PUNC     )),
-    aScriptSpaceCB(     this, CUI_RES(CB_AS_SCRIPT_SPACE    ))//,
+    SfxTabPage(pParent, "AsianTypography","cui/ui/asiantypography.ui", rSet)
 
 {
-    FreeResource();
+    get(m_pForbiddenRulesCB,"checkForbidList");
+    get(m_pHangingPunctCB,"checkHangPunct");
+    get(m_pScriptSpaceCB,"checkApplySpacing");
 
     Link aLink = LINK( this, SvxAsianTabPage, ClickHdl_Impl );
-    aHangingPunctCB.SetClickHdl( aLink );
-    aScriptSpaceCB.SetClickHdl( aLink );
-    aForbiddenRulesCB.SetClickHdl( aLink );
+    m_pHangingPunctCB->SetClickHdl( aLink );
+    m_pScriptSpaceCB->SetClickHdl( aLink );
+    m_pForbiddenRulesCB->SetClickHdl( aLink );
 
 }
 
@@ -2255,34 +2253,34 @@ sal_uInt16*     SvxAsianTabPage::GetRanges()
     };
     return pRanges;
 }
-
+//FIXME: This crash in Calc, but works in Writer/Draw/Impress
 sal_Bool        SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bRet = sal_False;
     SfxItemPool* pPool = rSet.GetPool();
-    if(aScriptSpaceCB.IsChecked() != aScriptSpaceCB.GetSavedValue())
+    if(m_pScriptSpaceCB->IsChecked() != m_pScriptSpaceCB->GetSavedValue())
     {
         SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
             pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE)).Clone();
-        pNewItem->SetValue(aScriptSpaceCB.IsChecked());
+        pNewItem->SetValue(m_pScriptSpaceCB->IsChecked());
         rSet.Put(*pNewItem);
         delete pNewItem;
         bRet = sal_True;
     }
-    if(aHangingPunctCB.IsChecked() != aHangingPunctCB.GetSavedValue())
+    if(m_pHangingPunctCB->IsChecked() != m_pHangingPunctCB->GetSavedValue())
     {
         SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
             pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION)).Clone();
-        pNewItem->SetValue(aHangingPunctCB.IsChecked());
+        pNewItem->SetValue(m_pHangingPunctCB->IsChecked());
         rSet.Put(*pNewItem);
         delete pNewItem;
         bRet = sal_True;
     }
-    if(aForbiddenRulesCB.IsChecked() != aForbiddenRulesCB.GetSavedValue())
+    if(m_pForbiddenRulesCB->IsChecked() != m_pForbiddenRulesCB->GetSavedValue())
     {
         SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
             pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES)).Clone();
-        pNewItem->SetValue(aForbiddenRulesCB.IsChecked());
+        pNewItem->SetValue(m_pForbiddenRulesCB->IsChecked());
         rSet.Put(*pNewItem);
         delete pNewItem;
         bRet = sal_True;
@@ -2290,7 +2288,7 @@ sal_Bool        SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
     return bRet;
 }
 
-static void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, TriStateBox& rBox)
+static void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, CheckBox& rBox)
 {
     sal_uInt16 _nWhich = rSet.GetPool()->GetWhich(nSlotId);
     SfxItemState eState = rSet.GetItemState(_nWhich, sal_True);
@@ -2309,14 +2307,14 @@ static void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, TriStateBox& 
 
 void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
 {
-    lcl_SetBox(rSet, SID_ATTR_PARA_FORBIDDEN_RULES, aForbiddenRulesCB );
-    lcl_SetBox(rSet, SID_ATTR_PARA_HANGPUNCTUATION, aHangingPunctCB );
+    lcl_SetBox(rSet, SID_ATTR_PARA_FORBIDDEN_RULES, *m_pForbiddenRulesCB );
+    lcl_SetBox(rSet, SID_ATTR_PARA_HANGPUNCTUATION, *m_pHangingPunctCB );
 
     //character distance not yet available
-    lcl_SetBox(rSet, SID_ATTR_PARA_SCRIPTSPACE, aScriptSpaceCB );
+    lcl_SetBox(rSet, SID_ATTR_PARA_SCRIPTSPACE, *m_pScriptSpaceCB );
 }
 
-IMPL_LINK( SvxAsianTabPage, ClickHdl_Impl, TriStateBox*, pBox )
+IMPL_LINK( SvxAsianTabPage, ClickHdl_Impl, CheckBox*, pBox )
 {
     pBox->EnableTriState( sal_False );
     return 0;
