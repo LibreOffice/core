@@ -92,6 +92,21 @@ public:
     sal_Bool            Delete(sal_uInt16 nRegion, sal_uInt16 nIdx);
     sal_Bool            InsertDir(const String &rText, sal_uInt16 nRegion);
 
+    /** Change the name of an entry or a directory
+        
+        \param rName
+            The new name to set
+        \param nRegion
+            The id of the region to rename or containing the template to rename
+        \param nIdx
+            The id of the template to rename or USHRT_MAX to rename the region.
+
+        \return
+            sal_True if the action could be performed, sal_False otherwise
+
+    */
+    sal_Bool            SetName(const rtl::OUString &rName, sal_uInt16 nRegion, sal_uInt16 nIdx);
+
     sal_Bool            CopyTo(sal_uInt16 nRegion, sal_uInt16 nIdx, const String &rName) const;
     sal_Bool            CopyFrom(sal_uInt16 nRegion, sal_uInt16 nIdx, String &rName);
 

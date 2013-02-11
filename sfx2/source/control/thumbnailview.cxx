@@ -505,6 +505,9 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                     deselectItems( );
                 pItem->setSelection(true);
 
+                bool bClickOnTitle = pItem->getTextArea().IsInside(rMEvt.GetPosPixel());
+                pItem->setEditTitle(bClickOnTitle);
+
                 if (!pItem->isHighlighted())
                     DrawItem(pItem);
 
@@ -881,6 +884,7 @@ void ThumbnailView::deselectItems()
     {
         if (mItemList[i]->isSelected())
         {
+            mItemList[i]->setEditTitle(false);
             mItemList[i]->setSelection(false);
 
             maItemStateHdl.Call(mItemList[i]);
@@ -963,6 +967,11 @@ void ThumbnailView::sortItems (const boost::function<bool (const ThumbnailViewIt
     CalculateItemPositions();
 
     Invalidate();
+}
+
+void ThumbnailView::renameItem(ThumbnailViewItem*, rtl::OUString)
+{
+    // Do nothing by default
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

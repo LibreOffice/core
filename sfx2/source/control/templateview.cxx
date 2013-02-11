@@ -9,6 +9,7 @@
 
 #include "templatedlg.hxx"
 #include <sfx2/templateview.hxx>
+#include <sfx2/templateabstractview.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -34,6 +35,7 @@ using namespace drawinglayer::primitive2d;
 
 TemplateView::TemplateView (Window *pParent)
     : ThumbnailView(pParent,WB_VSCROLL),
+      mpMasterView(NULL),
       maButtons(this, SfxResId(CONTROL_BUTTONS)),
       maAllButton(&maButtons, SfxResId(BTN_ALL_TEMPLATES)),
       maFTName(&maButtons, SfxResId(FT_NAME)),
@@ -61,6 +63,8 @@ void TemplateView::InsertItems (const std::vector<TemplateItemProperties> &rTemp
         const TemplateItemProperties *pCur = &rTemplates[i];
 
         pItem->mnId = pCur->nId;
+        pItem->mnDocId = pCur->nDocId;
+        pItem->mnRegionId = pCur->nRegionId;
         pItem->maTitle = pCur->aName;
         pItem->setPath(pCur->aPath);
         pItem->maPreview1 = pCur->aThumbnail;
@@ -94,6 +98,12 @@ void TemplateView::Resize()
     maFTName.SetSizePixel(aNameSize);
 
     ThumbnailView::Resize();
+}
+
+void TemplateView::renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle)
+{
+    if (mpMasterView)
+        mpMasterView->renameItem(pItem, sNewTitle);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

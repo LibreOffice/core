@@ -236,6 +236,8 @@ public:
 
     virtual void Resize();
 
+    virtual void renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle);
+
 protected:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt );

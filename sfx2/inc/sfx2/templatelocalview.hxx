@@ -68,6 +68,8 @@ public:
                          const OUString &rName);
 
     bool isTemplateNameUnique (const sal_uInt16 nRegionItemId, const OUString &rName) const;
+    
+    virtual void renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle);
 
 private:
 

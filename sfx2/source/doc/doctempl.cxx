@@ -1039,6 +1039,61 @@ sal_Bool SfxDocumentTemplates::InsertDir
     return sal_False;
 }
 
+sal_Bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegion, sal_uInt16 nIdx )
+
+{
+    DocTemplLocker_Impl aLocker( *pImp );
+
+    if ( ! pImp->Construct() )
+        return sal_False;
+
+    RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
+    DocTempl_EntryData_Impl *pEntry = NULL;
+
+    if ( !pRegion )
+        return sal_False;
+
+    uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
+    OUString aEmpty;
+
+    if ( nIdx == USHRT_MAX )
+    {
+        if ( pRegion->GetTitle() == rName )
+            return sal_True;
+
+        // we have to rename a region
+        if ( xTemplates->renameGroup( pRegion->GetTitle(), rName ) )
+        {
+            pRegion->SetTitle( rName );
+            pRegion->SetTargetURL( aEmpty );
+            pRegion->SetHierarchyURL( aEmpty );
+            return sal_True;
+        }
+    }
+    else
+    {
+        pEntry = pRegion->GetEntry( nIdx );
+
+        if ( !pEntry )
+            return sal_False;
+
+        if ( pEntry->GetTitle() == rName )
+            return sal_True;
+
+        if ( xTemplates->renameTemplate( pRegion->GetTitle(),
+                                         pEntry->GetTitle(),
+                                         rName ) )
+        {
+            pEntry->SetTitle( rName );
+            pEntry->SetTargetURL( aEmpty );
+            pEntry->SetHierarchyURL( aEmpty );
+            return sal_True;
+        }
+    }
+
+    return sal_False;
+}
+
 //------------------------------------------------------------------------
 
 sal_Bool SfxDocumentTemplates::GetFull

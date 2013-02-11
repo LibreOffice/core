@@ -19,6 +19,7 @@
 
 #include <sfx2/thumbnailviewitem.hxx>
 
+#include "thumbnailview.hxx"
 #include "thumbnailviewacc.hxx"
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -42,6 +43,66 @@ using namespace ::com::sun::star;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
+class ResizableMultiLineEdit : public VclMultiLineEdit
+{
+    private:
+        ThumbnailViewItem* mpItem;
+        bool mbIsInGrabFocus;
+
+    public:
+        ResizableMultiLineEdit (Window* pParent, ThumbnailViewItem* pItem);
+        ~ResizableMultiLineEdit ();
+
+        void SetInGrabFocus(bool bInGrabFocus) { mbIsInGrabFocus = bInGrabFocus; }
+
+        virtual long PreNotify(NotifyEvent& rNEvt);
+        virtual void Modify();
+};
+
+ResizableMultiLineEdit::ResizableMultiLineEdit (Window* pParent, ThumbnailViewItem* pItem) :
+    VclMultiLineEdit (pParent, WB_CENTER | WB_BORDER),
+    mpItem(pItem),
+    mbIsInGrabFocus(false)
+{
+}
+
+ResizableMultiLineEdit::~ResizableMultiLineEdit ()
+{
+}
+
+long ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
+{
+    long nDone = 0;
+    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
+        KeyCode aCode = rKEvt.GetKeyCode();
+        switch (aCode.GetCode())
+        {
+            case KEY_RETURN:
+                mpItem->setTitle( GetText() );
+            case KEY_ESCAPE:
+                mpItem->setEditTitle(false);
+                nDone = 1;
+                break;
+            default:
+                break;
+        }
+    }
+    else if ( rNEvt.GetType() == EVENT_LOSEFOCUS && !mbIsInGrabFocus )
+    {
+        mpItem->setTitle( GetText() );
+        mpItem->setEditTitle(false, false);
+    }
+    return nDone ? nDone : VclMultiLineEdit::PreNotify(rNEvt);
+}
+
+void ResizableMultiLineEdit::Modify()
+{
+    VclMultiLineEdit::Modify();
+    mpItem->updateTitleEditSize();
+}
+
 ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView)
     : mrParent(rView)
     , mnId(0)
@@ -49,11 +110,16 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView)
     , mbSelected(false)
     , mbHover(false)
     , mpxAcc(NULL)
+    , mbEditTitle(false)
+    , mpTitleED(NULL)
+    , maTextEditMaxArea()
 {
+    mpTitleED = new ResizableMultiLineEdit(&rView, this);
 }
 
 ThumbnailViewItem::~ThumbnailViewItem()
 {
+    delete mpTitleED;
     if( mpxAcc )
     {
         static_cast< ThumbnailViewItemAcc* >( mpxAcc->get() )->ParentDestroyed();
@@ -64,6 +130,8 @@ ThumbnailViewItem::~ThumbnailViewItem()
 void ThumbnailViewItem::show (bool bVisible)
 {
     mbVisible = bVisible;
+    if (!mbVisible)
+        mpTitleED->Show(false);
 }
 
 void ThumbnailViewItem::setSelection (bool state)
@@ -74,6 +142,53 @@ void ThumbnailViewItem::setSelection (bool state)
 void ThumbnailViewItem::setHighlight (bool state)
 {
     mbHover = state;
+}
+
+void ThumbnailViewItem::setEditTitle (bool edit, bool bChangeFocus)
+{
+    mbEditTitle = edit;
+    mpTitleED->Show(edit);
+    if (edit)
+    {
+        mpTitleED->SetText(maTitle);
+        updateTitleEditSize();
+        static_cast<ResizableMultiLineEdit*>(mpTitleED)->SetInGrabFocus(true);
+        mpTitleED->GrabFocus();
+        static_cast<ResizableMultiLineEdit*>(mpTitleED)->SetInGrabFocus(false);
+    }
+    else if (bChangeFocus)
+    {
+        mrParent.GrabFocus();
+    }
+}
+
+Rectangle ThumbnailViewItem::getTextArea() const
+{
+    Rectangle aTextArea(maTextEditMaxArea);
+
+    TextEngine aTextEngine;
+    aTextEngine.SetMaxTextWidth(maDrawArea.getWidth());
+    aTextEngine.SetText(maTitle);
+
+    long nTxtHeight = aTextEngine.GetTextHeight() + 6;
+    if (nTxtHeight < aTextArea.GetHeight())
+        aTextArea.SetSize(Size(aTextArea.GetWidth(), nTxtHeight));
+
+    return aTextArea;
+}
+
+void ThumbnailViewItem::updateTitleEditSize()
+{
+    Rectangle aTextArea = getTextArea();
+    Point aPos = aTextArea.TopLeft();
+    Size aSize = aTextArea.GetSize();
+    mpTitleED->SetPosSizePixel(aPos, aSize);
+}
+
+void ThumbnailViewItem::setTitle (const rtl::OUString& rTitle)
+{
+    mrParent.renameItem(this, rTitle);
+    maTitle = rTitle;
 }
 
 uno::Reference< accessibility::XAccessible > ThumbnailViewItem::GetAccessible( bool bIsTransientChildrenDisabled )
@@ -108,9 +223,15 @@ void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, con
     maPrev1Pos = aPos;
 
     // Calculate text position
-    aPos.Y() = maDrawArea.getY() + nThumbnailHeight + nPadding + aTextDev.getTextHeight();
+    aPos.Y() = maDrawArea.getY() + nThumbnailHeight + nPadding * 2;
     aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLenght))/2;
     maTextPos = aPos;
+
+    // Calculate the text edit max area
+    aPos = Point(maDrawArea.getX() + nPadding, maTextPos.getY());
+    Size aEditSize(maDrawArea.GetWidth() - nPadding * 2,
+                   maDrawArea.Bottom() - maTextPos.Y());
+    maTextEditMaxArea = Rectangle( aPos, aEditSize );
 }
 
 void ThumbnailViewItem::setSelectClickHdl (const Link &link)
@@ -162,8 +283,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
 
     // Draw text below thumbnail
     aPos = maTextPos;
-
-    addTextPrimitives( maTitle, pAttrs, maTextPos, aSeq );
+    addTextPrimitives( maTitle, pAttrs, aPos, aSeq );
 
     pProcessor->process(aSeq);
 }
@@ -171,6 +291,8 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
 void ThumbnailViewItem::addTextPrimitives (const rtl::OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, Primitive2DSequence& rSeq)
 {
     drawinglayer::primitive2d::TextLayouterDevice aTextDev;
+
+    aPos.setY(aPos.getY() + aTextDev.getTextHeight());
 
     rtl::OUString aText (rText);
 

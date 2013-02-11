@@ -42,6 +42,8 @@ public:
     // FIXME Kept only during the refactoring
     void setOpenHdl (const Link &rLink) { maOpenHdl = rLink; }
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) { maOpenHdl.Call(pItem); }
+    void setMasterView(TemplateAbstractView* pMasterView) { mpMasterView = pMasterView; }
+    virtual void renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle);
 
 protected:
 
@@ -50,6 +52,7 @@ protected:
 private:
 
     Link maOpenHdl;
+    TemplateAbstractView* mpMasterView;
 
     Control    maButtons;
     PushButton maAllButton;
