@@ -405,7 +405,8 @@ public:
                 break;
             }
         }
-        g_list_free_full (pSources, g_object_unref);
+        g_list_foreach (pSources, (GFunc)g_object_unref, NULL);
+        g_list_free (pSources);
         if (!id)
             return NULL;
 
