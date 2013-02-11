@@ -49,6 +49,7 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/compbase2.hxx"
 #include "cppuhelper/implbase1.hxx"
+#include "osl/endian.h"
 #include "osl/file.h"
 #include "osl/file.hxx"
 #include "osl/mutex.hxx"
@@ -221,11 +222,11 @@
 // *** 7: UNSIGNED HYPER
 // **** followed by UInt64 value
 // *** 8: FLOAT
-// **** followed by UInt32 value, representing values in IEEE-754 single
-//       precision format
+// **** followed by 4-byte value, representing values in ISO 60599 binary32
+//       format, LSB first
 // *** 9: DOUBLE
-// **** followed by UInt64 value, representing values in IEEE-754 double
-//       precision format
+// **** followed by 8-byte value, representing values in ISO 60599 binary64
+//       format, LSB first
 //
 // Memory layout:
 //
@@ -236,33 +237,51 @@
 
 namespace {
 
-// sizeof (UInt16) == 2
-struct UInt16 {
+// sizeof (Memory16) == 2
+struct Memory16 {
     unsigned char byte[2];
 
-    sal_uInt16 get() const {
+    sal_uInt16 getUnsigned16() const {
         return static_cast< sal_uInt16 >(byte[0])
             | (static_cast< sal_uInt16 >(byte[1]) << 8);
     }
 };
 
-// sizeof (UInt32) == 4
-struct UInt32 {
+// sizeof (Memory32) == 4
+struct Memory32 {
     unsigned char byte[4];
 
-    sal_uInt32 get() const {
+    sal_uInt32 getUnsigned32() const {
         return static_cast< sal_uInt32 >(byte[0])
             | (static_cast< sal_uInt32 >(byte[1]) << 8)
             | (static_cast< sal_uInt32 >(byte[2]) << 16)
             | (static_cast< sal_uInt32 >(byte[3]) << 24);
     }
+
+    float getIso60599Binary32() const {
+        // Create a copy in either case, for alingment:
+        unsigned char buf[4];
+#if defined OSL_LITENDIAN
+        buf[0] = byte[0];
+        buf[1] = byte[1];
+        buf[2] = byte[2];
+        buf[3] = byte[3];
+#else
+        buf[0] = byte[3];
+        buf[1] = byte[2];
+        buf[2] = byte[1];
+        buf[3] = byte[0];
+#endif
+        return *reinterpret_cast< float * >(buf);
+            // assuming float is ISO 60599 binary32
+    }
 };
 
-// sizeof (UInt64) == 8
-struct UInt64 {
+// sizeof (Memory64) == 8
+struct Memory64 {
     unsigned char byte[8];
 
-    sal_uInt64 get() const {
+    sal_uInt64 getUnsigned64() const {
         return static_cast< sal_uInt64 >(byte[0])
             | (static_cast< sal_uInt64 >(byte[1]) << 8)
             | (static_cast< sal_uInt64 >(byte[2]) << 16)
@@ -272,6 +291,32 @@ struct UInt64 {
             | (static_cast< sal_uInt64 >(byte[6]) << 48)
             | (static_cast< sal_uInt64 >(byte[7]) << 56);
         }
+
+    double getIso60599Binary64() const {
+        // Create a copy in either case, for alingment:
+        unsigned char buf[8];
+#if defined OSL_LITENDIAN
+        buf[0] = byte[0];
+        buf[1] = byte[1];
+        buf[2] = byte[2];
+        buf[3] = byte[3];
+        buf[4] = byte[4];
+        buf[5] = byte[5];
+        buf[6] = byte[6];
+        buf[7] = byte[7];
+#else
+        buf[0] = byte[7];
+        buf[1] = byte[6];
+        buf[2] = byte[5];
+        buf[3] = byte[4];
+        buf[4] = byte[3];
+        buf[5] = byte[2];
+        buf[6] = byte[1];
+        buf[7] = byte[0];
+#endif
+        return *reinterpret_cast< double * >(buf);
+            // assuming double is ISO 60599 binary64
+    }
 };
 
 struct MappedFile:
@@ -286,6 +331,10 @@ struct MappedFile:
     sal_uInt32 read32(sal_uInt32 offset) const;
 
     sal_uInt64 read64(sal_uInt32 offset) const;
+
+    float readIso60599Binary32(sal_uInt32 offset) const;
+
+    double readIso60599Binary64(sal_uInt32 offset) const;
 
     rtl::OUString readNameNul(sal_uInt32 offset) const;
 
@@ -306,6 +355,10 @@ private:
     sal_uInt32 get32(sal_uInt32 offset) const;
 
     sal_uInt64 get64(sal_uInt32 offset) const;
+
+    float getIso60599Binary32(sal_uInt32 offset) const;
+
+    double getIso60599Binary64(sal_uInt32 offset) const;
 };
 
 MappedFile::MappedFile(rtl::OUString const & fileUrl) {
@@ -376,6 +429,26 @@ sal_uInt64 MappedFile::read64(sal_uInt32 offset) const {
             css::uno::Reference< css::uno::XInterface >());
     }
     return get64(offset);
+}
+
+float MappedFile::readIso60599Binary32(sal_uInt32 offset) const {
+    assert(size >= 8);
+    if (offset > size - 4) {
+        throw css::uno::DeploymentException(
+            "broken UNOIDL file: offset for 32-bit value too large",
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    return getIso60599Binary32(offset);
+}
+
+double MappedFile::readIso60599Binary64(sal_uInt32 offset) const {
+    assert(size >= 8);
+    if (offset > size - 8) {
+        throw css::uno::DeploymentException(
+            "broken UNOIDL file: offset for 64-bit value too large",
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    return getIso60599Binary64(offset);
 }
 
 rtl::OUString MappedFile::readNameNul(sal_uInt32 offset) const {
@@ -473,22 +546,36 @@ sal_uInt8 MappedFile::get8(sal_uInt32 offset) const {
 sal_uInt16 MappedFile::get16(sal_uInt32 offset) const {
     assert(size >= 8);
     assert(offset <= size - 2);
-    return reinterpret_cast< UInt16 const * >(
-        static_cast< char const * >(address) + offset)->get();
+    return reinterpret_cast< Memory16 const * >(
+        static_cast< char const * >(address) + offset)->getUnsigned16();
 }
 
 sal_uInt32 MappedFile::get32(sal_uInt32 offset) const {
     assert(size >= 8);
     assert(offset <= size - 4);
-    return reinterpret_cast< UInt32 const * >(
-        static_cast< char const * >(address) + offset)->get();
+    return reinterpret_cast< Memory32 const * >(
+        static_cast< char const * >(address) + offset)->getUnsigned32();
 }
 
 sal_uInt64 MappedFile::get64(sal_uInt32 offset) const {
     assert(size >= 8);
     assert(offset <= size - 8);
-    return reinterpret_cast< UInt64 const * >(
-        static_cast< char const * >(address) + offset)->get();
+    return reinterpret_cast< Memory64 const * >(
+        static_cast< char const * >(address) + offset)->getUnsigned64();
+}
+
+float MappedFile::getIso60599Binary32(sal_uInt32 offset) const {
+    assert(size >= 8);
+    assert(offset <= size - 4);
+    return reinterpret_cast< Memory32 const * >(
+        static_cast< char const * >(address) + offset)->getIso60599Binary32();
+}
+
+double MappedFile::getIso60599Binary64(sal_uInt32 offset) const {
+    assert(size >= 8);
+    assert(offset <= size - 8);
+    return reinterpret_cast< Memory64 const * >(
+        static_cast< char const * >(address) + offset)->getIso60599Binary64();
 }
 
 css::uno::Reference< css::reflection::XTypeDescription > resolve(
@@ -2035,8 +2122,8 @@ private:
 
 // sizeof (MapEntry) == 8
 struct MapEntry {
-    UInt32 name;
-    UInt32 data;
+    Memory32 name;
+    Memory32 data;
 };
 
 class Enumeration:
@@ -2139,7 +2226,7 @@ void Enumeration::proceed() {
     assert(!positions_.empty());
     assert(positions_.top().position < positions_.top().end);
     if (deep_) {
-        sal_uInt32 off = positions_.top().position->data.get();
+        sal_uInt32 off = positions_.top().position->data.getUnsigned32();
         int v = file_->read8(off);
         bool recurse;
         bool cgroup = bool();
@@ -2155,7 +2242,8 @@ void Enumeration::proceed() {
         if (recurse) {
             rtl::OUString prefix(
                 positions_.top().prefix
-                + file_->readNameNul(positions_.top().position->name.get())
+                + file_->readNameNul(
+                    positions_.top().position->name.getUnsigned32())
                 + ".");
             sal_uInt32 mapSize = file_->read32(off + 1);
             if (8 * mapSize > file_->size - off - 5) { //TODO: overflow
@@ -2187,7 +2275,7 @@ void Enumeration::findMatch() {
             assert(matches(css::uno::TypeClass_CONSTANT));
             match = true;
         } else {
-            sal_uInt32 off = positions_.top().position->data.get();
+            sal_uInt32 off = positions_.top().position->data.getUnsigned32();
             int v = file_->read8(off);
             css::uno::TypeClass tc;
             switch (v & 0x1F) {
@@ -2232,7 +2320,8 @@ void Enumeration::findMatch() {
         }
         if (match) {
             current_ = positions_.top().prefix
-                + file_->readNameNul(positions_.top().position->name.get());
+                + file_->readNameNul(
+                    positions_.top().position->name.getUnsigned32());
             return;
         }
     }
@@ -2383,9 +2472,11 @@ css::uno::Any Provider::getByHierarchicalName(rtl::OUString const & aName)
             any <<= file_->read64(off + 1);
             break;
         case 8: // FLOAT
-            //TODO
+            any <<= file_->readIso60599Binary32(off + 1);
+            break;
         case 9: // DOUBLE
-            //TODO
+            any <<= file_->readIso60599Binary64(off + 1);
+            break;
         default:
             throw css::uno::DeploymentException(
                 ("broken UNOIDL file: bad constant type byte "
@@ -3036,7 +3127,7 @@ sal_uInt32 Provider::findInMap(
     default: // COMPARE_EQUAL
         break;
     }
-    sal_uInt32 off = mapBegin[n].data.get();
+    sal_uInt32 off = mapBegin[n].data.getUnsigned32();
     if (off == 0) {
         throw css::uno::DeploymentException(
             "broken UNOIDL file: map entry data offset is null",
@@ -3050,7 +3141,7 @@ Provider::Compare Provider::compare(
     MapEntry const * entry) const
 {
     assert(entry != 0);
-    sal_uInt32 off = entry->name.get();
+    sal_uInt32 off = entry->name.getUnsigned32();
     if (off > file_->size - 1) { // at least a trailing NUL
         throw css::uno::DeploymentException(
             "broken UNOIDL file: string offset too large",

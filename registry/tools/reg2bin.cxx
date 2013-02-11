@@ -9,6 +9,7 @@
 
 #include "sal/config.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
@@ -17,6 +18,7 @@
 #include <utility>
 #include <vector>
 
+#include "osl/endian.h"
 #include "osl/file.h"
 #include "osl/file.hxx"
 #include "osl/process.h"
@@ -31,6 +33,7 @@
 #include "rtl/textenc.h"
 #include "rtl/textcvt.h"
 #include "rtl/ustring.hxx"
+#include "sal/macros.h"
 #include "sal/main.h"
 
 namespace {
@@ -910,8 +913,9 @@ void write8(osl::File & file, sal_uInt64 value) {
         std::cerr << "Cannot write value >= 2^8; input is too large\n";
         std::exit(EXIT_FAILURE);
     }
-    unsigned char buf = value & 0xFF;
-    write(file, &buf, 1);
+    unsigned char buf[1];
+    buf[0] = value & 0xFF;
+    write(file, buf, SAL_N_ELEMENTS(buf));
 }
 
 void write16(osl::File & file, sal_uInt64 value) {
@@ -922,7 +926,7 @@ void write16(osl::File & file, sal_uInt64 value) {
     unsigned char buf[2];
     buf[0] = value & 0xFF;
     buf[1] = (value >> 8) & 0xFF;
-    write(file, buf, 2);
+    write(file, buf, SAL_N_ELEMENTS(buf));
 }
 
 void write32(osl::File & file, sal_uInt64 value) {
@@ -935,7 +939,7 @@ void write32(osl::File & file, sal_uInt64 value) {
     buf[1] = (value >> 8) & 0xFF;
     buf[2] = (value >> 16) & 0xFF;
     buf[3] = (value >> 24) & 0xFF;
-    write(file, buf, 4);
+    write(file, buf, SAL_N_ELEMENTS(buf));
 }
 
 void write64(osl::File & file, sal_uInt64 value) {
@@ -948,7 +952,31 @@ void write64(osl::File & file, sal_uInt64 value) {
     buf[3] = (value >> 40) & 0xFF;
     buf[3] = (value >> 48) & 0xFF;
     buf[3] = (value >> 56) & 0xFF;
-    write(file, buf, 8);
+    write(file, buf, SAL_N_ELEMENTS(buf));
+}
+
+void writeIso60599Binary32(osl::File & file, float value) {
+    unsigned char buf[4];
+    *reinterpret_cast< float * >(buf) = value;
+        // assuming float is ISO 60599 binary32
+#if defined OSL_BIGENDIAN
+    std::swap(buf[0], buf[3]);
+    std::swap(buf[1], buf[2]);
+#endif
+    write(file, buf, SAL_N_ELEMENTS(buf));
+}
+
+void writeIso60599Binary64(osl::File & file, double value) {
+    unsigned char buf[8];
+    *reinterpret_cast< double * >(buf) = value;
+        // assuming double is ISO 60599 binary64
+#if defined OSL_BIGENDIAN
+    std::swap(buf[0], buf[7]);
+    std::swap(buf[1], buf[6]);
+    std::swap(buf[2], buf[5]);
+    std::swap(buf[3], buf[4]);
+#endif
+    write(file, buf, SAL_N_ELEMENTS(buf));
 }
 
 rtl::OString toAscii(rtl::OUString const & name) {
@@ -1196,7 +1224,6 @@ sal_uInt64 writeMap(
                         static_cast< sal_uInt32 >(j->second.constantValue.l));
                     break;
                 case CONSTANT_TYPE_UNSIGNED_LONG:
-                case CONSTANT_TYPE_FLOAT: //access through union for strict-aliasing
                     write32(file, j->second.constantValue.ul);
                     break;
                 case CONSTANT_TYPE_HYPER:
@@ -1205,8 +1232,13 @@ sal_uInt64 writeMap(
                         static_cast< sal_uInt64 >(j->second.constantValue.h));
                     break;
                 case CONSTANT_TYPE_UNSIGNED_HYPER:
-                case CONSTANT_TYPE_DOUBLE: //access through union for strict-aliasing
                     write64(file, j->second.constantValue.uh);
+                    break;
+                case CONSTANT_TYPE_FLOAT:
+                    writeIso60599Binary32(file, j->second.constantValue.f);
+                    break;
+                case CONSTANT_TYPE_DOUBLE:
+                    writeIso60599Binary64(file, j->second.constantValue.d);
                     break;
                 default:
                     std::abort(); // this cannot happen
