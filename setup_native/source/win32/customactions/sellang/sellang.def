@@ -1,0 +1,4 @@
+LIBRARY		"sellangmsi.dll"
+EXPORTS
+			SelectLanguage
+			SortTree

@@ -13,6 +13,10 @@ $(eval $(call gb_Library_add_defs,sellangmsi,\
 	-D_STLP_USE_STATIC_LIB \
 ))
 
+$(eval $(call gb_Library_add_ldflags,sellangmsi,\
+	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/sellang/sellang.def \
+))
+
 $(eval $(call gb_Library_add_exception_objects,sellangmsi,\
     setup_native/source/win32/customactions/sellang/sellang \
     setup_native/source/win32/customactions/sellang/sorttree \
