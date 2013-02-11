@@ -42,6 +42,10 @@ public:
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs);
+
+    sal_uInt16    mnRegionId;
+    sal_uInt16    mnDocId;
+
 private:
 
     rtl::OUString maPath;
