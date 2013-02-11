@@ -1269,7 +1269,8 @@ sal_Bool DffPropSet::IsHardAttribute( sal_uInt32 nId ) const
     sal_Bool bRetValue = sal_True;
     nId &= 0x3ff;
     if ( ( nId & 0x3f ) >= 48 ) // is this a flag id
-        bRetValue = ( mpPropSetEntries[ nId ].nComplexIndexOrFlagsHAttr & ( 1 << ( 0xf - ( nId & 0xf ) ) ) ) != 0;
+        bRetValue = (mpPropSetEntries[nId | 0x3f].nComplexIndexOrFlagsHAttr
+                        & (1 << (0xf - (nId & 0xf)))) != 0;
     else
         bRetValue = ( mpPropSetEntries[ nId ].aFlags.bSoftAttr == 0 );
     return bRetValue;
