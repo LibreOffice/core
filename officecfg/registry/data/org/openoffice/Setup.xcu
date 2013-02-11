@@ -840,6 +840,9 @@
                 <it>/org.openoffice.Office.Embedding</it>
                 <it>/org.openoffice.Office.Events</it>
                 <it>/org.openoffice.Office.ExtendedColorScheme</it>
+                <it>/org.openoffice.Office.Histories</it>
+                <it>/org.openoffice.Office.Paths</it>
+                <it>/org.openoffice.Office.Recovery</it>
                 <it>/org.openoffice.Office.Common/Accessibility</it>
                 <it>/org.openoffice.Office.Common/Accessibility/AutoDetectSystemHC</it>
                 <it>/org.openoffice.Office.Common/AsianLayout</it>
@@ -864,6 +867,7 @@
                 <it>/org.openoffice.Office.Common/Misc/SymbolStyle</it>
                 <it>/org.openoffice.Office.Common/Misc/FilePickerPlacesNames</it>
                 <it>/org.openoffice.Office.Common/Misc/FilePickerPlacesUrls</it>
+                <it>/org.openoffice.Office.Common/ODF</it>
                 <it>/org.openoffice.Office.Common/Passwords</it>
                 <it>/org.openoffice.Office.Common/Print/PrintingModifiesDocument</it>
                 <it>/org.openoffice.Office.Common/Print/Warning</it>
@@ -873,6 +877,7 @@
                 <it>/org.openoffice.Office.Common/Undo</it>
                 <it>/org.openoffice.Office.Common/View/Dialog/Dialog/MiddleMouseButton</it>
                 <it>/org.openoffice.Office.Common/View/Dialog/MousePositioning</it>
+                <it>/org.openoffice.Office.Common/View/FontAntiAliasing</it>
                 <it>/org.openoffice.Office.Common/View/Localization</it>
                 <it>/org.openoffice.Office.Common/View/Menu</it>
                 <it>/org.openoffice.Office.Common/_3D_Engine</it>
@@ -945,6 +950,101 @@
             </prop>
             <prop oor:name="ExcludedNodes">
               <value>/org.openoffice.Office.Writer/Wizard</value>
+            </prop>
+          </node>
+          <node oor:name="BaseWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.BaseWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="BasicIDEWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.BasicIDEWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="CalcWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.CalcWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="ChartWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.ChartWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="DbBrowserWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.DbBrowserWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="DbQueryWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.DbQueryWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="DbRelationWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.DbRelationWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="DbTableDataWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.DbTableDataWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="DbTableWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.DbTableWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="DrawWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.DrawWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="ImpressWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.ImpressWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="MathWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.MathWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="StartModuleWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.StartModuleWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="WriterFormWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.WriterFormWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="WriterGlobalWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.WriterGlobalWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="WriterReportWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.WriterReportWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="WriterWebWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.WriterWebWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="WriterWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.WriterWindowState/UIElements</value>
+            </prop>
+          </node>
+          <node oor:name="XFormsWindowState" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Office.UI.XFormsWindowState/UIElements</value>
             </prop>
           </node>
         </node>
