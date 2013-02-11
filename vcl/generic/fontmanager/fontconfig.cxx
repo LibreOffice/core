@@ -832,7 +832,6 @@ namespace
 #endif
     }
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
     LanguageTag getExemplerLangTagForCodePoint(sal_uInt32 currentChar)
     {
         int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
@@ -844,6 +843,7 @@ namespace
         return LanguageTag(OStringToOUString(aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
     }
 
+#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
     guint get_xid_for_dbus()
     {
         const Window *pTopWindow = Application::IsHeadlessModeEnabled() ? NULL : Application::GetActiveTopWindow();
@@ -927,24 +927,31 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
     const FcChar8* pTargetNameUtf8 = (FcChar8*)aTargetName.getStr();
     FcPatternAddString(pPattern, FC_FAMILY, pTargetNameUtf8);
 
-    const LanguageTag aLangTag(rPattern.meLanguage);
-    const rtl::OString aLangAttrib = mapToFontConfigLangTag(aLangTag);
-    if (!aLangAttrib.isEmpty())
-        FcPatternAddString(pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr());
+    LanguageTag aLangTag(rPattern.meLanguage);
+    OString aLangAttrib = mapToFontConfigLangTag(aLangTag);
 
     // Add required Unicode characters, if any
     if ( !rMissingCodes.isEmpty() )
     {
-       FcCharSet *unicodes = FcCharSetCreate();
-       for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
-       {
-           // also handle unicode surrogates
-           const sal_uInt32 nCode = rMissingCodes.iterateCodePoints( &nStrIndex );
-           FcCharSetAddChar( unicodes, nCode );
-       }
-       FcPatternAddCharSet(pPattern, FC_CHARSET, unicodes);
-       FcCharSetDestroy(unicodes);
+        FcCharSet *unicodes = FcCharSetCreate();
+        for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
+        {
+            // also handle unicode surrogates
+            const sal_uInt32 nCode = rMissingCodes.iterateCodePoints( &nStrIndex );
+            FcCharSetAddChar( unicodes, nCode );
+            //#i105784#/rhbz#527719  improve selection of fallback font
+            if (aLangAttrib.isEmpty())
+            {
+                aLangTag = getExemplerLangTagForCodePoint(nCode);
+                aLangAttrib = mapToFontConfigLangTag(aLangTag);
+            }
+        }
+        FcPatternAddCharSet(pPattern, FC_CHARSET, unicodes);
+        FcCharSetDestroy(unicodes);
     }
+
+    if (!aLangAttrib.isEmpty())
+        FcPatternAddString(pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr());
 
     addtopattern(pPattern, rPattern.GetSlant(), rPattern.GetWeight(),
         rPattern.GetWidthType(), rPattern.GetPitch());
