@@ -71,7 +71,6 @@ namespace fs
         {
             rtl::OUString sWorkingDir;
             osl_getProcessWorkingDir(&sWorkingDir.pData);
-
             rtl::OString tmp(in.c_str());
             rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, getThreadTextEncoding()));
             osl::File::getFileURLFromSystemPath(ustrSystemPath, data);
@@ -230,6 +229,7 @@ public:
     HelpCompiler(StreamTable &streamTable,
                 const fs::path &in_inputFile,
                 const fs::path &in_src,
+                const fs::path &in_zipdir,
                 const fs::path &in_resEmbStylesheet,
                 const std::string &in_module,
                 const std::string &in_lang,
@@ -245,9 +245,10 @@ public:
                 const std::string &entryName, const Hashtable &bytesToAdd);
 private:
     xmlDocPtr getSourceDocument(const fs::path &filePath);
+    void sourceDocumentPreWorks( xmlDocPtr doc , const fs::path &filePath);
     xmlNodePtr clone(xmlNodePtr node, const std::string& appl);
     StreamTable &streamTable;
-    const fs::path inputFile, src;
+    const fs::path inputFile, src, zipdir;
     const std::string module, lang;
     const fs::path resEmbStylesheet;
     bool bExtensionMode;
@@ -260,5 +261,4 @@ inline char tocharlower(char c)
 }
 
 #endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

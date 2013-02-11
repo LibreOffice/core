@@ -377,7 +377,7 @@ void HelpLinker::link() throw( HelpProcessingException )
             xhpFile = fs::path(xhpFileName, fs::native);
         }
 
-        HelpCompiler hc( streamTable, xhpFile, langsourceRoot,
+        HelpCompiler hc( streamTable, xhpFile, langsourceRoot, zipdir,
             embeddStylesheet, module, lang, bExtensionMode );
 
         HCDBG(std::cerr << "before compile of " << xhpFileName << std::endl);

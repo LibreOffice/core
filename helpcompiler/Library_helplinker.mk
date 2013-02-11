@@ -43,7 +43,15 @@ endif
 
 $(eval $(call gb_Library_use_libraries,helplinker,\
     sal \
+    svt \
+    tl \
 ))
+
+$(eval $(call gb_Library_use_internal_api,helplinker,\
+    udkapi \
+    offapi \
+))
+
 
 $(eval $(call gb_Library_use_externals,helplinker,\
     boost_headers \
@@ -58,6 +66,7 @@ $(eval $(call gb_Library_add_exception_objects,helplinker,\
     helpcompiler/source/LuceneHelper \
     helpcompiler/source/HelpIndexer \
     helpcompiler/source/HelpSearch \
+    helpcompiler/source/BasCodeTagger \
 ))
 
 ifeq ($(strip $(OS)$(CPU)$(COM)),MACOSXPGCC)

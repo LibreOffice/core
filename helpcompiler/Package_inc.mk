@@ -15,5 +15,6 @@ $(eval $(call gb_Package_add_file,helpcompiler_inc,inc/helpcompiler/HelpCompiler
 $(eval $(call gb_Package_add_file,helpcompiler_inc,inc/helpcompiler/HelpIndexer.hxx,inc/HelpIndexer.hxx))
 $(eval $(call gb_Package_add_file,helpcompiler_inc,inc/helpcompiler/HelpLinker.hxx,inc/HelpLinker.hxx))
 $(eval $(call gb_Package_add_file,helpcompiler_inc,inc/helpcompiler/HelpSearch.hxx,inc/HelpSearch.hxx))
+$(eval $(call gb_Package_add_file,helpcompiler_inc,inc/helpcompiler/BasCodeTagger.hxx,inc/BasCodeTagger.hxx))
 
 # vim: set noet sw=4 ts=4:

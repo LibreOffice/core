@@ -19,6 +19,7 @@
 
 
 #include <helpcompiler/HelpCompiler.hxx>
+#include <helpcompiler/BasCodeTagger.hxx>
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,22 +37,52 @@ static void impl_sleep( sal_uInt32 nSec )
 
     osl::Thread::wait( aTime );
 }
-
 HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_inputFile,
-    const fs::path &in_src, const fs::path &in_resEmbStylesheet,
+    const fs::path &in_src, const fs::path &in_zipdir, const fs::path &in_resEmbStylesheet,
     const std::string &in_module, const std::string &in_lang, bool in_bExtensionMode)
     : streamTable(in_streamTable), inputFile(in_inputFile),
-    src(in_src), module(in_module), lang(in_lang), resEmbStylesheet(in_resEmbStylesheet),
+    src(in_src), zipdir(in_zipdir), module(in_module), lang(in_lang), resEmbStylesheet(in_resEmbStylesheet),
     bExtensionMode( in_bExtensionMode )
 {
     xmlKeepBlanksDefaultValue = 0;
     char* guitmp = getenv("GUI");
     if (guitmp)
     {
-        // WTF?
         gui = (strcmp(guitmp, "UNX") ? gui : "UNIX");
         gui = (strcmp(guitmp, "MAC") ? gui : "MAC");
         gui = (strcmp(guitmp, "WNT") ? gui : "WIN");
+    }
+}
+
+void HelpCompiler::sourceDocumentPreWorks( xmlDocPtr doc, const fs::path &filePath )
+{
+    if ( doc )
+    {
+        if ( module == "sbasic" )
+        {
+            try
+            {
+                BasicCodeTagger bct( doc );
+                bct.tagBasicCodes();
+            }
+            catch ( BasicCodeTagger::TaggerException ex )
+            {
+                if ( ex != BasicCodeTagger::EMPTY_DOCUMENT )
+                    throw;
+            }
+            //save document in ziptmp<modul>_<lang>/text directory
+            //1. construct new path
+            const std::string& pth = filePath.native_file_string();
+            std::string sourceNativeXhpPath = pth.substr( pth.rfind( lang+"/text/" ) ).substr( lang.length() );
+            std::string xhpFileName = sourceNativeXhpPath.substr( sourceNativeXhpPath.rfind( '/' ) + 1 );
+            sourceNativeXhpPath = sourceNativeXhpPath.substr( 0, sourceNativeXhpPath.rfind( '/' ) );
+            //2. save xml doc with the new path
+            //  -create directory hierachy
+            fs::create_directory( fs::path( zipdir.native_file_string() + sourceNativeXhpPath, fs::native ) );
+            //  -save document
+            if ( -1 == xmlSaveFormatFileEnc( (zipdir.native_file_string() + sourceNativeXhpPath + '/' + xhpFileName).c_str(), doc, "utf-8", 0 ) )
+                throw BasicCodeTagger::FILE_WRITING;
+        }
     }
 }
 
@@ -68,6 +99,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
             impl_sleep( 3 );
             res = xmlParseFile(filePath.native_file_string().c_str());
         }
+        sourceDocumentPreWorks( res, filePath );
     }
     else
     {
@@ -93,7 +125,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
             impl_sleep( 3 );
             doc = xmlParseFile(filePath.native_file_string().c_str());
         }
-
+        sourceDocumentPreWorks( doc, filePath );
         //???res = xmlParseFile(filePath.native_file_string().c_str());
 
         res = xsltApplyStylesheet(cur, doc, params);
