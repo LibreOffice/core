@@ -22,11 +22,11 @@ $(eval $(call gb_CustomTarget_register_targets,setup_native/scripts,\
 $(scripts_WORKDIR)/fake-db-1.0-0.noarch.rpm: $(SRCDIR)/setup_native/scripts/fake-db.spec
 	mkdir -p $(scripts_WORKDIR)/fake-db-root
 	$(RPM) --define "_builddir $(scripts_WORKDIR)/fake-db-root" \
-		--define "_rpmdir $(scripts_WORKDIR)" -bb $@
+		--define "_rpmdir $(scripts_WORKDIR)" -bb $<
 	chmod g+w $(scripts_WORKDIR)/fake-db-root
 
 $(scripts_WORKDIR)/install: $(SRCDIR)/setup_native/scripts/install_linux.sh $(scripts_WORKDIR)/fake-db-1.0-0.noarch.rpm
-	$(PERL) -w $(SRCDIR)/setup_native/scripts/install_create.pl $< $@
+	$(PERL) -w $(SRCDIR)/setup_native/scripts/install_create.pl $^ $@
 	chmod 775 $@
 
 $(scripts_WORKDIR)/uninstall: $(SRCDIR)/setup_native/scripts/uninstall_linux.sh
