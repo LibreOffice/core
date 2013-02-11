@@ -48,9 +48,9 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bDelEmptyNode =
     bWithRedlining =
     bAutoCmpltEndless =
-    bAutoCmpltAppendBlanc =
-    bAutoCmpltShowAsTip = sal_True;
+    bAutoCmpltAppendBlanc = sal_False;
 
+    bAutoCmpltShowAsTip =
     bSetBorder =
     bCreateTable =
     bSetNumRule =
