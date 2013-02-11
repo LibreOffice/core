@@ -2734,7 +2734,7 @@ if test "$_os" = "Darwin"; then
 
     AC_MSG_CHECKING([whether to do code signing])
 
-    if test -z "$enable_macosx_code_signing" -o "$enable_macosx_code_signing" = yes; then
+    if test "$enable_macosx_code_signing" = yes; then
         # By default use the first suitable certificate (?).
 
         # http://stackoverflow.com/questions/13196291/difference-between-mac-developer-and-3rd-party-mac-developer-application
