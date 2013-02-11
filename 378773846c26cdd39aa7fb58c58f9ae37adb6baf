@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///WE\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2143,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-11T02:44:49Z",
+      "side": 1,
+      "message": "\u0027\u003d\u003d\u0027 is not case insensitive, so that is not an equivalent change\n\nWhile we are at it, let\u0027s get rid of that ugly straircase effect\nalign all the pFont-\u003e under the one on the if( line\nif ( pFont-\u003e...  ||\n     pFont-\u003e.. ||\n     pFont-\u003e....",
+      "revId": "378773846c26cdd39aa7fb58c58f9ae37adb6baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///WA\u003d",
+        "filename": "sd/source/filter/ppt/pptin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-11T02:44:49Z",
+      "side": 1,
+      "message": "\u003d\u003e ! isEmpty()",
+      "revId": "378773846c26cdd39aa7fb58c58f9ae37adb6baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///V8\u003d",
+        "filename": "sd/source/filter/ppt/pptin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-11T02:44:49Z",
+      "side": 1,
+      "message": "isEmpty()",
+      "revId": "378773846c26cdd39aa7fb58c58f9ae37adb6baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///V4\u003d",
+        "filename": "sd/source/filter/ppt/pptin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2090,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-11T02:44:49Z",
+      "side": 1,
+      "message": "use isEmpty",
+      "revId": "378773846c26cdd39aa7fb58c58f9ae37adb6baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///V0\u003d",
+        "filename": "sd/source/filter/ppt/pptin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2114,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-11T02:44:49Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "378773846c26cdd39aa7fb58c58f9ae37adb6baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
