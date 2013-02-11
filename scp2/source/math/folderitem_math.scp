@@ -30,14 +30,13 @@
 #ifndef ENABLE_SILENT_MSI
 FolderItem gid_Folderitem_Smath
     Name = "%PRODUCTNAME Math";
-    ModuleID = gid_Module_Prg_Math_Bin;
+    ModuleID = gid_Module_Brand_Prg_Math;
     FolderID = gid_Folder_Staroffice51;
     FileID = gid_File_Exe_Smath;
     IconFile = gid_File_Exe_Smath;
     IconID = 0;
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";
-    Styles = (NOWEB, NON_ADVERTISED);
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_MATH);
 End
 #endif

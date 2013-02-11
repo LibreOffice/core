@@ -58,7 +58,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Unopkg,
              gid_Brand_File_Bin_Libxml2,
              gid_Brand_File_Bmp_IntroAboutShell,
-             gid_Brand_File_Desktophelper_Txt,
              gid_Brand_File_Html_Thirdpartylicensereadme,
              gid_Brand_File_Images_Brand_Zip,
              gid_Brand_File_Lib_Dbghelp,
@@ -530,16 +529,6 @@ File gid_Brand_File_Bin_Soffice_Bin_Manifest
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
     Name = "soffice.bin.manifest";
-End
-#endif
-
-#ifdef WNT
-File gid_Brand_File_Desktophelper_Txt
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-    Name = "desktophelper.txt";
-    ComponentCondition = "CREATEDESKTOPLINK=1";
 End
 #endif
 

@@ -30,14 +30,13 @@
 #ifndef ENABLE_SILENT_MSI
 FolderItem gid_Folderitem_Sdraw
     Name = "%PRODUCTNAME Draw";
-    ModuleID = gid_Module_Prg_Draw_Bin;
+    ModuleID = gid_Module_Brand_Prg_Draw;
     FolderID = gid_Folder_Staroffice51;
     FileID = gid_File_Exe_Sdraw;
     IconFile = gid_File_Exe_Sdraw;
     IconID = 0;
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";
-    Styles = (NOWEB, NON_ADVERTISED);
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_DRAW);
 End
 #endif
