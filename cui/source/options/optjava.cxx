@@ -89,7 +89,7 @@ private:
     const OUString m_sAccessibilityText;
 public:
     SvxJavaListBox(SvxSimpleTableContainer& rParent, const OUString &rAccessibilityText)
-        : SvxRadioButtonListBox(rParent)
+        : SvxRadioButtonListBox(rParent, 0)
         , m_sAccessibilityText(rAccessibilityText)
     {
     }

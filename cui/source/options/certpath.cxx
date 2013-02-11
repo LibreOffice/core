@@ -50,7 +50,7 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
     , m_aCertPathFL       ( this, CUI_RES( FL_CERTPATH ) )
     , m_aCertPathFT       ( this, CUI_RES( FT_CERTPATH ) )
     , m_aCertPathListContainer( this, CUI_RES( LB_CERTPATH ) )
-    , m_aCertPathList( m_aCertPathListContainer )
+    , m_aCertPathList( m_aCertPathListContainer, WB_BORDER )
     , m_aAddBtn           ( this, CUI_RES( PB_ADD ) )
     , m_aButtonsFL       ( this, CUI_RES( FL_BUTTONS ) )
     , m_aOKBtn           ( this, CUI_RES( PB_OK ) )

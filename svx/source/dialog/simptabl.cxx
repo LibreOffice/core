@@ -39,7 +39,6 @@ SvxSimpleTableContainer::SvxSimpleTableContainer(Window* pParent, WinBits nBits)
     : Control(pParent, nBits)
     , m_pTable(NULL)
 {
-    SetBorderStyle(WINDOW_BORDER_NOBORDER);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxSimpleTableContainer(Window *pParent,

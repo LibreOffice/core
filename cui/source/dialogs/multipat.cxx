@@ -183,7 +183,7 @@ SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed 
     aPathFL     ( this, CUI_RES( FL_MULTIPATH) ),
     aPathLB     ( this, CUI_RES( LB_MULTIPATH ) ),
     m_aRadioLBContainer(this, CUI_RES(LB_RADIOBUTTON)),
-    aRadioLB(m_aRadioLBContainer),
+    aRadioLB(m_aRadioLBContainer, WB_BORDER),
     aRadioFT    ( this, CUI_RES( FT_RADIOBUTTON ) ),
     aAddBtn     ( this, CUI_RES( BTN_ADD_MULTIPATH ) ),
     aDelBtn     ( this, CUI_RES( BTN_DEL_MULTIPATH ) ),

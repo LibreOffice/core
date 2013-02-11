@@ -63,7 +63,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     pCheckLBContainer->set_width_request(aControlSize.Width());
     pCheckLBContainer->set_height_request(aControlSize.Height());
 
-    m_pCheckLB = new SvxFontSubstCheckListBox(*pCheckLBContainer);
+    m_pCheckLB = new SvxFontSubstCheckListBox(*pCheckLBContainer, 0);
     m_pCheckLB->SetHelpId(HID_OFA_FONT_SUBST_CLB);
 
     m_pCheckLB->SetStyle(m_pCheckLB->GetStyle()|WB_HSCROLL|WB_VSCROLL);

@@ -41,7 +41,7 @@ class SvxFontSubstCheckListBox : public SvxSimpleTable
         virtual void    Resize();
 
     public:
-        SvxFontSubstCheckListBox(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER)
+        SvxFontSubstCheckListBox(SvxSimpleTableContainer& rParent, WinBits nBits)
             : SvxSimpleTable(rParent, nBits)
         {
         }
