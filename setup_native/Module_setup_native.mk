@@ -28,7 +28,6 @@ ifeq ($(OS),WNT)
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,setup_native,\
-	Library_instooofiltmsi \
 	Library_jfregca \
 	Library_qslnkmsi \
 	Library_reg4allmsdoc \
@@ -44,6 +43,7 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 ))
 else
 $(eval $(call gb_Module_add_targets,setup_native,\
+	Library_instooofiltmsi \
 	CustomTarget_wintools \
 	Package_wintools \
 ))
