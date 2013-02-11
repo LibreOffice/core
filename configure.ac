@@ -8611,6 +8611,13 @@ You can use --with-system-icu-for-build=force to use it anyway.])
         fi
     fi
 
+    if test "$cross_compiling" = "yes"; then
+       if test "$ICU_MAJOR" -ge "50"; then
+            AC_MSG_RESULT([Ignore ICU_MINOR as obviously the libraries don't include the minor version in their names any more])
+            ICU_MINOR=""
+       fi
+    fi
+
     libo_MINGW_CHECK_DLL([ICUDATA], [icudata][$ICU_MAJOR][$ICU_MINOR])
     libo_MINGW_CHECK_DLL([ICUI18N], [icui18n][$ICU_MAJOR][$ICU_MINOR])
     libo_MINGW_CHECK_DLL([ICUUC], [icuuc][$ICU_MAJOR][$ICU_MINOR])
