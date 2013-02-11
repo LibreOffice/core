@@ -2749,8 +2749,6 @@ if test "$_os" = "Darwin"; then
             pretty_name=`security find-identity -p codesigning -v | grep $MACOSX_CODESIGNING_IDENTITY | sed -e 's/^[[^"]]*"//' -e 's/"//'`
             AC_MSG_RESULT([yes, using the identity $MACOSX_CODESIGNING_IDENTITY for $pretty_name])
         fi
-    elif test -n "$enable_macosx_code_signing" -a $MACOSX_SDK_VERSION -lt 1070; then
-        AC_MSG_ERROR([Don't bother trying to use code signing with a SDK older than 10.7])
     elif test -n "$enable_macosx_code_signing"; then
         MACOSX_CODESIGNING_IDENTITY=$enable_macosx_code_signing
         pretty_name=`security find-identity -p codesigning -v | grep $MACOSX_CODESIGNING_IDENTITY | sed -e 's/^[[^"]]*"//' -e 's/"//'`
