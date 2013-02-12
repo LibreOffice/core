@@ -61,6 +61,7 @@
 #include "conditio.hxx"
 
 #include <math.h>
+#include <boost/scoped_ptr.hpp>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -158,6 +159,8 @@ static ScBaseCell * lcl_getSuffixCell( ScDocument* pDocument, sal_Int32 nValue,
         return new ScStringCell( aValue += aOrdinalSuffix);
 
     EditEngine aEngine( pDocument->GetEnginePool() );
+    aEngine.SetEditTextObjectPool(pDocument->GetEditPool());
+
     SfxItemSet aAttr = aEngine.GetEmptyItemSet();
     aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUPERSCRIPT, EE_CHAR_ESCAPEMENT));
     aEngine.SetText( aValue );
@@ -165,7 +168,9 @@ static ScBaseCell * lcl_getSuffixCell( ScDocument* pDocument, sal_Int32 nValue,
                 aValue.Len() + aOrdinalSuffix.Len()));
     aEngine.QuickSetAttribs( aAttr, ESelection( 0, aValue.Len(), 0, aValue.Len() +
                 aOrdinalSuffix.Len()));
-    return new ScEditCell( aEngine.CreateTextObject(), pDocument, NULL );
+
+    // Text object instance will be owned by the cell.
+    return new ScEditCell(aEngine.CreateTextObject(), pDocument);
 }
 
 void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

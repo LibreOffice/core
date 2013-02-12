@@ -86,6 +86,8 @@
 #include "docuno.hxx"
 #include "scresid.hxx"
 
+#include <memory>
+
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
 //  states for online spelling in the visible range (0 is set initially)
@@ -739,14 +741,15 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
 
                 if ( bNeedEdit )
                 {
-                    EditTextObject* pNewData = pEngine->CreateTextObject();
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+                    std::auto_ptr<EditTextObject> pNewData(pEngine->CreateTextObject());
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     if ( eType == CELLTYPE_EDIT )
-                        ((ScEditCell*)pCell)->SetData( pNewData,
-                            pEngine->GetEditTextObjectPool() );
+                        // SetData will create a clone of pNewData and stores the clone.
+                        static_cast<ScEditCell*>(pCell)->SetData(pNewData.get(), pEngine->GetEditTextObjectPool());
                     else
-                        PutCell( nCol, nRow, nTab, new ScEditCell( pNewData,
-                            this, pEngine->GetEditTextObjectPool() ) );
-                    delete pNewData;
+                        // The cell will take ownership of pNewData.
+                        PutCell(nCol, nRow, nTab, new ScEditCell(pNewData.release(), this));
                 }
                 else                    // einfacher String
                     PutCell( nCol, nRow, nTab, new ScStringCell( pEngine->GetText() ) );
@@ -1582,10 +1585,8 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                             SfxItemSet* pEmpty = new SfxItemSet( pEngine->GetEmptyItemSet() );
                             pEngine->SetDefaults( pEmpty, true );
 
-                            EditTextObject* pNewData = pEngine->CreateTextObject();
-                            PutCell( nCol, nRow, nTab,
-                                new ScEditCell( pNewData, this, pEngine->GetEditTextObjectPool() ) );
-                            delete pNewData;
+                            // The cell will take ownership of the text object instance.
+                            PutCell(nCol, nRow, nTab, new ScEditCell(pEngine->CreateTextObject(), this));
                         }
                         else
                         {

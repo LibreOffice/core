@@ -417,7 +417,6 @@ void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld, co
 
 ::EditTextObject* RichString::convert( ScEditEngineDefaulter& rEE, const Font* pFirstPortionFont ) const
 {
-    EditTextObject* pTextObj = NULL;
     ESelection aSelection;
 
     OUString sString;
@@ -432,8 +431,7 @@ void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld, co
         pFirstPortionFont = 0;
     }
 
-    pTextObj = rEE.CreateTextObject();
-    return pTextObj;
+    return rEE.CreateTextObject();
 }
 
 // private --------------------------------------------------------------------

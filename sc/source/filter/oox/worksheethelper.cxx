@@ -1552,8 +1552,8 @@ void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichStri
     ScDocument& rDoc = getScDocument();
     ScEditEngineDefaulter& rEE = getEditEngine();
 
-    ::std::auto_ptr< ::EditTextObject > pTextObj( rString.convert( rEE, pFirstPortionFont ) );
-    ScBaseCell* pNewCell = new ScEditCell( pTextObj.get(), &rDoc, rEE.GetEditTextObjectPool() );
+    // The cell will own the text object instance returned from convert().
+    ScBaseCell* pNewCell = new ScEditCell(rString.convert(rEE, pFirstPortionFont), &rDoc);
     ScAddress aAddress;
     ScUnoConversion::FillScAddress( aAddress, rAddress );
     rDoc.PutCell( aAddress, pNewCell );

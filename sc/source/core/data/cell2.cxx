@@ -56,13 +56,13 @@ ScEditCell::ScEditCell(EditTextObject* pObject, ScDocument* pDocP) :
     ScBaseCell(CELLTYPE_EDIT),
     pData(pObject), pString(NULL), pDoc(pDocP) {}
 
-ScEditCell::ScEditCell( const EditTextObject* pObject, ScDocument* pDocP,
-            const SfxItemPool* pFromPool )  :
-        ScBaseCell( CELLTYPE_EDIT ),
-        pString( NULL ),
-        pDoc( pDocP )
+ScEditCell::ScEditCell(
+    const EditTextObject& rObject, ScDocument* pDocP, const SfxItemPool* pFromPool) :
+    ScBaseCell(CELLTYPE_EDIT),
+    pString(NULL),
+    pDoc(pDocP)
 {
-    SetTextObject( pObject, pFromPool );
+    SetTextObject(&rObject, pFromPool);
 }
 
 ScEditCell::ScEditCell(const ScEditCell& rCell, ScDocument& rDoc, const ScAddress& rDestPos) :

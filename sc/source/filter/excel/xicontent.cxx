@@ -195,11 +195,9 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
                     rEE.QuickSetAttribs( aItemSet, ESelection( 0, 0, 0xFFFF, 0 ) );
                 }
             }
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< EditTextObject > xTextObj( rEE.CreateTextObject() );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
 
-            ScEditCell* pCell = new ScEditCell( xTextObj.get(), &rDoc, rEE.GetEditTextObjectPool() );
+            // The cell will own the text object instance.
+            ScEditCell* pCell = new ScEditCell(rEE.CreateTextObject(), &rDoc);
             rDoc.PutCell( aScPos, pCell );
         }
         break;

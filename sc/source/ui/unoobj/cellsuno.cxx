@@ -120,6 +120,7 @@
 #include "editeng/escpitem.hxx"
 
 #include <list>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -2341,6 +2342,8 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                 ScBaseCell *pCell = pDoc->GetCell( aAddr );
                                 String aStr( pCell->GetStringData() );
                                 EditEngine aEngine( pDoc->GetEnginePool() );
+                                aEngine.SetEditTextObjectPool(pDoc->GetEditPool());
+
                                 /* EE_CHAR_ESCAPEMENT seems to be set on the cell _only_ when
                                  * there are no other attribs for the cell.
                                  * So, it is safe to overwrite the complete attribute set.
@@ -2354,7 +2357,9 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                 else                // Superscript
                                     aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUPERSCRIPT, EE_CHAR_ESCAPEMENT ) );
                                 aEngine.QuickSetAttribs( aAttr, ESelection( 0, 0, 0, aStr.Len()));
-                                pDoc->PutCell( (aRanges[ 0 ])->aStart, new ScEditCell( aEngine.CreateTextObject(), pDoc, NULL ) );
+
+                                // The cell will own the text object instance.
+                                pDoc->PutCell(aRanges[0]->aStart, new ScEditCell(aEngine.CreateTextObject(), pDoc));
                             }
                         }
                     }

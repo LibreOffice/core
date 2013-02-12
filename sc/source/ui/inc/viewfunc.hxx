@@ -81,10 +81,15 @@ public:
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
                                const EditTextObject* pData = NULL );
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                               const EditTextObject* pData, bool bTestSimple = false );
+                               const EditTextObject& rData, bool bTestSimple = false );
     void            EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue );
 
     void            EnterMatrix( const String& rString, ::formula::FormulaGrammar::Grammar eGram );
+
+    /**
+     * @param pData The caller must manage the life cycle of the object this
+     *              pointer points to.  NULL is allowed.
+     */
     void            EnterBlock( const String& rString, const EditTextObject* pData );
 
     void            EnterDataAtCursor( const String& rString );         //! Not used?

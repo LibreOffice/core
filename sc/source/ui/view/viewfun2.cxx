@@ -772,7 +772,7 @@ void ScViewFunc::EnterBlock( const String& rString, const EditTextObject* pData 
 
             //  insert into single cell
             if ( pData )
-                EnterData( nCol, nRow, nTab, pData );
+                EnterData(nCol, nRow, nTab, *pData);
             else
                 EnterData( nCol, nRow, nTab, rString );
             return;
@@ -811,7 +811,8 @@ void ScViewFunc::EnterBlock( const String& rString, const EditTextObject* pData 
         pInsDoc->PutCell( nCol, nRow, nTab, pFCell );
     }
     else if ( pData )
-        pInsDoc->PutCell( nCol, nRow, nTab, new ScEditCell( pData, pDoc, NULL ) );
+        // A copy of pData will be stored.
+        pInsDoc->PutCell(nCol, nRow, nTab, new ScEditCell(*pData, pDoc, NULL));
     else
         pInsDoc->SetString( nCol, nRow, nTab, aNewStr );
 

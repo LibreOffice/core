@@ -245,7 +245,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else
                     {
-                        pTabViewShell->EnterData( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), pData );
+                        pTabViewShell->EnterData(aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), *pData);
                     }
                 }
                 else

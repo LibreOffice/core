@@ -296,7 +296,8 @@ void ScUndoEnterData::Redo()
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         if (pNewEditData)
-            pDoc->PutCell( nCol, nRow, pTabs[i], new ScEditCell( pNewEditData,
+            // A clone of pNewEditData will be stored in ScEditCell.
+            pDoc->PutCell( nCol, nRow, pTabs[i], new ScEditCell(*pNewEditData,
                 pDoc, NULL ) );
         else
             pDoc->SetString( nCol, nRow, pTabs[i], aNewString );
@@ -661,7 +662,8 @@ ScUndoThesaurus::ScUndoThesaurus( ScDocShell* pNewDocShell,
 
     ScBaseCell* pOldCell;
     if ( pUndoTObject )
-        pOldCell = new ScEditCell( pUndoTObject, pDocShell->GetDocument(), NULL );
+        // A clone of pUndoTObject will be stored in the cell.
+        pOldCell = new ScEditCell(*pUndoTObject, pDocShell->GetDocument(), NULL);
     else
         pOldCell = new ScStringCell( aUndoStr );
     SetChangeTrack( pOldCell );
@@ -713,7 +715,8 @@ void ScUndoThesaurus::DoChange( sal_Bool bUndo, const String& rStr,
         {
             if (pCell->GetCellType() == CELLTYPE_EDIT )
             {
-                ScEditCell* pNewCell = new ScEditCell( pTObj, pDoc, NULL );
+                // A copy of pTObj will be stored in the cell.
+                ScEditCell* pNewCell = new ScEditCell(*pTObj, pDoc, NULL);
                 pDoc->PutCell( nCol, nRow, nTab, pNewCell );
                 if ( !bUndo )
                     SetChangeTrack( pCell );

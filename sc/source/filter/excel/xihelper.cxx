@@ -231,8 +231,8 @@ ScBaseCell* XclImpStringHelper::CreateCell(
         ScDocument& rDoc = rRoot.GetDoc();
 
         if( pTextObj.get() )
-            // ScEditCell creates own copy of text object
-            pCell = new ScEditCell( pTextObj.get(), &rDoc, rRoot.GetEditEngine().GetEditTextObjectPool() );
+            // ScEditCell will own the text object instance.
+            pCell = new ScEditCell(pTextObj.release(), &rDoc);
         else
             pCell = ScBaseCell::CreateTextCell( rString.GetText(), &rDoc );
     }

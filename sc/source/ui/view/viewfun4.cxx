@@ -65,6 +65,8 @@
 #include "reffind.hxx"
 #include "compiler.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
@@ -127,9 +129,8 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             pDoc->EnableUndo( false );
             for( sal_uInt16 n = 0; n < nParCnt; n++ )
             {
-                EditTextObject* pObject = pEngine->CreateTextObject( n );
-                EnterData( nStartCol, nRow, nTab, pObject, true );
-                delete pObject;
+                boost::scoped_ptr<EditTextObject> pObject(pEngine->CreateTextObject(n));
+                EnterData(nStartCol, nRow, nTab, *pObject, true);
                 if( ++nRow > MAXROW )
                     break;
             }
@@ -413,10 +414,10 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
         EditTextObject* pNewTObj = NULL;
         if (pCell && pTObject)
         {
-            pNewTObj = pThesaurusEngine->CreateTextObject();
-            pCell = new ScEditCell( pNewTObj, pDoc,
-                pThesaurusEngine->GetEditTextObjectPool() );
-            pDoc->PutCell( nCol, nRow, nTab, pCell );
+            // The cell will own the text object instance.
+            pDoc->PutCell(
+                nCol, nRow, nTab,
+                new ScEditCell(pThesaurusEngine->CreateTextObject(), pDoc));
         }
         else
         {
@@ -764,9 +765,8 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
         aField.SetTargetFrame(*pTarget);
     aEngine.QuickInsertField( SvxFieldItem( aField, EE_FEATURE_FIELD ), aInsSel );
 
-    EditTextObject* pData = aEngine.CreateTextObject();
-    EnterData( nPosX, nPosY, nTab, pData );
-    delete pData;
+    boost::scoped_ptr<EditTextObject> pData(aEngine.CreateTextObject());
+    EnterData(nPosX, nPosY, nTab, *pData);
 }
 
 sal_Bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )

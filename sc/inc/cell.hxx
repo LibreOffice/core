@@ -244,8 +244,20 @@ public:
      */
     ScEditCell(EditTextObject* pObject, ScDocument* pDocP);
 
-                    ScEditCell( const EditTextObject* pObject, ScDocument*,
-                                const SfxItemPool* pFromPool /* = NULL */ );
+    /**
+     * Constructor.  The caller is responsible for deleting the text object
+     * instance passed on to this constructor, since it creates a clone and
+     * stores it instead of the original.
+     *
+     * @param rObject text object to clone from.
+     * @param pDocP pointer to the document instance.
+     * @param pFromPool pointer to SfxItemPool instance that the new text
+     *                  object that is to be stored in the cell instance
+     *                  should use.  If it's NULL, it uses the default pool
+     *                  for edit cells from the document instance (one
+     *                  returned from GetEditPool()).
+     */
+    ScEditCell(const EditTextObject& rObject, ScDocument* pDocP, const SfxItemPool* pFromPool);
     ScEditCell(const ScEditCell& rCell, ScDocument& rDoc, const ScAddress& rDestPos);
                     // for line breaks
                     ScEditCell( const rtl::OUString& rString, ScDocument* );

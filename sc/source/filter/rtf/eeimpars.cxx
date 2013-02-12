@@ -56,6 +56,8 @@
 
 #include "globstr.hrc"
 
+#include <boost/scoped_ptr.hpp>
+
 // in fuins1.cxx
 extern void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage );
 
@@ -68,7 +70,7 @@ ScEEImport::ScEEImport( ScDocument* pDocP, const ScRange& rRange ) :
 {
     const ScPatternAttr* pPattern = mpDoc->GetPattern(
         maRange.aStart.Col(), maRange.aStart.Row(), maRange.aStart.Tab() );
-    mpEngine = new ScTabEditEngine( *pPattern, mpDoc->GetEditPool() );
+    mpEngine = new ScTabEditEngine(*pPattern, mpDoc->GetEditPool(), mpDoc->GetEditPool());
     mpEngine->SetUpdateMode( false );
     mpEngine->EnableUndo( false );
 }
@@ -394,10 +396,9 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             }
             else
             {
-                EditTextObject* pObject = mpEngine->CreateTextObject( pE->aSel );
-                mpDoc->PutCell( nCol, nRow, nTab, new ScEditCell( pObject,
-                    mpDoc, mpEngine->GetEditTextObjectPool() ) );
-                delete pObject;
+                // The cell will own the text object instance.
+                mpDoc->PutCell(
+                    nCol, nRow, nTab, new ScEditCell(mpEngine->CreateTextObject(pE->aSel), mpDoc));
             }
             if ( pE->maImageList.size() )
                 bHasGraphics |= GraphicSize( nCol, nRow, nTab, pE );

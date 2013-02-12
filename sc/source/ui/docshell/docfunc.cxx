@@ -944,11 +944,11 @@ sal_Bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngi
             }
         }
 
-        EditTextObject* pNewData = rEngine.CreateTextObject();
+        // A copy of pNewData will be stored in the cell.
+        boost::scoped_ptr<EditTextObject> pNewData(rEngine.CreateTextObject());
         bRet = PutCell( rPos,
-                        new ScEditCell( pNewData, pDoc, rEngine.GetEditTextObjectPool() ),
+                        new ScEditCell(*pNewData, pDoc, rEngine.GetEditTextObjectPool()),
                         bApi );
-        delete pNewData;
 
         // Set the paragraph attributes back to the EditEngine.
         if (!aRememberItems.empty())

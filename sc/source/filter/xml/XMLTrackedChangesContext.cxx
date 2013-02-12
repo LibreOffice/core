@@ -1280,7 +1280,8 @@ void ScXMLChangeCellContext::EndElement()
                 }
             }
             if (GetScImport().GetDocument())
-                rOldCell = new ScEditCell(pEditTextObj->CreateTextObject(), GetScImport().GetDocument(), GetScImport().GetDocument()->GetEditPool());
+                // The cell will own the text object instance.
+                rOldCell = new ScEditCell(pEditTextObj->CreateTextObject(), GetScImport().GetDocument());
             GetScImport().GetTextImport()->ResetCursor();
             pEditTextObj->release();
         }

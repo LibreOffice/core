@@ -504,7 +504,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 {
                     ScBaseCell *pCell;
                     if ( pData )
-                        pCell = new ScEditCell( pData, pDoc, NULL );
+                        // A clone of pData will be stored in the cell.
+                        pCell = new ScEditCell(*pData, pDoc, NULL);
                     else
                         pCell = new ScStringCell( aFormula );
                     rFunc.PutCell( aPos, pCell, sal_False );
@@ -611,7 +612,7 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
 }
 
 void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                            const EditTextObject* pData, bool bTestSimple )
+                            const EditTextObject& rData, bool bTestSimple )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -634,7 +635,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
         ScTabEditEngine aEngine( *pOldPattern, pDoc->GetEnginePool() );
-        aEngine.SetText(*pData);
+        aEngine.SetText(rData);
 
         if (bTestSimple)                    // test, if simple string without attribute
         {
@@ -690,7 +691,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
             OSL_ENSURE( nPos==nSelCount, "nPos!=nSelCount" );
 
-            pUndoData = pData->Clone();
+            pUndoData = rData.Clone();
         }
 
         //
@@ -711,7 +712,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
             for (; itr != itrEnd; ++itr)
-                pDoc->PutCell( nCol, nRow, *itr, new ScEditCell( pData, pDoc, NULL ) );
+                pDoc->PutCell(nCol, nRow, *itr, new ScEditCell(rData, pDoc, NULL));
 
             if ( bRecord )
             {   //  because of ChangeTrack current first
