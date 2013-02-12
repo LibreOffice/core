@@ -27,8 +27,8 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 
-#define CUIFM_PROP_HIDDEN rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Hidden" ) )
-#define CUIFM_PROP_LABEL  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" ) )
+#define CUIFM_PROP_HIDDEN "Hidden"
+#define CUIFM_PROP_LABEL  "Label"
 
 //==========================================================================
 //  FmShowColsDialog
