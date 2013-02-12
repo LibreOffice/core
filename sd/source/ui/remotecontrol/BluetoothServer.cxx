@@ -6,7 +6,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 #include "BluetoothServer.hxx"
+#include "BluetoothServiceRecord.hxx"
 #include <stdio.h>
 
 #include <sal/log.hxx>
@@ -35,11 +37,10 @@
   #include <ws2bth.h>
 #endif
 
-// FIXME: move this into an external file and look at sharing definitions
-// across OS's (i.e. UUID and port ).
-// Also look at determining which ports are available.
-// Alternatively use the binary sdp record
-#define BLUETOOTH_SERVICE_RECORD "<?xml version='1.0' encoding= 'UTF-8' ?><record><attribute id='0x0001'><sequence><uuid value='0x1101' /></sequence></attribute><attribute id='0x0004'><sequence><sequence><uuid value='0x0100' /></sequence><sequence><uuid value='0x0003' /><uint8 value='0x05' /></sequence></sequence></attribute><attribute id='0x0005'><sequence><uuid value='0x1002' /></sequence></attribute><attribute id='0x0006'><sequence><uint16 value='0x656e' /><uint16 value='0x006a' /><uint16 value='0x0100' /></sequence></attribute><attribute id='0x0009'><sequence><sequence><uuid value='0x1101' /><uint16 value='0x0100' /></sequence></sequence></attribute><attribute id='0x0100'><text value='Serial Port' /></attribute><attribute id='0x0101'><text value='COM Port' /></attribute></record>"
+#ifdef __MINGW32__
+// Value taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms738518%28v=vs.85%29.aspx
+#define NS_BTH 16
+#endif
 
 #include "Communicator.hxx"
 
@@ -273,7 +274,7 @@ void SAL_CALL BluetoothServer::run()
     // don't bother as the record is automatically released when LO exits.
     guint aHandle;
     gboolean aResult = dbus_g_proxy_call( aAdapter, "AddRecord", &aError,
-                                G_TYPE_STRING, BLUETOOTH_SERVICE_RECORD ,
+                                G_TYPE_STRING, bluetooth_service_record,
                                 G_TYPE_INVALID,
                                 G_TYPE_UINT, &aHandle,
                                 G_TYPE_INVALID);
@@ -432,7 +433,6 @@ void SAL_CALL BluetoothServer::run()
 #endif
 }
 
-
 BluetoothServer *sd::BluetoothServer::spServer = NULL;
 
 void BluetoothServer::setup( std::vector<Communicator*>* pCommunicators )
@@ -443,6 +443,5 @@ void BluetoothServer::setup( std::vector<Communicator*>* pCommunicators )
     spServer = new BluetoothServer( pCommunicators );
     spServer->create();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
