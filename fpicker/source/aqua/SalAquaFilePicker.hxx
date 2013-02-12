@@ -47,12 +47,14 @@
 // class declaration
 //----------------------------------------------------------
 
+typedef ::cppu::WeakComponentImplHelper3 <
+            ::com::sun::star::ui::dialogs::XFilePicker3,
+            ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
+           ::com::sun::star::lang::XServiceInfo >  SalAquaFilePicker_Base;
+
 class SalAquaFilePicker :
     public SalAquaPicker,
-    public cppu::WeakComponentImplHelper3<
-    ::com::sun::star::ui::dialogs::XFilePicker3,
-    ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
-    ::com::sun::star::lang::XServiceInfo >
+    public SalAquaFilePicker_Base
 {
 public:
 

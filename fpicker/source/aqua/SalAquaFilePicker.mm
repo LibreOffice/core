@@ -93,10 +93,7 @@ namespace
 //-----------------------------------------------------------------------------------------
 
 SalAquaFilePicker::SalAquaFilePicker()
-  : cppu::WeakComponentImplHelper3<
-             XFilePicker3,
-             XFilePickerControlAccess,
-             lang::XServiceInfo>( m_rbHelperMtx )
+  : SalAquaFilePicker_Base( m_rbHelperMtx )
    , m_pFilterHelper( NULL )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
