@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -98,4 +98,5 @@ public class StartPresentationActivity extends SherlockActivity {
         }
     };
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
