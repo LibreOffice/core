@@ -1050,7 +1050,8 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                         mpEditEngine->QuickInsertField(SvxFieldItem(*it->mpData, EE_FEATURE_FIELD), it->maSelection);
                 }
 
-                pNewCell = new ScEditCell(mpEditEngine->CreateTextObject(), pDoc, pDoc->GetEditPool());
+                boost::scoped_ptr<EditTextObject> pTextObj(mpEditEngine->CreateTextObject());
+                pNewCell = new ScEditCell(pTextObj.get(), pDoc, pDoc->GetEditPool());
             }
         }
         else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
