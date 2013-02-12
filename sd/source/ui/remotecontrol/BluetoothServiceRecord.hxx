@@ -65,10 +65,10 @@ static const char *bluetooth_service_record =
       // Attribute identifiers are pointed to by the Language Base Attribute ID List
       //  id+0 = ServiceName, id+1 = ServiceDescription, id+2=ProviderName
       "<attribute id=\"0x0100\">"
-        "<text value=\"Serial Port\"/>"
+        "<text value=\"LibreOffice Impress Remote Control\"/>"
       "</attribute>"
-      "<attribute id=\"0x0101\">"
-        "<text value=\"COM Port\"/>"
+      "<attribute id=\"0x0102\">"
+        "<text value=\"The Document Foundation\"/>"
       "</attribute>"
     "</record>"
   ;
