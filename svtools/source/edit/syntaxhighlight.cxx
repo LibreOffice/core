@@ -152,7 +152,7 @@ static const char* strListBasicKeyWords[] = {
     "wend",
     "while",
     "with",
-    "withevent",
+    "withevents",
     "write",
     "xor"
 };
