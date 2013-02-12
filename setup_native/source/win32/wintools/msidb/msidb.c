@@ -146,8 +146,8 @@ static BOOL msidbExportStorage(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR storageName)
     if (fp != NULL)
     {
         fwrite(dataBuffer, 1, dataLen, fp);
+        fclose(fp);
     }
-    fclose(fp);
 
     free(storagePath);
     MsiCloseHandle(rec);
@@ -262,8 +262,8 @@ static BOOL msidbExportStream(LPCWSTR dbfile, LPCWSTR wdir, LPCWSTR streamName)
     if (fp != NULL)
     {
         fwrite(dataBuffer, 1, dataLen, fp);
+        fclose(fp);
     }
-    fclose(fp);
 
     free(streamFileA);
     MsiCloseHandle(rec);
