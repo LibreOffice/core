@@ -787,7 +787,7 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
 {
     if ( bDoSyntaxHighlight )
     {
-        String aLine( pEditEngine->GetText( nLine ) );
+        OUString aLine( pEditEngine->GetText( nLine ) );
         Range aChanges = aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
         if ( aChanges.Len() )
         {
@@ -935,7 +935,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
 
         if ( bDoSyntaxHighlight )
         {
-            String aDummy;
+            OUString aDummy;
             aHighlighter.notifyChange( nPara, bInserted ? 1 : (-1), &aDummy, 1 );
         }
     }

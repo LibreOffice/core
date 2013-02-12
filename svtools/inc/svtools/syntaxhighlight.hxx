@@ -131,8 +131,8 @@ public:
     SimpleTokenizer_Impl( HighlighterLanguage aLang = HIGHLIGHT_BASIC );
     ~SimpleTokenizer_Impl( void );
 
-    sal_uInt16 parseLine( sal_uInt32 nLine, const String* aSource );
-    void getHighlightPortions( sal_uInt32 nParseLine, const String& rLine,
+    sal_uInt16 parseLine( sal_uInt32 nLine, const OUString* aSource );
+    void getHighlightPortions( sal_uInt32 nParseLine, const OUString& rLine,
                                                     /*out*/HighlightPortions& portions );
     void setKeyWords( const char** ppKeyWords, sal_uInt16 nCount );
 };
@@ -165,9 +165,9 @@ public:
     void initialize( HighlighterLanguage eLanguage_ );
 
     const Range notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDifference,
-                                const String* pChangedLines, sal_uInt32 nArrayLength);
+                                const OUString* pChangedLines, sal_uInt32 nArrayLength);
 
-    void getHighlightPortions( sal_uInt32 nLine, const String& rLine,
+    void getHighlightPortions( sal_uInt32 nLine, const OUString& rLine,
                                             HighlightPortions& pPortions );
 
     HighlighterLanguage GetLanguage() { return eLanguage;}

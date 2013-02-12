@@ -167,7 +167,7 @@ void MultiLineEditSyntaxHighlight::UpdateData()
     sal_Bool bTempModified = GetTextEngine()->IsModified();
     for (unsigned int nLine=0; nLine < GetTextEngine()->GetParagraphCount(); nLine++)
     {
-        String aLine( GetTextEngine()->GetText( nLine ) );
+        OUString aLine( GetTextEngine()->GetText( nLine ) );
         aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
 
         GetTextEngine()->RemoveAttribs( nLine, sal_True );

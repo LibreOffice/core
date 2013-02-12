@@ -636,10 +636,10 @@ SimpleTokenizer_Impl* getSimpleTokenizer( void )
     return pSimpleTokenizer;
 }
 
-sal_uInt16 SimpleTokenizer_Impl::parseLine( sal_uInt32 nParseLine, const String* aSource )
+sal_uInt16 SimpleTokenizer_Impl::parseLine( sal_uInt32 nParseLine, const OUString* aSource )
 {
     // Set the position to the beginning of the source string
-    mpStringBegin = mpActualPos = aSource->GetBuffer();
+    mpStringBegin = mpActualPos = aSource->getStr();
 
     // Initialize row and column
     nLine = nParseLine;
@@ -658,11 +658,11 @@ sal_uInt16 SimpleTokenizer_Impl::parseLine( sal_uInt32 nParseLine, const String*
     return nTokenCount;
 }
 
-void SimpleTokenizer_Impl::getHighlightPortions( sal_uInt32 nParseLine, const String& rLine,
+void SimpleTokenizer_Impl::getHighlightPortions( sal_uInt32 nParseLine, const OUString& rLine,
                                                     /*out*/HighlightPortions& portions  )
 {
     // Set the position to the beginning of the source string
-    mpStringBegin = mpActualPos = rLine.GetBuffer();
+    mpStringBegin = mpActualPos = rLine.getStr();
 
     // Initialize row and column
     nLine = nParseLine;
@@ -722,7 +722,7 @@ void SyntaxHighlighter::initialize( HighlighterLanguage eLanguage_ )
 }
 
 const Range SyntaxHighlighter::notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDifference,
-                                const String* pChangedLines, sal_uInt32 nArrayLength)
+                                const OUString* pChangedLines, sal_uInt32 nArrayLength)
 {
     (void)nLineCountDifference;
 
@@ -732,7 +732,7 @@ const Range SyntaxHighlighter::notifyChange( sal_uInt32 nLine, sal_Int32 nLineCo
     return Range( nLine, nLine + nArrayLength-1 );
 }
 
-void SyntaxHighlighter::getHighlightPortions( sal_uInt32 nLine, const String& rLine,
+void SyntaxHighlighter::getHighlightPortions( sal_uInt32 nLine, const OUString& rLine,
                                             /*out*/HighlightPortions& portions )
 {
     m_pSimpleTokenizer->getHighlightPortions( nLine, rLine, portions );
