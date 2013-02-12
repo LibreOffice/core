@@ -770,9 +770,6 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
 #ifdef MODKEY_Ortho
     SetOrtho(MODKEY_Ortho!=IsOrthoDesired());
 #endif
-#ifdef MODKEY_BigOrtho
-    SetBigOrtho(MODKEY_BigOrtho);
-#endif
 #ifdef MODKEY_AngleSnap
     SetAngleSnapEnabled(MODKEY_AngleSnap);
 #endif
