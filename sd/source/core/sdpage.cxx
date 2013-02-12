@@ -29,7 +29,7 @@
 #include <editeng/editdata.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/outlobj.hxx>
@@ -41,7 +41,7 @@
 #include <editeng/pbinitem.hxx>
 #include <svx/svdundo.hxx>
 #include <svl/smplhint.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <svx/unopage.hxx>

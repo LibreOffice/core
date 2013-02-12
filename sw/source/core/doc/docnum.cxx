@@ -43,7 +43,7 @@
 #include <pamtyp.hxx>
 #include <redline.hxx>
 #include <comcore.hrc>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <frmatr.hxx>
 #include <SwStyleNameMapper.hxx>

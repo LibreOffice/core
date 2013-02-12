@@ -44,7 +44,7 @@
 #include <sot/storage.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/unolingu.hxx>
 #include "vcl/window.hxx"

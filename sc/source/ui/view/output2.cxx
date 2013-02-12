@@ -20,9 +20,9 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/algitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/editobj.hxx>

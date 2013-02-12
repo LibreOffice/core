@@ -21,7 +21,7 @@
 #include "hintids.hxx"
 #include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>

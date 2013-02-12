@@ -49,7 +49,7 @@
 #include <editeng/svxacorr.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/splwrap.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <i18npool/mslangid.hxx>
 #include <i18npool/languagetag.hxx>

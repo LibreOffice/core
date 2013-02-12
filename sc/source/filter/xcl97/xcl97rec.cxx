@@ -46,10 +46,10 @@
 #include "scitems.hxx"
 
 #include <unotools/fltrcfg.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 

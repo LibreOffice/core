@@ -26,14 +26,14 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/cntritem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
 
 //<- Fonts & Items
-#include <editeng/bulitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/bulletitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <vcl/graph.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>

@@ -20,10 +20,10 @@
 
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
-#include <editeng/bolnitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/editdata.hxx>     // can be removed if table has a bLayoutRTL flag
 #include <editeng/shaditem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 
 #include "fillinfo.hxx"
 #include "document.hxx"

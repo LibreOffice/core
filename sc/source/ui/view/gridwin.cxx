@@ -21,7 +21,7 @@
 #include "scitems.hxx"
 
 #include <memory> //auto_ptr
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>

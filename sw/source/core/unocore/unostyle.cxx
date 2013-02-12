@@ -32,7 +32,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <pagedesc.hxx>

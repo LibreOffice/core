@@ -21,7 +21,7 @@
 #include <editeng/eeitem.hxx>
 
 #include <sot/exchange.hxx>
-#include <editeng/akrnitem.hxx>
+#include <editeng/autokernitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/langitem.hxx>

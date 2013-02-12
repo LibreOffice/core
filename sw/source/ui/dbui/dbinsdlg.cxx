@@ -53,7 +53,7 @@
 #include <editeng/unolingu.hxx>
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/rulritem.hxx>
 #include <swdbtoolsclient.hxx>

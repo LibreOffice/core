@@ -23,9 +23,9 @@
 
 
 #include <sfx2/viewfrm.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/algitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>

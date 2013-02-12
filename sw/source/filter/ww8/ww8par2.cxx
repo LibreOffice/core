@@ -26,11 +26,11 @@
 #include <editeng/colritem.hxx>
 #include <editeng/orphitem.hxx>
 #include <editeng/widwitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/hyznitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/charrotateitem.hxx>

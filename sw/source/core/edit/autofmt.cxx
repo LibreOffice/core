@@ -27,12 +27,12 @@
 
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/brkitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/formatbreakitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/cscoitem.hxx>
+#include <editeng/charsetcoloritem.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/acorrcfg.hxx>
 

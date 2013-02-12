@@ -95,12 +95,12 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/sxekitm.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/extrud3d.hxx>
 #include "svx/svditer.hxx"

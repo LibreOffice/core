@@ -20,7 +20,7 @@
 
 #include <hintids.hxx>
 #include <vcl/vclenum.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/svxenum.hxx>

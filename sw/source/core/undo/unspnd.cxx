@@ -23,7 +23,7 @@
 #include "swtable.hxx"
 #include "ndtxt.hxx"
 #include "swundo.hxx"
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
 #include <UndoCore.hxx>

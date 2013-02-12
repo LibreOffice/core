@@ -28,10 +28,10 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/frmdiritem.hxx>

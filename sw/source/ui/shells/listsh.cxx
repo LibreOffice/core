@@ -20,7 +20,7 @@
 #include "cmdid.h"
 #include "hintids.hxx"
 #include <editeng/sizeitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>

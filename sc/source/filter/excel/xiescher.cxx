@@ -73,7 +73,7 @@
 #include <editeng/colritem.hxx>
 #include <svx/xflclit.hxx>
 #include <sal/macros.h>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/xlineit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/xlntrit.hxx>

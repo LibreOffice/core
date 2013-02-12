@@ -24,7 +24,7 @@
 #include "futempl.hxx"
 
 #include <editeng/editdata.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <svx/svxids.hrc>   // fuer SID_OBJECT_SELECT
 #include <sfx2/bindings.hxx>
 #include <svl/aeitem.hxx>

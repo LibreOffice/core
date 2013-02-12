@@ -30,7 +30,7 @@
 
 #include <svx/svdpagv.hxx>
 #include <editeng/eeitemid.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/gallery.hxx>

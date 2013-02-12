@@ -60,7 +60,7 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xlnedcit.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xbtmpit.hxx>

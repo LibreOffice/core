@@ -21,7 +21,7 @@
 
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/editdata.hxx>
 #include <svtools/colorcfg.hxx>
 #include "svtools/optionsdrawinglayer.hxx"

@@ -22,7 +22,7 @@
 #include <i18npool/mslangid.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>

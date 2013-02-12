@@ -28,7 +28,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/numehelp.hxx>
 #include <svl/zforlist.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <fmtrowsplt.hxx>
 #include <editeng/frmdiritem.hxx>

@@ -23,7 +23,7 @@
 
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
@@ -117,7 +117,7 @@
 #include "formula/errorcodes.hxx"
 #include "unoreflist.hxx"
 #include "formula/grammar.hxx"
-#include "editeng/escpitem.hxx"
+#include "editeng/escapementitem.hxx"
 
 #include <list>
 #include <boost/scoped_ptr.hpp>

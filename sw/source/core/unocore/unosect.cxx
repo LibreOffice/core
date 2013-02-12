@@ -27,7 +27,7 @@
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/lnkbase.hxx>

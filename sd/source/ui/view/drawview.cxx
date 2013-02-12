@@ -31,7 +31,7 @@
 #include <svx/svdorect.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/numitem.hxx>
 #include <svl/whiter.hxx>

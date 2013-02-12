@@ -28,11 +28,11 @@
 #include <vcl/outdev.hxx>
 
 #define ITEMID_ADJUST       EE_PARA_JUST
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #define ITEMID_WEIGHT       EE_CHAR_WEIGHT
 #include <editeng/wghtitem.hxx>
 #define ITEMID_ESCAPEMENT   EE_CHAR_ESCAPEMENT
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #define ITEMID_LINESPACING  EE_PARA_SBL
 #include <editeng/lspcitem.hxx>
 #define ITEMID_FONTHEIGHT   EE_CHAR_FONTHEIGHT

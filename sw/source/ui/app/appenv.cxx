@@ -39,7 +39,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <editeng/paperinf.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <fmthdft.hxx>
 #include <swwait.hxx>
 #include <paratr.hxx>

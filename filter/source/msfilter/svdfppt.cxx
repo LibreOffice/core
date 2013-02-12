@@ -51,7 +51,7 @@
 #include "svx/xattr.hxx"
 #include "svx/svditext.hxx"
 #include <svx/svdetc.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/svdoashp.hxx>
@@ -60,14 +60,14 @@
 #include <editeng/editids.hrc>
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
-#include <editeng/adjitem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -85,7 +85,7 @@
 #include <tools/zcodec.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <sfx2/objsh.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/unoapi.hxx>

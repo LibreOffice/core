@@ -23,7 +23,7 @@
 #include <boost/bind.hpp>
 
 #include <editeng/boxitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svx/algitem.hxx>
 

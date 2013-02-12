@@ -56,7 +56,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/flditem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/fcontnr.hxx>

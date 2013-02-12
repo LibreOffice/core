@@ -28,7 +28,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/opaqitem.hxx>
@@ -37,11 +37,11 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/protitem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <editeng/emphitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <viewopt.hxx>
 #include <doc.hxx>

@@ -23,7 +23,7 @@
 #include "chartview/ChartSfxItemIds.hxx"
 #include <svx/chrtitem.hxx>
 #include <svl/intitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/rectitem.hxx>

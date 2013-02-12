@@ -20,7 +20,7 @@
 #include <vcl/lazydelete.hxx>
 #include <vcl/gradient.hxx>
 #include <sfx2/progress.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/prntitem.hxx>
 #include <editeng/boxitem.hxx>

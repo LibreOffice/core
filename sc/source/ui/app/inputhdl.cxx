@@ -23,14 +23,14 @@
 #include <sfx2/app.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <svx/algitem.hxx>
-#include <editeng/adjitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/svxacorr.hxx>

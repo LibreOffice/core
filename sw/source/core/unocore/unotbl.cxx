@@ -77,7 +77,7 @@
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
 #include <svl/zforlist.hxx>     // SvNumberFormatter
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>

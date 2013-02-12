@@ -51,7 +51,7 @@
 #include <svl/srchitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/flagsdef.hxx>

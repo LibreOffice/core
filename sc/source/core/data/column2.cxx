@@ -23,7 +23,7 @@
 #include <svx/algitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
-#include <editeng/emphitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/rotmodit.hxx>

@@ -20,7 +20,7 @@
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <unotools/transliterationwrapper.hxx>

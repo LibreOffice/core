@@ -42,7 +42,7 @@
 #include <svl/flagitem.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdotext.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <editeng/numitem.hxx>
 #include <svx/svditer.hxx>
 #include <editeng/unolingu.hxx>

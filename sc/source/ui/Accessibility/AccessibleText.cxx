@@ -38,7 +38,7 @@
 #include <editeng/unoedhlp.hxx>
 #include <vcl/virdev.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/algitem.hxx>

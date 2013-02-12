@@ -30,7 +30,7 @@
 #include "dflyobj.hxx"
 #include "frmtool.hxx"
 #include "dcontact.hxx"
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtanchr.hxx>

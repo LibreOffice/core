@@ -29,7 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/gallery.hxx>
 #include <svl/urihelper.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/graph.hxx>

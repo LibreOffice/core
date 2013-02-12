@@ -31,7 +31,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <vcl/graphicfilter.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include "helpid.hrc"
 #include "svx/gallery.hxx"
 #include "galobj.hxx"

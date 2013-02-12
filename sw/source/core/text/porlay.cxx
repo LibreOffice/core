@@ -33,11 +33,11 @@
 #include <com/sun/star/i18n/CTLScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <paratr.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <vcl/outdev.hxx>
-#include <editeng/blnkitem.hxx>
+#include <editeng/blinkitem.hxx>
 #include <tools/multisel.hxx>
 #include <unotools/charclass.hxx>
 #include <i18npool/mslangid.hxx>

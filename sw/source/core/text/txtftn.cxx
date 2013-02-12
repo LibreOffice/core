@@ -31,7 +31,7 @@
 #include <charfmt.hxx>
 #include <dflyobj.hxx>
 #include <rowfrm.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>

@@ -25,7 +25,7 @@
 #include <svtools/colorcfg.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/justifyitem.hxx>

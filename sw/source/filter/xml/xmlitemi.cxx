@@ -33,7 +33,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/memberids.hrc>
 

@@ -25,7 +25,7 @@
 #include <svl/stylepool.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/emphitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/lrspitem.hxx>

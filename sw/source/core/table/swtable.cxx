@@ -24,7 +24,7 @@
 #include <hints.hxx>    // for SwAttrSetChg
 #include <editeng/lrspitem.hxx>
 #include <editeng/shaditem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/colritem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/boxitem.hxx>

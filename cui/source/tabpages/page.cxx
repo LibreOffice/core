@@ -36,7 +36,7 @@
 #include "helpid.hrc"
 #include "page.hxx"
 #include <svx/pageitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/pbinitem.hxx>

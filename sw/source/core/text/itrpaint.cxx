@@ -22,7 +22,7 @@
 #include "viewopt.hxx"  // SwViewOptions
 #include "txtatr.hxx"  // SwINetFmt
 #include <tools/multisel.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <txtinet.hxx>

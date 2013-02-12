@@ -25,7 +25,7 @@
 #include <hintids.hxx>
 #include <vcl/keycod.hxx>
 #include <tools/datetime.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <poolfmt.hxx>
 #include <fmtornt.hxx>
 #include <ndindex.hxx>

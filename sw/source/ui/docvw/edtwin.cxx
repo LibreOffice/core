@@ -58,7 +58,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/postitem.hxx>

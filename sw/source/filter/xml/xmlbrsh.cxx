@@ -28,7 +28,7 @@
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svx/unomid.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <xmloff/xmluconv.hxx>
 
 #include "xmlbrshi.hxx"

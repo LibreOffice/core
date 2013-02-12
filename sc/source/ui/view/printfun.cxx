@@ -23,9 +23,9 @@
 #include "printfun.hxx"
 
 #include <svx/svxids.hrc>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/editstat.hxx>     // EE_CNTRL_RTFSTYLESHEETS
 #include <svx/fmview.hxx>

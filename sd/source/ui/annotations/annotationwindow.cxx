@@ -21,14 +21,14 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/frmdir.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/editview.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -41,7 +41,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <svx/svxids.hrc>
 #include <svtools/langtab.hxx>
 #include <svl/slstitm.hxx>

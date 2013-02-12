@@ -35,8 +35,8 @@
 #include <editeng/unolingu.hxx>
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
-#include <editeng/adjitem.hxx>
-#include <editeng/akrnitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/autokernitem.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -50,7 +50,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/hyznitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <vcl/svapp.hxx>
 #include <view.hxx>

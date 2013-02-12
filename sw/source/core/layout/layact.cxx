@@ -50,7 +50,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/opaqitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <SwSmartTagMgr.hxx>
 
 #define _LAYACT_CXX

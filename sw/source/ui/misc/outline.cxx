@@ -22,7 +22,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <unotools/configmgr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <num.hxx>

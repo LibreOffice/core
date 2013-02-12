@@ -26,13 +26,13 @@
 #include <svl/srchitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/keepitem.hxx>
-#include <editeng/bolnitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/numinf.hxx>

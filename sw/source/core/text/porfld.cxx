@@ -21,7 +21,7 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/graph.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <viewopt.hxx>  // SwViewOptions

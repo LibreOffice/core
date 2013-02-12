@@ -25,7 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
 #include <fmtpdsc.hxx>

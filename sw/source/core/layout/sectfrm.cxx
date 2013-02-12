@@ -48,7 +48,7 @@
 #include "viewimp.hxx"
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <fmtftntx.hxx>
 // OD 2004-05-24 #i28701#
 #include <dflyobj.hxx>

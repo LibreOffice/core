@@ -20,8 +20,8 @@
 #include <hintids.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/lspcitem.hxx>
-#include <editeng/adjitem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/pgrditem.hxx>
 #include <vcl/window.hxx>

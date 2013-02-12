@@ -32,7 +32,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/svxfont.hxx>
 
 #include "document.hxx"

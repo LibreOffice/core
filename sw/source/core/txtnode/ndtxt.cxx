@@ -21,8 +21,8 @@
 #include <hints.hxx>
 
 #include <editeng/fontitem.hxx>
-#include <editeng/brkitem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/formatbreakitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/rsiditem.hxx>
 #include <editeng/tstpitem.hxx>

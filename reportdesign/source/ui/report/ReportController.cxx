@@ -113,7 +113,7 @@
 #include <editeng/sizeitem.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <svx/zoomslideritem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxdlg.hxx>

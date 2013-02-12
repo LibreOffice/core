@@ -20,7 +20,7 @@
 #include <UndoDelete.hxx>
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>

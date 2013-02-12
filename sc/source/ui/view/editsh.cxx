@@ -24,13 +24,13 @@
 
 #include <svx/clipfmtitem.hxx>
 #include <svx/svxdlg.hxx>
-#include <editeng/cntritem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unolingu.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <svx/hlnkitem.hxx>

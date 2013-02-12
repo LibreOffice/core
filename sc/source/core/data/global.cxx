@@ -20,7 +20,7 @@
 #include <vcl/svapp.hxx>
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <svl/srchitem.hxx>

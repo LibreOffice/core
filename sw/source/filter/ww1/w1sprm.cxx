@@ -22,7 +22,7 @@
 #include <tools/solar.h>
 #include <editeng/paperinf.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/boxitem.hxx>

@@ -26,7 +26,7 @@
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <editeng/svxfont.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 
 // Minimum: Percentage of kernel
 #define MINKERNPERCENT 5

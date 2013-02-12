@@ -73,7 +73,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <svl/style.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <editeng/outlobj.hxx>
 #include "editeng/forbiddencharacterstable.hxx"
 #include <svl/zforlist.hxx>

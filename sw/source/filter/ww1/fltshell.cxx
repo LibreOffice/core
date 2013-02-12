@@ -28,9 +28,9 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/cmapitem.hxx>
-#include <editeng/cntritem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/charclass.hxx>
 #include <txtftn.hxx>

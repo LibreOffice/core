@@ -20,7 +20,7 @@
 
 #include <hintids.hxx>
 #include <editeng/keepitem.hxx>
-#include <editeng/hyznitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
 #include <pagefrm.hxx>      // ChangeFtnRef
 #include <ndtxt.hxx>        // MakeFrm()
 #include <dcontact.hxx>     // SwDrawContact

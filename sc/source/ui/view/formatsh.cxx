@@ -46,9 +46,9 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/bolnitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <svtools/colorcfg.hxx>

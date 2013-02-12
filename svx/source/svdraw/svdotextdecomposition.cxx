@@ -35,7 +35,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/eeitemid.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/flditem.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>

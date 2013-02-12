@@ -33,12 +33,12 @@
 #include <editeng/langitem.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/tstpitem.hxx>
 #include "svl/urihelper.hxx"

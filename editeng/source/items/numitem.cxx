@@ -23,7 +23,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <vcl/font.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>

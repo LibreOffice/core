@@ -55,7 +55,7 @@
 #include "cell.hxx"
 #include <editeng/borderline.hxx>
 #include <editeng/colritem.hxx>
-#include "editeng/bolnitem.hxx"
+#include "editeng/lineitem.hxx"
 #include "svx/svdstr.hrc"
 #include "svx/svdglob.hxx"
 #include "svx/svdpage.hxx"

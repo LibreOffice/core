@@ -34,13 +34,13 @@
 // header for class SdrView
 #include <svx/svdview.hxx>
 //SvxBrushItem
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <frmatr.hxx>
 // header for class SvxBoxInfoItem
 #include <editeng/boxitem.hxx>
 // header for class SvxFmtBreakItem
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 // header for class SwFmtLayoutSplit
 #include <fmtlsplt.hxx>
 // header for class SvxFmtKeepItem

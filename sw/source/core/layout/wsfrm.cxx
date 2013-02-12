@@ -22,9 +22,9 @@
 #include <hints.hxx>
 #include <vcl/outdev.hxx>
 #include <svl/itemiter.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/keepitem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <fmtornt.hxx>
 #include <pagefrm.hxx>
 #include <section.hxx>

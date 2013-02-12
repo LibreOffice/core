@@ -21,10 +21,10 @@
 #include <comphelper/string.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brshitem.hxx>
-#include <editeng/cntritem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
@@ -36,7 +36,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/keycodes.hxx>
 #include <rtl/math.hxx>

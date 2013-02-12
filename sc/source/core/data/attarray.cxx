@@ -20,7 +20,7 @@
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/bolnitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/editobj.hxx>

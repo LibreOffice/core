@@ -24,7 +24,7 @@
 #include <sfx2/printer.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <shellio.hxx>
 #include <doc.hxx>

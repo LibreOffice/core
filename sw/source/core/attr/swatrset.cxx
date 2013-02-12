@@ -22,8 +22,8 @@
 #include <cmdid.h>
 #include <doc.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/brshitem.hxx>
-#include <editeng/bolnitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <fmtpdsc.hxx>
 #include <hintids.hxx>

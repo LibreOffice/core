@@ -22,12 +22,12 @@
 #include <comphelper/string.hxx>
 #include "scitems.hxx"
 
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/clipfmtitem.hxx>
-#include <editeng/cntritem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/frmdiritem.hxx>

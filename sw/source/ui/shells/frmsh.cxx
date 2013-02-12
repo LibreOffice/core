@@ -29,7 +29,7 @@
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/bolnitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/protitem.hxx>
 #include <sfx2/dispatch.hxx>

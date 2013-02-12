@@ -32,17 +32,17 @@
 #include <vcl/svapp.hxx>
 #include <eetext.hxx>
 
-#include <editeng/akrnitem.hxx>
+#include <editeng/autokernitem.hxx>
 
 #include <svx/svxids.hrc>
 #include <svl/srchitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>                  // SVX_RESSTR
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/sxmsuitm.hxx>
 #include <editeng/borderline.hxx>
@@ -58,10 +58,10 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/cntritem.hxx>
-#include <editeng/emphitem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/emphasismarkitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <svx/xbtmpit.hxx>

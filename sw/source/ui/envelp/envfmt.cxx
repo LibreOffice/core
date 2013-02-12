@@ -22,7 +22,7 @@
 #include <editeng/paperinf.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/menu.hxx>
 

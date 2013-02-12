@@ -38,7 +38,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <comphelper/sequence.hxx>
 #include <float.h>
 #include <vcl/svapp.hxx>

@@ -28,7 +28,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/fmmodel.hxx>

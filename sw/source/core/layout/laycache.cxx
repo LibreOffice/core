@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <tools/stream.hxx>
 #include <doc.hxx>
 #include <docstat.hxx>

@@ -21,8 +21,8 @@
 #include <comphelper/string.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/adjitem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <svx/svdobj.hxx>
 #include <crsrsh.hxx>
 #include <doc.hxx>

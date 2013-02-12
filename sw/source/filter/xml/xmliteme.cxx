@@ -30,7 +30,7 @@
 #include <xmloff/xmltabe.hxx>
 #include "xmlbrshe.hxx"
 #include <editeng/tstpitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <tools/fldunit.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>

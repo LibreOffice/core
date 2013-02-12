@@ -21,7 +21,7 @@
 
 #include <string.h>
 #include <vcl/font.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
 #include <fmtornt.hxx>

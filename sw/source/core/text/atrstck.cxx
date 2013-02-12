@@ -22,9 +22,9 @@
 #include <vcl/outdev.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/cntritem.hxx>
-#include <editeng/crsditem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/kernitem.hxx>
@@ -35,10 +35,10 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/wrlmitem.hxx>
-#include <editeng/akrnitem.hxx>
-#include <editeng/blnkitem.hxx>
+#include <editeng/autokernitem.hxx>
+#include <editeng/blinkitem.hxx>
 #include <editeng/charrotateitem.hxx>
-#include <editeng/emphitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charhiddenitem.hxx>
@@ -46,7 +46,7 @@
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
 #include <fmtautofmt.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
 #include <IDocumentSettingAccess.hxx>

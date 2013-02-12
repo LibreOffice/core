@@ -41,7 +41,7 @@
 #include <editeng/keepitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <vcl/outdev.hxx>
 #include <fmtlsplt.hxx>

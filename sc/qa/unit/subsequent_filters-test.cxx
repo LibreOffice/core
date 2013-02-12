@@ -45,7 +45,7 @@
 #include "editeng/postitem.hxx"
 #include "editeng/udlnitem.hxx"
 #include "editeng/editobj.hxx"
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/borderline.hxx>
 #include <dbdata.hxx>

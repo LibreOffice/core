@@ -22,7 +22,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <hintids.hxx>
 
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/boxitem.hxx>

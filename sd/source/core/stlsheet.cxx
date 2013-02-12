@@ -38,7 +38,7 @@
 #include <svx/sdr/properties/attributeproperties.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/unoshprp.hxx>
 #include <svx/unoshape.hxx>

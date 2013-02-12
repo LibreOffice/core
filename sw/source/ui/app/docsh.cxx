@@ -29,7 +29,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/PasswordHelper.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <basic/sbx.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/misccfg.hxx>

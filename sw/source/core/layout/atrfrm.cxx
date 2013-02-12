@@ -87,7 +87,7 @@
 #include <unoframe.hxx>
 #include <unotextbodyhf.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svtools/grfmgr.hxx>
 #include <cmdid.h>
 #include <unomid.h>

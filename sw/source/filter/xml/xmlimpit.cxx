@@ -39,9 +39,9 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include "fmtpdsc.hxx"
 #include "fmtornt.hxx"
 #include "fmtfsize.hxx"

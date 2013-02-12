@@ -33,11 +33,11 @@
 #include <osl/mutex.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/hyznitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
 #include <editeng/orphitem.hxx>
 #include <editeng/spltitem.hxx>
 #include <svx/svxdlg.hxx>

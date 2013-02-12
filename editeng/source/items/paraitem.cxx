@@ -33,13 +33,13 @@ using namespace ::com::sun::star;
 #include <svl/memberid.hrc>
 #include <editeng/editrids.hrc>
 #include <editeng/lspcitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/orphitem.hxx>
 #include <editeng/widwitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/pmdlitem.hxx>
 #include <editeng/spltitem.hxx>
-#include <editeng/hyznitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>

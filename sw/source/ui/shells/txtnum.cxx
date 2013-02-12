@@ -23,7 +23,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <numrule.hxx>
 
 #include "cmdid.h"

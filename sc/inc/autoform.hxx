@@ -38,13 +38,13 @@
 **************************************************************************/
 
 #include "scitems.hxx"
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brshitem.hxx>
-#include <editeng/cntritem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/postitem.hxx>
@@ -54,7 +54,7 @@
 #include <editeng/justifyitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svl/intitem.hxx>
-#include <editeng/bolnitem.hxx>
+#include <editeng/lineitem.hxx>
 #include "scdllapi.h"
 #include "global.hxx"
 #include "zforauto.hxx"

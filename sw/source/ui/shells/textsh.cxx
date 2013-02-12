@@ -45,7 +45,7 @@
 #include <sfx2/request.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/svxacorr.hxx>

@@ -32,7 +32,7 @@
 #include "tabvwsh.hxx"
 #include "sc.hrc"
 #include "drawview.hxx"
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 
 #include <math.h>
 

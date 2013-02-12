@@ -25,7 +25,7 @@
 #include <i18npool/mslangid.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
@@ -38,7 +38,7 @@
 #include <svl/style.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/tplpitem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/scripttypeitem.hxx>

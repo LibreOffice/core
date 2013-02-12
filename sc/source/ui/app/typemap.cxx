@@ -35,12 +35,12 @@
 #include <editeng/postitem.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/zoomitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/bolnitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <svl/ptitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/algitem.hxx>
@@ -73,9 +73,9 @@
 #include <svx/grafctrl.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/shaditem.hxx>
-#include <editeng/cntritem.hxx>
-#include <editeng/crsditem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/drawitem.hxx>

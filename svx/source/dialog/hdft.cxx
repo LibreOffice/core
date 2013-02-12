@@ -40,7 +40,7 @@
 #include <svx/dialmgr.hxx>
 #include "svx/htmlmode.hxx"
 
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/shaditem.hxx>

@@ -30,9 +30,9 @@
 #include <svx/drawitem.hxx>
 #include <svl/style.hxx>
 #include <svx/tabline.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <vcl/graph.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>

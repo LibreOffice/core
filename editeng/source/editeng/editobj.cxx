@@ -33,13 +33,13 @@
 #include <editattr.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/cscoitem.hxx>
+#include <editeng/charsetcoloritem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/tstpitem.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 
 #include <vcl/graph.hxx>
 #include <svl/intitem.hxx>

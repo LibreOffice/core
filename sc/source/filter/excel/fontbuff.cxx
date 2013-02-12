@@ -21,12 +21,12 @@
 #include "lotfntbf.hxx"
 
 #include "scitems.hxx"
-#include <editeng/cntritem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/shdditem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <sfx2/printer.hxx>

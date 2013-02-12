@@ -41,7 +41,7 @@
 #include <svl/itempool.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 
 #include <math.h>
 

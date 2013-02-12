@@ -39,7 +39,7 @@
 #include <svx/svdundo.hxx>
 #include <svl/brdcst.hxx>
 #include <vcl/msgbox.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/numitem.hxx>

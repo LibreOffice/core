@@ -19,7 +19,7 @@
 
 
 #include "scitems.hxx"
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/fontwork.hxx>
 #include <editeng/frmdiritem.hxx>

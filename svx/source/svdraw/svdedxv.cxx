@@ -58,7 +58,7 @@
 #include "svx/svdglob.hxx"  // StringCache
 #include "svx/globl3d.hxx"
 #include <editeng/outliner.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>

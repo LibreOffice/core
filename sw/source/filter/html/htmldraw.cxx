@@ -32,7 +32,7 @@
 #endif
 #include <svx/xfillit.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svl/itemiter.hxx>

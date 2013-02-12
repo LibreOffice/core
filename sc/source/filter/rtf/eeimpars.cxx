@@ -21,10 +21,10 @@
 #include <editeng/eeitem.hxx>
 
 
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>

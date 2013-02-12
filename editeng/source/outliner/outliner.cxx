@@ -43,13 +43,13 @@
 #include <svl/whiter.hxx>
 #include <vcl/metric.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <svtools/grfmgr.hxx>
 #include <editeng/svxfont.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svl/itempool.hxx>
 
 // calculate if it's RTL or not

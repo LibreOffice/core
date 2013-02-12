@@ -33,7 +33,7 @@
 #include <svx/htmlmode.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/langitem.hxx>

@@ -31,7 +31,7 @@
 #include <sfx2/printer.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/bindings.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <svx/optgrid.hxx>
 #include <svx/svxdlg.hxx>

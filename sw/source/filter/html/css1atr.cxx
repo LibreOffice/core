@@ -25,8 +25,8 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/crsditem.hxx>
-#include <editeng/blnkitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/blinkitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
@@ -35,10 +35,10 @@
 #include <editeng/kernitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/lspcitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/brshitem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/widwitem.hxx>
 #include <editeng/spltitem.hxx>

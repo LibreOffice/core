@@ -18,7 +18,7 @@
  */
 
 
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 
 #include <hintids.hxx>
 #include <fmtpdsc.hxx>

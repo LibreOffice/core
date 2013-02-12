@@ -23,7 +23,7 @@
 #include <sfx2/app.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>

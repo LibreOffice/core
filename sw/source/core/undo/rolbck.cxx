@@ -20,7 +20,7 @@
 #include <rolbck.hxx>
 #include <tools/resid.hxx>
 #include <svl/itemiter.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <hints.hxx>
 #include <hintids.hxx>
 #include <fmtftn.hxx>

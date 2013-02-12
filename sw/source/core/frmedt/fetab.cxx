@@ -24,7 +24,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/protitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svtools/ruler.hxx>
 #include <swwait.hxx>

@@ -38,7 +38,7 @@
 #include <svx/svxids.hrc>
 #include "grafctrl.hrc"
 #include <svx/dialogs.hrc>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/sdgcpitm.hxx>
 

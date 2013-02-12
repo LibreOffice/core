@@ -37,7 +37,7 @@
 #include <sfx2/docinf.hxx>
 #include <sfx2/frame.hxx>
 
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
@@ -46,7 +46,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/xflclit.hxx>
 

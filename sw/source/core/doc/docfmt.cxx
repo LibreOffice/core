@@ -25,7 +25,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>

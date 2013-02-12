@@ -32,7 +32,7 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/prntitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/swframevalidation.hxx>

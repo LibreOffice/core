@@ -41,7 +41,7 @@
 #define TBL_DEST_ROW    1
 #define TBL_DEST_TBL    2
 
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include "backgrnd.hxx"
 
 #include <svx/xtable.hxx>

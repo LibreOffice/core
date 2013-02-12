@@ -40,9 +40,9 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xlnclit.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/tstpitem.hxx>

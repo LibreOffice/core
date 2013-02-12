@@ -26,7 +26,7 @@
 #include <eertfpar.hxx>
 #include <impedit.hxx>
 #include <svl/intitem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/flditem.hxx>

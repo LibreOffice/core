@@ -23,7 +23,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <eehtml.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/flditem.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/fhgtitem.hxx>

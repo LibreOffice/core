@@ -40,7 +40,7 @@
 #include <editeng/sizeitem.hxx>
 // header for class SfxStringItem
 #include <svl/stritem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 //SfxIntegerListItem
 #include <svl/ilstitem.hxx>
 #include <vcl/graph.hxx>

@@ -24,7 +24,7 @@
 #include <tools/stream.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/itemiter.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 
 #include <tools/resid.hxx>
 #include <fmtornt.hxx>

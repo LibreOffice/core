@@ -48,7 +48,7 @@
 #include "svx/svdglob.hxx"  // string cache
 #include "svx/svdstr.hrc"
 #include <svx/sdgcpitm.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/sdtfchim.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <tools/bigint.hxx>
@@ -67,7 +67,7 @@
 #include "editeng/shaditem.hxx"
 
 #define ITEMID_LINE 0
-#include "editeng/bolnitem.hxx"
+#include "editeng/lineitem.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

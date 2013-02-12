@@ -19,7 +19,7 @@
 
 #include <hintids.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <tools/fract.hxx>
 #include <wrtswtbl.hxx>
 #include <swtable.hxx>

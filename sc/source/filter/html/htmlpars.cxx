@@ -28,7 +28,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>

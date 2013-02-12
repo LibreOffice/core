@@ -22,7 +22,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <svx/gallery.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
 #include <swvset.hxx>

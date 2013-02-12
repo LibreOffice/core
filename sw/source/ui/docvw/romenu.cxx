@@ -28,7 +28,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/gallery.hxx>
 #include <svx/graphichelper.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 
 #include <frmatr.hxx>
 #include <fmturl.hxx>

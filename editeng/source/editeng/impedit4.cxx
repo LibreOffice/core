@@ -25,7 +25,7 @@
 
 #include <svl/srchitem.hxx>
 #include <editeng/lspcitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/tstpitem.hxx>
 
 #include <eertfpar.hxx>
@@ -38,11 +38,11 @@
 
 #include "editxml.hxx"
 
-#include <editeng/akrnitem.hxx>
-#include <editeng/cntritem.hxx>
+#include <editeng/autokernitem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/crsditem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/kernitem.hxx>
@@ -55,7 +55,7 @@
 #include <editeng/langitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <editeng/emphitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
 #include <textconv.hxx>
 #include <rtl/tencinfo.h>
 #include <svtools/rtfout.hxx>

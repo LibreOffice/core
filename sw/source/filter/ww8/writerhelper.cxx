@@ -32,7 +32,7 @@
 #include <svx/svdobj.hxx>        //SdrObject
 #include <svx/svdoole2.hxx>      //SdrOle2Obj
 #include <svx/fmglob.hxx>        //FmFormInventor
-#include <editeng/brkitem.hxx>       //SvxFmtBreakItem
+#include <editeng/formatbreakitem.hxx>       //SvxFmtBreakItem
 #include <editeng/tstpitem.hxx>      //SvxTabStopItem
 #include <ndtxt.hxx>             //SwTxtNode
 #include <ndnotxt.hxx>          //SwNoTxtNode

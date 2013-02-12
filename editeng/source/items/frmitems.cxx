@@ -66,10 +66,10 @@
 #include <editeng/protitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
-#include <editeng/bolnitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/lineitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>

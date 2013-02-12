@@ -20,7 +20,7 @@
 #include <tools/bigint.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>

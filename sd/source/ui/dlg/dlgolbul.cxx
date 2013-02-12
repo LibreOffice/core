@@ -27,7 +27,7 @@
 #include <svx/svxids.hrc>
 #include <sfx2/objsh.hxx>
 #include <svx/drawitem.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/numitem.hxx>

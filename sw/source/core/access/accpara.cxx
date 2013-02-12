@@ -63,7 +63,7 @@
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <viewimp.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <textmarkuphelper.hxx>

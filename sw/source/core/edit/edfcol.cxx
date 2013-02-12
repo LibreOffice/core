@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>      // fuer SwTxtFmtColls
 #include <IDocumentUndoRedo.hxx>

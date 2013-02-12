@@ -19,7 +19,7 @@
 
 #include <hintids.hxx>
 #include <editeng/wghtitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif

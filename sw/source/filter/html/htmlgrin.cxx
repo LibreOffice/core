@@ -29,8 +29,8 @@
 #include <svl/urihelper.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/adjitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/ulspitem.hxx>

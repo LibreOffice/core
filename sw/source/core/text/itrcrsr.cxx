@@ -27,7 +27,7 @@
 #include "swselectionlist.hxx"
 #include <sortedobjs.hxx>
 #include <editeng/protitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <frmatr.hxx>

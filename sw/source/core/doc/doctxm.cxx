@@ -21,7 +21,7 @@
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <sot/clsids.hxx>

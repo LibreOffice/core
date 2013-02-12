@@ -22,7 +22,7 @@
 
 #define _SVX_BULITEM_CXX
 
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <editeng/editrids.hrc>
 
 #include <tools/tenccvt.hxx>

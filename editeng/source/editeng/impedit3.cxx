@@ -25,7 +25,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/flditem.hxx>
@@ -33,7 +33,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/txtrange.hxx>
-#include <editeng/cscoitem.hxx>
+#include <editeng/charsetcoloritem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fhgtitem.hxx>

@@ -28,7 +28,7 @@
 #include <UndoCore.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
 #include <doc.hxx>

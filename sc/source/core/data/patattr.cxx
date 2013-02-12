@@ -18,17 +18,17 @@
  */
 
 #include "scitems.hxx"
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/bolnitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/lineitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/charreliefitem.hxx>
-#include <editeng/cntritem.hxx>
+#include <editeng/contouritem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/crsditem.hxx>
-#include <editeng/emphitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>

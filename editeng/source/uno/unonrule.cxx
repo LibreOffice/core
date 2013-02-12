@@ -26,7 +26,7 @@
 #include <svtools/grfmgr.hxx>
 #include <toolkit/unohlp.hxx>
 
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/eeitem.hxx>

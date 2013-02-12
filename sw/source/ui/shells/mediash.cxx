@@ -35,7 +35,7 @@
 #include <svx/sdgtritm.hxx>
 #include <svx/sdginitm.hxx>
 #include <svx/sdgmoitm.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svx/grfflt.hxx>
 #include <fmturl.hxx>
 #include <view.hxx>

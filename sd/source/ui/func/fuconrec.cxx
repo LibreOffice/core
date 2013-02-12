@@ -42,7 +42,7 @@
 #include <svx/svdocirc.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svx/xtable.hxx>
 
 #include <svx/svdocapt.hxx>

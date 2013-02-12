@@ -27,7 +27,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlncapit.hxx>
@@ -36,9 +36,9 @@
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/akrnitem.hxx>
+#include <editeng/autokernitem.hxx>
 #include <editeng/wrlmitem.hxx>
-#include <editeng/cntritem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
 #include <vcl/metric.hxx>
 #include <editeng/charscaleitem.hxx>

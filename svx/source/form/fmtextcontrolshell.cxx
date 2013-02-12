@@ -23,7 +23,7 @@
 #include "fmtextcontroldialogs.hxx"
 #include "fmtextcontrolfeature.hxx"
 #include "fmtextcontrolshell.hxx"
-#include "editeng/crsditem.hxx"
+#include "editeng/crossedoutitem.hxx"
 #include "svx/dialmgr.hxx"
 #include "editeng/editeng.hxx"
 #include "editeng/eeitem.hxx"

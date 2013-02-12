@@ -21,8 +21,8 @@
 #include <editeng/eeitem.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <editeng/brkitem.hxx>
-#include <editeng/hyznitem.hxx>
+#include <editeng/formatbreakitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
 #include <editeng/orphitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/spltitem.hxx>

@@ -44,7 +44,7 @@
 #include <tools/cachestr.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <editeng/sizeitem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/ulspitem.hxx>
 #include <vcl/graph.hxx>

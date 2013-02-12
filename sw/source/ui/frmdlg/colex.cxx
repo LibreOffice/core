@@ -27,7 +27,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/pageitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/builder.hxx>

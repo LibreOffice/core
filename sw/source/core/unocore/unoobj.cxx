@@ -94,7 +94,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtflcnt.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <fmtclds.hxx>
 #include <dcontact.hxx>

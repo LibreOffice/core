@@ -30,20 +30,20 @@
 #include <svx/svdview.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/orphitem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/widwitem.hxx>
 #include <editeng/kernitem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/lspcitem.hxx>
-#include <editeng/adjitem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/wghtitem.hxx>
-#include <editeng/cntritem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
@@ -70,7 +70,7 @@
 #include <vcl/window.hxx>
 #include <editeng/editview.hxx>
 #include <vcl/outdev.hxx>
-#include <editeng/hyznitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
 
 #include <cmdid.h>
 #include <doc.hxx>

@@ -22,9 +22,9 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/cntritem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -34,21 +34,21 @@
 #include <svx/xlineit0.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/editeng.hxx>
 #include <svl/smplhint.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/charreliefitem.hxx>
-#include <editeng/emphitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
-#include <editeng/akrnitem.hxx>
+#include <editeng/autokernitem.hxx>
 
 #include <svx/svdattr.hxx>
 #include "eetext.hxx"
 #include <svx/xtable.hxx>           // fuer RGB_Color
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <svl/itempool.hxx>
 
 #include "stlpool.hxx"

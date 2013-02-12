@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <flyfrm.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>

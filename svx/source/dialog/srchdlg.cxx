@@ -62,7 +62,7 @@
 #include "srchctrl.hxx"
 #include <svx/dialmgr.hxx>
 #include "svx/dlgutil.hxx"
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <tools/resary.hxx>
 #include <svx/svxdlg.hxx>
 

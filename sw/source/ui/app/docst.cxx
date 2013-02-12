@@ -34,7 +34,7 @@
 #include <sfx2/newstyle.hxx>
 #include <sfx2/printer.hxx>
 #include <svl/macitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/eeitem.hxx>

@@ -39,11 +39,11 @@
 #include <editeng/txtrange.hxx>
 #include <vcl/graph.hxx>
 
-#include <editeng/akrnitem.hxx>
-#include <editeng/cntritem.hxx>
+#include <editeng/autokernitem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/crsditem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/kernitem.hxx>
@@ -53,10 +53,10 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/wrlmitem.hxx>
-#include <editeng/brshitem.hxx>
-#include <editeng/cscoitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/charsetcoloritem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/emphitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charreliefitem.hxx>
 
@@ -64,7 +64,7 @@
 #include <sot/formats.hxx>
 
 #include <editeng/numitem.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <linguistic/lngprops.hxx>
 #include <i18npool/mslangid.hxx>

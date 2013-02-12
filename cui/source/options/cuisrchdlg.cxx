@@ -41,7 +41,7 @@
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <optjsearch.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include "backgrnd.hxx"
 
 

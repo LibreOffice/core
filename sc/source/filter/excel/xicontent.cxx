@@ -35,7 +35,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include "stringutil.hxx"
 #include "document.hxx"
 #include "editutil.hxx"

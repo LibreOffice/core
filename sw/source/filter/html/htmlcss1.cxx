@@ -25,12 +25,12 @@
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/flstitem.hxx>
-#include <editeng/brkitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>

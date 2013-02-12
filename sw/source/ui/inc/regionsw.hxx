@@ -30,7 +30,7 @@
 #include <svtools/treelistbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 
 #include <condedit.hxx>
 #include <section.hxx>

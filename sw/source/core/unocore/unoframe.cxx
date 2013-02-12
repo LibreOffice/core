@@ -76,7 +76,7 @@
 #include <unostyle.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/protitem.hxx>
 #include <fmtornt.hxx>
 #include <fmturl.hxx>

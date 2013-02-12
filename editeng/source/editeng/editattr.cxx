@@ -29,18 +29,18 @@
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/cntritem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/crsditem.hxx>
-#include <editeng/cscoitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/charsetcoloritem.hxx>
 #include <editeng/kernitem.hxx>
-#include <editeng/akrnitem.hxx>
+#include <editeng/autokernitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/emphitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charreliefitem.hxx>
 

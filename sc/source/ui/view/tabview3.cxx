@@ -22,7 +22,7 @@
 #include <editeng/eeitem.hxx>
 
 
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/editview.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/svdoole2.hxx>

@@ -22,11 +22,11 @@
 #include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
 #include <sfx2/printer.hxx>
-#include <editeng/hyznitem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/splwrap.hxx>
 #include <editeng/pgrditem.hxx>
 #include <editeng/tstpitem.hxx>

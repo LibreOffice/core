@@ -40,14 +40,14 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/fmglob.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <docsh.hxx>
 #include <fmtanchr.hxx>
 #include <docary.hxx>

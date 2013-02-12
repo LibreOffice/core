@@ -39,7 +39,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svl/itempool.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/xftouit.hxx>
 #include <tools/helpers.hxx>

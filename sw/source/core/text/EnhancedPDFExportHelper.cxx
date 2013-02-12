@@ -24,7 +24,7 @@
 
 #include <vcl/outdev.hxx>
 #include <tools/multisel.hxx>
-#include <editeng/adjitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/scripttypeitem.hxx>

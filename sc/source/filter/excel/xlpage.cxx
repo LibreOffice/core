@@ -24,7 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <sal/macros.h>
 #include "scitems.hxx"
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include "global.hxx"
 #include "xlconst.hxx"
 #include <oox/core/xmlfilterbase.hxx>

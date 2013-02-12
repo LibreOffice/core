@@ -46,7 +46,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <sfx2/objsh.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svx/gallery.hxx>
 #include <svx/xbitmap.hxx>
 #include <unotools/localfilehelper.hxx>

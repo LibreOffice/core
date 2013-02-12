@@ -25,7 +25,7 @@
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <editeng/sizeitem.hxx>
-#include <editeng/brshitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <grfpage.hxx>
 #include <svx/grfcrop.hxx>
 #include <grfpage.hrc>
