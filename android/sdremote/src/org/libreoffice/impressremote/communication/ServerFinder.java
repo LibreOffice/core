@@ -17,11 +17,13 @@ import java.net.SocketException;
 import java.util.Collection;
 import java.util.HashMap;
 
+import org.libreoffice.impressremote.Globals;
 import org.libreoffice.impressremote.communication.Server.Protocol;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 public class ServerFinder {
 
@@ -78,7 +80,7 @@ public class ServerFinder {
                             .getAddress().getHostAddress(), aName,
                             System.currentTimeMillis());
             mServerList.put(aServer.getAddress(), aServer);
-            System.out.println("Contains:<<" + aName + ">>");
+            Log.i(Globals.TAG, "ServerFinder.listenForServer: contains " + aName);
 
             notifyActivity();
         } catch (java.net.SocketTimeoutException e) {
@@ -161,7 +163,7 @@ public class ServerFinder {
     private void checkAndAddEmulator() {
         try {
             if (InetAddress.getByName("10.0.2.2").isReachable(100)) {
-                System.out.println("NulledNot");
+                Log.i(Globals.TAG, "ServerFinder.checkAndAddEmulator: NulledNot, whatever that is supposed to mean");
                 Server aServer = new Server(Protocol.NETWORK, "10.0.2.2",
                                 "Android Emulator Host", 0);
                 aServer.mNoTimeout = true;
