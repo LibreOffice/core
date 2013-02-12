@@ -1002,8 +1002,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         {
             SwInsDBColumn aSrch( aLbTableCol.GetEntry( n ), 0 );
             SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
-            if( it != aDBColumns.end() )
-                aColFlds[ n ] = *it;
+            if (it != aDBColumns.end())
+                aColFlds.push_back(*it);
             else {
                 OSL_ENSURE( !this, "database column not found" );
             }
