@@ -52,14 +52,16 @@ protected:
     osl::Mutex  m_rbHelperMtx;
 };
 
+typedef ::cppu::WeakComponentImplHelper5 <
+            ::com::sun::star::ui::dialogs::XFilePicker2,
+            ::com::sun::star::ui::dialogs::XFilePicker3,
+            ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
+            ::com::sun::star::ui::dialogs::XFilePreview,
+            ::com::sun::star::lang::XServiceInfo >   CFilePicker_Base;
+
 class CFilePicker :
     public CFilePickerDummy,
-    public cppu::WeakComponentImplHelper5<
-        ::com::sun::star::ui::dialogs::XFilePicker2,
-        ::com::sun::star::ui::dialogs::XFilePicker3,
-        ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
-        ::com::sun::star::ui::dialogs::XFilePreview,
-        ::com::sun::star::lang::XServiceInfo >
+    public CFilePicker_Base
 {
 public:
 

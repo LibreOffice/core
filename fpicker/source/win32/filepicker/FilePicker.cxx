@@ -67,12 +67,9 @@ namespace
 //-----------------------------------------------------------------------------------------
 
 CFilePicker::CFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr) :
-    cppu::WeakComponentImplHelper3<
-        XFilePicker2,
-        XFilePicker3,
-        lang::XServiceInfo>(m_rbHelperMtx),
-        m_xServiceMgr(xServiceMgr),
-        m_aAsyncEventNotifier(rBHelper)
+    CFilePicker_Base(m_rbHelperMtx),
+    m_xServiceMgr(xServiceMgr),
+    m_aAsyncEventNotifier(rBHelper)
 {
     HINSTANCE hInstance = GetModuleHandle(FILE_PICKER_DLL_NAME);
     OSL_POSTCOND( hInstance, "The name of the service dll must have changed" );
