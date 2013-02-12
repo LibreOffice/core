@@ -34,10 +34,10 @@ public class BluetoothFinder {
     public BluetoothFinder(Context aContext) {
         mContext = aContext;
         mAdapter = BluetoothAdapter.getDefaultAdapter();
-
     }
 
     public void startFinding() {
+        Log.i(Globals.TAG, "BluetoothFinder.startFinding(): mAdapter=" + mAdapter);
         if (mAdapter == null) {
             return; // No bluetooth adapter found (emulator, special devices)
         }
@@ -49,6 +49,7 @@ public class BluetoothFinder {
     }
 
     public void stopFinding() {
+        Log.i(Globals.TAG, "BluetoothFinder.stopFinding(): mAdapter=" + mAdapter);
         if (mAdapter == null) {
             return; // No bluetooth adapter found (emulator, special devices)
         }
@@ -57,6 +58,7 @@ public class BluetoothFinder {
             mContext.unregisterReceiver(mReceiver);
         } catch (IllegalArgumentException e) {
             // The receiver wasn't registered
+            Log.i(Globals.TAG, "BluetoothFinder.stopFinding: " + e);
         }
     }
 
@@ -70,6 +72,7 @@ public class BluetoothFinder {
 
         @Override
         public void onReceive(Context context, Intent aIntent) {
+            Log.i(Globals.TAG, "BluetoothFinder: BroadcastReceiver.onReceive: aIntent=" + aIntent);
             if (aIntent.getAction().equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice aDevice = (BluetoothDevice) aIntent.getExtras()
                                 .get(BluetoothDevice.EXTRA_DEVICE);

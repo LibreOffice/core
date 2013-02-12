@@ -9,8 +9,8 @@
 package org.libreoffice.impressremote;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.libreoffice.impressremote.communication.CommunicationService;
@@ -267,27 +267,18 @@ public class SelectorActivity extends SherlockActivity {
     private void refreshLists() {
         if (mCommunicationService != null) {
 
-            Server[] aServers = mCommunicationService.getServers();
+            List<Server> aServers = mCommunicationService.getServers();
 
-/* TODO: this crashes currently - some concurrent modification on mBluetoothServers
-            // Bluetooth -- Remove old
-            for (Entry<Server, View> aEntry : mBluetoothServers.entrySet()) {
-                if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
-                    mBluetoothServers.remove(aEntry.getKey());
-                    mBluetoothList.removeView((View) aEntry.getValue()
-                                    .getParent());
-                }
-            }
-*/
-            // Network -- Remove old
-            for (Entry<Server, View> aEntry : mNetworkServers.entrySet()) {
-                if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
-                    mNetworkServers.remove(aEntry.getKey());
-                    mNetworkList.removeView((View) aEntry.getValue()
-                                    .getParent());
-                }
-            }
-            // Add all new
+            Log.i(Globals.TAG, "SelectorActivity.refreshLists: got " + aServers.size() + " servers");
+
+            // Simply replace the lists... first clear the old lists,
+            // Then add those currently found.
+
+            mNetworkServers.clear();
+            mBluetoothServers.clear();
+            mNetworkList.removeAllViews();
+            mBluetoothList.removeAllViews();
+
             for (Server aServer : aServers) {
                 boolean aIsBluetooth = (aServer.getProtocol() == Protocol.BLUETOOTH);
                 HashMap<Server, View> aMap = aIsBluetooth ? mBluetoothServers
@@ -295,22 +286,19 @@ public class SelectorActivity extends SherlockActivity {
                 LinearLayout aLayout = aIsBluetooth ? mBluetoothList
                                 : mNetworkList;
 
-                if (!aMap.containsKey(aServer)) {
-                    View aView = getLayoutInflater()
-                                    .inflate(R.layout.activity_selector_sublayout_server,
-                                                    null);
+                View aView = getLayoutInflater()
+                                .inflate(R.layout.activity_selector_sublayout_server,
+                                                null);
 
-                    TextView aText = (TextView) aView
-                                    .findViewById(R.id.selector_sub_label);
-                    aText.setOnClickListener(mClickListener);
-                    aText.setText(aServer.getName());
-                    aLayout.addView(aView);
-                    aMap.put(aServer, aText);
+                TextView aText = (TextView) aView
+                                .findViewById(R.id.selector_sub_label);
+                aText.setOnClickListener(mClickListener);
+                aText.setText(aServer.getName());
+                aLayout.addView(aView);
+                aMap.put(aServer, aText);
 
-                    //                    registerForContextMenu(aView);
-                    registerForContextMenu(aText);
-                }
-
+                //                    registerForContextMenu(aView);
+                registerForContextMenu(aText);
             }
         }
 
