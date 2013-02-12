@@ -233,7 +233,9 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
             break;
 
         default:
-            throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The dialog returned with an unknown result!")), static_cast< XFilePicker* >( this ));
+            throw uno::RuntimeException(
+                      rtl::OUString("The dialog returned with an unknown result!"), 
+                      static_cast<XFilePicker*>( static_cast<XFilePicker3*>( this ) ));
             break;
     }
 
@@ -495,15 +497,15 @@ throw( uno::Exception, uno::RuntimeException )
     // parameter checking
     uno::Any aAny;
     if( 0 == aArguments.getLength() )
-        throw lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
-                                             static_cast<XFilePicker*>( this ), 1 );
+        throw lang::IllegalArgumentException(rtl::OUString("no arguments"),
+                                             static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ), 1 );
 
     aAny = aArguments[0];
 
     if( ( aAny.getValueType() != ::getCppuType( ( sal_Int16* )0 ) ) &&
         (aAny.getValueType() != ::getCppuType( ( sal_Int8* )0 ) ) )
-        throw lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid argument type" )),
-                                             static_cast<XFilePicker*>( this ), 1 );
+        throw lang::IllegalArgumentException(rtl::OUString( "invalid argument type" ),
+                                             static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ), 1 );
 
     sal_Int16 templateId = -1;
     aAny >>= templateId;
@@ -555,8 +557,8 @@ throw( uno::Exception, uno::RuntimeException )
             OSL_TRACE( "Template: FILESAVE_AUTOEXTENSION" );
             break;
         default:
-            throw lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
-                                                 static_cast< XFilePicker* >( this ),
+            throw lang::IllegalArgumentException(rtl::OUString("Unknown template"),
+                                                 static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ),
                                                  1 );
     }
 
