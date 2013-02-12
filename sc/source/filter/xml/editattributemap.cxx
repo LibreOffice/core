@@ -12,9 +12,7 @@
 #include "editeng/eeitem.hxx"
 #include "editeng/memberids.hrc"
 
-namespace {
-
-struct {
+static struct {
     const char* mpXMLName;
     const char* mpAPIName;
     sal_uInt16 mnItemID;
@@ -68,8 +66,6 @@ struct {
     { "country-asian", "CharLocaleAsian", EE_CHAR_LANGUAGE_CJK, MID_LANG_LOCALE },
     { "country-complex", "CharLocaleComplex", EE_CHAR_LANGUAGE_CTL, MID_LANG_LOCALE },
 };
-
-}
 
 ScXMLEditAttributeMap::Entry::Entry(sal_uInt16 nItemID, sal_uInt8 nFlag) :
     mnItemID(nItemID), mnFlag(nFlag) {}
