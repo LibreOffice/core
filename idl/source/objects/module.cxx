@@ -319,8 +319,7 @@ sal_Bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm 
 
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok  = rInStm.GetToken_Next();
-    sal_Bool bOk        = sal_False;
-    bOk = pTok->Is( SvHash_module() );
+    sal_Bool bOk = pTok->Is( SvHash_module() );
     if( bOk )
     {
         pTok = rInStm.GetToken_Next();
