@@ -142,10 +142,7 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
                     aTemplateItem.aThumbnail = TemplateAbstractView::fetchThumbnail(sRealURL,
                                                                                     TEMPLATE_THUMBNAIL_MAX_WIDTH,
                                                                                     TEMPLATE_THUMBNAIL_MAX_HEIGHT);
-//                    pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE ) && !xRow->wasNull();
-//                    pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVEABLE ) && !xRow->wasNull();
                     aTemplateItem.aName = xRow->getString( ROW_TITLE );
-//                    pData->maSize = xRow->getLong( ROW_SIZE );
 
                     if ( bHasTargetURL &&
                         INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
@@ -154,7 +151,6 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
 
                         try
                         {
-//                            aCnt.getPropertyValue("Size") >>= pData->maSize;
                             aCnt.getPropertyValue("DateModified") >>= aDT;
                         }
                         catch (...)
