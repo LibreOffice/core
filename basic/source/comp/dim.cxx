@@ -615,10 +615,9 @@ void SbiParser::DefType( bool bPrivate )
 
                         for ( short i=0; i<pDim->GetSize();++i )
                         {
-                            sal_Int32 ub = -1;
                             sal_Int32 lb = nBase;
                             SbiExprNode* pNode =  pDim->Get(i)->GetExprNode();
-                            ub = pNode->GetNumber();
+                            sal_Int32 ub = pNode->GetNumber();
                             if ( !pDim->Get( i )->IsBased() ) // each dim is low/up
                             {
                                 if (  ++i >= pDim->GetSize() ) // trouble

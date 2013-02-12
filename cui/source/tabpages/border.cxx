@@ -246,14 +246,13 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
 
     // fill ColorBox out of the XColorList
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
-    const SfxPoolItem*  pItem       = NULL;
     XColorListRef       pColorTable;
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 
     if ( pDocSh )
     {
-        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
             pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
     }
@@ -562,7 +561,6 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     SvxBoxItem* pOldBoxItem = (SvxBoxItem*)GetOldItem( rCoreAttrs, SID_ATTR_BORDER_OUTER );
 
     SfxMapUnit eCoreUnit = rOldSet.GetPool()->GetMetric( nBoxWhich );
-    const SfxPoolItem* pOld = 0;
 
     //------------------
     // outer border:
@@ -684,7 +682,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             rCoreAttrs.Put( aBoxItem );
             bAttrsChanged |= sal_True;
         }
-        pOld = GetOldItem( rCoreAttrs, SID_ATTR_BORDER_INNER, sal_False );
+        const SfxPoolItem* pOld = GetOldItem( rCoreAttrs, SID_ATTR_BORDER_INNER, sal_False );
 
         if ( !pOld || !( *(const SvxBoxInfoItem*)pOld == aBoxInfoItem ) )
         {
@@ -796,7 +794,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl)
 
 IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox *, pLb )
 {
-    ColorListBox* pColLb = (ColorListBox*)pLb;
+    ColorListBox* pColLb = (ColorListBox*)(pLb);
 
     if (pLb == m_pLbLineColor)
     {

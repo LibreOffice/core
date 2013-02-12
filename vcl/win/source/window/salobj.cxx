@@ -243,7 +243,6 @@ void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
 {
     // Used for Unicode and none Unicode
     SalData*        pSalData = GetSalData();
-    WinSalFrame*    pFrame;
 
     if ( (pMsg->message == WM_KEYDOWN) || (pMsg->message == WM_KEYUP) )
     {
@@ -253,7 +252,7 @@ void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
             if ( pMsg->hwnd == ::GetFocus() )
             {
                 ImplSalYieldMutexAcquireWithWait();
-                pFrame = ImplFindSalObjectFrame( pMsg->hwnd );
+                WinSalFrame* pFrame = ImplFindSalObjectFrame( pMsg->hwnd );
                 if ( pFrame )
                     ImplHandleSalObjKeyMsg( pFrame->mhWnd, pMsg->message, pMsg->wParam, pMsg->lParam );
                 ImplSalYieldMutexRelease();

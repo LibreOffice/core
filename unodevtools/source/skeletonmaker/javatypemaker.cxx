@@ -460,8 +460,8 @@ void printMethods(std::ostream & o,
 
         // REMOVE next line
         OUString tmp = reader.getFieldName(i);
-        bool setAttrMethod = false;
         if ( (reader.getFieldFlags(i) & RT_ACCESS_READONLY) == 0 ) {
+            bool setAttrMethod = false;
             o << indentation << "public void set"
               << (codemaker::convertString(reader.getFieldName(i)).
                   getStr())
