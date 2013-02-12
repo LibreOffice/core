@@ -20,7 +20,7 @@ struct {
     sal_uInt16 mnItemID;
     sal_uInt8 mnFlag;
 
-} Entries[] = {
+} aEntries[] = {
 
     { "color", "CharColor", EE_CHAR_COLOR, 0 },
     { "font-charset", "CharFontCharSet", EE_CHAR_FONTINFO, MID_FONT_CHAR_SET },
@@ -76,13 +76,13 @@ ScXMLEditAttributeMap::Entry::Entry(sal_uInt16 nItemID, sal_uInt8 nFlag) :
 
 ScXMLEditAttributeMap::ScXMLEditAttributeMap()
 {
-    size_t n = sizeof(Entries) / sizeof(Entries[0]);
+    size_t n = sizeof(aEntries) / sizeof(aEntries[0]);
     for (size_t i = 0; i < n; ++i)
     {
         maEntries.insert(
             EntriesType::value_type(
-                OUString::createFromAscii(Entries[i].mpAPIName),
-                Entry(Entries[i].mnItemID, Entries[i].mnFlag)));
+                OUString::createFromAscii(aEntries[i].mpAPIName),
+                Entry(aEntries[i].mnItemID, aEntries[i].mnFlag)));
     }
 }
 
