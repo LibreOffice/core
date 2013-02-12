@@ -262,8 +262,32 @@ public:
                     // for line breaks
                     ScEditCell( const rtl::OUString& rString, ScDocument* );
 
-    void            SetData( const EditTextObject* pObject,
-                            const SfxItemPool* pFromPool /* = NULL */ );
+    /**
+     * Remove the text data as well as string cache.
+     */
+    void ClearData();
+
+    /**
+     * Set new text data.  This method clones the passed text data and stores
+     * the clone; the caller is responsible for deleting the text data
+     * instance after the call.
+     *
+     * @param rObject text object to clone from.
+     * @param pFromPool pointer to SfxItemPool instance that the new text
+     *                  object that is to be stored in the cell instance
+     *                  should use.  If it's NULL, it uses the default pool
+     *                  for edit cells from the document instance (one
+     *                  returned from GetEditPool()).
+     */
+    void SetData(const EditTextObject& rObject, const SfxItemPool* pFromPool);
+
+    /**
+     * Set new text data. The passed text data instance will be owned by the
+     * cell.  The caller must ensure that the text data uses the SfxItemPool
+     * instance returned from ScDocument::GetEditPool().
+     */
+    void SetData(EditTextObject* pObject);
+
     rtl::OUString   GetString() const;
 
     const EditTextObject* GetData() const;

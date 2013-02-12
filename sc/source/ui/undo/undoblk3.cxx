@@ -444,9 +444,19 @@ void ScUndoSelectionAttr::ChangeEditData( const bool bUndo )
 
         ScEditCell* pEditCell = static_cast<ScEditCell*>(pCell);
         if (bUndo)
-            pEditCell->SetData(pItem->GetOldData(), NULL);
+        {
+            if (pItem->GetOldData())
+                pEditCell->SetData(*pItem->GetOldData(), NULL);
+            else
+                pEditCell->ClearData();
+        }
         else
-            pEditCell->SetData(pItem->GetNewData(), NULL);
+        {
+            if (pItem->GetNewData())
+                pEditCell->SetData(*pItem->GetNewData(), NULL);
+            else
+                pEditCell->ClearData();
+        }
     }
 }
 

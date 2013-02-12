@@ -103,8 +103,8 @@ void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const share
 
     ScBaseCell* pCell;
     pDoc->GetCell(nCol, nRow, nTab, pCell);
-    if (pCell && pCell->GetCellType() == CELLTYPE_EDIT && pEditData.get())
-        static_cast<ScEditCell*>(pCell)->SetData(pEditData.get(), NULL);
+    if (pCell && pCell->GetCellType() == CELLTYPE_EDIT && pEditData)
+        static_cast<ScEditCell*>(pCell)->SetData(*pEditData, NULL);
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)

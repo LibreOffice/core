@@ -908,9 +908,7 @@ void ScColumn::RemoveAutoSpellObj()
             ScEditAttrTester aTester( pEngine );
             if ( aTester.NeedsObject() )                    // only remove spelling errors
             {
-                EditTextObject* pNewData = pEngine->CreateTextObject(); // without BIGOBJ
-                pOldCell->SetData( pNewData, pEngine->GetEditTextObjectPool() );
-                delete pNewData;
+                pOldCell->SetData(pEngine->CreateTextObject());
             }
             else                                            // create a string
             {
@@ -975,9 +973,7 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
                 sal_uInt32 nWantBig = bSpellErrors ? EE_CNTRL_ALLOWBIGOBJS : 0;
                 if ( ( nCtrl & EE_CNTRL_ALLOWBIGOBJS ) != nWantBig )
                     pEngine->SetControlWord( (nCtrl & ~EE_CNTRL_ALLOWBIGOBJS) | nWantBig );
-                EditTextObject* pNewData = pEngine->CreateTextObject();
-                pOldCell->SetData( pNewData, pEngine->GetEditTextObjectPool() );
-                delete pNewData;
+                pOldCell->SetData(pEngine->CreateTextObject());
             }
             else                                            // create String
             {

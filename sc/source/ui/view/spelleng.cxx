@@ -42,6 +42,8 @@
 #include "globstr.hrc"
 #include "markdata.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 ScConversionEngineBase::ScConversionEngineBase(
@@ -118,8 +120,8 @@ bool ScConversionEngineBase::FindNextConversionCell()
                     if( pCell )
                     {
                         ScEditCell* pEditCell = static_cast< ScEditCell* >( pCell );
-                        ::std::auto_ptr< EditTextObject > pEditObj( CreateTextObject() );
-                        pEditCell->SetData( pEditObj.get(), GetEditTextObjectPool() );
+                        boost::scoped_ptr<EditTextObject> pEditObj(CreateTextObject());
+                        pEditCell->SetData(*pEditObj, GetEditTextObjectPool());
                     }
                 }
                 else

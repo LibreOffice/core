@@ -741,15 +741,12 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
 
                 if ( bNeedEdit )
                 {
-                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                    std::auto_ptr<EditTextObject> pNewData(pEngine->CreateTextObject());
-                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     if ( eType == CELLTYPE_EDIT )
-                        // SetData will create a clone of pNewData and stores the clone.
-                        static_cast<ScEditCell*>(pCell)->SetData(pNewData.get(), pEngine->GetEditTextObjectPool());
+                        // The cell will take ownership of pNewData.
+                        static_cast<ScEditCell*>(pCell)->SetData(pEngine->CreateTextObject());
                     else
                         // The cell will take ownership of pNewData.
-                        PutCell(nCol, nRow, nTab, new ScEditCell(pNewData.release(), this));
+                        PutCell(nCol, nRow, nTab, new ScEditCell(pEngine->CreateTextObject(), this));
                 }
                 else                    // einfacher String
                     PutCell( nCol, nRow, nTab, new ScStringCell( pEngine->GetText() ) );

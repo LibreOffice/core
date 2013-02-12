@@ -96,16 +96,24 @@ ScEditCell::~ScEditCell()
 #endif
 }
 
-void ScEditCell::SetData( const EditTextObject* pObject,
-            const SfxItemPool* pFromPool )
+void ScEditCell::ClearData()
 {
-    if ( pString )
-    {
-        delete pString;
-        pString = NULL;
-    }
+    delete pString;
+    pString = NULL;
     delete pData;
-    SetTextObject( pObject, pFromPool );
+    pData = NULL;
+}
+
+void ScEditCell::SetData(const EditTextObject& rObject, const SfxItemPool* pFromPool)
+{
+    ClearData();
+    SetTextObject(&rObject, pFromPool);
+}
+
+void ScEditCell::SetData(EditTextObject* pObject)
+{
+    ClearData();
+    pData = pObject;
 }
 
 rtl::OUString ScEditCell::GetString() const
