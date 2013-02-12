@@ -5,8 +5,4 @@ au	automation\source\simplecm				nmake	-	all	au_scom au_inc NULL
 au	automation\source\communi				nmake	-	all	au_comm au_inc NULL
 au	automation\source\app					nmake	-	all	au_app au_inc NULL
 au	automation\source\server				nmake	-	all	au_server au_inc NULL
-#au	automation\source\testtool				nmake	-	all	au_tt au_inc NULL
-#au	automation\source\miniapp				nmake	-	all	au_mini au_inc NULL
-#au	automation\packimages					nmake	-	all	au_pack NULL
 au	automation\util							nmake	-	all	au_util au_scom au_comm au_app au_server NULL
-#au	automation\util							nmake	-	all	au_util au_scom au_comm au_app au_mini au_server au_tt NULL
