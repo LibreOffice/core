@@ -507,7 +507,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case SID_ATTR_PARA_LEFT_TO_RIGHT:
         case SID_ATTR_PARA_RIGHT_TO_LEFT:
         {
-            sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
+            bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
             const SfxPoolItem* pPoolItem;
             if( pNewAttrs && SFX_ITEM_SET == pNewAttrs->GetItemState( nSlot, sal_True, &pPoolItem ) )

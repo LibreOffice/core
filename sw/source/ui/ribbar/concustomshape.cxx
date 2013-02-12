@@ -92,9 +92,9 @@ sal_Bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
             if ( pObj )
             {
                 SetAttributes( pObj );
-                sal_Bool bForceNoFillStyle = sal_False;
+                bool bForceNoFillStyle = false;
                 if ( ((SdrObjCustomShape*)pObj)->UseNoFillStyle() )
-                    bForceNoFillStyle = sal_True;
+                    bForceNoFillStyle = true;
 
                 SfxItemSet aAttr( m_pView->GetPool() );
                 if ( bForceNoFillStyle )
@@ -138,7 +138,7 @@ void ConstCustomShape::Activate(const sal_uInt16 nSlotId)
 
 void ConstCustomShape::SetAttributes( SdrObject* pObj )
 {
-    sal_Bool bAttributesAppliedFromGallery = sal_False;
+    bool bAttributesAppliedFromGallery = false;
 
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
     {
@@ -181,7 +181,7 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
                                 double a = nAngle * F_PI18000;
                                 pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
                             }
-                            bAttributesAppliedFromGallery = sal_True;
+                            bAttributesAppliedFromGallery = true;
                         }
                     }
                     break;

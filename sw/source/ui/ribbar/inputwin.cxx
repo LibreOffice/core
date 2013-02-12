@@ -569,7 +569,7 @@ void InputEdit::UpdateRange(const String& rBoxes,
     }
     else
     {
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         sal_Unicode cCh;
         sal_uInt16 nPos, nEndPos = 0, nStartPos = (sal_uInt16) aSelection.Min();
         if( nStartPos-- )
@@ -585,13 +585,13 @@ void InputEdit::UpdateRange(const String& rBoxes,
         }
         if( bFound )
         {
-            bFound = sal_False;
+            bFound = false;
             nEndPos = nStartPos;
             while( nEndPos < nLen )
             {
                 if( cClose == (cCh = aActText.GetChar( nEndPos )))
                 {
-                    bFound = sal_True;
+                    bFound = true;
                     break;
                 }
                 ++nEndPos;
@@ -599,7 +599,7 @@ void InputEdit::UpdateRange(const String& rBoxes,
             // nur wenn akt. Pos im Breich oder direkt dahinter liegt
             if( bFound && !( nStartPos < (sal_uInt16)aSelection.Max() &&
                              (sal_uInt16)aSelection.Max() <= nEndPos + 1 ))
-                bFound = sal_False;
+                bFound = false;
         }
         if( bFound )
         {

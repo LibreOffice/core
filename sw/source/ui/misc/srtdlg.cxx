@@ -79,11 +79,11 @@ static void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 /*--------------------------------------------------------------------
      Description: determine lines and columns for table selection
  --------------------------------------------------------------------*/
-static sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
+static bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 {
     const SwTableNode* pTblNd = rSh.IsCrsrInTbl();
     if( !pTblNd )
-        return sal_False;
+        return false;
 
     _FndBox aFndBox( 0, 0 );
 
@@ -97,10 +97,10 @@ static sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
     }
     rX = aFndBox.GetLines().size();
     if( !rX )
-        return sal_False;
+        return false;
 
     rY = aFndBox.GetLines().front().GetBoxes().size();
-    return sal_True;
+    return true;
 }
 
 /*--------------------------------------------------------------------

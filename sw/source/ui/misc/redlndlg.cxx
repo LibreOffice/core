@@ -308,8 +308,8 @@ void SwRedlineAcceptDlg::InitAuthors()
     if (pFilterPage->SelectAuthor(sOldAuthor) == LISTBOX_ENTRY_NOTFOUND && !aStrings.empty())
         pFilterPage->SelectAuthor(aStrings[0]);
 
-    sal_Bool bEnable = pTable->GetEntryCount() != 0 && !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
-    sal_Bool bSel = pTable->FirstSelected() != 0;
+    bool bEnable = pTable->GetEntryCount() != 0 && !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
+    bool bSel = pTable->FirstSelected() != 0;
 
     SvTreeListEntry* pSelEntry = pTable->FirstSelected();
     while (pSelEntry)
@@ -561,7 +561,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRe
     String sChild;
     SwRedlineDataChild *pLastRedlineChild = 0;
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
-    sal_Bool bAutoFmt = (rRedln.GetRealType() & nAutoFmt) != 0;
+    bool bAutoFmt = (rRedln.GetRealType() & nAutoFmt) != 0;
 
     const String *pAction = &GetActionText(rRedln);
     sal_Bool bValidParent = !sFilterAction.Len() || sFilterAction == *pAction;
@@ -650,7 +650,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     // because of Bug of TLB that ALWAYS calls the SelectHandler at Remove:
     pTable->SetSelectHdl(aOldSelectHdl);
     pTable->SetDeselectHdl(aOldDeselectHdl);
-    sal_Bool bChildrenRemoved = sal_False;
+    bool bChildrenRemoved = false;
     pTable->SelectAll(sal_False);
 
     // set the cursor after the last entry because otherwise performance problem in TLB.
@@ -685,7 +685,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
                     }
 
                     aRedlineChildren.erase(it, it + nChildren);
-                    bChildrenRemoved = sal_True;
+                    bChildrenRemoved = true;
                     break;
                 }
         }
@@ -955,7 +955,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
     aSelectTimer.Stop();
 
     sal_Bool bIsNotFormated = sal_False;
-    sal_Bool bSel = sal_False;
+    bool bSel = false;
 
     //#98883# don't select redlines while the dialog is not focussed
     //#107938# But not only ask pTable if it has the focus. To move
@@ -986,7 +986,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
                 }
             }
             else
-                bSel = sal_True;
+                bSel = true;
 
             // #98864# find the selected redline (ignore, if the redline is already gone)
             sal_uInt16 nPos = GetRedlinePos(*pActEntry);
@@ -1010,7 +1010,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
         pSh->EndAction();
         pSh->SetCareWin(NULL);
     }
-    sal_Bool bEnable = !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
+    bool bEnable = !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
     pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
     pTPView->EnableReject( bEnable && bSel && bIsNotFormated /*&& !bReadonlySel*/ );
     pTPView->EnableRejectAll( bEnable && !bOnlyFormatedRedlines && !bHasReadonlySel );

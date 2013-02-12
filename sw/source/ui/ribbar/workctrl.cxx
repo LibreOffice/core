@@ -624,7 +624,7 @@ void SwNaviImageButton::DataChanged( const DataChangedEvent& rDCEvt )
 class SwZoomBox_Impl : public ComboBox
 {
     sal_uInt16          nSlotId;
-    sal_Bool            bRelease;
+    bool            bRelease;
     uno::Reference< frame::XDispatchProvider > m_xDispatchProvider;
 
 public:
@@ -648,7 +648,7 @@ SwZoomBox_Impl::SwZoomBox_Impl(
     const Reference< XDispatchProvider >& rDispatchProvider ):
     ComboBox( pParent, SW_RES(RID_PVIEW_ZOOM_LB)),
     nSlotId(nSlot),
-    bRelease(sal_True),
+    bRelease(true),
     m_xDispatchProvider( rDispatchProvider )
 {
     EnableAutocomplete( sal_False );
@@ -708,7 +708,7 @@ long SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
             case KEY_TAB:
             {
                 if ( KEY_TAB == nCode )
-                    bRelease = sal_False;
+                    bRelease = false;
                 else
                     nHandled = 1;
                 Select();
@@ -735,7 +735,7 @@ void SwZoomBox_Impl::ReleaseFocus()
 {
     if ( !bRelease )
     {
-        bRelease = sal_True;
+        bRelease = true;
         return;
     }
     SfxViewShell* pCurSh = SfxViewShell::Current();

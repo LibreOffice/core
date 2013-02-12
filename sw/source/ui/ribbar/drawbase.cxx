@@ -224,7 +224,7 @@ sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         if (!pSdrView->HasMarkablePoints())
                         {
-                            sal_Bool bUnlockView = !m_pSh->IsViewLocked();
+                            bool bUnlockView = !m_pSh->IsViewLocked();
                             m_pSh->LockView( sal_True ); //lock visible section
                             m_pSh->SelectObj(Point(LONG_MAX, LONG_MAX)); // deselect all
                             if( bUnlockView )
@@ -288,8 +288,8 @@ sal_Bool SwDrawBase::MouseMove(const MouseEvent& rMEvt)
 sal_Bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn = sal_False;
-    sal_Bool bCheckShell = sal_False;
-    sal_Bool bAutoCap = sal_False;
+    bool bCheckShell = false;
+    bool bAutoCap = false;
 
     Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
 
@@ -297,7 +297,7 @@ sal_Bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
     {
         const SdrObjKind nDrawMode = m_pWin->GetSdrDrawMode();
         //objects with multiple point may end at the start position
-        sal_Bool bMultiPoint = OBJ_PLIN == nDrawMode ||
+        bool bMultiPoint = OBJ_PLIN == nDrawMode ||
                                 OBJ_PATHLINE == nDrawMode ||
                                 OBJ_FREELINE == nDrawMode;
         if(rMEvt.IsRight() || (aPnt == m_aStartPos && !bMultiPoint))
@@ -329,7 +329,7 @@ sal_Bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                         aReq.AppendItem(SvxSizeItem( FN_PARAM_2, m_pSh->GetObjSize()));
                     aReq.Done();
                 }
-                bAutoCap = sal_True;
+                bAutoCap = true;
                 if(m_pWin->GetFrmColCount() > 1)
                 {
                     SfxItemSet aSet(m_pView->GetPool(),RES_COL,RES_COL);
@@ -386,7 +386,7 @@ sal_Bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     }
                     m_pView->NoRotate();
 
-                    bCheckShell = sal_True; // ggf BezierShell anwerfen
+                    bCheckShell = true; // ggf BezierShell anwerfen
                 }
                 else if (!m_pSh->IsObjSelected() && !m_pWin->IsDrawAction())
                 {
@@ -446,7 +446,7 @@ sal_Bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     }
                     m_pView->NoRotate();
 
-                    bCheckShell = sal_True; // ggf BezierShell anwerfen
+                    bCheckShell = true; // ggf BezierShell anwerfen
                 }
             }
 
