@@ -137,9 +137,9 @@ SwDrawDocument::~SwDrawDocument()
 /*************************************************************************
 |*
 |* This method creates a new page (SdPage) and thereupon returns a pointer
-|* back. The drawing engine is unsing this method while loading for the
-|* creating of pages (whose type it not even know, because they are
-|* derivations of the SdrPage).
+|* to it back. The drawing engine is using this method while loading for
+|* the creating of pages (whose type it not even know, because they are
+|* inherited from SdrPage).
 |*
 \************************************************************************/
 

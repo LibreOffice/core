@@ -268,7 +268,7 @@ sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
 
     // Copy PaM, so that it can be modified
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
-    // for comparison secure to the act. Pam
+    // for comparison secure to the current Pam
     pOrigPam = &rPaM;
 
     sal_uLong nRet = WriteStream();
@@ -353,7 +353,7 @@ sal_Bool Writer::CopyLocalFileToINet( String& rFileNm )
 void Writer::PutNumFmtFontsInAttrPool()
 {
     // then there are a few fonts in the NumRules
-    // These putt into the Pool. After this does they have a RefCount > 1
+    // These put into the Pool. After this does they have a RefCount > 1
     // it can be removed - it is already in the Pool
     SfxItemPool& rPool = pDoc->GetAttrPool();
     const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
@@ -452,7 +452,7 @@ void Writer::CreateBookmarkTbl()
 sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
     xub_StrLen nEnd, std::vector< const ::sw::mark::IMark* >& rArr)
 {
-    OSL_ENSURE( rArr.empty(), "there are entries available" );
+    OSL_ENSURE( rArr.empty(), "there are still entries available" );
 
     sal_uLong nNd = rNd.GetIndex();
     std::pair<SwBookmarkNodeTable::const_iterator, SwBookmarkNodeTable::const_iterator> aIterPair 
@@ -508,7 +508,7 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 
     // Copy PaM, so that it can be modified
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
-    // for comparison secure to the act. Pam
+    // for comparison secure to the current Pam
     pOrigPam = &rPaM;
 
     sal_uLong nRet = WriteStorage();
@@ -529,7 +529,7 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage 
 
     // Copy PaM, so that it can be modified
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
-    // for comparison secure to the act. Pam
+    // for comparison secure to the current Pam
     pOrigPam = &rPaM;
 
     sal_uLong nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();
