@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkGrid" id="ProtectionPage">
+  <object class="GtkGrid" id="CellProtectionPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -21,72 +21,66 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
-                  <object class="GtkBox" id="box1">
+                  <object class="GtkCheckButton" id="checkProtected">
+                    <property name="label" translatable="yes">_Protected</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkCheckButton" id="checkHideAll">
-                        <property name="label" translatable="yes">Hide _all</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="always_show_image">True</property>
-                        <property name="inconsistent">True</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="checkProtected">
-                        <property name="label" translatable="yes">_Protected</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="margin_left">25</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="inconsistent">True</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="checkHideFormula">
-                        <property name="label" translatable="yes">Hide _formula</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="margin_left">25</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="inconsistent">True</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="margin_left">12</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="active">True</property>
+                    <property name="inconsistent">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkHideFormula">
+                    <property name="label" translatable="yes">Hide _formula</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="margin_left">12</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="inconsistent">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkHideAll">
+                    <property name="label" translatable="yes">Hide _all</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="always_show_image">True</property>
+                    <property name="inconsistent">True</property>
+                    <property name="draw_indicator">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -99,16 +93,20 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">50</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Cell protection is only effective after the current sheet has been protected.
 
 Select 'Protect Document' from the 'Tools' menu, and specify 'Sheet'.</property>
+                    <property name="wrap">True</property>
+                    <property name="max_width_chars">52</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
                     <property name="width">1</property>
-                    <property name="height">1</property>
+                    <property name="height">3</property>
                   </packing>
                 </child>
               </object>
@@ -144,11 +142,13 @@ Select 'Protect Document' from the 'Tools' menu, and specify 'Sheet'.</property>
           <object class="GtkAlignment" id="alignment1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="checkHidePrinting">
                     <property name="label" translatable="yes">Hide _when printing</property>
@@ -171,9 +171,12 @@ Select 'Protect Document' from the 'Tools' menu, and specify 'Sheet'.</property>
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="margin_left">12</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">The cells selected will be omitted when printing.</property>
+                    <property name="wrap">True</property>
+                    <property name="width_chars">52</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -204,5 +207,19 @@ Select 'Protect Document' from the 'Tools' menu, and specify 'Sheet'.</property>
         <property name="height">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="label1"/>
+      <widget name="label4"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <widgets>
+      <widget name="checkProtected"/>
+      <widget name="checkHideFormula"/>
+      <widget name="checkHideAll"/>
+      <widget name="checkHidePrinting"/>
+    </widgets>
   </object>
 </interface>

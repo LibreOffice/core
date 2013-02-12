@@ -43,14 +43,10 @@ static sal_uInt16 pProtectionRanges[] =
 // Zellschutz-Tabpage:
 //========================================================================
 
-ScTabPageProtection::ScTabPageProtection( Window*           pParent,
-                                          const SfxItemSet& rCoreAttrs )
-    :   SfxTabPage          ( pParent,
-                              "ProtectionPage",
-                              "cui/ui/cellprotectionpage.ui",
-                              rCoreAttrs )
-
-    {
+ScTabPageProtection::ScTabPageProtection(Window* pParent, const SfxItemSet& rCoreAttrs)
+    : SfxTabPage(pParent, "CellProtectionPage",
+        "modules/scalc/ui/cellprotectionpage.ui", rCoreAttrs)
+{
     get(m_pBtnHideCell,"checkHideAll");
     get(m_pBtnProtect,"checkProtected");
     get(m_pBtnHideFormula,"checkHideFormula");
@@ -66,16 +62,7 @@ ScTabPageProtection::ScTabPageProtection( Window*           pParent,
     m_pBtnHideCell->SetClickHdl(    LINK( this, ScTabPageProtection, ButtonClickHdl ) );
     m_pBtnHideFormula->SetClickHdl( LINK( this, ScTabPageProtection, ButtonClickHdl ) );
     m_pBtnHidePrint->SetClickHdl(   LINK( this, ScTabPageProtection, ButtonClickHdl ) );
-
 }
-
-// -----------------------------------------------------------------------
-
-ScTabPageProtection::~ScTabPageProtection()
-{
-}
-
-//------------------------------------------------------------------------
 
 sal_uInt16* ScTabPageProtection::GetRanges()
 {
@@ -180,7 +167,7 @@ int ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScTabPageProtection, ButtonClickHdl, CheckBox*, pBox )
+IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
 {
     TriState eState = pBox->GetState();
     if ( eState == STATE_DONTKNOW )

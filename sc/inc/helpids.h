@@ -73,7 +73,6 @@
 #define HID_SC_PIVOTSUBT                                        "SC_HID_SC_PIVOTSUBT"
 #define HID_SCPAGE_SUBT_OPTIONS                                 "SC_HID_SCPAGE_SUBT_OPTIONS"
 #define HID_SCPAGE_SUBT_GROUP                                   "SC_HID_SCPAGE_SUBT_GROUP"
-#define HID_SCPAGE_PROTECTION                                   "SC_HID_SCPAGE_PROTECTION"
 #define HID_SCPAGE_CALC                                         "SC_HID_SCPAGE_CALC"
 #define HID_SCPAGE_FORMULA                                      "SC_HID_SCPAGE_FORMULA"
 #define HID_SCPAGE_USERLISTS                                    "SC_HID_SCPAGE_USERLISTS"

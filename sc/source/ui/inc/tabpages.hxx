@@ -42,13 +42,11 @@ protected:
 private:
                 ScTabPageProtection( Window*            pParent,
                                      const SfxItemSet&  rCoreAttrs );
-                ~ScTabPageProtection();
-
 private:
-    CheckBox*    m_pBtnHideCell;
-    CheckBox*    m_pBtnProtect;
-    CheckBox*    m_pBtnHideFormula;
-    CheckBox*    m_pBtnHidePrint;
+    TriStateBox*    m_pBtnHideCell;
+    TriStateBox*    m_pBtnProtect;
+    TriStateBox*    m_pBtnHideFormula;
+    TriStateBox*    m_pBtnHidePrint;
                                         // current status:
     sal_Bool        bTriEnabled;        //  if before - DontCare
     sal_Bool        bDontCare;          //  all in  TriState
@@ -58,7 +56,7 @@ private:
     sal_Bool        bHidePrint;
 
     // Handler:
-    DECL_LINK( ButtonClickHdl, CheckBox* pBox );
+    DECL_LINK( ButtonClickHdl, TriStateBox* pBox );
     void        UpdateButtons();
 };
 
