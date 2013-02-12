@@ -35,8 +35,7 @@ using namespace ::cppu;
 using ::com::sun::star::ui::dialogs::XFilePicker;
 
 
-static Reference< XInterface > SAL_CALL createFileInstance(
-    const Reference< XMultiServiceFactory >& rServiceManager )
+static Reference< XInterface > SAL_CALL createFileInstance( const Reference< XMultiServiceFactory >&  )
 {
     return Reference< XInterface >( *new SalAquaFilePicker );
 }
