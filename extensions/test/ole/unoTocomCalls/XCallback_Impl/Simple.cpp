@@ -60,14 +60,14 @@ STDMETHODIMP CSimple::get__implementedInterfaces(LPSAFEARRAY *pVal)
 
         hr= SafeArrayPutElement( pArr, & index, name1);
         index++;
-        hr= SafeArrayPutElement( pArr, &index, name2);
+        hr|= SafeArrayPutElement( pArr, &index, name2);
         index++;
-        hr= SafeArrayPutElement( pArr, &index, name3);
+        hr|= SafeArrayPutElement( pArr, &index, name3);
         *pVal= pArr;
 
     }
     *pVal= pArr;
-    return S_OK;
+    return hr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
