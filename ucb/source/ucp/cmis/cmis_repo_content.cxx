@@ -144,7 +144,9 @@ namespace cmis
         INetURLObject aBindingUrl( m_aURL.getBindingUrl( ) );
         const ucbhelper::InternetProxyServer& rProxy = aProxyDecider.getProxy(
                 INetURLObject::GetScheme( aBindingUrl.GetProtocol( ) ), aBindingUrl.GetHost(), aBindingUrl.GetPort() );
-        rtl::OUString sProxy = rProxy.aName + ":" + rtl::OUString::valueOf( rProxy.nPort );
+        rtl::OUString sProxy = rProxy.aName;
+        if ( rProxy.nPort > 0 )
+            sProxy += ":" + rtl::OUString::valueOf( rProxy.nPort );
         libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), string(), string(), string() );
 
         if ( m_aRepositories.empty() )
