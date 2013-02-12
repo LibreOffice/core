@@ -54,41 +54,50 @@ HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_input
     }
 }
 
-void HelpCompiler::sourceDocumentPreWorks( xmlDocPtr doc, const fs::path &filePath )
+void HelpCompiler::tagBasicCodeExamples( xmlDocPtr doc )
 {
-    if ( doc )
+    try
     {
-        if ( module == "sbasic" )
-        {
-            try
-            {
-                BasicCodeTagger bct( doc );
-                bct.tagBasicCodes();
-            }
-            catch ( BasicCodeTagger::TaggerException ex )
-            {
-                if ( ex != BasicCodeTagger::EMPTY_DOCUMENT )
-                    throw;
-            }
-            //save document in ziptmp<modul>_<lang>/text directory
-            //1. construct new path
-            const std::string& pth = filePath.native_file_string();
-            std::string sourceNativeXhpPath = pth.substr( pth.rfind( lang+"/text/" ) ).substr( lang.length() );
-            std::string xhpFileName = sourceNativeXhpPath.substr( sourceNativeXhpPath.rfind( '/' ) + 1 );
-            sourceNativeXhpPath = sourceNativeXhpPath.substr( 0, sourceNativeXhpPath.rfind( '/' ) );
-            //2. save xml doc with the new path
-            //  -create directory hierachy
-            fs::create_directory( fs::path( zipdir.native_file_string() + sourceNativeXhpPath, fs::native ) );
-            //  -save document
-            if ( -1 == xmlSaveFormatFileEnc( (zipdir.native_file_string() + sourceNativeXhpPath + '/' + xhpFileName).c_str(), doc, "utf-8", 0 ) )
-                throw BasicCodeTagger::FILE_WRITING;
-        }
+        BasicCodeTagger bct( doc );
+        bct.tagBasicCodes();
+    }
+    catch ( BasicCodeTagger::TaggerException &ex )
+    {
+        if ( ex != BasicCodeTagger::EMPTY_DOCUMENT )
+            throw;
     }
 }
 
+void HelpCompiler::saveXhpForJar( xmlDocPtr doc, const fs::path &filePath )
+{
+    //save processed xhp document in ziptmp<module>_<lang>/text directory
+#ifdef WNT
+    std::string pathSep = "\\";
+#else
+    std::string pathSep = "/";
+#endif
+    const std::string& sourceXhpPath = filePath.native_file_string();
+    std::string zipdirPath = zipdir.native_file_string();
+    std::string jarXhpPath = sourceXhpPath.substr( sourceXhpPath.rfind( lang + pathSep + "text" + pathSep ) ).substr( lang.length() );
+    std::string xhpFileName = jarXhpPath.substr( jarXhpPath.rfind( pathSep ) + 1 );
+    jarXhpPath = jarXhpPath.substr( 0, jarXhpPath.rfind( pathSep ) );
+    if ( !jarXhpPath.compare( 1, 11, "text" + pathSep + "sbasic" ) )
+    {
+        tagBasicCodeExamples( doc );
+    }
+    if ( !jarXhpPath.compare( 1, 11, "text" + pathSep + "shared" ) )
+    {
+        size_t pos = zipdirPath.find( "ziptmp" ) + 6;
+        zipdirPath.replace( pos, module.length(), "shared" );
+    }
+    fs::create_directory( fs::path( zipdirPath + jarXhpPath, fs::native ) );
+    if ( -1 == xmlSaveFormatFileEnc( (zipdirPath + jarXhpPath + pathSep + xhpFileName).c_str(), doc, "utf-8", 0 ) )
+        std::cerr << "Error saving file to " << (zipdirPath + jarXhpPath + pathSep + xhpFileName).c_str() << std::endl;
+}
+
+
 xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
 {
-    static const char *params[4 + 1];
     static xsltStylesheetPtr cur = NULL;
 
     xmlDocPtr res;
@@ -99,22 +108,19 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
             impl_sleep( 3 );
             res = xmlParseFile(filePath.native_file_string().c_str());
         }
-        sourceDocumentPreWorks( res, filePath );
     }
     else
     {
+        static const char *params[2 + 1];
         if (!cur)
         {
             static std::string fsroot('\'' + src.toUTF8() + '\'');
-            static std::string esclang('\'' + lang + '\'');
 
             xmlSubstituteEntitiesDefault(1);
             xmlLoadExtDtdDefaultValue = 1;
             cur = xsltParseStylesheetFile((const xmlChar *)resEmbStylesheet.native_file_string().c_str());
 
             int nbparams = 0;
-            params[nbparams++] = "Language";
-            params[nbparams++] = esclang.c_str();
             params[nbparams++] = "fsroot";
             params[nbparams++] = fsroot.c_str();
             params[nbparams] = NULL;
@@ -125,8 +131,8 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
             impl_sleep( 3 );
             doc = xmlParseFile(filePath.native_file_string().c_str());
         }
-        sourceDocumentPreWorks( doc, filePath );
-        //???res = xmlParseFile(filePath.native_file_string().c_str());
+
+        saveXhpForJar( doc, filePath );
 
         res = xsltApplyStylesheet(cur, doc, params);
         xmlFreeDoc(doc);

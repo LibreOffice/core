@@ -34,7 +34,6 @@ class L10N_DLLPUBLIC BasicCodeTagger
     BasicCodeTagger( xmlDocPtr rootDoc );
     ~BasicCodeTagger();
     void tagBasicCodes();
-    void saveTreeToFile( const std::string& filePath, const std::string& encoding );
 };
 
 //================LibXmlTreeWalker===========================================================

@@ -137,15 +137,9 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
     }
 
     //3. create new paragraph content
-    String strLine(
-                    OUString(
-                                reinterpret_cast<const sal_Char*>(codeSnippet),
-                                strlen(
-                                    reinterpret_cast<const char*>(codeSnippet)
-                                ),
-                                RTL_TEXTENCODING_UTF8
-                                )
-                     ) ;
+    OUString strLine( reinterpret_cast<const sal_Char*>(codeSnippet),
+                                strlen(reinterpret_cast<const char*>(codeSnippet)),
+                                RTL_TEXTENCODING_UTF8 );
     m_Highlighter.notifyChange ( 0, 0, &strLine, 1 );
     HighlightPortions portions;
     m_Highlighter.getHighlightPortions( 0, strLine, portions );
@@ -155,7 +149,7 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
     for ( size_t i=0; i<portions.size(); i++ )
     {
         HighlightPortion& r = portions[i];
-        subStr = xmlStrsub( codeSnippet, r.nBegin, r.nEnd-r.nBegin );
+        subStr = (xmlChar*) OUStringToOString( strLine.copy( r.nBegin, r.nEnd-r.nBegin ), RTL_TEXTENCODING_UTF8 ).getStr();
         text = xmlNewText( subStr );
         if ( r.tokenType != TT_WHITESPACE )
         {
@@ -185,7 +179,7 @@ void BasicCodeTagger::tagBasicCodes()
     {
         getBasicCodeContainerNodes();
     }
-    catch (TaggerException ex)
+    catch (TaggerException &ex)
     {
           std::cout << "BasCodeTagger error occured. Error code:" << ex << std::endl;
     }
@@ -229,7 +223,7 @@ xmlChar* BasicCodeTagger::getTypeString( TokenTypes tokenType )
             str = "operator";
             break;
         case TT_KEYWORDS :
-            str = "keywords";
+            str = "keyword";
             break;
         case TT_PARAMETER :
             str = "parameter";
@@ -239,13 +233,4 @@ xmlChar* BasicCodeTagger::getTypeString( TokenTypes tokenType )
             break;
     }
     return xmlCharStrdup( str );
-}
-
-//! Saves the current xml DOM to file with the provided libxml2 encoding string in an unformatted way.
-void BasicCodeTagger::saveTreeToFile( const std::string& filePath, const std::string& encoding )
-{
-    //saveDocument
-    int ret = xmlSaveFormatFileEnc( filePath.c_str(), m_pDocument, encoding.c_str(), 0 );
-    if ( ret == -1 )
-        throw FILE_WRITING;
 }

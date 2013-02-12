@@ -245,7 +245,8 @@ public:
                 const std::string &entryName, const Hashtable &bytesToAdd);
 private:
     xmlDocPtr getSourceDocument(const fs::path &filePath);
-    void sourceDocumentPreWorks( xmlDocPtr doc , const fs::path &filePath);
+    void tagBasicCodeExamples(xmlDocPtr doc);
+    void saveXhpForJar(xmlDocPtr doc, const fs::path &filePath);
     xmlNodePtr clone(xmlNodePtr node, const std::string& appl);
     StreamTable &streamTable;
     const fs::path inputFile, src, zipdir;
