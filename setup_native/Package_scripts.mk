@@ -17,7 +17,7 @@ $(eval $(call gb_Package_add_file,setup_native/scripts,bin/javaloader.sh,javaloa
 $(eval $(call gb_Package_add_file,setup_native/scripts,bin/update,update.sh))
 $(eval $(call gb_Package_add_file,setup_native/scripts,bin/downloadscript.sh,downloadscript.sh))
 
-ifeq ($(ENABLE_ONLINUE_UPDATE),TRUE)
+ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
 $(eval $(call gb_Package_add_file,setup_native/scripts,bin/unpack_update,unpack_update.sh))
 endif
 
