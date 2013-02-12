@@ -569,6 +569,7 @@ CCIDecompressor::CCIDecompressor( sal_uLong nOpts, sal_uInt32 nImageWidth ) :
     bTableBad   ( sal_False ),
     bStatus     ( sal_False ),
     pByteSwap   ( NULL ),
+    pIStream    ( NULL ),
     nWidth      ( nImageWidth ),
     nOptions    ( nOpts ),
     pLastLine   ( NULL )
@@ -623,7 +624,7 @@ void CCIDecompressor::StartDecompression( SvStream & rIStream )
 sal_Bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTargetBits )
 {
     sal_uInt16 i;
-    sal_uInt8 * pSrc,* pDst;
+    sal_uInt8 * pDst;
     sal_Bool b2D;
 
     if ( nEOLCount >= 5 )   // RTC (Return To Controller)
@@ -700,7 +701,7 @@ sal_Bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTa
     // if we're in 2D mode we have to remember the line:
     if ( nOptions & CCI_OPTION_2D && bStatus == sal_True )
     {
-        pSrc = pTarget;
+        sal_uInt8 *pSrc = pTarget;
         pDst = pLastLine;
         for ( i = 0; i < nLastLineSize; i++ ) *(pDst++)=*(pSrc++);
     }

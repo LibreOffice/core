@@ -234,7 +234,7 @@ struct SwHTMLFmtInfo
 
     // Konstruktor fuer einen Dummy zum Suchen
     SwHTMLFmtInfo( const SwFmt *pF ) :
-        pFmt( pF ), pRefFmt(0), pItemSet( 0 ), nFirstLineIndent(0)
+        pFmt( pF ), pRefFmt(0), pItemSet( 0 ), nFirstLineIndent(0), bScriptDependent(false)
     {}
 
 

@@ -40,15 +40,10 @@
 
 void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
 {
-    const int OFFSET_PE_OFFSET = 0x3c;
-    const int OFFSET_COFF_TIMEDATESTAMP = 4;
-    const int PE_SIGNATURE_SIZE = 4;
-    const int COFFHEADER_SIZE = 20;
-    const int OFFSET_PE_OPTIONALHEADER_CHECKSUM = 64;
-
     // Check the header part of the file buffer
     if (buffer[0] == sal_uInt8('M') && buffer[1] == sal_uInt8('Z'))
     {
+        const int OFFSET_PE_OFFSET = 0x3c;
         unsigned long PEHeaderOffset = (long)buffer[OFFSET_PE_OFFSET];
         if (PEHeaderOffset < nBufferSize-4)
         {
@@ -57,6 +52,8 @@ void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
                  buffer[PEHeaderOffset+2] == 0 &&
                  buffer[PEHeaderOffset+3] == 0 )
             {
+                const int PE_SIGNATURE_SIZE = 4;
+                const int OFFSET_COFF_TIMEDATESTAMP = 4;
                 PEHeaderOffset += PE_SIGNATURE_SIZE;
                 if (PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP < nBufferSize-4)
                 {
@@ -68,7 +65,8 @@ void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
                     buffer[PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP+2] = 0;
                     buffer[PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP+3] = 0;
                 }
-
+                const int COFFHEADER_SIZE = 20;
+                const int OFFSET_PE_OPTIONALHEADER_CHECKSUM = 64;
                 if (PEHeaderOffset+COFFHEADER_SIZE+OFFSET_PE_OPTIONALHEADER_CHECKSUM < nBufferSize-4)
                 {
                     // Set checksum to a normalized value
@@ -84,9 +82,6 @@ void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
 
 rtlDigestError calc_md5_checksum(const char *filename, rtl::OString &rChecksum)
 {
-    const size_t BUFFER_SIZE  = 0x1000;
-    const size_t MINIMAL_SIZE = 512;
-
     sal_uInt8 checksum[RTL_DIGEST_LENGTH_MD5];
     rtlDigestError error = rtl_Digest_E_None;
     rtl::OStringBuffer aChecksumBuf;
@@ -99,6 +94,7 @@ rtlDigestError calc_md5_checksum(const char *filename, rtl::OString &rChecksum)
 
         if ( digest )
         {
+            const size_t BUFFER_SIZE  = 0x1000;
             size_t          nBytesRead;
             sal_uInt8       buffer[BUFFER_SIZE];
             bool            bHeader(true);
@@ -109,6 +105,7 @@ rtlDigestError calc_md5_checksum(const char *filename, rtl::OString &rChecksum)
                 if (bHeader)
                 {
                     bHeader = false;
+                    const size_t MINIMAL_SIZE = 512;
                     if (nBytesRead >= MINIMAL_SIZE && buffer[0] == sal_uInt8('M') && buffer[1] == sal_uInt8('Z') )
                         normalize_pe_image(buffer, nBytesRead);
                 }

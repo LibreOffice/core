@@ -116,13 +116,13 @@ RscTop * RscArray::GetTypeClass() const
 static RscInstNode * Create( RscInstNode * pNode )
 {
     RscInstNode * pRetNode = NULL;
-    RscInstNode * pTmpNode;
 
     if( pNode )
     {
         pRetNode = new RscInstNode( pNode->GetId() );
         pRetNode->aInst = pNode->aInst.pClass->Create( NULL, pNode->aInst );
-        if( (pTmpNode = Create( pNode->Left() )) != NULL )
+        RscInstNode * pTmpNode = Create(pNode->Left());
+        if (pTmpNode)
             pRetNode->Insert( pTmpNode );
         if( (pTmpNode = Create( pNode->Right() )) != NULL )
             pRetNode->Insert( pTmpNode );
@@ -381,14 +381,11 @@ static sal_Bool IsValueDefault( RscInstNode * pNode, CLASS_DATA pDef )
 
 sal_Bool RscArray::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
-    RscArrayInst * pClassData;
-    sal_Bool bRet;
-
-    bRet = RscTop::IsValueDefault( rInst, pDef );
+    sal_Bool bRet = RscTop::IsValueDefault( rInst, pDef );
 
     if( bRet )
     {
-        pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
+        RscArrayInst * pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
 
         bRet = ::IsValueDefault( pClassData->pNode, pDef );
     }
