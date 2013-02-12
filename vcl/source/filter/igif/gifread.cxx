@@ -37,8 +37,10 @@ GIFReader::GIFReader( SvStream& rStm ) :
             aGPalette       ( 256 ),
             aLPalette       ( 256 ),
             rIStm           ( rStm ),
+            pDecomp         ( NULL ),
             pAcc8           ( NULL ),
             pAcc1           ( NULL ),
+            nYAcc           ( 0 ),
             nLastPos        ( rStm.Tell() ),
             nLogWidth100    ( 0UL ),
             nLogHeight100   ( 0UL ),
@@ -455,7 +457,7 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
         {
             if( bInterlaced )
             {
-                long nT1, nT2;
+                long nT1;
 
                 // falls Interlaced, werden die Zeilen kopiert
                 if( nLastInterCount )
@@ -493,7 +495,7 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
 
                 if( nT1 >= nImageHeight )
                 {
-                    nT2 = nImageY - ( ( nImageHeight + 7 ) >> 3 );
+                    long nT2 = nImageY - ( ( nImageHeight + 7 ) >> 3 );
                     nT1 = ( nT2 << 3 ) + 4;
                     nLastInterCount = 3;
 

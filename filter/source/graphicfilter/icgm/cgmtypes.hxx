@@ -24,7 +24,7 @@ struct FloatPoint
 {
         double          X;
         double          Y;
-        FloatPoint(){};
+        FloatPoint():X(0), Y(0){};
         FloatPoint( const double& rX, const double& rY ) { X = rX, Y = rY; };
 };
 
@@ -34,7 +34,7 @@ struct FloatRect
         double          Top;
         double          Right;
         double          Bottom;
-        FloatRect(){};
+        FloatRect():Left(0), Top(0), Right(0), Bottom(0){};
         FloatRect( const FloatPoint& rTopLeft, const FloatPoint& rBottomRight )
         {
             Left = rTopLeft.X;
