@@ -225,7 +225,6 @@ public:
 
     virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
-    void            selectEntry( long nPos );
     virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
                                       bool bLicenseMissing = false );
     bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage, bool bEnable );
