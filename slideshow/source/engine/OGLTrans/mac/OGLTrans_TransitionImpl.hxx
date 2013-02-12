@@ -283,7 +283,7 @@ private:
 class Operation
 {
 public:
-    Operation(){}
+    Operation():bInterpolate(false), nT0(0.0), nT1(0.0){}
     virtual ~Operation(){}
 
     /** Should this operation be interpolated . If TRUE, the transform will smoothly move from making no difference from t = 0.0 to nT0 to being completely transformed from t = nT1 to 1. If FALSE, the transform will be inneffectual from t = 0 to nT0, and completely transformed from t = nT0 to 1.
