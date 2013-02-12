@@ -34,6 +34,8 @@ struct SvxBackgroundTable_Impl;
 struct SvxBackgroundPara_Impl;
 struct SvxBackgroundPage_Impl;
 class SvxBrushItem;
+class XFillStyleItem;
+class XFillGradientItem;
 /** class SvxBackgroundTabPage --------------------------------------------
 {k:\svx\prototyp\dialog\backgrnd.bmp}
     [Description]
@@ -85,6 +87,17 @@ private:
     MetricField*            m_pColTransMF;
     CheckBox*               m_pBtnPreview;
 
+    // Gradient controls
+    VclFrame*               m_pBackGroundGradientFrame;
+    GradientLB*             m_pLbGradients;
+    SvxXRectPreview*        m_pCtlPreview;
+
+    // Gradient data
+    XGradientListRef        m_pGradientList;
+    SfxItemPool*            m_pXPool;
+    XFillAttrSetItem        m_aXFillAttr;
+    SfxItemSet&             m_rXFillSet;
+
     // Background Bitmap ----------------------------------
     VclContainer*           m_pFileFrame;
     PushButton*             m_pBtnBrowse;
@@ -128,6 +141,8 @@ private:
     void                HideColorUI_Impl();
     void                ShowBitmapUI_Impl();
     void                HideBitmapUI_Impl();
+    void                ShowGradientUI_Impl();
+    void                HideGradientUI_Impl();
     sal_Bool                LoadLinkedGraphic_Impl();
     void                RaiseLoadError_Impl();
     void                SetGraphicPosition_Impl( SvxGraphicPosition ePos );
@@ -145,6 +160,7 @@ private:
     DECL_LINK(BackgroundColorHdl_Impl, void *);
     DECL_LINK( TblDestinationHdl_Impl, ListBox* );
     DECL_LINK( ParaDestinationHdl_Impl, ListBox* );
+    DECL_LINK(ModifyGradientHdl_Impl, void *);
 #endif
 };
 

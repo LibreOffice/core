@@ -52,6 +52,8 @@
 #include <svx/htmlmode.hxx>
 #include <svtools/controldims.hrc>
 #include <svx/flagsdef.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflgrit.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 using namespace ::com::sun::star;
@@ -320,6 +322,9 @@ void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 
 SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rCoreSet)
     : SvxTabPage(pParent, "BackgroundPage", "cui/ui/backgroundpage.ui", rCoreSet)
+    , m_pXPool(rCoreSet.GetPool())
+    , m_aXFillAttr(m_pXPool)
+    , m_rXFillSet(m_aXFillAttr.GetItemSet())
     , nHtmlMode(0)
     , bAllowShowSelector(true)
     , bIsGraphicValid(false)
@@ -344,6 +349,17 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rC
     get(m_pColTransFT, "transparencyft");
     get(m_pColTransMF, "transparencymf");
     get(m_pBtnPreview, "showpreview");
+
+    // Initialize gradient controls
+    get(m_pBackGroundGradientFrame, "backgroundgradientframe");
+    get(m_pLbGradients, "gradientslb");
+    Size aSize = LogicToPixel(Size(88, 110), MAP_APPFONT);
+    m_pLbGradients->set_width_request(aSize.Width());
+    m_pLbGradients->set_height_request(aSize.Height());
+    get(m_pCtlPreview, "previewctl");
+    aSize = LogicToPixel(Size(88, 42), MAP_APPFONT);
+    m_pCtlPreview->set_width_request(aSize.Width());
+    m_pCtlPreview->set_height_request(aSize.Height());
 
     get(m_pFileFrame, "fileframe");
     get(m_pBtnBrowse, "browse");
@@ -743,6 +759,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         const SvxBrushItem& rOldItem    = (const SvxBrushItem&)*pOld;
         SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
         const sal_Bool          bIsBrush    = ( 0 == m_pLbSelect->GetSelectEntryPos() );
+        const bool bIsGradient = ( 2 == m_pLbSelect->GetSelectEntryPos() );
 
         // transparency has to be set if enabled, the color not already set to "No fill" and
         if( bColTransparency &&
@@ -750,22 +767,34 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             aBgdColor.SetTransparency(lcl_PercentToTransparency(static_cast<long>(m_pColTransMF->GetValue())));
         }
-        if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
-            || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap changed?
+        if (   ( (GPOS_NONE == eOldPos) && (bIsBrush || bIsGradient)  )
+            || ( (GPOS_NONE != eOldPos) && !(bIsBrush || bIsGradient) ) ) // Brush <-> Bitmap changed?
         {
             // background art hasn't been changed:
 
             if ( (GPOS_NONE == eOldPos) || !m_pLbSelect->IsVisible() )
             {
-                // Brush-treatment:
-                if ( rOldItem.GetColor() != aBgdColor ||
-                        (SFX_ITEM_AVAILABLE >= eOldItemState && !m_pBackgroundColorSet->IsNoSelection()))
+                if (bIsBrush)
                 {
-                    bModified = sal_True;
-                    rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
+                    // Brush-treatment:
+                    if ( rOldItem.GetColor() != aBgdColor ||
+                            (SFX_ITEM_AVAILABLE >= eOldItemState && !m_pBackgroundColorSet->IsNoSelection()))
+                    {
+                        bModified = sal_True;
+                        rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
+                    }
+                    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
+                        rCoreSet.ClearItem( nWhich );
                 }
-                else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
-                    rCoreSet.ClearItem( nWhich );
+                else
+                {
+                    XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rXFillSet.Get(XATTR_FILLSTYLE)).GetValue(), GetWhich(SID_ATTR_FILL_STYLE));
+                    rCoreSet.Put(aFillStyleItem);
+
+                    const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)m_rXFillSet.Get(XATTR_FILLGRADIENT);
+                    XFillGradientItem aFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue(), GetWhich(SID_ATTR_FILL_GRADIENT));
+                    rCoreSet.Put(aFillGradientItem);
+                }
             }
             else
             {
@@ -1054,6 +1083,7 @@ void SvxBackgroundTabPage::ShowSelector()
         m_pBtnArea->SetClickHdl( HDL(RadioClickHdl_Impl) );
         m_pBtnTile->SetClickHdl( HDL(RadioClickHdl_Impl) );
         m_pBtnPosition->SetClickHdl( HDL(RadioClickHdl_Impl) );
+        m_pLbGradients->SetSelectHdl(HDL(ModifyGradientHdl_Impl));
 
         // delayed loading via timer (because of UI-Update)
         pPageImpl->pLoadTimer = new Timer;
@@ -1166,6 +1196,7 @@ void SvxBackgroundTabPage::ShowColorUI_Impl()
     if (!m_pBackGroundColorFrame->IsVisible())
     {
         HideBitmapUI_Impl();
+        HideGradientUI_Impl();
         m_pBackGroundColorFrame->Show();
 
         if(bColTransparency)
@@ -1196,6 +1227,7 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
          (m_pBackGroundColorFrame->IsVisible() || !m_pFileFrame->IsVisible()))
     {
         HideColorUI_Impl();
+        HideGradientUI_Impl();
 
         m_pBtnPreview->Show();
 
@@ -1225,6 +1257,21 @@ void SvxBackgroundTabPage::HideBitmapUI_Impl()
         m_pGraphTransFrame->Hide();
 }
 
+void SvxBackgroundTabPage::ShowGradientUI_Impl()
+{
+    if (!m_pBackGroundGradientFrame->IsVisible())
+    {
+        HideColorUI_Impl();
+        HideBitmapUI_Impl();
+
+        m_pBackGroundGradientFrame->Show();
+    }
+}
+
+void SvxBackgroundTabPage::HideGradientUI_Impl()
+{
+    m_pBackGroundGradientFrame->Hide();
+}
 
 //------------------------------------------------------------------------
 
@@ -1326,10 +1373,14 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
         ShowColorUI_Impl();
         m_pParaLBox->Enable(); // drawing background can't be a bitmap
     }
-    else
+    else if ( 1 == m_pLbSelect->GetSelectEntryPos() )
     {
         ShowBitmapUI_Impl();
         m_pParaLBox->Enable(sal_False); // drawing background can't be a bitmap
+    }
+    else
+    {
+        ShowGradientUI_Impl();
     }
     return 0;
 }
@@ -1400,6 +1451,21 @@ IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
         m_pWndPosition->Disable();
         m_pWndPosition->Invalidate();
     }
+    return 0;
+}
+
+IMPL_LINK_NOARG(SvxBackgroundTabPage, ModifyGradientHdl_Impl)
+{
+    sal_uInt16 nPos = m_pLbGradients->GetSelectEntryPos();
+
+    if (nPos != LISTBOX_ENTRY_NOTFOUND)
+    {
+        XGradientEntry* pEntry = m_pGradientList->GetGradient(nPos);
+        m_rXFillSet.Put( XFillStyleItem( XFILL_GRADIENT ) );
+        m_rXFillSet.Put( XFillGradientItem( String(), pEntry->GetGradient() ) );
+    }
+    m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_pCtlPreview->Invalidate();
     return 0;
 }
 
@@ -1690,24 +1756,36 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
     if ( GPOS_NONE == ePos || !m_pLbSelect->IsVisible() )
     {
-        m_pLbSelect->SelectEntryPos( 0 );
-        ShowColorUI_Impl();
-        Color aTrColor( COL_TRANSPARENT );
-        aBgdColor = rColor;
-
-        sal_uInt16 nCol = ( aTrColor != aBgdColor ) ?
-            GetItemId_Impl(*m_pBackgroundColorSet, aBgdColor) : 0;
-
-        if( aTrColor != aBgdColor && nCol == 0)
+        // We don't have a graphic, do we have gradient fill style?
+        if (!m_rXFillSet.HasItem(XATTR_FILLSTYLE) || ((const XFillStyleItem&)m_rXFillSet.Get(XATTR_FILLSTYLE)).GetValue() != XFILL_GRADIENT)
         {
-            m_pBackgroundColorSet->SetNoSelection();
+            m_pLbSelect->SelectEntryPos( 0 );
+            ShowColorUI_Impl();
+            Color aTrColor( COL_TRANSPARENT );
+            aBgdColor = rColor;
+
+            sal_uInt16 nCol = ( aTrColor != aBgdColor ) ?
+                GetItemId_Impl(*m_pBackgroundColorSet, aBgdColor) : 0;
+
+            if( aTrColor != aBgdColor && nCol == 0)
+            {
+                m_pBackgroundColorSet->SetNoSelection();
+            }
+            else
+            {
+                m_pBackgroundColorSet->SelectItem( nCol );
+            }
+
+            m_pPreviewWin1->NotifyChange( aBgdColor );
         }
         else
         {
-            m_pBackgroundColorSet->SelectItem( nCol );
+            // Gradient fill style, then initialize preview with data from Writer.
+            m_pLbSelect->SelectEntryPos( 2 );
+            ShowGradientUI_Impl();
+            m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
+            m_pCtlPreview->Invalidate();
         }
-
-        m_pPreviewWin1->NotifyChange( aBgdColor );
         if ( m_pLbSelect->IsVisible() ) // initialize graphic part
         {
             aBgdGraphicFilter.Erase();
@@ -1813,6 +1891,8 @@ void SvxBackgroundTabPage::EnableTransparency(sal_Bool bColor, sal_Bool bGraphic
 void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pGradientListItem,SvxGradientListItem,SID_GRADIENT_LIST,sal_False);
+
     if (pFlagItem)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();
@@ -1825,6 +1905,20 @@ void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
         if ( ( nFlags & SVX_ENABLE_TRANSPARENCY ) == SVX_ENABLE_TRANSPARENCY )
             EnableTransparency(sal_True, sal_True);
     }
+
+    if (pGradientListItem)
+    {
+        // If we get a gradient list, also read fill and gradient style.
+        m_pGradientList = pGradientListItem->GetGradientList();
+        m_pLbGradients->Fill(m_pGradientList);
+        const XFillStyleItem& rFillStyleItem = (const XFillStyleItem&)aSet.Get(SID_ATTR_FILL_STYLE);
+        m_rXFillSet.Put(XFillStyleItem(rFillStyleItem.GetValue()));
+        const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)aSet.Get(SID_ATTR_FILL_GRADIENT);
+        m_rXFillSet.Put(XFillGradientItem(rFillGradientItem.GetGradientValue()));
+    }
+    else
+        // Otherwise hide the gradient UI.
+        m_pLbSelect->RemoveEntry(2);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

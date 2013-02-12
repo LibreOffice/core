@@ -23,6 +23,7 @@
 #include <svx/htmlmode.hxx>
 #include <fmtfsize.hxx>
 #include <wrtsh.hxx>
+#include <doc.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
 #include <viewopt.hxx>
@@ -37,6 +38,10 @@
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/drawitem.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflgrit.hxx>
 
 /*--------------------------------------------------------------------
     Description:    the dialog's carrier
@@ -173,6 +178,17 @@ void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             if(!m_bHTMLMode)
                 nFlagType |= SVX_ENABLE_TRANSPARENCY;
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
+
+            SvxGradientListItem aGradientListItem(m_pWrtShell->GetDoc()->GetOrCreateDrawModel()->GetGradientList(), SID_GRADIENT_LIST);
+            aSet.Put(aGradientListItem);
+
+            XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rSet.Get(RES_FILL_STYLE)).GetValue(), SID_ATTR_FILL_STYLE);
+            aSet.Put(aFillStyleItem);
+
+            const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)m_rSet.Get(RES_FILL_GRADIENT);
+            XFillGradientItem aFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue(), SID_ATTR_FILL_GRADIENT);
+            aSet.Put(aFillGradientItem);
+
             rPage.PageCreated(aSet);
         }
         break;
