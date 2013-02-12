@@ -425,7 +425,7 @@ hchar_string MailMerge::GetString()
 static hchar olHanglJaso(int num, int type)
 {
     static unsigned char han_init[] =
-        { "\x88\x90\x94\x9c\xa0\xa4\xac\xb4\xb8\xc0\xc4\xc8\xcc\xd0" };
+        "\x88\x90\x94\x9c\xa0\xa4\xac\xb4\xb8\xc0\xc4\xc8\xcc\xd0";
     static unsigned char jung[] = { 3, 5, 7, 11, 13, 19, 20, 26, 27, 29, 30 };
     static unsigned char jung2[] = { 3, 7, 13, 20, 27, 29, 30 };
 
