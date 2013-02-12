@@ -30,6 +30,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -252,10 +253,8 @@ public class SelectorActivity extends SherlockActivity {
     private HashMap<Server, View> mNetworkServers = new HashMap<Server, View>();
 
     private void deleteServer(View aView) {
+        Log.i(Globals.TAG, "SelectorActivity.deleteServer(" + aView + ")");
         for (Entry<Server, View> aEntry : mNetworkServers.entrySet()) {
-            System.out.println(aEntry.getKey().getName());
-            System.out.println(aView);
-            System.out.println(aEntry.getValue());
             if (aEntry.getValue() == aView
                             .findViewById(R.id.selector_sub_label)
                             || aEntry.getValue().findViewById(

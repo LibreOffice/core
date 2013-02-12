@@ -15,10 +15,13 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Random;
 
+import org.libreoffice.impressremote.Globals;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 /**
  * Standard Network client. Connects to a server using Sockets.
@@ -84,9 +87,9 @@ public class NetworkClient extends Client {
 
         while (mReader.readLine().length() != 0) {
             // Get rid of extra lines
-            System.out.println("SF: empty line");
+            Log.i(Globals.TAG, "NetworkClient: extra line");
         }
-        System.out.println("SD: empty");
+        Log.i(Globals.TAG, "NetworkClient: calling startListening");
         startListening();
 
     }

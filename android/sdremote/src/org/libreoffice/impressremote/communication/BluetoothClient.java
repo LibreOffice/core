@@ -13,11 +13,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.UUID;
 
+import org.libreoffice.impressremote.Globals;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 /**
  * Standard Network client. Connects to a server using Sockets.
@@ -49,7 +52,7 @@ public class BluetoothClient extends Client {
         mSocket = aDevice.createRfcommSocketToServiceRecord(UUID
                         .fromString("00001101-0000-1000-8000-00805F9B34FB"));
         mSocket.connect();
-        System.out.println("Connected");
+        Log.i(Globals.TAG, "BluetoothClient: connected");
 
         mInputStream = mSocket.getInputStream();
         mReader = new BufferedReader(new InputStreamReader(mInputStream,
@@ -57,7 +60,7 @@ public class BluetoothClient extends Client {
         mOutputStream = mSocket.getOutputStream();
 
         String aTemp = mReader.readLine();
-        System.out.println("SF:waited");
+        Log.i(Globals.TAG, "BluetoothClient: got line " + aTemp);
         if (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
             return;
         }
