@@ -366,7 +366,6 @@ rtl::OString BootParams::getClasspath()
 {
     rtl::OString sClassPath;
     rtl::OUString sCP;
-    char szSep[] = {SAL_PATHSEPARATOR,0};
     if (Bootstrap::get()->getFrom(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_CLASSPATH)),
         sCP) == sal_True)
@@ -387,6 +386,7 @@ rtl::OString BootParams::getClasspath()
         char * pCp = getenv("CLASSPATH");
         if (pCp)
         {
+            char szSep[] = {SAL_PATHSEPARATOR,0};
             sClassPath += rtl::OString(szSep) + rtl::OString(pCp);
         }
 #if OSL_DEBUG_LEVEL >=2
@@ -602,7 +602,6 @@ rtl::OString makeClassPathOption(OUString const & sUserClassPath)
     //Compose the class path
     rtl::OString sPaths;
     rtl::OUStringBuffer sBufCP(4096);
-    char szSep[] = {SAL_PATHSEPARATOR,0};
 
     // append all user selected jars to the class path
     if (!sUserClassPath.isEmpty())
@@ -613,7 +612,10 @@ rtl::OString makeClassPathOption(OUString const & sUserClassPath)
     if (!sAppCP.isEmpty())
     {
         if (!sUserClassPath.isEmpty())
+        {
+            char szSep[] = {SAL_PATHSEPARATOR,0};
             sBufCP.appendAscii(szSep);
+        }
         sBufCP.append(sAppCP);
     }
 

@@ -67,7 +67,6 @@ void BiNode::EnumNodes( Link aLink ) const{
 |*
 *************************************************************************/
 BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
-    BiNode * pRightNode;
     BiNode * pMiddle;
     BiNode * pTmp;
     sal_uInt32 nEle, i;
@@ -89,7 +88,8 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
             pTmp->pRight = (BiNode *)0;
 
         // linken Zeiger auf Null
-        if( NULL != (pRightNode = pMiddle->Right()) )
+        BiNode * pRightNode = pMiddle->Right();
+        if (pRightNode)
             pRightNode->pLeft = (BiNode *)0;
 
         pMiddle->pLeft = ChangeDLListBTree( pList );

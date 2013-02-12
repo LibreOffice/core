@@ -153,10 +153,9 @@ static void SAL_CALL predefineXInterface(AstModule* pRoot)
 
 static void SAL_CALL initializePredefinedTypes(AstModule* pRoot)
 {
-    AstBaseType* pPredefined = NULL;
     if ( pRoot )
     {
-         pPredefined = new AstBaseType(ET_long, OString("long"), pRoot);
+         AstBaseType* pPredefined = new AstBaseType(ET_long, OString("long"), pRoot);
          pRoot->addDeclaration(pPredefined);
 
          pPredefined = new AstBaseType(ET_ulong, OString("unsigned long"), pRoot);

@@ -85,10 +85,9 @@ void PopupMenuControllerBase::throwIfDisposed() throw ( RuntimeException )
 // protected function
 void PopupMenuControllerBase::resetPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu )
 {
-    VCLXPopupMenu* pPopupMenu = 0;
     if ( rPopupMenu.is() && rPopupMenu->getItemCount() > 0 )
     {
-         pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
+         VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
          if ( pPopupMenu )
          {
             SolarMutexGuard aSolarMutexGuard;

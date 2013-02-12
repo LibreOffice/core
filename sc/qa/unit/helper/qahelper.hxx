@@ -103,10 +103,9 @@ void loadFile(const OUString& aFileName, std::string& aContent)
     OString aOFileName = OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
 
 #ifdef ANDROID
-    const char *contents;
     size_t size;
     if (strncmp(aOFileName.getStr(), "/assets/", sizeof("/assets/")-1) == 0) {
-        contents = (const char *) lo_apkentry(aOFileName.getStr(), &size);
+        const char *contents = (const char *) lo_apkentry(aOFileName.getStr(), &size);
         if (contents != 0) {
             aContent = std::string(contents, size);
             return;
@@ -243,7 +242,7 @@ public:
         for ( unsigned int index=0; index<numElems; ++index )
         {
             OUString sFileName = OUString::createFromAscii( aTestValues[ index ].sTestDoc );
-            printf("aTestValues[%d] %s\n", index, OUStringToOString( sFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
+            printf("aTestValues[%u] %s\n", index, OUStringToOString( sFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
             int nImportType =  aTestValues[ index ].nImportType;
             int nExportType =  aTestValues[ index ].nExportType;
             ScDocShellRef xShell = loadDoc( sFileName, nImportType );
