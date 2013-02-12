@@ -379,7 +379,7 @@ public:
     virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const = 0;
 
 protected:
-    Operation(){}
+    Operation():bInterpolate(false), nT0(0.0), nT1(0.0){}
 };
 
 /** this class is a generic CounterClockWise(CCW) rotation with an axis angle
