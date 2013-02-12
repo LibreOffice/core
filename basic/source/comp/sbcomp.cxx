@@ -598,6 +598,7 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
         bSTMT = true;
     }
     char TimeBuffer[200];
+    memset (TimeBuffer, 0, size(TimeBuffer));
 #ifdef DBG_TRACE_PROFILING
     if( bPrintTimeStamp )
     {
