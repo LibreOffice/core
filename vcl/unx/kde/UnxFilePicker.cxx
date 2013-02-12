@@ -87,10 +87,11 @@ namespace
 //////////////////////////////////////////////////////////////////////////
 
 UnxFilePicker::UnxFilePicker( const uno::Reference<uno::XComponentContext>& )
-    : cppu::WeakComponentImplHelper3<
+    : cppu::WeakComponentImplHelper4<
 // TODO   XFilePreview,
           XFilePicker2,
           XFilePicker3,
+          XFilePickerControlAccess,
           lang::XServiceInfo>( m_rbHelperMtx ),
           m_nFilePickerPid( -1 ),
           m_nFilePickerWrite( -1 ),
