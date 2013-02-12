@@ -184,7 +184,6 @@ bool HelpParser::Merge( const rtl::OString &rSDFFile, const rtl::OString &rDesti
 {
 
     (void) rSDFFile;
-    bool hasNoError = true;
 
     SimpleXMLParser aParser;
 
@@ -193,7 +192,7 @@ bool HelpParser::Merge( const rtl::OString &rSDFFile, const rtl::OString &rDesti
     //TODO: explicit BOM handling?
 
     XMLFile* xmlfile = ( aParser.Execute( sXmlFile, new XMLFile( rtl::OUString('0') ) ) );
-    hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , rLanguage , rDestinationFile );
+    bool hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , rLanguage , rDestinationFile );
     delete xmlfile;
     return hasNoError;
 }
@@ -233,7 +232,6 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
 
     XMLElement*   pXMLElement = NULL;
     PFormEntrys   *pEntrys    = NULL;
-    XMLData       *data       = NULL;
 
     rtl::OString sLId;
     rtl::OString sGId;
@@ -284,7 +282,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
                 {
                     if( pXMLElement != NULL )
                     {
-                        data   = new XMLData( sNewdata , NULL , true ); // Add new one
+                        XMLData *data = new XMLData( sNewdata , NULL , true ); // Add new one
                         pXMLElement->RemoveAndDeleteAllChildren();
                         pXMLElement->AddChild( data );
                         aLangHM->erase( sCur );

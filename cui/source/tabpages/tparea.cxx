@@ -1001,12 +1001,12 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
-    const SfxPoolItem* pOld = NULL;
     sal_uInt16  _nPos;
     sal_Bool    bModified = sal_False;
 
     if( nDlgType != 0 || *pbAreaTP )
     {
+        const SfxPoolItem* pOld = NULL;
         XFillStyle eStyle = (XFillStyle) aTypeLB.GetSelectEntryPos();
         XFillStyle eSavedStyle = (XFillStyle) aTypeLB.GetSavedValue();
         switch( eStyle )

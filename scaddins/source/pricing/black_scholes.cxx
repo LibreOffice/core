@@ -185,7 +185,7 @@ double bincash(double S, double vol, double rd, double rf,
             val = -pm*dnorm(d2)*sqrt(tau)/vol;
             break;
         default:
-            printf("bincash: greek %ui not implemented\n", greeks );
+            printf("bincash: greek %d not implemented\n", greeks );
             abort();
         }
     }
@@ -286,7 +286,7 @@ double binasset(double S, double vol, double rd, double rf,
             val = -tau*S*pnorm(pm*d1) - pm*S*dnorm(d1)*sqrt(tau)/vol;
             break;
         default:
-            printf("binasset: greek %ui not implemented\n", greeks );
+            printf("binasset: greek %d not implemented\n", greeks );
             abort();
         }
     }
@@ -652,7 +652,7 @@ double barrier_term(double S, double vol, double rd, double rf,
               );
         break;
     default:
-        printf("barrier_term: greek %ui not implemented\n", greek );
+        printf("barrier_term: greek %d not implemented\n", greek );
         abort();
     }
     return val;
@@ -708,7 +708,7 @@ double barrier_double_term( double S, double vol, double rd, double rf,
               barrier_term(S,vol,rd,rf,tau,K,B1,B2,sc,pc,fd,types::Value);
         break;
     default:
-        printf("barrier_double_term: greek %ui not implemented\n", greek );
+        printf("barrier_double_term: greek %d not implemented\n", greek );
         abort();
     }
     return val;

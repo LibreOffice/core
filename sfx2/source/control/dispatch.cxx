@@ -101,9 +101,7 @@ struct SfxObjectBars_Impl
     String         aName;
     SfxInterface*  pIFace;
 
-    SfxObjectBars_Impl() :
-        nResId( 0 )
-    {}
+    SfxObjectBars_Impl() : nResId(0), nMode(0), pIFace(NULL) {}
 };
 
 //------------------------------------------------------------------

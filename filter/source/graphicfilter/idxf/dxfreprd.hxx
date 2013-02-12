@@ -40,7 +40,7 @@ public:
     double fMaxY;
     double fMaxZ;
 
-    DXFBoundingBox() { bEmpty=sal_True; }
+    DXFBoundingBox():bEmpty(sal_True), fMinX(0.0), fMinY(0.0), fMinZ(0.0), fMaxX(0.0), fMaxY(0.0), fMaxZ(0.0) {}
     void Union(const DXFVector & rVector);
 };
 
