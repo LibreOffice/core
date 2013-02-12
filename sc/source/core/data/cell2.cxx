@@ -52,6 +52,10 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScEditCell )
 
 // ============================================================================
 
+ScEditCell::ScEditCell(EditTextObject* pObject, ScDocument* pDocP) :
+    ScBaseCell(CELLTYPE_EDIT),
+    pData(pObject), pString(NULL), pDoc(pDocP) {}
+
 ScEditCell::ScEditCell( const EditTextObject* pObject, ScDocument* pDocP,
             const SfxItemPool* pFromPool )  :
         ScBaseCell( CELLTYPE_EDIT ),

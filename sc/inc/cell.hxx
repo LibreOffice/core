@@ -234,6 +234,16 @@ public:
 
                     ~ScEditCell();              // always because of pData!
 
+    /**
+     * Constructor that takes ownership of the passed EditTextObject instance
+     * which the caller must not delete afterward!
+     *
+     * <p>Also ensure that the passed edit text object <i>uses the SfxItemPool
+     * instance returned from ScDocument::GetEditPool()</i>.  This is
+     * important.</p>
+     */
+    ScEditCell(EditTextObject* pObject, ScDocument* pDocP);
+
                     ScEditCell( const EditTextObject* pObject, ScDocument*,
                                 const SfxItemPool* pFromPool /* = NULL */ );
     ScEditCell(const ScEditCell& rCell, ScDocument& rDoc, const ScAddress& rDestPos);

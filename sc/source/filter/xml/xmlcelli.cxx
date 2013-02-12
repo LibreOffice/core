@@ -1050,8 +1050,10 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                         mpEditEngine->QuickInsertField(SvxFieldItem(*it->mpData, EE_FEATURE_FIELD), it->maSelection);
                 }
 
-                boost::scoped_ptr<EditTextObject> pTextObj(mpEditEngine->CreateTextObject());
-                pNewCell = new ScEditCell(pTextObj.get(), pDoc, pDoc->GetEditPool());
+                // This edit engine uses the SfxItemPool instance returned
+                // from pDoc->GetEditPool() to create the text object, which
+                // is a prerequisite for using this constructor of ScEditCell.
+                pNewCell = new ScEditCell(mpEditEngine->CreateTextObject(), pDoc);
             }
         }
         else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
