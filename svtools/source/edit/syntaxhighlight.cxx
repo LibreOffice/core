@@ -318,8 +318,8 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
 
             if( bCanBeKeyword )
             {
-                rtl::OUString aKWString(rpStartPos, nCount);
-                rtl::OString aByteStr = rtl::OUStringToOString(aKWString,
+                OUString aKWString(rpStartPos, nCount);
+                OString aByteStr = OUStringToOString(aKWString,
                     RTL_TEXTENCODING_ASCII_US).toAsciiLowerCase();
                 if ( bsearch( aByteStr.getStr(), ppListKeyWords, nKeyWordCount, sizeof( char* ),
                                                                         compare_strings ) )
