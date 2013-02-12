@@ -18,18 +18,23 @@
 // This is an XML representation, an alternative would be a
 // binary SDP record.
 
+// for numbers see:
+// https://www.bluetooth.org/Technical/AssignedNumbers/service_discovery.htm
+
 static const char *bluetooth_service_record =
   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     "<record>"
       "<attribute id=\"0x0001\">"       // Service class ID list
         "<sequence>"
-          "<uuid value=\"0x1101\"/>"
+          "<uuid value=\"0x1101\"/>"    // an assigned service class meaning: 'serial port'
+                                        // we could add our own 'LibreOffice remote' service
+                                        // class here too in future ...
         "</sequence>"
       "</attribute>"
       "<attribute id=\"0x0004\">"       // Protocol Descriptor list
         "<sequence>"
           "<sequence>"
-            "<uuid value=\"0x0100\"/>"
+            "<uuid value=\"0x0100\"/>"  // L2CAP Protocol descriptor
           "</sequence>"
           "<sequence>"
             "<uuid value=\"0x0003\"/>"  // enumeration value of RFCOMM protocol
@@ -39,24 +44,26 @@ static const char *bluetooth_service_record =
       "</attribute>"
       "<attribute id=\"0x0005\">"       // Browse Group List
         "<sequence>"
-          "<uuid value=\"0x1002\"/>"
+          "<uuid value=\"0x1002\"/>"    // public browse class
         "</sequence>"
       "</attribute>"
       "<attribute id=\"0x0006\">"       // Language Base Attribute ID List
         "<sequence>"
-          "<uint16 value=\"0x656e\"/>"
-          "<uint16 value=\"0x006a\"/>"
-          "<uint16 value=\"0x0100\"/>"
+          "<uint16 value=\"0x656e\"/>"  // code_ISO639
+          "<uint16 value=\"0x006a\"/>"  // encoding 0x6a
+          "<uint16 value=\"0x0100\"/>"  // base_offset ie. points to below =>
         "</sequence>"
       "</attribute>"
       "<attribute id=\"0x0009\">"       // Bluetooth Profile Descriptor List
         "<sequence>"
           "<sequence>"
-            "<uuid value=\"0x1101\"/>"
-            "<uint16 value=\"0x0100\"/>"
+            "<uuid value=\"0x1101\"/>"  // 'serial port' UUID as above
+            "<uint16 value=\"0x0100\"/>"// version number 1.0 ?
           "</sequence>"
         "</sequence>"
       "</attribute>"
+      // Attribute identifiers are pointed to by the Language Base Attribute ID List
+      //  id+0 = ServiceName, id+1 = ServiceDescription, id+2=ProviderName
       "<attribute id=\"0x0100\">"
         "<text value=\"Serial Port\"/>"
       "</attribute>"
