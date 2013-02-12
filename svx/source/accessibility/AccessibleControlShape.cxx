@@ -265,8 +265,8 @@ void AccessibleControlShape::Init()
                 if ( xNativeControlContext.is() )
                 {
                     m_xControlContextProxy = xFactory->createProxy( xNativeControlContext );
-                    OSL_VERIFY( xNativeControlContext->queryInterface( ::getCppuType( &m_xControlContextTypeAccess ) ) >>= m_xControlContextTypeAccess );
-                    OSL_VERIFY( xNativeControlContext->queryInterface( ::getCppuType( &m_xControlContextComponent ) ) >>= m_xControlContextComponent );
+                    m_xControlContextTypeAccess.set( xNativeControlContext, UNO_QUERY_THROW );
+                    m_xControlContextComponent.set( xNativeControlContext, UNO_QUERY_THROW );
 
                     // aggregate the proxy
                     osl_atomic_increment( &m_refCount );

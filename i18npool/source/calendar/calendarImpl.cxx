@@ -86,7 +86,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
         }
 
         if ( xI.is() )
-            xI->queryInterface(::getCppuType((const Reference< XCalendar3>*)0)) >>= xCalendar;
+            xCalendar.set(xI, UNO_QUERY);
         else
             throw ERROR;
 

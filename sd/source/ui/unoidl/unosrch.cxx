@@ -120,7 +120,7 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
     {
         uno::Reference< drawing::XDrawPage > xPage( mpPage );
 
-        xPage->queryInterface( ITYPE( drawing::XShapes ) ) >>= xShapes;
+        xShapes.set( xPage, uno::UNO_QUERY );
 
         if( xShapes.is() && (xShapes->getCount() > 0) )
         {
@@ -223,7 +223,7 @@ uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL SdUnoSearch
     if(mpPage)
     {
         uno::Reference< drawing::XDrawPage >  xPage( mpPage );
-        xPage->queryInterface( ITYPE( drawing::XShapes ) ) >>= xShapes;
+        xShapes.set( xPage, uno::UNO_QUERY );
 
         if( xShapes.is() && xShapes->getCount() > 0 )
         {
@@ -267,9 +267,9 @@ uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL SdUnoSearch
 
         // test if its a group
         uno::Reference< drawing::XShapes >  xGroupShape;
-        uno::Any aAny( xShape->queryInterface( ITYPE( drawing::XShapes )));
+        xGroupShape.set( xShape, uno::UNO_QUERY );
 
-        if( (aAny >>= xGroupShape ) && xGroupShape->getCount() > 0 )
+        if( xGroupShape.is() && xGroupShape->getCount() > 0 )
         {
             pContext = new SearchContext_impl( xGroupShape, pContext );
             xShape = pContext->firstShape();
@@ -382,7 +382,7 @@ uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SdUnoSearchReplaceS
                         else
                             xCurrentShape = NULL;
 
-                        xCurrentShape->queryInterface( ITYPE( text::XTextRange ) ) >>= xRange;
+                        xRange.set( xCurrentShape, uno::UNO_QUERY );
                         if(!(xCurrentShape.is() && (xRange.is())))
                             xRange = NULL;
                     }
@@ -468,8 +468,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
 
     if( !xParent.is() )
     {
-        uno::Any aAny( xText->queryInterface( ITYPE( text::XText )) );
-        aAny >>= xParent;
+        xParent.set( xText, uno::UNO_QUERY );
     }
 
     const OUString aText( xParent->getString() );
@@ -684,7 +683,7 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetShape( uno::Refer
         {
             do
             {
-                xText->queryInterface( ITYPE( drawing::XShape )) >>= xShape;
+                xShape.set( xText, uno::UNO_QUERY );
                 if(!xShape.is())
                 {
                     uno::Reference< text::XText > xParent( xText->getText() );

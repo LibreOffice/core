@@ -102,7 +102,7 @@ TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale) throw
                 OUString("_") + aLocale.Variant, m_xContext);
 
         if (xI.is())
-            xI->queryInterface( getCppuType((const Reference< XTextConversion>*)0) ) >>= xTC;
+            xTC.set( xI, UNO_QUERY );
         else if (xTC.is())
             xTC.clear();
     }

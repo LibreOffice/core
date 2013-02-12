@@ -311,7 +311,7 @@ Reference< XWindow >    UnoControl::getParentPeer() const
         {
             Reference< XWindowPeer > xP = xContComp->getPeer();
             if ( xP.is() )
-                xP->queryInterface( ::getCppuType((const Reference< XWindow >*)0) ) >>= xPeer;
+                xPeer.set( xP, UNO_QUERY );
         }
     }
     return xPeer;

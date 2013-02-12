@@ -105,7 +105,7 @@ sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(con
             OUString("com.sun.star.i18n.IndexEntrySupplier_") + name, m_xContext);
 
         if ( xI.is() ) {
-            xI->queryInterface( ::getCppuType((const Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier>*)0) ) >>= xIES;
+            xIES.set( xI, UNO_QUERY );
             return xIES.is();
         }
         return sal_False;

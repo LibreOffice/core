@@ -549,7 +549,7 @@ sal_Bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUS
             OUString("com.sun.star.i18n.BreakIterator_") + aLocaleName, m_xContext);
 
         if ( xI.is() ) {
-            xI->queryInterface( getCppuType((const Reference< XBreakIterator>*)0) ) >>= xBI;
+            xBI.set(xI, UNO_QUERY);
             if (xBI.is()) {
                 lookupTable.push_back(new lookupTableItem(Locale(aLocaleName, aLocaleName, aLocaleName), xBI));
                 return sal_True;

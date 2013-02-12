@@ -159,7 +159,7 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
 
     if (xI.is()) {
         Reference < XCollator > xC;
-        xI->queryInterface( getCppuType((const Reference< XCollator>*)0) ) >>= xC;
+        xC.set( xI, UNO_QUERY );
         if (xC.is()) {
             lookupTable.push_back(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, xC));
             return sal_True;

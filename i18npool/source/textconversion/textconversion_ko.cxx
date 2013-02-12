@@ -49,7 +49,7 @@ TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xCo
         OUString("com.sun.star.i18n.ConversionDictionary_ko"), xContext);
 
     if ( xI.is() )
-        xI->queryInterface( getCppuType((const Reference< XConversionDictionary>*)0) ) >>= xCD;
+        xCD.set( xI, UNO_QUERY );
 
     xCDL = ConversionDictionaryList::create(xContext);
 

@@ -145,7 +145,7 @@ sal_Bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClas
 
         Reference < XCharacterClassification > xCI;
         if ( xI.is() ) {
-            xI->queryInterface(::getCppuType((const Reference< XCharacterClassification>*)0) ) >>= xCI;
+            xCI.set( xI, UNO_QUERY );
             if (xCI.is()) {
                 lookupTable.push_back( cachedItem =  new lookupTableItem(rLocale, serviceName, xCI) );
                 return sal_True;
