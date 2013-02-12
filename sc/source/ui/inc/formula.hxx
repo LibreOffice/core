@@ -29,7 +29,6 @@
 #include <vcl/tabpage.hxx>
 
 #include "compiler.hxx"
-#include "cell.hxx"
 
 #include "formula/formula.hxx"
 #include "IAnyRefDialog.hxx"

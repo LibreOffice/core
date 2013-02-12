@@ -32,7 +32,6 @@
 #include "parawin.hxx"
 #include <svtools/treelistbox.hxx>
 #include "compiler.hxx"
-#include "cell.hxx"
 
 class ScFuncDesc;
 

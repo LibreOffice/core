@@ -38,6 +38,7 @@
 #include "reffact.hxx"
 #include "undorangename.hxx"
 #include "tabvwsh.hxx"
+#include "tokenarray.hxx"
 
 // defines -------------------------------------------------------------------
 

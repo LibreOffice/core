@@ -25,9 +25,8 @@
 #include "spellparam.hxx"
 #include "cellmergeoption.hxx"
 
-#include "cell.hxx"
-
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScDocShell;
 class ScDocument;
@@ -38,6 +37,7 @@ class SvxBoxItem;
 class SvxBoxInfoItem;
 class SvxSearchItem;
 class SdrUndoAction;
+class ScEditDataArray;
 
 //----------------------------------------------------------------------------
 
@@ -347,7 +347,7 @@ public:
 private:
     ScMarkData      aMarkData;
     ScRange         aRange;
-    ScEditDataArray aDataArray;
+    boost::scoped_ptr<ScEditDataArray> mpDataArray;
     ScDocument*     pUndoDoc;
     sal_Bool            bMulti;
     ScPatternAttr*  pApplyPattern;

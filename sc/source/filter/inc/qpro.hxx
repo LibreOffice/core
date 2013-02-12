@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include "filter.hxx"
 #include "document.hxx"
-#include "cell.hxx"
 #include <tools/string.hxx>
 
 #include "flttypes.hxx"

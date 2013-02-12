@@ -360,6 +360,7 @@ ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
     :   ScSimpleUndo( pNewDocShell ),
         aMarkData   ( rMark ),
         aRange      ( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
+        mpDataArray(new ScEditDataArray),
         pUndoDoc    ( pNewUndoDoc ),
         bMulti      ( bNewMulti )
 {
@@ -389,7 +390,7 @@ rtl::OUString ScUndoSelectionAttr::GetComment() const
 
 ScEditDataArray* ScUndoSelectionAttr::GetDataArray()
 {
-    return &aDataArray;
+    return mpDataArray.get();
 }
 
 void ScUndoSelectionAttr::DoChange( const sal_Bool bUndo )
@@ -435,7 +436,7 @@ void ScUndoSelectionAttr::DoChange( const sal_Bool bUndo )
 void ScUndoSelectionAttr::ChangeEditData( const bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    for (const ScEditDataArray::Item* pItem = aDataArray.First(); pItem; pItem = aDataArray.Next())
+    for (const ScEditDataArray::Item* pItem = mpDataArray->First(); pItem; pItem = mpDataArray->Next())
     {
         ScBaseCell* pCell;
         pDoc->GetCell(pItem->GetCol(), pItem->GetRow(), pItem->GetTab(), pCell);

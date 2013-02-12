@@ -41,6 +41,7 @@
 #include "externalrefmgr.hxx"
 #include "colorscale.hxx"
 #include "attrib.hxx"
+#include "cell.hxx"
 
 using namespace formula;
 

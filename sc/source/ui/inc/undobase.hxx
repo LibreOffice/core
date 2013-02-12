@@ -35,6 +35,8 @@ class ScDBData;
 
 class ScSimpleUndo: public SfxUndoAction
 {
+    ScSimpleUndo(const ScSimpleUndo&); // disabled
+
 public:
                     TYPEINFO();
                     ScSimpleUndo( ScDocShell* pDocSh );

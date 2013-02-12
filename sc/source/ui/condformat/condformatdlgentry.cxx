@@ -22,6 +22,7 @@
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <vcl/msgbox.hxx>
+#include "tokenarray.hxx"
 #include "stlpool.hxx"
 #include "tabvwsh.hxx"
 

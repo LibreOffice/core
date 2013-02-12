@@ -36,7 +36,6 @@
 #include "xestring.hxx"
 #include "root.hxx"
 #include "excdefs.hxx"
-#include "cell.hxx"
 #include <boost/shared_ptr.hpp>
 
 //------------------------------------------------------------------ Forwards -

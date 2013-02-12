@@ -24,7 +24,6 @@
 #include <sal/config.h>
 #include "filter.hxx"
 #include "document.hxx"
-#include "cell.hxx"
 
 #include "flttypes.hxx"
 #include "ftools.hxx"

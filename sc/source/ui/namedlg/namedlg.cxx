@@ -29,6 +29,7 @@
 #include "tabvwsh.hxx"
 
 #include "globalnames.hxx"
+#include "tokenarray.hxx"
 
 #include "sfx2/app.hxx"
 

@@ -24,18 +24,20 @@
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include "formula/errorcodes.hxx"
-#include "cell.hxx"
+#include "formula/tokenarray.hxx"
 #include "scdll.hxx"
 #include "document.hxx"
 #include "scmatrix.hxx"
 #include "externalrefmgr.hxx"
 #include "calcconfig.hxx"
+#include "token.hxx"
 
 #include <map>
 
 class ScDocument;
 class SbxVariable;
 class ScBaseCell;
+class ScValueCell;
 class ScFormulaCell;
 class SvNumberFormatter;
 class ScDBRangeBase;
@@ -45,8 +47,11 @@ struct ScQueryEntry;
 
 struct ScCompare;
 struct ScCompareOptions;
+class ScSingleRefData;
+class ScComplexRefData;
 
 class ScToken;
+class ScJumpMatrix;
 
 #define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
 
@@ -187,19 +192,11 @@ double GetValueCellValue( const ScAddress&, const ScValueCell* );
 ScBaseCell* GetCell( const ScAddress& rPos )
     { return pDok->GetCell( rPos ); }
 void GetCellString( String& rStr, const ScBaseCell* pCell );
-inline sal_uInt16 GetCellErrCode( const ScBaseCell* pCell )
-    { return pCell ? pCell->GetErrorCode() : 0; }
-inline CellType GetCellType( const ScBaseCell* pCell )
-    { return pCell ? pCell->GetCellType() : CELLTYPE_NONE; }
-/// Really empty or inherited emptiness.
-inline bool HasCellEmptyData( const ScBaseCell* pCell )
-    { return pCell ? pCell->HasEmptyData() : true; }
-/// This includes inherited emptiness, which usually is regarded as value!
-inline bool HasCellValueData( const ScBaseCell* pCell )
-    { return pCell ? pCell->HasValueData() : false; }
-/// Not empty and not value.
-inline bool HasCellStringData( const ScBaseCell* pCell )
-    { return pCell ? pCell->HasStringData() : false; }
+sal_uInt16 GetCellErrCode( const ScBaseCell* pCell );
+CellType GetCellType( const ScBaseCell* pCell );
+bool HasCellEmptyData( const ScBaseCell* pCell );
+bool HasCellValueData( const ScBaseCell* pCell );
+bool HasCellStringData( const ScBaseCell* pCell );
 
 bool CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt8* pCellArr);

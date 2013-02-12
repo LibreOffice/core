@@ -191,6 +191,30 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, const ScValueCel
     return fVal;
 }
 
+sal_uInt16 ScInterpreter::GetCellErrCode( const ScBaseCell* pCell )
+{
+    return pCell ? pCell->GetErrorCode() : 0;
+}
+
+CellType ScInterpreter::GetCellType( const ScBaseCell* pCell )
+{
+    return pCell ? pCell->GetCellType() : CELLTYPE_NONE;
+}
+
+bool ScInterpreter::HasCellEmptyData( const ScBaseCell* pCell )
+{
+    return pCell ? pCell->HasEmptyData() : true;
+}
+
+bool ScInterpreter::HasCellValueData( const ScBaseCell* pCell )
+{
+    return pCell ? pCell->HasValueData() : false;
+}
+
+bool ScInterpreter::HasCellStringData( const ScBaseCell* pCell )
+{
+    return pCell ? pCell->HasStringData() : false;
+}
 
 /** Convert string content to numeric value.
 
