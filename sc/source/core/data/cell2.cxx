@@ -52,44 +52,45 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScEditCell )
 
 // ============================================================================
 
-ScEditCell::ScEditCell(EditTextObject* pObject, ScDocument* pDocP) :
+ScEditCell::ScEditCell(EditTextObject* pObject, ScDocument* pDoc) :
     ScBaseCell(CELLTYPE_EDIT),
-    pData(pObject), pString(NULL), pDoc(pDocP) {}
+    mpData(pObject), mpString(NULL), mpDoc(pDoc) {}
 
 ScEditCell::ScEditCell(
-    const EditTextObject& rObject, ScDocument* pDocP, const SfxItemPool* pFromPool) :
+    const EditTextObject& rObject, ScDocument* pDoc, const SfxItemPool* pFromPool) :
     ScBaseCell(CELLTYPE_EDIT),
-    pString(NULL),
-    pDoc(pDocP)
+    mpString(NULL),
+    mpDoc(pDoc)
 {
     SetTextObject(&rObject, pFromPool);
 }
 
 ScEditCell::ScEditCell(const ScEditCell& rCell, ScDocument& rDoc, const ScAddress& rDestPos) :
-    ScBaseCell(rCell), pString(NULL), pDoc(&rDoc)
+    ScBaseCell(rCell), mpString(NULL), mpDoc(&rDoc)
 {
-    SetTextObject( rCell.pData, rCell.pDoc->GetEditPool() );
+    SetTextObject( rCell.mpData, rCell.mpDoc->GetEditPool() );
     UpdateFields(rDestPos.Tab());
 }
 
-ScEditCell::ScEditCell( const rtl::OUString& rString, ScDocument* pDocP )  :
-        ScBaseCell( CELLTYPE_EDIT ),
-        pString( NULL ),
-        pDoc( pDocP )
+ScEditCell::ScEditCell(const OUString& rString, ScDocument* pDoc)  :
+    ScBaseCell(CELLTYPE_EDIT),
+    mpData(NULL),
+    mpString(NULL),
+    mpDoc(pDoc)
 {
     OSL_ENSURE( rString.indexOf('\n') != -1 ||
                 rString.indexOf(CHAR_CR) != -1,
                 "EditCell mit einfachem Text !?!?" );
 
-    EditEngine& rEngine = pDoc->GetEditEngine();
+    EditEngine& rEngine = mpDoc->GetEditEngine();
     rEngine.SetText( rString );
-    pData = rEngine.CreateTextObject();
+    mpData = rEngine.CreateTextObject();
 }
 
 ScEditCell::~ScEditCell()
 {
-    delete pData;
-    delete pString;
+    delete mpData;
+    delete mpString;
 
 #if OSL_DEBUG_LEVEL > 0
     eCellType = CELLTYPE_DESTROYED;
@@ -98,10 +99,10 @@ ScEditCell::~ScEditCell()
 
 void ScEditCell::ClearData()
 {
-    delete pString;
-    pString = NULL;
-    delete pData;
-    pData = NULL;
+    delete mpString;
+    mpString = NULL;
+    delete mpData;
+    mpData = NULL;
 }
 
 void ScEditCell::SetData(const EditTextObject& rObject, const SfxItemPool* pFromPool)
@@ -113,32 +114,32 @@ void ScEditCell::SetData(const EditTextObject& rObject, const SfxItemPool* pFrom
 void ScEditCell::SetData(EditTextObject* pObject)
 {
     ClearData();
-    pData = pObject;
+    mpData = pObject;
 }
 
-rtl::OUString ScEditCell::GetString() const
+OUString ScEditCell::GetString() const
 {
-    if ( pString )
-        return *pString;
+    if (mpString)
+        return *mpString;
 
-    if ( pData )
+    if (mpData)
     {
         // Also Text from URL fields, Doc-Engine is a ScFieldEditEngine
-        EditEngine& rEngine = pDoc->GetEditEngine();
-        rEngine.SetText( *pData );
+        EditEngine& rEngine = mpDoc->GetEditEngine();
+        rEngine.SetText(*mpData);
         rtl::OUString sRet = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
         // cache short strings for formulas
         if ( sRet.getLength() < 256 )
-            pString = new rtl::OUString(sRet);   //! non-const
+            mpString = new rtl::OUString(sRet);   //! non-const
         return sRet;
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
 const EditTextObject* ScEditCell::GetData() const
 {
-    return pData;
+    return mpData;
 }
 
 void ScEditCell::RemoveCharAttribs( const ScPatternAttr& rAttr )
@@ -159,13 +160,13 @@ void ScEditCell::RemoveCharAttribs( const ScPatternAttr& rAttr )
     for (sal_uInt16 i = 0; i < nMapCount; ++i)
     {
         if ( rSet.GetItemState(AttrTypeMap[i].nAttrType, false, &pItem) == SFX_ITEM_SET )
-            pData->RemoveCharAttribs(AttrTypeMap[i].nCharType);
+            mpData->RemoveCharAttribs(AttrTypeMap[i].nCharType);
     }
 }
 
 void ScEditCell::UpdateFields(SCTAB nTab)
 {
-    editeng::FieldUpdater aUpdater = pData->GetFieldUpdater();
+    editeng::FieldUpdater aUpdater = mpData->GetFieldUpdater();
     aUpdater.updateTableFields(nTab);
 }
 
@@ -174,13 +175,13 @@ void ScEditCell::SetTextObject( const EditTextObject* pObject,
 {
     if ( pObject )
     {
-        if ( pFromPool && pDoc->GetEditPool() == pFromPool )
-            pData = pObject->Clone();
+        if ( pFromPool && mpDoc->GetEditPool() == pFromPool )
+            mpData = pObject->Clone();
         else
         {   //! another "spool"
             // Sadly there is no other way to change the Pool than to
             // "spool" the Object through a corresponding Engine
-            EditEngine& rEngine = pDoc->GetEditEngine();
+            EditEngine& rEngine = mpDoc->GetEditEngine();
             if ( pObject->HasOnlineSpellErrors() )
             {
                 sal_uLong nControl = rEngine.GetControlWord();
@@ -189,19 +190,19 @@ void ScEditCell::SetTextObject( const EditTextObject* pObject,
                 if ( bNewControl )
                     rEngine.SetControlWord( nControl | nSpellControl );
                 rEngine.SetText( *pObject );
-                pData = rEngine.CreateTextObject();
+                mpData = rEngine.CreateTextObject();
                 if ( bNewControl )
                     rEngine.SetControlWord( nControl );
             }
             else
             {
                 rEngine.SetText( *pObject );
-                pData = rEngine.CreateTextObject();
+                mpData = rEngine.CreateTextObject();
             }
         }
     }
     else
-        pData = NULL;
+        mpData = NULL;
 }
 
 ScEditDataArray::ScEditDataArray()

@@ -215,10 +215,9 @@ private:
 
 class SC_DLLPUBLIC ScEditCell : public ScBaseCell
 {
-private:
-    EditTextObject*     pData;
-    mutable rtl::OUString* pString;        // for faster access to formulas
-    ScDocument*         pDoc;           // for EditEngine access with Pool
+    EditTextObject* mpData;
+    mutable OUString* mpString;        // for faster access to formulas
+    ScDocument* mpDoc;           // for EditEngine access with Pool
 
     void            SetTextObject( const EditTextObject* pObject,
                                     const SfxItemPool* pFromPool );
@@ -242,7 +241,7 @@ public:
      * instance returned from ScDocument::GetEditPool()</i>.  This is
      * important.</p>
      */
-    ScEditCell(EditTextObject* pObject, ScDocument* pDocP);
+    ScEditCell(EditTextObject* pObject, ScDocument* pDoc);
 
     /**
      * Constructor.  The caller is responsible for deleting the text object
@@ -250,17 +249,18 @@ public:
      * stores it instead of the original.
      *
      * @param rObject text object to clone from.
-     * @param pDocP pointer to the document instance.
+     * @param pDoc pointer to the document instance.
      * @param pFromPool pointer to SfxItemPool instance that the new text
      *                  object that is to be stored in the cell instance
      *                  should use.  If it's NULL, it uses the default pool
      *                  for edit cells from the document instance (one
      *                  returned from GetEditPool()).
      */
-    ScEditCell(const EditTextObject& rObject, ScDocument* pDocP, const SfxItemPool* pFromPool);
+    ScEditCell(const EditTextObject& rObject, ScDocument* pDoc, const SfxItemPool* pFromPool);
     ScEditCell(const ScEditCell& rCell, ScDocument& rDoc, const ScAddress& rDestPos);
-                    // for line breaks
-                    ScEditCell( const rtl::OUString& rString, ScDocument* );
+
+    // for line breaks
+    ScEditCell(const OUString& rString, ScDocument* pDoc);
 
     /**
      * Remove the text data as well as string cache.
@@ -288,7 +288,7 @@ public:
      */
     void SetData(EditTextObject* pObject);
 
-    rtl::OUString   GetString() const;
+    OUString GetString() const;
 
     const EditTextObject* GetData() const;
 
