@@ -11,9 +11,11 @@ package org.libreoffice.impressremote.communication;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.libreoffice.impressremote.Globals;
 import org.libreoffice.impressremote.communication.Server.Protocol;
 
 import android.app.Service;
@@ -23,6 +25,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 
@@ -126,6 +129,7 @@ public class CommunicationService extends Service implements Runnable {
     private boolean mBluetoothPreviouslyEnabled;
 
     public void startSearching() {
+        Log.i(Globals.TAG, "CommunicationService.startSearching()");
         SharedPreferences aPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean bEnableWifi = aPref.getBoolean("option_enablewifi", false);
         if (bEnableWifi)
@@ -140,12 +144,12 @@ public class CommunicationService extends Service implements Runnable {
     }
 
     public void stopSearching() {
+        Log.i(Globals.TAG, "CommunicationService.stopSearching()");
         mNetworkFinder.stopFinding();
         mBluetoothFinder.stopFinding();
         BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
         if (aAdapter != null) {
             if (!mBluetoothPreviouslyEnabled) {
-
                 aAdapter.disable();
             }
         }
@@ -253,12 +257,12 @@ public class CommunicationService extends Service implements Runnable {
         return mTransmitter;
     }
 
-    public Server[] getServers() {
+    public List<Server> getServers() {
         ArrayList<Server> aServers = new ArrayList<Server>();
         aServers.addAll(mNetworkFinder.getServerList());
         aServers.addAll(mBluetoothFinder.getServerList());
         aServers.addAll(mManualServers.values());
-        return aServers.toArray(new Server[aServers.size()]);
+        return aServers;
     }
 
     public SlideShow getSlideShow() {
