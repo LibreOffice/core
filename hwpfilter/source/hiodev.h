@@ -69,7 +69,7 @@ class DLLEXPORT HIODev
 
 struct gz_stream;
 
-/* ÆÄÀÏ ÀÔÃâ·Â ÀåÄ¡ */
+/* íŒŒì¼ ì…ì¶œë ¥ ì¥ì¹˜ */
 
 /**
  * This controls the HStream given by constructor
@@ -78,7 +78,7 @@ struct gz_stream;
 class HStreamIODev : public HIODev
 {
     private:
-/* zlibÀ¸·Î ¾ĞÃàÀ» Ç®±â À§ÇÑ ÀÚ·á ±¸Á¶ */
+/* zlibìœ¼ë¡œ ì••ì¶•ì„ í’€ê¸° ìœ„í•œ ìë£Œ êµ¬ì¡° */
         gz_stream *_gzfp;
         HStream& _stream;
     public:
@@ -134,7 +134,7 @@ class HStreamIODev : public HIODev
         virtual void init();
 };
 
-/* ¸Ş¸ğ¸® ÀÔÃâ·Â ÀåÄ¡ */
+/* ë©”ëª¨ë¦¬ ì…ì¶œë ¥ ì¥ì¹˜ */
 /**
  * The HMemIODev class controls the Input/Output device.
  * @short Memory IO device

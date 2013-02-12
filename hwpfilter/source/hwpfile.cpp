@@ -61,7 +61,7 @@ HWPFile::HWPFile(void)
 
 
 /**
- * TODO : Ãß°¡µÈ ½ºÅ¸ÀÏ¸®½ºÆ®¿¡ ´ëÇÑ ¸Ş¸ğ¸® ÇØÁ¦
+ * TODO : ì¶”ê°€ëœ ìŠ¤íƒ€ì¼ë¦¬ìŠ¤íŠ¸ì— ëŒ€í•œ ë©”ëª¨ë¦¬ í•´ì œ
  */
 HWPFile::~HWPFile(void)
 {
@@ -409,7 +409,7 @@ ColumnDef *HWPFile::GetColumnDef(int num)
     else
         return 0;
 }
-/* @return ÀÎµ¦½º´Â 1ºÎÅÍ ½ÃÀÛÇÑ´Ù. */
+/* @return ì¸ë±ìŠ¤ëŠ” 1ë¶€í„° ì‹œì‘í•œë‹¤. */
 int HWPFile::GetPageMasterNum(int page)
 {
     LinkedListIterator<ColumnInfo> it(&columnlist);

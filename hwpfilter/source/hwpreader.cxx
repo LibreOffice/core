@@ -360,7 +360,7 @@ void HwpReader::makeMeta()
         }
         sprintf(buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
 
-/* 2001³â 9¿ù 8ÀÏ Åä¿äÀÏ, 14½Ã 16ºÐ */
+/* 2001ë…„ 9ì›” 8ì¼ í† ìš”ì¼, 14ì‹œ 16ë¶„ */
 // 2001-09-07T11:16:47
         rstartEl( ascii("meta:creation-date"), rList );
         rchars( ascii(buf));
@@ -369,7 +369,7 @@ void HwpReader::makeMeta()
 
     if (hwpinfo->summary.keyword[0][0] || hwpinfo->summary.etc[0][0])
     {
-/* ½ºÆå¿¡´Â dc·Î µÇ¾îÀÖ´Ù. */
+/* ìŠ¤íŽ™ì—ëŠ” dcë¡œ ë˜ì–´ìžˆë‹¤. */
         rstartEl(ascii("meta:keywords"), rList);
         if (hwpinfo->summary.keyword[0][0])
         {
@@ -497,7 +497,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
         if( hdo->type == HWPDO_LINE || hdo->type == HWPDO_ARC || hdo->type == HWPDO_FREEFORM ||
             hdo->type == HWPDO_ADVANCED_ARC )
         {
-                                                  /* È­»ìÇ¥¸¦ »ç¿ë */
+                                                  /* í™”ì‚´í‘œë¥¼ ì‚¬ìš© */
             if( prop->line_tstyle && !ArrowShape[prop->line_tstyle].bMade  )
             {
                 ArrowShape[prop->line_tstyle].bMade = sal_True;
@@ -550,7 +550,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
 
         if( hdo->type != HWPDO_LINE )
         {
-            if( prop->flag >> 18  & 0x01 )        /* ºñÆ®¸Ê ÆÄÀÏ ¼Ó¼º Á¸Àç */
+            if( prop->flag >> 18  & 0x01 )        /* ë¹„íŠ¸ë§µ íŒŒì¼ ì†ì„± ì¡´ìž¬ */
             {
                 padd( ascii("draw:name"), sXML_CDATA, ascii(Int2Str(hdo->index, "fillimage%d", buf)));
                 if( !prop->pictype )
@@ -558,7 +558,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                     padd( ascii("xlink:href"), sXML_CDATA,
                         hconv(kstr2hstr( (uchar *)urltounix(prop->szPatternFile).c_str()).c_str()));
                 }
-                else                              /* ÀÓº£µðµå image·Î¼­ ÆÄÀÏ·Î ÀúÀåÇØ¾ß ÇÑ´Ù. */
+                else                              /* ìž„ë² ë””ë“œ imageë¡œì„œ íŒŒì¼ë¡œ ì €ìž¥í•´ì•¼ í•œë‹¤. */
                 {
                     EmPicture *emp = 0L;
                     if ( strlen( prop->szPatternFile ) > 3)
@@ -2471,11 +2471,11 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
 
 
 /**
- * Floating °´Ã¼¿¡ ´ëÇÑ ½ºÅ¸ÀÏÀ» ¸¸µç´Ù.
+ * Floating ê°ì²´ì— ëŒ€í•œ ìŠ¤íƒ€ì¼ì„ ë§Œë“ ë‹¤.
  */
 void HwpReader::makeFStyle(FBoxStyle * fstyle)
 {
-                                                  /* Ä¸¼Ç exist */
+                                                  /* ìº¡ì…˜ exist */
     if( ( fstyle->boxtype == 'G' || fstyle->boxtype == 'X' ) && fstyle->cap_len > 0 )
     {
         makeCaptionStyle(fstyle);
@@ -2769,7 +2769,7 @@ void HwpReader::make_text_p0(HWPPara * para, sal_Bool bParaStart)
     }
     if( d->bFirstPara && d->bInBody )
     {
-        strcpy(buf,"[¹®¼­ÀÇ Ã³À½]");
+        strcpy(buf,"[ë¬¸ì„œì˜ ì²˜ìŒ]");
         padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_EUC_KR));
         rstartEl(ascii("text:bookmark"), rList);
         pList->clear();
@@ -2840,7 +2840,7 @@ void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
     if( d->bFirstPara && d->bInBody )
     {
 /* for HWP's Bookmark */
-        strcpy(buf,"[¹®¼­ÀÇ Ã³À½]");
+        strcpy(buf,"[ë¬¸ì„œì˜ ì²˜ìŒ]");
         padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_EUC_KR));
         rstartEl(ascii("text:bookmark"), rList);
         pList->clear();
@@ -2918,7 +2918,7 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
     {
         if( !pstart )
             STARTP;
-        strcpy(buf,"[¹®¼­ÀÇ Ã³À½]");
+        strcpy(buf,"[ë¬¸ì„œì˜ ì²˜ìŒ]");
         padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_EUC_KR));
         rstartEl(ascii("text:bookmark"), rList);
         pList->clear();
@@ -4697,8 +4697,8 @@ void HwpReader::makeHidden(Hidden * hbox)
 
 
 /**
- * ÀÌ¹Ì master-page¿¡¼­ ÀÛ¾÷ÀÌ µÇ¾ú±â ¶§¹®¿¡ µû·Î ÀÛ¾÷ÇÒ ÇÊ¿ä°¡ ¾ø´Ù.
- * TODO : ³ªÁß¿¡ ¼Ò½ºÁ¤¸®ÇÒ¶§ Á¦°Å.
+ * ì´ë¯¸ master-pageì—ì„œ ìž‘ì—…ì´ ë˜ì—ˆê¸° ë•Œë¬¸ì— ë”°ë¡œ ìž‘ì—…í•  í•„ìš”ê°€ ì—†ë‹¤.
+ * TODO : ë‚˜ì¤‘ì— ì†ŒìŠ¤ì •ë¦¬í• ë•Œ ì œê±°.
  */
 /**
  * Footnote text: footnote, endnotes text: endnote to convert
@@ -4905,7 +4905,7 @@ void HwpReader::parsePara(HWPPara * para, sal_Bool bParaStart)
             if( d->bFirstPara && d->bInBody )
             {
 /* for HWP's Bookmark */
-                strcpy(buf,"[¹®¼­ÀÇ Ã³À½]");
+                strcpy(buf,"[ë¬¸ì„œì˜ ì²˜ìŒ]");
                 padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_EUC_KR));
                 rstartEl(ascii("text:bookmark"), rList);
                 pList->clear();
