@@ -57,7 +57,7 @@ class SalAquaFilePicker :
 public:
 
     // constructor
-    SalAquaFilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceMgr );
+    SalAquaFilePicker();
 
     //------------------------------------------------------------------------------------
     // XFilePickerNotifier
@@ -196,9 +196,6 @@ private:
     SalAquaFilePicker& operator=( const SalAquaFilePicker& );
 
     virtual void ensureFilterHelper();
-
-    // to instantiate own services
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >
     m_xListener;

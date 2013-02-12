@@ -38,8 +38,7 @@ using ::com::sun::star::ui::dialogs::XFilePicker;
 static Reference< XInterface > SAL_CALL createFileInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )
 {
-    return Reference< XInterface >(
-        *new SalAquaFilePicker( rServiceManager ) );
+    return Reference< XInterface >( *new SalAquaFilePicker );
 }
 
 static Reference< XInterface > SAL_CALL createFolderInstance(
