@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///Q0\u003d",
+        "filename": "sw/source/filter/writer/writer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-12T07:26:30Z",
+      "side": 1,
+      "message": "aktuell -\u003e current",
+      "revId": "4b41509eb836ae191c56343a9b597bc9c767f095",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///Q4\u003d",
+        "filename": "sw/source/filter/writer/writer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-12T07:26:30Z",
+      "side": 1,
+      "message": "putt -\u003e put",
+      "revId": "4b41509eb836ae191c56343a9b597bc9c767f095",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///Qw\u003d",
+        "filename": "sw/source/filter/writer/writer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-12T07:26:30Z",
+      "side": 1,
+      "message": "there are still entries available",
+      "revId": "4b41509eb836ae191c56343a9b597bc9c767f095",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///Qs\u003d",
+        "filename": "sw/source/filter/writer/writer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-12T07:26:30Z",
+      "side": 1,
+      "message": "dito",
+      "revId": "4b41509eb836ae191c56343a9b597bc9c767f095",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///Qo\u003d",
+        "filename": "sw/source/filter/writer/writer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-12T07:26:30Z",
+      "side": 1,
+      "message": "dito",
+      "revId": "4b41509eb836ae191c56343a9b597bc9c767f095",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
