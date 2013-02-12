@@ -216,8 +216,6 @@ sub get_path_for_library
         $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$getuidlibraryname, $includepatharrayref, 0);
     }
 
-    if ($$getuidlibraryref eq "") { installer::exiter::exit_program("ERROR: Could not find $getuidlibraryname!", "get_path_for_library"); }
-
     return $$getuidlibraryref;
 }
 
