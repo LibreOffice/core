@@ -24,7 +24,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 
@@ -209,13 +209,9 @@ void SvxPersonalizationTabPage::Reset( const SfxItemSet & )
 
 IMPL_LINK( SvxPersonalizationTabPage, SelectBackground, PushButton*, /*pButton*/ )
 {
-    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    if ( !xFactory.is() )
-        return 0;
+    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-    uno::Reference< ui::dialogs::XFilePicker > xFilePicker( xFactory->createInstance( "com.sun.star.ui.dialogs.FilePicker" ), uno::UNO_QUERY );
-    if ( !xFilePicker.is() )
-        return 0;
+    uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker = ui::dialogs::FilePicker::createDefault(xContext);
 
     xFilePicker->setMultiSelectionMode( false );
 
@@ -223,9 +219,7 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectBackground, PushButton*, /*pButton*/
     if ( xController.is() )
         xController->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, uno::makeAny( sal_True ) );
 
-    uno::Reference< ui::dialogs::XFilterManager > xFilterMgr( xFilePicker, uno::UNO_QUERY );
-    if ( xFilterMgr.is() )
-        xFilterMgr->appendFilter( "Background images (*.jpg;*.png)", "*.jpg;*.png" ); // TODO localize
+    xFilePicker->appendFilter( "Background images (*.jpg;*.png)", "*.jpg;*.png" ); // TODO localize
 
     while ( xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK )
     {

@@ -92,11 +92,12 @@ namespace
 // constructor
 //-----------------------------------------------------------------------------------------
 
-SalAquaFilePicker::SalAquaFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
-cppu::WeakComponentImplHelper8<XFilterManager, XFilterGroupManager, XFilePickerControlAccess, XFilePickerNotifier,
- lang::XInitialization, util::XCancellable, lang::XEventListener, lang::XServiceInfo>( m_rbHelperMtx )
-, m_xServiceMgr( xServiceMgr )
-, m_pFilterHelper( NULL )
+SalAquaFilePicker::SalAquaFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr )
+  : cppu::WeakComponentImplHelper2<
+             XFilePicker3,
+             lang::XServiceInfo>( m_rbHelperMtx )
+   , m_xServiceMgr( xServiceMgr )
+   , m_pFilterHelper( NULL )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 

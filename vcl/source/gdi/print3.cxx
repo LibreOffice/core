@@ -33,7 +33,7 @@
 #include "tools/urlobj.hxx"
 
 #include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/ui/dialogs/XFilePicker.hpp"
+#include "com/sun/star/ui/dialogs/FilePicker.hpp"
 #include "com/sun/star/ui/dialogs/XFilterManager.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
@@ -215,55 +215,42 @@ static rtl::OUString queryFile( Printer* pPrinter )
 {
     rtl::OUString aResult;
 
-    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    if( xFactory.is() )
-    {
-        uno::Sequence< uno::Any > aTempl( 1 );
-        aTempl.getArray()[0] <<= ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION;
-        uno::Reference< ui::dialogs::XFilePicker > xFilePicker(
-            xFactory->createInstanceWithArguments(
-                ::rtl::OUString( "com.sun.star.ui.dialogs.FilePicker" ),
-                aTempl ), uno::UNO_QUERY );
-        DBG_ASSERT( xFilePicker.is(), "could not get FilePicker service" );
+    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker = ui::dialogs::FilePicker::createWithMode(xContext, ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION);
 
-        uno::Reference< ui::dialogs::XFilterManager > xFilterMgr( xFilePicker, uno::UNO_QUERY );
-        if( xFilePicker.is() && xFilterMgr.is() )
-        {
-            try
-            {
+    try
+    {
 #ifdef UNX
-                // add PostScript and PDF
-                bool bPS = true, bPDF = true;
-                if( pPrinter )
-                {
-                    if( pPrinter->GetCapabilities( PRINTER_CAPABILITIES_PDF ) )
-                        bPS = false;
-                    else
-                        bPDF = false;
-                }
-                if( bPS )
-                    xFilterMgr->appendFilter( OUString( "PostScript" ), OUString( "*.ps" ) );
-                if( bPDF )
-                    xFilterMgr->appendFilter( OUString( "Portable Document Format" ), OUString( "*.pdf" ) );
+        // add PostScript and PDF
+        bool bPS = true, bPDF = true;
+        if( pPrinter )
+        {
+            if( pPrinter->GetCapabilities( PRINTER_CAPABILITIES_PDF ) )
+                bPS = false;
+            else
+                bPDF = false;
+        }
+        if( bPS )
+            xFilePicker->appendFilter( OUString( "PostScript" ), OUString( "*.ps" ) );
+        if( bPDF )
+            xFilePicker->appendFilter( OUString( "Portable Document Format" ), OUString( "*.pdf" ) );
 #elif defined WNT
         (void)pPrinter;
-                xFilterMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.PRN" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.prn" ) ) );
+        xFilePicker->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.PRN" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.prn" ) ) );
 #endif
-                // add arbitrary files
-                xFilterMgr->appendFilter(VclResId(SV_STDTEXT_ALLFILETYPES), "*.*");
-            }
-            catch (const lang::IllegalArgumentException&)
-            {
-                SAL_WARN( "vcl.gdi", "caught IllegalArgumentException when registering filter" );
-            }
+        // add arbitrary files
+        xFilePicker->appendFilter(VclResId(SV_STDTEXT_ALLFILETYPES), "*.*");
+    }
+    catch (const lang::IllegalArgumentException&)
+    {
+        SAL_WARN( "vcl.gdi", "caught IllegalArgumentException when registering filter" );
+    }
 
-            if( xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK )
-            {
-                uno::Sequence< ::rtl::OUString > aPathSeq( xFilePicker->getFiles() );
-                INetURLObject aObj( aPathSeq[0] );
-                aResult = aObj.PathToFileName();
-            }
-        }
+    if( xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK )
+    {
+        uno::Sequence< ::rtl::OUString > aPathSeq( xFilePicker->getFiles() );
+        INetURLObject aObj( aPathSeq[0] );
+        aResult = aObj.PathToFileName();
     }
     return aResult;
 }

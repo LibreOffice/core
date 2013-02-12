@@ -27,16 +27,11 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilePreview.hpp>
-#include <com/sun/star/util/XCancellable.hpp>
 
-#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ustring.hxx>
 
@@ -48,16 +43,11 @@ namespace vista{
 // types
 //-----------------------------------------------------------------------------
 
-typedef ::cppu::WeakComponentImplHelper10<
+typedef ::cppu::WeakComponentImplHelper5<
                 css::ui::dialogs::XFilePicker2,
-                css::ui::dialogs::XFilterManager,
-                css::ui::dialogs::XFilterGroupManager,
+                css::ui::dialogs::XFilePicker3,
                 css::ui::dialogs::XFilePickerControlAccess,
-                css::ui::dialogs::XFilePickerNotifier,
                 css::ui::dialogs::XFilePreview,
-                css::lang::XInitialization,
-                css::util::XCancellable,
-                css::lang::XEventListener,
                 css::lang::XServiceInfo >   TVistaFilePickerBase;
 
 //-----------------------------------------------------------------------------

@@ -20,17 +20,12 @@
 #ifndef _FILEPICKER_HXX_
 #define _FILEPICKER_HXX_
 
-#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <osl/mutex.hxx>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilePreview.hpp>
-#include <com/sun/star/util/XCancellable.hpp>
 #include "asynceventnotifier.hxx"
 #include "eventnotification.hxx"
 
@@ -59,16 +54,11 @@ protected:
 
 class CFilePicker :
     public CFilePickerDummy,
-    public cppu::WeakComponentImplHelper10<
-        ::com::sun::star::ui::dialogs::XFilterManager,
-        ::com::sun::star::ui::dialogs::XFilterGroupManager,
-        ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
-        ::com::sun::star::ui::dialogs::XFilePickerNotifier,
-        ::com::sun::star::ui::dialogs::XFilePreview,
+    public cppu::WeakComponentImplHelper5<
         ::com::sun::star::ui::dialogs::XFilePicker2,
-        ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::util::XCancellable,
-        ::com::sun::star::lang::XEventListener,
+        ::com::sun::star::ui::dialogs::XFilePicker3,
+        ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
+        ::com::sun::star::ui::dialogs::XFilePreview,
         ::com::sun::star::lang::XServiceInfo >
 {
 public:

@@ -27,6 +27,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -54,14 +55,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::ui::dialogs;
 
-FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
-    mxMSF( rxMSF )
+FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext )
 {
-    Sequence< Any > aInitPropSeq( 1 );
-    aInitPropSeq[ 0 ] <<= (sal_Int16)TemplateDescription::FILESAVE_AUTOEXTENSION;   // TemplateDescription.FILEOPEN_SIMPLE
-
-    mxFilePicker = Reference < XFilePicker >( mxMSF->getServiceManager()->createInstanceWithArgumentsAndContext(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aInitPropSeq, rxMSF ),UNO_QUERY_THROW );
+    mxFilePicker = FilePicker::createWithMode( rxContext, TemplateDescription::FILESAVE_AUTOEXTENSION);
     mxFilePicker->setMultiSelectionMode( sal_False );
 
     Reference< XFilePickerControlAccess > xAccess( mxFilePicker, UNO_QUERY );
@@ -77,8 +73,8 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
     }
 
     // collecting a list of impress filters
-    Reference< XNameAccess > xFilters( mxMSF->getServiceManager()->createInstanceWithContext(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ) ), rxMSF ), UNO_QUERY_THROW );
+    Reference< XNameAccess > xFilters( rxContext->getServiceManager()->createInstanceWithContext(
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ) ), rxContext ), UNO_QUERY_THROW );
     Sequence< OUString > aFilterList( xFilters->getElementNames() );
     for ( int i = 0; i < aFilterList.getLength(); i++ )
     {
@@ -122,13 +118,12 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
         }
     }
 
-    Reference< XNameAccess > xTypes( mxMSF->getServiceManager()->createInstanceWithContext(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ) ), rxMSF ), UNO_QUERY_THROW );
+    Reference< XNameAccess > xTypes( rxContext->getServiceManager()->createInstanceWithContext(
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ) ), rxContext ), UNO_QUERY_THROW );
     Sequence< OUString > aTypeList( xFilters->getElementNames() );
 
 //  mxFilePicker->setDefaultName( );
 
-    Reference< XFilterManager > xFilterManager( mxFilePicker, UNO_QUERY_THROW );
     std::vector< FilterEntry >::iterator aIter( aFilterEntryList.begin() );
     while( aIter != aFilterEntryList.end() )
     {
@@ -148,13 +143,13 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
                 }
                 if ( aExtensions.getLength() )
                 {
-                    xFilterManager->appendFilter( aIter->maUIName, aExtensions[ 0 ] );
+                    mxFilePicker->appendFilter( aIter->maUIName, aExtensions[ 0 ] );
                     if ( aIter->maFlags & 0x100 )
-                        xFilterManager->setCurrentFilter( aIter->maUIName );
+                        mxFilePicker->setCurrentFilter( aIter->maUIName );
                 }
             }
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
         }
         aIter++;

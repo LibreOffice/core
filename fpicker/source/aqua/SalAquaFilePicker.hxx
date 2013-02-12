@@ -20,13 +20,9 @@
 #ifndef _SALAQUAFILEPICKER_HXX_
 #define _SALAQUAFILEPICKER_HXX_
 
-#include <cppuhelper/compbase8.hxx>
-#include <com/sun/star/util/XCancellable.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
+#include <cppuhelper/compbase3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 
@@ -53,14 +49,9 @@
 
 class SalAquaFilePicker :
     public SalAquaPicker,
-    public cppu::WeakComponentImplHelper8<
-    ::com::sun::star::ui::dialogs::XFilterManager,
-    ::com::sun::star::ui::dialogs::XFilterGroupManager,
+    public cppu::WeakComponentImplHelper3<
+    ::com::sun::star::ui::dialogs::XFilePicker3,
     ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
-    ::com::sun::star::ui::dialogs::XFilePickerNotifier,
-    ::com::sun::star::lang::XInitialization,
-    ::com::sun::star::util::XCancellable,
-    ::com::sun::star::lang::XEventListener,
     ::com::sun::star::lang::XServiceInfo >
 {
 public:

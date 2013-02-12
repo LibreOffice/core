@@ -25,7 +25,7 @@
 #include "sfx2/objsh.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 using namespace com::sun::star;
@@ -177,11 +177,7 @@ void ScXMLSourceDlg::SelectSourceFile()
     if (!xServiceMgr.is())
         return;
 
-    uno::Reference<ui::dialogs::XFilePicker> xFilePicker(
-       xServiceMgr->createInstance("com.sun.star.ui.dialogs.FilePicker"), uno::UNO_QUERY);
-
-    if (!xFilePicker.is())
-        return;
+    uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = ui::dialogs::FilePicker::createDefault( comphelper::getComponentContext(xServiceMgr) );
 
     if (maSrcPath.isEmpty())
         // Use default path.

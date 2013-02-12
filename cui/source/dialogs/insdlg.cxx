@@ -19,7 +19,7 @@
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -112,40 +112,28 @@ IMPL_LINK_INLINE_END( SvInsertOleDlg, DoubleClickHdl, ListBox *, pListBox )
 
 IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
 {
-    Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    if( xFactory.is() )
+    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+
+    Reference< XFilePicker3 > xFilePicker = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
+
+    // add filter
+    try
     {
-        Reference< XFilePicker > xFilePicker( xFactory->createInstance( "com.sun.star.ui.dialogs.FilePicker" ), UNO_QUERY );
-        DBG_ASSERT( xFilePicker.is(), "could not get FilePicker service" );
+        xFilePicker->appendFilter(
+             OUString(),
+             OUString( "*.*" )
+             );
+    }
+    catch( const IllegalArgumentException& )
+    {
+        DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
+    }
 
-        Reference< XInitialization > xInit( xFilePicker, UNO_QUERY );
-        Reference< XFilterManager > xFilterMgr( xFilePicker, UNO_QUERY );
-        if( xInit.is() && xFilePicker.is() && xFilterMgr.is() )
-        {
-            Sequence< Any > aServiceType( 1 );
-            aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
-            xInit->initialize( aServiceType );
-
-            // add filter
-            try
-            {
-                xFilterMgr->appendFilter(
-                     OUString(),
-                     OUString( "*.*" )
-                     );
-            }
-            catch( IllegalArgumentException& )
-            {
-                DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
-            }
-
-            if( xFilePicker->execute() == ExecutableDialogResults::OK )
-            {
-                Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
-                INetURLObject aObj( aPathSeq[0] );
-                m_pEdFilepath->SetText( aObj.PathToFileName() );
-            }
-        }
+    if( xFilePicker->execute() == ExecutableDialogResults::OK )
+    {
+        Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
+        INetURLObject aObj( aPathSeq[0] );
+        m_pEdFilepath->SetText( aObj.PathToFileName() );
     }
 
     return 0;

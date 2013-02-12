@@ -41,7 +41,7 @@
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -1600,33 +1600,27 @@ sal_Bool WinSalPrinter::StartJob( const rtl::OUString* pFileName,
     if( mpInfoPrinter->maPortName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "FILE:" ) ) && !(pFileName && !pFileName->isEmpty()) )
     {
 
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-        if( xFactory.is() )
-        {
-            uno::Reference< XFilePicker > xFilePicker( xFactory->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ) ),
-                UNO_QUERY );
-            DBG_ASSERT( xFilePicker.is(), "could not get FilePicker service" );
+        uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        uno::Reference< XFilePicker3 > xFilePicker = FilePicker::createDefault(xContext);
 
-            uno::Reference< XInitialization > xInit( xFilePicker, UNO_QUERY );
-            uno::Reference< XFilterManager > xFilterMgr( xFilePicker, UNO_QUERY );
-            if( xInit.is() && xFilePicker.is() && xFilterMgr.is() )
+        uno::Reference< XInitialization > xInit( xFilePicker, UNO_QUERY );
+        uno::Reference< XFilterManager > xFilterMgr( xFilePicker, UNO_QUERY );
+        if( xInit.is() && xFilePicker.is() && xFilterMgr.is() )
+        {
+            Sequence< Any > aServiceType( 1 );
+            aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
+            xInit->initialize( aServiceType );
+            if( xFilePicker->execute() == ExecutableDialogResults::OK )
             {
-                Sequence< Any > aServiceType( 1 );
-                aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
-                xInit->initialize( aServiceType );
-                if( xFilePicker->execute() == ExecutableDialogResults::OK )
-                {
-                    Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
-                    INetURLObject aObj( aPathSeq[0] );
-                    // we're using ansi calls (StartDocA) so convert the string
-                    aOutFileName = aObj.PathToFileName();
-                }
-                else
-                {
-                    mnError = SAL_PRINTER_ERROR_ABORT;
-                    return FALSE;
-                }
+                Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
+                INetURLObject aObj( aPathSeq[0] );
+                // we're using ansi calls (StartDocA) so convert the string
+                aOutFileName = aObj.PathToFileName();
+            }
+            else
+            {
+                mnError = SAL_PRINTER_ERROR_ABORT;
+                return FALSE;
             }
         }
     }

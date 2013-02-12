@@ -105,16 +105,9 @@ QString toQString(const rtl::OUString& s)
 //////////////////////////////////////////////////////////////////////////
 
 KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
-    : cppu::WeakComponentImplHelper9<
-          XFilterManager,
-          XFilterGroupManager,
-          XFilePickerControlAccess,
-          XFilePickerNotifier,
-// TODO   XFilePreview,
+    : cppu::WeakComponentImplHelper3<
           XFilePicker2,
-          lang::XInitialization,
-          util::XCancellable,
-          lang::XEventListener,
+          XFilePicker3,
           lang::XServiceInfo>( _helperMutex ),
           _resMgr( ResMgr::CreateResMgr("fps_office") )
 {

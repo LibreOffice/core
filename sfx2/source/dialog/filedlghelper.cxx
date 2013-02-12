@@ -900,7 +900,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     else if ( nDialog == SFX2_IMPL_DIALOG_OOO )
         pServiceName = FILE_OPEN_SERVICE_NAME_OOO;
     else
-        pServiceName = FILE_OPEN_SERVICE_NAME;
+        pServiceName = "com.sun.star.ui.dialogs.FilePicker";
     OUString aService = ::rtl::OUString::createFromAscii( pServiceName );
 
     uno::Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );

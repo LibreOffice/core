@@ -24,7 +24,7 @@
 #include <vector>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 class FileOpenDialog
@@ -42,13 +42,12 @@ class FileOpenDialog
         FilterEntry() :
             maFlags( 0 ) {}
     };
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxMSF;
-    com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > mxFilePicker;
+    com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker3 > mxFilePicker;
 
     std::vector< FilterEntry > aFilterEntryList;
 
 public :
-        FileOpenDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF );
+        FileOpenDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
         ~FileOpenDialog();
 
         sal_Int16 execute();

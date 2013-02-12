@@ -34,6 +34,7 @@
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <comphelper/processfactory.hxx>
@@ -433,23 +434,15 @@ bool ModulWindow::LoadBasic()
     DBG_CHKTHIS( ModulWindow, 0 );
     bool bDone = false;
 
-    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-    Reference < XFilePicker > xFP;
-    if( xMSF.is() )
-    {
-        Sequence <Any> aServiceType(1);
-        aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
-        xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-            "com.sun.star.ui.dialogs.FilePicker", aServiceType ), UNO_QUERY );
-    }
+    Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
 
     if ( !aCurPath.isEmpty() )
         xFP->setDisplayDirectory ( aCurPath );
 
-    Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( "BASIC" , "*.bas" );
-    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), OUString( FilterMask_All ) );
-    xFltMgr->setCurrentFilter( "BASIC" );
+    xFP->appendFilter( "BASIC" , "*.bas" );
+    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), OUString( FilterMask_All ) );
+    xFP->setCurrentFilter( "BASIC" );
 
     if( xFP->execute() == RET_OK )
     {
@@ -487,15 +480,8 @@ bool ModulWindow::SaveBasicSource()
     DBG_CHKTHIS( ModulWindow, 0 );
     bool bDone = false;
 
-    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-    Reference < XFilePicker > xFP;
-    if( xMSF.is() )
-    {
-        Sequence <Any> aServiceType(1);
-        aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
-        xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-                    "com.sun.star.ui.dialogs.FilePicker", aServiceType ), UNO_QUERY );
-    }
+    Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD);
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
     xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
@@ -506,10 +492,9 @@ bool ModulWindow::SaveBasicSource()
     if ( !aCurPath.isEmpty() )
         xFP->setDisplayDirectory ( aCurPath );
 
-    Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( "BASIC", "*.bas" );
-    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), OUString( FilterMask_All ) );
-    xFltMgr->setCurrentFilter( "BASIC" );
+    xFP->appendFilter( "BASIC", "*.bas" );
+    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), OUString( FilterMask_All ) );
+    xFP->setCurrentFilter( "BASIC" );
 
     if( xFP->execute() == RET_OK )
     {

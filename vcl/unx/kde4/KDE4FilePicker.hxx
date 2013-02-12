@@ -19,17 +19,13 @@
 
 #pragma once
 
-#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/compbase4.hxx>
 
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XCancellable.hpp>
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
@@ -46,16 +42,11 @@ class QLayout;
 class ResMgr;
 
 class KDE4FilePicker :
-    public cppu::WeakComponentImplHelper9<
-        ::com::sun::star::ui::dialogs::XFilterManager,
-        ::com::sun::star::ui::dialogs::XFilterGroupManager,
-        ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
-        ::com::sun::star::ui::dialogs::XFilePickerNotifier,
-// TODO ::com::sun::star::ui::dialogs::XFilePreview,
+    public cppu::WeakComponentImplHelper4<
         ::com::sun::star::ui::dialogs::XFilePicker2,
-        ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::util::XCancellable,
-        ::com::sun::star::lang::XEventListener,
+        ::com::sun::star::ui::dialogs::XFilePicker3,
+        ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
+// TODO ::com::sun::star::ui::dialogs::XFilePreview,
         ::com::sun::star::lang::XServiceInfo >
 {
 protected:

@@ -348,6 +348,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
 	WindowStateConfiguration \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dialogs,\
+	FilePicker \
 	FolderPicker \
 	Wizard \
 ))
@@ -1480,7 +1481,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 	UIElementSettings \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui/dialogs,\
-	FilePicker \
 	FilterOptionsDialog \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/util,\
@@ -3926,6 +3926,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui/dialogs,\
 	XExecutableDialog \
 	XFilePicker \
 	XFilePicker2 \
+	XFilePicker3 \
 	XFilePickerControlAccess \
 	XFilePickerListener \
 	XFilePickerNotifier \

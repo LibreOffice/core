@@ -63,7 +63,7 @@
 
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include "com/sun/star/ui/dialogs/XFilePicker.hpp"
+#include "com/sun/star/ui/dialogs/FilePicker.hpp"
 #include "com/sun/star/ui/dialogs/XFilterManager.hpp"
 
 #include "com/sun/star/uno/Any.hxx"
@@ -886,12 +886,9 @@ bool ExtMgrDialog::acceptLicense( const uno::Reference< deployment::XPackage > &
 //------------------------------------------------------------------------------
 uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 {
-    const uno::Any mode( static_cast< sal_Int16 >( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE ) );
     const uno::Reference< uno::XComponentContext > xContext( m_pManager->getContext() );
-    const uno::Reference< ui::dialogs::XFilePicker > xFilePicker(
-        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.ui.dialogs.FilePicker",
-            uno::Sequence< uno::Any >( &mode, 1 ), xContext ), uno::UNO_QUERY_THROW );
+    const uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker =
+        ui::dialogs::FilePicker::createWithMode(xContext, ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE);
     xFilePicker->setTitle( m_sAddPackages );
 
     if ( m_sLastFolderURL.Len() )
@@ -927,15 +924,14 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         }
     }
 
-    const uno::Reference< ui::dialogs::XFilterManager > xFilterManager( xFilePicker, uno::UNO_QUERY_THROW );
     // All files at top:
-    xFilterManager->appendFilter( StrAllFiles::get(), "*.*" );
+    xFilePicker->appendFilter( StrAllFiles::get(), "*.*" );
     // then supported ones:
     t_string2string::const_iterator iPos( title2filter.begin() );
     const t_string2string::const_iterator iEnd( title2filter.end() );
     for ( ; iPos != iEnd; ++iPos ) {
         try {
-            xFilterManager->appendFilter( iPos->first, iPos->second );
+            xFilePicker->appendFilter( iPos->first, iPos->second );
         }
         catch (const lang::IllegalArgumentException & exc) {
             OSL_FAIL( ::rtl::OUStringToOString(
@@ -943,7 +939,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
             (void) exc;
         }
     }
-    xFilterManager->setCurrentFilter( sDefaultFilter );
+    xFilePicker->setCurrentFilter( sDefaultFilter );
 
     if ( xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK )
         return uno::Sequence<OUString>(); // cancelled

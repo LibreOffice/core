@@ -39,6 +39,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <comphelper/processfactory.hxx>
@@ -689,15 +690,8 @@ bool DialogWindow::SaveDialog()
     DBG_CHKTHIS( DialogWindow, 0 );
     bool bDone = false;
 
-    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-    Reference < XFilePicker > xFP;
-    if( xMSF.is() )
-    {
-        Sequence <Any> aServiceType(1);
-        aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
-        xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-            "com.sun.star.ui.dialogs.FilePicker", aServiceType ), UNO_QUERY );
-    }
+    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD);
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
     xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
@@ -711,10 +705,9 @@ bool DialogWindow::SaveDialog()
     xFP->setDefaultName( OUString( GetName() ) );
 
     OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
-    Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( aDialogStr, String( "*.xdl" ) );
-    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( FilterMask_All ) );
-    xFltMgr->setCurrentFilter( aDialogStr );
+    xFP->appendFilter( aDialogStr, String( "*.xdl" ) );
+    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( FilterMask_All ) );
+    xFP->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
     {
@@ -723,11 +716,10 @@ bool DialogWindow::SaveDialog()
 
         // export dialog model to xml
         Reference< container::XNameContainer > xDialogModel = GetDialog();
-        Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
         Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
         Reference< XInputStream > xInput( xISP->createInputStream() );
 
-        Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
+        Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(xContext) );
 
         Reference< XOutputStream > xOutput;
         try
@@ -950,14 +942,8 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
     bool bDone = false;
 
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-    Reference < XFilePicker > xFP;
-    if( xMSF.is() )
-    {
-        Sequence <Any> aServiceType(1);
-        aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
-        xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-            "com.sun.star.ui.dialogs.FilePicker", aServiceType ), UNO_QUERY );
-    }
+    Reference< XComponentContext > xContext( comphelper::getComponentContext( xMSF ) );
+    Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
     xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
@@ -970,10 +956,9 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
         xFP->setDisplayDirectory ( aCurPath );
 
     OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
-    Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( aDialogStr, String( "*.xdl" ) );
-    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( FilterMask_All ) );
-    xFltMgr->setCurrentFilter( aDialogStr );
+    xFP->appendFilter( aDialogStr, String( "*.xdl" ) );
+    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( FilterMask_All ) );
+    xFP->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
     {
@@ -998,8 +983,6 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
             if( xSFI->exists( aCurPath ) )
                 xInput = xSFI->openFileRead( aCurPath );
 
-            Reference< XComponentContext > xContext(
-                comphelper::getComponentContext( xMSF ) );
             ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
 
             OUString aXmlDlgName;

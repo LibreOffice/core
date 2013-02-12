@@ -45,7 +45,7 @@
 
 #include <sot/storage.hxx>
 #include <com/sun/star/io/Pipe.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -781,16 +781,10 @@ void LibPage::NewLib()
 
 void LibPage::InsertLib()
 {
-    // file open dialog
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-    Reference < XFilePicker > xFP;
-    if( xMSF.is() )
-    {
-        Sequence <Any> aServiceType(1);
-        aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
-        xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-                    "com.sun.star.ui.dialogs.FilePicker", aServiceType ), UNO_QUERY );
-    }
+    Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    // file open dialog
+    Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
     xFP->setTitle( String( IDEResId( RID_STR_APPENDLIBS ) ) );
 
     // filter
@@ -852,27 +846,24 @@ void LibPage::InsertLib()
             aDlgURLObj.setBase( aDlgBase );
         }
 
-        if ( xMSF.is() )
+        Reference< XSimpleFileAccess3 > xSFA( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
+
+        OUString aModURL( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        if ( xSFA->exists( aModURL ) )
         {
-            Reference< XSimpleFileAccess3 > xSFA( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
+            Sequence <Any> aSeqModURL(1);
+            aSeqModURL[0] <<= aModURL;
+            xModLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
+                        "com.sun.star.script.DocumentScriptLibraryContainer", aSeqModURL ), UNO_QUERY );
+        }
 
-            OUString aModURL( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
-            if ( xSFA->exists( aModURL ) )
-            {
-                Sequence <Any> aSeqModURL(1);
-                aSeqModURL[0] <<= aModURL;
-                xModLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
-                            "com.sun.star.script.DocumentScriptLibraryContainer", aSeqModURL ), UNO_QUERY );
-            }
-
-            OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
-            if ( xSFA->exists( aDlgURL ) )
-            {
-                Sequence <Any> aSeqDlgURL(1);
-                aSeqDlgURL[0] <<= aDlgURL;
-                xDlgLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
-                            "com.sun.star.script.DocumentDialogLibraryContainer", aSeqDlgURL ), UNO_QUERY );
-            }
+        OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        if ( xSFA->exists( aDlgURL ) )
+        {
+            Sequence <Any> aSeqDlgURL(1);
+            aSeqDlgURL[0] <<= aDlgURL;
+            xDlgLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
+                        "com.sun.star.script.DocumentDialogLibraryContainer", aSeqDlgURL ), UNO_QUERY );
         }
 
         if ( xModLibContImport.is() || xDlgLibContImport.is() )
@@ -1253,16 +1244,11 @@ Reference< XProgressHandler > OLibCommandEnvironment::getProgressHandler()
 void LibPage::ExportAsPackage( const String& aLibName )
 {
     // file open dialog
-    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, 0) );
     Reference< XSimpleFileAccess3 > xSFA = SimpleFileAccess::create(xContext);
 
-    Reference < XFilePicker > xFP;
-    Sequence <Any> aServiceType(1);
-    aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
-    xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-                "com.sun.star.ui.dialogs.FilePicker", aServiceType ), UNO_QUERY );
+    Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILESAVE_SIMPLE);
 
     xFP->setTitle( String( IDEResId( RID_STR_EXPORTPACKAGE ) ) );
 

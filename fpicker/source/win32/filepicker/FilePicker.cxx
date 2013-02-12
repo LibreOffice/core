@@ -67,16 +67,9 @@ namespace
 //-----------------------------------------------------------------------------------------
 
 CFilePicker::CFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr) :
-    cppu::WeakComponentImplHelper10<
-        XFilterManager,
-        XFilterGroupManager,
-        XFilePickerControlAccess,
-        XFilePickerNotifier,
-        XFilePreview,
+    cppu::WeakComponentImplHelper3<
         XFilePicker2,
-        lang::XInitialization,
-        util::XCancellable,
-        lang::XEventListener,
+        XFilePicker3,
         lang::XServiceInfo>(m_rbHelperMtx),
         m_xServiceMgr(xServiceMgr),
         m_aAsyncEventNotifier(rBHelper)
