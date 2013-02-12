@@ -32,9 +32,6 @@ $(eval $(call gb_AllLangZip_add_files,autotextshare,\
 	es/crdbus50.bau \
 	es/standard.bau \
 	es/template.bau \
-	eu/crdbus50.bau \
-	eu/standard.bau \
-	eu/template.bau \
 	fr/crdbus50.bau \
 	fr/standard.bau \
 	fr/template.bau \
