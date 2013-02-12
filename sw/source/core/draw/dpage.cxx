@@ -111,7 +111,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
 
             if ( pRect )
             {
-                //The drawing demands all sides which overlap with the rest.
+                //The drawing demands all pages which overlap with the rest.
                 const SwRect aRect( *pRect );
                 const SwFrm *pPg = pSh->GetLayout()->Lower();
                 do
@@ -122,7 +122,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
             }
             else
             {
-                //The drawing demands all visible sides
+                //The drawing demands all visible pages
                 const SwFrm *pPg = pSh->Imp()->GetFirstVisPage();
                 if ( pPg )
                     do
