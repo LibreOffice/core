@@ -219,7 +219,7 @@ void ExtBoxWithBtns_Impl::RecalcAll()
 {
     const sal_Int32 nActive = getSelIndex();
 
-    if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
     {
         SetButtonStatus( GetEntryData( nActive) );
     }
@@ -232,7 +232,7 @@ void ExtBoxWithBtns_Impl::RecalcAll()
 
     ExtensionBox_Impl::RecalcAll();
 
-    if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
         SetButtonPos( GetEntryRect( nActive ) );
 }
 
@@ -313,7 +313,7 @@ bool ExtBoxWithBtns_Impl::HandleTabKey( bool bReverse )
 {
     sal_Int32 nIndex = getSelIndex();
 
-    if ( nIndex == EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+    if ( nIndex == svt::IExtensionListBox::ENTRY_NOTFOUND )
         return false;
 
     PushButton *pNext = NULL;
@@ -417,7 +417,8 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
     {
         const SolarMutexGuard aGuard;
         if ( rMEvt.IsMod1() && HasActive() )
-            selectEntry( EXTENSION_LISTBOX_ENTRY_NOTFOUND );   // Selecting an not existing entry will deselect the current one
+            selectEntry( svt::IExtensionListBox::ENTRY_NOTFOUND );
+                // selecting a not existing entry will deselect the current one
         else
             selectEntry( nPos );
     }
@@ -452,7 +453,7 @@ void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
     if ( bEnable )
     {
         sal_Int32 nIndex = getSelIndex();
-        if ( nIndex != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+        if ( nIndex != svt::IExtensionListBox::ENTRY_NOTFOUND )
             SetButtonStatus( GetEntryData( nIndex ) );
     }
     else
@@ -486,7 +487,7 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleOptionsBtn)
 {
     const sal_Int32 nActive = getSelIndex();
 
-    if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
@@ -509,7 +510,7 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleEnableBtn)
 {
     const sal_Int32 nActive = getSelIndex();
 
-    if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
     {
         TEntry_Impl pEntry = GetEntryData( nActive );
 
@@ -530,7 +531,7 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleRemoveBtn)
 {
     const sal_Int32 nActive = getSelIndex();
 
-    if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+    if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
     {
         TEntry_Impl pEntry = GetEntryData( nActive );
         m_pParent->removePackage( pEntry->m_xPackage );

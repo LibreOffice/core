@@ -304,7 +304,7 @@ sal_Int32 ExtensionBox_Impl::getSelIndex() const
         return static_cast< sal_Int32 >( m_nActive );
     }
     else
-        return static_cast< sal_Int32 >( EXTENSION_LISTBOX_ENTRY_NOTFOUND );
+        return ENTRY_NOTFOUND;
 }
 
 //------------------------------------------------------------------------------

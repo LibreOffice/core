@@ -28,8 +28,6 @@
 namespace svt
 {
 
-#define EXTENSION_LISTBOX_ENTRY_NOTFOUND (sal_Int32) 0xFFFFFFFF
-
 // ============================================================================
 
 /** This abstract class provides methods to implement an extension list box.
@@ -38,6 +36,8 @@ namespace svt
 class IExtensionListBox: public Control
 {
 public:
+    enum { ENTRY_NOTFOUND = -1 };
+
     IExtensionListBox( Window* pParent, WinBits nWinStyle = 0 ): Control( pParent, nWinStyle ){}
 
     /** @return  The count of the entries in the list box. */
@@ -45,7 +45,7 @@ public:
 
     /** @return  The index of the first selected entry in the list box.
         When nothing is selected, which is the case when getItemCount returns '0',
-        then this function returns EXTENSION_LISTBOX_ENTRY_NOTFOUND */
+        then this function returns ENTRY_NOTFOUND */
     virtual sal_Int32 getSelIndex() const = 0;
 
     /** @return  The item name of the entry with the given index
