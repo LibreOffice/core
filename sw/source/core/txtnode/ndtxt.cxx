@@ -2965,9 +2965,8 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
         sTmpText.SearchAndReplaceAll('\t', ' ');
 
     // mask hidden characters
-    const xub_Unicode cChar = CH_TXTATR_BREAKWORD;
-    sal_uInt16 nHiddenChrs =
-        SwScriptInfo::MaskHiddenRanges( *this, sTmpText, 0, sTmpText.Len(), cChar );
+    const sal_Unicode cChar = CH_TXTATR_BREAKWORD;
+    SwScriptInfo::MaskHiddenRanges(*this, sTmpText, 0, sTmpText.Len(), cChar);
 
     sTmpText = sTmpText.Copy( nIdx, nLen );
     rDestNd.InsertText( sTmpText, aDestIdx );
@@ -3070,22 +3069,40 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
         rDestNd.InsertText( GetNumString(), aDestIdx );
     }
 
-    if ( nHiddenChrs > 0 )
+    aDestIdx = 0;
+    sal_Int32 nStartDelete(-1);
+    while (aDestIdx < rDestNd.GetTxt().Len())
     {
-        aDestIdx = 0;
-        while ( aDestIdx < rDestNd.GetTxt().Len() )
+        sal_Unicode const cur(rDestNd.GetTxt().GetChar(aDestIdx.GetIndex()));
+        if (   (cChar == cur) // filter substituted hidden text
+            || (CH_TXT_ATR_FIELDSTART  == cur) // filter all fieldmarks
+            || (CH_TXT_ATR_FIELDEND    == cur)
+            || (CH_TXT_ATR_FORMELEMENT == cur))
         {
-            if ( cChar == rDestNd.GetTxt().GetChar( aDestIdx.GetIndex() ) )
+            if (-1 == nStartDelete)
             {
-                xub_StrLen nIndex = aDestIdx.GetIndex();
-                while ( nIndex < rDestNd.GetTxt().Len() &&
-                        cChar == rDestNd.GetTxt().GetChar( ++nIndex ) )
-                    ;
-                rDestNd.EraseText( aDestIdx, nIndex - aDestIdx.GetIndex() );
+                nStartDelete = aDestIdx.GetIndex(); // start deletion range
             }
-            else
-                ++aDestIdx;
+            ++aDestIdx;
+            if (aDestIdx < rDestNd.GetTxt().Len())
+            {
+                continue;
+            } // else: end of paragraph => delete, see below
         }
+        else
+        {
+            if (-1 == nStartDelete)
+            {
+                ++aDestIdx;
+                continue;
+            } // else: delete, see below
+        }
+        assert(-1 != nStartDelete); // without delete range, would have contined
+        rDestNd.EraseText(
+            SwIndex(&rDestNd, static_cast<xub_StrLen>(nStartDelete)),
+            aDestIdx.GetIndex() - nStartDelete);
+        assert(aDestIdx.GetIndex() == nStartDelete);
+        nStartDelete = -1; // reset
     }
 
     return sal_True;
