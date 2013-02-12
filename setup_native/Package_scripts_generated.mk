@@ -10,15 +10,15 @@
 $(eval $(call gb_Package_Package,scripts_generated,$(call gb_CustomTarget_get_workdir,setup_native/scripts)))
 
 ifeq ($(OS),SOLARIS)
-$(eval $(call gb_Package_add_file,scripts,bin/userscripts/install,install))
-$(eval $(call gb_Package_add_file,scripts,bin/userscripts/uninstall,uninstall))
+$(eval $(call gb_Package_add_file,scripts_generated,bin/userscripts/install,install))
+$(eval $(call gb_Package_add_file,scripts_generated,bin/userscripts/uninstall,uninstall))
 endif
 
 ifeq ($(OS),LINUX)
-ifneq ($(filter-out rpm,$(PKGFORMAT)),)
-$(eval $(call gb_Package_add_file,scripts,bin/userscripts/install,install))
-$(eval $(call gb_Package_add_file,scripts,bin/userscripts/uninstall,uninstall))
-$(eval $(call gb_Package_add_file,scripts,bin/openoffice-userland-1.0-0.noarch.rpm,fake-db-1.0-0.noarch.rpm))
+ifneq ($(filter rpm,$(PKGFORMAT)),)
+$(eval $(call gb_Package_add_file,scripts_generated,bin/userscripts/install,install))
+$(eval $(call gb_Package_add_file,scripts_generated,bin/userscripts/uninstall,uninstall))
+$(eval $(call gb_Package_add_file,scripts_generated,bin/openoffice-userland-1.0-0.noarch.rpm,noarch/fake-db-1.0-0.noarch.rpm))
 endif
 endif
 # vim: set noet sw=4 ts=4:
