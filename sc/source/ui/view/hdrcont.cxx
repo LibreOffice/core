@@ -767,7 +767,6 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
         }
         else
         {
-            if (nNewWidth<0) nNewWidth=0;
             if (bDragMoved)
                 SetEntrySize( nDragNo, (sal_uInt16) nNewWidth );
         }
