@@ -20,7 +20,6 @@ $(eval $(call gb_Zip_add_files,autocorr,\
 	acor_en-US.dat \
 	acor_en-ZA.dat \
 	acor_es-ES.dat \
-	acor_eu.dat \
 	acor_fa-IR.dat \
 	acor_fi-FI.dat \
 	acor_fr-FR.dat \
