@@ -138,15 +138,8 @@ void SVGAttributeWriter::ImplGetColorStr( const Color& rColor, ::rtl::OUString& 
         rColorStr = "none";
     else
     {
-        ::rtl::OUStringBuffer aStyle;
-        aStyle.appendAscii( "rgb(" );
-        aStyle.append( (sal_Int32) rColor.GetRed() );
-        aStyle.appendAscii( "," );
-        aStyle.append( (sal_Int32) rColor.GetGreen() );
-        aStyle.appendAscii( "," );
-        aStyle.append( (sal_Int32) rColor.GetBlue() );
-        aStyle.appendAscii( ")" );
-        rColorStr = aStyle.makeStringAndClear();
+        rColorStr = "rgb(" + OUString::number(rColor.GetRed()) + "," + OUString::number(rColor.GetGreen()) +
+                    "," + OUString::number(rColor.GetBlue()) + ")";
     }
 }
 
@@ -2871,8 +2864,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                 Point                    aPt;
                 Size                     aSz;
                 Sequence< sal_Int8 >     aSeq( (sal_Int8*) aOStm.GetData(), aOStm.Tell() );
-                rtl::OUStringBuffer aBuffer;
-                aBuffer.appendAscii( "data:image/png;base64," );
+                OUStringBuffer aBuffer( "data:image/png;base64," );
                 ::sax::Converter::encodeBase64( aBuffer, aSeq );
 
                 if( bApplyMapping )

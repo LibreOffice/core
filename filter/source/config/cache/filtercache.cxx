@@ -412,11 +412,9 @@ CacheItem FilterCache::getItem(      EItemType        eType,
 
         if ( !bIsHelpFilter && !impl_isModuleInstalled(sDocService) )
         {
-            ::rtl::OUStringBuffer sMsg(256);
-            sMsg.appendAscii("The requested filter '"                                                               );
-            sMsg.append     (sItem                                                                                  );
-            sMsg.appendAscii("' exists ... but it shouldnt; because the corresponding OOo module was not installed.");
-            throw css::container::NoSuchElementException(sMsg.makeStringAndClear(), css::uno::Reference< css::uno::XInterface >());
+            OUString sMsg("The requested filter '" + sItem +
+                          "' exists ... but it shouldnt; because the corresponding LibreOffice module was not installed.");
+            throw css::container::NoSuchElementException(sMsg, css::uno::Reference< css::uno::XInterface >());
         }
     }
 
@@ -1039,7 +1037,7 @@ void FilterCache::impl_validateAndOptimize()
     // If there are some real errors throw a RuntimException!
     // If there are some warnings only, show an assertion.
     sal_Int32             nErrors   = 0;
-    ::rtl::OUStringBuffer sLog(256);
+    OUStringBuffer sLog(256);
 
     CacheItemList::iterator pIt;
 
@@ -1074,19 +1072,13 @@ void FilterCache::impl_validateAndOptimize()
         aType[PROPNAME_NAME] >>= sInternalTypeNameCheck;
         if (!sInternalTypeNameCheck.equals(sType))
         {
-            sLog.appendAscii("Warning\t:\t");
-            sLog.appendAscii("The type \"" );
-            sLog.append     (sType         );
-            sLog.appendAscii("\" does support the property \"Name\" correctly.\n");
+            sLog.append("Warning\t:\t" "The type \"" + sType + "\" does support the property \"Name\" correctly.\n");
             ++nWarnings;
         }
 
         if (!ce && !cu)
         {
-            sLog.appendAscii("Warning\t:\t");
-            sLog.appendAscii("The type \"" );
-            sLog.append     (sType         );
-            sLog.appendAscii("\" does not contain any URL pattern nor any extensions.\n");
+            sLog.append("Warning\t:\t" "The type \"" + sType + "\" does not contain any URL pattern nor any extensions.\n");
             ++nWarnings;
         }
 #endif
@@ -1162,10 +1154,7 @@ void FilterCache::impl_validateAndOptimize()
                 (!bReferencedByHandler)
                )
             {
-                sLog.appendAscii("Warning\t:\t"                                            );
-                sLog.appendAscii("The type \""                                             );
-                sLog.append     (sType                                                     );
-                sLog.appendAscii("\" isnt used by any filter, loader or content handler.\n");
+                sLog.append("Warning\t:\t" "The type \"" + sType + "\" isnt used by any filter, loader or content handler.\n");
                 ++nWarnings;
             }
         }
@@ -1178,20 +1167,15 @@ void FilterCache::impl_validateAndOptimize()
                 if (bAllFiltersShouldExist)
                 {
                     ++nWarnings; // preferred filters can point to a non-installed office module ! no error ... it's a warning only .-(
-                    sLog.appendAscii("error\t:\t");
+                    sLog.append("error\t:\t");
                 }
                 else
                 {
                     ++nWarnings;
-                    sLog.appendAscii("warning\t:\t");
+                    sLog.append("warning\t:\t");
                 }
 
-                sLog.appendAscii("The type \""                      );
-                sLog.append     (sType                              );
-                sLog.appendAscii("\" points to an invalid filter \"");
-                sLog.append     (sPrefFilter                        );
-                sLog.appendAscii("\".\n"                            );
-
+                sLog.append("The type \"" + sType + "\" points to an invalid filter \"" + sPrefFilter + "\".\n");
                 continue;
             }
 
@@ -1200,14 +1184,8 @@ void FilterCache::impl_validateAndOptimize()
             aPrefFilter[PROPNAME_TYPE] >>= sFilterTypeReg;
             if (sFilterTypeReg != sType)
             {
-                sLog.appendAscii("error\t:\t"                       );
-                sLog.appendAscii("The preferred filter \""          );
-                sLog.append     (sPrefFilter                        );
-                sLog.appendAscii("\" of type \""                    );
-                sLog.append     (sType                              );
-                sLog.appendAscii("is registered for another type \"");
-                sLog.append     (sFilterTypeReg                     );
-                sLog.appendAscii("\".\n"                            );
+                sLog.append("error\t:\t" "The preferred filter \"" + sPrefFilter + "\" of type \"" + sType +
+                            "is registered for another type \"" + sFilterTypeReg + "\".\n");
                 ++nErrors;
             }
 
@@ -1215,12 +1193,8 @@ void FilterCache::impl_validateAndOptimize()
             aPrefFilter[PROPNAME_FLAGS] >>= nFlags;
             if ((nFlags & FLAGVAL_IMPORT) != FLAGVAL_IMPORT)
             {
-                sLog.appendAscii("error\t:\t"                   );
-                sLog.appendAscii("The preferred filter \""      );
-                sLog.append     (sPrefFilter                    );
-                sLog.appendAscii("\" of type \""                );
-                sLog.append     (sType                          );
-                sLog.appendAscii("\" is not an IMPORT filter!\n");
+                sLog.append("error\t:\t" "The preferred filter \"" + sPrefFilter + "\" of type \"" +
+                            sType + "\" is not an IMPORT filter!\n");
                 ++nErrors;
             }
 
@@ -1228,10 +1202,8 @@ void FilterCache::impl_validateAndOptimize()
             aPrefFilter[PROPNAME_NAME] >>= sInternalFilterNameCheck;
             if (!sInternalFilterNameCheck.equals(sPrefFilter))
             {
-                sLog.appendAscii("Warning\t:\t"  );
-                sLog.appendAscii("The filter \"" );
-                sLog.append     (sPrefFilter     );
-                sLog.appendAscii("\" does support the property \"Name\" correctly.\n");
+                sLog.append("Warning\t:\t" "The filter \"" + sPrefFilter +
+                            "\" does support the property \"Name\" correctly.\n");
                 ++nWarnings;
             }
         }
@@ -1249,8 +1221,7 @@ void FilterCache::impl_validateAndOptimize()
         (sDefaultFrameLoader.isEmpty()       )
        )
     {
-        sLog.appendAscii("error\t:\t"                                );
-        sLog.appendAscii("There is no valid default frame loader!?\n");
+        sLog.append("error\t:\t" "There is no valid default frame loader!?\n");
         ++nErrors;
     }
 
@@ -1531,13 +1502,8 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
         css::uno::Any aVal = xConfig->getByName(sSetName);
         if (!(aVal >>= xSet) || !xSet.is())
         {
-            ::rtl::OUStringBuffer sMsg(256);
-            sMsg.appendAscii("Could not open configuration set \"");
-            sMsg.append     (sSetName                             );
-            sMsg.appendAscii("\"."                                );
-            throw css::uno::Exception(
-                    sMsg.makeStringAndClear(),
-                    css::uno::Reference< css::uno::XInterface >());
+            OUString sMsg("Could not open configuration set \"" + sSetName + "\".");
+            throw css::uno::Exception(sMsg, css::uno::Reference< css::uno::XInterface >());
         }
         lItems = xSet->getElementNames();
     }
@@ -1587,12 +1553,8 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
             {
                 if (pItem == pCache->end())
                 {
-                    ::rtl::OUStringBuffer sMsg(256);
-                    sMsg.appendAscii("item \""                 );
-                    sMsg.append     (pItems[i]                 );
-                    sMsg.appendAscii("\" not found for update!");
-                    throw css::uno::Exception(sMsg.makeStringAndClear()                    ,
-                                              css::uno::Reference< css::uno::XInterface >());
+                    OUString sMsg("item \"" + pItems[i] + "\" not found for update!");
+                    throw css::uno::Exception(sMsg, css::uno::Reference< css::uno::XInterface >());
                 }
                 try
                 {
@@ -1680,14 +1642,10 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
             return;
         ::rtl::OUString sName = rItem.getUnpackedValueOrDefault(PROPNAME_NAME, ::rtl::OUString());
 
-        ::rtl::OUStringBuffer sMsg(256);
-        sMsg.appendAscii("Fallback scenario for filter or type '"           );
-        sMsg.append     (sName                                              );
-        sMsg.appendAscii("' and locale '"                                   );
-        sMsg.append     (sActLocale                                         );
-        sMsg.appendAscii("' failed. Please check your filter configuration.");
+        OUString sMsg("Fallback scenario for filter or type '" + sName + "' and locale '" +
+                      sActLocale + "' failed. Please check your filter configuration.");
 
-        OSL_FAIL(_FILTER_CONFIG_TO_ASCII_(sMsg.makeStringAndClear()));
+        OSL_FAIL(_FILTER_CONFIG_TO_ASCII_(sMsg));
 #endif
         return;
     }
@@ -1745,12 +1703,8 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
         css::uno::Any aVal = xSet->getByName(sItem);
         if (!(aVal >>= xItem) || !xItem.is())
         {
-            ::rtl::OUStringBuffer sMsg(256);
-            sMsg.appendAscii("found corrupted item \"");
-            sMsg.append     (sItem                    );
-            sMsg.appendAscii("\"."                    );
-            throw css::uno::Exception(sMsg.makeStringAndClear()                    ,
-                                      css::uno::Reference< css::uno::XInterface >());
+            OUString sMsg("found corrupted item \"" + sItem + "\".");
+            throw css::uno::Exception(sMsg, css::uno::Reference< css::uno::XInterface >());
         }
     #ifdef WORKAROUND_EXCEPTION_PROBLEM
     }

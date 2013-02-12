@@ -199,10 +199,8 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     if (pos != -1)
     {
         OSL_FAIL("DEPRECATED!\nPlease use new query format: 'matchByDocumentService=...'");
-        ::rtl::OUStringBuffer sPatchedQuery(256);
-        sPatchedQuery.appendAscii("matchByDocumentService=");
-        sPatchedQuery.append     (sNewQuery.copy(7)        );
-        sNewQuery = sPatchedQuery.makeStringAndClear();
+        OUString sPatchedQuery("matchByDocumentService=" + sNewQuery.copy(7));
+        sNewQuery = sPatchedQuery;
     }
 
     // analyze query and split it into its tokens
