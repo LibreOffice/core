@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///Ns\u003d",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-02-12T21:49:38Z",
+      "side": 0,
+      "message": "We shouldn\u0027t modify this for loop.",
+      "revId": "98029f1625663609d670f79eea61f7547bfc8123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///No\u003d",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-02-12T21:49:38Z",
+      "side": 0,
+      "message": "Remove the \"nTabSelCount \u003e 1\" check from this.",
+      "revId": "98029f1625663609d670f79eea61f7547bfc8123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///Nk\u003d",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-02-12T21:49:38Z",
+      "side": 0,
+      "message": "We need to totally re-write from 119 to 135. We don\u0027t need to mess with the pReqArgs to put or retrieve the name at all. What we need to do is to get all selected sheet indices from ScMarkData (rMark), put them into a temporary array (such as std::vector) if the sheet is visible, then iterate through them and call HideTable() on each of them. We need to store the sheet indices in a temporary array because when you call HideTable(), it modifies the state of ScMarkData, which causes a crash if you are in iteration.",
+      "revId": "98029f1625663609d670f79eea61f7547bfc8123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///Nw\u003d",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-02-12T21:49:38Z",
+      "side": 0,
+      "message": "We shouldn\u0027t modify this line. What this for loop does is to make sure we have at least two visible sheets to allow this operation.",
+      "revId": "98029f1625663609d670f79eea61f7547bfc8123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///N0\u003d",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-02-12T21:49:38Z",
+      "side": 0,
+      "message": "Actually all we need to do is to remove the \"nTabSelCount \u003e 1\" condition from this if conditon.  We still need to check for nVis \u003c 2 to ensure that we won\u0027t allow hiding of the only visible sheet, which we don\u0027t want.",
+      "revId": "98029f1625663609d670f79eea61f7547bfc8123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
