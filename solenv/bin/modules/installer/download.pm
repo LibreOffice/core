@@ -165,7 +165,7 @@ sub put_checksum_and_size_into_script
 
 sub call_sum
 {
-    my ($filename, $getuidlibrary) = @_;
+    my ($filename) = @_;
 
     my $systemcall = "/usr/bin/sum $filename |";
 
