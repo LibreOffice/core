@@ -247,6 +247,7 @@ if (-d "$StartDir") {
                 "configuration/bootstrap",
                 "connection",
                 "container",
+                "cui",
                 "datatransfer",
                 "datatransfer/clipboard",
                 "datatransfer/dnd",
