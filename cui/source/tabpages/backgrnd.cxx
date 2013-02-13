@@ -1286,6 +1286,12 @@ void SvxBackgroundTabPage::ShowGradientUI_Impl()
             m_pLbGradients->SelectEntryPos(0);
             ModifyGradientHdl_Impl(this);
         }
+        else
+        {
+            // It has one, try to select the matching entry in the gradient list box.
+            const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)m_rXFillSet.Get(XATTR_FILLGRADIENT);
+            m_pLbGradients->SelectEntryByList(m_pGradientList, rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue());
+        }
     }
 }
 
@@ -1483,7 +1489,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, ModifyGradientHdl_Impl)
     {
         XGradientEntry* pEntry = m_pGradientList->GetGradient(nPos);
         m_rXFillSet.Put( XFillStyleItem( XFILL_GRADIENT ) );
-        m_rXFillSet.Put( XFillGradientItem( String(), pEntry->GetGradient() ) );
+        m_rXFillSet.Put( XFillGradientItem( pEntry->GetName(), pEntry->GetGradient() ) );
     }
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
@@ -1935,7 +1941,7 @@ void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
         const XFillStyleItem& rFillStyleItem = (const XFillStyleItem&)aSet.Get(SID_ATTR_FILL_STYLE);
         m_rXFillSet.Put(XFillStyleItem(rFillStyleItem.GetValue()));
         const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)aSet.Get(SID_ATTR_FILL_GRADIENT);
-        m_rXFillSet.Put(XFillGradientItem(rFillGradientItem.GetGradientValue()));
+        m_rXFillSet.Put(XFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue()));
     }
     else
         // Otherwise hide the gradient UI.
