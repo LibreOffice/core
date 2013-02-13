@@ -116,6 +116,7 @@ registerAtUcb(
 
     bool bSuccess = false;
     if (rManager.is() && xProvider.is())
+    {
         try
         {
             rManager->registerContentProvider(xProvider, rTemplate, true);
@@ -143,7 +144,7 @@ registerAtUcb(
                 catch (uno::RuntimeException const &) {}
             throw;
         }
-
+    }
     if (bSuccess && pInfo)
     {
         pInfo->m_xProvider = xOriginalProvider;
