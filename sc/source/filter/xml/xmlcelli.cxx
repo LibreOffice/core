@@ -1205,7 +1205,7 @@ void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
 
 bool ScXMLTableRowCellContext::HasSpecialContent() const
 {
-    return (maContentValidationName || mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource);
+    return (mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource);
 }
 
 bool ScXMLTableRowCellContext::CellsAreRepeated() const
