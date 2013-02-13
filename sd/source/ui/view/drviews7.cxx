@@ -26,6 +26,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/outlobj.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
@@ -50,7 +51,6 @@
 #include <svl/languageoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/request.hxx>
-
 
 #include <svx/pfiledlg.hxx>
 #include <svx/grafctrl.hxx>
@@ -996,15 +996,25 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
        rSet.DisableItem(SID_ZOOM_PREV);
     }
 
-    bool bDisableSdremoteForGood = false;
-#ifndef ENABLE_SDREMOTE
-    bDisableSdremoteForGood = true;
-#endif
-    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    if ( bDisableSdremoteForGood || ( xContext.is() && !officecfg::Office::Impress::Misc::Start::EnableSdremote::get( xContext ) ) )
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REMOTE_DLG ) )
     {
-        rSet.ClearItem(SID_REMOTE_DLG);
-        rSet.DisableItem(SID_REMOTE_DLG);
+
+        bool bDisableSdremoteForGood = false;
+#ifndef ENABLE_SDREMOTE
+        bDisableSdremoteForGood = true;
+#endif
+        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        if ( xContext.is() )
+            bDisableSdremoteForGood |= ! ( officecfg::Office::Common::Misc::ExperimentalMode::get( xContext ) &&
+
+                                           officecfg::Office::Impress::Misc::Start::EnableSdremote::get( xContext ) );
+
+        // This dialog is only useful for TCP/IP remote control
+        // which is unusual, under-tested and a security issue.
+        if ( bDisableSdremoteForGood )
+        {
+            rSet.Put(SfxVisibilityItem(SID_REMOTE_DLG, false));
+        }
     }
 
     // EditText aktiv
