@@ -25,10 +25,9 @@
 class SubTotal
 {
 public:
-
-    static  sal_Bool SafePlus( double& fVal1, double fVal2);
-    static  sal_Bool SafeMult( double& fVal1, double fVal2);
-    static  sal_Bool SafeDiv( double& fVal1, double fVal2);
+    static bool SafePlus( double& fVal1, double fVal2);
+    static bool SafeMult( double& fVal1, double fVal2);
+    static bool SafeDiv( double& fVal1, double fVal2);
 };
 
 
@@ -37,7 +36,7 @@ struct ScFunctionData                   // to calculate single functions
     ScSubTotalFunc  eFunc;
     double          nVal;
     long            nCount;
-    sal_Bool            bError;
+    bool            bError;
 
     ScFunctionData( ScSubTotalFunc eFn ) :
         eFunc(eFn), nVal(0.0), nCount(0), bError(false) {}

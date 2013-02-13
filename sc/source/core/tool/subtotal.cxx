@@ -20,11 +20,9 @@
 #include "subtotal.hxx"
 #include "interpre.hxx"
 
-// -----------------------------------------------------------------------
-
-sal_Bool SubTotal::SafePlus(double& fVal1, double fVal2)
+bool SubTotal::SafePlus(double& fVal1, double fVal2)
 {
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
     SAL_MATH_FPEXCEPTIONS_OFF();
     fVal1 += fVal2;
     if (!::rtl::math::isFinite(fVal1))
@@ -39,9 +37,9 @@ sal_Bool SubTotal::SafePlus(double& fVal1, double fVal2)
 }
 
 
-sal_Bool SubTotal::SafeMult(double& fVal1, double fVal2)
+bool SubTotal::SafeMult(double& fVal1, double fVal2)
 {
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
     SAL_MATH_FPEXCEPTIONS_OFF();
     fVal1 *= fVal2;
     if (!::rtl::math::isFinite(fVal1))
@@ -53,9 +51,9 @@ sal_Bool SubTotal::SafeMult(double& fVal1, double fVal2)
 }
 
 
-sal_Bool SubTotal::SafeDiv(double& fVal1, double fVal2)
+bool SubTotal::SafeDiv(double& fVal1, double fVal2)
 {
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
     SAL_MATH_FPEXCEPTIONS_OFF();
     fVal1 /= fVal2;
     if (!::rtl::math::isFinite(fVal1))
