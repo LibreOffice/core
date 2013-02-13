@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///Lw\u003d",
+        "filename": "sal/inc/rtl/ustrbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1341,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-13T14:50:11Z",
+      "side": 1,
+      "message": "that does not sound right to me.\n\nyou prolly want to use:\n rtl_uStringbuffer_newFromStr_WithLength( );\nhere... see the constructor of OUStringBuffer(const OUString)",
+      "revId": "50a50a399789d6491a1b6c36d6023db172acc07b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVH///Ls\u003d",
+        "filename": "sal/inc/rtl/ustrbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-13T14:50:11Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "50a50a399789d6491a1b6c36d6023db172acc07b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
