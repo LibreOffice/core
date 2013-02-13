@@ -115,6 +115,7 @@ endef
 define gb_Helper_init_registries
 gb_Executable_VALIDGROUPS := UREBIN SDK OOO NONE
 gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_NONE PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS EXTENSIONLIBS
+gb_Library_VALIDINSTALLMODULES := OOO
 gb_StaticLibrary_VALIDGROUPS := PLAINLIBS
 gb_Jar_VALIDGROUPS := URE OOO OXT
 
@@ -168,6 +169,18 @@ $(if $(filter-out $(words $(2)),$(words $(sort $(2)))),\
  $(call gb_Output_error,gb_Helper_register_libraries: contains duplicates: $(2)))
 
 gb_Library_$(1) += $(2)
+
+endef
+
+# the first argument is the group, which sets rpaths etc.
+# the second argument is the install module, which describes in which distro package/msi a lib should show up
+define gb_Helper_register_libraries_for_install
+ifeq ($$(filter $(2),$$(gb_Library_VALIDINSTALLMODULES)),)
+$$(eval $$(call gb_Output_error,$(2) is not a valid install module for libraries. Valid groups are: $$(gb_Library_VALIDINSTALLMODULES)))
+endif
+$(call gb_Helper_register_libraries,$(1),$(3))
+
+gb_Library_MODULE_$(2) += $(3)
 
 endef
 

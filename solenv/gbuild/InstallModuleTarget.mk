@@ -281,7 +281,7 @@ $(call gb_InstallModuleTarget_get_external_target,$(1)) :| \
 
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_FILES :=
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_DEFS :=
-$(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE := -I$(SRCDIR)/scp2/inc
+$(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE := -I$(SRCDIR)/scp2/inc -I$(WORKDIR)
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_TEMPLATE_INCLUDE :=
 $(call gb_InstallModuleTarget_use_custom_headers,$(1),scp2/macros)
 
@@ -312,6 +312,11 @@ define gb_InstallModuleTarget_define_mingw_dll_if_set
 $(call gb_InstallModuleTarget_add_defs,$(1),\
 	$(foreach def,$(2),$(if $($(def)),-DNEEDS_$(def) -D$(def)=\""$($(def))"\")) \
 )
+
+endef
+
+define gb_InstallModuleTarget_use_auto_install_libs
+$(call gb_InstallModuleTarget_get_external_target,$(1)) : $(call gb_AutoInstallLibs_get_target,$(2))
 
 endef
 

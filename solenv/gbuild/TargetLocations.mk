@@ -83,6 +83,7 @@ endef
 
 # workdir target patterns
 
+gb_AutoInstallLibs_get_target = $(WORKDIR)/AutoInstallLibs/$(1)
 gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
 gb_AllLangZip_get_target = $(WORKDIR)/AllLangZip/$(1)
 gb_AsmObject_get_target = $(WORKDIR)/AsmObject/$(1).o
@@ -237,6 +238,7 @@ $(patsubst $(1):%,$(WORKDIR)/Headers/StaticLibrary/%,$(filter $(1):%,$(gb_Static
 endef
 
 $(eval $(call gb_Helper_make_clean_targets,\
+	AutoInstallLibs \
 	AllLangResTarget \
 	AllLangZip \
 	CliAssembly \

@@ -25,6 +25,7 @@
  *
  ************************************************************************/
 #include "macros.inc"
+#include "AutoInstallLibs/ooo"
 
 #if defined SOLAR_JAVA && defined WNT
 File gid_File_Lib_Accessbridge
@@ -40,8 +41,6 @@ STD_LIB_FILE( gid_File_Lib_Ado, ado)
 #endif
 
 #ifndef DISABLE_SCRIPTING
-
-STD_LIB_FILE( gid_File_Lib_Basctl, basctl)
 
 File gid_File_Lib_Basprov
     LIB_FILE_BODY;

@@ -336,6 +336,7 @@ include $(foreach class, \
 	InstallModuleTarget \
 	InstallModule \
 	InstallScript \
+	AutoInstallLibs \
 ,$(GBUILDDIR)/$(class).mk)
 
 $(eval $(call gb_Helper_process_executable_registrations))

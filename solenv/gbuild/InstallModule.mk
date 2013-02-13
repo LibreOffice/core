@@ -50,6 +50,11 @@ $(call gb_Helper_make_userfriendly_targets,$(1),InstallModule)
 
 endef
 
+define gb_InstallModule_use_auto_install_libs
+$(call gb_InstallModuleTarget_use_auto_install_libs,$(1),$(2))
+
+endef
+
 define gb_InstallModule_add_defs
 $(call gb_InstallModuleTarget_add_defs,$(1),$(2))
 
