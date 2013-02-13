@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVH///MQ\u003d",
+        "filename": "sw/source/filter/ww8/ww8par.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2300,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-02-13T09:30:49Z",
+      "side": 1,
+      "message": "I really dont know if this test is still needed, but it makes this behave exactly as the original goto-solution.",
+      "revId": "26aaea0cc75085cda306edd610e4820ad881eaca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
