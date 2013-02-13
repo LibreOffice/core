@@ -2325,7 +2325,7 @@ void ChartExport::exportDataLabels(
                    mAny >>= aLabel;
 
                    namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
-                   sal_Int32 nPlacement;
+                   sal_Int32 nPlacement(csscd::AVOID_OVERLAP);
                    const char *aPlacement = NULL;
 
                    if (GetProperty( xPropSet, "LabelPlacement"))
