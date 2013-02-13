@@ -19,7 +19,7 @@ import traceback
 import os.path
 from .AgendaWizardDialog import AgendaWizardDialog, uno
 from .AgendaWizardDialogConst import HID
-from .AgendaDocument import AgendaDocument
+from .AgendaDocument import AgendaDocument, TextElement
 from .TemplateConsts import TemplateConsts
 from .TopicsControl import TopicsControl
 from .CGAgenda import CGAgenda
@@ -84,13 +84,14 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
             self.initializePaths()
             # initialize the agenda template
-            self.agendaTemplate = AgendaDocument(
+            self.myAgendaDoc = AgendaDocument(
                 self.xMSF, self.agenda, self.resources,
                 self.templateConsts, self)
             self.initializeTemplates()                
 
-            self.agendaTemplate.load(
-                self.agendaTemplates[1][self.agenda.cp_AgendaType], [])
+            self.myAgendaDoc.load(
+                self.agendaTemplates[1][self.agenda.cp_AgendaType])
+            self.drawConstants()
 
             # build the dialog.
             self.drawNaviBar()
@@ -114,13 +115,13 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                 self.myPathSelection.initializePath()
 
             # create the peer
-            xContainerWindow = self.agendaTemplate.xFrame.ContainerWindow
+            xContainerWindow = self.myAgendaDoc.xFrame.ContainerWindow
             self.createWindowPeer(xContainerWindow)
 
             # initialize roadmap
             self.insertRoadmap()
 
-            self.executeDialogFromComponent(self.agendaTemplate.xFrame)
+            self.executeDialogFromComponent(self.myAgendaDoc.xFrame)
             self.removeTerminateListener()
             self.closeDocument()
             self.running = False
@@ -236,61 +237,61 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             #avoid to load the same item again
             if AgendaWizardDialogImpl.pageDesign is not SelectedItemPos:
                 AgendaWizardDialogImpl.pageDesign = SelectedItemPos
-                self.agendaTemplate.load(
-                    self.agendaTemplates[1][SelectedItemPos],
-                    self.topicsControl.scrollfields)
+                self.myAgendaDoc.load(
+                    self.agendaTemplates[1][SelectedItemPos])
+                self.drawConstants()
         except Exception:
             traceback.print_exc()
 
     #textFields listeners
     def txtTitleTextChanged(self):
-        self.agendaTemplate.redrawTitle("txtTitle")
+        self.myAgendaDoc.redrawTitle("txtTitle")
 
     def txtDateTextChanged(self):
-        self.agendaTemplate.redrawTitle("txtDate")
+        self.myAgendaDoc.redrawTitle("txtDate")
 
     def txtTimeTextChanged(self):
-        self.agendaTemplate.redrawTitle("txtTime")
+        self.myAgendaDoc.redrawTitle("txtTime")
 
     def txtLocationTextChanged(self):
-        self.agendaTemplate.redrawTitle("cbLocation")
+        self.myAgendaDoc.redrawTitle("cbLocation")
 
     #checkbox listeners
     def chkUseMeetingTypeItemChanged(self):
-        self.agendaTemplate.agenda.cp_IncludeMinutes = bool(self.chkMinutes.State)
+        self.myAgendaDoc.agenda.cp_IncludeMinutes = bool(self.chkMinutes.State)
 
     def chkUseMeetingTypeItemChanged(self):
-        self.agendaTemplate.redraw(self.templateConsts.FILLIN_MEETING_TYPE)
+        self.myAgendaDoc.redraw(self.templateConsts.FILLIN_MEETING_TYPE)
 
     def chkUseReadItemChanged(self):
-        self.agendaTemplate.redraw(self.templateConsts.FILLIN_READ)
+        self.myAgendaDoc.redraw(self.templateConsts.FILLIN_READ)
 
     def chkUseBringItemChanged(self):
-        self.agendaTemplate.redraw(self.templateConsts.FILLIN_BRING)
+        self.myAgendaDoc.redraw(self.templateConsts.FILLIN_BRING)
 
     def chkUseNotesItemChanged(self):
-        self.agendaTemplate.redraw(self.templateConsts.FILLIN_NOTES)
+        self.myAgendaDoc.redraw(self.templateConsts.FILLIN_NOTES)
 
     def chkUseCalledByItemChanged(self):
-        self.agendaTemplate.redraw(self.templateConsts.FILLIN_CALLED_BY)
+        self.myAgendaDoc.redraw(self.templateConsts.FILLIN_CALLED_BY)
 
     def chkUseFacilitatorItemChanged(self):
-        self.agendaTemplate.redraw(self.templateConsts.FILLIN_FACILITATOR)
+        self.myAgendaDoc.redraw(self.templateConsts.FILLIN_FACILITATOR)
 
     def chkUseNoteTakerItemChanged(self):
-        self.agendaTemplate.redraw(self.templateConsts.FILLIN_NOTETAKER)
+        self.myAgendaDoc.redraw(self.templateConsts.FILLIN_NOTETAKER)
 
     def chkUseTimeKeeperItemChanged(self):
-        self.agendaTemplate.redraw(self.templateConsts.FILLIN_TIMEKEEPER)
+        self.myAgendaDoc.redraw(self.templateConsts.FILLIN_TIMEKEEPER)
 
     def chkUseAttendeesItemChanged(self):
-        self.agendaTemplate.redraw(self.templateConsts.FILLIN_PARTICIPANTS)
+        self.myAgendaDoc.redraw(self.templateConsts.FILLIN_PARTICIPANTS)
 
     def chkUseObserversItemChanged(self):
-        self.agendaTemplate.redraw(self.templateConsts.FILLIN_OBSERVERS)
+        self.myAgendaDoc.redraw(self.templateConsts.FILLIN_OBSERVERS)
 
     def chkUseResourcePersonsItemChanged(self):
-        self.agendaTemplate.redraw(self.templateConsts.FILLIN_RESOURCE_PERSONS)
+        self.myAgendaDoc.redraw(self.templateConsts.FILLIN_RESOURCE_PERSONS)
 
     def insertRow(self):
         self.topicsControl.insertRow()
@@ -332,13 +333,13 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                     endWizard = False
                     return False
             
-            xDocProps = self.agendaTemplate.xTextDocument.DocumentProperties
+            xDocProps = self.myAgendaDoc.xTextDocument.DocumentProperties
             xDocProps.Title = self.txtTemplateName.Text
-            self.agendaTemplate.setWizardTemplateDocInfo( \
+            self.myAgendaDoc.setWizardTemplateDocInfo( \
                 self.resources.resAgendaWizardDialog_title,
                 self.resources.resTemplateDescription)
             bSaveSuccess = OfficeDocument.store(
-                self.xMSF, self.agendaTemplate.xTextDocument, self.sPath,
+                self.xMSF, self.myAgendaDoc.xTextDocument, self.sPath,
                 "writer8_template")
 
             if bSaveSuccess:
@@ -349,7 +350,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                 self.agenda.writeConfiguration(root, "cp_")
                 root.commitChanges()
 
-                self.agendaTemplate.finish(self.topicsControl.scrollfields)
+                self.myAgendaDoc.finish(self.topicsControl.scrollfields)
 
                 loadValues = list(range(2))
                 loadValues[0] = uno.createUnoStruct( \
@@ -385,9 +386,18 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
     def closeDocument(self):
         try:
-            xCloseable = self.agendaTemplate.xFrame.close(False)
+            xCloseable = self.myAgendaDoc.xFrame.close(False)
         except CloseVetoException:
             traceback.print_exc()
+
+    def drawConstants(self):
+        '''Localise the template'''
+        constRangeList = self.myAgendaDoc.searchFillInItems(1)
+        
+        for i in constRangeList:
+            text = i.String.lower()
+            aux = TextElement(i, self.resources.dictConstants[text])
+            aux.write()
 
     def validatePath(self):
         if self.myPathSelection.usedPathPicker:

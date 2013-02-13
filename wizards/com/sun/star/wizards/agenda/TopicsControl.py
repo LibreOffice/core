@@ -686,7 +686,7 @@ class TopicsControl(ControlScroller):
             data = self.scrollfields[row]
         try:
             for i in range(len(data)):
-                self.CurUnoDialog.agendaTemplate.topics.writeCell(
+                self.CurUnoDialog.myAgendaDoc.topics.writeCell(
                     row, i, data)
         except Exception:
             traceback.print_exc()
@@ -702,7 +702,7 @@ class TopicsControl(ControlScroller):
 
     def updateDocumentCell(self, row, column, data):
         try:
-            self.CurUnoDialog.agendaTemplate.topics.writeCell(
+            self.CurUnoDialog.myAgendaDoc.topics.writeCell(
                 row, column, data)
         except Exception:
             traceback.print_exc()
@@ -715,7 +715,7 @@ class TopicsControl(ControlScroller):
 
     def reduceDocumentToTopics(self):
         try:
-            self.CurUnoDialog.agendaTemplate.topics.reduceDocumentTo(
+            self.CurUnoDialog.myAgendaDoc.topics.reduceDocumentTo(
                 len(self.scrollfields) - 1)
         except Exception:
             traceback.print_exc()

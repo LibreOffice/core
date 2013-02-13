@@ -86,7 +86,7 @@ class AgendaDocument(TextDocument):
         self.itemsMap = {}
         self.allItems = []
 
-    def load(self, templateURL, topics):
+    def load(self, templateURL):
         #Each template is duplicated. aw-XXX.ott is the template itself
         #and XXX.ott is a section link.
         self.template = self.calcTemplateName(templateURL)
@@ -94,7 +94,7 @@ class AgendaDocument(TextDocument):
         self.xFrame.ComponentWindow.Enable = False
         self.xTextDocument.lockControllers()
         self.initialize()
-        self.initializeData(topics)
+        self.initializeData()
         self.xTextDocument.unlockControllers()
 
     '''
@@ -114,7 +114,7 @@ class AgendaDocument(TextDocument):
     supplies this information.
     '''
 
-    def initializeData(self, topicsData):
+    def initializeData(self):
         for i in self.itemsTables:
             try:
                 i.write()

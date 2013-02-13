@@ -171,6 +171,39 @@ class AgendaWizardDialogResources(Resource):
         self.resButtonDown = self.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 71)        
 
+        #Create a dictionary for localised string in the template
+        self.dictConstants = {
+        "#datetitle#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 72),
+        "#timetitle#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 73),
+        "#locationtitle#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 74),
+        "#topics#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 75),
+        "#num.#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 76),
+        "#topicheader#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 77),
+        "#responsibleheader#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 78),
+        "#timeheader#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 79),
+        "#additional-information#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 80),
+        "#minutes-for#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 81),
+        "#discussion#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 82),
+        "#conclusion#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 83),
+        "#to-do#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 84),
+        "#responsible-party#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 85),
+        "#deadline#" : self.getResText(
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 86)}
+
         #Common Resources
         self.resOverwriteWarning = self.getResText(
             AgendaWizardDialogResources.RID_COMMON_START + 19)
