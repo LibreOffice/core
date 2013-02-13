@@ -417,9 +417,8 @@ SvStream::SvStream( SvLockBytes* pLockBytesP )
 
     ImpInit();
     xLockBytes = pLockBytesP;
-    const SvStream* pStrm;
     if( pLockBytesP ) {
-        pStrm = pLockBytesP->GetStream();
+        const SvStream* pStrm = pLockBytesP->GetStream();
         if( pStrm ) {
             SetError( pStrm->GetErrorCode() );
         }
