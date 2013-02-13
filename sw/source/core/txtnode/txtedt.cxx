@@ -1842,22 +1842,24 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
     NotifyClients( 0, &aHint );
 }
 
-void SwTxtNode::CountWords( SwDocStat& rStat,
+// the return values allows us to see if we did the heavy-
+// lifting required to actually break and count the words.
+bool SwTxtNode::CountWords( SwDocStat& rStat,
                             xub_StrLen nStt, xub_StrLen nEnd ) const
 {
     if( nStt > nEnd )
     {   // bad call
-        return;
+        return false;
     }
     if (IsInRedlines())
     {   //not counting txtnodes used to hold deleted redline content
-        return;
+        return false;
     }
     bool bCountAll = ( (0 == nStt) && (GetTxt().Len() == nEnd) );
     ++rStat.nAllPara; // #i93174#: count _all_ paragraphs
     if ( IsHidden() )
     {   // not counting hidden paras
-        return;
+        return false;
     }
     // count words in numbering string if started at beginning of para:
     bool bCountNumbering = nStt == 0;
@@ -1874,7 +1876,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
 
     if( nStt == nEnd && !bCountNumbering)
     {   // unnumbered empty node or empty selection
-        return;
+        return false;
     }
 
     // count of non-empty paras
@@ -1888,7 +1890,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
         rStat.nAsianWord += GetParaNumberOfAsianWords();
         rStat.nChar += GetParaNumberOfChars();
         rStat.nCharExcludingSpaces += GetParaNumberOfCharsExcludingSpaces();
-        return;
+        return false;
     }
 
     // ConversionMap to expand fields, remove invisible and redline deleted text for scanner
@@ -1902,7 +1904,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     if (aExpandText.isEmpty() && !bCountNumbering)
     {
         OSL_ENSURE(aExpandText.getLength() >= 0, "Node text expansion error: length < 0." );
-        return;
+        return false;
     }
 
     //do the count
@@ -1990,6 +1992,8 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     rStat.nAsianWord += nTmpAsianWords;
     rStat.nChar += nTmpChars;
     rStat.nCharExcludingSpaces += nTmpCharsExcludingSpaces;
+
+    return true;
 }
 
 //

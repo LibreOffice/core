@@ -355,7 +355,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SW_DLLPRIVATE virtual void  Move();
 
-    SW_DLLPRIVATE sal_Bool          InsertGraphicDlg( SfxRequest& );
+    SW_DLLPRIVATE sal_Bool      InsertGraphicDlg( SfxRequest& );
+
+    SW_DLLPRIVATE void          DocumentStatsChanged();
 
 protected:
 
@@ -654,6 +656,8 @@ public:
 
     // exhibition hack (MA,MBA)
     void SelectShellForDrop();
+
+    void UpdateDocStats();
 };
 
 // ----------------- inline Methoden ----------------------

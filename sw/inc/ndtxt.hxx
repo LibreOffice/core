@@ -745,8 +745,8 @@ public:
                             xub_StrLen nStart, xub_StrLen nEnd,
                             SwUndoTransliterate* pUndo = 0 );
 
-    /// count words in given range
-    void CountWords( SwDocStat& rStat, xub_StrLen nStart, xub_StrLen nEnd ) const;
+    /// count words in given range - returns true if we refreshed out count
+    bool CountWords( SwDocStat& rStat, xub_StrLen nStart, xub_StrLen nEnd ) const;
 
     /** Checks some global conditions like loading or destruction of document
        to economize notifications */

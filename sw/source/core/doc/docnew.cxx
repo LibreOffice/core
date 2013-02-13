@@ -403,6 +403,9 @@ SwDoc::SwDoc()
     aOLEModifiedTimer.SetTimeout( 1000 );
     aOLEModifiedTimer.SetTimeoutHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
 
+    aStatsUpdateTimer.SetTimeout( 100 );
+    aStatsUpdateTimer.SetTimeoutHdl( LINK( this, SwDoc, DoIdleStatsUpdate ) );
+
     // Create DBMgr
     pNewDBMgr = new SwNewDBMgr;
 
@@ -508,6 +511,7 @@ SwDoc::~SwDoc()
     SetDefault(aCharFmt);
 
     StopIdling();   // stop idle timer
+    aStatsUpdateTimer.Stop();
 
     delete pUnoCallBack, pUnoCallBack = 0;
     delete pURLStateChgd;
