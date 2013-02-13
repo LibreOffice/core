@@ -844,8 +844,20 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         }
         else // Brush <-> Bitmap changed!
         {
-            if ( bIsBrush )
+            if (bIsBrush || bIsGradient)
+            {
                 rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
+                if (bIsGradient)
+                {
+                    // Handle XFILL_BITMAP -> XFILL_GRADIENT
+                    XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rXFillSet.Get(XATTR_FILLSTYLE)).GetValue(), GetWhich(SID_ATTR_FILL_STYLE));
+                    rCoreSet.Put(aFillStyleItem);
+
+                    const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)m_rXFillSet.Get(XATTR_FILLGRADIENT);
+                    XFillGradientItem aFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue(), GetWhich(SID_ATTR_FILL_GRADIENT));
+                    rCoreSet.Put(aFillGradientItem);
+                }
+            }
             else
             {
                 SvxBrushItem* pTmpBrush = 0;
@@ -873,7 +885,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                     delete pTmpBrush;
                 }
             }
-            bModified = ( bIsBrush || m_pBtnLink->IsChecked() || bIsGraphicValid );
+            bModified = ( bIsBrush || bIsGradient || m_pBtnLink->IsChecked() || bIsGraphicValid );
         }
     }
     else if ( SID_ATTR_BRUSH_CHAR == nSlot && aBgdColor != Color( COL_WHITE ) )
