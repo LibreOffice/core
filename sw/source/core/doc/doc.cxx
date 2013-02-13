@@ -1792,7 +1792,10 @@ void SwDoc::UpdateDocStat( bool bCompleteAsync )
     if( pDocStat->bModified )
     {
         if (!bCompleteAsync)
+        {
             while (IncrementalDocStatCalculate()) {}
+            aStatsUpdateTimer.Stop();
+        }
         else if (IncrementalDocStatCalculate())
             aStatsUpdateTimer.Start();
     }
