@@ -115,6 +115,12 @@ Directory gid_Dir_Wizards_Letter
     DosName = "letter";
 End
 
+Directory gid_Dir_Wizards_Agenda
+    Styles = (CREATE);
+    ParentID = gid_Dir_Wizards;
+    DosName = "agenda";
+End
+
 Directory gid_Dir_Resource
     ParentID = gid_Brand_Dir_Program;
     DosName = "resource";

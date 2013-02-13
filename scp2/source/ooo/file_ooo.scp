@@ -433,7 +433,6 @@ End
 STD_JAR_FILE( gid_File_Jar_Report, report )
 STD_JAR_FILE( gid_File_Jar_Table, table )
 STD_JAR_FILE( gid_File_Jar_Form, form )
-STD_JAR_FILE( gid_File_Jar_Agenda, agenda )
 STD_JAR_FILE( gid_File_Jar_Query, query )
 STD_JAR_FILE( gid_File_Jar_Web, web )
 #endif
@@ -495,6 +494,11 @@ File gid_File_Wizards_Letter
     Name = "letter.zip";
 End
 
+File gid_File_Wizards_Agenda
+    Dir = gid_Dir_Wizards_Agenda;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "agenda.zip";
+End
 #endif
 #endif
 

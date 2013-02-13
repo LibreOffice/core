@@ -168,6 +168,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		scripting/source/pyprov/mailmerge \
 		wizards/com/sun/star/wizards/fax/fax \
 		wizards/com/sun/star/wizards/letter/letter \
+		wizards/com/sun/star/wizards/agenda/agenda \
 		scripting/source/stringresource/stringresource \
 		scripting/source/vbaevents/vbaevents \
 		scripting/util/scriptframe \
@@ -227,7 +228,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		xmerge/source/bridge/XMergeBridge \
 		scripting/java/ScriptFramework \
 		scripting/java/ScriptProviderForJava \
-		wizards/com/sun/star/wizards/agenda/agenda \
 		wizards/com/sun/star/wizards/form/form \
 		connectivity/source/drivers/hsqldb/hsqldb \
 		connectivity/source/drivers/jdbc/jdbc \
