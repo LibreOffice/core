@@ -4,6 +4,8 @@
   <object class="GtkVBox" id="PersonalizationTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
@@ -14,6 +16,7 @@
           <object class="GtkAlignment" id="alignment2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkVBox" id="vbox3">
@@ -110,7 +113,6 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="padding">5</property>
         <property name="position">0</property>
       </packing>
     </child>
@@ -124,6 +126,7 @@
           <object class="GtkAlignment" id="alignment1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkVBox" id="vbox2">
@@ -220,7 +223,6 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="padding">5</property>
         <property name="position">1</property>
       </packing>
     </child>
