@@ -63,7 +63,6 @@ using namespace ::sd;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -1312,9 +1311,9 @@ bool SlideShow::dependsOn( ViewShellBase* pViewShellBase )
 
 // ---------------------------------------------------------
 
-Reference< XPresentation2 > CreatePresentation( const SdDrawDocument& rDocument )
+Reference< presentation::XPresentation2 > CreatePresentation( const SdDrawDocument& rDocument )
 {
-    return Reference< XPresentation2 >( SlideShow::Create( const_cast< SdDrawDocument* >( &rDocument ) ).get() );
+    return Reference< presentation::XPresentation2 >( SlideShow::Create( const_cast< SdDrawDocument* >( &rDocument ) ).get() );
 }
 
 // ---------------------------------------------------------
