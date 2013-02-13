@@ -23,7 +23,7 @@
     <string name="options_switchcomputer">Switch computer</string>
     <string name="blankscreen_return">Return to Slide</string>
     <string name="bluetooth">Bluetooth</string>
-    <string name="wifi">WI-FI</string>
+    <string name="wifi">Wi-Fi</string>
     <string name="selector_noservers">Searching for computers…</string>
     <string name="selector_delete">Remove computer</string>
     <string name="selector_choose_a_computer">Choose a Computer</string>
@@ -42,7 +42,7 @@
     <string name="about_copyright">Copyright © 2012 LibreOffice Contributors and/or their affiliates.</string>
     <string name="about_licence">This app is released under the Mozilla Public License, v. 2.0.</string>
     <string name="about_libraries">This app uses android-coverflow\n\tCopyright © 2011, Polidea\n\tNew BSD License.\n\nThis app uses ActionBarSherlock:\n\tCopyright 2012 Jake Wharton\n\tLicensed under the Apache License, Version 2.0 (the "License")</string>
-    <string name="addserver">Add Computer Manually</string>
+    <string name="addserver">Add Wi-Fi Computer Manually</string>
     <string name="addserver_entername">Computer name:</string>
     <string name="addserver_enteraddress">Computer IP address or hostname:</string>
     <string name="addserver_remember">Remember this computer next time</string>
