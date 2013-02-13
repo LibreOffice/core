@@ -235,7 +235,7 @@ void FastSaxParser::pushContext()
 void FastSaxParser::popContext()
 {
     Entity& rEntity = getEntity();
-    OSL_ENSURE( !rEntity.maContextStack.empty(), "sax::FastSaxParser::popContext(), pop without push?" );
+    assert(!rEntity.maContextStack.empty()); // pop without push?
     if( !rEntity.maContextStack.empty() )
         rEntity.maContextStack.pop();
 }
@@ -245,7 +245,7 @@ void FastSaxParser::popContext()
 void FastSaxParser::DefineNamespace( const OString& rPrefix, const sal_Char* pNamespaceURL )
 {
     Entity& rEntity = getEntity();
-    OSL_ENSURE( !rEntity.maContextStack.empty(), "sax::FastSaxParser::DefineNamespace(), I need a context!" );
+    assert(!rEntity.maContextStack.empty()); // need a context!
     if( !rEntity.maContextStack.empty() )
     {
         sal_uInt32 nOffset = rEntity.maContextStack.top()->mnNamespaceCount++;
@@ -743,7 +743,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
         // #158414# first: get namespaces
         for( ; awAttributes[i]; i += 2 )
         {
-            OSL_ASSERT( awAttributes[i+1] );
+            assert(awAttributes[i+1]);
 
             splitName( awAttributes[i], pPrefix, nPrefixLen, pName, nNameLen );
             if( nPrefixLen )
@@ -853,7 +853,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
 void FastSaxParser::callbackEndElement( SAL_UNUSED_PARAMETER const XML_Char* )
 {
     Entity& rEntity = getEntity();
-    OSL_ENSURE( !rEntity.maContextStack.empty(), "FastSaxParser::callbackEndElement - no context" );
+    assert(!rEntity.maContextStack.empty()); // no context?
     if( !rEntity.maContextStack.empty() )
     {
         SaxContextImplPtr pContext = rEntity.maContextStack.top();
@@ -900,18 +900,17 @@ void FastSaxParser::callbackEntityDecl(
     SAL_UNUSED_PARAMETER const XML_Char * /*notationName*/)
 {
     if (value) { // value != 0 means internal entity
-        OSL_TRACE("FastSaxParser: internal entity declaration, stopping");
+        SAL_INFO("sax", "FastSaxParser: internal entity declaration, stopping");
         XML_StopParser(getEntity().mpParser, XML_FALSE);
         getEntity().maSavedException <<= SAXParseException(
-            ::rtl::OUString(
-                    "FastSaxParser: internal entity declaration, stopping"),
+            "FastSaxParser: internal entity declaration, stopping",
             static_cast<OWeakObject*>(this), Any(),
             mxDocumentLocator->getPublicId(),
             mxDocumentLocator->getSystemId(),
             mxDocumentLocator->getLineNumber(),
             mxDocumentLocator->getColumnNumber() );
     } else {
-        OSL_TRACE("FastSaxParser: ignoring external entity declaration");
+        SAL_INFO("sax", "FastSaxParser: ignoring external entity declaration");
     }
 }
 

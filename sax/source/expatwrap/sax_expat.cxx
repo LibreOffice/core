@@ -794,7 +794,7 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
         pImpl->pAttrList->clear();
 
         while( awAttributes[i] ) {
-            OSL_ASSERT( awAttributes[i+1] );
+            assert(awAttributes[i+1]);
             pImpl->pAttrList->addAttribute(
                 XML_CHAR_TO_OUSTRING( awAttributes[i] ) ,
                 pImpl->sCDATA,  // expat doesn't know types
@@ -853,10 +853,10 @@ void SaxExpatParser_Impl::callbackEntityDecl(
 {
     SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
     if (value) { // value != 0 means internal entity
-        OSL_TRACE("SaxExpatParser: internal entity declaration, stopping");
+        SAL_INFO("sax","SaxExpatParser: internal entity declaration, stopping");
         XML_StopParser(pImpl->getEntity().pParser, XML_FALSE);
         pImpl->exception = SAXParseException(
-            ::rtl::OUString( "SaxExpatParser: internal entity declaration, stopping"),
+            "SaxExpatParser: internal entity declaration, stopping",
             0, Any(),
             pImpl->rDocumentLocator->getPublicId(),
             pImpl->rDocumentLocator->getSystemId(),
