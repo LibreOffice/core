@@ -485,7 +485,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
 
         @Override
         public boolean onEditorAction(TextView tv, int aID, KeyEvent aEvent) {
-            if (aEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+            if (aEvent != null && aEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
 
                 long aTime = 0;
                 try {
