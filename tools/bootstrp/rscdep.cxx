@@ -81,7 +81,7 @@ int main( int argc, char** argv )
 
     for ( int i=1; i<argc; i++)
     {
-        strcpy( aBuf, (const char *)argv[i] );
+        strncpy( aBuf, (const char *)argv[i], sizeof(aBuf) );
         const sal_Int32 nLength (strlen(aBuf));
 
 #ifdef DEBUG
