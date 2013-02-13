@@ -24,7 +24,7 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -32,8 +32,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 
 #include <expat.h>
 
@@ -45,7 +44,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 
 #include "factory.hxx"
@@ -136,11 +134,10 @@ class SaxExpatParser_Impl;
 
 
 // This class implements the external Parser interface
-class SaxExpatParser :
-    public WeakImplHelper2<
-                XParser,
-                XServiceInfo
-                          >
+class SaxExpatParser
+    : public WeakImplHelper3< XInitialization
+                            , XServiceInfo
+                            , XParser >
 {
 
 public:
@@ -153,6 +150,10 @@ public:
     static Sequence< OUString >     getSupportedServiceNames_Static(void) throw ();
 
 public:
+    // ::com::sun::star::lang::XInitialization:
+    virtual void SAL_CALL initialize(Sequence<Any> const& rArguments)
+        throw (RuntimeException, Exception);
+
     // The SAX-Parser-Interface
     virtual void SAL_CALL parseStream(  const InputSource& structSource)
         throw ( SAXException,
@@ -222,6 +223,7 @@ class SaxExpatParser_Impl
 public: // module scope
     Mutex               aMutex;
     OUString            sCDATA;
+    bool m_bEnableDoS; // fdo#60471 thank you Adobe Illustrator
 
     Reference< XDocumentHandler >   rDocumentHandler;
     Reference< XExtendedDocumentHandler > rExtendedDocumentHandler;
@@ -257,6 +259,7 @@ public: // module scope
 public:
     SaxExpatParser_Impl()
         : sCDATA("CDATA")
+        , m_bEnableDoS(false)
     {
     }
 
@@ -452,6 +455,22 @@ SaxExpatParser::~SaxExpatParser()
     delete m_pImpl;
 }
 
+// ::com::sun::star::lang::XInitialization:
+void SAL_CALL
+SaxExpatParser::initialize(Sequence< Any > const& rArguments)
+    throw (RuntimeException, Exception)
+{
+    // possible arguments: a string "DoSmeplease"
+    if (rArguments.getLength())
+    {
+        OUString str;
+        if ((rArguments[0] >>= str) && "DoSmeplease" == str)
+        {
+            MutexGuard guard( m_pImpl->aMutex );
+            m_pImpl->m_bEnableDoS = true;
+        }
+    }
+}
 
 /***************
 *
@@ -500,7 +519,10 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     XML_SetCharacterDataHandler( entity.pParser , call_callbackCharacters );
     XML_SetProcessingInstructionHandler(entity.pParser ,
                                         call_callbackProcessingInstruction );
-    XML_SetEntityDeclHandler(entity.pParser, call_callbackEntityDecl);
+    if (!m_pImpl->m_bEnableDoS)
+    {
+        XML_SetEntityDeclHandler(entity.pParser, call_callbackEntityDecl);
+    }
     XML_SetNotationDeclHandler( entity.pParser, call_callbackNotationDecl );
     XML_SetExternalEntityRefHandler(    entity.pParser,
                                         call_callbackExternalEntityRef);
