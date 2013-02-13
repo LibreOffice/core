@@ -21,6 +21,7 @@
 
 #include <com/sun/star/graphic/XSvgParser.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <svgio/svgreader/svgdocumenthandler.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
@@ -131,6 +132,14 @@ namespace svgio
                     // get parser
                     uno::Reference< xml::sax::XParser > xParser(
                         xml::sax::Parser::create(context_));
+                    // fdo#60471 need to enable internal entities because
+                    // certain ... popular proprietary products write SVG files
+                    // that use entities to define XML namespaces.
+                    uno::Reference<lang::XInitialization> const xInit(xParser,
+                            uno::UNO_QUERY_THROW);
+                    uno::Sequence<uno::Any> args(1);
+                    args[0] <<= OUString("DoSmeplease");
+                    xInit->initialize(args);
 
                     // connect parser and filter
                     xParser->setDocumentHandler(xSvgDocHdl);
