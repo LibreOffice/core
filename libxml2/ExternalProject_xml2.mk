@@ -14,6 +14,7 @@ $(eval $(call gb_ExternalProject_use_unpacked,xml2,xml2))
 $(eval $(call gb_ExternalProject_register_targets,xml2,\
 	build \
 ))
+
 ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 $(call gb_ExternalProject_get_state_target,xml2,build):
@@ -39,7 +40,7 @@ else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,xml2,build):
 	cd $(EXTERNAL_WORKDIR) \
 	&& ./configure --disable-ipv6 --without-python --without-zlib --with-sax1 \
-	$(if $(debug),--with-mem-debug --with-run-debug) \
+	$(if $(debug),--with-run-debug) \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	LDFLAGS="$(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
@@ -48,4 +49,5 @@ $(call gb_ExternalProject_get_state_target,xml2,build):
 	&& $(MAKE) \
 	&& touch $@
 endif
+
 # vim: set noet sw=4 ts=4:
