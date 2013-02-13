@@ -10,15 +10,14 @@
 $(eval $(call gb_CustomTarget_CustomTarget,crashrep/source/win32))
 
 $(eval $(call gb_CustomTarget_register_targets,crashrep/source/win32, \
-	crashrep.ulf \
 	crashrep_impl.rc \
 ))
 
 $(call gb_CustomTarget_get_workdir,crashrep/source/win32)/crashrep_impl.rc : \
-	$(call gb_CustomTarget_get_workdir,crashrep/source/win32)/crashrep.ulf \
 	$(SRCDIR)/crashrep/source/win32/rcfooter.txt \
 	$(SRCDIR)/crashrep/source/win32/rcheader.txt \
 	$(SRCDIR)/crashrep/source/win32/rctemplate.txt \
+	$(SRCDIR)/crashrep/source/win32/crashrep.ulf \
 	$(call gb_Executable_get_runtime_dependencies,lngconvex)
 
 #BRAND_BASE_DIR=$(call gb_Helper_make_url,$(OUTDIR)/unittest/install)
@@ -27,18 +26,10 @@ $(call gb_CustomTarget_get_workdir,crashrep/source/win32)/crashrep_impl.rc :
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(SRCDIR)/crashrep/source/win32 && \
 		$(call gb_Executable_get_command,lngconvex) \
-			-ulf $< \
+			-ulf crashrep.ulf \
 			-rc $@ \
 			-rct rctemplate.txt \
 			-rch rcheader.txt \
 			-rcf rcfooter.txt)
-
-$(call gb_CustomTarget_get_workdir,crashrep/source/win32)/crashrep.ulf : \
-		$(SRCDIR)/crashrep/source/win32/crashrep.ulf \
-		$(call gb_Executable_get_runtime_dependencies,ulfex)
-	MERGEINPUT=`$(gb_MKTEMP)` && \
-	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(subst $(SRCDIR)/,,$(dir $<))).po) > $${MERGEINPUT} && \
-	$(call gb_Executable_get_command,ulfex) -p crashrep -i $< -o $@ -m $${MERGEINPUT} -l all && \
-	rm -f $${MERGEINPUT}
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

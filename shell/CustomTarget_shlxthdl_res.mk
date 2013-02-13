@@ -27,19 +27,14 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,shell/source/win32/shlxthandler/res))
 
-$(eval $(call gb_CustomTarget_register_targets,shell/source/win32/shlxthandler/res,\
-	shlxthdl.ulf \
-	shlxthdl_impl.rc \
-))
-
 $(call gb_CustomTarget_get_target,shell/source/win32/shlxthandler/res) : \
 	$(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl_impl.rc
 
 $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl_impl.rc : \
-	$(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl.ulf \
 	$(SRCDIR)/shell/source/win32/shlxthandler/res/rcfooter.txt \
 	$(SRCDIR)/shell/source/win32/shlxthandler/res/rcheader.txt \
 	$(SRCDIR)/shell/source/win32/shlxthandler/res/rctmpl.txt \
+	$(SRCDIR)/shell/source/win32/shlxthandler/res/shlxthdl.ulf \
 	$(call gb_Executable_get_runtime_dependencies,lngconvex) \
 	| $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/.dir
 
@@ -49,18 +44,10 @@ $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl
 		cd $(SRCDIR)/shell/source/win32/shlxthandler/res && \
 		BRAND_BASE_DIR=$(call gb_Helper_make_url,$(OUTDIR)/unittest/install) \
 		$(call gb_Executable_get_command,lngconvex) \
-			-ulf $< \
+			-ulf shlxthdl.ulf \
 			-rc $@ \
 			-rct rctmpl.txt \
 			-rch rcheader.txt \
 			-rcf rcfooter.txt)
-
-$(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl.ulf : \
-		$(SRCDIR)/shell/source/win32/shlxthandler/res/shlxthdl.ulf \
-		$(call gb_Executable_get_runtime_dependencies,ulfex)
-	MERGEINPUT=`$(gb_MKTEMP)` && \
-	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(subst $(SRCDIR)/,,$(dir $<))).po) > $${MERGEINPUT} && \
-	$(call gb_Executable_get_command,ulfex) -p shell -i $< -o $@ -m $${MERGEINPUT} -l all && \
-	rm -f $${MERGEINPUT}
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
