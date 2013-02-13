@@ -1280,6 +1280,12 @@ void SvxBackgroundTabPage::ShowGradientUI_Impl()
         HideBitmapUI_Impl();
 
         m_pBackGroundGradientFrame->Show();
+        if (!m_rXFillSet.HasItem(XATTR_FILLSTYLE) || ((const XFillStyleItem&)m_rXFillSet.Get(XATTR_FILLSTYLE)).GetValue() != XFILL_GRADIENT)
+        {
+            // Frame has no gradient? Then select the first one, just to be able to show something in the preview control.
+            m_pLbGradients->SelectEntryPos(0);
+            ModifyGradientHdl_Impl(this);
+        }
     }
 }
 
