@@ -115,7 +115,6 @@ DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(const char * sLineType)
 DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
 {
     DXFLineInfo aDXFLineInfo;
-    const DXFLayer * pLayer;
 
     aDXFLineInfo.eStyle = LINE_SOLID;
     aDXFLineInfo.fWidth = 0;
@@ -128,7 +127,7 @@ DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
     if (strcmp(rE.sLineType,"BYLAYER")==0) {
         if (rE.sLayer[0]=='0' && rE.sLayer[1]==0) aDXFLineInfo=aParentLayerDXFLineInfo;
         else {
-            pLayer=pDXF->aTables.SearchLayer(rE.sLayer);
+            const DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.sLayer);
             if (pLayer!=NULL) aDXFLineInfo=LTypeToDXFLineInfo(pLayer->sLineType);
             else aDXFLineInfo=aParentLayerDXFLineInfo;
         }
@@ -746,7 +745,7 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
 }
 
 
-DXF2GDIMetaFile::DXF2GDIMetaFile()
+DXF2GDIMetaFile::DXF2GDIMetaFile():pVirDev(NULL), pDXF(NULL), nBlockColor(0), nParentLayerColor(0)
 {
 }
 
