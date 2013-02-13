@@ -63,7 +63,7 @@ public:
 };
 
 SfxModule_Impl::SfxModule_Impl()
- : pSlotPool(0)
+ : pSlotPool(0), pTbxCtrlFac(0), pStbCtrlFac(0), pMenuCtrlFac(0), pFactArr(0), pImgListSmall(0), pImgListBig(0)
 {
 }
 
