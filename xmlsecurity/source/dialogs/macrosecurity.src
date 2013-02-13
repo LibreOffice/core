@@ -72,58 +72,6 @@ TabDialog RID_XMLSECTP_MACROSEC
     };
 };
 
-TabPage RID_XMLSECTP_SECLEVEL
-{
-    HelpId = HID_XMLSEC_TP_SECLEVEL;
-    Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
-    OutputSize = TRUE;
-    Hide = TRUE;
-    SVLook = TRUE;
-    FixedLine FL_SECLEVEL
-    {
-        Pos = MAP_APPFONT( SL_COL_0, SL_ROW_0 );
-        Size = MAP_APPFONT( SL_COL_3-SL_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
-        Hide = TRUE;
-    };
-    FixedImage FI_SEC_READONLY
-    {
-        Pos = MAP_APPFONT( SL_COL_1 - 7, SL_ROW_0 + 4 );
-        Size = MAP_APPFONT( 6, 6 );
-    };
-    RadioButton RB_VERYHIGH
-    {
-        HelpID = "xmlsecurity:RadioButton:RID_XMLSECTP_SECLEVEL:RB_VERYHIGH";
-        Pos = MAP_APPFONT( SL_COL_1, SL_ROW_0 );
-        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, RSC_BIG_RADIOBUTTON );
-        WordBreak = TRUE;
-        Text [ en-US ] = "~Very high.\nOnly macros from trusted file locations are allowed to run. All other macros, regardless whether signed or not, are disabled.";
-    };
-    RadioButton RB_HIGH
-    {
-        HelpID = "xmlsecurity:RadioButton:RID_XMLSECTP_SECLEVEL:RB_HIGH";
-        Pos = MAP_APPFONT( SL_COL_1, SL_ROW_1 );
-        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, RSC_BIG_RADIOBUTTON );
-        WordBreak = TRUE;
-        Text [ en-US ] = "H~igh.\nOnly signed macros from trusted sources are allowed to run. Unsigned macros are disabled.";
-    };
-    RadioButton RB_MEDIUM
-    {
-        HelpID = "xmlsecurity:RadioButton:RID_XMLSECTP_SECLEVEL:RB_MEDIUM";
-        Pos = MAP_APPFONT( SL_COL_1, SL_ROW_2 );
-        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, RSC_BIG_RADIOBUTTON );
-        WordBreak = TRUE;
-        Text [ en-US ] = "~Medium.\nConfirmation required before executing macros from untrusted sources.";
-    };
-    RadioButton RB_LOW
-    {
-        HelpID = "xmlsecurity:RadioButton:RID_XMLSECTP_SECLEVEL:RB_LOW";
-        Pos = MAP_APPFONT( SL_COL_1, SL_ROW_3 );
-        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, SL_ROW_4-SL_ROW_3 );
-        WordBreak = TRUE;
-        Text [ en-US ] = "~Low (not recommended).\nAll macros will be executed without confirmation. Use this setting only if you are certain that all documents that will be opened are safe.";
-    };
-};
-
 TabPage RID_XMLSECTP_TRUSTSOURCES
 {
     HelpId = HID_XMLSEC_TP_TRUSTSOURCES;

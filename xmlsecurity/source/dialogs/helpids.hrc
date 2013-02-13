@@ -24,7 +24,6 @@
 // Help-Ids --------------------------------------------------------------
 
 #define HID_XMLSEC_TP_MACROSEC                         "XMLSECURITY_HID_XMLSEC_TP_MACROSEC"
-#define HID_XMLSEC_TP_SECLEVEL                         "XMLSECURITY_HID_XMLSEC_TP_SECLEVEL"
 #define HID_XMLSEC_TP_TRUSTSOURCES                     "XMLSECURITY_HID_XMLSEC_TP_TRUSTSOURCES"
 #define HID_XMLSEC_DLG_CERTVIEWER                      "XMLSECURITY_HID_XMLSEC_DLG_CERTVIEWER"
 #define HID_XMLSEC_TP_GENERAL                          "XMLSECURITY_HID_XMLSEC_TP_GENERAL"

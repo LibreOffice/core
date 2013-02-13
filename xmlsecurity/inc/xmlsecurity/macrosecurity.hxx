@@ -89,29 +89,27 @@ class MacroSecurityTP : public TabPage
 protected:
     MacroSecurity*      mpDlg;
 public:
-                        MacroSecurityTP( Window* _pParent, const ResId& _rResId, MacroSecurity* _pDlg );
-    inline void         SetTabDlg( MacroSecurity* pTabDlg );
+    MacroSecurityTP(Window* _pParent, const OString& rID,
+        const OUString& rUIXMLDescription, MacroSecurity* _pDlg);
+    MacroSecurityTP(Window* _pParent, const ResId& _rResId, MacroSecurity* _pDlg);
+
+    void SetTabDlg(MacroSecurity* pTabDlg)
+    {
+        mpDlg = pTabDlg;
+    }
 
     virtual void        ClosePage( void ) = 0;
 };
 
-inline void MacroSecurityTP::SetTabDlg( MacroSecurity* _pTabDlg )
-{
-    mpDlg = _pTabDlg;
-}
-
-
 class MacroSecurityLevelTP : public MacroSecurityTP
 {
 private:
-    FixedLine           maSecLevelFL;
-    ReadOnlyImage       maSecReadonlyFI;
-    RadioButton         maVeryHighRB;
-    RadioButton         maHighRB;
-    RadioButton         maMediumRB;
-    RadioButton         maLowRB;
+    RadioButton* m_pVeryHighRB;
+    RadioButton* m_pHighRB;
+    RadioButton* m_pMediumRB;
+    RadioButton* m_pLowRB;
 
-    sal_uInt16              mnCurLevel;
+    sal_uInt16   mnCurLevel;
 
 protected:
     DECL_LINK(RadioButtonHdl, void *);

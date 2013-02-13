@@ -175,27 +175,6 @@
 #define MS_COL_G                        (MS_COL_F-RSC_SP_CTRL_X)
 #define MS_COL_H                        (MS_COL_G-RSC_CD_PUSHBUTTON_WIDTH)
 
-// --------- tab page security level ---------
-
-#define FL_SECLEVEL                     1
-#define RB_VERYHIGH                     2
-#define RB_HIGH                         3
-#define RB_MEDIUM                       4
-#define RB_LOW                          5
-#define FI_SEC_READONLY                 6
-
-#define RSC_BIG_RADIOBUTTON             40
-#define SL_RB_DIST_Y                    (RSC_SP_FLGR_SPACE_Y+RSC_BIG_RADIOBUTTON)
-#define SL_COL_0                        RSC_SP_TBPG_INNERBORDER_LEFT
-#define SL_COL_1                        (SL_COL_0+RSC_SP_FLGR_SPACE_X)
-#define SL_COL_3                        (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
-#define SL_COL_2                        ((SL_COL_3-SL_COL_1)*100/105)
-#define SL_ROW_0                        RSC_SP_TBPG_INNERBORDER_TOP
-#define SL_ROW_1                        (SL_ROW_0+SL_RB_DIST_Y)
-#define SL_ROW_2                        (SL_ROW_1+SL_RB_DIST_Y)
-#define SL_ROW_3                        (SL_ROW_2+SL_RB_DIST_Y)
-#define SL_ROW_4                        (TP_HEIGHT-RSC_SP_TBPG_INNERBORDER_BOTTOM)
-
 // --------- tab page trusted sources ---------
 
 #define FL_TRUSTCERT                    1

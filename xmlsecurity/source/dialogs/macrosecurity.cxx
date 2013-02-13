@@ -91,6 +91,12 @@ MacroSecurity::~MacroSecurity()
     delete maTabCtrl.GetTabPage( RID_XMLSECTP_SECLEVEL );
 }
 
+MacroSecurityTP::MacroSecurityTP(Window* _pParent, const OString& rID,
+    const OUString& rUIXMLDescription, MacroSecurity* _pDlg)
+    : TabPage(_pParent, rID, rUIXMLDescription)
+    , mpDlg(_pDlg)
+{
+}
 
 MacroSecurityTP::MacroSecurityTP( Window* _pParent, const ResId& _rResId, MacroSecurity* _pDlg )
     :TabPage        ( _pParent, _rResId )
@@ -98,66 +104,67 @@ MacroSecurityTP::MacroSecurityTP( Window* _pParent, const ResId& _rResId, MacroS
 {
 }
 
-MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pDlg )
-    :MacroSecurityTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_SECLEVEL ), _pDlg )
-    ,maSecLevelFL       ( this, XMLSEC_RES( FL_SECLEVEL ) )
-    ,maSecReadonlyFI    ( this, XMLSEC_RES( FI_SEC_READONLY ))
-    ,maVeryHighRB       ( this, XMLSEC_RES( RB_VERYHIGH ) )
-    ,maHighRB           ( this, XMLSEC_RES( RB_HIGH ) )
-    ,maMediumRB         ( this, XMLSEC_RES( RB_MEDIUM ) )
-    ,maLowRB            ( this, XMLSEC_RES( RB_LOW ) )
+MacroSecurityLevelTP::MacroSecurityLevelTP(Window* _pParent, MacroSecurity* _pDlg)
+    : MacroSecurityTP(_pParent, "SecurityLevelPage", "xmlsec/ui/securitylevelpage.ui", _pDlg)
 {
-    FreeResource();
+    get(m_pVeryHighRB, "vhigh");
+    get(m_pHighRB, "high");
+    get(m_pMediumRB, "med");
+    get(m_pLowRB, "low");
 
-    maLowRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
-    maMediumRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
-    maHighRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
-    maVeryHighRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
+    m_pLowRB->SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
+    m_pMediumRB->SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
+    m_pHighRB->SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
+    m_pVeryHighRB->SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
 
     mnCurLevel = (sal_uInt16) mpDlg->maSecOptions.GetMacroSecurityLevel();
     sal_Bool bReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_MACRO_SECLEVEL );
 
     RadioButton* pCheck = 0;
-    switch( mnCurLevel )
+    FixedImage* pImage = 0;
+    switch (mnCurLevel)
     {
-        case 3: pCheck = &maVeryHighRB;   break;
-        case 2: pCheck = &maHighRB;       break;
-        case 1: pCheck = &maMediumRB;     break;
-        case 0: pCheck = &maLowRB;        break;
+        case 3:
+            pCheck = m_pVeryHighRB;
+            pImage = get<FixedImage>("vhighimg");
+            break;
+        case 2:
+            pCheck = m_pHighRB;
+            pImage = get<FixedImage>("highimg");
+            break;
+        case 1:
+            pCheck = m_pMediumRB;
+            pImage = get<FixedImage>("medimg");
+            break;
+        case 0:
+            pCheck = m_pLowRB;
+            pImage = get<FixedImage>("lowimg");
+            break;
     }
-    if(pCheck)
+    if (pCheck)
         pCheck->Check();
     else
     {
         OSL_FAIL("illegal macro security level");
     }
-    maSecReadonlyFI.Show(bReadonly);
-    if(bReadonly)
+    if (bReadonly)
     {
-        //move to the selected button
-        if( pCheck && pCheck != &maVeryHighRB)
-        {
-            long nDiff = pCheck->GetPosPixel().Y() - maVeryHighRB.GetPosPixel().Y();
-            Point aPos(maSecReadonlyFI.GetPosPixel());
-            aPos.Y() += nDiff;
-            maSecReadonlyFI.SetPosPixel(aPos);
-        }
-        maVeryHighRB.Enable(sal_False);
-        maHighRB.Enable(sal_False);
-        maMediumRB.Enable(sal_False);
-        maLowRB.Enable(sal_False);
+        pImage->Show(true);
+        m_pVeryHighRB->Enable(false);
+        m_pHighRB->Enable(false);
+        m_pMediumRB->Enable(false);
+        m_pLowRB->Enable(false);
     }
-
 }
 
 IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl)
 {
     sal_uInt16 nNewLevel = 0;
-    if( maVeryHighRB.IsChecked() )
+    if( m_pVeryHighRB->IsChecked() )
         nNewLevel = 3;
-    else if( maHighRB.IsChecked() )
+    else if( m_pHighRB->IsChecked() )
         nNewLevel = 2;
-    else if( maMediumRB.IsChecked() )
+    else if( m_pMediumRB->IsChecked() )
         nNewLevel = 1;
 
     if ( nNewLevel != mnCurLevel )

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkGrid" id="SecurityLevelPage">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="border_width">6</property>
+    <property name="row_spacing">12</property>
+    <property name="column_spacing">12</property>
+    <property name="row_homogeneous">True</property>
+    <child>
+      <object class="GtkRadioButton" id="low:wrap">
+        <property name="label" translatable="yes">_Low (not recommended).
+All macros will be executed without confirmation. Use this setting only if you are certain that all documents that will be opened are safe.</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="use_underline">True</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="group">vhigh:wrap</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">3</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkRadioButton" id="med:wrap">
+        <property name="label" translatable="yes">_Medium.
+Confirmation required before executing macros from untrusted sources.</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="use_underline">True</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="group">low:wrap</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkRadioButton" id="high:wrap">
+        <property name="label" translatable="yes">H_igh.
+Only signed macros from trusted sources are allowed to run. Unsigned macros are disabled.</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="use_underline">True</property>
+        <property name="xalign">0</property>
+        <property name="active">True</property>
+        <property name="draw_indicator">True</property>
+        <property name="group">med:wrap</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">1</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkRadioButton" id="vhigh:wrap">
+        <property name="label" translatable="yes">_Very high.
+Only macros from trusted file locations are allowed to run. All other macros, regardless whether signed or not, are disabled.</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="use_underline">True</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+        <property name="group">high:wrap</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkImage" id="vhighimg">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="pixbuf">res/lock.png</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkImage" id="highimg">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="pixbuf">res/lock.png</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkImage" id="medimg">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="pixbuf">res/lock.png</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkImage" id="lowimg">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="pixbuf">res/lock.png</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">3</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+  </object>
+</interface>
