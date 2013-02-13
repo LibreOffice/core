@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">svx/res/nu01.png</property>
+  </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -9,6 +14,7 @@
   <object class="GtkBox" id="OptFontsPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
@@ -376,10 +382,5 @@
         <property name="position">4</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/nu01.png</property>
   </object>
 </interface>

@@ -4,6 +4,7 @@
   <object class="GtkBox" id="PrintOptionsPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
@@ -12,6 +13,7 @@
         <property name="can_focus">False</property>
         <property name="row_spacing">6</property>
         <property name="column_spacing">6</property>
+        <property name="column_homogeneous">True</property>
         <child>
           <object class="GtkFrame" id="frame2">
             <property name="visible">True</property>
@@ -32,11 +34,9 @@
                     <child>
                       <object class="GtkCheckButton" id="graphics">
                         <property name="label" translatable="yes">Pictures and objects</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -50,11 +50,9 @@
                     <child>
                       <object class="GtkCheckButton" id="formcontrols">
                         <property name="label" translatable="yes">Form controls</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -68,11 +66,9 @@
                     <child>
                       <object class="GtkCheckButton" id="background">
                         <property name="label" translatable="yes">Page background</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -86,11 +82,9 @@
                     <child>
                       <object class="GtkCheckButton" id="inblack">
                         <property name="label" translatable="yes">Print text in black</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -104,11 +98,9 @@
                     <child>
                       <object class="GtkCheckButton" id="hiddentext">
                         <property name="label" translatable="yes">Hidden text</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -122,11 +114,9 @@
                     <child>
                       <object class="GtkCheckButton" id="textplaceholder">
                         <property name="label" translatable="yes">Text placeholder</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -163,6 +153,7 @@
           <object class="GtkFrame" id="pagesframe">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">center</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
@@ -179,11 +170,9 @@
                     <child>
                       <object class="GtkCheckButton" id="leftpages">
                         <property name="label" translatable="yes">Left pages</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -197,11 +186,9 @@
                     <child>
                       <object class="GtkCheckButton" id="rightpages">
                         <property name="label" translatable="yes">Right pages</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -215,11 +202,9 @@
                     <child>
                       <object class="GtkCheckButton" id="brochure">
                         <property name="label" translatable="yes">Brochure</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -233,12 +218,10 @@
                     <child>
                       <object class="GtkCheckButton" id="rtl">
                         <property name="label" translatable="yes">Right to Left</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="margin_left">18</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -291,11 +274,9 @@
                     <child>
                       <object class="GtkRadioButton" id="none">
                         <property name="label" translatable="yes">None</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">only</property>
@@ -310,11 +291,9 @@
                     <child>
                       <object class="GtkRadioButton" id="only">
                         <property name="label" translatable="yes">Comments only</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">end</property>
@@ -329,11 +308,9 @@
                     <child>
                       <object class="GtkRadioButton" id="end">
                         <property name="label" translatable="yes">End of document</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">endpage</property>
@@ -348,11 +325,9 @@
                     <child>
                       <object class="GtkRadioButton" id="endpage">
                         <property name="label" translatable="yes">End of page</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">none</property>
@@ -451,11 +426,9 @@
                 <child>
                   <object class="GtkCheckButton" id="blankpages">
                     <property name="label" translatable="yes">Print automatically inserted blank pages</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -469,11 +442,9 @@
                 <child>
                   <object class="GtkCheckButton" id="papertray">
                     <property name="label" translatable="yes">Paper tray from printer settings</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
