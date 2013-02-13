@@ -400,12 +400,10 @@ void XRMResExport::WorkOnDesc(
     rtl::OString sDescFileName(
         sInputFileName.replaceAll("description.xml", rtl::OString()));
     sDescFileName += GetAttribute( rOpenTag, "xlink:href" );
-    int size;
-    char * memblock;
     ifstream file (sDescFileName.getStr(), ios::in|ios::binary|ios::ate);
     if (file.is_open()) {
-        size = static_cast<int>(file.tellg());
-        memblock = new char [size+1];
+        int size = static_cast<int>(file.tellg());
+        char* memblock = new char [size+1];
         file.seekg (0, ios::beg);
         file.read (memblock, size);
         file.close();
