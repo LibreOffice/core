@@ -218,6 +218,12 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 
 endif
 
+ifeq ($(DISABLE_SCRIPTING),)
+$(eval $(call gb_Helper_register_libraries,OOOLIBSINSTALLED, \
+    basctl \
+))
+endif
+
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     abp \
     acc \
@@ -227,7 +233,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     agg \
     analysis \
     animcore \
-    basctl \
     $(if $(filter $(OS),ANDROID),, \
 		basebmp \
     ) \
