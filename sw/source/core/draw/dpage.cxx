@@ -111,7 +111,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
 
             if ( pRect )
             {
-                //Das Drawing verlang alle Seiten, die mit dem Rect ueberlappen.
+                //The drawing demands all pages which overlap with the rest.
                 const SwRect aRect( *pRect );
                 const SwFrm *pPg = pSh->GetLayout()->Lower();
                 do
@@ -122,7 +122,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
             }
             else
             {
-                //Das Drawing verlangt alle sichbaren Seiten
+                //The drawing demands all visible pages
                 const SwFrm *pPg = pSh->Imp()->GetFirstVisPage();
                 if ( pPg )
                     do
@@ -174,11 +174,11 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
                 if( rURL.IsServerMap() )
                 {
-                    // dann die rel. Pixel Position anhaengen !!
+                    // then append the relative pixel position!!
                     Point aPt( aPos );
                     aPt -= pFly->Frm().Pos();
-                    // ohne MapMode-Offset !!!!!
-                    // ohne MapMode-Offset, ohne Offset, o ... !!!!!
+                    // without MapMode-Offset !!!!!
+                    // without MapMode-Offset, without Offset, w ... !!!!!
                     aPt = pWindow->LogicToPixel(
                             aPt, MapMode( MAP_TWIP ) );
                     ((( sTxt += '?' ) += String::CreateFromInt32( aPt.X() ))
@@ -209,7 +209,7 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                 }
                 else
                 {
-            // dann zeige die Hilfe mal an:
+            // then display the help:
                     Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
                     Help::ShowQuickHelp( pWindow, aRect, sTxt );
                 }
