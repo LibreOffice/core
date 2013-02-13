@@ -378,7 +378,7 @@ void HelpLinker::link() throw( HelpProcessingException )
         }
 
         HelpCompiler hc( streamTable, xhpFile, langsourceRoot, zipdir,
-            embeddStylesheet, module, lang, bExtensionMode );
+            compactStylesheet, embeddStylesheet, module, lang, bExtensionMode );
 
         HCDBG(std::cerr << "before compile of " << xhpFileName << std::endl);
         bool success = hc.compile();
@@ -607,6 +607,18 @@ void HelpLinker::main( std::vector<std::string> &args,
             }
             bSrcOption = true;
             sourceRoot = fs::path(args[i], fs::native);
+        }
+        else if (args[i].compare("-compact") == 0)
+        {
+            ++i;
+            if (i >= args.size())
+            {
+                std::stringstream aStrStream;
+                aStrStream << "compactStylesheet missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+            }
+
+            compactStylesheet = fs::path(args[i], fs::native);
         }
         else if (args[i].compare("-sty") == 0)
         {

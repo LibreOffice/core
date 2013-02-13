@@ -230,6 +230,7 @@ public:
                 const fs::path &in_inputFile,
                 const fs::path &in_src,
                 const fs::path &in_zipdir,
+                const fs::path &in_resCompactStylesheet,
                 const fs::path &in_resEmbStylesheet,
                 const std::string &in_module,
                 const std::string &in_lang,
@@ -246,11 +247,13 @@ public:
 private:
     xmlDocPtr getSourceDocument(const fs::path &filePath);
     void tagBasicCodeExamples(xmlDocPtr doc);
+    xmlDocPtr compactXhpForJar(xmlDocPtr doc);
     void saveXhpForJar(xmlDocPtr doc, const fs::path &filePath);
     xmlNodePtr clone(xmlNodePtr node, const std::string& appl);
     StreamTable &streamTable;
     const fs::path inputFile, src, zipdir;
     const std::string module, lang;
+    const fs::path resCompactStylesheet;
     const fs::path resEmbStylesheet;
     bool bExtensionMode;
     std::string gui;

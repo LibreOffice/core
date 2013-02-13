@@ -66,6 +66,7 @@ private:
     Stringtable additionalFiles;
     HashSet helpFiles;
     fs::path sourceRoot;
+    fs::path compactStylesheet;
     fs::path embeddStylesheet;
     fs::path idxCaptionStylesheet;
     fs::path idxContentStylesheet;

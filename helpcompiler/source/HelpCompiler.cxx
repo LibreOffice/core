@@ -38,11 +38,12 @@ static void impl_sleep( sal_uInt32 nSec )
     osl::Thread::wait( aTime );
 }
 HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_inputFile,
-    const fs::path &in_src, const fs::path &in_zipdir, const fs::path &in_resEmbStylesheet,
-    const std::string &in_module, const std::string &in_lang, bool in_bExtensionMode)
+    const fs::path &in_src, const fs::path &in_zipdir, const fs::path &in_resCompactStylesheet,
+    const fs::path &in_resEmbStylesheet, const std::string &in_module, const std::string &in_lang,
+    bool in_bExtensionMode)
     : streamTable(in_streamTable), inputFile(in_inputFile),
-    src(in_src), zipdir(in_zipdir), module(in_module), lang(in_lang), resEmbStylesheet(in_resEmbStylesheet),
-    bExtensionMode( in_bExtensionMode )
+    src(in_src), zipdir(in_zipdir), module(in_module), lang(in_lang), resCompactStylesheet(in_resCompactStylesheet),
+    resEmbStylesheet(in_resEmbStylesheet), bExtensionMode( in_bExtensionMode )
 {
     xmlKeepBlanksDefaultValue = 0;
     char* guitmp = getenv("GUI");
@@ -68,6 +69,22 @@ void HelpCompiler::tagBasicCodeExamples( xmlDocPtr doc )
     }
 }
 
+xmlDocPtr HelpCompiler::compactXhpForJar( xmlDocPtr doc )
+{
+    static xsltStylesheetPtr compact = NULL;
+    static const char *params[2 + 1];
+    params[0] = NULL;
+    xmlDocPtr compacted;
+
+    if (!compact)
+    {
+        compact = xsltParseStylesheetFile((const xmlChar *)resCompactStylesheet.native_file_string().c_str());
+    }
+
+    compacted = xsltApplyStylesheet(compact, doc, params);
+    return compacted;
+}
+
 void HelpCompiler::saveXhpForJar( xmlDocPtr doc, const fs::path &filePath )
 {
     //save processed xhp document in ziptmp<module>_<lang>/text directory
@@ -90,9 +107,11 @@ void HelpCompiler::saveXhpForJar( xmlDocPtr doc, const fs::path &filePath )
         size_t pos = zipdirPath.find( "ziptmp" ) + 6;
         zipdirPath.replace( pos, module.length(), "shared" );
     }
+    xmlDocPtr compacted = compactXhpForJar( doc );
     fs::create_directory( fs::path( zipdirPath + jarXhpPath, fs::native ) );
-    if ( -1 == xmlSaveFormatFileEnc( (zipdirPath + jarXhpPath + pathSep + xhpFileName).c_str(), doc, "utf-8", 0 ) )
+    if ( -1 == xmlSaveFormatFileEnc( (zipdirPath + jarXhpPath + pathSep + xhpFileName).c_str(), compacted, "utf-8", 0 ) )
         std::cerr << "Error saving file to " << (zipdirPath + jarXhpPath + pathSep + xhpFileName).c_str() << std::endl;
+    xmlFreeDoc(compacted);
 }
 
 

@@ -27,6 +27,7 @@
 
 $(eval $(call gb_Package_Package,xmlhelp_xsl,$(SRCDIR)/xmlhelp/util))
 
+$(eval $(call gb_Package_add_file,xmlhelp_xsl,bin/compact.xsl,compact.xsl))
 $(eval $(call gb_Package_add_file,xmlhelp_xsl,bin/embed.xsl,embed.xsl))
 $(eval $(call gb_Package_add_file,xmlhelp_xsl,bin/idxcaption.xsl,idxcaption.xsl))
 $(eval $(call gb_Package_add_file,xmlhelp_xsl,bin/idxcontent.xsl,idxcontent.xsl))
