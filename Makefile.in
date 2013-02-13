@@ -232,7 +232,7 @@ else # space-saving clone from another local workdir
 	git submodule update $(GIT_NEEDED_SUBMODULES)
 endif
 endif
-	cd $(SRCDIR) && ./g -z # make sure the git hooks are in place enven if no submodules are needed
+	@cd $(SRCDIR) && ./g -z # make sure the git hooks are in place enen if no submodules are needed
 
 else # these sources are from a tarball, so get the other source tarballs
 gb_LO_VER := $(shell . $(SRCDIR)/sources.ver && echo $$lo_sources_ver)
