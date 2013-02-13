@@ -260,6 +260,10 @@ public:
 //************************************************************
 
 class SVX_DLLPUBLIC SdrUndoObjList : public SdrUndoObj {
+    class ObjListListener;
+    friend class ObjListListener;
+
+private:
     bool                        bOwner;
 
 protected:
@@ -269,6 +273,7 @@ protected:
     sal_uInt32                      nOrdNum;
     // Bei einem Undo/Redo findet moeglicherweise Uebereignung des Objektes
     // statt. Im Dtor wird das Obj deleted, wenn bOwner==TRUE
+    ObjListListener*            m_pListener;
 
 protected:
     SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect = false);
@@ -277,6 +282,10 @@ protected:
     void SetView(SdrView* pView1, SdrPageView* pPageView1) { pView=pView1; pPageView=pPageView1; }
     bool IsOwner() { return bOwner; }
     void SetOwner(bool bNew);
+
+private:
+    sal_uInt32 GetOrdNum() const;
+    void SetOrdNum(sal_uInt32 nOrdNum_);
 };
 
 //************************************************************
