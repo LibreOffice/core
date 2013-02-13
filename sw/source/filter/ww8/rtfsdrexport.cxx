@@ -34,6 +34,7 @@ RtfSdrExport::RtfSdrExport( RtfExport &rExport )
     : EscherEx( EscherExGlobalRef( new EscherExGlobal ), 0 ),
       m_rExport( rExport ),
       m_rAttrOutput( (RtfAttributeOutput&)m_rExport.AttrOutput() ),
+      m_pSdrObject( NULL ),
       m_nShapeType( ESCHER_ShpInst_Nil ),
       m_pShapeStyle( new OStringBuffer( 200 ) ),
       m_pShapeTypeWritten( new bool[ ESCHER_ShpInst_COUNT ] )
