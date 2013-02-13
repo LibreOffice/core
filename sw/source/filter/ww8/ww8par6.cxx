@@ -1115,10 +1115,14 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         aNewSection.maSep.grpfIhdt = ReadBSprm(pSep, eVer <= ww::eWW2 ? 128 : 153, 0);
     else if (mrReader.pHdFt)
     {
-        aNewSection.maSep.grpfIhdt = WW8_HEADER_ODD | WW8_FOOTER_ODD;
+        aNewSection.maSep.grpfIhdt = WW8_HEADER_ODD | WW8_FOOTER_ODD
+            | WW8_HEADER_FIRST | WW8_FOOTER_FIRST;
 
-        if (aNewSection.HasTitlePage())
-            aNewSection.maSep.grpfIhdt |= WW8_HEADER_FIRST | WW8_FOOTER_FIRST;
+        // It is possible for a first page header to be provided
+        // for this section, but not actually shown in this section.  In this
+        // case (aNewSection.maSep.grpfIhdt & WW8_HEADER_FIRST) will be nonzero
+        // but aNewSection.HasTitlePage() will be false.
+        // Likewise for first page footer.
 
         if (mrReader.pWDop->fFacingPages)
             aNewSection.maSep.grpfIhdt |= WW8_HEADER_EVEN | WW8_FOOTER_EVEN;
