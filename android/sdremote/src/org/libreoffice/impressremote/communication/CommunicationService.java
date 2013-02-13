@@ -76,6 +76,7 @@ public class CommunicationService extends Service implements Runnable {
 
     @Override
     public void run() {
+        Log.i(Globals.TAG, "CommunicationService.run()");
         synchronized (this) {
             while (true) {
                 // Condition
@@ -86,6 +87,7 @@ public class CommunicationService extends Service implements Runnable {
                     return;
                 }
                 // Work
+                Log.i(Globals.TAG, "CommunicationService.run: at \"Work\"");
                 synchronized (mConnectionVariableMutex) {
                     if ((mStateDesired == State.CONNECTED && mState == State.CONNECTED)
                                     || (mStateDesired == State.DISCONNECTED && mState == State.CONNECTED)) {
@@ -107,23 +109,21 @@ public class CommunicationService extends Service implements Runnable {
                                                 mBluetoothPreviouslyEnabled);
                                 break;
                             }
+                            mTransmitter = new Transmitter(mClient);
+                            mState = State.CONNECTED;
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            Log.i(Globals.TAG, "CommunicationService.run: " + e);
                             mClient = null;
                             mState = State.DISCONNECTED;
                             Intent aIntent = new Intent(
                                             CommunicationService.STATUS_CONNECTION_FAILED);
                             LocalBroadcastManager.getInstance(this)
                                             .sendBroadcast(aIntent);
-                            return;
                         }
-                        mTransmitter = new Transmitter(mClient);
-                        mState = State.CONNECTED;
                     }
                 }
             }
         }
-
     }
 
     private boolean mBluetoothPreviouslyEnabled;
@@ -156,6 +156,7 @@ public class CommunicationService extends Service implements Runnable {
     }
 
     public void connectTo(Server aServer) {
+        Log.i(Globals.TAG, "CommunicationService.connectTo(" + aServer + ")");
         synchronized (mConnectionVariableMutex) {
             if (mState == State.SEARCHING) {
                 mNetworkFinder.stopFinding();
