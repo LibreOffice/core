@@ -32,18 +32,12 @@ $(eval $(call gb_CustomTarget_register_targets,shell/source/win32/shlxthandler/r
 	shlxthdl_impl.rc \
 ))
 
-$(call gb_CustomTarget_get_target,shell/source/win32/shlxthandler/res) : \
-	$(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl_impl.rc
-
 $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl_impl.rc : \
-	$(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl.ulf \
-	$(SRCDIR)/shell/source/win32/shlxthandler/res/rcfooter.txt \
-	$(SRCDIR)/shell/source/win32/shlxthandler/res/rcheader.txt \
-	$(SRCDIR)/shell/source/win32/shlxthandler/res/rctmpl.txt \
-	$(call gb_Executable_get_runtime_dependencies,lngconvex) \
-	| $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/.dir
-
-$(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl_impl.rc :
+		$(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl.ulf \
+		$(SRCDIR)/shell/source/win32/shlxthandler/res/rcfooter.txt \
+		$(SRCDIR)/shell/source/win32/shlxthandler/res/rcheader.txt \
+		$(SRCDIR)/shell/source/win32/shlxthandler/res/rctmpl.txt \
+		$(call gb_Executable_get_runtime_dependencies,lngconvex)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),LCX,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(SRCDIR)/shell/source/win32/shlxthandler/res && \
