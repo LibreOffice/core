@@ -2235,113 +2235,117 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
         if (!nCellLevel)
             nCellLevel = 0 != pPlcxMan->HasParaSprm(0x244B);
     }
-
-    WW8_TablePos *pTabPos=0;
-    WW8_TablePos aTabPos;
-    if (nCellLevel && !bVer67)
+    do
     {
-        WW8PLCFxSave1 aSave;
-        pPlcxMan->GetPap()->Save( aSave );
-        rbReSync = true;
-        WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
-        WW8_CP nMyStartCp=nStartCp;
-
-        if (const sal_uInt8 *pLevel = pPlcxMan->HasParaSprm(0x6649))
-            nCellLevel = *pLevel;
-
-        bool bHasRowEnd = SearchRowEnd(pPap, nMyStartCp, nCellLevel-1);
-
-        //Bad Table, remain unchanged in level, e.g. #i19667#
-        if (!bHasRowEnd)
-            nCellLevel = static_cast< sal_uInt8 >(nInTable);
-
-        if (bHasRowEnd && ParseTabPos(&aTabPos,pPap))
-            pTabPos = &aTabPos;
-
-        pPlcxMan->GetPap()->Restore( aSave );
-    }
-
-//  then look if we are in an Apo
-
-    ApoTestResults aApo = TestApo(nCellLevel, bTableRowEnd, pTabPos);
-
-    //look to see if we are in a Table, but Table in foot/end note not allowed
-    bool bStartTab = (nInTable < nCellLevel) && !bFtnEdn;
-
-    bool bStopTab = bWasTabRowEnd && (nInTable > nCellLevel) && !bFtnEdn;
-
-    bWasTabRowEnd = false;  // must be deactivated right here to prevent next
-                            // WW8TabDesc::TableCellEnd() from making nonsense
-
-    if (nInTable && !bTableRowEnd && !bStopTab && (nInTable == nCellLevel && aApo.HasStartStop()))
-        bStopTab = bStartTab = true;    // Required to stop and start table
-
-//  Dann auf Anl (Nummerierung) testen
-//  und dann alle Ereignisse in der richtigen Reihenfolge bearbeiten
-
-    if( bAnl && !bTableRowEnd )
-    {
-        const sal_uInt8* pSprm13 = pPlcxMan->HasParaSprm( 13 );
-        if( pSprm13 )
-        {                                   // Noch Anl ?
-            sal_uInt8 nT = static_cast< sal_uInt8 >(GetNumType( *pSprm13 ));
-            if( ( nT != WW8_Pause && nT != nWwNumType ) // Anl-Wechsel
-                || aApo.HasStartStop()                  // erzwungenes Anl-Ende
-                || bStopTab || bStartTab )
-            {
-                StopAnlToRestart(nT);  // Anl-Restart ( = Wechsel ) ueber sprms
-            }
-            else
-            {
-                NextAnlLine( pSprm13 );                 // naechste Anl-Zeile
-            }
-        }
-        else
-        {                                           // Anl normal zuende
-            StopAllAnl();                                  // Wirkliches Ende
-        }
-    }
-    if (bStopTab)
-    {
-        StopTable();
-        maApos.pop_back();
-        --nInTable;
-    }
-    if (aApo.mbStopApo)
-    {
-        StopApo();
-        maApos[nInTable] = false;
-    }
-
-    if (aApo.mbStartApo)
-    {
-        maApos[nInTable] = StartApo(aApo, pTabPos);
-        // nach StartApo ist ein ReSync noetig ( eigentlich nur, falls die Apo
-        // ueber eine FKP-Grenze geht
-        rbReSync = true;
-    }
-    if (bStartTab)
-    {
-        WW8PLCFxSave1 aSave;
-        pPlcxMan->GetPap()->Save( aSave );
-
-        if (bAnl)                           // Nummerierung ueber Zellengrenzen
-            StopAllAnl();                   // fuehrt zu Absturz -> keine Anls
-                                            // in Tabellen
-        while (nInTable < nCellLevel)
+        WW8_TablePos *pTabPos=0;
+        WW8_TablePos aTabPos;
+        if(nCellLevel && !bVer67)
         {
-            if (StartTable(nStartCp))
-                ++nInTable;
-            else
-                break;
+            WW8PLCFxSave1 aSave;
+            pPlcxMan->GetPap()->Save( aSave );
+            rbReSync = true;
+            WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
+            WW8_CP nMyStartCp=nStartCp;
 
-            maApos.push_back(false);
+            if (const sal_uInt8 *pLevel = pPlcxMan->HasParaSprm(0x6649))
+                nCellLevel = *pLevel;
+
+            bool bHasRowEnd = SearchRowEnd(pPap, nMyStartCp, (nInTable<nCellLevel?nInTable:nCellLevel-1));
+
+            //Bad Table, remain unchanged in level, e.g. #i19667#
+            if (!bHasRowEnd)
+                nCellLevel = static_cast< sal_uInt8 >(nInTable);
+
+            if (bHasRowEnd && ParseTabPos(&aTabPos,pPap))
+                pTabPos = &aTabPos;
+
+            pPlcxMan->GetPap()->Restore( aSave );
         }
-        // nach StartTable ist ein ReSync noetig ( eigentlich nur, falls die
-        // Tabelle ueber eine FKP-Grenze geht
-        rbReSync = true;
-        pPlcxMan->GetPap()->Restore( aSave );
-    }
+
+    //  then look if we are in an Apo
+
+        ApoTestResults aApo = TestApo(nCellLevel, bTableRowEnd, pTabPos);
+
+        //look to see if we are in a Table, but Table in foot/end note not allowed
+        bool bStartTab = (nInTable < nCellLevel) && !bFtnEdn;
+
+        bool bStopTab = bWasTabRowEnd && (nInTable > nCellLevel) && !bFtnEdn;
+
+        bWasTabRowEnd = false;  // must be deactivated right here to prevent next
+                                // WW8TabDesc::TableCellEnd() from making nonsense
+
+        if (nInTable && !bTableRowEnd && !bStopTab && (nInTable == nCellLevel && aApo.HasStartStop()))
+            bStopTab = bStartTab = true;    // Required to stop and start table
+
+    //  Dann auf Anl (Nummerierung) testen
+    //  und dann alle Ereignisse in der richtigen Reihenfolge bearbeiten
+
+        if( bAnl && !bTableRowEnd )
+        {
+            const sal_uInt8* pSprm13 = pPlcxMan->HasParaSprm( 13 );
+            if( pSprm13 )
+            {                                   // Noch Anl ?
+                sal_uInt8 nT = static_cast< sal_uInt8 >(GetNumType( *pSprm13 ));
+                if( ( nT != WW8_Pause && nT != nWwNumType ) // Anl-Wechsel
+                    || aApo.HasStartStop()                  // erzwungenes Anl-Ende
+                    || bStopTab || bStartTab )
+                {
+                    StopAnlToRestart(nT);  // Anl-Restart ( = Wechsel ) ueber sprms
+                }
+                else
+                {
+                    NextAnlLine( pSprm13 );                 // naechste Anl-Zeile
+                }
+            }
+            else
+            {                                           // Anl normal zuende
+                StopAllAnl();                                  // Wirkliches Ende
+            }
+        }
+        if (bStopTab)
+        {
+            StopTable();
+            maApos.pop_back();
+            --nInTable;
+        }
+        if (aApo.mbStopApo)
+        {
+            StopApo();
+            maApos[nInTable] = false;
+        }
+
+        if (aApo.mbStartApo)
+        {
+            maApos[nInTable] = StartApo(aApo, pTabPos);
+            // nach StartApo ist ein ReSync noetig ( eigentlich nur, falls die Apo
+            // ueber eine FKP-Grenze geht
+            rbReSync = true;
+        }
+        if (bStartTab)
+        {
+            WW8PLCFxSave1 aSave;
+            pPlcxMan->GetPap()->Save( aSave );
+
+            if (bAnl)                           // Nummerierung ueber Zellengrenzen
+                StopAllAnl();                   // fuehrt zu Absturz -> keine Anls
+                                                // in Tabellen
+            if(nInTable < nCellLevel)
+            {
+                if (StartTable(nStartCp))
+                    ++nInTable;
+                else
+                    break;
+                maApos.push_back(false);
+            }
+            if(nInTable >= nCellLevel)
+            {
+                // nach StartTable ist ein ReSync noetig ( eigentlich nur, falls die
+                // Tabelle ueber eine FKP-Grenze geht
+                rbReSync = true;
+                pPlcxMan->GetPap()->Restore( aSave );
+            }
+        }
+    } while (nInTable < nCellLevel);
     return bTableRowEnd;
 }
 
