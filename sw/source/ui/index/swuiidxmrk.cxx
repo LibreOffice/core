@@ -967,10 +967,10 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
     bool    bKey1HasText    = (!m_pKey1DCB->GetText().isEmpty());
     bool    bKey2HasText    = (!m_pKey2DCB->GetText().isEmpty());
 
-    m_pPhoneticFT1->Enable(bKey1HasText&&bIsPhoneticReadingEnabled);
-    m_pPhoneticED1->Enable(bKey1HasText&bIsPhoneticReadingEnabled);
-    m_pPhoneticFT2->Enable(bKey2HasText&bIsPhoneticReadingEnabled);
-    m_pPhoneticED2->Enable(bKey2HasText&bIsPhoneticReadingEnabled);
+    m_pPhoneticFT1->Enable(bKey1HasText && bIsPhoneticReadingEnabled);
+    m_pPhoneticED1->Enable(bKey1HasText && bIsPhoneticReadingEnabled);
+    m_pPhoneticFT2->Enable(bKey2HasText && bIsPhoneticReadingEnabled);
+    m_pPhoneticED2->Enable(bKey2HasText && bIsPhoneticReadingEnabled);
 
     return 0;
 }
