@@ -205,7 +205,6 @@ RSCINST RscClass::Create
 )
 {
     sal_uInt32  i;
-    CLASS_DATA  * ppData;
     RSCINST aInst;
     RSCINST aMemInst, aDfltI;
 
@@ -234,6 +233,7 @@ RSCINST RscClass::Create
         if( (VAR_POINTER & pVarTypeList[ i ].nVarType)
           && !(VAR_NODATAINST & pVarTypeList[ i ].nVarType) )
         {
+            CLASS_DATA  * ppData;
             if( VAR_EXTENDABLE & pVarTypeList[ i ].nVarType )
             {
                 RSCINST * pInstance = (RSCINST *)
