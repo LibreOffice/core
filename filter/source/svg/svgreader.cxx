@@ -327,7 +327,7 @@ struct AnnotatingVisitor
     bool hasGradientOpacity( const Gradient& rGradient )
     {
         return
-            !rGradient.maStops.empty() &&
+            (rGradient.maStops.size() > 1) &&
             (maGradientStopVector[
                  rGradient.maStops[0]].maStopColor.a != 1.0 ||
              maGradientStopVector[
@@ -367,6 +367,10 @@ struct AnnotatingVisitor
         }
 
         rGradient.maStops = aNewStops;
+        if (rGradient.maStops.size() < 2)
+        {
+            return; // can't optimize further...
+        }
 
         // axial gradient, maybe?
         if( rGradient.meType == Gradient::LINEAR &&
