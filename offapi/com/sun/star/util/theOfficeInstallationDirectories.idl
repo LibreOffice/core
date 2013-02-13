@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_util_OfficeInstallationDirectories_idl__
-#define __com_sun_star_util_OfficeInstallationDirectories_idl__
+#ifndef __com_sun_star_util_theOfficeInstallationDirectories_idl__
+#define __com_sun_star_util_theOfficeInstallationDirectories_idl__
 
 #include <com/sun/star/util/XOfficeInstallationDirectories.idl>
 
@@ -37,13 +37,8 @@ module com {  module sun {  module star {  module  util {
     directly would destroy the relocatability of an office installation and the
     possibility to share one office user data directory among parallel office
     installations.
-
-    @since OOo 2.0
-    @deprecated rather use the singleton theOfficeInstallationDirectories
  */
-published service OfficeInstallationDirectories {
-    interface XOfficeInstallationDirectories;
-};
+published singleton theOfficeInstallationDirectories : XOfficeInstallationDirectories;
 
 
 }; }; }; };

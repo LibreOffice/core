@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
+#include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <ucbhelper/content.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
@@ -829,13 +829,7 @@ namespace svt
             {
                 uno::Reference< uno::XComponentContext > xCtx(
                     comphelper::getProcessComponentContext() );
-                xCtx->getValueByName(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                "/singletons/com.sun.star.util.theOfficeInstallationDirectories" ) ) )
-                    >>= m_xOfficeInstDirs;
-
-                OSL_ENSURE( m_xOfficeInstDirs.is(),
-                            "Unable to obtain office directories singleton!" );
+                m_xOfficeInstDirs = util::theOfficeInstallationDirectories::get(xCtx);
             }
         }
         return m_xOfficeInstDirs;

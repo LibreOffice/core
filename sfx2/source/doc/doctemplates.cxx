@@ -40,6 +40,7 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
+#include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -2830,15 +2831,7 @@ void SfxURLRelocator_Impl::initOfficeInstDirs()
             uno::Reference< XComponentContext > xCtx(
                 comphelper::getComponentContext( mxFactory ) );
 
-            xCtx->getValueByName(
-                rtl::OUString(
-                    "/singletons/"
-                    "com.sun.star.util.theOfficeInstallationDirectories"  ) )
-                >>= mxOfficeInstDirs;
-
-            OSL_ENSURE( mxOfficeInstDirs.is(),
-                        "Unable to obtain office installation directory "
-                        "singleton!" );
+            mxOfficeInstDirs = theOfficeInstallationDirectories::get(xCtx);
         }
     }
 }

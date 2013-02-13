@@ -28,7 +28,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
+#include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include "hierarchyprovider.hxx"
@@ -268,13 +268,7 @@ HierarchyContentProvider::getOfficeInstallationDirectories()
         {
             OSL_ENSURE( m_xContext.is(), "No service manager!" );
 
-            m_xContext->getValueByName(
-                rtl::OUString( "/singletons/com.sun.star.util.theOfficeInstallationDirectories"  ) )
-                >>= m_xOfficeInstDirs;
-
-// Be silent. singleton only available in an Office environment.
-//          OSL_ENSURE( m_xOfficeInstDirs.is(),
-//                      "Unable to obtain office directories singleton!" );
+            m_xOfficeInstDirs = util::theOfficeInstallationDirectories::get(m_xContext);
         }
     }
     return m_xOfficeInstDirs;
