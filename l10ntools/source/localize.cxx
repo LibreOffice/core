@@ -103,8 +103,6 @@ bool passesNegativeList(OUString const & url) {
             "/officecfg/registry/data/org/openoffice/Office/"
             "Accelerators.xcu") },
         { RTL_CONSTASCII_STRINGPARAM(
-            "/officecfg/registry/data/org/openoffice/Office/Labels.xcu") },
-        { RTL_CONSTASCII_STRINGPARAM(
             "/officecfg/registry/data/org/openoffice/Office/SFX.xcu") }
     };
     return !matchList(url, list, SAL_N_ELEMENTS(list));

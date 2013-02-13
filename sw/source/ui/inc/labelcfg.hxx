@@ -22,14 +22,16 @@
 #include <unotools/configitem.hxx>
 #include "swdllapi.h"
 
+#include <map>
+#include <vector>
+
 class SwLabRecs;
 class SwLabRec;
 
 class SW_DLLPUBLIC SwLabelConfig : public utl::ConfigItem
 {
-    com::sun::star::uno::Sequence<rtl::OUString> aNodeNames;
-
-    SW_DLLPRIVATE com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    std::vector<rtl::OUString> m_aManufacturers;
+    std::map< OUString, std::map<OUString, OUString> > m_aLabels;
 
 public:
     SwLabelConfig();
@@ -38,9 +40,9 @@ public:
     virtual void Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 
+    void FillManufacturers();
     void    FillLabels(const rtl::OUString& rManufacturer, SwLabRecs& rLabArr);
-    const com::sun::star::uno::Sequence<rtl::OUString>&
-            GetManufacturers() const {return aNodeNames;}
+    const std::vector<rtl::OUString>& GetManufacturers() const {return m_aManufacturers;}
 
     sal_Bool    HasLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType);
     void        SaveLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType,

@@ -68,6 +68,7 @@ $(eval $(call gb_Library_use_libraries,sw,\
     utl \
     vbahelper \
     vcl \
+    xmlreader \
     xo \
 	$(gb_UWINAPI) \
 ))

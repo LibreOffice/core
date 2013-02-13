@@ -224,7 +224,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/Office/Histories.xcu \
 	$(postprocess_XCU)/Office/Impress.xcu \
 	$(postprocess_XCU)/Office/Jobs.xcu \
-	$(postprocess_XCU)/Office/Labels.xcu \
 	$(postprocess_XCU)/Office/Logging.xcu \
 	$(postprocess_XCU)/Office/Math.xcu \
 	$(postprocess_XCU)/Office/Paths.xcu \

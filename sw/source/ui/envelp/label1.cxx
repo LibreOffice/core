@@ -153,13 +153,12 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
         pRecs->insert( pRecs->begin(), pRec );
 
     sal_uInt16 nLstGroup = 0;
-    const ::com::sun::star::uno::Sequence<rtl::OUString>& rMan = aLabelsCfg.GetManufacturers();
-    const rtl::OUString* pMan = rMan.getConstArray();
-    for(sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++)
+    const std::vector<rtl::OUString>& rMan = aLabelsCfg.GetManufacturers();
+    for(sal_uInt16 nMan = 0; nMan < rMan.size(); nMan++)
     {
-        aMakes.push_back(pMan[nMan]);
-        if ( pMan[nMan] == aItem.aLstMake )
-            nLstGroup = (sal_uInt16) nMan;
+        aMakes.push_back(rMan[nMan]);
+        if ( rMan[nMan] == aItem.aLstMake )
+            nLstGroup = nMan;
     }
 
     if ( !aMakes.empty() )

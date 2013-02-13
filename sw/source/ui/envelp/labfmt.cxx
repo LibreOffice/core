@@ -576,14 +576,11 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
     if(pSaveDlg->GetLabel(aItem))
     {
         bModified = false;
-        const Sequence<OUString>& rMan = GetParentSwLabDlg()->GetLabelsConfig().GetManufacturers();
+        const std::vector<OUString>& rMan = GetParentSwLabDlg()->GetLabelsConfig().GetManufacturers();
         std::vector<rtl::OUString>& rMakes(GetParentSwLabDlg()->Makes());
-        if(rMakes.size() < (sal_uInt16)rMan.getLength())
+        if(rMakes.size() < rMan.size())
         {
-            rMakes.clear();
-            const OUString* pMan = rMan.getConstArray();
-            for(sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++)
-                rMakes.push_back(pMan[nMan]);
+            rMakes = rMan;
         }
         aMakeFI.SetText(aItem.aMake);
         aTypeFI.SetText(aItem.aType);
@@ -618,10 +615,9 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
     aTypeED.SetModifyHdl(aLk);
 
     SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
-    const Sequence<OUString>& rMan = rCfg.GetManufacturers();
-    const OUString* pMan = rMan.getConstArray();
-    for(sal_Int32 i = 0; i < rMan.getLength(); i++)
-        aMakeCB.InsertEntry(pMan[i]);
+    const std::vector<OUString>& rMan = rCfg.GetManufacturers();
+    for (sal_uInt16 i = 0; i < rMan.size(); i++)
+        aMakeCB.InsertEntry(rMan[i]);
 }
 
 IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)

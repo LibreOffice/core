@@ -42,6 +42,7 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Extensions,            
             gid_Brand_Dir_Share_Uno_Packages,
             gid_Brand_Dir_Share_Uno_Packages_Cache,
+            gid_Brand_Dir_Share_Labels,
             gid_Brand_Dir_Share_Registry,
             gid_Brand_Dir_Share_Xdg);
     Files = (gid_Brand_File_Bin_Crashreport,
@@ -416,6 +417,11 @@ Directory gid_Brand_Dir_Share_Uno_Packages_Cache_Uno_Packages
     ParentID = gid_Brand_Dir_Share_Uno_Packages_Cache;
     DosName = "uno_packages";
     Styles = (CREATE);
+End
+
+Directory gid_Brand_Dir_Share_Labels
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "labels";
 End
 
 Directory gid_Brand_Dir_Share_Registry

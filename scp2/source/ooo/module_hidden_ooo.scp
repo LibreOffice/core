@@ -536,6 +536,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Mod_Text,
     gid_File_Oo_Ldap_Xcd_Sample,
     gid_File_Oo_Ad_Ldap_Xcd_Sample,
+    gid_File_Share_Labels_Xml,
     gid_File_Share_Registry_Main_Xcd,
     gid_File_Share_Registry_Forcedefault_Xcd,
 	gid_File_Pymailmerge,

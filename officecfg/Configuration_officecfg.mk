@@ -36,7 +36,6 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Office/ExtensionManager.xcu \
 	org/openoffice/Office/Impress.xcu \
 	org/openoffice/Office/Jobs.xcu \
-	org/openoffice/Office/Labels.xcu \
 	org/openoffice/Office/Linguistic.xcu \
 	org/openoffice/Office/Logging.xcu \
 	org/openoffice/Office/Math.xcu \
