@@ -9,12 +9,9 @@
   <object class="GtkGrid" id="BackgroundPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_left">6</property>
-    <property name="margin_right">6</property>
-    <property name="margin_top">6</property>
-    <property name="margin_bottom">6</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="row_spacing">6</property>
     <child>
       <object class="GtkGrid" id="grid2">
@@ -139,6 +136,7 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid3">
@@ -418,9 +416,9 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                              <accessibility>
-                                <relation type="labelled-by" target="positionrb"/>
-                              </accessibility>
+                            <accessibility>
+                              <relation type="labelled-by" target="positionrb"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>

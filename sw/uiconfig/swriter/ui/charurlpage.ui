@@ -4,7 +4,9 @@
   <object class="GtkBox" id="CharURLPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkFrame" id="frame10">
         <property name="visible">True</property>
@@ -22,7 +24,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="column_spacing">6</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <property name="row_homogeneous">True</property>
                 <child>
                   <object class="GtkLabel" id="label36">
@@ -83,12 +86,10 @@
                 <child>
                   <object class="GtkButton" id="eventpb">
                     <property name="label" translatable="yes">Events...</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="valign">center</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -146,12 +147,10 @@
                 <child>
                   <object class="GtkButton" id="urlpb">
                     <property name="label" translatable="yes">Browse...</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="valign">center</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -232,7 +231,8 @@
               <object class="GtkGrid" id="grid6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="column_spacing">6</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label34">
                     <property name="visible">True</property>

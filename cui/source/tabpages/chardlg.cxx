@@ -1309,7 +1309,6 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
     get(m_pUnderlineColorFT, "underlinecolorft");
     get(m_pUnderlineColorLB, "underlinecolorlb");
     get(m_pIndividualWordsBtn, "individualwordscb");
-    get(m_pAsianLine, "asianfl");
     get(m_pEmphasisFT, "emphasisft");
     get(m_pEmphasisLB, "emphasislb");
     get(m_pPositionFT, "positionft");
@@ -1414,7 +1413,6 @@ void SvxCharEffectsPage::Initialize()
 
     if ( !SvtLanguageOptions().IsAsianTypographyEnabled() )
     {
-        m_pAsianLine->Hide();
         m_pEmphasisFT->Hide();
         m_pEmphasisLB->Hide();
         m_pPositionFT->Hide();

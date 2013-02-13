@@ -200,8 +200,6 @@ private:
 
     CheckBox*           m_pIndividualWordsBtn;
 
-    FixedLine*          m_pAsianLine;
-
     FixedText*          m_pEmphasisFT;
     ListBox*            m_pEmphasisLB;
 

@@ -40,10 +40,7 @@
   <object class="GtkBox" id="PositionPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_left">6</property>
-    <property name="margin_right">6</property>
-    <property name="margin_top">6</property>
-    <property name="margin_bottom">6</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
@@ -72,11 +69,9 @@
                     <child>
                       <object class="GtkRadioButton" id="superscript">
                         <property name="label" translatable="yes">Superscript</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">normal</property>
@@ -90,11 +85,9 @@
                     <child>
                       <object class="GtkRadioButton" id="normal">
                         <property name="label" translatable="yes">Normal</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">subscript</property>
@@ -108,11 +101,9 @@
                     <child>
                       <object class="GtkRadioButton" id="subscript">
                         <property name="label" translatable="yes">Subscript</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -184,11 +175,9 @@
                     <child>
                       <object class="GtkCheckButton" id="automatic">
                         <property name="label" translatable="yes">Automatic</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -212,15 +201,6 @@
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                     <child>
                       <placeholder/>
@@ -279,11 +259,9 @@
                     <child>
                       <object class="GtkRadioButton" id="0deg">
                         <property name="label" translatable="yes">0 degrees</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">90deg</property>
@@ -297,11 +275,9 @@
                     <child>
                       <object class="GtkRadioButton" id="90deg">
                         <property name="label" translatable="yes">90 degrees</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">270deg</property>
@@ -315,11 +291,9 @@
                     <child>
                       <object class="GtkRadioButton" id="270deg">
                         <property name="label" translatable="yes">270 degrees</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">0deg</property>
@@ -333,11 +307,9 @@
                     <child>
                       <object class="GtkCheckButton" id="fittoline">
                         <property name="label" translatable="yes">Fit to line</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -501,11 +473,9 @@
                 <child>
                   <object class="GtkCheckButton" id="pairkerning">
                     <property name="label" translatable="yes">Pair kerning</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
