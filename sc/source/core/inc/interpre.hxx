@@ -47,8 +47,8 @@ struct ScQueryEntry;
 
 struct ScCompare;
 struct ScCompareOptions;
-class ScSingleRefData;
-class ScComplexRefData;
+struct ScSingleRefData;
+struct ScComplexRefData;
 
 class ScToken;
 class ScJumpMatrix;
