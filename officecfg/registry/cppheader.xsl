@@ -149,11 +149,11 @@
       <xsl:value-of select="$name"/>
       <xsl:text>&gt; {&#xA;</xsl:text>
       <xsl:text>    static rtl::OUString path() { return rtl::OUString(<!--
-      -->RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
+      -->"</xsl:text>
       <xsl:value-of select="$path"/>
       <xsl:text>/</xsl:text>
       <xsl:value-of select="@oor:name"/>
-      <xsl:text>")); }&#xA;</xsl:text>
+      <xsl:text>"); }&#xA;</xsl:text>
       <xsl:text>&#xA;</xsl:text>
       <xsl:apply-templates select="group|set|prop">
         <xsl:with-param name="path">
@@ -183,11 +183,11 @@
     <xsl:value-of select="$name"/>
     <xsl:text>&gt; {&#xA;</xsl:text>
     <xsl:text>    static rtl::OUString path() { return rtl::OUString(<!--
-    -->RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
+    -->"</xsl:text>
     <xsl:value-of select="$path"/>
     <xsl:text>/</xsl:text>
     <xsl:value-of select="@oor:name"/>
-    <xsl:text>")); }&#xA;</xsl:text>
+    <xsl:text>"); }&#xA;</xsl:text>
     <xsl:text>private:&#xA;</xsl:text>
     <xsl:text>    </xsl:text>
     <xsl:value-of select="$name"/>
@@ -272,11 +272,11 @@
     </xsl:if>
     <xsl:text>&gt; {&#xA;</xsl:text>
     <xsl:text>    static rtl::OUString path() { return rtl::OUString(<!--
-    -->RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
+    -->"</xsl:text>
     <xsl:value-of select="$path"/>
     <xsl:text>/</xsl:text>
     <xsl:value-of select="@oor:name"/>
-    <xsl:text>")); }&#xA;</xsl:text>
+    <xsl:text>"); }&#xA;</xsl:text>
     <xsl:text>private:&#xA;</xsl:text>
     <xsl:text>    </xsl:text>
     <xsl:value-of select="$name"/>
