@@ -29,10 +29,7 @@
 
     @since OOo 3.3
  */
-service GridColumn
-{
-    interface com::sun::star::awt::grid::XGridColumn;
-};
+service GridColumn : com::sun::star::awt::grid::XGridColumn;
 
 
 }; }; }; };};
