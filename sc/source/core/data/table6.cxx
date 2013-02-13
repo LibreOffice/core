@@ -665,8 +665,8 @@ bool ScTable::SearchAndReplace(
     bool bFound = false;
     if ( ValidColRow(rCol, rRow) ||
          ((nCommand == SVX_SEARCHCMD_FIND || nCommand == SVX_SEARCHCMD_REPLACE) &&
-           (((rCol == MAXCOLCOUNT || rCol == -1) && VALIDROW(rRow)) ||
-            ((rRow == MAXROWCOUNT || rRow == -1) && VALIDCOL(rCol))
+           (((rCol == MAXCOLCOUNT || rCol == -1) && ValidRow(rRow)) ||
+            ((rRow == MAXROWCOUNT || rRow == -1) && ValidCol(rCol))
            )
          )
        )

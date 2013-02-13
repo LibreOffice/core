@@ -1220,7 +1220,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
     {
         bool bUp = ( nMovY < 0 );
         nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-        while ( VALIDROW(nRow) &&
+        while ( ValidRow(nRow) &&
                 (RowHidden(nRow) || pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
         {
             //  ausgeblendete ueberspringen (s.o.)
@@ -1231,7 +1231,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
         while ( nRow < 0 || nRow > MAXROW )
         {
             nCol = sal::static_int_cast<SCsCOL>( nCol + static_cast<SCsCOL>(nMovY) );
-            while ( VALIDCOL(nCol) && ColHidden(nCol) )
+            while ( ValidCol(nCol) && ColHidden(nCol) )
                 nCol = sal::static_int_cast<SCsCOL>( nCol + static_cast<SCsCOL>(nMovY) );   //  skip hidden rows (see above)
             if (nCol < 0)
             {
@@ -1250,7 +1250,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
             else if (nRow > MAXROW)
                 nRow = 0;
             nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-            while ( VALIDROW(nRow) &&
+            while ( ValidRow(nRow) &&
                     (RowHidden(nRow) || pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
             {
                 //  ausgeblendete ueberspringen (s.o.)
@@ -1358,7 +1358,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
     //  wenn nicht markiert und nicht geschuetzt ist (linker / rechter Rand),
     //  dann Werte unveraendert lassen
 
-    if (VALIDCOLROW(nCol,nRow))
+    if (ValidColRow(nCol,nRow))
     {
         rCol = nCol;
         rRow = nRow;

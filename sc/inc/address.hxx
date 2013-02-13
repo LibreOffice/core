@@ -121,11 +121,6 @@ const SCROW W16MAXROW = W16MAXROWCOUNT - 1;
 #define MAXROW      W16MAXROW
 #endif
 
-#define VALIDCOL(nCol)                  (ValidCol(nCol))
-#define VALIDROW(nRow)                  (ValidRow(nRow))
-#define VALIDTAB(nTab)                  (ValidTab(nTab))
-#define VALIDCOLROW(nCol,nRow)          (ValidColRow(nCol,nRow))
-
 // === old stuff defines end =================================================
 
 inline bool ValidCol( SCCOL nCol )

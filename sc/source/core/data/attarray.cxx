@@ -240,7 +240,7 @@ const ScPatternAttr* ScAttrArray::GetPatternRange( SCROW& rStartRow,
 
 void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
 {
-    if(!VALIDROW(nStartRow) || !VALIDROW(nEndRow))
+    if(!ValidRow(nStartRow) || !ValidRow(nEndRow))
         return;
 
     if(nEndRow < nStartRow)
@@ -291,7 +291,7 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
 
 void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
 {
-    if(!VALIDROW(nStartRow) || !VALIDROW(nEndRow))
+    if(!ValidRow(nStartRow) || !ValidRow(nEndRow))
         return;
 
     if(nEndRow < nStartRow)
@@ -1670,7 +1670,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
 SCsROW ScAttrArray::GetNextUnprotected( SCsROW nRow, bool bUp ) const
 {
     long nRet = nRow;
-    if (VALIDROW(nRow))
+    if (ValidRow(nRow))
     {
         SCSIZE nIndex;
         Search(nRow, nIndex);
@@ -2309,7 +2309,7 @@ SCsROW ScAttrArray::SearchStyle(
     if (pMarkArray)
     {
         nRow = pMarkArray->GetNextMarked( nRow, bUp );
-        if (!VALIDROW(nRow))
+        if (!ValidRow(nRow))
             return nRow;
     }
 
@@ -2369,7 +2369,7 @@ bool ScAttrArray::SearchStyleRange(
     const ScMarkArray* pMarkArray) const
 {
     SCsROW nStartRow = SearchStyle( rRow, pSearchStyle, bUp, pMarkArray );
-    if (VALIDROW(nStartRow))
+    if (ValidRow(nStartRow))
     {
         SCSIZE nIndex;
         Search(nStartRow,nIndex);

@@ -55,7 +55,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
     bool bRet = false;
     nX = 0.0;
     if (ValidColRow(nFCol, nFRow) && ValidColRow(nVCol, nVRow) &&
-        VALIDTAB(nFTab) && VALIDTAB(nVTab) &&
+        ValidTab(nFTab) && ValidTab(nVTab) &&
         nFTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nFTab] &&
         nVTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nVTab])
     {
@@ -576,7 +576,7 @@ sal_uLong ScDocument::AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab )
     if(!pNew)
         return 0;
 
-    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if(ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->AddCondFormat( pNew );
 
     return 0;
@@ -702,7 +702,7 @@ ScConditionalFormat* ScDocument::GetCondFormat(
 
 ScConditionalFormatList* ScDocument::GetCondFormList(SCTAB nTab) const
 {
-    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if(ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetCondFormList();
 
     return NULL;
@@ -710,7 +710,7 @@ ScConditionalFormatList* ScDocument::GetCondFormList(SCTAB nTab) const
 
 void ScDocument::SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab )
 {
-    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if(ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->SetCondFormList(pList);
 }
 
@@ -725,7 +725,7 @@ const ScValidationData* ScDocument::GetValidationEntry( sal_uLong nIndex ) const
 
 void ScDocument::DeleteConditionalFormat(sal_uLong nOldIndex, SCTAB nTab)
 {
-    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if(ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->DeleteConditionalFormat(nOldIndex);
 }
 

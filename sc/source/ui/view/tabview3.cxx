@@ -1056,10 +1056,10 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
 
     aViewData.ResetOldCursor();
 
-    if (nMovX != 0 && VALIDCOLROW(nCurX,nCurY))
+    if (nMovX != 0 && ValidColRow(nCurX,nCurY))
         SkipCursorHorizontal(nCurX, nCurY, nOldX, nMovX);
 
-    if (nMovY != 0 && VALIDCOLROW(nCurX,nCurY))
+    if (nMovY != 0 && ValidColRow(nCurX,nCurY))
         SkipCursorVertical(nCurX, nCurY, nOldY, nMovY);
 
     MoveCursorAbs( nCurX, nCurY, eMode, bShift, false, true, bKeepSel );

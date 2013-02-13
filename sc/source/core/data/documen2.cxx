@@ -576,7 +576,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
 void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                           ScBaseCell* pCell, sal_uLong nFormatIndex, bool bForceTab )
 {
-    if (VALIDTAB(nTab))
+    if (ValidTab(nTab))
     {
         if ( bForceTab && ( nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] ) )
         {
@@ -697,7 +697,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
         return false;
 
     bool bValid = false;
-    if (VALIDTAB(nOldPos) && nOldPos < nTabCount )
+    if (ValidTab(nOldPos) && nOldPos < nTabCount )
     {
         if (maTabs[nOldPos])
         {
@@ -792,7 +792,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         }
         else
         {
-            if (VALIDTAB(nNewPos) && (nNewPos < static_cast<SCTAB>(maTabs.size())))
+            if (ValidTab(nNewPos) && (nNewPos < static_cast<SCTAB>(maTabs.size())))
             {
                 SetNoListening( true );
 
@@ -925,7 +925,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     }
     else                        // bestehende Tabelle ersetzen
     {
-        if (VALIDTAB(nDestPos) && nDestPos < static_cast<SCTAB>(maTabs.size()) && maTabs[nDestPos])
+        if (ValidTab(nDestPos) && nDestPos < static_cast<SCTAB>(maTabs.size()) && maTabs[nDestPos])
         {
             maTabs[nDestPos]->DeleteArea( 0,0, MAXCOL,MAXROW, IDF_ALL );
         }
@@ -1033,7 +1033,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
 void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError)
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
             maTabs[nTab]->SetError( nCol, nRow, nError );
 }

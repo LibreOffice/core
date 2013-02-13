@@ -52,19 +52,19 @@ void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
     if ( Flags.bColRel )
     {
         nCol = nRelCol + rPos.Col();
-        if ( !VALIDCOL( nCol ) )
+        if ( !ValidCol( nCol ) )
             Flags.bColDeleted = sal_True;
     }
     if ( Flags.bRowRel )
     {
         nRow = nRelRow + rPos.Row();
-        if ( !VALIDROW( nRow ) )
+        if ( !ValidRow( nRow ) )
             Flags.bRowDeleted = sal_True;
     }
     if ( Flags.bTabRel )
     {
         nTab = nRelTab + rPos.Tab();
-        if ( !VALIDTAB( nTab ) )
+        if ( !ValidTab( nTab ) )
             Flags.bTabDeleted = sal_True;
     }
 }

@@ -2416,7 +2416,7 @@ void ScTable::ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& r
 
 void ScTable::SetColWidth( SCCOL nCol, sal_uInt16 nNewWidth )
 {
-    if (VALIDCOL(nCol) && pColWidth)
+    if (ValidCol(nCol) && pColWidth)
     {
         if (!nNewWidth)
         {
@@ -2437,7 +2437,7 @@ void ScTable::SetColWidth( SCCOL nCol, sal_uInt16 nNewWidth )
 
 void ScTable::SetColWidthOnly( SCCOL nCol, sal_uInt16 nNewWidth )
 {
-    if (!VALIDCOL(nCol) || !pColWidth)
+    if (!ValidCol(nCol) || !pColWidth)
         return;
 
     if (!nNewWidth)
@@ -2449,7 +2449,7 @@ void ScTable::SetColWidthOnly( SCCOL nCol, sal_uInt16 nNewWidth )
 
 void ScTable::SetRowHeight( SCROW nRow, sal_uInt16 nNewHeight )
 {
-    if (VALIDROW(nRow) && mpRowHeights)
+    if (ValidRow(nRow) && mpRowHeights)
     {
         if (!nNewHeight)
         {
@@ -2508,7 +2508,7 @@ bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNew
                                     double /* nPPTX */, double nPPTY )
 {
     bool bChanged = false;
-    if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && mpRowHeights)
+    if (ValidRow(nStartRow) && ValidRow(nEndRow) && mpRowHeights)
     {
         if (!nNewHeight)
         {
@@ -2579,7 +2579,7 @@ void ScTable::SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewH
 
 void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, bool bManual )
 {
-    if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && pRowFlags)
+    if (ValidRow(nStartRow) && ValidRow(nEndRow) && pRowFlags)
     {
         if (bManual)
             pRowFlags->OrValue( nStartRow, nEndRow, CR_MANUALSIZE);
@@ -2595,9 +2595,9 @@ void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, bool bManual )
 
 sal_uInt16 ScTable::GetColWidth( SCCOL nCol ) const
 {
-    OSL_ENSURE(VALIDCOL(nCol),"Falsche Spaltennummer");
+    OSL_ENSURE(ValidCol(nCol),"Falsche Spaltennummer");
 
-    if (VALIDCOL(nCol) && pColFlags && pColWidth)
+    if (ValidCol(nCol) && pColFlags && pColWidth)
     {
         if (ColHidden(nCol))
             return 0;
@@ -2611,9 +2611,9 @@ sal_uInt16 ScTable::GetColWidth( SCCOL nCol ) const
 
 sal_uInt16 ScTable::GetOriginalWidth( SCCOL nCol ) const        // immer die eingestellte
 {
-    OSL_ENSURE(VALIDCOL(nCol),"Falsche Spaltennummer");
+    OSL_ENSURE(ValidCol(nCol),"Falsche Spaltennummer");
 
-    if (VALIDCOL(nCol) && pColWidth)
+    if (ValidCol(nCol) && pColWidth)
         return pColWidth[nCol];
     else
         return (sal_uInt16) STD_COL_WIDTH;
@@ -2669,9 +2669,9 @@ sal_uInt16 ScTable::GetCommonWidth( SCCOL nEndCol ) const
 
 sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
 {
-    OSL_ENSURE(VALIDROW(nRow),"Invalid row number");
+    OSL_ENSURE(ValidRow(nRow),"Invalid row number");
 
-    if (VALIDROW(nRow) && mpRowHeights)
+    if (ValidRow(nRow) && mpRowHeights)
     {
         if (bHiddenAsZero && RowHidden( nRow, pStartRow, pEndRow))
             return 0;
@@ -2712,9 +2712,9 @@ sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, 
 
 sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
 {
-    OSL_ENSURE(VALIDROW(nStartRow) && VALIDROW(nEndRow),"Falsche Zeilennummer");
+    OSL_ENSURE(ValidRow(nStartRow) && ValidRow(nEndRow),"Falsche Zeilennummer");
 
-    if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && mpRowHeights)
+    if (ValidRow(nStartRow) && ValidRow(nEndRow) && mpRowHeights)
     {
         sal_uLong nHeight = 0;
         SCROW nRow = nStartRow;
@@ -2738,9 +2738,9 @@ sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
 
 sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const
 {
-    OSL_ENSURE(VALIDROW(nStartRow) && VALIDROW(nEndRow),"Falsche Zeilennummer");
+    OSL_ENSURE(ValidRow(nStartRow) && ValidRow(nEndRow),"Falsche Zeilennummer");
 
-    if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && mpRowHeights)
+    if (ValidRow(nStartRow) && ValidRow(nEndRow) && mpRowHeights)
     {
         sal_uLong nHeight = 0;
         SCROW nRow = nStartRow;
@@ -2779,9 +2779,9 @@ sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fS
 
 sal_uInt16 ScTable::GetOriginalHeight( SCROW nRow ) const       // non-0 even if hidden
 {
-    OSL_ENSURE(VALIDROW(nRow),"wrong row number");
+    OSL_ENSURE(ValidRow(nRow),"wrong row number");
 
-    if (VALIDROW(nRow) && mpRowHeights)
+    if (ValidRow(nRow) && mpRowHeights)
         return mpRowHeights->getValue(nRow);
     else
         return (sal_uInt16) ScGlobal::nStdRowHeight;
@@ -2808,7 +2808,7 @@ SCROW ScTable::GetHiddenRowCount( SCROW nRow ) const
 
 void ScTable::ShowCol(SCCOL nCol, bool bShow)
 {
-    if (VALIDCOL(nCol))
+    if (ValidCol(nCol))
     {
         bool bWasVis = !ColHidden(nCol);
         if (bWasVis != bShow)
@@ -2829,7 +2829,7 @@ void ScTable::ShowCol(SCCOL nCol, bool bShow)
 
 void ScTable::ShowRow(SCROW nRow, bool bShow)
 {
-    if (VALIDROW(nRow) && pRowFlags)
+    if (ValidRow(nRow) && pRowFlags)
     {
         bool bWasVis = !RowHidden(nRow);
         if (bWasVis != bShow)
@@ -2853,7 +2853,7 @@ void ScTable::ShowRow(SCROW nRow, bool bShow)
 
 void ScTable::DBShowRow(SCROW nRow, bool bShow)
 {
-    if (VALIDROW(nRow) && pRowFlags)
+    if (ValidRow(nRow) && pRowFlags)
     {
         //  Filter-Flag immer setzen, auch wenn Hidden unveraendert
         bool bChanged = SetRowHidden(nRow, nRow, !bShow);
@@ -2976,7 +2976,7 @@ bool ScTable::IsDataFiltered(const ScRange& rRange) const
 
 void ScTable::SetRowFlags( SCROW nRow, sal_uInt8 nNewFlags )
 {
-    if (VALIDROW(nRow) && pRowFlags)
+    if (ValidRow(nRow) && pRowFlags)
         pRowFlags->SetValue( nRow, nNewFlags);
     else
     {
@@ -2987,7 +2987,7 @@ void ScTable::SetRowFlags( SCROW nRow, sal_uInt8 nNewFlags )
 
 void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, sal_uInt8 nNewFlags )
 {
-    if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && pRowFlags)
+    if (ValidRow(nStartRow) && ValidRow(nEndRow) && pRowFlags)
         pRowFlags->SetValue( nStartRow, nEndRow, nNewFlags);
     else
     {
@@ -2998,7 +2998,7 @@ void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, sal_uInt8 nNewFlags )
 
 sal_uInt8 ScTable::GetColFlags( SCCOL nCol ) const
 {
-    if (VALIDCOL(nCol) && pColFlags)
+    if (ValidCol(nCol) && pColFlags)
         return pColFlags[nCol];
     else
         return 0;
@@ -3007,7 +3007,7 @@ sal_uInt8 ScTable::GetColFlags( SCCOL nCol ) const
 
 sal_uInt8 ScTable::GetRowFlags( SCROW nRow ) const
 {
-    if (VALIDROW(nRow) && pRowFlags)
+    if (ValidRow(nRow) && pRowFlags)
         return pRowFlags->GetValue(nRow);
     else
         return 0;

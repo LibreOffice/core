@@ -1643,7 +1643,7 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
 
 void ScColumn::SetError( SCROW nRow, const sal_uInt16 nError)
 {
-    if (VALIDROW(nRow))
+    if (ValidRow(nRow))
     {
         ScFormulaCell* pCell = new ScFormulaCell
             ( pDocument, ScAddress( nCol, nRow, nTab ) );
@@ -1655,7 +1655,7 @@ void ScColumn::SetError( SCROW nRow, const sal_uInt16 nError)
 
 void ScColumn::SetValue( SCROW nRow, const double& rVal)
 {
-    if (VALIDROW(nRow))
+    if (ValidRow(nRow))
     {
         ScBaseCell* pCell = new ScValueCell(rVal);
         Insert( nRow, pCell );

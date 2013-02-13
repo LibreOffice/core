@@ -434,7 +434,7 @@ void ScDocument::GetScenarioData( SCTAB nTab, rtl::OUString& rComment,
 
 void ScDocument::GetScenarioFlags( SCTAB nTab, sal_uInt16& rFlags ) const
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario())
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario())
         rFlags = maTabs[nTab]->GetScenarioFlags();
 }
 
@@ -617,14 +617,14 @@ ScFormulaParserPool& ScDocument::GetFormulaParserPool() const
 
 const ScSheetEvents* ScDocument::GetSheetEvents( SCTAB nTab ) const
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetSheetEvents();
     return NULL;
 }
 
 void ScDocument::SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew )
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->SetSheetEvents( pNew );
 }
 
@@ -672,7 +672,7 @@ bool ScDocument::HasAnyCalcNotification() const
 
 bool ScDocument::HasCalcNotification( SCTAB nTab ) const
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetCalcNotification();
     return false;
 }
@@ -680,7 +680,7 @@ bool ScDocument::HasCalcNotification( SCTAB nTab ) const
 void ScDocument::SetCalcNotification( SCTAB nTab )
 {
     // set only if not set before
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && !maTabs[nTab]->GetCalcNotification())
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && !maTabs[nTab]->GetCalcNotification())
         maTabs[nTab]->SetCalcNotification(true);
 }
 
@@ -696,7 +696,7 @@ ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, bool bCreate )
 {
     ScOutlineTable* pVal = NULL;
 
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
         {
             pVal = maTabs[nTab]->GetOutlineTable();
@@ -713,30 +713,30 @@ ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, bool bCreate )
 
 bool ScDocument::SetOutlineTable( SCTAB nTab, const ScOutlineTable* pNewOutline )
 {
-    return VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->SetOutlineTable(pNewOutline);
+    return ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->SetOutlineTable(pNewOutline);
 }
 
 void ScDocument::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, SCTAB nTab )
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->DoAutoOutline( nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
 bool ScDocument::TestRemoveSubTotals( SCTAB nTab, const ScSubTotalParam& rParam )
 {
-    return VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->TestRemoveSubTotals( rParam );
+    return ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->TestRemoveSubTotals( rParam );
 }
 
 void ScDocument::RemoveSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
 {
-    if ( VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->RemoveSubTotals( rParam );
 }
 
 bool ScDocument::DoSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
 {
-    return VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->DoSubTotals( rParam );
+    return ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->DoSubTotals( rParam );
 }
 
 bool ScDocument::HasSubTotalCells( const ScRange& rRange )
@@ -981,7 +981,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
     PutInOrder( nTab1, nTab2 );
-    if (VALIDTAB(nTab1) && VALIDTAB(nTab2))
+    if (ValidTab(nTab1) && ValidTab(nTab2))
     {
         bool bExpandRefsOld = IsExpandRefs();
         if ( eUpdateRefMode == URM_INSDEL && (nDx > 0 || nDy > 0 || nDz > 0) )
@@ -1136,7 +1136,7 @@ void ScDocument::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
 void ScDocument::GetAutoFormatData(SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     ScAutoFormatData& rData)
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
     {
         if (maTabs[nTab])
         {
@@ -1243,7 +1243,7 @@ bool ScDocument::SearchAndReplace(
     bool bFound = false;
     if (rTab >= static_cast<SCTAB>(maTabs.size()))
         OSL_FAIL("table out of range");
-    if (VALIDTAB(rTab))
+    if (ValidTab(rTab))
     {
         SCCOL nCol;
         SCROW nRow;
@@ -1411,13 +1411,13 @@ bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
 bool ScDocument::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     SCTAB nTab )
 {
-    return VALIDTAB(nTab) && maTabs[nTab] && maTabs[nTab]->HasColHeader( nStartCol, nStartRow, nEndCol, nEndRow );
+    return ValidTab(nTab) && maTabs[nTab] && maTabs[nTab]->HasColHeader( nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
 bool ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     SCTAB nTab )
 {
-    return VALIDTAB(nTab) && maTabs[nTab] && maTabs[nTab]->HasRowHeader( nStartCol, nStartRow, nEndCol, nEndRow );
+    return ValidTab(nTab) && maTabs[nTab] && maTabs[nTab]->HasRowHeader( nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
 //
@@ -1804,7 +1804,7 @@ bool ScDocument::IsDocEditable() const
 
 bool ScDocument::IsTabProtected( SCTAB nTab ) const
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->IsProtected();
 
     OSL_FAIL("Falsche Tabellennummer");
@@ -1813,7 +1813,7 @@ bool ScDocument::IsTabProtected( SCTAB nTab ) const
 
 ScTableProtection* ScDocument::GetTabProtection( SCTAB nTab ) const
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetProtection();
 
     return NULL;

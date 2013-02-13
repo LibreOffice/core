@@ -623,7 +623,7 @@ void ScDocument::SetChartRangeList( const rtl::OUString& rChartName,
 
 bool ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    if ( VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->HasData( nCol, nRow );
     else
         return false;

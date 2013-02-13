@@ -305,7 +305,7 @@ SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, sal_Bool bUp ) const
         const_cast<ScMarkArray*>(this)->Reset(false);   // create pData for further processing
 
     SCsROW nRet = nRow;
-    if (VALIDROW(nRow))
+    if (ValidRow(nRow))
     {
         SCSIZE nIndex;
         Search(nRow, nIndex);
