@@ -37,7 +37,7 @@
 using namespace ::com::sun::star;
 
 
-// Stringbuffer fuer die umgewandelten Zahlen
+// Stringbuffer for the converted numbers
 static sal_Char aNToABuf[] = "0000000000000000000000000";
 #define NTOABUFLEN (sizeof(aNToABuf))
 
@@ -91,16 +91,16 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 }
 
 /*
- * Dieses Modul ist die Zentrale-Sammelstelle fuer alle Write-Filter
- * und ist eine DLL !
+ * This module is the central collection point for all writer-filters
+ * and is a DLL !
  *
- * Damit der Writer mit den unterschiedlichen Writern arbeiten kann,
- * muessen fuer diese die Ausgabe-Funktionen der Inhalts tragenden
- * Objecte auf die verschiedenen Ausgabe-Funktionen gemappt werden.
+ * So that the Writer can work with different writers, the output-functions
+ * of the content carrying objects have to be mapped to the various
+ * output-functions.
  *
- * Dazu kann fuer jedes Object ueber den Which-Wert in einen Tabelle ge-
- * griffen werden, um seine Ausgabe-Funktion zu erfragen.
- * Diese Funktionen stehen in den entsprechenden Writer-DLL's.
+ * For that, to inquire its output function, every object can be gripped
+ * via the which-value in a table.
+ * These functions are available in the corresponding Writer-DLL's.
  */
 
 Writer::Writer()
@@ -151,11 +151,11 @@ sal_Bool Writer::CopyNextPam( SwPaM ** ppPam )
 {
     if( (*ppPam)->GetNext() == pOrigPam )
     {
-        *ppPam = pOrigPam;          // wieder auf den Anfangs-Pam setzen
-        return sal_False;               // Ende vom Ring
+        *ppPam = pOrigPam;          // set back to the beginning pam
+        return sal_False;               // end of the ring
     }
 
-    // ansonsten kopiere den die Werte aus dem naechsten Pam
+    // otherwise copy the next value from the next Pam
     *ppPam = ((SwPaM*)(*ppPam)->GetNext() );
 
     *pCurPam->GetPoint() = *(*ppPam)->Start();
@@ -164,7 +164,7 @@ sal_Bool Writer::CopyNextPam( SwPaM ** ppPam )
     return sal_True;
 }
 
-// suche die naechste Bookmark-Position aus der Bookmark-Tabelle
+// search the next Bookmark-Position from the Bookmark-Table
 
 sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 {
@@ -189,7 +189,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
     SwCntntNode* pCNode = aStt.GetNode().GetCntntNode();
     if( !pCNode && 0 == ( pCNode = pNds->GoNext( &aStt )) )
     {
-        OSL_FAIL( "An StartPos kein ContentNode mehr" );
+        OSL_FAIL( "No more ContentNode at StartPos" );
     }
 
     SwPaM* pNew = new SwPaM( aStt );
@@ -198,7 +198,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
     if( 0 == (pCNode = aStt.GetNode().GetCntntNode()) &&
         0 == (pCNode = pNds->GoPrevious( &aStt )) )
     {
-        OSL_FAIL( "An StartPos kein ContentNode mehr" );
+        OSL_FAIL( "No more ContentNode at StartPos" );
     }
     pCNode->MakeEndIndex( &pNew->GetPoint()->nContent );
     pNew->GetPoint()->nNode = aStt;
@@ -207,7 +207,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
 
 /////////////////////////////////////////////////////////////////////////////
 
-// Stream-spezifisches
+// Stream-specific
 SvStream& Writer::Strm()
 {
     OSL_ENSURE( m_pImpl->m_pStream, "Oh-oh. Writer with no Stream!" );
@@ -219,7 +219,7 @@ void Writer::SetStream(SvStream *const pStream)
 
 SvStream& Writer::OutLong( SvStream& rStrm, long nVal )
 {
-    // Pointer an das Bufferende setzen
+    // Set the Pointer at the end of the buffer
     sal_Char* pStr = aNToABuf + (NTOABUFLEN-1);
 
     int bNeg = nVal < 0;
@@ -231,7 +231,7 @@ SvStream& Writer::OutLong( SvStream& rStrm, long nVal )
         nVal /= 10;
     } while( nVal );
 
-    // Ist Zahl negativ, dann noch -
+    // is the number negative, then in addition -
     if( bNeg )
         *(--pStr) = '-';
 
@@ -240,7 +240,7 @@ SvStream& Writer::OutLong( SvStream& rStrm, long nVal )
 
 SvStream& Writer::OutULong( SvStream& rStrm, sal_uLong nVal )
 {
-    // Pointer an das Bufferende setzen
+    // Set the Pointer at the end of the buffer
     sal_Char* pStr = aNToABuf + (NTOABUFLEN-1);
 
     do {
@@ -266,9 +266,9 @@ sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
     pOrigFileName = pFName;
     m_pImpl->m_pStream = &rStrm;
 
-    // PaM kopieren, damit er veraendert werden kann
+    // Copy PaM, so that it can be modified
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
-    // zum Vergleich auf den akt. Pam sichern
+    // for comparison secure to the current Pam
     pOrigPam = &rPaM;
 
     sal_uLong nRet = WriteStream();
@@ -287,13 +287,13 @@ sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMed, const String* pFileName )
 
 sal_uLong Writer::Write( SwPaM& /*rPam*/, SvStorage&, const String* )
 {
-    OSL_ENSURE( !this, "Schreiben in Storages auf einem Stream?" );
+    OSL_ENSURE( !this, "Write in Storages on a stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
 sal_uLong Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const String*, SfxMedium* )
 {
-    OSL_ENSURE( !this, "Schreiben in Storages auf einem Stream?" );
+    OSL_ENSURE( !this, "Write in Storages on a stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
@@ -314,7 +314,7 @@ sal_Bool Writer::CopyLocalFileToINet( String& rFileNm )
 
     if (m_pImpl->pFileNameMap)
     {
-        // wurde die Datei schon verschoben
+        // has the file been moved?
         std::map<String, String>::iterator it = m_pImpl->pFileNameMap->find( rFileNm );
         if ( it != m_pImpl->pFileNameMap->end() )
         {
@@ -352,9 +352,9 @@ sal_Bool Writer::CopyLocalFileToINet( String& rFileNm )
 
 void Writer::PutNumFmtFontsInAttrPool()
 {
-    // dann gibt es noch in den NumRules ein paar Fonts
-    // Diese in den Pool putten. Haben sie danach einen RefCount > 1
-    // kann es wieder entfernt werden - ist schon im Pool
+    // then there are a few fonts in the NumRules
+    // These put into the Pool. After this does they have a RefCount > 1
+    // it can be removed - it is already in the Pool
     SfxItemPool& rPool = pDoc->GetAttrPool();
     const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
     const SwNumRule* pRule;
@@ -452,7 +452,7 @@ void Writer::CreateBookmarkTbl()
 sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
     xub_StrLen nEnd, std::vector< const ::sw::mark::IMark* >& rArr)
 {
-    OSL_ENSURE( rArr.empty(), "es sind noch Eintraege vorhanden" );
+    OSL_ENSURE( rArr.empty(), "there are still entries available" );
 
     sal_uLong nNd = rNd.GetIndex();
     std::pair<SwBookmarkNodeTable::const_iterator, SwBookmarkNodeTable::const_iterator> aIterPair 
@@ -491,11 +491,11 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
 
 ////////////////////////////////////////////////////////////////////////////
 
-// Storage-spezifisches
+// Storage-specific
 
 sal_uLong StgWriter::WriteStream()
 {
-    OSL_ENSURE( !this, "Schreiben in Streams auf einem Storage?" );
+    OSL_ENSURE( !this, "Write in Storages on a stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
@@ -506,9 +506,9 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
 
-    // PaM kopieren, damit er veraendert werden kann
+    // Copy PaM, so that it can be modified
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
-    // zum Vergleich auf den akt. Pam sichern
+    // for comparison secure to the current Pam
     pOrigPam = &rPaM;
 
     sal_uLong nRet = WriteStorage();
@@ -527,9 +527,9 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage 
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
 
-    // PaM kopieren, damit er veraendert werden kann
+    // Copy PaM, so that it can be modified
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
-    // zum Vergleich auf den akt. Pam sichern
+    // for comparison secure to the current Pam
     pOrigPam = &rPaM;
 
     sal_uLong nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();
