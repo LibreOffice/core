@@ -52,12 +52,12 @@ namespace cmis
         m_sBindingUrl = aHostUrl.GetURLNoMark( );
         m_sRepositoryId = aHostUrl.GetMark( );
 
-        m_sUser = aUrl.GetUser( );
-        m_sPass = aUrl.GetPass( );
+        m_sUser = aUrl.GetUser( INetURLObject::DECODE_WITH_CHARSET );
+        m_sPass = aUrl.GetPass( INetURLObject::DECODE_WITH_CHARSET );
 
         // Store the path to the object
         m_sPath = aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
-        m_sId = aUrl.GetMark( );
+        m_sId = aUrl.GetMark( INetURLObject::DECODE_WITH_CHARSET );
 
         if ( !m_sId.isEmpty( ) )
             m_sPath = rtl::OUString( );
