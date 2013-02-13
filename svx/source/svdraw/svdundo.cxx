@@ -18,6 +18,8 @@
  */
 
 
+#include <svl/lstner.hxx>
+
 #include <svx/svdundo.hxx>
 #include "svx/svditext.hxx"
 #include <svx/svdotext.hxx>
@@ -655,11 +657,55 @@ OUString SdrUndoGeoObj::GetComment() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+class SdrUndoObjList::ObjListListener : public SfxListener
+{
+public:
+    ObjListListener(SdrUndoObjList& rThat, SdrObject& rObject, SfxBroadcaster& rBroadcaster);
+    ~ObjListListener();
+
+private:
+    virtual void Notify(SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
+
+private:
+    SdrUndoObjList& m_rThat;
+    SdrObject& m_rObject;
+    SfxBroadcaster* m_pBroadcaster;
+};
+
+SdrUndoObjList::ObjListListener::ObjListListener(SdrUndoObjList& rThat, SdrObject& rObject, SfxBroadcaster& rBroadcaster)
+    : m_rThat(rThat)
+    , m_rObject(rObject)
+    , m_pBroadcaster(&rBroadcaster)
+{
+    StartListening(*m_pBroadcaster);
+}
+
+SdrUndoObjList::ObjListListener::~ObjListListener()
+{
+    if (m_pBroadcaster)
+        EndListening(*m_pBroadcaster);
+}
+
+void SdrUndoObjList::ObjListListener::Notify(SfxBroadcaster&, const SfxHint& rHint)
+{
+    const SdrHint* const pSdrHint(dynamic_cast<const SdrHint*>(&rHint));
+    if (pSdrHint)
+    {
+        if ((pSdrHint->GetObject() == &m_rObject) && (pSdrHint->GetKind() == HINT_OBJCHG))
+        {
+            const sal_uInt32 nNewOrdNum(m_rObject.GetOrdNum());
+            if (nNewOrdNum != m_rThat.GetOrdNum())
+                m_rThat.SetOrdNum(nNewOrdNum);
+        }
+    }
+}
+
 SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
 :   SdrUndoObj(rNewObj),
     bOwner(sal_False),
     pView(NULL),
-    pPageView(NULL)
+    pPageView(NULL),
+    m_pListener(NULL)
 {
     pObjList=pObj->GetObjList();
     if (bOrdNumDirect) {
@@ -667,10 +713,14 @@ SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
     } else {
         nOrdNum=pObj->GetOrdNum();
     }
+
+    m_pListener = new ObjListListener(*this, *pObj, *pObjList->GetModel());
 }
 
 SdrUndoObjList::~SdrUndoObjList()
 {
+    delete m_pListener;
+
     if (pObj!=NULL && IsOwner())
     {
         // Attribute have to go back to the regular Pool
@@ -684,6 +734,16 @@ SdrUndoObjList::~SdrUndoObjList()
 void SdrUndoObjList::SetOwner(bool bNew)
 {
     bOwner = bNew;
+}
+
+sal_uInt32 SdrUndoObjList::GetOrdNum() const
+{
+    return nOrdNum;
+}
+
+void SdrUndoObjList::SetOrdNum(sal_uInt32 nOrdNum_)
+{
+    nOrdNum = nOrdNum_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
