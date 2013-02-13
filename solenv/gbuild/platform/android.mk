@@ -72,6 +72,7 @@ endif
 
 # Prefix UNO library filenames with "lib"
 gb_Library_FILENAMES := \
+	$(foreach lib,$(gb_Library_OOOLIBSINSTALLED),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
@@ -89,6 +90,7 @@ gb_Library_FILENAMES += \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 
 gb_Library_LAYER := \
+	$(foreach lib,$(gb_Library_OOOLIBSINSTALLED),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \

@@ -235,6 +235,7 @@ gb_Library_SYSPRE := i
 gb_Library_PLAINEXT := .lib
 
 gb_Library_LAYER := \
+	$(foreach lib,$(gb_Library_OOOLIBSINSTALLED),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
@@ -258,6 +259,7 @@ gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)
 gb_Library_RTVEREXT := $(gb_Library_MAJORVER)$(gb_Library_RTEXT)
 
 gb_Library_DLLFILENAMES :=\
+	$(foreach lib,$(gb_Library_OOOLIBSINSTALLED),$(lib):$(lib)$(gb_Library_OOOEXT)) \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(lib)$(gb_Library_OOOEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
