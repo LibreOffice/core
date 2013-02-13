@@ -655,8 +655,6 @@ OUString SdrUndoGeoObj::GetComment() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrUndoObjList, SfxListener);
-
 SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
 :   SdrUndoObj(rNewObj),
     bOwner(sal_False),
@@ -669,14 +667,10 @@ SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
     } else {
         nOrdNum=pObj->GetOrdNum();
     }
-
-    StartListening(*pObjList->GetModel());
 }
 
 SdrUndoObjList::~SdrUndoObjList()
 {
-    EndListening(*pObjList->GetModel());
-
     if (pObj!=NULL && IsOwner())
     {
         // Attribute have to go back to the regular Pool
@@ -690,20 +684,6 @@ SdrUndoObjList::~SdrUndoObjList()
 void SdrUndoObjList::SetOwner(bool bNew)
 {
     bOwner = bNew;
-}
-
-void SdrUndoObjList::Notify(SfxBroadcaster&, const SfxHint& rHint)
-{
-    const SdrHint* pSdrHint(dynamic_cast<const SdrHint*>(&rHint));
-    if (pSdrHint)
-    {
-        if ((pSdrHint->GetObject() == pObj) && (pSdrHint->GetKind() == HINT_OBJCHG))
-        {
-            const sal_uInt32 nNewOrdNum(pObj->GetOrdNum());
-            if (nNewOrdNum != nOrdNum)
-                nOrdNum = nNewOrdNum;
-        }
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

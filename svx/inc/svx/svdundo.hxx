@@ -20,7 +20,6 @@
 #ifndef _SVDUNDO_HXX
 #define _SVDUNDO_HXX
 
-#include <svl/lstner.hxx>
 #include <svl/solar.hrc>
 #include <svl/undo.hxx>
 #include <tools/gen.hxx>
@@ -253,11 +252,8 @@ public:
 //
 //************************************************************
 
-class SVX_DLLPUBLIC SdrUndoObjList : public SdrUndoObj, public SfxListener {
+class SVX_DLLPUBLIC SdrUndoObjList : public SdrUndoObj {
     bool                        bOwner;
-
-public:
-    TYPEINFO();
 
 protected:
     SdrObjList*                 pObjList;
@@ -274,9 +270,6 @@ protected:
     void SetView(SdrView* pView1, SdrPageView* pPageView1) { pView=pView1; pPageView=pPageView1; }
     bool IsOwner() { return bOwner; }
     void SetOwner(bool bNew);
-
-private:
-    virtual void Notify(SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 };
 
 //************************************************************
