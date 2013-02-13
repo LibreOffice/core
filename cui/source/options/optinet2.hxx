@@ -20,9 +20,10 @@
 #define _SVX_OPTINET_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <vcl/lstbox.hxx>
-#include <vcl/group.hxx>
 #include <vcl/field.hxx>
+#include <vcl/group.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/lstbox.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svtools/svtabbx.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -145,31 +146,27 @@ class SvxSecurityTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    FixedLine           maSecurityOptionsFL;
-    FixedInfo           maSecurityOptionsFI;
-    PushButton          maSecurityOptionsPB;
+    PushButton*         m_pSecurityOptionsPB;
 
-    FixedLine           maPasswordsFL;
-    CheckBox            maSavePasswordsCB;
-    PushButton          maShowConnectionsPB;
-    CheckBox            maMasterPasswordCB;
-    FixedInfo           maMasterPasswordFI;
-    PushButton          maMasterPasswordPB;
+    CheckBox*           m_pSavePasswordsCB;
+    PushButton*         m_pShowConnectionsPB;
 
-    FixedLine           maMacroSecFL;
-    FixedInfo           maMacroSecFI;
-    PushButton          maMacroSecPB;
+    CheckBox*           m_pMasterPasswordCB;
+    FixedText*          m_pMasterPasswordFT;
+    PushButton*         m_pMasterPasswordPB;
 
-    FixedLine           m_aCertPathFL;
-    FixedInfo           m_aCertPathFI;
-    PushButton          m_aCertPathPB;
+    VclContainer*       m_pMacroSecFrame;
+    PushButton*         m_pMacroSecPB;
+
+    VclContainer*       m_pCertFrame;
+    PushButton*         m_pCertPathPB;
 
     SvtSecurityOptions*         mpSecOptions;
     svx::SecurityOptionsDialog* mpSecOptDlg;
 
     CertPathDialog* mpCertPathDlg;
 
-    String              msPasswordStoringDeactivateStr;
+    OUString            m_sPasswordStoringDeactivateStr;
 
     DECL_LINK(SecurityOptionsHdl, void *);
     DECL_LINK(SavePasswordHdl, void* );

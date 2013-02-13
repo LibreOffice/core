@@ -626,46 +626,33 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
 /*                                                                  */
 /********************************************************************/
 
-SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet )
-    :SfxTabPage         ( pParent, CUI_RES( RID_SVXPAGE_INET_SECURITY ), rSet )
-
-    ,maSecurityOptionsFL( this, CUI_RES( FL_SEC_SECURITYOPTIONS ) )
-    ,maSecurityOptionsFI( this, CUI_RES( FI_SEC_SECURITYOPTIONS ) )
-    ,maSecurityOptionsPB( this, CUI_RES( PB_SEC_SECURITYOPTIONS ) )
-
-    ,maPasswordsFL      ( this, CUI_RES( FL_SEC_PASSWORDS ) )
-    ,maSavePasswordsCB  ( this, CUI_RES( CB_SEC_SAVEPASSWORDS ) )
-    ,maShowConnectionsPB( this, CUI_RES( PB_SEC_CONNECTIONS ) )
-    ,maMasterPasswordCB ( this, CUI_RES( CB_SEC_MASTERPASSWORD ) )
-    ,maMasterPasswordFI ( this, CUI_RES( FI_SEC_MASTERPASSWORD ) )
-    ,maMasterPasswordPB ( this, CUI_RES( PB_SEC_MASTERPASSWORD ) )
-
-    ,maMacroSecFL       ( this, CUI_RES( FL_SEC_MACROSEC ) )
-    ,maMacroSecFI       ( this, CUI_RES( FI_SEC_MACROSEC ) )
-    ,maMacroSecPB       ( this, CUI_RES( PB_SEC_MACROSEC ) )
-
-    ,m_aCertPathFL      ( this, CUI_RES( FL_SEC_CERTPATH ) )
-    ,m_aCertPathFI      ( this, CUI_RES( FI_SEC_CERTPATH ) )
-    ,m_aCertPathPB      ( this, CUI_RES( PB_SEC_CERTPATH ) )
-
-    ,mpSecOptions       ( new SvtSecurityOptions )
-    ,mpSecOptDlg        ( NULL )
-    ,mpCertPathDlg      ( NULL )
-
-    ,msPasswordStoringDeactivateStr(    CUI_RES( STR_SEC_NOPASSWDSAVE ) )
-
+SvxSecurityTabPage::SvxSecurityTabPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "OptSecurityPage", "cui/ui/optsecuritypage.ui", rSet)
+    , mpSecOptions(new SvtSecurityOptions)
+    , mpSecOptDlg(NULL)
+    , mpCertPathDlg(NULL)
 {
-    FreeResource();
+    get(m_pSecurityOptionsPB, "options");
+    get(m_pSavePasswordsCB, "savepassword");
+    get(m_pShowConnectionsPB, "connections");
+    get(m_pMasterPasswordCB, "usemasterpassword");
+    get(m_pMasterPasswordFT, "masterpasswordtext");
+    get(m_pMasterPasswordPB, "masterpassword");
+    get(m_pMacroSecFrame, "macrosecurity");
+    get(m_pMacroSecPB, "macro");
+    get(m_pCertFrame, "certificatepath");
+    get(m_pCertPathPB, "cert");
+    m_sPasswordStoringDeactivateStr = get<FixedText>("nopasswordsave")->GetText();
 
     InitControls();
 
-    maSecurityOptionsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, SecurityOptionsHdl ) );
-    maSavePasswordsCB.SetClickHdl( LINK( this, SvxSecurityTabPage, SavePasswordHdl ) );
-    maMasterPasswordPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordHdl ) );
-    maMasterPasswordCB.SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordCBHdl ) );
-    maShowConnectionsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
-    maMacroSecPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
-    m_aCertPathPB.SetClickHdl( LINK( this, SvxSecurityTabPage, CertPathPBHdl ) );
+    m_pSecurityOptionsPB->SetClickHdl( LINK( this, SvxSecurityTabPage, SecurityOptionsHdl ) );
+    m_pSavePasswordsCB->SetClickHdl( LINK( this, SvxSecurityTabPage, SavePasswordHdl ) );
+    m_pMasterPasswordPB->SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordHdl ) );
+    m_pMasterPasswordCB->SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordCBHdl ) );
+    m_pShowConnectionsPB->SetClickHdl( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
+    m_pMacroSecPB->SetClickHdl( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
+    m_pCertPathPB->SetClickHdl( LINK( this, SvxSecurityTabPage, CertPathPBHdl ) );
 
     ActivatePage( rSet );
 }
@@ -693,49 +680,49 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
         Reference< task::XPasswordContainer2 > xMasterPasswd(
             task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
-        if ( maSavePasswordsCB.IsChecked() )
+        if ( m_pSavePasswordsCB->IsChecked() )
         {
             sal_Bool bOldValue = xMasterPasswd->allowPersistentStoring( sal_True );
             xMasterPasswd->removeMasterPassword();
             if ( xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
-                maMasterPasswordPB.Enable( sal_True );
-                maMasterPasswordCB.Check( sal_True );
-                maMasterPasswordCB.Enable( sal_True );
-                maMasterPasswordFI.Enable( sal_True );
-                maShowConnectionsPB.Enable( sal_True );
+                m_pMasterPasswordPB->Enable( sal_True );
+                m_pMasterPasswordCB->Check( sal_True );
+                m_pMasterPasswordCB->Enable( sal_True );
+                m_pMasterPasswordFT->Enable( sal_True );
+                m_pShowConnectionsPB->Enable( sal_True );
             }
             else
             {
                 xMasterPasswd->allowPersistentStoring( bOldValue );
-                maSavePasswordsCB.Check( sal_False );
+                m_pSavePasswordsCB->Check( sal_False );
             }
         }
         else
         {
-            QueryBox aQuery( this, WB_YES_NO|WB_DEF_NO, msPasswordStoringDeactivateStr );
+            QueryBox aQuery( this, WB_YES_NO|WB_DEF_NO, m_sPasswordStoringDeactivateStr );
             sal_uInt16 nRet = aQuery.Execute();
 
             if( RET_YES == nRet )
             {
                 xMasterPasswd->allowPersistentStoring( sal_False );
-                maMasterPasswordCB.Check( sal_True );
-                maMasterPasswordPB.Enable( sal_False );
-                maMasterPasswordCB.Enable( sal_False );
-                maMasterPasswordFI.Enable( sal_False );
-                maShowConnectionsPB.Enable( sal_False );
+                m_pMasterPasswordCB->Check( sal_True );
+                m_pMasterPasswordPB->Enable( sal_False );
+                m_pMasterPasswordCB->Enable( sal_False );
+                m_pMasterPasswordFT->Enable( sal_False );
+                m_pShowConnectionsPB->Enable( sal_False );
             }
             else
             {
-                maSavePasswordsCB.Check( sal_True );
-                maMasterPasswordPB.Enable( sal_True );
-                maShowConnectionsPB.Enable( sal_True );
+                m_pSavePasswordsCB->Check( sal_True );
+                m_pMasterPasswordPB->Enable( sal_True );
+                m_pShowConnectionsPB->Enable( sal_True );
             }
         }
     }
     catch (const Exception&)
     {
-        maSavePasswordsCB.Check( !maSavePasswordsCB.IsChecked() );
+        m_pSavePasswordsCB->Check( !m_pSavePasswordsCB->IsChecked() );
     }
 
     return 0;
@@ -764,38 +751,38 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl)
         Reference< task::XPasswordContainer2 > xMasterPasswd(
             task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
-        if ( maMasterPasswordCB.IsChecked() )
+        if ( m_pMasterPasswordCB->IsChecked() )
         {
             if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
-                maMasterPasswordPB.Enable( sal_True );
-                maMasterPasswordFI.Enable( sal_True );
+                m_pMasterPasswordPB->Enable( sal_True );
+                m_pMasterPasswordFT->Enable( sal_True );
             }
             else
             {
-                maMasterPasswordCB.Check( sal_False );
-                maMasterPasswordPB.Enable( sal_True );
-                maMasterPasswordFI.Enable( sal_True );
+                m_pMasterPasswordCB->Check( sal_False );
+                m_pMasterPasswordPB->Enable( sal_True );
+                m_pMasterPasswordFT->Enable( sal_True );
             }
         }
         else
         {
             if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->useDefaultMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
-                maMasterPasswordPB.Enable( sal_False );
-                maMasterPasswordFI.Enable( sal_False );
+                m_pMasterPasswordPB->Enable( sal_False );
+                m_pMasterPasswordFT->Enable( sal_False );
             }
             else
             {
-                maMasterPasswordCB.Check( sal_True );
-                maMasterPasswordPB.Enable( sal_True );
-                maShowConnectionsPB.Enable( sal_True );
+                m_pMasterPasswordCB->Check( sal_True );
+                m_pMasterPasswordPB->Enable( sal_True );
+                m_pShowConnectionsPB->Enable( sal_True );
             }
         }
     }
     catch (const Exception&)
     {
-        maSavePasswordsCB.Check( !maSavePasswordsCB.IsChecked() );
+        m_pSavePasswordsCB->Check( !m_pSavePasswordsCB->IsChecked() );
     }
 
     return 0;
@@ -865,76 +852,19 @@ void SvxSecurityTabPage::InitControls()
               && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS )
               && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_SECUREURLS ) ) )
     {
-        //Move these up
-        m_aCertPathFL.SetPosPixel(maMacroSecFL.GetPosPixel());
-        m_aCertPathFI.SetPosPixel(maMacroSecFI.GetPosPixel());
-        m_aCertPathPB.SetPosPixel(maMacroSecPB.GetPosPixel());
-
         //Hide these
-        maMacroSecFL.Hide();
-        maMacroSecFI.Hide();
-        maMacroSecPB.Hide();
+        m_pMacroSecFrame->Hide();
     }
 
-    // one button too small for its text?
-    long nBtnTextWidth = 0;
-    Window* pButtons[] = { &maSecurityOptionsPB, &maMasterPasswordPB,
-                           &maShowConnectionsPB, &maMacroSecPB, &m_aCertPathPB };
-    Window** pButton = pButtons;
-    const sal_Int32 nBCount = SAL_N_ELEMENTS( pButtons );
-    for (sal_Int32 i = 0; i < nBCount; ++i, ++pButton )
-    {
-        long nTemp = (*pButton)->GetCtrlTextWidth( (*pButton)->GetText() );
-        if ( nTemp > nBtnTextWidth )
-            nBtnTextWidth = nTemp;
-    }
+#ifndef UNX
+    m_pCertFrame->Hide();
+#endif
 
-    nBtnTextWidth = nBtnTextWidth * 115 / 100; // a little offset
-    const long nButtonWidth = maSecurityOptionsPB.GetSizePixel().Width();
-    const long nMaxWidth = nButtonWidth * 140 / 100;
-    long nExtra = ( nBtnTextWidth > nMaxWidth ) ? nBtnTextWidth - nMaxWidth : 0;
-    nBtnTextWidth = std::min( nBtnTextWidth, nMaxWidth );
-
-    if ( nBtnTextWidth > nButtonWidth )
-    {
-        // so make the buttons broader and its control in front of it smaller
-        long nDelta = nBtnTextWidth - nButtonWidth;
-        pButton = pButtons;
-
-        if ( nExtra > 0 )
-        {
-            long nPos = (*pButton)->GetPosPixel().X() - nDelta;
-            long nWidth = (*pButton)->GetSizePixel().Width() + nDelta;
-            long nMaxExtra = GetOutputSizePixel().Width() - ( nPos + nWidth ) - 2;
-            nExtra = ( nExtra < nMaxExtra ) ? nExtra : nMaxExtra;
-        }
-
-        for (sal_Int32 i = 0; i < nBCount; ++i, ++pButton )
-        {
-            Point aNewPos = (*pButton)->GetPosPixel();
-            aNewPos.X() -= nDelta;
-            Size aNewSize = (*pButton)->GetSizePixel();
-            aNewSize.Width() += ( nDelta + nExtra );
-            (*pButton)->SetPosSizePixel( aNewPos, aNewSize );
-        }
-
-        Window* pControls[] = { &maSecurityOptionsFI, &maSavePasswordsCB,
-                                &maMasterPasswordFI, &maMacroSecFI, &m_aCertPathFI };
-        Window** pControl = pControls;
-        const sal_Int32 nCCount = SAL_N_ELEMENTS( pControls );
-        for (sal_Int32 i = 0; i < nCCount; ++i, ++pControl )
-        {
-            Size aNewSize = (*pControl)->GetSizePixel();
-            aNewSize.Width() -= nDelta;
-            (*pControl)->SetSizePixel( aNewSize );
-        }
-    }
-
-    maMasterPasswordPB.Enable( sal_False );
-    maMasterPasswordCB.Enable( sal_False );
-    maMasterPasswordCB.Check( sal_True );
-    maMasterPasswordFI.Enable( sal_False );
-    maShowConnectionsPB.Enable( sal_False );
+    m_pMasterPasswordPB->Enable( sal_False );
+    m_pMasterPasswordCB->Enable( sal_False );
+    m_pMasterPasswordCB->Check( sal_True );
+    m_pMasterPasswordFT->Enable( sal_False );
+    m_pShowConnectionsPB->Enable( sal_False );
 
     // initialize the password saving checkbox
     try
@@ -944,31 +874,24 @@ void SvxSecurityTabPage::InitControls()
 
         if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
-            maMasterPasswordCB.Enable( sal_True );
-            maShowConnectionsPB.Enable( sal_True );
-            maSavePasswordsCB.Check( sal_True );
+            m_pMasterPasswordCB->Enable( sal_True );
+            m_pShowConnectionsPB->Enable( sal_True );
+            m_pSavePasswordsCB->Check( sal_True );
 
             if ( xMasterPasswd->isDefaultMasterPasswordUsed() )
-                maMasterPasswordCB.Check( sal_False );
+                m_pMasterPasswordCB->Check( sal_False );
             else
             {
-                maMasterPasswordPB.Enable( sal_True );
-                maMasterPasswordCB.Check( sal_True );
-                maMasterPasswordFI.Enable( sal_True );
+                m_pMasterPasswordPB->Enable( sal_True );
+                m_pMasterPasswordCB->Check( sal_True );
+                m_pMasterPasswordFT->Enable( sal_True );
             }
         }
     }
     catch (const Exception&)
     {
-        maSavePasswordsCB.Enable( sal_False );
+        m_pSavePasswordsCB->Enable( sal_False );
     }
-
-#ifndef UNX
-    m_aCertPathFL.Hide();
-    m_aCertPathFI.Hide();
-    m_aCertPathPB.Hide();
-#endif
-
 }
 
 SfxTabPage* SvxSecurityTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )

@@ -55,49 +55,6 @@
 #define ST_MSG_255_0                111
 #define ST_MSG_255_1                112
 
-// Security  -------------------------------------------------------------
-
-#define FL_SEC_SECURITYOPTIONS      10
-#define FI_SEC_SECURITYOPTIONS      11
-#define PB_SEC_SECURITYOPTIONS      12
-#define FL_SEC_PASSWORDS            13
-#define CB_SEC_SAVEPASSWORDS        14
-#define PB_SEC_CONNECTIONS          15
-#define CB_SEC_MASTERPASSWORD       16
-#define FI_SEC_MASTERPASSWORD       17
-#define PB_SEC_MASTERPASSWORD       18
-#define FL_SEC_MACROSEC             19
-#define FI_SEC_MACROSEC             20
-#define PB_SEC_MACROSEC             21
-#define FL_SEC_CERTPATH             22
-#define FI_SEC_CERTPATH             23
-#define PB_SEC_CERTPATH             24
-
-#define STR_SEC_NOPASSWDSAVE        12
-
-#define BORDER_OFFSET               8
-#define COL_0                       (RSC_SP_TBPG_INNERBORDER_LEFT)
-#define COL_1                       (COL_0+RSC_SP_FLGR_SPACE_X)
-#define COL_1a                      (COL_1+RSC_SP_CHK_TEXTINDENT)
-#define COL_4                       (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
-#define COL_3                       (COL_4-RSC_CD_PUSHBUTTON_WIDTH)
-#define COL_2                       (COL_3-RSC_SP_CTRL_DESC_X)
-
-#define ROW_0                       (RSC_SP_FLGR_INNERBORDER_TOP)
-#define ROW_1                       (ROW_0+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define ROW_2                       (ROW_1+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define ROW_2a                      (ROW_2-RSC_SP_FLGR_SPACE_Y-RSC_CD_PUSHBUTTON_HEIGHT)
-#define ROW_3                       (ROW_2+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define ROW_4                       (ROW_3+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_CTRL_DESC_Y-1)
-#define ROW_4a                      (ROW_4+RSC_CD_CHECKBOX_HEIGHT+1)
-#define ROW_5                       (ROW_4a+4*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define ROW_6                       (ROW_5+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define ROW_7                       (ROW_6+3*RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define ROW_7a                      (ROW_7-RSC_SP_FLGR_SPACE_Y-RSC_CD_PUSHBUTTON_HEIGHT)
-#define ROW_8                       (ROW_7+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define ROW_9                       (ROW_8+3*RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define ROW_9a                      (ROW_9-RSC_SP_FLGR_SPACE_Y-RSC_CD_PUSHBUTTON_HEIGHT)
-
 // Defines - JavaScriptDisableQueryBox_Impl -------------------------------
 
 #define IMG_JSCPT_WARNING           220
