@@ -26,6 +26,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include "address.hxx"
+#include "cell.hxx"
 #include "compiler.hxx"
 #include "formula/funcutl.hxx"
 #include "IAnyRefDialog.hxx"
@@ -40,7 +41,6 @@ class ScDocument;
 class ScTabViewShell;
 class ScRefHandler;
 class ScRangeList;
-class ScFormulaCell;
 
 class ScFormulaReferenceHelper
 {
