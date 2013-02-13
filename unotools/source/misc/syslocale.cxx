@@ -204,9 +204,21 @@ rtl_TextEncoding SvtSysLocale::GetBestMimeEncoding()
     {
         // If the system locale is unknown to us, e.g. LC_ALL=xx, match the UI
         // language if possible.
-        ::com::sun::star::lang::Locale aLocale( SvtSysLocale().GetUILanguageTag().getLocale() );
-        rtl_Locale * pLocale = rtl_locale_register( aLocale.Language.getStr(),
-                aLocale.Country.getStr(), aLocale.Variant.getStr() );
+        SvtSysLocale aSysLocale;
+        const LanguageTag& rLanguageTag = aSysLocale.GetUILanguageTag();
+        // Converting blindly to Locale and then to rtl_Locale may feed the
+        // 'qlt' to rtl_locale_register() and the underlying system locale
+        // stuff, which doesn't know about it nor about BCP47 in the Variant
+        // field. So use the real language and for non-pure ISO cases hope for
+        // the best.. the fallback to UTF-8 should solve these cases nowadays.
+        /* FIXME-BCP47: the script needs to go in here as well, so actually
+         * we'd need some variant fiddling or glibc locale string and tweak
+         * rtl_locale_register() to know about it! But then again the Windows
+         * implementation still wouldn't know anything about it ... */
+        SAL_WARN_IF( !rLanguageTag.isIsoLocale(), "unotools.i18n",
+                "SvtSysLocale::GetBestMimeEncoding - non-ISO UI locale");
+        rtl_Locale * pLocale = rtl_locale_register( rLanguageTag.getLanguage().getStr(),
+                rLanguageTag.getCountry().getStr(), OUString().getStr() );
         rtl_TextEncoding nEnc = osl_getTextEncodingFromLocale( pLocale );
         pCharSet = rtl_getBestMimeCharsetFromTextEncoding( nEnc );
     }
