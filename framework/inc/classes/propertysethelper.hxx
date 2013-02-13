@@ -71,7 +71,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
 
         sal_Bool m_bReleaseLockOnCall;
 
-        // hold it weak ... otherwhise this helper has to be "killed" explicitly .-)
+        // hold it weak ... otherwise this helper has to be "killed" explicitly .-)
         css::uno::WeakReference< css::uno::XInterface > m_xBroadcaster;
 
         LockHelper& m_rLock;

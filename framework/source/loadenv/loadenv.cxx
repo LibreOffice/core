@@ -885,7 +885,7 @@ sal_Bool LoadEnv::impl_handleContent()
     // SAFE -> -----------------------------------
     ReadGuard aReadLock(m_aLock);
 
-    // the type must exist inside the descriptor ... otherwhise this class is implemented wrong :-)
+    // the type must exist inside the descriptor ... otherwise this class is implemented wrong :-)
     ::rtl::OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
     if (sType.isEmpty())
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
@@ -1297,7 +1297,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
         return css::uno::Reference< css::frame::XFrame >();
     }
 
-    // otherwhise - iterate through the tasks of the desktop container
+    // otherwise - iterate through the tasks of the desktop container
     // to find out, which of them might contains the requested document
     css::uno::Reference< css::frame::XDesktop2 >  xSupplier = css::frame::Desktop::create( comphelper::getComponentContext(m_xSMGR) );
     css::uno::Reference< css::container::XIndexAccess > xTaskList(xSupplier->getFrames()                      , css::uno::UNO_QUERY);

@@ -2159,7 +2159,7 @@ public class Cache
             // move the preferred filter information to any type
             // Set the filter name to the type for which the filter is registered.
             // If this type already have a set PreferredFilter value, check if the current filter
-            // has the preferred flag set. If not ignore it - otherwhise overwrite the
+            // has the preferred flag set. If not ignore it - otherwise overwrite the
             // current information at the type. But look for multiple preferred filter relations ...
             // means: look if more the one filter has set the preferred flag for the same type!
 

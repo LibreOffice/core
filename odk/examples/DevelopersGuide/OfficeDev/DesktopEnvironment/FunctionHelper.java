@@ -138,7 +138,7 @@ public class FunctionHelper
      *          we nee the remote service manager to create this task/frame service
      *
      * @return [com.sun.star.frame.XFrame]
-     *          the new created frame reference in case of success or null otherwhise
+     *          the new created frame reference in case of success or null otherwise
      */
     private static com.sun.star.frame.XFrame impl_createEmptyFrame(
         com.sun.star.uno.XComponentContext xCtx )
@@ -173,7 +173,7 @@ public class FunctionHelper
      *   - the office window will be a child of one of our java windows
      *   - the office will be a normal system window outside this java application
      * This behaviour will be regulated by the second parameter of this operation.
-     * If a parentview is given the first mode will be activated - otherwhise
+     * If a parentview is given the first mode will be activated - otherwise
      * the second one.
      *
      * Note: First mode (creation of a child window) can be reached by two different

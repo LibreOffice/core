@@ -1680,7 +1680,7 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException )
     {
         // do we need to keep the locking of the commit
         // we hold the lock as long as the control differs from the current
-        // otherwhise we disabled the lock
+        // otherwise we disabled the lock
         m_bCommitLock = m_bCommitLock && (XControl*)xControl.get() != (XControl*)m_xCurrentControl.get();
         if (m_bCommitLock)
             return;

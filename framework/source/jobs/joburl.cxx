@@ -236,7 +236,7 @@ sal_Bool JobURL::getService( /*OUT*/ ::rtl::OUString& sService ) const
                     returns the part arguments if <var>sPart</var> was splitted successfully
 
     @return     <TRUE/> if the identifier could be found and the string was splitted.
-                <FALSE/> otherwhise.
+                <FALSE/> otherwise.
 */
 sal_Bool JobURL::implst_split( /*IN*/  const ::rtl::OUString& sPart           ,
                                /*IN*/  const sal_Char*        pPartIdentifier ,

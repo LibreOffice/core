@@ -73,7 +73,7 @@ class TargetHelper
                     represent the expected target.
 
             @return It returns <TRUE/> if <var>sCheckTarget</var> represent
-                    the expected <var>eSpecialTarget</var> value; <FALSE/> otherwhise.
+                    the expected <var>eSpecialTarget</var> value; <FALSE/> otherwise.
          */
         static sal_Bool matchSpecialTarget(const ::rtl::OUString& sCheckTarget  ,
                                                  ESpecialTarget   eSpecialTarget);

@@ -68,7 +68,7 @@ Locale::Locale(const ::rtl::OUString& sLanguage,
 //-----------------------------------------------
 Locale::Locale()
 {
-    // Initialize instance ... otherwhise user will
+    // Initialize instance ... otherwise user will
     // may be get exceptions if he e.g. copy this instance ...
     (*this) = X_NOTRANSLATE();
 }

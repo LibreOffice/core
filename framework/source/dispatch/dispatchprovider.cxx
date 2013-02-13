@@ -494,7 +494,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     @param      aURL
                     the dispatch URL for which may a handler is registered
 
-    @return     A dispatch object if a handler was found and agree with the given URL or <NULL/> otherwhise.
+    @return     A dispatch object if a handler was found and agree with the given URL or <NULL/> otherwise.
 
     @threadsafe yes
 */

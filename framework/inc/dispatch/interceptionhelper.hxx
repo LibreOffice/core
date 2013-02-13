@@ -218,7 +218,7 @@ class InterceptionHelper : public  css::frame::XDispatchProvider
                         optional search parameter for targeting, if sTargetFrameName isn't a special one.
 
             @return A valid dispatch object, if any interceptor or at least our slave is interested on the given URL;
-                    or NULL otherwhise.
+                    or NULL otherwise.
          */
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(const css::util::URL&  aURL            ,
                                                                                     const ::rtl::OUString& sTargetFrameName,

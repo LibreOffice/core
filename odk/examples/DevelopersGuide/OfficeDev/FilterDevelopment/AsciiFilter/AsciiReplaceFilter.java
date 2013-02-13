@@ -650,7 +650,7 @@ public class AsciiReplaceFilter
          *  the requested service name
          *
          * @return True, if the given service name will be supported;
-         *         False otherwhise.
+         *         False otherwise.
          */
         public boolean supportsService( String sService )
         {

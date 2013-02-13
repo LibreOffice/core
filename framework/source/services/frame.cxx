@@ -856,7 +856,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     else
     {
         //-------------------------------------------------------------------------------------------------
-        // II) otherwhise use optional given search flags
+        // II) otherwise use optional given search flags
         //  force using of combinations of such flags. means no "else" part of use if() statements.
         //  But we ust break further searches if target was already found.
         //  Order of using flags is fix: SELF - CHILDREN - SIBLINGS - PARENT
@@ -872,7 +872,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
 
         //-------------------------------------------------------------------------------------------------
         // II.I) SELF
-        //  Check for right name. If it's the searched one return ourself - otherwhise
+        //  Check for right name. If it's the searched one return ourself - otherwise
         //  ignore this flag.
         //-------------------------------------------------------------------------------------------------
         if (
@@ -1336,7 +1336,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
         implts_sendFrameActionEvent( css::frame::FrameAction_COMPONENT_DETACHING );
 
     //_____________________________________________________________________________________________________
-    // otherwhise release old component first
+    // otherwise release old component first
     // Always release controller before releasing window,
     // because controller may want to access its window!
     // But check for real changes - may the new controller is the old one.
@@ -1922,7 +1922,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     m_aTransactionManager.setWorkingMode( E_CLOSE );
 
     // Don't forget it restore old value -
-    // otherwhise no dialogs can be shown anymore in other frames.
+    // otherwise no dialogs can be shown anymore in other frames.
     Application::SetDialogCancelMode( old );
 }
 

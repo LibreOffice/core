@@ -1078,7 +1078,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
     else
     {
         //-------------------------------------------------------------------------------------------------
-        // II) otherwhise use optional given search flags
+        // II) otherwise use optional given search flags
         //  force using of combinations of such flags. means no "else" part of use if() statements.
         //  But we ust break further searches if target was already found.
         //  Order of using flags is fix: SELF - CHILDREN - SIBLINGS - PARENT
@@ -1095,7 +1095,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
 
         //-------------------------------------------------------------------------------------------------
         // II.I) SELF
-        //  Check for right name. If it's the searched one return ourself - otherwhise
+        //  Check for right name. If it's the searched one return ourself - otherwise
         //  ignore this flag.
         //-------------------------------------------------------------------------------------------------
         if (

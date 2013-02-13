@@ -587,7 +587,7 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
                                                           INetURLObject::DECODE_WITH_CHARSET);
         sExtension = sExtension.toAsciiLowerCase();
 
-        // otherwhise we must know, if it matches to the given URL realy.
+        // otherwise we must know, if it matches to the given URL realy.
         // especialy if it matches by its extension or pattern registration.
         OUStringList lExtensions(aType[PROPNAME_EXTENSIONS]);
         OUStringList lURLPattern(aType[PROPNAME_URLPATTERN]);

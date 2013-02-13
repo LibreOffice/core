@@ -121,7 +121,7 @@ class QuietInteraction : public  css::lang::XTypeProvider
 
             @return     [boolean]
                             <TRUE/> for used interaction
-                            <FALSE/> otherwhise
+                            <FALSE/> otherwise
 
             @threadsafe yes
         */

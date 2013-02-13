@@ -157,7 +157,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
 /** callback for started dispatch with guaranteed notifications.
 
     We must save the result, so the method executeDispatch() can return it.
-    Further we must release the broadcaster (otherwhise it can't die)
+    Further we must release the broadcaster (otherwise it can't die)
     and unblock the waiting executeDispatch() request.
 
     @param  aResult

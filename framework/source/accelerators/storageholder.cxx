@@ -181,7 +181,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const ::rtl:
     }
 
     // TODO think about return last storage as working storage ... but dont caching it inside this holder!
-    // => otherwhise the same storage is may be commit more then once.
+    // => otherwise the same storage is may be commit more then once.
 
     return xChild;
 }
@@ -237,7 +237,7 @@ void StorageHolder::commitPath(const ::rtl::OUString& sPath)
 
     css::uno::Reference< css::embed::XTransactedObject > xCommit;
     StorageHolder::TStorageList::reverse_iterator pIt;
-    for (  pIt  = lStorages.rbegin(); // order of commit is important ... otherwhise changes are not recognized!
+    for (  pIt  = lStorages.rbegin(); // order of commit is important ... otherwise changes are not recognized!
            pIt != lStorages.rend()  ;
          ++pIt                      )
     {

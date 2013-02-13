@@ -1437,7 +1437,7 @@ SfxAppToolBoxControl_Impl::~SfxAppToolBoxControl_Impl()
                 contains the image of the menu for the URL.
 
     @return sal_True - if URL could be located as an item of the popup menu.
-            sal_False - otherwhise.
+            sal_False - otherwise.
 */
 sal_Bool Impl_ExistURLInMenu( const PopupMenu *pMenu     ,
                                 String    &sURL      ,

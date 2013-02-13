@@ -1794,7 +1794,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt != m_lDocCache.end())
         m_lDocCache.erase(pIt);
-    pIt = m_lDocCache.end(); // otherwhise its not specified what pIt means!
+    pIt = m_lDocCache.end(); // otherwise its not specified what pIt means!
     aCacheLock2.unlock();
 
     aWriteLock.unlock();

@@ -229,7 +229,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                     by checking its interface type.
 
             @return A valid reference to the continuation, if it could be located ...
-                    or an empty reference otherwhise.
+                    or an empty reference otherwise.
          */
         static ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > extractContinuation(
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& lContinuations,

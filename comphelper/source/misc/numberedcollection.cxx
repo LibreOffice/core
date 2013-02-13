@@ -195,7 +195,7 @@ void SAL_CALL NumberedCollection::releaseNumberForComponent(const css::uno::Refe
     ::sal_Int32                  c = (::sal_Int32)m_lComponents.size ();
     ::sal_Int32                  i = 1;
 
-    // c cant be less then 0 ... otherwhise hash.size() has an error :-)
+    // c cant be less then 0 ... otherwise hash.size() has an error :-)
     // But we need at least n+1 numbers here.
     c += 1;
 

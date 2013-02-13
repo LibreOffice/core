@@ -122,7 +122,7 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
                     reference to the queried frame
 
     @return     <TRUE/> if frame is oart of this container
-                <FALSE/> otherwhise
+                <FALSE/> otherwise
 
     @threadsafe yes
  *****************************************************************************************************************/

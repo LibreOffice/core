@@ -459,7 +459,7 @@ void FilterCache::setItem(      EItemType        eType ,
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
-    // name must be part of the property set too ... otherwhise our
+    // name must be part of the property set too ... otherwise our
     // container query cant work correctly
     CacheItem aItem = aValue;
     aItem[PROPNAME_NAME] <<= sItem;

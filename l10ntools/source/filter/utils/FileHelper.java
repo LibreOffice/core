@@ -341,7 +341,7 @@ public class FileHelper
      *          e.g.: "dat"
      *
      *  @return A valid file object, if an unique file could be created -
-     *          Null otherwhise.
+     *          Null otherwise.
      *          e.g.: "c:\temp\myfile_1.dat"
      */
     public static java.io.File createUniqueFile(java.io.File     aBaseDir  ,

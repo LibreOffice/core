@@ -428,7 +428,7 @@ class FilterCache : public BaseLock
 
             @return     [sal_Bool]
                         True, if the requested sub container contains some items;
-                        False otherwhise.
+                        False otherwise.
 
             @throw      [css::uno::Exception]
                         if some input parameter are wrong or the cache itself is not valid
@@ -701,7 +701,7 @@ class FilterCache : public BaseLock
 
             @return     A valid reference, if the configuration access could be opened
                         and initialized within the requested modes successfully;
-                        a NULL reference otherwhise.
+                        a NULL reference otherwise.
          */
         css::uno::Reference< css::uno::XInterface > impl_createConfigAccess(const ::rtl::OUString& sRoot       ,
                                                                                   sal_Bool         bReadOnly   ,

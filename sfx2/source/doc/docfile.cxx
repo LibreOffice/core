@@ -2561,7 +2561,7 @@ SfxMedium::GetInteractionHandler()
     if ( !pImp->bAllowDefaultIntHdl )
         return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
 
-    // otherwhise return cached default handler ... if it exist.
+    // otherwise return cached default handler ... if it exist.
     if ( pImp->xInteraction.is() )
         return pImp->xInteraction;
 

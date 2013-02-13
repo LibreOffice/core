@@ -543,7 +543,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
 {
     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
-    // otherwhise - create new help task
+    // otherwise - create new help task
     Reference< XFrame > xHelpTask = xDesktop->findFrame(
         OUString("OFFICE_HELP_TASK"),
         FrameSearchFlag::TASKS | FrameSearchFlag::CREATE);

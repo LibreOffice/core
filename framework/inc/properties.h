@@ -271,14 +271,14 @@ class PropHelper
     //___________________________________________
 
     /** checks if given property will be changed by this settings.
-     *  We compare the content of the given any values. If they are different we return sal_True - sal_False otherwhise.
+     *  We compare the content of the given any values. If they are different we return sal_True - sal_False otherwise.
      *
      *  @param  aCurrentValue   contains the current value for this property
      *  @param  aNewValue       contains the new value for this property
      *  @param  aOldValue       returns the current value, in case somthing will be changed
      *  @param  aChangedValue   returns the new value, in case somthing will be changed
      *
-     *  @return <True/> if value of this property will be changed; <False/> otherwhise.
+     *  @return <True/> if value of this property will be changed; <False/> otherwise.
      */
 
     static sal_Bool willPropertyBeChanged( const css::uno::Any& aCurrentValue ,
