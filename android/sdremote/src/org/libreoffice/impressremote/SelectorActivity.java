@@ -183,6 +183,8 @@ public class SelectorActivity extends SherlockActivity {
     }
 
     void doBindService() {
+        // This is what creates the first (only?) CommunicationService instance
+        // and calls its run() method (in another thread).
         Intent aIntent = new Intent(this, CommunicationService.class);
         startService(aIntent);
         bindService(aIntent, mConnection, Context.BIND_IMPORTANT);

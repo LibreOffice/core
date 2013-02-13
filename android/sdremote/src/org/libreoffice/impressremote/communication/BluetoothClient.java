@@ -36,6 +36,9 @@ public class BluetoothClient extends Client {
                     Receiver aReceiver, boolean aBluetoothWasEnabled)
                     throws IOException {
         super(aServer, aCommunicationService, aReceiver);
+
+        Log.i(Globals.TAG, "BluetoothClient(" + aServer + ")");
+
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mBluetoothWasEnabled = aBluetoothWasEnabled;
         if (!mBluetoothWasEnabled) {
@@ -45,18 +48,21 @@ public class BluetoothClient extends Client {
         BluetoothDevice aDevice = mAdapter
                         .getRemoteDevice(aServer.getAddress());
         mAdapter.cancelDiscovery();
+
         // This is the "standard UUID for the Serial Port Profile".
         // I.e. the 16-bit SerialPort UUID 0x1101 inserted into the
         // Bluetooth BASE_UUID. See
         // https://www.bluetooth.org/Technical/AssignedNumbers/service_discovery.htm
         mSocket = aDevice.createRfcommSocketToServiceRecord(UUID
                         .fromString("00001101-0000-1000-8000-00805F9B34FB"));
+
         mSocket.connect();
         Log.i(Globals.TAG, "BluetoothClient: connected");
 
         mInputStream = mSocket.getInputStream();
         mReader = new BufferedReader(new InputStreamReader(mInputStream,
                         CHARSET));
+
         mOutputStream = mSocket.getOutputStream();
 
         String aTemp = mReader.readLine();

@@ -53,6 +53,9 @@ public class Server {
         return mTimeDiscovered;
     }
 
+    public String toString() {
+        return getClass().getName() + '@' + Integer.toHexString(hashCode()) + ":{" + mAddress + "," + mName + "}";
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
