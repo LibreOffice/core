@@ -6354,7 +6354,12 @@ if test "$SOLAR_JAVA" != ""; then
         JAVADOC=`cygpath -d "$JAVADOC"`
         JAVADOC=`cygpath -u "$JAVADOC"`
     fi
+
+    if test `$JAVADOC --version 2>&1 | $GREP -c "gjdoc"` -gt 0; then
+	JAVADOCISGJDOC="yes"
+    fi
 fi
+AC_SUBST(JAVADOCISGJDOC)
 
 if test "$SOLAR_JAVA" != ""; then
     # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr

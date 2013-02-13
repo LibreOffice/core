@@ -59,7 +59,10 @@ JAVA_BEAN_SRC_FILES=\
         $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/OfficeConnection.java \
         $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/OfficeWindow.java
 
-JAVADOCPARAMS= -notimestamp -use -splitindex -windowtitle "Java UNO Runtime Reference" -header $(JAVADOCREFNAME) -d $(DESTDIRGENJAVAREF) -sourcepath $(JAVA_SRC_DIR) -classpath $(SOLARBINDIR)$/ridl.jar -linkoffline ../../common/ref ./uno -linkoffline http://java.sun.com/j2se/1.5/docs/api ./java $(JAVA_PACKAGES)
+JAVADOCPARAMS= -use -splitindex -windowtitle "Java UNO Runtime Reference" -header $(JAVADOCREFNAME) -d $(DESTDIRGENJAVAREF) -sourcepath $(JAVA_SRC_DIR) -classpath $(SOLARBINDIR)$/ridl.jar -linkoffline ../../common/ref ./uno -linkoffline http://java.sun.com/j2se/1.5/docs/api ./java $(JAVA_PACKAGES)
+.IF "$(JAVADOCISGJDOC)" != "yes"
+JAVADOCPARAMS+= -notimestamp
+.ENDIF
 
 JAVADOCLOG = $(MISC)$/javadoc_log.txt
 
