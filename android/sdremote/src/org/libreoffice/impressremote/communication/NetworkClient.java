@@ -37,7 +37,6 @@ public class NetworkClient extends Client {
                     Receiver aReceiver) throws UnknownHostException,
                     IOException {
         super(aServer, aCommunicationService, aReceiver);
-        mName = aServer.getName();
         mSocket = new Socket(aServer.getAddress(), PORT);
         mInputStream = mSocket.getInputStream();
         mReader = new BufferedReader(new InputStreamReader(mInputStream,
