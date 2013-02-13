@@ -143,17 +143,14 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
     m_Highlighter.notifyChange ( 0, 0, &strLine, 1 );
     HighlightPortions portions;
     m_Highlighter.getHighlightPortions( 0, strLine, portions );
-    xmlChar* subStr;
-    xmlChar* typeStr;
-    xmlNodePtr text;
     for ( size_t i=0; i<portions.size(); i++ )
     {
         HighlightPortion& r = portions[i];
-        subStr = (xmlChar*) OUStringToOString( strLine.copy( r.nBegin, r.nEnd-r.nBegin ), RTL_TEXTENCODING_UTF8 ).getStr();
-        text = xmlNewText( subStr );
+        OString sToken(OUStringToOString(strLine.copy(r.nBegin, r.nEnd-r.nBegin), RTL_TEXTENCODING_UTF8));
+        xmlNodePtr text = xmlNewText((const xmlChar*)sToken.getStr());
         if ( r.tokenType != TT_WHITESPACE )
         {
-            typeStr = getTypeString( r.tokenType );
+            xmlChar* typeStr = getTypeString( r.tokenType );
             curNode = xmlNewTextChild( paragraph, 0, (xmlChar*)"item", 0 );
             xmlNewProp( curNode, (xmlChar*)"type", typeStr );
             xmlAddChild( curNode, text );
@@ -161,7 +158,6 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
         }
         else
             xmlAddChild( paragraph, text );
-        xmlFree( subStr );
     }
     xmlFree( codeSnippet );
 }
