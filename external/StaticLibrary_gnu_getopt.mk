@@ -9,6 +9,8 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,gnu_getopt))
 
+$(eval $(call gb_StaticLibrary_set_warnings_not_errors,gnu_getopt))
+
 $(eval $(call gb_StaticLibrary_use_unpacked,gnu_getopt,glibc))
 
 $(eval $(call gb_StaticLibrary_set_include,gnu_getopt,\
