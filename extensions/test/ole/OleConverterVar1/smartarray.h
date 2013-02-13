@@ -205,9 +205,6 @@ template <> SmartArray <IUnknown*>::SmartArray(sourceType * parParams, int count
 {
     ATLTRACE("SmartArray<IUnknown>");
     HRESULT hr= S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    rgsabound[0].cElements= count;
-    rgsabound[0].lLbound= 0;
     m_array= SafeArrayCreateVector( VT_UNKNOWN, 0, count);
     SafeArrayLock( m_array);
 

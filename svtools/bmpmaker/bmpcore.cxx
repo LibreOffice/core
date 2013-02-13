@@ -51,7 +51,7 @@ static String ImplGetSystemFileName( const String& rFileName )
 // - BmpCreator -
 // --------------
 
-BmpCreator::BmpCreator()
+BmpCreator::BmpCreator():pSRS(NULL)
 {
 }
 

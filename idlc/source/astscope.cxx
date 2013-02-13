@@ -259,7 +259,6 @@ AstDeclaration* AstScope::lookupPrimitiveType(ExprType type)
 {
     AstDeclaration* pDecl = NULL;
     AstScope*       pScope = NULL;
-    AstBaseType*    pBaseType = NULL;
     OString         typeName;
     pDecl = scopeAsDecl(this);
     if ( !pDecl )
@@ -324,7 +323,7 @@ AstDeclaration* AstScope::lookupPrimitiveType(ExprType type)
 
     if ( pDecl && (pDecl->getNodeType() == NT_predefined) )
     {
-        pBaseType = (AstBaseType*)pDecl;
+        AstBaseType* pBaseType = (AstBaseType*)pDecl;
 
         if ( pBaseType->getExprType() == type )
             return pDecl;

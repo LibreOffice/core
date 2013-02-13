@@ -25,12 +25,6 @@
 #include "debughelper.hxx"
 #include <vector>
 
-#define TESTEVAL \
-    if(number_of_errors)   \
-        fprintf(stderr,"errors in %s: %d\n",name,number_of_errors);  \
-    return number_of_errors
-
-
 struct ServerInfo {
     rtl::OUString host;
     rtl::OUString port;
@@ -138,7 +132,11 @@ int test_ftpurl(void) {
     ascii = "ftp://host/bla/../../test/", n = "anonymous", p = "";
     TESTURL;
 
-    TESTEVAL;
+    if(number_of_errors)
+    {
+        fprintf(stderr,"errors in %s: %d\n",name,number_of_errors);
+    }
+    return number_of_errors;
 }
 
 
@@ -161,7 +159,11 @@ int test_ftplist(void) {
     if(!(vec[0].m_aName == "dir1" && vec[1].m_aName == "dir2" && vec[2].m_aName == "file1" ))
        ++number_of_errors;
 
-    TESTEVAL;
+    if(number_of_errors)
+    {
+        fprintf(stderr,"errors in %s: %d\n",name,number_of_errors);
+    }
+    return number_of_errors;
 }
 
 
@@ -202,13 +204,16 @@ int test_ftpparent(void) {
     expect = "ftp://abi:psswd@abi-1/..";
     TESTPARENT;
 
-    TESTEVAL;
+    if(number_of_errors)
+    {
+        fprintf(stderr,"errors in %s: %d\n",name,number_of_errors);
+    }
+    return number_of_errors;
 }
 
 
 int test_ftpproperties(void) {
     int number_of_errors = 0;
-    const char* name = "test_ftpproperties";
     FTPHandleProviderI provider;
 
     ftp::FTPURL url(
@@ -220,14 +225,18 @@ int test_ftpproperties(void) {
     if(!(ade.m_aName == "file" && ade.isFile()))
         ++number_of_errors;
 
-    TESTEVAL;
+    if(number_of_errors)
+    {
+        const char* name = "test_ftpproperties";
+        fprintf(stderr,"errors in %s: %d\n",name,number_of_errors);
+    }
+    return number_of_errors;
 }
 
 
 int test_ftpopen(void)
 {
     int number_of_errors = 0;
-    const char* name = "test_ftpopen";
 
     FTPHandleProviderI provider;
     ftp::FTPURL url(
@@ -258,7 +267,12 @@ int test_ftpopen(void)
     } else
         ++number_of_errors;
 
-    TESTEVAL;
+    if(number_of_errors)
+    {
+        const char* name = "test_ftpopen";
+        fprintf(stderr,"errors in %s: %d\n",name,number_of_errors);
+    }
+    return number_of_errors;
 }
 
 
