@@ -336,6 +336,7 @@ include $(foreach class, \
 	InstallModuleTarget \
 	InstallModule \
 	InstallScript \
+	AutoInstallLibs \
 ,$(GBUILDDIR)/$(class).mk)
 
 # optional extensions that should never be essential
