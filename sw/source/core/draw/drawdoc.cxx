@@ -42,7 +42,7 @@ using namespace com::sun::star;
 
 /*************************************************************************
 |*
-|* Konstruktor
+|* Constructor
 |*
 \************************************************************************/
 
@@ -122,7 +122,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
 
 /*************************************************************************
 |*
-|* Destruktor
+|* Destructor
 |*
 \************************************************************************/
 
@@ -136,10 +136,10 @@ SwDrawDocument::~SwDrawDocument()
 
 /*************************************************************************
 |*
-|* Diese Methode erzeugt eine neue Seite (SdPage) und gibt einen Zeiger
-|* darauf zurueck. Die Drawing Engine benutzt diese Methode beim Laden
-|* zur Erzeugung von Seiten (deren Typ sie ja nicht kennt, da es ABLEITUNGEN
-|* der SdrPage sind).
+|* This method creates a new page (SdPage) and thereupon returns a pointer
+|* to it back. The drawing engine is using this method while loading for
+|* the creating of pages (whose type it not even know, because they are
+|* inherited from SdrPage).
 |*
 \************************************************************************/
 
@@ -158,7 +158,7 @@ uno::Reference<embed::XStorage> SwDrawDocument::GetDocumentStorage() const
 
 SdrLayerID SwDrawDocument::GetControlExportLayerId( const SdrObject & ) const
 {
-    //fuer Versionen < 5.0, es gab nur Hell und Heaven
+    //for versions < 5.0, there was only Hell and Heaven
     return (SdrLayerID)pDoc->GetHeavenId();
 }
 

@@ -89,11 +89,11 @@ void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor )
 }
 
 
-//Der Umgekehrte Weg: Sucht das Format zum angegebenen Objekt.
-//Wenn das Object ein SwVirtFlyDrawObj ist so wird das Format von
-//selbigem besorgt.
-//Anderfalls ist es eben ein einfaches Zeichenobjekt. Diese hat einen
-//UserCall und der ist Client vom gesuchten Format.
+// The Get reverse way: seeks the format to the specified object.
+// If the object is a SwVirtFlyDrawObj then the format of this
+// will be acquired.
+// Otherwise it is just a simple drawing object. This has a
+// UserCall and is the client of the searched format.
 
 SwFrmFmt *FindFrmFmt( SdrObject *pObj )
 {
@@ -130,7 +130,7 @@ sal_Bool HasWrap( const SdrObject* pObj )
 
 /*****************************************************************************
  *
- * GetBoundRect liefert das BoundRect _inklusive_ Abstand des Objekts.
+ * GetBoundRect returns the BoundRect _inclusive_ distance of the object.
  *
  *****************************************************************************/
 
@@ -151,7 +151,7 @@ SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj )
     return aRet;
 }
 
-//Liefert den UserCall ggf. vom Gruppenobjekt
+// Returns the UserCall if applicable from the group object
 // OD 2004-03-31 #i26791# - change return type
 SwContact* GetUserCall( const SdrObject* pObj )
 {
@@ -163,7 +163,7 @@ SwContact* GetUserCall( const SdrObject* pObj )
     return static_cast<SwContact*>(pObj->GetUserCall());
 }
 
-// liefert sal_True falls das SrdObject ein Marquee-Object (Lauftext) ist
+// Returns sal_True if the SrdObject is a Marquee-Object (scrolling text)
 sal_Bool IsMarqueeTextObj( const SdrObject& rObj )
 {
     SdrTextAniKind eTKind;
@@ -175,7 +175,7 @@ sal_Bool IsMarqueeTextObj( const SdrObject& rObj )
 
 /*************************************************************************
 |*
-|*  SwContact, Ctor und Dtor
+|*  SwContact, Ctor and Dtor
 |*
 |*************************************************************************/
 
@@ -643,8 +643,8 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
                                 InsertObject( pObj, pObj->GetOrdNumDirect() );
     }
 
-    //Controls muessen immer im Control-Layer liegen. Das gilt auch fuer
-    //Gruppenobjekte, wenn diese Controls enthalten.
+    //Controls have to be always in the Control-Layer. This is also true for
+    //group objects, if they contain controls.
     if ( ::CheckControlLayer( pObj ) )
     {
         // set layer of object to corresponding invisible layer.
@@ -1105,7 +1105,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
         return;
     }
 
-    //Action aufsetzen, aber nicht wenn gerade irgendwo eine Action laeuft.
+    //Put on Action, but not if presently anywhere an action runs.
     ViewShell *pSh = 0, *pOrg;
     SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();//swmod 080317
     if ( pTmpRoot && pTmpRoot->IsCallbackActionEnabled() )
@@ -1125,7 +1125,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
             pTmpRoot->StartAllAction();
     }
     SdrObjUserCall::Changed( rObj, eType, rOldBoundRect );
-    _Changed( rObj, eType, &rOldBoundRect );    //Achtung, ggf. Suizid!
+    _Changed( rObj, eType, &rOldBoundRect );    //Attention, possibly suicidal!
 
     if ( pSh )
         pTmpRoot->EndAllAction();
@@ -1203,7 +1203,7 @@ class NestedUserCallHdl
 };
 
 //
-// !!!ACHTUNG!!! The object may commit suicide!!!
+// !!!ATTENTION!!! The object may commit suicide!!!
 //
 void SwDrawContact::_Changed( const SdrObject& rObj,
                               SdrUserCallType eType,
@@ -1485,7 +1485,7 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
     if ( pNewAnchorFmt )
     {
-        // nicht auf ein Reset Anchor reagieren !!!!!
+        // Do not respond to a Reset Anchor !!!!!
         if ( SFX_ITEM_SET ==
                 GetFmt()->GetAttrSet().GetItemState( RES_ANCHOR, sal_False ) )
         {
@@ -1812,7 +1812,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                     pPage->AppendDrawObj( maAnchoredDrawObj );
                 }
                 else
-                    //Sieht doof aus, ist aber erlaubt (vlg. SwFEShell::SetPageObjsNewPage)
+                    //Looks stupid but is allowed (compare SwFEShell::SetPageObjsNewPage)
                     pRoot->SetAssertFlyPages();
                 }
                 break;
