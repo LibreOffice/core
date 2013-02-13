@@ -72,7 +72,7 @@
         <item name="android:actionDropDownStyle">@style/Theme.ImpressRemote.ActionBarMenu</item>
         <item name="android:windowBackground">@color/light_grey</item>
         <item name="android:homeAsUpIndicator">@drawable/up_indicator_white</item>
-        <item name="android:textColor">@color/light_grey</item>
+        <item name="android:textColor">@color/text_grey</item>
         <item name="android:alertDialogStyle">@style/Theme.ImpressRemote.Dialog</item>
 
     </style>
