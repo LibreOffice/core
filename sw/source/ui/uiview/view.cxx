@@ -1055,6 +1055,7 @@ SwView::~SwView()
     bInDtor = sal_True;
     pEditWin->Hide(); // damit kein Paint Aerger machen kann!
     // An der SwDocShell den Pointer auf die View ruecksetzen
+
     SwDocShell* pDocSh = GetDocShell();
     if( pDocSh && pDocSh->GetView() == this )
         pDocSh->SetView( 0 );

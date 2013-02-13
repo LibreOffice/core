@@ -1203,6 +1203,13 @@ void SwView::UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const Strin
     rBnd.Update( FN_STAT_PAGE );
 }
 
+void SwView::UpdateDocStats()
+{
+    SfxBindings &rBnd = GetViewFrame()->GetBindings();
+    rBnd.Invalidate( FN_STAT_WORDCOUNT );
+    rBnd.Update( FN_STAT_WORDCOUNT );
+}
+
 /*--------------------------------------------------------------------
     Beschreibung:   Status der Stauszeile
  --------------------------------------------------------------------*/
@@ -1241,7 +1248,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 SwDocStat documentStats;
                 {
                     rShell.CountWords(selectionStats);
-                    documentStats = rShell.GetDoc()->GetUpdatedDocStat();
+                    documentStats = rShell.GetDoc()->GetUpdatedDocStat( true /* complete-async */ );
                 }
 
                 const sal_uInt32 stringId = selectionStats.nWord? STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION;

@@ -282,6 +282,7 @@ class SW_DLLPUBLIC SwDoc :
     */
     Timer       aIdleTimer;             ///< Own IdleTimer
     Timer       aOLEModifiedTimer;      ///< Timer for update modified OLE-Objecs
+    Timer       aStatsUpdateTimer;      ///< Timer for asynchronous stats calculation
     SwDBData    aDBData;                ///< database descriptor
     ::com::sun::star::uno::Sequence <sal_Int8 > aRedlinePasswd;
     String      sTOIAutoMarkURL;        ///< ::com::sun::star::util::URL of table of index AutoMark file
@@ -909,9 +910,9 @@ public:
     */
     virtual void DocInfoChgd();
     virtual const SwDocStat &GetDocStat() const;
-    virtual const SwDocStat &GetUpdatedDocStat();
+    virtual const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync = false);
     virtual void SetDocStat(const SwDocStat& rStat);
-    virtual void UpdateDocStat();
+    virtual void UpdateDocStat(bool bCompleteAsync = false);
 
     /** IDocumentState
     */
@@ -2071,6 +2072,17 @@ private:
     void CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead, SwPageDesc *pDesc, bool bLeft);
     /// Copies master footer to left / first one, if necessary - used by ChgPageDesc().
     void CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot, SwPageDesc *pDesc, bool bLeft);
+
+    /** continue computing a chunk of document statistics
+      * \param nTextNodes number of paragraphs to calculate before
+      * exiting
+      *
+      * returns false when there is no more to calculate
+      */
+    bool IncrementalDocStatCalculate(long nTextNodes = 250);
+
+    /// Our own 'StatsUpdateTimer' calls the following method
+    DECL_LINK( DoIdleStatsUpdate, Timer * );
 };
 
 // This method is called in Dtor of SwDoc and deletes cache of ContourObjects.

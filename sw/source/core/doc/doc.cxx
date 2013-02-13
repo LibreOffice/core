@@ -55,6 +55,7 @@
 #include <editeng/rsiditem.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <vcl/timer.hxx>
 
 #include <swatrset.hxx>
 #include <swmodule.hxx>
@@ -112,6 +113,7 @@
 #include <shellres.hxx>
 #include <txtfrm.hxx>
 #include <attrhint.hxx>
+#include <view.hxx>
 
 #include <wdocsh.hxx>           // SwWebDocShell
 #include <prtopt.hxx>           // SwPrintOptions
@@ -1146,10 +1148,6 @@ bool SwDoc::UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal )
     return pTxtNode->SetAttr( aRsid );
 }
 
-
-/*************************************************************************
- *             void SetDocStat( const SwDocStat& rStat );
- *************************************************************************/
 void SwDoc::SetDocStat( const SwDocStat& rStat )
 {
     *pDocStat = rStat;
@@ -1160,11 +1158,11 @@ const SwDocStat& SwDoc::GetDocStat() const
     return *pDocStat;
 }
 
-const SwDocStat& SwDoc::GetUpdatedDocStat()
+const SwDocStat& SwDoc::GetUpdatedDocStat( bool bCompleteAsync )
 {
-    if (pDocStat->bModified)
+    if( pDocStat->bModified )
     {
-        UpdateDocStat();
+        UpdateDocStat( bCompleteAsync );
     }
     return *pDocStat;
 }
@@ -1686,92 +1684,117 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // thus we are done here.
 }
 
-/*************************************************************************
- *            void UpdateDocStat();
- *************************************************************************/
-void SwDoc::UpdateDocStat()
+// returns true while there is more to do
+bool SwDoc::IncrementalDocStatCalculate( long nTextNodes )
+{
+    pDocStat->Reset();
+    pDocStat->nPara = 0; // default is 1!
+    SwNode* pNd;
+
+    // This is the inner loop - at least while the paras are dirty.
+    for( sal_uLong i = GetNodes().Count(); i > 0 && nTextNodes > 0; )
+    {
+        switch( ( pNd = GetNodes()[ --i ])->GetNodeType() )
+        {
+        case ND_TEXTNODE:
+        {
+            SwTxtNode *pTxt = static_cast< SwTxtNode * >( pNd );
+            if( pTxt->CountWords( *pDocStat, 0, pTxt->GetTxt().Len() ) )
+                nTextNodes--;
+            break;
+        }
+        case ND_TABLENODE:      ++pDocStat->nTbl;   break;
+        case ND_GRFNODE:        ++pDocStat->nGrf;   break;
+        case ND_OLENODE:        ++pDocStat->nOLE;   break;
+        case ND_SECTIONNODE:    break;
+        }
+    }
+
+    // #i93174#: notes contain paragraphs that are not nodes
+    {
+        SwFieldType * const pPostits( GetSysFldType(RES_POSTITFLD) );
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pPostits );
+        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
+        {
+            if (pFmtFld->IsFldInDoc())
+            {
+                SwPostItField const * const pField(
+                    static_cast<SwPostItField const*>(pFmtFld->GetFld()));
+                pDocStat->nAllPara += pField->GetNumberOfParagraphs();
+            }
+        }
+    }
+
+    pDocStat->nPage     = GetCurrentLayout() ? GetCurrentLayout()->GetPageNum() : 0;
+    pDocStat->bModified = sal_False;
+
+    com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( pDocStat->nPage ? 8 : 7);
+    sal_Int32 n=0;
+    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableCount"));
+    aStat[n++].Value <<= (sal_Int32)pDocStat->nTbl;
+    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageCount"));
+    aStat[n++].Value <<= (sal_Int32)pDocStat->nGrf;
+    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectCount"));
+    aStat[n++].Value <<= (sal_Int32)pDocStat->nOLE;
+    if ( pDocStat->nPage )
+    {
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount"));
+        aStat[n++].Value <<= (sal_Int32)pDocStat->nPage;
+    }
+    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphCount"));
+    aStat[n++].Value <<= (sal_Int32)pDocStat->nPara;
+    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordCount"));
+    aStat[n++].Value <<= (sal_Int32)pDocStat->nWord;
+    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount"));
+    aStat[n++].Value <<= (sal_Int32)pDocStat->nChar;
+    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NonWhitespaceCharacterCount"));
+    aStat[n++].Value <<= (sal_Int32)pDocStat->nCharExcludingSpaces;
+
+    // For e.g. autotext documents there is no pSwgInfo (#i79945)
+    SfxObjectShell * const pObjShell( GetDocShell() );
+    if (pObjShell)
+    {
+        const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                pObjShell->GetModel(), uno::UNO_QUERY_THROW);
+        const uno::Reference<document::XDocumentProperties> xDocProps(
+                xDPS->getDocumentProperties());
+        // #i96786#: do not set modified flag when updating statistics
+        const bool bDocWasModified( IsModified() );
+        const ModifyBlocker_Impl b(pObjShell);
+        xDocProps->setDocumentStatistics(aStat);
+        if (!bDocWasModified)
+        {
+            ResetModified();
+        }
+    }
+
+    // optionally update stat. fields
+    SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
+    pType->UpdateFlds();
+
+    return nTextNodes <= 0;
+}
+
+IMPL_LINK( SwDoc, DoIdleStatsUpdate, Timer *, pTimer )
+{
+    (void)pTimer;
+    if( IncrementalDocStatCalculate( 1000 ) )
+        aStatsUpdateTimer.Start();
+
+    SwView* pView = GetDocShell() ? GetDocShell()->GetView() : NULL;
+    if( pView )
+        pView->UpdateDocStats();
+    return 0;
+}
+
+void SwDoc::UpdateDocStat( bool bCompleteAsync )
 {
     if( pDocStat->bModified )
     {
-        pDocStat->Reset();
-        pDocStat->nPara = 0;        // default is 1!
-        SwNode* pNd;
-
-        for( sal_uLong i = GetNodes().Count(); i; )
-        {
-            switch( ( pNd = GetNodes()[ --i ])->GetNodeType() )
-            {
-            case ND_TEXTNODE:
-                ((SwTxtNode*)pNd)->CountWords( *pDocStat, 0, ((SwTxtNode*)pNd)->GetTxt().Len() );
-                break;
-            case ND_TABLENODE:      ++pDocStat->nTbl;   break;
-            case ND_GRFNODE:        ++pDocStat->nGrf;   break;
-            case ND_OLENODE:        ++pDocStat->nOLE;   break;
-            case ND_SECTIONNODE:    break;
-            }
-        }
-
-        // #i93174#: notes contain paragraphs that are not nodes
-        {
-            SwFieldType * const pPostits( GetSysFldType(RES_POSTITFLD) );
-            SwIterator<SwFmtFld,SwFieldType> aIter( *pPostits );
-            for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
-            {
-                if (pFmtFld->IsFldInDoc())
-                {
-                    SwPostItField const * const pField(
-                        static_cast<SwPostItField const*>(pFmtFld->GetFld()));
-                    pDocStat->nAllPara += pField->GetNumberOfParagraphs();
-                }
-            }
-        }
-
-        pDocStat->nPage     = GetCurrentLayout() ? GetCurrentLayout()->GetPageNum() : 0;    //swmod 080218
-        pDocStat->bModified = sal_False;
-
-        com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( pDocStat->nPage ? 8 : 7);
-        sal_Int32 n=0;
-        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableCount"));
-        aStat[n++].Value <<= (sal_Int32)pDocStat->nTbl;
-        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageCount"));
-        aStat[n++].Value <<= (sal_Int32)pDocStat->nGrf;
-        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectCount"));
-        aStat[n++].Value <<= (sal_Int32)pDocStat->nOLE;
-        if ( pDocStat->nPage )
-        {
-            aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount"));
-            aStat[n++].Value <<= (sal_Int32)pDocStat->nPage;
-        }
-        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphCount"));
-        aStat[n++].Value <<= (sal_Int32)pDocStat->nPara;
-        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordCount"));
-        aStat[n++].Value <<= (sal_Int32)pDocStat->nWord;
-        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount"));
-        aStat[n++].Value <<= (sal_Int32)pDocStat->nChar;
-        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NonWhitespaceCharacterCount"));
-        aStat[n++].Value <<= (sal_Int32)pDocStat->nCharExcludingSpaces;
-
-        // For e.g. autotext documents there is no pSwgInfo (#i79945)
-        SfxObjectShell * const pObjShell( GetDocShell() );
-        if (pObjShell)
-        {
-            const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                pObjShell->GetModel(), uno::UNO_QUERY_THROW);
-            const uno::Reference<document::XDocumentProperties> xDocProps(
-                xDPS->getDocumentProperties());
-            // #i96786#: do not set modified flag when updating statistics
-            const bool bDocWasModified( IsModified() );
-            const ModifyBlocker_Impl b(pObjShell);
-            xDocProps->setDocumentStatistics(aStat);
-            if (!bDocWasModified)
-            {
-                ResetModified();
-            }
-        }
-
-        // optionally update stat. fields
-        SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
-        pType->UpdateFlds();
+        if (!bCompleteAsync)
+            while (IncrementalDocStatCalculate()) {}
+        else if (IncrementalDocStatCalculate())
+            aStatsUpdateTimer.Start();
     }
 }
 

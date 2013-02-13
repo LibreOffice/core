@@ -32,7 +32,7 @@
 #include <vcl/msgbox.hxx>
 
 IMPL_LINK_NOARG(SwWordCountFloatDlg, CloseHdl)
-{   
+{
     SfxViewFrame* pVFrame = ::GetActiveView()->GetViewFrame();
     if (pVFrame != NULL)
     {
