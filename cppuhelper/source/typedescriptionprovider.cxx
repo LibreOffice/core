@@ -259,10 +259,9 @@ struct Memory32 {
     }
 
     float getIso60599Binary32() const {
-        // Create a copy in either case, for alignment:
         union {
             unsigned char buf[4];
-            float f;
+            float f; // assuming float is ISO 60599 binary32
         } sa;
 #if defined OSL_LITENDIAN
         sa.buf[0] = byte[0];
@@ -276,7 +275,6 @@ struct Memory32 {
         sa.buf[3] = byte[0];
 #endif
         return sa.f;
-            // assuming float is ISO 60599 binary32
     }
 };
 
@@ -296,10 +294,9 @@ struct Memory64 {
         }
 
     double getIso60599Binary64() const {
-        // Create a copy in either case, for alignment:
         union {
             unsigned char buf[8];
-            double d;
+            double d; // assuming double is ISO 60599 binary64
         } sa;
 #if defined OSL_LITENDIAN
         sa.buf[0] = byte[0];
@@ -321,7 +318,6 @@ struct Memory64 {
         sa.buf[7] = byte[0];
 #endif
         return sa.d;
-            // assuming double is ISO 60599 binary64
     }
 };
 

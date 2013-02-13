@@ -958,10 +958,9 @@ void write64(osl::File & file, sal_uInt64 value) {
 void writeIso60599Binary32(osl::File & file, float value) {
     union {
         unsigned char buf[4];
-        float f;
+        float f; // assuming float is ISO 60599 binary32
     } sa;
     sa.f = value;
-        // assuming float is ISO 60599 binary32
 #if defined OSL_BIGENDIAN
     std::swap(sa.buf[0], sa.buf[3]);
     std::swap(sa.buf[1], sa.buf[2]);
@@ -970,13 +969,11 @@ void writeIso60599Binary32(osl::File & file, float value) {
 }
 
 void writeIso60599Binary64(osl::File & file, double value) {
-    union
-    {
+    union {
         unsigned char buf[8];
-        float d;
+        float d; // assuming double is ISO 60599 binary64
     } sa;
     sa.d = value;
-        // assuming double is ISO 60599 binary64
 #if defined OSL_BIGENDIAN
     std::swap(sa.buf[0], sa.buf[7]);
     std::swap(sa.buf[1], sa.buf[6]);
