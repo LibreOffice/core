@@ -779,8 +779,7 @@ void ScXMLTableRowCellContext::EndElement()
                 bool bWasEmpty = bIsEmpty;
 //              uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
-                if ((pContentValidationName && !pContentValidationName->isEmpty()) ||
-                    mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource)
+                if (mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource)
                     bIsEmpty = false;
 
                 for (sal_Int32 i = 0; i < nCellsRepeated; ++i)
