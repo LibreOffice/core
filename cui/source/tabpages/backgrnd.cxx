@@ -785,6 +785,9 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                     }
                     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
                         rCoreSet.ClearItem( nWhich );
+                    // Handle XFILL_GRADIENT -> XFILL_SOLID
+                    XFillStyleItem aFillStyleItem(XFILL_SOLID, GetWhich(SID_ATTR_FILL_STYLE));
+                    rCoreSet.Put(aFillStyleItem);
                 }
                 else
                 {
