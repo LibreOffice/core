@@ -956,8 +956,7 @@ void ScXMLTableRowCellContext::AddTextAndValueCells( const ScAddress& rCellPos,
 
 bool ScXMLTableRowCellContext::HasSpecialContent() const
 {
-    return ( (pContentValidationName && !pContentValidationName->isEmpty()) ||
-              mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource );
+    return (mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource);
 }
 
 bool ScXMLTableRowCellContext::CellsAreRepeated() const
