@@ -159,6 +159,9 @@ private:
     void exportDataPoints(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesProperties,
         sal_Int32 nSeriesLength );
+    void exportDataLabels(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesProperties,
+        sal_Int32 nSeriesLength );
     void exportGrouping( sal_Bool isBar = sal_False );
     void exportMarker();
     void exportSmooth();

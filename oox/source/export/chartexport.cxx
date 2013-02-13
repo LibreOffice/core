@@ -42,6 +42,7 @@
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -51,6 +52,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
@@ -1546,7 +1548,8 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                         }
                     }
 
-                    // TODO: Data Labels: show data lables
+                    // export data labels
+                    exportDataLabels( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
 
                     // export data points
                     exportDataPoints( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
@@ -2282,6 +2285,82 @@ void ChartExport::_exportAxis(
     // TODO: text properties
 
     pFS->endElement( FSNS( XML_c, nAxisType ) );
+}
+
+void ChartExport::exportDataLabels(
+    const uno::Reference< beans::XPropertySet > & xSeriesProperties,
+    sal_Int32 nSeriesLength )
+{
+    // TODO: export field separators, missing flag vs. showing series name or not
+    uno::Reference< chart2::XDataSeries > xSeries( xSeriesProperties, uno::UNO_QUERY );
+    Sequence< sal_Int32 > aDataPointSeq;
+    if( xSeriesProperties.is())
+    {
+        FSHelperPtr pFS = GetFS();
+        pFS->startElement( FSNS( XML_c, XML_dLbls ),
+                    FSEND );
+        sal_Int32 nElem;
+        for( nElem = 0; nElem < nSeriesLength; ++nElem)
+        {
+            uno::Reference< beans::XPropertySet > xPropSet;
+
+            try
+            {
+                xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
+                        xSeries, nElem, getModel() );
+            }
+            catch( const uno::Exception & rEx )
+            {
+                (void)rEx; // avoid warning for pro build
+                OSL_TRACE( "Exception caught during Export of data label: %s",
+                                rtl::OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            }
+
+            if( xPropSet.is() )
+            {
+               namespace cssc2 = ::com::sun::star::chart2;
+               cssc2::DataPointLabel aLabel;
+               if( GetProperty( xPropSet, S( "Label" ) ) )
+               {
+                   mAny >>= aLabel;
+
+                   namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
+                   sal_Int32 nPlacement;
+                   const char *aPlacement = NULL;
+
+                   if( GetProperty( xPropSet, S( "LabelPlacement" ) ) )
+                       mAny >>= nPlacement;
+
+                   switch( nPlacement )
+                   {
+                       case csscd::OUTSIDE:       aPlacement = "outEnd";  break;
+                       case csscd::INSIDE:        aPlacement = "inEnd";   break;
+                       case csscd::CENTER:        aPlacement = "ctr";     break;
+                       case csscd::NEAR_ORIGIN:   aPlacement = "inBase";  break;
+                       case csscd::TOP:           aPlacement = "t";       break;
+                       case csscd::BOTTOM:        aPlacement = "b";       break;
+                       case csscd::LEFT:          aPlacement = "l";       break;
+                       case csscd::RIGHT:         aPlacement = "r";       break;
+                       case csscd::AVOID_OVERLAP: aPlacement = "bestFit";  break;
+                   }
+
+                   pFS->startElement( FSNS( XML_c, XML_dLbl ), FSEND);
+                   pFS->singleElement( FSNS( XML_c, XML_idx), XML_val, I32S(nElem), FSEND);
+                   pFS->singleElement( FSNS( XML_c, XML_dLblPos), XML_val, aPlacement, FSEND);
+                   pFS->singleElement( FSNS( XML_c, XML_showLegendKey), XML_val,
+                                       aLabel.ShowLegendSymbol ? "1" : "0", FSEND);
+                   pFS->singleElement( FSNS( XML_c, XML_showVal), XML_val,
+                                       aLabel.ShowNumber ? "1" : "0", FSEND);
+                   pFS->singleElement( FSNS( XML_c, XML_showCatName), XML_val,
+                                       aLabel.ShowCategoryName ? "1" : "0", FSEND);
+                   pFS->singleElement( FSNS( XML_c, XML_showPercent), XML_val,
+                                       aLabel.ShowNumberInPercent ? "1" : "0", FSEND);
+                   pFS->endElement( FSNS( XML_c, XML_dLbl ));
+               }
+            }
+        }
+        pFS->endElement( FSNS( XML_c, XML_dLbls ) );
+    }
 }
 
 void ChartExport::exportDataPoints(
