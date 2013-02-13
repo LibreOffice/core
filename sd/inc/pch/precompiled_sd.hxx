@@ -80,6 +80,7 @@
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
+#include <com/sun/star/animations/SequenceTimeContainer.hpp>
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/ValuePair.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
@@ -131,6 +132,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -256,6 +258,7 @@
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/PresentationRange.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
+#include <com/sun/star/presentation/SlideShow.hpp>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
@@ -306,8 +309,8 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -368,14 +371,13 @@
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/autokernitem.hxx>
-#include <editeng/lineitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/bulletitem.hxx>
 #include <editeng/charreliefitem.hxx>
-#include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
@@ -395,6 +397,7 @@
 #include <editeng/frmdir.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/measfld.hxx>
@@ -438,6 +441,7 @@
 #include <new>
 #include <numeric>
 #include <o3tl/compat_functional.hxx>
+#include <officecfg/Office/Impress.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
@@ -644,6 +648,7 @@
 #include <svx/sdr/overlay/overlayobjectcell.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+#include <svx/sdr/properties/attributeproperties.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 #include <svx/sdrhittesthelper.hxx>

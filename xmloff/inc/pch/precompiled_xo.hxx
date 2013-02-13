@@ -42,6 +42,7 @@
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
+#include <com/sun/star/animations/SequenceTimeContainer.hpp>
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
@@ -134,6 +135,7 @@
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
@@ -156,6 +158,8 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XSet.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
+#include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -164,6 +168,8 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/document/XMLOasisBasicExporter.hpp>
+#include <com/sun/star/document/XMLOasisBasicImporter.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
@@ -456,7 +462,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
-#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
+#include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 #include <com/sun/star/xsd/XDataType.hpp>
@@ -494,6 +500,7 @@
 #include <o3tl/sorted_vector.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <rtl/instance.hxx>
@@ -543,6 +550,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
 #include <utility>
+#include <vcl/temporaryfonts.hxx>
 #include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

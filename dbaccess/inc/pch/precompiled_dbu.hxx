@@ -102,6 +102,7 @@
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XController2.hpp>
@@ -136,6 +137,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/mozilla/MozillaBootstrap.hpp>
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>

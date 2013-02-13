@@ -72,6 +72,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/ImageStatus.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -119,6 +120,8 @@
 #include <com/sun/star/container/XStringKeyMap.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
+#include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/RedlineDisplayType.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -134,6 +137,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
@@ -144,7 +148,9 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/embed/OOoEmbeddedObjectFactory.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
@@ -192,6 +198,7 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
+#include <com/sun/star/i18n/InputSequenceChecker.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
@@ -208,16 +215,15 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
+#include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
@@ -401,7 +407,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XRefreshListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
@@ -426,6 +431,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/flagguard.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/makesequence.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -450,6 +456,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cstdarg>
@@ -459,7 +466,6 @@
 #include <deque>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
@@ -481,19 +487,17 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/blinkitem.hxx>
-#include <editeng/lineitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/formatbreakitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/charscaleitem.hxx>
-#include <editeng/cmapitem.hxx>
-#include <editeng/contouritem.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/crossedoutitem.hxx>
 #include <editeng/charsetcoloritem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editerr.hxx>
@@ -509,6 +513,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/forbiddenruleitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/hangulhanja.hxx>
 #include <editeng/hngpnctitem.hxx>
@@ -517,6 +522,7 @@
 #include <editeng/keepitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/measfld.hxx>
@@ -993,6 +999,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/useroptions.hxx>
+#include <utility>
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/builder.hxx>

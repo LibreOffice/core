@@ -11,6 +11,7 @@
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ustrbuf.hxx"
+#include "sal/log.hxx"
 #include "tools/string.hxx"
 #include <algorithm>
 #include <assert.h>
@@ -19,6 +20,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <boost/bind.hpp>
+#include <boost/optional.hpp>
 #include <boost/unordered_map.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
@@ -126,6 +128,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
@@ -206,6 +209,8 @@
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/TempFile.hpp>
+#include <com/sun/star/io/TextInputStream.hpp>
+#include <com/sun/star/io/TextOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -213,8 +218,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/io/XTextInputStream.hpp>
-#include <com/sun/star/io/XTextOutputStream.hpp>
+#include <com/sun/star/io/XTextInputStream2.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -253,6 +257,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>

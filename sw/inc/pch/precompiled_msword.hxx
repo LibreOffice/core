@@ -21,6 +21,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -77,6 +78,7 @@
 #include <comphelper/stlunosequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <config_version.h>
 #include <cppuhelper/implementationentry.hxx>
 #include <cstdio>
 #include <cstring>
@@ -85,15 +87,14 @@
 #include <editeng/autokernitem.hxx>
 #include <editeng/blinkitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/formatbreakitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/cmapitem.hxx>
-#include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
@@ -104,6 +105,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
@@ -220,7 +222,9 @@
 #include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xfillit.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xlineit.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

@@ -27,10 +27,12 @@
 #include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/datatransfer/XTransferable.hpp"
+#include "com/sun/star/datatransfer/clipboard/SystemClipboard.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboard.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboardEx.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboardListener.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp"
+#include "com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp"
 #include "com/sun/star/datatransfer/dnd/DNDConstants.hpp"
 #include "com/sun/star/datatransfer/dnd/XDragSource.hpp"
 #include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
@@ -59,8 +61,8 @@
 #include "com/sun/star/rendering/XSpriteCanvas.hpp"
 #include "com/sun/star/script/XInvocation.hpp"
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
+#include "com/sun/star/ui/dialogs/FilePicker.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include "com/sun/star/ui/dialogs/XFilePicker.hpp"
 #include "com/sun/star/ui/dialogs/XFilterManager.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
@@ -74,7 +76,6 @@
 #include "comphelper/processfactory.hxx"
 #include "cppuhelper/compbase1.hxx"
 #include "cppuhelper/compbase2.hxx"
-#include "cppuhelper/compbase3.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "i18npool/languagetag.hxx"
@@ -208,6 +209,7 @@
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
+#include <com/sun/star/i18n/InputSequenceChecker.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/ScriptDirection.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -215,11 +217,9 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
-#include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/java/XJavaThreadRegister_11.hpp>
-#include <com/sun/star/java/XJavaVM.hpp>
+#include <com/sun/star/java/JavaVirtualMachine.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>

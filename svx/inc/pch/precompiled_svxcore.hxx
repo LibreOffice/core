@@ -13,7 +13,6 @@
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include "cppuhelper/factory.hxx"
 #include "editeng/AccessibleStringWrap.hxx"
-#include "editeng/bolnitem.hxx"
 #include "editeng/borderline.hxx"
 #include "editeng/boxitem.hxx"
 #include "editeng/editobj.hxx"
@@ -22,6 +21,7 @@
 #include "editeng/fontitem.hxx"
 #include "editeng/forbiddencharacterstable.hxx"
 #include "editeng/frmdiritem.hxx"
+#include "editeng/lineitem.hxx"
 #include "editeng/outlobj.hxx"
 #include "editeng/shaditem.hxx"
 #include "editeng/unolingu.hxx"
@@ -82,6 +82,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
+#include <cassert>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/InvalidateStyle.hpp>
@@ -362,18 +363,17 @@
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
-#include <editeng/adjitem.hxx>
-#include <editeng/akrnitem.hxx>
-#include <editeng/bolnitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/autokernitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brshitem.hxx>
-#include <editeng/bulitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/bulletitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/charscaleitem.hxx>
-#include <editeng/cntritem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/crsditem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
@@ -381,8 +381,8 @@
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/eerdll.hxx>
-#include <editeng/emphitem.hxx>
-#include <editeng/escpitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/flstitem.hxx>
@@ -390,6 +390,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/itemtype.hxx>
 #include <editeng/kernitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/measfld.hxx>
 #include <editeng/numitem.hxx>
