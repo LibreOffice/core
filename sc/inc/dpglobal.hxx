@@ -35,14 +35,14 @@
 #define     PIVOT_FUNC_STD_VARP     0x0400
 #define     PIVOT_FUNC_AUTO         0x1000
 
-struct ScDPValueData
+struct ScDPValue
 {
     enum Type { Empty = 0, Value, String, Error };
 
     double mfValue;
     Type meType;
 
-    ScDPValueData();
+    ScDPValue();
 
     void Set( double fV, Type eT );
 };

@@ -9,9 +9,9 @@
 
 #include "dpglobal.hxx"
 
-ScDPValueData::ScDPValueData() : mfValue(0.0), meType(String) {}
+ScDPValue::ScDPValue() : mfValue(0.0), meType(String) {}
 
-void ScDPValueData::Set( double fV, Type eT )
+void ScDPValue::Set( double fV, Type eT )
 {
     mfValue = fV;
     meType = eT;

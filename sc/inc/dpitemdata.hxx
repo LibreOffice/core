@@ -110,7 +110,7 @@ public:
     GroupValueAttr GetGroupValue() const;
     bool HasStringData() const ;
 
-    ScDPValueData::Type GetCellType() const;
+    ScDPValue::Type GetCellType() const;
 
 #if DEBUG_PIVOT_TABLE
     void Dump(const char* msg) const;

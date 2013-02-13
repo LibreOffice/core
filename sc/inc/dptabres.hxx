@@ -49,7 +49,7 @@ class ScDPAggData;
 class ScDPResultMember;
 class ScDPResultVisibilityData;
 
-struct ScDPValueData;
+struct ScDPValue;
 class ScDPItemData;
 
 /**
@@ -168,7 +168,7 @@ public:
             ScDPAggData() : fVal(0.0), fAux(0.0), nCount(SC_DPAGG_EMPTY), pChild(NULL) {}
             ~ScDPAggData() { delete pChild; }
 
-    void    Update( const ScDPValueData& rNext, ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
+    void    Update( const ScDPValue& rNext, ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
     void    Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
     sal_Bool    IsCalculated() const;
 
@@ -390,7 +390,7 @@ public:
     void                ProcessData( const ::std::vector<SCROW>& aChildMembers,
                                         const ScDPResultDimension* pDataDim,
                                         const ::std::vector<SCROW>& aDataMembers,
-                                        const ::std::vector<ScDPValueData>& aValues );
+                                        const ::std::vector<ScDPValue>& aValues );
     void                FillMemberResults( com::sun::star::uno::Sequence<
                                                 com::sun::star::sheet::MemberResult>* pSequences,
                                             long& rPos, long nMeasure, sal_Bool bRoot,
@@ -439,7 +439,7 @@ private:
     ScDPDataDimension*      pChildDimension;
     ScDPAggData             aAggregate;
 
-    void                UpdateValues( const ::std::vector<ScDPValueData>& aValues, const ScDPSubTotalState& rSubState );
+    void                UpdateValues( const ::std::vector<ScDPValue>& aValues, const ScDPSubTotalState& rSubState );
 
 public:
                         ScDPDataMember( const ScDPResultData* pData, const ScDPResultMember* pRes );
@@ -454,7 +454,7 @@ public:
     sal_Bool              IsNamedItem(   SCROW r ) const;
     sal_Bool                HasHiddenDetails() const;
 
-    void                ProcessData( const ::std::vector< SCROW >& aChildMembers, const ::std::vector<ScDPValueData>& aValues,
+    void                ProcessData( const ::std::vector< SCROW >& aChildMembers, const ::std::vector<ScDPValue>& aValues,
                                        const ScDPSubTotalState& rSubState );
     sal_Bool                HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const;
     double              GetAggregate( long nMeasure, const ScDPSubTotalState& rSubState ) const;
@@ -540,7 +540,7 @@ public:
     void                ProcessData( const ::std::vector<SCROW>& aMembers,
                                      const ScDPResultDimension* pDataDim,
                                      const ::std::vector<SCROW>& aDataMembers,
-                                     const ::std::vector<ScDPValueData>& aValues ) const;   //! Test
+                                     const ::std::vector<ScDPValue>& aValues ) const;   //! Test
     void                FillMemberResults( com::sun::star::uno::Sequence<
                                                 com::sun::star::sheet::MemberResult>* pSequences,
                                             long nStart, long nMeasure );
@@ -610,7 +610,7 @@ public:
                         ~ScDPDataDimension();
 
     void                InitFrom( const ScDPResultDimension* pDim );        // recursive
-    void                ProcessData( const ::std::vector< SCROW >& aDataMembers, const ::std::vector<ScDPValueData>& aValues,
+    void                ProcessData( const ::std::vector< SCROW >& aDataMembers, const ::std::vector<ScDPValue>& aValues,
                                        const ScDPSubTotalState& rSubState );
     void                FillDataRow( const ScDPResultDimension* pRefDim,
                                     com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,

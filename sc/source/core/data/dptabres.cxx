@@ -362,12 +362,12 @@ ScDPRelativePos::ScDPRelativePos( long nBase, long nDir ) :
 
 // -----------------------------------------------------------------------
 
-void ScDPAggData::Update( const ScDPValueData& rNext, ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState )
+void ScDPAggData::Update( const ScDPValue& rNext, ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState )
 {
     if (nCount<0)       // error?
         return;         // nothing more...
 
-    if (rNext.meType == ScDPValueData::Empty)
+    if (rNext.meType == ScDPValue::Empty)
         return;
 
     if ( rSubState.eColForce != SUBTOTAL_FUNC_NONE && rSubState.eRowForce != SUBTOTAL_FUNC_NONE &&
@@ -381,12 +381,12 @@ void ScDPAggData::Update( const ScDPValueData& rNext, ScSubTotalFunc eFunc, cons
 
     if ( eFunc != SUBTOTAL_FUNC_CNT2 )          // CNT2 counts everything, incl. strings and errors
     {
-        if (rNext.meType == ScDPValueData::Error)
+        if (rNext.meType == ScDPValue::Error)
         {
             nCount = -1;        // -1 for error (not for CNT2)
             return;
         }
-        if (rNext.meType == ScDPValueData::String)
+        if (rNext.meType == ScDPValue::String)
             return;             // ignore
     }
 
@@ -1239,7 +1239,7 @@ long ScDPResultMember::GetSubTotalCount( long* pUserSubStart ) const
 }
 
 void ScDPResultMember::ProcessData( const vector< SCROW >& aChildMembers, const ScDPResultDimension* pDataDim,
-                                    const vector< SCROW >& aDataMembers, const vector<ScDPValueData>& aValues )
+                                    const vector< SCROW >& aDataMembers, const vector<ScDPValue>& aValues )
 {
     SetHasElements();
 
@@ -1843,7 +1843,7 @@ static long lcl_GetSubTotalPos( const ScDPSubTotalState& rSubState )
     return nRet;
 }
 
-void ScDPDataMember::UpdateValues( const vector<ScDPValueData>& aValues, const ScDPSubTotalState& rSubState )
+void ScDPDataMember::UpdateValues( const vector<ScDPValue>& aValues, const ScDPSubTotalState& rSubState )
 {
     //! find out how many and which subtotals are used
 
@@ -1867,7 +1867,7 @@ void ScDPDataMember::UpdateValues( const vector<ScDPValueData>& aValues, const S
     }
 }
 
-void ScDPDataMember::ProcessData( const vector< SCROW >& aChildMembers, const vector<ScDPValueData>& aValues,
+void ScDPDataMember::ProcessData( const vector< SCROW >& aChildMembers, const vector<ScDPValue>& aValues,
                                     const ScDPSubTotalState& rSubState )
 {
     if ( pResultData->IsLateInit() && !pChildDimension && pResultMember && pResultMember->GetChildDimension() )
@@ -2951,7 +2951,7 @@ bool ScDPResultDimension::IsValidEntry( const vector< SCROW >& aMembers ) const
 void ScDPResultDimension::ProcessData( const vector< SCROW >& aMembers,
                                        const ScDPResultDimension* pDataDim,
                                        const vector< SCROW >& aDataMembers,
-                                       const vector<ScDPValueData>& aValues ) const
+                                       const vector<ScDPValue>& aValues ) const
 {
     if (aMembers.empty())
         return;
@@ -3498,7 +3498,7 @@ void ScDPDataDimension::InitFrom( const ScDPResultDimension* pDim )
     }
 }
 
-void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const vector<ScDPValueData>& aValues,
+void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const vector<ScDPValue>& aValues,
                                      const ScDPSubTotalState& rSubState )
 {
     // the ScDPItemData array must contain enough entries for all dimensions - this isn't checked

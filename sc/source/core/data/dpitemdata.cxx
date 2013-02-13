@@ -267,21 +267,21 @@ ScDPItemData& ScDPItemData::operator= (const ScDPItemData& r)
     return *this;
 }
 
-ScDPValueData::Type ScDPItemData::GetCellType() const
+ScDPValue::Type ScDPItemData::GetCellType() const
 {
     switch (meType)
     {
         case Error:
-            return ScDPValueData::Error;
+            return ScDPValue::Error;
         case Empty:
-            return ScDPValueData::Empty;
+            return ScDPValue::Empty;
         case Value:
-            return ScDPValueData::Value;
+            return ScDPValue::Value;
         default:
             ;
     }
 
-    return ScDPValueData::String;
+    return ScDPValue::String;
 }
 
 #if DEBUG_PIVOT_TABLE

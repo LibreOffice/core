@@ -165,12 +165,12 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPFiltered
     for (sal_Int32 i = 0; i < n; ++i)
     {
         long nDim = rInfo.aDataSrcCols[i];
-        rData.aValues.push_back( ScDPValueData() );
+        rData.aValues.push_back( ScDPValue() );
         // #i111435# GetItemData needs dimension indexes including groups,
         // so the index must be checked here (groups aren't useful as data fields).
         if ( nDim < nCacheColumnCount )
         {
-            ScDPValueData& rVal = rData.aValues.back();
+            ScDPValue& rVal = rData.aValues.back();
             rCacheTable.getValue( rVal, static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), false);
         }
     }

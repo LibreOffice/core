@@ -157,7 +157,7 @@ protected:
         ::std::vector< SCROW >  aColData;
         ::std::vector< SCROW >  aRowData;
         ::std::vector< SCROW >  aPageData;
-        ::std::vector<ScDPValueData> aValues;
+        ::std::vector<ScDPValue> aValues;
     };
 
     void            FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPFilteredCache& rCacheTable, const CalcInfo& rInfo, CalcRowData& rData);

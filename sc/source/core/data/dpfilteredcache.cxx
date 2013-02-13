@@ -278,7 +278,7 @@ const ScDPItemData* ScDPFilteredCache::getCell(SCCOL nCol, SCROW nRow, bool bRep
    return mrCache.GetItemDataById( nCol, nId );
 }
 
-void  ScDPFilteredCache::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
+void  ScDPFilteredCache::getValue( ScDPValue& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
 {
     const ScDPItemData* pData = getCell( nCol, nRow, bRepeatIfEmpty );
 
@@ -288,7 +288,7 @@ void  ScDPFilteredCache::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, 
         rVal.meType = pData->GetCellType();
     }
     else
-        rVal.Set(0.0, ScDPValueData::Empty);
+        rVal.Set(0.0, ScDPValue::Empty);
 }
 
 rtl::OUString ScDPFilteredCache::getFieldName(SCCOL nIndex) const
