@@ -33,10 +33,24 @@
 #include <osl/process.h>
 #include <rtl/tencinfo.h>
 
+
+/* XXX NOTE:
+ * http://msdn.microsoft.com/en-us/library/windows/desktop/dd373848.aspx
+ * (retrieved 2013-02-13) has some weird description for the LOCALE_SISO*
+ * constants: "The maximum number of characters allowed for this string is
+ * nine, including a terminating null character." NINE?!? In ISO 639 and ISO
+ * 3166?
+ */
+#define ELP_LANGUAGE_FIELD_LENGTH 4
+#define ELP_COUNTRY_FIELD_LENGTH  3
+
+/** Struct used in EnumLocalesProcA() called via EnumSystemLocalesA() to obtain
+    available locales.
+*/
 struct EnumLocalesParams
 {
-    WCHAR Language[3];
-    WCHAR Country[3];
+    WCHAR Language[ELP_LANGUAGE_FIELD_LENGTH];
+    WCHAR Country[ELP_COUNTRY_FIELD_LENGTH];
     LCID  Locale;
 };
 
@@ -58,7 +72,7 @@ BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
     LCID  localeId;
     LPSTR pszEndA;
 
-    WCHAR langCode[4];
+    WCHAR langCode[ELP_LANGUAGE_FIELD_LENGTH];
 
     /* convert hex-string to LCID */
     localeId = strtol( lpLocaleStringA, &pszEndA, 16 );
@@ -76,16 +90,17 @@ BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
         an error under WinNT/2000 when called with an
         unicode only lcid
     */
-    if( GetLocaleInfo( localeId, LOCALE_SISO639LANGNAME , langCode, 4 ) )
+    if( GetLocaleInfo( localeId, LOCALE_SISO639LANGNAME , langCode, ELP_LANGUAGE_FIELD_LENGTH ) )
     {
-        WCHAR ctryCode[4];
+        WCHAR ctryCode[ELP_COUNTRY_FIELD_LENGTH];
 
         /* continue if language code does not match */
         if( 0 != wcscmp( langCode, params->Language ) )
             return TRUE;
 
         /* check if country code is set and equals the current locale */
-        if( '\0' != params->Country[0] && GetLocaleInfo( localeId, LOCALE_SISO3166CTRYNAME , ctryCode, 4 ) )
+        if( '\0' != params->Country[0] && GetLocaleInfo( localeId,
+                    LOCALE_SISO3166CTRYNAME , ctryCode, ELP_COUNTRY_FIELD_LENGTH ) )
         {
             /* save return value in TLS and break if  found desired locale */
             if( 0 == wcscmp( ctryCode, params->Country ) )
@@ -173,11 +188,11 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         osl_getProcessLocale( &pLocale );
 
     /* copy in parameters to structure */
-    if( pLocale && pLocale->Language )
+    if( pLocale && pLocale->Language && pLocale->Language->length < ELP_LANGUAGE_FIELD_LENGTH )
     {
         wcscpy( params.Language, pLocale->Language->buffer );
 
-        if( pLocale->Country )
+        if( pLocale->Country && pLocale->Country->length < ELP_COUNTRY_FIELD_LENGTH )
             wcscpy( params.Country, pLocale->Country->buffer );
 
         /* save pointer to local structure in TLS */
@@ -199,8 +214,8 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
-    WCHAR langCode[4];
-    WCHAR ctryCode[4];
+    WCHAR langCode[ELP_LANGUAGE_FIELD_LENGTH];
+    WCHAR ctryCode[ELP_COUNTRY_FIELD_LENGTH];
     LCID  localeId;
 
     OSL_ASSERT( ppLocale );
@@ -209,8 +224,8 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     localeId = GetUserDefaultLCID();
 
     /* call GetLocaleInfo to retrieve the iso codes */
-    if( GetLocaleInfo( localeId, LOCALE_SISO639LANGNAME , langCode, 4 )  &&
-        GetLocaleInfo( localeId, LOCALE_SISO3166CTRYNAME , ctryCode, 4 ) )
+    if( GetLocaleInfo( localeId, LOCALE_SISO639LANGNAME , langCode, ELP_LANGUAGE_FIELD_LENGTH )  &&
+        GetLocaleInfo( localeId, LOCALE_SISO3166CTRYNAME , ctryCode, ELP_COUNTRY_FIELD_LENGTH ) )
     {
         *ppLocale = rtl_locale_register( langCode, ctryCode, L"" );
     }
