@@ -77,6 +77,8 @@ public class BluetoothFinder {
                 BluetoothDevice aDevice = (BluetoothDevice) aIntent.getExtras()
                                 .get(BluetoothDevice.EXTRA_DEVICE);
                 Log.i(Globals.TAG, "BluetoothFinder.onReceive: found " + aDevice.getName() + " at " + aDevice.getAddress());
+                if (aDevice.getName() == null)
+                    return;
                 Server aServer = new Server(Protocol.BLUETOOTH,
                                 aDevice.getAddress(), aDevice.getName(),
                                 System.currentTimeMillis());
