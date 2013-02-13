@@ -148,7 +148,7 @@ void StartIndexingService(SC_HANDLE hService)
     }
 }
 
-extern "C" __declspec(dllexport) UINT __stdcall RestartIndexingService(MSIHANDLE)
+extern "C" UINT __stdcall RestartIndexingService(MSIHANDLE)
 {
     //MessageBox(NULL, TEXT("Restarting Indexing Service"), TEXT("Message"), MB_OK | MB_ICONINFORMATION);
 

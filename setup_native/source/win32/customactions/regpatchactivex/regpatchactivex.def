@@ -1,0 +1,3 @@
+LIBRARY		"regpatchactivex.dll"
+EXPORTS
+			PatchActiveXControl

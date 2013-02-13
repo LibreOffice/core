@@ -9,6 +9,10 @@
 
 $(eval $(call gb_Library_Library,instooofiltmsi))
 
+$(eval $(call gb_Library_add_ldflags,instooofiltmsi,\
+	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/indexingfilter/instooofiltmsi.def \
+))
+
 $(eval $(call gb_Library_add_exception_objects,instooofiltmsi,\
     setup_native/source/win32/customactions/indexingfilter/restartindexingservice \
 ))

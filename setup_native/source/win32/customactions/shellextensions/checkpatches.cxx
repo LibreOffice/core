@@ -86,7 +86,7 @@ static void SetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
     MsiSetProperty( handle, sProperty.c_str(), TEXT("1") );
 }
 
-extern "C" __declspec(dllexport) UINT __stdcall CheckPatchList( MSIHANDLE handle )
+extern "C" UINT __stdcall CheckPatchList( MSIHANDLE handle )
 {
     std::_tstring sPatchList = GetMsiProperty( handle, TEXT("PATCH") );
     std::_tstring sRequiredPatch = GetMsiProperty( handle, TEXT("PREREQUIREDPATCH") );

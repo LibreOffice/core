@@ -9,6 +9,10 @@
 
 $(eval $(call gb_Library_Library,jfregca))
 
+$(eval $(call gb_Library_add_ldflags,jfregca,\
+	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/javafilter/jfregca.def \
+))
+
 $(eval $(call gb_Library_add_exception_objects,jfregca,\
     setup_native/source/win32/customactions/javafilter/jfregca \
 ))

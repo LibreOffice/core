@@ -62,7 +62,7 @@ namespace
     }
 } // namespace
 
-extern "C" __declspec(dllexport) UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
+extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
 {
     TCHAR   szValue[8192];
     DWORD   nValueSize = sizeof(szValue);

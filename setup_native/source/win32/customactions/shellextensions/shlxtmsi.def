@@ -1,0 +1,14 @@
+LIBRARY		"shlxtmsi.dll"
+EXPORTS
+			CheckInstallDirectory
+			CheckPatchList
+			CompleteInstallPath
+			RebuildShellIconCache
+			CreateLayerLinks
+			RemoveLayerLinks
+			MigrateInstallPath
+			InstallStartmenuFolderIcon
+			DeinstallStartmenuFolderIcon
+			SetProductInstallMode
+			RenamePrgFolder
+			RemovePrgFolder

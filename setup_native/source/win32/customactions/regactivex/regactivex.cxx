@@ -294,7 +294,7 @@ BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
     return bResult;
 }
 //----------------------------------------------------------
-extern "C" __declspec(dllexport) UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
+extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
 {
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;
@@ -341,7 +341,7 @@ extern "C" __declspec(dllexport) UINT __stdcall InstallActiveXControl( MSIHANDLE
 }
 
 //----------------------------------------------------------
-extern "C" __declspec(dllexport) UINT __stdcall DeinstallActiveXControl( MSIHANDLE hMSI )
+extern "C" UINT __stdcall DeinstallActiveXControl( MSIHANDLE hMSI )
 {
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;

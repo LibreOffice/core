@@ -33,7 +33,7 @@
 #include "quickstarter.hxx"
 
 
-extern "C" __declspec(dllexport) UINT __stdcall RemoveQuickstarterLink( MSIHANDLE hMSI )
+extern "C" UINT __stdcall RemoveQuickstarterLink( MSIHANDLE hMSI )
 {
     CHAR    szStartupPath[MAX_PATH];
 

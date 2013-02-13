@@ -9,6 +9,10 @@
 
 $(eval $(call gb_Library_Library,regactivex))
 
+$(eval $(call gb_Library_add_ldflags,regactivex,\
+	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/regactivex/regactivex.def \
+))
+
 $(eval $(call gb_Library_add_exception_objects,regactivex,\
     setup_native/source/win32/customactions/regactivex/regactivex \
 ))

@@ -141,7 +141,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
 
 
 
-extern "C" __declspec(dllexport) UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
+extern "C" UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
 {
     std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
 
@@ -165,7 +165,7 @@ extern "C" __declspec(dllexport) UINT __stdcall RenamePrgFolder( MSIHANDLE handl
     return ERROR_SUCCESS;
 }
 
-extern "C" __declspec(dllexport) UINT __stdcall RemovePrgFolder( MSIHANDLE handle )
+extern "C" UINT __stdcall RemovePrgFolder( MSIHANDLE handle )
 {
     std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
     std::_tstring sRemoveDir = sOfficeInstallPath + TEXT("program_old");

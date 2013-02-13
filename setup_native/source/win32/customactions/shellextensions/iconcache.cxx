@@ -29,7 +29,7 @@
 
 #include <stdlib.h>
 
-extern "C" __declspec(dllexport) UINT __stdcall RebuildShellIconCache(MSIHANDLE)
+extern "C" UINT __stdcall RebuildShellIconCache(MSIHANDLE)
 {
     // Rebuild icon cache on windows OS prior XP
 

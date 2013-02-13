@@ -72,7 +72,7 @@ static inline void OutputDebugStringFormat( LPCTSTR, ... )
 #endif
 
 //----------------------------------------------------------
-extern "C" __declspec(dllexport) UINT __stdcall CheckVersions( MSIHANDLE hMSI )
+extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
 {
     // MessageBox(NULL, L"CheckVersions", L"Information", MB_OK | MB_ICONINFORMATION);
 

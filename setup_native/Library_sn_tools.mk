@@ -9,6 +9,10 @@
 
 $(eval $(call gb_Library_Library,sn_tools))
 
+$(eval $(call gb_Library_add_ldflags,sn_tools,\
+	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/tools/sn_tools.def \
+))
+
 $(eval $(call gb_Library_add_exception_objects,sn_tools,\
     setup_native/source/win32/customactions/tools/checkversion \
 ))

@@ -9,6 +9,10 @@
 
 $(eval $(call gb_Library_Library,sdqsmsi))
 
+$(eval $(call gb_Library_add_ldflags,sdqsmsi,\
+	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/quickstarter/sdqsmsi.def \
+))
+
 $(eval $(call gb_Library_add_exception_objects,sdqsmsi,\
     setup_native/source/win32/customactions/quickstarter/shutdown_quickstart \
 ))

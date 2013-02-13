@@ -62,7 +62,7 @@ static BOOL CALLBACK EnumWindowsProc( HWND hWnd, LPARAM lParam )
 }
 
 
-extern "C" __declspec(dllexport) UINT __stdcall ShutDownQuickstarter( MSIHANDLE hMSI )
+extern "C" UINT __stdcall ShutDownQuickstarter( MSIHANDLE hMSI )
 {
     EnumWindows( EnumWindowsProc, hMSI );
 

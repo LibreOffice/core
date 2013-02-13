@@ -80,7 +80,7 @@ BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 }
 
 //----------------------------------------------------------
-extern "C" __declspec(dllexport) UINT __stdcall PatchActiveXControl( MSIHANDLE hMSI )
+extern "C" UINT __stdcall PatchActiveXControl( MSIHANDLE hMSI )
 {
     // MessageBox(NULL, L"PatchActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);
 

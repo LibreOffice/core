@@ -14,12 +14,16 @@ $(eval $(call gb_Library_add_defs,reg4allmsdoc,\
 	-D_UNICODE \
 ))
 
+$(eval $(call gb_Library_add_ldflags,reg4allmsdoc,\
+	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/reg4allmsdoc/reg4allmsdoc.def \
+))
+
 $(eval $(call gb_Library_add_exception_objects,reg4allmsdoc,\
     setup_native/source/win32/customactions/reg4allmsdoc/reg4allmsi \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,reg4allmsdoc,\
-        msi \
+	msi \
 	kernel32 \
 	user32 \
 	advapi32 \

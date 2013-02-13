@@ -169,7 +169,7 @@ namespace
     }
 } // namespace
 
-extern "C" __declspec(dllexport) UINT __stdcall SetProductInstallMode(MSIHANDLE handle)
+extern "C" UINT __stdcall SetProductInstallMode(MSIHANDLE handle)
 {
     string upgradeCode = GetMsiProperty(handle, TEXT("UpgradeCode"));
     upgradeCode = ConvertGuid(string(upgradeCode.c_str() + 1, upgradeCode.length() - 2));

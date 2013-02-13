@@ -63,7 +63,7 @@ std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
     Called during installation to customize the start menu folder icon.
     See: http://msdn.microsoft.com/library/en-us/shellcc/platform/shell/programmersguide/shell_basics/shell_basics_extending/custom.asp
 */
-extern "C" __declspec(dllexport) UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
+extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
 {
     std::_tstring   sOfficeMenuFolder = GetMsiProperty( handle, TEXT("OfficeMenuFolder") );
     std::_tstring sDesktopFile = sOfficeMenuFolder + TEXT("Desktop.ini");
@@ -107,7 +107,7 @@ extern "C" __declspec(dllexport) UINT __stdcall InstallStartmenuFolderIcon( MSIH
     return ERROR_SUCCESS;
 }
 
-extern "C" __declspec(dllexport) UINT __stdcall DeinstallStartmenuFolderIcon(MSIHANDLE handle)
+extern "C" UINT __stdcall DeinstallStartmenuFolderIcon(MSIHANDLE handle)
 {
     std::_tstring   sOfficeMenuFolder = GetMsiProperty( handle, TEXT("OfficeMenuFolder") );
     std::_tstring sDesktopFile = sOfficeMenuFolder + TEXT("Desktop.ini");

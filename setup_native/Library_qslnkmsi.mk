@@ -9,6 +9,10 @@
 
 $(eval $(call gb_Library_Library,qslnkmsi))
 
+$(eval $(call gb_Library_add_ldflags,qslnkmsi,\
+	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/quickstarter/qslnkmsi.def \
+))
+
 $(eval $(call gb_Library_add_exception_objects,qslnkmsi,\
     setup_native/source/win32/customactions/quickstarter/remove_quickstart_link \
 ))

@@ -74,7 +74,7 @@ static void SetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty, con
     MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
 }
 
-extern "C" __declspec(dllexport) UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
+extern "C" UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
 {
     std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
     std::_tstring sOfficeHostnamePath = GetMsiProperty(handle, TEXT("OFFICEDIRHOSTNAME"));

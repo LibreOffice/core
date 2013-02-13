@@ -11,6 +11,10 @@ $(eval $(call gb_Library_Library,shlxtmsi))
 
 $(eval $(call gb_Library_use_external,shlxtmsi,boost_headers))
 
+$(eval $(call gb_Library_add_ldflags,shlxtmsi,\
+	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/shellextensions/shlxtmsi.def \
+))
+
 $(eval $(call gb_Library_add_exception_objects,shlxtmsi,\
     setup_native/source/win32/customactions/shellextensions/startmenuicon \
     setup_native/source/win32/customactions/shellextensions/upgrade \

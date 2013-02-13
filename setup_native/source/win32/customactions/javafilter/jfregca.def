@@ -1,0 +1,4 @@
+LIBRARY		"jfregca.dll"
+EXPORTS
+			install_jf
+			uninstall_jf

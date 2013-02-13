@@ -302,7 +302,7 @@ static void registerSomeExtensions( MSIHANDLE handle, const int nStart, const in
     }
 }
 
-extern "C" __declspec(dllexport) UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
+extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
 {
     OutputDebugStringFormat( "LookForRegisteredExtensions: " );
 
@@ -403,7 +403,7 @@ extern "C" __declspec(dllexport) UINT __stdcall LookForRegisteredExtensions( MSI
     return ERROR_SUCCESS;
 }
 
-extern "C" __declspec(dllexport) UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
+extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
 {
     OutputDebugStringFormat( "RegisterSomeExtensions: " );
 
@@ -457,7 +457,7 @@ extern "C" __declspec(dllexport) UINT __stdcall RegisterSomeExtensions( MSIHANDL
     return ERROR_SUCCESS;
 }
 
-extern "C" __declspec(dllexport) UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
+extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
 {
     if ( IsSetMsiProp( handle, "FILETYPEDIALOGUSED" ) )
     {
@@ -546,7 +546,7 @@ static void restoreOldRegistration( LPCSTR lpSubKey )
     }
 }
 
-extern "C" __declspec(dllexport) UINT __stdcall RestoreRegAllMSDoc( MSIHANDLE /*handle*/ )
+extern "C" UINT __stdcall RestoreRegAllMSDoc( MSIHANDLE /*handle*/ )
 {
     OutputDebugStringFormat( "RestoreRegAllMSDoc\n" );
 

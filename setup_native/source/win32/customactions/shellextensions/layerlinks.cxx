@@ -88,7 +88,7 @@ namespace
     }
 } // namespace
 
-extern "C" __declspec(dllexport) UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
+extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
 {
     string sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
 
@@ -147,7 +147,7 @@ extern "C" __declspec(dllexport) UINT __stdcall CreateLayerLinks(MSIHANDLE handl
     return ERROR_SUCCESS;
 }
 
-extern "C" __declspec(dllexport) UINT __stdcall RemoveLayerLinks(MSIHANDLE handle)
+extern "C" UINT __stdcall RemoveLayerLinks(MSIHANDLE handle)
 {
     string sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
 
