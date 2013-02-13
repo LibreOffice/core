@@ -41,39 +41,32 @@ class SFX2_DLLPUBLIC SfxCommonPrintOptionsTabPage : public SfxTabPage
 {
 private:
 
-    FixedLine           aReduceGB;
+    RadioButton*        m_pPrinterOutputRB;
+    RadioButton*        m_pPrintFileOutputRB;
 
-    FixedText           aOutputTypeFT;
-    RadioButton         aPrinterOutputRB;
-    RadioButton         aPrintFileOutputRB;
+    CheckBox*           m_pReduceTransparencyCB;
+    RadioButton*        m_pReduceTransparencyAutoRB;
+    RadioButton*        m_pReduceTransparencyNoneRB;
 
-    FixedLine           aOutputGB;
+    CheckBox*           m_pReduceGradientsCB;
+    RadioButton*        m_pReduceGradientsStripesRB;
+    RadioButton*        m_pReduceGradientsColorRB;
+    NumericField*       m_pReduceGradientsStepCountNF;
 
-    CheckBox            aReduceTransparencyCB;
-    RadioButton         aReduceTransparencyAutoRB;
-    RadioButton         aReduceTransparencyNoneRB;
+    CheckBox*           m_pReduceBitmapsCB;
+    RadioButton*        m_pReduceBitmapsOptimalRB;
+    RadioButton*        m_pReduceBitmapsNormalRB;
+    RadioButton*        m_pReduceBitmapsResolutionRB;
+    ListBox*            m_pReduceBitmapsResolutionLB;
+    CheckBox*           m_pReduceBitmapsTransparencyCB;
 
-    CheckBox            aReduceGradientsCB;
-    RadioButton         aReduceGradientsStripesRB;
-    RadioButton         aReduceGradientsColorRB;
-    NumericField        aReduceGradientsStepCountNF;
+    CheckBox*           m_pConvertToGreyscalesCB;
 
-    CheckBox            aReduceBitmapsCB;
-    RadioButton         aReduceBitmapsOptimalRB;
-    RadioButton         aReduceBitmapsNormalRB;
-    RadioButton         aReduceBitmapsResolutionRB;
-    ListBox             aReduceBitmapsResolutionLB;
-    CheckBox            aReduceBitmapsTransparencyCB;
+    CheckBox*           m_pPDFCB;
 
-    CheckBox            aConvertToGreyscalesCB;
-
-    CheckBox            aPDFCB;
-
-    FixedLine           aWarnGB;
-
-    CheckBox            aPaperSizeCB;
-    CheckBox            aPaperOrientationCB;
-    CheckBox            aTransparencyCB;
+    CheckBox*           m_pPaperSizeCB;
+    CheckBox*           m_pPaperOrientationCB;
+    CheckBox*           m_pTransparencyCB;
 
 private:
 
@@ -92,9 +85,6 @@ private:
 
     SAL_DLLPRIVATE void ImplUpdateControls( const PrinterOptions* pCurrentOptions );
     SAL_DLLPRIVATE void ImplSaveControls( PrinterOptions* pCurrentOptions );
-
-    // #i63982#
-    SAL_DLLPRIVATE void ImplSetAccessibleNames();
 
 protected:
 

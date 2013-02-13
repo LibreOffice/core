@@ -96,7 +96,6 @@
 #define HID_CNT_SENT_VIEW_UNSENT_ARTICLES                     "SFX2_HID_CNT_SENT_VIEW_UNSENT_ARTICLES"
 #define HID_CNT_SENT_VIEW_MARKED_ARTICLES                     "SFX2_HID_CNT_SENT_VIEW_MARKED_ARTICLES"
 #define HID_TABDLG_APPLY_BTN                                  "SFX2_HID_TABDLG_APPLY_BTN"
-#define HID_TP_COMMONPRINTOPTIONS                             "SFX2_HID_TP_COMMONPRINTOPTIONS"
 #define HID_HELP_WINDOW                                       "SFX2_HID_HELP_WINDOW"
 #define HID_HELP_LISTBOX                                      "SFX2_HID_HELP_LISTBOX"
 #define HID_HELP_TABCONTROL                                   "SFX2_HID_HELP_TABCONTROL"
