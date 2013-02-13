@@ -47,6 +47,7 @@ public abstract class Client {
                     CommunicationService aCommunicationService,
                     Receiver aReceiver) {
         mServer = aServer;
+        mName = aServer.getName();
         mCommunicationService = aCommunicationService;
         mReceiver = aReceiver;
         latestInstance = this;
@@ -92,7 +93,6 @@ public abstract class Client {
             // TODO stream couldn't be opened.
             e1.printStackTrace();
         } finally {
-            latestInstance = null;
             onDisconnect();
         }
 
