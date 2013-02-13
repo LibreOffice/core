@@ -952,9 +952,8 @@ void ScTabView::PaintBlock( bool bReset )
 {
     ScMarkData& rMark = aViewData.GetMarkData();
     SCTAB nTab = aViewData.GetTabNo();
-    bool bMark = rMark.IsMarked();
     bool bMulti = rMark.IsMultiMarked();
-    if (bMark || bMulti)
+    if (rMark.IsMarked() || bMulti)
     {
         ScRange aMarkRange;
         HideAllCursors();
@@ -966,8 +965,6 @@ void ScTabView::PaintBlock( bool bReset )
             rMark.GetMultiMarkArea(aMarkRange);
             rMark.MarkToSimple();
             rMark.SetMarking(bFlag);
-
-            bMark = rMark.IsMarked();
         }
         else
             rMark.GetMarkArea(aMarkRange);
