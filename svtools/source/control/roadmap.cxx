@@ -138,6 +138,7 @@ namespace svt
             ,m_iCurItemID( -1 )
             ,m_bInteractive( sal_True )
             ,m_bComplete( sal_True )
+            ,InCompleteHyperLabel ( NULL )
         {
         }
 
@@ -238,7 +239,7 @@ namespace svt
     {
         HL_Vector aItemsCopy = m_pImpl->getHyperLabels();
         m_pImpl->getHyperLabels().clear();
-        for ( HL_Vector::iterator i = aItemsCopy.begin(); i< aItemsCopy.end(); ++i )
+        for ( HL_Vector::iterator i = aItemsCopy.begin(); i != aItemsCopy.end(); ++i )
         {
             delete *i;
         }
@@ -309,7 +310,7 @@ namespace svt
 
         const HL_Vector& rItems = m_pImpl->getHyperLabels();
         for (   HL_Vector::const_iterator i = rItems.begin();
-                i < rItems.end();
+                i != rItems.end();
                 ++i
             )
         {
@@ -348,7 +349,7 @@ namespace svt
         {
             RoadmapItem* pItem = NULL;
             for (   HL_Vector::const_iterator i = rItems.begin() + _nIndex;
-                    i< rItems.end();
+                    i != rItems.end();
                     ++i, ++_nIndex
                 )
             {
@@ -435,7 +436,7 @@ namespace svt
 
             const HL_Vector& rItems = m_pImpl->getHyperLabels();
             for (   HL_Vector::const_iterator i = rItems.begin() + _nStartIndex;
-                    i < rItems.end();
+                    i != rItems.end();
                     ++i
                 )
             {
@@ -458,7 +459,7 @@ namespace svt
         ItemId nLocID = 0;
         const HL_Vector& rItems = m_pImpl->getHyperLabels();
         for (   HL_Vector::const_iterator i = rItems.begin() + _nStartIndex;
-                i < rItems.end();
+                i != rItems.end();
                 ++i
             )
         {
@@ -530,7 +531,7 @@ namespace svt
     {
         const HL_Vector& rItems = m_pImpl->getHyperLabels();
         for (   HL_Vector::const_iterator i = rItems.begin();
-                i < rItems.end();
+                i != rItems.end();
                 ++i
             )
         {
@@ -630,7 +631,7 @@ namespace svt
     {
         const HL_Vector& rItems = m_pImpl->getHyperLabels();
         for (   HL_Vector::const_iterator i = rItems.begin();
-                i < rItems.end();
+                i != rItems.end();
                 ++i
             )
         {
