@@ -2320,7 +2320,7 @@ void ChartExport::exportDataLabels(
             {
                namespace cssc2 = ::com::sun::star::chart2;
                cssc2::DataPointLabel aLabel;
-               if( GetProperty( xPropSet, S( "Label" ) ) )
+               if (GetProperty( xPropSet, "Label"))
                {
                    mAny >>= aLabel;
 
@@ -2328,7 +2328,7 @@ void ChartExport::exportDataLabels(
                    sal_Int32 nPlacement;
                    const char *aPlacement = NULL;
 
-                   if( GetProperty( xPropSet, S( "LabelPlacement" ) ) )
+                   if (GetProperty( xPropSet, "LabelPlacement"))
                        mAny >>= nPlacement;
 
                    switch( nPlacement )
