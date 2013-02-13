@@ -35,6 +35,18 @@
 #define     PIVOT_FUNC_STD_VARP     0x0400
 #define     PIVOT_FUNC_AUTO         0x1000
 
+struct ScDPValueData
+{
+    enum Type { Empty = 0, Value, String, Error };
+
+    double mfValue;
+    Type meType;
+
+    ScDPValueData();
+
+    void Set( double fV, Type eT );
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

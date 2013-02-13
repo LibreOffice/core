@@ -122,6 +122,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/document \
 	sc/source/core/data/dpdimsave \
 	sc/source/core/data/dpfilteredcache \
+	sc/source/core/data/dpglobal \
 	sc/source/core/data/dpgroup \
 	sc/source/core/data/dpitemdata \
 	sc/source/core/data/dpnumgroupinfo \

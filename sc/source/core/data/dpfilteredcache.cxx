@@ -284,11 +284,11 @@ void  ScDPFilteredCache::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, 
 
     if (pData)
     {
-        rVal.fValue = pData->IsValue() ? pData->GetValue() : 0.0;
-        rVal.nType = pData->GetCellType();
+        rVal.mfValue = pData->IsValue() ? pData->GetValue() : 0.0;
+        rVal.meType = pData->GetCellType();
     }
     else
-        rVal.Set(0.0, SC_VALTYPE_EMPTY);
+        rVal.Set(0.0, ScDPValueData::Empty);
 }
 
 rtl::OUString ScDPFilteredCache::getFieldName(SCCOL nIndex) const

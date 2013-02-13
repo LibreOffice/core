@@ -36,6 +36,7 @@
 #include "tools/solar.h"
 #include "rtl/ustring.hxx"
 #include "dpmacros.hxx"
+#include "dpglobal.hxx"
 
 /**
  * When assigning a string value, you can also assign an interned string
@@ -109,7 +110,7 @@ public:
     GroupValueAttr GetGroupValue() const;
     bool HasStringData() const ;
 
-    sal_uInt8 GetCellType() const;
+    ScDPValueData::Type GetCellType() const;
 
 #if DEBUG_PIVOT_TABLE
     void Dump(const char* msg) const;

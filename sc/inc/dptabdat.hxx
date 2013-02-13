@@ -54,24 +54,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
 #define SC_DAPI_LEVEL_WEEK      4
 #define SC_DAPI_LEVEL_WEEKDAY   5
 
-
-//
-//  base class ScDPTableData to allow implementation with tabular data
-//  by deriving only of this
-//
-#define SC_VALTYPE_EMPTY    0
-#define SC_VALTYPE_VALUE    1
-#define SC_VALTYPE_STRING   2
-#define SC_VALTYPE_ERROR    3
-
-struct ScDPValueData
-{
-    double  fValue;
-    sal_uInt8   nType;
-
-    void    Set( double fV, sal_uInt8 nT ) { fValue = fV; nType = nT; }
-};
-
 class ScDPResultMember;
 class ScDPDimension;
 class ScDPLevel;

@@ -267,21 +267,21 @@ ScDPItemData& ScDPItemData::operator= (const ScDPItemData& r)
     return *this;
 }
 
-sal_uInt8 ScDPItemData::GetCellType() const
+ScDPValueData::Type ScDPItemData::GetCellType() const
 {
     switch (meType)
     {
         case Error:
-            return SC_VALTYPE_ERROR;
+            return ScDPValueData::Error;
         case Empty:
-            return SC_VALTYPE_EMPTY;
+            return ScDPValueData::Empty;
         case Value:
-            return SC_VALTYPE_VALUE;
+            return ScDPValueData::Value;
         default:
             ;
     }
 
-    return SC_VALTYPE_STRING;
+    return ScDPValueData::String;
 }
 
 #if DEBUG_PIVOT_TABLE

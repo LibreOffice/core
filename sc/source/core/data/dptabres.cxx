@@ -367,7 +367,7 @@ void ScDPAggData::Update( const ScDPValueData& rNext, ScSubTotalFunc eFunc, cons
     if (nCount<0)       // error?
         return;         // nothing more...
 
-    if ( rNext.nType == SC_VALTYPE_EMPTY )
+    if (rNext.meType == ScDPValueData::Empty)
         return;
 
     if ( rSubState.eColForce != SUBTOTAL_FUNC_NONE && rSubState.eRowForce != SUBTOTAL_FUNC_NONE &&
@@ -381,12 +381,12 @@ void ScDPAggData::Update( const ScDPValueData& rNext, ScSubTotalFunc eFunc, cons
 
     if ( eFunc != SUBTOTAL_FUNC_CNT2 )          // CNT2 counts everything, incl. strings and errors
     {
-        if ( rNext.nType == SC_VALTYPE_ERROR )
+        if (rNext.meType == ScDPValueData::Error)
         {
             nCount = -1;        // -1 for error (not for CNT2)
             return;
         }
-        if ( rNext.nType == SC_VALTYPE_STRING )
+        if (rNext.meType == ScDPValueData::String)
             return;             // ignore
     }
 
@@ -396,13 +396,13 @@ void ScDPAggData::Update( const ScDPValueData& rNext, ScSubTotalFunc eFunc, cons
     {
         case SUBTOTAL_FUNC_SUM:
         case SUBTOTAL_FUNC_AVE:
-            if ( !SubTotal::SafePlus( fVal, rNext.fValue ) )
+            if ( !SubTotal::SafePlus( fVal, rNext.mfValue ) )
                 nCount = -1;                            // -1 for error
             break;
         case SUBTOTAL_FUNC_PROD:
             if ( nCount == 1 )          // copy first value (fVal is initialized to 0)
-                fVal = rNext.fValue;
-            else if ( !SubTotal::SafeMult( fVal, rNext.fValue ) )
+                fVal = rNext.mfValue;
+            else if ( !SubTotal::SafeMult( fVal, rNext.mfValue ) )
                 nCount = -1;                            // -1 for error
             break;
         case SUBTOTAL_FUNC_CNT:
@@ -410,12 +410,12 @@ void ScDPAggData::Update( const ScDPValueData& rNext, ScSubTotalFunc eFunc, cons
             //  nothing more than incrementing nCount
             break;
         case SUBTOTAL_FUNC_MAX:
-            if ( nCount == 1 || rNext.fValue > fVal )
-                fVal = rNext.fValue;
+            if ( nCount == 1 || rNext.mfValue > fVal )
+                fVal = rNext.mfValue;
             break;
         case SUBTOTAL_FUNC_MIN:
-            if ( nCount == 1 || rNext.fValue < fVal )
-                fVal = rNext.fValue;
+            if ( nCount == 1 || rNext.mfValue < fVal )
+                fVal = rNext.mfValue;
             break;
         case SUBTOTAL_FUNC_STD:
         case SUBTOTAL_FUNC_STDP:
@@ -423,10 +423,10 @@ void ScDPAggData::Update( const ScDPValueData& rNext, ScSubTotalFunc eFunc, cons
         case SUBTOTAL_FUNC_VARP:
             {
                 // fAux is used to sum up squares
-                if ( !SubTotal::SafePlus( fVal, rNext.fValue ) )
+                if ( !SubTotal::SafePlus( fVal, rNext.mfValue ) )
                     nCount = -1;                            // -1 for error
-                double fAdd = rNext.fValue;
-                if ( !SubTotal::SafeMult( fAdd, rNext.fValue ) ||
+                double fAdd = rNext.mfValue;
+                if ( !SubTotal::SafeMult( fAdd, rNext.mfValue ) ||
                      !SubTotal::SafePlus( fAux, fAdd ) )
                     nCount = -1;                            // -1 for error
             }
