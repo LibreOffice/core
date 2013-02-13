@@ -40,7 +40,6 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 	Library_sellangmsi \
 	Library_shlxtmsi \
 	Library_sn_tools \
-	Library_thidxmsi \
 	StaticLibrary_quickstarter \
 	StaticLibrary_seterror \
 ))
