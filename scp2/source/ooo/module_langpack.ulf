@@ -32,10 +32,10 @@ en-US = "Additional user interface languages"
 en-US = "Additional user interface languages"
 
 [STR_NAME_MODULE_LANGPACK_EN_US]
-en-US = "English"
+en-US = "English (United States)"
 
 [STR_DESC_MODULE_LANGPACK_EN_US]
-en-US = "Installs the English user interface"
+en-US = "Installs the English (United States) user interface"
 
 [STR_NAME_MODULE_LANGPACK_DE]
 en-US = "German"

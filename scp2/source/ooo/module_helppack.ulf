@@ -32,10 +32,10 @@ en-US = "Additional help packs"
 en-US = "Additional help packs"
 
 [STR_NAME_MODULE_HELPPACK_EN_US]
-en-US = "English"
+en-US = "English (United States)"
 
 [STR_DESC_MODULE_HELPPACK_EN_US]
-en-US = "Installs English help in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs English (United States) help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_DE]
 en-US = "German"
