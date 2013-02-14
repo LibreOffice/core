@@ -81,6 +81,17 @@ $(eval $(call gb_CppunitTest_use_system_win32_libs,sd_uimpress,\
 ))
 endif
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_CppunitTest_add_libs,sd_uimpress,\
+	-lobjc \
+))
+
+$(eval $(call gb_CppunitTest_use_system_darwin_frameworks,sd_uimpress,\
+	Foundation \
+	IOBluetooth \
+))
+endif
+
 $(eval $(call gb_CppunitTest_use_externals,sd_uimpress,\
 	boost_headers \
     gtk \

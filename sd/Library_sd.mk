@@ -532,9 +532,29 @@ $(eval $(call gb_Library_add_defs,sd,\
 ))
 
 ifeq ($(ENABLE_SDREMOTE_BLUETOOTH),YES)
+
+ifeq (,$(filter IOS MACOSX,$(OS)))
+
 $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/remotecontrol/BluetoothServer \
 ))
+
+else
+
+$(eval $(call gb_Library_add_objcxxobjects,sd,\
+    sd/source/ui/remotecontrol/BluetoothServer \
+))
+
+$(eval $(call gb_Library_add_libs,sd,\
+    -lobjc \
+))
+
+$(eval $(call gb_Library_use_system_darwin_frameworks,sd,\
+	Foundation \
+	IOBluetooth \
+))
+
+endif
 
 $(eval $(call gb_Library_add_defs,sd,\
     -DENABLE_SDREMOTE_BLUETOOTH \

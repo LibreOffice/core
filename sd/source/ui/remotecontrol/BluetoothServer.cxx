@@ -8,7 +8,7 @@
  */
 
 #include "BluetoothServer.hxx"
-#include "BluetoothServiceRecord.hxx"
+
 #include <stdio.h>
 
 #include <sal/log.hxx>
@@ -28,6 +28,7 @@
   #ifndef DBusGObjectPath
     #define DBusGObjectPath char // DBusGObjectPath is only present in newer version of dbus-glib
   #endif
+  #include "BluetoothServiceRecord.hxx"
 #endif
 
 #ifdef WIN32
@@ -36,6 +37,12 @@
   #undef WB_RIGHT
   #include <winsock2.h>
   #include <ws2bth.h>
+#endif
+
+#ifdef MACOSX
+  #include <premac.h>
+  #include <IOBluetooth/IOBluetooth.h>
+  #include <postmac.h>
 #endif
 
 #ifdef __MINGW32__
@@ -243,7 +250,6 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
     dbus_g_connection_unref( aConnection );
 #else // defined(LINUX) && defined(ENABLE_DBUS)
     (void) aDiscoverable; // avoid warnings
-    return;
 #endif
 }
 
@@ -337,7 +343,6 @@ void SAL_CALL BluetoothServer::run()
         }
     }
 
-// LINUX && ENABLE_DBUS
 #elif defined(WIN32)
     WORD wVersionRequested;
     WSADATA wsaData;
@@ -430,8 +435,109 @@ void SAL_CALL BluetoothServer::run()
         }
     }
 
-// WIN32
-#else // !((defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)) && !defined(WIN32)
+#elif defined(MACOSX)
+    // Build up dictionary at run-time instead of bothering with a
+    // .plist file, using the Objective-C API
+
+    // Compare to BluetoothServiceRecord.hxx
+
+    NSDictionary *dict =
+        [NSDictionary dictionaryWithObjectsAndKeys:
+
+         // Service class ID list
+         [NSArray arrayWithObject:
+          [IOBluetoothSDPUUID uuid16: kBluetoothSDPUUID16ServiceClassSerialPort]],
+         @"0001 - ServiceClassIDList",
+
+         // Protocol descriptor list
+         [NSArray arrayWithObjects:
+          [NSArray arrayWithObject: [IOBluetoothSDPUUID uuid16: kBluetoothSDPUUID16L2CAP]],
+          [NSArray arrayWithObjects:
+           [IOBluetoothSDPUUID uuid16: kBluetoothL2CAPPSMRFCOMM],
+           [NSDictionary dictionaryWithObjectsAndKeys:
+            [NSNumber numberWithInt: 1],
+            @"DataElementSize",
+            [NSNumber numberWithInt: 1],
+            @"DataElementType",
+            [NSNumber numberWithInt: 5], // RFCOMM port number, will be replaced if necessary automatically
+            @"DataElementValue",
+            nil],
+           nil],
+          nil],
+         @"0004 - Protocol descriptor list",
+
+         // Browse group list
+         [NSArray arrayWithObject:
+          [IOBluetoothSDPUUID uuid16: kBluetoothSDPUUID16ServiceClassPublicBrowseGroup]],
+         @"0005 - BrowseGroupList",
+
+         // Language base attribute ID list
+         [NSArray arrayWithObjects:
+          [NSData dataWithBytes: "en" length: 2],
+          [NSDictionary dictionaryWithObjectsAndKeys:
+           [NSNumber numberWithInt: 2],
+           @"DataElementSize",
+           [NSNumber numberWithInt: 1],
+           @"DataElementType",
+           [NSNumber numberWithInt: 0x006a], // encoding
+           @"DataElementValue",
+           nil],
+          [NSDictionary dictionaryWithObjectsAndKeys:
+           [NSNumber numberWithInt: 2],
+           @"DataElementSize",
+           [NSNumber numberWithInt: 1],
+           @"DataElementType",
+           [NSNumber numberWithInt: 0x0100], // offset
+           @"DataElementValue",
+           nil],
+          nil],
+         @"0006 - LanguageBaseAttributeIDList",
+
+         // Bluetooth profile descriptor list
+         [NSArray arrayWithObject:
+          [NSArray arrayWithObjects:
+           [IOBluetoothSDPUUID uuid16: kBluetoothSDPUUID16ServiceClassSerialPort],
+           [NSDictionary dictionaryWithObjectsAndKeys:
+            [NSNumber numberWithInt: 2],
+            @"DataElementSize",
+            [NSNumber numberWithInt: 1],
+            @"DataElementType",
+            [NSNumber numberWithInt: 0x0100], // version number ?
+            @"DataElementValue",
+            nil],
+           nil]],
+         @"0009 - BluetoothProfileDescriptorList",
+
+         // Attributes pointed to by the LanguageBaseAttributeIDList
+         @"LibreOffice Impress Remote Control",
+         @"0100 - ServiceName",
+         @"The Document Foundation",
+         @"0102 - ProviderName",
+         nil];
+
+    // Create service
+    IOBluetoothSDPServiceRecordRef serviceRecordRef;
+    IOReturn rc = IOBluetoothAddServiceDict((CFDictionaryRef) dict, &serviceRecordRef);
+
+    SAL_INFO("sd.bluetooth", "IOBluetoothAddServiceDict returned " << rc);
+
+    if (rc == kIOReturnSuccess)
+    {
+        IOBluetoothSDPServiceRecord *serviceRecord =
+            [IOBluetoothSDPServiceRecord withSDPServiceRecordRef: serviceRecordRef];
+
+        BluetoothRFCOMMChannelID channelID;
+        [serviceRecord getRFCOMMChannelID: &channelID];
+
+        BluetoothSDPServiceRecordHandle serviceRecordHandle;
+        [serviceRecord getServiceRecordHandle: &serviceRecordHandle];
+
+        // Do more...
+
+        (void) serviceRecord;
+    }
+    (void) mpCommunicators;
+#else
     (void) mpCommunicators; // avoid warnings about unused member
 #endif
 }

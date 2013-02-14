@@ -9654,7 +9654,7 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
     # If not explicitly enabled or disabled, default
     if test -z "$enable_sdremote_bluetooth"; then
         case "$OS" in
-        LINUX|WNT)
+        LINUX|MACOSX|WNT)
             # Default to yes for these
             enable_sdremote_bluetooth=yes
             ;;
