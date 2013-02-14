@@ -19,59 +19,6 @@
 #include "dialogs.hrc"
 #include "helpids.hrc"
 
-TabDialog RID_XMLSECTP_MACROSEC
-{
-    HelpID = HID_XMLSEC_TP_MACROSEC;
-    Size = MAP_APPFONT( TD_WIDTH, TD_HEIGHT );
-    OutputSize = TRUE;
-    Closeable = TRUE;
-    Moveable = TRUE;
-    SVLook = TRUE;
-
-    Text [ en-US ] = "Macro Security";
-    TabControl 1
-    {
-        Pos = MAP_APPFONT( TD_SP_INNERBORDER_LEFT, TD_SP_INNERBORDER_TOP );
-        Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT+RIDDER_HEIGHT );
-        SVLook = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_XMLSECTP_SECLEVEL;
-                Text [ en-US ] = "Security Level";
-            };
-            PageItem
-            {
-                Identifier = RID_XMLSECTP_TRUSTSOURCES;
-                Text [ en-US ] = "Trusted Sources";
-            };
-        };
-    };
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT( MS_COL_H, CV_ROW_A );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        DefButton = TRUE;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT( MS_COL_F, CV_ROW_A );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT( MS_COL_D, CV_ROW_A );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-    };
-    PushButton BTN_RESET
-    {
-        Pos = MAP_APPFONT( MS_COL_B, CV_ROW_A );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "Reset";
-    };
-};
-
 String RID_XMLSECTP_READONLY_CONFIG_TIP
 {
     Text [ en-US ] = "This setting is protected by the Administrator";

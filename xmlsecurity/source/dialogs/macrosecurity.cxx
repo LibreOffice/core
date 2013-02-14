@@ -62,33 +62,34 @@ IMPL_LINK_NOARG(MacroSecurity, OkBtnHdl)
     return 0;
 }
 
-MacroSecurity::MacroSecurity( Window* _pParent, const cssu::Reference< cssu::XComponentContext> &_rxCtx, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment )
-    :TabDialog          ( _pParent, XMLSEC_RES( RID_XMLSECTP_MACROSEC ) )
-    ,maTabCtrl          ( this, XMLSEC_RES( 1 ) )
-    ,maOkBtn            ( this, XMLSEC_RES( BTN_OK ) )
-    ,maCancelBtn        ( this, XMLSEC_RES( BTN_CANCEL ) )
-    ,maHelpBtn          ( this, XMLSEC_RES( BTN_HELP ) )
-    ,maResetBtn         ( this, XMLSEC_RES( BTN_RESET ) )
+MacroSecurity::MacroSecurity( Window* _pParent,
+    const cssu::Reference< cssu::XComponentContext> &_rxCtx,
+    const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment)
+    : TabDialog(_pParent, "MacroSecurityDialog", "xmlsec/ui/macrosecuritydialog.ui")
+    , mxCtx(_rxCtx)
+    , mxSecurityEnvironment(_rxSecurityEnvironment)
 {
-    FreeResource();
+    get(m_pTabCtrl, "tabcontrol");
+    get(m_pResetBtn, "reset");
+    get(m_pOkBtn, "ok");
 
-    mxCtx = _rxCtx;
-    mxSecurityEnvironment = _rxSecurityEnvironment;
+    mpLevelTP = new MacroSecurityLevelTP(m_pTabCtrl, this);
+    mpTrustSrcTP = new MacroSecurityTrustedSourcesTP(m_pTabCtrl, this);
 
-    mpLevelTP = new MacroSecurityLevelTP( &maTabCtrl, this );
-    mpTrustSrcTP = new MacroSecurityTrustedSourcesTP( &maTabCtrl, this );
+    m_nSecLevelId = m_pTabCtrl->GetPageId("SecurityLevelPage");
+    m_nSecTrustId = m_pTabCtrl->GetPageId("SecurityTrustPage");
 
-    maTabCtrl.SetTabPage( RID_XMLSECTP_SECLEVEL, mpLevelTP );
-    maTabCtrl.SetTabPage( RID_XMLSECTP_TRUSTSOURCES, mpTrustSrcTP );
-    maTabCtrl.SetCurPageId( RID_XMLSECTP_SECLEVEL );
+    m_pTabCtrl->SetTabPage(m_nSecLevelId, mpLevelTP);
+    m_pTabCtrl->SetTabPage(m_nSecTrustId, mpTrustSrcTP);
+    m_pTabCtrl->SetCurPageId(m_nSecLevelId);
 
-    maOkBtn.SetClickHdl( LINK( this, MacroSecurity, OkBtnHdl ) );
+    m_pOkBtn->SetClickHdl( LINK( this, MacroSecurity, OkBtnHdl ) );
 }
 
 MacroSecurity::~MacroSecurity()
 {
-    delete maTabCtrl.GetTabPage( RID_XMLSECTP_TRUSTSOURCES );
-    delete maTabCtrl.GetTabPage( RID_XMLSECTP_SECLEVEL );
+    delete m_pTabCtrl->GetTabPage(m_nSecTrustId);
+    delete m_pTabCtrl->GetTabPage(m_nSecLevelId);
 }
 
 MacroSecurityTP::MacroSecurityTP(Window* _pParent, const OString& rID,

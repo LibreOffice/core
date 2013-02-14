@@ -11,7 +11,8 @@
     <child>
       <object class="GtkRadioButton" id="low:wrap">
         <property name="label" translatable="yes">_Low (not recommended).
-All macros will be executed without confirmation. Use this setting only if you are certain that all documents that will be opened are safe.</property>
+All macros will be executed without confirmation.
+Use this setting only if you are certain that all documents that will be opened are safe.</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -49,7 +50,8 @@ Confirmation required before executing macros from untrusted sources.</property>
     <child>
       <object class="GtkRadioButton" id="high:wrap">
         <property name="label" translatable="yes">H_igh.
-Only signed macros from trusted sources are allowed to run. Unsigned macros are disabled.</property>
+Only signed macros from trusted sources are allowed to run.
+Unsigned macros are disabled.</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -69,7 +71,8 @@ Only signed macros from trusted sources are allowed to run. Unsigned macros are 
     <child>
       <object class="GtkRadioButton" id="vhigh:wrap">
         <property name="label" translatable="yes">_Very high.
-Only macros from trusted file locations are allowed to run. All other macros, regardless whether signed or not, are disabled.</property>
+Only macros from trusted file locations are allowed to run.
+All other macros, regardless whether signed or not, are disabled.</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>

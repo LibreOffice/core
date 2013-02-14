@@ -58,31 +58,32 @@ private:
     friend class MacroSecurityLevelTP;
     friend class MacroSecurityTrustedSourcesTP;
 
-    TabControl          maTabCtrl;
-    OKButton            maOkBtn;
-    CancelButton        maCancelBtn;
-    HelpButton          maHelpBtn;
-    PushButton          maResetBtn;
+    TabControl*         m_pTabCtrl;
+    OKButton*           m_pOkBtn;
+    PushButton*         m_pResetBtn;
 
     cssu::Reference< cssu::XComponentContext >  mxCtx;
     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >  mxSecurityEnvironment;
     SvtSecurityOptions                                          maSecOptions;
+
+    sal_uInt16 m_nSecLevelId;
+    sal_uInt16 m_nSecTrustId;
 
     MacroSecurityTP*    mpLevelTP;
     MacroSecurityTP*    mpTrustSrcTP;
 
     DECL_LINK(          OkBtnHdl, void* );
 public:
-    MacroSecurity( Window* pParent, const cssu::Reference< cssu::XComponentContext>& rxCtx, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment );
-    virtual             ~MacroSecurity();
+    MacroSecurity(Window* pParent,
+        const cssu::Reference< cssu::XComponentContext>& rxCtx,
+        const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
+    virtual ~MacroSecurity();
 
-    inline void     EnableReset( bool _bEnable = true );
+    inline void EnableReset(bool _bEnable = true)
+    {
+        m_pResetBtn->Enable ( _bEnable );
+    }
 };
-
-inline void MacroSecurity::EnableReset( bool _bEnable )
-{
-    maResetBtn.Enable ( _bEnable );
-}
 
 class MacroSecurityTP : public TabPage
 {

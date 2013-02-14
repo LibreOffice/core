@@ -26,7 +26,6 @@
 
 #define FL_BOTTOM_SEP                   50
 #define BTN_OK                          51
-#define BTN_CANCEL                      52
 #define BTN_HELP                        53
 #define LB_SIGNATURES                   54
 #define BTN_VIEWCERT                    55

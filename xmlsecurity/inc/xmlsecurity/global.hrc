@@ -25,9 +25,6 @@
 #define RID_XMLSECTP_GENERAL                1003
 #define RID_XMLSECTP_DETAILS                1004
 #define RID_XMLSECTP_CERTPATH               1005
-#define RID_XMLSECTP_MACROSEC               1006
-#define RID_XMLSECTP_SECLEVEL               1007
-#define RID_XMLSECTP_TRUSTSOURCES           1008
 #define RID_XMLSECTP_MACROWARN              1009
 #define RID_XMLSECTP_READONLY_CONFIG_TIP    1010
 #define RID_XMLSECTP_LOCK                   1011
