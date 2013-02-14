@@ -126,7 +126,6 @@ class MacroSecurityTrustedSourcesTP : public MacroSecurityTP
 private:
     FixedImage*         m_pTrustCertROFI;
     SvxSimpleTable*     m_pTrustCertLB;
-    PushButton*         m_pAddCertPB;
     PushButton*         m_pViewCertPB;
     PushButton*         m_pRemoveCertPB;
     FixedImage*         m_pTrustFileROFI;
