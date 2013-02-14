@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVX///+Y\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-14T10:51:24Z",
+      "side": 1,
+      "message": "Sounds great! Hopefully, done right, we could some day implement the apparently undoable configure option: \n\n --with-apps-only\u003d\"sw base\"",
+      "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVX///+g\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-14T10:51:24Z",
+      "side": 1,
+      "message": "s/me/be/",
+      "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVX///+c\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-14T10:51:24Z",
+      "side": 1,
+      "message": "to stay with basctl sample, what is missing to handle it completly?\n\nbasctl/Module_basctl.mk:\n------------------------------------------------------------------\n ifneq ($(DISABLE_SCRIPTING),TRUE)\n $(eval $(call gb_Module_add_targets,basctl,\\\n \tAllLangResTarget_basctl \\\n \tLibrary_basctl \\\n ))\n endif\n $(eval $(call gb_Module_add_targets,basctl,\\\n \tPackage_uiconfig \\\n \tUI_basicide \\\n ))\n------------------------------------------------------------------\n\nThis is not handled:\nconditionally, only if DISABLE_SCRIPTING !\u003d TRUE\n \tAllLangResTarget_basctl \\\n\nalways:\n \tPackage_uiconfig \\\n \tUI_basicide \\\n\nHow can we handle it?",
+      "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
