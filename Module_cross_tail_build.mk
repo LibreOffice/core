@@ -78,8 +78,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 		sot \
 		svtools \
 		toolkit \
-		tools \
-		unotools \
 	    vcl) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
