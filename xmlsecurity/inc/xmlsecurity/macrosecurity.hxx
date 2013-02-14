@@ -124,19 +124,15 @@ public:
 class MacroSecurityTrustedSourcesTP : public MacroSecurityTP
 {
 private:
-    FixedLine           maTrustCertFL;
-    ReadOnlyImage       maTrustCertROFI;
-    SvxSimpleTableContainer m_aTrustCertLBContainer;
-    SvxSimpleTable      maTrustCertLB;
-    PushButton          maAddCertPB;
-    PushButton          maViewCertPB;
-    PushButton          maRemoveCertPB;
-    FixedLine           maTrustFileLocFL;
-    ReadOnlyImage       maTrustFileROFI;
-    FixedInfo           maTrustFileLocFI;
-    ListBox             maTrustFileLocLB;
-    PushButton          maAddLocPB;
-    PushButton          maRemoveLocPB;
+    FixedImage*         m_pTrustCertROFI;
+    SvxSimpleTable*     m_pTrustCertLB;
+    PushButton*         m_pAddCertPB;
+    PushButton*         m_pViewCertPB;
+    PushButton*         m_pRemoveCertPB;
+    FixedImage*         m_pTrustFileROFI;
+    ListBox*            m_pTrustFileLocLB;
+    PushButton*         m_pAddLocPB;
+    PushButton*         m_pRemoveLocPB;
 
     cssu::Sequence< SvtSecurityOptions::Certificate > maTrustedAuthors;
 
@@ -154,7 +150,8 @@ private:
     void                ImplCheckButtons();
 
 public:
-                        MacroSecurityTrustedSourcesTP( Window* pParent, MacroSecurity* _pDlg );
+    MacroSecurityTrustedSourcesTP(Window* pParent, MacroSecurity* _pDlg);
+    ~MacroSecurityTrustedSourcesTP();
 
     virtual void        ActivatePage();
     virtual void        ClosePage( void );

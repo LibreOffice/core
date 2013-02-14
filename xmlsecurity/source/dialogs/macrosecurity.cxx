@@ -183,20 +183,20 @@ void MacroSecurityLevelTP::ClosePage( void )
 
 void MacroSecurityTrustedSourcesTP::ImplCheckButtons()
 {
-    bool bCertSelected = maTrustCertLB.FirstSelected() != NULL;
-    maViewCertPB.Enable( bCertSelected );
-    maRemoveCertPB.Enable( bCertSelected && !mbAuthorsReadonly);
+    bool bCertSelected = m_pTrustCertLB->FirstSelected() != NULL;
+    m_pViewCertPB->Enable( bCertSelected );
+    m_pRemoveCertPB->Enable( bCertSelected && !mbAuthorsReadonly);
 
-    bool bLocationSelected = maTrustFileLocLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
-    maRemoveLocPB.Enable( bLocationSelected && !mbURLsReadonly);
+    bool bLocationSelected = m_pTrustFileLocLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
+    m_pRemoveLocPB->Enable( bLocationSelected && !mbURLsReadonly);
 }
 
 
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl)
 {
-    if( maTrustCertLB.FirstSelected() )
+    if( m_pTrustCertLB->FirstSelected() )
     {
-        sal_uInt16 nSelected = sal_uInt16( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
+        sal_uInt16 nSelected = sal_uInt16( sal_uIntPtr( m_pTrustCertLB->FirstSelected()->GetUserData() ) );
 
         uno::Reference< dcss::security::XSerialNumberAdapter > xSerialNumberAdapter =
             ::com::sun::star::security::SerialNumberAdapter::create(mpDlg->mxCtx);
@@ -220,9 +220,9 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl)
 
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveCertPBHdl)
 {
-    if( maTrustCertLB.FirstSelected() )
+    if( m_pTrustCertLB->FirstSelected() )
     {
-        sal_uInt16 nAuthor = sal_uInt16( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
+        sal_uInt16 nAuthor = sal_uInt16( sal_uIntPtr( m_pTrustCertLB->FirstSelected()->GetUserData() ) );
         ::comphelper::removeElementAt( maTrustedAuthors, nAuthor );
 
         FillCertLB();
@@ -257,9 +257,9 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl)
         if ( osl::FileBase::getSystemPathFromFileURL( aSystemFileURL, aSystemFileURL ) == osl::FileBase::E_None )
             aNewPathStr = aSystemFileURL;
 
-        if( maTrustFileLocLB.GetEntryPos( aNewPathStr ) == LISTBOX_ENTRY_NOTFOUND )
+        if( m_pTrustFileLocLB->GetEntryPos( aNewPathStr ) == LISTBOX_ENTRY_NOTFOUND )
         {
-            maTrustFileLocLB.InsertEntry( aNewPathStr );
+            m_pTrustFileLocLB->InsertEntry( aNewPathStr );
         }
 
         ImplCheckButtons();
@@ -274,18 +274,18 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl)
 
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveLocPBHdl)
 {
-    sal_uInt16  nSel = maTrustFileLocLB.GetSelectEntryPos();
+    sal_uInt16  nSel = m_pTrustFileLocLB->GetSelectEntryPos();
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
-        maTrustFileLocLB.RemoveEntry( nSel );
+        m_pTrustFileLocLB->RemoveEntry( nSel );
         // Trusted Path could not be removed (#i33584#)
         // after remove an entry, select another one if exists
-        sal_uInt16 nNewCount = maTrustFileLocLB.GetEntryCount();
+        sal_uInt16 nNewCount = m_pTrustFileLocLB->GetEntryCount();
         if ( nNewCount > 0 )
         {
             if ( nSel >= nNewCount )
                 nSel = nNewCount - 1;
-            maTrustFileLocLB.SelectEntryPos( nSel );
+            m_pTrustFileLocLB->SelectEntryPos( nSel );
         }
         ImplCheckButtons();
     }
@@ -307,7 +307,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl)
 
 void MacroSecurityTrustedSourcesTP::FillCertLB( void )
 {
-    maTrustCertLB.Clear();
+    m_pTrustCertLB->Clear();
 
     sal_uInt32 nEntries = maTrustedAuthors.getLength();
 
@@ -321,68 +321,88 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
             // create from RawData
             xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
 
-            SvTreeListEntry*    pLBEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
-            maTrustCertLB.SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
-            maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
+            SvTreeListEntry*    pLBEntry = m_pTrustCertLB->InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
+            m_pTrustCertLB->SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
+            m_pTrustCertLB->SetEntryText( XmlSec::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
             pLBEntry->SetUserData( ( void* ) (sal_IntPtr)nEntry );      // missuse user data as index
         }
     }
 }
 
-MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, MacroSecurity* _pDlg )
-    :MacroSecurityTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_TRUSTSOURCES ), _pDlg )
-    ,maTrustCertFL      ( this, XMLSEC_RES( FL_TRUSTCERT ) )
-    ,maTrustCertROFI    ( this, XMLSEC_RES( FI_TRUSTCERT_RO ) )
-    ,m_aTrustCertLBContainer(this, XMLSEC_RES(LB_TRUSTCERT))
-    ,maTrustCertLB(m_aTrustCertLBContainer)
-    ,maAddCertPB        ( this, XMLSEC_RES( PB_ADD_TRUSTCERT ) )
-    ,maViewCertPB       ( this, XMLSEC_RES( PB_VIEW_TRUSTCERT ) )
-    ,maRemoveCertPB     ( this, XMLSEC_RES( PB_REMOVE_TRUSTCERT ) )
-    ,maTrustFileLocFL   ( this, XMLSEC_RES( FL_TRUSTFILELOC ) )
-    ,maTrustFileROFI    ( this, XMLSEC_RES( FI_TRUSTFILE_RO ) )
-    ,maTrustFileLocFI   ( this, XMLSEC_RES( FI_TRUSTFILELOC ) )
-    ,maTrustFileLocLB   ( this, XMLSEC_RES( LB_TRUSTFILELOC ) )
-    ,maAddLocPB         ( this, XMLSEC_RES( FL_ADD_TRUSTFILELOC ) )
-    ,maRemoveLocPB      ( this, XMLSEC_RES( FL_REMOVE_TRUSTFILELOC ) )
+class TrustCertLB : public SvxSimpleTable
 {
-    static long nTabs[] = { 3, 0, 35*CS_LB_WIDTH/100, 70*CS_LB_WIDTH/100 };
-    maTrustCertLB.SetTabs( &nTabs[ 0 ] );
-    maTrustCertLB.InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );
+public:
+    TrustCertLB(SvxSimpleTableContainer &rContainer)
+        : SvxSimpleTable(rContainer, 0)
+    {
+    }
+    virtual void Resize()
+    {
+        SvxSimpleTable::Resize();
+        const long nControlWidth = GetSizePixel().Width();
+        long aTabLocs[] = { 3, 0, 35*nControlWidth/100, 70*nControlWidth/100 };
+        SvxSimpleTable::SetTabs(aTabLocs, MAP_PIXEL);
+    }
+};
 
-    FreeResource();
+MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(Window* _pParent, MacroSecurity* _pDlg)
+    : MacroSecurityTP(_pParent, "SecurityTrustPage", "xmlsec/ui/securitytrustpage.ui", _pDlg)
+{
+    get(m_pTrustCertROFI, "lockcertimg");
+    get(m_pViewCertPB, "viewcert");
+    get(m_pRemoveCertPB, "removecert");
+    get(m_pTrustFileROFI, "lockfileimg");
+    get(m_pTrustFileLocLB, "locations");
+    m_pTrustFileLocLB->SetDropDownLineCount(6);
+    get(m_pAddLocPB, "addfile");
+    get(m_pRemoveLocPB, "removefile");
 
-    maTrustCertLB.SetSelectHdl( LINK( this, MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl ) );
-    maAddCertPB.Hide();     // not used in the moment...
-    maViewCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, ViewCertPBHdl ) );
-    maViewCertPB.Disable();
-    maRemoveCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, RemoveCertPBHdl ) );
-    maRemoveCertPB.Disable();
+    SvxSimpleTableContainer *pCertificates = get<SvxSimpleTableContainer>("certificates");
+    m_pTrustCertLB = new TrustCertLB(*pCertificates);
+    static long aTabs[] = { 3, 0, 0, 0 };
+    m_pTrustCertLB->SetTabs( aTabs );
 
-    maTrustFileLocLB.SetSelectHdl( LINK( this, MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl ) );
-    maAddLocPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, AddLocPBHdl ) );
-    maRemoveLocPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, RemoveLocPBHdl ) );
-    maRemoveLocPB.Disable();
+    OUStringBuffer aBuf(get<FixedText>("to")->GetText());
+    aBuf.append("\t").append(get<FixedText>("by")->GetText())
+        .append("\t").append(get<FixedText>("date")->GetText());
+    m_pTrustCertLB->InsertHeaderEntry(aBuf.makeStringAndClear());
+
+    m_pTrustCertLB->SetSelectHdl( LINK( this, MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl ) );
+    m_pViewCertPB->SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, ViewCertPBHdl ) );
+    m_pViewCertPB->Disable();
+    m_pRemoveCertPB->SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, RemoveCertPBHdl ) );
+    m_pRemoveCertPB->Disable();
+
+    m_pTrustFileLocLB->SetSelectHdl( LINK( this, MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl ) );
+    m_pAddLocPB->SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, AddLocPBHdl ) );
+    m_pRemoveLocPB->SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, RemoveLocPBHdl ) );
+    m_pRemoveLocPB->Disable();
 
     maTrustedAuthors = mpDlg->maSecOptions.GetTrustedAuthors();
     mbAuthorsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS );
-    maTrustCertROFI.Show( mbAuthorsReadonly );
-    mbAuthorsReadonly ? maTrustCertLB.DisableTable() : maTrustCertLB.EnableTable();
+    m_pTrustCertROFI->Show( mbAuthorsReadonly );
+    mbAuthorsReadonly ? m_pTrustCertLB->DisableTable() : m_pTrustCertLB->EnableTable();
 
     FillCertLB();
 
     cssu::Sequence< rtl::OUString > aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
     mbURLsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_SECUREURLS );
-    maTrustFileROFI.Show( mbURLsReadonly );
-    maTrustFileLocLB.Enable( !mbURLsReadonly );
-    maAddLocPB      .Enable( !mbURLsReadonly );
+    m_pTrustFileROFI->Show( mbURLsReadonly );
+    m_pTrustFileLocLB->Enable( !mbURLsReadonly );
+    m_pAddLocPB->Enable( !mbURLsReadonly );
 
     sal_Int32 nEntryCnt = aSecureURLs.getLength();
     for( sal_Int32 i = 0 ; i < nEntryCnt ; ++i )
     {
         ::rtl::OUString aSystemFileURL( aSecureURLs[ i ] );
         osl::FileBase::getSystemPathFromFileURL( aSystemFileURL, aSystemFileURL );
-        maTrustFileLocLB.InsertEntry( aSystemFileURL );
+        m_pTrustFileLocLB->InsertEntry( aSystemFileURL );
     }
+}
+
+MacroSecurityTrustedSourcesTP::~MacroSecurityTrustedSourcesTP()
+{
+    delete m_pTrustCertLB;
 }
 
 void MacroSecurityTrustedSourcesTP::ActivatePage()
@@ -393,13 +413,13 @@ void MacroSecurityTrustedSourcesTP::ActivatePage()
 
 void MacroSecurityTrustedSourcesTP::ClosePage( void )
 {
-    sal_uInt16  nEntryCnt = maTrustFileLocLB.GetEntryCount();
+    sal_uInt16  nEntryCnt = m_pTrustFileLocLB->GetEntryCount();
     if( nEntryCnt )
     {
         cssu::Sequence< rtl::OUString > aSecureURLs( nEntryCnt );
         for( sal_uInt16 i = 0 ; i < nEntryCnt ; ++i )
         {
-            ::rtl::OUString aURL( maTrustFileLocLB.GetEntry( i ) );
+            ::rtl::OUString aURL( m_pTrustFileLocLB->GetEntry( i ) );
             osl::FileBase::getFileURLFromSystemPath( aURL, aURL );
             aSecureURLs[ i ] = aURL;
         }

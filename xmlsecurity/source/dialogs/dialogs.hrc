@@ -175,43 +175,6 @@
 #define MS_COL_G                        (MS_COL_F-RSC_SP_CTRL_X)
 #define MS_COL_H                        (MS_COL_G-RSC_CD_PUSHBUTTON_WIDTH)
 
-// --------- tab page trusted sources ---------
-
-#define FL_TRUSTCERT                    1
-#define LB_TRUSTCERT                    2
-#define PB_ADD_TRUSTCERT                3
-#define PB_VIEW_TRUSTCERT               4
-#define PB_REMOVE_TRUSTCERT             5
-#define FL_TRUSTFILELOC                 6
-#define FI_TRUSTFILELOC                 7
-#define LB_TRUSTFILELOC                 8
-#define FL_ADD_TRUSTFILELOC             9
-#define FL_REMOVE_TRUSTFILELOC          10
-#define FI_TRUSTCERT_RO                 11
-#define FI_TRUSTFILE_RO                 12
-
-#define TS_COL_0                        RSC_SP_TBPG_INNERBORDER_LEFT
-#define TS_COL_1                        (TS_COL_0+RSC_SP_FLGR_SPACE_X)
-#define TS_COL_8                        (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
-#define TS_COL_7                        (TS_COL_8-RSC_SP_FLGR_SPACE_X)
-#define TS_COL_6                        (TS_COL_7-RSC_CD_PUSHBUTTON_WIDTH)
-#define TS_COL_5                        (TS_COL_6-RSC_SP_CTRL_GROUP_X)
-#define TS_COL_4                        (TS_COL_5-RSC_CD_PUSHBUTTON_WIDTH)
-#define TS_COL_3                        (TS_COL_4-RSC_SP_CTRL_GROUP_X)
-#define TS_COL_2                        (TS_COL_3-RSC_CD_PUSHBUTTON_WIDTH)
-
-#define RSC_CD_TABLISTBOX_HEIGHT        6*RSC_BS_CHARHEIGHT
-#define TS_ROW_0                        RSC_SP_TBPG_INNERBORDER_TOP
-#define TS_ROW_1                        (TS_ROW_0+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define TS_ROW_2                        (TS_ROW_1+RSC_CD_TABLISTBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define TS_ROW_3                        (TS_ROW_2+RSC_CD_PUSHBUTTON_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define TS_ROW_4                        (TS_ROW_3+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define TS_ROW_5                        (TS_ROW_4+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-
-#define TS_ROW_8                        (TP_HEIGHT-RSC_SP_TBPG_INNERBORDER_BOTTOM)
-#define TS_ROW_7                        (TS_ROW_8-RSC_CD_PUSHBUTTON_HEIGHT)
-#define TS_ROW_6                        (TS_ROW_7-RSC_SP_FLGR_SPACE_Y)
-
 // --------- signed macro warning ---------
 
 #define FI_DOCNAME                      1

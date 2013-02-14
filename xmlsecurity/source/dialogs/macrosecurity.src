@@ -72,104 +72,11 @@ TabDialog RID_XMLSECTP_MACROSEC
     };
 };
 
-TabPage RID_XMLSECTP_TRUSTSOURCES
-{
-    HelpId = HID_XMLSEC_TP_TRUSTSOURCES;
-    Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
-    OutputSize = TRUE;
-    Hide = TRUE;
-    SVLook = TRUE;
-    FixedLine FL_TRUSTCERT
-    {
-        Pos = MAP_APPFONT( TS_COL_0, TS_ROW_0 );
-        Size = MAP_APPFONT( TS_COL_8-TS_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ en-US ] = "Trusted certificates";
-    };
-    FixedImage FI_TRUSTCERT_RO
-    {
-        Pos = MAP_APPFONT( TS_COL_1 - 7, TS_ROW_1 );
-        Size = MAP_APPFONT( 6, 6 );
-    };
-    Control LB_TRUSTCERT
-    {
-        HelpId = HID_XMLSEC_CTRL_TRUSTSOURCES;
-        Pos = MAP_APPFONT( TS_COL_1, TS_ROW_1 );
-        Size = MAP_APPFONT( TS_COL_7-TS_COL_1, RSC_CD_TABLISTBOX_HEIGHT );
-        SVLook = TRUE;
-        Border = TRUE;
-    };
-    String STR_HEADERBAR
-    {
-        Text [ en-US ] = "Issued to\tIssued by\tExpiration date";
-    };
-    PushButton PB_ADD_TRUSTCERT
-    {
-        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:PB_ADD_TRUSTCERT";
-        Pos = MAP_APPFONT( TS_COL_2, TS_ROW_2 );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "Add...";
-    };
-    PushButton PB_VIEW_TRUSTCERT
-    {
-        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:PB_VIEW_TRUSTCERT";
-        Pos = MAP_APPFONT( TS_COL_4, TS_ROW_2 );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "View...";
-    };
-    PushButton PB_REMOVE_TRUSTCERT
-    {
-        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:PB_REMOVE_TRUSTCERT";
-        Pos = MAP_APPFONT( TS_COL_6, TS_ROW_2 );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "Remove";
-    };
-    FixedLine FL_TRUSTFILELOC
-    {
-        Pos = MAP_APPFONT( TS_COL_0, TS_ROW_3 );
-        Size = MAP_APPFONT( TS_COL_8-TS_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ en-US ] = "Trusted file locations";
-    };
-    FixedText FI_TRUSTFILELOC
-    {
-        Pos = MAP_APPFONT( TS_COL_1, TS_ROW_4 );
-        Size = MAP_APPFONT( TS_COL_7-TS_COL_1, 3*RSC_CD_FIXEDLINE_HEIGHT );
-        WordBreak = TRUE;
-        Text [ en-US ] = "Document macros are always executed if they have been opened from one of the following locations.";
-    };
-    FixedImage FI_TRUSTFILE_RO
-    {
-        Pos = MAP_APPFONT( TS_COL_1 - 7, TS_ROW_5 );
-        Size = MAP_APPFONT( 6, 6 );
-    };
-    ListBox LB_TRUSTFILELOC
-    {
-        HelpID = "xmlsecurity:ListBox:RID_XMLSECTP_TRUSTSOURCES:LB_TRUSTFILELOC";
-        Pos = MAP_APPFONT( TS_COL_1, TS_ROW_5 );
-        Size = MAP_APPFONT( TS_COL_7-TS_COL_1, TS_ROW_6-TS_ROW_5 );
-        SVLook = TRUE;
-        Border = TRUE;
-        VScroll = TRUE;
-        Sort = TRUE;
-    };
-    PushButton FL_ADD_TRUSTFILELOC
-    {
-        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:FL_ADD_TRUSTFILELOC";
-        Pos = MAP_APPFONT( TS_COL_4, TS_ROW_7 );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "Add...";
-    };
-    PushButton FL_REMOVE_TRUSTFILELOC
-    {
-        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:FL_REMOVE_TRUSTFILELOC";
-        Pos = MAP_APPFONT( TS_COL_6, TS_ROW_7 );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "Remove";
-    };
-};
 String RID_XMLSECTP_READONLY_CONFIG_TIP
 {
     Text [ en-US ] = "This setting is protected by the Administrator";
 };
+
 Image RID_XMLSECTP_LOCK
 {
     ImageBitmap = Bitmap

@@ -206,8 +206,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     m_pSignaturesLB = new SvxSimpleTable(*pSignatures);
     // #i48253# the tablistbox needs its own unique id
     m_pSignaturesLB->Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
-    static long nTabs[] = { 4, 0, 6*nControlWidth/100, 36*nControlWidth/100, 74*nControlWidth/100 };
-    m_pSignaturesLB->SetTabs( &nTabs[ 0 ] );
+    static long aTabs[] = { 4, 0, 6*nControlWidth/100, 36*nControlWidth/100, 74*nControlWidth/100 };
+    m_pSignaturesLB->SetTabs(aTabs);
 
     OUStringBuffer sHeader;
     sHeader.append("\t").append(get<FixedText>("signed")->GetText())
