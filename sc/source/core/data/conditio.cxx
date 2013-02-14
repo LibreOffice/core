@@ -1271,6 +1271,7 @@ rtl::OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uIn
                                         sal_uLong nNumFmt,
                                         const FormulaGrammar::Grammar eGrammar ) const
 {
+    assert( nIndex <= 1);
     rtl::OUString aRet;
 
     if ( FormulaGrammar::isEnglish( eGrammar) && nNumFmt == 0 )
@@ -1314,16 +1315,13 @@ rtl::OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uIn
         else
             mpDoc->GetFormatTable()->GetInputLineString(nVal2, nNumFmt, aRet);
     }
-    else
-    {
-        SAL_WARN("sc", "GetExpression: falscher Index");
-    }
 
     return aRet;
 }
 
 ScTokenArray* ScConditionEntry::CreateTokenArry( sal_uInt16 nIndex ) const
 {
+    assert(nIndex <= 1);
     ScTokenArray* pRet = NULL;
     ScAddress aAddr;
 
@@ -1352,10 +1350,6 @@ ScTokenArray* ScConditionEntry::CreateTokenArry( sal_uInt16 nIndex ) const
             else
                 pRet->AddDouble( nVal2 );
         }
-    }
-    else
-    {
-        SAL_WARN("sc", "GetExpression: falscher Index");
     }
 
     return pRet;
