@@ -54,6 +54,10 @@ typedef XLIB_Window GdkNativeWindow;
 #define gdk_window_foreign_new_for_display(a,b) gdk_x11_window_foreign_new_for_display(a,b)
 #endif
 
+#if !(GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 26)
+    typedef void GDBusConnection;
+#endif
+
 class GtkSalFrame : public SalFrame
 {
     static const int nMaxGraphics = 2;
