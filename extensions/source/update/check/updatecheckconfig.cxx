@@ -371,7 +371,7 @@ void
 UpdateCheckConfig::storeLocalFileName(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize)
 {
     const sal_uInt8 nItems = 2;
-    const OUString aNameList[nItems] = { LOCAL_FILE, DOWNLOAD_SIZE };
+    const OUString aNameList[nItems] = { OUString(LOCAL_FILE), OUString(DOWNLOAD_SIZE) };
     const uno::Any aValueList[nItems] = { uno::makeAny(rLocalFileName), uno::makeAny(nFileSize) };
 
     for( sal_uInt8 i=0; i < nItems; ++i )
@@ -391,7 +391,7 @@ void
 UpdateCheckConfig::clearLocalFileName()
 {
     const sal_uInt8 nItems = 2;
-    const OUString aNameList[nItems] = { LOCAL_FILE, DOWNLOAD_SIZE };
+    const OUString aNameList[nItems] = { OUString(LOCAL_FILE), OUString(DOWNLOAD_SIZE) };
 
     for( sal_uInt8 i=0; i < nItems; ++i )
     {
