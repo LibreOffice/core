@@ -29,6 +29,7 @@
 #include "RemoteServer.hxx"
 #include "BluetoothServer.hxx"
 #include "Communicator.hxx"
+#include "BufferedStreamSocket.hxx"
 
 using namespace std;
 using namespace sd;

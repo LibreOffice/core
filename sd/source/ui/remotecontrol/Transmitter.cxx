@@ -13,7 +13,7 @@ using namespace std;
 using namespace osl; // Sockets etc.
 using namespace sd;
 
-Transmitter::Transmitter( BufferedStreamSocket* aSocket )
+Transmitter::Transmitter( IBluetoothSocket* aSocket )
   : pStreamSocket( aSocket ),
     mQueuesNotEmpty(),
     mFinishRequested(),
