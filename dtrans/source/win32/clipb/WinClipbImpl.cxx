@@ -180,16 +180,15 @@ sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  ) throw( RuntimeExce
 
 void SAL_CALL CWinClipbImpl::flushClipboard( ) throw( RuntimeException )
 {
-    // sollte eigentlich hier stehen: ClearableMutexGuard aGuard( m_ClipContentMutex );
-    // geht aber nicht, da FlushClipboard zurückruft und das DataObject
-    // freigibt und damit würde es einen Deadlock in onReleaseDataObject geben
-    // FlushClipboard muß synchron sein, damit das runterfahren ggf. erst weitergeht,
-    // wenn alle Clipboard-Formate gerendert wurden
-    // die Abfrage ist nötig, damit nur geflusht wird, wenn wir wirklich Clipboardowner
-    // sind (ich weiss nicht genau was passiert, wenn man flusht und nicht Clipboard
-    // owner ist).
-    // eventuell kann man aber die Abfrage in den Clipboard STA Thread verlagern, indem
-    // man sich dort das DataObject merkt und vor dem flushen OleIsCurrentClipboard ruft
+    // actually it should be ClearableMutexGuard aGuard( m_ClipContentMutex );
+    // but it does not work since FlushClipboard does a callback and frees DataObject
+    // which results in a deadlock in onReleaseDataObject.
+    // FlushClipboard had to be synchron in order to prevent shutdown until all
+    // clipboard-formats are redered.
+    // The request is needed to prevent flushing if we are not clipboard owner (it is
+    // not known what happens if we flush but aren't clipoard owner).
+    // It may be possible to move the request to the clipboard STA thread by saving the
+    // DataObject and call OleIsCurrentClipboard bevore flushing.
 
     if ( NULL != m_pCurrentClipContent )
         m_MtaOleClipboard.flushClipboard( );
