@@ -682,8 +682,7 @@ namespace sw
                 case RTL_TEXTENCODING_UTF7:
                 case RTL_TEXTENCODING_UTF8:
                 case RTL_TEXTENCODING_JAVA_UTF8:
-                    OSL_ENSURE(nRet != 0x80, "This method may be redundant");
-                    nRet = 0x80;
+                    nRet = 0x01;
                     break;
                 default:
                     break;
