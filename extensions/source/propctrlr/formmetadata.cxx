@@ -44,26 +44,23 @@ namespace pcr
         String          sTranslation;
         rtl::OString    sHelpId;
         sal_Int32       nId;
-        sal_uInt16      nPos;
         sal_uInt32      nUIFlags;
 
         OPropertyInfoImpl(
                         const ::rtl::OUString&      rName,
                         sal_Int32                   _nId,
                         const String&               aTranslation,
-                        sal_uInt16                  nPosId,
                         const rtl::OString&,
                         sal_uInt32                  _nUIFlags);
     };
 
     //------------------------------------------------------------------------
     OPropertyInfoImpl::OPropertyInfoImpl(const ::rtl::OUString& _rName, sal_Int32 _nId,
-                                   const String& aString, sal_uInt16 nP, const rtl::OString& sHid, sal_uInt32 _nUIFlags)
+                                   const String& aString, const rtl::OString& sHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
        ,sTranslation(aString)
        ,sHelpId(sHid)
        ,nId(_nId)
-       ,nPos(nP)
        ,nUIFlags(_nUIFlags)
     {
     }
@@ -83,7 +80,7 @@ namespace pcr
     //========================================================================
 #define DEF_INFO( ident, uinameres, helpid, flags )   \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
-            String( PcrRes( RID_STR_##uinameres ) ), nPos++, HID_PROP_##helpid, flags )
+            String( PcrRes( RID_STR_##uinameres ) ), HID_PROP_##helpid, flags )
 
 #define DEF_INFO_1( ident, uinameres, helpid, flag1 ) \
     DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 )
@@ -110,8 +107,6 @@ namespace pcr
 
         PcrClient aResourceAccess;
         // this ensures that we have our resource file loaded
-
-        sal_uInt16 nPos = 1;
 
         static OPropertyInfoImpl aPropertyInfos[] =
         {
@@ -399,7 +394,7 @@ namespace pcr
     sal_Int16 OPropertyInfoService::getPropertyPos(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->nPos : 0xFFFF;
+        return (pInfo) ? pInfo - s_pPropertyInfos : 0xFFFF;
     }
 
     //------------------------------------------------------------------------
@@ -550,7 +545,7 @@ namespace pcr
         // Initialization
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, "", 0);
+        OPropertyInfoImpl  aSearch(_rName, 0L, String(), "", 0);
 
         const OPropertyInfoImpl* pInfo = ::std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );
