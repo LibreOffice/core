@@ -50,6 +50,23 @@
       "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVX///+Q\u003d",
+        "filename": "solenv/gbuild/Helper.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-02-14T11:50:13Z",
+      "side": 1,
+      "message": "is it necessary to add a new group for every single scp2 module? (there are apparently lots of libraries that don\u0027t go into \"ooo\" module)",
+      "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
