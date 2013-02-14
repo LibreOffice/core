@@ -24,6 +24,8 @@ namespace sd
 
         static bool isDiscoverable();
         static void setDiscoverable( bool aDiscoverable );
+        void addCommunicator( Communicator* pCommunicator );
+
     private:
         BluetoothServer( std::vector<Communicator*>* pCommunicators );
         ~BluetoothServer();

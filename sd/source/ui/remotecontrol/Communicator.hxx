@@ -9,20 +9,17 @@
 #ifndef _SD_IMPRESSREMOTE_COMMUNICATOR_HXX
 #define _SD_IMPRESSREMOTE_COMMUNICATOR_HXX
 
-// SERVER
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <vector>
 
-#include <osl/socket.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
 
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 
-#include "BufferedStreamSocket.hxx"
+#include "IBluetoothSocket.hxx"
 
 #define CHARSET RTL_TEXTENCODING_UTF8
 namespace sd
@@ -39,7 +36,7 @@ namespace sd
     class Communicator : public salhelper::Thread
     {
         public:
-            Communicator( BufferedStreamSocket *pSocket );
+            Communicator( IBluetoothSocket *pSocket );
             ~Communicator();
 
             void presentationStarted( const css::uno::Reference<
@@ -49,7 +46,7 @@ namespace sd
 
         private:
             void execute();
-            BufferedStreamSocket *mpSocket;
+            IBluetoothSocket *mpSocket;
 
             Transmitter *pTransmitter;
             rtl::Reference<Listener> mListener;
@@ -57,4 +54,5 @@ namespace sd
 }
 
 #endif // _SD_IMPRESSREMOTE_COMMUNICATOR_HXX
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
