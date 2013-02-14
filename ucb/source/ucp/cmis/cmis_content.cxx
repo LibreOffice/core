@@ -307,7 +307,46 @@ namespace cmis
         if ( NULL == m_pObjectType.get( ) && m_bTransient )
         {
             string typeId = m_bIsFolder ? "cmis:folder" : "cmis:document";
-            m_pObjectType = getSession( xEnv )->getType( typeId );
+            // The type to create needs to be fetched from the possible children types
+            // defined in the parent folder. Then, we'll pick up the first one we find matching
+            // cmis:folder or cmis:document (depending what we need to create).
+            // The easy case will work in most cases, but not on some servers (like Lotus Live)
+            libcmis::Folder* pParent = NULL;
+            bool bTypeRestricted = false;
+            try
+            {
+                pParent = dynamic_cast< libcmis::Folder* >( getObject( xEnv ).get( ) );
+            }
+            catch ( const libcmis::Exception& )
+            {
+            }
+
+            if ( pParent )
+            {
+                map< string, libcmis::PropertyPtr >& aProperties = pParent->getProperties( );
+                map< string, libcmis::PropertyPtr >::iterator it = aProperties.find( "cmis:allowedChildObjectTypeIds" );
+                if ( it != aProperties.end( ) )
+                {
+                    libcmis::PropertyPtr pProperty = it->second;
+                    if ( pProperty )
+                    {
+                        vector< string > typesIds = pProperty->getStrings( );
+                        for ( vector< string >::iterator typeIt = typesIds.begin();
+                                typeIt != typesIds.end() && !m_pObjectType; ++typeIt )
+                        {
+                            bTypeRestricted = true;
+                            libcmis::ObjectTypePtr type = getSession( xEnv )->getType( *typeIt );
+
+                            // FIXME Improve performances by adding getBaseTypeId( ) method to libcmis
+                            if ( type->getBaseType( )->getId( ) == typeId )
+                                m_pObjectType = type;
+                        }
+                    }
+                }
+            }
+
+            if ( !bTypeRestricted )
+                m_pObjectType = getSession( xEnv )->getType( typeId );
         }
         return m_pObjectType;
     }
@@ -318,7 +357,39 @@ namespace cmis
         if ( !m_pObject.get() )
         {
             if ( !m_sObjectPath.isEmpty( ) )
-                m_pObject = getSession( xEnv )->getObjectByPath( OUSTR_TO_STDSTR( m_sObjectPath ) );
+            {
+                try
+                {
+                    m_pObject = getSession( xEnv )->getObjectByPath( OUSTR_TO_STDSTR( m_sObjectPath ) );
+                }
+                catch ( const libcmis::Exception& )
+                {
+                    // In some cases, getting the object from the path doesn't work,
+                    // but getting the parent from its path and the get the child in the list is OK.
+                    // It's weird, but needed to handle case where the path isn't the folders/files
+                    // names separated by '/' (as in Lotus Live)
+                    INetURLObject aParentUrl( m_sURL );
+                    string sName = OUSTR_TO_STDSTR( aParentUrl.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ) );
+                    aParentUrl.removeSegment( );
+                    rtl::OUString sParentUrl = aParentUrl.GetMainURL( INetURLObject::NO_DECODE );
+       
+                    Content aParent( m_xContext, m_pProvider, new ucbhelper::ContentIdentifier( sParentUrl ) );
+                    libcmis::FolderPtr pParentFolder = boost::dynamic_pointer_cast< libcmis::Folder >( aParent.getObject( xEnv ) );
+                    if ( pParentFolder )
+                    {
+                        vector< libcmis::ObjectPtr > children = pParentFolder->getChildren( );
+                        for ( vector< libcmis::ObjectPtr >::iterator it = children.begin( );
+                              it != children.end() && !m_pObject; ++it )
+                        {
+                            if ( ( *it )->getName( ) == sName )
+                                m_pObject = *it;
+                        }
+                    }
+
+                    if ( !m_pObject )
+                        throw libcmis::Exception( "Object not found" );
+                }
+            }
             else if (!m_sObjectId.isEmpty( ) )
                 m_pObject = getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
             else
@@ -643,25 +714,6 @@ namespace cmis
         return uno::Reference< sdbc::XRow >( xRow.get() );
     }
 
-    bool Content::exists( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    {
-        bool bExists = true;
-        try
-        {
-            if ( !m_sObjectPath.isEmpty( ) )
-                m_pSession->getObjectByPath( OUSTR_TO_STDSTR( m_sObjectPath ) );
-            else if ( !m_sObjectId.isEmpty( ) )
-                getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
-            // No need to handle the root folder case... how can it not exists?
-        }
-        catch ( const libcmis::Exception& )
-        {
-            bExists = false;
-        }
-
-        return bExists;
-    }
-
     uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
             throw( uno::Exception )
@@ -669,7 +721,7 @@ namespace cmis
         bool bIsFolder = isFolder( xEnv );
 
         // Handle the case of the non-existing file
-        if ( !exists( xEnv ) )
+        if ( !getObject( xEnv ) )
         {
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
@@ -992,7 +1044,17 @@ namespace cmis
                         boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
                         uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
                         copyData( xInputStream, xOutput );
-                        document->setContentStream( pOut, OUSTR_TO_STDSTR( rMimeType ), string( ), bReplaceExisting );
+                        try
+                        {
+                            document->setContentStream( pOut, OUSTR_TO_STDSTR( rMimeType ), string( ), bReplaceExisting );
+                        }
+                        catch ( const libcmis::Exception& )
+                        {
+                            ucbhelper::cancelCommandExecution( uno::makeAny
+                                ( uno::RuntimeException( "Error when setting document content",
+                                    static_cast< cppu::OWeakObject * >( this ) ) ),
+                                xEnv );
+                        }
                     }
                 }
                 else
@@ -1003,16 +1065,36 @@ namespace cmis
 
                     if ( bIsFolder )
                     {
-                        libcmis::FolderPtr pNew = pFolder->createFolder( m_pObjectProps );
-                        sNewPath = STD_TO_OUSTR( newPath );
+                        try
+                        {
+                            libcmis::FolderPtr pNew = pFolder->createFolder( m_pObjectProps );
+                            sNewPath = STD_TO_OUSTR( newPath );
+                        }
+                        catch ( const libcmis::Exception& )
+                        {
+                            ucbhelper::cancelCommandExecution( uno::makeAny
+                                ( uno::RuntimeException( "Error when creating folder",
+                                    static_cast< cppu::OWeakObject * >( this ) ) ),
+                                xEnv );
+                        }
                     }
                     else
                     {
                         boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
                         uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
                         copyData( xInputStream, xOutput );
-                        pFolder->createDocument( m_pObjectProps, pOut, OUSTR_TO_STDSTR( rMimeType ), string() );
-                        sNewPath = STD_TO_OUSTR( newPath );
+                        try
+                        {
+                            pFolder->createDocument( m_pObjectProps, pOut, OUSTR_TO_STDSTR( rMimeType ), string() );
+                            sNewPath = STD_TO_OUSTR( newPath );
+                        }
+                        catch ( const libcmis::Exception& )
+                        {
+                            ucbhelper::cancelCommandExecution( uno::makeAny
+                                ( uno::RuntimeException( "Error when creating document",
+                                    static_cast< cppu::OWeakObject * >( this ) ) ),
+                                xEnv );
+                        }
                     }
                 }
 
@@ -1336,7 +1418,7 @@ namespace cmis
             {
                 URL aCmisUrl( m_sURL );
                 aUrl.removeSegment( );
-                aCmisUrl.setObjectPath( aUrl.GetURLPath( INetURLObject::NO_DECODE ) );
+                aCmisUrl.setObjectPath( aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
                 sRet = aCmisUrl.asString( );
             }
         }

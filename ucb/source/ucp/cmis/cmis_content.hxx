@@ -99,8 +99,6 @@ private:
     libcmis::Session* getSession( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
     libcmis::ObjectTypePtr getObjectType( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
-    bool exists( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
-
 private:
     typedef rtl::Reference< Content > ContentRef;
     typedef std::list< ContentRef > ContentRefList;

@@ -107,13 +107,34 @@ namespace cmis
 
         if ( !m_sPath.isEmpty( ) )
         {
-            if ( m_sPath[0] != '/' )
-                sUrl += "/";
-            sUrl += m_sPath;
+            sal_Int32 nPos = -1;
+            rtl::OUString sEncodedPath;
+            do
+            {
+                sal_Int32 nStartPos = nPos + 1;
+                nPos = m_sPath.indexOf( '/', nStartPos );
+                sal_Int32 nLen = nPos - nStartPos;
+                if ( nPos == -1 )
+                    nLen = m_sPath.getLength( ) - nStartPos;
+                rtl::OUString sSegment = m_sPath.copy( nStartPos, nLen );
+
+                if ( !sSegment.isEmpty( ) )
+                {
+                    sEncodedPath += "/" + rtl::Uri::encode( sSegment,
+                            rtl_UriCharClassRelSegment,
+                            rtl_UriEncodeKeepEscapes,
+                            RTL_TEXTENCODING_UTF8 );
+                }
+            }
+            while ( nPos != -1 );
+            sUrl += sEncodedPath;
         }
         else if ( !m_sId.isEmpty( ) )
         {
-            sUrl += "#" + m_sId;
+            sUrl += "#" + rtl::Uri::encode( m_sId,
+                rtl_UriCharClassRelSegment,
+                rtl_UriEncodeKeepEscapes,
+                RTL_TEXTENCODING_UTF8 );
         }
 
         return sUrl;
