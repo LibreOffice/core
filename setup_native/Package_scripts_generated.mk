@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,scripts_generated,$(call gb_CustomTarget_get_workdir,setup_native/scripts)))
 
+$(eval $(call gb_Package_use_custom_target,scripts_generated,setup_native/scripts))
+
 ifeq ($(OS),SOLARIS)
 $(eval $(call gb_Package_add_file,scripts_generated,bin/userscripts/install,install))
 $(eval $(call gb_Package_add_file,scripts_generated,bin/userscripts/uninstall,uninstall))
