@@ -1041,11 +1041,33 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
 
 void FontSubstConfiguration::readLocaleSubst() const
 {
-            Reference< XNameAccess > xNode;
+    Reference< XNameAccess > xNode;
+    try
+    {
+        Any aAny = m_xConfigAccess->getByName( "en" );
+        aAny >>= xNode;
+    }
+    catch (const NoSuchElementException&)
+    {
+    }
+    catch (const WrappedTargetException&)
+    {
+    }
+    if( xNode.is() )
+    {
+        Sequence< OUString > aFonts = xNode->getElementNames();
+        int nFonts = aFonts.getLength();
+        const OUString* pFontNames = aFonts.getConstArray();
+        // improve performance, heap fragmentation
+        m_aSubstAttributes.reserve( nFonts );
+
+        for( int i = 0; i < nFonts; i++ )
+        {
+            Reference< XNameAccess > xFont;
             try
             {
-                Any aAny = m_xConfigAccess->getByName( "en" );
-                aAny >>= xNode;
+                Any aAny = xNode->getByName( pFontNames[i] );
+                aAny >>= xFont;
             }
             catch (const NoSuchElementException&)
             {
@@ -1053,61 +1075,31 @@ void FontSubstConfiguration::readLocaleSubst() const
             catch (const WrappedTargetException&)
             {
             }
-            if( xNode.is() )
+            if( ! xFont.is() )
             {
-                Sequence< OUString > aFonts = xNode->getElementNames();
-                int nFonts = aFonts.getLength();
-                const OUString* pFontNames = aFonts.getConstArray();
-                // improve performance, heap fragmentation
-                m_aSubstAttributes.reserve( nFonts );
-
-                // strings for subst retrieval, construct only once
-                OUString aSubstFontsStr     ( RTL_CONSTASCII_USTRINGPARAM( "SubstFonts" ) );
-                OUString aSubstFontsMSStr   ( RTL_CONSTASCII_USTRINGPARAM( "SubstFontsMS" ) );
-                OUString aSubstFontsPSStr   ( RTL_CONSTASCII_USTRINGPARAM( "SubstFontsPS" ) );
-                OUString aSubstFontsHTMLStr ( RTL_CONSTASCII_USTRINGPARAM( "SubstFontsHTML" ) );
-                OUString aSubstWeightStr    ( RTL_CONSTASCII_USTRINGPARAM( "FontWeight" ) );
-                OUString aSubstWidthStr     ( RTL_CONSTASCII_USTRINGPARAM( "FontWidth" ) );
-                OUString aSubstTypeStr      ( RTL_CONSTASCII_USTRINGPARAM( "FontType" ) );
-                for( int i = 0; i < nFonts; i++ )
-                {
-                    Reference< XNameAccess > xFont;
-                    try
-                    {
-                        Any aAny = xNode->getByName( pFontNames[i] );
-                        aAny >>= xFont;
-                    }
-                    catch (const NoSuchElementException&)
-                    {
-                    }
-                    catch (const WrappedTargetException&)
-                    {
-                    }
-                    if( ! xFont.is() )
-                    {
-                        #if OSL_DEBUG_LEVEL > 1
-                        fprintf( stderr, "did not get font attributes for %s\n",
-                                 OUStringToOString( pFontNames[i], RTL_TEXTENCODING_UTF8 ).getStr() );
-                        #endif
-                        continue;
-                    }
-
-                    FontNameAttr aAttr;
-                    // read subst attributes from config
-                    aAttr.Name = pFontNames[i];
-                    fillSubstVector( xFont, aSubstFontsStr, aAttr.Substitutions );
-                    fillSubstVector( xFont, aSubstFontsMSStr, aAttr.MSSubstitutions );
-                    fillSubstVector( xFont, aSubstFontsPSStr, aAttr.PSSubstitutions );
-                    fillSubstVector( xFont, aSubstFontsHTMLStr, aAttr.HTMLSubstitutions );
-                    aAttr.Weight = getSubstWeight( xFont, aSubstWeightStr );
-                    aAttr.Width = getSubstWidth( xFont, aSubstWidthStr );
-                    aAttr.Type = getSubstType( xFont, aSubstTypeStr );
-
-                    // finally insert this entry
-                    m_aSubstAttributes.push_back( aAttr );
-                }
-                std::sort( m_aSubstAttributes.begin(), m_aSubstAttributes.end(), StrictStringSort() );
+                #if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr, "did not get font attributes for %s\n",
+                         OUStringToOString( pFontNames[i], RTL_TEXTENCODING_UTF8 ).getStr() );
+                #endif
+                continue;
             }
+
+            FontNameAttr aAttr;
+            // read subst attributes from config
+            aAttr.Name = pFontNames[i];
+            fillSubstVector( xFont, "SubstFonts", aAttr.Substitutions );
+            fillSubstVector( xFont, "SubstFontsMS", aAttr.MSSubstitutions );
+            fillSubstVector( xFont, "SubstFontsPS", aAttr.PSSubstitutions );
+            fillSubstVector( xFont, "SubstFontsHTML", aAttr.HTMLSubstitutions );
+            aAttr.Weight = getSubstWeight( xFont, "FontWeight" );
+            aAttr.Width = getSubstWidth( xFont, "FontWidth" );
+            aAttr.Type = getSubstType( xFont, "FontType" );
+
+            // finally insert this entry
+            m_aSubstAttributes.push_back( aAttr );
+        }
+        std::sort( m_aSubstAttributes.begin(), m_aSubstAttributes.end(), StrictStringSort() );
+    }
 }
 
 const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontName ) const
@@ -1120,20 +1112,20 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
     FontNameAttr aSearchAttr;
     aSearchAttr.Name = aSearchFont;
 
-            if( m_aSubstAttributes.empty() )
-                readLocaleSubst();
-            // try to find an exact match
-            // because the list is sorted this will also find fontnames of the form searchfontname*
-            std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( m_aSubstAttributes.begin(), m_aSubstAttributes.end(), aSearchAttr, StrictStringSort() );
-            if( it != m_aSubstAttributes.end())
-            {
-                const FontNameAttr& rFoundAttr = *it;
-                // a search for "abcblack" may match with an entry for "abc"
-                // the reverse is not a good idea (e.g. #i112731# alba->albani)
-                if( rFoundAttr.Name.Len() <= aSearchFont.Len() )
-                    if( aSearchFont.CompareTo( rFoundAttr.Name, rFoundAttr.Name.Len() ) == COMPARE_EQUAL )
-                        return &rFoundAttr;
-            }
+    if( m_aSubstAttributes.empty() )
+        readLocaleSubst();
+    // try to find an exact match
+    // because the list is sorted this will also find fontnames of the form searchfontname*
+    std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( m_aSubstAttributes.begin(), m_aSubstAttributes.end(), aSearchAttr, StrictStringSort() );
+    if( it != m_aSubstAttributes.end())
+    {
+        const FontNameAttr& rFoundAttr = *it;
+        // a search for "abcblack" may match with an entry for "abc"
+        // the reverse is not a good idea (e.g. #i112731# alba->albani)
+        if( rFoundAttr.Name.Len() <= aSearchFont.Len() )
+            if( aSearchFont.CompareTo( rFoundAttr.Name, rFoundAttr.Name.Len() ) == COMPARE_EQUAL )
+                return &rFoundAttr;
+    }
     return NULL;
 }
 

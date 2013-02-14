@@ -171,10 +171,10 @@ private:
             m_xConfigProvider;
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
             m_xConfigAccess;
-        // note: m_aSubstAttributes must be sorted alphabetically by Name
-        // searches on the substitutes are done with Name as key, where
-        // a minimal match is sufficient (that is e.g. "Thorndale" will match
-        // "Thorndale BlaBlub"). Also names must be lower case.
+    // note: m_aSubstAttributes must be sorted alphabetically by Name
+    // searches on the substitutes are done with Name as key, where
+    // a minimal match is sufficient (that is e.g. "Thorndale" will match
+    // "Thorndale BlaBlub"). Also names must be lower case.
     mutable std::vector< FontNameAttr > m_aSubstAttributes;
 
     typedef boost::unordered_set< rtl::OUString, rtl::OUStringHash > UniqueSubstHash;
