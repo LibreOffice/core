@@ -131,8 +131,18 @@ typedef boost::ptr_vector< _SaveRedline > _SaveRedlines;
 static bool lcl_MayOverwrite( const SwTxtNode *pNode, const xub_StrLen nPos )
 {
     sal_Unicode cChr = pNode->GetTxt().GetChar( nPos );
-    return !( ( CH_TXTATR_BREAKWORD == cChr || CH_TXTATR_INWORD == cChr ) &&
-              (0 != pNode->GetTxtAttrForCharAt( nPos ) ) );
+    switch (cChr)
+    {
+        case CH_TXTATR_BREAKWORD:
+        case CH_TXTATR_INWORD:
+            return !pNode->GetTxtAttrForCharAt(nPos);// how could there be none?
+        case CH_TXT_ATR_FIELDSTART:
+        case CH_TXT_ATR_FIELDEND:
+        case CH_TXT_ATR_FORMELEMENT:
+            return false;
+        default:
+            return true;
+    }
 }
 
 static void lcl_SkipAttr( const SwTxtNode *pNode, SwIndex &rIdx, xub_StrLen &rStart )
