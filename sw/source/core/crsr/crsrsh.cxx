@@ -2879,7 +2879,7 @@ void SwCrsrShell::SetReadOnlyAvailable( sal_Bool bFlag )
     }
 }
 
-sal_Bool SwCrsrShell::HasReadonlySel() const
+sal_Bool SwCrsrShell::HasReadonlySel(bool bAnnotationMode) const
 {
     sal_Bool bRet = sal_False;
     if( IsReadOnlyAvailable() || GetViewOptions()->IsFormView() )
@@ -2892,7 +2892,7 @@ sal_Bool SwCrsrShell::HasReadonlySel() const
             const SwPaM* pCrsr = pCurCrsr;
 
             do {
-                if( pCrsr->HasReadonlySel( GetViewOptions()->IsFormView() ) )
+                if( pCrsr->HasReadonlySel( GetViewOptions()->IsFormView(), bAnnotationMode ) )
                     bRet = sal_True;
             } while( !bRet && pCurCrsr != ( pCrsr = (SwPaM*)pCrsr->GetNext() ));
         }

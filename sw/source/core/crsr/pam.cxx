@@ -590,7 +590,7 @@ static const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
 }
 
 /// is in protected section or selection surrounds something protected
-bool SwPaM::HasReadonlySel( bool bFormView ) const
+bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
 {
     bool bRet = sal_False;
     Point aTmpPt;
@@ -732,8 +732,8 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     }
 
     // Don't allow inserting characters between the 'field mark end' and
-    // the 'comment anchor'.
-    if (!bRet)
+    // the 'comment anchor', unless the cursor is inside the annotation.
+    if (!bRet && !bAnnotationMode)
     {
         if (!pA && GetPoint() && GetPoint()->nNode.GetNode().IsTxtNode() && GetPoint()->nContent.GetIndex() > 0)
         {

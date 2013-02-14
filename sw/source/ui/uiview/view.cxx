@@ -653,7 +653,7 @@ void SwView::_CheckReadonlySelection()
     sal_uInt32 nDisableFlags = 0;
     SfxDispatcher &rDis = GetDispatcher();
 
-    if( pWrtShell->HasReadonlySel() &&
+    if( pWrtShell->HasReadonlySel(m_bAnnotationMode) &&
         ( !pWrtShell->GetDrawView() ||
             !pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount() ))
         nDisableFlags |= SW_DISABLE_ON_PROTECTED_CURSOR;
@@ -748,7 +748,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     bInMailMerge(sal_False),
     bInDtor(sal_False),
     bOldShellWasPagePreView(sal_False),
-    bIsPreviewDoubleClick(sal_False)
+    bIsPreviewDoubleClick(sal_False),
+    m_bAnnotationMode(false)
 {
     // According to discussion with MBA and further
     // investigations, no old SfxViewShell will be set as parameter <pOldSh>,

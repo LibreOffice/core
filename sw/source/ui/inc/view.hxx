@@ -267,7 +267,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     bInDtor : 1, //detect destructor to prevent creating of sub shells while closing
                     bOldShellWasPagePreView : 1,
                     bIsPreviewDoubleClick : 1, // #i114045#
-                    bMakeSelectionVisible : 1; // transport the bookmark selection
+                    bMakeSelectionVisible : 1, // transport the bookmark selection
+                    m_bAnnotationMode; ///< The real cursor position is inside an annotation.
 
     // methods for searching
     // set search context
@@ -660,6 +661,8 @@ public:
     void SelectShellForDrop();
 
     void UpdateDocStats();
+    /// Where is the real cursor: in the annotation or in the main document?
+    void SetAnnotationMode(bool bMode);
 };
 
 // ----------------- inline Methoden ----------------------

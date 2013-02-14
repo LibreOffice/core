@@ -476,7 +476,7 @@ public:
 
     // Cursor is placed in something that is protected or selection contains
     // something that is protected.
-    sal_Bool HasReadonlySel() const;
+    sal_Bool HasReadonlySel(bool bAnnotationMode = false) const;
 
     // Can the cursor be set to read only ranges?
     sal_Bool IsReadOnlyAvailable() const { return bSetCrsrInReadOnly; }
