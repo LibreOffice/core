@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAVX///+A\u003d",
+        "filename": "scp2/source/ooo/module_hidden_ooo.scp",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-14T12:36:25Z",
+      "side": 1,
+      "message": "can we differentiate here between manually and auto installed artifacts? May be different name convention suffix \"auto_installed\" or something like that?\n\n gid_File_Lib_basctl_auto_installed",
+      "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVX///+Q\u003d",
         "filename": "solenv/gbuild/Helper.mk",
         "patchSetId": 2
