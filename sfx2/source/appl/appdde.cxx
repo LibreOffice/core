@@ -233,7 +233,7 @@ class SfxDdeDocTopics_Impl : public std::vector<SfxDdeDocTopic_Impl*> {};
 //========================================================================
 
 sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
-                           const String &rCmd, const String &rEvent,
+                           const OUString& rCmd, const OUString& rEvent,
                            ApplicationEvent::Type eType )
 
 /*  [Description]
@@ -250,12 +250,12 @@ sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
 */
 
 {
-    String aEvent( rEvent );
-    aEvent += '(';
-    if ( rCmd.CompareIgnoreCaseToAscii( aEvent, aEvent.Len() ) == COMPARE_EQUAL )
+    OUString sEvent(rEvent);
+    sEvent += "(";
+    if (rCmd.startsWithIgnoreAsciiCase(sEvent))
     {
         ::rtl::OUStringBuffer aData( rCmd );
-        aData.remove( 0, aEvent.Len() );
+        aData.remove(0, sEvent.getLength());
         if ( aData.getLength() > 2 )
         {
             // Transform into the ApplicationEvent Format
