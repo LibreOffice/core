@@ -41,7 +41,14 @@
 
 #ifdef MACOSX
   #include <premac.h>
-  #include <IOBluetooth/IOBluetooth.h>
+  #if MACOSX_SDK_VERSION >= 1070
+    #import <IOBluetooth/IOBluetooth.h>
+  #else
+    #import <CoreFoundation/CoreFoundation.h>
+    #import <IOBluetooth/IOBluetoothUtilities.h>
+    #import <IOBluetooth/objc/IOBluetoothSDPUUID.h>
+    #import <IOBluetooth/objc/IOBluetoothSDPServiceRecord.h>
+  #endif
   #include <postmac.h>
 #endif
 
