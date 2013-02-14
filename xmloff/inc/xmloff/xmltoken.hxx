@@ -850,6 +850,7 @@ namespace xmloff { namespace token {
         XML_FOREIGN_OBJECT,
         XML_FORMAT_CHANGE,
         XML_FORMAT_SOURCE,
+        XML_FORMATTING_ENTRY,
         XML_FORMS,
         XML_FORMULA,
         XML_FORMULA_HIDDEN,

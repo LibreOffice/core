@@ -189,7 +189,8 @@ enum ScXMLColorScaleEntryAttrTokens
 
 enum ScXMLDataBarFormatTokens
 {
-    XML_TOK_DATABAR_DATABARENTRY
+    XML_TOK_DATABAR_DATABARENTRY,
+    XML_TOK_DATABAR_FORMATTINGENTRY
 };
 
 enum ScXMLDataBarAttrTokens

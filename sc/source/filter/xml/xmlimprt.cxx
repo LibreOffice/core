@@ -706,6 +706,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataBarTokenMap()
         static SvXMLTokenMapEntry aDataBarElemTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, XML_TOK_DATABAR_DATABARENTRY },
+            { XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, XML_TOK_DATABAR_FORMATTINGENTRY },
             XML_TOKEN_MAP_END
         };
 
