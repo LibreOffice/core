@@ -5081,7 +5081,7 @@ void ScCompiler::CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaT
         case svExternalName:
         {
             const OUString *pStr = pRefMgr->getExternalFileName(t->GetIndex());
-            OUString aFileName = pStr ? *pStr : OUString(ScGlobal::GetRscString(STR_NO_NAME_REF));
+            OUString aFileName = pStr ? *pStr : ScGlobal::GetRscString(STR_NO_NAME_REF);
             rBuffer.append(pConv->makeExternalNameStr( aFileName, t->GetString()));
         }
         break;

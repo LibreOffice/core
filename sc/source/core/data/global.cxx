@@ -88,7 +88,7 @@ ScAutoFormat*   ScGlobal::pAutoFormat = NULL;
 FuncCollection* ScGlobal::pFuncCollection = NULL;
 ScUnoAddInCollection* ScGlobal::pAddInCollection = NULL;
 ScUserList*     ScGlobal::pUserList = NULL;
-String**        ScGlobal::ppRscString = NULL;
+OUString**      ScGlobal::ppRscString = NULL;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
 ::com::sun::star::lang::Locale*     ScGlobal::pLocale = NULL;
 SvtSysLocale*   ScGlobal::pSysLocale = NULL;
@@ -339,7 +339,7 @@ void ScGlobal::SetUserList( const ScUserList* pNewList )
     }
 }
 
-const String& ScGlobal::GetRscString( sal_uInt16 nIndex )
+const OUString& ScGlobal::GetRscString( sal_uInt16 nIndex )
 {
     OSL_ENSURE( nIndex < STR_COUNT, "ScGlobal::GetRscString - invalid string index");
     if( !ppRscString[ nIndex ] )
@@ -373,10 +373,10 @@ const String& ScGlobal::GetRscString( sal_uInt16 nIndex )
                 ;   // nothing
         }
         if (eOp != ocNone)
-            ppRscString[ nIndex ] = new String(
+            ppRscString[ nIndex ] = new OUString(
                     ScCompiler::GetNativeSymbol( eOp));
         else
-            ppRscString[ nIndex ] = new String(
+            ppRscString[ nIndex ] = new OUString(
                     ScRscStrLoader( RID_GLOBSTR, nIndex ).GetString());
     }
     return *ppRscString[ nIndex ];
@@ -543,7 +543,7 @@ void ScGlobal::Init()
     pCharClass = pSysLocale->GetCharClassPtr();
     pLocaleData = pSysLocale->GetLocaleDataPtr();
 
-    ppRscString = new String *[ STR_COUNT ];
+    ppRscString = new OUString *[ STR_COUNT ];
     for( sal_uInt16 nC = 0 ; nC < STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
 
     pEmptyBrushItem = new SvxBrushItem( Color( COL_TRANSPARENT ), ATTR_BACKGROUND );

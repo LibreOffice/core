@@ -43,7 +43,7 @@ sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellC
 
 ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
                                           sal_uInt16        nCheckDefaults,
-                                          const String* pStrTitle )
+                                          const OUString* pStrTitle )
 
  :  ModalDialog     ( pParent, ScResId( RID_SCDLG_INSCONT ) ),
     //

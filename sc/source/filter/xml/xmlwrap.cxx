@@ -382,7 +382,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         if (xStatusIndicator.is())
         {
             sal_Int32 nProgressRange(1000000);
-            xStatusIndicator->start(rtl::OUString(ScGlobal::GetRscString(STR_LOAD_DOC)), nProgressRange);
+            xStatusIndicator->start(ScGlobal::GetRscString(STR_LOAD_DOC), nProgressRange);
             xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), uno::makeAny(nProgressRange));
         }
 
@@ -783,12 +783,12 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator());
         sal_Int32 nProgressRange(1000000);
         if(xStatusIndicator.is())
-            xStatusIndicator->start(rtl::OUString(ScGlobal::GetRscString(STR_SAVE_DOC)), nProgressRange);
-        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), uno::makeAny(nProgressRange));
+            xStatusIndicator->start(ScGlobal::GetRscString(STR_SAVE_DOC), nProgressRange);
+        xInfoSet->setPropertyValue("ProgressRange", uno::makeAny(nProgressRange));
 
         SvtSaveOptions aSaveOpt;
         sal_Bool bUsePrettyPrinting(aSaveOpt.IsPrettyPrinting());
-        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), uno::makeAny(bUsePrettyPrinting));
+        xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(bUsePrettyPrinting));
 
         const OUString sTargetStorage( RTL_CONSTASCII_USTRINGPARAM("TargetStorage") );
         xInfoSet->setPropertyValue( sTargetStorage, uno::Any( xStorage ) );
