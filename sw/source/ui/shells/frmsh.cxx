@@ -108,7 +108,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 {
     //Erstmal die, die keinen FrmMgr benoetigen.
     SwWrtShell &rSh = GetShell();
-    sal_Bool bMore = sal_False;
+    bool bMore = false;
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -278,7 +278,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-        default: bMore = sal_True;
+        default: bMore = true;
     }
 
     if ( !bMore )
@@ -287,8 +287,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
     }
 
     SwFlyFrmAttrMgr aMgr( sal_False, &rSh, FRMMGR_TYPE_NONE );
-    sal_Bool bUpdateMgr = sal_True;
-    sal_Bool bCopyToFmt = sal_False;
+    bool bUpdateMgr = true;
+    bool bCopyToFmt = false;
     switch ( nSlot )
     {
         case SID_OBJECT_ALIGN_MIDDLE:
@@ -351,7 +351,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             if(pArgs)
             {
                 aMgr.SetAttrSet( *pArgs );
-                bCopyToFmt = sal_True;
+                bCopyToFmt = true;
             }
         }
         break;
@@ -361,7 +361,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(GetPool().GetWhich(nSlot), sal_False, &pItem))
             {
                 aMgr.SetAttrSet( *pArgs );
-                bCopyToFmt = sal_True;
+                bCopyToFmt = true;
             }
         }
         break;
@@ -371,7 +371,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             if (nSel & nsSelectionType::SEL_GRF)
             {
                 rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_FORMAT_GRAFIC_DLG);
-                bUpdateMgr = sal_False;
+                bUpdateMgr = false;
             }
             else
             {
@@ -563,7 +563,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     }
                 }
                 else
-                    bUpdateMgr = sal_False;
+                    bUpdateMgr = false;
                 delete pDlg;
             }
         }
@@ -576,14 +576,14 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             SfxItemSet aSet(GetPool(), RES_HORI_ORIENT, RES_HORI_ORIENT);
             aSet.Put(aHori);
             aMgr.SetAttrSet(aSet);
-            bCopyToFmt = sal_True;
+            bCopyToFmt = true;
             rReq.SetReturnValue(SfxBoolItem(nSlot, bMirror));
         }
         break;
         // #i73249#
         case FN_TITLE_DESCRIPTION_SHAPE:
         {
-            bUpdateMgr = sal_False;
+            bUpdateMgr = false;
             SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
             if ( pSdrView &&
                  pSdrView->GetMarkedObjectCount() == 1 )
@@ -633,7 +633,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 void SwFrameShell::GetState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
-    sal_Bool bHtmlMode = 0 != ::GetHtmlMode(rSh.GetView().GetDocShell());
+    bool bHtmlMode = 0 != ::GetHtmlMode(rSh.GetView().GetDocShell());
     if (rSh.IsFrmSelected())
     {
         SfxItemSet aSet( rSh.GetAttrPool(),
@@ -888,7 +888,7 @@ SwFrameShell::~SwFrameShell()
 void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
-    sal_Bool bDefault = sal_False;
+    bool bDefault = false;
     if (!rSh.IsFrmSelected())
         return;
 
@@ -903,7 +903,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
     const SvxBoxItem& rBoxItem = (const SvxBoxItem&)aFrameSet.Get(RES_BOX);
 
     if (pPoolBoxItem == &rBoxItem)
-        bDefault = sal_True;
+        bDefault = true;
 
     SvxBoxItem aBoxItem(rBoxItem);
 
@@ -1074,7 +1074,7 @@ static void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLi
 void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
-    sal_Bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
+    bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
     if (bParentCntProt)
     {

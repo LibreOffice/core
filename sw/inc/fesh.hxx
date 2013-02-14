@@ -494,7 +494,7 @@ public:
 
     bool IsGroupAllowed() const;
 
-    void MirrorSelection( sal_Bool bHorizontal );   ///< Vertical if FALSE.
+    void MirrorSelection( bool bHorizontal );   ///< Vertical if FALSE.
 
     /** frmatr.hxx. Here no enum because of dependencies.
      bool value only for internal use! Anchor is newly set according

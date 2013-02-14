@@ -118,8 +118,8 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     sal_Bool bAlignPossible = pSh->IsAlignPossible();
 
     sal_Bool bTopParam = sal_True, bBottomParam = sal_True;
-    sal_Bool bNotify = sal_False;
-    sal_Bool bDone = sal_False;
+    bool bNotify = false;
+    bool bDone = false;
     SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
 
     switch (nSlotId)
@@ -185,7 +185,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     {
                         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                         SfxAbstractTabDialog *pDlg=NULL;
-                        sal_Bool bCaption = sal_False;
+                        bool bCaption = false;
 
                         // Erlaubte Verankerungen:
                         short nAnchor = pSh->GetAnchorId();
@@ -196,7 +196,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             nAllowedAnchors |= SVX_OBJ_AT_FLY;
 
                         if (pObj->GetObjIdentifier() == OBJ_CAPTION )
-                            bCaption = sal_True;
+                            bCaption = true;
 
                         if (bCaption)
                         {
@@ -365,7 +365,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         case FN_BACKSPACE:
             if (pSh->IsObjSelected() && !pSdrView->IsTextEdit())
             {
-                bDone = sal_True;
+                bDone = true;
 
                 if( GetView().IsDrawRotate() )
                 {
@@ -394,7 +394,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     pSh->LeaveSelFrmMode();
                     // #105852# FME
                 }
-                bNotify = sal_True;
+                bNotify = true;
             }
             break;
 
@@ -522,7 +522,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
         case FN_NAME_SHAPE:
         {
-            bDone = sal_True;
+            bDone = true;
 
             if(1L == pSdrView->GetMarkedObjectCount())
             {
@@ -554,7 +554,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         // #i68101#
         case FN_TITLE_DESCRIPTION_SHAPE:
         {
-            bDone = sal_True;
+            bDone = true;
 
             if(1L == pSdrView->GetMarkedObjectCount())
             {

@@ -87,7 +87,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     if(pArgs)
         pArgs->GetItemState(nSlotId, sal_False, &pItem);
 
-    sal_Bool bMirror = sal_True;
+    bool bMirror = true;
 
     switch (nSlotId)
     {
@@ -157,7 +157,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             break;
 
         case FN_FLIP_HORZ_GRAFIC:
-            bMirror = sal_False;
+            bMirror = false;
             /* no break */
         case FN_FLIP_VERT_GRAFIC:
             rSh.MirrorSelection( bMirror );

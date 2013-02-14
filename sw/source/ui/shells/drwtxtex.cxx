@@ -473,7 +473,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SdrView* pTmpView = pSdrView;
 
             pSdrView->SdrEndTextEdit(sal_True);
-            sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
+            bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
             const SfxPoolItem* pPoolItem;
             if( pNewAttrs && SFX_ITEM_SET == pNewAttrs->GetItemState( nSlot, sal_True, &pPoolItem ) )
@@ -821,7 +821,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
 
     ESelection aSel(pOLV->GetSelection());
-    const sal_Bool bCopy = (aSel.nStartPara != aSel.nEndPara) || (aSel.nStartPos != aSel.nEndPos);
+    const bool bCopy = (aSel.nStartPara != aSel.nEndPara) || (aSel.nStartPos != aSel.nEndPos);
     sal_uInt16 nId = rReq.GetSlot();
     switch( nId )
     {
@@ -855,7 +855,7 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     ESelection aSel(pOLV->GetSelection());
-    const sal_Bool bCopy = (aSel.nStartPara != aSel.nEndPara) ||
+    const bool bCopy = (aSel.nStartPara != aSel.nEndPara) ||
                            (aSel.nStartPos != aSel.nEndPos);
 
 

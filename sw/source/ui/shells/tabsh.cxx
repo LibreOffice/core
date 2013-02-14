@@ -274,7 +274,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         aUsrPref.SetTblDest((sal_uInt8)nBackgroundDestination);
         SW_MOD()->ApplyUsrPref(aUsrPref, &rSh.GetView());
     }
-    sal_Bool bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
+    bool bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
             SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BORDER_INNER ) );
     pItem = 0;
     sal_Bool bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, sal_False, &pItem );
@@ -282,9 +282,9 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, sal_False, &pRowItem );
     bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, sal_False, &pTableItem );
     const SfxPoolItem* pSplit = 0;
-    sal_Bool bRowSplit = SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, sal_False, &pSplit );
+    bool bRowSplit = SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, sal_False, &pSplit );
     const SfxPoolItem* pBoxDirection = 0;
-    sal_Bool bBoxDirection = SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTORIENTATION, sal_False, &pBoxDirection );
+    bool bBoxDirection = SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTORIENTATION, sal_False, &pBoxDirection );
     if( bBackground || bBorder || bRowSplit || bBoxDirection)
     {
         /*
@@ -347,7 +347,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     }
 
     SwTabCols aTabCols;
-    sal_Bool bTabCols = sal_False;
+    bool bTabCols = false;
     sal_Bool bSingleLine = sal_False;
     SwTableRep* pRep = 0;
     SwFrmFmt *pFmt = rSh.GetTableFmt();
@@ -389,7 +389,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
 
         if(pRep->HasColsChanged())
         {
-            bTabCols = sal_True;
+            bTabCols = true;
         }
     }
 
@@ -451,12 +451,12 @@ void SwTableShell::Execute(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
 
     //Erstmal die Slots, die keinen FrmMgr benoetigen.
-    sal_Bool bMore = sal_False;
+    bool bMore = false;
     const SfxPoolItem* pItem = 0;
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), sal_False, &pItem);
-    sal_Bool bCallDone = sal_False;
+    bool bCallDone = false;
     switch ( nSlot )
     {
         case SID_ATTR_BORDER:
@@ -545,7 +545,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             // the SvxBoxItem
             rReq.AppendItem( aBox );
             rReq.AppendItem( aInfo );
-            bCallDone = sal_True;
+            bCallDone = true;
 
         }
         break;
@@ -684,27 +684,27 @@ void SwTableShell::Execute(SfxRequest &rReq)
         break;
         case FN_CALC_TABLE:
             rSh.UpdateTable();
-            bCallDone = sal_True;
+            bCallDone = true;
         break;
         case FN_TABLE_OPTIMAL_HEIGHT:
         {
             const SwFmtFrmSize aSz;
             rSh.SetRowHeight( aSz );
-            bCallDone = sal_True;
+            bCallDone = true;
         }
         break;
         case FN_TABLE_DELETE_COL:
             if ( rSh.DeleteCol() && rSh.HasSelection() )
                 rSh.EnterStdMode();
-            bCallDone = sal_True;
+            bCallDone = true;
         break;
         case FN_END_TABLE:
             rSh.MoveTable( fnTableCurr, fnTableEnd );
-            bCallDone = sal_True;
+            bCallDone = true;
         break;
         case FN_START_TABLE:
             rSh.MoveTable( fnTableCurr, fnTableStart );
-            bCallDone = sal_True;
+            bCallDone = true;
         break;
         case FN_GOTO_NEXT_CELL:
         {
@@ -713,24 +713,24 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 bAppendLine = ((SfxBoolItem*)pItem)->GetValue();
             rReq.SetReturnValue( SfxBoolItem( nSlot,
                                     rSh.GoNextCell( bAppendLine ) ) );
-            bCallDone = sal_True;
+            bCallDone = true;
         }
         break;
         case FN_GOTO_PREV_CELL:
             rReq.SetReturnValue( SfxBoolItem( nSlot, rSh.GoPrevCell() ) );
-            bCallDone = sal_True;
+            bCallDone = true;
         break;
         case FN_TABLE_DELETE_ROW:
             if ( rSh.DeleteRow() && rSh.HasSelection() )
                 rSh.EnterStdMode();
-            bCallDone = sal_True;
+            bCallDone = true;
         break;
         case FN_TABLE_MERGE_CELLS:
             if ( rSh.IsTableMode() )
                 switch ( rSh.MergeTab() )
                 {
                     case TBLMERGE_OK:
-                         bCallDone = sal_True;
+                         bCallDone = true;
                     //no break;
                     case TBLMERGE_NOSELECTION:  break;
                     case TBLMERGE_TOOCOMPLEX:
@@ -755,13 +755,13 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 }
                 rSh.AdjustCellWidth(bBalance);
             }
-            bCallDone = sal_True;
+            bCallDone = true;
         }
         break;
         case FN_TABLE_BALANCE_ROWS:
             if ( rSh.BalanceRowHeight(sal_True) )
                 rSh.BalanceRowHeight(sal_False);
-            bCallDone = sal_True;
+            bCallDone = true;
         break;
         case FN_TABLE_SELECT_ALL:
             rSh.EnterStdMode();
@@ -769,26 +769,26 @@ void SwTableShell::Execute(SfxRequest &rReq)
             rSh.SttSelect();
             rSh.MoveTable( fnTableCurr, fnTableEnd );
             rSh.EndSelect();
-            bCallDone = sal_True;
+            bCallDone = true;
         break;
         case FN_TABLE_SELECT_COL:
             rSh.EnterStdMode();
             rSh.SelectTableCol();
-            bCallDone = sal_True;
+            bCallDone = true;
         break;
         case FN_TABLE_SELECT_ROW:
             rSh.EnterStdMode();
             rSh.SelectTableRow();
-            bCallDone = sal_True;
+            bCallDone = true;
         break;
         case FN_TABLE_SET_READ_ONLY_CELLS:
             rSh.ProtectCells();
             rSh.ResetSelect( 0, sal_False );
-            bCallDone = sal_True;
+            bCallDone = true;
         break;
         case FN_TABLE_UNSET_READ_ONLY_CELLS:
             rSh.UnProtectCells();
-            bCallDone = sal_True;
+            bCallDone = true;
         break;
         case SID_AUTOFORMAT:
         {
@@ -820,7 +820,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_TABLE_INSERT_COL:
         case FN_TABLE_INSERT_ROW:
         {
-            sal_Bool bColumn = rReq.GetSlot() == FN_TABLE_INSERT_COL;
+            bool bColumn = rReq.GetSlot() == FN_TABLE_INSERT_COL;
             sal_uInt16 nCount = 0;
             sal_Bool bAfter = sal_True;
             if (pItem)
@@ -869,7 +869,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     rSh.EndUndo( nUndoId );
                 }
 
-                bCallDone = sal_True;
+                bCallDone = true;
                 break;
             }
 
@@ -936,7 +936,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if ( nCount>1 )
             {
                 rSh.SplitTab(!bHorizontal, static_cast< sal_uInt16 >( nCount-1 ), bProportional );
-                bCallDone = sal_True;
+                bCallDone = true;
             }
             else
                 rReq.Ignore();
@@ -969,7 +969,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 pDlg->Execute();
                 rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, pDlg->GetSplitMode() ) );
                 delete pDlg;
-                bCallDone = sal_True;
+                bCallDone = true;
             }
         }
         break;
@@ -1012,7 +1012,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                 0
                             };
             rBind.Invalidate( aInva );
-            bCallDone = sal_True;
+            bCallDone = true;
         }
         break;
         case FN_TABLE_AUTOSUM:
@@ -1051,7 +1051,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         return;
         //break;
         default:
-            bMore = sal_True;
+            bMore = true;
     }
 
     if ( !bMore )
@@ -1061,7 +1061,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         return;
     }
     else
-        bMore = sal_False;
+        bMore = false;
     //Jetzt die Slots, die direkt auf dem TableFmt arbeiten.
     SwFrmFmt *pFmt = rSh.GetTableFmt();
     switch ( nSlot )
@@ -1109,7 +1109,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                     nSlot == FN_TABLE_VERT_CENTER ?
                                         text::VertOrientation::CENTER : text::VertOrientation::BOTTOM;
             rSh.SetBoxAlign(nAlign);
-            bCallDone = sal_True;
+            bCallDone = true;
         }
         break;
 

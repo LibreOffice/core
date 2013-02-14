@@ -2359,7 +2359,7 @@ void SwFEShell::UnGroupSelection()
 |*
 *************************************************************************/
 
-void SwFEShell::MirrorSelection( sal_Bool bHorizontal )
+void SwFEShell::MirrorSelection( bool bHorizontal )
 {
     SdrView *pView = Imp()->GetDrawView();
     if ( IsObjSelected() && pView->IsMirrorAllowed() )

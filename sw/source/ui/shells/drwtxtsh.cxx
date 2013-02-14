@@ -517,7 +517,7 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 {
     if( IsTextEdit() )
     {
-        sal_Bool bCallBase = sal_True;
+        bool bCallBase = true;
         const SfxItemSet* pArgs = rReq.GetArgs();
         if( pArgs )
         {
@@ -541,7 +541,7 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
                             while( nCnt-- )
                                 pUndoManager->Redo();
                     }
-                    bCallBase = sal_False;
+                    bCallBase = false;
                     GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
                 }
                 break;
