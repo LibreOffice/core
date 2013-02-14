@@ -50,33 +50,29 @@ public:
 
     virtual short   Execute();      // overloaded to set parent dialog
 
-    sal_Bool            GetTablesFromFile() { return aBtnFromFile.IsChecked(); }
-    sal_Bool            GetTablesAsLink()   { return aBtnLink.IsChecked(); }
+    sal_Bool        GetTablesFromFile() const { return m_pBtnFromFile->IsChecked(); }
+    sal_Bool        GetTablesAsLink() const { return m_pBtnLink->IsChecked(); }
 
     const String*   GetFirstTable( sal_uInt16* pN = NULL );
     const String*   GetNextTable( sal_uInt16* pN = NULL );
     ScDocShell*     GetDocShellTables() { return pDocShTables; }
-    sal_Bool            IsTableBefore() { return aBtnBefore.IsChecked(); }
-    SCTAB           GetTableCount() { return nTableCount;}
+    sal_Bool        IsTableBefore() const { return m_pBtnBefore->IsChecked(); }
+    SCTAB           GetTableCount() const { return nTableCount;}
 
 private:
-    FixedLine               aFlPos;
-    RadioButton             aBtnBefore;
-    RadioButton             aBtnBehind;
-    FixedLine               aFlTable;
-    RadioButton             aBtnNew;
-    RadioButton             aBtnFromFile;
-    FixedText               aFtCount;
-    NumericField            aNfCount;
-    FixedText               aFtName;
-    Edit                    aEdName;
-    MultiListBox            aLbTables;
-    ScExpandedFixedText     aFtPath;
-    PushButton              aBtnBrowse;
-    CheckBox                aBtnLink;
-    OKButton                aBtnOk;
-    CancelButton            aBtnCancel;
-    HelpButton              aBtnHelp;
+    RadioButton*            m_pBtnBefore;
+    RadioButton*            m_pBtnBehind;
+    RadioButton*            m_pBtnNew;
+    RadioButton*            m_pBtnFromFile;
+    FixedText*              m_pFtCount;
+    NumericField*           m_pNfCount;
+    FixedText*              m_pFtName;
+    Edit*                   m_pEdName;
+    ListBox*                m_pLbTables;
+    FixedText*              m_pFtPath;
+    PushButton*             m_pBtnBrowse;
+    CheckBox*               m_pBtnLink;
+    OKButton*               m_pBtnOk;
 
     Timer                   aBrowseTimer;
     ScViewData&             rViewData;
@@ -86,9 +82,10 @@ private:
     SfxObjectShellRef       aDocShTablesRef;
 
     bool                bMustClose;
-    sal_uInt16              nSelTabIndex;   // for GetFirstTable() / GetNextTable()
+    sal_uInt16          nSelTabIndex;   // for GetFirstTable() / GetNextTable()
     String              aStrCurSelTable;
     SCTAB               nTableCount;
+    OUString            m_sSheetDotDotDot;
 
 #ifdef SC_INSTBDLG_CXX
     void    Init_Impl( bool bFromFile );

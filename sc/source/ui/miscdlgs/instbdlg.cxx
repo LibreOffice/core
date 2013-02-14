@@ -36,7 +36,6 @@
 #include "docsh.hxx"
 #include "viewdata.hxx"
 #include "scresid.hxx"
-#include "instbdlg.hrc"
 #include "globstr.hrc"
 
 #define SC_INSTBDLG_CXX
@@ -45,37 +44,31 @@
 //==================================================================
 
 ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
-
-    :   ModalDialog ( pParent, ScResId( RID_SCDLG_INSERT_TABLE ) ),
-        //
-        aFlPos          ( this, ScResId( FL_POSITION ) ),
-        aBtnBefore      ( this, ScResId( RB_BEFORE ) ),
-        aBtnBehind      ( this, ScResId( RB_BEHIND ) ),
-        aFlTable        ( this, ScResId( FL_TABLE ) ),
-        aBtnNew         ( this, ScResId( RB_NEW ) ),
-        aBtnFromFile    ( this, ScResId( RB_FROMFILE ) ),
-        aFtCount        ( this, ScResId( FT_COUNT ) ),
-        aNfCount        ( this, ScResId( NF_COUNT ) ),
-        aFtName         ( this, ScResId( FT_NAME ) ),
-        aEdName         ( this, ScResId( ED_TABNAME ) ),
-        aLbTables       ( this, ScResId( LB_TABLES ) ),
-        aFtPath         ( this, ScResId( FT_PATH ) ),
-        aBtnBrowse      ( this, ScResId( BTN_BROWSE ) ),
-        aBtnLink        ( this, ScResId( CB_LINK ) ),
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        rViewData       ( rData ),
-        rDoc            ( *rData.GetDocument() ),
-        pDocShTables    ( NULL ),
-        pDocInserter    ( NULL ),
-        bMustClose      ( false ),
-        nSelTabIndex    ( 0 ),
-        nTableCount     (nTabCount)
+    : ModalDialog(pParent, "InsertSheetDialog", "modules/scalc/ui/insertsheet.ui")
+    , rViewData(rData)
+    , rDoc(*rData.GetDocument())
+    , pDocShTables(NULL)
+    , pDocInserter(NULL)
+    , bMustClose(false)
+    , nSelTabIndex(0)
+    , nTableCount(nTabCount)
 {
+    get(m_pBtnBefore, "before");
+    get(m_pBtnBehind, "after");
+    get(m_pBtnNew, "new");
+    get(m_pBtnFromFile, "fromfile");
+    get(m_pFtCount, "countft");
+    get(m_pNfCount, "countnf");
+    get(m_pFtName, "nameft");
+    get(m_pEdName, "nameed");
+    m_sSheetDotDotDot = m_pEdName->GetText();
+    get(m_pLbTables, "tables");
+    m_pLbTables->SetDropDownLineCount(8);
+    get(m_pFtPath, "path");
+    get(m_pBtnBrowse, "browse");
+    get(m_pBtnLink, "link");
+    get(m_pBtnOk, "ok");
     Init_Impl( bFromFile );
-    FreeResource();
-    aLbTables.SetAccessibleName(aBtnFromFile.GetText());
 }
 
 //------------------------------------------------------------------------
@@ -91,46 +84,45 @@ ScInsertTableDlg::~ScInsertTableDlg()
 
 void ScInsertTableDlg::Init_Impl( bool bFromFile )
 {
-    aBtnBrowse      .SetClickHdl( LINK( this, ScInsertTableDlg, BrowseHdl_Impl ) );
-    aBtnNew         .SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
-    aBtnFromFile    .SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
-    aLbTables       .SetSelectHdl( LINK( this, ScInsertTableDlg, SelectHdl_Impl ) );
-    aNfCount        .SetModifyHdl( LINK( this, ScInsertTableDlg, CountHdl_Impl));
-    aBtnOk          .SetClickHdl( LINK( this, ScInsertTableDlg, DoEnterHdl ));
-    aBtnBefore.Check();
+    m_pLbTables->EnableMultiSelection(true);
+    m_pBtnBrowse->SetClickHdl( LINK( this, ScInsertTableDlg, BrowseHdl_Impl ) );
+    m_pBtnNew->SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
+    m_pBtnFromFile->SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
+    m_pLbTables->SetSelectHdl( LINK( this, ScInsertTableDlg, SelectHdl_Impl ) );
+    m_pNfCount->SetModifyHdl( LINK( this, ScInsertTableDlg, CountHdl_Impl));
+    m_pBtnOk->SetClickHdl( LINK( this, ScInsertTableDlg, DoEnterHdl ));
+    m_pBtnBefore->Check();
 
-    aNfCount.SetText( String::CreateFromInt32(nTableCount) );
-    aNfCount.SetMax( MAXTAB - rDoc.GetTableCount() + 1 );
+    m_pNfCount->SetText( String::CreateFromInt32(nTableCount) );
+    m_pNfCount->SetMax( MAXTAB - rDoc.GetTableCount() + 1 );
 
     if(nTableCount==1)
     {
         rtl::OUString aName;
         rDoc.CreateValidTabName( aName );
-        aEdName.SetText( aName );
+        m_pEdName->SetText( aName );
     }
     else
     {
-        String aName=aFlTable.GetText();
-        aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
-        aEdName.SetText( aName );
-        aFtName.Disable();
-        aEdName.Disable();
+        m_pEdName->SetText(m_sSheetDotDotDot);
+        m_pFtName->Disable();
+        m_pEdName->Disable();
     }
 
     bool bShared = ( rViewData.GetDocShell() ? rViewData.GetDocShell()->IsDocShared() : false );
 
     if ( !bFromFile || bShared )
     {
-        aBtnNew.Check();
+        m_pBtnNew->Check();
         SetNewTable_Impl();
         if ( bShared )
         {
-            aBtnFromFile.Disable();
+            m_pBtnFromFile->Disable();
         }
     }
     else
     {
-        aBtnFromFile.Check();
+        m_pBtnFromFile->Check();
         SetFromTo_Impl();
 
         aBrowseTimer.SetTimeoutHdl( LINK( this, ScInsertTableDlg, BrowseTimeoutHdl ) );
@@ -146,7 +138,7 @@ short ScInsertTableDlg::Execute()
     Window* pOldDefParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
 
-    if ( aBtnFromFile.IsChecked() )
+    if ( m_pBtnFromFile->IsChecked() )
         aBrowseTimer.Start();
 
     short nRet = ModalDialog::Execute();
@@ -158,19 +150,19 @@ short ScInsertTableDlg::Execute()
 
 void ScInsertTableDlg::SetNewTable_Impl()
 {
-    if (aBtnNew.IsChecked() )
+    if (m_pBtnNew->IsChecked() )
     {
-        aNfCount    .Enable();
-        aFtCount    .Enable();
-        aLbTables   .Disable();
-        aFtPath     .Disable();
-        aBtnBrowse  .Disable();
-        aBtnLink    .Disable();
+        m_pNfCount->Enable();
+        m_pFtCount->Enable();
+        m_pLbTables->Disable();
+        m_pFtPath->Disable();
+        m_pBtnBrowse->Disable();
+        m_pBtnLink->Disable();
 
         if(nTableCount==1)
         {
-            aEdName.Enable();
-            aFtName.Enable();
+            m_pEdName->Enable();
+            m_pFtName->Enable();
         }
     }
 }
@@ -179,16 +171,16 @@ void ScInsertTableDlg::SetNewTable_Impl()
 
 void ScInsertTableDlg::SetFromTo_Impl()
 {
-    if (aBtnFromFile.IsChecked() )
+    if (m_pBtnFromFile->IsChecked() )
     {
-        aEdName     .Disable();
-        aFtName     .Disable();
-        aFtCount    .Disable();
-        aNfCount    .Disable();
-        aLbTables   .Enable();
-        aFtPath     .Enable();
-        aBtnBrowse  .Enable();
-        aBtnLink    .Enable();
+        m_pEdName->Disable();
+        m_pFtName->Disable();
+        m_pFtCount->Disable();
+        m_pNfCount->Disable();
+        m_pLbTables->Enable();
+        m_pFtPath->Enable();
+        m_pBtnBrowse->Enable();
+        m_pBtnLink->Enable();
     }
 }
 
@@ -196,8 +188,8 @@ void ScInsertTableDlg::SetFromTo_Impl()
 
 void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
 {
-    aLbTables.SetUpdateMode( false );
-    aLbTables.Clear();
+    m_pLbTables->SetUpdateMode( false );
+    m_pLbTables->Clear();
 
     if ( pSrcDoc )
     {
@@ -207,14 +199,14 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
         for ( SCTAB i=0; i<nCount; i++ )
         {
             pSrcDoc->GetName( i, aName );
-            aLbTables.InsertEntry( aName );
+            m_pLbTables->InsertEntry( aName );
         }
     }
 
-    aLbTables.SetUpdateMode( sal_True );
+    m_pLbTables->SetUpdateMode( sal_True );
 
-    if(aLbTables.GetEntryCount()==1)
-        aLbTables.SelectEntryPos(0);
+    if(m_pLbTables->GetEntryCount()==1)
+        m_pLbTables->SelectEntryPos(0);
 }
 
 //------------------------------------------------------------------------
@@ -223,17 +215,17 @@ const String* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
 {
     const String* pStr = NULL;
 
-    if ( aBtnNew.IsChecked() )
+    if ( m_pBtnNew->IsChecked() )
     {
-        aStrCurSelTable = aEdName.GetText();
+        aStrCurSelTable = m_pEdName->GetText();
         pStr = &aStrCurSelTable;
     }
-    else if ( nSelTabIndex < aLbTables.GetSelectEntryCount() )
+    else if ( nSelTabIndex < m_pLbTables->GetSelectEntryCount() )
     {
-        aStrCurSelTable = aLbTables.GetSelectEntry( 0 );
+        aStrCurSelTable = m_pLbTables->GetSelectEntry( 0 );
         pStr = &aStrCurSelTable;
         if ( pN )
-            *pN = aLbTables.GetSelectEntryPos( 0 );
+            *pN = m_pLbTables->GetSelectEntryPos( 0 );
         nSelTabIndex = 1;
     }
 
@@ -246,12 +238,12 @@ const String* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 {
     const String* pStr = NULL;
 
-    if ( !aBtnNew.IsChecked() && nSelTabIndex < aLbTables.GetSelectEntryCount() )
+    if ( !m_pBtnNew->IsChecked() && nSelTabIndex < m_pLbTables->GetSelectEntryCount() )
     {
-        aStrCurSelTable = aLbTables.GetSelectEntry( nSelTabIndex );
+        aStrCurSelTable = m_pLbTables->GetSelectEntry( nSelTabIndex );
         pStr = &aStrCurSelTable;
         if ( pN )
-            *pN = aLbTables.GetSelectEntryPos( nSelTabIndex );
+            *pN = m_pLbTables->GetSelectEntryPos( nSelTabIndex );
         nSelTabIndex++;
     }
 
@@ -265,22 +257,20 @@ const String* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 
 IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl)
 {
-    nTableCount = static_cast<SCTAB>(aNfCount.GetValue());
+    nTableCount = static_cast<SCTAB>(m_pNfCount->GetValue());
     if ( nTableCount==1)
     {
         rtl::OUString aName;
         rDoc.CreateValidTabName( aName );
-        aEdName.SetText( aName );
-        aFtName.Enable();
-        aEdName.Enable();
+        m_pEdName->SetText( aName );
+        m_pFtName->Enable();
+        m_pEdName->Enable();
     }
     else
     {
-        String aName=aFlTable.GetText();
-        aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
-        aEdName.SetText( aName );
-        aFtName.Disable();
-        aEdName.Disable();
+        m_pEdName->SetText(m_sSheetDotDotDot);
+        m_pFtName->Disable();
+        m_pEdName->Disable();
     }
 
     DoEnable_Impl();
@@ -290,7 +280,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl)
 //------------------------------------------------------------------------
 IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl)
 {
-    if ( aBtnNew.IsChecked() )
+    if ( m_pBtnNew->IsChecked() )
         SetNewTable_Impl();
     else
         SetFromTo_Impl();
@@ -323,15 +313,15 @@ IMPL_LINK_NOARG(ScInsertTableDlg, SelectHdl_Impl)
 
 void ScInsertTableDlg::DoEnable_Impl()
 {
-    if ( aBtnNew.IsChecked() || ( pDocShTables && aLbTables.GetSelectEntryCount() ) )
-        aBtnOk.Enable();
+    if ( m_pBtnNew->IsChecked() || ( pDocShTables && m_pLbTables->GetSelectEntryCount() ) )
+        m_pBtnOk->Enable();
     else
-        aBtnOk.Disable();
+        m_pBtnOk->Disable();
 }
 
 IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl)
 {
-    if(nTableCount > 1 || rDoc.ValidTabName(aEdName.GetText()))
+    if(nTableCount > 1 || rDoc.ValidTabName(m_pEdName->GetText()))
     {
         EndDialog(RET_OK);
     }
@@ -346,7 +336,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl)
 IMPL_LINK_NOARG(ScInsertTableDlg, BrowseTimeoutHdl)
 {
     bMustClose = true;
-    BrowseHdl_Impl( &aBtnBrowse );
+    BrowseHdl_Impl(m_pBtnBrowse);
     return 0;
 }
 
@@ -380,7 +370,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             if ( !pDocShTables->GetError() )                    // nur Errors
             {
                 FillTables_Impl( pDocShTables->GetDocument() );
-                aFtPath.SetText( pDocShTables->GetTitle( SFX_TITLE_FULLNAME ) );
+                m_pFtPath->SetText( pDocShTables->GetTitle( SFX_TITLE_FULLNAME ) );
             }
             else
             {
@@ -389,7 +379,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
                 pDocShTables = NULL;
 
                 FillTables_Impl( NULL );
-                aFtPath.SetText( EMPTY_STRING );
+                m_pFtPath->SetText( EMPTY_STRING );
             }
         }
 

@@ -458,8 +458,8 @@ public:
                                                                     sal_uInt16          nCheckDefaults = 0,
                                                                     const String*   pStrTitle = NULL );
 
-    virtual AbstractScInsertTableDlg * CreateScInsertTableDlg ( Window* pParent, ScViewData& rViewData,  //add for ScInsertTableDlg
-                                                                SCTAB nTabCount, bool bFromFile, int nId);
+    virtual AbstractScInsertTableDlg * CreateScInsertTableDlg(Window* pParent, ScViewData& rViewData,
+        SCTAB nTabCount, bool bFromFile);
 
     virtual AbstractScSelEntryDlg * CreateScSelEntryDlg ( Window* pParent, // add for ScSelEntryDlg
                                                             sal_uInt16  nResId,

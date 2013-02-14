@@ -1002,26 +1002,12 @@ AbstractScInsertContentsDlg * ScAbstractDialogFactory_Impl::CreateScInsertConten
     return 0;
 }
 
-
-
-AbstractScInsertTableDlg * ScAbstractDialogFactory_Impl::CreateScInsertTableDlg ( Window* pParent, ScViewData& rViewData,
-                                                                SCTAB nTabCount, bool bFromFile, int nId)
+AbstractScInsertTableDlg * ScAbstractDialogFactory_Impl::CreateScInsertTableDlg(Window* pParent, ScViewData& rViewData,
+    SCTAB nTabCount, bool bFromFile)
 {
-    ScInsertTableDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_INSERT_TABLE :
-            pDlg = new ScInsertTableDlg( pParent, rViewData,nTabCount, bFromFile );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScInsertTableDlg_Impl( pDlg );
-    return 0;
+    ScInsertTableDlg* pDlg = new ScInsertTableDlg( pParent, rViewData,nTabCount, bFromFile );
+    return new AbstractScInsertTableDlg_Impl( pDlg );
 }
-
 
 // add for ScSelEntryDlg begin
 AbstractScSelEntryDlg * ScAbstractDialogFactory_Impl::CreateScSelEntryDlg ( Window* pParent,

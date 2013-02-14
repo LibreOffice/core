@@ -221,9 +221,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    AbstractScInsertTableDlg* pDlg = pFact->CreateScInsertTableDlg( GetDialogParent(), *pViewData,
-                                                                                    nTabSelCount, nSlot == FID_INS_TABLE_EXT,
-                                                                                    RID_SCDLG_INSERT_TABLE);
+                    AbstractScInsertTableDlg* pDlg = pFact->CreateScInsertTableDlg(GetDialogParent(), *pViewData,
+                        nTabSelCount, nSlot == FID_INS_TABLE_EXT);
                     OSL_ENSURE(pDlg, "Dialog create fail!");
                     if ( RET_OK == pDlg->Execute() )
                     {
