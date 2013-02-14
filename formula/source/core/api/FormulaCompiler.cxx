@@ -1067,8 +1067,10 @@ void FormulaCompiler::Factor()
                 case ocColumn :
                 case ocRow :
                     // ocCell needs recalc on move for some possible type values.
+                    // and recalc mode on load, fdo#60646
                 case ocCell :
                     pArr->SetRecalcModeOnRefMove();
+                    pArr->SetRecalcModeOnLoad();
                 break;
                 case ocHyperLink :
                     // cell with hyperlink needs to be calculated on load to
