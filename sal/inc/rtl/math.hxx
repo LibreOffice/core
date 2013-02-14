@@ -186,13 +186,6 @@ inline double pow10Exp(double fValue, int nExp)
     return rtl_math_pow10Exp(fValue, nExp);
 }
 
-/** A wrapper around rtl_math_powr.
- */
-inline double powr(double fValue, int fExp)
-{
-    return rtl_math_powr(fValue, fExp);
-}
-
 /** A wrapper around rtl_math_approxValue.
  */
 inline double approxValue(double fValue)

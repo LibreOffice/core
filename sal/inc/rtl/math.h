@@ -396,21 +396,6 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
  */
 double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THROW_EXTERN_C();
 
-/** Similar to pow() with stricter exception handling for indeterminate values.
-
-    powr is part of the IEEE 754 2008 Floating Point Standard.
-
-    @param fValue
-    The value to be raised.
-
-    @param fExp
-    The exponent.
-
-    @return
-    powr(fValue, fExp)
- */
-double SAL_CALL rtl_math_powr(double fValue, double fExp) SAL_THROW_EXTERN_C();
-
 /** Rounds value to 15 significant decimal digits.
 
     @param fValue

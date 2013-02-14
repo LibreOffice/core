@@ -1611,14 +1611,14 @@ void ScInterpreter::ScPow()
             if (bFlag)
             {   for ( SCSIZE i = 0; i < nCount; i++ )
                     if (pMat->IsValue(i))
-                        pResMat->PutDouble(::rtl::math::powr(fVal,pMat->GetDouble(i)), i);
+                        pResMat->PutDouble(pow(fVal,pMat->GetDouble(i)), i);
                     else
                         pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
             }
             else
             {   for ( SCSIZE i = 0; i < nCount; i++ )
                     if (pMat->IsValue(i))
-                        pResMat->PutDouble(::rtl::math::powr(pMat->GetDouble(i),fVal), i);
+                        pResMat->PutDouble(pow(pMat->GetDouble(i),fVal), i);
                     else
                         pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
             }
@@ -1628,7 +1628,7 @@ void ScInterpreter::ScPow()
             PushIllegalArgument();
     }
     else
-        PushDouble(::rtl::math::powr(fVal1,fVal2));
+        PushDouble(pow(fVal1,fVal2));
 }
 
 void ScInterpreter::ScSumProduct()
