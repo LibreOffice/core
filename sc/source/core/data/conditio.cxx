@@ -1307,9 +1307,9 @@ rtl::OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uIn
         }
         else if (bIsStr2)
         {
-            aRet = """";
+            aRet = "\"";
             aRet += aStrVal2;
-            aRet += """";
+            aRet += "\"";
         }
         else
             mpDoc->GetFormatTable()->GetInputLineString(nVal2, nNumFmt, aRet);
