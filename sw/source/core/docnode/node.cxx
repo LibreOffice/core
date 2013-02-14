@@ -1624,12 +1624,26 @@ const SfxPoolItem* SwCntntNode::GetNoCondAttr( sal_uInt16 nWhich,
     return pFnd;
 }
 
+static bool lcl_CheckMaxLength(SwNode const& rPrev, SwNode const& rNext)
+{
+    if (rPrev.GetNodeType() != rNext.GetNodeType())
+    {
+        return false;
+    }
+    if (!rPrev.IsTxtNode())
+    {
+        return true;
+    }
+    size_t const nSum(  static_cast<const SwTxtNode&>(rPrev).GetTxt().Len()
+                      + static_cast<const SwTxtNode&>(rNext).GetTxt().Len());
+    return (nSum <= TXTNODE_MAX);
+}
+
 // Can we join two Nodes?
 // We can return the 2nd position in pIdx.
 int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
 {
     const SwNodes& rNds = GetNodes();
-    sal_uInt8 nNdType = GetNodeType();
     SwNodeIndex aIdx( *this, 1 );
 
     const SwNode* pNd = this;
@@ -1638,16 +1652,11 @@ int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
             ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )))
         ++aIdx;
 
-    if( pNd->GetNodeType() != nNdType || rNds.Count()-1 == aIdx.GetIndex() )
+    if (rNds.Count()-1 == aIdx.GetIndex())
         return sal_False;
-    if( IsTxtNode() )
-    {   // Do not merge strings if the result exceeds the allowed string length
-        const SwTxtNode* pTxtNd = static_cast<const SwTxtNode*>(this);
-        sal_uInt64 nSum = pTxtNd->GetTxt().Len();
-        pTxtNd = static_cast<const SwTxtNode*>(pNd);
-        nSum += pTxtNd->GetTxt().Len();
-        if( nSum > STRING_LEN )
-            return sal_False;
+    if (!lcl_CheckMaxLength(*this, *pNd))
+    {
+        return false;
     }
     if( pIdx )
         *pIdx = aIdx;
@@ -1658,7 +1667,6 @@ int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
 // We can return the 2nd position in pIdx.
 int SwCntntNode::CanJoinPrev( SwNodeIndex* pIdx ) const
 {
-    sal_uInt8 nNdType = GetNodeType();
     SwNodeIndex aIdx( *this, -1 );
 
     const SwNode* pNd = this;
@@ -1667,8 +1675,12 @@ int SwCntntNode::CanJoinPrev( SwNodeIndex* pIdx ) const
             ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )))
         aIdx--;
 
-    if( pNd->GetNodeType() != nNdType || 0 == aIdx.GetIndex() )
+    if (0 == aIdx.GetIndex())
         return sal_False;
+    if (!lcl_CheckMaxLength(*pNd, *this))
+    {
+        return false;
+    }
     if( pIdx )
         *pIdx = aIdx;
     return sal_True;
