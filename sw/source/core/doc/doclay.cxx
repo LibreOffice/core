@@ -654,7 +654,11 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         if (pTxtNode != NULL)
         {
             SwFmtFlyCnt aFmt( pFmt );
-            pTxtNode->InsertItem( aFmt, nStt, nStt );
+            bool const bSuccess( pTxtNode->InsertItem(aFmt, nStt, nStt) );
+            if (!bSuccess) // may fail if there's no space left or header/ftr
+            {   // pFmt is dead now
+                return 0;
+            }
         }
     }
 
@@ -740,7 +744,9 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
         if (bCalledFromShell && !lcl_IsItemSet(*pNewTxtNd, RES_PARATR_ADJUST) &&
             SFX_ITEM_SET == pAnchorNode->GetSwAttrSet().
             GetItemState(RES_PARATR_ADJUST, sal_True, &pItem))
+        {
             static_cast<SwCntntNode *>(pNewTxtNd)->SetAttr(*pItem);
+        }
 
          pFmt = _MakeFlySection( *pAnchorPos, *pNewTxtNd,
                                 eAnchorType, pFlySet, pFrmFmt );
@@ -941,8 +947,13 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     {
         xub_StrLen nStt = rRg.GetPoint()->nContent.GetIndex();
         SwFmtFlyCnt aFmt( pFmt );
-        rRg.GetPoint()->nNode.GetNode().GetTxtNode()->InsertItem(
-                aFmt, nStt, nStt );
+        bool const bSuccess( // may fail if there's no space left
+            rRg.GetPoint()->nNode.GetNode().GetTxtNode()->InsertItem(
+                    aFmt, nStt, nStt));
+        if (!bSuccess)
+        {   // pFmt is dead now
+            return 0;
+        }
     }
 
     SwDrawContact* pContact = new SwDrawContact( pFmt, &rDrawObj );
