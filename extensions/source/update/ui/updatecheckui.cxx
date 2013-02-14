@@ -75,7 +75,7 @@ static uno::Sequence< rtl::OUString > getServiceNames()
 
 static rtl::OUString getImplementationName()
 {
-    return "vnd.sun.UpdateCheckUI";
+    return rtl::OUString("vnd.sun.UpdateCheckUI");
 }
 
 //------------------------------------------------------------------------------

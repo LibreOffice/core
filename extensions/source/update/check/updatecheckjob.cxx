@@ -175,7 +175,7 @@ UpdateCheckJob::getServiceNames()
 rtl::OUString
 UpdateCheckJob::getImplName()
 {
-    return "vnd.sun.UpdateCheck";
+    return rtl::OUString("vnd.sun.UpdateCheck");
 }
 
 

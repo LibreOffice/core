@@ -505,7 +505,7 @@ UpdateCheckConfig::getServiceNames()
 rtl::OUString
 UpdateCheckConfig::getImplName()
 {
-    return "vnd.sun.UpdateCheckConfig";
+    return rtl::OUString("vnd.sun.UpdateCheckConfig");
 }
 
 //------------------------------------------------------------------------------
