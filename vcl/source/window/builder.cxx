@@ -941,15 +941,23 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     {
         extractGroup(id, rMap);
         extractButtonImage(id, rMap, true);
-        pWindow = new RadioButton(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+        WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
+        OString sWrap = extractCustomProperty(rMap);
+        if (!sWrap.isEmpty())
+            nBits |= WB_WORDBREAK;
+        pWindow = new RadioButton(pParent, nBits);
     }
     else if (name == "GtkCheckButton")
     {
+        WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
+        OString sWrap = extractCustomProperty(rMap);
+        if (!sWrap.isEmpty())
+            nBits |= WB_WORDBREAK;
         //maybe always import as TriStateBox and enable/disable tristate
         bool bIsTriState = extractInconsistent(rMap);
         CheckBox *pCheckBox = bIsTriState ?
-            new TriStateBox(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK) :
-            new CheckBox(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+            new TriStateBox(pParent, nBits) :
+            new CheckBox(pParent, nBits);
         if (bIsTriState)
             pCheckBox->SetState(STATE_DONTKNOW);
         pWindow = pCheckBox;
