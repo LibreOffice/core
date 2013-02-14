@@ -64,7 +64,7 @@ _PaMIntoCrsrShellRing::_PaMIntoCrsrShellRing( SwCrsrShell& rCSh,
 }
 _PaMIntoCrsrShellRing::~_PaMIntoCrsrShellRing()
 {
-    // und den Pam wieder herausnehmen:
+    // and take out the Pam again:
     RemoveFromRing( rDelPam, pPrevDelPam );
     RemoveFromRing( rCrsr, pPrevCrsr );
 }
@@ -102,8 +102,8 @@ void SwAutoCorrDoc::DeleteSel( SwPaM& rDelPam )
     SwDoc* pDoc = rEditSh.GetDoc();
     if( pDoc->IsAutoFmtRedline() )
     {
-        // damit der DelPam auch verschoben wird, in den Shell-Cursr-Ring
-        // mit aufnehmen !!
+        // so that also the DelPam be moved,  include it in the
+        // Shell-Cursr-Ring !!
         _PaMIntoCrsrShellRing aTmp( rEditSh, rCrsr, rDelPam );
         pDoc->DeleteAndJoin( rDelPam );
     }
@@ -181,7 +181,7 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
 
         if( pDoc->IsAutoFmtRedline() )
         {
-            if( nPos == pNd->GetTxt().Len() )       // am Ende erfolgt ein Insert
+            if( nPos == pNd->GetTxt().Len() )       // at the End an Insert takes place
             {
                 pDoc->InsertString( *pPam, rTxt );
             }
@@ -271,13 +271,13 @@ sal_Bool SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const Str
     return sal_True;
 }
 
-    // returne den Text eines vorherigen Absatzes.
-    // Dieser darf nicht leer sein!
-    // Gibt es diesen nicht oder gibt es davor nur Leere, dann returne 0
-    // Das Flag gibt an:
-    //      sal_True: den, vor der normalen Einfuegeposition (sal_True)
-    //      sal_False: den, in den das korrigierte Wort eingfuegt wurde.
-    //              (Muss nicht der gleiche Absatz sein!!!!)
+    // Return the text of a previous paragraph
+    // This must not be empty!
+    // Does this not exists or there are only blankness, then return 0
+    // The Flag specifies:
+    // sal_True: that, before the normal insert position
+    //sal_False: that, in which the corrected word was inserted.
+    //              (Doesn't need to be the same paragraph!!!!)
 const String* SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
 {
     const String* pStr = 0;
@@ -309,10 +309,10 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;
 
-    // Absatz-Anfang oder ein Blank gefunden, suche nach dem Wort
-    // Kuerzel im Auto
+    // Found a beginning of a paragraph or a Blank,
+    // search for the word Kuerzel (Shortcut) in the Auto
     SwTxtNode* pTxtNd = rCrsr.GetNode()->GetTxtNode();
-    OSL_ENSURE( pTxtNd, "wo ist denn der TextNode?" );
+    OSL_ENSURE( pTxtNd, "where is the TextNode?" );
 
     sal_Bool bRet = sal_False;
     if( nEndPos == rSttPos )
@@ -322,7 +322,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
     if(LANGUAGE_SYSTEM == eLang)
         eLang = GetAppLanguage();
 
-    //JP 22.04.99: Bug 63883 - Sonderbehandlung fuer Punkte.
+    //JP 22.04.99: Bug 63883 - Special treatment for dots.
     bool bLastCharIsPoint = nEndPos < pTxtNd->GetTxt().Len() &&
                             '.' == pTxtNd->GetTxt().GetChar( nEndPos );
 
@@ -336,7 +336,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
 
         if( pFnd->IsTextOnly() )
         {
-            //JP 22.04.99: Bug 63883 - Sonderbehandlung fuer Punkte.
+            //JP 22.04.99: Bug 63883 - Special treatment for dots.
             if( !bLastCharIsPoint || !pFnd->GetLong().Len() ||
                 '.' != pFnd->GetLong().GetChar( pFnd->GetLong().Len() - 1 ) )
             {
@@ -356,7 +356,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
 
                 if( ppPara )
                 {
-                    OSL_ENSURE( !pIdx, "wer hat seinen Index nicht geloescht?" );
+                    OSL_ENSURE( !pIdx, "who has not deleted his Index?" );
                     pIdx = new SwNodeIndex( rCrsr.GetPoint()->nNode, -1 );
                 }
 
@@ -374,7 +374,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
                 }
                 aCpyPam.SetMark();
 
-                // dann bis zum Ende vom Nodes Array
+                // then until the end of the Nodes Array
                 aCpyPam.GetPoint()->nNode.Assign( pAutoDoc->GetNodes().GetEndOfContent(), -1 );
                 pCntntNd = aCpyPam.GetCntntNode();
                 aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
@@ -404,11 +404,11 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
 }
 
 
-    // wird nach dem austauschen der Zeichen von den Funktionen
+    // is being called after the exchange of the character from the functions
     //  - FnCptlSttWrd
     //  - FnCptlSttSntnc
-    // gerufen. Dann koennen die Worte ggfs. in die Ausnahmelisten
-    // aufgenommen werden.
+    // Then, the words if necessary be added to the exception
+    // list.
 void SwAutoCorrDoc::SaveCpltSttWord( sal_uLong nFlag, xub_StrLen nPos,
                                             const String& rExceptWord,
                                             sal_Unicode cChar )
@@ -436,15 +436,15 @@ LanguageType SwAutoCorrDoc::GetLanguage( xub_StrLen nPos, sal_Bool bPrevPara ) c
 
 void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
 {
-    // nur testen ob es eine Verbesserung ist. Wenn ja, dann das Wort
-    // in die Ausnahmeliste aufnehmen.
+    // test only if this is a improvement.
+    // If yes, then add the word to the list.
     if( cChar == cChr && rPos.nNode.GetIndex() == nNode &&
         rPos.nContent.GetIndex() == nCntnt )
     {
-        // die akt. Autokorrektur besorgen:
+        // get the current autocorrection:
         SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
-        // dann in die Liste aufnehmen:
+        // then add to the list:
         if( CptlSttWrd & nFlags )
             pACorr->AddWrtSttException( sWord, eLanguage );
         else if( CptlSttSntnc & nFlags )
@@ -501,7 +501,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
             {
                 SwTxtAttr* pHt = pTxtNd->GetpSwpHints()->GetTextHint( n );
                 nAttrStart = *pHt->GetStart();
-                if( nAttrStart > nStart )       // ueber den Bereich hinaus
+                if( nAttrStart > nStart )       // beyond the area
                     break;
 
                 if( 0 != ( pAttrEnd = pHt->GetEnd() ) &&
@@ -516,9 +516,9 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
                         GetItemState( pHt->Which(), sal_False, &pItem ) ||
                         *pItem != pHt->GetAttr() )
                     {
-                        // das Attribut war vorher nicht in dieser Form im Absatz
-                        // gesetzt, also kann es nur durchs einfuegen/kopieren erzeugt
-                        // worden sein. Damit ist es ein Kandiadat fuers DontExpand
+                        // The attribute was not previously set in this form in the
+                        // paragraph, so it can only be created through insert/copy
+                        // Because of that it is a candidate for DontExpand
                         pHt->SetDontExpand( sal_True );
                     }
                 }

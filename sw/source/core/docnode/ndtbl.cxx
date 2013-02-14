@@ -333,8 +333,8 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
                                    sal_Bool bCalledFromShell,
                                    sal_Bool bNewModel )
 {
-    OSL_ENSURE( nRows, "Tabelle ohne Zeile?" );
-    OSL_ENSURE( nCols, "Tabelle ohne Spalten?" );
+    OSL_ENSURE( nRows, "Table without line?" );
+    OSL_ENSURE( nCols, "Table without rows?" );
 
     {
         // Do not copy into Footnotes!
@@ -1398,7 +1398,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                         aCellNodeIdx = SwNodeIndex( *aCellNodeIdx.GetNode().EndOfSectionNode() );
                 }
 
-                // Section der Box zuweisen
+                // assign Section to the Box
                 pBox = new SwTableBox( pBoxFmt, *pSttNd, pLine );
                 pLine->GetTabBoxes().insert( pLine->GetTabBoxes().begin() + nBoxes++, pBox );
         }
@@ -3086,7 +3086,7 @@ sal_uInt16 aTableSplitBoxSetRange[] = {
                 }
             }
 
-            // bedingte Vorlage beachten
+            // note conditional template
             pBox->GetSttNd()->CheckSectionCondColl();
         }
     }

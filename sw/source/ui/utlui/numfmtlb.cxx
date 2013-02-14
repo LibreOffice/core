@@ -49,10 +49,10 @@ using namespace ::com::sun::star::lang;
 // STATIC DATA -----------------------------------------------------------
 
 /*--------------------------------------------------------------------
-    Beschreibung:
-                    nFormatType: Formate dieses Typs anzeigen
-                    nDefFmt:     Dieses Format selektieren und ggf vorher
-                                 einfuegen
+    Description:
+                    nFormatType: Display the formats of this Type
+                    nDefFmt:     Select this format and possibly
+                                 insert it
  --------------------------------------------------------------------*/
 
 NumFormatListBox::NumFormatListBox( Window* pWin, const ResId& rResId,
@@ -122,7 +122,7 @@ SwView* NumFormatListBox::GetView()
 void NumFormatListBox::SetFormatType(const short nFormatType)
 {
     if (nCurrFormatType == -1 ||
-        (nCurrFormatType & nFormatType) == 0)   // Es gibt Mischformate, wie z.B. DateTime
+        (nCurrFormatType & nFormatType) == 0)   // there are mixed formats, like for example DateTime
     {
         SvNumberFormatter* pFormatter;
 
@@ -138,7 +138,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
             pFormatter = rSh.GetNumberFormatter();
         }
 
-        Clear();    // Alle Eintraege in der Listbox entfernen
+        Clear();    // Remove all entries from the Listbox
 
         NfIndexTableOffset eOffsetStart = NF_NUMBER_START;
         NfIndexTableOffset eOffsetEnd = NF_NUMBER_START;
@@ -302,7 +302,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
         }
     }
 
-    // Kein Eintrag gefunden:
+    // No entry found:
     double fValue = GetDefValue(nType);
     String sValue;
     Color* pCol = 0;
@@ -348,7 +348,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
         sValue += String(SW_RES(RID_STR_SYSTEM));
     }
 
-    nPos = InsertEntry(sValue, nPos);   // Als ersten numerischen Eintrag einfuegen
+    nPos = InsertEntry(sValue, nPos);   // Insert as first numeric entry
     SetEntryData(nPos, (void*)nDefFmt);
     SelectEntryPos(nPos);
     nDefFormat = GetFormat();
