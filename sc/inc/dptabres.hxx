@@ -371,7 +371,7 @@ public:
                                         size_t nPos,
                                         ScDPInitState& rInitState);
     void CheckShowEmpty( bool bShow = false );
-    String              GetName() const;
+    OUString GetName() const;
     void                FillItemData( ScDPItemData& rData ) const;
     bool IsValid() const;
     bool IsVisible() const;
@@ -391,11 +391,10 @@ public:
                                         const ScDPResultDimension* pDataDim,
                                         const ::std::vector<SCROW>& aDataMembers,
                                         const ::std::vector<ScDPValue>& aValues );
-    void                FillMemberResults( com::sun::star::uno::Sequence<
-                                                com::sun::star::sheet::MemberResult>* pSequences,
-                                            long& rPos, long nMeasure, bool bRoot,
-                                            const String* pMemberName,
-                                            const String* pMemberCaption );
+    void FillMemberResults(
+        com::sun::star::uno::Sequence<
+            com::sun::star::sheet::MemberResult>* pSequences,
+        long& rPos, long nMeasure, bool bRoot, const OUString* pMemberName, const OUString* pMemberCaption );
 
     void                FillDataResults( const ScDPResultMember* pRefMember,
                                     com::sun::star::uno::Sequence<
@@ -447,7 +446,7 @@ public:
 
     void                InitFrom( const ScDPResultDimension* pDim );
 
-    String              GetName() const;
+    OUString GetName() const;
     bool IsVisible() const;
     bool HasData( long nMeasure, const ScDPSubTotalState& rSubState ) const;
 
@@ -561,13 +560,15 @@ public:
 
     void                ResetResults();
 
-                        //  called for the reference dimension
-    ScDPDataMember*     GetRowReferenceMember( const ScDPRelativePos* pMemberPos, const String* pName,
-                                    const long* pRowIndexes, const long* pColIndexes ) const;
+    //  called for the reference dimension
+    ScDPDataMember* GetRowReferenceMember(
+        const ScDPRelativePos* pMemberPos, const OUString* pName,
+        const long* pRowIndexes, const long* pColIndexes ) const;
 
-                        //  uses row root member from ScDPRunningTotalState
-    static ScDPDataMember* GetColReferenceMember( const ScDPRelativePos* pMemberPos, const String* pName,
-                                    long nRefDimPos, const ScDPRunningTotalState& rRunning );
+    // uses row root member from ScDPRunningTotalState
+    static ScDPDataMember* GetColReferenceMember(
+        const ScDPRelativePos* pMemberPos, const OUString* pName,
+        long nRefDimPos, const ScDPRunningTotalState& rRunning );
 
     void                DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
 
@@ -580,7 +581,7 @@ public:
     ScMemberSortOrder&  GetMemberOrder()                { return aMemberOrder; }
 
     bool IsDataLayout() const { return bIsDataLayout; }
-    String              GetName() const         { return aDimensionName; }
+    const OUString& GetName() const { return aDimensionName; }
 
     bool IsSortByData() const { return bSortByData; }
     bool IsSortAscending() const { return bSortAscending; }
@@ -648,7 +649,7 @@ public:
     ScDPResultVisibilityData( ScDPSource* pSource);
     ~ScDPResultVisibilityData();
 
-    void addVisibleMember(const String& rDimName, const ScDPItemData& rMemberItem);
+    void addVisibleMember(const OUString& rDimName, const ScDPItemData& rMemberItem);
     void fillFieldFilters(::std::vector<ScDPFilteredCache::Criterion>& rFilters) const;
 
 private:
@@ -657,7 +658,7 @@ private:
         size_t operator()(const ScDPItemData& r) const;
     };
     typedef ::boost::unordered_set<ScDPItemData, MemberHash> VisibleMemberType;
-    typedef ::boost::unordered_map<String, VisibleMemberType, ScStringHashCode> DimMemberType;
+    typedef ::boost::unordered_map<OUString, VisibleMemberType, ScStringHashCode> DimMemberType;
     DimMemberType maDimensions;
 
     ScDPSource* mpSource;

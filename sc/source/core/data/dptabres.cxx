@@ -966,9 +966,9 @@ ScDPResultMember::~ScDPResultMember()
     delete pDataRoot;
 }
 
-String ScDPResultMember::GetName() const
+OUString ScDPResultMember::GetName() const
 {
-  const ScDPMember*   pMemberDesc = GetDPMember();
+  const ScDPMember* pMemberDesc = GetDPMember();
     if (pMemberDesc)
         return pMemberDesc->GetNameStr();
     else
@@ -1304,10 +1304,9 @@ static String lcl_parseSubtotalName(const String& rSubStr, const String& rCaptio
     return aNewStr;
 }
 
-void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pSequences,
-                                            long& rPos, long nMeasure, bool bRoot,
-                                            const String* pMemberName,
-                                            const String* pMemberCaption )
+void ScDPResultMember::FillMemberResults(
+    uno::Sequence<sheet::MemberResult>* pSequences, long& rPos, long nMeasure, bool bRoot,
+    const OUString* pMemberName, const OUString* pMemberCaption )
 {
     //  IsVisible() test is in ScDPResultDimension::FillMemberResults
     //  (not on data layout dimension)
@@ -1321,7 +1320,7 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
     OSL_ENSURE( rPos+nSize <= pSequences->getLength(), "bumm" );
 
     bool bIsNumeric = false;
-    rtl::OUString aName;
+    OUString aName;
     if ( pMemberName )          // if pMemberName != NULL, use instead of real member name
     {
         aName = *pMemberName;
@@ -1356,7 +1355,7 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
         bIsNumeric = false;
     }
 
-    String aCaption = aName;
+    OUString aCaption = aName;
     const ScDPMember* pMemberDesc = GetDPMember();
     if (pMemberDesc)
     {
@@ -1370,7 +1369,7 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
 
     if ( pMemberCaption )                   // use pMemberCaption if != NULL
         aCaption = *pMemberCaption;
-    if (!aCaption.Len())
+    if (aCaption.isEmpty())
         aCaption = ScGlobal::GetRscString(STR_EMPTYDATA);
 
     if (bIsNumeric)
@@ -1380,8 +1379,8 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
 
     if ( nSize && !bRoot )                  // root is overwritten by first dimension
     {
-        pArray[rPos].Name    = rtl::OUString(aName);
-        pArray[rPos].Caption = rtl::OUString(aCaption);
+        pArray[rPos].Name    = aName;
+        pArray[rPos].Caption = aCaption;
         pArray[rPos].Flags  |= sheet::MemberResultFlags::HASMEMBER;
 
         //  set "continue" flag (removed for subtotals later)
@@ -1441,9 +1440,7 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
                     eForce = lcl_GetForceFunc( pParentLevel, nUserPos );
 
                 bool bTotalResult = false;
-                String aSubStr = aCaption;
-                aSubStr += ' ';
-                aSubStr += pResultData->GetMeasureString(nMemberMeasure, false, eForce, bTotalResult);
+                OUString aSubStr = aCaption + " " + pResultData->GetMeasureString(nMemberMeasure, false, eForce, bTotalResult);
 
                 if (bTotalResult)
                 {
@@ -1465,8 +1462,8 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
                     }
                 }
 
-                pArray[rPos].Name    = rtl::OUString(aName);
-                pArray[rPos].Caption = rtl::OUString(aSubStr);
+                pArray[rPos].Name    = aName;
+                pArray[rPos].Caption = aSubStr;
                 pArray[rPos].Flags = ( pArray[rPos].Flags |
                                     ( sheet::MemberResultFlags::HASMEMBER | sheet::MemberResultFlags::SUBTOTAL) ) &
                                     ~sheet::MemberResultFlags::CONTINUE;
@@ -1781,12 +1778,12 @@ ScDPDataMember::~ScDPDataMember()
     delete pChildDimension;
 }
 
-String ScDPDataMember::GetName() const
+OUString ScDPDataMember::GetName() const
 {
     if (pResultMember)
         return pResultMember->GetName();
     else
-        return EMPTY_STRING;
+        return EMPTY_OUSTRING;
 }
 
 bool ScDPDataMember::IsVisible() const
@@ -2418,10 +2415,10 @@ void ScDPDataMember::UpdateRunningTotals(
 
                                 if ( pSelectDim )
                                 {
-                                    String aRefItemName = aReferenceValue.ReferenceItemName;
+                                    OUString aRefItemName = aReferenceValue.ReferenceItemName;
                                     ScDPRelativePos aRefItemPos( 0, nRelativeDir );     // nBasePos is modified later
 
-                                    const String* pRefName = NULL;
+                                    const OUString* pRefName = NULL;
                                     const ScDPRelativePos* pRefPos = NULL;
                                     if ( bRelative )
                                         pRefPos = &aRefItemPos;
@@ -2985,8 +2982,8 @@ void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>*
         if ( bIsDataLayout )
         {
             bool bTotalResult = false;
-            String aMbrName = pResultData->GetMeasureDimensionName( nSorted );
-            String aMbrCapt = pResultData->GetMeasureString( nSorted, false, SUBTOTAL_FUNC_NONE, bTotalResult );
+            OUString aMbrName = pResultData->GetMeasureDimensionName( nSorted );
+            OUString aMbrCapt = pResultData->GetMeasureString( nSorted, false, SUBTOTAL_FUNC_NONE, bTotalResult );
             maMemberArray[0]->FillMemberResults( pSequences, nPos, nSorted, false, &aMbrName, &aMbrCapt );
         }
         else if ( pMember->IsVisible() )
@@ -3184,8 +3181,9 @@ void ScDPResultDimension::UpdateRunningTotals( const ScDPResultMember* pRefMembe
     }
 }
 
-ScDPDataMember* ScDPResultDimension::GetRowReferenceMember( const ScDPRelativePos* pRelativePos, const String* pName,
-                                    const long* pRowIndexes, const long* pColIndexes ) const
+ScDPDataMember* ScDPResultDimension::GetRowReferenceMember(
+    const ScDPRelativePos* pRelativePos, const OUString* pName,
+    const long* pRowIndexes, const long* pColIndexes ) const
 {
     // get named, previous/next, or first member of this dimension (first existing if pRelativePos and pName are NULL)
 
@@ -3273,8 +3271,9 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember( const ScDPRelativePo
     return pColMember;
 }
 
-ScDPDataMember* ScDPResultDimension::GetColReferenceMember( const ScDPRelativePos* pRelativePos, const String* pName,
-                            long nRefDimPos, const ScDPRunningTotalState& rRunning )
+ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
+    const ScDPRelativePos* pRelativePos, const OUString* pName,
+    long nRefDimPos, const ScDPRunningTotalState& rRunning )
 {
     OSL_ENSURE( pRelativePos == NULL || pName == NULL, "can't use position and name" );
 
@@ -3327,7 +3326,7 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember( const ScDPRelativePo
         {
             long nReferenceCount = pReferenceDim->GetMemberCount();
 
-            sal_Bool bFirstExisting = ( pRelativePos == NULL && pName == NULL );
+            bool bFirstExisting = ( pRelativePos == NULL && pName == NULL );
             long nMemberIndex = 0;      // unsorted
             long nDirection = 1;        // forward if no relative position is used
             pColMember = NULL;          // don't use parent dimension's member if none found
@@ -3798,7 +3797,7 @@ ScDPResultVisibilityData::~ScDPResultVisibilityData()
 {
 }
 
-void ScDPResultVisibilityData::addVisibleMember(const String& rDimName, const ScDPItemData& rMemberItem)
+void ScDPResultVisibilityData::addVisibleMember(const OUString& rDimName, const ScDPItemData& rMemberItem)
 {
     DimMemberType::iterator itr = maDimensions.find(rDimName);
     if (itr == maDimensions.end())
@@ -3843,7 +3842,7 @@ void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criter
 
         long nDimIndex = itrField->second;
         aCri.mnFieldIndex = static_cast<sal_Int32>(nDimIndex);
-        aCri.mpFilter.reset(new ScDPFilteredCache::GroupFilter(/*mrSharedString*/));
+        aCri.mpFilter.reset(new ScDPFilteredCache::GroupFilter);
 
         ScDPFilteredCache::GroupFilter* pGrpFilter =
             static_cast<ScDPFilteredCache::GroupFilter*>(aCri.mpFilter.get());
