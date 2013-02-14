@@ -120,8 +120,8 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
     {
         if( dynamic_cast<ParagraphElement*>(pAnchor) )
         {
-            rProps[ "text:anchor-type" ] =
-                rElem.isCharacter ? "character" : "paragraph";
+            rProps[ "text:anchor-type" ] = rElem.isCharacter
+                ? OUString("character") : OUString("paragraph");
         }
         else
         {
