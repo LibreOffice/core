@@ -45,6 +45,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/pickoutlinepage \
 	cui/uiconfig/ui/positionpage \
 	cui/uiconfig/ui/scriptorganizer \
+	cui/uiconfig/ui/securityoptionsdialog \
 	cui/uiconfig/ui/select_persona_dialog \
 	cui/uiconfig/ui/specialcharacters \
 	cui/uiconfig/ui/spellingdialog \

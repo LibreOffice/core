@@ -43,10 +43,9 @@ namespace svx
 {
 //........................................................................
 
-SecurityOptionsDialog::SecurityOptionsDialog( Window* pParent, SvtSecurityOptions* pOptions ) :
-     ModalDialog( pParent, CUI_RES( RID_SVXDLG_SECURITY_OPTIONS ) )
-    ,m_aWarningsFL      ( this, CUI_RES( FL_WARNINGS ) )
-    ,m_aWarningsFI      ( this, CUI_RES( FI_WARNINGS ) )
+SecurityOptionsDialog::SecurityOptionsDialog(Window* pParent, SvtSecurityOptions* pOptions)
+    : ModalDialog(pParent, "SecurityOptionsDialog", "cui/ui/securityoptionsdialog.ui")
+
     ,m_aSaveOrSendDocsFI( this, CUI_RES( FI_SAVESENDDOCS ) )
     ,m_aSaveOrSendDocsCB( this, CUI_RES( CB_SAVESENDDOCS ) )
     ,m_aSignDocsFI      ( this, CUI_RES( FI_SIGNDOCS ) )
@@ -55,7 +54,6 @@ SecurityOptionsDialog::SecurityOptionsDialog( Window* pParent, SvtSecurityOption
     ,m_aPrintDocsCB     ( this, CUI_RES( CB_PRINTDOCS ) )
     ,m_aCreatePdfFI     ( this, CUI_RES( FI_CREATEPDF ) )
     ,m_aCreatePdfCB     ( this, CUI_RES( CB_CREATEPDF ) )
-    ,m_aOptionsFL       ( this, CUI_RES( FL_OPTIONS ) )
     ,m_aRemovePersInfoFI( this, CUI_RES( FI_REMOVEINFO ) )
     ,m_aRemovePersInfoCB( this, CUI_RES( CB_REMOVEINFO ) )
     ,m_aRecommPasswdFI  ( this, CUI_RES( FI_RECOMMENDPWD ) )
@@ -63,13 +61,7 @@ SecurityOptionsDialog::SecurityOptionsDialog( Window* pParent, SvtSecurityOption
     ,m_aCtrlHyperlinkFI ( this, CUI_RES( FI_CTRLHYPERLINK ) )
     ,m_aCtrlHyperlinkCB ( this, CUI_RES( CB_CTRLHYPERLINK ) )
 
-    ,m_aButtonsFL       ( this, CUI_RES( FL_BUTTONS ) )
-    ,m_aOKBtn           ( this, CUI_RES( PB_OK ) )
-    ,m_aCancelBtn       ( this, CUI_RES( PB_CANCEL ) )
-    ,m_aHelpBtn         ( this, CUI_RES( PB_HELP ) )
-
 {
-    FreeResource();
 
     DBG_ASSERT( pOptions, "SecurityOptionsDialog::SecurityOptionsDialog(): invalid SvtSecurityOptions" );
     enableAndSet( *pOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, m_aSaveOrSendDocsCB, m_aSaveOrSendDocsFI );

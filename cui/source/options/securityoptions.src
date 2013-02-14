@@ -23,7 +23,6 @@
 
 ModalDialog RID_SVXDLG_SECURITY_OPTIONS
 {
-    HelpID = HID_DLG_SECURITY_OPTIONS ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( DLG_WIDTH , ROW_10 ) ;

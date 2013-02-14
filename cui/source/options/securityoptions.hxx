@@ -38,8 +38,6 @@ namespace svx
     class SecurityOptionsDialog : public ModalDialog
     {
     private:
-        FixedLine           m_aWarningsFL;
-        FixedInfo           m_aWarningsFI;
         ReadOnlyImage       m_aSaveOrSendDocsFI;
         CheckBox            m_aSaveOrSendDocsCB;
         ReadOnlyImage       m_aSignDocsFI;
@@ -49,7 +47,6 @@ namespace svx
         ReadOnlyImage       m_aCreatePdfFI;
         CheckBox            m_aCreatePdfCB;
 
-        FixedLine           m_aOptionsFL;
         ReadOnlyImage       m_aRemovePersInfoFI;
         CheckBox            m_aRemovePersInfoCB;
         ReadOnlyImage       m_aRecommPasswdFI;
@@ -57,10 +54,6 @@ namespace svx
         ReadOnlyImage       m_aCtrlHyperlinkFI;
         CheckBox            m_aCtrlHyperlinkCB;
 
-        FixedLine           m_aButtonsFL;
-        OKButton            m_aOKBtn;
-        CancelButton        m_aCancelBtn;
-        HelpButton          m_aHelpBtn;
 
     public:
         SecurityOptionsDialog( Window* pParent, SvtSecurityOptions* pOptions );
