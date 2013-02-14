@@ -898,13 +898,13 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
     double nValMax = CalcValue(nMin, nMax, itr);
 
     ++itr;
-    while(itr != end() && nVal > nValMax)
+    while(itr != end() && nVal >= nValMax)
     {
         ++nIndex;
         nValMax = CalcValue(nMin, nMax, itr);
         ++itr;
     }
-    if(nVal > nValMax)
+    if(nVal >= nValMax)
         ++nIndex;
 
     pInfo->nIconIndex = nIndex;
