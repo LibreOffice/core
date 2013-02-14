@@ -106,7 +106,7 @@ private:
     SAL_DLLPRIVATE void ImplInitInfoBoxData();
 
 public:
-                        InfoBox( Window* pParent, const XubString& rMessage );
+                        InfoBox( Window* pParent, const OUString& rMessage );
                         InfoBox( Window* pParent, const ResId & rResId );
 
     static Image        GetStandardImage();

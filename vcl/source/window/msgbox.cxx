@@ -445,7 +445,7 @@ void InfoBox::ImplInitInfoBoxData()
 
 // -----------------------------------------------------------------------
 
-InfoBox::InfoBox( Window* pParent, const XubString& rMessage ) :
+InfoBox::InfoBox( Window* pParent, const OUString& rMessage ) :
     MessBox( pParent, WB_OK | WB_DEF_OK, ImplGetSVEmptyStr(), rMessage )
 {
     ImplInitInfoBoxData();
