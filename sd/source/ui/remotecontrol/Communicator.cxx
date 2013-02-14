@@ -22,7 +22,7 @@ using namespace std;
 using namespace com::sun::star;
 using namespace osl;
 
-Communicator::Communicator( BufferedStreamSocket *pSocket ):
+Communicator::Communicator( IBluetoothSocket *pSocket ):
     Thread( "CommunicatorThread" ),
     mpSocket( pSocket ),
     pTransmitter( 0 ),

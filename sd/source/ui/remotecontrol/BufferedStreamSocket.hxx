@@ -9,7 +9,7 @@
 #ifndef _SD_IMPRESSREMOTE_BUFFEREDSTREAMSOCKET_HXX
 #define _SD_IMPRESSREMOTE_BUFFEREDSTREAMSOCKET_HXX
 
-#include <boost/noncopyable.hpp>
+#include "IBluetoothSocket.hxx"
 #include <osl/socket.hxx>
 #include <vector>
 
@@ -28,8 +28,8 @@ namespace sd
      * integrated into osl Sockets.
      */
     class BufferedStreamSocket :
-        private ::osl::StreamSocket,
-        private ::boost::noncopyable
+        public IBluetoothSocket,
+        private ::osl::StreamSocket
     {
         public:
             /**
@@ -47,9 +47,9 @@ namespace sd
              * Returns whatever the last call of recv returned, i.e. 0 or less
              * if there was a problem in communications.
              */
-            sal_Int32 readLine(OString& aLine);
+            virtual sal_Int32 readLine( OString& aLine );
 
-            sal_Int32 write( const void* pBuffer, sal_uInt32 n );
+            virtual sal_Int32 write( const void* pBuffer, sal_uInt32 n );
 
             void getPeerAddr(osl::SocketAddr&);
         private:

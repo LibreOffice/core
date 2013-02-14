@@ -9,7 +9,8 @@
 
 #include "BluetoothServer.hxx"
 
-#include <stdio.h>
+#include <iostream>
+#include <iomanip>
 
 #include <sal/log.hxx>
 
@@ -40,6 +41,7 @@
 #endif
 
 #ifdef MACOSX
+  #include <osl/conditn.hxx> // Include this early to avoid error as check() gets defined by some SDK header to empty
   #include <premac.h>
   #if MACOSX_SDK_VERSION >= 1070
     #import <IOBluetooth/IOBluetooth.h>
@@ -50,6 +52,8 @@
     #import <IOBluetooth/objc/IOBluetoothSDPServiceRecord.h>
   #endif
   #include <postmac.h>
+  #import "OSXBluetooth.h"
+  #include "OSXBluetoothWrapper.hxx"
 #endif
 
 #ifdef __MINGW32__
@@ -103,6 +107,141 @@ DBusGProxy* bluezGetDefaultAdapter( DBusGConnection* aConnection,
     return aAdapter;
 }
 #endif // defined(LINUX) && defined(ENABLE_DBUS)
+
+#if defined(MACOSX)
+
+OSXBluetoothWrapper::OSXBluetoothWrapper( IOBluetoothRFCOMMChannel* channel ) :
+    mpChannel(channel),
+    mnMTU(0),
+    mHaveBytes(),
+    mMutex(),
+    mBuffer()
+{
+    // silly enough, can't write more than mnMTU bytes at once
+    mnMTU = [channel getMTU];
+
+    SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::OSXBluetoothWrapper(): mnMTU=" << mnMTU );
+}
+
+sal_Int32 OSXBluetoothWrapper::readLine( rtl::OString& aLine )
+{
+    SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::readLine()" );
+
+    while( true )
+    {
+        {
+            SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::readLine: entering mutex" );
+            ::osl::MutexGuard aQueueGuard( mMutex );
+            SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::readLine: entered mutex" );
+
+#ifdef SAL_LOG_INFO
+            // We should have in the sal logging some standard way to
+            // output char buffers with non-printables escaped.
+            std::ostringstream s;
+            for (unsigned char *p = (unsigned char *) mBuffer.data(); p != (unsigned char *) mBuffer.data() + mBuffer.size(); p++)
+            {
+                if (*p == '\n')
+                    s << "\\n";
+                else if (*p < ' ' || (*p >= 0x7F && *p <= 0xFF))
+                    s << "\\0x" << std::hex << std::setw(2) << std::setfill('0') << (int) *p << std::setfill(' ') << std::setw(1) << std::dec;
+                else
+                    s << *p;
+            }
+            SAL_INFO( "sdremote.bluetooth", "  mBuffer:  \"" << s.str() << "\"" );
+#endif
+
+            // got enough bytes to return a line?
+            std::vector<char>::iterator aIt;
+            if ( (aIt = find( mBuffer.begin(), mBuffer.end(), '\n' ))
+                 != mBuffer.end() )
+            {
+                sal_uInt64 aLocation = aIt - mBuffer.begin();
+
+                aLine = OString( &(*mBuffer.begin()), aLocation );
+
+                mBuffer.erase( mBuffer.begin(), aIt + 1 ); // Also delete the empty line
+
+                // yeps
+                SAL_INFO( "sdremote.bluetooth", "  returning, got \"" << OStringToOUString( aLine, RTL_TEXTENCODING_UTF8 ) << "\"" );
+                return aLine.getLength() + 1;
+            }
+
+            // nope - wait some more (after releasing the mutex)
+            SAL_INFO( "sdremote.bluetooth", "  resetting mHaveBytes" );
+            mHaveBytes.reset();
+            SAL_INFO( "sdremote.bluetooth", "  leaving mutex" );
+        }
+
+        SAL_INFO( "sdremote.bluetooth", "  waiting for mHaveBytes" );
+        mHaveBytes.wait();
+        SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::readLine: got mHaveBytes" );
+    }
+}
+
+sal_Int32 OSXBluetoothWrapper::write( const void* pBuffer, sal_uInt32 n )
+{
+    SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::write(" << pBuffer << ", " << n << ") mpChannel=" << mpChannel );
+
+    char* ptr = (char*)pBuffer;
+    sal_uInt32 nBytesWritten = 0;
+    while( nBytesWritten < n )
+    {
+        int toWrite = n - nBytesWritten;
+        toWrite = toWrite <= mnMTU ? toWrite : mnMTU;
+        if ( [mpChannel writeSync:ptr length:toWrite] != kIOReturnSuccess )
+        {
+            SAL_INFO( "sdremote.bluetooth", "  [mpChannel writeSync:" << (void *) ptr << " length:" << toWrite << "] returned error, total written " << nBytesWritten );
+            return nBytesWritten;
+        }
+        ptr += toWrite;
+        nBytesWritten += toWrite;
+    }
+    SAL_INFO( "sdremote.bluetooth", "  total written " << nBytesWritten );
+    return nBytesWritten;
+}
+
+void OSXBluetoothWrapper::appendData(void* pBuffer, size_t len)
+{
+    SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::appendData(" << pBuffer << ", " << len << ")" );
+
+    if( len )
+    {
+        SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::appendData: entering mutex" );
+        ::osl::MutexGuard aQueueGuard( mMutex );
+        SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::appendData: entered mutex" );
+        mBuffer.insert(mBuffer.begin()+mBuffer.size(),
+                       (char*)pBuffer, (char *)pBuffer+len);
+        SAL_INFO( "sdremote.bluetooth", "  setting mHaveBytes" );
+        mHaveBytes.set();
+        SAL_INFO( "sdremote.bluetooth", "  leaving mutex" );
+    }
+}
+
+void incomingCallback( void *userRefCon,
+                       IOBluetoothUserNotificationRef inRef,
+                       IOBluetoothObjectRef objectRef )
+{
+    (void) inRef;
+
+    SAL_INFO( "sdremote.bluetooth", "incomingCallback()" );
+
+    BluetoothServer* pServer = (BluetoothServer*)userRefCon;
+
+    IOBluetoothRFCOMMChannel* channel = [IOBluetoothRFCOMMChannel withRFCOMMChannelRef:(IOBluetoothRFCOMMChannelRef)objectRef];
+
+    OSXBluetoothWrapper* socket = new OSXBluetoothWrapper( channel);
+    Communicator* pCommunicator = new Communicator( socket );
+    pServer->addCommunicator( pCommunicator );
+
+    ChannelDelegate* delegate = [[ChannelDelegate alloc] initWithCommunicatorAndSocket: pCommunicator socket: socket];
+    [channel setDelegate: delegate];
+    [delegate retain];
+
+    pCommunicator->launch();
+}
+
+#endif // MACOSX
+
 
 BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
   : mpCommunicators( pCommunicators )
@@ -258,6 +397,11 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
 #else // defined(LINUX) && defined(ENABLE_DBUS)
     (void) aDiscoverable; // avoid warnings
 #endif
+}
+
+void BluetoothServer::addCommunicator( Communicator* pCommunicator )
+{
+    mpCommunicators->push_back( pCommunicator );
 }
 
 void SAL_CALL BluetoothServer::run()
@@ -526,7 +670,7 @@ void SAL_CALL BluetoothServer::run()
     IOBluetoothSDPServiceRecordRef serviceRecordRef;
     IOReturn rc = IOBluetoothAddServiceDict((CFDictionaryRef) dict, &serviceRecordRef);
 
-    SAL_INFO("sd.bluetooth", "IOBluetoothAddServiceDict returned " << rc);
+    SAL_INFO("sdremote.bluetooth", "IOBluetoothAddServiceDict returned " << rc);
 
     if (rc == kIOReturnSuccess)
     {
@@ -539,9 +683,17 @@ void SAL_CALL BluetoothServer::run()
         BluetoothSDPServiceRecordHandle serviceRecordHandle;
         [serviceRecord getServiceRecordHandle: &serviceRecordHandle];
 
-        // Do more...
+        // Register callback for incoming connections
+        IOBluetoothUserNotificationRef callbackRef =
+            IOBluetoothRegisterForFilteredRFCOMMChannelOpenNotifications(
+                incomingCallback,
+                this,
+                channelID,
+                kIOBluetoothUserNotificationChannelDirectionIncoming);
 
-        (void) serviceRecord;
+        (void) callbackRef;
+
+        [serviceRecord release];
     }
     (void) mpCommunicators;
 #else

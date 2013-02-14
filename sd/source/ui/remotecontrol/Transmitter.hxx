@@ -6,12 +6,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 #ifndef _SD_IMPRESSREMOTE_TRANSMITTER_HXX
 #define _SD_IMPRESSREMOTE_TRANSMITTER_HXX
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
-#include "BufferedStreamSocket.hxx"
+#include "IBluetoothSocket.hxx"
 #include <osl/thread.hxx>
 #include <rtl/string.hxx>
 
@@ -25,7 +26,7 @@ class Transmitter
 {
 public:
     enum Priority { PRIORITY_LOW = 1, PRIORITY_HIGH };
-    Transmitter( ::sd::BufferedStreamSocket* aSocket );
+    Transmitter( ::sd::IBluetoothSocket* aSocket );
     ~Transmitter();
     void addMessage( const rtl::OString& aMessage, const Priority aPriority );
     void notifyFinished();
@@ -33,7 +34,7 @@ public:
 private:
     virtual void SAL_CALL run();
 
-    ::sd::BufferedStreamSocket* pStreamSocket;
+    ::sd::IBluetoothSocket* pStreamSocket;
 
     ::osl::Condition mQueuesNotEmpty;
     ::osl::Condition mFinishRequested;
@@ -46,4 +47,5 @@ private:
 
 }
 #endif // _SD_IMPRESSREMOTE_TRANSMITTER_HXX
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
