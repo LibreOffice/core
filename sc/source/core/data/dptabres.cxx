@@ -237,8 +237,9 @@ void ScDPInitState::RemoveMember()
         maMembers.pop_back();
 }
 
-static void lcl_DumpRow( const String& rType, const String& rName, const ScDPAggData* pAggData,
-                    ScDocument* pDoc, ScAddress& rPos )
+static void lcl_DumpRow(
+    const OUString& rType, const OUString& rName, const ScDPAggData* pAggData,
+    ScDocument* pDoc, ScAddress& rPos )
 {
     SCCOL nCol = rPos.Col();
     SCROW nRow = rPos.Row();
@@ -1603,38 +1604,37 @@ void ScDPResultMember::UpdateDataResults( const ScDPResultMember* pRefMember, lo
     bool bHasChild = ( pChildDimension != NULL );
 
     long nUserSubCount = GetSubTotalCount();
+
     // process subtotals even if not shown
-//  if ( nUserSubCount || !bHasChild )
+
+    // Calculate at least automatic if no subtotals are selected,
+    // show only own values if there's no child dimension (innermost).
+    if (!nUserSubCount || !bHasChild)
+        nUserSubCount = 1;
+
+    long nMemberMeasure = nMeasure;
+    long nSubSize = pResultData->GetCountForMeasure(nMeasure);
+
+    if (pDataRoot)
     {
-        // Calculate at least automatic if no subtotals are selected,
-        // show only own values if there's no child dimension (innermost).
-        if ( !nUserSubCount || !bHasChild )
-            nUserSubCount = 1;
+        ScDPSubTotalState aSubState;        // initial state
 
-        long nMemberMeasure = nMeasure;
-        long nSubSize = pResultData->GetCountForMeasure(nMeasure);
-
-        if ( pDataRoot )
+        for (long nUserPos = 0; nUserPos < nUserSubCount; ++nUserPos)   // including hidden "automatic"
         {
-            ScDPSubTotalState aSubState;        // initial state
-
-            for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
+            if (bHasChild && nUserSubCount > 1)
             {
-                if ( bHasChild && nUserSubCount > 1 )
-                {
-                    aSubState.nRowSubTotalFunc = nUserPos;
-                    aSubState.eRowForce = lcl_GetForceFunc( /*pParentLevel*/GetParentLevel() , nUserPos );
-                }
+                aSubState.nRowSubTotalFunc = nUserPos;
+                aSubState.eRowForce = lcl_GetForceFunc(GetParentLevel(), nUserPos);
+            }
 
-                for ( long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
-                {
-                    if ( nMeasure == SC_DPMEASURE_ALL )
-                        nMemberMeasure = nSubCount;
-                    else if ( pResultData->GetColStartMeasure() == SC_DPMEASURE_ALL )
-                        nMemberMeasure = SC_DPMEASURE_ALL;
+            for (long nSubCount = 0; nSubCount < nSubSize; ++nSubCount)
+            {
+                if (nMeasure == SC_DPMEASURE_ALL)
+                    nMemberMeasure = nSubCount;
+                else if (pResultData->GetColStartMeasure() == SC_DPMEASURE_ALL)
+                    nMemberMeasure = SC_DPMEASURE_ALL;
 
-                    pDataRoot->UpdateDataRow( pRefMember, nMemberMeasure, bHasChild, aSubState );
-                }
+                pDataRoot->UpdateDataRow(pRefMember, nMemberMeasure, bHasChild, aSubState);
             }
         }
     }
@@ -1871,8 +1871,6 @@ void ScDPDataMember::ProcessData( const vector< SCROW >& aChildMembers, const ve
         InitFrom( pResultMember->GetChildDimension() );
     }
 
-    ScDPSubTotalState aLocalSubState(rSubState);        // keep row state, modify column
-
     long nUserSubCount = pResultMember ? pResultMember->GetSubTotalCount() : 0;
 
     // Calculate at least automatic if no subtotals are selected,
@@ -1880,6 +1878,7 @@ void ScDPDataMember::ProcessData( const vector< SCROW >& aChildMembers, const ve
     if ( !nUserSubCount || !pChildDimension )
         nUserSubCount = 1;
 
+    ScDPSubTotalState aLocalSubState = rSubState;        // keep row state, modify column
     for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
     {
         if ( pChildDimension && nUserSubCount > 1 )

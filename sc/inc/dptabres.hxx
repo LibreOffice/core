@@ -281,6 +281,9 @@ public:
     bool IsEnd( size_t nPos ) const ;
 };
 
+/**
+ * The term 'measure' here roughly equals "data dimension" ?
+ */
 class ScDPResultData
 {
 private:
