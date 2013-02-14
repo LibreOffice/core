@@ -177,7 +177,7 @@ public:
     bool HasData() const;
 
     void    SetResult( double fNew );
-    void    SetEmpty( sal_Bool bSet );
+    void SetEmpty( bool bSet );
     void    SetError();
 
     double  GetAuxiliary() const;
