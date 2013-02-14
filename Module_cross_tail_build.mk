@@ -75,6 +75,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	$(call gb_Helper_optional_for_host,DESKTOP, \
 		helpcompiler \
 		l10ntools \
+		nss \
 		sot \
 		svl \
 		svtools \
