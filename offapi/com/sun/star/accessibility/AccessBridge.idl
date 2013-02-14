@@ -19,9 +19,9 @@
 #ifndef __com_sun_star_accessibility_AccessBridge_idl__
 #define __com_sun_star_accessibility_AccessBridge_idl__
 
-module com { module sun { module star { module lang {
-     published interface XInitialization;
-}; }; }; };
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/awt/XExtendedToolkit.idl>
+
 
 module com { module sun { module star { module accessibility {
 
@@ -35,10 +35,9 @@ module com { module sun { module star { module accessibility {
     @since OOo 1.1.2
 */
 
-service AccessBridge
+service AccessBridge : com::sun::star::lang::XComponent
 {
-    /** Expects and instance of XExtendedToolkit as first parameter */
-    interface ::com::sun::star::lang::XInitialization;
+    createWithToolkit([in] com::sun::star::awt::XExtendedToolkit toolkit);
 };
 
 }; }; }; };

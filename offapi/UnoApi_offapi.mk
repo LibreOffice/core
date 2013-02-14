@@ -30,6 +30,9 @@ $(eval $(call gb_UnoApi_set_include,offapi,\
 ))
 
 
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/accessibility,\
+	AccessBridge \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/animations,\
 	SequenceTimeContainer \
 	TargetPropertiesCreator \
@@ -404,7 +407,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star,\
 	modules \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/accessibility,\
-	AccessBridge \
 	Accessible \
 	AccessibleContext \
 ))
