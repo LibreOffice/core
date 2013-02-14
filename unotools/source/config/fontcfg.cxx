@@ -388,29 +388,6 @@ FontSubstConfiguration::FontSubstConfiguration() :
                                         "com.sun.star.configuration.ConfigurationAccess" )),
                                                                     aArgs ),
                     UNO_QUERY );
-            if( m_xConfigAccess.is() )
-            {
-                Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
-                // fill config hash with empty interfaces
-                int nLocales = aLocales.getLength();
-                const OUString* pLocaleStrings = aLocales.getConstArray();
-                Locale aLoc;
-                for( int i = 0; i < nLocales; i++ )
-                {
-                    sal_Int32 nIndex = 0;
-                    aLoc.Language = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiLowerCase();
-                    if( nIndex != -1 )
-                        aLoc.Country = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
-                    else
-                        aLoc.Country = OUString();
-                    if( nIndex != -1 )
-                        aLoc.Variant = pLocaleStrings[i].getToken( 0, sal_Unicode('-'), nIndex ).toAsciiUpperCase();
-                    else
-                        aLoc.Variant = OUString();
-                    m_aSubst[ aLoc ] = LocaleSubst();
-                    m_aSubst[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
-                }
-            }
         }
         catch (const Exception&)
         {
@@ -1062,19 +1039,12 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
     return type;
 }
 
-void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale& rLocale ) const
+void FontSubstConfiguration::readLocaleSubst() const
 {
-    boost::unordered_map< Locale, LocaleSubst, LocaleHash >::const_iterator it =
-        m_aSubst.find( rLocale );
-    if( it != m_aSubst.end() )
-    {
-        if( ! it->second.bConfigRead )
-        {
-            it->second.bConfigRead = true;
             Reference< XNameAccess > xNode;
             try
             {
-                Any aAny = m_xConfigAccess->getByName( it->second.aConfigLocaleString );
+                Any aAny = m_xConfigAccess->getByName( "en" );
                 aAny >>= xNode;
             }
             catch (const NoSuchElementException&)
@@ -1089,7 +1059,7 @@ void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale
                 int nFonts = aFonts.getLength();
                 const OUString* pFontNames = aFonts.getConstArray();
                 // improve performance, heap fragmentation
-                it->second.aSubstAttributes.reserve( nFonts );
+                m_aSubstAttributes.reserve( nFonts );
 
                 // strings for subst retrieval, construct only once
                 OUString aSubstFontsStr     ( RTL_CONSTASCII_USTRINGPARAM( "SubstFonts" ) );
@@ -1134,45 +1104,28 @@ void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale
                     aAttr.Type = getSubstType( xFont, aSubstTypeStr );
 
                     // finally insert this entry
-                    it->second.aSubstAttributes.push_back( aAttr );
+                    m_aSubstAttributes.push_back( aAttr );
                 }
-                std::sort( it->second.aSubstAttributes.begin(), it->second.aSubstAttributes.end(), StrictStringSort() );
+                std::sort( m_aSubstAttributes.begin(), m_aSubstAttributes.end(), StrictStringSort() );
             }
-        }
-    }
 }
 
-const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontName, const Locale& rLocale ) const
+const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontName ) const
 {
     if( !rFontName.Len() )
         return NULL;
 
-    // search if a  (language dep.) replacement table for the given font exists
-    // fallback is english
     String aSearchFont( rFontName );
     aSearchFont.ToLowerAscii();
     FontNameAttr aSearchAttr;
     aSearchAttr.Name = aSearchFont;
 
-    Locale aLocale;
-    aLocale.Language = rLocale.Language.toAsciiLowerCase();
-    aLocale.Country = rLocale.Country.toAsciiUpperCase();
-    aLocale.Variant = rLocale.Variant.toAsciiUpperCase();
-
-    if( aLocale.Language.isEmpty() )
-        aLocale = SvtSysLocale().GetUILanguageTag().getLocale();
-
-    while( !aLocale.Language.isEmpty() )
-    {
-        boost::unordered_map< Locale, LocaleSubst, LocaleHash >::const_iterator lang = m_aSubst.find( aLocale );
-        if( lang != m_aSubst.end() )
-        {
-            if( ! lang->second.bConfigRead )
-                readLocaleSubst( aLocale );
+            if( m_aSubstAttributes.empty() )
+                readLocaleSubst();
             // try to find an exact match
             // because the list is sorted this will also find fontnames of the form searchfontname*
-            std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( lang->second.aSubstAttributes.begin(), lang->second.aSubstAttributes.end(), aSearchAttr, StrictStringSort() );
-            if( it != lang->second.aSubstAttributes.end())
+            std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( m_aSubstAttributes.begin(), m_aSubstAttributes.end(), aSearchAttr, StrictStringSort() );
+            if( it != m_aSubstAttributes.end())
             {
                 const FontNameAttr& rFoundAttr = *it;
                 // a search for "abcblack" may match with an entry for "abc"
@@ -1181,17 +1134,6 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
                     if( aSearchFont.CompareTo( rFoundAttr.Name, rFoundAttr.Name.Len() ) == COMPARE_EQUAL )
                         return &rFoundAttr;
             }
-        }
-        // gradually become more unspecific
-        if( !aLocale.Variant.isEmpty() )
-            aLocale.Variant = OUString();
-        else if( !aLocale.Country.isEmpty() )
-            aLocale.Country = OUString();
-        else if( aLocale.Language != "en" )
-            aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
-        else
-            aLocale.Language = OUString();
-    }
     return NULL;
 }
 

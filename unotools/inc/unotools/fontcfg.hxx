@@ -171,19 +171,12 @@ private:
             m_xConfigProvider;
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
             m_xConfigAccess;
-    struct LocaleSubst
-    {
-        rtl::OUString                           aConfigLocaleString;
-        mutable bool                            bConfigRead;
-        // note: aSubstAttributes must be sorted alphabetically by Name
+        // note: m_aSubstAttributes must be sorted alphabetically by Name
         // searches on the substitutes are done with Name as key, where
         // a minimal match is sufficient (that is e.g. "Thorndale" will match
         // "Thorndale BlaBlub"). Also names must be lower case.
-        mutable std::vector< FontNameAttr >     aSubstAttributes;
+    mutable std::vector< FontNameAttr > m_aSubstAttributes;
 
-        LocaleSubst() : bConfigRead( false ) {}
-    };
-    boost::unordered_map< com::sun::star::lang::Locale, LocaleSubst, utl::LocaleHash > m_aSubst;
     typedef boost::unordered_set< rtl::OUString, rtl::OUStringHash > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
 
@@ -197,20 +190,14 @@ private:
                              const rtl::OUString& rType ) const;
     unsigned long getSubstType( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
                                 const rtl::OUString& rType ) const;
-    void readLocaleSubst( const com::sun::star::lang::Locale& rLocale ) const;
+    void readLocaleSubst() const;
 public:
     FontSubstConfiguration();
     ~FontSubstConfiguration();
 
     static FontSubstConfiguration& get();
 
-    const FontNameAttr* getSubstInfo(
-                                     const String& rFontName,
-                                     const com::sun::star::lang::Locale& rLocale =
-                                     com::sun::star::lang::Locale( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) ),
-                                                                   rtl::OUString(),
-                                                                   rtl::OUString() )
-                                     ) const;
+    const FontNameAttr* getSubstInfo( const String& rFontName ) const;
     static void getMapName( const String& rOrgName, String& rShortName, String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uLong& rType );
 };
 
