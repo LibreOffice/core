@@ -180,16 +180,16 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, const CalcRowData& rData, bo
 {
     if (!bAutoShow)
     {
-            LateInitParams  aColParams(rInfo.aColDims, rInfo.aColLevels, false);
-            LateInitParams  aRowParams(rInfo.aRowDims, rInfo.aRowLevels, true);
-            // root always init child
-            aColParams.SetInitChild(true);
-            aColParams.SetInitAllChildren( false);
-            aRowParams.SetInitChild(true);
-            aRowParams.SetInitAllChildren( false);
+        LateInitParams aColParams(rInfo.aColDims, rInfo.aColLevels, false);
+        LateInitParams aRowParams(rInfo.aRowDims, rInfo.aRowLevels, true);
+        // root always init child
+        aColParams.SetInitChild(true);
+        aColParams.SetInitAllChildren( false);
+        aRowParams.SetInitChild(true);
+        aRowParams.SetInitAllChildren( false);
 
-            rInfo.pColRoot->LateInitFrom(aColParams, rData.aColData, 0, *rInfo.pInitState);
-            rInfo.pRowRoot->LateInitFrom(aRowParams, rData.aRowData, 0, *rInfo.pInitState);
+        rInfo.pColRoot->LateInitFrom(aColParams, rData.aColData, 0, *rInfo.pInitState);
+        rInfo.pRowRoot->LateInitFrom(aRowParams, rData.aRowData, 0, *rInfo.pInitState);
     }
 
     if ( ( !rInfo.pColRoot->GetChildDimension() || rInfo.pColRoot->GetChildDimension()->IsValidEntry(rData.aColData) ) &&
