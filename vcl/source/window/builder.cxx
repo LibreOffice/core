@@ -680,7 +680,11 @@ bool VclBuilder::extractGroup(const OString &id, stringmap &rMap)
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("group"));
     if (aFind != rMap.end())
     {
-        m_pParserState->m_aGroupMaps.push_back(RadioButtonGroupMap(id, aFind->second));
+        OString sID = aFind->second;
+        sal_Int32 nDelim = sID.indexOf(':');
+        if (nDelim != -1)
+            sID = sID.copy(0, nDelim);
+        m_pParserState->m_aGroupMaps.push_back(RadioButtonGroupMap(id, sID));
         rMap.erase(aFind);
         return true;
     }
