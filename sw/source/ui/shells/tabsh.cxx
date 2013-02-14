@@ -447,7 +447,6 @@ static void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLi
 
 void SwTableShell::Execute(SfxRequest &rReq)
 {
-    sal_Bool bUseDialog = sal_True;
     const SfxItemSet* pArgs = rReq.GetArgs();
     SwWrtShell &rSh = GetShell();
 
@@ -564,7 +563,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwTableRep* pTblRep = ::lcl_TableParamToItemSet( aCoreSet, rSh );
             SfxAbstractTabDialog * pDlg = NULL;
-            if ( bUseDialog )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
