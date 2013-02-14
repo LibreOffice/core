@@ -294,6 +294,9 @@ SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nP
         case XML_TOK_DATABAR_DATABARENTRY:
             pContext = new ScXMLDataBarFormatEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormatData );
             break;
+        case XML_TOK_DATABAR_FORMATTINGENTRY:
+            pContext = new ScXMLDataBarFormatEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormatData );
+            break;
         default:
             break;
     }
