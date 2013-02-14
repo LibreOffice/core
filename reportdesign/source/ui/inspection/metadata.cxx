@@ -44,26 +44,23 @@ namespace rptui
         String          sTranslation;
         rtl::OString    sHelpId;
         sal_Int32       nId;
-        sal_uInt16      nPos;
         sal_uInt32      nUIFlags;
 
         OPropertyInfoImpl(
                         const ::rtl::OUString&      rName,
                         sal_Int32                   _nId,
                         const String&               aTranslation,
-                        sal_uInt16                  nPosId,
                         const rtl::OString&         _sHelpId,
                         sal_uInt32                  _nUIFlags);
     };
 
     //------------------------------------------------------------------------
     OPropertyInfoImpl::OPropertyInfoImpl(const ::rtl::OUString& _rName, sal_Int32 _nId,
-                                   const String& aString, sal_uInt16 nP, const rtl::OString& sHid, sal_uInt32 _nUIFlags)
+                                   const String& aString, const rtl::OString& sHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
        ,sTranslation(aString)
        ,sHelpId(sHid)
        ,nId(_nId)
-       ,nPos(nP)
        ,nUIFlags(_nUIFlags)
     {
     }
@@ -83,7 +80,7 @@ namespace rptui
     //========================================================================
 #define DEF_INFO( ident, uinameres, helpid, flags )   \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
-            String( ModuleRes( RID_STR_##uinameres ) ), nPos++, HID_RPT_PROP_##helpid, flags )
+            String( ModuleRes( RID_STR_##uinameres ) ), HID_RPT_PROP_##helpid, flags )
 
 #define DEF_INFO_1( ident, uinameres, helpid, flag1 ) \
     DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 )
@@ -111,7 +108,6 @@ namespace rptui
         OModuleClient aResourceAccess;
         // this ensures that we have our resource file loaded
 
-        sal_uInt16 nPos = 1;
         static OPropertyInfoImpl aPropertyInfos[] =
         {
         /*
@@ -202,7 +198,7 @@ namespace rptui
         // intialisierung
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, "", 0);
+        OPropertyInfoImpl  aSearch(_rName, 0L, String(), "", 0);
 
         const OPropertyInfoImpl* pPropInfo = ::std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );
