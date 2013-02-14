@@ -984,8 +984,8 @@ AbstractScInsertCellDlg * ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( W
 
 AbstractScInsertContentsDlg * ScAbstractDialogFactory_Impl::CreateScInsertContentsDlg( Window*      pParent,
                                                                                     int nId,
-                                                                                    sal_uInt16          nCheckDefaults,
-                                                                                    const String*   pStrTitle )
+                                                                                    sal_uInt16      nCheckDefaults,
+                                                                                    const OUString* pStrTitle )
 {
     ScInsertContentsDlg * pDlg=NULL;
     switch ( nId )

@@ -388,8 +388,8 @@ public:
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( Window*        pParent, //add for ScInsertContentsDlg
                                                                     int nId,
-                                                                    sal_uInt16          nCheckDefaults = 0,
-                                                                    const String*   pStrTitle = NULL ) = 0;
+                                                                    sal_uInt16      nCheckDefaults = 0,
+                                                                    const OUString* pStrTitle = NULL ) = 0;
 
     virtual AbstractScInsertTableDlg * CreateScInsertTableDlg ( Window* pParent, ScViewData& rViewData,  //add for ScInsertTableDlg
                                                                 SCTAB nTabCount, bool bFromFile, int nId) = 0;

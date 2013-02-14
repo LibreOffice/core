@@ -994,7 +994,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
 
             if( lcl_HFPresentation( rItem, ePresentation, GetMetric( nW ), ePresentationMetric, aBuffer, pIntl ) != SFX_ITEM_PRESENTATION_NONE )
             {
-                rText = OUString(ScGlobal::GetRscString(STR_HEADER)) + " ( " + aBuffer + " ) ";
+                rText = ScGlobal::GetRscString(STR_HEADER) + " ( " + aBuffer + " ) ";
             }
         }
         break;
@@ -1005,7 +1005,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
 
             if( lcl_HFPresentation( rItem, ePresentation, GetMetric( nW ), ePresentationMetric, aBuffer, pIntl ) != SFX_ITEM_PRESENTATION_NONE )
             {
-                rText = OUString(ScGlobal::GetRscString(STR_FOOTER)) + " ( " + aBuffer + " ) ";
+                rText = ScGlobal::GetRscString(STR_FOOTER) + " ( " + aBuffer + " ) ";
             }
         }
         break;

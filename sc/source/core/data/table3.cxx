@@ -2057,12 +2057,12 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         if (nIndex > 0)
         {
             GetUpperCellString(nCol1, nRow, aCellStr);
-            if ( aCellStr == rtl::OUString(ScGlobal::GetRscString(STR_TABLE_UND)) )
+            if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_UND) )
             {
                 rEntry.eConnect = SC_AND;
                 bValid = true;
             }
-            else if ( aCellStr == rtl::OUString(ScGlobal::GetRscString(STR_TABLE_ODER)) )
+            else if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_ODER) )
             {
                 rEntry.eConnect = SC_OR;
                 bValid = true;

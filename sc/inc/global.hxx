@@ -494,7 +494,7 @@ class ScGlobal
     static FuncCollection*  pFuncCollection;
     static ScUnoAddInCollection* pAddInCollection;
     static ScUserList*      pUserList;
-    static String**         ppRscString;
+    static OUString**       ppRscString;
     static String*          pStrScDoc;
     static String*          pEmptyString;
     static ::rtl::OUString* pEmptyOUString;
@@ -553,7 +553,7 @@ public:
     SC_DLLPUBLIC static ScUnoAddInCollection* GetAddInCollection();
     SC_DLLPUBLIC static ScUserList*         GetUserList();
     static void                 SetUserList( const ScUserList* pNewList );
-    SC_DLLPUBLIC static const String&       GetRscString( sal_uInt16 nIndex );
+    SC_DLLPUBLIC static const OUString&       GetRscString( sal_uInt16 nIndex );
     static void                 OpenURL( const String& rURL, const String& rTarget );
     SC_DLLPUBLIC static String              GetAbsDocName( const String& rFileName,
                                                 SfxObjectShell* pShell );

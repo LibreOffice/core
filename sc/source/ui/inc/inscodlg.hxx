@@ -31,9 +31,9 @@
 class ScInsertContentsDlg : public ModalDialog
 {
 public:
-            ScInsertContentsDlg( Window*        pParent,
-                                 sal_uInt16         nCheckDefaults = 0,
-                                 const String*  pStrTitle = NULL );
+            ScInsertContentsDlg( Window*          pParent,
+                                 sal_uInt16       nCheckDefaults = 0,
+                                 const OUString*  pStrTitle = NULL );
             ~ScInsertContentsDlg();
 
     sal_uInt16      GetInsContentsCmdBits() const;
