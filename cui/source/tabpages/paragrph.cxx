@@ -2253,12 +2253,12 @@ sal_uInt16*     SvxAsianTabPage::GetRanges()
     };
     return pRanges;
 }
-//FIXME: This crash in Calc, but works in Writer/Draw/Impress
-sal_Bool        SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
+
+sal_Bool SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bRet = sal_False;
     SfxItemPool* pPool = rSet.GetPool();
-    if(m_pScriptSpaceCB->IsChecked() != m_pScriptSpaceCB->GetSavedValue())
+    if (m_pScriptSpaceCB->IsEnabled() && m_pScriptSpaceCB->IsChecked() != m_pScriptSpaceCB->GetSavedValue())
     {
         SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
             pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE)).Clone();
@@ -2267,7 +2267,7 @@ sal_Bool        SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
         delete pNewItem;
         bRet = sal_True;
     }
-    if(m_pHangingPunctCB->IsChecked() != m_pHangingPunctCB->GetSavedValue())
+    if (m_pHangingPunctCB->IsEnabled() && m_pHangingPunctCB->IsChecked() != m_pHangingPunctCB->GetSavedValue())
     {
         SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
             pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION)).Clone();
@@ -2276,7 +2276,7 @@ sal_Bool        SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
         delete pNewItem;
         bRet = sal_True;
     }
-    if(m_pForbiddenRulesCB->IsChecked() != m_pForbiddenRulesCB->GetSavedValue())
+    if (m_pForbiddenRulesCB->IsEnabled() && m_pForbiddenRulesCB->IsChecked() != m_pForbiddenRulesCB->GetSavedValue())
     {
         SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
             pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES)).Clone();
