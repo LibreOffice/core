@@ -74,7 +74,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	$(call gb_Helper_optional,CLUCENE,clucene) \
 	$(call gb_Helper_optional_for_host,DESKTOP, \
 		helpcompiler \
-		i18nisolang1 \
 		l10ntools \
 		sot \
 		svtools \
