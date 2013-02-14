@@ -176,7 +176,7 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPFiltered
     }
 }
 
-void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAutoShow)
+void ScDPTableData::ProcessRowData(CalcInfo& rInfo, const CalcRowData& rData, bool bAutoShow)
 {
     if (!bAutoShow)
     {
