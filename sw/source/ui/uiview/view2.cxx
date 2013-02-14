@@ -1210,6 +1210,11 @@ void SwView::UpdateDocStats()
     rBnd.Update( FN_STAT_WORDCOUNT );
 }
 
+void SwView::SetAnnotationMode(bool bMode)
+{
+    m_bAnnotationMode = bMode;
+}
+
 /*--------------------------------------------------------------------
     Beschreibung:   Status der Stauszeile
  --------------------------------------------------------------------*/
