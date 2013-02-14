@@ -70,6 +70,11 @@ namespace com { namespace sun { namespace star {
 
 typedef std::set< xub_StrLen > SwSoftPageBreakList;
 
+// do not fill the String up to the max - need to be able to have a
+// SwPosition "behind" the last character, i.e., at index TXTNODE_MAX + 1
+// (also STRING_LEN is often used for "not found")
+const xub_StrLen TXTNODE_MAX = STRING_LEN - 2;
+
 /// SwTxtNode is a paragraph in the document model.
 class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 {
