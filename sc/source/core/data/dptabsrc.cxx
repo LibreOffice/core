@@ -953,8 +953,8 @@ void ScDPSource::CreateRes_Impl()
 
         //  Reset all results to empty, so they can be built again with data for the
         //  desired members only.
-        pColResRoot->ResetResults( sal_True );
-        pRowResRoot->ResetResults( sal_True );
+        pColResRoot->ResetResults();
+        pRowResRoot->ResetResults();
         pData->CalcResults(aInfo, true);
 
         //  Call UpdateDataResults again, with the new (limited) values.

@@ -553,7 +553,7 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
     fAux = 0.0;             // used for running total or original result of reference value
 }
 
-sal_Bool ScDPAggData::IsCalculated() const
+bool ScDPAggData::IsCalculated() const
 {
     return ( nCount <= SC_DPAGG_RESULT_EMPTY );
 }
@@ -565,14 +565,14 @@ double ScDPAggData::GetResult() const
     return fVal;        // use calculated value
 }
 
-sal_Bool ScDPAggData::HasError() const
+bool ScDPAggData::HasError() const
 {
     OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
 
     return ( nCount == SC_DPAGG_RESULT_ERROR );
 }
 
-sal_Bool ScDPAggData::HasData() const
+bool ScDPAggData::HasData() const
 {
     OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
 
@@ -931,8 +931,8 @@ ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, ScDPDimension* pDi
 // -----------------------------------------------------------------------
 
 
-ScDPResultMember::ScDPResultMember(  const ScDPResultData* pData, const ScDPParentDimData& rParentDimData ,
-                                    sal_Bool bForceSub ) :
+ScDPResultMember::ScDPResultMember(
+    const ScDPResultData* pData, const ScDPParentDimData& rParentDimData, bool bForceSub ) :
     pResultData( pData ),
        aParentDimData( rParentDimData ),
     pChildDimension( NULL ),
@@ -947,8 +947,8 @@ ScDPResultMember::ScDPResultMember(  const ScDPResultData* pData, const ScDPPare
     // pParentLevel/pMemberDesc is 0 for root members
 }
 
-ScDPResultMember::ScDPResultMember(  const ScDPResultData* pData,
-                                    sal_Bool bForceSub ) :
+ScDPResultMember::ScDPResultMember(
+    const ScDPResultData* pData, bool bForceSub ) :
     pResultData( pData ),
         pChildDimension( NULL ),
     pDataRoot( NULL ),
@@ -984,7 +984,7 @@ void ScDPResultMember::FillItemData( ScDPItemData& rData ) const
         rData.SetString( ScGlobal::GetRscString(STR_PIVOT_TOTAL) );     // root member
 }
 
-sal_Bool ScDPResultMember::IsNamedItem( SCROW nIndex ) const
+bool ScDPResultMember::IsNamedItem( SCROW nIndex ) const
 {
     //! store ScDPMember pointer instead of ScDPMember ???
     const ScDPMember* pMemberDesc = GetDPMember();
@@ -1014,13 +1014,13 @@ bool ScDPResultMember::IsValidEntry( const vector< SCROW >& aMembers ) const
 
 void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev,
                                  size_t nPos, ScDPInitState& rInitState ,
-                                 sal_Bool bInitChild /*= sal_True */)
+                                 bool bInitChild )
 {
     //  with LateInit, initialize only those members that have data
     if ( pResultData->IsLateInit() )
         return;
 
-    bInitialized = sal_True;
+    bInitialized = true;
 
     if (nPos >= ppDim.size())
         return;
@@ -1052,7 +1052,7 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
     if ( bInitChild )
     {
         pChildDimension = new ScDPResultDimension( pResultData );
-        pChildDimension->InitFrom( ppDim, ppLev, nPos, rInitState, sal_True  );
+        pChildDimension->InitFrom(ppDim, ppLev, nPos, rInitState, true);
     }
 }
 
@@ -1063,7 +1063,7 @@ void ScDPResultMember::LateInitFrom(
     if ( !pResultData->IsLateInit() )
         return;
 
-    bInitialized = sal_True;
+    bInitialized = true;
 
     if ( rParams.IsEnd( nPos )  /*nPos >= ppDim.size()*/)
         // No next dimension.  Bail out.
@@ -1108,9 +1108,9 @@ void ScDPResultMember::LateInitFrom(
     }
 }
 
-sal_Bool ScDPResultMember::IsSubTotalInTitle(long nMeasure) const
+bool ScDPResultMember::IsSubTotalInTitle(long nMeasure) const
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     if ( pChildDimension && /*pParentLevel*/GetParentLevel() &&
          /*pParentLevel*/GetParentLevel()->IsOutlineLayout() && /*pParentLevel*/GetParentLevel()->IsSubtotalsAtTop() )
     {
@@ -1124,7 +1124,7 @@ sal_Bool ScDPResultMember::IsSubTotalInTitle(long nMeasure) const
 
             // only a single subtotal row will be shown in the outline title row
             if ( nSubTotals == 1 )
-                bRet = sal_True;
+                bRet = true;
         }
     }
     return bRet;
@@ -1167,7 +1167,7 @@ long ScDPResultMember::GetSize(long nMeasure) const
     }
 }
 
-sal_Bool ScDPResultMember::IsVisible() const
+bool ScDPResultMember::IsVisible() const
 {
     if (!bInitialized)
         return false;
@@ -1185,7 +1185,7 @@ sal_Bool ScDPResultMember::IsVisible() const
     return (pParentLevel && pParentLevel->getShowEmpty());
 }
 
-sal_Bool ScDPResultMember::IsValid() const
+bool ScDPResultMember::IsValid() const
 {
     //  non-Valid members are left out of calculation
 
@@ -1197,10 +1197,10 @@ sal_Bool ScDPResultMember::IsValid() const
     if ( bAutoHidden )
         return false;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool ScDPResultMember::HasHiddenDetails() const
+bool ScDPResultMember::HasHiddenDetails() const
 {
     // bHasHiddenDetails is set only if the "show details" flag is off,
     // and there was a child dimension to skip
@@ -1305,7 +1305,7 @@ static String lcl_parseSubtotalName(const String& rSubStr, const String& rCaptio
 }
 
 void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pSequences,
-                                            long& rPos, long nMeasure, sal_Bool bRoot,
+                                            long& rPos, long nMeasure, bool bRoot,
                                             const String* pMemberName,
                                             const String* pMemberCaption )
 {
@@ -1679,16 +1679,13 @@ void ScDPResultMember::DoAutoShow( ScDPResultMember* pRefMember )
     }
 }
 
-void ScDPResultMember::ResetResults( sal_Bool /*bRoot*/ )
+void ScDPResultMember::ResetResults()
 {
     if (pDataRoot)
         pDataRoot->ResetResults();
 
     if (pChildDimension)
         pChildDimension->ResetResults();
-
- //   if (!bRoot)
- //       bHasElements = sal_False;
 }
 
 void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure,
@@ -1792,7 +1789,7 @@ String ScDPDataMember::GetName() const
         return EMPTY_STRING;
 }
 
-sal_Bool ScDPDataMember::IsVisible() const
+bool ScDPDataMember::IsVisible() const
 {
     if (pResultMember)
         return pResultMember->IsVisible();
@@ -1800,15 +1797,15 @@ sal_Bool ScDPDataMember::IsVisible() const
         return false;
 }
 
-sal_Bool ScDPDataMember::IsNamedItem( /*const ScDPItemData& r*/SCROW r ) const
+bool ScDPDataMember::IsNamedItem( SCROW nRow ) const
 {
     if (pResultMember)
-        return pResultMember->IsNamedItem(r);
+        return pResultMember->IsNamedItem(nRow);
     else
         return false;
 }
 
-sal_Bool ScDPDataMember::HasHiddenDetails() const
+bool ScDPDataMember::HasHiddenDetails() const
 {
     if (pResultMember)
         return pResultMember->HasHiddenDetails();
@@ -1903,7 +1900,7 @@ void ScDPDataMember::ProcessData( const vector< SCROW >& aChildMembers, const ve
         pChildDimension->ProcessData( aChildMembers, aValues, rSubState );      // with unmodified subtotal state
 }
 
-sal_Bool ScDPDataMember::HasData( long nMeasure, const ScDPSubTotalState& rSubState ) const
+bool ScDPDataMember::HasData( long nMeasure, const ScDPSubTotalState& rSubState ) const
 {
     if ( rSubState.eColForce != SUBTOTAL_FUNC_NONE && rSubState.eRowForce != SUBTOTAL_FUNC_NONE &&
                                                         rSubState.eColForce != rSubState.eRowForce )
@@ -1918,11 +1915,11 @@ sal_Bool ScDPDataMember::HasData( long nMeasure, const ScDPSubTotalState& rSubSt
     return pAgg->HasData();
 }
 
-sal_Bool ScDPDataMember::HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const
+bool ScDPDataMember::HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const
 {
     const ScDPAggData* pAgg = GetConstAggData( nMeasure, rSubState );
     if (!pAgg)
-        return sal_True;
+        return true;
 
     return pAgg->HasError();
 }
@@ -1978,7 +1975,7 @@ const ScDPAggData* ScDPDataMember::GetConstAggData( long nMeasure, const ScDPSub
 
 void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
                                     uno::Sequence<sheet::DataResult>& rSequence,
-                                    long& rCol, long nMeasure, sal_Bool bIsSubTotalRow,
+                                    long& rCol, long nMeasure, bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
     OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
@@ -1996,15 +1993,15 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
         if ( pRefParentLevel && pRefParentLevel->IsAddEmpty() )
             ++nExtraSpace;
 
-        sal_Bool bTitleLine = false;
+        bool bTitleLine = false;
         if ( pRefParentLevel && pRefParentLevel->IsOutlineLayout() )
             bTitleLine = sal_True;
 
-        sal_Bool bSubTotalInTitle = pRefMember->IsSubTotalInTitle( nMeasure );
+        bool bSubTotalInTitle = pRefMember->IsSubTotalInTitle( nMeasure );
 
         //  leave space for children even if the DataMember hasn't been initialized
         //  (pDataChild is null then, this happens when no values for it are in this row)
-        sal_Bool bHasChild = ( pRefChild != NULL );
+        bool bHasChild = ( pRefChild != NULL );
 
         if ( bHasChild )
         {
@@ -2095,9 +2092,9 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
     }
 }
 
-void ScDPDataMember::UpdateDataRow( const ScDPResultMember* pRefMember,
-                                long nMeasure, sal_Bool bIsSubTotalRow,
-                                const ScDPSubTotalState& rSubState )
+void ScDPDataMember::UpdateDataRow(
+    const ScDPResultMember* pRefMember, long nMeasure, bool bIsSubTotalRow,
+    const ScDPSubTotalState& rSubState )
 {
     OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
 
@@ -2107,7 +2104,7 @@ void ScDPDataMember::UpdateDataRow( const ScDPResultMember* pRefMember,
 
     //  leave space for children even if the DataMember hasn't been initialized
     //  (pDataChild is null then, this happens when no values for it are in this row)
-    sal_Bool bHasChild = ( pRefChild != NULL );
+    bool bHasChild = ( pRefChild != NULL );
 
     // process subtotals even if not shown
     long nUserSubCount = pRefMember->GetSubTotalCount();
@@ -2203,10 +2200,10 @@ void ScDPDataMember::ResetResults()
         pDataChild->ResetResults();
 }
 
-void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
-                                long nMeasure, sal_Bool bIsSubTotalRow,
-                                const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
-                                ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent )
+void ScDPDataMember::UpdateRunningTotals(
+    const ScDPResultMember* pRefMember, long nMeasure, bool bIsSubTotalRow,
+    const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
+    ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent )
 {
     OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
 
@@ -2215,11 +2212,11 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
         const ScDPDataDimension* pDataChild = GetChildDimension();
         const ScDPResultDimension* pRefChild = pRefMember->GetChildDimension();
 
-        sal_Bool bIsRoot = ( pResultMember == NULL || pResultMember->GetParentLevel() == NULL );
+        bool bIsRoot = ( pResultMember == NULL || pResultMember->GetParentLevel() == NULL );
 
         //  leave space for children even if the DataMember hasn't been initialized
         //  (pDataChild is null then, this happens when no values for it are in this row)
-        sal_Bool bHasChild = ( pRefChild != NULL );
+        bool bHasChild = ( pRefChild != NULL );
 
         long nUserSubCount = pRefMember->GetSubTotalCount();
         {
@@ -2275,8 +2272,8 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
 
                             //! aLocalSubState?
                             sal_uInt16 nRefOrient = pResultData->GetMeasureRefOrient( nMemberMeasure );
-                            sal_Bool bRefDimInCol = ( nRefOrient == sheet::DataPilotFieldOrientation_COLUMN );
-                            sal_Bool bRefDimInRow = ( nRefOrient == sheet::DataPilotFieldOrientation_ROW );
+                            bool bRefDimInCol = ( nRefOrient == sheet::DataPilotFieldOrientation_COLUMN );
+                            bool bRefDimInRow = ( nRefOrient == sheet::DataPilotFieldOrientation_ROW );
 
                             ScDPResultDimension* pSelectDim = NULL;
                             long nRowPos = 0;
@@ -2320,7 +2317,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                     pSelectDim = NULL;
                             }
 
-                            sal_Bool bNoDetailsInRef = false;
+                            bool bNoDetailsInRef = false;
                             if ( pSelectDim && bRunningTotal )
                             {
                                 //  Running totals:
@@ -2354,17 +2351,17 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                 //  - Otherwise, the error isn't strictly necessary, but shown for
                                 //    consistency.
 
-                                sal_Bool bInnerNoDetails = bRefDimInCol ? HasHiddenDetails() :
-                                                     ( bRefDimInRow ? rRowParent.HasHiddenDetails() : sal_True );
+                                bool bInnerNoDetails = bRefDimInCol ? HasHiddenDetails() :
+                                                     ( bRefDimInRow ? rRowParent.HasHiddenDetails() : true );
                                 if ( bInnerNoDetails )
                                 {
                                     pSelectDim = NULL;
-                                    bNoDetailsInRef = sal_True;         // show error, not empty
+                                    bNoDetailsInRef = true;         // show error, not empty
                                 }
                             }
 
                             if ( !bRefDimInCol && !bRefDimInRow )   // invalid dimension specified
-                                bNoDetailsInRef = sal_True;             // pSelectDim is then already NULL
+                                bNoDetailsInRef = true;             // pSelectDim is then already NULL
 
                             //
                             //  get the member for the reference item and do the calculation
@@ -2413,7 +2410,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                 else if (bNoDetailsInRef)
                                     pAggData->SetError();
                                 else
-                                    pAggData->SetEmpty(sal_True);                       // empty (dim set to 0 above)
+                                    pAggData->SetEmpty(true);                       // empty (dim set to 0 above)
                             }
                             else
                             {
@@ -2452,7 +2449,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                     if ( pSelectMember == this &&
                                          eRefType != sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE )
                                     {
-                                        pAggData->SetEmpty(sal_True);
+                                        pAggData->SetEmpty(true);
                                     }
                                     else if ( pSelectMember )
                                     {
@@ -2466,7 +2463,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
 
                                             double fOtherResult = pOtherAggData->GetAuxiliary();
                                             double fThisResult = pAggData->GetResult();
-                                            sal_Bool bError = false;
+                                            bool bError = false;
                                             switch ( eRefType )
                                             {
                                                 case sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE:
@@ -2500,14 +2497,14 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                         }
                                     }
                                     else if (bRelative && !bNoDetailsInRef)
-                                        pAggData->SetEmpty(sal_True);                   // empty
+                                        pAggData->SetEmpty(true);                   // empty
                                     else
                                         pAggData->SetError();                       // error
                                 }
                                 else if (bNoDetailsInRef)
                                     pAggData->SetError();                           // error
                                 else
-                                    pAggData->SetEmpty(sal_True);                       // empty
+                                    pAggData->SetEmpty(true);                       // empty
                             }
                         }
                         else if ( eRefType == sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE ||
@@ -2726,8 +2723,9 @@ ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
     return NULL;
 }
 
-void ScDPResultDimension::InitFrom( const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev,
-                                    size_t nPos, ScDPInitState& rInitState,  sal_Bool bInitChild /*= sal_True */ )
+void ScDPResultDimension::InitFrom(
+    const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev,
+    size_t nPos, ScDPInitState& rInitState,  bool bInitChild )
 {
     if (nPos >= ppDim.size() || nPos >= ppLev.size())
     {
@@ -3145,7 +3143,7 @@ void ScDPResultDimension::ResetResults()
     {
         // sort order doesn't matter
         ScDPResultMember* pMember = maMemberArray[bIsDataLayout ? 0 : i];
-        pMember->ResetResults( false );
+        pMember->ResetResults();
     }
 }
 
@@ -3527,7 +3525,7 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
 
 void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,
                                     uno::Sequence<sheet::DataResult>& rSequence,
-                                    long nCol, long nMeasure, sal_Bool bIsSubTotalRow,
+                                    long nCol, long nMeasure, bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
     OSL_ENSURE( pRefDim && static_cast<size_t>(pRefDim->GetMemberCount()) == maMembers.size(), "dimensions don't match" );
@@ -3562,7 +3560,7 @@ void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,
 }
 
 void ScDPDataDimension::UpdateDataRow( const ScDPResultDimension* pRefDim,
-                                    long nMeasure, sal_Bool bIsSubTotalRow,
+                                    long nMeasure, bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
     OSL_ENSURE( pRefDim && static_cast<size_t>(pRefDim->GetMemberCount()) == maMembers.size(), "dimensions don't match" );
@@ -3715,7 +3713,7 @@ long ScDPDataDimension::GetSortedIndex( long nUnsorted ) const
 }
 
 void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
-                                    long nMeasure, sal_Bool bIsSubTotalRow,
+                                    long nMeasure, bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
                                     ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent ) const
 {
@@ -3973,7 +3971,8 @@ ResultMembers::~ResultMembers()
         delete iter->second;
 }
 // -----------------------------------------------------------------------
-LateInitParams::LateInitParams( const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev, sal_Bool bRow, sal_Bool bInitChild, sal_Bool bAllChildren ):
+LateInitParams::LateInitParams(
+    const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev, bool bRow, bool bInitChild, bool bAllChildren ) :
     mppDim( ppDim ),
     mppLev( ppLev ),
     mbRow( bRow ),
@@ -3986,12 +3985,12 @@ LateInitParams::~LateInitParams()
 {
 }
 
-sal_Bool LateInitParams::IsEnd( size_t nPos ) const
+bool LateInitParams::IsEnd( size_t nPos ) const
 {
     return nPos >= mppDim.size();
 }
 
-void ScDPResultDimension::CheckShowEmpty( sal_Bool bShow )
+void ScDPResultDimension::CheckShowEmpty( bool bShow )
 {
     long nCount = maMemberArray.size();
 
@@ -4004,7 +4003,7 @@ void ScDPResultDimension::CheckShowEmpty( sal_Bool bShow )
 
 }
 
-void ScDPResultMember::CheckShowEmpty( sal_Bool bShow )
+void ScDPResultMember::CheckShowEmpty( bool bShow )
 {
     if (bHasElements)
     {
