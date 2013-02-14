@@ -76,6 +76,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 		helpcompiler \
 		l10ntools \
 		sot \
+		svl \
 		svtools \
 		toolkit \
 	    vcl) \
