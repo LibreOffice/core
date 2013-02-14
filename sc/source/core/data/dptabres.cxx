@@ -1579,7 +1579,8 @@ void ScDPResultMember::FillDataResults( const ScDPResultMember* pRefMember,
                     OSL_ENSURE( rRow < rSequence.getLength(), "bumm" );
                     uno::Sequence<sheet::DataResult>& rSubSeq = rSequence.getArray()[rRow];
                     long nSeqCol = 0;
-                    pDataRoot->FillDataRow( pRefMember, rSubSeq, nSeqCol, nMemberMeasure, bHasChild, aSubState );
+                    if (pRefMember->IsVisible())
+                        pDataRoot->FillDataRow(pRefMember, rSubSeq, nSeqCol, nMemberMeasure, bHasChild, aSubState);
 
                     rRow += 1;
                 }
@@ -1975,115 +1976,112 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
 {
     OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
 
-    if ( pRefMember->IsVisible() )  //! here or in ScDPDataDimension::FillDataRow ???
+    long nStartCol = rCol;
+
+    const ScDPDataDimension* pDataChild = GetChildDimension();
+    const ScDPResultDimension* pRefChild = pRefMember->GetChildDimension();
+
+    const ScDPLevel* pRefParentLevel = const_cast<ScDPResultMember*>(pRefMember)->GetParentLevel();
+
+    long nExtraSpace = 0;
+    if ( pRefParentLevel && pRefParentLevel->IsAddEmpty() )
+        ++nExtraSpace;
+
+    bool bTitleLine = false;
+    if ( pRefParentLevel && pRefParentLevel->IsOutlineLayout() )
+        bTitleLine = true;
+
+    bool bSubTotalInTitle = pRefMember->IsSubTotalInTitle( nMeasure );
+
+    //  leave space for children even if the DataMember hasn't been initialized
+    //  (pDataChild is null then, this happens when no values for it are in this row)
+    bool bHasChild = ( pRefChild != NULL );
+
+    if ( bHasChild )
     {
-        long nStartCol = rCol;
+        if ( bTitleLine )           // in tabular layout the title is on a separate column
+            ++rCol;                 // -> fill child dimension one column below
 
-        const ScDPDataDimension* pDataChild = GetChildDimension();
-        const ScDPResultDimension* pRefChild = pRefMember->GetChildDimension();
+        if ( pDataChild )
+            pDataChild->FillDataRow( pRefChild, rSequence, rCol, nMeasure, bIsSubTotalRow, rSubState );
+        rCol += (sal_uInt16)pRefMember->GetSize( nMeasure );
 
-        const ScDPLevel* pRefParentLevel = const_cast<ScDPResultMember*>(pRefMember)->GetParentLevel();
+        if ( bTitleLine )           // title column is included in GetSize, so the following
+            --rCol;                 // positions are calculated with the normal values
+    }
 
-        long nExtraSpace = 0;
-        if ( pRefParentLevel && pRefParentLevel->IsAddEmpty() )
-            ++nExtraSpace;
-
-        bool bTitleLine = false;
-        if ( pRefParentLevel && pRefParentLevel->IsOutlineLayout() )
-            bTitleLine = true;
-
-        bool bSubTotalInTitle = pRefMember->IsSubTotalInTitle( nMeasure );
-
-        //  leave space for children even if the DataMember hasn't been initialized
-        //  (pDataChild is null then, this happens when no values for it are in this row)
-        bool bHasChild = ( pRefChild != NULL );
-
-        if ( bHasChild )
+    long nUserSubStart;
+    long nUserSubCount = pRefMember->GetSubTotalCount(&nUserSubStart);
+    if ( nUserSubCount || !bHasChild )
+    {
+        // Calculate at least automatic if no subtotals are selected,
+        // show only own values if there's no child dimension (innermost).
+        if ( !nUserSubCount || !bHasChild )
         {
-            if ( bTitleLine )           // in tabular layout the title is on a separate column
-                ++rCol;                 // -> fill child dimension one column below
-
-            if ( pDataChild )
-                pDataChild->FillDataRow( pRefChild, rSequence, rCol, nMeasure, bIsSubTotalRow, rSubState );
-            rCol += (sal_uInt16)pRefMember->GetSize( nMeasure );
-
-            if ( bTitleLine )           // title column is included in GetSize, so the following
-                --rCol;                 // positions are calculated with the normal values
+            nUserSubCount = 1;
+            nUserSubStart = 0;
         }
 
-        long nUserSubStart;
-        long nUserSubCount = pRefMember->GetSubTotalCount(&nUserSubStart);
-        if ( nUserSubCount || !bHasChild )
+        ScDPSubTotalState aLocalSubState(rSubState);        // keep row state, modify column
+
+        long nMemberMeasure = nMeasure;
+        long nSubSize = pResultData->GetCountForMeasure(nMeasure);
+        if (bHasChild)
         {
-            // Calculate at least automatic if no subtotals are selected,
-            // show only own values if there's no child dimension (innermost).
-            if ( !nUserSubCount || !bHasChild )
+            rCol -= nSubSize * ( nUserSubCount - nUserSubStart );   // GetSize includes space for SubTotal
+            rCol -= nExtraSpace;                                    // GetSize includes the empty line
+        }
+
+        long nMoveSubTotal = 0;
+        if ( bSubTotalInTitle )
+        {
+            nMoveSubTotal = rCol - nStartCol;   // force to first (title) column
+            rCol = nStartCol;
+        }
+
+        for (long nUserPos=nUserSubStart; nUserPos<nUserSubCount; nUserPos++)
+        {
+            if ( pChildDimension && nUserSubCount > 1 )
             {
-                nUserSubCount = 1;
-                nUserSubStart = 0;
+                const ScDPLevel* pForceLevel = pResultMember ? pResultMember->GetParentLevel() : NULL;
+                aLocalSubState.nColSubTotalFunc = nUserPos;
+                aLocalSubState.eColForce = lcl_GetForceFunc( pForceLevel, nUserPos );
             }
 
-            ScDPSubTotalState aLocalSubState(rSubState);        // keep row state, modify column
-
-            long nMemberMeasure = nMeasure;
-            long nSubSize = pResultData->GetCountForMeasure(nMeasure);
-            if (bHasChild)
+            for ( long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
             {
-                rCol -= nSubSize * ( nUserSubCount - nUserSubStart );   // GetSize includes space for SubTotal
-                rCol -= nExtraSpace;                                    // GetSize includes the empty line
-            }
+                if ( nMeasure == SC_DPMEASURE_ALL )
+                    nMemberMeasure = nSubCount;
 
-            long nMoveSubTotal = 0;
-            if ( bSubTotalInTitle )
-            {
-                nMoveSubTotal = rCol - nStartCol;   // force to first (title) column
-                rCol = nStartCol;
-            }
+                OSL_ENSURE( rCol < rSequence.getLength(), "bumm" );
+                sheet::DataResult& rRes = rSequence.getArray()[rCol];
 
-            for (long nUserPos=nUserSubStart; nUserPos<nUserSubCount; nUserPos++)
-            {
-                if ( pChildDimension && nUserSubCount > 1 )
+                if ( HasData( nMemberMeasure, aLocalSubState ) )
                 {
-                    const ScDPLevel* pForceLevel = pResultMember ? pResultMember->GetParentLevel() : NULL;
-                    aLocalSubState.nColSubTotalFunc = nUserPos;
-                    aLocalSubState.eColForce = lcl_GetForceFunc( pForceLevel, nUserPos );
-                }
-
-                for ( long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
-                {
-                    if ( nMeasure == SC_DPMEASURE_ALL )
-                        nMemberMeasure = nSubCount;
-
-                    OSL_ENSURE( rCol < rSequence.getLength(), "bumm" );
-                    sheet::DataResult& rRes = rSequence.getArray()[rCol];
-
-                    if ( HasData( nMemberMeasure, aLocalSubState ) )
+                    if ( HasError( nMemberMeasure, aLocalSubState ) )
                     {
-                        if ( HasError( nMemberMeasure, aLocalSubState ) )
-                        {
-                            rRes.Value = 0;
-                            rRes.Flags |= sheet::DataResultFlags::ERROR;
-                        }
-                        else
-                        {
-                            rRes.Value = GetAggregate( nMemberMeasure, aLocalSubState );
-                            rRes.Flags |= sheet::DataResultFlags::HASDATA;
-                        }
+                        rRes.Value = 0;
+                        rRes.Flags |= sheet::DataResultFlags::ERROR;
                     }
-
-                    if ( bHasChild || bIsSubTotalRow )
-                        rRes.Flags |= sheet::DataResultFlags::SUBTOTAL;
-
-                    rCol += 1;
+                    else
+                    {
+                        rRes.Value = GetAggregate( nMemberMeasure, aLocalSubState );
+                        rRes.Flags |= sheet::DataResultFlags::HASDATA;
+                    }
                 }
+
+                if ( bHasChild || bIsSubTotalRow )
+                    rRes.Flags |= sheet::DataResultFlags::SUBTOTAL;
+
+                rCol += 1;
             }
-
-            // add extra space again if subtracted from GetSize above,
-            // add to own size if no children
-            rCol += nExtraSpace;
-
-            rCol += nMoveSubTotal;
         }
+
+        // add extra space again if subtracted from GetSize above,
+        // add to own size if no children
+        rCol += nExtraSpace;
+
+        rCol += nMoveSubTotal;
     }
 }
 
