@@ -191,7 +191,7 @@ private:
 
     void            ReleaseFocus_Impl();
     void            EnableControls_Impl();
-    void            CheckAndMarkUnknownFont( const OUString& fontname );
+    DECL_DLLPRIVATE_LINK( CheckAndMarkUnknownFont, VclWindowEvent* );
 
 protected:
     virtual void    Select();
@@ -201,6 +201,7 @@ public:
     SvxFontNameBox_Impl( Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame
         , WinBits nStyle = WB_SORT
         );
+    virtual ~SvxFontNameBox_Impl();
 
     void            FillList();
     void            Update( const SvxFontItem* pFontItem );
@@ -209,8 +210,6 @@ public:
     void            Fill( const FontList* pList )
                         { FontNameBox::Fill( pList );
                           nFtCount = pList->GetFontNameCount(); }
-    virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE;
-    virtual void    SetText( const OUString& rStr, const Selection& rNewSelection ) SAL_OVERRIDE;
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
@@ -771,7 +770,14 @@ SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDis
 {
     SetSizePixel(LogicToPixel( aLogicalSize, MAP_APPFONT ));
     EnableControls_Impl();
+    GetSubEdit()->AddEventListener( LINK( this, SvxFontNameBox_Impl, CheckAndMarkUnknownFont ));
 }
+
+SvxFontNameBox_Impl::~SvxFontNameBox_Impl()
+{
+    GetSubEdit()->RemoveEventListener( LINK( this, SvxFontNameBox_Impl, CheckAndMarkUnknownFont ));
+}
+
 // -----------------------------------------------------------------------
 
 void SvxFontNameBox_Impl::FillList()
@@ -784,22 +790,11 @@ void SvxFontNameBox_Impl::FillList()
     SetSelection( aOldSel );
 }
 
-void SvxFontNameBox_Impl::SetText( const OUString& rStr )
+IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent*, event )
 {
-    CheckAndMarkUnknownFont( rStr );
-    return FontNameBox::SetText( rStr );
-}
-
-void SvxFontNameBox_Impl::SetText( const OUString& rStr, const Selection& rNewSelection )
-{
-    CheckAndMarkUnknownFont( rStr );
-    return FontNameBox::SetText( rStr, rNewSelection );
-}
-
-void SvxFontNameBox_Impl::CheckAndMarkUnknownFont( const OUString& fontname )
-{
-    if( fontname == GetText())
-        return;
+    if( event->GetId() != VCLEVENT_EDIT_MODIFY )
+        return 0;
+    OUString fontname = GetSubEdit()->GetText();
     GetDocFontList_Impl( &pFontList, this );
     // If the font is unknown, show it in italic.
     Font font = GetControlFont();
@@ -821,6 +816,7 @@ void SvxFontNameBox_Impl::CheckAndMarkUnknownFont( const OUString& fontname )
             SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE ));
         }
     }
+    return 0;
 }
 
 // -----------------------------------------------------------------------
