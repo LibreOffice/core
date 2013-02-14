@@ -125,10 +125,18 @@ public:
     }
 
     //-----------------------------------------
+#if defined HAVE_CXX11_PERFECT_FORWARDING
+    template< typename... Args >
+    void construct (pointer p, Args &&... value)
+    {
+        new ((void*)p)T(std::forward< Args >(value)...);
+    }
+#else
     void construct (pointer p, const T& value)
     {
         new ((void*)p)T(value);
     }
+#endif
 
     //-----------------------------------------
     void destroy (pointer p)
