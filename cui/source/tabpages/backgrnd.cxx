@@ -117,6 +117,23 @@ static void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
     aTransparency <<= (sal_Int8)nTransparency;
     rBrush.PutValue(aTransparency, MID_GRAPHIC_TRANSPARENCY);
 }
+
+/// Returns the fill style of the currently selected entry.
+static XFillStyle lcl_getFillStyle(ListBox* pLbSelect)
+{
+    return (XFillStyle)(sal_uLong)pLbSelect->GetEntryData(pLbSelect->GetSelectEntryPos());
+}
+
+// Selects the entry matching the specified fill style.
+static void lcl_setFillStyle(ListBox* pLbSelect, XFillStyle eStyle)
+{
+    for (int i = 0; i < pLbSelect->GetEntryCount(); ++i)
+        if ((XFillStyle)(sal_uLong)pLbSelect->GetEntryData(i) == eStyle)
+        {
+            pLbSelect->SelectEntryPos(i);
+            return;
+        }
+}
 //-------------------------------------------------------------------------
 
 sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
@@ -537,7 +554,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
     {
         m_pSelectTxt->Hide();
         m_pLbSelect->Hide();
-        m_pLbSelect->SelectEntryPos( 0 );
+        lcl_setFillStyle(m_pLbSelect, XFILL_SOLID);
         ShowColorUI_Impl();
 
         const SfxPoolItem* pOld = GetOldItem( rSet, SID_ATTR_BRUSH );
@@ -664,7 +681,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     }
     else
     {
-        m_pLbSelect->SelectEntryPos( 0 );
+        lcl_setFillStyle(m_pLbSelect, XFILL_SOLID);
         ShowColorUI_Impl();
 
         const SfxPoolItem* pOld = GetOldItem( rSet, SID_VIEW_FLD_PIC );
@@ -758,8 +775,8 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
     {
         const SvxBrushItem& rOldItem    = (const SvxBrushItem&)*pOld;
         SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
-        const sal_Bool          bIsBrush    = ( 0 == m_pLbSelect->GetSelectEntryPos() );
-        const bool bIsGradient = ( 2 == m_pLbSelect->GetSelectEntryPos() );
+        const sal_Bool          bIsBrush    = ( XFILL_SOLID == lcl_getFillStyle(m_pLbSelect) );
+        const bool bIsGradient = ( XFILL_GRADIENT == lcl_getFillStyle(m_pLbSelect) );
 
         // transparency has to be set if enabled, the color not already set to "No fill" and
         if( bColTransparency &&
@@ -990,7 +1007,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
 
     SvxBrushItem        rOldItem( (const CntWallpaperItem&)*pOld, nWhich );
     SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
-    const sal_Bool          bIsBrush    = ( 0 == m_pLbSelect->GetSelectEntryPos() );
+    const sal_Bool          bIsBrush    = ( XFILL_SOLID == lcl_getFillStyle(m_pLbSelect) );
     sal_Bool                bModified = sal_False;
 
     if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
@@ -1395,12 +1412,12 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl)
 
 IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
 {
-    if ( 0 == m_pLbSelect->GetSelectEntryPos() )
+    if ( XFILL_SOLID == lcl_getFillStyle(m_pLbSelect) )
     {
         ShowColorUI_Impl();
         m_pParaLBox->Enable(); // drawing background can't be a bitmap
     }
-    else if ( 1 == m_pLbSelect->GetSelectEntryPos() )
+    else if ( XFILL_BITMAP == lcl_getFillStyle(m_pLbSelect) )
     {
         ShowBitmapUI_Impl();
         m_pParaLBox->Enable(sal_False); // drawing background can't be a bitmap
@@ -1649,7 +1666,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
         pTableBck_Impl->nActPos = nSelPos;
         if(!*pActItem)
             *pActItem = new SvxBrushItem(nWhich);
-        if(0 == m_pLbSelect->GetSelectEntryPos())  // brush selected
+        if(XFILL_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
         {
             **pActItem = SvxBrushItem( aBgdColor, nWhich );
         }
@@ -1719,7 +1736,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
             break;
         }
         pParaBck_Impl->nActPos = nSelPos;
-        if(0 == m_pLbSelect->GetSelectEntryPos())  // brush selected
+        if(XFILL_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
         {
             sal_uInt16 nWhich = (*pActItem)->Which();
             **pActItem = SvxBrushItem( aBgdColor, nWhich );
@@ -1786,7 +1803,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         // We don't have a graphic, do we have gradient fill style?
         if (!m_rXFillSet.HasItem(XATTR_FILLSTYLE) || ((const XFillStyleItem&)m_rXFillSet.Get(XATTR_FILLSTYLE)).GetValue() != XFILL_GRADIENT)
         {
-            m_pLbSelect->SelectEntryPos( 0 );
+            lcl_setFillStyle(m_pLbSelect, XFILL_SOLID);
             ShowColorUI_Impl();
             Color aTrColor( COL_TRANSPARENT );
             aBgdColor = rColor;
@@ -1808,7 +1825,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         else
         {
             // Gradient fill style, then initialize preview with data from Writer.
-            m_pLbSelect->SelectEntryPos( 2 );
+            lcl_setFillStyle(m_pLbSelect, XFILL_GRADIENT);
             ShowGradientUI_Impl();
             m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
             m_pCtlPreview->Invalidate();
@@ -1831,7 +1848,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         const String*   pStrLink   = rBgdAttr.GetGraphicLink();
         const String*   pStrFilter = rBgdAttr.GetGraphicFilter();
 
-        m_pLbSelect->SelectEntryPos( 1 );
+        lcl_setFillStyle(m_pLbSelect, XFILL_BITMAP);
         ShowBitmapUI_Impl();
 
         if ( pStrLink )
@@ -1945,7 +1962,12 @@ void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
     }
     else
         // Otherwise hide the gradient UI.
-        m_pLbSelect->RemoveEntry(2);
+        for (int i = 0; i < m_pLbSelect->GetEntryCount(); ++i)
+            if ((XFillStyle)(sal_uLong)m_pLbSelect->GetEntryData(i) == XFILL_GRADIENT)
+            {
+                m_pLbSelect->RemoveEntry(i);
+                break;
+            }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

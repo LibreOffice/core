@@ -33,16 +33,12 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="selectlb">
+          <object class="GtkComboBox" id="selectlb">
             <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
+            <property name="model">liststore1</property>
             <property name="entry_text_column">0</property>
             <property name="id_column">1</property>
-            <items>
-              <item translatable="yes">Color</item>
-              <item translatable="yes">Graphic</item>
-              <item translatable="yes">Gradient</item>
-            </items>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -696,5 +692,27 @@
         <property name="height">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name gint1 -->
+      <column type="gint"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Color</col>
+        <col id="1">1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Gradient</col>
+        <col id="1">2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Graphic</col>
+        <col id="1">4</col>
+      </row>
+    </data>
   </object>
 </interface>
