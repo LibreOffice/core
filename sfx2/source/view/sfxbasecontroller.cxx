@@ -1439,7 +1439,7 @@ void SfxBaseController::ShowInfoBars( )
     {
         // CMIS verifications
         REFERENCE< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
-        if ( xCmisDoc.is( ) )
+        if ( xCmisDoc.is( ) && xCmisDoc->canCheckOut( ) )
         {
             beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
 
