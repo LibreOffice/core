@@ -1309,6 +1309,56 @@ public:
     {
         return stripStart(c) + stripEnd(c);
     }
+    /**
+      Returns the int32 value from this string buffer.
+
+      This function can't be used for language specific conversion.
+
+      @param    radix       the radix (between 2 and 36)
+      @return   the int32 represented from this string.
+                0 if this string represents no number.
+      @since LibreOffice 4.1
+    */
+    sal_Int32 toInt32( sal_Int16 radix = 10 ) const SAL_THROW(())
+    {
+        return rtl_ustr_toInt32( pData->buffer, radix );
+    }
+    /**
+      Returns a new string buffer that is a substring of this string.
+
+      The substring begins at the specified beginIndex. If
+      beginIndex is negative or be greater than the length of
+      this string, behaviour is undefined.
+
+      @param     beginIndex   the beginning index, inclusive.
+      @return    the specified substring.
+      @since LibreOffice 4.1
+    */
+    OUStringBuffer copy( sal_Int32 beginIndex ) const SAL_THROW(())
+    {
+        rtl_uString *pNew = 0;
+        rtl_uStringbuffer_newFromStr_WithLength( &pNew, getStr() + beginIndex, getLength() - beginIndex );
+        return OUStringBuffer( pNew, getLength() - beginIndex + 16 );
+    }
+    /**
+      Returns a new string buffer that is a substring of this string.
+
+      The substring begins at the specified beginIndex and contains count
+      characters.  If either beginIndex or count are negative,
+      or beginIndex + count are greater than the length of this string
+      then behaviour is undefined.
+
+      @param     beginIndex   the beginning index, inclusive.
+      @param     count        the number of characters.
+      @return    the specified substring.
+      @since LibreOffice 4.1
+    */
+    OUStringBuffer copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
+    {
+        rtl_uString *pNew = 0;
+        rtl_uStringbuffer_newFromStr_WithLength( &pNew, getStr() + beginIndex, count );
+        return OUStringBuffer( pNew, count + 16 );
+    }
 
 #ifdef LIBO_INTERNAL_ONLY
     // This is to complement the RTL_FAST_STRING operator+, which allows any combination of valid operands,
@@ -1326,6 +1376,12 @@ public:
 #endif
 
 private:
+    OUStringBuffer( rtl_uString * value, const sal_Int32 capacity )
+    {
+        pData = value;
+        nCapacity = capacity;
+    }
+
     /**
         A pointer to the data structur which contains the data.
      */
