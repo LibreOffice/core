@@ -12445,6 +12445,10 @@ AC_CONFIG_HEADERS([config_host/config_vclplug.h])
 AC_CONFIG_HEADERS([config_host/config_version.h])
 AC_OUTPUT
 
+if test "$CROSS_COMPILING" = YES; then
+    (echo; echo export BUILD_TYPE_FOR_HOST=$BUILD_TYPE) >>config_build.mk
+fi
+
 # touch the config timestamp file
 if test ! -f config_host.mk.stamp; then
     echo > config_host.mk.stamp

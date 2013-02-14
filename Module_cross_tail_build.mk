@@ -31,16 +31,13 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	autodoc \
 	basegfx \
 	binaryurp \
-	$(call gb_Helper_optional,BOOST,boost) \
 	bridges \
 	cli_ure \
-	$(call gb_Helper_optional,CLUCENE,clucene) \
-	$(call gb_Helper_optional,DESKTOP,codemaker) \
+	codemaker \
 	comphelper \
 	cosv \
 	cppu \
 	cppuhelper \
-	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
 	i18npool \
 	i18nutil \
 	idl \
@@ -50,13 +47,10 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	jurt \
 	jvmaccess \
 	jvmfwk \
-	$(call gb_Helper_optional,DESKTOP,l10ntools) \
-	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	o3tl \
 	offapi \
 	officecfg \
 	oovbaapi \
-	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 	registry \
 	remotebridges \
 	ridljar \
@@ -69,15 +63,28 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	store \
 	tools \
 	ucbhelper \
-	$(call gb_Helper_optional,UCPP,ucpp) \
 	udkapi \
 	udm \
 	unoil \
 	unotest \
 	unotools \
 	ure \
-	xmlhelp \
 	xmlreader \
+	$(call gb_Helper_optional,BOOST,boost) \
+	$(call gb_Helper_optional,CLUCENE,clucene) \
+	$(call gb_Helper_optional_for_host,DESKTOP, \
+		helpcompiler \
+		i18nisolang1 \
+		l10ntools \
+		sot \
+		svtools \
+		toolkit \
+		tools \
+		unotools \
+	    vcl) \
+	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
+	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
+	$(call gb_Helper_optional,UCPP,ucpp) \
 	$(call gb_Helper_optional,ZLIB,zlib) \
 ))
 

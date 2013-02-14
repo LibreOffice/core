@@ -216,4 +216,8 @@ define gb_Helper_optional
 $(if $(filter $(1),$(BUILD_TYPE)),$(2))
 endef
 
+define gb_Helper_optional_for_host
+$(if $(filter $(1),$(BUILD_TYPE_FOR_HOST)),$(2))
+endef
+
 # vim: set noet sw=4 ts=4:
