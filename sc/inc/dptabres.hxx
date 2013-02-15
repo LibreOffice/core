@@ -292,7 +292,7 @@ class ScDPResultData
     std::vector<ScSubTotalFunc> maMeasureFuncs;
     std::vector<com::sun::star::sheet::DataPilotFieldReference> maMeasureRefs;
     std::vector<sal_uInt16> maMeasureRefOrients;
-    std::vector<rtl::OUString> maMeasureNames;
+    std::vector<OUString> maMeasureNames;
 
     bool                    bLateInit:1;
     bool                    bDataAtCol:1;
@@ -304,9 +304,11 @@ public:
     ScDPResultData( ScDPSource& rSrc );
     ~ScDPResultData();
 
-    void                SetMeasureData( long nCount, const ScSubTotalFunc* pFunctions,
-                                        const ::com::sun::star::sheet::DataPilotFieldReference* pRefs,
-                                        const sal_uInt16* pRefOrient, std::vector<rtl::OUString>& rNames );
+    void SetMeasureData(
+        std::vector<ScSubTotalFunc>& rFunctions,
+        std::vector<com::sun::star::sheet::DataPilotFieldReference>& rRefs,
+        std::vector<sal_uInt16>& rRefOrient, std::vector<OUString>& rNames );
+
     void                SetDataLayoutOrientation( sal_uInt16 nOrient );
     void                SetLateInit( bool bSet );
 

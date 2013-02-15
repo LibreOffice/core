@@ -724,33 +724,14 @@ ScDPResultData::~ScDPResultData()
     std::for_each(maDimMembers.begin(), maDimMembers.end(), ScDeleteObjectByPtr<ResultMembers>());
 }
 
-void ScDPResultData::SetMeasureData( long nCount, const ScSubTotalFunc* pFunctions,
-                                    const sheet::DataPilotFieldReference* pRefs, const sal_uInt16* pRefOrient,
-                                    std::vector<rtl::OUString>& rNames )
+void ScDPResultData::SetMeasureData(
+    std::vector<ScSubTotalFunc>& rFunctions, std::vector<sheet::DataPilotFieldReference>& rRefs,
+    std::vector<sal_uInt16>& rRefOrient, std::vector<OUString>& rNames )
 {
-    maMeasureFuncs.clear();
-    maMeasureRefs.clear();
-    maMeasureRefOrients.clear();
-
-    if ( nCount )
-    {
-        OSL_ASSERT(nCount == static_cast<long>(rNames.size()));
-        maMeasureFuncs.assign(pFunctions, pFunctions+nCount);
-        maMeasureRefs.assign(pRefs, pRefs+nCount);
-        maMeasureRefOrients.assign(pRefOrient, pRefOrient+nCount);
-        maMeasureNames.swap(rNames);
-    }
-    else
-    {
-        //  use one dummy measure
-        maMeasureFuncs.push_back(SUBTOTAL_FUNC_NONE);
-        maMeasureRefs.push_back(sheet::DataPilotFieldReference()); // default ctor is ok
-        maMeasureRefOrients.push_back(sheet::DataPilotFieldOrientation_HIDDEN);
-
-        std::vector<rtl::OUString> aMeasureName;
-        aMeasureName.push_back(ScGlobal::GetRscString(STR_EMPTYDATA));
-        maMeasureNames.swap(aMeasureName);
-    }
+    maMeasureFuncs.swap(rFunctions);
+    maMeasureRefs.swap(rRefs);
+    maMeasureRefOrients.swap(rRefOrient);
+    maMeasureNames.swap(rNames);
 }
 
 void ScDPResultData::SetDataLayoutOrientation( sal_uInt16 nOrient )

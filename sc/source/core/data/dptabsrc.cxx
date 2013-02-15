@@ -841,16 +841,7 @@ void ScDPSource::CreateRes_Impl()
     }
 
     pResData = new ScDPResultData(*this);
-    const ScSubTotalFunc* pDataFunctions = NULL;
-    const sheet::DataPilotFieldReference* pDataRefValues = NULL;
-    const sal_uInt16* pDataRefOrient = NULL;
-    if (!maDataDims.empty())
-    {
-        pDataFunctions = &aDataFunctions[0];
-        pDataRefValues = &aDataRefValues[0];
-        pDataRefOrient = &aDataRefOrient[0];
-    }
-    pResData->SetMeasureData(maDataDims.size(), pDataFunctions, pDataRefValues, pDataRefOrient, aDataNames);
+    pResData->SetMeasureData(aDataFunctions, aDataRefValues, aDataRefOrient, aDataNames);
     pResData->SetDataLayoutOrientation(nDataOrient);
     pResData->SetLateInit( bLateInit );
 
