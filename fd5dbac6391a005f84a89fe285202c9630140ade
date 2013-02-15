@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///8M\u003d",
+        "filename": "solenv/gbuild/Helper.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-02-15T13:39:42Z",
+      "side": 1,
+      "message": "true, and it makes the whole thing a lot more trivial and without the need to fumble around with solenv/gbuild/platform",
+      "parentUuid": "AAAAVn///80\u003d",
+      "revId": "fd5dbac6391a005f84a89fe285202c9630140ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn///84\u003d",
         "filename": "solenv/gbuild/platform/WNT_INTEL_GCC.mk",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-15T12:44:19Z",
       "side": 1,
       "message": "this removes the OOOLIBS line",
+      "revId": "fd5dbac6391a005f84a89fe285202c9630140ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///8I\u003d",
+        "filename": "solenv/gbuild/platform/WNT_INTEL_GCC.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-02-15T13:39:42Z",
+      "side": 1,
+      "message": "not needed, removing the need for playing around with platform.",
+      "parentUuid": "AAAAVn///84\u003d",
       "revId": "fd5dbac6391a005f84a89fe285202c9630140ade",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
