@@ -201,6 +201,7 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
     if (!pNewDBCollection)
     {
         pNewDBCollection = new ScDBCollection(&rNewDoc);
+        rNewDoc.SetDBCollection(pNewDBCollection);
     }
     ScDBCollection::NamedDBs& aNewNamedDBs = pNewDBCollection->getNamedDBs();
     ScDBData* pNewDBData = aNewNamedDBs.findByUpperName(aDBName);
