@@ -404,11 +404,11 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
 }
 
 
-    // is being called after the exchange of the character from the functions
-    //  - FnCptlSttWrd
-    //  - FnCptlSttSntnc
-    // Then, the words if necessary be added to the exception
-    // list.
+// Called by the functions:
+//  - FnCptlSttWrd
+//  - FnCptlSttSntnc
+// after the exchange of characters. Then the words, if necessary, can be inserted
+// into the exception list.
 void SwAutoCorrDoc::SaveCpltSttWord( sal_uLong nFlag, xub_StrLen nPos,
                                             const String& rExceptWord,
                                             sal_Unicode cChar )

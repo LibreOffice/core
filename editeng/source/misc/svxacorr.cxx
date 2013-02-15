@@ -172,11 +172,12 @@ static sal_Bool lcl_IsInAsciiArr( const sal_Char* pArr, const sal_Unicode c )
 SvxAutoCorrDoc::~SvxAutoCorrDoc()
 {
 }
-    // Is called by the functions:
-    //  - FnCptlSttWrd
-    //  - FnCptlSttSntnc
-    // after the exchange of characters. then the words can maybe be inserted
-    // into the exception list.
+
+// Called by the functions:
+//  - FnCptlSttWrd
+//  - FnCptlSttSntnc
+// after the exchange of characters. Then the words, if necessary, can be inserted
+// into the exception list.
 void SvxAutoCorrDoc::SaveCpltSttWord( sal_uLong, xub_StrLen, const String&,
                                         sal_Unicode )
 {
