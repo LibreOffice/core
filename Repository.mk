@@ -50,7 +50,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     lngconvex \
     localize \
     makedepend \
-    mkunroll \
     mork_helper \
     osl_process_child \
     pdf2xml \

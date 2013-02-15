@@ -34,7 +34,6 @@ $(eval $(call gb_Module_add_check_targets,tools,\
 ifneq ($(CROSS_COMPILING),YES)
 $(eval $(call gb_Module_add_targets,tools,\
     Executable_bestreversemap \
-    Executable_mkunroll \
     Executable_rscdep \
     Executable_so_checksum \
 ))
