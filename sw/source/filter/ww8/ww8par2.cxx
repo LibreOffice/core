@@ -1288,52 +1288,77 @@ void WW8TabBandDesc::ProcessSprmTSetBRC(bool bVer67, const sal_uInt8* pParamsTSe
         {
             WW8_BRCVer6* pBRC = (WW8_BRCVer6*)(pParamsTSetBRC+3);
 
-            for( int i = nitcFirst; i < nitcLim; i++, ++pAktTC )
+            for( int i = nitcFirst; i < nitcLim; ++i, ++pAktTC )
             {
                 if( bChangeTop )
+                {
                     memcpy( pAktTC->rgbrc[ WW8_TOP  ].aBits1,
                             pBRC->aBits1,
                             sizeof( SVBT16 ) );
+                }
                 if( bChangeLeft )
+                {
                     memcpy( pAktTC->rgbrc[ WW8_LEFT ].aBits1,
                             pBRC->aBits1,
                             sizeof( SVBT16 ) );
+                }
                 if( bChangeBottom )
+                {
                     memcpy( pAktTC->rgbrc[ WW8_BOT  ].aBits1,
                             pBRC->aBits1,
                             sizeof( SVBT16 ) );
+                }
                 if( bChangeRight )
+                {
                     memcpy( pAktTC->rgbrc[ WW8_RIGHT].aBits1,
                             pBRC->aBits1,
                             sizeof( SVBT16 ) );
+                }
             }
         }
         else
         {
             WW8_BRC* pBRC = (WW8_BRC*)(pParamsTSetBRC+3);
 
-            for( int i = nitcFirst; i < nitcLim; i++, ++pAktTC )
+            for( int i = nitcFirst; i < nitcLim; ++i, ++pAktTC )
             {
                 if( bChangeTop )
+                {
                     memcpy( pAktTC->rgbrc[ WW8_TOP  ].aBits1,
                             pBRC->aBits1,
-                            sizeof( WW8_BRC ) );
+                            sizeof( SVBT16 ) );
+                    memcpy( pAktTC->rgbrc[ WW8_TOP  ].aBits2,
+                            pBRC->aBits2,
+                            sizeof( SVBT16 ) );
+                }
                 if( bChangeLeft )
+                {
                     memcpy( pAktTC->rgbrc[ WW8_LEFT ].aBits1,
                             pBRC->aBits1,
-                            sizeof( WW8_BRC ) );
+                            sizeof( SVBT16 ) );
+                    memcpy( pAktTC->rgbrc[ WW8_LEFT ].aBits2,
+                            pBRC->aBits2,
+                            sizeof( SVBT16 ) );
+                }
                 if( bChangeBottom )
+                {
                     memcpy( pAktTC->rgbrc[ WW8_BOT  ].aBits1,
                             pBRC->aBits1,
-                            sizeof( WW8_BRC ) );
+                            sizeof( SVBT16 ) );
+                    memcpy( pAktTC->rgbrc[ WW8_BOT  ].aBits2,
+                            pBRC->aBits2,
+                            sizeof( SVBT16 ) );
+                }
                 if( bChangeRight )
+                {
                     memcpy( pAktTC->rgbrc[ WW8_RIGHT].aBits1,
                             pBRC->aBits1,
-                            sizeof( WW8_BRC ) );
+                            sizeof( SVBT16 ) );
+                    memcpy( pAktTC->rgbrc[ WW8_RIGHT].aBits2,
+                            pBRC->aBits2,
+                            sizeof( SVBT16 ) );
+                }
             }
-
-
-
         }
     }
 }
