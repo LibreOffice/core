@@ -2395,7 +2395,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
         {
             ScXMLImport::MutexGuard aGuard(*this);
             sal_Int16 nTemp16(0);
-            ScChangeViewSettings* pViewSettings(new ScChangeViewSettings());
+            boost::scoped_ptr<ScChangeViewSettings> pViewSettings(new ScChangeViewSettings());
             for (sal_Int32 i = 0; i < nCount; ++i)
             {
                 rtl::OUString sName(rChangeProps[i].Name);
