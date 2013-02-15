@@ -38,7 +38,7 @@ endef
 #
 # Horrors below:
 #
-$(BOOTSTRAPDIR)/no-resource-compress.xml :
+$(BOOTSTRAPDIR)/no-resource-compress.xml : $(ANDROID_SDK_HOME)/tools/ant/build.xml
 	( \
 	android_sdk_ver=`grep 'Pkg.Revision' $(ANDROID_SDK_HOME)/tools/source.properties | sed 's/^.*=//' | sed 's/\..*//'` ; \
 	cp $(BOOTSTRAPDIR)/no-resource-compress-$$android_sdk_ver.xml $(BOOTSTRAPDIR)/no-resource-compress.xml ; \
@@ -68,7 +68,7 @@ uninstall:
 
 clean: android_version_setup properties
 	$(ANT) clean
-	rm -rf assets libs $(SODEST) $(OBJLOCAL)
+	rm -rf assets libs $(SODEST) $(OBJLOCAL) $(BOOTSTRAPDIR)/no-resource-compress.xml
 
 #
 # Build / link the single .so for this app
