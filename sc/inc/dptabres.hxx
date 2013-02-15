@@ -227,16 +227,15 @@ struct MemberHashIndexFunc : public std::unary_function< const SCROW &, size_t >
     size_t operator() (const SCROW &rDataIndex) const { return rDataIndex; }
 };
 
-class ScDPParentDimData
+struct ScDPParentDimData
 {
-public:
-    const SCROW                     mnOrder;                        //! Ref
+    const SCROW                     mnOrder;                //! Ref
     const ScDPDimension*            mpParentDim;            //! Ref
     const ScDPLevel*                mpParentLevel;          //! Ref
     const ScDPMember*               mpMemberDesc;           //! Ref
 
-    ScDPParentDimData():mnOrder(-1), mpParentDim( NULL), mpParentLevel( NULL ), mpMemberDesc( NULL ){}
-    ScDPParentDimData( const SCROW nIndex, ScDPDimension* pDim, const ScDPLevel* pLev, const ScDPMember* pMember ): mnOrder( nIndex ), mpParentDim( pDim), mpParentLevel( pLev ), mpMemberDesc( pMember ){}
+    ScDPParentDimData();
+    ScDPParentDimData(SCROW nIndex, const ScDPDimension* pDim, const ScDPLevel* pLev, const ScDPMember* pMember);
 };
 
 typedef std::vector <ScDPParentDimData *>                 DimMemberArray;
