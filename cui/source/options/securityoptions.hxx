@@ -38,34 +38,27 @@ namespace svx
     class SecurityOptionsDialog : public ModalDialog
     {
     private:
-        ReadOnlyImage       m_aSaveOrSendDocsFI;
-        CheckBox            m_aSaveOrSendDocsCB;
-        ReadOnlyImage       m_aSignDocsFI;
-        CheckBox            m_aSignDocsCB;
-        ReadOnlyImage       m_aPrintDocsFI;
-        CheckBox            m_aPrintDocsCB;
-        ReadOnlyImage       m_aCreatePdfFI;
-        CheckBox            m_aCreatePdfCB;
+        CheckBox* m_pSaveOrSendDocsCB;
+        CheckBox* m_pSignDocsCB;
+        CheckBox* m_pPrintDocsCB;
+        CheckBox* m_pCreatePdfCB;
 
-        ReadOnlyImage       m_aRemovePersInfoFI;
-        CheckBox            m_aRemovePersInfoCB;
-        ReadOnlyImage       m_aRecommPasswdFI;
-        CheckBox            m_aRecommPasswdCB;
-        ReadOnlyImage       m_aCtrlHyperlinkFI;
-        CheckBox            m_aCtrlHyperlinkCB;
+        CheckBox* m_pRemovePersInfoCB;
+        CheckBox* m_pRecommPasswdCB;
+        CheckBox* m_pCtrlHyperlinkCB;
 
 
     public:
         SecurityOptionsDialog( Window* pParent, SvtSecurityOptions* pOptions );
         ~SecurityOptionsDialog();
 
-        inline bool         IsSaveOrSendDocsChecked() const { return m_aSaveOrSendDocsCB.IsChecked() != sal_False; }
-        inline bool         IsSignDocsChecked() const { return m_aSignDocsCB.IsChecked() != sal_False; }
-        inline bool         IsPrintDocsChecked() const { return m_aPrintDocsCB.IsChecked() != sal_False; }
-        inline bool         IsCreatePdfChecked() const { return m_aCreatePdfCB.IsChecked() != sal_False; }
-        inline bool         IsRemovePersInfoChecked() const { return m_aRemovePersInfoCB.IsChecked() != sal_False; }
-        inline bool         IsRecommPasswdChecked() const { return m_aRecommPasswdCB.IsChecked() != sal_False; }
-        inline bool         IsCtrlHyperlinkChecked() const { return m_aCtrlHyperlinkCB.IsChecked() != sal_False; }
+        bool IsSaveOrSendDocsChecked() const { return m_pSaveOrSendDocsCB->IsChecked() != sal_False; }
+        bool IsSignDocsChecked() const { return m_pSignDocsCB->IsChecked() != sal_False; }
+        bool IsPrintDocsChecked() const { return m_pPrintDocsCB->IsChecked() != sal_False; }
+        bool IsCreatePdfChecked() const { return m_pCreatePdfCB->IsChecked() != sal_False; }
+        bool IsRemovePersInfoChecked() const { return m_pRemovePersInfoCB->IsChecked() != sal_False; }
+        bool IsRecommPasswdChecked() const { return m_pRecommPasswdCB->IsChecked() != sal_False; }
+        bool IsCtrlHyperlinkChecked() const { return m_pCtrlHyperlinkCB->IsChecked() != sal_False; }
     };
 
 //........................................................................

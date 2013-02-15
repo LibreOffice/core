@@ -22,7 +22,6 @@
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include "securityoptions.hxx"
-#include "securityoptions.hrc"
 
 namespace
 {
@@ -45,32 +44,29 @@ namespace svx
 
 SecurityOptionsDialog::SecurityOptionsDialog(Window* pParent, SvtSecurityOptions* pOptions)
     : ModalDialog(pParent, "SecurityOptionsDialog", "cui/ui/securityoptionsdialog.ui")
-
-    ,m_aSaveOrSendDocsFI( this, CUI_RES( FI_SAVESENDDOCS ) )
-    ,m_aSaveOrSendDocsCB( this, CUI_RES( CB_SAVESENDDOCS ) )
-    ,m_aSignDocsFI      ( this, CUI_RES( FI_SIGNDOCS ) )
-    ,m_aSignDocsCB      ( this, CUI_RES( CB_SIGNDOCS ) )
-    ,m_aPrintDocsFI     ( this, CUI_RES( FI_PRINTDOCS ) )
-    ,m_aPrintDocsCB     ( this, CUI_RES( CB_PRINTDOCS ) )
-    ,m_aCreatePdfFI     ( this, CUI_RES( FI_CREATEPDF ) )
-    ,m_aCreatePdfCB     ( this, CUI_RES( CB_CREATEPDF ) )
-    ,m_aRemovePersInfoFI( this, CUI_RES( FI_REMOVEINFO ) )
-    ,m_aRemovePersInfoCB( this, CUI_RES( CB_REMOVEINFO ) )
-    ,m_aRecommPasswdFI  ( this, CUI_RES( FI_RECOMMENDPWD ) )
-    ,m_aRecommPasswdCB  ( this, CUI_RES( CB_RECOMMENDPWD ) )
-    ,m_aCtrlHyperlinkFI ( this, CUI_RES( FI_CTRLHYPERLINK ) )
-    ,m_aCtrlHyperlinkCB ( this, CUI_RES( CB_CTRLHYPERLINK ) )
-
 {
-
     DBG_ASSERT( pOptions, "SecurityOptionsDialog::SecurityOptionsDialog(): invalid SvtSecurityOptions" );
-    enableAndSet( *pOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, m_aSaveOrSendDocsCB, m_aSaveOrSendDocsFI );
-    enableAndSet( *pOptions, SvtSecurityOptions::E_DOCWARN_SIGNING, m_aSignDocsCB, m_aSignDocsFI );
-    enableAndSet( *pOptions, SvtSecurityOptions::E_DOCWARN_PRINT, m_aPrintDocsCB, m_aPrintDocsFI );
-    enableAndSet( *pOptions, SvtSecurityOptions::E_DOCWARN_CREATEPDF, m_aCreatePdfCB, m_aCreatePdfFI );
-    enableAndSet( *pOptions, SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO, m_aRemovePersInfoCB, m_aRemovePersInfoFI );
-    enableAndSet( *pOptions, SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD, m_aRecommPasswdCB, m_aRecommPasswdFI );
-    enableAndSet( *pOptions, SvtSecurityOptions::E_CTRLCLICK_HYPERLINK, m_aCtrlHyperlinkCB, m_aCtrlHyperlinkFI );
+    get(m_pSaveOrSendDocsCB, "savesenddocs");
+    enableAndSet(*pOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, *m_pSaveOrSendDocsCB,
+        *get<FixedImage>("locksavesenddocs"));
+    get(m_pSignDocsCB, "whensigning");
+    enableAndSet(*pOptions, SvtSecurityOptions::E_DOCWARN_SIGNING, *m_pSignDocsCB,
+        *get<FixedImage>("lockwhensigning"));
+    get(m_pPrintDocsCB, "whenprinting");
+    enableAndSet(*pOptions, SvtSecurityOptions::E_DOCWARN_PRINT, *m_pPrintDocsCB,
+        *get<FixedImage>("lockwhenprinting"));
+    get(m_pCreatePdfCB, "whenpdf");
+    enableAndSet(*pOptions, SvtSecurityOptions::E_DOCWARN_CREATEPDF, *m_pCreatePdfCB,
+        *get<FixedImage>("lockwhenpdf"));
+    get(m_pRemovePersInfoCB, "removepersonal");
+    enableAndSet(*pOptions, SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO, *m_pRemovePersInfoCB,
+        *get<FixedImage>("lockremovepersonal"));
+    get(m_pRecommPasswdCB, "password");
+    enableAndSet(*pOptions, SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD, *m_pRecommPasswdCB,
+        *get<FixedImage>("lockpassword"));
+    get(m_pCtrlHyperlinkCB, "ctrlclick");
+    enableAndSet(*pOptions, SvtSecurityOptions::E_CTRLCLICK_HYPERLINK, *m_pCtrlHyperlinkCB,
+        *get<FixedImage>("lockctrlclick"));
 }
 
 SecurityOptionsDialog::~SecurityOptionsDialog()
