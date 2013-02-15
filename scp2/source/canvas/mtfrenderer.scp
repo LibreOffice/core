@@ -27,14 +27,4 @@
 
 #include "macros.inc"
 
-File gid_File_Lib_MtfRenderer
-    LIB_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(mtfrenderer.uno,UNXSUFFIX));
-  #else
-    Name = "mtfrenderer.uno.dll";
-  #endif
-End
+STD_LIB_FILE(gid_File_Lib_MtfRenderer, mtfrenderer)

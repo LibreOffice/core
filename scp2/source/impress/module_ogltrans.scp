@@ -36,16 +36,8 @@ Module gid_Module_Optional_OGLTrans
     Default = NO;
 End
 
-File gid_File_Lib_OpenGLTransitions
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(OGLTrans.uno,UNXSUFFIX));
-  #else
-    Name = "OGLTrans.uno.dll";
-  #endif
-End
+
+STD_LIB_FILE(gid_File_Lib_OpenGLTransitions, OGLTrans)
 
 File gid_File_Share_Config_Sofficecfg_Impress_Transitions_OGL_Xml
     TXT_FILE_BODY;
