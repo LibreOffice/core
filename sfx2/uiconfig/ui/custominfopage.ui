@@ -6,6 +6,7 @@
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="row_spacing">12</property>
     <child>
       <object class="GtkLabel" id="label56">
@@ -25,12 +26,10 @@
     <child>
       <object class="GtkButton" id="add">
         <property name="label">gtk-add</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="halign">end</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_stock">True</property>
       </object>
       <packing>

@@ -19,6 +19,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
+    <property name="border_width">6</property>
     <property name="row_spacing">12</property>
     <property name="column_spacing">6</property>
     <child>
@@ -165,6 +166,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
+        <property name="column_spacing">12</property>
         <child>
           <object class="GtkEntry" id="forwarded">
             <property name="visible">True</property>
@@ -208,6 +210,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
+        <property name="column_spacing">12</property>
         <child>
           <object class="GtkSpinButton" id="afternf">
             <property name="visible">True</property>
@@ -250,6 +253,7 @@
       <object class="GtkGrid" id="grid3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="column_spacing">12</property>
         <child>
           <object class="GtkSpinButton" id="reloadnf">
             <property name="visible">True</property>

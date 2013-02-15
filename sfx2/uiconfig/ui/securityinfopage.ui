@@ -6,6 +6,7 @@
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="label_xalign">0</property>
     <property name="shadow_type">none</property>
     <child>
@@ -24,17 +25,15 @@
             <property name="valign">end</property>
             <property name="hexpand">True</property>
             <property name="row_spacing">12</property>
-            <property name="column_spacing">6</property>
+            <property name="column_spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="readonly">
                 <property name="label" translatable="yes">_Open file read-only</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
                 <property name="valign">end</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -49,11 +48,9 @@
             <child>
               <object class="GtkCheckButton" id="recordchanges">
                 <property name="label" translatable="yes">Record _changes</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -74,12 +71,10 @@
                 <child>
                   <object class="GtkButton" id="protect">
                     <property name="label" translatable="yes">Protect...</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -90,12 +85,10 @@
                 <child>
                   <object class="GtkButton" id="unprotect">
                     <property name="label" translatable="yes">_Unprotect...</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
