@@ -749,6 +749,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         SfxPoolItem* pItem = 0;
                         if( rBindings.QueryState( nSlot, pItem ) >= SFX_ITEM_DEFAULT )
                             bMerge = !static_cast< SfxBoolItem* >( pItem )->GetValue();
+
+                        delete pItem;
                     }
                     break;
                 }
