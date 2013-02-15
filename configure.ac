@@ -1042,11 +1042,6 @@ AC_ARG_ENABLE(icecream,
          wrappers, you can override that using --with-gcc-home=/the/path switch.]),
 ,)
 
-AC_ARG_ENABLE(zenity,
-    AS_HELP_STRING([--disable-zenity],
-        [Do not display a build icon in the notification area (on unix) during build.]),
-,enable_zenity=yes)
-
 AC_ARG_ENABLE(cups,
     AS_HELP_STRING([--disable-cups],
         [Do not build cups support.])
@@ -4250,7 +4245,6 @@ if test "$cross_compiling" = "yes"; then
     ./configure \
         --disable-graphite \
         --disable-postgresql-sdbc \
-        --disable-zenity \
         --with-parallelism="$with_parallelism" \
         --without-doxygen \
         ENABLE_PDFIMPORT=FALSE \
@@ -12133,25 +12127,6 @@ else
     AC_MSG_RESULT([not set])
 fi
 AC_SUBST(VERBOSE)
-
-dnl ===================================================================
-dnl Use zenity during build
-dnl ===================================================================
-AC_MSG_CHECKING([whether to use zenity during build])
-if test "$enable_zenity" = "yes"; then
-    AC_MSG_RESULT([yes])
-    AC_PATH_PROGS( ZNTY, zenity )
-    if test -z "$ZNTY"; then
-        ENABLE_ZENITY=FALSE
-    else
-        ENABLE_ZENITY=TRUE
-    fi
-else
-    ENABLE_ZENITY=FALSE
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_ZENITY)
-
 
 dnl ===================================================================
 dnl Hook up LibreOffice's nodep environmental variable to automake's equivalent
