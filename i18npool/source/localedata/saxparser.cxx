@@ -321,8 +321,6 @@ public:
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-
-
     if( argc < 6) {
         printf( "usage : %s <locaLe> <XML inputfile> <destination file> <services.rdb location> <types.rdb location>\n", argv[0] );
         exit( 1 );
@@ -336,9 +334,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             ::rtl::OUString::createFromAscii(argv[4]),
             ::rtl::OUString::createFromAscii(argv[5]), true );
     }
-    catch ( Exception& )
+    catch( const Exception& e)
     {
-        printf( "Exception on createRegistryServiceFactory\n" );
+        const OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8 );
+        printf( "Exception on createRegistryServiceFactory: \"%s\"\n", aMsg.getStr() );
         exit(1);
     }
 
@@ -373,10 +372,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             rParser->parseStream( source );
         }
 
-        catch( Exception & e )
+        catch( const Exception& e)
         {
-            OString o1 = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8 );
-            printf( "Exception during parsing : %s\n" ,  o1.getStr() );
+            const OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8 );
+            printf( "Exception during parsing : \"%s\"\n",  aMsg.getStr() );
             exit(1);
         }
         nError = pDocHandler->nError;
