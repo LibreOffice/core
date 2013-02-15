@@ -30,7 +30,6 @@ class RASWriter {
 private:
 
     SvStream & m_rOStm;
-    sal_uInt16              mpOStmOldModus;
 
     sal_Bool                mbStatus;
     BitmapReadAccess*   mpAcc;
@@ -110,7 +109,7 @@ sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilter
     mpAcc = aBmp.AcquireReadAccess();
     if ( mpAcc )
     {
-        mpOStmOldModus = m_rOStm.GetNumberFormatInt();
+        sal_uInt16 nOStmOldModus = m_rOStm.GetNumberFormatInt();
         m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
         if ( ImplWriteHeader() )
@@ -119,12 +118,13 @@ sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilter
                 ImplWritePalette();
             ImplWriteBody();
         }
+
+        m_rOStm.SetNumberFormatInt( nOStmOldModus );
+
         aBmp.ReleaseAccess( mpAcc );
     }
     else
         mbStatus = sal_False;
-
-    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
