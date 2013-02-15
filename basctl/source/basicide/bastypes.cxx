@@ -36,6 +36,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
+#include <tools/stream.hxx>
 
 namespace basctl
 {

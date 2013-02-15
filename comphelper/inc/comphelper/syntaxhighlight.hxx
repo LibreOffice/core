@@ -16,20 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVTOOLS_SYNTAXHIGHLIGHT_HXX
-#define _SVTOOLS_SYNTAXHIGHLIGHT_HXX
+#ifndef _COMPHELPER_SYNTAXHIGHLIGHT_HXX
+#define _COMPHELPER_SYNTAXHIGHLIGHT_HXX
 
-#include <list>
+#include <vector>
+#include <rtl/ustring.hxx>
 
-#include <osl/mutex.hxx>
-
-#include <vcl/svapp.hxx>
-
-#include <tools/stream.hxx>
-#include <tools/shl.hxx>
-
-#include <svl/brdcst.hxx>
-#include <svtools/svtdllapi.h>
+#include <comphelper/comphelperdllapi.h>
 
 
 #if defined CDECL
@@ -46,11 +39,6 @@
 #ifdef UNX
 #include <sys/resource.h>
 #endif
-
-#include <stdio.h>
-
-#include <tools/string.hxx>
-#include <tools/gen.hxx>
 
 
 // Token-Typen TT_...
@@ -145,7 +133,7 @@ public:
 // aufgrund dieser Aenderung neu gehighlighted werden muss.
 // Dazu merkt sich Highlighter intern fuer jede Zeile, ob dort
 // C-Kommentare beginnen oder enden.
-class SVT_DLLPUBLIC SyntaxHighlighter
+class COMPHELPER_DLLPUBLIC SyntaxHighlighter
 {
     HighlighterLanguage eLanguage;
     SimpleTokenizer_Impl* m_pSimpleTokenizer;
@@ -164,7 +152,7 @@ public:
     // nur Zeile 0 angegeben werden.
     void initialize( HighlighterLanguage eLanguage_ );
 
-    const Range notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDifference,
+    void notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDifference,
                                 const OUString* pChangedLines, sal_uInt32 nArrayLength);
 
     void getHighlightPortions( sal_uInt32 nLine, const OUString& rLine,

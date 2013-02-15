@@ -41,7 +41,8 @@
 #include <vcl/xtextedt.hxx>
 #include <vcl/txtattr.hxx>
 #include <svtools/textwindowpeer.hxx>
-#include <svtools/syntaxhighlight.hxx>
+#include <tools/stream.hxx>
+#include <comphelper/syntaxhighlight.hxx>
 #include "svtools/treelistentry.hxx"
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
@@ -788,13 +789,7 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
     if ( bDoSyntaxHighlight )
     {
         OUString aLine( pEditEngine->GetText( nLine ) );
-        Range aChanges = aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
-        if ( aChanges.Len() )
-        {
-            for ( long n = aChanges.Min() + 1; n <= aChanges.Max(); n++ )
-                aSyntaxLineTable.insert( n );
-            aSyntaxIdleTimer.Start();
-        }
+        aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
 
         bool const bWasModified = pEditEngine->IsModified();
         pEditEngine->RemoveAttribs( nLine, true );

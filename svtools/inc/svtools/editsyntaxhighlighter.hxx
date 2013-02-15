@@ -20,8 +20,8 @@
 #ifndef _EDITSYNTAXHIGHLIGHTER_HXX
 #define _EDITSYNTAXHIGHLIGHTER_HXX
 
+#include <comphelper/syntaxhighlight.hxx>
 #include <svtools/svmedit.hxx>
-#include <svtools/syntaxhighlight.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/colorcfg.hxx>
 

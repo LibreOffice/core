@@ -35,7 +35,11 @@ $(eval $(call gb_Library_add_defs,comphelper,\
        -DCOMPHELPER_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_external,comphelper,boost_headers))
+$(eval $(call gb_Library_use_externals,comphelper,\
+    boost_headers \
+    icuuc \
+    icu_headers \
+))
 
 $(eval $(call gb_Library_use_libraries,comphelper,\
     cppu \
@@ -108,6 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/storagehelper \
     comphelper/source/misc/string \
     comphelper/source/misc/synchronousdispatch \
+    comphelper/source/misc/syntaxhighlight \
     comphelper/source/misc/types \
     comphelper/source/misc/weak \
     comphelper/source/misc/weakeventlistener \

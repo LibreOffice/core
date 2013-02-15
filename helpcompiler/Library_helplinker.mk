@@ -43,8 +43,7 @@ endif
 
 $(eval $(call gb_Library_use_libraries,helplinker,\
     sal \
-    svt \
-    tl \
+    comphelper \
 ))
 
 $(eval $(call gb_Library_use_internal_api,helplinker,\

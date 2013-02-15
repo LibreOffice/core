@@ -19,7 +19,7 @@
 
 
 #include <unicode/uchar.h>
-#include <svtools/syntaxhighlight.hxx>
+#include <comphelper/syntaxhighlight.hxx>
 #include <comphelper/string.hxx>
 
 // ##########################################################################
@@ -721,15 +721,13 @@ void SyntaxHighlighter::initialize( HighlighterLanguage eLanguage_ )
     }
 }
 
-const Range SyntaxHighlighter::notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDifference,
+void SyntaxHighlighter::notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDifference,
                                 const OUString* pChangedLines, sal_uInt32 nArrayLength)
 {
     (void)nLineCountDifference;
 
     for( sal_uInt32 i=0 ; i < nArrayLength ; i++ )
         m_pSimpleTokenizer->parseLine(nLine+i, &pChangedLines[i]);
-
-    return Range( nLine, nLine + nArrayLength-1 );
 }
 
 void SyntaxHighlighter::getHighlightPortions( sal_uInt32 nLine, const OUString& rLine,

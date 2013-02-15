@@ -453,7 +453,7 @@ private:
         void NewConfig (bool bFirst);
 
     private:
-        // the color values (the indexes are TokenTypes, see svtools/syntaxhighlight.hxx)
+        // the color values (the indexes are TokenTypes, see comphelper/syntaxhighlight.hxx)
         Color aColors[TT_KEYWORDS + 1];
         // the configuration
         svtools::ColorConfig aConfig;

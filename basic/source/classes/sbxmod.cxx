@@ -36,7 +36,6 @@
 #include "token.hxx"
 #include "sbunoobj.hxx"
 
-#include <svtools/syntaxhighlight.hxx>
 #include "sal/log.hxx"
 
 #include <basic/basrdll.hxx>

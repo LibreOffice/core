@@ -17,7 +17,7 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <rtl/ustring.hxx>
-#include <svtools/syntaxhighlight.hxx>
+#include <comphelper/syntaxhighlight.hxx>
 #include <helpcompiler/dllapi.h>
 
 class BasicCodeTagger;

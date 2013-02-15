@@ -20,9 +20,10 @@
 #ifndef _SVEDIT_HXX
 #define _SVEDIT_HXX
 
+#include <vcl/svapp.hxx>
 #include <vcl/vclmedit.hxx>
 
-#include <svtools/syntaxhighlight.hxx>
+#include <comphelper/syntaxhighlight.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/colorcfg.hxx>
 

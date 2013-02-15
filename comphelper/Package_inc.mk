@@ -124,5 +124,6 @@ $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/sequenceashashma
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/configuration.hxx,comphelper/configuration.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/configurationhelper.hxx,comphelper/configurationhelper.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/newarray.hxx,comphelper/newarray.hxx))
+$(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/syntaxhighlight.hxx,comphelper/syntaxhighlight.hxx))
 
 # vim: set noet sw=4 ts=4:
