@@ -252,11 +252,6 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     if ( rNewFilter != aFilterName )
         aOptions.Erase();
 
-    //  ItemSet immer anlegen, damit die DocShell die Optionen setzen kann
-    SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
-    if ( aOptions.Len() )
-        pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
-
     SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, pFilter);
 
     // aRef->DoClose() will be closed explicitly, but it is still more safe to use SfxObjectShellLock here
