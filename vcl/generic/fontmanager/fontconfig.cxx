@@ -291,6 +291,9 @@ namespace
     FcChar8* localizedsorter::bestname(const std::vector<lang_and_element> &elements)
     {
         FcChar8* candidate = elements.begin()->second;
+        /* FIXME-BCP47: once fontconfig supports language tags this
+         * language-territory stuff needs to be changed! */
+        SAL_INFO_IF( !maLoc.isIsoLocale(), "i18n", "localizedsorter::bestname - not an ISO locale");
         rtl::OString sLangMatch(rtl::OUStringToOString(maLoc.getLanguage().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8));
         rtl::OString sFullMatch = sLangMatch;
         sFullMatch += OString('-');
