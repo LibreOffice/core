@@ -796,19 +796,19 @@ long ScDPResultData::GetRowStartMeasure() const
 
 ScSubTotalFunc ScDPResultData::GetMeasureFunction(long nMeasure) const
 {
-    OSL_ENSURE(nMeasure < maMeasureFuncs.size(), "bumm");
+    OSL_ENSURE((size_t) nMeasure < maMeasureFuncs.size(), "bumm");
     return maMeasureFuncs[nMeasure];
 }
 
 const sheet::DataPilotFieldReference& ScDPResultData::GetMeasureRefVal(long nMeasure) const
 {
-    OSL_ENSURE(nMeasure < maMeasureRefs.size(), "bumm");
+    OSL_ENSURE((size_t) nMeasure < maMeasureRefs.size(), "bumm");
     return maMeasureRefs[nMeasure];
 }
 
 sal_uInt16 ScDPResultData::GetMeasureRefOrient(long nMeasure) const
 {
-    OSL_ENSURE(nMeasure < maMeasureRefOrients.size(), "bumm");
+    OSL_ENSURE((size_t) nMeasure < maMeasureRefOrients.size(), "bumm");
     return maMeasureRefOrients[nMeasure];
 }
 
@@ -829,7 +829,7 @@ rtl::OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSub
     }
     else
     {
-        OSL_ENSURE(nMeasure < maMeasureFuncs.size(), "bumm");
+        OSL_ENSURE((size_t) nMeasure < maMeasureFuncs.size(), "bumm");
         const ScDPDimension* pDataDim = mrSource.GetDataDimension(nMeasure);
         if (pDataDim)
         {
