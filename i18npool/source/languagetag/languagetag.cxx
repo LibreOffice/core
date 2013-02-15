@@ -898,6 +898,14 @@ rtl::OUString LanguageTag::getRegion() const
 }
 
 
+bool LanguageTag::hasScript() const
+{
+    if (!mbCachedScript)
+        getScript();
+    return !maCachedScript.isEmpty();
+}
+
+
 bool LanguageTag::cacheSimpleLSC()
 {
     OUString aLanguage, aScript, aCountry;

@@ -127,12 +127,16 @@ public:
     /** Get ISO 15924 script code, if not the default script according to
         BCP 47. For default script an empty string is returned.
 
+        @see hasScript()
+
         Always resolves an empty tag to the system locale.
      */
     rtl::OUString                   getScript() const;
 
     /** Get combined language and script code, separated by '-' if
         non-default script, if default script only language.
+
+        @see hasScript()
 
         Always resolves an empty tag to the system locale.
      */
@@ -151,6 +155,10 @@ public:
         Always resolves an empty tag to the system locale.
      */
     rtl::OUString                   getRegion() const;
+
+    /** If language tag has a non-default script specified.
+     */
+    bool                            hasScript() const;
 
     /** If language tag is a locale that can be expressed using only ISO 639
         language codes and ISO 3166 country codes, thus is convertible to a
