@@ -158,7 +158,6 @@ void LinkManager::Remove( sal_uInt16 nPos, sal_uInt16 nCnt )
 
 sal_Bool LinkManager::Insert( SvBaseLink* pLink )
 {
-  // No duplicate links inserted
     for( sal_uInt16 n = 0; n < aLinkTbl.size(); ++n )
     {
         SvBaseLinkRef* pTmp = aLinkTbl[ n ];
@@ -167,9 +166,8 @@ sal_Bool LinkManager::Insert( SvBaseLink* pLink )
             delete pTmp;
             aLinkTbl.erase( aLinkTbl.begin() + n-- );
         }
-
-        if( pLink == *pTmp )
-            return sal_False;
+        else if( pLink == *pTmp )
+            return sal_False; // No duplicate links inserted
     }
 
     SvBaseLinkRef* pTmp = new SvBaseLinkRef( pLink );
