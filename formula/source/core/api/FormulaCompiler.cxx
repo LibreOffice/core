@@ -1070,16 +1070,16 @@ void FormulaCompiler::Factor()
                     // and recalc mode on load, fdo#60646
                 case ocCell :
                     pArr->SetRecalcModeOnRefMove();
-                    pArr->SetRecalcModeOnLoad();
+                    pArr->AddRecalcMode( RECALCMODE_ONLOAD );
                 break;
                 case ocHyperLink :
                     // cell with hyperlink needs to be calculated on load to
                     // get its matrix result generated.
-                    pArr->SetRecalcModeOnLoad();
+                    pArr->AddRecalcMode( RECALCMODE_ONLOAD );
                     pArr->SetHyperLink(true);
                 break;
                 case ocDde:
-                    pArr->SetRecalcModeOnLoad();
+                    pArr->AddRecalcMode( RECALCMODE_ONLOAD );
                 break;
                 default:
                     ;   // nothing
