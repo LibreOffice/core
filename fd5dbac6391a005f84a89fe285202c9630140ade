@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///80\u003d",
+        "filename": "solenv/gbuild/Helper.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-02-15T12:44:19Z",
+      "side": 1,
+      "message": "if we use a separate function for these now (which seems reasonable),\nwhy then do we need to add another\n\"OOOLIBSINSTALLED\" layer that does the same thing as \"OOOLIBS\"?",
+      "revId": "fd5dbac6391a005f84a89fe285202c9630140ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///84\u003d",
+        "filename": "solenv/gbuild/platform/WNT_INTEL_GCC.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-02-15T12:44:19Z",
+      "side": 1,
+      "message": "this removes the OOOLIBS line",
+      "revId": "fd5dbac6391a005f84a89fe285202c9630140ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
