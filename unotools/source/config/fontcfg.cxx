@@ -364,6 +364,12 @@ FontSubstConfiguration& FontSubstConfiguration::get()
     return theFontSubstConfiguration::get();
 }
 
+struct StrictStringSort : public ::std::binary_function< const FontNameAttr&, const FontNameAttr&, bool >
+{
+    bool operator()( const FontNameAttr& rLeft, const FontNameAttr& rRight )
+    { return rLeft.Name.CompareTo( rRight.Name ) == COMPARE_LESS ; }
+};
+
 static inline void lcl_assertEndingItem(xmlreader::XmlReader& reader)
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -383,130 +389,79 @@ static inline void lcl_assertEndingItem(xmlreader::XmlReader& reader)
 FontSubstConfiguration::FontSubstConfiguration() :
     maSubstHash( 300 )
 {
-    OUString uri("$BRAND_BASE_DIR/share/config/fontsubstitutions.xml");
-    rtl::Bootstrap::expandMacros(uri);
-    xmlreader::XmlReader reader(uri);
-    int nsId;
-    xmlreader::Span name;
-    xmlreader::XmlReader::Result res;
-    OUString sAttribute;
+    try {
+        OUString uri("$BRAND_BASE_DIR/share/config/fontsubstitutions.xml");
+        rtl::Bootstrap::expandMacros(uri);
+        xmlreader::XmlReader reader(uri);
+        int nsId;
+        xmlreader::Span name;
+        xmlreader::XmlReader::Result res;
 
-    res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
-    assert(res == xmlreader::XmlReader::RESULT_BEGIN &&
-                name.equals(RTL_CONSTASCII_STRINGPARAM("FontSubstitutions")));
-    res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
-    while (res != xmlreader::XmlReader::RESULT_END)
-    {
-        FontNameAttr aAttr;
-        // Opening Font
-        assert(res == xmlreader::XmlReader::RESULT_BEGIN &&
-                name.equals(RTL_CONSTASCII_STRINGPARAM("Font")));
-        // Get the name
-        reader.nextAttribute(&nsId, &name);
-        assert(nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                name.equals(RTL_CONSTASCII_STRINGPARAM("name")));
-        aAttr.Name = reader.getAttributeValue(false).convertFromUtf8();
-        for(;;) {
-            // Opening attribute or ending Font
-            res = reader.nextItem(
-                    xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
-            if (res == xmlreader::XmlReader::RESULT_END)
-            {
-                break;
-            }
-            sAttribute = name.convertFromUtf8();
-            // Get value
-            res = reader.nextItem(xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
-            if (res == xmlreader::XmlReader::RESULT_END)
-                // there is no value
-                continue;
-            assert(res == xmlreader::XmlReader::RESULT_TEXT);
-            OUString sValue = name.convertFromUtf8();
-            // Ending attribute
-            lcl_assertEndingItem(reader);
-
-            if (sAttribute == "SubstFonts")
-                ;
-                //fillSubstVector( xFont, "SubstFonts", aAttr.Substitutions );
-            else if (sAttribute == "SubstFontsMS")
-                ;
-                //fillSubstVector( xFont, "SubstFontsMS", aAttr.MSSubstitutions );
-            else if (sAttribute == "SubstFontsPS")
-                ;
-                //fillSubstVector( xFont, "SubstFontsPS", aAttr.PSSubstitutions );
-            else if (sAttribute == "SubstFontsHTML")
-                ;
-                //fillSubstVector( xFont, "SubstFontsHTML", aAttr.HTMLSubstitutions );
-            else if (sAttribute == "FontWeight")
-                ;
-                //aAttr.Weight = getSubstWeight( xFont, "FontWeight" );
-            else if (sAttribute == "FontWidth")
-                ;
-                //aAttr.Width = getSubstWidth( xFont, "FontWidth" );
-            else if (sAttribute == "FontType")
-                ;
-                //aAttr.Type = getSubstType( xFont, "FontType" );
-            else assert(false);
-        }
-        // Get next Font or end
         res = reader.nextItem(
                 xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
-        //m_aSubstAttributes.push_back( aAttr );
-    };
-    res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
-    assert(res == xmlreader::XmlReader::RESULT_DONE);
-
-    try
-    {
-        // get service provider
-        Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        // create configuration hierachical access name
-        try
+        assert(res == xmlreader::XmlReader::RESULT_BEGIN &&
+                    name.equals(RTL_CONSTASCII_STRINGPARAM("FontSubstitutions")));
+        res = reader.nextItem(
+                xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+        while (res != xmlreader::XmlReader::RESULT_END)
         {
-            m_xConfigProvider = theDefaultProvider::get( xContext );
-            Sequence< Any > aArgs(1);
-            PropertyValue aVal;
-            aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-            aVal.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.VCL/FontSubstitutions" ) );
-            aArgs.getArray()[0] <<= aVal;
-            m_xConfigAccess =
-                Reference< XNameAccess >(
-                    m_xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.configuration.ConfigurationAccess" )),
-                                                                    aArgs ),
-                    UNO_QUERY );
-        }
-        catch (const Exception&)
-        {
-            // configuration is awry
-            m_xConfigProvider.clear();
-            m_xConfigAccess.clear();
-        }
+            FontNameAttr aAttr;
+            // Opening Font
+            assert(res == xmlreader::XmlReader::RESULT_BEGIN &&
+                    name.equals(RTL_CONSTASCII_STRINGPARAM("Font")));
+            // Get the name
+            reader.nextAttribute(&nsId, &name);
+            assert(nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
+                    name.equals(RTL_CONSTASCII_STRINGPARAM("name")));
+            aAttr.Name = reader.getAttributeValue(false).convertFromUtf8();
+            for(;;) {
+                // Opening attribute or ending Font
+                res = reader.nextItem(
+                        xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+                if (res == xmlreader::XmlReader::RESULT_END)
+                    break;
+                OUString sAttribute = name.convertFromUtf8();
+                // Get value
+                res = reader.nextItem(xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
+                if (res == xmlreader::XmlReader::RESULT_END)
+                    // there is no value
+                    continue;
+                assert(res == xmlreader::XmlReader::RESULT_TEXT);
+                OUString sValue = name.convertFromUtf8();
+                // Ending attribute
+                lcl_assertEndingItem(reader);
+
+                if (sAttribute == "SubstFonts")
+                    fillSubstVector( sValue, aAttr.Substitutions );
+                else if (sAttribute == "SubstFontsMS")
+                    fillSubstVector( sValue, aAttr.MSSubstitutions );
+                else if (sAttribute == "SubstFontsPS")
+                    fillSubstVector( sValue, aAttr.PSSubstitutions );
+                else if (sAttribute == "SubstFontsHTML")
+                    fillSubstVector( sValue, aAttr.HTMLSubstitutions );
+                else if (sAttribute == "FontWeight")
+                    aAttr.Weight = getSubstWeight( sValue );
+                else if (sAttribute == "FontWidth")
+                    aAttr.Width = getSubstWidth( sValue );
+                else if (sAttribute == "FontType")
+                    aAttr.Type = getSubstType( sValue );
+                else assert(false);
+            }
+            // Get next Font or end
+            res = reader.nextItem(
+                    xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            m_aSubstAttributes.push_back( aAttr );
+        };
+        std::sort( m_aSubstAttributes.begin(), m_aSubstAttributes.end(), StrictStringSort() );
+        res = reader.nextItem(
+                xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+        assert(res == xmlreader::XmlReader::RESULT_DONE);
     }
-    catch (const WrappedTargetException&)
+    catch (const com::sun::star::container::NoSuchElementException& )
     {
+        // Should happen only in unit tests because
+        // fontsubstitutions.xml is not available.
     }
-    #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "config provider: %s, config access: %s\n",
-             m_xConfigProvider.is() ? "true" : "false",
-             m_xConfigAccess.is() ? "true" : "false"
-             );
-    #endif
-}
-
-/*
- *  FontSubstConfigItem::~FontSubstConfigItem
- */
-
-FontSubstConfiguration::~FontSubstConfiguration()
-{
-    // release config access
-    m_xConfigAccess.clear();
-    // release config provider
-    m_xConfigProvider.clear();
 }
 
 /*
@@ -898,13 +853,6 @@ void FontSubstConfiguration::getMapName( const String& rOrgName, String& rShortN
     }
 }
 
-
-struct StrictStringSort : public ::std::binary_function< const FontNameAttr&, const FontNameAttr&, bool >
-{
-    bool operator()( const FontNameAttr& rLeft, const FontNameAttr& rRight )
-    { return rLeft.Name.CompareTo( rRight.Name ) == COMPARE_LESS ; }
-};
-
 static const char* const pAttribNames[] =
 {
     "default",
@@ -980,216 +928,74 @@ static const enum_convert pWidthNames[] =
     { "ultraexpanded", WIDTH_ULTRA_EXPANDED }
 };
 
-void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Reference< XNameAccess > xFont,
-                                              const rtl::OUString& rType,
+void FontSubstConfiguration::fillSubstVector( const rtl::OUString& rValue,
                                               std::vector< String >& rSubstVector ) const
 {
-    try
+    sal_Int32 nLength = rValue.getLength();
+    assert(nLength);
+
+    const sal_Unicode* pStr = rValue.getStr();
+    sal_Int32 nTokens = 0;
+    // count tokens
+    while( nLength-- )
     {
-        Any aAny = xFont->getByName( rType );
-        if( aAny.getValueTypeClass() == TypeClass_STRING )
+        if( *pStr++ == sal_Unicode(';') )
+            nTokens++;
+    }
+    rSubstVector.clear();
+    // optimize performance, heap fragmentation
+    rSubstVector.reserve( nTokens );
+    sal_Int32 nIndex = 0;
+    while( nIndex != -1 )
+    {
+        OUString aSubst( rValue.getToken( 0, ';', nIndex ) );
+        if( !aSubst.isEmpty() )
         {
-            const OUString* pLine = (const OUString*)aAny.getValue();
-            sal_Int32 nLength = pLine->getLength();
-            if( nLength )
-            {
-                const sal_Unicode* pStr = pLine->getStr();
-                sal_Int32 nTokens = 0;
-                // count tokens
-                while( nLength-- )
-                {
-                    if( *pStr++ == sal_Unicode(';') )
-                        nTokens++;
-                }
-                rSubstVector.clear();
-                // optimize performance, heap fragmentation
-                rSubstVector.reserve( nTokens );
-                sal_Int32 nIndex = 0;
-                while( nIndex != -1 )
-                {
-                    OUString aSubst( pLine->getToken( 0, ';', nIndex ) );
-                    if( !aSubst.isEmpty() )
-                    {
-                        UniqueSubstHash::iterator aEntry = maSubstHash.find( aSubst );
-                        if (aEntry != maSubstHash.end())
-                            aSubst = *aEntry;
-                        else
-                            maSubstHash.insert( aSubst );
-                        rSubstVector.push_back( aSubst );
-                    }
-                }
-            }
+            UniqueSubstHash::iterator aEntry = maSubstHash.find( aSubst );
+            if (aEntry != maSubstHash.end())
+                aSubst = *aEntry;
+            else
+                maSubstHash.insert( aSubst );
+            rSubstVector.push_back( aSubst );
         }
-    }
-    catch (const NoSuchElementException&)
-    {
-    }
-    catch (const WrappedTargetException&)
-    {
     }
 }
 
-FontWeight FontSubstConfiguration::getSubstWeight( const com::sun::star::uno::Reference< XNameAccess > xFont,
-                                                   const rtl::OUString& rType ) const
+FontWeight FontSubstConfiguration::getSubstWeight( const rtl::OUString& rValue ) const
 {
     int weight = -1;
-    try
-    {
-        Any aAny = xFont->getByName( rType );
-        if( aAny.getValueTypeClass() == TypeClass_STRING )
-        {
-            const OUString* pLine = (const OUString*)aAny.getValue();
-            if( !pLine->isEmpty() )
-            {
-                for( weight=SAL_N_ELEMENTS(pWeightNames)-1; weight >= 0; weight-- )
-                    if( pLine->equalsIgnoreAsciiCaseAscii( pWeightNames[weight].pName ) )
-                        break;
-            }
-#if OSL_DEBUG_LEVEL > 1
-            if( weight < 0 )
-                fprintf( stderr, "Error: invalid weight %s\n",
-                         OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
-        }
-    }
-    catch (const NoSuchElementException&)
-    {
-    }
-    catch (const WrappedTargetException&)
-    {
-    }
+    for (weight = SAL_N_ELEMENTS(pWeightNames) - 1; weight >= 0; weight--)
+        if (rValue.equalsIgnoreAsciiCaseAscii( pWeightNames[weight].pName ))
+            break;
+    SAL_WARN_IF( weight < 0, "unotools.config", "Error: invalid weight " << rValue);
     return (FontWeight)( weight >= 0 ? pWeightNames[weight].nEnum : WEIGHT_DONTKNOW );
 }
 
-FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Reference< XNameAccess > xFont,
-                                                 const rtl::OUString& rType ) const
+FontWidth FontSubstConfiguration::getSubstWidth( const rtl::OUString& rValue ) const
 {
     int width = -1;
-    try
-    {
-        Any aAny = xFont->getByName( rType );
-        if( aAny.getValueTypeClass() == TypeClass_STRING )
-        {
-            const OUString* pLine = (const OUString*)aAny.getValue();
-            if( !pLine->isEmpty() )
-            {
-                for( width=SAL_N_ELEMENTS(pWidthNames)-1; width >= 0; width-- )
-                    if( pLine->equalsIgnoreAsciiCaseAscii( pWidthNames[width].pName ) )
-                        break;
-            }
-#if OSL_DEBUG_LEVEL > 1
-            if( width < 0 )
-                fprintf( stderr, "Error: invalid width %s\n",
-                         OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
-        }
-    }
-    catch (const NoSuchElementException&)
-    {
-    }
-    catch (const WrappedTargetException&)
-    {
-    }
+    for (width = SAL_N_ELEMENTS(pWidthNames) - 1; width >= 0; width-- )
+        if (rValue.equalsIgnoreAsciiCaseAscii( pWidthNames[width].pName ))
+            break;
+    SAL_WARN_IF( width < 0, "unotools.config", "Error: invalid width " << rValue);
     return (FontWidth)( width >= 0 ? pWidthNames[width].nEnum : WIDTH_DONTKNOW );
 }
 
-unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::Reference< XNameAccess > xFont,
-                                                    const rtl::OUString& rType ) const
+unsigned long FontSubstConfiguration::getSubstType( const rtl::OUString& rType ) const
 {
     unsigned long type = 0;
-    try
+    sal_Int32 nIndex = 0;
+    while (nIndex != -1)
     {
-        Any aAny = xFont->getByName( rType );
-        if( aAny.getValueTypeClass() == TypeClass_STRING )
-        {
-            const OUString* pLine = (const OUString*)aAny.getValue();
-            if( !pLine->isEmpty() )
+        String aToken( rType.getToken( 0, ',', nIndex ) );
+        for( int k = 0; k < 32; k++ )
+            if( aToken.EqualsIgnoreCaseAscii( pAttribNames[k] ) )
             {
-                sal_Int32 nIndex = 0;
-                while( nIndex != -1 )
-                {
-                    String aToken( pLine->getToken( 0, ',', nIndex ) );
-                    for( int k = 0; k < 32; k++ )
-                        if( aToken.EqualsIgnoreCaseAscii( pAttribNames[k] ) )
-                        {
-                            type |= 1 << k;
-                            break;
-                        }
-                }
+                type |= 1 << k;
+                break;
             }
-        }
     }
-    catch (const NoSuchElementException&)
-    {
-    }
-    catch (const WrappedTargetException&)
-    {
-    }
-
     return type;
-}
-
-void FontSubstConfiguration::readLocaleSubst() const
-{
-    Reference< XNameAccess > xNode;
-    try
-    {
-        Any aAny = m_xConfigAccess->getByName( "en" );
-        aAny >>= xNode;
-    }
-    catch (const NoSuchElementException&)
-    {
-    }
-    catch (const WrappedTargetException&)
-    {
-    }
-    if( xNode.is() )
-    {
-        Sequence< OUString > aFonts = xNode->getElementNames();
-        int nFonts = aFonts.getLength();
-        const OUString* pFontNames = aFonts.getConstArray();
-        // improve performance, heap fragmentation
-        m_aSubstAttributes.reserve( nFonts );
-
-        for( int i = 0; i < nFonts; i++ )
-        {
-            Reference< XNameAccess > xFont;
-            try
-            {
-                Any aAny = xNode->getByName( pFontNames[i] );
-                aAny >>= xFont;
-            }
-            catch (const NoSuchElementException&)
-            {
-            }
-            catch (const WrappedTargetException&)
-            {
-            }
-            if( ! xFont.is() )
-            {
-                #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "did not get font attributes for %s\n",
-                         OUStringToOString( pFontNames[i], RTL_TEXTENCODING_UTF8 ).getStr() );
-                #endif
-                continue;
-            }
-
-            FontNameAttr aAttr;
-            // read subst attributes from config
-            aAttr.Name = pFontNames[i];
-            fillSubstVector( xFont, "SubstFonts", aAttr.Substitutions );
-            fillSubstVector( xFont, "SubstFontsMS", aAttr.MSSubstitutions );
-            fillSubstVector( xFont, "SubstFontsPS", aAttr.PSSubstitutions );
-            fillSubstVector( xFont, "SubstFontsHTML", aAttr.HTMLSubstitutions );
-            aAttr.Weight = getSubstWeight( xFont, "FontWeight" );
-            aAttr.Width = getSubstWidth( xFont, "FontWidth" );
-            aAttr.Type = getSubstType( xFont, "FontType" );
-
-            // finally insert this entry
-            m_aSubstAttributes.push_back( aAttr );
-        }
-        std::sort( m_aSubstAttributes.begin(), m_aSubstAttributes.end(), StrictStringSort() );
-    }
 }
 
 const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontName ) const
@@ -1202,8 +1008,6 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
     FontNameAttr aSearchAttr;
     aSearchAttr.Name = aSearchFont;
 
-    if( m_aSubstAttributes.empty() )
-        readLocaleSubst();
     // try to find an exact match
     // because the list is sorted this will also find fontnames of the form searchfontname*
     std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( m_aSubstAttributes.begin(), m_aSubstAttributes.end(), aSearchAttr, StrictStringSort() );

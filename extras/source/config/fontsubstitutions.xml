@@ -17,6 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
+<!--
+Contains attributes for fonts. The substitution lists are separated
+by ';' and are searched first to last for a substitute.
+
+SubstFonts - Contains a list of substitute fonts used in office documents.
+
+SubstFontsMS - Contains a list of substitute fonts used in MS import filters.
+
+SubstFontsPS - Contains a list of substitute fonts used in
+a PostScript context (for example, EPS export).
+
+SubstFontsHTML - Contains a list of substitute fonts used in
+a HTML context (for example, HTML import/export).
+
+FontWeight - Specifies the font weight. Valid values are "thin", "ultralight",
+"light", "semilight", "normal", "medium", "semibold", "bold", "ultrabold",
+"black" (in ascending order of weight) and "unknown".
+
+FontWidth - Specifies the font width. Valid values are "ultracondensed",
+"extracondensed", "condensed", "semicondensed", "normal", "semiexpanded",
+"expanded", "extraexpanded", "ultraexpanded" (in ascending order of width)
+and "unknown".
+
+FontType - Denotes the compatible styles for the font. Multiple styles are
+separated by ','. Valid styles are: "Default", "Standard", "Normal", "Symbol",
+"Fixed", "SansSerif", "Serif", "Decorative", "Special", "Italic", "Title",
+"Capitals", "CJK", "CJK_JP", "CJK_SC", "CJK_TC", "CJK_KR", "CTL", "NoneLatin",
+"Full", "Outline", "Shadow", "Rounded", "Typewriter", "Script", "Handwriting",
+"Chancery", "comic", "brushscript", "gothic", "schoolbook", "other".
+-->
+
 <FontSubstitutions>
   <Font name="albany">
     <SubstFonts>albanyamt;albany;arial;liberationsans;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</SubstFonts>

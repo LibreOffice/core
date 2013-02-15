@@ -167,10 +167,6 @@ struct UNOTOOLS_DLLPUBLIC FontNameAttr
 class UNOTOOLS_DLLPUBLIC FontSubstConfiguration
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-            m_xConfigProvider;
-    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
-            m_xConfigAccess;
     // note: m_aSubstAttributes must be sorted alphabetically by Name
     // searches on the substitutes are done with Name as key, where
     // a minimal match is sufficient (that is e.g. "Thorndale" will match
@@ -181,19 +177,13 @@ private:
     mutable UniqueSubstHash maSubstHash;
 
 
-    void fillSubstVector( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
-                          const rtl::OUString& rType,
+    void fillSubstVector( const rtl::OUString& rType,
                           std::vector< String >& rSubstVector ) const;
-    FontWeight getSubstWeight( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
-                          const rtl::OUString& rType ) const;
-    FontWidth getSubstWidth( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
-                             const rtl::OUString& rType ) const;
-    unsigned long getSubstType( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
-                                const rtl::OUString& rType ) const;
-    void readLocaleSubst() const;
+    FontWeight getSubstWeight( const rtl::OUString& rType ) const;
+    FontWidth getSubstWidth( const rtl::OUString& rType ) const;
+    unsigned long getSubstType( const rtl::OUString& rType ) const;
 public:
     FontSubstConfiguration();
-    ~FontSubstConfiguration();
 
     static FontSubstConfiguration& get();
 
