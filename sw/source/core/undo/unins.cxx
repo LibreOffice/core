@@ -347,8 +347,10 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
             {
                 SwTxtNode *const pTxtNode = pCNd->GetTxtNode();
                 OSL_ENSURE( pTxtNode, "where is my textnode ?" );
-                pTxtNode->InsertText( *pTxt, pPam->GetMark()->nContent,
-                      m_nInsertFlags );
+                OUString const ins(
+                    pTxtNode->InsertText( *pTxt, pPam->GetMark()->nContent,
+                    m_nInsertFlags) );
+                assert(ins.getLength() == pTxt->Len()); // must succeed
                 DELETEZ( pTxt );
             }
             else
@@ -712,7 +714,8 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if (!m_sOld.isEmpty())
     {
-        pNd->InsertText( m_sOld, aIdx );
+        OUString const ins( pNd->InsertText( m_sOld, aIdx ) );
+        assert(ins.getLength() == m_sOld.getLength()); // must succeed
     }
 
     if( pHistory )

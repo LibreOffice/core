@@ -1254,7 +1254,15 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
 
                     SwIndex aIdx( this, *pAttr->GetStart() );
                     const rtl::OUString c(GetCharOfTxtAttr(*pAttr));
-                    InsertText( c, aIdx, nInsertFlags );
+                    OUString const ins( InsertText(c, aIdx, nInsertFlags) );
+                    if (ins.isEmpty())
+                    {
+                        // do not record deletion of Format!
+                        ::sw::UndoGuard const ug(
+                                pFmt->GetDoc()->GetIDocumentUndoRedo());
+                        DestroyAttr(pAttr);
+                        return false; // text node full :(
+                    }
                     nInsMode |= nsSetAttrMode::SETATTR_NOTXTATRCHR;
 
                     if (pAnchor &&
@@ -1371,7 +1379,12 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     // Dokument nicht eingetrage wird.
                     SwIndex aNdIdx( this, *pAttr->GetStart() );
                     const rtl::OUString c(GetCharOfTxtAttr(*pAttr));
-                    InsertText( c, aNdIdx, nInsertFlags );
+                    OUString const ins( InsertText(c, aNdIdx, nInsertFlags) );
+                    if (ins.isEmpty())
+                    {
+                        DestroyAttr(pAttr);
+                        return false; // text node full :(
+                    }
                     nInsMode |= nsSetAttrMode::SETATTR_NOTXTATRCHR;
                 }
 
@@ -1430,7 +1443,13 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
         if( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode) )
         {
             SwIndex aIdx( this, *pAttr->GetStart() );
-            InsertText( rtl::OUString(GetCharOfTxtAttr(*pAttr)), aIdx, nInsertFlags );
+            OUString const ins( InsertText(OUString(GetCharOfTxtAttr(*pAttr)),
+                        aIdx, nInsertFlags) );
+            if (ins.isEmpty())
+            {
+                DestroyAttr(pAttr);
+                return false; // text node full :(
+            }
 
             // adjust end of hint to account for inserted CH_TXTATR
             xub_StrLen * const pEnd(pAttr->GetEnd());
