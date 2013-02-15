@@ -93,7 +93,6 @@ class VclEventListeners2;
 class SalData;
 
 namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
-namespace utl { class DefaultFontConfiguration; class FontSubstConfiguration; }
 
 // -----------------
 // - ImplSVAppData -
@@ -183,8 +182,6 @@ struct ImplSVGDIData
     long                    mnAppFontX;         // AppFont X-Numenator for 40/tel Width + DialogScaleX
     long                    mnAppFontY;         // AppFont Y-Numenator for 80/tel Height
     sal_Bool                    mbFontSubChanged;   // sal_True: FontSubstitution was changed between Begin/End
-    utl::DefaultFontConfiguration* mpDefaultFontConfiguration;
-    utl::FontSubstConfiguration* mpFontSubstConfiguration;
     bool                    mbNativeFontConfig; // true: do not override UI font
     bool                    mbNoXORClipping;    // true: do not use XOR to achieve clipping effects
 };

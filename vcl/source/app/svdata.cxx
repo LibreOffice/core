@@ -27,7 +27,6 @@
 #include <tools/debug.hxx>
 #include <tools/resary.hxx>
 #include <tools/gen.hxx>
-#include <unotools/fontcfg.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/string.hxx>
 #include <uno/current_context.hxx>
@@ -114,11 +113,6 @@ void ImplDeInitSVData()
 
     if( pSVData->mpDockingManager )
         delete pSVData->mpDockingManager;
-
-    if( pSVData->maGDIData.mpDefaultFontConfiguration )
-        delete pSVData->maGDIData.mpDefaultFontConfiguration;
-    if( pSVData->maGDIData.mpFontSubstConfiguration )
-        delete pSVData->maGDIData.mpFontSubstConfiguration;
 
     if( pSVData->maCtrlData.mpFieldUnitStrings )
         delete pSVData->maCtrlData.mpFieldUnitStrings, pSVData->maCtrlData.mpFieldUnitStrings = NULL;

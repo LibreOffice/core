@@ -30,7 +30,6 @@
 #include "comphelper/processfactory.hxx"
 
 #include "unotools/syslocaleoptions.hxx"
-#include "unotools/fontcfg.hxx"
 
 #include "vcl/svapp.hxx"
 #include "vcl/wrkwin.hxx"
@@ -404,10 +403,6 @@ void DeInitVCL()
 
     if( pSVData->mpSettingsConfigItem )
         delete pSVData->mpSettingsConfigItem, pSVData->mpSettingsConfigItem = NULL;
-    if( pSVData->maGDIData.mpDefaultFontConfiguration )
-        delete pSVData->maGDIData.mpDefaultFontConfiguration, pSVData->maGDIData.mpDefaultFontConfiguration = NULL;
-    if( pSVData->maGDIData.mpFontSubstConfiguration )
-        delete pSVData->maGDIData.mpFontSubstConfiguration, pSVData->maGDIData.mpFontSubstConfiguration = NULL;
 
     if ( pSVData->maAppData.mpIdleMgr )
         delete pSVData->maAppData.mpIdleMgr;
