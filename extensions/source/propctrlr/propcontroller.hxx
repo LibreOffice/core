@@ -101,7 +101,7 @@ namespace pcr
                 ,public IPropertyExistenceCheck
     {
     private:
-        typedef ::std::map< sal_Int32, ::com::sun::star::beans::Property >  OrderedPropertyMap;
+        typedef ::std::multimap< sal_Int32, ::com::sun::star::beans::Property >  OrderedPropertyMap;
         typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
                                                                             InterfaceArray;
 

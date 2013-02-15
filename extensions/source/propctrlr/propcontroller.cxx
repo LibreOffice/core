@@ -1098,9 +1098,7 @@ namespace pcr
                 sal_Int32 nRelativePropertyOrder = sourceProps - aProperties.begin();
                 if ( m_xModel.is() )
                     nRelativePropertyOrder = m_xModel->getPropertyOrderIndex( sourceProps->Name );
-                while ( m_aProperties.find( nRelativePropertyOrder ) != m_aProperties.end() )
-                    ++nRelativePropertyOrder;
-                m_aProperties[ nRelativePropertyOrder ] = *sourceProps;
+                m_aProperties.insert(OrderedPropertyMap::value_type(nRelativePropertyOrder, *sourceProps));
             }
 
             // be notified when one of our inspectees dies
