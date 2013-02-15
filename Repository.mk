@@ -61,7 +61,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     rsc \
     rscdep \
     saxparser \
-    so_checksum \
     sp2bv \
     svg2odf \
     svidl \
