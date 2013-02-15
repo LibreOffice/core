@@ -382,9 +382,11 @@ inline bool hasFloatingChild(Window *pWindow)
             }
             else if ( nType == WINDOW_BORDERWINDOW && hasFloatingChild( pWindow ) )
             {
-                PopupMenuFloatingWindow* pChild = dynamic_cast<PopupMenuFloatingWindow*>(
-                    pWindow->GetAccessibleChildWindow(0));
-                if ( pChild && pChild->IsPopupMenu() )
+                // The logic here has to match that of Window::GetAccessibleParentWindow in
+                // vcl/source/window/window.cxx to avoid PopupMenuFloatingWindow
+                // becoming a11y parents of themselves
+                Window* pChild = pWindow->GetAccessibleChildWindow(0);
+                if (PopupMenuFloatingWindow::isPopupMenu(pChild))
                 {
                     // Get the accessible context from the child window.
                     Reference<XAccessible> xAccessible = pChild->CreateAccessible();

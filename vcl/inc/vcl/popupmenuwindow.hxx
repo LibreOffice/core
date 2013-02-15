@@ -34,6 +34,9 @@ public:
     sal_uInt16      GetMenuStackLevel() const;
     void            SetMenuStackLevel( sal_uInt16 nLevel );
     bool            IsPopupMenu() const;
+
+    //determine if a given window is an activated PopupMenuFloatingWindow
+    static bool isPopupMenu(const Window *pWindow);
 };
 
 #endif

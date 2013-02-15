@@ -48,6 +48,7 @@
 #include "vcl/unowrap.hxx"
 #include "vcl/gdimtf.hxx"
 #include "vcl/pdfextoutdevdata.hxx"
+#include "vcl/popupmenuwindow.hxx"
 #include "vcl/lazydelete.hxx"
 #include "vcl/virdev.hxx"
 
@@ -8601,10 +8602,15 @@ Window* Window::GetAccessibleParentWindow() const
             pWorkWin = pWorkWin->mpWindowImpl->mpNext;
         pParent = pWorkWin;
     }
-    // If this a floating window which has a native boarder window, this one should be reported as
-    // accessible parent
+    // If this is a floating window which has a native border window, then that border should be reported as
+    // the accessible parent, unless the floating window is a PopupMenuFloatingWindow
+    //
+    // The logic here has to match that of AccessibleFactory::createAccessibleContext in
+    // accessibility/source/helper/acc_factory.cxx to avoid PopupMenuFloatingWindow
+    // becoming a11y parents of themselves
     else if( GetType() == WINDOW_FLOATINGWINDOW &&
-        mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame)
+        mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame &&
+        !PopupMenuFloatingWindow::isPopupMenu(this))
     {
         pParent = mpWindowImpl->mpBorderWindow;
     }
