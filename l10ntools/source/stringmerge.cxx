@@ -161,7 +161,7 @@ void StringParser::Merge(
             {
                 OString sNewText;
                 pEntrys->GetText( sNewText, STRING_TYP_TEXT, m_sLang );
-                sNewText = sNewText.replaceAll("\"","&quot;").replaceAll("\\\\\"","\\\"").replaceAll("\'","&apos;").replaceAll("\\\\\'","\\\'");
+                sNewText = sNewText.replaceAll("\'","\\\'").replaceAll("\"","\\\"");
                 xmlNodeSetContent(
                     pCurrent,
                     xmlEncodeSpecialChars( NULL,
