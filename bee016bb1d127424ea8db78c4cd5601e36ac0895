@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///+w\u003d",
+        "filename": "sw/source/core/draw/dcontact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-02-15T02:45:15Z",
+      "side": 1,
+      "message": "Could you add a second patch that removes these ASCII graphics and such useless comments like Ctor and Dtor.\nWe don\u0027t need them as it is obvious from looking at the code and just uses valuable vertical space.",
+      "revId": "bee016bb1d127424ea8db78c4cd5601e36ac0895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///+s\u003d",
+        "filename": "sw/source/core/draw/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-02-15T02:45:15Z",
+      "side": 1,
+      "message": "This comment can be removed.",
+      "revId": "bee016bb1d127424ea8db78c4cd5601e36ac0895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///+o\u003d",
+        "filename": "sw/source/core/draw/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-02-15T02:45:15Z",
+      "side": 1,
+      "message": "This comment can be removed.",
+      "revId": "bee016bb1d127424ea8db78c4cd5601e36ac0895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///+k\u003d",
+        "filename": "sw/source/core/draw/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-02-15T02:45:15Z",
+      "side": 1,
+      "message": "The ASCII graphics around the comment can be removed. Maybe make it a doxygen comment instead.",
+      "revId": "bee016bb1d127424ea8db78c4cd5601e36ac0895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
