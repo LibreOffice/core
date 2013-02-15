@@ -32,22 +32,9 @@
 class MasterPasswordCreateDialog : public ModalDialog
 {
 private:
-    FixedText       aFTInfoText;
-    FixedLine       aFLInfoText;
-
-    FixedText       aFTMasterPasswordCrt;
-    Edit            aEDMasterPasswordCrt;
-    FixedText       aFTMasterPasswordRepeat;
-    Edit            aEDMasterPasswordRepeat;
-
-    FixedText       aFTCautionText;
-    FixedLine       aFLCautionText;
-
-    FixedText       aFTMasterPasswordWarning;
-    FixedLine       aFL;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    Edit*     m_pEDMasterPasswordCrt;
+    Edit*     m_pEDMasterPasswordRepeat;
+    OKButton* m_pOKBtn;
 
 
     DECL_LINK(OKHdl_Impl, void *);
@@ -56,13 +43,11 @@ private:
 public:
     MasterPasswordCreateDialog( Window* pParent, ResMgr * pResMgr );
 
-    String          GetMasterPassword() const { return aEDMasterPasswordCrt.GetText(); }
+    OUString GetMasterPassword() const { return m_pEDMasterPasswordCrt->GetText(); }
 
 private:
     ResMgr*                                         pResourceMgr;
     sal_uInt16                                      nMinLen;
-
-    void            CalculateTextHeight();
 };
 
 #endif // UUI_MASTERPASSCRTDLG_HXX

@@ -21,7 +21,6 @@
 #include <vcl/msgbox.hxx>
 
 #include <ids.hrc>
-#include <masterpasscrtdlg.hrc>
 #include <masterpasscrtdlg.hxx>
 
 // MasterPasswordCreateDialog---------------------------------------------------
@@ -30,7 +29,7 @@
 
 IMPL_LINK_NOARG(MasterPasswordCreateDialog, EditHdl_Impl)
 {
-    aOKBtn.Enable( aEDMasterPasswordCrt.GetText().getLength() >= nMinLen );
+    m_pOKBtn->Enable( m_pEDMasterPasswordCrt->GetText().getLength() >= nMinLen );
     return 0;
 }
 
@@ -39,141 +38,33 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, EditHdl_Impl)
 IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl)
 {
     // compare both passwords and show message box if there are not equal!!
-    if( aEDMasterPasswordCrt.GetText() == aEDMasterPasswordRepeat.GetText() )
+    if( m_pEDMasterPasswordCrt->GetText() == m_pEDMasterPasswordRepeat->GetText() )
         EndDialog( RET_OK );
     else
     {
         String aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, *pResourceMgr ));
         ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
         aErrorBox.Execute();
-        aEDMasterPasswordCrt.SetText( String() );
-        aEDMasterPasswordRepeat.SetText( String() );
-        aEDMasterPasswordCrt.GrabFocus();
+        m_pEDMasterPasswordCrt->SetText( String() );
+        m_pEDMasterPasswordRepeat->SetText( String() );
+        m_pEDMasterPasswordCrt->GrabFocus();
     }
     return 1;
 }
 
 // -----------------------------------------------------------------------
 
-MasterPasswordCreateDialog::MasterPasswordCreateDialog
-(
-    Window*                                     pParent,
-    ResMgr*                                     pResMgr
-) :
-
-    ModalDialog( pParent, ResId( DLG_UUI_MASTERPASSWORD_CRT, *pResMgr ) ),
-
-    aFTInfoText             ( this, ResId( FT_INFOTEXT, *pResMgr ) ),
-    aFLInfoText             ( this, ResId( FL_INFOTEXT, *pResMgr ) ),
-
-    aFTMasterPasswordCrt    ( this, ResId( FT_MASTERPASSWORD_CRT, *pResMgr ) ),
-    aEDMasterPasswordCrt    ( this, ResId( ED_MASTERPASSWORD_CRT, *pResMgr ) ),
-    aFTMasterPasswordRepeat ( this, ResId( FT_MASTERPASSWORD_REPEAT, *pResMgr ) ),
-    aEDMasterPasswordRepeat ( this, ResId( ED_MASTERPASSWORD_REPEAT, *pResMgr ) ),
-
-    aFTCautionText          ( this, ResId( FT_CAUTIONTEXT, *pResMgr ) ),
-    aFLCautionText          ( this, ResId( FL_CAUTIONTEXT, *pResMgr ) ),
-
-    aFTMasterPasswordWarning ( this, ResId( FT_MASTERPASSWORD_WARNING, *pResMgr ) ),
-    aFL ( this, ResId( FL_FIXED_LINE, *pResMgr ) ),
-    aOKBtn                  ( this, ResId( BTN_MASTERPASSCRT_OK, *pResMgr ) ),
-    aCancelBtn              ( this, ResId( BTN_MASTERPASSCRT_CANCEL, *pResMgr ) ),
-    aHelpBtn                ( this, ResId( BTN_MASTERPASSCRT_HELP, *pResMgr ) ),
-
-    pResourceMgr            ( pResMgr ),
-    nMinLen                 ( 1 )
+MasterPasswordCreateDialog::MasterPasswordCreateDialog(Window* pParent, ResMgr* pResMgr)
+    : ModalDialog(pParent, "SetMasterPasswordDialog", "uui/ui/setmasterpassworddlg.ui")
+    , pResourceMgr(pResMgr)
+    , nMinLen(1)
 {
-    FreeResource();
-
-    aOKBtn.Enable( sal_False );
-    aOKBtn.SetClickHdl( LINK( this, MasterPasswordCreateDialog, OKHdl_Impl ) );
-    aEDMasterPasswordCrt.SetModifyHdl( LINK( this, MasterPasswordCreateDialog, EditHdl_Impl ) );
-
-    CalculateTextHeight();
-
-    long nLableWidth = aFTMasterPasswordWarning.GetSizePixel().Width();
-    long nLabelHeight = aFTMasterPasswordWarning.GetSizePixel().Height();
-    long nTextWidth = aFTMasterPasswordWarning.GetCtrlTextWidth( aFTMasterPasswordWarning.GetText() );
-    long nTextHeight = aFTMasterPasswordWarning.GetTextHeight();
-
-    Rectangle aLabelRect( aFTMasterPasswordWarning.GetPosPixel(), aFTMasterPasswordWarning.GetSizePixel() );
-    Rectangle aRect = aFTMasterPasswordWarning.GetTextRect( aLabelRect, aFTMasterPasswordWarning.GetText() );
-
-    long nNewLabelHeight = 0;
-    if ( nTextWidth > 0 )
-    {
-        for( nNewLabelHeight = ( nTextWidth / nLableWidth + 1 ) * nTextHeight;
-            nNewLabelHeight < aRect.GetHeight();
-        nNewLabelHeight += nTextHeight ) {};
-    }
-
-    long nDelta = nNewLabelHeight - nLabelHeight;
-    Size aNewDlgSize = GetSizePixel();
-    aNewDlgSize.Height() += nDelta;
-    SetSizePixel( aNewDlgSize );
-
-    Size aNewWarningSize = aFTMasterPasswordWarning.GetSizePixel();
-    aNewWarningSize.Height() = nNewLabelHeight;
-    aFTMasterPasswordWarning.SetPosSizePixel( aFTMasterPasswordWarning.GetPosPixel(), aNewWarningSize );
-
-    Window* pControls[] = { &aFL, &aOKBtn, &aCancelBtn, &aHelpBtn };
-    const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[0] );
-    for ( int i = 0; i < nCCount; ++i )
-    {
-        Point aNewPos =(*pControls[i]).GetPosPixel();
-        aNewPos.Y() += nDelta;
-        pControls[i]->SetPosSizePixel( aNewPos, pControls[i]->GetSizePixel() );
-    }
-};
-
-void MasterPasswordCreateDialog::CalculateTextHeight()
-{
-    Size aSize = aFTInfoText.GetSizePixel();
-    Size aMinSize = aFTInfoText.CalcMinimumSize( aSize.Width() );
-    long nDelta = 0;
-
-    if ( aSize.Height() > aMinSize.Height() )
-    {
-        aFTInfoText.SetSizePixel( aMinSize );
-        nDelta = aSize.Height() - aMinSize.Height();
-        Window* pWins[] = { &aFLInfoText, &aFTMasterPasswordCrt, &aEDMasterPasswordCrt,
-                            &aFTMasterPasswordRepeat, &aEDMasterPasswordRepeat, &aFTCautionText,
-                            &aFLCautionText, &aOKBtn, &aCancelBtn, &aHelpBtn };
-        Window** pWindow = pWins;
-        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[0] );
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pWindow )
-        {
-            Point aNewPos = (*pWindow)->GetPosPixel();
-            aNewPos.Y() -= nDelta;
-            (*pWindow)->SetPosPixel( aNewPos );
-        }
-    }
-
-    aSize = aFTCautionText.GetSizePixel();
-    aMinSize = aFTCautionText.CalcMinimumSize( aSize.Width() );
-
-    if ( aSize.Height() > aMinSize.Height() )
-    {
-        aFTCautionText.SetSizePixel( aMinSize );
-        long nTemp = aSize.Height() - aMinSize.Height();
-        nDelta += nTemp;
-        Window* pWins[] = { &aFLCautionText, &aOKBtn, &aCancelBtn, &aHelpBtn };
-        Window** pWindow = pWins;
-        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[0] );
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pWindow )
-        {
-            Point aNewPos = (*pWindow)->GetPosPixel();
-            aNewPos.Y() -= nTemp;
-            (*pWindow)->SetPosPixel( aNewPos );
-        }
-    }
-
-    if ( nDelta > 0 )
-    {
-        Size aDlgSize = GetOutputSizePixel();
-        aDlgSize.Height() -= nDelta;
-        SetSizePixel( aDlgSize );
-    }
+    get(m_pEDMasterPasswordCrt, "password1");
+    get(m_pEDMasterPasswordRepeat, "password2");
+    get(m_pOKBtn, "ok");
+    m_pOKBtn->Enable( sal_False );
+    m_pOKBtn->SetClickHdl( LINK( this, MasterPasswordCreateDialog, OKHdl_Impl ) );
+    m_pEDMasterPasswordCrt->SetModifyHdl( LINK( this, MasterPasswordCreateDialog, EditHdl_Impl ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

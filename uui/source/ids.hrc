@@ -155,7 +155,6 @@
 #define TITLE_UUI_SSLWARN_INVALID (ERRCODE_AREA_UUI_UNKNOWNAUTH + SSLWARN_TYPE_INVALID + 3)
 
 #define HID_DLG_LOGIN                                          "UUI_HID_DLG_LOGIN"
-#define HID_DLG_MASTERPASSWORD_CRT                             "UUI_HID_DLG_MASTERPASSWORD_CRT"
 #define HID_DLG_FILTER_SELECT                                  "UUI_HID_DLG_FILTER_SELECT"
 #define HID_DLG_PASSWORD_UUI                                   "UUI_HID_DLG_PASSWORD_UUI"
 #define HID_DLG_UNKNOWNAUTH_UUI                                "UUI_HID_DLG_UNKNOWNAUTH_UUI"

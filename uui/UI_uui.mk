@@ -11,6 +11,7 @@ $(eval $(call gb_UI_UI,uui))
 
 $(eval $(call gb_UI_add_uifiles,uui,\
 	uui/uiconfig/ui/masterpassworddlg \
+	uui/uiconfig/ui/setmasterpassworddlg \
 ))
 
 # vim: set noet sw=4 ts=4:
