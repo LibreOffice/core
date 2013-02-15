@@ -1703,23 +1703,27 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 }
 
 
-void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
+OUString SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
         const IDocumentContentOperations::InsertFlags nMode )
 {
     OSL_ENSURE( rIdx <= m_Text.Len(), "SwTxtNode::InsertText: invalid index." );
-    OSL_ENSURE( (sal_uLong)m_Text.Len() + (sal_uLong)rStr.Len() <= STRING_LEN,
-            "SwTxtNode::InsertText: node text with insertion > STRING_LEN." );
 
     xub_StrLen aPos = rIdx.GetIndex();
     xub_StrLen nLen = m_Text.Len() - aPos;
     ssize_t const nOverflow(static_cast<ssize_t>(m_Text.Len())
             + static_cast<ssize_t>(rStr.Len()) - TXTNODE_MAX);
-    m_Text.Insert((nOverflow > 0) ? rStr.Copy(0, rStr.Len() - nOverflow) : rStr,
-            aPos);
+    SAL_WARN_IF(nOverflow > 0, "sw.core",
+            "SwTxtNode::InsertText: node text with insertion > TXTNODE_MAX.");
+    OUString const sInserted(
+            (nOverflow > 0) ? rStr.Copy(0, rStr.Len() - nOverflow) : rStr);
+    if (sInserted.isEmpty())
+    {
+        return sInserted;
+    }
+    m_Text.Insert(sInserted, aPos);
     assert(m_Text.Len() <= TXTNODE_MAX);
     nLen = m_Text.Len() - aPos - nLen;
-
-    if ( !nLen ) return;
+    assert(nLen != 0);
 
     bool bOldExpFlg = IsIgnoreDontExpand();
     if (nMode & IDocumentContentOperations::INS_FORCEHINTEXPAND)
@@ -1804,6 +1808,7 @@ void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
     SetCalcHiddenCharFlags();
 
     CHECK_SWPHINTS(this);
+    return sInserted;
 }
 
 /*************************************************************************
@@ -3007,9 +3012,12 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                         if( aExpand.Len() )
                         {
                             ++aDestIdx;     // dahinter einfuegen;
-                            rDestNd.InsertText( aExpand, aDestIdx );
+                            OUString const ins(
+                                rDestNd.InsertText( aExpand, aDestIdx));
+                            SAL_INFO_IF(ins.getLength() != aExpand.Len(),
+                                    "sw.core", "GetExpandTxt lossage");
                             aDestIdx = nInsPos + nAttrStartIdx;
-                            nInsPos = nInsPos + aExpand.Len();
+                            nInsPos = nInsPos + ins.getLength();
                         }
                         rDestNd.EraseText( aDestIdx, 1 );
                         --nInsPos;
@@ -3038,10 +3046,13 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                                 rDestNd.InsertItem(aItem,
                                         aDestIdx.GetIndex(),
                                         aDestIdx.GetIndex() );
-                                rDestNd.InsertText( sExpand, aDestIdx,
-                                  IDocumentContentOperations::INS_EMPTYEXPAND);
+                                OUString const ins( rDestNd.InsertText(sExpand,
+                                  aDestIdx,
+                                  IDocumentContentOperations::INS_EMPTYEXPAND));
+                                SAL_INFO_IF(ins.getLength() != sExpand.Len(),
+                                        "sw.core", "GetExpandTxt lossage");
                                 aDestIdx = nInsPos + nAttrStartIdx;
-                                nInsPos = nInsPos + sExpand.Len();
+                                nInsPos = nInsPos + ins.getLength();
                             }
                         }
                         rDestNd.EraseText( aDestIdx, 1 );

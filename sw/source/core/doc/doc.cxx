@@ -945,12 +945,11 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
 
     if (!bDoesUndo || !GetIDocumentUndoRedo().DoesGroupUndo())
     {
-        pNode->InsertText( rStr, rPos.nContent, nInsertMode );
-
+        OUString const ins(pNode->InsertText(rStr, rPos.nContent, nInsertMode));
         if (bDoesUndo)
         {
-            SwUndoInsert * const pUndo( new SwUndoInsert(
-                rPos.nNode, rPos.nContent.GetIndex(), rStr.Len(), nInsertMode));
+            SwUndoInsert * const pUndo( new SwUndoInsert(rPos.nNode,
+                    rPos.nContent.GetIndex(), ins.getLength(), nInsertMode));
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
     }
@@ -980,16 +979,16 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
             GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
 
-        pNode->InsertText( rStr, rPos.nContent, nInsertMode );
+        OUString const ins(pNode->InsertText(rStr, rPos.nContent, nInsertMode));
 
-        for( xub_StrLen i = 0; i < rStr.Len(); ++i )
+        for (sal_Int32 i = 0; i < ins.getLength(); ++i)
         {
             nInsPos++;
-            // if CanGrouping() returns sal_True, everything has already been done
-            if( !pUndo->CanGrouping( rStr.GetChar( i ) ))
+            // if CanGrouping() returns true, everything has already been done
+            if (!pUndo->CanGrouping(ins[i]))
             {
-                pUndo = new SwUndoInsert( rPos.nNode, nInsPos, 1, nInsertMode,
-                            !rCC.isLetterNumeric( rStr, i ) );
+                pUndo = new SwUndoInsert(rPos.nNode, nInsPos, 1, nInsertMode,
+                            !rCC.isLetterNumeric(ins, i));
                 GetIDocumentUndoRedo().AppendUndo( pUndo );
             }
         }

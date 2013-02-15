@@ -716,8 +716,11 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     }
 
     SwTxtNode *pNode = rPt.nNode.GetNode().GetTxtNode();
-    if(!pNode)
+    if (!pNode || ( static_cast<size_t>(rStr.Len()) // worst case: no erase
+                  + static_cast<size_t>(pNode->GetTxt().Len()) > TXTNODE_MAX))
+    {
         return sal_False;
+    }
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {

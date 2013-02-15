@@ -154,8 +154,9 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     bool bOldExpFlg = pDelTxtNd->IsIgnoreDontExpand();
     pDelTxtNd->SetIgnoreDontExpand( true );
 
-    pDelTxtNd->InsertText( rtl::OUString(cIns), rPos.nContent,
-            IDocumentContentOperations::INS_EMPTYEXPAND );
+    OUString const ins( pDelTxtNd->InsertText(OUString(cIns), rPos.nContent,
+            IDocumentContentOperations::INS_EMPTYEXPAND) );
+    assert(ins.getLength() == 1); // check in SwDoc::Overwrite => cannot fail
     aInsStr.Insert( cIns );
 
     if( !bInsChar )
@@ -210,7 +211,8 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             // do it individually, to keep the attributes!
             *pTmpStr = aDelStr.GetChar( n );
-            pTxtNd->InsertText( aTmpStr, rIdx /*???, SETATTR_NOTXTATRCHR*/ );
+            OUString const ins( pTxtNd->InsertText(aTmpStr, rIdx) );
+            assert(ins.getLength() == 1); // cannot fail
             rIdx -= 2;
             pTxtNd->EraseText( rIdx, 1 );
             rIdx += 2;
@@ -279,8 +281,10 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     for( xub_StrLen n = 0; n < aInsStr.Len(); n++  )
     {
         // do it individually, to keep the attributes!
-        pTxtNd->InsertText( rtl::OUString(aInsStr.GetChar(n)), rIdx,
-                IDocumentContentOperations::INS_EMPTYEXPAND );
+        OUString const ins(
+                pTxtNd->InsertText( rtl::OUString(aInsStr.GetChar(n)), rIdx,
+                IDocumentContentOperations::INS_EMPTYEXPAND) );
+        assert(ins.getLength() == 1); // cannot fail
         if( n < aDelStr.Len() )
         {
             rIdx -= 2;
