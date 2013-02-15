@@ -315,7 +315,7 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     const EditTextObject* pTObject = NULL;
     ScBaseCell* pCell = NULL;
     EditView* pEditView = NULL;
-    ESelection* pEditSel = NULL;
+    boost::scoped_ptr<ESelection> pEditSel;
     ScEditEngineDefaulter* pThesaurusEngine;
     sal_Bool bIsEditMode = GetViewData()->HasEditView(eWhich);
     if (bRecord && !pDoc->IsUndoEnabled())
@@ -323,7 +323,7 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     if (bIsEditMode)                                            // Edit-Mode aktiv
     {
         GetViewData()->GetEditView(eWhich, pEditView, nCol, nRow);
-        pEditSel = new ESelection(pEditView->GetSelection());
+        pEditSel.reset(new ESelection(pEditView->GetSelection()));
         SC_MOD()->InputEnterHandler();
         GetViewData()->GetBindings().Update();          // sonst kommt der Sfx durcheinander...
     }
@@ -338,7 +338,6 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
-        delete pEditSel;
         return;
     }
     pDoc->GetCellType(nCol, nRow, nTab, eCellType);
@@ -440,7 +439,6 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     delete pEditDefaults;
     delete pThesaurusEngine;
     delete pOldTObj;
-    delete pEditSel;
     pDocSh->PostPaintGridAll();
 }
 
