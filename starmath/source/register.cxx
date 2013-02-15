@@ -28,7 +28,6 @@
 #include "document.hxx"
 #include "unomodel.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
