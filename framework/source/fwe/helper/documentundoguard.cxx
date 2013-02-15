@@ -69,7 +69,7 @@ namespace framework
             osl_atomic_decrement( &m_refCount );
         }
 
-        UndoManagerContextListener()
+        UndoManagerContextListener():m_nRelativeContextDepth(0), m_documentDisposed(false)
         {
         }
 

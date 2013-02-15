@@ -1098,9 +1098,9 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
     }
 
     // kann Surrogat aufgel"ost werden?
-    const SfxPoolItem *pItem = 0;
     if ( bResolvable )
     {
+        const SfxPoolItem *pItem = 0;
         for ( SfxItemPool *pTarget = this; pTarget; pTarget = pTarget->pImp->mpSecondary )
         {
             // richtigen (Folge-) Pool gefunden?

@@ -88,7 +88,7 @@ private:
 public:
                             ImplFontListFontInfo( const FontInfo& rInfo,
                                                   OutputDevice* pDev ) :
-                                FontInfo( rInfo )
+                                FontInfo( rInfo ), mpNext(NULL)
                             {
                                 mpDevice = pDev;
                             }
