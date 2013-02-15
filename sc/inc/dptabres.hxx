@@ -286,8 +286,7 @@ public:
  */
 class ScDPResultData
 {
-private:
-    ScDPSource*             pSource;                //! Ref
+    ScDPSource& mrSource;
     //! keep things like measure lists here
 
     long                    nMeasCount;
@@ -302,8 +301,8 @@ private:
     //! add "displayed values" settings
     mutable std::vector<ResultMembers*> maDimMembers;
 public:
-                        ScDPResultData( ScDPSource* pSrc );     //! Ref
-                        ~ScDPResultData();
+    ScDPResultData( ScDPSource& rSrc );
+    ~ScDPResultData();
 
     void                SetMeasureData( long nCount, const ScSubTotalFunc* pFunctions,
                                         const ::com::sun::star::sheet::DataPilotFieldReference* pRefs,
@@ -338,7 +337,7 @@ public:
 
     ResultMembers* GetDimResultMembers(long nDim, ScDPDimension* pDim, ScDPLevel* pLevel) const;
 
-    const ScDPSource*   GetSource() const;
+    const ScDPSource& GetSource() const;
 };
 
 

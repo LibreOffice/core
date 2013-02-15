@@ -711,8 +711,8 @@ static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, long nFuncNo )
 
 // -----------------------------------------------------------------------
 
-ScDPResultData::ScDPResultData( ScDPSource* pSrc ) :        //! Ref
-    pSource( pSrc ),
+ScDPResultData::ScDPResultData( ScDPSource& rSrc ) :
+    mrSource(rSrc),
     nMeasCount( 0 ),
     pMeasFuncs( NULL ),
     pMeasRefs( NULL ),
@@ -828,7 +828,7 @@ rtl::OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSub
     else
     {
         OSL_ENSURE( nMeasure < nMeasCount, "bumm" );
-        ScDPDimension* pDataDim = pSource->GetDataDimension(nMeasure);
+        const ScDPDimension* pDataDim = mrSource.GetDataDimension(nMeasure);
         if (pDataDim)
         {
             const OUString* pLayoutName = pDataDim->GetLayoutName();
@@ -858,30 +858,30 @@ rtl::OUString ScDPResultData::GetMeasureDimensionName(long nMeasure) const
         return rtl::OUString::createFromAscii("***");
     }
 
-    return pSource->GetDataDimName( nMeasure );
+    return mrSource.GetDataDimName(nMeasure);
 }
 
 bool ScDPResultData::IsBaseForGroup( long nDim ) const
 {
-    return pSource->GetData()->IsBaseForGroup( nDim );
+    return mrSource.GetData()->IsBaseForGroup(nDim);
 }
 
 long ScDPResultData::GetGroupBase( long nGroupDim ) const
 {
-    return pSource->GetData()->GetGroupBase( nGroupDim );
+    return mrSource.GetData()->GetGroupBase(nGroupDim);
 }
 
 bool ScDPResultData::IsNumOrDateGroup( long nDim ) const
 {
-    return pSource->GetData()->IsNumOrDateGroup( nDim );
+    return mrSource.GetData()->IsNumOrDateGroup(nDim);
 }
 
 bool ScDPResultData::IsInGroup( SCROW nGroupDataId, long nGroupIndex,
                                 const ScDPItemData& rBaseData, long nBaseIndex ) const
 {
-    const ScDPItemData* pGroupData = pSource->GetItemDataById( nGroupIndex , nGroupDataId);
+    const ScDPItemData* pGroupData = mrSource.GetItemDataById(nGroupIndex , nGroupDataId);
     if ( pGroupData )
-        return pSource->GetData()->IsInGroup( *pGroupData, nGroupIndex, rBaseData , nBaseIndex );
+        return mrSource.GetData()->IsInGroup(*pGroupData, nGroupIndex, rBaseData, nBaseIndex);
     else
         return false;
 }
@@ -889,16 +889,16 @@ bool ScDPResultData::IsInGroup( SCROW nGroupDataId, long nGroupIndex,
 bool ScDPResultData::HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
                                        const ScDPItemData& rSecondData, long nSecondIndex ) const
 {
-    const ScDPItemData* pFirstData = pSource->GetItemDataById( nFirstIndex , nFirstDataId);
+    const ScDPItemData* pFirstData = mrSource.GetItemDataById(nFirstIndex , nFirstDataId);
     if ( pFirstData )
-        return pSource->GetData()->HasCommonElement( *pFirstData, nFirstIndex, rSecondData, nSecondIndex );
+        return mrSource.GetData()->HasCommonElement(*pFirstData, nFirstIndex, rSecondData, nSecondIndex);
     else
         return false;
 }
 
-const ScDPSource* ScDPResultData::GetSource() const
+const ScDPSource& ScDPResultData::GetSource() const
 {
-    return pSource;
+    return mrSource;
 }
 
 ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, ScDPDimension* pDim, ScDPLevel* pLevel) const
@@ -1333,7 +1333,7 @@ void ScDPResultMember::FillMemberResults(
         if (aParentDimData.mpParentDim)
         {
             long nDim = aParentDimData.mpParentDim->GetDimension();
-            aName = pResultData->GetSource()->GetData()->GetFormattedString(nDim, aItemData);
+            aName = pResultData->GetSource().GetData()->GetFormattedString(nDim, aItemData);
         }
         else
         {
@@ -1341,7 +1341,7 @@ void ScDPResultMember::FillMemberResults(
             const ScDPMember* pMem = GetDPMember();
             if (pMem)
                 nDim = pMem->GetDim();
-            aName = pResultData->GetSource()->GetData()->GetFormattedString(nDim, aItemData);
+            aName = pResultData->GetSource().GetData()->GetFormattedString(nDim, aItemData);
         }
 
         ScDPItemData::Type eType = aItemData.GetType();
@@ -1456,7 +1456,7 @@ void ScDPResultMember::FillMemberResults(
                     else
                     {
                         // root member - subtotal (grand total?) for multi-data field layout.
-                        const rtl::OUString* pGrandTotalName = pResultData->GetSource()->GetGrandTotalName();
+                        const OUString* pGrandTotalName = pResultData->GetSource().GetGrandTotalName();
                         if (pGrandTotalName)
                             aSubStr = *pGrandTotalName;
                         pArray[rPos].Flags |= sheet::MemberResultFlags::GRANDTOTAL;

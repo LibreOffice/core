@@ -840,7 +840,7 @@ void ScDPSource::CreateRes_Impl()
             aInfo.aDataSrcCols.push_back(nDimIndex);
     }
 
-    pResData = new ScDPResultData( this );
+    pResData = new ScDPResultData(*this);
     const ScSubTotalFunc* pDataFunctions = NULL;
     const sheet::DataPilotFieldReference* pDataRefValues = NULL;
     const sal_uInt16* pDataRefOrient = NULL;
