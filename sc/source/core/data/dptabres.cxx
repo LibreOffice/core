@@ -713,10 +713,6 @@ static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, long nFuncNo )
 
 ScDPResultData::ScDPResultData( ScDPSource& rSrc ) :
     mrSource(rSrc),
-    nMeasCount( 0 ),
-    pMeasFuncs( NULL ),
-    pMeasRefs( NULL ),
-    pMeasRefOrient( NULL ),
     bLateInit( false ),
     bDataAtCol( false ),
     bDataAtRow( false )
@@ -725,10 +721,6 @@ ScDPResultData::ScDPResultData( ScDPSource& rSrc ) :
 
 ScDPResultData::~ScDPResultData()
 {
-    delete[] pMeasFuncs;
-    delete[] pMeasRefs;
-    delete[] pMeasRefOrient;
-
     std::for_each(maDimMembers.begin(), maDimMembers.end(), ScDeleteObjectByPtr<ResultMembers>());
 }
 
@@ -736,33 +728,25 @@ void ScDPResultData::SetMeasureData( long nCount, const ScSubTotalFunc* pFunctio
                                     const sheet::DataPilotFieldReference* pRefs, const sal_uInt16* pRefOrient,
                                     std::vector<rtl::OUString>& rNames )
 {
-    delete[] pMeasFuncs;
-    delete[] pMeasRefs;
-    delete[] pMeasRefOrient;
+    maMeasureFuncs.clear();
+    maMeasureRefs.clear();
+    maMeasureRefOrients.clear();
+
     if ( nCount )
     {
         OSL_ASSERT(nCount == static_cast<long>(rNames.size()));
-        nMeasCount = nCount;
-        pMeasFuncs = new ScSubTotalFunc[nCount];
-        pMeasRefs  = new sheet::DataPilotFieldReference[nCount];
-        pMeasRefOrient = new sal_uInt16[nCount];
+        maMeasureFuncs.assign(pFunctions, pFunctions+nCount);
+        maMeasureRefs.assign(pRefs, pRefs+nCount);
+        maMeasureRefOrients.assign(pRefOrient, pRefOrient+nCount);
         maMeasureNames.swap(rNames);
-        for (long i=0; i<nCount; i++)
-        {
-            pMeasFuncs[i] = pFunctions[i];
-            pMeasRefs[i]  = pRefs[i];
-            pMeasRefOrient[i] = pRefOrient[i];
-        }
     }
     else
     {
         //  use one dummy measure
-        nMeasCount = 1;
-        pMeasFuncs = new ScSubTotalFunc[1];
-        pMeasFuncs[0] = SUBTOTAL_FUNC_NONE;
-        pMeasRefs  = new sheet::DataPilotFieldReference[1]; // default ctor is ok
-        pMeasRefOrient = new sal_uInt16[1];
-        pMeasRefOrient[0] = sheet::DataPilotFieldOrientation_HIDDEN;
+        maMeasureFuncs.push_back(SUBTOTAL_FUNC_NONE);
+        maMeasureRefs.push_back(sheet::DataPilotFieldReference()); // default ctor is ok
+        maMeasureRefOrients.push_back(sheet::DataPilotFieldOrientation_HIDDEN);
+
         std::vector<rtl::OUString> aMeasureName;
         aMeasureName.push_back(ScGlobal::GetRscString(STR_EMPTYDATA));
         maMeasureNames.swap(aMeasureName);
@@ -782,32 +766,36 @@ void ScDPResultData::SetLateInit( bool bSet )
 
 long ScDPResultData::GetColStartMeasure() const
 {
-    if ( nMeasCount == 1 ) return 0;
+    if (maMeasureFuncs.size() == 1)
+        return 0;
+
     return bDataAtCol ? SC_DPMEASURE_ALL : SC_DPMEASURE_ANY;
 }
 
 long ScDPResultData::GetRowStartMeasure() const
 {
-    if ( nMeasCount == 1 ) return 0;
+    if (maMeasureFuncs.size() == 1)
+        return 0;
+
     return bDataAtRow ? SC_DPMEASURE_ALL : SC_DPMEASURE_ANY;
 }
 
 ScSubTotalFunc ScDPResultData::GetMeasureFunction(long nMeasure) const
 {
-    OSL_ENSURE( pMeasFuncs && nMeasure < nMeasCount, "bumm" );
-    return pMeasFuncs[nMeasure];
+    OSL_ENSURE(nMeasure < maMeasureFuncs.size(), "bumm");
+    return maMeasureFuncs[nMeasure];
 }
 
 const sheet::DataPilotFieldReference& ScDPResultData::GetMeasureRefVal(long nMeasure) const
 {
-    OSL_ENSURE( pMeasRefs && nMeasure < nMeasCount, "bumm" );
-    return pMeasRefs[nMeasure];
+    OSL_ENSURE(nMeasure < maMeasureRefs.size(), "bumm");
+    return maMeasureRefs[nMeasure];
 }
 
 sal_uInt16 ScDPResultData::GetMeasureRefOrient(long nMeasure) const
 {
-    OSL_ENSURE( pMeasRefOrient && nMeasure < nMeasCount, "bumm" );
-    return pMeasRefOrient[nMeasure];
+    OSL_ENSURE(nMeasure < maMeasureRefOrients.size(), "bumm");
+    return maMeasureRefOrients[nMeasure];
 }
 
 rtl::OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const
@@ -815,7 +803,7 @@ rtl::OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSub
     //  with bForce==true, return function instead of "result" for single measure
     //  with eForceFunc != SUBTOTAL_FUNC_NONE, always use eForceFunc
     rbTotalResult = false;
-    if ( nMeasure < 0 || ( nMeasCount == 1 && !bForce && eForceFunc == SUBTOTAL_FUNC_NONE ) )
+    if ( nMeasure < 0 || (maMeasureFuncs.size() == 1 && !bForce && eForceFunc == SUBTOTAL_FUNC_NONE) )
     {
         //  for user-specified subtotal function with all measures,
         //  display only function name
@@ -827,7 +815,7 @@ rtl::OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSub
     }
     else
     {
-        OSL_ENSURE( nMeasure < nMeasCount, "bumm" );
+        OSL_ENSURE(nMeasure < maMeasureFuncs.size(), "bumm");
         const ScDPDimension* pDataDim = mrSource.GetDataDimension(nMeasure);
         if (pDataDim)
         {

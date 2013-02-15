@@ -289,11 +289,11 @@ class ScDPResultData
     ScDPSource& mrSource;
     //! keep things like measure lists here
 
-    long                    nMeasCount;
-    ScSubTotalFunc*         pMeasFuncs;
-    ::com::sun::star::sheet::DataPilotFieldReference* pMeasRefs;
-    sal_uInt16*                 pMeasRefOrient;
+    std::vector<ScSubTotalFunc> maMeasureFuncs;
+    std::vector<com::sun::star::sheet::DataPilotFieldReference> maMeasureRefs;
+    std::vector<sal_uInt16> maMeasureRefOrients;
     std::vector<rtl::OUString> maMeasureNames;
+
     bool                    bLateInit:1;
     bool                    bDataAtCol:1;
     bool                    bDataAtRow:1;
@@ -310,7 +310,7 @@ public:
     void                SetDataLayoutOrientation( sal_uInt16 nOrient );
     void                SetLateInit( bool bSet );
 
-    long                GetMeasureCount() const     { return nMeasCount; }
+    long GetMeasureCount() const { return maMeasureFuncs.size(); }
     ScSubTotalFunc      GetMeasureFunction(long nMeasure) const;
     rtl::OUString       GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
     rtl::OUString       GetMeasureDimensionName(long nMeasure) const;
@@ -324,8 +324,7 @@ public:
     long                GetColStartMeasure() const;
     long                GetRowStartMeasure() const;
 
-    long                GetCountForMeasure( long nMeas ) const
-                                { return ( nMeas == SC_DPMEASURE_ALL ) ? nMeasCount : 1; }
+    long GetCountForMeasure( long nMeas ) const { return (nMeas == SC_DPMEASURE_ALL) ? maMeasureFuncs.size() : 1; }
 
     bool                IsBaseForGroup( long nDim ) const;              // any group
     long                GetGroupBase( long nGroupDim ) const;
