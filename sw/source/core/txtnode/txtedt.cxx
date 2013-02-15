@@ -1799,9 +1799,19 @@ void SwTxtNode::TransliterateText(
         {
             // now apply the changes from end to start to leave the offsets of the
             // yet unchanged text parts remain the same.
+            size_t nSum(m_Text.Len());
             for (size_t i = 0; i < aChanges.size(); ++i)
-            {
-                swTransliterationChgData &rData = aChanges[ aChanges.size() - 1 - i ];
+            {   // check this here since AddChanges cannot be moved below
+                // call to ReplaceTextOnly
+                swTransliterationChgData & rData =
+                    aChanges[ aChanges.size() - 1 - i ];
+                nSum = nSum + rData.sChanged.Len() - rData.nLen;
+                if (nSum > TXTNODE_MAX)
+                {
+                    SAL_WARN("sw.core", "SwTxtNode::ReplaceTextOnly: "
+                            "node text with insertion > TXTNODE_MAX.");
+                    return;
+                }
                 if (pUndo)
                     pUndo->AddChanges( *this, rData.nStart, rData.nLen, rData.aOffsets );
                 ReplaceTextOnly( rData.nStart, rData.nLen, rData.sChanged, rData.aOffsets );
@@ -1814,6 +1824,9 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
                                 const XubString& rText,
                                 const Sequence<sal_Int32>& rOffsets )
 {
+    assert(static_cast<size_t>(m_Text.Len()) +
+        static_cast<size_t>(rText.Len()) - nLen <= TXTNODE_MAX);
+
     m_Text.Replace( nPos, nLen, rText );
 
     xub_StrLen nTLen = rText.Len();
