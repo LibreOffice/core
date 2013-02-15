@@ -228,6 +228,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
 ))
 endif
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
+    bib \
+))
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     abp \
     acc \
@@ -240,7 +243,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     $(if $(filter $(OS),ANDROID),, \
 		basebmp \
     ) \
-    bib \
     canvastools \
     communi \
     date \

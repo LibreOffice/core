@@ -66,8 +66,6 @@ End
 
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Bib , bib)
-
 File gid_File_Lib_Cached1
     LIB_FILE_BODY;
     Styles = (PACKED);
