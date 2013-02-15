@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///9Q\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-02-15T12:32:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVX///+Y\u003d",
+      "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVX///+g\u003d",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-14T10:51:24Z",
       "side": 1,
       "message": "s/me/be/",
+      "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///9M\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-02-15T12:32:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVX///+g\u003d",
       "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///9I\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-02-15T12:32:41Z",
+      "side": 1,
+      "message": "Lets start with the libs and take care of the rest later. One step at a time.",
+      "parentUuid": "AAAAVX///+c\u003d",
+      "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVX///+A\u003d",
         "filename": "scp2/source/ooo/module_hidden_ooo.scp",
         "patchSetId": 2
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///9E\u003d",
+        "filename": "scp2/source/ooo/module_hidden_ooo.scp",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-02-15T12:32:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVX///+A\u003d",
+      "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVX///+Q\u003d",
         "filename": "solenv/gbuild/Helper.mk",
         "patchSetId": 2
@@ -81,6 +153,24 @@
       "writtenOn": "2013-02-14T11:50:13Z",
       "side": 1,
       "message": "is it necessary to add a new group for every single scp2 module? (there are apparently lots of libraries that don\u0027t go into \"ooo\" module)",
+      "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///9A\u003d",
+        "filename": "solenv/gbuild/Helper.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-02-15T12:32:41Z",
+      "side": 1,
+      "message": "Done with the addition of the installmodule bookkeeping to gbuild.",
+      "parentUuid": "AAAAVX///+Q\u003d",
       "revId": "7d552c4baf73e279e08c2e3b40283368ecd4edbd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
