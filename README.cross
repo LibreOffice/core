@@ -150,7 +150,6 @@ CXX_FOR_BUILD=ccache g++
 --disable-mozilla
 --disable-nss-module
 --disable-pdfimport
---disable-zenity
 --enable-python=system
 --with-system-altlinuxhyph
 --with-system-boost
@@ -338,7 +337,6 @@ v7a System Image, and the Android Support Library.
 Here is an autogen.lastrun for Android, when cross-compiling from Mac
 OS X 10.8 with Xcode 4.4.1:
 
---disable-zenity
 --enable-debug
 --enable-werror
 --with-android-ndk=/Users/tml/android-ndk-r8b
@@ -364,7 +362,6 @@ And here is an autogen.lastrun for Android when cross-compiling to x86 from Linu
 --with-android-sdk=/opt/libreoffice/android-sdk-linux
 --build=i586-suse-linux
 --enable-ccache
---disable-zenity
 --with-distro=LibreOfficeAndroidX86
 --with-num-cpus=6
 --with-max-jobs=6
