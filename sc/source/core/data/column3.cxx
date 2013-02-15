@@ -1195,7 +1195,8 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
         if (pParam)
             aParam = *pParam;
 
-        sal_uInt32 nIndex, nOldIndex = 0;
+        sal_uInt32 nIndex = 0;
+        sal_uInt32 nOldIndex = 0;
         sal_Unicode cFirstChar;
         if (!aParam.mpNumFormatter)
             aParam.mpNumFormatter = pDocument->GetFormatTable();
