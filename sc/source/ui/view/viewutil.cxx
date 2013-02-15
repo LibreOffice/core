@@ -379,6 +379,8 @@ bool ScViewUtil::IsFullScreen( SfxViewShell& rViewShell )
 
     if (rBindings.QueryState( SID_WIN_FULLSCREEN, pItem ) >= SFX_ITEM_DEFAULT)
         bIsFullScreen = static_cast< SfxBoolItem* >( pItem )->GetValue();
+    delete pItem;
+
     return bIsFullScreen;
 }
 
