@@ -262,6 +262,7 @@ void XclImpChangeTrack::ReadCell(
             ReadFormula( pTokenArray, rPosition );
             if( pStrm->IsValid() && pTokenArray )
                 rpCell = new ScFormulaCell( GetDocPtr(), rPosition, pTokenArray );
+            delete pTokenArray;
         }
         break;
         default:
