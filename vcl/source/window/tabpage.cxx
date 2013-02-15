@@ -222,7 +222,7 @@ Size TabPage::GetOptimalSize(WindowSizeType eType) const
         return Window::GetOptimalSize(eType);
     Size aSize;
     if (isLayoutEnabled())
-        aSize = GetWindow(WINDOW_FIRSTCHILD)->GetOptimalSize(eType);
+        aSize = VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
     else
         aSize = getLegacyBestSizeForChildren(*this);
     return Window::CalcWindowSize(aSize);
