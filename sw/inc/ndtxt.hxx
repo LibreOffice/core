@@ -333,6 +333,8 @@ public:
                     const SwIndex & rStart, const xub_StrLen nLen);
 
     /// replace nDelLen characters at rStart with rText
+    /// in case the replacement does not fit, it is partially inserted up to
+    /// TXTNODE_MAX
     void ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
             const XubString& rText );
     void ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen, const XubString& rText,

@@ -672,11 +672,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     SwIndex aIdx( pNd, m_nSttCnt );
-    if( m_nSttNd == m_nEndNd )
-    {
-        pNd->EraseText( aIdx, sal_uInt16( m_sIns.getLength() ) );
-    }
-    else
+    // don't look at m_sIns for deletion, maybe it was not completely inserted
     {
         rPam.GetPoint()->nNode = *pNd;
         rPam.GetPoint()->nContent.Assign( pNd, m_nSttCnt );
@@ -783,13 +779,9 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
 {
-    if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
-    {
-        // multiple paragraphs were inserted
-        const SwPosition* pEnd = rPam.End();
-        m_nEndNd = m_nOffset + pEnd->nNode.GetIndex();
-        m_nEndCnt = pEnd->nContent.GetIndex();
-    }
+    const SwPosition* pEnd = rPam.End();
+    m_nEndNd = m_nOffset + pEnd->nNode.GetIndex();
+    m_nEndCnt = pEnd->nContent.GetIndex();
 }
 
 

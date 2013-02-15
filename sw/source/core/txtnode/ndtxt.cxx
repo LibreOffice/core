@@ -3322,11 +3322,23 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
  *************************************************************************/
 
 void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
-                             const XubString& rText )
+                             const XubString& rStr)
 {
     OSL_ENSURE( rStart.GetIndex() < m_Text.Len() &&
             rStart.GetIndex() + nDelLen <= m_Text.Len(),
             "SwTxtNode::ReplaceText: index out of bounds" );
+
+    ssize_t const nOverflow(static_cast<ssize_t>(m_Text.Len())
+            + static_cast<ssize_t>(rStr.Len()) - nDelLen - TXTNODE_MAX);
+    SAL_WARN_IF(nOverflow > 0, "sw.core",
+            "SwTxtNode::ReplaceText: node text with insertion > TXTNODE_MAX.");
+    OUString const sInserted(
+            (nOverflow > 0) ? rStr.Copy(0, rStr.Len() - nOverflow) : rStr);
+    if (sInserted.isEmpty())
+    {
+        return;
+    }
+
     const xub_StrLen nStartPos = rStart.GetIndex();
     xub_StrLen nEndPos = nStartPos + nDelLen;
     xub_StrLen nLen = nDelLen;
@@ -3353,17 +3365,17 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
     bool bOldExpFlg = IsIgnoreDontExpand();
     SetIgnoreDontExpand( true );
 
-    if( nLen && rText.Len() )
+    if (nLen && sInserted.getLength())
     {
         // dann das 1. Zeichen ersetzen den Rest loschen und einfuegen
         // Dadurch wird die Attributierung des 1. Zeichen expandiert!
-        m_Text.SetChar( nStartPos, rText.GetChar( 0 ) );
+        m_Text.SetChar( nStartPos, sInserted[0] );
 
         ++((SwIndex&)rStart);
         m_Text.Erase( rStart.GetIndex(), nLen - 1 );
         Update( rStart, nLen - 1, true );
 
-        XubString aTmpTxt( rText ); aTmpTxt.Erase( 0, 1 );
+        XubString aTmpTxt(sInserted); aTmpTxt.Erase( 0, 1 );
         m_Text.Insert( aTmpTxt, rStart.GetIndex() );
         Update( rStart, aTmpTxt.Len(), false );
     }
@@ -3372,15 +3384,15 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
         m_Text.Erase( nStartPos, nLen );
         Update( rStart, nLen, true );
 
-        m_Text.Insert( rText, nStartPos );
-        Update( rStart, rText.Len(), false );
+        m_Text.Insert( sInserted, nStartPos );
+        Update( rStart, sInserted.getLength(), false );
     }
 
     SetIgnoreDontExpand( bOldExpFlg );
     SwDelTxt aDelHint( nStartPos, nDelLen );
     NotifyClients( 0, &aDelHint );
 
-    SwInsTxt aHint( nStartPos, rText.Len() );
+    SwInsTxt aHint( nStartPos, sInserted.getLength() );
     NotifyClients( 0, &aHint );
 }
 
