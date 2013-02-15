@@ -76,6 +76,8 @@ while (<SOURCE>) {
         # For every section in the specified ulf file there should exist
         # a template file in $workdir ..
         $entry{'outfile'} = "$workdir/$prefix$template.$ext";
+        my %translations;
+        $entry{'translations'} = \%translations;
         $templates{$template} = \%entry;
     } else {
         # split locale = "value" into 2 strings
@@ -93,8 +95,7 @@ while (<SOURCE>) {
 
             $locale=~s/-/_/;
 
-            $templates{$template}->{'locale'} = $locale;
-            $templates{$template}->{'value'} = $value;
+            $templates{$template}->{'translations'}->{$locale} = $value;
         }
     }
 }
@@ -125,15 +126,17 @@ foreach $template (keys %templates) {
         $keyline =~ s/^$key/$outkey/;
         print OUTFILE $keyline;
         if (/$key/) {
-            my $locale = $templates{$template}->{'locale'};
-            my $value = $templates{$template}->{'value'};
-            print "locale is $locale\n";
-            print "value is $value\n";
-            if ($value) {
-                if ($ext eq "desktop") {
-                    print OUTFILE "$outkey\[$locale\]=$value\n";
-                } else {
-                    print OUTFILE "\t\[$locale\]$outkey=$value\n";
+            my $translations = $templates{$template}->{'translations'};
+            foreach my $locale (keys %{$translations}) {
+                my $value = $translations->{$locale};
+                print "locale is $locale\n";
+                print "value is $value\n";
+                if ($value) {
+                    if ($ext eq "desktop") {
+                        print OUTFILE "$outkey\[$locale\]=$value\n";
+                    } else {
+                        print OUTFILE "\t\[$locale\]$outkey=$value\n";
+                    }
                 }
             }
         }
