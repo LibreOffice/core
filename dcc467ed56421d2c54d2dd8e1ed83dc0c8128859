@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///8s\u003d",
+        "filename": "sw/source/ui/utlui/numfmtlb.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-02-15T13:00:30Z",
+      "side": 1,
+      "message": "Please transform this comment into doxygen syntax in a second patch.",
+      "revId": "dcc467ed56421d2c54d2dd8e1ed83dc0c8128859",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
