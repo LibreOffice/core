@@ -70,7 +70,7 @@ void ScMediaShell::GetMediaState( SfxItemSet& rSet )
         {
             if( SID_AVMEDIA_TOOLBOX == nWhich )
             {
-                SdrMarkList*    pMarkList = new SdrMarkList( pView->GetMarkedObjectList() );
+                boost::scoped_ptr<SdrMarkList> pMarkList(new SdrMarkList( pView->GetMarkedObjectList() ));
                 bool            bDisable = true;
 
                 if( 1 == pMarkList->GetMarkCount() )
@@ -89,8 +89,6 @@ void ScMediaShell::GetMediaState( SfxItemSet& rSet )
 
                 if( bDisable )
                     rSet.DisableItem( SID_AVMEDIA_TOOLBOX );
-
-                delete pMarkList;
             }
 
             nWhich = aIter.NextWhich();
