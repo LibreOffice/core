@@ -30,7 +30,7 @@ module com { module sun { module star { module ui { module dialogs {
 interface XFilePicker2 : ::com::sun::star::ui::dialogs::XFilePicker
 {
     /** Returns a sequence of the selected files including path information in
-        URL format, conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
+        URL format, conforming to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
 
         <p>If the user closed the dialog with cancel an empty sequence will be returned.</p>
         <br/>

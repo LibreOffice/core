@@ -107,7 +107,7 @@ published interface XSimpleMailMessage: com::sun::star::uno::XInterface
     /** To set an attachment of a simple mail message.
         @param aAttachement
         Sets a sequence of file URLs specifying the files that should be
-        attached to the mail. The given file URLs must be conform to
+        attached to the mail. The given file URLs must conform to
         <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
         The method does not check if the specified file or files really exist.
 
@@ -122,7 +122,7 @@ published interface XSimpleMailMessage: com::sun::star::uno::XInterface
         @returns
         A sequence of file URLs specifying the files that should be attached to
         the mail or an empty sequence if no attachments have been specified.
-        The returned file URLs are conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
+        The returned file URLs conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
     */
     sequence< string > getAttachement( );
 };

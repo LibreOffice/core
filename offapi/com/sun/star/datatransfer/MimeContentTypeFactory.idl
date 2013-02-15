@@ -28,7 +28,7 @@ module com { module sun { module star { module datatransfer {
 
 /** Used to create an instance that implement the interface
     <type>XMimeContentType</type> from a string
-    representation of such a MIME content-type that is conform to
+    representation of such a MIME content-type that conforms to
     <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and
     <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>.
 

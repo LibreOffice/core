@@ -36,7 +36,7 @@ published interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialo
         chooses if the specified root directory doesn't exist.
 
         @param aDirectory
-        Specifies the root directory in url format, conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
+        Specifies the root directory in url format, conforming to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
 
         @throws com::sun::star::lang::IllegalArgumentException
         if the given url is invalid.
@@ -53,7 +53,7 @@ published interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialo
      */
     string getDisplayDirectory();
 
-    /** Returns the selected directory as url conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
+    /** Returns the selected directory as url conforming to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
 
         @returns
         The selected directory as url if the user did close the dialog with Ok

@@ -56,7 +56,7 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
     /** Sets the directory that the file dialog initially displays.
 
         @param aDirectory
-        Specifies the initial directory in URL format. The given URL must be
+        Specifies the initial directory in URL format. The given URL must
         conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>).
 
         @throws com::sun::star::lang::IllegalArgumentException
@@ -70,12 +70,12 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
         did cancel the dialog, the returned value is undefined.
 
         @returns
-        The directory in URL format, must be conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
+        The directory in URL format, must conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
      */
     string getDisplayDirectory();
 
     /** Returns a sequence of the selected files including path information in
-        URL format, conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
+        URL format, conforming to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
 
         <p>If the user closed the dialog with cancel an empty sequence will be
         returned.</p>
