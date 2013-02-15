@@ -1067,6 +1067,8 @@ void FormulaCompiler::Factor()
                     // If the referred cell is moved the value changes.
                 case ocColumn :
                 case ocRow :
+                    pArr->SetRecalcModeOnRefMove();
+                break;
                     // ocCell needs recalc on move for some possible type values.
                     // and recalc mode on load, fdo#60646
                 case ocCell :
