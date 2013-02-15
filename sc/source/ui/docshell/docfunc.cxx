@@ -1794,6 +1794,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 if (!bApi)
                     rDocShell.ErrorMessage(STR_MSSG_INSERTCELLS_0);
                 rDocShell.GetUndoManager()->LeaveListAction();
+                delete pUndoData;
                 return false;
             }
         }
