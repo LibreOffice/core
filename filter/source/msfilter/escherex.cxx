@@ -231,7 +231,7 @@ void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_Bool bBlib, sal_uI
         {
             pTemp[ i ] = pSortStruct[ i ];
         }
-        delete pSortStruct;
+        delete[] pSortStruct;
         pSortStruct = pTemp;
     }
     pSortStruct[ nSortCount ].nPropId = nPropID;                                // insert property
