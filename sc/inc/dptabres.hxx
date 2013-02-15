@@ -246,7 +246,7 @@ class ResultMembers
     DimMemberHash      maMemberHash;
     bool mbHasHideDetailsMember;
 public:
-    ScDPParentDimData* FindMember( const SCROW& nIndex ) const;
+    ScDPParentDimData* FindMember( SCROW nIndex ) const;
     void                             InsertMember(  ScDPParentDimData* pNew );
     bool IsHasHideDetailsMembers() const { return mbHasHideDetailsMember; }
     void SetHasHideDetailsMembers( bool b ) { mbHasHideDetailsMember = b; }

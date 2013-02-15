@@ -3916,7 +3916,7 @@ ScDPParentDimData::ScDPParentDimData(
     SCROW nIndex, const ScDPDimension* pDim, const ScDPLevel* pLev, const ScDPMember* pMember) :
     mnOrder(nIndex), mpParentDim(pDim), mpParentLevel(pLev), mpMemberDesc(pMember) {}
 
-ScDPParentDimData* ResultMembers::FindMember( const SCROW& nIndex ) const
+ScDPParentDimData* ResultMembers::FindMember( SCROW nIndex ) const
 {
     DimMemberHash::const_iterator aRes = maMemberHash.find( nIndex );
     if( aRes != maMemberHash.end()) {
