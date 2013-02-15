@@ -73,6 +73,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	$(call gb_Helper_optional,BOOST,boost) \
 	$(call gb_Helper_optional,CLUCENE,clucene) \
 	$(call gb_Helper_optional_for_host,DESKTOP, \
+		basebmp \
 		helpcompiler \
 		l10ntools \
 		$(call gb_Helper_optional,LCMS2,lcms2) \
@@ -81,7 +82,9 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 		svl \
 		svtools \
 		toolkit \
-	    vcl) \
+		vcl \
+		$(call gb_Helper_optional,VIGRA,vigra) \
+	) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 	$(call gb_Helper_optional,UCPP,ucpp) \
