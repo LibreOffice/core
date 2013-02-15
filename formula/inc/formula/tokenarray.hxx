@@ -84,7 +84,7 @@ protected:
     inline  ScRecalcMode    GetCombinedBitsRecalcMode() const
                                 { return nMode & ~RECALCMODE_EMASK; }
                             /** Exclusive bits already set in nMode are
-                                zero'ed, nVal may contain combined bits, but
+                                zero'ed, nBits may contain combined bits, but
                                 only one exclusive bit may be set! */
     inline  void            SetMaskedRecalcMode( ScRecalcMode nBits )
                                 { nMode = GetCombinedBitsRecalcMode() | nBits; }
@@ -142,13 +142,13 @@ public:
             void            AddRecalcMode( ScRecalcMode nBits );
 
     inline  void            ClearRecalcMode() { nMode = RECALCMODE_NORMAL; }
-    inline  void            SetRecalcModeNormal()
+    inline  void            SetExclusiveRecalcModeNormal()
                                 { SetMaskedRecalcMode( RECALCMODE_NORMAL ); }
-    inline  void            SetRecalcModeAlways()
+    inline  void            SetExclusiveRecalcModeAlways()
                                 { SetMaskedRecalcMode( RECALCMODE_ALWAYS ); }
-    inline  void            SetRecalcModeOnLoad()
+    inline  void            SetExclusiveRecalcModeOnLoad()
                                 { SetMaskedRecalcMode( RECALCMODE_ONLOAD ); }
-    inline  void            SetRecalcModeOnLoadOnce()
+    inline  void            SetExclusiveRecalcModeOnLoadOnce()
                                 { SetMaskedRecalcMode( RECALCMODE_ONLOAD_ONCE ); }
     inline  void            SetRecalcModeForced()
                                 { nMode |= RECALCMODE_FORCED; }

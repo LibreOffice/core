@@ -1684,7 +1684,7 @@ const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
     if( nError )
         ( ( ScTokenArray* ) pErgebnis )->SetCodeError( nError );
 
-    ( ( ScTokenArray* ) pErgebnis )->SetRecalcModeNormal();
+    ( ( ScTokenArray* ) pErgebnis )->SetExclusiveRecalcModeNormal();
 
     return pErgebnis;
 }

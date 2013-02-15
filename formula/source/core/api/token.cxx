@@ -783,13 +783,13 @@ void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
 {
     //! Reihenfolge ist wichtig
     if ( nBits & RECALCMODE_ALWAYS )
-        SetRecalcModeAlways();
+        SetExclusiveRecalcModeAlways();
     else if ( !IsRecalcModeAlways() )
     {
         if ( nBits & RECALCMODE_ONLOAD )
-            SetRecalcModeOnLoad();
+            SetExclusiveRecalcModeOnLoad();
         else if ( nBits & RECALCMODE_ONLOAD_ONCE && !IsRecalcModeOnLoad() )
-            SetRecalcModeOnLoadOnce();
+            SetExclusiveRecalcModeOnLoadOnce();
     }
     SetCombinedBitsRecalcMode( nBits );
 }

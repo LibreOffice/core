@@ -1698,7 +1698,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             break;
             case ScInterpreter::VOLATILE_MACRO:
                 // The formula contains a volatile macro.
-                pCode->SetRecalcModeAlways();
+                pCode->SetExclusiveRecalcModeAlways();
                 pDocument->PutInFormulaTree(this);
                 StartListeningTo(pDocument);
             break;
@@ -1707,7 +1707,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 {
                     // The formula was previously volatile, but no more.
                     EndListeningTo(pDocument);
-                    pCode->SetRecalcModeNormal();
+                    pCode->SetExclusiveRecalcModeNormal();
                 }
                 else
                 {

@@ -2676,7 +2676,7 @@ void ScInterpreter::ScExternal()
                 {
                     // nach dem Laden Asyncs wieder anwerfen
                     if ( pMyFormulaCell->GetCode()->IsRecalcModeNormal() )
-                        pMyFormulaCell->GetCode()->SetRecalcModeOnLoad();
+                        pMyFormulaCell->GetCode()->SetExclusiveRecalcModeOnLoad();
                     // garantiert identischer Handle bei identischem Aufruf?!?
                     // sonst schei*e ...
                     double nErg = 0.0;
@@ -3047,7 +3047,7 @@ void ScInterpreter::ScExternal()
             {
                 if ( pMyFormulaCell->GetCode()->IsRecalcModeNormal() )
                 {
-                    pMyFormulaCell->GetCode()->SetRecalcModeOnLoad();
+                    pMyFormulaCell->GetCode()->SetExclusiveRecalcModeOnLoad();
                 }
                 uno::Reference<sheet::XVolatileResult> xRes = aCall.GetVarRes();
                 ScAddInListener* pLis = ScAddInListener::Get( xRes );

@@ -1052,14 +1052,15 @@ void FormulaCompiler::Factor()
             nNumFmt = lcl_GetRetFormat( eOp );
 
         if ( IsOpCodeVolatile(eOp) )
-            pArr->SetRecalcModeAlways();
+            pArr->SetExclusiveRecalcModeAlways();
         else
         {
             switch( eOp )
             {
                     // Functions recalculated on every document load.
-                    // Don't use SetRecalcModeOnLoad() which would override
-                    // ModeAlways.
+                    // Don't use SetExclusiveRecalcModeOnLoad() which would
+                    // override ModeAlways, use
+                    // AddRecalcMode(RECALCMODE_ONLOAD) instead.
                 case ocConvert :
                     pArr->AddRecalcMode( RECALCMODE_ONLOAD );
                 break;
@@ -1599,7 +1600,7 @@ void FormulaCompiler::PopTokenArray()
         p->pArr->nRefs = sal::static_int_cast<short>( p->pArr->nRefs + pArr->nRefs );
         // obtain special RecalcMode from SharedFormula
         if ( pArr->IsRecalcModeAlways() )
-            p->pArr->SetRecalcModeAlways();
+            p->pArr->SetExclusiveRecalcModeAlways();
         else if ( !pArr->IsRecalcModeNormal() && p->pArr->IsRecalcModeNormal() )
             p->pArr->SetMaskedRecalcMode( pArr->GetRecalcMode() );
         p->pArr->SetCombinedBitsRecalcMode( pArr->GetRecalcMode() );
