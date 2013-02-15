@@ -77,6 +77,7 @@
 #include "charthelper.hxx"
 #include "tabbgcolor.hxx"
 #include "clipparam.hxx"
+#include "prnsave.hxx"
 
 #include <boost/scoped_ptr.hpp>
 #include <vector>
@@ -1021,6 +1022,8 @@ void ScViewFunc::SetPrintRanges( sal_Bool bEntireSheet, const String* pPrint,
         pDocSh->GetUndoManager()->AddUndoAction(
                     new ScUndoPrintRange( pDocSh, nCurTab, pOldRanges, pNewRanges ) );
     }
+    else
+        delete pOldRanges;
 
     //  update page breaks
 
