@@ -1,3 +1,0 @@
-Builds internal tools necessary for cross-compilation
-
-This is a meta-module that directs the build of all necessary modules.

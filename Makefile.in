@@ -297,7 +297,7 @@ cross-toolset: bootstrap fetch
 # platform. see --with-cross-build in icu/ExternalProject_icu.mk
 	$(GNUMAKE) gb_Side=build icu
 #
-	cd cross_toolset && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
+	cd cross_tail_build && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 
 #
 # Install
