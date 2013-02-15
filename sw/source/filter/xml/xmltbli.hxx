@@ -177,7 +177,7 @@ public:
                      const ::rtl::OUString *pFormula=0,
                      sal_Bool bHasValue = sal_False,
                      double fValue = 0.0,
-                     sal_Bool bTextValue = sal_False );
+                     ::rtl::OUString const*const pStringValue = 0);
     void InsertRow( const ::rtl::OUString& rStyleName,
                     const ::rtl::OUString& rDfltCellStyleName,
                     bool bInHead,

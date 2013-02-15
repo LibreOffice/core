@@ -95,6 +95,7 @@ enum SwXMLTableCellAttrTokens
     XML_TOK_TABLE_BOOLEAN_VALUE,
     XML_TOK_TABLE_PROTECTED,
     XML_TOK_TABLE_STRING_VALUE,
+    XML_TOK_TABLE_VALUE_TYPE,
     XML_TOK_TABLE_CELL_ATTR_END=XML_TOK_UNKNOWN
 };
 
@@ -136,6 +137,7 @@ static SvXMLTokenMapEntry aTableCellAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TOK_TABLE_PROTECTED },
     { XML_NAMESPACE_TABLE, XML_PROTECT, XML_TOK_TABLE_PROTECTED }, // for backwards compatibility with SRC629 (and before)
     { XML_NAMESPACE_OFFICE, XML_STRING_VALUE, XML_TOK_TABLE_STRING_VALUE },
+    { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_TOK_TABLE_VALUE_TYPE },
     XML_TOKEN_MAP_END
 };
 
@@ -162,6 +164,7 @@ class SwXMLTableCell_Impl
     OUString aStyleName;
 
     OUString mXmlId;
+    OUString m_StringValue;
 
     OUString sFormula;  // cell formula; valid if length > 0
     double dValue;      // formula value
@@ -175,7 +178,7 @@ class SwXMLTableCell_Impl
     sal_Bool bProtected : 1;
     sal_Bool bHasValue; // determines whether dValue attribute is valid
     sal_Bool mbCovered;
-    sal_Bool mbTextValue;
+    bool m_bHasStringValue;
 
 public:
 
@@ -185,18 +188,19 @@ public:
         nColSpan( nCSpan ),
         bProtected( sal_False ),
         mbCovered( sal_False )
+        , m_bHasStringValue(false)
         {}
 
     inline void Set( const OUString& rStyleName,
                       sal_uInt32 nRSpan, sal_uInt32 nCSpan,
                      const SwStartNode *pStNd, SwXMLTableContext *pTable,
-                     sal_Bool bProtect = sal_False,
-                     const OUString* pFormula = NULL,
-                     sal_Bool bHasValue = sal_False,
-                     sal_Bool mbCovered = sal_False,
-                     double dVal = 0.0,
-                     sal_Bool mbTextValue = sal_False,
-                     OUString const& i_rXmlId = OUString());
+                     sal_Bool bProtect,
+                     const OUString* pFormula,
+                     sal_Bool bHasValue,
+                     sal_Bool bCovered,
+                     double dVal,
+                     OUString const*const pStringValue,
+                     OUString const& i_rXmlId);
 
     bool IsUsed() const { return pStartNode!=0 ||
                                      xSubTable.Is() || bProtected;}
@@ -210,7 +214,10 @@ public:
     sal_Bool HasValue() const { return bHasValue; }
     sal_Bool IsProtected() const { return bProtected; }
     sal_Bool IsCovered() const { return mbCovered; }
-    sal_Bool HasTextValue() const { return mbTextValue; }
+    bool HasStringValue() const { return m_bHasStringValue; }
+    OUString const* GetStringValue() const {
+        return (m_bHasStringValue) ? &m_StringValue : 0;
+    }
     const OUString& GetXmlId() const { return mXmlId; }
 
     const SwStartNode *GetStartNode() const { return pStartNode; }
@@ -230,7 +237,7 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
                                       sal_Bool bHasVal,
                                       sal_Bool bCov,
                                       double dVal,
-                                      sal_Bool bTextVal,
+                                      OUString const*const pStringValue,
                                       OUString const& i_rXmlId )
 {
     aStyleName = rStyleName;
@@ -241,7 +248,11 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
     dValue = dVal;
     bHasValue = bHasVal;
     mbCovered = bCov;
-    mbTextValue = bTextVal;
+    if (pStringValue)
+    {
+        m_StringValue = *pStringValue;
+    }
+    m_bHasStringValue = (pStringValue != 0);
     bProtected = bProtect;
 
     if (!mbCovered) // ensure uniqueness
@@ -396,12 +407,14 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
     OUString sFormula;
     OUString sSaveParaDefault;
     OUString mXmlId;
+    OUString m_StringValue;
 
     SvXMLImportContextRef   xMyTable;
 
     double fValue;
     sal_Bool bHasValue;
-    sal_Bool bHasTextValue;
+    bool     m_bHasStringValue;
+    bool     m_bValueTypeIsString;
     sal_Bool bProtect;
 
     sal_uInt32                  nRowSpan;
@@ -445,7 +458,8 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     xMyTable( pTable ),
     fValue( 0.0 ),
     bHasValue( sal_False ),
-    bHasTextValue( sal_False ),
+    m_bHasStringValue(false),
+    m_bValueTypeIsString(false),
     bProtect( sal_False ),
     nRowSpan( 1UL ),
     nColSpan( 1UL ),
@@ -550,7 +564,19 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             break;
         case XML_TOK_TABLE_STRING_VALUE:
             {
-                bHasTextValue = sal_True;
+                m_StringValue = rValue;
+                m_bHasStringValue = true;
+            }
+            break;
+        case XML_TOK_TABLE_VALUE_TYPE:
+            {
+                if ("string" == rValue)
+                {
+                    m_bValueTypeIsString = true;
+                }
+                // ignore other types - it would be correct to require
+                // matching value-type and $type-value attributes,
+                // but we've been reading those without checking forever.
             }
             break;
         }
@@ -566,7 +592,8 @@ inline void SwXMLTableCellContext_Impl::_InsertContent()
     GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan,
                             GetTable()->InsertTableSection(),
                             mXmlId,
-                            NULL, bProtect, &sFormula, bHasValue, fValue, bHasTextValue );
+                            NULL, bProtect, &sFormula, bHasValue, fValue,
+            (m_bHasStringValue && m_bValueTypeIsString) ? &m_StringValue : 0);
 }
 
 inline void SwXMLTableCellContext_Impl::InsertContent()
@@ -643,9 +670,13 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
     {
         if( GetTable()->IsValid() )
             InsertContentIfNotThere();
-        pContext = GetImport().GetTextImport()->CreateTextChildContext(
+        // fdo#60842: "office:string-value" overrides text content -> no import
+        if (!(m_bValueTypeIsString && m_bHasStringValue))
+        {
+            pContext = GetImport().GetTextImport()->CreateTextChildContext(
                         GetImport(), nPrefix, rLocalName, xAttrList,
                         XML_TEXT_TYPE_CELL  );
+        }
     }
 
     if( !pContext )
@@ -1579,7 +1610,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
                                     const OUString* pFormula,
                                     sal_Bool bHasValue,
                                     double fValue,
-                                    sal_Bool bTextValue )
+                                    OUString const*const pStringValue )
 {
     OSL_ENSURE( nCurCol < GetColumnCount(),
             "SwXMLTableContext::InsertCell: row is full" );
@@ -1673,7 +1704,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
             GetCell( nRowsReq-j, nColsReq-i )
                 ->Set( sStyleName, j, i, pStartNode,
                        pTable, bProtect, pFormula, bHasValue, bCovered, fValue,
-                       bTextValue, i_rXmlId );
+                       pStringValue, i_rXmlId );
         }
     }
 
@@ -1742,7 +1773,7 @@ void SwXMLTableContext::InsertRepRows( sal_uInt32 nCount )
                             0, pSrcCell->IsProtected(),
                             &pSrcCell->GetFormula(),
                             pSrcCell->HasValue(), pSrcCell->GetValue(),
-                            pSrcCell->HasTextValue() );
+                            pSrcCell->GetStringValue() );
             }
         }
         FinishRow();
@@ -2076,6 +2107,18 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
 
     if( pCell->GetStartNode() )
     {
+        if (pCell->HasStringValue())
+        {
+            SwNodeIndex const aNodeIndex(*(pCell->GetStartNode()), 1);
+            SwTxtNode *const pTxtNode(aNodeIndex.GetNode().GetTxtNode());
+            SAL_WARN_IF(!pTxtNode, "sw", "Should have a text node in cell?");
+            if (pTxtNode)
+            {
+                SAL_WARN_IF(pTxtNode->GetTxt().Len(), "sw", "why text here?");
+                pTxtNode->InsertText(*pCell->GetStringValue(),
+                        SwIndex(pTxtNode, 0));
+            }
+        }
 
         // try to rescue broken documents with a certain pattern
         // if: 1) the cell has a default number format (number 0)
@@ -2139,7 +2182,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                 SwTblBoxFormula aFormulaItem( rFormula );
                 pBoxFmt2->SetFmtAttr( aFormulaItem );
             }
-            else if( !pCell->HasValue() && pCell->HasTextValue() )
+            else if (!pCell->HasValue() && pCell->HasStringValue())
             {
                 // Check for another inconsistency:
                 // No value but a non-textual format, i.e. a number format
