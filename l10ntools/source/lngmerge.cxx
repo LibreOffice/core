@@ -269,7 +269,7 @@ sal_Bool LngParser::Merge(
                                 rtl::OString sText1( sLang );
                                 sText1 += " = \"";
                                 // escape quotes, unescape double escaped quotes fdo#56648
-                                sText1 += sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"").replaceAll("\'","\\\'").replaceAll("\\\\\'","\\\'");
+                                sText1 += sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"");
                                 sText1 += "\"";
                                 *pLine = sText1;
                                 Text[ sLang ] = sNewText;
@@ -307,7 +307,7 @@ sal_Bool LngParser::Merge(
                         sLine += sCur;
                         sLine += " = \"";
                         // escape quotes, unescape double escaped quotes fdo#56648
-                        sLine += sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"").replaceAll("\'","\\\'").replaceAll("\\\\\'","\\\'");
+                        sLine += sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"");
                         sLine += "\"";
 
                         nLastLangPos++;
