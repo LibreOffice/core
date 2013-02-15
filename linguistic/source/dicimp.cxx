@@ -313,6 +313,8 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
                     return nErr;
                 *(aWordBuf + nLen) = 0;
             }
+            else
+                return SVSTREAM_READ_ERROR;
         }
 
         while(!pStream->IsEof())
