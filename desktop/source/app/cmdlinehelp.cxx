@@ -45,7 +45,7 @@ namespace desktop
     //     [OK]
 
     const char aCmdLineHelp_version[] =
-        "%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION\n"\
+        "%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION %BUILDID\n"\
         "\n";
     const char aCmdLineHelp_head[] =
         "Usage: %CMDNAME [options] [documents...]\n"\

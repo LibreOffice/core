@@ -72,6 +72,7 @@
 #include <toolkit/unohlp.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
+#include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -484,6 +485,7 @@ rtl::OUString ReplaceStringHookProc( const rtl::OUString& rStr )
     {
         rtl::OUString sBrandName = BrandName::get();
         rtl::OUString sVersion = Version::get();
+        rtl::OUString sBuildId = utl::Bootstrap::getBuildIdData("development");
         rtl::OUString sAboutBoxVersion = AboutBoxVersion::get();
         rtl::OUString sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
         rtl::OUString sExtension = Extension::get();
@@ -507,6 +509,7 @@ rtl::OUString ReplaceStringHookProc( const rtl::OUString& rStr )
 
         sRet = sRet.replaceAll( "%PRODUCTNAME", sBrandName );
         sRet = sRet.replaceAll( "%PRODUCTVERSION", sVersion );
+        sRet = sRet.replaceAll( "%BUILDID", sBuildId );
         sRet = sRet.replaceAll( "%ABOUTBOXPRODUCTVERSIONSUFFIX", sAboutBoxVersionSuffix );
         sRet = sRet.replaceAll( "%ABOUTBOXPRODUCTVERSION", sAboutBoxVersion );
         sRet = sRet.replaceAll( "%PRODUCTEXTENSION", sExtension );
