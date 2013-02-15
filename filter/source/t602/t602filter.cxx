@@ -693,7 +693,7 @@ tnode T602ImportFilter::PointCmd602(unsigned char *ch)
 void T602ImportFilter::Read602()
 {
     unsigned char ch=0;
-    char cmd602[3];
+    char cmd602[3] = {0};
 
     Reference < XAttributeList > mAttrList ( mpAttrList );
 
