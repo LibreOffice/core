@@ -970,7 +970,7 @@ static bool lcl_PutString(
     if ( nColFormat == SC_COL_TEXT )
     {
         double fDummy;
-        sal_uInt32 nIndex;
+        sal_uInt32 nIndex = 0;
         if (pFormatter->IsNumberFormat(rStr, nIndex, fDummy))
         {
             // Set the format of this cell to Text.
