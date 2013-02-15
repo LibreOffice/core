@@ -559,6 +559,10 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
     salhelper \
 ))
 
+$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+    mtfrenderer \
+    OGLTrans \
+))
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     PresenterScreen \
     basprov \
@@ -589,9 +593,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     migrationoo2 \
     migrationoo3 \
     msforms \
-    mtfrenderer \
     nullcanvas \
-    OGLTrans \
     passwordcontainer \
     pdfimport \
     pythonloader \
