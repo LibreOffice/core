@@ -6,6 +6,7 @@
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="label_xalign">0</property>
     <property name="shadow_type">none</property>
     <child>
@@ -22,6 +23,7 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="row_spacing">6</property>
             <child>
               <object class="GtkCheckButton" id="linkgraphics">
                 <property name="label" translatable="yes">_Link graphics</property>

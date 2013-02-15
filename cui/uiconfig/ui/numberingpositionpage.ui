@@ -12,13 +12,47 @@
     <property name="step_increment">0.050000000000000003</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Left</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Centered</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Right</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore2">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Tab stop</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Space</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Nothing</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkBox" id="NumberingPositionPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_left">10</property>
-    <property name="margin_right">10</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
+    <property name="border_width">6</property>
+    <property name="spacing">6</property>
     <child>
       <object class="GtkFrame" id="frame3">
         <property name="visible">True</property>
@@ -29,6 +63,7 @@
           <object class="GtkAlignment" id="alignment5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkTreeView" id="levellb">
@@ -76,6 +111,7 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid1">
@@ -428,39 +464,5 @@
         <property name="position">1</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Left</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Centered</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Right</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="liststore2">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Tab stop</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Space</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Nothing</col>
-      </row>
-    </data>
   </object>
 </interface>
