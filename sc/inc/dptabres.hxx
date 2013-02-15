@@ -22,6 +22,7 @@
 
 #include "global.hxx"
 #include "dpfilteredcache.hxx"
+#include "dpmacros.hxx"
 
 #include <tools/string.hxx>
 #include <com/sun/star/sheet/MemberResult.hpp>
@@ -413,7 +414,9 @@ public:
 
     void ResetResults();
 
-    void                DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
+#if DEBUG_PIVOT_TABLE
+    void DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
+#endif
 
                         //! this will be removed!
     const ScDPResultDimension*  GetChildDimension() const   { return pChildDimension; }
@@ -478,7 +481,9 @@ public:
 
     void                ResetResults();
 
-    void                DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
+#if DEBUG_PIVOT_TABLE
+    void DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
+#endif
 
                         //! this will be removed!
     const ScDPDataDimension*    GetChildDimension() const   { return pChildDimension; }
@@ -572,7 +577,9 @@ public:
         const ScDPRelativePos* pMemberPos, const OUString* pName,
         long nRefDimPos, const ScDPRunningTotalState& rRunning );
 
-    void                DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
+#if DEBUG_PIVOT_TABLE
+    void DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
+#endif
 
                         //  for ScDPDataDimension::InitFrom
     long                GetMemberCount() const;
@@ -632,7 +639,9 @@ public:
 
     void                ResetResults();
 
-    void                DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const;
+#if DEBUG_PIVOT_TABLE
+    void DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const;
+#endif
 
     long                GetMemberCount() const;
     const ScDPDataMember*     GetMember(long n) const;

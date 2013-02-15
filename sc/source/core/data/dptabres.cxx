@@ -237,7 +237,10 @@ void ScDPInitState::RemoveMember()
         maMembers.pop_back();
 }
 
-static void lcl_DumpRow(
+namespace {
+
+#if DEBUG_PIVOT_TABLE
+void lcl_DumpRow(
     const OUString& rType, const OUString& rName, const ScDPAggData* pAggData,
     ScDocument* pDoc, ScAddress& rPos )
 {
@@ -254,7 +257,7 @@ static void lcl_DumpRow(
     rPos.SetRow( nRow + 1 );
 }
 
-static void lcl_Indent( ScDocument* pDoc, SCROW nStartRow, const ScAddress& rPos )
+void lcl_Indent( ScDocument* pDoc, SCROW nStartRow, const ScAddress& rPos )
 {
     SCCOL nCol = rPos.Col();
     SCTAB nTab = rPos.Tab();
@@ -270,8 +273,9 @@ static void lcl_Indent( ScDocument* pDoc, SCROW nStartRow, const ScAddress& rPos
         }
     }
 }
+#endif
 
-// -----------------------------------------------------------------------
+}
 
 ScDPRunningTotalState::ScDPRunningTotalState( ScDPResultMember* pColRoot, ScDPResultMember* pRowRoot ) :
     pColResRoot(pColRoot), pRowResRoot(pRowRoot)
@@ -1707,6 +1711,7 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
     }
 }
 
+#if DEBUG_PIVOT_TABLE
 void ScDPResultMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
     lcl_DumpRow( rtl::OUString("ScDPResultMember"), GetName(), NULL, pDoc, rPos );
@@ -1720,6 +1725,7 @@ void ScDPResultMember::DumpState( const ScDPResultMember* pRefMember, ScDocument
 
     lcl_Indent( pDoc, nStartRow, rPos );
 }
+#endif
 
 ScDPAggData* ScDPResultMember::GetColTotal( long nMeasure ) const
 {
@@ -2546,6 +2552,7 @@ void ScDPDataMember::UpdateRunningTotals(
     }
 }
 
+#if DEBUG_PIVOT_TABLE
 void ScDPDataMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
     lcl_DumpRow( rtl::OUString("ScDPDataMember"), GetName(), &aAggregate, pDoc, rPos );
@@ -2558,6 +2565,7 @@ void ScDPDataMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* 
 
     lcl_Indent( pDoc, nStartRow, rPos );
 }
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -3357,6 +3365,7 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
     return pColMember;
 }
 
+#if DEBUG_PIVOT_TABLE
 void ScDPResultDimension::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
     rtl::OUString aDimName = bIsDataLayout ? rtl::OUString("(data layout)") : rtl::OUString(GetName());
@@ -3373,6 +3382,7 @@ void ScDPResultDimension::DumpState( const ScDPResultMember* pRefMember, ScDocum
 
     lcl_Indent( pDoc, nStartRow, rPos );
 }
+#endif
 
 long ScDPResultDimension::GetMemberCount() const
 {
@@ -3717,6 +3727,7 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
     }
 }
 
+#if DEBUG_PIVOT_TABLE
 void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const
 {
     rtl::OUString aDimName = bIsDataLayout ? rtl::OUString("(data layout)") : rtl::OUString("(unknown)");
@@ -3734,6 +3745,7 @@ void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocumen
 
     lcl_Indent( pDoc, nStartRow, rPos );
 }
+#endif
 
 long ScDPDataDimension::GetMemberCount() const
 {
