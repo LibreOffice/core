@@ -28,8 +28,6 @@
 #include <sfx2/cntids.hrc>
 #include <svx/dialogs.hrc>
 
-#define _SVX_BACKGRND_CXX
-
 #include <cuires.hrc>
 #include <svx/dialmgr.hxx>
 #include <editeng/memberids.hrc>

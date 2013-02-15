@@ -24,6 +24,7 @@
 #include <vcl/graph.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/dlgctrl.hxx>
+#include <editeng/brushitem.hxx>
 
 //------------------------------------------------------------------------
 // forwards:
@@ -135,7 +136,6 @@ private:
     SvxBackgroundTable_Impl*    pTableBck_Impl;///< Items for Sw-Table must be corrected
     SvxBackgroundPara_Impl* pParaBck_Impl;///< also for the paragraph style
 
-#ifdef _SVX_BACKGRND_CXX
     void                FillColorValueSets_Impl();
     void                ShowColorUI_Impl();
     void                HideColorUI_Impl();
@@ -161,7 +161,6 @@ private:
     DECL_LINK( TblDestinationHdl_Impl, ListBox* );
     DECL_LINK( ParaDestinationHdl_Impl, ListBox* );
     DECL_LINK(ModifyGradientHdl_Impl, void *);
-#endif
 };
 
 #endif // #ifndef _SVX_BACKGRND_HXX
