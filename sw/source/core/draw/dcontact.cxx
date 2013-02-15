@@ -173,11 +173,7 @@ sal_Bool IsMarqueeTextObj( const SdrObject& rObj )
          || SDRTEXTANI_ALTERNATE == eTKind || SDRTEXTANI_SLIDE == eTKind );
 }
 
-/*************************************************************************
-|*
-|*  SwContact, Ctor and Dtor
-|*
-|*************************************************************************/
+// SwContact
 
 SwContact::SwContact( SwFrmFmt *pToRegisterIn ) :
     SwClient( pToRegisterIn ),
@@ -200,7 +196,6 @@ void SwContact::SetInDTOR()
 }
 
 /** method to move drawing object to corresponding visible layer
-
     @author OD
 */
 void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
@@ -234,9 +229,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 }
 
 /** method to move drawing object to corresponding invisible layer
-
     OD 21.08.2003 #i18447#
-
     @author OD
 */
 void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
@@ -263,11 +256,9 @@ void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 }
 
 /** method to move object to visible/invisible layer
-
     OD 21.08.2003 #i18447#
     implementation for the public method <MoveObjToVisibleLayer(..)>
     and <MoveObjToInvisibleLayer(..)>
-
     @author OD
 */
 void SwContact::_MoveObjToLayer( const bool _bToVisible,
@@ -359,7 +350,6 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
     }
 }
 
-// -------------------------------------------------------------------------
 // some virtual helper methods for information
 // about the object (Writer fly frame resp. drawing object)
 
@@ -368,10 +358,9 @@ const SwIndex& SwContact::GetCntntAnchorIndex() const
     return GetCntntAnchor().nContent;
 }
 
-/** get minimum order number of anchored objects handled by with contact
+// get minimum order number of anchored objects handled by with contact
+// @author
 
-    @author
-*/
 sal_uInt32 SwContact::GetMinOrdNum() const
 {
     sal_uInt32 nMinOrdNum( SAL_MAX_UINT32 );
@@ -421,13 +410,8 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
 
     return nMaxOrdNum;
 }
-// -------------------------------------------------------------------------
 
-/*************************************************************************
-|*
-|*  SwFlyDrawContact, Ctor und Dtor
-|*
-|*************************************************************************/
+// SwFlyDrawContact
 
 SwFlyDrawContact::SwFlyDrawContact( SwFlyFrmFmt *pToRegisterIn, SdrModel * ) :
     SwContact( pToRegisterIn )
@@ -506,11 +490,7 @@ void SwFlyDrawContact::SetMaster( SdrObject* _pNewMaster )
     mpMasterObj = static_cast<SwFlyDrawObj *>(_pNewMaster);
 }
 
-/*************************************************************************
-|*
-|*  SwFlyDrawContact::Modify()
-|*
-|*************************************************************************/
+// SwFlyDrawContact::Modify()
 
 void SwFlyDrawContact::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {
@@ -598,11 +578,8 @@ void SwFlyDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchore
     SwFlyFrm::GetAnchoredObjects( _roAnchoredObjs, *pFmt );
 }
 
-/*************************************************************************
-|*
-|*  SwDrawContact, Ctor+Dtor
-|*
-|*************************************************************************/
+// SwDrawContact
+
 bool CheckControlLayer( const SdrObject *pObj )
 {
     if ( FmFormInventor == pObj->GetObjInventor() )
@@ -1010,11 +987,7 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm )
     return pRetDrawObj;
 }
 
-/*************************************************************************
-|*
-|*  SwDrawContact::Changed
-|*
-|*************************************************************************/
+// SwDrawContact::Changed
 
 void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
 {
@@ -1469,11 +1442,7 @@ namespace
     }
 }
 
-/*************************************************************************
-|*
-|*  SwDrawContact::Modify()
-|*
-|*************************************************************************/
+// SwDrawContact::Modify()
 
 void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
@@ -1624,11 +1593,7 @@ void SwDrawContact::_InvalidateObjs( const bool _bUpdateSortedObjsList )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwDrawContact::DisconnectFromLayout()
-|*
-|*************************************************************************/
+// SwDrawContact::DisconnectFromLayout()
 
 void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
 {
@@ -1740,11 +1705,8 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwDrawContact::ConnectToLayout()
-|*
-|*************************************************************************/
+// SwDrawContact::ConnectToLayout()
+
 static SwTxtFrm* lcl_GetFlyInCntntAnchor( SwTxtFrm* _pProposedAnchorFrm,
                                    const xub_StrLen _nTxtOfs )
 {
@@ -1951,11 +1913,7 @@ void SwDrawContact::InsertMasterIntoDrawPage()
     GetMaster()->SetUserCall( this );
 }
 
-/*************************************************************************
-|*
-|*  SwDrawContact::FindPage(), ChkPage()
-|*
-|*************************************************************************/
+// SwDrawContact::FindPage(), ChkPage()
 
 SwPageFrm* SwDrawContact::FindPage( const SwRect &rRect )
 {
@@ -2001,11 +1959,8 @@ void SwDrawContact::ChkPage()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwDrawContact::ChangeMasterObject()
-|*
-|*************************************************************************/
+// SwDrawContact::ChangeMasterObject()
+
 // Important note:
 // method is called by method <SwDPage::ReplaceObject(..)>, which called its
 // corresponding superclass method <FmFormPage::ReplaceObject(..)>.
@@ -2037,7 +1992,6 @@ void SwDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredOb
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
 // AW: own sdr::contact::ViewContact (VC) sdr::contact::ViewObjectContact (VOC) needed
 // since offset is defined different from SdrVirtObj's sdr::contact::ViewContactOfVirtObj.
 // For paint, that offset is used by setting at the OutputDevice; for primitives this is
@@ -2202,12 +2156,8 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////////////
-
-// =============================================================================
 /** implementation of class <SwDrawVirtObj>
-
-    @author OD
+ *  @author OD
 */
 
 TYPEINIT1(SwDrawVirtObj,SdrVirtObj);
@@ -2255,10 +2205,8 @@ SwDrawVirtObj* SwDrawVirtObj::Clone() const
     return pObj;
 }
 
-// --------------------------------------------------------------------
 // connection to writer layout: <GetAnchoredObj()>, <SetAnchorFrm(..)>,
 // <GetAnchorFrm()>, <SetPageFrm(..)>, <GetPageFrm()> and <RemoveFromWriterLayout()>
-// --------------------------------------------------------------------
 const SwAnchoredObject* SwDrawVirtObj::GetAnchoredObj() const
 {
     return &maAnchoredDrawObj;
@@ -2291,9 +2239,8 @@ void SwDrawVirtObj::RemoveFromWriterLayout()
     }
 }
 
-// --------------------------------------------------------------------
 // connection to writer layout: <AddToDrawingPage()>, <RemoveFromDrawingPage()>
-// --------------------------------------------------------------------
+
 void SwDrawVirtObj::AddToDrawingPage()
 {
     // determine 'master'
@@ -2346,7 +2293,6 @@ void SwDrawVirtObj::NbcSetAnchorPos(const Point& rPnt)
     SdrObject::NbcSetAnchorPos( rPnt );
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // #i97197#
 // the methods relevant for positioning
 

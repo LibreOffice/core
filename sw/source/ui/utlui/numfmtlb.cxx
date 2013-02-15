@@ -46,14 +46,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 
-// STATIC DATA -----------------------------------------------------------
+// STATIC DATA
 
-/*--------------------------------------------------------------------
-    Description:
-                    nFormatType: Display the formats of this Type
-                    nDefFmt:     Select this format and possibly
-                                 insert it
- --------------------------------------------------------------------*/
+/**
+ *  Description:
+ *     nFormatType: Display the formats of this Type
+ *     nDefFmt:     Select this format and possibly insert it
+ */
 
 NumFormatListBox::NumFormatListBox( Window* pWin, const ResId& rResId,
                                     short nFormatType, sal_uLong nDefFmt,

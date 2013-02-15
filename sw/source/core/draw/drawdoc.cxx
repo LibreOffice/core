@@ -40,11 +40,7 @@
 
 using namespace com::sun::star;
 
-/*************************************************************************
-|*
-|* Constructor
-|*
-\************************************************************************/
+// Constructor
 
 const String GetPalettePath()
 {
@@ -120,12 +116,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     SetCharCompressType( static_cast<sal_uInt16>(pD->getCharacterCompressionType() ));
 }
 
-/*************************************************************************
-|*
-|* Destructor
-|*
-\************************************************************************/
-
+// Destructor
 
 SwDrawDocument::~SwDrawDocument()
 {
@@ -134,15 +125,10 @@ SwDrawDocument::~SwDrawDocument()
     ClearModel(sal_True);
 }
 
-/*************************************************************************
-|*
-|* This method creates a new page (SdPage) and thereupon returns a pointer
-|* to it back. The drawing engine is using this method while loading for
-|* the creating of pages (whose type it not even know, because they are
-|* inherited from SdrPage).
-|*
-\************************************************************************/
-
+// This method creates a new page (SdPage) and thereupon returns a pointer
+// to it back. The drawing engine is using this method while loading for
+// the creating of pages (whose type it not even know, because they are
+// inherited from SdrPage).
 
 SdrPage* SwDrawDocument::AllocPage(bool bMasterPage)
 {
