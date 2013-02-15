@@ -52,7 +52,7 @@ LoadXmlFile( Buffer &           o_rBuffer,
 
     // Read file:
     aXmlFile.read(o_rBuffer.Data(), (int) nBufferSize);
-    bool ret = aXmlFile.good() != 0;
+    const bool ret = !aXmlFile.fail();
     aXmlFile.close();
     return ret;
 }
