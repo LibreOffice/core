@@ -199,10 +199,6 @@ IMPLIBFLAGS=
 MAPSYM=
 MAPSYMFLAGS=
 
-RSC=
-RSCFLAGS=
-RSCDEFS=
-RSCLANG=
 
 RC=
 RCFLAGS=
@@ -391,22 +387,6 @@ ENVCFLAGSINCXX*=$(envcflagsincxx)
 ENVLINKFLAGS*=$(envlinkflags)
 .ENDIF
 
-.IF "$(envrscflags)"!=""
-ENVRSCFLAGS*=$(envrscflags)
-.ENDIF
-
-.IF "$(envrscdefs)"!=""
-ENVRSCDEFS*=$(envrscdefs)
-.ENDIF
-
-.IF "$(envrsclinkflags)"!=""
-# ENVRSCLINKFLAGS*=$(envrsclinkflags)
-.ENDIF
-
-.IF "$(envrcflags)"!=""
-ENVRCFLAGS*=$(envrcflags)
-.ENDIF
-
 .IF "$(envrclinkflags)"!=""
 ENVRCLINKFLAGS*=$(envrclinkflags)
 .ENDIF
@@ -475,8 +455,6 @@ OPTIMIZE=
 
 .INCLUDE : postset.mk
 
-RSC_LANG_ISO+:=$(completelangiso)
-.EXPORT : RSC_LANG_ISO
 
 ######################################################
 
@@ -868,12 +846,6 @@ SCPLINKFLAGS=-i $(PAR),$(SOLARPARDIR)
 SCPLINKFLAGS+=-v $(SCPLINKVERSION)
 .ENDIF			# "$(SCPLINKVERSION)"!=""
 
-.IF "$(make_srs_deps)"!=""
-RSC=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/rscdep
-.ELSE # "$(make_srs_deps)"!=""
-RSC=$(AUGMENT_LIBRARY_PATH) $(FLIPCMD) $(SOLARBINDIR)/rsc
-.ENDIF # "$(make_srs_deps)"!=""
-
 .IF "$(VERBOSE)" == "TRUE"
     VERBOSITY=-verbose
 .ELSE
@@ -883,17 +855,6 @@ RSC=$(AUGMENT_LIBRARY_PATH) $(FLIPCMD) $(SOLARBINDIR)/rsc
 .ENDIF # "$(VERBOSE)" == "TRUE"
 COMPILE_ECHO_SWITCH=
 COMPILE_ECHO_FILE=$(<:f)
-
-RSCFLAGS=-s
-RSCDEFS=-D$(GUI) -D$(COM) $(JAVADEF)
-
-RSCDEFIMG*=icon-themes/galaxy
-
-RSCEXTINC=.
-
-.IF "$(DEBUG)" != ""
-RSCDEFS+= -DDEBUG
-.ENDIF
 
 # settings for mozilla idl compiler
 XPIDL=xpidl
@@ -1062,21 +1023,17 @@ LINKFLAGSADD+= $(LINKFLAGSDEBUG)
 .IF "$(dbgutil)"!=""
 CDEFS+=$(CDEFSDBGUTIL)
 CFLAGS+=$(CFLAGSDBGUTIL)
-RSCDEFS+=-DDBG_UTIL
 .ENDIF
 
 .IF "$(product)"!=""
 CDEFS+= -DPRODUCT
-RSCDEFS+= -DPRODUCT
 .IF "$(ASSERT_ALWAYS_ABORT)"=="FALSE"
 CDEFS+=-DNDEBUG
-RSCDEFS+= -DNDEBUG
 .ENDIF
 .ENDIF
 
 .IF "$(DBG_LEVEL)"!=""
 CDEFS+=-DOSL_DEBUG_LEVEL=$(DBG_LEVEL)
-RSCDEFS+=-DOSL_DEBUG_LEVEL=$(DBG_LEVEL)
 .IF "$(DBG_LEVEL)"!="0"
 CDEFS+=-DSAL_LOG_INFO -DSAL_LOG_WARN
 .ENDIF
@@ -1204,10 +1161,6 @@ CFLAGSCXX+= $(ENVCFLAGSCXX)
 CFLAGSINCXX+:=$(ENVCFLAGSINCXX)
 LIBFLAGS+= $(ENVLIBFLAGS)
 LINKFLAGSADD+= $(ENVLINKFLAGS)
-RSCFLAGS+= $(ENVRSCFLAGS)
-RSCDEFS+= $(ENVRSCDEFS)
-# RSCLINKFLAGS+= $(ENVRSCLINKFLAGS)
-RCFLAGS+= $(ENVRCFLAGS)
 RCLINKFLAGS+= $(ENVRCLINKFLAGS)
 
 LINKFLAGSRUNPATH_URELIB*=
