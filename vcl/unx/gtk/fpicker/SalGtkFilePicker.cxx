@@ -90,16 +90,7 @@ void SalGtkFilePicker::InitialMapping()
 
 SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext >& xContext ) :
     SalGtkPicker( xContext ),
-    cppu::WeakComponentImplHelper9<
-        XFilterManager,
-        XFilterGroupManager,
-        XFilePickerControlAccess,
-        XFilePickerNotifier,
-        XFilePreview,
-        XFilePicker2,
-        lang::XInitialization,
-        util::XCancellable,
-        lang::XEventListener>( m_rbHelperMtx ),
+    SalGtkFilePicker_Base( m_rbHelperMtx ),
     m_pFilterList( NULL ),
     m_pVBox ( NULL ),
     mnHID_FolderChange( 0 ),

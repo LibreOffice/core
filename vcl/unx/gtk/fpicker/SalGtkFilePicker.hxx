@@ -20,13 +20,11 @@
 #ifndef _SALGTKFILEPICKER_HXX_
 #define _SALGTKFILEPICKER_HXX_
 
-#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 
 #include <list>
@@ -54,18 +52,15 @@ typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // c
 // class declaration
 //----------------------------------------------------------
 
-class SalGtkFilePicker :
-        public SalGtkPicker,
-    public cppu::WeakComponentImplHelper9<
-        ::com::sun::star::ui::dialogs::XFilterManager,
-        ::com::sun::star::ui::dialogs::XFilterGroupManager,
+typedef cppu::WeakComponentImplHelper5<
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
-        ::com::sun::star::ui::dialogs::XFilePickerNotifier,
         ::com::sun::star::ui::dialogs::XFilePreview,
         ::com::sun::star::ui::dialogs::XFilePicker2,
-        ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::util::XCancellable,
-        ::com::sun::star::lang::XEventListener >
+        ::com::sun::star::ui::dialogs::XFilePicker3,
+        ::com::sun::star::lang::XInitialization
+        > SalGtkFilePicker_Base;
+
+class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 {
     public:
 
