@@ -210,7 +210,7 @@ bool TabPage::isLayoutEnabled() const
 Size TabPage::GetOptimalSize() const
 {
     if (isLayoutEnabled())
-        return GetWindow(WINDOW_FIRSTCHILD)->GetOptimalSize();
+        return VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
     return getLegacyBestSizeForChildren(*this);
 }
 

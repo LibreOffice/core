@@ -29,6 +29,7 @@
 #include "vcl/tabpage.hxx"
 #include "vcl/tabctrl.hxx"
 #include "vcl/controllayout.hxx"
+#include "vcl/layout.hxx"
 #include "vcl/lstbox.hxx"
 
 #include "controldata.hxx"
@@ -2219,7 +2220,7 @@ Size TabControl::calculateRequisition() const
         if (!pPage)
             continue;
 
-        Size aPageSize(pPage->GetOptimalSize());
+        Size aPageSize(VclContainer::getLayoutRequisition(*pPage));
 
         if (aPageSize.Width() > aOptimalPageSize.Width())
             aOptimalPageSize.Width() = aPageSize.Width();
