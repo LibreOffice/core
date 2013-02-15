@@ -313,26 +313,59 @@ void ExtensionManager::addExtensionsToMap(
     {   //will throw an exception if the extension does not exist
         extensionList.push_back(getUserRepository()->getDeployedPackage(
             identifier, fileName, Reference<ucb::XCommandEnvironment>()));
-    } catch(lang::IllegalArgumentException &)
+    }
+    catch(lang::IllegalArgumentException &)
     {
         extensionList.push_back(Reference<deploy::XPackage>());
     }
+    // catch deploy::DeploymentException and ucb::CommandFailedException to avoid unhandled exceptions causing crashes
+    catch( deploy::DeploymentException & )
+    {
+        extensionList.push_back(Reference<deploy::XPackage>());
+    }
+    catch( ucb::CommandFailedException & )
+    {
+        extensionList.push_back(Reference<deploy::XPackage>());
+    }
+
     try
     {
         extensionList.push_back(getSharedRepository()->getDeployedPackage(
             identifier, fileName, Reference<ucb::XCommandEnvironment>()));
-    } catch (lang::IllegalArgumentException &)
+    }
+    catch (lang::IllegalArgumentException &)
     {
         extensionList.push_back(Reference<deploy::XPackage>());
     }
+    // catch deploy::DeploymentException and ucb::CommandFailedException to avoid unhandled exceptions causing crashes
+    catch( deploy::DeploymentException & )
+    {
+        extensionList.push_back(Reference<deploy::XPackage>());
+    }
+    catch( ucb::CommandFailedException & )
+    {
+        extensionList.push_back(Reference<deploy::XPackage>());
+    }
+
     try
     {
        extensionList.push_back(getBundledRepository()->getDeployedPackage(
            identifier, fileName, Reference<ucb::XCommandEnvironment>()));
-    } catch (lang::IllegalArgumentException &)
+    }
+    catch (lang::IllegalArgumentException &)
     {
         extensionList.push_back(Reference<deploy::XPackage>());
     }
+    // catch deploy::DeploymentException and ucb::CommandFailedException to avoid unhandled exceptions causing crashes
+    catch( deploy::DeploymentException & )
+    {
+        extensionList.push_back(Reference<deploy::XPackage>());
+    }
+    catch( ucb::CommandFailedException & )
+    {
+        extensionList.push_back(Reference<deploy::XPackage>());
+    }
+
     OSL_ASSERT(extensionList.size() == 3);
     return extensionList;
 }
@@ -1181,7 +1214,6 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
         uno::Sequence<Reference<deploy::XPackage> > bundledExt =
             getBundledRepository()->getDeployedPackages(xAbort, xCmdEnv);
         addExtensionsToMap(mapExt, bundledExt, OUSTR("bundled"));
-        addExtensionsToMap(mapExt, bundledExt, OUSTR("bundled_prereg"));
 
         // Create the tmp repository to trigger its clean up (deletion
         // of old temporary data.)
