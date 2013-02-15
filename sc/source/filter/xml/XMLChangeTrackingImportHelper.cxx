@@ -405,6 +405,7 @@ void ScXMLChangeTrackingImportHelper::AddGenerated(ScMyCellInfo* pCellInfo, cons
     }
     else
     {
+        delete pGenerated;
         OSL_FAIL("try to insert a generated action to a wrong action");
     }
 }
