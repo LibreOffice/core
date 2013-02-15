@@ -35,7 +35,6 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     common/FileAccess.py \
     common/Properties.py \
     common/Resource.py \
-    common/DebugHelper.py \
     common/NoValidPathException.py \
     common/PropertyNames.py \
     common/SystemDialog.py \
@@ -43,7 +42,6 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     common/Desktop.py \
     common/HelpIds.py \
     common/NumberFormatter.py \
-    common/PropertySetHelper.py \
     text/TextElement.py \
     document/__init__.py \
     document/OfficeDocument.py \
