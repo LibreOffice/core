@@ -103,7 +103,12 @@ certain functionality.
 
 @section i18npool
 
-@li @c i18npool.langtag
+@li @c i18npool - general i18npool
+@li @c i18npool.langtag - language tags
+
+@section i18n
+
+@li @c i18n - module independent i18n related, e.g. language tag usage
 
 @section jvmfwk
 
