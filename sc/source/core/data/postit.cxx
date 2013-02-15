@@ -845,6 +845,9 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
         // ScNoteCaptionCreator c'tor updates the caption object to be part of a note
         ScNoteCaptionCreator aCreator( rDoc, rPos, rCaption, bShown );
     }
+    else
+        return NULL;
+
     return pNote;
 }
 
