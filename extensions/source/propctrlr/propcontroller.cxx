@@ -1254,7 +1254,7 @@ namespace pcr
                     // this category does not yet exist. This is allowed, as an inspector model might be lazy, and not provide
                     // any category information of its own. In this case, we have a fallback ...
                     m_aPageIds[ aDescriptor.Category ] =
-                    getPropertyBox().AppendPage( aDescriptor.Category, rtl::OString() );
+                        getPropertyBox().AppendPage( aDescriptor.Category, rtl::OString() );
                     nTargetPageId = impl_getPageIdForCategory_nothrow( aDescriptor.Category );
                 }
 
