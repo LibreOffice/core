@@ -40,7 +40,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo:SvxBmpNumValueSet" id="valueset">
+              <object class="svxlo:SvxBmpNumValueSet" id="valueset">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>

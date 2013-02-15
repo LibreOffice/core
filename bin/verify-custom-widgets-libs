@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Run this from the source root dir of a completed build to
+# verify that all customwidgets used in our .ui files have
+# their factory method in the library they claim to be in
+#
+# Under Linux dlsym will search other locations and find
+# them if they exist elsewhere, but not under windows, so
+# its easy to put the wrong lib name in if developing
+# under Linux
+
+FOO=`grep -h -r lo: */uiconfig | sed -e "s/<object class=\"//g" | sed -e "s/\".*$//"| sed 's/^[ \t]*//;s/[ \t]*$//'|sort|uniq`
+for foo in $FOO; do
+    lib=$(echo $foo | cut -f1 -d:)
+    symbol=$(echo $foo | cut -f2 -d:)
+    echo testing if lib$lib.so contains make$symbol
+    nm -D solver/unxlng*/lib/lib$lib.so | grep make$symbol > /dev/null
+    if [ $? != 0 ]; then
+        echo "MISSING. Windows will crash"
+    else
+        echo "OK";
+    fi
+done
