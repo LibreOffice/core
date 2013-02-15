@@ -288,10 +288,11 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.xDialogModel.lstPrivateStyle.Enabled = False
         self.lstPrivOfficialStyleItemChanged()
         self.disableBusinessPaper()
-        self.enableSenderReceiver()
+        self.disableSenderReceiver()
         self.setPossibleFooter(True)
         if self.myPathSelection.xSaveTextBox.Text.lower():
             self.myPathSelection.initializePath()
+        self.myLetterDoc.fillSenderWithUserData()
 
     def optPrivateLetterItemChanged(self):
         self.lstBusinessStylePos = None
