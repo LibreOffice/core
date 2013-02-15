@@ -29,7 +29,6 @@ class XPMWriter {
 private:
 
     SvStream&           m_rOStm;            // Die auszugebende XPM-Datei
-    sal_uInt16              mpOStmOldModus;
 
     sal_Bool                mbStatus;
     sal_Bool                mbTrans;
@@ -117,22 +116,24 @@ sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilter
     mpAcc = aBmp.AcquireReadAccess();
     if ( mpAcc )
     {
-        mnColors = mpAcc->GetPaletteEntryCount();
-        mpOStmOldModus = m_rOStm.GetNumberFormatInt();
+        sal_uInt16 nOStmOldModus = m_rOStm.GetNumberFormatInt();
         m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
+        mnColors = mpAcc->GetPaletteEntryCount();
         if ( ImplWriteHeader() )
         {
             ImplWritePalette();
             ImplWriteBody();
             m_rOStm << "\x22XPMENDEXT\x22\x0a};";
         }
+
+        m_rOStm.SetNumberFormatInt(nOStmOldModus);
+
         aBmp.ReleaseAccess( mpAcc );
     }
     else
         mbStatus = sal_False;
 
-    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
