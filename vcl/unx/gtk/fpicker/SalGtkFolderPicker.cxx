@@ -96,7 +96,7 @@ rtl::OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory() throw( uno::Run
 
     gchar* pCurrentFolder =
         gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
-    ::rtl::OUString aCurrentFolderName = uritounicode(pCurrentFolder);
+    OUString aCurrentFolderName = uritounicode(pCurrentFolder);
     g_free( pCurrentFolder );
 
     return aCurrentFolderName;
@@ -104,7 +104,16 @@ rtl::OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory() throw( uno::Run
 
 rtl::OUString SAL_CALL SalGtkFolderPicker::getDirectory() throw( uno::RuntimeException )
 {
-    return getDisplayDirectory();
+    SolarMutexGuard g;
+
+    OSL_ASSERT( m_pDialog != NULL );
+
+    gchar* pSelectedFolder =
+        gtk_file_chooser_get_uri( GTK_FILE_CHOOSER( m_pDialog ) );
+    OUString aSelectedFolderName = uritounicode(pSelectedFolder);
+    g_free( pSelectedFolder );
+
+    return aSelectedFolderName;
 }
 
 void SAL_CALL SalGtkFolderPicker::setDescription( const rtl::OUString& rDescription )
