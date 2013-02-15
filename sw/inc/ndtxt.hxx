@@ -244,7 +244,10 @@ public:
     virtual sal_uInt16 ResetAllAttr();
 
     /// insert text content
-    void InsertText( const XubString & rStr, const SwIndex & rIdx,
+    /// @param rStr text to insert; in case it does not fit into the limit of
+    ///             TXTNODE_MAX, the longest prefix that fits is inserted
+    /// @return the prefix of rStr that was actually inserted
+    OUString InsertText( const XubString & rStr, const SwIndex & rIdx,
                      const enum IDocumentContentOperations::InsertFlags nMode
                          = IDocumentContentOperations::INS_DEFAULT );
 

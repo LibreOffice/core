@@ -789,8 +789,9 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             }
             if( pTxtNd )
             {
-                pTxtNd->InsertText( *pEndStr, aPos.nContent,
-                        IDocumentContentOperations::INS_NOHINTEXPAND );
+                OUString const ins( pTxtNd->InsertText(*pEndStr, aPos.nContent,
+                        IDocumentContentOperations::INS_NOHINTEXPAND) );
+                assert(ins.getLength() == pEndStr->Len()); // must succeed
                 // METADATA: restore
                 pTxtNd->RestoreMetadata(m_pMetadataUndoEnd);
             }
@@ -882,8 +883,9 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 // SectionNode mode and selection from top to bottom:
                 //  -> in StartNode is still the rest of the Join => delete
                 aPos.nContent.Assign( pTxtNd, nSttCntnt );
-                pTxtNd->InsertText( *pSttStr, aPos.nContent,
-                        IDocumentContentOperations::INS_NOHINTEXPAND );
+                OUString const ins( pTxtNd->InsertText(*pSttStr, aPos.nContent,
+                        IDocumentContentOperations::INS_NOHINTEXPAND) );
+                assert(ins.getLength() == pSttStr->Len()); // must succeed
                 // METADATA: restore
                 pTxtNd->RestoreMetadata(m_pMetadataUndoStart);
             }
