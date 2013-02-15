@@ -732,10 +732,39 @@ void ScDPResultData::SetMeasureData(
     std::vector<ScSubTotalFunc>& rFunctions, std::vector<sheet::DataPilotFieldReference>& rRefs,
     std::vector<sal_uInt16>& rRefOrient, std::vector<OUString>& rNames )
 {
-    maMeasureFuncs.swap(rFunctions);
-    maMeasureRefs.swap(rRefs);
-    maMeasureRefOrients.swap(rRefOrient);
-    maMeasureNames.swap(rNames);
+    // We need to have at least one measure data at all times.
+
+    if (rFunctions.empty())
+    {
+        std::vector<ScSubTotalFunc> aDummy(1, SUBTOTAL_FUNC_NONE);
+        maMeasureFuncs.swap(aDummy);
+    }
+    else
+        maMeasureFuncs.swap(rFunctions);
+
+    if (rRefs.empty())
+    {
+        std::vector<sheet::DataPilotFieldReference> aDummy(1); // default ctor is ok.
+        maMeasureRefs.swap(aDummy);
+    }
+    else
+        maMeasureRefs.swap(rRefs);
+
+    if (rRefOrient.empty())
+    {
+        std::vector<sal_uInt16> aDummy(1, sheet::DataPilotFieldOrientation_HIDDEN);
+        maMeasureRefOrients.swap(aDummy);
+    }
+    else
+        maMeasureRefOrients.swap(rRefOrient);
+
+    if (rNames.empty())
+    {
+        std::vector<OUString> aDummy(1, ScGlobal::GetRscString(STR_EMPTYDATA));
+        maMeasureNames.swap(aDummy);
+    }
+    else
+        maMeasureNames.swap(rNames);
 }
 
 void ScDPResultData::SetDataLayoutOrientation( sal_uInt16 nOrient )
