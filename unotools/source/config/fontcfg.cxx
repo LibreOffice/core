@@ -27,9 +27,11 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <unotools/configpaths.hxx>
 #include <unotools/syslocale.hxx>
+#include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 #include <sal/macros.h>
+#include <xmlreader/xmlreader.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -362,6 +364,18 @@ FontSubstConfiguration& FontSubstConfiguration::get()
     return theFontSubstConfiguration::get();
 }
 
+static inline void lcl_assertEndingItem(xmlreader::XmlReader& reader)
+{
+#if OSL_DEBUG_LEVEL > 0
+    int nsId;
+    xmlreader::Span name;
+    assert(reader.nextItem(xmlreader::XmlReader::TEXT_NONE, &name, &nsId)
+            == xmlreader::XmlReader::RESULT_END);
+#else
+    (void)reader;
+#endif
+}
+
 /*
  *  FontSubstConfigItem::FontSubstConfigItem
  */
@@ -369,6 +383,82 @@ FontSubstConfiguration& FontSubstConfiguration::get()
 FontSubstConfiguration::FontSubstConfiguration() :
     maSubstHash( 300 )
 {
+    OUString uri("$BRAND_BASE_DIR/share/config/fontsubstitutions.xml");
+    rtl::Bootstrap::expandMacros(uri);
+    xmlreader::XmlReader reader(uri);
+    int nsId;
+    xmlreader::Span name;
+    xmlreader::XmlReader::Result res;
+    OUString sAttribute;
+
+    res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+    assert(res == xmlreader::XmlReader::RESULT_BEGIN &&
+                name.equals(RTL_CONSTASCII_STRINGPARAM("FontSubstitutions")));
+    res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+    while (res != xmlreader::XmlReader::RESULT_END)
+    {
+        FontNameAttr aAttr;
+        // Opening Font
+        assert(res == xmlreader::XmlReader::RESULT_BEGIN &&
+                name.equals(RTL_CONSTASCII_STRINGPARAM("Font")));
+        // Get the name
+        reader.nextAttribute(&nsId, &name);
+        assert(nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
+                name.equals(RTL_CONSTASCII_STRINGPARAM("name")));
+        aAttr.Name = reader.getAttributeValue(false).convertFromUtf8();
+        for(;;) {
+            // Opening attribute or ending Font
+            res = reader.nextItem(
+                    xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            if (res == xmlreader::XmlReader::RESULT_END)
+            {
+                break;
+            }
+            sAttribute = name.convertFromUtf8();
+            // Get value
+            res = reader.nextItem(xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
+            if (res == xmlreader::XmlReader::RESULT_END)
+                // there is no value
+                continue;
+            assert(res == xmlreader::XmlReader::RESULT_TEXT);
+            OUString sValue = name.convertFromUtf8();
+            // Ending attribute
+            lcl_assertEndingItem(reader);
+
+            if (sAttribute == "SubstFonts")
+                ;
+                //fillSubstVector( xFont, "SubstFonts", aAttr.Substitutions );
+            else if (sAttribute == "SubstFontsMS")
+                ;
+                //fillSubstVector( xFont, "SubstFontsMS", aAttr.MSSubstitutions );
+            else if (sAttribute == "SubstFontsPS")
+                ;
+                //fillSubstVector( xFont, "SubstFontsPS", aAttr.PSSubstitutions );
+            else if (sAttribute == "SubstFontsHTML")
+                ;
+                //fillSubstVector( xFont, "SubstFontsHTML", aAttr.HTMLSubstitutions );
+            else if (sAttribute == "FontWeight")
+                ;
+                //aAttr.Weight = getSubstWeight( xFont, "FontWeight" );
+            else if (sAttribute == "FontWidth")
+                ;
+                //aAttr.Width = getSubstWidth( xFont, "FontWidth" );
+            else if (sAttribute == "FontType")
+                ;
+                //aAttr.Type = getSubstType( xFont, "FontType" );
+            else assert(false);
+        }
+        // Get next Font or end
+        res = reader.nextItem(
+                xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+        //m_aSubstAttributes.push_back( aAttr );
+    };
+    res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+    assert(res == xmlreader::XmlReader::RESULT_DONE);
+
     try
     {
         // get service provider

@@ -62,7 +62,7 @@ static inline OUString lcl_getValue(xmlreader::XmlReader& reader,
 SwLabelConfig::SwLabelConfig() :
     ConfigItem("Office.Labels/Manufacturer")
 {
-    OUString uri("$BRAND_BASE_DIR/share/labels/labels.xml");
+    OUString uri("$BRAND_BASE_DIR/share/config/labels.xml");
     rtl::Bootstrap::expandMacros(uri);
     xmlreader::XmlReader reader(uri);
     int nsId;

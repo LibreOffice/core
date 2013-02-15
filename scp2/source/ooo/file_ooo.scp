@@ -625,10 +625,17 @@ End
 
 #endif
 
+File gid_File_Share_FontSubstitutions_Xml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Share_Config;
+    Name = "fontsubstitutions.xml";
+End
+
 File gid_File_Share_Labels_Xml
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Brand_Dir_Share_Labels;
+    Dir = gid_Brand_Dir_Share_Config;
     Name = "labels.xml";
 End
 

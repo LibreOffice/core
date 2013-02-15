@@ -7,8 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_labels,$(SRCDIR)/extras/source/labels))
+$(eval $(call gb_Package_Package,extras_config,$(SRCDIR)/extras/source/config))
 
-$(eval $(call gb_Package_add_file,extras_labels,pck/labels.xml,labels.xml))
+$(eval $(call gb_Package_add_files,extras_config,pck,\
+	fontsubstitutions.xml \
+	labels.xml \
+))
 
 # vim: set noet sw=4 ts=4:

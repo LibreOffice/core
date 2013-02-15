@@ -63,6 +63,7 @@ $(eval $(call gb_Library_use_libraries,utl,\
     salhelper \
     tl \
     ucbhelper \
+	xmlreader \
 	$(gb_UWINAPI) \
 ))
 
