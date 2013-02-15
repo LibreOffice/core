@@ -222,15 +222,7 @@ fetch: get-submodules
 ifneq (,$(wildcard $(SRCDIR)/.git))
 get-submodules:
 ifneq ($(foreach i,$(GIT_NEEDED_SUBMODULES),$(i)/.git),$(wildcard $(foreach i,$(GIT_NEEDED_SUBMODULES),$(i)/.git)))
-ifeq (,$(GIT_LINK_SRC))
 	cd $(SRCDIR) && ./g -f clone
-else # space-saving clone from another local workdir
-	@echo "FIXME: GIT_LINK_SRC method is not yet implemented with submodules" 1>&2
-	true $(foreach i,$(GIT_NEEDED_SUBMODULES),\
-		&& rm -r $(i) && cp -R $(GIT_LINK_SRC)/$(i) $(i))
-#		bin/git-new-workdir $GIT_LINK_SRC/$i $i
-	git submodule update $(GIT_NEEDED_SUBMODULES)
-endif
 endif
 	@cd $(SRCDIR) && ./g -z # make sure the git hooks are in place enen if no submodules are needed
 

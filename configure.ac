@@ -1194,14 +1194,6 @@ AC_ARG_WITH(solver-and-workdir-root,
         [Specify path that contains SOLARVER and WORKDIR directories manually.])
 )
 
-AC_ARG_WITH(linked-git,
-    AS_HELP_STRING([--with-linked-git=<OTHER_CLONE_DIR>],
-        [Specify another checkout's clonedir to re-use. This makes use of
-                 git-new-workdir, and saves a lot of diskspace when having multiple
-                 trees side-by-side.]),
-    GIT_LINK_SRC=$withval ,
-)
-
 AC_ARG_WITH(referenced-git,
     AS_HELP_STRING([--with-referenced-git=<OTHER_CHECKOUT_DIR>],
         [Specify another checkout directory to reference. This makes use of
@@ -11944,17 +11936,6 @@ if test -d "$SRC_ROOT/translations/source"; then
 fi
 AC_SUBST(L10N_MODULE)
 AC_SUBST(WITH_POOR_HELP_LOCALIZATIONS)
-
-dnl git-new-workdir
-dnl ===================================================================
-if test -n "${GIT_LINK_SRC}"; then
-    for repo in ${GIT_NEEDED_SUBMODULES}; do
-        if ! test -d "${GIT_LINK_SRC}"/${repo}; then
-            AC_MSG_ERROR([linked git: required repository does not exist: ${GIT_LINK_SRC}/${repo}])
-        fi
-    done
-fi
-AC_SUBST(GIT_LINK_SRC)
 
 dnl git submodule update --reference
 dnl ===================================================================
