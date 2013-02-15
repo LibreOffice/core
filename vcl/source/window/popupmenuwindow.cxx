@@ -67,4 +67,10 @@ bool PopupMenuFloatingWindow::IsPopupMenu() const
     return mpImplData->mnMenuStackLevel != ::std::numeric_limits<sal_uInt16>::max();
 }
 
+bool PopupMenuFloatingWindow::isPopupMenu(const Window *pWindow)
+{
+    const PopupMenuFloatingWindow* pChild = dynamic_cast<const PopupMenuFloatingWindow*>(pWindow);
+    return pChild && pChild->IsPopupMenu();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
