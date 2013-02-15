@@ -18,7 +18,6 @@
  */
 
 #include "webconninfo.hxx"
-#include "webconninfo.hrc"
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include <sal/macros.h>
@@ -44,14 +43,9 @@ PasswordTable::PasswordTable(SvxSimpleTableContainer& rParent, WinBits nBits)
 {
 }
 
-void PasswordTable::InsertHeaderItem( sal_uInt16 nColumn, const String& rText, HeaderBarItemBits nBits )
+void PasswordTable::InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText, HeaderBarItemBits nBits)
 {
     GetTheHeaderBar().InsertItem( nColumn, rText, 0, nBits );
-}
-
-void PasswordTable::ResetTabs()
-{
-    SetTabs();
 }
 
 void PasswordTable::Resort( bool bForced )
@@ -81,91 +75,78 @@ void PasswordTable::Resort( bool bForced )
     }
 }
 
+void PasswordTable::Resize()
+{
+    SvxSimpleTable::Resize();
+    setColWidths();
+}
+
+void PasswordTable::setColWidths()
+{
+    HeaderBar &rBar = GetTheHeaderBar();
+    if (rBar.GetItemCount() < 2)
+        return;
+    long nUserNameWidth = 12 +
+        std::max(rBar.GetTextWidth(rBar.GetItemText(2)),
+        GetTextWidth(OUString("XXXXXXXXXXXX")));
+    long nWebSiteWidth = std::max(
+        12 + rBar.GetTextWidth(rBar.GetItemText(1)),
+        GetSizePixel().Width() - nUserNameWidth);
+    long aStaticTabs[]= { 2, 0, 0 };
+    aStaticTabs[2] = nWebSiteWidth;
+    SvxSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+}
+
 // class WebConnectionInfoDialog -----------------------------------------
 
 // -----------------------------------------------------------------------
-WebConnectionInfoDialog::WebConnectionInfoDialog( Window* pParent ) :
-     ModalDialog( pParent, CUI_RES( RID_SVXDLG_WEBCONNECTION_INFO ) )
-    ,m_aNeverShownFI    ( this, CUI_RES( FI_NEVERSHOWN ) )
-    ,m_aPasswordsLBContainer(this, CUI_RES( LB_PASSWORDS))
-    ,m_aPasswordsLB(m_aPasswordsLBContainer)
-    ,m_aRemoveBtn       ( this, CUI_RES( PB_REMOVE ) )
-    ,m_aRemoveAllBtn    ( this, CUI_RES( PB_REMOVEALL ) )
-    ,m_aChangeBtn       ( this, CUI_RES( PB_CHANGE ) )
-    ,m_aButtonsFL       ( this, CUI_RES( FL_BUTTONS ) )
-    ,m_aCloseBtn        ( this, CUI_RES( PB_CLOSE ) )
-    ,m_aHelpBtn         ( this, CUI_RES( PB_HELP ) )
-    ,m_nPos             ( -1 )
+WebConnectionInfoDialog::WebConnectionInfoDialog(Window* pParent)
+    : ModalDialog(pParent, "StoredWebConnectionDialog", "cui/ui/storedwebconnectiondialog.ui")
+    , m_nPos( -1 )
 {
-    static long aStaticTabs[]= { 3, 0, 150, 250 };
-    m_aPasswordsLB.SetTabs( aStaticTabs );
-    m_aPasswordsLB.InsertHeaderItem( 1, CUI_RESSTR( STR_WEBSITE ),
+    get(m_pRemoveBtn, "remove");
+    get(m_pRemoveAllBtn, "removeall");
+    get(m_pChangeBtn, "change");
+
+    SvxSimpleTableContainer *pPasswordsLBContainer = get<SvxSimpleTableContainer>("logins");
+    m_pPasswordsLB = new PasswordTable(*pPasswordsLBContainer, 0);
+
+    long aStaticTabs[]= { 2, 0, 0 };
+    m_pPasswordsLB->SetTabs( aStaticTabs );
+    m_pPasswordsLB->InsertHeaderItem( 1, get<FixedText>("website")->GetText(),
         HIB_LEFT | HIB_VCENTER | HIB_FIXEDPOS | HIB_CLICKABLE | HIB_UPARROW );
-    m_aPasswordsLB.InsertHeaderItem( 2, CUI_RESSTR( STR_USERNAME ),
+    m_pPasswordsLB->InsertHeaderItem( 2, get<FixedText>("username")->GetText(),
         HIB_LEFT | HIB_VCENTER | HIB_FIXEDPOS );
-    m_aPasswordsLB.ResetTabs();
+    pPasswordsLBContainer->set_height_request(m_pPasswordsLB->GetTextHeight()*8);
 
-    FreeResource();
+    m_pPasswordsLB->SetHeaderBarClickHdl( LINK( this, WebConnectionInfoDialog, HeaderBarClickedHdl ) );
+    m_pRemoveBtn->SetClickHdl( LINK( this, WebConnectionInfoDialog, RemovePasswordHdl ) );
+    m_pRemoveAllBtn->SetClickHdl( LINK( this, WebConnectionInfoDialog, RemoveAllPasswordsHdl ) );
+    m_pChangeBtn->SetClickHdl( LINK( this, WebConnectionInfoDialog, ChangePasswordHdl ) );
 
-    m_aPasswordsLB.SetHeaderBarClickHdl( LINK( this, WebConnectionInfoDialog, HeaderBarClickedHdl ) );
-    m_aRemoveBtn.SetClickHdl( LINK( this, WebConnectionInfoDialog, RemovePasswordHdl ) );
-    m_aRemoveAllBtn.SetClickHdl( LINK( this, WebConnectionInfoDialog, RemoveAllPasswordsHdl ) );
-    m_aChangeBtn.SetClickHdl( LINK( this, WebConnectionInfoDialog, ChangePasswordHdl ) );
-
-    // one button too small for its text?
-    sal_Int32 i = 0;
-    long nBtnTextWidth = 0;
-    Window* pButtons[] = { &m_aRemoveBtn, &m_aRemoveAllBtn, &m_aChangeBtn };
-    Window** pButton = pButtons;
-    const sal_Int32 nBCount = SAL_N_ELEMENTS( pButtons );
-    for ( ; i < nBCount; ++i, ++pButton )
-    {
-        long nTemp = (*pButton)->GetCtrlTextWidth( (*pButton)->GetText() );
-        if ( nTemp > nBtnTextWidth )
-            nBtnTextWidth = nTemp;
-    }
-    nBtnTextWidth = nBtnTextWidth * 115 / 100; // a little offset
-    long nButtonWidth = m_aRemoveBtn.GetSizePixel().Width();
-    if ( nBtnTextWidth > nButtonWidth )
-    {
-        // so make the buttons broader and its control in front of it smaller
-        long nDelta = nBtnTextWidth - nButtonWidth;
-        pButton = pButtons;
-        for ( i = 0; i < nBCount; ++i, ++pButton )
-        {
-            Point aNewPos = (*pButton)->GetPosPixel();
-            if ( &m_aRemoveAllBtn == (*pButton) )
-                aNewPos.X() += nDelta;
-            else if ( &m_aChangeBtn == (*pButton) )
-                aNewPos.X() -= nDelta;
-            Size aNewSize = (*pButton)->GetSizePixel();
-            aNewSize.Width() += nDelta;
-            (*pButton)->SetPosSizePixel( aNewPos, aNewSize );
-        }
-    }
 
     FillPasswordList();
 
-    m_aRemoveBtn.SetClickHdl( LINK( this, WebConnectionInfoDialog, RemovePasswordHdl ) );
-    m_aRemoveAllBtn.SetClickHdl( LINK( this, WebConnectionInfoDialog, RemoveAllPasswordsHdl ) );
-    m_aChangeBtn.SetClickHdl( LINK( this, WebConnectionInfoDialog, ChangePasswordHdl ) );
-    m_aPasswordsLB.SetSelectHdl( LINK( this, WebConnectionInfoDialog, EntrySelectedHdl ) );
+    m_pRemoveBtn->SetClickHdl( LINK( this, WebConnectionInfoDialog, RemovePasswordHdl ) );
+    m_pRemoveAllBtn->SetClickHdl( LINK( this, WebConnectionInfoDialog, RemoveAllPasswordsHdl ) );
+    m_pChangeBtn->SetClickHdl( LINK( this, WebConnectionInfoDialog, ChangePasswordHdl ) );
+    m_pPasswordsLB->SetSelectHdl( LINK( this, WebConnectionInfoDialog, EntrySelectedHdl ) );
 
-    m_aRemoveBtn.Enable( sal_False );
-    m_aChangeBtn.Enable( sal_False );
+    m_pRemoveBtn->Enable( sal_False );
+    m_pChangeBtn->Enable( sal_False );
 
     HeaderBarClickedHdl( NULL );
 }
 
-// -----------------------------------------------------------------------
 WebConnectionInfoDialog::~WebConnectionInfoDialog()
 {
+    delete m_pPasswordsLB;
 }
 
 // -----------------------------------------------------------------------
 IMPL_LINK( WebConnectionInfoDialog, HeaderBarClickedHdl, SvxSimpleTable*, pTable )
 {
-    m_aPasswordsLB.Resort( NULL == pTable );
+    m_pPasswordsLB->Resort( NULL == pTable );
     return 0;
 }
 
@@ -192,7 +173,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                     ::rtl::OUString aUIEntry( aURLEntries[nURLInd].Url );
                     aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
                     aUIEntry += aURLEntries[nURLInd].UserList[nUserInd].UserName;
-                    SvTreeListEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
+                    SvTreeListEntry* pEntry = m_pPasswordsLB->InsertEntry( aUIEntry );
                     pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
                 }
             }
@@ -208,7 +189,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                 ::rtl::OUString aUIEntry( aUrls[ nURLIdx ] );
                 aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
                 aUIEntry += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*" ) );
-                SvTreeListEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
+                SvTreeListEntry* pEntry = m_pPasswordsLB->InsertEntry( aUIEntry );
                 pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
             }
         }
@@ -222,11 +203,11 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
 {
     try
     {
-        SvTreeListEntry* pEntry = m_aPasswordsLB.GetCurEntry();
+        SvTreeListEntry* pEntry = m_pPasswordsLB->GetCurEntry();
         if ( pEntry )
         {
-            ::rtl::OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
-            ::rtl::OUString aUserName = m_aPasswordsLB.GetEntryText( pEntry, 1 );
+            ::rtl::OUString aURL = m_pPasswordsLB->GetEntryText( pEntry, 0 );
+            ::rtl::OUString aUserName = m_pPasswordsLB->GetEntryText( pEntry, 1 );
 
             uno::Reference< task::XPasswordContainer2 > xPasswdContainer(
                 task::PasswordContainer::create(comphelper::getProcessComponentContext()));
@@ -240,7 +221,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
             {
                 xPasswdContainer->removeUrl( aURL );
             }
-            m_aPasswordsLB.RemoveEntry( pEntry );
+            m_pPasswordsLB->RemoveEntry( pEntry );
         }
     }
     catch( uno::Exception& )
@@ -265,7 +246,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl)
         for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
             xPasswdContainer->removeUrl( aUrls[ nURLIdx ] );
 
-        m_aPasswordsLB.Clear();
+        m_pPasswordsLB->Clear();
     }
     catch( uno::Exception& )
     {}
@@ -278,11 +259,11 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
 {
     try
     {
-        SvTreeListEntry* pEntry = m_aPasswordsLB.GetCurEntry();
+        SvTreeListEntry* pEntry = m_pPasswordsLB->GetCurEntry();
         if ( pEntry )
         {
-            ::rtl::OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
-            ::rtl::OUString aUserName = m_aPasswordsLB.GetEntryText( pEntry, 1 );
+            ::rtl::OUString aURL = m_pPasswordsLB->GetEntryText( pEntry, 0 );
+            ::rtl::OUString aUserName = m_pPasswordsLB->GetEntryText( pEntry, 1 );
 
             ::comphelper::SimplePasswordRequest* pPasswordRequest
                   = new ::comphelper::SimplePasswordRequest( task::PasswordRequestMode_PASSWORD_CREATE );
@@ -315,20 +296,20 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
 // -----------------------------------------------------------------------
 IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl)
 {
-    SvTreeListEntry* pEntry = m_aPasswordsLB.GetCurEntry();
+    SvTreeListEntry* pEntry = m_pPasswordsLB->GetCurEntry();
     if ( !pEntry )
     {
-        m_aRemoveBtn.Enable( sal_False );
-        m_aChangeBtn.Enable( sal_False );
+        m_pRemoveBtn->Enable( sal_False );
+        m_pChangeBtn->Enable( sal_False );
     }
     else
     {
-        m_aRemoveBtn.Enable( sal_True );
+        m_pRemoveBtn->Enable( sal_True );
 
         // url container entries (-> use system credentials) have
         // no password
         sal_Int32 nPos = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
-        m_aChangeBtn.Enable( nPos < m_nPos );
+        m_pChangeBtn->Enable( nPos < m_nPos );
     }
 
     return 0;

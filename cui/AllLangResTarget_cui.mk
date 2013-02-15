@@ -98,7 +98,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/optupdt.src \
     cui/source/options/readonlyimage.src \
     cui/source/options/treeopt.src \
-    cui/source/options/webconninfo.src \
     cui/source/tabpages/align.src \
     cui/source/tabpages/autocdlg.src \
     cui/source/tabpages/bbdlg.src \

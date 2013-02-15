@@ -33,11 +33,12 @@ namespace svx
     class PasswordTable : public SvxSimpleTable
     {
     public:
-        PasswordTable(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
+        PasswordTable(SvxSimpleTableContainer& rParent, WinBits nBits);
 
-        void InsertHeaderItem( sal_uInt16 nColumn, const String& rText, HeaderBarItemBits nBits );
-        void ResetTabs();
+        void InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText, HeaderBarItemBits nBits);
+        void setColWidths();
         void Resort( bool bForced );
+        virtual void Resize();
     };
 
     //====================================================================
@@ -46,16 +47,11 @@ namespace svx
     class WebConnectionInfoDialog : public ModalDialog
     {
     private:
-        FixedInfo           m_aNeverShownFI;
-        SvxSimpleTableContainer m_aPasswordsLBContainer;
-        PasswordTable       m_aPasswordsLB;
-        PushButton          m_aRemoveBtn;
-        PushButton          m_aRemoveAllBtn;
-        PushButton          m_aChangeBtn;
-        FixedLine           m_aButtonsFL;
-        CancelButton        m_aCloseBtn;
-        HelpButton          m_aHelpBtn;
-        sal_Int32           m_nPos;
+        PasswordTable* m_pPasswordsLB;
+        PushButton*    m_pRemoveBtn;
+        PushButton*    m_pRemoveAllBtn;
+        PushButton*    m_pChangeBtn;
+        sal_Int32      m_nPos;
 
     DECL_LINK( HeaderBarClickedHdl, SvxSimpleTable* );
     DECL_LINK(RemovePasswordHdl, void *);

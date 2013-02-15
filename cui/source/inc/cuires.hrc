@@ -139,7 +139,6 @@
 #define RID_RIDER_SLL_PERSONAL          (RID_OFA_START + 101)//?
 
 // options
-#define RID_SVXDLG_WEBCONNECTION_INFO       (RID_SVX_START + 301)
 #define RID_SVXDLG_SECURITY_OPTIONS         (RID_SVX_START + 300)
 #define RID_SVXPAGE_ONLINEUPDATE            (RID_SVX_START + 298)
 #define OFA_TP_MEMORY                   (RID_OFA_START + 250)

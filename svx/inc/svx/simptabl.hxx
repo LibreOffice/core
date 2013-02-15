@@ -41,7 +41,7 @@ protected:
 
 public:
     SvxSimpleTableContainer( Window* pParent, const ResId& rResId );
-    SvxSimpleTableContainer( Window* pParent, WinBits nBits = WB_BORDER | WB_3DLOOK );
+    SvxSimpleTableContainer( Window* pParent, WinBits nBits = WB_BORDER );
 
     void SetTable(SvxSimpleTable* pTable);
 
