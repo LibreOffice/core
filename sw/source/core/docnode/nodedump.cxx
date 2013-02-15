@@ -135,6 +135,8 @@ void MarkManager::dumpAsXml( xmlTextWriterPtr w )
         writer.writeFormatAttribute("startOffset", "%d", pMark->GetMarkStart().nContent.GetIndex());
         writer.writeFormatAttribute("endNode", "%lu", pMark->GetMarkEnd().nNode.GetIndex());
         writer.writeFormatAttribute("endOffset", "%d", pMark->GetMarkEnd().nContent.GetIndex());
+        OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
+        writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
         writer.endElement();
     }
     writer.endElement();
