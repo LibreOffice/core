@@ -28,6 +28,7 @@
 
 #include "doc.hxx"
 #include "ndtxt.hxx"
+#include "MarkManager.hxx"
 
 #include <libxml/encoding.h>
 #include <libxml/xmlwriter.h>
@@ -115,8 +116,32 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     writer.startElement( "doc" );
     writer.writeFormatAttribute( "ptr", "%p", this );
     m_pNodes->dumpAsXml( writer );
+    pMarkManager->dumpAsXml( writer );
     writer.endElement();
 }
+
+namespace sw {
+namespace mark {
+void MarkManager::dumpAsXml( xmlTextWriterPtr w )
+{
+    WriterHelper writer(w);
+    writer.startElement("markManager");
+    writer.startElement("fieldmarks");
+    for (const_iterator_t it = m_vFieldmarks.begin(); it != m_vFieldmarks.end(); ++it)
+    {
+        pMark_t pMark = *it;
+        writer.startElement("fieldmark");
+        writer.writeFormatAttribute("startNode", "%lu", pMark->GetMarkStart().nNode.GetIndex());
+        writer.writeFormatAttribute("startOffset", "%d", pMark->GetMarkStart().nContent.GetIndex());
+        writer.writeFormatAttribute("endNode", "%lu", pMark->GetMarkEnd().nNode.GetIndex());
+        writer.writeFormatAttribute("endOffset", "%d", pMark->GetMarkEnd().nContent.GetIndex());
+        writer.endElement();
+    }
+    writer.endElement();
+    writer.endElement();
+}
+} // namespace mark
+} // namespace sw
 
 void SwNodes::dumpAsXml( xmlTextWriterPtr w )
 {

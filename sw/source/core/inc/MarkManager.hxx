@@ -77,6 +77,7 @@ namespace sw {
             virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& rPos) const;
             virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& rPos) const;
 
+            void dumpAsXml(xmlTextWriterPtr w);
         private:
             // make names
             ::rtl::OUString getUniqueMarkName(const ::rtl::OUString& rName) const;
