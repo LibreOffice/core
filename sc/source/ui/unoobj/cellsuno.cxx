@@ -4128,9 +4128,9 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                     for (; itr != itrEnd && *itr < nTabCount; ++itr)
                         if ( *itr != nTab && bUndo)
                             pUndoDoc->AddUndoTab( *itr, *itr );
-                    ScMarkData* pUndoMark = NULL;
+                    boost::scoped_ptr<ScMarkData> pUndoMark;
                     if (bUndo)
-                        pUndoMark = new ScMarkData(aMark);
+                        pUndoMark.reset(new ScMarkData(aMark));
 
                     bool bFound = false;
                     if (bUndo)
@@ -4153,7 +4153,6 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                     else
                     {
                         delete pUndoDoc;
-                        delete pUndoMark;
                         // nReplaced bleibt 0
                     }
                 }
