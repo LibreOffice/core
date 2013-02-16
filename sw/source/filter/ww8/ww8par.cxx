@@ -1008,8 +1008,8 @@ const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
         if (rTxtNode.IsCountedInList())
         {
             const SwNumRule *pRule = pDoc->FindNumRulePtr(sName);
-            sal_uInt8 nLvl = static_cast< sal_uInt8 >(rTxtNode.GetActualListLevel());
-            pRet = &(pRule->Get(nLvl));
+
+            pRet = GetNumFmtFromSwNumRuleLevel(*pRule, rTxtNode.GetActualListLevel());
         }
     }
     return pRet;

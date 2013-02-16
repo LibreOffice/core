@@ -665,9 +665,25 @@ namespace sw
         */
         const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode);
 
+        /** Get the Numbering Format for a given level from a numbering rule
+
+            @param rRule
+            The numbering rule
+
+            @param nLevel
+            The numbering level
+
+            @return A SwNumFmt pointer that describes the numbering level
+            or 0 if the nLevel is out of range
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        const SwNumFmt* GetNumFmtFromSwNumRuleLevel(const SwNumRule &rRule,
+            int nLevel);
+
         const SwNumRule* GetNumRuleFromTxtNode(const SwTxtNode &rTxtNd);
         const SwNumRule* GetNormalNumRuleFromTxtNode(const SwTxtNode &rTxtNd);
-
 
         /** Get the SwNoTxtNode associated with a SwFrmFmt if here is one
 
