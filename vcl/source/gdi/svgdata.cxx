@@ -166,7 +166,7 @@ SvgData::SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLeng
 
 //////////////////////////////////////////////////////////////////////////////
 SvgData::SvgData(const OUString& rPath):
-    maSvgDataArray(NULL),
+    maSvgDataArray(),
     mnSvgDataArrayLength(0),
     maPath(rPath),
     maRange(),
