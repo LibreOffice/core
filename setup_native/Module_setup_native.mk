@@ -25,12 +25,9 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 endif
 
 ifeq ($(OS),WNT)
-
-$(eval $(call gb_Module_add_targets,setup_native,\
-        Library_instooofiltmsi \
-))
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,setup_native,\
+        Library_instooofiltmsi \
 	Library_jfregca \
 	Library_qslnkmsi \
 	Library_reg4allmsdoc \
