@@ -19,18 +19,18 @@
 
 
 #include <editsh.hxx>
-#include <doc.hxx>      // fuer aNodes
+#include <doc.hxx>      // for aNodes
 #include <IDocumentUndoRedo.hxx>
-#include <pam.hxx>      // fuer SwPaM
-#include <edimp.hxx>    // fuer MACROS
-#include <swundo.hxx>   // fuer die UndoIds
-#include <ndtxt.hxx>    // fuer Get-/ChgFmt Set-/GetAttrXXX
+#include <pam.hxx>      // for SwPaM
+#include <edimp.hxx>    // for MACROS
+#include <swundo.hxx>   // for the UndoIds
+#include <ndtxt.hxx>    // fot Get-/ChgFmt Set-/GetAttrXXX
 
 
 
-/*************************************
- * harte Formatierung (Attribute)
- *************************************/
+/**
+ * hard formatting (Attribute)
+ */
 
 
 void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
@@ -87,18 +87,18 @@ void SwEditShell::GCAttr()
     FOREACHPAM_END()
 }
 
-// Setze das Attribut als neues default Attribut im Dokument.
+// Set the attribute as new default attribute in the document.
 
 
 void SwEditShell::SetDefault( const SfxPoolItem& rFmtHint )
 {
-    // 7502: Action-Klammerung
+    // 7502: Action-Parenthesis
     StartAllAction();
     GetDoc()->SetDefault( rFmtHint );
     EndAllAction();
 }
 
-// Erfrage das Default Attribut in diesem Dokument.
+// Inquire the Default Attribut in this document.
 
 const SfxPoolItem& SwEditShell::GetDefault( sal_uInt16 nFmtHint ) const
 {
@@ -112,7 +112,7 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, sal_uInt16 nFlags )
     SET_CURR_SHELL( this );
     StartAllAction();
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
+    if( pCrsr->GetNext() != pCrsr )     // Ring of Cursors
     {
         sal_Bool bIsTblMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
@@ -143,7 +143,7 @@ void SwEditShell::SetAttr( const SfxItemSet& rSet, sal_uInt16 nFlags, SwPaM* pPa
 
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
     StartAllAction();
-    if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
+    if( pCrsr->GetNext() != pCrsr )     // Ring of Cursors
     {
         sal_Bool bIsTblMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
