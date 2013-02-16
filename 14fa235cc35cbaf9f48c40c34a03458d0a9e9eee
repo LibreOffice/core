@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///54\u003d",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-16T08:33:32Z",
+      "side": 1,
+      "message": "that\u0027s wrong: s/UNOLIBS_OOO/OOOLIBS/:\n\n* Commit messages states that only mtfrenderer and OGLTrans moved to OOOLIBS in this commit.\n* and besides this these libraries are not adjusted in scp2 module anyway:\n\n File gid_File_Lib_Smplmail\n    LIB_FILE_BODY;\n    Styles \u003d (PACKED);\n    Dir \u003d SCP2_OOO_BIN_DIR;\n    Name \u003d \"*smplmail.uno.dll*\";\n End",
+      "revId": "14fa235cc35cbaf9f48c40c34a03458d0a9e9eee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
