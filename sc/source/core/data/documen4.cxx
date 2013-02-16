@@ -185,7 +185,8 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                         // Zelle ein eigenes Array erhaelt!
                         aPos = ScAddress( j, k, *itr );
                         t->CalcRelFromAbs( aPos );
-                        pCell = new ScFormulaCell( this, aPos, aArr.Clone(), eGram, MM_REFERENCE );
+                        boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
+                        pCell = new ScFormulaCell( this, aPos, pTokArr.get(), eGram, MM_REFERENCE );
                         maTabs[*itr]->PutCell(j, k, (ScBaseCell*) pCell);
                     }
                 }
