@@ -5774,7 +5774,6 @@ fi
 dnl ===================================================================
 dnl Check for C++11 perfect forwarding support
 dnl ===================================================================
-HAVE_CXX11_PERFECT_FORWARDING=
 AC_MSG_CHECKING([whether $CXX supports C++11 perfect forwarding])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
