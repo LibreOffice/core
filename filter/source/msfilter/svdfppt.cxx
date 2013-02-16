@@ -4110,24 +4110,20 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             {
                 if ( rIn.GetError() == 0 )
                 {
-                    rtl::OStringBuffer aMsg;
+                    OStringBuffer aMsg;
                     if ( rIn.Tell() > aTxMasterStyleHd.GetRecEndFilePos() )
                     {
-                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("\n  "));
-                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("reading too many bytes:"));
-                        aMsg.append(static_cast<sal_Int32>(rIn.Tell() - aTxMasterStyleHd.GetRecEndFilePos()));
+                        aMsg.append("\n  " + "reading too many bytes:" +
+                                    OString::number(rIn.Tell() - aTxMasterStyleHd.GetRecEndFilePos()));
                     }
                     if ( rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() )
                     {
-                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("\n  "));
-                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("reading too few bytes:"));
-                        aMsg.append(static_cast<sal_Int32>(aTxMasterStyleHd.GetRecEndFilePos() - rIn.Tell()));
+                        aMsg.append("\n  " + "reading too few bytes:" +
+                                    OString::number(aTxMasterStyleHd.GetRecEndFilePos() - rIn.Tell()));
                     }
                     if (aMsg.getLength())
                     {
-                        aMsg.insert(0, RTL_CONSTASCII_STRINGPARAM("]:"));
-                        aMsg.insert(0, RTL_CONSTASCII_STRINGPARAM(
-                            "PptStyleSheet::operator>>["));
+                        aMsg.insert(0, "PptStyleSheet::operator>>[]");
                         OSL_FAIL(aMsg.getStr());
                     }
                 }

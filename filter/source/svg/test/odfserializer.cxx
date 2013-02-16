@@ -76,32 +76,19 @@ void SAL_CALL ODFSerializer::endDocument() throw (xml::sax::SAXException, uno::R
 void SAL_CALL ODFSerializer::startElement( const ::rtl::OUString& aName,
                                            const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException)
 {
-    rtl::OUStringBuffer aElement;
-    aElement.appendAscii("<");
-    aElement.append(aName);
-    aElement.appendAscii(" ");
+    OUStringBuffer aElement("<" + aName + " ");
 
     const sal_Int16 nLen=xAttribs->getLength();
     for( sal_Int16 i=0; i<nLen; ++i )
-    {
-        rtl::OUStringBuffer aAttribute;
-        aElement.append(xAttribs->getNameByIndex(i));
-        aElement.appendAscii("=\"");
-        aElement.append(xAttribs->getValueByIndex(i));
-        aElement.appendAscii("\" ");
-    }
+        aElement.append(xAttribs->getNameByIndex(i) + "=\"" +
+                        xAttribs->getValueByIndex(i) + "\" ");
 
-    aElement.appendAscii(">");
-    characters(aElement.makeStringAndClear());
+    characters(aElement.makeStringAndClear() + ">");
 }
 
 void SAL_CALL ODFSerializer::endElement( const ::rtl::OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException)
 {
-    rtl::OUStringBuffer aElement;
-    aElement.appendAscii("</");
-    aElement.append(aName);
-    aElement.appendAscii(">");
-    characters(aElement.makeStringAndClear());
+    characters("</" + aName + ">");
 }
 
 void SAL_CALL ODFSerializer::characters( const ::rtl::OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException)

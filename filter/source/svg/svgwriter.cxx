@@ -2935,8 +2935,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 SvXMLElementExport aElem( mrExport,
                         XML_NAMESPACE_NONE, "desc", sal_False, sal_False );
-                OUStringBuffer sType;
-                sType.append(static_cast<sal_Int32>(nType));
+                OUStringBuffer sType(OUString::number(nType));
                 if (pAction && (nType == META_COMMENT_ACTION))
                 {
                     sType.append(": ");
@@ -2944,9 +2943,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     rtl::OString sComment = pA->GetComment();
                     if (!sComment.isEmpty())
                     {
-                        OUString ssComment = OUString( sComment.getStr(),
+                        sType.append(OUString( sComment.getStr(),
                                 sComment.getLength(), RTL_TEXTENCODING_UTF8 );
-                        sType.append(ssComment);
                     }
                     if (sComment.equalsIgnoreAsciiCaseL(
                                 RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_BEGIN")))

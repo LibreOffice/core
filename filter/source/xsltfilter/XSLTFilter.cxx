@@ -241,9 +241,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         Exception e;
         if (a >>= e)
         {
-            rtl::OStringBuffer aMessage(RTL_CONSTASCII_STRINGPARAM("XSLTFilter::error was called: "));
-            aMessage.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
-            OSL_FAIL(aMessage.getStr());
+            OSL_FAIL("XSLTFilter::error was called: " + OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
         }
         m_bError = sal_True;
         osl_setCondition(m_cTransformed);
