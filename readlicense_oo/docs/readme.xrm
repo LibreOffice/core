@@ -130,7 +130,7 @@
 			<p id="Precautions" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system, and please ensure that read, write and run access rights have been granted. Close all other programs before starting the installation process.</p>
 			<h3 id="sdfsdfgf42s" xml:lang="en-US">Installation of ${PRODUCTNAME} on Debian/Ubuntu-based Linux systems</h3>
 			<p id="debianinstall1" xml:lang="en-US">If you have a previous version of ${PRODUCTNAME} already installed, then you will need to de-install it before proceeding further. For instructions on how to install a language pack (after having installed the US English version of ${PRODUCTNAME}), please read the section below entitled Installing a Language Pack.</p>
-			<p id="debianinstall2" xml:lang="en-US">When you unpack the downloaded archive, you will see that the contents have been decompressed into a sub-directory. Open a file manager window, and change directory to the one starting with "LibO_", followed by the version number and some platform information.</p>
+			<p id="debianinstall2" xml:lang="en-US">When you unpack the downloaded archive, you will see that the contents have been decompressed into a sub-directory. Open a file manager window, and change directory to the one starting with "LibreOffice_", followed by the version number and some platform information.</p>
 			<p id="debianinstall3" xml:lang="en-US">This directory contains a subdirectory called "DEBS". Change directory to the "DEBS" directory.</p>
 			<p id="debianinstall4" xml:lang="en-US">Right-click within the directory and choose "Open in Terminal". A terminal window will open. From the command line of the terminal window, enter the following command (you will be prompted to enter your root user's password before the command will execute):</p>
 			<p id="debianinstall5" xml:lang="en-US">sudo dpkg -i *.deb</p>
@@ -139,14 +139,14 @@
 			<p id="debianinstall8" xml:lang="en-US">Now run the dpkg command again:</p>
 			<p id="debianinstall9" xml:lang="en-US">sudo dpkg -i *.deb</p>
 			<p id="debianinstallA" xml:lang="en-US">The installation process is now completed, and you should have icons for all the ${PRODUCTNAME} applications in your desktop's Applications/Office menu.</p>
-			<h3 id="sdfsdfgf42t" xml:lang="en-US">Installation of ${PRODUCTNAME} on Fedora, Suse, Mandriva and other Linux systems using RPM packages</h3>
+			<h3 id="sdfsdfgf42t" xml:lang="en-US">Installation of ${PRODUCTNAME} on Fedora, openSUSE, Mandriva and other Linux systems using RPM packages</h3>
 			<p id="rpminstall1" xml:lang="en-US">If you have a previous version of ${PRODUCTNAME} already installed, then you will need to de-install it before proceeding further. For instructions on how to install a language pack (after having installed the US English version of ${PRODUCTNAME}), please read the section below entitled Installing a Language Pack.</p>
-			<p id="rpminstall2" xml:lang="en-US">When you unpack the downloaded archive, you will see that the contents have been decompressed into a sub-directory. Open a file manager window, and change directory to the one starting with "LibO_", followed by the version number and some platform information.</p>
+			<p id="rpminstall2" xml:lang="en-US">When you unpack the downloaded archive, you will see that the contents have been decompressed into a sub-directory. Open a file manager window, and change directory to the one starting with "LibreOffice_", followed by the version number and some platform information.</p>
 			<p id="rpminstall3" xml:lang="en-US">This directory contains a subdirectory called "RPMS". Change directory to the "RPMS" directory.</p>
 			<p id="rpminstall4" xml:lang="en-US">Right-click within the directory and choose "Open in Terminal". A terminal window will open. From the command line of the terminal window, enter the following command (you will be prompted to enter your root user's password before the command will execute):</p>
 			<p id="rpminstall5" xml:lang="en-US">For Fedora-based systems: su -c 'yum install *.rpm'</p>
 			<p id="rpminstall6" xml:lang="en-US">For Mandriva-based systems: sudo urpmi *.rpm</p>
-			<p id="rpminstall7" xml:lang="en-US">For other RPM-based systems (Suse, etc.): rpm -Uvh *.rpm</p>
+			<p id="rpminstall7" xml:lang="en-US">For other RPM-based systems (openSUSE, etc.): rpm -Uvh *.rpm</p>
 			<p id="rpminstall7a" xml:lang="en-US">Alternatively, you can use the 'install' script, located in the toplevel directory of this archive to perform an installation as a user. The script will set up ${PRODUCTNAME} to have its own profile for this installation, separated from your normal ${PRODUCTNAME} profile.</p>
 			<p id="rpminstall8" xml:lang="en-US">The above command does the first part of the installation process. To complete the process, you also need to install the desktop integration packages. To do this, change directory to the "desktop-integration" directory that is within the "RPMS" directory, using the following command:</p>
 			<p id="rpminstall9" xml:lang="en-US">cd desktop-integration</p>
@@ -162,13 +162,13 @@
 			<h3 id="sdfsdfgf42t3" xml:lang="en-US">Installing a Language Pack</h3>
 			<p id="linuxlangpack1" xml:lang="en-US">Download the language pack for your desired language and platform. They are available from the same location as the main installation archive. From the Nautilus file manager, extract the downloaded archive into a directory (your desktop, for instance). Ensure that you have exited all ${PRODUCTNAME} applications (including the QuickStarter, if it is started).</p>
 			<p id="linuxlangpack2" xml:lang="en-US">Change directory to the directory in which you extracted your downloaded language pack.</p>
-			<p id="linuxlangpack3" xml:lang="en-US">Now change directory to the directory that was created during the extraction process. For instance, for the French language pack for a 32-bit Debian/Ubuntu-based system, the directory is named LibO_, plus some version information, plus Linux_x86_langpack-deb_fr.</p>
-			<p id="linuxlangpack4" xml:lang="en-US">Now change directory to the directory that contains the packages to install. On Debian/Ubuntu-based systems, the directory will be DEBS. On Fedora, Suse or Mandriva systems, the directory will be RPMS.</p>
+			<p id="linuxlangpack3" xml:lang="en-US">Now change directory to the directory that was created during the extraction process. For instance, for the French language pack for a 32-bit Debian/Ubuntu-based system, the directory is named LibreOffice_, plus some version information, plus Linux_x86_langpack-deb_fr.</p>
+			<p id="linuxlangpack4" xml:lang="en-US">Now change directory to the directory that contains the packages to install. On Debian/Ubuntu-based systems, the directory will be DEBS. On Fedora, openSUSE or Mandriva systems, the directory will be RPMS.</p>
 			<p id="linuxlangpack5" xml:lang="en-US">From the Nautilus file manager, right-click in the directory and choose the command "Open in terminal". In the terminal window you just opened, execute the command to install the language pack (with all of the commands below, you may be prompted to enter your root user's password):</p>
 			<p id="linuxlangpack6" xml:lang="en-US">For Debian/Ubuntu-based systems: sudo dpkg -i *.deb</p>
 			<p id="linuxlangpack7" xml:lang="en-US">For Fedora-based systems: su -c 'yum install *.rpm'</p>
 			<p id="linuxlangpack8" xml:lang="en-US">For Mandriva-based systems: sudo urpmi *.rpm</p>
-			<p id="linuxlangpack9" xml:lang="en-US">For other RPM-using systems (Suse, etc.): rpm -Uvh *.rpm</p>
+			<p id="linuxlangpack9" xml:lang="en-US">For other RPM-using systems (openSUSE, etc.): rpm -Uvh *.rpm</p>
 			<p id="linuxlangpackA" xml:lang="en-US">Now start one of the ${PRODUCTNAME} applications - Writer, for instance. Go to the Tools menu and choose Options. In the Options dialog box, click on "Language Settings" and then click on "Languages". Dropdown the "User interface" list and select the language you just installed. If you want, do the same thing for the "Locale setting", the "Default currency", and the "Default languages for documents".</p>
 			<p id="linuxlangpackB" xml:lang="en-US">After adjusting those settings, click on OK. The dialog box will close, and you will see an information message telling you that your changes will only be activated after you exit ${PRODUCTNAME} and start it again (remember to also exit the QuickStarter if it is started).</p>
 			<p id="linuxlangpackC" xml:lang="en-US">The next time you start ${PRODUCTNAME}, it will start in the language you just installed.</p>
