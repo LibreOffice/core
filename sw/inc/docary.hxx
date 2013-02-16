@@ -44,6 +44,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 }}}}
 
 #include <swtypes.hxx>
+#include <ndarr.hxx>
 
 /** provides some methods for generic operations on lists that contain
 SwFmt* subclasses. */
@@ -114,6 +115,7 @@ public:
     /// the destructor will free all objects still in the vector
     ~SwFldTypes();
     sal_uInt16 GetPos(const SwFieldType* pFieldType) const;
+    void dumpAsXml(xmlTextWriterPtr w);
 };
 
 class SwTOXTypes : public std::vector<SwTOXType*> {

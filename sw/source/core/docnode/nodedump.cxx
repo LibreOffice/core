@@ -29,6 +29,10 @@
 #include "doc.hxx"
 #include "ndtxt.hxx"
 #include "MarkManager.hxx"
+#include "docary.hxx"
+#include "switerator.hxx"
+#include "fmtfld.hxx"
+#include "docufld.hxx"
 
 #include <libxml/encoding.h>
 #include <libxml/xmlwriter.h>
@@ -117,6 +121,7 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     writer.writeFormatAttribute( "ptr", "%p", this );
     m_pNodes->dumpAsXml( writer );
     pMarkManager->dumpAsXml( writer );
+    pFldTypes->dumpAsXml( writer );
     writer.endElement();
 }
 
@@ -144,6 +149,45 @@ void MarkManager::dumpAsXml( xmlTextWriterPtr w )
 }
 } // namespace mark
 } // namespace sw
+
+void SwFldTypes::dumpAsXml( xmlTextWriterPtr w )
+{
+    WriterHelper writer(w);
+    writer.startElement("swfldtypes");
+    sal_uInt16 nCount = size();
+    for (sal_uInt16 nType = 0; nType < nCount; ++nType)
+    {
+        const SwFieldType *pCurType = (*this)[nType];
+        SwIterator<SwFmtFld, SwFieldType> aIter(*pCurType);
+        for (const SwFmtFld* pCurFldFmt = aIter.First(); pCurFldFmt; pCurFldFmt = aIter.Next())
+        {
+            writer.startElement("swfmtfld");
+            writer.writeFormatAttribute("ptr", "%p", pCurFldFmt);
+            writer.writeFormatAttribute("pTxtAttr", "%p", pCurFldFmt->GetTxtFld());
+            const char* name = "???";
+            switch(pCurFldFmt->GetFld()->GetTyp()->Which())
+            {
+                case RES_POSTITFLD:
+                    name = "swpostitfield";
+                    break;
+                default:
+                    SAL_INFO("sw.core", "unhandled field type " << pCurFldFmt->GetFld()->GetTyp()->Which());
+                    break;
+            }
+            writer.startElement(name);
+            writer.writeFormatAttribute("ptr", "%p", pCurFldFmt->GetFld());
+            if (pCurFldFmt->GetFld()->GetTyp()->Which() == RES_POSTITFLD)
+            {
+                const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pCurFldFmt->GetFld());
+                OString txt8 = OUStringToOString(pField->GetName(), RTL_TEXTENCODING_UTF8);
+                writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
+            }
+            writer.endElement();
+            writer.endElement();
+        }
+    }
+    writer.endElement();
+}
 
 void SwNodes::dumpAsXml( xmlTextWriterPtr w )
 {
