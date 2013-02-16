@@ -43,6 +43,12 @@
     pSocket = NULL;
 }
 
+// The Xcode 3 compiler warns if we don't implement all methods of the
+// IOBluetoothRFCOMMChannelDelegate protocol. In later SDKs they are
+// marked as @optional.
+
+#pragma GCC diagnostic ignored "-Wprotocol"
+
 @end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
