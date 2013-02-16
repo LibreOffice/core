@@ -4113,12 +4113,12 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     OStringBuffer aMsg;
                     if ( rIn.Tell() > aTxMasterStyleHd.GetRecEndFilePos() )
                     {
-                        aMsg.append("\n  " + "reading too many bytes:" +
+                        aMsg.append("\n  reading too many bytes:" +
                                     OString::number(rIn.Tell() - aTxMasterStyleHd.GetRecEndFilePos()));
                     }
                     if ( rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() )
                     {
-                        aMsg.append("\n  " + "reading too few bytes:" +
+                        aMsg.append("\n  reading too few bytes:" +
                                     OString::number(aTxMasterStyleHd.GetRecEndFilePos() - rIn.Tell()));
                     }
                     if (aMsg.getLength())

@@ -2943,8 +2943,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     rtl::OString sComment = pA->GetComment();
                     if (!sComment.isEmpty())
                     {
-                        sType.append(OUString( sComment.getStr(),
-                                sComment.getLength(), RTL_TEXTENCODING_UTF8 );
+                        sType.append(OStringToOUString(
+                                        sComment, RTL_TEXTENCODING_UTF8));
                     }
                     if (sComment.equalsIgnoreAsciiCaseL(
                                 RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_BEGIN")))
