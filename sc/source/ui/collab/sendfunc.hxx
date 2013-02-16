@@ -34,17 +34,12 @@ ScBaseCell *stringToCell( const rtl::OUString &rString )
 // method name ';' then arguments ; separated
 class ScChangeOpWriter
 {
-    rtl::OUStringBuffer aMessage;
-    void appendSeparator()
-    {
-        aMessage.append( sal_Unicode( ';' ) );
-    }
+    OUStringBuffer aMessage;
 
 public:
     ScChangeOpWriter( const char *pName )
     {
-        aMessage.appendAscii( pName );
-        appendSeparator();
+        aMessage.append( OUString(pName ) + ";");
     }
 
     void appendString( const rtl::OUString &rStr )
@@ -58,27 +53,24 @@ public:
         }
         else
             aMessage.append( rStr );
-        appendSeparator();
+        aMessage.append(";");
     }
 
     void appendAddress( const ScAddress &rPos )
     {
-        rtl::OUString aStr;
+        OUString aStr;
         rPos.Format( aStr, SCA_VALID );
-        aMessage.append( aStr );
-        appendSeparator();
+        aMessage.append( aStr + ";" );
     }
 
     void appendInt( sal_Int32 i )
     {
-        aMessage.append( i );
-        appendSeparator();
+        aMessage.append( OUString::number(i) + ";" );
     }
 
     void appendBool( sal_Bool b )
     {
-        aMessage.appendAscii( b ? "true" : "false" );
-        appendSeparator();
+        aMessage.append( OUString(b ? "true" : "false" ) + ";";
     }
 
     void appendCell( ScBaseCell *pCell )
