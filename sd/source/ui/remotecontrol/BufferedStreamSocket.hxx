@@ -38,7 +38,7 @@ namespace sd
              */
             BufferedStreamSocket( const osl::StreamSocket &aSocket );
             /**
-             * Create a BufferedStreamSocket on top of a standard c socket.
+             * Create a BufferedStreamSocket on top of a POSIX or WinSock socket.
              */
             BufferedStreamSocket( int aSocket );
             BufferedStreamSocket( const BufferedStreamSocket &aSocket );
