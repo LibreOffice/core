@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///2k\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 7192,
+      "author": {
+        "id": 1000024
+      },
+      "writtenOn": "2013-02-16T22:27:26Z",
+      "side": 1,
+      "message": "You AC SUBST CLUCENE_LIBS here, but is modified later.",
+      "revId": "34030a3519d4f558e9c7237862da9c88553722b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
