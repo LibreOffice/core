@@ -1715,7 +1715,7 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
                 if ( bHasChild && nUserSubCount > 1 )
                 {
                     aSubState.nRowSubTotalFunc = nUserPos;
-                    aSubState.eRowForce = lcl_GetForceFunc( /*pParentLevel*/GetParentLevel(), nUserPos );
+                    aSubState.eRowForce = lcl_GetForceFunc(GetParentLevel(), nUserPos);
                 }
 
                 for ( long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
@@ -1725,8 +1725,9 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
                     else if ( pResultData->GetColStartMeasure() == SC_DPMEASURE_ALL )
                         nMemberMeasure = SC_DPMEASURE_ALL;
 
-                    pDataRoot->UpdateRunningTotals( pRefMember, nMemberMeasure,
-                                        bHasChild, aSubState, rRunning, rTotals, *this );
+                    if (pRefMember->IsVisible())
+                        pDataRoot->UpdateRunningTotals(
+                            pRefMember, nMemberMeasure, bHasChild, aSubState, rRunning, rTotals, *this);
                 }
             }
         }
@@ -2221,380 +2222,377 @@ void ScDPDataMember::UpdateRunningTotals(
 {
     OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
 
-    if ( pRefMember->IsVisible() )  //! here or in ScDPDataDimension::UpdateRunningTotals ???
+    const ScDPDataDimension* pDataChild = GetChildDimension();
+    const ScDPResultDimension* pRefChild = pRefMember->GetChildDimension();
+
+    bool bIsRoot = ( pResultMember == NULL || pResultMember->GetParentLevel() == NULL );
+
+    //  leave space for children even if the DataMember hasn't been initialized
+    //  (pDataChild is null then, this happens when no values for it are in this row)
+    bool bHasChild = ( pRefChild != NULL );
+
+    long nUserSubCount = pRefMember->GetSubTotalCount();
     {
-        const ScDPDataDimension* pDataChild = GetChildDimension();
-        const ScDPResultDimension* pRefChild = pRefMember->GetChildDimension();
+        // Calculate at least automatic if no subtotals are selected,
+        // show only own values if there's no child dimension (innermost).
+        if ( !nUserSubCount || !bHasChild )
+            nUserSubCount = 1;
 
-        bool bIsRoot = ( pResultMember == NULL || pResultMember->GetParentLevel() == NULL );
+        ScDPSubTotalState aLocalSubState(rSubState);        // keep row state, modify column
 
-        //  leave space for children even if the DataMember hasn't been initialized
-        //  (pDataChild is null then, this happens when no values for it are in this row)
-        bool bHasChild = ( pRefChild != NULL );
+        long nMemberMeasure = nMeasure;
+        long nSubSize = pResultData->GetCountForMeasure(nMeasure);
 
-        long nUserSubCount = pRefMember->GetSubTotalCount();
+        for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
         {
-            // Calculate at least automatic if no subtotals are selected,
-            // show only own values if there's no child dimension (innermost).
-            if ( !nUserSubCount || !bHasChild )
-                nUserSubCount = 1;
-
-            ScDPSubTotalState aLocalSubState(rSubState);        // keep row state, modify column
-
-            long nMemberMeasure = nMeasure;
-            long nSubSize = pResultData->GetCountForMeasure(nMeasure);
-
-            for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
+            if ( pChildDimension && nUserSubCount > 1 )
             {
-                if ( pChildDimension && nUserSubCount > 1 )
-                {
-                    const ScDPLevel* pForceLevel = pResultMember ? pResultMember->GetParentLevel() : NULL;
-                    aLocalSubState.nColSubTotalFunc = nUserPos;
-                    aLocalSubState.eColForce = lcl_GetForceFunc( pForceLevel, nUserPos );
-                }
+                const ScDPLevel* pForceLevel = pResultMember ? pResultMember->GetParentLevel() : NULL;
+                aLocalSubState.nColSubTotalFunc = nUserPos;
+                aLocalSubState.eColForce = lcl_GetForceFunc( pForceLevel, nUserPos );
+            }
 
-                for ( long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
-                {
-                    if ( nMeasure == SC_DPMEASURE_ALL )
-                        nMemberMeasure = nSubCount;
+            for ( long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
+            {
+                if ( nMeasure == SC_DPMEASURE_ALL )
+                    nMemberMeasure = nSubCount;
 
-                    // update data...
-                    ScDPAggData* pAggData = GetAggData( nMemberMeasure, aLocalSubState );
-                    if (pAggData)
+                // update data...
+                ScDPAggData* pAggData = GetAggData( nMemberMeasure, aLocalSubState );
+                if (pAggData)
+                {
+                    //! aLocalSubState?
+                    sheet::DataPilotFieldReference aReferenceValue = pResultData->GetMeasureRefVal( nMemberMeasure );
+                    sal_Int32 eRefType = aReferenceValue.ReferenceType;
+
+                    if ( eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL ||
+                         eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE ||
+                         eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE ||
+                         eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE )
                     {
+                        bool bRunningTotal = ( eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL );
+                        bool bRelative =
+                            ( aReferenceValue.ReferenceItemType != sheet::DataPilotFieldReferenceItemType::NAMED && !bRunningTotal );
+                        long nRelativeDir = bRelative ?
+                            ( ( aReferenceValue.ReferenceItemType == sheet::DataPilotFieldReferenceItemType::PREVIOUS ) ? -1 : 1 ) : 0;
+
+                        const ScDPRunningTotalState::IndexArray& rColVisible = rRunning.GetColVisible();
+                        const ScDPRunningTotalState::IndexArray& rColSorted = rRunning.GetColSorted();
+                        const ScDPRunningTotalState::IndexArray& rRowVisible = rRunning.GetRowVisible();
+                        const ScDPRunningTotalState::IndexArray& rRowSorted = rRunning.GetRowSorted();
+
+                        String aRefFieldName = aReferenceValue.ReferenceField;
+
                         //! aLocalSubState?
-                        sheet::DataPilotFieldReference aReferenceValue = pResultData->GetMeasureRefVal( nMemberMeasure );
-                        sal_Int32 eRefType = aReferenceValue.ReferenceType;
+                        sal_uInt16 nRefOrient = pResultData->GetMeasureRefOrient( nMemberMeasure );
+                        bool bRefDimInCol = ( nRefOrient == sheet::DataPilotFieldOrientation_COLUMN );
+                        bool bRefDimInRow = ( nRefOrient == sheet::DataPilotFieldOrientation_ROW );
 
-                        if ( eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL ||
-                             eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE ||
-                             eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE ||
-                             eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE )
+                        ScDPResultDimension* pSelectDim = NULL;
+                        long nRowPos = 0;
+                        long nColPos = 0;
+
+                        //
+                        //  find the reference field in column or row dimensions
+                        //
+
+                        if ( bRefDimInRow )     //  look in row dimensions
                         {
-                            bool bRunningTotal = ( eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL );
-                            bool bRelative =
-                                ( aReferenceValue.ReferenceItemType != sheet::DataPilotFieldReferenceItemType::NAMED && !bRunningTotal );
-                            long nRelativeDir = bRelative ?
-                                ( ( aReferenceValue.ReferenceItemType == sheet::DataPilotFieldReferenceItemType::PREVIOUS ) ? -1 : 1 ) : 0;
-
-                            const ScDPRunningTotalState::IndexArray& rColVisible = rRunning.GetColVisible();
-                            const ScDPRunningTotalState::IndexArray& rColSorted = rRunning.GetColSorted();
-                            const ScDPRunningTotalState::IndexArray& rRowVisible = rRunning.GetRowVisible();
-                            const ScDPRunningTotalState::IndexArray& rRowSorted = rRunning.GetRowSorted();
-
-                            String aRefFieldName = aReferenceValue.ReferenceField;
-
-                            //! aLocalSubState?
-                            sal_uInt16 nRefOrient = pResultData->GetMeasureRefOrient( nMemberMeasure );
-                            bool bRefDimInCol = ( nRefOrient == sheet::DataPilotFieldOrientation_COLUMN );
-                            bool bRefDimInRow = ( nRefOrient == sheet::DataPilotFieldOrientation_ROW );
-
-                            ScDPResultDimension* pSelectDim = NULL;
-                            long nRowPos = 0;
-                            long nColPos = 0;
-
-                            //
-                            //  find the reference field in column or row dimensions
-                            //
-
-                            if ( bRefDimInRow )     //  look in row dimensions
+                            pSelectDim = rRunning.GetRowResRoot()->GetChildDimension();
+                            while ( pSelectDim && pSelectDim->GetName() != aRefFieldName )
                             {
-                                pSelectDim = rRunning.GetRowResRoot()->GetChildDimension();
-                                while ( pSelectDim && pSelectDim->GetName() != aRefFieldName )
-                                {
-                                    long nIndex = rRowSorted[nRowPos];
-                                    if ( nIndex >= 0 && nIndex < pSelectDim->GetMemberCount() )
-                                        pSelectDim = pSelectDim->GetMember(nIndex)->GetChildDimension();
-                                    else
-                                        pSelectDim = NULL;
-                                    ++nRowPos;
-                                }
-                                // child dimension of innermost member?
-                                if ( pSelectDim && rRowSorted[nRowPos] < 0 )
-                                    pSelectDim = NULL;
-                            }
-
-                            if ( bRefDimInCol )     //  look in column dimensions
-                            {
-                                pSelectDim = rRunning.GetColResRoot()->GetChildDimension();
-                                while ( pSelectDim && pSelectDim->GetName() != aRefFieldName )
-                                {
-                                    long nIndex = rColSorted[nColPos];
-                                    if ( nIndex >= 0 && nIndex < pSelectDim->GetMemberCount() )
-                                        pSelectDim = pSelectDim->GetMember(nIndex)->GetChildDimension();
-                                    else
-                                        pSelectDim = NULL;
-                                    ++nColPos;
-                                }
-                                // child dimension of innermost member?
-                                if ( pSelectDim && rColSorted[nColPos] < 0 )
-                                    pSelectDim = NULL;
-                            }
-
-                            bool bNoDetailsInRef = false;
-                            if ( pSelectDim && bRunningTotal )
-                            {
-                                //  Running totals:
-                                //  If details are hidden for this member in the reference dimension,
-                                //  don't show or sum up the value. Otherwise, for following members,
-                                //  the running totals of details and subtotals wouldn't match.
-
-                                long nMyIndex = bRefDimInCol ? rColSorted[nColPos] : rRowSorted[nRowPos];
-                                if ( nMyIndex >= 0 && nMyIndex < pSelectDim->GetMemberCount() )
-                                {
-                                    const ScDPResultMember* pMyRefMember = pSelectDim->GetMember(nMyIndex);
-                                    if ( pMyRefMember && pMyRefMember->HasHiddenDetails() )
-                                    {
-                                        pSelectDim = NULL;          // don't calculate
-                                        bNoDetailsInRef = true;     // show error, not empty
-                                    }
-                                }
-                            }
-
-                            if ( bRelative )
-                            {
-                                //  Difference/Percentage from previous/next:
-                                //  If details are hidden for this member in the innermost column/row
-                                //  dimension (the orientation of the reference dimension), show an
-                                //  error value.
-                                //  - If the no-details dimension is the reference dimension, its
-                                //    members will be skipped when finding the previous/next member,
-                                //    so there must be no results for its members.
-                                //  - If the no-details dimension is outside of the reference dimension,
-                                //    no calculation in the reference dimension is possible.
-                                //  - Otherwise, the error isn't strictly necessary, but shown for
-                                //    consistency.
-
-                                bool bInnerNoDetails = bRefDimInCol ? HasHiddenDetails() :
-                                                     ( bRefDimInRow ? rRowParent.HasHiddenDetails() : true );
-                                if ( bInnerNoDetails )
-                                {
-                                    pSelectDim = NULL;
-                                    bNoDetailsInRef = true;         // show error, not empty
-                                }
-                            }
-
-                            if ( !bRefDimInCol && !bRefDimInRow )   // invalid dimension specified
-                                bNoDetailsInRef = true;             // pSelectDim is then already NULL
-
-                            //
-                            //  get the member for the reference item and do the calculation
-                            //
-
-                            if ( bRunningTotal )
-                            {
-                                // running total in (dimension) -> find first existing member
-
-                                if ( pSelectDim )
-                                {
-                                    ScDPDataMember* pSelectMember;
-                                    if ( bRefDimInCol )
-                                        pSelectMember = ScDPResultDimension::GetColReferenceMember( NULL, NULL,
-                                                                        nColPos, rRunning );
-                                    else
-                                    {
-                                        const long* pRowSorted = &rRowSorted[0];
-                                        const long* pColSorted = &rColSorted[0];
-                                        pRowSorted += nRowPos + 1; // including the reference dimension
-                                        pSelectMember = pSelectDim->GetRowReferenceMember(
-                                            NULL, NULL, pRowSorted, pColSorted);
-                                    }
-
-                                    if ( pSelectMember )
-                                    {
-                                        // The running total is kept as the auxiliary value in
-                                        // the first available member for the reference dimension.
-                                        // Members are visited in final order, so each one's result
-                                        // can be used and then modified.
-
-                                        ScDPAggData* pSelectData = pSelectMember->
-                                                        GetAggData( nMemberMeasure, aLocalSubState );
-                                        if ( pSelectData )
-                                        {
-                                            double fTotal = pSelectData->GetAuxiliary();
-                                            fTotal += pAggData->GetResult();
-                                            pSelectData->SetAuxiliary( fTotal );
-                                            pAggData->SetResult( fTotal );
-                                            pAggData->SetEmpty(false);              // always display
-                                        }
-                                    }
-                                    else
-                                        pAggData->SetError();
-                                }
-                                else if (bNoDetailsInRef)
-                                    pAggData->SetError();
+                                long nIndex = rRowSorted[nRowPos];
+                                if ( nIndex >= 0 && nIndex < pSelectDim->GetMemberCount() )
+                                    pSelectDim = pSelectDim->GetMember(nIndex)->GetChildDimension();
                                 else
-                                    pAggData->SetEmpty(true);                       // empty (dim set to 0 above)
+                                    pSelectDim = NULL;
+                                ++nRowPos;
                             }
-                            else
+                            // child dimension of innermost member?
+                            if ( pSelectDim && rRowSorted[nRowPos] < 0 )
+                                pSelectDim = NULL;
+                        }
+
+                        if ( bRefDimInCol )     //  look in column dimensions
+                        {
+                            pSelectDim = rRunning.GetColResRoot()->GetChildDimension();
+                            while ( pSelectDim && pSelectDim->GetName() != aRefFieldName )
                             {
-                                // difference/percentage -> find specified member
-
-                                if ( pSelectDim )
-                                {
-                                    OUString aRefItemName = aReferenceValue.ReferenceItemName;
-                                    ScDPRelativePos aRefItemPos( 0, nRelativeDir );     // nBasePos is modified later
-
-                                    const OUString* pRefName = NULL;
-                                    const ScDPRelativePos* pRefPos = NULL;
-                                    if ( bRelative )
-                                        pRefPos = &aRefItemPos;
-                                    else
-                                        pRefName = &aRefItemName;
-
-                                    ScDPDataMember* pSelectMember;
-                                    if ( bRefDimInCol )
-                                    {
-                                        aRefItemPos.nBasePos = rColVisible[nColPos];    // without sort order applied
-                                        pSelectMember = ScDPResultDimension::GetColReferenceMember( pRefPos, pRefName,
-                                                                        nColPos, rRunning );
-                                    }
-                                    else
-                                    {
-                                        aRefItemPos.nBasePos = rRowVisible[nRowPos];    // without sort order applied
-                                        const long* pRowSorted = &rRowSorted[0];
-                                        const long* pColSorted = &rColSorted[0];
-                                        pRowSorted += nRowPos + 1; // including the reference dimension
-                                        pSelectMember = pSelectDim->GetRowReferenceMember(
-                                            pRefPos, pRefName, pRowSorted, pColSorted);
-                                    }
-
-                                    // difference or perc.difference is empty for the reference item itself
-                                    if ( pSelectMember == this &&
-                                         eRefType != sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE )
-                                    {
-                                        pAggData->SetEmpty(true);
-                                    }
-                                    else if ( pSelectMember )
-                                    {
-                                        const ScDPAggData* pOtherAggData = pSelectMember->
-                                                            GetConstAggData( nMemberMeasure, aLocalSubState );
-                                        OSL_ENSURE( pOtherAggData, "no agg data" );
-                                        if ( pOtherAggData )
-                                        {
-                                            // Reference member may be visited before or after this one,
-                                            // so the auxiliary value is used for the original result.
-
-                                            double fOtherResult = pOtherAggData->GetAuxiliary();
-                                            double fThisResult = pAggData->GetResult();
-                                            bool bError = false;
-                                            switch ( eRefType )
-                                            {
-                                                case sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE:
-                                                    fThisResult = fThisResult - fOtherResult;
-                                                    break;
-                                                case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE:
-                                                    if ( fOtherResult == 0.0 )
-                                                        bError = true;
-                                                    else
-                                                        fThisResult = fThisResult / fOtherResult;
-                                                    break;
-                                                case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE:
-                                                    if ( fOtherResult == 0.0 )
-                                                        bError = true;
-                                                    else
-                                                        fThisResult = ( fThisResult - fOtherResult ) / fOtherResult;
-                                                    break;
-                                                default:
-                                                    OSL_FAIL("invalid calculation type");
-                                            }
-                                            if ( bError )
-                                            {
-                                                pAggData->SetError();
-                                            }
-                                            else
-                                            {
-                                                pAggData->SetResult(fThisResult);
-                                                pAggData->SetEmpty(false);              // always display
-                                            }
-                                            //! errors in data?
-                                        }
-                                    }
-                                    else if (bRelative && !bNoDetailsInRef)
-                                        pAggData->SetEmpty(true);                   // empty
-                                    else
-                                        pAggData->SetError();                       // error
-                                }
-                                else if (bNoDetailsInRef)
-                                    pAggData->SetError();                           // error
+                                long nIndex = rColSorted[nColPos];
+                                if ( nIndex >= 0 && nIndex < pSelectDim->GetMemberCount() )
+                                    pSelectDim = pSelectDim->GetMember(nIndex)->GetChildDimension();
                                 else
-                                    pAggData->SetEmpty(true);                       // empty
+                                    pSelectDim = NULL;
+                                ++nColPos;
+                            }
+                            // child dimension of innermost member?
+                            if ( pSelectDim && rColSorted[nColPos] < 0 )
+                                pSelectDim = NULL;
+                        }
+
+                        bool bNoDetailsInRef = false;
+                        if ( pSelectDim && bRunningTotal )
+                        {
+                            //  Running totals:
+                            //  If details are hidden for this member in the reference dimension,
+                            //  don't show or sum up the value. Otherwise, for following members,
+                            //  the running totals of details and subtotals wouldn't match.
+
+                            long nMyIndex = bRefDimInCol ? rColSorted[nColPos] : rRowSorted[nRowPos];
+                            if ( nMyIndex >= 0 && nMyIndex < pSelectDim->GetMemberCount() )
+                            {
+                                const ScDPResultMember* pMyRefMember = pSelectDim->GetMember(nMyIndex);
+                                if ( pMyRefMember && pMyRefMember->HasHiddenDetails() )
+                                {
+                                    pSelectDim = NULL;          // don't calculate
+                                    bNoDetailsInRef = true;     // show error, not empty
+                                }
                             }
                         }
-                        else if ( eRefType == sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE ||
-                                  eRefType == sheet::DataPilotFieldReferenceType::COLUMN_PERCENTAGE ||
-                                  eRefType == sheet::DataPilotFieldReferenceType::TOTAL_PERCENTAGE ||
-                                  eRefType == sheet::DataPilotFieldReferenceType::INDEX )
+
+                        if ( bRelative )
                         {
-                            //
-                            //  set total values when they are encountered (always before their use)
-                            //
+                            //  Difference/Percentage from previous/next:
+                            //  If details are hidden for this member in the innermost column/row
+                            //  dimension (the orientation of the reference dimension), show an
+                            //  error value.
+                            //  - If the no-details dimension is the reference dimension, its
+                            //    members will be skipped when finding the previous/next member,
+                            //    so there must be no results for its members.
+                            //  - If the no-details dimension is outside of the reference dimension,
+                            //    no calculation in the reference dimension is possible.
+                            //  - Otherwise, the error isn't strictly necessary, but shown for
+                            //    consistency.
 
-                            ScDPAggData* pColTotalData = pRefMember->GetColTotal( nMemberMeasure );
-                            ScDPAggData* pRowTotalData = rTotals.GetRowTotal( nMemberMeasure );
-                            ScDPAggData* pGrandTotalData = rTotals.GetGrandTotal( nMemberMeasure );
-
-                            double fTotalValue = pAggData->HasError() ? 0 : pAggData->GetResult();
-
-                            if ( bIsRoot && rTotals.IsInColRoot() && pGrandTotalData )
-                                pGrandTotalData->SetAuxiliary( fTotalValue );
-
-                            if ( bIsRoot && pRowTotalData )
-                                pRowTotalData->SetAuxiliary( fTotalValue );
-
-                            if ( rTotals.IsInColRoot() && pColTotalData )
-                                pColTotalData->SetAuxiliary( fTotalValue );
-
-                            //
-                            //  find relation to total values
-                            //
-
-                            switch ( eRefType )
+                            bool bInnerNoDetails = bRefDimInCol ? HasHiddenDetails() :
+                                                 ( bRefDimInRow ? rRowParent.HasHiddenDetails() : true );
+                            if ( bInnerNoDetails )
                             {
-                                case sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE:
-                                case sheet::DataPilotFieldReferenceType::COLUMN_PERCENTAGE:
-                                case sheet::DataPilotFieldReferenceType::TOTAL_PERCENTAGE:
-                                    {
-                                        double nTotal;
-                                        if ( eRefType == sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE )
-                                            nTotal = pRowTotalData->GetAuxiliary();
-                                        else if ( eRefType == sheet::DataPilotFieldReferenceType::COLUMN_PERCENTAGE )
-                                            nTotal = pColTotalData->GetAuxiliary();
-                                        else
-                                            nTotal = pGrandTotalData->GetAuxiliary();
-
-                                        if ( nTotal == 0.0 )
-                                            pAggData->SetError();
-                                        else
-                                            pAggData->SetResult( pAggData->GetResult() / nTotal );
-                                    }
-                                    break;
-                                case sheet::DataPilotFieldReferenceType::INDEX:
-                                    {
-                                        double nColTotal = pColTotalData->GetAuxiliary();
-                                        double nRowTotal = pRowTotalData->GetAuxiliary();
-                                        double nGrandTotal = pGrandTotalData->GetAuxiliary();
-                                        if ( nRowTotal == 0.0 || nColTotal == 0.0 )
-                                            pAggData->SetError();
-                                        else
-                                            pAggData->SetResult(
-                                                ( pAggData->GetResult() * nGrandTotal ) /
-                                                ( nRowTotal * nColTotal ) );
-                                    }
-                                    break;
+                                pSelectDim = NULL;
+                                bNoDetailsInRef = true;         // show error, not empty
                             }
+                        }
+
+                        if ( !bRefDimInCol && !bRefDimInRow )   // invalid dimension specified
+                            bNoDetailsInRef = true;             // pSelectDim is then already NULL
+
+                        //
+                        //  get the member for the reference item and do the calculation
+                        //
+
+                        if ( bRunningTotal )
+                        {
+                            // running total in (dimension) -> find first existing member
+
+                            if ( pSelectDim )
+                            {
+                                ScDPDataMember* pSelectMember;
+                                if ( bRefDimInCol )
+                                    pSelectMember = ScDPResultDimension::GetColReferenceMember( NULL, NULL,
+                                                                    nColPos, rRunning );
+                                else
+                                {
+                                    const long* pRowSorted = &rRowSorted[0];
+                                    const long* pColSorted = &rColSorted[0];
+                                    pRowSorted += nRowPos + 1; // including the reference dimension
+                                    pSelectMember = pSelectDim->GetRowReferenceMember(
+                                        NULL, NULL, pRowSorted, pColSorted);
+                                }
+
+                                if ( pSelectMember )
+                                {
+                                    // The running total is kept as the auxiliary value in
+                                    // the first available member for the reference dimension.
+                                    // Members are visited in final order, so each one's result
+                                    // can be used and then modified.
+
+                                    ScDPAggData* pSelectData = pSelectMember->
+                                                    GetAggData( nMemberMeasure, aLocalSubState );
+                                    if ( pSelectData )
+                                    {
+                                        double fTotal = pSelectData->GetAuxiliary();
+                                        fTotal += pAggData->GetResult();
+                                        pSelectData->SetAuxiliary( fTotal );
+                                        pAggData->SetResult( fTotal );
+                                        pAggData->SetEmpty(false);              // always display
+                                    }
+                                }
+                                else
+                                    pAggData->SetError();
+                            }
+                            else if (bNoDetailsInRef)
+                                pAggData->SetError();
+                            else
+                                pAggData->SetEmpty(true);                       // empty (dim set to 0 above)
+                        }
+                        else
+                        {
+                            // difference/percentage -> find specified member
+
+                            if ( pSelectDim )
+                            {
+                                OUString aRefItemName = aReferenceValue.ReferenceItemName;
+                                ScDPRelativePos aRefItemPos( 0, nRelativeDir );     // nBasePos is modified later
+
+                                const OUString* pRefName = NULL;
+                                const ScDPRelativePos* pRefPos = NULL;
+                                if ( bRelative )
+                                    pRefPos = &aRefItemPos;
+                                else
+                                    pRefName = &aRefItemName;
+
+                                ScDPDataMember* pSelectMember;
+                                if ( bRefDimInCol )
+                                {
+                                    aRefItemPos.nBasePos = rColVisible[nColPos];    // without sort order applied
+                                    pSelectMember = ScDPResultDimension::GetColReferenceMember( pRefPos, pRefName,
+                                                                    nColPos, rRunning );
+                                }
+                                else
+                                {
+                                    aRefItemPos.nBasePos = rRowVisible[nRowPos];    // without sort order applied
+                                    const long* pRowSorted = &rRowSorted[0];
+                                    const long* pColSorted = &rColSorted[0];
+                                    pRowSorted += nRowPos + 1; // including the reference dimension
+                                    pSelectMember = pSelectDim->GetRowReferenceMember(
+                                        pRefPos, pRefName, pRowSorted, pColSorted);
+                                }
+
+                                // difference or perc.difference is empty for the reference item itself
+                                if ( pSelectMember == this &&
+                                     eRefType != sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE )
+                                {
+                                    pAggData->SetEmpty(true);
+                                }
+                                else if ( pSelectMember )
+                                {
+                                    const ScDPAggData* pOtherAggData = pSelectMember->
+                                                        GetConstAggData( nMemberMeasure, aLocalSubState );
+                                    OSL_ENSURE( pOtherAggData, "no agg data" );
+                                    if ( pOtherAggData )
+                                    {
+                                        // Reference member may be visited before or after this one,
+                                        // so the auxiliary value is used for the original result.
+
+                                        double fOtherResult = pOtherAggData->GetAuxiliary();
+                                        double fThisResult = pAggData->GetResult();
+                                        bool bError = false;
+                                        switch ( eRefType )
+                                        {
+                                            case sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE:
+                                                fThisResult = fThisResult - fOtherResult;
+                                                break;
+                                            case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE:
+                                                if ( fOtherResult == 0.0 )
+                                                    bError = true;
+                                                else
+                                                    fThisResult = fThisResult / fOtherResult;
+                                                break;
+                                            case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE:
+                                                if ( fOtherResult == 0.0 )
+                                                    bError = true;
+                                                else
+                                                    fThisResult = ( fThisResult - fOtherResult ) / fOtherResult;
+                                                break;
+                                            default:
+                                                OSL_FAIL("invalid calculation type");
+                                        }
+                                        if ( bError )
+                                        {
+                                            pAggData->SetError();
+                                        }
+                                        else
+                                        {
+                                            pAggData->SetResult(fThisResult);
+                                            pAggData->SetEmpty(false);              // always display
+                                        }
+                                        //! errors in data?
+                                    }
+                                }
+                                else if (bRelative && !bNoDetailsInRef)
+                                    pAggData->SetEmpty(true);                   // empty
+                                else
+                                    pAggData->SetError();                       // error
+                            }
+                            else if (bNoDetailsInRef)
+                                pAggData->SetError();                           // error
+                            else
+                                pAggData->SetEmpty(true);                       // empty
+                        }
+                    }
+                    else if ( eRefType == sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE ||
+                              eRefType == sheet::DataPilotFieldReferenceType::COLUMN_PERCENTAGE ||
+                              eRefType == sheet::DataPilotFieldReferenceType::TOTAL_PERCENTAGE ||
+                              eRefType == sheet::DataPilotFieldReferenceType::INDEX )
+                    {
+                        //
+                        //  set total values when they are encountered (always before their use)
+                        //
+
+                        ScDPAggData* pColTotalData = pRefMember->GetColTotal( nMemberMeasure );
+                        ScDPAggData* pRowTotalData = rTotals.GetRowTotal( nMemberMeasure );
+                        ScDPAggData* pGrandTotalData = rTotals.GetGrandTotal( nMemberMeasure );
+
+                        double fTotalValue = pAggData->HasError() ? 0 : pAggData->GetResult();
+
+                        if ( bIsRoot && rTotals.IsInColRoot() && pGrandTotalData )
+                            pGrandTotalData->SetAuxiliary( fTotalValue );
+
+                        if ( bIsRoot && pRowTotalData )
+                            pRowTotalData->SetAuxiliary( fTotalValue );
+
+                        if ( rTotals.IsInColRoot() && pColTotalData )
+                            pColTotalData->SetAuxiliary( fTotalValue );
+
+                        //
+                        //  find relation to total values
+                        //
+
+                        switch ( eRefType )
+                        {
+                            case sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE:
+                            case sheet::DataPilotFieldReferenceType::COLUMN_PERCENTAGE:
+                            case sheet::DataPilotFieldReferenceType::TOTAL_PERCENTAGE:
+                                {
+                                    double nTotal;
+                                    if ( eRefType == sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE )
+                                        nTotal = pRowTotalData->GetAuxiliary();
+                                    else if ( eRefType == sheet::DataPilotFieldReferenceType::COLUMN_PERCENTAGE )
+                                        nTotal = pColTotalData->GetAuxiliary();
+                                    else
+                                        nTotal = pGrandTotalData->GetAuxiliary();
+
+                                    if ( nTotal == 0.0 )
+                                        pAggData->SetError();
+                                    else
+                                        pAggData->SetResult( pAggData->GetResult() / nTotal );
+                                }
+                                break;
+                            case sheet::DataPilotFieldReferenceType::INDEX:
+                                {
+                                    double nColTotal = pColTotalData->GetAuxiliary();
+                                    double nRowTotal = pRowTotalData->GetAuxiliary();
+                                    double nGrandTotal = pGrandTotalData->GetAuxiliary();
+                                    if ( nRowTotal == 0.0 || nColTotal == 0.0 )
+                                        pAggData->SetError();
+                                    else
+                                        pAggData->SetResult(
+                                            ( pAggData->GetResult() * nGrandTotal ) /
+                                            ( nRowTotal * nColTotal ) );
+                                }
+                                break;
                         }
                     }
                 }
             }
         }
+    }
 
-        if ( bHasChild )    // child dimension must be processed last, so the row total is known
-        {
-            if ( pDataChild )
-                pDataChild->UpdateRunningTotals( pRefChild, nMeasure,
-                                                bIsSubTotalRow, rSubState, rRunning, rTotals, rRowParent );
-        }
+    if ( bHasChild )    // child dimension must be processed last, so the row total is known
+    {
+        if ( pDataChild )
+            pDataChild->UpdateRunningTotals( pRefChild, nMeasure,
+                                            bIsSubTotalRow, rSubState, rRunning, rTotals, rRowParent );
     }
 }
 
@@ -3781,7 +3779,7 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
         }
 
         const ScDPResultMember* pRefMember = pRefDim->GetMember(nMemberPos);
-        if ( pRefMember->IsVisible() )  //! here or in ScDPDataMember::UpdateRunningTotals ???
+        if ( pRefMember->IsVisible() )
         {
             if ( bIsDataLayout )
                 rRunning.AddColIndex( 0, 0 );
@@ -3789,8 +3787,8 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
                 rRunning.AddColIndex( i, nSorted );
 
             ScDPDataMember* pDataMember = maMembers[nMemberPos];
-            pDataMember->UpdateRunningTotals( pRefMember, nMemberMeasure,
-                                            bIsSubTotalRow, rSubState, rRunning, rTotals, rRowParent );
+            pDataMember->UpdateRunningTotals(
+                pRefMember, nMemberMeasure, bIsSubTotalRow, rSubState, rRunning, rTotals, rRowParent);
 
             rRunning.RemoveColIndex();
         }
