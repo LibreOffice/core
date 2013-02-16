@@ -68,13 +68,7 @@ static bool bInResize = false;
 TYPEINIT1( SwFlyDrawObj, SdrObject )
 TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
 
-/*************************************************************************
-|*
-|*  SwFlyDrawObj::Ctor
-|*
-*************************************************************************/
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// SwFlyDrawObj::Ctor
 
 namespace sdr
 {
@@ -112,7 +106,6 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
 {
@@ -135,11 +128,7 @@ SwFlyDrawObj::~SwFlyDrawObj()
 {
 }
 
-/*************************************************************************
-|*
-|*  SwFlyDrawObj::Factory-Methoden
-|*
-*************************************************************************/
+// SwFlyDrawObj - Factory-Methods
 
 sal_uInt32 SwFlyDrawObj::GetObjInventor() const
 {
@@ -158,13 +147,8 @@ sal_uInt16 SwFlyDrawObj::GetObjVersion() const
     return SwDrawFirst;
 }
 
-/*************************************************************************
-|*
-|*  SwVirtFlyDrawObj::CToren, Dtor
-|*
-*************************************************************************/
+// SwVirtFlyDrawObj::CToren, Dtor
 
-//////////////////////////////////////////////////////////////////////////////////////
 // AW: Need own primitive to get the FlyFrame paint working
 
 namespace drawinglayer
@@ -274,7 +258,6 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////////////
 // AW: own sdr::contact::ViewContact (VC) sdr::contact::ViewObjectContact (VOC) needed
 // since offset is defined different from SdrVirtObj's sdr::contact::ViewContactOfVirtObj.
 // For paint, that offset is used by setting at the OutputDevice; for primitives this is
@@ -343,7 +326,6 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////////////
 
 basegfx::B2DRange SwVirtFlyDrawObj::getOuterBound() const
 {
@@ -418,15 +400,12 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
 
 SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
 {
-    if ( GetPage() )    //Der SdrPage die Verantwortung entziehen.
+    if ( GetPage() )    //Withdraw SdrPage the responsibility.
         GetPage()->RemoveObject( GetOrdNum() );
 }
 
-/*************************************************************************
-|*
-|*  SwVirtFlyDrawObj::GetFmt()
-|*
-*************************************************************************/
+// SwVirtFlyDrawObj::GetFmt()
+
 
 const SwFrmFmt *SwVirtFlyDrawObj::GetFmt() const
 {
@@ -439,11 +418,7 @@ SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
     return GetFlyFrm()->GetFmt();
 }
 
-/*************************************************************************
-|*
-|*  SwVirtFlyDrawObj::Paint()
-|*
-*************************************************************************/
+// SwVirtFlyDrawObj::Paint()
 
 // --> OD #i102707#
 namespace
@@ -527,11 +502,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
     }
 }
 
-/*************************************************************************
-|*
-|*  SwVirtFlyDrawObj::TakeObjInfo()
-|*
-*************************************************************************/
+// SwVirtFlyDrawObj::TakeObjInfo()
 
 void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 {
@@ -545,12 +516,7 @@ void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
     rInfo.bCanConvToPathLineToArea = rInfo.bCanConvToPolyLineToArea = sal_False;
 }
 
-
-/*************************************************************************
-|*
-|*  SwVirtFlyDrawObj::Groessenermittlung
-|*
-*************************************************************************/
+// SwVirtFlyDrawObj - Size Determination
 
 void SwVirtFlyDrawObj::SetRect() const
 {
@@ -644,11 +610,7 @@ void SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
     return aRetval;
 }
 
-/*************************************************************************
-|*
-|*  SwVirtFlyDrawObj::Move() und Resize()
-|*
-*************************************************************************/
+//  SwVirtFlyDrawObj::Move() und Resize()
 
 void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 {
@@ -657,16 +619,16 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
     const Point aNewPos( aOutRect.TopLeft() );
     const SwRect aFlyRect( aOutRect );
 
-    //Wenn der Fly eine automatische Ausrichtung hat (rechts oder oben),
-    //so soll die Automatik erhalten bleiben
+    //If the Fly has a automatic align (right or top),
+    //so preserve the automatic.
     SwFrmFmt *pFmt = GetFlyFrm()->GetFmt();
     const sal_Int16 eHori = pFmt->GetHoriOrient().GetHoriOrient();
     const sal_Int16 eVert = pFmt->GetVertOrient().GetVertOrient();
     const sal_Int16 eRelHori = pFmt->GetHoriOrient().GetRelationOrient();
     const sal_Int16 eRelVert = pFmt->GetVertOrient().GetRelationOrient();
-    //Bei Absatzgebundenen Flys muss ausgehend von der neuen Position ein
-    //neuer Anker gesetzt werden. Anker und neue RelPos werden vom Fly selbst
-    //berechnet und gesetzt.
+    //On paragraph bound Flys starting from the new postition a new
+    //anchor must be set. Anchor and the new RelPos is calculated and
+    //placed by the Fly itself.
     if( GetFlyFrm()->IsFlyAtCntFrm() )
         ((SwFlyAtCntFrm*)GetFlyFrm())->SetAbsPos( aNewPos );
     else
@@ -724,9 +686,8 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
     if( !GetFlyFrm()->IsFlyLayFrm() &&
         ::GetHtmlMode(pFmt->GetDoc()->GetDocShell()) )
     {
-        //Im HTML-Modus sind nur automatische Ausrichtungen erlaubt.
-        //Einzig einen Snap auf Links/Rechts bzw. Linker-/Rechter-Rand koennen
-        //wir versuchen.
+        //In HTML-Mode only automatic aligns are allowed.
+        //Only we can try a snap to left/right respectively left-/right border
         const SwFrm* pAnch = GetFlyFrm()->GetAnchorFrm();
         bool bNextLine = false;
 
@@ -740,7 +701,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             else
             {
                 bNextLine = true;
-                //Horizontale Ausrichtung:
+                //Horizontal Align:
                 const bool bLeftFrm =
                     aFlyRect.Left() < pAnch->Frm().Left() + pAnch->Prt().Left(),
                     bLeftPrt = aFlyRect.Left() + aFlyRect.Width() <
@@ -760,8 +721,8 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             }
             aSet.Put( aHori );
         }
-        //Vertikale Ausrichtung bleibt grundsaetzlich schlicht erhalten,
-        //nur bei nicht automatischer Ausrichtung wird umgeschaltet.
+        //Vertical alignment simply is retained principally,
+        //only on manual align will be switched over.
         bool bRelChar = text::RelOrientation::CHAR == eRelVert;
         aVert.SetVertOrient( eVert != text::VertOrientation::NONE ? eVert :
                 GetFlyFrm()->IsFlyInCntFrm() ? text::VertOrientation::CHAR_CENTER :
@@ -774,7 +735,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         bPut = true;
     }
 
-    //Automatische Ausrichtungen wollen wir moeglichst nicht verlieren.
+    //We want preferably not to lose the automatic alignments.
     if ( !bPut && bInResize )
     {
         if ( text::HoriOrientation::NONE != eHori )
@@ -820,7 +781,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
               aOutRect.Bottom()- aOutRect.Top()  + 1 );
     if( aSz != GetFlyFrm()->Frm().SSize() )
     {
-        //Die Breite darf bei Spalten nicht zu schmal werden
+        //The width of the columns should not be too narrow
         if ( GetFlyFrm()->Lower() && GetFlyFrm()->Lower()->IsColumnFrm() )
         {
             SwBorderAttrAccess aAccess( SwFrm::GetCache(), GetFlyFrm() );
@@ -875,13 +836,13 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
         }
     }
 
-    //Position kann auch veraendert sein!
+    //Position can also be changed!
     const Point aOldPos( ( bVertX && !bVertL2RX ) || bRTL ?
                          GetFlyFrm()->Frm().TopRight() :
                          GetFlyFrm()->Frm().Pos() );
     if ( aNewPos != aOldPos )
     {
-        //Kann sich durch das ChgSize veraendert haben!
+        //May have been altered by the ChgSize!
         if( bVertX || bRTL )
         {
             if( aOutRect.TopRight() != aNewPos )

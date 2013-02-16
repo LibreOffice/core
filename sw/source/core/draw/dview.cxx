@@ -92,13 +92,7 @@ static const SwFrm *lcl_FindAnchor( const SdrObject *pObj, sal_Bool bAll )
     return 0;
 }
 
-/*************************************************************************
-|*
-|*  SwDrawView::Ctor
-|*
-*************************************************************************/
-
-
+// SwDrawView
 
 SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
     FmFormView( (FmFormModel*)pMd, pOutDev ),
@@ -134,7 +128,6 @@ sal_Bool SwDrawView::IsAntiAliasing() const
     return getOptionsDrawinglayer().IsAntiAliasing();
 }
 
-//////////////////////////////////////////////////////////////////////////////
 
 SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt16 nTol, const SdrMarkList &rMrkList)
 {
@@ -209,13 +202,8 @@ SdrObject* SwDrawView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTo
     return pRetval;
 }
 
-/*************************************************************************
-|*
-|*  SwDrawView::AddCustomHdl()
-|*
-|*  Gets called every time the handles need to be build
-|*
-*************************************************************************/
+// SwDrawView::AddCustomHdl()
+// Gets called every time the handles need to be build
 
 void SwDrawView::AddCustomHdl()
 {
@@ -261,12 +249,7 @@ void SwDrawView::AddCustomHdl()
                                      pAnch->IsRightToLeft() ) );
 }
 
-/*************************************************************************
-|*
-|*  SwDrawView::GetMaxToTopObj(), _GetMaxToTopObj()
-|*
-*************************************************************************/
-
+// SwDrawView::GetMaxToTopObj(), _GetMaxToTopObj()
 
 SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
 {
@@ -275,8 +258,7 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
         const SwFrm *pAnch = ::lcl_FindAnchor( pObj, sal_False );
         if ( pAnch )
         {
-            //Das oberste Obj innerhalb des Ankers darf nicht ueberholt
-            //werden.
+            //The topmost Obj within the anchor must not be overtaken.
             const SwFlyFrm *pFly = pAnch->FindFlyFrm();
             if ( pFly )
             {
@@ -314,12 +296,7 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
     return 0;
 }
 
-/*************************************************************************
-|*
-|*  SwDrawView::GetMaxToBtmObj()
-|*
-*************************************************************************/
-
+// SwDrawView::GetMaxToBtmObj()
 
 SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
 {
@@ -328,7 +305,7 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
         const SwFrm *pAnch = ::lcl_FindAnchor( pObj, sal_False );
         if ( pAnch )
         {
-            //Der Fly des Ankers darf nicht "unterflogen" werden.
+            //The Fly of the anchor must not be "flying under".
             const SwFlyFrm *pFly = pAnch->FindFlyFrm();
             if ( pFly )
             {
@@ -340,16 +317,11 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
     return 0;
 }
 
-/*************************************************************************
-|*
-|*  SwDrawView::ObjOrderChanged()
-|*
-*************************************************************************/
+// SwDrawView::ObjOrderChanged()
 
-/** determine maximal order number for a 'child' object of given 'parent' object
+// determine maximal order number for a 'child' object of given 'parent' object
+// @author OD
 
-    @author OD
-*/
 sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
                                            const SdrObject* _pExclChildObj ) const
 {
@@ -382,10 +354,10 @@ sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
 }
 
 /** method to move 'repeated' objects of the given moved object to the
-    according level
-
-    @author OD
-*/
+ *  according level
+ *
+ *  @author OD
+ */
 void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                     const std::vector<SdrObject*>& _rMovedChildObjs ) const
 {
@@ -695,12 +667,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
     _MoveRepeatedObjs( *pMovedAnchoredObj, aMovedChildObjs );
 }
 
-/*************************************************************************
-|*
-|*  SwDrawView::TakeDragLimit()
-|*
-*************************************************************************/
-
+// SwDrawView::TakeDragLimit()
 
 sal_Bool SwDrawView::TakeDragLimit( SdrDragMode eMode,
                                             Rectangle& rRect ) const
@@ -720,12 +687,7 @@ sal_Bool SwDrawView::TakeDragLimit( SdrDragMode eMode,
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*  SwDrawView::CalcAnchor()
-|*
-*************************************************************************/
-
+// SwDrawView::CalcAnchor()
 
 const SwFrm* SwDrawView::CalcAnchor()
 {
@@ -735,8 +697,8 @@ const SwFrm* SwDrawView::CalcAnchor()
 
     SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
 
-    //Fuer Absatzgebundene Objekte suchen, andernfalls einfach nur
-    //der aktuelle Anker. Nur suchen wenn wir gerade draggen.
+    //Search for paragraph bound objects, otherwise only the
+    //current anchor. Search only if we currently drag.
     const SwFrm* pAnch;
     Rectangle aMyRect;
     const sal_Bool bFly = pObj->ISA(SwVirtFlyDrawObj);
@@ -807,12 +769,7 @@ const SwFrm* SwDrawView::CalcAnchor()
     return pAnch;
 }
 
-/*************************************************************************
-|*
-|*  SwDrawView::ShowDragXor(), HideDragXor()
-|*
-*************************************************************************/
-
+// SwDrawView::ShowDragXor(), HideDragXor()
 
 void SwDrawView::ShowDragAnchor()
 {
@@ -827,12 +784,7 @@ void SwDrawView::ShowDragAnchor()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwDrawView::MarkListHasChanged()
-|*
-*************************************************************************/
-
+// SwDrawView::MarkListHasChanged()
 
 void SwDrawView::MarkListHasChanged()
 {
@@ -883,12 +835,12 @@ void SwDrawView::CheckPossibilities()
 {
     FmFormView::CheckPossibilities();
 
-    //Zusaetzlich zu den bestehenden Flags der Objekte selbst, die von der
-    //DrawingEngine ausgewertet werden, koennen weitere Umstaende zu einem
-    //Schutz fuehren.
-    //Objekte, die in Rahmen verankert sind, muessen genau dann geschuetzt
-    //sein, wenn der Inhalt des Rahmens geschuetzt ist.
-    //OLE-Objekte konnen selbst einen Resize-Schutz wuenschen (StarMath)
+    //In addition to the existing flags of the objects themselves,
+    //which are evaluated by the DrawingEngine, other circumstances
+    //lead to a protection.
+    //Objects that are anchored in frames need to be protected
+    //if the content of the frame is protected.
+    //OLE-Objects may themselves wish a resize protection (StarMath)
 
     const SdrMarkList &rMrkList = GetMarkedObjectList();
     sal_Bool bProtect = sal_False,
@@ -937,7 +889,7 @@ void SwDrawView::CheckPossibilities()
                 pFrm = pC->GetAnchorFrm( pObj );
         }
         if ( pFrm )
-            bProtect = pFrm->IsProtected(); //Rahmen, Bereiche usw.
+            bProtect = pFrm->IsProtected(); //Frames, areas etc.
         {
             SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
             if ( !pFrmFmt )
@@ -957,9 +909,9 @@ void SwDrawView::CheckPossibilities()
 }
 
 /** replace marked <SwDrawVirtObj>-objects by its reference object for delete
-    marked objects.
-
-    @author OD
+ *  marked objects.
+ *
+ *  @author OD
 */
 void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
 {
