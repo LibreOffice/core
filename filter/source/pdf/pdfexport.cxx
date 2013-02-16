@@ -878,10 +878,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 if( aPageRange.isEmpty() )
                 {
-                    aPageRange = OUStringBuffer()
-                        .append( static_cast< sal_Int32 >( 1 ) )
-                        .append( static_cast< sal_Unicode >( '-' ) )
-                        .append( nPageCount ).makeStringAndClear();
+                    aPageRange = OUString::number( 1 ) + "-" + OUString::number(nPageCount );
                 }
                 StringRangeEnumerator aRangeEnum( aPageRange, 0, nPageCount-1 );
 

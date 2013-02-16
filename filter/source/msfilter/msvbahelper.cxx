@@ -48,11 +48,7 @@ const OUString sUrlPart1( "?language=Basic&location=document" );
 
 OUString makeMacroURL( const OUString& sMacroName )
 {
-    return OUStringBuffer().
-        append( sUrlPart0 ).
-        append( sMacroName ).
-        append( sUrlPart1 ).
-        makeStringAndClear();
+    return sUrlPart0 + sMacroName + sUrlPart1;
 }
 
 OUString extractMacroName( const OUString& rMacroUrl )
@@ -282,7 +278,7 @@ OUString resolveVBAMacro( SfxObjectShell* pShell, const OUString& rLibName, cons
         OUString aLibName = rLibName.isEmpty() ?  getDefaultProjectName( pShell ) : rLibName ;
         OUString aModuleName = rModuleName;
         if( hasMacro( pShell, aLibName, aModuleName, rMacroName ) )
-            return OUStringBuffer( aLibName ).append( sal_Unicode( '.' ) ).append( aModuleName ).append( sal_Unicode( '.' ) ).append( rMacroName ).makeStringAndClear();
+            return aLibName + "." + aModuleName + "." + rMacroName;
     }
 #endif
     return OUString();
