@@ -218,7 +218,11 @@ public:
      * Extended data that the client code may need to store.  Create a
      * sub-class of this and store data there.
      */
-    struct ExtendedData {};
+    struct ExtendedData {
+
+    virtual ~ExtendedData() {}
+
+    };
 
     /**
      * Configuration options for this popup window.
