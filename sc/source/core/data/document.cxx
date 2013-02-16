@@ -5107,7 +5107,6 @@ bool ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
     ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
     for (; itr != itrEnd; ++itr)
     {
-        pData = &(*itr);
         if (itr->HasAutoFilter())
         {
             itr->GetArea( nDBTab, nDBStartCol,nDBStartRow, nDBEndCol,nDBEndRow );
