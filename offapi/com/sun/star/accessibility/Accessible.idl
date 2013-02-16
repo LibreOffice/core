@@ -38,7 +38,10 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-service Accessible : XAccessible;
+service Accessible
+{
+    interface XAccessible;
+};
 
 }; }; }; };
 
