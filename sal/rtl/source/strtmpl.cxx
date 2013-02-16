@@ -1103,8 +1103,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
     }
 #endif
 
-    if ( pThis->refCount == 1 ||
-         !osl_atomic_decrement( &(pThis->refCount) ) )
+    if ( !osl_atomic_decrement( &(pThis->refCount) ) )
     {
         RTL_LOG_STRING_DELETE( pThis );
         rtl_freeMemory( pThis );
