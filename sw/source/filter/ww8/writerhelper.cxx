@@ -500,6 +500,17 @@ namespace sw
             return aRet;
         }
 
+        const SwNumFmt* GetNumFmtFromSwNumRuleLevel(const SwNumRule &rRule,
+            int nLevel)
+        {
+            if (nLevel < 0 || nLevel >= MAXLEVEL)
+            {
+                OSL_FAIL("Invalid level");
+                return NULL;
+            }
+            return &(rRule.Get( static_cast< sal_uInt16 >(nLevel) ));
+        }
+
         const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode)
         {
             const SwNumRule *pRule = 0;
@@ -508,7 +519,8 @@ namespace sw
                 0 != (pRule = rTxtNode.GetNumRule())
                 )
             {
-                return &(pRule->Get( static_cast< sal_uInt16 >(rTxtNode.GetActualListLevel()) ));
+                return GetNumFmtFromSwNumRuleLevel(*pRule,
+                    rTxtNode.GetActualListLevel());
             }
 
             OSL_ENSURE(rTxtNode.GetDoc(), "No document for node?, suspicious");
@@ -520,7 +532,8 @@ namespace sw
                 0 != (pRule = rTxtNode.GetDoc()->GetOutlineNumRule())
                 )
             {
-                return &(pRule->Get( static_cast< sal_uInt16 >(rTxtNode.GetActualListLevel()) ));
+                return GetNumFmtFromSwNumRuleLevel(*pRule,
+                    rTxtNode.GetActualListLevel());
             }
 
             return 0;
