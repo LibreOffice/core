@@ -20,6 +20,7 @@
 
 #include "cppuhelper/implbase4.hxx"
 #include "cppuhelper/implementationentry.hxx"
+#include "cppuhelper/supportsservice.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -233,18 +234,10 @@ OUString SAL_CALL JavaMigration::getImplementationName()
     return jvmfwk_getImplementationName();
 }
 
-sal_Bool SAL_CALL JavaMigration::supportsService( const OUString & rServiceName )
+sal_Bool JavaMigration::supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > const & rSNL = getSupportedServiceNames();
-    OUString const * pArray = rSNL.getConstArray();
-    for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-    {
-        if (rServiceName.equals( pArray[ nPos ] ))
-            return true;
-    }
-    return false;
-
+    return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL JavaMigration::getSupportedServiceNames()

@@ -29,6 +29,7 @@
 #include "rtl/uri.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/supportsservice.hxx"
 #include "ucbhelper/content.hxx"
 #include "svl/inettype.hxx"
 #include "comphelper/anytostring.hxx"
@@ -329,10 +330,10 @@ OUString BackendImpl::getImplementationName() throw (RuntimeException)
     return OUString("com.sun.star.comp.deployment.bundle.PackageRegistryBackend");
 }
 
-sal_Bool BackendImpl::supportsService( OUString const& name )
-    throw (RuntimeException)
+sal_Bool BackendImpl::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
 {
-    return getSupportedServiceNames()[0].equals(name);
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence<OUString> BackendImpl::getSupportedServiceNames()

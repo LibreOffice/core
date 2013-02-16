@@ -28,6 +28,7 @@
 #include <unotools/textsearch.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <com/sun/star/task/XInteractionApprove.hpp>
@@ -350,15 +351,10 @@ bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir 
 
 // -----------------------------------------------------------------------------
 
-sal_Bool OO3ExtensionMigration::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+sal_Bool OO3ExtensionMigration::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // -----------------------------------------------------------------------------

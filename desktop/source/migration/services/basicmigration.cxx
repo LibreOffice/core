@@ -18,6 +18,7 @@
  */
 
 #include "basicmigration.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 
@@ -168,15 +169,10 @@ namespace migration
 
     // -----------------------------------------------------------------------------
 
-    sal_Bool BasicMigration::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+    sal_Bool BasicMigration::supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
     {
-        Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-        const ::rtl::OUString* pNames = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pNames + aNames.getLength();
-        for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-            ;
-
-        return pNames != pEnd;
+        return cppu::supportsService(this, ServiceName);
     }
 
     // -----------------------------------------------------------------------------

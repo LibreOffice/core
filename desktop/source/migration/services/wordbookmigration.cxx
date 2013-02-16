@@ -18,6 +18,7 @@
  */
 
 #include "wordbookmigration.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -234,15 +235,10 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
 
     // -----------------------------------------------------------------------------
 
-    sal_Bool WordbookMigration::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+    sal_Bool WordbookMigration::supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
     {
-        Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-        const ::rtl::OUString* pNames = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pNames + aNames.getLength();
-        for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-            ;
-
-        return pNames != pEnd;
+        return cppu::supportsService(this, ServiceName);
     }
 
     // -----------------------------------------------------------------------------

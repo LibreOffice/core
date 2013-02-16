@@ -38,6 +38,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <rtl/process.h>
 #include "tools/getprocessworkingdir.hxx"
@@ -310,10 +311,10 @@ throw ( RuntimeException )
     return OUString( "com.sun.star.comp.OfficeIPCThreadController" );
 }
 
-sal_Bool SAL_CALL OfficeIPCThreadController::supportsService( const OUString& )
-throw ( RuntimeException )
+sal_Bool OfficeIPCThreadController::supportsService(
+    OUString const & ServiceName) throw (css::uno::RuntimeException)
 {
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL OfficeIPCThreadController::getSupportedServiceNames()

@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 namespace desktop
 {
@@ -205,10 +206,11 @@ Sequence<OUString> SAL_CALL Acceptor::getSupportedServiceNames()
 {
     return Acceptor::impl_getSupportedServiceNames();
 }
-sal_Bool SAL_CALL Acceptor::supportsService( const OUString&)
-    throw (RuntimeException)
+
+sal_Bool Acceptor::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
 {
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // Factory
