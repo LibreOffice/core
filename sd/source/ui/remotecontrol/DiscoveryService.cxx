@@ -40,16 +40,15 @@ using namespace sd;
 DiscoveryService::DiscoveryService() :
     mSocket(0)
 {
-    int rc;
-
     mSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
     sockaddr_in aAddr;
+    memset(&aAddr, 0, sizeof(aAddr));
     aAddr.sin_family = AF_INET;
     aAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     aAddr.sin_port = htons( PORT_DISCOVERY );
 
-    rc = bind( mSocket, (sockaddr*) &aAddr, sizeof(sockaddr_in) );
+    int rc = bind( mSocket, (sockaddr*) &aAddr, sizeof(sockaddr_in) );
 
     if (rc)
     {
