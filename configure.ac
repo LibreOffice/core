@@ -10975,9 +10975,6 @@ AC_SUBST(ENABLE_CORETEXT)
 ###############################################################################
 # Extensions checking
 ###############################################################################
-dnl ===================================================================
-dnl Test whether to integrate extensions into the product's installer
-dnl ===================================================================
 AC_MSG_CHECKING([for extensions integration])
 if test "x$enable_extension_integration" != "xno"; then
     WITH_EXTENSION_INTEGRATION=YES
@@ -10994,160 +10991,19 @@ dnl There are standalone tests for each of these below.
 WITH_EXTRA_EXTENSIONS=
 AC_SUBST([WITH_EXTRA_EXTENSIONS])
 
-dnl ===================================================================
-dnl Test whether to include Watch Window extension
-dnl ===================================================================
-AC_MSG_CHECKING([for Watch Window extension integration])
-WATCH_WINDOW_EXTENSION_PACK=
-if test "x$enable_ext_watch_window" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_WATCH_WINDOW"
-    WATCH_WINDOW_EXTENSION_PACK="23bd75552206dfcd8fd4e29137dcac84-WatchWindow_1.2.0.0.oxt"
-    WITH_EXTRA_EXTENSIONS=YES
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(WATCH_WINDOW_EXTENSION_PACK)
-
-dnl ===================================================================
-dnl Test whether to include SmART Gallery (Diagram) extension
-dnl ===================================================================
-AC_MSG_CHECKING([for SmART Gallery (Diagram) extension integration])
-DIAGRAM_EXTENSION_PACK=
-if test "x$enable_ext_diagram" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_DIAGRAM"
-    DIAGRAM_EXTENSION_PACK="8d74685d41f8bffe8c3e71fe8deac09d-SmART_0.9.5.oxt"
-    WITH_EXTRA_EXTENSIONS=YES
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(DIAGRAM_EXTENSION_PACK)
-
-dnl ===================================================================
-dnl Test whether to include Validator extension
-dnl ===================================================================
-AC_MSG_CHECKING([for Validator extension integration])
-VALIDATOR_EXTENSION_PACK=
-if test "x$enable_ext_validator" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_VALIDATOR"
-    VALIDATOR_EXTENSION_PACK="bbdd5639ada63e3130761daaecae1a10-Validator_1.1.0.0.oxt"
-    WITH_EXTRA_EXTENSIONS=YES
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(VALIDATOR_EXTENSION_PACK)
-
-dnl ===================================================================
-dnl Test whether to include Barcode extension
-dnl ===================================================================
-AC_MSG_CHECKING([for Barcode extension integration])
-BARCODE_EXTENSION_PACK=
-if test "x$enable_ext_barcode" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_BARCODE"
-    BARCODE_EXTENSION_PACK="3ed18025a766f1e955707b969c8113a5-Barcode_1.3.5.0.oxt"
-    WITH_EXTRA_EXTENSIONS=YES
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST([BARCODE_EXTENSION_PACK])
-
-dnl ===================================================================
-dnl Test whether to include ConvertTextToNumber extension
-dnl ===================================================================
-AC_MSG_CHECKING([for ConvertTextToNumber extension integration])
-if test "x$enable_ext_ct2n" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    BUILD_TYPE="$BUILD_TYPE CT2N"
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_CT2N"
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-
-dnl ===================================================================
-dnl Test whether to include Numbertext extension
-dnl ===================================================================
-AC_MSG_CHECKING([for Numbertext extension integration])
-NUMBERTEXT_EXTENSION_PACK=
-if test "x$enable_ext_numbertext" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NUMBERTEXT"
-    NUMBERTEXT_EXTENSION_PACK="b7cae45ad2c23551fd6ccb8ae2c1f59e-numbertext_0.9.5.oxt"
-    WITH_EXTRA_EXTENSIONS=YES
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(NUMBERTEXT_EXTENSION_PACK)
-
-dnl ===================================================================
-dnl Test whether to include Hungarian Cross-reference Toolbar extension
-dnl ===================================================================
-AC_MSG_CHECKING([for Hungarian Cross-reference Toolbar extension integration])
-HUNART_EXTENSION_PACK=
-if test "x$enable_ext_hunart" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_HUNART"
-    HUNART_EXTENSION_PACK="b632bdd25649cc4067bcb410bae23d2b-hunart_0.3.oxt"
-    WITH_EXTRA_EXTENSIONS=YES
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(HUNART_EXTENSION_PACK)
-
-dnl ===================================================================
-dnl Test whether to include Typography Toolbar extension
-dnl ===================================================================
-AC_MSG_CHECKING([for Typography Toolbar extension integration])
-TYPO_EXTENSION_PACK=
-if test "x$enable_ext_typo" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_TYPO"
-    TYPO_EXTENSION_PACK="9d60b6cfa3ef1926848710bbcd11115b-typo_0.4.2.oxt"
-    WITH_EXTRA_EXTENSIONS=YES
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(TYPO_EXTENSION_PACK)
-
-dnl ===================================================================
-dnl Test whether to include Google Docs extension
-dnl ===================================================================
-AC_MSG_CHECKING([for Google Docs extension integration])
-GOOGLE_DOCS_EXTENSION_PACK=
-if test "x$enable_ext_google_docs" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_GOOGLE_DOCS"
-    GOOGLE_DOCS_EXTENSION_PACK="27211596cf0ad97cab7321239406fde0-gdocs_3.0.1_modified.oxt"
-    WITH_EXTRA_EXTENSIONS=YES
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(GOOGLE_DOCS_EXTENSION_PACK)
-
-dnl ===================================================================
-dnl Test whether to include NLPSolver extension
-dnl ===================================================================
-AC_MSG_CHECKING([for NLPSolver extension integration])
-if test "x$enable_ext_nlpsolver" = "xyes" -a "x$enable_extension_integration" != "xno" -a "x$with_java" != "xno"; then
-    BUILD_TYPE="$BUILD_TYPE NLPSOLVER"
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NLPSOLVER"
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-
-dnl ===================================================================
-dnl Test whether to include LanguageTool extension
-dnl ===================================================================
-AC_MSG_CHECKING([for LanguageTool extension integration])
-if test "x$enable_ext_languagetool" = "xyes" -a "x$enable_extension_integration" != "xno" -a "x$with_java" != "xno"; then
-    BUILD_TYPE="$BUILD_TYPE LANGUAGETOOL"
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LANGUAGETOOL"
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
+libo_CHECK_EXTENSION([Watch Window],[WATCH_WINDOW],[watch_window],[23bd75552206dfcd8fd4e29137dcac84-WatchWindow_1.2.0.0.oxt])
+libo_CHECK_EXTENSION([SmART Gallery (Diagram)],[DIAGRAM],[diagram],[8d74685d41f8bffe8c3e71fe8deac09d-SmART_0.9.5.oxt])
+libo_CHECK_EXTENSION([Watch Window],[WATCH_WINDOW],[watch_window],[23bd75552206dfcd8fd4e29137dcac84-WatchWindow_1.2.0.0.oxt])
+libo_CHECK_EXTENSION([Validator],[VALIDATOR],[validator],[bbdd5639ada63e3130761daaecae1a10-Validator_1.1.0.0.oxt])
+libo_CHECK_EXTENSION([Barcode],[BARCODE],[barcode],[3ed18025a766f1e955707b969c8113a5-Barcode_1.3.5.0.oxt])
+libo_CHECK_EXTENSION([ConvertTextToNumber],[CT2N],[ct2n],[])
+libo_CHECK_EXTENSION([Numbertext],[NUMBERTEXT],[numbertext],[b7cae45ad2c23551fd6ccb8ae2c1f59e-numbertext_0.9.5.oxt])
+libo_CHECK_EXTENSION([Hungarian Cross-reference Toolbar],[HUNART],[hunart],[b632bdd25649cc4067bcb410bae23d2b-hunart_0.3.oxt])
+libo_CHECK_EXTENSION([Typography Toolbar],[TYPO],[typo],[9d60b6cfa3ef1926848710bbcd11115b-typo_0.4.2.oxt])
+libo_CHECK_EXTENSION([Google Docs],[GOOGLE_DOCS],[google_docs],[27211596cf0ad97cab7321239406fde0-gdocs_3.0.1_modified.oxt])
+if test "x$with_java" != "xno"; then
+    libo_CHECK_EXTENSION([NLPSolver],[NLPSOLVER],[nlpsolver],[])
+    libo_CHECK_EXTENSION([LanguageTool],[LANGUAGETOOL],[languagetool],[])
 fi
 
 dnl ===================================================================
