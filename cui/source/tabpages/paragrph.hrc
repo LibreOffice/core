@@ -61,37 +61,6 @@
 #define ST_LEFTALIGN_ASIAN              53
 #define ST_RIGHTALIGN_ASIAN             54
 
-// ExtendedTabPage ----------------------------------------------------------
-
-#define BTN_HYPHEN                      50
-#define ED_HYPHENBEFORE         52
-#define FT_HYPHENBEFORE         53
-#define ED_HYPHENAFTER          55
-#define FT_HYPHENAFTER          56
-#define FL_HYPHEN                       57
-
-#define BTN_PAGEBREAK           60
-#define FT_BREAKTYPE            61
-#define LB_BREAKTYPE            62
-#define FT_BREAKPOSITION        63
-#define LB_BREAKPOSITION        64
-#define BTN_PAGECOLL            65
-#define LB_PAGECOLL                     66
-#define BTN_KEEPTOGETHER        67
-#define BTN_WIDOWS                      68
-#define ED_WIDOWS                       69
-#define FT_WIDOWS                       70
-#define BTN_ORPHANS                     71
-#define ED_ORPHANS                      72
-#define FT_ORPHANS                      73
-#define FL_OPTIONS                      74
-#define FT_PAGENUM                      75
-#define ED_PAGENUM                      76
-#define FL_BREAKS                       77
-
-#define CB_KEEPTOGETHER                 80
-#define FT_MAXHYPH                      81
-#define ED_MAXHYPH                      83
 
 #define CB_REGISTER                     84
 #define FL_REGISTER                     85
