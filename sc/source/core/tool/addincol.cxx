@@ -951,7 +951,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                             }
                                             catch(uno::Exception&)
                                             {
-                                                aArgName = "###";
+                                                aArgDesc = "###";
                                             }
 
                                             sal_Bool bOptional =
