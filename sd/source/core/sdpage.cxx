@@ -329,6 +329,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
             Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
         }
+        break;
 
         case PRESOBJ_TABLE:
         case PRESOBJ_CALC:
