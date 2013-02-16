@@ -35,12 +35,7 @@ module data
 /** describes a service that allows reading two-dimensional data in
     the form of a sequence of <type>DataSequence</type>s.
   */
-service DataSource
-{
-    /** allows the read-access of the actual data.
-     */
-    interface XDataSource;
-};
+service DataSource : XDataSource;
 
 } ; // data
 } ; // chart2

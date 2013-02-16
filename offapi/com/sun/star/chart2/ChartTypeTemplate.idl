@@ -31,10 +31,7 @@ module star
 module chart2
 {
 
-service ChartTypeTemplate
-{
-    interface ::com::sun::star::chart2::XChartTypeTemplate;
-};
+service ChartTypeTemplate : com::sun::star::chart2::XChartTypeTemplate;
 
 } ; // chart2
 } ; // com

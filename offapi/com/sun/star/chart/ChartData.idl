@@ -29,10 +29,7 @@
 /** must be supported by every component that wants to provide data
    for a chart
  */
-published service ChartData
-{
-    interface com::sun::star::chart::XChartData;
-};
+published service ChartData : com::sun::star::chart::XChartData;
 
 
 }; }; }; };

@@ -34,12 +34,7 @@ module data
 
 /**
  */
-service RangeHighlighter
-{
-    /**
-     */
-    interface XRangeHighlighter;
-};
+service RangeHighlighter : XRangeHighlighter;
 
 } ; // data
 } ; // chart2

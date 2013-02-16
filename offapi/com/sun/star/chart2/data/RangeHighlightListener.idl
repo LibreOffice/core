@@ -36,12 +36,7 @@ module data
     <type>XRangeHighlighter</type> in order to get notified about
     selection changes that affect range highlighting.
  */
-service RangeHighlightListener
-{
-    /**
-     */
-    interface ::com::sun::star::view::XSelectionChangeListener;
-};
+service RangeHighlightListener : com::sun::star::view::XSelectionChangeListener;
 
 } ; // data
 } ; // chart2

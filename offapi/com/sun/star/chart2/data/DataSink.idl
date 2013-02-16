@@ -35,12 +35,7 @@ module data
 /** describes a service that allows reading two-dimensional data in
     the form of a sequence of <type>DataSequence</type>s.
   */
-service DataSink
-{
-    /** allows the write-access of the actual data.
-     */
-    interface XDataSink;
-};
+service DataSink : XDataSink;
 
 } ; // data
 } ; // chart2
