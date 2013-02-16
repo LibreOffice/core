@@ -270,7 +270,6 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
                         rBindings.Invalidate( SID_OBJECT_ROTATE );
                         rBindings.Invalidate( SID_OBJECT_MIRROR );
-                        pHdl=pView->GetHdl(nHdlNum);
                     }
 
                     if ( pView->MarkObj(aMDPos, -2, false, rMEvt.IsMod1()) )
