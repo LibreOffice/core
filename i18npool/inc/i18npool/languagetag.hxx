@@ -16,6 +16,8 @@
 #include <i18npool/i18npooldllapi.h>
 #include <i18npool/lang.h>
 
+#include <vector>
+
 typedef struct _rtl_Locale rtl_Locale;  // as in rtl/locale.h
 
 
@@ -211,6 +213,25 @@ public:
         If the current tag is known, no change occurs.
      */
     LanguageTag &                   makeFallback();
+
+    /** Return a vector of fall-back strings.
+
+        In order:
+        full BCP 47 tag, same as getBcp47()
+        lll-Ssss-CC
+        lll-Ssss
+        lll-CC
+        lll
+
+        Only strings that differ from a higher order are included, for example
+        if there is no script the elements will be bcp47, lll-CC, lll; if the
+        bcp47 string is identical to lll-CC then only lll-CC, lll.
+
+        Note that lll is only ISO 639-1/2 alpha code and CC is only ISO 3166
+        alpha code. If the region can not be expressed as ISO 3166 then no -CC
+        tags are included.
+     */
+    ::std::vector< OUString >       getFallbackStrings() const;
 
     /* Test equality of two LangageTag. */
     bool    operator==( const LanguageTag & rLanguageTag ) const;

@@ -1003,6 +1003,46 @@ LanguageTag & LanguageTag::makeFallback()
 }
 
 
+::std::vector< OUString > LanguageTag::getFallbackStrings() const
+{
+    ::std::vector< OUString > aVec;
+    OUString aLanguage( getLanguage());
+    OUString aCountry( getCountry());
+    if (isIsoLocale())
+    {
+        if (!aCountry.isEmpty())
+            aVec.push_back( aLanguage + "-" + aCountry);
+        aVec.push_back( aLanguage);
+        return aVec;
+    }
+    aVec.push_back( getBcp47());
+    OUString aTmp;
+    if (hasScript())
+    {
+        OUString aScript( getScript());
+        if (!aCountry.isEmpty())
+        {
+            aTmp = aLanguage + "-" + aScript + "-" + aCountry;
+            if (aTmp != aVec[0])
+                aVec.push_back( aTmp);
+        }
+        aTmp = aLanguage + "-" + aScript;
+        if (aTmp != aVec[0])
+            aVec.push_back( aTmp);
+    }
+    if (!aCountry.isEmpty())
+    {
+        aTmp = aLanguage + "-" + aCountry;
+        if (aTmp != aVec[0])
+            aVec.push_back( aTmp);
+    }
+    aTmp = aLanguage;
+    if (aTmp != aVec[0])
+        aVec.push_back( aTmp);
+    return aVec;
+}
+
+
 bool LanguageTag::operator==( const LanguageTag & rLanguageTag ) const
 {
     // Compare full language tag strings but SYSTEM unresolved.
