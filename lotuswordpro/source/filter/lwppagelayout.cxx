@@ -335,13 +335,15 @@ void LwpPageLayout::RegisterStyle()
 
     //Add the page master to stylemanager
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    OUString pmname = pXFStyleManager->AddStyle(pm1)->GetStyleName();
+    m_pXFPageMaster = pm1 = (XFPageMaster*)pXFStyleManager->AddStyle(pm1);
+    OUString pmname = pm1->GetStyleName();
 
     //Add master page
     XFMasterPage* mp1 = new XFMasterPage();
     mp1->SetStyleName(GetName()->str());
     mp1->SetPageMaster(pmname);
-    m_StyleName = pXFStyleManager->AddStyle(mp1)->GetStyleName();
+    mp1 = (XFMasterPage*)pXFStyleManager->AddStyle(mp1);
+    m_StyleName = mp1->GetStyleName();
 
     //Set footer style
     LwpFooterLayout* pLayoutFooter = GetFooterLayout();
@@ -392,7 +394,8 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
 
     //Add the page master to stylemanager
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    OUString pmname = pXFStyleManager->AddStyle(pm1)->GetStyleName();
+    m_pXFPageMaster = pm1 = (XFPageMaster*)pXFStyleManager->AddStyle(pm1);
+    OUString pmname = pm1->GetStyleName();
 
     //Add master page
     XFMasterPage* mp1 = new XFMasterPage();
