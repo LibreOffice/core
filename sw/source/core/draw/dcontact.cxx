@@ -151,8 +151,9 @@ SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj )
     return aRet;
 }
 
-// Returns the UserCall if applicable from the group object
-// OD 2004-03-31 #i26791# - change return type
+/** Returns the UserCall if applicable from the group object
+    #i26791# - change return type
+*/
 SwContact* GetUserCall( const SdrObject* pObj )
 {
     SdrObject *pTmp;
@@ -163,7 +164,7 @@ SwContact* GetUserCall( const SdrObject* pObj )
     return static_cast<SwContact*>(pObj->GetUserCall());
 }
 
-// Returns sal_True if the SrdObject is a Marquee-Object (scrolling text)
+/// Returns sal_True if the SrdObject is a Marquee-Object (scrolling text)
 sal_Bool IsMarqueeTextObj( const SdrObject& rObj )
 {
     SdrTextAniKind eTKind;
@@ -195,9 +196,7 @@ void SwContact::SetInDTOR()
     mbInDTOR = true;
 }
 
-/** method to move drawing object to corresponding visible layer
-    @author OD
-*/
+/// method to move drawing object to corresponding visible layer
 void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 {
     // #i46297# - notify background about the arriving of
@@ -228,10 +227,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
     }
 }
 
-/** method to move drawing object to corresponding invisible layer
-    OD 21.08.2003 #i18447#
-    @author OD
-*/
+/// method to move drawing object to corresponding invisible layer - #i18447#
 void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 {
     // #i46297# - notify background about the leaving of the object.
@@ -255,11 +251,10 @@ void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
     }
 }
 
-/** method to move object to visible/invisible layer
-    OD 21.08.2003 #i18447#
+/** method to move object to visible/invisible layer -  #i18447#
+
     implementation for the public method <MoveObjToVisibleLayer(..)>
     and <MoveObjToInvisibleLayer(..)>
-    @author OD
 */
 void SwContact::_MoveObjToLayer( const bool _bToVisible,
                                  SdrObject* _pDrawObj )
@@ -358,9 +353,7 @@ const SwIndex& SwContact::GetCntntAnchorIndex() const
     return GetCntntAnchor().nContent;
 }
 
-// get minimum order number of anchored objects handled by with contact
-// @author
-
+/// get minimum order number of anchored objects handled by with contact
 sal_uInt32 SwContact::GetMinOrdNum() const
 {
     sal_uInt32 nMinOrdNum( SAL_MAX_UINT32 );
@@ -385,10 +378,7 @@ sal_uInt32 SwContact::GetMinOrdNum() const
     return nMinOrdNum;
 }
 
-/** get maximum order number of anchored objects handled by with contact
-
-    @author
-*/
+/// get maximum order number of anchored objects handled by with contact
 sal_uInt32 SwContact::GetMaxOrdNum() const
 {
     sal_uInt32 nMaxOrdNum( 0L );
@@ -416,7 +406,7 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
 SwFlyDrawContact::SwFlyDrawContact( SwFlyFrmFmt *pToRegisterIn, SdrModel * ) :
     SwContact( pToRegisterIn )
 {
-    // OD 2004-04-01 #i26791# - class <SwFlyDrawContact> contains the 'master'
+    // #i26791# - class <SwFlyDrawContact> contains the 'master'
     // drawing object of type <SwFlyDrawObj> on its own.
     mpMasterObj = new SwFlyDrawObj;
     mpMasterObj->SetOrdNum( 0xFFFFFFFE );
@@ -434,7 +424,7 @@ SwFlyDrawContact::~SwFlyDrawContact()
     }
 }
 
-// OD 2004-03-29 #i26791#
+// #i26791#
 const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj ) const
 {
     OSL_ENSURE( _pSdrObj,
@@ -568,10 +558,7 @@ void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
     SwContact::MoveObjToInvisibleLayer( _pDrawObj );
 }
 
-/** get data collection of anchored objects, handled by with contact
-
-    @author
-*/
+/// get data collection of anchored objects, handled by with contact
 void SwFlyDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const
 {
     const SwFrmFmt* pFmt = GetFmt();
@@ -591,7 +578,7 @@ bool CheckControlLayer( const SdrObject *pObj )
         {
             if ( ::CheckControlLayer( pLst->GetObj( i ) ) )
             {
-                // OD 21.08.2003 #i18447# - return correct value ;-)
+                // #i18447# - return correct value ;-)
                 return true;
             }
         }
@@ -694,7 +681,7 @@ void SwDrawContact::GetTextObjectsFromFmt( std::list<SdrTextObj*>& rTextObjects,
     }
 }
 
-// OD 2004-03-29 #i26791#
+// #i26791#
 const SwAnchoredObject* SwDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj ) const
 {
     // handle default parameter value
@@ -920,7 +907,7 @@ SwDrawContact::VirtObjAnchoredAtFrmPred::VirtObjAnchoredAtFrmPred(
     }
 }
 
-// OD 2004-04-14 #i26791# - compare with master frame
+// #i26791# - compare with master frame
 bool SwDrawContact::VirtObjAnchoredAtFrmPred::operator() ( const SwDrawVirtObj* _pDrawVirtObj )
 {
     const SwFrm* pObjAnchorFrm = _pDrawVirtObj->GetAnchorFrm();
@@ -1022,7 +1009,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
     }
 }
 
-// OD 2004-04-08 #i26791# - local method to notify the background for a drawing object
+/// local method to notify the background for a drawing object - #i26791#
 static void lcl_NotifyBackgroundOfObj( SwDrawContact& _rDrawContact,
                                 const SdrObject& _rObj,
                                 const Rectangle* _pOldObjRect )
@@ -1061,7 +1048,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
                              SdrUserCallType eType,
                              const Rectangle& rOldBoundRect )
 {
-    // OD 2004-06-01 #i26791# - no event handling, if existing <ViewShell>
+    // #i26791# - no event handling, if existing <ViewShell>
     // is in contruction
     SwDoc* pDoc = GetFmt()->GetDoc();
     if ( pDoc->GetCurrentViewShell() &&
@@ -1290,7 +1277,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 break;
             }
 
-            // OD 2004-04-06 #i26791# - adjust positioning and alignment attributes,
+            // #i26791# - adjust positioning and alignment attributes,
             // if positioning of drawing object isn't in progress.
             // #i53320# - no adjust of positioning attributes,
             // if drawing object isn't positioned.
@@ -1560,7 +1547,7 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     GetAnchoredObj( 0L )->ResetLayoutProcessBools();
 }
 
-// OD 2004-03-31 #i26791#
+// #i26791#
 // #i28701# - added parameter <_bUpdateSortedObjsList>
 void SwDrawContact::_InvalidateObjs( const bool _bUpdateSortedObjsList )
 {
@@ -2156,10 +2143,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-/** implementation of class <SwDrawVirtObj>
- *  @author OD
-*/
-
+/// implementation of class <SwDrawVirtObj>
 TYPEINIT1(SwDrawVirtObj,SdrVirtObj);
 
 sdr::contact::ViewContact* SwDrawVirtObj::CreateObjectSpecificViewContact()
@@ -2171,11 +2155,11 @@ sdr::contact::ViewContact* SwDrawVirtObj::CreateObjectSpecificViewContact()
 SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
                               SwDrawContact&    _rDrawContact )
     : SdrVirtObj( _rNewObj ),
-      // OD 2004-03-29 #i26791# - init new member <maAnchoredDrawObj>
+      // #i26791# - init new member <maAnchoredDrawObj>
       maAnchoredDrawObj(),
       mrDrawContact( _rDrawContact )
 {
-    // OD 2004-03-29 #i26791#
+    // #i26791#
     maAnchoredDrawObj.SetDrawObj( *this );
     // #i35635# - set initial position out of sight
     NbcMove( Size( -RECT_EMPTY, -RECT_EMPTY ) );
@@ -2219,20 +2203,20 @@ SwAnchoredObject* SwDrawVirtObj::AnchoredObj()
 
 const SwFrm* SwDrawVirtObj::GetAnchorFrm() const
 {
-    // OD 2004-03-29 #i26791# - use new member <maAnchoredDrawObj>
+    // #i26791# - use new member <maAnchoredDrawObj>
     return maAnchoredDrawObj.GetAnchorFrm();
 }
 
 SwFrm* SwDrawVirtObj::AnchorFrm()
 {
-    // OD 2004-03-29 #i26791# - use new member <maAnchoredDrawObj>
+    // #i26791# - use new member <maAnchoredDrawObj>
     return maAnchoredDrawObj.AnchorFrm();
 }
 
 void SwDrawVirtObj::RemoveFromWriterLayout()
 {
     // remove contact object from frame for 'virtual' drawing object
-    // OD 2004-03-29 #i26791# - use new member <maAnchoredDrawObj>
+    // #i26791# - use new member <maAnchoredDrawObj>
     if ( maAnchoredDrawObj.GetAnchorFrm() )
     {
         maAnchoredDrawObj.AnchorFrm()->RemoveDrawObj( maAnchoredDrawObj );
@@ -2332,7 +2316,7 @@ void SwDrawVirtObj::SetBoundRectDirty()
 
 void SwDrawVirtObj::RecalcBoundRect()
 {
-    // OD 2004-04-05 #i26791# - switch order of calling <GetOffset()> and
+    // #i26791# - switch order of calling <GetOffset()> and
     // <ReferencedObj().GetCurrentBoundRect()>, because <GetOffset()> calculates
     // its value by the 'BoundRect' of the referenced object.
 
