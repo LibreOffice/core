@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///5U\u003d",
+        "filename": "sw/source/core/draw/dcontact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2161,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-02-16T11:38:07Z",
+      "side": 1,
+      "message": "these ASCII Art lines can be removed completey IMHO",
+      "revId": "02a5bc403705d1c19733a6f4548f59f8968e52a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
