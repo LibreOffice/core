@@ -20,7 +20,6 @@ ifeq ($(OS),LINUX)
 ifneq ($(filter rpm,$(PKGFORMAT)),)
 $(eval $(call gb_Package_add_file,scripts_generated,bin/userscripts/install,install))
 $(eval $(call gb_Package_add_file,scripts_generated,bin/userscripts/uninstall,uninstall))
-$(eval $(call gb_Package_add_file,scripts_generated,bin/openoffice-userland-1.0-0.noarch.rpm,noarch/fake-db-1.0-0.noarch.rpm))
 endif
 endif
 # vim: set noet sw=4 ts=4:
