@@ -30,6 +30,8 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/table/XCell.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
@@ -196,7 +198,7 @@ protected:
     }
 
     // Get paragraph (counted from 1), optionally check it contains the given text.
-    uno::Reference< text::XTextRange > getParagraph( int number, OUString content = OUString() ) const
+    uno::Reference<text::XTextContent> getParagraphOrTable(int number) const
     {
         uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
@@ -205,10 +207,18 @@ protected:
              i < number;
              ++i )
             paraEnum->nextElement();
-        uno::Reference< text::XTextRange > paragraph( paraEnum->nextElement(), uno::UNO_QUERY );
+        uno::Reference< text::XTextContent> const xElem(paraEnum->nextElement(),
+                uno::UNO_QUERY_THROW);
+        return xElem;
+    }
+
+    uno::Reference< text::XTextRange > getParagraph( int number, OUString content = OUString() ) const
+    {
+        uno::Reference<text::XTextRange> const xParagraph(
+                getParagraphOrTable(number), uno::UNO_QUERY_THROW);
         if( !content.isEmpty())
-            CPPUNIT_ASSERT_EQUAL( content, paragraph->getString());
-        return paragraph;
+            CPPUNIT_ASSERT_EQUAL( content, xParagraph->getString());
+        return xParagraph;
     }
 
     /// Get run (counted from 1) of a paragraph, optionally check it contains the given text.
@@ -233,6 +243,24 @@ protected:
         return getProperty<OUString>(getProperty< uno::Reference<beans::XPropertySet> >(xFormula, "Model"), "Formula");
     }
 
+    /// get cell of a table; table can be retrieved with getParagraphOrTable
+    uno::Reference<table::XCell> getCell(
+            uno::Reference<uno::XInterface> const& xTableIfc,
+            OUString const& rCell, OUString const& rContent = OUString())
+    {
+        uno::Reference<text::XTextTable> const xTable(xTableIfc,
+                uno::UNO_QUERY_THROW);
+        uno::Reference<table::XCell> const xCell(
+                xTable->getCellByName(rCell), uno::UNO_SET_THROW);
+        if (!rContent.isEmpty())
+        {
+            uno::Reference<text::XText> const xCellText(xCell,
+                    uno::UNO_QUERY_THROW);
+            CPPUNIT_ASSERT_EQUAL(rContent, xCellText->getString());
+        }
+        return xCell;
+    }
+
     void header()
     {
         fprintf(stderr, "File tested,Execution Time (ms)\n");
@@ -246,7 +274,7 @@ protected:
         mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.text.TextDocument");
         calcLayout();
     }
-    
+
     void reload(OUString aFilter)
     {
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);

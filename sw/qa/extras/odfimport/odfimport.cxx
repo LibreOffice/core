@@ -42,6 +42,7 @@ public:
     void testOdtBorders();
     void testPageStyleLayoutDefault();
     void testPageStyleLayoutRight();
+    void testFdo60842();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -61,6 +62,7 @@ void Test::run()
         {"borders_ooo33.odt", &Test::testOdtBorders},
         {"hello.odt", &Test::testPageStyleLayoutDefault},
         {"hello.odt", &Test::testPageStyleLayoutRight},
+        {"fdo60842.odt", &Test::testFdo60842},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -289,6 +291,16 @@ void Test::testPageStyleLayoutRight()
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
     // This caused a crash.
     xPropertySet->setPropertyValue("PageStyleLayout", uno::makeAny(style::PageStyleLayout_RIGHT));
+}
+
+void Test::testFdo60842()
+{
+    uno::Reference<text::XTextContent> const xTable(getParagraphOrTable(0));
+    getCell(xTable, "A1", "");
+    getCell(xTable, "B1", "18/02/2012");
+    getCell(xTable, "C1", "USD"); // this is the cell with office:string-value
+    getCell(xTable, "D1", "");
+    getCell(xTable, "E1", "01/04/2012");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
