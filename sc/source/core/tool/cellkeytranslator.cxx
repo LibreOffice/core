@@ -45,7 +45,7 @@ enum LocaleMatch
 static LocaleMatch lclLocaleCompare(const Locale& rLocale1, const Locale& rLocale2)
 {
     LocaleMatch eMatchLevel = LOCALE_MATCH_NONE;
-    if ( !rLocale1.Language.compareTo(rLocale1.Language) )
+    if ( !rLocale1.Language.compareTo(rLocale2.Language) )
         eMatchLevel = LOCALE_MATCH_LANG;
     else
         return eMatchLevel;
