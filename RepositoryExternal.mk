@@ -505,7 +505,14 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-gb_LinkTarget__use_boost_headers:=
+define gb_LinkTarget__use_boost_headers
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(BOOST_CPPFLAGS) \
+)
+
+endef
+
 gb_ExternalProject__use_boost_headers:=
 
 else # !SYSTEM_BOOST
