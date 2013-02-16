@@ -188,6 +188,10 @@ public:
 
     const ScDPAggData*  GetExistingChild() const    { return pChild; }
     ScDPAggData*        GetChild();
+
+#if DEBUG_PIVOT_TABLE
+    void Dump(int nIndent) const;
+#endif
 };
 
 //
@@ -416,6 +420,8 @@ public:
 
 #if DEBUG_PIVOT_TABLE
     void DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
+
+    void Dump(int nIndent) const;
 #endif
 
                         //! this will be removed!
@@ -483,6 +489,7 @@ public:
 
 #if DEBUG_PIVOT_TABLE
     void DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
+    void Dump(int nIndent) const;
 #endif
 
                         //! this will be removed!
@@ -579,6 +586,7 @@ public:
 
 #if DEBUG_PIVOT_TABLE
     void DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
+    void Dump(int nIndent) const;
 #endif
 
                         //  for ScDPDataDimension::InitFrom
@@ -641,6 +649,7 @@ public:
 
 #if DEBUG_PIVOT_TABLE
     void DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const;
+    void Dump(int nIndent) const;
 #endif
 
     long                GetMemberCount() const;

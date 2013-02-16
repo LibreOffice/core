@@ -46,7 +46,6 @@ ScDPNumGroupInfo::ScDPNumGroupInfo(const ScDPNumGroupInfo& r) :
     mfEnd(r.mfEnd), mfStep(r.mfStep) {}
 
 #if DEBUG_PIVOT_TABLE
-#include <iostream>
 using std::cout;
 using std::endl;
 

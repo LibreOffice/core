@@ -39,7 +39,6 @@
 #include "stlsheet.hxx"
 
 #if DEBUG_PIVOT_TABLE
-#include <iostream>
 using std::cout;
 using std::endl;
 #endif

@@ -1171,6 +1171,16 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const rtl::OUString& aPropertyNa
     return aRet;
 }
 
+#if DEBUG_PIVOT_TABLE
+void ScDPSource::DumpResults() const
+{
+    std::cout << "+++++ column root" << std::endl;
+    pColResRoot->Dump(1);
+    std::cout << "+++++ row root" << std::endl;
+    pRowResRoot->Dump(1);
+}
+#endif
+
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPSource )
 
 // -----------------------------------------------------------------------

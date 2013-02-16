@@ -31,6 +31,12 @@
 
 #define DEBUG_PIVOT_TABLE 0
 
+#if DEBUG_PIVOT_TABLE
+#include <iostream>
+#include <string>
+#include <cstdio>
+#endif
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

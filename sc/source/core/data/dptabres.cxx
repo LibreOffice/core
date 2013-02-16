@@ -640,6 +640,20 @@ void ScDPAggData::Reset()
     pChild = NULL;
 }
 
+#if DEBUG_PIVOT_TABLE
+void ScDPAggData::Dump(int nIndent) const
+{
+    std::string aIndent(nIndent*2, ' ');
+    std::cout << aIndent << "* ";
+    if (IsCalculated())
+        std::cout << GetResult();
+    else
+        std::cout << "not calculated";
+
+    std::cout << "  [val=" << fVal << "; aux=" << fAux << "; count=" << nCount << "]" << std::endl;
+}
+#endif
+
 // -----------------------------------------------------------------------
 
 ScDPRowTotals::ScDPRowTotals() :
@@ -1738,6 +1752,25 @@ void ScDPResultMember::DumpState( const ScDPResultMember* pRefMember, ScDocument
 
     lcl_Indent( pDoc, nStartRow, rPos );
 }
+
+void ScDPResultMember::Dump(int nIndent) const
+{
+    std::string aIndent(nIndent*2, ' ');
+    std::cout << aIndent << "-- result member '" << GetName() << "'" << std::endl;
+
+    std::cout << aIndent << " column totals" << std::endl;
+    for (const ScDPAggData* p = &aColTotal; p; p = p->GetExistingChild())
+        p->Dump(nIndent+1);
+
+    if (pChildDimension)
+        pChildDimension->Dump(nIndent+1);
+
+    if (pDataRoot)
+    {
+        std::cout << aIndent << " data root" << std::endl;
+        pDataRoot->Dump(nIndent+1);
+    }
+}
 #endif
 
 ScDPAggData* ScDPResultMember::GetColTotal( long nMeasure ) const
@@ -2578,6 +2611,18 @@ void ScDPDataMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* 
 
     lcl_Indent( pDoc, nStartRow, rPos );
 }
+
+void ScDPDataMember::Dump(int nIndent) const
+{
+    std::string aIndent(nIndent*2, ' ');
+    std::cout << aIndent << "-- data member '"
+        << (pResultMember ? pResultMember->GetName() : OUString()) << "'" << std::endl;
+    for (const ScDPAggData* pAgg = &aAggregate; pAgg; pAgg = pAgg->GetExistingChild())
+        pAgg->Dump(nIndent+1);
+
+    if (pChildDimension)
+        pChildDimension->Dump(nIndent+1);
+}
 #endif
 
 // -----------------------------------------------------------------------
@@ -3395,6 +3440,18 @@ void ScDPResultDimension::DumpState( const ScDPResultMember* pRefMember, ScDocum
 
     lcl_Indent( pDoc, nStartRow, rPos );
 }
+
+void ScDPResultDimension::Dump(int nIndent) const
+{
+    std::string aIndent(nIndent*2, ' ');
+    std::cout << aIndent << "-- dimension '" << GetName() << "'" << std::endl;
+    MemberArray::const_iterator it = maMemberArray.begin(), itEnd = maMemberArray.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScDPResultMember* p = *it;
+        p->Dump(nIndent+1);
+    }
+}
 #endif
 
 long ScDPResultDimension::GetMemberCount() const
@@ -3757,6 +3814,16 @@ void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocumen
     }
 
     lcl_Indent( pDoc, nStartRow, rPos );
+}
+
+void ScDPDataDimension::Dump(int nIndent) const
+{
+    std::string aIndent(nIndent*2, ' ');
+    std::cout << aIndent << "-- data dimension '"
+        << (pResultDimension ? pResultDimension->GetName() : OUString()) << "'" << std::endl;
+    ScDPDataMembers::const_iterator it = maMembers.begin(), itEnd = maMembers.end();
+    for (; it != itEnd; ++it)
+        (*it)->Dump(nIndent+1);
 }
 #endif
 

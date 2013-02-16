@@ -262,6 +262,10 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+#if DEBUG_PIVOT_TABLE
+    void DumpResults() const;
+#endif
 };
 
 class ScDPDimensions : public cppu::WeakImplHelper2<

@@ -285,7 +285,6 @@ ScDPValue::Type ScDPItemData::GetCellType() const
 }
 
 #if DEBUG_PIVOT_TABLE
-#include <cstdio>
 
 void ScDPItemData::Dump(const char* msg) const
 {

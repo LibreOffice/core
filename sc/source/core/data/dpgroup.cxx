@@ -1004,7 +1004,6 @@ long ScDPGroupTableData::Compare(long nDim, long nDataId1, long nDataId2)
 }
 
 #if DEBUG_PIVOT_TABLE
-#include <iostream>
 using std::cout;
 using std::endl;
 

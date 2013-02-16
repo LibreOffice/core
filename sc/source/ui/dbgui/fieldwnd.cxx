@@ -62,7 +62,6 @@ const size_t PIVOTFIELD_INVALID = static_cast< size_t >(-1);
 const size_t INVALID_INDEX = static_cast<size_t>(-1);
 
 #if DEBUG_PIVOT_TABLE
-#include <iostream>
 using std::cout;
 using std::endl;
 #endif

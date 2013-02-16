@@ -417,7 +417,6 @@ const ScDPCache* ScDPFilteredCache::getCache() const
 }
 
 #if DEBUG_PIVOT_TABLE
-#include <iostream>
 using std::cout;
 using std::endl;
 
