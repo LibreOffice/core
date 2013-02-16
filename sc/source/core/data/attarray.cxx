@@ -1247,7 +1247,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
                     if( pSet && pSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SFX_ITEM_SET )
                     {
                         const ScProtectionAttr* pCondProtect = static_cast<const ScProtectionAttr*>(pItem);
-                        if( pCondProtect->GetProtection() || pProtect->GetHideCell() )
+                        if( pCondProtect->GetProtection() || pCondProtect->GetHideCell() )
                             bFoundCond = true;
                         else
                             break;
