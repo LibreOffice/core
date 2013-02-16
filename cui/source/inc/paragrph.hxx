@@ -222,41 +222,37 @@ private:
                         SvxExtParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
 
     // hyphenation
-    FixedLine           aExtFL;
-    TriStateBox         aHyphenBox;
-    FixedText           aBeforeText;
-    NumericField        aExtHyphenBeforeBox;
-    FixedText           aAfterText;
-    NumericField        aExtHyphenAfterBox;
-    FixedText           aMaxHyphenLabel;
-    NumericField        aMaxHyphenEdit;
+    TriStateBox*        m_pHyphenBox;
+    FixedText*          m_pBeforeText;
+    NumericField*       m_pExtHyphenBeforeBox;
+    FixedText*          m_pAfterText;
+    NumericField*       m_pExtHyphenAfterBox;
+    FixedText*          m_pMaxHyphenLabel;
+    NumericField*       m_pMaxHyphenEdit;
 
     // pagebreak
-    FixedLine           aBreaksFL;
-    TriStateBox         aPageBreakBox;
-    FixedText           aBreakTypeFT;
-    ListBox             aBreakTypeLB;
-    FixedText           aBreakPositionFT;
-    ListBox             aBreakPositionLB;
-    TriStateBox         aApplyCollBtn;
-    ListBox             aApplyCollBox;
-    FixedText           aPagenumText;
-    NumericField        aPagenumEdit;
-
-    FixedLine           aExtendFL;
+    TriStateBox*        m_pPageBreakBox;
+    FixedText*          m_pBreakTypeFT;
+    ListBox*            m_pBreakTypeLB;
+    FixedText*          m_pBreakPositionFT;
+    ListBox*            m_pBreakPositionLB;
+    TriStateBox*        m_pApplyCollBtn;
+    ListBox*            m_pApplyCollBox;
+    FixedText*          m_pPagenumText;
+    NumericField*       m_pPagenumEdit;
 
     // paragraph division
-    TriStateBox         aKeepTogetherBox;
-    TriStateBox         aKeepParaBox;
+    TriStateBox*        m_pKeepTogetherBox;
+    TriStateBox*        m_pKeepParaBox;
 
     // orphan/widow
-    TriStateBox         aOrphanBox;
-    NumericField        aOrphanRowNo;
-    FixedText           aOrphanRowLabel;
+    TriStateBox*        m_pOrphanBox;
+    NumericField*       m_pOrphanRowNo;
+    FixedText*          m_pOrphanRowLabel;
 
-    TriStateBox         aWidowBox;
-    NumericField        aWidowRowNo;
-    FixedText           aWidowRowLabel;
+    TriStateBox*        m_pWidowBox;
+    NumericField*       m_pWidowRowNo;
+    FixedText*          m_pWidowRowLabel;
 
     sal_Bool                bPageBreak;
     sal_Bool                bHtmlMode;
