@@ -1354,11 +1354,11 @@ sal_uInt8 SwScriptInfo::DirType( const xub_StrLen nPos ) const
  * Takes a string and replaced the hidden ranges with cChar.
  **************************************************************************/
 
-sal_uInt16 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
+sal_uInt16 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, OUStringBuffer & rText,
                                        const xub_StrLen nStt, const xub_StrLen nEnd,
                                        const sal_Unicode cChar )
 {
-    assert(rNode.GetTxt().Len() == rText.Len());
+    assert(rNode.GetTxt().Len() == rText.getLength());
 
     PositionList aList;
     xub_StrLen nHiddenStart;
@@ -1379,7 +1379,7 @@ sal_uInt16 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, XubString& rT
         {
             if ( nHiddenStart >= nStt && nHiddenStart < nEnd )
             {
-                rText.SetChar( nHiddenStart, cChar );
+                rText[nHiddenStart] = cChar;
                 ++nNumOfHiddenChars;
             }
             ++nHiddenStart;

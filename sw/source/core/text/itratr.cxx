@@ -623,7 +623,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     xub_StrLen nIdx = 0;
     aIter.SeekAndChgAttrIter( nIdx, pOut );
-    xub_StrLen nLen = m_Text.Len();
+    xub_StrLen nLen = m_Text.getLength();
     long nAktWidth = 0;
     MSHORT nAdd = 0;
     SwMinMaxArgs aArg( pOut, pSh, rMin, rMax, rAbsMin );
@@ -637,7 +637,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
         sal_Unicode cChar = CH_BLANK;
         nStop = nIdx;
         while( nStop < nLen && nStop < nNextChg &&
-               CH_TAB != ( cChar = m_Text.GetChar( nStop ) ) &&
+               CH_TAB != ( cChar = m_Text[nStop] ) &&
                CH_BREAK != cChar && CHAR_HARDBLANK != cChar &&
                CHAR_HARDHYPHEN != cChar && CHAR_SOFTHYPHEN != cChar &&
                !pHint )
@@ -887,7 +887,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
         // stop at special characters in [ nIdx, nNextChg ]
         while( nStop < nEnd && nStop < nNextChg )
         {
-            cChar = m_Text.GetChar( nStop );
+            cChar = m_Text[nStop];
             if (
                 CH_TAB == cChar ||
                 CH_BREAK == cChar ||

@@ -24,6 +24,8 @@
 #include <deque>
 #include "swscanner.hxx"
 
+namespace rtl { class OUStringBuffer; }
+
 class SwTxtNode;
 class Point;
 class MultiSelection;
@@ -184,14 +186,15 @@ public:
 
     @param  rNode
                 The text node.
-    @param  nPos
+    @param  rText
                 The string to modify.
     @param  cChar
                 The character that should replace the hidden characters.
     @param  bDel
                 If set, the hidden ranges will be deleted from the text node.
  */
-    static sal_uInt16 MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
+    static sal_uInt16 MaskHiddenRanges(
+            const SwTxtNode& rNode, ::rtl::OUStringBuffer& rText,
                                     const xub_StrLen nStt, const xub_StrLen nEnd,
                                     const sal_Unicode cChar );
 

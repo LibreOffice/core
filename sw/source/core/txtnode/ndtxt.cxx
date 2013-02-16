@@ -269,7 +269,7 @@ SwCntntFrm *SwTxtNode::MakeFrm( SwFrm* pSib )
 
 xub_StrLen SwTxtNode::Len() const
 {
-    return m_Text.Len();
+    return m_Text.getLength();
 }
 
 /*---------------------------------------------------------------------------
@@ -359,7 +359,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
     // lege den Node "vor" mir an
     const xub_StrLen nSplitPos = rPos.nContent.GetIndex();
-    const xub_StrLen nTxtLen = m_Text.Len();
+    const xub_StrLen nTxtLen = m_Text.getLength();
     SwTxtNode* const pNode =
         _MakeNewTxtNode( rPos.nNode, sal_False, nSplitPos==nTxtLen );
 
@@ -384,7 +384,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         ResetAttr( RES_PARATR_LIST_LEVEL );
     }
 
-    if ( GetDepends() && m_Text.Len() && (nTxtLen / 2) < nSplitPos )
+    if ( GetDepends() && !m_Text.isEmpty() && (nTxtLen / 2) < nSplitPos )
     {
 // JP 25.04.95: Optimierung fuer SplitNode:
 //              Wird am Ende vom Node gesplittet, dann verschiebe die
@@ -603,7 +603,7 @@ void SwTxtNode::MoveTxtAttr_To_AttrSet()
         if( !pHtEndIdx )
             continue;
 
-        if ( *pHtEndIdx < m_Text.Len() || pHt->IsCharFmtAttr() )
+        if (*pHtEndIdx < m_Text.getLength() || pHt->IsCharFmtAttr())
             break;
 
         if( !pHt->IsDontMoveAttr() &&
@@ -627,7 +627,7 @@ SwCntntNode *SwTxtNode::JoinNext()
         std::vector<sal_uLong> aBkmkArr;
         _SaveCntntIdx( pDoc, aIdx.GetIndex(), USHRT_MAX, aBkmkArr, SAVEFLY );
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
-        xub_StrLen nOldLen = m_Text.Len();
+        xub_StrLen nOldLen = m_Text.getLength();
 
         // METADATA: merge
         this->JoinMetadatable(*pTxtNode, !this->Len(), !pTxtNode->Len());
@@ -1102,7 +1102,7 @@ bool SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
                                 bool bFmtToTxtAttributes )
 {
     const xub_StrLen nIdx = rIdx.GetIndex();
-    if ( bFmtToTxtAttributes && nIdx == m_Text.Len() )
+    if (bFmtToTxtAttributes && nIdx == m_Text.getLength())
     {
         FmtToTxtAttr( this );
     }
@@ -1451,7 +1451,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
                       const xub_StrLen nLen,
                       const bool bForceCopyOfAllAttrs )
 {
-    SwIndex aIdx( pDest, pDest->m_Text.Len() );
+    SwIndex const aIdx( pDest, pDest->m_Text.getLength() );
     CopyText( pDest, aIdx, rStart, nLen, bForceCopyOfAllAttrs );
 }
 
@@ -1510,15 +1510,15 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     }
 
     // 1. Text kopieren
-    const xub_StrLen oldLen = pDest->m_Text.Len();
+    const xub_StrLen oldLen = pDest->m_Text.getLength();
     //JP 15.02.96: Bug 25537 - Attributbehandlung am Ende fehlt! Darum
     //              ueber die InsertMethode den Text einfuegen und nicht
     //              selbst direkt
-    pDest->InsertText( m_Text.Copy( nTxtStartIdx, nLen ), rDestStart,
+    pDest->InsertText( m_Text.copy(nTxtStartIdx, nLen), rDestStart,
                    IDocumentContentOperations::INS_EMPTYEXPAND );
 
     // um reale Groesse Updaten !
-    nLen = pDest->m_Text.Len() - oldLen;
+    nLen = pDest->m_Text.getLength() - oldLen;
     if ( !nLen ) // string not longer?
         return;
 
@@ -1706,11 +1706,11 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 OUString SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
         const IDocumentContentOperations::InsertFlags nMode )
 {
-    OSL_ENSURE( rIdx <= m_Text.Len(), "SwTxtNode::InsertText: invalid index." );
+    OSL_ENSURE( rIdx <= m_Text.getLength(), "SwTxtNode::InsertText: invalid index." );
 
     xub_StrLen aPos = rIdx.GetIndex();
-    xub_StrLen nLen = m_Text.Len() - aPos;
-    long const nOverflow(static_cast<long>(m_Text.Len())
+    xub_StrLen nLen = m_Text.getLength() - aPos;
+    long const nOverflow(static_cast<long>(m_Text.getLength())
             + static_cast<long>(rStr.Len()) - TXTNODE_MAX);
     SAL_WARN_IF(nOverflow > 0, "sw.core",
             "SwTxtNode::InsertText: node text with insertion > TXTNODE_MAX.");
@@ -1720,9 +1720,9 @@ OUString SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
     {
         return sInserted;
     }
-    m_Text.Insert(sInserted, aPos);
-    assert(m_Text.Len() <= TXTNODE_MAX);
-    nLen = m_Text.Len() - aPos - nLen;
+    m_Text = m_Text.replaceAt(aPos, 0, sInserted);
+    assert(m_Text.getLength() <= TXTNODE_MAX);
+    nLen = m_Text.getLength() - aPos - nLen;
     assert(nLen != 0);
 
     bool bOldExpFlg = IsIgnoreDontExpand();
@@ -1864,14 +1864,17 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 
     xub_StrLen nTxtStartIdx = rStart.GetIndex();
     xub_StrLen nDestStart = rDestStart.GetIndex();      // alte Pos merken
-    const xub_StrLen nInitSize = pDest->m_Text.Len();
+    const xub_StrLen nInitSize = pDest->m_Text.getLength();
 
     // wird in sich selbst verschoben, muss es gesondert behandelt werden !!
     if( pDest == this )
     {
         OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
-        m_Text.Insert( m_Text, nTxtStartIdx, nLen, nDestStart );
-        m_Text.Erase( nTxtStartIdx + (nDestStart<nTxtStartIdx ? nLen : 0), nLen );
+        OUStringBuffer buf(m_Text);
+        buf.insert(nDestStart, m_Text.copy(nTxtStartIdx, nLen));
+        buf.remove(
+            nTxtStartIdx + ((nDestStart < nTxtStartIdx) ? nLen : 0), nLen);
+        m_Text = buf.makeStringAndClear();
 
         const xub_StrLen nEnd = rStart.GetIndex() + nLen;
 
@@ -1978,9 +1981,10 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
     }
     else
     {
-        pDest->m_Text.Insert( m_Text, nTxtStartIdx, nLen, nDestStart );
-        m_Text.Erase( nTxtStartIdx, nLen );
-        nLen = pDest->m_Text.Len() - nInitSize; // update w/ current size!
+        pDest->m_Text = pDest->m_Text.replaceAt(nDestStart, 0,
+                            m_Text.copy(nTxtStartIdx, nLen));
+        m_Text = m_Text.replaceAt(nTxtStartIdx, nLen, "");
+        nLen = pDest->m_Text.getLength() - nInitSize; // update w/ current size!
         if( !nLen )                 // String nicht gewachsen ??
             return;
 
@@ -2165,13 +2169,13 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
         const IDocumentContentOperations::InsertFlags nMode )
 {
-    OSL_ENSURE( rIdx <= m_Text.Len(), "SwTxtNode::EraseText: invalid index." );
+    OSL_ENSURE( rIdx <= m_Text.getLength(), "SwTxtNode::EraseText: invalid index." );
 
     const xub_StrLen nStartIdx = rIdx.GetIndex();
     const xub_StrLen nCnt = (STRING_LEN == nCount)
-                      ? m_Text.Len() - nStartIdx : nCount;
+                      ? m_Text.getLength() - nStartIdx : nCount;
     const xub_StrLen nEndIdx = nStartIdx + nCnt;
-    m_Text.Erase( nStartIdx, nCnt );
+    m_Text = m_Text.replaceAt(nStartIdx, nCnt, "");
 
     /* GCAttr(); alle leeren weggwerfen ist zu brutal.
      * Es duerfen nur die wegggeworfen werden,
@@ -2278,7 +2282,7 @@ void SwTxtNode::GCAttr()
         return;
 
     bool   bChanged = false;
-    sal_uInt16 nMin = m_Text.Len(),
+    sal_uInt16 nMin = m_Text.getLength(),
            nMax = 0;
     bool bAll = nMin != 0; // Bei leeren Absaetzen werden nur die
                            // INet-Formate entfernt.
@@ -2959,16 +2963,20 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     xub_StrLen nDestStt = aDestIdx.GetIndex();
 
     // Text einfuegen
-    String sTmpText = GetTxt();
+    OUStringBuffer buf(GetTxt());
     if( bReplaceTabsWithSpaces )
-        sTmpText.SearchAndReplaceAll('\t', ' ');
+        buf.replace('\t', ' ');
 
     // mask hidden characters
     const sal_Unicode cChar = CH_TXTATR_BREAKWORD;
-    SwScriptInfo::MaskHiddenRanges(*this, sTmpText, 0, sTmpText.Len(), cChar);
+    SwScriptInfo::MaskHiddenRanges(*this, buf, 0, buf.getLength(), cChar);
 
-    sTmpText = sTmpText.Copy( nIdx, nLen );
-    rDestNd.InsertText( sTmpText, aDestIdx );
+    buf.remove(0, nIdx);
+    if (STRING_LEN != nLen)
+    {
+        buf.truncate(nLen);
+    }
+    rDestNd.InsertText(buf.makeStringAndClear(), aDestIdx);
     nLen = aDestIdx.GetIndex() - nDestStt;
 
     // alle FontAttribute mit CHARSET Symbol in dem Bereich setzen
@@ -3324,11 +3332,11 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
 void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
                              const XubString& rStr)
 {
-    OSL_ENSURE( rStart.GetIndex() < m_Text.Len() &&
-            rStart.GetIndex() + nDelLen <= m_Text.Len(),
+    OSL_ENSURE( rStart.GetIndex() < m_Text.getLength()
+             && rStart.GetIndex() + nDelLen <= m_Text.getLength(),
             "SwTxtNode::ReplaceText: index out of bounds" );
 
-    long const nOverflow(static_cast<long>(m_Text.Len())
+    long const nOverflow(static_cast<long>(m_Text.getLength())
             + static_cast<long>(rStr.Len()) - nDelLen - TXTNODE_MAX);
     SAL_WARN_IF(nOverflow > 0, "sw.core",
             "SwTxtNode::ReplaceText: node text with insertion > TXTNODE_MAX.");
@@ -3344,8 +3352,8 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
     xub_StrLen nLen = nDelLen;
     for ( xub_StrLen nPos = nStartPos; nPos < nEndPos; ++nPos )
     {
-        if ( ( CH_TXTATR_BREAKWORD == m_Text.GetChar( nPos ) ) ||
-             ( CH_TXTATR_INWORD    == m_Text.GetChar( nPos ) ) )
+        if ((CH_TXTATR_BREAKWORD == m_Text[nPos]) ||
+            (CH_TXTATR_INWORD    == m_Text[nPos]))
         {
             SwTxtAttr *const pHint = GetTxtAttrForCharAt( nPos );
             if (pHint)
@@ -3369,22 +3377,22 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
     {
         // dann das 1. Zeichen ersetzen den Rest loschen und einfuegen
         // Dadurch wird die Attributierung des 1. Zeichen expandiert!
-        m_Text.SetChar( nStartPos, sInserted[0] );
+        m_Text = m_Text.replaceAt(nStartPos, 1, sInserted.copy(0, 1));
 
         ++((SwIndex&)rStart);
-        m_Text.Erase( rStart.GetIndex(), nLen - 1 );
+        m_Text = m_Text.replaceAt(rStart.GetIndex(), nLen - 1, "");
         Update( rStart, nLen - 1, true );
 
         XubString aTmpTxt(sInserted); aTmpTxt.Erase( 0, 1 );
-        m_Text.Insert( aTmpTxt, rStart.GetIndex() );
+        m_Text = m_Text.replaceAt(rStart.GetIndex(), 0, aTmpTxt);
         Update( rStart, aTmpTxt.Len(), false );
     }
     else
     {
-        m_Text.Erase( nStartPos, nLen );
+        m_Text = m_Text.replaceAt(nStartPos, nLen, "");
         Update( rStart, nLen, true );
 
-        m_Text.Insert( sInserted, nStartPos );
+        m_Text = m_Text.replaceAt(nStartPos, 0, sInserted);
         Update( rStart, sInserted.getLength(), false );
     }
 

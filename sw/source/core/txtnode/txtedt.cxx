@@ -95,7 +95,8 @@ extern       SwTxtFrm  *pLinguFrm;
  * only for deleted redlines
  */
 
-static sal_uInt16 lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
+static sal_uInt16
+lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
                          const xub_StrLen nStt, const xub_StrLen nEnd,
                          const sal_Unicode cChar )
 {
@@ -125,7 +126,7 @@ static sal_uInt16 lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
             {
                 if ( nRedlineStart >= nStt && nRedlineStart < nEnd )
                 {
-                    rText.SetChar( nRedlineStart, cChar );
+                    rText[nRedlineStart] = cChar;
                     ++nNumOfMaskedRedlines;
                 }
                 ++nRedlineStart;
@@ -140,7 +141,8 @@ static sal_uInt16 lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
  * Used for spell checking. Deleted redlines and hidden characters are masked
  */
 
-static sal_uInt16 lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, XubString& rText,
+static sal_uInt16
+lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
                                       const xub_StrLen nStt, const xub_StrLen nEnd,
                                       const sal_Unicode cChar = CH_TXTATR_INWORD,
                                       bool bCheckShowHiddenChar = true )
@@ -384,7 +386,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
     bool bChanged = false;
 
     // nMin and nMax initialized to maximum / minimum (inverse)
-    xub_StrLen nMin = m_Text.Len();
+    xub_StrLen nMin = m_Text.getLength();
     xub_StrLen nMax = nStt;
 
     const bool bNoLen = !nMin;
@@ -605,9 +607,9 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
 
 XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 {
-    OSL_ENSURE( nPos <= m_Text.Len(), "SwTxtNode::GetCurWord: invalid index." );
+    OSL_ENSURE( nPos <= m_Text.getLength(), "SwTxtNode::GetCurWord: invalid index." );
 
-    if (!m_Text.Len())
+    if (m_Text.isEmpty())
         return m_Text;
 
     Boundary aBndry;
@@ -637,8 +639,8 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
     if (aBndry.endPos != aBndry.startPos && IsSymbol( (xub_StrLen)aBndry.startPos ))
         aBndry.endPos = aBndry.startPos;
 
-    return m_Text.Copy( static_cast<xub_StrLen>(aBndry.startPos),
-                       static_cast<xub_StrLen>(aBndry.endPos - aBndry.startPos) );
+    return m_Text.copy(aBndry.startPos,
+                       aBndry.endPos - aBndry.startPos);
 }
 
 SwScanner::SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
@@ -872,9 +874,14 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
     xub_StrLen nBegin, nEnd;
 
     // modify string according to redline information and hidden text
-    const XubString aOldTxt( m_Text );
+    const OUString aOldTxt( m_Text );
+    OUStringBuffer buf(m_Text);
     const bool bRestoreString =
-        lcl_MaskRedlinesAndHiddenText( *this, m_Text, 0, m_Text.Len() ) > 0;
+        lcl_MaskRedlinesAndHiddenText(*this, buf, 0, m_Text.getLength()) > 0;
+    if (bRestoreString)
+    {   // ??? UGLY: is it really necessary to modify m_Text here?
+        m_Text = buf.makeStringAndClear();
+    }
 
     if ( pArgs->pStartNode != this )
         nBegin = 0;
@@ -882,7 +889,7 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
         nBegin = pArgs->pStartIdx->GetIndex();
 
     nEnd = ( pArgs->pEndNode != this )
-            ? m_Text.Len()
+            ? m_Text.getLength()
             : pArgs->pEndIdx->GetIndex();
 
     pArgs->xSpellAlt = NULL;
@@ -899,15 +906,15 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
     //      Text has been checked but there is an invalid range in the wrong list
     //
     // Nothing has to be done for case 1.
-    if ( ( IsWrongDirty() || GetWrong() ) && m_Text.Len() )
+    if ( ( IsWrongDirty() || GetWrong() ) && m_Text.getLength() )
     {
-        if ( nBegin > m_Text.Len() )
+        if (nBegin > m_Text.getLength())
         {
-            nBegin = m_Text.Len();
+            nBegin = m_Text.getLength();
         }
-        if ( nEnd > m_Text.Len() )
+        if (nEnd > m_Text.getLength())
         {
-            nEnd = m_Text.Len();
+            nEnd = m_Text.getLength();
         }
         //
         if(!IsWrongDirty())
@@ -1037,27 +1044,32 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
     }
     else
         nTextBegin = rArgs.pStartIdx->GetIndex();
-    if (nTextBegin > m_Text.Len())
+    if (nTextBegin > m_Text.getLength())
     {
-        nTextBegin = m_Text.Len();
+        nTextBegin = m_Text.getLength();
     }
 
     nTextEnd = ( rArgs.pEndNode != this )
-        ?  m_Text.Len()
-        :  ::std::min( rArgs.pEndIdx->GetIndex(), m_Text.Len() );
+        ?  m_Text.getLength()
+        :  ::std::min<xub_StrLen>(rArgs.pEndIdx->GetIndex(), m_Text.getLength());
 
     rArgs.aConvText = rtl::OUString();
 
     // modify string according to redline information and hidden text
     const OUString aOldTxt( m_Text );
+    OUStringBuffer buf(m_Text);
     const bool bRestoreString =
-        lcl_MaskRedlinesAndHiddenText( *this, m_Text, 0, m_Text.Len() ) > 0;
+        lcl_MaskRedlinesAndHiddenText(*this, buf, 0, m_Text.getLength()) > 0;
+    if (bRestoreString)
+    {   // ??? UGLY: is it really necessary to modify m_Text here?
+        m_Text = buf.makeStringAndClear();
+    }
 
     bool    bFound  = false;
     xub_StrLen  nBegin  = nTextBegin;
     xub_StrLen  nLen = 0;
     LanguageType nLangFound = LANGUAGE_NONE;
-    if (!m_Text.Len())
+    if (m_Text.isEmpty())
     {
         if (rArgs.bAllowImplicitChangesForNotConvertibleText)
         {
@@ -1093,7 +1105,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
             // and thus must be cut to the end of the actual string.
             if (nChPos == (xub_StrLen) -1)
             {
-                nChPos = m_Text.Len();
+                nChPos = m_Text.getLength();
             }
 
             nLen = nChPos - nBegin;
@@ -1142,8 +1154,8 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
 
     if (bFound && bInSelection)     // convertible text found within selection/range?
     {
-        OSL_ENSURE( m_Text.Len() > 0, "convertible text portion missing!" );
-        rArgs.aConvText     = m_Text.Copy( nBegin, nLen );
+        OSL_ENSURE( !m_Text.isEmpty(), "convertible text portion missing!" );
+        rArgs.aConvText     = m_Text.copy(nBegin, nLen);
         rArgs.nConvTextLang = nLangFound;
 
         // position where to start looking in next iteration (after current ends)
@@ -1182,14 +1194,18 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
     SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
     // modify string according to redline information and hidden text
-    const XubString aOldTxt( pNode->GetTxt() );
-    const bool bRestoreString =
-            lcl_MaskRedlinesAndHiddenText( *pNode, pNode->m_Text,
+    const OUString aOldTxt( pNode->GetTxt() );
+    OUStringBuffer buf(pNode->m_Text);
+    const bool bRestoreString = lcl_MaskRedlinesAndHiddenText( *pNode, buf,
                 0, pNode->GetTxt().Len() )     > 0;
+    if (bRestoreString)
+    {   // ??? UGLY: is it really necessary to modify m_Text here?
+        pNode->m_Text = buf.makeStringAndClear();
+    }
 
     // a change of data indicates that at least one word has been modified
     const bool bRedlineChg =
-        ( pNode->GetTxt().GetBuffer() != aOldTxt.GetBuffer() );
+        ( pNode->GetTxt().GetBuffer() != aOldTxt.getStr() );
 
     xub_StrLen nBegin = 0;
     xub_StrLen nEnd = pNode->GetTxt().Len();
@@ -1526,7 +1542,7 @@ sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     // Abkuerzung: am Absatz ist keine Sprache eingestellt:
     if ( LANGUAGE_NONE == sal_uInt16( GetSwAttrSet().GetLanguage().GetLanguage() )
-         && USHRT_MAX == GetLang( 0, m_Text.Len() ) )
+         && USHRT_MAX == GetLang(0, m_Text.getLength()))
     {
         if( !rHyphInf.IsCheck() )
             rHyphInf.SetNoLang( sal_True );
@@ -1648,9 +1664,13 @@ void SwTxtNode::TransliterateText(
                 OSL_ENSURE( nLen > 0, "invalid word length of 0" );
 
                 Sequence <sal_Int32> aOffsets;
-                String sChgd( rTrans.transliterate( GetTxt(), GetLang( nStt ), nStt, nLen, &aOffsets ));
+                OUString const sChgd( rTrans.transliterate(
+                            GetTxt(), GetLang(nStt), nStt, nLen, &aOffsets) );
 
-                if (!m_Text.Equals( sChgd, nStt, nLen ))
+                assert(nStt < m_Text.getLength());
+                if (0 == rtl_ustr_shortenedCompare_WithLength(
+                            m_Text.getStr() + nStt, m_Text.getLength() - nStt,
+                            sChgd.getStr(), sChgd.getLength(), nLen))
                 {
                     aChgData.nStart     = nStt;
                     aChgData.nLen       = nLen;
@@ -1728,10 +1748,13 @@ void SwTxtNode::TransliterateText(
                 OSL_ENSURE( nLen > 0, "invalid word length of 0" );
 
                 Sequence <sal_Int32> aOffsets;
-                String sChgd( rTrans.transliterate( GetTxt(),
-                        GetLang( nCurrentStart ), nCurrentStart, nLen, &aOffsets ));
+                OUString const sChgd( rTrans.transliterate(GetTxt(),
+                    GetLang(nCurrentStart), nCurrentStart, nLen, &aOffsets) );
 
-                if (!m_Text.Equals( sChgd, nStt, nLen ))
+                assert(nStt < m_Text.getLength());
+                if (0 == rtl_ustr_shortenedCompare_WithLength(
+                            m_Text.getStr() + nStt, m_Text.getLength() - nStt,
+                            sChgd.getStr(), sChgd.getLength(), nLen))
                 {
                     aChgData.nStart     = nCurrentStart;
                     aChgData.nLen       = nLen;
@@ -1779,9 +1802,13 @@ void SwTxtNode::TransliterateText(
                 xub_StrLen nLen = nEndPos - nStt;
 
                 Sequence <sal_Int32> aOffsets;
-                String sChgd( rTrans.transliterate( m_Text, nLang, nStt, nLen, &aOffsets ));
+                OUString const sChgd( rTrans.transliterate(
+                            m_Text, nLang, nStt, nLen, &aOffsets) );
 
-                if (!m_Text.Equals( sChgd, nStt, nLen ))
+                assert(nStt < m_Text.getLength());
+                if (0 == rtl_ustr_shortenedCompare_WithLength(
+                            m_Text.getStr() + nStt, m_Text.getLength() - nStt,
+                            sChgd.getStr(), sChgd.getLength(), nLen))
                 {
                     aChgData.nStart     = nStt;
                     aChgData.nLen       = nLen;
@@ -1799,7 +1826,7 @@ void SwTxtNode::TransliterateText(
         {
             // now apply the changes from end to start to leave the offsets of the
             // yet unchanged text parts remain the same.
-            size_t nSum(m_Text.Len());
+            size_t nSum(m_Text.getLength());
             for (size_t i = 0; i < aChanges.size(); ++i)
             {   // check this here since AddChanges cannot be moved below
                 // call to ReplaceTextOnly
@@ -1824,10 +1851,10 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
                                 const XubString& rText,
                                 const Sequence<sal_Int32>& rOffsets )
 {
-    assert(static_cast<size_t>(m_Text.Len()) +
+    assert(static_cast<size_t>(m_Text.getLength()) +
         static_cast<size_t>(rText.Len()) - nLen <= TXTNODE_MAX);
 
-    m_Text.Replace( nPos, nLen, rText );
+    m_Text = m_Text.replaceAt(nPos, nLen, rText);
 
     xub_StrLen nTLen = rText.Len();
     const sal_Int32* pOffsets = rOffsets.getConstArray();

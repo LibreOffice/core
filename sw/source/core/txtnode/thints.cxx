@@ -1301,11 +1301,11 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                         {
                             // loesche das Zeichen aus dem String !
                             OSL_ENSURE( ( CH_TXTATR_BREAKWORD ==
-                                        m_Text.GetChar(*pAttr->GetStart() ) ||
+                                        m_Text[*pAttr->GetStart()] ||
                                       CH_TXTATR_INWORD ==
-                                        m_Text.GetChar(*pAttr->GetStart())),
+                                        m_Text[*pAttr->GetStart()]),
                                     "where is my attribute character?" );
-                            m_Text.Erase( *pAttr->GetStart(), 1 );
+                            m_Text = m_Text.replaceAt(*pAttr->GetStart(), 1, "");
                             // Indizies Updaten
                             SwIndex aTmpIdx( this, *pAttr->GetStart() );
                             Update( aTmpIdx, 1, sal_True );
@@ -1337,11 +1337,11 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     {
                         // loesche das Zeichen aus dem String !
                         OSL_ENSURE( ( CH_TXTATR_BREAKWORD ==
-                                      m_Text.GetChar(*pAttr->GetStart() ) ||
+                                      m_Text[*pAttr->GetStart()] ||
                                   CH_TXTATR_INWORD ==
-                                      m_Text.GetChar(*pAttr->GetStart())),
+                                      m_Text[*pAttr->GetStart()]),
                                 "where is my attribute character?" );
-                        m_Text.Erase( *pAttr->GetStart(), 1 );
+                        m_Text = m_Text.replaceAt(*pAttr->GetStart(), 1, "");
                         // Indizies Updaten
                         SwIndex aTmpIdx( this, *pAttr->GetStart() );
                         Update( aTmpIdx, 1, sal_True );
@@ -1473,8 +1473,8 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
         // resulting in infinite recursion
         if ( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nMode) )
         {
-            OSL_ENSURE( ( CH_TXTATR_BREAKWORD == m_Text.GetChar(nStart) ||
-                      CH_TXTATR_INWORD    == m_Text.GetChar(nStart) ),
+            OSL_ENSURE( ( CH_TXTATR_BREAKWORD == m_Text[nStart] ||
+                          CH_TXTATR_INWORD    == m_Text[nStart] ),
                     "where is my attribute character?" );
             SwIndex aIdx( this, nStart );
             EraseText( aIdx, 1 );
@@ -1596,9 +1596,8 @@ void SwTxtNode::DeleteAttributes( const sal_uInt16 nWhich,
 
 void SwTxtNode::DelSoftHyph( const xub_StrLen nStt, const xub_StrLen nEnd )
 {
-    xub_StrLen nFndPos = nStt, nEndPos = nEnd;
-    while( STRING_NOTFOUND !=
-            ( nFndPos = m_Text.Search( CHAR_SOFTHYPHEN, nFndPos )) &&
+    sal_Int32 nFndPos = nStt, nEndPos = nEnd;
+    while ((-1 != (nFndPos = m_Text.indexOf(CHAR_SOFTHYPHEN, nFndPos))) &&
             nFndPos < nEndPos )
     {
         const SwIndex aIdx( this, nFndPos );
@@ -1620,7 +1619,7 @@ sal_Bool SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
     SfxItemSet aTxtSet( *rSet.GetPool(), RES_TXTATR_BEGIN, RES_TXTATR_END-1 );
 
     // gesamter Bereich
-    if ( !nStt && (nEnd == m_Text.Len()) &&
+    if ( !nStt && (nEnd == m_Text.getLength()) &&
          !(nMode & nsSetAttrMode::SETATTR_NOFORMATATTR ) )
     {
         // sind am Node schon Zeichenvorlagen gesetzt, muss man diese Attribute
@@ -2192,7 +2191,7 @@ SwTxtNode::impl_FmtToTxtAttr(const SfxItemSet& i_rAttrSet)
 
     // 1. Identify all spans in hints' array
 
-    lcl_CollectHintSpans(*m_pSwpHints, m_Text.Len(), aAttrSpanMap);
+    lcl_CollectHintSpans(*m_pSwpHints, m_Text.getLength(), aAttrSpanMap);
 
     // 2. Go through all spans and insert new attrs
 

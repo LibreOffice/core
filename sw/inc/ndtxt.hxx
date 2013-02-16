@@ -91,7 +91,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 
     mutable SwNodeNum* mpNodeNum;  ///< Numbering for this paragraph.
 
-    XubString   m_Text;
+    OUString m_Text;
 
     SwParaIdleData_Impl* m_pParaIdleData_Impl;
 
@@ -218,7 +218,7 @@ protected:
 public:
     using SwCntntNode::GetAttr;
 
-    const String& GetTxt() const { return m_Text; }
+    const String& GetTxt() const { return (String&)m_Text; } //FIXME
 
     /// getters for SwpHints
     inline       SwpHints &GetSwpHints();
