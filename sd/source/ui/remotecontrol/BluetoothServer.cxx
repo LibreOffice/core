@@ -30,6 +30,7 @@
     #define DBusGObjectPath char // DBusGObjectPath is only present in newer version of dbus-glib
   #endif
   #include "BluetoothServiceRecord.hxx"
+  #include "BufferedStreamSocket.hxx"
 #endif
 
 #ifdef WIN32
@@ -38,6 +39,7 @@
   #undef WB_RIGHT
   #include <winsock2.h>
   #include <ws2bth.h>
+  #include "BufferedStreamSocket.hxx"
 #endif
 
 #ifdef MACOSX
