@@ -1520,8 +1520,6 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
                         pTheView->RemoveEntry(pParent);
                 }
             }
-
-            pScChangeAction=pScChangeAction->GetNext();
         }
 
         if( bTheFlag && (!pDoc->IsDocEditable() || pChanges->IsProtected()) )
