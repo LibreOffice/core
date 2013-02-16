@@ -127,13 +127,12 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
     ScDocShell* pDocSh = pView->GetDocShell();
 
     ScRangeList aRanges(rRanges);
-    ScRange* p = aRanges.front();
     ScRangeList aRangesToMark;
     ScAddress aCurPos = pView->GetCurPos();
     size_t ListSize = aRanges.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        p = aRanges[i];
+        const ScRange* p = aRanges[i];
         // Collect only those ranges that are on the same sheet as the current
         // cursor.
         if (p->aStart.Tab() == aCurPos.Tab())
@@ -144,7 +143,7 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
         return;
 
     // Jump to the first range of all precedent ranges.
-    p = aRangesToMark.front();
+    const ScRange* p = aRangesToMark.front();
     lcl_jumpToRange(*p, pView, pDocSh->GetDocument());
 
     ListSize = aRangesToMark.size();
