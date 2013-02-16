@@ -2598,11 +2598,11 @@ static void lcl_InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const
     if ( rEvt.IsShift() )
         rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
     if ( rEvt.IsMod1() )
-    rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
     if ( rEvt.IsMod2() )
         rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
-        if ( rEvt.IsMod3() )
-                rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD3;
+    if ( rEvt.IsMod3() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD3;
 
     rEvent.Buttons = 0;
     if ( rEvt.IsLeft() )
