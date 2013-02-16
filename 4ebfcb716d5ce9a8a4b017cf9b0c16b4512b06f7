@@ -33,6 +33,24 @@
       "revId": "4ebfcb716d5ce9a8a4b017cf9b0c16b4512b06f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///20\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 10997,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-02-16T20:25:31Z",
+      "side": 1,
+      "message": "... but we don\u0027t build them. Ignore me.",
+      "parentUuid": "AAAAVn///3E\u003d",
+      "revId": "4ebfcb716d5ce9a8a4b017cf9b0c16b4512b06f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
