@@ -1521,13 +1521,13 @@ bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
     else if (rKey == "mode")
     {
         VclSizeGroupMode eMode = VCL_SIZE_GROUP_HORIZONTAL;
-        if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("none")))
+        if (rValue.equals("none"))
             eMode = VCL_SIZE_GROUP_NONE;
-        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("horizontal")))
+        else if (rValue.equals("horizontal"))
             eMode = VCL_SIZE_GROUP_HORIZONTAL;
-        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("vertical")))
+        else if (rValue.equals("vertical"))
             eMode = VCL_SIZE_GROUP_VERTICAL;
-        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("both")))
+        else if (rValue.equals("both"))
             eMode = VCL_SIZE_GROUP_BOTH;
         else
         {

@@ -446,11 +446,11 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("e")))
+            if (name.equals("e"))
             {
                 while (reader.nextAttribute(&nsId, &name))
                 {
-                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("g")))
+                    if (name.equals("g"))
                     {
                         name = reader.getAttributeValue(false);
                         sID = OString(name.begin, name.length);
@@ -458,7 +458,7 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
                         if (nDelim != -1)
                             sID = sID.copy(nDelim);
                     }
-                    else if (name.equals(RTL_CONSTASCII_STRINGPARAM("i")))
+                    else if (name.equals("i"))
                     {
                         name = reader.getAttributeValue(false);
                         sProperty = OString(name.begin, name.length);
@@ -1306,11 +1306,11 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
             ++nLevel;
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("object")))
+            if (name.equals("object"))
             {
                 while (reader.nextAttribute(&nsId, &name))
                 {
-                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
+                    if (name.equals("id"))
                     {
                         name = reader.getAttributeValue(false);
                         sID = OString(name.begin, name.length);
@@ -1324,7 +1324,7 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
                     }
                 }
             }
-            else if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+            else if (name.equals("property"))
                 collectProperty(reader, sID, aProperties);
         }
 
@@ -1409,18 +1409,18 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
     while (reader.nextAttribute(&nsId, &name))
     {
-        if (name.equals(RTL_CONSTASCII_STRINGPARAM("type")))
+        if (name.equals("type"))
         {
             name = reader.getAttributeValue(false);
             sType = OString(name.begin, name.length);
         }
-        else if (name.equals(RTL_CONSTASCII_STRINGPARAM("internal-child")))
+        else if (name.equals("internal-child"))
         {
             bIsInternalChild = true;
         }
     }
 
-    if (sType == "tab")
+    if (sType.equals("tab"))
     {
         handleTabChild(pParent, reader);
         return;
@@ -1434,7 +1434,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("object")) || name.equals(RTL_CONSTASCII_STRINGPARAM("placeholder")))
+            if (name.equals("object") || name.equals("placeholder"))
             {
                 pCurrentChild = handleObject(pParent, reader);
 
@@ -1474,7 +1474,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                     }
                 }
             }
-            else if (name.equals(RTL_CONSTASCII_STRINGPARAM("packing")))
+            else if (name.equals("packing"))
             {
                 handlePacking(pCurrentChild, reader);
             }
@@ -1503,12 +1503,12 @@ void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &
 
     while (reader.nextAttribute(&nsId, &span))
     {
-        if (span.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        if (span.equals("name"))
         {
             span = reader.getAttributeValue(false);
             sProperty = OString(span.begin, span.length);
         }
-        else if (span.equals(RTL_CONSTASCII_STRINGPARAM("value")))
+        else if (span.equals("value"))
         {
             span = reader.getAttributeValue(false);
             sValue = OString(span.begin, span.length);
@@ -1529,12 +1529,12 @@ void VclBuilder::collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rM
 
     while (reader.nextAttribute(&nsId, &span))
     {
-        if (span.equals(RTL_CONSTASCII_STRINGPARAM("type")))
+        if (span.equals("type"))
         {
             span = reader.getAttributeValue(false);
             sProperty = OString(span.begin, span.length);
         }
-        else if (span.equals(RTL_CONSTASCII_STRINGPARAM("target")))
+        else if (span.equals("target"))
         {
             span = reader.getAttributeValue(false);
             sValue = OString(span.begin, span.length);
@@ -1578,7 +1578,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
             ++nLevel;
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("col")))
+            if (name.equals("col"))
             {
                 bool bTranslated = false;
                 OString sProperty, sValue;
@@ -1586,12 +1586,12 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
 
                 while (reader.nextAttribute(&nsId, &name))
                 {
-                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
+                    if (name.equals("id"))
                     {
                         name = reader.getAttributeValue(false);
                         nId = OString(name.begin, name.length).toInt32();
                     }
-                    else if (nId == 0 && name.equals(RTL_CONSTASCII_STRINGPARAM("translatable")) && reader.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("yes")))
+                    else if (nId == 0 && name.equals("translatable") && reader.getAttributeValue(false).equals("yes"))
                     {
                         sValue = getTranslation(rID, OString::valueOf(nRowIndex));
                         bTranslated = !sValue.isEmpty();
@@ -1640,7 +1640,7 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("row")))
+            if (name.equals("row"))
                 handleRow(reader, rID, nRowIndex++);
             else
                 ++nLevel;
@@ -1678,7 +1678,7 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rI
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
             ++nLevel;
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+            if (name.equals("property"))
                 collectProperty(reader, rID, aProperties);
         }
 
@@ -1724,14 +1724,14 @@ std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
             ++nLevel;
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("item")))
+            if (name.equals("item"))
             {
                 bool bTranslated = false;
                 OString sValue;
 
                 while (reader.nextAttribute(&nsId, &name))
                 {
-                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("translatable")) && reader.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("yes")))
+                    if (name.equals("translatable") && reader.getAttributeValue(false).equals("yes"))
                     {
                         sValue = getTranslation(rID, OString::valueOf(nItemIndex));
                         bTranslated = !sValue.isEmpty();
@@ -1782,14 +1782,14 @@ void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("child")))
+            if (name.equals("child"))
             {
                 handleMenuChild(pCurrentMenu, reader);
             }
             else
             {
                 ++nLevel;
-                if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+                if (name.equals("property"))
                     collectProperty(reader, rID, aProperties);
             }
         }
@@ -1820,7 +1820,7 @@ void VclBuilder::handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reade
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("object")) || name.equals(RTL_CONSTASCII_STRINGPARAM("placeholder")))
+            if (name.equals("object") || name.equals("placeholder"))
             {
                 handleMenuObject(pParent, reader);
             }
@@ -1850,12 +1850,12 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
 
     while (reader.nextAttribute(&nsId, &name))
     {
-        if (name.equals(RTL_CONSTASCII_STRINGPARAM("class")))
+        if (name.equals("class"))
         {
             name = reader.getAttributeValue(false);
             sClass = OString(name.begin, name.length);
         }
-        else if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
+        else if (name.equals("id"))
         {
             name = reader.getAttributeValue(false);
             sID = OString(name.begin, name.length);
@@ -1886,9 +1886,9 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
             ++nLevel;
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+            if (name.equals("property"))
                 collectProperty(reader, sID, aProperties);
-            else if (name.equals(RTL_CONSTASCII_STRINGPARAM("accelerator")))
+            else if (name.equals("accelerator"))
                 collectAccelerator(reader, aAccelerators);
         }
 
@@ -1925,11 +1925,11 @@ void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader, const OString &rI
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
             ++nLevel;
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("widget")))
+            if (name.equals("widget"))
             {
                 while (reader.nextAttribute(&nsId, &name))
                 {
-                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+                    if (name.equals("name"))
                     {
                         name = reader.getAttributeValue(false);
                         OString sWidget = OString(name.begin, name.length);
@@ -1942,7 +1942,7 @@ void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader, const OString &rI
             }
             else
             {
-                if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+                if (name.equals("property"))
                     collectProperty(reader, rID, rSizeGroup.m_aProperties);
             }
         }
@@ -2062,12 +2062,12 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 
     while (reader.nextAttribute(&nsId, &name))
     {
-        if (name.equals(RTL_CONSTASCII_STRINGPARAM("class")))
+        if (name.equals("class"))
         {
             name = reader.getAttributeValue(false);
             sClass = OString(name.begin, name.length);
         }
-        else if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
+        else if (name.equals("id"))
         {
             name = reader.getAttributeValue(false);
             sID = OString(name.begin, name.length);
@@ -2120,7 +2120,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("child")))
+            if (name.equals("child"))
             {
                 if (!pCurrentChild)
                 {
@@ -2129,16 +2129,16 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
                 }
                 handleChild(pCurrentChild, reader);
             }
-            else if (name.equals(RTL_CONSTASCII_STRINGPARAM("items")))
+            else if (name.equals("items"))
                 aItems = handleItems(reader, sID);
             else
             {
                 ++nLevel;
-                if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+                if (name.equals("property"))
                     collectProperty(reader, sID, aProperties);
-                else if (name.equals(RTL_CONSTASCII_STRINGPARAM("attribute")))
+                else if (name.equals("attribute"))
                     collectPangoAttribute(reader, aPangoAttributes);
-                else if (name.equals(RTL_CONSTASCII_STRINGPARAM("relation")))
+                else if (name.equals("relation"))
                     collectAtkAttribute(reader, aAtkAttributes);
             }
         }
@@ -2190,7 +2190,7 @@ void VclBuilder::handlePacking(Window *pCurrent, xmlreader::XmlReader &reader)
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
             ++nLevel;
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+            if (name.equals("property"))
                 applyPackingProperty(pCurrent, reader);
         }
 
@@ -2225,7 +2225,7 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
 
     while (reader.nextAttribute(&nsId, &name))
     {
-        if (name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        if (name.equals("name"))
         {
             name = reader.getAttributeValue(false);
             OString sKey(name.begin, name.length);
@@ -2310,12 +2310,12 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
 
     while (reader.nextAttribute(&nsId, &name))
     {
-        if (name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        if (name.equals("name"))
         {
             name = reader.getAttributeValue(false);
             sProperty = OString(name.begin, name.length);
         }
-        else if (name.equals(RTL_CONSTASCII_STRINGPARAM("translatable")) && reader.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("yes")))
+        else if (name.equals("translatable") && reader.getAttributeValue(false).equals("yes"))
         {
             sValue = getTranslation(rID, sProperty);
             bTranslated = !sValue.isEmpty();
@@ -2344,12 +2344,12 @@ void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMa
 
     while (reader.nextAttribute(&nsId, &name))
     {
-        if (name.equals(RTL_CONSTASCII_STRINGPARAM("key")))
+        if (name.equals("key"))
         {
             name = reader.getAttributeValue(false);
             sValue = OString(name.begin, name.length);
         }
-        else if (name.equals(RTL_CONSTASCII_STRINGPARAM("signal")))
+        else if (name.equals("signal"))
         {
             name = reader.getAttributeValue(false);
             sProperty = OString(name.begin, name.length);
