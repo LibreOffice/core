@@ -84,7 +84,7 @@
 @@ -1,5 +1,5 @@
  set CC=cl
 -set CFLAGS=/DWIN32 /I.. /I..\goo /I..\fofi /O2 /nologo
-+set CFLAGS=/DWIN32 /D_MT /I.. /I..\goo /I..\fofi /O2 /nologo
++set CFLAGS=/DWIN32 /D_MT /I.. /I..\goo /I..\fofi /O2 /nologo %SOLARINC%
  set CXX=cl
  set CXXFLAGS=%CFLAGS% /TP
  set LIBPROG=lib

@@ -1741,8 +1741,12 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 ))
 
 define gb_LinkTarget__use_poppler
+$(call gb_LinkTarget_use_package,$(1),xpdf)
+
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/xpdf \
+	-I$(call gb_UnpackedTarball_get_dir,xpdf) \
+	-I$(call gb_UnpackedTarball_get_dir,xpdf)/xpdf \
+	-I$(call gb_UnpackedTarball_get_dir,xpdf)/goo \
 	$$(INCLUDE) \
 )
 

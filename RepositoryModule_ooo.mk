@@ -223,6 +223,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	xmerge \
 	$(call gb_Helper_optional,DESKTOP,xmlhelp) \
 	xmloff \
+	$(call gb_Helper_optional,XPDF,xpdf) \
 	xmlreader \
 	xmlscript \
 	xmlsecurity \
