@@ -1769,10 +1769,11 @@ void SwDoc::GetAllDBNames( std::vector<String>& rAllDBNames )
     for(sal_uInt16 i = 0; i < rArr.size(); i++)
     {
         const SwDSParam* pParam = &rArr[i];
-        String* pStr = new String( pParam->sDataSource );
-        (*pStr) += DB_DELIM;
-        (*pStr) += (String)pParam->sCommand;
-        rAllDBNames.push_back(*pStr);
+        OUStringBuffer sStr(pParam->sDataSource.getLength() + pParam->sCommand.getLength() + 2);
+        sStr.append(pParam->sDataSource );
+        sStr.append(DB_DELIM);
+        sStr.append(pParam->sCommand);
+        rAllDBNames.push_back(sStr.makeStringAndClear());
     }
 }
 
