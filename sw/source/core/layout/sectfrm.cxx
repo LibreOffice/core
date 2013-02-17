@@ -932,6 +932,10 @@ static SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, bool &rbEmpty,
                 SwFtnFrm* pRet = (SwFtnFrm*)pFtnCont->Lower();
                 while( pRet ) // look for endnotes
                 {
+                    /* CollectEndNode can destroy pRet so we need to get the
+                       next early
+                    */
+                    SwFtnFrm* pRetNext = (SwFtnFrm*)pRet->GetNext();
                     if( pRet->GetAttr()->GetFtn().IsEndNote() )
                     {
                         if( pRet->GetMaster() )
@@ -944,7 +948,7 @@ static SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, bool &rbEmpty,
                         else
                             return pRet; // Found
                     }
-                    pRet = (SwFtnFrm*)pRet->GetNext();
+                    pRet = pRetNext;
                 }
             }
             pCol = (SwColumnFrm*)pCol->GetNext();
