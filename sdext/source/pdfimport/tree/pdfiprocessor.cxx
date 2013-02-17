@@ -486,9 +486,10 @@ GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
 
   return rGlyph.getGC();
 }
+
 void PDFIProcessor::drawCharGlyphs( rtl::OUString&             rGlyphs,
                                     geometry::RealRectangle2D& rRect,
-                                    GraphicsContext aGC,
+                                    const GraphicsContext& aGC,
                                     ParagraphElement* pPara,
                                     FrameElement* pFrame,
                                     bool bSpaceFlag )
@@ -523,6 +524,7 @@ void PDFIProcessor::drawCharGlyphs( rtl::OUString&             rGlyphs,
       pFrame->updateGeometryWith( pPara );
 
 }
+
 void PDFIProcessor::drawGlyphs( const rtl::OUString&             rGlyphs,
                                 const geometry::RealRectangle2D& rRect,
                                 const geometry::Matrix2D&        rFontMatrix )

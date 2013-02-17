@@ -1167,10 +1167,9 @@ static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window
         // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
         // See tools/options/print for example.
         sal_Bool bThisIsAGroupControl = (nMyType == WINDOW_GROUPBOX) || (nMyType == WINDOW_FIXEDLINE);
-        Window* pSWindow = NULL;
         // get index, form start and form end
         sal_uInt16 nIndex=0, nFormStart=0, nFormEnd=0;
-        pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
+        Window* pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
                                            pLabel,
                                            nIndex,
                                            nFormStart,
