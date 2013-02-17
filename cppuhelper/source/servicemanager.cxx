@@ -1567,6 +1567,9 @@ bool cppuhelper::ServiceManager::removeLegacyFactory(
         }
         assert(i->second.get() != 0);
         clear = i->second;
+        if (removeListener) {
+            comp = i->second->component;
+        }
         //TODO: The below leaves data_ in an inconsistent state upon exceptions:
         removeFromImplementationMap(
             &data_.services, i->second->info->services, i->second);
@@ -1576,9 +1579,6 @@ bool cppuhelper::ServiceManager::removeLegacyFactory(
             data_.namedImplementations.erase(i->second->info->name);
         }
         data_.dynamicImplementations.erase(i);
-        if (removeListener) {
-            comp = i->second->component;
-        }
     }
     if (comp.is()) {
         removeEventListenerFromComponent(comp);
