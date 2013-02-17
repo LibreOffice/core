@@ -1325,7 +1325,13 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
                 mGraphicsGradientStyles.push_back(new TagCloseElement("draw:opacity"));
             }
         }
-
+        else
+        {
+            /* if mxGradient.count() == 1 for some reason we would leak
+             * pDrawGradientElement
+             */
+            delete pDrawGradientElement;
+        }
         if(!bUseOpacityGradient)
             delete pDrawOpacityElement;
     }
