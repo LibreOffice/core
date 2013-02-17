@@ -8240,28 +8240,6 @@ AC_MSG_CHECKING([which boost to use])
 if test "$with_system_boost" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_BOOST=YES
-    AC_LANG_PUSH([C++])
-    AC_CHECK_HEADER(boost/shared_ptr.hpp, [],
-       [AC_MSG_ERROR(boost/shared_ptr.hpp not found. install boost)], [])
-    AC_CHECK_HEADER(boost/spirit/include/classic_core.hpp, [],
-       [AC_MSG_ERROR(boost/spirit/include/classic_core.hpp not found. install boost >= 1.36)], [])
-    AC_CHECK_HEADER(boost/function.hpp, [],
-       [AC_MSG_ERROR(boost/function.hpp not found. install boost)], [])
-
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -fno-exceptions"
-    AC_MSG_CHECKING([whether boost/function.hpp compiles with -fno-exceptions])
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <boost/function.hpp>
-]], [[]])],[ac_cv_cxx_boost_no_exceptions_broken=no],[ac_cv_cxx_boost_no_exceptions_broken=yes])
-
-    if test "$ac_cv_cxx_boost_no_exceptions_broken" = "yes"; then
-        AC_MSG_ERROR([no, see https://bugzilla.redhat.com/show_bug.cgi?id=477131])
-    else
-        AC_MSG_RESULT([yes])
-    fi
-    CXXFLAGS=$save_CXXFLAGS
-    AC_LANG_POP([C++])
-
     AX_BOOST_BASE
     AX_BOOST_DATE_TIME
     mingw_boost_date_time_dll=`echo $BOOST_DATE_TIME_LIB | sed -e 's/^-l//' -e 's/\.dll$//'`
@@ -8271,6 +8249,26 @@ if test "$with_system_boost" = "yes"; then
         libo_MINGW_CHECK_DLL([BOOST_DATE_TIME],
                              [lib$mingw_boost_date_time_dll])
     fi
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $BOOST_CPPFLAGS"
+    AC_CHECK_HEADER(boost/shared_ptr.hpp, [],
+       [AC_MSG_ERROR(boost/shared_ptr.hpp not found. install boost)], [])
+    AC_CHECK_HEADER(boost/spirit/include/classic_core.hpp, [],
+       [AC_MSG_ERROR(boost/spirit/include/classic_core.hpp not found. install boost >= 1.36)], [])
+    AC_CHECK_HEADER(boost/function.hpp, [],
+       [AC_MSG_ERROR(boost/function.hpp not found. install boost)], [])
+    CXXFLAGS="$CXXFLAGS -fno-exceptions"
+    AC_MSG_CHECKING([whether boost/function.hpp compiles with -fno-exceptions])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <boost/function.hpp>
+]], [[]])],[ac_cv_cxx_boost_no_exceptions_broken=no],[ac_cv_cxx_boost_no_exceptions_broken=yes])
+    if test "$ac_cv_cxx_boost_no_exceptions_broken" = "yes"; then
+        AC_MSG_ERROR([no, see https://bugzilla.redhat.com/show_bug.cgi?id=477131])
+    else
+        AC_MSG_RESULT([yes])
+    fi
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE BOOST"
