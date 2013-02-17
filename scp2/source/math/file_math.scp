@@ -70,13 +70,3 @@ File gid_File_Exe_Smath
     Styles = (PACKED);
   #endif
 End
-
-// new user interface configuration files
-/*
-File gid_File_Share_Config_Sofficecfg_Math_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Smath_Menubar;
-    Name = "/uiconfig/smath/menubar/menubar.xml";
-End
-*/

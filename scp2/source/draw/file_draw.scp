@@ -54,13 +54,3 @@ File gid_File_Exe_Sdraw
     Styles = (PACKED);
   #endif
 End
-
-// new user interface configuration files
-/*
-File gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Sdraw_Menubar;
-    Name = "/uiconfig/sdraw/menubar/menubar.xml";
-End
-*/

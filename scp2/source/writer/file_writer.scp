@@ -62,29 +62,6 @@ File gid_File_Help_Swriter_Zip
 End
 #endif
 
-/*
-File gid_File_Share_Config_Sofficecfg_Writer_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Swriter_Menubar;
-    Name = "/uiconfig/swriter/menubar/menubar.xml";
-End
-
-File gid_File_Share_Config_Sofficecfg_Writerweb_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Sweb_Menubar;
-    Name = "/uiconfig/sweb/menubar/menubar.xml";
-End
-
-File gid_File_Share_Config_Sofficecfg_Writerglobal_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Sglobal_Menubar;
-    Name = "/uiconfig/sglobal/menubar/menubar.xml";
-End
-*/
-
 File gid_File_Share_Registry_Writer_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);

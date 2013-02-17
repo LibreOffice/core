@@ -78,15 +78,6 @@ File gid_File_Help_Scalc_Zip
 End
 #endif
 
-// new user interface configuration files
-/*
-File gid_File_Share_Config_Sofficecfg_Calc_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Scalc_Menubar;
-    Name = "/uiconfig/scalc/menubar/menubar.xml";
-End
-*/
 File gid_File_Exe_Scalc
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;

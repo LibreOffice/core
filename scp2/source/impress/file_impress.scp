@@ -76,16 +76,6 @@ File gid_File_Exe_Simpress
   #endif
 End
 
-// new user interface configuration files
-/*
-File gid_File_Share_Config_Sofficecfg_Impress_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Simpress_Menubar;
-    Name = "/uiconfig/simpress/menubar/menubar.xml";
-End
-*/
-
 // configuration files for custom animation effects
 
 File gid_File_Share_Config_Sofficecfg_Impress_Effects_Xml
