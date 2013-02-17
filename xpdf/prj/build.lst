@@ -1,2 +1,2 @@
 xp      xpdf : solenv soltools NULL
-xp      xpdf						nmake   -       all     xp_xpdf NULL
+xp      xpdf\prj						nmake   -       all     xp_xpdf NULL
