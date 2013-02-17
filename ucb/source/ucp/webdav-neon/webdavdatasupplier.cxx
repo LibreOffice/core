@@ -475,8 +475,10 @@ sal_Bool DataSupplier::getData()
                             rValue >>= bDocument;
 
                             if ( !bDocument )
+                            {
+                                delete pContentProperties;
                                 continue;
-
+                            }
                             break;
                         }
 
