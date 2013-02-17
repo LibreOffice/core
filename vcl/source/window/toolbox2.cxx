@@ -86,24 +86,29 @@ ImplToolBoxPrivateData::~ImplToolBoxPrivateData()
 }
 
 // -----------------------------------------------------------------------
-ImplToolItem::ImplToolItem()
+void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits)
 {
-    mnId            = 0;
+    mnId            = nItemId;
     mpWindow        = NULL;
     mpUserData      = NULL;
     meType          = TOOLBOXITEM_BUTTON;
-    mnBits          = 0;
+    mnBits          = nItemBits;
     meState         = STATE_NOCHECK;
     mbEnabled       = sal_True;
     mbVisible       = sal_True;
-    mbEmptyBtn      = sal_True;
+    mbEmptyBtn      = (mnBits == 0);
     mbShowWindow    = sal_False;
     mbBreak         = sal_False;
     mnSepSize       = TB_SEP_SIZE;
     mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
     mnImageAngle    = 0;
-    mbMirrorMode    = sal_False;
-    mbVisibleText   = sal_False;
+    mbMirrorMode    = false;
+    mbVisibleText   = false;
+}
+
+ImplToolItem::ImplToolItem()
+{
+    init(0,0);
 }
 
 // -----------------------------------------------------------------------
@@ -112,22 +117,7 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
                             ToolBoxItemBits nItemBits ) :
     maImage( rImage )
 {
-    mnId            = nItemId;
-    mpWindow        = NULL;
-    mpUserData      = NULL;
-    meType          = TOOLBOXITEM_BUTTON;
-    mnBits          = nItemBits;
-    meState         = STATE_NOCHECK;
-    mbEnabled       = sal_True;
-    mbVisible       = sal_True;
-    mbEmptyBtn      = sal_False;
-    mbShowWindow    = sal_False;
-    mbBreak         = sal_False;
-    mnSepSize       = TB_SEP_SIZE;
-    mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
-    mnImageAngle    = 0;
-    mbMirrorMode    = false;
-    mbVisibleText   = false;
+    init(nItemId, nItemBits);
 }
 
 // -----------------------------------------------------------------------
@@ -136,22 +126,7 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const XubString& rText,
                             ToolBoxItemBits nItemBits ) :
     maText( rText )
 {
-    mnId            = nItemId;
-    mpWindow        = NULL;
-    mpUserData      = NULL;
-    meType          = TOOLBOXITEM_BUTTON;
-    mnBits          = nItemBits;
-    meState         = STATE_NOCHECK;
-    mbEnabled       = sal_True;
-    mbVisible       = sal_True;
-    mbEmptyBtn      = sal_False;
-    mbShowWindow    = sal_False;
-    mbBreak         = sal_False;
-    mnSepSize       = TB_SEP_SIZE;
-    mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
-    mnImageAngle    = 0;
-    mbMirrorMode    = false;
-    mbVisibleText   = false;
+    init(nItemId, nItemBits);
 }
 
 // -----------------------------------------------------------------------
@@ -161,22 +136,7 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
     maImage( rImage ),
     maText( rText )
 {
-    mnId            = nItemId;
-    mpWindow        = NULL;
-    mpUserData      = NULL;
-    meType          = TOOLBOXITEM_BUTTON;
-    mnBits          = nItemBits;
-    meState         = STATE_NOCHECK;
-    mbEnabled       = sal_True;
-    mbVisible       = sal_True;
-    mbEmptyBtn      = sal_False;
-    mbShowWindow    = sal_False;
-    mbBreak         = sal_False;
-    mnSepSize       = TB_SEP_SIZE;
-    mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
-    mnImageAngle    = 0;
-    mbMirrorMode    = false;
-    mbVisibleText   = false;
+    init(nItemId, nItemBits);
 }
 
 // -----------------------------------------------------------------------
