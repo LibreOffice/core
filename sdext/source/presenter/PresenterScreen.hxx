@@ -145,9 +145,13 @@ private:
     class ViewDescriptor
     {
     public:
-        ::rtl::OUString msTitle;
-        ::rtl::OUString msAccessibleTitle;
+        OUString msTitle;
+        OUString msAccessibleTitle;
         bool mbIsOpaque;
+        ViewDescriptor()
+            : mbIsOpaque(false)
+        {
+        }
     };
     typedef ::std::map<rtl::OUString,ViewDescriptor> ViewDescriptorContainer;
     ViewDescriptorContainer maViewDescriptors;

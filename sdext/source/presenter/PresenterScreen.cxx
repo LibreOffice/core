@@ -396,14 +396,14 @@ void PresenterScreen::InitializePresenterScreen (void)
 
                 mpPresenterController->GetWindowManager()->RestoreViewMode();
             }
-            catch (RuntimeException&)
+            catch (const RuntimeException&)
             {
                 xCC->restoreConfiguration(mxSavedConfiguration);
             }
             xCC->unlock();
         }
     }
-    catch (Exception&)
+    catch (const Exception&)
     {
     }
 }
@@ -501,7 +501,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
             return -1;
         }
     }
-    catch (beans::UnknownPropertyException&)
+    catch (const beans::UnknownPropertyException&)
     {
         OSL_ASSERT(false);
         // For some reason we can not access the screen number.  Use
@@ -608,7 +608,7 @@ void PresenterScreen::SetupPaneFactory (const Reference<XComponentContext>& rxCo
                 mxController,
                 mpPresenterController);
     }
-    catch (RuntimeException&)
+    catch (const RuntimeException&)
     {
         OSL_ASSERT(false);
     }
@@ -624,7 +624,7 @@ void PresenterScreen::SetupViewFactory (const Reference<XComponentContext>& rxCo
                 mxController,
                 mpPresenterController);
     }
-    catch (RuntimeException&)
+    catch (const RuntimeException&)
     {
         OSL_ASSERT(false);
     }
@@ -647,7 +647,7 @@ void PresenterScreen::SetupConfiguration (
             OUString("Presenter/CurrentLayout")) >>= sLayoutName;
         ProcessLayout(aConfiguration, sLayoutName, rxContext, rxAnchorId);
     }
-    catch (RuntimeException&)
+    catch (const RuntimeException&)
     {
     }
 }
@@ -701,7 +701,7 @@ void PresenterScreen::ProcessLayout (
                 rxContext,
                 rxAnchorId));
     }
-    catch (RuntimeException&)
+    catch (const RuntimeException&)
     {
     }
 }
@@ -726,7 +726,7 @@ void PresenterScreen::ProcessViewDescriptions (
             aProperties,
             ::boost::bind(&PresenterScreen::ProcessViewDescription, this, _1, _2));
     }
-    catch (RuntimeException&)
+    catch (const RuntimeException&)
     {
         OSL_ASSERT(false);
     }
@@ -798,8 +798,8 @@ void PresenterScreen::ProcessViewDescription (
         if (aViewDescriptor.msAccessibleTitle.isEmpty())
             aViewDescriptor.msAccessibleTitle = aViewDescriptor.msTitle;
         maViewDescriptors[sViewURL] = aViewDescriptor;
-       }
-    catch (Exception&)
+    }
+    catch (const Exception&)
     {
         OSL_ASSERT(false);
     }
