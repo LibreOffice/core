@@ -276,38 +276,88 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
     long*   pMapIY = new long[ aUnrotatedHeight ];
     long*   pMapFY = new long[ aUnrotatedHeight ];
 
-    const double fScaleX = ( aUnrotatedWidth  - 1 ) / (double) ( aBitmapWidth  - 1 );
-    const double fScaleY = ( aUnrotatedHeight - 1 ) / (double) ( aBitmapHeight - 1 );
+    double fRevScaleX;
+    double fRevScaleY;
 
-    const double fRevScaleX = 1.0 / fScaleX;
-    const double fRevScaleY = 1.0 / fScaleY;
-
+    bool scaleByAveraging = false;
     int x,y;
 
-    // create horizontal mapping table
-    for( x = 0, nTmpX = aBitmapWidth - 1L, nTmp = aBitmapWidth - 2L; x < aUnrotatedWidth; x++ )
+    if(aBitmapWidth > 1 && aUnrotatedWidth > 1)
     {
-        fTmp = x * fRevScaleX;
+        fRevScaleX = (double) ( aBitmapWidth  - 1 ) / (double)( aUnrotatedWidth  - 1 );
+        // create horizontal mapping table
+        for( x = 0, nTmpX = aBitmapWidth - 1L, nTmp = aBitmapWidth - 2L >= 0 ? aBitmapWidth -2L : 0L; x < aUnrotatedWidth; x++ )
+        {
+            fTmp = x * fRevScaleX;
 
-        if( bHMirr )
-            fTmp = nTmpX - fTmp;
+            if( bHMirr )
+                fTmp = nTmpX - fTmp;
 
-        pMapIX[ x ] = MinMax( fTmp, 0, nTmp );
-        pMapFX[ x ] = (long) ( ( fTmp - pMapIX[ x ] ) * 1048576.0 );
+            pMapIX[ x ] = MinMax( fTmp, 0, nTmp );
+            pMapFX[ x ] = (long) ( ( fTmp - pMapIX[ x ] ) * 1048576.0 );
+        }
+        scaleByAveraging |= fRevScaleX > 5.0/3.0;
     }
-
-    // create vertical mapping table
-    for( y = 0, nTmpY = aBitmapHeight - 1L, nTmp = aBitmapHeight - 2L; y < aUnrotatedHeight; y++ )
+    else
     {
-        fTmp = y * fRevScaleY;
+        if(aBitmapWidth == 1)
+        {
+            fRevScaleX = 1.0 / (double)( aUnrotatedWidth );
+            for ( x = 0; x < aUnrotatedWidth ; x++)
+            {
+                pMapIX[x] = 0;
+                pMapFX[x] = 0.5;
+            }
+            scaleByAveraging = true;
+        }
+        else
+        {
+            fRevScaleX = (double) aBitmapWidth / (double)( aUnrotatedWidth);
+            fTmp = (double)aBitmapWidth / 2.0;
 
-        if( bVMirr )
-            fTmp = nTmpY - fTmp;
-
-        pMapIY[ y ] = MinMax( fTmp, 0, nTmp );
-        pMapFY[ y ] = (long) ( ( fTmp - pMapIY[ y ] ) * 1048576.0 );
+            pMapIX[ 0 ] = (long)fTmp;
+            pMapFX[ 0 ] = (long)( ( fTmp - pMapIX[ 0 ] ) * 1048576.0 );
+            scaleByAveraging = true;
+        }
     }
+    if(aBitmapHeight > 1 && aUnrotatedHeight > 1)
+    {
+        fRevScaleY = (double) ( aBitmapHeight  - 1 ) / (double)( aUnrotatedHeight - 1 );
+        // create vertical mapping table
+        for( y = 0, nTmpY = aBitmapHeight - 1L, nTmp = aBitmapHeight - 2L >= 0 ? aBitmapHeight - 2L : 0L; y < aUnrotatedHeight; y++ )
+        {
+            fTmp = y * fRevScaleY;
 
+            if( bVMirr )
+                fTmp = nTmpY - fTmp;
+
+            pMapIY[ y ] = MinMax( fTmp, 0, nTmp );
+            pMapFY[ y ] = (long) ( ( fTmp - pMapIY[ y ] ) * 1048576.0 );
+        }
+        scaleByAveraging |= fRevScaleY > 5.0/3.0;
+    }
+    else
+    {
+        if(aBitmapHeight == 1)
+        {
+            fRevScaleY = 1.0 / (double)( aUnrotatedHeight);
+            for ( y = 0; x < aUnrotatedHeight ; y++)
+            {
+                pMapIY[y] = 0;
+                pMapFY[y] = 0.5;
+            }
+            scaleByAveraging = true;
+        }
+        else
+        {
+            fRevScaleY = (double) aBitmapHeight / (double)( aUnrotatedHeight);
+            fTmp = (double)aBitmapHeight / 2.0;
+
+            pMapIY[ 0 ] = (long)fTmp;
+            pMapFY[ 0 ] = (long)( ( fTmp - pMapIY[ 0 ] ) * 1048576.0 );
+            scaleByAveraging = true;
+        }
+    }
 
     Bitmap              aBmp( rBmpEx.GetBitmap() );
     Bitmap              aOutBmp;
@@ -329,8 +379,6 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
     Polygon             aPoly( Rectangle( Point(), rUnrotatedSzPix ) );
     aPoly.Rotate( Point(), nRot10 );
     Rectangle           aNewBound( aPoly.GetBoundRect() );
-
-    bool                scaleByAveraging = fScaleX < 0.6 || fScaleY < 0.6;
 
     // create horizontal mapping table
     for( x = 0, nTmpX = aNewBound.Left() + nStartX; x < aTargetWidth; x++ )
@@ -696,11 +744,11 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
 
                     // create new horizontal mapping table
                     for( nX = 0UL; nX < aUnrotatedWidth; nX++ )
-                        pMapLX[ nX ] = FRound( (double) pMapIX[ nX ] + pMapFX[ nX ] / 1048576. );
+                        pMapLX[ nX ] = FRound( (double) pMapIX[ nX ] + pMapFX[ nX ] / 1048576.0 );
 
                     // create new vertical mapping table
                     for( nY = 0UL; nY < aUnrotatedHeight; nY++ )
-                        pMapLY[ nY ] = FRound( (double) pMapIY[ nY ] + pMapFY[ nY ] / 1048576. );
+                        pMapLY[ nY ] = FRound( (double) pMapIY[ nY ] + pMapFY[ nY ] / 1048576.0 );
 
                     // do mask rotation
                     for( nY = 0; nY < aTargetHeight; nY++ )
