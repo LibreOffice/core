@@ -1710,8 +1710,8 @@ OUString SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
 
     xub_StrLen aPos = rIdx.GetIndex();
     xub_StrLen nLen = m_Text.Len() - aPos;
-    ssize_t const nOverflow(static_cast<ssize_t>(m_Text.Len())
-            + static_cast<ssize_t>(rStr.Len()) - TXTNODE_MAX);
+    long const nOverflow(static_cast<long>(m_Text.Len())
+            + static_cast<long>(rStr.Len()) - TXTNODE_MAX);
     SAL_WARN_IF(nOverflow > 0, "sw.core",
             "SwTxtNode::InsertText: node text with insertion > TXTNODE_MAX.");
     OUString const sInserted(
@@ -3328,8 +3328,8 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
             rStart.GetIndex() + nDelLen <= m_Text.Len(),
             "SwTxtNode::ReplaceText: index out of bounds" );
 
-    ssize_t const nOverflow(static_cast<ssize_t>(m_Text.Len())
-            + static_cast<ssize_t>(rStr.Len()) - nDelLen - TXTNODE_MAX);
+    long const nOverflow(static_cast<long>(m_Text.Len())
+            + static_cast<long>(rStr.Len()) - nDelLen - TXTNODE_MAX);
     SAL_WARN_IF(nOverflow > 0, "sw.core",
             "SwTxtNode::ReplaceText: node text with insertion > TXTNODE_MAX.");
     OUString const sInserted(
