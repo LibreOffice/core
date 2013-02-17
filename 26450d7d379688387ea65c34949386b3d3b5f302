@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///zo\u003d",
+        "filename": "dbaccess/source/ui/querydesign/limitboxcontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-02-17T17:04:15Z",
+      "side": 1,
+      "message": "I don\u0027t see why we should reject a number entry that we can \"understand\", just to adhere strictly to the locale, but I\u0027ll ask an expert what LibreOffice does in other areas, and we should just \"do the same\".\n\nMy assumption is that we should definitely accept native digits, but why reject ASCII digits?",
+      "parentUuid": "AAAAVH///Ws\u003d",
+      "revId": "26450d7d379688387ea65c34949386b3d3b5f302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVH///Zs\u003d",
         "filename": "dbaccess/source/ui/querydesign/limitboxcontroller.cxx",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "1. It is simpler than cut leading 0\u0027s.\n\n2. In Writer, Font Size Box (on Formatting Toolbar) works in the same way.\n\n3. I cant see any reason to allow that.",
       "parentUuid": "AAAAVH///Zs\u003d",
+      "revId": "26450d7d379688387ea65c34949386b3d3b5f302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///zc\u003d",
+        "filename": "dbaccess/source/ui/querydesign/limitboxcontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-02-17T17:04:15Z",
+      "side": 1,
+      "message": "2. No, writer font size box accepts leading zeros and just throws them away; my guess is that this happens through a double conversion string (entered by user) -\u003efloat (which is stored) -\u003e string (which is displayed)\n\n3. My opinion is that we should be as liberal as possible is what we allow from the user. Why make user\u0027s life more difficult by showing an error message with leading zeros instead of just accepting it?",
+      "parentUuid": "AAAAVH///Wo\u003d",
       "revId": "26450d7d379688387ea65c34949386b3d3b5f302",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
