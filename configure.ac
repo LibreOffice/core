@@ -10009,7 +10009,11 @@ if test "$ENABLE_MEDIAWIKI" = "YES"; then
         AC_MSG_RESULT([external])
         SYSTEM_SERVLETAPI=YES
         if test -z "$SERVLETAPI_JAR"; then
-            SERVLETAPI_JAR=/usr/share/java/servlet-api.jar
+            for version in '' -3.3 -3.2 -3.1 -3.0 -2.5 -2.4; do
+                if test -r "/usr/share/java/servlet-api${version}.jar"; then
+                    SERVLETAPI_JAR=/usr/share/java/servlet-api${version}.jar
+                fi
+            done
         fi
         AC_CHECK_FILE($SERVLETAPI_JAR, [],
               [AC_MSG_ERROR(servlet-api.jar not found.)], [])
