@@ -502,11 +502,17 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             int nBytes = 0;
             int nBufSz = sc_nCSASeqLength + 1;
             // read byte per byte
+            pReceiveBuffer[0] = 0;
             while ((nResult=aStreamPipe.recv( pReceiveBuffer+nBytes, nBufSz-nBytes))>0) {
                 nBytes += nResult;
                 if (pReceiveBuffer[nBytes-1]=='\0') {
                     break;
                 }
+            }
+            /* make sure the buffer is \0 terminated */
+            if (nBytes > 0)
+            {
+                pReceiveBuffer[nBytes-1] = 0;
             }
             if (rtl::OString(sc_aSendArgumentsSequence).equals(pReceiveBuffer))
             {
