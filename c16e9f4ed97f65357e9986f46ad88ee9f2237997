@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///2I\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 7250,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-02-17T06:48:08Z",
+      "side": 0,
+      "message": "Oops... I am pretty sure you did not actually want to remove this line.\n\nBut we can move some of the complexity into libo_MINGW_CHECK_DLL/libo_MINGW_TRY_DLL, in the same way as here. I.e., only run the test when \"$with_system_foo\" equals \"yes\" and automatically export the variable on success. Of course that is for another commit.",
+      "revId": "c16e9f4ed97f65357e9986f46ad88ee9f2237997",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
