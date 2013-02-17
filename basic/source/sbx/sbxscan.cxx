@@ -719,7 +719,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
         LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
         SvNumberFormatter aFormatter( comphelper::getProcessComponentContext(), eLangType );
 
-        sal_uInt32 nIndex;
+        sal_uInt32 nIndex = 0;
         double nNumber;
         Color* pCol;
 
