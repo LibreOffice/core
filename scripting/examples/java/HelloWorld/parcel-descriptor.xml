@@ -21,7 +21,7 @@
         <locale lang="en">
             <displayname value="HelloWorld.Java"/>
             <description>
-                Prints "Helo World".
+                Prints "Hello World".
             </description>
         </locale>
         <functionname value="org.libreoffice.example.java_scripts.HelloWorld.printHW"/>
