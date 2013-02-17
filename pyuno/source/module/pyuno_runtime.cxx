@@ -179,6 +179,9 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         reinterpret_cast< oslGenericFunction >(readLoggingConfig),
         (rtl_uString **) &fileName );
     fileName = OUString( fileName.getStr(), fileName.lastIndexOf( '/' )+1 );
+#ifdef MACOSX
+    fileName += "../Resources/";
+#endif
     fileName += OUString(  SAL_CONFIGFILE("pyuno" ));
     rtl::Bootstrap bootstrapHandle( fileName );
 

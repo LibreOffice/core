@@ -54,6 +54,8 @@ sub make_absolute_filename_to_relative_filename
 {
     my ($longfilenameref) = @_;
 
+    my $orig=$$longfilenameref;
+
     if ( $installer::globals::isunix )
     {
         if ( $$longfilenameref =~ /^.*\/(\S.+\S?)/ )

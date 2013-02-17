@@ -28,48 +28,33 @@
 #include "macros.inc"
 
 #ifdef MACOSX
-Directory gid_Dir_Bundle_Contents_Resources
-    ParentID = gid_Dir_Bundle_Contents;
-    HostName = "Resources";
-End
-#endif
 
-#ifdef MACOSX
 Directory gid_Dir_Bundle_Contents_Resources_Lang
-    ParentID = gid_Dir_Bundle_Contents_Resources;
+    ParentID = gid_Brand_Dir_Share;
     DIR_ISOLANGUAGE_ALL_LANG_LPROJ;
 End
-#endif
 
-#ifdef MACOSX
 Directory gid_Dir_Bundle_Contents_Library
     ParentID = gid_Dir_Bundle_Contents;
     HostName = "Library";
 End
-#endif
 
-#ifdef MACOSX
 Directory gid_Dir_Bundle_Contents_Library_Spotlight
     ParentID = gid_Dir_Bundle_Contents_Library;
     HostName = "Spotlight";
 End
-#endif
 
-#ifdef MACOSX
 Directory gid_Dir_Bundle_Contents_Library_Spotlight_Bundle
     ParentID = gid_Dir_Bundle_Contents_Library_Spotlight;
     HostName = "OOoSpotlightImporter.mdimporter";
 End
-#endif
 
-#ifdef MACOSX
 Directory gid_Dir_Bundle_Contents_Library_Spotlight_Bundle_Contents
     ParentID = gid_Dir_Bundle_Contents_Library_Spotlight_Bundle;
     HostName = "Contents";
 End
-#endif
 
-#if defined MACOSX
+#ifndef ENABLE_MACOSX_SANDBOX
 Unixlink gid_Unixlink_Applications
     BIN_FILE_BODY;
     Styles = ();
@@ -79,15 +64,25 @@ Unixlink gid_Unixlink_Applications
 End
 #endif
 
+#endif
+
+#ifndef ENABLE_MACOSX_SANDBOX
+
 Directory gid_Dir_Addin
     Styles = (CREATE);
     ParentID = gid_Brand_Dir_Program;
     DosName = "addin";
 End
 
+#endif
+
 Directory gid_Dir_Wizards
     Styles = (CREATE);
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_Share;
+#else
     ParentID = gid_Brand_Dir_Program;
+#endif
     DosName = "wizards";
 End
 
@@ -122,13 +117,22 @@ Directory gid_Dir_Wizards_Agenda
 End
 
 Directory gid_Dir_Resource
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_Share;
+#else
     ParentID = gid_Brand_Dir_Program;
+#endif
     DosName = "resource";
 End
 
 Directory gid_Dir_Classes
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "java";
+#else
     ParentID = gid_Brand_Dir_Program;
     DosName = "classes";
+#endif
 End
 
 #ifdef WNT
@@ -256,11 +260,15 @@ Directory gid_Dir_Store
     Styles = (WORKSTATION, CREATE);
 End
 
+#ifndef ENABLE_MACOSX_SANDBOX
+
 Directory gid_Dir_Plugin
     ParentID = gid_Brand_Dir_Program;
     DosName = "plugin";
     Styles = (WORKSTATION, CREATE);
 End
+
+#endif
 
 Directory gid_Dir_Fonts
     ParentID = gid_Brand_Dir_Share;
@@ -1073,11 +1081,19 @@ Directory gid_Dir_Template_Common_Presnt
 End
 
 Directory gid_Brand_Dir_Program_Services
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_Share;
+#else
     ParentID = gid_Brand_Dir_Program;
+#endif
     DosName = "services";
 End
 
 Directory gid_Brand_Dir_Program_Types
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_Share;
+#else
     ParentID = gid_Brand_Dir_Program;
+#endif
     DosName = "types";
 End

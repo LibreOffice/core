@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <generic/gensys.h>
 
 #include <vcl/msgbox.hxx>
@@ -191,7 +193,7 @@ const char* SalGenericSystem::getFrameClassName()
     {
         OUString aIni, aProduct;
         rtl::Bootstrap::get( "BRAND_BASE_DIR", aIni );
-        aIni += OUString("/program/") + SAL_CONFIGFILE( "bootstrap" );
+        aIni += OUString("/" LIBO_ETC_FOLDER "/") + SAL_CONFIGFILE( "bootstrap" );
         rtl::Bootstrap aBootstrap( aIni );
         aBootstrap.getFrom( "ProductKey", aProduct );
 

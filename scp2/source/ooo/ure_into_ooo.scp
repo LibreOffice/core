@@ -50,12 +50,7 @@ File gid_File_UreLink
     Name = "ure-link";
     Styles = (PACKED);
 End
-#elif defined MACOSX
-Directory gid_Dir_UreLink
-    ParentID = gid_Dir_Bundle_Contents;
-    DosName = "ure-link";
-End
-#else
+#elif !defined MACOSX
 Unixlink gid_Unixlink_UreLink
     BIN_FILE_BODY;
     Styles = ();

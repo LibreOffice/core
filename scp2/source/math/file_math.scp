@@ -59,6 +59,8 @@ File gid_File_Help_Smath_Zip
 End
 #endif
 
+#ifndef ENABLE_MACOSX_SANDBOX
+
 File gid_File_Exe_Smath
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -70,3 +72,5 @@ File gid_File_Exe_Smath
     Styles = (PACKED);
   #endif
 End
+
+#endif

@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#ifndef ENABLE_MACOSX_SANDBOX
+
 File gid_File_Exe_Sbase
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -38,6 +40,8 @@ File gid_File_Exe_Sbase
     Styles = (PACKED);
   #endif
 End
+
+#endif
 
 #if defined WNT
 File gid_File_Exe_Odbcconfig

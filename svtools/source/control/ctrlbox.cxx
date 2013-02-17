@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #define _CTRLBOX_CXX
 #include <tools/stream.hxx>
@@ -1130,7 +1131,7 @@ void FontNameBox::LoadMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode
 
 void FontNameBox::InitFontMRUEntriesFile()
 {
-    rtl::OUString sUserConfigDir("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}");
+    rtl::OUString sUserConfigDir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}");
     rtl::Bootstrap::expandMacros(sUserConfigDir);
 
     maFontMRUEntriesFile = sUserConfigDir;

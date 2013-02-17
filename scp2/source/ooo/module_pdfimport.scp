@@ -57,7 +57,7 @@ End
 
 File gid_File_Lib_PdfimportUno
     TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
+    Dir = SCP2_OOO_LIB_DIR;
     Name = SCP2_URE_DL_BARE("pdfimport.uno");
     Styles = (PACKED);
 End

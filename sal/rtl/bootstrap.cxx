@@ -288,6 +288,13 @@ static OUString & getIniFileName_Impl()
 
             // append config file suffix
             fileName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("")));
+
+#ifdef MACOSX
+            // We keep only executables in the MacOS folder, and all
+            // rc files in Resources.
+            sal_Int32 p = fileName.lastIndexOf( "/MacOS/" );
+            fileName = fileName.replaceAt( p+1, 5, "Resources" );
+#endif
         }
 #endif
 

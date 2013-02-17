@@ -78,7 +78,10 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
 
     // read keys from soffice.ini (sofficerc)
     OUString sIniFileName = sProgramPath;
-    sIniFileName += OUString( SAL_CONFIGFILE( "version" ) );
+#ifdef MACOSX
+    sIniFileName += "../Resources";
+#endif
+    sIniFileName += SAL_CONFIGFILE( "version" );
     ::rtl::Bootstrap aIniFile( sIniFileName );
     OUString sNotifyURL;
     aIniFile.getFrom( OUString(  "ODFNotifyURL" ), sNotifyURL );

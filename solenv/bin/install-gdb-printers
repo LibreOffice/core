@@ -29,9 +29,13 @@ GDBDIR="${SOLARENV}/gdb"
 SOLVERLIBDIR="${SOLARVER}/${INPATH}/lib"
 INSTALLDIR="${DEVINSTALLDIR}/opt"
 DYLIB=so
+URELIBFOLDER=ure-link/lib
+LIBFOLDER=program
 if [ "$(uname)" = Darwin ]; then
     INSTALLDIR=$INSTALLDIR/LibreOffice.app/Contents
     DYLIB=dylib
+    URELIBFOLDER=Frameworks
+    LIBFOLDER=Frameworks
 fi
 
 die() {
@@ -168,10 +172,10 @@ if [[ ${DESTDIR}${pythondir} != ${GDBDIR} ]]; then
     cp -pr "${GDBDIR}/libreoffice" "${DESTDIR}${pythondir}"
 fi
 
-make_autoload cppu ure-link/lib libuno_cppu."$DYLIB".3
-make_autoload sal ure-link/lib libuno_sal."$DYLIB".3
-make_autoload svl program libsvllo."$DYLIB"
-make_autoload sw program libswlo."$DYLIB"
-make_autoload tl program libtllo."$DYLIB"
+make_autoload cppu $URELIBFOLDER libuno_cppu."$DYLIB".3
+make_autoload sal $URELIBFOLDER libuno_sal."$DYLIB".3
+make_autoload svl $LIBFOLDER libsvllo."$DYLIB"
+make_autoload sw $LIBFOLDER libswlo."$DYLIB"
+make_autoload tl $LIBFOLDER libtllo."$DYLIB"
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include <cstring>
 #include <sys/stat.h>
@@ -53,7 +54,7 @@ OUString getOfficePath( enum whichOfficePath ePath )
         bOnce = true;
         OUString aIni;
         Bootstrap::get( "BRAND_BASE_DIR", aInstallationRootPath );
-        aIni = aInstallationRootPath + "/program/" + SAL_CONFIGFILE( "bootstrap" );
+        aIni = aInstallationRootPath + "/" LIBO_ETC_FOLDER "/" + SAL_CONFIGFILE( "bootstrap" );
         Bootstrap aBootstrap( aIni );
         aBootstrap.getFrom( "CustomDataUrl", aConfigPath );
         aBootstrap.getFrom( "UserInstallation", aUserPath );
@@ -79,13 +80,8 @@ OUString getOfficePath( enum whichOfficePath ePath )
         }
         // ensure user path exists
         aUPath += "/user/psprint";
-        #if OSL_DEBUG_LEVEL > 1
-        oslFileError eErr =
-        #endif
-        osl_createDirectoryPath( aUPath.pData, NULL, NULL );
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "try to create \"%s\" = %d\n", OUStringToOString( aUPath, RTL_TEXTENCODING_UTF8 ).getStr(), eErr );
-        #endif
+        oslFileError eErr = osl_createDirectoryPath( aUPath.pData, NULL, NULL );
+        SAL_INFO( "vcl.fontmanager", "tried to create " << aUPath << ": " << eErr );
     }
 
     switch( ePath )
@@ -204,7 +200,7 @@ OUString psp::getFontPath()
             // #i53530# Path from CustomDataUrl will completely
             // replace net and user paths if the path exists
             aPathBuffer.append(aConfigPath);
-            aPathBuffer.appendAscii("/share/fonts");
+            aPathBuffer.appendAscii("/" LIBO_SHARE_FOLDER "/fonts");
             // check existance of config path
             struct stat aStat;
             if( 0 != stat( OUStringToOString( aPathBuffer.makeStringAndClear(), osl_getThreadTextEncoding() ).getStr(), &aStat )
@@ -221,9 +217,9 @@ OUString psp::getFontPath()
             if( !aInstallationRootPath.isEmpty() )
             {
                 aPathBuffer.append( aInstallationRootPath );
-                aPathBuffer.appendAscii( "/share/fonts/truetype;");
+                aPathBuffer.appendAscii( "/" LIBO_SHARE_FOLDER "/fonts/truetype;");
                 aPathBuffer.append( aInstallationRootPath );
-                aPathBuffer.appendAscii( "/share/fonts/type1;" );
+                aPathBuffer.appendAscii( "/" LIBO_SHARE_FOLDER "/fonts/type1;" );
             }
             if( !aUserPath.isEmpty() )
             {
@@ -233,9 +229,8 @@ OUString psp::getFontPath()
         }
 
         aPath = aPathBuffer.makeStringAndClear();
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "initializing font path to \"%s\"\n", OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-#endif
+
+        SAL_INFO( "vcl.fontmanager", "Initializing font path to " << aPath );
     }
     return aPath;
 }

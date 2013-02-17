@@ -31,6 +31,8 @@ STD_LIB_FILE(gid_File_Lib_Swd, swd)
 
 STD_LIB_FILE(gid_File_Lib_Hwpreader, hwp)
 
+#ifndef ENABLE_MACOSX_SANDBOX
+
 File gid_File_Exe_Swriter
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -42,6 +44,8 @@ File gid_File_Exe_Swriter
     Styles = (PACKED);
   #endif
 End
+
+#endif
 
 #ifdef WNT
 File gid_File_Exe_Sweb

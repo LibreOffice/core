@@ -47,6 +47,9 @@ struct Bootstrap :
         const rtl::Bootstrap * operator () () {
             ::rtl::OUStringBuffer buf(256);
             buf.append(getLibraryLocation());
+#ifdef MACOSX
+            buf.appendAscii("/../Resources");
+#endif
             buf.appendAscii(SAL_CONFIGFILE("/jvmfwk3"));
             ::rtl::OUString sIni = buf.makeStringAndClear();
             ::rtl::Bootstrap *  bootstrap = new ::rtl::Bootstrap(sIni);

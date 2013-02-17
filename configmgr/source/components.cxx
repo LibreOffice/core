@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include "sal/config.h"
 
 #include <algorithm>
@@ -842,7 +844,7 @@ void Components::parseModificationLayer(OUString const & url) {
             Data::NO_LAYER, OUString(".xcu"),
             &parseXcuFile,
             expand(
-                OUString("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
+                OUString("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap")
                         ":UserInstallation}/user/registry/data")),
             false);
     }

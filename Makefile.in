@@ -366,7 +366,9 @@ ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
 	codesign --force --verbose --sign $(MACOSX_CODESIGNING_IDENTITY) $(entitlements) $(DEVINSTALLDIR)/opt/LibreOffice.app
 #
 endif
+ifneq ($(ENABLE_MACOSX_SANDBOX),YES)
 	@install-gdb-printers -L
+endif
 else
 	@ooinstall -l $(DEVINSTALLDIR)/opt
 endif

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include <string.h>
 #include <malloc.h>
@@ -2210,7 +2211,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 
             ::rtl::OUString aBootStrap;
             rtl::Bootstrap::get( String( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aBootStrap );
-            aBootStrap += String( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
+            aBootStrap += String( RTL_CONSTASCII_USTRINGPARAM( "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" ) ) );
             rtl::Bootstrap aBootstrap( aBootStrap );
             ::rtl::OUString aUserPath;
             aBootstrap.getFrom( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );

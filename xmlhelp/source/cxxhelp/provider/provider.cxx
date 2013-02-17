@@ -333,7 +333,7 @@ void ContentProvider::init()
     subst( aPath );
     aImagesZipPaths[ 0 ] = aPath;
 
-    aPath = rtl::OUString("$BRAND_BASE_DIR/share/config");
+    aPath = rtl::OUString("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config");
     rtl::Bootstrap::expandMacros(aPath);
     aImagesZipPaths[ 1 ] = aPath;
 

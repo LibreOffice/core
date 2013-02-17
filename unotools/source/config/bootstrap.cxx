@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include <stdio.h>
 
@@ -78,7 +79,7 @@ namespace utl
             rtl::Bootstrap::get(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")),
                 uri);
-            return uri + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/program/" BOOTSTRAP_DATA_NAME));
+            return uri + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/" LIBO_ETC_FOLDER "/" BOOTSTRAP_DATA_NAME));
         }
     }
 
@@ -793,7 +794,7 @@ sal_Bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rVa
     rtl::Bootstrap::get(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")), uri);
     rtl::Bootstrap aData( uri +
-                          OUString(RTL_CONSTASCII_USTRINGPARAM("/program/" SAL_CONFIGFILE("version"))) );
+                          OUString(RTL_CONSTASCII_USTRINGPARAM("/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version"))) );
     if ( aData.getHandle() == NULL )
         // version.ini (versionrc) doesn't exist
         return sal_False;

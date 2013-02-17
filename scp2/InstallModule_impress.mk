@@ -28,6 +28,7 @@
 $(eval $(call gb_InstallModule_InstallModule,scp2/impress))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/impress,\
+	ENABLE_MACOSX_SANDBOX \
 	ENABLE_OPENGL \
 ))
 
