@@ -18,6 +18,10 @@ orcus_patches :=
 orcus_patches += liborcus_0.1.0-configure.patch
 # disable boost "auto lib" in MSVC build
 orcus_patches += liborcus_0.1.0-boost_disable_auto_lib.patch
+# <https://gitorious.org/orcus/orcus/merge_requests/2#
+# f60d6eecee72349993a392a9a63ddf3383d3b8c8-
+# f60d6eecee72349993a392a9a63ddf3383d3b8c8@2>:
+orcus_patches += liborcus_0.1.0-boost-include.patch.1
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,orcus,\
 	vsprojects/liborcus-static-nozip/liborcus-static-nozip.vcproj \
