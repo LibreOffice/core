@@ -1038,7 +1038,8 @@ ScPostIt* ScNotes::GetOrCreateNote(const ScAddress& rPos)
     else
     {
         ScPostIt* pPostIt = new ScPostIt(*mpDoc, rPos, false);
-        insert(rPos, pPostIt);
+        if(!insert(rPos, pPostIt))
+            assert(false);
         return pPostIt;
     }
 }
