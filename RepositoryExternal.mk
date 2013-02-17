@@ -2251,7 +2251,10 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),orcus)
 
-$(if $(filter YES,$(SYSTEM_BOOST)),$(call gb_LinkTarget_add_libs,$(1),$(BOOST_SYSTEM_LIB)))
+$(if $(filter YES,$(SYSTEM_BOOST)), \
+    $(call gb_LinkTarget_add_ldflags,$(1),$(BOOST_LDFLAGS)) \
+    $(call gb_LinkTarget_add_libs,$(1),$(BOOST_SYSTEM_LIB)) \
+)
 
 endef
 
