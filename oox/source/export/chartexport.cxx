@@ -2293,12 +2293,13 @@ void ChartExport::exportDataLabels(
 {
     // TODO: export field separators, missing flag vs. showing series name or not
     uno::Reference< chart2::XDataSeries > xSeries( xSeriesProperties, uno::UNO_QUERY );
-    Sequence< sal_Int32 > aDataPointSeq;
+
     if( xSeriesProperties.is())
     {
         FSHelperPtr pFS = GetFS();
         pFS->startElement( FSNS( XML_c, XML_dLbls ),
                     FSEND );
+
         sal_Int32 nElem;
         for( nElem = 0; nElem < nSeriesLength; ++nElem)
         {
@@ -2327,6 +2328,7 @@ void ChartExport::exportDataLabels(
                    namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
                    sal_Int32 nPlacement(csscd::AVOID_OVERLAP);
                    const char *aPlacement = NULL;
+                   OUString aSep;
 
                    if (GetProperty( xPropSet, "LabelPlacement"))
                        mAny >>= nPlacement;
@@ -2347,6 +2349,13 @@ void ChartExport::exportDataLabels(
                    pFS->startElement( FSNS( XML_c, XML_dLbl ), FSEND);
                    pFS->singleElement( FSNS( XML_c, XML_idx), XML_val, I32S(nElem), FSEND);
                    pFS->singleElement( FSNS( XML_c, XML_dLblPos), XML_val, aPlacement, FSEND);
+
+                   if (GetProperty( xPropSet, "LabelSeparator"))
+                   {
+                       mAny >>= aSep;
+                       pFS->singleElement( FSNS( XML_c, XML_separator), XML_val, USS(aSep), FSEND);
+                   }
+
                    pFS->singleElement( FSNS( XML_c, XML_showLegendKey), XML_val,
                                        aLabel.ShowLegendSymbol ? "1" : "0", FSEND);
                    pFS->singleElement( FSNS( XML_c, XML_showVal), XML_val,
@@ -2355,6 +2364,10 @@ void ChartExport::exportDataLabels(
                                        aLabel.ShowCategoryName ? "1" : "0", FSEND);
                    pFS->singleElement( FSNS( XML_c, XML_showPercent), XML_val,
                                        aLabel.ShowNumberInPercent ? "1" : "0", FSEND);
+                   // MSO somehow assumes series name to be on (=displayed) by default.
+                   // Let's put false here and switch it off then, since we have no UI means
+                   // in LibO to toggle it on anyway
+                   pFS->singleElement( FSNS( XML_c, XML_showSerName), XML_val, "0", FSEND);
                    pFS->endElement( FSNS( XML_c, XML_dLbl ));
                }
             }
