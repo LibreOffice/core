@@ -889,8 +889,6 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
             return NULL;
     }
 
-    ScIconSetInfo* pInfo = new ScIconSetInfo;
-
     // now we have for sure a value
     double nVal = mpDoc->GetValue(rAddr);
 
@@ -918,6 +916,8 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
     }
     if(nVal >= nValMax)
         ++nIndex;
+
+    ScIconSetInfo* pInfo = new ScIconSetInfo;
 
     if(mpFormatData->mbReverse)
     {
