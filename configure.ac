@@ -3384,6 +3384,11 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     else
         with_system_orcus=no
     fi
+    if test "$with_system_libcmis" = "yes"; then
+        AC_MSG_ERROR([--with-system-libcmis conflicts with --enable-dbgutil])
+    else
+        with_system_libcmis=no
+    fi
 else
     ENABLE_DBGUTIL=""
     # PRODUCT is old concept, still used by build.pl .
