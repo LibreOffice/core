@@ -451,10 +451,13 @@ void PDFOutDev::writeFontFile( GfxFont* gfxFont ) const
     fflush(stdout);
 
     if( fwrite(pBuf, sizeof(char), nSize, g_binary_out) != (size_t)nSize )
+    {
+        gfree(pBuf);
         exit(1); // error
-
+    }
     // ---sync point--- see SYNC STREAMS above
     fflush(g_binary_out);
+    gfree(pBuf);
 }
 
 void PDFOutDev::printPath( GfxPath* pPath ) const
