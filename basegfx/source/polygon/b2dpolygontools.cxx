@@ -2451,7 +2451,7 @@ namespace basegfx
                     const sal_uInt32 nNextIndex((a + 1) % nPointCount);
                     aBezier.setEndPoint(rCandidate.getB2DPoint(nNextIndex));
                     double fEdgeDist;
-                    double fNewCut;
+                    double fNewCut(0.0);
                     bool bEdgeIsCurve(false);
 
                     if(rCandidate.areControlPointsUsed())
