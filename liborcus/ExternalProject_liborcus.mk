@@ -60,7 +60,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		--disable-spreadsheet-model \
 		--disable-werror \
 		$(if $(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID,$(OS)),$(if $(gb_ENABLE_DBGUTIL),CPPFLAGS=-D_GLIBCXX_DEBUG)) \
-		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(call gb_UnpackedTarball_get_dir,boost)) \
+		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(call gb_UnpackedTarball_get_dir,boost),CXXFLAGS=$(BOOST_CPPFLAGS) LDFLAGS=$(BOOST_LDFLAGS)) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& $(MAKE) \
 	&& touch $@

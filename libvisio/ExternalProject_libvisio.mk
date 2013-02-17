@@ -68,7 +68,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 		--without-docs \
 		--disable-debug \
 		--disable-werror \
-		CXXFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost)) \
+		CXXFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS)) \
 		$(if $(filter NO,$(SYSTEM_LIBXML)),-I$(call gb_UnpackedTarball_get_dir,xml2)/include)" \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
