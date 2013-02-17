@@ -1722,8 +1722,8 @@ void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
 
     xub_StrLen aPos = rIdx.GetIndex();
     xub_StrLen nLen = m_Text.Len() - aPos;
-    ssize_t const nOverflow(static_cast<ssize_t>(m_Text.Len())
-            + static_cast<ssize_t>(rStr.Len()) - TXTNODE_MAX);
+    long const nOverflow(static_cast<long>(m_Text.Len())
+            + static_cast<long>(rStr.Len()) - TXTNODE_MAX);
     m_Text.Insert((nOverflow > 0) ? rStr.Copy(0, rStr.Len() - nOverflow) : rStr,
             aPos);
     assert(m_Text.Len() <= TXTNODE_MAX);
