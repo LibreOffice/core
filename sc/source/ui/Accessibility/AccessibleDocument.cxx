@@ -1022,6 +1022,8 @@ void ScChildrenShapes::SetAnchor(const uno::Reference<drawing::XShape>& xShape, 
             if (pData->pAccShape)
                 pData->pAccShape->SetRelationSet(GetRelationSet(pData));
         }
+        else
+            delete pAddress;
     }
 }
 
