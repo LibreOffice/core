@@ -1952,7 +1952,7 @@ RTLFUNC(DateValue)
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
         }
 
-        sal_uInt32 nIndex;
+        sal_uInt32 nIndex = 0;
         double fResult;
         OUString aStr( rPar.Get(1)->GetOUString() );
         sal_Bool bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
@@ -1967,6 +1967,7 @@ RTLFUNC(DateValue)
         {
             // Create a new SvNumberFormatter by using LANGUAGE_ENGLISH to get the date value;
             SvNumberFormatter aFormatter( comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US );
+            nIndex = 0;
             bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, fResult );
             nType = aFormatter.GetType( nIndex );
         }
@@ -2019,7 +2020,7 @@ RTLFUNC(TimeValue)
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
         }
 
-        sal_uInt32 nIndex;
+        sal_uInt32 nIndex = 0;
         double fResult;
         sal_Bool bSuccess = pFormatter->IsNumberFormat( rPar.Get(1)->GetOUString(),
                                                    nIndex, fResult );
