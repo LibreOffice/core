@@ -1,0 +1,26 @@
+From f60d6eecee72349993a392a9a63ddf3383d3b8c8 Mon Sep 17 00:00:00 2001
+From: Stephan Bergmann <sbergman@redhat.com>
+Date: Sat, 16 Feb 2013 13:25:44 +0100
+Subject: [PATCH] Missing include <boost/noncopyable.hpp>
+
+(at least when compiling against Boost 1.53.0)
+---
+ src/liborcus/dom_tree.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/liborcus/dom_tree.cpp b/src/liborcus/dom_tree.cpp
+index ecf7beb..14725ad 100644
+--- a/src/liborcus/dom_tree.cpp
++++ b/src/liborcus/dom_tree.cpp
+@@ -34,6 +34,8 @@
+ #include <iostream>
+ #include <sstream>
+ 
++#include <boost/noncopyable.hpp>
++
+ using namespace std;
+ 
+ namespace orcus {
+-- 
+1.8.1.2
+
