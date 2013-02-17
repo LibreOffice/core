@@ -811,22 +811,25 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             }
 
             // #i54336#
-            if ( pNewAnchorFrm && pOldAsCharAnchorPos )
+            if( pOldAsCharAnchorPos )
             {
-                // We need to handle InCntnts in a special way:
-                // The TxtAttribut needs to be destroyed which, unfortunately, also
-                // destroys the format. To avoid that, we disconnect the format from
-                // the attribute.
-                const xub_StrLen nIndx( pOldAsCharAnchorPos->nContent.GetIndex() );
-                SwTxtNode* pTxtNode( pOldAsCharAnchorPos->nNode.GetNode().GetTxtNode() );
-                OSL_ENSURE( pTxtNode, "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object" );
-                OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
-                SwTxtAttr * const pHnt =
-                    pTxtNode->GetTxtAttrForCharAt( nIndx, RES_TXTATR_FLYCNT );
-                const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
+                if ( pNewAnchorFrm)
+                {
+                    // We need to handle InCntnts in a special way:
+                    // The TxtAttribut needs to be destroyed which, unfortunately, also
+                    // destroys the format. To avoid that, we disconnect the format from
+                    // the attribute.
+                    const xub_StrLen nIndx( pOldAsCharAnchorPos->nContent.GetIndex() );
+                    SwTxtNode* pTxtNode( pOldAsCharAnchorPos->nNode.GetNode().GetTxtNode() );
+                    OSL_ENSURE( pTxtNode, "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object" );
+                    OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+                    SwTxtAttr * const pHnt =
+                        pTxtNode->GetTxtAttrForCharAt( nIndx, RES_TXTATR_FLYCNT );
+                    const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
-                // They are disconnected. We now have to destroy the attribute.
-                pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIndx, nIndx );
+                    // They are disconnected. We now have to destroy the attribute.
+                    pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIndx, nIndx );
+                }
                 delete pOldAsCharAnchorPos;
             }
         }
