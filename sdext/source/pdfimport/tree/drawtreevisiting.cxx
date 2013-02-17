@@ -666,7 +666,7 @@ bool isSpaces(TextElement* pTextElem)
     return true;
 }
 
-bool notTransformed(GraphicsContext GC)
+bool notTransformed(const GraphicsContext& GC)
 {
     return (
         GC.Transformation.get(0,0) ==  100.00 &&
