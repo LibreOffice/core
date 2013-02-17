@@ -54,5 +54,7 @@ translations.done: $(foreach lang,$(call android_get_langlist),$(call android_ge
 
 translations.clean:
 	rm -rf $(foreach lang,$(call android_get_langlist),$(call android_get_podir,$(lang)))
+	rm -rf $(foreach lang,$(call android_get_langlist),translations-$(lang).db)
+	rm translations.done
 
 # vim: set noet sw=4 ts=4:
