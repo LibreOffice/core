@@ -55,17 +55,17 @@ sub action($$$)
     # by the dynamic linker already in DYLD_LIBRARY_PATH.
 
     my %action =
-        ('app/UREBIN/URELIB' => '@executable_path/../lib',
-         'app/OOO/URELIB' => '@executable_path/../ure-link/lib',
-         'app/OOO/OOO' => '@executable_path',
-         'app/SDKBIN/URELIB' => '@executable_path/../../ure-link/lib',
+        ('app/UREBIN/URELIB' => '@executable_path/../Frameworks',
+         'app/OOO/URELIB' => '@executable_path/../Frameworks',
+         'app/OOO/OOO' => '@executable_path/../Frameworks',
+         'app/SDKBIN/URELIB' => '@executable_path/../Frameworks',
          'app/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/NONE' => '@__VIA_LIBRARY_PATH__',
          'shl/URELIB/URELIB' => '@loader_path',
-         'shl/OOO/URELIB' => '@loader_path/../ure-link/lib',
+         'shl/OOO/URELIB' => '@loader_path',
          'shl/OOO/OOO' => '@loader_path',
-         'shl/OXT/URELIB' => '@executable_path/urelibs',
+         'shl/OXT/URELIB' => '@executable_path/../Frameworks',
          'shl/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'shl/OOO/NONE' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/OOO' => '@__VIA_LIBRARY_PATH__',

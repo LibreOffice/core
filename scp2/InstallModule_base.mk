@@ -28,6 +28,7 @@
 $(eval $(call gb_InstallModule_InstallModule,scp2/base))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/base,\
+	ENABLE_MACOSX_SANDBOX \
 	ENABLE_REPORTBUILDER \
 ))
 

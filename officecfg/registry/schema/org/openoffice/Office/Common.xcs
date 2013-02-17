@@ -1808,7 +1808,7 @@
             <desc>Specifies the settings of the AutoCorrect dialog.</desc>
           </info>
           <value>
-            <it>$(insturl)/share/autocorr</it>
+            <it>$(insturl)/$(share_subdir_name)/autocorr</it>
             <it>$(userurl)/autocorr</it>
           </value>
         </prop>
@@ -1819,7 +1819,7 @@
             modules.</desc>
           </info>
           <value>
-            <it>$(insturl)/share/autotext/$(vlang)</it>
+            <it>$(insturl)/$(share_subdir_name)/autotext/$(vlang)</it>
             <it>$(userurl)/autotext</it>
           </value>
         </prop>
@@ -1837,7 +1837,7 @@
             AutoPilots.</desc>
           </info>
           <value>
-            <it>$(insturl)/share/basic</it>
+            <it>$(insturl)/$(share_subdir_name)/basic</it>
             <it>$(userurl)/basic</it>
           </value>
         </prop>
@@ -1847,7 +1847,7 @@
             <desc>Contains the bitmap files which can be used for menu and
             toolbar icons.</desc>
           </info>
-          <value>$(insturl)/share/config/symbol</value>
+          <value>$(insturl)/$(share_subdir_name)/config/symbol</value>
         </prop>
         <prop oor:name="Config" oor:type="xs:string" oor:nillable="false">
           <info>
@@ -1855,14 +1855,14 @@
             <desc>Contains the configuration files. This value cannot be changed
             through the user interface.</desc>
           </info>
-          <value>$(insturl)/share/config</value>
+          <value>$(insturl)/$(share_subdir_name)/config</value>
         </prop>
         <prop oor:name="Dictionary" oor:type="xs:string" oor:nillable="false">
           <info>
             <author>TL</author>
             <desc>Contains the provided dictionaries.</desc>
           </info>
-          <value>$(insturl)/share/wordbook</value>
+          <value>$(insturl)/$(share_subdir_name)/wordbook</value>
         </prop>
         <prop oor:name="Favorite" oor:type="xs:string" oor:nillable="false">
           <info>
@@ -1887,7 +1887,7 @@
             and multimedia files.</desc>
           </info>
           <value>
-            <it>$(insturl)/share/gallery</it>
+            <it>$(insturl)/$(share_subdir_name)/gallery</it>
             <it>$(userurl)/gallery</it>
           </value>
         </prop>
@@ -1912,7 +1912,7 @@
             <desc>Contains the files that are necessary for the
             spellcheck.</desc>
           </info>
-          <value>$(insturl)/share/dict</value>
+          <value>$(insturl)/$(share_subdir_name)/dict</value>
         </prop>
         <prop oor:name="Module" oor:type="xs:string" oor:nillable="false">
           <info>
@@ -1963,8 +1963,8 @@
             sub-folders.</desc>
           </info>
           <value>
-            <it>$(insturl)/share/template/$(vlang)</it>
-            <it>$(insturl)/share/template/common</it>
+            <it>$(insturl)/$(share_subdir_name)/template/$(vlang)</it>
+            <it>$(insturl)/$(share_subdir_name)/template/common</it>
             <it>$(userurl)/template</it>
           </value>
         </prop>
@@ -1977,7 +1977,7 @@
             merged from UserConfig and from these folders.</desc>
           </info>
           <value>
-            <it>$(insturl)/share/config</it>
+            <it>$(insturl)/$(share_subdir_name)/config</it>
           </value>
         </prop>
         <prop oor:name="UserConfig" oor:type="xs:string" oor:nillable="false">
@@ -2027,7 +2027,7 @@
             AutoCorrect dialog.</desc>
           </info>
           <value>
-            <it>$(insturl)/share/autocorr</it>
+            <it>$(insturl)/$(share_subdir_name)/autocorr</it>
             <it>$(userurl)/autocorr</it>
           </value>
         </prop>
@@ -2038,7 +2038,7 @@
             located.</desc>
           </info>
           <value>
-            <it>$(insturl)/share/autotext/$(vlang)</it>
+            <it>$(insturl)/$(share_subdir_name)/autotext/$(vlang)</it>
             <it>$(userurl)/autotext</it>
           </value>
         </prop>
@@ -2055,7 +2055,7 @@
             the AutoPilots, are located.</desc>
           </info>
           <value>
-            <it>$(insturl)/share/basic</it>
+            <it>$(insturl)/$(share_subdir_name)/basic</it>
             <it>$(userurl)/basic</it>
           </value>
         </prop>
@@ -2064,21 +2064,21 @@
             <desc>Specifies the default directory where the bitmap files, which
             can be used for the menu and toolbar icons, are located.</desc>
           </info>
-          <value>$(insturl)/share/config/symbol</value>
+          <value>$(insturl)/$(share_subdir_name)/config/symbol</value>
         </prop>
         <prop oor:name="Config" oor:type="xs:string" oor:nillable="false">
           <info>
             <desc>Specifies the default directory where the configuration files
             are stored.</desc>
           </info>
-          <value>$(insturl)/share/config</value>
+          <value>$(insturl)/$(share_subdir_name)/config</value>
         </prop>
         <prop oor:name="Dictionary" oor:type="xs:string" oor:nillable="false">
           <info>
             <desc>Specifies the default directory where the provided
             dictionaries are located.</desc>
           </info>
-          <value>$(insturl)/share/wordbook/$(vlang)</value>
+          <value>$(insturl)/$(share_subdir_name)/wordbook/$(vlang)</value>
         </prop>
         <prop oor:name="Favorite" oor:type="xs:string" oor:nillable="false">
           <info>
@@ -2101,7 +2101,7 @@
             multimedia files are located.</desc>
           </info>
           <value>
-            <it>$(insturl)/share/gallery</it>
+            <it>$(insturl)/$(share_subdir_name)/gallery</it>
             <it>$(userurl)/gallery</it>
           </value>
         </prop>
@@ -2124,7 +2124,7 @@
             <desc>Specifies the default directory where the files that are
             necessary for the spellcheck are saved.</desc>
           </info>
-          <value>$(insturl)/share/dict</value>
+          <value>$(insturl)/$(share_subdir_name)/dict</value>
         </prop>
         <prop oor:name="Module" oor:type="xs:string" oor:nillable="false">
           <info>
@@ -2163,8 +2163,8 @@
             are located in folders and sub-folders.</desc>
           </info>
           <value>
-            <it>$(insturl)/share/template/$(vlang)</it>
-            <it>$(insturl)/share/template/common</it>
+            <it>$(insturl)/$(share_subdir_name)/template/$(vlang)</it>
+            <it>$(insturl)/$(share_subdir_name)/template/common</it>
             <it>$(userurl)/template</it>
           </value>
         </prop>

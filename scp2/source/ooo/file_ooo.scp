@@ -115,6 +115,8 @@ File gid_File_Exe_Nsplugin
 End
 #endif
 
+#ifndef ENABLE_MACOSX_SANDBOX
+
 File gid_File_Bin_Gengal
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -242,6 +244,8 @@ File gid_File_Bin_Spadmin_Bin
 End
 
 #endif
+
+#endif // !ENABLE_MACOSX_SANDBOX
 
 File gid_File_Dtd_Accelerator
     TXT_FILE_BODY;
@@ -1174,56 +1178,48 @@ End
 #endif
 
 #ifdef MACOSX 
+
 File gid_File_App_PkgInfo
     TXT_FILE_BODY;
     Dir = gid_Dir_Bundle_Contents;
     Name = "PkgInfo";
 End
-#endif
 
-#ifdef MACOSX 
 File gid_File_App_InfoPlist
     TXT_FILE_BODY;
     Dir = gid_Dir_Bundle_Contents;
     Name = "Info.plist";
     Styles = (SCPZIP_REPLACE);
 End
-#endif
 
-#ifdef MACOSX
 File gid_File_Icns_Bundle
     ARCHIVE_TXT_FILE_BODY;
-    Dir = gid_Dir_Bundle_Contents_Resources;
+    Dir = gid_Brand_Dir_Share;
     Name = "osxicons.zip";
     Styles = (ARCHIVE);
 End
-#endif
 
-#ifdef MACOSX
 File gid_File_Res_Bundle
     ARCHIVE_TXT_FILE_BODY;
-    Dir = gid_Dir_Bundle_Contents_Resources;
+    Dir = gid_Brand_Dir_Share;
     Name = "osxres.zip";
     Styles = (ARCHIVE);
 End
-#endif
 
-#ifdef MACOSX
 File gid_File_InfoPlist_Lang
     Dir = gid_Dir_Bundle_Contents_Resources_Lang;
     ARCHIVE_TXT_FILE_BODY;
     Styles = (ARCHIVE);
     EXTRA_ALL_LANG(InfoPlist,zip);
 End
-#endif
 
-#ifdef MACOSX
 File gid_File_Spotlight_Bundle
     ARCHIVE_TXT_FILE_BODY;
     Dir = gid_Dir_Bundle_Contents_Library_Spotlight_Bundle_Contents;
     Name = "mdibundle.zip";
     Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
 End
+
 #endif
 
 #ifdef THEME_DEFAULT

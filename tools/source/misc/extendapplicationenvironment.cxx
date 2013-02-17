@@ -71,6 +71,9 @@ void extendApplicationEnvironment() {
             uri = uri.copy(0, i + 1);
         }
         env.append(rtl::Bootstrap::encode(uri));
+#ifdef MACOSX
+        env.appendAscii("../Resources/");
+#endif
         env.appendAscii(
             RTL_CONSTASCII_STRINGPARAM(SAL_CONFIGFILE("fundamental")));
     }

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include "sal/config.h"
 
@@ -292,7 +293,7 @@ void ImplImageTree::resetPaths() {
     m_paths.clear();
     {
         rtl::OUString url(
-            "$BRAND_BASE_DIR/program/edition/images");
+            "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/edition/images");
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
@@ -303,7 +304,7 @@ void ImplImageTree::resetPaths() {
     }
     {
         rtl::OUString url(
-            "$BRAND_BASE_DIR/share/config");
+            "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config");
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
@@ -319,7 +320,7 @@ void ImplImageTree::resetPaths() {
                 css::uno::Reference< css::container::XNameAccess >()));
     }
     {
-        rtl::OUString url( "$BRAND_BASE_DIR/share/config/images_brand");
+        rtl::OUString url( "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config/images_brand");
         rtl::Bootstrap::expandMacros(url);
         m_paths.push_back(
             std::make_pair(
@@ -327,7 +328,7 @@ void ImplImageTree::resetPaths() {
     }
     {
         rtl::OUString url(
-            "$BRAND_BASE_DIR/share/config");
+            "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config");
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
@@ -343,7 +344,7 @@ void ImplImageTree::resetPaths() {
     }
     if ( m_style == "default" )
     {
-        rtl::OUString url( "$BRAND_BASE_DIR/share/config/images");
+        rtl::OUString url( "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config/images");
         rtl::Bootstrap::expandMacros(url);
         m_paths.push_back(
             std::make_pair(

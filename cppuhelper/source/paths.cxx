@@ -69,6 +69,22 @@ rtl::OUString cppu::getUnoIniUri() {
     rtl::OUString uri("file:///assets/program");
 #else
     rtl::OUString uri(get_this_libpath());
+#ifdef MACOSX
+    // We keep both the LO and URE dylibs direcly in the Frameworks
+    // folder and rc files in Resources. Except for unorc, of which
+    // there are two, the "LO" one (which is in Resources) and the
+    // "URE" one which is in Resources/ure. As this code goes into the
+    // cppuhelper library which is part of URE, we are looking for the
+    // latter one here. I think...
+    sal_Int32 p = uri.lastIndexOf( "Frameworks" );
+    if (p > 10)
+    {
+        // Of course, p is normally much larger than 10. The shortest possible pathname to Frameworks
+        // in an app bundle would be /X.app/Contents/Frameworks, I guess. A typical pathname would be
+        // /Applications/LibreOffice.app/Contents/Frameworks.
+        uri = uri.replaceAt( p, 10, "Resources/ure" );
+    }
+#endif
 #endif
     return uri + "/" SAL_CONFIGFILE("uno");
 }

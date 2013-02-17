@@ -57,7 +57,7 @@ gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
 gb_Rdb_get_outdir_target_for_build = $(OUTDIR_FOR_BUILD)/xml/$(1).rdb
 gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
 gb_ResTarget_get_unittest_target = \
-    $(OUTDIR)/unittest/install/program/resource/$(1).res
+    $(OUTDIR)/unittest/install/$(LIBO_SHARE_RESOURCE_FOLDER)/$(1).res
 gb_UnoApi_get_target = $(OUTDIR)/bin/$(1).rdb
 gb_UnoApiMerge_get_target = $(OUTDIR)/bin/$(1).rdb
 gb_UnoApiMerge_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1).rdb
@@ -102,7 +102,7 @@ gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_Configuration_get_preparation_target = $(WORKDIR)/Configuration/$(1).prepared
 gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
 gb_CppunitTestFakeExecutable_get_target = \
-    $(OUTDIR)/unittest/install/program/$(1)
+    $(OUTDIR)/unittest/install/$(LIBO_BIN_FOLDER)/$(1)
 gb_CustomTarget_get_repo_target = $(WORKDIR)/CustomTarget/$(2)_$(1).done
 gb_CustomTarget_get_target = $(WORKDIR)/CustomTarget/$(1).done
 gb_CustomTarget_get_workdir = $(WORKDIR)/CustomTarget/$(1)

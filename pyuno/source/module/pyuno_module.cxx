@@ -274,6 +274,9 @@ static PyObject* getComponentContext(
 
             OUStringBuffer iniFileName;
             iniFileName.append( path );
+#ifdef MACOSX
+            iniFileName.appendAscii( "/../Resources/" );
+#endif
             iniFileName.appendAscii( "/" );
             iniFileName.appendAscii( SAL_CONFIGFILE( "pyuno" ) );
             iniFile = iniFileName.makeStringAndClear();

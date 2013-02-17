@@ -44,47 +44,26 @@ File gid_File_Rdb_Scriptproviderforpython
 End
 
 File gid_File_Lib_Pyuno
-    LIB_FILE_BODY;
+    PACKED_LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(libpyuno,UNXSUFFIX));
   #else
     Name = "pyuno.pyd";
   #endif
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
 End
 
 File gid_File_Lib_Pythonloader
-    LIB_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
+    PACKED_LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(pythonloader.uno,UNXSUFFIX));
   #else
     Name = "pythonloader.uno.dll";
   #endif
-    Styles = (PACKED);
 End
 
-File gid_File_Py_Unohelper
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "unohelper.py";
-    Styles = (PACKED);
-End
-
-File gid_File_Py_Uno
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "uno.py";
-    Styles = (PACKED);
-End
-
-File gid_File_Py_Pythonloader
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "pythonloader.py";
-    Styles = (PACKED);
-End
+STD_PY_FILE(gid_File_Py_Unohelper, "unohelper.py")
+STD_PY_FILE(gid_File_Py_Uno, "uno.py")
+STD_PY_FILE(gid_File_Py_Pythonloader, "pythonloader.py")
 
 #ifndef SYSTEM_PYTHON
 File gid_File_Py_Bin_Python
@@ -109,7 +88,7 @@ End
 File gid_File_Py_Python_Core
     TXT_FILE_BODY;
   #ifdef MACOSX
-    Dir = gid_Brand_Dir_Program;
+    Dir = gid_Dir_Frameworks;
     Name = "LibreOfficePython.framework.zip";
     Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
   #else
@@ -178,9 +157,8 @@ File gid_File_Lib_Python3_So
     Styles = (PACKED);
 End
 #else //MACOSX
-//directory entries solely to be able to create the symlinks
 Directory gid_Dir_PythonFramework
-    ParentID = gid_Brand_Dir_Program;
+    ParentID = gid_Dir_Frameworks;
     HostName = "LibreOfficePython.framework";
 End
 
@@ -377,10 +355,8 @@ End
 
 // pyuno.so even on Mac OS X, because it is a python module
 File gid_File_Pyuno
-    LIB_FILE_BODY;
+    PACKED_LIB_FILE_BODY;
     Name = "pyuno.so";
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
 End
 
 #endif

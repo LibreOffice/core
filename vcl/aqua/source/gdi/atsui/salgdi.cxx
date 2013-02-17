@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include "osl/file.hxx"
 #include "osl/process.h"
@@ -494,7 +495,7 @@ static bool AddLocalTempFontDirs( void )
 
     rtl::OStringBuffer aBrandFontDir( aBrandSysPath.getLength()*2 );
     aBrandFontDir.append( rtl::OUStringToOString( aBrandSysPath, RTL_TEXTENCODING_UTF8 ) );
-    aBrandFontDir.append( "/share/fonts/truetype/" );
+    aBrandFontDir.append( "/" LIBO_SHARE_FOLDER "/fonts/truetype/" );
     return AddTempFontDir( aBrandFontDir.getStr() );
 }
 

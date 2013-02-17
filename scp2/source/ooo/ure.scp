@@ -27,33 +27,21 @@
 
 #include "macros.inc"
 
+#if !defined MACOSX
+
 Directory gid_Dir_Ure_Bin
-#if defined MACOSX
-    ParentID = gid_Dir_UreLink;
-#else
     ParentID = gid_Dir_Common_Ure;
-#endif
     DosName = "bin";
 End
 
 #if !defined WNT
 Directory gid_Dir_Ure_Lib
-#if defined MACOSX
-    ParentID = gid_Dir_UreLink;
-#else
     ParentID = gid_Dir_Common_Ure;
-#endif
     DosName = "lib";
 End
-#endif
 
-#if !defined WNT
 Directory gid_Dir_Ure_Share
-#if defined MACOSX
-    ParentID = gid_Dir_UreLink;
-#else
     ParentID = gid_Dir_Common_Ure;
-#endif
     DosName = "share";
 End
 #endif
@@ -70,6 +58,8 @@ Directory gid_Dir_Ure_Misc
     DosName = "misc";
 End
 
+#endif // !MACOSX
+
 // Public Executables:
 
 #if defined WNT
@@ -82,10 +72,10 @@ File gid_File_Exe_Uno
 End
 #endif
 
-#ifndef WNT
+#if !defined WNT && !defined MACOSX
 Shortcut gid_Shortcut_Exe_Uno
     FileID = gid_File_Exe_StartupSh;
-    Dir = gid_Dir_Ure_Bin;
+    Dir = GID_DIR_URE_BIN;
     Name = EXENAME(uno);
     Styles = (RELATIVE);
 End
@@ -93,7 +83,7 @@ End
 
 File gid_File_Exe_Regmerge
     BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
+    Dir = GID_DIR_URE_BIN;
     Name = EXENAME(regmerge);
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "881BCC1D-BA4A-4527-9C7D-D89157C2D03B";
@@ -101,7 +91,7 @@ End
 
 File gid_File_Exe_Regview
     BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
+    Dir = GID_DIR_URE_BIN;
     Name = EXENAME(regview);
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "DAB09DCD-8491-4DC8-B153-2BA81A830AC2";
@@ -119,7 +109,7 @@ End
 
 // Private Executables:
 
-#if !defined WNT
+#if !defined WNT && !defined MACOSX
 File gid_File_Exe_StartupSh
     BIN_FILE_BODY;
     Dir = gid_Dir_Ure_Bin;
@@ -132,7 +122,7 @@ End
 #if !defined WNT
 File gid_File_Exe_UnoBin
     BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
+    Dir = GID_DIR_URE_BIN;
     Name = "uno.bin";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "4AE33B3E-B33E-4BA4-AADC-8D7ED303FDE9";
@@ -238,14 +228,79 @@ Unixlink gid_Unixlink_File_Dl_Salhelper
 End
 #endif
 
-// Private Dynamic Libraries:
+// Private Dynamic Libraries (whatever that means):
 
-File gid_File_Dl_Profile_Uno
-    LIB_FILE_BODY;
+// We set up the URE unorc/uno.ini in scp2 because then it is easy to
+// get the platform differences into it compared to constructing it in
+// Makefiles etc. On the Mac it goes into
+// .app/Contents/Resources/ure/unorc, on Unix into .../ure/lib/unorc
+// and on Windows into .../ure/bin/unorc. The latter two locations
+// are factored out as SCP2_URE_DL_DIR.
+
+Profile gid_Profile_Dl_Uno_Ini
+    ModuleID = gid_Module_Root_Ure_Hidden;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Share_Ure;
+#else
     Dir = SCP2_URE_DL_DIR;
-    Name = PROFILENAME(/ure/uno);
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "4681F5C1-8F64-486F-B804-03B4D8CEB41F";
+#endif
+    Name = PROFILENAME(uno);
+End
+
+ProfileItem gid_Profileitem_Dl_Uno_Ure_Internal_Lib_Dir
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    ProfileID = gid_Profile_Dl_Uno_Ini;
+    Section = "Bootstrap";
+    Key = "URE_INTERNAL_LIB_DIR";
+#if defined MACOSX
+    Value = "${ORIGIN}/../../Frameworks";
+#else
+    Value = "${ORIGIN}";
+#endif
+End
+
+ProfileItem gid_Profileitem_Dl_Uno_Ure_Internal_Java_Dir
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    ProfileID = gid_Profile_Dl_Uno_Ini;
+    Section = "Bootstrap";
+    Key = "URE_INTERNAL_JAVA_DIR";
+#if defined MACOSX
+    Value = "${ORIGIN}/../java";
+#else
+    Value = "${ORIGIN}/../share/java";
+#endif
+End
+
+ProfileItem gid_Profileitem_Dl_Uno_Ure_Internal_Java_Classpath
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    ProfileID = gid_Profile_Dl_Uno_Ini;
+    Section = "Bootstrap";
+    Key = "URE_INTERNAL_JAVA_CLASSPATH";
+    Value = "${URE_MORE_JAVA_TYPES}";
+End
+
+ProfileItem gid_Profileitem_Dl_Uno_Uno_Types
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    ProfileID = gid_Profile_Dl_Uno_Ini;
+    Section = "Bootstrap";
+    Key = "UNO_TYPES";
+#if defined MACOSX
+    Value = "${ORIGIN}/types.rdb ${URE_MORE_TYPES}";
+#else
+    Value = "${ORIGIN}/../share/misc/types.rdb ${URE_MORE_TYPES}";
+#endif
+End
+
+ProfileItem gid_Profileitem_Dl_Uno_Uno_Services
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    ProfileID = gid_Profile_Dl_Uno_Ini;
+    Section = "Bootstrap";
+    Key = "UNO_SERVICES";
+#if defined MACOSX
+    Value = "${ORIGIN}/services.rdb ${URE_MORE_SERVICES}";
+#else
+    Value = "${ORIGIN}/../share/misc/services.rdb ${URE_MORE_SERVICES}";
+#endif
 End
 
 File gid_File_Dl_Reg
@@ -854,7 +909,7 @@ End
 #if defined SOLAR_JAVA
 File gid_File_Java_UnoloaderJar
     TXT_FILE_BODY;
-    Dir = gid_Dir_Ure_Java;
+    Dir = GID_DIR_URE_JAVA;
     Name = "unoloader.jar";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "90F99ED3-814C-4B45-894B-D9248848CEB4";
@@ -864,7 +919,7 @@ End
 #if defined SOLAR_JAVA
 File gid_File_Java_JuhJar
     TXT_FILE_BODY;
-    Dir = gid_Dir_Ure_Java;
+    Dir = GID_DIR_URE_JAVA;
     Name = "juh.jar";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "E77CC8B5-0345-4B7F-ABED-5EB9DC94E492";
@@ -874,7 +929,7 @@ End
 #if defined SOLAR_JAVA
 File gid_File_Java_JurtJar
     TXT_FILE_BODY;
-    Dir = gid_Dir_Ure_Java;
+    Dir = GID_DIR_URE_JAVA;
     Name = "jurt.jar";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "EA63EDCC-9152-4560-AB7A-BFC367442E50";
@@ -884,7 +939,7 @@ End
 #if defined SOLAR_JAVA
 File gid_File_Java_RidlJar
     TXT_FILE_BODY;
-    Dir = gid_Dir_Ure_Java;
+    Dir = GID_DIR_URE_JAVA;
     Name = "ridl.jar";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "4A915C83-6BE3-41B9-BAF9-13AA27034955";
@@ -896,7 +951,7 @@ End
 #if defined SOLAR_JAVA
 File gid_File_Java_JavaUnoJar
     TXT_FILE_BODY;
-    Dir = gid_Dir_Ure_Java;
+    Dir = GID_DIR_URE_JAVA;
     Name = "java_uno.jar";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "ABDC8DDA-5D2B-424C-ABD8-FD22D59658FE";
@@ -907,7 +962,7 @@ End
 
 File gid_File_Misc_TypesRdb
     TXT_FILE_BODY;
-    Dir = gid_Dir_Ure_Misc;
+    Dir = GID_DIR_URE_SHARE_MISC;
     Name = "/ure/types.rdb";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "E5086F6A-855B-4CAE-AD3A-A85A21C5AE44";
@@ -915,7 +970,7 @@ End
 
 File gid_File_Misc_ServicesRdb
     TXT_FILE_BODY;
-    Dir = gid_Dir_Ure_Misc;
+    Dir = GID_DIR_URE_SHARE_MISC;
     Name = "/ure/services.rdb";
     Styles = (PACKED);
 End
@@ -925,18 +980,10 @@ End
 #if defined SOLAR_JAVA
 File gid_File_Misc_JavavendorsXml
     TXT_FILE_BODY;
-    Dir = gid_Dir_Ure_Misc;
+    Dir = GID_DIR_URE_SHARE_MISC;
     Name = "javavendors.xml";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "403FCCFE-545B-44F6-91D1-5C75F846E587";
-End
-#endif
-
-#if defined MACOSX
-Unixlink gid_Unixlink_Ure_Bin_Urelibs
-    Dir = gid_Dir_Ure_Bin;
-    Name = "urelibs";
-    Target = "../lib";
 End
 #endif
 

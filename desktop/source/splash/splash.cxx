@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include "splash.hxx"
 #include <stdio.h>
@@ -334,7 +335,7 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
 // Read keys from edition/edition.ini or soffice{.ini|rc}:
 OUString implReadBootstrapKey( const OUString& _rKey )
 {
-    OUString sValue("${.override:${BRAND_BASE_DIR}/program/edition/edition.ini:" + _rKey + "}");
+    OUString sValue("${.override:${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/edition/edition.ini:" + _rKey + "}");
     rtl::Bootstrap::expandMacros(sValue);
     return sValue;
 }

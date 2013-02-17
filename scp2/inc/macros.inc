@@ -57,6 +57,26 @@
     #define SPECIAL_COMPONENT_LIB_NAME(name)  STRING(CONCAT2(name,.dll))
 #endif
 
+#if defined MACOSX
+    #define GID_BRAND_DIR_ETC gid_Brand_Dir_Share
+    #define GID_DIR_PY gid_Brand_Dir_Share
+    #define GID_DIR_URE gid_Dir_Bundle_Contents
+    #define GID_DIR_URE_BIN gid_Brand_Dir_Program
+    #define GID_DIR_URE_JAVA gid_Dir_Classes
+    #define GID_DIR_URE_LIB gid_Dir_Frameworks
+    #define GID_DIR_URE_SHARE gid_Brand_Dir_Share_Ure
+    #define GID_DIR_URE_SHARE_MISC gid_Brand_Dir_Share_Ure
+#else
+    #define GID_BRAND_DIR_ETC gid_Brand_Dir_Program
+    #define GID_DIR_PY gid_Brand_Dir_Program
+    #define GID_DIR_URE gid_Dir_Common_Ure
+    #define GID_DIR_URE_BIN gid_Dir_Ure_Bin
+    #define GID_DIR_URE_JAVA gid_Dir_Ure_Java
+    #define GID_DIR_URE_LIB gid_Dir_Ure_Lib
+    #define GID_DIR_URE_SHARE gid_Dir_Ure_Share
+    #define GID_DIR_URE_SHARE_MISC gid_Dir_Ure_Misc
+#endif
+
 #define RESFILENAME(name,lang)                STRING(CONCAT3(name,lang,.res))
 #define READMETXTFILENAME(name,lang,ext)      STRING(CONCAT4(name,lang,.,ext))
 #define READMEFILENAME(name,lang)             STRING(CONCAT2(name,lang))
@@ -64,6 +84,12 @@
 #define CONFIGLANGFILENAME(name,lang,ext)     STRING(CONCAT4(name,lang,.,ext))
 
 #define SCP2_OOO_BIN_DIR gid_Brand_Dir_Program
+
+#if defined MACOSX
+    #define SCP2_OOO_LIB_DIR gid_Dir_Frameworks
+#else
+    #define SCP2_OOO_LIB_DIR gid_Brand_Dir_Program
+#endif
 
 #define BIN_FILE_BODY \
         UnixRights   = 755
@@ -98,7 +124,7 @@
 #define PACKED_LIB_FILE_BODY \
         LIB_FILE_BODY; \
         Styles = (PACKED); \
-        Dir    = SCP2_OOO_BIN_DIR
+        Dir    = SCP2_OOO_LIB_DIR
 
 #define STD_LIB_FILE(id,name) \
     File id \
@@ -205,6 +231,13 @@
     File id \
         Name     = SPECIAL_COMPONENT_LIB_NAME(name); \
         PACKED_LIB_FILE_BODY; \
+    End
+
+#define STD_PY_FILE(id,name) \
+    File id \
+        PACKED_TXT_FILE_BODY; \
+        Dir = GID_DIR_PY; \
+        Name = name; \
     End
 
 // ---------------------------------------
@@ -411,7 +444,7 @@ End
 #define SCP2_STDLP_DEBUG ""
 #endif
 #else
-#define SCP2_URE_DL_DIR gid_Dir_Ure_Lib
+#define SCP2_URE_DL_DIR GID_DIR_URE_LIB
 #define SCP2_URE_DL_NORMAL(n) "lib" n STRING(UNXSUFFIX)
 #define SCP2_URE_DL_BARE(n) n STRING(UNXSUFFIX)
 #define SCP2_URE_DL_VER(n, v) "lib" n STRING(UNXSUFFIX) "." v
@@ -425,7 +458,7 @@ End
     "libuno_" n STRING(COMID) STRING(UNXSUFFIX) "." v
 #define SCP2_URE_DL_UNO_COMID_NORMAL(n)	\
     "libuno_" n STRING(COMID) STRING(UNXSUFFIX)
-#define SCP2_URE_SHARE_DIR gid_Dir_Ure_Share
+#define SCP2_URE_SHARE_DIR GID_DIR_URE_SHARE
 #endif
 #if defined MACOSX
 #define SCP2_URE_JDL_NORMAL(n) "lib" n ".jnilib"

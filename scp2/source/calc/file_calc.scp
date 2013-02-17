@@ -78,6 +78,8 @@ File gid_File_Help_Scalc_Zip
 End
 #endif
 
+#ifndef ENABLE_MACOSX_SANDBOX
+
 File gid_File_Exe_Scalc
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -89,3 +91,5 @@ File gid_File_Exe_Scalc
     Styles = (PACKED);
   #endif
 End
+
+#endif

@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_folders.h>
+
 #include <vcl/temporaryfonts.hxx>
 
 #include <osl/file.hxx>
@@ -16,7 +18,7 @@
 
 void TemporaryFonts::clear()
 {
-    OUString path = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( path );
     path += "/user/temp/fonts/";
     osl::Directory dir( path );
@@ -36,7 +38,7 @@ void TemporaryFonts::clear()
 
 OUString TemporaryFonts::fileUrlForFont( const OUString& fontName, const char* fontStyle )
 {
-    OUString path = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( path );
     path += "/user/temp/fonts/";
     osl::Directory::createPath( path );

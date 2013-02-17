@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -600,7 +602,7 @@ static void createVariableURL( OUString& rStr, const OUString& rLibName,
     }
     else
     {
-        rStr = OUString("$(INST)/share/basic/");
+        rStr = OUString("$(INST)/" LIBO_SHARE_FOLDER "/basic/");
     }
     rStr += rLibName;
     rStr += "/";

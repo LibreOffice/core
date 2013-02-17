@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -1192,7 +1194,7 @@ void GraphicFilter::ImplInit()
 
     if( bUseConfig )
     {
-        rtl::OUString url("$BRAND_BASE_DIR/program");
+        rtl::OUString url("$BRAND_BASE_DIR/" LIBO_LIB_FOLDER);
         rtl::Bootstrap::expandMacros(url); //TODO: detect failure
         utl::LocalFileHelper::ConvertURLToPhysicalName(url, aFilterPath);
     }

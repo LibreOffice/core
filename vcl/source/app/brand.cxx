@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <rtl/ustring.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/process.h>
@@ -42,8 +44,8 @@ namespace {
     static bool tryLoadPng( const OUString& rBaseDir, const OUString& rName, BitmapEx& rBitmap )
     {
         return
-            loadPng( rBaseDir + "/program/edition" + rName, rBitmap) ||
-            loadPng( rBaseDir + "/program" + rName, rBitmap);
+            loadPng( rBaseDir + "/" LIBO_ETC_FOLDER "/edition" + rName, rBitmap) ||
+            loadPng( rBaseDir + "/" LIBO_ETC_FOLDER + rName, rBitmap);
     }
     static bool loadSvg( const OUString & rPath, BitmapEx &rBitmap)
     {
@@ -55,8 +57,8 @@ namespace {
     static bool tryLoadSvg( const OUString& rBaseDir, const OUString& rName, BitmapEx& rBitmap )
     {
         return
-            loadSvg( rBaseDir + "/program/edition" + rName, rBitmap) ||
-            loadSvg( rBaseDir + "/program" + rName, rBitmap);
+            loadSvg( rBaseDir + "/" LIBO_ETC_FOLDER "/edition" + rName, rBitmap) ||
+            loadSvg( rBaseDir + "/" LIBO_ETC_FOLDER + rName, rBitmap);
     }
 }
 

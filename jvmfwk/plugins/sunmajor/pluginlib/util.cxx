@@ -155,6 +155,9 @@ namespace
            static OUString sIni;
             rtl::OUStringBuffer buf( 255);
             buf.append( getLibraryLocation());
+#ifdef MACOSX
+            buf.appendAscii( "/../Resources" );
+#endif
             buf.appendAscii( SAL_CONFIGFILE("/sunjavaplugin") );
             sIni = buf.makeStringAndClear();
             JFW_TRACE2("[Java framework] sunjavaplugin: "

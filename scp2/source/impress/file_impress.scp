@@ -39,7 +39,7 @@ End
 
 File gid_File_Lib_PresenterScreen
     LIB_FILE_BODY;
-    Dir = SCP2_OOO_BIN_DIR;
+    Dir = SCP2_OOO_LIB_DIR;
 #if defined UNX
     Name = STRING(CONCAT2(PresenterScreen.uno,UNXSUFFIX));
 #else
@@ -64,6 +64,8 @@ File gid_File_Help_Simpress_Zip
 End
 #endif
 
+#ifndef ENABLE_MACOSX_SANDBOX
+
 File gid_File_Exe_Simpress
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -75,6 +77,8 @@ File gid_File_Exe_Simpress
     Styles = (PACKED);
   #endif
 End
+
+#endif
 
 // configuration files for custom animation effects
 
