@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_static_libraries,pdfimport,\
 $(eval $(call gb_Library_use_externals,pdfimport,\
 	boost_headers \
     zlib \
+    poppler \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,pdfimport,\
