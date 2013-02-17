@@ -930,7 +930,7 @@ DifAttrCache::~DifAttrCache()
             delete ppCols[ nCnt ];
     }
 
-    delete ppCols;
+    delete[] ppCols;
 }
 
 void DifAttrCache::SetLogical( const SCCOL nCol, const SCROW nRow )
