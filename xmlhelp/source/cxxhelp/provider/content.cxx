@@ -218,14 +218,14 @@ public:
         sal_Int32 nOpenMode,
         const uno::Sequence< beans::Property >& seq,
         const uno::Sequence< ucb::NumberedSortingInfo >& seqSort,
-        URLParameter aURLParameter,
+        const URLParameter& rURLParameter,
         Databases* pDatabases )
         : m_xContext( xContext ),
           m_xProvider( xProvider ),
           m_nOpenMode( nOpenMode ),
           m_seq( seq ),
           m_seqSort( seqSort ),
-          m_aURLParameter( aURLParameter ),
+          m_aURLParameter( rURLParameter ),
           m_pDatabases( pDatabases )
     {
     }
@@ -266,14 +266,14 @@ public:
         sal_Int32 nOpenMode,
         const uno::Sequence< beans::Property >& seq,
         const uno::Sequence< ucb::NumberedSortingInfo >& seqSort,
-        URLParameter aURLParameter,
+        const URLParameter& rURLParameter,
         Databases* pDatabases )
         : m_xContext( rxContext ),
           m_xProvider( xProvider ),
           m_nOpenMode( nOpenMode ),
           m_seq( seq ),
           m_seqSort( seqSort ),
-          m_aURLParameter( aURLParameter ),
+          m_aURLParameter( rURLParameter ),
           m_pDatabases( pDatabases )
     {
     }
