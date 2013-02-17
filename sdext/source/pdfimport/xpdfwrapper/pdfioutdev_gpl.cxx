@@ -427,7 +427,10 @@ int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, GfxState* state ) 
         // we must write byte count to stdout before
         char* pBuf = gfxFont->readEmbFontFile( m_pDoc->getXRef(), &nSize );
         if( pBuf )
+        {
             aNewFont.isEmbedded = true;
+            gfree(pBuf);
+        }
     }
 
     m_aFontMap[ nNewId ] = aNewFont;
