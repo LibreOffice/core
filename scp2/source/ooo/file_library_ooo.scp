@@ -1103,7 +1103,7 @@ File gid_File_Lib_Sfx
     Dir = SCP2_OOO_BIN_DIR;
 End
 
-#ifdef WNT
+#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_Instooofiltmsi
     LIB_FILE_BODY;
