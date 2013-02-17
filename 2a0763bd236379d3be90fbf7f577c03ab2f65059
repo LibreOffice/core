@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///18\u003d",
+        "filename": "sdext/source/pdfimport/pdfiadaptor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-02-17T08:36:58Z",
+      "side": 1,
+      "message": "No need to convert to OString, just use the OUString in the SAL_INFO().",
+      "revId": "2a0763bd236379d3be90fbf7f577c03ab2f65059",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///14\u003d",
+        "filename": "sdext/source/pdfimport/pdfiadaptor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-02-17T08:36:58Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "2a0763bd236379d3be90fbf7f577c03ab2f65059",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///10\u003d",
+        "filename": "sdext/source/pdfimport/pdfiadaptor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-02-17T08:36:58Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "2a0763bd236379d3be90fbf7f577c03ab2f65059",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
