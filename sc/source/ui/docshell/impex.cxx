@@ -1289,14 +1289,14 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     CalendarWrapper aCalendar( comphelper::getComponentContext(pDoc->GetServiceManager()) );
     aCalendar.loadDefaultCalendar(
         LanguageTag( eDocLang ).getLocale() );
-    ::utl::TransliterationWrapper* pEnglishTransliteration = NULL;
-    CalendarWrapper* pEnglishCalendar = NULL;
+    boost::scoped_ptr< ::utl::TransliterationWrapper > pEnglishTransliteration;
+    boost::scoped_ptr< CalendarWrapper > pEnglishCalendar;
     if ( eDocLang != LANGUAGE_ENGLISH_US )
     {
-        pEnglishTransliteration = new ::utl::TransliterationWrapper (
-            comphelper::getComponentContext(pDoc->GetServiceManager()), SC_TRANSLITERATION_IGNORECASE );
+        pEnglishTransliteration.reset(new ::utl::TransliterationWrapper (
+            comphelper::getComponentContext(pDoc->GetServiceManager()), SC_TRANSLITERATION_IGNORECASE ));
         aTransliteration.loadModuleIfNeeded( LANGUAGE_ENGLISH_US );
-        pEnglishCalendar = new CalendarWrapper ( comphelper::getComponentContext(pDoc->GetServiceManager()) );
+        pEnglishCalendar.reset(new CalendarWrapper ( comphelper::getComponentContext(pDoc->GetServiceManager()) ));
         pEnglishCalendar->loadDefaultCalendar(
             LanguageTag( LANGUAGE_ENGLISH_US ).getLocale() );
     }
@@ -1363,7 +1363,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                             bMultiLine |= lcl_PutString(
                                 pDoc, nCol, nRow, nTab, aCell, nFmt,
                                 &aNumFormatter, bDetectNumFormat, aTransliteration, aCalendar,
-                                pEnglishTransliteration, pEnglishCalendar);
+                                pEnglishTransliteration.get(), pEnglishCalendar.get());
                         }
                         ++nCol;
                     }
@@ -1406,7 +1406,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                             bMultiLine |= lcl_PutString(
                                 pDoc, nCol, nRow, nTab, aCell, nFmt,
                                 &aNumFormatter, bDetectNumFormat, aTransliteration,
-                                aCalendar, pEnglishTransliteration, pEnglishCalendar);
+                                aCalendar, pEnglishTransliteration.get(), pEnglishCalendar.get());
                         }
                         ++nCol;
                     }
@@ -1447,8 +1447,6 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 ScReplaceWarnBox aBox( pDocSh->GetActiveDialogParent() );
                 if ( aBox.Execute() != RET_YES )
                 {
-                    delete pEnglishTransliteration;
-                    delete pEnglishCalendar;
                     return false;
                 }
             }
@@ -1466,9 +1464,6 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     } while (!bDetermineRange);
 
     pDoc->DoColResize( nTab, nStartCol, nEndCol, 0 );
-
-    delete pEnglishTransliteration;
-    delete pEnglishCalendar;
 
     xProgress.reset();    // make room for AdjustRowHeight progress
     if (bRangeIsDetermined)
