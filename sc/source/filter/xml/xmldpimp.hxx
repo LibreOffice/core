@@ -79,7 +79,7 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     };
     ScDocument*     pDoc;
     ScDPObject*     pDPObject;
-    ScDPSaveData*   pDPSave;
+    boost::scoped_ptr<ScDPSaveData> pDPSave;
     ScDPDimensionSaveData* pDPDimSaveData;
     GrandTotalItem  maRowGrandTotal;
     GrandTotalItem  maColGrandTotal;

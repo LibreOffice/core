@@ -112,7 +112,6 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDoc(GetScImport().GetDocument()),
     pDPObject(NULL),
-    pDPSave(NULL),
     pDPDimSaveData(NULL),
     sDataPilotTableName(),
     sApplicationData(),
@@ -216,7 +215,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     }
 
     pDPObject = new ScDPObject(pDoc);
-    pDPSave = new ScDPSaveData();
+    pDPSave.reset(new ScDPSaveData());
 }
 
 ScXMLDataPilotTableContext::~ScXMLDataPilotTableContext()
