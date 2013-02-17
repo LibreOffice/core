@@ -2043,6 +2043,7 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
             //the binary form of the doc id is needed for encryption stuff
             rtl_digest_getMD5( aDigest, &o_rIdentifier[0], 16 );
         }
+        rtl_digest_destroyMD5(aDigest);
     }
 }
 
