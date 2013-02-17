@@ -125,7 +125,7 @@ SvxSimpleTable::~SvxSimpleTable()
 
 void SvxSimpleTable::UpdateViewSize()
 {
-    Size theWinSize=m_rParentTableContainer.GetSizePixel();
+    Size theWinSize=m_rParentTableContainer.GetOutputSizePixel();
     Size HbSize=aHeaderBar.GetSizePixel();
 
     HbSize.Width()=theWinSize.Width();
