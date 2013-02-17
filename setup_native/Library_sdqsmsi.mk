@@ -9,8 +9,17 @@
 
 $(eval $(call gb_Library_Library,sdqsmsi))
 
+$(eval $(call gb_Library_add_defs,sdqsmsi,\
+	-U_DLL \
+))
+
+$(eval $(call gb_Library_add_cxxflags,sdqsmsi,\
+	/MT \
+))
+
 $(eval $(call gb_Library_add_ldflags,sdqsmsi,\
 	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/quickstarter/sdqsmsi.def \
+	/NODEFAULTLIB \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sdqsmsi,\
@@ -22,7 +31,11 @@ $(eval $(call gb_Library_use_static_libraries,sdqsmsi,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,sdqsmsi,\
+	libcmt \
+	libcpmt \
 	msi \
+	kernel32 \
+	user32 \
 	advapi32 \
 	shell32 \
 ))

@@ -9,14 +9,27 @@
 
 $(eval $(call gb_Library_Library,instooofiltmsi))
 
-ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_defs,instooofiltmsi,\
+	-U_DLL \
+))
+
+$(eval $(call gb_Library_add_cxxflags,instooofiltmsi,\
+	/MT \
+))
+
 $(eval $(call gb_Library_add_ldflags,instooofiltmsi,\
 	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/indexingfilter/instooofiltmsi.def \
+	/NODEFAULTLIB \
 ))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,instooofiltmsi,\
     setup_native/source/win32/customactions/indexingfilter/restartindexingservice \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,instooofiltmsi,\
+	libcmt \
+	libcpmt \
+	kernel32 \
 ))
 
 # vim: set noet sw=4 ts=4:

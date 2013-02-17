@@ -10,11 +10,16 @@
 $(eval $(call gb_Library_Library,sellangmsi))
 
 $(eval $(call gb_Library_add_defs,sellangmsi,\
-	-D_STLP_USE_STATIC_LIB \
+	-U_DLL \
+))
+
+$(eval $(call gb_Library_add_cxxflags,sellangmsi,\
+	/MT \
 ))
 
 $(eval $(call gb_Library_add_ldflags,sellangmsi,\
 	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/sellang/sellang.def \
+	/NODEFAULTLIB \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sellangmsi,\
@@ -23,7 +28,9 @@ $(eval $(call gb_Library_add_exception_objects,sellangmsi,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,sellangmsi,\
-    msi \
+	libcmt \
+	libcpmt \
+	msi \
 	kernel32 \
 	user32 \
 	advapi32 \

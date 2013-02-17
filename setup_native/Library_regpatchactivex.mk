@@ -9,8 +9,17 @@
 
 $(eval $(call gb_Library_Library,regpatchactivex))
 
+$(eval $(call gb_Library_add_defs,regpatchactivex,\
+	-U_DLL \
+))
+
+$(eval $(call gb_Library_add_cxxflags,regpatchactivex,\
+	/MT \
+))
+
 $(eval $(call gb_Library_add_ldflags,regpatchactivex,\
 	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/regpatchactivex/regpatchactivex.def \
+	/NODEFAULTLIB \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,regpatchactivex,\
@@ -18,7 +27,9 @@ $(eval $(call gb_Library_add_exception_objects,regpatchactivex,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,regpatchactivex,\
-        msi \
+	libcmt \
+	libcpmt \
+	msi \
 	kernel32 \
 	user32 \
 	advapi32 \

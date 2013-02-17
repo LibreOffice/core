@@ -9,8 +9,17 @@
 
 $(eval $(call gb_Library_Library,jfregca))
 
+$(eval $(call gb_Library_add_defs,jfregca,\
+	-U_DLL \
+))
+
+$(eval $(call gb_Library_add_cxxflags,jfregca,\
+	/MT \
+))
+
 $(eval $(call gb_Library_add_ldflags,jfregca,\
 	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/javafilter/jfregca.def \
+	/NODEFAULTLIB \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,jfregca,\
@@ -18,6 +27,9 @@ $(eval $(call gb_Library_add_exception_objects,jfregca,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,jfregca,\
+	libcmt \
+	libcpmt \
+	kernel32 \
 	msi \
 	advapi32 \
 ))

@@ -11,8 +11,17 @@ $(eval $(call gb_Library_Library,shlxtmsi))
 
 $(eval $(call gb_Library_use_external,shlxtmsi,boost_headers))
 
+$(eval $(call gb_Library_add_defs,shlxtmsi,\
+	-U_DLL \
+))
+
+$(eval $(call gb_Library_add_cxxflags,shlxtmsi,\
+	/MT \
+))
+
 $(eval $(call gb_Library_add_ldflags,shlxtmsi,\
 	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/shellextensions/shlxtmsi.def \
+	/NODEFAULTLIB \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,shlxtmsi,\
@@ -32,7 +41,10 @@ $(eval $(call gb_Library_use_static_libraries,shlxtmsi,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,shlxtmsi,\
-    msi \
+	libcmt \
+	libcpmt \
+	msi \
+	kernel32 \
 	advapi32 \
 	shell32 \
 	psapi \

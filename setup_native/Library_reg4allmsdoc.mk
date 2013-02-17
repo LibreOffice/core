@@ -12,10 +12,16 @@ $(eval $(call gb_Library_Library,reg4allmsdoc))
 $(eval $(call gb_Library_add_defs,reg4allmsdoc,\
 	-DUNICODE \
 	-D_UNICODE \
+	-U_DLL \
+))
+
+$(eval $(call gb_Library_add_cxxflags,reg4allmsdoc,\
+	/MT \
 ))
 
 $(eval $(call gb_Library_add_ldflags,reg4allmsdoc,\
 	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/reg4allmsdoc/reg4allmsdoc.def \
+	/NODEFAULTLIB \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,reg4allmsdoc,\
@@ -23,6 +29,8 @@ $(eval $(call gb_Library_add_exception_objects,reg4allmsdoc,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,reg4allmsdoc,\
+	libcmt \
+	libcpmt \
 	msi \
 	kernel32 \
 	user32 \

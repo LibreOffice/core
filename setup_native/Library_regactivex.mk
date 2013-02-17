@@ -9,8 +9,17 @@
 
 $(eval $(call gb_Library_Library,regactivex))
 
+$(eval $(call gb_Library_add_defs,regactivex,\
+	-U_DLL \
+))
+
+$(eval $(call gb_Library_add_cxxflags,regactivex,\
+	/MT \
+))
+
 $(eval $(call gb_Library_add_ldflags,regactivex,\
 	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/regactivex/regactivex.def \
+	/NODEFAULTLIB \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,regactivex,\
@@ -18,7 +27,10 @@ $(eval $(call gb_Library_add_exception_objects,regactivex,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,regactivex,\
-        msi \
+	libcmt \
+	libcpmt \
+	kernel32 \
+	msi \
 ))
 
 # vim: set noet sw=4 ts=4:

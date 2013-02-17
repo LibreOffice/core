@@ -69,12 +69,12 @@ extern "C" UINT __stdcall RebuildShellIconCache(MSIHANDLE)
         if ( !iSize )
         {
             iSize = GetSystemMetrics( SM_CXICON );
-            itoa( iSize, szValue, 10 );
+            _itoa_s( iSize, szValue, 256, 10 );
             cbValue = strlen( szValue ) + 1;
             dwType = REG_SZ;
         }
 
-        itoa( iSize + 1, szTempValue, 10 );
+        _itoa_s( iSize + 1, szTempValue, 256, 10 );
         lError = RegSetValueEx( hKey, TEXT("Shell Icon Size"), 0, dwType, (LPBYTE)szTempValue, strlen( szTempValue ) + 1 );
 
         LRESULT lResult = SendMessageTimeout(

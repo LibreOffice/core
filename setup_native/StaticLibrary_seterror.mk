@@ -9,6 +9,14 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,seterror))
 
+$(eval $(call gb_StaticLibrary_add_defs,seterror,\
+	-U_DLL \
+))
+
+$(eval $(call gb_StaticLibrary_add_cxxflags,seterror,\
+	/MT \
+))
+
 $(eval $(call gb_StaticLibrary_add_exception_objects,seterror,\
     setup_native/source/win32/customactions/tools/seterror \
 ))

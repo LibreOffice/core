@@ -27,7 +27,7 @@ static BOOL CALLBACK EnumWindowsProc( HWND hWnd, LPARAM lParam )
 
     int nCharsCopied = GetClassName( hWnd, szClassName, sizeof( szClassName ) );
 
-    if ( nCharsCopied && !stricmp( QUICKSTART_CLASSNAMEA, szClassName ) )
+    if ( nCharsCopied && !_stricmp( QUICKSTART_CLASSNAMEA, szClassName ) )
     {
         DWORD   dwProcessId;
 
@@ -36,7 +36,7 @@ static BOOL CALLBACK EnumWindowsProc( HWND hWnd, LPARAM lParam )
             std::string sImagePath = GetProcessImagePath( dwProcessId );
             std::string sOfficeImageDir = GetOfficeInstallationPath( hMSI ) + "program\\";
 
-            if ( !strnicmp( sImagePath.c_str(), sOfficeImageDir.c_str(), sOfficeImageDir.length() ) )
+            if ( !_strnicmp( sImagePath.c_str(), sOfficeImageDir.c_str(), sOfficeImageDir.length() ) )
             {
                 UINT    uMsgShutdownQuickstart = RegisterWindowMessageA( SHUTDOWN_QUICKSTART_MESSAGEA );
 

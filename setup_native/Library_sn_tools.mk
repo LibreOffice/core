@@ -9,8 +9,17 @@
 
 $(eval $(call gb_Library_Library,sn_tools))
 
+$(eval $(call gb_Library_add_defs,sn_tools,\
+	-U_DLL \
+))
+
+$(eval $(call gb_Library_add_cxxflags,sn_tools,\
+	/MT \
+))
+
 $(eval $(call gb_Library_add_ldflags,sn_tools,\
 	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/tools/sn_tools.def \
+	/NODEFAULTLIB \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sn_tools,\
@@ -22,8 +31,11 @@ $(eval $(call gb_Library_use_static_libraries,sn_tools,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,sn_tools,\
-        msi \
-        advapi32 \
+	libcmt \
+	libcpmt \
+	kernel32 \
+	msi \
+	advapi32 \
 ))
 
 # vim: set noet sw=4 ts=4:

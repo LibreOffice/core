@@ -9,6 +9,14 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,quickstarter))
 
+$(eval $(call gb_StaticLibrary_add_defs,quickstarter,\
+	-U_DLL \
+))
+
+$(eval $(call gb_StaticLibrary_add_cxxflags,quickstarter,\
+	/MT \
+))
+
 $(eval $(call gb_StaticLibrary_add_exception_objects,quickstarter,\
     setup_native/source/win32/customactions/quickstarter/quickstarter \
 ))
