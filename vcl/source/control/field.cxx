@@ -393,7 +393,7 @@ const AllSettings& FormatterBase::GetFieldSettings() const
 
 // -----------------------------------------------------------------------
 
-void FormatterBase::ImplSetText( const XubString& rText, Selection* pNewSelection )
+void FormatterBase::ImplSetText( const OUString& rText, Selection* pNewSelection )
 {
     if ( mpField )
     {
@@ -1417,7 +1417,7 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplMetricGetValue( const XubString& rStr, double& rValue, sal_Int64 nBaseValue,
+static sal_Bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit )
 {
     // Zahlenwert holen
@@ -1522,7 +1522,7 @@ void MetricFormatter::SetUnit( FieldUnit eNewUnit )
 
 // -----------------------------------------------------------------------
 
-void MetricFormatter::SetCustomUnitText( const XubString& rStr )
+void MetricFormatter::SetCustomUnitText( const OUString& rStr )
 {
     maCustomUnitText = rStr;
     ReformatAll();
@@ -2078,7 +2078,7 @@ static sal_Bool ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
 // -----------------------------------------------------------------------
 
-inline sal_Bool ImplCurrencyGetValue( const XubString& rStr, double& rValue,
+inline sal_Bool ImplCurrencyGetValue( const OUString& rStr, double& rValue,
                                   sal_uInt16 nDecDigits, const LocaleDataWrapper& rWrapper )
 {
     // fetch number
