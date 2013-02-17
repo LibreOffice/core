@@ -911,7 +911,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         // we need to write the text without quotes
         // we have to actually get the string from
         // the token array for that
-        ScTokenArray* pTokenArray = mrFormatEntry.CreateTokenArry(0);
+        boost::scoped_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateTokenArry(0));
         if(pTokenArray->GetLen())
             aText = XclXmlUtils::ToOString(pTokenArray->First()->GetString());
     }
