@@ -34,6 +34,7 @@ $(eval $(call gb_Library_use_packages,kabdrv1,\
 $(eval $(call gb_Library_use_sdk_api,kabdrv1))
 
 $(eval $(call gb_Library_use_externals,kabdrv1,\
+	boost_headers \
 	kde \
 ))
 

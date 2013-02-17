@@ -27,7 +27,10 @@
 
 $(eval $(call gb_Library_Library,kab1))
 
-$(eval $(call gb_Library_use_externals,kab1,kde))
+$(eval $(call gb_Library_use_externals,kab1, \
+    boost_headers \
+    kde \
+))
 
 $(eval $(call gb_Library_set_componentfile,kab1,connectivity/source/drivers/kab/kab1))
 
