@@ -543,7 +543,8 @@ else
 
 $(eval $(call gb_Library_add_objcxxobjects,sd,\
     sd/source/ui/remotecontrol/BluetoothServer \
-    sd/source/ui/remotecontrol/OSXBluetooth \
+    sd/source/ui/remotecontrol/OSXBluetooth,\
+    -Wno-error \
 ))
 
 $(eval $(call gb_Library_add_libs,sd,\
