@@ -335,22 +335,22 @@ const Sequence< sal_Int8>& X509Certificate_NssImpl :: getUnoTunnelId() {
 {
     if( pCert != NULL )
     {
+        SECStatus rv;
         unsigned char fingerprint[20];
         int length = ((id == SEC_OID_MD5)?MD5_LENGTH:SHA1_LENGTH);
 
         memset(fingerprint, 0, sizeof fingerprint);
-        PK11_HashBuf(id, fingerprint, pCert->derCert.data, pCert->derCert.len);
+        rv = PK11_HashBuf(id, fingerprint, pCert->derCert.data, pCert->derCert.len);
+        if(rv == SECSuccess)
+        {
+            Sequence< sal_Int8 > thumbprint( length ) ;
+            for( int i = 0 ; i < length ; i ++ )
+                thumbprint[i] = fingerprint[i];
 
-        Sequence< sal_Int8 > thumbprint( length ) ;
-        for( int i = 0 ; i < length ; i ++ )
-            thumbprint[i] = fingerprint[i];
-
-        return thumbprint;
+            return thumbprint;
+        }
     }
-    else
-    {
-        return ::com::sun::star::uno::Sequence< sal_Int8 >();
-    }
+    return ::com::sun::star::uno::Sequence< sal_Int8 >();
 }
 
 ::rtl::OUString SAL_CALL X509Certificate_NssImpl::getSubjectPublicKeyAlgorithm()
