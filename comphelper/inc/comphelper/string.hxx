@@ -285,6 +285,17 @@ COMPHELPER_DLLPUBLIC inline rtl::OUStringBuffer& padToLength(
     return detail::padToLength(rBuffer, nLength, cFill);
 }
 
+/** Find any of a list of code units in the string.
+    @param rIn      OUString to search
+    @param pChars   0-terminated array of sal_Unicode code units to search for
+    @param nPos     start position
+
+    @return position of first occurrence of any of the elements of pChars
+            or -1 if none of the code units occur in the string
+ */
+COMPHELPER_DLLPUBLIC sal_Int32 indexOfAny(rtl::OUString const& rIn,
+        sal_Unicode const*const pChars, sal_Int32 const nPos = 0);
+
 /** Convert a sequence of strings to a single comma separated string.
 
     Note that no escaping of commas or anything fancy is done.

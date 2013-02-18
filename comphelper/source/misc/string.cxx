@@ -400,6 +400,22 @@ rtl::OString reverseString(const rtl::OString &rStr)
     return tmpl_reverseString<rtl::OString, rtl::OStringBuffer>(rStr);
 }
 
+sal_Int32 indexOfAny(rtl::OUString const& rIn,
+        sal_Unicode const*const pChars, sal_Int32 const nPos)
+{
+    for (sal_Int32 i = nPos; i < rIn.getLength(); ++i)
+    {
+        sal_Unicode const c = rIn[i];
+        for (sal_Unicode const* pChar = pChars; *pChar; ++pChar)
+        {
+            if (c == *pChar)
+            {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
 
 } }
 
