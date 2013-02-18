@@ -260,24 +260,28 @@ LanguageTag::LanguageTag( const rtl_Locale & rLocale )
     // looking for '.' dot delimiter or '@' modifier content.
     if (!maLocale.Variant.isEmpty())
     {
+        OString aStr = OUStringToOString( maLocale.Language + "_" + maLocale.Country + maLocale.Variant,
+                RTL_TEXTENCODING_UTF8);
         /* FIXME: let liblangtag parse this entirely with
          * lt_tag_convert_from_locale() but that needs a patch to pass the
          * string. */
 #if 0
-        OString aStr = OUStringToOString( maLocale.Language + "-" + maLocale.Country + maLocale.Variant,
-                RTL_TEXTENCODING_UTF8);
         myLtError aError;
         theDataRef::get().incRef();
         mpImplLangtag = lt_tag_convert_from_locale( aStr.getStr(), &aError.p);
         maBcp47 = OStringToOUString( lt_tag_get_string( MPLANGTAG), RTL_TEXTENCODING_UTF8);
         mbInitializedBcp47 = true;
+#else
+        mnLangID = MsLangId::convertUnxByteStringToLanguage( aStr);
+        if (mnLangID == LANGUAGE_DONTKNOW)
+        {
+            SAL_WARN( "i18npool.langtag", "LanguageTag(rtl_Locale) - unknown: " << aStr);
+            mnLangID = LANGUAGE_ENGLISH_US;     // we need _something_ here
+        }
+        mbInitializedLangID = true;
+#endif
         maLocale = lang::Locale();
         mbInitializedLocale = false;
-#else
-        SAL_WARN( "i18npool.langtag", "rtl_Locale Variant modifier not handled");
-        // For now clear anything unknown to us.
-        maLocale.Variant = OUString();
-#endif
     }
 }
 
