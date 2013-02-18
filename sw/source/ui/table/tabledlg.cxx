@@ -495,8 +495,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
 
         nOldAlign = pTblData->GetAlign();
 
-        sal_Bool bSetRight = sal_False, bRightEnable = sal_False,
-             bSetLeft  = sal_False, bLeftEnable  = sal_False;
+        sal_Bool bSetRight = sal_False, bSetLeft = sal_False;
         switch( nOldAlign )
         {
             case text::HoriOrientation::NONE:
@@ -540,13 +539,13 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
         }
         if ( bSetRight )
         {
-            m_aRightMF.Enable(bRightEnable);
-            m_pRightFT->Enable(bRightEnable);
+            m_aRightMF.Enable(sal_False);
+            m_pRightFT->Enable(sal_False);
         }
         if ( bSetLeft )
         {
-            m_aLeftMF.Enable(bLeftEnable);
-            m_pLeftFT->Enable(bLeftEnable);
+            m_aLeftMF.Enable(sal_False);
+            m_pLeftFT->Enable(sal_False);
         }
 
     }
