@@ -215,7 +215,7 @@ Sequence< Property > ImplPropertySetInfo::getProperties(void)
 
     if( !pSeq )
     {
-        // die Informationen für die Properties "Width", "Height" und "Name" anlegen
+        // Create information for the properties "Width", "Height" and "Name"
         pSeq = new Sequence<Property>( 3 );
         Property * pAry = pSeq->getArray();
 
@@ -234,7 +234,7 @@ Sequence< Property > ImplPropertySetInfo::getProperties(void)
         pAry[2].Type = getCppuType( (OUString*) NULL );
         pAry[2].Attributes = TRANSIENT;
     }
-    // Die Information über alle drei Properties liefern.
+    // Return information about all three properties
     return *pSeq;
 }
 
@@ -249,7 +249,7 @@ Property ImplPropertySetInfo::getPropertyByName(const OUString& Name)
         if( pAry[i].Name == Name )
             return pAry[i];
     }
-    // Property unbekannt, also leere liefern
+    // Property unknown, also return empty ones
     return Property();
 }
 
@@ -264,7 +264,7 @@ sal_Bool ImplPropertySetInfo::hasPropertyByName(const OUString& Name)
         if( pAry[i].Name == Name )
             return sal_True;
     }
-    // Property unbekannt, also leere liefern
+    // Property unknown, also return empty ones
     return sal_False;
 }
 
@@ -275,7 +275,7 @@ class ImplIntroTest : public ImplIntroTestHelper
 
     friend class ImplPropertySetInfo;
 
-    // Properties fuer das PropertySet
+    // Properties for the PropertySet
     Any aAnyArray[10];
 
     Reference< XPropertySetInfo > m_xMyInfo;
@@ -295,10 +295,10 @@ class ImplIntroTest : public ImplIntroTestHelper
     Sequence< Sequence< Sequence< sal_Int16 > > > aMultSeq;
     Reference< XIntroTest > m_xIntroTest;
 
-    // Daten fuer NameAccess
+    // Data for NameAccess
     Reference< XIntroTest >* pNameAccessTab;
 
-    // Daten fuer IndexAccess
+    // Data for IndexAccess
     Reference< XIntroTest >* pIndexAccessTab;
     sal_Int16 iIndexAccessCount;
 
