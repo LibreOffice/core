@@ -1984,6 +1984,11 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         pDest->m_Text = pDest->m_Text.replaceAt(nDestStart, 0,
                             m_Text.copy(nTxtStartIdx, nLen));
         m_Text = m_Text.replaceAt(nTxtStartIdx, nLen, "");
+        if (m_Text.getLength() > TXTNODE_MAX)
+        {   // FIXME: could only happen when called from SwRedline::Show.
+            // unfortunately can't really do anything here to handle that...
+            abort();
+        }
         nLen = pDest->m_Text.getLength() - nInitSize; // update w/ current size!
         if( !nLen )                 // String nicht gewachsen ??
             return;
