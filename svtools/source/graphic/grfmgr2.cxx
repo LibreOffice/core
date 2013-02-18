@@ -341,7 +341,7 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
         if(aBitmapHeight == 1)
         {
             fRevScaleY = 1.0 / (double)( aUnrotatedHeight);
-            for ( y = 0; x < aUnrotatedHeight ; y++)
+            for (y = 0; y < aUnrotatedHeight; ++y)
             {
                 pMapIY[y] = 0;
                 pMapFY[y] = 0.5;
