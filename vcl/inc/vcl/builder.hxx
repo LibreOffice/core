@@ -23,6 +23,7 @@ class ListBox;
 class NumericFormatter;
 class PopupMenu;
 class ScrollBar;
+class TimeField;
 class VclMultiLineEdit;
 
 class VCL_DLLPUBLIC VclBuilder
@@ -127,8 +128,9 @@ private:
 
     typedef stringmap Adjustment;
     const Adjustment *get_adjustment_by_name(OString sID) const;
-    static void mungeSpinAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment);
-    static void mungeScrollAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment);
+    static void mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment);
+    static void mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustment);
+    static void mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment);
 
     typedef std::map<OString, OString> WidgetTranslations;
     typedef std::map<OString, WidgetTranslations> Translations;
@@ -165,7 +167,8 @@ private:
         std::vector<TextBufferMap> m_aTextBufferMaps;
         std::map<OString, TextBuffer> m_aTextBuffers;
 
-        std::vector<WidgetAdjustmentMap> m_aSpinAdjustmentMaps;
+        std::vector<WidgetAdjustmentMap> m_aNumericFormatterAdjustmentMaps;
+        std::vector<WidgetAdjustmentMap> m_aTimeFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aScrollAdjustmentMaps;
         std::map<OString, Adjustment> m_aAdjustments;
 
@@ -258,10 +261,12 @@ private:
     Window *makeObject(Window *pParent, const OString &rClass, const OString &rID,
         stringmap &rVec, const std::vector<OString> &rItems);
 
+    void connectNumericFormatterAdjustment(const OString &id, const OString &rAdjustment);
+    void connectTimeFormatterAdjustment(const OString &id, const OString &rAdjustment);
+
     bool extractGroup(const OString &id, stringmap &rVec);
     bool extractModel(const OString &id, stringmap &rVec);
     bool extractBuffer(const OString &id, stringmap &rVec);
-    bool extractSpinAdjustment(const OString &id, stringmap &rVec);
     bool extractScrollAdjustment(const OString &id, stringmap &rVec);
     bool extractButtonImage(const OString &id, stringmap &rMap, bool bRadio);
     bool extractStock(const OString &id, stringmap &rMap);

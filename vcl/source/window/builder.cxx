@@ -236,14 +236,24 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
     }
 
     //Set SpinButton adjustments when everything has been imported
-    for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aSpinAdjustmentMaps.begin(),
-         aEnd = m_pParserState->m_aSpinAdjustmentMaps.end(); aI != aEnd; ++aI)
+    for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aNumericFormatterAdjustmentMaps.begin(),
+         aEnd = m_pParserState->m_aNumericFormatterAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
         NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get<Window>(aI->m_sID));
         const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)
-            mungeSpinAdjustment(*pTarget, *pAdjustment);
+            mungeAdjustment(*pTarget, *pAdjustment);
+    }
+
+    for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aTimeFormatterAdjustmentMaps.begin(),
+         aEnd = m_pParserState->m_aTimeFormatterAdjustmentMaps.end(); aI != aEnd; ++aI)
+    {
+        TimeField *pTarget = dynamic_cast<TimeField*>(get<Window>(aI->m_sID));
+        const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
+        SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
+        if (pTarget && pAdjustment)
+            mungeAdjustment(*pTarget, *pAdjustment);
     }
 
     //Set ScrollBar adjustments when everything has been imported
@@ -254,7 +264,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of scrollbar/adjustment");
         if (pTarget && pAdjustment)
-            mungeScrollAdjustment(*pTarget, *pAdjustment);
+            mungeAdjustment(*pTarget, *pAdjustment);
     }
 
     //Set size-groups when all widgets have been imported
@@ -663,6 +673,8 @@ namespace
         else if (sUnit == "%")
             eUnit = FUNIT_PERCENT;
 
+        assert(eUnit != FUNIT_NONE); //unknown unit
+
         return eUnit;
     }
 
@@ -691,19 +703,19 @@ bool VclBuilder::extractGroup(const OString &id, stringmap &rMap)
     return false;
 }
 
-bool VclBuilder::extractSpinAdjustment(const OString &id, stringmap &rMap)
+void VclBuilder::connectNumericFormatterAdjustment(const OString &id, const OString &rAdjustment)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find(OString("adjustment"));
-    if (aFind != rMap.end())
-    {
-        m_pParserState->m_aSpinAdjustmentMaps.push_back(WidgetAdjustmentMap(id, aFind->second));
-        rMap.erase(aFind);
-        return true;
-    }
-    return false;
+    if (!rAdjustment.isEmpty())
+        m_pParserState->m_aNumericFormatterAdjustmentMaps.push_back(WidgetAdjustmentMap(id, rAdjustment));
 }
 
-bool VclBuilder::extractScrollAdjustment(const OString &id, stringmap &rMap)
+void VclBuilder::connectTimeFormatterAdjustment(const OString &id, const OString &rAdjustment)
+{
+    if (!rAdjustment.isEmpty())
+        m_pParserState->m_aTimeFormatterAdjustmentMaps.push_back(WidgetAdjustmentMap(id, rAdjustment));
+}
+
+bool VclBuilder::extractScrollAdjustment(const OString &id, VclBuilder::stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("adjustment"));
     if (aFind != rMap.end())
@@ -741,6 +753,18 @@ namespace
         return bSelectable;
     }
 
+    OString extractAdjustment(VclBuilder::stringmap &rMap)
+    {
+        OString sAdjustment;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("adjustment"));
+        if (aFind != rMap.end())
+        {
+            sAdjustment= aFind->second;
+            rMap.erase(aFind);
+            return sAdjustment;
+        }
+        return sAdjustment;
+    }
 }
 
 bool VclBuilder::extractModel(const OString &id, stringmap &rMap)
@@ -968,7 +992,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkSpinButton")
     {
-        extractSpinAdjustment(id, rMap);
+        OString sAdjustment = extractAdjustment(rMap);
         OString sPattern = extractCustomProperty(rMap);
         OString sUnit = sPattern;
 
@@ -981,23 +1005,34 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             }
         }
 
-        FieldUnit eUnit = detectMetricUnit(sUnit);
-
         WinBits nBits = WB_LEFT|WB_BORDER|WB_3DLOOK;
         if (!id.endsWith("-nospin"))
             nBits |= WB_SPIN;
 
         if (sPattern.isEmpty())
         {
+            connectNumericFormatterAdjustment(id, sAdjustment);
             SAL_INFO("vcl.layout", "making numeric field for " << name.getStr() << " " << sUnit.getStr());
             pWindow = new NumericField(pParent, nBits);
         }
         else
         {
-            SAL_INFO("vcl.layout", "making metric field for " << name.getStr() << " " << sUnit.getStr());
-            MetricField *pField = new MetricField(pParent, nBits);
-            pField->SetUnit(eUnit);
-            pWindow = pField;
+            if (sPattern == "hh:mm")
+            {
+                connectTimeFormatterAdjustment(id, sAdjustment);
+                SAL_INFO("vcl.layout", "making time field for " << name.getStr() << " " << sUnit.getStr());
+                TimeField *pField = new TimeField(pParent, nBits);
+                pWindow = pField;
+            }
+            else
+            {
+                connectNumericFormatterAdjustment(id, sAdjustment);
+                FieldUnit eUnit = detectMetricUnit(sUnit);
+                SAL_INFO("vcl.layout", "making metric field for " << name.getStr() << " " << sUnit.getStr());
+                MetricField *pField = new MetricField(pParent, nBits);
+                pField->SetUnit(eUnit);
+                pWindow = pField;
+            }
         }
     }
     else if (name == "GtkLinkButton")
@@ -2467,7 +2502,7 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt1
         rTarget.SelectEntryPos(nActiveId);
 }
 
-void VclBuilder::mungeSpinAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment)
+void VclBuilder::mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment)
 {
     int nMul = rtl_math_pow10Exp(1, rTarget.GetDecimalDigits());
 
@@ -2505,7 +2540,40 @@ void VclBuilder::mungeSpinAdjustment(NumericFormatter &rTarget, const Adjustment
     }
 }
 
-void VclBuilder::mungeScrollAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment)
+//assume all in minutes for the moment
+void VclBuilder::mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustment)
+{
+    for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
+    {
+        const OString &rKey = aI->first;
+        const OString &rValue = aI->second;
+
+        if (rKey == "upper")
+        {
+            Time aUpper(0, rValue.toInt32());
+            rTarget.SetMax(aUpper);
+            rTarget.SetLast(aUpper);
+        }
+        else if (rKey == "lower")
+        {
+            Time aLower(0, rValue.toInt32());
+            rTarget.SetMin(aLower);
+            rTarget.SetFirst(aLower);
+        }
+        else if (rKey == "value")
+        {
+            Time aValue(0, rValue.toInt32());
+            rTarget.SetTime(aValue);
+        }
+        else
+        {
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
+        }
+    }
+}
+
+
+void VclBuilder::mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment)
 {
     for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
     {
