@@ -44,6 +44,15 @@ using namespace com::sun::star;
 #define ISO639_LANGUAGE_TAG "qlt"
 
 
+// Helper to ensure lt_error_t is free'd
+struct myLtError
+{
+    lt_error_t* p;
+    myLtError() : p(NULL) {}
+    ~myLtError() { if (p) lt_error_unref( p); }
+};
+
+
 // "statics" to be returned as const reference to an empty locale and string.
 namespace {
 struct theEmptyLocale : public rtl::Static< lang::Locale, theEmptyLocale > {};
@@ -239,6 +248,37 @@ LanguageTag::LanguageTag( const rtl_Locale & rLocale )
         mbCachedCountry( false),
         mbIsFallback( false)
 {
+    // The rtl_Locale follows the Open Group Base Specification,
+    // 8.2 Internationalization Variables
+    // language[_territory][.codeset][@modifier]
+    // On GNU/Linux systems usually being glibc locales.
+    // sal/osl/unx/nlsupport.c _parse_locale() parses them into
+    // Language: language               2 or 3 alpha code
+    // Country: [territory]             2 alpha code
+    // Variant: [.codeset][@modifier]
+    // Variant effectively contains anything that follows the territory, not
+    // looking for '.' dot delimiter or '@' modifier content.
+    if (!maLocale.Variant.isEmpty())
+    {
+        /* FIXME: let liblangtag parse this entirely with
+         * lt_tag_convert_from_locale() but that needs a patch to pass the
+         * string. */
+#if 0
+        OString aStr = OUStringToOString( maLocale.Language + "-" + maLocale.Country + maLocale.Variant,
+                RTL_TEXTENCODING_UTF8);
+        myLtError aError;
+        theDataRef::get().incRef();
+        mpImplLangtag = lt_tag_convert_from_locale( aStr.getStr(), &aError.p);
+        maBcp47 = OStringToOUString( lt_tag_get_string( MPLANGTAG), RTL_TEXTENCODING_UTF8);
+        mbInitializedBcp47 = true;
+        maLocale = lang::Locale();
+        mbInitializedLocale = false;
+#else
+        SAL_WARN( "i18npool.langtag", "rtl_Locale Variant modifier not handled");
+        // For now clear anything unknown to us.
+        maLocale.Variant = OUString();
+#endif
+    }
 }
 
 
@@ -480,13 +520,7 @@ bool LanguageTag::canonicalize()
         mpImplLangtag = lt_tag_new();
     }
 
-    // ensure error is free'd
-    struct myerror
-    {
-        lt_error_t* p;
-        myerror() : p(NULL) {}
-        ~myerror() { if (p) lt_error_unref( p); }
-    } aError;
+    myLtError aError;
 
     if (lt_tag_parse( MPLANGTAG, OUStringToOString( maBcp47, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
     {
