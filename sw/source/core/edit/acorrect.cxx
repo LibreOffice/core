@@ -190,8 +190,8 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
                 _PaMIntoCrsrShellRing aTmp( rEditSh, rCrsr, *pPam );
 
                 pPam->SetMark();
-                pPam->GetPoint()->nContent =
-                    std::min(pNd->GetTxt().getLength(), nPos + nSourceLength);
+                pPam->GetPoint()->nContent = std::min<sal_Int32>(
+                        pNd->GetTxt().getLength(), nPos + nSourceLength);
                 pDoc->ReplaceRange( *pPam, rTxt, false );
                 pPam->Exchange();
                 pPam->DeleteMark();
@@ -202,8 +202,8 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
             if( nSourceLength != rTxt.Len() )
             {
                 pPam->SetMark();
-                pPam->GetPoint()->nContent =
-                    std::min(pNd->GetTxt().getLength(), nPos + nSourceLength);
+                pPam->GetPoint()->nContent = std::min<sal_Int32>(
+                        pNd->GetTxt().getLength(), nPos + nSourceLength);
                 pDoc->ReplaceRange( *pPam, rTxt, false );
                 pPam->Exchange();
                 pPam->DeleteMark();
