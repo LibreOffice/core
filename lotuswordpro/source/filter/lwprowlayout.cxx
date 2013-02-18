@@ -248,25 +248,25 @@ void LwpRowLayout::ConvertRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nE
  */
 void LwpRowLayout::RegisterCurRowStyle(XFRow* pXFRow,sal_uInt16 nRowMark)
 {
-    XFRowStyle* pRowStyle;
-    XFRowStyle* pNewStyle = new XFRowStyle;
-    double fHeight;
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    pRowStyle = static_cast<XFRowStyle*>(pXFStyleManager->FindStyle(m_StyleName));
+    XFRowStyle* pRowStyle = static_cast<XFRowStyle*>(pXFStyleManager->FindStyle(m_StyleName));
     if (!pRowStyle)
         return;
-    fHeight = pRowStyle->GetRowHeight();
+    double fHeight = pRowStyle->GetRowHeight();
 
+    XFRowStyle* pNewStyle = new XFRowStyle;
     *pNewStyle = *pRowStyle;
-    std::map<sal_uInt16,LwpRowLayout*>::iterator iter;
     LwpTableLayout* pTableLayout = GetParentTableLayout();
     if (!pTableLayout)
+    {
+        delete pNewStyle;
         return;
+    }
     std::map<sal_uInt16,LwpRowLayout*> RowsMap = pTableLayout->GetRowsMap();
 
     for (sal_uInt16 i=crowid+1; i<nRowMark;i++)
     {
-        iter = RowsMap.find(i);
+        std::map<sal_uInt16,LwpRowLayout*>::iterator iter = RowsMap.find(i);
         if (iter == RowsMap.end())
         {
             pRowStyle = static_cast<XFRowStyle*>(
