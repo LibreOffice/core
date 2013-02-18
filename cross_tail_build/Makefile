@@ -26,9 +26,7 @@
 #
 #*************************************************************************
 
-ifeq ($(strip $(SOLARENV)),)
 include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../config_build.mk
-endif
 
 export gb_Side=build
 
