@@ -73,6 +73,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     uiex \
     ulfconv \
     ulfex \
+    $(call gb_Helper_optional,ODK,unoapploader) \
     xpdfimport \
     xrmex \
 ))
@@ -379,6 +380,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     tl \
 	tubes \
     unordf \
+	unowinreg \
     unoxml \
     updatecheckui \
     utl \

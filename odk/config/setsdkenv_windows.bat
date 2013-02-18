@@ -42,7 +42,7 @@ if "%1" EQU "--force-configure" (
 
 if "%1" EQU "-h" goto printhelp
 if "%1" EQU "--help" goto printhelp
-if "%1" NEQ "" goto printhelp 
+if "%1" NEQ "" goto printhelp
 
 :start
 cls

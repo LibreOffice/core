@@ -97,7 +97,7 @@ function getSdkHome()
         var scriptname = WScript.ScriptFullName;
         sSuggestedHome = scriptname.substr(0,scriptname.length-10);
     }
-    
+
     while(true)
     {
         stdout.Write("\n Enter the Office Software Development Kit directory [" +
@@ -105,14 +105,14 @@ function getSdkHome()
         var sHome = stdin.ReadLine();
         if (sHome.length == 0)
         {
-            //No user input, use default. 
+            //No user input, use default.
             if ( ! aFileSystemObject.FolderExists(sSuggestedHome))
             {
                 stdout.WriteLine("\n Error: Could not find directory \"" +
                                  sSuggestedHome + "\". An SDK is required, please" +
 								 " specify the path to a valid installation.");
                 continue;
-            }       
+            }
             sHome = sSuggestedHome;
         }
         else
@@ -120,7 +120,7 @@ function getSdkHome()
             //validate the user input
             if ( ! aFileSystemObject.FolderExists(sHome))
             {
-                stdout.WriteLine("\n Error: The directory \"" + sHome + 
+                stdout.WriteLine("\n Error: The directory \"" + sHome +
                                  "\" does not exist. Please enter the path to a" +
 								 "valid SDK installation.");
                 continue;
@@ -137,7 +137,7 @@ function getSdkHome()
         }
 
         return sHome;
-    }   
+    }
 }
 
 function getOfficeHome()
@@ -145,28 +145,28 @@ function getOfficeHome()
     var sSuggestedHome = WshSysEnv("OFFICE_HOME");
     if (sSuggestedHome.length == 0)
     {
-        try {   
+        try {
             sSuggestedHome = WshShell.RegRead(regKeyOfficeCurrentUser);
-			//The registry entry points to the program folder but we need the 
+			//The registry entry points to the program folder but we need the
 			//installation folder
         } catch(exc) {}
         if (sSuggestedHome.length == 0)
         {
             try {
                 sSuggestedHome = WshShell.RegRead(regKeyOfficeLocaleMachine);
-                //The registry entry points to the program folder but we need 
+                //The registry entry points to the program folder but we need
 				//the installation folder
             } catch (exc) {}
         }
 
 		var index=0;
-        if ((index = sSuggestedHome.lastIndexOf("\\")) != -1)   
+        if ((index = sSuggestedHome.lastIndexOf("\\")) != -1)
 		   sSuggestedHome = sSuggestedHome.substr(0, index);
 
         if (sSuggestedHome.length == 0)
 		   sSuggestedHome = searchOffice();
     }
-    
+
     while(true)
     {
         stdout.Write("\n Enter the Office base installation directory [" +
@@ -174,29 +174,29 @@ function getOfficeHome()
         var sHome = stdin.ReadLine();
         if (sHome.length == 0)
         {
-            //No user input, use default. 
+            //No user input, use default.
             if ( ! aFileSystemObject.FolderExists(sSuggestedHome))
             {
-                stdout.WriteLine("\n Error: Could not find directory \"" + 
+                stdout.WriteLine("\n Error: Could not find directory \"" +
                                  sSuggestedHome + "\" An office installation is " +
 								 "required, please specify the path to a valid " +
 								 "office installation.");
                 sSuggestedHome = "";
                 continue;
-            }       
+            }
             sHome = sSuggestedHome;
         } else
         {
             //validate the user input
             if ( ! aFileSystemObject.FolderExists(sHome))
             {
-                stdout.WriteLine("\n Error: The directory \"" + sHome + 
+                stdout.WriteLine("\n Error: The directory \"" + sHome +
                                  "\" does not exist. Please specify the path to " +
 								 "a valid office installation.");
                 continue;
             }
         }
-        //Check if this is a valid office installtion folder by looking for the 
+        //Check if this is a valid office installtion folder by looking for the
 		//program sub-directory
         var progDir = sHome + "\\program";
         if (! aFileSystemObject.FolderExists(progDir))
@@ -218,14 +218,14 @@ function searchOffice()
 	if (aFileSystemObject.FileExists(tmp + "\\program\\soffice.exe")) {
 	   return tmp;
 	}
-  
+
 	return "";
 }
 
 function getMakeHome()
 {
     var sSuggestedHome = WshSysEnv("OO_SDK_MAKE_HOME");
-    
+
     while(true)
     {
         stdout.Write("\n Enter GNU make (3.79.1 or higher) tools directory [" +
@@ -233,7 +233,7 @@ function getMakeHome()
         var sHome = stdin.ReadLine();
         if (sHome.length == 0)
         {
-            //No user input, use default. 
+            //No user input, use default.
             if ( ! aFileSystemObject.FolderExists(sSuggestedHome))
             {
                 stdout.WriteLine("\n Error: Could not find directory \"" +
@@ -241,14 +241,14 @@ function getMakeHome()
 								 "please specify a GNU make tools directory.");
                 sSuggestedHome = "";
                 continue;
-            }       
+            }
             sHome = sSuggestedHome;
         } else
         {
             //validate the user input
             if ( ! aFileSystemObject.FolderExists(sHome))
             {
-                stdout.WriteLine("\n Error: The directory \"" + sHome + 
+                stdout.WriteLine("\n Error: The directory \"" + sHome +
                                  "\" does not exist. GNU make is required, " +
 								 "please specify a GNU make tools directory.");
                 continue;
@@ -262,19 +262,19 @@ function getMakeHome()
 	}
         if (! aFileSystemObject.FileExists(sMakePath))
         {
-            stdout.WriteLine("\n Error: Could not find \"" + sMakePath + 
+            stdout.WriteLine("\n Error: Could not find \"" + sMakePath +
 							 "\". GNU make is required, please specify a GNU " +
 							 "make tools directory.");
             continue;
         }
         return sHome;
-    }   
+    }
 }
 
 function getZipHome()
 {
     var sSuggestedHome = WshSysEnv("OO_SDK_ZIP_HOME");
-    
+
     while(true)
     {
         stdout.Write("\n Enter a zip (2.3 or higher) tools directory [" +
@@ -282,15 +282,15 @@ function getZipHome()
         var sHome = stdin.ReadLine();
         if (sHome.length == 0)
         {
-            //No user input, use default. 
+            //No user input, use default.
             if ( ! aFileSystemObject.FolderExists(sSuggestedHome))
             {
-                stdout.WriteLine("\n Error: Could not find directory \"" + 
+                stdout.WriteLine("\n Error: Could not find directory \"" +
 								 sSuggestedHome + "\". zip is required, please " +
 								 "specify a zip tools directory.");
                 sSuggestedHome = "";
                 continue;
-            }       
+            }
             sHome = sSuggestedHome;
         }
         else
@@ -298,7 +298,7 @@ function getZipHome()
             //validate the user input
             if ( ! aFileSystemObject.FolderExists(sHome))
             {
-                stdout.WriteLine("\n Error: The directory \"" + sHome + 
+                stdout.WriteLine("\n Error: The directory \"" + sHome +
                                  "\" does not exist. zip is required, please " +
 								 "specify a zip tools directory.");
                 continue;
@@ -308,20 +308,20 @@ function getZipHome()
         var sZipPath = sHome + "\\zip.exe";
         if (! aFileSystemObject.FileExists(sZipPath))
         {
-            stdout.WriteLine("\n Error: Could not find \"" + sZipPath + 
+            stdout.WriteLine("\n Error: Could not find \"" + sZipPath +
                              "\". zip is required, please specify a zip tools " +
 							 "directory.");
             continue;
         }
         return sHome;
-    }   
+    }
 }
 
 function getCppHome()
 {
     var sSuggestedHome = WshSysEnv("OO_SDK_CPP_HOME");
     if (sSuggestedHome.length == 0)
-    {       
+    {
         var sVC="";
         try {
             sVC = WshShell.RegRead(regKeyVCExpress90);
@@ -331,11 +331,11 @@ function getCppHome()
 	        try {
 				sVC = WshShell.RegRead(regKeyVC90);
 			}catch (exc) {}
-		}        
+		}
 		// check Windows SDK if VC 9
         if (sVC.length > 0)
         {
-		    oo_sdk_manifest_used="true";	
+		    oo_sdk_manifest_used="true";
 			try {
 				oo_sdk_windowssdk = WshShell.RegRead(regKeyWindowsSDK);
 			}catch (exc) {}
@@ -347,7 +347,7 @@ function getCppHome()
 			}catch (exc) {}
 	        if (sVC.length > 0)
 			   oo_sdk_manifest_used="true";
-		}        
+		}
         if (sVC.length == 0)
         {
 	        try {
@@ -355,22 +355,22 @@ function getCppHome()
 			}catch (exc) {}
 	        if (sVC.length > 0)
 			   oo_sdk_manifest_used="true";
-		}        
+		}
         if (sVC.length == 0)
         {
 	        try {
 				sVC = WshShell.RegRead(regKeyVC71);
 			}catch (exc) {}
-		}        
+		}
         if (sVC.length > 0)
         {
             sVC += "bin";
             if (aFileSystemObject.FileExists(sVC + "\\cl.exe"))
-                sSuggestedHome = sVC;			
+                sSuggestedHome = sVC;
         }
     }
 
-    var bSkip = false;       
+    var bSkip = false;
     while(true)
     {
         stdout.Write("\n Enter the directory of the C++ compiler (optional) [" +
@@ -390,7 +390,7 @@ function getCppHome()
 		    bSkip = true;
 		}
 	    }
-       
+
             sHome = sSuggestedHome;
         } else
         {
@@ -407,21 +407,21 @@ function getCppHome()
 		    //Check if the C++ compiler exist
 		    var cl = sHome + "\\cl.exe";
 		    var mt = sHome + "\\mt.exe";
-        
+
 			if (! aFileSystemObject.FileExists(cl))
 			{
-				stdout.WriteLine("\n Error: Could not find the C++ compiler \"" 
+				stdout.WriteLine("\n Error: Could not find the C++ compiler \""
 								 + cl + "\".");
 				sHome = "";
 				bSkip = true;
 			} else {
 			    if (aFileSystemObject.FileExists(mt)) {
-				    oo_sdk_vc8_used="true";				   
+				    oo_sdk_vc8_used="true";
 				}
 			}
 		}
 
-		if ( bSkip ) { 
+		if ( bSkip ) {
 		   if ( skipChoice("the C++ compiler") ) {
 			   return "";
 		   } else {
@@ -431,13 +431,13 @@ function getCppHome()
 		}
 
         return sHome;
-    }   
+    }
 }
 
 function getCliHome()
 {
     var sSuggestedHome = WshSysEnv("OO_SDK_CLI_HOME");
-    
+
     if (sSuggestedHome.length == 0)
     {
         try {
@@ -450,7 +450,7 @@ function getCliHome()
                     sSuggestedHome = "";
             }
 
-			if (sSuggestedHome.length == 0) 
+			if (sSuggestedHome.length == 0)
 			{
 				_ver = WshShell.RegRead(regKeyDotNet1_1);
 				if (_ver.length > 0)
@@ -460,11 +460,11 @@ function getCliHome()
 					if ( ! aFileSystemObject.FolderExists(sSuggestedHome))
 					   sSuggestedHome = "";
 				}
-			}				
+			}
 		} catch (exc) {}
     }
-    
-    var bSkip = false;       
+
+    var bSkip = false;
     while(true)
     {
         stdout.Write("\n Enter the directory of the C# and VB.NET compilers (optional) [" + sSuggestedHome + "]:");
@@ -477,11 +477,11 @@ function getCliHome()
 			} else {
 			    if ( !aFileSystemObject.FolderExists(sSuggestedHome) )
 				{
-					stdout.WriteLine("\n Error: Could not find directory \"" + 
+					stdout.WriteLine("\n Error: Could not find directory \"" +
 									 sSuggestedHome + "\".");
 					sSuggestedHome = "";
 					bSkip = true;
-				} 
+				}
 			}
 
 		    sHome = sSuggestedHome;
@@ -491,7 +491,7 @@ function getCliHome()
             //validate the user input
             if ( ! aFileSystemObject.FolderExists(sHome))
             {
-                stdout.WriteLine("\n Error: The directory \"" + sHome + 
+                stdout.WriteLine("\n Error: The directory \"" + sHome +
                                  "\" does not exist.");
                 bSkip = true;
             }
@@ -501,10 +501,10 @@ function getCliHome()
 		    //Check if the C# and VB.NET compiler exist
 		    var csc = sHome + "\\csc.exe";
 		    var vbc = sHome + "\\vbc.exe";
-        
-			if (! aFileSystemObject.FileExists(csc)) 
+
+			if (! aFileSystemObject.FileExists(csc))
 			{
-				stdout.WriteLine("\n Error: Could not find the C# compiler \"" + 
+				stdout.WriteLine("\n Error: Could not find the C# compiler \"" +
 								 csc + "\".");
 				bSkip = true;
 			}
@@ -516,7 +516,7 @@ function getCliHome()
 			}
 		}
 
-		if ( bSkip ) { 
+		if ( bSkip ) {
 		   if ( skipChoice("the C# and VB.NET compilers") ) {
 			   return "";
 		   } else {
@@ -526,7 +526,7 @@ function getCliHome()
 		}
 
         return sHome;
-    }   
+    }
 }
 
 function getJavaHome()
@@ -538,15 +538,15 @@ function getJavaHome()
             var currentVersion = WshShell.RegRead(regKeyJDK + "CurrentVersion");
             if (currentVersion.length > 0)
             {
-                sSuggestedHome = WshShell.RegRead(regKeyJDK + currentVersion + 
-												  "\\JavaHome");           
+                sSuggestedHome = WshShell.RegRead(regKeyJDK + currentVersion +
+												  "\\JavaHome");
                 if ( ! aFileSystemObject.FolderExists(sSuggestedHome) )
                     sSuggestedHome = "";
             }
         } catch (exc) {}
     }
-    
-    var bSkip = false;       
+
+    var bSkip = false;
     while(true)
     {
         stdout.Write("\n Enter JAVA SDK (1.4.1_01 or higher) installation directory (optional) [" + sSuggestedHome + "]:");
@@ -559,20 +559,20 @@ function getJavaHome()
 			} else {
 			    if ( !aFileSystemObject.FolderExists(sSuggestedHome) )
 				{
-					stdout.WriteLine("\n Error: Could not find directory \"" + 
+					stdout.WriteLine("\n Error: Could not find directory \"" +
 									 sSuggestedHome + "\".");
 					sSuggestedHome = "";
 					bSkip=true;
 				}
-			}	
-			
+			}
+
 			sHome = sSuggestedHome;
         } else
         {
             //validate the user input
             if ( ! aFileSystemObject.FolderExists(sHome))
             {
-                stdout.WriteLine("\n Error: The directory \"" + sHome + 
+                stdout.WriteLine("\n Error: The directory \"" + sHome +
                                  "\" does not exist.");
 				bSkip = true;
             }
@@ -589,7 +589,7 @@ function getJavaHome()
 			}
         }
 
-		if ( bSkip ) { 
+		if ( bSkip ) {
 		   if ( skipChoice("the Java SDK") ) {
 			   return "";
 		   } else {
@@ -599,7 +599,7 @@ function getJavaHome()
 		}
 
         return sHome;
-    }   
+    }
 }
 
 function getOutputDir()
@@ -609,14 +609,14 @@ function getOutputDir()
 	if (sSuggestedDir.length == 0)
 	   sSuggestedDir = defaultdir;
 
-    var bSkip = false;       
+    var bSkip = false;
     while(true)
     {
         stdout.Write(
 			"\n Default output directory is the \"c:\\" + oo_sdk_name + "\".\n" +
             " Enter an existent directory if you prefer a different one. But note" +
 			" that only\n a path without spaces is allowed because of a" +
-			" limitation of gnu make. (optional) [" + sSuggestedDir + "]:");    
+			" limitation of gnu make. (optional) [" + sSuggestedDir + "]:");
         var sDir = stdin.ReadLine();
         if (sDir.length == 0)
         {
@@ -628,7 +628,7 @@ function getOutputDir()
 				    var fso = new ActiveXObject("Scripting.FileSystemObject");
 					if ( !fso.FolderExists(sSuggestedDir) )
 						fso.CreateFolder(sSuggestedDir);
-				}				
+				}
 			    if ( !aFileSystemObject.FolderExists(sSuggestedDir) )
 				{
 					stdout.WriteLine("\n Error: Could not find directory \"" +
@@ -637,14 +637,14 @@ function getOutputDir()
 					bSkip = true;
 				}
 			}
-       
+
             sDir = sSuggestedDir;
         }
         else
         {
 			if (sDir.indexOf(' ') != -1) {
 				stdout.WriteLine("\n Error: your specified output directory " +
-								 "\"" + sDir + "\" " +	 
+								 "\"" + sDir + "\" " +
 								 "contains one or more spaces.\n        That " +
 								 "causes problems with gnu make. Please specifiy" +
 								 " a directory without spaces.");
@@ -659,7 +659,7 @@ function getOutputDir()
             }
         }
 
-		if ( bSkip ) { 
+		if ( bSkip ) {
 		   if ( skipChoice("a special output directory") ) {
 			   return "";
 		   } else {
@@ -667,9 +667,9 @@ function getOutputDir()
 			   continue;
 		   }
 		}
-        
+
         return sDir;
-    }   
+    }
 }
 
 function getAutoDeployment()
@@ -677,11 +677,11 @@ function getAutoDeployment()
     var sSuggestedAuto = WshSysEnv("SDK_AUTO_DEPLOYMENT");
     if (sSuggestedAuto.length == 0)
         sSuggestedAuto = "YES";
-    
+
     while(true)
     {
         stdout.Write("\n Automatic deployment of UNO components (YES/NO) ["+
-                     sSuggestedAuto + "]:");   
+                     sSuggestedAuto + "]:");
         var sAuto = stdin.ReadLine();
         if (sAuto.length == 0)
             sAuto = sSuggestedAuto;
@@ -697,7 +697,7 @@ function getAutoDeployment()
             sAuto = sAutoU;
         }
         return sAuto;
-    }   
+    }
 }
 
 //The function uses sp2bv.exe to obtain a file URL from a
@@ -753,32 +753,32 @@ function writeBatFile(fdir, file)
         "set OO_SDK_URE_HOME=" + oo_sdk_ure_home +
         "\n\n" +
         "REM Directory of the make command.\n" +
-        "REM Example: set OO_SDK_MAKE_HOME=D:\\NextGenerationMake\\make\n" + 
-        "set OO_SDK_MAKE_HOME=" + oo_sdk_make_home + 
+        "REM Example: set OO_SDK_MAKE_HOME=D:\\NextGenerationMake\\make\n" +
+        "set OO_SDK_MAKE_HOME=" + oo_sdk_make_home +
         "\n\n" +
 		"REM Directory of the zip tool.\n" +
 		"REM Example: set OO_SDK_ZIP_HOME=D:\\infozip\\bin\n" +
-		"set OO_SDK_ZIP_HOME=" + oo_sdk_zip_home + 
+		"set OO_SDK_ZIP_HOME=" + oo_sdk_zip_home +
         "\n\n" +
-        "REM Directory of the C++ compiler.\n" + 
-        "REM Example:set OO_SDK_CPP_HOME=C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\bin\n" + 
-        "set OO_SDK_CPP_HOME=" + oo_sdk_cpp_home + 
+        "REM Directory of the C++ compiler.\n" +
+        "REM Example:set OO_SDK_CPP_HOME=C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\bin\n" +
+        "set OO_SDK_CPP_HOME=" + oo_sdk_cpp_home +
 		"\nset CPP_MANIFEST=" + oo_sdk_manifest_used +
 		"\nset CPP_WINDOWS_SDK=" + oo_sdk_windowssdk +
-        "\n\n" + 
-        "REM Directory of the C# and VB.NET compilers.\n" + 
+        "\n\n" +
+        "REM Directory of the C# and VB.NET compilers.\n" +
         "REM Example:set OO_SDK_CLI_HOME=C:\\WINXP\\Microsoft.NET\\Framework\\v1.0.3705\n" +
-        "set OO_SDK_CLI_HOME=" + oo_sdk_cli_home + 
+        "set OO_SDK_CLI_HOME=" + oo_sdk_cli_home +
         "\n\n" +
-        "REM Java SDK installation directory.\n" + 
-        "REM Example: set OO_SDK_JAVA_HOME=C:\\Program Files\\Java\\jdk1.6.0_05\n" + 
-        "set OO_SDK_JAVA_HOME=" + oo_sdk_java_home + 
-        "\n\n" + 
-        "REM Special output directory\n" + 
+        "REM Java SDK installation directory.\n" +
+        "REM Example: set OO_SDK_JAVA_HOME=C:\\Program Files\\Java\\jdk1.6.0_05\n" +
+        "set OO_SDK_JAVA_HOME=" + oo_sdk_java_home +
+        "\n\n" +
+        "REM Special output directory\n" +
         "REM Example: set OO_SDK_OUT=C:\\" + oo_sdk_name + "\n" +
-        "set OO_SDK_OUT=" + oo_sdk_out + 
+        "set OO_SDK_OUT=" + oo_sdk_out +
         "\n\n" +
-        "REM Automatic deployment\n" + 
+        "REM Automatic deployment\n" +
         "REM Example: set SDK_AUTO_DEPLOYMENT=YES\n" +
         "set SDK_AUTO_DEPLOYMENT=" + sdk_auto_deployment +
         "\n\n" +
@@ -786,30 +786,30 @@ function writeBatFile(fdir, file)
         "if not defined OO_SDK_HOME (\n" +
         "   echo Error: the variable OO_SDK_HOME is missing!\n" +
         "   goto :error\n" +
-        " )\n" + 
-        "\n" + 
-        "REM Check installation path for the office.\n" + 
-        "REM if not defined OFFICE_HOME (\n" + 
-        "REM if not defined OO_SDK_URE_HOME (\n" + 
+        " )\n" +
+        "\n" +
+        "REM Check installation path for the office.\n" +
+        "REM if not defined OFFICE_HOME (\n" +
+        "REM if not defined OO_SDK_URE_HOME (\n" +
         "REM    echo Error: either of the variables OFFICE_HOME and\n" +
-        "REM    echo OO_SDK_URE_HOME is missing!\n" + 
-        "REM    goto :error\n" + 
+        "REM    echo OO_SDK_URE_HOME is missing!\n" +
+        "REM    goto :error\n" +
         "REM  )\n" +
         "REM  )\n" +
         "\n" +
-        "REM Check installation path for GNU make.\n" + 
-        "if not defined OO_SDK_MAKE_HOME (\n" + 
+        "REM Check installation path for GNU make.\n" +
+        "if not defined OO_SDK_MAKE_HOME (\n" +
         "   echo Error: the variable OO_SDK_MAKE_HOME is missing!\n" +
-        "   goto :error\n" +
-        " )\n" + 
-        "\n" +
-        "REM Check installation path for the zip tool.\n" + 
-        "if not defined OO_SDK_ZIP_HOME (\n" +
-        "   echo Error: the variable OO_SDK_ZIP_HOME is missing!\n" + 
         "   goto :error\n" +
         " )\n" +
         "\n" +
-        "REM Set library path. \n" + 
+        "REM Check installation path for the zip tool.\n" +
+        "if not defined OO_SDK_ZIP_HOME (\n" +
+        "   echo Error: the variable OO_SDK_ZIP_HOME is missing!\n" +
+        "   goto :error\n" +
+        " )\n" +
+        "\n" +
+        "REM Set library path. \n" +
         "set LIB=%OO_SDK_HOME%\\lib;%LIB%\n" +
         "if defined CPP_WINDOWS_SDK (\n" +
         "   set LIB=%LIB%;%CPP_WINDOWS_SDK%\\lib\n" +
@@ -847,43 +847,43 @@ function writeBatFile(fdir, file)
         "set PATH=%OO_SDK_HOME%\\bin;%OO_SDK_URE_BIN_DIR%;%OO_SDK_OFFICE_BIN_DIR%;%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\n" +
         "\n" +
         "REM Set PATH appropriate to the output directory\n" +
-        "if defined OO_SDK_OUT (\n" + 
-        "   set PATH=%OO_SDK_OUT%\\WINexample.out\\bin;%PATH%\n" + 
-        " ) else (\n" + 
-        "   set PATH=%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\n" + 
-        " )\n" + 
+        "if defined OO_SDK_OUT (\n" +
+        "   set PATH=%OO_SDK_OUT%\\WINexample.out\\bin;%PATH%\n" +
+        " ) else (\n" +
+        "   set PATH=%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\n" +
+        " )\n" +
         "\n" +
         "REM Add directory of the command make to the path, if necessary.\n" +
-        "if defined OO_SDK_MAKE_HOME set PATH=%OO_SDK_MAKE_HOME%;%PATH%\n" + 
-        "\n" + 
+        "if defined OO_SDK_MAKE_HOME set PATH=%OO_SDK_MAKE_HOME%;%PATH%\n" +
+        "\n" +
 	"REM Add directory of the zip tool to the path, if necessary.\n" +
 	"if defined OO_SDK_ZIP_HOME set PATH=%OO_SDK_ZIP_HOME%;%PATH%\n" +
-        "\n" + 
+        "\n" +
         "REM Add directory of the C++ compiler to the path, if necessary.\n" +
-        "if defined OO_SDK_CPP_HOME set PATH=%OO_SDK_CPP_HOME%;%PATH%\n" + 
+        "if defined OO_SDK_CPP_HOME set PATH=%OO_SDK_CPP_HOME%;%PATH%\n" +
         "\n" +
         "REM Add directory of the Win SDK to the path, if necessary.\n" +
         "if defined CPP_WINDOWS_SDK (\n" +
-		"   set PATH=%CPP_WINDOWS_SDK%\\bin;%PATH%\n" + 
-		"   set INCLUDE=%CPP_WINDOWS_SDK%\\Include;%INCLUDE%\n" + 
+		"   set PATH=%CPP_WINDOWS_SDK%\\bin;%PATH%\n" +
+		"   set INCLUDE=%CPP_WINDOWS_SDK%\\Include;%INCLUDE%\n" +
         ")\n" +
-        "REM Add directory of the C# and VB.NET compilers to the path, if necessary.\n" + 
-        "if defined OO_SDK_CLI_HOME set PATH=%OO_SDK_CLI_HOME%;%PATH%\n" + 
-        "\n" + 
-        "REM Add directory of the Java tools to the path, if necessary.\n" + 
+        "REM Add directory of the C# and VB.NET compilers to the path, if necessary.\n" +
+        "if defined OO_SDK_CLI_HOME set PATH=%OO_SDK_CLI_HOME%;%PATH%\n" +
+        "\n" +
+        "REM Add directory of the Java tools to the path, if necessary.\n" +
         "if defined OO_SDK_JAVA_HOME set PATH=%OO_SDK_JAVA_HOME%\\bin;%OO_SDK_JAVA_HOME%\\jre\\bin;%PATH%\n" +
         "\n" +
-        "REM Set environment for C++ compiler tools, if necessary.\n" + 
+        "REM Set environment for C++ compiler tools, if necessary.\n" +
         "if defined OO_SDK_CPP_HOME call \"%OO_SDK_CPP_HOME%\\VCVARS32.bat\"\n" +
         "\n" +
-        "REM Set tilte to identify the prepared shell.\n" + 
-        "title Shell prepared for SDK\n" + 
+        "REM Set tilte to identify the prepared shell.\n" +
+        "title Shell prepared for SDK\n" +
         "\nREM Prepare shell with all necessary environment variables.\n" +
         "echo.\n" +
         "echo  ******************************************************************\n" +
-        "echo  *\n" + 
+        "echo  *\n" +
         "echo  * SDK environment is prepared for Windows\n" +
-        "echo  *\n" +       
+        "echo  *\n" +
         "echo  * SDK = %OO_SDK_HOME%\n" +
         "echo  * Office = %OFFICE_HOME%\n" +
         "echo  * URE = %OO_SDK_URE_HOME%\n" +
@@ -897,15 +897,12 @@ function writeBatFile(fdir, file)
         "echo  *\n" +
         "echo  ******************************************************************\n" +
         "echo.\n" +
-        "goto end\n" + 
+        "goto end\n" +
         "\n" +
         " :error\n" +
-        "Error: Please insert the necessary environment variables into the batch file.\n" + 
-        "\n" + 
-        " :end\n" 
+        "Error: Please insert the necessary environment variables into the batch file.\n" +
+        "\n" +
+        " :end\n"
         );
-        newFile.Close();        
+        newFile.Close();
 }
-
-
-

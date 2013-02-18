@@ -272,7 +272,7 @@ then
 	"${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}" \
 	"${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
 
-#    prepare links 
+#    prepare links
     if [ "${OO_SDK_URE_HOME}" ]
     then
 	mkdir -p "${OO_SDK_OUT}/${directoryname}/lib"
@@ -287,7 +287,7 @@ then
 	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
     fi
-fi 
+fi
 
 
 # Prepare shell with all necessary environment variables.
@@ -309,4 +309,3 @@ echo " *"
 echo " ************************************************************************"
 
 echo "]2;Shell prepared with the SDK environment"
-

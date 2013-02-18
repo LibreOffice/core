@@ -47,8 +47,11 @@ $(call gb_Zip_get_clean_target,%) :
 $(call gb_Zip_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),ZIP,3)
 	$(call gb_Helper_abbreviate_dirs,\
+		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
+                        $(FILES)) && \
 	mkdir -p $(dir $(call gb_Zip_get_target,$*)) && \
-	cd $(LOCATION) && $(gb_Zip_ZIPCOMMAND) -rX --filesync $(call gb_Zip_get_target,$*) $(FILES) )
+	cd $(LOCATION) && cat $${RESPONSEFILE} | tr "[:space:]" "\n" | $(gb_Zip_ZIPCOMMAND) -@rX --filesync $(call gb_Zip_get_target,$*) && \
+	rm -f $${RESPONSEFILE} )
 
 # the final target is a touch target; we use it as registered targets should be in workdir, not in outdir
 # the outdir target depends on the workdir target and is built by delivering the latter
