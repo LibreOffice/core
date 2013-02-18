@@ -140,14 +140,17 @@ sal_Int32 OSXBluetoothWrapper::readLine( rtl::OString& aLine )
             // We should have in the sal logging some standard way to
             // output char buffers with non-printables escaped.
             std::ostringstream s;
-            for (unsigned char *p = (unsigned char *) mBuffer.data(); p != (unsigned char *) mBuffer.data() + mBuffer.size(); p++)
+            if (mBuffer.size() > 0)
             {
-                if (*p == '\n')
-                    s << "\\n";
-                else if (*p < ' ' || (*p >= 0x7F && *p <= 0xFF))
-                    s << "\\0x" << std::hex << std::setw(2) << std::setfill('0') << (int) *p << std::setfill(' ') << std::setw(1) << std::dec;
-                else
-                    s << *p;
+                for (unsigned char *p = (unsigned char *) &mBuffer.front(); p != (unsigned char *) &mBuffer.front() + mBuffer.size(); p++)
+                {
+                    if (*p == '\n')
+                        s << "\\n";
+                    else if (*p < ' ' || (*p >= 0x7F && *p <= 0xFF))
+                        s << "\\0x" << std::hex << std::setw(2) << std::setfill('0') << (int) *p << std::setfill(' ') << std::setw(1) << std::dec;
+                    else
+                        s << *p;
+                }
             }
             SAL_INFO( "sdremote.bluetooth", "  mBuffer:  \"" << s.str() << "\"" );
 #endif
