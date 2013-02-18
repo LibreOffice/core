@@ -301,7 +301,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
 
             SetCurLib( aDocument, aLibName );
 
-            if ( rReq.GetSlot() == SID_BASICIDE_CREATEMACRO )
+            if ( pBasic && rReq.GetSlot() == SID_BASICIDE_CREATEMACRO )
             {
                 SbModule* pModule = pBasic->FindModule( rInfo.GetModule() );
                 if ( !pModule )
@@ -318,7 +318,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                         pModule = (SbModule*) pBasic->GetModules()->Get(0);
                 }
                 DBG_ASSERT( pModule, "Kein Modul!" );
-                if ( !pModule->GetMethods()->Find( rInfo.GetMethod(), SbxCLASS_METHOD ) )
+                if ( pModule && !pModule->GetMethods()->Find( rInfo.GetMethod(), SbxCLASS_METHOD ) )
                     CreateMacro( pModule, rInfo.GetMethod() );
             }
             SfxViewFrame* pViewFrame = GetViewFrame();
