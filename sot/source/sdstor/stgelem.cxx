@@ -157,8 +157,9 @@ sal_Bool StgHeader::Store( StgIo& rIo )
         return sal_True;
     SvStream& r = *rIo.GetStrm();
     r.Seek( 0L );
-    r.Write( cSignature, 8 + 16 );
-    r << nVersion                   // 1A version number
+    r.Write( cSignature, 8 );
+    r << aClsId                     // 08 Class ID
+      << nVersion                   // 1A version number
       << nByteOrder                 // 1C Unicode byte order indicator
       << nPageSize                  // 1E 1 << nPageSize = block size
       << nDataPageSize              // 20 1 << this size == data block size
