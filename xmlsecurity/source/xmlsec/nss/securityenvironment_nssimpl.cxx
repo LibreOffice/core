@@ -687,7 +687,8 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromRa
     return xcert ;
 }
 
-Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAscii( const OUString& asciiCertificate ) throw( SecurityException , RuntimeException ) {
+Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAscii( const OUString& asciiCertificate ) throw( SecurityException , RuntimeException )
+{
     xmlChar* chCert ;
     xmlSecSize certSize ;
 
@@ -697,13 +698,20 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAs
 
     certSize = xmlSecBase64Decode( chCert, ( xmlSecByte* )chCert, xmlStrlen( chCert ) ) ;
 
-    Sequence< sal_Int8 > rawCert( certSize ) ;
-    for( unsigned int i = 0 ; i < certSize ; i ++ )
-        rawCert[i] = *( chCert + i ) ;
+    if(certSize > 0)
+    {
+        Sequence< sal_Int8 > rawCert( certSize ) ;
+        for( unsigned int i = 0 ; i < certSize ; i ++ )
+            rawCert[i] = *( chCert + i ) ;
 
-    xmlFree( chCert ) ;
+        xmlFree( chCert ) ;
 
-    return createCertificateFromRaw( rawCert ) ;
+        return createCertificateFromRaw( rawCert ) ;
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 sal_Int32 SecurityEnvironment_NssImpl ::
