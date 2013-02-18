@@ -75,7 +75,6 @@ namespace accessibility
 
     private:
         /** The treelistbox control */
-        SvTreeListBox*                      m_pListBox;
         ::std::deque< sal_Int32 >           m_aEntryPath;
 
     protected:
