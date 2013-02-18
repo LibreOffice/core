@@ -213,10 +213,12 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUStrin
     }
     pTabBar->InsertPage( (sal_uInt16)nKey, aModName );
     pTabBar->Sort();
-    pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
-    if ( !pCurWin )
-        SetCurWindow( pWin, false, false );
-
+    if(pWin)
+    {
+        pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
+        if ( !pCurWin )
+            SetCurWindow( pWin, false, false );
+    }
     bCreatingWindow = false;
     return pWin;
 }
