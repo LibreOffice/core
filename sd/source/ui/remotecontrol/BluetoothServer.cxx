@@ -260,12 +260,34 @@ void incomingCallback( void *userRefCon,
 
 
 BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
-  : mpCommunicators( pCommunicators )
+  : meWasDiscoverable( UNKNOWN ),
+    mpCommunicators( pCommunicators )
 {
 }
 
 BluetoothServer::~BluetoothServer()
 {
+}
+
+
+void BluetoothServer::ensureDiscoverable()
+{
+     if( !spServer || spServer->meWasDiscoverable != UNKNOWN )
+        return;
+
+     bool bDiscoverable = spServer->isDiscoverable();
+     spServer->meWasDiscoverable = bDiscoverable ? DISCOVERABLE : NOT_DISCOVERABLE;
+     spServer->setDiscoverable( true );
+}
+
+void BluetoothServer::restoreDiscoverable()
+{
+     if(!spServer)
+        return;
+
+     if ( spServer->meWasDiscoverable == NOT_DISCOVERABLE )
+         spServer->setDiscoverable( false );
+     spServer->meWasDiscoverable = UNKNOWN;
 }
 
 bool BluetoothServer::isDiscoverable()
@@ -321,7 +343,7 @@ bool BluetoothServer::isDiscoverable()
 #endif
 }
 
-void BluetoothServer::setDiscoverable( bool aDiscoverable )
+void BluetoothServer::setDiscoverable( bool bDiscoverable )
 {
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
     SAL_INFO( "sdremote.bluetooth", "BluetoothServer::setDiscoverable called" );
@@ -391,12 +413,12 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
         return;
     }
 
-    GValue aDiscoverableGValue = G_VALUE_INIT;
-    g_value_init( &aDiscoverableGValue, G_TYPE_BOOLEAN );
-    g_value_set_boolean( &aDiscoverableGValue, aDiscoverable );
+    GValue bDiscoverableGValue = G_VALUE_INIT;
+    g_value_init( &bDiscoverableGValue, G_TYPE_BOOLEAN );
+    g_value_set_boolean( &bDiscoverableGValue, bDiscoverable );
     aResult = dbus_g_proxy_call( aAdapter, "SetProperty", &aError,
                                 G_TYPE_STRING, "Discoverable",
-                                 G_TYPE_VALUE, &aDiscoverableGValue, G_TYPE_INVALID, G_TYPE_INVALID);
+                                 G_TYPE_VALUE, &bDiscoverableGValue, G_TYPE_INVALID, G_TYPE_INVALID);
     if ( !aResult || aError )
     {
         SAL_WARN( "sdremote.bluetooth", "SetProperty(Discoverable) failed" );
@@ -411,7 +433,7 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
     g_object_unref( G_OBJECT( aAdapter ));
     dbus_g_connection_unref( aConnection );
 #else // defined(LINUX) && defined(ENABLE_DBUS)
-    (void) aDiscoverable; // avoid warnings
+    (void) bDiscoverable; // avoid warnings
 #endif
 }
 

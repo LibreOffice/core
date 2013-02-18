@@ -22,22 +22,12 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
     ModalDialog( pWindow, SdResId( DLG_PAIR_REMOTE ) ),
     mButtonConnect(     this, SdResId( BTN_CONNECT ) ),
     mButtonCancel(      this, SdResId( BTN_CANCEL ) ),
-    mClientBox(         this, NULL, SdResId( LB_SERVERS ) ),
-    mPreviouslyDiscoverable()
+    mClientBox(         this, NULL, SdResId( LB_SERVERS ) )
 {
-    (void) mPreviouslyDiscoverable; // avoid warnings about unused member
-
     FreeResource();
 
 #ifdef ENABLE_SDREMOTE
-
-#ifdef ENABLE_SDREMOTE_BLUETOOTH
-    mPreviouslyDiscoverable = RemoteServer::isBluetoothDiscoverable();
-    if ( !mPreviouslyDiscoverable )
-        RemoteServer::setBluetoothDiscoverable( true );
-#else
-	RemoteServer::setBluetoothDiscoverable( false );
-#endif
+    RemoteServer::ensureDiscoverable();
 
     vector<ClientInfo*> aClients( RemoteServer::getClients() );
 
@@ -83,12 +73,7 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
 
 IMPL_LINK_NOARG( RemoteDialog, CloseHdl )
 {
-#if defined(ENABLE_SDREMOTE) && defined(ENABLE_SDREMOTE_BLUETOOTH)
-    if ( !mPreviouslyDiscoverable )
-    {
-        RemoteServer::setBluetoothDiscoverable( false );
-    }
-#endif
+    RemoteServer::restoreDiscoverable();
     Close();
     return 0;
 }
