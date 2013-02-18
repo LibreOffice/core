@@ -21,20 +21,12 @@
 #ifdef LINUX_BLUETOOTH
   #include <glib.h>
   #include <dbus/dbus.h>
-  #include <dbus/dbus-glib.h>
   #include <errno.h>
   #include <fcntl.h>
   #include <sys/unistd.h>
   #include <sys/socket.h>
   #include <bluetooth/bluetooth.h>
   #include <bluetooth/rfcomm.h>
-  #define DBUS_TYPE_G_STRING_ANY_HASHTABLE (dbus_g_type_get_map( "GHashTable", G_TYPE_STRING, G_TYPE_VALUE ))
-  #ifndef G_VALUE_INIT
-    #define G_VALUE_INIT {0,{{0}}} // G_VALUE_INIT only present in glib >= 2.30
-  #endif
-  #ifndef DBusGObjectPath
-    #define DBusGObjectPath char // DBusGObjectPath is only present in newer version of dbus-glib
-  #endif
   #include "BluetoothServiceRecord.hxx"
   #include "BufferedStreamSocket.hxx"
 #endif
@@ -75,25 +67,51 @@ using namespace sd;
 
 #ifdef LINUX_BLUETOOTH
 
-struct sd::BluetoothServerImpl {
-    // the glib mainloop running in the thread
-    GMainContext *mpContext;
-    volatile bool mbExitMainloop;
-};
-
 struct DBusObject {
     OString maBusName;
     OString maPath;
     OString maInterface;
 
+    DBusObject() { }
     DBusObject( const char *pBusName, const char *pPath, const char *pInterface )
-        : maBusName( pBusName ), maPath( pPath ), maInterface( pInterface )
-    { }
+        : maBusName( pBusName ), maPath( pPath ), maInterface( pInterface ) { }
 
     DBusMessage *getMethodCall( const char *pName )
     {
         return dbus_message_new_method_call( maBusName.getStr(), maPath.getStr(),
                                              maInterface.getStr(), pName );
+    }
+    DBusObject *cloneForInterface( const char *pInterface )
+    {
+        DBusObject *pObject = new DBusObject();
+
+        pObject->maBusName = maBusName;
+        pObject->maPath = maPath;
+        pObject->maInterface = pInterface;
+
+        return pObject;
+    }
+};
+
+struct sd::BluetoothServerImpl {
+    // the glib mainloop running in the thread
+    GMainContext *mpContext;
+    DBusConnection *mpConnection;
+    DBusObject *mpService;
+    volatile bool mbExitMainloop;
+
+    BluetoothServerImpl() :
+        mpContext( g_main_context_new() ),
+        mpConnection( NULL ),
+        mpService( NULL ),
+        mbExitMainloop( false )
+    { }
+
+    DBusObject *getAdapter()
+    {
+        if( !mpService )
+            return NULL;
+        return mpService->cloneForInterface( "org.bluez.Adapter" );
     }
 };
 
@@ -116,19 +134,15 @@ dbusConnectToNameOnBus()
     return pConnection;
 }
 
-static DBusObject *
-bluezGetDefaultAdapter( DBusConnection *pConnection,
-                        const gchar* pInterfaceType = "org.bluez.Adapter" )
+static DBusMessage *
+sendUnrefAndWaitForReply( DBusConnection *pConnection, DBusMessage *pMsg )
 {
-    DBusMessage *pMsg;
-    DBusMessageIter it;
-    DBusPendingCall *pPending;
+    DBusPendingCall *pPending = NULL;
 
-    pMsg = DBusObject( "org.bluez", "/", "org.bluez.Manager" ).getMethodCall( "DefaultAdapter" );
     if( !pMsg || !dbus_connection_send_with_reply( pConnection, pMsg, &pPending,
                                                    -1 /* default timeout */ ) )
     {
-        SAL_WARN( "sdremote.bluetooth", "Memory allocation failed on message" );
+        SAL_WARN( "sdremote.bluetooth", "Memory allocation failed on message send" );
         dbus_message_unref( pMsg );
         return NULL;
     }
@@ -138,14 +152,25 @@ bluezGetDefaultAdapter( DBusConnection *pConnection,
     dbus_pending_call_block( pPending ); // block for reply
 
     pMsg = dbus_pending_call_steal_reply( pPending );
-    if( !pMsg || !dbus_message_iter_init( pMsg, &it ) )
-    {
+    if( !pMsg )
         SAL_WARN( "sdremote.bluetooth", "no valid reply / timeout" );
-        dbus_pending_call_unref( pPending );
-        return NULL;
-    }
-    dbus_pending_call_unref( pPending );
 
+    dbus_pending_call_unref( pPending );
+    return pMsg;
+}
+
+static DBusObject *
+bluezGetDefaultService( DBusConnection *pConnection )
+{
+    DBusMessage *pMsg;
+    DBusMessageIter it;
+    const gchar* pInterfaceType = "org.bluez.Service";
+
+    pMsg = DBusObject( "org.bluez", "/", "org.bluez.Manager" ).getMethodCall( "DefaultAdapter" );
+    pMsg = sendUnrefAndWaitForReply( pConnection, pMsg );
+
+    if(!pMsg || !dbus_message_iter_init( pMsg, &it ) )
+        return NULL;
 
     if( DBUS_TYPE_OBJECT_PATH != dbus_message_iter_get_arg_type( &it ) )
         SAL_WARN( "sdremote.bluetooth", "invalid type of reply to DefaultAdapter: '"
@@ -169,25 +194,13 @@ bluezRegisterServiceRecord( DBusConnection *pConnection, DBusObject *pAdapter,
 {
     DBusMessage *pMsg;
     DBusMessageIter it;
-    DBusPendingCall *pPending;
 
     pMsg = pAdapter->getMethodCall( "AddRecord" );
     dbus_message_iter_init_append( pMsg, &it );
     dbus_message_iter_append_basic( &it, DBUS_TYPE_STRING, &pServiceRecord );
 
-    if(!dbus_connection_send_with_reply( pConnection, pMsg, &pPending,
-                                         -1 /* default timeout */ ) )
-    if( !dbus_connection_send( pConnection, pMsg, NULL ) )
-    {
-        SAL_WARN( "sdremote.bluetooth", "failed to send service record" );
-        return false;
-    }
-    dbus_connection_flush( pConnection );
-    dbus_message_unref( pMsg );
+    pMsg = sendUnrefAndWaitForReply( pConnection, pMsg );
 
-    dbus_pending_call_block( pPending ); // block for reply
-
-    pMsg = dbus_pending_call_steal_reply( pPending );
     if( !pMsg || !dbus_message_iter_init( pMsg, &it ) ||
         dbus_message_iter_get_arg_type( &it ) != DBUS_TYPE_UINT32 )
     {
@@ -197,8 +210,6 @@ bluezRegisterServiceRecord( DBusConnection *pConnection, DBusObject *pAdapter,
 
     // We ignore the uint de-registration handle we get back:
     // bluez will clean us up automatically on exit
-
-    dbus_pending_call_unref( pPending );
 
     return true;
 }
@@ -244,7 +255,12 @@ bluezCreateListeningSocket()
     return nSocket;
 }
 
-#endif // defined(LINUX) && defined(ENABLE_DBUS)
+#endif // LINUX_BLUETOOTH
+
+void BluetoothServer::addCommunicator( Communicator* pCommunicator )
+{
+    mpCommunicators->push_back( pCommunicator );
+}
 
 #if defined(MACOSX)
 
@@ -394,6 +410,141 @@ void incomingCallback( void *userRefCon,
 
 #endif // MACOSX
 
+#ifdef LINUX_BLUETOOTH
+
+extern "C" {
+    static gboolean ensureDiscoverable_cb(gpointer)
+    {
+        BluetoothServer::doEnsureDiscoverable();
+        return FALSE; // remove source
+    }
+    static gboolean restoreDiscoverable_cb(gpointer)
+    {
+        BluetoothServer::doRestoreDiscoverable();
+        return FALSE; // remove source
+    }
+}
+
+static bool
+getBooleanProperty( DBusConnection *pConnection, DBusObject *pAdapter,
+                    const char *pPropertyName, bool *pBoolean )
+{
+    *pBoolean = false;
+
+    if( !pAdapter )
+        return false;
+
+    DBusMessage *pMsg;
+    pMsg = sendUnrefAndWaitForReply( pConnection,
+                                     pAdapter->getMethodCall( "GetProperties" ) );
+
+    DBusMessageIter it;
+    if( !pMsg || !dbus_message_iter_init( pMsg, &it ) )
+    {
+        SAL_WARN( "sdremote.bluetooth", "no valid reply / timeout" );
+        return false;
+    }
+
+    if( DBUS_TYPE_ARRAY != dbus_message_iter_get_arg_type( &it ) )
+    {
+        SAL_WARN( "sdremote.bluetooth", "no valid reply / timeout" );
+        return false;
+    }
+
+    DBusMessageIter arrayIt;
+    dbus_message_iter_recurse( &it, &arrayIt );
+
+    while( dbus_message_iter_get_arg_type( &arrayIt ) == DBUS_TYPE_DICT_ENTRY )
+    {
+        DBusMessageIter dictIt;
+        dbus_message_iter_recurse( &arrayIt, &dictIt );
+
+        const char *pName = NULL;
+        if( dbus_message_iter_get_arg_type( &dictIt ) == DBUS_TYPE_STRING )
+        {
+            dbus_message_iter_get_basic( &dictIt, &pName );
+            if( pName != NULL && !strcmp( pName, pPropertyName ) )
+            {
+                SAL_INFO( "sdremote.bluetooth", "hit " << pPropertyName << " property" );
+                dbus_message_iter_next( &dictIt );
+                dbus_bool_t bBool = false;
+
+                if( dbus_message_iter_get_arg_type( &dictIt ) == DBUS_TYPE_VARIANT )
+                {
+                    DBusMessageIter variantIt;
+                    dbus_message_iter_recurse( &dictIt, &variantIt );
+
+                    if( dbus_message_iter_get_arg_type( &variantIt ) == DBUS_TYPE_BOOLEAN )
+                    {
+                        dbus_message_iter_get_basic( &variantIt, &bBool );
+                        SAL_INFO( "sdremote.bluetooth", "" << pPropertyName << " is " << bBool );
+                        *pBoolean = bBool;
+                        return true;
+                    }
+                    else
+                        SAL_WARN( "sdremote.bluetooth", "" << pPropertyName << " type " <<
+                                  dbus_message_iter_get_arg_type( &variantIt ) );
+                }
+                else
+                    SAL_WARN( "sdremote.bluetooth", "variant type ? " <<
+                              dbus_message_iter_get_arg_type( &dictIt ) );
+            }
+            else
+            {
+                const char *pStr = pName ? pName : "<null>";
+                SAL_INFO( "sdremote.bluetooth", "property '" << pStr << "'" );
+            }
+        }
+        else
+            SAL_WARN( "sdremote.bluetooth", "unexpected property key type "
+                      << dbus_message_iter_get_arg_type( &dictIt ) );
+        dbus_message_iter_next( &arrayIt );
+    }
+    dbus_message_unref( pMsg );
+
+    return false;
+}
+
+static void
+setDiscoverable( DBusConnection *pConnection, DBusObject *pAdapter, bool bDiscoverable )
+{
+    SAL_INFO( "sdremote.bluetooth", "setDiscoverable to " << bDiscoverable );
+
+    bool bPowered = false;
+    if( !getBooleanProperty( pConnection, pAdapter, "Powered", &bPowered ) || !bPowered )
+        return; // nothing to do
+
+    DBusMessage *pMsg;
+    DBusMessageIter it, varIt;
+
+    // set timeout to zero
+    pMsg = pAdapter->getMethodCall( "SetProperty" );
+    dbus_message_iter_init_append( pMsg, &it );
+    const char *pTimeoutStr = "DiscoverableTimeout";
+    dbus_message_iter_append_basic( &it, DBUS_TYPE_STRING, &pTimeoutStr );
+    dbus_message_iter_open_container( &it, DBUS_TYPE_VARIANT,
+                                      DBUS_TYPE_UINT32_AS_STRING, &varIt );
+    dbus_uint32_t nTimeout = 0;
+    dbus_message_iter_append_basic( &varIt, DBUS_TYPE_UINT32, &nTimeout );
+    dbus_message_iter_close_container( &it, &varIt );
+    dbus_connection_send( pConnection, pMsg, NULL ); // async send - why not ?
+    dbus_message_unref( pMsg );
+
+    // set discoverable value
+    pMsg = pAdapter->getMethodCall( "SetProperty" );
+    dbus_message_iter_init_append( pMsg, &it );
+    const char *pDiscoverableStr = "Discoverable";
+    dbus_message_iter_append_basic( &it, DBUS_TYPE_STRING, &pDiscoverableStr );
+    dbus_message_iter_open_container( &it, DBUS_TYPE_VARIANT,
+                                      DBUS_TYPE_BOOLEAN_AS_STRING, &varIt );
+    dbus_bool_t bValue = bDiscoverable;
+    dbus_message_iter_append_basic( &varIt, DBUS_TYPE_BOOLEAN, &bValue );
+    dbus_message_iter_close_container( &it, &varIt ); // async send - why not ?
+    dbus_connection_send( pConnection, pMsg, NULL );
+    dbus_message_unref( pMsg );
+}
+
+#endif // LINUX_BLUETOOTH
 
 BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
   : meWasDiscoverable( UNKNOWN ),
@@ -401,10 +552,7 @@ BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
     mpCommunicators( pCommunicators )
 {
 #ifdef LINUX_BLUETOOTH
-    g_type_init();
     mpImpl = new BluetoothServerImpl();
-    mpImpl->mpContext = g_main_context_new();
-    mpImpl->mbExitMainloop = false;
 #endif
 }
 
@@ -412,177 +560,72 @@ BluetoothServer::~BluetoothServer()
 {
 }
 
-
 void BluetoothServer::ensureDiscoverable()
 {
-     if( !spServer || spServer->meWasDiscoverable != UNKNOWN )
+#ifdef LINUX_BLUETOOTH
+    // Push it all across into our mainloop
+    if( !spServer )
         return;
-
-     bool bDiscoverable = spServer->isDiscoverable();
-     spServer->meWasDiscoverable = bDiscoverable ? DISCOVERABLE : NOT_DISCOVERABLE;
-     spServer->setDiscoverable( true );
+    GSource *pIdle = g_idle_source_new();
+    g_source_set_callback( pIdle, ensureDiscoverable_cb, NULL, NULL );
+    g_source_set_priority( pIdle, G_PRIORITY_DEFAULT );
+    g_source_attach( pIdle, spServer->mpImpl->mpContext );
+    g_source_unref( pIdle );
+#endif
 }
 
 void BluetoothServer::restoreDiscoverable()
 {
-     if(!spServer)
+#ifdef LINUX_BLUETOOTH
+    // Push it all across into our mainloop
+    if( !spServer )
         return;
-
-     if ( spServer->meWasDiscoverable == NOT_DISCOVERABLE )
-         spServer->setDiscoverable( false );
-     spServer->meWasDiscoverable = UNKNOWN;
-}
-
-bool BluetoothServer::isDiscoverable()
-{
-#if 0 // (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
-    SAL_INFO( "sdremote.bluetooth", "BluetoothServer::isDiscoverable called" );
-    g_type_init();
-    gboolean aResult;
-
-    GError *aError = NULL;
-
-    DBusGConnection *aConnection = NULL;
-    aConnection = dbus_g_bus_get( DBUS_BUS_SYSTEM, &aError );
-
-    if ( aError != NULL ) {
-        g_error_free (aError);
-        SAL_INFO( "sdremote.bluetooth", "did not get DBusGConnection" );
-        return false;
-    }
-
-    DBusGProxy* aAdapter = bluezGetDefaultAdapter( pConnection );
-    if ( aAdapter == NULL )
-    {
-        dbus_g_connection_unref( aConnection );
-        SAL_INFO( "sdremote.bluetooth", "did not get default adaptor" );
-        return false;
-    }
-
-    GHashTable* aProperties = NULL;
-    aResult = dbus_g_proxy_call( aAdapter, "GetProperties", &aError,
-                                G_TYPE_INVALID,
-                                DBUS_TYPE_G_STRING_ANY_HASHTABLE, &aProperties,
-                                G_TYPE_INVALID);
-    g_object_unref( G_OBJECT( aAdapter ));
-    dbus_g_connection_unref( aConnection );
-    if ( !aResult || aError )
-    {
-        if ( aError )
-            g_error_free( aError );
-        SAL_INFO( "sdremote.bluetooth", "did not get properties" );
-        return false;
-    }
-
-    gboolean aIsDiscoverable = g_value_get_boolean( (GValue*) g_hash_table_lookup(
-                aProperties, "Discoverable" ) );
-
-    g_hash_table_unref( aProperties );
-
-    SAL_INFO( "sdremote.bluetooth", "BluetoothServer::isDiscoverable() returns " << static_cast< bool >( aIsDiscoverable ) );
-    return aIsDiscoverable;
-#else // defined(LINUX) && defined(ENABLE_DBUS)
-    return false;
+    GSource *pIdle = g_idle_source_new();
+    g_source_set_callback( pIdle, restoreDiscoverable_cb, NULL, NULL );
+    g_source_set_priority( pIdle, G_PRIORITY_DEFAULT_IDLE );
+    g_source_attach( pIdle, spServer->mpImpl->mpContext );
+    g_source_unref( pIdle );
 #endif
 }
 
-void BluetoothServer::setDiscoverable( bool bDiscoverable )
+void BluetoothServer::doEnsureDiscoverable()
 {
-#if 0 // (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
-    SAL_INFO( "sdremote.bluetooth", "BluetoothServer::setDiscoverable called" );
-    g_type_init();
-    gboolean aResult;
-
-    GError *aError = NULL;
-
-    DBusGConnection *aConnection = NULL;
-    aConnection = dbus_g_bus_get( DBUS_BUS_SYSTEM, &aError );
-
-    if ( aError != NULL )
-    {
-        g_error_free (aError);
+    if (!spServer->mpImpl->mpConnection ||
+        spServer->meWasDiscoverable != UNKNOWN )
         return;
+
+#ifdef LINUX_BLUETOOTH
+    // Find out if we are discoverable already ...
+    DBusObject *pAdapter = spServer->mpImpl->getAdapter();
+    if( !pAdapter )
+        return;
+
+    bool bDiscoverable;
+    if( getBooleanProperty( spServer->mpImpl->mpConnection, pAdapter,
+                            "Discoverable", &bDiscoverable ) )
+    {
+        spServer->meWasDiscoverable = bDiscoverable ? DISCOVERABLE : NOT_DISCOVERABLE;
+        if( !bDiscoverable )
+            setDiscoverable( spServer->mpImpl->mpConnection, pAdapter, true );
     }
 
-    DBusGProxy* aAdapter = bluezGetDefaultAdapter( pConnection );
-    if ( aAdapter == NULL )
-    {
-        dbus_g_connection_unref( aConnection );
-        return;
-    }
-
-    GHashTable* aProperties;
-    aResult = dbus_g_proxy_call( aAdapter, "GetProperties", &aError,
-                                G_TYPE_INVALID,
-                                DBUS_TYPE_G_STRING_ANY_HASHTABLE, &aProperties,
-                                G_TYPE_INVALID);
-
-    if ( !aResult || aError )
-    {
-        SAL_WARN( "sdremote.bluetooth", "GetProperties failed" );
-        if ( aError )
-        {
-            g_error_free( aError );
-            SAL_WARN( "sdremote.bluetooth", "with error " << aError->message );
-        }
-        return;
-    }
-
-    gboolean aPowered = g_value_get_boolean( (GValue*) g_hash_table_lookup(
-                aProperties, "Powered" ) );
-
-    g_hash_table_unref( aProperties );
-    if ( !aPowered )
-    {
-        SAL_INFO( "sdremote.bluetooth", "Bluetooth adapter not powered, returning" );
-        g_object_unref( G_OBJECT( aAdapter ));
-        return;
-    }
-
-    GValue aTimeout = G_VALUE_INIT;
-    g_value_init( &aTimeout, G_TYPE_UINT );
-    g_value_set_uint( &aTimeout, 0 );
-    aResult = dbus_g_proxy_call( aAdapter, "SetProperty", &aError,
-                                G_TYPE_STRING, "DiscoverableTimeout",
-                                 G_TYPE_VALUE, &aTimeout, G_TYPE_INVALID, G_TYPE_INVALID);
-    if ( !aResult || aError )
-    {
-        SAL_WARN( "sdremote.bluetooth", "SetProperty(DiscoverableTimeout) failed" );
-        if ( aError )
-        {
-            g_error_free( aError );
-            SAL_WARN( "sdremote.bluetooth", "with error " << aError->message );
-        }
-        return;
-    }
-
-    GValue bDiscoverableGValue = G_VALUE_INIT;
-    g_value_init( &bDiscoverableGValue, G_TYPE_BOOLEAN );
-    g_value_set_boolean( &bDiscoverableGValue, bDiscoverable );
-    aResult = dbus_g_proxy_call( aAdapter, "SetProperty", &aError,
-                                G_TYPE_STRING, "Discoverable",
-                                 G_TYPE_VALUE, &bDiscoverableGValue, G_TYPE_INVALID, G_TYPE_INVALID);
-    if ( !aResult || aError )
-    {
-        SAL_WARN( "sdremote.bluetooth", "SetProperty(Discoverable) failed" );
-        if ( aError )
-        {
-            g_error_free( aError );
-            SAL_WARN( "sdremote.bluetooth", "with error " << aError->message );
-        }
-        return;
-    }
-
-    g_object_unref( G_OBJECT( aAdapter ));
-    dbus_g_connection_unref( aConnection );
-#else // defined(LINUX) && defined(ENABLE_DBUS)
-    (void) bDiscoverable; // avoid warnings
+    delete pAdapter;
 #endif
 }
 
-void BluetoothServer::addCommunicator( Communicator* pCommunicator )
+void BluetoothServer::doRestoreDiscoverable()
 {
-    mpCommunicators->push_back( pCommunicator );
+    if( spServer->meWasDiscoverable == NOT_DISCOVERABLE )
+    {
+#ifdef LINUX_BLUETOOTH
+        DBusObject *pAdapter = spServer->mpImpl->getAdapter();
+        if( !pAdapter )
+            return;
+        setDiscoverable( spServer->mpImpl->mpConnection, pAdapter, false );
+        delete pAdapter;
+#endif
+    }
+    spServer->meWasDiscoverable = UNKNOWN;
 }
 
 void SAL_CALL BluetoothServer::run()
@@ -594,14 +637,15 @@ void SAL_CALL BluetoothServer::run()
     if( !pConnection )
         return;
 
-    DBusObject *pService = bluezGetDefaultAdapter( pConnection, "org.bluez.Service" );
-    if( !pService )
+    mpImpl->mpService = bluezGetDefaultService( pConnection );
+    if( !mpImpl->mpService )
     {
         dbus_connection_unref( pConnection );
         return;
     }
 
-    if( !bluezRegisterServiceRecord( pConnection, pService, bluetooth_service_record ) )
+    if( !bluezRegisterServiceRecord( pConnection, mpImpl->mpService,
+                                     bluetooth_service_record ) )
         return;
 
     int nSocket = bluezCreateListeningSocket();
@@ -633,6 +677,8 @@ void SAL_CALL BluetoothServer::run()
     else
         SAL_WARN( "sdremote.bluetooth", "failed to poll for incoming dbus signals" );
 
+    mpImpl->mpConnection = pConnection;
+
     while( !mpImpl->mbExitMainloop )
     {
         aDBusFD.revents = 0;
@@ -660,6 +706,10 @@ void SAL_CALL BluetoothServer::run()
             }
         }
     }
+
+    g_main_context_unref( mpImpl->mpContext );
+    mpImpl->mpConnection = NULL;
+    mpImpl->mpContext = NULL;
 
 #elif defined(WIN32)
     WORD wVersionRequested;
