@@ -775,6 +775,14 @@ Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
     m_rView(rView),
     m_aEngineListener(*this),
     m_aViewListener(LINK(this, Document, WindowEventHandler)),
+    m_nViewOffset(0),
+    m_nViewHeight(0),
+    m_nVisibleBeginOffset(0),
+    m_nSelectionFirstPara(-1),
+    m_nSelectionFirstPos(-1),
+    m_nSelectionLastPara(-1),
+    m_nSelectionLastPos(-1),
+    m_bSelectionChangedNotification(false),
     m_bCompoundControlChild(bCompoundControlChild)
 {}
 
