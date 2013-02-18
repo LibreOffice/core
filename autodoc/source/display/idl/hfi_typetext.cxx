@@ -543,23 +543,19 @@ int
 HF_IdlTypeText::count_Sequences( const char * i_sFullType ) const
 {
     int ret = 0;
+    const char* pCount = i_sFullType;
 
-    for ( const char * pCount = i_sFullType;
-          *pCount != 0;
-           )
+    while((pCount = strstr(pCount,"sequence")) != 0)
     {
-        pCount = strstr(pCount,"sequence");
-        if (pCount != 0)
+
+        pCount += sizeof("sequence");   // = strlen(sequence) + 1 for '<'.
+        if ( *(pCount-1) == '\0' )
         {
-            pCount += sizeof("sequence");   // = strlen(sequence) + 1 for '<'.
-            if ( *(pCount-1) == '\0' )
-            {
-                // SYNTAX_ERR
-                return 0;
-            }
-            ++ret;
+            // SYNTAX_ERR
+            return 0;
         }
-    }   // end for
+        ret += 1;
+    }
 
     return ret;
 }
