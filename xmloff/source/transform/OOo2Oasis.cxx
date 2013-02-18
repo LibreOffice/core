@@ -1768,6 +1768,7 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
                 case OOO_SOURCE_SERVICE_ACTIONS:
                     m_aActions[OOO_SOURCE_SERVICE_ACTIONS] =
                         new XMLTransformerActions( aSourceServiceActionTable );
+                    break;
                 case OOO_DRAW_AREA_POLYGON_ACTIONS:
                     m_aActions[OOO_DRAW_AREA_POLYGON_ACTIONS] =
                         new XMLTransformerActions( aShapeActionTable );
