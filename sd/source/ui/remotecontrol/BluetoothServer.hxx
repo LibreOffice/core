@@ -22,18 +22,25 @@ namespace sd
     public:
         static void setup( std::vector<Communicator*>* pCommunicators );
 
-        static bool isDiscoverable();
-        static void setDiscoverable( bool aDiscoverable );
+        /// ensure that Bluetooth discoverability is on
+        static void ensureDiscoverable();
+        /// restore the state of discoverability from before ensureDiscoverable
+        static void restoreDiscoverable();
+
         void addCommunicator( Communicator* pCommunicator );
 
     private:
         BluetoothServer( std::vector<Communicator*>* pCommunicators );
         ~BluetoothServer();
+
+        bool isDiscoverable();
+        void setDiscoverable( bool bDiscoverable );
+
+        enum { UNKNOWN, DISCOVERABLE, NOT_DISCOVERABLE } meWasDiscoverable;
         static BluetoothServer *spServer;
 
         virtual void SAL_CALL run();
         std::vector<Communicator*>* mpCommunicators;
-
     };
 }
 

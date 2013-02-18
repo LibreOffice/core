@@ -318,21 +318,19 @@ void SdDLL::RegisterRemotes()
     sd::DiscoveryService::setup();
 }
 
-bool RemoteServer::isBluetoothDiscoverable()
+void RemoteServer::ensureDiscoverable()
 {
+    // FIXME: we could also enable listening on our WiFi
+    // socket here to significantly reduce the attack surface.
 #ifdef ENABLE_SDREMOTE_BLUETOOTH
-    return BluetoothServer::isDiscoverable();
-#else
-    return false;
+    BluetoothServer::ensureDiscoverable();
 #endif
 }
 
-void RemoteServer::setBluetoothDiscoverable( bool aDiscoverable )
+void RemoteServer::restoreDiscoverable()
 {
 #ifdef ENABLE_SDREMOTE_BLUETOOTH
-    BluetoothServer::setDiscoverable( aDiscoverable );
-#else
-    (void) aDiscoverable;
+    BluetoothServer::restoreDiscoverable();
 #endif
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
