@@ -227,7 +227,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         SwTxtNode const*const pTNd = rPam.GetNode()->GetTxtNode();
         if( pTNd )
         {
-            rPam.GetPoint()->nContent = pTNd->GetTxt().Len();
+            rPam.GetPoint()->nContent = pTNd->GetTxt().getLength();
         }
     }
 }

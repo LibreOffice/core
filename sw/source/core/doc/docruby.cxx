@@ -188,8 +188,8 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
     // Point must be the startposition, Mark is optional the end position
     SwPosition* pPos = rPam.GetPoint();
        const SwTxtNode* pTNd = pPos->nNode.GetNode().GetTxtNode();
-    const String* pTxt = &pTNd->GetTxt();
-    xub_StrLen nStart = pPos->nContent.GetIndex(), nEnd = pTxt->Len();
+    OUString const& rTxt = pTNd->GetTxt();
+    xub_StrLen nStart = pPos->nContent.GetIndex(), nEnd = rTxt.getLength();
 
     sal_Bool bHasMark = rPam.HasMark();
     if( bHasMark )
@@ -234,7 +234,7 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
     {
         // skip to the word begin!
         long nWordStt = pBreakIt->GetBreakIter()->getWordBoundary(
-                            *pTxt, nStart,
+                            rTxt, nStart,
                             pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
                             sal_True ).startPos;
@@ -264,7 +264,7 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
             break;
         }
 
-        sal_Int32 nChType = rCC.getType( *pTxt, nStart );
+        sal_Int32 nChType = rCC.getType(rTxt, nStart);
         bool bIgnoreChar = false, bIsAlphaNum = false, bChkNxtWrd = false;
         switch( nChType )
         {
@@ -305,7 +305,7 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
             {
                 // search the end of this word
                 nWordEnd = pBreakIt->GetBreakIter()->getWordBoundary(
-                            *pTxt, nStart,
+                            rTxt, nStart,
                             pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
                             sal_True ).endPos;
@@ -318,7 +318,7 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
     }
 
     nStart = rPam.GetMark()->nContent.GetIndex();
-    rEntry.SetText( pTxt->Copy( nStart,
+    rEntry.SetText( rTxt.copy( nStart,
                            rPam.GetPoint()->nContent.GetIndex() - nStart ));
     return rPam.HasMark();
 }

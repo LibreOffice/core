@@ -51,6 +51,7 @@
 #include <fmtfld.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <set>
@@ -251,7 +252,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
     pUnoCrsr->Add(this);
 
     OSL_ENSURE(nEnd == -1 || (nStart <= nEnd &&
-        nEnd <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->GetTxt().Len()),
+        nEnd <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->GetTxt().getLength()),
             "start or end value invalid!");
 
     // find all frames, graphics and OLEs that are bound AT character in para
@@ -313,8 +314,8 @@ lcl_FillFieldMarkArray(FieldMarks_t & rFieldMarks, SwUnoCrsr const & rUnoCrsr,
 
     const sal_Unicode fld[] = {
         CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, CH_TXT_ATR_FORMELEMENT, 0 };
-    xub_StrLen pos = ::std::max(static_cast<const sal_Int32>(0), i_nStartPos);
-    while ((pos = pTxtNode->GetTxt().SearchChar(fld, pos)) != STRING_NOTFOUND)
+    sal_Int32 pos = ::std::max(static_cast<const sal_Int32>(0), i_nStartPos);
+    while ((pos = ::comphelper::string::indexOfAny(pTxtNode->GetTxt(), fld, pos)) != -1)
     {
         rFieldMarks.push_back(pos);
         ++pos;
@@ -363,7 +364,7 @@ lcl_ExportFieldMark(
         return 0;
     }
 
-    const sal_Unicode Char = pTxtNode->GetTxt().GetChar(start);
+    const sal_Unicode Char = pTxtNode->GetTxt()[start];
     if (CH_TXT_ATR_FIELDSTART == Char)
     {
         ::sw::mark::IFieldmark* pFieldmark = NULL;
@@ -1083,7 +1084,7 @@ lcl_CreatePortions(
         pUnoCrsr->DeleteMark();
         OSL_ENSURE(pUnoCrsr->Start()->nNode.GetNode().GetTxtNode() &&
             (i_nStartPos <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->
-                                GetTxt().Len()), "Incorrect start position" );
+                        GetTxt().getLength()), "Incorrect start position" );
         // ??? should this be i_nStartPos - current position ?
         pUnoCrsr->Right(static_cast<xub_StrLen>(i_nStartPos),
                 CRSR_SKIP_CHARS, sal_False, sal_False);

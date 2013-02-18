@@ -70,10 +70,11 @@ namespace
         SwTxtNode const*const pStartTxtNode =
             rStart.nNode.GetNode().GetTxtNode();
         SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
-        const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
+        const sal_Unicode ch_start =
+            pStartTxtNode->GetTxt()[rStart.nContent.GetIndex()];
         xub_StrLen nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 ) ?
             rEnd.nContent.GetIndex() : rEnd.nContent.GetIndex() - 1;
-        const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar( nEndPos );
+        const sal_Unicode ch_end = pEndTxtNode->GetTxt()[nEndPos];
         SwPaM aStartPaM(rStart);
         SwPaM aEndPaM(rEnd);
         io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
@@ -100,10 +101,11 @@ namespace
         SwTxtNode const*const pStartTxtNode =
             rStart.nNode.GetNode().GetTxtNode();
         SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
-        const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
+        const sal_Unicode ch_start =
+            pStartTxtNode->GetTxt()[rStart.nContent.GetIndex()];
         xub_StrLen nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 ) ?
             rEnd.nContent.GetIndex() : rEnd.nContent.GetIndex() - 1;
-        const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar( nEndPos );
+        const sal_Unicode ch_end = pEndTxtNode->GetTxt()[nEndPos];
         SwPaM aStartPaM(rStart);
         SwPaM aEndPaM(rEnd);
         io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);

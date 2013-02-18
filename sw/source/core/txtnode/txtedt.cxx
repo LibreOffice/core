@@ -1197,18 +1197,17 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
     const OUString aOldTxt( pNode->GetTxt() );
     OUStringBuffer buf(pNode->m_Text);
     const bool bRestoreString = lcl_MaskRedlinesAndHiddenText( *pNode, buf,
-                0, pNode->GetTxt().Len() )     > 0;
+                0, pNode->GetTxt().getLength()) > 0;
     if (bRestoreString)
     {   // ??? UGLY: is it really necessary to modify m_Text here?
         pNode->m_Text = buf.makeStringAndClear();
     }
 
     // a change of data indicates that at least one word has been modified
-    const bool bRedlineChg =
-        ( pNode->GetTxt().GetBuffer() != aOldTxt.getStr() );
+    const bool bRedlineChg = (pNode->GetTxt().getStr() != aOldTxt.getStr());
 
     xub_StrLen nBegin = 0;
-    xub_StrLen nEnd = pNode->GetTxt().Len();
+    xub_StrLen nEnd = pNode->GetTxt().getLength();
     xub_StrLen nInsertPos = 0;
     xub_StrLen nChgStart = STRING_LEN;
     xub_StrLen nChgEnd = 0;
@@ -1224,9 +1223,9 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         if( STRING_LEN != nBegin )
         {
             nEnd = pNode->GetWrong()->GetEndInv();
-            if ( nEnd > pNode->GetTxt().Len() )
+            if (nEnd > pNode->GetTxt().getLength())
             {
-                nEnd = pNode->GetTxt().Len();
+                nEnd = pNode->GetTxt().getLength();
             }
         }
 
@@ -1494,7 +1493,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
     SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
     xub_StrLen nBegin = 0;
-    xub_StrLen nEnd = pNode->GetTxt().Len();
+    xub_StrLen nEnd = pNode->GetTxt().getLength();
     xub_StrLen nLen;
     bool bACWDirty = false, bAnyWrd = false;
 
@@ -1907,7 +1906,7 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
     {   //not counting txtnodes used to hold deleted redline content
         return false;
     }
-    bool bCountAll = ( (0 == nStt) && (GetTxt().Len() == nEnd) );
+    bool bCountAll = ( (0 == nStt) && (GetTxt().getLength() == nEnd) );
     ++rStat.nAllPara; // #i93174#: count _all_ paragraphs
     if ( IsHidden() )
     {   // not counting hidden paras

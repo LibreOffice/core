@@ -251,7 +251,7 @@ void SwDocTest::testModelToViewHelper()
         nPos = aPaM.GetPoint()->nContent.GetIndex();
         pTxtNode->InsertItem(aFtn, nPos, nPos);
         m_pDoc->InsertString(aPaM, rtl::OUString(" DDDDD"));
-        CPPUNIT_ASSERT(pTxtNode->GetTxt().Len() == (4*5) + 5 + 2);
+        CPPUNIT_ASSERT_EQUAL(pTxtNode->GetTxt().getLength(), (4*5) + 5 + 2);
 
         //set start of selection to first B
         aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 6);
@@ -533,7 +533,8 @@ void SwDocTest::testSwScanner()
         aPaM.SetMark(); //set start of selection to current pos
         aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 5);   //set end of selection to fifth char of current node
         m_pDoc->DeleteAndJoin(aPaM);    //redline-aware deletion api
-        CPPUNIT_ASSERT_MESSAGE("real underlying text should be the same", pTxtNode->GetTxt().EqualsAscii(aString));
+        //"real underlying text should be the same"
+        CPPUNIT_ASSERT_EQUAL(pTxtNode->GetTxt(), OUString(aString));
 
         aDocStat.Reset();
         pTxtNode->SetWordCountDirty(true);

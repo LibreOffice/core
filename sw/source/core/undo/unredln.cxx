@@ -150,7 +150,7 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
         nSttNode == nEndNode && nSttCntnt + 1 == nEndCntnt &&
         0 != (pTNd = rRange.GetNode()->GetTxtNode()) )
     {
-        sal_Unicode cCh = pTNd->GetTxt().GetChar( nSttCntnt );
+        sal_Unicode const cCh = pTNd->GetTxt()[nSttCntnt];
         if( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
         {
             bCanGroup = sal_True;

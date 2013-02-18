@@ -2005,7 +2005,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                 if ( pTNd->IsHidden() ||
                      // #i40292# Skip empty outlines:
-                     0 == pTNd->GetTxt().Len() )
+                     pTNd->GetTxt().isEmpty())
                     continue;
 
                 // Get parent id from stack:

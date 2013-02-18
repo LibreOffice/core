@@ -2951,7 +2951,7 @@ xub_StrLen SwHTMLParser::StripTrailingLF()
         {
             xub_StrLen nPos = nLen;
             xub_StrLen nLFCount = 0;
-            while( nPos && '\x0a' == (pTxtNd->GetTxt()).GetChar(--nPos) )
+            while (nPos && ('\x0a' == pTxtNd->GetTxt()[--nPos]))
                 nLFCount++;
 
             if( nLFCount )
@@ -3426,8 +3426,8 @@ void _CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc * /*pDoc*/ )
                 SwTxtNode const*const pTxtNd(rPos.nNode.GetNode().GetTxtNode());
                 if( pTxtNd )
                 {
-                    sal_Unicode cLast =
-                            pTxtNd->GetTxt().GetChar(nNoBreakEndCntntPos);
+                    sal_Unicode const cLast =
+                            pTxtNd->GetTxt()[nNoBreakEndCntntPos];
                     if( ' '==cLast || '\x0a'==cLast )
                     {
                         // Zwischem dem </NOBR> und dem Zellen-Ende gibt es nur

@@ -1145,7 +1145,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
     SwRepaint &rRepaint = *(pPara->GetRepaint());
     if( bUnChg && rRepaint.Top() == rLine.Y()
                && (bPrev || nNewStart <= pPara->GetReformat()->Start())
-               && ( nNewStart < GetTxtNode()->GetTxt().Len() ) )
+               && (nNewStart < GetTxtNode()->GetTxt().getLength()))
     {
         rRepaint.Top( nBottom );
         rRepaint.Height( 0 );
@@ -1218,7 +1218,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
         return sal_True;
 
     // Until the String's end?
-    if( nNewStart >= GetTxtNode()->GetTxt().Len() )
+    if (nNewStart >= GetTxtNode()->GetTxt().getLength())
         return sal_False;
 
     if( rLine.GetInfo().IsShift() )
@@ -1718,7 +1718,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         return;
     }
 
-    const xub_StrLen nStrLen = GetTxtNode()->GetTxt().Len();
+    const xub_StrLen nStrLen = GetTxtNode()->GetTxt().getLength();
     if ( nStrLen || !FormatEmpty() )
     {
 
@@ -1756,7 +1756,8 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         SwTxtFrmLocker aLock(this);
         SwTxtLineAccess aAccess( this );
         const bool bNew = !aAccess.SwTxtLineAccess::IsAvailable();
-        const bool bSetOfst = ( GetOfst() && GetOfst() > GetTxtNode()->GetTxt().Len() );
+        const bool bSetOfst =
+            (GetOfst() && GetOfst() > GetTxtNode()->GetTxt().getLength());
 
         if( CalcPreps() )
             ; // nothing

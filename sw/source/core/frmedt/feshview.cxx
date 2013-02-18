@@ -357,7 +357,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                     else
                     {
                         xub_StrLen nMax =
-                            ((SwTxtFrm*)pOld)->GetTxtNode()->GetTxt().Len();
+                            static_cast<SwTxtFrm*>(pOld)->GetTxtNode()->GetTxt().getLength();
                         if( nAct < nMax )
                         {
                             ++nAct;
@@ -384,7 +384,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                     xub_StrLen nTmp = 0;
                     if( bRet )
                     {
-                        nTmp = ((SwTxtFrm*)pNew)->GetTxtNode()->GetTxt().Len();
+                        nTmp = static_cast<SwTxtFrm*>(pNew)->GetTxtNode()->GetTxt().getLength();
                         if( nTmp )
                             --nTmp;
                     }

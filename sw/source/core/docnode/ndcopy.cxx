@@ -277,7 +277,7 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // Is that enough? What about PostIts/Fields/FieldTypes?
     // #i96213# - force copy of all attributes
     pCpyTxtNd->CopyText( pTxtNd, SwIndex( pCpyTxtNd ),
-        pCpyTxtNd->GetTxt().Len(), true );
+        pCpyTxtNd->GetTxt().getLength(), true );
 
     if( RES_CONDTXTFMTCOLL == pColl->Which() )
         pTxtNd->ChkCondColl();
@@ -903,7 +903,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     SwTxtNode* pEndTxtNd = pEnd->nNode.GetNode().GetTxtNode();
     SwTxtNode* pDestTxtNd = aInsPos.GetNode().GetTxtNode();
     bool bCopyCollFmt = !pDoc->IsInsOnlyTextGlossary() &&
-                        ( ( pDestTxtNd && !pDestTxtNd->GetTxt().Len() ) ||
+                        ( (pDestTxtNd && !pDestTxtNd->GetTxt().getLength()) ||
                           ( !bOneNode && !rPos.nContent.GetIndex() ) );
     bool bCopyBookmarks = true;
     sal_Bool bStartIsTxtNode = 0 != pSttTxtNd;
@@ -932,7 +932,8 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     // - destination is an empty paragraph which is not in a list and
     // - source contains at least one paragraph which is not in a list
     if ( pNumRuleToPropagate &&
-         pDestTxtNd && !pDestTxtNd->GetTxt().Len() && !pDestTxtNd->IsInList() &&
+         pDestTxtNd && !pDestTxtNd->GetTxt().getLength() &&
+         !pDestTxtNd->IsInList() &&
          !lcl_ContainsOnlyParagraphsInList( rPam ) )
     {
         pNumRuleToPropagate = 0;
@@ -976,7 +977,8 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     }
 
                     pDestTxtNd = pDoc->GetNodes()[ aInsPos.GetIndex()-1 ]->GetTxtNode();
-                    aDestIdx.Assign( pDestTxtNd, pDestTxtNd->GetTxt().Len() );
+                    aDestIdx.Assign(
+                            pDestTxtNd, pDestTxtNd->GetTxt().getLength());
 
                     // Correct the area again
                     if( bEndEqualIns )
@@ -1029,7 +1031,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 {
                     const xub_StrLen nCpyLen = ( (bOneNode)
                                            ? pEnd->nContent.GetIndex()
-                                           : pSttTxtNd->GetTxt().Len() )
+                                           : pSttTxtNd->GetTxt().getLength())
                                          - pStt->nContent.GetIndex();
                     pSttTxtNd->CopyText( pDestTxtNd, aDestIdx,
                                             pStt->nContent, nCpyLen );
@@ -1170,7 +1172,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 }
             }
 
-            const bool bEmptyDestNd = 0 == pDestTxtNd->GetTxt().Len();
+            const bool bEmptyDestNd = pDestTxtNd->GetTxt().isEmpty();
             pEndTxtNd->CopyText( pDestTxtNd, aDestIdx, SwIndex( pEndTxtNd ),
                             pEnd->nContent.GetIndex() );
 
@@ -1423,7 +1425,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
                 SwTxtNode* pTxtNode;
                 if( 0 != ( pTxtNode = pAPos->nNode.GetNode().GetTxtNode() ))
                 {
-                    bEmptyNode = !pTxtNode->GetTxt().Len();
+                    bEmptyNode = pTxtNode->GetTxt().isEmpty();
                     if( bEmptyNode )
                     {
                         //last node information is only necessary to know for the last TextNode

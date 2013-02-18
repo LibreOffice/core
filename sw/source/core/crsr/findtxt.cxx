@@ -59,7 +59,7 @@ static String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart, xub_StrLen
     const SwpHints *pHts = rNd.GetpSwpHints();
 
     sal_uInt16 n = 0;
-    xub_StrLen nSoftHyphen = nStart;
+    sal_Int32 nSoftHyphen = nStart;
     xub_StrLen nHintStart = STRING_LEN;
     bool bNewHint       = true;
     bool bNewSoftHyphen = true;
@@ -74,9 +74,11 @@ static String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart, xub_StrLen
                          STRING_LEN;
 
         if ( bNewSoftHyphen )
-            nSoftHyphen = bRemoveSoftHyphen ?
-                          rNd.GetTxt().Search( CHAR_SOFTHYPHEN, nSoftHyphen ) :
-                          STRING_LEN;
+        {
+            nSoftHyphen = (bRemoveSoftHyphen)
+                    ?  rNd.GetTxt().indexOf(CHAR_SOFTHYPHEN, nSoftHyphen)
+                    : -1;
+        }
 
         bNewHint       = false;
         bNewSoftHyphen = false;
@@ -84,19 +86,21 @@ static String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart, xub_StrLen
         xub_StrLen nStt = 0;
 
         // Check if next stop is a hint.
-        if ( STRING_LEN != nHintStart && nHintStart < nSoftHyphen && nHintStart < nEnd )
+        if ( STRING_LEN != nHintStart
+            && (-1 == nSoftHyphen || nHintStart < nSoftHyphen)
+            && nHintStart < nEnd )
         {
             nStt = nHintStart;
             bNewHint = true;
         }
         // Check if next stop is a soft hyphen.
-        else if ( STRING_LEN != nSoftHyphen && nSoftHyphen < nHintStart && nSoftHyphen < nEnd )
+        else if (-1 != nSoftHyphen && nSoftHyphen < nHintStart && nSoftHyphen < nEnd)
         {
             nStt = nSoftHyphen;
             bNewSoftHyphen = true;
         }
         // If nSoftHyphen == nHintStart, the current hint *must* be a hint with an end.
-        else if ( STRING_LEN != nSoftHyphen && nSoftHyphen == nHintStart )
+        else if (-1 != nSoftHyphen && nSoftHyphen == nHintStart)
         {
             nStt = nSoftHyphen;
             bNewHint = true;
@@ -258,7 +262,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
     {
         if( pNode->IsTxtNode() )
         {
-            nTxtLen = ((SwTxtNode*)pNode)->GetTxt().Len();
+            nTxtLen = static_cast<SwTxtNode*>(pNode)->GetTxt().getLength();
             if( rNdIdx == pPam->GetMark()->nNode )
                 nEnd = pPam->GetMark()->nContent.GetIndex();
             else
@@ -668,7 +672,8 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
             }
             xub_StrLen nEnd = aStr.Len();
             bool bDeleteLastX = false;
-            if( pPam->End()->nContent < (static_cast<const SwTxtNode*>(pTxtNode))->GetTxt().Len() )
+            if (pPam->End()->nContent <
+                static_cast<const SwTxtNode*>(pTxtNode)->GetTxt().getLength())
             {
                 aStr.Insert( sX );
                 bDeleteLastX = true;

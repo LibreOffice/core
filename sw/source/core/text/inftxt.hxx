@@ -864,7 +864,7 @@ inline void SwTxtFormatInfo::SetParaFtn()
 
 inline sal_Bool SwTxtFormatInfo::IsSoftHyph( const xub_StrLen nPos ) const
 {
-    return CHAR_SOFTHYPHEN == GetTxtFrm()->GetTxtNode()->GetTxt().GetChar(nPos);
+    return CHAR_SOFTHYPHEN == GetTxtFrm()->GetTxtNode()->GetTxt()[nPos];
 }
 
 

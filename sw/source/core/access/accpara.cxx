@@ -1623,7 +1623,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
          paragraph. */
     if (bBehindText)
     {
-        nPos = pNode->GetTxt().Len();
+        nPos = pNode->GetTxt().getLength();
     }
     else
         nPos = GetPortionData().FillSpecialPos

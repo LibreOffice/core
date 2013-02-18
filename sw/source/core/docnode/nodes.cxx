@@ -1604,7 +1604,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     SwTxtNode *const pSrcNd = aSttIdx.GetNode().GetTxtNode();
     SwTxtNode * pDestNd = rPos.nNode.GetNode().GetTxtNode();
     bool bSplitDestNd = true;
-    bool bCopyCollFmt = pDestNd && !pDestNd->GetTxt().Len();
+    bool bCopyCollFmt = pDestNd && pDestNd->GetTxt().isEmpty();
 
     if( pSrcNd )
     {

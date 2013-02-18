@@ -2109,7 +2109,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
                 break;
             case WORD_COUNT :
             {
-                const xub_StrLen nEnd = pTxtNode->GetTxt().Len();
+                const xub_StrLen nEnd = pTxtNode->GetTxt().getLength();
                 SwDocStat aStat;
                 pTxtNode->CountWords( aStat, 0, nEnd );
                 if ( Application::AnyInput( VCL_INPUT_ANY ) )

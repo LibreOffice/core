@@ -913,7 +913,9 @@ void SwLayoutFrm::MakeAll()
 |*************************************************************************/
 bool SwTxtNode::IsCollapse() const
 {
-    if ( GetDoc()->get( IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA ) &&  GetTxt().Len()==0 ) {
+    if (GetDoc()->get( IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA )
+        &&  GetTxt().isEmpty())
+    {
         sal_uLong nIdx=GetIndex();
         const SwEndNode *pNdBefore=GetNodes()[nIdx-1]->GetEndNode();
         const SwEndNode *pNdAfter=GetNodes()[nIdx+1]->GetEndNode();

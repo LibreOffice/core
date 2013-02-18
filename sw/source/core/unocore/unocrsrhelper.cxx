@@ -1125,7 +1125,7 @@ bool DocInsertStringSplitCR(
         return false;
     }
     const xub_StrLen nMaxLength = ( pTxtNd )
-        ? STRING_LEN - pTxtNd->GetTxt().Len()
+        ? STRING_LEN - pTxtNd->GetTxt().getLength()
         : STRING_LEN;
     xub_StrLen nIdx = rText.Search( '\r', nStartIdx );
     if( ( nIdx == STRING_NOTFOUND && nMaxLength < rText.Len() ) ||

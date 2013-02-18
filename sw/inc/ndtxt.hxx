@@ -218,7 +218,7 @@ protected:
 public:
     using SwCntntNode::GetAttr;
 
-    const String& GetTxt() const { return (String&)m_Text; } //FIXME
+    const OUString& GetTxt() const { return m_Text; }
 
     /// getters for SwpHints
     inline       SwpHints &GetSwpHints();

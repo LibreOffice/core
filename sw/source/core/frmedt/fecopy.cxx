@@ -91,7 +91,7 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     // delete content if ClpDocument contains content
     SwNodeIndex aSttIdx( pClpDoc->GetNodes().GetEndOfExtras(), 2 );
     SwTxtNode* pTxtNd = aSttIdx.GetNode().GetTxtNode();
-    if( !pTxtNd || pTxtNd->GetTxt().Len() ||
+    if (!pTxtNd || !pTxtNd->GetTxt().isEmpty() ||
         aSttIdx.GetIndex()+1 != pClpDoc->GetNodes().GetEndOfContent().GetIndex() )
     {
         pClpDoc->GetNodes().Delete( aSttIdx,

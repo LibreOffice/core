@@ -295,8 +295,10 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                 (rOrig.*fnRect->fnGetBottom)() == nUpperMaxY &&
                 pFrm->GetOfst() < nOffset &&
                 !pFrm->IsFollow() && !bNoScroll &&
-                pFrm->GetTxtNode()->GetTxt().Len() != nNextOfst )
+                pFrm->GetTxtNode()->GetTxt().getLength() != nNextOfst)
+            {
                 bGoOn = sw_ChangeOffset( pFrm, nNextOfst );
+            }
             else
                 bGoOn = false;
         } while ( bGoOn );
@@ -625,11 +627,11 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
             pPos->nContent.Assign( pTxtNd, nOffset );
             if( pFillData )
             {
-                if( pTxtNd->GetTxt().Len() > nOffset ||
+                if (pTxtNd->GetTxt().getLength() > nOffset ||
                     rPoint.Y() < Frm().Top() )
                     pFillData->bInner = true;
                 pFillData->bFirstLine = aLine.GetLineNr() < 2;
-                if( pTxtNd->GetTxt().Len() )
+                if (pTxtNd->GetTxt().getLength())
                 {
                     pFillData->bEmpty = false;
                     pFillData->nLineWidth = aLine.GetCurr()->Width();
@@ -755,12 +757,12 @@ sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
 
         // We skip hard line brakes
         if( aLine.GetCurr()->GetLen() &&
-            CH_BREAK == aInf.GetTxt().GetChar( nRightMargin - 1 ) )
+            CH_BREAK == aInf.GetTxt().GetChar(nRightMargin - 1))
             --nRightMargin;
         else if( !bAPI && (aLine.GetNext() || pFrm->GetFollow()) )
         {
             while( nRightMargin > aLine.GetStart() &&
-                ' ' == aInf.GetTxt().GetChar( nRightMargin - 1 ) )
+                ' ' == aInf.GetTxt().GetChar(nRightMargin - 1))
                 --nRightMargin;
         }
     }
@@ -1117,7 +1119,7 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
     //
     // Bidi functions from icu 2.0
     //
-    const sal_Unicode* pLineString = GetTxtNode()->GetTxt().GetBuffer();
+    const sal_Unicode* pLineString = GetTxtNode()->GetTxt().getStr();
     pLine += nStt;
 
     UErrorCode nError = U_ZERO_ERROR;
@@ -1390,7 +1392,8 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                 {
                     SwTxtNode* pTxtNd = ((SwTxtFrm*)pFrm)->GetTxtNode();
                     rFill.pPos->nNode = *pTxtNd;
-                    rFill.pPos->nContent.Assign( pTxtNd, pTxtNd->GetTxt().Len() );
+                    rFill.pPos->nContent.Assign(
+                            pTxtNd, pTxtNd->GetTxt().getLength());
                 }
                 if( nNextCol )
                 {

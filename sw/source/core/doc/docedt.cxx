@@ -130,7 +130,7 @@ typedef boost::ptr_vector< _SaveRedline > _SaveRedlines;
 
 static bool lcl_MayOverwrite( const SwTxtNode *pNode, const xub_StrLen nPos )
 {
-    sal_Unicode cChr = pNode->GetTxt().GetChar( nPos );
+    sal_Unicode const cChr = pNode->GetTxt()[nPos];
     switch (cChr)
     {
         case CH_TXTATR_BREAKWORD:
@@ -152,7 +152,8 @@ static void lcl_SkipAttr( const SwTxtNode *pNode, SwIndex &rIdx, xub_StrLen &rSt
         // skip all special attributes
         do {
             ++rIdx;
-        } while( (rStart = rIdx.GetIndex()) < pNode->GetTxt().Len()
+            rStart = rIdx.GetIndex();
+        } while (rStart < pNode->GetTxt().getLength()
                && !lcl_MayOverwrite(pNode, rStart) );
     }
 }
@@ -717,9 +718,9 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
 
     SwTxtNode *pNode = rPt.nNode.GetNode().GetTxtNode();
     if (!pNode || ( static_cast<size_t>(rStr.Len()) // worst case: no erase
-                  + static_cast<size_t>(pNode->GetTxt().Len()) > TXTNODE_MAX))
+                  + static_cast<size_t>(pNode->GetTxt().getLength()) > TXTNODE_MAX))
     {
-        return sal_False;
+        return false;
     }
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -740,7 +741,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     {
         // start behind the characters (to fix the attributes!)
         nStart = rIdx.GetIndex();
-        if ( nStart < pNode->GetTxt().Len() )
+        if  (nStart < pNode->GetTxt().getLength())
         {
             lcl_SkipAttr( pNode, rIdx, nStart );
         }
@@ -768,7 +769,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
         else
         {
             // start behind the characters (to fix the attributes!)
-            if( nStart < pNode->GetTxt().Len() )
+            if (nStart < pNode->GetTxt().getLength())
                 ++rIdx;
             pNode->InsertText( rtl::OUString(c), rIdx, INS_EMPTYEXPAND );
             if( nStart+1 < rIdx.GetIndex() )
@@ -824,8 +825,8 @@ bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         if( pTxtNd && pTxtNd->CanJoinNext( &aNxtIdx ) )
         {
             {   // Block so SwIndex into node is deleted before Join
-                CorrRel( aNxtIdx, SwPosition( aIdx, SwIndex( pTxtNd,
-                            pTxtNd->GetTxt().Len() ) ), 0, sal_True );
+                CorrRel( aNxtIdx, SwPosition( aIdx, SwIndex(pTxtNd,
+                            pTxtNd->GetTxt().getLength()) ), 0, sal_True );
             }
             pTxtNd->JoinNext();
         }
@@ -1236,7 +1237,7 @@ static bool lcl_StrLenOverFlow( const SwPaM& rPam )
         if( (0 != pEndNd) && pStt->nNode.GetNode().IsTxtNode() )
         {
             sal_uInt64 nSum = pStt->nContent.GetIndex() +
-                pEndNd->GetTxt().Len() - pEnd->nContent.GetIndex();
+                pEndNd->GetTxt().getLength() - pEnd->nContent.GetIndex();
             if( nSum > STRING_LEN )
                 bRet = true;
         }
@@ -1260,13 +1261,13 @@ void sw_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
             {
                 bool bExchange = pStt == rPam.GetPoint();
                 if( !pStt->nContent.GetIndex() &&
-                    pEndNd->GetTxt().Len() != pEnd->nContent.GetIndex() )
+                    pEndNd->GetTxt().getLength() != pEnd->nContent.GetIndex())
                     bExchange = !bExchange;
                 if( bExchange )
                     rPam.Exchange();
                 rJoinPrev = rPam.GetPoint() == pStt;
                 OSL_ENSURE( !pStt->nContent.GetIndex() &&
-                    pEndNd->GetTxt().Len() != pEnd->nContent.GetIndex()
+                    pEndNd->GetTxt().getLength() != pEnd->nContent.GetIndex()
                     ? rPam.GetPoint()->nNode < rPam.GetMark()->nNode
                     : rPam.GetPoint()->nNode > rPam.GetMark()->nNode,
                     "sw_GetJoinFlags");
@@ -1416,7 +1417,7 @@ lcl_CalcBreaks( ::std::vector<xub_StrLen> & rBreaks, SwPaM const & rPam )
 
     for (xub_StrLen i = nStart; i < nEnd; ++i)
     {
-        const sal_Unicode c(pTxtNode->GetTxt().GetChar(i));
+        const sal_Unicode c(pTxtNode->GetTxt()[i]);
         if ((CH_TXTATR_INWORD == c) || (CH_TXTATR_BREAKWORD == c))
         {
             SwTxtAttr const * const pAttr( pTxtNode->GetTxtAttrForCharAt(i) );
@@ -1618,7 +1619,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
         SwTxtNode* pTxtNd = rPam.Start()->nNode.GetNode().GetTxtNode();
         xub_StrLen nIndex = rPam.Start()->nContent.GetIndex();
         // We may have a postit here.
-        if (pTxtNd->GetTxt().GetChar(nIndex) == CH_TXTATR_INWORD)
+        if (pTxtNd->GetTxt()[nIndex] == CH_TXTATR_INWORD)
         {
             SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(nIndex, RES_TXTATR_FIELD);
             if (pTxtAttr && pTxtAttr->GetFld().GetFld()->Which() == RES_POSTITFLD)
@@ -1897,10 +1898,14 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     nBeginGrammarCheck = aCrsr.GetPoint()->nContent.GetIndex();
                                 }
                             }
-                            nEndGrammarCheck = pSpellArgs->pEndNode == pNd ? pSpellArgs->pEndIdx->GetIndex() : ((SwTxtNode*)pNd)->GetTxt().Len();
+                            nEndGrammarCheck = (pSpellArgs->pEndNode == pNd)
+                                ? pSpellArgs->pEndIdx->GetIndex()
+                                : static_cast<SwTxtNode const*>(pNd)
+                                    ->GetTxt().getLength();
                         }
 
-                        xub_StrLen nSpellErrorPosition = ((SwTxtNode*)pNd)->GetTxt().Len();
+                        xub_StrLen nSpellErrorPosition =
+                            static_cast<SwTxtNode const*>(pNd)->GetTxt().getLength();
                         if( (!pConvArgs &&
                                 ((SwTxtNode*)pNd)->Spell( pSpellArgs )) ||
                             ( pConvArgs &&
@@ -2265,7 +2270,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
         SwTxtNode* pTxtNd = pStt->nNode.GetNode().GetTxtNode();
         xub_StrLen nStt = pStt->nContent.GetIndex(),
                 nEnd = bOneNode ? pEnd->nContent.GetIndex()
-                                : pTxtNd->GetTxt().Len();
+                                : pTxtNd->GetTxt().getLength();
 
         SwDataChanged aTmp( aDelPam );
 
@@ -2411,13 +2416,13 @@ SetRedlineMode( eOld );
             // Set the values again, if Frames or footnotes on the Text have been removed.
             nStt = nPtCnt;
             nEnd = bOneNode ? pEnd->nContent.GetIndex()
-                            : pTxtNd->GetTxt().Len();
+                            : pTxtNd->GetTxt().getLength();
 
             bool bFirst = true;
             String sIns;
             while ( lcl_GetTokenToParaBreak( sRepl, sIns, bRegExReplace ) )
             {
-                if( !bFirst || nStt == pTxtNd->GetTxt().Len() )
+                if (!bFirst || nStt == pTxtNd->GetTxt().getLength())
                 {
                     InsertString( aDelPam, sIns );
                 }
@@ -2431,7 +2436,7 @@ SetRedlineMode( eOld );
 
             if( bFirst || sIns.Len() )
             {
-                if( !bFirst || nStt == pTxtNd->GetTxt().Len() )
+                if (!bFirst || nStt == pTxtNd->GetTxt().getLength())
                 {
                     InsertString( aDelPam, sIns );
                 }
@@ -2657,13 +2662,18 @@ void SwDoc::TransliterateText(
         {
             ++aIdx;
             if( pTNd )
-                pTNd->TransliterateText( rTrans, nSttCnt, pTNd->GetTxt().Len(), pUndo );
+                pTNd->TransliterateText(
+                        rTrans, nSttCnt, pTNd->GetTxt().getLength(), pUndo);
         }
 
         for( ; aIdx.GetIndex() < nEndNd; ++aIdx )
         {
-            if( 0 != ( pTNd = aIdx.GetNode().GetTxtNode() ))
-                pTNd->TransliterateText( rTrans, 0, pTNd->GetTxt().Len(), pUndo );
+            pTNd = aIdx.GetNode().GetTxtNode();
+            if (pTNd)
+            {
+                pTNd->TransliterateText(
+                        rTrans, 0, pTNd->GetTxt().getLength(), pUndo);
+            }
         }
 
         if( nEndCnt && 0 != ( pTNd = pEnd->nNode.GetNode().GetTxtNode() ))
@@ -2733,12 +2743,12 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const
         {
             ++aIdx;
             if( pTNd )
-                pTNd->CountWords( rStat, nSttCnt, pTNd->GetTxt().Len() );
+                pTNd->CountWords( rStat, nSttCnt, pTNd->GetTxt().getLength() );
         }
 
         for( ; aIdx.GetIndex() < nEndNd; ++aIdx )
             if( 0 != ( pTNd = aIdx.GetNode().GetTxtNode() ))
-                pTNd->CountWords( rStat, 0, pTNd->GetTxt().Len() );
+                pTNd->CountWords( rStat, 0, pTNd->GetTxt().getLength() );
 
         if( nEndCnt && 0 != ( pTNd = pEnd->nNode.GetNode().GetTxtNode() ))
             pTNd->CountWords( rStat, 0, nEndCnt );
@@ -2752,13 +2762,17 @@ void SwDoc::RemoveLeadingWhiteSpace(const SwPosition & rPos )
     const SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
     if ( pTNd )
     {
-        const String& rTxt = pTNd->GetTxt();
+        const OUString& rTxt = pTNd->GetTxt();
         xub_StrLen nIdx = 0;
-        sal_Unicode cCh;
-        while( nIdx < rTxt.Len() &&
-                ( '\t' == ( cCh = rTxt.GetChar( nIdx ) ) ||
-                (  ' ' == cCh ) ) )
+        while (nIdx < rTxt.getLength())
+        {
+            sal_Unicode const cCh = rTxt[nIdx];
+            if (('\t' != cCh) && (' ' != cCh))
+            {
+                break;
+            }
             ++nIdx;
+        }
 
         if ( nIdx > 0 )
         {

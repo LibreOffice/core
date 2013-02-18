@@ -502,7 +502,7 @@ void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
             if ((FLY_AS_CHAR == nAnchorTyp) ||
                 (FLY_AT_CHAR == nAnchorTyp))
             {
-                if ( nCntnt > static_cast<SwTxtNode*>(pNd)->GetTxt().Len() )
+                if (nCntnt > static_cast<SwTxtNode*>(pNd)->GetTxt().getLength())
                 {
                     pNd = 0;    // invalid position
                 }

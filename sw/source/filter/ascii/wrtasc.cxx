@@ -131,8 +131,7 @@ sal_uLong SwASCWriter::WriteStream()
                 // Should we have frames only?
                 // That's possible, if we put a frame selection into the clipboard
                 if( bTstFly && bWriteAll &&
-                    // No length
-                    !pNd->GetTxt().Len() &&
+                    pNd->GetTxt().isEmpty() &&
                     // Frame exists
                     pDoc->GetSpzFrmFmts()->size() &&
                     // Only one node in the array

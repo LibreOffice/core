@@ -390,7 +390,7 @@ SwTxtFrm::~SwTxtFrm()
 
 const XubString& SwTxtFrm::GetTxt() const
 {
-    return GetTxtNode()->GetTxt();
+    return reinterpret_cast<const XubString&>(GetTxtNode()->GetTxt()); //FIXME
 }
 
 void SwTxtFrm::ResetPreps()
@@ -511,7 +511,7 @@ bool sw_HideObj( const SwTxtFrm& _rFrm,
              _rFrm.IsInDocBody() && !_rFrm.FindNextCnt() )
         {
             const sal_Unicode cAnchorChar =
-                        _rFrm.GetTxtNode()->GetTxt().GetChar( _nObjAnchorPos );
+                        _rFrm.GetTxtNode()->GetTxt()[_nObjAnchorPos];
             if ( cAnchorChar == CH_TXTATR_BREAKWORD )
             {
                 const SwTxtAttr* const pHint(

@@ -372,7 +372,7 @@ SwTblToTxtSave::SwTblToTxtSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEndIdx, x
         if ( pNd->GetpSwpHints() )
         {
             m_pHstry->CopyAttr( pNd->GetpSwpHints(), nNd, 0,
-                        pNd->GetTxt().Len(), false );
+                        pNd->GetTxt().getLength(), false );
         }
         if( pNd->HasSwAttrSet() )
             m_pHstry->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNd );
@@ -571,7 +571,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
             aBkmkArr.clear();
             if( pTxtNd )
                 _SaveCntntIdx( GetDoc(), aSttIdx.GetIndex(),
-                                pTxtNd->GetTxt().Len(), aBkmkArr );
+                                pTxtNd->GetTxt().getLength(), aBkmkArr );
         }
 
         if( pTxtNd )
@@ -779,7 +779,7 @@ void SwUndoTxtToTbl::UndoImpl(::sw::UndoRedoContext & rContext)
             aPam.GetPoint()->nContent.Assign( 0, 0 );
 
             // than move, relatively, the Crsr/etc. again
-            pPos->nContent.Assign( pTxtNd, pTxtNd->GetTxt().Len() );
+            pPos->nContent.Assign(pTxtNd, pTxtNd->GetTxt().getLength());
             RemoveIdxRel( nEndNode + 1, *pPos );
 
             pTxtNd->JoinNext();
@@ -2018,7 +2018,7 @@ CHECKTABLE(pTblNd->GetTable())
                     // also delete not needed attributes
                     SwIndex aTmpIdx( pTxtNd, nDelPos );
                     if( pTxtNd->GetpSwpHints() && pTxtNd->GetpSwpHints()->Count() )
-                        pTxtNd->RstAttr( aTmpIdx, pTxtNd->GetTxt().Len() -
+                        pTxtNd->RstAttr(aTmpIdx, pTxtNd->GetTxt().getLength() -
                                                             nDelPos + 1 );
                     // delete separator
                     pTxtNd->EraseText( aTmpIdx, 1 );
@@ -2147,7 +2147,7 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
         // always save all text atttibutes because of possibly overlapping
         // areas of on/off
         pHistory->CopyAttr( pTNd->GetpSwpHints(), nNdPos, 0,
-                            pTNd->GetTxt().Len(), true );
+                            pTNd->GetTxt().getLength(), true );
 
         if( pTNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTNd->GetpSwAttrSet(), nNdPos );
@@ -2718,7 +2718,7 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
         pTxt = aInsertEnd.nNode.GetNode().GetTxtNode();
         if( pTxt )
         {
-            aInsertEnd.nContent.Assign( pTxt, pTxt->GetTxt().Len() );
+            aInsertEnd.nContent.Assign(pTxt, pTxt->GetTxt().getLength());
             if( !bRedo && rPos.nNode.GetNode().GetTxtNode() )
             {   // Try to merge, if not called by Redo()
                 rJoin = true;
@@ -2740,7 +2740,7 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     SwPosition aCellEnd( SwNodeIndex( *rBox.GetSttNd()->EndOfSectionNode(), -1 ) );
     pTxt = aCellEnd.nNode.GetNode().GetTxtNode();
     if( pTxt )
-        aCellEnd.nContent.Assign( pTxt, pTxt->GetTxt().Len() );
+        aCellEnd.nContent.Assign(pTxt, pTxt->GetTxt().getLength());
     if( aDeleteStart != aCellEnd )
     {   // If the old (deleted) part is not empty, here we are...
         SwPaM aDeletePam( aDeleteStart, aCellEnd );

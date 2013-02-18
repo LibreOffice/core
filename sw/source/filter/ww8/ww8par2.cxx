@@ -354,7 +354,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
     //There should have been a footnote char, we will replace this.
     if (pTxt && nPos)
     {
-        sChar.Append(pTxt->GetTxt().GetChar(--nPos));
+        sChar.Append(pTxt->GetTxt()[--nPos]);
         pPaM->SetMark();
         pPaM->GetMark()->nContent--;
         rDoc.DeleteRange( *pPaM );
@@ -400,14 +400,14 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         SwNodeIndex& rNIdx = pPaM->GetPoint()->nNode;
         rNIdx = pSttIdx->GetIndex() + 1;
         SwTxtNode* pTNd = rNIdx.GetNode().GetTxtNode();
-        if (pTNd && pTNd->GetTxt().Len() && sChar.Len())
+        if (pTNd && !pTNd->GetTxt().isEmpty() && sChar.Len())
         {
-            if (pTNd->GetTxt().GetChar(0) == sChar.GetChar(0))
+            if (pTNd->GetTxt()[0] == sChar.GetChar(0))
             {
                 pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
                 pPaM->SetMark();
                 // Strip out tabs we may have inserted on export #i24762#
-                if (pTNd->GetTxt().GetChar(1) == 0x09)
+                if (pTNd->GetTxt()[1] == 0x09)
                     pPaM->GetMark()->nContent++;
                 pPaM->GetMark()->nContent++;
                 pReffingStck->Delete(*pPaM);

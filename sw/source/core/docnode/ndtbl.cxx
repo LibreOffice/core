@@ -1025,10 +1025,10 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             SwTxtFrmInfo aFInfo( (SwTxtFrm*)pTxtNd->getLayoutFrm( pTxtNd->GetDoc()->GetCurrentLayout() ) );
             if( aFInfo.IsOneLine() ) // only makes sense in this case
             {
-                const sal_Unicode* pTxt = pTxtNd->GetTxt().GetBuffer();
-                for( xub_StrLen nChPos = 0; *pTxt; ++nChPos, ++pTxt )
+                OUString const& rTxt(pTxtNd->GetTxt());
+                for (sal_Int32 nChPos = 0; nChPos < rTxt.getLength(); ++nChPos)
                 {
-                    if( *pTxt == cCh )
+                    if (rTxt[nChPos] == cCh)
                     {
                         aPosArr.push_back( static_cast<sal_uInt16>(
                                         aFInfo.GetCharPos( nChPos+1, sal_False )) );
@@ -1055,13 +1055,14 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         SwPosition aCntPos( aSttIdx, SwIndex( pTxtNd ));
 
         std::vector<sal_uLong> aBkmkArr;
-        _SaveCntntIdx( pDoc, aSttIdx.GetIndex(), pTxtNd->GetTxt().Len(), aBkmkArr );
-
-        const sal_Unicode* pTxt = pTxtNd->GetTxt().GetBuffer();
+        _SaveCntntIdx( pDoc, aSttIdx.GetIndex(), pTxtNd->GetTxt().getLength(),
+                       aBkmkArr );
 
         if( T2T_PARA != cCh )
-            for( xub_StrLen nChPos = 0; *pTxt; ++nChPos, ++pTxt )
-                if( *pTxt == cCh )
+        {
+            for (xub_StrLen nChPos = 0; nChPos < pTxtNd->GetTxt().getLength();)
+            {
+                if (pTxtNd->GetTxt()[nChPos] == cCh)
                 {
                     aCntPos.nContent = nChPos;
                     SwCntntNode* pNewNd = pTxtNd->SplitCntntNode( aCntPos );
@@ -1072,9 +1073,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
                     // Delete separator and correct search string
                     pTxtNd->EraseText( aCntPos.nContent, 1 );
-                    pTxt = pTxtNd->GetTxt().GetBuffer();
                     nChPos = 0;
-                    --nChPos, --pTxt; // for the ++ in the for loop !!!
 
                     // Set the TableNode as StartNode for all TextNodes in the Table
                     const SwNodeIndex aTmpIdx( aCntPos.nNode, -1 );
@@ -1087,11 +1086,17 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                     pBox = new SwTableBox( pBoxFmt, *pSttNd, pLine );
                     pLine->GetTabBoxes().insert( pLine->GetTabBoxes().begin() + nBoxes++, pBox );
                 }
+                else
+                {
+                    ++nChPos;
+                }
+            }
+        }
 
         // Now for the last substring
         if( !aBkmkArr.empty() )
-            _RestoreCntntIdx( aBkmkArr, *pTxtNd, pTxtNd->GetTxt().Len(),
-                                pTxtNd->GetTxt().Len()+1 );
+            _RestoreCntntIdx( aBkmkArr, *pTxtNd, pTxtNd->GetTxt().getLength(),
+                                pTxtNd->GetTxt().getLength()+1 );
 
         pSttNd = new SwStartNode( aCntPos.nNode, ND_STARTNODE, SwTableBoxStartNode );
         const SwNodeIndex aTmpIdx( aCntPos.nNode, 1 );
@@ -1516,7 +1521,8 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
             if( pDelPara->pLastNd == &aDelRg.aStart.GetNode() )
             {
                 // Inserting the separator
-                SwIndex aCntIdx( pDelPara->pLastNd, pDelPara->pLastNd->GetTxt().Len());
+                SwIndex aCntIdx( pDelPara->pLastNd,
+                        pDelPara->pLastNd->GetTxt().getLength());
                 pDelPara->pLastNd->InsertText( rtl::OUString(pDelPara->cCh), aCntIdx,
                     IDocumentContentOperations::INS_EMPTYEXPAND );
                 if( pDelPara->pUndo )
@@ -1525,7 +1531,7 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
 
                 std::vector<sal_uLong> aBkmkArr;
                 xub_StrLen nOldTxtLen = aCntIdx.GetIndex();
-                _SaveCntntIdx( pDoc, nNdIdx, pCurTxtNd->GetTxt().Len(),
+                _SaveCntntIdx( pDoc, nNdIdx, pCurTxtNd->GetTxt().getLength(),
                                 aBkmkArr );
 
                 pDelPara->pLastNd->JoinNext();
@@ -4166,7 +4172,8 @@ void SwDoc::ClearLineNumAttrs( SwPosition & rPos )
     if( pNode->IsTxtNode() )
     {
         SwTxtNode * pTxtNode = pNode->GetTxtNode();
-        if ( pTxtNode && pTxtNode->IsNumbered() && pTxtNode->GetTxt().Len()==0 )
+        if (pTxtNode && pTxtNode->IsNumbered()
+            && pTxtNode->GetTxt().isEmpty())
         {
             const SfxPoolItem* pFmtItem = 0;
             SfxItemSet rSet( const_cast<SwAttrPool&>(pTxtNode->GetDoc()->GetAttrPool()),

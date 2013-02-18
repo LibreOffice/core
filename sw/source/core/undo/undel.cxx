@@ -274,7 +274,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
                     aRg.aEnd--;
             }
         }
-        else if( pSttTxtNd && ( pEndTxtNd || pSttTxtNd->GetTxt().Len() ) )
+        else if (pSttTxtNd && (pEndTxtNd || pSttTxtNd->GetTxt().getLength()))
             aRg.aStart++;
 
         // Step 3: Moving into UndoArray...
@@ -344,22 +344,24 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
     {
         bool bOneNode = nSttNode == nEndNode;
         xub_StrLen nLen = bOneNode ? nEndCntnt - nSttCntnt
-                                : pSttTxtNd->GetTxt().Len() - nSttCntnt;
+                                : pSttTxtNd->GetTxt().getLength() - nSttCntnt;
         SwRegHistory aRHst( *pSttTxtNd, pHistory );
         // always save all text atttibutes because of possibly overlapping
         // areas of on/off
         pHistory->CopyAttr( pSttTxtNd->GetpSwpHints(), nNdIdx,
-                            0, pSttTxtNd->GetTxt().Len(), true );
+                            0, pSttTxtNd->GetTxt().getLength(), true );
         if( !bOneNode && pSttTxtNd->HasSwAttrSet() )
                 pHistory->CopyFmtAttr( *pSttTxtNd->GetpSwAttrSet(), nNdIdx );
 
         // the length might have changed (!!Fields!!)
-        nLen = ( bOneNode ? pEnd->nContent.GetIndex() : pSttTxtNd->GetTxt().Len() )
-                - pStt->nContent.GetIndex();
+        nLen = ((bOneNode)
+                    ? pEnd->nContent.GetIndex()
+                    : pSttTxtNd->GetTxt().getLength())
+            - pStt->nContent.GetIndex();
 
         // delete now also the text (all attribute changes are added to
         // UNDO history)
-        pSttStr = (String*)new String( pSttTxtNd->GetTxt().Copy( nSttCntnt, nLen ));
+        pSttStr = new String( pSttTxtNd->GetTxt().copy(nSttCntnt, nLen));
         pSttTxtNd->EraseText( pStt->nContent, nLen );
         if( pSttTxtNd->GetpSwpHints() )
             pSttTxtNd->GetpSwpHints()->DeRegister();
@@ -387,14 +389,14 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
         // always save all text atttibutes because of possibly overlapping
         // areas of on/off
         pHistory->CopyAttr( pEndTxtNd->GetpSwpHints(), nNdIdx, 0,
-                            pEndTxtNd->GetTxt().Len(), true );
+                            pEndTxtNd->GetTxt().getLength(), true );
 
         if( pEndTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nNdIdx );
 
         // delete now also the text (all attribute changes are added to
         // UNDO history)
-        pEndStr = (String*)new String( pEndTxtNd->GetTxt().Copy( 0,
+        pEndStr = new String( pEndTxtNd->GetTxt().copy( 0,
                                     pEnd->nContent.GetIndex() ));
         pEndTxtNd->EraseText( aEndIdx, pEnd->nContent.GetIndex() );
         if( pEndTxtNd->GetpSwpHints() )
@@ -455,7 +457,7 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
     if( !pDelTxtNd ) return sal_False;
 
     xub_StrLen nUChrPos = bBackSp ? 0 : pSttStr->Len()-1;
-    sal_Unicode cDelChar = pDelTxtNd->GetTxt().GetChar( pStt->nContent.GetIndex() );
+    sal_Unicode cDelChar = pDelTxtNd->GetTxt()[ pStt->nContent.GetIndex() ];
     CharClass& rCC = GetAppCharClass();
     if( ( CH_TXTATR_BREAKWORD == cDelChar || CH_TXTATR_INWORD == cDelChar ) ||
         rCC.isLetterNumeric( rtl::OUString( cDelChar ), 0 ) !=
@@ -801,7 +803,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             SwTxtNode * pNd = aPos.nNode.GetNode().GetTxtNode();
             if( pNd )
             {
-                if( nSttCntnt < pNd->GetTxt().Len() )
+                if (nSttCntnt < pNd->GetTxt().getLength())
                 {
                     sal_uLong nOldIdx = aPos.nNode.GetIndex();
                     pDoc->SplitNode( aPos, false );

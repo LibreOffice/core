@@ -323,8 +323,12 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
         //TODO maybe use hints like FieldHints for this instead of looking at the text...
         int l=(nNext<m_pTxtNode->Len()?nNext:m_pTxtNode->Len());
         sal_uInt16 p=nPos;
-        const sal_Unicode *txt=m_pTxtNode->GetTxt().GetBuffer();
-        while(p<l && txt[p]!=CH_TXT_ATR_FIELDSTART && txt[p]!=CH_TXT_ATR_FIELDEND && txt[p]!=CH_TXT_ATR_FORMELEMENT) p++;
+        while (p<l && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FIELDSTART
+                   && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FIELDEND
+                   && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FORMELEMENT)
+        {
+            ++p;
+        }
         if ((p<l && p>nPos) || nNext<=p)
         nNext=p;
         else
@@ -1013,8 +1017,8 @@ sal_uInt16 SwTxtNode::GetWidthOfLeadingTabs() const
     xub_StrLen nIdx = 0;
     sal_Unicode cCh;
 
-    while ( nIdx < GetTxt().Len() &&
-             ( '\t' == ( cCh = GetTxt().GetChar( nIdx ) ) ||
+    while ( nIdx < GetTxt().getLength() &&
+             ( '\t' == ( cCh = GetTxt()[nIdx] ) ||
                 ' ' == cCh ) )
         ++nIdx;
 

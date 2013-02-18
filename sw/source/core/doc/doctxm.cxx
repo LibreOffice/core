@@ -1149,7 +1149,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
             //
             // If selected use marks from the same chapter only
             if( pTOXSrc->GetNodes().IsDocNodes() &&
-                pTOXSrc->GetTxt().Len() && pTOXSrc->GetDepends() &&
+                pTOXSrc->GetTxt().getLength() && pTOXSrc->GetDepends() &&
                 pTOXSrc->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
                (!IsFromChapter() || ::lcl_FindChapterNode( *pTOXSrc, 0 ) == pOwnChapterNode ) &&
                !pTOXSrc->HasHiddenParaField() &&
@@ -1249,7 +1249,8 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
             {
                 ::SetProgressState( 0, pDoc->GetDocShell() );
 
-                if( pTxtNd->GetTxt().Len() && pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
+                if (pTxtNd->GetTxt().getLength() &&
+                    pTxtNd->getLayoutFrm(pDoc->GetCurrentLayout()) &&
                     pTxtNd->GetNodes().IsDocNodes() &&
                     ( !IsFromChapter() || pOwnChapterNode ==
                         ::lcl_FindChapterNode( *pTxtNd, 0 ) ) )
@@ -1281,7 +1282,8 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
         const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-        if( rTxtNode.GetTxt().Len() && rTxtNode.getLayoutFrm( pDoc->GetCurrentLayout() ) &&
+        if (rTxtNode.GetTxt().getLength() &&
+            rTxtNode.getLayoutFrm(pDoc->GetCurrentLayout()) &&
             rTxtNode.GetNodes().IsDocNodes() &&
             ( !IsFromChapter() ||
                 ::lcl_FindChapterNode( rTxtNode, 0 ) == pOwnChapterNode ) )
@@ -1319,7 +1321,8 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
         const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-        if( rTxtNode.GetTxt().Len() && rTxtNode.getLayoutFrm( pDoc->GetCurrentLayout() ) &&
+        if (rTxtNode.GetTxt().getLength() &&
+            rTxtNode.getLayoutFrm(pDoc->GetCurrentLayout()) &&
             rTxtNode.GetNodes().IsDocNodes() )
         {
             //#106485# the body node has to be used!
@@ -1976,16 +1979,16 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
 
     rtl::OUString sSrchStr = rtl::OUStringBuffer().append(cNumRepl).
         append(sPageDeli).append(cNumRepl).makeStringAndClear();
-    xub_StrLen nStartPos = pNd->GetTxt().Search( sSrchStr );
+    sal_Int32 nStartPos = pNd->GetTxt().indexOf(sSrchStr);
     sSrchStr = rtl::OUStringBuffer().append(cNumRepl).
         append(cEndPageNum).makeStringAndClear();
-    xub_StrLen nEndPos = pNd->GetTxt().Search( sSrchStr );
+    sal_Int32 nEndPos = pNd->GetTxt().indexOf(sSrchStr);
     sal_uInt16 i;
 
-    if( STRING_NOTFOUND == nEndPos || rNums.empty() )
+    if (-1 == nEndPos || rNums.empty())
         return;
 
-    if( STRING_NOTFOUND == nStartPos || nStartPos > nEndPos)
+    if (-1 == nStartPos || nStartPos > nEndPos)
         nStartPos = nEndPos;
 
     sal_uInt16 nOld = rNums[0],
@@ -2119,7 +2122,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
             pCharFmt = pDoc->MakeCharFmt(GetMainEntryCharStyle(), 0);
 
         // find the page numbers in aNumStr and set the character style
-        xub_StrLen nOffset = pNd->GetTxt().Len() - aNumStr.Len();
+        xub_StrLen nOffset = pNd->GetTxt().getLength() - aNumStr.Len();
         SwFmtCharFmt aCharFmt(pCharFmt);
         for(sal_uInt16 j = 0; j < pCharStyleIdx->size(); j += 2)
         {

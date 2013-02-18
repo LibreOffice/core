@@ -765,7 +765,7 @@ void SwXMLImport::endDocument( void )
                 {
                     pPaM->GetPoint()->nNode = *pSttNdIdx;
                     pPaM->GetPoint()->nContent.Assign( pTxtNode,
-                                            pTxtNode->GetTxt().Len() );
+                                            pTxtNode->GetTxt().getLength());
                 }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -783,7 +783,7 @@ void SwXMLImport::endDocument( void )
                     sal_uInt16 nCntPos =
                             pPaM->GetBound( sal_True ).nContent.GetIndex();
                     pPaM->GetBound( sal_True ).nContent.Assign( pTxtNode,
-                            pTxtNode->GetTxt().Len() + nCntPos );
+                            pTxtNode->GetTxt().getLength() + nCntPos );
                 }
                 if( pSttNdIdx->GetIndex()+1 ==
                                 pPaM->GetBound( sal_False ).nNode.GetIndex() )
@@ -791,14 +791,14 @@ void SwXMLImport::endDocument( void )
                     sal_uInt16 nCntPos =
                             pPaM->GetBound( sal_False ).nContent.GetIndex();
                     pPaM->GetBound( sal_False ).nContent.Assign( pTxtNode,
-                            pTxtNode->GetTxt().Len() + nCntPos );
+                            pTxtNode->GetTxt().getLength() + nCntPos );
                 }
 #endif
                 // If the first new node isn't empty, convert  the node's text
                 // attributes into hints. Otherwise, set the new node's
                 // paragraph style at the previous (empty) node.
                 SwTxtNode* pDelNd = aNxtIdx.GetNode().GetTxtNode();
-                if( pTxtNode->GetTxt().Len() )
+                if (!pTxtNode->GetTxt().isEmpty())
                     pDelNd->FmtToTxtAttr( pTxtNode );
                 else
                     pTxtNode->ChgFmtColl( pDelNd->GetTxtColl() );
@@ -853,7 +853,7 @@ void SwXMLImport::endDocument( void )
                         pNextNd->JoinPrev();
                     }
                 }
-                else if( !pCurrNd->GetTxt().Len() )
+                else if (pCurrNd->GetTxt().isEmpty())
                 {
                     pPos->nContent.Assign( 0, 0 );
                     pPaM->SetMark(); pPaM->DeleteMark();

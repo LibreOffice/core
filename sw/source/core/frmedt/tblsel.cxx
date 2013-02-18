@@ -1387,7 +1387,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             rInsPosNd.GetNode().EndOfSectionIndex() - 2 );
             pTxtNd = rInsPosNd.GetNode().GetTxtNode();
             if( pTxtNd )
-                aInsPos.nContent.Assign( pTxtNd, pTxtNd->GetTxt().Len() );
+                aInsPos.nContent.Assign(pTxtNd, pTxtNd->GetTxt().getLength());
         }
 
         // the MergeBox should contain the complete text

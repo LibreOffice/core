@@ -116,7 +116,7 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
                 pFnt->ChkMagic( pShell, nTmp );
                 pFnt->GetMagic( aMagicNo[ nTmp ], aFntIdx[ nTmp ], nTmp );
             }
-        } while( nChg < rTxtNode.GetTxt().Len() );
+        } while (nChg < rTxtNode.GetTxt().getLength());
     }
     else
     {

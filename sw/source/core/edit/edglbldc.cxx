@@ -194,7 +194,7 @@ sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     bool bEndUndo = false;
     SwDoc* pMyDoc = GetDoc();
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
-    if( pTxtNd && pTxtNd->GetTxt().Len() && rPos.nNode.GetIndex() + 1 !=
+    if (pTxtNd && pTxtNd->GetTxt().getLength() && rPos.nNode.GetIndex() + 1 !=
         pMyDoc->GetNodes().GetEndOfContent().GetIndex() )
         rPos.nContent.Assign( pTxtNd, 0 );
     else

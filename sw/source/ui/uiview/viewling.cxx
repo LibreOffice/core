@@ -191,9 +191,9 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             {
                                 SwTxtNode *pTxtNode = aPointNodeIndex.GetNode().GetTxtNode();
                                 // check for unexpected error case
-                                OSL_ENSURE( pTxtNode && pTxtNode->GetTxt().Len() >= nPointIndex,
+                                OSL_ENSURE(pTxtNode && pTxtNode->GetTxt().getLength() >= nPointIndex,
                                     "text missing: corrupted node?" );
-                                if (!pTxtNode || pTxtNode->GetTxt().Len() < nPointIndex)
+                                if (!pTxtNode || pTxtNode->GetTxt().getLength() < nPointIndex)
                                     nPointIndex = 0;
                                 // restore cursor to its original position
                                 pWrtShell->GetCrsr()->GetPoint()->nContent.Assign( pTxtNode, nPointIndex );

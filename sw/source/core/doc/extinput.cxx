@@ -85,7 +85,7 @@ SwExtTextInput::~SwExtTextInput()
                 }
             }
             rIdx = nSttCnt;
-            String sTxt( pTNd->GetTxt().Copy( nSttCnt, nEndCnt - nSttCnt ));
+            String sTxt( pTNd->GetTxt().copy(nSttCnt, nEndCnt - nSttCnt));
             if( bIsOverwriteCursor && sOverwriteText.Len() )
             {
                 xub_StrLen nLen = sTxt.Len();
@@ -211,7 +211,7 @@ void SwExtTextInput::SetOverwriteCursor( sal_Bool bFlag )
     {
         xub_StrLen nSttCnt = GetPoint()->nContent.GetIndex(),
                     nEndCnt = GetMark()->nContent.GetIndex();
-        sOverwriteText = pTNd->GetTxt().Copy( nEndCnt < nSttCnt ? nEndCnt
+        sOverwriteText = pTNd->GetTxt().copy( nEndCnt < nSttCnt ? nEndCnt
                                                                 : nSttCnt );
         if( sOverwriteText.Len() )
         {

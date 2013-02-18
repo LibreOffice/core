@@ -299,7 +299,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
 
     pFnt = pNewFnt;
     pUnderFnt = 0;
-    pTxt = &pNd->GetTxt();
+    pTxt = reinterpret_cast<String const*>(&pNd->GetTxt()); //FIXME
 
     nIdx = nNewIdx;
     nLen = nNewLen;

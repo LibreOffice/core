@@ -240,7 +240,7 @@ void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )
         nNdStt = rPam.GetPoint()->nContent.GetIndex();
         nNdEnd = rPam.GetPoint()->nNode == rPam.GetMark()->nNode
                 ? rPam.GetMark()->nContent.GetIndex()
-                : rTxtNd.GetTxt().Len();
+                : rTxtNd.GetTxt().getLength();
     }
     else
     {

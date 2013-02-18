@@ -244,8 +244,8 @@ public:
     }
 
     virtual bool Compare( int nIdx1, int nIdx2 ) const;
-    virtual int GetLen1() const { return pTxtNd1->GetTxt().Len(); }
-    virtual int GetLen2() const { return pTxtNd2->GetTxt().Len(); }
+    virtual int GetLen1() const { return pTxtNd1->GetTxt().getLength(); }
+    virtual int GetLen2() const { return pTxtNd2->GetTxt().getLength(); }
 };
 
 // Options set in Tools->Options->Writer->Comparison
@@ -1281,8 +1281,8 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
 
         int nLcsLen = 0;
 
-        int nDstLen = rDstNd.GetTxt().Len();
-        int nSrcLen = rSrcNd.GetTxt().Len();
+        int nDstLen = rDstNd.GetTxt().getLength();
+        int nSrcLen = rSrcNd.GetTxt().getLength();
 
         int nMinLen = std::min( nDstLen , nSrcLen );
         int nAvgLen = ( nDstLen + nSrcLen )/2;
@@ -2146,13 +2146,13 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
     }
     for( i = 0; i < nBorderLen; i++ )
     {
-        nHash = nHash*nMul + pTxtNd1->GetTxt().GetChar( i );
+        nHash = nHash*nMul + pTxtNd1->GetTxt()[i];
     }
     aHashes.insert( nHash );
     for( ; i < nPar1Len; i++ )
     {
-        nHash = nHash - nPow*pTxtNd1->GetTxt().GetChar( i - nBorderLen );
-        nHash = nHash*nMul + pTxtNd1->GetTxt().GetChar( i );
+        nHash = nHash - nPow*pTxtNd1->GetTxt()[ i - nBorderLen ];
+        nHash = nHash*nMul + pTxtNd1->GetTxt()[ i ];
 
         aHashes.insert( nHash );
     }
@@ -2160,7 +2160,7 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
     nHash = 0;
     for( i = 0; i < nBorderLen; i++ )
     {
-        nHash = nHash*nMul + pTxtNd2->GetTxt().GetChar( i );
+        nHash = nHash*nMul + pTxtNd2->GetTxt()[ i ];
     }
 
     if( aHashes.find( nHash ) != aHashes.end() )
@@ -2170,8 +2170,8 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
 
     for( ; i < nPar2Len; i++ )
     {
-        nHash = nHash - nPow*pTxtNd2->GetTxt().GetChar( i - nBorderLen );
-        nHash = nHash*nMul + pTxtNd2->GetTxt().GetChar( i );
+        nHash = nHash - nPow*pTxtNd2->GetTxt()[ i - nBorderLen ];
+        nHash = nHash*nMul + pTxtNd2->GetTxt()[ i ];
         if( aHashes.find( nHash ) != aHashes.end() )
         {
             return true;
@@ -2190,16 +2190,15 @@ bool CharArrayComparator::Compare( int nIdx1, int nIdx2 ) const
 
     return ( !CmpOptions.bUseRsid
             || pTxtNd1->CompareRsid(  *pTxtNd2, nIdx1 + 1, nIdx2 + 1 ) )
-            && pTxtNd1->GetTxt().GetChar( nIdx1 )
-            == pTxtNd2->GetTxt().GetChar( nIdx2 );
+            && pTxtNd1->GetTxt()[ nIdx1 ] == pTxtNd2->GetTxt()[ nIdx2 ];
 }
 
 WordArrayComparator::WordArrayComparator( const SwTxtNode *pNode1,
                                             const SwTxtNode *pNode2 )
     : pTxtNd1( pNode1 ), pTxtNd2( pNode2 )
 {
-    pPos1 = new int[ pTxtNd1->GetTxt().Len() + 1 ];
-    pPos2 = new int[ pTxtNd2->GetTxt().Len() + 1 ];
+    pPos1 = new int[ pTxtNd1->GetTxt().getLength() + 1 ];
+    pPos2 = new int[ pTxtNd2->GetTxt().getLength() + 1 ];
 
     CalcPositions( pPos1, pTxtNd1, nCnt1 );
     CalcPositions( pPos2, pTxtNd2, nCnt2 );
@@ -2220,8 +2219,8 @@ bool WordArrayComparator::Compare( int nIdx1, int nIdx2 ) const
     }
     for( int i = 0; i < nLen; i++)
     {
-        if( pTxtNd1->GetTxt().GetChar( pPos1[ nIdx1 ] + i )
-            != pTxtNd2->GetTxt().GetChar( pPos2[ nIdx2 ] + i )
+        if( pTxtNd1->GetTxt()[ pPos1[ nIdx1 ] + i ]
+            != pTxtNd2->GetTxt()[ pPos2[ nIdx2 ] + i ]
             || ( CmpOptions.bUseRsid && !pTxtNd1->CompareRsid( *pTxtNd2,
                                 pPos1[ nIdx1 ] + i, pPos2[ nIdx2 ] + i ) ) )
         {
@@ -2248,8 +2247,8 @@ int WordArrayComparator::GetCharSequence( const int *pWordLcs1,
             pSubseq1[ nLen ] = pPos1[ pWordLcs1[i] ] + j;
             pSubseq2[ nLen ] = pPos2[ pWordLcs2[i] ] + j;
 
-            if( pTxtNd1->GetTxt().GetChar( pPos1[ pWordLcs1[i] ] + j )
-             != pTxtNd2->GetTxt().GetChar( pPos2[ pWordLcs2[i] ] + j ) )
+            if( pTxtNd1->GetTxt()[ pPos1[ pWordLcs1[i] ] + j ]
+             != pTxtNd2->GetTxt()[ pPos2[ pWordLcs2[i] ] + j ] )
             {
                 nLen -= j;
                 break;
@@ -2265,11 +2264,11 @@ void WordArrayComparator::CalcPositions( int *pPos, const SwTxtNode *pTxtNd,
                                          int &nCnt )
 {
     nCnt = -1;
-    for( int i = 0; i <= pTxtNd->GetTxt().Len(); i++ )
+    for (int i = 0; i <= pTxtNd->GetTxt().getLength(); ++i)
     {
-        if( i == 0 || i == pTxtNd->GetTxt().Len()
-                    || !isalnum( pTxtNd->GetTxt().GetChar( i - 1 ) )
-                    || !isalnum( pTxtNd->GetTxt().GetChar( i ) ) )
+        if (i == 0 || i == pTxtNd->GetTxt().getLength()
+                    || !isalnum( pTxtNd->GetTxt()[ i - 1 ])
+                    || !isalnum( pTxtNd->GetTxt()[ i ]))
         { // Begin new word
             nCnt++;
             pPos[ nCnt ] = i;

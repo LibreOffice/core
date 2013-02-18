@@ -567,7 +567,7 @@ static String lcl_dbg_out(const SwNode & rNode)
         const SfxItemSet * pAttrSet = pTxtNode->GetpSwAttrSet();
 
         aTmpStr += String("<txt>", RTL_TEXTENCODING_ASCII_US);
-        aTmpStr += pTxtNode->GetTxt().Copy(0, 10);
+        aTmpStr += pTxtNode->GetTxt().copy(0, 10);
         aTmpStr += String("</txt>", RTL_TEXTENCODING_ASCII_US);
 
         if (rNode.IsTableNode())

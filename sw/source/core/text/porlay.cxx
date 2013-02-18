@@ -1358,7 +1358,7 @@ sal_uInt16 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, OUStringBuffe
                                        const xub_StrLen nStt, const xub_StrLen nEnd,
                                        const sal_Unicode cChar )
 {
-    assert(rNode.GetTxt().Len() == rText.getLength());
+    assert(rNode.GetTxt().getLength() == rText.getLength());
 
     PositionList aList;
     xub_StrLen nHiddenStart;
@@ -1441,11 +1441,11 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, xub_StrLen nP
             if ( pList )
             {
                 pList->push_back( 0 );
-                pList->push_back( rNode.GetTxt().Len() );
+                pList->push_back(rNode.GetTxt().getLength());
             }
 
             rnStartPos = 0;
-            rnEndPos = rNode.GetTxt().Len();
+            rnEndPos = rNode.GetTxt().getLength();
             return true;
         }
     }
@@ -1457,7 +1457,8 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, xub_StrLen nP
         // Check first, if we have a valid SwScriptInfo object for this text node:
         //
         bNewContainsHiddenChars = pSI->GetBoundsOfHiddenRange( nPos, rnStartPos, rnEndPos, pList );
-        const bool bNewHiddenCharsHidePara = ( rnStartPos == 0 && rnEndPos >= rNode.GetTxt().Len() );
+        const bool bNewHiddenCharsHidePara =
+            rnStartPos == 0 && rnEndPos >= rNode.GetTxt().getLength();
         rNode.SetHiddenCharAttribute( bNewHiddenCharsHidePara, bNewContainsHiddenChars );
     }
     else
@@ -1465,7 +1466,9 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, xub_StrLen nP
         //
         // No valid SwScriptInfo Object, we have to do it the hard way:
         //
-        Range aRange( 0, rNode.GetTxt().Len() ? rNode.GetTxt().Len() - 1 : 0 );
+        Range aRange(0, (!rNode.GetTxt().isEmpty())
+                            ? rNode.GetTxt().getLength() - 1
+                            : 0);
         MultiSelection aHiddenMulti( aRange );
         SwScriptInfo::CalcHiddenRanges( rNode, aHiddenMulti );
         for( sal_uInt16 i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
@@ -1479,7 +1482,8 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, xub_StrLen nP
             else if ( nHiddenStart <= nPos && nPos < nHiddenEnd )
             {
                 rnStartPos = nHiddenStart;
-                rnEndPos   = Min( nHiddenEnd, rNode.GetTxt().Len() );
+                rnEndPos   = std::min<sal_Int32>(nHiddenEnd,
+                                                 rNode.GetTxt().getLength());
                 break;
             }
         }
@@ -2181,8 +2185,8 @@ SwTwips SwTxtFrm::HangingMargin() const
 
 void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelection &rHiddenMulti)
 {
-    assert((!rNode.GetTxt().Len() && rHiddenMulti.GetTotalRange().Len() == 1) ||
-           (rNode.GetTxt().Len() == rHiddenMulti.GetTotalRange().Len()));
+    assert((rNode.GetTxt().isEmpty() && rHiddenMulti.GetTotalRange().Len() == 1)
+        || (rNode.GetTxt().getLength() == rHiddenMulti.GetTotalRange().Len()));
 
     const SfxPoolItem* pItem = 0;
     if( SFX_ITEM_SET == rNode.GetSwAttrSet().GetItemState( RES_CHRATR_HIDDEN, sal_True, &pItem ) &&
@@ -2218,8 +2222,8 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelecti
 
 void SwScriptInfo::selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &rHiddenMulti, bool bSelect)
 {
-    assert((!rNode.GetTxt().Len() && rHiddenMulti.GetTotalRange().Len() == 1) ||
-           (rNode.GetTxt().Len() == rHiddenMulti.GetTotalRange().Len()));
+    assert((rNode.GetTxt().isEmpty() && rHiddenMulti.GetTotalRange().Len() == 1)
+        || (rNode.GetTxt().getLength() == rHiddenMulti.GetTotalRange().Len()));
 
     const IDocumentRedlineAccess& rIDRA = *rNode.getIDocumentRedlineAccess();
     if ( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
@@ -2237,7 +2241,7 @@ void SwScriptInfo::selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &
             xub_StrLen nRedlnEnd;
             pRed->CalcStartEnd( rNode.GetIndex(), nRedlStart, nRedlnEnd );
             //clip it if the redline extends past the end of the nodes text
-            nRedlnEnd = std::min(nRedlnEnd, rNode.GetTxt().Len());
+            nRedlnEnd = std::min<sal_Int32>(nRedlnEnd, rNode.GetTxt().getLength());
             if ( nRedlnEnd > nRedlStart )
             {
                 Range aTmp( nRedlStart, nRedlnEnd - 1 );
@@ -2271,7 +2275,8 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
         const Range& rRange = rHiddenMulti.GetRange( 0 );
         const xub_StrLen nHiddenStart = (xub_StrLen)rRange.Min();
         const xub_StrLen nHiddenEnd = (xub_StrLen)rRange.Max() + 1;
-        bNewHiddenCharsHidePara = ( nHiddenStart == 0 && nHiddenEnd >= rNode.GetTxt().Len() );
+        bNewHiddenCharsHidePara =
+            (nHiddenStart == 0 && nHiddenEnd >= rNode.GetTxt().getLength());
     }
     rNode.SetHiddenCharAttribute( bNewHiddenCharsHidePara, bNewContainsHiddenChars );
 }

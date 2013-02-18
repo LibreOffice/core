@@ -1368,7 +1368,7 @@ static void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
         case RES_TXTATR_METAFIELD:
             OSL_ENSURE(pNewHt, "copying Meta should not fail!");
             OSL_ENSURE(pDest && (CH_TXTATR_BREAKWORD ==
-                                pDest->GetTxt().GetChar(*pNewHt->GetStart())),
+                                pDest->GetTxt()[*pNewHt->GetStart()]),
                    "missing CH_TXTATR?");
             break;
     }
@@ -1487,7 +1487,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
             if ( !bForceCopyOfAllAttrs &&
                  ( nDestStart ||
                    pDest->HasSwAttrSet() ||
-                   nLen != pDest->GetTxt().Len() ) )
+                   nLen != pDest->GetTxt().getLength()))
             {
                 SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -1533,7 +1533,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
         if ( !bForceCopyOfAllAttrs &&
              ( nDestStart ||
                pDest->HasSwAttrSet() ||
-               nLen != pDest->GetTxt().Len() ) )
+               nLen != pDest->GetTxt().getLength()))
         {
             SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -1824,7 +1824,7 @@ void SwTxtNode::CutText( SwTxtNode * const pDest,
 {
     if(pDest)
     {
-        SwIndex aDestStt( pDest, pDest->GetTxt().Len() );
+        SwIndex aDestStt(pDest, pDest->GetTxt().getLength());
         CutImpl( pDest, aDestStt, rStart, nLen, false );
     }
     else
@@ -2015,7 +2015,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         {
             // alle, oder nur die CharAttribute ?
             if( nInitSize || pDest->HasSwAttrSet() ||
-                nLen != pDest->GetTxt().Len() )
+                nLen != pDest->GetTxt().getLength())
             {
                 SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -2923,7 +2923,7 @@ XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx,
                                    const bool bAddSpaceAfterListLabelStr,
                                    const bool bWithSpacesForLevel ) const
 {
-    XubString aTxt( GetTxt().Copy( nIdx, nLen ) );
+    XubString aTxt( GetTxt().copy(nIdx, nLen) );
     xub_StrLen nTxtStt = nIdx;
     Replace0xFF( aTxt, nTxtStt, aTxt.Len(), sal_True );
     if( bWithNum )
@@ -2962,7 +2962,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     if( &rDestNd == this )
         return sal_False;
 
-    SwIndex aDestIdx( &rDestNd, rDestNd.GetTxt().Len() );
+    SwIndex aDestIdx(&rDestNd, rDestNd.GetTxt().getLength());
     if( pDestIdx )
         aDestIdx = *pDestIdx;
     xub_StrLen nDestStt = aDestIdx.GetIndex();
@@ -3089,9 +3089,9 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
 
     aDestIdx = 0;
     sal_Int32 nStartDelete(-1);
-    while (aDestIdx < rDestNd.GetTxt().Len())
+    while (aDestIdx < rDestNd.GetTxt().getLength())
     {
-        sal_Unicode const cur(rDestNd.GetTxt().GetChar(aDestIdx.GetIndex()));
+        sal_Unicode const cur(rDestNd.GetTxt()[aDestIdx.GetIndex()]);
         if (   (cChar == cur) // filter substituted hidden text
             || (CH_TXT_ATR_FIELDSTART  == cur) // filter all fieldmarks
             || (CH_TXT_ATR_FIELDEND    == cur)
@@ -3102,7 +3102,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                 nStartDelete = aDestIdx.GetIndex(); // start deletion range
             }
             ++aDestIdx;
-            if (aDestIdx < rDestNd.GetTxt().Len())
+            if (aDestIdx < rDestNd.GetTxt().getLength())
             {
                 continue;
             } // else: end of paragraph => delete, see below
@@ -3294,7 +3294,7 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
                         aRedlArr.push_back( pREnd->nContent.GetIndex() );
                     else
                     {
-                        aRedlArr.push_back( GetTxt().Len() );
+                        aRedlArr.push_back(GetTxt().getLength());
                         break;      // mehr kann nicht kommen
                     }
                 }
@@ -3304,7 +3304,7 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
         }
     }
 
-    XubString aTxt( GetTxt().Copy( nIdx, nLen ) );
+    XubString aTxt(GetTxt().copy(nIdx, nLen));
 
     xub_StrLen nTxtStt = nIdx, nIdxEnd = nIdx + aTxt.Len();
     for( sal_uInt16 n = 0; n < aRedlArr.size(); n += 2 )

@@ -1000,7 +1000,7 @@ uno::Reference< XSpellAlternatives >
         xub_StrLen nLen = 1;
         if( pWrong->InWrongWord(nBegin,nLen) && !pNode->IsSymbol(nBegin) )
         {
-            String aText( pNode->GetTxt().Copy( nBegin, nLen ) );
+            String const aText(pNode->GetTxt().copy(nBegin, nLen));
             String aWord( aText );
             aWord = comphelper::string::remove(aWord, CH_TXTATR_BREAKWORD);
             aWord = comphelper::string::remove(aWord, CH_TXTATR_INWORD);
@@ -1113,7 +1113,7 @@ bool SwEditShell::GetGrammarCorrection(
         xub_StrLen nLen = 1;
         if (pWrong->InWrongWord(nBegin, nLen))
         {
-            String aText( pNode->GetTxt().Copy( nBegin, nLen ) );
+            String const aText(pNode->GetTxt().copy(nBegin, nLen));
 
             uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( pDoc->GetGCIterator() );
             if (xGCIterator.is())
@@ -1811,7 +1811,8 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
 
                 bool bField = false;
                 //read the character at the current position to check if it's a field
-                sal_Unicode cChar = pTxtNode->GetTxt().GetChar( pCrsr->GetMark()->nContent.GetIndex() );
+                sal_Unicode const cChar =
+                    pTxtNode->GetTxt()[pCrsr->GetMark()->nContent.GetIndex()];
                 if( CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar)
                 {
                     const SwTxtAttr* pTxtAttr = pTxtNode->GetTxtAttrForCharAt(

@@ -785,7 +785,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             SwTxtNode* pTxtNd = static_cast<SwTxtNode*>(pNode);
             const SwIndex& rSt = pStt->nContent;
             sal_uInt16 nMkPos, nPtPos = rSt.GetIndex();
-            const String& rStr = pTxtNd->GetTxt();
+            const OUString& rStr = pTxtNd->GetTxt();
 
             // Special case: if the Crsr is located within a URL attribute, we take over it's area
             SwTxtAttr const*const pURLAttr(
@@ -819,7 +819,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             // These attributes are inserted as FormatAttributes and
             // never override the TextAttributes!
             if( !(nFlags & nsSetAttrMode::SETATTR_DONTREPLACE ) &&
-                pTxtNd->HasHints() && !nMkPos && nPtPos == rStr.Len() )
+                pTxtNd->HasHints() && !nMkPos && nPtPos == rStr.getLength())
             {
                 SwIndex aSt( pTxtNd );
                 if( pHistory )
@@ -985,7 +985,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                 if( pSwpHints )
                     pSwpHints->Register( &aRegH );
 
-                pTNd->SetAttr( *pCharSet, 0, pTNd->GetTxt().Len(), nFlags );
+                pTNd->SetAttr(*pCharSet, 0, pTNd->GetTxt().getLength(), nFlags);
                 if( pSwpHints )
                     pSwpHints->DeRegister();
             }
@@ -995,7 +995,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         else
         {
             if( pTNd && pCharSet && pCharSet->Count() )
-                pTNd->SetAttr( *pCharSet, 0, pTNd->GetTxt().Len(), nFlags );
+                pTNd->SetAttr(*pCharSet, 0, pTNd->GetTxt().getLength(), nFlags);
             if( pOtherSet && pOtherSet->Count() )
                 pNode->SetAttr( *pOtherSet );
         }
@@ -2376,7 +2376,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
     if( pSet && pTNd && pSet->Count() )
     {
         aPam.SetMark();
-        aPam.GetMark()->nContent.Assign( pTNd, pTNd->GetTxt().Len() );
+        aPam.GetMark()->nContent.Assign(pTNd, pTNd->GetTxt().getLength());
         InsertItemSet( aPam, *pSet, 0 );
     }
 }

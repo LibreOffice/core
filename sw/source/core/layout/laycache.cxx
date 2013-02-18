@@ -782,7 +782,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     sal_uInt16 nRepeat( 0 );
                     if( !bLongTab && rpFrm->IsTxtFrm() &&
                         SW_LAYCACHE_IO_REC_PARA == nType &&
-                        nOfst<((SwTxtFrm*)rpFrm)->GetTxtNode()->GetTxt().Len() )
+                        nOfst<((SwTxtFrm*)rpFrm)->GetTxtNode()->GetTxt().getLength())
                         bSplit = true;
                     else if( rpFrm->IsTabFrm() && nRowCount < nOfst &&
                              ( bLongTab || SW_LAYCACHE_IO_REC_TABLE == nType ) )

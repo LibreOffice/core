@@ -2576,7 +2576,7 @@ sal_uInt16 SwTableBox::IsFormulaOrValueBox() const
         nWhich = RES_BOXATR_VALUE;
     else if( pSttNd && pSttNd->GetIndex() + 2 == pSttNd->EndOfSectionIndex()
             && 0 != ( pTNd = pSttNd->GetNodes()[ pSttNd->GetIndex() + 1 ]
-            ->GetTxtNode() ) && !pTNd->GetTxt().Len() )
+            ->GetTxtNode() ) && pTNd->GetTxt().isEmpty())
         nWhich = USHRT_MAX;
 
     return nWhich;

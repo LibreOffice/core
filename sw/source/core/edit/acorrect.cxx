@@ -166,7 +166,7 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
     xub_StrLen const nLen = rTxt.Len();
     for ( xub_StrLen n = 0; n < nLen; ++n )
     {
-        sal_Unicode const Char = pNd->GetTxt().GetChar( n + nPos );
+        sal_Unicode const Char = pNd->GetTxt()[n + nPos];
         if ( ( CH_TXTATR_BREAKWORD == Char || CH_TXTATR_INWORD == Char )
              && pNd->GetTxtAttrForCharAt( n + nPos ) )
         {
@@ -181,7 +181,7 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
 
         if( pDoc->IsAutoFmtRedline() )
         {
-            if( nPos == pNd->GetTxt().Len() )       // at the End an Insert takes place
+            if (nPos == pNd->GetTxt().getLength()) // at the End do an Insert
             {
                 pDoc->InsertString( *pPam, rTxt );
             }
@@ -190,8 +190,8 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
                 _PaMIntoCrsrShellRing aTmp( rEditSh, rCrsr, *pPam );
 
                 pPam->SetMark();
-                pPam->GetPoint()->nContent = Min( pNd->GetTxt().Len(),
-                                              xub_StrLen( nPos + nSourceLength ));
+                pPam->GetPoint()->nContent =
+                    std::min(pNd->GetTxt().getLength(), nPos + nSourceLength);
                 pDoc->ReplaceRange( *pPam, rTxt, false );
                 pPam->Exchange();
                 pPam->DeleteMark();
@@ -202,8 +202,8 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
             if( nSourceLength != rTxt.Len() )
             {
                 pPam->SetMark();
-                pPam->GetPoint()->nContent = Min( pNd->GetTxt().Len(),
-                                              xub_StrLen( nPos + nSourceLength ));
+                pPam->GetPoint()->nContent =
+                    std::min(pNd->GetTxt().getLength(), nPos + nSourceLength);
                 pDoc->ReplaceRange( *pPam, rTxt, false );
                 pPam->Exchange();
                 pPam->DeleteMark();
@@ -288,13 +288,13 @@ const String* SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
         (*pIdx)--;
 
     SwTxtNode* pTNd = pIdx->GetNode().GetTxtNode();
-    while( pTNd && !pTNd->GetTxt().Len() )
+    while (pTNd && !pTNd->GetTxt().getLength())
     {
         (*pIdx)--;
         pTNd = pIdx->GetNode().GetTxtNode();
     }
     if( pTNd && 0 == pTNd->GetAttrOutlineLevel() )//#outline level,zhaojianwei
-        pStr = &pTNd->GetTxt();
+        pStr = reinterpret_cast<String const*>(&pTNd->GetTxt()); // FIXME
 
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;
@@ -323,8 +323,8 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
         eLang = GetAppLanguage();
 
     //JP 22.04.99: Bug 63883 - Special treatment for dots.
-    bool bLastCharIsPoint = nEndPos < pTxtNd->GetTxt().Len() &&
-                            '.' == pTxtNd->GetTxt().GetChar( nEndPos );
+    bool bLastCharIsPoint = nEndPos < pTxtNd->GetTxt().getLength() &&
+                            ('.' == pTxtNd->GetTxt()[nEndPos]);
 
     const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(
                                 pTxtNd->GetTxt(), rSttPos, nEndPos, *this, eLang );
@@ -398,7 +398,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
     }
 
     if( bRet && ppPara && pTxtNd )
-        *ppPara = &pTxtNd->GetTxt();
+        *ppPara = reinterpret_cast<String const*>(&pTxtNd->GetTxt()); //FIXME
 
     return bRet;
 }
@@ -476,7 +476,7 @@ void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
                                             aCharFmtSetRange );
         xub_StrLen n = rPos.nContent.GetIndex();
         if( !pTxtNd->GetAttr( *pDontExpItems, n, n,
-                                n != pTxtNd->GetTxt().Len() ))
+                                n != pTxtNd->GetTxt().getLength() ))
             delete pDontExpItems, pDontExpItems = 0;
     }
 }
@@ -487,7 +487,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
     if( pTxtNd )
     {
         xub_StrLen nStart = rPos.nContent.GetIndex();
-        if( nStart == pTxtNd->GetTxt().Len() )
+        if( nStart == pTxtNd->GetTxt().getLength() )
             pTxtNd->FmtToTxtAttr( pTxtNd );
 
         if( pTxtNd->GetpSwpHints() && pTxtNd->GetpSwpHints()->Count() )

@@ -2892,7 +2892,7 @@ void SwRedlineExtraData_FmtColl::Reject( SwPaM& rPam ) const
         SwTxtNode* pTNd = rMark.nNode.GetNode().GetTxtNode();
         if( pTNd )
         {
-            rMark.nContent.Assign( pTNd, pTNd->GetTxt().Len() );
+            rMark.nContent.Assign(pTNd, pTNd->GetTxt().getLength());
 
             if( pTNd->HasSwAttrSet() )
             {
@@ -3263,7 +3263,9 @@ void SwRedline::InvalidateRange()       // trigger the Layout
         if( pNd->IsTxtNode() )
         {
             aHt.nStart = n == nSttNd ? nSttCnt : 0;
-            aHt.nEnd = n == nEndNd ? nEndCnt : ((SwTxtNode*)pNd)->GetTxt().Len();
+            aHt.nEnd = (n == nEndNd)
+                ? nEndCnt
+                : static_cast<SwTxtNode*>(pNd)->GetTxt().getLength();
             ((SwTxtNode*)pNd)->ModifyNotification( &aHt, &aHt );
         }
     }

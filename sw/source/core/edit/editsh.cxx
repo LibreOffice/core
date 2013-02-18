@@ -558,7 +558,7 @@ String SwEditShell::GetDropTxt( const sal_uInt16 nChars ) const
     {
         xub_StrLen nDropLen = pTxtNd->GetDropLen( nChars );
         if( nDropLen )
-            aTxt = pTxtNd->GetTxt().Copy( 0, nDropLen );
+            aTxt = pTxtNd->GetTxt().copy(0, nDropLen);
     }
 
     return aTxt;

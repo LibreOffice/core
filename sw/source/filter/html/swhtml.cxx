@@ -696,7 +696,7 @@ void SwHTMLParser::Continue( int nToken )
             SwNodeIndex aNxtIdx( *pSttNdIdx );
             if( pTxtNode && pTxtNode->CanJoinNext( &aNxtIdx ))
             {
-                xub_StrLen nStt = pTxtNode->GetTxt().Len();
+                xub_StrLen nStt = pTxtNode->GetTxt().getLength();
                 // wenn der Cursor noch in dem Node steht, dann setze in an das Ende
                 if( pPam->GetPoint()->nNode == aNxtIdx )
                 {
@@ -715,18 +715,18 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_True ).nNode.GetIndex() )
 {
     xub_StrLen nCntPos = pPam->GetBound( sal_True ).nContent.GetIndex();
     pPam->GetBound( sal_True ).nContent.Assign( pTxtNode,
-                    pTxtNode->GetTxt().Len() + nCntPos );
+                    pTxtNode->GetTxt().getLength() + nCntPos );
 }
 if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
 {
     xub_StrLen nCntPos = pPam->GetBound( sal_False ).nContent.GetIndex();
     pPam->GetBound( sal_False ).nContent.Assign( pTxtNode,
-                    pTxtNode->GetTxt().Len() + nCntPos );
+                    pTxtNode->GetTxt().getLength() + nCntPos );
 }
 #endif
                 // Zeichen Attribute beibehalten!
                 SwTxtNode* pDelNd = aNxtIdx.GetNode().GetTxtNode();
-                if( pTxtNode->GetTxt().Len() )
+                if (pTxtNode->GetTxt().getLength())
                     pDelNd->FmtToTxtAttr( pTxtNode );
                 else
                     pTxtNode->ChgFmtColl( pDelNd->GetTxtColl() );
@@ -793,7 +793,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
                     pPam->SetMark(); pPam->DeleteMark();
                     pNextNd->JoinPrev();
                 }
-                else if( !pAktNd->GetTxt().Len() )
+                else if (pAktNd->GetTxt().isEmpty())
                 {
                     pPos->nContent.Assign( 0, 0 );
                     pPam->SetMark(); pPam->DeleteMark();

@@ -1396,7 +1396,7 @@ void SwHTMLParser::StripTrailingPara()
         {
             --nPos;
             bSetSmallFont =
-                (CH_TXTATR_BREAKWORD == pTxtNd->GetTxt().GetChar( nPos )) &&
+                (CH_TXTATR_BREAKWORD == pTxtNd->GetTxt()[nPos]) &&
                 (0 != pTxtNd->GetTxtAttrForCharAt( nPos, RES_TXTATR_FLYCNT ));
         }
     }

@@ -105,7 +105,7 @@ SwAccessiblePortionData::~SwAccessiblePortionData()
 
 void SwAccessiblePortionData::Text(sal_uInt16 nLength, sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)
 {
-    OSL_ENSURE( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
+    OSL_ENSURE( (nModelPosition + nLength) <= pTxtNode->GetTxt().getLength(),
                 "portion exceeds model string!" );
 
     OSL_ENSURE( !bFinished, "We are already done!" );
@@ -124,9 +124,7 @@ void SwAccessiblePortionData::Text(sal_uInt16 nLength, sal_uInt16 nType, sal_Int
 
     // update buffer + nModelPosition
     aBuffer.append( OUString(
-        pTxtNode->GetTxt().Copy(
-            static_cast<sal_uInt16>( nModelPosition ),
-            nLength ) ) );
+        pTxtNode->GetTxt().copy(nModelPosition, nLength)) );
     nModelPosition += nLength;
 
     bLastIsSpecial = sal_False;
@@ -136,7 +134,7 @@ void SwAccessiblePortionData::Special(
     sal_uInt16 nLength, const String& rText, sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)
 {
     OSL_ENSURE( nModelPosition >= 0, "illegal position" );
-    OSL_ENSURE( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
+    OSL_ENSURE( (nModelPosition + nLength) <= pTxtNode->GetTxt().getLength(),
                 "portion exceeds model string!" );
 
     OSL_ENSURE( !bFinished, "We are already done!" );
@@ -166,7 +164,7 @@ void SwAccessiblePortionData::Special(
         {
             OUStringBuffer aTmpBuffer( rText.Len() + 1 );
             aTmpBuffer.append( rText );
-            aTmpBuffer.append( pTxtNode->GetTxt().GetChar(nModelPosition) );
+            aTmpBuffer.append( pTxtNode->GetTxt()[nModelPosition] );
             sDisplay = aTmpBuffer.makeStringAndClear();
             break;
         }
@@ -216,7 +214,8 @@ void SwAccessiblePortionData::Skip(sal_uInt16 nLength)
 {
     OSL_ENSURE( !bFinished, "We are already done!" );
     OSL_ENSURE( aModelPositions.empty(), "Never Skip() after portions" );
-    OSL_ENSURE( nLength <= pTxtNode->GetTxt().Len(), "skip exceeds model string!" );
+    OSL_ENSURE( nLength <= pTxtNode->GetTxt().getLength(),
+            "skip exceeds model string!" );
 
     nModelPosition += nLength;
 }
@@ -532,7 +531,7 @@ void SwAccessiblePortionData::GetAttributeBoundary(
 
 sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( sal_uInt16 nPos ) const
 {
-    OSL_ENSURE( nPos <= pTxtNode->GetTxt().Len(), "illegal position" );
+    OSL_ENSURE( nPos <= pTxtNode->GetTxt().getLength(), "illegal position" );
 
     // find the portion number
     // #i70538# - consider "empty" model portions - e.g. number portion
@@ -602,8 +601,7 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
 
         // if we have anything except plain text, compute nExtend + nRefPos
         if( (nModelEndPos - nModelPos == 1) &&
-            (pTxtNode->GetTxt().GetChar(static_cast<sal_uInt16>(nModelPos)) !=
-             sAccessibleString.getStr()[nPos]) )
+            (pTxtNode->GetTxt()[nModelPos] != sAccessibleString.getStr()[nPos]))
         {
             // case 1: a one-character, non-text portion
             // reference position is the first accessibilty for our

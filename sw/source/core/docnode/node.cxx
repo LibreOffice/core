@@ -1156,7 +1156,7 @@ sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
                 else
                     bRet = sal_False;
             }
-            else if( nPos < rTNd.GetTxt().Len() )
+            else if (nPos < rTNd.GetTxt().getLength())
                 ++(*pIdx);
             else
                 bRet = sal_False;
@@ -1634,8 +1634,8 @@ static bool lcl_CheckMaxLength(SwNode const& rPrev, SwNode const& rNext)
     {
         return true;
     }
-    size_t const nSum(  static_cast<const SwTxtNode&>(rPrev).GetTxt().Len()
-                      + static_cast<const SwTxtNode&>(rNext).GetTxt().Len());
+    size_t const nSum(static_cast<const SwTxtNode&>(rPrev).GetTxt().getLength()
+                    + static_cast<const SwTxtNode&>(rNext).GetTxt().getLength());
     return (nSum <= TXTNODE_MAX);
 }
 

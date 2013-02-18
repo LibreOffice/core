@@ -74,8 +74,8 @@ String * SwUndoInsert::GetTxtFromDoc() const
 
     if( pCNd->IsTxtNode() )
     {
-        pResult = new String( ((SwTxtNode*)pCNd)->GetTxt().Copy(nCntnt-nLen,
-                                                             nLen ) );
+        pResult = new String(
+            static_cast<SwTxtNode*>(pCNd)->GetTxt().copy(nCntnt-nLen, nLen));
 
     }
 
@@ -241,7 +241,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                 if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
                     pTmpDoc->DeleteRedline( aPaM, true, USHRT_MAX );
                 RemoveIdxFromRange( aPaM, sal_False );
-                pTxt = new String( pTxtNode->GetTxt().Copy(nCntnt-nLen, nLen) );
+                pTxt = new String( pTxtNode->GetTxt().copy(nCntnt-nLen, nLen) );
                 pTxtNode->EraseText( aPaM.GetPoint()->nContent, nLen );
 
                 // Undo deletes fieldmarks in two step: first the end then the start position.
@@ -404,10 +404,10 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
         }
         else
         {
-            String aTxt( ((SwTxtNode*)pCNd)->GetTxt() );
+            OUString const aTxt( static_cast<SwTxtNode*>(pCNd)->GetTxt() );
             ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
             rDoc.InsertString( rContext.GetRepeatPaM(),
-                aTxt.Copy( nCntnt - nLen, nLen ) );
+                aTxt.copy(nCntnt - nLen, nLen) );
         }
         break;
     case ND_GRFNODE:
@@ -622,7 +622,7 @@ SwUndoReplace::Impl::Impl(
     if ( pNd->GetpSwpHints() )
     {
         pHistory->CopyAttr( pNd->GetpSwpHints(), nNewPos, 0,
-                            pNd->GetTxt().Len(), true );
+                            pNd->GetTxt().getLength(), true );
     }
 
     if ( m_bSplitNext )
@@ -634,7 +634,7 @@ SwUndoReplace::Impl::Impl(
         SwTxtNode* pNext = pEnd->nNode.GetNode().GetTxtNode();
         sal_uLong nTmp = pNext->GetIndex();
         pHistory->CopyAttr( pNext->GetpSwpHints(), nTmp, 0,
-                            pNext->GetTxt().Len(), true );
+                            pNext->GetTxt().getLength(), true );
         if( pNext->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pNext->GetpSwAttrSet(), nTmp );
         pHistory->Add( pNext->GetTxtColl(),nTmp, ND_TEXTNODE );
@@ -646,9 +646,9 @@ SwUndoReplace::Impl::Impl(
     if( !pHistory->Count() )
         delete pHistory, pHistory = 0;
 
-    xub_StrLen nECnt = m_bSplitNext ? pNd->GetTxt().Len()
+    xub_StrLen nECnt = m_bSplitNext ? pNd->GetTxt().getLength()
         : pEnd->nContent.GetIndex();
-    m_sOld = pNd->GetTxt().Copy( m_nSttCnt, nECnt - m_nSttCnt );
+    m_sOld = pNd->GetTxt().copy( m_nSttCnt, nECnt - m_nSttCnt );
 }
 
 void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)

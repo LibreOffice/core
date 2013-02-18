@@ -47,7 +47,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
     {
         pHistory = new SwHistory;
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nNode, 0,
-                            pTxtNd->GetTxt().Len(), false );
+                            pTxtNd->GetTxt().getLength(), false );
         if( !pHistory->Count() )
             DELETEZ( pHistory );
     }
@@ -111,7 +111,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pTNd )
         {
             rPam.GetPoint()->nNode = *pTNd;
-            rPam.GetPoint()->nContent.Assign( pTNd, pTNd->GetTxt().Len() );
+            rPam.GetPoint()->nContent.Assign(pTNd, pTNd->GetTxt().getLength());
 
             if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
             {
@@ -130,7 +130,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 rPam.GetPoint()->nContent = 0;
                 rPam.SetMark();
-                rPam.GetPoint()->nContent = pTNd->GetTxt().Len();
+                rPam.GetPoint()->nContent = pTNd->GetTxt().getLength();
 
                 pDoc->RstTxtAttrs( rPam, true );
                 pHistory->TmpRollback( pDoc, 0, false );

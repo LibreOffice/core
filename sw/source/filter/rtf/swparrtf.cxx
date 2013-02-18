@@ -120,13 +120,13 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const String& /*rBaseURL*/, SwPaM& rPa
             {
                 aPam.GetPoint()->nNode = *pSttNdIdx;
                 aPam.GetPoint()->nContent.Assign( pTxtNode,
-                        pTxtNode->GetTxt().Len() );
+                        pTxtNode->GetTxt().getLength() );
             }
             // If the first new node isn't empty, convert  the node's text
             // attributes into hints. Otherwise, set the new node's
             // paragraph style at the previous (empty) node.
             SwTxtNode* pDelNd = aNxtIdx.GetNode().GetTxtNode();
-            if( pTxtNode->GetTxt().Len() )
+            if (pTxtNode->GetTxt().getLength())
                 pDelNd->FmtToTxtAttr( pTxtNode );
             else
                 pTxtNode->ChgFmtColl( pDelNd->GetTxtColl() );

@@ -619,7 +619,7 @@ void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
     xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
     SwTxtNode *pTxtNd = pPam->GetNode()->GetTxtNode();
     sal_Bool bMoveFwd = sal_False;
-    if( nPos>0 && pTxtNd && ' '==pTxtNd->GetTxt().GetChar(nPos-1) )
+    if (nPos>0 && pTxtNd && (' ' == pTxtNd->GetTxt()[nPos-1]))
     {
         bMoveFwd = sal_True;
 

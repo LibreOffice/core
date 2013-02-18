@@ -234,7 +234,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, sal_uLong nNode )
 
     {
         RemoveIdxRel( nNode + 1, SwPosition( aIdx,
-                            SwIndex( pTxtNd, pTxtNd->GetTxt().Len() )));
+                            SwIndex(pTxtNd, pTxtNd->GetTxt().getLength())));
     }
     pTxtNd->JoinNext();
 
@@ -256,7 +256,7 @@ SwUndoInsSection::SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart)
             m_pHistory.reset( new SwHistory );
         }
         m_pHistory->CopyAttr( pTxtNd->GetpSwpHints(), pTxtNd->GetIndex(), 0,
-                            pTxtNd->GetTxt().Len(), false );
+                            pTxtNd->GetTxt().getLength(), false );
     }
 
     if (bAtStart)

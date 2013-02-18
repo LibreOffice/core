@@ -1240,7 +1240,7 @@ sal_Bool SwFEShell::IsAdjustCellWidthAllowed( sal_Bool bBalance ) const
 
             while ( pCNd )
             {
-                if ( pCNd->GetTxt().Len() )
+                if (!pCNd->GetTxt().isEmpty())
                     return sal_True;
                 ++aIdx;
                 pCNd = aIdx.GetNode().GetTxtNode();

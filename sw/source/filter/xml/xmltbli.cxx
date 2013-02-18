@@ -2114,7 +2114,8 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             SAL_WARN_IF(!pTxtNode, "sw", "Should have a text node in cell?");
             if (pTxtNode)
             {
-                SAL_WARN_IF(pTxtNode->GetTxt().Len(), "sw", "why text here?");
+                SAL_WARN_IF(!pTxtNode->GetTxt().isEmpty(), "sw",
+                        "why text here?");
                 pTxtNode->InsertText(*pCell->GetStringValue(),
                         SwIndex(pTxtNode, 0));
             }

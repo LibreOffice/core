@@ -60,10 +60,10 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     OSL_ENSURE( pTxtNd, "Overwrite not in a TextNode?" );
 
     bInsChar = sal_True;
-    xub_StrLen nTxtNdLen = pTxtNd->GetTxt().Len();
+    xub_StrLen nTxtNdLen = pTxtNd->GetTxt().getLength();
     if( nSttCntnt < nTxtNdLen )     // no pure insert?
     {
-        aDelStr.Insert( pTxtNd->GetTxt().GetChar( nSttCntnt ) );
+        aDelStr.Insert( pTxtNd->GetTxt()[nSttCntnt] );
         if( !pHistory )
             pHistory = new SwHistory;
         SwRegHistory aRHst( *pTxtNd, pHistory );
@@ -108,7 +108,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     // Is the node a TextNode at all?
     SwTxtNode * pDelTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( !pDelTxtNd ||
-        ( pDelTxtNd->GetTxt().Len() != rPos.nContent.GetIndex() &&
+        (pDelTxtNd->GetTxt().getLength() != rPos.nContent.GetIndex() &&
             rPos.nContent.GetIndex() != ( nSttCntnt + aInsStr.Len() )))
         return sal_False;
 
@@ -142,9 +142,9 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     // both 'overwrites' can be combined so 'move' the corresponding character
     if( !bInsChar )
     {
-        if( rPos.nContent.GetIndex() < pDelTxtNd->GetTxt().Len() )
+        if (rPos.nContent.GetIndex() < pDelTxtNd->GetTxt().getLength())
         {
-            aDelStr.Insert( pDelTxtNd->GetTxt().GetChar(rPos.nContent.GetIndex()) );
+            aDelStr.Insert(pDelTxtNd->GetTxt()[rPos.nContent.GetIndex()]);
             rPos.nContent++;
         }
         else
@@ -388,7 +388,7 @@ void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
     long nOffsLen = rOffsets.getLength();
     _UndoTransliterate_Data* pNew = new _UndoTransliterate_Data(
                         rTNd.GetIndex(), nStart, (xub_StrLen)nOffsLen,
-                        rTNd.GetTxt().Copy( nStart, nLen ));
+                        rTNd.GetTxt().copy(nStart, nLen));
 
     aChanges.push_back( pNew );
 
@@ -442,7 +442,7 @@ void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
             pNew->pHistory = new SwHistory;
             SwRegHistory aRHst( rTNd, pNew->pHistory );
             pNew->pHistory->CopyAttr( rTNd.GetpSwpHints(),
-                    pNew->nNdIdx, 0, rTNd.GetTxt().Len(), false );
+                    pNew->nNdIdx, 0, rTNd.GetTxt().getLength(), false );
         }
         break;
     }

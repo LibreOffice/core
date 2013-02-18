@@ -126,9 +126,10 @@ sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
             {
             case ND_TEXTNODE:
                 {
-                    xub_StrLen nStt = n == nSttNd ? nSttCnt : 0,
-                                  nEnd = n == nEndNd ? nEndCnt
-                                        : ((SwTxtNode*)pNd)->GetTxt().Len();
+                    xub_StrLen const nStt = (n == nSttNd) ? nSttCnt : 0;
+                    xub_StrLen const nEnd = (n == nEndNd)
+                        ? nEndCnt
+                        : static_cast<SwTxtNode*>(pNd)->GetTxt().getLength();
 
                     ((SwTxtNode*)pNd)->GetAttr( *pSet, nStt, nEnd,
                                                 sal_False, sal_True,
@@ -456,7 +457,6 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
                             sal_uInt16 &rScrpt, bool bInSelection, bool bNum )
 {
     bool bRet = false;
-    const String& rTxt = rTNd.GetTxt();
     String sExp;
 
     // consider numbering
@@ -484,7 +484,7 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
     }
 
     // and fields
-    if ( CH_TXTATR_BREAKWORD == rTxt.GetChar( nPos ) )
+    if (CH_TXTATR_BREAKWORD == rTNd.GetTxt()[nPos])
     {
         const SwTxtAttr* const pAttr = rTNd.GetTxtAttrForCharAt( nPos );
         if (pAttr)
@@ -557,7 +557,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
 
                     sal_uInt16 nScript;
 
-                    if ( pTNd->GetTxt().Len() )
+                    if (!pTNd->GetTxt().isEmpty())
                     {
                         nScript = pScriptInfo ?
                                   pScriptInfo->ScriptType( nPos ) :
@@ -578,7 +578,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
                     if( aIdx.GetNode().IsTxtNode() )
                     {
                         const SwTxtNode* pTNd = aIdx.GetNode().GetTxtNode();
-                        const String& rTxt = pTNd->GetTxt();
+                        const OUString& rTxt = pTNd->GetTxt();
 
                         // try to get SwScriptInfo
                         const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( *pTNd );
@@ -588,11 +588,12 @@ sal_uInt16 SwEditShell::GetScriptType() const
                                                 : 0,
                                     nEndPos = aIdx == nEndIdx
                                                 ? pEnd->nContent.GetIndex()
-                                                : rTxt.Len();
+                                                : rTxt.getLength();
 
-                        OSL_ENSURE( nEndPos <= rTxt.Len(), "Index outside the range - endless loop!" );
-                        if( nEndPos > rTxt.Len() )
-                            nEndPos = rTxt.Len();
+                        OSL_ENSURE( nEndPos <= rTxt.getLength(),
+                                "Index outside the range - endless loop!" );
+                        if (nEndPos > rTxt.getLength())
+                            nEndPos = rTxt.getLength();
 
                         sal_uInt16 nScript;
                         while( nChg < nEndPos )
@@ -603,23 +604,23 @@ sal_uInt16 SwEditShell::GetScriptType() const
                                                                 rTxt, nChg );
 
                             if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, true,
-                                                          0 == nChg && rTxt.Len() == nEndPos ) )
+                                      0 == nChg && rTxt.getLength() == nEndPos))
                                 nRet |= lcl_SetScriptFlags( nScript );
 
                             if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
                                 SCRIPTTYPE_COMPLEX) == nRet )
                                 break;
 
-                            xub_StrLen nFldPos = nChg+1;
+                            sal_Int32 nFldPos = nChg+1;
 
                             nChg = pScriptInfo ?
                                    pScriptInfo->NextScriptChg( nChg ) :
                                    (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(
                                                     rTxt, nChg, nScript );
 
-                            nFldPos = rTxt.Search(
-                                            CH_TXTATR_BREAKWORD, nFldPos );
-                            if( nFldPos < nChg )
+                            nFldPos = rTxt.indexOf(
+                                            CH_TXTATR_BREAKWORD, nFldPos);
+                            if ((-1 != nFldPos) && (nFldPos < nChg))
                                 nChg = nFldPos;
                         }
                         if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
@@ -676,7 +677,7 @@ sal_uInt16 SwEditShell::GetScalingOfSelectedText() const
         if( pStt->nNode == pEnd->nNode )
             nEnd = pEnd->nContent.GetIndex();
         else
-            nEnd = pTNd->GetTxt().Len();
+            nEnd = pTNd->GetTxt().getLength();
         nScaleWidth = pTNd->GetScalingOfSelectedText( nStt, nEnd );
     }
     else

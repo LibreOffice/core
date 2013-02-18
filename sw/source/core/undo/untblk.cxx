@@ -44,7 +44,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     {
         pTxtFmtColl = pTxtNd->GetTxtColl();
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode,
-                            0, pTxtNd->GetTxt().Len(), false );
+                            0, pTxtNd->GetTxt().getLength(), false );
         if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
 
@@ -163,7 +163,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         if( nSttNode != nEndNode )
         {
             SwTxtNode* pTxtNd = pDoc->GetNodes()[ nEndNode ]->GetTxtNode();
-            if( pTxtNd && pTxtNd->GetTxt().Len() == nEndCntnt )
+            if (pTxtNd && pTxtNd->GetTxt().getLength() == nEndCntnt)
                 pLastNdColl = pTxtNd->GetTxtColl();
         }
 
@@ -223,7 +223,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 {
                     RemoveIdxRel( rIdx.GetIndex()+1, SwPosition( rIdx,
-                            SwIndex( pTxtNode, pTxtNode->GetTxt().Len() )));
+                            SwIndex(pTxtNode, pTxtNode->GetTxt().getLength())));
                 }
                 pTxtNode->JoinNext();
             }

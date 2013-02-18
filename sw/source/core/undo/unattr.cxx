@@ -465,7 +465,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         {
             aPos.nContent.Assign( (SwTxtNode*)pNd, rAnchor.GetPageNum() );
             if ( aPos.nContent.GetIndex() >
-                    static_cast<SwTxtNode*>(pNd)->GetTxt().Len() )
+                    static_cast<SwTxtNode*>(pNd)->GetTxt().getLength())
             {
                 // #i35443# - invalid position.
                 // Thus, anchor attribute not restored

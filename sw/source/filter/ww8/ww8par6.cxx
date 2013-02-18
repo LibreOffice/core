@@ -2190,7 +2190,7 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
                     {
                         SwTxtNode *pNd = aIdx.GetNode().GetTxtNode();
                         ++aIdx;
-                        if (aIdx == aEnd && pNd && !pNd->GetTxt().Len())
+                        if (aIdx == aEnd && pNd && pNd->GetTxt().isEmpty())
                         {
                             //An extra pre-created by writer unused paragraph
                             //
@@ -2367,7 +2367,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
     {
         maSectionManager.JoinNode(*rPam.GetPoint(), aPref.GetNode());
         rPam.GetPoint()->nNode = aPref;
-        rPam.GetPoint()->nContent.Assign(pNode, pNode->GetTxt().Len());
+        rPam.GetPoint()->nContent.Assign(pNode, pNode->GetTxt().getLength());
         if (bStealAttr)
             pCtrlStck->StealAttr(rPam.GetPoint()->nNode);
 

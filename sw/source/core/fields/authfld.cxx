@@ -295,7 +295,8 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
             //body the directly available text node will be used
             if(!pTxtNode)
                 pTxtNode = &rFldTxtNode;
-            if( pTxtNode->GetTxt().Len() && pTxtNode->getLayoutFrm( rDoc.GetCurrentLayout() ) &&
+            if (!pTxtNode->GetTxt().isEmpty() &&
+                pTxtNode->getLayoutFrm( rDoc.GetCurrentLayout() ) &&
                 pTxtNode->GetNodes().IsDocNodes() )
             {
                 SwTOXAuthority* pNew = new SwTOXAuthority( *pTxtNode,

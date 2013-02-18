@@ -874,8 +874,10 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
 
     const sal_uLong nFlySttNd = pCntIdx->GetIndex();
     if( 2 != ( pCntIdx->GetNode().EndOfSectionIndex() - nFlySttNd ) ||
-        pTxtNd->GetTxt().Len() )
+        pTxtNd->GetTxt().getLength() )
+    {
         return SW_CHAIN_NOT_EMPTY;
+    }
 
     sal_uInt16 nArrLen = GetSpzFrmFmts()->size();
     for( sal_uInt16 n = 0; n < nArrLen; ++n )

@@ -2151,7 +2151,7 @@ String SwCrsrShell::GetText() const
     {
         SwTxtNode* pTxtNd = pCurCrsr->GetNode()->GetTxtNode();
         if( pTxtNd )
-            aTxt = pTxtNd->GetTxt().Copy(
+            aTxt = pTxtNd->GetTxt().copy(
                     pCurCrsr->GetPoint()->nContent.GetIndex() );
     }
     return aTxt;
@@ -2174,11 +2174,11 @@ sal_Unicode SwCrsrShell::GetChar( sal_Bool bEnd, long nOffset )
         return 0;
 
     xub_StrLen nPos = pPos->nContent.GetIndex();
-    const String& rStr = pTxtNd->GetTxt();
+    const OUString& rStr = pTxtNd->GetTxt();
     sal_Unicode cCh = 0;
 
-    if( ((nPos+nOffset) >= 0 ) && (nPos+nOffset) < rStr.Len() )
-        cCh = rStr.GetChar( static_cast<xub_StrLen>(nPos+nOffset) );
+    if (((nPos+nOffset) >= 0 ) && (nPos+nOffset) < rStr.getLength())
+        cCh = rStr[nPos + nOffset];
 
     return cCh;
 }
@@ -2200,7 +2200,7 @@ sal_Bool SwCrsrShell::ExtendSelection( sal_Bool bEnd, xub_StrLen nCount )
     xub_StrLen nPos = pPos->nContent.GetIndex();
     if( bEnd )
     {
-        if( ( nPos + nCount ) <= pTxtNd->GetTxt().Len() )
+        if ((nPos + nCount) <= pTxtNd->GetTxt().getLength())
             nPos = nPos + nCount;
         else
             return sal_False; // not possible
@@ -3318,7 +3318,7 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             lcl_FillTextRange( rRange, *pNode, nBegin, nLen );
 
             // get smarttag word
-            String aText( pNode->GetTxt().Copy( nBegin, nLen ) );
+            String aText( pNode->GetTxt().copy(nBegin, nLen) );
 
             //save the start and end positons of the line and the starting point
             Push();

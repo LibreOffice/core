@@ -260,7 +260,7 @@ bool SwXParagraph::SelectPaM(SwPaM & rPaM)
     *rPaM.GetPoint() = SwPosition( *pTxtNode );
     // set selection to the whole paragraph
     rPaM.SetMark();
-    rPaM.GetMark()->nContent = pTxtNode->GetTxt().Len();
+    rPaM.GetMark()->nContent = pTxtNode->GetTxt().getLength();
     return true;
 }
 
@@ -1247,7 +1247,7 @@ throw (uno::RuntimeException)
             aCursor.MovePara(fnParaCurr, fnParaStart);
         }
         SwUnoCursorHelper::SelectPam(aCursor, true);
-        if (pTxtNode->GetTxt().Len()) {
+        if (pTxtNode->GetTxt().getLength()) {
             aCursor.MovePara(fnParaCurr, fnParaEnd);
         }
         SwUnoCursorHelper::SetString(aCursor, aString);

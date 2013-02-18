@@ -162,8 +162,8 @@ class SwAutoFormat
     // TxtNode methods
     const SwTxtNode* GetNextNode() const;
     bool IsEmptyLine( const SwTxtNode& rNd ) const
-        {   return 0 == rNd.GetTxt().Len() ||
-                rNd.GetTxt().Len() == GetLeadingBlanks( rNd.GetTxt() ); }
+        {   return rNd.GetTxt().isEmpty() ||
+                rNd.GetTxt().getLength() == GetLeadingBlanks( rNd.GetTxt() ); }
 
     sal_Bool IsOneLine( const SwTxtNode& ) const;
     sal_Bool IsFastFullLine( const SwTxtNode& ) const;
@@ -213,8 +213,8 @@ class SwAutoFormat
              !IsEmptyLine( *pTxtNd ) &&
              !IsNoAlphaLine( *pTxtNd) &&
              !IsEnumericChar( *pTxtNd ) &&
-             ((STRING_MAXLEN - 50 - pTxtNd->GetTxt().Len()) >
-                    pAktTxtNd->GetTxt().Len()) &&
+             ((STRING_MAXLEN - 50 - pTxtNd->GetTxt().getLength()) >
+                    pAktTxtNd->GetTxt().getLength()) &&
              !HasBreakAttr( *pTxtNd );
     }
 
@@ -401,17 +401,17 @@ sal_Bool SwAutoFormat::IsFastFullLine( const SwTxtNode& rNd ) const
 
 sal_Bool SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
 {
-    const String& rTxt = rNd.GetTxt();
+    const OUString& rTxt = rNd.GetTxt();
     String sTmp( rTxt );
     xub_StrLen nBlnks = GetLeadingBlanks( sTmp );
-    xub_StrLen nLen = rTxt.Len() - nBlnks;
+    xub_StrLen nLen = rTxt.getLength() - nBlnks;
     if( !nLen )
         return sal_False;
 
     // -, +, * separated by blank ??
-    if( 2 < nLen && IsSpace( rTxt.GetChar( nBlnks + 1 ) ) )
+    if (2 < nLen && IsSpace(rTxt[nBlnks + 1]))
     {
-        if( StrChr( pBulletChar, rTxt.GetChar( nBlnks ) ) )
+        if (StrChr(pBulletChar, rTxt[nBlnks]))
             return sal_True;
         // Should there be a symbol font at the position?
         SwTxtFrmInfo aFInfo( GetFrm( rNd ) );
@@ -455,7 +455,7 @@ sal_Bool SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
 sal_uInt16 SwAutoFormat::CalcLevel( const SwTxtNode& rNd, sal_uInt16 *pDigitLvl ) const
 {
     sal_uInt16 nLvl = 0, nBlnk = 0;
-    const String& rTxt = rNd.GetTxt();
+    const OUString& rTxt = rNd.GetTxt();
     if( pDigitLvl )
         *pDigitLvl = USHRT_MAX;
 
@@ -472,9 +472,9 @@ sal_uInt16 SwAutoFormat::CalcLevel( const SwTxtNode& rNd, sal_uInt16 *pDigitLvl 
     }
 
 
-    for( xub_StrLen n = 0, nEnd = rTxt.Len(); n < nEnd; ++n )
+    for (xub_StrLen n = 0, nEnd = rTxt.getLength(); n < nEnd; ++n)
     {
-        switch( rTxt.GetChar( n ) )
+        switch (rTxt[n])
         {
         case ' ':   if( 3 == ++nBlnk )
                         ++nLvl, nBlnk = 0;
@@ -540,13 +540,13 @@ bool SwAutoFormat::DoUnderline()
     if( !aFlags.bSetBorder )
         return false;
 
-    const sal_Unicode* pStr = pAktTxtNd->GetTxt().GetBuffer();
+    OUString const& rTxt(pAktTxtNd->GetTxt());
     int eState = 0;
     xub_StrLen nCnt = 0;
-    while( *pStr )
+    while (nCnt < rTxt.getLength())
     {
         int eTmp = 0;
-        switch( *pStr )
+        switch (rTxt[nCnt])
         {
             case '-': eTmp = 1; break;
             case '_': eTmp = 2; break;
@@ -562,8 +562,6 @@ bool SwAutoFormat::DoUnderline()
         else if( eState != eTmp )
             return false;
         ++nCnt;
-
-        ++pStr;
     }
 
     if( 2 < nCnt )
@@ -624,25 +622,24 @@ bool SwAutoFormat::DoTable()
         pAktTxtNd->FindTableNode() )
         return false;
 
-    const String& rTmp = pAktTxtNd->GetTxt();
+    const OUString& rTmp = pAktTxtNd->GetTxt();
     xub_StrLen nSttPlus = GetLeadingBlanks( rTmp );
     xub_StrLen nEndPlus = GetTrailingBlanks( rTmp );
     sal_Unicode cChar;
 
     if( 2 > nEndPlus - nSttPlus ||
-        ( '+' != ( cChar = rTmp.GetChar( nSttPlus )) && '|' != cChar ) ||
-        ( '+' != ( cChar = rTmp.GetChar( nEndPlus - 1)) && '|' != cChar ))
+        ( '+' != ( cChar = rTmp[nSttPlus]) && '|' != cChar ) ||
+        ( '+' != ( cChar = rTmp[nEndPlus - 1]) && '|' != cChar ))
         return false;
 
     SwTxtFrmInfo aInfo( pAktTxtFrm );
 
     xub_StrLen n = nSttPlus;
-    const sal_Unicode* pStr = rTmp.GetBuffer() + n;
     std::vector<sal_uInt16> aPosArr;
 
-    while( *pStr )
+    while (n < rTmp.getLength())
     {
-        switch( *pStr )
+        switch (rTmp[n])
         {
         case '-':
         case '_':
@@ -661,8 +658,6 @@ bool SwAutoFormat::DoTable()
         }
         if( ++n == nEndPlus )
             break;
-
-        ++pStr;
     }
 
     if( 1 < aPosArr.size() )
@@ -754,9 +749,9 @@ xub_StrLen SwAutoFormat::GetTrailingBlanks( const String& rStr ) const
 
 bool SwAutoFormat::IsFirstCharCapital( const SwTxtNode& rNd ) const
 {
-    const String& rTxt = rNd.GetTxt();
-    for( xub_StrLen n = 0, nEnd = rTxt.Len(); n < nEnd; ++n )
-        if( !IsSpace( rTxt.GetChar( n ) ) )
+    const OUString& rTxt = rNd.GetTxt();
+    for (xub_StrLen n = 0, nEnd = rTxt.getLength(); n < nEnd; ++n)
+        if (!IsSpace(rTxt[n]))
         {
             CharClass& rCC = GetCharClass( rNd.GetSwAttrSet().
                                         GetLanguage().GetLanguage() );
@@ -773,7 +768,7 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
         String* pPreFix, String* pPostFix, String* pNumTypes ) const
 {
     // Teste auf 1.) / 1. / 1.1.1 / (1). / (1) / ....
-    const String& rTxt = rNd.GetTxt();
+    const OUString& rTxt = rNd.GetTxt();
     xub_StrLen nPos = rPos;
     int eScan = NONE;
 
@@ -785,9 +780,9 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
 
     CharClass& rCC = GetCharClass( rNd.GetSwAttrSet().GetLanguage().GetLanguage() );
 
-    while( nPos < rTxt.Len() && nDigitLvl < MAXLEVEL - 1)
+    while (nPos < rTxt.getLength() && nDigitLvl < MAXLEVEL - 1)
     {
-        const sal_Unicode cCurrentChar = rTxt.GetChar( nPos );
+        const sal_Unicode cCurrentChar = rTxt[nPos];
         if( ('0' <= cCurrentChar &&  '9' >= cCurrentChar) ||
             (0xff10 <= cCurrentChar &&  0xff19 >= cCurrentChar) )
         {
@@ -977,9 +972,9 @@ CHECK_ROMAN_5:
                 nClosingParentheses++;
             // nur wenn noch keine Zahlen gelesen wurden!
             if( pPreFix && !( eScan & ( NO_DELIM | CHG )) )
-                *pPreFix += rTxt.GetChar( nPos );
+                *pPreFix += rTxt[nPos];
             else if( pPostFix )
-                *pPostFix += rTxt.GetChar( nPos );
+                *pPostFix += rTxt[nPos];
 
             if( NO_DELIM & eScan )
             {
@@ -998,7 +993,7 @@ CHECK_ROMAN_5:
         ++nPos;
     }
     if( !( CHG & eScan ) || rPos == nPos ||
-        nPos == rTxt.Len() || !IsSpace( rTxt.GetChar( nPos ) ) ||
+        nPos == rTxt.getLength() || !IsSpace(rTxt[nPos]) ||
         (nOpeningParentheses > nClosingParentheses))
         return USHRT_MAX;
 
@@ -1054,16 +1049,16 @@ bool SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
     SwPosition * pPos = rPam.End();
     xub_StrLen nBlnkPos = pPos->nContent.GetIndex();
     SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-    if( nBlnkPos && nBlnkPos-- < pTxtNd->GetTxt().Len() &&
-        ( ' ' == pTxtNd->GetTxt().GetChar( nBlnkPos ) ))
+    if (nBlnkPos && nBlnkPos-- < pTxtNd->GetTxt().getLength() &&
+        (' ' == pTxtNd->GetTxt()[nBlnkPos]))
         pPos->nContent--;
     else
     {
         pPos = rPam.GetPoint() == pPos ? rPam.GetMark() : rPam.GetPoint();
         nBlnkPos = pPos->nContent.GetIndex();
         pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-        if( nBlnkPos < pTxtNd->GetTxt().Len() &&
-            ( ' ' == pTxtNd->GetTxt().GetChar( nBlnkPos )))
+        if (nBlnkPos < pTxtNd->GetTxt().getLength() &&
+            (' ' == pTxtNd->GetTxt()[nBlnkPos]))
             pPos->nContent++;
         else
             return false;
@@ -1124,10 +1119,11 @@ void SwAutoFormat::DeleteAktPara( bool bStart, bool bEnd )
             DeleteSel( aDelPam );
             aDelPam.DeleteMark();
         }
-        if( bEnd && pAktTxtNd->GetTxt().Len() !=
+        if (bEnd && pAktTxtNd->GetTxt().getLength() !=
                     ( nPos = GetTrailingBlanks( pAktTxtNd->GetTxt() )) )
         {
-            aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, pAktTxtNd->GetTxt().Len() );
+            aDelPam.GetPoint()->nContent.Assign(
+                    pAktTxtNd, pAktTxtNd->GetTxt().getLength());
             aDelPam.SetMark();
             aDelPam.GetPoint()->nContent = nPos;
             DeleteSel( aDelPam );
@@ -1180,7 +1176,7 @@ bool SwAutoFormat::DeleteAktNxtPara( const String& rNxtPara )
     {
         // dann nur bis zum Ende von Absatz loeschen
         aDelPam.GetPoint()->nNode--;
-        aDelPam.GetPoint()->nContent = pAktTxtNd->GetTxt().Len();
+        aDelPam.GetPoint()->nContent = pAktTxtNd->GetTxt().getLength();
     }
     else
         aDelPam.GetPoint()->nContent.Assign( pTNd,
@@ -1204,14 +1200,15 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
     // Loesche Blanks den leeren Absatz
     aDelPam.DeleteMark();
     aDelPam.GetPoint()->nNode = aNdIdx;
-    aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, pAktTxtNd->GetTxt().Len() );
+    aDelPam.GetPoint()->nContent.Assign(
+            pAktTxtNd, pAktTxtNd->GetTxt().getLength() );
     aDelPam.SetMark();
 
     aDelPam.GetMark()->nNode--;
     SwTxtNode* pTNd = aDelPam.GetNode( sal_False )->GetTxtNode();
     if( pTNd )
         // erstmal den vorherigen Textnode benutzen.
-        aDelPam.GetMark()->nContent.Assign( pTNd, pTNd->GetTxt().Len() );
+        aDelPam.GetMark()->nContent.Assign(pTNd, pTNd->GetTxt().getLength());
     else if( bTstNextPara )
     {
         // dann versuche den naechsten (am Anfang vom Dok, Tabellen-Zellen,
@@ -1288,7 +1285,7 @@ void SwAutoFormat::DelPrevPara()
     if( pTNd )
     {
         // erstmal den vorherigen Textnode benutzen.
-        aDelPam.GetPoint()->nContent.Assign( pTNd, pTNd->GetTxt().Len() );
+        aDelPam.GetPoint()->nContent.Assign(pTNd, pTNd->GetTxt().getLength());
         DeleteSel( aDelPam );
     }
     aDelPam.DeleteMark();
@@ -1422,12 +1419,15 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     SwTwips nFrmWidth = pAktTxtFrm->Prt().Width();;
     SwTwips nLeftTxtPos;
     {
-        const sal_Unicode* pTxt = pAktTxtNd->GetTxt().GetBuffer(), *pSav = pTxt;
-        while( IsSpace( *pTxt ) )
-            ++pTxt;
+        sal_Int32 nPos(0);
+        while (nPos < pAktTxtNd->GetTxt().getLength() &&
+               IsSpace(pAktTxtNd->GetTxt()[nPos]))
+        {
+            ++nPos;
+        }
 
         SwTxtFrmInfo aInfo( pAktTxtFrm );
-        nLeftTxtPos = aInfo.GetCharPos( static_cast<xub_StrLen>(pTxt - pSav) );
+        nLeftTxtPos = aInfo.GetCharPos(nPos);
         nLeftTxtPos -= pAktTxtNd->GetSwAttrSet().GetLRSpace().GetLeft();
     }
 
@@ -1747,21 +1747,21 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
 
     if( nTxtPos )
     {
-        const String& rStr = pAktTxtNd->GetTxt();
+        const OUString& rStr = pAktTxtNd->GetTxt();
         bool bInsTab = true;
 
-        if( '\t' == rStr.GetChar( nSpacePos+1 ))       // ein Tab, das belassen wir
+        if ('\t' == rStr[nSpacePos+1]) // leave tab alone
         {
             --nSpacePos;
             bInsTab = false;
         }
 
         xub_StrLen nSpaceStt = nSpacePos;
-        while( nSpaceStt && IsSpace( rStr.GetChar( --nSpaceStt ) ) )
+        while (nSpaceStt && IsSpace(rStr[--nSpaceStt]))
             ;
         ++nSpaceStt;
 
-        if( bInsTab && '\t' == rStr.GetChar( nSpaceStt ) )      // ein Tab, das belassen wir
+        if (bInsTab && '\t' == rStr[nSpaceStt]) // leave tab alone
         {
             ++nSpaceStt;
             bInsTab = false;
@@ -1862,8 +1862,8 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
         !aFlags.bChgWeightUnderl && !aFlags.bAddNonBrkSpace) )
         return;
 
-    const String* pTxt = &pAktTxtNd->GetTxt();
-    if( nPos >= pTxt->Len() )
+    const OUString* pTxt = &pAktTxtNd->GetTxt();
+    if (nPos >= pTxt->getLength())
         return;
 
     bool bGetLanguage = aFlags.bChgOrdinalNumber ||
@@ -1887,14 +1887,14 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
     CharClass& rAppCC = GetAppCharClass();
 
     do {
-        while( nPos < pTxt->Len() && IsSpace( cChar = pTxt->GetChar( nPos ) ))
+        while (nPos < pTxt->getLength() && IsSpace(cChar = (*pTxt)[nPos]))
             ++nPos;
-        if( nPos == pTxt->Len() )
+        if (nPos == pTxt->getLength())
             break;      // das wars
 
         if( ( ( bReplaceQuote && '\"' == cChar ) ||
               ( bReplaceSglQuote && '\'' == cChar ) ) &&
-            ( !nPos || ' ' == pTxt->GetChar( nPos-1 ) ) )
+            (!nPos || ' ' == (*pTxt)[nPos-1]))
         {
             // --------------------------------------
             // beachte: Sonderfall Symbolfonts !!!
@@ -1939,10 +1939,10 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
 
         bool bCallACorr = false;
         int bBreak = 0;
-        if( nPos && IsSpace( pTxt->GetChar( nPos-1 )))
+        if (nPos && IsSpace((*pTxt)[nPos-1]))
             nLastBlank = nPos;
-        for( nSttPos = nPos; !bBreak && nPos < pTxt->Len(); ++nPos )
-            switch( cChar = pTxt->GetChar( nPos ) )
+        for (nSttPos = nPos; !bBreak && nPos < pTxt->getLength(); ++nPos)
+            switch (cChar = (*pTxt)[nPos])
             {
             case '\"':
             case '\'':
@@ -2006,7 +2006,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                                             ? STR_AUTOFMTREDL_BOLD
                                             : STR_AUTOFMTREDL_UNDER );
 
-                        sal_Unicode cBlank = nSttPos ? pTxt->GetChar(nSttPos - 1) : 0;
+                        sal_Unicode cBlank = nSttPos ? (*pTxt)[nSttPos - 1] : 0;
                         aDelPam.GetPoint()->nContent = nPos;
 
                         if( pATst->FnChgWeightUnderl( aACorrDoc, *pTxt,
@@ -2025,7 +2025,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                             if(0 == (pDoc->GetRedlineMode() & nsRedlineMode_t::REDLINE_SHOW_DELETE))
                                 nPos = aDelPam.GetPoint()->nContent.GetIndex() - 1;
                             // wurde vorm Start ein Zeichen entfernt?
-                            if( cBlank && cBlank != pTxt->GetChar(nSttPos - 1) )
+                            if (cBlank && cBlank != (*pTxt)[nSttPos - 1])
                                 --nSttPos;
                         }
                     }
@@ -2061,7 +2061,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
 
         if( nPos == nSttPos )
         {
-            if( ++nPos == pTxt->Len() )
+            if (++nPos == pTxt->getLength())
                 bCallACorr = true;
         }
         else
@@ -2107,7 +2107,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                     SetRedlineTxt( STR_AUTOFMTREDL_DASH ) &&
                     pATst->FnChgToEnEmDash( aACorrDoc, *pTxt, nSttPos, nPos, eLang ) ) ||
                 ( aFlags.bSetINetAttr &&
-                    ( nPos == pTxt->Len() || IsSpace( pTxt->GetChar( nPos )) ) &&
+                    (nPos == pTxt->getLength() || IsSpace((*pTxt)[nPos])) &&
                     SetRedlineTxt( STR_AUTOFMTREDL_DETECT_URL ) &&
                     pATst->FnSetINetAttr( aACorrDoc, *pTxt, nLastBlank, nPos, eLang ) ) )
                     nPos = aDelPam.GetPoint()->nContent.GetIndex();
@@ -2140,7 +2140,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                 }
             }
         }
-    } while( nPos < pTxt->Len() );
+    } while (nPos < pTxt->getLength());
     ClearRedlineTxt();
 }
 
@@ -2666,7 +2666,7 @@ void SwEditShell::AutoFmtBySplitNode()
             // dann einen Node zurueckspringen
             SwNodeIndex aNdIdx( pCrsr->GetMark()->nNode, -1 );
             SwTxtNode* pTxtNd = aNdIdx.GetNode().GetTxtNode();
-            if( pTxtNd && pTxtNd->GetTxt().Len() )
+            if (pTxtNd && !pTxtNd->GetTxt().isEmpty())
             {
                 pCntnt->Assign( pTxtNd, 0 );
                 pCrsr->GetMark()->nNode = aNdIdx;

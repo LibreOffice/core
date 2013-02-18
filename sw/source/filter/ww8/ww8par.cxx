@@ -2950,17 +2950,17 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
     if (!pNd)
         return;
 
-    if ((pNd->GetTxt().Len() + rAddString.Len()) < STRING_MAXLEN-1)
+    if ((pNd->GetTxt().getLength() + rAddString.Len()) < STRING_MAXLEN-1)
     {
         rDoc.InsertString(*pPaM, rAddString);
     }
     else
     {
 
-        if (pNd->GetTxt().Len()< STRING_MAXLEN -1)
+        if (pNd->GetTxt().getLength() < STRING_MAXLEN -1)
         {
             String sTempStr (rAddString,0,
-                STRING_MAXLEN - pNd->GetTxt().Len() -1);
+                STRING_MAXLEN - pNd->GetTxt().getLength() -1);
             rDoc.InsertString(*pPaM, sTempStr);
             sTempStr = rAddString.Copy(sTempStr.Len(),
                 rAddString.Len() - sTempStr.Len());
@@ -3022,7 +3022,8 @@ bool SwWW8ImplReader::HandlePageBreakChar()
         //xushanchuan add for issue106569
         bool IsTemp=true;
         SwTxtNode* pTemp = pPaM->GetNode()->GetTxtNode();
-        if ( pTemp && !( pTemp->GetTxt().Len() ) && ( bFirstPara || bFirstParaOfPage ) )
+        if (pTemp && pTemp->GetTxt().isEmpty()
+                && (bFirstPara || bFirstParaOfPage))
         {
             IsTemp = false;
             AppendTxtNode(*pPaM->GetPoint());
@@ -3479,7 +3480,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
         if (pPreviousNode && bStartLine)
         {
             SwTxtNode* pEndNd = pPaM->GetNode()->GetTxtNode();
-            const xub_StrLen nDropCapLen = pPreviousNode->GetTxt().Len();
+            const xub_StrLen nDropCapLen = pPreviousNode->GetTxt().getLength();
 
             // Need to reset the font size and text position for the dropcap
             {
@@ -4509,10 +4510,10 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         sal_uInt16 nCntPos = pPos->nContent.GetIndex();
 
         // EinfuegePos nicht in leerer Zeile
-        if( nCntPos && pSttNd->GetTxt().Len() )
+        if (nCntPos && pSttNd->GetTxt().getLength())
             rDoc.SplitNode( *pPos, false );            // neue Zeile erzeugen
 
-        if( pSttNd->GetTxt().Len() )
+        if (pSttNd->GetTxt().getLength())
         {   // EinfuegePos nicht am Ende der Zeile
             rDoc.SplitNode( *pPos, false );    // neue Zeile
             pPaM->Move( fnMoveBackward );   // gehe in leere Zeile

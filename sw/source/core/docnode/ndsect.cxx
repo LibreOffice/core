@@ -233,8 +233,8 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                 {
                     SwTxtNode *const pTNd =
                         pEndPos->nNode.GetNode().GetTxtNode();
-                    if (pTNd &&
-                        (pTNd->GetTxt().Len() != pEndPos->nContent.GetIndex()))
+                    if (pTNd && (pTNd->GetTxt().getLength()
+                                    != pEndPos->nContent.GetIndex()))
                     {
                         pUndoInsSect->SaveSplitNode( pTNd, sal_False );
                     }
@@ -278,7 +278,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                         pEndPos->nNode--;
                         pTNd = pEndPos->nNode.GetNode().GetTxtNode();
                     }
-                    if( pTNd ) nCntnt = pTNd->GetTxt().Len(); else nCntnt = 0;
+                    nCntnt = (pTNd) ? pTNd->GetTxt().getLength() : 0;
                     pEndPos->nContent.Assign( pTNd, nCntnt );
                 }
             }

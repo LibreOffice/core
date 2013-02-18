@@ -1698,7 +1698,7 @@ bool SwDoc::IncrementalDocStatCalculate( long nTextNodes )
         case ND_TEXTNODE:
         {
             SwTxtNode *pTxt = static_cast< SwTxtNode * >( pNd );
-            if( pTxt->CountWords( *mpDocStat, 0, pTxt->GetTxt().Len() ) )
+            if (pTxt->CountWords(*mpDocStat, 0, pTxt->GetTxt().getLength()))
                 nTextNodes--;
             break;
         }
@@ -2124,7 +2124,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
                    GetNodes()[ nIndex + nEndOfs ]->IsTxtNode() )
             {
                 SwTxtNode* pTxtNode = (SwTxtNode*)GetNodes()[ nIndex+nEndOfs ];
-                if( pTxtNode->GetTxt().Len() && nWish )
+                if (pTxtNode->GetTxt().getLength() && nWish)
                     --nWish;
                 bKeep = pTxtNode->GetSwAttrSet().GetKeep().GetValue();
                 ++nEndOfs;
@@ -2189,7 +2189,7 @@ bool SwDoc::RemoveInvisibleContent()
                 &pTxtNd->GetNodes() == &GetNodes() )
             {
                 bRet = true;
-                SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
+                SwPaM aPam(*pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().getLength());
 
                 // Remove hidden paragraph or delete contents:
                 // Delete contents if
@@ -2220,7 +2220,7 @@ bool SwDoc::RemoveInvisibleContent()
         if ( pTxtNd )
         {
             bool bRemoved = false;
-            SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
+            SwPaM aPam(*pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().getLength());
             if ( pTxtNd->HasHiddenCharAttribute( true ) )
             {
                 bRemoved = sal_True;
@@ -2361,7 +2361,7 @@ bool SwDoc::HasInvisibleContent() const
             SwTxtNode* pTxtNd = GetNodes()[ --n ]->GetTxtNode();
             if ( pTxtNd )
             {
-                SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
+                SwPaM aPam(*pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().getLength());
                 if( pTxtNd->HasHiddenCharAttribute( true ) ||  ( pTxtNd->HasHiddenCharAttribute( false ) ) )
                 {
                     bRet = true;
@@ -2636,7 +2636,7 @@ String SwDoc::GetPaMDescr(const SwPaM & rPam) const
 
             aResult += String(SW_RES(STR_START_QUOTE));
             aResult += ShortenString(pTxtNode->GetTxt().
-                                     Copy(nStart, nEnd - nStart),
+                                         copy(nStart, nEnd - nStart),
                                      nUndoStringLength,
                                      String(SW_RES(STR_LDOTS)));
             aResult += String(SW_RES(STR_END_QUOTE));

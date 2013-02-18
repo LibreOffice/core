@@ -48,7 +48,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
         if ( pTxtNd->GetpSwpHints() )
         {
             pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode,
-                                0, pTxtNd->GetTxt().Len(), false );
+                                0, pTxtNd->GetTxt().getLength(), false );
         }
         if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
@@ -59,7 +59,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
         if ( pEndTxtNd->GetpSwpHints() )
         {
             pHistory->CopyAttr( pEndTxtNd->GetpSwpHints(), nEndNode,
-                                0, pEndTxtNd->GetTxt().Len(), false );
+                                0, pEndTxtNd->GetTxt().getLength(), false );
         }
         if( pEndTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nEndNode );
@@ -72,7 +72,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
         if ( pTxtNd->GetpSwpHints() )
         {
             pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nMvDestNode,
-                                0, pTxtNd->GetTxt().Len(), false );
+                                0, pTxtNd->GetTxt().getLength(), false );
         }
         if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nMvDestNode );
@@ -228,7 +228,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             {
                 RemoveIdxRel( aIdx.GetIndex() + 1, SwPosition( aIdx,
-                        SwIndex( pTxtNd, pTxtNd->GetTxt().Len() ) ) );
+                        SwIndex(pTxtNd, pTxtNd->GetTxt().getLength())));
             }
             // Are there any Pams in the next TextNode?
             pTxtNd->JoinNext();
@@ -240,7 +240,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
             pTxtNd = aIdx.GetNode().GetTxtNode();
             {
                 RemoveIdxRel( aIdx.GetIndex() + 1, SwPosition( aIdx,
-                        SwIndex( pTxtNd, pTxtNd->GetTxt().Len() ) ) );
+                        SwIndex( pTxtNd, pTxtNd->GetTxt().getLength())));
             }
             pTxtNd->JoinNext();
         }
@@ -303,7 +303,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
             {
                 {
                     RemoveIdxRel( aIdx.GetIndex() + 1, SwPosition( aIdx,
-                            SwIndex( pTxtNd, pTxtNd->GetTxt().Len() ) ) );
+                            SwIndex(pTxtNd, pTxtNd->GetTxt().getLength())));
                 }
                 pTxtNd->JoinNext();
             }

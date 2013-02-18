@@ -951,10 +951,11 @@ SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const String& rBaseURL, sal_Boo
         const SwPosition* pPos = pPaM->GetPoint();
         const SwTxtNode* pSttNd = pPos->nNode.GetNode().GetTxtNode();
         sal_uInt16 nCntPos = pPos->nContent.GetIndex();
-        if( nCntPos && pSttNd->GetTxt().Len() )
+        if (nCntPos && !pSttNd->GetTxt().isEmpty())
                                             // EinfuegePos nicht in leerer Zeile
             pDoc->SplitNode( *pPos, false );        // neue Zeile erzeugen
-        if( pSttNd->GetTxt().Len() ){       // EinfuegePos nicht am Ende der Zeile
+        if (!pSttNd->GetTxt().isEmpty())
+        {   // InsertPos not on empty line
             pDoc->SplitNode( *pPos, false );        // neue Zeile
             pPaM->Move( fnMoveBackward );   // gehe in leere Zeile
         }

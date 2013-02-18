@@ -1227,7 +1227,7 @@ sal_Bool SwCursor::GoStartWordWT( sal_Int16 nWordType )
                             nWordType,
                             sal_False ).startPos;
 
-        if( nPtPos < pTxtNd->GetTxt().Len() )
+        if (nPtPos < pTxtNd->GetTxt().getLength())
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
@@ -1251,7 +1251,7 @@ sal_Bool SwCursor::GoEndWordWT( sal_Int16 nWordType )
                             nWordType,
                             sal_True ).endPos;
 
-        if( nPtPos <= pTxtNd->GetTxt().Len() &&
+        if (nPtPos <= pTxtNd->GetTxt().getLength() &&
             GetPoint()->nContent.GetIndex() != nPtPos )
         {
             GetPoint()->nContent = nPtPos;
@@ -1276,7 +1276,7 @@ sal_Bool SwCursor::GoNextWordWT( sal_Int16 nWordType )
             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     nWordType ).startPos;
 
-        if( nPtPos < pTxtNd->GetTxt().Len() )
+        if (nPtPos < pTxtNd->GetTxt().getLength())
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
@@ -1303,7 +1303,7 @@ sal_Bool SwCursor::GoPrevWordWT( sal_Int16 nWordType )
             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     nWordType ).startPos;
 
-        if( nPtPos < pTxtNd->GetTxt().Len() )
+        if (nPtPos < pTxtNd->GetTxt().getLength())
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
@@ -1469,7 +1469,7 @@ sal_Bool SwCursor::GoSentence( SentenceMoveType eMoveType )
 
         // it is allowed to place the PaM just behind the last
         // character in the text thus <= ...Len
-        if( nPtPos <= pTxtNd->GetTxt().Len() )
+        if (nPtPos <= pTxtNd->GetTxt().getLength())
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
@@ -1507,12 +1507,12 @@ sal_Bool SwCursor::ExpandToSentenceBorders()
         // it is allowed to place the PaM just behind the last
         // character in the text thus <= ...Len
         bool bChanged = false;
-        if (nStartPos <= pStartNd->GetTxt().Len())
+        if (nStartPos <= pStartNd->GetTxt().getLength())
         {
             GetMark()->nContent = nStartPos;
             bChanged = true;
         }
-        if (nEndPos <= pEndNd->GetTxt().Len())
+        if (nEndPos <= pEndNd->GetTxt().getLength())
         {
             GetPoint()->nContent = nEndPos;
             bChanged = true;
@@ -1723,7 +1723,8 @@ void SwCursor::DoSetBidiLevelUpDown()
             SwIndex& rIdx = GetPoint()->nContent;
             xub_StrLen nPos = rIdx.GetIndex();
 
-            if( nPos && nPos < ((SwTxtNode&)rNode).GetTxt().Len() )
+            if (nPos && nPos <
+                    static_cast<SwTxtNode&>(rNode).GetTxt().getLength())
             {
                 const sal_uInt8 nCurrLevel = pSI->DirType( nPos );
                 const sal_uInt8 nPrevLevel = pSI->DirType( nPos - 1 );

@@ -73,6 +73,7 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
     const SwCntntNode* pCNd = pPam->GetCntntNode();
     if( pCNd->IsTxtNode() )
     {
+        SwTxtNode const*const pTxtNode(static_cast<SwTxtNode const*>(pCNd));
         xub_StrLen nStt, nEnd;
         if( pPam->HasMark() )
         {
@@ -98,7 +99,7 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
                     nStt = 0;
                 }
                 else
-                    nEnd = ((SwTxtNode*)pCNd)->GetTxt().Len();
+                    nEnd = pTxtNode->GetTxt().getLength();
             }
         }
         else
@@ -106,7 +107,7 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
 
         SfxItemSet aSet( pDoc->GetAttrPool(),
                             pCharFmt->GetAttrSet().GetRanges() );
-        ((SwTxtNode*)pCNd)->GetAttr( aSet, nStt, nEnd );
+        pTxtNode->GetAttr( aSet, nStt, nEnd );
         pCharFmt->SetFmtAttr( aSet );
     }
     else if( pCNd->HasSwAttrSet() )
