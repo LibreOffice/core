@@ -1864,6 +1864,7 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
             case OASIS_CONTENT_VALIDATION_ACTIONS:
                 m_aActions[OASIS_CONTENT_VALIDATION_ACTIONS] =
                     new XMLTransformerActions( aContentValidationActionTable );
+                break;
             case OASIS_DDE_CONV_MODE_ACTIONS:
                 m_aActions[OASIS_DDE_CONV_MODE_ACTIONS] =
                     new XMLTransformerActions( aDDEConvModeActionTable );
