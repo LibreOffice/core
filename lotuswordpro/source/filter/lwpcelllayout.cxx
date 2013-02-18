@@ -769,7 +769,7 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
             LwpCellLayout * pBelowNeighbour = GetCellByRowCol(nRow + nRowSpan, nCol+iLoop, pTableLayout);
             if (pBelowNeighbour)
             {
-                XFBorders * pBelowBorders = pBelowNeighbour->GetXFBorders();
+                boost::scoped_ptr<XFBorders> pBelowBorders(pBelowNeighbour->GetXFBorders());
                 if (pBelowBorders)
                 {
                     XFBorder * pTopBorder = pBelowBorders->GetTop();
@@ -780,7 +780,6 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
                         bNoBottomBorder = sal_False;
                         break;
                     }
-                    delete pBelowBorders;
                 }
             }
         }
