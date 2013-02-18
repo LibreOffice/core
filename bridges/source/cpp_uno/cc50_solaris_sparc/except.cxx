@@ -401,8 +401,7 @@ void cc50_solaris_sparc_fillUnoException(
     if (pExcTypeDescr == 0) // the thing that should not be
     {
         RuntimeException aRE(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                          "exception type not found: ") ) + aName,
+            "exception type not found: " + aName,
             Reference< XInterface >() );
         Type const & rType = ::getCppuType( &aRE );
         uno_type_any_constructAndConvert(
