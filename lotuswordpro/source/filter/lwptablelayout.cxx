@@ -266,7 +266,7 @@ double LwpSuperTableLayout::GetTableWidth()
 void LwpSuperTableLayout::ApplyShadow(XFTableStyle *pTableStyle)
 {
     // use shadow property of supertable
-    XFShadow* pXFShadow = GetXFShadow();
+    boost::scoped_ptr<XFShadow> pXFShadow(GetXFShadow());
     if(pXFShadow)
     {
         pTableStyle->SetShadow(pXFShadow->GetPosition(), pXFShadow->GetOffset(), pXFShadow->GetColor());
