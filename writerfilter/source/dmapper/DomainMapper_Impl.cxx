@@ -727,7 +727,9 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 {
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
-    if( rAppendContext.pLastParagraphProperties.get() && rAppendContext.pLastParagraphProperties->IsFrameMode() )
+    // n#779642: ignore fly frame inside table as it could lead to messy situations
+    if( rAppendContext.pLastParagraphProperties.get() && rAppendContext.pLastParagraphProperties->IsFrameMode()
+        && !getTableManager().isInTable() )
     {
         try
         {
