@@ -32,27 +32,16 @@ class OfaMemoryOptionsPage : public SfxTabPage
 {
     using SfxTabPage::DeactivatePage;
 private:
-    FixedLine           aUndoBox;
-    FixedText           aUndoText;
-    NumericField        aUndoEdit;
+    NumericField*       m_pUndoEdit;
 
-    FixedLine           aGbGraphicCache;
-    FixedText           aFtGraphicCache;
-    NumericField        aNfGraphicCache;
-    FixedText           aFtGraphicCacheUnit;
-    FixedText           aFtGraphicObjectCache;
-    NumericField        aNfGraphicObjectCache;
-    FixedText           aFtGraphicObjectCacheUnit;
-    FixedText           aFtGraphicObjectTime;
-    TimeField           aTfGraphicObjectTime;
-    FixedText           aFtGraphicObjectTimeUnit;
+    NumericField*       m_pNfGraphicCache;
+    NumericField*       m_pNfGraphicObjectCache;
+    TimeField*          m_pTfGraphicObjectTime;
 
-    FixedLine           aGbOLECache;
-    FixedText           aFtOLECache;
-    NumericField        aNfOLECache;
+    NumericField*       m_pNfOLECache;
 
-    FixedLine           aQuickLaunchFL;
-    CheckBox            aQuickLaunchCB;
+    VclContainer*       m_pQuickStarterFrame;
+    CheckBox*           m_pQuickLaunchCB;
 
     DECL_LINK(GraphicCacheConfigHdl, void *);
 

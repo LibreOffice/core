@@ -92,7 +92,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/optjava.src \
     cui/source/options/optjsearch.src \
     cui/source/options/optlingu.src \
-    cui/source/options/optmemory.src \
     cui/source/options/optpath.src \
     cui/source/options/optsave.src \
     cui/source/options/optupdt.src \

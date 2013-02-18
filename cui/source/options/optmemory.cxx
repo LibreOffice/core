@@ -52,7 +52,6 @@
 #include <svx/xpool.hxx>
 #include <svx/dlgutil.hxx>
 #include "cuitabarea.hxx"
-#include "optmemory.hrc"
 #include "optmemory.hxx"
 #include <svx/ofaitem.hxx>
 #include <cuires.hrc>
@@ -69,38 +68,38 @@ using namespace ::rtl;
 using namespace ::sfx2;
 
 
-#define NF2BYTES        104857.6                        // 2^20/10, used for aNfGraphicObjectCache-unit -> Byte
+#define NF2BYTES        104857.6                        // 2^20/10, used for M_pNfGraphicObjectCache-unit -> Byte
 #define BYTES2NF        (1.0/NF2BYTES)                  // 10/2^20
 
 
 sal_Int32 OfaMemoryOptionsPage::GetNfGraphicCacheVal() const
 {
-    return aNfGraphicCache.GetValue() << 20;
+    return m_pNfGraphicCache->GetValue() << 20;
 }
 
 inline void OfaMemoryOptionsPage::SetNfGraphicCacheVal( long nSizeInBytes )
 {
-    aNfGraphicCache.SetValue( nSizeInBytes >> 20 );
+    m_pNfGraphicCache->SetValue( nSizeInBytes >> 20 );
 }
 
 long OfaMemoryOptionsPage::GetNfGraphicObjectCacheVal( void ) const
 {
-    return long( ::rtl::math::round( double( aNfGraphicObjectCache.GetValue() ) * NF2BYTES ) );
+    return long( ::rtl::math::round( double( m_pNfGraphicObjectCache->GetValue() ) * NF2BYTES ) );
 }
 
 void OfaMemoryOptionsPage::SetNfGraphicObjectCacheVal( long nSizeInBytes )
 {
-    aNfGraphicObjectCache.SetValue( long( ::rtl::math::round( double( nSizeInBytes ) * BYTES2NF ) ) );
+    m_pNfGraphicObjectCache->SetValue( long( ::rtl::math::round( double( nSizeInBytes ) * BYTES2NF ) ) );
 }
 
 inline void OfaMemoryOptionsPage::SetNfGraphicObjectCacheMax( long nSizeInBytes )
 {
-    aNfGraphicObjectCache.SetMax( long( double( nSizeInBytes ) * BYTES2NF ) );
+    m_pNfGraphicObjectCache->SetMax( long( double( nSizeInBytes ) * BYTES2NF ) );
 }
 
 inline void OfaMemoryOptionsPage::SetNfGraphicObjectCacheLast( long nSizeInBytes )
 {
-    aNfGraphicObjectCache.SetLast( long( double( nSizeInBytes ) * BYTES2NF ) );
+    m_pNfGraphicObjectCache->SetLast( long( double( nSizeInBytes ) * BYTES2NF ) );
 }
 
 int OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
@@ -112,46 +111,33 @@ int OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
 
 // -----------------------------------------------------------------------
 
-OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rSet ) :
-
-    SfxTabPage( pParent, CUI_RES( OFA_TP_MEMORY ), rSet ),
-
-    aUndoBox                ( this, CUI_RES( GB_UNDO ) ),
-    aUndoText               ( this, CUI_RES( FT_UNDO ) ),
-    aUndoEdit               ( this, CUI_RES( ED_UNDO ) ),
-    aGbGraphicCache         ( this, CUI_RES( GB_GRAPHICCACHE ) ),
-    aFtGraphicCache         ( this, CUI_RES( FT_GRAPHICCACHE ) ),
-    aNfGraphicCache         ( this, CUI_RES( NF_GRAPHICCACHE ) ),
-    aFtGraphicCacheUnit     ( this, CUI_RES( FT_GRAPHICCACHE_UNIT         ) ),
-    aFtGraphicObjectCache   ( this, CUI_RES( FT_GRAPHICOBJECTCACHE ) ),
-    aNfGraphicObjectCache   ( this, CUI_RES( NF_GRAPHICOBJECTCACHE ) ),
-    aFtGraphicObjectCacheUnit(this, CUI_RES( FT_GRAPHICOBJECTCACHE_UNIT ) ),
-    aFtGraphicObjectTime    ( this, CUI_RES( FT_GRAPHICOBJECTTIME ) ),
-    aTfGraphicObjectTime    ( this, CUI_RES( TF_GRAPHICOBJECTTIME ) ),
-    aFtGraphicObjectTimeUnit( this, CUI_RES( FT_GRAPHICOBJECTTIME_UNIT     ) ),
-
-    aGbOLECache             ( this, CUI_RES( GB_OLECACHE ) ),
-    aFtOLECache             ( this, CUI_RES( FT_OLECACHE ) ),
-    aNfOLECache             ( this, CUI_RES( NF_OLECACHE ) ),
-    aQuickLaunchFL          ( this, CUI_RES( FL_QUICKLAUNCH ) ),
-    aQuickLaunchCB          ( this, CUI_RES( CB_QUICKLAUNCH ) )//,
+OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "OptMemoryPage", "cui/ui/optmemorypage.ui", rSet)
 {
+    get(m_pUndoEdit, "undo");
+    get(m_pNfGraphicCache, "graphiccache");
+    get(m_pNfGraphicObjectCache, "objectcache");
+    get(m_pTfGraphicObjectTime,"objecttime");
+    get(m_pNfOLECache, "olecache");
+    get(m_pQuickStarterFrame, "quickstarter");
+
 #if defined(UNX)
-    aQuickLaunchCB.SetText( CUI_RES( STR_QUICKLAUNCH_UNX ) );
+    get(m_pQuickLaunchCB, "systray");
+#else
+    get(m_pQuickLaunchCB, "quicklaunch");
 #endif
-    FreeResource();
+    m_pQuickLaunchCB->Show();
 
-    //quick launch only available in Win
+    //Only available in Win or if building the gtk systray
 #if !defined(WNT) && !defined(ENABLE_GTK)
-    aQuickLaunchFL.Hide();
-    aQuickLaunchCB.Hide();
+    m_pQuickStarterFrame->Hide();
 #endif
 
-    aTfGraphicObjectTime.SetExtFormat( EXTTIMEF_24H_SHORT );
+    m_pTfGraphicObjectTime->SetExtFormat( EXTTIMEF_24H_SHORT );
 
     SetExchangeSupport();
 
-    aNfGraphicCache.SetModifyHdl( LINK( this, OfaMemoryOptionsPage, GraphicCacheConfigHdl ) );
+    m_pNfGraphicCache->SetModifyHdl( LINK( this, OfaMemoryOptionsPage, GraphicCacheConfigHdl ) );
 }
 
 // -----------------------------------------------------------------------
@@ -176,9 +162,9 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     boost::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
 
-    if ( aUndoEdit.GetText() != aUndoEdit.GetSavedValue() )
+    if ( m_pUndoEdit->GetText() != m_pUndoEdit->GetSavedValue() )
         officecfg::Office::Common::Undo::Steps::set(
-            aUndoEdit.GetValue(), batch);
+            m_pUndoEdit->GetValue(), batch);
 
     // GraphicCache
     sal_Int32 totalCacheSize = GetNfGraphicCacheVal();
@@ -188,7 +174,7 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::set(
         objectCacheSize, batch);
 
-    const Time aTime( aTfGraphicObjectTime.GetTime() );
+    const Time aTime( m_pTfGraphicObjectTime->GetTime() );
     sal_Int32 objectReleaseTime =
         aTime.GetSec() + aTime.GetMin() * 60 + aTime.GetHour() * 3600;
     officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::set(
@@ -204,15 +190,15 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 
     // OLECache
     officecfg::Office::Common::Cache::Writer::OLE_Objects::set(
-        aNfOLECache.GetValue(), batch);
+        m_pNfOLECache->GetValue(), batch);
     officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::set(
-        aNfOLECache.GetValue(), batch);
+        m_pNfOLECache->GetValue(), batch);
 
     batch->commit();
 
-    if( aQuickLaunchCB.IsChecked() != aQuickLaunchCB.GetSavedValue())
+    if( m_pQuickLaunchCB->IsChecked() != m_pQuickLaunchCB->GetSavedValue())
     {
-        rSet.Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, aQuickLaunchCB.IsChecked()));
+        rSet.Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, m_pQuickLaunchCB->IsChecked()));
         bModified = sal_True;
     }
 
@@ -225,8 +211,8 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem*  pItem;
 
-    aUndoEdit.SetValue(officecfg::Office::Common::Undo::Steps::get());
-    aUndoEdit.SaveValue();
+    m_pUndoEdit->SetValue(officecfg::Office::Common::Undo::Steps::get());
+    m_pUndoEdit->SaveValue();
 
     // GraphicCache
     long n =
@@ -242,12 +228,12 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
         officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::
         get();
     Time aTime( (sal_uInt16)( nTime / 3600 ), (sal_uInt16)( ( nTime % 3600 ) / 60 ), (sal_uInt16)( ( nTime % 3600 ) % 60 ) );
-    aTfGraphicObjectTime.SetTime( aTime );
+    m_pTfGraphicObjectTime->SetTime( aTime );
 
-    GraphicCacheConfigHdl( &aNfGraphicCache );
+    GraphicCacheConfigHdl(m_pNfGraphicCache);
 
     // OLECache
-    aNfOLECache.SetValue(
+    m_pNfOLECache->SetValue(
         std::max(
             officecfg::Office::Common::Cache::Writer::OLE_Objects::get(),
             (officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::
@@ -255,15 +241,14 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
 
     SfxItemState eState = rSet.GetItemState( SID_ATTR_QUICKLAUNCHER, sal_False, &pItem );
     if ( SFX_ITEM_SET == eState )
-        aQuickLaunchCB.Check( ( (SfxBoolItem*)pItem )->GetValue() );
+        m_pQuickLaunchCB->Check( ( (SfxBoolItem*)pItem )->GetValue() );
     else if ( SFX_ITEM_DISABLED == eState )
     {
         // quickstart not installed
-        aQuickLaunchFL.Hide();
-        aQuickLaunchCB.Hide();
+        m_pQuickStarterFrame->Hide();
     }
 
-    aQuickLaunchCB.SaveValue();
+    m_pQuickLaunchCB->SaveValue();
 }
 
 // -----------------------------------------------------------------------

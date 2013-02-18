@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkBox" id="box1">
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1</property>
+    <property name="upper">1000</property>
+    <property name="value">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="lower">1</property>
+    <property name="upper">256</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="lower">1</property>
+    <property name="upper">1024</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="lower">1</property>
+    <property name="upper">1439</property>
+    <property name="value">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkBox" id="OptMemoryPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
@@ -16,17 +45,21 @@
           <object class="GtkAlignment" id="alignment1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="column_spacing">24</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">~Number of steps</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Number of steps</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">undo</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -36,10 +69,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="spinbutton1">
+                  <object class="GtkSpinButton" id="undo">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
+                    <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -57,6 +91,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Undo</property>
+            <attributes>
+              <attribute name="weight" value="semibold"/>
+            </attributes>
           </object>
         </child>
       </object>
@@ -76,19 +113,22 @@
           <object class="GtkAlignment" id="alignment2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="column_spacing">24</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="yalign">0.50999999046325684</property>
-                    <property name="label" translatable="yes">~Use for LibreOffice</property>
+                    <property name="label" translatable="yes">_Use for LibreOffice</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">graphiccache</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -102,7 +142,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">~Memory per object</property>
+                    <property name="label" translatable="yes">_Memory per object</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">objectcache</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -116,7 +158,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Remove ~from memory after</property>
+                    <property name="label" translatable="yes">Remove _from memory after</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">objecttime:hh:mm</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -154,24 +198,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkAccelLabel" id="accellabel1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">hh:mm</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="spinbutton2">
+                  <object class="GtkSpinButton" id="graphiccache">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
+                    <property name="adjustment">adjustment2</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -181,10 +212,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="spinbutton3">
+                  <object class="GtkSpinButton" id="objectcache">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
+                    <property name="adjustment">adjustment2</property>
+                    <property name="digits">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -194,14 +227,27 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="spinbutton4">
+                  <object class="GtkSpinButton" id="objecttime:hh:mm">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="digits">2</property>
+                    <property name="adjustment">adjustment4</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label12">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">hh:mm</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -216,6 +262,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Graphics cache</property>
+            <attributes>
+              <attribute name="weight" value="semibold"/>
+            </attributes>
           </object>
         </child>
       </object>
@@ -235,17 +284,19 @@
           <object class="GtkAlignment" id="alignment3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="column_spacing">24</property>
+                <property name="column_spacing">12</property>
                 <child>
-                  <object class="GtkSpinButton" id="spinbutton5">
+                  <object class="GtkSpinButton" id="olecache">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
+                    <property name="adjustment">adjustment3</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -260,6 +311,8 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Number of objects </property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">olecache</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -277,6 +330,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Cache for inserted objects</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>
@@ -287,7 +343,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame4">
+      <object class="GtkFrame" id="quickstarter">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label_xalign">0</property>
@@ -296,17 +352,44 @@
           <object class="GtkAlignment" id="alignment4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkCheckButton" id="checkbutton1">
-                <property name="label" translatable="yes">Enable systray Quickstarter</property>
-                <property name="use_action_appearance">False</property>
+              <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkCheckButton" id="quicklaunch">
+                    <property name="label" translatable="yes">Load %PRODUCTNAME during system start-up</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="systray">
+                    <property name="label" translatable="yes">Enable systray Quickstarter</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
               </object>
             </child>
           </object>
@@ -315,7 +398,10 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">LibreOffice Quickstarter</property>
+            <property name="label" translatable="yes">%PRODUCTNAME Quickstarter</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>
@@ -325,5 +411,14 @@
         <property name="position">3</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="label5"/>
+      <widget name="label6"/>
+      <widget name="label7"/>
+      <widget name="label8"/>
+      <widget name="label11"/>
+    </widgets>
   </object>
 </interface>
