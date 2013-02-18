@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,hsqldb,\
 	sal \
 	tl \
 	utl \
+	i18nisolang1 \
 	$(gb_UWINAPI) \
 ))
 

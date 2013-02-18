@@ -50,6 +50,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include "resource/hsqldb_res.hrc"
 #include "resource/sharedresources.hxx"
+#include <i18npool/languagetag.hxx>
 
 #include <o3tl/compat_functional.hxx>
 
@@ -862,15 +863,7 @@ namespace connectivity
             {
                 rtl_Locale* pProcessLocale = NULL;
                 osl_getProcessLocale( &pProcessLocale );
-
-                ::rtl::OUStringBuffer aProcLocale;
-                aProcLocale.append( pProcessLocale->Language->buffer, pProcessLocale->Language->length );
-                if ( pProcessLocale->Country->length )
-                {
-                    aProcLocale.appendAscii( "-" );
-                    aProcLocale.append( pProcessLocale->Country->buffer, pProcessLocale->Country->length );
-                }
-                sLocaleString = aProcLocale.makeStringAndClear();
+                sLocaleString = LanguageTag( *pProcessLocale).getBcp47();
             }
             return sLocaleString;
         }
