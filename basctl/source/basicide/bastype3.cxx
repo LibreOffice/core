@@ -208,49 +208,45 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
 
             switch ( pBE->GetType() )
             {
-                case OBJ_TYPE_LIBRARY:
-                {
-                    if (BasicManager* pBasMgr = aDocument.getBasicManager())
-                        pVar = pBasMgr->GetLib( aName );
-                }
+            case OBJ_TYPE_LIBRARY:
+                if (BasicManager* pBasMgr = aDocument.getBasicManager())
+                    pVar = pBasMgr->GetLib( aName );
                 break;
-                case OBJ_TYPE_MODULE:
+            case OBJ_TYPE_MODULE:
+                DBG_ASSERT(dynamic_cast<StarBASIC*>(pVar), "FindVariable: invalid Basic");
+                if(!pVar)
                 {
-                    DBG_ASSERT(dynamic_cast<StarBASIC*>(pVar), "FindVariable: invalid Basic");
-                    // extract the module name from the string like "Sheet1 (Example1)"
-                    if( bDocumentObjects )
-                    {
-                        sal_uInt16 nIndex = 0;
-                        aName = aName.GetToken( 0, ' ', nIndex );
-                    }
-                    pVar = static_cast<StarBASIC*>(pVar)->FindModule( aName );
+                    break;
                 }
+                // extract the module name from the string like "Sheet1 (Example1)"
+                if( bDocumentObjects )
+                {
+                    sal_uInt16 nIndex = 0;
+                    aName = aName.GetToken( 0, ' ', nIndex );
+                }
+                pVar = static_cast<StarBASIC*>(pVar)->FindModule( aName );
                 break;
-                case OBJ_TYPE_METHOD:
+            case OBJ_TYPE_METHOD:
+                DBG_ASSERT(dynamic_cast<SbxObject*>(pVar), "FindVariable: invalid modul/object");
+                if(!pVar)
                 {
-                    DBG_ASSERT(dynamic_cast<SbxObject*>(pVar), "FindVariable: invalid modul/object");
-                    pVar = static_cast<SbxObject*>(pVar)->GetMethods()->Find(aName, SbxCLASS_METHOD);
+                    break;
                 }
+                pVar = static_cast<SbxObject*>(pVar)->GetMethods()->Find(aName, SbxCLASS_METHOD);
                 break;
-                case OBJ_TYPE_DIALOG:
-                {
-                    // sbx dialogs removed
-                }
+            case OBJ_TYPE_DIALOG:
+                // sbx dialogs removed
                 break;
-                case OBJ_TYPE_DOCUMENT_OBJECTS:
-                    bDocumentObjects = true;
-                case OBJ_TYPE_USERFORMS:
-                case OBJ_TYPE_NORMAL_MODULES:
-                case OBJ_TYPE_CLASS_MODULES:
-                {
-                    // skip, to find the child entry.
-                    continue;
-                }
-                default:
-                {
-                    OSL_FAIL( "FindVariable: Unbekannter Typ!" );
-                    pVar = 0;
-                }
+            case OBJ_TYPE_DOCUMENT_OBJECTS:
+                bDocumentObjects = true;
+            case OBJ_TYPE_USERFORMS:
+            case OBJ_TYPE_NORMAL_MODULES:
+            case OBJ_TYPE_CLASS_MODULES:
+                // skip, to find the child entry.
+                continue;
+            default:
+                OSL_FAIL( "FindVariable: Unbekannter Typ!" );
+                pVar = 0;
                 break;
             }
             if ( !pVar )
