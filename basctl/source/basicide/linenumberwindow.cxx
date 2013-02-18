@@ -65,6 +65,10 @@ void LineNumberWindow::Paint( const Rectangle& )
 
     int windowHeight = GetOutputSize().Height();
     int nLineHeight = GetTextHeight();
+    if(!nLineHeight)
+    {
+        return;
+    }
 
     int startY = txtView->GetStartDocPos().Y();
     int nStartLine = startY / nLineHeight + 1;
@@ -86,7 +90,7 @@ void LineNumberWindow::Paint( const Rectangle& )
         m_nWidth += m_nBaseWidth;
     }
 
-    sal_Int64 y = (nStartLine - 1) * nLineHeight;
+    sal_Int64 y = (nStartLine - 1) * (sal_Int64)nLineHeight;
     for(sal_Int32 n = nStartLine; n <= nEndLine; ++n, y += nLineHeight)
         DrawText(Point(0, y - m_nCurYOffset), OUString::valueOf(n));
 }
