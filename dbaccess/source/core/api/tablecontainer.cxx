@@ -70,13 +70,13 @@ using namespace ::connectivity::sdbcx;
 
 namespace
 {
-    sal_Bool lcl_isPropertySetDefaulted(const Sequence< ::rtl::OUString>& _aNames,const Reference<XPropertySet>& _xProp)
+    sal_Bool lcl_isPropertySetDefaulted(const Sequence< OUString>& _aNames,const Reference<XPropertySet>& _xProp)
     {
         Reference<XPropertyState> xState(_xProp,UNO_QUERY);
         if ( xState.is() )
         {
-            const ::rtl::OUString* pIter = _aNames.getConstArray();
-            const ::rtl::OUString* pEnd   = pIter + _aNames.getLength();
+            const OUString* pIter = _aNames.getConstArray();
+            const OUString* pEnd   = pIter + _aNames.getLength();
             for(;pIter != pEnd;++pIter)
             {
                 try
@@ -136,10 +136,10 @@ void OTableContainer::removeMasterContainerListener()
     }
 }
 
-::rtl::OUString OTableContainer::getTableTypeRestriction() const
+OUString OTableContainer::getTableTypeRestriction() const
 {
     // no restriction at all (other than the ones provided externally)
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // XServiceInfo
@@ -147,7 +147,7 @@ IMPLEMENT_SERVICE_INFO2(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContai
 
 namespace
 {
-void lcl_createDefintionObject(const ::rtl::OUString& _rName
+void lcl_createDefintionObject(const OUString& _rName
                            ,const Reference< XNameContainer >& _xTableDefinitions
                            ,Reference<XPropertySet>& _xTableDefinition
                            ,Reference<XNameAccess>& _xColumnDefinitions
@@ -172,7 +172,7 @@ void lcl_createDefintionObject(const ::rtl::OUString& _rName
 
 }
 
-connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUString& _rName)
+connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _rName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::createObject" );
     Reference<XColumnsSupplier > xSup;
@@ -194,7 +194,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUStr
         }
         else
         {
-            ::rtl::OUString sCatalog,sSchema,sTable;
+            OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(m_xMetaData,
                                                 _rName,
                                                 sCatalog,
@@ -204,8 +204,8 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUStr
             Any aCatalog;
             if(!sCatalog.isEmpty())
                 aCatalog <<= sCatalog;
-            ::rtl::OUString sType,sDescription;
-            Sequence< ::rtl::OUString> aTypeFilter;
+            OUString sType,sDescription;
+            Sequence< OUString> aTypeFilter;
             getAllTableTypeFilter( aTypeFilter );
 
             Reference< XResultSet > xRes =  m_xMetaData.is() ? m_xMetaData->getTables(aCatalog,sSchema,sTable,aTypeFilter) : Reference< XResultSet >();
@@ -270,16 +270,15 @@ Reference< XPropertySet > OTableContainer::createDescriptor()
 }
 
 // XAppend
-ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+ObjectType OTableContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::appendObject" );
     // append the new table with a create stmt
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
+    OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
     if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(aName))
     {
-        String sMessage(DBACORE_RESSTRING(RID_STR_TABLE_IS_FILTERED));
-        sMessage.SearchAndReplaceAscii("$name$", aName);
-        throw SQLException(sMessage,static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)),SQLSTATE_GENERAL,1000,Any());
+        OUString sMessage(DBACORE_RESSTRING(RID_STR_TABLE_IS_FILTERED));
+        throw SQLException(sMessage.replaceAll("$name$", aName),static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)),SQLSTATE_GENERAL,1000,Any());
     }
 
     Reference< XConnection > xConnection( m_xConnection.get(), UNO_QUERY );
@@ -296,7 +295,7 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
         }
         else
         {
-            ::rtl::OUString aSql = ::dbtools::createSqlCreateTableStatement(descriptor,m_xConnection);
+            OUString aSql = ::dbtools::createSqlCreateTableStatement(descriptor,m_xConnection);
 
             Reference<XConnection> xCon = m_xConnection;
             OSL_ENSURE(xCon.is(),"Connection is null!");
@@ -327,9 +326,9 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
         if ( xNames.is() )
         {
             Reference<XPropertySet> xProp = xFac->createDataDescriptor();
-            Sequence< ::rtl::OUString> aSeq = xNames->getElementNames();
-            const ::rtl::OUString* pIter = aSeq.getConstArray();
-            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+            Sequence< OUString> aSeq = xNames->getElementNames();
+            const OUString* pIter = aSeq.getConstArray();
+            const OUString* pEnd   = pIter + aSeq.getLength();
             for(;pIter != pEnd;++pIter)
             {
                 if ( !xColumnDefinitions->hasByName(*pIter) )
@@ -345,12 +344,12 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
             }
         }
     }
-    const static ::rtl::OUString s_pTableProps[] = {    ::rtl::OUString(PROPERTY_FILTER), ::rtl::OUString(PROPERTY_ORDER)
-                                                    , ::rtl::OUString(PROPERTY_APPLYFILTER), ::rtl::OUString(PROPERTY_FONT)
-                                                    , ::rtl::OUString(PROPERTY_ROW_HEIGHT), ::rtl::OUString(PROPERTY_TEXTCOLOR)
-                                                    , ::rtl::OUString(PROPERTY_TEXTLINECOLOR), ::rtl::OUString(PROPERTY_TEXTEMPHASIS)
-                                                    , ::rtl::OUString(PROPERTY_TEXTRELIEF) };
-    Sequence< ::rtl::OUString> aNames(s_pTableProps,sizeof(s_pTableProps)/sizeof(s_pTableProps[0]));
+    const static OUString s_pTableProps[] = {    OUString(PROPERTY_FILTER), OUString(PROPERTY_ORDER)
+                                                    , OUString(PROPERTY_APPLYFILTER), OUString(PROPERTY_FONT)
+                                                    , OUString(PROPERTY_ROW_HEIGHT), OUString(PROPERTY_TEXTCOLOR)
+                                                    , OUString(PROPERTY_TEXTLINECOLOR), OUString(PROPERTY_TEXTEMPHASIS)
+                                                    , OUString(PROPERTY_TEXTRELIEF) };
+    Sequence< OUString> aNames(s_pTableProps,sizeof(s_pTableProps)/sizeof(s_pTableProps[0]));
     if ( bModified || !lcl_isPropertySetDefaulted(aNames,xTableDefinition) )
         ::dbaccess::notifyDataSourceModified(m_xTableDefinitions,sal_True);
 
@@ -358,7 +357,7 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
 }
 
 // XDrop
-void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OTableContainer::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::dropObject" );
     m_bInDrop = sal_True;
@@ -369,7 +368,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
             xDrop->dropByName(_sElementName);
         else
         {
-            ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
+            OUString sCatalog,sSchema,sTable,sComposedName;
 
             sal_Bool bIsView = sal_False;
             Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
@@ -383,20 +382,20 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
 
                 sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
 
-                ::rtl::OUString sType;
+                OUString sType;
                 xTable->getPropertyValue(PROPERTY_TYPE)         >>= sType;
-                bIsView = sType.equalsIgnoreAsciiCase(::rtl::OUString("VIEW"));
+                bIsView = sType.equalsIgnoreAsciiCase(OUString("VIEW"));
             }
 
             if(sComposedName.isEmpty())
                 ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
-            ::rtl::OUString aSql("DROP ");
+            OUString aSql("DROP ");
 
             if ( bIsView ) // here we have a view
-                aSql += ::rtl::OUString("VIEW ");
+                aSql += OUString("VIEW ");
             else
-                aSql += ::rtl::OUString("TABLE ");
+                aSql += OUString("TABLE ");
             aSql += sComposedName;
             Reference<XConnection> xCon = m_xConnection;
             OSL_ENSURE(xCon.is(),"Connection is null!");
@@ -426,7 +425,7 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::elementInserted" );
     ::osl::MutexGuard aGuard(m_rMutex);
-    ::rtl::OUString sName;
+    OUString sName;
     Event.Accessor >>= sName;
     if ( !m_nInAppend && !hasByName(sName) )
     {
@@ -451,7 +450,7 @@ void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) th
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::elementReplaced" );
     // create a new config entry
     {
-        ::rtl::OUString sOldComposedName,sNewComposedName;
+        OUString sOldComposedName,sNewComposedName;
         Event.ReplacedElement   >>= sOldComposedName;
         Event.Accessor          >>= sNewComposedName;
 

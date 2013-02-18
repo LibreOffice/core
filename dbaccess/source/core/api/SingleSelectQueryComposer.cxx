@@ -396,9 +396,8 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sa
             }
             else
             {
-                String sMessage( DBACORE_RESSTRING( RID_STR_QUERY_DOES_NOT_EXIST ) );
-                sMessage.SearchAndReplaceAscii( "$table$", Command );
-                throwGenericSQLException(sMessage,*this);
+                OUString sMessage( DBACORE_RESSTRING( RID_STR_QUERY_DOES_NOT_EXIST ) );
+                throwGenericSQLException(sMessage.replaceAll( "$table$", Command ),*this);
             }
 
             break;
@@ -480,9 +479,8 @@ OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< X
 
     if ( !m_xMetaData->supportsOrderByUnrelated() && m_aCurrentColumns[SelectColumns] && !m_aCurrentColumns[SelectColumns]->hasByName(aName))
     {
-        String sError(DBACORE_RESSTRING(RID_STR_COLUMN_MUST_VISIBLE));
-        sError.SearchAndReplaceAscii("%name", aName);
-        throw SQLException(sError,*this,SQLSTATE_GENERAL,1000,Any() );
+        OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_MUST_VISIBLE));
+        throw SQLException(sError.replaceAll("%name", aName),*this,SQLSTATE_GENERAL,1000,Any() );
     }
 
     // Attach filter
