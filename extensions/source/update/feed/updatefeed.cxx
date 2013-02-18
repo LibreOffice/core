@@ -356,7 +356,6 @@ UpdateInformationProvider::UpdateInformationProvider(
         "org.openoffice.Setup/Product",
         "ooSetupExtension") >>= extension;
     if (!extension.isEmpty()) {
-        buf.append(sal_Unicode(' '));
         buf.append(extension);
     }
     rtl::OUString product(buf.makeStringAndClear());
@@ -374,6 +373,8 @@ UpdateInformationProvider::UpdateInformationProvider(
             i, RTL_CONSTASCII_LENGTH("<PRODUCT>"), product);
         i += product.getLength();
     }
+
+    SAL_INFO("extensions.update", "UpdateUserAgent: " << aUserAgent);
 
     m_aRequestHeaderList[0].Name = "Accept-Language";
     m_aRequestHeaderList[0].Value = getConfigurationItem( xConfigurationProvider, "org.openoffice.Setup/L10N", "ooLocale" );
