@@ -177,14 +177,11 @@ void LwpRowLayout::Read()
  */
 void LwpRowLayout::ConvertRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol)
 {
-    XFRow* pXFRow = new XFRow;
-
     LwpTableLayout* pTableLayout = GetParentTableLayout();
     LwpTable* pTable = pTableLayout->GetTable();
 
     //calculate the connected cell position
-    sal_Int32 nMarkConnCell;
-    nMarkConnCell = FindMarkConnCell(nStartCol,nEndCol);
+    sal_Int32 nMarkConnCell = FindMarkConnCell(nStartCol,nEndCol);
 
     //if there is no connected cell
     if (nMarkConnCell == -1)
@@ -195,6 +192,7 @@ void LwpRowLayout::ConvertRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nE
 
     //register connect row style
     sal_uInt16 nRowMark = crowid + GetCurMaxSpannedRows(nStartCol,nEndCol);
+    XFRow* pXFRow = new XFRow;
     RegisterCurRowStyle(pXFRow,nRowMark);
 
     //if there is connected cell
