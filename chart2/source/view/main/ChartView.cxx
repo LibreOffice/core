@@ -229,10 +229,10 @@ void ChartView::impl_deleteCoordinateSystems()
 // datatransfer::XTransferable
 namespace
 {
-const rtl::OUString lcl_aGDIMetaFileMIMEType(
-    RTL_CONSTASCII_USTRINGPARAM("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\""));
-const rtl::OUString lcl_aGDIMetaFileMIMETypeHighContrast(
-    RTL_CONSTASCII_USTRINGPARAM("application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\""));
+const OUString lcl_aGDIMetaFileMIMEType(
+    "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" );
+const OUString lcl_aGDIMetaFileMIMETypeHighContrast(
+    "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" );
 } // anonymous namespace
 
 void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStream
@@ -2986,12 +2986,12 @@ uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (un
 {
     uno::Sequence< ::rtl::OUString > aServiceNames( 6 );
 
-    aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DashTable" ) );
-    aServiceNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GradientTable" ) );
-    aServiceNames[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.HatchTable" ) );
-    aServiceNames[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.BitmapTable" ) );
-    aServiceNames[4] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TransparencyGradientTable" ) );
-    aServiceNames[5] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MarkerTable" ) );
+    aServiceNames[0] = "com.sun.star.drawing.DashTable";
+    aServiceNames[1] = "com.sun.star.drawing.GradientTable";
+    aServiceNames[2] = "com.sun.star.drawing.HatchTable";
+    aServiceNames[3] = "com.sun.star.drawing.BitmapTable";
+    aServiceNames[4] = "com.sun.star.drawing.TransparencyGradientTable";
+    aServiceNames[5] = "com.sun.star.drawing.MarkerTable";
 
     return aServiceNames;
 }

@@ -73,13 +73,11 @@ public:
 
         if( m_bMatchPrefix )
             return ( xProp.is() &&
-                     (xProp->getPropertyValue(
-                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" )) ) >>= aRole ) &&
+                     (xProp->getPropertyValue( "Role" ) >>= aRole ) &&
                      aRole.match( m_aRole ));
 
         return ( xProp.is() &&
-                 (xProp->getPropertyValue(
-                     OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" )) ) >>= aRole ) &&
+                 (xProp->getPropertyValue( "Role" ) >>= aRole ) &&
                  m_aRole.equals( aRole ));
     }
 
@@ -388,7 +386,7 @@ void setStackModeAtSeries(
     if( eStackMode == StackMode_AMBIGUOUS )
         return;
 
-    const OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( "StackingDirection" ));
+    const OUString aPropName( "StackingDirection" );
     const uno::Any aPropValue = uno::makeAny(
         ( (eStackMode == StackMode_Y_STACKED) ||
           (eStackMode == StackMode_Y_STACKED_PERCENT) )

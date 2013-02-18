@@ -32,8 +32,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-static const ::rtl::OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.DataSource" ));
+static const OUString lcl_aServiceName( "com.sun.star.comp.chart.DataSource" );
 }  // anonymous namespace
 
 namespace chart
@@ -70,7 +69,7 @@ void SAL_CALL DataSource::setData( const Sequence< Reference< chart2::data::XLab
 Sequence< OUString > DataSource::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 1 );
-    aServices[ 0 ] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.data.DataSource" ));
+    aServices[ 0 ] = "com.sun.star.chart2.data.DataSource";
     return aServices;
 }
 

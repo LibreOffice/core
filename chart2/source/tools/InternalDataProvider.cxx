@@ -64,21 +64,14 @@ namespace
 {
 
 // note: in xmloff this name is used to indicate usage of own data
-static const ::rtl::OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.InternalDataProvider" ));
+static const OUString lcl_aServiceName( "com.sun.star.comp.chart.InternalDataProvider" );
 
-static const ::rtl::OUString lcl_aCategoriesRangeName(
-    RTL_CONSTASCII_USTRINGPARAM( "categories" ));
-static const ::rtl::OUString lcl_aCategoriesLevelRangeNamePrefix(
-    RTL_CONSTASCII_USTRINGPARAM( "categoriesL " )); //L <-> level
-static const ::rtl::OUString lcl_aCategoriesPointRangeNamePrefix(
-    RTL_CONSTASCII_USTRINGPARAM( "categoriesP " )); //P <-> point
-static const ::rtl::OUString lcl_aCategoriesRoleName(
-    RTL_CONSTASCII_USTRINGPARAM( "categories" ));
-static const ::rtl::OUString lcl_aLabelRangePrefix(
-    RTL_CONSTASCII_USTRINGPARAM( "label " ));
-static const ::rtl::OUString lcl_aCompleteRange(
-    RTL_CONSTASCII_USTRINGPARAM( "all" ));
+static const OUString lcl_aCategoriesRangeName( "categories" );
+static const OUString lcl_aCategoriesLevelRangeNamePrefix( "categoriesL " ); //L <-> level
+static const OUString lcl_aCategoriesPointRangeNamePrefix( "categoriesP " ); //P <-> point
+static const OUString lcl_aCategoriesRoleName( "categories" );
+static const OUString lcl_aLabelRangePrefix( "label " );
+static const OUString lcl_aCompleteRange( "all" );
 
 typedef ::std::multimap< OUString, uno::WeakReference< chart2::data::XDataSequence > >
     lcl_tSequenceMap;
@@ -1104,7 +1097,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRang
            uno::RuntimeException)
 {
     XMLRangeHelper::CellRange aRange;
-    aRange.aTableName = OUString(RTL_CONSTASCII_USTRINGPARAM("local-table"));
+    aRange.aTableName = OUString( "local-table" );
 
     // attention: this data provider has the limitation that it stores
     // internally if data comes from columns or rows. It is intended for
@@ -1459,7 +1452,7 @@ double SAL_CALL InternalDataProvider::getNotANumber()
 void SAL_CALL InternalDataProvider::initialize(const uno::Sequence< uno::Any > & _aArguments) throw (uno::RuntimeException, uno::Exception)
 {
     comphelper::SequenceAsHashMap aArgs(_aArguments);
-    if ( aArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDefaultData")),sal_False) )
+    if ( aArgs.getUnpackedValueOrDefault( "CreateDefaultData" ,sal_False) )
         createDefaultData();
 }
 // ____ XCloneable ____
@@ -1475,7 +1468,7 @@ Reference< util::XCloneable > SAL_CALL InternalDataProvider::createClone()
 Sequence< OUString > InternalDataProvider::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 1 );
-    aServices[ 0 ] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.data.DataProvider" ));
+    aServices[ 0 ] = "com.sun.star.chart2.data.DataProvider";
     return aServices;
 }
 

@@ -329,7 +329,7 @@ DataSourceTabPage::DataSourceTabPage(
     // set symbol font for arrows
     // note: StarSymbol is substituted to OpenSymbol for OOo
     Font aSymbolFont( m_aBTN_UP.GetFont());
-    aSymbolFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "StarSymbol" )));
+    aSymbolFont.SetName( "StarSymbol" );
     m_aBTN_UP.SetControlFont( aSymbolFont );
     m_aBTN_DOWN.SetControlFont( aSymbolFont );
 

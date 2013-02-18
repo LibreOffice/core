@@ -174,9 +174,9 @@ public:
     {
         return (::cppu::OWeakObject *)new XMLReportFilterHelper( xContext );
     }
-    static ::rtl::OUString getImplementationName_Static()
+    static OUString getImplementationName_Static()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.report.XMLFilter" ));
+        return OUString( "com.sun.star.comp.chart2.report.XMLFilter" );
     }
 protected:
     virtual ::rtl::OUString SAL_CALL
@@ -192,7 +192,7 @@ protected:
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException)
     {
-        setDocumentHandler(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.ImportDocumentHandler")));
+        setDocumentHandler( "com.sun.star.comp.report.ImportDocumentHandler" );
         XMLFilter::setTargetDocument(Document);
     }
 
@@ -203,7 +203,7 @@ protected:
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException)
     {
-        setDocumentHandler(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.ExportDocumentHandler")));
+        setDocumentHandler( "com.sun.star.comp.report.ExportDocumentHandler" );
         XMLFilter::setSourceDocument(Document);
     }
 

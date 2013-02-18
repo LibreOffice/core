@@ -42,8 +42,7 @@ using ::rtl::OUString;
 namespace
 {
 
-static const ::rtl::OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.GridProperties" ));
+static const OUString lcl_aServiceName( "com.sun.star.comp.chart2.GridProperties" );
 
 enum
 {

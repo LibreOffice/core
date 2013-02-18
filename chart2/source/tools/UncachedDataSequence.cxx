@@ -42,8 +42,7 @@ using ::chart::impl::UncachedDataSequence_Base;
 
 namespace
 {
-static const OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.UncachedDataSequence" ));
+static const OUString lcl_aServiceName( "com.sun.star.comp.chart.UncachedDataSequence" );
 
 enum
 {

@@ -45,8 +45,7 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.BubbleChartTypeTemplate" ));
+static const OUString lcl_aServiceName( "com.sun.star.chart2.BubbleChartTypeTemplate" );
 
 void lcl_AddPropertiesToVector(
     ::std::vector< Property > & /*rOutProperties*/ )

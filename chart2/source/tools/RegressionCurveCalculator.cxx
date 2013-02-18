@@ -52,7 +52,7 @@ bool RegressionCurveCalculator::isLinearScaling(
     // no scaling means linear
     if( !xScaling.is())
         return true;
-    static OUString aLinScalingServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LinearScaling" ));
+    static OUString aLinScalingServiceName( "com.sun.star.chart2.LinearScaling" );
     uno::Reference< lang::XServiceName > xServiceName( xScaling, uno::UNO_QUERY );
     return (xServiceName.is() && xServiceName->getServiceName().equals( aLinScalingServiceName ));
 }
@@ -60,7 +60,7 @@ bool RegressionCurveCalculator::isLinearScaling(
 bool RegressionCurveCalculator::isLogarithmicScaling(
     const Reference< chart2::XScaling > & xScaling )
 {
-    static OUString aLogScalingServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LogarithmicScaling" ));
+    static OUString aLogScalingServiceName( "com.sun.star.chart2.LogarithmicScaling" );
     uno::Reference< lang::XServiceName > xServiceName( xScaling, uno::UNO_QUERY );
     return (xServiceName.is() && xServiceName->getServiceName().equals( aLogScalingServiceName ));
 }

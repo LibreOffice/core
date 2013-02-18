@@ -38,7 +38,7 @@ namespace chart
 {
 
 ChartItemPool::ChartItemPool():
-        SfxItemPool( String( RTL_CONSTASCII_USTRINGPARAM( "ChartItemPool" )), SCHATTR_START, SCHATTR_END, NULL, NULL )
+        SfxItemPool( "ChartItemPool" , SCHATTR_START, SCHATTR_END, NULL, NULL )
 {
     /**************************************************************************
     * PoolDefaults

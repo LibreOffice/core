@@ -250,8 +250,9 @@ void CandleStickChart::createShapes()
                     //create min-max line
                     if( isValidPosition(aPosMiddleMinimum) && isValidPosition(aPosMiddleMaximum) )
                     {
-                        uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.drawing.PolyLineShape" ) ) ), uno::UNO_QUERY );
+                        uno::Reference< drawing::XShape > xShape(
+                            m_xShapeFactory->createInstance( "com.sun.star.drawing.PolyLineShape" ),
+                            uno::UNO_QUERY );
                         xPointGroupShape_Shapes->add(xShape);
                         uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
                         if(xProp.is())
@@ -268,8 +269,9 @@ void CandleStickChart::createShapes()
                     //create first-last shape
                     if(bJapaneseStyle && isValidPosition(aPosLeftFirst) && isValidPosition(aPosRightLast) )
                     {
-                        uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.drawing.RectangleShape" ) ) ), uno::UNO_QUERY );
+                        uno::Reference< drawing::XShape > xShape(
+                            m_xShapeFactory->createInstance( "com.sun.star.drawing.RectangleShape" ),
+                            uno::UNO_QUERY );
                         xLossGainTarget->add(xShape);
 
                         xShape->setPosition( Position3DToAWTPoint( aPosLeftFirst ) );
@@ -309,8 +311,9 @@ void CandleStickChart::createShapes()
 
                         if( aPoly.SequenceX.getLength() )
                         {
-                            uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.drawing.PolyLineShape" ) ) ), uno::UNO_QUERY );
+                            uno::Reference< drawing::XShape > xShape(
+                                m_xShapeFactory->createInstance( "com.sun.star.drawing.PolyLineShape" ),
+                                uno::UNO_QUERY );
                             xPointGroupShape_Shapes->add(xShape);
                             uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
                             if(xProp.is())

@@ -48,8 +48,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-static const ::rtl::OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.ElementSelectorToolbarController" ));
+static const OUString lcl_aServiceName( "com.sun.star.comp.chart.ElementSelectorToolbarController" );
 }
 
 //------------------------------------------------------------------------------

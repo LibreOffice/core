@@ -148,7 +148,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
 
     // find FilterName in MediaDescriptor
     OUString aFilterName(
-        lcl_getProperty< OUString >( rMediaDescriptor, OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ))));
+        lcl_getProperty< OUString >( rMediaDescriptor, "FilterName" ) );
 
     // if FilterName was found, get Filter from factory
     if( !aFilterName.isEmpty() )
@@ -166,7 +166,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
                 (aFilterProps >>= aProps))
             {
                 OUString aFilterServiceName(
-                    lcl_getProperty< OUString >( aProps, OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterService" ))));
+                    lcl_getProperty< OUString >( aProps, "FilterService" ) );
 
                 if( !aFilterServiceName.isEmpty())
                 {
@@ -376,7 +376,8 @@ void ChartModel::impl_store(
         apphelper::MediaDescriptorHelper aMDHelper(rMediaDescriptor);
         try
         {
-            xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "SavedObject" )),
+            xPropSet->setPropertyValue(
+                "SavedObject",
                 uno::makeAny( aMDHelper.HierarchicalDocumentName ) );
         }
         catch ( const uno::Exception& )

@@ -29,7 +29,7 @@ const short FLAG_DEPRECATED =1;
 const short FLAG_MODEL      =2;
 
 #define WRITE_PROPERTY( MediaName, nFlags )             \
-if(rProp.Name.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(#MediaName)))) \
+if(rProp.Name.equals(#MediaName)) \
 {                                                       \
     if( rProp.Value >>= MediaName )                     \
         ISSET_##MediaName = sal_True;                   \

@@ -76,9 +76,9 @@ using namespace ::chart::CloneHelper;
 namespace
 {
 const OUString lcl_aGDIMetaFileMIMEType(
-    RTL_CONSTASCII_USTRINGPARAM("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\""));
+    "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"");
 const OUString lcl_aGDIMetaFileMIMETypeHighContrast(
-    RTL_CONSTASCII_USTRINGPARAM("application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\""));
+    "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"");
 
 } // anonymous namespace
 
@@ -462,9 +462,9 @@ uno::Reference< frame::XController > SAL_CALL ChartModel::getCurrentController()
 {
     LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())
-        throw lang::DisposedException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "getCurrentController was called on an already disposed or closed model" ) )
-                , static_cast< ::cppu::OWeakObject* >(this));
+        throw lang::DisposedException(
+                "getCurrentController was called on an already disposed or closed model",
+                static_cast< ::cppu::OWeakObject* >(this) );
 
     return impl_getCurrentController();
 }
@@ -474,15 +474,15 @@ void SAL_CALL ChartModel::setCurrentController( const uno::Reference< frame::XCo
 {
     LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())
-        throw lang::DisposedException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "setCurrentController was called on an already disposed or closed model" ) )
-                , static_cast< ::cppu::OWeakObject* >(this));
+        throw lang::DisposedException(
+                "setCurrentController was called on an already disposed or closed model",
+                static_cast< ::cppu::OWeakObject* >(this) );
 
     //OSL_ENSURE( impl_isControllerConnected(xController), "setCurrentController is called with a Controller which is not connected" );
     if(!impl_isControllerConnected(xController))
-        throw container::NoSuchElementException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "setCurrentController is called with a Controller which is not connected" ) )
-                , static_cast< ::cppu::OWeakObject* >(this));
+        throw container::NoSuchElementException(
+                "setCurrentController is called with a Controller which is not connected",
+                static_cast< ::cppu::OWeakObject* >(this) );
 
     m_xCurrentController = xController;
 
@@ -493,9 +493,9 @@ uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection() thr
 {
     LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())
-        throw lang::DisposedException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "getCurrentSelection was called on an already disposed or closed model" ) )
-                , static_cast< ::cppu::OWeakObject* >(this));
+        throw lang::DisposedException(
+                "getCurrentSelection was called on an already disposed or closed model",
+                static_cast< ::cppu::OWeakObject* >(this) );
 
 
     uno::Reference< uno::XInterface > xReturn;
@@ -628,9 +628,8 @@ void SAL_CALL ChartModel::close( sal_Bool bDeliverOwnership )
     //check whether we self can close
     {
         util::CloseVetoException aVetoException = util::CloseVetoException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "the model itself could not be closed" ) )
-                        , static_cast< ::cppu::OWeakObject* >(this));
+                        "the model itself could not be closed",
+                        static_cast< ::cppu::OWeakObject* >(this) );
 
         if( m_aLifeTimeManager.g_close_isNeedToCancelLongLastingCalls( bDeliverOwnership, aVetoException ) )
         {
@@ -753,7 +752,7 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
             //init internal dataprovider
             {
                 uno::Sequence< uno::Any > aArgs(1);
-                beans::NamedValue aParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDefaultData")),uno::makeAny(sal_True));
+                beans::NamedValue aParam( "CreateDefaultData" ,uno::makeAny(sal_True) );
                 aArgs[0] <<= aParam;
                 xIni->initialize(aArgs);
             }
@@ -763,14 +762,20 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
                 OUString( "CellRangeRepresentation" ), -1,
                 uno::makeAny( OUString("all") ), beans::PropertyState_DIRECT_VALUE );
             aArgs[1] = beans::PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasCategories" )), -1,
-                uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+                "HasCategories",
+                -1,
+                uno::makeAny( true ),
+                beans::PropertyState_DIRECT_VALUE );
             aArgs[2] = beans::PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstCellAsLabel" )), -1,
-                uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+                "FirstCellAsLabel",
+                -1,
+                uno::makeAny( true ),
+                beans::PropertyState_DIRECT_VALUE );
             aArgs[3] = beans::PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), -1,
-                uno::makeAny( ::com::sun::star::chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+                "DataRowSource",
+                -1,
+                uno::makeAny( ::com::sun::star::chart::ChartDataRowSource_COLUMNS ),
+                beans::PropertyState_DIRECT_VALUE );
             xDataSource = m_xInternalDataProvider->createDataSource( aArgs );
         }
     }

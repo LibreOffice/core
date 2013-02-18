@@ -39,8 +39,7 @@ using ::osl::MutexGuard;
 
 namespace
 {
-static const ::rtl::OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.NetChartTypeTemplate" ));
+static const OUString lcl_aServiceName( "com.sun.star.chart2.NetChartTypeTemplate" );
 } // anonymous namespace
 
 namespace chart

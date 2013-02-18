@@ -31,15 +31,11 @@ using ::rtl::OUString;
 namespace
 {
 
-static const ::rtl::OUString lcl_aServiceNameCartesian2d(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CartesianCoordinateSystem2d" ));
-static const ::rtl::OUString lcl_aServiceNameCartesian3d(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CartesianCoordinateSystem3d" ));
+static const OUString lcl_aServiceNameCartesian2d( "com.sun.star.chart2.CartesianCoordinateSystem2d" );
+static const OUString lcl_aServiceNameCartesian3d( "com.sun.star.chart2.CartesianCoordinateSystem3d" );
 
-static const ::rtl::OUString lcl_aImplementationNameCartesian2d(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.CartesianCoordinateSystem2d" ));
-static const ::rtl::OUString lcl_aImplementationNameCartesian3d(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.CartesianCoordinateSystem3d" ));
+static const OUString lcl_aImplementationNameCartesian2d( "com.sun.star.comp.chart2.CartesianCoordinateSystem2d" );
+static const OUString lcl_aImplementationNameCartesian3d( "com.sun.star.comp.chart2.CartesianCoordinateSystem3d" );
 }
 
 namespace chart
@@ -62,13 +58,13 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem()
 {}
 
 // ____ XCoordinateSystem ____
-::rtl::OUString SAL_CALL CartesianCoordinateSystem::getCoordinateSystemType()
+OUString SAL_CALL CartesianCoordinateSystem::getCoordinateSystemType()
     throw (RuntimeException)
 {
     return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
 }
 
-::rtl::OUString SAL_CALL CartesianCoordinateSystem::getViewServiceName()
+OUString SAL_CALL CartesianCoordinateSystem::getViewServiceName()
     throw (RuntimeException)
 {
     return CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME;

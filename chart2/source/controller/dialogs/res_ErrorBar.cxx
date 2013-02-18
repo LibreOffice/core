@@ -272,7 +272,7 @@ void ErrorBarResources::UpdateControlStates()
 
     if( bIsPercentage )
     {
-        aCustomUnit = String( RTL_CONSTASCII_USTRINGPARAM( " %" ));
+        aCustomUnit = " %";
         m_aMfPositive.SetDecimalDigits( 1 );
         m_aMfPositive.SetSpinSize( 10 );
         m_aMfNegative.SetDecimalDigits( 1 );
