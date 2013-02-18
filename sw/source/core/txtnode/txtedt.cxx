@@ -607,7 +607,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
 
 XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 {
-    OSL_ENSURE( nPos <= m_Text.getLength(), "SwTxtNode::GetCurWord: invalid index." );
+    assert(nPos <= m_Text.getLength()); // invalid index
 
     if (m_Text.isEmpty())
         return m_Text;
@@ -1954,7 +1954,6 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
 
     if (aExpandText.isEmpty() && !bCountNumbering)
     {
-        OSL_ENSURE(aExpandText.getLength() >= 0, "Node text expansion error: length < 0." );
         return false;
     }
 

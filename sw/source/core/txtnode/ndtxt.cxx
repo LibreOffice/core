@@ -1163,7 +1163,7 @@ lcl_GetTxtAttrs(
         case SwTxtNode::DEFAULT:   pMatchFunc = &lcl_GetTxtAttrDefault; break;
         case SwTxtNode::EXPAND:    pMatchFunc = &lcl_GetTxtAttrExpand;  break;
         case SwTxtNode::PARENT:    pMatchFunc = &lcl_GetTxtAttrParent;  break;
-        default: OSL_ASSERT(false);
+        default: assert(false);
     }
 
     for( sal_uInt16 i = 0; i < nSize; ++i )
@@ -1181,8 +1181,8 @@ lcl_GetTxtAttrs(
         }
 
         xub_StrLen const*const pEndIdx = pHint->GetEnd();
-        OSL_ENSURE(pEndIdx || pHint->HasDummyChar(),
-                "hint with no end and no dummy char?");
+        // cannot have hint with no end and no dummy char
+        assert(pEndIdx || pHint->HasDummyChar());
             // Wenn bExpand gesetzt ist, wird das Verhalten bei Eingabe
             // simuliert, d.h. der Start wuede verschoben, das Ende expandiert,
         bool const bContained( (pEndIdx)
@@ -1224,13 +1224,13 @@ SwTxtAttr *
 SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
                         enum GetTxtAttrMode const eMode) const
 {
-    OSL_ENSURE(    (nWhich == RES_TXTATR_META)
+    assert(    (nWhich == RES_TXTATR_META)
             || (nWhich == RES_TXTATR_METAFIELD)
             || (nWhich == RES_TXTATR_AUTOFMT)
             || (nWhich == RES_TXTATR_INETFMT)
             || (nWhich == RES_TXTATR_CJK_RUBY)
-            || (nWhich == RES_TXTATR_UNKNOWN_CONTAINER),
-        "GetTxtAttrAt() will give wrong result for this hint!");
+            || (nWhich == RES_TXTATR_UNKNOWN_CONTAINER));
+            // "GetTxtAttrAt() will give wrong result for this hint!")
 
     SwTxtAttr * pRet(0);
     lcl_GetTxtAttrs(0, & pRet, m_pSwpHints, nIndex, nWhich, eMode);
@@ -1260,12 +1260,12 @@ static SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString&
 static void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
     SwTxtAttr *const pNewHt, SwDoc *const pOtherDoc, SwTxtNode *const pDest )
 {
-    OSL_ENSURE( nWhich == pHt->Which(), "Falsche Hint-Id" );
+    assert(nWhich == pHt->Which()); // wrong hint-id
     switch( nWhich )
     {
         // copy nodesarray section with footnote content
         case RES_TXTATR_FTN :
-            OSL_ENSURE(pDest, "lcl_CopyHint: no destination text node?");
+            assert(pDest); // "lcl_CopyHint: no destination text node?"
             static_cast<const SwTxtFtn*>(pHt)->CopyFtn(
                 *static_cast<SwTxtFtn*>(pNewHt), *pDest);
             break;
@@ -1706,7 +1706,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 OUString SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
         const IDocumentContentOperations::InsertFlags nMode )
 {
-    OSL_ENSURE( rIdx <= m_Text.getLength(), "SwTxtNode::InsertText: invalid index." );
+    assert(rIdx <= m_Text.getLength()); // invalid index
 
     xub_StrLen aPos = rIdx.GetIndex();
     xub_StrLen nLen = m_Text.getLength() - aPos;
@@ -1830,6 +1830,7 @@ void SwTxtNode::CutText( SwTxtNode * const pDest,
     else
     {
         OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
+        assert(false);
         EraseText( rStart, nLen );
     }
 }
@@ -1841,6 +1842,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
     if(!pDest)
     {
         OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
+        assert(false);
         EraseText( rStart, nLen );
         return;
     }
@@ -1849,6 +1851,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
     if( GetDoc() != pDest->GetDoc() )
     {
         OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
+        assert(false);
         CopyText( pDest, rDestStart, rStart, nLen);
         EraseText(rStart, nLen);
         return;
@@ -1870,6 +1873,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
     if( pDest == this )
     {
         OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
+        assert(false);
         OUStringBuffer buf(m_Text);
         buf.insert(nDestStart, m_Text.copy(nTxtStartIdx, nLen));
         buf.remove(
@@ -2009,6 +2013,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 
         OSL_ENSURE(!pOtherDoc,
             "mst: entering dead and bitrotted code; fasten your seatbelts!");
+        assert(!pOtherDoc);
 
         // harte Absatz umspannende Attribute kopieren
         if( HasSwAttrSet() )
@@ -2174,7 +2179,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
         const IDocumentContentOperations::InsertFlags nMode )
 {
-    OSL_ENSURE( rIdx <= m_Text.getLength(), "SwTxtNode::EraseText: invalid index." );
+    assert(rIdx <= m_Text.getLength()); // invalid index
 
     const xub_StrLen nStartIdx = rIdx.GetIndex();
     const xub_StrLen nCnt = (STRING_LEN == nCount)
@@ -2204,8 +2209,8 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
 
         if( !pHtEndIdx )
         {
-            OSL_ENSURE(pHt->HasDummyChar(),
-                    "attribute with neither end nor CH_TXTATR?");
+                    // attribute with neither end nor CH_TXTATR?
+            assert(pHt->HasDummyChar());
             if (isTXTATR(nWhich) &&
                 (nHintStart >= nStartIdx) && (nHintStart < nEndIdx))
             {
@@ -2216,11 +2221,11 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
             continue;
         }
 
-       OSL_ENSURE(!( (nHintStart < nEndIdx) && (*pHtEndIdx > nEndIdx)
+       assert(!( (nHintStart < nEndIdx) && (*pHtEndIdx > nEndIdx)
                     && pHt->HasDummyChar() )
                 // next line: deleting exactly dummy char: DeleteAttributes
-                || ((nHintStart == nStartIdx) && (nHintStart + 1 == nEndIdx)),
-                "ERROR: deleting left-overlapped attribute with CH_TXTATR");
+                || ((nHintStart == nStartIdx) && (nHintStart + 1 == nEndIdx)));
+                // "ERROR: deleting left-overlapped attribute with CH_TXTATR");
 
         // Delete the hint if:
         // 1. The hint ends before the deletion end position or
@@ -3337,9 +3342,8 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
 void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
                              const XubString& rStr)
 {
-    OSL_ENSURE( rStart.GetIndex() < m_Text.getLength()
-             && rStart.GetIndex() + nDelLen <= m_Text.getLength(),
-            "SwTxtNode::ReplaceText: index out of bounds" );
+    assert( rStart.GetIndex() < m_Text.getLength()     // index out of bounds
+         && rStart.GetIndex() + nDelLen <= m_Text.getLength());
 
     long const nOverflow(static_cast<long>(m_Text.getLength())
             + static_cast<long>(rStr.Len()) - nDelLen - TXTNODE_MAX);
@@ -3363,11 +3367,10 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
             SwTxtAttr *const pHint = GetTxtAttrForCharAt( nPos );
             if (pHint)
             {
-               OSL_ENSURE(!( pHint->GetEnd() && pHint->HasDummyChar()
+               assert(!( pHint->GetEnd() && pHint->HasDummyChar()
                             && (*pHint->GetStart() < nEndPos)
-                            && (*pHint->GetEnd()   > nEndPos) ),
-                    "ReplaceText: ERROR: "
-                    "deleting left-overlapped attribute with CH_TXTATR");
+                            && (*pHint->GetEnd()   > nEndPos) ));
+                    // "deleting left-overlapped attribute with CH_TXTATR"
                 DeleteAttribute( pHint );
                 --nEndPos;
                 --nLen;
@@ -3718,7 +3721,7 @@ int SwTxtNode::GetAttrOutlineLevel() const
 }
 void SwTxtNode::SetAttrOutlineLevel(int nLevel)
 {
-    OSL_ENSURE( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtNode: Level Out Of Range" );//#outline level,zhaojianwei
+    assert(0 <= nLevel && nLevel <= MAXLEVEL); // Level Out Of Range
     if ( 0 <= nLevel && nLevel <= MAXLEVEL )
     {
         SetAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL,
@@ -3756,7 +3759,7 @@ void SwTxtNode::SetAttrListLevel( int nLevel )
 {
     if ( nLevel < 0 || nLevel >= MAXLEVEL )
     {
-        OSL_FAIL( "<SwTxtNode::SetAttrListLevel()> - value of parameter <nLevel> is out of valid range" );
+        assert(false); // invalid level
         return;
     }
 
