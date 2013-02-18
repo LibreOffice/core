@@ -61,6 +61,7 @@ namespace connectivity
                 s_pKApplication = new KApplication(false, false);
             }
 
+            /* FIXME-BCP47: what slumbering dogs may we wake up here? */
             // set language
             rtl_Locale *pProcessLocale;
             osl_getProcessLocale(&pProcessLocale);
