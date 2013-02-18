@@ -415,10 +415,6 @@ void SbiImage::AddString( const OUString& r )
         {
             sal_uInt32 nNewLen = needed + 1024;
             nNewLen &= 0xFFFFFC00;  // trim to 1K border
-            if( nNewLen > 0xFFFFFF00L )
-            {
-                nNewLen = 0xFFFFFF00L;
-            }
             sal_Unicode* p = NULL;
             if( (p = new sal_Unicode[ nNewLen ]) != NULL )
             {
