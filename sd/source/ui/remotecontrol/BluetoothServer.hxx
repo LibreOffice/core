@@ -28,14 +28,14 @@ namespace sd
         /// restore the state of discoverability from before ensureDiscoverable
         static void restoreDiscoverable();
 
-        void addCommunicator( Communicator* pCommunicator );
+        // called by C / idle callbacks
+        static void doEnsureDiscoverable();
+        static void doRestoreDiscoverable();
 
+        void addCommunicator( Communicator* pCommunicator );
     private:
         BluetoothServer( std::vector<Communicator*>* pCommunicators );
         ~BluetoothServer();
-
-        bool isDiscoverable();
-        void setDiscoverable( bool bDiscoverable );
 
         enum { UNKNOWN, DISCOVERABLE, NOT_DISCOVERABLE } meWasDiscoverable;
         static BluetoothServer *spServer;
