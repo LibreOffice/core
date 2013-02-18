@@ -20,7 +20,7 @@
 #ifndef _SVDGLOB_HXX
 #define _SVDGLOB_HXX
 
-#include <tools/resid.hxx>
+#include <sal/config.h>
 #include <tools/string.hxx>
 
 #include <svx/svxdllapi.h>
@@ -29,21 +29,10 @@
 //   forward declaration
 //************************************************************
 
-class Link;
 class ResMgr;
-class SdrEngineDefaults;
-
-//************************************************************
-//   Defines
-//************************************************************
 
 // Get the resource manager for the app
 ResMgr* ImpGetResMgr();
-
-class SdrResId: ResId {
-public:
-    SdrResId(sal_uInt16 nId): ResId(nId,*ImpGetResMgr()) {}
-};
 
 // ResourceCache for frequently used strings.
 // Global string resources with the IDs from
