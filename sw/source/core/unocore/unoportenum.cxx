@@ -331,7 +331,8 @@ static const SwFmtFld* lcl_getFieldByName(SwDoc* pDoc, const OUString& rName)
         SwIterator<SwFmtFld, SwFieldType> aIter(*pCurType);
         for (const SwFmtFld* pCurFldFmt = aIter.First(); pCurFldFmt; pCurFldFmt = aIter.Next())
         {
-            if (pCurFldFmt->GetFld()->GetTyp()->Which() != RES_POSTITFLD)
+            // Ignore the field if it's not an annotation or it doesn't have an anchor.
+            if (pCurFldFmt->GetFld()->GetTyp()->Which() != RES_POSTITFLD || !pCurFldFmt->GetTxtFld())
                 continue;
 
             const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pCurFldFmt->GetFld());
