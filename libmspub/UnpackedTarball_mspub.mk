@@ -11,10 +11,4 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,mspub))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,mspub,$(MSPUB_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,mspub,1))
-
-$(eval $(call gb_UnpackedTarball_add_patches,mspub,\
-	libmspub/libmspub-0.0.4-boost.patch \
-))
-
 # vim: set noet sw=4 ts=4:
