@@ -299,7 +299,7 @@ void unoInterfaceProxyDispatch(
             aParam.bOut     = sal_False;
 
             typelib_TypeDescriptionReference * pReturnTypeRef = 0;
-            OUString aVoidName( RTL_CONSTASCII_USTRINGPARAM("void") );
+            OUString aVoidName( "void" );
             typelib_typedescriptionreference_new(
                 &pReturnTypeRef, typelib_TypeClass_VOID, aVoidName.pData );
 
@@ -372,7 +372,7 @@ void unoInterfaceProxyDispatch(
     default:
     {
         ::com::sun::star::uno::RuntimeException aExc(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal member type description!") ),
+            "illegal member type description!",
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
 
         Type const & rExcType = ::getCppuType( &aExc );

@@ -182,7 +182,7 @@ Bridge::Bridge(
     protPropTid_(
         reinterpret_cast< sal_Int8 const * >(".UrpProtocolPropertiesTid"),
         RTL_CONSTASCII_LENGTH(".UrpProtocolPropertiesTid")),
-    protPropOid_(RTL_CONSTASCII_USTRINGPARAM("UrpProtocolProperties")),
+    protPropOid_("UrpProtocolProperties"),
     protPropType_(
         cppu::UnoType<
             css::uno::Reference< css::bridge::XProtocolProperties > >::get()),
