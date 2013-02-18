@@ -78,6 +78,7 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/dialog/abstract \
     sw/source/ui/dialog/addrdlg \
     sw/source/ui/dialog/ascfldlg \
+    sw/source/ui/dialog/documentfontsdialog \
     sw/source/ui/dialog/docstdlg \
     sw/source/ui/dialog/macassgn \
     sw/source/ui/dialog/swdialmgr \
