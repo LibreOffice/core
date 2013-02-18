@@ -12,6 +12,6 @@ include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))config_build.mk
 gb_Side := build
 include $(SOLARENV)/gbuild/gbuild.mk
 
-$(eval $(call gb_Module_make_global_targets,$(SRCDIR)/Module_cross_tail_build.mk))
+$(eval $(call gb_Module_make_global_targets,$(SRCDIR)/Module_cross_toolset.mk))
 
 # vim: set noet sw=4 ts=4:
