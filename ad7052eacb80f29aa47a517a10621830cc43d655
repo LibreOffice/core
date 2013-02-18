@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///qQ\u003d",
+        "filename": "instsetoo_native/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-18T20:47:54Z",
+      "side": 1,
+      "message": "if this change now shouldn\u0027t it be mentioned in commit message? I guess tinderboxes must be updated to upload binary artifacts.",
+      "revId": "ad7052eacb80f29aa47a517a10621830cc43d655",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
