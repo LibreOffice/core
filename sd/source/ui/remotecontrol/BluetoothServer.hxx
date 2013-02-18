@@ -16,6 +16,7 @@ namespace sd
 {
     class Communicator;
 
+    struct BluetoothServerImpl;
     class BluetoothServer:
         public osl::Thread
     {
@@ -39,7 +40,9 @@ namespace sd
         enum { UNKNOWN, DISCOVERABLE, NOT_DISCOVERABLE } meWasDiscoverable;
         static BluetoothServer *spServer;
 
+        BluetoothServerImpl *mpImpl;
         virtual void SAL_CALL run();
+
         std::vector<Communicator*>* mpCommunicators;
     };
 }
