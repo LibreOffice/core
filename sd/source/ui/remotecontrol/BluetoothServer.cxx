@@ -152,7 +152,7 @@ sal_Int32 OSXBluetoothWrapper::readLine( rtl::OString& aLine )
                         s << *p;
                 }
             }
-            SAL_INFO( "sdremote.bluetooth", "  mBuffer:  \"" << s.str() << "\"" );
+            SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::readLine mBuffer:  \"" << s.str() << "\"" );
 #endif
 
             // got enough bytes to return a line?
