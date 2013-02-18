@@ -15,10 +15,15 @@
 #include <sal/log.hxx>
 
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
+#  define LINUX_BLUETOOTH
+#endif
+
+#ifdef LINUX_BLUETOOTH
   #include <glib.h>
   #include <dbus/dbus.h>
   #include <dbus/dbus-glib.h>
   #include <errno.h>
+  #include <fcntl.h>
   #include <sys/unistd.h>
   #include <sys/socket.h>
   #include <bluetooth/bluetooth.h>
@@ -68,7 +73,13 @@
 
 using namespace sd;
 
-#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
+#ifdef LINUX_BLUETOOTH
+
+struct sd::BluetoothServerImpl {
+    // the glib mainloop running in the thread
+    GMainContext *mpContext;
+    volatile bool mbExitMainloop;
+};
 
 struct DBusObject {
     OString maBusName;
@@ -219,6 +230,13 @@ bluezCreateListeningSocket()
     if ( ( a = listen( nSocket, 1 ) ) < 0 )
     {
         SAL_WARN( "sdremote.bluetooth", "listen failed with error" << a );
+        close( nSocket );
+        return -1;
+    }
+
+    // set non-blocking behaviour ...
+    if( fcntl( nSocket, F_SETFL, O_NONBLOCK) < 0 )
+    {
         close( nSocket );
         return -1;
     }
@@ -379,8 +397,15 @@ void incomingCallback( void *userRefCon,
 
 BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
   : meWasDiscoverable( UNKNOWN ),
+    mpImpl( NULL ),
     mpCommunicators( pCommunicators )
 {
+#ifdef LINUX_BLUETOOTH
+    g_type_init();
+    mpImpl = new BluetoothServerImpl();
+    mpImpl->mpContext = g_main_context_new();
+    mpImpl->mbExitMainloop = false;
+#endif
 }
 
 BluetoothServer::~BluetoothServer()
@@ -563,9 +588,8 @@ void BluetoothServer::addCommunicator( Communicator* pCommunicator )
 void SAL_CALL BluetoothServer::run()
 {
     SAL_INFO( "sdremote.bluetooth", "BluetoothServer::run called" );
-#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
-    g_type_init();
 
+#ifdef LINUX_BLUETOOTH
     DBusConnection *pConnection = dbusConnectToNameOnBus();
     if( !pConnection )
         return;
@@ -580,8 +604,8 @@ void SAL_CALL BluetoothServer::run()
     if( !bluezRegisterServiceRecord( pConnection, pService, bluetooth_service_record ) )
         return;
 
-    int aSocket = bluezCreateListeningSocket();
-    if( aSocket < 0 )
+    int nSocket = bluezCreateListeningSocket();
+    if( nSocket < 0 )
         return;
 
     // ---------------- Socket code ----------------
@@ -589,23 +613,51 @@ void SAL_CALL BluetoothServer::run()
     sockaddr_rc aRemoteAddr;
     socklen_t  aRemoteAddrLen = sizeof(aRemoteAddr);
 
-    // FIXME: use a glib main-loop [!] ...
-    // FIXME: fixme ! ...
-    while ( true )
+    // Avoid using GSources where we can
+
+    // poll on our socket
+    GPollFD aSocketFD;
+    aSocketFD.fd = nSocket;
+    aSocketFD.events = G_IO_IN | G_IO_PRI;
+    g_main_context_add_poll( mpImpl->mpContext, &aSocketFD, G_PRIORITY_DEFAULT );
+
+    // also poll on our dbus connection
+    int fd = -1;
+    GPollFD aDBusFD;
+    if( dbus_connection_get_unix_fd( pConnection, &fd ) && fd >= 0 )
     {
-        int bSocket;
-        SAL_INFO( "sdremote.bluetooth", "waiting on accept" );
-        if ( (bSocket = accept(aSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) < 0 )
+        aDBusFD.fd = fd;
+        aDBusFD.events = G_IO_IN | G_IO_PRI;
+        g_main_context_add_poll( mpImpl->mpContext, &aDBusFD, G_PRIORITY_DEFAULT );
+    }
+    else
+        SAL_WARN( "sdremote.bluetooth", "failed to poll for incoming dbus signals" );
+
+    while( !mpImpl->mbExitMainloop )
+    {
+        aDBusFD.revents = 0;
+        aSocketFD.revents = 0;
+        g_main_context_iteration( mpImpl->mpContext, TRUE );
+
+        SAL_INFO( "sdremote.bluetooth", "main-loop spin "
+                  << aDBusFD.revents << " " << aSocketFD.revents );
+        if( aDBusFD.revents )
+            dbus_connection_read_write_dispatch( pConnection, 0 );
+
+        if( aSocketFD.revents )
         {
-            int err = errno;
-            SAL_WARN( "sdremote.bluetooth", "accept failed with errno " << err );
-            close( aSocket );
-            return;
-        } else {
-            SAL_INFO( "sdremote.bluetooth", "connection accepted" );
-            Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( bSocket ) );
-            mpCommunicators->push_back( pCommunicator );
-            pCommunicator->launch();
+            int nClient;
+            SAL_INFO( "sdremote.bluetooth", "performing accept" );
+            if ( ( nClient = accept( nSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) < 0 &&
+                 errno != EAGAIN )
+            {
+                SAL_WARN( "sdremote.bluetooth", "accept failed with errno " << errno );
+            } else {
+                SAL_INFO( "sdremote.bluetooth", "connection accepted " << nClient );
+                Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( nClient ) );
+                mpCommunicators->push_back( pCommunicator );
+                pCommunicator->launch();
+            }
         }
     }
 
