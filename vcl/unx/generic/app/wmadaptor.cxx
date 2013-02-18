@@ -988,6 +988,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
     rtl::OString aTitle(rtl::OUStringToOString(rWMName,
         osl_getThreadTextEncoding()));
 
+    /* FIXME-BCP47: what slumbering dogs may we wake up here? */
     ::rtl::OString aWMLocale;
     rtl_Locale* pLocale = NULL;
     osl_getProcessLocale( &pLocale );
