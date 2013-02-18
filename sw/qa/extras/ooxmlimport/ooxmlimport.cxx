@@ -114,6 +114,7 @@ public:
     void testN793262();
     void testN793998();
     void testGroupshapeLine();
+    void testN779642();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -180,6 +181,7 @@ void Test::run()
         {"n793262.docx", &Test::testN793262},
         {"n793998.docx", &Test::testN793998},
         {"groupshape-line.docx", &Test::testGroupshapeLine},
+        {"n779642.docx", &Test::testN779642},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1157,6 +1159,13 @@ void Test::testN793998()
     sal_Int32 nRightMargin = 3000;
     // The problem was that the tab portion didn't ignore the right margin, so text + tab width wasn't larger than body (paragraph - right margin) width.
     CPPUNIT_ASSERT(nTextPortion + nTabPortion > nParagraph - nRightMargin);
+}
+
+void Test::testN779642()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

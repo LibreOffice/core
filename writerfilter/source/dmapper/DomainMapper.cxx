@@ -2902,7 +2902,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     }
     break;
     case NS_ooxml::LN_CT_PPrBase_framePr:
-    // Avoid frames if we're inside a structured document tag, would just cause outher tables fail to create.
+    // Avoid frames if we're inside a structured document tag, would just cause outer tables fail to create.
     if (!m_pImpl->GetSdt())
     {
         PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
@@ -2910,7 +2910,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         {
             ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pContext.get() );
             pParaContext->SetFrameMode();
-
         }
         else
         {
