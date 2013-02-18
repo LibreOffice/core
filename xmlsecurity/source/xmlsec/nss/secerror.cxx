@@ -104,6 +104,7 @@ printChainFailure(CERTVerifyLog *log)
                     specificError = "[unknown usage].";
                     break;
                 }
+                break;
             case SEC_ERROR_INADEQUATE_CERT_TYPE:
                 errorFlags = (unsigned long)node->arg;
                 switch (errorFlags)
@@ -131,6 +132,7 @@ printChainFailure(CERTVerifyLog *log)
                     specificError = "[unknown usage].";
                     break;
                 }
+                break;
             case SEC_ERROR_UNKNOWN_ISSUER:
                 specificError = "Unknown issuer:";
                 issuer = node->cert->issuerName;
