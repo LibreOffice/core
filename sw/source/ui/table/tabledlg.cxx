@@ -495,17 +495,17 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
 
         nOldAlign = pTblData->GetAlign();
 
-        sal_Bool bSetRight = sal_False, bSetLeft = sal_False;
+        bool bSetRight = false, bSetLeft = false;
         switch( nOldAlign )
         {
             case text::HoriOrientation::NONE:
                 m_pFreeBtn->Check();
                 if(m_pRelWidthCB->IsChecked())
-                    bSetRight = sal_True;
+                    bSetRight = true;
             break;
             case text::HoriOrientation::FULL:
             {
-                bSetRight = bSetLeft = sal_True;
+                bSetRight = bSetLeft = true;
                 m_pFullBtn->Check();
                 m_aWidthMF.Enable(sal_False);
                 m_pRelWidthCB->Enable(sal_False);
@@ -514,25 +514,25 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
             break;
             case text::HoriOrientation::LEFT:
             {
-                bSetLeft = sal_True;
+                bSetLeft = true;
                 m_pLeftBtn->Check();
             }
             break;
             case text::HoriOrientation::LEFT_AND_WIDTH :
             {
-                bSetRight = sal_True;
+                bSetRight = true;
                 m_pFromLeftBtn->Check();
             }
             break;
             case text::HoriOrientation::RIGHT:
             {
-                bSetRight = sal_True;
+                bSetRight = true;
                 m_pRightBtn->Check();
             }
             break;
             case text::HoriOrientation::CENTER:
             {
-                bSetRight = sal_True;
+                bSetRight = true;
                 m_pCenterBtn->Check();
             }
             break;
@@ -1474,7 +1474,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-    sal_Bool bFlowAllowed = !bHtmlMode || rHtmlOpt.IsPrintLayoutExtension();
+    bool bFlowAllowed = !bHtmlMode || rHtmlOpt.IsPrintLayoutExtension();
     if(bFlowAllowed)
     {
         // Einfuegen der vorhandenen Seitenvorlagen in die Listbox

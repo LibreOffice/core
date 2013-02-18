@@ -130,7 +130,7 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
         SwTwips nOld = 0;
         SwTwips nNew = 0;
         sal_Bool bOld = sal_False;
-        sal_Bool bFirst = sal_True;
+        bool bFirst = true;
         i = 0;
 
         while ( i < nAllCols -1 )
@@ -149,7 +149,7 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
                 if(pOldTColumns[nNewPos - 1].bVisible)
                     break;
             }
-            bFirst = sal_False;
+            bFirst = false;
             // sie muessen sortiert eingefuegt werden
             bOld = nOld < nNew;
             nPos = sal_uInt16(bOld ? nOld : nNew);

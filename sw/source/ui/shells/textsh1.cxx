@@ -117,7 +117,7 @@
 
 using namespace ::com::sun::star;
 
-void sw_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq )
+void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq )
 {
     FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rWrtSh.GetView()));
     SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
@@ -269,7 +269,7 @@ static short lcl_AskRedlineMode(Window *pWin)
 
 void SwTextShell::Execute(SfxRequest &rReq)
 {
-    sal_Bool bUseDialog = sal_True;
+    bool bUseDialog = true;
     const SfxItemSet *pArgs = rReq.GetArgs();
     SwWrtShell& rWrtSh = GetShell();
     const SfxPoolItem* pItem = 0;
@@ -412,7 +412,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, nSlot , sal_False );
             if ( pNameItem )
                 aStr = pNameItem->GetValue();
-            sal_Bool bFont = pFont && pFont->GetValue().Len();
+            bool bFont = pFont && pFont->GetValue().Len();
             rWrtSh.StartUndo( UNDO_UI_INSERT_FOOTNOTE );
             rWrtSh.InsertFootnote( aStr, nSlot == FN_INSERT_ENDNOTE, !bFont );
             if ( bFont )
@@ -812,7 +812,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
-                bUseDialog = sal_False;
+                bUseDialog = false;
             // intentionally no break
         }
         case SID_CHAR_DLG:
@@ -843,7 +843,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
-                bUseDialog = sal_False;
+                bUseDialog = false;
             // intentionally no break
 
         }
@@ -1344,7 +1344,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         {
             // is there a valid selection to get text from?
             String aText;
-            sal_Bool bValid = !rSh.HasSelection() ||
+            bool bValid = !rSh.HasSelection() ||
                     (rSh.IsSelOnePara() && !rSh.IsMultiSelection());
             // prevent context menu from showing when cursor is not in or at the end of a word
             // (GetCurWord will return the next word if there is none at the current position...)

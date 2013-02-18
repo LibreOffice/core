@@ -87,7 +87,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
                 0 );
         SwDocShell* pDocSh = GetView().GetDocShell();
-        sal_Bool bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
+        bool bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
         const SwNumRule* pCurRule = GetShell().GetCurNumRule();
         if( pCurRule )
         {

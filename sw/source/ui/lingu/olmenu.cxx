@@ -96,7 +96,7 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-extern void sw_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
+extern void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
 
 
 

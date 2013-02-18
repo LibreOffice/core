@@ -176,7 +176,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
 
     SfxChildWindow* pAuthMark = pVFrame->GetChildWindow(FN_INSERT_AUTH_ENTRY_DLG);
 
-    const sal_Bool bHtmlMode = 0 != ::GetHtmlMode( GetView().GetDocShell() );
+    const bool bHtmlMode = 0 != ::GetHtmlMode( GetView().GetDocShell() );
     const SwTOXBase* pBase = 0;
     if( bHtmlMode || 0 != ( pBase = rSh.GetCurTOX()) )
     {
@@ -205,16 +205,16 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
     else
     {
 
-        sal_Bool bEnableEdit = sal_True;
+        bool bEnableEdit = true;
         sal_Bool bInReadonly = rSh.HasReadonlySel();
         if( rSh.HasSelection() || bInReadonly)
-            bEnableEdit = sal_False;
+            bEnableEdit = false;
         else
         {
             SwTOXMarks aArr;
             rSh.GetCurTOXMarks( aArr );
             if( aArr.empty())
-                bEnableEdit = sal_False;
+                bEnableEdit = false;
         }
 
         if(!bEnableEdit)

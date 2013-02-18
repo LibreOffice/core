@@ -102,7 +102,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), sal_False, &pItem);
 
     Window *pMDI = &GetView().GetViewFrame()->GetWindow();
-    sal_Bool bMore = sal_False;
+    bool bMore = false;
     bool bIsText = true;
     sal_uInt16 nInsertType = 0;
     sal_uInt16 nInsertSubType = 0;
@@ -182,7 +182,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             break;
 
         default:
-            bMore = sal_True;
+            bMore = true;
     }
     if(bMore)
     {
@@ -338,7 +338,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             case FN_POSTIT:
             {
                 SwPostItField* pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
-                  sal_Bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == RES_POSTITFLD);
+                bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == RES_POSTITFLD);
                 if (bNew || GetView().GetPostItMgr()->IsAnswer())
                 {
                     SvtUserOptions aUserOpt;
@@ -689,7 +689,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 break;
             case FN_POSTIT :
             case FN_JAVAEDIT :
-                sal_Bool bCurField = sal_False;
+                bool bCurField = false;
                 pField = rSh.GetCurFld();
                 if(nWhich == FN_POSTIT)
                     bCurField = pField && pField->GetTyp()->Which() == RES_POSTITFLD;

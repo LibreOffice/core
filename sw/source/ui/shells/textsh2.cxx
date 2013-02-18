@@ -238,7 +238,7 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
 {
     if( pDBStruct )
     {
-        sal_Bool bDispose = sal_False;
+        bool bDispose = false;
         Reference< sdbc::XConnection> xConnection = pDBStruct->xConnection;
         Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,pDBStruct->aDBData.sDataSource);
         // #111987# the connection is disposed an so no parent has been found
@@ -248,7 +248,7 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
         if ( !xConnection.is()  )
         {
             xConnection = SwNewDBMgr::GetConnection(pDBStruct->aDBData.sDataSource, xSource);
-            bDispose = sal_True;
+            bDispose = true;
         }
 
         Reference< XColumnsSupplier> xColSupp;

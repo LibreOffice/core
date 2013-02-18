@@ -172,7 +172,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
 {
     sal_uInt16 nSlot = rReq.GetSlot();
     const SfxItemSet* pArgs = rReq.GetArgs();
-    sal_Bool bArgs = pArgs != 0 && pArgs->Count() > 0;
+    bool bArgs = pArgs != 0 && pArgs->Count() > 0;
     int bGrow = sal_False;
     SwWrtShell& rWrtSh = GetShell();
     SwTxtFmtColl* pColl = 0;
@@ -340,7 +340,7 @@ SET_LINESPACE:
             SfxItemSet aAdjustSet( GetPool(),
                     RES_PARATR_ADJUST, RES_PARATR_ADJUST );
             GetShell().GetCurAttr(aAdjustSet);
-            sal_Bool bChgAdjust = sal_False;
+            bool bChgAdjust = false;
             SfxItemState eAdjustState = aAdjustSet.GetItemState(RES_PARATR_ADJUST, sal_False);
             if(eAdjustState  >= SFX_ITEM_DEFAULT)
             {
@@ -350,7 +350,7 @@ SET_LINESPACE:
                              (SVX_ADJUST_RIGHT == eAdjust  &&  SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot);
             }
             else
-                bChgAdjust = sal_True;
+                bChgAdjust = true;
 
             SvxFrameDirection eFrmDirection =
                     (SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot) ?

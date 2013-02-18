@@ -502,14 +502,14 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     break;
     case FN_INSERT_FRAME:
     {
-        sal_Bool bSingleCol = sal_False;
+        bool bSingleCol = false;
         if( 0!= dynamic_cast< SwWebDocShell*>( GetView().GetDocShell()) )
         {
             SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
             sal_uInt16 nExport = rHtmlOpt.GetExportMode();
             if( HTML_CFG_MSIE == nExport )
             {
-                bSingleCol = sal_True;
+                bSingleCol = true;
             }
 
         }

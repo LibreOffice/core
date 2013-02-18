@@ -39,7 +39,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                                         FN_GLOSSARY_DLG == nSlot );
     SwGlossaryHdl* pGlosHdl = GetView().GetGlosHdl();
     // SwGlossaryList updaten?
-    sal_Bool bUpdateList = sal_False;
+    bool bUpdateList = false;
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
@@ -50,7 +50,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
     {
         case FN_GLOSSARY_DLG:
             pGlosHdl->GlossaryDlg();
-            bUpdateList = sal_True;
+            bUpdateList = true;
             rReq.Ignore();
             break;
         case FN_EXPAND_GLOSSARY:
@@ -82,7 +82,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 pGlosHdl->NewGlossary( aName, aShortName, sal_True );
                 rReq.Done();
             }
-            bUpdateList = sal_True;
+            bUpdateList = true;
         break;
         case FN_SET_ACT_GLOSSARY:
             if(pItem)
