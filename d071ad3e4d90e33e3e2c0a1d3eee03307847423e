@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///pc\u003d",
+        "filename": "svtools/source/graphic/grfmgr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-02-18T22:34:25Z",
+      "side": 1,
+      "message": "the \"x\" here ought to be a y, surely?\n\ni\u0027ve changed that on master in 995494ec27a5815f8d85974c1ba525f4b4b4250b",
+      "revId": "d071ad3e4d90e33e3e2c0a1d3eee03307847423e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
