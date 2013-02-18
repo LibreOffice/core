@@ -38,6 +38,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	cosv \
 	cppu \
 	cppuhelper \
+	cppunit \
 	i18npool \
 	i18nutil \
 	idl \
@@ -78,6 +79,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 		helpcompiler \
 		xmlhelp \
 	) \
+	$(call gb_Helper_optional,EXPAT,expat) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 	$(call gb_Helper_optional,UCPP,ucpp) \
