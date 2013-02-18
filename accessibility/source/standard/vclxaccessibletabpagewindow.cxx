@@ -37,6 +37,8 @@ VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindo
     :VCLXAccessibleComponent( pVCLXWindow )
 {
     m_pTabPage = static_cast< TabPage* >( GetWindow() );
+    m_pTabControl = 0;
+    m_nPageId = 0;
     if ( m_pTabPage )
     {
         Window* pParent = m_pTabPage->GetAccessibleParentWindow();
