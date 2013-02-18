@@ -1392,7 +1392,7 @@ XFBGImage* LwpMiddleLayout::GetXFBGImage()
                 pXFBGImage->SetImageData(pGrafData, nDataLen);
                 if(pGrafData)
                 {
-                    delete pGrafData;
+                    delete[] pGrafData;
                     pGrafData = NULL;
                 }
             }
