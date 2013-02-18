@@ -535,7 +535,7 @@ TabPage OFA_TP_LANGUAGES
     {
         HelpID = "cui:CheckBox:OFA_TP_LANGUAGES:CB_IGNORE_LANG_CHANGE";
         Pos = MAP_APPFONT ( 12 , 188-11+13 ) ;
-        Size = MAP_APPFONT ( 125 , RSC_CD_CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( 236 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Ignore s~ystem input language";
     };
 };
