@@ -123,21 +123,6 @@ SAXHelper::SAXHelper( )
 
     m_pParserCtxt = xmlNewParserCtxt() ;
 
-    /*
-     * i41748
-     *
-     * mmi : re-initialize the SAX handler to version 1
-     */
-
-    xmlSAXVersion(m_pParserCtxt->sax, 1);
-
-    /* end */
-
-    if( m_pParserCtxt->inputTab[0] != NULL )
-    {
-        m_pParserCtxt->inputTab[0] = NULL ;
-    }
-
     if( m_pParserCtxt == NULL )
     {
 #ifndef XMLSEC_NO_XSLT
@@ -148,25 +133,35 @@ SAXHelper::SAXHelper( )
 //      xmlCleanupParser() ;
         throw cssu::RuntimeException() ;
     }
-    else if( m_pParserCtxt->sax == NULL )
+    else
     {
-        xmlFreeParserCtxt( m_pParserCtxt ) ;
+        xmlSAXVersion(m_pParserCtxt->sax, 1);
+
+        if( m_pParserCtxt->inputTab[0] != NULL )
+        {
+            m_pParserCtxt->inputTab[0] = NULL ;
+        }
+
+        if( m_pParserCtxt->sax == NULL )
+        {
+            xmlFreeParserCtxt( m_pParserCtxt ) ;
 
 #ifndef XMLSEC_NO_XSLT
-        xsltCleanupGlobals() ;
+            xsltCleanupGlobals() ;
 #endif
 //      see issue i74334, we cannot call xmlCleanupParser when libxml is still used
 //      in other parts of the office.
 //      xmlCleanupParser() ;
-        m_pParserCtxt = NULL ;
-        throw cssu::RuntimeException() ;
-    }
-    else
-    {
-        m_pSaxHandler = m_pParserCtxt->sax ;
+            m_pParserCtxt = NULL ;
+            throw cssu::RuntimeException() ;
+        }
+        else
+        {
+            m_pSaxHandler = m_pParserCtxt->sax ;
 
-        //Adjust the context
-        m_pParserCtxt->recovery = 1 ;
+            //Adjust the context
+            m_pParserCtxt->recovery = 1 ;
+        }
     }
 }
 
@@ -233,6 +228,10 @@ xmlDocPtr SAXHelper::getDocument()
 void SAXHelper::startDocument( void )
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
+    if( m_pParserCtxt == NULL)
+    {
+        throw cssu::RuntimeException() ;
+    }
     /*
      * Adjust inputTab
      */
@@ -246,7 +245,7 @@ void SAXHelper::startDocument( void )
 
     m_pSaxHandler->startDocument( m_pParserCtxt ) ;
 
-    if( m_pParserCtxt == NULL || m_pParserCtxt->myDoc == NULL )
+    if( m_pParserCtxt->myDoc == NULL )
     {
         throw cssu::RuntimeException() ;
     }
