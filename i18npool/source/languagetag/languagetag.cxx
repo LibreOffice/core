@@ -248,41 +248,7 @@ LanguageTag::LanguageTag( const rtl_Locale & rLocale )
         mbCachedCountry( false),
         mbIsFallback( false)
 {
-    // The rtl_Locale follows the Open Group Base Specification,
-    // 8.2 Internationalization Variables
-    // language[_territory][.codeset][@modifier]
-    // On GNU/Linux systems usually being glibc locales.
-    // sal/osl/unx/nlsupport.c _parse_locale() parses them into
-    // Language: language               2 or 3 alpha code
-    // Country: [territory]             2 alpha code
-    // Variant: [.codeset][@modifier]
-    // Variant effectively contains anything that follows the territory, not
-    // looking for '.' dot delimiter or '@' modifier content.
-    if (!maLocale.Variant.isEmpty())
-    {
-        OString aStr = OUStringToOString( maLocale.Language + "_" + maLocale.Country + maLocale.Variant,
-                RTL_TEXTENCODING_UTF8);
-        /* FIXME: let liblangtag parse this entirely with
-         * lt_tag_convert_from_locale() but that needs a patch to pass the
-         * string. */
-#if 0
-        myLtError aError;
-        theDataRef::get().incRef();
-        mpImplLangtag = lt_tag_convert_from_locale( aStr.getStr(), &aError.p);
-        maBcp47 = OStringToOUString( lt_tag_get_string( MPLANGTAG), RTL_TEXTENCODING_UTF8);
-        mbInitializedBcp47 = true;
-#else
-        mnLangID = MsLangId::convertUnxByteStringToLanguage( aStr);
-        if (mnLangID == LANGUAGE_DONTKNOW)
-        {
-            SAL_WARN( "i18npool.langtag", "LanguageTag(rtl_Locale) - unknown: " << aStr);
-            mnLangID = LANGUAGE_ENGLISH_US;     // we need _something_ here
-        }
-        mbInitializedLangID = true;
-#endif
-        maLocale = lang::Locale();
-        mbInitializedLocale = false;
-    }
+    convertFromRtlLocale();
 }
 
 
@@ -414,6 +380,13 @@ void LanguageTag::reset( LanguageType nLanguage )
     mnLangID            = nLanguage;
     mbSystemLocale      = nLanguage == LANGUAGE_SYSTEM;
     mbInitializedLangID = !mbSystemLocale;
+}
+
+
+void LanguageTag::reset( const rtl_Locale & rLocale )
+{
+    reset( lang::Locale( rLocale.Language, rLocale.Country, rLocale.Variant));
+    convertFromRtlLocale();
 }
 
 
@@ -668,6 +641,46 @@ void LanguageTag::convertLangToBcp47()
         convertLangToLocale();
     convertLocaleToBcp47();
     mbInitializedBcp47 = true;
+}
+
+
+void LanguageTag::convertFromRtlLocale()
+{
+    // The rtl_Locale follows the Open Group Base Specification,
+    // 8.2 Internationalization Variables
+    // language[_territory][.codeset][@modifier]
+    // On GNU/Linux systems usually being glibc locales.
+    // sal/osl/unx/nlsupport.c _parse_locale() parses them into
+    // Language: language               2 or 3 alpha code
+    // Country: [territory]             2 alpha code
+    // Variant: [.codeset][@modifier]
+    // Variant effectively contains anything that follows the territory, not
+    // looking for '.' dot delimiter or '@' modifier content.
+    if (!maLocale.Variant.isEmpty())
+    {
+        OString aStr = OUStringToOString( maLocale.Language + "_" + maLocale.Country + maLocale.Variant,
+                RTL_TEXTENCODING_UTF8);
+        /* FIXME: let liblangtag parse this entirely with
+         * lt_tag_convert_from_locale() but that needs a patch to pass the
+         * string. */
+#if 0
+        myLtError aError;
+        theDataRef::get().incRef();
+        mpImplLangtag = lt_tag_convert_from_locale( aStr.getStr(), &aError.p);
+        maBcp47 = OStringToOUString( lt_tag_get_string( MPLANGTAG), RTL_TEXTENCODING_UTF8);
+        mbInitializedBcp47 = true;
+#else
+        mnLangID = MsLangId::convertUnxByteStringToLanguage( aStr);
+        if (mnLangID == LANGUAGE_DONTKNOW)
+        {
+            SAL_WARN( "i18npool.langtag", "LanguageTag(rtl_Locale) - unknown: " << aStr);
+            mnLangID = LANGUAGE_ENGLISH_US;     // we need _something_ here
+        }
+        mbInitializedLangID = true;
+#endif
+        maLocale = lang::Locale();
+        mbInitializedLocale = false;
+    }
 }
 
 

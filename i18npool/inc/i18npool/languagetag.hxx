@@ -205,6 +205,9 @@ public:
     /** Reset with LanguageType MS-LangID. */
     void                            reset( LanguageType nLanguage );
 
+    /** Reset with rtl_Locale. */
+    void                            reset( const rtl_Locale & rLocale );
+
 
     /** Fall back to a known locale.
 
@@ -274,6 +277,8 @@ private:
     void    convertBcp47ToLang();
     void    convertLangToLocale();
     void    convertLangToBcp47();
+
+    void    convertFromRtlLocale();
 
     bool    canonicalize();
 
