@@ -1603,24 +1603,24 @@ XFColumns* LwpLayout::GetXFColumns()
     //set xfcolumn
     for(sal_uInt16 nIndex = 0; nIndex<nCols; nIndex++)
     {
-        XFColumn* pColumn = new XFColumn();
+        XFColumn aColumn;
         sal_Int32 nWidth = static_cast<sal_Int32>(GetColWidth(nIndex));
         nWidth=8305/nCols;  //relative width
-        pColumn->SetRelWidth(nWidth);
+        aColumn.SetRelWidth(nWidth);
 
         //the left and right margins is 0;
         double nGap = GetColGap(nIndex)/2;
         //nGap=0;
-        pColumn->SetMargins(nGap,nGap);
+        aColumn.SetMargins(nGap,nGap);
         if(nIndex==0)
         {
-            pColumn->SetMargins(0,nGap);
+            aColumn.SetMargins(0,nGap);
         }
         if(nIndex==(nCols-1))
         {
-            pColumn->SetMargins(nGap,0);
+            aColumn.SetMargins(nGap,0);
         }
-        pColumns->AddColumn(*pColumn);
+        pColumns->AddColumn(aColumn);
     }
 
     return pColumns;
