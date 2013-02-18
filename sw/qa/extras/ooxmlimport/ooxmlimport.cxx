@@ -110,6 +110,7 @@ public:
     void testN773061();
     void testN780645();
     void testFineTableDash();
+    void testN779642();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -171,7 +172,8 @@ void Test::run()
         {"n785767.docx", &Test::testN785767},
         {"n773061.docx", &Test::testN773061},
         {"n780645.docx", &Test::testN780645},
-        {"tableborder-finedash.docx", &Test::testFineTableDash}
+        {"tableborder-finedash.docx", &Test::testFineTableDash},
+        {"n779642.docx", &Test::testN779642},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1059,6 +1061,13 @@ void Test::testFineTableDash()
     table::TableBorder2 aBorder;
     xTableProperties->getPropertyValue("TableBorder2") >>= aBorder;
     CPPUNIT_ASSERT_EQUAL(aBorder.RightLine.LineStyle, table::BorderLineStyle::FINE_DASHED);
+}
+
+void Test::testN779642()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
