@@ -31,15 +31,11 @@ using ::rtl::OUString;
 namespace
 {
 
-static const ::rtl::OUString lcl_aServiceNamePolar2d(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PolarCoordinateSystem2d" ));
-static const ::rtl::OUString lcl_aServiceNamePolar3d(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PolarCoordinateSystem3d" ));
+static const OUString lcl_aServiceNamePolar2d( "com.sun.star.chart2.PolarCoordinateSystem2d" );
+static const OUString lcl_aServiceNamePolar3d( "com.sun.star.chart2.PolarCoordinateSystem3d" );
 
-static const ::rtl::OUString lcl_aImplementationNamePolar2d(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.PolarCoordinateSystem2d" ));
-static const ::rtl::OUString lcl_aImplementationNamePolar3d(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.PolarCoordinateSystem3d" ));
+static const OUString lcl_aImplementationNamePolar2d( "com.sun.star.comp.chart2.PolarCoordinateSystem2d" );
+static const OUString lcl_aImplementationNamePolar3d( "com.sun.star.comp.chart2.PolarCoordinateSystem3d" );
 }
 
 namespace chart

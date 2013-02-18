@@ -24,14 +24,10 @@
 namespace
 {
 
-static const ::rtl::OUString lcl_aServiceName_Logarithmic(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LogarithmicScaling" ));
-static const ::rtl::OUString lcl_aServiceName_Exponential(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ExponentialScaling" ));
-static const ::rtl::OUString lcl_aServiceName_Linear(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LinearScaling" ));
-static const ::rtl::OUString lcl_aServiceName_Power(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PowerScaling" ));
+static const OUString lcl_aServiceName_Logarithmic( "com.sun.star.chart2.LogarithmicScaling" );
+static const OUString lcl_aServiceName_Exponential( "com.sun.star.chart2.ExponentialScaling" );
+static const OUString lcl_aServiceName_Linear( "com.sun.star.chart2.LinearScaling" );
+static const OUString lcl_aServiceName_Power( "com.sun.star.chart2.PowerScaling" );
 
 }
 

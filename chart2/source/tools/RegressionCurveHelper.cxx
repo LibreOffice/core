@@ -167,8 +167,7 @@ void RegressionCurveHelper::initializeCurveCalculator(
             Reference< data::XDataSequence > xSeq( aDataSeqs[i]->getValues());
             Reference< XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
             ::rtl::OUString aRole;
-            if( xProp->getPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" ))) >>= aRole )
+            if( xProp->getPropertyValue( "Role" ) >>= aRole )
             {
                 if( bUseXValuesIfAvailable && !bXValuesFound && aRole == "values-x" )
                 {
@@ -630,7 +629,7 @@ void RegressionCurveHelper::resetEquationPosition(
     {
         try
         {
-            const OUString aPosPropertyName( RTL_CONSTASCII_USTRINGPARAM( "RelativePosition" ));
+            const OUString aPosPropertyName( "RelativePosition" );
             Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties()); // since m233: , uno::UNO_SET_THROW );
             if( xEqProp->getPropertyValue( aPosPropertyName ).hasValue())
                 xEqProp->setPropertyValue( aPosPropertyName, uno::Any());

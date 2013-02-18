@@ -47,10 +47,8 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const ::rtl::OUString lcl_aImplementationName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.RegressionEquation" ));
-static const ::rtl::OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.RegressionEquation" ));
+static const OUString lcl_aImplementationName( "com.sun.star.comp.chart2.RegressionEquation" );
+static const OUString lcl_aServiceName( "com.sun.star.chart2.RegressionEquation" );
 
 enum
 {

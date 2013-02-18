@@ -576,16 +576,16 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
     return pObj;
 }
 
-bool DrawCommandDispatch::parseCommandURL( const ::rtl::OUString& rCommandURL, sal_uInt16* pnFeatureId,
-    ::rtl::OUString* pBaseCommand, ::rtl::OUString* pCustomShapeType )
+bool DrawCommandDispatch::parseCommandURL( const OUString& rCommandURL, sal_uInt16* pnFeatureId,
+    OUString* pBaseCommand, ::rtl::OUString* pCustomShapeType )
 {
     bool bFound = true;
     sal_uInt16 nFeatureId = 0;
-    ::rtl::OUString aBaseCommand;
-    ::rtl::OUString aType;
+    OUString aBaseCommand;
+    OUString aType;
 
     sal_Int32 nIndex = 1;
-    ::rtl::OUString aToken = rCommandURL.getToken( 0, '.', nIndex );
+    OUString aToken = rCommandURL.getToken( 0, '.', nIndex );
     if ( nIndex == -1 || aToken.isEmpty() )
     {
         aBaseCommand = rCommandURL;
@@ -598,32 +598,32 @@ bool DrawCommandDispatch::parseCommandURL( const ::rtl::OUString& rCommandURL, s
             {
                 case COMMAND_ID_DRAWTBX_CS_BASIC:
                     {
-                        aType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "diamond" ) );
+                        aType = "diamond";
                     }
                     break;
                 case COMMAND_ID_DRAWTBX_CS_SYMBOL:
                     {
-                        aType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "smiley" ) );
+                        aType = "smiley";
                     }
                     break;
                 case COMMAND_ID_DRAWTBX_CS_ARROW:
                     {
-                        aType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "left-right-arrow" ) );
+                        aType = "left-right-arrow";
                     }
                     break;
                 case COMMAND_ID_DRAWTBX_CS_FLOWCHART:
                     {
-                        aType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "flowchart-internal-storage" ) );
+                        aType = "flowchart-internal-storage";
                     }
                     break;
                 case COMMAND_ID_DRAWTBX_CS_CALLOUT:
                     {
-                        aType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "round-rectangular-callout" ) );
+                        aType = "round-rectangular-callout";
                     }
                     break;
                 case COMMAND_ID_DRAWTBX_CS_STAR:
                     {
-                        aType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "star5" ) );
+                        aType = "star5";
                     }
                     break;
                 default:

@@ -48,8 +48,7 @@ using ::chart::impl::CachedDataSequence_Base;
 
 namespace
 {
-static const OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.CachedDataSequence" ));
+static const OUString lcl_aServiceName( "com.sun.star.comp.chart.CachedDataSequence" );
 
 enum
 {
@@ -365,17 +364,17 @@ void SAL_CALL CachedDataSequence::removeModifyListener( const Reference< util::X
 void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< uno::Any > & _aArguments) throw (uno::RuntimeException, uno::Exception)
 {
     ::comphelper::SequenceAsHashMap aMap(_aArguments);
-    m_aNumericalSequence = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSequence")),m_aNumericalSequence);
+    m_aNumericalSequence = aMap.getUnpackedValueOrDefault( "DataSequence" ,m_aNumericalSequence);
     if ( m_aNumericalSequence.getLength() )
         m_eCurrentDataType = NUMERICAL;
     else
     {
-        m_aTextualSequence = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSequence")),m_aTextualSequence);
+        m_aTextualSequence = aMap.getUnpackedValueOrDefault( "DataSequence" ,m_aTextualSequence);
         if ( m_aTextualSequence.getLength() )
             m_eCurrentDataType = TEXTUAL;
         else
         {
-            m_aMixedSequence = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSequence")),m_aMixedSequence);
+            m_aMixedSequence = aMap.getUnpackedValueOrDefault( "DataSequence" ,m_aMixedSequence);
             if ( m_aMixedSequence.getLength() )
                 m_eCurrentDataType = MIXED;
         }

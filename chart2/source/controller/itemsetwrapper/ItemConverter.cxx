@@ -134,10 +134,9 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                         delete pItem;
                         (void)ex;
                         OSL_FAIL(
-                                    ::rtl::OUStringToOString(
+                                    OUStringToOString(
                                         ex.Message +
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                             " - unknown Property: " )) + aProperty.first,
+                                        " - unknown Property: " + aProperty.first,
                                         RTL_TEXTENCODING_ASCII_US ).getStr());
                     }
                     catch( const uno::Exception &ex )
@@ -206,10 +205,9 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                 {
                     (void)ex;
                     OSL_FAIL(
-                                ::rtl::OUStringToOString(
+                                OUStringToOString(
                                     ex.Message +
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                         " - unknown Property: " )) + aProperty.first,
+                                    " - unknown Property: " + aProperty.first,
                                     RTL_TEXTENCODING_ASCII_US).getStr());
                 }
                 catch( const uno::Exception &ex )

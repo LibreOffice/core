@@ -25,7 +25,7 @@
 
 
 #define IPM_MAP_ENTRY(wid,uno,mid) (wid, ::std::make_pair< ::comphelper::ItemConverter::tPropertyNameType, ::comphelper::ItemConverter::tMemberIdType >(\
-    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(uno)), mid))
+    uno, mid))
 
 namespace comphelper
 {

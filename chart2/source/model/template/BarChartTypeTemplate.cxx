@@ -41,8 +41,7 @@ using ::rtl::OUString;
 namespace
 {
 
-static const OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.BarChartTypeTemplate" ));
+static const OUString lcl_aServiceName( "com.sun.star.chart2.BarChartTypeTemplate" );
 
 enum
 {

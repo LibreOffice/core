@@ -61,9 +61,9 @@ void RelativeSizeHelper::adaptFontSizes(
     float fFontHeight = 0;
 
     vector< OUString > aProperties;
-    aProperties.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" )));
-    aProperties.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "CharHeightAsian" )));
-    aProperties.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "CharHeightComplex" )));
+    aProperties.push_back( "CharHeight" );
+    aProperties.push_back( "CharHeightAsian" );
+    aProperties.push_back( "CharHeightComplex" );
 
     for( vector< OUString >::const_iterator aIt = aProperties.begin();
          aIt != aProperties.end(); ++aIt )

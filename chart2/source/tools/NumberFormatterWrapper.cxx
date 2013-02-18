@@ -62,7 +62,7 @@ NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNum
 
 {
     uno::Reference<beans::XPropertySet> xProp(m_xNumberFormatsSupplier,uno::UNO_QUERY);
-    rtl::OUString sNullDate( RTL_CONSTASCII_USTRINGPARAM("NullDate"));
+    rtl::OUString sNullDate( "NullDate" );
     if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(sNullDate) )
         m_aNullDate = xProp->getPropertyValue(sNullDate);
     SvNumberFormatsSupplierObj* pSupplierObj = SvNumberFormatsSupplierObj::getImplementation( xSupplier );

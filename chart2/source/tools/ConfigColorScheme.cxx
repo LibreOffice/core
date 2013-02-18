@@ -36,7 +36,7 @@ using ::rtl::OUString;
 namespace
 {
 
-static const OUString aSeriesPropName( RTL_CONSTASCII_USTRINGPARAM("Series"));
+static const OUString aSeriesPropName( "Series" );
 
 } // anonymous namespace
 
@@ -73,7 +73,7 @@ private:
 };
 
 ChartConfigItem::ChartConfigItem( ConfigItemListener & rListener ) :
-        ::utl::ConfigItem( "Office.Chart/DefaultColor"),
+        ::utl::ConfigItem( "Office.Chart/DefaultColor" ),
     m_rListener( rListener )
 {}
 

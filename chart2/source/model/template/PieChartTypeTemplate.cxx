@@ -50,8 +50,7 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const ::rtl::OUString lcl_aServiceName(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PieChartTypeTemplate" ));
+static const OUString lcl_aServiceName( "com.sun.star.chart2.PieChartTypeTemplate" );
 
 enum
 {
@@ -469,7 +468,7 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
         sal_Int32 nOuterSeriesIndex = 0; //@todo in future this will depend on Orientation of the radius axis scale
         if( nSeriesIndex == nOuterSeriesIndex )
         {
-            const OUString aOffsetPropName( RTL_CONSTASCII_USTRINGPARAM("Offset"));
+            const OUString aOffsetPropName( "Offset" );
             // get offset mode
             chart2::PieChartOffsetMode ePieOffsetMode;
             this->getFastPropertyValue( PROP_PIE_TEMPLATE_OFFSET_MODE ) >>= ePieOffsetMode;

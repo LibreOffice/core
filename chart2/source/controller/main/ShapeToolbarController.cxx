@@ -39,20 +39,20 @@ namespace chart
 {
 //.............................................................................
 
-::rtl::OUString ShapeToolbarController::getImplementationName() throw (uno::RuntimeException)
+OUString ShapeToolbarController::getImplementationName() throw (uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 
-::rtl::OUString ShapeToolbarController::getImplementationName_Static() throw (uno::RuntimeException)
+OUString ShapeToolbarController::getImplementationName_Static() throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ShapeToolbarController" ) );
+    return OUString( "com.sun.star.comp.chart2.ShapeToolbarController" );
 }
 
-Sequence< ::rtl::OUString > ShapeToolbarController::getSupportedServiceNames_Static() throw (uno::RuntimeException)
+Sequence< OUString > ShapeToolbarController::getSupportedServiceNames_Static() throw (uno::RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ShapeToolbarController" ) );
+    Sequence< OUString > aSupported(1);
+    aSupported.getArray()[0] = "com.sun.star.chart2.ShapeToolbarController";
     return aSupported;
 }
 
@@ -61,7 +61,7 @@ Sequence< ::rtl::OUString > ShapeToolbarController::getSupportedServiceNames_Sta
     return ::comphelper::existsValue( ServiceName, getSupportedServiceNames_Static() );
 }
 
-Sequence< ::rtl::OUString> ShapeToolbarController::getSupportedServiceNames() throw (uno::RuntimeException)
+Sequence< OUString > ShapeToolbarController::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
@@ -128,37 +128,37 @@ void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments 
         }
         if ( m_aCommandURL == ".uno:BasicShapes" )
         {
-            m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BasicShapes" ) ), sal_True ) );
+            m_aStates.insert( TCommandState::value_type( ".uno:BasicShapes", sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_BASIC;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }
         else if ( m_aCommandURL == ".uno:SymbolShapes" )
         {
-            m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SymbolShapes" ) ), sal_True ) );
+            m_aStates.insert( TCommandState::value_type( ".uno:SymbolShapes", sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_SYMBOL;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }
         else if ( m_aCommandURL == ".uno:ArrowShapes" )
         {
-            m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ArrowShapes" ) ), sal_True ) );
+            m_aStates.insert( TCommandState::value_type( ".uno:ArrowShapes", sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_ARROW;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox) );
         }
         else if ( m_aCommandURL == ".uno:FlowChartShapes" )
         {
-            m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FlowChartShapes" ) ), sal_True ) );
+            m_aStates.insert( TCommandState::value_type( ".uno:FlowChartShapes", sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_FLOWCHART;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }
         else if ( m_aCommandURL == ".uno:CalloutShapes" )
         {
-            m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CalloutShapes" ) ), sal_True ) );
+            m_aStates.insert( TCommandState::value_type( ".uno:CalloutShapes", sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_CALLOUT;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }
         else if ( m_aCommandURL == ".uno:StarShapes" )
         {
-            m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StarShapes" ) ), sal_True ) );
+            m_aStates.insert( TCommandState::value_type( ".uno:StarShapes" , sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_STAR;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }

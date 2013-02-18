@@ -508,10 +508,10 @@ sal_Int32 XMLFilter::impl_ImportStream(
                     {
                         uno::Sequence< uno::Any > aArgs(2);
                         beans::NamedValue aValue;
-                        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentHandler"));
+                        aValue.Name = "DocumentHandler";
                         aValue.Value <<= xDocHandler;
                         aArgs[0] <<= aValue;
-                        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model"));
+                        aValue.Name = "Model";
                         aValue.Value <<= m_xTargetDoc;
                         aArgs[1] <<= aValue;
 
@@ -603,10 +603,10 @@ sal_Int32 XMLFilter::impl_Export(
             {
                 uno::Sequence< uno::Any > aArgs(2);
                 beans::NamedValue aValue;
-                aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentHandler"));
+                aValue.Name = "DocumentHandler";
                 aValue.Value <<= xDocHandler;
                 aArgs[0] <<= aValue;
-                aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model"));
+                aValue.Name = "Model";
                 aValue.Value <<= xDocumentComp;
                 aArgs[1] <<= aValue;
 
@@ -637,7 +637,7 @@ sal_Int32 XMLFilter::impl_Export(
             comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) );
 
         SvtSaveOptions aSaveOpt;
-        OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting"));
+        OUString sUsePrettyPrinting( "UsePrettyPrinting" );
         sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
         xInfoSet->setPropertyValue( sUsePrettyPrinting, uno::makeAny( bUsePrettyPrinting ) );
         if( ! bOasis )
