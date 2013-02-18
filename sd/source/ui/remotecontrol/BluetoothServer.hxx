@@ -43,6 +43,7 @@ namespace sd
         BluetoothServerImpl *mpImpl;
         virtual void SAL_CALL run();
 
+        void cleanupCommunicators();
         std::vector<Communicator*>* mpCommunicators;
     };
 }

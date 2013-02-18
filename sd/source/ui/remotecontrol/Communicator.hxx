@@ -43,6 +43,7 @@ namespace sd
                 css::presentation::XSlideShowController > &rController );
             void informListenerDestroyed();
             void disposeListener();
+            void forceClose();
 
         private:
             void execute();

@@ -34,6 +34,14 @@ Communicator::~Communicator()
 {
 }
 
+/// Close the underlying socket from another thread to force
+/// an early exit / termination
+void Communicator::forceClose()
+{
+    if( mpSocket )
+        mpSocket->close();
+}
+
 // Run as a thread
 void Communicator::execute()
 {

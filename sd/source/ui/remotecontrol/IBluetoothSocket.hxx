@@ -33,6 +33,8 @@ namespace sd
             @return number of bytes actually written
          */
         virtual sal_Int32 write( const void* pBuffer, sal_uInt32 n ) = 0;
+
+        virtual void close() {};
     };
 }
 

@@ -31,7 +31,7 @@ BufferedStreamSocket::BufferedStreamSocket( const osl::StreamSocket &aSocket ):
     aRead( 0 ),
     aBuffer(),
     mSocket( 0 ),
-    usingCSocket( false)
+    usingCSocket( false )
 {
 }
 
@@ -57,6 +57,17 @@ sal_Int32 BufferedStreamSocket::write( const void* pBuffer, sal_uInt32 n )
         return StreamSocket::write( pBuffer, n );
     else
         return ::send( mSocket, (const char *) pBuffer, (size_t) n, 0 );
+}
+
+void BufferedStreamSocket::close()
+{
+    if( usingCSocket )
+    {
+        ::close( mSocket );
+        mSocket = -1;
+    }
+    else
+        close();
 }
 
 sal_Int32 BufferedStreamSocket::readLine( OString& aLine )

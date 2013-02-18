@@ -214,15 +214,17 @@ bluezRegisterServiceRecord( DBusConnection *pConnection, DBusObject *pAdapter,
     return true;
 }
 
-static int
-bluezCreateListeningSocket()
+static void
+bluezCreateAttachListeningSocket( GMainContext *pContext, GPollFD *pSocketFD )
 {
     int nSocket;
+
+    pSocketFD->fd = -1;
 
     if( ( nSocket = socket( AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM ) ) < 0 )
     {
         SAL_WARN( "sdremote.bluetooth", "failed to open bluetooth socket with error " << nSocket );
-        return -1;
+        return;
     }
 
     sockaddr_rc aAddr;
@@ -235,24 +237,39 @@ bluezCreateListeningSocket()
     if ( ( a = bind( nSocket, (sockaddr*) &aAddr, sizeof(aAddr) ) ) < 0 ) {
         SAL_WARN( "sdremote.bluetooth", "bind failed with error" << a );
         close( nSocket );
-        return -1;
+        return;
     }
 
     if ( ( a = listen( nSocket, 1 ) ) < 0 )
     {
         SAL_WARN( "sdremote.bluetooth", "listen failed with error" << a );
         close( nSocket );
-        return -1;
+        return;
     }
 
     // set non-blocking behaviour ...
     if( fcntl( nSocket, F_SETFL, O_NONBLOCK) < 0 )
     {
         close( nSocket );
-        return -1;
+        return;
     }
 
-    return nSocket;
+    pSocketFD->fd = nSocket;
+    pSocketFD->events = G_IO_IN | G_IO_PRI;
+    pSocketFD->revents = 0;
+
+    g_main_context_add_poll( pContext, pSocketFD, G_PRIORITY_DEFAULT );
+}
+
+static void
+bluezDetachCloseSocket( GMainContext *pContext, GPollFD *pSocketFD )
+{
+    if( pSocketFD->fd >= 0 )
+    {
+        close( pSocketFD->fd );
+        g_main_context_remove_poll( pContext, pSocketFD );
+        pSocketFD->fd = -1;
+    }
 }
 
 #endif // LINUX_BLUETOOTH
@@ -544,6 +561,24 @@ setDiscoverable( DBusConnection *pConnection, DBusObject *pAdapter, bool bDiscov
     dbus_message_unref( pMsg );
 }
 
+static DBusObject *
+registerWithDefaultAdapter( DBusConnection *pConnection )
+{
+    DBusObject *pService;
+    pService = bluezGetDefaultService( pConnection );
+    if( !pService )
+        return NULL;
+
+    if( !bluezRegisterServiceRecord( pConnection, pService,
+                                     bluetooth_service_record ) )
+    {
+        delete pService;
+        return NULL;
+    }
+
+    return pService;
+}
+
 #endif // LINUX_BLUETOOTH
 
 BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
@@ -628,6 +663,17 @@ void BluetoothServer::doRestoreDiscoverable()
     spServer->meWasDiscoverable = UNKNOWN;
 }
 
+// We have to have all our clients shut otherwise we can't
+// re-bind to the same port number it appears.
+void BluetoothServer::cleanupCommunicators()
+{
+    for (std::vector<Communicator *>::iterator it = mpCommunicators->begin();
+         it != mpCommunicators->end(); it++)
+        (*it)->forceClose();
+    // the hope is that all the threads then terminate cleanly and
+    // clean themselves up.
+}
+
 void SAL_CALL BluetoothServer::run()
 {
     SAL_INFO( "sdremote.bluetooth", "BluetoothServer::run called" );
@@ -637,33 +683,20 @@ void SAL_CALL BluetoothServer::run()
     if( !pConnection )
         return;
 
-    mpImpl->mpService = bluezGetDefaultService( pConnection );
-    if( !mpImpl->mpService )
-    {
-        dbus_connection_unref( pConnection );
-        return;
-    }
+    // listen for connection state and power changes - we need to close
+    // and re-create our socket code on suspend / resume, enable/disable
+    DBusError aError;
+    dbus_error_init( &aError );
+    dbus_bus_add_match( pConnection, "type='signal',interface='org.bluez.Manager'", &aError );
+    dbus_connection_flush( pConnection );
 
-    if( !bluezRegisterServiceRecord( pConnection, mpImpl->mpService,
-                                     bluetooth_service_record ) )
-        return;
+    // Try to setup the default adapter, otherwise wait for add/remove signal
+    mpImpl->mpService = registerWithDefaultAdapter( pConnection );
 
-    int nSocket = bluezCreateListeningSocket();
-    if( nSocket < 0 )
-        return;
-
-    // ---------------- Socket code ----------------
-
-    sockaddr_rc aRemoteAddr;
-    socklen_t  aRemoteAddrLen = sizeof(aRemoteAddr);
-
-    // Avoid using GSources where we can
-
-    // poll on our socket
+    // poll on our bluetooth socket - if we can.
     GPollFD aSocketFD;
-    aSocketFD.fd = nSocket;
-    aSocketFD.events = G_IO_IN | G_IO_PRI;
-    g_main_context_add_poll( mpImpl->mpContext, &aSocketFD, G_PRIORITY_DEFAULT );
+    if( mpImpl->mpService )
+        bluezCreateAttachListeningSocket( mpImpl->mpContext, &aSocketFD );
 
     // also poll on our dbus connection
     int fd = -1;
@@ -688,13 +721,45 @@ void SAL_CALL BluetoothServer::run()
         SAL_INFO( "sdremote.bluetooth", "main-loop spin "
                   << aDBusFD.revents << " " << aSocketFD.revents );
         if( aDBusFD.revents )
-            dbus_connection_read_write_dispatch( pConnection, 0 );
+        {
+            dbus_connection_read_write( pConnection, 0 );
+            DBusMessage *pMsg = dbus_connection_pop_message( pConnection );
+            if( pMsg )
+            {
+                if( dbus_message_is_signal( pMsg, "org.bluez.Manager", "AdapterRemoved" ) )
+                {
+                    SAL_WARN( "sdremote.bluetooth", "lost adapter - cleaning up sockets" );
+                    bluezDetachCloseSocket( mpImpl->mpContext, &aSocketFD );
+                    cleanupCommunicators();
+                }
+                else if( dbus_message_is_signal( pMsg, "org.bluez.Manager", "AdapterAdded" ) ||
+                         dbus_message_is_signal( pMsg, "org.bluez.Manager", "DefaultAdapterChanged" ) )
+                {
+                    SAL_WARN( "sdremote.bluetooth", "gained adapter - re-generating sockets" );
+                    bluezDetachCloseSocket( mpImpl->mpContext, &aSocketFD );
+                    cleanupCommunicators();
+                    mpImpl->mpService = registerWithDefaultAdapter( pConnection );
+                    if( mpImpl->mpService )
+                        bluezCreateAttachListeningSocket( mpImpl->mpContext, &aSocketFD );
+                }
+                else
+                    SAL_INFO( "sdremote.bluetooth", "unknown incoming dbus message, "
+                              << " type: " << dbus_message_get_type( pMsg )
+                              << " path: '" << dbus_message_get_path( pMsg )
+                              << "' interface: '" << dbus_message_get_interface( pMsg )
+                              << "' member: '" << dbus_message_get_member( pMsg ) );
+            }
+            dbus_message_unref( pMsg );
+        }
 
         if( aSocketFD.revents )
         {
+            sockaddr_rc aRemoteAddr;
+            socklen_t aRemoteAddrLen = sizeof(aRemoteAddr);
+
             int nClient;
             SAL_INFO( "sdremote.bluetooth", "performing accept" );
-            if ( ( nClient = accept( nSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) < 0 &&
+            if ( ( nClient = accept( aSocketFD.fd, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) < 0 &&
                  errno != EAGAIN )
             {
                 SAL_WARN( "sdremote.bluetooth", "accept failed with errno " << errno );

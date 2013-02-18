@@ -51,6 +51,8 @@ namespace sd
 
             virtual sal_Int32 write( const void* pBuffer, sal_uInt32 n );
 
+            virtual void close();
+
             void getPeerAddr(osl::SocketAddr&);
         private:
             sal_Int32 aRet, aRead;
