@@ -27,11 +27,10 @@
 #include <vcl/svgdata.hxx>
 
 namespace {
-    static bool loadPng(const char *pPath, const rtl::OUString &rName, BitmapEx &rBitmap)
+    static bool loadPng( rtl::OUString aUri, BitmapEx &rBitmap)
     {
-        rtl::OUString uri = rtl::OUString::createFromAscii( pPath ) + rName;
-        rtl::Bootstrap::expandMacros( uri );
-        INetURLObject aObj( uri );
+        rtl::Bootstrap::expandMacros( aUri );
+        INetURLObject aObj( aUri );
         SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
         if ( !aStrm.GetError() ) {
             vcl::PNGReader aReader( aStrm );
@@ -41,6 +40,12 @@ namespace {
         else
             return false;
     }
+    static bool tryLoadPng( const OUString& rName, BitmapEx& rBitmap )
+    {
+        return
+            loadPng( "$BRAND_BASE_DIR/program/edition" + rName, rBitmap) ||
+            loadPng( "$BRAND_BASE_DIR/program" + rName, rBitmap);
+    }
     static bool loadSvg(rtl::OUString aUri, BitmapEx &rBitmap)
     {
         rtl::Bootstrap::expandMacros( aUri );
@@ -49,13 +54,12 @@ namespace {
         rBitmap = aSvgData.getReplacement();
         return !rBitmap.IsEmpty();
     }
-}
-
-static bool lcl_loadPng( const OUString& rName, BitmapEx& rBitmap )
-{
-    return
-        loadPng( "$BRAND_BASE_DIR/program/edition", rName, rBitmap) ||
-        loadPng( "$BRAND_BASE_DIR/program", rName, rBitmap);
+    static bool tryLoadSvg( const OUString& rName, BitmapEx& rBitmap )
+    {
+        return
+            loadSvg( "$BRAND_BASE_DIR/program/edition" + rName, rBitmap) ||
+            loadSvg( "$BRAND_BASE_DIR/program" + rName, rBitmap);
+    }
 }
 
 bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
@@ -72,21 +76,14 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
     ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
     for (size_t i=0; i < aFallbacks.size(); ++i)
     {
-        if (lcl_loadPng( aBaseName + "-" + aFallbacks[i] + aPng, rBitmap))
+        if (tryLoadPng( aBaseName + "-" + aFallbacks[i] + aPng, rBitmap))
             return true;
     }
 
-    if (lcl_loadPng( aBaseName + aPng, rBitmap))
+    if (tryLoadPng( aBaseName + aPng, rBitmap))
         return true;
 
     return false;
-}
-
-static bool lcl_loadSvg( const OUString& rName, BitmapEx& rBitmap )
-{
-    return
-        loadSvg( "$BRAND_BASE_DIR/program/edition" + rName, rBitmap) ||
-        loadSvg( "$BRAND_BASE_DIR/program" + rName, rBitmap);
 }
 
 bool Application::LoadBrandSVG (const char *pName, BitmapEx &rBitmap)
@@ -101,11 +98,11 @@ bool Application::LoadBrandSVG (const char *pName, BitmapEx &rBitmap)
     ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
     for (size_t i=0; i < aFallbacks.size(); ++i)
     {
-        if (lcl_loadSvg( aBaseName + "-" + aFallbacks[i] + aSvg, rBitmap))
+        if (tryLoadSvg( aBaseName + "-" + aFallbacks[i] + aSvg, rBitmap))
             return true;
     }
 
-    if (lcl_loadSvg( aBaseName + aSvg, rBitmap))
+    if (tryLoadSvg( aBaseName + aSvg, rBitmap))
         return true;
 
     return false;
