@@ -3629,7 +3629,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     int nUseMonthCase = 0;      // not decided yet
     OUString aOrgCalendar;        // empty => not changed yet
 
-    double fOrgDateTime;
+    double fOrgDateTime(0.);
     bool bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
     if ( bOtherCalendar )
     {
