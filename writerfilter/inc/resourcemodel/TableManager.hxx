@@ -530,6 +530,11 @@ public:
     virtual void endLevel();
 
     /**
+       Tells whether a table has been started or not
+      */
+    bool isInTable();
+
+    /**
        Handle the start of a paragraph group.
      */
     virtual void startParagraphGroup();
@@ -699,6 +704,15 @@ void TableManager<T, PropertiesPointer>::handle(const T & rHandle)
 #endif
 
     setHandle(rHandle);
+}
+
+template <typename T, typename PropertiesPointer>
+bool TableManager<T, PropertiesPointer>::isInTable()
+{
+    bool bInTable = false;
+    if ( !mTableDataStack.empty() )
+        bInTable = mTableDataStack.top()->getDepth() > 0;
+    return bInTable;
 }
 
 template <typename T, typename PropertiesPointer>
