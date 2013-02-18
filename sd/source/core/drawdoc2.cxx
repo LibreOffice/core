@@ -69,25 +69,18 @@
 
 using namespace ::sd;
 
-const long PRINT_OFFSET = 30;       // siehe \svx\source\dialog\page.cxx (PB)
+const long PRINT_OFFSET = 30;       // see /svx/source/dialog/page.cxx
 
 using namespace com::sun::star;
 
-/*************************************************************************
-|*
-|* Sucht ein Objekt per Name
-|*
-\************************************************************************/
-
+// Looks up an object by name
 SdrObject* SdDrawDocument::GetObj(const String& rObjName) const
 {
     SdrObject* pObj = NULL;
     SdrObject* pObjFound = NULL;
     SdPage* pPage = NULL;
 
-    /**************************************************************************
-    * Zuerst alle Pages durchsuchen
-    **************************************************************************/
+    // First search in all pages
     sal_uInt16 nPage = 0;
     const sal_uInt16 nMaxPages = GetPageCount();
 
@@ -112,9 +105,7 @@ SdrObject* SdDrawDocument::GetObj(const String& rObjName) const
         nPage++;
     }
 
-    /**************************************************************************
-    * Wenn nicht gefunden, dann alle MasterPages durchsuchen
-    **************************************************************************/
+    // If it couldn't be found, look through all master pages
     nPage = 0;
     const sal_uInt16 nMaxMasterPages = GetMasterPageCount();
 
@@ -143,12 +134,7 @@ SdrObject* SdDrawDocument::GetObj(const String& rObjName) const
 }
 
 
-/*************************************************************************
-|*
-|* Sucht die SdPage per Name
-|*
-\************************************************************************/
-
+// Find SdPage by name
 sal_uInt16 SdDrawDocument::GetPageByName(const String& rPgName, sal_Bool& rbIsMasterPage) const
 {
     SdPage* pPage = NULL;
@@ -159,7 +145,7 @@ sal_uInt16 SdDrawDocument::GetPageByName(const String& rPgName, sal_Bool& rbIsMa
     rbIsMasterPage = sal_False;
 
     // Search all regular pages and all notes pages (handout pages are
-    // ignored.)
+    // ignored)
     while (nPage < nMaxPages && nPageNum == SDRPAGE_NOTFOUND)
     {
         pPage = const_cast<SdPage*>(static_cast<const SdPage*>(
@@ -175,7 +161,7 @@ sal_uInt16 SdDrawDocument::GetPageByName(const String& rPgName, sal_Bool& rbIsMa
         nPage++;
     }
 
-    // Search all master pages when not found among non-master pages.
+    // Search all master pages when not found among non-master pages
     const sal_uInt16 nMaxMasterPages = GetMasterPageCount();
     nPage = 0;
 
@@ -216,13 +202,8 @@ sal_uInt16 SdDrawDocument::GetMasterSdPageCount(PageKind ePgKind) const
     return (sal_uInt16)mpMasterPageListWatcher->GetSdPageCount(ePgKind);
 }
 
-/*************************************************************************
-|*
-|*  die in den Seitenobjekten der Notizseiten eingetragenen
-|*  Seitennummern anpassen
-|*
-\************************************************************************/
-
+// Adapt the page numbers that are registered in the page objects of the notes
+// pages
 void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
 {
     sal_uInt16  nPageCount  = GetPageCount();
@@ -232,8 +213,8 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
     {
         pPage = (SdPage*)GetPage(nPage);
 
-        // wenn es eine Notizseite ist, Seitenobjekt suchen
-        // und Nummer korrigieren
+        // If this is a notes page, find its page object and correct the page
+        // number
         if (pPage && pPage->GetPageKind() == PK_NOTES)
         {
             sal_uLong nObjCount = pPage->GetObjCount();
@@ -244,11 +225,10 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
                 if (pObj->GetObjIdentifier() == OBJ_PAGE &&
                     pObj->GetObjInventor() == SdrInventor)
                 {
-                    // das Seitenobjekt stellt die vorhergende Seite (also
-                    // die Zeichenseite) dar
-                    DBG_ASSERTWARNING(nStartPos, "Notizseitenpos. darf nicht 0 sein");
+                    // The page object is the preceding page (drawing page)
+                    DBG_ASSERTWARNING(nStartPos, "Position of notes page must not be 0.");
 
-                    DBG_ASSERTWARNING(nPage > 1, "Seitenobjekt darf nicht Handzettel darstellen");
+                    DBG_ASSERTWARNING(nPage > 1, "Page object must not be a handout.");
 
                     if (nStartPos > 0 && nPage > 1)
                         ((SdrPageObj*)pObj)->SetReferencedPage(GetPage(nPage - 1));
@@ -366,15 +346,9 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage* pPage, sal_uInt16 nPos, sal_
     }
 }
 
-/*************************************************************************
-|*
-|*  Seite verschieben
-|*
-\************************************************************************/
-
+// Move page
 void SdDrawDocument::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 {
-    // Seite verschieben
     FmFormModel::MovePage(nPgNum, nNewPos);
 
     sal_uInt16 nMin = Min(nPgNum, nNewPos);
@@ -382,12 +356,7 @@ void SdDrawDocument::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
     UpdatePageObjectsInNotes(nMin);
 }
 
-/*************************************************************************
-|*
-|*  Seite einfuegen
-|*
-\************************************************************************/
-
+// Insert page
 void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 {
     bool bLast = (nPos == GetPageCount());
@@ -403,12 +372,7 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 
 }
 
-/*************************************************************************
-|*
-|*  Seite loeschen
-|*
-\************************************************************************/
-
+// Delete page
 void SdDrawDocument::DeletePage(sal_uInt16 nPgNum)
 {
     FmFormModel::DeletePage(nPgNum);
@@ -416,12 +380,7 @@ void SdDrawDocument::DeletePage(sal_uInt16 nPgNum)
     UpdatePageObjectsInNotes(nPgNum);
 }
 
-/*************************************************************************
-|*
-|*  Seite entfernen
-|*
-\************************************************************************/
-
+// Remove page
 SdrPage* SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 {
     SdrPage* pPage = FmFormModel::RemovePage(nPgNum);
@@ -466,12 +425,7 @@ SdrPage* SdDrawDocument::RemoveMasterPage(sal_uInt16 nPgNum)
     return FmFormModel::RemoveMasterPage(nPgNum);
 }
 
-/*************************************************************************
-|*
-|* Seiten selektieren
-|*
-\************************************************************************/
-
+//Select pages
 void SdDrawDocument::SetSelected(SdPage* pPage, sal_Bool bSelect)
 {
     PageKind ePageKind = pPage->GetPageKind();
@@ -503,18 +457,10 @@ void SdDrawDocument::SetSelected(SdPage* pPage, sal_Bool bSelect)
     }
 }
 
-/*************************************************************************
-|*
-|* Sofern noch keine Seiten vorhanden sind, werden nun Seiten erzeugt
-|*
-\************************************************************************/
-
+// If no pages exist yet, create them now
 void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
 {
-    /**************************************************************************
-    * Wenn noch keine Seite im Model vorhanden ist (Datei-Neu), wird
-    * eine neue Seite eingefuegt
-    **************************************************************************/
+    // If no page exists yet in the model, (File -> New), insert a page
     sal_uInt16 nPageCount = GetPageCount();
 
     if (nPageCount <= 1)
@@ -522,9 +468,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         // #i57181# Paper size depends on Language, like in Writer
         Size aDefSize = SvxPaperInfo::GetDefaultPaperSize( MAP_100TH_MM );
 
-        /**********************************************************************
-        * Handzettel-Seite einfuegen
-        **********************************************************************/
+        // Insert handout page
         SdPage* pHandoutPage = dynamic_cast< SdPage* >( AllocPage(sal_False) );
 
         SdPage* pRefPage = NULL;
@@ -547,9 +491,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         pHandoutPage->SetName( String (SdResId(STR_HANDOUT) ) );
         InsertPage(pHandoutPage, 0);
 
-        /**********************************************************************
-        * MasterPage einfuegen und an der Handzettel-Seite vermerken
-        **********************************************************************/
+        // Insert master page and register this with the handout page
         SdPage* pHandoutMPage = (SdPage*) AllocPage(sal_True);
         pHandoutMPage->SetSize( pHandoutPage->GetSize() );
         pHandoutMPage->SetPageKind(PK_HANDOUT);
@@ -560,11 +502,9 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         InsertMasterPage(pHandoutMPage, 0);
         pHandoutPage->TRG_SetMasterPage( *pHandoutMPage );
 
-        /**********************************************************************
-        * Seite einfuegen
-        * Sofern nPageCount==1 ist, wurde das Model fuers Clipboad erzeugt.
-        * Eine Standard-Seite ist daher schon vorhanden.
-        **********************************************************************/
+        // Insert page
+        // If nPageCount==1 is, the model for the clipboard was created, thus a
+        // default page must already exist
         SdPage* pPage;
         sal_Bool bClipboard = sal_False;
 
@@ -582,7 +522,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
             }
             else if (meDocType == DOCUMENT_TYPE_DRAW)
             {
-                // Draw: stets Default-Groesse mit Raendern
+                // Draw: always use default size with margins
                 pPage->SetSize(aDefSize);
 
                 SfxPrinter* pPrinter = mpDocSh->GetPrinter(sal_False);
@@ -612,7 +552,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
             }
             else
             {
-                // Impress: stets Bildschirmformat, quer
+                // Impress: always use screen format, landscape.
                 Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN_4_3, MAP_100TH_MM) );
                 pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
                 pPage->SetBorder(0, 0, 0, 0);
@@ -626,9 +566,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
             pPage = (SdPage*) GetPage(1);
         }
 
-        /**********************************************************************
-        * MasterPage einfuegen und an der Seite vermerken
-        **********************************************************************/
+        // Insert master page, then register this with the page
         SdPage* pMPage = (SdPage*) AllocPage(sal_True);
         pMPage->SetSize( pPage->GetSize() );
         pMPage->SetBorder( pPage->GetLftBorder(),
@@ -640,9 +578,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         if( bClipboard )
             pMPage->SetLayoutName( pPage->GetLayoutName() );
 
-        /**********************************************************************
-        * Notizen-Seite einfuegen
-        **********************************************************************/
+        // Insert notes page
         SdPage* pNotesPage = (SdPage*) AllocPage(sal_False);
 
         if( pRefDocument )
@@ -655,7 +591,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         }
         else
         {
-            // Stets Hochformat
+            // Always use portrait format
             if (aDefSize.Height() >= aDefSize.Width())
             {
                 pNotesPage->SetSize(aDefSize);
@@ -672,9 +608,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         if( bClipboard )
             pNotesPage->SetLayoutName( pPage->GetLayoutName() );
 
-        /**********************************************************************
-        * MasterPage einfuegen und an der Notizen-Seite vermerken
-        **********************************************************************/
+        // Insert master page, then register this with the notes page
         SdPage* pNotesMPage = (SdPage*) AllocPage(sal_True);
         pNotesMPage->SetSize( pNotesPage->GetSize() );
         pNotesMPage->SetPageKind(PK_NOTES);
@@ -700,13 +634,8 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
     }
 }
 
-/*************************************************************************
-|*
-|* Erzeugt fehlende Notiz und Handzettelseiten (nach PowerPoint-Import)
-|* Es wird davon ausgegangen, dass mindestens eine Standard-Seite und
-|* eine Standard-MasterPage vorhanden sind.
-|*
-\************************************************************************/
+// Creates missing notes and handout pages (after PowerPoint import).
+// We assume that at least one default page and one default master page exist.
 
 sal_Bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
 {
@@ -715,9 +644,7 @@ sal_Bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
 
     if (nPageCount != 0)
     {
-        /**********************************************************************
-        * PageKind setzen
-        **********************************************************************/
+        // Set PageKind
         SdPage* pHandoutMPage = (SdPage*) GetMasterPage(0);
         pHandoutMPage->SetPageKind(PK_HANDOUT);
 
@@ -731,15 +658,15 @@ sal_Bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
 
             if(!pPage->TRG_HasMasterPage())
             {
-                // Keine MasterPage gesetzt -> erste Standard-MasterPage nehmen
-                // (Wenn bei PPT keine Standard-Seite vorhanden war)
+                // No master page set -> use first default master page
+                // (If there was no default page in the PPT)
                 pPage->TRG_SetMasterPage(*GetMasterPage(1));
             }
 
             SdPage* pNotesPage = (SdPage*) GetPage(i+1);
             pNotesPage->SetPageKind(PK_NOTES);
 
-            // Notiz-MasterPages setzen
+            // Set notes master page
             sal_uInt16 nMasterPageAfterPagesMasterPage = (pPage->TRG_GetMasterPage()).GetPageNum() + 1;
             pNotesPage->TRG_SetMasterPage(*GetMasterPage(nMasterPageAfterPagesMasterPage));
         }
@@ -752,14 +679,9 @@ sal_Bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
     return(bOK);
 }
 
-/*************************************************************************
-|*
-|* - selektierte Seiten hinter genannte Seite schieben
-|*   (nTargetPage = (sal_uInt16)-1  --> vor erste Seite schieben)
-|* - ergibt sal_True, wenn Seiten verschoben wurden
-|*
-\************************************************************************/
-
+// + Move selected pages after said page
+//   (nTargetPage = (sal_uInt16)-1  --> move before first page)
+// + Returns sal_True when the page has been moved
 sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
 {
     SdPage* pPage              = NULL;
@@ -772,7 +694,7 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
     if( bUndo )
         BegUndo(String(SdResId(STR_UNDO_MOVEPAGES)));
 
-    // Liste mit selektierten Seiten
+    // List of selected pages
     std::vector<SdPage*> aPageList;
     for (nPage = 0; nPage < nNoOfPages; nPage++)
     {
@@ -782,7 +704,7 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
             aPageList.push_back(pPage);
     }
 
-    // falls noetig, nach vorne hangeln, bis nicht selektierte Seite gefunden
+    // If necessary, look backwards, until we find a page that wasn't selected
     nPage = nTargetPage;
     if (nPage != (sal_uInt16)-1)
     {
@@ -799,7 +721,7 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
         }
     }
 
-    // vor der ersten Seite einfuegen
+    // Insert before the first page
     if (nPage == (sal_uInt16)-1)
     {
         std::vector<SdPage*>::reverse_iterator iter;
@@ -820,11 +742,11 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
             }
         }
     }
-    // hinter <nPage> einfuegen
+    // Insert after <nPage>
     else
     {
         nTargetPage = nPage;
-        nTargetPage = 2 * nTargetPage + 1;    // PK_STANDARD --> absolut
+        nTargetPage = 2 * nTargetPage + 1;    // PK_STANDARD --> absolute
 
         std::vector<SdPage*>::iterator iter;
         for (iter = aPageList.begin(); iter != aPageList.end(); ++iter)
@@ -833,7 +755,7 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
             nPage = pPage->GetPageNum();
             if (nPage > nTargetPage)
             {
-                nTargetPage += 2;        // hinter (!) der Seite einfuegen
+                nTargetPage += 2;        // Insert _after_ the page
 
                 if (nPage != nTargetPage)
                 {
@@ -874,23 +796,13 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
 }
 
 
-/*************************************************************************
-|*
-|* Anzahl der Links im sfx2::LinkManager zurueckgeben
-|*
-\************************************************************************/
-
+// Return number of links in sfx2::LinkManager
 sal_uLong SdDrawDocument::GetLinkCount()
 {
     return pLinkManager->GetLinks().size();
 }
 
-/*************************************************************************
-|*
-|* Language setzen
-|*
-\************************************************************************/
-
+// Set Language
 void SdDrawDocument::SetLanguage( const LanguageType eLang, const sal_uInt16 nId )
 {
     sal_Bool bChanged = sal_False;
@@ -921,12 +833,7 @@ void SdDrawDocument::SetLanguage( const LanguageType eLang, const sal_uInt16 nId
 }
 
 
-/*************************************************************************
-|*
-|* Return language
-|*
-\************************************************************************/
-
+// Return language
 LanguageType SdDrawDocument::GetLanguage( const sal_uInt16 nId ) const
 {
     LanguageType eLangType = meLanguage;
@@ -940,25 +847,20 @@ LanguageType SdDrawDocument::GetLanguage( const sal_uInt16 nId ) const
 }
 
 
-/*************************************************************************
-|*
-|* WorkStartup einleiten
-|*
-\************************************************************************/
-
+// Initiate WorkStartup
 IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
 {
     if( mpDocSh )
         mpDocSh->SetWaitCursor( sal_True );
 
-    sal_Bool bChanged = IsChanged();        // merken
+    sal_Bool bChanged = IsChanged();        // remember this
 
-    // Autolayouts initialisieren
+    // Initialize Autolayouts
     SdPage* pHandoutMPage = GetMasterSdPage(0, PK_HANDOUT);
 
     if (pHandoutMPage->GetAutoLayout() == AUTOLAYOUT_NONE)
     {
-        // AutoLayout wurde noch nicht umgesetzt -> Initialisieren
+        // No AutoLayout yet -> initialize
         pHandoutMPage->SetAutoLayout(AUTOLAYOUT_HANDOUT6, sal_True, sal_True);
     }
 
@@ -966,7 +868,7 @@ IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
 
     if (pPage->GetAutoLayout() == AUTOLAYOUT_NONE)
     {
-        // AutoLayout wurde noch nicht umgesetzt -> Initialisieren
+        // No AutoLayout yet -> initialize
         pPage->SetAutoLayout(AUTOLAYOUT_NONE, sal_True, sal_True);
     }
 
@@ -974,7 +876,7 @@ IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
 
     if (pNotesPage->GetAutoLayout() == AUTOLAYOUT_NONE)
     {
-        // AutoLayout wurde noch nicht umgesetzt -> Initialisieren
+        // No AutoLayout yet -> initialize
         pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
     }
 
@@ -986,21 +888,16 @@ IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
 }
 
 
-/*************************************************************************
-|*
-|* Wenn der WorkStartupTimer erzeugt worden ist (das erfolgt ausschliesslich
-|* in SdDrawViewShell::Consruct() ), so wird der Timer ggf. gestoppt und
-|* das WorkStartup eingeleitet
-|*
-\************************************************************************/
-
+// When the WorkStartupTimer has been created (this only happens in
+// SdDrawViewShell::Construct() ), the timer may be stopped and the WorkStartup
+// may be initiated.
 void SdDrawDocument::StopWorkStartupDelay()
 {
     if (mpWorkStartupTimer)
     {
         if ( mpWorkStartupTimer->IsActive() )
         {
-            // Timer war noch nicht abgelaufen -> WorkStartup wird eingeleitet
+            // Timer not yet expired -> initiate WorkStartup
             mpWorkStartupTimer->Stop();
             WorkStartupHdl(NULL);
         }
@@ -1010,14 +907,9 @@ void SdDrawDocument::StopWorkStartupDelay()
     }
 }
 
-/*************************************************************************
-|*
-|* Wenn der WorkStartupTimer erzeugt worden ist (das erfolgt ausschliesslich
-|* in SdDrawViewShell::Consruct() ), so wird der Timer ggf. gestoppt und
-|* das WorkStartup eingeleitet
-|*
-\************************************************************************/
-
+// When the WorkStartupTimer has been created (this only happens in
+// SdDrawViewShell::Construct() ), the timer may be stopped and the WorkStartup
+// may be initiated.
 SdAnimationInfo* SdDrawDocument::GetAnimationInfo(SdrObject* pObject) const
 {
     DBG_ASSERT(pObject, "sd::SdDrawDocument::GetAnimationInfo(), invalid argument!");
@@ -1034,7 +926,7 @@ SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCrea
     SdrObjUserData* pUD = 0;
     SdAnimationInfo* pRet = 0;
 
-    // gibt es in den User-Daten eine Animationsinformation?
+    // Can we find animation information within the user data?
     for (nUD = 0; nUD < nUDCount; nUD++)
     {
         pUD = rObject.GetUserData(nUD);
@@ -1056,13 +948,13 @@ SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCrea
 
 SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject ) const
 {
-    DBG_ASSERT(pObject, "ohne Objekt keine IMapInfo");
+    DBG_ASSERT(pObject, "Without an object there is no IMapInfo");
 
     SdrObjUserData* pUserData = NULL;
     SdIMapInfo*     pIMapInfo = NULL;
     sal_uInt16          nCount = pObject->GetUserDataCount();
 
-    // gibt es in den User-Daten eine IMap-Information?
+    // Can we find IMap information within the user data?
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
         pUserData = pObject->GetUserData( i );
@@ -1090,22 +982,22 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
         const Rectangle&    rRect = pObj->GetLogicRect();
         sal_Bool                bObjSupported = sal_False;
 
-        // HitTest ausfuehren
-        if ( pObj->ISA( SdrGrafObj )  ) // einfaches Grafik-Objekt
+        // execute HitTest
+        if ( pObj->ISA( SdrGrafObj )  ) // simple graphics object
         {
             const SdrGrafObj*   pGrafObj = (const SdrGrafObj*) pObj;
             const GeoStat&      rGeo = pGrafObj->GetGeoStat();
             SdrGrafObjGeoData*  pGeoData = (SdrGrafObjGeoData*) pGrafObj->GetGeoData();
 
-            // Drehung rueckgaengig
+            // Undo rotation
             if ( rGeo.nDrehWink )
                 RotatePoint( aRelPoint, rRect.TopLeft(), -rGeo.nSin, rGeo.nCos );
 
-            // Spiegelung rueckgaengig
+            // Undo mirroring
             if ( pGeoData->bMirrored )
                 aRelPoint.X() = rRect.Right() + rRect.Left() - aRelPoint.X();
 
-            // ggf. Unshear:
+            // Undo shearing
             if ( rGeo.nShearWink )
                 ShearPoint( aRelPoint, rRect.TopLeft(), -rGeo.nTan );
 
@@ -1118,20 +1010,20 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
             delete pGeoData;
             bObjSupported = sal_True;
         }
-        else if ( pObj->ISA( SdrOle2Obj ) ) // OLE-Objekt
+        else if ( pObj->ISA( SdrOle2Obj ) ) // OLE object
         {
             aGraphSize = ( (SdrOle2Obj*) pObj )->GetOrigObjSize();
             bObjSupported = sal_True;
         }
 
-        // hat alles geklappt, dann HitTest ausfuehren
+        // Everything worked out well, thus execute HitTest
         if ( bObjSupported )
         {
-            // relativen Mauspunkt berechnen
+            // Calculate relative position of mouse cursor
             aRelPoint -= rRect.TopLeft();
             pIMapObj = rImageMap.GetHitIMapObject( aGraphSize, rRect.GetSize(), aRelPoint );
 
-            // Deaktivierte Objekte wollen wir nicht
+            // We don't care about deactivated objects
             if ( pIMapObj && !pIMapObj->IsActive() )
                 pIMapObj = NULL;
         }
@@ -1317,7 +1209,7 @@ sal_uInt16 SdDrawDocument::CreatePage (
         eNotesLayout = pPreviousNotesPage->GetAutoLayout();
     }
 
-    // Create new standard page and set it up.
+    // Create new standard page and set it up
     pStandardPage = (SdPage*) AllocPage(sal_False);
 
     // Set the size here since else the presobj autolayout
@@ -1331,7 +1223,7 @@ sal_uInt16 SdDrawDocument::CreatePage (
     // Use master page of current page.
     pStandardPage->TRG_SetMasterPage(pPreviousStandardPage->TRG_GetMasterPage());
 
-    // User layout of current standard page.
+    // User layout of current standard page
     pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
     pStandardPage->SetAutoLayout(eStandardLayout, sal_True);
     pStandardPage->setHeaderFooterSettings( pPreviousStandardPage->getHeaderFooterSettings() );
@@ -1347,14 +1239,14 @@ sal_uInt16 SdDrawDocument::CreatePage (
     pStandardPage->SetPresChange( pPreviousStandardPage->GetPresChange() );
     pStandardPage->SetTime( pPreviousStandardPage->GetTime() );
 
-    // Create new notes page and set it up.
+    // Create new notes page and set it up
     pNotesPage = (SdPage*) AllocPage(sal_False);
     pNotesPage->SetPageKind(PK_NOTES);
 
-    // Use master page of current page.
+    // Use master page of current page
     pNotesPage->TRG_SetMasterPage(pPreviousNotesPage->TRG_GetMasterPage());
 
-    // Use layout of current notes page.
+    // Use layout of current notes page
     pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
     pNotesPage->SetAutoLayout(eNotesLayout, sal_True);
     pNotesPage->setHeaderFooterSettings( pPreviousNotesPage->getHeaderFooterSettings() );
@@ -1378,10 +1270,10 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
 {
     PageKind ePageKind = PK_STANDARD;
 
-    // Get current page.
+    // Get current page
     SdPage* pActualPage = GetSdPage(nPageNum, ePageKind);
 
-    // Get background flags.
+    // Get background flags
     SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
     sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
     sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
@@ -1389,7 +1281,7 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
 
     return DuplicatePage (
         pActualPage, ePageKind,
-        // No names for the new slides.
+        // No names for the new slides
         String(), String(),
         aVisibleLayers.IsSet(aBckgrnd),
         aVisibleLayers.IsSet(aBckgrndObj));
@@ -1427,7 +1319,7 @@ sal_uInt16 SdDrawDocument::DuplicatePage (
         pPreviousNotesPage = (SdPage*) GetPage(nStandardPageNum - 1);
     }
 
-    // Create duplicates of a standard page and the associated notes page.
+    // Create duplicates of a standard page and the associated notes page
     pStandardPage = (SdPage*) pPreviousStandardPage->Clone();
     pNotesPage = (SdPage*) pPreviousNotesPage->Clone();
 
@@ -1465,7 +1357,7 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
     String aNotesPageName = sNotesPageName;
 
     // Gather some information about the standard page and the notes page
-    // that are to be inserted.  This makes sure that there is always one
+    // that are to be inserted. This makes sure that there is always one
     // standard page followed by one notes page.
     if (ePageKind == PK_NOTES)
     {
@@ -1487,7 +1379,7 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
     if (nInsertPosition < 0)
         nInsertPosition = nStandardPageNum;
 
-    // Set up and insert the standard page.
+    // Set up and insert the standard page
     SetupNewPage (
         pPreviousStandardPage,
         pStandardPage,
@@ -1496,7 +1388,7 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
         bIsPageBack,
         bIsPageObj);
 
-    // Set up and insert the notes page.
+    // Set up and insert the notes page
     pNotesPage->SetPageKind(PK_NOTES);
     SetupNewPage (
         pPreviousNotesPage,
@@ -1507,7 +1399,7 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
         bIsPageObj);
 
     // Return an index that allows the caller to access the newly inserted
-    // pages by using GetSdPage().
+    // pages by using GetSdPage()
     return pStandardPage->GetPageNum() / 2;
 }
 
