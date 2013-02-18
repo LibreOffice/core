@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAVn///uk\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 7182,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-02-18T12:43:44Z",
+      "side": 1,
+      "message": "removed this as zlib doesnt seem to have a proper pkg-config on OS X unfortunately (at least on some tinderboxes). :/",
+      "revId": "34030a3519d4f558e9c7237862da9c88553722b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn///2k\u003d",
         "filename": "configure.ac",
         "patchSetId": 3
@@ -13,6 +30,24 @@
       "writtenOn": "2013-02-16T22:27:26Z",
       "side": 1,
       "message": "You AC SUBST CLUCENE_LIBS here, but is modified later.",
+      "revId": "34030a3519d4f558e9c7237862da9c88553722b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///vk\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 7192,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-02-18T12:43:44Z",
+      "side": 1,
+      "message": "That shouldnt be an issue as it only matters what is in the var on AC_OUTPUT:\n\"This means that AC_OUTPUT replaces instances of ‘@variable@’ in input files with the value that the shell variable variable has when AC_OUTPUT is called.\"\nhttp://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.69/html_node/Setting-Output-Variables.html",
+      "parentUuid": "AAAAVn///2k\u003d",
       "revId": "34030a3519d4f558e9c7237862da9c88553722b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
