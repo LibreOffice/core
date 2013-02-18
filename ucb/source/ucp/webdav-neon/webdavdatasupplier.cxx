@@ -32,6 +32,8 @@
  **************************************************************************
 
  *************************************************************************/
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/shared_ptr.hpp>
 #include <osl/diagnose.h>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <ucbhelper/contentidentifier.hxx>
@@ -60,10 +62,11 @@ struct ResultListEntry
     uno::Reference< ucb::XContentIdentifier > xId;
     uno::Reference< ucb::XContent >           xContent;
     uno::Reference< sdbc::XRow >              xRow;
-    const ContentProperties*                  pData;
+    boost::shared_ptr<ContentProperties> const pData;
 
-    ResultListEntry( const ContentProperties* pEntry ) : pData( pEntry ) {};
-     ~ResultListEntry() { delete pData; }
+    ResultListEntry(boost::shared_ptr<ContentProperties> const& pEntry)
+        : pData(pEntry)
+    {}
 };
 
 //=========================================================================
@@ -72,7 +75,7 @@ struct ResultListEntry
 //
 //=========================================================================
 
-typedef std::vector< ResultListEntry* > ResultList;
+typedef boost::ptr_vector<ResultListEntry> ResultList;
 
 //=========================================================================
 //
@@ -96,21 +99,7 @@ struct DataSupplier_Impl
                 sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xContext( rxContext ), m_nOpenMode( nOpenMode ),
       m_bCountFinal( sal_False ), m_bThrowException( sal_False ) {}
-    ~DataSupplier_Impl();
 };
-
-//=========================================================================
-DataSupplier_Impl::~DataSupplier_Impl()
-{
-    ResultList::const_iterator it  = m_aResults.begin();
-    ResultList::const_iterator end = m_aResults.end();
-
-    while ( it != end )
-    {
-        delete (*it);
-        ++it;
-    }
-}
 
 }
 
@@ -134,7 +123,6 @@ DataSupplier::DataSupplier(
 // virtual
 DataSupplier::~DataSupplier()
 {
-    delete m_pImpl;
 }
 
 //=========================================================================
@@ -145,7 +133,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
+        rtl::OUString aId = m_pImpl->m_aResults[ nIndex ].aId;
         if ( !aId.isEmpty() )
         {
             // Already cached.
@@ -158,7 +146,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         rtl::OUString aId = m_pImpl->m_xContent->getResourceAccess().getURL();
 
         const ContentProperties& props
-                            = *( m_pImpl->m_aResults[ nIndex ]->pData );
+                            = *( m_pImpl->m_aResults[ nIndex ].pData );
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
             aId += rtl::OUString("/");
@@ -168,7 +156,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         if ( props.isTrailingSlash() )
             aId += rtl::OUString("/");
 
-        m_pImpl->m_aResults[ nIndex ]->aId = aId;
+        m_pImpl->m_aResults[ nIndex ].aId = aId;
         return aId;
     }
     return rtl::OUString();
@@ -184,7 +172,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
         uno::Reference< ucb::XContentIdentifier > xId
-            = m_pImpl->m_aResults[ nIndex ]->xId;
+            = m_pImpl->m_aResults[ nIndex ].xId;
         if ( xId.is() )
         {
             // Already cached.
@@ -197,7 +185,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     {
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aId );
-        m_pImpl->m_aResults[ nIndex ]->xId = xId;
+        m_pImpl->m_aResults[ nIndex ].xId = xId;
         return xId;
     }
     return uno::Reference< ucb::XContentIdentifier >();
@@ -213,7 +201,7 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
         uno::Reference< ucb::XContent > xContent
-            = m_pImpl->m_aResults[ nIndex ]->xContent;
+            = m_pImpl->m_aResults[ nIndex ].xContent;
         if ( xContent.is() )
         {
             // Already cached.
@@ -229,7 +217,7 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
         {
             uno::Reference< ucb::XContent > xContent
                 = m_pImpl->m_xContent->getProvider()->queryContent( xId );
-            m_pImpl->m_aResults[ nIndex ]->xContent = xContent;
+            m_pImpl->m_aResults[ nIndex ].xContent = xContent;
             return xContent;
 
         }
@@ -298,7 +286,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        uno::Reference< sdbc::XRow > xRow = m_pImpl->m_aResults[ nIndex ]->xRow;
+        uno::Reference< sdbc::XRow > xRow = m_pImpl->m_aResults[ nIndex ].xRow;
         if ( xRow.is() )
         {
             // Already cached.
@@ -312,11 +300,11 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
             = Content::getPropertyValues(
                 m_pImpl->m_xContext,
                 getResultSet()->getProperties(),
-                *(m_pImpl->m_aResults[ nIndex ]->pData),
+                *(m_pImpl->m_aResults[ nIndex ].pData),
                 rtl::Reference< ::ucbhelper::ContentProviderImplHelper >(
                     m_pImpl->m_xContent->getProvider().get() ),
                 queryContentIdentifierString( nIndex ) );
-        m_pImpl->m_aResults[ nIndex ]->xRow = xRow;
+        m_pImpl->m_aResults[ nIndex ].xRow = xRow;
         return xRow;
     }
 
@@ -330,7 +318,7 @@ void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() )
-        m_pImpl->m_aResults[ nIndex ]->xRow = uno::Reference< sdbc::XRow >();
+        m_pImpl->m_aResults[ nIndex ].xRow = uno::Reference< sdbc::XRow >();
 }
 
 //=========================================================================
@@ -444,8 +432,8 @@ sal_Bool DataSupplier::getData()
                         }
                     }
 
-                    ContentProperties* pContentProperties
-                        = new ContentProperties( rRes );
+                    boost::shared_ptr<ContentProperties> const
+                        pContentProperties(new ContentProperties(rRes));
 
                     // Check resource against open mode.
                     switch ( m_pImpl->m_nOpenMode )

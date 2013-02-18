@@ -26,10 +26,11 @@
  *
  ************************************************************************/
 
-#ifndef _WEBDAV_UCP_DATASUPPLIER_HXX
-#define _WEBDAV_UCP_DATASUPPLIER_HXX
+#ifndef WEBDAV_UCP_DATASUPPLIER_HXX
+#define WEBDAV_UCP_DATASUPPLIER_HXX
 
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 
@@ -40,7 +41,7 @@ class Content;
 
 class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
-    DataSupplier_Impl* m_pImpl;
+    boost::scoped_ptr<DataSupplier_Impl> m_pImpl;
 
 private:
     sal_Bool getData();
