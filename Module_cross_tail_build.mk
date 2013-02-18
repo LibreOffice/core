@@ -47,6 +47,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	jurt \
 	jvmaccess \
 	jvmfwk \
+	l10ntools \
 	o3tl \
 	offapi \
 	officecfg \
@@ -75,7 +76,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	$(call gb_Helper_optional,CLUCENE,clucene) \
 	$(call gb_Helper_optional_for_host,DESKTOP, \
 		helpcompiler \
-		l10ntools \
 		xmlhelp \
 	) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
