@@ -595,6 +595,10 @@ static rtl_String* ustr_to_str( rtl_uString* pStr )
 
 static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
 {
+    /* FIXME-BCP47: if we wanted to support language tags here that would get
+     * complicated, this is C-source not C++ so LanguageTag can't be used. For
+     * now the splash screen will have to get along with language-territory. */
+
     char *pBuffer, *pSuffix, *pLocale;
     int nLocSize;
     rtl_Locale *pLoc = NULL;
