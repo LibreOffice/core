@@ -146,7 +146,7 @@ sal_Int32 OSXBluetoothWrapper::readLine( rtl::OString& aLine )
                 {
                     if (*p == '\n')
                         s << "\\n";
-                    else if (*p < ' ' || (*p >= 0x7F && *p <= 0xFF))
+                    else if (*p < ' ' || *p >= 0x7F)
                         s << "\\0x" << std::hex << std::setw(2) << std::setfill('0') << (int) *p << std::setfill(' ') << std::setw(1) << std::dec;
                     else
                         s << *p;
