@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkBox" id="box1">
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1583</property>
+    <property name="upper">9857</property>
+    <property name="value">1930</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkBox" id="OptGeneralPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
@@ -16,6 +24,7 @@
           <object class="GtkAlignment" id="alignment1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid1">
@@ -23,14 +32,14 @@
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
+                <property name="column_homogeneous">True</property>
                 <child>
-                  <object class="GtkCheckButton" id="checkbutton1">
-                    <property name="label" translatable="yes">~Tips</property>
-                    <property name="use_action_appearance">False</property>
+                  <object class="GtkCheckButton" id="tooltips">
+                    <property name="label" translatable="yes">_Tips</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -42,13 +51,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="checkbutton2">
-                    <property name="label" translatable="yes">~Extended tips</property>
-                    <property name="use_action_appearance">False</property>
+                  <object class="GtkCheckButton" id="exthelp">
+                    <property name="label" translatable="yes">_Extended tips</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -60,13 +68,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="checkbutton3">
-                    <property name="label" translatable="yes">~Help Agent</property>
-                    <property name="use_action_appearance">False</property>
+                  <object class="GtkCheckButton" id="helpagent">
+                    <property name="label" translatable="yes">_Help Agent</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -78,13 +85,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button1">
-                    <property name="label" translatable="yes">~Reset Help Agent</property>
-                    <property name="use_action_appearance">False</property>
+                  <object class="GtkButton" id="resethelpagent">
+                    <property name="label" translatable="yes">_Reset Help Agent</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -102,6 +109,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Help</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>
@@ -112,7 +122,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame2">
+      <object class="GtkFrame" id="filedlgframe">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label_xalign">0</property>
@@ -121,17 +131,45 @@
           <object class="GtkAlignment" id="alignment2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkCheckButton" id="checkbutton4">
-                <property name="label" translatable="yes">~Use LibreOffice dialogs</property>
-                <property name="use_action_appearance">False</property>
+              <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
+                <property name="can_focus">False</property>
+                <property name="column_spacing">6</property>
+                <child>
+                  <object class="GtkCheckButton" id="filedlg">
+                    <property name="label" translatable="yes">_Use LibreOffice dialogs</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="image1">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="pixbuf">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
               </object>
             </child>
           </object>
@@ -141,6 +179,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Open/Save dialogs</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>
@@ -151,7 +192,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame3">
+      <object class="GtkFrame" id="printdlgframe">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label_xalign">0</property>
@@ -160,15 +201,15 @@
           <object class="GtkAlignment" id="alignment3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkCheckButton" id="checkbutton5">
-                <property name="label" translatable="yes">Use LibreOffice ~dialogs</property>
-                <property name="use_action_appearance">False</property>
+              <object class="GtkCheckButton" id="printdlg">
+                <property name="label" translatable="yes">Use LibreOffice _dialogs</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
+                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
@@ -180,6 +221,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Print dialogs</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>
@@ -199,19 +243,19 @@
           <object class="GtkAlignment" id="alignment4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkCheckButton" id="checkbutton6">
-                    <property name="label" translatable="yes">~Printing sets "document modified" status</property>
-                    <property name="use_action_appearance">False</property>
+                  <object class="GtkCheckButton" id="docstatus">
+                    <property name="label" translatable="yes">_Printing sets "document modified" status</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -223,13 +267,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="checkbutton7">
-                    <property name="label" translatable="yes">~Allow to save document even when the document is not modified </property>
-                    <property name="use_action_appearance">False</property>
+                  <object class="GtkCheckButton" id="savealways">
+                    <property name="label" translatable="yes">_Allow to save document even when the document is not modified </property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -249,6 +292,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Document status</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>
@@ -259,7 +305,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame5">
+      <object class="GtkFrame" id="yearframe">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label_xalign">0</property>
@@ -268,44 +314,36 @@
           <object class="GtkAlignment" id="alignment5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="column_spacing">12</property>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <object class="GtkGrid" id="grid4">
+                  <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkLabel" id="label7">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">label</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="spinbutton1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Interpret as years between </property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">year</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="year">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
+                    <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -315,33 +353,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label6">
+                  <object class="GtkLabel" id="toyear">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">~Interpret as years between </property>
+                    <property name="label" translatable="yes">and </property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="checkbutton8">
-                    <property name="label" translatable="yes">Enable experimental (unstable) ~features </property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>
@@ -354,7 +373,10 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Year(two digits)</property>
+            <property name="label" translatable="yes">Year (two digits)</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>

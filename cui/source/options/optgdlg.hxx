@@ -36,29 +36,24 @@ class OfaMiscTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
 private:
-    FixedLine           aHelpFL;
-    CheckBox            aToolTipsCB;
-    CheckBox            aExtHelpCB;
-    CheckBox            aHelpAgentCB;
-    PushButton          aHelpAgentResetBtn;
+    CheckBox*     m_pToolTipsCB;
+    CheckBox*     m_pExtHelpCB;
+    CheckBox*     m_pHelpAgentCB;
+    PushButton*   m_pHelpAgentResetBtn;
 
-    FixedLine           aFileDlgFL;
-    ReadOnlyImage       aFileDlgROImage;
-    CheckBox            aFileDlgCB;
+    FixedImage*   m_pFileDlgROImage;
+    CheckBox*     m_pFileDlgCB;
 
-    FixedLine           aPrintDlgFL;
-    CheckBox            aPrintDlgCB;
+    CheckBox*     m_pPrintDlgCB;
 
-    FixedLine           aDocStatusFL;
-    CheckBox            aDocStatusCB;
-    CheckBox            aSaveAlwaysCB;
+    CheckBox*     m_pDocStatusCB;
+    CheckBox*     m_pSaveAlwaysCB;
 
-    FixedLine           aTwoFigureFL;
-    FixedText           aInterpretFT;
-    NumericField        aYearValueField;
-    FixedText           aToYearFT;
+    VclContainer* m_pYearFrame;
+    NumericField* m_pYearValueField;
+    FixedText*    m_pToYearFT;
 
-    String              aStrDateInfo;
+    OUString      m_aStrDateInfo;
 
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );

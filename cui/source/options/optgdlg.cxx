@@ -182,112 +182,47 @@ namespace
 
 // -----------------------------------------------------------------------
 
-OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
-
-    SfxTabPage( pParent, CUI_RES( OFA_TP_MISC ), rSet ),
-
-    aHelpFL             ( this, CUI_RES( FL_HELP ) ),
-    aToolTipsCB         ( this, CUI_RES( CB_TOOLTIP ) ),
-    aExtHelpCB          ( this, CUI_RES( CB_EXTHELP ) ),
-    aHelpAgentCB        ( this, CUI_RES( CB_HELPAGENT ) ),
-    aHelpAgentResetBtn  ( this, CUI_RES( PB_HELPAGENT_RESET ) ),
-    aFileDlgFL          ( this, CUI_RES( FL_FILEDLG ) ),
-    aFileDlgROImage     ( this, CUI_RES( FI_FILEDLG_RO ) ),
-    aFileDlgCB          ( this, CUI_RES( CB_FILEDLG ) ),
-    aPrintDlgFL         ( this, CUI_RES( FL_PRINTDLG ) ),
-    aPrintDlgCB         ( this, CUI_RES( CB_PRINTDLG ) ),
-    aDocStatusFL        ( this, CUI_RES( FL_DOCSTATUS ) ),
-    aDocStatusCB        ( this, CUI_RES( CB_DOCSTATUS ) ),
-    aSaveAlwaysCB       ( this, CUI_RES( CB_SAVE_ALWAYS ) ),
-    aTwoFigureFL        ( this, CUI_RES( FL_TWOFIGURE ) ),
-    aInterpretFT        ( this, CUI_RES( FT_INTERPRET ) ),
-    aYearValueField     ( this, CUI_RES( NF_YEARVALUE ) ),
-    aToYearFT           ( this, CUI_RES( FT_TOYEAR ) )
+OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "OptGeneralPage", "cui/ui/optgeneralpage.ui", rSet)
 {
-    FreeResource();
-
+    get(m_pToolTipsCB, "tooltips");
+    get(m_pExtHelpCB, "exthelp");
+    get(m_pHelpAgentCB, "helpagent");
+    get(m_pHelpAgentResetBtn, "resethelpagent");
     if (!lcl_HasSystemFilePicker())
-    {
-        aFileDlgFL.Hide();
-        aFileDlgCB.Hide();
-    }
-
+        get<VclContainer>("filedlgframe")->Hide();
 #if !defined(MACOSX) && !defined(ENABLE_GTK)
-    aPrintDlgFL.Hide();
-    aPrintDlgCB.Hide();
+    get<VclContainer>("printdlgframe")->Hide();
 #endif
+    get(m_pFileDlgCB, "filedlg");
+    get(m_pPrintDlgCB, "printdlg");
+    get(m_pDocStatusCB, "docstatus");
+    get(m_pSaveAlwaysCB, "savealways");
+    get(m_pYearFrame, "yearframe");
+    get(m_pYearValueField, "year");
+    get(m_pToYearFT, "toyear");
 
-    if ( !aFileDlgCB.IsVisible() )
+    if (m_pFileDlgCB->IsVisible() && SvtMiscOptions().IsUseSystemFileDialogReadOnly())
     {
-        // rearrange the following controls
-        Point aNewPos = aPrintDlgFL.GetPosPixel();
-        long nDelta = aNewPos.Y() - aFileDlgFL.GetPosPixel().Y();
-
-        Window* pWins[] =
-        {
-            &aPrintDlgFL, &aPrintDlgCB, &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB,
-            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT
-        };
-        Window** pCurrent = pWins;
-        const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
-        {
-            aNewPos = (*pCurrent)->GetPosPixel();
-            aNewPos.Y() -= nDelta;
-            (*pCurrent)->SetPosPixel( aNewPos );
-        }
-    }
-    else if ( SvtMiscOptions().IsUseSystemFileDialogReadOnly() )
-    {
-        aFileDlgROImage.Show();
-        aFileDlgCB.Disable();
+        m_pFileDlgROImage->Show();
+        m_pFileDlgCB->Disable();
     }
 
-    if ( !aPrintDlgCB.IsVisible() )
-    {
-        // rearrange the following controls
-        Point aNewPos = aDocStatusFL.GetPosPixel();
-        long nDelta = aNewPos.Y() - aPrintDlgFL.GetPosPixel().Y();
-
-        Window* pWins[] =
-        {
-            &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB, &aTwoFigureFL,
-            &aInterpretFT, &aYearValueField, &aToYearFT
-        };
-        Window** pCurrent = pWins;
-        const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
-        {
-            aNewPos = (*pCurrent)->GetPosPixel();
-            aNewPos.Y() -= nDelta;
-            (*pCurrent)->SetPosPixel( aNewPos );
-        }
-    }
-
-    // at least the button is as wide as its text
-    long nTxtWidth = aHelpAgentResetBtn.GetTextWidth( aHelpAgentResetBtn.GetText() );
-    Size aBtnSz = aHelpAgentResetBtn.GetSizePixel();
-    if ( aBtnSz.Width() < nTxtWidth )
-    {
-        aBtnSz.Width() = nTxtWidth;
-        aHelpAgentResetBtn.SetSizePixel( aBtnSz );
-    }
-
-    aStrDateInfo = aToYearFT.GetText();
-    aYearValueField.SetModifyHdl( LINK( this, OfaMiscTabPage, TwoFigureHdl ) );
+    m_aStrDateInfo = m_pToYearFT->GetText();
+    m_pYearValueField->SetModifyHdl( LINK( this, OfaMiscTabPage, TwoFigureHdl ) );
     Link aLink = LINK( this, OfaMiscTabPage, TwoFigureConfigHdl );
-    aYearValueField.SetDownHdl( aLink );
-    aYearValueField.SetUpHdl( aLink );
-    aYearValueField.SetLoseFocusHdl( aLink );
-    aYearValueField.SetFirstHdl( aLink );
-    TwoFigureConfigHdl( &aYearValueField );
+    m_pYearValueField->SetDownHdl( aLink );
+    m_pYearValueField->SetUpHdl( aLink );
+    m_pYearValueField->SetLoseFocusHdl( aLink );
+    m_pYearValueField->SetFirstHdl( aLink );
+    TwoFigureConfigHdl(m_pYearValueField);
 
     SetExchangeSupport();
 
     aLink = LINK( this, OfaMiscTabPage, HelpCheckHdl_Impl );
-    aToolTipsCB.SetClickHdl( aLink );
-    aHelpAgentCB.SetClickHdl( aLink );
-    aHelpAgentResetBtn.SetClickHdl( LINK( this, OfaMiscTabPage, HelpAgentResetHdl_Impl ) );
+    m_pToolTipsCB->SetClickHdl( aLink );
+    m_pHelpAgentCB->SetClickHdl( aLink );
+    m_pHelpAgentResetBtn->SetClickHdl( LINK( this, OfaMiscTabPage, HelpAgentResetHdl_Impl ) );
 }
 
 // -----------------------------------------------------------------------
@@ -310,47 +245,47 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     sal_Bool bModified = sal_False;
 
     SvtHelpOptions aHelpOptions;
-    sal_Bool bChecked = aToolTipsCB.IsChecked();
-    if ( bChecked != aToolTipsCB.GetSavedValue() )
+    sal_Bool bChecked = m_pToolTipsCB->IsChecked();
+    if ( bChecked != m_pToolTipsCB->GetSavedValue() )
         aHelpOptions.SetHelpTips( bChecked );
-    bChecked = ( aExtHelpCB.IsChecked() && aToolTipsCB.IsChecked() );
-    if ( bChecked != aExtHelpCB.GetSavedValue() )
+    bChecked = ( m_pExtHelpCB->IsChecked() && m_pToolTipsCB->IsChecked() );
+    if ( bChecked != m_pExtHelpCB->GetSavedValue() )
         aHelpOptions.SetExtendedHelp( bChecked );
-    bChecked = aHelpAgentCB.IsChecked();
-    if ( bChecked != aHelpAgentCB.GetSavedValue() )
+    bChecked = m_pHelpAgentCB->IsChecked();
+    if ( bChecked != m_pHelpAgentCB->GetSavedValue() )
         aHelpOptions.SetHelpAgentAutoStartMode( bChecked );
 
-    if ( aFileDlgCB.IsChecked() != aFileDlgCB.GetSavedValue() )
+    if ( m_pFileDlgCB->IsChecked() != m_pFileDlgCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetUseSystemFileDialog( !aFileDlgCB.IsChecked() );
+        aMiscOpt.SetUseSystemFileDialog( !m_pFileDlgCB->IsChecked() );
         bModified = sal_True;
     }
 
-    if ( aPrintDlgCB.IsChecked() != aPrintDlgCB.GetSavedValue() )
+    if ( m_pPrintDlgCB->IsChecked() != m_pPrintDlgCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetUseSystemPrintDialog( !aPrintDlgCB.IsChecked() );
+        aMiscOpt.SetUseSystemPrintDialog( !m_pPrintDlgCB->IsChecked() );
         bModified = sal_True;
     }
 
-    if ( aDocStatusCB.IsChecked() != aDocStatusCB.GetSavedValue() )
+    if ( m_pDocStatusCB->IsChecked() != m_pDocStatusCB->GetSavedValue() )
     {
         SvtPrintWarningOptions aPrintOptions;
-        aPrintOptions.SetModifyDocumentOnPrintingAllowed( aDocStatusCB.IsChecked() );
+        aPrintOptions.SetModifyDocumentOnPrintingAllowed( m_pDocStatusCB->IsChecked() );
         bModified = sal_True;
     }
 
-    if ( aSaveAlwaysCB.IsChecked() != aSaveAlwaysCB.GetSavedValue() )
+    if ( m_pSaveAlwaysCB->IsChecked() != m_pSaveAlwaysCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetSaveAlwaysAllowed( aSaveAlwaysCB.IsChecked() );
+        aMiscOpt.SetSaveAlwaysAllowed( m_pSaveAlwaysCB->IsChecked() );
         bModified = sal_True;
     }
 
     const SfxUInt16Item* pUInt16Item =
         PTR_CAST( SfxUInt16Item, GetOldItem( rSet, SID_ATTR_YEAR2000 ) );
-    sal_uInt16 nNum = (sal_uInt16)aYearValueField.GetText().toInt32();
+    sal_uInt16 nNum = (sal_uInt16)m_pYearValueField->GetText().toInt32();
     if ( pUInt16Item && pUInt16Item->GetValue() != nNum )
     {
         bModified = sal_True;
@@ -365,39 +300,36 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
 void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
 {
     SvtHelpOptions aHelpOptions;
-    aToolTipsCB.Check( aHelpOptions.IsHelpTips() );
-    aExtHelpCB.Check( aHelpOptions.IsHelpTips() && aHelpOptions.IsExtendedHelp() );
-    aHelpAgentCB.Check( aHelpOptions.IsHelpAgentAutoStartMode() );
+    m_pToolTipsCB->Check( aHelpOptions.IsHelpTips() );
+    m_pExtHelpCB->Check( aHelpOptions.IsHelpTips() && aHelpOptions.IsExtendedHelp() );
+    m_pHelpAgentCB->Check( aHelpOptions.IsHelpAgentAutoStartMode() );
 
-    aToolTipsCB.SaveValue();
-    aExtHelpCB.SaveValue();
-    aHelpAgentCB.SaveValue();
-    HelpCheckHdl_Impl( &aHelpAgentCB );
+    m_pToolTipsCB->SaveValue();
+    m_pExtHelpCB->SaveValue();
+    m_pHelpAgentCB->SaveValue();
+    HelpCheckHdl_Impl(m_pHelpAgentCB);
 
     SvtMiscOptions aMiscOpt;
-    aFileDlgCB.Check( !aMiscOpt.UseSystemFileDialog() );
-    aFileDlgCB.SaveValue();
-    aPrintDlgCB.Check( !aMiscOpt.UseSystemPrintDialog() );
-    aPrintDlgCB.SaveValue();
-    aSaveAlwaysCB.Check( aMiscOpt.IsSaveAlwaysAllowed() );
-    aSaveAlwaysCB.SaveValue();
+    m_pFileDlgCB->Check( !aMiscOpt.UseSystemFileDialog() );
+    m_pFileDlgCB->SaveValue();
+    m_pPrintDlgCB->Check( !aMiscOpt.UseSystemPrintDialog() );
+    m_pPrintDlgCB->SaveValue();
+    m_pSaveAlwaysCB->Check( aMiscOpt.IsSaveAlwaysAllowed() );
+    m_pSaveAlwaysCB->SaveValue();
 
     SvtPrintWarningOptions aPrintOptions;
-    aDocStatusCB.Check(aPrintOptions.IsModifyDocumentOnPrintingAllowed());
-    aDocStatusCB.SaveValue();
+    m_pDocStatusCB->Check(aPrintOptions.IsModifyDocumentOnPrintingAllowed());
+    m_pDocStatusCB->SaveValue();
 
     const SfxPoolItem* pItem = NULL;
     if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, sal_False, &pItem ) )
     {
-        aYearValueField.SetValue( ((SfxUInt16Item*)pItem)->GetValue() );
-        TwoFigureConfigHdl( &aYearValueField );
+        m_pYearValueField->SetValue( ((SfxUInt16Item*)pItem)->GetValue() );
+        TwoFigureConfigHdl(m_pYearValueField);
     }
     else
     {
-        aYearValueField.Enable(sal_False);
-        aTwoFigureFL.Enable(sal_False);
-        aInterpretFT.Enable(sal_False);
-        aToYearFT.Enable(sal_False);
+        m_pYearFrame->Enable(sal_False);
     }
 }
 
@@ -407,21 +339,21 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 {
     (void)pEd;
 
-    OUString aOutput( aStrDateInfo );
-    OUString aStr( aYearValueField.GetText() );
+    OUString aOutput( m_aStrDateInfo );
+    OUString aStr( m_pYearValueField->GetText() );
     OUString sSep( SvtSysLocale().GetLocaleData().getNumThousandSep() );
     sal_Int32 nIndex = 0;
     while ((nIndex = aStr.indexOf( sSep, nIndex)) != -1)
         aStr = aStr.replaceAt( nIndex, sSep.getLength(), "");
     sal_Int32 nNum = aStr.toInt32();
-    if ( aStr.getLength() != 4 || nNum < aYearValueField.GetMin() || nNum > aYearValueField.GetMax() )
+    if ( aStr.getLength() != 4 || nNum < m_pYearValueField->GetMin() || nNum > m_pYearValueField->GetMax() )
         aOutput += "????";
     else
     {
         nNum += 99;
         aOutput += OUString::number( nNum );
     }
-    aToYearFT.SetText( aOutput );
+    m_pToYearFT->SetText( aOutput );
     return 0;
 }
 
@@ -429,10 +361,10 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 
 IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 {
-    sal_Int64 nNum = aYearValueField.GetValue();
+    sal_Int64 nNum = m_pYearValueField->GetValue();
     rtl::OUString aOutput(rtl::OUString::number(nNum));
-    aYearValueField.SetText(aOutput);
-    aYearValueField.SetSelection( Selection( 0, aOutput.getLength() ) );
+    m_pYearValueField->SetText(aOutput);
+    m_pYearValueField->SetSelection( Selection( 0, aOutput.getLength() ) );
     TwoFigureHdl( pEd );
     return 0;
 }
@@ -441,8 +373,8 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 
 IMPL_LINK_NOARG(OfaMiscTabPage, HelpCheckHdl_Impl)
 {
-    aExtHelpCB.Enable( aToolTipsCB.IsChecked() );
-    aHelpAgentResetBtn.Enable( aHelpAgentCB.IsChecked() );
+    m_pExtHelpCB->Enable( m_pToolTipsCB->IsChecked() );
+    m_pHelpAgentResetBtn->Enable( m_pHelpAgentCB->IsChecked() );
     return 0;
 }
 

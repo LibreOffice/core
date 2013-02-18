@@ -87,21 +87,6 @@
 #define ROW_FL_SELECTION        (ROW_LB_MOUSEMIDDLE + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_FLGR_SPACE_X)
 #define ROW_CB_SELECTION        (ROW_FL_SELECTION + RSC_CD_FIXEDLINE_HEIGHT + ROWSPACE)
 
-// tabpage general -------------------------------------------------------
-
-#define FL_HELP                     10
-#define CB_TOOLTIP                  11
-#define CB_EXTHELP                  12
-#define CB_HELPAGENT                13
-#define PB_HELPAGENT_RESET          14
-
-#define FL_TWOFIGURE                40
-#define FT_INTERPRET                41
-#define NF_YEARVALUE                42
-#define FT_TOYEAR                   43
-#define FL_PRINTDLG                 44
-#define CB_PRINTDLG                 45
-
 // tabpage view ----------------------------------------------------------
 // #i95644# 10 .. 14 freed, may be reused
 
