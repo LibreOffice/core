@@ -189,6 +189,10 @@ sal_Int32 OSXBluetoothWrapper::write( const void* pBuffer, sal_uInt32 n )
 
     char* ptr = (char*)pBuffer;
     sal_uInt32 nBytesWritten = 0;
+
+    if (mpChannel == nil)
+        return 0;
+
     while( nBytesWritten < n )
     {
         int toWrite = n - nBytesWritten;
@@ -220,6 +224,13 @@ void OSXBluetoothWrapper::appendData(void* pBuffer, size_t len)
         mHaveBytes.set();
         SAL_INFO( "sdremote.bluetooth", "  leaving mutex" );
     }
+}
+
+void OSXBluetoothWrapper::channelClosed()
+{
+    SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::channelClosed()" );
+
+    mpChannel = nil;
 }
 
 void incomingCallback( void *userRefCon,

@@ -37,7 +37,12 @@
 {
     (void) rfcommChannel;
 
-    // TODO: broadcast premature closing of data channel
+    SAL_INFO( "sdremote.bluetooth", "ChannelDelegate::rfcommChannelClosed()\n");
+
+    if ( pSocket )
+    {
+        pSocket->channelClosed();
+    }
     pCommunicator = NULL;
     pSocket = NULL;
 }
