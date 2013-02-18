@@ -294,10 +294,13 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
         if ( NSS_NoDB_Init(NULL) != SECSuccess )
         {
             xmlsec_trace("Initializing NSS without profile failed.");
-            char * error = NULL;
-            PR_GetErrorText(error);
-            if (error)
+            int errlen = PR_GetErrorTextLength();
+            if(errlen > 0)
+            {
+                char error[errlen + 1];
+                PR_GetErrorText(error);
                 xmlsec_trace("%s",error);
+            }
             return false ;
         }
     }
