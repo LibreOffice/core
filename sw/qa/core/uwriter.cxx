@@ -251,7 +251,7 @@ void SwDocTest::testModelToViewHelper()
         nPos = aPaM.GetPoint()->nContent.GetIndex();
         pTxtNode->InsertItem(aFtn, nPos, nPos);
         m_pDoc->InsertString(aPaM, rtl::OUString(" DDDDD"));
-        CPPUNIT_ASSERT_EQUAL(pTxtNode->GetTxt().getLength(), (4*5) + 5 + 2);
+        CPPUNIT_ASSERT(pTxtNode->GetTxt().getLength() == (4*5) + 5 + 2);
 
         //set start of selection to first B
         aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 6);
