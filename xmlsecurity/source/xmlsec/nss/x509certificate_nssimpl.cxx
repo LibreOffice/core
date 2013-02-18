@@ -240,6 +240,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
                 else
                     crit = ( (*extns)->critical.data[0] == 0xFF ) ? sal_True : sal_False ;
                 pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, (*extns)->id.data, (*extns)->id.len, crit ) ;
+                break;
             }
         }
 
