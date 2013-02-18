@@ -597,6 +597,8 @@ void SAL_CALL BluetoothServer::run()
 
     // Compare to BluetoothServiceRecord.hxx
 
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+
     NSDictionary *dict =
         [NSDictionary dictionaryWithObjectsAndKeys:
 
@@ -700,6 +702,9 @@ void SAL_CALL BluetoothServer::run()
 
         [serviceRecord release];
     }
+
+    [pool release];
+
     (void) mpCommunicators;
 #else
     (void) mpCommunicators; // avoid warnings about unused member
