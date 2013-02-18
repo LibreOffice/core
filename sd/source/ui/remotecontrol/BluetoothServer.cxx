@@ -16,6 +16,7 @@
 
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
   #include <glib.h>
+  #include <dbus/dbus.h>
   #include <dbus/dbus-glib.h>
   #include <errno.h>
   #include <sys/unistd.h>
@@ -68,46 +69,163 @@
 using namespace sd;
 
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
-DBusGProxy* bluezGetDefaultAdapter( DBusGConnection* aConnection,
-                                    const gchar* aInterfaceType = "org.bluez.Adapter" )
+
+struct DBusObject {
+    OString maBusName;
+    OString maPath;
+    OString maInterface;
+
+    DBusObject( const char *pBusName, const char *pPath, const char *pInterface )
+        : maBusName( pBusName ), maPath( pPath ), maInterface( pInterface )
+    { }
+
+    DBusMessage *getMethodCall( const char *pName )
+    {
+        return dbus_message_new_method_call( maBusName.getStr(), maPath.getStr(),
+                                             maInterface.getStr(), pName );
+    }
+};
+
+static DBusConnection *
+dbusConnectToNameOnBus()
 {
-    GError *aError = NULL;
+    DBusError aError;
+    DBusConnection *pConnection;
 
-    DBusGProxy *aManager = NULL;
-    aManager = dbus_g_proxy_new_for_name( aConnection, "org.bluez", "/",
-                                          "org.bluez.Manager" );
+    dbus_error_init( &aError );
 
-    if ( aManager == NULL )
+    pConnection = dbus_bus_get( DBUS_BUS_SYSTEM, &aError );
+    if( !pConnection || dbus_error_is_set( &aError ))
     {
-        SAL_WARN( "sdremote.bluetooth", "getting org.bluez.Manager failed" );
-        dbus_g_connection_unref( aConnection );
+        SAL_WARN( "sdremote.bluetooth", "failed to get dbus system bus: " << aError.message );
+        dbus_error_free( &aError );
         return NULL;
     }
 
-    gboolean aResult;
-    DBusGObjectPath* aAdapterPath = NULL;
-    aResult = dbus_g_proxy_call( aManager, "DefaultAdapter", &aError,
-                                 G_TYPE_INVALID,
-                                 DBUS_TYPE_G_OBJECT_PATH, &aAdapterPath,
-                                 G_TYPE_INVALID);
-
-    g_object_unref( G_OBJECT( aManager ));
-    if ( !aResult || aError )
-    {
-        SAL_WARN( "sdremote.bluetooth", "getting DefaultAdapter path failed" );
-        if ( aError )
-            g_error_free( aError );
-        return NULL;
-    }
-
-    DBusGProxy *aAdapter = NULL;
-    aAdapter = dbus_g_proxy_new_for_name( aConnection, "org.bluez",
-                                          aAdapterPath, aInterfaceType );
-    g_free( aAdapterPath );
-
-    SAL_INFO( "sdremote.bluetooth", "DefaultAdapter retrieved" );
-    return aAdapter;
+    return pConnection;
 }
+
+static DBusObject *
+bluezGetDefaultAdapter( DBusConnection *pConnection,
+                        const gchar* pInterfaceType = "org.bluez.Adapter" )
+{
+    DBusMessage *pMsg;
+    DBusMessageIter it;
+    DBusPendingCall *pPending;
+
+    pMsg = DBusObject( "org.bluez", "/", "org.bluez.Manager" ).getMethodCall( "DefaultAdapter" );
+    if( !pMsg || !dbus_connection_send_with_reply( pConnection, pMsg, &pPending,
+                                                   -1 /* default timeout */ ) )
+    {
+        SAL_WARN( "sdremote.bluetooth", "Memory allocation failed on message" );
+        dbus_message_unref( pMsg );
+        return NULL;
+    }
+    dbus_connection_flush( pConnection );
+    dbus_message_unref( pMsg );
+
+    dbus_pending_call_block( pPending ); // block for reply
+
+    pMsg = dbus_pending_call_steal_reply( pPending );
+    if( !pMsg || !dbus_message_iter_init( pMsg, &it ) )
+    {
+        SAL_WARN( "sdremote.bluetooth", "no valid reply / timeout" );
+        dbus_pending_call_unref( pPending );
+        return NULL;
+    }
+    dbus_pending_call_unref( pPending );
+
+
+    if( DBUS_TYPE_OBJECT_PATH != dbus_message_iter_get_arg_type( &it ) )
+        SAL_WARN( "sdremote.bluetooth", "invalid type of reply to DefaultAdapter: '"
+                  << dbus_message_iter_get_arg_type( &it ) << "'" );
+    else
+    {
+        const char *pObjectPath = NULL;
+        dbus_message_iter_get_basic( &it, &pObjectPath );
+        SAL_INFO( "sdremote.bluetooth", "DefaultAdapter retrieved: '"
+                  << pObjectPath << "' '" << pInterfaceType << "'" );
+        return new DBusObject( "org.bluez", pObjectPath, pInterfaceType );
+    }
+    dbus_message_unref( pMsg );
+
+    return NULL;
+}
+
+static bool
+bluezRegisterServiceRecord( DBusConnection *pConnection, DBusObject *pAdapter,
+                            const char *pServiceRecord )
+{
+    DBusMessage *pMsg;
+    DBusMessageIter it;
+    DBusPendingCall *pPending;
+
+    pMsg = pAdapter->getMethodCall( "AddRecord" );
+    dbus_message_iter_init_append( pMsg, &it );
+    dbus_message_iter_append_basic( &it, DBUS_TYPE_STRING, &pServiceRecord );
+
+    if(!dbus_connection_send_with_reply( pConnection, pMsg, &pPending,
+                                         -1 /* default timeout */ ) )
+    if( !dbus_connection_send( pConnection, pMsg, NULL ) )
+    {
+        SAL_WARN( "sdremote.bluetooth", "failed to send service record" );
+        return false;
+    }
+    dbus_connection_flush( pConnection );
+    dbus_message_unref( pMsg );
+
+    dbus_pending_call_block( pPending ); // block for reply
+
+    pMsg = dbus_pending_call_steal_reply( pPending );
+    if( !pMsg || !dbus_message_iter_init( pMsg, &it ) ||
+        dbus_message_iter_get_arg_type( &it ) != DBUS_TYPE_UINT32 )
+    {
+        SAL_WARN( "sdremote.bluetooth", "SDP registration failed" );
+        return false;
+    }
+
+    // We ignore the uint de-registration handle we get back:
+    // bluez will clean us up automatically on exit
+
+    dbus_pending_call_unref( pPending );
+
+    return true;
+}
+
+static int
+bluezCreateListeningSocket()
+{
+    int nSocket;
+
+    if( ( nSocket = socket( AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM ) ) < 0 )
+    {
+        SAL_WARN( "sdremote.bluetooth", "failed to open bluetooth socket with error " << nSocket );
+        return -1;
+    }
+
+    sockaddr_rc aAddr;
+    aAddr.rc_family = AF_BLUETOOTH;
+    // BDADDR_ANY is broken, so use memset to set to 0.
+    memset( &aAddr.rc_bdaddr, 0, sizeof( aAddr.rc_bdaddr ) );
+    aAddr.rc_channel = 5;
+
+    int a;
+    if ( ( a = bind( nSocket, (sockaddr*) &aAddr, sizeof(aAddr) ) ) < 0 ) {
+        SAL_WARN( "sdremote.bluetooth", "bind failed with error" << a );
+        close( nSocket );
+        return -1;
+    }
+
+    if ( ( a = listen( nSocket, 1 ) ) < 0 )
+    {
+        SAL_WARN( "sdremote.bluetooth", "listen failed with error" << a );
+        close( nSocket );
+        return -1;
+    }
+
+    return nSocket;
+}
+
 #endif // defined(LINUX) && defined(ENABLE_DBUS)
 
 #if defined(MACOSX)
@@ -292,7 +410,7 @@ void BluetoothServer::restoreDiscoverable()
 
 bool BluetoothServer::isDiscoverable()
 {
-#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
+#if 0 // (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
     SAL_INFO( "sdremote.bluetooth", "BluetoothServer::isDiscoverable called" );
     g_type_init();
     gboolean aResult;
@@ -308,7 +426,7 @@ bool BluetoothServer::isDiscoverable()
         return false;
     }
 
-    DBusGProxy* aAdapter = bluezGetDefaultAdapter( aConnection );
+    DBusGProxy* aAdapter = bluezGetDefaultAdapter( pConnection );
     if ( aAdapter == NULL )
     {
         dbus_g_connection_unref( aConnection );
@@ -345,7 +463,7 @@ bool BluetoothServer::isDiscoverable()
 
 void BluetoothServer::setDiscoverable( bool bDiscoverable )
 {
-#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
+#if 0 // (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
     SAL_INFO( "sdremote.bluetooth", "BluetoothServer::setDiscoverable called" );
     g_type_init();
     gboolean aResult;
@@ -361,7 +479,7 @@ void BluetoothServer::setDiscoverable( bool bDiscoverable )
         return;
     }
 
-    DBusGProxy* aAdapter = bluezGetDefaultAdapter( aConnection );
+    DBusGProxy* aAdapter = bluezGetDefaultAdapter( pConnection );
     if ( aAdapter == NULL )
     {
         dbus_g_connection_unref( aConnection );
@@ -448,72 +566,31 @@ void SAL_CALL BluetoothServer::run()
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
     g_type_init();
 
-    GError *aError = NULL;
-
-    DBusGConnection *aConnection = NULL;
-    aConnection = dbus_g_bus_get( DBUS_BUS_SYSTEM, &aError );
-
-    if ( aError != NULL ) {
-        SAL_WARN( "sdremote.bluetooth", "failed to get dbus system bus" );
-        g_error_free (aError);
+    DBusConnection *pConnection = dbusConnectToNameOnBus();
+    if( !pConnection )
         return;
-    }
 
-    DBusGProxy* aAdapter = bluezGetDefaultAdapter( aConnection, "org.bluez.Service" );
-    if ( aAdapter == NULL )
+    DBusObject *pService = bluezGetDefaultAdapter( pConnection, "org.bluez.Service" );
+    if( !pService )
     {
-        SAL_WARN( "sdremote.bluetooth", "failed to retrieve default adapter" );
-        dbus_g_connection_unref( aConnection );
+        dbus_connection_unref( pConnection );
         return;
     }
 
-    // Add the record -- the handle can be used to release it again, but we
-    // don't bother as the record is automatically released when LO exits.
-    guint aHandle;
-    gboolean aResult = dbus_g_proxy_call( aAdapter, "AddRecord", &aError,
-                                G_TYPE_STRING, bluetooth_service_record,
-                                G_TYPE_INVALID,
-                                G_TYPE_UINT, &aHandle,
-                                G_TYPE_INVALID);
-
-    g_object_unref( G_OBJECT( aAdapter ));
-    dbus_g_connection_unref( aConnection );
-    if ( !aResult)
-    {
-        SAL_WARN( "sdremote.bluetooth", "SDP registration failed" );
+    if( !bluezRegisterServiceRecord( pConnection, pService, bluetooth_service_record ) )
         return;
-    }
 
-    // ---------------- Socket code
-    int aSocket;
-    if ( (aSocket = socket( AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM )) < 0 )
-    {
-        SAL_WARN( "sdremote.bluetooth", "failed to open bluetooth socket with error " << aSocket );
+    int aSocket = bluezCreateListeningSocket();
+    if( aSocket < 0 )
         return;
-    }
 
-    sockaddr_rc aAddr;
-    aAddr.rc_family = AF_BLUETOOTH;
-    // BDADDR_ANY is broken, so use memset to set to 0.
-    memset( &aAddr.rc_bdaddr, 0, sizeof( aAddr.rc_bdaddr ) );
-    aAddr.rc_channel = 5;
-
-    int a;
-    if ( ( a = bind( aSocket, (sockaddr*) &aAddr, sizeof(aAddr) ) ) < 0 ) {
-        SAL_WARN( "sdremote.bluetooth", "bind failed with error" << a );
-        close( aSocket );
-        return;
-    }
-
-    if ( ( a = listen( aSocket, 1 ) ) < 0 )
-    {
-        SAL_WARN( "sdremote.bluetooth", "listen failed with error" << a );
-        close( aSocket );
-        return;
-    }
+    // ---------------- Socket code ----------------
 
     sockaddr_rc aRemoteAddr;
     socklen_t  aRemoteAddrLen = sizeof(aRemoteAddr);
+
+    // FIXME: use a glib main-loop [!] ...
+    // FIXME: fixme ! ...
     while ( true )
     {
         int bSocket;
