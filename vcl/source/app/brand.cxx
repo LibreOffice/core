@@ -27,10 +27,9 @@
 #include <vcl/svgdata.hxx>
 
 namespace {
-    static bool loadPng( rtl::OUString aUri, BitmapEx &rBitmap)
+    static bool loadPng( const OUString & rPath, BitmapEx &rBitmap)
     {
-        rtl::Bootstrap::expandMacros( aUri );
-        INetURLObject aObj( aUri );
+        INetURLObject aObj( rPath );
         SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
         if ( !aStrm.GetError() ) {
             vcl::PNGReader aReader( aStrm );
@@ -40,25 +39,24 @@ namespace {
         else
             return false;
     }
-    static bool tryLoadPng( const OUString& rName, BitmapEx& rBitmap )
+    static bool tryLoadPng( const OUString& rBaseDir, const OUString& rName, BitmapEx& rBitmap )
     {
         return
-            loadPng( "$BRAND_BASE_DIR/program/edition" + rName, rBitmap) ||
-            loadPng( "$BRAND_BASE_DIR/program" + rName, rBitmap);
+            loadPng( rBaseDir + "/program/edition" + rName, rBitmap) ||
+            loadPng( rBaseDir + "/program" + rName, rBitmap);
     }
-    static bool loadSvg(rtl::OUString aUri, BitmapEx &rBitmap)
+    static bool loadSvg( const OUString & rPath, BitmapEx &rBitmap)
     {
-        rtl::Bootstrap::expandMacros( aUri );
-        INetURLObject aObj( aUri );
+        INetURLObject aObj( rPath );
         SvgData aSvgData(aObj.PathToFileName());
         rBitmap = aSvgData.getReplacement();
         return !rBitmap.IsEmpty();
     }
-    static bool tryLoadSvg( const OUString& rName, BitmapEx& rBitmap )
+    static bool tryLoadSvg( const OUString& rBaseDir, const OUString& rName, BitmapEx& rBitmap )
     {
         return
-            loadSvg( "$BRAND_BASE_DIR/program/edition" + rName, rBitmap) ||
-            loadSvg( "$BRAND_BASE_DIR/program" + rName, rBitmap);
+            loadSvg( rBaseDir + "/program/edition" + rName, rBitmap) ||
+            loadSvg( rBaseDir + "/program" + rName, rBitmap);
     }
 }
 
@@ -66,6 +64,8 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
 {
     // TODO - if we want more flexibility we could add a branding path
     // in an rc file perhaps fallback to "about.bmp"
+    OUString aBaseDir( "$BRAND_BASE_DIR");
+    rtl::Bootstrap::expandMacros( aBaseDir );
     OUString aBaseName( "/" + OUString::createFromAscii( pName ) );
     OUString aPng( ".png" );
 
@@ -76,11 +76,11 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
     ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
     for (size_t i=0; i < aFallbacks.size(); ++i)
     {
-        if (tryLoadPng( aBaseName + "-" + aFallbacks[i] + aPng, rBitmap))
+        if (tryLoadPng( aBaseDir, aBaseName + "-" + aFallbacks[i] + aPng, rBitmap))
             return true;
     }
 
-    if (tryLoadPng( aBaseName + aPng, rBitmap))
+    if (tryLoadPng( aBaseDir, aBaseName + aPng, rBitmap))
         return true;
 
     return false;
@@ -88,6 +88,8 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
 
 bool Application::LoadBrandSVG (const char *pName, BitmapEx &rBitmap)
 {
+    OUString aBaseDir( "$BRAND_BASE_DIR");
+    rtl::Bootstrap::expandMacros( aBaseDir );
     rtl::OUString aBaseName( "/" + rtl::OUString::createFromAscii( pName ) );
     rtl::OUString aSvg( ".svg" );
 
@@ -98,11 +100,11 @@ bool Application::LoadBrandSVG (const char *pName, BitmapEx &rBitmap)
     ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
     for (size_t i=0; i < aFallbacks.size(); ++i)
     {
-        if (tryLoadSvg( aBaseName + "-" + aFallbacks[i] + aSvg, rBitmap))
+        if (tryLoadSvg( aBaseDir, aBaseName + "-" + aFallbacks[i] + aSvg, rBitmap))
             return true;
     }
 
-    if (tryLoadSvg( aBaseName + aSvg, rBitmap))
+    if (tryLoadSvg( aBaseDir, aBaseName + aSvg, rBitmap))
         return true;
 
     return false;
