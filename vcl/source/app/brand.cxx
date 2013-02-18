@@ -51,46 +51,64 @@ namespace {
     }
 }
 
+static bool lcl_loadPng( const OUString& rName, BitmapEx& rBitmap )
+{
+    return
+        loadPng( "$BRAND_BASE_DIR/program/edition", rName, rBitmap) ||
+        loadPng( "$BRAND_BASE_DIR/program", rName, rBitmap);
+}
+
 bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
 {
     // TODO - if we want more flexibility we could add a branding path
     // in an rc file perhaps fallback to "about.bmp"
-    rtl::OUString aBaseName = ( rtl::OUString("/") +
-                                rtl::OUString::createFromAscii( pName ) );
-    rtl::OUString aPng( ".png" );
+    OUString aBaseName( "/" + OUString::createFromAscii( pName ) );
+    OUString aPng( ".png" );
 
     rtl_Locale *pLoc = NULL;
     osl_getProcessLocale (&pLoc);
     LanguageTag aLanguageTag( *pLoc);
 
-    rtl::OUString aName = aBaseName + aPng;
-    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString("-") +
-                                  aLanguageTag.getBcp47() +
-                                  aPng );
+    ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
+    for (size_t i=0; i < aFallbacks.size(); ++i)
+    {
+        if (lcl_loadPng( aBaseName + "-" + aFallbacks[i] + aPng, rBitmap))
+            return true;
+    }
 
-    return ( loadPng ("$BRAND_BASE_DIR/program/edition", aLocaleName, rBitmap) ||
-             loadPng ("$BRAND_BASE_DIR/program", aLocaleName, rBitmap) ||
-             loadPng ("$BRAND_BASE_DIR/program/edition", aName, rBitmap) ||
-             loadPng ("$BRAND_BASE_DIR/program", aName, rBitmap) );
+    if (lcl_loadPng( aBaseName + aPng, rBitmap))
+        return true;
+
+    return false;
+}
+
+static bool lcl_loadSvg( const OUString& rName, BitmapEx& rBitmap )
+{
+    return
+        loadSvg( "$BRAND_BASE_DIR/program/edition" + rName, rBitmap) ||
+        loadSvg( "$BRAND_BASE_DIR/program" + rName, rBitmap);
 }
 
 bool Application::LoadBrandSVG (const char *pName, BitmapEx &rBitmap)
 {
-    rtl::OUString aBaseName = ( rtl::OUString("/") +
-                                rtl::OUString::createFromAscii( pName ) );
+    rtl::OUString aBaseName( "/" + rtl::OUString::createFromAscii( pName ) );
     rtl::OUString aSvg( ".svg" );
 
     rtl_Locale *pLoc = NULL;
     osl_getProcessLocale (&pLoc);
     LanguageTag aLanguageTag( *pLoc);
 
-    rtl::OUString aName = aBaseName + aSvg;
-    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString("-") +
-                                  aLanguageTag.getBcp47() +
-                                  aSvg );
-    rtl::OUString uriOpt = rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ) + aLocaleName;
-    rtl::OUString uri = rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ) + aBaseName+aSvg;
-    return ( loadSvg( uriOpt, rBitmap ) || loadSvg( uri, rBitmap ) );
+    ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
+    for (size_t i=0; i < aFallbacks.size(); ++i)
+    {
+        if (lcl_loadSvg( aBaseName + "-" + aFallbacks[i] + aSvg, rBitmap))
+            return true;
+    }
+
+    if (lcl_loadSvg( aBaseName + aSvg, rBitmap))
+        return true;
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
