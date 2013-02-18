@@ -343,7 +343,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     SwUndoRedlineSort* pRedlUndo = 0;
     SwUndoSort* pUndoSort = 0;
 
-    if( IsRedlineOn() || (!IsIgnoreRedline() && !pRedlineTbl->empty() ))
+    if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
     {
         pRedlPam = new SwPaM( pStart->nNode, pEnd->nNode, -1, 1 );
         SwCntntNode* pCNd = pRedlPam->GetCntntNode( sal_False );

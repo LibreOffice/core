@@ -708,11 +708,11 @@ void SwDoc::SetModified(SwPaM &rPaM)
 bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
 {
     SwPosition& rPt = *(SwPosition*)rRg.GetPoint();
-    if( pACEWord )                  // Add to AutoCorrect
+    if( mpACEWord )                  // Add to AutoCorrect
     {
         if( 1 == rStr.Len() )
-            pACEWord->CheckChar( rPt, rStr.GetChar( 0 ) );
-        delete pACEWord, pACEWord = 0;
+            mpACEWord->CheckChar( rPt, rStr.GetChar( 0 ) );
+        delete mpACEWord, mpACEWord = 0;
     }
 
     SwTxtNode *pNode = rPt.nNode.GetNode().GetTxtNode();
@@ -1581,13 +1581,13 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
     if( !rPam.HasMark() || *pStt >= *pEnd )
         return false;
 
-    if( pACEWord )
+    if( mpACEWord )
     {
         // if necessary the saved Word for the exception
-        if( pACEWord->IsDeleted() ||  pStt->nNode != pEnd->nNode ||
+        if( mpACEWord->IsDeleted() ||  pStt->nNode != pEnd->nNode ||
             pStt->nContent.GetIndex() + 1 != pEnd->nContent.GetIndex() ||
-            !pACEWord->CheckDelChar( *pStt ))
-            delete pACEWord, pACEWord = 0;
+            !mpACEWord->CheckDelChar( *pStt ))
+            delete mpACEWord, mpACEWord = 0;
     }
 
     {
@@ -2470,9 +2470,9 @@ SetRedlineMode( eOld );
 // Save the current values to add them as automatic entries to to AutoCorrect.
 void SwDoc::SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew )
 {
-    if( pNew != pACEWord )
-        delete pACEWord;
-    pACEWord = pNew;
+    if( pNew != mpACEWord )
+        delete mpACEWord;
+    mpACEWord = pNew;
 }
 
 bool SwDoc::DelFullPara( SwPaM& rPam )

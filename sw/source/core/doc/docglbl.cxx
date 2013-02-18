@@ -151,7 +151,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
     // Iterate over all the template's Nodes, creating an own
     // document for every single one and replace linked sections (GlobalDoc) for links (HTML).
     // Finally, we save this document as a GlobalDoc/HTMLDoc.
-    if( !pDocShell || !pDocShell->GetMedium() ||
+    if( !mpDocShell || !mpDocShell->GetMedium() ||
         ( SPLITDOC_TO_GLOBALDOC == eDocType && get(IDocumentSettingAccess::GLOBAL_DOCUMENT) ) )
         return false;
 
@@ -290,8 +290,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
                     pDoc->ReplaceStyles( *this );
 
                     // Take over chapter numbering
-                    if( pOutlineRule )
-                        pDoc->SetOutlineNumRule( *pOutlineRule );
+                    if( mpOutlineRule )
+                        pDoc->SetOutlineNumRule( *mpOutlineRule );
 
                     SwNodeRange aRg( *pStartNd, 0, aEndIdx.GetNode() );
                     SwNodeIndex aTmpIdx( pDoc->GetNodes().GetEndOfContent() );
@@ -488,7 +488,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
             while( !GetSections().empty() )
                 DelSectionFmt( GetSections().front() );
 
-            SfxFilterContainer* pFCntnr = pDocShell->GetFactory().GetFilterContainer();
+            SfxFilterContainer* pFCntnr = mpDocShell->GetFactory().GetFilterContainer();
             pFilter = pFCntnr->GetFilter4EA( pFilter->GetTypeName(), SFX_FILTER_EXPORT );
         }
         break;
@@ -505,7 +505,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
     aReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
     if(pFilter)
         aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
-    const SfxBoolItem *pRet = (const SfxBoolItem*)pDocShell->ExecuteSlot( aReq );
+    const SfxBoolItem *pRet = (const SfxBoolItem*)mpDocShell->ExecuteSlot( aReq );
 
     return pRet && pRet->GetValue();
 }

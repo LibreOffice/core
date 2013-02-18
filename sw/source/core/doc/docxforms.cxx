@@ -45,12 +45,12 @@ using rtl::OUString;
 
 Reference<XNameContainer> SwDoc::getXForms() const
 {
-    return xXForms;
+    return mxXForms;
 }
 
 bool SwDoc::isXForms() const
 {
-    return xXForms.is();
+    return mxXForms.is();
 }
 
 static Reference<XInterface> lcl_createInstance( const sal_Char* pServiceName )
@@ -67,9 +67,9 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
     try
     {
         // create XForms components
-        xXForms.set( lcl_createInstance( "com.sun.star.xforms.XForms" ),
+        mxXForms.set( lcl_createInstance( "com.sun.star.xforms.XForms" ),
                     UNO_QUERY );
-        OSL_ENSURE( xXForms.is(), "can't create XForms container" );
+        OSL_ENSURE( mxXForms.is(), "can't create XForms container" );
 
         // change our module identifier, to be able to have a dedicated UI
         Reference< XModule > xModule;
@@ -81,7 +81,7 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
             xModule->setIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xforms.XMLFormDocument" ) ) );
 
         // create default model
-        if( bCreateDefaultModel && xXForms.is() )
+        if( bCreateDefaultModel && mxXForms.is() )
         {
             OUString sName(RTL_CONSTASCII_USTRINGPARAM("Model 1"));
             Reference<XModel> xModel(
@@ -95,9 +95,9 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
                     OUString(RTL_CONSTASCII_USTRINGPARAM("Instance 1")),
                     OUString(), sal_True );
                 xModel->initialize();
-                xXForms->insertByName( sName, makeAny( xModel ) );
+                mxXForms->insertByName( sName, makeAny( xModel ) );
             }
-            OSL_ENSURE( xXForms->hasElements(), "can't create XForms model" );
+            OSL_ENSURE( mxXForms->hasElements(), "can't create XForms model" );
         }
 
         OSL_ENSURE( isXForms(), "initialization failed" );

@@ -318,7 +318,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 
     SetRedlineMode_intern( eOld );
 
-    if( IsRedlineOn() || (!IsIgnoreRedline() && !pRedlineTbl->empty() ))
+    if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
     {
         SwPaM aPam( *pNewSectNode->EndOfSectionNode(), *pNewSectNode, 1 );
         if( IsRedlineOn() )
@@ -504,19 +504,19 @@ SwSection* SwDoc::GetCurrSection( const SwPosition& rPos ) const
 SwSectionFmt* SwDoc::MakeSectionFmt( SwSectionFmt *pDerivedFrom )
 {
     if( !pDerivedFrom )
-        pDerivedFrom = (SwSectionFmt*)pDfltFrmFmt;
+        pDerivedFrom = (SwSectionFmt*)mpDfltFrmFmt;
     SwSectionFmt* pNew = new SwSectionFmt( pDerivedFrom, this );
-    pSectionFmtTbl->push_back( pNew );
+    mpSectionFmtTbl->push_back( pNew );
     return pNew;
 }
 
 void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes )
 {
-    SwSectionFmts::iterator itFmtPos = std::find( pSectionFmtTbl->begin(), pSectionFmtTbl->end(), pFmt );
+    SwSectionFmts::iterator itFmtPos = std::find( mpSectionFmtTbl->begin(), mpSectionFmtTbl->end(), pFmt );
 
     GetIDocumentUndoRedo().StartUndo(UNDO_DELSECTION, NULL);
 
-    if( pSectionFmtTbl->end() != itFmtPos )
+    if( mpSectionFmtTbl->end() != itFmtPos )
     {
         const SwNodeIndex* pIdx = pFmt->GetCntnt( sal_False ).GetCntntIdx();
         const SfxPoolItem* pFtnEndAtTxtEnd;
@@ -565,11 +565,11 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes )
 
         // A ClearRedo could result in a recursive call of this function and delete some section
         // formats, thus the position inside the SectionFmtTbl could have changed
-        itFmtPos = std::find( pSectionFmtTbl->begin(), pSectionFmtTbl->end(), pFmt );
+        itFmtPos = std::find( mpSectionFmtTbl->begin(), mpSectionFmtTbl->end(), pFmt );
 
         // WARNING: First remove from the array and then delete,
         //          as the Section DTOR tries to delete it's format itself.
-        pSectionFmtTbl->erase( itFmtPos );
+        mpSectionFmtTbl->erase( itFmtPos );
 //FEATURE::CONDCOLL
         sal_uLong nCnt = 0, nSttNd = 0;
         if( pIdx && &GetNodes() == &pIdx->GetNodes() &&
@@ -605,7 +605,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes )
 void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         SfxItemSet const*const pAttr, bool const bPreventLinkUpdate)
 {
-    SwSectionFmt* pFmt = (*pSectionFmtTbl)[ nPos ];
+    SwSectionFmt* pFmt = (*mpSectionFmtTbl)[ nPos ];
     SwSection* pSection = pFmt->GetSection();
 
     /// remember hidden condition flag of SwSection before changes
@@ -1391,22 +1391,22 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
     xub_StrLen nNmLen = aName.Len();
 
     sal_uInt16 nNum = 0;
-    sal_uInt16 nTmp, nFlagSize = ( pSectionFmtTbl->size() / 8 ) +2;
+    sal_uInt16 nTmp, nFlagSize = ( mpSectionFmtTbl->size() / 8 ) +2;
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
     const SwSectionNode* pSectNd;
     sal_uInt16 n;
 
-    for( n = 0; n < pSectionFmtTbl->size(); ++n )
-        if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( sal_False ) ))
+    for( n = 0; n < mpSectionFmtTbl->size(); ++n )
+        if( 0 != ( pSectNd = (*mpSectionFmtTbl)[ n ]->GetSectionNode( sal_False ) ))
         {
             const String& rNm = pSectNd->GetSection().GetSectionName();
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Calculate the Number and reset the Flag
                 nNum = static_cast<sal_uInt16>(rNm.Copy( nNmLen ).ToInt32());
-                if( nNum-- && nNum < pSectionFmtTbl->size() )
+                if( nNum-- && nNum < mpSectionFmtTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
             if( pChkStr && pChkStr->Equals( rNm ) )
@@ -1416,7 +1416,7 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
     if( !pChkStr )
     {
         // Flagged all Numbers accordingly, so get the right Number
-        nNum = pSectionFmtTbl->size();
+        nNum = mpSectionFmtTbl->size();
         for( n = 0; n < nFlagSize; ++n )
             if( 0xff != ( nTmp = pSetFlags[ n ] ))
             {

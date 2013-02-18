@@ -197,7 +197,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
 
     getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
     {   // fix redlines
-        SwRedlineTbl& rTbl = *pRedlineTbl;
+        SwRedlineTbl& rTbl = *mpRedlineTbl;
         for (sal_uInt16 n = 0; n < rTbl.size(); )
         {
             // is on position ??
@@ -315,7 +315,7 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
     getIDocumentMarkAccess()->correctMarksRelative(rOldNode, rNewPos, nOffset);
 
     { // fix the Redlines
-        SwRedlineTbl& rTbl = *pRedlineTbl;
+        SwRedlineTbl& rTbl = *mpRedlineTbl;
         SwPosition aNewPos(rNewPos);
         for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
         {
@@ -332,9 +332,9 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
 SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
 {
     // Layout and OLE shells should be available
-    if( pCurrentView )
+    if( mpCurrentView )
     {
-        ViewShell *pSh = pCurrentView, *pVSh = pSh;
+        ViewShell *pSh = mpCurrentView, *pVSh = pSh;
         if( ppSh )
             *ppSh = pSh;
 

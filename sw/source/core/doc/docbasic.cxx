@@ -82,7 +82,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
             SbxBaseRef aRef;
             SbxValue* pRetValue = new SbxValue;
             aRef = pRetValue;
-            eErr = pDocShell->CallBasic( rMacro.GetMacName(),
+            eErr = mpDocShell->CallBasic( rMacro.GetMacName(),
                                          rMacro.GetLibName(),
                                          pArgs, pRet ? pRetValue : 0 );
 
@@ -120,7 +120,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
             OSL_TRACE( "SwDoc::ExecMacro URL is %s", rtl::OUStringToOString( rMacro.GetMacName(),
                 RTL_TEXTENCODING_UTF8).getStr() );
 
-            eErr = pDocShell->CallXScript(
+            eErr = mpDocShell->CallXScript(
                 rMacro.GetMacName(), *pUnoArgs, aRet, aOutArgsIndex, aOutArgs);
 
             delete pUnoArgs;
@@ -136,7 +136,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
 sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
                     bool bCheckPtr, SbxArray* pArgs, const Link* )
 {
-    if( !pDocShell )        // we can't do that without a DocShell!
+    if( !mpDocShell )        // we can't do that without a DocShell!
         return 0;
 
     sal_uInt16 nRet = 0;
@@ -208,7 +208,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             const SvxMacro& rMacro = *pTbl->Get( nEvent );
             if( STARBASIC == rMacro.GetScriptType() )
             {
-                nRet += 0 == pDocShell->CallBasic( rMacro.GetMacName(),
+                nRet += 0 == mpDocShell->CallBasic( rMacro.GetMacName(),
                                     rMacro.GetLibName(), pArgs ) ? 1 : 0;
             }
             else if( EXTENDED_STYPE == rMacro.GetScriptType() )
@@ -232,7 +232,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                 OSL_TRACE( "SwDoc::CallEvent URL is %s", rtl::OUStringToOString(
                     rMacro.GetMacName(), RTL_TEXTENCODING_UTF8).getStr() );
 
-                nRet += 0 == pDocShell->CallXScript(
+                nRet += 0 == mpDocShell->CallXScript(
                     rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;
 
                 delete pUnoArgs;

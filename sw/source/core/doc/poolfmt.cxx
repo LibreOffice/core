@@ -315,9 +315,9 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
 
     SwTxtFmtColl* pNewColl;
     sal_uInt16 nOutLvlBits = 0;
-    for( sal_uInt16 n = 0; n < pTxtFmtCollTbl->size(); ++n )
+    for( sal_uInt16 n = 0; n < mpTxtFmtCollTbl->size(); ++n )
     {
-        if( nId == ( pNewColl = (*pTxtFmtCollTbl)[ n ] )->GetPoolFmtId() )
+        if( nId == ( pNewColl = (*mpTxtFmtCollTbl)[ n ] )->GetPoolFmtId() )
         {
             return pNewColl;
         }
@@ -357,15 +357,15 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
 //FEATURE::CONDCOLL
         if(::IsConditionalByPoolId( nId ))
             pNewColl = new SwConditionTxtFmtColl( GetAttrPool(), aNm, !nParent
-                                                ? pDfltTxtFmtColl
+                                                ? mpDfltTxtFmtColl
                                                 : GetTxtCollFromPool( nParent ));
         else
 //FEATURE::CONDCOLL
             pNewColl = new SwTxtFmtColl( GetAttrPool(), aNm, !nParent
-                                            ? pDfltTxtFmtColl
+                                            ? mpDfltTxtFmtColl
                                             : GetTxtCollFromPool( nParent ));
         pNewColl->SetPoolFmtId( nId );
-        pTxtFmtCollTbl->push_back( pNewColl );
+        mpTxtFmtCollTbl->push_back( pNewColl );
     }
 
     bool bNoDefault = get( IDocumentSettingAccess::STYLES_NODEFAULT );
@@ -1052,9 +1052,9 @@ bool SwDoc::IsPoolTxtCollUsed( sal_uInt16 nId ) const
 
     SwTxtFmtColl* pNewColl = 0;
     bool bFnd = false;
-    for( sal_uInt16 n = 0; !bFnd && n < pTxtFmtCollTbl->size(); ++n )
+    for( sal_uInt16 n = 0; !bFnd && n < mpTxtFmtCollTbl->size(); ++n )
     {
-        pNewColl = (*pTxtFmtCollTbl)[ n ];
+        pNewColl = (*mpTxtFmtCollTbl)[ n ];
         if( nId == pNewColl->GetPoolFmtId() )
             bFnd = true;
     }
@@ -1081,8 +1081,8 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
     {
     case POOLGRP_CHARFMT:
         {
-            pArray[0] = pCharFmtTbl;
-            pDeriveFmt = pDfltCharFmt;
+            pArray[0] = mpCharFmtTbl;
+            pDeriveFmt = mpDfltCharFmt;
 
             if( nId > RES_POOLCHR_NORMAL_END )
                 nRCId = RC_POOLCHRFMT_HTML_BEGIN - RES_POOLCHR_HTML_BEGIN;
@@ -1101,9 +1101,9 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
         break;
     case POOLGRP_FRAMEFMT:
         {
-            pArray[0] = pFrmFmtTbl;
-            pArray[1] = pSpzFrmFmtTbl;
-            pDeriveFmt = pDfltFrmFmt;
+            pArray[0] = mpFrmFmtTbl;
+            pArray[1] = mpSpzFrmFmtTbl;
+            pDeriveFmt = mpDfltFrmFmt;
             nArrCnt = 2;
             nRCId = RC_POOLFRMFMT_BEGIN - RES_POOLFRM_BEGIN;
             pWhichRange = aFrmFmtSetRange;
@@ -1367,12 +1367,12 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
 
     if (RES_POOLCHR_BEGIN <= nId && nId < RES_POOLCHR_END)
     {
-        pArray[0] = pCharFmtTbl;
+        pArray[0] = mpCharFmtTbl;
     }
     else if (RES_POOLFRM_BEGIN <= nId && nId < RES_POOLFRM_END)
     {
-        pArray[0] = pFrmFmtTbl;
-        pArray[1] = pSpzFrmFmtTbl;
+        pArray[0] = mpFrmFmtTbl;
+        pArray[1] = mpSpzFrmFmtTbl;
         nArrCnt = 2;
     }
     else
@@ -1430,8 +1430,8 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     SwPageDesc *pNewPgDsc;
     sal_uInt16 n;
 
-    for( n = 0; n < aPageDescs.size(); ++n )
-        if( nId == ( pNewPgDsc = aPageDescs[ n ] )->GetPoolFmtId() )
+    for( n = 0; n < maPageDescs.size(); ++n )
+        if( nId == ( pNewPgDsc = maPageDescs[ n ] )->GetPoolFmtId() )
         {
             return pNewPgDsc;
         }
@@ -1453,7 +1453,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             n = MakePageDesc( aNm, 0, bRegardLanguage );
         }
 
-        pNewPgDsc = aPageDescs[ n ];
+        pNewPgDsc = maPageDescs[ n ];
         pNewPgDsc->SetPoolFmtId( nId );
         if( !bIsModified )
             ResetModified();
@@ -2269,9 +2269,9 @@ bool SwDoc::IsPoolPageDescUsed( sal_uInt16 nId ) const
             "Wrong AutoFormat Id" );
     SwPageDesc *pNewPgDsc = 0;
     bool bFnd = false;
-    for( sal_uInt16 n = 0; !bFnd && n < aPageDescs.size(); ++n )
+    for( sal_uInt16 n = 0; !bFnd && n < maPageDescs.size(); ++n )
     {
-        pNewPgDsc = aPageDescs[ n ];
+        pNewPgDsc = maPageDescs[ n ];
         if( nId == pNewPgDsc->GetPoolFmtId() )
             bFnd = true;
     }
@@ -2310,20 +2310,20 @@ sal_uInt16 SwDoc::SetDocPattern( const String& rPatternName )
 {
     OSL_ENSURE( rPatternName.Len(), "no Document style name" );
 
-    size_t nNewPos = aPatternNms.size();
-    for(size_t n = 0; n < aPatternNms.size(); ++n)
-        if( boost::is_null(aPatternNms.begin() + n) )
+    size_t nNewPos = maPatternNms.size();
+    for(size_t n = 0; n < maPatternNms.size(); ++n)
+        if( boost::is_null(maPatternNms.begin() + n) )
         {
-            if( nNewPos == aPatternNms.size() )
+            if( nNewPos == maPatternNms.size() )
                 nNewPos = n;
         }
-        else if( rPatternName == aPatternNms[n] )
+        else if( rPatternName == maPatternNms[n] )
             return n;
 
-    if( nNewPos < aPatternNms.size() )
-        aPatternNms.erase(aPatternNms.begin() + nNewPos);   // Free space again
+    if( nNewPos < maPatternNms.size() )
+        maPatternNms.erase(maPatternNms.begin() + nNewPos);   // Free space again
 
-    aPatternNms.insert(aPatternNms.begin() + nNewPos, new String(rPatternName));
+    maPatternNms.insert(maPatternNms.begin() + nNewPos, new String(rPatternName));
     SetModified();
     return nNewPos;
 }

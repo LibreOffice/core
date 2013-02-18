@@ -206,12 +206,12 @@ SwChartDataProvider * SwDoc::GetChartDataProvider( bool bCreate ) const
     // we need a mutex here
     SolarMutexGuard aGuard;
 
-    if (bCreate && !aChartDataProviderImplRef.get())
+    if (bCreate && !maChartDataProviderImplRef.get())
     {
-        aChartDataProviderImplRef = comphelper::ImplementationReference< SwChartDataProvider
+        maChartDataProviderImplRef = comphelper::ImplementationReference< SwChartDataProvider
             , chart2::data::XDataProvider >( new SwChartDataProvider( this ) );
     }
-    return aChartDataProviderImplRef.get();
+    return maChartDataProviderImplRef.get();
 }
 
 
@@ -248,11 +248,11 @@ void SwDoc::CreateChartInternalDataProviders( const SwTable *pTable )
 
 SwChartLockController_Helper & SwDoc::GetChartControllerHelper()
 {
-    if (!pChartControllerHelper)
+    if (!mpChartControllerHelper)
     {
-        pChartControllerHelper = new SwChartLockController_Helper( this );
+        mpChartControllerHelper = new SwChartLockController_Helper( this );
     }
-    return *pChartControllerHelper;
+    return *mpChartControllerHelper;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

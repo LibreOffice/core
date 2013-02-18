@@ -140,14 +140,14 @@ bool SwDoc::GetData( const rtl::OUString& rItem, const String& rMimeType,
     bool bCaseSensitive = true;
     while( true )
     {
-        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem, bCaseSensitive);
+        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*mpMarkManager, rItem, bCaseSensitive);
         if(pBkmk)
             return SwServerObject(*pBkmk).GetData(rValue, rMimeType);
 
         // Do we already have the Item?
         String sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
-        BOOST_FOREACH( const SwSectionFmt* pFmt, *pSectionFmtTbl )
+        BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
         {
             if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
                 break;
@@ -163,7 +163,7 @@ bool SwDoc::GetData( const rtl::OUString& rItem, const String& rMimeType,
     }
 
     _FindItem aPara( GetAppCharClass().lowercase( rItem ));
-    BOOST_FOREACH( const SwFrmFmt* pFmt, *pTblFrmFmtTbl )
+    BOOST_FOREACH( const SwFrmFmt* pFmt, *mpTblFrmFmtTbl )
     {
         if (!(lcl_FindTable(pFmt, &aPara)))
             break;
@@ -185,14 +185,14 @@ bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
     bool bCaseSensitive = true;
     while( true )
     {
-        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem, bCaseSensitive);
+        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*mpMarkManager, rItem, bCaseSensitive);
         if(pBkmk)
             return SwServerObject(*pBkmk).SetData(rMimeType, rValue);
 
         // Do we already have the Item?
         String sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
-        BOOST_FOREACH( const SwSectionFmt* pFmt, *pSectionFmtTbl )
+        BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
         {
             if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
                 break;
@@ -209,7 +209,7 @@ bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
 
     String sItem(GetAppCharClass().lowercase(rItem));
     _FindItem aPara( sItem );
-    BOOST_FOREACH( const SwFrmFmt* pFmt, *pTblFrmFmtTbl )
+    BOOST_FOREACH( const SwFrmFmt* pFmt, *mpTblFrmFmtTbl )
     {
         if (!(lcl_FindTable(pFmt, &aPara)))
             break;
@@ -233,7 +233,7 @@ bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
     while( true )
     {
         // bookmarks
-        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem, bCaseSensitive);
+        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*mpMarkManager, rItem, bCaseSensitive);
         if(pBkmk && pBkmk->IsExpanded()
             && (0 == (pObj = pBkmk->GetRefObject())))
         {
@@ -247,7 +247,7 @@ bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
 
         _FindItem aPara(bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         // sections
-        BOOST_FOREACH( const SwSectionFmt* pFmt, *pSectionFmtTbl )
+        BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
         {
             if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
                 break;
@@ -270,7 +270,7 @@ bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
 
     _FindItem aPara( GetAppCharClass().lowercase(rItem) );
     // tables
-    BOOST_FOREACH( const SwFrmFmt* pFmt, *pTblFrmFmtTbl )
+    BOOST_FOREACH( const SwFrmFmt* pFmt, *mpTblFrmFmtTbl )
     {
         if (!(lcl_FindTable(pFmt, &aPara)))
             break;
@@ -315,7 +315,7 @@ bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
         if( sCmp.EqualsAscii( pMarkToTable ) )
         {
             sName = rCC.lowercase( sName );
-            BOOST_FOREACH( const SwFrmFmt* pFmt, *pTblFrmFmtTbl )
+            BOOST_FOREACH( const SwFrmFmt* pFmt, *mpTblFrmFmtTbl )
             {
                 if (!(lcl_FindTable(pFmt, &aPara)))
                     break;
@@ -384,7 +384,7 @@ bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
     bool bCaseSensitive = true;
     while( true )
     {
-        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, sItem, bCaseSensitive);
+        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*mpMarkManager, sItem, bCaseSensitive);
         if(pBkmk)
         {
             if(pBkmk->IsExpanded())
@@ -397,9 +397,9 @@ bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
         //
         _FindItem aPara( bCaseSensitive ? sItem : String(rCC.lowercase( sItem )) );
 
-        if( !pSectionFmtTbl->empty() )
+        if( !mpSectionFmtTbl->empty() )
         {
-            BOOST_FOREACH( const SwSectionFmt* pFmt, *pSectionFmtTbl )
+            BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
             {
                 if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
                     break;

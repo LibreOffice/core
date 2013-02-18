@@ -1489,7 +1489,7 @@ SwDoc::InsertLabel(
                         bBefore, nId, rCharacterStyle, bCpyBrd );
     }
 
-    SwFlyFrmFmt *const pNewFmt = lcl_InsertLabel(*this, pTxtFmtCollTbl, pUndo,
+    SwFlyFrmFmt *const pNewFmt = lcl_InsertLabel(*this, mpTxtFmtCollTbl, pUndo,
             eType, rTxt, rSeparator, rNumberingSeparator, bBefore,
             nId, nNdIdx, rCharacterStyle, bCpyBrd);
 
@@ -1781,7 +1781,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel(
     }
 
     SwFlyFrmFmt *const pNewFmt = lcl_InsertDrawLabel(
-        *this, pTxtFmtCollTbl, pUndo, pOldFmt,
+        *this, mpTxtFmtCollTbl, pUndo, pOldFmt,
         rTxt, rSeparator, rNumberSeparator, nId, rCharacterStyle, rSdrObj);
 
     if (pUndo)
@@ -1806,31 +1806,31 @@ void SwDoc::StartIdling()
 {
     mbStartIdleTimer = true;
     if( !mIdleBlockCount )
-        aIdleTimer.Start();
+        maIdleTimer.Start();
 }
 
 void SwDoc::StopIdling()
 {
     mbStartIdleTimer = false;
-    aIdleTimer.Stop();
+    maIdleTimer.Stop();
 }
 
 void SwDoc::BlockIdling()
 {
-    aIdleTimer.Stop();
+    maIdleTimer.Stop();
     ++mIdleBlockCount;
 }
 
 void SwDoc::UnblockIdling()
 {
     --mIdleBlockCount;
-    if( !mIdleBlockCount && mbStartIdleTimer && !aIdleTimer.IsActive() )
-        aIdleTimer.Start();
+    if( !mIdleBlockCount && mbStartIdleTimer && !maIdleTimer.IsActive() )
+        maIdleTimer.Start();
 }
 
 void SwDoc::StartBackgroundJobs() {
     // Trigger DoIdleJobs(), asynchronously.
-    aIdleTimer.Start();
+    maIdleTimer.Start();
 }
 
 /*************************************************************************
@@ -1848,7 +1848,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 
     SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
     if( pTmpRoot &&
-        !SfxProgress::GetActiveProgress( pDocShell ) )
+        !SfxProgress::GetActiveProgress( mpDocShell ) )
     {
         ViewShell *pSh, *pStartSh;
         pSh = pStartSh = GetCurrentViewShell();
@@ -2168,7 +2168,7 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
     // Because Redlines are also attached to Start and EndNoden,
     // the Index must not necessarily be from a ContentNode.
     SwNode* pNd = &rIdx.GetNode();
-    if( pNd->IsCntntNode() && pCurrentView )//swmod 071029//swmod 071225
+    if( pNd->IsCntntNode() && mpCurrentView )//swmod 071029//swmod 071225
     {
         const SwFrm *pFrm = pNd->GetCntntNode()->getLayoutFrm( GetCurrentLayout() );
         if( pFrm )
@@ -2284,32 +2284,32 @@ bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) const
 
 void SwDoc::SetCurrentViewShell( ViewShell* pNew )
 {
-    pCurrentView = pNew;
+    mpCurrentView = pNew;
 }
 
 SwLayouter* SwDoc::GetLayouter()
 {
-    return pLayouter;
+    return mpLayouter;
 }
 
 const SwLayouter* SwDoc::GetLayouter() const
 {
-    return pLayouter;
+    return mpLayouter;
 }
 
 void SwDoc::SetLayouter( SwLayouter* pNew )
 {
-    pLayouter = pNew;
+    mpLayouter = pNew;
 }
 
 const ViewShell *SwDoc::GetCurrentViewShell() const
 {
-    return pCurrentView;
+    return mpCurrentView;
 }
 
 ViewShell *SwDoc::GetCurrentViewShell()
 {
-    return pCurrentView;
+    return mpCurrentView;
 }
 
 //swmod 080219
@@ -2331,7 +2331,7 @@ SwRootFrm *SwDoc::GetCurrentLayout()
 bool SwDoc::HasLayout() const
 {
     // if there is a view, there is always a layout
-    return (pCurrentView != 0);
+    return (mpCurrentView != 0);
 }
 
 std::set<SwRootFrm*> SwDoc::GetAllLayouts()
@@ -2356,7 +2356,7 @@ std::set<SwRootFrm*> SwDoc::GetAllLayouts()
 
 void SwDoc::ShareLayout(boost::shared_ptr<SwRootFrm>& rPtr)
 {
-    pLayoutPtr = rPtr;
+    mpLayoutPtr = rPtr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -540,7 +540,7 @@ void SwDoc::InitDrawModel()
 
     // !! Attention: there is similar code in the Sw3 Reader (sw3imp.cxx) that
     // also has to be maintained!!
-    if ( pDrawModel )
+    if ( mpDrawModel )
         ReleaseDrawModel();
 
     // Setup DrawPool and EditEnginePool. Ownership is ours and only gets passed
@@ -574,38 +574,38 @@ void SwDoc::InitDrawModel()
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create DrawDocument" );
     // The document owns the SdrModel. We always have two layers and one page.
-    pDrawModel = new SwDrawDocument( this );
+    mpDrawModel = new SwDrawDocument( this );
 
-    pDrawModel->EnableUndo( GetIDocumentUndoRedo().DoesUndo() );
+    mpDrawModel->EnableUndo( GetIDocumentUndoRedo().DoesUndo() );
 
     String sLayerNm;
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Hell" ));
-    nHell   = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+    mnHell   = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Heaven" ));
-    nHeaven = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+    mnHeaven = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Controls" ));
-    nControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+    mnControls = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
     // add invisible layers corresponding to the visible ones.
     {
         sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHell" ));
-        nInvisibleHell   = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+        mnInvisibleHell   = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
         sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHeaven" ));
-        nInvisibleHeaven = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+        mnInvisibleHeaven = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
         sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleControls" ));
-        nInvisibleControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+        mnInvisibleControls = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
     }
 
-    SdrPage* pMasterPage = pDrawModel->AllocPage( sal_False );
-    pDrawModel->InsertPage( pMasterPage );
+    SdrPage* pMasterPage = mpDrawModel->AllocPage( sal_False );
+    mpDrawModel->InsertPage( pMasterPage );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create DrawDocument" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create Spellchecker/Hyphenator" );
-    SdrOutliner& rOutliner = pDrawModel->GetDrawOutliner();
+    SdrOutliner& rOutliner = mpDrawModel->GetDrawOutliner();
     uno::Reference< XSpellChecker1 > xSpell = ::GetSpellChecker();
     rOutliner.SetSpeller( xSpell );
     uno::Reference<XHyphenator> xHyphenator( ::GetHyphenator() );
@@ -613,21 +613,21 @@ void SwDoc::InitDrawModel()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create Spellchecker/Hyphenator" );
 
     SetCalcFieldValueHdl(&rOutliner);
-    SetCalcFieldValueHdl(&pDrawModel->GetHitTestOutliner());
+    SetCalcFieldValueHdl(&mpDrawModel->GetHitTestOutliner());
 
     // Set the LinkManager in the model so that linked graphics can be inserted.
     // The WinWord import needs it too.
-    pDrawModel->SetLinkManager( &GetLinkManager() );
-    pDrawModel->SetAddExtLeading( get(IDocumentSettingAccess::ADD_EXT_LEADING) );
+    mpDrawModel->SetLinkManager( &GetLinkManager() );
+    mpDrawModel->SetAddExtLeading( get(IDocumentSettingAccess::ADD_EXT_LEADING) );
 
     OutputDevice* pRefDev = getReferenceDevice( false );
     if ( pRefDev )
-        pDrawModel->SetRefDevice( pRefDev );
+        mpDrawModel->SetRefDevice( pRefDev );
 
-    pDrawModel->SetNotifyUndoActionHdl( LINK( this, SwDoc, AddDrawUndo ));
-    if ( pCurrentView )
+    mpDrawModel->SetNotifyUndoActionHdl( LINK( this, SwDoc, AddDrawUndo ));
+    if ( mpCurrentView )
     {
-        ViewShell* pViewSh = pCurrentView;
+        ViewShell* pViewSh = mpCurrentView;
         do
         {
             SwRootFrm* pRoot =  pViewSh->GetLayout();
@@ -635,14 +635,14 @@ void SwDoc::InitDrawModel()
             {
                 // Disable "multiple layout" for the moment:
                 // use pMasterPage instead of a new created SdrPage
-                // pDrawModel->AllocPage( FALSE );
-                // pDrawModel->InsertPage( pDrawPage );
+                // mpDrawModel->AllocPage( FALSE );
+                // mpDrawModel->InsertPage( pDrawPage );
                 SdrPage* pDrawPage = pMasterPage;
                 pRoot->SetDrawPage( pDrawPage );
                 pDrawPage->SetSize( pRoot->Frm().SSize() );
             }
             pViewSh = (ViewShell*)pViewSh->GetNext();
-        }while( pViewSh != pCurrentView );
+        }while( pViewSh != mpCurrentView );
     }
 
     UpdateDrawDefaults();
@@ -770,11 +770,11 @@ SdrLayerID SwDoc::GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLa
 
 void SwDoc::ReleaseDrawModel()
 {
-    if ( pDrawModel )
+    if ( mpDrawModel )
     {
         // !! Also maintain the code in the sw3io for inserting documents!!
 
-        delete pDrawModel; pDrawModel = 0;
+        delete mpDrawModel; mpDrawModel = 0;
         SfxItemPool *pSdrPool = GetAttrPool().GetSecondaryPool();
 
         OSL_ENSURE( pSdrPool, "missing pool" );
@@ -794,16 +794,16 @@ void SwDoc::ReleaseDrawModel()
 
 SdrModel* SwDoc::_MakeDrawModel()
 {
-    OSL_ENSURE( !pDrawModel, "_MakeDrawModel: Why?" );
+    OSL_ENSURE( !mpDrawModel, "_MakeDrawModel: Why?" );
     InitDrawModel();
-    if ( pCurrentView )
+    if ( mpCurrentView )
     {
-        ViewShell* pTmp = pCurrentView;
+        ViewShell* pTmp = mpCurrentView;
         do
         {
             pTmp->MakeDrawView();
             pTmp = (ViewShell*) pTmp->GetNext();
-        } while ( pTmp != pCurrentView );
+        } while ( pTmp != mpCurrentView );
 
         // Broadcast, so that the FormShell can be connected to the DrawView
         if( GetDocShell() )
@@ -812,14 +812,14 @@ SdrModel* SwDoc::_MakeDrawModel()
             GetDocShell()->Broadcast( aHnt );
         }
     }   //swmod 071029//swmod 071225
-    return pDrawModel;
+    return mpDrawModel;
 }
 
 /*************************************************************************/
 
 void SwDoc::DrawNotifyUndoHdl()
 {
-    pDrawModel->SetNotifyUndoActionHdl( Link() );
+    mpDrawModel->SetNotifyUndoActionHdl( Link() );
 }
 
 /*************************************************************************
@@ -922,14 +922,14 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
 /* TFFDI: The functions formerly declared 'inline'
  */
-const SdrModel* SwDoc::GetDrawModel() const { return pDrawModel; }
-SdrModel* SwDoc::GetDrawModel() { return pDrawModel; }
-SdrLayerID SwDoc::GetHeavenId() const { return nHeaven; }
-SdrLayerID SwDoc::GetHellId() const { return nHell; }
-SdrLayerID SwDoc::GetControlsId() const { return nControls;   }
-SdrLayerID SwDoc::GetInvisibleHeavenId() const { return nInvisibleHeaven; }
-SdrLayerID SwDoc::GetInvisibleHellId() const { return nInvisibleHell; }
-SdrLayerID SwDoc::GetInvisibleControlsId() const { return nInvisibleControls; }
+const SdrModel* SwDoc::GetDrawModel() const { return mpDrawModel; }
+SdrModel* SwDoc::GetDrawModel() { return mpDrawModel; }
+SdrLayerID SwDoc::GetHeavenId() const { return mnHeaven; }
+SdrLayerID SwDoc::GetHellId() const { return mnHell; }
+SdrLayerID SwDoc::GetControlsId() const { return mnControls;   }
+SdrLayerID SwDoc::GetInvisibleHeavenId() const { return mnInvisibleHeaven; }
+SdrLayerID SwDoc::GetInvisibleHellId() const { return mnInvisibleHell; }
+SdrLayerID SwDoc::GetInvisibleControlsId() const { return mnInvisibleControls; }
 SdrModel* SwDoc::GetOrCreateDrawModel() { return GetDrawModel() ? GetDrawModel() : _MakeDrawModel(); }
 
 // #i62875#
@@ -1031,8 +1031,8 @@ void SwDoc::SetDrawDefaults()
 void SwDoc::UpdateDrawDefaults()
 {
     // drawing layer defaults that are set for new documents (if InitNew was called)
-    if ( pDrawModel && mbSetDrawDefaults )
-        pDrawModel->SetDrawingLayerPoolDefaults();
+    if ( mpDrawModel && mbSetDrawDefaults )
+        mpDrawModel->SetDrawingLayerPoolDefaults();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

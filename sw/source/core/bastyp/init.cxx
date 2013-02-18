@@ -428,7 +428,7 @@ const sal_Char* pMarkToOLE      = "ole";
 
 std::vector<SvGlobalName*> *pGlobalOLEExcludeList = 0;
 
-SwAutoCompleteWord* SwDoc::pACmpltWords = 0;
+SwAutoCompleteWord* SwDoc::mpACmpltWords = 0;
 
 SwCheckIt* pCheckIt = 0;
 CharClass* pAppCharClass = 0;
@@ -710,7 +710,7 @@ void _InitCore()
     pGlobalOLEExcludeList = new std::vector<SvGlobalName*>;
 
     const SvxSwAutoFmtFlags& rAFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
-    SwDoc::pACmpltWords = new SwAutoCompleteWord( rAFlags.nAutoCmpltListLen,
+    SwDoc::mpACmpltWords = new SwAutoCompleteWord( rAFlags.nAutoCmpltListLen,
                                             rAFlags.nAutoCmpltWordLen );
 }
 
@@ -738,7 +738,7 @@ void _FinitCore()
     if ( aAttrTab[0]->GetRefCount() )
         SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN, sal_False);
 #endif
-    delete SwDoc::pACmpltWords;
+    delete SwDoc::mpACmpltWords;
 
     delete SwStyleNameMapper::pTextUINameArray;
     delete SwStyleNameMapper::pListsUINameArray;

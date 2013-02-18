@@ -278,7 +278,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
                   *pNewChrFmt = rInfo.GetCharFmt( *this );
         bool bFtnChrFmts = pOldChrFmt != pNewChrFmt;
 
-        *pFtnInfo = rInfo;
+        *mpFtnInfo = rInfo;
 
         if (pTmpRoot)
         {
@@ -314,7 +314,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
         {
             SwFmtChg aOld( pOldChrFmt );
             SwFmtChg aNew( pNewChrFmt );
-            pFtnInfo->ModifyNotification( &aOld, &aNew );
+            mpFtnInfo->ModifyNotification( &aOld, &aNew );
         }
 
         // #i81002# no update during loading
@@ -353,7 +353,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
                   *pNewChrFmt = rInfo.GetCharFmt( *this );
         bool bFtnChrFmts = pOldChrFmt != pNewChrFmt;
 
-        *pEndNoteInfo = rInfo;
+        *mpEndNoteInfo = rInfo;
 
         if ( pTmpRoot )
         {
@@ -383,7 +383,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         {
             SwFmtChg aOld( pOldChrFmt );
             SwFmtChg aNew( pNewChrFmt );
-            pEndNoteInfo->ModifyNotification( &aOld, &aNew );
+            mpEndNoteInfo->ModifyNotification( &aOld, &aNew );
         }
 
         // #i81002# no update during loading

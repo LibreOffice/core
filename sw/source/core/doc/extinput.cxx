@@ -229,21 +229,21 @@ void SwExtTextInput::SetOverwriteCursor( sal_Bool bFlag )
 
 SwExtTextInput* SwDoc::CreateExtTextInput( const SwPaM& rPam )
 {
-    SwExtTextInput* pNew = new SwExtTextInput( rPam, pExtInputRing );
-    if( !pExtInputRing )
-        pExtInputRing = pNew;
+    SwExtTextInput* pNew = new SwExtTextInput( rPam, mpExtInputRing );
+    if( !mpExtInputRing )
+        mpExtInputRing = pNew;
     pNew->SetMark();
     return pNew;
 }
 
 void SwDoc::DeleteExtTextInput( SwExtTextInput* pDel )
 {
-    if( pDel == pExtInputRing )
+    if( pDel == mpExtInputRing )
     {
-        if( pDel->GetNext() != pExtInputRing )
-            pExtInputRing = (SwPaM*)pDel->GetNext();
+        if( pDel->GetNext() != mpExtInputRing )
+            mpExtInputRing = (SwPaM*)pDel->GetNext();
         else
-            pExtInputRing = 0;
+            mpExtInputRing = 0;
     }
     delete pDel;
 }
@@ -252,10 +252,10 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
                                         xub_StrLen nCntntPos ) const
 {
     SwExtTextInput* pRet = 0;
-    if( pExtInputRing )
+    if( mpExtInputRing )
     {
         sal_uLong nNdIdx = rNd.GetIndex();
-        SwExtTextInput* pTmp = (SwExtTextInput*)pExtInputRing;
+        SwExtTextInput* pTmp = (SwExtTextInput*)mpExtInputRing;
         do {
             sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
                   nMk = pTmp->GetMark()->nNode.GetIndex();
@@ -275,16 +275,16 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
                 pRet = pTmp;
                 break;
             }
-        } while( pExtInputRing != (pTmp = (SwExtTextInput*)pExtInputRing ) );
+        } while( mpExtInputRing != (pTmp = (SwExtTextInput*)mpExtInputRing ) );
     }
     return pRet;
 }
 
 SwExtTextInput* SwDoc::GetExtTextInput() const
 {
-    OSL_ENSURE( !pExtInputRing || pExtInputRing == pExtInputRing->GetNext(),
+    OSL_ENSURE( !mpExtInputRing || mpExtInputRing == mpExtInputRing->GetNext(),
             "more then one InputEngine available" );
-    return (SwExtTextInput*)pExtInputRing;
+    return (SwExtTextInput*)mpExtInputRing;
 }
 
 

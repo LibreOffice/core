@@ -29,8 +29,8 @@ void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
 {
     SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
     if (  pTmpRoot &&
-         (rNew.IsCountBlankLines() != pLineNumberInfo->IsCountBlankLines() ||
-          rNew.IsRestartEachPage() != pLineNumberInfo->IsRestartEachPage()) )
+         (rNew.IsCountBlankLines() != mpLineNumberInfo->IsCountBlankLines() ||
+          rNew.IsRestartEachPage() != mpLineNumberInfo->IsRestartEachPage()) )
     {
         std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080225
         pTmpRoot->StartAllAction();
@@ -40,13 +40,13 @@ void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_LINENUM | INV_SIZE));//swmod 080226
          pTmpRoot->EndAllAction();
     }   //swmod 080219
-    *pLineNumberInfo = rNew;
+    *mpLineNumberInfo = rNew;
     SetModified();
 }
 
 const SwLineNumberInfo& SwDoc::GetLineNumberInfo() const
 {
-    return *pLineNumberInfo;
+    return *mpLineNumberInfo;
 }
 
 SwLineNumberInfo::SwLineNumberInfo() :

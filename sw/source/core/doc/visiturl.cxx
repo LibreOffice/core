@@ -98,9 +98,9 @@ bool SwDoc::IsVisitedURL( const String& rURL ) const
     if( rURL.Len() )
     {
         INetURLHistory *pHist = INetURLHistory::GetOrCreate();
-        if( '#' == rURL.GetChar( 0 ) && pDocShell && pDocShell->GetMedium() )
+        if( '#' == rURL.GetChar( 0 ) && mpDocShell && mpDocShell->GetMedium() )
         {
-            INetURLObject aIObj( pDocShell->GetMedium()->GetURLObject() );
+            INetURLObject aIObj( mpDocShell->GetMedium()->GetURLObject() );
             aIObj.SetMark( rURL.Copy( 1 ) );
             bRet = pHist->QueryUrl( aIObj );
         }
@@ -108,10 +108,10 @@ bool SwDoc::IsVisitedURL( const String& rURL ) const
             bRet = pHist->QueryUrl( rURL );
 
         // We also want to be informed about status updates in the History
-        if( !pURLStateChgd )
+        if( !mpURLStateChgd )
         {
             SwDoc* pD = (SwDoc*)this;
-            pD->pURLStateChgd = new SwURLStateChanged( this );
+            pD->mpURLStateChgd = new SwURLStateChanged( this );
         }
     }
     return bRet;

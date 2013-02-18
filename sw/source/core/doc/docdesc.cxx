@@ -279,9 +279,9 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
 
 void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 {
-    OSL_ENSURE( i < aPageDescs.size(), "PageDescs is out of range." );
+    OSL_ENSURE( i < maPageDescs.size(), "PageDescs is out of range." );
 
-    SwPageDesc *pDesc = aPageDescs[i];
+    SwPageDesc *pDesc = maPageDescs[i];
     SwRootFrm* pTmpRoot = GetCurrentLayout();
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -441,22 +441,22 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         return;
 
     // mba: test iteration as clients are removed while iteration
-    SwPageDescHint aHint( aPageDescs[0] );
+    SwPageDescHint aHint( maPageDescs[0] );
     pDel->CallSwClientNotify( aHint );
 
     bool bHasLayout = HasLayout();
-    if ( pFtnInfo->DependsOn( pDel ) )
+    if ( mpFtnInfo->DependsOn( pDel ) )
     {
-        pFtnInfo->ChgPageDesc( aPageDescs[0] );
+        mpFtnInfo->ChgPageDesc( maPageDescs[0] );
         if ( bHasLayout )
         {
             std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
             std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), false));
         }
     }
-    else if ( pEndNoteInfo->DependsOn( pDel ) )
+    else if ( mpEndNoteInfo->DependsOn( pDel ) )
     {
-        pEndNoteInfo->ChgPageDesc( aPageDescs[0] );
+        mpEndNoteInfo->ChgPageDesc( maPageDescs[0] );
         if ( bHasLayout )
         {
             std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
@@ -464,11 +464,11 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         }
     }
 
-    for ( sal_uInt16 j = 0; j < aPageDescs.size(); ++j )
+    for ( sal_uInt16 j = 0; j < maPageDescs.size(); ++j )
     {
-        if ( aPageDescs[j]->GetFollow() == pDel )
+        if ( maPageDescs[j]->GetFollow() == pDel )
         {
-            aPageDescs[j]->SetFollow( 0 );
+            maPageDescs[j]->SetFollow( 0 );
             if( bHasLayout )
             {
                 std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
@@ -481,9 +481,9 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
 void SwDoc::BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
                                     sal_uInt16 nOp)
 {
-    if (pDocShell)
+    if (mpDocShell)
     {
-        SfxStyleSheetBasePool * pPool = pDocShell->GetStyleSheetPool();
+        SfxStyleSheetBasePool * pPool = mpDocShell->GetStyleSheetPool();
 
         if (pPool)
         {
@@ -498,12 +498,12 @@ void SwDoc::BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
 
 void SwDoc::DelPageDesc( sal_uInt16 i, bool bBroadcast )
 {
-    OSL_ENSURE( i < aPageDescs.size(), "PageDescs is out of range." );
+    OSL_ENSURE( i < maPageDescs.size(), "PageDescs is out of range." );
     OSL_ENSURE( i != 0, "You cannot delete the default Pagedesc.");
     if ( i == 0 )
         return;
 
-    SwPageDesc *pDel = aPageDescs[i];
+    SwPageDesc *pDel = maPageDescs[i];
 
     if (bBroadcast)
         BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_PAGE,
@@ -517,7 +517,7 @@ void SwDoc::DelPageDesc( sal_uInt16 i, bool bBroadcast )
 
     PreDelPageDesc(pDel); // #i7983#
 
-    aPageDescs.erase( aPageDescs.begin() + i );
+    maPageDescs.erase( maPageDescs.begin() + i );
     delete pDel;
     SetModified();
 }
@@ -559,7 +559,7 @@ sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
         pNew->GetLeft().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
         pNew->GetFirst().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
     }
-    aPageDescs.push_back( pNew );
+    maPageDescs.push_back( pNew );
 
     if (bBroadcast)
         BroadcastStyleOperation(rName, SFX_STYLE_FAMILY_PAGE,
@@ -571,7 +571,7 @@ sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
     }
 
     SetModified();
-    return (aPageDescs.size()-1);
+    return (maPageDescs.size()-1);
 }
 
 SwPageDesc* SwDoc::FindPageDescByName( const String& rName, sal_uInt16* pPos ) const
@@ -579,10 +579,10 @@ SwPageDesc* SwDoc::FindPageDescByName( const String& rName, sal_uInt16* pPos ) c
     SwPageDesc* pRet = 0;
     if( pPos ) *pPos = USHRT_MAX;
 
-    for( sal_uInt16 n = 0, nEnd = aPageDescs.size(); n < nEnd; ++n )
-        if( aPageDescs[ n ]->GetName() == rName )
+    for( sal_uInt16 n = 0, nEnd = maPageDescs.size(); n < nEnd; ++n )
+        if( maPageDescs[ n ]->GetName() == rName )
         {
-            pRet = aPageDescs[ n ];
+            pRet = maPageDescs[ n ];
             if( pPos )
                 *pPos = n;
             break;
@@ -624,10 +624,10 @@ void SwDoc::PrtDataChanged()
             bEndAction = true;
 
             bDraw = false;
-            if( pDrawModel )
+            if( mpDrawModel )
             {
-                pDrawModel->SetAddExtLeading( get(IDocumentSettingAccess::ADD_EXT_LEADING) );
-                pDrawModel->SetRefDevice( getReferenceDevice( false ) );
+                mpDrawModel->SetAddExtLeading( get(IDocumentSettingAccess::ADD_EXT_LEADING) );
+                mpDrawModel->SetRefDevice( getReferenceDevice( false ) );
             }
 
             pFntCache->Flush();
@@ -637,21 +637,21 @@ void SwDoc::PrtDataChanged()
 
             do
             {
-                pSh->InitPrt( pPrt );
+                pSh->InitPrt( mpPrt );
                 pSh = (ViewShell*)pSh->GetNext();
             }
             while ( pSh != GetCurrentViewShell() );
         }
     }
-    if ( bDraw && pDrawModel )
+    if ( bDraw && mpDrawModel )
     {
         const sal_Bool bTmpAddExtLeading = get(IDocumentSettingAccess::ADD_EXT_LEADING);
-        if ( bTmpAddExtLeading != pDrawModel->IsAddExtLeading() )
-            pDrawModel->SetAddExtLeading( bTmpAddExtLeading );
+        if ( bTmpAddExtLeading != mpDrawModel->IsAddExtLeading() )
+            mpDrawModel->SetAddExtLeading( bTmpAddExtLeading );
 
         OutputDevice* pOutDev = getReferenceDevice( false );
-        if ( pOutDev != pDrawModel->GetRefDevice() )
-            pDrawModel->SetRefDevice( pOutDev );
+        if ( pOutDev != mpDrawModel->GetRefDevice() )
+            mpDrawModel->SetRefDevice( pOutDev );
     }
 
     PrtOLENotify( sal_True );
@@ -791,9 +791,9 @@ bool SwDoc::FindPageDesc( const String & rName, sal_uInt16 * pFound)
 {
     bool bResult = false;
     sal_uInt16 nI;
-    for (nI = 0; nI < aPageDescs.size(); nI++)
+    for (nI = 0; nI < maPageDescs.size(); nI++)
     {
-        if (aPageDescs[nI]->GetName() == rName)
+        if (maPageDescs[nI]->GetName() == rName)
         {
             *pFound = nI;
             bResult = true;
@@ -811,7 +811,7 @@ SwPageDesc * SwDoc::GetPageDesc( const String & rName )
     sal_uInt16 nI;
 
     if (FindPageDesc(rName, &nI))
-        aResult = aPageDescs[nI];
+        aResult = maPageDescs[nI];
 
     return aResult;
 }

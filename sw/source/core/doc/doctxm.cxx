@@ -463,13 +463,13 @@ const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, bool bCreate )
     SwTOXBase** prBase = 0;
     switch(eTyp)
     {
-    case  TOX_CONTENT:          prBase = &pDefTOXBases->pContBase; break;
-    case  TOX_INDEX:            prBase = &pDefTOXBases->pIdxBase;  break;
-    case  TOX_USER:             prBase = &pDefTOXBases->pUserBase; break;
-    case  TOX_TABLES:           prBase = &pDefTOXBases->pTblBase;  break;
-    case  TOX_OBJECTS:          prBase = &pDefTOXBases->pObjBase;  break;
-    case  TOX_ILLUSTRATIONS:    prBase = &pDefTOXBases->pIllBase;  break;
-    case  TOX_AUTHORITIES:      prBase = &pDefTOXBases->pAuthBase; break;
+    case  TOX_CONTENT:          prBase = &mpDefTOXBases->pContBase; break;
+    case  TOX_INDEX:            prBase = &mpDefTOXBases->pIdxBase;  break;
+    case  TOX_USER:             prBase = &mpDefTOXBases->pUserBase; break;
+    case  TOX_TABLES:           prBase = &mpDefTOXBases->pTblBase;  break;
+    case  TOX_OBJECTS:          prBase = &mpDefTOXBases->pObjBase;  break;
+    case  TOX_ILLUSTRATIONS:    prBase = &mpDefTOXBases->pIllBase;  break;
+    case  TOX_AUTHORITIES:      prBase = &mpDefTOXBases->pAuthBase; break;
     }
     if(!(*prBase) && bCreate)
     {
@@ -485,13 +485,13 @@ void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
     SwTOXBase** prBase = 0;
     switch(rBase.GetType())
     {
-    case  TOX_CONTENT:          prBase = &pDefTOXBases->pContBase; break;
-    case  TOX_INDEX:            prBase = &pDefTOXBases->pIdxBase;  break;
-    case  TOX_USER:             prBase = &pDefTOXBases->pUserBase; break;
-    case  TOX_TABLES:           prBase = &pDefTOXBases->pTblBase;  break;
-    case  TOX_OBJECTS:          prBase = &pDefTOXBases->pObjBase;  break;
-    case  TOX_ILLUSTRATIONS:    prBase = &pDefTOXBases->pIllBase;  break;
-    case  TOX_AUTHORITIES:      prBase = &pDefTOXBases->pAuthBase; break;
+    case  TOX_CONTENT:          prBase = &mpDefTOXBases->pContBase; break;
+    case  TOX_INDEX:            prBase = &mpDefTOXBases->pIdxBase;  break;
+    case  TOX_USER:             prBase = &mpDefTOXBases->pUserBase; break;
+    case  TOX_TABLES:           prBase = &mpDefTOXBases->pTblBase;  break;
+    case  TOX_OBJECTS:          prBase = &mpDefTOXBases->pObjBase;  break;
+    case  TOX_ILLUSTRATIONS:    prBase = &mpDefTOXBases->pIllBase;  break;
+    case  TOX_AUTHORITIES:      prBase = &mpDefTOXBases->pAuthBase; break;
     }
     if(*prBase)
         delete (*prBase);
@@ -595,8 +595,8 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 sal_uInt16 SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
 {
     sal_uInt16 nCnt = 0;
-    for( sal_uInt16 n = 0; n < pTOXTypes->size(); ++n )
-        if( eTyp == (*pTOXTypes)[n]->GetType() )
+    for( sal_uInt16 n = 0; n < mpTOXTypes->size(); ++n )
+        if( eTyp == (*mpTOXTypes)[n]->GetType() )
             ++nCnt;
     return nCnt;
 }
@@ -604,16 +604,16 @@ sal_uInt16 SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
 const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, sal_uInt16 nId ) const
 {
     sal_uInt16 nCnt = 0;
-    for( sal_uInt16 n = 0; n < pTOXTypes->size(); ++n )
-        if( eTyp == (*pTOXTypes)[n]->GetType() && nCnt++ == nId )
-            return (*pTOXTypes)[n];
+    for( sal_uInt16 n = 0; n < mpTOXTypes->size(); ++n )
+        if( eTyp == (*mpTOXTypes)[n]->GetType() && nCnt++ == nId )
+            return (*mpTOXTypes)[n];
     return 0;
 }
 
 const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 {
     SwTOXType * pNew = new SwTOXType( rTyp );
-    pTOXTypes->push_back( pNew );
+    mpTOXTypes->push_back( pNew );
     return pNew;
 }
 
@@ -631,12 +631,12 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
 
     sal_uInt16 nNum = 0;
     sal_uInt16 nTmp = 0;
-    sal_uInt16 nFlagSize = ( pSectionFmtTbl->size() / 8 ) +2;
+    sal_uInt16 nFlagSize = ( mpSectionFmtTbl->size() / 8 ) +2;
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
-    for( n = 0; n < pSectionFmtTbl->size(); ++n )
-        if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( sal_False ) )&&
+    for( n = 0; n < mpSectionFmtTbl->size(); ++n )
+        if( 0 != ( pSectNd = (*mpSectionFmtTbl)[ n ]->GetSectionNode( sal_False ) )&&
              TOX_CONTENT_SECTION == (pSect = &pSectNd->GetSection())->GetType())
         {
             const String& rNm = pSect->GetSectionName();
@@ -644,7 +644,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
             {
                 // Calculate number and set the Flag
                 nNum = (sal_uInt16)rNm.Copy( nNmLen ).ToInt32();
-                if( nNum-- && nNum < pSectionFmtTbl->size() )
+                if( nNum-- && nNum < mpSectionFmtTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
             if( pChkStr && pChkStr->Equals( rNm ) )
@@ -654,7 +654,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     if( !pChkStr )
     {
         // All Numbers have been flagged accordingly, so get the right Number
-        nNum = pSectionFmtTbl->size();
+        nNum = mpSectionFmtTbl->size();
         for( n = 0; n < nFlagSize; ++n )
             if( 0xff != ( nTmp = pSetFlags[ n ] ))
             {

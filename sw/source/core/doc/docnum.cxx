@@ -96,30 +96,30 @@ inline sal_uInt8 GetUpperLvlChg( sal_uInt8 nCurLvl, sal_uInt8 nLevel, sal_uInt16
 
 void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
 {
-    if( pOutlineRule )
-        (*pOutlineRule) = rRule;
+    if( mpOutlineRule )
+        (*mpOutlineRule) = rRule;
     else
     {
-        pOutlineRule = new SwNumRule( rRule );
+        mpOutlineRule = new SwNumRule( rRule );
 
-        AddNumRule(pOutlineRule); // #i36749#
+        AddNumRule(mpOutlineRule); // #i36749#
     }
 
-    pOutlineRule->SetRuleType( OUTLINE_RULE );
-    pOutlineRule->SetName( rtl::OUString::createFromAscii(
+    mpOutlineRule->SetRuleType( OUTLINE_RULE );
+    mpOutlineRule->SetName( rtl::OUString::createFromAscii(
                                         SwNumRule::GetOutlineRuleName() ),
                            *this);
 
     // assure that the outline numbering rule is an automatic rule
-    pOutlineRule->SetAutoRule( sal_True );
+    mpOutlineRule->SetAutoRule( sal_True );
 
     // test whether the optional CharFormats are defined in this Document
-    pOutlineRule->CheckCharFmts( this );
+    mpOutlineRule->CheckCharFmts( this );
 
     // notify text nodes, which are registered at the outline style, about the
     // changed outline style
     SwNumRule::tTxtNodeList aTxtNodeList;
-    pOutlineRule->GetTxtNodeList( aTxtNodeList );
+    mpOutlineRule->GetTxtNodeList( aTxtNodeList );
     for ( SwNumRule::tTxtNodeList::iterator aIter = aTxtNodeList.begin();
           aIter != aTxtNodeList.end(); ++aIter )
     {
@@ -135,7 +135,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     }
 
     PropagateOutlineRule();
-    pOutlineRule->SetInvalidRule(sal_True);
+    mpOutlineRule->SetInvalidRule(sal_True);
     UpdateNumRule();
 
     // update if we have foot notes && numbering by chapter
@@ -149,9 +149,9 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
 
 void SwDoc::PropagateOutlineRule()
 {
-    for (sal_uInt16 n = 0; n < pTxtFmtCollTbl->size(); n++)
+    for (sal_uInt16 n = 0; n < mpTxtFmtCollTbl->size(); n++)
     {
-        SwTxtFmtColl *pColl = (*pTxtFmtCollTbl)[n];
+        SwTxtFmtColl *pColl = (*mpTxtFmtCollTbl)[n];
 
         if(pColl->IsAssignedToListLevelOfOutlineStyle())//<-end,zhaojianwei
         {
@@ -204,12 +204,12 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     SwTxtFmtColl* aCollArr[ MAXLEVEL ];
     memset( aCollArr, 0, sizeof( SwTxtFmtColl* ) * MAXLEVEL );
 
-    for( n = 0; n < pTxtFmtCollTbl->size(); ++n )
+    for( n = 0; n < mpTxtFmtCollTbl->size(); ++n )
     {
-        if((*pTxtFmtCollTbl)[ n ]->IsAssignedToListLevelOfOutlineStyle())
+        if((*mpTxtFmtCollTbl)[ n ]->IsAssignedToListLevelOfOutlineStyle())
         {
-            const int nLevel = (*pTxtFmtCollTbl)[ n ]->GetAssignedOutlineStyleLevel();
-            aCollArr[ nLevel ] = (*pTxtFmtCollTbl)[ n ];
+            const int nLevel = (*mpTxtFmtCollTbl)[ n ]->GetAssignedOutlineStyleLevel();
+            aCollArr[ nLevel ] = (*mpTxtFmtCollTbl)[ n ];
         }//<-end,zhaojianwei
     }
 
@@ -845,7 +845,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
 
     if( !pNew )
     {
-        pNew = (*pNumRuleTbl)[ MakeNumRule( rRule.GetName(), &rRule ) ];
+        pNew = (*mpNumRuleTbl)[ MakeNumRule( rRule.GetName(), &rRule ) ];
     }
     else if (rRule != *pNew)
     {
@@ -1010,18 +1010,18 @@ bool SwDoc::DelNumRule( const String& rName, bool bBroadcast )
 {
     sal_uInt16 nPos = FindNumRule( rName );
 
-    if ( (*pNumRuleTbl)[ nPos ] == GetOutlineNumRule() )
+    if ( (*mpNumRuleTbl)[ nPos ] == GetOutlineNumRule() )
     {
         OSL_FAIL( "<SwDoc::DelNumRule(..)> - No deletion of outline list style. This is serious defect - please inform OD" );
         return false;
     }
 
-    if( USHRT_MAX != nPos && !IsUsed( *(*pNumRuleTbl)[ nPos ] ))
+    if( USHRT_MAX != nPos && !IsUsed( *(*mpNumRuleTbl)[ nPos ] ))
     {
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             SwUndo * pUndo =
-                new SwUndoNumruleDelete(*(*pNumRuleTbl)[nPos], this);
+                new SwUndoNumruleDelete(*(*mpNumRuleTbl)[nPos], this);
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
@@ -1054,8 +1054,8 @@ bool SwDoc::DelNumRule( const String& rName, bool bBroadcast )
         // #i34097# DeleteAndDestroy deletes rName if
         // rName is directly taken from the numrule.
         const String aTmpName( rName );
-        delete (*pNumRuleTbl)[ nPos ];
-        pNumRuleTbl->erase( pNumRuleTbl->begin() + nPos );
+        delete (*mpNumRuleTbl)[ nPos ];
+        mpNumRuleTbl->erase( mpNumRuleTbl->begin() + nPos );
         maNumRuleMap.erase(aTmpName);
 
         SetModified();
@@ -1377,8 +1377,8 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
 
 void SwDoc::InvalidateNumRules()
 {
-    for (sal_uInt16 n = 0; n < pNumRuleTbl->size(); ++n)
-        (*pNumRuleTbl)[n]->SetInvalidRule(sal_True);
+    for (sal_uInt16 n = 0; n < mpNumRuleTbl->size(); ++n)
+        (*mpNumRuleTbl)[n]->SetInvalidRule(sal_True);
 }
 
 // To the next/preceding Bullet at the same Level
@@ -2126,8 +2126,8 @@ SwNumRule* SwDoc::GetCurrNumRule( const SwPosition& rPos ) const
 
 sal_uInt16 SwDoc::FindNumRule( const String& rName ) const
 {
-    for( sal_uInt16 n = pNumRuleTbl->size(); n; )
-        if( (*pNumRuleTbl)[ --n ]->GetName() == rName )
+    for( sal_uInt16 n = mpNumRuleTbl->size(); n; )
+        if( (*mpNumRuleTbl)[ --n ]->GetName() == rName )
             return n;
 
     return USHRT_MAX;
@@ -2141,11 +2141,11 @@ SwNumRule* SwDoc::FindNumRulePtr( const String& rName ) const
 
     if ( !pResult )
     {
-        for (sal_uInt16 n = 0; n < pNumRuleTbl->size(); ++n)
+        for (sal_uInt16 n = 0; n < mpNumRuleTbl->size(); ++n)
         {
-            if ((*pNumRuleTbl)[n]->GetName() == rName)
+            if ((*mpNumRuleTbl)[n]->GetName() == rName)
             {
-                pResult = (*pNumRuleTbl)[n];
+                pResult = (*mpNumRuleTbl)[n];
 
                 break;
             }
@@ -2157,12 +2157,12 @@ SwNumRule* SwDoc::FindNumRulePtr( const String& rName ) const
 
 void SwDoc::AddNumRule(SwNumRule * pRule)
 {
-    if ((SAL_MAX_UINT16 - 1) <= pNumRuleTbl->size())
+    if ((SAL_MAX_UINT16 - 1) <= mpNumRuleTbl->size())
     {
         OSL_ENSURE(false, "SwDoc::AddNumRule: table full.");
         abort(); // this should never happen on real documents
     }
-    pNumRuleTbl->push_back(pRule);
+    mpNumRuleTbl->push_back(pRule);
     maNumRuleMap[pRule->GetName()] = pRule;
     pRule->SetNumRuleMap(&maNumRuleMap);
 
@@ -2196,7 +2196,7 @@ sal_uInt16 SwDoc::MakeNumRule( const String &rName,
                               eDefaultNumberFormatPositionAndSpaceMode );
     }
 
-    sal_uInt16 nRet = pNumRuleTbl->size();
+    sal_uInt16 nRet = mpNumRuleTbl->size();
 
     AddNumRule(pNew);
 
@@ -2233,7 +2233,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, bool bAutoNum ) const
         aName = SW_RESSTR( STR_NUMRULE_DEFNAME );
     }
 
-    sal_uInt16 nNum(0), nTmp, nFlagSize = ( pNumRuleTbl->size() / 8 ) +2;
+    sal_uInt16 nNum(0), nTmp, nFlagSize = ( mpNumRuleTbl->size() / 8 ) +2;
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
@@ -2254,15 +2254,15 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, bool bAutoNum ) const
     const SwNumRule* pNumRule;
     sal_uInt16 n;
 
-    for( n = 0; n < pNumRuleTbl->size(); ++n )
-        if( 0 != ( pNumRule = (*pNumRuleTbl)[ n ] ) )
+    for( n = 0; n < mpNumRuleTbl->size(); ++n )
+        if( 0 != ( pNumRule = (*mpNumRuleTbl)[ n ] ) )
         {
             const String& rNm = pNumRule->GetName();
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Determine Number and set the Flag
                 nNum = (sal_uInt16)rNm.Copy( nNmLen ).ToInt32();
-                if( nNum-- && nNum < pNumRuleTbl->size() )
+                if( nNum-- && nNum < mpNumRuleTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
             if( pChkStr && pChkStr->Equals( rNm ) )
@@ -2272,7 +2272,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, bool bAutoNum ) const
     if( !pChkStr )
     {
         // All Numbers have been flagged accordingly, so identify the right Number
-        nNum = pNumRuleTbl->size();
+        nNum = mpNumRuleTbl->size();
         for( n = 0; n < nFlagSize; ++n )
             if( 0xff != ( nTmp = pSetFlags[ n ] ))
             {

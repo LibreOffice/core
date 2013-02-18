@@ -1166,29 +1166,29 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
 
         if (isCHRATR(nWhich) || isTXTATR(nWhich))
         {
-            aCallMod.Add( pDfltTxtFmtColl );
-            aCallMod.Add( pDfltCharFmt );
+            aCallMod.Add( mpDfltTxtFmtColl );
+            aCallMod.Add( mpDfltCharFmt );
             bCheckSdrDflt = 0 != pSdrPool;
         }
         else if ( isPARATR(nWhich) ||
                   isPARATR_LIST(nWhich) )
         {
-            aCallMod.Add( pDfltTxtFmtColl );
+            aCallMod.Add( mpDfltTxtFmtColl );
             bCheckSdrDflt = 0 != pSdrPool;
         }
         else if (isGRFATR(nWhich))
         {
-            aCallMod.Add( pDfltGrfFmtColl );
+            aCallMod.Add( mpDfltGrfFmtColl );
         }
         else if (isFRMATR(nWhich))
         {
-            aCallMod.Add( pDfltGrfFmtColl );
-            aCallMod.Add( pDfltTxtFmtColl );
-            aCallMod.Add( pDfltFrmFmt );
+            aCallMod.Add( mpDfltGrfFmtColl );
+            aCallMod.Add( mpDfltTxtFmtColl );
+            aCallMod.Add( mpDfltFrmFmt );
         }
         else if (isBOXATR(nWhich))
         {
-            aCallMod.Add( pDfltFrmFmt );
+            aCallMod.Add( mpDfltFrmFmt );
         }
 
         // also copy the defaults
@@ -1242,7 +1242,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             aOld.ClearItem( RES_PARATR_TABSTOP );
             if( bChg )
             {
-                SwFmtChg aChgFmt( pDfltCharFmt );
+                SwFmtChg aChgFmt( mpDfltCharFmt );
                 // notify the frames
                 aCallMod.ModifyNotification( &aChgFmt, &aChgFmt );
             }
@@ -1275,7 +1275,7 @@ const SfxPoolItem& SwDoc::GetDefault( sal_uInt16 nFmtHint ) const
  */
 void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
 {
-    SwCharFmt * pDel = (*pCharFmtTbl)[nFmt];
+    SwCharFmt * pDel = (*mpCharFmtTbl)[nFmt];
 
     if (bBroadcast)
         BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_CHAR,
@@ -1289,15 +1289,15 @@ void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
-    delete (*pCharFmtTbl)[nFmt];
-    pCharFmtTbl->erase(pCharFmtTbl->begin() + nFmt);
+    delete (*mpCharFmtTbl)[nFmt];
+    mpCharFmtTbl->erase(mpCharFmtTbl->begin() + nFmt);
 
     SetModified();
 }
 
 void SwDoc::DelCharFmt( SwCharFmt *pFmt, bool bBroadcast )
 {
-    sal_uInt16 nFmt = pCharFmtTbl->GetPos( pFmt );
+    sal_uInt16 nFmt = mpCharFmtTbl->GetPos( pFmt );
     OSL_ENSURE( USHRT_MAX != nFmt, "Fmt not found," );
     DelCharFmt( nFmt, bBroadcast );
 }
@@ -1314,8 +1314,8 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
     {
 
         // The format has to be in the one or the other, we'll see in which one.
-        SwFrmFmts::iterator it = std::find( pFrmFmtTbl->begin(), pFrmFmtTbl->end(), pFmt );
-        if ( it != pFrmFmtTbl->end() )
+        SwFrmFmts::iterator it = std::find( mpFrmFmtTbl->begin(), mpFrmFmtTbl->end(), pFmt );
+        if ( it != mpFrmFmtTbl->end() )
         {
             if (bBroadcast)
                 BroadcastStyleOperation(pFmt->GetName(),
@@ -1330,7 +1330,7 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
             }
 
             delete *it;
-            pFrmFmtTbl->erase(it);
+            mpFrmFmtTbl->erase(it);
         }
         else
         {
@@ -1347,10 +1347,10 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
 
 void SwDoc::DelTblFrmFmt( SwTableFmt *pFmt )
 {
-    SwFrmFmts::iterator it = std::find( pTblFrmFmtTbl->begin(), pTblFrmFmtTbl->end(), pFmt );
-    OSL_ENSURE( it != pTblFrmFmtTbl->end(), "Fmt not found," );
+    SwFrmFmts::iterator it = std::find( mpTblFrmFmtTbl->begin(), mpTblFrmFmtTbl->end(), pFmt );
+    OSL_ENSURE( it != mpTblFrmFmtTbl->end(), "Fmt not found," );
     delete *it;
-    pTblFrmFmtTbl->erase(it);
+    mpTblFrmFmtTbl->erase(it);
 }
 
 /*
@@ -1377,13 +1377,13 @@ SwDrawFrmFmt *SwDoc::MakeDrawFrmFmt( const String &rFmtName,
 
 sal_uInt16 SwDoc::GetTblFrmFmtCount(bool bUsed) const
 {
-    sal_uInt16 nCount = pTblFrmFmtTbl->size();
+    sal_uInt16 nCount = mpTblFrmFmtTbl->size();
     if(bUsed)
     {
         SwAutoFmtGetDocNode aGetHt( &GetNodes() );
         for ( sal_uInt16 i = nCount; i; )
         {
-            if((*pTblFrmFmtTbl)[--i]->GetInfo( aGetHt ))
+            if((*mpTblFrmFmtTbl)[--i]->GetInfo( aGetHt ))
                 --nCount;
         }
     }
@@ -1400,20 +1400,20 @@ SwFrmFmt& SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const
         SwAutoFmtGetDocNode aGetHt( &GetNodes() );
         for ( sal_uInt16 i = 0; i <= nFmt; i++ )
         {
-            while ( (*pTblFrmFmtTbl)[ i + nRemoved]->GetInfo( aGetHt ))
+            while ( (*mpTblFrmFmtTbl)[ i + nRemoved]->GetInfo( aGetHt ))
             {
                 nRemoved++;
             }
         }
     }
-    return *((*pTblFrmFmtTbl)[nRemoved + nFmt]);
+    return *((*mpTblFrmFmtTbl)[nRemoved + nFmt]);
 }
 
 SwTableFmt* SwDoc::MakeTblFrmFmt( const String &rFmtName,
                                     SwFrmFmt *pDerivedFrom )
 {
     SwTableFmt* pFmt = new SwTableFmt( GetAttrPool(), rFmtName, pDerivedFrom );
-    pTblFrmFmtTbl->push_back( pFmt );
+    mpTblFrmFmtTbl->push_back( pFmt );
     SetModified();
 
     return pFmt;
@@ -1427,7 +1427,7 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
     SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
 
     pFmt->SetAuto(bAuto);
-    pFrmFmtTbl->push_back( pFmt );
+    mpFrmFmtTbl->push_back( pFmt );
     SetModified();
 
     if (bBroadcast)
@@ -1463,7 +1463,7 @@ SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
                                bool )
 {
     SwCharFmt *pFmt = new SwCharFmt( GetAttrPool(), rFmtName, pDerivedFrom );
-    pCharFmtTbl->push_back( pFmt );
+    mpCharFmtTbl->push_back( pFmt );
     pFmt->SetAuto( false );
     SetModified();
 
@@ -1505,7 +1505,7 @@ SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const String &rFmtName,
 {
     SwTxtFmtColl *pFmtColl = new SwTxtFmtColl( GetAttrPool(), rFmtName,
                                                 pDerivedFrom );
-    pTxtFmtCollTbl->push_back(pFmtColl);
+    mpTxtFmtCollTbl->push_back(pFmtColl);
     pFmtColl->SetAuto( false );
     SetModified();
 
@@ -1540,7 +1540,7 @@ SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const String &rFmtName,
 {
     SwConditionTxtFmtColl*pFmtColl = new SwConditionTxtFmtColl( GetAttrPool(),
                                                     rFmtName, pDerivedFrom );
-    pTxtFmtCollTbl->push_back(pFmtColl);
+    mpTxtFmtCollTbl->push_back(pFmtColl);
     pFmtColl->SetAuto( false );
     SetModified();
 
@@ -1559,7 +1559,7 @@ SwGrfFmtColl* SwDoc::MakeGrfFmtColl( const String &rFmtName,
 {
     SwGrfFmtColl *pFmtColl = new SwGrfFmtColl( GetAttrPool(), rFmtName,
                                                 pDerivedFrom );
-    pGrfFmtCollTbl->push_back( pFmtColl );
+    mpGrfFmtCollTbl->push_back( pFmtColl );
     pFmtColl->SetAuto( false );
     SetModified();
     return pFmtColl;
@@ -1570,8 +1570,8 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, bool bBroadcast)
     OSL_ENSURE( nFmtColl, "Remove fuer Coll 0." );
 
     // Who has the to-be-deleted as their Next?
-    SwTxtFmtColl *pDel = (*pTxtFmtCollTbl)[nFmtColl];
-    if( pDfltTxtFmtColl == pDel )
+    SwTxtFmtColl *pDel = (*mpTxtFmtCollTbl)[nFmtColl];
+    if( mpDfltTxtFmtColl == pDel )
         return;     // never delete default!
 
     if (bBroadcast)
@@ -1587,9 +1587,9 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, bool bBroadcast)
     }
 
     // Remove the FmtColl
-    pTxtFmtCollTbl->erase(pTxtFmtCollTbl->begin() + nFmtColl);
+    mpTxtFmtCollTbl->erase(mpTxtFmtCollTbl->begin() + nFmtColl);
     // Correct next
-    for( SwTxtFmtColls::const_iterator it = pTxtFmtCollTbl->begin() + 1; it != pTxtFmtCollTbl->end(); ++it )
+    for( SwTxtFmtColls::const_iterator it = mpTxtFmtCollTbl->begin() + 1; it != mpTxtFmtCollTbl->end(); ++it )
         SetTxtFmtCollNext( *it, pDel );
     delete pDel;
     SetModified();
@@ -1597,7 +1597,7 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, bool bBroadcast)
 
 void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, bool bBroadcast )
 {
-    sal_uInt16 nFmt = pTxtFmtCollTbl->GetPos( pColl );
+    sal_uInt16 nFmt = mpTxtFmtCollTbl->GetPos( pColl );
     OSL_ENSURE( USHRT_MAX != nFmt, "Collection not found," );
     DelTxtFmtColl( nFmt, bBroadcast );
 }
@@ -1775,7 +1775,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
         return pNewColl;
 
     // search for the "parent" first
-    SwTxtFmtColl* pParent = pDfltTxtFmtColl;
+    SwTxtFmtColl* pParent = mpDfltTxtFmtColl;
     if( pParent != rColl.DerivedFrom() )
         pParent = CopyTxtColl( *(SwTxtFmtColl*)rColl.DerivedFrom() );
 
@@ -1785,7 +1785,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     {
         pNewColl = new SwConditionTxtFmtColl( GetAttrPool(), rColl.GetName(),
                                                 pParent);
-        pTxtFmtCollTbl->push_back( pNewColl );
+        mpTxtFmtCollTbl->push_back( pNewColl );
         pNewColl->SetAuto( false );
         SetModified();
 
@@ -1845,7 +1845,7 @@ SwGrfFmtColl* SwDoc::CopyGrfColl( const SwGrfFmtColl& rColl )
         return pNewColl;
 
      // Search for the "parent" first
-    SwGrfFmtColl* pParent = pDfltGrfFmtColl;
+    SwGrfFmtColl* pParent = mpDfltGrfFmtColl;
     if( pParent != rColl.DerivedFrom() )
         pParent = CopyGrfColl( *(SwGrfFmtColl*)rColl.DerivedFrom() );
 
@@ -1920,10 +1920,10 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
         {
             SwFmtPageDesc aPageDesc( *(SwFmtPageDesc*)pItem );
             const String& rNm = aPageDesc.GetPageDesc()->GetName();
-            SwPageDesc* pPageDesc = ::lcl_FindPageDesc( aPageDescs, rNm );
+            SwPageDesc* pPageDesc = ::lcl_FindPageDesc( maPageDescs, rNm );
             if( !pPageDesc )
             {
-                pPageDesc = aPageDescs[ MakePageDesc( rNm ) ];
+                pPageDesc = maPageDescs[ MakePageDesc( rNm ) ];
             }
             aPageDesc.RegisterToPageDesc( *pPageDesc );
             SwAttrSet aTmpAttrSet( pSrc->GetAttrSet() );
@@ -2048,13 +2048,13 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
 
     if( rSrcDesc.GetFollow() != &rSrcDesc )
     {
-        SwPageDesc* pFollow = ::lcl_FindPageDesc( aPageDescs,
+        SwPageDesc* pFollow = ::lcl_FindPageDesc( maPageDescs,
                                     rSrcDesc.GetFollow()->GetName() );
         if( !pFollow )
         {
             // copy
             sal_uInt16 nPos = MakePageDesc( rSrcDesc.GetFollow()->GetName() );
-            pFollow = aPageDescs[ nPos ];
+            pFollow = maPageDescs[ nPos ];
             CopyPageDesc( *rSrcDesc.GetFollow(), *pFollow );
         }
         rDstDesc.SetFollow( pFollow );
@@ -2124,12 +2124,12 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
 {
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
-    CopyFmtArr( *rSource.pCharFmtTbl, *pCharFmtTbl,
-                &SwDoc::_MakeCharFmt, *pDfltCharFmt );
-    CopyFmtArr( *rSource.pFrmFmtTbl, *pFrmFmtTbl,
-                &SwDoc::_MakeFrmFmt, *pDfltFrmFmt );
-    CopyFmtArr( *rSource.pTxtFmtCollTbl, *pTxtFmtCollTbl,
-                &SwDoc::_MakeTxtFmtColl, *pDfltTxtFmtColl );
+    CopyFmtArr( *rSource.mpCharFmtTbl, *mpCharFmtTbl,
+                &SwDoc::_MakeCharFmt, *mpDfltCharFmt );
+    CopyFmtArr( *rSource.mpFrmFmtTbl, *mpFrmFmtTbl,
+                &SwDoc::_MakeFrmFmt, *mpDfltFrmFmt );
+    CopyFmtArr( *rSource.mpTxtFmtCollTbl, *mpTxtFmtCollTbl,
+                &SwDoc::_MakeTxtFmtColl, *mpDfltTxtFmtColl );
 
     sal_uInt16 nCnt;
 
@@ -2143,7 +2143,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
     if (bIncludePageStyles)
     {
         // and now the page templates
-        nCnt = rSource.aPageDescs.size();
+        nCnt = rSource.maPageDescs.size();
         if( nCnt )
         {
             // a different Doc -> Number formatter needs to be merged
@@ -2152,16 +2152,16 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
             // 1st step: Create all formats (skip the 0th - it's the default!)
             while( nCnt )
             {
-                SwPageDesc *pSrc = rSource.aPageDescs[ --nCnt ];
-                if( 0 == ::lcl_FindPageDesc( aPageDescs, pSrc->GetName() ) )
+                SwPageDesc *pSrc = rSource.maPageDescs[ --nCnt ];
+                if( 0 == ::lcl_FindPageDesc( maPageDescs, pSrc->GetName() ) )
                     MakePageDesc( pSrc->GetName() );
             }
 
             // 2nd step: Copy all attributes, set the right parents
-            for( nCnt = rSource.aPageDescs.size(); nCnt; )
+            for( nCnt = rSource.maPageDescs.size(); nCnt; )
             {
-                SwPageDesc *pSrc = rSource.aPageDescs[ --nCnt ];
-                CopyPageDesc( *pSrc, *::lcl_FindPageDesc( aPageDescs, pSrc->GetName() ));
+                SwPageDesc *pSrc = rSource.maPageDescs[ --nCnt ];
+                CopyPageDesc( *pSrc, *::lcl_FindPageDesc( maPageDescs, pSrc->GetName() ));
             }
         }
     }
@@ -2289,7 +2289,7 @@ bool SwDoc::DontExpandFmt( const SwPosition& rPos, bool bFlag )
 SwTableBoxFmt* SwDoc::MakeTableBoxFmt()
 {
     SwTableBoxFmt* pFmt = new SwTableBoxFmt( GetAttrPool(), aEmptyStr,
-                                                pDfltFrmFmt );
+                                                mpDfltFrmFmt );
     SetModified();
     return pFmt;
 }
@@ -2297,7 +2297,7 @@ SwTableBoxFmt* SwDoc::MakeTableBoxFmt()
 SwTableLineFmt* SwDoc::MakeTableLineFmt()
 {
     SwTableLineFmt* pFmt = new SwTableLineFmt( GetAttrPool(), aEmptyStr,
-                                                pDfltFrmFmt );
+                                                mpDfltFrmFmt );
     SetModified();
     return pFmt;
 }
@@ -2306,14 +2306,14 @@ void SwDoc::_CreateNumberFormatter()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::_CreateNumberFormatter" );
 
-    OSL_ENSURE( !pNumberFormatter, "is already there" );
+    OSL_ENSURE( !mpNumberFormatter, "is already there" );
 
 
     LanguageType eLang = LANGUAGE_SYSTEM;
 
-    pNumberFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLang );
-    pNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
-    pNumberFormatter->SetYear2000(static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000()));
+    mpNumberFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLang );
+    mpNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
+    mpNumberFormatter->SetYear2000(static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000()));
 
 }
 

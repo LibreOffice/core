@@ -120,8 +120,8 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     writer.startElement( "doc" );
     writer.writeFormatAttribute( "ptr", "%p", this );
     m_pNodes->dumpAsXml( writer );
-    pMarkManager->dumpAsXml( writer );
-    pFldTypes->dumpAsXml( writer );
+    mpMarkManager->dumpAsXml( writer );
+    mpFldTypes->dumpAsXml( writer );
     writer.endElement();
 }
 

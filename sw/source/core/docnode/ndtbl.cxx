@@ -540,7 +540,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
     pTblNd->MakeFrms( &aNdIdx );
 
-    if( IsRedlineOn() || (!IsIgnoreRedline() && !pRedlineTbl->empty() ))
+    if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
     {
         SwPaM aPam( *pTblNd->EndOfSectionNode(), *pTblNd, 1 );
         if( IsRedlineOn() )
@@ -3881,27 +3881,27 @@ String SwDoc::GetUniqueTblName() const
     String aName( aId );
     xub_StrLen nNmLen = aName.Len();
 
-    sal_uInt16 nNum, nTmp, nFlagSize = ( pTblFrmFmtTbl->size() / 8 ) +2;
+    sal_uInt16 nNum, nTmp, nFlagSize = ( mpTblFrmFmtTbl->size() / 8 ) +2;
     sal_uInt16 n;
 
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
-    for( n = 0; n < pTblFrmFmtTbl->size(); ++n )
+    for( n = 0; n < mpTblFrmFmtTbl->size(); ++n )
     {
-        const SwFrmFmt* pFmt = (*pTblFrmFmtTbl)[ n ];
+        const SwFrmFmt* pFmt = (*mpTblFrmFmtTbl)[ n ];
         if( !pFmt->IsDefault() && IsUsed( *pFmt )  &&
             pFmt->GetName().Match( aName ) == nNmLen )
         {
             // Get number and set the Flag
             nNum = static_cast<sal_uInt16>(pFmt->GetName().Copy( nNmLen ).ToInt32());
-            if( nNum-- && nNum < pTblFrmFmtTbl->size() )
+            if( nNum-- && nNum < mpTblFrmFmtTbl->size() )
                 pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
     }
 
     // All numbers are flagged properly, thus calculate the right number
-    nNum = pTblFrmFmtTbl->size();
+    nNum = mpTblFrmFmtTbl->size();
     for( n = 0; n < nFlagSize; ++n )
         if( 0xff != ( nTmp = pSetFlags[ n ] ))
         {
@@ -3920,13 +3920,13 @@ SwTableFmt* SwDoc::FindTblFmtByName( const String& rName, sal_Bool bAll ) const
 {
     const SwFmt* pRet = 0;
     if( bAll )
-        pRet = FindFmtByName( *pTblFrmFmtTbl, rName );
+        pRet = FindFmtByName( *mpTblFrmFmtTbl, rName );
     else
     {
         // Only the ones set in the Doc
-        for( sal_uInt16 n = 0; n < pTblFrmFmtTbl->size(); ++n )
+        for( sal_uInt16 n = 0; n < mpTblFrmFmtTbl->size(); ++n )
         {
-            const SwFrmFmt* pFmt = (*pTblFrmFmtTbl)[ n ];
+            const SwFrmFmt* pFmt = (*mpTblFrmFmtTbl)[ n ];
             if( !pFmt->IsDefault() && IsUsed( *pFmt ) &&
                 pFmt->GetName() == rName )
             {

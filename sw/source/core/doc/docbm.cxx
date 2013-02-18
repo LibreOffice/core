@@ -1009,10 +1009,10 @@ namespace
 // IDocumentMarkAccess for SwDoc
 
 IDocumentMarkAccess* SwDoc::getIDocumentMarkAccess()
-    { return static_cast< IDocumentMarkAccess* >(pMarkManager.get()); }
+    { return static_cast< IDocumentMarkAccess* >(mpMarkManager.get()); }
 
 const IDocumentMarkAccess* SwDoc::getIDocumentMarkAccess() const
-    { return static_cast< IDocumentMarkAccess* >(pMarkManager.get()); }
+    { return static_cast< IDocumentMarkAccess* >(mpMarkManager.get()); }
 
 // SaveBookmark
 
