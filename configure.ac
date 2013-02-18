@@ -10993,7 +10993,6 @@ AC_SUBST([WITH_EXTRA_EXTENSIONS])
 
 libo_CHECK_EXTENSION([Watch Window],[WATCH_WINDOW],[watch_window],[23bd75552206dfcd8fd4e29137dcac84-WatchWindow_1.2.0.0.oxt])
 libo_CHECK_EXTENSION([SmART Gallery (Diagram)],[DIAGRAM],[diagram],[8d74685d41f8bffe8c3e71fe8deac09d-SmART_0.9.5.oxt])
-libo_CHECK_EXTENSION([Watch Window],[WATCH_WINDOW],[watch_window],[23bd75552206dfcd8fd4e29137dcac84-WatchWindow_1.2.0.0.oxt])
 libo_CHECK_EXTENSION([Validator],[VALIDATOR],[validator],[bbdd5639ada63e3130761daaecae1a10-Validator_1.1.0.0.oxt])
 libo_CHECK_EXTENSION([Barcode],[BARCODE],[barcode],[3ed18025a766f1e955707b969c8113a5-Barcode_1.3.5.0.oxt])
 libo_CHECK_EXTENSION([ConvertTextToNumber],[CT2N],[ct2n],[])
