@@ -45,10 +45,8 @@ using namespace ::com::sun::star::security ;
 rtl::OUString certificateValidityToOUString( ::sal_Int32 certValidity ) {
     OUString aValidity ;
 
-    if( (certValidity & CertificateValidity::VALID) == CertificateValidity::VALID ) {
+    if( certValidity == CertificateValidity::VALID ) {
         aValidity = OUString(VALID_STR ) ;
-    } else if( ( certValidity & CertificateValidity::INVALID ) == CertificateValidity::INVALID ) {
-         aValidity = OUString(INVALID_STR ) ;
     } else if( ( certValidity &  CertificateValidity::UNTRUSTED ) ==  CertificateValidity::UNTRUSTED ) {
          aValidity = OUString(UNTRUSTED_STR ) ;
     } else if( ( certValidity & CertificateValidity::TIME_INVALID ) == CertificateValidity::TIME_INVALID ) {
