@@ -212,7 +212,7 @@ $(share_WORKDIR)/%/build.flag: $(share_SRCDIR)/share/brand.pl $(LAUNCHERS) \
 	touch $@
 
 ifneq ($(WITH_LANG),)
-$(share_WORKDIR)/%.ulf: $(share_SRCDIR)/desktop/share/%.ulf | $(call gb_Executable_get_runtime_dependencies,ulfex)
+$(share_WORKDIR)/%.ulf: $(share_SRCDIR)/share/%.ulf | $(call gb_Executable_get_runtime_dependencies,ulfex)
 	$(call gb_Output_announce,$@,$(true),SUM,1)
 	MERGEINPUT=`$(gb_MKTEMP)` && \
 	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $@)).po) > $${MERGEINPUT} && \
