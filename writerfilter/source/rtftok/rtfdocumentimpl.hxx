@@ -559,12 +559,6 @@ namespace writerfilter {
                 RTFSprms m_aFormfieldAttributes;
                 RTFFormFieldTypes m_nFormFieldType;
 
-                RTFSprms m_aObjectSprms;
-                RTFSprms m_aObjectAttributes;
-                /// If we are in an object group.
-                bool m_bObject;
-                /// Contents of the objdata group.
-                boost::shared_ptr<SvStream> m_pObjectData;
                 /// If the data for a picture is a binary one, it's stored here.
                 boost::shared_ptr<SvStream> m_pBinaryData;
 

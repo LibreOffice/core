@@ -265,9 +265,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aFormfieldSprms(),
     m_aFormfieldAttributes(),
     m_nFormFieldType(FORMFIELD_NONE),
-    m_aObjectSprms(),
-    m_aObjectAttributes(),
-    m_bObject(false),
     m_aFontTableEntries(),
     m_nCurrentFontIndex(0),
     m_aStyleTableEntries(),
@@ -716,26 +713,6 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         if ( xShapes.is() )
             xShapes->add( xShape );
     }
-    if (m_bObject)
-    {
-        // Set bitmap
-        beans::PropertyValues aMediaProperties(1);
-        aMediaProperties[0].Name = "URL";
-        aMediaProperties[0].Value <<= aGraphicUrl;
-        uno::Reference<graphic::XGraphicProvider> xGraphicProvider(graphic::GraphicProvider::create(m_xContext));
-        uno::Reference<graphic::XGraphic> xGraphic = xGraphicProvider->queryGraphic(aMediaProperties);
-        xPropertySet->setPropertyValue("Graphic", uno::Any(xGraphic));
-
-        // Set the object size
-        awt::Size aSize;
-        aSize.Width = (m_aStates.top().aPicture.nGoalWidth ? m_aStates.top().aPicture.nGoalWidth : m_aStates.top().aPicture.nWidth);
-        aSize.Height = (m_aStates.top().aPicture.nGoalHeight ? m_aStates.top().aPicture.nGoalHeight : m_aStates.top().aPicture.nHeight);
-        xShape->setSize( aSize );
-
-        RTFValue::Pointer_t pShapeValue(new RTFValue(xShape));
-        m_aObjectAttributes.set(NS_ooxml::LN_shape, pShapeValue);
-        return 0;
-    }
     if (xPropertySet.is())
         xPropertySet->setPropertyValue("GraphicURL", uno::Any(aGraphicUrl));
 
@@ -1047,7 +1024,6 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_OPERATOR:
         case DESTINATION_COMPANY:
         case DESTINATION_COMMENT:
-        case DESTINATION_OBJDATA:
         case DESTINATION_ANNOTATIONDATE:
         case DESTINATION_ANNOTATIONAUTHOR:
         case DESTINATION_FALT:
@@ -1446,11 +1422,13 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_COMMENT;
             break;
         case RTF_OBJECT:
+            // begining of an OLE Object, we will use it's \result (RTF_RESULT) element
             m_aStates.top().nDestinationState = DESTINATION_OBJECT;
-            m_bObject = true;
             break;
         case RTF_OBJDATA:
-            m_aStates.top().nDestinationState = DESTINATION_OBJDATA;
+            // do not support OLE Object. Use the \result (RTF_RESULT) element of the object
+            // instead, the result element contain picture representing the OLE Object.
+            m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         case RTF_RESULT:
             m_aStates.top().nDestinationState = DESTINATION_RESULT;
@@ -3678,8 +3656,7 @@ int RTFDocumentImpl::popState()
     break;
     case DESTINATION_PICPROP:
     case DESTINATION_SHAPEINSTRUCTION:
-        if (!m_bObject)
-            m_pSdrImport->resolve(m_aStates.top().aShape);
+        m_pSdrImport->resolve(m_aStates.top().aShape);
     break;
     case DESTINATION_BOOKMARKSTART:
     {
@@ -3803,80 +3780,6 @@ int RTFDocumentImpl::popState()
             xUserDefinedProperties->addProperty(aName, beans::PropertyAttribute::REMOVEABLE,
                     uno::makeAny(m_aStates.top().aDestinationText.makeStringAndClear()));
         }
-    }
-    break;
-    case DESTINATION_OBJDATA:
-    {
-        m_pObjectData.reset(new SvMemoryStream());
-        int b = 0, count = 2;
-
-        // Feed the destination text to a stream.
-        OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        const char *str = aStr.getStr();
-        for (int i = 0; i < aStr.getLength(); ++i)
-        {
-            char ch = str[i];
-            if (ch != 0x0d && ch != 0x0a)
-            {
-                b = b << 4;
-                sal_Int8 parsed = m_pTokenizer->asHex(ch);
-                if (parsed == -1)
-                    return ERROR_HEX_INVALID;
-                b += parsed;
-                count--;
-                if (!count)
-                {
-                    *m_pObjectData << (char)b;
-                    count = 2;
-                    b = 0;
-                }
-            }
-        }
-
-        if (m_pObjectData->Tell())
-        {
-            m_pObjectData->Seek(0);
-
-            // Skip ObjectHeader
-            sal_uInt32 nData;
-            *m_pObjectData >> nData; // OLEVersion
-            *m_pObjectData >> nData; // FormatID
-            *m_pObjectData >> nData; // ClassName
-            m_pObjectData->SeekRel(nData);
-            *m_pObjectData >> nData; // TopicName
-            m_pObjectData->SeekRel(nData);
-            *m_pObjectData >> nData; // ItemName
-            m_pObjectData->SeekRel(nData);
-            *m_pObjectData >> nData; // NativeDataSize
-        }
-
-        uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(m_pObjectData.get()));
-        RTFValue::Pointer_t pStreamValue(new RTFValue(xInputStream));
-
-        RTFSprms aOLEAttributes;
-        aOLEAttributes.set(NS_ooxml::LN_inputstream, pStreamValue);
-        RTFValue::Pointer_t pValue(new RTFValue(aOLEAttributes));
-        m_aObjectSprms.set(NS_ooxml::LN_OLEObject_OLEObject, pValue);
-    }
-    break;
-    case DESTINATION_OBJECT:
-    {
-        RTFSprms aObjAttributes;
-        RTFSprms aObjSprms;
-        RTFValue::Pointer_t pValue(new RTFValue(m_aObjectAttributes, m_aObjectSprms));
-        aObjSprms.set(NS_ooxml::LN_object, pValue);
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aObjAttributes, aObjSprms));
-        uno::Reference<drawing::XShape> xShape;
-        RTFValue::Pointer_t pShape = m_aObjectAttributes.find(NS_ooxml::LN_shape);
-        OSL_ASSERT(pShape.get());
-        if (pShape.get())
-            pShape->getAny() >>= xShape;
-        Mapper().startShape(xShape);
-        Mapper().props(pProperties);
-        Mapper().endShape();
-        m_aObjectAttributes.clear();
-        m_aObjectSprms.clear();
-        m_bObject = false;
     }
     break;
     case DESTINATION_ANNOTATIONDATE:
