@@ -116,7 +116,7 @@ shopt -s nullglob
 DOXYGEN_PROJECT_PREFIX="LibreOffice"
 
 # get list of modules in build order - bah, blows RAM & disk, static list below
-INPUT_PROJECTS="o3tl basegfx basebmp basic comphelper svl vcl canvas cppcanvas oox svtools goodies drawinglayer xmloff slideshow sfx2 editeng svx writerfilter cui chart2 dbaccess sd starmath sc sw"
+INPUT_PROJECTS="sal o3tl basegfx basebmp basic comphelper svl vcl canvas cppcanvas oox svtools goodies drawinglayer xmloff slideshow sfx2 editeng svx writerfilter cui chart2 dbaccess sd starmath sc sw"
 
 # output directory for generated documentation
 BASE_OUTPUT="$1"
@@ -155,7 +155,7 @@ umask 022
 # generate docs
 echo "generating doxygen docs"
 DOXYGEN_REF_TAGFILES=""
-for PROJECT in `echo $INPUT_PROJECTS|tr ' ' '\n'|sort|tr '\n' ' '`;
+for PROJECT in $INPUT_PROJECTS;
 do
   # avoid processing of full project subdirs, only add source and inc
   DOXYGEN_INPUT=`printf "%s" "$PROJECT/source $PROJECT/inc "`
