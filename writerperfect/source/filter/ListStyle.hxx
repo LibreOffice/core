@@ -48,7 +48,7 @@ class ListStyle : public Style
 public:
     ListStyle(const char *psName, const int iListID);
     virtual ~ListStyle();
-    virtual void updateListLevel(const int iLevel, const WPXPropertyList &xPropList) = 0;
+    void updateListLevel(const int iLevel, const WPXPropertyList &xPropList, bool ordered);
     virtual void write(OdfDocumentHandler *pHandler) const;
     int getListID()
     {
@@ -64,19 +64,6 @@ private:
     const int miListID;
 };
 
-class OrderedListStyle : public ListStyle
-{
-public:
-    OrderedListStyle(const char *psName, const int iListID) : ListStyle(psName, iListID) {}
-    void updateListLevel(const int iLevel, const WPXPropertyList &xPropList);
-};
-
-class UnorderedListStyle : public ListStyle
-{
-public:
-    UnorderedListStyle(const char *psName, const int iListID) : ListStyle(psName, iListID) {}
-    void updateListLevel(const int iLevel, const WPXPropertyList &xPropList);
-};
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

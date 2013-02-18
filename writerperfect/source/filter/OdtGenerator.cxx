@@ -640,15 +640,15 @@ void OdtGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
     if (propList["libwpd:id"])
         id = propList["libwpd:id"]->getInt();
 
-    OrderedListStyle *pOrderedListStyle = 0;
+    ListStyle *pListStyle = 0;
     if (mpImpl->mWriterListStates.top().mpCurrentListStyle && mpImpl->mWriterListStates.top().mpCurrentListStyle->getListID() == id)
-        pOrderedListStyle = static_cast<OrderedListStyle *>(mpImpl->mWriterListStates.top().mpCurrentListStyle); // FIXME: using a dynamic cast here causes oo to crash?!
+        pListStyle = mpImpl->mWriterListStates.top().mpCurrentListStyle;
 
     // this rather appalling conditional makes sure we only start a new list (rather than continue an old
     // one) if: (1) we have no prior list OR (2) the prior list is actually definitively different
     // from the list that is just being defined (listIDs differ) OR (3) we can tell that the user actually
     // is starting a new list at level 1 (and only level 1)
-    if (pOrderedListStyle == 0 || pOrderedListStyle->getListID() != id  ||
+    if (pListStyle == 0 || pListStyle->getListID() != id  ||
             (propList["libwpd:level"] && propList["libwpd:level"]->getInt()==1 &&
              (propList["text:start-value"] && propList["text:start-value"]->getInt() != int(mpImpl->mWriterListStates.top().miLastListNumber+1))))
     {
@@ -656,9 +656,9 @@ void OdtGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
         WPXString sName;
         sName.sprintf("OL%i", mpImpl->miNumListStyles);
         mpImpl->miNumListStyles++;
-        pOrderedListStyle = new OrderedListStyle(sName.cstr(), id);
-        mpImpl->mListStyles.push_back(pOrderedListStyle);
-        mpImpl->mWriterListStates.top().mpCurrentListStyle = pOrderedListStyle;
+        pListStyle = new ListStyle(sName.cstr(), id);
+        mpImpl->mListStyles.push_back(pListStyle);
+        mpImpl->mWriterListStates.top().mpCurrentListStyle = pListStyle;
         mpImpl->mWriterListStates.top().mbListContinueNumbering = false;
         mpImpl->mWriterListStates.top().miLastListNumber = 0;
     }
@@ -668,10 +668,10 @@ void OdtGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
     // Iterate through ALL list styles with the same WordPerfect list id and define a level if it is not already defined
     // This solves certain problems with lists that start and finish without reaching certain levels and then begin again
     // and reach those levels. See gradguide0405_PC.wpd in the regression suite
-    for (std::vector<ListStyle *>::iterator iterOrderedListStyles = mpImpl->mListStyles.begin(); iterOrderedListStyles != mpImpl->mListStyles.end(); ++iterOrderedListStyles)
+    for (std::vector<ListStyle *>::iterator iterListStyles = mpImpl->mListStyles.begin(); iterListStyles != mpImpl->mListStyles.end(); ++iterListStyles)
     {
-        if ((* iterOrderedListStyles) && (* iterOrderedListStyles)->getListID() == id && propList["libwpd:level"])
-            (* iterOrderedListStyles)->updateListLevel((propList["libwpd:level"]->getInt() - 1), propList);
+        if ((* iterListStyles) && (* iterListStyles)->getListID() == id && propList["libwpd:level"])
+            (* iterListStyles)->updateListLevel((propList["libwpd:level"]->getInt() - 1), propList, true);
     }
 }
 
@@ -681,26 +681,26 @@ void OdtGenerator::defineUnorderedListLevel(const WPXPropertyList &propList)
     if (propList["libwpd:id"])
         id = propList["libwpd:id"]->getInt();
 
-    UnorderedListStyle *pUnorderedListStyle = 0;
+    ListStyle *pListStyle = 0;
     if (mpImpl->mWriterListStates.top().mpCurrentListStyle && mpImpl->mWriterListStates.top().mpCurrentListStyle->getListID() == id)
-        pUnorderedListStyle = static_cast<UnorderedListStyle *>(mpImpl->mWriterListStates.top().mpCurrentListStyle); // FIXME: using a dynamic cast here causes oo to crash?!
+        pListStyle = mpImpl->mWriterListStates.top().mpCurrentListStyle;
 
-    if (pUnorderedListStyle == 0)
+    if (pListStyle == 0)
     {
         WRITER_DEBUG_MSG(("Attempting to create a new unordered list style (listid: %i)\n", id));
         WPXString sName;
         sName.sprintf("UL%i", mpImpl->miNumListStyles);
         mpImpl->miNumListStyles++;
-        pUnorderedListStyle = new UnorderedListStyle(sName.cstr(), id);
-        mpImpl->mListStyles.push_back(pUnorderedListStyle);
-        mpImpl->mWriterListStates.top().mpCurrentListStyle = pUnorderedListStyle;
+        pListStyle = new ListStyle(sName.cstr(), id);
+        mpImpl->mListStyles.push_back(pListStyle);
+        mpImpl->mWriterListStates.top().mpCurrentListStyle = pListStyle;
     }
 
     // See comment in OdtGenerator::defineOrderedListLevel
-    for (std::vector<ListStyle *>::iterator iterUnorderedListStyles = mpImpl->mListStyles.begin(); iterUnorderedListStyles != mpImpl->mListStyles.end(); ++iterUnorderedListStyles)
+    for (std::vector<ListStyle *>::iterator iterListStyles = mpImpl->mListStyles.begin(); iterListStyles != mpImpl->mListStyles.end(); ++iterListStyles)
     {
-        if ((* iterUnorderedListStyles) && (* iterUnorderedListStyles)->getListID() == id && propList["libwpd:level"])
-            (* iterUnorderedListStyles)->updateListLevel((propList["libwpd:level"]->getInt() - 1), propList);
+        if ((* iterListStyles) && (* iterListStyles)->getListID() == id && propList["libwpd:level"])
+            (* iterListStyles)->updateListLevel((propList["libwpd:level"]->getInt() - 1), propList, false);
     }
 }
 
@@ -747,7 +747,11 @@ void OdtGeneratorPrivate::_openListLevel(TagOpenElement *pListLevelOpenElement)
     mWriterListStates.top().mbListElementOpened.push(false);
     if (mWriterListStates.top().mbListElementOpened.size() == 1)
     {
-        pListLevelOpenElement->addAttribute("text:style-name", mWriterListStates.top().mpCurrentListStyle->getName());
+        // add a sanity check ( to avoid a crash if mpCurrentListStyle is NULL)
+        if (mWriterListStates.top().mpCurrentListStyle)
+        {
+            pListLevelOpenElement->addAttribute("text:style-name", mWriterListStates.top().mpCurrentListStyle->getName());
+        }
     }
 }
 
@@ -763,6 +767,12 @@ void OdtGenerator::closeUnorderedListLevel()
 
 void OdtGeneratorPrivate::_closeListLevel()
 {
+    if (mWriterListStates.top().mbListElementOpened.empty())
+    {
+        // this implies that openListLevel was not called, so it is better to stop here
+        WRITER_DEBUG_MSG(("attempting to close an unexisting level\n"));
+        return;
+    }
     if (mWriterListStates.top().mbListElementOpened.top())
     {
         mpCurrentContentElements->push_back(new TagCloseElement("text:list-item"));
@@ -770,11 +780,7 @@ void OdtGeneratorPrivate::_closeListLevel()
     }
 
     mpCurrentContentElements->push_back(new TagCloseElement("text:list"));
-
-    if (!mWriterListStates.top().mbListElementOpened.empty())
-    {
-        mWriterListStates.top().mbListElementOpened.pop();
-    }
+    mWriterListStates.top().mbListElementOpened.pop();
 }
 
 void OdtGenerator::openListElement(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops)
