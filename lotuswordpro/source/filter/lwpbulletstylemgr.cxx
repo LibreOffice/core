@@ -239,6 +239,8 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
             }
             aStyleName = pXFStyleMgr->AddStyle(pListStyle)->GetStyleName();
         }
+        else
+            delete pListStyle;
 
     }
 
