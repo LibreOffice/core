@@ -494,12 +494,6 @@ OString SAL_CALL unicode::getExemplerLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_UNKNOWN:
             sRet = "und";
             break;
-        case USCRIPT_NABATAEAN: //no language with an assigned code yet
-            sRet = "mis";
-            break;
-        case USCRIPT_PALMYRENE: //no language with an assigned code yet
-            sRet = "mis";
-            break;
         case USCRIPT_ARABIC:
             sRet = "ar";
             break;
@@ -742,9 +736,6 @@ OString SAL_CALL unicode::getExemplerLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_LINEAR_A:
             sRet = "ecr";
             break;
-        case USCRIPT_MANDAIC:
-            sRet = "mic";
-            break;
         case USCRIPT_MAYAN_HIEROGLYPHS:
             sRet = "myn";
             break;
@@ -862,6 +853,16 @@ OString SAL_CALL unicode::getExemplerLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_TAI_VIET:
             sRet = "blt";
             break;
+#if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 4)
+        case USCRIPT_NABATAEAN: //no language with an assigned code yet
+            sRet = "mis";
+            break;
+        case USCRIPT_PALMYRENE: //no language with an assigned code yet
+            sRet = "mis";
+            break;
+        case USCRIPT_MANDAIC:
+            sRet = "mic";
+            break;
         case USCRIPT_BAMUM:
             sRet = "bax";
             break;
@@ -907,6 +908,7 @@ OString SAL_CALL unicode::getExemplerLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_WARANG_CITI:
             sRet = "hoc";
             break;
+#endif
 #if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 8)
         case USCRIPT_AFAKA:
             sRet = "djk";
