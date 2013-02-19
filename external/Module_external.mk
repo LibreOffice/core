@@ -30,16 +30,6 @@ $(eval $(call gb_Module_add_targets,external,\
 ))
 endif
 
-ifeq ($(SYSTEM_STDLIBS),NO)
-ifeq ($(gb_CPPU_ENV),gcc3)
-$(eval $(call gb_Module_add_targets,external,\
-	CustomTarget_stdlibs \
-	Package_stdlibs \
-))
-endif
-endif
-
-
 ifeq ($(HAVE_GETOPT),NO)
 $(eval $(call gb_Module_add_targets,external,\
 	UnpackedTarball_glibc \

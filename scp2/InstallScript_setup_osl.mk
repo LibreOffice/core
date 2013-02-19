@@ -67,9 +67,6 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 	$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),\
 		scp2/onlineupdate \
 	) \
-	$(if $(filter-out YES,$(SYSTEM_STDLIBS)),\
-		scp2/stdlibs \
-	) \
 	$(if $(filter TRUE,$(ENABLE_TDE)),\
 		scp2/tde \
 	) \

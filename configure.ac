@@ -1289,11 +1289,6 @@ AC_ARG_WITH(system-jars,
          on the system. Use this to disable that]),,
     [with_system_jars="$with_system_libs"])
 
-AC_ARG_WITH(system-stdlibs,
-    AS_HELP_STRING([--without-system-stdlibs],
-        [Bundle the used libstdc++/libgcc_s into the installation set.]),,
-    [with_system_stdlibs="$with_system_libs"])
-
 AC_ARG_WITH(system-cairo,
     AS_HELP_STRING([--with-system-cairo],
         [Use Cairo libraries already on system.]),,
@@ -7125,19 +7120,6 @@ fi
 AC_SUBST(BUILD_UNOWINREG)
 AC_SUBST(MINGWCXX)
 AC_SUBST(MINGWSTRIP)
-
-dnl ===================================================================
-dnl Check for system stdlibs
-dnl ===================================================================
-AC_MSG_CHECKING([whether to provide libstdc++/libgcc_s in the installset])
-if test "$with_system_stdlibs" != "no"; then
-    AC_MSG_RESULT([no])
-    SYSTEM_STDLIBS=YES
-else
-    AC_MSG_RESULT([yes])
-    SYSTEM_STDLIBS=NO
-fi
-AC_SUBST(SYSTEM_STDLIBS)
 
 dnl ===================================================================
 dnl Check for system zlib
