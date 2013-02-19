@@ -585,9 +585,7 @@ namespace dxcanvas
 
             if(!(create(rWindow)))
             {
-                throw lang::NoSupportException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                         "Could not create DirectX device!") ),NULL);
+                throw lang::NoSupportException( "Could not create DirectX device!" ,NULL);
             }
 
             // allocate a single texture surface which can be used later.
@@ -606,9 +604,7 @@ namespace dxcanvas
                    (aPageSize.getY() < MIN_TEXTURE_SIZE))
                 {
                     throw lang::NoSupportException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                            "Could not create DirectX device - "
-                                            "insufficient texture space!") ),NULL);
+                        "Could not create DirectX device - insufficient texture space!", NULL );
                 }
             }
             maPageSize=aPageSize;
@@ -623,8 +619,7 @@ namespace dxcanvas
                                                     NULL)) )
             {
                 throw lang::NoSupportException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                         "Could not create DirectX device - out of memory!")),NULL);
+                    "Could not create DirectX device - out of memory!", NULL );
             }
 
             mpVertexBuffer=COMReference<IDirect3DVertexBuffer9>(pVB);
@@ -905,8 +900,7 @@ namespace dxcanvas
                            NULL)) )
             {
                 throw lang::NoSupportException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                         "Could not create offscreen surface - out of mem!") ),NULL);
+                    "Could not create offscreen surface - out of mem!", NULL );
             }
 
             return COMReference<IDirect3DSurface9>(pSurface);
@@ -960,8 +954,7 @@ namespace dxcanvas
                                                                 NULL)) )
                         {
                             throw lang::NoSupportException(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                     "Could not create DirectX device - out of memory!")),NULL);
+                                "Could not create DirectX device - out of memory!", NULL );
                         }
                         mpVertexBuffer=COMReference<IDirect3DVertexBuffer9>(pVB);
 

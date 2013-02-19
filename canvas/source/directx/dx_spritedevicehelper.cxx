@@ -73,10 +73,7 @@ namespace dxcanvas
         const SystemEnvData *pData = rWindow.GetSystemData();
         const HWND hWnd = reinterpret_cast<HWND>(pData->hWnd);
         if( !IsWindow( hWnd ) )
-            throw lang::NoSupportException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                     "Passed window has invalid system window, or canvas out-of-process!")),
-                NULL);
+            throw lang::NoSupportException( "Passed window has invalid system window, or canvas out-of-process!", NULL);
 
         mpSpriteCanvas = &rSpriteCanvas;
 
@@ -87,9 +84,7 @@ namespace dxcanvas
         }
         catch (...) {
 
-            throw lang::NoSupportException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                     "Could not create DirectX device!") ),
+            throw lang::NoSupportException( "Could not create DirectX device!",
                 static_cast< ::cppu::OWeakObject* >(&rSpriteCanvas) );
         }
 

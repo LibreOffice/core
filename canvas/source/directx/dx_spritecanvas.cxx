@@ -90,10 +90,7 @@ namespace dxcanvas
         maArguments[4] >>= xParentWindow;
         Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
         if( !pParentWindow )
-            throw lang::NoSupportException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                     "Parent window not VCL window, or canvas out-of-process!")),
-                NULL);
+            throw lang::NoSupportException( "Parent window not VCL window, or canvas out-of-process!", NULL);
 
         awt::Rectangle aRect;
         maArguments[2] >>= aRect;
@@ -158,9 +155,9 @@ namespace dxcanvas
             mbSurfaceDirty );
     }
 
-    ::rtl::OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SPRITECANVAS_SERVICE_NAME ) );
+        return OUString( SPRITECANVAS_SERVICE_NAME );
     }
 
     const IDXRenderModuleSharedPtr& SpriteCanvas::getRenderModule() const
