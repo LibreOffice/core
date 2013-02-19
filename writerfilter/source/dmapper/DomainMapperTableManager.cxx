@@ -30,6 +30,7 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <ooxml/resourceids.hxx>
 #include <doctok/sprmids.hxx>
 #include <dmapperLoggers.hxx>
@@ -251,28 +252,26 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TcPrBase_textDirection:
             {
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                const sal_Int16 HORI_LEFT_TOP = 0;
-                const sal_Int16 VERT_TOP_RIGHT = 2;
                 bool bInsertCellProps = true;
                 switch ( nIntValue )
                 {
                     case 1:  // tbRl
                     // Binary filter takes BiDirection into account ( but I have no idea about that here )
                     // or even what it is. But... here's where to handle it if it becomes an issue
-                        pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( VERT_TOP_RIGHT ));
+                        pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( text::WritingMode2::TB_RL ));
                         SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
                         break;
                     case 3:  // btLr
                         // We have to fake this text direction
-                         pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( HORI_LEFT_TOP ));
+                         pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( text::WritingMode2::LR_TB ));
                          pPropMap->Insert( PROP_CHAR_ROTATION, false, uno::makeAny( sal_Int16( 900 ) ));
                         SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
                         break;
                     case 4: // lrTbV
-                        pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( HORI_LEFT_TOP ));
+                        pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( text::WritingMode2::LR_TB ));
                         break;
                     case 5: // tbRlV
-                        pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( VERT_TOP_RIGHT ));
+                        pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( text::WritingMode2::TB_RL ));
                         break;
                     case 0: // lrTb
                     case NS_ooxml::LN_Value_ST_TextDirection_tbLrV:
