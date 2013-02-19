@@ -1194,7 +1194,7 @@ endef
 endif # SYSTEM_OPENSSL
 
 
-ifeq ($(SYSTEM_LIBCDR),YES)
+ifeq ($(SYSTEM_CDR),YES)
 
 define gb_LinkTarget__use_cdr
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1205,7 +1205,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(CDR_LIBS))
 
 endef
 
-else # !SYSTEM_LIBCDR
+else # !SYSTEM_CDR
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	cdr-0.0 \
@@ -1221,7 +1221,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 
 endef
 
-endif # SYSTEM_LIBCDR
+endif # SYSTEM_CDR
 
 
 ifeq ($(SYSTEM_LIBMSPUB),YES)

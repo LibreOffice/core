@@ -30,7 +30,7 @@ endif
 ifneq (,$(SYSTEM_WPD))
 ifneq (,$(SYSTEM_LIBWPG))
 ifneq (,$(SYSTEM_VISIO))
-ifneq (,$(SYSTEM_LIBCDR))
+ifneq (,$(SYSTEM_CDR))
 ifneq (,$(SYSTEM_LIBMSPUB))
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftdraw \

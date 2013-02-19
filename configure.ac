@@ -7255,8 +7255,6 @@ if test $_os = iOS; then
 else
     libo_CHECK_SYSTEM_MODULE([libcdr],[CDR],[libcdr-0.0 >= 0.0.5])
 fi
-SYSTEM_LIBCDR=$SYSTEM_CDR
-AC_SUBST(SYSTEM_LIBCDR)
 
 dnl ===================================================================
 dnl Check for system libmspub
