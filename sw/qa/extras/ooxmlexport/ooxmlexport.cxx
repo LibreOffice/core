@@ -41,7 +41,12 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 
 #include <unotools/tempfile.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <rtl/strbuf.hxx>
 #include <swmodeltestbase.hxx>
+
+#include <libxml/xpathInternals.h>
+#include <libxml/parserInternals.h>
 
 class Test : public SwModelTestBase
 {
@@ -74,6 +79,7 @@ public:
     void testTextFrames();
     void testTextFrameBorders();
     void testTextframeGradient();
+    void testCellBtlr();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -116,6 +122,7 @@ void Test::run()
         {"textframes.odt", &Test::testTextFrames},
         {"textframe-borders.docx", &Test::testTextFrameBorders},
         {"textframe-gradient.docx", &Test::testTextframeGradient},
+        {"cell-btlr.docx", &Test::testCellBtlr},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -562,6 +569,61 @@ void Test::testTextframeGradient()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aGradient.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x666666), aGradient.EndColor);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
+}
+
+void Test::testCellBtlr()
+{
+    /*
+     * The problem was that the exporter didn't mirror the workaround of the
+     * importer, regarding the btLr text direction: the <w:textDirection
+     * w:val="btLr"/> token was completely missing in the output.
+     *
+     * Given that this doesn't affect the result in the importer, we test the
+     * resulting file directly, by opening the zip file, parsing an xml stream,
+     * and asserting an XPath expression. This can be extracted to a helper
+     * method, once it's clear what is common in such tests.
+     */
+
+    // Create the zip file.
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFilterArgs(1);
+    aFilterArgs[0].Name = "FilterName";
+    aFilterArgs[0].Value <<= OUString("Office Open XML Text");
+    xStorable->storeToURL(aTempFile.GetURL(), aFilterArgs);
+
+    // Read the XML stream we're interested in.
+    uno::Sequence<uno::Any> aArgs(1);
+    aArgs[0] <<= OUString(aTempFile.GetURL());
+    uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"), uno::UNO_QUERY);
+    boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_Size nSize = pStream->Tell();
+    pStream->Seek(0);
+    OStringBuffer aDocument(nSize);
+    char ch;
+    for (sal_Size i = 0; i < nSize; ++i)
+    {
+        *pStream >> ch;
+        aDocument.append(ch);
+    }
+
+    // Parse the XML.
+    xmlDocPtr pXmlDoc = xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
+
+    // Assert the XPath expression.
+    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
+    OString aXPath = "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:textDirection";
+    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
+    xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OString aAttribute = "val";
+    OUString aValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
+    CPPUNIT_ASSERT_EQUAL(OUString("btLr"), aValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
