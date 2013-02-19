@@ -710,7 +710,7 @@ void Outliner::ImplSetLevelDependendStyleSheet( sal_uInt16 nPara, SfxStyleSheet*
 
         String aNewStyleSheetName( pStyle->GetName() );
         aNewStyleSheetName.Erase( aNewStyleSheetName.Len()-1, 1 );
-        aNewStyleSheetName += String::CreateFromInt32( nDepth+1 );
+        aNewStyleSheetName += OUString::number( nDepth+1 );
         SfxStyleSheet* pNewStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( aNewStyleSheetName, pStyle->GetFamily() );
         DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );
         if ( pNewStyle && ( pNewStyle != GetStyleSheet( nPara ) ) )

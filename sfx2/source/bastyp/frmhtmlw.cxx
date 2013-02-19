@@ -147,7 +147,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         if( (i_xDocProps->getAutoloadSecs() != 0) ||
             !i_xDocProps->getAutoloadURL().isEmpty() )
         {
-            String sContent = String::CreateFromInt32(
+            String sContent = OUString::number(
                                 i_xDocProps->getAutoloadSecs() );
 
             const String &rReloadURL = i_xDocProps->getAutoloadURL();
@@ -173,9 +173,9 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         ::util::DateTime uDT = i_xDocProps->getCreationDate();
         Date aD(uDT.Day, uDT.Month, uDT.Year);
         Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
-        String sOut = String::CreateFromInt32(aD.GetDate());
+        String sOut = OUString::number(aD.GetDate());
         sOut += ';';
-        sOut += String::CreateFromInt32(aT.GetTime());
+        sOut += OUString::number(aT.GetTime());
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_created, sOut, sal_False,
                  eDestEnc, pNonConvertableChars );
 
@@ -189,9 +189,9 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         uDT = i_xDocProps->getModificationDate();
         Date aD2(uDT.Day, uDT.Month, uDT.Year);
         Time aT2(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
-        sOut = String::CreateFromInt32(aD2.GetDate());
+        sOut = OUString::number(aD2.GetDate());
         sOut += ';';
-        sOut += String::CreateFromInt32(aT2.GetTime());
+        sOut += OUString::number(aT2.GetTime());
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_changed, sOut, sal_False,
                  eDestEnc, pNonConvertableChars );
 
