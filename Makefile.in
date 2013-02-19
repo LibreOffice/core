@@ -384,7 +384,11 @@ endif
 	@rm -f $(SRCDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
 	@echo
 	@echo "Developer installation finished, you can now execute:"
-	@echo "$(SRCDIR)/install/program/soffice"
+	@echo
+	@echo "  cd $(SRCDIR)/install/program"
+	@echo "  . ./ooenv"
+	@echo "  ./soffice.bin"
+
 
 dev-install-nocheck : export SKIP_TESTS := YES
 dev-install-nocheck : dev-install
