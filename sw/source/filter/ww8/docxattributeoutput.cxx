@@ -91,6 +91,7 @@
 #include <ndtxt.hxx>
 #include <pagedesc.hxx>
 #include <paratr.hxx>
+#include <charatr.hxx>
 #include <swmodule.hxx>
 #include <swtable.hxx>
 #include <txtftn.hxx>
@@ -1756,6 +1757,7 @@ void DocxAttributeOutput::EndTableCell( )
 {
     m_pSerializer->endElementNS( XML_w, XML_tc );
 
+    m_bBtLr = false;
     m_bTableCellOpen = false;
 }
 
@@ -1996,6 +1998,23 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
         m_pSerializer->singleElementNS( XML_w, XML_textDirection,
                FSNS( XML_w, XML_val ), "tbRl",
                FSEND );
+    else if ( FRMDIR_HORI_LEFT_TOP == m_rExport.TrueFrameDirection( *pFrmFmt ) )
+    {
+        // Undo the text direction mangling done by the btLr handler in writerfilter::dmapper::DomainMapperTableManager::sprm()
+        SwPaM aPam(*pTabBox->GetSttNd(), 0);
+        aPam.GetPoint()->nNode++;
+        if (aPam.GetPoint()->nNode.GetNode().IsTxtNode())
+        {
+            const SwTxtNode& rTxtNode = (const SwTxtNode&)aPam.GetPoint()->nNode.GetNode();
+            const SwAttrSet* pAttrSet = rTxtNode.GetpSwAttrSet();
+            const SvxCharRotateItem& rCharRotate = pAttrSet->GetCharRotate();
+            if (rCharRotate.GetValue() == 900)
+            {
+                m_pSerializer->singleElementNS( XML_w, XML_textDirection, FSNS( XML_w, XML_val ), "btLr", FSEND );
+                m_bBtLr = true;
+            }
+        }
+    }
 
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
@@ -3562,7 +3581,8 @@ void DocxAttributeOutput::CharWeightCTL( const SvxWeightItem& rWeight )
 
 void DocxAttributeOutput::CharRotate( const SvxCharRotateItem& rRotate)
 {
-    if ( !rRotate.GetValue() )
+    // Not rorated or we the rotation already handled?
+    if ( !rRotate.GetValue() || m_bBtLr)
         return;
 
     if (!m_pEastAsianLayoutAttrList)
@@ -4802,7 +4822,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_postponedMath( NULL ),
       m_postitFieldsMaxId( 0 ),
       m_anchorId( 0 ),
-      m_nextFontId( 1 )
+      m_nextFontId( 1 ),
+      m_bBtLr(false)
 {
 }
 

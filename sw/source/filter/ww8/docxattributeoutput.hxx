@@ -635,6 +635,9 @@ private:
 
     boost::optional<XFillStyle> m_oFillStyle;
 
+    /// Is fake rotation detected, so rotation with 90 degrees should be ignored in this cell?
+    bool m_bBtLr;
+
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
 
