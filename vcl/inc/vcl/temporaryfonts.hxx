@@ -24,8 +24,8 @@ class VCL_DLLPUBLIC TemporaryFonts
 {
 public:
     /**
-      Returns an URL for a file where to store contents of a temporary font, or an empty string
-      if this font is already known. The file will be cleaned up automatically as appropriate.
+      Returns an URL for a file where to store contents of a temporary font
+      (the file may or may not exist). The file will be cleaned up automatically as appropriate.
       Use activateTemporaryFont() to actually enable usage of the font.
 
       @param fontName name of the font (e.g. 'Times New Roman')
