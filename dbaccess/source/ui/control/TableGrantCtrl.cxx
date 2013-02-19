@@ -285,7 +285,7 @@ String OTableGrantControl::GetCellText( long nRow, sal_uInt16 nColId ) const
     if(aFind != m_aPrivMap.end())
         nPriv = aFind->second.nRights;
 
-    return String::CreateFromInt32(isAllowed(nColId,nPriv) ? 1 :0);
+    return OUString::number(isAllowed(nColId,nPriv) ? 1 :0);
 }
 
 //------------------------------------------------------------------------------

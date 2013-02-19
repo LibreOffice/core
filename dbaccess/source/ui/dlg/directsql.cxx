@@ -286,7 +286,7 @@ DBG_NAME(DirectSQLDialog)
     //--------------------------------------------------------------------
     void DirectSQLDialog::addStatusText(const String& _rMessage)
     {
-        String sAppendMessage = String::CreateFromInt32(m_nStatusCount++);
+        String sAppendMessage = OUString::number(m_nStatusCount++);
         sAppendMessage += rtl::OUString(": ");
         sAppendMessage += _rMessage;
         sAppendMessage += rtl::OUString("\n\n");

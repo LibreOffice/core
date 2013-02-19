@@ -49,7 +49,7 @@ DBG_NAME( UniString )
 
 UniString::UniString(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
 
-UniString UniString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
+UniString OUString::number( sal_Int32 n, sal_Int16 nRadix )
 {
     return rtl::OUString::valueOf(n, nRadix);
 }

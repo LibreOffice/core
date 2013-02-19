@@ -90,7 +90,7 @@ rtl::OUString AquaSalSystem::GetDisplayScreenName( unsigned int nScreen )
         if( pMgr )
         {
             String aScreenName( ResId( SV_MAC_SCREENNNAME, *pMgr ) );
-            aScreenName.SearchAndReplaceAllAscii( "%d", String::CreateFromInt32( nScreen ) );
+            aScreenName.SearchAndReplaceAllAscii( "%d", OUString::number( nScreen ) );
             aRet = aScreenName;
         }
    }
