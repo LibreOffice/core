@@ -219,8 +219,14 @@ static bool findCentralDirectoryEnd(NSFileHandle *file)
 
     [file seekToFileOffset: (fileLength - 4)];
 
+    unsigned long long limit;
+    if (fileLength > 1024)
+        limit = fileLength - 1024;
+    else
+        limit = 0;
+
     unsigned long long offset;
-    while ((offset = [file offsetInFile]) > 0 && offset >= fileLength - 1024)
+    while ((offset = [file offsetInFile]) > limit)
     {
         unsigned signature = readInt(file);
         if (signature == CDIR_END_SIG)
