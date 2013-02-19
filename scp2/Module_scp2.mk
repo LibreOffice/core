@@ -73,9 +73,6 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	$(if $(filter TRUE,$(ENABLE_TDE)),\
 		InstallModule_tde \
 	) \
-	$(if $(filter-out YES,$(SYSTEM_STDLIBS)),\
-		InstallModule_stdlibs \
-	) \
 	$(if $(filter-out MACOSX,$(OS)),\
 		InstallScript_ure \
 	) \
