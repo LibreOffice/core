@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_set_post_action,icu,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
+	icu/icu4c.9948.mlym-crash.patch \
 	icu/icu4c-bsd.patch \
 	icu/icu4c-build.patch \
 	icu/icu4c.8198.revert.icu5431.patch \
