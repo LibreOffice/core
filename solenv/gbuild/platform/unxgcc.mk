@@ -170,6 +170,19 @@ gb_LinkTarget__RPATHS := \
 	OXT: \
 	NONE:\dORIGIN/../lib:\dORIGIN \
 
+define gb_LinkTarget__get_installlocation_for_layer
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget__INSTALLLOCATIONS)))
+endef
+
+gb_LinkTarget__INSTALLLOCATIONS := \
+	URELIB:$(PREFIXDIR)$(LIBDIR)/ure \
+	UREBIN:$(PREFIXDIR)$(BINDIR)/ \
+	OOO:$(PREFIXDIR)$(LIBDIR)/program \
+	SDKBIN:$(PREFIXDIR)$(BINDIR)/ \
+	OXT:/dev/null \
+	NONE:/dev/null \
+
+
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
@@ -184,6 +197,7 @@ define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) \
+		-L$(WORKDIR)/LinkTarget/Library \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(if $(SOVERSION),-Wl$(COMMA)--soname=$(notdir $(1)).$(SOVERSION)) \
@@ -262,12 +276,27 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
+gb_Library_INSTALLLOCATION := \
+	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(LIBDIR)/program) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(LIBDIR)/ure) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(LIBDIR)/program) \
+	$(foreach lib,$(gb_Library_RTLIBS),$(lib):) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
+
 define gb_Library__get_rpath
 $(if $(1),$(strip -Wl,-z,origin '-Wl,-rpath,$(1)' -Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)))
 endef
 
 define gb_Library_get_rpath
 $(call gb_Library__get_rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))))
+endef
+
+define gb_Library_get_installlocation
+$(call gb_LinkTarget__get_installlocation_for_layer,$(call gb_Library_get_layer,$(1)))
 endef
 
 define gb_Library_Library_platform

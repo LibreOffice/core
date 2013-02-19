@@ -50,6 +50,14 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/unittest \
 	$(OUTDIR)/xml \
 
+# TODO: PREFIXDIR should be DESTDIR
+gb_InstallationPart_get_destinations = $(sort \
+	$(PREFIXDIR)$(LIBDIR) \
+	$(PREFIXDIR)$(DATADIR) \
+	$(PREFIXDIR)$(DOCDIR) \
+	$(PREFIXDIR)$(MANDIR) \
+)
+
 gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
 gb_InternalUnoApi_get_target = $(OUTDIR)/rdb/$(1).rdb
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
@@ -119,6 +127,7 @@ gb_ExternalProject_get_statedir = $(WORKDIR)/ExternalProject/$(1)
 gb_ExternalProject_get_preparation_target = $(WORKDIR)/ExternalProject/$(1).prepare
 gb_ExternalProject_get_state_target = $(WORKDIR)/ExternalProject/$(1)/$(2)
 gb_ExternalProject_get_target = $(WORKDIR)/ExternalProject/$(1).done
+gb_InstallationPart_get_target = $(WORKDIR)/InstallationPart/$(1)
 gb_InstallModule_get_filelist = $(call gb_InstallModuleTarget_get_filelist,$(1))
 gb_InstallModule_get_target = $(WORKDIR)/InstallModule/$(1).done
 gb_InstallModuleTarget_get_external_target = $(WORKDIR)/InstallModuleTarget/$(1).external
@@ -254,6 +263,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	InstallModule \
 	InstallModuleTarget \
 	InstallScriptTarget \
+	InstallationPart \
 	JavaClassSet \
 	Jar \
 	JunitTest \

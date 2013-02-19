@@ -157,7 +157,7 @@ gb_Executable_$(1) += $(2)
 
 endef
 
-define gb_Helper_register_libraries
+define gb_Helper__register_libraries
 ifeq ($$(filter $(1),$$(gb_Library_VALIDGROUPS)),)
 $$(eval $$(call gb_Output_error,$(1) is not a valid group for libraries. Valid groups are: $$(gb_Library_VALIDGROUPS)))
 endif
@@ -172,13 +172,22 @@ gb_Library_$(1) += $(2)
 
 endef
 
+define gb_Helper_register_libraries
+$(call gb_Helper__register_libraries,$(1),$(2))
+
+ifneq ($(filter OOO URELIB,$(1)),)
+gb_Library_MODULE_UNASSIGNED += $(2)
+endif
+
+endef
+
 # the first argument is the group, which sets rpaths etc.
 # the second argument is the install module, which describes in which distro package/msi a lib should show up
 define gb_Helper_register_libraries_for_install
 ifeq ($$(filter $(2),$$(gb_Library_VALIDINSTALLMODULES)),)
 $$(eval $$(call gb_Output_error,$(2) is not a valid install module for libraries. Valid groups are: $$(gb_Library_VALIDINSTALLMODULES)))
 endif
-$(call gb_Helper_register_libraries,$(1),$(3))
+$(call gb_Helper__register_libraries,$(1),$(3))
 
 gb_Library_MODULE_$(2) += $(3)
 
