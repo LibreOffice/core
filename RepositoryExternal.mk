@@ -1284,7 +1284,7 @@ endef
 endif # SYSTEM_VISIO
 
 
-ifeq ($(SYSTEM_LIBWPD),YES)
+ifeq ($(SYSTEM_WPD),YES)
 
 define gb_LinkTarget__use_wpd
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1296,7 +1296,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(WPD_LIBS))
 endef
 gb_ExternalProject__use_wpd :=
 
-else # !SYSTEM_LIBWPD
+else # !SYSTEM_WPD
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	wpd-0.9 \
@@ -1316,7 +1316,7 @@ $(call gb_ExternalProject_use_package,$(1),libwpd)
 
 endef
 
-endif # SYSTEM_LIBWPD
+endif # SYSTEM_WPD
 
 
 ifeq ($(SYSTEM_LIBWPG),YES)

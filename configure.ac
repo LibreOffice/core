@@ -7297,8 +7297,6 @@ else
     fi
     libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.9 libwpd-stream-0.9])
 fi
-SYSTEM_LIBWPD=$SYSTEM_WPD
-AC_SUBST(SYSTEM_LIBWPD)
 
 dnl ===================================================================
 dnl Check for system lcms2

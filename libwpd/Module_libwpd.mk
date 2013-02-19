@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,libwpd))
 
-ifeq ($(SYSTEM_LIBWPD),NO)
+ifeq ($(SYSTEM_WPD),NO)
 
 $(eval $(call gb_Module_add_targets,libwpd,\
 	ExternalProject_libwpd \
