@@ -9,7 +9,9 @@
 package org.libreoffice.impressremote.communication;
 
 import org.libreoffice.impressremote.R;
+import org.libreoffice.impressremote.Globals;
 
+import android.util.Log;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,7 +56,14 @@ public class SlideShow {
             return BitmapFactory.decodeResource(mContext.getResources(),
                             R.drawable.image_loading);
         }
-        Bitmap aBitmap = BitmapFactory.decodeByteArray(aImage, 0, aImage.length);
+        Bitmap aBitmap = null;
+        try {
+            aBitmap = BitmapFactory.decodeByteArray(aImage, 0, aImage.length);
+        } catch (OutOfMemoryError e) {
+            Log.e(Globals.TAG, "Bitmap decoding error byte length: " + aImage.length +
+                  "first 4 bytes: " + aImage[0] + " " + aImage[1] + " " + aImage[2] + " " + aImage[3] +
+                  "Exception " + e);
+        }
         if (aBitmap == null) {
             return BitmapFactory.decodeResource(mContext.getResources(),
                             R.drawable.image_loading);
