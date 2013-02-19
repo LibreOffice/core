@@ -7279,14 +7279,11 @@ if test $_os = iOS; then
 else
     libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.0])
 fi
-SYSTEM_LIBVISIO=$SYSTEM_VISIO
-AC_SUBST(SYSTEM_LIBVISIO)
 
 dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.3 >= 0.3.0])
-
 
 dnl ===================================================================
 dnl Check for system libwpd

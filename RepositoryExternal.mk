@@ -1254,7 +1254,7 @@ endef
 endif # SYSTEM_LIBMSPUB
 
 
-ifeq ($(SYSTEM_LIBVISIO),YES)
+ifeq ($(SYSTEM_VISIO),YES)
 
 define gb_LinkTarget__use_visio
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1265,7 +1265,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(VISIO_LIBS))
 
 endef
 
-else # !SYSTEM_LIBVISIO
+else # !SYSTEM_VISIO
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	visio-0.0 \
@@ -1281,7 +1281,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 
 endef
 
-endif # SYSTEM_LIBVISIO
+endif # SYSTEM_VISIO
 
 
 ifeq ($(SYSTEM_LIBWPD),YES)

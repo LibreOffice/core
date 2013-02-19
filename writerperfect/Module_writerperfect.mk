@@ -29,7 +29,7 @@ endif
 
 ifneq (,$(SYSTEM_LIBWPD))
 ifneq (,$(SYSTEM_LIBWPG))
-ifneq (,$(SYSTEM_LIBVISIO))
+ifneq (,$(SYSTEM_VISIO))
 ifneq (,$(SYSTEM_LIBCDR))
 ifneq (,$(SYSTEM_LIBMSPUB))
 $(eval $(call gb_Module_add_targets,writerperfect,\
