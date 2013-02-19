@@ -401,9 +401,6 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
 
         SbUnoStructRefObject* pUnoStructObj = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xVarObj);
 
-        if ( ( !pUnoVal && !pUnoStructVal ) )
-            return false;
-
         OUString sClassName = pUnoVal ? pUnoVal->GetClassName() : pUnoStructVal->GetClassName();
         OUString sName = pUnoVal ? pUnoVal->GetName() : pUnoStructVal->GetName();
 
@@ -965,19 +962,18 @@ void SbiRuntime::StepREDIMP()
             short nDimsNew = pNewArray->GetDims();
             short nDimsOld = pOldArray->GetDims();
             short nDims = nDimsNew;
-            bool bRangeError = false;
-
-            // Store dims to use them for copying later
-            sal_Int32* pLowerBounds = new sal_Int32[nDims];
-            sal_Int32* pUpperBounds = new sal_Int32[nDims];
-            sal_Int32* pActualIndices = new sal_Int32[nDims];
 
             if( nDimsOld != nDimsNew )
             {
-                bRangeError = true;
+                StarBASIC::Error( SbERR_OUT_OF_RANGE );
             }
             else
             {
+                // Store dims to use them for copying later
+                sal_Int32* pLowerBounds = new sal_Int32[nDims];
+                sal_Int32* pUpperBounds = new sal_Int32[nDims];
+                sal_Int32* pActualIndices = new sal_Int32[nDims];
+
                 // Compare bounds
                 for( short i = 1 ; i <= nDims ; i++ )
                 {
@@ -991,24 +987,16 @@ void SbiRuntime::StepREDIMP()
                     pActualIndices[j] = pLowerBounds[j] = lBoundNew;
                     pUpperBounds[j] = uBoundNew;
                 }
-            }
-
-            if( bRangeError )
-            {
-                StarBASIC::Error( SbERR_OUT_OF_RANGE );
-            }
-            else
-            {
                 // Copy data from old array by going recursively through all dimensions
                 // (It would be faster to work on the flat internal data array of an
                 // SbyArray but this solution is clearer and easier)
                 implCopyDimArray( pNewArray, pOldArray, nDims - 1,
                                   0, pActualIndices, pLowerBounds, pUpperBounds );
+                delete[] pUpperBounds;
+                delete[] pLowerBounds;
+                delete[] pActualIndices;
             }
 
-            delete[] pUpperBounds;
-            delete[] pLowerBounds;
-            delete[] pActualIndices;
             refRedimpArray = NULL;
         }
     }
