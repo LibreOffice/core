@@ -1006,21 +1006,15 @@ static ExtDateFieldFormat ImplGetExtFormat( DateFormat eOld )
 
 static sal_uInt16 ImplCutNumberFromString( OUString& rStr )
 {
-    // Nach Zahl suchen
-    OUStringBuffer sTmpStr(rStr);
-    while ( !sTmpStr.isEmpty() && !(sTmpStr[0] >= '0' && sTmpStr[0] <= '9') )
-        sTmpStr.remove( 0, 1 );
-    if ( sTmpStr.isEmpty() ) {
-        rStr = "";
-        return 0;
+    sal_Int32 i1 = 0;
+    while (i1 != rStr.getLength() && !(rStr[i1] >= '0' && rStr[i1] <= '9')) {
+        ++i1;
     }
-    OUStringBuffer aNumStr;
-    while ( !sTmpStr.isEmpty() && (sTmpStr[0] >= '0' && sTmpStr[0] <= '9') )
-    {
-        aNumStr.append( sTmpStr[0] );
-        sTmpStr.remove( 0, 1 );
+    sal_Int32 i2 = i1;
+    while (i2 != rStr.getLength() && rStr[i2] >= '0' && rStr[i2] <= '9') {
+        ++i2;
     }
-    return (sal_uInt16)aNumStr.toInt32();
+    return rStr.copy(i1, i2 - i1).toInt32();
 }
 
 // -----------------------------------------------------------------------
@@ -2191,7 +2185,7 @@ static sal_Bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplIsOnlyDigits( const OUStringBuffer& _rStr )
+static sal_Bool ImplIsOnlyDigits( const OUString& _rStr )
 {
     const sal_Unicode* _pChr = _rStr.getStr();
     for ( sal_Int32 i = 0; i < _rStr.getLength(); ++i, ++_pChr )
@@ -2204,7 +2198,7 @@ static sal_Bool ImplIsOnlyDigits( const OUStringBuffer& _rStr )
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const OUStringBuffer& _rStr )
+static sal_Bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const OUString& _rStr )
 {
     if ( !_bSkipInvalidCharacters )
     {
@@ -2216,10 +2210,10 @@ static sal_Bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const 
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplCutTimePortion( OUStringBuffer& _rStr, xub_StrLen _nSepPos, sal_Bool _bSkipInvalidCharacters, short* _pPortion )
+static sal_Bool ImplCutTimePortion( OUString& _rStr, xub_StrLen _nSepPos, sal_Bool _bSkipInvalidCharacters, short* _pPortion )
 {
-    OUStringBuffer sPortion = _rStr.copy( 0, _nSepPos );
-    _rStr = _rStr.remove( 0, _nSepPos + 1 );
+    OUString sPortion = _rStr.copy( 0, _nSepPos );
+    _rStr = _rStr.copy( _nSepPos + 1 );
 
     if ( !ImplIsValidTimePortion( _bSkipInvalidCharacters, sPortion ) )
         return sal_False;
@@ -2233,7 +2227,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
                               TimeFieldFormat eFormat, sal_Bool bDuration,
                               const LocaleDataWrapper& rLocaleDataWrapper, sal_Bool _bSkipInvalidCharacters = sal_True )
 {
-    OUStringBuffer    aStr    = rStr;
+    OUString    aStr    = rStr;
     short       nHour   = 0;
     short       nMinute = 0;
     short       nSecond = 0;
@@ -2251,16 +2245,18 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
             aSepStr.append('-');
 
         // Replace characters above by the separator character
+        OUStringBuffer buf(aStr);
         for (sal_Int32 i = 0; i < aSepStr.getLength(); ++i)
         {
             if (string::equals(rLocaleDataWrapper.getTimeSep(), aSepStr[i]))
                 continue;
-            for ( sal_Int32 j = 0; j < aStr.getLength(); j++ )
+            for ( sal_Int32 j = 0; j < buf.getLength(); j++ )
             {
-                if (aStr[j] == aSepStr[i])
-                    aStr[j] = rLocaleDataWrapper.getTimeSep()[0];
+                if (buf[j] == aSepStr[i])
+                    buf[j] = rLocaleDataWrapper.getTimeSep()[0];
             }
         }
+        aStr = buf.makeStringAndClear();
     }
 
     sal_Bool bNegative = sal_False;
@@ -2310,7 +2306,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
     else
     {
         nSecond = (short)aStr.copy( 0, nSepPos ).toInt32();
-        aStr.remove( 0, nSepPos+1 );
+        aStr = aStr.copy( nSepPos+1 );
 
         nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
         if ( aStr[0] == '-' )
@@ -2319,7 +2315,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
         {
             nMinute = nSecond;
             nSecond = (short)aStr.copy( 0, nSepPos ).toInt32();
-            aStr.remove( 0, nSepPos+1 );
+            aStr = aStr.copy( nSepPos+1 );
 
             nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
             if ( aStr[0] == '-' )
@@ -2329,7 +2325,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
                 nHour   = nMinute;
                 nMinute = nSecond;
                 nSecond = (short)aStr.copy( 0, nSepPos ).toInt32();
-                aStr.remove( 0, nSepPos+1 );
+                aStr = aStr.copy( nSepPos+1 );
             }
             else
             {
@@ -2388,7 +2384,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
              (nSecond < 0) || (n100Sec < 0) )
             return sal_False;
 
-        OUString aUpperCaseStr = aStr.toString().toAsciiUpperCase();
+        OUString aUpperCaseStr = aStr.toAsciiUpperCase();
         OUString aAM(rLocaleDataWrapper.getTimeAM().toAsciiUpperCase());
         OUString aPM(rLocaleDataWrapper.getTimePM().toAsciiUpperCase());
         OUString aAM2("AM");  // aAM is localized
