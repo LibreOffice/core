@@ -962,8 +962,6 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
     sal_uInt16 nWhich = aIter.FirstWhich();
     OSL_ENSURE(nWhich, "empty set");
     SwPagePreviewLayout* pPagePrevwLay = GetViewShell()->PagePreviewLayout();
-    // zoom has to be disabled if Accessibility support is switched on
-    sal_Bool bZoomEnabled = sal_True; // !Application::GetSettings().GetMiscSettings().GetEnableATToolSupport();
 
     while(nWhich)
     {
@@ -1008,8 +1006,6 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
         case SID_ATTR_ZOOM:
         case FN_STAT_ZOOM:
             {
-                if(bZoomEnabled)
-                {
                     const SwViewOption* pVOpt = GetViewShell()->GetViewOptions();
                     SvxZoomItem aZoom((SvxZoomType)pVOpt->GetZoomType(),
                                         pVOpt->GetZoom());
@@ -1020,41 +1016,28 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
                             SVX_ZOOM_ENABLE_150|
                             SVX_ZOOM_ENABLE_200);
                     rSet.Put( aZoom );
-                }
-                else
-                    rSet.DisableItem(nWhich);
             }
         break;
         case SID_ATTR_ZOOMSLIDER :
             {
-                if(bZoomEnabled)
-                {
                     const SwViewOption* pVOpt = GetViewShell()->GetViewOptions();
                     const sal_uInt16 nCurrentZoom = pVOpt->GetZoom();
                     SvxZoomSliderItem aZoomSliderItem( nCurrentZoom, MINZOOM, MAXZOOM );
                     aZoomSliderItem.AddSnappingPoint( 100 );
                     rSet.Put( aZoomSliderItem );
-                }
-                else
-                    rSet.DisableItem(nWhich);
             }
         break;
         case FN_PREVIEW_ZOOM:
         {
-            if(bZoomEnabled)
-            {
                 const SwViewOption* pVOpt = GetViewShell()->GetViewOptions();
                 rSet.Put(SfxUInt16Item(nWhich, pVOpt->GetZoom()));
-            }
-            else
-                rSet.DisableItem(nWhich);
         }
         break;
         case SID_ZOOM_IN:
         case SID_ZOOM_OUT:
         {
             const SwViewOption* pVOpt = GetViewShell()->GetViewOptions();
-            if(!bZoomEnabled || (SID_ZOOM_OUT == nWhich && pVOpt->GetZoom() >= MAX_PREVIEW_ZOOM)||
+            if((SID_ZOOM_OUT == nWhich && pVOpt->GetZoom() >= MAX_PREVIEW_ZOOM)||
               (SID_ZOOM_IN == nWhich && pVOpt->GetZoom() <= MIN_PREVIEW_ZOOM))
             {
                 rSet.DisableItem(nWhich);
