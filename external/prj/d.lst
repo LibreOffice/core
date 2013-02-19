@@ -23,9 +23,6 @@ mkdir: %_DEST%\inc\external\wine
 
 ..\%__SRC%\lib\libautorec*.* %_DEST%\lib\lib*.*
 
-..\%__SRC%\lib\libgcc_s.so.* %_DEST%\lib\libgcc_s.so.*
-..\%__SRC%\lib\libstdc++.so.* %_DEST%\lib\libstdc++.so.*
-
 ..\dbghelp\dbghelp.dll %_DEST%\bin\dbghelp.dll
 
 ..\msvcp80\msvcm80*.dll %_DEST%\bin
