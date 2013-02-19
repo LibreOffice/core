@@ -2008,7 +2008,7 @@ void WinMtfOutput::SetDevByWin() //mnWinExt...-stuff has to be assigned before.
 {
     if (!mbIsMapDevSet)
     {
-        if ((mnMapMode == MM_ISOTROPIC) ) //TODO: WHAT ABOUT ANISOTROPIC???
+        if ( mnMapMode == MM_ISOTROPIC ) //TODO: WHAT ABOUT ANISOTROPIC???
         {
             SetDevExt(Size((mnWinExtX+mnWinOrgX)>>MS_FIXPOINT_BITCOUNT_28_4,-((mnWinExtY-mnWinOrgY)>>MS_FIXPOINT_BITCOUNT_28_4)),sal_False);
         }
