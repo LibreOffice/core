@@ -230,7 +230,7 @@ public class ImageElementLayoutController
         return null;
     }
 
-    protected boolean isValueChanged()
+    public boolean isValueChanged()
     {
         final ImageElement imageElement = (ImageElement) getNode();
         final FormulaExpression formulaExpression = imageElement.getFormula();
@@ -246,7 +246,7 @@ public class ImageElementLayoutController
         {
             final Formula formula = formulaExpression.getCompiledFormula();
             final LValue lValue = formula.getRootReference();
-            return isReferenceChanged(lValue);
+            return FormatValueUtility.isReferenceChanged(this, lValue);
         }
         catch (ParseException e)
         {

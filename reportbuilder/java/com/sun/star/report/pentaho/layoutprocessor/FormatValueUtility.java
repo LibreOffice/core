@@ -21,6 +21,8 @@ package com.sun.star.report.pentaho.layoutprocessor;
 import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.FormattedTextElement;
+import com.sun.star.report.pentaho.model.OfficeGroupSection;
+import com.sun.star.report.pentaho.model.ReportElement;
 import java.math.BigDecimal;
 
 import java.sql.Time;
@@ -31,12 +33,20 @@ import java.util.Date;
 
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataFlags;
+import org.jfree.report.DataRow;
 import org.jfree.report.DataSourceException;
 import org.jfree.report.data.DefaultDataFlags;
+import org.jfree.report.expressions.Expression;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.flow.FlowController;
+import org.jfree.report.flow.layoutprocessor.LayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
+import org.jfree.report.flow.layoutprocessor.SectionLayoutController;
+import org.jfree.report.structure.Element;
+import org.jfree.report.structure.Group;
 
+import org.pentaho.reporting.libraries.formula.lvalues.ContextLookup;
+import org.pentaho.reporting.libraries.formula.lvalues.LValue;
 import org.pentaho.reporting.libraries.formula.util.HSSFDateUtil;
 
 /**
@@ -228,4 +238,126 @@ public class FormatValueUtility
             return new DefaultDataFlags(null, result, true);
         }
     }
+
+    public static boolean shouldPrint(final LayoutController ref, final ReportElement text)
+        throws DataSourceException
+    {
+        final boolean isValueChanged;
+        if (ref instanceof AbstractReportElementLayoutController)
+            isValueChanged=((AbstractReportElementLayoutController)ref).isValueChanged();
+        else if (ref instanceof TableCellLayoutController)
+            isValueChanged=((TableCellLayoutController)ref).isValueChanged();
+        else
+            throw new AssertionError("com.sun.star.report.pentaho.layoutprocessor.FormatValueUtility.shouldPrint expects an implementor of isValueChanged as first argument");
+
+        // Tests we have to perform:
+        // 1. If repeated values are supposed to be printed, then print.
+        //    (this is always the case for static text and static elements)
+        // 2. If value changed, then print.
+        // 3. If (printing should be forced on group change AND group changed), then print
+        if ( !(    isValueChanged
+                || text.isPrintRepeatedValues()
+                || ( text.isPrintWhenGroupChange() && isGroupChanged(ref) )))
+        {
+            return false;
+        }
+
+        final Expression dc = text.getDisplayCondition();
+        if (dc != null)
+        {
+            final Object o = LayoutControllerUtil.evaluateExpression(ref.getFlowController(), text, dc);
+            if (Boolean.FALSE.equals(o))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean isGroupChanged(LayoutController ref)
+    {
+        // search the group.
+        final SectionLayoutController slc = findGroup(ref);
+        if (slc == null)
+        {
+            // Always print the content of the report header and footer and
+            // the page header and footer.
+            return true;
+        }
+
+        // we are in the first iteration, so yes, the group has changed recently.
+        return slc.getIterationCount() == 0;
+    }
+
+    public static SectionLayoutController findGroup(LayoutController ref)
+    {
+        LayoutController parent = ref.getParent();
+        boolean skipNext = false;
+        while (parent != null)
+        {
+            if (!(parent instanceof SectionLayoutController))
+            {
+                parent = parent.getParent();
+            }
+            else
+            {
+                final SectionLayoutController slc = (SectionLayoutController) parent;
+                final Element element = slc.getElement();
+                if (element instanceof OfficeGroupSection)
+                {
+                    // This is a header or footer. So we take the next group instead.
+                    skipNext = true;
+                    parent = parent.getParent();
+                }
+                else if (!(element instanceof Group))
+                {
+                    parent = parent.getParent();
+                }
+                else if (skipNext)
+                {
+                    skipNext = false;
+                    parent = parent.getParent();
+                }
+                else
+                {
+                    return (SectionLayoutController) parent;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static boolean isReferenceChanged(LayoutController ref, final LValue lValue)
+    {
+        if (lValue instanceof ContextLookup)
+        {
+            final ContextLookup rval = (ContextLookup) lValue;
+            final String s = rval.getName();
+            final DataRow view = ref.getFlowController().getMasterRow().getGlobalView();
+            try
+            {
+                final DataFlags flags = view.getFlags(s);
+                if (flags != null && flags.isChanged())
+                {
+                    return true;
+                }
+            }
+            catch (DataSourceException e)
+            {
+                // ignore .. assume that the reference has not changed.
+            }
+        }
+        final LValue[] childValues = lValue.getChildValues();
+        for (int i = 0; i < childValues.length; i++)
+        {
+            final LValue value = childValues[i];
+            if (isReferenceChanged(ref, value))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
