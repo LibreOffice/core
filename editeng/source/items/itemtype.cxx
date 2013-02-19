@@ -79,7 +79,7 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
         case SFX_MAPUNIT_POINT:
         case SFX_MAPUNIT_TWIP:
         case SFX_MAPUNIT_PIXEL:
-            return String::CreateFromInt32( (long)OutputDevice::LogicToLogic(
+            return OUString::number( (long)OutputDevice::LogicToLogic(
                         nVal, (MapUnit)eSrcUnit, (MapUnit)eDestUnit ));
 
         default:
@@ -106,7 +106,7 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
         if ( nRet < nDiff )
             sRet += sal_Unicode('0');
         else
-            sRet += String::CreateFromInt32( nRet / nDiff );
+            sRet += OUString::number( nRet / nDiff );
         nRet %= nDiff;
         if( 4 == nDigits )
         {
@@ -162,11 +162,11 @@ XubString GetColorString( const Color& rCol )
     {
         sStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "RGB" ));
         sStr += sal_Unicode('(');
-        sStr += String::CreateFromInt32( rCol.GetRed() );
+        sStr += OUString::number( rCol.GetRed() );
         sStr += cpDelim;
-        sStr += String::CreateFromInt32( rCol.GetGreen() );
+        sStr += OUString::number( rCol.GetGreen() );
         sStr += cpDelim;
-        sStr += String::CreateFromInt32( rCol.GetBlue() );
+        sStr += OUString::number( rCol.GetBlue() );
         sStr += sal_Unicode(')');
     }
     return sStr;

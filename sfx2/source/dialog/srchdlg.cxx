@@ -119,13 +119,13 @@ void SearchDialog::SaveConfig()
     }
     sUserData = comphelper::string::stripStart(sUserData, '\t');
     sUserData += ';';
-    sUserData += String::CreateFromInt32( m_aWholeWordsBox.IsChecked() ? 1 : 0 );
+    sUserData += OUString::number( m_aWholeWordsBox.IsChecked() ? 1 : 0 );
     sUserData += ';';
-    sUserData += String::CreateFromInt32( m_aMatchCaseBox.IsChecked() ? 1 : 0 );
+    sUserData += OUString::number( m_aMatchCaseBox.IsChecked() ? 1 : 0 );
     sUserData += ';';
-    sUserData += String::CreateFromInt32( m_aWrapAroundBox.IsChecked() ? 1 : 0 );
+    sUserData += OUString::number( m_aWrapAroundBox.IsChecked() ? 1 : 0 );
     sUserData += ';';
-    sUserData += String::CreateFromInt32( m_aBackwardsBox.IsChecked() ? 1 : 0 );
+    sUserData += OUString::number( m_aBackwardsBox.IsChecked() ? 1 : 0 );
 
     Any aUserItem = makeAny( ::rtl::OUString( sUserData ) );
     aViewOpt.SetUserItem( "UserItem", aUserItem );

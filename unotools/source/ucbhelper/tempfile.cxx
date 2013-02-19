@@ -267,7 +267,7 @@ void lcl_createName(TempFile_Impl& _rImpl,const String& rLeadingChars,sal_Bool _
     {
         String aTmp( aName );
         if ( bUseNumber )
-            aTmp += String::CreateFromInt32( i );
+            aTmp += OUString::number( i );
         bUseNumber = sal_True;
         if ( pExtension )
             aTmp += *pExtension;
@@ -316,7 +316,7 @@ umask(old_mode);
             }
         }
         if ( !_bStartWithZero )
-            aTmp += String::CreateFromInt32( i );
+            aTmp += OUString::number( i );
     }
 }
 

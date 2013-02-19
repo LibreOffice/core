@@ -897,7 +897,7 @@ String OTableEditorCtrl::GenerateName( const String& rName )
     while( HasFieldName(aFieldName) )
     {
         aFieldName = aBaseName;
-        aFieldName += String::CreateFromInt32(i);
+        aFieldName += OUString::number(i);
         i++;
     }
 
@@ -1227,7 +1227,7 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
 
         case FIELD_PROPERTY_TEXTLEN:
         case FIELD_PROPERTY_LENGTH:
-            sValue = String::CreateFromInt32(pFieldDescr->GetPrecision());
+            sValue = OUString::number(pFieldDescr->GetPrecision());
             break;
 
         case FIELD_PROPERTY_NUMTYPE:
@@ -1239,7 +1239,7 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
             break;
 
         case FIELD_PROPERTY_SCALE:
-            sValue = String::CreateFromInt32(pFieldDescr->GetScale());
+            sValue = OUString::number(pFieldDescr->GetScale());
             break;
 
         case FIELD_PROPERTY_BOOL_DEFAULT:
@@ -1247,7 +1247,7 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
             break;
 
         case FIELD_PROPERTY_FORMAT:
-            sValue = String::CreateFromInt32(pFieldDescr->GetFormatKey());
+            sValue = OUString::number(pFieldDescr->GetFormatKey());
             break;
     }
 

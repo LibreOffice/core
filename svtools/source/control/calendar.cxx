@@ -1693,21 +1693,21 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
                 sal_uInt16      nMonth = aDate.GetMonth();
                 XubString   aStr( maDayText );
                 aStr.AppendAscii( ": " );
-                aStr.Append( XubString::CreateFromInt32( aDate.GetDayOfYear() ) );
+                aStr.Append( OUString::number( aDate.GetDayOfYear() ) );
                 aStr.AppendAscii( " / " );
                 aStr.Append( maWeekText );
                 aStr.AppendAscii( ": " );
-                aStr.Append( XubString::CreateFromInt32( nWeek ) );
+                aStr.Append( OUString::number( nWeek ) );
                 // Evt. noch Jahr hinzufuegen, wenn es nicht das gleiche ist
                 if ( (nMonth == 12) && (nWeek == 1) )
                 {
                     aStr.AppendAscii( ",  " );
-                    aStr.Append( XubString::CreateFromInt32( aDate.GetYear()+1 ) );
+                    aStr.Append( OUString::number( aDate.GetYear()+1 ) );
                 }
                 else if ( (nMonth == 1) && (nWeek > 50) )
                 {
                     aStr.AppendAscii( ", " );
-                    aStr.Append( XubString::CreateFromInt32( aDate.GetYear()-1 ) );
+                    aStr.Append( OUString::number( aDate.GetYear()-1 ) );
                 }
                 Help::ShowQuickHelp( this, aDateRect, aStr );
                 return;

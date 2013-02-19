@@ -1010,10 +1010,10 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
 {
     SvtViewOptions aViewOpt( E_TABPAGE, CONFIGNAME_SEARCHPAGE );
     sal_Int32 nChecked = aFullWordsCB.IsChecked() ? 1 : 0;
-    String aUserData = String::CreateFromInt32( nChecked );
+    String aUserData = OUString::number( nChecked );
     aUserData += ';';
     nChecked = aScopeCB.IsChecked() ? 1 : 0;
-    aUserData += String::CreateFromInt32( nChecked );
+    aUserData += OUString::number( nChecked );
     aUserData += ';';
     sal_uInt16 nCount = Min( aSearchED.GetEntryCount(), (sal_uInt16)10 );  // save only 10 entries
 
@@ -2992,20 +2992,20 @@ void SfxHelpWindow_Impl::SaveConfig()
     }
 
     aViewOpt.SetVisible( bIndex );
-    String aUserData = String::CreateFromInt32( nIndexSize );
+    String aUserData = OUString::number( nIndexSize );
     aUserData += ';';
-    aUserData += String::CreateFromInt32( nTextSize );
+    aUserData += OUString::number( nTextSize );
     aUserData += ';';
-    aUserData += String::CreateFromInt32( nW );
+    aUserData += OUString::number( nW );
     aUserData += ';';
-    aUserData += String::CreateFromInt32( nH );
+    aUserData += OUString::number( nH );
 
        Window* pScreenWin = VCLUnoHelper::GetWindow( xWindow );
     aWinPos = pScreenWin->GetWindowExtentsRelative( NULL ).TopLeft();
     aUserData += ';';
-    aUserData += String::CreateFromInt32( aWinPos.X() );
+    aUserData += OUString::number( aWinPos.X() );
     aUserData += ';';
-    aUserData += String::CreateFromInt32( aWinPos.Y() );
+    aUserData += OUString::number( aWinPos.Y() );
 
     aViewOpt.SetUserItem( USERITEM_NAME, makeAny( rtl::OUString( aUserData ) ) );
 }

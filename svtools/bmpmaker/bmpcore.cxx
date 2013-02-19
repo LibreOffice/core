@@ -128,7 +128,7 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
                 aString = aPrefix;
 
                 if( atoi( aLine.getStr() ) < 10000 )
-                    aString += String::CreateFromInt32( 0 );
+                    aString += OUString::number( 0 );
 
                 // search for pngs by default
                 String aPngString( aString += rtl::OStringToOUString(aLine, RTL_TEXTENCODING_UTF8) );

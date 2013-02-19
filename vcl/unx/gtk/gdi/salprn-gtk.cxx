@@ -976,11 +976,11 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
             const GtkPageRange* pRanges = gtk_print_settings_get_page_ranges(pSettings, &num_ranges);
             for (gint i = 0; i < num_ranges; ++i)
             {
-                aRangeText.Append(String::CreateFromInt32(pRanges[i].start+1));
+                aRangeText.Append(OUString::number(pRanges[i].start+1));
                 if (pRanges[i].start != pRanges[i].end)
                 {
                     aRangeText.AppendAscii("-");
-                    aRangeText.Append(String::CreateFromInt32(pRanges[i].end+1));
+                    aRangeText.Append(OUString::number(pRanges[i].end+1));
                 }
 
                 if (i != num_ranges-1)
@@ -1028,7 +1028,7 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
                        {
                             aFilterData.realloc(aFilterData.getLength()+1);
                             aFilterData[aFilterData.getLength()-1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageRange"));
-                            aFilterData[aFilterData.getLength()-1].Value <<= rtl::OUString(String::CreateFromInt32(i + 1));
+                            aFilterData[aFilterData.getLength()-1].Value <<= rtl::OUString(OUString::number(i + 1));
                        }
                    }
             }

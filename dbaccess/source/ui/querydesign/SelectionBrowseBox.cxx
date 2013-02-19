@@ -1037,7 +1037,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
 
             case BROW_ORDER_ROW:
             {
-                strOldCellContents = String::CreateFromInt32((sal_uInt16)pEntry->GetOrderDir());
+                strOldCellContents = OUString::number((sal_uInt16)pEntry->GetOrderDir());
                 sal_uInt16 nIdx = m_pOrderCell->GetSelectEntryPos();
                 if (nIdx == sal_uInt16(-1))
                     nIdx = 0;
@@ -1048,7 +1048,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     m_pVisibleCell->GetBox().Check();
                     RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
                 }
-                sNewValue = String::CreateFromInt32((sal_uInt16)pEntry->GetOrderDir());
+                sNewValue = OUString::number((sal_uInt16)pEntry->GetOrderDir());
             }   break;
 
             case BROW_COLUMNALIAS_ROW:

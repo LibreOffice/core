@@ -2143,7 +2143,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             if (m_nFetchSize > 0)
             {
                 aText.AssignAscii("Fetch size set to ");
-                aText += String::CreateFromInt32(m_nFetchSize);
+                aText += OUString::number(m_nFetchSize);
             }
             else
                 aText.AssignAscii("Fetch size reset to default");

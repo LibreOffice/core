@@ -167,7 +167,6 @@ public:
                             { return Append( UniString( concat ) ); }
 #endif
 
-    static UniString    CreateFromInt32( sal_Int32 n, sal_Int16 nRadix = 10 );
     static const UniString& EmptyString();
     sal_Int32           ToInt32() const;
     sal_Int64           ToInt64() const;

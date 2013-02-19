@@ -98,7 +98,7 @@ void SfxFloatingWindow_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 void SfxModalDialog::SetDialogData_Impl()
 {
     // save settings (position and user data)
-    SvtViewOptions aDlgOpt( E_DIALOG, String::CreateFromInt32( nUniqId ) );
+    SvtViewOptions aDlgOpt( E_DIALOG, OUString::number( nUniqId ) );
     aDlgOpt.SetWindowState(OStringToOUString(
         GetWindowState(WINDOWSTATE_MASK_POS), RTL_TEXTENCODING_ASCII_US));
     if ( aExtraData.Len() )
@@ -116,7 +116,7 @@ void SfxModalDialog::GetDialogData_Impl()
 */
 
 {
-    SvtViewOptions aDlgOpt( E_DIALOG, String::CreateFromInt32( nUniqId ) );
+    SvtViewOptions aDlgOpt( E_DIALOG, OUString::number( nUniqId ) );
     if ( aDlgOpt.Exists() )
     {
         // load settings
@@ -707,7 +707,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialogBase, OKHdl_Impl)
         // Save user data in IniManager.
         pImpl->m_pSfxPage->FillUserData();
         String sData( pImpl->m_pSfxPage->GetUserData() );
-        SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( GetUniqId() ) );
+        SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( GetUniqId() ) );
         aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( sData ) ) );
         EndDialog( RET_OK );
     }
@@ -807,7 +807,7 @@ void SfxSingleTabDialog::setTabPage(SfxTabPage* pTabPage,
     if ( pImpl->m_pSfxPage )
     {
         // First obtain the user data, only then Reset()
-        SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( GetUniqId() ) );
+        SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( GetUniqId() ) );
         String sUserData;
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;
@@ -857,7 +857,7 @@ void SfxNoLayoutSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
     if ( pImpl->m_pSfxPage )
     {
         // First obtain the user data, only then Reset()
-        SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( GetUniqId() ) );
+        SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( GetUniqId() ) );
         String sUserData;
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;
