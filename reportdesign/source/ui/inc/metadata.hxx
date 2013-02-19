@@ -113,14 +113,14 @@ namespace rptui
     #define PROPERTY_ID_WIDTH                           14
     #define PROPERTY_ID_HEIGHT                          15
     #define PROPERTY_ID_FORMULA                         16
-    #define PROPERTY_ID_PRINTREPEATEDVALUES             17
-    #define PROPERTY_ID_CONDITIONALPRINTEXPRESSION      18
-    #define PROPERTY_ID_INITIALFORMULA                  19
-    #define PROPERTY_ID_STARTNEWCOLUMN                  20
-    #define PROPERTY_ID_TYPE                            21
-    #define PROPERTY_ID_DATAFIELD                       22
-    #define PROPERTY_ID_CHARFONTNAME                    23
-    #define PROPERTY_ID_PRINTWHENGROUPCHANGE            24
+    #define PROPERTY_ID_CONDITIONALPRINTEXPRESSION      17
+    #define PROPERTY_ID_PRINTREPEATEDVALUES             18
+    #define PROPERTY_ID_PRINTWHENGROUPCHANGE            19
+    #define PROPERTY_ID_INITIALFORMULA                  20
+    #define PROPERTY_ID_STARTNEWCOLUMN                  21
+    #define PROPERTY_ID_TYPE                            22
+    #define PROPERTY_ID_DATAFIELD                       23
+    #define PROPERTY_ID_CHARFONTNAME                    24
     #define PROPERTY_ID_DEEPTRAVERSING                  25
     #define PROPERTY_ID_PREEVALUATED                    26
 
