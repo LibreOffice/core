@@ -109,6 +109,18 @@ public abstract class AbstractReportElementLayoutController
                 (AbstractReportElementLayoutController) clone();
         alc.state = AbstractReportElementLayoutController.FINISHED;
         return alc;
+        // That's how this method is implemented in classes of pentaho itself;
+        // I'm not sure why we do something different, but I haven't been able
+        // to pinpoint a bug attributable to the above implementation.
+        // final LayoutController parent = getParent();
+        // if (parent == null)
+        // {
+        //     // skip to the next step ..
+        //     throw new IllegalStateException("There is no parent to join with. " +
+        //                                     "This should not happen in a sane environment!");
+        // }
+
+        // return parent.join(getFlowController());
     }
 
     protected abstract LayoutController delegateContentGeneration(final ReportTarget target)
