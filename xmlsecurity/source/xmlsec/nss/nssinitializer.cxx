@@ -62,6 +62,8 @@
 #include "digestcontext.hxx"
 #include "ciphercontext.hxx"
 
+#include <boost/scoped_array.hpp>
+
 #include <nspr.h>
 #include <cert.h>
 #include <nss.h>
@@ -282,9 +284,9 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
             int errlen = PR_GetErrorTextLength();
             if(errlen > 0)
             {
-                char error[errlen + 1];
-                PR_GetErrorText(error);
-                xmlsec_trace("%s",error);
+                boost::scoped_array<char> const error(new char[errlen + 1]);
+                PR_GetErrorText(error.get());
+                xmlsec_trace("%s", error.get());
             }
             bSuccess = false;
         }
@@ -299,9 +301,9 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
             int errlen = PR_GetErrorTextLength();
             if(errlen > 0)
             {
-                char error[errlen + 1];
-                PR_GetErrorText(error);
-                xmlsec_trace("%s",error);
+                boost::scoped_array<char> const error(new char[errlen + 1]);
+                PR_GetErrorText(error.get());
+                xmlsec_trace("%s", error.get());
             }
             return false ;
         }
