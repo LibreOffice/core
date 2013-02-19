@@ -216,7 +216,7 @@ void SvxListBoxControl::Impl_SetInfo( sal_uInt16 nCount )
     aActionStr = String(SVX_RES(nId));
 
     String aText( aActionStr );
-    aText.SearchAndReplaceAllAscii( "$(ARG1)", String::CreateFromInt32( nCount ) );
+    aText.SearchAndReplaceAllAscii( "$(ARG1)", OUString::number( nCount ) );
     pPopupWin->SetText( aText );
 }
 

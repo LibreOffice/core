@@ -120,7 +120,7 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
     {
         const SfxUInt16Item* pItem = (const SfxUInt16Item*)pState;
         nZoom = pItem->GetValue();
-        String aStr( String::CreateFromInt32(nZoom) );
+        String aStr( OUString::number(nZoom) );
         aStr += '%';
         GetStatusBar().SetItemText( GetId(), aStr );
 
@@ -140,7 +140,7 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
 
 void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
 {
-    String aStr( String::CreateFromInt32( nZoom ));
+    String aStr( OUString::number( nZoom ));
     aStr += '%';
     GetStatusBar().SetItemText( GetId(), aStr );
 }

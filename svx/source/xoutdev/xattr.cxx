@@ -298,7 +298,7 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
                 }
             }
             aUniqueName = aUser;
-            aUniqueName += String::CreateFromInt32( nUserIndex );
+            aUniqueName += OUString::number( nUserIndex );
         }
     }
 
@@ -1942,7 +1942,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
             {
                 aUniqueName = aUser;
                 aUniqueName += sal_Unicode(' ');
-                aUniqueName += String::CreateFromInt32( nUserIndex );
+                aUniqueName += OUString::number( nUserIndex );
             }
         }
 
@@ -2294,7 +2294,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
             {
                 aUniqueName = aUser;
                 aUniqueName += sal_Unicode(' ');
-                aUniqueName += String::CreateFromInt32( nUserIndex );
+                aUniqueName += OUString::number( nUserIndex );
             }
         }
 

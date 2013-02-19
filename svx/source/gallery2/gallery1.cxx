@@ -57,7 +57,7 @@ GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const Strin
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
     String aFileName( String( "sg"  ) );
 
-    aURL.Append( ( aFileName += String::CreateFromInt32( nFileNumber ) ) += String( RTL_CONSTASCII_USTRINGPARAM( ".thm" ) ) );
+    aURL.Append( ( aFileName += OUString::number( nFileNumber ) ) += String( RTL_CONSTASCII_USTRINGPARAM( ".thm" ) ) );
     aThmURL = ImplGetURLIgnoreCase( aURL );
 
     aURL.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "sdg" ) ) );

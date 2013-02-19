@@ -1222,9 +1222,9 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                                     nPageIndex = pIter - maSlideNameList.begin();
                                     aPageUrl = rtl::OUString::valueOf(static_cast<sal_Int32>(256 + nPageIndex));
                                     aPageUrl.Append( rtl::OUString( "," ) );
-                                    aPageUrl.Append( String::CreateFromInt32( nPageIndex + 1 ) );
+                                    aPageUrl.Append( OUString::number( nPageIndex + 1 ) );
                                     aPageUrl.Append( rtl::OUString( ",Slide " ) );
-                                    aPageUrl.Append( String::CreateFromInt32( nPageIndex + 1 ) );
+                                    aPageUrl.Append( OUString::number( nPageIndex + 1 ) );
                                 }
                             }
                             sal_uInt32 nHyperId(0);
@@ -2058,9 +2058,9 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
                         String aEmpty;
                         String aHyperString = rtl::OUString::valueOf(static_cast<sal_Int32>(256 + nIndex));
                         aHyperString.Append( rtl::OUString( "," ) );
-                        aHyperString.Append( String::CreateFromInt32( nIndex + 1 ) );
+                        aHyperString.Append( OUString::number( nIndex + 1 ) );
                         aHyperString.Append( rtl::OUString( ",Slide " ) );
-                        aHyperString.Append( String::CreateFromInt32( nIndex + 1 ) );
+                        aHyperString.Append( OUString::number( nIndex + 1 ) );
                         nHyperLinkID = ImplInsertBookmarkURL( aHyperString, 1 | ( nIndex << 8 ) | ( 1 << 31 ), aBookmark, aEmpty, aEmpty, aHyperString );
                     }
                 }

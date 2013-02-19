@@ -201,7 +201,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
             for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
             {
                 String aName( nDisplay == nExternalIndex ? msExternalMonitor : msMonitor );
-                const String aNumber( String::CreateFromInt32( nDisplay + 1 ) );
+                const String aNumber( OUString::number( nDisplay + 1 ) );
                 aName.SearchAndReplace( sPlaceHolder, aNumber );
                 maLBMonitor.InsertEntry( aName );
 

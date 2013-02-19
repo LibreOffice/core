@@ -2216,7 +2216,7 @@ namespace svxform
         {
             SAL_WARN( "svx.form", "DataNavigatorWindow::CreateInstancePage(): instance without name" );
             String sTemp = rtl::OUString("untitled");
-            sTemp += String::CreateFromInt32( nPageId );
+            sTemp += OUString::number( nPageId );
             sInstName = sTemp;
         }
         m_aTabCtrl.InsertPage( nPageId, sInstName, m_aTabCtrl.GetPageCount() - 2 );

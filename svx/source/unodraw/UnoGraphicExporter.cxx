@@ -353,7 +353,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                         aPageNumValue += sal_Unicode(' ');
                         break;
                     default:
-                        aPageNumValue += String::CreateFromInt32( (sal_Int32)mnPageNumber );
+                        aPageNumValue += OUString::number( (sal_Int32)mnPageNumber );
                 }
 
                 pInfo->SetRepresentation( aPageNumValue );

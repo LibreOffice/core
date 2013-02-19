@@ -821,7 +821,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
                 {
                     String aNewStyleSheetName( pStyleSheet->GetName() );
                     aNewStyleSheetName.Erase( aNewStyleSheetName.Len()-1, 1 );
-                    aNewStyleSheetName += String::CreateFromInt32( nDepth+1 );
+                    aNewStyleSheetName += OUString::number( nDepth+1 );
                     SfxStyleSheetBasePool* pStylePool = mrDoc.GetStyleSheetPool();
                     pStyleSheet = (SfxStyleSheet*) pStylePool->Find( aNewStyleSheetName, pStyleSheet->GetFamily() );
                 }
@@ -1866,7 +1866,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
             aNewFont.SetOrientation( bVertical ? 2700 : 0 );
             aNewFont.SetColor( COL_AUTO );
             pInfo->mpOutDev->SetFont( aNewFont );
-            String aPageText = String::CreateFromInt32( nPage );
+            String aPageText = OUString::number( nPage );
             Size aTextSz;
             aTextSz.Width() = pInfo->mpOutDev->GetTextWidth( aPageText );
             aTextSz.Height() = pInfo->mpOutDev->GetTextHeight();
@@ -1958,7 +1958,7 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
                     {
                         String aStyleSheetName( pStyle->GetName() );
                         aStyleSheetName.Erase( aStyleSheetName.Len() - 1, 1 );
-                        aStyleSheetName += String::CreateFromInt32( nDepth );
+                        aStyleSheetName += OUString::number( nDepth );
                         pStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pStyle->GetFamily() ) );
                         DBG_ASSERT( pStyle, "sd::OutlineView::OnEndPasteOrDrop(), Style not found!" );
                     }

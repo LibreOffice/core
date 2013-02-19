@@ -284,9 +284,9 @@ void TableWindow::Paint( const Rectangle& )
     if ( nCol && nLine )
     {
         String aText;
-        aText += String::CreateFromInt32( nCol );
+        aText += OUString::number( nCol );
         aText.AppendAscii( " x " );
-        aText += String::CreateFromInt32( nLine );
+        aText += OUString::number( nLine );
         if(GetId() == FN_SHOW_MULTIPLE_PAGES)
         {
             aText += ' ';
@@ -659,7 +659,7 @@ void ColumnsWindow::Paint( const Rectangle& )
     SetFillColor( aFaceColor );
     String aText;
     if ( nCol )
-        aText = String::CreateFromInt32(nCol);
+        aText = OUString::number(nCol);
     else
         aText = comphelper::string::remove(Button::GetStandardText(BUTTON_CANCEL), '~');
 

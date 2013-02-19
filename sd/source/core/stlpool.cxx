@@ -146,7 +146,7 @@ void SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName, std::v
     {
         String aFullName(aName);
         aFullName.Append( sal_Unicode( ' ' ));
-        aFullName.Append( String::CreateFromInt32( (sal_Int32)nSheet ));
+        aFullName.Append( OUString::number( (sal_Int32)nSheet ));
         SfxStyleSheetBase* pSheet = Find(aFullName, SD_STYLE_FAMILY_MASTERPAGE);
 
         if (pSheet)
@@ -204,7 +204,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     {
         String aLevelName(aName);
         aLevelName.Append( sal_Unicode( ' ' ));
-        aLevelName.Append( String::CreateFromInt32( sal_Int32( nLevel )));
+        aLevelName.Append( OUString::number( sal_Int32( nLevel )));
 
         aLevelName.Insert(aPrefix, 0);
 
@@ -306,7 +306,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         {
             String aLevelName(aName);
             aLevelName.Append( sal_Unicode( ' ' ));
-            aLevelName.Append( String::CreateFromInt32( sal_Int32( nLevel )));
+            aLevelName.Append( OUString::number( sal_Int32( nLevel )));
 
             aLevelName.Insert(aPrefix, 0);
 
@@ -731,7 +731,7 @@ void SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName, std::ve
         aStr = String( aPrefix );
         aStr.Append(aName);
         aStr.Append( sal_Unicode( ' ' ));
-        aStr.Append( String::CreateFromInt32( sal_Int32( nLevel )));
+        aStr.Append( OUString::number( sal_Int32( nLevel )));
         aNameList.push_back(aStr);
     }
 
@@ -847,7 +847,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     {
         String aLevelName(aName);
         aLevelName.Append( sal_Unicode( ' ' ));
-        aLevelName.Append( String::CreateFromInt32( sal_Int32( nLevel )));
+        aLevelName.Append( OUString::number( sal_Int32( nLevel )));
 
         if( (pSheet = Find(aLevelName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
         {
@@ -943,7 +943,7 @@ void SdStyleSheetPool::UpdateStdNames()
                     if( nNameId == STR_PSEUDOSHEET_OUTLINE )
                     {
                         aNewName.Append( sal_Unicode( ' ' ));
-                        aNewName.Append( String::CreateFromInt32( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE )));
+                        aNewName.Append( OUString::number( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE )));
                     }
                 }
 

@@ -307,7 +307,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
         if( SGA_OBJ_SVDRAW == eObjKind )
         {
             String aFileName( RTL_CONSTASCII_USTRINGPARAM( "gallery/svdraw/dd" ) );
-            aNewURL = INetURLObject( aFileName += String::CreateFromInt32( ++nNextNumber % 99999999 ), INET_PROT_PRIV_SOFFICE );
+            aNewURL = INetURLObject( aFileName += OUString::number( ++nNextNumber % 99999999 ), INET_PROT_PRIV_SOFFICE );
 
             bExists = sal_False;
 
@@ -322,7 +322,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
         {
             String aFileName( RTL_CONSTASCII_USTRINGPARAM( "dd" ) );
 
-            aFileName += String::CreateFromInt32( ++nNextNumber % 999999 );
+            aFileName += OUString::number( ++nNextNumber % 999999 );
             aFileName += String( pExt, RTL_TEXTENCODING_ASCII_US );
 
             aNewURL = aDir;

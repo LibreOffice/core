@@ -205,7 +205,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         sal_Int16 nDepth = pOutliner->GetDepth( (sal_uInt16) nParaPos );
                         String aName(rPage.GetLayoutName());
                         aName += (sal_Unicode)(' ');
-                        aName += String::CreateFromInt32( (nDepth <= 0) ? 1 : nDepth + 1 );
+                        aName += OUString::number( (nDepth <= 0) ? 1 : nDepth + 1 );
                         SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
                         DBG_ASSERT(pSheet, "StyleSheet not found");
 
@@ -232,7 +232,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         {
                             String aSheetName(rPage.GetLayoutName());
                             aSheetName += (sal_Unicode)(' ');
-                            aSheetName += String::CreateFromInt32( nChild <= 0 ? 1 : nChild + 1 );
+                            aSheetName += OUString::number( nChild <= 0 ? 1 : nChild + 1 );
                             SfxStyleSheet* pOutlSheet = static_cast< SfxStyleSheet* >(pStShPool->Find(aSheetName, SD_STYLE_FAMILY_MASTERPAGE));
 
                             if( pOutlSheet )
@@ -303,7 +303,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         {
                             String aName(rPage.GetLayoutName());
                             aName += (sal_Unicode)(' ');
-                            aName += String::CreateFromInt32( (sal_Int32)nLevel );
+                            aName += OUString::number( (sal_Int32)nLevel );
                             SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->
                                                 Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
                             DBG_ASSERT(pSheet, "StyleSheet not found");

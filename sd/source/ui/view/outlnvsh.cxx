@@ -1441,9 +1441,9 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
         aPageStr = String(SdResId( STR_SD_PAGE ));
         aPageStr += sal_Unicode(' ');
-        aPageStr += String::CreateFromInt32( (sal_Int32)(nPos + 1) );   // sal_uLong -> sal_Int32
+        aPageStr += OUString::number( (sal_Int32)(nPos + 1) );   // sal_uLong -> sal_Int32
         aPageStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
-        aPageStr += String::CreateFromInt32( nPageCount );
+        aPageStr += OUString::number( nPageCount );
 
         aLayoutStr = pPage->GetLayoutName();
         aLayoutStr.Erase( aLayoutStr.SearchAscii( SD_LT_SEPARATOR ) );
@@ -1997,7 +1997,7 @@ sal_uLong OutlineViewShell::Read(SvStream& rInput, const String& rBaseURL, sal_u
                 pOutl->SetDepth( pOutl->GetParagraph( nPara ), nDepth - 1 );
                 String aStyleSheetName( pOutlSheet->GetName() );
                 aStyleSheetName.Erase( aStyleSheetName.Len() - 1, 1 );
-                aStyleSheetName += String::CreateFromInt32( nDepth );
+                aStyleSheetName += OUString::number( nDepth );
                 SfxStyleSheetBasePool* pStylePool = GetDoc()->GetStyleSheetPool();
                 SfxStyleSheet* pStyle = (SfxStyleSheet*) pStylePool->Find( aStyleSheetName, pOutlSheet->GetFamily() );
                 DBG_ASSERT( pStyle, "AutoStyleSheetName - Style not found!" );

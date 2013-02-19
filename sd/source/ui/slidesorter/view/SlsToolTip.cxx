@@ -76,7 +76,7 @@ void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
             if (sHelpText.isEmpty())
             {
                 sHelpText = String(SdResId(STR_PAGE));
-                sHelpText += String::CreateFromInt32(mpDescriptor->GetPageIndex()+1);
+                sHelpText += OUString::number(mpDescriptor->GetPageIndex()+1);
             }
 
             msDefaultHelpText = sHelpText;

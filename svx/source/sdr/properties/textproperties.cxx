@@ -271,7 +271,7 @@ namespace sdr
                                     String aNewStyleSheetName(GetStyleSheet()->GetName());
                                     aNewStyleSheetName.Erase(aNewStyleSheetName.Len() - 1, 1);
                                     sal_Int16 nDepth = rOutliner.GetDepth((sal_uInt16)nPara);
-                                    aNewStyleSheetName += String::CreateFromInt32( nDepth <= 0 ? 1 : nDepth + 1);
+                                    aNewStyleSheetName += OUString::number( nDepth <= 0 ? 1 : nDepth + 1);
 
                                     SdrModel* pModel = rObj.GetModel();
                                     SfxStyleSheetBasePool* pStylePool = (pModel != NULL) ? pModel->GetStyleSheetPool() : 0L;

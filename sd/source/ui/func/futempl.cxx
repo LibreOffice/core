@@ -456,7 +456,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                 for( sal_uInt16 n = (sal_uInt16)(ePO - PO_OUTLINE_1 + 2); n < 10; n++ )
                                 {
                                     String aName( sStyleName );
-                                    aName.Append( String::CreateFromInt32( (sal_Int32) n ));
+                                    aName.Append( OUString::number( (sal_Int32) n ));
 
                                     SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SD_STYLE_FAMILY_PSEUDO);
 

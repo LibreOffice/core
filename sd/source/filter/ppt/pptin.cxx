@@ -605,7 +605,7 @@ sal_Bool ImplSdPPTImport::Import()
                         if ( ePgKind == PK_STANDARD )
                         {   // Standardseite: Neues Praesentationslayout erzeugen
                             aLayoutName = String( SdResId( STR_LAYOUT_DEFAULT_TITLE_NAME ) );
-                            aLayoutName += String::CreateFromInt32( (sal_Int32)( ( nMasterNum + 1 ) / 2 - 1 ) );
+                            aLayoutName += OUString::number( (sal_Int32)( ( nMasterNum + 1 ) / 2 - 1 ) );
                             ( (SdStyleSheetPool*)mpDoc->GetStyleSheetPool() )->CreateLayoutStyleSheets( aLayoutName );
                         }
                         else    // Notizseite: Praesentationslayout von der Standardseite verwenden
@@ -648,7 +648,7 @@ sal_Bool ImplSdPPTImport::Import()
                         {
                             String aName( pPage->GetLayoutName() );
                             aName.Append( (sal_Unicode)( ' ' ) );
-                            aName.Append( String::CreateFromInt32( nLevel + 1 ) );
+                            aName.Append( OUString::number( nLevel + 1 ) );
                             SfxStyleSheet* pOutlineSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE );
                             DBG_ASSERT( pOutlineSheet, "Vorlage fuer Gliederungsobjekt nicht gefunden" );
                             if ( pOutlineSheet )
@@ -2205,7 +2205,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             {
                 String aName( pPage->GetLayoutName() );
                 aName.Append( (sal_Unicode)( ' ' ) );
-                aName.Append( String::CreateFromInt32( nLevel ) );
+                aName.Append( OUString::number( nLevel ) );
                 pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE );
                 if ( pSheet )
                     pText->StartListening( *pSheet );

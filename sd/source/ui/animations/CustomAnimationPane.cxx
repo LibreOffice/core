@@ -136,11 +136,11 @@ void fillRepeatComboBox( ComboBox* pBox )
     String aNone( SdResId( STR_CUSTOMANIMATION_REPEAT_NONE ) );
     pBox->SetEntryData( pBox->InsertEntry( aNone ), (void*)((sal_Int32)0) );
 
-    pBox->SetEntryData( pBox->InsertEntry( String::CreateFromInt32( 2 ) ), (void*)((sal_Int32)1) );
-    pBox->SetEntryData( pBox->InsertEntry( String::CreateFromInt32( 3 ) ), (void*)((sal_Int32)3) );
-    pBox->SetEntryData( pBox->InsertEntry( String::CreateFromInt32( 4 ) ), (void*)((sal_Int32)4) );
-    pBox->SetEntryData( pBox->InsertEntry( String::CreateFromInt32( 5 ) ), (void*)((sal_Int32)5) );
-    pBox->SetEntryData( pBox->InsertEntry( String::CreateFromInt32( 10 ) ), (void*)((sal_Int32)10) );
+    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 2 ) ), (void*)((sal_Int32)1) );
+    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 3 ) ), (void*)((sal_Int32)3) );
+    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 4 ) ), (void*)((sal_Int32)4) );
+    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 5 ) ), (void*)((sal_Int32)5) );
+    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 10 ) ), (void*)((sal_Int32)10) );
 
     String aUntilClick( SdResId( STR_CUSTOMANIMATION_REPEAT_UNTIL_NEXT_CLICK ) );
     pBox->SetEntryData( pBox->InsertEntry( aUntilClick ), (void*)((sal_Int32)-1) );
