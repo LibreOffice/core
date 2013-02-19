@@ -907,7 +907,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
                                 rtl_getGlobalProcessId( (sal_uInt8*)processID );
 
-                                ::com::sun::star::uno::Sequence<sal_Int8> processIdSeq(processID, 16);
+                                ::com::sun::star::uno::Sequence<sal_Int8> processIdSeq((sal_Int8*)processID, 16);
 
                                 ::com::sun::star::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
 
