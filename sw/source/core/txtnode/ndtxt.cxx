@@ -2928,7 +2928,8 @@ XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx,
                                    const bool bAddSpaceAfterListLabelStr,
                                    const bool bWithSpacesForLevel ) const
 {
-    XubString aTxt( GetTxt().copy(nIdx, nLen) );
+    XubString aTxt(
+        (STRING_LEN == nLen) ? GetTxt().copy(nIdx) : GetTxt().copy(nIdx, nLen));
     xub_StrLen nTxtStt = nIdx;
     Replace0xFF( aTxt, nTxtStt, aTxt.Len(), sal_True );
     if( bWithNum )
