@@ -59,7 +59,7 @@ struct OOO_DLLPUBLIC_XMLREADER Span {
             begin, length, text.getStr(), text.getLength()) == 0;
     }
 
-#ifdef RTL_FAST_STRING
+#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
@@ -68,7 +68,7 @@ struct OOO_DLLPUBLIC_XMLREADER Span {
     equals( T& literal, typename rtl::internal::ConstCharArrayDetector< T, rtl::internal::Dummy >::Type = rtl::internal::Dummy() ) SAL_THROW(())
     {
         assert( strlen( literal ) == rtl::internal::ConstCharArrayDetector< T >::size - 1 );
-        return rtl_str_compare_WithLength( begin, length, literal, rtl::internal::ConstCharArrayDetector< T, void >::size - 1 );
+        return rtl_str_compare_WithLength( begin, length, literal, rtl::internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
 #endif
 
