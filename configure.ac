@@ -7135,10 +7135,6 @@ if test "$with_system_zlib" = "auto"; then
     esac
 fi
 
-dnl we want to use libo_CHECK_SYSTEM_MODULE here too, but OS X is too stupid
-dnl and has no pkg-config for it at least on some tinderboxes,
-dnl so leaving that out for now
-dnl libo_CHECK_SYSTEM_MODULE([zlib],[ZLIB],[zlib])
 AC_MSG_CHECKING([which zlib to use])
 if test "$with_system_zlib" = "yes"; then
     AC_MSG_RESULT([external])
@@ -7189,12 +7185,15 @@ fi
 AC_SUBST(SYSTEM_JPEG)
 AC_SUBST([MINGW_JPEG_DLL])
 
-
 dnl ===================================================================
 dnl Check for system clucene
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([clucence],[CLUCENE],[liblucence-core])
+AC_MSG_CHECKING([which clucene to use])
 if test "$with_system_clucene" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_CLUCENE=YES
+    PKG_CHECK_MODULES(CLUCENE, libclucene-core)
+
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     save_CPPFLAGS=$CPPFLAGS
@@ -7209,96 +7208,175 @@ if test "$with_system_clucene" = "yes"; then
     AC_LANG_POP([C++])
 
     CLUCENE_LIBS="$CLUCENE_LIBS -lclucene-contribs-lib"
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_CLUCENE=NO
+    BUILD_TYPE="$BUILD_TYPE CLUCENE"
 fi
+AC_SUBST(SYSTEM_CLUCENE)
+AC_SUBST(CLUCENE_CFLAGS)
+AC_SUBST(CLUCENE_LIBS)
 
 dnl ===================================================================
 dnl Check for system expat
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([expat],[EXPAT],[expat])
+AC_MSG_CHECKING([which expat to use])
 if test "$with_system_expat" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_EXPAT=YES
+    AC_CHECK_HEADER(expat.h, [],
+        [AC_MSG_ERROR(expat.h not found. install expat)], [])
+    AC_CHECK_LIB([expat], [XML_ParserCreate], [:],
+    [AC_MSG_RESULT(expat library not found or functional.)], [])
     libo_MINGW_CHECK_DLL([EXPAT], [libexpat])
-fi 
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_EXPAT=NO
+    BUILD_TYPE="$BUILD_TYPE EXPAT"
+fi
+AC_SUBST(SYSTEM_EXPAT)
 AC_SUBST([MINGW_EXPAT_DLL])
 
 dnl ===================================================================
 dnl Check for system libcdr
 dnl ===================================================================
-if test $_os = iOS; then
-    # libcdr depends on libwpd and libwpg and those are LGPL, publishing empty flags
-    libo_PUBLISH_MODULE([CDR])
+AC_MSG_CHECKING([which libcdr to use])
+if test "$with_system_libcdr" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBCDR=YES
+    PKG_CHECK_MODULES( CDR, libcdr-0.0 >= 0.0.5 )
+elif test $_os = iOS; then
+    # libcdr depends on libwpd and libwpg and those are LGPL
+    AC_MSG_RESULT([none])
 else
-    libo_CHECK_SYSTEM_MODULE([libcdr],[CDR],[libcdr-0.0 >= 0.0.5])
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBCDR=NO
+    BUILD_TYPE="$BUILD_TYPE CDR"
 fi
-SYSTEM_LIBCDR=$SYSTEM_CDR
 AC_SUBST(SYSTEM_LIBCDR)
+AC_SUBST(CDR_CFLAGS)
+AC_SUBST(CDR_LIBS)
 
 dnl ===================================================================
 dnl Check for system libmspub
 dnl ===================================================================
-if test $_os = iOS; then
-    # libmspub depends on libwpd and libwpg and those are LGPL, publishing empty flags
-    libo_PUBLISH_MODULE([MSPUB])
+AC_MSG_CHECKING([which libmspub to use])
+if test "$with_system_libmspub" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBMSPUB=YES
+    PKG_CHECK_MODULES( MSPUB, libmspub-0.0 )
+elif test $_os = iOS; then
+    # libmspub depends on libwpd and libwpg and those are LGPL
+    AC_MSG_RESULT([none])
 else
-    libo_CHECK_SYSTEM_MODULE([libmspub],[MSPUB],[libmspub-0.0])
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBMSPUB=NO
+    BUILD_TYPE="$BUILD_TYPE MSPUB"
 fi
-SYSTEM_LIBMSPUB=$SYSTEM_MSPUB
 AC_SUBST(SYSTEM_LIBMSPUB)
+AC_SUBST(MSPUB_CFLAGS)
+AC_SUBST(MSPUB_LIBS)
 
 dnl ===================================================================
 dnl Check for system libvisio
 dnl ===================================================================
-if test $_os = iOS; then
-    # libvisio depends on libwpd and libwpg and those are LGPL, publishing empty flags
-    libo_PUBLISH_MODULE([VISIO])
+AC_MSG_CHECKING([which libvisio to use])
+if test "$with_system_libvisio" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBVISIO=YES
+    PKG_CHECK_MODULES( VISIO, libvisio-0.0 )
+elif test $_os = iOS; then
+    # libvisio depends on libwpd and libwpg and those are LGPL
+    AC_MSG_RESULT([none])
 else
-    libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.0])
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBVISIO=NO
+    BUILD_TYPE="$BUILD_TYPE VISIO"
 fi
-SYSTEM_LIBVISIO=$SYSTEM_VISIO
 AC_SUBST(SYSTEM_LIBVISIO)
+AC_SUBST(VISIO_CFLAGS)
+AC_SUBST(VISIO_LIBS)
 
 dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.3 >= 0.3.0])
-SYSTEM_LIBCMIS=$SYSTEM_CMIS
+AC_MSG_CHECKING([which libcmis to use])
+if test "$with_system_libcmis" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBCMIS=YES
+    PKG_CHECK_MODULES( CMIS, libcmis-0.3 >= 0.3.0 )
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBCMIS=NO
+    BUILD_TYPE="$BUILD_TYPE CMIS"
+fi
 AC_SUBST(SYSTEM_LIBCMIS)
+AC_SUBST(CMIS_CFLAGS)
+AC_SUBST(CMIS_LIBS)
 
 
 dnl ===================================================================
 dnl Check for system libwpd
 dnl ===================================================================
-if test $_os = iOS; then
-    libo_PUBLISH_MODULE([WPD])
+AC_MSG_CHECKING([which libwpd to use])
+if test "$with_system_libwpd" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBWPD=YES
+    PKG_CHECK_MODULES( WPD, libwpd-0.9 libwpd-stream-0.9 )
+elif test $_os = iOS; then
+    AC_MSG_RESULT([none])
 else
-    if test "$with_system_libwpd" = "no"; then
-        WPD_CFLAGS="-I${OUTDIR}/inc/external"
-        WPD_LIBS="-L${OUTDIR}/lib -lwpdlib"
-    fi
-    libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.9 libwpd-stream-0.9])
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBWPD=NO
+    WPD_CFLAGS="-I${OUTDIR}/inc/external"
+    WPD_LIBS="-L${OUTDIR}/lib -lwpdlib"
+    BUILD_TYPE="$BUILD_TYPE WPD"
 fi
-SYSTEM_LIBWPD=$SYSTEM_WPD
 AC_SUBST(SYSTEM_LIBWPD)
+AC_SUBST(WPD_CFLAGS)
+AC_SUBST(WPD_LIBS)
 
 dnl ===================================================================
 dnl Check for system lcms2
 dnl ===================================================================
+AC_MSG_CHECKING([which littlecms v2 to use])
 if test "$with_system_lcms2" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LCMS2=YES
+    PKG_CHECK_MODULES( LCMS2, lcms2 )
     libo_MINGW_CHECK_DLL([LCMS2], [liblcms2])
 else
+    AC_MSG_RESULT([internal])
     SYSTEM_LCMS2=NO
     LCMS2_LIBS="-L${OUTDIR}/lib -llcms2"
     LCMS2_CFLAGS="-I${WORKDIR}/UnpackedTarball/lcms2/include"
     if test "$GCC" = "yes"; then
         LCMS2_CFLAGS="${LCMS2_CFLAGS} -Wno-long-long"
     fi
+    BUILD_TYPE="$BUILD_TYPE LCMS2"
 fi
-libo_CHECK_SYSTEM_MODULE([lcms2],[LCMS2],[lcms2])
+AC_SUBST(SYSTEM_LCMS2)
+AC_SUBST(LCMS2_CFLAGS)
+AC_SUBST(LCMS2_LIBS)
 AC_SUBST([MINGW_LCMS2_DLL])
 
 dnl ===================================================================
 dnl Check for system cppunit
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([cppunit],[CPPUNIT],[cppunit >= 1.12.0])
+AC_MSG_CHECKING([which cppunit to use])
+if test "$with_system_cppunit" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_CPPUNIT=YES
+    # might work for earlier, too but go sure:
+    PKG_CHECK_MODULES( CPPUNIT, cppunit >= 1.12.0 )
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_CPPUNIT=NO
+    BUILD_TYPE="$BUILD_TYPE CPPUNIT"
+fi
+AC_SUBST(SYSTEM_CPPUNIT)
+AC_SUBST(CPPUNIT_CFLAGS)
+AC_SUBST(CPPUNIT_LIBS)
 
 dnl ===================================================================
 dnl Check whether freetype is available
@@ -7319,32 +7397,44 @@ AC_SUBST(FREETYPE_LIBS)
 dnl ===================================================================
 dnl Check for system libwps
 dnl ===================================================================
-if test $_os = iOS; then
-    libo_PUBLISH_MODULE([WPS])
+AC_MSG_CHECKING([which libwps to use])
+if test "$with_system_libwps" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBWPS=YES
+    PKG_CHECK_MODULES( WPS, libwps-0.2 )
+elif test $_os = iOS; then
+    AC_MSG_RESULT([none])
 else
-    if test "$with_system_libwps" = "no"; then
-        WPS_CFLAGS="-I${OUTDIR}/inc/external"
-        WPS_LIBS="-L${OUTDIR}/lib -lwpslib"
-    fi
-    libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.2])
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBWPS=NO
+    WPS_CFLAGS="-I${OUTDIR}/inc/external"
+    WPS_LIBS="-L${OUTDIR}/lib -lwpslib"
+    BUILD_TYPE="$BUILD_TYPE WPS"
 fi
-SYSTEM_LIBWPS=$SYSTEM_WPS
 AC_SUBST(SYSTEM_LIBWPS)
+AC_SUBST(WPS_CFLAGS)
+AC_SUBST(WPS_LIBS)
 
 dnl ===================================================================
 dnl Check for system libwpg
 dnl ===================================================================
-if test $_os = iOS; then
-    libo_PUBLISH_MODULE([WPD])
+AC_MSG_CHECKING([which libwpg to use])
+if test "$with_system_libwpg" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBWPG=YES
+    PKG_CHECK_MODULES( WPG, libwpg-0.2 )
+elif test $_os = iOS; then
+    AC_MSG_RESULT([none])
 else
-    if test "$with_system_libwpg" = "no"; then
-        WPG_CFLAGS="-I${OUTDIR}/inc/external"
-        WPG_LIBS="-L${OUTDIR}/lib -lwpglib"
-    fi
-    libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.2])
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBWPG=NO
+    WPG_CFLAGS="-I${OUTDIR}/inc/external"
+    WPG_LIBS="-L${OUTDIR}/lib -lwpglib"
+    BUILD_TYPE="$BUILD_TYPE WPG"
 fi
-SYSTEM_LIBWPG=$SYSTEM_WPG
 AC_SUBST(SYSTEM_LIBWPG)
+AC_SUBST(WPG_CFLAGS)
+AC_SUBST(WPG_LIBS)
 
 dnl ===================================================================
 dnl Check whether freetype2 supports emboldening
@@ -9027,16 +9117,24 @@ fi
 AC_SUBST(SYSTEM_LPSOLVE)
 AC_SUBST([MINGW_LPSOLVE_DLL])
 
-
-
 dnl ===================================================================
 dnl Checking for libexttextcat
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libexttextcat],[LIBEXTTEXTCAT],[libexttextcat >= 3.1.1])
+AC_MSG_CHECKING([which libexttextcat to use])
 if test "$with_system_libexttextcat" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBEXTTEXTCAT=YES
+    PKG_CHECK_MODULES([LIBEXTTEXTCAT], [libexttextcat >= 3.1.1])
     SYSTEM_LIBEXTTEXTCAT_DATA=file://`$PKG_CONFIG --variable=pkgdatadir libexttextcat`
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBEXTTEXTCAT=NO
+    BUILD_TYPE="$BUILD_TYPE LIBEXTTEXTCAT"
 fi
+AC_SUBST(SYSTEM_LIBEXTTEXTCAT)
 AC_SUBST(SYSTEM_LIBEXTTEXTCAT_DATA)
+AC_SUBST(LIBEXTTEXTCAT_CFLAGS)
+AC_SUBST(LIBEXTTEXTCAT_LIBS)
 
 dnl ***************************************
 dnl testing libc version for Linux...
