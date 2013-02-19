@@ -1090,7 +1090,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     {
         const Time aT( nTime/3600, (nTime%3600)/60, nTime%60 );
         m_pTimeLogValFt->SetText( rLocaleWrapper.getDuration( aT ) );
-        m_pDocNoValFt->SetText( String::CreateFromInt32(
+        m_pDocNoValFt->SetText( OUString::number(
             m_pInfoItem->getEditingCycles() ) );
     }
 
@@ -1626,12 +1626,12 @@ void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration
     m_aDuration = rDuration;
     String sText(rDuration.Negative ? rtl::OUString('-') : rtl::OUString('+'));
     sText += m_pLine->m_sDurationFormat;
-    sText.SearchAndReplace(rtl::OUString("%1"), String::CreateFromInt32( rDuration.Years ) );
-    sText.SearchAndReplace(rtl::OUString("%2"), String::CreateFromInt32( rDuration.Months ) );
-    sText.SearchAndReplace(rtl::OUString("%3"), String::CreateFromInt32( rDuration.Days   ) );
-    sText.SearchAndReplace(rtl::OUString("%4"), String::CreateFromInt32( rDuration.Hours  ) );
-    sText.SearchAndReplace(rtl::OUString("%5"), String::CreateFromInt32( rDuration.Minutes) );
-    sText.SearchAndReplace(rtl::OUString("%6"), String::CreateFromInt32( rDuration.Seconds) );
+    sText.SearchAndReplace(rtl::OUString("%1"), OUString::number( rDuration.Years ) );
+    sText.SearchAndReplace(rtl::OUString("%2"), OUString::number( rDuration.Months ) );
+    sText.SearchAndReplace(rtl::OUString("%3"), OUString::number( rDuration.Days   ) );
+    sText.SearchAndReplace(rtl::OUString("%4"), OUString::number( rDuration.Hours  ) );
+    sText.SearchAndReplace(rtl::OUString("%5"), OUString::number( rDuration.Minutes) );
+    sText.SearchAndReplace(rtl::OUString("%6"), OUString::number( rDuration.Seconds) );
     SetText( sText );
 }
 

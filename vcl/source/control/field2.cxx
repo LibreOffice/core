@@ -2754,11 +2754,11 @@ void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelect
             sal_uLong n  = aNewTime.GetHour() * 3600L;
             n       += aNewTime.GetMin()  * 60L;
             n       += aNewTime.GetSec();
-            aStr     = String::CreateFromInt32( n );
+            aStr     = OUString::number( n );
             aStr    += ImplGetLocaleDataWrapper().getTime100SecSep();
             if ( aNewTime.Get100Sec() < 10 )
                 aStr += '0';
-            aStr += String::CreateFromInt32( aNewTime.Get100Sec() );
+            aStr += OUString::number( aNewTime.Get100Sec() );
         }
         else if ( mbDuration )
         {

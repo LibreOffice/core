@@ -260,7 +260,7 @@ namespace
             aDisplayInfo.sMessage = pCurrentError->Message.trim();
             aDisplayInfo.sSQLState = pCurrentError->SQLState;
             if ( pCurrentError->ErrorCode )
-                aDisplayInfo.sErrorCode = String::CreateFromInt32( pCurrentError->ErrorCode );
+                aDisplayInfo.sErrorCode = OUString::number( pCurrentError->ErrorCode );
 
             if  (   !aDisplayInfo.sMessage.Len()
                 &&  !lcl_hasDetails( aDisplayInfo )

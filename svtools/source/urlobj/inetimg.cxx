@@ -36,9 +36,9 @@ sal_Bool INetImage::Write( SvStream& rOStm, sal_uLong nFormat ) const
             (sString += aTargetURL ) += TOKEN_SEPARATOR;
             (sString += aTargetFrame ) += TOKEN_SEPARATOR;
             (sString += aAlternateText ) += TOKEN_SEPARATOR;
-            sString += String::CreateFromInt32( aSizePixel.Width() );
+            sString += OUString::number( aSizePixel.Width() );
             sString += TOKEN_SEPARATOR;
-            sString += String::CreateFromInt32( aSizePixel.Height() );
+            sString += OUString::number( aSizePixel.Height() );
 
             rtl::OString sOut(rtl::OUStringToOString(sString,
                 RTL_TEXTENCODING_UTF8));

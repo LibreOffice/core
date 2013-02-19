@@ -1848,7 +1848,7 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
             {
                 nLastSize = nCurSize;
                 APPEND(rRet," size ");
-                rRet += String::CreateFromInt32(-nLstSize/32);
+                rRet += OUString::number(-nLstSize/32);
                 rRet += '{';
                 bRet=true;
                 rSetSize++;
@@ -1877,7 +1877,7 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
             {
                 nLastSize = nCurSize;
                 APPEND(rRet," size ");
-                rRet += String::CreateFromInt32(nLstSize);
+                rRet += OUString::number(nLstSize);
                 rRet += '{';
                 bRet=true;
                 rSetSize++;

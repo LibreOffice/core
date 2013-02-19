@@ -748,7 +748,7 @@ sal_Int16 SAL_CALL ToolbarMenuEntryAcc::getAccessibleRole() throw (RuntimeExcept
         if( !aRet.Len() )
         {
             aRet = String( RTL_CONSTASCII_USTRINGPARAM( "Item " ) );
-            aRet += String::CreateFromInt32( mpParent->mnEntryId );
+            aRet += OUString::number( mpParent->mnEntryId );
         }
     }
 

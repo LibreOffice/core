@@ -226,8 +226,8 @@ namespace dbmm
     void ProgressPage::setDocumentCounts( const sal_Int32 _nForms, const sal_Int32 _nReports )
     {
         String sText( m_aObjectCount.GetText() );
-        sText.SearchAndReplaceAscii( "$forms$", String::CreateFromInt32( _nForms ) );
-        sText.SearchAndReplaceAscii( "$reports$", String::CreateFromInt32( _nReports ) );
+        sText.SearchAndReplaceAscii( "$forms$", OUString::number( _nForms ) );
+        sText.SearchAndReplaceAscii( "$reports$", OUString::number( _nReports ) );
         m_aObjectCount.SetText( sText );
     }
 
