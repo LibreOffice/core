@@ -567,7 +567,7 @@ void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
         if (nDelFlag & IDF_NOTE && pRange)
             maNotes.erase(pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row(), true);
 
-        if(pRange && pRange->aStart.Tab() == nTab)
+        if((nDelFlag & IDF_ATTRIB) && pRange && pRange->aStart.Tab() == nTab)
             mpCondFormatList->DeleteArea( pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row() );
     }
 
