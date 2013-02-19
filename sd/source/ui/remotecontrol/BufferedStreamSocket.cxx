@@ -77,7 +77,7 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
         // Process buffer first incase data already present.
         vector<char>::iterator aIt;
         if ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))
-            != aBuffer.end() )
+             != aBuffer.end() )
         {
             sal_uInt64 aLocation = aIt - aBuffer.begin();
 
@@ -96,9 +96,9 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
         else
             aRet = ::recv( mSocket, &aBuffer[aRead], 100, 0 );
 
-        if ( aRet == 0 )
+        if ( aRet <= 0 )
         {
-                return aRet;
+            return 0;
         }
         // Prevent buffer from growing massively large.
         if ( aRead > MAX_LINE_LENGTH )
