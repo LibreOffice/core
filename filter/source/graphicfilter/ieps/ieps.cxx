@@ -146,7 +146,7 @@ static void MakeAsMeta(Graphic &rGraphic)
     rGraphic = aMtf;
 }
 
-static oslProcessError runProcessWithPathSearch(const rtl::OUString &rProgName,
+static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
     rtl_uString* pArgs[], sal_uInt32 nArgs, oslProcess *pProcess,
     oslFileHandle *pIn, oslFileHandle *pOut, oslFileHandle *pErr)
 {
@@ -166,8 +166,8 @@ static oslProcessError runProcessWithPathSearch(const rtl::OUString &rProgName,
      * PATH.
      *
      */
-    rtl::OUString url;
-    rtl::OUString path(reinterpret_cast<const sal_Unicode*>(_wgetenv(L"PATH")));
+    OUString url;
+    OUString path(reinterpret_cast<const sal_Unicode*>(_wgetenv(L"PATH")));
 
     oslFileError err = osl_searchFileURL(rProgName.pData, path.pData, &url.pData);
     if (err != osl_File_E_None)
@@ -192,15 +192,11 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
 {
     TempFile aTemp;
     aTemp.EnableKillingFile();
-    rtl::OUString fileName =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pstoedit" EXESUFFIX));
-    rtl::OUString arg1 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-f"));
-    rtl::OUString arg2 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("emf:-OO"));
-    rtl::OUString arg3 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
-    rtl::OUString output;
+    OUString fileName("pstoedit" EXESUFFIX);
+    OUString arg1("-f");
+    OUString arg2("emf:-OO");
+    OUString arg3("-");
+    OUString output;
     osl::FileBase::getSystemPathFromFileURL(aTemp.GetName(), output);
     rtl_uString *args[] =
     {
@@ -227,8 +223,8 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
         rtl::ByteSequence seq;
                 if (osl_File_E_None == osl_readLine(pOut, (sal_Sequence **)&seq))
         {
-                        rtl::OString line( (const sal_Char *) seq.getConstArray(), seq.getLength() );
-            if (line.indexOf(rtl::OString("Unsupported output format")) == 0)
+                        OString line( (const sal_Char *) seq.getConstArray(), seq.getLength() );
+            if (line.indexOf(OString("Unsupported output format")) == 0)
                 bEMFSupported=false;
         }
         osl_closeFile(pOut);
@@ -246,7 +242,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
 }
 
 static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
-    Graphic &rGraphic, rtl::OUString &rProgName, rtl_uString *pArgs[], size_t nArgs)
+    Graphic &rGraphic, OUString &rProgName, rtl_uString *pArgs[], size_t nArgs)
 {
     oslProcess aProcess;
     oslFileHandle pIn = NULL;
@@ -293,17 +289,16 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
 static bool RenderAsPNGThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     Graphic &rGraphic)
 {
-    rtl::OUString fileName =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("convert" EXESUFFIX));
+    OUString fileName("convert" EXESUFFIX);
     // density in pixel/inch
-    rtl::OUString arg1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-density"));
+    OUString arg1("-density");
     // since the preview is also used for PDF-Export & printing on non-PS-printers,
     // use some better quality - 300x300 should allow some resizing as well
-    rtl::OUString arg2 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("300x300"));
+    OUString arg2("300x300");
     // read eps from STDIN
-    rtl::OUString arg3 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("eps:-"));
+    OUString arg3("eps:-");
     // write png to STDOUT
-    rtl::OUString arg4 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("png:-"));
+    OUString arg4("png:-");
     rtl_uString *args[] =
     {
         arg1.pData, arg2.pData, arg3.pData, arg4.pData
@@ -316,34 +311,21 @@ static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     Graphic &rGraphic)
 {
 #ifdef WNT
-    rtl::OUString fileName =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gswin32c" EXESUFFIX));
+    OUString fileName("gswin32c" EXESUFFIX);
 #else
-    rtl::OUString fileName =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gs" EXESUFFIX));
+    OUString fileName("gs" EXESUFFIX);
 #endif
-    rtl::OUString arg1 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-q"));
-    rtl::OUString arg2 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dBATCH"));
-    rtl::OUString arg3 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dNOPAUSE"));
-    rtl::OUString arg4 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dPARANOIDSAFER"));
-    rtl::OUString arg5 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dEPSCrop"));
-    rtl::OUString arg6 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dTextAlphaBits=4"));
-    rtl::OUString arg7 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dGraphicsAlphaBits=4"));
-    rtl::OUString arg8 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-r300x300"));
-    rtl::OUString arg9 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-sDEVICE=png256"));
-    rtl::OUString arg10 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-sOutputFile=-"));
-    rtl::OUString arg11 =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+    OUString arg1("-q");
+    OUString arg2("-dBATCH");
+    OUString arg3("-dNOPAUSE");
+    OUString arg4("-dPARANOIDSAFER");
+    OUString arg5("-dEPSCrop");
+    OUString arg6("-dTextAlphaBits=4");
+    OUString arg7("-dGraphicsAlphaBits=4");
+    OUString arg8("-r300x300");
+    OUString arg9("-sDEVICE=png256");
+    OUString arg10("-sOutputFile=-");
+    OUString arg11("-");
     rtl_uString *args[] =
     {
         arg1.pData, arg2.pData, arg3.pData, arg4.pData, arg5.pData,
@@ -367,7 +349,7 @@ static bool RenderAsPNG(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
 void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 nOrigPos, sal_uInt32 nPSSize,
                                 sal_uInt32 nPosWMF, sal_uInt32 nSizeWMF, sal_uInt32 nPosTIFF, sal_uInt32 nSizeTIFF )
 {
-    rtl::OString aComment(RTL_CONSTASCII_STRINGPARAM("EPSReplacementGraphic"));
+    OString aComment("EPSReplacementGraphic");
     if ( nSizeWMF || nSizeTIFF )
     {
         SvMemoryStream aReplacement( nSizeWMF + nSizeTIFF + 28 );

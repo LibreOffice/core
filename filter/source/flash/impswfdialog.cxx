@@ -52,9 +52,9 @@ ImpSWFDialog::ImpSWFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     maBtnOK( this, ResId( BTN_OK, rResMgr ) ),
     maBtnCancel( this, ResId( BTN_CANCEL, rResMgr ) ),
     maBtnHelp( this, ResId( BTN_HELP, rResMgr ) ),
-    maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Flash/Export/" ) ), &rFilterData )
+    maConfigItem( "Office.Common/Filter/Flash/Export/", &rFilterData )
 {
-    const sal_uLong nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 75 );
+    const sal_uLong nCompressMode = maConfigItem.ReadInt32( "CompressMode", 75 );
     maNumFldQuality.SetValue( nCompressMode );
 
     maCheckExportAll.Check();
@@ -85,14 +85,14 @@ ImpSWFDialog::~ImpSWFDialog()
 Sequence< PropertyValue > ImpSWFDialog::GetFilterData()
 {
     sal_Int32 nCompressMode = (sal_Int32)maNumFldQuality.GetValue();
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), nCompressMode );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportAll" ) ), maCheckExportAll.IsChecked() );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBackgrounds" ) ), maCheckExportBackgrounds.IsChecked() );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBackgroundObjects" ) ), maCheckExportBackgroundObjects.IsChecked() );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportSlideContents" ) ), maCheckExportSlideContents.IsChecked() );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportSound" ) ), maCheckExportSound.IsChecked() );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportOLEAsJPEG" ) ), maCheckExportOLEAsJPEG.IsChecked() );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportMultipleFiles" ) ), maCheckExportMultipleFiles.IsChecked() );
+    maConfigItem.WriteInt32( "CompressMode" , nCompressMode );
+    maConfigItem.WriteBool( "ExportAll", maCheckExportAll.IsChecked() );
+    maConfigItem.WriteBool( "ExportBackgrounds", maCheckExportBackgrounds.IsChecked() );
+    maConfigItem.WriteBool( "ExportBackgroundObjects", maCheckExportBackgroundObjects.IsChecked() );
+    maConfigItem.WriteBool( "ExportSlideContents", maCheckExportSlideContents.IsChecked() );
+    maConfigItem.WriteBool( "ExportSound", maCheckExportSound.IsChecked() );
+    maConfigItem.WriteBool( "ExportOLEAsJPEG", maCheckExportOLEAsJPEG.IsChecked() );
+    maConfigItem.WriteBool( "ExportMultipleFiles", maCheckExportMultipleFiles.IsChecked() );
 
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
 
