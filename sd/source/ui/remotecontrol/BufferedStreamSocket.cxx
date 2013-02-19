@@ -67,7 +67,7 @@ void BufferedStreamSocket::close()
         mSocket = -1;
     }
     else
-        close();
+        ::osl::StreamSocket::close();
 }
 
 sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
