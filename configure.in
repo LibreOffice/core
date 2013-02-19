@@ -4597,7 +4597,8 @@ SYSTEM_SERF=NO
 SERF_CFLAGS=
 SERF_LIBS=
 AC_MSG_CHECKING([which libserf to use])
-if test "x$with_system_serf" = "xyes" -o -n "$with_system_libs"; then
+if test -n "$with_system_serf" -o -n "$with_system_libs" && \
+  test "$with_system_serf" != "no"; then
     AC_MSG_RESULT([system])
     PKG_CHECK_MODULES([SERF], [serf-1 >= 1.1])
     SYSTEM_SERF=YES
