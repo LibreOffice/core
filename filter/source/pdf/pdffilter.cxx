@@ -68,45 +68,45 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
      to pdf, but we have to use the last user settings (especially for the CompressMode) */
     if ( !aFilterData.getLength() )
     {
-        FilterConfigItem aCfgItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ) );
-        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseLosslessCompression" ) ), sal_False );
-        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 90 );
-        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ReduceImageResolution" ) ), sal_False );
-        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ), 300 );
-        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ), sal_False );
-        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "SelectPdfVersion" ) ), 0 );
-        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), sal_False );
-        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ), sal_False );
-        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), sal_True );
-        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ), sal_False );
-        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ), sal_True );
-        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), 0 );
-        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ), sal_False );
-        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "HideViewerMenubar" ) ), sal_False );
-        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "HideViewerWindowControls" ) ), sal_False );
-        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "ResizeWindowToInitialPage" ) ), sal_False );
-        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "CenterWindow" ) ), sal_False );
-        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "OpenInFullScreenMode" ) ), sal_False );
-        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "DisplayPDFDocumentTitle" ) ), sal_True );
-        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "InitialView" ) ), 0 );
-        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Magnification" ) ), 0 );
-        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ), 0 );
-        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ), sal_False );
-        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "IsAddStream" ) ), sal_False );
+        FilterConfigItem aCfgItem( "Office.Common/Filter/PDF/Export/" );
+        aCfgItem.ReadBool(  "UseLosslessCompression", sal_False );
+        aCfgItem.ReadInt32( "Quality", 90 );
+        aCfgItem.ReadBool(  "ReduceImageResolution", sal_False );
+        aCfgItem.ReadInt32( "MaxImageResolution", 300 );
+        aCfgItem.ReadBool(  "UseTaggedPDF", sal_False );
+        aCfgItem.ReadInt32( "SelectPdfVersion", 0 );
+        aCfgItem.ReadBool(  "ExportNotes", sal_False );
+        aCfgItem.ReadBool(  "ExportNotesPages", sal_False );
+        aCfgItem.ReadBool(  "UseTransitionEffects", sal_True );
+        aCfgItem.ReadBool(  "IsSkipEmptyPages", sal_False );
+        aCfgItem.ReadBool(  "ExportFormFields", sal_True );
+        aCfgItem.ReadInt32( "FormsType", 0 );
+        aCfgItem.ReadBool(  "HideViewerToolbar", sal_False );
+        aCfgItem.ReadBool(  "HideViewerMenubar", sal_False );
+        aCfgItem.ReadBool(  "HideViewerWindowControls", sal_False );
+        aCfgItem.ReadBool(  "ResizeWindowToInitialPage", sal_False );
+        aCfgItem.ReadBool(  "CenterWindow", sal_False );
+        aCfgItem.ReadBool(  "OpenInFullScreenMode", sal_False );
+        aCfgItem.ReadBool(  "DisplayPDFDocumentTitle", sal_True );
+        aCfgItem.ReadInt32( "InitialView", 0 );
+        aCfgItem.ReadInt32( "Magnification", 0 );
+        aCfgItem.ReadInt32( "PageLayout", 0 );
+        aCfgItem.ReadBool(  "FirstPageOnLeft", sal_False );
+        aCfgItem.ReadBool(  "IsAddStream", sal_False );
 //
 // the encryption is not available when exporting directly, since the encryption is off by default and the selection
 // (encrypt or not) is not persistent; it's available through macro though,
 // provided the correct property values are set, see help
 //
 // now, the relative link stuff
-        aCfgItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportLinksRelativeFsys" ) ), sal_False );
-        aCfgItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PDFViewSelection" ) ), 0 );
-        aCfgItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ConvertOOoTargetToPDFTarget" ) ), sal_False );
-        aCfgItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ), sal_False );
+        aCfgItem.ReadBool( "ExportLinksRelativeFsys", sal_False );
+        aCfgItem.ReadInt32("PDFViewSelection", 0 );
+        aCfgItem.ReadBool( "ConvertOOoTargetToPDFTarget", sal_False );
+        aCfgItem.ReadBool( "ExportBookmarksToPDFDestination", sal_False );
 
-        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ), sal_True );
-        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "ExportHiddenSlides" ) ), sal_False );
-        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ), -1 );
+        aCfgItem.ReadBool(  "ExportBookmarks", sal_True );
+        aCfgItem.ReadBool(  "ExportHiddenSlides", sal_False );
+        aCfgItem.ReadInt32( "OpenBookmarkLevels", -1 );
         aFilterData = aCfgItem.GetFilterData();
     }
     if( mxSrcDoc.is() && xOStm.is() )
@@ -205,7 +205,7 @@ void SAL_CALL PDFFilter::initialize( const ::com::sun::star::uno::Sequence< ::co
 OUString PDFFilter_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.PDF.PDFFilter" ) );
+    return OUString ( "com.sun.star.comp.PDF.PDFFilter" );
 }
 
 // -----------------------------------------------------------------------------
@@ -224,7 +224,7 @@ Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  ) throw (Runt
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] = SERVICE_NAME;
     return aRet;
 }
 

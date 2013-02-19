@@ -43,7 +43,7 @@ using namespace ::com::sun::star::beans;
 OUString PDFDialog_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.PDF.PDFDialog" ) );
+    return OUString ( "com.sun.star.comp.PDF.PDFDialog" );
 }
 
 // -----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames()
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] = SERVICE_NAME;
     return aRet;
 }
 
@@ -180,7 +180,7 @@ Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
     if( i == nCount )
         maMediaDescriptor.realloc( ++nCount );
 
-    maMediaDescriptor[ i ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "FilterData" ) );
+    maMediaDescriptor[ i ].Name = "FilterData";
     maMediaDescriptor[ i ].Value <<= maFilterData;
 
     return maMediaDescriptor;

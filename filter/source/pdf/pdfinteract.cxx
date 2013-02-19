@@ -71,7 +71,7 @@ sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Referen
 OUString PDFInteractionHandler_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.PDF.PDFExportInteractionHandler" ) );
+    return OUString ( "com.sun.star.comp.PDF.PDFExportInteractionHandler" );
 }
 
 // -----------------------------------------------------------------------------
@@ -90,7 +90,7 @@ Sequence< OUString > SAL_CALL PDFInteractionHandler_getSupportedServiceNames(  )
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] = SERVICE_NAME;
     return aRet;
 }
 

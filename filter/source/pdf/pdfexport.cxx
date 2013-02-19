@@ -283,19 +283,18 @@ void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
     if( xStore.is() )
     {
         Sequence< beans::PropertyValue > aArgs( 2 + ((m_aPreparedPassword.getLength() > 0) ? 1 : 0) );
-        aArgs.getArray()[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
-        aArgs.getArray()[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ) );
+        aArgs.getArray()[0].Name = "FilterName";
+        aArgs.getArray()[1].Name = "OutputStream";
         aArgs.getArray()[1].Value <<= xStream;
         if( m_aPreparedPassword.getLength() )
         {
-            aArgs.getArray()[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionData" ) );
+            aArgs.getArray()[2].Name = "EncryptionData";
             aArgs.getArray()[2].Value <<= m_aPreparedPassword;
         }
 
         try
         {
-            xStore->storeToURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) ),
-                                aArgs );
+            xStore->storeToURL( "private:stream", aArgs );
         }
         catch( const IOException& )
         {
@@ -322,27 +321,26 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
                     comphelper::getComponentContext( xFactory ) ) );
             uno::Sequence< uno::Any > aArgs( 1 );
             beans::NamedValue aPathProp;
-            aPathProp.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-            aPathProp.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Setup/Office/Factories/" ) );
+            aPathProp.Name = "nodepath";
+            aPathProp.Value <<= OUString( "/org.openoffice.Setup/Office/Factories/" );
             aArgs[0] <<= aPathProp;
 
             Reference< container::XNameAccess > xSOFConfig(
                 xConfigProvider->createInstanceWithArguments(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ) ),
-                    aArgs ),
+                    "com.sun.star.configuration.ConfigurationAccess", aArgs ),
                 uno::UNO_QUERY );
 
             Reference< container::XNameAccess > xApplConfig;
             xSOFConfig->getByName( aDocServiceName ) >>= xApplConfig;
             if ( xApplConfig.is() )
             {
-                xApplConfig->getByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "ooSetupFactoryActualFilter" ) ) ) >>= aFilterName;
+                xApplConfig->getByName( "ooSetupFactoryActualFilter" ) >>= aFilterName;
                 if( !aFilterName.isEmpty() )
                 {
                     // find the related type name
                     OUString aTypeName;
                     Reference< container::XNameAccess > xFilterFactory(
-                        xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ),
+                        xFactory->createInstance( "com.sun.star.document.FilterFactory" ),
                         uno::UNO_QUERY );
 
                     Sequence< beans::PropertyValue > aFilterData;
@@ -355,7 +353,7 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
                     {
                         // find the mediatype
                         Reference< container::XNameAccess > xTypeDetection(
-                            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ),
+                            xFactory->createInstance( "com.sun.star.document.TypeDetection" ),
                             UNO_QUERY );
 
                         Sequence< beans::PropertyValue > aTypeData;
@@ -406,15 +404,15 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             Reference< XServiceInfo > xInfo( mxSrcDoc, UNO_QUERY );
             if ( xInfo.is() )
             {
-                if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" )) ) )
+                if ( xInfo->supportsService( "com.sun.star.presentation.PresentationDocument" ) )
                     aCreator.AppendAscii( "Impress" );
-                else if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" )) ) )
+                else if ( xInfo->supportsService( "com.sun.star.drawing.DrawingDocument" ) )
                     aCreator.AppendAscii( "Draw" );
-                else if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" )) ) )
+                else if ( xInfo->supportsService( "com.sun.star.text.TextDocument" ) )
                     aCreator.AppendAscii( "Writer" );
-                else if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" )) ) )
+                else if ( xInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
                     aCreator.AppendAscii( "Calc" );
-                else if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.formula.FormulaProperties" )) ) )
+                else if ( xInfo->supportsService( "com.sun.star.formula.FormulaProperties"  ) )
                     aCreator.AppendAscii( "Math" );
             }
 
@@ -433,7 +431,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             // getting the string for the producer
             aContext.DocumentInfo.Producer =
                 utl::ConfigManager::getProductName() +
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) +
+                " " +
                 utl::ConfigManager::getProductVersion();
             aContext.DocumentInfo.Creator = aCreator;
 
@@ -824,18 +822,18 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 pPDFExtOutDevData->SetIsExportNamedDestinations( mbExportBmkToDest );
 
                 Sequence< PropertyValue > aRenderOptions( 6 );
-                aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
+                aRenderOptions[ 0 ].Name = "RenderDevice";
                 aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
-                aRenderOptions[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) );
+                aRenderOptions[ 1 ].Name = "ExportNotesPages";
                 aRenderOptions[ 1 ].Value <<= sal_False;
                 Any& rExportNotesValue = aRenderOptions[ 1 ].Value;
-                aRenderOptions[ 2 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFirstPage" ) );
+                aRenderOptions[ 2 ].Name = "IsFirstPage";
                 aRenderOptions[ 2 ].Value <<= sal_True;
-                aRenderOptions[ 3 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsLastPage" ) );
+                aRenderOptions[ 3 ].Name = "IsLastPage";
                 aRenderOptions[ 3 ].Value <<= sal_False;
-                aRenderOptions[ 4 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) );
+                aRenderOptions[ 4 ].Name = "IsSkipEmptyPages";
                 aRenderOptions[ 4 ].Value <<= mbSkipEmptyPages;
-                aRenderOptions[ 5 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
+                aRenderOptions[ 5 ].Name = "PageRange";
                 aRenderOptions[ 5 ].Value <<= aPageRange;
 
                 if( !aPageRange.isEmpty() || !aSelection.hasValue() )
@@ -845,7 +843,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 }
                 sal_Bool        bSecondPassForImpressNotes = sal_False;
                 bool bReChangeToNormalView = false;
-                  ::rtl::OUString sShowOnlineLayout( RTL_CONSTASCII_USTRINGPARAM( "ShowOnlineLayout"));
+                  OUString sShowOnlineLayout( "ShowOnlineLayout" );
                   uno::Reference< beans::XPropertySet > xViewProperties;
 
                 if ( aCreator.EqualsAscii( "Writer" ) )
@@ -1045,8 +1043,8 @@ sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFEx
 
 void PDFExport::ImplWriteWatermark( PDFWriter& rWriter, const Size& rPageSize )
 {
-    OUString aText( RTL_CONSTASCII_USTRINGPARAM( "Watermark" ) );
-    Font aFont( OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ), Size( 0, 3*rPageSize.Height()/4 ) );
+    OUString aText( "Watermark" );
+    Font aFont( OUString( "Helvetica" ), Size( 0, 3*rPageSize.Height()/4 ) );
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_NORMAL );
     aFont.SetWeight( WEIGHT_NORMAL );

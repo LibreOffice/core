@@ -67,8 +67,8 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
                                   ) :
     SfxTabDialog( pParent, PDFFilterResId( RID_PDF_EXPORT_DLG ), 0, sal_False, 0 ),
     mxMSF( xFact ),
-    maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData ),
-    maConfigI18N( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/I18N/CTL/" ) ) ),
+    maConfigItem( "Office.Common/Filter/PDF/Export/", &rFilterData ),
+    maConfigI18N( "Office.Common/I18N/CTL/" ),
     mbIsPresentation( sal_False ),
     mbIsWriter( sal_False ),
 
@@ -169,9 +169,9 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
         Reference< XServiceInfo > xInfo( rxDoc, UNO_QUERY );
         if ( xInfo.is() )
         {
-            if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ) )
+            if ( xInfo->supportsService( "com.sun.star.presentation.PresentationDocument" ) )
                 mbIsPresentation = sal_True;
-            if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.GenericTextDocument" ) ) ) )
+            if ( xInfo->supportsService( "com.sun.star.text.GenericTextDocument" ) )
                 mbIsWriter = sal_True;
         }
     }
@@ -180,68 +180,68 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     }
 
 //get the CTL (Complex Text Layout) from general options, returns sal_True if we have a CTL font on our hands.
-    mbUseCTLFont = maConfigI18N.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "CTLFont" ) ), sal_False );
+    mbUseCTLFont = maConfigI18N.ReadBool( "CTLFont", sal_False );
 
-    mbUseLosslessCompression = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseLosslessCompression" ) ), sal_False );
-    mnQuality = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 90 );
-    mbReduceImageResolution = maConfigItem.ReadBool(  OUString( RTL_CONSTASCII_USTRINGPARAM( "ReduceImageResolution" ) ), sal_False );
-    mnMaxImageResolution = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ), 300 );
+    mbUseLosslessCompression = maConfigItem.ReadBool( "UseLosslessCompression", sal_False );
+    mnQuality = maConfigItem.ReadInt32( "Quality", 90 );
+    mbReduceImageResolution = maConfigItem.ReadBool( "ReduceImageResolution", sal_False );
+    mnMaxImageResolution = maConfigItem.ReadInt32( "MaxImageResolution", 300 );
 
-    mbUseTaggedPDF = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ), sal_False );
-    mnPDFTypeSelection =  maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectPdfVersion" ) ), 0 );
+    mbUseTaggedPDF = maConfigItem.ReadBool( "UseTaggedPDF", sal_False );
+    mnPDFTypeSelection =  maConfigItem.ReadInt32( "SelectPdfVersion", 0 );
     if ( mbIsPresentation )
-        mbExportNotesPages = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages"  ) ), sal_False );
-    mbExportNotes = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes"  ) ), sal_False );
+        mbExportNotesPages = maConfigItem.ReadBool( "ExportNotesPages", sal_False );
+    mbExportNotes = maConfigItem.ReadBool( "ExportNotes", sal_False );
 
-    mbExportBookmarks = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ), sal_True );
+    mbExportBookmarks = maConfigItem.ReadBool( "ExportBookmarks", sal_True );
     if ( mbIsPresentation )
-        mbExportHiddenSlides = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportHiddenSlides" ) ), sal_False );
-    mnOpenBookmarkLevels = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ), -1 );
-    mbUseTransitionEffects = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects"  ) ), sal_True );
-    mbIsSkipEmptyPages = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages"  ) ), sal_False );
-    mbAddStream = maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "IsAddStream" ) ), sal_False );
-    mbEmbedStandardFonts = maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "EmbedStandardFonts" ) ), sal_False );
+        mbExportHiddenSlides = maConfigItem.ReadBool( "ExportHiddenSlides", sal_False );
+    mnOpenBookmarkLevels = maConfigItem.ReadInt32( "OpenBookmarkLevels", -1 );
+    mbUseTransitionEffects = maConfigItem.ReadBool( "UseTransitionEffects", sal_True );
+    mbIsSkipEmptyPages = maConfigItem.ReadBool( "IsSkipEmptyPages", sal_False );
+    mbAddStream = maConfigItem.ReadBool( "IsAddStream", sal_False );
+    mbEmbedStandardFonts = maConfigItem.ReadBool( "EmbedStandardFonts", sal_False );
 
-    mnFormsType = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), 0 );
-    mbExportFormFields = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ), sal_True );
+    mnFormsType = maConfigItem.ReadInt32( "FormsType", 0 );
+    mbExportFormFields = maConfigItem.ReadBool( "ExportFormFields", sal_True );
     if ( ( mnFormsType < 0 ) || ( mnFormsType > 3 ) )
         mnFormsType = 0;
-    mbAllowDuplicateFieldNames = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowDuplicateFieldNames" ) ), sal_False );
+    mbAllowDuplicateFieldNames = maConfigItem.ReadBool( "AllowDuplicateFieldNames", sal_False );
 
 //prepare values for the Viewer tab page
-    mbHideViewerToolbar = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ), sal_False );
-    mbHideViewerMenubar = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerMenubar" ) ), sal_False );
-    mbHideViewerWindowControls = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerWindowControls" ) ), sal_False );
-    mbResizeWinToInit = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ResizeWindowToInitialPage" ) ), sal_False );
-    mbCenterWindow = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "CenterWindow" ) ), sal_False );
-    mbOpenInFullScreenMode = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenInFullScreenMode" ) ), sal_False );
-    mbDisplayPDFDocumentTitle = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisplayPDFDocumentTitle" ) ), sal_True );
+    mbHideViewerToolbar = maConfigItem.ReadBool( "HideViewerToolbar", sal_False );
+    mbHideViewerMenubar = maConfigItem.ReadBool( "HideViewerMenubar", sal_False );
+    mbHideViewerWindowControls = maConfigItem.ReadBool( "HideViewerWindowControls", sal_False );
+    mbResizeWinToInit = maConfigItem.ReadBool( "ResizeWindowToInitialPage", sal_False );
+    mbCenterWindow = maConfigItem.ReadBool( "CenterWindow", sal_False );
+    mbOpenInFullScreenMode = maConfigItem.ReadBool( "OpenInFullScreenMode", sal_False );
+    mbDisplayPDFDocumentTitle = maConfigItem.ReadBool( "DisplayPDFDocumentTitle", sal_True );
 
-    mnInitialView = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialView" ) ), 0 );
-    mnMagnification = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Magnification" ) ), 0 );
-    mnZoom = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Zoom" ) ), 100 );
-    mnPageLayout = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ), 0 );
-    mbFirstPageLeft = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ), sal_False );
-    mnInitialPage = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialPage" ) ), 1 );
+    mnInitialView = maConfigItem.ReadInt32( "InitialView", 0 );
+    mnMagnification = maConfigItem.ReadInt32( "Magnification", 0 );
+    mnZoom = maConfigItem.ReadInt32( "Zoom", 100 );
+    mnPageLayout = maConfigItem.ReadInt32( "PageLayout", 0 );
+    mbFirstPageLeft = maConfigItem.ReadBool( "FirstPageOnLeft", sal_False );
+    mnInitialPage = maConfigItem.ReadInt32( "InitialPage", 1 );
     if( mnInitialPage < 1 )
         mnInitialPage = 1;
 
 //prepare values for the security tab page
-    mnPrint = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Printing" ) ), 2 );
-    mnChangesAllowed = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Changes" ) ), 4 );
-    mbCanCopyOrExtract = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableCopyingOfContent" ) ), sal_True );
-    mbCanExtractForAccessibility = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableTextAccessForAccessibilityTools" ) ), sal_True );
+    mnPrint = maConfigItem.ReadInt32( "Printing", 2 );
+    mnChangesAllowed = maConfigItem.ReadInt32( "Changes", 4 );
+    mbCanCopyOrExtract = maConfigItem.ReadBool( "EnableCopyingOfContent", sal_True );
+    mbCanExtractForAccessibility = maConfigItem.ReadBool( "EnableTextAccessForAccessibilityTools", sal_True );
 
 //prepare values for relative links
-    mbExportRelativeFsysLinks = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportLinksRelativeFsys" ) ), sal_False );
+    mbExportRelativeFsysLinks = maConfigItem.ReadBool( "ExportLinksRelativeFsys", sal_False );
 
-    mnViewPDFMode = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PDFViewSelection" ) ), 0 );
+    mnViewPDFMode = maConfigItem.ReadInt32( "PDFViewSelection", 0 );
 
-    mbConvertOOoTargets = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ConvertOOoTargetToPDFTarget" ) ), sal_False );
-    mbExportBmkToPDFDestination = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ), sal_False );
+    mbConvertOOoTargets = maConfigItem.ReadBool( "ConvertOOoTargetToPDFTarget", sal_False );
+    mbExportBmkToPDFDestination = maConfigItem.ReadBool( "ExportBookmarksToPDFDestination", sal_False );
 
 //prepare values for digital signatures
-    mbSignPDF = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "SignPDF" ) ), sal_False );
+    mbSignPDF = maConfigItem.ReadBool( "SignPDF", sal_False );
 
 //queue the tab pages for later creation (created when first shown)
     AddTabPage( RID_PDF_TAB_SIGNING, ImpPDFTabSigningPage::Create, 0 );
@@ -259,7 +259,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     AddTabPage( RID_PDF_TAB_GENER, ImpPDFTabGeneralPage::Create, 0 );
 
 //get the string property value (from sfx2/source/dialog/mailmodel.cxx) to overwrite the text for the Ok button
-    ::rtl::OUString sOkButtonText = maConfigItem.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "_OkButtonString" ) ), OUString() );
+    OUString sOkButtonText = maConfigItem.ReadString( "_OkButtonString", OUString() );
 
 //change text on the Ok button: get the relevant string from resources, update it on the button
 //according to the exported pdf file destination: send as e-mail or write to file?
@@ -349,60 +349,60 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
         ( ( ImpPDFTabSigningPage* )GetTabPage( RID_PDF_TAB_SIGNING ) )->GetFilterConfigItem( this );
 
 //prepare the items to be returned
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseLosslessCompression" ) ), mbUseLosslessCompression );
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), mnQuality );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ReduceImageResolution" ) ), mbReduceImageResolution );
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ), mnMaxImageResolution );
+    maConfigItem.WriteBool( "UseLosslessCompression", mbUseLosslessCompression );
+    maConfigItem.WriteInt32("Quality", mnQuality );
+    maConfigItem.WriteBool( "ReduceImageResolution", mbReduceImageResolution );
+    maConfigItem.WriteInt32("MaxImageResolution", mnMaxImageResolution );
 
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ), mbUseTaggedPDF );
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectPdfVersion" ) ), mnPDFTypeSelection );
+    maConfigItem.WriteBool( "UseTaggedPDF", mbUseTaggedPDF );
+    maConfigItem.WriteInt32("SelectPdfVersion", mnPDFTypeSelection );
 
     if ( mbIsPresentation )
-        maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ), mbExportNotesPages );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), mbExportNotes );
+        maConfigItem.WriteBool( "ExportNotesPages", mbExportNotesPages );
+    maConfigItem.WriteBool( "ExportNotes", mbExportNotes );
 
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ), mbExportBookmarks );
+    maConfigItem.WriteBool( "ExportBookmarks", mbExportBookmarks );
     if ( mbIsPresentation )
-        maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportHiddenSlides" ) ), mbExportHiddenSlides );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), mbUseTransitionEffects );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ), mbIsSkipEmptyPages );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAddStream" ) ), mbAddStream );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbedStandardFonts" ) ), mbEmbedStandardFonts );
+        maConfigItem.WriteBool( "ExportHiddenSlides", mbExportHiddenSlides );
+    maConfigItem.WriteBool( "UseTransitionEffects", mbUseTransitionEffects );
+    maConfigItem.WriteBool( "IsSkipEmptyPages", mbIsSkipEmptyPages );
+    maConfigItem.WriteBool( "IsAddStream", mbAddStream );
+    maConfigItem.WriteBool( "EmbedStandardFonts", mbEmbedStandardFonts );
 
     /*
     * FIXME: the entries are only implicitly defined by the resource file. Should there
     * ever be an additional form submit format this could get invalid.
     */
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), mnFormsType );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ), mbExportFormFields );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowDuplicateFieldNames" ) ), mbAllowDuplicateFieldNames );
+    maConfigItem.WriteInt32( "FormsType", mnFormsType );
+    maConfigItem.WriteBool( "ExportFormFields", mbExportFormFields );
+    maConfigItem.WriteBool( "AllowDuplicateFieldNames", mbAllowDuplicateFieldNames );
 
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ), mbHideViewerToolbar );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerMenubar" ) ), mbHideViewerMenubar );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerWindowControls" ) ), mbHideViewerWindowControls );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ResizeWindowToInitialPage" ) ), mbResizeWinToInit );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "CenterWindow" ) ), mbCenterWindow );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenInFullScreenMode" ) ), mbOpenInFullScreenMode );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisplayPDFDocumentTitle" ) ), mbDisplayPDFDocumentTitle );
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialView" ) ), mnInitialView );
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Magnification" ) ), mnMagnification);
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Zoom" ) ), mnZoom );
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialPage" ) ), mnInitialPage );
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ), mnPageLayout );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ), mbFirstPageLeft );
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ), mnOpenBookmarkLevels );
+    maConfigItem.WriteBool( "HideViewerToolbar", mbHideViewerToolbar );
+    maConfigItem.WriteBool( "HideViewerMenubar", mbHideViewerMenubar );
+    maConfigItem.WriteBool( "HideViewerWindowControls", mbHideViewerWindowControls );
+    maConfigItem.WriteBool( "ResizeWindowToInitialPage", mbResizeWinToInit );
+    maConfigItem.WriteBool( "CenterWindow", mbCenterWindow );
+    maConfigItem.WriteBool( "OpenInFullScreenMode", mbOpenInFullScreenMode );
+    maConfigItem.WriteBool( "DisplayPDFDocumentTitle", mbDisplayPDFDocumentTitle );
+    maConfigItem.WriteInt32( "InitialView", mnInitialView );
+    maConfigItem.WriteInt32( "Magnification", mnMagnification);
+    maConfigItem.WriteInt32( "Zoom", mnZoom );
+    maConfigItem.WriteInt32( "InitialPage", mnInitialPage );
+    maConfigItem.WriteInt32( "PageLayout", mnPageLayout );
+    maConfigItem.WriteBool( "FirstPageOnLeft", mbFirstPageLeft );
+    maConfigItem.WriteInt32( "OpenBookmarkLevels", mnOpenBookmarkLevels );
 
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportLinksRelativeFsys" ) ), mbExportRelativeFsysLinks );
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PDFViewSelection" ) ), mnViewPDFMode );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ConvertOOoTargetToPDFTarget" ) ), mbConvertOOoTargets );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ), mbExportBmkToPDFDestination );
+    maConfigItem.WriteBool( "ExportLinksRelativeFsys", mbExportRelativeFsysLinks );
+    maConfigItem.WriteInt32("PDFViewSelection", mnViewPDFMode );
+    maConfigItem.WriteBool( "ConvertOOoTargetToPDFTarget", mbConvertOOoTargets );
+    maConfigItem.WriteBool( "ExportBookmarksToPDFDestination", mbExportBmkToPDFDestination );
 
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "SignPDF" ) ), mbSignPDF );
+    maConfigItem.WriteBool( "SignPDF", mbSignPDF );
 
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Printing" ) ), mnPrint );
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Changes" ) ), mnChangesAllowed );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableCopyingOfContent" ) ), mbCanCopyOrExtract );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableTextAccessForAccessibilityTools" ) ), mbCanExtractForAccessibility );
+    maConfigItem.WriteInt32( "Printing", mnPrint );
+    maConfigItem.WriteInt32( "Changes", mnChangesAllowed );
+    maConfigItem.WriteBool( "EnableCopyingOfContent", mbCanCopyOrExtract );
+    maConfigItem.WriteBool( "EnableTextAccessForAccessibilityTools", mbCanExtractForAccessibility );
 
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
 
@@ -412,61 +412,61 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 
     // add the encryption enable flag
     sal_uInt32 const nLength(aRet.getLength());
-    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Watermark" ) );
+    aRet[ nLength - nElementAdded ].Name = "Watermark";
     aRet[ nLength - nElementAdded ].Value <<= maWatermarkText;
     nElementAdded--;
 
 // add the encryption enable flag
-    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptFile" ) );
+    aRet[ nLength - nElementAdded ].Name = "EncryptFile";
     aRet[ nLength - nElementAdded ].Value <<= mbEncrypt;
     nElementAdded--;
 
 // add the open password
-    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPasswords" ) );
+    aRet[ nLength - nElementAdded ].Name = "PreparedPasswords";
     aRet[ nLength - nElementAdded ].Value <<= mxPreparedPasswords;
     nElementAdded--;
 
 //the restrict permission flag (needed to have the scripting consistent with the dialog)
-    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RestrictPermissions" ) );
+    aRet[ nLength - nElementAdded ].Name = "RestrictPermissions";
     aRet[ nLength - nElementAdded ].Value <<= mbRestrictPermissions;
     nElementAdded--;
 
 //add the permission password
-    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPermissionPassword" ) );
+    aRet[ nLength - nElementAdded ].Name = "PreparedPermissionPassword";
     aRet[ nLength - nElementAdded ].Value <<= maPreparedOwnerPassword;
     nElementAdded--;
 
 // this should be the last added...
     if( mbIsRangeChecked )
     {
-        aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
+        aRet[ nLength - nElementAdded ].Name = "PageRange";
         aRet[ nLength - nElementAdded ].Value <<= msPageRange;
         nElementAdded--;
     }
     else if( mbSelectionIsChecked )
     {
-        aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) );
+        aRet[ nLength - nElementAdded ].Name = "Selection";
         aRet[ nLength - nElementAdded ].Value <<= maSelection;
         nElementAdded--;
     }
 
-    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureLocation" ) );
+    aRet[ nLength - nElementAdded ].Name = "SignatureLocation";
     aRet[ nLength - nElementAdded ].Value <<= msSignLocation;
     nElementAdded--;
 
-    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureReason" ) );
+    aRet[ nLength - nElementAdded ].Name = "SignatureReason";
     aRet[ nLength - nElementAdded ].Value <<= msSignReason;
     nElementAdded--;
 
-    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureContactInfo" ) );
+    aRet[ nLength - nElementAdded ].Name = "SignatureContactInfo";
     aRet[ nLength - nElementAdded ].Value <<= msSignContact;
     nElementAdded--;
 
-    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignaturePassword" ) );
+    aRet[ nLength - nElementAdded ].Name = "SignaturePassword";
     aRet[ nLength - nElementAdded ].Value <<= msSignPassword;
     nElementAdded--;
 
-    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureCertificate" ) );
+    aRet[ nLength - nElementAdded ].Name = "SignatureCertificate";
     aRet[ nLength - nElementAdded ].Value <<= maSignCertificate;
     nElementAdded--;
 
