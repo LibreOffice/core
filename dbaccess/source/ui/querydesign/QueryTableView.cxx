@@ -258,7 +258,7 @@ sal_Int32 OQueryTableView::CountTableAlias(const String& rName, sal_Int32& rMax)
         String aNewName;
         aNewName = rName;
         aNewName += '_';
-        aNewName += String::CreateFromInt32(++nRet);
+        aNewName += OUString::number(++nRet);
 
         aIter = GetTabWinMap()->find(aNewName);
     }

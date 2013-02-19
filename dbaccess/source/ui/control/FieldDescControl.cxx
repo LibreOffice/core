@@ -1470,7 +1470,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if( pTextLen )
     {
-        pTextLen->SetText( String::CreateFromInt32(pFieldDescr->GetPrecision()) );
+        pTextLen->SetText( OUString::number(pFieldDescr->GetPrecision()) );
         pTextLen->ClearModifyFlag();
     }
 
@@ -1480,10 +1480,10 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     }
 
     if( pLength )
-        pLength->SetText( String::CreateFromInt32(pFieldDescr->GetPrecision()) );
+        pLength->SetText( OUString::number(pFieldDescr->GetPrecision()) );
 
     if( pScale )
-        pScale->SetText( String::CreateFromInt32(pFieldDescr->GetScale()) );
+        pScale->SetText( OUString::number(pFieldDescr->GetScale()) );
 
     if( pFormat )
         UpdateFormatSample(pFieldDescr);

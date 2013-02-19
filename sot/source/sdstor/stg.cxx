@@ -596,7 +596,7 @@ BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, bool bDire
             if( !aNewName.Len() )
             {
                 aNewName.AssignAscii( "Temp Stg " );
-                aNewName.Append( String::CreateFromInt32( ++nTmpCount ) );
+                aNewName.Append( OUString::number( ++nTmpCount ) );
                 bTemp = sal_True;
             }
             p = pIo->pTOC->Create( *pEntry, aNewName, STG_STORAGE );
@@ -656,7 +656,7 @@ pB
             if( !aNewName.Len() )
             {
                 aNewName.AssignAscii( "Temp Strm " );
-                aNewName.Append( String::CreateFromInt32( ++nTmpCount ) );
+                aNewName.Append( OUString::number( ++nTmpCount ) );
                 bTemp = sal_True;
             }
             p = pIo->pTOC->Create( *pEntry, aNewName, STG_STREAM );

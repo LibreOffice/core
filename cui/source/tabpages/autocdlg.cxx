@@ -684,7 +684,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
 
     nPercent = pOpt->nRightMargin;
     sMargin = ' ';
-    sMargin += String::CreateFromInt32( nPercent );
+    sMargin += OUString::number( nPercent );
     sMargin += '%';
     pUserData = new ImpUserData(&sMargin, 0);
     aCheckLB.SetUserData( MERGE_SINGLE_LINE_PARA, pUserData );
@@ -740,7 +740,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
         {
             nPercent = (sal_uInt16)aDlg.GetPrcntFld().GetValue();
             sMargin = ' ';
-            sMargin += String::CreateFromInt32( nPercent );
+            sMargin += OUString::number( nPercent );
             sMargin += '%';
         }
     }

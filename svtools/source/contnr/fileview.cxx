@@ -1572,7 +1572,7 @@ String SvtFileView::GetConfigString() const
     DBG_ASSERT( pBar, "invalid headerbar" );
 
     // sort order
-    sRet += String::CreateFromInt32( mpImp->mnSortColumn );
+    sRet += OUString::number( mpImp->mnSortColumn );
     sRet += ';';
     HeaderBarItemBits nBits = pBar->GetItemBits( mpImp->mnSortColumn );
     sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
@@ -1583,9 +1583,9 @@ String SvtFileView::GetConfigString() const
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         sal_uInt16 nId = pBar->GetItemId(i);
-        sRet += String::CreateFromInt32( nId );
+        sRet += OUString::number( nId );
         sRet += ';';
-        sRet += String::CreateFromInt32( pBar->GetItemSize( nId ) );
+        sRet += OUString::number( pBar->GetItemSize( nId ) );
         sRet += ';';
     }
 

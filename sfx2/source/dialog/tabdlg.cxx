@@ -528,7 +528,7 @@ SfxTabDialog::~SfxTabDialog()
             if ( aPageData.Len() )
             {
                 // save settings of all pages (user data)
-                SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( pDataObject->nId ) );
+                SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( pDataObject->nId ) );
                 aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aPageData ) ) );
             }
 
@@ -784,7 +784,7 @@ void SfxTabDialog::Start_Impl()
     sal_uInt16 nActPage = m_pTabCtrl->GetPageId( 0 );
 
     // load old settings, when exists
-    SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
+    SvtViewOptions aDlgOpt( E_TABDIALOG, OUString::number( nResId ) );
     if ( aDlgOpt.Exists() )
     {
         SetWindowState(rtl::OUStringToOString(aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
@@ -971,7 +971,7 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
             if ( aPageData.Len() )
             {
                 // save settings of this page (user data)
-                SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( pDataObject->nId ) );
+                SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( pDataObject->nId ) );
                 aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aPageData ) ) );
             }
 
@@ -1042,7 +1042,7 @@ SfxTabPage* SfxTabDialog::GetTabPage( sal_uInt16 nPageId ) const
 void SfxTabDialog::SavePosAndId()
 {
     // save settings (screen position and current page)
-    SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
+    SvtViewOptions aDlgOpt( E_TABDIALOG, OUString::number( nResId ) );
     aDlgOpt.SetWindowState(OStringToOUString(GetWindowState(WINDOWSTATE_MASK_POS),RTL_TEXTENCODING_ASCII_US));
     aDlgOpt.SetPageID( m_pTabCtrl->GetCurPageId() );
 }
@@ -1402,7 +1402,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         pDataObject->pTabPage = pTabPage;
 
         pDataObject->pTabPage->SetTabDialog( this );
-        SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( pDataObject->nId ) );
+        SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( pDataObject->nId ) );
         String sUserData;
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;

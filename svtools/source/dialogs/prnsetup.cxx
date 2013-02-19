@@ -206,7 +206,7 @@ XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
     if ( nJobs && (nJobs != QUEUE_JOBS_DONTKNOW) )
     {
         XubString aJobStr( SVT_RESSTR( STR_SVT_PRNDLG_JOBCOUNT ) );
-        XubString aJobs( XubString::CreateFromInt32( nJobs ) );
+        XubString aJobs( OUString::number( nJobs ) );
         aJobStr.SearchAndReplaceAscii( "%d", aJobs );
         ImplPrnDlgAddString( aStr, aJobStr );
     }

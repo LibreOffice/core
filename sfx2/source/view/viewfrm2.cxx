@@ -147,7 +147,7 @@ void SfxViewFrame::UpdateTitle()
     if ( IsVisible() )
     {
         aSbxName += ':';
-        aSbxName += String::CreateFromInt32(pImp->nDocViewNo);
+        aSbxName += OUString::number(pImp->nDocViewNo);
     }
 
     SetName( aSbxName );

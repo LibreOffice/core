@@ -611,7 +611,7 @@ rtl::OUString BigInt::GetString() const
     String aString;
 
     if ( !bIsBig )
-        aString = String::CreateFromInt32( nVal );
+        aString = OUString::number( nVal );
     else
     {
         BigInt aTmp( *this );
@@ -627,20 +627,20 @@ rtl::OUString BigInt::GetString() const
             String aStr = aString;
             if ( a.nVal < 100000000L )
             { // leading 0s
-                aString = String::CreateFromInt32( a.nVal + 1000000000L );
+                aString = OUString::number( a.nVal + 1000000000L );
                 aString.Erase(0,1);
             }
             else
-                aString = String::CreateFromInt32( a.nVal );
+                aString = OUString::number( a.nVal );
             aString += aStr;
         }
         while( aTmp.bIsBig );
 
         String aStr = aString;
         if ( bIsNeg )
-            aString = String::CreateFromInt32( -aTmp.nVal );
+            aString = OUString::number( -aTmp.nVal );
         else
-            aString = String::CreateFromInt32( aTmp.nVal );
+            aString = OUString::number( aTmp.nVal );
         aString += aStr;
     }
 

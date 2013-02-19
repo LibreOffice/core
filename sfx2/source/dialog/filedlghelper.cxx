@@ -1965,7 +1965,7 @@ void FileDialogHelper_Impl::saveConfig()
             aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
             bValue = sal_False;
             aValue >>= bValue;
-            aUserData.SetToken( 1, ' ', String::CreateFromInt32( (sal_Int32) bValue ) );
+            aUserData.SetToken( 1, ' ', OUString::number( (sal_Int32) bValue ) );
 
             INetURLObject aObj( getPath() );
 
@@ -2001,7 +2001,7 @@ void FileDialogHelper_Impl::saveConfig()
                 aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 );
                 sal_Bool bAutoExt = sal_True;
                 aValue >>= bAutoExt;
-                aUserData.SetToken( 0, ' ', String::CreateFromInt32( (sal_Int32) bAutoExt ) );
+                aUserData.SetToken( 0, ' ', OUString::number( (sal_Int32) bAutoExt ) );
                 bWriteConfig = sal_True;
             }
             catch( const IllegalArgumentException& ){}
@@ -2027,7 +2027,7 @@ void FileDialogHelper_Impl::saveConfig()
                 aValue >>= bSelection;
                 if ( comphelper::string::getTokenCount(aUserData, ' ') < 3 )
                     aUserData.Append(' ');
-                aUserData.SetToken( 2, ' ', String::CreateFromInt32( (sal_Int32) bSelection ) );
+                aUserData.SetToken( 2, ' ', OUString::number( (sal_Int32) bSelection ) );
                 bWriteConfig = sal_True;
             }
             catch( const IllegalArgumentException& ){}
