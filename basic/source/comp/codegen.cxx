@@ -233,8 +233,8 @@ void SbiCodeGen::Save()
                     case PROPERTY_MODE_SET:
                         ePropType = SbxOBJECT;
                         break;
-                    case PROPERTY_MODE_NONE:
-                        OSL_FAIL( "Illegal PropertyMode PROPERTY_MODE_NONE" );
+                    default:
+                        OSL_FAIL("Illegal PropertyMode");
                         break;
                     }
                     OUString aPropName = pProc->GetPropName();
@@ -295,7 +295,7 @@ void SbiCodeGen::Save()
                             t = (SbxDataType) ( t | SbxARRAY );
                         }
                         // #33677 hand-over an Optional-Info
-                       sal_uInt16 nFlags = SBX_READ;
+                        sal_uInt16 nFlags = SBX_READ;
                         if( pPar->IsOptional() )
                         {
                             nFlags |= SBX_OPTIONAL;
