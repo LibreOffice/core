@@ -583,7 +583,7 @@ void ScFormulaFrmtEntry::SetInactive()
 
 namespace {
 
-void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ColorListBox& rLbCol )
+void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ColorListBox& rLbCol, ScDocument* pDoc )
 {
     // entry Automatic is not available for color scales
     sal_Int32 nIndex = static_cast<sal_Int32>(rEntry.GetType());
@@ -597,7 +597,13 @@ void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType,
         case COLORSCALE_PERCENTILE:
         case COLORSCALE_VALUE:
         case COLORSCALE_PERCENT:
-            rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+            {
+                double nVal = rEntry.GetValue();
+                SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
+                rtl::OUString aText;
+                pNumberFormatter->GetInputLineString(nVal, 0, aText);
+                rEdit.SetText(aText);
+            }
             break;
         case COLORSCALE_FORMULA:
             rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
@@ -673,9 +679,9 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( Window* pParent, ScDocument* pDo
     if(pFormat)
     {
         ScColorScaleFormat::const_iterator itr = pFormat->begin();
-        SetColorScaleEntryTypes(*itr, maLbEntryTypeMin, maEdMin, maLbColMin);
+        SetColorScaleEntryTypes(*itr, maLbEntryTypeMin, maEdMin, maLbColMin, pDoc);
         ++itr;
-        SetColorScaleEntryTypes(*itr, maLbEntryTypeMax, maEdMax, maLbColMax);
+        SetColorScaleEntryTypes(*itr, maLbEntryTypeMax, maEdMax, maLbColMax, pDoc);
     }
     else
     {
@@ -825,12 +831,12 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( Window* pParent, ScDocument* pDo
     if(pFormat)
     {
         ScColorScaleFormat::const_iterator itr = pFormat->begin();
-        SetColorScaleEntryTypes(*itr, maLbEntryTypeMin, maEdMin, maLbColMin);
+        SetColorScaleEntryTypes(*itr, maLbEntryTypeMin, maEdMin, maLbColMin, pDoc);
         assert(pFormat->size() == 3);
         ++itr;
-        SetColorScaleEntryTypes(*itr, maLbEntryTypeMiddle, maEdMiddle, maLbColMiddle);
+        SetColorScaleEntryTypes(*itr, maLbEntryTypeMiddle, maEdMiddle, maLbColMiddle, pDoc);
         ++itr;
-        SetColorScaleEntryTypes(*itr, maLbEntryTypeMax, maEdMax, maLbColMax);
+        SetColorScaleEntryTypes(*itr, maLbEntryTypeMax, maEdMax, maLbColMax, pDoc);
     }
     else
     {
@@ -1006,7 +1012,7 @@ IMPL_LINK_NOARG( ScConditionFrmtEntry, ConditionTypeSelectHdl )
 
 namespace {
 
-void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit )
+void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ScDocument* pDoc )
 {
     rLbType.SelectEntryPos(rEntry.GetType());
     switch(rEntry.GetType())
@@ -1015,17 +1021,19 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Ed
         case COLORSCALE_MIN:
         case COLORSCALE_MAX:
             break;
-        case COLORSCALE_PERCENTILE:
-            rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-            break;
+        case COLORSCALE_VALUE:
         case COLORSCALE_PERCENT:
-            rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+        case COLORSCALE_PERCENTILE:
+            {
+                double nVal = rEntry.GetValue();
+                SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
+                rtl::OUString aText;
+                pNumberFormatter->GetInputLineString(nVal, 0, aText);
+                rEdit.SetText(aText);
+            }
             break;
         case COLORSCALE_FORMULA:
             rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
-            break;
-        case COLORSCALE_VALUE:
-            rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
             break;
     }
 }
@@ -1046,8 +1054,8 @@ ScDataBarFrmtEntry::ScDataBarFrmtEntry( Window* pParent, ScDocument* pDoc, const
     if(pFormat)
     {
         mpDataBarData.reset(new ScDataBarFormatData(*pFormat->GetDataBarData()));
-        SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin);
-        SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax);
+        SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin, pDoc);
+        SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax, pDoc);
         DataBarTypeSelectHdl(NULL);
     }
     else
@@ -1151,8 +1159,8 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl )
     if( pDlg->Execute() == RET_OK)
     {
         mpDataBarData.reset(pDlg->GetData());
-        SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin);
-        SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax);
+        SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin, mpDoc);
+        SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax, mpDoc);
         DataBarTypeSelectHdl(NULL);
     }
     return 0;
