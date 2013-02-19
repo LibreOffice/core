@@ -23,7 +23,7 @@ $(foreach product,$(PRODUCTLIST),\
 
 $(slack_WORKDIR)/empty.tar:
 	mkdir $(slack_WORKDIR)/empty
-	$(GNUTAR) -C $(slack_WORKDIR)/empty --owner=root $(if $(filter-out MACOSX,$(OS)),--group=root) --same-owner -cf $@ .
+	$(GNUTAR) -C $(slack_WORKDIR)/empty --owner=root $(if $(filter-out MACOSX,$(OS_FOR_BUILD)),--group=root) --same-owner -cf $@ .
 
 $(slack_WORKDIR)/%/install/doinst.sh: $(slack_SRCDIR)/update-script $(call gb_CustomTarget_get_workdir,sysui/share)/%/launcherlist
 	echo "( cd etc; rm -rf $(UNIXFILENAME.$*) )" > $@
@@ -52,7 +52,7 @@ $(slack_WORKDIR)/%$(PRODUCTVERSION)-slackware-menus-$(PKGVERSION)-noarch-$(LIBO_
            GNOMEDIR="" \
            ./create_tree.sh
 	cp $(slack_WORKDIR)/empty.tar $@.tmp
-	$(GNUTAR) -C $(slack_WORKDIR)/$* --owner=root $(if $(filter-out MACOSX,$(OS)),--group=root) --same-owner \
+	$(GNUTAR) -C $(slack_WORKDIR)/$* --owner=root $(if $(filter-out MACOSX,$(OS_FOR_BUILD)),--group=root) --same-owner \
 		-rf $@.tmp install usr opt
 	gzip < $@.tmp > $@
 
