@@ -3559,36 +3559,17 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 // Are we clicking on a field?
                 if (rSh.GetContentAtPos(aDocPos, aFieldAtPos))
                 {
-                    bool bAddMode(false); // AdditionalMode if applicable
-                    if (KEY_MOD1 == rMEvt.GetModifier() && !rSh.IsAddMode())
-                    {
-                        bAddMode = true;
-                        rSh.EnterAddMode();
-                    }
                     rSh.SetCursor(&aDocPos, bOnlyText);
-                    // Select the field. Unfortunately cursor may be on field
+                    // Unfortunately the cursor may be on field
                     // position or on position after field depending on which
                     // half of the field was clicked on.
                     SwTxtAttr const*const pTxtFld(aFieldAtPos.pFndTxtAttr);
                     if (rSh.GetCurrentShellCursor().GetPoint()->nContent
-                            .GetIndex() == *pTxtFld->GetStart())
-                    {
-                        rSh.Right( CRSR_SKIP_CHARS, true, 1, false );
-                        rSh.NormalizePam();
-                    }
-                    else
+                            .GetIndex() != *pTxtFld->GetStart())
                     {
                         assert(rSh.GetCurrentShellCursor().GetPoint()->nContent
                                 .GetIndex() == (*pTxtFld->GetStart() + 1));
-                        rSh.Left( CRSR_SKIP_CHARS, true, 1, false );
-                    }
-                    // it's a bit of a mystery what this is good for?
-                    // in this case we assume it's valid since we just
-                    // selected a field
-                    bValidCrsrPos = true;
-                    if (bAddMode)
-                    {
-                        rSh.LeaveAddMode();
+                        rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
                     }
                     // don't go into the !bOverSelect block below - it moves
                     // the cursor
@@ -4422,7 +4403,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         if(pApplyTempl)
                             bExecHyperlinks = sal_False;
 
-                        SwContentAtPos aCntntAtPos( SwContentAtPos::SW_CLICKFIELD |
+                        SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD |
                                                     SwContentAtPos::SW_INETATTR |
                                                     SwContentAtPos::SW_SMARTTAG  | SwContentAtPos::SW_FORMCTRL);
 
@@ -4441,7 +4422,23 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
                             if( SwContentAtPos::SW_FIELD == aCntntAtPos.eCntntAtPos )
                             {
+                                bool bAddMode(false);
+                                // AdditionalMode if applicable
+                                if (KEY_MOD1 == rMEvt.GetModifier()
+                                    && !rSh.IsAddMode())
+                                {
+                                    bAddMode = true;
+                                    rSh.EnterAddMode();
+                                }
                                 rSh.ClickToField( *aCntntAtPos.aFnd.pFld );
+                                // a bit of a mystery what this is good for?
+                                // in this case we assume it's valid since we
+                                // just selected a field
+                                bValidCrsrPos = true;
+                                if (bAddMode)
+                                {
+                                    rSh.LeaveAddMode();
+                                }
                             }
                             else if ( SwContentAtPos::SW_SMARTTAG == aCntntAtPos.eCntntAtPos )
                             {
