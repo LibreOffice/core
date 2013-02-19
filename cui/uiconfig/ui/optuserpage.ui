@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkFrame" id="OptUserPage">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="border_width">6</property>
+    <property name="label_xalign">0</property>
+    <property name="shadow_type">none</property>
+    <child>
+      <object class="GtkAlignment" id="alignment1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="top_padding">6</property>
+        <property name="left_padding">12</property>
+        <child>
+          <object class="GtkGrid" id="grid1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
+            <child>
+              <object class="GtkLabel" id="companyft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">_Company</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">company</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="nameft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">First/Last _name/Initials</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">firstname</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="streetft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">_Street</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">street</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">4</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="cityft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">City/State/_Zip</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">city</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">7</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="countryft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Country/Re_gion</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">8</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="titleft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">_Title/Position</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">title</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">9</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="phoneft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Tel. (Home/_Work)</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">home</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">10</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="faxft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Fa_x/E-mail</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">fax</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">11</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="company">
+                <property name="can_focus">True</property>
+                <property name="no_show_all">True</property>
+                <property name="invisible_char">•</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkEntry" id="firstname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="lastname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="shortname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="width_chars">7</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkEntry" id="city">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="state">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="zip">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="width_chars">15</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">7</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid5">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkEntry" id="title">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="position">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">9</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid6">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkEntry" id="home">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="work">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">10</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid7">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkEntry" id="fax">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="email">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">11</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="street">
+                <property name="can_focus">True</property>
+                <property name="no_show_all">True</property>
+                <property name="invisible_char">•</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">4</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="usefordocprop">
+                <property name="label" translatable="yes">Use data for document properties</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">12</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="rusnameft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Last Name/First _name/Father's name/Initials</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">ruslastname</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid8">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkEntry" id="ruslastname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="rusfathersname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="russhortname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="width_chars">7</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="rusfirstname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="eastnameft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Last/First _name/Initials</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">eastlastname</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid9">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkEntry" id="eastlastname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="eastfirstname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="eastshortname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="width_chars">7</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="russtreetft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">_Street/Apartment number</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">russtreet</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">5</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid10">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkEntry" id="russtreet">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="apartnum">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="width_chars">15</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">5</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="icityft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">_Zip/City</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">city</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">6</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid11">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkEntry" id="icity">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="izip">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="width_chars">15</property>
+                    <property name="invisible_char_set">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">6</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="country">
+                <property name="can_focus">True</property>
+                <property name="no_show_all">True</property>
+                <property name="invisible_char">•</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">8</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child type="label">
+      <object class="GtkLabel" id="label1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Address</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -40,10 +40,8 @@ class SvxGeneralTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
 private:
-    // the horizontal line "Address"
-    FixedLine           aAddrFrm;
-    // the "Use data for document properties" checkbox (but where is it?)
-    CheckBox            aUseDataCB;
+    // the "Use data for document properties" checkbox
+    CheckBox* m_pUseDataCB;
     // rows
     struct Row;
     std::vector<boost::shared_ptr<Row> > vRows;
@@ -59,8 +57,7 @@ private:
     sal_Bool            GetAddress_Impl();
     void                SetAddress_Impl();
 
-    void CreateControls ();
-    void PositionControls ();
+    void InitControls ();
     void SetLinks ();
     void SetAccessibleNames ();
 
