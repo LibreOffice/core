@@ -157,8 +157,10 @@
             </child>
             <child>
               <object class="GtkComboBox" id="sortuserlb">
+                <property name="width_request">250</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="margin_left">20</property>
                 <accessibility>
                   <relation type="labelled-by" target="sortuser"/>
