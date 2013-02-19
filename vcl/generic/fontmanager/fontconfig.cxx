@@ -128,10 +128,14 @@ public:
     boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash > m_aLocalizedToCanonical;
 private:
     void cacheLocalizedFontNames(const FcChar8 *origfontname, const FcChar8 *bestfontname, const std::vector< lang_and_element > &lang_and_elements);
+
+    LanguageTag* m_pLanguageTag;
 };
 
 FontCfgWrapper::FontCfgWrapper()
-    : m_pOutlineSet( NULL )
+    :
+        m_pOutlineSet( NULL ),
+        m_pLanguageTag( NULL )
 {
     FcInit();
 }
@@ -282,22 +286,21 @@ namespace
 {
     class localizedsorter
     {
-            LanguageTag maLoc;
         public:
-            localizedsorter(const LanguageTag& rLanguageTag) : maLoc(rLanguageTag) {}
-            FcChar8* bestname(const std::vector<lang_and_element> &elements);
+            localizedsorter() {};
+            FcChar8* bestname(const std::vector<lang_and_element> &elements, const LanguageTag & rLangTag);
     };
 
-    FcChar8* localizedsorter::bestname(const std::vector<lang_and_element> &elements)
+    FcChar8* localizedsorter::bestname(const std::vector<lang_and_element> &elements, const LanguageTag & rLangTag)
     {
         FcChar8* candidate = elements.begin()->second;
         /* FIXME-BCP47: once fontconfig supports language tags this
          * language-territory stuff needs to be changed! */
-        SAL_INFO_IF( !maLoc.isIsoLocale(), "i18n", "localizedsorter::bestname - not an ISO locale");
-        rtl::OString sLangMatch(rtl::OUStringToOString(maLoc.getLanguage().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8));
+        SAL_INFO_IF( !rLangTag.isIsoLocale(), "i18n", "localizedsorter::bestname - not an ISO locale");
+        rtl::OString sLangMatch(rtl::OUStringToOString(rLangTag.getLanguage().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8));
         rtl::OString sFullMatch = sLangMatch;
         sFullMatch += OString('-');
-        sFullMatch += rtl::OUStringToOString(maLoc.getCountry().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8);
+        sFullMatch += rtl::OUStringToOString(rLangTag.getCountry().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8);
 
         std::vector<lang_and_element>::const_iterator aEnd = elements.end();
         bool alreadyclosematch = false;
@@ -382,11 +385,13 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar
             }
 
             //possible to-do, sort by UILocale instead of process locale
-            rtl_Locale* pLoc = NULL;
-            osl_getProcessLocale(&pLoc);
-            LanguageTag aTag(*pLoc);
-            localizedsorter aSorter(aTag);
-            *element = aSorter.bestname(lang_and_elements);
+            if (!m_pLanguageTag)
+            {
+                rtl_Locale* pLoc = NULL;
+                osl_getProcessLocale(&pLoc);
+                m_pLanguageTag = new LanguageTag(*pLoc);
+            }
+            *element = localizedsorter().bestname(lang_and_elements, *m_pLanguageTag);
 
             //if this element is a fontname, map the other names to this best-name
             if (rtl_str_compare(elementtype, FC_FAMILY) == 0)
@@ -406,6 +411,8 @@ void FontCfgWrapper::clear()
         FcFontSetDestroy( m_pOutlineSet );
         m_pOutlineSet = NULL;
     }
+    delete m_pLanguageTag;
+    m_pLanguageTag = NULL;
 }
 
 /*
