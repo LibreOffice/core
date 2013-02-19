@@ -208,21 +208,32 @@ static bool areHeadersConsistent(const LocalFileHeader *header, const CentralDir
 
 static bool findCentralDirectoryEnd(NSFileHandle *file)
 {
+    // Assume the cdir end is in the last 1024 bytes
+    // Scan backward from end of file for the end signature
+
     [file seekToEndOfFile];
     unsigned long long fileLength = [file offsetInFile];
-    [file seekToFileOffset: 0];
 
-    while ([file offsetInFile] < fileLength)
+    if (fileLength < 10)
+        return false;
+
+    [file seekToFileOffset: (fileLength - 4)];
+
+    unsigned long long offset;
+    while ((offset = [file offsetInFile]) > 0 && offset >= fileLength - 1024)
     {
-        unsigned long long offset = [file offsetInFile];
         unsigned signature = readInt(file);
         if (signature == CDIR_END_SIG)
         {
-            [file seekToFileOffset: (offset - 4)];
+            // Seek back over the CDIR_END_SIG
+            [file seekToFileOffset: offset];
             return true;
         }
         else
-            [file seekToFileOffset: (offset - 3)];
+        {
+            // Seek one byte back
+            [file seekToFileOffset: (offset - 1)];
+        }
     }
     return false;
 }
