@@ -152,7 +152,7 @@ void adjustAnchoredPosition(const SdrHint& rHint, const ScDocument& rDoc, SCTAB 
     if (pAnchor->meType == ScDrawObjData::CellNote)
         return;
 
-    if (pAnchor->maLastRect == pObj->GetLogicRect())
+    if (pAnchor->maLastRect == pObj->GetSnapRect())
         return;
 
     if (pAnchor->maStart.Tab() != nTab)

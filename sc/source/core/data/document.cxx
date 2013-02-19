@@ -3498,10 +3498,10 @@ void ScDocument::SetManualHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bo
 }
 
 
-sal_uInt16 ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab ) const
+sal_uInt16 ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetColWidth( nCol );
+        return maTabs[nTab]->GetColWidth( nCol, bHiddenAsZero );
     OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
@@ -3552,17 +3552,17 @@ sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, S
 }
 
 
-sal_uLong ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const
+sal_uLong ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if (nStartRow == nEndRow)
-        return GetRowHeight( nStartRow, nTab);  // faster for a single row
+        return GetRowHeight( nStartRow, nTab, bHiddenAsZero );  // faster for a single row
 
     // check bounds because this method replaces former for(i=start;i<=end;++i) loops
     if (nStartRow > nEndRow)
         return 0;
 
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetRowHeight( nStartRow, nEndRow);
+        return maTabs[nTab]->GetRowHeight( nStartRow, nEndRow, bHiddenAsZero );
 
     OSL_FAIL("wrong sheet number");
     return 0;
@@ -3600,19 +3600,19 @@ SCROW ScDocument::GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const
 }
 
 
-sal_uLong ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab ) const
+sal_uLong ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetColOffset( nCol );
+        return maTabs[nTab]->GetColOffset( nCol, bHiddenAsZero );
     OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
 
-sal_uLong ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab ) const
+sal_uLong ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetRowOffset( nRow );
+        return maTabs[nTab]->GetRowOffset( nRow, bHiddenAsZero );
     OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }

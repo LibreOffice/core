@@ -725,7 +725,7 @@ SCROW ScTable::CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const
     return nCount;
 }
 
-sal_uInt32 ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow) const
+sal_uInt32 ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero ) const
 {
     sal_uInt32 nHeight = 0;
     SCROW nRow = nStartRow;
@@ -738,7 +738,7 @@ sal_uInt32 ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow) const
         if (aData.mnRow2 > nEndRow)
             aData.mnRow2 = nEndRow;
 
-        if (!aData.mbValue)
+        if ( !( bHiddenAsZero && aData.mbValue ) )
             // visible row range.
             nHeight += mpRowHeights->getSumValue(nRow, aData.mnRow2);
 

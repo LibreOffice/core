@@ -1890,7 +1890,7 @@ void ScDocument::SetDrawDefaults()
     UpdateDrawDefaults();
 }
 
-Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const
+Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
     {
@@ -1902,15 +1902,15 @@ Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol
     Rectangle aRect;
 
     for (i=0; i<nStartCol; i++)
-        aRect.Left() += GetColWidth(i,nTab);
-    aRect.Top() += GetRowHeight( 0, nStartRow-1, nTab);
+        aRect.Left() += GetColWidth(i,nTab, bHiddenAsZero );
+    aRect.Top() += GetRowHeight( 0, nStartRow-1, nTab, bHiddenAsZero );
 
     aRect.Right()  = aRect.Left();
     aRect.Bottom() = aRect.Top();
 
     for (i=nStartCol; i<=nEndCol; i++)
-        aRect.Right() += GetColWidth(i,nTab);
-    aRect.Bottom() += GetRowHeight( nStartRow, nEndRow, nTab);
+        aRect.Right() += GetColWidth(i,nTab, bHiddenAsZero);
+    aRect.Bottom() += GetRowHeight( nStartRow, nEndRow, nTab, bHiddenAsZero );
 
     aRect.Left()    = (long)(aRect.Left()   * HMM_PER_TWIPS);
     aRect.Right()   = (long)(aRect.Right()  * HMM_PER_TWIPS);

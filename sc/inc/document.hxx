@@ -1300,14 +1300,14 @@ public:
                                                   sal_uInt16 nNewHeight );
     SC_DLLPUBLIC void           SetManualHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bManual );
 
-    SC_DLLPUBLIC sal_uInt16         GetColWidth( SCCOL nCol, SCTAB nTab ) const;
+    SC_DLLPUBLIC sal_uInt16         GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero = true ) const;
-    SC_DLLPUBLIC sal_uLong          GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC sal_uLong          GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SCROW                       GetRowForHeight( SCTAB nTab, sal_uLong nHeight ) const;
     sal_uLong                       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, double fScale ) const;
-    SC_DLLPUBLIC sal_uLong          GetColOffset( SCCOL nCol, SCTAB nTab ) const;
-    SC_DLLPUBLIC sal_uLong          GetRowOffset( SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC sal_uLong          GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC sal_uLong          GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
 
     SC_DLLPUBLIC sal_uInt16         GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const;
     SC_DLLPUBLIC sal_uInt16         GetOriginalHeight( SCROW nRow, SCTAB nTab ) const;
@@ -1458,7 +1458,7 @@ public:
     void            RestorePrintRanges( const ScPrintRangeSaver& rSaver );
 
     SC_DLLPUBLIC Rectangle      GetMMRect( SCCOL nStartCol, SCROW nStartRow,
-                                           SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const;
+                                           SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC ScRange            GetRange( SCTAB nTab, const Rectangle& rMMRect ) const;
 
     void            UpdStlShtPtrsFrmNms();

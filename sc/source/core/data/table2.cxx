@@ -2591,13 +2591,13 @@ void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, bool bManual )
 }
 
 
-sal_uInt16 ScTable::GetColWidth( SCCOL nCol ) const
+sal_uInt16 ScTable::GetColWidth( SCCOL nCol, bool bHiddenAsZero ) const
 {
     OSL_ENSURE(ValidCol(nCol),"Falsche Spaltennummer");
 
     if (ValidCol(nCol) && pColFlags && pColWidth)
     {
-        if (ColHidden(nCol))
+        if (bHiddenAsZero && ColHidden(nCol))
             return 0;
         else
             return pColWidth[nCol];
@@ -2708,7 +2708,7 @@ sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, 
 }
 
 
-sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
+sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero ) const
 {
     OSL_ENSURE(ValidRow(nStartRow) && ValidRow(nEndRow),"Falsche Zeilennummer");
 
@@ -2719,7 +2719,7 @@ sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
         while (nRow <= nEndRow)
         {
             SCROW nLastRow = -1;
-            if (!RowHidden(nRow, NULL, &nLastRow))
+            if (!( ( RowHidden(nRow, NULL, &nLastRow) ) && bHiddenAsZero ) )
             {
                 if (nLastRow > nEndRow)
                     nLastRow = nEndRow;
@@ -3370,7 +3370,7 @@ ScRangeName* ScTable::GetRangeName() const
 }
 
 
-sal_uLong ScTable::GetRowOffset( SCROW nRow ) const
+sal_uLong ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const
 {
     sal_uLong n = 0;
     if ( mpHiddenRows && mpRowHeights )
@@ -3378,9 +3378,9 @@ sal_uLong ScTable::GetRowOffset( SCROW nRow ) const
         if (nRow == 0)
             return 0;
         else if (nRow == 1)
-            return GetRowHeight(0);
+            return GetRowHeight(0, NULL, NULL, bHiddenAsZero );
 
-        n = GetTotalRowHeight(0, nRow-1);
+        n = GetTotalRowHeight(0, nRow-1, bHiddenAsZero);
 #if OSL_DEBUG_LEVEL > 0
         if (n == ::std::numeric_limits<unsigned long>::max())
             OSL_FAIL("ScTable::GetRowOffset: row heights overflow");
@@ -3420,14 +3420,14 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
 }
 
 
-sal_uLong ScTable::GetColOffset( SCCOL nCol ) const
+sal_uLong ScTable::GetColOffset( SCCOL nCol, bool bHiddenAsZero ) const
 {
     sal_uLong n = 0;
     if ( pColWidth )
     {
         SCCOL i;
         for( i = 0; i < nCol; i++ )
-            if (!ColHidden(i))
+            if (!( bHiddenAsZero && ColHidden(i) ))
                 n += pColWidth[i];
     }
     else

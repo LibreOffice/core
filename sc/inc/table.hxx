@@ -629,12 +629,12 @@ public:
                         // nPPT to test for modification
     void        SetManualHeight( SCROW nStartRow, SCROW nEndRow, bool bManual );
 
-    sal_uInt16      GetColWidth( SCCOL nCol ) const;
+    sal_uInt16      GetColWidth( SCCOL nCol, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC sal_uInt16 GetRowHeight( SCROW nRow, SCROW* pStartRow = NULL, SCROW* pEndRow = NULL, bool bHiddenAsZero = true ) const;
-    sal_uLong       GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const;
+    sal_uLong       GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true ) const;
     sal_uLong       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const;
-    sal_uLong       GetColOffset( SCCOL nCol ) const;
-    sal_uLong       GetRowOffset( SCROW nRow ) const;
+    sal_uLong       GetColOffset( SCCOL nCol, bool bHiddenAsZero = true ) const;
+    sal_uLong       GetRowOffset( SCROW nRow, bool bHiddenAsZero = true ) const;
 
     /**
      * Get the last row such that the height of row 0 to the end row is as
@@ -727,7 +727,7 @@ public:
     SCROW       FirstVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW       LastVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW       CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const;
-    sal_uInt32  GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow) const;
+    sal_uInt32  GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true) const;
 
     SCCOLROW    LastHiddenColRow(SCCOLROW nPos, bool bCol) const;
 

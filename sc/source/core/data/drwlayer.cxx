@@ -73,6 +73,7 @@
 #include "postit.hxx"
 #include "attrib.hxx"
 #include "charthelper.hxx"
+#include "basegfx/matrix/b2dhommatrix.hxx"
 
 #include <vcl/field.hxx>
 
@@ -593,6 +594,41 @@ namespace
             static_cast<long>(aRange.getMaxX()), static_cast<long>(aRange.getMaxY()));
     }
 }
+void ScDrawLayer::ResizeLastRectFromAnchor( SdrObject* pObj, ScDrawObjData& rData, bool bUseLogicRect, bool bNegativePage, bool bCanResize, bool bHiddenAsZero )
+{
+    rData.maLastRect = ( bUseLogicRect ? pObj->GetLogicRect() : pObj->GetSnapRect() );
+    SCCOL nCol1 = rData.maStart.Col();
+    SCROW nRow1 = rData.maStart.Row();
+    SCTAB nTab1 = rData.maStart.Tab();
+    SCCOL nCol2 = rData.maEnd.Col();
+    SCROW nRow2 = rData.maEnd.Row();
+    SCTAB nTab2 = rData.maEnd.Tab();
+    Point aPos( pDoc->GetColOffset( nCol1, nTab1, bHiddenAsZero ), pDoc->GetRowOffset( nRow1, nTab1, bHiddenAsZero ) );
+    TwipsToMM( aPos.X() );
+    TwipsToMM( aPos.Y() );
+    aPos += lcl_calcAvailableDiff(*pDoc, nCol1, nRow1, nTab1, rData.maStartOffset);
+
+    if( bCanResize )
+    {
+        Point aEnd( pDoc->GetColOffset( nCol2, nTab2, bHiddenAsZero ), pDoc->GetRowOffset( nRow2, nTab2, bHiddenAsZero ) );
+        TwipsToMM( aEnd.X() );
+        TwipsToMM( aEnd.Y() );
+        aEnd += lcl_calcAvailableDiff(*pDoc, nCol2, nRow2, nTab2, rData.maEndOffset);
+
+        Rectangle aNew = Rectangle( aPos, aEnd );
+        if ( bNegativePage )
+            MirrorRectRTL( aNew );
+
+        rData.maLastRect = lcl_makeSafeRectangle(aNew);
+    }
+    else
+    {
+        if ( bNegativePage )
+            aPos.X() = -aPos.X() - rData.maLastRect.GetWidth();
+        // shouldn't we initialise maLastRect with the object rectangle ?
+        rData.maLastRect.SetPos( aPos );
+    }
+}
 
 void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos )
 {
@@ -751,32 +787,66 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         bool bCanResize = bValid2 && !pObj->IsResizeProtect();
 
         //First time positioning, must be able to at least move it
+        ScDrawObjData& rNoRotatedAnchor = *GetNonRotatedObjData( pObj, true );
         if (rData.maLastRect.IsEmpty())
-            rData.maLastRect = pObj->GetLogicRect();
+        {
+            // It's confusing ( but blame that we persist the anchor in terms of unrotated shape )
+            // that the initial anchor we get here is in terms of an unrotated shape ( if the shape is rotated )
+            // we need to save the old anchor ( for persisting ) and also track any resize or repositions that happen.
 
-        OSL_ENSURE( bValid1, "ScDrawLayer::RecalcPos - invalid start position" );
-        Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
-        TwipsToMM( aPos.X() );
-        TwipsToMM( aPos.Y() );
-        aPos += lcl_calcAvailableDiff(*pDoc, nCol1, nRow1, nTab1, rData.maStartOffset);
+            // This is an evil hack, having a anchor that is one minute in terms of untransformed object and then later
+            // in terms of the transformed object is not ideal, similary having 2 anchors per object is wasteful, can't
+            // see another way out of this at the moment though.
+            rNoRotatedAnchor.maStart = rData.maStart;
+            rNoRotatedAnchor.maEnd = rData.maEnd;
+            rNoRotatedAnchor.maStartOffset = rData.maStartOffset;
+            rNoRotatedAnchor.maEndOffset = rData.maEndOffset;
+
+            Rectangle aRect = pObj->GetLogicRect();
+
+            // get bounding rectangle of shape ( include any hidden row/columns ), <sigh> we need to do this
+            // because if the shape is rotated the anchor from xml is in terms of the unrotated shape, if
+            // the shape is hidden ( by the rows that contain the shape being hidden ) then our hack of
+            // trying to infer the 'real' e.g. rotated anchor from the SnapRect will fail ( because the LogicRect will
+            // not have the correct position or size ) The only way we can possible do this is to first get the
+            // 'unrotated' shape dimensions from the persisted Anchor (from xml) and then 'create' an Anchor from the
+            // associated rotated shape ( note: we do this by actually setting the LogicRect for the shape temporarily to the
+            // *full* size then grabbing the SnapRect ( which gives the transformed rotated dimensions ), it would be
+            // wonderful if we could do this mathematically without having to temporarily tweak the object... othoh this way
+            // is gauranteed to get consistent results )
+            ResizeLastRectFromAnchor( pObj, rData, true, bNegativePage, bCanResize, false );
+            // aFullRect contains the unrotated size and position of the shape ( regardless of any hidden row/columns )
+            Rectangle aFullRect = rData.maLastRect;
+
+            // get current size and position from the anchor for use later
+            ResizeLastRectFromAnchor( pObj, rNoRotatedAnchor, true, bNegativePage, bCanResize );
+
+            // resize/position the shape to *full* size e.g. how it would be ( if no hidden rows/cols affected things )
+            pObj->SetLogicRect(aFullRect);
+            // capture rotated shape ( if relevant )
+            aRect = pObj->GetSnapRect();
+
+            // Ok, here is more nastyness, from xml the Anchor is in terms of the LogicRect which is the
+            // untransformed unrotated shape, here we swap out that initial anchor and from now on use
+            // an Anchor based on the SnapRect ( which is what you see on the screen )
+            ScDrawLayer::GetCellAnchorFromPosition( *pObj, rData, *pDoc, nTab1, false, false );
+            // reset shape to true 'maybe affected by hidden rows/cols' size calculated previously
+            pObj->SetLogicRect(rNoRotatedAnchor.maLastRect);
+        }
+
+        // update anchor with snap rect
+        ResizeLastRectFromAnchor( pObj, rData, false, bNegativePage, bCanResize );
 
         if( bCanResize )
         {
-            Point aEnd( pDoc->GetColOffset( nCol2, nTab2 ), pDoc->GetRowOffset( nRow2, nTab2 ) );
-            TwipsToMM( aEnd.X() );
-            TwipsToMM( aEnd.Y() );
-            aEnd += lcl_calcAvailableDiff(*pDoc, nCol2, nRow2, nTab2, rData.maEndOffset);
+            Rectangle aNew = rData.maLastRect;
 
-            Rectangle aNew( aPos, aEnd );
-            if ( bNegativePage )
-                MirrorRectRTL( aNew );
-            if ( pObj->GetLogicRect() != aNew )
+            if ( pObj->GetSnapRect() != aNew )
             {
-                Rectangle aOld(pObj->GetLogicRect());
+                Rectangle aOld(pObj->GetSnapRect());
 
                 if (bRecording)
                     AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
-                rData.maLastRect = lcl_makeSafeRectangle(aNew);
                 if (pObj->IsPolyObj())
                 {
                     // Polyline objects need special treatment.
@@ -787,23 +857,25 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                     double fYFrac = static_cast<double>(aNew.GetHeight()) / static_cast<double>(aOld.GetHeight());
                     pObj->NbcResize(aNew.TopLeft(), Fraction(fXFrac), Fraction(fYFrac));
                 }
-
-                pObj->SetLogicRect(rData.maLastRect);
+                // order of these lines is important, modify rData.maLastRect carefully it is used as both
+                // a value and a flag for initialisation
+                rData.maLastRect = lcl_makeSafeRectangle(rData.maLastRect);
+                pObj->SetSnapRect(rData.maLastRect);
+                // update 'unrotated anchor' it's the anchor we persist, it must be kept in sync
+                // with the normal Anchor
+                ResizeLastRectFromAnchor( pObj, rNoRotatedAnchor, true, bNegativePage, bCanResize );
             }
         }
         else
         {
-            if ( bNegativePage )
-                aPos.X() = -aPos.X() - rData.maLastRect.GetWidth();
+            Point aPos( rData.maLastRect.getX(), rData.maLastRect.getY() );
             if ( pObj->GetRelativePos() != aPos )
             {
                 if (bRecording)
                     AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
-                rData.maLastRect.SetPos( aPos );
                 pObj->SetRelativePos( aPos );
             }
         }
-
         /*
          * If we were not allowed resize the object, then the end cell anchor
          * is possibly incorrect now, and if the object has no end-cell (e.g.
@@ -811,7 +883,12 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         */
         bool bEndAnchorIsBad = !bValid2 || pObj->IsResizeProtect();
         if (bEndAnchorIsBad)
-            ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, *pDoc, nTab1);
+        {
+            // update 'rotated' anchor
+            ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, rData, *pDoc, nTab1, false);
+            // update 'unrotated' anchor
+            ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, rNoRotatedAnchor, *pDoc, nTab1 );
+        }
     }
 }
 
@@ -1725,6 +1802,15 @@ namespace
     }
 }
 
+void ScDrawLayer::SetVisualCellAnchored( SdrObject &rObj, const ScDrawObjData &rAnchor )
+{
+    ScDrawObjData* pAnchor = GetNonRotatedObjData( &rObj, true );
+    pAnchor->maStart = rAnchor.maStart;
+    pAnchor->maEnd = rAnchor.maEnd;
+    pAnchor->maStartOffset = rAnchor.maStartOffset;
+    pAnchor->maEndOffset = rAnchor.maEndOffset;
+}
+
 void ScDrawLayer::SetCellAnchored( SdrObject &rObj, const ScDrawObjData &rAnchor )
 {
     ScDrawObjData* pAnchor = GetObjData( &rObj, true );
@@ -1738,20 +1824,33 @@ void ScDrawLayer::SetCellAnchored( SdrObject &rObj, const ScDrawObjData &rAnchor
 void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab )
 {
     ScDrawObjData aAnchor;
-    GetCellAnchorFromPosition( rObj, aAnchor, rDoc, nTab );
+    // set anchor in terms of the visual ( SnapRect )
+    // object ( e.g. for when object is rotated )
+    GetCellAnchorFromPosition( rObj, aAnchor, rDoc, nTab, false );
     SetCellAnchored( rObj, aAnchor );
+    // - keep also an anchor in terms of the Logic ( untransformed ) object
+    // because thats what we stored ( and still do ) to xml
+    ScDrawObjData aVisAnchor;
+    GetCellAnchorFromPosition( rObj, aVisAnchor, rDoc, nTab );
+    SetVisualCellAnchored( rObj, aVisAnchor );
+    // absolutely necessary to set flag that in order to preven ScDrawLayer::RecalcPos
+    // doing an initialisation hack
+    if ( ScDrawObjData* pAnchor = GetObjData( &rObj ) )
+    {
+        pAnchor->maLastRect = rObj.GetSnapRect();
+    }
 }
 
-void ScDrawLayer::GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab )
+void ScDrawLayer::GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect, bool bHiddenAsZero )
 {
-    Rectangle aObjRect(rObj.GetLogicRect());
+    Rectangle aObjRect( bUseLogicRect ? rObj.GetLogicRect() : rObj.GetSnapRect() );
     ScRange aRange = rDoc.GetRange( nTab, aObjRect );
 
     Rectangle aCellRect;
 
     rAnchor.maStart = aRange.aStart;
     aCellRect = rDoc.GetMMRect( aRange.aStart.Col(), aRange.aStart.Row(),
-      aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab() );
+      aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab(), bHiddenAsZero );
     rAnchor.maStartOffset.Y() = aObjRect.Top()-aCellRect.Top();
     if (!rDoc.IsNegativePage(nTab))
         rAnchor.maStartOffset.X() = aObjRect.Left()-aCellRect.Left();
@@ -1760,7 +1859,7 @@ void ScDrawLayer::GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAn
 
     rAnchor.maEnd = aRange.aEnd;
     aCellRect = rDoc.GetMMRect( aRange.aEnd.Col(), aRange.aEnd.Row(),
-      aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab() );
+      aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab(), bHiddenAsZero );
     rAnchor.maEndOffset.Y() = aObjRect.Bottom()-aCellRect.Top();
     if (!rDoc.IsNegativePage(nTab))
         rAnchor.maEndOffset.X() = aObjRect.Right()-aCellRect.Left();
@@ -1769,12 +1868,13 @@ void ScDrawLayer::GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAn
 
 }
 
-void ScDrawLayer::UpdateCellAnchorFromPositionEnd( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab )
+
+void ScDrawLayer::UpdateCellAnchorFromPositionEnd( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect )
 {
-    Rectangle aObjRect(rObj.GetLogicRect());
+    Rectangle aObjRect(bUseLogicRect ? rObj.GetLogicRect() : rObj.GetSnapRect());
     ScRange aRange = rDoc.GetRange( nTab, aObjRect );
 
-    ScDrawObjData* pAnchor = GetObjData( &rObj, true );
+    ScDrawObjData* pAnchor = &rAnchor;
     pAnchor->maEnd = aRange.aEnd;
 
     Rectangle aCellRect;
@@ -1797,6 +1897,7 @@ bool ScDrawLayer::IsCellAnchored( const SdrObject& rObj )
 void ScDrawLayer::SetPageAnchored( SdrObject &rObj )
 {
     DeleteFirstUserDataOfType(&rObj, SC_UD_OBJDATA);
+    DeleteFirstUserDataOfType(&rObj, SC_UD_OBJDATA);
 }
 
 ScAnchorType ScDrawLayer::GetAnchorType( const SdrObject &rObj )
@@ -1804,6 +1905,25 @@ ScAnchorType ScDrawLayer::GetAnchorType( const SdrObject &rObj )
     //If this object has a cell anchor associated with it
     //then its cell-anchored, otherwise its page-anchored
     return ScDrawLayer::GetObjData(const_cast<SdrObject*>(&rObj)) ? SCA_CELL : SCA_PAGE;
+}
+
+ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, sal_Bool bCreate )
+{
+    sal_uInt16 nCount = pObj ? pObj->GetUserDataCount() : 0;
+    sal_uInt16 nFound = 0;
+    for( sal_uInt16 i = 0; i < nCount; i++ )
+    {
+        SdrObjUserData* pData = pObj->GetUserData( i );
+        if( pData && pData->GetInventor() == SC_DRAWLAYER && pData->GetId() == SC_UD_OBJDATA && ++nFound == 2 )
+            return (ScDrawObjData*)pData;
+    }
+    if( pObj && bCreate )
+    {
+        ScDrawObjData* pData = new ScDrawObjData;
+        pObj->AppendUserData(pData);
+        return pData;
+    }
+    return 0;
 }
 
 ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, sal_Bool bCreate )
