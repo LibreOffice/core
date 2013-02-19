@@ -20,7 +20,7 @@
 #ifndef _FILEPICKER_HXX_
 #define _FILEPICKER_HXX_
 
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase6.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
@@ -52,11 +52,12 @@ protected:
     osl::Mutex  m_rbHelperMtx;
 };
 
-typedef ::cppu::WeakComponentImplHelper5 <
+typedef ::cppu::WeakComponentImplHelper6 <
             ::com::sun::star::ui::dialogs::XFilePicker2,
             ::com::sun::star::ui::dialogs::XFilePicker3,
             ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
             ::com::sun::star::ui::dialogs::XFilePreview,
+            ::com::sun::star::lang::XInitialization,
             ::com::sun::star::lang::XServiceInfo >   CFilePicker_Base;
 
 class CFilePicker :

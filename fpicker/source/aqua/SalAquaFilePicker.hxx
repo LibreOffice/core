@@ -20,7 +20,7 @@
 #ifndef _SALAQUAFILEPICKER_HXX_
 #define _SALAQUAFILEPICKER_HXX_
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase4.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -47,9 +47,10 @@
 // class declaration
 //----------------------------------------------------------
 
-typedef ::cppu::WeakComponentImplHelper3 <
+typedef ::cppu::WeakComponentImplHelper4 <
             ::com::sun::star::ui::dialogs::XFilePicker3,
             ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
+            ::com::sun::star::lang::XInitialization,
            ::com::sun::star::lang::XServiceInfo >  SalAquaFilePicker_Base;
 
 class SalAquaFilePicker :
