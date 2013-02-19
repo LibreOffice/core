@@ -306,7 +306,7 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
             for ( x = 0; x < aUnrotatedWidth ; x++)
             {
                 pMapIX[x] = 0;
-                pMapFX[x] = 0.5;
+                pMapFX[x] = 0;
             }
             scaleByAveraging = true;
         }
@@ -344,7 +344,7 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
             for (y = 0; y < aUnrotatedHeight; ++y)
             {
                 pMapIY[y] = 0;
-                pMapFY[y] = 0.5;
+                pMapFY[y] = 0;
             }
             scaleByAveraging = true;
         }
