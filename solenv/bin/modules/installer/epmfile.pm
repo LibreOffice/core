@@ -265,6 +265,8 @@ sub create_epm_header
     # %readme /test/replace/01/README01
     # %requires foo
     # %provides bar
+    # %replaces bar
+    # %incompat bar
 
     # The first language in the languages array determines the language of license and readme file
 
@@ -512,23 +514,38 @@ sub create_epm_header
 		$onereplaces = debian_rewrite($onereplaces);
                 $line = "%replaces" . " " . $onereplaces . "\n";
                 push(@epmheader, $line);
-
-                # Force the openofficeorg packages to get removed,
-                # see http://www.debian.org/doc/debian-policy/ch-relationships.html
-                # 7.5.2 Replacing whole packages, forcing their removal
-
-                if ( $installer::globals::debian )
-                {
-                    $line = "%incompat" . " " . $onereplaces . "\n";
-                    push(@epmheader, $line);
-                }
             }
+        }
+    }
 
-            if ( $installer::globals::debian && $variableshashref->{'UNIXPRODUCTNAME'} eq 'libreoffice' )
+    # including %incompat
+
+    my $incompat = "";
+
+    if (( $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::patch ))
+    {
+        $incompat = "solarisincompat";   # the name in the packagelist
+    }
+    elsif (( $installer::globals::islinuxbuild ) && ( ! $installer::globals::patch ))
+    {
+        $incompat = "linuxincompat";    # the name in the packagelist
+    }
+
+    if (( $incompat ) && ( ! $installer::globals::patch ))
+    {
+        if ( $onepackage->{$incompat} )
+        {
+            my $incompatstring = $onepackage->{$incompat};
+
+            my $allincompat = installer::converter::convert_stringlist_into_array(\$incompatstring, ",");
+
+            for ( my $i = 0; $i <= $#{$allincompat}; $i++ )
             {
-                $line = "%provides" . " libreoffice-unbundled\n";
-                push(@epmheader, $line);
-                $line = "%incompat" . " libreoffice-bundled\n";
+                my $oneincompat = ${$allincompat}[$i];
+                $oneincompat =~ s/\s*$//;
+                installer::packagelist::resolve_packagevariables(\$oneincompat, $variableshashref, 1);
+                $oneincompat = debian_rewrite($oneincompat);
+                $line = "%incompat" . " " . $oneincompat . "\n";
                 push(@epmheader, $line);
             }
         }
