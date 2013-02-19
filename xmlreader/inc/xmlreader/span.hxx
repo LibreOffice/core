@@ -53,6 +53,11 @@ struct OOO_DLLPUBLIC_XMLREADER Span {
         return equals(Span(textBegin, textLength));
     }
 
+    inline bool equals(rtl::OString const & text) const {
+        return rtl_str_compare_WithLength(
+            begin, length, text.getStr(), text.getLength()) == 0;
+    }
+
     rtl::OUString convertFromUtf8() const;
 };
 
