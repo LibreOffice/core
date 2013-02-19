@@ -625,11 +625,11 @@ void BluetoothServer::restoreDiscoverable()
 
 void BluetoothServer::doEnsureDiscoverable()
 {
+#ifdef LINUX_BLUETOOTH
     if (!spServer->mpImpl->mpConnection ||
         spServer->meWasDiscoverable != UNKNOWN )
         return;
 
-#ifdef LINUX_BLUETOOTH
     // Find out if we are discoverable already ...
     DBusObject *pAdapter = spServer->mpImpl->getAdapter();
     if( !pAdapter )
