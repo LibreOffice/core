@@ -353,11 +353,14 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
         }
         for( aOuterIt=rComplexCats.begin(); aOuterIt != aOuterEnd; ++aOuterIt )
         {
-            sal_Int32 nCurrentCount = lcl_getCategoryCount( *aOuterIt );
-            if( nCurrentCount< nMaxCategoryCount )
+            if ( !aOuterIt->empty() )
             {
-                ComplexCategory& rComplexCategory = aOuterIt->back();
-                rComplexCategory.Count += (nMaxCategoryCount-nCurrentCount);
+                sal_Int32 nCurrentCount = lcl_getCategoryCount( *aOuterIt );
+                if( nCurrentCount< nMaxCategoryCount )
+                {
+                    ComplexCategory& rComplexCategory = aOuterIt->back();
+                    rComplexCategory.Count += (nMaxCategoryCount-nCurrentCount);
+                }
             }
         }
     }
@@ -389,12 +392,15 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
             OUString aText;
             for( aOuterIt=aComplexCatsPerIndex.begin() ; aOuterIt != aOuterEnd; ++aOuterIt )
             {
-                OUString aAddText = (*aOuterIt)[nN].Text;
-                if( !aAddText.isEmpty() )
+                if ( static_cast<size_t>(nN) < aOuterIt->size() )
                 {
-                    if(!aText.isEmpty())
-                        aText += aSpace;
-                    aText += aAddText;
+                    OUString aAddText = (*aOuterIt)[nN].Text;
+                    if( !aAddText.isEmpty() )
+                    {
+                        if(!aText.isEmpty())
+                            aText += aSpace;
+                        aText += aAddText;
+                    }
                 }
             }
             aRet[nN]=aText;
