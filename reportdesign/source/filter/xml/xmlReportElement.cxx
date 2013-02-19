@@ -55,18 +55,18 @@ OXMLReportElement::OXMLReportElement( ORptFilter& rImport,
     {
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-         ::rtl::OUString sLocalName;
+            ::rtl::OUString sLocalName;
             const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
             const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
-                case XML_TOK_PRINT_ONLY_WHEN_GROUP_CHANGE:
+                case XML_TOK_PRINT_WHEN_GROUP_CHANGE:
                     m_xComponent->setPrintWhenGroupChange(s_sTRUE == sValue);
                     break;
-                   case XML_TOK_PRINT_REPEATED_VALUES:
-                    m_xComponent->setPrintRepeatedValues(sValue == s_sTRUE ? sal_True : sal_False);
+                case XML_TOK_PRINT_REPEATED_VALUES:
+                    m_xComponent->setPrintRepeatedValues(sValue == s_sTRUE);
                     break;
                 default:
                     break;

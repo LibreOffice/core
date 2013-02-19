@@ -49,15 +49,15 @@ public abstract class ReportElement extends Element
      * @return true, if the element should only be printed in the first row of the
      *         current group, false otherwise.
      */
-    public boolean isPrintWhenGroupChanges()
+    public boolean isPrintWhenGroupChange()
     {
-        return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, "print-when-group-changes"));
+        return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, "print-when-group-change"));
     }
 
-    public void setPrintWhenGroupChanges(final boolean printWhenGroupChanges)
+    public void setPrintWhenGroupChange(final boolean printWhenGroupChange)
     {
-        setAttribute(OfficeNamespaces.OOREPORT_NS, "print-when-group-changes",
-                String.valueOf(printWhenGroupChanges));
+        setAttribute(OfficeNamespaces.OOREPORT_NS, "print-when-group-change",
+                String.valueOf(printWhenGroupChange));
     }
 
     /**

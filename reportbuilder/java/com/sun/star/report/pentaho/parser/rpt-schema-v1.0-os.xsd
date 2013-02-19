@@ -330,7 +330,7 @@
         </xs:complexType>
     </xs:element>
     <xs:attributeGroup name="rpt-report-element-attlist">
-        <xs:attribute name="print-when-group-change" default="false" form="qualified">
+        <xs:attribute name="print-when-group-change" default="true" form="qualified">
             <xs:simpleType>
                 <xs:restriction base="xs:token">
                     <xs:enumeration value="true"/>
