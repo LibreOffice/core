@@ -76,7 +76,6 @@ fi
 
 chmod +x "$SRC_ROOT/solenv/bin/build.pl"
 chmod +x "$SRC_ROOT/solenv/bin/zipdep.pl"
-chmod +x "$SRC_ROOT/solenv/bin/gccinstlib.pl"
 
 # Local Variables:
 # mode: shell-script
