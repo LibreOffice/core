@@ -32,8 +32,7 @@ namespace dxcanvas
 {
     DXCanvasItem::DXCanvasItem() :
         ConfigItem(
-            ::rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "Office.Canvas/DXCanvas" )),
+            "Office.Canvas/DXCanvas",
             CONFIG_MODE_IMMEDIATE_UPDATE ),
         maValues(),
         maMaxTextureSize(),
@@ -42,8 +41,8 @@ namespace dxcanvas
     {
         try
         {
-            uno::Sequence< ::rtl::OUString > aName(1);
-            aName[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DeviceBlacklist" ));
+            uno::Sequence< OUString > aName(1);
+            aName[0] = "DeviceBlacklist";
 
             uno::Sequence< uno::Any > aProps( GetProperties( aName ));
             uno::Sequence< sal_Int32 > aValues;
@@ -68,12 +67,12 @@ namespace dxcanvas
                 }
             }
 
-            aName[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BlacklistCurrentDevice" ));
+            aName[0] = "BlacklistCurrentDevice";
             aProps = GetProperties( aName );
             if( aProps.getLength() > 0 )
                 aProps[0] >>= mbBlacklistCurrentDevice;
 
-            aName[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxTextureSize" ));
+            aName[0] = "MaxTextureSize";
             aProps = GetProperties( aName );
             if( aProps.getLength() > 0 )
                 maMaxTextureSize.reset( aProps[0].get<sal_Int32>() );
@@ -95,8 +94,8 @@ namespace dxcanvas
 
         try
         {
-            uno::Sequence< ::rtl::OUString > aName(1);
-            aName[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DeviceBlacklist" ));
+            uno::Sequence< OUString > aName(1);
+            aName[0] = "DeviceBlacklist";
 
             uno::Sequence< sal_Int32 > aValues( sizeof(DeviceInfo)/sizeof(sal_Int32)*maValues.size() );
 

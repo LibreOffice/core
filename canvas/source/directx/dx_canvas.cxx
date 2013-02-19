@@ -96,10 +96,7 @@ namespace dxcanvas
 
         const SystemGraphicsData* pSysData=reinterpret_cast<const SystemGraphicsData*>(aSeq.getConstArray());
         if( !pSysData || !pSysData->hDC )
-            throw lang::NoSupportException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                     "Passed SystemGraphicsData or HDC invalid!")),
-                NULL);
+            throw lang::NoSupportException( "Passed SystemGraphicsData or HDC invalid!" ), NULL);
 
         // setup helper
         maDeviceHelper.init( pSysData->hDC,
@@ -123,9 +120,9 @@ namespace dxcanvas
         CanvasBaseT::disposeThis();
     }
 
-    ::rtl::OUString SAL_CALL Canvas::getServiceName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL Canvas::getServiceName(  ) throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CANVAS_SERVICE_NAME ) );
+        return OUString( CANVAS_SERVICE_NAME );
     }
 
     BitmapCanvas::BitmapCanvas( const uno::Sequence< uno::Any >&                aArguments,
@@ -156,10 +153,7 @@ namespace dxcanvas
 
         const SystemGraphicsData* pSysData=reinterpret_cast<const SystemGraphicsData*>(aSeq.getConstArray());
         if( !pSysData || !pSysData->hDC )
-            throw lang::NoSupportException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                     "Passed SystemGraphicsData or HDC invalid!")),
-                NULL);
+            throw lang::NoSupportException( "Passed SystemGraphicsData or HDC invalid!", NULL);
 
         // setup helper
         maDeviceHelper.init( pSysData->hDC,
@@ -173,10 +167,7 @@ namespace dxcanvas
         hBmp=(HBITMAP)GetCurrentObject(pSysData->hDC, OBJ_BITMAP);
         if( !hBmp || GetObjectType(pSysData->hDC) != OBJ_MEMDC )
         {
-            throw lang::NoSupportException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                     "Passed HDC is no mem DC/has no bitmap selected!")),
-                NULL);
+            throw lang::NoSupportException( "Passed HDC is no mem DC/has no bitmap selected!", NULL);
         }
 
         mpTarget.reset( new DXBitmap(
@@ -201,9 +192,9 @@ namespace dxcanvas
         BitmapCanvasBaseT::disposeThis();
     }
 
-    ::rtl::OUString SAL_CALL BitmapCanvas::getServiceName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL BitmapCanvas::getServiceName(  ) throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( BITMAPCANVAS_SERVICE_NAME ) );
+        return OUString( BITMAPCANVAS_SERVICE_NAME );
     }
 
     IBitmapSharedPtr BitmapCanvas::getBitmap() const
