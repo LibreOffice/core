@@ -511,7 +511,7 @@ uno::Reference< container::XNameContainer > lcl_getUnoNumberingStyles(
 
         oFamily >>= xStyles;
     }
-    catch ( const uno::Exception )
+    catch ( const uno::Exception & )
     {
     }
 
@@ -645,13 +645,15 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             OUString sNumRulesName = aPropNameSupplier.GetName( PROP_NUMBERING_RULES );
             xStyle->setPropertyValue( sNumRulesName, uno::makeAny( m_xNumRules ) );
         }
-        catch( const lang::IllegalArgumentException& )
+        catch( const lang::IllegalArgumentException& e )
         {
-            assert( !"Incorrect argument to UNO call" );
+            SAL_WARN( "writerfilter", "Exception: " << e.Message );
+             assert( !"Incorrect argument to UNO call" );
         }
-        catch( const uno::RuntimeException& )
+        catch( const uno::RuntimeException& e )
         {
-            assert( !"Incorrect argument to UNO call" );
+            SAL_WARN( "writerfilter", "Exception: " << e.Message );
+             assert( !"Incorrect argument to UNO call" );
         }
         catch( const uno::Exception& e )
         {
