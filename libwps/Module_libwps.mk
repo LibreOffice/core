@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,libwps))
 
-ifeq ($(SYSTEM_LIBWPS),NO)
+ifeq ($(SYSTEM_WPS),NO)
 
 $(eval $(call gb_Module_add_targets,libwps,\
 	ExternalPackage_libwps \

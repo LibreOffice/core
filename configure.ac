@@ -7343,8 +7343,6 @@ else
     fi
     libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.2])
 fi
-SYSTEM_LIBWPS=$SYSTEM_WPS
-AC_SUBST(SYSTEM_LIBWPS)
 
 dnl ===================================================================
 dnl Check for system libwpg
@@ -7358,8 +7356,6 @@ else
     fi
     libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.2])
 fi
-SYSTEM_LIBWPG=$SYSTEM_WPG
-AC_SUBST(SYSTEM_LIBWPG)
 
 dnl ===================================================================
 dnl Check whether freetype2 supports emboldening

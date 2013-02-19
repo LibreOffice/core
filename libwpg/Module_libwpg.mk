@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,libwpg))
 
-ifeq ($(SYSTEM_LIBWPG),NO)
+ifeq ($(SYSTEM_WPG),NO)
 
 $(eval $(call gb_Module_add_targets,libwpg,\
 	ExternalPackage_libwpg \

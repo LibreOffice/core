@@ -1319,7 +1319,7 @@ endef
 endif # SYSTEM_WPD
 
 
-ifeq ($(SYSTEM_LIBWPG),YES)
+ifeq ($(SYSTEM_WPG),YES)
 
 define gb_LinkTarget__use_wpg
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1331,7 +1331,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(WPG_LIBS))
 endef
 gb_ExternalProject__use_wpg :=
 
-else # !SYSTEM_LIBWPG
+else # !SYSTEM_WPG
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	wpglib \
@@ -1352,10 +1352,10 @@ $(call gb_ExternalProject_use_static_libraries,$(1),wpglib)
 
 endef
 
-endif # SYSTEM_LIBWPG
+endif # SYSTEM_WPG
 
 
-ifeq ($(SYSTEM_LIBWPS),YES)
+ifeq ($(SYSTEM_WPS),YES)
 
 define gb_LinkTarget__use_wps
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1367,7 +1367,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(WPS_LIBS))
 endef
 gb_ExternalProject__use_wps :=
 
-else # !SYSTEM_LIBWPS
+else # !SYSTEM_WPS
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	wpslib \
@@ -1385,7 +1385,7 @@ $(call gb_ExternalProject_use_static_libraries,$(1),wpslib)
 
 endef
 
-endif # SYSTEM_LIBWPS
+endif # SYSTEM_WPS
 
 
 ifeq ($(SYSTEM_LCMS2),YES)
