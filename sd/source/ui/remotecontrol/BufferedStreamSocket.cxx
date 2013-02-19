@@ -63,7 +63,11 @@ void BufferedStreamSocket::close()
 {
     if( usingCSocket )
     {
+#ifdef WIN32
+        ::closesocket( mSocket );
+#else
         ::close( mSocket );
+#endif
         mSocket = -1;
     }
     else
