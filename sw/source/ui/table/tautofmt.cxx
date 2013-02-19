@@ -309,7 +309,7 @@ IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 
 IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
 {
-    sal_Bool bOk = sal_False, bFmtInserted = sal_False;
+    bool bOk = false, bFmtInserted = false;
     while( !bOk )
     {
         SwStringInputDlg*   pDlg = new SwStringInputDlg( this,
@@ -344,7 +344,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
                     pTableTbl->InsertAutoFmt(n, pNewData);
                     m_pLbFormat->InsertEntry( aFormatName, nDfltStylePos + n );
                     m_pLbFormat->SelectEntryPos( nDfltStylePos + n );
-                    bFmtInserted = sal_True;
+                    bFmtInserted = true;
                     m_pBtnAdd->Enable( sal_False );
                     if ( !bCoreDataChanged )
                     {
@@ -353,7 +353,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
                     }
 
                     SelFmtHdl( 0 );
-                    bOk = sal_True;
+                    bOk = true;
                 }
             }
 
@@ -366,7 +366,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
             }
         }
         else
-            bOk = sal_True;
+            bOk = true;
         delete pDlg;
     }
     return 0;
@@ -413,7 +413,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
 
 IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
 {
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
     while( !bOk )
     {
         SwStringInputDlg* pDlg = new SwStringInputDlg( this,
@@ -421,7 +421,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
                                                         aEmptyStr );
         if( pDlg->Execute() == RET_OK )
         {
-            sal_Bool bFmtRenamed = sal_False;
+            bool bFmtRenamed = false;
             String aFormatName;
             pDlg->GetInputString( aFormatName );
 
@@ -459,8 +459,8 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
                     }
 
                     SelFmtHdl( 0 );
-                    bOk = sal_True;
-                    bFmtRenamed = sal_True;
+                    bOk = true;
+                    bFmtRenamed = true;
                 }
             }
 
@@ -473,7 +473,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
             }
         }
         else
-            bOk = sal_True;
+            bOk = true;
         delete pDlg;
     }
     return 0;

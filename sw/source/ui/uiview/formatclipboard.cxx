@@ -149,7 +149,7 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
 void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
 {
     const SfxPoolItem* pItem = 0;
-    sal_Bool bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
+    bool bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
             SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BORDER_INNER ) );
     sal_Bool bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, sal_False, &pItem );
     const SfxPoolItem* pRowItem = 0, *pTableItem = 0;
@@ -310,7 +310,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         SwPaM* pCrsr = rWrtShell.GetCrsr();
 
         sal_Bool bHasSelection = pCrsr->HasMark();
-        sal_Bool bForwardSelection = sal_False;
+        bool bForwardSelection = false;
 
         if(!bHasSelection && pCrsr->GetPrev() != pCrsr && pCrsr->GetPrev() != 0)
         {

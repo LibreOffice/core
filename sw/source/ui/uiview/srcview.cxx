@@ -537,7 +537,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                 TransferableDataHelper aDataHelper(
                     TransferableDataHelper::CreateFromSystemClipboard(
                                                         &aEditWin) );
-                sal_Bool bDisable = !aDataHelper.GetXTransferable().is() ||
+                bool bDisable = !aDataHelper.GetXTransferable().is() ||
                             0 == aDataHelper.GetFormatCount();
                 if( bDisable )
                     rSet.DisableItem(nWhich);
@@ -573,7 +573,7 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     TextPaM aPaM;
 
     sal_Bool bForward = !rSearchItem.GetBackward();
-    sal_Bool bAtStart = pTextView->GetSelection() == TextSelection( aPaM, aPaM );
+    bool bAtStart = pTextView->GetSelection() == TextSelection( aPaM, aPaM );
 
     if( !bForward )
         aPaM = TextPaM( (sal_uLong)-1, (sal_uInt16)-1 );
@@ -607,7 +607,7 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
 
     if( !nFound )
     {
-        sal_Bool bNotFoundMessage = sal_False;
+        bool bNotFoundMessage = false;
         if(!bRecursive)
         {
             if(!bFromStart)
@@ -616,13 +616,13 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
             }
             else
             {
-                bNotFoundMessage = sal_True;
+                bNotFoundMessage = true;
                 pTextView->SetSelection( aSel );
             }
         }
         else if(bAtStart)
         {
-            bNotFoundMessage = sal_True;
+            bNotFoundMessage = true;
         }
 
 
@@ -656,8 +656,8 @@ sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool )
     if ( nDiffFlags & SFX_PRINTER_OPTIONS )
         ::SetPrinter( pDocSh->getIDocumentDeviceAccess(), pNew, sal_True );
 
-    const sal_Bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ? sal_True : sal_False;
-    const sal_Bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE ? sal_True : sal_False;
+    const bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION;
+    const bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE;
     if ( bChgOri || bChgSize )
     {
         pDocSh->SetModified();
@@ -776,7 +776,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     SfxMedium* pMedium = pDocShell->GetMedium();
 
     const SfxFilter* pFilter = pMedium->GetFilter();
-    sal_Bool bHtml = pFilter && pFilter->GetUserData() == "HTML";
+    bool bHtml = pFilter && pFilter->GetUserData() == "HTML";
     sal_Bool bDocModified = pDocShell->IsModified();
     if(bHtml && !bDocModified && pDocShell->HasName())
     {

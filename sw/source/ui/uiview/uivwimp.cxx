@@ -153,7 +153,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 
         case SID_TWAIN_TRANSFER:
         {
-            sal_Bool bDone = sal_False;
+            bool bDone = false;
 
             Reference< XScannerManager2 > xScanMgr = SW_MOD()->GetScannerManager();
             if( xScanMgr.is() )
@@ -166,7 +166,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
                     {
                         Reference< XEventListener > xLstner = &rListener;
                         xScanMgr->startScan( aContexts.getConstArray()[ 0 ], xLstner );
-                        bDone = sal_True;
+                        bDone = true;
                     }
                 }
                 catch(...)

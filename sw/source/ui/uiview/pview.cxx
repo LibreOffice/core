@@ -435,7 +435,7 @@ void  SwPagePreViewWin::KeyInput( const KeyEvent &rKEvt )
 {
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
     sal_uInt16 nKey = rKeyCode.GetCode();
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     if(!rKeyCode.GetModifier())
     {
         sal_uInt16 nSlot = 0;
@@ -447,7 +447,7 @@ void  SwPagePreViewWin::KeyInput( const KeyEvent &rKEvt )
         }
         if(nSlot)
         {
-            bHandled = sal_True;
+            bHandled = true;
             mrView.GetViewFrame()->GetDispatcher()->Execute(
                                 nSlot, SFX_CALLMODE_ASYNCHRON );
         }
@@ -458,12 +458,12 @@ void  SwPagePreViewWin::KeyInput( const KeyEvent &rKEvt )
 
 void SwPagePreViewWin::Command( const CommandEvent& rCEvt )
 {
-    sal_Bool bCallBase = sal_True;
+    bool bCallBase = true;
     switch( rCEvt.GetCommand() )
     {
         case COMMAND_CONTEXTMENU:
             mrView.GetViewFrame()->GetDispatcher()->ExecutePopup();
-            bCallBase = sal_False;
+            bCallBase = false;
         break;
 
         case COMMAND_WHEEL:
@@ -693,7 +693,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
 {
     int eMvMode;
     sal_uInt8 nRow = 1;
-    sal_Bool bRetVal = sal_False;
+    bool bRetVal = false;
     bool bRefresh = true;
 
     switch(rReq.GetSlot())
@@ -884,11 +884,11 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
         case FN_START_OF_LINE:
         case FN_START_OF_DOCUMENT:
             aViewWin.SetSelectedPage( 1 );
-            eMvMode = SwPagePreViewWin::MV_DOC_STT; bRetVal = sal_True; goto MOVEPAGE;
+            eMvMode = SwPagePreViewWin::MV_DOC_STT; bRetVal = true; goto MOVEPAGE;
         case FN_END_OF_LINE:
         case FN_END_OF_DOCUMENT:
             aViewWin.SetSelectedPage( mnPageCount );
-            eMvMode = SwPagePreViewWin::MV_DOC_END; bRetVal = sal_True; goto MOVEPAGE;
+            eMvMode = SwPagePreViewWin::MV_DOC_END; bRetVal = true; goto MOVEPAGE;
 MOVEPAGE:
             {
                 int nRet = ChgPage( eMvMode, sal_True );
@@ -1705,8 +1705,8 @@ sal_uInt16  SwPagePreView::SetPrinter( SfxPrinter *pNew, sal_uInt16 nDiffFlags, 
     if ( ( nDiffFlags & SFX_PRINTER_OPTIONS ) == SFX_PRINTER_OPTIONS )
         ::SetPrinter( rSh.getIDocumentDeviceAccess(), pNew, sal_False );
 
-    const sal_Bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ? sal_True : sal_False;
-    const sal_Bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE ? sal_True : sal_False;
+    const bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION;
+    const bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE;
     if ( bChgOri || bChgSize )
     {
         rESh.StartAllAction();

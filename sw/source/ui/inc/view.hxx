@@ -133,13 +133,13 @@ struct SwApplyTemplate
     int eType;
     sal_uInt16 nColor;
     SwFormatClipboard* pFormatClipboard;
-    sal_Bool bUndo;
+    bool bUndo;
 
     SwApplyTemplate() :
         eType(0),
         nColor(0),
         pFormatClipboard(0),
-        bUndo(sal_False)
+        bUndo(false)
     {
         aColl.pTxtColl = 0;
     }
@@ -166,9 +166,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     static sal_uInt16           nMoveType; // for buttons below the scrollbar (viewmdi)
     static sal_Int32        nActMark; // current jump mark for unknown mark
 
-    static sal_Bool             bExtra;
+    static bool             bExtra;
     static sal_Bool             bFound;
-    static sal_Bool             bJustOpened;
+    static bool             bJustOpened;
 
     static SearchAttrItemList* pSrchList;
     static SearchAttrItemList* pReplList;

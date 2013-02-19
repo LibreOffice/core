@@ -4607,7 +4607,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     rSh.EnterStdMode();
                     rSh.SetVisCrsr(aDocPt);
 
-                    pApplyTempl->bUndo = sal_True;
+                    pApplyTempl->bUndo = true;
                     bCallBase = false;
                     aTemplateTimer.Stop();
                 }
@@ -4628,7 +4628,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                          & eSelection ) && !rSh.HasReadonlySel() )
                     {
                         rSh.SetTxtFmtColl( pApplyTempl->aColl.pTxtColl );
-                        pApplyTempl->bUndo = sal_True;
+                        pApplyTempl->bUndo = true;
                         bCallBase = false;
                         if ( pApplyTempl->aColl.pTxtColl )
                             aStyleName = pApplyTempl->aColl.pTxtColl->GetName();
@@ -4642,7 +4642,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         rSh.UnSetVisCrsr();
                         rSh.EnterStdMode();
                         rSh.SetVisCrsr(aDocPt);
-                        pApplyTempl->bUndo = sal_True;
+                        pApplyTempl->bUndo = true;
                         bCallBase = false;
                         if ( pApplyTempl->aColl.pCharFmt )
                             aStyleName = pApplyTempl->aColl.pCharFmt->GetName();
@@ -4654,7 +4654,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     if(PTR_CAST(SwFlyFrmFmt, pFmt))
                     {
                         rSh.SetFrmFmt( pApplyTempl->aColl.pFrmFmt, false, &aDocPt );
-                        pApplyTempl->bUndo = sal_True;
+                        pApplyTempl->bUndo = true;
                         bCallBase = false;
                         if( pApplyTempl->aColl.pFrmFmt )
                             aStyleName = pApplyTempl->aColl.pFrmFmt->GetName();
@@ -4675,7 +4675,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                            false,
                                            pApplyTempl->aColl.pNumRule->GetDefaultListId() );
                         bCallBase = false;
-                        pApplyTempl->bUndo = sal_True;
+                        pApplyTempl->bUndo = true;
                         if( pApplyTempl->aColl.pNumRule )
                             aStyleName = pApplyTempl->aColl.pNumRule->GetName();
                     }

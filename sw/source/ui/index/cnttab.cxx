@@ -761,11 +761,11 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
         if(rName.Len() > 0)
         {
             SvTreeListEntry* pEntry = rTLB.First();
-            sal_Bool bFound = sal_False;
+            bool bFound = false;
             while(pEntry && !bFound)
             {
                 if(rTLB.GetEntryText(pEntry) == rName)
-                    bFound = sal_True;
+                    bFound = true;
                 pEntry = rTLB.Next(pEntry);
             }
             if(!bFound)

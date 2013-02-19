@@ -138,7 +138,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
     break;
 
     case FID_SEARCH_ON:
-        bJustOpened = sal_True;
+        bJustOpened = true;
         GetViewFrame()->GetBindings().Invalidate(SID_SEARCH_ITEM);
         break;
 
@@ -472,10 +472,10 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
         // Suchen in den Sonderbereichen, wenn keine
         // Suche in Selektionen vorliegt. Bei Suche in Selektionen
         // wird ohnehin in diesen Sonderbereichen gesucht
-    sal_Bool bHasSrchInOther = bExtra;
+    bool bHasSrchInOther = bExtra;
     if (!pSrchItem->GetSelection() && !bExtra )
     {
-        bExtra = sal_True;
+        bExtra = true;
         if( FUNC_Search( aOpts ) )
         {
             bFound = sal_True;
@@ -483,7 +483,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
             pWrtShell->EndAllAction();
             return sal_True;
         }
-        bExtra = sal_False;
+        bExtra = false;
     }
     else
         bExtra = !bExtra;
@@ -566,7 +566,7 @@ sal_Bool SwView::SearchAll(sal_uInt16* pFound)
         else
             pWrtShell->SttDoc();
     }
-    bExtra = sal_False;
+    bExtra = false;
     sal_uInt16 nFound = (sal_uInt16)FUNC_Search( aOpts );
     if(pFound)
         *pFound = nFound;
@@ -825,7 +825,7 @@ void SwView::StateSearch(SfxItemSet &rSet)
                         pSrchItem->SetSelection( sal_True );
                 }
 
-                bJustOpened = sal_False;
+                bJustOpened = false;
                 rSet.Put( *pSrchItem );
             }
             break;

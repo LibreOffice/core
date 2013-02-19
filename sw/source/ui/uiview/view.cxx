@@ -130,9 +130,9 @@ sal_uInt16          SwView::nInsertCtrlState        = FN_INSERT_TABLE;
 sal_uInt16          SwView::nWebInsertCtrlState     = FN_INSERT_TABLE;
 sal_uInt16          SwView::nInsertObjectCtrlState  = SID_INSERT_DIAGRAM;
 
-sal_Bool            SwView::bExtra      = sal_False;
+bool            SwView::bExtra      = false;
 sal_Bool            SwView::bFound      = sal_False;
-sal_Bool            SwView::bJustOpened = sal_False;
+bool            SwView::bJustOpened = false;
 
 SvxSearchDialog*    SwView::pSrchDlg    = 0;
 SearchAttrItemList* SwView::pSrchList   = 0;
