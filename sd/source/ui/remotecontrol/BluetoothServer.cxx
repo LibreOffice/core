@@ -583,12 +583,12 @@ registerWithDefaultAdapter( DBusConnection *pConnection )
 
 BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
   : meWasDiscoverable( UNKNOWN ),
-    mpImpl( NULL ),
     mpCommunicators( pCommunicators )
 {
 #ifdef LINUX_BLUETOOTH
     mpImpl = new BluetoothServerImpl();
 #endif
+    (void) mpImpl; // Avoid warning: private field 'mpImpl' is not used
 }
 
 BluetoothServer::~BluetoothServer()
