@@ -64,7 +64,7 @@ public class FormattedTextReadHandler extends ElementReadHandler
 
         // * Print-Repeated-Values
         // * Print-In-First-New-Section
-        // * Print-When-Group-Changes
+        // * Print-When-Group-Change
 
         // * Print-When-Section-Overflows
         // That property cannot be evaluated yet, as this would require us to

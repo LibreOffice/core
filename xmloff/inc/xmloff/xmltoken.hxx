@@ -2959,7 +2959,7 @@ namespace xmloff { namespace token {
         XML_GROUP_ON,
         XML_FORCE_NEW_PAGE,
         XML_GROUP_INTERVAL,
-        XML_PRINT_ONLY_WHEN_GROUP_CHANGE,
+        XML_PRINT_WHEN_GROUP_CHANGE,
         XML_REPORT_ELEMENT,
         XML_LIST_SOURCE,
         XML_LIST_SOURCE_TYPE,

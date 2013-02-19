@@ -78,7 +78,7 @@ public class FormattedTextLayoutController
         return null;
     }
 
-    protected boolean isValueChanged()
+    public boolean isValueChanged()
     {
         try
         {
@@ -86,7 +86,7 @@ public class FormattedTextLayoutController
             final FormulaExpression formulaExpression = element.getValueExpression();
             final Formula formula = formulaExpression.getCompiledFormula();
             final LValue lValue = formula.getRootReference();
-            return isReferenceChanged(lValue);
+            return FormatValueUtility.isReferenceChanged(this, lValue);
         }
         catch (final ParseException e)
         {

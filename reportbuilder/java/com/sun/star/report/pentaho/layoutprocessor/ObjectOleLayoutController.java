@@ -44,7 +44,7 @@ public class ObjectOleLayoutController extends AbstractReportElementLayoutContro
     {
     }
 
-    protected boolean isValueChanged()
+    public boolean isValueChanged()
     {
         final ObjectOleElement element = (ObjectOleElement) getNode();
         final List masterfields = element.getMasterfields();

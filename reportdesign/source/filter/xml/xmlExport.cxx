@@ -472,7 +472,7 @@ void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xRep
 {
     OSL_ENSURE(_xReportElement.is(),"_xReportElement is NULL -> GPF");
     if ( _xReportElement->getPrintWhenGroupChange() )
-        AddAttribute(XML_NAMESPACE_REPORT, XML_PRINT_ONLY_WHEN_GROUP_CHANGE, XML_TRUE );
+        AddAttribute(XML_NAMESPACE_REPORT, XML_PRINT_WHEN_GROUP_CHANGE, XML_TRUE );
 
     if ( !_xReportElement->getPrintRepeatedValues() )
         AddAttribute(XML_NAMESPACE_REPORT, XML_PRINT_REPEATED_VALUES,XML_FALSE);

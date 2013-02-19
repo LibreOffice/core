@@ -2955,7 +2955,7 @@ namespace xmloff { namespace token {
         TOKEN( "group-on",       XML_GROUP_ON),
         TOKEN( "force-new-page",       XML_FORCE_NEW_PAGE),
         TOKEN( "group-interval",       XML_GROUP_INTERVAL),
-        TOKEN( "print-only-when-group-change",   XML_PRINT_ONLY_WHEN_GROUP_CHANGE),
+        TOKEN( "print-when-group-change",   XML_PRINT_WHEN_GROUP_CHANGE),
         TOKEN( "report-element",   XML_REPORT_ELEMENT),
         TOKEN( "list-source",   XML_LIST_SOURCE),
         TOKEN( "list-source-type",   XML_LIST_SOURCE_TYPE),

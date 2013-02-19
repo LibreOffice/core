@@ -60,8 +60,8 @@ public class ReportElementReadHandler extends ElementReadHandler
             throws SAXException
     {
         super.startParsing(attrs);
-        final String printWhenGroupChanges = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "print-when-group-changes");
-        element.setPrintWhenGroupChanges(OfficeToken.TRUE.equals(printWhenGroupChanges));
+        final String printWhenGroupChange = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "print-when-group-change");
+        element.setPrintWhenGroupChange(OfficeToken.TRUE.equals(printWhenGroupChange));
         final String printRepeatingValues = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "print-repeated-values");
         element.setPrintRepeatedValues(printRepeatingValues == null || OfficeToken.TRUE.equals(printRepeatingValues));
     }
