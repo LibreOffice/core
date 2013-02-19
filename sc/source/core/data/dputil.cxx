@@ -50,7 +50,7 @@ const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calc
 
 rtl::OUString getTwoDigitString(sal_Int32 nValue)
 {
-    String aRet = String::CreateFromInt32( nValue );
+    String aRet = OUString::number( nValue );
     if ( aRet.Len() < 2 )
         aRet.Insert( (sal_Unicode)'0', 0 );
     return aRet;

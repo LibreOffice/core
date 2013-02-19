@@ -653,7 +653,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x38: // Command-Equivalent Function           [333    ]
                 aString.AssignAscii( "COMM_EQU_FUNC" );
                 aIn >> nByte;
-                aString += String::CreateFromInt32( nByte );
+                aString += OUString::number( nByte );
                 aIn >> nByte;
                 aStack << aPool.Store( aString );
                 DoMulArgs( ocPush, nByte + 1 );

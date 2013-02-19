@@ -367,7 +367,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                             {
                                 String aPict = ScGlobal::GetRscString( STR_PROGRESS_IMPORT );
                                 String aText = aPict.GetToken(0,'#');
-                                aText += String::CreateFromInt32( nInserted );
+                                aText += OUString::number( nInserted );
                                 aText += aPict.GetToken(1,'#');
 
                                 if (!aProgress.SetStateText( 0, aText ))    // stopped by user?

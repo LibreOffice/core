@@ -662,12 +662,12 @@ String ScPreview::GetPosString()
 
     String aString( ScGlobal::GetRscString( STR_PAGE ) );
     aString += ' ';
-    aString += String::CreateFromInt32(nPageNo+1);
+    aString += OUString::number(nPageNo+1);
 
     if (nTabsTested >= nTabCount)
     {
         aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " / " ));
-        aString += String::CreateFromInt32(nTotalPages);
+        aString += OUString::number(nTotalPages);
     }
 
     return aString;

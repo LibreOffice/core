@@ -1610,7 +1610,7 @@ lcl_a1_append_r ( String &r, int nRow, bool bIsAbs )
 {
     if ( bIsAbs )
         r += '$';
-    r += String::CreateFromInt32( nRow+1 );
+    r += OUString::number( nRow+1 );
 }
 
 static inline void
@@ -1620,14 +1620,14 @@ lcl_r1c1_append_c ( String &r, int nCol, bool bIsAbs,
     r += 'C';
     if (bIsAbs)
     {
-        r += String::CreateFromInt32( nCol + 1 );
+        r += OUString::number( nCol + 1 );
     }
     else
     {
         nCol -= rDetails.nCol;
         if (nCol != 0) {
             r += '[';
-            r += String::CreateFromInt32( nCol );
+            r += OUString::number( nCol );
             r += ']';
         }
     }
@@ -1639,14 +1639,14 @@ lcl_r1c1_append_r ( String &r, int nRow, bool bIsAbs,
     r += 'R';
     if (bIsAbs)
     {
-        r += String::CreateFromInt32( nRow + 1 );
+        r += OUString::number( nRow + 1 );
     }
     else
     {
         nRow -= rDetails.nRow;
         if (nRow != 0) {
             r += '[';
-            r += String::CreateFromInt32( nRow );
+            r += OUString::number( nRow );
             r += ']';
         }
     }
@@ -1996,7 +1996,7 @@ String ScAddress::GetColRowString( bool bAbsolute,
     if ( bAbsolute )
         aString.Append( '$' );
 
-    aString += String::CreateFromInt32(nRow+1);
+    aString += OUString::number(nRow+1);
         break;
 
     case formula::FormulaGrammar::CONV_XL_R1C1:

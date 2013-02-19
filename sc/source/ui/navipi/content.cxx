@@ -517,7 +517,7 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
             SvTreeListEntry* pParent = GetParent(pEntry);
             if ( !pParent )                                 // Top-Level ?
             {
-                aHelpText = String::CreateFromInt32( GetChildCount(pEntry) );
+                aHelpText = OUString::number( GetChildCount(pEntry) );
                 aHelpText += ' ';
                 aHelpText += GetEntryText(pEntry);
                 bRet = sal_True;

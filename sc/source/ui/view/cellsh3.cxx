@@ -448,7 +448,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         do
                         {
                             aName = aBaseName;
-                            aName += String::CreateFromInt32( i );
+                            aName += OUString::number( i );
                             if (bPrefix)
                                 bValid = pDoc->ValidNewTabName( aName );
                             else

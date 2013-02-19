@@ -1114,7 +1114,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
             {
                 aHelpStr = ScGlobal::GetRscString(STR_ROW);
                 aHelpStr += ' ';
-                aHelpStr += String::CreateFromInt32(nScrollPos + 1);
+                aHelpStr += OUString::number(nScrollPos + 1);
 
                 // show quicktext always inside sheet area
                 aRect.Left() = bLayoutRTL ? (aPos.X() + aSize.Width() + 8) : (aPos.X() - 8);

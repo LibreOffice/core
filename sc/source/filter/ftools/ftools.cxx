@@ -233,7 +233,7 @@ ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const String& rStyleNa
     {
         if( !pOldStyleSheet )
             pOldStyleSheet = pStyleSheet;
-        aNewName.Assign( rStyleName ).Append( ' ' ).Append( String::CreateFromInt32( ++nIndex ) );
+        aNewName.Assign( rStyleName ).Append( ' ' ).Append( OUString::number( ++nIndex ) );
     }
 
     // rename existing style
@@ -305,7 +305,7 @@ const String& ScfTools::GetHTMLNamePrefix()
 String ScfTools::GetNameFromHTMLIndex( sal_uInt32 nIndex )
 {
     String aName( GetHTMLIndexPrefix() );
-    aName += String::CreateFromInt32( static_cast< sal_Int32 >( nIndex ) );
+    aName += OUString::number( static_cast< sal_Int32 >( nIndex ) );
     return aName;
 }
 

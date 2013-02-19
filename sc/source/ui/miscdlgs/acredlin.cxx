@@ -1883,11 +1883,11 @@ void ScAcceptChgDlg::FillInfo(SfxChildWinInfo& rInfo) const
 
     sal_uInt16  nCount=pTheView->TabCount();
 
-    rInfo.aExtraString += String::CreateFromInt32(nCount);
+    rInfo.aExtraString += OUString::number(nCount);
     rInfo.aExtraString += ';';
     for(sal_uInt16 i=0;i<nCount;i++)
     {
-        rInfo.aExtraString += String::CreateFromInt32(pTheView->GetTab(i));
+        rInfo.aExtraString += OUString::number(pTheView->GetTab(i));
         rInfo.aExtraString += ';';
     }
     rInfo.aExtraString += ')';

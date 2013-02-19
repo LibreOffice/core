@@ -137,7 +137,7 @@ void ScShareDocumentDlg::UpdateView()
                         {
                             aUser = maStrUnkownUser;
                             aUser += ' ';
-                            aUser += String::CreateFromInt32( nUnknownUser++ );
+                            aUser += OUString::number( nUnknownUser++ );
                         }
 
                         // parse the edit time string of the format "DD.MM.YYYY hh:mm"

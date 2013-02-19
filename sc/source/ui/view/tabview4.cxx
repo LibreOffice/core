@@ -68,9 +68,9 @@ void ScTabView::ShowRefTip()
 
             String aHelp = ScGlobal::GetRscString( STR_QUICKHELP_REF );
             aHelp.SearchAndReplace( rtl::OUString("%1"),
-                                    String::CreateFromInt32(nRows) );
+                                    OUString::number(nRows) );
             aHelp.SearchAndReplace( rtl::OUString("%2"),
-                                    String::CreateFromInt32(nCols) );
+                                    OUString::number(nCols) );
 
             ScSplitPos eWhich = aViewData.GetActivePart();
             Window* pWin = pGridWin[eWhich];
@@ -264,9 +264,9 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             SCCOL nCols = nEndX + 1 - aViewData.GetRefStartX(); // Reihenfolge ist richtig
             SCROW nRows = nEndY + 1 - aViewData.GetRefStartY();
             aHelpStr.SearchAndReplace( rtl::OUString("%1"),
-                                       String::CreateFromInt32(nRows) );
+                                       OUString::number(nRows) );
             aHelpStr.SearchAndReplace( rtl::OUString("%2"),
-                                       String::CreateFromInt32(nCols) );
+                                       OUString::number(nCols) );
         }
         else if ( aViewData.GetDelMark( aDelRange ) )
             aHelpStr = ScGlobal::GetRscString( STR_QUICKHELP_DELETE );

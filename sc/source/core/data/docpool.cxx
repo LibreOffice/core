@@ -917,7 +917,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
                     case SFX_ITEM_PRESENTATION_NAMELESS:
                     {
                         String aPages( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_PAGES ) );
-                        aPages.SearchAndReplaceAscii( "%1", String::CreateFromInt32( nPagNo ) );
+                        aPages.SearchAndReplaceAscii( "%1", OUString::number( nPagNo ) );
                         rText += aPages;
                     }
                     break;
@@ -946,7 +946,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
                     rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_FIRSTPAGENO) + aStrSep;
 //                  break; // DURCHFALLEN!!!
                     case SFX_ITEM_PRESENTATION_NAMELESS:
-                    rText += String::CreateFromInt32( nPagNo );
+                    rText += OUString::number( nPagNo );
                     break;
                     default:
                     {

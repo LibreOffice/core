@@ -1736,7 +1736,7 @@ String ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
     {
         ++nId;
         aGraphicName = aBase;
-        aGraphicName += String::CreateFromInt32( nId );
+        aGraphicName += OUString::number( nId );
         bThere = ( GetNamedObject( aGraphicName, 0, nDummy ) != NULL );
     }
 

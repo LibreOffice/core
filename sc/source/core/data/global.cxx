@@ -399,7 +399,7 @@ String ScGlobal::GetErrorString(sal_uInt16 nErrNumber)
         case errIllegalFPOperation : nErrNumber = STR_NUM_ERROR; break;
 
         default          : sResStr = GetRscString(STR_ERROR_STR);
-                           sResStr += String::CreateFromInt32( nErrNumber );
+                           sResStr += OUString::number( nErrNumber );
                            nErrNumber = 0;
                            break;
     }
@@ -733,7 +733,7 @@ String ScGlobal::GetCharsetString( CharSet eVal )
         case RTL_TEXTENCODING_DONTKNOW:     pChar = "SYSTEM";       break;
         // new string of TextEncoding value
         default:
-            return String::CreateFromInt32( eVal );
+            return OUString::number( eVal );
     }
     return rtl::OUString::createFromAscii(pChar);
 }

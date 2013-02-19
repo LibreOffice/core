@@ -3179,7 +3179,7 @@ public:
                     pArr[mnCount] = aString;
                 }
                 else //only indices for categories
-                    pArr[mnCount] = String::CreateFromInt32( mnCount+1 );
+                    pArr[mnCount] = OUString::number( mnCount+1 );
                 ++mnCount;
             }
         }
@@ -3191,11 +3191,11 @@ public:
                 {
                     String aString = ScGlobal::GetRscString(STR_ROW);
                     aString += ' ';
-                    aString += String::CreateFromInt32( nRow+1 );
+                    aString += OUString::number( nRow+1 );
                     pArr[mnCount] = aString;
                 }
                 else //only indices for categories
-                    pArr[mnCount] = String::CreateFromInt32( mnCount+1 );
+                    pArr[mnCount] = OUString::number( mnCount+1 );
                 ++mnCount;
             }
         }

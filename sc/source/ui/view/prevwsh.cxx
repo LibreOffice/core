@@ -458,10 +458,10 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
 
                 aHelpStr = ScGlobal::GetRscString( STR_PAGE );
                 aHelpStr += ' ';
-                aHelpStr += String::CreateFromInt32( nPageNo );
+                aHelpStr += OUString::number( nPageNo );
 
                 aHelpStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " / " ));
-                aHelpStr += String::CreateFromInt32( nTotalPages );
+                aHelpStr += OUString::number( nTotalPages );
             }
             else if( nDelta > 0 )
             {
@@ -471,10 +471,10 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
 
                 aHelpStr = ScGlobal::GetRscString( STR_PAGE );
                 aHelpStr += ' ';
-                aHelpStr += String::CreateFromInt32( nPageNo+1 );
+                aHelpStr += OUString::number( nPageNo+1 );
 
                 aHelpStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " / " ));
-                aHelpStr += String::CreateFromInt32( nTotalPages );
+                aHelpStr += OUString::number( nTotalPages );
             }
 
             aRect.Left()    = aPos.X() - 8;
@@ -933,9 +933,9 @@ void ScPreviewShell::WriteUserData(String& rData, sal_Bool /* bBrowse */)
     //  nZoom
     //  nPageNo
 
-    rData =  String::CreateFromInt32(pPreview->GetZoom());
+    rData =  OUString::number(pPreview->GetZoom());
     rData += (sal_Unicode) SC_USERDATA_SEP;
-    rData += String::CreateFromInt32(pPreview->GetPageNo());
+    rData += OUString::number(pPreview->GetPageNo());
 }
 
 void ScPreviewShell::ReadUserData(const String& rData, sal_Bool /* bBrowse */)

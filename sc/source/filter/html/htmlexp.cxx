@@ -679,7 +679,7 @@ void ScHTMLExport::WriteTables()
             {
                 aStrOut  = aStrTable;
                 aStrOut.AppendAscii( " " );
-                aStrOut += String::CreateFromInt32( nTableStrNum++ );
+                aStrOut += OUString::number( nTableStrNum++ );
                 aStrOut.AppendAscii( ": " );
 
                 OUT_HR();

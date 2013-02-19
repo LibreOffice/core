@@ -529,7 +529,7 @@ String XclExpNameManagerImpl::GetUnusedName( const String& rName ) const
             bExist = xName->GetOrigName() == aNewName;
             // name exists -> create a new name "<originalname>_<counter>"
             if( bExist )
-                aNewName.Assign( rName ).Append( '_' ).Append( String::CreateFromInt32( ++nAppIdx ) );
+                aNewName.Assign( rName ).Append( '_' ).Append( OUString::number( ++nAppIdx ) );
         }
     }
     return aNewName;

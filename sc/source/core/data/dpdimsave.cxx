@@ -171,7 +171,7 @@ rtl::OUString ScDPSaveGroupDimension::CreateGroupName(const rtl::OUString& rPref
     while ( nAdd <= nMaxAdd )
     {
         String aGroupName( rPrefix );
-        aGroupName.Append( String::CreateFromInt32( nAdd ) );
+        aGroupName.Append( OUString::number( nAdd ) );
         bool bExists = false;
 
         // look for existing groups

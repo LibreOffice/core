@@ -84,9 +84,9 @@ String ScImportOptions::BuildString() const
     if( bFixedWidth )
         aResult.AppendAscii( pStrFix );
     else
-        aResult += String::CreateFromInt32(nFieldSepCode);
+        aResult += OUString::number(nFieldSepCode);
     aResult += ',';
-    aResult += String::CreateFromInt32(nTextSepCode);
+    aResult += OUString::number(nTextSepCode);
     aResult += ',';
     aResult += aStrFont;
                                                             // use the same string format as ScAsciiOptions:

@@ -1421,7 +1421,7 @@ void ScPrintFunc::PrintRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY )
 
             pDev->DrawRect( Rectangle( nPosX,nPosY,nEndX,nEndY ) );
 
-            aText = String::CreateFromInt32( nRow+1 );
+            aText = OUString::number( nRow+1 );
             long nTextWidth = pDev->GetTextWidth(aText);
             long nTextHeight = pDev->GetTextHeight();
             long nAddX = ( nWidth  - nTextWidth  ) / 2;

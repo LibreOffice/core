@@ -1456,12 +1456,12 @@ r1c1_add_col( rtl::OUStringBuffer &rBuf, const ScSingleRefData& rRef )
         if (rRef.nRelCol != 0)
         {
             rBuf.append( sal_Unicode( '[' ) );
-            rBuf.append( String::CreateFromInt32( rRef.nRelCol ) );
+            rBuf.append( OUString::number( rRef.nRelCol ) );
             rBuf.append( sal_Unicode( ']' ) );
         }
     }
     else
-        rBuf.append( String::CreateFromInt32( rRef.nCol + 1 ) );
+        rBuf.append( OUString::number( rRef.nCol + 1 ) );
 }
 static void
 r1c1_add_row( rtl::OUStringBuffer &rBuf, const ScSingleRefData& rRef )
@@ -1472,12 +1472,12 @@ r1c1_add_row( rtl::OUStringBuffer &rBuf, const ScSingleRefData& rRef )
         if (rRef.nRelRow != 0)
         {
             rBuf.append( sal_Unicode( '[' ) );
-            rBuf.append( String::CreateFromInt32( rRef.nRelRow ) );
+            rBuf.append( OUString::number( rRef.nRelRow ) );
             rBuf.append( sal_Unicode( ']' ) );
         }
     }
     else
-        rBuf.append( String::CreateFromInt32( rRef.nRow + 1 ) );
+        rBuf.append( OUString::number( rRef.nRow + 1 ) );
 }
 
 struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL

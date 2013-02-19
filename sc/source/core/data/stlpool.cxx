@@ -96,7 +96,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
         for ( sal_uInt32 nAdd = 1; nAdd <= nCount; nAdd++ )
         {
             String aNewName = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
-            aNewName += String::CreateFromInt32( nAdd );
+            aNewName += OUString::number( nAdd );
             if ( Find( aNewName, eFam ) == NULL )
                 return SfxStyleSheetPool::Make( aNewName, eFam, mask, nPos );
         }

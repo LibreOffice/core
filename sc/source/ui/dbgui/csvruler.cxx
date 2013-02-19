@@ -75,7 +75,7 @@ static void save_FixedWidthList(ScCsvSplits aSplits)
     sal_uInt32 n = aSplits.Count();
     for (sal_uInt32 i = 0; i < n; ++i)
     {
-        sSplits.Append( String::CreateFromInt32( aSplits[i] ) );
+        sSplits.Append( OUString::number( aSplits[i] ) );
         sSplits.Append((char)';');
     }
 
@@ -591,7 +591,7 @@ void ScCsvRuler::ImplDrawBackgrDev()
     maBackgrDev.SetTextFillColor();
     for( nPos = ((nFirstPos + 9) / 10) * 10; nPos <= nLastPos; nPos += 10 )
     {
-        String aText( String::CreateFromInt32( nPos ) );
+        String aText( OUString::number( nPos ) );
         sal_Int32 nTextWidth = maBackgrDev.GetTextWidth( aText );
         sal_Int32 nTextX = GetX( nPos ) - nTextWidth / 2;
         ImplDrawArea( nTextX - 1, nTextWidth + 2 );

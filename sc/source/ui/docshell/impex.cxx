@@ -1985,9 +1985,9 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                             rtl_math_DecimalPlaces_Max, '.', true );
 
                     aBufStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "C;X" ));
-                    aBufStr += String::CreateFromInt32( c );
+                    aBufStr += OUString::number( c );
                     aBufStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";Y" ));
-                    aBufStr += String::CreateFromInt32( r );
+                    aBufStr += OUString::number( r );
                     aBufStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";K" ));
                     aBufStr += aValStr;
                     lcl_WriteSimpleString( rStrm, aBufStr );
@@ -2000,9 +2000,9 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                     aCellStr.SearchAndReplaceAll( rtl::OUString(_LF), rtl::OUString(SYLK_LF) );
 
                     aBufStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "C;X" ));
-                    aBufStr += String::CreateFromInt32( c );
+                    aBufStr += OUString::number( c );
                     aBufStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";Y" ));
-                    aBufStr += String::CreateFromInt32( r );
+                    aBufStr += OUString::number( r );
                     aBufStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";K" ));
                     lcl_WriteSimpleString( rStrm, aBufStr );
                     lcl_WriteString( rStrm, aCellStr, '"', ';' );
@@ -2047,9 +2047,9 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 nC += c - 1;
                                 nR += r - 1;
                                 aPrefix.AssignAscii( RTL_CONSTASCII_STRINGPARAM( ";R" ) );
-                                aPrefix += String::CreateFromInt32( nR );
+                                aPrefix += OUString::number( nR );
                                 aPrefix.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ";C" ) );
-                                aPrefix += String::CreateFromInt32( nC );
+                                aPrefix += OUString::number( nC );
                                 aPrefix.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ";M" ) );
                             }
                             break;
@@ -2058,9 +2058,9 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 ScAddress aPos;
                                 pFCell->GetMatrixOrigin( aPos );
                                 aPrefix.AssignAscii( RTL_CONSTASCII_STRINGPARAM( ";I;R" ) );
-                                aPrefix += String::CreateFromInt32( aPos.Row() - nStartRow + 1 );
+                                aPrefix += OUString::number( aPos.Row() - nStartRow + 1 );
                                 aPrefix.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ";C" ) );
-                                aPrefix += String::CreateFromInt32( aPos.Col() - nStartCol + 1 );
+                                aPrefix += OUString::number( aPos.Col() - nStartCol + 1 );
                             }
                             break;
                             default:

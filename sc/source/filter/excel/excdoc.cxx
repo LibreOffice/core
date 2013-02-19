@@ -82,7 +82,7 @@ using namespace oox;
 static String lcl_GetVbaTabName( SCTAB n )
 {
     String  aRet( RTL_CONSTASCII_USTRINGPARAM( "__VBA__" ) );
-    aRet += String::CreateFromInt32( static_cast<sal_uInt16>(n) );
+    aRet += OUString::number( static_cast<sal_uInt16>(n) );
     return aRet;
 }
 

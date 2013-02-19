@@ -326,7 +326,7 @@ String ScAsciiOptions::WriteToString() const
         {
             if (i)
                 aOutStr += '/';
-            aOutStr += String::CreateFromInt32(aFieldSeps.GetChar(i));
+            aOutStr += OUString::number(aFieldSeps.GetChar(i));
         }
         if ( bMergeFieldSeps )
         {
@@ -341,7 +341,7 @@ String ScAsciiOptions::WriteToString() const
         //  Text-Trenner
         //
 
-    aOutStr += String::CreateFromInt32(cTextSep);
+    aOutStr += OUString::number(cTextSep);
     aOutStr += ',';                 // Token-Ende
 
         //
@@ -358,7 +358,7 @@ String ScAsciiOptions::WriteToString() const
         //  Startzeile
         //
 
-    aOutStr += String::CreateFromInt32(nStartRow);
+    aOutStr += OUString::number(nStartRow);
     aOutStr += ',';                 // Token-Ende
 
         //
@@ -370,9 +370,9 @@ String ScAsciiOptions::WriteToString() const
     {
         if (nInfo)
             aOutStr += '/';
-        aOutStr += String::CreateFromInt32(pColStart[nInfo]);
+        aOutStr += OUString::number(pColStart[nInfo]);
         aOutStr += '/';
-        aOutStr += String::CreateFromInt32(pColFormat[nInfo]);
+        aOutStr += OUString::number(pColFormat[nInfo]);
     }
 
     // #i112025# the options string is used in macros and linked sheets,
@@ -381,7 +381,7 @@ String ScAsciiOptions::WriteToString() const
     aOutStr += ',';
 
     // Language
-    aOutStr += String::CreateFromInt32(eLang);
+    aOutStr += OUString::number(eLang);
     aOutStr += ',';
 
     // Import quoted field as text.

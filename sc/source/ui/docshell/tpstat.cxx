@@ -60,9 +60,9 @@ ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
     String aInfo = aFlInfo.GetText();
     aInfo += aDocStat.aDocName;
     aFlInfo     .SetText( aInfo );
-    aFtTables   .SetText( String::CreateFromInt32( aDocStat.nTableCount ) );
-    aFtCells    .SetText( String::CreateFromInt32( aDocStat.nCellCount ) );
-    aFtPages    .SetText( String::CreateFromInt32( aDocStat.nPageCount ) );
+    aFtTables   .SetText( OUString::number( aDocStat.nTableCount ) );
+    aFtCells    .SetText( OUString::number( aDocStat.nCellCount ) );
+    aFtPages    .SetText( OUString::number( aDocStat.nPageCount ) );
 
     FreeResource();
 }
