@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///oc\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:05:24Z",
+      "side": 1,
+      "message": "no more xubStrLen here and the 2 below",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///oY\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:05:24Z",
+      "side": 1,
+      "message": "actually you do not need a OUStringBuffer for aText here since\nif(i)\n{\n    aText \u003d aText.copy(i);\n}\n\nwhich means you to not need the .toString() twice later on it",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///oU\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:05:24Z",
+      "side": 1,
+      "message": "maybe reverse the two ?\n\nOUString aOldStr(pEdit-\u003eGetText());\nOUStringBuffer aStr(aOldStr);",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///oQ\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:05:24Z",
+      "side": 1,
+      "message": "we are essentially substituting just 1 character right ? so why not simply\naStr[nNewPos] \u003d rLiteralMask[NewPos]",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///oM\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:05:24Z",
+      "side": 1,
+      "message": "not to be fixed here.. but there is danger here:\nwe already truncated aStr so it is conceivable that the entire selection be out of bound of what is left.\nand remove() implementaion actually is not\ntolerating that well.\n\nnote: self: patch ustrbuf.cxx to deal with these.",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///oE\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:05:24Z",
+      "side": 1,
+      "message": "I know the original code was very bad.. but here\nyou want to loop and just count the number of character to remove\nand remove them once.\nif(count)\n{\n    rStr \u003d rStr.copy(count)\n}\n\nsame below: count how many you want to copy and then copy them once\n   rStr \u003d rStr.copy(0, count);\n\nyou avoid OUStringBuffer altogether and make the whole function much more efficent.",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///oI\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:05:24Z",
+      "side": 1,
+      "message": "rStr reference is not updated (whereas it was before)",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///oA\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:05:24Z",
+      "side": 1,
+      "message": "sal_Int32 index \u003d 0;\n\nrStr \u003d rStr.replaceFirst(_rLookupMonthName, OUString(), \u0026index);\n\nreturn index \u003e\u003d 0;",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///n8\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:05:24Z",
+      "side": 1,
+      "message": "no xub_StrLen anymore",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///n4\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:05:24Z",
+      "side": 1,
+      "message": "no xub_StrLen",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///n0\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1435,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:05:24Z",
+      "side": 1,
+      "message": "be careful with String Search would return +MAX in case of not found. so not found \u003d\u003e \u003e\u003d aSelection.Max()\nwhereas indexOf() return \u003c 0 for not found",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
