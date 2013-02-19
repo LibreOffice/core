@@ -1602,8 +1602,8 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
                         // without MapMode-Offset, without Offset, o ... !!!!!
                         aPt = GetOut()->LogicToPixel(
                                 aPt, MapMode( MAP_TWIP ) );
-                        ((( *pURL += '?' ) += String::CreateFromInt32( aPt.X() ))
-                                  += ',' ) += String::CreateFromInt32(aPt.Y() );
+                        ((( *pURL += '?' ) += OUString::number( aPt.X() ))
+                                  += ',' ) += OUString::number(aPt.Y() );
                     }
                 }
                 pRet = pFly->GetFmt();

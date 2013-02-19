@@ -729,7 +729,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     nWidth--;
     rHB.InsertItem( 100, sHBFirst,  4 * nWidth );
     for( i = 1; i <= MAXLEVEL; i++)
-        rHB.InsertItem( 100 + i, String::CreateFromInt32(i), nWidth );
+        rHB.InsertItem( 100 + i, OUString::number(i), nWidth );
     rHB.Show();
 
     SwIndexTreeLB& rTLB = aHeaderTree.GetTreeListBox();
@@ -2107,10 +2107,10 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
                 if(i == 1)
                     aLevelLB.InsertEntry( sDelimStr );
                 else
-                    aLevelLB.InsertEntry( String::CreateFromInt32(i - 1) );
+                    aLevelLB.InsertEntry( OUString::number(i - 1) );
             }
             else
-                aLevelLB.InsertEntry(String::CreateFromInt32(i));
+                aLevelLB.InsertEntry(OUString::number(i));
         }
         if(bToxIsAuthorities)
         {
@@ -3328,7 +3328,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
 #if OSL_DEBUG_LEVEL > 1
     //find all start/end positions and print it
     String sMessage(rtl::OUString("Space: "));
-    sMessage += String::CreateFromInt32(nSpace);
+    sMessage += OUString::number(nSpace);
     sMessage += rtl::OUString(" | ");
 
     for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
@@ -3338,9 +3338,9 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         long nDebugXPos = pDebugCtrl->GetPosPixel().X();
         long nDebugWidth = pDebugCtrl->GetSizePixel().Width();
 
-        sMessage += String::CreateFromInt32( nDebugXPos );
+        sMessage += OUString::number( nDebugXPos );
         sMessage += rtl::OUString(" ");
-        sMessage += String::CreateFromInt32(nDebugXPos + nDebugWidth);
+        sMessage += OUString::number(nDebugXPos + nDebugWidth);
         sMessage += rtl::OUString(" | ");
     }
 
@@ -3726,7 +3726,7 @@ void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         else
         {
             aStr  = SW_RESSTR(STR_LEVEL);
-            aStr += String::CreateFromInt32(
+            aStr += OUString::number(
                     TOX_INDEX == m_pCurrentForm->GetTOXType() ? i - 1 : i );
         }
         String aCpy( aStr );

@@ -1112,21 +1112,21 @@ void SwView::WriteUserData( String &rUserData, sal_Bool bBrowse )
     const SwRect& rRect = pWrtShell->GetCharRect();
     const Rectangle& rVis = GetVisArea();
 
-    rUserData = String::CreateFromInt32( rRect.Left() );
+    rUserData = OUString::number( rRect.Left() );
     rUserData += ';';
-    rUserData += String::CreateFromInt32( rRect.Top() );
+    rUserData += OUString::number( rRect.Top() );
     rUserData += ';';
-    rUserData += String::CreateFromInt32( pWrtShell->GetViewOptions()->GetZoom() );
+    rUserData += OUString::number( pWrtShell->GetViewOptions()->GetZoom() );
     rUserData += ';';
-    rUserData += String::CreateFromInt32( rVis.Left() );
+    rUserData += OUString::number( rVis.Left() );
     rUserData += ';';
-    rUserData += String::CreateFromInt32( rVis.Top() );
+    rUserData += OUString::number( rVis.Top() );
     rUserData += ';';
-    rUserData += String::CreateFromInt32( bBrowse ? SAL_MIN_INT32 : rVis.Right());
+    rUserData += OUString::number( bBrowse ? SAL_MIN_INT32 : rVis.Right());
     rUserData += ';';
-    rUserData += String::CreateFromInt32( bBrowse ? SAL_MIN_INT32 : rVis.Bottom());
+    rUserData += OUString::number( bBrowse ? SAL_MIN_INT32 : rVis.Bottom());
     rUserData += ';';
-    rUserData += String::CreateFromInt32(
+    rUserData += OUString::number(
             (sal_uInt16)pWrtShell->GetViewOptions()->GetZoomType());//eZoom;
     rUserData += ';';
     rUserData += FRMTYPE_NONE == pWrtShell->GetSelFrmType() ? '0' : '1';

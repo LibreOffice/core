@@ -1986,7 +1986,7 @@ static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
         }
 
     delete [] pSetFlags;
-    return aName += String::CreateFromInt32( ++nNum );
+    return aName += OUString::number( ++nNum );
 }
 
 String SwDoc::GetUniqueGrfName() const
@@ -2132,7 +2132,7 @@ void SwDoc::SetAllUniqueFlyNames()
                 nNum = ++nFlyNum;
                 break;
             }
-            pFlyFmt->SetName( sNm += String::CreateFromInt32( nNum ));
+            pFlyFmt->SetName( sNm += OUString::number( nNum ));
         }
     aArr.clear();
 

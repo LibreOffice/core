@@ -283,14 +283,14 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
                 "OutHTML_SwFmtFtn: Position falsch" );
         sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_anc );
         sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
-        sFtnName += String::CreateFromInt32( (sal_Int32)(++rHTMLWrt.nEndNote) );
+        sFtnName += OUString::number( (sal_Int32)(++rHTMLWrt.nEndNote) );
     }
     else
     {
         nPos = rHTMLWrt.nFootNote;
         sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_anc );
         sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote);
-        sFtnName += String::CreateFromInt32( (sal_Int32)(++rHTMLWrt.nFootNote));
+        sFtnName += OUString::number( (sal_Int32)(++rHTMLWrt.nFootNote));
     }
 
     if( !rHTMLWrt.pFootEndNotes )
@@ -346,13 +346,13 @@ void SwHTMLWriter::OutFootEndNotes()
         {
             sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
             sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
-            sFtnName.Append( String::CreateFromInt32((sal_Int32)(++nEndNote)) );
+            sFtnName.Append( OUString::number((sal_Int32)(++nEndNote)) );
         }
         else
         {
             sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote );
             sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote );
-            sFtnName.Append( String::CreateFromInt32((sal_Int32)(++nFootNote)));
+            sFtnName.Append( OUString::number((sal_Int32)(++nFootNote)));
         }
 
         if( bLFPossible )
@@ -437,14 +437,14 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
     {
         sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_sym );
         sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
-        sFtnName.Append( String::CreateFromInt32((sal_Int32)nEndNote) );
+        sFtnName.Append( OUString::number((sal_Int32)nEndNote) );
         pInfo = &pDoc->GetEndNoteInfo();
     }
     else
     {
         sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_sym );
         sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote );
-        sFtnName.Append( String::CreateFromInt32((sal_Int32)nFootNote));
+        sFtnName.Append( OUString::number((sal_Int32)nFootNote));
         pInfo = &pDoc->GetFtnInfo();
     }
 

@@ -586,7 +586,7 @@ static String lcl_DenotedPortion(String rStr, xub_StrLen nStart,
             }
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1,
-                              String::CreateFromInt32(nEnd - nStart));
+                              OUString::number(nEnd - nStart));
             aResult = aRewriter.Apply(aResult);
         }
         else

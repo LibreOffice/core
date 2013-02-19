@@ -346,7 +346,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
     String aSrcStgName = rtl::OUString('_');
     // ergibt Name "_4711"
-    aSrcStgName += String::CreateFromInt32( nObjLocFc );
+    aSrcStgName += OUString::number( nObjLocFc );
 
     SvStorageRef xSrc0 = pStg->OpenSotStorage(rtl::OUString(SL::aObjectPool));
     SvStorageRef xSrc1 = xSrc0->OpenSotStorage( aSrcStgName,

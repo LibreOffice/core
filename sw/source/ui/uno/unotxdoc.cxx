@@ -1055,7 +1055,7 @@ static String lcl_CreateOutlineString( sal_uInt16 nIndex,
             long nVal = aNumVector[nLevel];
             nVal ++;
             nVal -= pOutlRule->Get(nLevel).GetStart();
-            sEntry += String::CreateFromInt32( nVal );
+            sEntry += OUString::number( nVal );
             sEntry += '.';
         }
     sEntry += rOutlineNodes[ nIndex ]->

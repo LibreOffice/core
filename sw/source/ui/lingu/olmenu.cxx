@@ -515,7 +515,7 @@ SwSpellPopup::SwSpellPopup(
 
     //ADD NEW LANGUAGE MENU ITEM
     ///////////////////////////////////////////////////////////////////////////
-    String aScriptTypesInUse( String::CreateFromInt32( pWrtSh->GetScriptType() ) );
+    String aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
     SvtLanguageTable aLanguageTable;
 
     // get keyboard language
@@ -670,7 +670,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
 
     //ADD NEW LANGUAGE MENU ITEM
     ///////////////////////////////////////////////////////////////////////////
-    String aScriptTypesInUse( String::CreateFromInt32( pWrtSh->GetScriptType() ) );
+    String aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
     SvtLanguageTable aLanguageTable;
 
     // get keyboard language

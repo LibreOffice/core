@@ -668,7 +668,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     delete [] pSetFlags;
     if( pChkStr )
         return *pChkStr;
-    return aName += String::CreateFromInt32( ++nNum );
+    return aName += OUString::number( ++nNum );
 }
 
 bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)

@@ -1431,7 +1431,7 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
     delete [] pSetFlags;
     if( pChkStr )
         return *pChkStr;
-    return aName += String::CreateFromInt32( ++nNum );
+    return aName += OUString::number( ++nNum );
 }
 
 

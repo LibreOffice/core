@@ -575,7 +575,7 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
                 rMan.Fill(c);
                 OSL_ENSURE(c==21, "Ww1PlainText");
                 sFormel.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "Ww" ));
-                sFormel += String::CreateFromInt32( nPlcIndex );
+                sFormel += OUString::number( nPlcIndex );
                 c = rMan.Fill(aStr, GetLength());
                 OSL_ENSURE(Ww1PlainText::IsChar(c), "Ww1PlainText");
                 sFormel += aStr;
@@ -815,7 +815,7 @@ oncemore:
             else // rekursion:
             {
                 rtl::OUString aName("Ww");
-                aName += String::CreateFromInt32( nPlcIndex );
+                aName += OUString::number( nPlcIndex );
                 SwFieldType* pFT = rOut.GetDoc().GetFldType( RES_SETEXPFLD, aName, false);
                 if (pFT == 0)
                 {

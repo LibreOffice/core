@@ -1321,7 +1321,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
                     nAddNumber++;
                     sTempSectionName = sSectionName;
                     sTempSectionName += ':';
-                    sTempSectionName += String::CreateFromInt32( nAddNumber );
+                    sTempSectionName += OUString::number( nAddNumber );
                 }
                 else
                     nCount++;

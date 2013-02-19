@@ -1643,7 +1643,7 @@ String  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
     if( AUTH_FIELD_AUTHORITY_TYPE == eField )
     {
         OSL_ENSURE(pTypeListBox, "No ListBox");
-        sRet = String::CreateFromInt32(pTypeListBox->GetSelectEntryPos());
+        sRet = OUString::number(pTypeListBox->GetSelectEntryPos());
     }
     else if( AUTH_FIELD_IDENTIFIER == eField && !m_bNewEntryMode)
     {

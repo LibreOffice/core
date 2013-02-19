@@ -186,15 +186,15 @@ String SwView::GetPageStr( sal_uInt16 nPg, sal_uInt16 nLogPg,
     if( rDisplay.Len() )
         aStr += rDisplay;
     else
-        aStr += String::CreateFromInt32(nLogPg);
+        aStr += OUString::number(nLogPg);
 
     if( nLogPg && nLogPg != nPg )
     {
         aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM("   "));
-        aStr += String::CreateFromInt32(nPg);
+        aStr += OUString::number(nPg);
     }
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM(" / "));
-    aStr += String::CreateFromInt32( GetWrtShell().GetPageCnt() );
+    aStr += OUString::number( GetWrtShell().GetPageCnt() );
 
     return aStr;
 }
@@ -1472,7 +1472,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         if( sStr.Len() )
                             sStr.AppendAscii(sStatusDelim);
                         sStr += SW_RESSTR(STR_NUM_LEVEL);
-                        sStr += String::CreateFromInt32( nNumLevel + 1 );
+                        sStr += OUString::number( nNumLevel + 1 );
 
                     }
                 }
@@ -1489,7 +1489,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     }
                     else
                         sStr += SW_RESSTR(STR_NUM_OUTLINE);
-                    sStr += String::CreateFromInt32( nOutlineLevel);
+                    sStr += OUString::number( nOutlineLevel);
                 }
                 //<-end ,zhaojianwei
 

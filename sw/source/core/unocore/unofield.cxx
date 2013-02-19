@@ -1535,7 +1535,7 @@ void SwXTextField::attachToRange(
                 pFld = new SwDBNumSetField( (SwDBNumSetFieldType*)
                     pDoc->GetSysFldType(RES_DBNUMSETFLD),
                     m_pProps->sPar3,
-                    String::CreateFromInt32(m_pProps->nFormat),
+                    OUString::number(m_pProps->nFormat),
                     aData );
             }
             break;

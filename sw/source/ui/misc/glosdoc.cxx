@@ -258,7 +258,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
 
                         rNewGroup = sNewFileName.Copy(0, nFileNameLen);
                         rNewGroup += GLOS_DELIM;
-                        rNewGroup += String::CreateFromInt32(nNewPath);
+                        rNewGroup += OUString::number(nNewPath);
                         if (m_GlosArr.empty())
                         {
                             GetNameList();
@@ -293,7 +293,7 @@ sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
     String aTmp( rName.GetToken(0, GLOS_DELIM));
     String aName(aTmp);
     aName += GLOS_DELIM;
-    aName += String::CreateFromInt32(nPath);
+    aName += OUString::number(nPath);
 
     aTmp += SwGlossaries::GetExtension();
     sFileURL += INET_PATH_TOKEN;
@@ -368,7 +368,7 @@ std::vector<String> & SwGlossaries::GetNameList()
                 String *pTitle = *filesIt;
                 String sName( pTitle->Copy( 0, pTitle->Len() - sExt.Len() ));
                 sName += GLOS_DELIM;
-                sName += String::CreateFromInt32( static_cast<sal_Int16>(i) );
+                sName += OUString::number( static_cast<sal_Int16>(i) );
                 m_GlosArr.push_back(sName);
 
                 // don't need any more these pointers

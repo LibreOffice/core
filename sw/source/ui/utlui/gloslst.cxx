@@ -288,7 +288,7 @@ void SwGlossaryList::Update()
 
                 aFoundGroupNames.push_back(sName);
                 sName += GLOS_DELIM;
-                sName += String::CreateFromInt32( static_cast<sal_uInt16>(nPath) );
+                sName += OUString::number( static_cast<sal_uInt16>(nPath) );
                 AutoTextGroup* pFound = FindGroup( sName );
                 if( !pFound )
                 {

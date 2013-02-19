@@ -655,7 +655,7 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/,
             OSL_ENSURE( !this,"Unhandled Ruby justication code" );
             break;
     }
-    aStr += String::CreateFromInt32( nJC );
+    aStr += OUString::number( nJC );
 
     /*
      MS needs to know the name and size of the font used in the ruby item,
@@ -704,7 +704,7 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/,
     aStr.AppendAscii( " \\* \"Font:" );
     aStr.Append( sFamilyName );
     aStr.AppendAscii( "\" \\* hps" );
-    aStr += String::CreateFromInt32( nHeight );
+    aStr += OUString::number( nHeight );
     aStr.AppendAscii( " \\o" );
     if ( cDirective )
     {
@@ -725,7 +725,7 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/,
         ( const SvxFontHeightItem& )rSet.Get(
                                              GetWhichOfScript( RES_CHRATR_FONTSIZE, nRubyScript ) );
     nHeight = (rHeightItem.GetHeight() + 10)/20-1;
-    aStr += String::CreateFromInt32(nHeight);
+    aStr += OUString::number(nHeight);
     aStr += '(';
     aStr += rRuby.GetText();
     aStr.AppendAscii( ")" );
@@ -783,7 +783,7 @@ bool AttributeOutputBase::AnalyzeURL( const String& rUrl, const String& /*rTarge
                 if ( bkmkName == sLink )
                 {
                     sMark = String(  "_toc"  );
-                    sMark += String::CreateFromInt32( aIter->second );
+                    sMark += OUString::number( aIter->second );
                 }
             }
         }
@@ -1109,7 +1109,7 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
                     nLvl = WW8ListManager::nMaxLevel;
 
                 ((sTxt.AppendAscii( "\" \\l " ))
-                 += String::CreateFromInt32( nLvl )) += ' ';
+                 += OUString::number( nLvl )) += ' ';
             }
             break;
         default:
@@ -1782,7 +1782,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     if ( aAttrIter.RequiresImplicitBookmark() )
     {
         String sBkmkName = String(  "_toc"  );
-        sBkmkName += String::CreateFromInt32( rNode.GetIndex() );
+        sBkmkName += OUString::number( rNode.GetIndex() );
         AppendWordBookmark( sBkmkName );
     }
 

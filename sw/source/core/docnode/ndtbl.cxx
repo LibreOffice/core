@@ -3919,7 +3919,7 @@ String SwDoc::GetUniqueTblName() const
         }
 
     delete [] pSetFlags;
-    return aName += String::CreateFromInt32( ++nNum );
+    return aName += OUString::number( ++nNum );
 }
 
 SwTableFmt* SwDoc::FindTblFmtByName( const String& rName, sal_Bool bAll ) const

@@ -268,7 +268,7 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     String *pGlosGroup = ::GetCurrGlosGroup();
     (*pGlosGroup) = pGroupData->sGroupName;
     (*pGlosGroup) += GLOS_DELIM;
-    (*pGlosGroup) += String::CreateFromInt32(pGroupData->nPathIdx);
+    (*pGlosGroup) += OUString::number(pGroupData->nPathIdx);
     pGlossaryHdl->SetCurGroup(*pGlosGroup);
     // set current text block
     bReadOnly = pGlossaryHdl->IsReadOnly();
@@ -653,7 +653,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
                         GroupUserData* pGroupData = (GroupUserData*)pEntry->GetUserData();
                         String sGroup = pGroupData->sGroupName;
                         sGroup += GLOS_DELIM;
-                        sGroup += String::CreateFromInt32(pGroupData->nPathIdx);
+                        sGroup += OUString::number(pGroupData->nPathIdx);
                         if(sGroup == sNewGroup)
                         {
                             m_pCategoryBox->Select(pEntry);
@@ -939,7 +939,7 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
         GroupUserData* pGroupData = (GroupUserData*)pParent->GetUserData();
         String sEntry(pGroupData->sGroupName);
         sEntry += GLOS_DELIM;
-        sEntry += String::CreateFromInt32(pGroupData->nPathIdx);
+        sEntry += OUString::number(pGroupData->nPathIdx);
         sal_Int8 nDragOption = DND_ACTION_COPY;
         eRet = SV_DRAGDROP_CTRL_COPY;
         if(!pDlg->pGlossaryHdl->IsReadOnly(&sEntry))
@@ -987,7 +987,7 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvTreeListEntry*  pTarget,
         GroupUserData* pGroupData = (GroupUserData*)pSrcParent->GetUserData();
         String sSourceGroup(pGroupData->sGroupName);
         sSourceGroup += GLOS_DELIM;
-        sSourceGroup += String::CreateFromInt32(pGroupData->nPathIdx);
+        sSourceGroup += OUString::number(pGroupData->nPathIdx);
         pDlg->pGlossaryHdl->SetCurGroup(sSourceGroup);
         String sTitle(GetEntryText(pEntry));
         String sShortName(*(String*)pEntry->GetUserData());
@@ -995,7 +995,7 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvTreeListEntry*  pTarget,
         GroupUserData* pDestData = (GroupUserData*)pDestParent->GetUserData();
         String sDestName = pDestData->sGroupName;
         sDestName += GLOS_DELIM;
-        sDestName += String::CreateFromInt32(pDestData->nPathIdx);
+        sDestName += OUString::number(pDestData->nPathIdx);
         bRet = pDlg->pGlossaryHdl->CopyOrMove( sSourceGroup,  sShortName,
                         sDestName, sTitle, sal_True );
         if(bRet)
@@ -1033,7 +1033,7 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvTreeListEntry*  pTarget,
         GroupUserData* pGroupData = (GroupUserData*)pSrcParent->GetUserData();
         String sSourceGroup(pGroupData->sGroupName);
         sSourceGroup += GLOS_DELIM;
-        sSourceGroup += String::CreateFromInt32(pGroupData->nPathIdx);
+        sSourceGroup += OUString::number(pGroupData->nPathIdx);
 
         pDlg->pGlossaryHdl->SetCurGroup(sSourceGroup);
         String sTitle(GetEntryText(pEntry));
@@ -1042,7 +1042,7 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvTreeListEntry*  pTarget,
         GroupUserData* pDestData = (GroupUserData*)pDestParent->GetUserData();
         String sDestName = pDestData->sGroupName;
         sDestName += GLOS_DELIM;
-        sDestName += String::CreateFromInt32(pDestData->nPathIdx);
+        sDestName += OUString::number(pDestData->nPathIdx);
 
         bRet = pDlg->pGlossaryHdl->CopyOrMove( sSourceGroup,  sShortName,
                         sDestName, sTitle, sal_False );
@@ -1066,7 +1066,7 @@ String SwGlossaryDlg::GetCurrGrpName() const
         GroupUserData* pGroupData = (GroupUserData*)pEntry->GetUserData();
         sRet = pGroupData->sGroupName;
         sRet += GLOS_DELIM;
-        sRet += String::CreateFromInt32(pGroupData->nPathIdx);
+        sRet += OUString::number(pGroupData->nPathIdx);
     }
     return sRet;
 }

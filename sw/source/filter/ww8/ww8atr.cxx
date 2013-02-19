@@ -884,11 +884,11 @@ String MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const rtl::OUString* 
             break;      // ???
         case REF_FOOTNOTE:
             sRet.AppendAscii( "_RefF" );
-            sRet += String::CreateFromInt32( nSeqNo );
+            sRet += OUString::number( nSeqNo );
             break;
         case REF_ENDNOTE:
             sRet.AppendAscii( "_RefE" );
-            sRet += String::CreateFromInt32( nSeqNo );
+            sRet += OUString::number( nSeqNo );
             break;
     }
     return BookmarkToWord( sRet ); // #i43956# - encode bookmark accordingly
@@ -2102,7 +2102,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             nTmpLvl = WW8ListManager::nMaxLevel;
 
                         sStr.AppendAscii( "\\o \"1-" );
-                        sStr += String::CreateFromInt32( nTmpLvl );
+                        sStr += OUString::number( nTmpLvl );
                         sStr.AppendAscii(sEntryEnd);
 
                     }
@@ -2160,7 +2160,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
               nMaxMSAutoEvaluate = WW8ListManager::nMaxLevel;
 
             sStr.AppendAscii( "\\o \"1-" );
-            sStr += String::CreateFromInt32( nMaxMSAutoEvaluate );
+            sStr += OUString::number( nMaxMSAutoEvaluate );
             sStr.AppendAscii(sEntryEnd);
                       }
 
@@ -2181,7 +2181,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 if( sTOption.Len() )
                   sTOption += ',';
                 (( sTOption += pColl->GetName() ) += ',' )
-                  += String::CreateFromInt32( nTestLvl + 1 );
+                  += OUString::number( nTestLvl + 1 );
                   }
               }
               }
@@ -2196,7 +2196,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         {
                             xub_StrLen nPos = 0;
                             String sLvl = rtl::OUString(',');
-                            sLvl += String::CreateFromInt32( n + 1 );
+                            sLvl += OUString::number( n + 1 );
                             do {
                                 String sStyle( rStyles.GetToken( 0,
                                             TOX_STYLE_DELIMITER, nPos ));
@@ -2251,9 +2251,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         if (WW8ListManager::nMaxLevel < nNoPgEnd)
                             nNoPgEnd = WW8ListManager::nMaxLevel;
                         sStr.AppendAscii( "\\n " );
-                        sStr += String::CreateFromInt32( nNoPgStt );
+                        sStr += OUString::number( nNoPgStt );
                         sStr += '-';
-                        sStr += String::CreateFromInt32( nNoPgEnd  );
+                        sStr += OUString::number( nNoPgEnd  );
                         sStr += ' ';
                     }
                     if( bOnlyText )
@@ -2886,12 +2886,12 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         xub_StrLen nAbove = (pFld->GetPar1().getLength()+1)/2;
         sStr = FieldString(ww::eEQ);
         sStr.AppendAscii("\\o (\\s\\up ");
-        sStr += String::CreateFromInt32(nHeight/2);
+        sStr += OUString::number(nHeight/2);
 
         sStr.Append('(');
         sStr += String(pFld->GetPar1(),0,nAbove);
         sStr.AppendAscii("), \\s\\do ");
-        sStr += String::CreateFromInt32(nHeight/5);
+        sStr += OUString::number(nHeight/5);
 
         sStr.Append('(');
         sStr += String(pFld->GetPar1(),nAbove,pFld->GetPar1().getLength()-nAbove);

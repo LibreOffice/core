@@ -506,9 +506,9 @@ void SwPagePreViewWin::MouseButtonDown( const MouseEvent& rMEvt )
         {
             // close page preview, set new cursor position and switch to
             // normal view.
-            String sNewCrsrPos( String::CreateFromInt32( aDocPos.X() ));
+            String sNewCrsrPos( OUString::number( aDocPos.X() ));
             ((( sNewCrsrPos += ';' )
-                            += String::CreateFromInt32( aDocPos.Y() )) )
+                            += OUString::number( aDocPos.Y() )) )
                             += ';';
             mrView.SetNewCrsrPos( sNewCrsrPos );
 
@@ -1448,7 +1448,7 @@ IMPL_LINK( SwPagePreView, ScrollHdl, SwScrollbar *, pScrollbar )
         sal_uInt16 nThmbPos = (sal_uInt16)pScrollbar->GetThumbPos();
         if( 1 == aViewWin.GetCol() || !nThmbPos )
             ++nThmbPos;
-        sStateStr += String::CreateFromInt32( nThmbPos );
+        sStateStr += OUString::number( nThmbPos );
         Point aPos = pScrollbar->GetParent()->OutputToScreenPixel(
                                         pScrollbar->GetPosPixel());
         aPos.Y() = pScrollbar->OutputToScreenPixel(pScrollbar->GetPointerPosPixel()).Y();

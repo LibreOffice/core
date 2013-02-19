@@ -167,7 +167,7 @@ static void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt1
         String aPageStr( rtl::OUString(" [") );
         aPageStr += String( SW_RES( STR_PAGE ) );
         aPageStr += ' ';
-        aPageStr += String::CreateFromInt32( nCurPage );
+        aPageStr += OUString::number( nCurPage );
         aPageStr += ']';
         aPos.X() += rOutDev.GetTextWidth( rTitle );
         rOutDev.DrawText( aPos, aPageStr );
@@ -446,10 +446,10 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             {
                 String aPos( SW_RES(STR_SRCVIEW_ROW) );
                 TextSelection aSel = pTextView->GetSelection();
-                aPos += String::CreateFromInt32( aSel.GetEnd().GetPara()+1 );
+                aPos += OUString::number( aSel.GetEnd().GetPara()+1 );
                 aPos += rtl::OUString(" : ");
                 aPos += String(SW_RES(STR_SRCVIEW_COL));
-                aPos += String::CreateFromInt32( aSel.GetEnd().GetIndex()+1 );
+                aPos += OUString::number( aSel.GetEnd().GetIndex()+1 );
                 SfxStringItem aItem( nWhich, aPos );
                 rSet.Put( aItem );
             }

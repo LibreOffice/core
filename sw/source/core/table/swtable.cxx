@@ -1904,13 +1904,13 @@ String SwTableBox::GetName() const
         const SwTableLines* pLines = pLine->GetUpper()
                 ? &pLine->GetUpper()->GetTabLines() : &rTbl.GetTabLines();
 
-        sTmp = String::CreateFromInt32( nPos = pLines->GetPos( pLine ) + 1 );
+        sTmp = OUString::number( nPos = pLines->GetPos( pLine ) + 1 );
         if( sNm.Len() )
             sNm.Insert( aDotStr, 0 ).Insert( sTmp, 0 );
         else
             sNm = sTmp;
 
-        sTmp = String::CreateFromInt32(( nPos = pBoxes->GetPos( pBox )) + 1 );
+        sTmp = OUString::number(( nPos = pBoxes->GetPos( pBox )) + 1 );
         if( 0 != ( pBox = pLine->GetUpper()) )
             sNm.Insert( aDotStr, 0 ).Insert( sTmp, 0 );
         else

@@ -974,7 +974,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     sal_uInt16 i;
     for(i = 1; i <= MAXLEVEL; i++ )
     {
-        pSubPop1->InsertItem( i + 100, String::CreateFromInt32(i));
+        pSubPop1->InsertItem( i + 100, OUString::number(i));
     }
     pSubPop1->CheckItem(100 + nOutlineLevel);
     for(i=0; i < 3; i++ )
@@ -1598,7 +1598,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                         sal_uInt16 nVal = (sal_uInt16)aNumVector[nLevel];
                         nVal ++;
                         nVal = nVal - pOutlRule->Get(nLevel).GetStart();
-                        sEntry += String::CreateFromInt32( nVal );
+                        sEntry += OUString::number( nVal );
                         sEntry += '.';
                     }
                 }
@@ -2497,7 +2497,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                         sEntry = ((SwGraphicContent*)pUserData)->GetLink();
 #if OSL_DEBUG_LEVEL > 1
                         sEntry += ' ';
-                        sEntry += String::CreateFromInt32(
+                        sEntry += OUString::number(
                                     ((SwGraphicContent*)pUserData)->GetYPos());
 #endif
                         bRet = true;
@@ -2505,7 +2505,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
 #if OSL_DEBUG_LEVEL > 1
                     case CONTENT_TYPE_TABLE:
                     case CONTENT_TYPE_FRAME:
-                        sEntry = String::CreateFromInt32(
+                        sEntry = OUString::number(
                                         ((SwContent*)pUserData)->GetYPos() );
                         bRet = true;
                     break;
@@ -2522,7 +2522,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
             else
             {
                 sal_uInt16 nMemberCount = ((SwContentType*)pUserData)->GetMemberCount();
-                sEntry = String::CreateFromInt32(nMemberCount);
+                sEntry = OUString::number(nMemberCount);
                 sEntry += ' ';
                 sEntry += nMemberCount == 1
                             ? ((SwContentType*)pUserData)->GetSingleName()

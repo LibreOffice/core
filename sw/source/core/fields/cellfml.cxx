@@ -843,9 +843,9 @@ static String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
         sCpy = sTmp;        //JP 01.11.95: den Rest aus dem BoxNamen anhaengen
 
         sTmp = cRelKennung;
-        sTmp += String::CreateFromInt32( nBox );
+        sTmp += OUString::number( nBox );
         sTmp += cRelTrenner;
-        sTmp += String::CreateFromInt32( nLine );
+        sTmp += OUString::number( nLine );
 
         if( sCpy.Len() )
         {

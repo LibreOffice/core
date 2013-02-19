@@ -257,7 +257,7 @@ static const String lcl_dbg_out(const SfxPoolItem & rItem)
     if (GetItemWhichMap().find(rItem.Which()) != GetItemWhichMap().end())
         aStr += GetItemWhichMap()[rItem.Which()];
     else
-        aStr += String::CreateFromInt32(rItem.Which());
+        aStr += OUString::number(rItem.Which());
 
     aStr += String(" ]", RTL_TEXTENCODING_ASCII_US);
 
@@ -313,9 +313,9 @@ static const String lcl_dbg_out(const SwTxtAttr & rAttr)
 {
     String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
 
-    aStr += String::CreateFromInt32(*rAttr.GetStart());
+    aStr += OUString::number(*rAttr.GetStart());
     aStr += String("->", RTL_TEXTENCODING_ASCII_US);
-    aStr += String::CreateFromInt32(*rAttr.GetEnd());
+    aStr += OUString::number(*rAttr.GetEnd());
     aStr += String(" ", RTL_TEXTENCODING_ASCII_US);
     aStr += lcl_dbg_out(rAttr.GetAttr());
 
@@ -354,11 +354,11 @@ static String lcl_dbg_out(const SwPosition & rPos)
 {
     String aStr("( ", RTL_TEXTENCODING_ASCII_US);
 
-    aStr += String::CreateFromInt32(rPos.nNode.GetIndex());
+    aStr += OUString::number(rPos.nNode.GetIndex());
     aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-    aStr += String::CreateFromInt32(rPos.nContent.GetIndex());
+    aStr += OUString::number(rPos.nContent.GetIndex());
     aStr += String(": ", RTL_TEXTENCODING_ASCII_US);
-    aStr += String::CreateFromInt32
+    aStr += OUString::number
         (reinterpret_cast<sal_IntPtr>(rPos.nContent.GetIdxReg()), 16);
 
     aStr += String(" )", RTL_TEXTENCODING_ASCII_US);
@@ -407,13 +407,13 @@ static String lcl_dbg_out(const SwRect & rRect)
 {
     String aResult("[ [", RTL_TEXTENCODING_ASCII_US);
 
-    aResult += String::CreateFromInt32(rRect.Left());
+    aResult += OUString::number(rRect.Left());
     aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
-    aResult += String::CreateFromInt32(rRect.Top());
+    aResult += OUString::number(rRect.Top());
     aResult += String("], [", RTL_TEXTENCODING_ASCII_US);
-    aResult += String::CreateFromInt32(rRect.Right());
+    aResult += OUString::number(rRect.Right());
     aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
-    aResult += String::CreateFromInt32(rRect.Bottom());
+    aResult += OUString::number(rRect.Bottom());
 
     aResult += String("] ]", RTL_TEXTENCODING_ASCII_US);
 
@@ -539,17 +539,17 @@ static String lcl_dbg_out(const SwNode & rNode)
 
     aTmpStr += String("<node ", RTL_TEXTENCODING_ASCII_US);
     aTmpStr += String("index=\"", RTL_TEXTENCODING_ASCII_US);
-    aTmpStr += String::CreateFromInt32(rNode.GetIndex());
+    aTmpStr += OUString::number(rNode.GetIndex());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
 
 #ifdef DBG_UTIL
     aTmpStr += String(" serial=\"", RTL_TEXTENCODING_ASCII_US);
-    aTmpStr += String::CreateFromInt32(rNode.GetSerial());
+    aTmpStr += OUString::number(rNode.GetSerial());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
 #endif
 
     aTmpStr += String(" type=\"", RTL_TEXTENCODING_ASCII_US);
-    aTmpStr += String::CreateFromInt32(sal_Int32( rNode.GetNodeType() ) );
+    aTmpStr += OUString::number(sal_Int32( rNode.GetNodeType() ) );
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
 
     aTmpStr += String(" pointer=\"", RTL_TEXTENCODING_ASCII_US);
@@ -574,7 +574,7 @@ static String lcl_dbg_out(const SwNode & rNode)
             aTmpStr += String("<tbl/>", RTL_TEXTENCODING_ASCII_US);
 
         aTmpStr += String("<outlinelevel>", RTL_TEXTENCODING_ASCII_US);
-        aTmpStr += String::CreateFromInt32(pTxtNode->GetAttrOutlineLevel()-1);
+        aTmpStr += OUString::number(pTxtNode->GetAttrOutlineLevel()-1);
         aTmpStr += String("</outlinelevel>", RTL_TEXTENCODING_ASCII_US);
 
         const SwNumRule * pNumRule = pTxtNode->GetNumRule();
@@ -629,7 +629,7 @@ static String lcl_dbg_out(const SwNode & rNode)
             aTmpStr += pColl->GetName();
 
             aTmpStr += String("(", RTL_TEXTENCODING_ASCII_US);
-            aTmpStr += String::CreateFromInt32
+            aTmpStr += OUString::number
                 (static_cast<SwTxtFmtColl *>(pColl)->GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
 
             const SwNumRuleItem & rItem =
@@ -672,7 +672,7 @@ static String lcl_dbg_out(const SwNode & rNode)
 
         const SwStartNode * pStartNode = dynamic_cast<const SwStartNode *> (&rNode);
         if (pStartNode != NULL)
-            aTmpStr += String::CreateFromInt32(pStartNode->EndOfSectionNode()->GetIndex());
+            aTmpStr += OUString::number(pStartNode->EndOfSectionNode()->GetIndex());
 
         aTmpStr += String("\"/>", RTL_TEXTENCODING_ASCII_US);
     }
@@ -788,7 +788,7 @@ static String lcl_dbg_out(const SwUndo & rUndo)
 {
     String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
 
-    aStr += String::CreateFromInt32(
+    aStr += OUString::number(
                 static_cast<SfxUndoAction const&>(rUndo).GetId());
     aStr += String(": ", RTL_TEXTENCODING_ASCII_US);
 
@@ -879,7 +879,7 @@ static String lcl_dbg_out(const SwTxtFmtColl & rFmt)
     String aResult(rFmt.GetName());
 
     aResult += String("(", RTL_TEXTENCODING_ASCII_US);
-    aResult += String::CreateFromInt32(rFmt.GetAttrOutlineLevel());
+    aResult += OUString::number(rFmt.GetAttrOutlineLevel());
     aResult += String(")", RTL_TEXTENCODING_ASCII_US);
 
     return aResult;

@@ -789,7 +789,7 @@ String SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
     if( nVal <= SHRT_MAX )
         sRet = FormatNumber( (sal_uInt16)nVal, nFmt );
     else
-        sRet = String::CreateFromInt32( nVal );
+        sRet = OUString::number( nVal );
     return sRet;
 }
 
@@ -930,7 +930,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                                 xDocProps->getKeywords());
                     break;
     case DI_COMMENT:aStr = xDocProps->getDescription(); break;
-    case DI_DOCNO:  aStr = String::CreateFromInt32(
+    case DI_DOCNO:  aStr = OUString::number(
                                         xDocProps->getEditingCycles() );
                     break;
     case DI_EDIT:
@@ -1131,12 +1131,12 @@ String SwDocInfoField::Expand() const
                     {
                         String sText = aDuration.Negative ? rtl::OUString('-') : rtl::OUString('+');
                         sText += ViewShell::GetShellRes()->sDurationFormat;
-                        sText.SearchAndReplace(rtl::OUString("%1"), String::CreateFromInt32( aDuration.Years ) );
-                        sText.SearchAndReplace(rtl::OUString("%2"), String::CreateFromInt32( aDuration.Months ) );
-                        sText.SearchAndReplace(rtl::OUString("%3"), String::CreateFromInt32( aDuration.Days   ) );
-                        sText.SearchAndReplace(rtl::OUString("%4"), String::CreateFromInt32( aDuration.Hours  ) );
-                        sText.SearchAndReplace(rtl::OUString("%5"), String::CreateFromInt32( aDuration.Minutes) );
-                        sText.SearchAndReplace(rtl::OUString("%6"), String::CreateFromInt32( aDuration.Seconds) );
+                        sText.SearchAndReplace(rtl::OUString("%1"), OUString::number( aDuration.Years ) );
+                        sText.SearchAndReplace(rtl::OUString("%2"), OUString::number( aDuration.Months ) );
+                        sText.SearchAndReplace(rtl::OUString("%3"), OUString::number( aDuration.Days   ) );
+                        sText.SearchAndReplace(rtl::OUString("%4"), OUString::number( aDuration.Hours  ) );
+                        sText.SearchAndReplace(rtl::OUString("%5"), OUString::number( aDuration.Minutes) );
+                        sText.SearchAndReplace(rtl::OUString("%6"), OUString::number( aDuration.Seconds) );
                         sVal = sText;
                     }
                     else
@@ -1271,7 +1271,7 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         if( nSubType & DI_SUB_FIXED )
         {
             rAny >>= nValue;
-            aContent = String::CreateFromInt32(nValue);
+            aContent = OUString::number(nValue);
         }
         break;
 

@@ -706,7 +706,7 @@ MAKENUMSTR:
                 pNumFmt->GetOutputString( nVal, nKey, cellString, &pDummy );
             }
             else
-                cellString = String::CreateFromInt32((sal_Int32)nVal);
+                cellString = OUString::number((sal_Int32)nVal);
             break;
 
     }

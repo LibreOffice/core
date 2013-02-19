@@ -1477,7 +1477,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
                     nFormat = SVX_NUM_PAGEDESC;
                 short nOff = (short)sPar2.ToInt32();
                 nOff += 1;
-                sPar2 = String::CreateFromInt32(nOff);
+                sPar2 = OUString::number(nOff);
             }
             break;
 
@@ -1493,7 +1493,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
                     nFormat = SVX_NUM_PAGEDESC;
                 short nOff = (short)sPar2.ToInt32();
                 nOff -= 1;
-                sPar2 = String::CreateFromInt32(nOff);
+                sPar2 = OUString::number(nOff);
             }
             break;
 

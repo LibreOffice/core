@@ -1551,7 +1551,7 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
                 aName.AssignAscii( sCSS1_first_letter );
                 aName.Append( ' ' );
                 aName.Append(
-                    String::CreateFromInt32( (sal_Int32)(++nDropCapCnt) ) );
+                    OUString::number( (sal_Int32)(++nDropCapCnt) ) );
             }
             while( pDoc->FindCharFmtByName(aName) );
         }

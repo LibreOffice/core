@@ -669,12 +669,12 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
 void SwSendMailDialog::UpdateTransferStatus()
 {
     String sStatus( m_sTransferStatus );
-    sStatus.SearchAndReplaceAscii("%1", String::CreateFromInt32(m_nSendCount) );
-    sStatus.SearchAndReplaceAscii("%2", String::CreateFromInt32(m_pImpl->nDocumentCount));
+    sStatus.SearchAndReplaceAscii("%1", OUString::number(m_nSendCount) );
+    sStatus.SearchAndReplaceAscii("%2", OUString::number(m_pImpl->nDocumentCount));
     m_aTransferStatusFT.SetText(sStatus);
 
     sStatus = m_sErrorStatus;
-    sStatus.SearchAndReplaceAscii("%1", String::CreateFromInt32(m_nErrorCount) );
+    sStatus.SearchAndReplaceAscii("%1", OUString::number(m_nErrorCount) );
     m_aErrorStatusFT.SetText(sStatus);
 
     if(m_pImpl->aDescriptors.size())

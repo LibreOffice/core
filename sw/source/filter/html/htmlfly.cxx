@@ -867,7 +867,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             aNameBase.AssignAscii( OOO_STRING_SVTOOLS_HTML_map );
         if( !aIMapName.Len() )
             (aIMapName = aNameBase)
-                += String::CreateFromInt32( rHTMLWrt.nImgMapCnt );
+                += OUString::number( rHTMLWrt.nImgMapCnt );
 
         sal_Bool bFound;
         do
@@ -887,7 +887,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             {
                 rHTMLWrt.nImgMapCnt++;
                 (aIMapName = aNameBase)
-                    += String::CreateFromInt32( rHTMLWrt.nImgMapCnt );
+                    += OUString::number( rHTMLWrt.nImgMapCnt );
             }
 
         } while( bFound );

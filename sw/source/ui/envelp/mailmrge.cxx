@@ -411,9 +411,9 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
                 xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY_THROW);
         uno::Reference< container::XContainerQuery > xQuery(xFilterFactory, UNO_QUERY_THROW);
         OUString sCommand("matchByDocumentService=com.sun.star.text.TextDocument:iflags=");
-        sCommand += String::CreateFromInt32(SFX_FILTER_EXPORT);
+        sCommand += OUString::number(SFX_FILTER_EXPORT);
         sCommand += ":eflags=";
-        sCommand += String::CreateFromInt32(SFX_FILTER_NOTINFILEDLG);
+        sCommand += OUString::number(SFX_FILTER_NOTINFILEDLG);
         sCommand += ":default_first";
         uno::Reference< container::XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
         const ::rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("Name"));

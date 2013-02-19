@@ -2287,7 +2287,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, bool bAutoNum ) const
     delete [] pSetFlags;
     if( pChkStr && pChkStr->Len() )
         return *pChkStr;
-    return aName += String::CreateFromInt32( ++nNum );
+    return aName += OUString::number( ++nNum );
 }
 
 void SwDoc::UpdateNumRule()
@@ -2596,7 +2596,7 @@ namespace listfunc
         {
             ++nHitCount;
             aTmpStr = aSuggestedUniqueListId;
-            aTmpStr += String::CreateFromInt32( nHitCount );
+            aTmpStr += OUString::number( nHitCount );
         }
 
         return aTmpStr;

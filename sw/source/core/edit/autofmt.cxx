@@ -981,7 +981,7 @@ CHECK_ROMAN_5:
                 eScan |= CHG;
                 if( pPreFix )
                     (*pPreFix += (sal_Unicode)1)
-                              += String::CreateFromInt32( nStart );
+                              += OUString::number( nStart );
             }
             eScan &= ~NO_DELIM;     // Delim raus
             eScan |= DELIM;         // Digit rein
@@ -998,7 +998,7 @@ CHECK_ROMAN_5:
         return USHRT_MAX;
 
     if( (NO_DELIM & eScan) && pPreFix )     // den letzen nicht vergessen
-        (*pPreFix += (sal_Unicode)1) += String::CreateFromInt32( nStart );
+        (*pPreFix += (sal_Unicode)1) += OUString::number( nStart );
 
     rPos = nPos;
     return nDigitLvl;       // 0 .. 9 (MAXLEVEL - 1)
@@ -1819,7 +1819,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
         String sTxt(ViewShell::GetShellRes()->GetAutoFmtNameLst()[
                                     STR_AUTOFMTREDL_SET_TMPL_HEADLINE ] );
         sTxt.SearchAndReplace( rtl::OUString("$(ARG1)"),
-                                String::CreateFromInt32( nLvl + 1 ) );
+                                OUString::number( nLvl + 1 ) );
         pDoc->SetAutoFmtRedlineComment( &sTxt );
     }
 

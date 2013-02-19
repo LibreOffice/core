@@ -871,7 +871,7 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     for( sal_uInt16 i = 0; (i < nNoOfVisibleCols ) && ( i < MET_FIELDS); i++ )
     {
         String sEntry = rtl::OUString('~');
-        String sIndex = String::CreateFromInt32( aValueTbl[i] + 1 );
+        String sIndex = OUString::number( aValueTbl[i] + 1 );
         sEntry += sIndex;
         m_pTextArr[i]->SetText( sEntry );
 
@@ -1360,7 +1360,7 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 
     // Repeat Heading
     if(m_pHeadLineCB->IsChecked() != m_pHeadLineCB->GetSavedValue() ||
-        String::CreateFromInt32( static_cast< sal_Int32 >(m_pRepeatHeaderNF->GetValue()) ) != m_pRepeatHeaderNF->GetSavedValue() )
+        OUString::number( static_cast< sal_Int32 >(m_pRepeatHeaderNF->GetValue()) ) != m_pRepeatHeaderNF->GetSavedValue() )
     {
         bModified |= 0 != rSet.Put(
             SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, m_pHeadLineCB->IsChecked()? sal_uInt16(m_pRepeatHeaderNF->GetValue()) : 0 ));

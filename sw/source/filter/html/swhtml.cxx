@@ -229,9 +229,9 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, co
         pStrm->ResetError();
     else if( SVPAR_ACCEPTED != eState )
     {
-        String sErr( String::CreateFromInt32((sal_Int32)xParser->GetLineNr()));
+        String sErr( OUString::number((sal_Int32)xParser->GetLineNr()));
         sErr += ',';
-        sErr += String::CreateFromInt32((sal_Int32)xParser->GetLinePos());
+        sErr += OUString::number((sal_Int32)xParser->GetLinePos());
 
         // den Stream als Fehlernummer Transporter benutzen
         nRet = *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,

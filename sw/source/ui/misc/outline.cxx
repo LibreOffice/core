@@ -783,10 +783,10 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     {
         m_pCollBox->InsertEntry( SwStyleNameMapper::GetUIName(
                                     static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i), aEmptyStr ));
-        m_pLevelLB->InsertEntry( String::CreateFromInt32(i + 1) );
+        m_pLevelLB->InsertEntry( OUString::number(i + 1) );
     }
     sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "1 - " ));
-    sStr += String::CreateFromInt32(MAXLEVEL);
+    sStr += OUString::number(MAXLEVEL);
     m_pLevelLB->InsertEntry( sStr );
 
     // query the texttemplates' outlining levels

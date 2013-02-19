@@ -96,14 +96,14 @@ void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
 
 void SwDocStatPage::SetData(const SwDocStat &rStat)
 {
-    m_pTableNo->SetText(String::CreateFromInt32( rStat.nTbl ));
-    m_pGrfNo->SetText(String::CreateFromInt32( rStat.nGrf ));
-    m_pOLENo->SetText(String::CreateFromInt32( rStat.nOLE ));
-    m_pPageNo->SetText(String::CreateFromInt32( rStat.nPage ));
-    m_pParaNo->SetText(String::CreateFromInt32( rStat.nPara ));
-    m_pWordNo->SetText(String::CreateFromInt32( rStat.nWord ));
-    m_pCharNo->SetText(String::CreateFromInt32( rStat.nChar ));
-    m_pCharExclSpacesNo->SetText(String::CreateFromInt32( rStat.nCharExcludingSpaces ));
+    m_pTableNo->SetText(OUString::number( rStat.nTbl ));
+    m_pGrfNo->SetText(OUString::number( rStat.nGrf ));
+    m_pOLENo->SetText(OUString::number( rStat.nOLE ));
+    m_pPageNo->SetText(OUString::number( rStat.nPage ));
+    m_pParaNo->SetText(OUString::number( rStat.nPara ));
+    m_pWordNo->SetText(OUString::number( rStat.nWord ));
+    m_pCharNo->SetText(OUString::number( rStat.nChar ));
+    m_pCharExclSpacesNo->SetText(OUString::number( rStat.nCharExcludingSpaces ));
 }
 
 /*------------------------------------------------------------------------
@@ -136,7 +136,7 @@ IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl)
     SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(pFEShell)
-        m_pLineNo->SetText( String::CreateFromInt32( pFEShell->GetLineCount(sal_False)));
+        m_pLineNo->SetText( OUString::number( pFEShell->GetLineCount(sal_False)));
     //pButton->Disable();
     return 0;
 }

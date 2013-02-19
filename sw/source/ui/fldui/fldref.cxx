@@ -464,7 +464,7 @@ void SwFldRefPage::UpdateSubType()
         }
     }
     if (IsFldEdit() && !sOldSel.Len())
-        sOldSel = String::CreateFromInt32( pRefFld->GetSeqNo() + 1 );
+        sOldSel = OUString::number( pRefFld->GetSeqNo() + 1 );
 
     aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
@@ -602,7 +602,7 @@ void SwFldRefPage::UpdateSubType()
                 }
 
                 if (IsFldEdit() && !sOldSel.Len())
-                    sOldSel = String::CreateFromInt32( pRefFld->GetSeqNo() + 1);
+                    sOldSel = OUString::number( pRefFld->GetSeqNo() + 1);
             }
         }
     }
@@ -834,13 +834,13 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
 
             if (pSh->GetSeqFtnList(aArr) && aArr.SeekEntry(aElem, &nPos))
             {
-                aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
+                aVal = OUString::number( aArr[nPos]->nSeqNo );
 
                 if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
                     bModified = sal_True; // can happen with fields of which the references were deleted
             }
             else if (IsFldEdit())
-                aVal = String::CreateFromInt32( pRefFld->GetSeqNo() );
+                aVal = OUString::number( pRefFld->GetSeqNo() );
         }
         else if (REFFLDFLAG_ENDNOTE == nTypeId)         // endnotes
         {
@@ -855,13 +855,13 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
 
             if (pSh->GetSeqFtnList(aArr, true) && aArr.SeekEntry(aElem, &nPos))
             {
-                aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
+                aVal = OUString::number( aArr[nPos]->nSeqNo );
 
                 if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
                     bModified = sal_True; // can happen with fields of which the reference was deleted
             }
             else if (IsFldEdit())
-                aVal = String::CreateFromInt32( pRefFld->GetSeqNo() );
+                aVal = OUString::number( pRefFld->GetSeqNo() );
         }
         // #i83479#
         else if ( nTypeId == REFFLDFLAG_HEADING )
@@ -922,13 +922,13 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
 
                 if (pType->GetSeqFldList(aArr) && aArr.SeekEntry(aElem, &nPos))
                 {
-                    aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
+                    aVal = OUString::number( aArr[nPos]->nSeqNo );
 
                     if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
                         bModified = sal_True; // can happen with fields of which the reference was deleted
                 }
                 else if (IsFldEdit())
-                    aVal = String::CreateFromInt32( pRefFld->GetSeqNo() );
+                    aVal = OUString::number( pRefFld->GetSeqNo() );
             }
         }
     }
@@ -936,7 +936,7 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
     if (IsFldEdit() && nTypeId == TYP_GETREFFLD)
     {
         aVal.Insert('|', 0);
-        aVal.Insert(String::CreateFromInt32(nSubType), 0);
+        aVal.Insert(OUString::number(nSubType), 0);
     }
 
     if (!IsFldEdit() || bModified ||
@@ -974,7 +974,7 @@ void    SwFldRefPage::FillUserData()
         nTypeSel = USHRT_MAX;
     else
         nTypeSel = sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(aTypeLB.GetEntryData( nTypeSel )));
-    sData += String::CreateFromInt32( nTypeSel );
+    sData += OUString::number( nTypeSel );
     SetUserData(sData);
 }
 

@@ -973,7 +973,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         {
             // Style definieren
             String aName( sPrefix.Len() ? sPrefix : rNumRule.GetName() );
-            (aName += 'z') += String::CreateFromInt32( nLevel );
+            (aName += 'z') += OUString::number( nLevel );
 
             // const Wegcasten
             pFmt = rDoc.MakeCharFmt(aName, (SwCharFmt*)rDoc.GetDfltCharFmt());
@@ -1027,7 +1027,7 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
 {
     // wird erstmal zur Bildung des Style Namens genommen
     String sPrefix(rtl::OUString("WW8Num"));
-    sPrefix += String::CreateFromInt32(nUniqueList++);
+    sPrefix += OUString::number(nUniqueList++);
     // #i86652#
     sal_uInt16 nRul =
             rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), 0, false,
@@ -1262,7 +1262,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 // Nauemsprefix aufbauen: fuer NumRule-Name (eventuell)
                 // und (falls vorhanden) fuer Style-Name (dann auf jeden Fall)
                 String sPrefix(rtl::OUString("WW8NumSt"));
-                sPrefix += String::CreateFromInt32( nLfo + 1 );
+                sPrefix += OUString::number( nLfo + 1 );
                 // jetzt dem pNumRule seinen RICHTIGEN Wert zuweisen !!!
                 // (bis dahin war hier die Parent NumRule vermerkt )
                 //

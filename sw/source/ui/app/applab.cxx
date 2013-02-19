@@ -202,12 +202,12 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
         if(bLabel)
         {
             aTmp = String(SW_RES( STR_LAB_TITLE));
-            aTmp += String::CreateFromInt32(++nLabelTitleNo );
+            aTmp += OUString::number(++nLabelTitleNo );
         }
         else
         {
             aTmp = pDlg->GetBusinessCardStr();
-            aTmp += String::CreateFromInt32( ++nBCTitleNo );
+            aTmp += OUString::number( ++nBCTitleNo );
         }
         xDocSh->SetTitle( aTmp );
 

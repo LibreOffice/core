@@ -202,7 +202,7 @@ sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
         sDBName += DB_DELIM;
         sDBName += (String)aData.sCommand;
         sDBName += DB_DELIM;
-        sDBName += String::CreateFromInt32(aData.nCommandType);
+        sDBName += OUString::number(aData.nCommandType);
         sDBName += DB_DELIM;
         if(sColumnName.Len())
         {
@@ -487,7 +487,7 @@ void    SwFldDBPage::FillUserData()
         nTypeSel = USHRT_MAX;
     else
         nTypeSel = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData( nTypeSel );
-    sData += String::CreateFromInt32( nTypeSel );
+    sData += OUString::number( nTypeSel );
     SetUserData(sData);
 }
 

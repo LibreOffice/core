@@ -466,7 +466,7 @@ void    SwFldDokInfPage::FillUserData()
     sData += ';';
     SvTreeListEntry* pEntry = aTypeTLB.FirstSelected();
     sal_uInt16 nTypeSel = pEntry ? sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(pEntry->GetUserData())) : USHRT_MAX;
-    sData += String::CreateFromInt32( nTypeSel );
+    sData += OUString::number( nTypeSel );
     SetUserData(sData);
 }
 

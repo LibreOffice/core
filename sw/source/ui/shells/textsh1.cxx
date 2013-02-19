@@ -1308,7 +1308,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case SID_LANGUAGE_STATUS:
             {
                 // the value of used script types
-                String aScriptTypesInUse( String::CreateFromInt32( rSh.GetScriptType() ) );
+                String aScriptTypesInUse( OUString::number( rSh.GetScriptType() ) );
 
                 SvtLanguageTable aLangTable;
 

@@ -431,7 +431,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
 
     m_pLbLevel->InsertEntry(sNone);
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
-        m_pLbLevel->InsertEntry( String::CreateFromInt32(n+1) );
+        m_pLbLevel->InsertEntry( OUString::number(n+1) );
 
     SwSetExpFieldType* pFldType = (SwSetExpFieldType*)rSh.GetFldType(
                                         RES_SETEXPFLD, aFldTypeName );

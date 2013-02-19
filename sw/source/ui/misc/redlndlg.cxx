@@ -822,7 +822,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
         {
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1,
-                              String::CreateFromInt32(aRedlines.size()));
+                              OUString::number(aRedlines.size()));
             aTmpStr = aRewriter.Apply(String(SW_RES(STR_N_REDLINES)));
         }
 
@@ -1226,11 +1226,11 @@ void SwRedlineAcceptDlg::FillInfo(String &rExtraData) const
 
     sal_uInt16  nCount = pTable->TabCount();
 
-    rExtraData += String::CreateFromInt32(nCount);
+    rExtraData += OUString::number(nCount);
     rExtraData += ';';
     for(sal_uInt16 i = 0; i < nCount; i++)
     {
-        rExtraData += String::CreateFromInt32( pTable->GetTab(i) );
+        rExtraData += OUString::number( pTable->GetTab(i) );
         rExtraData += ';';
     }
     rExtraData += ')';

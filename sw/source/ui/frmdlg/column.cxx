@@ -883,17 +883,17 @@ void SwColumnPage::SetLabels( sal_uInt16 nVis )
 {
     rtl::OUString sLbl( '~' );
 
-    String sLbl2( String::CreateFromInt32( nVis + 1 ));
+    String sLbl2( OUString::number( nVis + 1 ));
     String tmp1(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     m_pLbl1->SetText(sLbl2);
 
-    sLbl2 = String::CreateFromInt32( nVis + 2 );
+    sLbl2 = OUString::number( nVis + 2 );
     String tmp2(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     m_pLbl2->SetText(sLbl2);
 
-    sLbl2 = String::CreateFromInt32( nVis + 3 );
+    sLbl2 = OUString::number( nVis + 3 );
     String tmp3(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     m_pLbl3->SetText(sLbl2);

@@ -201,7 +201,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 sDBName += DB_DELIM;
                 sDBName += (String)sCommandArg;
                 sDBName += DB_DELIM;
-                sDBName += String::CreateFromInt32(nCommandTypeArg);
+                sDBName += OUString::number(nCommandTypeArg);
                 sDBName += DB_DELIM;
                 sDBName += (String)sColumnName;
 

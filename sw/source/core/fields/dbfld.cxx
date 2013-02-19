@@ -796,7 +796,7 @@ bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         {
             sal_Int32 nVal = 0;
             rAny >>= nVal;
-            aPar2 = String::CreateFromInt32(nVal);
+            aPar2 = OUString::number(nVal);
         }
         break;
     default:

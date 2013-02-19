@@ -170,7 +170,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
             sal_uInt16 nNum = 1;
             do {
                 String sSrch( rFldNm );
-                sSrch.Append( String::CreateFromInt32( nNum ));
+                sSrch.Append( OUString::number( nNum ));
                 for( i = INIT_FLDTYPES; i < nSize; ++i )
                     if( nFldWhich == (pFnd = (*mpFldTypes)[i])->Which() &&
                         rSCmp.isEqual( sSrch, pFnd->GetName() ) )
@@ -1681,7 +1681,7 @@ static String lcl_DBDataToString(const SwDBData& rData)
     sRet += DB_DELIM;
     sRet += (String)rData.sCommand;
     sRet += DB_DELIM;
-    sRet += String::CreateFromInt32(rData.nCommandType);
+    sRet += OUString::number(rData.nCommandType);
     return sRet;
 }
 

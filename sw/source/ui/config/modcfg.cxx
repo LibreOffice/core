@@ -212,7 +212,7 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFro
                     if( c <= 0x1f || c >= 0x7f )
                     {
                         sReturn.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\\x" ))
-                            += String::CreateFromInt32( c, 16 );
+                            += OUString::number( c, 16 );
                     }
                     else
                         sReturn += c;

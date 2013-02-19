@@ -476,7 +476,7 @@ String sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
     if (nColumn < 0 || nRow < 0)
         return sCellName;
     sw_GetTblBoxColStr( static_cast< sal_uInt16 >(nColumn), sCellName );
-    sCellName += String::CreateFromInt32( nRow + 1 );
+    sCellName += OUString::number( nRow + 1 );
     return sCellName;
 }
 

@@ -553,7 +553,7 @@ String  SwAuthorityField::Expand() const
        if(!pAuthType->GetDoc()->IsExpFldsLocked())
            m_nTempSequencePos = pAuthType->GetSequencePos( m_nHandle );
        if( m_nTempSequencePos >= 0 )
-           sRet += String::CreateFromInt32( m_nTempSequencePos );
+           sRet += OUString::number( m_nTempSequencePos );
     }
     else
     {

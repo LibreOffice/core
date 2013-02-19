@@ -211,7 +211,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl)
 {
     String sGroup(m_pNameED->GetText());
     sGroup += GLOS_DELIM;
-    sGroup += String::CreateFromInt32(m_pPathLB->GetSelectEntryPos());
+    sGroup += OUString::number(m_pPathLB->GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
     m_InsertedArr.push_back(sGroup);
     String sTemp(m_pNameED->GetText());
@@ -294,7 +294,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
     String sNewTitle(sNewName);
 
     sNewName += GLOS_DELIM;
-    sNewName += String::CreateFromInt32(m_pPathLB->GetSelectEntryPos());
+    sNewName += OUString::number(m_pPathLB->GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sNewName), "group already available!");
 
     // if the name to be renamed is among the new ones - replace

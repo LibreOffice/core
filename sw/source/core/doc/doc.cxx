@@ -1272,13 +1272,13 @@ static void lcl_FormatPostIt(
     String aStr( ViewShell::GetShellRes()->aPostItPage );
     aStr.AppendAscii(sTmp);
 
-    aStr += XubString::CreateFromInt32( nPageNo );
+    aStr += OUString::number( nPageNo );
     aStr += ' ';
     if( nLineNo )
     {
         aStr += ViewShell::GetShellRes()->aPostItLine;
         aStr.AppendAscii(sTmp);
-        aStr += XubString::CreateFromInt32( nLineNo );
+        aStr += OUString::number( nLineNo );
         aStr += ' ';
     }
     aStr += ViewShell::GetShellRes()->aPostItAuthor;

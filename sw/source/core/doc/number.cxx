@@ -694,7 +694,7 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                 if( rNumVector[ i ] )
                 {
                     if( bOnlyArabic )
-                        aStr += String::CreateFromInt32( rNumVector[ i ] );
+                        aStr += OUString::number( rNumVector[ i ] );
                     else
                         aStr += rNFmt.GetNumStr( rNumVector[ i ] );
                 }
