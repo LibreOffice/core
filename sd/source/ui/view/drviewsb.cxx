@@ -86,7 +86,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
             sal_uInt16 nLayer = nLayerCnt - 2 + 1;
             String aLayerName ( SdResId(STR_LAYER) ), aLayerTitle, aLayerDesc;
-            aLayerName += String::CreateFromInt32( (sal_Int32)nLayer );
+            aLayerName += OUString::number( (sal_Int32)nLayer );
             sal_Bool bIsVisible = sal_False;
             sal_Bool bIsLocked = sal_False;
             sal_Bool bIsPrintable = sal_False;

@@ -511,7 +511,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
             {
                 String aName(maLayoutName);
                 aName += sal_Unicode( ' ' );
-                aName += String::CreateFromInt32( nLevel );
+                aName += OUString::number( nLevel );
                 SfxStyleSheet* pSheet = (SfxStyleSheet*)pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
                 DBG_ASSERT(pSheet, "Vorlage fuer Gliederungsobjekt nicht gefunden");
                 if (pSheet)
@@ -595,7 +595,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
         {
             aName = GetLayoutName();
             aName += sal_Unicode( ' ' );
-            aName += String::CreateFromInt32( 1 );
+            aName += OUString::number( 1 );
         }
         break;
 
@@ -661,7 +661,7 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
     if( nNameId == STR_LAYOUT_OUTLINE )
     {
         aStyleName.Append( sal_Unicode( ' ' ));
-        aStyleName.Append( String::CreateFromInt32( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE )));
+        aStyleName.Append( OUString::number( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE )));
     }
 
     SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
@@ -1910,7 +1910,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                             for (sal_uInt16 i=1; i<=9; i++)
                             {
                                 String sLayoutName(aName);
-                                sLayoutName += String::CreateFromInt32( (sal_Int32)i );
+                                sLayoutName += OUString::number( (sal_Int32)i );
                                 SfxStyleSheet* pOutlineSheet = (SfxStyleSheet*)((SdDrawDocument*) pModel)->GetStyleSheetPool()->Find(sLayoutName, SD_STYLE_FAMILY_MASTERPAGE);
 
                                 if (pOutlineSheet)
@@ -2063,7 +2063,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
                 // Neue Vorlage zuweisen
                 String aName(rPage.GetLayoutName());
                 aName += sal_Unicode( ' ' );
-                aName += String::CreateFromInt32( nLevel );
+                aName += OUString::number( nLevel );
                 SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE) );
 
                 if (pSheet)
@@ -2523,7 +2523,7 @@ const String& SdPage::GetName() const
                 // if the document has number none as a formating
                 // for page numbers we still default to arabic numbering
                 // to keep the default page names unique
-                aCreatedPageName += String::CreateFromInt32( (sal_Int32)nNum );
+                aCreatedPageName += OUString::number( (sal_Int32)nNum );
             }
             else
             {

@@ -2644,7 +2644,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                 i++;
                 aPrefix = aStdPrefix;
                 aPrefix += sal_Unicode( ' ' );
-                aPrefix += String::CreateFromInt32( i );
+                aPrefix += OUString::number( i );
             }
 
         } while( !bUnique );

@@ -351,7 +351,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage* pPage, sal_uInt16 nPos, sal_
                             // update link page number
                             number += nIncrement;
                             aURL.Erase (aHashSlide.Len() + 1, aURL.Len() - aHashSlide.Len() - 1);
-                            aURL += XubString::CreateFromInt32(number);
+                            aURL += OUString::number(number);
                             if (bNotes)
                             {
                                 aURL += ' ';

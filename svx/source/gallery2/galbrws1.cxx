@@ -330,7 +330,7 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
             {
                 aTitle = mpExchangeData->aEditedTitle;
                 aTitle += ' ';
-                aTitle += String::CreateFromInt32( nCount );
+                aTitle += OUString::number( nCount );
             }
 
             mpGallery->RenameTheme( aOldName, aTitle );
@@ -435,7 +435,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
                     {
                         aName = aNewName;
                         aName += ' ';
-                        aName += String::CreateFromInt32( nCount );
+                        aName += OUString::number( nCount );
                     }
 
                     mpGallery->RenameTheme( aOldName, aName );
@@ -687,7 +687,7 @@ IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl)
     {
         aName = aNewTheme;
         aName += ' ';
-        aName += String::CreateFromInt32( nCount );
+        aName += OUString::number( nCount );
     }
 
     if( !mpGallery->HasTheme( aName ) && mpGallery->CreateTheme( aName ) )

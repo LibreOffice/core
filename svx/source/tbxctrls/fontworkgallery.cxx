@@ -160,7 +160,7 @@ void FontWorkGalleryDialog::fillFavorites( sal_uInt16 nThemeId, std::vector< Bit
     {
         String aStr(SVX_RES(RID_SVXFLOAT3D_FAVORITE));
         aStr += sal_Unicode(' ');
-        aStr += String::CreateFromInt32((sal_Int32)nFavorite);
+        aStr += OUString::number((sal_Int32)nFavorite);
         Image aThumbImage( *rFavorites[nFavorite-1] );
         maCtlFavorites.InsertItem( (sal_uInt16)nFavorite, aThumbImage, aStr );
     }

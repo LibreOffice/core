@@ -658,7 +658,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
                 pDocliner->Insert( pOutliner->GetText(pSourcePara), nTargetPos, nDepth );
                 String aStyleSheetName( pStyleSheet->GetName() );
                 aStyleSheetName.Erase( aStyleSheetName.Len()-1, 1 );
-                aStyleSheetName += String::CreateFromInt32( nDepth <= 0 ? 1 : nDepth+1 );
+                aStyleSheetName += OUString::number( nDepth <= 0 ? 1 : nDepth+1 );
                 SfxStyleSheetBasePool* pStylePool = mpDoc->GetStyleSheetPool();
                 SfxStyleSheet* pOutlStyle = (SfxStyleSheet*) pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() );
                 pDocliner->SetStyleSheet( nTargetPos, pOutlStyle );

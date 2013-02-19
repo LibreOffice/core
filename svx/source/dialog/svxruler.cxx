@@ -1515,7 +1515,7 @@ long SvxRuler::GetCorrectedDragPos( sal_Bool bLeft, sal_Bool bRight )
 {
     const long lNullPix = Ruler::GetNullOffset();
     long lDragPos = GetDragPos() + lNullPix;
-ADD_DEBUG_TEXT("lDragPos: ", String::CreateFromInt32(lDragPos))
+ADD_DEBUG_TEXT("lDragPos: ", OUString::number(lDragPos))
      sal_Bool bHoriRows = bHorz && pRuler_Imp->bIsTableRows;
     if((bLeft || (bHoriRows)) && lDragPos < nMaxLeft)
         lDragPos = nMaxLeft;
@@ -1935,7 +1935,7 @@ void SvxRuler::DragBorders()
     {
       case RULER_DRAGSIZE_MOVE:
         {
-ADD_DEBUG_TEXT("lLastLMargin: ", String::CreateFromInt32(pRuler_Imp->lLastLMargin))
+ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(pRuler_Imp->lLastLMargin))
             lDiff = GetDragType()==RULER_TYPE_BORDER ?
                 lPos-nDragOffset - pBorders[nIdx].nPos
                 : GetDragType() == RULER_TYPE_MARGIN1 ? lPos - pRuler_Imp->lLastLMargin : lPos - pRuler_Imp->lLastRMargin;

@@ -1767,7 +1767,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             // Testnamen bilden
             aTest = aName;              // Standard, Standard1, Standard2, ...
             if (nCount > 0)
-                aTest += String::CreateFromInt32( nCount );
+                aTest += OUString::number( nCount );
 
             // gibt's schon eine, die so heisst?
             bNotANewName = sal_False;

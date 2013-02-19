@@ -148,7 +148,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
             aName += '_';
             aName += String(aURL.getExtension());
             aName += '_';
-            String aStr( String::CreateFromInt32( rGraphic.GetChecksum(), 16 ) );
+            String aStr( OUString::number( rGraphic.GetChecksum(), 16 ) );
             if ( aStr.GetChar(0) == '-' )
                 aStr.SetChar(0,'m');
             aName += aStr;

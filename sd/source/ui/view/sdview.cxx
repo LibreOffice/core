@@ -1250,7 +1250,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
                 {
                     String aStyleSheetName( pStyleSheet->GetName() );
                     aStyleSheetName.Erase( aStyleSheetName.Len() - 1, 1 );
-                    aStyleSheetName += String::CreateFromInt32( nDepth );
+                    aStyleSheetName += OUString::number( nDepth );
                     pStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() ) );
                     DBG_ASSERT( pStyle, "sd::View::OnEndPasteOrDrop(), Style not found!" );
                 }

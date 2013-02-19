@@ -1818,7 +1818,7 @@ namespace svxform
             else
             {
                 aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE);
-                aUndoStr.SearchAndReplaceAscii( "#", String::CreateFromInt32( m_arrCurrentSelection.size() ) );
+                aUndoStr.SearchAndReplaceAscii( "#", OUString::number( m_arrCurrentSelection.size() ) );
             }
             pFormModel->BegUndo(aUndoStr);
         }

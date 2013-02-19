@@ -163,9 +163,9 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                     aFullName = maLayoutName;
                     aOldFullName = aOldLayoutName;
                     aFullName += sal_Unicode( ' ' );
-                    aFullName += String::CreateFromInt32( (sal_Int32) (i <= 0 ) ? 1 : i + 1);
+                    aFullName += OUString::number( (sal_Int32) (i <= 0 ) ? 1 : i + 1);
                     aOldFullName += sal_Unicode( ' ' );
-                    aOldFullName += String::CreateFromInt32( (sal_Int32) (i <= 0 ) ? 1 : i + 1 );
+                    aOldFullName += OUString::number( (sal_Int32) (i <= 0 ) ? 1 : i + 1 );
 
                     pSheet = pStShPool->Find(aOldFullName, SD_STYLE_FAMILY_MASTERPAGE);
                     DBG_ASSERT(pSheet, "alte Gliederungsvorlage nicht gefunden");

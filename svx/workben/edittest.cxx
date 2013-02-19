@@ -565,7 +565,7 @@ EditMainWindow::EditMainWindow() :
 void EditMainWindow::SetTitle()
 {
     String aHeading( String( RTL_CONSTASCII_USTRINGPARAM( "SvEdit!  -  Zoom " ) ) );
-    aHeading += String::CreateFromInt32(nZoom);
+    aHeading += OUString::number(nZoom);
     aHeading += '%';
     EditEngine* pEditEngine = aViewWin.GetEditView()->GetEditEngine();
     if ( pEditEngine->GetControlWord() & EE_CNTRL_STRETCHING )
@@ -573,9 +573,9 @@ void EditMainWindow::SetTitle()
         USHORT nX, nY;
         pEditEngine->GetGlobalCharStretching( nX, nY );
         aHeading += String( RTL_CONSTASCII_USTRINGPARAM( ", Stretch=(" ) );
-        aHeading += String::CreateFromInt32(nX);
+        aHeading += OUString::number(nX);
         aHeading += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
-        aHeading += String::CreateFromInt32(nY);
+        aHeading += OUString::number(nY);
         aHeading += ')';
     }
     SetText( aHeading );
@@ -1118,7 +1118,7 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
             for ( USHORT nWhich = EE_ITEMS_START; nWhich <= EE_ITEMS_END; nWhich++)
             {
                 aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "\n" ) );
-                aDebStr += String::CreateFromInt32( nWhich );
+                aDebStr += OUString::number( nWhich );
                 aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "\t" ) );
                 if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
                     aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "---" ) );
@@ -1131,25 +1131,25 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                     {
                         case EE_PARA_LRSPACE:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "FI=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxLRSpaceItem&)rItem).GetTxtFirstLineOfst() );
+                            aDebStr += OUString::number( ((SvxLRSpaceItem&)rItem).GetTxtFirstLineOfst() );
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( ", LI=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxLRSpaceItem&)rItem).GetTxtLeft() );
+                            aDebStr += OUString::number( ((SvxLRSpaceItem&)rItem).GetTxtLeft() );
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( ", RI=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxLRSpaceItem&)rItem).GetRight() );
+                            aDebStr += OUString::number( ((SvxLRSpaceItem&)rItem).GetRight() );
                         break;
                         case EE_PARA_ULSPACE:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "SB=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxULSpaceItem&)rItem).GetUpper() );
+                            aDebStr += OUString::number( ((SvxULSpaceItem&)rItem).GetUpper() );
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( ", SA=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxULSpaceItem&)rItem).GetLower() );
+                            aDebStr += OUString::number( ((SvxULSpaceItem&)rItem).GetLower() );
                         break;
                         case EE_PARA_SBL:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "SBL=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxLineSpacingItem&)rItem).GetInterLineSpace() );
+                            aDebStr += OUString::number( ((SvxLineSpacingItem&)rItem).GetInterLineSpace() );
                         break;
                         case EE_PARA_JUST:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "SvxAdust=" ) );
-                            aDebStr += String::CreateFromInt32( (USHORT)((SvxAdjustItem&)rItem).GetAdjust() );
+                            aDebStr += OUString::number( (USHORT)((SvxAdjustItem&)rItem).GetAdjust() );
                         break;
                         case EE_PARA_TABS:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "Tabs = ?" ) );
@@ -1158,11 +1158,11 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                         {
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "Color= " ) );
                             Color aColor( ((SvxColorItem&)rItem).GetValue() );
-                            aDebStr += String::CreateFromInt32( aColor.GetRed() );
+                            aDebStr += OUString::number( aColor.GetRed() );
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
-                            aDebStr += String::CreateFromInt32( aColor.GetGreen() );
+                            aDebStr += OUString::number( aColor.GetGreen() );
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
-                            aDebStr += String::CreateFromInt32( aColor.GetBlue() );
+                            aDebStr += OUString::number( aColor.GetBlue() );
                         }
                         break;
                         case EE_CHAR_FONTINFO:
@@ -1171,35 +1171,35 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                         break;
                         case EE_CHAR_FONTHEIGHT:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "Groesse=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxFontHeightItem&)rItem).GetHeight() );
+                            aDebStr += OUString::number( ((SvxFontHeightItem&)rItem).GetHeight() );
                         break;
                         case EE_CHAR_WEIGHT:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "FontWeight=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxWeightItem&)rItem).GetWeight() );
+                            aDebStr += OUString::number( ((SvxWeightItem&)rItem).GetWeight() );
                         break;
                         case EE_CHAR_UNDERLINE:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "FontUnderline=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxUnderlineItem&)rItem).GetLineStyle() );
+                            aDebStr += OUString::number( ((SvxUnderlineItem&)rItem).GetLineStyle() );
                         break;
                         case EE_CHAR_WLM:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "WordLineMode=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxWordLineModeItem&)rItem).GetValue() );
+                            aDebStr += OUString::number( ((SvxWordLineModeItem&)rItem).GetValue() );
                         break;
                         case EE_CHAR_STRIKEOUT:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "FontStrikeout=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxCrossedOutItem&)rItem).GetStrikeout() );
+                            aDebStr += OUString::number( ((SvxCrossedOutItem&)rItem).GetStrikeout() );
                         break;
                         case EE_CHAR_ITALIC:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "FontPosture=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxPostureItem&)rItem).GetPosture() );
+                            aDebStr += OUString::number( ((SvxPostureItem&)rItem).GetPosture() );
                         break;
                         case EE_CHAR_OUTLINE:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "FontOutline=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxContourItem&)rItem).GetValue() );
+                            aDebStr += OUString::number( ((SvxContourItem&)rItem).GetValue() );
                         break;
                         case EE_CHAR_SHADOW:
                             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "FontShadowed=" ) );
-                            aDebStr += String::CreateFromInt32( ((SvxShadowedItem&)rItem).GetValue() );
+                            aDebStr += OUString::number( ((SvxShadowedItem&)rItem).GetValue() );
                         break;
                     }
                 }

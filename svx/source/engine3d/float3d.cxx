@@ -3055,13 +3055,13 @@ sal_Bool Svx3DWin::LBSelectColor( ColorLB* pLb, const Color& rColor )
     {
         String aStr(SVX_RES(RID_SVXFLOAT3D_FIX_R));
 
-        aStr += String::CreateFromInt32((sal_Int32)rColor.GetRed());
+        aStr += OUString::number((sal_Int32)rColor.GetRed());
         aStr += sal_Unicode(' ');
         aStr += String(SVX_RES(RID_SVXFLOAT3D_FIX_G));
-        aStr += String::CreateFromInt32((sal_Int32)rColor.GetGreen());
+        aStr += OUString::number((sal_Int32)rColor.GetGreen());
         aStr += sal_Unicode(' ');
         aStr += String(SVX_RES(RID_SVXFLOAT3D_FIX_B));
-        aStr += String::CreateFromInt32((sal_Int32)rColor.GetBlue());
+        aStr += OUString::number((sal_Int32)rColor.GetBlue());
 
         sal_uInt16 nPos = pLb->InsertEntry( rColor, aStr );
         pLb->SelectEntryPos( nPos );

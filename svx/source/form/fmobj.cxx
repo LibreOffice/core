@@ -434,7 +434,7 @@ namespace
             sal_Int32 nPos = getElementPos(xParent, xChild);
 
             // prepend this current relaive pos
-            sCurrentIndex = String::CreateFromInt32(nPos);
+            sCurrentIndex = OUString::number(nPos);
             if (sReturn.Len() != 0)
             {
                 sCurrentIndex += '\\';
