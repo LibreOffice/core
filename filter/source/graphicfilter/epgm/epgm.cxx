@@ -74,7 +74,7 @@ sal_Bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilter
 {
     if ( pFilterConfigItem )
     {
-        mnMode = pFilterConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
+        mnMode = pFilterConfigItem->ReadInt32( "FileFormat", 0 );
 
         xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
         if ( xStatusIndicator.is() )

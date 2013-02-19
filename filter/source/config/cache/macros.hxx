@@ -33,10 +33,10 @@
 #endif
 
 #define _FILTER_CONFIG_FROM_ASCII_(ASCII_STRING)            \
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ASCII_STRING))
+            OUString(ASCII_STRING)
 
 #define _FILTER_CONFIG_TO_ASCII_(UNICODE_STRING)            \
-            ::rtl::OUStringToOString(UNICODE_STRING, RTL_TEXTENCODING_UTF8).getStr()
+            OUStringToOString(UNICODE_STRING, RTL_TEXTENCODING_UTF8).getStr()
 
 #define _FILTER_CONFIG_LOG_(TEXT)
 #define _FILTER_CONFIG_LOG_1_(FORMAT, ARG1)

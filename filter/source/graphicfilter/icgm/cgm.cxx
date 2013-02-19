@@ -797,7 +797,7 @@ ImportCGM( String& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uIn
                             aXStatInd = *(uno::Reference< task::XStatusIndicator > *)pProgressBar;
                         bProgressBar = aXStatInd.is();
                         if ( bProgressBar )
-                            aXStatInd->start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CGM Import" )), nInSize );
+                            aXStatInd->start( "CGM Import" , nInSize );
 #endif
 
                         while ( pCGM->IsValid() && ( pIn->Tell() < nInSize ) && !pCGM->IsFinished() )
