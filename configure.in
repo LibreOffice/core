@@ -268,6 +268,12 @@ AC_ARG_ENABLE(cl-standard,
                           options and therefore removes a lot of warnings when
                           using the cheaper standard compiler. )
 ],,)
+AC_ARG_ENABLE(win-x64-shellext,
+[  --enable-win-x64-shellext    Enable the build/usage of Windows 64bit shell extensions.
+                          These extension are used for the system integration on a 
+			  Windows 64bit systems. For example supporting the search 
+			  in ODF files with the standard Windows search feature.
+],,)
 AC_ARG_ENABLE(gtk,
 [  --disable-gtk           Determines whether to use Gtk+ vclplug on platforms
                           where Gtk+ is available.
@@ -1290,6 +1296,21 @@ if test "$_os" = "WINNT"; then
       AC_MSG_RESULT([yes])
    fi
    AC_SUBST(VC_STANDARD)
+fi
+
+if test "$_os" = "WINNT"; then
+   dnl ===================================================================
+   dnl Set the BUILD_X64 variable. 
+   dnl ===================================================================
+   AC_MSG_CHECKING([whether to build/use the Windows 64bit shell extensions])
+   if test "$enable_win_x64_shellext" = "" -o "$enable_win_x64_shellext" = "no"; then
+      BUILD_X64=""
+      AC_MSG_RESULT([no])
+   else
+      BUILD_X64="TRUE"
+      AC_MSG_RESULT([yes])
+   fi
+   AC_SUBST(BUILD_X64)
 fi
 
 dnl ===================================================================
@@ -5766,8 +5787,10 @@ if test \( "$_os" = "WINNT" \) ; then
         fi
         if test -z "$with_atl_lib_dir"; then
             ATL_LIB=$COMPATH/atlmfc/lib
+	    ATL_LIB_X64=$COMPATH/atlmfc/lib/amd64
         else
             ATL_LIB=`cygpath -u "$with_atl_lib_dir"`
+            ATL_LIB_X64=$ATL_LIB/../amd64
         fi
         if test -z "$with_mfc_include_dir"; then
             MFC_INCLUDE=$COMPATH/atlmfc/include
@@ -5782,6 +5805,7 @@ if test \( "$_os" = "WINNT" \) ; then
 
         ATL_INCLUDE=`echo $ATL_INCLUDE | $SED 's/\/$//'`
         ATL_LIB=`echo $ATL_LIB | $SED 's/\/$//'`
+        ATL_LIB_X64=`echo $ATL_LIB_X64 | $SED 's/\/$//'`
         MFC_INCLUDE=`echo $MFC_INCLUDE | $SED 's/\/$//'`
         MFC_LIB=`echo $MFC_LIB | $SED 's/\/$//'`
 
@@ -5827,6 +5851,7 @@ if test \( "$_os" = "WINNT" \) ; then
         if test "$HAVE_ATL_H" = "no" -o "$HAVE_MFC_H" = "no" -o "$HAVE_ATL_LIB" = "no" -o "$HAVE_MFC_LIB" = "no"; then
             ATL_INCLUDE=
             ATL_LIB=
+            ATL_LIB_X64=
             MFC_INCLUDE=
             MFC_LIB=
             HAVE_ATL_LIB=
@@ -5837,6 +5862,7 @@ if test \( "$_os" = "WINNT" \) ; then
         else
             ATL_INCLUDE=`cygpath -dm "$ATL_INCLUDE"`
             ATL_LIB=`cygpath -dm "$ATL_LIB"`
+            ATL_LIB_X64=`cygpath -dm "$ATL_LIB_X64"`
             MFC_INCLUDE=`cygpath -dm "$MFC_INCLUDE"`
             MFC_LIB=`cygpath -dm "$MFC_LIB"`
             AC_MSG_RESULT([ATL/MFC enabled])
@@ -5845,6 +5871,7 @@ if test \( "$_os" = "WINNT" \) ; then
 fi
 AC_SUBST(ATL_INCLUDE)
 AC_SUBST(ATL_LIB)
+AC_SUBST(ATL_LIB_X64)
 AC_SUBST(HAVE_ATLTHUNK)
 AC_SUBST(MFC_INCLUDE)
 AC_SUBST(MFC_LIB)
