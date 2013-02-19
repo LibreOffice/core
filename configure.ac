@@ -3868,9 +3868,7 @@ linux-gnu*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
+    SOLARLIB=""
     ;;
 
 linux-android*)

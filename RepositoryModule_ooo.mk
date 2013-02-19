@@ -99,6 +99,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	$(call gb_Helper_optional,ICU,icu) \
 	idl \
 	$(call gb_Helper_optional,DESKTOP,idlc) \
+	installationparts \
 	io \
 	ios \
 	javaunohelper \

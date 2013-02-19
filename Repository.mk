@@ -232,9 +232,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     abp \
     acc \
-	adabas \
-	adabasui \
-	ado \
     agg \
     analysis \
     animcore \
@@ -403,6 +400,12 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     xsltdlg \
     xsltfilter \
 ))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+	ado \
+))
+endif
 
 ifneq (,$(filter ANDROID IOS,$(OS)))
 
