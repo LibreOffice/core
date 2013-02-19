@@ -7286,8 +7286,6 @@ dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.3 >= 0.3.0])
-SYSTEM_LIBCMIS=$SYSTEM_CMIS
-AC_SUBST(SYSTEM_LIBCMIS)
 
 
 dnl ===================================================================

@@ -565,7 +565,7 @@ endef
 endif # SYSTEM_BOOST
 
 
-ifeq ($(SYSTEM_LIBCMIS),YES)
+ifeq ($(SYSTEM_CMIS),YES)
 
 define gb_LinkTarget__use_cmis
 $(call gb_LinkTarget_set_include,$(1),\
@@ -576,7 +576,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(CMIS_LIBS))
 
 endef
 
-else # !SYSTEM_LIBCMIS
+else # !SYSTEM_CMIS
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	cmislib \
@@ -589,7 +589,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 
 endef
 
-endif # SYSTEM_LIBCMIS
+endif # SYSTEM_CMIS
 
 ifeq ($(OS)$(COM),WNTGCC)
 

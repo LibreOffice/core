@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,libcmis))
 
-ifeq ($(SYSTEM_LIBCMIS),NO)
+ifeq ($(SYSTEM_CMIS),NO)
 
 $(eval $(call gb_Module_add_targets,libcmis,\
 	ExternalPackage_libcmis \
