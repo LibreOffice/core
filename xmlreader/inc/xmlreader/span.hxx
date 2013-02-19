@@ -22,7 +22,8 @@
 
 #include "sal/config.h"
 
-#include "rtl/string.h"
+#include "rtl/string.hxx"
+#include "rtl/stringutils.hxx"
 #include "sal/types.h"
 #include "xmlreader/detail/xmlreaderdllapi.hxx"
 
@@ -57,6 +58,19 @@ struct OOO_DLLPUBLIC_XMLREADER Span {
         return rtl_str_compare_WithLength(
             begin, length, text.getStr(), text.getLength()) == 0;
     }
+
+#ifdef RTL_FAST_STRING
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+    */
+    template< typename T > bool
+    equals( T& literal, typename rtl::internal::ConstCharArrayDetector< T, rtl::internal::Dummy >::Type = rtl::internal::Dummy() ) SAL_THROW(())
+    {
+        assert( strlen( literal ) == rtl::internal::ConstCharArrayDetector< T >::size - 1 );
+        return rtl_str_compare_WithLength( begin, length, literal, rtl::internal::ConstCharArrayDetector< T, void >::size - 1 );
+    }
+#endif
 
     rtl::OUString convertFromUtf8() const;
 };
