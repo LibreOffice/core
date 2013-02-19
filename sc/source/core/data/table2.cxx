@@ -389,9 +389,10 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
 
     if (nStartCol>0)                        // copy old attributes
     {
-        sal_uInt16 nWhichArray[2];
+        sal_uInt16 nWhichArray[3];
         nWhichArray[0] = ATTR_MERGE;
-        nWhichArray[1] = 0;
+        nWhichArray[1] = ATTR_CONDITIONAL;
+        nWhichArray[2] = 0;
 
         for (SCSIZE i=0; i<nSize; i++)
         {
