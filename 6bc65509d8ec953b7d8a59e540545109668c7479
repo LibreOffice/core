@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///ns\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5190,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:27:16Z",
+      "side": 1,
+      "message": "nack: \u003d aString.copy(nCharAnzRead, 1)",
+      "revId": "6bc65509d8ec953b7d8a59e540545109668c7479",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///no\u003d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 6689,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:27:16Z",
+      "side": 1,
+      "message": "!isEmpty()",
+      "revId": "6bc65509d8ec953b7d8a59e540545109668c7479",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///nk\u003d",
+        "filename": "sd/source/filter/ppt/propread.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:27:16Z",
+      "side": 1,
+      "message": "oh, no! do not duplicate the whole implementation\njust convert it and create a wrapper so that the String version still work.\n\niow the String version become\n\nRead(String\u0026 rString, ...)\n{\nsal_Bool result;\nOUString sStr(rString)\n\n    result \u003d Read(sStr,...)\n    rString \u003d sStr;\n    return result;\n}",
+      "revId": "6bc65509d8ec953b7d8a59e540545109668c7479",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
