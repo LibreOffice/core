@@ -136,7 +136,7 @@ namespace
         if ( _pPortNumber )
         {
             sNewUrl += rtl::OUString::createFromAscii(":");
-            sNewUrl += String::CreateFromInt32(_pPortNumber->GetValue());
+            sNewUrl += OUString::number(_pPortNumber->GetValue());
         }
 
         return sNewUrl;

@@ -95,18 +95,18 @@ inline void SetValueProp( XubString& rStr, const sal_uInt16 nValue,
                           const sal_uInt16 nProp )
 {
     if( 100 == nProp )
-        rStr += String::CreateFromInt32( nValue );
+        rStr += OUString::number( nValue );
     else
-        ( rStr += String::CreateFromInt32( nProp )) += sal_Unicode('%');
+        ( rStr += OUString::number( nProp )) += sal_Unicode('%');
 }
 
 inline void SetValueProp( XubString& rStr, const short nValue,
                           const sal_uInt16 nProp )
 {
     if( 100 == nProp )
-        rStr += String::CreateFromInt32( nValue );
+        rStr += OUString::number( nValue );
     else
-        ( rStr += String::CreateFromInt32( nProp )) += sal_Unicode('%');
+        ( rStr += OUString::number( nProp )) += sal_Unicode('%');
 }
 
 // -----------------------------------------------------------------------

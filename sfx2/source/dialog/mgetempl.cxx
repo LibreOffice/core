@@ -115,12 +115,12 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
         String aNoName( SfxResId(STR_NONAME).toString() );
         sal_uInt16 nNo = 1;
         String aNo( aNoName );
-        aNoName += String::CreateFromInt32( nNo );
+        aNoName += OUString::number( nNo );
         while ( pPool->Find( aNoName ) )
         {
             ++nNo;
             aNoName = aNo;
-            aNoName += String::CreateFromInt32( nNo );
+            aNoName += OUString::number( nNo );
         }
         pStyle->SetName( aNoName );
         aName = aNoName;

@@ -1199,24 +1199,24 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 
     rInfo.aWinState = pImp->aWinState;
     rInfo.aExtraString = "AL:(";
-    rInfo.aExtraString += String::CreateFromInt32((sal_uInt16) GetAlignment());
+    rInfo.aExtraString += OUString::number((sal_uInt16) GetAlignment());
     rInfo.aExtraString += ',';
-    rInfo.aExtraString += String::CreateFromInt32 ((sal_uInt16) pImp->GetLastAlignment());
+    rInfo.aExtraString += OUString::number ((sal_uInt16) pImp->GetLastAlignment());
     if ( pImp->bSplitable )
     {
         Point aPos(pImp->nLine, pImp->nPos);
         rInfo.aExtraString += ',';
-        rInfo.aExtraString += String::CreateFromInt32( aPos.X() );
+        rInfo.aExtraString += OUString::number( aPos.X() );
         rInfo.aExtraString += '/';
-        rInfo.aExtraString += String::CreateFromInt32( aPos.Y() );
+        rInfo.aExtraString += OUString::number( aPos.Y() );
         rInfo.aExtraString += '/';
-        rInfo.aExtraString += String::CreateFromInt32( pImp->nHorizontalSize );
+        rInfo.aExtraString += OUString::number( pImp->nHorizontalSize );
         rInfo.aExtraString += '/';
-        rInfo.aExtraString += String::CreateFromInt32( pImp->nVerticalSize );
+        rInfo.aExtraString += OUString::number( pImp->nVerticalSize );
         rInfo.aExtraString += ',';
-        rInfo.aExtraString += String::CreateFromInt32( pImp->aSplitSize.Width() );
+        rInfo.aExtraString += OUString::number( pImp->aSplitSize.Width() );
         rInfo.aExtraString += ';';
-        rInfo.aExtraString += String::CreateFromInt32( pImp->aSplitSize.Height() );
+        rInfo.aExtraString += OUString::number( pImp->aSplitSize.Height() );
     }
 
     rInfo.aExtraString += ')';

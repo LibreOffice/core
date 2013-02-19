@@ -1114,10 +1114,10 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
             sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
 
             String aText( SVT_RESSTR(STR_SVT_ACC_DESC_TABLISTBOX) );
-            aText.SearchAndReplace( sVar1, String::CreateFromInt32( nRow ) );
+            aText.SearchAndReplace( sVar1, OUString::number( nRow ) );
             String sColHeader = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( nColumn ) );
             if ( sColHeader.Len() == 0 )
-                sColHeader = String::CreateFromInt32( nColumn );
+                sColHeader = OUString::number( nColumn );
             aText.SearchAndReplace( sVar2, sColHeader );
             aRetText = aText;
         }

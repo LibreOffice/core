@@ -379,7 +379,7 @@ DBG_NAME(DbaIndexDialog)
         for ( i = 1; i < 0x7FFFFFFF; ++i )
         {
             sNewIndexName = sNewIndexNameBase;
-            sNewIndexName += String::CreateFromInt32(i);
+            sNewIndexName += OUString::number(i);
             if (m_pIndexes->end() == m_pIndexes->find(sNewIndexName))
                 break;
         }

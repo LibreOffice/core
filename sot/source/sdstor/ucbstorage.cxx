@@ -3213,7 +3213,7 @@ String UCBStorage::CreateLinkFile( const String& rName )
             for ( sal_Int32 i=0; !bRet; i++ )
             {
                 String aTmp( aTitle );
-                aTmp += String::CreateFromInt32( i );
+                aTmp += OUString::number( i );
                 bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, aTmp, aNewFolder );
                 if ( bRet )
                     aTitle = aTmp;

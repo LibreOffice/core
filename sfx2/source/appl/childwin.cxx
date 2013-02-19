@@ -288,7 +288,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
         aWinData.append(rInfo.aExtraString);
     }
 
-    SvtViewOptions aWinOpt( E_WINDOW, String::CreateFromInt32( nID ) );
+    SvtViewOptions aWinOpt( E_WINDOW, OUString::number( nID ) );
     aWinOpt.SetWindowState(rtl::OStringToOUString(rInfo.aWinState, RTL_TEXTENCODING_UTF8));
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
@@ -350,7 +350,7 @@ sal_uInt16 SfxChildWindow::GetPosition()
 void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWinInfo& rInfo )
 {
     // load configuration
-    SvtViewOptions aWinOpt( E_WINDOW, String::CreateFromInt32( nId ) );
+    SvtViewOptions aWinOpt( E_WINDOW, OUString::number( nId ) );
 
     if ( aWinOpt.Exists() && aWinOpt.HasVisible() )
         rInfo.bVisible  = aWinOpt.IsVisible(); // set state from configuration. Can be overwritten by UserData, see below
