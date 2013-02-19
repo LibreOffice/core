@@ -382,13 +382,21 @@ else
 endif
 endif
 	@rm -f $(SRCDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
+ifeq ($(OS),LINUX)
 	@echo
 	@echo "Developer installation finished, you can now execute:"
 	@echo
 	@echo "  cd $(SRCDIR)/install/program"
 	@echo "  . ./ooenv"
 	@echo "  ./soffice.bin"
-
+else ifeq ($(OS),MACOSX)
+	@echo
+	@echo "Developer installation finished, you can now run:"
+	@echo
+	@echo "  open $(SRCDIR)/install/LibreOffice.app"
+	@echo
+	@echo "To debug: gdb install/LibreOffice.app/Contents/MacOS/soffice"
+endif
 
 dev-install-nocheck : export SKIP_TESTS := YES
 dev-install-nocheck : dev-install
