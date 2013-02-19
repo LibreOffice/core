@@ -123,7 +123,7 @@ String RID_STR_CHARTTYPE
 };
 String RID_STR_PRINTWHENGROUPCHANGE
 {
-    Text [ en-US ] = "Print When Group Change" ;
+    Text [ en-US ] = "Print repeated value on group change" ;
 };
 String RID_STR_VISIBLE
 {
