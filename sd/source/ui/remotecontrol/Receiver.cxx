@@ -51,7 +51,8 @@ void Receiver::Timeout()
     {
         std::vector< rtl::OString > aCommands( maExecQueue.front() );
         maExecQueue.pop_front();
-        executeCommand( aCommands );
+        if( !aCommands.empty() )
+            executeCommand( aCommands );
         Start();
     }
     else
