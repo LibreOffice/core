@@ -664,8 +664,13 @@ void OdgGenerator::startGraphics(const ::WPXPropertyList &propList)
     TagOpenElement *pStylePageLayoutOpenElement = new TagOpenElement("style:page-layout");
 
     WPXString sValue;
-    sValue.sprintf("page%i", mpImpl->miPageIndex);
-    pDrawPageOpenElement->addAttribute("draw:name", sValue);
+    if (propList["draw:name"])
+        pDrawPageOpenElement->addAttribute("draw:name", propList["draw:name"]->getStr());
+    else
+    {
+        sValue.sprintf("page%i", mpImpl->miPageIndex);
+        pDrawPageOpenElement->addAttribute("draw:name", sValue);
+    }
 #ifdef MULTIPAGE_WORKAROUND
     pStyleMasterPageOpenElement->addAttribute("style:page-layout-name", "PM0");
     pStylePageLayoutOpenElement->addAttribute("style:page-layout-name", "PM0");
