@@ -16,6 +16,24 @@
       "revId": "d071ad3e4d90e33e3e2c0a1d3eee03307847423e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///nY\u003d",
+        "filename": "svtools/source/graphic/grfmgr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-19T01:34:37Z",
+      "side": 1,
+      "message": "yep, good catch. Done.",
+      "parentUuid": "AAAAVn///pc\u003d",
+      "revId": "d071ad3e4d90e33e3e2c0a1d3eee03307847423e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
