@@ -381,7 +381,7 @@ static String lcl_MakeOldPageStyleFormatName( sal_uInt16 i )
 {
     String  aName = ScGlobal::GetRscString( STR_PAGESTYLE );
     aName.AppendAscii( " " );
-    aName += String::CreateFromInt32( i + 1 );
+    aName += OUString::number( i + 1 );
 
     return aName;
 }

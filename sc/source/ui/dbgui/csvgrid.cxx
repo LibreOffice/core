@@ -1190,7 +1190,7 @@ void ScCsvGrid::ImplDrawRowHeaders()
     sal_Int32 nLastLine = GetLastVisLine();
     for( sal_Int32 nLine = GetFirstVisLine(); nLine <= nLastLine; ++nLine )
     {
-        String aText( String::CreateFromInt32( nLine + 1 ) );
+        String aText( OUString::number( nLine + 1 ) );
         sal_Int32 nX = GetHdrX() + (GetHdrWidth() - maBackgrDev.GetTextWidth( aText )) / 2;
         maBackgrDev.DrawText( Point( nX, GetY( nLine ) ), aText );
     }

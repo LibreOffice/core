@@ -659,9 +659,9 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     String  aStr( ScGlobal::GetRscString( STR_TABLE ) );
 
                     aStr += ' ';
-                    aStr += String::CreateFromInt32( nTab + 1 );
+                    aStr += OUString::number( nTab + 1 );
                     aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " / " ));
-                    aStr += String::CreateFromInt32( nTabCount );
+                    aStr += OUString::number( nTabCount );
                     rSet.Put( SfxStringItem( nWhich, aStr ) );
                 }
                 break;

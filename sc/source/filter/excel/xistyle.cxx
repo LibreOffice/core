@@ -1598,7 +1598,7 @@ void XclImpXFBuffer::CreateUserStyles()
         sal_Int32 nIndex = 0;
         do
         {
-            aUnusedName.Assign( pStyle->GetName() ).Append( ' ' ).Append( String::CreateFromInt32( ++nIndex ) );
+            aUnusedName.Assign( pStyle->GetName() ).Append( ' ' ).Append( OUString::number( ++nIndex ) );
         }
         while( aCellStyles.count( aUnusedName ) > 0 );
         aCellStyles[ aUnusedName ] = pStyle;

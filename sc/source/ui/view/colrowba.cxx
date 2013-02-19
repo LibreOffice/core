@@ -92,7 +92,7 @@ sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo )
 String ScColBar::GetEntryText( SCCOLROW nEntryNo )
 {
     return UseNumericHeader()
-        ? String::CreateFromInt32( nEntryNo + 1 )
+        ? OUString::number( nEntryNo + 1 )
         : ScColToAlpha( static_cast<SCCOL>(nEntryNo) );
 }
 
@@ -257,7 +257,7 @@ sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo )
 
 String ScRowBar::GetEntryText( SCCOLROW nEntryNo )
 {
-    return String::CreateFromInt32( nEntryNo + 1 );
+    return OUString::number( nEntryNo + 1 );
 }
 
 void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )

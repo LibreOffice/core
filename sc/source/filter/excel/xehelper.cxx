@@ -769,7 +769,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 (aNewData.mnHeight += 10) /= 20;
                 bool bFontHtChanged = (aFontData.mnHeight != aNewData.mnHeight);
                 if( bFontHtChanged )
-                    aParaText.Append( '&' ).Append( String::CreateFromInt32( aNewData.mnHeight ) );
+                    aParaText.Append( '&' ).Append( OUString::number( aNewData.mnHeight ) );
                 // update maximum paragraph height, convert to twips
                 nParaHeight = ::std::max< sal_Int32 >( nParaHeight, aNewData.mnHeight * 20 );
 

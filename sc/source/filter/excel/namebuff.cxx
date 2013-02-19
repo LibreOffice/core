@@ -141,15 +141,15 @@ sal_uInt16 ShrfmlaBuffer::Find( const ScAddress & aAddr ) const
 String ShrfmlaBuffer::CreateName( const ScRange& r )
 {
     String          aName( RTL_CONSTASCII_USTRINGPARAM( SHRFMLA_BASENAME ) );
-    aName += String::CreateFromInt32( r.aStart.Col() );
+    aName += OUString::number( r.aStart.Col() );
     aName.Append( '_' );
-    aName += String::CreateFromInt32( r.aStart.Row() );
+    aName += OUString::number( r.aStart.Row() );
     aName.Append( '_' );
-    aName += String::CreateFromInt32( r.aEnd.Col() );
+    aName += OUString::number( r.aEnd.Col() );
     aName.Append( '_' );
-    aName += String::CreateFromInt32( r.aEnd.Row() );
+    aName += OUString::number( r.aEnd.Row() );
     aName.Append( '_' );
-    aName += String::CreateFromInt32( r.aStart.Tab() );
+    aName += OUString::number( r.aStart.Tab() );
 
     return aName;
 }

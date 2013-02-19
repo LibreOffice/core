@@ -398,18 +398,18 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
                     break;
                 case sdbc::DataType::VARCHAR:
                     aHeader.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",C," ));
-                    aHeader += String::CreateFromInt32( xMeta->getColumnDisplaySize( i+1 ) );
+                    aHeader += OUString::number( xMeta->getColumnDisplaySize( i+1 ) );
                     break;
                 case sdbc::DataType::DECIMAL:
                     {
                         long nPrec = xMeta->getPrecision( i+1 );
                         long nScale = xMeta->getScale( i+1 );
                         aHeader.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",N," ));
-                        aHeader += String::CreateFromInt32(
+                        aHeader += OUString::number(
                                     SvDbaseConverter::ConvertPrecisionToDbase(
                                         nPrec, nScale ) );
                         aHeader += ',';
-                        aHeader += String::CreateFromInt32( nScale );
+                        aHeader += OUString::number( nScale );
                         aScales[i] = nScale;
                     }
                     break;
@@ -609,7 +609,7 @@ void lcl_GetColumnTypes(
                 do
                 {
                     ++nSub;
-                    String aVarPart = String::CreateFromInt32( nSub );
+                    String aVarPart = OUString::number( nSub );
                     if ( aFixPart.Len() + aVarPart.Len() > 10 )
                         aFixPart.Erase( 10 - aVarPart.Len() );
                     aFieldName = aFixPart;
@@ -620,7 +620,7 @@ void lcl_GetColumnTypes(
         else
         {
             aFieldName = 'N';
-            aFieldName += String::CreateFromInt32(nCol+1);
+            aFieldName += OUString::number(nCol+1);
         }
 
         if ( !bTypeDefined )
@@ -746,13 +746,13 @@ void lcl_GetColumnTypes(
                     break;
                 case sdbc::DataType::VARCHAR :
                     aOutString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",C," ));
-                    aOutString += String::CreateFromInt32( nFieldLen );
+                    aOutString += OUString::number( nFieldLen );
                     break;
                 case sdbc::DataType::DECIMAL :
                     aOutString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",N," ));
-                    aOutString += String::CreateFromInt32( nFieldLen );
+                    aOutString += OUString::number( nFieldLen );
                     aOutString += ',';
-                    aOutString += String::CreateFromInt32( nPrecision );
+                    aOutString += OUString::number( nPrecision );
                     break;
             }
             if ( !aOutString.EqualsIgnoreCaseAscii( aString ) )

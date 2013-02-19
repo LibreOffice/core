@@ -71,7 +71,7 @@ void ScSolverProgressDialog::SetTimeLimit( sal_Int32 nSeconds )
 {
     String aOld = maFtTime.GetText();
     String aNew = aOld.GetToken(0,'#');
-    aNew += String::CreateFromInt32( nSeconds );
+    aNew += OUString::number( nSeconds );
     aNew += aOld.GetToken(1,'#');
     maFtTime.SetText( aNew );
 }

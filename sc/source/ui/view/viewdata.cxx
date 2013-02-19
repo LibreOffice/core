@@ -2183,10 +2183,10 @@ void ScViewData::WriteUserData(String& rData)
     //  wenn Zeilen groesser 8192, "+" statt "/"
 
     sal_uInt16 nZoom = (sal_uInt16)((pThisTab->aZoomY.GetNumerator() * 100) / pThisTab->aZoomY.GetDenominator());
-    rData = String::CreateFromInt32( nZoom );
+    rData = OUString::number( nZoom );
     rData += '/';
     nZoom = (sal_uInt16)((pThisTab->aPageZoomY.GetNumerator() * 100) / pThisTab->aPageZoomY.GetDenominator());
-    rData += String::CreateFromInt32( nZoom );
+    rData += OUString::number( nZoom );
     rData += '/';
     if (bPagebreak)
         rData += '1';
@@ -2194,10 +2194,10 @@ void ScViewData::WriteUserData(String& rData)
         rData += '0';
 
     rData += ';';
-    rData += String::CreateFromInt32( nTabNo );
+    rData += OUString::number( nTabNo );
     rData += ';';
     rData.AppendAscii(RTL_CONSTASCII_STRINGPARAM( TAG_TABBARWIDTH ));
-    rData += String::CreateFromInt32( pView->GetTabBarWidth() );
+    rData += OUString::number( pView->GetTabBarWidth() );
 
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB i=0; i<nTabCount; i++)
@@ -2215,33 +2215,33 @@ void ScViewData::WriteUserData(String& rData)
             }
 
 
-            rData += String::CreateFromInt32( maTabData[i]->nCurX );
+            rData += OUString::number( maTabData[i]->nCurX );
             rData += cTabSep;
-            rData += String::CreateFromInt32( maTabData[i]->nCurY );
+            rData += OUString::number( maTabData[i]->nCurY );
             rData += cTabSep;
-            rData += String::CreateFromInt32( maTabData[i]->eHSplitMode );
+            rData += OUString::number( maTabData[i]->eHSplitMode );
             rData += cTabSep;
-            rData += String::CreateFromInt32( maTabData[i]->eVSplitMode );
+            rData += OUString::number( maTabData[i]->eVSplitMode );
             rData += cTabSep;
             if ( maTabData[i]->eHSplitMode == SC_SPLIT_FIX )
-                rData += String::CreateFromInt32( maTabData[i]->nFixPosX );
+                rData += OUString::number( maTabData[i]->nFixPosX );
             else
-                rData += String::CreateFromInt32( maTabData[i]->nHSplitPos );
+                rData += OUString::number( maTabData[i]->nHSplitPos );
             rData += cTabSep;
             if ( maTabData[i]->eVSplitMode == SC_SPLIT_FIX )
-                rData += String::CreateFromInt32( maTabData[i]->nFixPosY );
+                rData += OUString::number( maTabData[i]->nFixPosY );
             else
-                rData += String::CreateFromInt32( maTabData[i]->nVSplitPos );
+                rData += OUString::number( maTabData[i]->nVSplitPos );
             rData += cTabSep;
-            rData += String::CreateFromInt32( maTabData[i]->eWhichActive );
+            rData += OUString::number( maTabData[i]->eWhichActive );
             rData += cTabSep;
-            rData += String::CreateFromInt32( maTabData[i]->nPosX[0] );
+            rData += OUString::number( maTabData[i]->nPosX[0] );
             rData += cTabSep;
-            rData += String::CreateFromInt32( maTabData[i]->nPosX[1] );
+            rData += OUString::number( maTabData[i]->nPosX[1] );
             rData += cTabSep;
-            rData += String::CreateFromInt32( maTabData[i]->nPosY[0] );
+            rData += OUString::number( maTabData[i]->nPosY[0] );
             rData += cTabSep;
-            rData += String::CreateFromInt32( maTabData[i]->nPosY[1] );
+            rData += OUString::number( maTabData[i]->nPosY[1] );
         }
     }
 }

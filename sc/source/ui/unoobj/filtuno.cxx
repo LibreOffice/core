@@ -235,7 +235,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
                 LanguageType eLang = pDlg->GetLanguageType();
                 OUStringBuffer aBuf;
 
-                aBuf.append(String::CreateFromInt32(static_cast<sal_Int32>(eLang)));
+                aBuf.append(OUString::number(static_cast<sal_Int32>(eLang)));
                 aBuf.append(sal_Unicode(' '));
                 aBuf.append(pDlg->IsDateConversionSet() ? sal_Unicode('1') : sal_Unicode('0'));
                 aFilterOptions = aBuf.makeStringAndClear();

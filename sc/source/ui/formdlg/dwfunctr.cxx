@@ -1105,9 +1105,9 @@ void ScFunctionDockWin::FillInfo(SfxChildWinInfo& rInfo) const
     SfxDockingWindow::FillInfo(rInfo);
     Point aPoint=aPrivatSplit.GetPosPixel();
     rInfo.aExtraString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "ScFuncList:(" ));
-    rInfo.aExtraString += String::CreateFromInt32(aPoint.Y());
+    rInfo.aExtraString += OUString::number(aPoint.Y());
     rInfo.aExtraString += ';';
-    rInfo.aExtraString += String::CreateFromInt32(aCatBox.GetSelectEntryPos());
+    rInfo.aExtraString += OUString::number(aCatBox.GetSelectEntryPos());
     rInfo.aExtraString += ')';
 }
 

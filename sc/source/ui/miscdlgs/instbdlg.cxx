@@ -93,7 +93,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
     m_pBtnOk->SetClickHdl( LINK( this, ScInsertTableDlg, DoEnterHdl ));
     m_pBtnBefore->Check();
 
-    m_pNfCount->SetText( String::CreateFromInt32(nTableCount) );
+    m_pNfCount->SetText( OUString::number(nTableCount) );
     m_pNfCount->SetMax( MAXTAB - rDoc.GetTableCount() + 1 );
 
     if(nTableCount==1)

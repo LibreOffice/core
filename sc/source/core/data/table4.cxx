@@ -129,10 +129,10 @@ static short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16*
 static String lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
 {
     if ( nMinDigits <= 1 )
-        return String::CreateFromInt32( nValue );           // simple case...
+        return OUString::number( nValue );           // simple case...
     else
     {
-        String aStr = String::CreateFromInt32( Abs( nValue ) );
+        String aStr = OUString::number( Abs( nValue ) );
         if ( aStr.Len() < nMinDigits )
         {
             OUStringBuffer aZero;
