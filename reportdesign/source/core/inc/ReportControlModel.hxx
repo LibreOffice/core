@@ -100,7 +100,7 @@ namespace reportdesign
             ,aComponent(_xContext)
             ,m_pOwner(_pOwner)
             ,m_rMutex(_rMutex)
-            ,bPrintWhenGroupChange(sal_False)
+            ,bPrintWhenGroupChange(sal_True)
         {}
 
         // XContainer

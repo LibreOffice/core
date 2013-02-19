@@ -27,6 +27,7 @@ import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataFlags;
 import org.jfree.report.DataSourceException;
 import org.jfree.report.expressions.Expression;
+import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.flow.FlowController;
 import org.jfree.report.flow.ReportTarget;
 import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
@@ -34,6 +35,9 @@ import org.jfree.report.flow.layoutprocessor.SectionLayoutController;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Node;
 import org.jfree.report.structure.Section;
+import org.pentaho.reporting.libraries.formula.Formula;
+import org.pentaho.reporting.libraries.formula.lvalues.LValue;
+import org.pentaho.reporting.libraries.formula.parser.ParseException;
 
 import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
 
@@ -99,18 +103,36 @@ public class TableCellLayoutController extends SectionLayoutController
         {
             return null;
         }
-        final Expression dc = element.getDisplayCondition();
-        if (dc != null)
+        if (!FormatValueUtility.shouldPrint(this, element))
         {
-            final Object o = LayoutControllerUtil.evaluateExpression(getFlowController(), element, dc);
-            if (Boolean.FALSE.equals(o))
-            {
-                attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS,
-                    FormatValueUtility.VALUE_TYPE, "string");
-                return null;
-            }
+            attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS,
+                                      FormatValueUtility.VALUE_TYPE, "string");
+            return null;
         }
         return FormatValueUtility.computeDataFlag(element, getFlowController());
+    }
+
+    public boolean isValueChanged()
+    {
+        try
+        {
+            final Section cell = (Section) getElement();
+            final FormattedTextElement element = findFormattedTextElement(cell);
+            if (element == null)
+                return false;
+            else
+            {
+                final FormulaExpression formulaExpression = element.getValueExpression();
+                final Formula formula = formulaExpression.getCompiledFormula();
+                final LValue lValue = formula.getRootReference();
+                return FormatValueUtility.isReferenceChanged(this, lValue);
+            }
+        }
+        catch (final ParseException e)
+        {
+            //LOGGER.debug("Parse Exception", e);
+            return false;
+        }
     }
 
     private FormattedTextElement findFormattedTextElement(final Section section)

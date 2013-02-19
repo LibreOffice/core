@@ -49,7 +49,7 @@ public class FixedTextLayoutController
     {
     }
 
-    protected boolean isValueChanged()
+    public boolean isValueChanged()
     {
         final FlowController controller = getFlowController();
         final GlobalMasterRow masterRow = controller.getMasterRow();
