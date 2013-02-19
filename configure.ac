@@ -7265,8 +7265,6 @@ if test $_os = iOS; then
 else
     libo_CHECK_SYSTEM_MODULE([libmspub],[MSPUB],[libmspub-0.0])
 fi
-SYSTEM_LIBMSPUB=$SYSTEM_MSPUB
-AC_SUBST(SYSTEM_LIBMSPUB)
 
 dnl ===================================================================
 dnl Check for system libvisio

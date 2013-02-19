@@ -1224,7 +1224,7 @@ endef
 endif # SYSTEM_CDR
 
 
-ifeq ($(SYSTEM_LIBMSPUB),YES)
+ifeq ($(SYSTEM_MSPUB),YES)
 
 define gb_LinkTarget__use_mspub
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1235,7 +1235,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(MSPUB_LIBS))
 
 endef
 
-else # !SYSTEM_LIBMSPUB
+else # !SYSTEM_MSPUB
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	mspub-0.0 \
@@ -1251,7 +1251,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 
 endef
 
-endif # SYSTEM_LIBMSPUB
+endif # SYSTEM_MSPUB
 
 
 ifeq ($(SYSTEM_VISIO),YES)
