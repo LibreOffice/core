@@ -139,7 +139,7 @@ void SwMailMergeAddressBlockPage::ActivatePage()
     {
         m_aHideEmptyParagraphsCB.Check( rConfigItem.IsHideEmptyParagraphs() );
         String sTemp(m_sDocument);
-        sTemp.SearchAndReplaceAscii("%1", String::CreateFromInt32(1));
+        sTemp.SearchAndReplaceAscii("%1", OUString::number(1));
         m_aDocumentIndexFI.SetText(sTemp);
 
         m_aSettingsWIN.Clear();
@@ -320,7 +320,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
     }
     m_aPrevSetIB.Enable(bEnable);
     String sTemp(m_sDocument);
-    sTemp.SearchAndReplaceAscii("%1", String::CreateFromInt32(nPos));
+    sTemp.SearchAndReplaceAscii("%1", OUString::number(nPos));
     m_aDocumentIndexFI.SetText(sTemp);
 
     GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));

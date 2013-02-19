@@ -326,7 +326,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         sDBName += DB_DELIM;
         String sDatabaseConditionPrefix(sDBName);
         sDatabaseConditionPrefix.SearchAndReplaceAll(DB_DELIM, '.');
-        sDBName += String::CreateFromInt32(rData.nCommandType);
+        sDBName += OUString::number(rData.nCommandType);
         sDBName += DB_DELIM;
 
         // if only the country is in an address line the
@@ -542,7 +542,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             sDBName += DB_DELIM;
             sDBName += String(rData.sCommand);
             sDBName += DB_DELIM;
-            sDBName += String::CreateFromInt32(rData.nCommandType);
+            sDBName += OUString::number(rData.nCommandType);
             sDBName += DB_DELIM;
 
 //          Female:  [database.sGenderColumn] != "rFemaleGenderValue" && [database.NameColumn]

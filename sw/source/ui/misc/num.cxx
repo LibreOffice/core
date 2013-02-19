@@ -150,9 +150,9 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
 
     // insert levels
     for(sal_uInt16 i = 1; i <= MAXLEVEL; i++)
-        m_pLevelLB->InsertEntry(String::CreateFromInt32(i));
+        m_pLevelLB->InsertEntry(OUString::number(i));
     String sEntry(rtl::OUString("1 - "));
-    sEntry += String::CreateFromInt32(MAXLEVEL);
+    sEntry += OUString::number(MAXLEVEL);
     m_pLevelLB->InsertEntry(sEntry);
     m_pLevelLB->SelectEntry(sEntry);
 

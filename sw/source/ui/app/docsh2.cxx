@@ -1264,7 +1264,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         for( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
                         {
                             if( bOutline[i] )
-                                pEntries[nIdx++] = sOutline + String::CreateFromInt32( i+1 );
+                                pEntries[nIdx++] = sOutline + OUString::number( i+1 );
                         }
 
                         OUString    sStyle( SW_RESSTR(STR_FDLG_STYLE) );

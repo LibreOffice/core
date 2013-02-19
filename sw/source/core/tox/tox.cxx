@@ -662,7 +662,7 @@ String SwFormToken::GetString() const
         case TOKEN_AUTHORITY:
         {
             sRet.AssignAscii( SwForm::aFormAuth );
-            String sTmp( String::CreateFromInt32( nAuthorityField ));
+            String sTmp( OUString::number( nAuthorityField ));
             if( sTmp.Len() < 2 )
                 sTmp.Insert('0', 0);
             sRet.Insert( sTmp, 2 );
@@ -675,26 +675,26 @@ String SwFormToken::GetString() const
     sRet += ' ';
     sRet += sCharStyleName;
     sRet += ',';
-    sRet += String::CreateFromInt32( nPoolId );
+    sRet += OUString::number( nPoolId );
     sRet += ',';
 
     // TabStopPosition and TabAlign or ChapterInfoFormat
     if(TOKEN_TAB_STOP == eTokenType)
     {
-        sRet += String::CreateFromInt32( nTabStopPosition );
+        sRet += OUString::number( nTabStopPosition );
         sRet += ',';
-        sRet += String::CreateFromInt32( static_cast< sal_Int32 >(eTabAlign) );
+        sRet += OUString::number( static_cast< sal_Int32 >(eTabAlign) );
         sRet += ',';
         sRet += cTabFillChar;
         sRet += ',';
-        sRet += String::CreateFromInt32( bWithTab );
+        sRet += OUString::number( bWithTab );
     }
     else if(TOKEN_CHAPTER_INFO == eTokenType)
     {
-        sRet += String::CreateFromInt32( nChapterFormat );
+        sRet += OUString::number( nChapterFormat );
         // add maximum permitted level
         sRet += ',';
-        sRet += String::CreateFromInt32( nOutlineLevel );
+        sRet += OUString::number( nOutlineLevel );
     }
     else if(TOKEN_TEXT == eTokenType)
     {
@@ -711,10 +711,10 @@ String SwFormToken::GetString() const
     }
     else if(TOKEN_ENTRY_NO == eTokenType)
     {
-        sRet += String::CreateFromInt32( nChapterFormat );
+        sRet += OUString::number( nChapterFormat );
         // add maximum permitted level
         sRet += ',';
-        sRet += String::CreateFromInt32( nOutlineLevel );
+        sRet += OUString::number( nOutlineLevel );
     }
 
     if(bAppend)

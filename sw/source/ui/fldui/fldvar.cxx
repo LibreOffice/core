@@ -74,7 +74,7 @@ SwFldVarPage::SwFldVarPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     sOldNameFT = aNameFT.GetText();
 
     for (sal_uInt16 i = 1; i <= MAXLEVEL; i++)
-        aChapterLevelLB.InsertEntry(String::CreateFromInt32(i));
+        aChapterLevelLB.InsertEntry(OUString::number(i));
 
     aChapterLevelLB.SelectEntryPos(0);
     //enable 'active' language selection
@@ -500,7 +500,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 {
                     bValue = sal_True;      // SubType OFF - knows no Offset
                     if (IsFldEdit())
-                        aValueED.SetText(String::CreateFromInt32(((SwRefPageSetField*)GetCurField())->GetOffset()));
+                        aValueED.SetText(OUString::number(((SwRefPageSetField*)GetCurField())->GetOffset()));
                 }
             }
             break;
@@ -1281,7 +1281,7 @@ void SwFldVarPage::FillUserData()
         nTypeSel = USHRT_MAX;
     else
         nTypeSel = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData( nTypeSel );
-    sData += String::CreateFromInt32( nTypeSel );
+    sData += OUString::number( nTypeSel );
     SetUserData(sData);
 }
 

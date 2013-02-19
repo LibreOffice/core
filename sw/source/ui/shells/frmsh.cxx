@@ -203,7 +203,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     {
                         sName = sOldName;
                         sName += '_';
-                        sName += String::CreateFromInt32(i++);
+                        sName += OUString::number(i++);
                     }
                     rSh.SetFlyName(sName);
                 }

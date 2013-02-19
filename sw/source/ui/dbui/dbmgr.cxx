@@ -413,7 +413,7 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
         sDBName += DB_DELIM;
         sDBName += (String)aInsertData.sCommand;
         sDBName += DB_DELIM;
-        sDBName += String::CreateFromInt32(aInsertData.nCommandType);
+        sDBName += OUString::number(aInsertData.nCommandType);
         rMergeDesc.rSh.ChangeDBFields( aDBNames, sDBName);
         SetInitDBFields(sal_False);
     }
@@ -746,7 +746,7 @@ static String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStarti
     do
     {
         String sTest = rStartingPageDesc;
-        sTest += String::CreateFromInt32( nDocNo );
+        sTest += OUString::number( nDocNo );
         if( !pTargetShell->FindPageDescByName( sTest ) )
             return sTest;
         ++nDocNo;
@@ -1019,7 +1019,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         aPrtMonDlg.aPrinter.SetText( aTempFileURL.GetBase() );
                         String sStat(SW_RES(STR_STATSTR_LETTER));   // Brief
                         sStat += ' ';
-                        sStat += String::CreateFromInt32( nDocNo );
+                        sStat += OUString::number( nDocNo );
                         aPrtMonDlg.aPrintInfo.SetText(sStat);
 
                         // computation time for Save-Monitor:
@@ -2296,7 +2296,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             while(xDBContext->hasByName(sFind))
             {
                 sFind = sNewName;
-                sFind += String::CreateFromInt32(++nIndex);
+                sFind += OUString::number(++nIndex);
             }
 
             Reference<XInterface> xNewInstance;

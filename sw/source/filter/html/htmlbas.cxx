@@ -143,7 +143,7 @@ void SwHTMLParser::EndScript()
                     while( bFound )
                     {
                         aBasicModule.AssignAscii( "Modul" );
-                        aBasicModule += String::CreateFromInt32( (sal_Int32)(++nSBModuleCnt) );
+                        aBasicModule += OUString::number( (sal_Int32)(++nSBModuleCnt) );
                         bFound = xModLib->hasByName( ::rtl::OUString( aBasicModule ) );
                     }
                 }

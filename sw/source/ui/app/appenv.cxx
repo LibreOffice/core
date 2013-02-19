@@ -161,7 +161,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     pSh = pNewView->GetWrtShellPtr();
 
     String aTmp( SW_RES(STR_ENV_TITLE) );
-    aTmp += String::CreateFromInt32( ++nTitleNo );
+    aTmp += OUString::number( ++nTitleNo );
     xDocSh->SetTitle( aTmp );
 
     // if applicable, copy the old Collections "Sender" and "Reciever" to

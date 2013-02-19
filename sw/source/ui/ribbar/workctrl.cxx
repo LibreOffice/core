@@ -656,7 +656,7 @@ SwZoomBox_Impl::SwZoomBox_Impl(
     {   25, 50, 75, 100, 150, 200 };
     for(sal_uInt16 i = 0; i < sizeof(aZoomValues)/sizeof(sal_uInt16); i++)
     {
-        String sEntry = String::CreateFromInt32(aZoomValues[i]);
+        String sEntry = OUString::number(aZoomValues[i]);
         sEntry += '%';
         InsertEntry(sEntry);
     }
@@ -772,7 +772,7 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     SwZoomBox_Impl* pBox = (SwZoomBox_Impl*)GetToolBox().GetItemWindow( GetId() );
     if(SFX_ITEM_AVAILABLE <= eState)
     {
-        String sZoom(String::CreateFromInt32(((const SfxUInt16Item*)pState)->GetValue()));
+        String sZoom(OUString::number(((const SfxUInt16Item*)pState)->GetValue()));
         sZoom += '%';
         pBox->SetText(sZoom);
         pBox->SaveValue();

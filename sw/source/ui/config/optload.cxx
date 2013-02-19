@@ -477,7 +477,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     }
 
     for (i = 0; i < MAXLEVEL; i++)
-        aLbLevel.InsertEntry(String::CreateFromInt32(i + 1));
+        aLbLevel.InsertEntry(OUString::number(i + 1));
 
     sal_Unicode nLvl = MAXLEVEL;
     rtl::OUString sDelim(": ");

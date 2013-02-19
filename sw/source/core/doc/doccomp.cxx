@@ -1211,7 +1211,7 @@ String SwCompareLine::GetText() const
             {
             case CONTENT_SECTION:
                 if( rSect.IsProtect() )
-                    sRet.Append( String::CreateFromInt32(
+                    sRet.Append( OUString::number(
                             rSNd.EndOfSectionIndex() - rSNd.GetIndex() ));
                 break;
 
@@ -1223,7 +1223,7 @@ String SwCompareLine::GetText() const
                         sRet.Append( pTOX->GetTitle() )
                             .Append( pTOX->GetTypeName() )
 //                          .Append( pTOX->GetTOXName() )
-                            .Append( String::CreateFromInt32( pTOX->GetType() ));
+                            .Append( OUString::number( pTOX->GetType() ));
                 }
                 break;
 

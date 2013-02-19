@@ -1635,7 +1635,7 @@ void SwInsertDBColAutoPilot::Commit()
             sColumnInsertNode += '0';
         if( nCol < 10 )
             sColumnInsertNode += '0';
-        sColumnInsertNode += String::CreateFromInt32(  nCol );
+        sColumnInsertNode += OUString::number(  nCol );
 
         Sequence <rtl::OUString> aSubNodeNames = lcl_CreateSubNames(sColumnInsertNode);
         Sequence<PropertyValue> aSubValues(aSubNodeNames.getLength());

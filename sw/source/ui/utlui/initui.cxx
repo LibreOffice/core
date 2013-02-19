@@ -197,7 +197,7 @@ String ShellResource::GetPageDescName( sal_uInt16 nNo, PageNameMode eMode )
             break;
     }
 
-    sRet.SearchAndReplaceAscii( "$(ARG1)", String::CreateFromInt32( nNo ));
+    sRet.SearchAndReplaceAscii( "$(ARG1)", OUString::number( nNo ));
     return sRet;
 }
 

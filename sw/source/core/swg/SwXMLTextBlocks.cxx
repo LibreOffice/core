@@ -274,7 +274,7 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
             rDestImp.CloseFile();
             return ERR_SWG_WRITE_ERROR;
         }
-        sDestShortName += String::CreateFromInt32( nIdx );
+        sDestShortName += OUString::number( nIdx );
     }
 
     try

@@ -434,7 +434,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                     pPage->GetPageDesc() )
                     sTxt = pPage->GetPageDesc()->GetNumType().GetNumStr( nPageNo );
                 else
-                    sTxt = String::CreateFromInt32(nPageNo);
+                    sTxt = OUString::number(nPageNo);
             }
         }
         break;

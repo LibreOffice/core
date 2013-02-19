@@ -654,7 +654,7 @@ void    SwFldFuncPage::FillUserData()
         nTypeSel = USHRT_MAX;
     else
         nTypeSel = sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(aTypeLB.GetEntryData( nTypeSel )));
-    sData += String::CreateFromInt32( nTypeSel );
+    sData += OUString::number( nTypeSel );
     SetUserData(sData);
 }
 

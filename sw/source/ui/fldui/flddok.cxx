@@ -335,10 +335,10 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
                         sal_Int32 nOff = GetCurField()->GetPar2().toInt32();
                         if( TYP_NEXTPAGEFLD == nTypeId && 1 != nOff )
                             aValueED.SetText(
-                                String::CreateFromInt32(nOff - 1) );
+                                OUString::number(nOff - 1) );
                         else if( TYP_PREVPAGEFLD == nTypeId && -1 != nOff )
                             aValueED.SetText(
-                                String::CreateFromInt32(nOff + 1) );
+                                OUString::number(nOff + 1) );
                         else
                             aValueED.SetText(aEmptyStr);
                     }
@@ -351,7 +351,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
             case TYP_CHAPTERFLD:
                 aValueFT.SetText(SW_RESSTR(STR_LEVEL));
                 if (IsFldEdit())
-                    aLevelED.SetText(String::CreateFromInt32(((SwChapterField*)GetCurField())->GetLevel() + 1));
+                    aLevelED.SetText(OUString::number(((SwChapterField*)GetCurField())->GetLevel() + 1));
                 bLevel = sal_True;
                 break;
 
@@ -586,9 +586,9 @@ sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
             nFormat = aNumFormatLB.GetFormat();
             long nVal = static_cast< long >(aDateOffsetED.GetValue());
             if (nTypeId == TYP_DATEFLD)
-                aVal = String::CreateFromInt32(nVal * 60 * 24);
+                aVal = OUString::number(nVal * 60 * 24);
             else
-                aVal = String::CreateFromInt32(nVal);
+                aVal = OUString::number(nVal);
             break;
         }
 
@@ -601,7 +601,7 @@ sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
                 (TYP_PREVPAGEFLD == nTypeId || TYP_NEXTPAGEFLD == nTypeId))
             {
                 sal_Int32 nVal = aValueED.GetText().toInt32();
-                aVal = String::CreateFromInt32(nVal);
+                aVal = OUString::number(nVal);
             }
             break;
         }
@@ -648,7 +648,7 @@ void    SwFldDokPage::FillUserData()
         nTypeSel = USHRT_MAX;
     else
         nTypeSel = sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(aTypeLB.GetEntryData( nTypeSel )));
-    sData += String::CreateFromInt32( nTypeSel );
+    sData += OUString::number( nTypeSel );
     SetUserData(sData);
 }
 

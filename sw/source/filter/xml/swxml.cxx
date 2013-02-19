@@ -215,9 +215,9 @@ sal_Int32 ReadThroughComponent(
         OSL_FAIL(aError.getStr());
 #endif
 
-        String sErr( String::CreateFromInt32( r.LineNumber ));
+        String sErr( OUString::number( r.LineNumber ));
         sErr += ',';
-        sErr += String::CreateFromInt32( r.ColumnNumber );
+        sErr += OUString::number( r.ColumnNumber );
 
         if( rStreamName.Len() )
         {

@@ -474,7 +474,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
                 i < (sizeof(nZoomValues)/sizeof(nZoomValues[0])); ++i)
         {
             String sTemp;
-            sTemp = String::CreateFromInt32(nZoomValues[i]);
+            sTemp = OUString::number(nZoomValues[i]);
             sTemp += rtl::OUString(" %");
             aSubPop1.InsertItem( ITEM_ZOOM + i + 1, sTemp);
             if(nZoom == nZoomValues[i])

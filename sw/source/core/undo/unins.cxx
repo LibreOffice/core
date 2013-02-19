@@ -541,7 +541,7 @@ MakeUndoReplaceRewriter(sal_uLong const occurrences,
 
     if (1 < occurrences)
     {
-        aResult.AddRule(UndoArg1, String::CreateFromInt32(occurrences));
+        aResult.AddRule(UndoArg1, OUString::number(occurrences));
         aResult.AddRule(UndoArg2, String(SW_RES(STR_OCCURRENCES_OF)));
 
         String aTmpStr;

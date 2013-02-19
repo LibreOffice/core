@@ -428,7 +428,7 @@ SwField * SwField::CopyField() const
 String FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat)
 {
     if(SVX_NUM_PAGEDESC == nFormat)
-        return  String::CreateFromInt32( nNum );
+        return  OUString::number( nNum );
     SvxNumberType aNumber;
 
     OSL_ENSURE(nFormat != SVX_NUM_NUMBER_NONE, "Falsches Nummern-Format" );

@@ -301,7 +301,7 @@ namespace myImplHelpers
                     (nI < SAL_MAX_INT32)
                   )
             {
-                aName += String::CreateFromInt32(nI++);
+                aName += OUString::number(nI++);
             }
         }
 

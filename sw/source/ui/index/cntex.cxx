@@ -139,7 +139,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl)
         rtl::OUString sSectionName("IndexSection_");
         for(int i = 0; i < 7; ++i )
         {
-            String sTmp( sSectionName ); sTmp += String::CreateFromInt32(i);
+            String sTmp( sSectionName ); sTmp += OUString::number(i);
             uno::Any aSection = xSections->getByName( sTmp );
             aSection >>= pxIndexSectionsArr[i]->xContainerSection;
          }
@@ -440,7 +440,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             for(sal_uInt16 i = 1; i < nEndLevel; i++)
             {
                 String sPropName(rtl::OUString("ParaStyleLevel"));
-                sPropName += String::CreateFromInt32( i );
+                sPropName += OUString::number( i );
                 lcl_SetProp(xInfo,
                     xIdxProps,
                     rtl::OUStringToOString(sPropName, RTL_TEXTENCODING_ASCII_US).getStr(),

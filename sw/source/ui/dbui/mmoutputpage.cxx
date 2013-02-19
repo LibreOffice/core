@@ -767,7 +767,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             }
             String sStat(SW_RES(STR_STATSTR_LETTER));
             sStat += ' ';
-            sStat += String::CreateFromInt32( nDoc );
+            sStat += OUString::number( nDoc );
             aSaveMonitor.aPrintInfo.SetText(sStat);
 
             //now extract a document from the target document
@@ -792,7 +792,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             //then save it
             String sOutPath = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
             String sCounter = rtl::OUString('_');
-            sCounter += String::CreateFromInt32(nDoc);
+            sCounter += OUString::number(nDoc);
             sOutPath.Insert(sCounter, sOutPath.Len() - sExtension.Len() - 1);
 
             while(true)

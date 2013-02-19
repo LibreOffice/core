@@ -1189,7 +1189,7 @@ static String lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
 
         nCount++;
         sName = sPrefixStr;
-        sName += String::CreateFromInt32(nCount);
+        sName += OUString::number(nCount);
 
     }
     while (NULL != pTableNode->GetDoc()->GetFldType(RES_DDEFLD, sName, false));

@@ -338,7 +338,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         String aText( SW_RES( STR_NB_REPLACED ) );
                         const xub_StrLen nPos = aText.Search( rtl::OUString("XX") );
                         aText.Erase( nPos, 2 );
-                        aText.Insert( String::CreateFromInt32( nFound ), nPos );
+                        aText.Insert( OUString::number( nFound ), nPos );
                         Window* pParentWindow = GetParentWindow( pSrchDlg );
                         InfoBox( pParentWindow, aText ).Execute();
                     }

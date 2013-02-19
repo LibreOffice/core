@@ -414,7 +414,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
             PopupMenu *pMenu = new PopupMenu;
             for (sal_uInt16 i = 101; i <= 100 + MAXLEVEL; i++)
             {
-                pMenu->InsertItem( i, String::CreateFromInt32(i - 100) );
+                pMenu->InsertItem( i, OUString::number(i - 100) );
                 pMenu->SetHelpId( i, HID_NAVI_OUTLINES );
             }
             pMenu->CheckItem( aContentTree.GetOutlineLevel() + 100 );

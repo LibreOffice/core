@@ -2016,7 +2016,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
 
     do {
         aName = aApp;
-        aName += String::CreateFromInt32( i );
+        aName += OUString::number( i );
         for( j = INIT_FLDTYPES; j < nSize; j++ )
         {
             pTyp = rWrtShell.GetFldType( j );

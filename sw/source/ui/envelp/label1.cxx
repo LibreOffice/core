@@ -476,9 +476,9 @@ void SwLabPage::DisplayFormat()
     aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(" x "));
     aText += aField.GetText();
     aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(" ("));
-    aText += String::CreateFromInt32( pRec->nCols );
+    aText += OUString::number( pRec->nCols );
     aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(" x "));
-    aText += String::CreateFromInt32( pRec->nRows );
+    aText += OUString::number( pRec->nRows );
     aText += ')';
     aFormatInfo.SetText(aText);
 }

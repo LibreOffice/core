@@ -46,7 +46,7 @@ sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8
 {
     sal_uInt16 nNumId = USHRT_MAX;
     String sPrefix(rtl::OUString("WW8TempExport"));
-    sPrefix += String::CreateFromInt32( nUniqueList++ );
+    sPrefix += OUString::number( nUniqueList++ );
     SwNumRule* pMyNumRule =
             new SwNumRule( pDoc->GetUniqueNumRuleName( &sPrefix ),
                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
@@ -399,7 +399,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     // now search the nums in the string
                     for( sal_uInt8 i = 0; i <= nLvl; ++i )
                     {
-                        String sSrch( String::CreateFromInt32( i ));
+                        String sSrch( OUString::number( i ));
                         xub_StrLen nFnd = sNumStr.Search( sSrch );
                         if( STRING_NOTFOUND != nFnd )
                         {

@@ -1446,9 +1446,9 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
 
                 rCntntAtPos.sStr.AssignAscii(
                                     RTL_CONSTASCII_STRINGPARAM( "Pos: (" ));
-                rCntntAtPos.sStr += String::CreateFromInt32( aPos.nNode.GetIndex());
+                rCntntAtPos.sStr += OUString::number( aPos.nNode.GetIndex());
                 rCntntAtPos.sStr += ':';
-                rCntntAtPos.sStr += String::CreateFromInt32( aPos.nContent.GetIndex());
+                rCntntAtPos.sStr += OUString::number( aPos.nContent.GetIndex());
                 rCntntAtPos.sStr += ')';
                 rCntntAtPos.sStr.AppendAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "\nAbs.Vorl.: " )); // translation *might be* "paragraph template"

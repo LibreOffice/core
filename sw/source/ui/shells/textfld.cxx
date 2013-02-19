@@ -214,7 +214,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                                         FN_PARAM_3, sal_False, &pItem ))
                         nCommand = ((SfxInt32Item*)pItem)->GetValue();
                     aPar1 += DB_DELIM;
-                    aPar1 += String::CreateFromInt32(nCommand);
+                    aPar1 += OUString::number(nCommand);
                     aPar1 += DB_DELIM;
                     if( SFX_ITEM_SET == pArgs->GetItemState(
                                         FN_PARAM_2, sal_False, &pItem ))

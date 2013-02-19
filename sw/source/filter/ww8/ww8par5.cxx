@@ -386,7 +386,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
                 String sTmp( sHex );
                 if( cChar < 0x10 )
                     sTmp += '0';
-                sTmp += String::CreateFromInt32( cChar, 16 );
+                sTmp += OUString::number( cChar, 16 );
                 aVal.Replace( nI, 1 , sTmp );
                 nI += sTmp.Len() - 1;
             }
@@ -754,7 +754,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         {
                             // Store the OLE object as an internal link
                             String sOleId = rtl::OUString('_');
-                            sOleId += String::CreateFromInt32( maFieldStack.back().mnObjLocFc );
+                            sOleId += OUString::number( maFieldStack.back().mnObjLocFc );
 
                             SvStorageRef xSrc0 = pStg->OpenSotStorage(rtl::OUString(SL::aObjectPool));
                             SvStorageRef xSrc1 = xSrc0->OpenSotStorage( sOleId, STREAM_READ );
@@ -1200,7 +1200,7 @@ void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
             String sTmp( sHex );
             if( cChar < 0x10 )
                 sTmp += '0';
-            sTmp += String::CreateFromInt32( cChar, 16 );
+            sTmp += OUString::number( cChar, 16 );
             rStr.Replace( nI, 1 , sTmp );
             nI += sTmp.Len() - 1;
         }
@@ -1214,7 +1214,7 @@ void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const String& rTagTe
 {
     String aName(rtl::OUString("WwFieldTag"));
     if( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_DO_ID ) ) // Nummer?
-        aName += String::CreateFromInt32( nId );                    // ausgeben ?
+        aName += OUString::number( nId );                    // ausgeben ?
 
     if( SwFltGetFlag(nFieldFlags, SwFltControlStack::TAGS_IN_TEXT))
     {
@@ -1387,7 +1387,7 @@ long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     {
         sName = rtl::OUString("WWSetBkmk");
         nNo = pReffingStck->aFieldVarNames.size()+1;
-        sName += String::CreateFromInt32(nNo);
+        sName += OUString::number(nNo);
         nNo += pPlcxMan->GetBook()->GetIMax();
     }
     pReffedStck->NewAttr(*pPaM->GetPoint(),
@@ -2389,7 +2389,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
 String wwSectionNamer::UniqueName()
 {
     String aName(msFileLinkSeed);
-    aName += String::CreateFromInt32(++mnFileSectionNo);
+    aName += OUString::number(++mnFileSectionNo);
     return mrDoc.GetUniqueSectionName(&aName);
 }
 
@@ -2715,7 +2715,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
             String aNm;
             //Take this as the base name
             SwStyleNameMapper::FillUIName(RES_POOLCHR_RUBYTEXT,aNm);
-            aNm+=String::CreateFromInt32(aRubyCharFmts.size()+1);
+            aNm+=OUString::number(aRubyCharFmts.size()+1);
             pFmt = rDoc.MakeCharFmt(aNm,(SwCharFmt*)rDoc.GetDfltCharFmt());
             SvxFontHeightItem aHeightItem(nFontSize*10, 100, RES_CHRATR_FONTSIZE);
             SvxFontItem aFontItem(FAMILY_DONTKNOW,sFontName,

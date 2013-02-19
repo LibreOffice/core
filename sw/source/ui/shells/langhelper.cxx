@@ -67,7 +67,7 @@ namespace SwLangHelper
 
         // the value of used script types
         const sal_uInt16 nScriptType =pOLV->GetSelectedScriptType();
-        String aScriptTypesInUse( String::CreateFromInt32( nScriptType ) );//pEditEngine->GetScriptType(aSelection)
+        String aScriptTypesInUse( OUString::number( nScriptType ) );//pEditEngine->GetScriptType(aSelection)
 
         SvtLanguageTable aLangTable;
 
