@@ -84,11 +84,11 @@ typedef WeakImplHelper3< XIntrospectionAccess, XMaterialHolder, XExactName > Int
 
 //==================================================================================================
 
-// Spezial-Wert fuer Method-Concept, um "normale" Funktionen kennzeichnen zu koennen
+// Special value for Method-Concept, to be able to mark "normal" functions
 #define  MethodConcept_NORMAL_IMPL        0x80000000
 
 
-// Methode zur Feststellung, ob eine Klasse von einer anderen abgeleitet ist
+// Method to assert, if a class is derived from another class
 sal_Bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> xDerivedFromClass )
 {
     Sequence< Reference<XIdlClass> > aClassesSeq = xToTestClass->getSuperclasses();
@@ -110,18 +110,18 @@ sal_Bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> 
 
 //========================================================================
 
-// *** Klassifizierung der Properties (kein enum, um Sequence verwenden zu koennen) ***
-// Properties aus einem PropertySet-Interface
+// *** Classification of Properties (no enum, to be able to use Sequence) ***
+// Properties from a PropertySet-Interface
 #define MAP_PROPERTY_SET    0
-// Properties aus Fields
+// Properties from Fields
 #define MAP_FIELD            1
-// Properties, die durch get/set-Methoden beschrieben werden
+// Properties, that get described with get/set-Methods
 #define MAP_GETSET            2
-// Properties, die nur eine set-Methode haben
+// Properties, with only a set-Method
 #define MAP_SETONLY            3
 
 
-// Schrittweite, in der die Groesse der Sequences angepasst wird
+// Increments, in which the size of Sequences get adjusted
 #define ARRAY_SIZE_STEP        20
 
 
@@ -129,10 +129,10 @@ sal_Bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> 
 //**************************************
 //*** IntrospectionAccessStatic_Impl ***
 //**************************************
-// Entspricht dem alten IntrospectionAccessImpl, bildet jetzt den statischen
-// Anteil des neuen Instanz-bezogenen ImplIntrospectionAccess
+// Equals to the old IntrospectionAccessImpl, forms now a static
+// part of the new Instance-related ImplIntrospectionAccess
 
-// Hashtable fuer die Suche nach Namen
+// Hashtable for the search of names
 struct hashName_Impl
 {
     size_t operator()(const ::rtl::OUString Str) const
@@ -159,8 +159,8 @@ typedef boost::unordered_map
 IntrospectionNameMap;
 
 
-// Hashtable zur Zuordnung der exakten Namen zu den zu Lower-Case
-// konvertierten Namen, dient zur Unterst�tzung von XExactName
+// Hashtable to assign exact names to the Lower-Case
+// converted names, for the support of XExactName
 typedef boost::unordered_map
 <
     ::rtl::OUString,
@@ -177,29 +177,29 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
     friend class ImplIntrospection;
     friend class ImplIntrospectionAccess;
 
-    // CoreReflection halten
+    // Holding CoreReflection
     Reference< XIdlReflection > mxCoreReflection;
 
-    // InterfaceSequences, um Zusatz-Infos zu einer Property speichern zu koennen.
-    // z.B. das Field bei MAP_FIELD, die get/set-Methoden bei MAP_GETSET usw.
+    // InterfaceSequences, to save additional information in a property
+    // for example the Field at MAP_FIELD, the get/set-Methods at MAP_GETSET, et cetera
     Sequence< Reference<XInterface> > aInterfaceSeq1;
     Sequence< Reference<XInterface> > aInterfaceSeq2;
 
-    // Hashtables fuer die Namen
+    // Hashtables for names
     IntrospectionNameMap maPropertyNameMap;
     IntrospectionNameMap maMethodNameMap;
     LowerToExactNameMap  maLowerToExactNameMap;
 
-    // Sequence aller Properties, auch zum Liefern aus getProperties()
+    // Sequence of all Properties, also for delivering from getProperties()
     Sequence<Property> maAllPropertySeq;
 
-    // Mapping der Properties auf Zugriffs-Arten
+    // Mapping of properties to Access-Types
     Sequence<sal_Int16> maMapTypeSeq;
 
-    // Klassifizierung der gefundenen Methoden
+    // Classification of found methods
     Sequence<sal_Int32> maPropertyConceptSeq;
 
-    // Anzahl der Properties
+    // Number of Properties
     sal_Int32 mnPropCount;
 
     // Anzahl der Properties, die den jeweiligen Konzepten zugeordnet sind
