@@ -499,6 +499,12 @@ File gid_File_Wizards_Agenda
     ARCHIVE_TXT_FILE_BODY;
     Name = "agenda.zip";
 End
+
+File gid_File_Pymailmerge
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "mailmerge.zip";
 #endif
 #endif
 

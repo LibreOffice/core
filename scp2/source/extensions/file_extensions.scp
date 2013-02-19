@@ -282,24 +282,4 @@ End
 
 #endif
 
-/* ** Script provider for Python ** */
-
-#ifndef WITHOUT_SCRIPTING_PYTHON
-
-File gid_File_Py_Pythonscript
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "pythonscript.py";
-    Styles = (PACKED);
-End
-
-File gid_File_Rdb_Scriptproviderforpython
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program_Services;
-    Name = "scriptproviderforpython.rdb";
-    Styles = (PACKED);
-End
-
-#endif
-
 #endif

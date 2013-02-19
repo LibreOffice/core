@@ -29,11 +29,8 @@
 
 #ifndef DISABLE_PYUNO
 
-Module gid_Module_Optional_Pyuno
-    PackageInfo = "packinfo_office.txt";
-    MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON );
-    ParentID = gid_Module_Optional;
-    Sortkey = "750";
+Module gid_Module_Pyuno
+    ParentID = gid_Module_Root_Brand;
     Dirs = (gid_Dir_PythonFramework,
             gid_Dir_PythonFramework_Versions,
             gid_Dir_PythonFramework_Versions_ver,
@@ -54,6 +51,8 @@ Module gid_Module_Optional_Pyuno
              gid_File_Py_Pythonloader,
              gid_File_Py_Python_Core,
              gid_File_Py_Python_Bin,
+             gid_File_Py_Pythonscript,
+             gid_File_Rdb_Scriptproviderforpython,
              gid_File_Lib_Python_So,
              gid_File_Lib_Python3_So,
              gid_File_Scripts_Python,
@@ -77,9 +76,7 @@ Module gid_Module_Optional_Pyuno
                  gid_Unixlink_Python_libpython_config_dylib,
                  gid_Unixlink_Python_libpython_m_config_a,
                  gid_Unixlink_Python_libpython_m_config_dylib);
-    Minimal = NO;
-    Default = YES;
-    Styles = ( );
+    Styles = (HIDDEN_ROOT);
 End
 
 #endif

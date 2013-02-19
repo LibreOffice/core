@@ -30,7 +30,7 @@
 #ifndef DISABLE_PYUNO
 
 Profile gid_Profile_Pythonloader_Uno_Ini
-    ModuleID = gid_Module_Optional_Pyuno;
+    ModuleID = gid_Module_Pyuno;
   #ifdef UNX
     Name = "pythonloader.unorc";
   #else
@@ -43,7 +43,7 @@ End
 #ifndef SYSTEM_PYTHON
 ProfileItem gid_Profileitem_Pythonloader_Pythonhome
     ProfileID = gid_Profile_Pythonloader_Uno_Ini;
-    ModuleID = gid_Module_Optional_Pyuno;
+    ModuleID = gid_Module_Pyuno;
     Section = "Bootstrap";
     Order = 1;
     Key = "PYUNO_LOADER_PYTHONHOME";
@@ -57,7 +57,7 @@ End
 
 ProfileItem gid_Profileitem_Pythonloader_Pythonpath
     ProfileID = gid_Profile_Pythonloader_Uno_Ini;
-    ModuleID = gid_Module_Optional_Pyuno;
+    ModuleID = gid_Module_Pyuno;
     Section = "Bootstrap";
     Order = 1;
     Key = "PYUNO_LOADER_PYTHONPATH";

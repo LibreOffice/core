@@ -140,9 +140,3 @@ en-US = "Script provider for JavaScript"
 
 [STR_DESC_MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_JAVASCRIPT]
 en-US = "Script provider for JavaScript"
-
-[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_PYTHON]
-en-US = "Script provider for Python"
-
-[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_PYTHON]
-en-US = "Script provider for Python"

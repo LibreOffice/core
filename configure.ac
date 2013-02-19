@@ -10254,16 +10254,6 @@ AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 AC_SUBST(SYSTEM_RHINO)
 AC_SUBST(RHINO_JAR)
 
-dnl Scripting provider for Python extension?
-dnl We always provide this unless we have disabled Python completely
-if test $enable_python = no; then
-    ENABLE_SCRIPTING_PYTHON=NO
-    SCPDEFS="$SCPDEFS -DWITHOUT_SCRIPTING_PYTHON"
-else
-    ENABLE_SCRIPTING_PYTHON=YES
-fi
-AC_SUBST(ENABLE_SCRIPTING_PYTHON)
-
 supports_multilib=
 case "$host_cpu" in
 x86_64 | powerpc64 | s390x)

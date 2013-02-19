@@ -13,8 +13,8 @@
 Module gid_Module_Optional_Pyuno_LibreLogo
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON_LIBRELOGO );
-    ParentID = gid_Module_Optional_Pyuno;
-    Sortkey = "100";
+    ParentID = gid_Module_Optional;
+    Sortkey = "810";
     Files = (gid_File_LibreLogo,
              gid_File_Share_Registry_LibreLogo_Xcd);
     Minimal = NO;
