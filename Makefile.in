@@ -386,9 +386,7 @@ ifeq ($(OS),LINUX)
 	@echo
 	@echo "Developer installation finished, you can now execute:"
 	@echo
-	@echo "  cd $(SRCDIR)/install/program"
-	@echo "  . ./ooenv"
-	@echo "  ./soffice.bin"
+	@echo "$(SRCDIR)/install/program/soffice"
 else ifeq ($(OS),MACOSX)
 	@echo
 	@echo "Developer installation finished, you can now run:"
