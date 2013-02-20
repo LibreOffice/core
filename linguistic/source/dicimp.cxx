@@ -386,33 +386,75 @@ static rtl::OString formatForSave(const uno::Reference< XDictionaryEntry > &xEnt
    return aStr.makeStringAndClear();
 }
 
+struct TmpDictionary
+{
+    OUString maURL, maTmpURL;
+    uno::Reference< ucb::XSimpleFileAccess3 > mxAccess;
+
+    void cleanTmpFile()
+    {
+        try
+        {
+            mxAccess->kill(maTmpURL);
+        }
+        catch (const uno::Exception &) { }
+    }
+    TmpDictionary(const OUString &rURL)
+        : maURL( rURL )
+    {
+        maTmpURL = maURL + ".tmp";
+    }
+    ~TmpDictionary()
+    {
+        cleanTmpFile();
+    }
+
+    uno::Reference< io::XStream > openTmpFile()
+    {
+        uno::Reference< io::XStream > xStream;
+
+        try
+        {
+            mxAccess = ucb::SimpleFileAccess::create(
+                        comphelper::getProcessComponentContext());
+            xStream = mxAccess->openFileReadWrite(maTmpURL);
+        } catch (const uno::Exception &) { }
+
+        return xStream;
+    }
+
+    bool renameTmpToURL()
+    {
+        try
+        {
+            mxAccess->move(maTmpURL, maURL);
+        }
+        catch (const uno::Exception &)
+        {
+            DBG_ASSERT( 0, "failed to overwrite dict" );
+            return static_cast< sal_uLong >(-1);
+        }
+        return 0;
+    }
+};
 
 sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard aGuard( GetLinguMutex() );
 
     if (rURL.isEmpty())
         return 0;
     DBG_ASSERT(!INetURLObject( rURL ).HasError(), "lng : invalid URL");
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    // lifecycle manage the .tmp file
+    TmpDictionary aTmpDictionary(rURL);
+    uno::Reference< io::XStream > xStream = aTmpDictionary.openTmpFile();
 
-    // get XOutputStream stream
-    uno::Reference< io::XStream > xStream;
-    try
-    {
-        uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
-        xStream = xAccess->openFileReadWrite( rURL );
-    }
-    catch (const uno::Exception &)
-    {
-        DBG_ASSERT( 0, "failed to get input stream" );
-    }
     if (!xStream.is())
         return static_cast< sal_uLong >(-1);
 
-    SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
     sal_uLong nErr = sal::static_int_cast< sal_uLong >(-1);
+    SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
     //
     // Always write as the latest version, i.e. DIC_VERSION_7
@@ -449,8 +491,10 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
         rtl::OString aOutStr = formatForSave(pEntry[i], eEnc);
         pStream->WriteLine (aOutStr);
         if (0 != (nErr = pStream->GetError()))
-            return nErr;
+            break;
     }
+
+    nErr = aTmpDictionary.renameTmpToURL();
 
     //If we are migrating from an older version, then on first successful
     //write, we're now converted to the latest version, i.e. DIC_VERSION_7
