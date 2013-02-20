@@ -29,7 +29,7 @@ DBG_NAMEEX_VISIBILITY(CntUnencodedStringItem, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC CntUnencodedStringItem: public SfxPoolItem
 {
-    XubString m_aValue;
+    OUString m_aValue;
 
 public:
     TYPEINFO();
@@ -37,7 +37,7 @@ public:
     CntUnencodedStringItem(sal_uInt16 which = 0): SfxPoolItem(which)
     { DBG_CTOR(CntUnencodedStringItem, 0); }
 
-    CntUnencodedStringItem(sal_uInt16 which, const XubString & rTheValue):
+    CntUnencodedStringItem(sal_uInt16 which, const OUString & rTheValue):
         SfxPoolItem(which), m_aValue(rTheValue)
     { DBG_CTOR(CntUnencodedStringItem, 0); }
 
@@ -68,12 +68,12 @@ public:
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 
-    const XubString & GetValue() const { return m_aValue; }
+    const OUString & GetValue() const { return m_aValue; }
 
-    inline void SetValue(const XubString & rTheValue);
+    inline void SetValue(const OUString & rTheValue);
 };
 
-inline void CntUnencodedStringItem::SetValue(const XubString & rTheValue)
+inline void CntUnencodedStringItem::SetValue(const OUString & rTheValue)
 {
     DBG_ASSERT(GetRefCount() == 0,
                "CntUnencodedStringItem::SetValue(): Pooled item");

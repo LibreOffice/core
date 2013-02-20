@@ -78,14 +78,14 @@ private:
     @throws WrappedTargetException
         if an error occurs accessing the URL via the UCB
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > loadObjectFromURL(const ::rtl::OUString& _rName,const ::rtl::OUString& _sURL);
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getObject( const ::rtl::OUString& _rURL );
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > loadObjectFromURL(const OUString& _rName,const OUString& _sURL);
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getObject( const OUString& _rURL );
 
     /** sets all properties which were transient at the data source. e.g. password
         @param  _sURL       The file URL of the data source
         @param  _xObject    The data source itself.
     */
-    void setTransientProperties(const ::rtl::OUString& _sURL, ODatabaseModelImpl& _rDataSourceModel );
+    void setTransientProperties(const OUString& _sURL, ODatabaseModelImpl& _rDataSourceModel );
 
     /** creates a new data source
     */
@@ -128,13 +128,13 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo - static methods
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static ::rtl::OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
@@ -146,23 +146,23 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
 
     // XNamingService
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const ::rtl::OUString& Name ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL registerObject( const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL revokeObject( const ::rtl::OUString& Name ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL registerObject( const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL revokeObject( const OUString& Name ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XDatabaseRegistrations
-    virtual ::sal_Bool SAL_CALL hasRegisteredDatabase( const ::rtl::OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getRegistrationNames() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getDatabaseLocation( const ::rtl::OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL registerDatabaseLocation( const ::rtl::OUString& Name, const ::rtl::OUString& Location ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL revokeDatabaseLocation( const ::rtl::OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL changeDatabaseLocation( const ::rtl::OUString& Name, const ::rtl::OUString& NewLocation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL isDatabaseRegistrationReadOnly( const ::rtl::OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasRegisteredDatabase( const OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getRegistrationNames() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getDatabaseLocation( const OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL registerDatabaseLocation( const OUString& Name, const OUString& Location ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL revokeDatabaseLocation( const OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isDatabaseRegistrationReadOnly( const OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addDatabaseRegistrationsListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseRegistrationsListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeDatabaseRegistrationsListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseRegistrationsListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -176,7 +176,7 @@ public:
 
     void registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl);
     void revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl);
-    void databaseDocumentURLChange(const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName);
+    void databaseDocumentURLChange(const OUString& _sOldName, const OUString& _sNewName);
     void storeTransientProperties( ODatabaseModelImpl& _rModelImpl);
     void appendAtTerminateListener(const ODatabaseModelImpl& _rDataSourceModel);
     void removeFromTerminateListener(const ODatabaseModelImpl& _rDataSourceModel);
