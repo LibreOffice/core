@@ -215,7 +215,7 @@ private:
     const SfxItemPropertySet* pPropSet;
     ScDocShell*             pDocShell;
     SfxStyleFamily          eFamily;        // Family
-    String                  aStyleName;
+    OUString                aStyleName;
 
     SfxStyleSheetBase*      GetStyle_Impl();
     const SfxItemSet*       GetStyleItemSet_Impl( const ::rtl::OUString& rPropName, const SfxItemPropertySimpleEntry*& rpEntry );
