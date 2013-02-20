@@ -35,7 +35,7 @@ class ScXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
     void AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const sal_Bool bExportDefaults);
     public:
 
-    ScXMLFontAutoStylePool_Impl( ScXMLExport& rExport );
+    ScXMLFontAutoStylePool_Impl( ScXMLExport& rExport, bool bBlockFontEmbedding );
 
 };
 
@@ -69,8 +69,8 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 
 }
 
 ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
-    ScXMLExport& rExportP ) :
-    XMLFontAutoStylePool( rExportP )
+    ScXMLExport& rExportP, bool bBlockFontEmbedding ) :
+    XMLFontAutoStylePool( rExportP, bBlockFontEmbedding )
 {
     sal_uInt16 aWhichIds[3] = { ATTR_FONT, ATTR_CJK_FONT,
                                 ATTR_CTL_FONT };
@@ -131,7 +131,16 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
 
 XMLFontAutoStylePool* ScXMLExport::CreateFontAutoStylePool()
 {
-    return new ScXMLFontAutoStylePool_Impl( *this );
+    bool blockFontEmbedding = false;
+    // We write font info to both content.xml and styles.xml, but they are both
+    // written by different ScXMLExport instance, and would therefore write each
+    // font file twice without complicated checking for duplicates, so handle
+    // the embedding only in one of them.
+    if(( getExportFlags() & EXPORT_CONTENT ) == 0 )
+        blockFontEmbedding = true;
+    if( !GetDocument()->IsUsingEmbededFonts())
+        blockFontEmbedding = true;
+    return new ScXMLFontAutoStylePool_Impl( *this, !blockFontEmbedding );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

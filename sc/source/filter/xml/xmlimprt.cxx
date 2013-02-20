@@ -3404,4 +3404,10 @@ const ScXMLEditAttributeMap& ScXMLImport::GetEditAttributeMap() const
     return *mpEditAttrMap;
 }
 
+void ScXMLImport::NotifyEmbeddedFontRead()
+{
+    if ( pDoc )
+        pDoc->SetIsUsingEmbededFonts( true );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

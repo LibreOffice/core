@@ -74,6 +74,7 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_LOADREADONLY), 0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNO_SHAREDOC),     0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNO_MODIFYPASSWORDINFO), 0,  &getCppuType((uno::Sequence< beans::PropertyValue >*)0),              0, 0},
+        {MAP_CHAR_LEN(SC_UNO_EMBED_FONTS), 0,  &getBooleanCppuType(),              0, 0},
         {0,0,0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -276,6 +277,15 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The hash is not allowed to be changed now!" ) ),
                         uno::Reference< uno::XInterface >() );
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_EMBED_FONTS ) == 0 )
+            {
+                sal_Bool bVal = sal_False;
+                if ( aValue >>=bVal )
+                {
+                    pDoc->SetIsUsingEmbededFonts(bVal);
+                }
+            }
+
             else
             {
                 ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -410,6 +420,11 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_MODIFYPASSWORDINFO ) == 0 )
                 aRet <<= pDocShell->GetModifyPasswordInfo();
+            else if ( aPropertyName.compareToAscii( SC_UNO_EMBED_FONTS ) == 0 )
+            {
+                aRet <<= pDoc->IsUsingEmbededFonts();
+            }
+
             else
             {
                 const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();

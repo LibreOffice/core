@@ -665,6 +665,8 @@
 // Named ranges
 #define SC_UNO_MODIFY_BROADCAST     "ModifyAndBroadcast"
 
+#define SC_UNO_EMBED_FONTS     "EmbedFonts"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

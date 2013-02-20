@@ -302,7 +302,6 @@ private:
 
     com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >
                         mxVbaEvents;
-
 public:
     boost::ptr_vector< ScInterpreterTableOpParams > aTableOpList; // list of ScInterpreterTableOpParams currently in use
     ScInterpreterTableOpParams  aLastTableOpParams;     // remember last params
@@ -403,7 +402,10 @@ private:
 
     ::std::set<ScFormulaCell*> maSubTotalCells;
 
+    bool                mbUseEmbedFonts;
 public:
+    bool              IsUsingEmbededFonts() { return mbUseEmbedFonts; }
+    void              SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
     SC_DLLPUBLIC sal_uLong          GetCellCount() const;       // all cells
     SCSIZE          GetCellCount(SCTAB nTab, SCCOL nCol) const;
     sal_uLong           GetCodeCount() const;       // RPN-Code in formulas

@@ -1195,6 +1195,7 @@ public:
 
     ScEditEngineDefaulter* GetEditEngine();
     const ScXMLEditAttributeMap& GetEditAttributeMap() const;
+    virtual void NotifyEmbeddedFontRead() SAL_OVERRIDE;
 };
 
 #endif
