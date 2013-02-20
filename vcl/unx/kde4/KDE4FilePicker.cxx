@@ -105,12 +105,8 @@ QString toQString(const rtl::OUString& s)
 //////////////////////////////////////////////////////////////////////////
 
 KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
-    : cppu::WeakComponentImplHelper4<
-          XFilePicker2,
-          XFilePicker3,
-          XFilePickerControlAccess,
-          lang::XServiceInfo>( _helperMutex ),
-          _resMgr( ResMgr::CreateResMgr("fps_office") )
+    : KDE4FilePicker_Base(_helperMutex)
+    , _resMgr( ResMgr::CreateResMgr("fps_office") )
 {
     _extraControls = new QWidget();
     _layout = new QGridLayout(_extraControls);

@@ -42,14 +42,17 @@ class QLayout;
 
 class ResMgr;
 
-class KDE4FilePicker :
-    public cppu::WeakComponentImplHelper5<
-        ::com::sun::star::ui::dialogs::XFilePicker2,
-        ::com::sun::star::ui::dialogs::XFilePicker3,
-        ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
-// TODO ::com::sun::star::ui::dialogs::XFilePreview,
-        ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::lang::XServiceInfo >
+typedef ::cppu::WeakComponentImplHelper5
+<   ::com::sun::star::ui::dialogs::XFilePicker2
+,   ::com::sun::star::ui::dialogs::XFilePicker3
+,   ::com::sun::star::ui::dialogs::XFilePickerControlAccess
+// TODO ::com::sun::star::ui::dialogs::XFilePreview
+,   ::com::sun::star::lang::XInitialization
+,   ::com::sun::star::lang::XServiceInfo
+> KDE4FilePicker_Base;
+
+class KDE4FilePicker
+    : public KDE4FilePicker_Base
 {
 protected:
 
