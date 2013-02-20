@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///gk\u003d",
+        "filename": "odk/CustomTarget_javadollar.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-20T08:54:16Z",
+      "side": 1,
+      "message": "That\u0027s messy. Why we don\u0027t use jar here? $JAVA_HOME/bin/jar should be there.",
+      "revId": "538f27061bfce4cd90068cbeba373416c54e74d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///gg\u003d",
+        "filename": "odk/CustomTarget_odkcommon.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-20T08:54:16Z",
+      "side": 1,
+      "message": "This one is really big. For better readability and maintainance split it in different makefiles, i. e.:\n odk/odkcommon_bin\n odk/odkcommon_lib\n odk/odkcommon_include\n odk/odkcommon_configuration\n odk/odkcommon_documentation",
+      "revId": "538f27061bfce4cd90068cbeba373416c54e74d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///gU\u003d",
+        "filename": "odk/CustomTarget_unowinreg.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-20T08:54:16Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the else branch only be built on MinGW?\n ifeq ($(OS),WNT)\n ifeq ($(COM),GCC)",
+      "revId": "538f27061bfce4cd90068cbeba373416c54e74d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
