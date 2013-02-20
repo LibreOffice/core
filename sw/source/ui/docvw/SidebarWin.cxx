@@ -933,6 +933,7 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
             aItems[1] = 0;
             mrView.GetViewFrame()->GetBindings().Execute( nSlot, aItems, 0, SFX_CALLMODE_ASYNCHRON );
         }
+            break;
         default:
             mrView.GetViewFrame()->GetBindings().Execute( nSlot );
             break;
