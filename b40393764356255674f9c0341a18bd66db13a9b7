@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///e4\u003d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-02-20T16:37:31Z",
+      "side": 1,
+      "message": "This needs a\n\n (void)e;\n\nadded for the non-dbgutil build to not bail out with werror, doesn\u0027t it?",
+      "revId": "b40393764356255674f9c0341a18bd66db13a9b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
