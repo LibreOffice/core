@@ -22,14 +22,14 @@
   </object>
   <object class="GtkDialog" id="PrintDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">Print</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -95,6 +95,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="vcllo:PrintPreviewWindow" id="preview">
                     <property name="width_request">235</property>
@@ -114,7 +115,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">30</property>
                     <property name="margin_right">30</property>
-                    <property name="spacing">5</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkSpinButton" id="pageedit-nospin">
                         <property name="visible">True</property>
@@ -192,6 +193,7 @@
                     <property name="can_focus">False</property>
                     <property name="border_width">6</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkFrame" id="frame1">
                         <property name="visible">True</property>
@@ -202,6 +204,7 @@
                           <object class="GtkAlignment" id="alignment3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="top_padding">6</property>
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkGrid" id="grid4">
@@ -411,12 +414,14 @@
                                   <object class="GtkBox" id="box6">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="spacing">12</property>
                                     <child>
                                       <object class="GtkLabel" id="label14">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="margin_right">7</property>
                                         <property name="label" translatable="yes">Number of copies</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">copycount</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -450,6 +455,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
+                                    <property name="spacing">12</property>
                                     <child>
                                       <object class="GtkCheckButton" id="collate">
                                         <property name="label" translatable="yes">Collate</property>
@@ -457,7 +463,6 @@
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
-                                        <property name="margin_right">7</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
                                       </object>
@@ -606,6 +611,7 @@
                                       <object class="GtkBox" id="box13">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="spacing">12</property>
                                         <child>
                                           <object class="GtkRadioButton" id="printpages">
                                             <property name="label" translatable="yes">Pages</property>
@@ -716,17 +722,20 @@
                           <object class="GtkAlignment" id="alignment2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="top_padding">6</property>
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkBox" id="box7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="spacing">7</property>
+                                <property name="spacing">12</property>
                                 <child>
                                   <object class="GtkLabel" id="label16">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">Comments</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">writercomments</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -775,6 +784,7 @@
                           <object class="GtkAlignment" id="alignment1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="top_padding">6</property>
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkBox" id="box5">
@@ -786,12 +796,14 @@
                                   <object class="GtkBox" id="box17">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="spacing">7</property>
+                                    <property name="spacing">12</property>
                                     <child>
                                       <object class="GtkLabel" id="label10">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">Document</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">impressdocument</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -821,12 +833,14 @@
                                   <object class="GtkBox" id="box18">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="spacing">7</property>
+                                    <property name="spacing">12</property>
                                     <child>
                                       <object class="GtkLabel" id="label12">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">Slides per page</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">slidesperpage</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -850,6 +864,8 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">Order</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">slidesperpageorder</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -938,6 +954,7 @@
                     <property name="can_focus">False</property>
                     <property name="border_width">6</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
                     <child>
                       <object class="GtkFrame" id="frame5">
                         <property name="visible">True</property>
@@ -948,13 +965,14 @@
                           <object class="GtkAlignment" id="alignment5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="top_padding">6</property>
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkGrid" id="grid1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="row_spacing">6</property>
-                                <property name="column_spacing">7</property>
+                                <property name="column_spacing">12</property>
                                 <child>
                                   <object class="GtkComboBox" id="paperspersheetlb">
                                     <property name="visible">True</property>
@@ -1032,6 +1050,8 @@
                                     <property name="halign">start</property>
                                     <property name="margin_left">12</property>
                                     <property name="label" translatable="yes">Pages</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">pagecols</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -1047,6 +1067,8 @@
                                     <property name="halign">start</property>
                                     <property name="margin_left">12</property>
                                     <property name="label" translatable="yes">Margin</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">sheetmarginsb:0mm</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -1062,6 +1084,8 @@
                                     <property name="halign">start</property>
                                     <property name="margin_left">12</property>
                                     <property name="label" translatable="yes">Orientation</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">orientationlb</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -1077,6 +1101,8 @@
                                     <property name="halign">start</property>
                                     <property name="margin_left">12</property>
                                     <property name="label" translatable="yes">Distance</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">pagemarginsb:0mm</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -1176,6 +1202,8 @@
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="label" translatable="yes">by</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">pagerows</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">2</property>
@@ -1237,6 +1265,8 @@
                                     <property name="halign">start</property>
                                     <property name="margin_left">12</property>
                                     <property name="label" translatable="yes">Order</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">orderlb</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -1312,6 +1342,8 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">Include</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">brochureinclude</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1378,6 +1410,7 @@
                       <object class="GtkAlignment" id="alignment6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="top_padding">6</property>
                         <property name="left_padding">12</property>
                         <child>
                           <object class="GtkGrid" id="grid5">
