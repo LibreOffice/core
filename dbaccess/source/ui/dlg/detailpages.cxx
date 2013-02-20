@@ -509,7 +509,7 @@ namespace dbaui
         {
             m_sDefaultJdbcDriverName = pTypeCollection->getJavaDriverClass(pUrlItem->GetValue());
         }
-        if ( m_sDefaultJdbcDriverName.Len() )
+        if ( m_sDefaultJdbcDriverName.getLength() )
         {
             m_aEDDriverClass.SetModifyHdl(getControlModifiedLink());
             m_aEDDriverClass.SetModifyHdl(LINK(this, OGeneralSpecialJDBCDetailsPage, OnEditModified));
@@ -935,7 +935,7 @@ namespace dbaui
     //------------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
     {
-        ::rtl::OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( _rAttrSet );
+        OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( _rAttrSet );
         DataSourceMetaData aMetaData( eType );
         return new SpecialSettingsPage( _pParent, _rAttrSet, aMetaData );
     }

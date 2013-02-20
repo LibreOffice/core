@@ -258,7 +258,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     {
         Any aValue;
         Reference<XInterface> xDs = dbaccess::getDataSource(_xConnection);
-        if ( dbtools::getDataSourceSetting(xDs,static_cast <rtl::OUString> (PROPERTY_BOOLEANCOMPARISONMODE),aValue) )
+        if ( dbtools::getDataSourceSetting(xDs,static_cast <OUString> (PROPERTY_BOOLEANCOMPARISONMODE),aValue) )
         {
             OSL_VERIFY( aValue >>= m_nBoolCompareMode );
         }
@@ -380,9 +380,8 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sa
             }
             else
             {
-                String sMessage( DBACORE_RESSTRING( RID_STR_TABLE_DOES_NOT_EXIST ) );
-                sMessage.SearchAndReplaceAscii( "$table$", Command );
-                throwGenericSQLException(sMessage,*this);
+                OUString sMessage( DBACORE_RESSTRING( RID_STR_TABLE_DOES_NOT_EXIST ) );
+                throwGenericSQLException(sMessage.replaceAll( "$table$", Command ),*this);
             }
             break;
         case CommandType::QUERY:
