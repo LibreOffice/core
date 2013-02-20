@@ -16,6 +16,24 @@
       "revId": "b40393764356255674f9c0341a18bd66db13a9b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///ek\u003d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-02-20T19:20:33Z",
+      "side": 1,
+      "message": "SAL_WARN/SAL_INFO always use their parameter regardless of OSL_DEBUG_LEVEL, so that should not be necessary.",
+      "parentUuid": "AAAAVn///e4\u003d",
+      "revId": "b40393764356255674f9c0341a18bd66db13a9b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
