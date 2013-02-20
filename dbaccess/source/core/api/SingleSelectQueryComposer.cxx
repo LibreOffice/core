@@ -258,7 +258,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     {
         Any aValue;
         Reference<XInterface> xDs = dbaccess::getDataSource(_xConnection);
-        if ( dbtools::getDataSourceSetting(xDs,static_cast <rtl::OUString> (PROPERTY_BOOLEANCOMPARISONMODE),aValue) )
+        if ( dbtools::getDataSourceSetting(xDs,static_cast <OUString> (PROPERTY_BOOLEANCOMPARISONMODE),aValue) )
         {
             OSL_VERIFY( aValue >>= m_nBoolCompareMode );
         }
@@ -380,9 +380,8 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sa
             }
             else
             {
-                String sMessage( DBACORE_RESSTRING( RID_STR_TABLE_DOES_NOT_EXIST ) );
-                sMessage.SearchAndReplaceAscii( "$table$", Command );
-                throwGenericSQLException(sMessage,*this);
+                OUString sMessage( DBACORE_RESSTRING( RID_STR_TABLE_DOES_NOT_EXIST ) );
+                throwGenericSQLException(sMessage.replaceAll( "$table$", Command ),*this);
             }
             break;
         case CommandType::QUERY:
@@ -468,9 +467,8 @@ OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< X
         || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
         )
         {
-            String sError(DBACORE_RESSTRING(RID_STR_COLUMN_UNKNOWN_PROP));
-            sError.SearchAndReplaceAscii("%value", OUString(PROPERTY_NAME));
-            SQLException aErr(sError,*this,SQLSTATE_GENERAL,1000,Any() );
+            OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_UNKNOWN_PROP));
+            SQLException aErr(sError.replaceAll("%value", OUString(PROPERTY_NAME)),*this,SQLSTATE_GENERAL,1000,Any() );
             throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
         }
 

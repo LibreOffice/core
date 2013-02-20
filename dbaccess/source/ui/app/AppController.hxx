@@ -131,7 +131,7 @@ namespace dbaui
 
         ::std::auto_ptr< SelectionNotifier >
                                 m_pSelectionNotifier;
-        typedef ::std::map< ElementType, ::std::vector< ::rtl::OUString > > SelectionByElementType;
+        typedef ::std::map< ElementType, ::std::vector< OUString > > SelectionByElementType;
         SelectionByElementType  m_aPendingSelection;
 
     private:
@@ -143,13 +143,13 @@ namespace dbaui
             @return
                 the database name
         */
-        ::rtl::OUString getDatabaseName() const;
+        OUString getDatabaseName() const;
 
         /** returns the stripped database name.
             @return
                 The stripped database name either the registered naem or if it is a file url the last segment.
         */
-        ::rtl::OUString getStrippedDatabaseName() const;
+        OUString getStrippedDatabaseName() const;
 
         /** return the element type for given container
             @param  _xContainer The container where the element type has to be found
@@ -169,7 +169,7 @@ namespace dbaui
             @return the form or report model will only be returned, otherwise <NULL/>
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > openElement(
-            const ::rtl::OUString& _sName,
+            const OUString& _sName,
             ElementType _eType,
             ElementOpenMode _eOpenMode,
             sal_uInt16 _nInstigatorCommand = 0
@@ -178,7 +178,7 @@ namespace dbaui
         /** opens a new sub frame with a table/query/form/report/view, passing additional arguments
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > openElementWithArguments(
-            const ::rtl::OUString& _sName,
+            const OUString& _sName,
             ElementType _eType,
             ElementOpenMode _eOpenMode,
             sal_uInt16 _nInstigatorCommand,
@@ -211,7 +211,7 @@ namespace dbaui
             @param  _sName
                 The name of the query.
         */
-        void convertToView(const ::rtl::OUString& _sName);
+        void convertToView(const OUString& _sName);
 
         /** checks if the connection for the selected data source is read only. If the connection doesn't exist, <TRUE/> will be returned.
             @return
@@ -220,7 +220,7 @@ namespace dbaui
         sal_Bool isConnectionReadOnly() const;
 
         /// fills the list with the selected entries.
-        void getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const;
+        void getSelectionElementNames( ::std::vector< OUString>& _rNames ) const;
 
         /// deletes the entries selected.
         void deleteEntries();
@@ -237,14 +237,14 @@ namespace dbaui
                 determines whether the user must confirm the deletion
         */
         void deleteObjects( ElementType _eType,
-                            const ::std::vector< ::rtl::OUString>& _rList,
+                            const ::std::vector< OUString>& _rList,
                             bool _bConfirm );
 
         /** deletes tables.
             @param  _rList
                 The list of tables.
         */
-        void deleteTables(const ::std::vector< ::rtl::OUString>& _rList);
+        void deleteTables(const ::std::vector< OUString>& _rList);
 
         /// copies the current object into clipboard
         TransferableHelper* copyObject();
@@ -306,7 +306,7 @@ namespace dbaui
             @param  _sServiceName
                 The serivce name of the dialog to be executed.
         */
-        void openDialog(const ::rtl::OUString& _sServiceName);
+        void openDialog(const OUString& _sServiceName);
 
         /** opens the administration dialog for the selected data source
         */
@@ -329,7 +329,7 @@ namespace dbaui
         /** remember a newly opened sub document for later access
         */
         void onDocumentOpened(
-            const ::rtl::OUString&  _rName,
+            const OUString&  _rName,
             const sal_Int32         _nType,
             const ElementOpenMode   _eMode,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDocument,
@@ -374,11 +374,11 @@ namespace dbaui
         *
         * \return the name of the currently table or query. If the tables or query container is selected otherwise an empty string will be returned.
         */
-        ::rtl::OUString getCurrentlySelectedName(sal_Int32& _rnCommandType) const;
+        OUString getCurrentlySelectedName(sal_Int32& _rnCommandType) const;
 
         /** shows the preview for the given entry
         */
-        void showPreviewFor( const ElementType _eType,const ::rtl::OUString& _sName );
+        void showPreviewFor( const ElementType _eType,const OUString& _sName );
 
         /** called we were attached to a frame
 
@@ -388,7 +388,7 @@ namespace dbaui
         void onAttachedFrame();
 
         /// determines whether the given table name denotes a view which can be altered
-        bool    impl_isAlterableView_nothrow( const ::rtl::OUString& _rTableOrViewName ) const;
+        bool    impl_isAlterableView_nothrow( const OUString& _rTableOrViewName ) const;
 
         /** does the macro/script migration, where macros/scripts in forms/reports are moved
             to the database document itself.
@@ -398,7 +398,7 @@ namespace dbaui
         /** verifies the object type denotes a valid DatabaseObject, and the object name denotes an existing
             object of this type. Throws if not.
         */
-        void    impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::boost::optional< ::rtl::OUString >& i_rObjectName );
+        void    impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::boost::optional< OUString >& i_rObjectName );
 
     protected:
         // ----------------------------------------------------------------
@@ -430,11 +430,11 @@ namespace dbaui
         DECLARE_XTYPEPROVIDER( )
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
         // need by registration
-        static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
@@ -459,10 +459,10 @@ namespace dbaui
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > SAL_CALL getSubComponents() throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL connect(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::beans::Pair< ::sal_Int32, ::rtl::OUString > SAL_CALL identifySubComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& SubComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::beans::Pair< ::sal_Int32, OUString > SAL_CALL identifySubComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& SubComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL closeSubComponents(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponent( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponentWithArguments( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponent( ::sal_Int32 ObjectType, const OUString& ObjectName, ::sal_Bool ForEditing ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponentWithArguments( ::sal_Int32 ObjectType, const OUString& ObjectName, ::sal_Bool ForEditing, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL createComponent( ::sal_Int32 ObjectType, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_DocumentDefinition ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL createComponentWithArguments( ::sal_Int32 ObjectType, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_DocumentDefinition ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
@@ -514,8 +514,8 @@ namespace dbaui
         virtual void        executeUnChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
         virtual void        executeChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
         virtual sal_Bool    isCommandEnabled(sal_uInt16 _nCommandId) const;
-        virtual sal_Bool    isCommandEnabled( const ::rtl::OUString& _rCompleteCommandURL ) const;
-        virtual sal_uInt16  registerCommandURL( const ::rtl::OUString& _rCompleteCommandURL );
+        virtual sal_Bool    isCommandEnabled( const OUString& _rCompleteCommandURL ) const;
+        virtual sal_uInt16  registerCommandURL( const OUString& _rCompleteCommandURL );
         virtual void        notifyHiContrastChanged();
         virtual sal_Bool    isDataSourceReadOnly() const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >

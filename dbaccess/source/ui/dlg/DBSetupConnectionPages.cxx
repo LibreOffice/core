@@ -166,7 +166,7 @@ DBG_NAME(OTextConnectionPageSetup)
         ,m_aCBUseSSL            (this, ModuleRes(CB_WIZ_USESSL))
     {
         SetControlFontWeight(&m_aFTHeaderText);
-        m_aFTDefaultPortNumber.SetText(String(ModuleRes(STR_LDAP_DEFAULT)));
+        m_aFTDefaultPortNumber.SetText(OUString(ModuleRes(STR_LDAP_DEFAULT)));
         m_aETHostServer.SetModifyHdl(getControlModifiedLink());
         m_aETBaseDN.SetModifyHdl(getControlModifiedLink());
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
@@ -190,7 +190,7 @@ DBG_NAME(OTextConnectionPageSetup)
                 pCollection = pCollectionItem->getCollection();
             OSL_ENSURE(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
 
-            String sUrl = pCollection->getPrefix( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:ldap:")));
+            OUString sUrl = pCollection->getPrefix( ::rtl::OUString("sdbc:address:ldap:"));
             sUrl += m_aETHostServer.GetText();
             _rSet.Put(SfxStringItem(DSID_CONNECTURL, sUrl));
             bChangedSomething = sal_True;
@@ -422,10 +422,10 @@ DBG_NAME(OMySQLIntroPageSetup)
         ,m_aPBTestJavaDriver    (this, ModuleRes(PB_AUTOTESTDRIVERCLASS))
         ,m_nPortId(_nPortId)
     {
-        m_aFTDriverClass.SetText(String(ModuleRes(_nDriverClassId)));
+        m_aFTDriverClass.SetText(OUString(ModuleRes(_nDriverClassId)));
 
-        m_aFTDefaultPortNumber.SetText(String(ModuleRes(_nDefaultPortResId)));
-        String sHelpText = String(ModuleRes(_nHelpTextResId));
+        m_aFTDefaultPortNumber.SetText(OUString(ModuleRes(_nDefaultPortResId)));
+        OUString sHelpText = OUString(ModuleRes(_nHelpTextResId));
         m_aFTHelpText.SetText(sHelpText);
         //TODO this code snippet is redundant
         SetHeaderText(FT_AUTOWIZARDHEADER, _nHeaderTextResId);
@@ -440,7 +440,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         SFX_ITEMSET_GET(_rCoreAttrs, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
         SFX_ITEMSET_GET(_rCoreAttrs, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
         ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
-        if (pTypeCollection && pUrlItem && pUrlItem->GetValue().Len() )
+        if (pTypeCollection && pUrlItem && pUrlItem->GetValue().getLength() )
         {
             m_sDefaultJdbcDriverName = pTypeCollection->getJavaDriverClass(pUrlItem->GetValue());
         }
@@ -567,7 +567,7 @@ DBG_NAME(OMySQLIntroPageSetup)
 
         const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
-        OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String(), WB_OK | WB_DEF_OK, mt );
+        OSQLMessageBox aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
         aMsg.Execute();
         return 0L;
     }
@@ -635,10 +635,10 @@ DBG_NAME(OMySQLIntroPageSetup)
 
         if ( bValid )
         {
-            if ( !pDrvItem->GetValue().Len() )
+            if ( !pDrvItem->GetValue().getLength() )
             {
-                String sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
-                if ( sDefaultJdbcDriverName.Len() )
+                OUString sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
+                if ( sDefaultJdbcDriverName.getLength() )
                 {
                     m_aETDriverClass.SetText(sDefaultJdbcDriverName);
                     m_aETDriverClass.SetModifyFlag();
@@ -650,7 +650,7 @@ DBG_NAME(OMySQLIntroPageSetup)
                 m_aETDriverClass.ClearModifyFlag();
             }
         }
-        sal_Bool bEnable = pDrvItem->GetValue().Len() != 0;
+        sal_Bool bEnable = pDrvItem->GetValue().getLength() != 0;
         m_aPBTestJavaDriver.Enable(bEnable);
         OConnectionTabPageSetup::implInitControls(_rSet, _bSaveValue);
 
@@ -686,7 +686,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         }
 
         sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
-        OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String() );
+        OSQLMessageBox aMsg( this, OUString( ModuleRes( nMessage ) ), OUString() );
         aMsg.Execute();
         return 0L;
     }
@@ -828,7 +828,7 @@ DBG_NAME(OAuthentificationPageSetup)
         if (m_aETUserName.GetText() != m_aETUserName.GetSavedValue())
         {
             _rSet.Put(SfxStringItem(DSID_USER, m_aETUserName.GetText()));
-            _rSet.Put(SfxStringItem(DSID_PASSWORD, String()));
+            _rSet.Put(SfxStringItem(DSID_PASSWORD, OUString()));
             bChangedSomething = sal_True;
         }
         fillBool(_rSet,&m_aCBPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
@@ -856,7 +856,7 @@ DBG_NAME(OFinalDBPageSetup)
     {
         DBG_CTOR(OFinalDBPageSetup,NULL);
 
-        String stext = m_aFTFinalHeader.GetText();
+        OUString stext = m_aFTFinalHeader.GetText();
         SetControlFontWeight(&m_aFTFinalHeader);
         m_aCBOpenAfterwards.SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
         m_aCBStartTableWizard.SetClickHdl(getControlModifiedLink());

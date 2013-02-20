@@ -139,49 +139,49 @@ namespace dbaui
         switch( eType )
         {
             case  ::dbaccess::DST_DBASE:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_DBASE_PATH_OR_FILE)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_DBASE_PATH_OR_FILE)));
                 m_aConnectionURL.SetHelpId(HID_DSADMIN_DBASE_PATH);
                 break;
             case  ::dbaccess::DST_FLAT:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_FLAT_PATH_OR_FILE)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_FLAT_PATH_OR_FILE)));
                 m_aConnectionURL.SetHelpId(HID_DSADMIN_FLAT_PATH);
                 break;
             case  ::dbaccess::DST_CALC:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_CALC_PATH_OR_FILE)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_CALC_PATH_OR_FILE)));
                 m_aConnectionURL.SetHelpId(HID_DSADMIN_CALC_PATH);
                 break;
             case  ::dbaccess::DST_ADO:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_COMMONURL)));
                 break;
             case  ::dbaccess::DST_MSACCESS:
             case  ::dbaccess::DST_MSACCESS_2007:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_MSACCESS_MDB_FILE)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_MSACCESS_MDB_FILE)));
                 m_aConnectionURL.SetHelpId(HID_DSADMIN_MSACCESS_MDB_FILE);
                 break;
             case  ::dbaccess::DST_MYSQL_NATIVE:
             case  ::dbaccess::DST_MYSQL_JDBC:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_MYSQL_DATABASE_NAME)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_MYSQL_DATABASE_NAME)));
                 m_aConnectionURL.SetHelpId( HID_DSADMIN_MYSQL_DATABASE );
                 break;
             case  ::dbaccess::DST_ORACLE_JDBC:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_ORACLE_DATABASE_NAME)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_ORACLE_DATABASE_NAME)));
                 m_aConnectionURL.SetHelpId(HID_DSADMIN_ORACLE_DATABASE);
                 break;
             case  ::dbaccess::DST_MYSQL_ODBC:
             case  ::dbaccess::DST_ODBC:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_NAME_OF_ODBC_DATASOURCE)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_NAME_OF_ODBC_DATASOURCE)));
                 m_aConnectionURL.SetHelpId( eType ==  ::dbaccess::DST_MYSQL_ODBC ? HID_DSADMIN_MYSQL_ODBC_DATASOURCE : HID_DSADMIN_ODBC_DATASOURCE);
                 break;
             case  ::dbaccess::DST_LDAP:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_HOSTNAME)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_HOSTNAME)));
                 m_aConnectionURL.SetHelpId( HID_DSADMIN_LDAP_HOSTNAME );
                 break;
             case  ::dbaccess::DST_MOZILLA:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_MOZILLA_PROFILE_NAME)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_MOZILLA_PROFILE_NAME)));
                 m_aConnectionURL.SetHelpId( HID_DSADMIN_MOZILLA_PROFILE_NAME );
                 break;
             case  ::dbaccess::DST_THUNDERBIRD:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_THUNDERBIRD_PROFILE_NAME)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_THUNDERBIRD_PROFILE_NAME)));
                 m_aConnectionURL.SetHelpId( HID_DSADMIN_THUNDERBIRD_PROFILE_NAME );
                 break;
             case  ::dbaccess::DST_OUTLOOK:
@@ -191,19 +191,19 @@ namespace dbaui
             case  ::dbaccess::DST_EVOLUTION_LDAP:
             case  ::dbaccess::DST_KAB:
             case  ::dbaccess::DST_MACAB:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_NO_ADDITIONAL_SETTINGS)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_NO_ADDITIONAL_SETTINGS)));
                 {
-                    String sText = m_aFT_Connection.GetText();
-                    sText.SearchAndReplaceAscii("%test",m_aTestConnection.GetText());
-                    String sTemp;
-                    sText.SearchAndReplaceAscii("~",sTemp);
+                    OUString sText = m_aFT_Connection.GetText();
+                    sText = sText.replaceAll("%test",m_aTestConnection.GetText());
+                    OUString sTemp;
+                    sText = sText.replaceAll("~",sTemp);
                     m_aFT_Connection.SetText(sText);
                 }
                 m_aConnectionURL.Hide();
                 break;
             case  ::dbaccess::DST_JDBC:
             default:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
+                m_aFT_Connection.SetText(OUString(ModuleRes(STR_COMMONURL)));
                 break;
         }
 
@@ -233,14 +233,14 @@ namespace dbaui
             m_aUserName.SetText(pUidItem->GetValue());
             m_aPasswordRequired.Check(pAllowEmptyPwd->GetValue());
 
-            String sUrl = pUrlItem->GetValue();
+            OUString sUrl = pUrlItem->GetValue();
             setURL( sUrl );
 
             const sal_Bool bEnableJDBC = m_pCollection->determineType(m_eType) == ::dbaccess::DST_JDBC;
-            if ( !pJdbcDrvItem->GetValue().Len() )
+            if ( !pJdbcDrvItem->GetValue().getLength() )
             {
-                String sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
-                if ( sDefaultJdbcDriverName.Len() )
+                OUString sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
+                if ( sDefaultJdbcDriverName.getLength() )
                 {
                     m_aJavaDriver.SetText(sDefaultJdbcDriverName);
                     m_aJavaDriver.SetModifyFlag();
@@ -294,7 +294,7 @@ namespace dbaui
         if (m_aUserName.GetText() != m_aUserName.GetSavedValue())
         {
             _rSet.Put(SfxStringItem(DSID_USER, m_aUserName.GetText()));
-            _rSet.Put(SfxStringItem(DSID_PASSWORD, String()));
+            _rSet.Put(SfxStringItem(DSID_PASSWORD, OUString()));
             bChangedSomething = sal_True;
         }
 
@@ -328,7 +328,7 @@ namespace dbaui
 
         const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
-        OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String(), WB_OK | WB_DEF_OK, mt );
+        OSQLMessageBox aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
         aMsg.Execute();
         return 0L;
     }
