@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,icu))
 ifeq ($(SYSTEM_ICU),NO)
 $(eval $(call gb_Module_add_targets,icu,\
 	UnpackedTarball_icu \
+	UnpackedTarball_icu_data \
 	ExternalPackage_icu \
 	ExternalProject_icu \
 ))
