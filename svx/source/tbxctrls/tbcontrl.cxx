@@ -372,7 +372,7 @@ void SvxStyleBox_Impl::Select()
 
     if ( !IsTravelSelect() )
     {
-        String aSelEntry( GetText() );
+        OUString aSelEntry( GetText() );
         bool bDoIt = true, bClear = false;
         if( bInSpecialMode )
         {
@@ -402,8 +402,28 @@ void SvxStyleBox_Impl::Select()
             }
         }
 
-        // #i36723# after ReleaseFocus() the new entry is included into the List
-        sal_Bool bCreateNew = GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND;
+        //Do we need to create a new style?
+        SfxObjectShell *pShell = SfxObjectShell::Current();
+        SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
+        SfxStyleSheetBase* pStyle = NULL;
+
+        sal_Bool bCreateNew = 0;
+
+        if ( pPool )
+        {
+            pPool->SetSearchMask( eStyleFamily, SFXSTYLEBIT_ALL );
+
+            pStyle = pPool->First();
+            while ( pStyle && OUString( pStyle->GetName() ) != aSelEntry )
+                pStyle = pPool->Next();
+        }
+
+        if ( !pStyle )
+        {
+            // cannot find the style for whatever reason
+            // therefore create a new style
+            bCreateNew = 1;
+        }
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
             This instance may be deleted in the meantime (i.e. when a dialog is opened
