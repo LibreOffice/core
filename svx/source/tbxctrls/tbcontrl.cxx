@@ -407,7 +407,7 @@ void SvxStyleBox_Impl::Select()
         SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
         SfxStyleSheetBase* pStyle = NULL;
 
-        sal_Bool bCreateNew = 0;
+        bool bCreateNew = 0;
 
         if ( pPool )
         {
