@@ -45,15 +45,17 @@ protected:
     osl::Mutex                  m_rbHelperMtx;
 };
 
-class UnxFilePicker :
-    public UnxFilePickerDummy,
-    public cppu::WeakComponentImplHelper5<
+typedef ::cppu::WeakComponentImplHelper5<
         ::com::sun::star::ui::dialogs::XFilePicker2,
         ::com::sun::star::ui::dialogs::XFilePicker3,
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
 // TODO ::com::sun::star::ui::dialogs::XFilePreview,
         ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::lang::XServiceInfo >
+        ::com::sun::star::lang::XServiceInfo >  UnxFilePicker_Base;
+
+class UnxFilePicker :
+    public UnxFilePickerDummy,
+    public UnxFilePicker_Base
 {
 protected:
 
