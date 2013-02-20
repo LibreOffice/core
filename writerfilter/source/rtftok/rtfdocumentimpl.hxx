@@ -561,7 +561,9 @@ namespace writerfilter {
 
                 RTFSprms m_aObjectSprms;
                 RTFSprms m_aObjectAttributes;
-                /// If we are in an object group.
+                /** If we are in an object group and if the we use its
+                 *  \objdata element.
+                 *  (if we don't use the \objdata we use the \result element)*/
                 bool m_bObject;
                 /// Contents of the objdata group.
                 boost::shared_ptr<SvStream> m_pObjectData;
