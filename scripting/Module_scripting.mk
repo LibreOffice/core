@@ -47,9 +47,7 @@ $(eval $(call gb_Module_add_targets,scripting,\
 		) \
 		Zip_ScriptsJava \
 	) \
-	$(if $(filter $(ENABLE_SCRIPTING_PYTHON),YES),\
-		Package_scriptproviderforpython \
-	) \
+	Package_scriptproviderforpython \
 	Library_basprov \
 	Library_dlgprov \
 	Library_protocolhandler \
