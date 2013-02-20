@@ -23,6 +23,8 @@ if test "$with_system_$1" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_$2=NO
+    $2_CFLAGS=$4
+    $2_LIBS=$5
     BUILD_TYPE="$BUILD_TYPE $2"
 fi
     libo_PUBLISH_MODULE([$2])

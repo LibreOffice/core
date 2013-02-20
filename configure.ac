@@ -7287,11 +7287,7 @@ dnl ===================================================================
 if test $_os = iOS; then
     libo_PUBLISH_MODULE([WPD])
 else
-    if test "$with_system_libwpd" = "no"; then
-        WPD_CFLAGS="-I${OUTDIR}/inc/external"
-        WPD_LIBS="-L${OUTDIR}/lib -lwpdlib"
-    fi
-    libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.9 libwpd-stream-0.9])
+    libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.9 libwpd-stream-0.9],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpdlib"])
 fi
 
 dnl ===================================================================
@@ -7337,11 +7333,7 @@ dnl ===================================================================
 if test $_os = iOS; then
     libo_PUBLISH_MODULE([WPS])
 else
-    if test "$with_system_libwps" = "no"; then
-        WPS_CFLAGS="-I${OUTDIR}/inc/external"
-        WPS_LIBS="-L${OUTDIR}/lib -lwpslib"
-    fi
-    libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.2])
+    libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.2],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpslib"])
 fi
 
 dnl ===================================================================
@@ -7350,11 +7342,7 @@ dnl ===================================================================
 if test $_os = iOS; then
     libo_PUBLISH_MODULE([WPG])
 else
-    if test "$with_system_libwpg" = "no"; then
-        WPG_CFLAGS="-I${OUTDIR}/inc/external"
-        WPG_LIBS="-L${OUTDIR}/lib -lwpglib"
-    fi
-    libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.2])
+    libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.2],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpglib"])
 fi
 
 dnl ===================================================================
