@@ -200,6 +200,11 @@ public:
         : iField(iField_)
         , pEdit(pEdit_)
     {
+        //We want all widgets inside a container, so each row of the toplevel
+        //grid has another container in it. To avoid adding spacing to these
+        //empty grids they all default to invisible, so show them if their
+        //children are visibles
+        pEdit->GetParent()->Show();
         pEdit->Show();
     }
 };
