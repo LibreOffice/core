@@ -68,6 +68,7 @@
 #define SFX_PB_EDIT                     ( RC_DIALOG_BEGIN + 124 )
 
 #define STR_STYLE_ELEMTLIST             ( RC_DIALOG_BEGIN + 125 )
+#define STR_FONT_TABPAGE                ( RC_DIALOG_BEGIN + 126 )
 
 #endif // #ifndef _SFX_DIALOG_HRC
 

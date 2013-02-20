@@ -61,6 +61,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 
+#include "documentfontsdialog.hxx"
 #include <sfx2/sfx.hrc>
 #include "dinfdlg.hrc"
 #include "../appl/app.hrc"
@@ -74,6 +75,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
+
+const sal_uInt16 FONT_PAGE_ID = 99;
 
 struct CustomProperty
 {
@@ -1487,6 +1490,11 @@ void SfxDocumentInfoDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if ( m_nDocInfoId == nId )
         ( (SfxDocumentPage&)rPage ).EnableUseUserData();
+}
+
+void SfxDocumentInfoDialog::AddFontTabPage()
+{
+    AddTabPage( FONT_PAGE_ID, SfxResId( STR_FONT_TABPAGE ).toString(), SfxDocumentFontsPage::Create, 0);
 }
 
 // class CustomPropertiesYesNoButton -------------------------------------

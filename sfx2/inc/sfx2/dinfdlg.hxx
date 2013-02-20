@@ -310,6 +310,7 @@ protected:
 
 public:
     SfxDocumentInfoDialog( Window* pParent, const SfxItemSet& );
+    void AddFontTabPage();
 };
 
 // class CustomPropertiesRemoveButton ------------------------------------

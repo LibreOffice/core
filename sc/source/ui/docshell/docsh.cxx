@@ -2813,6 +2813,7 @@ SfxDocumentInfoDialog* ScDocShell::CreateDocumentInfoDialog(
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
         ::CreateTabPage ScDocStatPageCreate =   pFact->GetTabPageCreatorFunc( RID_SCPAGE_STAT );
         OSL_ENSURE(ScDocStatPageCreate, "Tabpage create fail!");
+        pDlg->AddFontTabPage();
         pDlg->AddTabPage( 42,
             ScGlobal::GetRscString( STR_DOC_STAT ),
             ScDocStatPageCreate,

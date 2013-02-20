@@ -128,5 +128,10 @@ Image IMG_INFO
     };
 };
 
+String STR_FONT_TABPAGE
+{
+  Text [ en-US ] = "Font" ;
+};
+
 // ******************************************************************* EOF
 
