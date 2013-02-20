@@ -1623,7 +1623,14 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         // remove the addtional paragraphs in the end
         if (pStartStartNode->GetStartNodeType() == SwTableBoxStartNode)
         {
-            SwTableNode *const pStartTableNode(pStartStartNode->FindTableNode());
+            SwTableNode * pStartTableNode(pStartStartNode->FindTableNode());
+            // Is it the same table start node than the end?
+            SwTableNode *const pEndStartTableNode(pEndStartNode->FindTableNode());
+            while (pEndStartTableNode->GetIndex() < pStartTableNode->GetIndex())
+            {
+                SwStartNode* pStartStartTableNode = pStartTableNode->StartOfSectionNode();
+                pStartTableNode = pStartStartTableNode->FindTableNode();
+            }
             const SwNodeIndex aTblIdx(  *pStartTableNode, -1 );
             SwPosition aBefore(aTblIdx);
             bParaBeforeInserted = GetDoc()->AppendTxtNode( aBefore );

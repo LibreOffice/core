@@ -44,7 +44,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     bool            m_bOOXML;
     OUString m_sTableStyleName;
-    OUString m_sTableVertAnchor;
+    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> m_aTablePosition;
     PropertyMapPtr  m_pTableStyleTextProperies;
 
     ::std::vector< IntVectorPtr >  m_aTableGrid;
@@ -81,7 +81,7 @@ public:
     IntVectorPtr getCurrentCellWidths( );
 
     const OUString& getTableStyleName() const { return m_sTableStyleName; }
-    const OUString& getTableVertAnchor() const;
+    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getTablePosition() { return m_aTablePosition; }
     /// copy the text properties of the table style and its parent into pContext
     void    CopyTextProperties(PropertyMapPtr pContext, StyleSheetTablePtr pStyleSheetTable);
 
