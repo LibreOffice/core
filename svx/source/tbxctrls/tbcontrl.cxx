@@ -372,20 +372,20 @@ void SvxStyleBox_Impl::Select()
 
     if ( !IsTravelSelect() )
     {
-        String aSelEntry( GetText() );
+        OUString aSearchEntry( GetText() );
         bool bDoIt = true, bClear = false;
         if( bInSpecialMode )
         {
-            if( aSelEntry == aClearFormatKey && GetSelectEntryPos() == 0 )
+            if( aSearchEntry == aClearFormatKey && GetSelectEntryPos() == 0 )
             {
-                aSelEntry = sDefaultStyle;
+                aSearchEntry = sDefaultStyle;
                 bClear = true;
                 //not only apply default style but also call 'ClearFormatting'
                 Sequence< PropertyValue > aEmptyVals;
-                SfxToolBoxControl::Dispatch( m_xDispatchProvider, rtl::OUString(".uno:ResetAttributes"),
+                SfxToolBoxControl::Dispatch( m_xDispatchProvider, OUString(".uno:ResetAttributes"),
                     aEmptyVals);
             }
-            else if( aSelEntry == aMoreKey && GetSelectEntryPos() == ( GetEntryCount() - 1 ) )
+            else if( aSearchEntry == aMoreKey && GetSelectEntryPos() == ( GetEntryCount() - 1 ) )
             {
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                 DBG_ASSERT( pViewFrm, "SvxStyleBox_Impl::Select(): no viewframe" );
@@ -402,8 +402,28 @@ void SvxStyleBox_Impl::Select()
             }
         }
 
-        // #i36723# after ReleaseFocus() the new entry is included into the List
-        sal_Bool bCreateNew = GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND;
+        //Do we need to create a new style?
+        SfxObjectShell *pShell = SfxObjectShell::Current();
+        SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
+        SfxStyleSheetBase* pStyle = NULL;
+
+        bool bCreateNew = 0;
+
+        if ( pPool )
+        {
+            pPool->SetSearchMask( eStyleFamily, SFXSTYLEBIT_ALL );
+
+            pStyle = pPool->First();
+            while ( pStyle && OUString( pStyle->GetName() ) != aSearchEntry )
+                pStyle = pPool->Next();
+        }
+
+        if ( !pStyle )
+        {
+            // cannot find the style for whatever reason
+            // therefore create a new style
+            bCreateNew = 1;
+        }
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
             This instance may be deleted in the meantime (i.e. when a dialog is opened
@@ -413,17 +433,17 @@ void SvxStyleBox_Impl::Select()
         if( bDoIt )
         {
             if ( bClear )
-                SetText( aSelEntry );
+                SetText( aSearchEntry );
             SaveValue();
 
             Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Value  = makeAny( OUString( aSelEntry ) );
+            aArgs[0].Value  = makeAny( OUString( aSearchEntry ) );
             aArgs[1].Name   = OUString("Family");
             aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
             if( bCreateNew )
             {
                 aArgs[0].Name   = OUString("Param");
-                SfxToolBoxControl::Dispatch( m_xDispatchProvider, rtl::OUString(".uno:StyleNewByExample"), aArgs);
+                SfxToolBoxControl::Dispatch( m_xDispatchProvider, OUString(".uno:StyleNewByExample"), aArgs);
             }
             else
             {
