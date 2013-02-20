@@ -2035,10 +2035,7 @@ void DomainMapper_Impl::PushFieldContext()
     uno::Reference< text::XTextRange > xStart;
     if (xTextAppend.is())
     {
-        //insert a dummy char to make sure the start range doesn't move together with the to-be-appended text
-        xTextAppend->appendTextPortion(OUString( '-' ), uno::Sequence< beans::PropertyValue >() );
         uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange( xTextAppend->getEnd() );
-        xCrsr->goLeft( 1, false );
         xStart = xCrsr->getStart();
     }
     m_aFieldStack.push( FieldContextPtr( new FieldContext( xStart ) ) );
@@ -3312,9 +3309,6 @@ void DomainMapper_Impl::PopFieldContext()
             try
             {
                 uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
-                //remove the dummy character
-                xCrsr->goRight( 1, true );
-                xCrsr->setString( OUString() );
                 uno::Reference< text::XTextContent > xToInsert( pContext->GetTOC(), uno::UNO_QUERY );
                 if( xToInsert.is() )
                 {
