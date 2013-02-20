@@ -735,7 +735,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     // Display of current page and layer.
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_PAGE ) )
     {
-        // Allways show the slide/page number.
+        // Always show the slide/page number.
         OUString aOUString = SD_RESSTR(STR_SD_PAGE);
         aOUString += " ";
         aOUString += OUString::valueOf( sal_Int32(maTabControl.GetCurPageId()) );

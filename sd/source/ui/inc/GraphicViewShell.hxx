@@ -59,7 +59,7 @@ public:
 
     virtual ~GraphicViewShell (void);
 
-    /** This method is overloaded in order to have the layer mode allways
+    /** This method is overloaded in order to have the layer mode always
         active.
     */
     virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);

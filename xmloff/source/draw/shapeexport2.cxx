@@ -135,7 +135,7 @@ void XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint(const ::basegfx::B2D
 void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTRScale, double fTRShear,
     double fTRRotate, ::basegfx::B2DTuple& rTRTranslate, const sal_Int32 nFeatures)
 {
-    // allways write Size (rTRScale) since this statement carries the union
+    // always write Size (rTRScale) since this statement carries the union
     // of the object
     OUString aStr;
     OUStringBuffer sStringBuffer;

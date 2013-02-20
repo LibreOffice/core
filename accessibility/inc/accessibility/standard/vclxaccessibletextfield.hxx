@@ -31,7 +31,7 @@ typedef ::cppu::ImplHelper1<
 
 /** This class represents non editable text fields.  The object passed to
     the constructor is expected to be a list (a <type>ListBox</type> to be
-    more specific).  From this allways the selected item is token to be made
+    more specific).  From this always the selected item is token to be made
     accessible by this class.  When the selected item changes then also the
     exported text changes.
 */

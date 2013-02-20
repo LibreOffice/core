@@ -283,7 +283,7 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
 
     sal_uInt32 lHTMLFmtHdr = rtl_str_getLength( aHTMLFmtHdr );
 
-    // the office allways writes the start
+    // the office always writes the start
     // and end html tag in upper cases and
     // without spaces
     // both tags don't allow parameters
@@ -356,7 +356,7 @@ std::string GetHtmlFormatHeader(size_t startHtml, size_t endHtml, size_t startFr
     return htmlHeader.str();
 }
 
-// the office allways writes the start and end html tag in upper cases and
+// the office always writes the start and end html tag in upper cases and
 // without spaces both tags don't allow parameters
 const std::string TAG_HTML = std::string("<HTML>");
 const std::string TAG_END_HTML = std::string("</HTML>");

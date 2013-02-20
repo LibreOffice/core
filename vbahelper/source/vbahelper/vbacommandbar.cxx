@@ -76,7 +76,7 @@ ScVbaCommandBar::setName( const OUString& _name ) throw (uno::RuntimeException)
 ::sal_Bool SAL_CALL
 ScVbaCommandBar::getVisible() throw (uno::RuntimeException)
 {
-    // menu bar is allways visible in OOo
+    // menu bar is always visible in OOo
     if( m_bIsMenu )
         return sal_True;
 

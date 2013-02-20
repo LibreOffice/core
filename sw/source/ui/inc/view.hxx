@@ -247,7 +247,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     sal_Bool            bCenterCrsr : 1,
                     bTopCrsr : 1,
-                    bAllwaysShowSel : 1,
+                    bAlwaysShowSel : 1,
                     bTabColFromDoc : 1,
                     bNumIndentFromDoc : 1, // #i23726#
                     bTabRowFromDoc : 1,
@@ -334,7 +334,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
     SW_DLLPRIVATE sal_Bool      CheckSpecialCntnt();
     SW_DLLPRIVATE void          SpellKontext(sal_Bool bOn = sal_True)
-                            { bCenterCrsr = bOn; bAllwaysShowSel = bOn; }
+                            { bCenterCrsr = bOn; bAlwaysShowSel = bOn; }
 
     // methods for printing
     SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );

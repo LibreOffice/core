@@ -1237,7 +1237,7 @@ bool NormalModeHandler::ProcessButtonDownEvent (
 
         case BUTTON_DOWN | LEFT_BUTTON | DOUBLE_CLICK | OVER_SELECTED_PAGE:
         case BUTTON_DOWN | LEFT_BUTTON | DOUBLE_CLICK | OVER_UNSELECTED_PAGE:
-            // A double click allways shows the selected slide in the center
+            // A double click always shows the selected slide in the center
             // pane in an edit view.
             SetCurrentPage(rDescriptor.mpHitDescriptor);
             SwitchView(rDescriptor.mpHitDescriptor);

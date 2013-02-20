@@ -114,7 +114,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
                  " css.embed.ElementModes"),
                 static_cast< OWeakObject * >(this), -1);
         }
-        // it's allways possible to read written storage in this implementation
+        // it's always possible to read written storage in this implementation
         nStorageMode |= embed::ElementModes::READ;
     }
 

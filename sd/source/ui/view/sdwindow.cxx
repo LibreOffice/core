@@ -926,7 +926,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
              (rDCEvt.GetFlags() & SETTINGS_STYLE) )
         {
             // When the screen zoom factor has changed then reset the zoom
-            // factor of the frame to allways display the whole page.
+            // factor of the frame to always display the whole page.
             const AllSettings* pOldSettings = rDCEvt.GetOldSettings ();
             const AllSettings& rNewSettings = GetSettings ();
             if (pOldSettings)

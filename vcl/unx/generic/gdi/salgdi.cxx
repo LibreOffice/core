@@ -318,7 +318,7 @@ GC X11SalGraphics::SelectBrush()
         }
         else
         {
-            // Bug in Sun Solaris 2.5.1, XFillPolygon doesn't allways reflect
+            // Bug in Sun Solaris 2.5.1, XFillPolygon doesn't always reflect
             // changes of the tile. PROPERTY_BUG_Tile doesn't fix this !
             if (GetDisplay()->GetProperties() & PROPERTY_BUG_FillPolygon_Tile)
                 XSetFillStyle ( pDisplay, pBrushGC_, FillSolid );

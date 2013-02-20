@@ -125,7 +125,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             OSL_FAIL( "Wrong second argument!\n" );
             throw lang::IllegalArgumentException(); // TODO:
         }
-        // it's allways possible to read written storage in this implementation
+        // it's always possible to read written storage in this implementation
         nStorageMode |= embed::ElementModes::READ;
     }
 

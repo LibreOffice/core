@@ -881,7 +881,7 @@ class ServiceManagerFactory implements  XServiceInfo, XSingleComponentFactory, X
      * because there is no the <code>ServiceManager</code> has no constructor with
      * arguments.
      * <p>
-     * @return      null - allways throws an exception
+     * @return      null - always throws an exception
      * @param       aArguments arguments for new instance.
       * @see         com.sun.star.lang.XSingleServiceFactory
      */

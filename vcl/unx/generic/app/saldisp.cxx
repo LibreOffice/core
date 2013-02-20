@@ -208,7 +208,7 @@ sal_GetServerVendor( Display *p_display )
 
     const vendor_t p_vendorlist[] = {
         { vendor_sun,         "Sun Microsystems, Inc.",          10 },
-        // allways the last entry: vendor_none to indicate eol
+        // always the last entry: vendor_none to indicate eol
         { vendor_none,        NULL,                               0 },
     };
 

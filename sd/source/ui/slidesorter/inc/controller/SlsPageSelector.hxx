@@ -49,7 +49,7 @@ class SlideSorterController;
     has to be done explicitly by calling the
     CurrentSlideManager::SetCurrentSlide() method.
 
-    Indices of pages relate allways to the number of all pages in the model
+    Indices of pages relate always to the number of all pages in the model
     (as returned by GetPageCount()) not just the selected pages.
 */
 class PageSelector : private ::boost::noncopyable

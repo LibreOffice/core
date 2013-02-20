@@ -78,7 +78,7 @@ void GraphicViewShell::ChangeEditMode (
     bool )
 {
     // There is no page tab that could be shown instead of the layer tab.
-    // Therefore we have it allways visible regardless of what the caller
+    // Therefore we have it always visible regardless of what the caller
     // said. (We have to change the callers behaviour, of course.)
     DrawViewShell::ChangeEditMode (eMode, true);
 }

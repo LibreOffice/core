@@ -360,7 +360,7 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
         }
         aTbxStyle.Enable();
 
-        // Make sure that there is allways exactly one checked toolbox item.
+        // Make sure that there is always exactly one checked toolbox item.
         if ( pItem->GetValue() == XFT_NONE )
         {
             aTbxStyle.CheckItem(TBI_STYLE_ROTATE, sal_False);

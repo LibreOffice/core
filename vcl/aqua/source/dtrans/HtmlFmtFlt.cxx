@@ -71,7 +71,7 @@ std::string GetHtmlFormatHeader(size_t startHtml, size_t endHtml, size_t startFr
 } // namespace private
 
 
-// the office allways writes the start and end html tag in upper cases and
+// the office always writes the start and end html tag in upper cases and
 // without spaces both tags don't allow parameters
 const std::string TAG_HTML = std::string("<HTML>");
 const std::string TAG_END_HTML = std::string("</HTML>");

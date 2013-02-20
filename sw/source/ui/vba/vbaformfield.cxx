@@ -93,7 +93,7 @@ void SAL_CALL SwVbaFormField::setResult( const rtl::OUString& result ) throw ( u
 
 sal_Bool SAL_CALL SwVbaFormField::getEnabled() throw ( uno::RuntimeException )
 {
-    //allways return true
+    //always return true
     return sal_True;
 }
 

@@ -47,7 +47,7 @@
 
 // error numbers, listed by error class
 // Within each class, errors should be numbered consecutively. Please
-// allways add to error code below the appropriate comment.
+// always add to error code below the appropriate comment.
 
 // I/O errors:
 

@@ -2612,7 +2612,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
       && !( nStorageMode & embed::ElementModes::WRITE ) )
         throw io::IOException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() ); // TODO: access denied
 
-    // it's allways possible to read written storage in this implementation
+    // it's always possible to read written storage in this implementation
     nStorageMode |= embed::ElementModes::READ;
 
     uno::Reference< embed::XStorage > xResult;
@@ -2924,7 +2924,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStorName == "_rels" )
         throw lang::IllegalArgumentException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 1 ); // unacceptable storage name
 
-    // it's allways possible to read written storage in this implementation
+    // it's always possible to read written storage in this implementation
     sal_Int32 nStorageMode = embed::ElementModes::READ;
 
     try

@@ -725,7 +725,7 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
     if (HasNoneField())
     {
         if (nIndex == 0)
-            // When present the first item is the then allways visible none field.
+            // When present the first item is the then always visible none field.
             pItem = mpParent->ImplGetItem (VALUESET_ITEM_NONEITEM);
         else
             // Shift down the index to compensate for the none field.

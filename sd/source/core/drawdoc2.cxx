@@ -1465,7 +1465,7 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
     String aNotesPageName = sNotesPageName;
 
     // Gather some information about the standard page and the notes page
-    // that are to be inserted.  This makes sure that there is allways one
+    // that are to be inserted.  This makes sure that there is always one
     // standard page followed by one notes page.
     if (ePageKind == PK_NOTES)
     {

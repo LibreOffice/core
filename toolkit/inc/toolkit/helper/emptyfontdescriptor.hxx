@@ -34,7 +34,7 @@ public:
     EmptyFontDescriptor()
     {
         // Not all enums are initialized correctly in FontDescriptor-CTOR because
-        // they are set to the first enum value, this is not allways the default value.
+        // they are set to the first enum value, this is not always the default value.
         Slant = ::com::sun::star::awt::FontSlant_DONTKNOW;
         Underline = ::com::sun::star::awt::FontUnderline::DONTKNOW;
         Strikeout = ::com::sun::star::awt::FontStrikeout::DONTKNOW;
