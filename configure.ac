@@ -7195,7 +7195,7 @@ dnl Check for system clucene
 dnl ===================================================================
 dnl we should rather be using
 dnl libo_CHECK_SYSTEM_MODULE([clucence],[CLUCENE],[liblucence-core]) here
-dnl but the contibs-lib check seems tricky
+dnl but the contribs-lib check seems tricky
 AC_MSG_CHECKING([which clucene to use])
 if test "$with_system_clucene" = "yes"; then
     AC_MSG_RESULT([external])
@@ -7348,7 +7348,7 @@ dnl ===================================================================
 dnl Check for system libwpg
 dnl ===================================================================
 if test $_os = iOS; then
-    libo_PUBLISH_MODULE([WPD])
+    libo_PUBLISH_MODULE([WPG])
 else
     if test "$with_system_libwpg" = "no"; then
         WPG_CFLAGS="-I${OUTDIR}/inc/external"
