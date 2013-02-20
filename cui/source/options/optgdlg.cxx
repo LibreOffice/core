@@ -549,120 +549,57 @@ void CanvasSettings::EnabledHardwareAcceleration( sal_Bool _bEnabled ) const
 
 // class OfaViewTabPage --------------------------------------------------
 
-OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
-
-    SfxTabPage( pParent, CUI_RES( OFA_TP_VIEW ), rSet ),
-
-    aUserInterfaceFL    ( this, CUI_RES( FL_USERINTERFACE ) ),
-    aWindowSizeFT       ( this, CUI_RES( FT_WINDOWSIZE ) ),
-    aWindowSizeMF       ( this, CUI_RES( MF_WINDOWSIZE ) ),
-    aIconSizeStyleFT    ( this, CUI_RES( FT_ICONSIZESTYLE ) ),
-    aIconSizeLB              ( this, CUI_RES( LB_ICONSIZE ) ),
-    aIconStyleLB        ( this, CUI_RES( LB_ICONSTYLE ) ),
-    m_aSystemFont               (this, CUI_RES( CB_SYSTEM_FONT ) ),
-#if defined( UNX )
-    aFontAntiAliasing   ( this, CUI_RES( CB_FONTANTIALIASING )),
-    aAAPointLimitLabel  ( this, CUI_RES( FT_POINTLIMIT_LABEL )),
-    aAAPointLimit       ( this, CUI_RES( NF_AA_POINTLIMIT )),
-    aAAPointLimitUnits  ( this, CUI_RES( FT_POINTLIMIT_UNIT )),
-#endif
-    aMenuFL             ( this, CUI_RES( FL_MENU ) ),
-    aMenuIconsFT        ( this, CUI_RES( FT_MENU_ICONS )),
-    aMenuIconsLB        ( this, CUI_RES( LB_MENU_ICONS )),
-    aFontListsFL        ( this, CUI_RES( FL_FONTLISTS) ),
-    aFontShowCB         ( this, CUI_RES( CB_FONT_SHOW ) ),
-    aFontHistoryCB      ( this, CUI_RES( CB_FONT_HISTORY ) ),
-    aRenderingFL        ( this, CUI_RES( FL_RENDERING ) ),
-    aUseHardwareAccell  ( this, CUI_RES( CB_USE_HARDACCELL ) ),
-    aUseAntiAliase      ( this, CUI_RES( CB_USE_ANTIALIASE ) ),
-    aMouseFL            ( this, CUI_RES( FL_MOUSE ) ),
-    aMousePosFT         ( this, CUI_RES( FT_MOUSEPOS ) ),
-    aMousePosLB         ( this, CUI_RES( LB_MOUSEPOS ) ),
-    aMouseMiddleFT      ( this, CUI_RES( FT_MOUSEMIDDLE ) ),
-    aMouseMiddleLB      ( this, CUI_RES( LB_MOUSEMIDDLE ) ),
-
-    // #i97672#
-    maSelectionFL(this, CUI_RES(FL_SELECTION)),
-    maSelectionCB(this, CUI_RES(CB_SELECTION)),
-    maSelectionMF(this, CUI_RES(MF_SELECTION)),
-
-    nSizeLB_InitialSelection(0),
-    nStyleLB_InitialSelection(0),
-    pAppearanceCfg(new SvtTabAppearanceCfg),
-    pCanvasSettings(new CanvasSettings),
-    mpDrawinglayerOpt(new SvtOptionsDrawinglayer)
+OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "OptViewPage", "cui/ui/optviewpage.ui", rSet)
+    , nSizeLB_InitialSelection(0)
+    , nStyleLB_InitialSelection(0)
+    , pAppearanceCfg(new SvtTabAppearanceCfg)
+    , pCanvasSettings(new CanvasSettings)
+    , mpDrawinglayerOpt(new SvtOptionsDrawinglayer)
 {
+    get(m_pWindowSizeMF, "windowsize");
+    get(m_pIconSizeLB, "iconsize");
+    get(m_pIconStyleLB, "iconstyle");
+    get(m_pSystemFont, "systemfont");
+    get(m_pFontAntiAliasing, "aafont");
+    get(m_pAAPointLimitLabel, "aafrom");
+    get(m_pAAPointLimit, "aanf");
+    get(m_pAAPointLimitUnits, "aaunits");
+    get(m_pMenuIconsLB, "menuicons");
+    get(m_pFontShowCB, "showfontpreview");
+    get(m_pFontHistoryCB, "showfonthistory");
+    get(m_pUseHardwareAccell, "useaccel");
+    get(m_pUseAntiAliase, "useaa");
+    get(m_pMousePosLB, "mousepos");
+    get(m_pMouseMiddleLB, "mousemiddle");
+    // #i97672#
+    get(m_pSelectionCB, "trans");
+    get(m_pSelectionMF, "transmf");
+
 #if defined( UNX )
-    aFontAntiAliasing.SetToggleHdl( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
-
-    // depending on the size of the text in aAAPointLimitLabel, we slightly re-arrange aAAPointLimit and aAAPointLimitUnits
-    //#110391#  if the label has no mnemonic and we are in a CJK version the mnemonic "(X)" will be added which
-    //          influences the width calculation
-    MnemonicGenerator aMnemonicGenerator;
-    String sLabel(aAAPointLimitLabel.GetText());
-    aMnemonicGenerator.RegisterMnemonic( sLabel );
-    aMnemonicGenerator.CreateMnemonic( sLabel );
-    sLabel = comphelper::string::remove(sLabel, '~');
-
-    sal_Int32 nLabelWidth = aAAPointLimitLabel.GetTextWidth( sLabel );
-    nLabelWidth += 3;   // small gap
-    // pixels to move both controls to the left
-    Size aSize = aAAPointLimitLabel.GetSizePixel();
-    sal_Int32 nMoveLeft = aSize.Width() - nLabelWidth;
-    // resize the first label
-    aSize.Width() = nLabelWidth;
-    aAAPointLimitLabel.SetSizePixel( aSize );
-
-    // move the numeric field
-    Point aPos( aAAPointLimit.GetPosPixel() );
-    aPos.X() -= nMoveLeft;
-    aAAPointLimit.SetPosPixel( aPos );
-
-    // move (and resize) the units FixedText
-    aPos = ( aAAPointLimitUnits.GetPosPixel() );
-    aPos.X() -= nMoveLeft;
-    aSize = aAAPointLimitUnits.GetSizePixel();
-    aSize.Width() += nMoveLeft;
-    aAAPointLimitUnits.SetPosSizePixel( aPos, aSize );
+    m_pFontAntiAliasing->SetToggleHdl( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 #else
-    // on this platform, we do not have the anti aliasing options - move the other checkboxes accordingly
-    // (in the resource, the coordinates are calculated for the AA options beeing present)
-    Control* pMiscOptions[] =
-    {
-        &aMenuFL, &aMenuIconsFT, &aMenuIconsLB,
-        &aFontListsFL, &aFontShowCB, &aFontHistoryCB
-    };
-
-    // temporaryly create the checkbox for the anti aliasing (we need to to determine it's pos)
-    CheckBox* pFontAntiAliasing = new CheckBox( this, CUI_RES( CB_FONTANTIALIASING ) );
-    sal_Int32 nMoveUp = aMenuFL.GetPosPixel().Y() - pFontAntiAliasing->GetPosPixel().Y();
-    DELETEZ( pFontAntiAliasing );
-
-    Point aPos;
-    for ( size_t i = 0; i < SAL_N_ELEMENTS( pMiscOptions ); ++i )
-    {
-        aPos = pMiscOptions[i]->GetPosPixel( );
-        aPos.Y() -= nMoveUp;
-        pMiscOptions[i]->SetPosPixel( aPos );
-    }
+    // on this platform, we do not have the anti aliasing options
+    m_pFontAntiAliasing->Hide();
+    m_pAAPointLimitLabel->Hide();
+    m_pAAPointLimit->Hide();
+    m_pAAPointLimitUnits->Hide();
 
 #endif
 
     // #i97672#
-    maSelectionCB.SetToggleHdl( LINK( this, OfaViewTabPage, OnSelectionToggled ) );
-
-    FreeResource();
+    m_pSelectionCB->SetToggleHdl( LINK( this, OfaViewTabPage, OnSelectionToggled ) );
 
     if( ! Application::ValidateSystemFont() )
     {
-        m_aSystemFont.Check( sal_False );
-        m_aSystemFont.Enable( sal_False );
+        m_pSystemFont->Check(false);
+        m_pSystemFont->Enable(false);
     }
 
     const StyleSettings& aStyleSettings = Application::GetSettings().GetStyleSettings();
 
     // remove non-installed icon themes
-    if( aIconStyleLB.GetEntryCount() == STYLE_SYMBOLS_THEMES_MAX )
+    if( m_pIconStyleLB->GetEntryCount() == STYLE_SYMBOLS_THEMES_MAX )
     {
         // do not check 0th item == auto; it is not a real theme
         aIconStyleItemId[0] = 0;
@@ -677,16 +614,16 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
             else
             {
                 // non-existing style => remove item;
-                aIconStyleLB.RemoveEntry( nItem );
+                m_pIconStyleLB->RemoveEntry( nItem );
                 aIconStyleItemId[n] = 0;
             }
         }
     }
 
     // add real theme name to 'auto' theme, e.g. 'auto' => 'auto (classic)'
-    if( aIconStyleLB.GetEntryCount() > 1 )
+    if( m_pIconStyleLB->GetEntryCount() > 1 )
     {
-        ::rtl::OUString aAutoStr( aIconStyleLB.GetEntry( 0 ) );
+        ::rtl::OUString aAutoStr( m_pIconStyleLB->GetEntry( 0 ) );
 
         aAutoStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (") );
 
@@ -696,12 +633,12 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
         if ( nAutoStyle == STYLE_SYMBOLS_AUTO || !aIconStyleItemId[nAutoStyle] )
             nAutoStyle = aStyleSettings.GetAutoSymbolsStyle();
         if ( aIconStyleItemId[nAutoStyle] )
-            aAutoStr += aIconStyleLB.GetEntry( aIconStyleItemId[nAutoStyle] );
+            aAutoStr += m_pIconStyleLB->GetEntry( aIconStyleItemId[nAutoStyle] );
 
-        aIconStyleLB.RemoveEntry( 0 );
-        aIconStyleLB.InsertEntry( aAutoStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")") ), 0 );
+        m_pIconStyleLB->RemoveEntry( 0 );
+        m_pIconStyleLB->InsertEntry( aAutoStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")") ), 0 );
         // separate auto and other icon themes
-        aIconStyleLB.SetSeparatorPos( 0 );
+        m_pIconStyleLB->SetSeparatorPos( 0 );
     }
 }
 
@@ -717,11 +654,11 @@ IMPL_LINK( OfaViewTabPage, OnAntialiasingToggled, void*, NOTINTERESTEDIN )
 {
     (void)NOTINTERESTEDIN;
 
-    sal_Bool bAAEnabled = aFontAntiAliasing.IsChecked();
+    sal_Bool bAAEnabled = m_pFontAntiAliasing->IsChecked();
 
-    aAAPointLimitLabel.Enable( bAAEnabled );
-    aAAPointLimit.Enable( bAAEnabled );
-    aAAPointLimitUnits.Enable( bAAEnabled );
+    m_pAAPointLimitLabel->Enable( bAAEnabled );
+    m_pAAPointLimit->Enable( bAAEnabled );
+    m_pAAPointLimitUnits->Enable( bAAEnabled );
 
     return 0L;
 }
@@ -731,8 +668,8 @@ IMPL_LINK( OfaViewTabPage, OnAntialiasingToggled, void*, NOTINTERESTEDIN )
 IMPL_LINK( OfaViewTabPage, OnSelectionToggled, void*, NOTINTERESTEDIN )
 {
     (void)NOTINTERESTEDIN;
-    const bool bSelectionEnabled(maSelectionCB.IsChecked());
-    maSelectionMF.Enable(bSelectionEnabled);
+    const bool bSelectionEnabled(m_pSelectionCB->IsChecked());
+    m_pSelectionMF->Enable(bSelectionEnabled);
     return 0;
 }
 
@@ -751,7 +688,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     bool bRepaintWindows(false);
 
     SvtMiscOptions aMiscOptions;
-    sal_uInt16 nSizeLB_NewSelection = aIconSizeLB.GetSelectEntryPos();
+    sal_uInt16 nSizeLB_NewSelection = m_pIconSizeLB->GetSelectEntryPos();
     if( nSizeLB_InitialSelection != nSizeLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
@@ -762,12 +699,12 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
             case 1: eSet = SFX_SYMBOLS_SIZE_SMALL; break;
             case 2: eSet = SFX_SYMBOLS_SIZE_LARGE; break;
             default:
-                OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of aIconSizeLB should not be possible!" );
+                OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_pIconSizeLB should not be possible!" );
         }
         aMiscOptions.SetSymbolsSize( eSet );
     }
 
-    sal_uInt16 nStyleLB_NewSelection = aIconStyleLB.GetSelectEntryPos();
+    sal_uInt16 nStyleLB_NewSelection = m_pIconStyleLB->GetSelectEntryPos();
     if( nStyleLB_InitialSelection != nStyleLB_NewSelection )
     {
         // find the style name in the aIconStyleItemId table
@@ -787,7 +724,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
 
     // Screen Scaling
     sal_uInt16 nOldScale = pAppearanceCfg->GetScaleFactor();
-    sal_uInt16 nNewScale = (sal_uInt16)aWindowSizeMF.GetValue();
+    sal_uInt16 nNewScale = (sal_uInt16)m_pWindowSizeMF->GetValue();
 
     if ( nNewScale != nOldScale )
     {
@@ -797,7 +734,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
 
     // Mouse Snap Mode
     short eOldSnap = pAppearanceCfg->GetSnapMode();
-    short eNewSnap = aMousePosLB.GetSelectEntryPos();
+    short eNewSnap = m_pMousePosLB->GetSelectEntryPos();
     if(eNewSnap > 2)
         eNewSnap = 2;
 
@@ -809,7 +746,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
 
     // Middle Mouse Button
     short eOldMiddleMouse = pAppearanceCfg->GetMiddleMouseButton();
-    short eNewMiddleMouse = aMouseMiddleLB.GetSelectEntryPos();
+    short eNewMiddleMouse = m_pMouseMiddleLB->GetSelectEntryPos();
     if(eNewMiddleMouse > 2)
         eNewMiddleMouse = 2;
 
@@ -820,74 +757,74 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     }
 
 #if defined( UNX )
-    if ( aFontAntiAliasing.IsChecked() != aFontAntiAliasing.GetSavedValue() )
+    if ( m_pFontAntiAliasing->IsChecked() != m_pFontAntiAliasing->GetSavedValue() )
     {
-        pAppearanceCfg->SetFontAntiAliasing( aFontAntiAliasing.IsChecked() );
+        pAppearanceCfg->SetFontAntiAliasing( m_pFontAntiAliasing->IsChecked() );
         bAppearanceChanged = sal_True;
     }
 
-    if ( aAAPointLimit.GetValue() != aAAPointLimit.GetSavedValue().toInt32() )
+    if ( m_pAAPointLimit->GetValue() != m_pAAPointLimit->GetSavedValue().toInt32() )
     {
-        pAppearanceCfg->SetFontAntialiasingMinPixelHeight( aAAPointLimit.GetValue() );
+        pAppearanceCfg->SetFontAntialiasingMinPixelHeight( m_pAAPointLimit->GetValue() );
         bAppearanceChanged = sal_True;
     }
 #endif
 
-    if ( aFontShowCB.IsChecked() != aFontShowCB.GetSavedValue() )
+    if ( m_pFontShowCB->IsChecked() != m_pFontShowCB->GetSavedValue() )
     {
-        aFontOpt.EnableFontWYSIWYG( aFontShowCB.IsChecked() );
+        aFontOpt.EnableFontWYSIWYG( m_pFontShowCB->IsChecked() );
         bModified = sal_True;
     }
 
-    if(aMenuIconsLB.GetSelectEntryPos() != aMenuIconsLB.GetSavedValue())
+    if(m_pMenuIconsLB->GetSelectEntryPos() != m_pMenuIconsLB->GetSavedValue())
     {
-        aMenuOpt.SetMenuIconsState( aMenuIconsLB.GetSelectEntryPos() == 0 ? 2 : aMenuIconsLB.GetSelectEntryPos() - 1);
+        aMenuOpt.SetMenuIconsState( m_pMenuIconsLB->GetSelectEntryPos() == 0 ? 2 : m_pMenuIconsLB->GetSelectEntryPos() - 1);
         bModified = sal_True;
         bMenuOptModified = sal_True;
         bAppearanceChanged = sal_True;
     }
 
-    if ( aFontHistoryCB.IsChecked() != aFontHistoryCB.GetSavedValue() )
+    if ( m_pFontHistoryCB->IsChecked() != m_pFontHistoryCB->GetSavedValue() )
     {
-        aFontOpt.EnableFontHistory( aFontHistoryCB.IsChecked() );
+        aFontOpt.EnableFontHistory( m_pFontHistoryCB->IsChecked() );
         bModified = sal_True;
     }
 
     // #i95644#  if disabled, do not use value, see in ::Reset()
-    if(aUseHardwareAccell.IsEnabled())
+    if(m_pUseHardwareAccell->IsEnabled())
     {
-        if(aUseHardwareAccell.IsChecked() != aUseHardwareAccell.GetSavedValue())
+        if(m_pUseHardwareAccell->IsChecked() != m_pUseHardwareAccell->GetSavedValue())
         {
-            pCanvasSettings->EnabledHardwareAcceleration(aUseHardwareAccell.IsChecked());
+            pCanvasSettings->EnabledHardwareAcceleration(m_pUseHardwareAccell->IsChecked());
             bModified = sal_True;
         }
     }
 
     // #i95644#  if disabled, do not use value, see in ::Reset()
-    if(aUseAntiAliase.IsEnabled())
+    if(m_pUseAntiAliase->IsEnabled())
     {
-        if(aUseAntiAliase.IsChecked() != mpDrawinglayerOpt->IsAntiAliasing())
+        if(m_pUseAntiAliase->IsChecked() != mpDrawinglayerOpt->IsAntiAliasing())
         {
-            mpDrawinglayerOpt->SetAntiAliasing(aUseAntiAliase.IsChecked());
+            mpDrawinglayerOpt->SetAntiAliasing(m_pUseAntiAliase->IsChecked());
             bModified = sal_True;
             bRepaintWindows = true;
         }
     }
 
     // #i97672#
-    if(maSelectionCB.IsEnabled())
+    if(m_pSelectionCB->IsEnabled())
     {
-        const bool bNewSelection(maSelectionCB.IsChecked());
-        const sal_uInt16 nNewTransparence((sal_uInt16)maSelectionMF.GetValue());
+        const bool bNewSelection(m_pSelectionCB->IsChecked());
+        const sal_uInt16 nNewTransparence((sal_uInt16)m_pSelectionMF->GetValue());
 
         if(bNewSelection != (bool)mpDrawinglayerOpt->IsTransparentSelection())
         {
-            mpDrawinglayerOpt->SetTransparentSelection(maSelectionCB.IsChecked());
+            mpDrawinglayerOpt->SetTransparentSelection(m_pSelectionCB->IsChecked());
             bModified = sal_True;
             bRepaintWindows = true;
         }
 
-        // #i104150# even read the value when maSelectionMF is disabled; it may have been
+        // #i104150# even read the value when m_pSelectionMF is disabled; it may have been
         // modified by enabling-modify-disabling by the user
         if(nNewTransparence != mpDrawinglayerOpt->GetTransparentSelectionPercent())
         {
@@ -898,10 +835,10 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     }
 
     SvtAccessibilityOptions     aAccessibilityOptions;
-    if( aAccessibilityOptions.GetIsSystemFont() != m_aSystemFont.IsChecked() &&
-        m_aSystemFont.IsEnabled() )
+    if( aAccessibilityOptions.GetIsSystemFont() != m_pSystemFont->IsChecked() &&
+        m_pSystemFont->IsEnabled() )
     {
-        aAccessibilityOptions.SetIsSystemFont( m_aSystemFont.IsChecked() );
+        aAccessibilityOptions.SetIsSystemFont( m_pSystemFont->IsChecked() );
         bModified = sal_True;
         bMenuOptModified = sal_True;
     }
@@ -911,8 +848,8 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         // Set changed settings to the application instance
         AllSettings aAllSettings = Application::GetSettings();
         StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
-        if( m_aSystemFont.IsEnabled() )
-            aStyleSettings.SetUseSystemUIFonts( m_aSystemFont.IsChecked() );
+        if( m_pSystemFont->IsEnabled() )
+            aStyleSettings.SetUseSystemUIFonts( m_pSystemFont->IsChecked() );
         aAllSettings.SetStyleSettings(aStyleSettings);
         Application::MergeSystemSettings( aAllSettings );
         Application::SetSettings(aAllSettings);
@@ -944,70 +881,70 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
 
     if( aMiscOptions.GetSymbolsSize() != SFX_SYMBOLS_SIZE_AUTO )
         nSizeLB_InitialSelection = ( aMiscOptions.AreCurrentSymbolsLarge() )? 2 : 1;
-    aIconSizeLB.SelectEntryPos( nSizeLB_InitialSelection );
-    aIconSizeLB.SaveValue();
+    m_pIconSizeLB->SelectEntryPos( nSizeLB_InitialSelection );
+    m_pIconSizeLB->SaveValue();
 
     if( aMiscOptions.GetSymbolsStyle() != STYLE_SYMBOLS_AUTO )
         nStyleLB_InitialSelection = aIconStyleItemId[aMiscOptions.GetCurrentSymbolsStyle()];
 
-    aIconStyleLB.SelectEntryPos( nStyleLB_InitialSelection );
-    aIconStyleLB.SaveValue();
+    m_pIconStyleLB->SelectEntryPos( nStyleLB_InitialSelection );
+    m_pIconStyleLB->SaveValue();
 
-    if( m_aSystemFont.IsEnabled() )
+    if( m_pSystemFont->IsEnabled() )
     {
         SvtAccessibilityOptions aAccessibilityOptions;
-        m_aSystemFont.Check( aAccessibilityOptions.GetIsSystemFont() );
+        m_pSystemFont->Check( aAccessibilityOptions.GetIsSystemFont() );
     }
 
     // Screen Scaling
-    aWindowSizeMF.SetValue ( pAppearanceCfg->GetScaleFactor() );
+    m_pWindowSizeMF->SetValue ( pAppearanceCfg->GetScaleFactor() );
     // Mouse Snap
-    aMousePosLB.SelectEntryPos(pAppearanceCfg->GetSnapMode());
-    aMousePosLB.SaveValue();
+    m_pMousePosLB->SelectEntryPos(pAppearanceCfg->GetSnapMode());
+    m_pMousePosLB->SaveValue();
 
     // Mouse Snap
-    aMouseMiddleLB.SelectEntryPos(pAppearanceCfg->GetMiddleMouseButton());
-    aMouseMiddleLB.SaveValue();
+    m_pMouseMiddleLB->SelectEntryPos(pAppearanceCfg->GetMiddleMouseButton());
+    m_pMouseMiddleLB->SaveValue();
 
 #if defined( UNX )
-    aFontAntiAliasing.Check( pAppearanceCfg->IsFontAntiAliasing() );
-    aAAPointLimit.SetValue( pAppearanceCfg->GetFontAntialiasingMinPixelHeight() );
+    m_pFontAntiAliasing->Check( pAppearanceCfg->IsFontAntiAliasing() );
+    m_pAAPointLimit->SetValue( pAppearanceCfg->GetFontAntialiasingMinPixelHeight() );
 #endif
 
     // WorkingSet
     SvtFontOptions aFontOpt;
-    aFontShowCB.Check( aFontOpt.IsFontWYSIWYGEnabled() );
+    m_pFontShowCB->Check( aFontOpt.IsFontWYSIWYGEnabled() );
     SvtMenuOptions aMenuOpt;
-    aMenuIconsLB.SelectEntryPos(aMenuOpt.GetMenuIconsState() == 2 ? 0 : aMenuOpt.GetMenuIconsState() + 1);
-    aMenuIconsLB.SaveValue();
-    aFontHistoryCB.Check( aFontOpt.IsFontHistoryEnabled() );
+    m_pMenuIconsLB->SelectEntryPos(aMenuOpt.GetMenuIconsState() == 2 ? 0 : aMenuOpt.GetMenuIconsState() + 1);
+    m_pMenuIconsLB->SaveValue();
+    m_pFontHistoryCB->Check( aFontOpt.IsFontHistoryEnabled() );
 
     { // #i95644# HW accel (unified to disable mechanism)
         if(pCanvasSettings->IsHardwareAccelerationAvailable())
         {
-            aUseHardwareAccell.Check(pCanvasSettings->IsHardwareAccelerationEnabled());
+            m_pUseHardwareAccell->Check(pCanvasSettings->IsHardwareAccelerationEnabled());
         }
         else
         {
-            aUseHardwareAccell.Check(false);
-            aUseHardwareAccell.Disable();
+            m_pUseHardwareAccell->Check(false);
+            m_pUseHardwareAccell->Disable();
         }
 
-        aUseHardwareAccell.SaveValue();
+        m_pUseHardwareAccell->SaveValue();
     }
 
     { // #i95644# AntiAliasing
         if(mpDrawinglayerOpt->IsAAPossibleOnThisSystem())
         {
-            aUseAntiAliase.Check(mpDrawinglayerOpt->IsAntiAliasing());
+            m_pUseAntiAliase->Check(mpDrawinglayerOpt->IsAntiAliasing());
         }
         else
         {
-            aUseAntiAliase.Check(false);
-            aUseAntiAliase.Disable();
+            m_pUseAntiAliase->Check(false);
+            m_pUseAntiAliase->Disable();
         }
 
-        aUseAntiAliase.SaveValue();
+        m_pUseAntiAliase->SaveValue();
     }
 
     {
@@ -1020,23 +957,23 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
         // enter values
         if(bTransparentSelectionPossible)
         {
-            maSelectionCB.Check(mpDrawinglayerOpt->IsTransparentSelection());
+            m_pSelectionCB->Check(mpDrawinglayerOpt->IsTransparentSelection());
         }
         else
         {
-            maSelectionCB.Enable(false);
+            m_pSelectionCB->Enable(false);
         }
 
-        maSelectionMF.SetValue(mpDrawinglayerOpt->GetTransparentSelectionPercent());
-        maSelectionMF.Enable(mpDrawinglayerOpt->IsTransparentSelection() && bTransparentSelectionPossible);
+        m_pSelectionMF->SetValue(mpDrawinglayerOpt->GetTransparentSelectionPercent());
+        m_pSelectionMF->Enable(mpDrawinglayerOpt->IsTransparentSelection() && bTransparentSelectionPossible);
     }
 
 #if defined( UNX )
-    aFontAntiAliasing.SaveValue();
-    aAAPointLimit.SaveValue();
+    m_pFontAntiAliasing->SaveValue();
+    m_pAAPointLimit->SaveValue();
 #endif
-    aFontShowCB.SaveValue();
-    aFontHistoryCB.SaveValue();
+    m_pFontShowCB->SaveValue();
+    m_pFontHistoryCB->SaveValue();
 
 #if defined( UNX )
     LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( NULL );

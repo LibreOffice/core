@@ -81,46 +81,33 @@ class SvtTabAppearanceCfg;
 class OfaViewTabPage : public SfxTabPage
 {
 private:
-    FixedLine       aUserInterfaceFL;
-    FixedText       aWindowSizeFT;
-    MetricField     aWindowSizeMF;
-    FixedText       aIconSizeStyleFT;
-    ListBox         aIconSizeLB;
-    ListBox         aIconStyleLB;
-    CheckBox        m_aSystemFont;
+    MetricField*    m_pWindowSizeMF;
+    ListBox*        m_pIconSizeLB;
+    ListBox*        m_pIconStyleLB;
+    CheckBox*       m_pSystemFont;
 
-#if defined( UNX )
-    CheckBox        aFontAntiAliasing;
-    FixedText       aAAPointLimitLabel;
-    NumericField    aAAPointLimit;
-    FixedText       aAAPointLimitUnits;
-#endif
+    CheckBox*       m_pFontAntiAliasing;
+    FixedText*      m_pAAPointLimitLabel;
+    NumericField*   m_pAAPointLimit;
+    FixedText*      m_pAAPointLimitUnits;
 
-    FixedLine       aMenuFL;
-    FixedText       aMenuIconsFT;
-    ListBox         aMenuIconsLB;
+    ListBox*        m_pMenuIconsLB;
 
-    FixedLine       aFontListsFL;
-    CheckBox        aFontShowCB;
-    CheckBox        aFontHistoryCB;
+    CheckBox*       m_pFontShowCB;
+    CheckBox*       m_pFontHistoryCB;
 
-    FixedLine       aRenderingFL;
-    CheckBox        aUseHardwareAccell;
-    CheckBox        aUseAntiAliase;
+    CheckBox*       m_pUseHardwareAccell;
+    CheckBox*       m_pUseAntiAliase;
 
-    FixedLine       aMouseFL;
-    FixedText       aMousePosFT;
-    ListBox         aMousePosLB;
-    FixedText       aMouseMiddleFT;
-    ListBox         aMouseMiddleLB;
+    ListBox*        m_pMousePosLB;
+    ListBox*        m_pMouseMiddleLB;
 
     // #i97672#
-    FixedLine       maSelectionFL;
-    CheckBox        maSelectionCB;
-    MetricField     maSelectionMF;
+    CheckBox*       m_pSelectionCB;
+    MetricField*    m_pSelectionMF;
 
-    sal_uInt16          nSizeLB_InitialSelection;
-    sal_uInt16          nStyleLB_InitialSelection;
+    sal_uInt16      nSizeLB_InitialSelection;
+    sal_uInt16      nStyleLB_InitialSelection;
 
     // item ID for the given icon theme
     // might be zero when the theme is not installed and the item is removed

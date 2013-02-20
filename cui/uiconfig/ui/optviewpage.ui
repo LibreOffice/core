@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkBox" id="box1">
+  <object class="GtkBox" id="OptViewPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
+    <property name="spacing">12</property>
+    <property name="homogeneous">True</property>
     <child>
       <object class="GtkBox" id="box3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="spacing">18</property>
         <child>
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
@@ -20,6 +23,7 @@
               <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkGrid" id="grid4">
@@ -31,13 +35,15 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="row_spacing">6</property>
-                        <property name="column_spacing">6</property>
+                        <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Sc~aling</property>
+                            <property name="label" translatable="yes">Sc_aling</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">windowsize</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -47,11 +53,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinbutton1">
+                          <object class="GtkSpinButton" id="windowsize">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="halign">start</property>
                             <property name="invisible_char">•</property>
                             <property name="invisible_char_set">True</property>
+                            <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -64,7 +72,10 @@
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Icon ~size and style</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">Icon _size and style</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">iconsize</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -74,11 +85,16 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBoxText" id="comboboxtext1">
+                          <object class="GtkComboBoxText" id="iconsize">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="entry_text_column">0</property>
                             <property name="id_column">1</property>
+                            <items>
+                              <item translatable="yes">Automatic</item>
+                              <item translatable="yes">Small</item>
+                              <item translatable="yes">Large</item>
+                            </items>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -88,11 +104,23 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBoxText" id="comboboxtext2">
+                          <object class="GtkComboBoxText" id="iconstyle">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="entry_text_column">0</property>
                             <property name="id_column">1</property>
+                            <items>
+                              <item translatable="yes">Automatic</item>
+                              <item translatable="yes">Galaxy (default)</item>
+                              <item translatable="yes">High Contrast</item>
+                              <item translatable="yes">Industrial</item>
+                              <item translatable="yes">Crystal</item>
+                              <item translatable="yes">Tango</item>
+                              <item translatable="yes">Oxygen</item>
+                              <item translatable="yes">Classic</item>
+                              <item translatable="yes">Human</item>
+                              <item translatable="yes">Tango Testing</item>
+                            </items>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -113,13 +141,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton3">
-                        <property name="label" translatable="yes">Use system ~font user interface</property>
-                        <property name="use_action_appearance">False</property>
+                      <object class="GtkCheckButton" id="systemfont">
+                        <property name="label" translatable="yes">Use system _font for user interface</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -131,13 +158,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton4">
-                        <property name="label" translatable="yes">Screen font antialiasing</property>
-                        <property name="use_action_appearance">False</property>
+                      <object class="GtkCheckButton" id="aafont">
+                        <property name="label" translatable="yes">Screen font antialiasin_g</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -149,15 +175,18 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkGrid" id="grid6">
+                      <object class="GtkGrid" id="fromft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">24</property>
+                        <property name="margin_left">12</property>
+                        <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkLabel" id="label9">
+                          <object class="GtkLabel" id="aafrom">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">fro~m</property>
+                            <property name="label" translatable="yes">fro_m</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">aanf</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -167,10 +196,10 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label10">
+                          <object class="GtkLabel" id="aaunits">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Pixels</property>
+                            <property name="label" translatable="yes">pixels</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -180,11 +209,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinbutton2">
+                          <object class="GtkSpinButton" id="aanf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">•</property>
                             <property name="invisible_char_set">True</property>
+                            <property name="adjustment">adjustment2</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -210,6 +240,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">User Interface</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>
@@ -229,17 +262,20 @@
               <object class="GtkAlignment" id="alignment3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkGrid" id="grid8">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="label13">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Iconsin men~us</property>
+                        <property name="label" translatable="yes">Icons in men_us</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">menuicons</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -249,15 +285,20 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="comboboxtext5">
+                      <object class="GtkComboBoxText" id="menuicons">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
+                        <items>
+                          <item translatable="yes">Automatic</item>
+                          <item translatable="yes">Hide</item>
+                          <item translatable="yes">Show</item>
+                        </items>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
@@ -271,6 +312,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Menu</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>
@@ -290,6 +334,7 @@
               <object class="GtkAlignment" id="alignment5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkGrid" id="grid9">
@@ -297,13 +342,12 @@
                     <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton5">
-                        <property name="label" translatable="yes">Show p~review of fonts</property>
-                        <property name="use_action_appearance">False</property>
+                      <object class="GtkCheckButton" id="showfontpreview">
+                        <property name="label" translatable="yes">Show p_review of fonts</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -315,13 +359,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton6">
-                        <property name="label" translatable="yes">Show font history</property>
-                        <property name="use_action_appearance">False</property>
+                      <object class="GtkCheckButton" id="showfonthistory">
+                        <property name="label" translatable="yes">Show font h_istory</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -341,6 +384,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Font Lists</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>
@@ -362,7 +408,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="spacing">18</property>
         <child>
           <object class="GtkFrame" id="frame2">
             <property name="visible">True</property>
@@ -373,6 +419,7 @@
               <object class="GtkAlignment" id="alignment2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkGrid" id="grid3">
@@ -380,13 +427,12 @@
                     <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton1">
-                        <property name="label" translatable="yes">Use hard~ware acceleration</property>
-                        <property name="use_action_appearance">False</property>
+                      <object class="GtkCheckButton" id="useaccel">
+                        <property name="label" translatable="yes">Use hard_ware acceleration</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -398,13 +444,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton2">
-                        <property name="label" translatable="yes">Use Anti-A~liasing</property>
-                        <property name="use_action_appearance">False</property>
+                      <object class="GtkCheckButton" id="useaa">
+                        <property name="label" translatable="yes">Use Anti-A_liasing</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -424,6 +469,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Graphics output</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>
@@ -443,6 +491,7 @@
               <object class="GtkAlignment" id="alignment4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkGrid" id="grid7">
@@ -453,7 +502,10 @@
                       <object class="GtkLabel" id="label11">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Mouse ~positioning</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Mouse _positioning</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">mousepos</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -466,7 +518,10 @@
                       <object class="GtkLabel" id="label12">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Middle Mouse ~button</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Middle Mouse _button</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">mousemiddle</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -476,11 +531,16 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="comboboxtext3">
+                      <object class="GtkComboBoxText" id="mousepos">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
+                        <items>
+                          <item translatable="yes">Default button</item>
+                          <item translatable="yes">Dialog center</item>
+                          <item translatable="yes">No automatic positioning</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -490,11 +550,16 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="comboboxtext4">
+                      <object class="GtkComboBoxText" id="mousemiddle">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
+                        <items>
+                          <item translatable="yes">No function</item>
+                          <item translatable="yes">Automatic scrolling</item>
+                          <item translatable="yes">Paste clipboard</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -512,6 +577,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Mouse</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>
@@ -531,20 +599,20 @@
               <object class="GtkAlignment" id="alignment7">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkGrid" id="grid11">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="column_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton8">
-                        <property name="label" translatable="yes">~Transparency</property>
-                        <property name="use_action_appearance">False</property>
+                      <object class="GtkCheckButton" id="trans">
+                        <property name="label" translatable="yes">_Transparency</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -556,11 +624,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spinbutton4">
+                      <object class="GtkSpinButton" id="transmf:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
                         <property name="invisible_char_set">True</property>
+                        <property name="adjustment">adjustment3</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -578,6 +647,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Selection</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>
@@ -594,5 +666,26 @@
         <property name="position">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">80</property>
+    <property name="upper">130</property>
+    <property name="value">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="lower">1</property>
+    <property name="upper">10000</property>
+    <property name="value">8</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="lower">10</property>
+    <property name="upper">90</property>
+    <property name="value">75</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
 </interface>
