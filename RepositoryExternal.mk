@@ -1312,7 +1312,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 
 endef
 define gb_ExternalProject__use_wpd
-$(call gb_ExternalProject_use_external_project,$(1),libwpd)
+$(call gb_ExternalProject_use_package,$(1),libwpd)
 
 endef
 
