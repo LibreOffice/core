@@ -126,7 +126,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             nFamily = SD_STYLE_FAMILY_PSEUDO;
     }
 
-    String aStyleName;
+    OUString aStyleName;
     sal_uInt16 nRetMask = SFXSTYLEBIT_ALL;
 
     switch( nSId )

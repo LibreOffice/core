@@ -121,8 +121,8 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
 
     if( bUnique )
     {
-        String aStyleName = aLayoutName;
-        aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ) );
+        OUString aStyleName = aLayoutName;
+        aStyleName += SD_LT_SEPARATOR ;
         sal_uInt16 nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
         PresentationObjects ePO;
 
@@ -130,15 +130,15 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
         {
             ePO = PO_TITLE;
             String aStr(SdResId( STR_LAYOUT_TITLE ));
-            aStyleName.Append( aStr );
+            aStyleName += aStr ;
         }
         else
         {
             ePO = (PresentationObjects) ( PO_OUTLINE_1 + nDepth - 1 );
             String aStr(SdResId( STR_LAYOUT_OUTLINE ));
-            aStyleName.Append( aStr );
-            aStyleName.Append( sal_Unicode(' ') );
-            aStyleName.Append( OUString::number( nDepth ) );
+            aStyleName += aStr ;
+            aStyleName += OUString(' ') ;
+            aStyleName += OUString::number( nDepth ) ;
         }
 
         SfxStyleSheetBasePool* pStyleSheetPool = mpDocSh->GetStyleSheetPool();

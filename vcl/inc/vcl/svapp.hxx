@@ -260,8 +260,8 @@ public:
     static bool                 LoadBrandSVG( const char *pName, BitmapEx &rBitmap );
 
     // default name of the application for message dialogs and printing
-    static void                 SetDisplayName( const UniString& rDisplayName );
-    static UniString            GetDisplayName();
+    static void                 SetDisplayName( const OUString& rDisplayName );
+    static OUString             GetDisplayName();
 
 
     static unsigned int         GetScreenCount();

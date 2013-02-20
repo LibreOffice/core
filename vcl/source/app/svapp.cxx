@@ -1192,20 +1192,20 @@ XubString Application::GetAppName()
 
 // -----------------------------------------------------------------------
 
-void Application::SetDisplayName( const UniString& rName )
+void Application::SetDisplayName( const OUString& rName )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     // create if not existing
     if ( !pSVData->maAppData.mpDisplayName )
-        pSVData->maAppData.mpDisplayName = new UniString( rName );
+        pSVData->maAppData.mpDisplayName = new OUString( rName );
     else
         *(pSVData->maAppData.mpDisplayName) = rName;
 }
 
 // -----------------------------------------------------------------------
 
-UniString Application::GetDisplayName()
+OUString Application::GetDisplayName()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maAppData.mpDisplayName )
