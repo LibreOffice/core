@@ -181,7 +181,7 @@ namespace dbaui
         Edit                m_aETDriverClass;
         PushButton          m_aPBTestJavaDriver;
 
-        String              m_sDefaultJdbcDriverName;
+        OUString              m_sDefaultJdbcDriverName;
         sal_uInt16              m_nPortId;
     };
 

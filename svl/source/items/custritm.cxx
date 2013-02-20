@@ -54,7 +54,7 @@ int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith) const
     DBG_CHKTHIS(CntUnencodedStringItem, 0);
     DBG_ASSERT(rWith.ISA(CntUnencodedStringItem),
                 "CntUnencodedStringItem::Compare(): Bad type");
-    switch (m_aValue.CompareTo(static_cast< CntUnencodedStringItem const * >(
+    switch (m_aValue.compareTo(static_cast< CntUnencodedStringItem const * >(
                                        &rWith)->
                                    m_aValue))
     {

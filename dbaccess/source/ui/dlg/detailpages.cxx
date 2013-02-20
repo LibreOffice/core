@@ -272,7 +272,7 @@ namespace dbaui
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
         SFX_ITEMSET_GET(_rSet, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
         ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
-        if (pTypeCollection && pUrlItem && pUrlItem->GetValue().Len())
+        if (pTypeCollection && pUrlItem && pUrlItem->GetValue().getLength())
             m_sDsn = pTypeCollection->cutPrefix(pUrlItem->GetValue());
 
         // get the other relevant items
@@ -505,11 +505,11 @@ namespace dbaui
         SFX_ITEMSET_GET(_rCoreAttrs, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
         SFX_ITEMSET_GET(_rCoreAttrs, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
         ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
-        if (pTypeCollection && pUrlItem && pUrlItem->GetValue().Len() )
+        if (pTypeCollection && pUrlItem && pUrlItem->GetValue().getLength() )
         {
             m_sDefaultJdbcDriverName = pTypeCollection->getJavaDriverClass(pUrlItem->GetValue());
         }
-        if ( m_sDefaultJdbcDriverName.Len() )
+        if ( m_sDefaultJdbcDriverName.getLength() )
         {
             m_aEDDriverClass.SetModifyHdl(getControlModifiedLink());
             m_aEDDriverClass.SetModifyHdl(LINK(this, OGeneralSpecialJDBCDetailsPage, OnEditModified));
@@ -935,7 +935,7 @@ namespace dbaui
     //------------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
     {
-        ::rtl::OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( _rAttrSet );
+        OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( _rAttrSet );
         DataSourceMetaData aMetaData( eType );
         return new SpecialSettingsPage( _pParent, _rAttrSet, aMetaData );
     }

@@ -41,8 +41,8 @@ namespace dbaui
     {
         void convert(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> & xContext,
                      const ::dbaccess::ODsnTypeCollection* _pCollection,
-                     const ::rtl::OUString& _sOldURLPrefix,
-                     const ::rtl::OUString& _sNewURLPrefix,
+                     const OUString& _sOldURLPrefix,
+                     const OUString& _sNewURLPrefix,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDatasource);
     };
     class IItemSetHelper;
@@ -52,7 +52,7 @@ namespace dbaui
     class ODbDataSourceAdministrationHelper
     {
     public:
-        DECLARE_STL_MAP(sal_Int32, ::rtl::OUString, ::std::less< sal_Int32 >, MapInt2String);
+        DECLARE_STL_MAP(sal_Int32, OUString, ::std::less< sal_Int32 >, MapInt2String);
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
@@ -63,7 +63,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         m_xModel;
 
         ::com::sun::star::uno::Any              m_aDataSourceOrName;
-        typedef ::std::set< ::rtl::OUString >   StringSet;
+        typedef ::std::set< OUString >   StringSet;
         typedef StringSet::const_iterator       ConstStringSetIterator;
 
 
@@ -101,7 +101,7 @@ namespace dbaui
         /** return the corresponding driver for the selected URL
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >         getDriver();
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >         getDriver(const ::rtl::OUString& _sURL);
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >         getDriver(const OUString& _sURL);
 
         /** returns the data source the dialog is currently working with
         */
@@ -114,7 +114,7 @@ namespace dbaui
         /** extracts the connection type from the given set<p/>
             The connection type is determined by the value of the DSN item, analyzed by the TypeCollection item.
         */
-        static ::rtl::OUString getDatasourceType( const SfxItemSet& _rSet );
+        static OUString getDatasourceType( const SfxItemSet& _rSet );
 
         /** returns the connection URL
             @return
@@ -160,7 +160,7 @@ namespace dbaui
         ::com::sun::star::uno::Any implTranslateProperty(const SfxPoolItem* _pItem);
 
         /// translate the given SfxPoolItem into an <type scope="com.sun.star.Any">uno</type>, set it (under the given name) on the given property set
-        void        implTranslateProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSet, const ::rtl::OUString& _rName, const SfxPoolItem* _pItem);
+        void        implTranslateProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSet, const OUString& _rName, const SfxPoolItem* _pItem);
 
         /** check if the data source described by the given set needs authentication<p/>
             The return value depends on the data source type only.

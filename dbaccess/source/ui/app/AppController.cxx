@@ -164,25 +164,25 @@ namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OApplicationController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL OApplicationController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OApplicationController::getImplementationName_Static() throw( RuntimeException )
+OUString OApplicationController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString(SERVICE_SDB_APPLICATIONCONTROLLER);
+    return OUString(SERVICE_SDB_APPLICATIONCONTROLLER);
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> OApplicationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> OApplicationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.application.DefaultViewController"));
+    Sequence< OUString> aSupported(1);
+    aSupported.getArray()[0] = OUString("com.sun.star.sdb.application.DefaultViewController");
     return aSupported;
 }
 //-------------------------------------------------------------------------
-Sequence< ::rtl::OUString> SAL_CALL OApplicationController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL OApplicationController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
@@ -386,7 +386,7 @@ void SAL_CALL OApplicationController::disposing()
 
         if ( m_xDataSource.is() )
         {
-            m_xDataSource->removePropertyChangeListener(::rtl::OUString(), this);
+            m_xDataSource->removePropertyChangeListener(OUString(), this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_INFO, this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_URL, this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_ISPASSWORDREQUIRED, this);
@@ -406,13 +406,13 @@ void SAL_CALL OApplicationController::disposing()
 
         if ( m_xModel.is() )
         {
-            ::rtl::OUString sUrl = m_xModel->getURL();
+            OUString sUrl = m_xModel->getURL();
             if ( !sUrl.isEmpty() )
             {
                 ::comphelper::NamedValueCollection aArgs( m_xModel->getArgs() );
                 if ( true == aArgs.getOrDefault( "PickListEntry", true ) )
                 {
-                    ::rtl::OUString     aFilter;
+                    OUString     aFilter;
                     INetURLObject       aURL( m_xModel->getURL() );
                     const SfxFilter* pFilter = getStandardDatabaseFilter();
                     if ( pFilter )
@@ -423,7 +423,7 @@ void SAL_CALL OApplicationController::disposing()
                             aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
                             aFilter,
                             getStrippedDatabaseName(),
-                            ::rtl::OUString() );
+                            OUString() );
                 }
             }
 
@@ -531,7 +531,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
     if ( xBroadcaster.is() )
     {
         xBroadcaster->notifyDocumentEvent(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnPrepareViewClosing" ) ),
+            OUString("OnPrepareViewClosing"),
             this,
             Any()
         );
@@ -660,7 +660,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     aReturn.bEnabled = xEnumAccess.is();
                     if ( aReturn.bEnabled )
                     {
-                        const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_xContext);
+                        const OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_xContext);
                         aReturn.bEnabled = !sReportEngineServiceName.isEmpty();
                         if ( aReturn.bEnabled )
                         {
@@ -746,7 +746,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                         aReturn.bEnabled = xEnumAccess.is();
                         if ( aReturn.bEnabled )
                         {
-                            static ::rtl::OUString s_sReportDesign(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
+                            static OUString s_sReportDesign("com.sun.star.report.pentaho.SOReportJobFactory");
                             Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(s_sReportDesign);
                             aReturn.bEnabled = xEnumDrivers.is() && xEnumDrivers->hasMoreElements();
                         }
@@ -804,10 +804,10 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                             &&  ( getContainer()->isALeafSelected() )
                             )
                         {
-                            ::std::vector< ::rtl::OUString > aSelected;
+                            ::std::vector< OUString > aSelected;
                             getSelectionElementNames( aSelected );
                             bool bAlterableViews = true;
-                            for (   ::std::vector< ::rtl::OUString >::const_iterator selectedName = aSelected.begin();
+                            for (   ::std::vector< OUString >::const_iterator selectedName = aSelected.begin();
                                     bAlterableViews && ( selectedName != aSelected.end() ) ;
                                     ++selectedName
                                 )
@@ -898,12 +898,12 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = m_xDataSource.is();
                 if ( aReturn.bEnabled )
                 {
-                    ::rtl::OUString sURL;
+                    OUString sURL;
                     m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sURL;
-                    ::rtl::OUString sDSTypeName;
+                    OUString sDSTypeName;
                     if ( m_aTypeCollection.isEmbeddedDatabase( sURL ) )
                     {
-                        sDSTypeName = String( ModuleRes( RID_STR_EMBEDDED_DATABASE ) );
+                        sDSTypeName = OUString( ModuleRes( RID_STR_EMBEDDED_DATABASE ) );
                     }
                     else
                     {
@@ -916,20 +916,20 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = m_xDataSource.is();
                 if ( aReturn.bEnabled )
                 {
-                    ::rtl::OUString sURL;
+                    OUString sURL;
                     m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sURL;
-                    String sDatabaseName;
-                    String sHostName;
+                    OUString sDatabaseName;
+                    OUString sHostName;
                     sal_Int32 nPortNumber( -1 );
 
                     m_aTypeCollection.extractHostNamePort( sURL, sDatabaseName, sHostName, nPortNumber );
 
-                    if ( !sDatabaseName.Len() )
+                    if ( !sDatabaseName.getLength() )
                         sDatabaseName = m_aTypeCollection.cutPrefix( sURL );
                     if ( m_aTypeCollection.isFileSystemBased(sURL) )
                     {
                         sDatabaseName = SvtPathOptions().SubstituteVariable( sDatabaseName );
-                        if ( sDatabaseName.Len() )
+                        if ( sDatabaseName.getLength() )
                         {
                             ::svt::OFileNotation aFileNotation(sDatabaseName);
                             // set this decoded URL as text
@@ -937,7 +937,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                         }
                     }
 
-                    if ( sDatabaseName.Len() == 0 )
+                    if ( sDatabaseName.getLength() == 0 )
                         sDatabaseName = m_aTypeCollection.getTypeDisplayName( sURL );
 
                     aReturn.sTitle = sDatabaseName;
@@ -952,10 +952,10 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = m_xDataSource.is();
                 if ( aReturn.bEnabled )
                 {
-                    ::rtl::OUString sURL;
+                    OUString sURL;
                     m_xDataSource->getPropertyValue( PROPERTY_URL ) >>= sURL;
 
-                    String sHostName, sDatabaseName;
+                    OUString sHostName, sDatabaseName;
                     sal_Int32 nPortNumber = -1;
                     m_aTypeCollection.extractHostNamePort( sURL, sDatabaseName, sHostName, nPortNumber );
                     aReturn.sTitle = sHostName;
@@ -1044,7 +1044,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         case E_TABLE:
                             {
                                 // get the selected tablename
-                                ::std::vector< ::rtl::OUString > aList;
+                                ::std::vector< OUString > aList;
                                 getSelectionElementNames( aList );
                                 if ( !aList.empty() )
                                     m_aTableCopyHelper.SetTableNameForAppend( *aList.begin() );
@@ -1061,9 +1061,9 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             break;
                         default:
                             {
-                                ::std::vector< ::rtl::OUString> aList;
+                                ::std::vector< OUString> aList;
                                 getSelectionElementNames(aList);
-                                ::rtl::OUString sFolderNameToInsertInto;
+                                OUString sFolderNameToInsertInto;
                                 if ( !aList.empty() )
                                 {
                                     Reference< XHierarchicalNameAccess > xContainer(getElements(eType),UNO_QUERY);
@@ -1092,7 +1092,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         ::std::vector<SotFormatStringId> aFormatIds;
                         getSupportedFormats(getContainer()->getElementType(),aFormatIds);
                         const ::std::vector<SotFormatStringId>::iterator aEnd = aFormatIds.end();
-                        ::rtl::OUString sEmpty;
+                        OUString sEmpty;
                         for (::std::vector<SotFormatStringId>::iterator aIter = aFormatIds.begin();aIter != aEnd; ++aIter)
                             pDlg->Insert(*aIter,sEmpty);
 
@@ -1126,16 +1126,16 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         switch(_nId)
                         {
                             case SID_HELP_INDEX:
-                                aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:HelpIndex"));
+                                aURL.Complete = OUString(".uno:HelpIndex");
                                 break;
                             case SID_OPENDOC:
-                                aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open"));
+                                aURL.Complete = OUString(".uno:Open");
                                 break;
                         }
 
                         if ( m_xUrlTransformer.is() )
                             m_xUrlTransformer->parseStrict( aURL );
-                        Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, String(), 0 );
+                        Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
                         if ( xDisp.is() )
                             xDisp->dispatch( aURL, Sequence < PropertyValue >() );
                     }
@@ -1157,7 +1157,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
 
             case ID_BROWSER_SAVEASDOC:
                 {
-                    ::rtl::OUString sUrl;
+                    OUString sUrl;
                     if ( m_xModel.is() )
                         sUrl = m_xModel->getURL();
                     if ( sUrl.isEmpty() )
@@ -1252,7 +1252,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             eType = E_QUERY;
                             break;
                         case ID_NEW_QUERY_DESIGN:
-                            aCreationArgs.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, sal_True );
+                            aCreationArgs.put( (OUString)PROPERTY_GRAPHICAL_DESIGN, sal_True );
                             // run through
                         case ID_NEW_QUERY_SQL:
                             eType = E_QUERY;
@@ -1277,7 +1277,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case SID_APP_NEW_FOLDER:
                 {
                     ElementType eType = getContainer()->getElementType();
-                    ::rtl::OUString sName = getContainer()->getQualifiedName( NULL );
+                    OUString sName = getContainer()->getQualifiedName( NULL );
                     insertHierachyElement(eType,sName);
                 }
                 break;
@@ -1290,11 +1290,11 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         QueryDesigner aDesigner( getORB(), this, getFrame(), true );
 
                         ::comphelper::NamedValueCollection aCreationArgs;
-                        aCreationArgs.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, ID_NEW_VIEW_DESIGN == _nId );
+                        aCreationArgs.put( (OUString)PROPERTY_GRAPHICAL_DESIGN, ID_NEW_VIEW_DESIGN == _nId );
 
                         const Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                         const Reference< XComponent > xComponent( aDesigner.createNew( xDataSource, aCreationArgs ), UNO_QUERY );
-                        onDocumentOpened( ::rtl::OUString(), E_QUERY, E_OPEN_DESIGN, xComponent, NULL );
+                        onDocumentOpened( OUString(), E_QUERY, E_OPEN_DESIGN, xComponent, NULL );
                     }
                 }
                 break;
@@ -1337,7 +1337,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case SID_DB_APP_DSRELDESIGN:
             {
                 Reference< XComponent > xRelationDesigner;
-                if ( !m_pSubComponentManager->activateSubFrame( ::rtl::OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xRelationDesigner ) )
+                if ( !m_pSubComponentManager->activateSubFrame( OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xRelationDesigner ) )
                 {
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
@@ -1346,7 +1346,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
 
                         const Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                         const Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
-                        onDocumentOpened( ::rtl::OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xComponent, NULL );
+                        onDocumentOpened( OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xComponent, NULL );
                     }
                 }
             }
@@ -1355,7 +1355,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 {
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
-                        openDialog(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.UserAdministrationDialog")));
+                        openDialog(OUString("com.sun.star.sdb.UserAdministrationDialog"));
                 }
                 break;
             case SID_DB_APP_TABLEFILTER:
@@ -1370,11 +1370,11 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 askToReconnect();
                 break;
             case SID_DB_APP_DSADVANCED_SETTINGS:
-                openDialog(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.AdvancedDatabaseSettingsDialog")));
+                openDialog(OUString("com.sun.star.sdb.AdvancedDatabaseSettingsDialog"));
                 askToReconnect();
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:
-                openDialog(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DataSourceTypeChangeDialog")));
+                openDialog(OUString("com.sun.star.sdb.DataSourceTypeChangeDialog"));
                 askToReconnect();
                 break;
             case ID_DIRECT_SQL:
@@ -1414,7 +1414,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case SID_MAIL_SENDDOC:
                 {
                     SfxMailModel aSendMail;
-                    if ( aSendMail.AttachDocument(rtl::OUString(),getModel(), rtl::OUString()) == SfxMailModel::SEND_MAIL_OK )
+                    if ( aSendMail.AttachDocument(OUString(),getModel(), OUString()) == SfxMailModel::SEND_MAIL_OK )
                         aSendMail.Send( getFrame() );
                 }
                 break;
@@ -1555,7 +1555,7 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
         OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
         if ( getContainer() )
         {
-            ::rtl::OUString sName;
+            OUString sName;
             _rEvent.Accessor >>= sName;
             ElementType eType = getElementType(xContainer);
 
@@ -1589,7 +1589,7 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
     if ( ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
     {
         OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
-        ::rtl::OUString sName;
+        OUString sName;
         _rEvent.Accessor >>= sName;
         ElementType eType = getElementType(xContainer);
         switch( eType )
@@ -1603,7 +1603,7 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
                     Reference<XContent> xContent(xContainer,UNO_QUERY);
                     if ( xContent.is() )
                     {
-                        sName = xContent->getIdentifier()->getContentIdentifier() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sName;
+                        sName = xContent->getIdentifier()->getContentIdentifier() + OUString("/") + sName;
                     }
                 }
                 break;
@@ -1623,13 +1623,13 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
     if ( ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
     {
         OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
-        ::rtl::OUString sName;
+        OUString sName;
         try
         {
             _rEvent.Accessor >>= sName;
             Reference<XConnection> xConnection;
             Reference<XPropertySet> xProp(_rEvent.Element,UNO_QUERY);
-            ::rtl::OUString sNewName;
+            OUString sNewName;
 
             ElementType eType = getElementType(xContainer);
             switch( eType )
@@ -1647,7 +1647,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
                         Reference<XContent> xContent(xContainer,UNO_QUERY);
                         if ( xContent.is() )
                         {
-                            sName = xContent->getIdentifier()->getContentIdentifier() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sName;
+                            sName = xContent->getIdentifier()->getContentIdentifier() + OUString("/") + sName;
                         }
                     }
                     break;
@@ -1664,22 +1664,22 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
 }
 namespace
 {
-    ::rtl::OUString lcl_getToolBarResource(ElementType _eType)
+    OUString lcl_getToolBarResource(ElementType _eType)
     {
-        ::rtl::OUString sToolbar;
+        OUString sToolbar;
         switch(_eType)
         {
             case E_TABLE:
-                sToolbar = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/tableobjectbar" ));
+                sToolbar = OUString("private:resource/toolbar/tableobjectbar");
                 break;
             case E_QUERY:
-                sToolbar = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/queryobjectbar" ));
+                sToolbar = OUString("private:resource/toolbar/queryobjectbar");
                 break;
             case E_FORM:
-                sToolbar = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/formobjectbar" ));
+                sToolbar = OUString("private:resource/toolbar/formobjectbar");
                 break;
             case E_REPORT:
-                sToolbar = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/reportobjectbar" ));
+                sToolbar = OUString("private:resource/toolbar/reportobjectbar");
                 break;
             case E_NONE:
                 break;
@@ -1724,8 +1724,8 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
         Reference< XLayoutManager > xLayoutManager = getLayoutManager( getFrame() );
         if ( xLayoutManager.is() )
         {
-            ::rtl::OUString sToolbar = lcl_getToolBarResource(_eType);
-            ::rtl::OUString sDestroyToolbar = lcl_getToolBarResource(m_eCurrentType);
+            OUString sToolbar = lcl_getToolBarResource(_eType);
+            OUString sDestroyToolbar = lcl_getToolBarResource(m_eCurrentType);
 
             xLayoutManager->lock();
             xLayoutManager->destroyElement( sDestroyToolbar );
@@ -1748,7 +1748,7 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
         SelectionByElementType::iterator pendingSelection = m_aPendingSelection.find( _eType );
         if ( pendingSelection != m_aPendingSelection.end() )
         {
-            Sequence< ::rtl::OUString > aSelected( pendingSelection->second.size() );
+            Sequence< OUString > aSelected( pendingSelection->second.size() );
             ::std::copy( pendingSelection->second.begin(), pendingSelection->second.end(), aSelected.getArray() );
             getContainer()->selectElements( aSelected );
 
@@ -1783,7 +1783,7 @@ bool OApplicationController::onEntryDoubleClick( SvTreeListBox& _rTree )
     return false;   // not handled
 }
 // -----------------------------------------------------------------------------
-bool OApplicationController::impl_isAlterableView_nothrow( const ::rtl::OUString& _rTableOrViewName ) const
+bool OApplicationController::impl_isAlterableView_nothrow( const OUString& _rTableOrViewName ) const
 {
     OSL_PRECOND( m_xDataSourceConnection.is(), "OApplicationController::impl_isAlterableView_nothrow: no connection!" );
 
@@ -1809,14 +1809,14 @@ bool OApplicationController::impl_isAlterableView_nothrow( const ::rtl::OUString
 }
 
 // -----------------------------------------------------------------------------
-Reference< XComponent > OApplicationController::openElement(const ::rtl::OUString& _sName, ElementType _eType,
+Reference< XComponent > OApplicationController::openElement(const OUString& _sName, ElementType _eType,
     ElementOpenMode _eOpenMode, sal_uInt16 _nInstigatorCommand )
 {
     return openElementWithArguments( _sName, _eType, _eOpenMode, _nInstigatorCommand, ::comphelper::NamedValueCollection() );
 }
 
 // -----------------------------------------------------------------------------
-Reference< XComponent > OApplicationController::openElementWithArguments( const ::rtl::OUString& _sName, ElementType _eType,
+Reference< XComponent > OApplicationController::openElementWithArguments( const OUString& _sName, ElementType _eType,
     ElementOpenMode _eOpenMode, sal_uInt16 _nInstigatorCommand, const ::comphelper::NamedValueCollection& _rAdditionalArguments )
 {
     OSL_PRECOND( getContainer(), "OApplicationController::openElementWithArguments: no view!" );
@@ -1901,7 +1901,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
                 if ( bAddViewTypeArg )
                 {
                     const bool bQueryGraphicalMode =( _nInstigatorCommand != SID_DB_APP_EDIT_SQL_VIEW );
-                    aArguments.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, bQueryGraphicalMode );
+                    aArguments.put( (OUString)PROPERTY_GRAPHICAL_DESIGN, bQueryGraphicalMode );
                 }
 
             }
@@ -1909,8 +1909,8 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
             {
                 pDesigner.reset( new ResultSetBrowser( getORB(), this, m_aCurrentFrame.getFrame(), _eType == E_TABLE ) );
 
-                if ( !aArguments.has( (::rtl::OUString)PROPERTY_SHOWMENU ) )
-                    aArguments.put( (::rtl::OUString)PROPERTY_SHOWMENU, makeAny( (sal_Bool)sal_True ) );
+                if ( !aArguments.has( (OUString)PROPERTY_SHOWMENU ) )
+                    aArguments.put( (OUString)PROPERTY_SHOWMENU, makeAny( (sal_Bool)sal_True ) );
 
                 aDataSource <<= getDatabaseName();
             }
@@ -1962,7 +1962,7 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
             if ( aHelper->isConnected() )
             {
                 sal_Int32 nCommandType = -1;
-                const ::rtl::OUString sCurrentSelected( getCurrentlySelectedName( nCommandType ) );
+                const OUString sCurrentSelected( getCurrentlySelectedName( nCommandType ) );
                 if ( E_REPORT == _eType )
                     aHelper->newReportWithPilot( nCommandType, sCurrentSelected );
                 else
@@ -2047,7 +2047,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
     }
 
     if ( xComponent.is() )
-        onDocumentOpened( ::rtl::OUString(), _eType, E_OPEN_DESIGN, xComponent, o_rDocumentDefinition );
+        onDocumentOpened( OUString(), _eType, E_OPEN_DESIGN, xComponent, o_rDocumentDefinition );
 
     return xComponent;
 }
@@ -2081,7 +2081,7 @@ void OApplicationController::renameEntry()
     ::osl::MutexGuard aGuard( getMutex() );
 
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
-    ::std::vector< ::rtl::OUString> aList;
+    ::std::vector< OUString> aList;
     getSelectionElementNames(aList);
 
     Reference< XNameAccess > xContainer = getElements(getContainer()->getElementType());
@@ -2108,13 +2108,13 @@ void OApplicationController::renameEntry()
                         Reference<XHierarchicalNameContainer> xHNames(xContainer, UNO_QUERY);
                         if ( xHNames.is() )
                         {
-                            String sLabel;
+                            OUString sLabel;
                             if ( eType == E_FORM )
-                                sLabel = String(ModuleRes( STR_FRM_LABEL ));
+                                sLabel = OUString(ModuleRes( STR_FRM_LABEL ));
                             else
-                                sLabel = String(ModuleRes( STR_RPT_LABEL ));
+                                sLabel = OUString(ModuleRes( STR_RPT_LABEL ));
 
-                            ::rtl::OUString sName = *aList.begin();
+                            OUString sName = *aList.begin();
                             if ( xHNames->hasByHierarchicalName(sName) )
                             {
                                 xRename.set(xHNames->getByHierarchicalName(sName),UNO_QUERY);
@@ -2128,7 +2128,7 @@ void OApplicationController::renameEntry()
                                         Reference<XPropertySet>(xRename,UNO_QUERY)->getPropertyValue(PROPERTY_NAME) >>= sName;
                                     }
                                 }
-                                pNameChecker.reset( new HierarchicalNameCheck( xHNames.get(), String() ) );
+                                pNameChecker.reset( new HierarchicalNameCheck( xHNames.get(), OUString() ) );
                                 aDialog.reset( new OSaveAsDlg(
                                     getView(), getORB(), sName, sLabel, *pNameChecker, SAD_TITLE_RENAME ) );
                             }
@@ -2167,19 +2167,19 @@ void OApplicationController::renameEntry()
                     {
                         try
                         {
-                            ::rtl::OUString sNewName;
+                            OUString sNewName;
                             if ( eType == E_TABLE )
                             {
-                                ::rtl::OUString sName = aDialog->getName();
-                                ::rtl::OUString sCatalog = aDialog->getCatalog();
-                                ::rtl::OUString sSchema  = aDialog->getSchema();
+                                OUString sName = aDialog->getName();
+                                OUString sCatalog = aDialog->getCatalog();
+                                OUString sSchema  = aDialog->getSchema();
 
                                 sNewName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sName, sal_False, ::dbtools::eInDataManipulation );
                             }
                             else
                                 sNewName = aDialog->getName();
 
-                            ::rtl::OUString sOldName = *aList.begin();
+                            OUString sOldName = *aList.begin();
                             if ( eType == E_FORM || eType == E_REPORT )
                             {
                                 Reference<XContent> xContent(xRename,UNO_QUERY);
@@ -2207,10 +2207,9 @@ void OApplicationController::renameEntry()
                         }
                         catch(const ElementExistException& e)
                         {
-                            rtl::OUString sStatus("S1000");
-                            String sMsg = String( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
-                            sMsg.SearchAndReplace(rtl::OUString('#'), e.Message);
-                            showError(SQLExceptionInfo(SQLException(sMsg, e.Context, sStatus, 0, Any())));
+                            OUString sStatus("S1000");
+                            OUString sMsg = OUString( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
+                            showError(SQLExceptionInfo(SQLException(sMsg.replaceAll(OUString('#'), e.Message), e.Context, sStatus, 0, Any())));
                         }
                         catch(const Exception& )
                         {
@@ -2245,13 +2244,13 @@ void OApplicationController::onSelectionChanged()
         const ElementType eType = pView->getElementType();
           if ( pView->isALeafSelected() )
         {
-            const ::rtl::OUString sName = pView->getQualifiedName( NULL /* means 'first selected' */ );
+            const OUString sName = pView->getQualifiedName( NULL /* means 'first selected' */ );
             showPreviewFor( eType, sName );
         }
     }
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::showPreviewFor(const ElementType _eType,const ::rtl::OUString& _sName)
+void OApplicationController::showPreviewFor(const ElementType _eType,const OUString& _sName)
 {
     if ( m_ePreviewMode == E_PREVIEWNONE )
         return;
@@ -2382,13 +2381,13 @@ sal_Bool OApplicationController::isCommandEnabled(sal_uInt16 _nCommandId) const
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::isCommandEnabled( const ::rtl::OUString& _rCompleteCommandURL ) const
+sal_Bool OApplicationController::isCommandEnabled( const OUString& _rCompleteCommandURL ) const
 {
     return OApplicationController_CBASE::isCommandEnabled( _rCompleteCommandURL );
 }
 
 // -----------------------------------------------------------------------------
-sal_uInt16 OApplicationController::registerCommandURL( const ::rtl::OUString& _rCompleteCommandURL )
+sal_uInt16 OApplicationController::registerCommandURL( const OUString& _rCompleteCommandURL )
 {
     return OApplicationController_CBASE::registerCommandURL( _rCompleteCommandURL );
 }
@@ -2488,7 +2487,7 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                 if ( nAction != DND_ACTION_NONE )
                 {
                     SvTreeListEntry* pHitEntry = pView->getEntry(_rEvt.maPosPixel);
-                    ::rtl::OUString sName;
+                    OUString sName;
                     if ( pHitEntry )
                     {
                         sName = pView->getQualifiedName( pHitEntry );
@@ -2539,7 +2538,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     m_aAsyncDrop.nAction        = _rEvt.mnAction;
     m_aAsyncDrop.bError         = sal_False;
     m_aAsyncDrop.bHtml          = sal_False;
-    m_aAsyncDrop.aUrl           = ::rtl::OUString();
+    m_aAsyncDrop.aUrl           = OUString();
 
 
     // loop through the available formats and see what we can do ...
@@ -2564,7 +2563,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
         m_aAsyncDrop.aDroppedData[daComponent] >>= xContent;
         if ( xContent.is() )
         {
-            ::rtl::OUString sName = xContent->getIdentifier()->getContentIdentifier();
+            OUString sName = xContent->getIdentifier()->getContentIdentifier();
             sal_Int32 nIndex = 0;
             sName = sName.copy(sName.getToken(0,'/',nIndex).getLength() + 1);
             if ( m_aAsyncDrop.aUrl.Len() >= sName.getLength() && 0 == sName.compareTo(m_aAsyncDrop.aUrl,sName.getLength()) )
@@ -2684,9 +2683,9 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
             return 0L;
 
         SQLWarning aWarning;
-        aWarning.Message = String( ModuleRes( STR_SUB_DOCS_WITH_SCRIPTS ) );
+        aWarning.Message = OUString( ModuleRes( STR_SUB_DOCS_WITH_SCRIPTS ) );
         SQLException aDetail;
-        aDetail.Message = String( ModuleRes( STR_SUB_DOCS_WITH_SCRIPTS_DETAIL ) );
+        aDetail.Message = OUString( ModuleRes( STR_SUB_DOCS_WITH_SCRIPTS_DETAIL ) );
         aWarning.NextException <<= aDetail;
 
         Reference< XExecutableDialog > xDialog = ErrorMessageDialog::create( getORB(), "", NULL, makeAny( aWarning ) );
@@ -2727,7 +2726,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
         return sal_False;
     }
 
-    const ::rtl::OUString aPropertyNames[] =
+    const OUString aPropertyNames[] =
     {
         PROPERTY_URL, PROPERTY_USER
     };
@@ -2783,9 +2782,9 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
         {
             // to get the 'modified' for the data source
             ::comphelper::NamedValueCollection aLayoutInfo( m_xDataSource->getPropertyValue( PROPERTY_LAYOUTINFORMATION ) );
-            if ( aLayoutInfo.has( (rtl::OUString)INFO_PREVIEW ) )
+            if ( aLayoutInfo.has( (OUString)INFO_PREVIEW ) )
             {
-                const sal_Int32 nPreviewMode( aLayoutInfo.getOrDefault( (rtl::OUString)INFO_PREVIEW, (sal_Int32)0 ) );
+                const sal_Int32 nPreviewMode( aLayoutInfo.getOrDefault( (OUString)INFO_PREVIEW, (sal_Int32)0 ) );
                 m_ePreviewMode = static_cast< PreviewMode >( nPreviewMode );
                 if ( getView() )
                     getContainer()->switchPreview( m_ePreviewMode );
@@ -2816,13 +2815,13 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
     }
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OApplicationController::getCurrentlySelectedName(sal_Int32& _rnCommandType) const
+OUString OApplicationController::getCurrentlySelectedName(sal_Int32& _rnCommandType) const
 {
     _rnCommandType = ( (getContainer()->getElementType() == E_QUERY)
                                 ? CommandType::QUERY : ( (getContainer()->getElementType() == E_TABLE) ? CommandType::TABLE : -1 ));
 
 
-    ::rtl::OUString sName;
+    OUString sName;
     if ( _rnCommandType != -1 )
     {
         try
@@ -2855,7 +2854,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
-    Sequence< ::rtl::OUString> aSelection;
+    Sequence< OUString> aSelection;
     if ( !_aSelection.hasValue() || !getView() )
     {
         getContainer()->selectElements(aSelection);
@@ -2944,10 +2943,10 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
             default:
             case DatabaseObjectContainer::DATA_SOURCE:
             {
-                ::rtl::OUString sMessage(
-                    rtl::OUString(
+                OUString sMessage(
+                    OUString(
                         String(ModuleRes(RID_STR_UNSUPPORTED_OBJECT_TYPE))).
-                    replaceFirst("$type$", ::rtl::OUString::valueOf(sal_Int32(pObject->Type))));
+                    replaceFirst("$type$", OUString::valueOf(sal_Int32(pObject->Type))));
                 throw IllegalArgumentException(sMessage, *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ));
             }
         }
@@ -2960,7 +2959,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
     {
         if ( sel->first == m_eCurrentType )
         {
-            Sequence< ::rtl::OUString > aSelected( sel->second.size() );
+            Sequence< OUString > aSelected( sel->second.size() );
             ::std::copy( sel->second.begin(), sel->second.end(), aSelected.getArray() );
             getContainer()->selectElements( aSelected );
         }
@@ -3010,7 +3009,7 @@ void OApplicationController::impl_migrateScripts_nothrow()
 {
     try
     {
-        ::rtl::OUString sDialogService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.application.MacroMigrationWizard" ) );
+        OUString sDialogService("com.sun.star.sdb.application.MacroMigrationWizard");
         ::comphelper::ComponentContext aContext( getORB() );
         Sequence< Any > aDialogArgs(1);
         aDialogArgs[0] <<= Reference< XOfficeDatabaseDocument >( m_xModel, UNO_QUERY_THROW );
