@@ -26,42 +26,45 @@ def __lldb_init_module( dbg, dict):
 
 # definitions for individual LLDB type summary helpers 
 
+def ret_strinfo( refs, length, ary0):
+	a = ary0.AddressOf().GetPointeeData( 0, length)
+	if ary0.GetByteSize() == 1:
+		s = ''.join([chr(x) for x in a.uint8s])
+	else: # assume UTF-16
+		s = (u''.join([unichr(x) for x in a.uint16s])).encode('utf-8')
+	return ('{refs=%d, len=%d, str="%s"}' % (refs, length, s.encode('string_escape')))
+
 def getinfo_for_rtl_String( valobj, dict):
 	while valobj.TypeIsPointerType():
 		valobj = valobj.Dereference()
 	r = valobj.GetChildMemberWithName('refCount').GetValueAsSigned()
 	l = valobj.GetChildMemberWithName('length').GetValueAsSigned()
-	a = valobj.GetChildMemberWithName('buffer').AddressOf().GetPointeeData(0,l)
-	s = ''.join([chr(x) for x in a.uint8s])                                
-	return '{refs=%d, len=%d, str="%s"}'%(r,l,s)
-	return info
+	a = valobj.GetChildMemberWithName('buffer')
+	return ret_strinfo(r,l,a)
 
 def getinfo_for_rtl_uString( valobj, dict):
 	while valobj.TypeIsPointerType():
 		valobj = valobj.Dereference()
 	r = valobj.GetChildMemberWithName('refCount').GetValueAsSigned()
 	l = valobj.GetChildMemberWithName('length').GetValueAsSigned()
-	a = valobj.GetChildMemberWithName('buffer').AddressOf().GetPointeeData(0,l)
-	s = (u''.join([unichr(x) for x in a.uint16s])).encode('utf-8')
-	return '{refs=%d, len=%d, str="%s"}'%(r,l,s)
+	a = valobj.GetChildMemberWithName('buffer')
+	return ret_strinfo(r,l,a)
 
 def getinfo_for__ByteStringData( valobj, dict):
 	while valobj.TypeIsPointerType():
 		valobj = valobj.Dereference()
 	r = valobj.GetChildMemberWithName('mnRefCount').GetValueAsSigned()
 	l = valobj.GetChildMemberWithName('mnLen').GetValueAsSigned()
-	a = valobj.GetChildMemberWithName('maStr').AddressOf().GetPointeeData(0,l)
-	s = ''.join([chr(x) for x in a.uint8s])                                
-	return '{refs=%d, len=%d, str="%s"}'%(r,l,s)
+	a = valobj.GetChildMemberWithName('maStr')
+	return ret_strinfo(r,l,a)
 
 def getinfo_for__UniStringData( valobj, dict):
 	while valobj.TypeIsPointerType():
 		valobj = valobj.Dereference()
 	r = valobj.GetChildMemberWithName('mnRefCount').GetValueAsSigned()
 	l = valobj.GetChildMemberWithName('mnLen').GetValueAsSigned()
-	a = valobj.GetChildMemberWithName('maStr').AddressOf().GetPointeeData(0,l)
-	s = (u''.join([unichr(x) for x in a.uint16s])).encode('utf-8')
-	return '{refs=%d, len=%d, str="%s"}'%(r,l,s)
+	a = valobj.GetChildMemberWithName('maStr')
+	return ret_strinfo(r,l,a)
 
 
 def getinfo_for_rtl_OString( valobj, dict):
