@@ -64,29 +64,29 @@ using namespace ::com::sun::star::xml::sax;
 
 class ODBExport : public SvXMLExport
 {
-    typedef ::std::map< ::xmloff::token::XMLTokenEnum, ::rtl::OUString> TSettingsMap;
+    typedef ::std::map< ::xmloff::token::XMLTokenEnum, OUString> TSettingsMap;
 
-    typedef ::std::pair< ::rtl::OUString ,::rtl::OUString> TStringPair;
+    typedef ::std::pair< OUString ,OUString> TStringPair;
     struct TDelimiter
     {
-        ::rtl::OUString sText;
-        ::rtl::OUString sField;
-        ::rtl::OUString sDecimal;
-        ::rtl::OUString sThousand;
+        OUString sText;
+        OUString sField;
+        OUString sDecimal;
+        OUString sThousand;
         bool            bUsed;
 
         TDelimiter() : bUsed( false ) { }
     };
-    typedef ::std::map< Reference<XPropertySet> ,::rtl::OUString >          TPropertyStyleMap;
+    typedef ::std::map< Reference<XPropertySet> ,OUString >          TPropertyStyleMap;
     typedef ::std::map< Reference<XPropertySet> ,Reference<XPropertySet> >  TTableColumnMap;
 
     struct TypedPropertyValue
     {
-        ::rtl::OUString               Name;
+        OUString               Name;
         ::com::sun::star::uno::Type   Type;
         ::com::sun::star::uno::Any    Value;
 
-        TypedPropertyValue( const ::rtl::OUString& _name, const ::com::sun::star::uno::Type& _type, const ::com::sun::star::uno::Any& _value )
+        TypedPropertyValue( const OUString& _name, const ::com::sun::star::uno::Type& _type, const ::com::sun::star::uno::Any& _value )
             :Name( _name )
             ,Type( _type )
             ,Value( _value )
@@ -102,7 +102,7 @@ class ODBExport : public SvXMLExport
     TPropertyStyleMap                               m_aCellAutoStyleNames;
     TPropertyStyleMap                               m_aRowAutoStyleNames;
     TTableColumnMap                                 m_aTableDummyColumns;
-    ::rtl::OUString                                 m_sCharSet;
+    OUString                                 m_sCharSet;
     UniReference < SvXMLExportPropertyMapper>       m_xExportHelper;
     UniReference < SvXMLExportPropertyMapper>       m_xColumnExportHelper;
     UniReference < SvXMLExportPropertyMapper>       m_xCellExportHelper;
@@ -122,7 +122,7 @@ class ODBExport : public SvXMLExport
     void                    exportDriverSettings(const TSettingsMap& _aSettings);
     void                    exportApplicationConnectionSettings(const TSettingsMap& _aSettings);
     void                    exportLogin();
-    void                    exportSequence(const Sequence< ::rtl::OUString>& _aValue
+    void                    exportSequence(const Sequence< OUString>& _aValue
                                         ,::xmloff::token::XMLTokenEnum _eTokenFilter
                                         ,::xmloff::token::XMLTokenEnum _eTokenType);
     void                    exportDelimiter();
@@ -147,14 +147,14 @@ class ODBExport : public SvXMLExport
     void                    exportQuery(XPropertySet* _xProp);
     void                    exportTable(XPropertySet* _xProp);
     void                    exportFilter(XPropertySet* _xProp
-                                        ,const ::rtl::OUString& _sProp
+                                        ,const OUString& _sProp
                                         ,enum ::xmloff::token::XMLTokenEnum _eStatementType);
     void                    exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate);
     void                    exportAutoStyle(XPropertySet* _xProp);
     void                    exportColumns(const Reference<XColumnsSupplier>& _xColSup);
     void                    collectComponentStyles();
 
-    ::rtl::OUString         implConvertAny(const Any& _rValue);
+    OUString         implConvertAny(const Any& _rValue);
 
     UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const;
 

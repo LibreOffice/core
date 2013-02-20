@@ -239,8 +239,8 @@ namespace dbaui
             const sal_Bool bEnableJDBC = m_pCollection->determineType(m_eType) == ::dbaccess::DST_JDBC;
             if ( !pJdbcDrvItem->GetValue().Len() )
             {
-                String sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
-                if ( sDefaultJdbcDriverName.Len() )
+                OUString sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
+                if ( sDefaultJdbcDriverName.getLength() )
                 {
                     m_aJavaDriver.SetText(sDefaultJdbcDriverName);
                     m_aJavaDriver.SetModifyFlag();
