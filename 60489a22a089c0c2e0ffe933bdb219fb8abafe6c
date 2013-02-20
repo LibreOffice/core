@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///c4\u003d",
+        "filename": "sw/source/core/access/accmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-02-20T23:18:35Z",
+      "side": 1,
+      "message": "did you actually build that with \"debug\u003dtrue\" ? i\u0027m not sure it will work, i\u0027d expect a need for a getStr() somewhere...",
+      "revId": "60489a22a089c0c2e0ffe933bdb219fb8abafe6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///c8\u003d",
+        "filename": "sw/source/core/access/accportions.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-02-20T23:18:35Z",
+      "side": 1,
+      "message": "there is also an  isEmpty() function",
+      "revId": "60489a22a089c0c2e0ffe933bdb219fb8abafe6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
