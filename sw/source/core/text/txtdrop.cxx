@@ -695,12 +695,12 @@ void SwTxtPainter::PaintDropPortion()
 
 class SwDropCapCache
 {
-    long aMagicNo[ DROP_CACHE_SIZE ];
-    XubString aTxt[ DROP_CACHE_SIZE ];
-    sal_uInt16 aFactor[ DROP_CACHE_SIZE ];
-    KSHORT aWishedHeight[ DROP_CACHE_SIZE ];
-    short aDescent[ DROP_CACHE_SIZE ];
-    MSHORT nIndex;
+    long aMagicNo[ DROP_CACHE_SIZE ] = {0};
+    XubString aTxt[ DROP_CACHE_SIZE ] = {'\0'};
+    sal_uInt16 aFactor[ DROP_CACHE_SIZE ] = {0};
+    KSHORT aWishedHeight[ DROP_CACHE_SIZE ] = {0};
+    short aDescent[ DROP_CACHE_SIZE ] = {0};
+    MSHORT nIndex = 0;
 public:
     SwDropCapCache();
     ~SwDropCapCache(){}
@@ -711,11 +711,7 @@ public:
  *                  SwDropCapCache Ctor / Dtor
  *************************************************************************/
 
-SwDropCapCache::SwDropCapCache() : nIndex( 0 )
-{
-    memset( &aMagicNo, 0, sizeof(aMagicNo) );
-    memset( &aWishedHeight, 0, sizeof(aWishedHeight) );
-}
+SwDropCapCache::SwDropCapCache() {}
 
 void SwDropPortion::DeleteDropCapCache()
 {
