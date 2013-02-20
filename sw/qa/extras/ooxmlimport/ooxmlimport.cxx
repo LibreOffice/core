@@ -1164,8 +1164,23 @@ void Test::testN793998()
 void Test::testN779642()
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+
+    // First problem: check that we have 2 tables, nesting caused the
+    // creation of outer one to fail
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of imported tables", sal_Int32(2), xTables->getCount());
+
+    // Second problem: check that the outer table is in a frame, at the bottom of the page
+    uno::Reference<text::XTextTable> xTextTable(xTextTablesSupplier->getTextTables()->getByName("Table2"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xAnchor(xTextTable->getAnchor(), uno::UNO_QUERY);
+    uno::Any aFrame = xAnchor->getPropertyValue("TextFrame");
+    uno::Reference<beans::XPropertySet> xFrame;
+    aFrame >>= xFrame;
+    sal_Int16 nValue;
+    xFrame->getPropertyValue("VertOrient") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", nValue, text::VertOrientation::BOTTOM);
+    xFrame->getPropertyValue("VertOrientRelation") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation relation", nValue, text::RelOrientation::PAGE_PRINT_AREA);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

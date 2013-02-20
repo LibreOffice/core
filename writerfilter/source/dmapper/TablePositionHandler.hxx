@@ -12,6 +12,7 @@
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace writerfilter {
     namespace dmapper {
@@ -21,6 +22,11 @@ namespace writerfilter {
             : public LoggedProperties
         {
             OUString m_aVertAnchor;
+            OUString m_aYSpec;
+            OUString m_aHorzAnchor;
+            OUString m_aXSpec;
+            sal_Int32 m_nY;
+            sal_Int32 m_nX;
 
             // Properties
             virtual void lcl_attribute(Id Name, Value & val);
@@ -30,7 +36,13 @@ namespace writerfilter {
             TablePositionHandler();
             virtual ~TablePositionHandler();
 
-            OUString getVertAnchor() const;
+            /** Compute the UNO properties for the frame containing the table based
+                on the received tokens.
+
+                Note that the properties will need to be adjusted with the table
+                properties before actually using them.
+              */
+            com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getTablePosition() const;
         };
 
         typedef boost::shared_ptr<TablePositionHandler> TablePositionHandlerPtr;

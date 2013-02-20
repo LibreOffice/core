@@ -324,7 +324,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     {
                         TablePositionHandlerPtr pHandler( new TablePositionHandler );
                         pProperties->resolve(*pHandler);
-                        m_sTableVertAnchor = pHandler->getVertAnchor();
+                        m_aTablePosition = pHandler->getTablePosition();
                     }
                 }
                 break;
@@ -358,11 +358,6 @@ boost::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentSpa
 boost::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentCellWidths( )
 {
     return m_aCellWidths.back( );
-}
-
-const OUString& DomainMapperTableManager::getTableVertAnchor() const
-{
-    return m_sTableVertAnchor;
 }
 
 void DomainMapperTableManager::startLevel( )
@@ -580,8 +575,8 @@ void DomainMapperTableManager::clearData()
 {
     m_nRow = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = 0;
     m_sTableStyleName = OUString();
-    m_sTableVertAnchor = OUString();
     m_pTableStyleTextProperies.reset();
+    m_aTablePosition = uno::Sequence<beans::PropertyValue>(0);
 }
 
 

@@ -17946,7 +17946,7 @@
           <xs:documentation>Relative Horizontal Alignment From Anchor</xs:documentation>
         </attribute>
         <attribute name="tblpX">
-          <text/>
+          <ref name="ST_SignedTwipsMeasure"/>
           <xs:documentation>Absolute Horizontal Distance From Anchor</xs:documentation>
         </attribute>
         <attribute name="tblpYSpec">
@@ -17954,7 +17954,7 @@
           <xs:documentation>Relative Vertical Alignment from Anchor</xs:documentation>
         </attribute>
         <attribute name="tblpY">
-          <text/>
+          <ref name="ST_SignedTwipsMeasure"/>
           <xs:documentation>Absolute Vertical Distance From Anchor</xs:documentation>
         </attribute>
       </define>
@@ -22825,6 +22825,11 @@
     </resource>
     <resource name="CT_TblPPr" resource="Properties" tag="table">
       <attribute name="vertAnchor" tokenid="ooxml:CT_TblPPr_vertAnchor"/>
+      <attribute name="tblpYSpec" tokenid="ooxml:CT_TblPPr_tblpYSpec"/>
+      <attribute name="horzAnchor" tokenid="ooxml:CT_TblPPr_horzAnchor"/>
+      <attribute name="tblpXSpec" tokenid="ooxml:CT_TblPPr_tblpXSpec"/>
+      <attribute name="tblpY" tokenid="ooxml:CT_TblPPr_tblpY"/>
+      <attribute name="tblpX" tokenid="ooxml:CT_TblPPr_tblpX"/>
     </resource>
     <resource name="CT_TblGridCol" resource="Value" tag="table">
       <attribute name="w" tokenid="ooxml:CT_TblGridCol_w" action="setValue"/>

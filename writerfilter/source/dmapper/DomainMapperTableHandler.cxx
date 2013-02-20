@@ -717,7 +717,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         uno::Reference<text::XTextRange> xStart;
         uno::Reference<text::XTextRange> xEnd;
         // If we want to make this table a floating one.
-        bool bFloating = !m_rDMapper_Impl.getTableManager().getTableVertAnchor().isEmpty();
+        uno::Sequence<beans::PropertyValue> aFrameProperties = m_rDMapper_Impl.getTableManager().getTablePosition();
+        bool bFloating = aFrameProperties.hasElements();
         // Additional checks: if we can do this.
         if (bFloating && (*m_pTableSeq)[0].getLength() > 0 && (*m_pTableSeq)[0][0].getLength() > 0)
         {
@@ -764,46 +765,11 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         if (xTable.is() && xStart.is() && xEnd.is())
         {
             uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
-            uno::Sequence< beans::PropertyValue > aFrameProperties(16);
-            beans::PropertyValue* pFrameProperties = aFrameProperties.getArray();
-            pFrameProperties[0].Name = "Width";
-            pFrameProperties[0].Value = xTableProperties->getPropertyValue("Width");
+            aFrameProperties.realloc(aFrameProperties.getLength() + 1);
+            aFrameProperties[aFrameProperties.getLength() - 1].Name = "Width";
+            aFrameProperties[aFrameProperties.getLength() - 1].Value = xTableProperties->getPropertyValue("Width");
 
-            pFrameProperties[1].Name = "LeftBorderDistance";
-            pFrameProperties[1].Value <<= sal_Int32(0);
-            pFrameProperties[2].Name = "RightBorderDistance";
-            pFrameProperties[2].Value <<= sal_Int32(0);
-            pFrameProperties[3].Name = "TopBorderDistance";
-            pFrameProperties[3].Value <<= sal_Int32(0);
-            pFrameProperties[4].Name = "BottomBorderDistance";
-            pFrameProperties[4].Value <<= sal_Int32(0);
-
-            pFrameProperties[5].Name = "LeftMargin";
-            pFrameProperties[5].Value <<= sal_Int32(0);
-            pFrameProperties[6].Name = "RightMargin";
-            pFrameProperties[6].Value <<= sal_Int32(0);
-            pFrameProperties[7].Name = "TopMargin";
-            pFrameProperties[7].Value <<= sal_Int32(0);
-            pFrameProperties[8].Name = "BottomMargin";
-            pFrameProperties[8].Value <<= sal_Int32(0);
-
-            table::BorderLine2 aEmptyBorder;
-            pFrameProperties[9].Name = "TopBorder";
-            pFrameProperties[9].Value <<= aEmptyBorder;
-            pFrameProperties[10].Name = "BottomBorder";
-            pFrameProperties[10].Value <<= aEmptyBorder;
-            pFrameProperties[11].Name = "LeftBorder";
-            pFrameProperties[11].Value <<= aEmptyBorder;
-            pFrameProperties[12].Name = "RightBorder";
-            pFrameProperties[12].Value <<= aEmptyBorder;
-
-            pFrameProperties[13].Name = "HoriOrient";
-            pFrameProperties[13].Value <<= text::HoriOrientation::NONE;
-            pFrameProperties[14].Name = "HoriOrientRelation";
-            pFrameProperties[14].Value <<= text::RelOrientation::FRAME;
             // A non-zero left margin would move the table out of the frame, move the frame itself instead.
-            pFrameProperties[15].Name = "HoriOrientPosition";
-            pFrameProperties[15].Value <<= xTableProperties->getPropertyValue("LeftMargin");
             xTableProperties->setPropertyValue("LeftMargin", uno::makeAny(sal_Int32(0)));
 
             uno::Reference< text::XTextContent > xFrame = m_xText->convertToTextFrame(xStart, xEnd, aFrameProperties);
