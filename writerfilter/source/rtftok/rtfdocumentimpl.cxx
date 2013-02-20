@@ -716,6 +716,9 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         if ( xShapes.is() )
             xShapes->add( xShape );
     }
+
+    // check if the picture is in an OLE object and if the \objdata element is used
+    // (see RTF_OBJECT in RTFDocumentImpl::dispatchDestination)
     if (m_bObject)
     {
         // Set bitmap
@@ -736,6 +739,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         m_aObjectAttributes.set(NS_ooxml::LN_shape, pShapeValue);
         return 0;
     }
+
     if (xPropertySet.is())
         xPropertySet->setPropertyValue("GraphicURL", uno::Any(aGraphicUrl));
 
@@ -1446,11 +1450,34 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_COMMENT;
             break;
         case RTF_OBJECT:
-            m_aStates.top().nDestinationState = DESTINATION_OBJECT;
-            m_bObject = true;
+            {
+                // begining of an OLE Object
+                m_aStates.top().nDestinationState = DESTINATION_OBJECT;
+
+                // check if the object is in a special container (e.g. a table)
+                if (!m_pCurrentBuffer)
+                {
+                    // the object is in a table or another container.
+                    // Don't try to treate it as an OLE object (fdo#53594).
+                    // Use the \result (RTF_RESULT) element of the object instead,
+                    // the result element contain picture representing the OLE Object.
+                    m_bObject = true;
+                }
+            }
             break;
         case RTF_OBJDATA:
-            m_aStates.top().nDestinationState = DESTINATION_OBJDATA;
+            // check if the object is in a special container (e.g. a table)
+            if (m_pCurrentBuffer)
+            {
+                // the object is in a table or another container.
+                // Use the \result (RTF_RESULT) element of the object instead,
+                // of the \objdata.
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            }
+            else
+            {
+                m_aStates.top().nDestinationState = DESTINATION_OBJDATA;
+            }
             break;
         case RTF_RESULT:
             m_aStates.top().nDestinationState = DESTINATION_RESULT;
@@ -3861,6 +3888,14 @@ int RTFDocumentImpl::popState()
     break;
     case DESTINATION_OBJECT:
     {
+        if (!m_bObject)
+        {
+            // if the object is in a special container we will use the \result
+            // element instead of the \objdata
+            // (see RTF_OBJECT in RTFDocumentImpl::dispatchDestination)
+            break;
+        }
+
         RTFSprms aObjAttributes;
         RTFSprms aObjSprms;
         RTFValue::Pointer_t pValue(new RTFValue(m_aObjectAttributes, m_aObjectSprms));
