@@ -55,7 +55,7 @@
 #include "../ui/inc/DrawViewShell.hxx"
 #include "../ui/inc/ViewShellBase.hxx"
 
-using ::rtl::OUString;
+
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
 using ::cppu::OInterfaceContainerHelper;
@@ -124,7 +124,7 @@ void ModifyListenerForewarder::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*
 }
 
 SdStyleSheet::SdStyleSheet(const OUString& rDisplayName, SfxStyleSheetBasePool& _rPool, SfxStyleFamily eFamily, sal_uInt16 _nMask)
-: SdStyleSheetBase( UniString( rDisplayName ), _rPool, eFamily, _nMask)
+: SdStyleSheetBase( OUString( rDisplayName ), _rPool, eFamily, _nMask)
 , ::cppu::BaseMutex()
 , msApiName( rDisplayName )
 , mxPool( const_cast< SfxStyleSheetBasePool* >(&_rPool) )
@@ -386,8 +386,8 @@ bool SdStyleSheet::IsUsed() const
 
 SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
 {
-    String aRealStyle;
-    String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
+    OUString aRealStyle;
+    OUString aSep( SD_LT_SEPARATOR );
     SdStyleSheet* pRealStyle = NULL;
     SdDrawDocument* pDoc = ((SdStyleSheetPool*)pPool)->GetDoc();
 
@@ -404,11 +404,14 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         {
             aRealStyle = pPage->GetLayoutName();
             // cut after seperator string
-            aRealStyle.Erase(aRealStyle.Search(aSep) + aSep.Len());
+            
+            if( aRealStyle.indexOf(aSep) >= 0)
+            {
+                aRealStyle = aRealStyle.copy(0,(aRealStyle.indexOf(aSep) + aSep.getLength()));
+            }      
         }
     }
-
-    if (aRealStyle.Len() == 0)
+    if (aRealStyle.isEmpty())
     {
         SdPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
 
@@ -426,7 +429,10 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
                 aRealStyle = pSheet->GetName();
         }
 
-        aRealStyle.Erase(aRealStyle.Search(aSep) + aSep.Len());
+            if( aRealStyle.indexOf(aSep) >= 0)
+            {
+                aRealStyle = aRealStyle.copy(0,(aRealStyle.indexOf(aSep) + aSep.getLength()));
+            }
     }
 
     // jetzt vom Namen (landessprachlich angepasst) auf den internen
@@ -490,39 +496,43 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
 SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
 {
     SdStyleSheet* pPseudoStyle = NULL;
-    String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
-    String aStyleName(aName);
+    OUString aSep( SD_LT_SEPARATOR );
+    OUString aStyleName(aName);
         // ohne Layoutnamen und Separator
-    aStyleName.Erase(0, aStyleName.Search(aSep) + aSep.Len());
 
-    if (aStyleName == String(SdResId(STR_LAYOUT_TITLE)))
+    if( aStyleName.indexOf(aSep) >=0 )
     {
-        aStyleName = String(SdResId(STR_PSEUDOSHEET_TITLE));
+        aStyleName = aStyleName.copy (aStyleName.indexOf(aSep) + aSep.getLength());
     }
-    else if (aStyleName == String(SdResId(STR_LAYOUT_SUBTITLE)))
+
+    if (aStyleName == OUString(SdResId(STR_LAYOUT_TITLE)))
     {
-        aStyleName = String(SdResId(STR_PSEUDOSHEET_SUBTITLE));
+        aStyleName = OUString(SdResId(STR_PSEUDOSHEET_TITLE));
     }
-    else if (aStyleName == String(SdResId(STR_LAYOUT_BACKGROUND)))
+    else if (aStyleName == OUString(SdResId(STR_LAYOUT_SUBTITLE)))
     {
-        aStyleName = String(SdResId(STR_PSEUDOSHEET_BACKGROUND));
+        aStyleName = OUString(SdResId(STR_PSEUDOSHEET_SUBTITLE));
     }
-    else if (aStyleName == String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS)))
+    else if (aStyleName == OUString(SdResId(STR_LAYOUT_BACKGROUND)))
     {
-        aStyleName = String(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS));
+        aStyleName = OUString(SdResId(STR_PSEUDOSHEET_BACKGROUND));
     }
-    else if (aStyleName == String(SdResId(STR_LAYOUT_NOTES)))
+    else if (aStyleName == OUString(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS)))
     {
-        aStyleName = String(SdResId(STR_PSEUDOSHEET_NOTES));
+        aStyleName = OUString(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS));
+    }
+    else if (aStyleName == OUString(SdResId(STR_LAYOUT_NOTES)))
+    {
+        aStyleName = OUString(SdResId(STR_PSEUDOSHEET_NOTES));
     }
     else
     {
-        String aOutlineStr((SdResId(STR_LAYOUT_OUTLINE)));
-        sal_uInt16 nPos = aStyleName.Search(aOutlineStr);
-        if (nPos != STRING_NOTFOUND)
+        OUString aOutlineStr((SdResId(STR_LAYOUT_OUTLINE)));
+        sal_Int32 nPos = aStyleName.indexOf(aOutlineStr);
+        if (nPos != -1)
         {
-            String aNumStr(aStyleName.Copy(aOutlineStr.Len()));
-            aStyleName = String(SdResId(STR_PSEUDOSHEET_OUTLINE));
+            OUString aNumStr(aStyleName.copy(aOutlineStr.getLength()));
+            aStyleName = OUString(SdResId(STR_PSEUDOSHEET_OUTLINE));
             aStyleName += aNumStr;
         }
     }
@@ -573,7 +583,7 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, sal_Bool bOnlyMissingIte
     // Bulletbreite und Texteinzug an neue Fonthoehe
     // anpassen, wenn sie nicht explizit gesetzt wurden
     SfxStyleFamily eFamily = nFamily;
-    String aStyleName(aName);
+    OUString aStyleName(aName);
     if (eFamily == SD_STYLE_FAMILY_PSEUDO)
     {
         SfxStyleSheet* pRealStyle = GetRealStyleSheet();
@@ -582,7 +592,7 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, sal_Bool bOnlyMissingIte
     }
 
     if (eFamily == SD_STYLE_FAMILY_MASTERPAGE &&
-        aStyleName.Search(String(SdResId(STR_LAYOUT_OUTLINE))) != STRING_NOTFOUND &&
+        aStyleName.indexOf(OUString(SdResId(STR_LAYOUT_OUTLINE))) != -1 &&
         rSet.GetItemState(EE_CHAR_FONTHEIGHT) == SFX_ITEM_SET)
     {
         const SfxItemSet* pCurSet = &GetItemSet();

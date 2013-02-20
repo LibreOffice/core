@@ -120,7 +120,7 @@ struct ImplSVAppData
     ImplAccelManager*       mpAccelMgr;         // Accelerator Manager
     XubString*              mpAppName;          // Application name
     XubString*              mpAppFileName;      // Abs. Application FileName
-    XubString*              mpDisplayName;      // Application Display Name
+    OUString*               mpDisplayName;      // Application Display Name
     String*                 mpFontPath;         // Additional Fontpath
     Help*                   mpHelp;             // Application help
     PopupMenu*              mpActivePopupMenu;  // Actives Popup-Menu (in Execute)
