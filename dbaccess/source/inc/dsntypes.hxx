@@ -104,7 +104,7 @@ enum DATASOURCE_TYPE
 class OOO_DLLPUBLIC_DBA ODsnTypeCollection
 {
 protected:
-    DECLARE_STL_VECTOR(String, StringVector);
+    DECLARE_STL_VECTOR(OUString, StringVector);
 
     StringVector    m_aDsnTypesDisplayNames;    /// user readable names for the datasource types
     StringVector    m_aDsnPrefixes;             /// DSN prefixes which determine the type of a datasource
@@ -123,69 +123,69 @@ public:
     ~ODsnTypeCollection();
 
     /// get the datasource type display name from a DSN string
-    String getTypeDisplayName(const ::rtl::OUString& _sURL) const;
+    OUString getTypeDisplayName(const OUString& _sURL) const;
 
     /// on a given string, cut the type prefix and return the result
-    String cutPrefix(const ::rtl::OUString& _sURL) const;
+    OUString cutPrefix(const OUString& _sURL) const;
 
     /// on a given string, return the type prefix
-    String getPrefix(const ::rtl::OUString& _sURL) const;
+    OUString getPrefix(const OUString& _sURL) const;
 
     /// determines whether there is a driver for the given URL prefix/pattern
     bool    hasDriver( const sal_Char* _pAsciiPattern ) const;
 
     /// on a given string, return the Java Driver Class
-    String getJavaDriverClass(const ::rtl::OUString& _sURL) const;
+    OUString getJavaDriverClass(const OUString& _sURL) const;
 
     /// returns the media type of a file based database
-    String getMediaType(const ::rtl::OUString& _sURL) const;
+    OUString getMediaType(const OUString& _sURL) const;
 
     /// returns the dsn prefix for a given media type
-    String getDatasourcePrefixFromMediaType(const ::rtl::OUString& _sMediaType,const ::rtl::OUString& _sExtension = ::rtl::OUString() );
+    OUString getDatasourcePrefixFromMediaType(const OUString& _sMediaType,const OUString& _sExtension = OUString() );
 
-    void extractHostNamePort(const ::rtl::OUString& _rDsn,String& _sDatabaseName,String& _rHostname,sal_Int32& _nPortNumber) const;
+    void extractHostNamePort(const OUString& _rDsn,OUString& _sDatabaseName,OUString& _rHostname,sal_Int32& _nPortNumber) const;
 
     /// check if the given data source allows creation of tables
-    sal_Bool supportsTableCreation(const ::rtl::OUString& _sURL) const;
+    sal_Bool supportsTableCreation(const OUString& _sURL) const;
 
     /// check if the given data source allows to show column description.
-    sal_Bool supportsColumnDescription(const ::rtl::OUString& _sURL) const;
+    sal_Bool supportsColumnDescription(const OUString& _sURL) const;
 
     // check if a Browse button may be shown to insert connection url
-    sal_Bool supportsBrowsing(const ::rtl::OUString& _sURL) const;
+    sal_Bool supportsBrowsing(const OUString& _sURL) const;
 
     /// check if the given data source tyoe is based on the file system - i.e. the URL is a prefix plus a file URL
-    sal_Bool isFileSystemBased(const ::rtl::OUString& _sURL) const;
+    sal_Bool isFileSystemBased(const OUString& _sURL) const;
 
-    bool isConnectionUrlRequired(const ::rtl::OUString& _sURL) const;
+    bool isConnectionUrlRequired(const OUString& _sURL) const;
 
     /// checks if the given data source type embeds its data into the database document
-    bool isEmbeddedDatabase( const ::rtl::OUString& _sURL ) const;
+    bool isEmbeddedDatabase( const OUString& _sURL ) const;
 
-    ::rtl::OUString getEmbeddedDatabase() const;
+    OUString getEmbeddedDatabase() const;
 
     // returns true when the properties dialog can be shown, otherwise false.
-    bool isShowPropertiesEnabled( const ::rtl::OUString& _sURL ) const;
+    bool isShowPropertiesEnabled( const OUString& _sURL ) const;
 
     /** returns default settings for newly created databases of the given type.
     */
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
-            getDefaultDBSettings( const ::rtl::OUString& _sURL ) const;
+            getDefaultDBSettings( const OUString& _sURL ) const;
 
     /// get access to the first element of the types collection
     TypeIterator    begin() const;
     /// get access to the (last + 1st) element of the types collection
     TypeIterator    end() const;
 
-    void fillPageIds(const ::rtl::OUString& _sURL,::std::vector<sal_Int16>& _rOutPathIds) const;
+    void fillPageIds(const OUString& _sURL,::std::vector<sal_Int16>& _rOutPathIds) const;
 
-    DATASOURCE_TYPE determineType(const String& _rDsn) const;
+    DATASOURCE_TYPE determineType(const OUString& _rDsn) const;
 
-    bool needsJVM(const String& _rDsn) const;
+    bool needsJVM(const OUString& _rDsn) const;
 
-    sal_Int32 getIndexOf(const ::rtl::OUString& _sURL) const;
+    sal_Int32 getIndexOf(const OUString& _sURL) const;
     sal_Int32 size() const;
-    ::rtl::OUString getType(const ::rtl::OUString& _sURL) const;
+    OUString getType(const OUString& _sURL) const;
 };
 
 //-------------------------------------------------------------------------
@@ -206,8 +206,8 @@ public:
     TypeIterator(const TypeIterator& _rSource);
     ~TypeIterator();
 
-    ::rtl::OUString getURLPrefix() const;
-    String          getDisplayName() const;
+    OUString getURLPrefix() const;
+    OUString          getDisplayName() const;
 
     /// prefix increment
     const TypeIterator& operator++();

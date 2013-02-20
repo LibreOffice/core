@@ -107,7 +107,7 @@ namespace
         return bCorrectType;
     }
 
-    void lcl_putProperty(const Reference< XPropertySet >& _rxSet, const ::rtl::OUString& _rName, const Any& _rValue)
+    void lcl_putProperty(const Reference< XPropertySet >& _rxSet, const OUString& _rName, const Any& _rValue)
     {
         try
         {
@@ -126,17 +126,17 @@ namespace
 
     }
 
-    String lcl_createHostWithPort(const SfxStringItem* _pHostName,const SfxInt32Item* _pPortNumber)
+    OUString lcl_createHostWithPort(const SfxStringItem* _pHostName,const SfxInt32Item* _pPortNumber)
     {
-        String sNewUrl;
+        OUString sNewUrl;
 
-        if ( _pHostName && _pHostName->GetValue().Len() )
+        if ( _pHostName && _pHostName->GetValue().getLength() )
             sNewUrl = _pHostName->GetValue();
 
         if ( _pPortNumber )
         {
-            sNewUrl += rtl::OUString::createFromAscii(":");
-            sNewUrl += String::CreateFromInt32(_pPortNumber->GetValue());
+            sNewUrl += OUString::createFromAscii(":");
+            sNewUrl += OUString::number(_pPortNumber->GetValue());
         }
 
         return sNewUrl;
@@ -182,30 +182,30 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AS_BEFORE_CORRNAME, INFO_AS_BEFORE_CORRELATION_NAME ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CHECK_REQUIRED_FIELDS, INFO_FORMS_CHECK_REQUIRED_FIELDS ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ESCAPE_DATETIME, INFO_ESCAPE_DATETIME ) );
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_PRIMARY_KEY_SUPPORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrimaryKeySupport" ) ) ) );
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_PRIMARY_KEY_SUPPORT, OUString("PrimaryKeySupport")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_PARAMETERNAMESUBST, INFO_PARAMETERNAMESUBST));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_IGNOREDRIVER_PRIV, INFO_IGNOREDRIVER_PRIV));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_BOOLEANCOMPARISON, PROPERTY_BOOLEANCOMPARISONMODE));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ENABLEOUTERJOIN, PROPERTY_ENABLEOUTERJOIN));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CATALOG, PROPERTY_USECATALOGINSELECT));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_SCHEMA, PROPERTY_USESCHEMAINSELECT));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_INDEXAPPENDIX, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AddIndexAppendix"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DOSLINEENDS, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferDosLikeLineEnds" ) ) ) );
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SOCKET, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalSocket" ) ) ) );
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_NAMED_PIPE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NamedPipe" ) ) ) );
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_RESPECTRESULTSETTYPE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RespectDriverResultSetType" ) ) ) );
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_MAX_ROW_SCAN, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxRowScan" ) ) ) );
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_INDEXAPPENDIX, OUString("AddIndexAppendix")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DOSLINEENDS, OUString("PreferDosLikeLineEnds")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SOCKET, OUString("LocalSocket")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_NAMED_PIPE, OUString("NamedPipe")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_RESPECTRESULTSETTYPE, OUString("RespectDriverResultSetType")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_MAX_ROW_SCAN, OUString("MaxRowScan")));
 
     // extra settings for odbc
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_USECATALOG, INFO_USECATALOG));
     // extra settings for a ldap address book
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_BASEDN, INFO_CONN_LDAP_BASEDN));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_ROWCOUNT, INFO_CONN_LDAP_ROWCOUNT));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_USESSL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSSL"))));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_USESSL, OUString("UseSSL")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DOCUMENT_URL, PROPERTY_URL));
 
     // oracle
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_IGNORECURRENCY, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreCurrency"))));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_IGNORECURRENCY, OUString("IgnoreCurrency")));
 
     try
     {
@@ -213,7 +213,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     }
     catch(const Exception&)
     {
-        ShowServiceNotAvailableError(_pParent->GetParent(), String("com.sun.star.sdb.DatabaseContext"), sal_True);
+        ShowServiceNotAvailableError(_pParent->GetParent(), OUString("com.sun.star.sdb.DatabaseContext"), sal_True);
     }
 }
     //-------------------------------------------------------------------------
@@ -228,20 +228,20 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
 
     // user: DSID_USER -> "user"
     SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pUser, SfxStringItem, DSID_USER, sal_True);
-    if (pUser && pUser->GetValue().Len())
+    if (pUser && pUser->GetValue().getLength())
         aReturn.push_back(
-            PropertyValue(  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), 0,
-                            makeAny(::rtl::OUString(pUser->GetValue())), PropertyState_DIRECT_VALUE));
+            PropertyValue(  OUString("user"), 0,
+                            makeAny(OUString(pUser->GetValue())), PropertyState_DIRECT_VALUE));
 
     // check if the connection type requires a password
     if (hasAuthentication(*m_pItemSetHelper->getOutputSet()))
     {
         // password: DSID_PASSWORD -> "password"
         SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPassword, SfxStringItem, DSID_PASSWORD, sal_True);
-        String sPassword = pPassword ? pPassword->GetValue() : String();
+        OUString sPassword = pPassword ? pPassword->GetValue() : OUString();
         SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPasswordRequired, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
         // if the set does not contain a password, but the item set says it requires one, ask the user
-        if ((!pPassword || !pPassword->GetValue().Len()) && (pPasswordRequired && pPasswordRequired->GetValue()))
+        if ((!pPassword || !pPassword->GetValue().getLength()) && (pPasswordRequired && pPasswordRequired->GetValue()))
         {
             SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pName, SfxStringItem, DSID_NAME, sal_True);
 
@@ -255,16 +255,16 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
                 xHandler = Reference< XInteractionHandler >( task::InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY );
             }
 
-            String sName = pName ? pName->GetValue() : String();
-            String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
-            ::rtl::OUString sTemp = sName;
+            OUString sName = pName ? pName->GetValue() : OUString();
+            OUString sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
+            OUString sTemp = sName;
             sName = ::dbaui::getStrippedDatabaseName(NULL,sTemp);
-            if ( sName.Len() )
-                sLoginRequest.SearchAndReplaceAscii("$name$", sName);
+            if ( sName.getLength() )
+                sLoginRequest.replaceAll("$name$", sName);
             else
             {
-                sLoginRequest.SearchAndReplaceAscii("\"$name$\"", String());
-                sLoginRequest.SearchAndReplaceAscii("$name$", String()); // just to be sure that in other languages the string will be deleted
+                sLoginRequest.replaceAll("\"$name$\"", OUString());
+                sLoginRequest.replaceAll("$name$", OUString()); // just to be sure that in other languages the string will be deleted
             }
 
             // the request
@@ -274,7 +274,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             aRequest.HasRealm   = aRequest.HasAccount = sal_False;
             // aRequest.Realm
             aRequest.HasUserName = pUser != 0;
-            aRequest.UserName    = pUser ? rtl::OUString(pUser->GetValue()) : ::rtl::OUString();
+            aRequest.UserName    = pUser ? OUString(pUser->GetValue()) : OUString();
             aRequest.HasPassword = sal_True;
             //aRequest.Password
             aRequest.HasAccount  = sal_False;
@@ -313,10 +313,10 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
                 m_pItemSetHelper->getWriteOutputSet()->Put(SfxStringItem(DSID_PASSWORD, sPassword));
         }
 
-        if (sPassword.Len())
+        if (sPassword.getLength())
             aReturn.push_back(
-                PropertyValue(  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password")), 0,
-                                makeAny(::rtl::OUString(sPassword)), PropertyState_DIRECT_VALUE));
+                PropertyValue(  OUString("password"), 0,
+                                makeAny(OUString(sPassword)), PropertyState_DIRECT_VALUE));
     }
 
     if ( !aReturn.empty() )
@@ -337,9 +337,9 @@ void ODbDataSourceAdministrationHelper::successfullyConnected()
     if (hasAuthentication(*m_pItemSetHelper->getOutputSet()))
     {
         SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPassword, SfxStringItem, DSID_PASSWORD, sal_True);
-        if (pPassword && (0 != pPassword->GetValue().Len()))
+        if (pPassword && (0 != pPassword->GetValue().getLength()))
         {
-            ::rtl::OUString sPassword = pPassword->GetValue();
+            OUString sPassword = pPassword->GetValue();
 
             Reference< XPropertySet > xCurrentDatasource = getCurrentDataSource();
             lcl_putProperty(xCurrentDatasource,m_aDirectPropTranslator[DSID_PASSWORD], makeAny(sPassword));
@@ -386,7 +386,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver()
     return getDriver(getConnectionURL());
 }
 // -----------------------------------------------------------------------------
-Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const ::rtl::OUString& _sURL)
+Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString& _sURL)
 {
     // get the global DriverManager
     Reference< XConnectionPool > xDriverManager;
@@ -401,8 +401,8 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const ::rtl::O
     catch (const Exception& e)
     {
         // wrap the exception into an SQLException
-        SQLException aSQLWrapper(e.Message, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
-        throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, makeAny(aSQLWrapper));
+        SQLException aSQLWrapper(e.Message, getORB(), OUString("S1000"), 0, Any());
+        throw SQLException(sCurrentActionError, getORB(), OUString("S1000"), 0, makeAny(aSQLWrapper));
     }
 
 
@@ -412,7 +412,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const ::rtl::O
         sCurrentActionError = String(ModuleRes(STR_NOREGISTEREDDRIVER));
         sCurrentActionError.SearchAndReplaceAscii("#connurl#", _sURL);
         // will be caught and translated into an SQLContext exception
-        throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
+        throw SQLException(sCurrentActionError, getORB(), OUString("S1000"), 0, Any());
     }
     return xDriver;
 }
@@ -425,7 +425,7 @@ Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSourc
         Reference<XInterface> xIn(m_aDataSourceOrName,UNO_QUERY);
         if ( !xIn.is() )
         {
-            ::rtl::OUString sCurrentDatasource;
+            OUString sCurrentDatasource;
             m_aDataSourceOrName >>= sCurrentDatasource;
             OSL_ENSURE(!sCurrentDatasource.isEmpty(),"No datasource name given!");
             try
@@ -453,7 +453,7 @@ Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSourc
     return m_xDatasource;
 }
 //-------------------------------------------------------------------------
-::rtl::OUString ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet& _rSet )
+OUString ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet& _rSet )
 {
     SFX_ITEMSET_GET( _rSet, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True );
     OSL_ENSURE( pConnectURL , "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!" );
@@ -473,7 +473,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
 {
     String sNewUrl;
 
-    ::rtl::OUString eType = getDatasourceType(*m_pItemSetHelper->getOutputSet());
+    OUString eType = getDatasourceType(*m_pItemSetHelper->getOutputSet());
 
     SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
     SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
@@ -492,8 +492,8 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
         case  ::dbaccess::DST_MSACCESS:
         case  ::dbaccess::DST_MSACCESS_2007:
             {
-                ::rtl::OUString sFileName = pCollection->cutPrefix(pUrlItem->GetValue());
-                ::rtl::OUString sNewFileName;
+                OUString sFileName = pCollection->cutPrefix(pUrlItem->GetValue());
+                OUString sNewFileName;
                 if ( ::osl::FileBase::getSystemPathFromFileURL( sFileName, sNewFileName ) == ::osl::FileBase::E_None )
                 {
                     sNewUrl += String(sNewFileName);
@@ -507,17 +507,16 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_MYSQL_PORTNUMBER, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pDatabaseName, SfxStringItem, DSID_DATABASENAME, sal_True);
                 sNewUrl = lcl_createHostWithPort(pHostName,pPortNumber);
-                String sDatabaseName = pDatabaseName ? pDatabaseName->GetValue() : String();
-                if ( !sDatabaseName.Len() && pUrlItem )
+                OUString sDatabaseName = pDatabaseName ? pDatabaseName->GetValue() : OUString();
+                if ( !sDatabaseName.getLength() && pUrlItem )
                     sDatabaseName = pCollection->cutPrefix( pUrlItem->GetValue() );
                     // TODO: what's that? Why is the database name transported via the URL Item?
                     // Huh? Anybody there?
                     // OJ: It is needed when the connection properties are changed. There the URL is used for every type.
 
-                if ( sDatabaseName.Len() )
+                if ( sDatabaseName.getLength() )
                 {
-                    sNewUrl += rtl::OUString::createFromAscii("/");
-                    sNewUrl += sDatabaseName;
+                    sNewUrl += OUString::createFromAscii("/") + sDatabaseName;
                 }
             }
             break;
@@ -526,17 +525,15 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_ORACLE_PORTNUMBER, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pDatabaseName, SfxStringItem, DSID_DATABASENAME, sal_True);
-                if ( pHostName && pHostName->GetValue().Len() )
+                if ( pHostName && pHostName->GetValue().getLength() )
                 {
-                    sNewUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("@"));
-                    sNewUrl += lcl_createHostWithPort(pHostName,pPortNumber);
-                    String sDatabaseName = pDatabaseName ? pDatabaseName->GetValue() : String();
-                    if ( !sDatabaseName.Len() && pUrlItem )
+                    sNewUrl = OUString("@") + lcl_createHostWithPort(pHostName,pPortNumber);
+                    OUString sDatabaseName = pDatabaseName ? pDatabaseName->GetValue() : OUString();
+                    if ( !sDatabaseName.getLength() && pUrlItem )
                         sDatabaseName = pCollection->cutPrefix( pUrlItem->GetValue() );
-                    if ( sDatabaseName.Len() )
+                    if ( sDatabaseName.getLength() )
                     {
-                        sNewUrl += rtl::OUString::createFromAscii(":");
-                        sNewUrl += sDatabaseName;
+                        sNewUrl += OUString::createFromAscii(":") + sDatabaseName;
                     }
                 }
                 else
@@ -579,7 +576,7 @@ DECLARE_STL_SET( PropertyValue, PropertyValueLess, PropertyValueSet);
 //........................................................................
 void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPropertySet >& _rxSource, SfxItemSet& _rDest)
 {
-    Sequence< ::rtl::OUString > aTableFitler;
+    Sequence< OUString > aTableFitler;
 
     if (_rxSource.is())
     {
@@ -623,7 +620,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
             if (0 == pAdditionalInfo->Name.compareToAscii("JDBCDRV"))
             {   // compatibility
                 PropertyValue aCompatibility(*pAdditionalInfo);
-                aCompatibility.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"));
+                aCompatibility.Name = OUString("JavaDriverClass");
                 aInfos.insert(aCompatibility);
             }
             else
@@ -675,7 +672,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
     try { xInfo = _rxDest->getPropertySetInfo(); }
     catch(Exception&) { }
 
-    const ::rtl::OUString sUrlProp(RTL_CONSTASCII_USTRINGPARAM("URL"));
+    const OUString sUrlProp("URL");
     // -----------------------------
     // transfer the direct properties
     for (   ConstMapInt2StringIterator aDirect = m_aDirectPropTranslator.begin();
@@ -696,8 +693,8 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
             {
                 if ( sUrlProp == aDirect->second )
                 {
-                    Any aValue(makeAny(::rtl::OUString(getConnectionURL())));
-                    //  aValue <<= ::rtl::OUString();
+                    Any aValue(makeAny(OUString(getConnectionURL())));
+                    //  aValue <<= OUString();
                     lcl_putProperty(_rxDest, aDirect->second,aValue);
                 }
                 else
@@ -732,7 +729,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     // us)
 
     // first determine which of all the items are relevant for the data source (depends on the connection url)
-    ::rtl::OUString eType = getDatasourceType(_rSource);
+    OUString eType = getDatasourceType(_rSource);
     ::std::vector< sal_Int32> aDetailIds;
     ODriversSettings::getSupportedIndirectSettings(eType, getORB(), aDetailIds);
 
@@ -748,7 +745,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         {
             if ( aTranslation->second == INFO_CHARSET )
             {
-                ::rtl::OUString sCharSet;
+                OUString sCharSet;
                 implTranslateProperty(pCurrent) >>= sCharSet;
                 if ( !sCharSet.isEmpty() )
                     aRelevantSettings.insert(PropertyValue(aTranslation->second, 0, makeAny(sCharSet), PropertyState_DIRECT_VALUE));
@@ -812,7 +809,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
             if (aIndirectProps.end() != aIndirectProps.find(aPreserved->second))
             {
 #if OSL_DEBUG_LEVEL > 0
-                const ::rtl::OUString sName = aPreserved->second;
+                const OUString sName = aPreserved->second;
 #endif
                 aRemoveIndexes.push_back(aPreserved->first - nPositionCorrector);
                 ++nPositionCorrector;
@@ -830,7 +827,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         const PropertyValue* pWhatsLeftEnd = pWhatsLeft + _rInfo.getLength();
         for (; pWhatsLeft != pWhatsLeftEnd; ++pWhatsLeft)
         {
-            ::rtl::OUString sLookAtIt = pWhatsLeft->Name;
+            OUString sLookAtIt = pWhatsLeft->Name;
         }
 #endif
     }
@@ -842,7 +839,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     // here we have a special entry for types from oracle
     if ( aTypeSettings.getLength() )
     {
-        aRelevantSettings.insert(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeInfoSettings")), 0, makeAny(aTypeSettings), PropertyState_DIRECT_VALUE));
+        aRelevantSettings.insert(PropertyValue(OUString("TypeInfoSettings"), 0, makeAny(aTypeSettings), PropertyState_DIRECT_VALUE));
     }
 
     // check which values are still left ('cause they were not present in the original sequence, but are to be set)
@@ -859,7 +856,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         {
             if ( aLoop->Name == INFO_CHARSET )
             {
-                ::rtl::OUString sCharSet;
+                OUString sCharSet;
                 aLoop->Value >>= sCharSet;
                 if ( !sCharSet.isEmpty() )
                     *pAppendValues = *aLoop;
@@ -883,7 +880,7 @@ Any ODbDataSourceAdministrationHelper::implTranslateProperty(const SfxPoolItem* 
 
     if ( pStringItem )
     {
-        aValue <<= ::rtl::OUString( pStringItem->GetValue().GetBuffer() );
+        aValue <<= OUString( pStringItem->GetValue().getStr() );
     }
     else if ( pBoolItem )
     {
@@ -913,7 +910,7 @@ Any ODbDataSourceAdministrationHelper::implTranslateProperty(const SfxPoolItem* 
     return aValue;
 }
 //-------------------------------------------------------------------------
-void ODbDataSourceAdministrationHelper::implTranslateProperty(const Reference< XPropertySet >& _rxSet, const ::rtl::OUString& _rName, const SfxPoolItem* _pItem)
+void ODbDataSourceAdministrationHelper::implTranslateProperty(const Reference< XPropertySet >& _rxSet, const OUString& _rName, const SfxPoolItem* _pItem)
 {
     Any aValue = implTranslateProperty(_pItem);
     lcl_putProperty(_rxSet, _rName,aValue);
@@ -923,7 +920,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty(const Reference< X
 //-------------------------------------------------------------------------
 ::rtl::OString ODbDataSourceAdministrationHelper::translatePropertyId( sal_Int32 _nId )
 {
-    ::rtl::OUString aString;
+    OUString aString;
 
     MapInt2String::const_iterator aPos = m_aDirectPropTranslator.find( _nId );
     if ( m_aDirectPropTranslator.end() != aPos )
@@ -950,7 +947,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
         case TypeClass_STRING:
             if ( implCheckItemType( _rSet, _nId, SfxStringItem::StaticType() ) )
             {
-                ::rtl::OUString sValue;
+                OUString sValue;
                 _rValue >>= sValue;
                 _rSet.Put(SfxStringItem(_nId, sValue));
             }
@@ -1025,7 +1022,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 {
                     case TypeClass_STRING:
                     {
-                        Sequence< ::rtl::OUString > aStringList;
+                        Sequence< OUString > aStringList;
                         _rValue >>= aStringList;
                         _rSet.Put(OStringListItem(_nId, aStringList));
                     }
@@ -1065,7 +1062,7 @@ String ODbDataSourceAdministrationHelper::getDocumentUrl(SfxItemSet& _rDest)
 // -----------------------------------------------------------------------------
 void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 {
-    ::rtl::OUString eType = getDatasourceType(_rDest);
+    OUString eType = getDatasourceType(_rDest);
 
     SFX_ITEMSET_GET(_rDest, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
     SFX_ITEMSET_GET(_rDest, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
@@ -1077,8 +1074,8 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 
     sal_uInt16 nPortNumberId    = 0;
     sal_Int32 nPortNumber   = -1;
-    String sNewHostName;
-    String sUrlPart;
+    OUString sNewHostName;
+    OUString sUrlPart;
 
     pCollection->extractHostNamePort(pUrlItem->GetValue(),sUrlPart,sNewHostName,nPortNumber);
     const ::dbaccess::DATASOURCE_TYPE eTy = pCollection->determineType(eType);
@@ -1099,7 +1096,7 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
             break;
     }
 
-    if ( sUrlPart.Len() )
+    if ( sUrlPart.getLength() )
     {
         if ( eTy == ::dbaccess::DST_MYSQL_NATIVE )
         {
@@ -1107,13 +1104,13 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
         }
         else
         {
-            String sNewUrl = pCollection->getPrefix(eType);
+            OUString sNewUrl = pCollection->getPrefix(eType);
             sNewUrl += sUrlPart;
             _rDest.Put( SfxStringItem( DSID_CONNECTURL, sNewUrl ) );
         }
     }
 
-    if ( sNewHostName.Len() )
+    if ( sNewHostName.getLength() )
         _rDest.Put(SfxStringItem(DSID_CONN_HOSTNAME, sNewHostName));
 
     if ( nPortNumber != -1 && nPortNumberId != 0 )

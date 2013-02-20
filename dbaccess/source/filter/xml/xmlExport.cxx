@@ -64,15 +64,15 @@ namespace dbaxml
     class ODBExportHelper
     {
     public:
-        static ::rtl::OUString SAL_CALL getImplementationName_Static(  ) throw (RuntimeException);
-        static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(RuntimeException);
+        static OUString SAL_CALL getImplementationName_Static(  ) throw (RuntimeException);
+        static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(RuntimeException);
         static Reference< XInterface > SAL_CALL Create(const Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
     };
     class ODBFullExportHelper
     {
     public:
-        static ::rtl::OUString SAL_CALL getImplementationName_Static(  ) throw (RuntimeException);
-        static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(RuntimeException);
+        static OUString SAL_CALL getImplementationName_Static(  ) throw (RuntimeException);
+        static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(RuntimeException);
         static Reference< XInterface > SAL_CALL Create(const Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
     };
 }
@@ -105,15 +105,15 @@ namespace dbaxml
         return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB),EXPORT_SETTINGS | EXPORT_PRETTY ));
     }
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ODBExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+    OUString SAL_CALL ODBExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString("com.sun.star.comp.sdb.XMLSettingsExporter");
+        return OUString("com.sun.star.comp.sdb.XMLSettingsExporter");
     }
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ODBExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL ODBExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -124,29 +124,29 @@ namespace dbaxml
         return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB),EXPORT_ALL));
     }
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+    OUString SAL_CALL ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString("com.sun.star.comp.sdb.XMLFullExporter");
+        return OUString("com.sun.star.comp.sdb.XMLFullExporter");
     }
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString lcl_implGetPropertyXMLType(const Type& _rType)
+    OUString lcl_implGetPropertyXMLType(const Type& _rType)
     {
         // possible types we can write (either because we recognize them directly or because we convert _rValue
         // into one of these types)
-        static const ::rtl::OUString s_sTypeBoolean ("boolean");
-        static const ::rtl::OUString s_sTypeShort   ("short");
-        static const ::rtl::OUString s_sTypeInteger ("int");
-        static const ::rtl::OUString s_sTypeLong    ("long");
-        static const ::rtl::OUString s_sTypeDouble  ("double");
-        static const ::rtl::OUString s_sTypeString  ("string");
+        static const OUString s_sTypeBoolean ("boolean");
+        static const OUString s_sTypeShort   ("short");
+        static const OUString s_sTypeInteger ("int");
+        static const OUString s_sTypeLong    ("long");
+        static const OUString s_sTypeDouble  ("double");
+        static const OUString s_sTypeString  ("string");
 
         // handle the type description
         switch (_rType.getTypeClass())
@@ -236,27 +236,27 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext,sal_uInt16
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_TABLE,
-        rtl::OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ),
+        OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ),
         m_xExportHelper.get(),
-        rtl::OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX ));
+        OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX ));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_COLUMN,
-        rtl::OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ),
+        OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ),
         m_xColumnExportHelper.get(),
-        rtl::OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX ));
+        OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX ));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_CELL,
-        rtl::OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ),
+        OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ),
         m_xCellExportHelper.get(),
-        rtl::OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX ));
+        OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX ));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_ROW,
-        rtl::OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ),
+        OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ),
         m_xRowExportHelper.get(),
-        rtl::OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX ));
+        OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX ));
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(ODBExport, "com.sun.star.comp.sdb.DBExportFilter")
@@ -291,11 +291,11 @@ void ODBExport::exportDataSource()
         xSettingsState->getPropertyDefault( INFO_THOUSANDSDELIMITER ) >>= aDelimiter.sThousand;
 
         ::connectivity::DriversConfig aDriverConfig(getComponentContext());
-        const ::rtl::OUString sURL = ::comphelper::getString(xProp->getPropertyValue(PROPERTY_URL));
+        const OUString sURL = ::comphelper::getString(xProp->getPropertyValue(PROPERTY_URL));
         ::comphelper::NamedValueCollection aDriverSupportedProperties( aDriverConfig.getProperties( sURL ) );
 
-        static ::rtl::OUString s_sTrue(::xmloff::token::GetXMLToken( XML_TRUE ));
-        static ::rtl::OUString s_sFalse(::xmloff::token::GetXMLToken( XML_FALSE ));
+        static OUString s_sTrue(::xmloff::token::GetXMLToken( XML_TRUE ));
+        static OUString s_sFalse(::xmloff::token::GetXMLToken( XML_FALSE ));
         // loop through the properties, and export only those which are not defaulted
         TSettingsMap aSettingsMap;
         Sequence< Property > aProperties = xSettingsInfo->getProperties();
@@ -303,7 +303,7 @@ void ODBExport::exportDataSource()
         const Property* pPropertiesEnd = pProperties + aProperties.getLength();
         for ( ; pProperties != pPropertiesEnd; ++pProperties )
         {
-            ::rtl::OUString sValue;
+            OUString sValue;
             Any aValue = xDataSourceSettings->getPropertyValue( pProperties->Name );
             switch ( aValue.getValueTypeClass() )
             {
@@ -312,7 +312,7 @@ void ODBExport::exportDataSource()
                 break;
                 case TypeClass_DOUBLE:
                     // let the unit converter format is as string
-                    sValue = ::rtl::OUString::valueOf( getDouble( aValue ) );
+                    sValue = OUString::valueOf( getDouble( aValue ) );
                     break;
                 case TypeClass_BOOLEAN:
                     sValue = ::xmloff::token::GetXMLToken( getBOOL( aValue ) ? XML_TRUE : XML_FALSE );
@@ -321,7 +321,7 @@ void ODBExport::exportDataSource()
                 case TypeClass_SHORT:
                 case TypeClass_LONG:
                     // let the unit converter format is as string
-                    sValue = ::rtl::OUString::valueOf( getINT32( aValue ) );
+                    sValue = OUString::valueOf( getINT32( aValue ) );
                     break;
                 default:
                     break;
@@ -331,18 +331,18 @@ void ODBExport::exportDataSource()
 
             struct PropertyMap
             {
-                const ::rtl::OUString                       sPropertyName;
+                const OUString                       sPropertyName;
                 const XMLTokenEnum                          eAttributeToken;
-                const ::boost::optional< ::rtl::OUString >  aXMLDefault;
+                const ::boost::optional< OUString >  aXMLDefault;
 
-                PropertyMap( const ::rtl::OUString& _rPropertyName, const XMLTokenEnum _eToken )
+                PropertyMap( const OUString& _rPropertyName, const XMLTokenEnum _eToken )
                     :sPropertyName( _rPropertyName )
                     ,eAttributeToken( _eToken )
                     ,aXMLDefault()
                 {
                 }
 
-                PropertyMap( const ::rtl::OUString& _rPropertyName, const XMLTokenEnum _eToken, const ::rtl::OUString& _rDefault )
+                PropertyMap( const OUString& _rPropertyName, const XMLTokenEnum _eToken, const OUString& _rDefault )
                     :sPropertyName( _rPropertyName )
                     ,eAttributeToken( _eToken )
                     ,aXMLDefault( _rDefault )
@@ -404,13 +404,13 @@ void ODBExport::exportDataSource()
                     sal_Int32 nValue = 0;
                     aValue >>= nValue;
                     if ( sValue == "0" )
-                        sValue = ::rtl::OUString("equal-integer");
+                        sValue = OUString("equal-integer");
                     else if ( sValue == "1" )
-                        sValue = ::rtl::OUString("is-boolean");
+                        sValue = OUString("is-boolean");
                     else if ( sValue == "2" )
-                        sValue = ::rtl::OUString("equal-boolean");
+                        sValue = OUString("equal-boolean");
                     else if ( sValue == "3" )
-                        sValue = ::rtl::OUString("equal-use-only-zero");
+                        sValue = OUString("equal-use-only-zero");
                     if ( sValue == "equal-integer" )
                         continue;
                     eToken = XML_BOOLEAN_COMPARISON_MODE;
@@ -510,7 +510,7 @@ void ODBExport::exportApplicationConnectionSettings(const TSettingsMap& _aSettin
     SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_APPLICATION_CONNECTION_SETTINGS, sal_True, sal_True);
 
     Reference<XPropertySet> xProp(getDataSource());
-    Sequence< ::rtl::OUString> aValue;
+    Sequence< OUString> aValue;
     xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aValue;
     if ( aValue.getLength() )
     {
@@ -551,7 +551,7 @@ void ODBExport::exportConnectionData()
     SvXMLElementExport aConnData(*this,XML_NAMESPACE_DB, XML_CONNECTION_DATA, sal_True, sal_True);
 
     {
-        ::rtl::OUString sValue;
+        OUString sValue;
         Reference<XPropertySet> xProp(getDataSource());
         xProp->getPropertyValue(PROPERTY_URL) >>= sValue;
         if ( m_aTypeCollection.isFileSystemBased(sValue) )
@@ -559,12 +559,12 @@ void ODBExport::exportConnectionData()
             SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, sal_True, sal_True);
             {
                 SvtPathOptions aPathOptions;
-                const String sOrigUrl = m_aTypeCollection.cutPrefix(sValue);
-                String sFileName = aPathOptions.SubstituteVariable(sOrigUrl);
+                const OUString sOrigUrl = m_aTypeCollection.cutPrefix(sValue);
+                OUString sFileName = aPathOptions.SubstituteVariable(sOrigUrl);
                 if ( sOrigUrl == sFileName )
                 {
                     ::svt::OFileNotation aTransformer( sFileName );
-                    ::rtl::OUStringBuffer sURL( aTransformer.get( ::svt::OFileNotation::N_URL ) );
+                    OUStringBuffer sURL( aTransformer.get( ::svt::OFileNotation::N_URL ) );
                     if (sURL.getLength() == 0 || sURL[sURL.getLength() - 1] != '/')
                         sURL.append('/');
 
@@ -576,9 +576,9 @@ void ODBExport::exportConnectionData()
                 const ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.determineType(sValue);
                 try
                 {
-                    ::rtl::OUString sExtension;
+                    OUString sExtension;
                     if ( eType == dbaccess::DST_MSACCESS )
-                        sExtension = ::rtl::OUString("mdb");
+                        sExtension = OUString("mdb");
                     else
                     {
                         Reference< XPropertySet > xDataSourceSettings;
@@ -596,19 +596,19 @@ void ODBExport::exportConnectionData()
         }
         else
         {
-            String sDatabaseName,sHostName;
+            OUString sDatabaseName,sHostName;
             sal_Int32 nPort = -1;
             m_aTypeCollection.extractHostNamePort(sValue,sDatabaseName,sHostName,nPort);
-            if ( sHostName.Len() )
+            if ( sHostName.getLength() )
             {
                 SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, sal_True, sal_True);
                 {
-                    String sType = comphelper::string::stripEnd(m_aTypeCollection.getPrefix(sValue), ':');
+                    OUString sType = comphelper::string::stripEnd(m_aTypeCollection.getPrefix(sValue), ':');
                     AddAttribute(XML_NAMESPACE_DB,XML_TYPE,sType);
                     AddAttribute(XML_NAMESPACE_DB,XML_HOSTNAME,sHostName);
                     if ( nPort != -1 )
-                        AddAttribute(XML_NAMESPACE_DB,XML_PORT,::rtl::OUString::valueOf(nPort));
-                    if ( sDatabaseName.Len() )
+                        AddAttribute(XML_NAMESPACE_DB,XML_PORT,OUString::valueOf(nPort));
+                    if ( sDatabaseName.getLength() )
                         AddAttribute(XML_NAMESPACE_DB,XML_DATABASE_NAME,sDatabaseName);
 
                     try
@@ -639,10 +639,10 @@ void ODBExport::exportConnectionData()
                                 ++i
                             )
                         {
-                            const ::rtl::OUString sPropertyName = ::rtl::OUString::createFromAscii( aProperties[i].pAsciiPropertyName );
+                            const OUString sPropertyName = OUString::createFromAscii( aProperties[i].pAsciiPropertyName );
                             if ( xSettingsInfo->hasPropertyByName( sPropertyName ) )
                             {
-                                ::rtl::OUString sPropertyValue;
+                                OUString sPropertyValue;
                                 if ( ( xDataSourceSettings->getPropertyValue( sPropertyName ) >>= sPropertyValue ) && !sPropertyValue.isEmpty() )
                                     AddAttribute( XML_NAMESPACE_DB, XML_LOCAL_SOCKET, sPropertyValue );
 
@@ -702,7 +702,7 @@ void ODBExport::exportDataSourceSettings()
         AddAttribute( XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_IS_LIST,bIsSequence ? XML_TRUE : XML_FALSE );
         AddAttribute( XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_NAME, aIter->Name );
 
-        ::rtl::OUString sTypeName = lcl_implGetPropertyXMLType( aSimpleType );
+        OUString sTypeName = lcl_implGetPropertyXMLType( aSimpleType );
         if ( bIsSequence && aSimpleType.getTypeClass() == TypeClass_ANY )
         {
             Sequence<Any> aSeq;
@@ -727,7 +727,7 @@ void ODBExport::exportDataSourceSettings()
             switch (aSimpleType.getTypeClass())
             {
                 case TypeClass_STRING:
-                    exportDataSourceSettingsSequence< ::rtl::OUString >(
+                    exportDataSourceSettingsSequence< OUString >(
                         aIter );
                     break;
                 case TypeClass_DOUBLE:
@@ -788,18 +788,18 @@ void ODBExport::exportAutoIncrement()
     }
 }
 // -----------------------------------------------------------------------------
-void ODBExport::exportSequence(const Sequence< ::rtl::OUString>& _aValue
+void ODBExport::exportSequence(const Sequence< OUString>& _aValue
                             ,::xmloff::token::XMLTokenEnum _eTokenFilter
                             ,::xmloff::token::XMLTokenEnum _eTokenType)
 {
     Reference<XPropertySet> xProp(getDataSource());
-    Sequence< ::rtl::OUString> aValue;
+    Sequence< OUString> aValue;
     if ( _aValue.getLength() )
     {
         SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, _eTokenFilter, sal_True, sal_True);
 
-        const ::rtl::OUString* pIter = _aValue.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + _aValue.getLength();
+        const OUString* pIter = _aValue.getConstArray();
+        const OUString* pEnd   = pIter + _aValue.getLength();
         for(;pIter != pEnd;++pIter)
         {
             SvXMLElementExport aDataSource(*this,XML_NAMESPACE_DB, _eTokenType, sal_True, sal_False);
@@ -811,7 +811,7 @@ void ODBExport::exportSequence(const Sequence< ::rtl::OUString>& _aValue
 void ODBExport::exportLogin()
 {
     Reference<XPropertySet> xProp(getDataSource());
-    ::rtl::OUString sValue;
+    OUString sValue;
     xProp->getPropertyValue(PROPERTY_USER) >>= sValue;
     sal_Bool bAddLogin = !sValue.isEmpty();
     if ( bAddLogin )
@@ -840,9 +840,9 @@ void ODBExport::exportCollection(const Reference< XNameAccess >& _xCollection
         SAL_WNODEPRECATED_DECLARATIONS_POP
         if ( _bExportContext )
             pComponents.reset( new SvXMLElementExport(*this,XML_NAMESPACE_DB, _eComponents, sal_True, sal_True));
-        Sequence< ::rtl::OUString> aSeq = _xCollection->getElementNames();
-        const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+        Sequence< OUString> aSeq = _xCollection->getElementNames();
+        const OUString* pIter = aSeq.getConstArray();
+        const OUString* pEnd   = pIter + aSeq.getLength();
         for(;pIter != pEnd;++pIter)
         {
             Reference<XPropertySet> xProp(_xCollection->getByName(*pIter),UNO_QUERY);
@@ -861,14 +861,14 @@ void ODBExport::exportCollection(const Reference< XNameAccess >& _xCollection
 // -----------------------------------------------------------------------------
 void ODBExport::exportComponent(XPropertySet* _xProp)
 {
-    ::rtl::OUString sValue;
+    OUString sValue;
     _xProp->getPropertyValue(PROPERTY_PERSISTENT_NAME) >>= sValue;
     sal_Bool bIsForm = sal_True;
-    _xProp->getPropertyValue(::rtl::OUString("IsForm")) >>= bIsForm;
+    _xProp->getPropertyValue(OUString("IsForm")) >>= bIsForm;
     if ( bIsForm )
-        sValue = ::rtl::OUString("forms/") + sValue;
+        sValue = OUString("forms/") + sValue;
     else
-        sValue = ::rtl::OUString("reports/") + sValue;
+        sValue = OUString("reports/") + sValue;
 
     AddAttribute(XML_NAMESPACE_XLINK, XML_HREF,sValue);
     sal_Bool bAsTemplate = sal_False;
@@ -945,7 +945,7 @@ void ODBExport::exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,cons
 // -----------------------------------------------------------------------------
 void ODBExport::exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate)
 {
-    ::rtl::OUString sValue;
+    OUString sValue;
     _xProp->getPropertyValue(_bUpdate ? PROPERTY_UPDATE_TABLENAME : PROPERTY_NAME) >>= sValue;
     if ( !sValue.isEmpty() )
     {
@@ -965,11 +965,11 @@ void ODBExport::exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate)
 }
 // -----------------------------------------------------------------------------
 void ODBExport::exportFilter(XPropertySet* _xProp
-                             ,const ::rtl::OUString& _sProp
+                             ,const OUString& _sProp
                              ,enum ::xmloff::token::XMLTokenEnum _eStatementType)
 {
     OSL_PRECOND(!GetAttrList().getLength(),"Invalid attribute length!");
-    ::rtl::OUString sCommand;
+    OUString sCommand;
     _xProp->getPropertyValue(_sProp) >>= sCommand;
     if ( !sCommand.isEmpty() )
     {
@@ -1006,9 +1006,9 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
         }
 
         SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, sal_True, sal_True);
-        Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
-        const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+        Sequence< OUString> aSeq = xNameAccess->getElementNames();
+        const OUString* pIter = aSeq.getConstArray();
+        const OUString* pEnd   = pIter + aSeq.getLength();
         for( ; pIter != pEnd ; ++pIter)
         {
             Reference<XPropertySet> xProp(xNameAccess->getByName(*pIter),UNO_QUERY);
@@ -1020,7 +1020,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
 
                 sal_Bool bHidden = getBOOL(xProp->getPropertyValue(PROPERTY_HIDDEN));
 
-                ::rtl::OUString sValue;
+                OUString sValue;
                 xProp->getPropertyValue(PROPERTY_HELPTEXT) >>= sValue;
                 Any aColumnDefault;
                 aColumnDefault = xProp->getPropertyValue(PROPERTY_CONTROLDEFAULT);
@@ -1036,7 +1036,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
 
                     if ( aColumnDefault.hasValue() )
                     {
-                        ::rtl::OUStringBuffer sColumnDefaultString,sType;
+                        OUStringBuffer sColumnDefaultString,sType;
                         ::sax::Converter::convertAny(
                             sColumnDefaultString, sType, aColumnDefault );
                         AddAttribute(XML_NAMESPACE_DB, XML_TYPE_NAME,sType.makeStringAndClear());
@@ -1063,7 +1063,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
 void ODBExport::exportForms()
 {
     Any aValue;
-    ::rtl::OUString sService;
+    OUString sService;
     dbtools::getDataSourceSetting(getDataSource(),"Forms",aValue);
     aValue >>= sService;
     if ( sService.isEmpty() )
@@ -1084,7 +1084,7 @@ void ODBExport::exportForms()
 void ODBExport::exportReports()
 {
     Any aValue;
-    ::rtl::OUString sService;
+    OUString sService;
     dbtools::getDataSourceSetting(getDataSource(),"Reports",aValue);
     aValue >>= sService;
     if ( sService.isEmpty() )
@@ -1105,7 +1105,7 @@ void ODBExport::exportReports()
 void ODBExport::exportQueries(sal_Bool _bExportContext)
 {
     Any aValue;
-    ::rtl::OUString sService;
+    OUString sService;
     dbtools::getDataSourceSetting(getDataSource(),"CommandDefinitions",aValue);
     aValue >>= sService;
     if ( sService.isEmpty() )
@@ -1314,10 +1314,10 @@ void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
             {
                 sal_Int32 nLength = aProps.getLength();
                 aProps.realloc(nLength + 1);
-                aProps[nLength].Name = ::rtl::OUString("Queries");
-                Sequence< ::rtl::OUString> aSeq = xCollection->getElementNames();
-                const ::rtl::OUString* pIter = aSeq.getConstArray();
-                const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+                aProps[nLength].Name = OUString("Queries");
+                Sequence< OUString> aSeq = xCollection->getElementNames();
+                const OUString* pIter = aSeq.getConstArray();
+                const OUString* pEnd   = pIter + aSeq.getLength();
 
                 Sequence<PropertyValue> aQueries(aSeq.getLength());
                 for(sal_Int32 i = 0;pIter != pEnd;++pIter,++i)
@@ -1354,7 +1354,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
             if ( aPropValues.getLength() )
             {
                 aProps.realloc(nLength + 1);
-                aProps[nLength].Name = ::rtl::OUString("layout-settings");
+                aProps[nLength].Name = OUString("layout-settings");
                 aProps[nLength].Value = aValue;
             }
         }
@@ -1365,14 +1365,14 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
     }
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ODBExport::implConvertAny(const Any& _rValue)
+OUString ODBExport::implConvertAny(const Any& _rValue)
 {
-    ::rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     switch (_rValue.getValueTypeClass())
     {
         case TypeClass_STRING:
         {   // extract the string
-            ::rtl::OUString sCurrentValue;
+            OUString sCurrentValue;
             _rValue >>= sCurrentValue;
             aBuffer.append(sCurrentValue);
         }

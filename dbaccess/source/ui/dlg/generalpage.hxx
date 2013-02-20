@@ -80,12 +80,12 @@ namespace dbaui
 
         ::svt::ControlDependencyManager
                             m_aControlDependencies;
-        ::std::vector< ::rtl::OUString> m_aURLPrefixes;
+        ::std::vector< OUString> m_aURLPrefixes;
 
 
         ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
-        ::rtl::OUString     m_eCurrentSelection;    /// currently selected type
+        OUString     m_eCurrentSelection;    /// currently selected type
         ::dbaccess::DATASOURCE_TYPE     m_eNotSupportedKnownType;   /// if a data source of an unsupported, but known type is encountered ....
 
         enum SPECIAL_MESSAGE
@@ -101,8 +101,8 @@ namespace dbaui
         Link                m_aChooseDocumentHandler;       /// to be called when a recent document has been definately chosen
         sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
         bool                m_bInitTypeList : 1;
-        bool                approveDataSourceType( const ::rtl::OUString& _sURLPrefix, String& _inout_rDisplayName );
-        void                insertDatasourceTypeEntryData(const ::rtl::OUString& _sType, String sDisplayName);
+        bool                approveDataSourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName );
+        void                insertDatasourceTypeEntryData(const OUString& _sType, String sDisplayName);
 
     public:
         static SfxTabPage*  Create(Window* pParent, const SfxItemSet& _rAttrSet, sal_Bool _bDBWizardMode = sal_False);
@@ -117,7 +117,7 @@ namespace dbaui
         DocumentDescriptor  GetSelectedDocument() const;
 
         /// get the currently selected datasource type
-        ::rtl::OUString     GetSelectedType() const { return m_eCurrentSelection; }
+        OUString     GetSelectedType() const { return m_eCurrentSelection; }
 
     protected:
         // SfxTabPage overridables
@@ -135,15 +135,15 @@ namespace dbaui
 
     protected:
 
-        void onTypeSelected(const ::rtl::OUString& _sURLPrefix);
+        void onTypeSelected(const OUString& _sURLPrefix);
         void initializeTypeList();
 
-        void implSetCurrentType( const ::rtl::OUString& _eType );
+        void implSetCurrentType( const OUString& _eType );
 
-        void switchMessage(const ::rtl::OUString& _sURLPrefix);
+        void switchMessage(const OUString& _sURLPrefix);
 
         /// sets the title of the parent dialog
-        void setParentTitle(const ::rtl::OUString& _sURLPrefix);
+        void setParentTitle(const OUString& _sURLPrefix);
 
         DECL_LINK(OnDatasourceTypeSelected, ListBox*);
         DECL_LINK(OnSetupModeSelected, RadioButton*);

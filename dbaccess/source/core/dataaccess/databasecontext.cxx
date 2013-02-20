@@ -214,25 +214,25 @@ Reference< XInterface > ODatabaseContext::Create(const Reference< XComponentCont
     return *( new ODatabaseContext( _rxContext ) );
 }
 
-Sequence< rtl::OUString > ODatabaseContext::getSupportedServiceNames_static(void) throw( RuntimeException )
+Sequence< OUString > ODatabaseContext::getSupportedServiceNames_static(void) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString > aSNS( 1 );
+    Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.sdb.DatabaseContext";
     return aSNS;
 }
 
 // XServiceInfo
-rtl::OUString ODatabaseContext::getImplementationName(  ) throw(RuntimeException)
+OUString ODatabaseContext::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_static();
 }
 
-sal_Bool ODatabaseContext::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool ODatabaseContext::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
-Sequence< ::rtl::OUString > ODatabaseContext::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > ODatabaseContext::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
@@ -255,7 +255,7 @@ Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  ) throw (Exc
 Reference< XInterface > SAL_CALL ODatabaseContext::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
 {
     ::comphelper::NamedValueCollection aArgs( _rArguments );
-    ::rtl::OUString sURL = aArgs.getOrDefault( (::rtl::OUString)INFO_POOLURL, ::rtl::OUString() );
+    OUString sURL = aArgs.getOrDefault( (OUString)INFO_POOLURL, OUString() );
 
     Reference< XInterface > xDataSource;
     if ( !sURL.isEmpty() )
@@ -292,12 +292,12 @@ void ODatabaseContext::disposing()
 }
 
 // XNamingService
-Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUString& _rName) throw( Exception, RuntimeException )
+Reference< XInterface >  ODatabaseContext::getRegisteredObject(const OUString& _rName) throw( Exception, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
-    ::rtl::OUString sURL( getDatabaseLocation( _rName ) );
+    OUString sURL( getDatabaseLocation( _rName ) );
 
     if ( sURL.isEmpty() )
         // there is a registration for this name, but no URL
@@ -311,7 +311,7 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
     return loadObjectFromURL( _rName, sURL );
 }
 
-Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUString& _rName,const ::rtl::OUString& _sURL)
+Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rName,const OUString& _sURL)
 {
     INetURLObject aURL( _sURL );
     if ( aURL.GetProtocol() == INET_PROT_NOT_VALID )
@@ -333,12 +333,11 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
             )
         {
             // #i40463# #i39187#
-            String sErrorMessage( DBACORE_RESSTRING( RID_STR_FILE_DOES_NOT_EXIST ) );
+            OUString sErrorMessage( DBACORE_RESSTRING( RID_STR_FILE_DOES_NOT_EXIST ) );
             ::svt::OFileNotation aTransformer( _sURL );
-            sErrorMessage.SearchAndReplaceAscii( "$file$", aTransformer.get( ::svt::OFileNotation::N_SYSTEM ) );
 
             SQLException aError;
-            aError.Message = sErrorMessage;
+            aError.Message = sErrorMessage.replaceAll( "$file$", aTransformer.get( ::svt::OFileNotation::N_SYSTEM ) );
 
             throw WrappedTargetException( _sURL, *this, makeAny( aError ) );
         }
@@ -386,13 +385,13 @@ void ODatabaseContext::removeFromTerminateListener(const ODatabaseModelImpl& _rD
     m_pDatabaseDocumentLoader->remove(_rDataSourceModel);
 }
 
-void ODatabaseContext::setTransientProperties(const ::rtl::OUString& _sURL, ODatabaseModelImpl& _rDataSourceModel )
+void ODatabaseContext::setTransientProperties(const OUString& _sURL, ODatabaseModelImpl& _rDataSourceModel )
 {
     if ( m_aDatasourceProperties.end() == m_aDatasourceProperties.find(_sURL) )
         return;
     try
     {
-        ::rtl::OUString sAuthFailedPassword;
+        OUString sAuthFailedPassword;
         Reference< XPropertySet > xDSProps( _rDataSourceModel.getOrCreateDataSource(), UNO_QUERY_THROW );
         const Sequence< PropertyValue >& rSessionPersistentProps = m_aDatasourceProperties[_sURL];
         const PropertyValue* pProp = rSessionPersistentProps.getConstArray();
@@ -417,20 +416,20 @@ void ODatabaseContext::setTransientProperties(const ::rtl::OUString& _sURL, ODat
     }
 }
 
-void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Reference< XInterface > & _rxObject) throw( Exception, RuntimeException )
+void ODatabaseContext::registerObject(const OUString& _rName, const Reference< XInterface > & _rxObject) throw( Exception, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
     if ( _rName.isEmpty() )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        throw IllegalArgumentException( OUString(), *this, 1 );
 
     Reference< XDocumentDataSource > xDocDataSource( _rxObject, UNO_QUERY );
     Reference< XModel > xModel( xDocDataSource.is() ? xDocDataSource->getDatabaseDocument() : Reference< XOfficeDatabaseDocument >(), UNO_QUERY );
     if ( !xModel.is() )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 2 );
+        throw IllegalArgumentException( OUString(), *this, 2 );
 
-    ::rtl::OUString sURL = xModel->getURL();
+    OUString sURL = xModel->getURL();
     if ( sURL.isEmpty() )
         throw IllegalArgumentException( DBACORE_RESSTRING( RID_STR_DATASOURCE_NOT_STORED ), *this, 2 );
 
@@ -482,7 +481,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     // #i86178#
     aRememberProps.put( "AuthFailedPassword", _rModelImpl.m_sFailedPassword );
 
-    ::rtl::OUString sDocumentURL( _rModelImpl.getURL() );
+    OUString sDocumentURL( _rModelImpl.getURL() );
     if ( m_aDatabaseObjects.find( sDocumentURL ) != m_aDatabaseObjects.end() )
     {
         m_aDatasourceProperties[ sDocumentURL ] = aRememberProps.getPropertyValues();
@@ -510,12 +509,12 @@ void SAL_CALL ODatabaseContext::removeContainerListener( const Reference< XConta
     m_aContainerListeners.removeInterface(_rxListener);
 }
 
-void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exception, RuntimeException )
+void ODatabaseContext::revokeObject(const OUString& _rName) throw( Exception, RuntimeException )
 {
     ClearableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
-    ::rtl::OUString sURL = getDatabaseLocation( _rName );
+    OUString sURL = getDatabaseLocation( _rName );
 
     revokeDatabaseLocation( _rName );
         // will throw if something goes wrong
@@ -536,37 +535,37 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
     m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
 }
 
-::sal_Bool SAL_CALL ODatabaseContext::hasRegisteredDatabase( const ::rtl::OUString& _Name ) throw (IllegalArgumentException, RuntimeException)
+::sal_Bool SAL_CALL ODatabaseContext::hasRegisteredDatabase( const OUString& _Name ) throw (IllegalArgumentException, RuntimeException)
 {
     return m_xDatabaseRegistrations->hasRegisteredDatabase( _Name );
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ODatabaseContext::getRegistrationNames() throw (RuntimeException)
+Sequence< OUString > SAL_CALL ODatabaseContext::getRegistrationNames() throw (RuntimeException)
 {
     return m_xDatabaseRegistrations->getRegistrationNames();
 }
 
-::rtl::OUString SAL_CALL ODatabaseContext::getDatabaseLocation( const ::rtl::OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
+OUString SAL_CALL ODatabaseContext::getDatabaseLocation( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
 {
     return m_xDatabaseRegistrations->getDatabaseLocation( _Name );
 }
 
-void SAL_CALL ODatabaseContext::registerDatabaseLocation( const ::rtl::OUString& _Name, const ::rtl::OUString& _Location ) throw (IllegalArgumentException, ElementExistException, RuntimeException)
+void SAL_CALL ODatabaseContext::registerDatabaseLocation( const OUString& _Name, const OUString& _Location ) throw (IllegalArgumentException, ElementExistException, RuntimeException)
 {
     m_xDatabaseRegistrations->registerDatabaseLocation( _Name, _Location );
 }
 
-void SAL_CALL ODatabaseContext::revokeDatabaseLocation( const ::rtl::OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException)
+void SAL_CALL ODatabaseContext::revokeDatabaseLocation( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException)
 {
     m_xDatabaseRegistrations->revokeDatabaseLocation( _Name );
 }
 
-void SAL_CALL ODatabaseContext::changeDatabaseLocation( const ::rtl::OUString& _Name, const ::rtl::OUString& _NewLocation ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException)
+void SAL_CALL ODatabaseContext::changeDatabaseLocation( const OUString& _Name, const OUString& _NewLocation ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException)
 {
     m_xDatabaseRegistrations->changeDatabaseLocation( _Name, _NewLocation );
 }
 
-::sal_Bool SAL_CALL ODatabaseContext::isDatabaseRegistrationReadOnly( const ::rtl::OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
+::sal_Bool SAL_CALL ODatabaseContext::isDatabaseRegistrationReadOnly( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
 {
     return m_xDatabaseRegistrations->isDatabaseRegistrationReadOnly( _Name );
 }
@@ -603,7 +602,7 @@ Reference< ::com::sun::star::container::XEnumeration >  ODatabaseContext::create
 }
 
 // ::com::sun::star::container::XNameAccess
-Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElementException,
+Any ODatabaseContext::getByName(const OUString& _rName) throw( NoSuchElementException,
                                                           WrappedTargetException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -618,7 +617,7 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
             return makeAny( xExistent );
 
         // see whether this is an registered name
-        ::rtl::OUString sURL;
+        OUString sURL;
         if ( hasRegisteredDatabase( _rName ) )
         {
             sURL = getDatabaseLocation( _rName );
@@ -653,7 +652,7 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
     }
 }
 
-Sequence< rtl::OUString > ODatabaseContext::getElementNames(void) throw( RuntimeException )
+Sequence< OUString > ODatabaseContext::getElementNames(void) throw( RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
@@ -661,7 +660,7 @@ Sequence< rtl::OUString > ODatabaseContext::getElementNames(void) throw( Runtime
     return getRegistrationNames();
 }
 
-sal_Bool ODatabaseContext::hasByName(const rtl::OUString& _rName) throw( RuntimeException )
+sal_Bool ODatabaseContext::hasByName(const OUString& _rName) throw( RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
@@ -669,7 +668,7 @@ sal_Bool ODatabaseContext::hasByName(const rtl::OUString& _rName) throw( Runtime
     return hasRegisteredDatabase( _rName );
 }
 
-Reference< XInterface > ODatabaseContext::getObject( const ::rtl::OUString& _rURL )
+Reference< XInterface > ODatabaseContext::getObject( const OUString& _rURL )
 {
     ObjectCacheIterator aFind = m_aDatabaseObjects.find( _rURL );
     Reference< XInterface > xExistent;
@@ -680,9 +679,9 @@ Reference< XInterface > ODatabaseContext::getObject( const ::rtl::OUString& _rUR
 
 void ODatabaseContext::registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl )
 {
-    ::rtl::OUString sURL( _rModelImpl.getURL() );
+    OUString sURL( _rModelImpl.getURL() );
 #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "DatabaseContext: registering %s", ::rtl::OUStringToOString( sURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_TRACE( "DatabaseContext: registering %s", OUStringToOString( sURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
     if ( m_aDatabaseObjects.find( sURL ) == m_aDatabaseObjects.end() )
     {
@@ -695,19 +694,19 @@ void ODatabaseContext::registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl
 
 void ODatabaseContext::revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl )
 {
-    ::rtl::OUString sURL( _rModelImpl.getURL() );
+    OUString sURL( _rModelImpl.getURL() );
 #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "DatabaseContext: deregistering %s", ::rtl::OUStringToOString( sURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_TRACE( "DatabaseContext: deregistering %s", OUStringToOString( sURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
     m_aDatabaseObjects.erase( sURL );
 }
 
-void ODatabaseContext::databaseDocumentURLChange( const ::rtl::OUString& _rOldURL, const ::rtl::OUString& _rNewURL )
+void ODatabaseContext::databaseDocumentURLChange( const OUString& _rOldURL, const OUString& _rNewURL )
 {
 #if OSL_DEBUG_LEVEL > 1
     OSL_TRACE( "DatabaseContext: changing registration from %s to %s",
-        ::rtl::OUStringToOString( _rOldURL, RTL_TEXTENCODING_UTF8 ).getStr(),
-        ::rtl::OUStringToOString( _rNewURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUStringToOString( _rOldURL, RTL_TEXTENCODING_UTF8 ).getStr(),
+        OUStringToOString( _rNewURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
     ObjectCache::iterator oldPos = m_aDatabaseObjects.find( _rOldURL );
     ENSURE_OR_THROW( oldPos != m_aDatabaseObjects.end(), "illegal old database document URL" );

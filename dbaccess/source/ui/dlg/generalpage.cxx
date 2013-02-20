@@ -96,13 +96,13 @@ namespace dbaui
         // If no driver for embedded DBs is installed, and no dBase driver, then hide the "Create new database" option
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
-            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:")) );
+            nCreateNewDBIndex = m_pCollection->getIndexOf( OUString("sdbc:dbase:") );
         bool bHideCreateNew = ( nCreateNewDBIndex == -1 );
 
         // also, if our application policies tell us to hide the option, do it
         ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext(
             ::comphelper::getProcessComponentContext(),
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/Policies/Features/Base" ) )
+            OUString("/org.openoffice.Office.DataAccess/Policies/Features/Base")
         ) );
         sal_Bool bAllowCreateLocalDatabase( sal_True );
         OSL_VERIFY( aConfig.getNodeValue( "CreateLocalDatabase" ) >>= bAllowCreateLocalDatabase );
@@ -152,10 +152,10 @@ namespace dbaui
     {
         struct DisplayedType
         {
-            ::rtl::OUString eType;
+            OUString eType;
             String          sDisplayName;
 
-            DisplayedType( const ::rtl::OUString& _eType, const String& _rDisplayName ) : eType( _eType ), sDisplayName( _rDisplayName ) { }
+            DisplayedType( const OUString& _eType, const String& _rDisplayName ) : eType( _eType ), sDisplayName( _rDisplayName ) { }
         };
         typedef ::std::vector< DisplayedType > DisplayedTypes;
 
@@ -186,10 +186,10 @@ namespace dbaui
                         ++aTypeLoop
                     )
                 {
-                    const ::rtl::OUString sURLPrefix = aTypeLoop.getURLPrefix();
+                    const OUString sURLPrefix = aTypeLoop.getURLPrefix();
                     if ( !sURLPrefix.isEmpty() )
                     {
-                        String sDisplayName = aTypeLoop.getDisplayName();
+                        OUString sDisplayName = aTypeLoop.getDisplayName();
                         if (   m_pDatasourceType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND
                             && approveDataSourceType( sURLPrefix, sDisplayName ) )
                         {
@@ -211,17 +211,16 @@ namespace dbaui
 
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::setParentTitle(const ::rtl::OUString& _sURLPrefix)
+    void OGeneralPage::setParentTitle(const OUString& _sURLPrefix)
     {
         if (!m_DBWizardMode)
         {
-            const String sName = m_pCollection->getTypeDisplayName(_sURLPrefix);
+            const OUString sName = m_pCollection->getTypeDisplayName(_sURLPrefix);
             if ( m_pAdminDialog )
             {
                 LocalResourceAccess aStringResAccess( PAGE_GENERAL, RSC_TABPAGE );
-                String sMessage = String(ModuleRes(STR_PARENTTITLE));
-                sMessage.SearchAndReplaceAscii("#",sName);
-                m_pAdminDialog->setTitle(sMessage);
+                OUString sMessage = OUString(ModuleRes(STR_PARENTTITLE));
+                m_pAdminDialog->setTitle(sMessage.replaceAll("#",sName));
             }
         }
     }
@@ -247,7 +246,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::switchMessage(const ::rtl::OUString& _sURLPrefix)
+    void OGeneralPage::switchMessage(const OUString& _sURLPrefix)
     {
         SPECIAL_MESSAGE eMessage = smNone;
         if ( _sURLPrefix.isEmpty()/*_eType == m_eNotSupportedKnownType*/ )
@@ -274,7 +273,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::onTypeSelected(const ::rtl::OUString& _sURLPrefix)
+    void OGeneralPage::onTypeSelected(const OUString& _sURLPrefix)
     {
         // the new URL text as indicated by the selection history
         implSetCurrentType( _sURLPrefix );
@@ -357,12 +356,12 @@ namespace dbaui
             sConnectURL = pUrlItem->GetValue();
         }
 
-        ::rtl::OUString eOldSelection = m_eCurrentSelection;
+        OUString eOldSelection = m_eCurrentSelection;
         m_eNotSupportedKnownType =  ::dbaccess::DST_UNKNOWN;
-        implSetCurrentType(  ::rtl::OUString() );
+        implSetCurrentType(  OUString() );
 
         // compare the DSN prefix with the registered ones
-        String sDisplayName;
+        OUString sDisplayName;
 
         if (m_pCollection && bValid)
         {
@@ -384,7 +383,7 @@ namespace dbaui
         }
 
         if (m_aRB_CreateDatabase.IsChecked() && m_DBWizardMode)
-            sDisplayName = m_pCollection->getTypeDisplayName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jdbc:")));
+            sDisplayName = m_pCollection->getTypeDisplayName( OUString("jdbc:"));
         m_pDatasourceType->SelectEntry(sDisplayName);
 
         // notify our listener that our type selection has changed (if so)
@@ -407,7 +406,7 @@ namespace dbaui
     // representative for all MySQl databases)
     // Also, embedded databases (embedded HSQL, at the moment), are not to appear in the list of
     // databases to connect to.
-    bool OGeneralPage::approveDataSourceType( const ::rtl::OUString& _sURLPrefix, String& _inout_rDisplayName )
+    bool OGeneralPage::approveDataSourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName )
     {
         const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(_sURLPrefix);
 
@@ -440,12 +439,12 @@ namespace dbaui
         if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB )
             _inout_rDisplayName = String();
 
-        return _inout_rDisplayName.Len() > 0;
+        return _inout_rDisplayName.getLength() > 0;
     }
 
 
     // -----------------------------------------------------------------------
-    void OGeneralPage::insertDatasourceTypeEntryData(const ::rtl::OUString& _sType, String sDisplayName)
+    void OGeneralPage::insertDatasourceTypeEntryData(const OUString& _sType, String sDisplayName)
     {
         // insert a (temporary) entry
         sal_uInt16 nPos = m_pDatasourceType->InsertEntry(sDisplayName);
@@ -476,7 +475,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::implSetCurrentType( const ::rtl::OUString& _eType )
+    void OGeneralPage::implSetCurrentType( const OUString& _eType )
     {
         if ( _eType == m_eCurrentSelection )
             return;
@@ -488,7 +487,7 @@ namespace dbaui
     void OGeneralPage::Reset(const SfxItemSet& _rCoreAttrs)
     {
         // reset all locale data
-        implSetCurrentType(  ::rtl::OUString() );
+        implSetCurrentType(  OUString() );
             // this ensures that our type selection link will be called, even if the new is is the same as the
             // current one
         OGenericAdministrationPage::Reset(_rCoreAttrs);
@@ -504,7 +503,7 @@ namespace dbaui
         {
             if ( m_aRB_CreateDatabase.IsChecked() )
             {
-                _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:"))));
+                _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, OUString("sdbc:dbase:")));
                 bChangedSomething = sal_True;
                 bCommitTypeSelection = false;
             }
@@ -521,7 +520,7 @@ namespace dbaui
         if ( bCommitTypeSelection )
         {
             sal_uInt16 nEntry = m_pDatasourceType->GetSelectEntryPos();
-            ::rtl::OUString sURLPrefix = m_aURLPrefixes[nEntry];
+            OUString sURLPrefix = m_aURLPrefixes[nEntry];
             if (m_DBWizardMode)
             {
                 if  (  ( m_pDatasourceType->GetSavedValue() != nEntry )
@@ -551,7 +550,7 @@ namespace dbaui
     {
         // get the type from the entry data
         sal_Int16 nSelected = _pBox->GetSelectEntryPos();
-        const ::rtl::OUString sURLPrefix = m_aURLPrefixes[nSelected];
+        const OUString sURLPrefix = m_aURLPrefixes[nSelected];
 
         setParentTitle(sURLPrefix);
         // let the impl method do all the stuff
@@ -596,7 +595,7 @@ namespace dbaui
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                0, rtl::OUString::createFromAscii("sdatabase") );
+                0, OUString::createFromAscii("sdatabase") );
         const SfxFilter* pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {
