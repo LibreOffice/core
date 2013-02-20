@@ -349,6 +349,9 @@
 #define RID_SVXSTR_CENTERED                 (RID_SVX_START + 306)
 #define RID_SVXSTR_NOTCENTERED              (RID_SVX_START + 307)
 
+#define RID_SVXSTR_VIEW                     (RID_SVX_START + 308)
+#define RID_SVXSTR_FILTER                   (RID_SVX_START + 309)
+
 // String-Arrays
 #define RID_SVXSTR_TEXTENCODING_TABLE       (RID_SVX_START + 312)
 

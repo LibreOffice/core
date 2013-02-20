@@ -1992,15 +1992,28 @@ String RID_SVXSTR_GALLERY_THEMEITEMS
 {
     Text [ en-US ] = "Theme Items";
 };
+
 String RID_SVXSTR_GALLERY_THEMENAME
 {
     Text [ en-US ] = "Theme Name";
 };
+
 String RID_SVXSTR_GALLERY_FILESFOUND
 {
     Text [ en-US ] = "Files Found";
 };
+
 String RID_SVXSTR_GALLERY_PREVIEW
 {
     Text [ en-US ] = "Preview";
+};
+
+String RID_SVXSTR_FILTER
+{
+    Text [ en-US ] = "Filter" ;
+};
+
+String RID_SVXSTR_VIEW
+{
+    Text [ en-US ] = "List" ;
 };

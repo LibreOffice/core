@@ -173,26 +173,24 @@ private:
     Link            aModifyComLink;
 
     SvxRedlinTable* pRedlinTable;
-    CheckBox        aCbDate;
-    ListBox         aLbDate;
-    DateField       aDfDate;
-    TimeField       aTfDate;
-    ImageButton     aIbClock;
-    FixedText       aFtDate2;
-    DateField       aDfDate2;
-    TimeField       aTfDate2;
-    ImageButton     aIbClock2;
-    CheckBox        aCbAuthor;
-    ListBox         aLbAuthor;
-    CheckBox        aCbRange;
-    Edit            aEdRange;
-    PushButton      aBtnRange;
-    ListBox         aLbAction;
-    CheckBox        aCbComment;
-    Edit            aEdComment;
-    String          aActionStr;
-    String          aRangeStr;
-    String          aStrMyName;
+    CheckBox*       m_pCbDate;
+    ListBox*        m_pLbDate;
+    DateField*      m_pDfDate;
+    TimeField*      m_pTfDate;
+    PushButton*     m_pIbClock;
+    FixedText*      m_pFtDate2;
+    DateField*      m_pDfDate2;
+    TimeField*      m_pTfDate2;
+    PushButton*     m_pIbClock2;
+    CheckBox*       m_pCbAuthor;
+    ListBox*        m_pLbAuthor;
+    CheckBox*       m_pCbRange;
+    Edit*           m_pEdRange;
+    PushButton*     m_pBtnRange;
+    CheckBox*       m_pCbAction;
+    ListBox*        m_pLbAction;
+    CheckBox*       m_pCbComment;
+    Edit*           m_pEdComment;
     sal_Bool            bModified;
 
     DECL_LINK( SelDateHdl, ListBox* );
@@ -215,7 +213,6 @@ public:
     virtual void    DeactivatePage();
     void            SetRedlinTable(SvxRedlinTable*);
 
-    String          GetMyName() const;
     Date            GetFirstDate() const;
     void            SetFirstDate(const Date &aDate);
     Time            GetFirstTime() const;
@@ -319,7 +316,6 @@ private:
     String          aTitle3;
     String          aTitle4;
     String          aTitle5;
-    String          aStrMyName;
     long            nDistance;
     Size            aMinSize;
 
@@ -332,8 +328,6 @@ protected:
 
 public:
                     SvxTPView( Window * pParent);
-
-    String          GetMyName() const;
 
     void            InsertWriterHeader();
     void            InsertCalcHeader();

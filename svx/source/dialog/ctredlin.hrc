@@ -16,31 +16,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svxids.hrc> // ->SID_REDLIN_FILTER_PAGE
-                      // ->SID_REDLIN_VIEW_PAGE
+#include <svx/svxids.hrc> // ->SID_REDLIN_VIEW_PAGE
 
 #define TP_FILTER       11
 #define TP_VIEW         12
-
-#define LB_DATE         1
-#define DF_DATE         2
-#define TF_DATE         3
-#define LB_AUTOR        4
-#define ED_RANGE        5
-#define IB_CLOCK        6
-#define BTN_REF         7
-#define CB_DATE         8
-#define CB_AUTOR        9
-#define CB_RANGE        10
-#define FT_DATE2        12
-#define DF_DATE2        13
-#define TF_DATE2        14
-#define IB_CLOCK2       15
-#define STR_FILTER      16
-#define STR_ACTION      17
-#define LB_ACTION       18
-#define CB_COMMENT      19
-#define ED_COMMENT      20
 
 #define DG_VIEW         2
 #define PB_ACCEPT       3

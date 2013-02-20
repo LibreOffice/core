@@ -28,6 +28,7 @@
 
 #include <editeng/unolingu.hxx>
 #include <svx/dialmgr.hxx>
+#include "svx/dialogs.hrc"
 #include "ctredlin.hrc"
 #include <svx/ctredlin.hxx>
 #include "helpid.hrc"
@@ -497,8 +498,7 @@ SvxTPView::SvxTPView( Window * pParent)
     aTitle2     ( SVX_RES( STR_TITLE2 ) ),
     aTitle3     ( SVX_RES( STR_TITLE3 ) ),
     aTitle4     ( SVX_RES( STR_TITLE4 ) ),
-    aTitle5     ( SVX_RES( STR_TITLE5 ) ),
-    aStrMyName  ( SVX_RES( STR_VIEW) )
+    aTitle5     ( SVX_RES( STR_TITLE5 ) )
 {
     aViewData.SetAccessibleName(String(SVX_RES(STR_TREE)));
     FreeResource();
@@ -518,11 +518,6 @@ SvxTPView::SvxTPView( Window * pParent)
 
     nDistance=PbAccept.GetSizePixel().Height()+2*MIN_DISTANCE;
     aViewData.SetTabs(nStaticTabs);
-}
-
-String SvxTPView::GetMyName() const
-{
-    return aStrMyName;
 }
 
 void SvxTPView::Resize()
@@ -670,100 +665,80 @@ IMPL_LINK( SvxTPView, PbClickHdl, PushButton*, pPushB )
 //----------------------------------------------------------------------------
 
 SvxTPFilter::SvxTPFilter( Window * pParent)
-    : TabPage( pParent, SVX_RES(SID_REDLIN_FILTER_PAGE)),
-    pRedlinTable(NULL),
-    aCbDate     ( this, SVX_RES( CB_DATE ) ),
-    aLbDate     ( this, SVX_RES( LB_DATE ) ),
-    aDfDate     ( this, SVX_RES( DF_DATE ) ),
-    aTfDate     ( this, SVX_RES( TF_DATE ) ),
-    aIbClock    ( this, SVX_RES( IB_CLOCK ) ),
-    aFtDate2    ( this, SVX_RES( FT_DATE2 ) ),
-    aDfDate2    ( this, SVX_RES( DF_DATE2 ) ),
-    aTfDate2    ( this, SVX_RES( TF_DATE2 ) ),
-    aIbClock2   ( this, SVX_RES( IB_CLOCK2) ),
-    aCbAuthor   ( this, SVX_RES( CB_AUTOR ) ),
-    aLbAuthor   ( this, SVX_RES( LB_AUTOR ) ),
-    aCbRange    ( this, SVX_RES( CB_RANGE ) ),
-    aEdRange    ( this, SVX_RES( ED_RANGE ) ),
-    aBtnRange   ( this, SVX_RES( BTN_REF ) ),
-    aLbAction   ( this, SVX_RES( LB_ACTION ) ),
-    aCbComment  ( this, SVX_RES( CB_COMMENT) ),
-    aEdComment  ( this, SVX_RES( ED_COMMENT) ),
-    aActionStr  (       SVX_RES( STR_ACTION) ),
-    aStrMyName  (       SVX_RES( STR_FILTER) ),
-    bModified   (sal_False)
+    : TabPage(pParent, "RedlineFilterPage", "svx/ui/redlinefilterpage.ui")
+    , pRedlinTable(NULL)
+    , bModified(false)
 {
-    aLbDate.SetAccessibleName( String( SVX_RES( STR_DATE_COMBOX) ) );
-    aDfDate.SetAccessibleName( String( SVX_RES( STR_DATE_SPIN) ) );
-    aTfDate.SetAccessibleName( String( SVX_RES( STR_DATE_TIME_SPIN) ) );
-    aDfDate2.SetAccessibleName( String( SVX_RES( STR_DATE_SPIN1) ) );
-    aTfDate2.SetAccessibleName( String( SVX_RES( STR_DATE_TIME_SPIN1) ) );
-    aLbAuthor.SetAccessibleName(aCbAuthor.GetText());
-    aLbAction.SetAccessibleName( String( SVX_RES( STR_ACTION) ) );
-    aEdComment.SetAccessibleName(aCbComment.GetText());
-    FreeResource();
+    get(m_pCbDate, "date");
+    get(m_pLbDate, "datecond");
+    get(m_pDfDate, "startdate");
+    get(m_pTfDate, "starttime");
+    get(m_pIbClock, "startclock");
+    get(m_pFtDate2, "and");
+    get(m_pDfDate2, "enddate");
+    get(m_pTfDate2, "endtime");
+    get(m_pIbClock2, "endclock");
+    get(m_pCbAuthor, "author");
+    get(m_pLbAuthor, "authorlist");
+    get(m_pCbRange, "range");
+    get(m_pEdRange, "rangeedit");
+    get(m_pBtnRange, "dotdotdot");
+    get(m_pCbAction, "action");
+    get(m_pLbAction, "actionlist");
+    get(m_pCbComment, "comment");
+    get(m_pEdComment, "commentedit");
 
-    aDfDate.SetShowDateCentury( sal_True );
-    aDfDate2.SetShowDateCentury( sal_True );
+    m_pLbAuthor->SetAccessibleName(m_pCbAuthor->GetText());
+    m_pEdComment->SetAccessibleName(m_pCbComment->GetText());
 
-    aRangeStr=aCbRange.GetText();
-    aLbDate.SelectEntryPos(0);
-    aLbDate.SetSelectHdl( LINK( this, SvxTPFilter, SelDateHdl ) );
-    aIbClock.SetClickHdl( LINK( this, SvxTPFilter, TimeHdl) );
-    aIbClock2.SetClickHdl( LINK( this, SvxTPFilter,TimeHdl) );
-    aBtnRange.SetClickHdl( LINK( this, SvxTPFilter, RefHandle));
+    m_pDfDate->SetShowDateCentury( sal_True );
+    m_pDfDate2->SetShowDateCentury( sal_True );
+
+    m_pLbDate->SelectEntryPos(0);
+    m_pLbDate->SetSelectHdl( LINK( this, SvxTPFilter, SelDateHdl ) );
+    m_pIbClock->SetClickHdl( LINK( this, SvxTPFilter, TimeHdl) );
+    m_pIbClock2->SetClickHdl( LINK( this, SvxTPFilter,TimeHdl) );
+    m_pBtnRange->SetClickHdl( LINK( this, SvxTPFilter, RefHandle));
 
     Link aLink=LINK( this, SvxTPFilter, RowEnableHdl) ;
-    aCbDate.SetClickHdl(aLink);
-    aCbAuthor.SetClickHdl(aLink);
-    aCbRange.SetClickHdl(aLink);
-    aCbComment.SetClickHdl(aLink);
+    m_pCbDate->SetClickHdl(aLink);
+    m_pCbAuthor->SetClickHdl(aLink);
+    m_pCbRange->SetClickHdl(aLink);
+    m_pCbAction->SetClickHdl(aLink);
+    m_pCbComment->SetClickHdl(aLink);
 
     Link a2Link=LINK( this, SvxTPFilter, ModifyDate);
-    aDfDate.SetModifyHdl(a2Link);
-    aTfDate.SetModifyHdl(a2Link);
-    aDfDate2.SetModifyHdl(a2Link);
-    aTfDate2.SetModifyHdl(a2Link);
+    m_pDfDate->SetModifyHdl(a2Link);
+    m_pTfDate->SetModifyHdl(a2Link);
+    m_pDfDate2->SetModifyHdl(a2Link);
+    m_pTfDate2->SetModifyHdl(a2Link);
 
     Link a3Link=LINK( this, SvxTPFilter, ModifyHdl);
-    aEdRange.SetModifyHdl(a3Link);
-    aEdComment.SetModifyHdl(a3Link);
-    aLbAction.SetSelectHdl(a3Link);
-    aLbAuthor.SetSelectHdl(a3Link);
+    m_pEdRange->SetModifyHdl(a3Link);
+    m_pEdComment->SetModifyHdl(a3Link);
+    m_pLbAction->SetSelectHdl(a3Link);
+    m_pLbAuthor->SetSelectHdl(a3Link);
 
-    RowEnableHdl(&aCbDate);
-    RowEnableHdl(&aCbAuthor);
-    RowEnableHdl(&aCbRange);
-    RowEnableHdl(&aCbComment);
+    RowEnableHdl(m_pCbDate);
+    RowEnableHdl(m_pCbAuthor);
+    RowEnableHdl(m_pCbRange);
+    RowEnableHdl(m_pCbAction);
+    RowEnableHdl(m_pCbComment);
 
     Date aDate( Date::SYSTEM );
     Time aTime( Time::SYSTEM );
-    aDfDate.SetDate(aDate);
-    aTfDate.SetTime(aTime);
-    aDfDate2.SetDate(aDate);
-    aTfDate2.SetTime(aTime);
+    m_pDfDate->SetDate(aDate);
+    m_pTfDate->SetTime(aTime);
+    m_pDfDate2->SetDate(aDate);
+    m_pTfDate2->SetTime(aTime);
     HideRange();
     ShowAction();
     bModified=sal_False;
-
-    aLbDate.SetAccessibleRelationLabeledBy(&aCbDate);
-    aLbAuthor.SetAccessibleRelationLabeledBy(&aCbAuthor);
-    aLbAction.SetAccessibleRelationLabeledBy(&aCbRange);
-    aEdRange.SetAccessibleRelationLabeledBy(&aCbRange);
-    aBtnRange.SetAccessibleRelationLabeledBy(&aCbRange);
-    aEdComment.SetAccessibleRelationLabeledBy(&aCbComment);
-    aDfDate2.SetAccessibleRelationLabeledBy(&aDfDate2);
-    aTfDate2.SetAccessibleRelationLabeledBy(&aTfDate2);
 }
 
 void SvxTPFilter::SetRedlinTable(SvxRedlinTable* pTable)
 {
     pRedlinTable=pTable;
-}
-
-String SvxTPFilter::GetMyName() const
-{
-    return aStrMyName;
 }
 
 void SvxTPFilter::ShowDateFields(sal_uInt16 nKind)
@@ -781,14 +756,14 @@ void SvxTPFilter::ShowDateFields(sal_uInt16 nKind)
                 break;
         case FLT_DATE_EQUAL:
                 EnableDateLine1(sal_True);
-                aTfDate.Disable();
-                aTfDate.SetText(aEmpty);
+                m_pTfDate->Disable();
+                m_pTfDate->SetText(aEmpty);
                 EnableDateLine2(sal_False);
                 break;
         case FLT_DATE_NOTEQUAL:
                 EnableDateLine1(sal_True);
-                aTfDate.Disable();
-                aTfDate.SetText(aEmpty);
+                m_pTfDate->Disable();
+                m_pTfDate->SetText(aEmpty);
                 EnableDateLine2(sal_False);
                 break;
         case FLT_DATE_BETWEEN:
@@ -804,215 +779,215 @@ void SvxTPFilter::ShowDateFields(sal_uInt16 nKind)
 
 void SvxTPFilter::EnableDateLine1(sal_Bool bFlag)
 {
-    if(bFlag && aCbDate.IsChecked())
+    if(bFlag && m_pCbDate->IsChecked())
     {
-        aDfDate.Enable();
-        aTfDate.Enable();
-        aIbClock.Enable();
+        m_pDfDate->Enable();
+        m_pTfDate->Enable();
+        m_pIbClock->Enable();
     }
     else
     {
-        aDfDate.Disable();
-        aTfDate.Disable();
-        aIbClock.Disable();
+        m_pDfDate->Disable();
+        m_pTfDate->Disable();
+        m_pIbClock->Disable();
     }
 }
 void SvxTPFilter::EnableDateLine2(sal_Bool bFlag)
 {
     String aEmpty;
-    if(bFlag && aCbDate.IsChecked())
+    if(bFlag && m_pCbDate->IsChecked())
     {
-        aFtDate2.Enable();
-        aDfDate2.Enable();
-        aTfDate2.Enable();
-        aIbClock2.Enable();
+        m_pFtDate2->Enable();
+        m_pDfDate2->Enable();
+        m_pTfDate2->Enable();
+        m_pIbClock2->Enable();
     }
     else
     {
-        aFtDate2.Disable();
-        aDfDate2.Disable();
-        aDfDate2.SetText(aEmpty);
-        aTfDate2.Disable();
-        aTfDate2.SetText(aEmpty);
-        aIbClock2.Disable();
+        m_pFtDate2->Disable();
+        m_pDfDate2->Disable();
+        m_pDfDate2->SetText(aEmpty);
+        m_pTfDate2->Disable();
+        m_pTfDate2->SetText(aEmpty);
+        m_pIbClock2->Disable();
     }
 }
 
 Date SvxTPFilter::GetFirstDate() const
 {
-    return aDfDate.GetDate();
+    return m_pDfDate->GetDate();
 }
 
 void SvxTPFilter::SetFirstDate(const Date &aDate)
 {
-    aDfDate.SetDate(aDate);
+    m_pDfDate->SetDate(aDate);
 }
 
 Time SvxTPFilter::GetFirstTime() const
 {
-    return aTfDate.GetTime();
+    return m_pTfDate->GetTime();
 }
 
 void SvxTPFilter::SetFirstTime(const Time &aTime)
 {
-    aTfDate.SetTime(aTime);
+    m_pTfDate->SetTime(aTime);
 }
 
 
 Date SvxTPFilter::GetLastDate() const
 {
-    return aDfDate2.GetDate();
+    return m_pDfDate2->GetDate();
 }
 
 void SvxTPFilter::SetLastDate(const Date &aDate)
 {
-    aDfDate2.SetDate(aDate);
+    m_pDfDate2->SetDate(aDate);
 }
 
 Time SvxTPFilter::GetLastTime() const
 {
-    return aTfDate2.GetTime();
+    return m_pTfDate2->GetTime();
 }
 
 void SvxTPFilter::SetLastTime(const Time &aTime)
 {
-    aTfDate2.SetTime(aTime);
+    m_pTfDate2->SetTime(aTime);
 }
 
 void SvxTPFilter::SetDateMode(sal_uInt16 nMode)
 {
-    aLbDate.SelectEntryPos(nMode);
-    SelDateHdl(&aLbDate);
+    m_pLbDate->SelectEntryPos(nMode);
+    SelDateHdl(m_pLbDate);
 }
 
 sal_uInt16 SvxTPFilter::GetDateMode()
 {
-    return (sal_uInt16) aLbDate.GetSelectEntryPos();
+    return (sal_uInt16) m_pLbDate->GetSelectEntryPos();
 }
 void SvxTPFilter::ClearAuthors()
 {
-    aLbAuthor.Clear();
+    m_pLbAuthor->Clear();
 }
 
 void SvxTPFilter::InsertAuthor( const String& rString, sal_uInt16 nPos)
 {
-    aLbAuthor.InsertEntry(rString,nPos);
+    m_pLbAuthor->InsertEntry(rString,nPos);
 }
 
 String SvxTPFilter::GetSelectedAuthor() const
 {
-    return aLbAuthor.GetSelectEntry();
+    return m_pLbAuthor->GetSelectEntry();
 }
 
 void SvxTPFilter::SelectedAuthorPos(sal_uInt16 nPos)
 {
-    aLbAuthor.SelectEntryPos(nPos);
+    m_pLbAuthor->SelectEntryPos(nPos);
 }
 
 sal_uInt16 SvxTPFilter::SelectAuthor(const String& aString)
 {
-    aLbAuthor.SelectEntry(aString);
-    return aLbAuthor.GetSelectEntryPos();
+    m_pLbAuthor->SelectEntry(aString);
+    return m_pLbAuthor->GetSelectEntryPos();
 }
 
 void SvxTPFilter::SetRange(const String& rString)
 {
-    aEdRange.SetText(rString);
+    m_pEdRange->SetText(rString);
 }
 
 String SvxTPFilter::GetRange() const
 {
-    return aEdRange.GetText();
+    return m_pEdRange->GetText();
 }
 
 void SvxTPFilter::SetFocusToRange()
 {
-    aEdRange.GrabFocus();
+    m_pEdRange->GrabFocus();
 }
 
 void SvxTPFilter::HideRange(sal_Bool bHide)
 {
-    if(bHide)
+    if (bHide)
     {
-        aCbRange.Hide();
-        aEdRange.Hide();
-        aBtnRange.Hide();
+        m_pCbRange->Hide();
+        m_pEdRange->Hide();
+        m_pBtnRange->Hide();
     }
     else
     {
-        ShowAction(sal_False);
-        aCbRange.SetText(aRangeStr);
-        aCbRange.Show();
-        aEdRange.Show();
-        aBtnRange.Show();
+        ShowAction(false);
+        m_pCbRange->Show();
+        m_pEdRange->Show();
+        m_pBtnRange->Show();
     }
 }
 
 void SvxTPFilter::SetComment(const String &rComment)
 {
-    aEdComment.SetText(rComment);
+    m_pEdComment->SetText(rComment);
 }
 String SvxTPFilter::GetComment()const
 {
-    return aEdComment.GetText();
+    return m_pEdComment->GetText();
 }
 
 sal_Bool SvxTPFilter::IsDate()
 {
-    return aCbDate.IsChecked();
+    return m_pCbDate->IsChecked();
 }
 
 sal_Bool SvxTPFilter::IsAuthor()
 {
-    return aCbAuthor.IsChecked();
+    return m_pCbAuthor->IsChecked();
 }
 
 sal_Bool SvxTPFilter::IsRange()
 {
-    return aCbRange.IsChecked();
+    return m_pCbRange->IsChecked();
 }
+
 sal_Bool SvxTPFilter::IsAction()
 {
-    return aCbRange.IsChecked();
+    return m_pCbAction->IsChecked();
 }
 
 sal_Bool SvxTPFilter::IsComment()
 {
-    return aCbComment.IsChecked();
+    return m_pCbComment->IsChecked();
 }
 
 void SvxTPFilter::CheckDate(sal_Bool bFlag)
 {
-    aCbDate.Check(bFlag);
-    RowEnableHdl(&aCbDate);
+    m_pCbDate->Check(bFlag);
+    RowEnableHdl(m_pCbDate);
     bModified=sal_False;
 }
 
 void SvxTPFilter::CheckAuthor(sal_Bool bFlag)
 {
-    aCbAuthor.Check(bFlag);
-    RowEnableHdl(&aCbAuthor);
+    m_pCbAuthor->Check(bFlag);
+    RowEnableHdl(m_pCbAuthor);
     bModified=sal_False;
 }
 
 void SvxTPFilter::CheckRange(sal_Bool bFlag)
 {
-    aCbRange.Check(bFlag);
-    RowEnableHdl(&aCbRange);
+    m_pCbRange->Check(bFlag);
+    RowEnableHdl(m_pCbRange);
     bModified=sal_False;
 }
 
 void SvxTPFilter::CheckAction(sal_Bool bFlag)
 {
-    aCbRange.Check(bFlag);
-    RowEnableHdl(&aCbRange);
+    m_pCbAction->Check(bFlag);
+    RowEnableHdl(m_pCbAction);
     bModified=sal_False;
 }
 
 void SvxTPFilter::CheckComment(sal_Bool bFlag)
 {
-    aCbComment.Check(bFlag);
-    RowEnableHdl(&aCbComment);
+    m_pCbComment->Check(bFlag);
+    RowEnableHdl(m_pCbComment);
     bModified=sal_False;
 }
 
@@ -1020,59 +995,58 @@ void SvxTPFilter::ShowAction(sal_Bool bShow)
 {
     if(!bShow)
     {
-        aCbRange.Hide();
-        aLbAction.Hide();
-        aCbRange.SetHelpId(HID_REDLINING_FILTER_CB_RANGE);
+        m_pCbAction->Hide();
+        m_pLbAction->Hide();
     }
     else
     {
         HideRange();
-        aCbRange.SetText(aActionStr);
-        aCbRange.SetHelpId(HID_REDLINING_FILTER_CB_ACTION);
-        aCbRange.Show();
-        aLbAction.Show();
-
+        m_pCbAction->Show();
+        m_pLbAction->Show();
     }
 }
 
 ListBox* SvxTPFilter::GetLbAction()
 {
-    return &aLbAction;
+    return m_pLbAction;
 }
 
 IMPL_LINK( SvxTPFilter, SelDateHdl, ListBox*, pLb )
 {
-    ShowDateFields((sal_uInt16)aLbDate.GetSelectEntryPos());
+    ShowDateFields((sal_uInt16)m_pLbDate->GetSelectEntryPos());
     ModifyHdl(pLb);
     return 0;
 }
 
 IMPL_LINK( SvxTPFilter, RowEnableHdl, CheckBox*, pCB )
 {
-    if(pCB==&aCbDate)
+    if (pCB == m_pCbDate)
     {
-        aLbDate.Enable(aCbDate.IsChecked());
-        aLbDate.Invalidate();
+        m_pLbDate->Enable(m_pCbDate->IsChecked());
+        m_pLbDate->Invalidate();
         EnableDateLine1(sal_False);
         EnableDateLine2(sal_False);
-        if(aCbDate.IsChecked()) SelDateHdl(&aLbDate);
+        if(m_pCbDate->IsChecked()) SelDateHdl(m_pLbDate);
     }
-    else if(pCB==&aCbAuthor)
+    else if (pCB == m_pCbAuthor)
     {
-        aLbAuthor.Enable(aCbAuthor.IsChecked());
-        aLbAuthor.Invalidate();
+        m_pLbAuthor->Enable(m_pCbAuthor->IsChecked());
+        m_pLbAuthor->Invalidate();
     }
-    else if(pCB==&aCbRange)
+    else if (pCB == m_pCbRange)
     {
-        aLbAction.Enable(aCbRange.IsChecked());
-        aLbAction.Invalidate();
-        aEdRange.Enable(aCbRange.IsChecked());
-        aBtnRange.Enable(aCbRange.IsChecked());
+        m_pEdRange->Enable(m_pCbRange->IsChecked());
+        m_pBtnRange->Enable(m_pCbRange->IsChecked());
     }
-    else if(pCB==&aCbComment)
+    else if (pCB == m_pCbAction)
     {
-        aEdComment.Enable(aCbComment.IsChecked());
-        aEdComment.Invalidate();
+        m_pLbAction->Enable(m_pCbAction->IsChecked());
+        m_pLbAction->Invalidate();
+    }
+    else if (pCB == m_pCbComment)
+    {
+        m_pEdComment->Enable(m_pCbComment->IsChecked());
+        m_pEdComment->Invalidate();
     }
 
     ModifyHdl(pCB);
@@ -1083,17 +1057,17 @@ IMPL_LINK( SvxTPFilter, TimeHdl, ImageButton*,pIB )
 {
     Date aDate( Date::SYSTEM );
     Time aTime( Time::SYSTEM );
-    if(pIB==&aIbClock)
+    if (pIB == m_pIbClock)
     {
-        aDfDate.SetDate(aDate);
-        aTfDate.SetTime(aTime);
+        m_pDfDate->SetDate(aDate);
+        m_pTfDate->SetTime(aTime);
     }
-    else if(pIB==&aIbClock2)
+    else if (pIB == m_pIbClock2)
     {
-        aDfDate2.SetDate(aDate);
-        aTfDate2.SetTime(aTime);
+        m_pDfDate2->SetDate(aDate);
+        m_pTfDate2->SetTime(aTime);
     }
-    ModifyHdl(&aDfDate);
+    ModifyHdl(m_pDfDate);
     return 0;
 }
 
@@ -1101,24 +1075,24 @@ IMPL_LINK( SvxTPFilter, ModifyHdl, void*, pCtr)
 {
     if(pCtr!=NULL)
     {
-        if(pCtr==&aCbDate  || pCtr==&aLbDate ||
-           pCtr==&aDfDate  || pCtr==&aTfDate ||
-           pCtr==&aIbClock || pCtr==&aFtDate2||
-           pCtr==&aDfDate2 || pCtr==&aTfDate2||
-           pCtr==&aIbClock2)
+        if (pCtr == m_pCbDate || pCtr == m_pLbDate ||
+            pCtr == m_pDfDate || pCtr == m_pTfDate ||
+            pCtr == m_pIbClock || pCtr == m_pFtDate2 ||
+            pCtr == m_pDfDate2 || pCtr == m_pTfDate2 ||
+            pCtr == m_pIbClock2)
         {
             aModifyDateLink.Call(this);
         }
-        else if(pCtr==&aCbAuthor || pCtr==&aLbAuthor)
+        else if (pCtr == m_pCbAuthor || pCtr == m_pLbAuthor)
         {
             aModifyAuthorLink.Call(this);
         }
-        else if(pCtr==&aCbRange  || pCtr==&aEdRange ||
-                pCtr==&aBtnRange )
+        else if (pCtr == m_pCbRange || pCtr == m_pLbAction || pCtr == m_pEdRange ||
+                pCtr == m_pBtnRange)
         {
             aModifyRefLink.Call(this);
         }
-        else if(pCtr==&aCbComment || pCtr==&aEdComment)
+        else if (pCtr == m_pCbComment || pCtr == m_pEdComment)
         {
             aModifyComLink.Call(this);
         }
@@ -1137,16 +1111,16 @@ void SvxTPFilter::DeactivatePage()
         {
             pRedlinTable->SetFilterDate(IsDate());
             pRedlinTable->SetDateTimeMode(GetDateMode());
-            pRedlinTable->SetFirstDate(aDfDate.GetDate());
-            pRedlinTable->SetLastDate(aDfDate2.GetDate());
-            pRedlinTable->SetFirstTime(aTfDate.GetTime());
-            pRedlinTable->SetLastTime(aTfDate2.GetTime());
+            pRedlinTable->SetFirstDate(m_pDfDate->GetDate());
+            pRedlinTable->SetLastDate(m_pDfDate2->GetDate());
+            pRedlinTable->SetFirstTime(m_pTfDate->GetTime());
+            pRedlinTable->SetLastTime(m_pTfDate2->GetTime());
             pRedlinTable->SetFilterAuthor(IsAuthor());
             pRedlinTable->SetAuthor(GetSelectedAuthor());
 
             pRedlinTable->SetFilterComment(IsComment());
 
-            utl::SearchParam aSearchParam( aEdComment.GetText(),
+            utl::SearchParam aSearchParam( m_pEdComment->GetText(),
                     utl::SearchParam::SRCH_REGEXP,sal_False,sal_False,sal_False );
 
             pRedlinTable->SetCommentParams(&aSearchParam);
@@ -1163,12 +1137,12 @@ void SvxTPFilter::DeactivatePage()
 void SvxTPFilter::Enable( bool bEnable, bool bChild)
 {
     TabPage::Enable(bEnable,bChild);
-    if(aCbDate.IsEnabled())
+    if(m_pCbDate->IsEnabled())
     {
-        RowEnableHdl(&aCbDate);
-        RowEnableHdl(&aCbAuthor);
-        RowEnableHdl(&aCbRange);
-        RowEnableHdl(&aCbComment);
+        RowEnableHdl(m_pCbDate);
+        RowEnableHdl(m_pCbAuthor);
+        RowEnableHdl(m_pCbRange);
+        RowEnableHdl(m_pCbComment);
     }
 }
 void SvxTPFilter::Disable( bool bChild)
@@ -1181,40 +1155,40 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
 
     Date aDate( Date::SYSTEM );
     Time aTime(0);
-    if(&aDfDate==pTF)
+    if (m_pDfDate==pTF)
     {
-        if(aDfDate.GetText().isEmpty())
-           aDfDate.SetDate(aDate);
+        if(m_pDfDate->GetText().isEmpty())
+           m_pDfDate->SetDate(aDate);
 
         if(pRedlinTable!=NULL)
-            pRedlinTable->SetFirstDate(aDfDate.GetDate());
+            pRedlinTable->SetFirstDate(m_pDfDate->GetDate());
     }
-    else if(&aDfDate2==pTF)
+    else if (m_pDfDate2==pTF)
     {
-        if(aDfDate2.GetText().isEmpty())
-           aDfDate2.SetDate(aDate);
+        if(m_pDfDate2->GetText().isEmpty())
+           m_pDfDate2->SetDate(aDate);
 
         if(pRedlinTable!=NULL)
-            pRedlinTable->SetLastDate(aDfDate2.GetDate());
+            pRedlinTable->SetLastDate(m_pDfDate2->GetDate());
     }
-    else if(&aTfDate==pTF)
+    else if (m_pTfDate==pTF)
     {
-        if(aTfDate.GetText().isEmpty())
-           aTfDate.SetTime(aTime);
+        if(m_pTfDate->GetText().isEmpty())
+           m_pTfDate->SetTime(aTime);
 
         if(pRedlinTable!=NULL)
-            pRedlinTable->SetFirstTime(aTfDate.GetTime());
+            pRedlinTable->SetFirstTime(m_pTfDate->GetTime());
     }
-    else if(&aTfDate2==pTF)
+    else if (m_pTfDate2==pTF)
     {
-        if(aTfDate2.GetText().isEmpty())
-           aTfDate2.SetTime(aTime);
+        if(m_pTfDate2->GetText().isEmpty())
+           m_pTfDate2->SetTime(aTime);
 
         if(pRedlinTable!=NULL)
-            pRedlinTable->SetLastTime(aTfDate2.GetTime());
+            pRedlinTable->SetLastTime(m_pTfDate2->GetTime());
 
     }
-    ModifyHdl(&aDfDate);
+    ModifyHdl(m_pDfDate);
     return 0;
 }
 
@@ -1240,8 +1214,8 @@ SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, const ResId& rResId )
     pTPView=new SvxTPView(&aTCAccept);
     aMinSize=pTPView->GetMinSizePixel();
 
-    aTCAccept.InsertPage( TP_VIEW,   pTPView->GetMyName());
-    aTCAccept.InsertPage( TP_FILTER, pTPFilter->GetMyName());
+    aTCAccept.InsertPage( TP_VIEW,   SVX_RESSTR(RID_SVXSTR_VIEW));
+    aTCAccept.InsertPage( TP_FILTER, SVX_RESSTR(RID_SVXSTR_FILTER));
     aTCAccept.SetTabPage( TP_VIEW,   pTPView);
     aTCAccept.SetTabPage( TP_FILTER, pTPFilter);
     aTCAccept.SetHelpId(HID_REDLINING_TABCONTROL);

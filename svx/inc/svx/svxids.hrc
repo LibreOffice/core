@@ -620,7 +620,6 @@
 #define SID_FM_NEW                                      ( SID_SVX_START + 638 )
 #define SID_FM_DELETE                                   ( SID_SVX_START + 639 )
 #define SID_FM_NEW_FORM                                 ( SID_SVX_START + 640 )
-#define SID_REDLIN_FILTER_PAGE                          ( SID_SVX_START + 642 )
 #define SID_REDLIN_VIEW_PAGE                            ( SID_SVX_START + 643 )
 #define SID_3D_WIN                                      ( SID_SVX_START + 644 )
 #define SID_3D_STATE                                    ( SID_SVX_START + 645 )
