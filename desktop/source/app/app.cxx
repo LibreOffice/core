@@ -357,27 +357,27 @@ namespace {
 // is not available.
 
 OUString GetMsgString(
-    sal_uInt16 nId, const OUString& aFaultBackMsg,
-    bool bAlwaysUseFaultBackMsg = false )
+    sal_uInt16 nId, const OUString& aFallbackMsg,
+    bool bAlwaysUseFallbackMsg = false )
 {
-    if ( !bAlwaysUseFaultBackMsg )
+    if ( !bAlwaysUseFallbackMsg )
     {
         ResMgr* resMgr = Desktop::GetDesktopResManager();
         if ( resMgr )
             return OUString( String( ResId( nId, *resMgr )));
     }
-    return aFaultBackMsg;
+    return aFallbackMsg;
 }
 
 OUString MakeStartupErrorMessage(
-    OUString const & aErrorMessage, bool bAlwaysUseFaultBackMsg = false )
+    OUString const & aErrorMessage, bool bAlwaysUseFallbackMsg = false )
 {
     OUStringBuffer    aDiagnosticMessage( 100 );
 
     aDiagnosticMessage.append(
         GetMsgString(
             STR_BOOTSTRAP_ERR_CANNOT_START, "The program cannot be started.",
-            bAlwaysUseFaultBackMsg ) );
+            bAlwaysUseFallbackMsg ) );
 
     aDiagnosticMessage.appendAscii( "\n" );
 
