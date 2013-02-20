@@ -351,6 +351,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rC
     , pTableBck_Impl(NULL)
     , pParaBck_Impl(NULL)
 {
+    get(m_pAsGrid, "asgrid");
     get(m_pSelectTxt, "asft");
     get(m_pLbSelect, "selectlb");
     get(m_pTblDesc, "forft");
@@ -1104,6 +1105,7 @@ void SvxBackgroundTabPage::ShowSelector()
 {
     if( bAllowShowSelector)
     {
+        m_pAsGrid->Show();
         m_pSelectTxt->Show();
         m_pLbSelect->Show();
         m_pLbSelect->SetSelectHdl( HDL(SelectHdl_Impl) );
@@ -1622,6 +1624,7 @@ void SvxBackgroundTabPage::ShowTblControl()
     m_pTblLBox->SelectEntryPos(0);
     m_pTblDesc->Show();
     m_pTblLBox->Show();
+    m_pAsGrid->Show();
 }
 
 //-----------------------------------------------------------------------
@@ -1630,10 +1633,11 @@ void SvxBackgroundTabPage::ShowParaControl(sal_Bool bCharOnly)
 {
     m_pParaLBox->SetSelectHdl(HDL(ParaDestinationHdl_Impl));
     m_pParaLBox->SelectEntryPos(0);
-    if(!bCharOnly)
+    if (!bCharOnly)
     {
         m_pTblDesc->Show();
         m_pParaLBox->Show();
+        m_pAsGrid->Show();
     }
     m_pParaLBox->SetData(m_pParaLBox); // here it can be recognized that this mode is turned on
 }

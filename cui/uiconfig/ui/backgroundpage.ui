@@ -14,9 +14,9 @@
     <property name="border_width">6</property>
     <property name="row_spacing">6</property>
     <child>
-      <object class="GtkGrid" id="grid2">
-        <property name="visible">True</property>
+      <object class="GtkGrid" id="asgrid">
         <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
         <property name="column_spacing">12</property>
         <child>
           <object class="GtkLabel" id="asft">

@@ -74,6 +74,7 @@ private:
     SvxBackgroundTabPage( Window* pParent, const SfxItemSet& rCoreSet );
     ~SvxBackgroundTabPage();
 
+    VclContainer*           m_pAsGrid;
     FixedText*              m_pSelectTxt;
     ListBox*                m_pLbSelect;
     FixedText*              m_pTblDesc;
