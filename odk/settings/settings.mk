@@ -95,16 +95,15 @@ EMPTYSTRING=
 PATH_SEPARATOR=;
 
 # use this for release version
-CC_FLAGS_JNI=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
-CC_FLAGS=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
+ifeq "$(DEBUG)" "yes"
+OPT_FLAGS=-Zi
+endif
+CC_FLAGS_JNI=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa $(OPT_FLAGS)
+CC_FLAGS=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa $(OPT_FLAGS)
 ifeq "$(CPP_MANIFEST)" "true"
 LINK_MANIFEST=mt -manifest $@.manifest "-outputresource:$@;2"
 else
 LINK_MANIFEST=
-endif
-ifeq "$(DEBUG)" "yes"
-CC_FLAGS_JNI+=-Zi
-CC_FLAGS+=-Zi
 endif
 
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
@@ -213,14 +212,13 @@ STORELIB=-lstore
 EMPTYSTRING=
 PATH_SEPARATOR=:
 
-#CC_FLAGS_JNI=-c -KPIC
-#CC_FLAGS=-c -KPIC -xldscope=hidden
-CC_FLAGS_JNI=-c -fpic
-CC_FLAGS=-c -fpic -fvisibility=hidden
 ifeq "$(DEBUG)" "yes"
-CC_FLAGS_JNI+=-g
-CC_FLAGS+=-g
+OPT_FLAGS=-g
 endif
+#CC_FLAGS_JNI=-c -KPIC $(OPT_FLAGS)
+#CC_FLAGS=-c -KPIC -xldscope=hidden $(OPT_FLAGS)
+CC_FLAGS_JNI=-c -fpic $(OPT_FLAGS)
+CC_FLAGS=-c -fpic -fvisibility=hidden $(OPT_FLAGS)
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/solaris"
 
@@ -341,16 +339,14 @@ STORELIB=-lstore
 EMPTYSTRING=
 PATH_SEPARATOR=:
 
-CC_FLAGS_JNI=-c -fpic
-CC_FLAGS=-c -fpic -fvisibility=hidden
 # -O is necessary for inlining (see gcc documentation)
 ifeq "$(DEBUG)" "yes"
-CC_FLAGS_JNI+=-g
-CC_FLAGS+=-g
+OPT_FLAGS=-g
 else
-CC_FLAGS_JNI+=-O
-CC_FLAGS+=-O
+OPT_FLAGS=-O
 endif
+CC_FLAGS_JNI=-c -fpic $(OPT_FLAGS)
+CC_FLAGS=-c -fpic -fvisibility=hidden $(OPT_FLAGS)
 
 ifeq "$(PROCTYPE)" "ppc"
 CC_FLAGS+=-fPIC
@@ -466,16 +462,14 @@ INSTALL_NAME_URELIBS_BIN=$(XCRUN) install_name_tool -change @___________________
 EMPTYSTRING=
 PATH_SEPARATOR=:
 
-CC_FLAGS_JNI=-malign-natural -c -fPIC -fno-common $(GCC_ARCH_OPTION)
-CC_FLAGS=-malign-natural -c -fPIC -fno-common $(GCC_ARCH_OPTION) -fvisibility=hidden
 # -O is necessary for inlining (see gcc documentation)
 ifeq "$(DEBUG)" "yes"
-CC_FLAGS_JNI+=-g
-CC_FLAGS+=-g
+OPT_FLAGS=-g
 else
-CC_FLAGS_JNI+=-O
-CC_FLAGS+=-O
+OPT_FLAGS=-O
 endif
+CC_FLAGS_JNI=-malign-natural -c -fPIC -fno-common $(GCC_ARCH_OPTION) $(OPT_FLAGS)
+CC_FLAGS=-malign-natural -c -fPIC -fno-common $(GCC_ARCH_OPTION) -fvisibility=hidden $(OPT_FLAGS)
 
 SDK_JAVA_INCLUDES = -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers -I/System/Library/Frameworks/JavaVM.framework/Headers
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
@@ -580,16 +574,14 @@ STORELIB=-lstore
 EMPTYSTRING=
 PATH_SEPARATOR=:
 
-CC_FLAGS_JNI=-c -g -fPIC -DPIC $(PTHREAD_CFLAGS)
-CC_FLAGS=-c -g -fPIC -DPIC $(PTHREAD_CFLAGS) -fvisibility=hidden
 # -O is necessary for inlining (see gcc documentation)
 ifeq "$(DEBUG)" "yes"
-CC_FLAGS_JNI+=-g
-CC_FLAGS+=-g
+OPT_FLAGS=-g
 else
-CC_FLAGS_JNI+=-O
-CC_FLAGS+=-O
+OPT_FLAGS=-O
 endif
+CC_FLAGS_JNI=-c -g -fPIC -DPIC $(PTHREAD_CFLAGS) $(OPT_FLAGS)
+CC_FLAGS=-c -g -fPIC -DPIC $(PTHREAD_CFLAGS) -fvisibility=hidden $(OPT_FLAGS)
 
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/freebsd"
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
