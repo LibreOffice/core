@@ -175,9 +175,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
         {
             (void)r;
 #if OSL_DEBUG_LEVEL > 0
-            rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM("Runtime exception caught while notifying shape.:\n"));
-            aError.append(rtl::OUStringToOString(r.Message, RTL_TEXTENCODING_ASCII_US));
-            OSL_FAIL( aError.getStr() );
+              OSL_FAIL( "Runtime exception caught while notifying shape.:\n" + OUStringToOString(r.Message, RTL_TEXTENCODING_ASCII_US) );
 #endif
         }
     }

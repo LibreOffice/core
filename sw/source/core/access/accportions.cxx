@@ -141,40 +141,34 @@ void SwAccessiblePortionData::Special(
 
     // construct string with representation; either directly from
     // rText, or use resources for special case portions
-    String sDisplay;
+    OUString sDisplay;
     switch( nType )
     {
         case POR_POSTITS:
         case POR_FLYCNT:
         case POR_GRFNUM:
-            sDisplay = rtl::OUString(sal_Unicode(0xfffc));
+            sDisplay = OUString(sal_Unicode(0xfffc));
 
             break;
         case POR_NUMBER:
         {
-            OUStringBuffer aTmpBuffer( rText.Len() + 1 );
-            aTmpBuffer.append( rText );
-            aTmpBuffer.append( sal_Unicode(' ') );
-            sDisplay = aTmpBuffer.makeStringAndClear();
+            sDisplay = OUString( rText ) + " ";
             break;
         }
         // #i111768# - apply patch from kstribley:
         // Include the control characters.
         case POR_CONTROLCHAR:
         {
-            OUStringBuffer aTmpBuffer( rText.Len() + 1 );
-            aTmpBuffer.append( rText );
-            aTmpBuffer.append( pTxtNode->GetTxt()[nModelPosition] );
-            sDisplay = aTmpBuffer.makeStringAndClear();
+            sDisplay = OUString( rText ) + OUString( pTxtNode->GetTxt()[nModelPosition] );
             break;
         }
         default:
-            sDisplay = rText;
+            sDisplay = OUString( rText );
             break;
     }
 
     // ignore zero/zero portions (except for terminators)
-    if( (nLength == 0) && (sDisplay.Len() == 0) && (nType != POR_TERMINATE) )
+    if( (nLength == 0) && (sDisplay.getLength() == 0) && (nType != POR_TERMINATE) )
         return;
 
     // special treatment for zero length portion at the beginning:
@@ -194,7 +188,7 @@ void SwAccessiblePortionData::Special(
     aPortionAttrs.push_back( nAttr );
 
     // update buffer + nModelPosition
-    aBuffer.append( OUString(sDisplay) );
+    aBuffer.append( sDisplay );
     nModelPosition += nLength;
 
     // remember 'last' special portion (unless it's our own 'closing'
