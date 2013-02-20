@@ -526,13 +526,13 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 if( bLeftToRight )
                 {
                     aNewAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
-                    if( nAdjust == SVX_ADJUST_RIGHT )
+                    if( nAdjust != SVX_ADJUST_LEFT )
                         aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
                 }
                 else
                 {
                     aNewAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
-                    if( nAdjust == SVX_ADJUST_LEFT )
+                    if( nAdjust != SVX_ADJUST_RIGHT )
                         aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
                 }
 
