@@ -129,7 +129,6 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         }
         break;
 
-        case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
         {
             SwFlyFrmAttrMgr aMgr( sal_False, &rSh, rSh.IsFrmSelected() ?
@@ -536,7 +535,6 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         bool bDisable = bParentCntProt;
         switch( nWhich )
         {
-        case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
         case SID_TWAIN_TRANSFER:
             if( bParentCntProt || !bIsGrfCntnt )

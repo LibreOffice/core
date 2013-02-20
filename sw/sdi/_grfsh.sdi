@@ -55,13 +55,6 @@ interface BaseTextGraphic
         StateMethod = GetAttrState ;
     ]
 
-    SID_INSERT_GRAPHIC // zeigt auf FN_FORMAT_GRAFIC_DLG
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetAttrState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
     SID_TWAIN_TRANSFER
     [
         ExecMethod = Execute ;
