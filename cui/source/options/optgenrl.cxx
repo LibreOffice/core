@@ -214,7 +214,6 @@ SvxGeneralTabPage::SvxGeneralTabPage(Window* pParent, const SfxItemSet& rCoreSet
     InitControls();
     SetExchangeSupport(); // this page needs ExchangeSupport
     SetLinks();
-    SetAccessibleNames();
 }
 
 //------------------------------------------------------------------------
@@ -290,40 +289,6 @@ void SvxGeneralTabPage::SetLinks ()
     Row& rNameRow = *vRows[nNameRow];
     for (unsigned i = rNameRow.nFirstField; i != rNameRow.nLastField - 1; ++i)
         vFields[i]->pEdit->SetModifyHdl(aLink);
-}
-
-//------------------------------------------------------------------------
-
-void SvxGeneralTabPage::SetAccessibleNames ()
-{
-    // Because some labels have text for more than one edit field we have to
-    // split these texts and set these texts as accessible name
-    // of the corresponding edit fields.
-    // E.g. "City/State/Zip" -> "City", "State", "Zip" or
-    // "Tel. (Home/Work)" -> "Tel. (Home)", "Tel. (Work)"
-    for (unsigned i = 0; i != vRows.size(); ++i)
-    {
-        Row& rRow = *vRows[i];
-        rtl::OUString const sLabel = rRow.pLabel->GetDisplayText();
-        rtl::OUString sList = sLabel; // between brackets or the whole label
-        // brackets?
-        int iBracket = sLabel.indexOf('(');
-        if (iBracket != -1)
-            sList = sList.copy(iBracket + 1, sLabel.lastIndexOf(')') - iBracket - 1);
-        // cutting at '/'s
-        sal_Int32 nIndex = 0;
-        for (unsigned iField = rRow.nFirstField; iField != rRow.nLastField; ++iField)
-        {
-            // the token
-            rtl::OUString sPart = sList.getToken(0, static_cast<sal_Unicode>('/'), nIndex).trim();
-            Edit *pEdit = vFields[iField]->pEdit;
-            // creating the accessible name
-            if (iBracket != -1)
-                pEdit->SetAccessibleName(sLabel.copy(0, iBracket) + "(" + sPart + ")");
-            else
-                pEdit->SetAccessibleName(sPart);
-        }
-    }
 }
 
 //------------------------------------------------------------------------

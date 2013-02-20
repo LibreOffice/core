@@ -122,6 +122,11 @@
                 <property name="label" translatable="yes">Tel. (Home/_Work)</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">home</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="phoneft-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes">Home telephone number</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -170,6 +175,11 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="firstname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">First name</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -184,6 +194,11 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="lastname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Last name</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -198,6 +213,11 @@
                     <property name="no_show_all">True</property>
                     <property name="invisible_char">•</property>
                     <property name="width_chars">7</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="shortname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Initials</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -225,6 +245,11 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="city-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">City</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -239,6 +264,11 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="state-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">State</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -253,6 +283,11 @@
                     <property name="no_show_all">True</property>
                     <property name="invisible_char">•</property>
                     <property name="width_chars">15</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="zip-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Zip code</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -281,6 +316,11 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="title-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Title</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -295,6 +335,11 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="position-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Position</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -322,6 +367,11 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="home-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Home telephone number</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -336,6 +386,11 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="work-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Work telephone number</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -364,6 +419,11 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fax-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">FAX number</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -378,6 +438,11 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="email-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">email address</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -451,6 +516,11 @@
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ruslastname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Last name</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -466,6 +536,11 @@
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rusfathersname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Father's name</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -481,6 +556,11 @@
                     <property name="invisible_char">•</property>
                     <property name="width_chars">7</property>
                     <property name="invisible_char_set">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="russhortname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Initials</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -496,6 +576,11 @@
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rusfirstname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">First name</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -540,6 +625,11 @@
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eastlastname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Last name</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -555,6 +645,11 @@
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eastfirstname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">First name</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -570,6 +665,11 @@
                     <property name="invisible_char">•</property>
                     <property name="width_chars">7</property>
                     <property name="invisible_char_set">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eastshortname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Initials</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -614,6 +714,11 @@
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="russtreet-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Street</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -629,6 +734,11 @@
                     <property name="invisible_char">•</property>
                     <property name="width_chars">15</property>
                     <property name="invisible_char_set">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="apartnum-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Apartment number</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -673,6 +783,11 @@
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="icity-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">City</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -688,6 +803,11 @@
                     <property name="invisible_char">•</property>
                     <property name="width_chars">15</property>
                     <property name="invisible_char_set">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="izip-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Zip code</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

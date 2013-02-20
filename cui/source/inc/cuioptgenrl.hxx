@@ -59,7 +59,6 @@ private:
 
     void InitControls ();
     void SetLinks ();
-    void SetAccessibleNames ();
 
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet );
