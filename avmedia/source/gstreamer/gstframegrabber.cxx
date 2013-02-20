@@ -158,7 +158,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 #ifdef AVMEDIA_GST_0_10
         GST_BUFFER_SIZE( pBuf ) >= static_cast<unsigned>( nWidth * nHeight * 3 )
 #else
-        gst_buffer_get_size( pBuf ) >= ( nWidth * nHeight * 3 )
+        gst_buffer_get_size( pBuf ) >= static_cast<unsigned>( nWidth * nHeight * 3 )
 #endif
         )
     {
