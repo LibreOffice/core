@@ -212,7 +212,8 @@ Window* MediaWindow::getWindow() const
 
 void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 {
-    static const char* pFilters[] = { "AIF Audio", "aif;aiff",
+    static const char* pFilters[] = { "Advanced Audio Coding", "aac",
+                                      "AIF Audio", "aif;aiff",
                                       "AU Audio", "au",
                                       "AVI", "avi",
                                       "CD Audio", "cda",
@@ -225,7 +226,9 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
                                       "Quicktime Video", "mov",
                                       "Vivo Video", "viv",
                                       "WAVE Audio", "wav",
-                                      "WebM Video", "webm" };
+                                      "WebM Video", "webm",
+                                      "Windows Media Audio", "wma",
+                                      "Windows Media Video", "wmv"};
 
     for( size_t i = 0; i < SAL_N_ELEMENTS(pFilters); i += 2 )
     {
