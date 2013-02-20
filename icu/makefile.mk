@@ -83,7 +83,8 @@ EXTRA_CDEFS+=-DU_HAVE_GCC_ATOMICS=0
 # If you do that, upload a new subset data zip file with just the MD5 part of the name changed
 # appropriately. Let's not bother trying to list what stuff has been removed in the file name.
 # Describe it in the comment above instead.
-CONFIGURE_ACTION=unzip $(TARFILE_LOCATION)/$(ICU_DATA_SUBSET_ZIP) && mv icudt49l.dat data/in && 
+#CONFIGURE_ACTION=unzip $(TARFILE_LOCATION)/$(ICU_DATA_SUBSET_ZIP) && mv icudt49l.dat data/in && 
+CONFIGURE_ACTION=
 
 .IF "$(GUI)"=="UNX"
 
