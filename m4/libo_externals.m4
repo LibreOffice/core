@@ -1,4 +1,4 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -29,4 +29,5 @@ else
 fi
     libo_PUBLISH_MODULE([$2])
 ])
-# vim: set noet sw=4 ts=4:
+
+dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
