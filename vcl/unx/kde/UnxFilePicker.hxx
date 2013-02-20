@@ -20,11 +20,12 @@
 #ifndef _UNXFILEPICKER_HXX_
 #define _UNXFILEPICKER_HXX_
 
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
@@ -46,11 +47,12 @@ protected:
 
 class UnxFilePicker :
     public UnxFilePickerDummy,
-    public cppu::WeakComponentImplHelper4<
+    public cppu::WeakComponentImplHelper5<
         ::com::sun::star::ui::dialogs::XFilePicker2,
         ::com::sun::star::ui::dialogs::XFilePicker3,
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
 // TODO ::com::sun::star::ui::dialogs::XFilePreview,
+        ::com::sun::star::lang::XInitialization,
         ::com::sun::star::lang::XServiceInfo >
 {
 protected:

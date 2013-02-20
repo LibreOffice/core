@@ -19,9 +19,10 @@
 
 #pragma once
 
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase5.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -42,11 +43,12 @@ class QLayout;
 class ResMgr;
 
 class KDE4FilePicker :
-    public cppu::WeakComponentImplHelper4<
+    public cppu::WeakComponentImplHelper5<
         ::com::sun::star::ui::dialogs::XFilePicker2,
         ::com::sun::star::ui::dialogs::XFilePicker3,
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
 // TODO ::com::sun::star::ui::dialogs::XFilePreview,
+        ::com::sun::star::lang::XInitialization,
         ::com::sun::star::lang::XServiceInfo >
 {
 protected:

@@ -31,7 +31,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase6.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ustring.hxx>
 
@@ -43,11 +43,12 @@ namespace vista{
 // types
 //-----------------------------------------------------------------------------
 
-typedef ::cppu::WeakComponentImplHelper5<
+typedef ::cppu::WeakComponentImplHelper6<
                 css::ui::dialogs::XFilePicker2,
                 css::ui::dialogs::XFilePicker3,
                 css::ui::dialogs::XFilePickerControlAccess,
                 css::ui::dialogs::XFilePreview,
+                css::lang::XInitialization,
                 css::lang::XServiceInfo >   TVistaFilePickerBase;
 
 //-----------------------------------------------------------------------------
