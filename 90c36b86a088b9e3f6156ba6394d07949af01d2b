@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///kI\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-02-20T20:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVn///oc\u003d",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn///oY\u003d",
         "filename": "vcl/source/control/field2.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-19T01:05:24Z",
       "side": 1,
       "message": "actually you do not need a OUStringBuffer for aText here since\nif(i)\n{\n    aText \u003d aText.copy(i);\n}\n\nwhich means you to not need the .toString() twice later on it",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///kE\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-02-20T20:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVn///oY\u003d",
       "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///j0\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-02-20T20:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVn///oU\u003d",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn///oQ\u003d",
         "filename": "vcl/source/control/field2.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2013-02-19T01:05:24Z",
       "side": 1,
       "message": "we are essentially substituting just 1 character right ? so why not simply\naStr[nNewPos] \u003d rLiteralMask[NewPos]",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///jw\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-02-20T20:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVn///oQ\u003d",
       "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -104,6 +176,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///jk\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-02-20T20:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVn///oE\u003d",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn///oI\u003d",
         "filename": "vcl/source/control/field2.cxx",
         "patchSetId": 1
@@ -115,6 +205,24 @@
       "writtenOn": "2013-02-19T01:05:24Z",
       "side": 1,
       "message": "rStr reference is not updated (whereas it was before)",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///jg\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-02-20T20:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVn///oI\u003d",
       "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -138,6 +246,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///hY\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-02-20T20:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVn///oA\u003d",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn///n8\u003d",
         "filename": "vcl/source/control/field2.cxx",
         "patchSetId": 1
@@ -149,6 +275,24 @@
       "writtenOn": "2013-02-19T01:05:24Z",
       "side": 1,
       "message": "no xub_StrLen anymore",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///hU\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-02-20T20:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVn///n8\u003d",
       "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -172,6 +316,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///hQ\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-02-20T20:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVn///n4\u003d",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn///n0\u003d",
         "filename": "vcl/source/control/field2.cxx",
         "patchSetId": 1
@@ -183,6 +345,24 @@
       "writtenOn": "2013-02-19T01:05:24Z",
       "side": 1,
       "message": "be careful with String Search would return +MAX in case of not found. so not found \u003d\u003e \u003e\u003d aSelection.Max()\nwhereas indexOf() return \u003c 0 for not found",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///hM\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1435,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-02-20T20:29:54Z",
+      "side": 1,
+      "message": "but nPos \u003c 0 has to be a third branch in the if statement?!?\n\nThe if clause tests whether the separator is found beyond the end of the selection, right? Or does that test mean \"date separator not found\"? Then 2 branches would be enough and the condition changed to nPos \u003c 0.",
+      "parentUuid": "AAAAVn///n0\u003d",
       "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
