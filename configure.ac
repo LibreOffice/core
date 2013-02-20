@@ -7297,13 +7297,11 @@ if test "$with_system_lcms2" = "yes"; then
     libo_MINGW_CHECK_DLL([LCMS2], [liblcms2])
 else
     SYSTEM_LCMS2=NO
-    LCMS2_LIBS="-L${OUTDIR}/lib -llcms2"
-    LCMS2_CFLAGS="-I${WORKDIR}/UnpackedTarball/lcms2/include"
-    if test "$GCC" = "yes"; then
-        LCMS2_CFLAGS="${LCMS2_CFLAGS} -Wno-long-long"
-    fi
 fi
-libo_CHECK_SYSTEM_MODULE([lcms2],[LCMS2],[lcms2])
+libo_CHECK_SYSTEM_MODULE([lcms2],[LCMS2],[lcms2],["-I${WORKDIR}/UnpackedTarball/lcms2/include"],["-L${OUTDIR}/lib -llcms2"])
+if test "$GCC" = "yes"; then
+    LCMS2_CFLAGS="${LCMS2_CFLAGS} -Wno-long-long"
+fi
 AC_SUBST([MINGW_LCMS2_DLL])
 
 dnl ===================================================================
