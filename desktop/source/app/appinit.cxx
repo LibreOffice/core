@@ -123,14 +123,11 @@ void Desktop::RegisterServices(Reference< XComponentContext > const & context)
     {
         RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::registerServices" );
 
-        // read command line parameters
-        sal_Bool        bHeadlessMode = sal_False;
-
         // interpret command line arguments
         CommandLineArgs& rCmdLine = GetCommandLineArgs();
 
         // Headless mode for FAT Office
-        bHeadlessMode   = rCmdLine.IsHeadless();
+        sal_Bool bHeadlessMode = rCmdLine.IsHeadless();
         if ( bHeadlessMode )
             Application::EnableHeadlessMode(false);
 

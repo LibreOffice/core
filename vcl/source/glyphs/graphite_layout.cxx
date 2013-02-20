@@ -526,11 +526,10 @@ void GraphiteLayout::clear()
 // This method shouldn't be called on windows, since it needs the dc reset
 bool GraphiteLayout::LayoutText(ImplLayoutArgs & rArgs)
 {
-    gr_segment * pSegment = NULL;
     bool success = true;
     if (rArgs.mnMinCharPos < rArgs.mnEndCharPos)
     {
-        pSegment = CreateSegment(rArgs);
+        gr_segment * pSegment = CreateSegment(rArgs);
         if (!pSegment)
             return false;
         success = LayoutGlyphs(rArgs, pSegment);

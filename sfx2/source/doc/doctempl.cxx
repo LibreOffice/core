@@ -1048,7 +1048,6 @@ sal_Bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegio
         return sal_False;
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
-    DocTempl_EntryData_Impl *pEntry = NULL;
 
     if ( !pRegion )
         return sal_False;
@@ -1072,7 +1071,7 @@ sal_Bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegio
     }
     else
     {
-        pEntry = pRegion->GetEntry( nIdx );
+        DocTempl_EntryData_Impl *pEntry = pRegion->GetEntry( nIdx );
 
         if ( !pEntry )
             return sal_False;

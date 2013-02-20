@@ -40,7 +40,7 @@ namespace dp_gui {
 struct UpdateData
 {
     UpdateData( ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > const & aExt):
-        bIsShared(false), aInstalledPackage(aExt){};
+        bIsShared(false), aInstalledPackage(aExt), aUpdateSource(NULL), m_nID(0), m_bIgnored(false){};
 
     //When entries added to the listbox then there can be one for the user update and one
     //for the shared update. However, both list entries will contain the same UpdateData.

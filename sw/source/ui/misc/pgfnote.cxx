@@ -221,14 +221,13 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
 
     // Separator Color
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
-    const SfxPoolItem*  pColorItem  = NULL;
     XColorListRef pColorList;
 
     OSL_ENSURE( pDocSh, "DocShell not found!" );
 
     if ( pDocSh )
     {
-        pColorItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        const SfxPoolItem* pColorItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pColorItem != NULL )
             pColorList = ( (SvxColorListItem*)pColorItem )->GetColorList();
     }
