@@ -26,7 +26,7 @@ endif
 # HACK: comes from Library_mysql.mk
 ifeq ($(SYSTEM_MYSQL),NO)
 $(eval $(call gb_Extension_add_files,mysql-connector-ooo,,\
-	$(LIBMYSQL_PATH)/lib/$(MYSQL_LIBFILE) \
+	$(LIBMYSQL_PATH)/lib/$(LIBMYSQL) \
 ))
 endif
 
