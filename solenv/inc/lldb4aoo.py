@@ -45,7 +45,7 @@ def getinfo_for_rtl_uString( valobj, dict):
 	s = (u''.join([unichr(x) for x in a.uint16s])).encode('utf-8')
 	return '{refs=%d, len=%d, str="%s"}'%(r,l,s)
 
-def getinfo_for_rtl__ByteStringData( valobj, dict):
+def getinfo_for__ByteStringData( valobj, dict):
 	while valobj.TypeIsPointerType():
 		valobj = valobj.Dereference()
 	r = valobj.GetChildMemberWithName('mnRefCount').GetValueAsSigned()
@@ -54,7 +54,7 @@ def getinfo_for_rtl__ByteStringData( valobj, dict):
 	s = ''.join([chr(x) for x in a.uint8s])                                
 	return '{refs=%d, len=%d, str="%s"}'%(r,l,s)
 
-def getinfo_for_rtl__UniStringData( valobj, dict):
+def getinfo_for__UniStringData( valobj, dict):
 	while valobj.TypeIsPointerType():
 		valobj = valobj.Dereference()
 	r = valobj.GetChildMemberWithName('mnRefCount').GetValueAsSigned()
@@ -72,11 +72,11 @@ def getinfo_for_rtl_OUString( valobj, dict):
 	d = valobj.GetChildMemberWithName('pData')
 	return d.Dereference()
 
-def getinfo_for_rtl_ByteString( valobj, dict):
+def getinfo_for_ByteString( valobj, dict):
 	d = valobj.GetChildMemberWithName('mpData')
 	return d.Dereference()
 
-def getinfo_for_rtl_UniString( valobj, dict):
+def getinfo_for_UniString( valobj, dict):
 	d = valobj.GetChildMemberWithName('mpData')
 	return d.Dereference()
 
