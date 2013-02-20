@@ -1576,23 +1576,40 @@ void DomainMapper_Impl::PopAnnotation()
 
     m_aTextAppendStack.pop();
 
-    // See if the annotation will be a single position or a range.
-    if (!m_aAnnotationPosition.m_xStart.is() || !m_aAnnotationPosition.m_xEnd.is())
+    try
     {
-        uno::Sequence< beans::PropertyValue > aEmptyProperties;
-        appendTextContent( uno::Reference< text::XTextContent >( m_xAnnotationField, uno::UNO_QUERY_THROW ), aEmptyProperties );
-    }
-    else
-    {
-        // Create a range that points to the annotation start/end.
-        uno::Reference<text::XText> xText = m_aAnnotationPosition.m_xStart->getText();
-        uno::Reference<text::XTextCursor> xCursor = xText->createTextCursorByRange(m_aAnnotationPosition.m_xStart);
-        xCursor->gotoRange(m_aAnnotationPosition.m_xEnd, true);
-        uno::Reference<text::XTextRange> xTextRange(xCursor, uno::UNO_QUERY_THROW);
+        // See if the annotation will be a single position or a range.
+        if (!m_aAnnotationPosition.m_xStart.is() ||
+            !m_aAnnotationPosition.m_xEnd.is())
+        {
+            uno::Sequence< beans::PropertyValue > aEmptyProperties;
+            appendTextContent(uno::Reference<text::XTextContent>(
+                m_xAnnotationField, uno::UNO_QUERY_THROW), aEmptyProperties);
+        }
+        else
+        {
+            // Create a range that points to the annotation start/end.
+            uno::Reference<text::XText> const xText =
+                m_aAnnotationPosition.m_xStart->getText();
+            uno::Reference<text::XTextCursor> const xCursor =
+                xText->createTextCursorByRange(m_aAnnotationPosition.m_xStart);
+            xCursor->gotoRange(m_aAnnotationPosition.m_xEnd, true);
+            uno::Reference<text::XTextRange> const xTextRange(
+                    xCursor, uno::UNO_QUERY_THROW);
 
-        // Attach the annotation to the range.
-        uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
-        xTextAppend->insertTextContent(xTextRange, uno::Reference<text::XTextContent>(m_xAnnotationField, uno::UNO_QUERY_THROW), !xCursor->isCollapsed());
+            // Attach the annotation to the range.
+            uno::Reference<text::XTextAppend> const xTextAppend =
+                m_aTextAppendStack.top().xTextAppend;
+            xTextAppend->insertTextContent(xTextRange,
+                    uno::Reference<text::XTextContent>(m_xAnnotationField,
+                        uno::UNO_QUERY_THROW),
+                    !xCursor->isCollapsed());
+        }
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("writerfilter",
+                "Cannot insert annotation field: exception: " << e.Message);
     }
 
     m_aAnnotationPosition.m_xStart.clear();
