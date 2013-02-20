@@ -692,12 +692,7 @@ SwAccessibleTable::SwAccessibleTable(
     const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
     const String& rName = pFrmFmt->GetName();
 
-    OUStringBuffer aBuffer( rName.Len() + 4 );
-    aBuffer.append( OUString(rName) );
-    aBuffer.append( static_cast<sal_Unicode>( '-' ) );
-    aBuffer.append( static_cast<sal_Int32>( pTabFrm->GetPhyPageNum() ) );
-
-    SetName( aBuffer.makeStringAndClear() );
+    SetName( OUString( rName ) + "-" + OUString::number( pTabFrm->GetPhyPageNum() ) );
 
     OUString sArg1( static_cast< const SwTabFrm * >( GetFrm() )
                                         ->GetFmt()->GetName() );
@@ -728,12 +723,9 @@ void SwAccessibleTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew
             OUString sOldName( GetName() );
 
             const String& rNewTabName = pFrmFmt->GetName();
-            OUStringBuffer aBuffer( rNewTabName.Len() + 4 );
-            aBuffer.append( OUString(rNewTabName) );
-            aBuffer.append( static_cast<sal_Unicode>( '-' ) );
-            aBuffer.append( static_cast<sal_Int32>( pTabFrm->GetPhyPageNum() ) );
 
-            SetName( aBuffer.makeStringAndClear() );
+            SetName( OUString(rNewTabName) + "-" + OUString::number( pTabFrm->GetPhyPageNum() ) );
+
             if( sOldName != GetName() )
             {
                 AccessibleEventObject aEvent;
@@ -1611,17 +1603,9 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap2
     const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
     const String& rName = pFrmFmt->GetName();
 
-    OUStringBuffer aBuffer( rName.Len() + 15 + 6 );
-    aBuffer.append( OUString(rName) );
-    aBuffer.append( rtl::OUString("-ColumnHeaders-") );
-    aBuffer.append( static_cast<sal_Int32>( pTabFrm->GetPhyPageNum() ) );
+    SetName( OUString(rName) + "-ColumnHeaders-" +  OUString::number( pTabFrm->GetPhyPageNum() ) );
 
-    SetName( aBuffer.makeStringAndClear() );
-
-    OUStringBuffer aBuffer2( rName.Len() + 14 );
-    aBuffer2.append( OUString(rName) );
-    aBuffer2.append( rtl::OUString("-ColumnHeaders") );
-    OUString sArg1( aBuffer2.makeStringAndClear() );
+    OUString sArg1( OUString(rName) + "-ColumnHeaders" );
     OUString sArg2( GetFormattedPageNumber() );
 
     OUString sDesc2 = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
