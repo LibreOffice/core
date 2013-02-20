@@ -1,5 +1,5 @@
-# to activate run the command below when inside lldb
-#   command script import /tools/lldb4aoo.py
+# to activate LLDB helper script run the command below when inside LLDB
+#	command script import /tools/lldb4aoo.py
 # or add the line to ~/.lldbinit to always activate it
 
 def __lldb_init_module( dbg, dict):
@@ -26,60 +26,53 @@ def __lldb_init_module( dbg, dict):
 
 # definitions for individual LLDB type summary helpers 
 
-def ret_strinfo( refs, length, ary0):
-	a = ary0.AddressOf().GetPointeeData( 0, length)
-	if ary0.GetByteSize() == 1:
-		s = ''.join([chr(x) for x in a.uint8s])
+def ret_strdata_info( v, refvar, lenvar, aryvar):
+	while v.TypeIsPointerType():
+		if v.GetValueAsUnsigned() == 0:
+			return 'NULL-Pointer!'
+		v = v.Dereference()
+	r = v.GetChildMemberWithName( refvar).GetValueAsSigned()
+	l = v.GetChildMemberWithName( lenvar).GetValueAsSigned()
+	c = v.GetChildMemberWithName( aryvar)
+	d = c.AddressOf().GetPointeeData( 0, l)
+	if c.GetByteSize() == 1: # assume UTF-8
+		s = ''.join([chr(x) for x in d.uint8s])
 	else: # assume UTF-16
-		s = (u''.join([unichr(x) for x in a.uint16s])).encode('utf-8')
-	return ('{refs=%d, len=%d, str="%s"}' % (refs, length, s.encode('string_escape')))
+		s = (u''.join([unichr(x) for x in d.uint16s])).encode('utf-8')
+	info = ('{refs=%d, len=%d, str="%s"}' % (r, l, s.encode('string_escape')))
+	return info
+
+def ret_strobject_info( v, ptrvar):
+	while v.TypeIsPointerType():
+		if v.GetValueAsUnsigned() == 0:
+			return 'NULL-Pointer!'
+		v = v.Dereference()
+	p = v.GetChildMemberWithName( ptrvar)
+	return p.Dereference()
+
 
 def getinfo_for_rtl_String( valobj, dict):
-	while valobj.TypeIsPointerType():
-		valobj = valobj.Dereference()
-	r = valobj.GetChildMemberWithName('refCount').GetValueAsSigned()
-	l = valobj.GetChildMemberWithName('length').GetValueAsSigned()
-	a = valobj.GetChildMemberWithName('buffer')
-	return ret_strinfo(r,l,a)
+	return ret_strdata_info( valobj, 'refCount', 'length', 'buffer') 
 
 def getinfo_for_rtl_uString( valobj, dict):
-	while valobj.TypeIsPointerType():
-		valobj = valobj.Dereference()
-	r = valobj.GetChildMemberWithName('refCount').GetValueAsSigned()
-	l = valobj.GetChildMemberWithName('length').GetValueAsSigned()
-	a = valobj.GetChildMemberWithName('buffer')
-	return ret_strinfo(r,l,a)
+	return ret_strdata_info( valobj, 'refCount', 'length', 'buffer') 
 
 def getinfo_for__ByteStringData( valobj, dict):
-	while valobj.TypeIsPointerType():
-		valobj = valobj.Dereference()
-	r = valobj.GetChildMemberWithName('mnRefCount').GetValueAsSigned()
-	l = valobj.GetChildMemberWithName('mnLen').GetValueAsSigned()
-	a = valobj.GetChildMemberWithName('maStr')
-	return ret_strinfo(r,l,a)
+	return ret_strdata_info( valobj, 'mnRefCount', 'mnLen', 'maStr') 
 
 def getinfo_for__UniStringData( valobj, dict):
-	while valobj.TypeIsPointerType():
-		valobj = valobj.Dereference()
-	r = valobj.GetChildMemberWithName('mnRefCount').GetValueAsSigned()
-	l = valobj.GetChildMemberWithName('mnLen').GetValueAsSigned()
-	a = valobj.GetChildMemberWithName('maStr')
-	return ret_strinfo(r,l,a)
+	return ret_strdata_info( valobj, 'mnRefCount', 'mnLen', 'maStr') 
 
 
 def getinfo_for_rtl_OString( valobj, dict):
-	d = valobj.GetChildMemberWithName('pData')
-	return d.Dereference()
+	return ret_strobject_info( valobj, 'pData')
 
 def getinfo_for_rtl_OUString( valobj, dict):
-	d = valobj.GetChildMemberWithName('pData')
-	return d.Dereference()
+	return ret_strobject_jinfo( valobj, 'pData')
 
 def getinfo_for_ByteString( valobj, dict):
-	d = valobj.GetChildMemberWithName('mpData')
-	return d.Dereference()
+	return ret_strobject_jinfo( valobj, 'mpData')
 
 def getinfo_for_UniString( valobj, dict):
-	d = valobj.GetChildMemberWithName('mpData')
-	return d.Dereference()
+	return ret_strobject_info( valobj, 'mpData')
 
