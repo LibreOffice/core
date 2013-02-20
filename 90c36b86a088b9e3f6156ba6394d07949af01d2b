@@ -366,6 +366,24 @@
       "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///eY\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1435,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-20T21:03:13Z",
+      "side": 1,
+      "message": "in the old code, it seem to search the first \u0027datre sep\u0027 that occurs outside the current selection...\nif there is no such separator outside then we end-up with nDataArea \u003d 65536 due to the value of NOT_FOUND in String\nbut in OUString -1 is always \u003c aSelectionMax()\nso the behavior change....",
+      "parentUuid": "AAAAVn///hM\u003d",
+      "revId": "90c36b86a088b9e3f6156ba6394d07949af01d2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
