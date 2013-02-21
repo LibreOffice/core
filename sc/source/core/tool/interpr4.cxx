@@ -2545,13 +2545,16 @@ void ScInterpreter::ScExternal()
     FuncData* pFuncData = ScGlobal::GetFuncCollection()->findByName(aFuncName);
     if (pFuncData)
     {
-        if (nParamCount <= MAXFUNCPARAM && nParamCount == pFuncData->GetParamCount() - 1)
+        // Old binary non-UNO add-in function.
+        // NOTE: parameter count is 1-based with the 0th "parameter" being the
+        // return value, included in pFuncDatat->GetParamCount()
+        if (nParamCount < MAXFUNCPARAM && nParamCount == pFuncData->GetParamCount() - 1)
         {
             ParamType   eParamType[MAXFUNCPARAM];
             void*       ppParam[MAXFUNCPARAM];
             double      nVal[MAXFUNCPARAM];
             sal_Char*   pStr[MAXFUNCPARAM];
-            sal_uInt8*       pCellArr[MAXFUNCPARAM];
+            sal_uInt8*  pCellArr[MAXFUNCPARAM];
             short       i;
 
             for (i = 0; i < MAXFUNCPARAM; i++)
