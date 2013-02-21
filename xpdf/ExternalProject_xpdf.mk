@@ -18,29 +18,30 @@ $(eval $(call gb_ExternalProject_register_targets,xpdf,\
 ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 $(call gb_ExternalProject_get_state_target,xpdf,build):
-	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure --without-x --enable-multithreaded --enable-exceptions \
-	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2" \
-	LIBS="-lgdi32" \
-	&& $(MAKE) \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		./configure --without-x --enable-multithreaded --enable-exceptions \
+			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2" \
+			LIBS="-lgdi32" \
+		&& $(MAKE) \
+	)
 else # COM=MSC
 $(call gb_ExternalProject_get_state_target,xpdf,build):
-	cd $(EXTERNAL_WORKDIR) \
-	&& LIB="$(ILIB)" cmd.exe /d /c ms_make.bat \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		LIB="$(ILIB)" cmd.exe /d /c ms_make.bat \
+	)
 endif
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,xpdf,build):
-	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure --without-x --without-libpaper-library --without-t1-library --enable-multithreaded --enable-exceptions \
-	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-	$(if $(SYSBASE),CFLAGS="-I$(SYSBASE)/usr/include") \
-	$(if $(filter MACOSXP,$(OS)$(CPU)),CXXFLAGS="-malign-natural") \
-	&& MAKEFLAGS="$(subst r,,$(MAKEFLAGS))" $(MAKE) \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		./configure --without-x --without-libpaper-library --without-t1-library --enable-multithreaded --enable-exceptions \
+			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			$(if $(SYSBASE),CFLAGS="-I$(SYSBASE)/usr/include") \
+			$(if $(filter MACOSXP,$(OS)$(CPU)),CXXFLAGS="-malign-natural") \
+			&& MAKEFLAGS="$(subst r,,$(MAKEFLAGS))" $(MAKE) \
+	)
+
 endif
 
 # vim: set noet sw=4 ts=4:

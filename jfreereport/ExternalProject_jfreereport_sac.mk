@@ -16,18 +16,18 @@ $(eval $(call gb_ExternalProject_register_targets,jfreereport_sac,\
 ))
 
 $(call gb_ExternalProject_get_state_target,jfreereport_sac,build) :
-	cd "$(call gb_UnpackedTarball_get_dir,jfreereport_sac)" && \
-	$(ICECREAM_RUN) "$(ANT)" \
-		-q \
-		-f build.xml \
-		-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
-		$(if $(filter yes,$(JAVACISGCJ))\
-			,-Dbuild.compiler=gcj \
-			,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
-			-Dant.build.javac.target=$(JAVA_TARGET_VER) \
-		) \
-		-Dantcontrib.available="true" \
-		$(if $(debug),-Dbuild.debug="on") all && \
-	touch $@
+	$(call gb_ExternalProject_run,build,\
+		$(ICECREAM_RUN) "$(ANT)" \
+			-q \
+			-f build.xml \
+			-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
+			$(if $(filter yes,$(JAVACISGCJ))\
+				,-Dbuild.compiler=gcj \
+				,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
+				 -Dant.build.javac.target=$(JAVA_TARGET_VER) \
+			) \
+			-Dantcontrib.available="true" \
+			$(if $(debug),-Dbuild.debug="on") all \
+	)
 
 # vim: set noet sw=4 ts=4:

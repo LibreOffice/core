@@ -16,12 +16,12 @@ $(eval $(call gb_ExternalProject_register_targets,exttextcat,\
 ))
 
 $(call gb_ExternalProject_get_state_target,exttextcat,build):
-	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure --disable-shared --with-pic \
-	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	CFLAGS="$(if $(filter TRUE,$(HAVE_GCC_VISIBILITY_FEATURE)),-fvisibility=hidden) \
-	$(if $(filter AIX,$(OS)),-D_LINUX_SOURCE_COMPAT)" \
-	&& $(MAKE) \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		./configure --disable-shared --with-pic \
+			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+		CFLAGS="$(if $(filter TRUE,$(HAVE_GCC_VISIBILITY_FEATURE)),-fvisibility=hidden) \
+		$(if $(filter AIX,$(OS)),-D_LINUX_SOURCE_COMPAT)" \
+		&& $(MAKE) \
+	)
 
 # vim: set noet sw=4 ts=4:
