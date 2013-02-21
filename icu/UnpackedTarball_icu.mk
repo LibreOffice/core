@@ -11,12 +11,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,icu))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,icu,$(ICU_TARBALL)))
 
-$(call gb_UnpackedTarball_get_target,icu): $(call gb_UnpackedTarball_get_target,icu_data)
-$(eval $(call gb_UnpackedTarball_set_post_action,icu,\
-	cp $(call gb_UnpackedTarball_get_dir,icu_data)/icudt49l.dat \
-	$(call gb_UnpackedTarball_get_dir,icu)/source/data/in/ \
-))
-
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	icu/icu4c.9948.mlym-crash.patch \
 	icu/icu4c-bsd.patch \
