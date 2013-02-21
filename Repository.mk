@@ -73,6 +73,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     uiex \
     ulfconv \
     ulfex \
+    $(call gb_Helper_optional,ODK,unoapploader) \
     xpdfimport \
     xrmex \
 ))
@@ -542,6 +543,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     so_activex_x64 \
     sysdtrans \
 	thidxmsi \
+	unowinreg \
 ))
 endif
 

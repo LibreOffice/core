@@ -17,7 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-# This script sets all enviroment variables, which are necessary for building 
+# This script sets all enviroment variables, which are necessary for building
 # the examples of the Office Development Kit.
 # The Script was developed for the operating systems Solaris, Linux and MacOS.
 
@@ -180,14 +180,14 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
     else
 	set OSVERSION=`/usr/sbin/sysctl  -n kern.osreldate`
     endif
-    
+
     if ( ${OSVERSION} < 500016 ) then
 	setenv PTHREAD_CFLAGS -D_THREAD_SAFE
 	setenv PTHREAD_LIBS -pthread
     else if ( ${OSVERSION} < 502102 ) then
 	setenv PTHREAD_CFLAGS -D_THREAD_SAFE
 	setenv PTHREAD_LIBS -lc_r
-    else	
+    else
 	setenv PTHREAD_LIBS -pthread
     endif
   breaksw
@@ -250,12 +250,12 @@ if ( "${platform}" == "MacOSX" ) then
     endif
 endif
 
- 
-echo 
+
+echo
 echo " ************************************************************************"
-echo " *"                                                  
-echo " * SDK environment is prepared for ${platform}"      
-echo " *"                                                  
+echo " *"
+echo " * SDK environment is prepared for ${platform}"
+echo " *"
 echo " * SDK = ${OO_SDK_HOME}"
 echo " * Office = ${OFFICE_HOME}"
 echo " * URE = ${OO_SDK_URE_HOME}"

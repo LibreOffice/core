@@ -132,6 +132,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
 	np_sdk \
 	o3tl \
+	$(call gb_Helper_optional,ODK,odk) \
 	offapi \
 	officecfg \
 	oovbaapi \
