@@ -112,7 +112,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,HUNSPELL,$(HUNSPELL_TARBALL)) \
 		$(call fetch_Optional,HYPHEN,$(HYPHEN_TARBALL)) \
 		$(call fetch_Optional,ICU,$(ICU_TARBALL)) \
-		$(call fetch_Optional,ICU,$(ICU_DATA_SUBSET_ZIP)) \
 		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_FLOW_ENGINE_TARBALL)) \
 		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_FLUTE_TARBALL)) \
 		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_LIBBASE_TARBALL)) \
