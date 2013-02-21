@@ -244,7 +244,7 @@ public:
     void FontPitchType( FontPitch ePitch ) const;
 
     /// Write out the font into the document, if it's an embedded font.
-    void EmbedFont( const OUString& name );
+    void EmbedFont( const OUString& name, FontFamily family, FontPitch pitch, rtl_TextEncoding encoding );
 
     /// Definition of a numbering instance.
     virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule );
@@ -326,7 +326,8 @@ private:
 
     void WriteFFData( const FieldInfos& rInfos );
 
-    void EmbedFontStyle( const OUString& name, int tag, const char* style );
+    void EmbedFontStyle( const OUString& name, int tag, FontFamily family, FontItalic italic, FontWeight weight,
+        FontPitch pitch, rtl_TextEncoding encoding );
 
 protected:
 

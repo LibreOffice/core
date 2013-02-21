@@ -550,7 +550,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
 #include <utility>
-#include <vcl/temporaryfonts.hxx>
+#include <vcl/embeddedfontshelper.hxx>
 #include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
