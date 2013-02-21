@@ -1,2 +1,2 @@
-po      postprocess     ::      HELP:helpcontent2 ODK:odk tail_build NULL
+po      postprocess     ::      HELP:helpcontent2 tail_build NULL
 po	postprocess\prj		nmake	-	all	po_prj NULL
