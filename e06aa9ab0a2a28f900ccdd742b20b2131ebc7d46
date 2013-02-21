@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///ak\u003d",
+        "filename": "apache-commons/ExternalProject_apache_commons_codec.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-21T07:11:36Z",
+      "side": 1,
+      "message": "in most places we cd to EXTERNAL_WORKDIR\nbut in other we use a combinaison of UnpackedTarball_get_dir and some extra stuff...\nI\u0027ll have to make sure that EXTERNAL_DIR can always be used\nand has always to \u0027right\u0027 value.. then yes we could abstract the cd and the touch...",
+      "parentUuid": "AAAAVn///bQ\u003d",
+      "revId": "e06aa9ab0a2a28f900ccdd742b20b2131ebc7d46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn///bI\u003d",
         "filename": "apache-commons/ExternalProject_apache_commons_codec.mk",
         "patchSetId": 2
@@ -64,6 +82,24 @@
       "writtenOn": "2013-02-21T06:40:38Z",
       "side": 1,
       "message": "Do we really need this configure option? I argue that the captured output should be printed in case of error in silent build and always in verbose build. For example, packagers like verbose builds, because it is easier to see what went wrong when there is a good build to compare to.",
+      "revId": "e06aa9ab0a2a28f900ccdd742b20b2131ebc7d46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///ao\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-21T07:11:36Z",
+      "side": 1,
+      "message": "well there is the case of the lo dev that want \u0027verbose\u0027 to debug lo stuff... and not necessarily be flooded with extra stuff just because he want to see the command line of our own pieces...\nBeside I did not want to force it upon people all the sudden.\nso I made it a non-default option first... but I secretly hope to make that the default :-)",
+      "parentUuid": "AAAAVn///bo\u003d",
       "revId": "e06aa9ab0a2a28f900ccdd742b20b2131ebc7d46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
