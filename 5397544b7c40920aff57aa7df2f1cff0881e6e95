@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///W8\u003d",
+        "filename": "vcl/source/window/toolbox2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-02-21T12:50:48Z",
+      "side": 1,
+      "message": "this doesn\u0027t do the same as before; most constructors set this to false regardless of mnBits",
+      "revId": "5397544b7c40920aff57aa7df2f1cff0881e6e95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
