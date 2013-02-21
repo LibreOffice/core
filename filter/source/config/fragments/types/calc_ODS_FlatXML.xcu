@@ -23,7 +23,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>OpenDocument Spreadsheet Flat XML</value></prop>
         <prop oor:name="UIName">
-            <value>OpenDocument Spreadsheet (Flat XML)</value>
+            <value xml:lang="en-US">OpenDocument Spreadsheet (Flat XML)</value>
         </prop>
         <prop oor:name="ClipboardFormat">
             <value>doctype:office:mimetype="application/vnd.oasis.opendocument.spreadsheet"</value>
