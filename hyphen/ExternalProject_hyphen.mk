@@ -18,13 +18,13 @@ $(eval $(call gb_ExternalProject_register_targets,hyphen,\
 ))
 
 $(call gb_ExternalProject_get_state_target,hyphen,build):
-	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure --disable-shared \
-	$(if $(filter-out IOS,$(OS)),--with-pic) \
-	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no) \
-	$(if $(filter C52U,$(COM)$(CPU)),CFLAGS="-m64") \
-	&& $(MAKE) \
-	$(if $(filter YESYES,$(SYSTEM_HYPH)$(WITH_MYSPELL_DICTS)),hyph_en_US.dic) \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		./configure --disable-shared \
+			$(if $(filter-out IOS,$(OS)),--with-pic) \
+			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no) \
+			$(if $(filter C52U,$(COM)$(CPU)),CFLAGS="-m64") \
+		&& $(MAKE) \
+			$(if $(filter YESYES,$(SYSTEM_HYPH)$(WITH_MYSPELL_DICTS)),hyph_en_US.dic) \
+	)
 
 # vim: set noet sw=4 ts=4:

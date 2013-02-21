@@ -20,16 +20,16 @@ $(eval $(call gb_ExternalProject_register_targets,fontconfig,\
 ))
 
 $(call gb_ExternalProject_get_state_target,fontconfig,build) :
-	cd $(EXTERNAL_WORKDIR) \
-	&& CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" $(if $(filter ANDROID,$(OS)),LIBS="-lm") \
+	$(call gb_ExternalProject_run,build,\
+		CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" $(if $(filter ANDROID,$(OS)),LIBS="-lm") \
 		./configure \
-		--disable-shared \
-		--with-arch=arm \
-		--with-expat-includes=$(OUTDIR)/inc/external/expat \
-		--with-expat-lib=$(OUTDIR)/lib \
-		--with-freetype-config=$(OUTDIR)/bin/freetype-config \
-		--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-	&& $(MAKE) \
-	&& touch $@
+			--disable-shared \
+			--with-arch=arm \
+			--with-expat-includes=$(OUTDIR)/inc/external/expat \
+			--with-expat-lib=$(OUTDIR)/lib \
+			--with-freetype-config=$(OUTDIR)/bin/freetype-config \
+			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
+		&& $(MAKE) \
+	)
 
 # vim: set noet sw=4 ts=4:

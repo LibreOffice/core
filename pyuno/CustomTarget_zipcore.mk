@@ -46,6 +46,6 @@ $(call gb_CustomTarget_get_workdir,pyuno/zipcore)/$(pyuno_PYTHON_ARCHIVE_NAME) \
 		: $(call gb_ExternalPackage_get_target,python3) \
 		| $(call gb_CustomTarget_get_workdir,pyuno/zipcore)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ZIP,1)
-	cd $(pyuno_PYTHON_LIB_DIR) && zip $@ $(shell cd $(pyuno_PYTHON_LIB_DIR) && find . -type f | grep -v "\.pyc" | grep -v "\.py~" | grep -v .orig | grep -v _failed)
+	cd $(pyuno_PYTHON_LIB_DIR) && zip -q $@ $(shell cd $(pyuno_PYTHON_LIB_DIR) && find . -type f | grep -v "\.pyc" | grep -v "\.py~" | grep -v .orig | grep -v _failed)
 
 # vim: set noet sw=4 ts=4:

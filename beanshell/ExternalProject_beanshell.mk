@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,beanshell,\
 ))
 
 $(call gb_ExternalProject_get_state_target,beanshell,build) :
-	cd "$(call gb_UnpackedTarball_get_dir,beanshell)" && \
+	$(call gb_ExternalProject_run,build,\
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
@@ -26,7 +26,7 @@ $(call gb_ExternalProject_get_state_target,beanshell,build) :
 			,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
 				-Dant.build.javac.target=$(JAVA_TARGET_VER) \
 		) \
-		$(if $(debug),-Dbuild.debug="on") && \
-	touch $@
+		$(if $(debug),-Dbuild.debug="on") \
+	)
 
 # vim: set noet sw=4 ts=4:

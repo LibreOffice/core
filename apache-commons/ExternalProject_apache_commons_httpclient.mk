@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,apache_commons_httpclient))
 
-$(eval $(call gb_ExternalProject_use_unpacked,apache_commons_codec,apache_commons_httpclient))
+$(eval $(call gb_ExternalProject_use_unpacked,apache_commons_httpclient,apache_commons_httpclient))
 
 $(eval $(call gb_ExternalProject_use_external,apache_commons_httpclient,commons-codec))
 $(eval $(call gb_ExternalProject_use_external,apache_commons_httpclient,commons-logging))
@@ -19,7 +19,7 @@ $(eval $(call gb_ExternalProject_register_targets,apache_commons_httpclient,\
 ))
 
 $(call gb_ExternalProject_get_state_target,apache_commons_httpclient,build) :
-	cd "$(call gb_UnpackedTarball_get_dir,apache_commons_httpclient)" && \
+	$(call gb_ExternalProject_run,build,\
 	ANT_OPTS="$$ANT_OPTS -Dfile.encoding=ISO-8859-1" \
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
@@ -33,7 +33,7 @@ $(call gb_ExternalProject_get_state_target,apache_commons_httpclient,build) :
 				-Dant.build.javac.target=$(JAVA_TARGET_VER) \
 		) \
 		$(if $(debug),-Dbuild.debug="on") \
-		dist && \
-	touch $@
+		dist \
+	)
 
 # vim: set noet sw=4 ts=4:

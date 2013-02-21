@@ -180,4 +180,18 @@ $(call gb_ExternalProject_get_preparation_target,$(1)) : \
 
 endef
 
+
+# Run a target command
+#
+# This provide a wrapper that cange to the right directory
+# touch the 'target' if sucessfull and also provide
+# the ability to hide the output if there is no failure
+# gb_ExternalProject_run,run_target,command,optional_extra_sub_directory,optional_log_filename)
+# default log_filename is <run_target>.log
+#
+
+define gb_ExternalProject_run
+$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/$(3) && $(2) && touch $@,$(EXTERNAL_WORKDIR)/$(if $(3),$(3)/,)$(if $(4),$(4),$(1).log))
+endef
+
 # vim: set noet sw=4 ts=4:

@@ -21,43 +21,43 @@ ifeq ($(OS),WNT)
 
 ifeq ($(COM),GCC)
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
-	cd $(EXTERNAL_WORKDIR) \
-	&& autoreconf \
-	&& ./configure --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-	--without-libxslt --without-openssl --without-gnutls --disable-crypto-dl \
-	$(if $(filter NO,$(SYSTEM_NSS)),--disable-pkgconfig) \
-	CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
-	LDFLAGS="-Wl,--no-undefined $(ILIB:;= -L)" \
-	LIBS="$(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED__LIBSTDCPP))" \
-	&& $(MAKE) \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		autoreconf \
+		&& ./configure --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
+			--without-libxslt --without-openssl --without-gnutls --disable-crypto-dl \
+			$(if $(filter NO,$(SYSTEM_NSS)),--disable-pkgconfig) \
+			CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
+			LDFLAGS="-Wl,--no-undefined $(ILIB:;= -L)" \
+			LIBS="$(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED__LIBSTDCPP))" \
+		&& $(MAKE) \
+	)
 
 else
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
-	cd $(EXTERNAL_WORKDIR)/win32 \
-	&& cscript configure.js crypto=mscrypto xslt=no iconv=no static=no \
-	$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
-	&& unset MAKEFLAGS \
-	&& LIB="$(ILIB)" nmake \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		cscript configure.js crypto=mscrypto xslt=no iconv=no static=no \
+			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
+		&& unset MAKEFLAGS \
+		&& LIB="$(ILIB)" nmake \
+	,win32)
 endif
 
 else
 
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
-	cd $(EXTERNAL_WORKDIR) \
-	&& $(if $(filter MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") autoreconf \
-	&& ./configure \
-		--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls \
-	$(if $(filter ANDROID,$(OS)),--with-openssl=$(OUTDIR),--without-openssl) \
-	$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-	$(if $(filter NO,$(SYSTEM_NSS))$(filter MACOSX,$(OS)),--disable-pkgconfig) \
-	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	$(if $(SYSBASE),CFLAGS="-I$(SYSBASE)/usr/include" \
-	LDFLAGS="-L$(SYSBASE)/usr/lib $(if $(filter-out LINUX FREEBSD,$(OS)),,-Wl,-z,origin -Wl,-rpath,\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib),\
-	$(if $(filter-out MACOSX,$(OS)),,LDFLAGS="-Wl,-dylib_file,@executable_path/libnssutil3.dylib:$(OUTDIR)/lib/libnssutil3.dylib")) \
-	&& $(MAKE) \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		$(if $(filter MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") autoreconf \
+		&& ./configure \
+			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls \
+			$(if $(filter ANDROID,$(OS)),--with-openssl=$(OUTDIR),--without-openssl) \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			$(if $(filter NO,$(SYSTEM_NSS))$(filter MACOSX,$(OS)),--disable-pkgconfig) \
+			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(SYSBASE),CFLAGS="-I$(SYSBASE)/usr/include" \
+			LDFLAGS="-L$(SYSBASE)/usr/lib $(if $(filter-out LINUX FREEBSD,$(OS)),,-Wl,-z,origin -Wl,-rpath,\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib),\
+			$(if $(filter-out MACOSX,$(OS)),,LDFLAGS="-Wl,-dylib_file,@executable_path/libnssutil3.dylib:$(OUTDIR)/lib/libnssutil3.dylib")) \
+		&& $(MAKE) \
+	)
 
 endif
 
