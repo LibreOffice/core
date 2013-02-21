@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "scitems.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
@@ -40,7 +39,6 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
-
 #include "viewutil.hxx"
 #include "global.hxx"
 #include "chgtrack.hxx"
@@ -49,9 +47,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-// STATIC DATA -----------------------------------------------------------
 
-//==================================================================
 
 void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
                                 sal_uInt16 nWhichId, sal_uInt16 nScript )
@@ -140,8 +136,8 @@ sal_Bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,
                                 ScDocument& rDocument )
 {
-    // abgelehnte werden durch eine invertierende akzeptierte Action dargestellt,
-    // die Reihenfolge von ShowRejected/ShowAccepted ist deswegen wichtig
+    // discarded are displayed as inverted accepted action, because of this
+    // order of ShowRejected/ShowAccepted is important
 
     if ( !rSettings.IsShowRejected() && rAction.IsRejecting() )
         return false;
@@ -153,7 +149,7 @@ sal_Bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
     {
         if ( rSettings.IsEveryoneButMe() )
         {
-            //  GetUser() am ChangeTrack ist der aktuelle Benutzer
+            // GetUser() at ChangeTrack is the current user
             ScChangeTrack* pTrack = rDocument.GetChangeTrack();
             if ( !pTrack || rAction.GetUser().equals(pTrack->GetUser()) )
                 return false;
@@ -186,7 +182,7 @@ sal_Bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
         const DateTime& rFirst = rSettings.GetTheFirstDateTime();
         const DateTime& rLast  = rSettings.GetTheLastDateTime();
         switch ( rSettings.GetTheDateMode() )
-        {   // korrespondiert mit ScHighlightChgDlg::OKBtnHdl
+        {   // corresponds with ScHighlightChgDlg::OKBtnHdl
             case SCDM_DATE_BEFORE:
                 if ( aDateTime > rFirst )
                     return false;
@@ -341,7 +337,6 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal
         rSet.DisableItem( nSlotId );
 }
 
-//==================================================================
 
 sal_Bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
                                  SfxViewFrame& rFrame,
@@ -393,7 +388,6 @@ void ScViewUtil::SetFullScreen( SfxViewShell& rViewShell, bool bSet )
     }
 }
 
-//------------------------------------------------------------------
 
 ScUpdateRect::ScUpdateRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
 {

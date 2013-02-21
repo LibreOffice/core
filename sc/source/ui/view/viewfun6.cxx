@@ -52,7 +52,6 @@ using ::std::vector;
 
 #define D_TIMEFACTOR              86400.0
 
-//==================================================================
 
 void ScViewFunc::DetectiveAddPred()
 {
@@ -271,8 +270,6 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     pUndoMgr->LeaveListAction();
 }
 
-//---------------------------------------------------------------------------
-
 void ScViewFunc::ShowNote( bool bShow )
 {
     if( bShow )
@@ -285,7 +282,7 @@ void ScViewFunc::ShowNote( bool bShow )
 
 void ScViewFunc::EditNote()
 {
-    //  zum Editieren einblenden und aktivieren
+    // for editing display and activate
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -321,11 +318,11 @@ void ScViewFunc::EditNote()
 
             // activate object (as in FuSelection::TestComment)
             GetViewData()->GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
-            // jetzt den erzeugten FuText holen und in den EditModus setzen
+            // now get the created FuText and set into EditMode
             FuPoor* pPoor = GetDrawFuncPtr();
-            if ( pPoor && (pPoor->GetSlotID() == SID_DRAW_NOTEEDIT) )    // hat keine RTTI
+            if ( pPoor && (pPoor->GetSlotID() == SID_DRAW_NOTEEDIT) )    // has no RTTI
             {
-                ScrollToObject( pCaption );         // Objekt komplett sichtbar machen
+                ScrollToObject( pCaption );         // make object fully visible
                 static_cast< FuText* >( pPoor )->SetInEditMode( pCaption );
             }
         }

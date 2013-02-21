@@ -135,7 +135,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     //  Path is no longer used as name for the graphics object
 
     ScDrawLayer* pLayer = (ScDrawLayer*) pView->GetModel();
-    String aName = pLayer->GetNewGraphicName();                 // "Grafik x"
+    String aName = pLayer->GetNewGraphicName();                 // "Graphics"
     pObj->SetName(aName);
 
     //  don't select if from (dispatch) API, to allow subsequent cell operations
