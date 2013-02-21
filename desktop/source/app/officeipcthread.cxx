@@ -54,12 +54,38 @@ using ::rtl::OUStringBuffer;
 
 const char  *OfficeIPCThread::sc_aShowSequence = "-tofront";
 const int OfficeIPCThread::sc_nShSeqLength = 5;
-const char  *OfficeIPCThread::sc_aConfirmationSequence = "InternalIPC::ProcessingDone";
-const int OfficeIPCThread::sc_nCSeqLength = 27;
-const char  *OfficeIPCThread::sc_aSendArgumentsSequence = "InternalIPC::SendArguments";
-const int OfficeIPCThread::sc_nCSASeqLength = 26;
 
-namespace { static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments"; }
+namespace {
+
+static char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
+static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
+static char const PROCESSING_DONE[] = "InternalIPC::ProcessingDone";
+
+// Receives packets from the pipe until a packet ends in a NUL character (that
+// will not be included in the returned string) or it cannot read anything (due
+// to error or closed pipe, in which case an empty string will be returned to
+// signal failure):
+OString readStringFromPipe(osl::StreamPipe & pipe) {
+    for (OStringBuffer str;;) {
+        char buf[1024];
+        sal_Int32 n = pipe.recv(buf, SAL_N_ELEMENTS(buf));
+        if (n <= 0) {
+            return "";
+        }
+        bool end = false;
+        if (buf[n - 1] == '\0') {
+            end = true;
+            --n;
+        }
+        str.append(buf, n);
+            //TODO: how does OStringBuffer.append handle overflow?
+        if (end) {
+            return str.makeStringAndClear();
+        }
+    }
+}
+
+}
 
 // Type of pipe we use
 enum PipeMode
@@ -497,18 +523,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         else if( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) // Creation not successfull, now we try to connect
         {
             osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
-            char pReceiveBuffer[sc_nCSASeqLength + 1] = {0};
-            int nResult = 0;
-            int nBytes = 0;
-            int nBufSz = sc_nCSASeqLength + 1;
-            // read byte per byte
-            while ((nResult=aStreamPipe.recv( pReceiveBuffer+nBytes, nBufSz-nBytes))>0) {
-                nBytes += nResult;
-                if (pReceiveBuffer[nBytes-1]=='\0') {
-                    break;
-                }
-            }
-            if (rtl::OString(sc_aSendArgumentsSequence).equals(pReceiveBuffer))
+            if (readStringFromPipe(aStreamPipe) == SEND_ARGUMENTS)
             {
                 // Pipe connected to first office
                 nPipeMode = PIPEMODE_CONNECTED;
@@ -563,19 +578,16 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
                 return IPC_STATUS_BOOTSTRAP_ERROR;
             }
         }
+        aArguments.append('\0');
         // finally, write the string onto the pipe
-        aStreamPipe.write(aArguments.getStr(), aArguments.getLength());
-        aStreamPipe.write("\0", 1);
+        sal_Int32 n = aStreamPipe.write(
+            aArguments.getStr(), aArguments.getLength());
+        if (n != aArguments.getLength()) {
+            SAL_INFO("desktop", "short write: " << n);
+            return IPC_STATUS_BOOTSTRAP_ERROR;
+        }
 
-        rtl::OString aToken(sc_aConfirmationSequence);
-        char *pReceiveBuffer = new char[aToken.getLength()+1];
-        sal_Int32 n = aStreamPipe.read(pReceiveBuffer, aToken.getLength());
-        pReceiveBuffer[n]='\0';
-
-        bool bIsConfirmationSequence = aToken.equals(pReceiveBuffer);
-        delete[] pReceiveBuffer;
-
-        if (!bIsConfirmationSequence)
+        if (readStringFromPipe(aStreamPipe) != PROCESSING_DONE)
         {
             // something went wrong
             return IPC_STATUS_BOOTSTRAP_ERROR;
@@ -671,30 +683,16 @@ void OfficeIPCThread::execute()
                 break;
             }
 
-            // notify client we're ready to process its args
-            int nBytes = 0;
-            int nResult;
-            while (
-                (nResult = aStreamPipe.send(sc_aSendArgumentsSequence+nBytes, sc_nCSASeqLength-nBytes))>0 &&
-                ((nBytes += nResult) < sc_nCSASeqLength) ) ;
-            aStreamPipe.write("\0", 1);
-
-            // test byte by byte
-            const int nBufSz = 2048;
-            char pBuf[nBufSz];
-            nBytes = 0;
-            rtl::OStringBuffer aBuf;
-            // read into pBuf until '\0' is read or read-error
-            while ((nResult=aStreamPipe.recv( pBuf+nBytes, nBufSz-nBytes))>0) {
-                nBytes += nResult;
-                if (pBuf[nBytes-1]=='\0') {
-                    aBuf.append(pBuf);
-                    break;
-                }
+            // notify client we're ready to process its args:
+            sal_Int32 n = aStreamPipe.write(
+                SEND_ARGUMENTS, SAL_N_ELEMENTS(SEND_ARGUMENTS));
+                // incl. terminating NUL
+            if (n != SAL_N_ELEMENTS(SEND_ARGUMENTS)) {
+                SAL_WARN("desktop", "short write: " << n);
+                continue;
             }
-            // don't close pipe ...
 
-            rtl::OString aArguments = aBuf.makeStringAndClear();
+            rtl::OString aArguments = readStringFromPipe(aStreamPipe);
 
             // Is this a lookup message from another application? if so, ignore
             if (aArguments.isEmpty())
@@ -908,11 +906,14 @@ void OfficeIPCThread::execute()
             // wait for processing to finish
             if (bDocRequestSent)
                 cProcessed.wait();
-            // processing finished, inform the requesting end
-            nBytes = 0;
-            while (
-                   (nResult = aStreamPipe.send(sc_aConfirmationSequence+nBytes, sc_nCSeqLength-nBytes))>0 &&
-                   ((nBytes += nResult) < sc_nCSeqLength) ) ;
+            // processing finished, inform the requesting end:
+            n = aStreamPipe.write(
+                PROCESSING_DONE, SAL_N_ELEMENTS(PROCESSING_DONE));
+                // incl. terminating NUL
+            if (n != SAL_N_ELEMENTS(PROCESSING_DONE)) {
+                SAL_WARN("desktop", "short write: " << n);
+                continue;
+            }
         }
         else
         {
