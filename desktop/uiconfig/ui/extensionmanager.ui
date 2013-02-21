@@ -95,7 +95,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">10</property>
             <child>
-              <object class="deploymentgui:ExtBoxWithBtns" id="extensions">
+              <object class="deploymentgui-ExtBoxWithBtns" id="extensions">
                 <property name="width_request">600</property>
                 <property name="height_request">320</property>
                 <property name="visible">True</property>
