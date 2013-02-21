@@ -17,22 +17,22 @@ $(eval $(call gb_ExternalProject_register_targets,langtag,\
 ))
 
 $(call gb_ExternalProject_get_state_target,langtag,build):
-	cd $(EXTERNAL_WORKDIR) \
-	$(if $(filter MSC,$(COM)), \
-		&& export LIB="$(ILIB)" \
+	$(call gb_ExternalProject_run,build,\
+		$(if $(filter MSC,$(COM)), \
+		export LIB="$(ILIB)" \
 		CC="$(CC) -MD -nologo \
 			$(if $(filter TRUE,$(ENABLE_DEBUG)),-Zi) \
-			$(SOLARINC)") \
-	&& ./configure --disable-modules --disable-test --disable-introspection --disable-shared --enable-static --with-pic \
-	$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
-	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	$(if $(filter NO,$(SYSTEM_LIBXML)),LIBXML2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,xml2)/include" \
-	$(if $(filter MSC,$(COM)),LIBXML2_LIBS="$(OUTDIR)/lib/libxml2.lib",LIBXML2_LIBS="-L$(OUTDIR)/lib -lxml2"),\
-	$(if $(filter MACOSX,$(OS)),LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" LIBXML2_LIBS="$(LIBXML_LIBS)")) \
-	$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-	$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl,-z,origin -Wl,-rpath,\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
-	$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl,-z,origin -Wl,-R,\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
-	$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
-	&& $(MAKE) \
-	&& touch $@
+			$(SOLARINC)" && ) \
+		./configure --disable-modules --disable-test --disable-introspection --disable-shared --enable-static --with-pic \
+		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
+		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+		$(if $(filter NO,$(SYSTEM_LIBXML)),LIBXML2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,xml2)/include" \
+		$(if $(filter MSC,$(COM)),LIBXML2_LIBS="$(OUTDIR)/lib/libxml2.lib",LIBXML2_LIBS="-L$(OUTDIR)/lib -lxml2"),\
+		$(if $(filter MACOSX,$(OS)),LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" LIBXML2_LIBS="$(LIBXML_LIBS)")) \
+		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+		$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl,-z,origin -Wl,-rpath,\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
+		$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl,-z,origin -Wl,-R,\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
+		$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
+		&& $(MAKE) \
+	)
 # vim: set noet sw=4 ts=4:

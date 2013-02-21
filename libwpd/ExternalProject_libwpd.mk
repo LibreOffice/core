@@ -19,36 +19,36 @@ ifeq ($(OS)$(COM),WNTMSC)
 
 ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
-	&& $(COMPATH)/vcpackages/vcbuild.exe libwpd.vcproj "Release|Win32" \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		$(COMPATH)/vcpackages/vcbuild.exe libwpd.vcproj "Release|Win32" \
+	,build/win32)
 else ifeq ($(VCVER),100)
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
-	&& msbuild.exe libwpd.vcxproj /p:Configuration=Release \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		msbuild.exe libwpd.vcxproj /p:Configuration=Release \
+	,build/win32)
 else
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
-	&& msbuild.exe libwpd.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:TargetName=libwpd-0.9 /p:Configuration=Release \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		msbuild.exe libwpd.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:TargetName=libwpd-0.9 /p:Configuration=Release \
+	,build/win32)
 endif
 else
 
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
-	cd $(EXTERNAL_WORKDIR) \
-	&& $(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)") \
+	$(call gb_ExternalProject_run,build,\
+		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)") \
 		./configure \
-		--with-pic \
-		--enable-static \
-		--disable-shared \
-		--without-stream \
-		--without-docs \
-		--disable-debug \
-		$(if $(filter MACOSX,$(OS)),--disable-werror) \
-		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	&& $(MAKE) \
-	&& touch $@
+			--with-pic \
+			--enable-static \
+			--disable-shared \
+			--without-stream \
+			--without-docs \
+			--disable-debug \
+			$(if $(filter MACOSX,$(OS)),--disable-werror) \
+			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+		&& $(MAKE) \
+	)
 
 endif
 

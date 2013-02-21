@@ -16,9 +16,9 @@ $(eval $(call gb_ExternalProject_register_targets,expat,\
 ))
 
 $(call gb_ExternalProject_get_state_target,expat,configure) :
-	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure \
-		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	&& touch $@
+	$(call gb_ExternalProject_run,configure,\
+		./configure \
+			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+	,,expat_configure.log)
 
 # vim: set noet sw=4 ts=4:

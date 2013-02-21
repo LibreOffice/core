@@ -26,53 +26,53 @@ ifeq ($(OS)$(COM),WNTMSC)
 
 ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
-	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
-	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
-	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-	&& $(COMPATH)/vcpackages/vcbuild.exe libvisio.vcproj "Release|Win32" \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
+		&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
+		&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
+		&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
+		&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+		&& $(COMPATH)/vcpackages/vcbuild.exe libvisio.vcproj "Release|Win32" \
+	,build/win32)
 else ifeq ($(VCVER),100)
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
-	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
-	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
-	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-	&& msbuild.exe libvisio.vcxproj /p:Configuration=Release \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
+		&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
+		&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
+		&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
+		&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+		&& msbuild.exe libvisio.vcxproj /p:Configuration=Release \
+	,build/win32)
 else
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
-	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
-	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
-	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-	&& msbuild.exe libvisio.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
+		&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
+		&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
+		&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
+		&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+		&& msbuild.exe libvisio.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release \
+	,build/win32)
 endif
 
 else
 
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
-	cd $(EXTERNAL_WORKDIR) \
-	&& PKG_CONFIG="" \
-	./configure \
-		--with-pic \
-		--enable-static \
-		--disable-shared \
-		--without-docs \
-		--disable-debug \
-		--disable-werror \
-		CXXFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS)) \
-		$(if $(filter NO,$(SYSTEM_LIBXML)),-I$(call gb_UnpackedTarball_get_dir,xml2)/include)" \
-		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		PKG_CONFIG="" \
+		./configure \
+			--with-pic \
+			--enable-static \
+			--disable-shared \
+			--without-docs \
+			--disable-debug \
+			--disable-werror \
+			CXXFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS)) \
+			$(if $(filter NO,$(SYSTEM_LIBXML)),-I$(call gb_UnpackedTarball_get_dir,xml2)/include)" \
+			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+		&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
+	)
 
 endif
 
