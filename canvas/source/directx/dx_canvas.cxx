@@ -96,7 +96,7 @@ namespace dxcanvas
 
         const SystemGraphicsData* pSysData=reinterpret_cast<const SystemGraphicsData*>(aSeq.getConstArray());
         if( !pSysData || !pSysData->hDC )
-            throw lang::NoSupportException( "Passed SystemGraphicsData or HDC invalid!" ), NULL);
+            throw lang::NoSupportException("Passed SystemGraphicsData or HDC invalid!", NULL);
 
         // setup helper
         maDeviceHelper.init( pSysData->hDC,
