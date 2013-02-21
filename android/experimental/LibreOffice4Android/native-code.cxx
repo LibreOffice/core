@@ -114,6 +114,7 @@ lo_get_libmap(void)
         { "libsmdlo.a", smd_component_getFactory },
         { "libsmlo.a", sm_component_getFactory },
         { "libsotlo.a", sot_component_getFactory },
+        { "libspelllo.a", spell_component_getFactory },
         { "libscriptframe.a", scriptframe_component_getFactory },
         { "libstringresource.uno.a", stringresource_component_getFactory },
         { "libsvgfilterlo.a", svgfilter_component_getFactory },
