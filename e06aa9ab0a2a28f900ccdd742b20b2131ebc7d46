@@ -103,6 +103,24 @@
       "revId": "e06aa9ab0a2a28f900ccdd742b20b2131ebc7d46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///ZU\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-02-21T08:49:56Z",
+      "side": 1,
+      "message": "Clearly being interested in verbose external builds is a special case (how many of us need it and how often), so it should be ok to treat it like being special and simply default to silent (and most if not all people will be happy to have it that way).\n\nAnd I agree even with binding it to silent/verbose build instead of having an option. Gbuild is already pretty chatty as it is, so if somebody wants to debug the build this way, it already requires some special handling like building only in a module or redirecting the output and wading through it.",
+      "parentUuid": "AAAAVn///ao\u003d",
+      "revId": "e06aa9ab0a2a28f900ccdd742b20b2131ebc7d46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
