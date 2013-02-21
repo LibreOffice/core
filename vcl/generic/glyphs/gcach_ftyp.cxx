@@ -512,8 +512,8 @@ FreetypeManager::FreetypeManager()
     pFTNewSize      = (FT_Error(*)(FT_Face,FT_Size*))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_New_Size" );
     pFTActivateSize = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Activate_Size" );
     pFTDoneSize     = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Done_Size" );
-    pFTEmbolden     = (FT_Error(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Embolden" );
-    pFTOblique      = (FT_Error(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Oblique" );
+    pFTEmbolden     = (void(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Embolden" );
+    pFTOblique      = (void(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Oblique" );
 
     bEnableSizeFT = (pFTNewSize!=NULL) && (pFTActivateSize!=NULL) && (pFTDoneSize!=NULL);
 
