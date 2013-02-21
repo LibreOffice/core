@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///WA\u003d",
+        "filename": "solenv/gbuild/Helper.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-21T14:27:05Z",
+      "side": 1,
+      "message": "forget to remove that?",
+      "revId": "62c8accc8346974fa44cf63eade6ae19d6a6e81f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
