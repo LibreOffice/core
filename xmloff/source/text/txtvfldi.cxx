@@ -936,7 +936,7 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
                 break;
             }
             default:
-                OSL_FAIL("unkown varfield type");
+                OSL_FAIL("unknown varfield type");
             } // switch
         } // else: no field master found/constructed
     } // else: no sequence-decl

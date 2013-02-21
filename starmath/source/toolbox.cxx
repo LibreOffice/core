@@ -48,7 +48,7 @@ static sal_uInt16  GetImageListRID( sal_uInt16 nCategoryRID )
         case RID_FORMAT_CAT         : nRes = RID_IL_FORMAT; break;
         case RID_MISC_CAT           : nRes = RID_IL_MISC; break;
         default :
-            OSL_FAIL( "unkown category" );
+            OSL_FAIL( "unknown category" );
     }
     return nRes;
 }
@@ -93,7 +93,7 @@ static sal_uInt16  GetCategoryRID( sal_uInt16 nResId )
             if (nResId != RID_IL_CATALOG)
             {
 #if OSL_DEBUG_LEVEL > 1
-                OSL_FAIL( "unkown category" );
+                OSL_FAIL( "unknown category" );
 #endif
             }
     }
@@ -310,7 +310,7 @@ void SmToolBoxWindow::SetCategory(sal_uInt16 nCategoryRID)
     pToolBoxCmd->Hide();
 
     sal_Int16 nIdx = GetToolBoxCategoriesIndex( nCategoryRID );
-        OSL_ENSURE( nIdx >= 0, "unkown category" );
+        OSL_ENSURE( nIdx >= 0, "unknown category" );
     if (nIdx >= 0)
         pToolBoxCmd = vToolBoxCategories[nIdx];
 

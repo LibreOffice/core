@@ -748,7 +748,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_DRAW_FOOTER:
     case FIELD_ID_DRAW_DATE_TIME:
     default:
-        OSL_FAIL("unkown field type/field has no content");
+        OSL_FAIL("unknown field type/field has no content");
         return sal_True; // invalid info; string in case of doubt
     }
 }
@@ -967,8 +967,8 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 
     case FIELD_ID_UNKNOWN:
     default:
-        OSL_FAIL("unkown field type!");
-        // ignore -> no format for unkowns
+        OSL_FAIL("unknown field type!");
+        // ignore -> no format for ukowns
         break;
     }
 }
@@ -1857,7 +1857,7 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_UNKNOWN:
     default:
-        OSL_FAIL("unkown field type encountered!");
+        OSL_FAIL("unknown field type encountered!");
         // always export content
         GetExport().Characters(sPresentation);
     }
@@ -2946,8 +2946,8 @@ enum XMLTokenEnum XMLTextFieldExport::MapPlaceholderType(sal_uInt16 nType)
             break;
 
         default:
-            // unkown placeholder: XML_TEXT
-            OSL_FAIL("unkown placeholder type");
+            // unknown placeholder: XML_TEXT
+            OSL_FAIL("unknown placeholder type");
     }
 
     return eType;
@@ -3088,7 +3088,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapChapterDisplayFormat(sal_Int16 nFormat)
             eName = XML_PLAIN_NUMBER;
             break;
         default:
-            OSL_FAIL("unkown chapter display format");
+            OSL_FAIL("unknown chapter display format");
             eName = XML_TOKEN_INVALID;
             break;
     }
@@ -3197,7 +3197,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceSource(sal_Int16 nType)
             eElement = XML_NOTE_REF;
             break;
         default:
-            OSL_FAIL("unkown reference source");
+            OSL_FAIL("unknown reference source");
             break;
     }
 

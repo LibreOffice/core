@@ -396,7 +396,7 @@ static PyObject *createUnoStructHelper(
                         OStringBuffer buf;
                         buf.append( "UNO struct " );
                         buf.append( PyStr_AsString(structName) );
-                        buf.append( " is unkown" );
+                        buf.append( " is unknown" );
                         PyErr_SetString (PyExc_RuntimeError, buf.getStr());
                     }
                 }

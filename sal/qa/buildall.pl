@@ -141,7 +141,7 @@ sub initEnvironment()
           $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "${FS}tmp${FS}";
           last SWITCH;
       }
-      print STDERR "buildall.pl: unkown platform\n";
+      print STDERR "buildall.pl: unknown platform\n";
       exit(1);
   }
 }

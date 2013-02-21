@@ -168,7 +168,7 @@ static const sal_Char* warningCodeToMessage(WarningCode wCode)
     case WIDL_WRONG_NAMING_CONV:
         return "type or identifier doesn't fulfill the UNO naming convention: ";
     }
-    return "unkown warning";
+    return "unknown warning";
 }
 
 static const sal_Char* parseStateToMessage(ParseState state)

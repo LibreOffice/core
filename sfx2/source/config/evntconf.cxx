@@ -257,7 +257,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
             }
         }
         else {
-            DBG_WARNING( "PropagateEvents_Impl: Got unkown event" );
+            DBG_WARNING( "PropagateEvents_Impl: Got unknown event" );
         }
     }
 }

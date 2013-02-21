@@ -49,7 +49,7 @@ namespace dbaui
         ::rtl::OUString m_sName;                // table for update data
         ::rtl::OUString m_sAutoIncrementValue;  // the autoincrement value set in the datasource
         String          m_sTypeNames;           // these type names are the ones out of the resource file
-        TOTypeInfoSP    m_pTypeInfo;            // fall back when type is unkown because database driver has a failure
+        TOTypeInfoSP    m_pTypeInfo;            // fall back when type is unknown because database driver has a failure
 
         sal_Bool        m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has a AutoIncrementValue property in their info property
         sal_Bool        m_bNew      : 1;        // is true when we create a new table

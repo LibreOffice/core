@@ -2308,7 +2308,7 @@ void XMLFileNameImportContext::ProcessAttribute(
             break;
         }
         default:
-            ; // unkown attribute: ignore
+            ; // unknown attribute: ignore
             break;
     }
 }

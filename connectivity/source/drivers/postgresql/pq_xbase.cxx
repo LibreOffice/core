@@ -121,7 +121,7 @@ void ReflectionBase::setPropertyValue_NoBroadcast_public(
     if( -1 == nHandle  )
     {
         rtl::OUStringBuffer buf(128);
-        buf.appendAscii( "Unkown property '" );
+        buf.appendAscii( "Unknown property '" );
         buf.append( name );
         buf.appendAscii( "' in " );
         buf.append( m_implName );

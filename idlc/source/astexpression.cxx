@@ -1277,7 +1277,7 @@ const sal_Char* SAL_CALL exprTypeToString(ExprType t)
             return "none";
     }
 
-    return ("unkown");
+    return ("unknown");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
