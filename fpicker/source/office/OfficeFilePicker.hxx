@@ -19,12 +19,10 @@
 #ifndef INCLUDED_SVT_FILEPICKER_HXX
 #define INCLUDED_SVT_FILEPICKER_HXX
 
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -52,11 +50,9 @@ typedef ::com::sun::star::uno::Sequence< OUString >  OUStringList;   // can be t
 
 // class SvtFilePicker ---------------------------------------------------
 
-typedef ::cppu::ImplHelper7 <   ::com::sun::star::ui::dialogs::XFilePickerControlAccess
-                            ,   ::com::sun::star::ui::dialogs::XFilePickerNotifier
+typedef ::cppu::ImplHelper5 <   ::com::sun::star::ui::dialogs::XFilePicker3
+                            ,   ::com::sun::star::ui::dialogs::XFilePickerControlAccess
                             ,   ::com::sun::star::ui::dialogs::XFilePreview
-                            ,   ::com::sun::star::ui::dialogs::XFilterManager
-                            ,   ::com::sun::star::ui::dialogs::XFilterGroupManager
                             ,   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::ui::dialogs::XAsynchronousExecutableDialog
                             >   SvtFilePicker_Base;
@@ -163,6 +159,19 @@ public:
     // XFilterGroupManager functions
     //------------------------------------------------------------------------------------
     virtual void SAL_CALL           appendFilterGroup( const OUString& sGroupTitle, const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& aFilters ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+
+    //------------------------------------------------------------------------------------
+    // these methods are here because they're ambiguous
+    //------------------------------------------------------------------------------------
+    virtual void SAL_CALL           cancel() throw( ::com::sun::star::uno::RuntimeException )
+     { ::svt::OCommonPicker::cancel(); }
+    virtual void SAL_CALL           dispose() throw( ::com::sun::star::uno::RuntimeException )
+     { ::svt::OCommonPicker::dispose(); }
+    virtual void SAL_CALL           addEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& l) throw( ::com::sun::star::uno::RuntimeException )
+     { ::svt::OCommonPicker::addEventListener(l); }
+    virtual void SAL_CALL           removeEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& l) throw( ::com::sun::star::uno::RuntimeException )
+     { ::svt::OCommonPicker::removeEventListener(l); }
 
     //------------------------------------------------------------------------------------
     // XInitialization functions
