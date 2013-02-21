@@ -76,7 +76,6 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
         return EXIT_SUCCESS;
     }
 #endif
-    fprintf (stderr, "enter svmain()\n");
     return SVMain();
 #if defined ANDROID
     } catch (const ::com::sun::star::uno::Exception &e) {
