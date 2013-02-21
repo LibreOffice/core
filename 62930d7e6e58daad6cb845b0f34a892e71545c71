@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///Sg\u003d",
+        "filename": "odk/CustomTarget_check.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000172
+      },
+      "writtenOn": "2013-02-21T22:16:35Z",
+      "side": 1,
+      "message": "Yeah, but I\u0027m not sure how to do that in gnu make.\nExamples welcome!",
+      "parentUuid": "AAAAVn///Wc\u003d",
+      "revId": "62930d7e6e58daad6cb845b0f34a892e71545c71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn///WY\u003d",
         "filename": "odk/CustomTarget_doxygen.mk",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-21T14:41:38Z",
       "side": 1,
       "message": "these variables need some \"odk_\" prefix",
+      "revId": "62930d7e6e58daad6cb845b0f34a892e71545c71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///SI\u003d",
+        "filename": "odk/CustomTarget_doxygen.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000172
+      },
+      "writtenOn": "2013-02-21T22:16:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVn///WY\u003d",
       "revId": "62930d7e6e58daad6cb845b0f34a892e71545c71",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///SM\u003d",
+        "filename": "odk/CustomTarget_include.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000172
+      },
+      "writtenOn": "2013-02-21T22:16:35Z",
+      "side": 1,
+      "message": "I just included that file for now.",
+      "parentUuid": "AAAAVn///WU\u003d",
+      "revId": "62930d7e6e58daad6cb845b0f34a892e71545c71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn///WQ\u003d",
         "filename": "odk/CustomTarget_javadoc.mk",
         "patchSetId": 6
@@ -64,6 +118,24 @@
       "writtenOn": "2013-02-21T14:41:38Z",
       "side": 1,
       "message": "please prefix this variable",
+      "revId": "62930d7e6e58daad6cb845b0f34a892e71545c71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///SY\u003d",
+        "filename": "odk/CustomTarget_javadoc.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000172
+      },
+      "writtenOn": "2013-02-21T22:16:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAVn///WQ\u003d",
       "revId": "62930d7e6e58daad6cb845b0f34a892e71545c71",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
