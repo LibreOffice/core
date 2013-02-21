@@ -18,11 +18,11 @@ $(eval $(call gb_ExternalProject_register_targets,mythes,\
 ))
 
 $(call gb_ExternalProject_get_state_target,mythes,build):
-	cd $(EXTERNAL_WORKDIR) \
-	&& LIBS="$(gb_STDLIBS) $(LIBS)" ./configure --disable-shared --with-pic \
-	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no) \
-	$(if $(filter C52U,$(COM)$(CPU)),CFLAGS="-m64") \
-	&& $(MAKE) \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		LIBS="$(gb_STDLIBS) $(LIBS)" ./configure --disable-shared --with-pic \
+		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no) \
+		$(if $(filter C52U,$(COM)$(CPU)),CFLAGS="-m64") \
+		&& $(MAKE) \
+	)
 
 # vim: set noet sw=4 ts=4:

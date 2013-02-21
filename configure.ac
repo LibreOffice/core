@@ -1035,6 +1035,14 @@ AC_ARG_ENABLE(dependency-tracking,
                           Speed up one-time builds.],
 ,)
 
+AC_ARG_ENABLE(quiet-external,
+    AS_HELP_STRING([--enable-quiet-external],
+        [Hide external module build output unless they fail to build.])[
+  --enable-quiet-external
+                          Hide the output of external module build unless they fails.
+                          That help keep the output clean of mostly irrelevant and messy output.],
+,)
+
 AC_ARG_ENABLE(icecream,
     AS_HELP_STRING([--enable-icecream],
         [Use the 'icecream' distributed compiling tool to speedup the compilation.
@@ -11880,6 +11888,20 @@ else
     AC_MSG_RESULT([yes])
 fi
 AC_SUBST(nodep)
+
+dnl ===================================================================
+dnl check to enable the hiding of external modules build output
+dnl unless they fails to build
+dnl ===================================================================
+AC_MSG_CHECKING([whether to hide external module build output])
+if test "$enable_quiet_external" = "yes"; then
+    QUIET_EXTERNAL=TRUE
+    AC_MSG_RESULT([yes])
+else
+    QUIET_EXTERNAL=
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(QUIET_EXTERNAL)
 
 dnl ===================================================================
 dnl Number of CPUs to use during the build

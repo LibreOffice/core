@@ -20,9 +20,10 @@ $(eval $(call gb_ExternalProject_register_targets,cairo,\
 ifeq ($(OS)$(COM),WNTMSC)
 
 $(call gb_ExternalProject_get_state_target,cairo,build) :
-	cd $(EXTERNAL_WORKDIR) \
-	&& $(MAKE) -f Makefile.win32 CFG=release ZLIB3RDLIB=zlib.lib \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+	$(MAKE) -f Makefile.win32 CFG=release ZLIB3RDLIB=zlib.lib \
+	)
+
 
 else
 
@@ -30,8 +31,8 @@ else
 # from cairo.h in non-overridable way
 
 $(call gb_ExternalProject_get_state_target,cairo,build) :
-	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure \
+	$(call gb_ExternalProject_run,build,\
+	./configure \
 		$(if $(debug),STRIP=" ") \
 		CFLAGS="$(if $(debug),-g) $(SOLARINC)" \
 		LDFLAGS='-L$(OUTDIR)/lib' \
@@ -51,7 +52,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	&& cp cairo-version.h src/cairo-version.h \
 	&& cd src && $(MAKE) \
-	&& touch $@
+	)
 
 endif
 
