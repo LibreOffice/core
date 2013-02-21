@@ -24,8 +24,6 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <com/sun/star/awt/FontFamily.hpp>
-#include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 
@@ -43,7 +41,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::awt;
 
 void XMLTextExportPropertySetMapper::handleElementItem(
         SvXMLExport& rExp,
@@ -204,8 +201,8 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
 {
     OUString sFamilyName;
     OUString sStyleName;
-    sal_Int16 nFamily = awt::FontFamily::DONTKNOW;
-    sal_Int16 nPitch = awt::FontPitch::DONTKNOW;
+    FontFamily nFamily = FAMILY_DONTKNOW;
+    FontPitch nPitch = PITCH_DONTKNOW;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
 
     OUString sTmp;
@@ -216,9 +213,9 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
 
     sal_Int16 nTmp = sal_Int16();
     if( pFontFamilyState && (pFontFamilyState->maValue >>= nTmp ) )
-        nFamily = nTmp;
+        nFamily = static_cast< FontFamily >( nTmp );
     if( pFontPitchState && (pFontPitchState->maValue >>= nTmp ) )
-        nPitch = nTmp;
+        nPitch = static_cast< FontPitch >( nTmp );
     if( pFontCharsetState && (pFontCharsetState->maValue >>= nTmp ) )
         eEnc = (rtl_TextEncoding)nTmp;
 

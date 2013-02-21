@@ -1150,7 +1150,8 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
         {
             const awt::FontDescriptor aFont = xFormat->getFontDescriptor();
             OSL_ENSURE(!aFont.Name.isEmpty(),"No Font Name !");
-            GetFontAutoStylePool()->Add(aFont.Name,aFont.StyleName,aFont.Family,aFont.Pitch,aFont.CharSet );
+            GetFontAutoStylePool()->Add(aFont.Name,aFont.StyleName,static_cast<FontFamily>(aFont.Family),
+                static_cast<FontPitch>(aFont.Pitch),aFont.CharSet );
         }
         catch(beans::UnknownPropertyException&)
         {

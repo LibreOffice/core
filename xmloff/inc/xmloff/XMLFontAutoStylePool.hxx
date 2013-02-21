@@ -23,6 +23,7 @@
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
 #include <rtl/ustring.hxx>
+#include <tools/fontenum.hxx>
 #include <xmloff/uniref.hxx>
 #include <set>
 
@@ -53,15 +54,15 @@ public:
     ::rtl::OUString Add(
             const ::rtl::OUString& rFamilyName,
             const ::rtl::OUString& rStyleName,
-            sal_Int16 nFamily,
-            sal_Int16 nPitch,
+            FontFamily nFamily,
+            FontPitch nPitch,
             rtl_TextEncoding eEnc );
 
     ::rtl::OUString Find(
             const ::rtl::OUString& rFamilyName,
             const ::rtl::OUString& rStyleName,
-            sal_Int16 nFamily,
-            sal_Int16 nPitch,
+            FontFamily nFamily,
+            FontPitch nPitch,
             rtl_TextEncoding eEnc )const;
     ::rtl::OUString Find( const ::rtl::OUString& rInternalName ) const;
 

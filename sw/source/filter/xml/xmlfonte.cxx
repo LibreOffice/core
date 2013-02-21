@@ -56,7 +56,7 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
         const SvxFontItem& rFont =
             (const SvxFontItem&)rPool.GetDefaultItem( nWhichId );
         Add( rFont.GetFamilyName(), rFont.GetStyleName(),
-             static_cast< sal_uInt16 >(rFont.GetFamily()), static_cast< sal_uInt16 >(rFont.GetPitch()),
+             rFont.GetFamily(), rFont.GetPitch(),
              rFont.GetCharSet() );
         sal_uInt32 nItems = rPool.GetItemCount2( nWhichId );
         for( sal_uInt32 j = 0; j < nItems; ++j )
@@ -66,7 +66,7 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
                 const SvxFontItem *pFont =
                             (const SvxFontItem *)pItem;
                 Add( pFont->GetFamilyName(), pFont->GetStyleName(),
-                     static_cast< sal_uInt16 >(pFont->GetFamily()), static_cast< sal_uInt16 >(pFont->GetPitch()),
+                     pFont->GetFamily(), pFont->GetPitch(),
                      pFont->GetCharSet() );
             }
         }

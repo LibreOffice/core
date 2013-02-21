@@ -118,8 +118,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
     sal_Unicode cBullet = 0xf095;
     OUString sBulletFontName, sBulletFontStyleName ;
-    sal_Int16 eBulletFontFamily = FAMILY_DONTKNOW;
-    sal_Int16 eBulletFontPitch = PITCH_DONTKNOW;
+    FontFamily eBulletFontFamily = FAMILY_DONTKNOW;
+    FontPitch eBulletFontPitch = PITCH_DONTKNOW;
     rtl_TextEncoding eBulletFontEncoding = RTL_TEXTENCODING_DONTKNOW;
 
     OUString sImageURL;
@@ -177,8 +177,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             {
                 sBulletFontName = rFDesc.Name;
                 sBulletFontStyleName = rFDesc.StyleName;
-                eBulletFontFamily = (sal_Int16)rFDesc.Family;
-                eBulletFontPitch = (sal_Int16)rFDesc.Pitch;
+                eBulletFontFamily = static_cast< FontFamily >( rFDesc.Family );
+                eBulletFontPitch = static_cast< FontPitch >( rFDesc.Pitch );
                 eBulletFontEncoding = (rtl_TextEncoding)rFDesc.CharSet;
             }
         }

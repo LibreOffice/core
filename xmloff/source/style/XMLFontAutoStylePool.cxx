@@ -44,8 +44,8 @@ class XMLFontAutoStylePoolEntry_Impl
     OUString    sName;
     OUString    sFamilyName;
     OUString    sStyleName;
-    sal_Int16   nFamily;
-    sal_Int16   nPitch;
+    FontFamily  nFamily;
+    FontPitch   nPitch;
     rtl_TextEncoding eEnc;
 
 public:
@@ -54,22 +54,22 @@ public:
             const ::rtl::OUString& rName,
             const ::rtl::OUString& rFamilyName,
             const ::rtl::OUString& rStyleName,
-            sal_Int16 nFamily,
-            sal_Int16 nPitch,
+            FontFamily nFamily,
+            FontPitch nPitch,
             rtl_TextEncoding eEnc );
 
     inline XMLFontAutoStylePoolEntry_Impl(
             const ::rtl::OUString& rFamilyName,
             const ::rtl::OUString& rStyleName,
-            sal_Int16 nFamily,
-            sal_Int16 nPitch,
+            FontFamily nFamily,
+            FontPitch nPitch,
             rtl_TextEncoding eEnc );
 
     const OUString& GetName() const { return sName; }
     const OUString& GetFamilyName() const { return sFamilyName; }
     const OUString& GetStyleName() const { return sStyleName; }
-    sal_Int16 GetFamily() const {   return nFamily; }
-    sal_Int16 GetPitch() const { return nPitch; }
+    FontFamily GetFamily() const {   return nFamily; }
+    FontPitch GetPitch() const { return nPitch; }
     rtl_TextEncoding GetEncoding() const { return eEnc; }
 };
 
@@ -78,8 +78,8 @@ inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
         const ::rtl::OUString& rName,
         const ::rtl::OUString& rFamilyName,
         const ::rtl::OUString& rStyleName,
-        sal_Int16 nFam,
-        sal_Int16 nP,
+        FontFamily nFam,
+        FontPitch nP,
         rtl_TextEncoding eE ) :
     sName( rName ),
     sFamilyName( rFamilyName ),
@@ -93,8 +93,8 @@ inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
 inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
         const ::rtl::OUString& rFamilyName,
         const ::rtl::OUString& rStyleName,
-        sal_Int16 nFam,
-        sal_Int16 nP,
+        FontFamily nFam,
+        FontPitch nP,
         rtl_TextEncoding eE ) :
     sFamilyName( rFamilyName ),
     sStyleName( rStyleName ),
@@ -149,8 +149,8 @@ XMLFontAutoStylePool::~XMLFontAutoStylePool()
 OUString XMLFontAutoStylePool::Add(
             const OUString& rFamilyName,
             const OUString& rStyleName,
-            sal_Int16 nFamily,
-            sal_Int16 nPitch,
+            FontFamily nFamily,
+            FontPitch nPitch,
             rtl_TextEncoding eEnc )
 {
     OUString sPoolName;
@@ -203,8 +203,8 @@ OUString XMLFontAutoStylePool::Add(
 ::rtl::OUString XMLFontAutoStylePool::Find(
             const OUString& rFamilyName,
             const OUString& rStyleName,
-            sal_Int16 nFamily,
-            sal_Int16 nPitch,
+            FontFamily nFamily,
+            FontPitch nPitch,
             rtl_TextEncoding eEnc ) const
 {
     OUString sName;
