@@ -27,18 +27,18 @@ REM Example: set OO_SDK_NAME=apacheopenoffice4.0_sdk
 set OO_SDK_NAME=apacheopenoffice4.0_sdk
 
 REM Installation directory of the Software Development Kit.
-REM Example: set OO_SDK_HOME=C:\Program Files\Apache OpenOffice\Basic 4.0\sdk
+REM Example: set OO_SDK_HOME=C:\Program Files\OpenOffice\Basic 4.0\sdk
 set OO_SDK_HOME=
 
 REM Office installation directory.
-REM Example: set OFFICE_HOME=C:\Program Files\Apache OpenOffice 4
+REM Example: set OFFICE_HOME=C:\Program Files\OpenOffice 4
 set OFFICE_HOME=
 
-REM Example: set OFFICE_HOME=C:\Program Files\Apache OpenOffice\Basis 4.0
+REM Example: set OFFICE_HOME=C:\Program Files\OpenOffice\Basis 4.0
 set OFFICE_BASE_HOME=
 
 REM URE installation directory.
-REM Example: set OO_SDK_URE_HOME=C:\Program Files\Apache OpenOffice\URE
+REM Example: set OO_SDK_URE_HOME=C:\Program Files\OpenOffice\URE
 set OO_SDK_URE_HOME=
 
 REM Directory of the make command.

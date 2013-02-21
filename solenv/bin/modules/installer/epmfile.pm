@@ -492,7 +492,7 @@ sub create_epm_header
     {
         # refer to the license in the matching AOO installation
         # TODO: sync AOO dest license full path with lpacks/sdks/exts
-        my $licpath = "apacheopenoffice3/program/" . $licensefilename;
+        my $licpath = "openoffice4/program/" . $licensefilename;
         $foundlicensefile = 1;
         $line = "%license " . $licpath . "\n";
         push(@epmheader, $line);
@@ -550,7 +550,7 @@ sub create_epm_header
                 }
             }
 
-            if ( $installer::globals::debian && $variableshashref->{'UNIXPRODUCTNAME'} eq 'apache openoffice' )
+            if ( $installer::globals::debian && $variableshashref->{'UNIXPRODUCTNAME'} eq 'openoffice' )
             {
                 $line = "%provides" . " openoffice.org-unbundled\n";
                 push(@epmheader, $line);
@@ -3435,7 +3435,6 @@ sub finalize_linux_patch
     my $productname = $allvariables->{'PRODUCTNAME'};
     $productname = lc($productname);
     $productname =~ s/ /_/g;    # abc office -> abc_office
-#   $productname =~ s/\.//g;    # openoffice.org -> openofficeorg
 
     $infoline = "Adding productname $productname into Linux patch script\n";
     push( @installer::globals::logfileinfo, $infoline);

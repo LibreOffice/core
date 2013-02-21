@@ -333,7 +333,7 @@ sub replace_variables_in_scriptfile
     replace_one_variable_in_shellscript($scriptfile, $allvariables->{'PRODUCTVERSION'}, "PRODUCTVERSION" );
 
     my $scriptname = lc($allvariables->{'PRODUCTNAME'}) . "\.script";
-    if ( $allvariables->{'PRODUCTNAME'} eq "Apache OpenOffice" )
+    if ( $allvariables->{'PRODUCTNAME'} eq "OpenOffice" )
     {
         $scriptname = "org.openoffice.script";
     }

@@ -228,14 +228,21 @@
 				<desc>Contains common product and version information</desc>
 			</info>
 			<!--The default must be written by the setup.-->
-			<prop oor:name="ooName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the name of a product.</desc>
-				</info>
-				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-			<prop oor:name="ooXMLFileFormatVersion" oor:type="xs:string">
+            <prop oor:name="ooName" oor:type="xs:string">
+                <info>
+                    <desc>Specifies the name of a product.</desc>
+                </info>
+                <value/>
+                <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+            </prop>
+            <prop oor:name="ooFullname" oor:type="xs:string">
+                <info>
+                    <author>orw</author>
+                    <desc>Specifies the full name of a product.</desc>
+                </info>
+                <value/>
+            </prop>
+            <prop oor:name="ooXMLFileFormatVersion" oor:type="xs:string">
 				<info>
 					<desc>Specifies the version of the SO 6/7 or OOo 1.0 xml file formats.</desc>
 				</info>

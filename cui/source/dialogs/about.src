@@ -33,7 +33,7 @@ ModalDialog RID_DEFAULTABOUT
     Moveable = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 150 ) ;
-    Text [ en-US ] = "About %PRODUCTNAME" ;
+    Text [ en-US ] = "About %FULLPRODUCTNAME" ;
     OKButton RID_CUI_ABOUT_BTN_OK
     {
         DefButton = TRUE ;
@@ -48,7 +48,7 @@ ModalDialog RID_DEFAULTABOUT
     FixedText RID_CUI_ABOUT_FTXT_VERSION
     {
         WordBreak = TRUE ;
-        Text = "%PRODUCTNAME %ABOUTBOXPRODUCTVERSION %PRODUCTEXTENSION" ;
+        Text = "%FULLPRODUCTNAME %ABOUTBOXPRODUCTVERSION %PRODUCTEXTENSION" ;
     };
     MultiLineEdit RID_CUI_ABOUT_FTXT_BUILDDATA
    {

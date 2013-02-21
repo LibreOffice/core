@@ -44,11 +44,11 @@ Linux)
 esac
 
 # creating link to ure
-if [ -d $$UREDIR/apacheopenoffice/ure ]
+if [ -d $$UREDIR/openoffice/ure ]
 then
-      ln -s $$UREDIR/apacheopenoffice/ure $$PRODUCTINSTALLLOCATION/apacheopenoffice/basisBASISDIRECTORYVERSION/ure-link >/dev/null 2>&1
+      ln -s $$UREDIR/openoffice/ure $$PRODUCTINSTALLLOCATION/openoffice/basisBASISDIRECTORYVERSION/ure-link >/dev/null 2>&1
 else
-      ln -s ../ure $$PRODUCTINSTALLLOCATION/apacheopenoffice/basisBASISDIRECTORYVERSION/ure-link >/dev/null 2>&1
+      ln -s ../ure $$PRODUCTINSTALLLOCATION/openoffice/basisBASISDIRECTORYVERSION/ure-link >/dev/null 2>&1
 fi
 
 exit 0
@@ -80,11 +80,11 @@ Linux)
   ;;
 esac
 
-if [ -h $$PRODUCTINSTALLLOCATION/apacheopenoffice/basisBASISDIRECTORYVERSION/ure-link -a $$LASTUNINSTALL -eq 1 ]
+if [ -h $$PRODUCTINSTALLLOCATION/openoffice/basisBASISDIRECTORYVERSION/ure-link -a $$LASTUNINSTALL -eq 1 ]
 then
-  rm -f $$PRODUCTINSTALLLOCATION/apacheopenoffice/basisBASISDIRECTORYVERSION/ure-link 2>/dev/null
-  rmdir $$PRODUCTINSTALLLOCATION/apacheopenoffice/basisBASISDIRECTORYVERSION 2>/dev/null
-  rmdir $$PRODUCTINSTALLLOCATION/apacheopenoffice 2>/dev/null
+  rm -f $$PRODUCTINSTALLLOCATION/openoffice/basisBASISDIRECTORYVERSION/ure-link 2>/dev/null
+  rmdir $$PRODUCTINSTALLLOCATION/openoffice/basisBASISDIRECTORYVERSION 2>/dev/null
+  rmdir $$PRODUCTINSTALLLOCATION/openoffice 2>/dev/null
 fi
 
 exit 0

@@ -33,7 +33,7 @@ BuildArch: noarch
 #        here and check for the 'mandriva-release' in the future (next year).
 #
 Requires: mandrake-release
-Provides: apache_openoffice3-desktop-integration
+Provides: openoffice-desktop-integration
 
 %define _unpackaged_files_terminate_build 0
 %define _binary_filedigest_algorithm 1

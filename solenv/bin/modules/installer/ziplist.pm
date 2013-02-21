@@ -639,7 +639,7 @@ sub set_manufacturer
 {
     my ($allvariables) = @_;
 
-    my $openofficeproductname = "Apache OpenOffice";
+    my $openofficeproductname = "OpenOffice";
     my $sunname = "";
 
 

@@ -472,7 +472,7 @@ sub get_downloadname_productname
     else
     {
         $start = "Apache_OpenOffice";
-        if ( $allvariables->{'PRODUCTNAME'} eq "Apache OpenOffice" )
+        if ( $allvariables->{'PRODUCTNAME'} eq "OpenOffice" )
         {
             if ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )
             {

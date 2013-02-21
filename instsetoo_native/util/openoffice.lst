@@ -9,8 +9,8 @@ Globals
             OOOPACKAGEVERSION 4.0.0
             UREPACKAGEVERSION 4.0.0
             URELAYERVERSION 1
-            BASISROOTNAME ApacheOpenOffice
-            UNIXBASISROOTNAME apacheopenoffice
+            BASISROOTNAME OpenOffice
+            UNIXBASISROOTNAME openoffice
             HIDELICENSEDIALOG 1
             PACKAGEPREFIX 
             BASISPACKAGEPREFIX aoobasis
@@ -58,7 +58,8 @@ Apache_OpenOffice
     {
         variables
         {
-            PRODUCTNAME Apache OpenOffice
+            FULLPRODUCTNAME Apache OpenOffice
+            PRODUCTNAME OpenOffice
             PRODUCTVERSION 4.0.0
             PRODUCTEXTENSION 
             LONG_PRODUCTEXTENSION 
@@ -117,7 +118,8 @@ Apache_OpenOffice_wJRE
     {
         variables
         {
-            PRODUCTNAME Apache OpenOffice
+            FULLPRODUCTNAME Apache OpenOffice
+            PRODUCTNAME OpenOffice
             PRODUCTVERSION 4.0.0
             PRODUCTEXTENSION 
             LONG_PRODUCTEXTENSION 
@@ -176,6 +178,7 @@ Apache_OpenOffice_Dev
     {
         variables
         {
+            FULLPRODUCTNAME AOO-Developer-Build
             PRODUCTNAME AOO-Developer-Build
             PRODUCTVERSION 4.0.0
             PRODUCTEXTENSION 
@@ -244,6 +247,7 @@ URE
         downloadname URE_{productversion}_{os}_install_{languages}
         variables
         {
+            FULLPRODUCTNAME URE
             PRODUCTNAME URE
             PRODUCTVERSION 4.0.0
             PACKAGEVERSION 4.0
@@ -286,7 +290,8 @@ Apache_OpenOffice_SDK
         downloadname Apache_OpenOffice-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME Apache OpenOffice
+            FULLPRODUCTNAME Apache OpenOffice
+            PRODUCTNAME OpenOffice
             PRODUCTVERSION 4.0.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
@@ -333,6 +338,7 @@ Apache_OpenOffice_Dev_SDK
         downloadname Apache_OpenOffice-Dev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
+            FULLPRODUCTNAME AOO-Developer-Build
             PRODUCTNAME AOO-Developer-Build
             PRODUCTVERSION 4.0.0
             PRODUCTEXTENSION

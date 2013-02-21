@@ -54,7 +54,7 @@ namespace cli_ure {
 
 // INSTALL_PATH value needs to correspond to the Windows registry subkey
 // in main\scp2\source\ooo\registryitem_ooo.scp
-#define INSTALL_PATH L"Software\\Apache OpenOffice\\UNO\\InstallPath"
+#define INSTALL_PATH L"Software\\OpenOffice\\UNO\\InstallPath"
 #define BASIS_LINK L"\\basis-link"
 #define URE_LINK L"\\ure-link"
 #define URE_BIN L"\\bin"
@@ -130,7 +130,7 @@ void oneDirUp(LPTSTR io_path)
     for example c:/openoffice.org 3/program
    This path is either obtained from the environment variable UNO_PATH
    or the registry item
-   "Software\\Apache OpenOffice\\UNO\\InstallPath"
+   "Software\\OpenOffice\\UNO\\InstallPath"
    either in HKEY_CURRENT_USER or HKEY_LOCAL_MACHINE
    The return value must be freed with delete[]
 */
@@ -332,8 +332,8 @@ namespace util
 
     Bootstrapping requires the existence of many libraries which are contained
     in an URE installation. To find and load these libraries the Windows
-    registry keys HKEY_CURRENT_USER\Software\Apache OpenOffice\Layer\URE\1
-    and HKEY_LOCAL_MACHINE\Software\Apache OpenOffice\Layer\URE\1 are examined.
+    registry keys HKEY_CURRENT_USER\Software\OpenOffice\Layer\URE\1
+    and HKEY_LOCAL_MACHINE\Software\OpenOffice\Layer\URE\1 are examined.
     These contain a named value UREINSTALLLOCATION which holds a path to the URE
     installation folder.
 */

@@ -56,11 +56,11 @@ struct PROPERTYMAP
 
 PROPERTYMAP g_rgPROPERTYMAP[] =
 {
-    { PKEY_Title,          L"Apache OpenOffice",          L"Title" },
-    { PKEY_Author,         L"Apache OpenOffice",          L"Author" },
-    { PKEY_Subject,        L"Apache OpenOffice",          L"Subject" },
-    { PKEY_Keywords,       L"Apache OpenOffice",          L"Keyword" },
-    { PKEY_Comment,        L"Apache OpenOffice",          L"Comments" },
+    { PKEY_Title,          L"OpenOffice",          L"Title" },
+    { PKEY_Author,         L"OpenOffice",          L"Author" },
+    { PKEY_Subject,        L"OpenOffice",          L"Subject" },
+    { PKEY_Keywords,       L"OpenOffice",          L"Keyword" },
+    { PKEY_Comment,        L"OpenOffice",          L"Comments" },
 };
 
 size_t gPropertyMapTableSize = sizeof(g_rgPROPERTYMAP)/sizeof(g_rgPROPERTYMAP[0]);

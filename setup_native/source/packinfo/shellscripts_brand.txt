@@ -44,11 +44,11 @@ Linux)
 esac
 
 # creating link to basis layer
-if [ -d $$BASISDIR/apacheopenoffice/basisBASISDIRECTORYVERSION ]
+if [ -d $$BASISDIR/openoffice/basisBASISDIRECTORYVERSION ]
 then
-      ln -s $$BASISDIR/apacheopenoffice/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
+      ln -s $$BASISDIR/openoffice/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
 else
-      ln -s ../apacheopenoffice/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
+      ln -s ../openoffice/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
 fi
 
 exit 0

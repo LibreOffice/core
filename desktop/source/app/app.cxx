@@ -409,6 +409,8 @@ namespace
 {
     struct BrandName
         : public rtl::Static< String, BrandName > {};
+    struct FullProductname
+        : public rtl::Static< String, FullProductname > {};
     struct Version
         : public rtl::Static< String, Version > {};
     struct AboutBoxVersion
@@ -430,9 +432,11 @@ void ReplaceStringHookProc( UniString& rStr )
     static int nAll = 0, nPro = 0;
 
     nAll++;
-    if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
+    if ( ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND ) ||
+         ( rStr.SearchAscii( "%FULLPRODUCT" ) != STRING_NOTFOUND ) )
     {
         String &rBrandName = BrandName::get();
+        String& rFullProductname = FullProductname::get();
         String &rVersion = Version::get();
         String &rAboutBoxVersion = AboutBoxVersion::get();
         String &rExtension = Extension::get();
@@ -445,6 +449,10 @@ void ReplaceStringHookProc( UniString& rStr )
             Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
             aRet >>= aTmp;
             rBrandName = aTmp;
+
+            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::FULLPRODUCTNAME );
+            aRet >>= aTmp;
+            rFullProductname = aTmp;
 
             aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTXMLFILEFORMATNAME );
             aRet >>= aTmp;
@@ -472,6 +480,7 @@ void ReplaceStringHookProc( UniString& rStr )
 
         nPro++;
         rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", rBrandName );
+        rStr.SearchAndReplaceAllAscii( "%FULLPRODUCTNAME", rFullProductname );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", rVersion );
         rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSION", rAboutBoxVersion );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );

@@ -1316,7 +1316,7 @@ End
 RegistryItem gid_Regitem_Path
     ModuleID = gid_Module_Root;
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "Software\Apache OpenOffice\%PRODUCTNAME";
+    Subkey = "Software\OpenOffice\%PRODUCTNAME";
     Name = "Path";
     Value = "[INSTALLLOCATION]";
 End

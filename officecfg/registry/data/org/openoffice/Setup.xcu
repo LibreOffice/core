@@ -27,6 +27,9 @@
         <prop oor:name="ooName" install:module="brand">
             <value >${PRODUCTNAME}</value>
         </prop>
+        <prop oor:name="ooFullname" install:module="brand">
+            <value >${FULLPRODUCTNAME}</value>
+        </prop>
         <prop oor:name="ooSetupVersion" install:module="brand">
             <value >${PRODUCTVERSION}</value>
         </prop>

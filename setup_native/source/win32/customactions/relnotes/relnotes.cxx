@@ -158,7 +158,7 @@ extern "C" UINT __stdcall ShowSurveyAfter( MSIHANDLE handle )
     std::wstring prodname;
 
     GetMsiProp( handle, TEXT("ProductName"), prodname );
-    std::wstring::size_type nIndex = prodname.find( TEXT( "Apache OpenOffice" ) );
+    std::wstring::size_type nIndex = prodname.find( TEXT( "OpenOffice" ) );
     if( std::wstring::npos == nIndex )
         return ERROR_SUCCESS;
 

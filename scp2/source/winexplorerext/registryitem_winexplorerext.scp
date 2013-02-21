@@ -77,8 +77,8 @@ RegistryItem gid_Regitem_Folder_shellex_ColumnHandlers_C52AF81D_F7A0_4AAB_8E87_F
     ModuleID = gid_Module_Optional_Winexplorerext;
     Styles = (X64);
     Subkey = "Folder\shellex\ColumnHandlers\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}";
-    Value = "Apache OpenOffice Column Handler";
-    Val64 = "Apache OpenOffice Column Handler";
+    Value = "OpenOffice Column Handler";
+    Val64 = "OpenOffice Column Handler";
 End
 
 RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32

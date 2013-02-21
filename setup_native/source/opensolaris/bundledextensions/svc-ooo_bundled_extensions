@@ -49,11 +49,11 @@
 #Create the folder which contains the temporary user installation
 INSTDIR=`/usr/bin/mktemp -d "/tmp/userinstall.XXXXXX"`
 
-OOO_BASE_DIR="/opt/apacheopenoffice/basis${OOOBASEVERSION}"
+OOO_BASE_DIR="/opt/openoffice/basis${OOOBASEVERSION}"
 
 case "$1" in
 'start')
-    EXTENSIONDIR=/opt/apacheopenoffice${OOOBRANDPACKAGEVERSION}/share/extension/install
+    EXTENSIONDIR=/opt/openoffice${OOOBRANDPACKAGEVERSION}/share/extension/install
     for FILE in $EXTENSIONDIR/*.oxt
     do
 	#We check if the file exist, because if there is no extension
@@ -70,7 +70,7 @@ case "$1" in
 		#list. That is, it has not been installed (with unopkg) yet.
 		#Therefore we do it now.
 		echo installing $FILE
-		/opt/apacheopenoffice${OOOBRANDPACKAGEVERSION}/program/unopkg add --shared --bundled "$FILE" '-env:UserInstallation=file://$INSTDIR' '-env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+		/opt/openoffice${OOOBRANDPACKAGEVERSION}/program/unopkg add --shared --bundled "$FILE" '-env:UserInstallation=file://$INSTDIR' '-env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
 		#Let us remember that this extensions has been installed
 		#by adding the path name of the extension to the file 
 		#installed
@@ -98,7 +98,7 @@ case "$1" in
 # 	    #share/extension/install. Now we remove the installed
 # 	    #extension
 # 	    echo removing `basename $LINE`
-# 	    /opt/apacheopenoffice${OOOBRANDPACKAGEVERSION}/program/unopkg remove --shared --bundled "`basename $LINE`" '-env:UserInstallation=file://$INSTDIR' '-env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+# 	    /opt/openoffice${OOOBRANDPACKAGEVERSION}/program/unopkg remove --shared --bundled "`basename $LINE`" '-env:UserInstallation=file://$INSTDIR' '-env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
 # 	    REMOVED=1
 # 	else
 # 	    NEWCONTENT+=$LINE 

@@ -62,6 +62,8 @@ namespace
 {
     struct BrandName
         : public rtl::Static< ::rtl::OUString, BrandName > {};
+    struct FullProductname
+        : public rtl::Static< ::rtl::OUString, FullProductname > {};
     struct ProductVersion
         : public rtl::Static< ::rtl::OUString, ProductVersion > {};
     struct AboutBoxProductVersion
@@ -417,6 +419,13 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         return aRet;
     }
 
+    ::rtl::OUString& rFullProductname = FullProductname::get();
+    if ( eProp == FULLPRODUCTNAME && rFullProductname.getLength() )
+    {
+        aRet <<= rFullProductname;
+        return aRet;
+    }
+
     rtl::OUString &rProductVersion = ProductVersion::get();
     if ( eProp == PRODUCTVERSION && rProductVersion.getLength() )
     {
@@ -494,6 +503,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         case LOCALE:                        sPath += C2U("Setup/L10N"); break;
 
         case PRODUCTNAME:
+        case FULLPRODUCTNAME:
         case PRODUCTVERSION:
         case PRODUCTEXTENSION:
         case PRODUCTXMLFILEFORMATNAME :
@@ -531,6 +541,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         {
             case LOCALE:                            sProperty = C2U("ooLocale"); break;
             case PRODUCTNAME:                       sProperty = C2U("ooName"); break;
+            case FULLPRODUCTNAME:                   sProperty = C2U("ooFullname"); break;
             case PRODUCTVERSION:                    sProperty = C2U("ooSetupVersion"); break;
             case ABOUTBOXPRODUCTVERSION:            sProperty = C2U("ooSetupVersionAboutBox"); break;
             case OOOVENDOR:                         sProperty = C2U("ooVendor"); break;

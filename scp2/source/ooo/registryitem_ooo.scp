@@ -247,7 +247,7 @@ End
 
 RegistryItem gid_Regitem_Software_Openoffice_Productname_Productversion_Path
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\Apache OpenOffice\%PRODUCTNAME\%PRODUCTVERSION";
+	Subkey = "Software\OpenOffice\%PRODUCTNAME\%PRODUCTVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "Path";
 	Value = "<progpath>\program\soffice.exe";
@@ -273,7 +273,7 @@ End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Install
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\Apache OpenOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
+	Subkey = "Software\OpenOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "INSTALLLOCATION";
 	Value = "[INSTALLLOCATION]";
@@ -318,7 +318,7 @@ End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Officeinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\Apache OpenOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
+	Subkey = "Software\OpenOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "OFFICEINSTALLLOCATION";
 	Value = "[INSTALLLOCATION]";
@@ -345,7 +345,7 @@ End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Basisinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\Apache OpenOffice\${REGISTRYLAYERNAME}\Basis\%OOOBASEVERSION";
+	Subkey = "Software\OpenOffice\${REGISTRYLAYERNAME}\Basis\%OOOBASEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
 	Value = "[INSTALLLOCATION]Basis\\";
@@ -354,7 +354,7 @@ End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Basisinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\Apache OpenOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
+	Subkey = "Software\OpenOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
 	Value = "[INSTALLLOCATION]Basis\\";
@@ -381,7 +381,7 @@ End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Ureinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\Apache OpenOffice\${REGISTRYLAYERNAME}\URE\%URELAYERVERSION";
+	Subkey = "Software\OpenOffice\${REGISTRYLAYERNAME}\URE\%URELAYERVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "UREINSTALLLOCATION";
 	Value = "[INSTALLLOCATION]URE\\";
@@ -390,7 +390,7 @@ End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Ureinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\Apache OpenOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
+	Subkey = "Software\OpenOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "UREINSTALLLOCATION";
 	Value = "[INSTALLLOCATION]URE\\";
@@ -513,14 +513,14 @@ End
 
 RegistryItem gid_Regitem_Software_Openofficeorg_Uno_Installpath
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\Apache OpenOffice\UNO\InstallPath";
+    Subkey = "Software\OpenOffice\UNO\InstallPath";
     ModuleID = gid_Module_Root;
     Value  = "<progpath>\program";
 End
 
 RegistryItem gid_Regitem_Software_Openofficeorg_Uno_Installpath_Branded
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\Apache OpenOffice\UNO\InstallPath";
+    Subkey = "Software\OpenOffice\UNO\InstallPath";
     ModuleID = gid_Module_Root;
     Name = "%PRODUCTNAME %PRODUCTVERSION";
     Value  = "<progpath>\program";

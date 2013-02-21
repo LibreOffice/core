@@ -1225,7 +1225,7 @@ namespace /* private */
         SubstitutePlaceholder(ClsidEntry_Persist, GUID_PLACEHOLDER, ClsidToString(PersistentGuid));
 
 
-        if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry_Persist.c_str(), "", "Apache OpenOffice Persistent Handler"))
+        if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry_Persist.c_str(), "", "OpenOffice Persistent Handler"))
             return E_FAIL;
 
         // Add missing entry

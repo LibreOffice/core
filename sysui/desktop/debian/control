@@ -1,6 +1,6 @@
 Description: %productname desktop integration
 Maintainer: Apache Software Foundation
 Architecture: all
-Provides: apache_openoffice-desktop-integration, openoffice.org-unbundled
-Conflicts: apache_openoffice-desktop-integration, openofficeorg-desktop-integration, openofficeorg-debian-menus, openoffice.org-bundled
-Replaces: apache_openoffice-desktop-integration, openofficeorg-debian-menus
+Provides: openoffice-desktop-integration, openoffice.org-unbundled
+Conflicts: openoffice-desktop-integration, openofficeorg-desktop-integration, openofficeorg-debian-menus, openoffice.org-bundled
+Replaces: openoffice-desktop-integration, openofficeorg-debian-menus
