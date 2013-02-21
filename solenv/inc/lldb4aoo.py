@@ -1,54 +1,62 @@
-# to activate LLDB helper script run the command below when inside LLDB
-#	command script import /tools/lldb4aoo.py
-# or add the line to ~/.lldbinit to always activate it
+# to activate the AOO-LLDB helper script run the line below into LLDB
+#	command script import path-to-script/lldb4aoo.py
+# or activate it automatically by adding the line to ~/.lldbinit
 
 def __lldb_init_module( dbg, dict):
 	# the list of AOO specific types
-	aoo_types = ['rtl_String', 'rtl::OString', 'rtl_uString', 'rtl::OUString',
-		    '_ByteStringData', '_UniStringData', 'ByteString', 'UniString']
-	# register a helper function for each type
+	aoo_types = ['rtl_String', 'rtl_uString', '_ByteStringData', '_UniStringData']
+	pimpl_types = ['rtl::OString', 'rtl::OUString', 'ByteString', 'UniString']
+	# register a helper function for each non-trivial type
 	for t in aoo_types:
 		f = 'getinfo_for_' + t.replace( '::', '_')
 		if f in globals():
-			dbg.HandleCommand( 'type summary add %s -F %s.%s' % (t,__name__,f))
+			dbg.HandleCommand( 'type summary add %s -v -C yes -F %s.%s' % (t,__name__,f))
 		else:
-			print( 'AOO-LLDB helper function "%s" is not yet defined: "%s" types cannot be displayed properly!' % (f,t))
+			print( 'AOO-LLDB helper function "%s" is not yet defined: '
+			    '"%s" types cannot be displayed properly!' % (f,t))
+	# register a generic helper function for pimpl types
+	dbg.HandleCommand( 'type summary add -F %s.%s -v -C yes -n PIMPL %s' % ( __name__,'get_pimpl_info', ' '.join(pimpl_types)))
 
-	# perform some goodies if the process is ready to run or already running
-	if dbg.GetNumTargets() > 0:
-		# the list of interesting function breakpoints
-		aoo_breakfn = ['main', '__cxa_call_unexpected', 'objc_exception_throw']
-		aoo_breakfn += ['__cxa_throw']
-		# register the function breakpoints
-		for t in aoo_breakfn:
-			dbg.HandleCommand( 'breakpoint set -n ' + t)
+# local functions for use by the AOO-type summary providers
 
-
-# definitions for individual LLDB type summary helpers 
+def walk_ptrchain( v, info):
+	while v.TypeIsPointerType():
+		n = v.GetValueAsUnsigned()
+		if n == 0:
+			info += 'NULL'
+			return (None, info)
+		else:
+			info += '0x%04X-> ' % (n)
+			v = v.Dereference()
+	return (v, info)
 
 def ret_strdata_info( v, refvar, lenvar, aryvar):
-	while v.TypeIsPointerType():
-		if v.GetValueAsUnsigned() == 0:
-			return 'NULL-Pointer!'
-		v = v.Dereference()
+	info = ''
+	(v, info) = walk_ptrchain( v, info)
+	if not v:
+		return info
 	r = v.GetChildMemberWithName( refvar).GetValueAsSigned()
 	l = v.GetChildMemberWithName( lenvar).GetValueAsSigned()
 	c = v.GetChildMemberWithName( aryvar)
-	d = c.AddressOf().GetPointeeData( 0, l)
+	L = min(l,128)
+	d = c.AddressOf().GetPointeeData( 0, L)
 	if c.GetByteSize() == 1: # assume UTF-8
 		s = ''.join([chr(x) for x in d.uint8s])
 	else: # assume UTF-16
 		s = (u''.join([unichr(x) for x in d.uint16s])).encode('utf-8')
-	info = ('{refs=%d, len=%d, str="%s"}' % (r, l, s.encode('string_escape')))
+	info += ('{refs=%d, len=%d, str="%s"%s}' % (r, l, s.encode('string_escape'), '...'if(l!=L)else''))
 	return info
 
-def ret_strobject_info( v, ptrvar):
-	while v.TypeIsPointerType():
-		if v.GetValueAsUnsigned() == 0:
-			return 'NULL-Pointer!'
-		v = v.Dereference()
-	p = v.GetChildMemberWithName( ptrvar)
-	return p.Dereference()
+# definitions for our individual LLDB type summary providers
+
+def get_pimpl_info( valobj, dict):
+	v = walk_ptrchain( valobj, '')
+	p = v.GetChildAtIndex(0)
+	info = v.GetName()
+	if v.GetValueAsUnsigned() == 0:
+		return '(%s==NULL)' % (info)
+	info = '(%s=0x%04X)-> ' % (info,n)
+	return info + p.Dereference().GetSummary()
 
 
 def getinfo_for_rtl_String( valobj, dict):
@@ -63,16 +71,4 @@ def getinfo_for__ByteStringData( valobj, dict):
 def getinfo_for__UniStringData( valobj, dict):
 	return ret_strdata_info( valobj, 'mnRefCount', 'mnLen', 'maStr') 
 
-
-def getinfo_for_rtl_OString( valobj, dict):
-	return ret_strobject_info( valobj, 'pData')
-
-def getinfo_for_rtl_OUString( valobj, dict):
-	return ret_strobject_jinfo( valobj, 'pData')
-
-def getinfo_for_ByteString( valobj, dict):
-	return ret_strobject_jinfo( valobj, 'mpData')
-
-def getinfo_for_UniString( valobj, dict):
-	return ret_strobject_info( valobj, 'mpData')
 
