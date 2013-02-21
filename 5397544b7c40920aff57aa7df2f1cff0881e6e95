@@ -16,6 +16,24 @@
       "revId": "5397544b7c40920aff57aa7df2f1cff0881e6e95",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///SE\u003d",
+        "filename": "vcl/source/window/toolbox2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-02-21T21:59:14Z",
+      "side": 1,
+      "message": "use an additional parameter for init()",
+      "parentUuid": "AAAAVn///W8\u003d",
+      "revId": "5397544b7c40920aff57aa7df2f1cff0881e6e95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
