@@ -52,6 +52,24 @@
       "revId": "62c8accc8346974fa44cf63eade6ae19d6a6e81f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///UE\u003d",
+        "filename": "solenv/gbuild/Helper.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-21T18:55:29Z",
+      "side": 1,
+      "message": "in gbuild we try to avoid doing that. if you grep solenv/gbuild\nyou will notice that VERBOSE is nowhere to be found\nexternal variable are typically transferred to an internal one in the gb_ namespace, in gbuild.mk\n\nthe thing about gb_Helper_print_error and external was true whether or not the trigger was a separate config option or \u0027verbose\u0027\nI left the function in gb_Helper when I adapted the change to dtardon request... because we might want to use it somewhere else one-day... if the internal name become a problem then, we will adjust...",
+      "parentUuid": "AAAAVn///Vk\u003d",
+      "revId": "62c8accc8346974fa44cf63eade6ae19d6a6e81f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
