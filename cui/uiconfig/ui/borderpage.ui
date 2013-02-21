@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">0.050000000000000003</property>
     <property name="upper">9</property>
@@ -55,8 +56,6 @@
                       <object class="svxlo-SvxFrameSelector" id="framesel">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hexpand">center</property>
-                        <property name="vexpand">center</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -539,6 +538,7 @@
                   <object class="svtlo-ColorListBox" id="shadowcolorlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
