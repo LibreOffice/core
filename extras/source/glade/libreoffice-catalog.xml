@@ -42,6 +42,12 @@
     <glade-widget-class title="Font Preview" name="svxlo-SvxFontPrevWindow"
                         generic-name="Font Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Frame Selector" name="svxlo-SvxFrameSelector"
+                        generic-name="Frame Border Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="ValueSet" name="svtlo-ValueSet"
+                        generic-name="Set of Value Options" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Table Container" name="svxcorelo-SvxSimpleTableContainer"
                         generic-name="Simple Table Container" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
