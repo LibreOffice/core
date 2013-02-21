@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///XQ\u003d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-02-21T12:36:48Z",
+      "side": 1,
+      "message": "Please don\u0027t use globals - presumably this can go into DomainMapper_Impl ?",
+      "revId": "bd68a259cb42a8af68d331bf1ad93ebe725d0f03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///XM\u003d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1640,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-02-21T12:36:48Z",
+      "side": 1,
+      "message": "Just a nitpick, but - please align formatting a bit with the rest of the file. Also, please use spaces instead of tabs. ;)",
+      "revId": "bd68a259cb42a8af68d331bf1ad93ebe725d0f03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
