@@ -132,7 +132,6 @@ static FT_Error (*pFTNewSize)(FT_Face,FT_Size*);
 static FT_Error (*pFTActivateSize)(FT_Size);
 static FT_Error (*pFTDoneSize)(FT_Size);
 void (*pFTEmbolden)(FT_GlyphSlot);
-void (*pFTOblique)(FT_GlyphSlot);
 static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
@@ -496,7 +495,6 @@ FreetypeManager::FreetypeManager()
     pFTActivateSize = FT_Activate_Size;
     pFTDoneSize = FT_Done_Size;
     pFTEmbolden = FT_GlyphSlot_Embolden;
-    pFTOblique = FT_GlyphSlot_Oblique;
     nFTVERSION = FTVERSION;
 #else
 #ifdef RTLD_DEFAULT // true if a good dlfcn.h header was included
@@ -513,7 +511,6 @@ FreetypeManager::FreetypeManager()
     pFTActivateSize = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Activate_Size" );
     pFTDoneSize     = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Done_Size" );
     pFTEmbolden     = (void(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Embolden" );
-    pFTOblique      = (void(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Oblique" );
 
     bEnableSizeFT = (pFTNewSize!=NULL) && (pFTActivateSize!=NULL) && (pFTDoneSize!=NULL);
 
