@@ -3,14 +3,14 @@
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="LineNumberingDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">Line Numbering</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -18,12 +18,10 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -35,11 +33,9 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -51,11 +47,9 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -77,7 +71,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">4</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkAlignment" id="alignment4">
                 <property name="visible">True</property>
@@ -86,12 +80,10 @@
                 <child>
                   <object class="GtkCheckButton" id="shownumbering">
                     <property name="label" translatable="yes">Show numbering</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -108,6 +100,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkFrame" id="frame1">
                     <property name="visible">True</property>
@@ -118,19 +111,22 @@
                       <object class="GtkAlignment" id="alignment1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="top_padding">6</property>
                         <property name="left_padding">12</property>
                         <child>
                           <object class="GtkGrid" id="grid2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="row_spacing">4</property>
-                            <property name="column_spacing">8</property>
+                            <property name="row_spacing">6</property>
+                            <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkLabel" id="characterstyle">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Character Style</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">styledropdown</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -159,6 +155,8 @@
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Position</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">positiondropdown</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -173,6 +171,8 @@
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Spacing</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">spacingspin:0.00cm</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -187,6 +187,8 @@
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Interval</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">intervalspin</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -257,7 +259,7 @@
                               <object class="GtkBox" id="box4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="spacing">4</property>
+                                <property name="spacing">12</property>
                                 <child>
                                   <object class="GtkSpinButton" id="intervalspin">
                                     <property name="visible">True</property>
@@ -318,6 +320,7 @@
                   <object class="GtkBox" id="box3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="spacing">12</property>
                     <child>
                       <object class="GtkFrame" id="frame2">
                         <property name="visible">True</property>
@@ -328,18 +331,22 @@
                           <object class="GtkAlignment" id="alignment2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="top_padding">6</property>
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkGrid" id="grid1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="column_spacing">6</property>
+                                <property name="row_spacing">6</property>
+                                <property name="column_spacing">12</property>
                                 <child>
                                   <object class="GtkLabel" id="text">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Text</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">textentry</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -354,6 +361,8 @@
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Every</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">linesspin</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -437,20 +446,20 @@
                           <object class="GtkAlignment" id="alignment3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="top_padding">6</property>
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkBox" id="box5">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
+                                <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkCheckButton" id="blanklines">
                                     <property name="label" translatable="yes">Blank lines</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
@@ -464,11 +473,9 @@
                                 <child>
                                   <object class="GtkCheckButton" id="linesintextframes">
                                     <property name="label" translatable="yes">Lines in text frames</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
@@ -481,11 +488,9 @@
                                 <child>
                                   <object class="GtkCheckButton" id="restarteverynewpage">
                                     <property name="label" translatable="yes">Restart every new page</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0</property>
                                     <property name="yalign">0.60000002384185791</property>
                                     <property name="draw_indicator">True</property>
@@ -554,12 +559,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="lineadjustment">
-    <property name="upper">1000</property>
-    <property name="value">3</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkListStore" id="positionstore">
     <columns>
       <!-- column-name positions -->
@@ -579,6 +578,12 @@
         <col id="0" translatable="yes">Outer</col>
       </row>
     </data>
+  </object>
+  <object class="GtkAdjustment" id="lineadjustment">
+    <property name="upper">1000</property>
+    <property name="value">3</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="spacingadjustment">
     <property name="upper">9999</property>
