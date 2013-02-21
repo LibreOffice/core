@@ -202,34 +202,34 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
     // Number of Properties
     sal_Int32 mnPropCount;
 
-    // Anzahl der Properties, die den jeweiligen Konzepten zugeordnet sind
+    // Number of Properties, which are assigned to particular concepts
     //sal_Int32 mnDangerousPropCount;
     sal_Int32 mnPropertySetPropCount;
     sal_Int32 mnAttributePropCount;
     sal_Int32 mnMethodPropCount;
 
-    // Flag, ob ein FastPropertySet unterstuetzt wird
+    // Flag, if a FastPropertySet is supported
     sal_Bool mbFastPropSet;
 
-    // Original-Handles eines FastPropertySets
+    // Original-Handles of FastPropertySets
     sal_Int32* mpOrgPropertyHandleArray;
 
-    // MethodSequence, die alle Methoden aufnimmt
+    // MethodSequence, that accepts all methods
     Sequence< Reference<XIdlMethod> > maAllMethodSeq;
 
-    // Klassifizierung der gefundenen Methoden
+    // Classification of found methods
     Sequence<sal_Int32> maMethodConceptSeq;
 
-    // Anzahl der Methoden
+    // Number of methods
     sal_Int32 mnMethCount;
 
-    // Sequence der Listener, die angemeldet werden koennen
+    // Sequence of Listener, that can be registered
     Sequence< Type > maSupportedListenerSeq;
 
-    // BaseInit (soll spaeter in der Applikation erfolgen!)
+    // BaseInit (should be done later in the application!)
     void BaseInit( void );
 
-    // Hilfs-Methoden zur Groessen-Anpassung der Sequences
+    // Helper-methods for adjusting sizes of Sequences
     void checkPropertyArraysSize
     (
         Property*& rpAllPropArray,
@@ -249,7 +249,7 @@ public:
     sal_Int32 getPropertyIndex( const ::rtl::OUString& aPropertyName ) const;
     sal_Int32 getMethodIndex( const ::rtl::OUString& aMethodName ) const;
 
-    // Methoden von XIntrospectionAccess (ALT, jetzt nur Impl)
+    // Methods of XIntrospectionAccess (OLD, now only Impl)
     void setPropertyValue(const Any& obj, const ::rtl::OUString& aPropertyName, const Any& aValue) const;
 //    void setPropertyValue(Any& obj, const ::rtl::OUString& aPropertyName, const Any& aValue) const;
     Any getPropertyValue(const Any& obj, const ::rtl::OUString& aPropertyName) const;
@@ -272,7 +272,7 @@ IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlR
     aInterfaceSeq1.realloc( ARRAY_SIZE_STEP );
     aInterfaceSeq2.realloc( ARRAY_SIZE_STEP );
 
-    // Property-Daten
+    // Property-Data
     maAllPropertySeq.realloc( ARRAY_SIZE_STEP );
     maMapTypeSeq.realloc( ARRAY_SIZE_STEP );
     maPropertyConceptSeq.realloc( ARRAY_SIZE_STEP );
@@ -286,7 +286,7 @@ IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlR
     mnAttributePropCount = 0;
     mnMethodPropCount = 0;
 
-    // Method-Daten
+    // Method-Data
     mnMethCount = 0;
 }
 
@@ -394,7 +394,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValue( const Any& obj, const ::r
 void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal_Int32 nSequenceIndex, const Any& aValue) const
 //void IntrospectionAccessStatic_Impl::setPropertyValueByIndex( Any& obj, sal_Int32 nSequenceIndex, const Any& aValue) const
 {
-    // Handelt es sich bei dem uebergebenen Objekt ueberhaupt um was passendes?
+    // Is the passed object something that fits?
     TypeClass eObjType = obj.getValueType().getTypeClass();
 
     Reference<XInterface> xInterface;
@@ -407,7 +407,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
         throw IllegalArgumentException();
     }
 
-    // Flags pruefen
+    // Test flags
     const Property* pProps = maAllPropertySeq.getConstArray();
     if( (pProps[ nSequenceIndex ].Attributes & READONLY) != 0 )
     {
@@ -419,10 +419,10 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
     {
         case MAP_PROPERTY_SET:
         {
-            // Property besorgen
+            // Get Property
             const Property& rProp = maAllPropertySeq.getConstArray()[ nSequenceIndex ];
 
-            // Interface-Parameter auf den richtigen Typ bringen
+            // Convert Interface-Parameter to the correct type
             sal_Bool bUseCopy = sal_False;
             Any aRealValue;
 
@@ -446,13 +446,13 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
                 }
             }
 
-            // Haben wir ein FastPropertySet und ein gueltiges Handle?
-            // ACHTUNG: An dieser Stelle wird ausgenutzt, dass das PropertySet
-            // zu Beginn des Introspection-Vorgangs abgefragt wird.
+            // Do we have a FastPropertySet and a valid Handle?
+            // CAUTION: At this point we exploit, that the PropertySet
+            // gets queried at the beginning of the Introspection-Process.
             sal_Int32 nOrgHandle;
             if( mbFastPropSet && ( nOrgHandle = mpOrgPropertyHandleArray[ nSequenceIndex ] ) != -1 )
             {
-                // PropertySet-Interface holen
+                // Retrieve PropertySet-Interface
                 Reference<XFastPropertySet> xFastPropSet =
                     Reference<XFastPropertySet>::query( xInterface );
                 if( xFastPropSet.is() )
@@ -464,10 +464,10 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
                     // throw UnknownPropertyException
                 }
             }
-            // sonst eben das normale nehmen
+            // else take the normal one
             else
             {
-                // PropertySet-Interface holen
+                // Retrieve PropertySet-Interface
                 Reference<XPropertySet> xPropSet =
                     Reference<XPropertySet>::query( xInterface );
                 if( xPropSet.is() )
@@ -508,7 +508,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
         case MAP_GETSET:
         case MAP_SETONLY:
         {
-            // set-Methode holen
+            // Retrieve set-Methods
             Reference<XIdlMethod> xMethod = (XIdlMethod*)(aInterfaceSeq2.getConstArray()[ nSequenceIndex ].get());
             if( xMethod.is() )
             {
