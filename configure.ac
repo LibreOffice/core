@@ -8277,30 +8277,15 @@ dnl ===================================================================
 dnl Check for mozilla ab connectivity for windows
 dnl ===================================================================
 
-AC_MSG_CHECKING([whether to enable build of Mozilla addressbook connectivity driver for Windows])
-if test "$enable_win_mozab_driver" = "yes" -a "$_os" = "WINNT" -a "$WITH_MINGW" != "YES" ; then
-    AC_MSG_RESULT([yes])
-    WITH_MOZAB4WIN=YES
-    BUILD_MOZAB=YES
-    if test "$enable_build_mozab" = "no" ; then
-        BUILD_MOZAB=NO
-    fi
-else
-    AC_MSG_RESULT([no])
-    WITH_MOZAB4WIN=NO
-fi
-AC_SUBST(WITH_MOZAB4WIN)
-AC_SUBST(BUILD_MOZAB)
-
-if test "$_os" != "WINNT"; then
-# on all other platforms Mozilla addressbook connectivity
-# is unconditionally built
-# new and shiny mork driver
-   AC_MSG_RESULT([yes (new mork driver)])
-else
-    if test "$WITH_MOZAB4WIN" = "NO"; then
-        AC_MSG_RESULT([no])
-    else
+if test "$_os" = "WINNT"; then
+    AC_MSG_CHECKING([whether to enable build of Mozilla addressbook connectivity driver for Windows])
+    if test "$enable_win_mozab_driver" = "yes" -a "$WITH_MINGW" != "YES" ; then
+        AC_MSG_RESULT([yes])
+        WITH_MOZAB4WIN=YES
+        BUILD_MOZAB=YES
+        if test "$enable_build_mozab" = "no" ; then
+            BUILD_MOZAB=NO
+        fi
         AC_MSG_RESULT([yes, internal (old windows mozab driver)])
         BUILD_TYPE="$BUILD_TYPE MOZ"
         EXTMSV80=`cygpath  -u "$SRC_ROOT/external/msvcp80"`
@@ -8331,10 +8316,13 @@ else
     and relaunch ./autogen.sh])
             fi
         fi
+    else
+        AC_MSG_RESULT([no])
+        WITH_MOZAB4WIN=NO
     fi
 fi
-
-
+AC_SUBST(WITH_MOZAB4WIN)
+AC_SUBST(BUILD_MOZAB)
 AC_SUBST(MSVC80_DLL_DIR)
 AC_SUBST(MSVC80_MNFST)
 AC_SUBST(EXTMSV80)
