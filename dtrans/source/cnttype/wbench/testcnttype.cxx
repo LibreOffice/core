@@ -116,7 +116,7 @@ sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& v
     {
         try
         {
-            fprintf( fstream, "Gelesen: %s\n", iter->c_str( ) );
+            fprintf( fstream, "Read: %s\n", iter->c_str( ) );
 
             Reference< XMimeContentType > xMCntTyp = cnttypeFactory->createMimeContentType( OUString::createFromAscii( iter->c_str( ) ) );
 
@@ -134,15 +134,15 @@ sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& v
         }
         catch( IllegalArgumentException& ex )
         {
-            fwprintf( fstream, OUString("Fehlerhafter Content-Type gelesen!!!\n\n") );
+            fwprintf( fstream, OUString("Read incorrect content type!\n\n") );
         }
         catch( NoSuchElementException& )
         {
-            fwprintf( fstream, OUString("Parameterwert nicht vorhanden\n") );
+            fwprintf( fstream, OUString("Value of parameter not available\n") );
         }
         catch( ... )
         {
-            fwprintf( fstream, OUString("Unbekannter Fehler!!!\n\n") );
+            fwprintf( fstream, OUString("Unknown error!\n\n") );
         }
 
         fwprintf( fstream, OUString("\n#############################################\n\n") );
