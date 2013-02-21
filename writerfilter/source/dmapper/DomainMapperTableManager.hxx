@@ -20,6 +20,7 @@
 #define INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
 
 #include "TablePropertiesHandler.hxx"
+#include <TablePositionHandler.hxx>
 
 #include <resourcemodel/TableManager.hxx>
 #include <PropertyMap.hxx>
@@ -44,7 +45,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     bool            m_bOOXML;
     OUString m_sTableStyleName;
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> m_aTablePosition;
+    std::vector< TablePositionHandlerPtr > m_aTablePositions;
     PropertyMapPtr  m_pTableStyleTextProperies;
 
     ::std::vector< IntVectorPtr >  m_aTableGrid;
@@ -81,7 +82,8 @@ public:
     IntVectorPtr getCurrentCellWidths( );
 
     const OUString& getTableStyleName() const { return m_sTableStyleName; }
-    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getTablePosition() { return m_aTablePosition; }
+    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getCurrentTablePosition();
+
     /// copy the text properties of the table style and its parent into pContext
     void    CopyTextProperties(PropertyMapPtr pContext, StyleSheetTablePtr pStyleSheetTable);
 
