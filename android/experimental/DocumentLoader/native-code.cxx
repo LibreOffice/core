@@ -28,6 +28,7 @@ extern "C"
     extern void * lnth_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * lotuswordpro_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * oox_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * protocolhandler_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sb_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * scd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -75,6 +76,7 @@ lo_get_libmap(void)
         { "liblnthlo.a", lnth_component_getFactory },
         { "liblwpftlo.a", lotuswordpro_component_getFactory },
         { "libooxlo.a", oox_component_getFactory },
+        { "libprotocolhandlerlo.a", protocolhandler_component_getFactory },
         { "libscdlo.a", scd_component_getFactory },
         { "libscfiltlo.a", scfilt_component_getFactory },
         { "libsblo.a", sb_component_getFactory },
@@ -83,6 +85,7 @@ lo_get_libmap(void)
         { "libsdlo.a", sd_component_getFactory },
         { "libsmdlo.a", smd_component_getFactory },
         { "libsmlo.a", sm_component_getFactory },
+        { "libspelllo.a", spell_component_getFactory },
         { "libsvgfilterlo.a", svgfilter_component_getFactory },
         { "libswdlo.a", swd_component_getFactory },
         { "libswlo.a", sw_component_getFactory },
