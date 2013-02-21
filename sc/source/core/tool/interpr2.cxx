@@ -2575,6 +2575,9 @@ void ScInterpreter::ScRoman()
 
                 if( (nDigit % 5) == 4 )
                 {
+                    // assert can't happen with nVal<4000 precondition
+                    assert( ((nDigit == 4) ? (nIndex >= 1) : (nIndex >= 2)));
+
                     sal_uInt16 nIndex2 = (nDigit == 4) ? nIndex - 1 : nIndex - 2;
                     sal_uInt16 nSteps = 0;
                     while( (nSteps < nMode) && (nIndex < nMaxIndex) )
@@ -2593,7 +2596,11 @@ void ScInterpreter::ScRoman()
                 else
                 {
                     if( nDigit > 4 )
+                    {
+                        // assert can't happen with nVal<4000 precondition
+                        assert( nIndex >= 1 );
                         aRoman += pChars[ nIndex - 1 ];
+                    }
                     sal_Int32 nPad = nDigit % 5;
                     if (nPad)
                     {
