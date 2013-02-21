@@ -53,6 +53,11 @@
 #include FT_TRUETYPE_TAGS_H
 #include FT_TRUETYPE_IDS_H
 
+#ifdef ANDROID
+#include FT_SIZES_H
+#include FT_SYNTHESIS_H
+#endif
+
 #ifndef FT_RENDER_MODE_MONO  // happens in the MACOSX build
     #define FT_RENDER_MODE_MONO ft_render_mode_mono
 #endif
@@ -126,8 +131,8 @@ static int nFTVERSION = 0;
 static FT_Error (*pFTNewSize)(FT_Face,FT_Size*);
 static FT_Error (*pFTActivateSize)(FT_Size);
 static FT_Error (*pFTDoneSize)(FT_Size);
-FT_Error (*pFTEmbolden)(FT_GlyphSlot);
-FT_Error (*pFTOblique)(FT_GlyphSlot);
+void (*pFTEmbolden)(FT_GlyphSlot);
+void (*pFTOblique)(FT_GlyphSlot);
 static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
@@ -481,6 +486,19 @@ FreetypeManager::FreetypeManager()
 {
     /*FT_Error rcFT =*/ FT_Init_FreeType( &aLibFT );
 
+#ifdef ANDROID
+    // For Android we use the bundled static libfreetype.a, and we
+    // want to avoid accidentally finding the FT_* symbols in the
+    // system FreeType code (which *is* present in a system library,
+    // libskia.so, but is not a public API, and in fact does crash the
+    // app if used).
+    pFTNewSize = FT_New_Size;
+    pFTActivateSize = FT_Activate_Size;
+    pFTDoneSize = FT_Done_Size;
+    pFTEmbolden = FT_GlyphSlot_Embolden;
+    pFTOblique = FT_GlyphSlot_Oblique;
+    nFTVERSION = FTVERSION;
+#else
 #ifdef RTLD_DEFAULT // true if a good dlfcn.h header was included
     // Get version of freetype library to enable workarounds.
     // Freetype <= 2.0.9 does not have FT_Library_Version().
@@ -517,7 +535,7 @@ FreetypeManager::FreetypeManager()
     // assume systems where dlsym is not possible use supplied library
     nFTVERSION = FTVERSION;
 #endif
-
+#endif
     // TODO: remove when the priorities are selected by UI
     char* pEnv;
     pEnv = ::getenv( "SAL_EMBEDDED_BITMAP_PRIORITY" );
