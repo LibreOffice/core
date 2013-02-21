@@ -540,6 +540,8 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, rtl::OUString &rText )
     if ( mpDatStream->GetError() == ERRCODE_IO_CANTSEEK )
         mpDatStream->ResetError();
 
+    ScImportExport::EmbeddedNullTreatment( rText);
+
     return bRet;
 }
 
