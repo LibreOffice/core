@@ -98,7 +98,7 @@
 #include <txtinet.hxx>
 
 #include <osl/file.hxx>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/temporaryfonts.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -3055,14 +3055,14 @@ void DocxAttributeOutput::FontPitchType( FontPitch ePitch ) const
                 FSEND );
 }
 
-void DocxAttributeOutput::EmbedFont( const OUString& name, FontFamily family, FontPitch pitch, rtl_TextEncoding encoding )
+void DocxAttributeOutput::EmbedFont( const OUString& name )
 {
     if( !m_rExport.pDoc->get( IDocumentSettingAccess::EMBED_FONTS ))
         return; // no font embedding with this document
-    EmbedFontStyle( name, XML_embedRegular, family, ITALIC_NONE, WEIGHT_NORMAL, pitch, encoding );
-    EmbedFontStyle( name, XML_embedBold, family, ITALIC_NONE, WEIGHT_BOLD, pitch, encoding );
-    EmbedFontStyle( name, XML_embedItalic, family, ITALIC_NORMAL, WEIGHT_NORMAL, pitch, encoding );
-    EmbedFontStyle( name, XML_embedBoldItalic, family, ITALIC_NORMAL, WEIGHT_BOLD, pitch, encoding );
+    EmbedFontStyle( name, XML_embedRegular, "" );
+    EmbedFontStyle( name, XML_embedBold, "b" );
+    EmbedFontStyle( name, XML_embedItalic, "i" );
+    EmbedFontStyle( name, XML_embedBoldItalic, "bi" );
 }
 
 static inline char toHexChar( int value )
@@ -3070,12 +3070,11 @@ static inline char toHexChar( int value )
     return value >= 10 ? value + 'A' - 10 : value + '0';
 }
 
-void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFamily family, FontItalic italic,
-    FontWeight weight, FontPitch pitch, rtl_TextEncoding encoding )
+void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, const char* style )
 {
-    OUString fontUrl = EmbeddedFontsHelper::fontFileUrl( name, family, italic, weight, pitch, encoding );
-    if( fontUrl.isEmpty())
-        return;
+    OUString fontUrl = TemporaryFonts::fileUrlForFont( name, style );
+    // If a temporary font file exists for this font, assume it was embedded
+    // and embed it again.
     // TODO IDocumentSettingAccess::EMBED_SYSTEM_FONTS
     osl::File file( fontUrl );
     if( file.open( osl_File_OpenFlag_Read ) != osl::File::E_None )

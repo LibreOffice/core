@@ -207,7 +207,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/configsettings \
     vcl/source/gdi/cvtgrf \
     vcl/source/gdi/cvtsvm \
-    vcl/source/gdi/embeddedfontshelper \
     vcl/source/gdi/extoutdevdata \
     vcl/source/gdi/font \
     vcl/source/gdi/gdimtf \
@@ -256,6 +255,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/salmisc \
     vcl/source/gdi/salnativewidgets-none \
     vcl/source/gdi/svgdata \
+    vcl/source/gdi/temporaryfonts \
     vcl/source/gdi/textlayout \
     vcl/source/gdi/virdev \
     vcl/source/gdi/wall \

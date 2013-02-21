@@ -25,7 +25,7 @@
 #include "fonthdl.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLFontAutoStylePool.hxx>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/temporaryfonts.hxx>
 #include <osl/file.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -276,25 +276,18 @@ void XMLFontAutoStylePool::exportXML()
         {
             std::vector< OUString > fileUrls;
             static const char* const styles[] = { "", "b", "i", "bi" };
-            static const FontWeight weight[] = { WEIGHT_NORMAL, WEIGHT_BOLD, WEIGHT_NORMAL, WEIGHT_BOLD };
-            static const FontItalic italic[] = { ITALIC_NONE, ITALIC_NONE, ITALIC_NORMAL, ITALIC_NORMAL };
-            assert( SAL_N_ELEMENTS( styles ) == SAL_N_ELEMENTS( italic ));
-            assert( SAL_N_ELEMENTS( styles ) == SAL_N_ELEMENTS( weight ));
             for( unsigned int j = 0;
                  j < SAL_N_ELEMENTS( styles );
                  ++j )
             {
-                OUString fileUrl = EmbeddedFontsHelper::fontFileUrl( pEntry->GetFamilyName(), pEntry->GetFamily(),
-                    italic[ j ], weight[ j ], pEntry->GetPitch(), pEntry->GetEncoding());
-                if( fileUrl.isEmpty())
-                    continue;
+                OUString fileUrl = TemporaryFonts::fileUrlForFont( pEntry->GetFamilyName(), styles[ j ] );
                 if( !fontFilesMap.count( fileUrl ))
                 {
                     OUString docUrl = embedFontFile( fileUrl, styles[ j ] );
                     if( !docUrl.isEmpty())
                         fontFilesMap[ fileUrl ] = docUrl;
                     else
-                        continue; // --> failed to embed
+                        continue; // --> failed (most probably this font is not embedded)
                 }
                 fileUrls.push_back( fileUrl );
             }

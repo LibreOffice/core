@@ -7,35 +7,31 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef VCL_EMBEDDEDFONTSHELPER_HXX
-#define VCL_EMBEDDEDFONTSHELPER_HXX
+#ifndef VCL_TEMPORARYFONTS_HXX
+#define VCL_TEMPORARYFONTS_HXX
 
 #include <vcl/dllapi.h>
 
 #include <rtl/ustring.hxx>
-#include <tools/fontenum.hxx>
 
 /**
- Helper functions for handling embedded fonts in documents.
+ Management of temporary fonts (e.g. embedded in documents).
 
+ This class handles adding of temporary fonts.
+ @since LibreOffice 4.0
 */
-class VCL_DLLPUBLIC EmbeddedFontsHelper
+class VCL_DLLPUBLIC TemporaryFonts
 {
 public:
     /**
-      Returns URL for a font file for the given font, or empty if it does not exist.
-    */
-    static OUString fontFileUrl( const OUString& familyName, FontFamily family, FontItalic italic,
-        FontWeight weight, FontPitch pitch, rtl_TextEncoding encoding );
-    /**
-      Returns an URL for a file where to store contents of a given temporary font.
-      The file may or not may not exist yet, and will be cleaned up automatically as appropriate.
+      Returns an URL for a file where to store contents of a temporary font
+      (the file may or may not exist). The file will be cleaned up automatically as appropriate.
       Use activateTemporaryFont() to actually enable usage of the font.
 
       @param fontName name of the font (e.g. 'Times New Roman')
       @param fontStyle font style, "" for regular, "bi" for bold italic, etc.
     */
-    static OUString fileUrlForTemporaryFont( const OUString& fontName, const char* fontStyle );
+    static OUString fileUrlForFont( const OUString& fontName, const char* fontStyle );
 
     /**
       Adds the given font to the list of known fonts. The font is used only until application
@@ -47,10 +43,10 @@ public:
     static void activateFont( const OUString& fontName, const OUString& fileUrl );
 
     /**
-      Removes all temporary fonts in the path used by fileUrlForTemporaryFont().
+      Removes all temporary fonts.
       @internal
     */
-    static void clearTemporaryFontFiles();
+    static void clear();
 };
 
 #endif

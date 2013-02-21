@@ -24,7 +24,7 @@
 #include <osl/file.hxx>
 #include <stdio.h>
 #include <rtl/tencinfo.h>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/temporaryfonts.hxx>
 
 #include "dmapperLoggers.hxx"
 
@@ -251,7 +251,7 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
 {
     if( !inputStream.is())
         return;
-    OUString fileUrl = EmbeddedFontsHelper::fileUrlForTemporaryFont( fontName, style );
+    OUString fileUrl = TemporaryFonts::fileUrlForFont( fontName, style );
     osl::File file( fileUrl );
     switch( file.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write ))
     {
@@ -318,7 +318,7 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
         osl::File::remove( fileUrl );
         return;
     }
-    EmbeddedFontsHelper::activateFont( fontName, fileUrl );
+    TemporaryFonts::activateFont( fontName, fileUrl );
 }
 
 void EmbeddedFontHandler::lcl_attribute( Id name, Value& val )
