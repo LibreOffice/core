@@ -231,6 +231,7 @@ void WorkbookFragment::finalizeImport()
     typedef ::std::pair< WorksheetGlobalsRef, FragmentHandlerRef > SheetFragmentHandler;
     typedef ::std::vector< SheetFragmentHandler > SheetFragmentVector;
     SheetFragmentVector aSheetFragments;
+    std::vector<WorksheetHelper*> maHelpers;
     WorksheetBuffer& rWorksheets = getWorksheets();
     sal_Int32 nWorksheetCount = rWorksheets.getWorksheetCount();
     for( sal_Int32 nWorksheet = 0; nWorksheet < nWorksheetCount; ++nWorksheet )
@@ -286,7 +287,10 @@ void WorkbookFragment::finalizeImport()
 
                         // insert the fragment into the map
                         if( xFragment.is() )
+                        {
                             aSheetFragments.push_back( SheetFragmentHandler( xSheetGlob, xFragment.get() ) );
+                            maHelpers.push_back(xFragment.get());
+                        }
                     }
                 }
             }
@@ -301,6 +305,15 @@ void WorkbookFragment::finalizeImport()
     {
         // import the sheet fragment
         importOoxFragment( aIt->second );
+    }
+
+    for( std::vector<WorksheetHelper*>::iterator aIt = maHelpers.begin(), aEnd = maHelpers.end(); aIt != aEnd; ++aIt )
+    {
+        (*aIt)->finalizeDrawingImport();
+    }
+
+    for( SheetFragmentVector::iterator aIt = aSheetFragments.begin(), aEnd = aSheetFragments.end(); aIt != aEnd; ++aIt )
+    {
         // delete fragment object and WorkbookGlobals object, will free all allocated sheet buffers
         aIt->second.clear();
         aIt->first.reset();

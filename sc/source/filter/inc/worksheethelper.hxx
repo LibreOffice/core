@@ -303,6 +303,8 @@ public:
     void                initializeWorksheetImport();
     /** Final conversion after importing the worksheet. */
     void                finalizeWorksheetImport();
+    /** Final import of drawing objects. Has to be called after all content has been imported */
+    void finalizeDrawingImport();
 
     void                setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString&  );
     void                setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, sal_Int32  );
