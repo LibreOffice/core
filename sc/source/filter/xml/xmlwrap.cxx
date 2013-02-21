@@ -354,6 +354,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             { MAP_LEN( "ScriptConfiguration" ), 0, &::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "OrganizerMode" ), 0, &::getBooleanCppuType(),
                 ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "SourceStorage" ), 0, &embed::XStorage::static_type(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
 
             { NULL, 0, 0, NULL, 0, 0 }
         };
@@ -419,6 +420,8 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                 RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
             xInfoSet->setPropertyValue(sOrganizerMode, uno::makeAny(sal_True));
         }
+
+        xInfoSet->setPropertyValue( "SourceStorage", uno::Any( xStorage ) );
 
         sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
