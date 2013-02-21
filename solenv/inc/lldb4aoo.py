@@ -17,6 +17,34 @@ def __lldb_init_module( dbg, dict):
 	# register a generic helper function for pimpl types
 	dbg.HandleCommand( 'type summary add -F %s.%s -v -C yes -n PIMPL %s' % ( __name__,'get_pimpl_info', ' '.join(pimpl_types)))
 
+	# add info about specific helper methods
+	# assume functions with docstrings are available for general consumption
+	helper_funcs = [v for (k,v) in globals().iteritems() if( not k.startswith('_') and callable(v) and v.__doc__)]
+	if helper_funcs:
+		print( 'Available AOO-specific helper functions:')
+		for hfunc in helper_funcs:
+			shortdesc = hfunc.__doc__.splitlines()[0]
+			print( '\t%s\t# "%s"' %(hfunc.__name__, shortdesc))
+		print( 'Run them with:')
+		for hfunc in helper_funcs[:4]:
+			print( '\tscript %s.%s()' %(__name__, hfunc.__name__))
+
+# some helpers for use from interactive LLDB sessions
+
+import lldb
+
+def add_breakpoints():
+	'Setup breakpoints useful for AOO debugging'
+	dbg = lldb.debugger
+	if dbg.GetNumTargets() == 0:
+		return
+	# the list of interesting function breakpoints
+	aoo_breakfn = ['main', '__cxa_call_unexpected', 'objc_exception_throw']
+	aoo_breakfn += ['__cxa_throw']
+	# register breakpoints for function basenames
+	for b in aoo_breakfn:
+		dbg.HandleCommand( 'breakpoint set -b ' + b)
+
 
 # local functions for use by the AOO-type summary providers
 
