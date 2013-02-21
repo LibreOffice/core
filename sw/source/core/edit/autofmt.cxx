@@ -1110,7 +1110,7 @@ void SwAutoFormat::DeleteAktPara( bool bStart, bool bEnd )
         // Loesche Blanks am Ende vom akt. und am Anfang vom naechsten
         aDelPam.DeleteMark();
         aDelPam.GetPoint()->nNode = aNdIdx;
-        xub_StrLen nPos;
+        xub_StrLen nPos(0);
         if( bStart && 0 != ( nPos = GetLeadingBlanks( pAktTxtNd->GetTxt() )))
         {
             aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, 0 );
