@@ -92,7 +92,7 @@ $(OBJLOCAL)/liblo-native-code.so : $(wildcard $(OUTDIR)/lib/lib*.a) native-code.
 
 $(SODEST)/liblo-native-code.so : $(OBJLOCAL)/liblo-native-code.so
 	mkdir -p $(SODEST)
-	cp -a $(OBJLOCAL)/liblo-native-code.so $(SODEST)/liblo-native-code.so
+	$(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
 
 # shrinkme $(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
 
