@@ -19,24 +19,24 @@ ifeq ($(OS)$(COM),WNTMSC)
 
 ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& $(COMPATH)/vcpackages/vcbuild.exe libwpd.vcproj "Release|Win32" \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else ifeq ($(VCVER),100)
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& msbuild.exe libwpd.vcxproj /p:Configuration=Release \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& msbuild.exe libwpd.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:TargetName=libwpd-0.9 /p:Configuration=Release \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 else
 
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& $(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)") \
 		./configure \
 		--with-pic \
@@ -48,7 +48,7 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 		$(if $(filter MACOSX,$(OS)),--disable-werror) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 endif
 

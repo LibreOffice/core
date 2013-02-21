@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,tomcat,\
 ))
 
 $(call gb_ExternalProject_get_state_target,tomcat,build) :
-	cd "$(call gb_UnpackedTarball_get_dir,tomcat)/jakarta-servletapi-5" && \
+	$(call gb_Helper_print_on_error,cd "$(call gb_UnpackedTarball_get_dir,tomcat)/jakarta-servletapi-5" && \
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
@@ -28,6 +28,6 @@ $(call gb_ExternalProject_get_state_target,tomcat,build) :
 		) \
 		$(if $(debug),-Dbuild.debug="on") \
 		&& \
-	touch $@
+	touch $@,$(call gb_UnpackedTarball_get_dir,tomcat)/build.log)
 
 # vim: set noet sw=4 ts=4:

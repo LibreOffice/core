@@ -21,35 +21,35 @@ ifeq ($(OS)$(COM),WNTMSC)
 
 ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
-	cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static-nozip \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static-nozip \
 	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
 	&& $(COMPATH)/vcpackages/vcbuild.exe liborcus-static-nozip.vcproj "Release|Win32" \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else ifeq ($(VCVER),100)
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
-	cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static-nozip \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static-nozip \
 	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
 	&& MSBuild.exe liborcus-static-nozip.vcxproj /p:Configuration=Release /p:OutDir=Release/ /p:TargetName=orcus /p:WholeProgramOptimization=no \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
-	cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static-nozip \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static-nozip \
 	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
 	&& MSBuild.exe liborcus-static-nozip.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release /p:OutDir=Release/ /p:TargetName=orcus /p:WholeProgramOptimization=no \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 
 else
 
 # must be built with debug STL if --enable-dbgutil
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& $(if $(filter ANDROID,$(OS)),LIBS='-lgnustl_shared -lm') \
 	./configure \
 		--with-pic \
@@ -63,7 +63,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(call gb_UnpackedTarball_get_dir,boost),CXXFLAGS=$(BOOST_CPPFLAGS) LDFLAGS=$(BOOST_LDFLAGS)) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 endif
 

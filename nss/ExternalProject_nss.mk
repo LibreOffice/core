@@ -17,7 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,nss,\
 ))
 
 $(call gb_ExternalProject_get_state_target,nss,configure):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& $(if $(filter MSC,$(COM)),LIB="$(ILIB)") \
 	mozilla/nsprpub/configure --includedir=$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
@@ -30,12 +30,12 @@ $(call gb_ExternalProject_get_state_target,nss,configure):
 	-e 's%@MOD_PATCH_VERSION@%$(NSS_PATCH)%' \
 	$(SRCDIR)/nss/nss-config.in > $(EXTERNAL_WORKDIR)/config/nss-config \
 	&& chmod a+x $(EXTERNAL_WORKDIR)/config/nss-config \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/nss_configure.log)
 
 ifeq ($(OS),WNT)
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
-	cd $(EXTERNAL_WORKDIR)/mozilla/security/nss \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/mozilla/security/nss \
 	&& $(if $(debug),,BUILD_OPT=1) \
 	MOZ_MSVCVERSION=9 OS_TARGET=WIN95 \
 	$(if $(filter X,$(CPU)),USE_64=1) \
@@ -43,12 +43,12 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 	XCFLAGS="$(SOLARINC)" \
 	$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
 	NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py' \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 
 else
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure)
-	cd $(EXTERNAL_WORKDIR)/mozilla/security/nss \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/mozilla/security/nss \
 	CC="$(CC) $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 	CXX="$(CXX) $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 	OS_LIBS="-ladvapi32 -lws2_32 -lmwsock -lwinm $(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED_LIBSTDCPP))" \
@@ -57,12 +57,12 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 	NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --enable-shared --disable-static" \
 	NSINSTALL="$(PYTHON_FOR_BUILD) $(SRCDIR)/nss/nsinstall.py" \
 	$(MAKE) -j1 nss_build_all \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 endif
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure)
-	cd $(EXTERNAL_WORKDIR)/mozilla/security/nss \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/mozilla/security/nss \
 	&& $(if $(filter FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X,$(CPU)),USE_64=1)) \
 	$(if $(filter MACOSX,$(OS)),MACOS_SDK_DIR=$(MACOSX_SDK_PATH) \
 	$(if $(filter 1060 1070 1080,$(MAC_OS_X_VERSION_MIN_REQUIRED)),NSS_USE_SYSTEM_SQLITE=1)) \
@@ -72,7 +72,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 	NSINSTALL="$(PYTHON_FOR_BUILD) $(SRCDIR)/nss/nsinstall.py") \
 	NSDISTMODE=copy \
 	$(MAKE) -j1 nss_build_all \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 endif
 

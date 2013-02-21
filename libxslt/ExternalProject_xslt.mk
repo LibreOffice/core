@@ -19,7 +19,7 @@ $(eval $(call gb_ExternalProject_register_targets,xslt,\
 ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 $(call gb_ExternalProject_get_state_target,xslt,build):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& ./configure --without-crypto --without-python --disable-static \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
@@ -28,18 +28,18 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 	OBJDUMP=objdump \
 	&& chmod 777 xslt-config \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else # COM=MSC
 $(call gb_ExternalProject_get_state_target,xslt,build):
-	cd $(EXTERNAL_WORKDIR)/win32 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/win32 \
 	&& cscript configure.js \
 	&& unset MAKEFLAGS \
 	&& LIB="$(ILIB)" nmake \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,xslt,build):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& ./configure --without-crypto --without-python \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
@@ -52,6 +52,6 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 	$(if $(filter NO,$(SYSTEM_LIBXML)),--with-libxml-prefix=$(OUTDIR) LIBXML2LIB=-lxml2) \
 	&& chmod 777 xslt-config \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 # vim: set noet sw=4 ts=4:

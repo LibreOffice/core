@@ -26,40 +26,40 @@ ifeq ($(OS)$(COM),WNTMSC)
 
 ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,libmspub,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& $(COMPATH)/vcpackages/vcbuild.exe libmspub.vcproj "Release|Win32" \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else ifeq ($(VCVER),100)
 $(call gb_ExternalProject_get_state_target,libmspub,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& msbuild.exe libmspub.vcxproj /p:Configuration=Release \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else
 $(call gb_ExternalProject_get_state_target,libmspub,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& msbuild.exe libmspub.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 
 else
 
 $(call gb_ExternalProject_get_state_target,libmspub,build) :
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& export PKG_CONFIG="" \
 	&& export ICU_LIBS=" " && export ICU_CFLAGS="-I$(OUTDIR)/inc/external" \
 	&& export LIBMSPUB_CFLAGS="$(WPG_CFLAGS) $(WPD_CFLAGS)" \
@@ -75,7 +75,7 @@ $(call gb_ExternalProject_get_state_target,libmspub,build) :
 		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(call gb_UnpackedTarball_get_dir,boost),CXXFLAGS=$(BOOST_CPPFLAGS)) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 endif
 

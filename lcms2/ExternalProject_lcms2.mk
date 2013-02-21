@@ -19,19 +19,19 @@ ifeq ($(COM),MSC)
 
 ifeq ($(filter-out 14 13,$(COMEX)),)
 $(call gb_ExternalProject_get_state_target,lcms2,build):
-	cd $(EXTERNAL_WORKDIR)/Projects/VC2010/lcms2_DLL \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/Projects/VC2010/lcms2_DLL \
 	&& MSBuild.exe lcms2_DLL.vcxproj /p:Configuration=Release /p:Platform=Win32 /p:TargetName=lcms2 \
 	$(if $(filter 14,$(COMEX)),/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else
 $(call gb_ExternalProject_get_state_target,lcms2,build):
-	cd $(EXTERNAL_WORKDIR)/Projects/VC2008/lcms2_DLL \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/Projects/VC2008/lcms2_DLL \
 	&& $(COMPATH)/vcpackages/vcbuild.exe lcms2_DLL.vcproj "Release|Win32" \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 else
 $(call gb_ExternalProject_get_state_target,lcms2,build):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& ./configure --without-jpeg --without-tiff --with-pic \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	CPPFLAGS=" $(SOLARINC)" \
@@ -40,6 +40,6 @@ $(call gb_ExternalProject_get_state_target,lcms2,build):
 	$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	&& cd src \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 # vim: set noet sw=4 ts=4:

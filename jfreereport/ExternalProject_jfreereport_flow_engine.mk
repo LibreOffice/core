@@ -20,7 +20,7 @@ $(eval $(call gb_ExternalProject_register_targets,jfreereport_flow_engine,\
 ))
 
 $(call gb_ExternalProject_get_state_target,jfreereport_flow_engine,build) :
-	cd "$(call gb_UnpackedTarball_get_dir,jfreereport_flow_engine)" && \
+	$(call gb_Helper_print_on_error,cd "$(call gb_UnpackedTarball_get_dir,jfreereport_flow_engine)" && \
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
@@ -35,6 +35,6 @@ $(call gb_ExternalProject_get_state_target,jfreereport_flow_engine,build) :
 			-Dant.build.javac.target=$(JAVA_TARGET_VER) \
 		) \
 		$(if $(debug),-Dbuild.debug="on") jar && \
-	touch $@
+	touch $@,$(call gb_UnpackedTarball_get_dir,jfreereport_flow_engine)/build.log)
 
 # vim: set noet sw=4 ts=4:

@@ -35,7 +35,7 @@ OPENSSL_PLATFORM := $(if $(filter LINUX FREEBSD ANDROID,$(OS)),\
 
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,openssl,build):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& export CC="$(shell cygpath -w $(CC))" \
 	&& export PERL="$(shell cygpath -w $(PERL))" \
 	&& export LIB="$(ILIB)" \
@@ -43,10 +43,11 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 	&& cmd /c "ms\do_ms.bat $(PERL) $(OPENSSL_PLATFORM)" \
 	&& unset MAKEFLAGS \
 	&& nmake -f "ms\ntdll.mak" \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
+
 else
 $(call gb_ExternalProject_get_state_target,openssl,build):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& MAKE="$(MAKE) -j1" \
 	$(if $(filter LINUX FREEBSD ANDROID SOLARIS IOS,$(OS)),./Configure,\
 	$(if $(filter WNT,$(OS)),$(PERL) Configure,./config)) \
@@ -63,6 +64,6 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 	CC="$(CC) $(if $(filter-out WNT,$(OS)),\
 	$(if $(filter TRUE,$(HAVE_GCC_VISIBILITY_FEATURE)),\
 	-fvisibility=hidden))" \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 # vim: set noet sw=4 ts=4:

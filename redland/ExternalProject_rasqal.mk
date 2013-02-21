@@ -21,7 +21,7 @@ $(eval $(call gb_ExternalProject_register_targets,rasqal,\
 
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,rasqal,build):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 	LDFLAGS="-Wl,--no-undefined -Wl,--enable-runtime-pseudo-reloc-v2 -Wl,--export-all-symbols $(subst ;, -L,$(ILIB))" \
 	LIBXML2LIB="$(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_LIBS),-lxml2)" \
@@ -34,10 +34,10 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 	--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 	lt_cv_cc_dll_switch="-shared" \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else
 $(call gb_ExternalProject_get_state_target,rasqal,build):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& CFLAGS="$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden)" \
 	PATH="$(OUTDIR)/bin:$$PATH" \
 	LDFLAGS="-L$(OUTDIR)/lib \
@@ -56,6 +56,6 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 	$(if $(filter MACOSX,$(OS)),&& $(PERL) \
             $(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
             $(gb_Package_SOURCEDIR_rasqal)/src/.libs/librasqal-lo.1.dylib) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 # vim: set noet sw=4 ts=4:

@@ -19,24 +19,24 @@ $(eval $(call gb_ExternalProject_register_targets,cppunit,\
 ifeq ($(OS)$(COM),WNTMSC)
 ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
-	cd $(EXTERNAL_WORKDIR)/src/cppunit \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/src/cppunit \
 	&& $(COMPATH)/vcpackages/vcbuild.exe cppunit_dll.vcproj "Release|Win32" \
 	&& cd ../DllPlugInTester \
 	&& $(COMPATH)/vcpackages/vcbuild.exe DllPlugInTester.vcproj "Release|Win32" \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
-	cd $(EXTERNAL_WORKDIR)/src/cppunit \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/src/cppunit \
 	&& msbuild.exe cppunit_dll.vcxproj /p:Configuration=Release \
 	$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
 	&& cd ../DllPlugInTester \
 	&& msbuild.exe DllPlugInTester.vcxproj /p:Configuration=Release \
 	$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 else
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& ./configure \
 		--disable-dependency-tracking \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
@@ -52,7 +52,7 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 		$(if $(debug),-g)" \
 	&& cd src \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 
 # vim: set noet sw=4 ts=4:

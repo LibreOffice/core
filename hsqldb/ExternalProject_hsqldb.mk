@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,hsqldb,\
 ))
 
 $(call gb_ExternalProject_get_state_target,hsqldb,build) :
-	cd $(EXTERNAL_WORKDIR) && \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) && \
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build/build.xml \
@@ -28,6 +28,6 @@ $(call gb_ExternalProject_get_state_target,hsqldb,build) :
 		) \
 		$(if $(debug),-Dbuild.debug="on") \
 		jar && \
-	touch $@
+	touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 # vim: set noet sw=4 ts=4:
