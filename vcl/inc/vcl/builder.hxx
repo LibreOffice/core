@@ -23,6 +23,7 @@ class ListBox;
 class NumericFormatter;
 class PopupMenu;
 class ScrollBar;
+class DateField;
 class TimeField;
 class VclMultiLineEdit;
 
@@ -129,6 +130,7 @@ private:
     typedef stringmap Adjustment;
     const Adjustment *get_adjustment_by_name(OString sID) const;
     static void mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment);
+    static void mungeAdjustment(DateField &rTarget, const Adjustment &rAdjustment);
     static void mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustment);
     static void mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment);
 
@@ -169,6 +171,7 @@ private:
 
         std::vector<WidgetAdjustmentMap> m_aNumericFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aTimeFormatterAdjustmentMaps;
+        std::vector<WidgetAdjustmentMap> m_aDateFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aScrollAdjustmentMaps;
         std::map<OString, Adjustment> m_aAdjustments;
 
@@ -263,6 +266,7 @@ private:
 
     void connectNumericFormatterAdjustment(const OString &id, const OString &rAdjustment);
     void connectTimeFormatterAdjustment(const OString &id, const OString &rAdjustment);
+    void connectDateFormatterAdjustment(const OString &id, const OString &rAdjustment);
 
     bool extractGroup(const OString &id, stringmap &rVec);
     bool extractModel(const OString &id, stringmap &rVec);

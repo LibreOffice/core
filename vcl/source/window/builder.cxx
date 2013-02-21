@@ -256,6 +256,16 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
             mungeAdjustment(*pTarget, *pAdjustment);
     }
 
+    for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aDateFormatterAdjustmentMaps.begin(),
+         aEnd = m_pParserState->m_aDateFormatterAdjustmentMaps.end(); aI != aEnd; ++aI)
+    {
+        DateField *pTarget = dynamic_cast<DateField*>(get<Window>(aI->m_sID));
+        const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
+        SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
+        if (pTarget && pAdjustment)
+            mungeAdjustment(*pTarget, *pAdjustment);
+    }
+
     //Set ScrollBar adjustments when everything has been imported
     for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aScrollAdjustmentMaps.begin(),
          aEnd = m_pParserState->m_aScrollAdjustmentMaps.end(); aI != aEnd; ++aI)
@@ -715,6 +725,12 @@ void VclBuilder::connectTimeFormatterAdjustment(const OString &id, const OString
         m_pParserState->m_aTimeFormatterAdjustmentMaps.push_back(WidgetAdjustmentMap(id, rAdjustment));
 }
 
+void VclBuilder::connectDateFormatterAdjustment(const OString &id, const OString &rAdjustment)
+{
+    if (!rAdjustment.isEmpty())
+        m_pParserState->m_aDateFormatterAdjustmentMaps.push_back(WidgetAdjustmentMap(id, rAdjustment));
+}
+
 bool VclBuilder::extractScrollAdjustment(const OString &id, VclBuilder::stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("adjustment"));
@@ -1022,6 +1038,13 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
                 connectTimeFormatterAdjustment(id, sAdjustment);
                 SAL_INFO("vcl.layout", "making time field for " << name.getStr() << " " << sUnit.getStr());
                 TimeField *pField = new TimeField(pParent, nBits);
+                pWindow = pField;
+            }
+            else if (sPattern == "yy:mm:dd")
+            {
+                connectDateFormatterAdjustment(id, sAdjustment);
+                SAL_INFO("vcl.layout", "making date field for " << name.getStr() << " " << sUnit.getStr());
+                DateField *pField = new DateField(pParent, nBits);
                 pWindow = pField;
             }
             else
@@ -2540,7 +2563,6 @@ void VclBuilder::mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rA
     }
 }
 
-//assume all in minutes for the moment
 void VclBuilder::mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustment)
 {
     for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
@@ -2550,19 +2572,19 @@ void VclBuilder::mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustme
 
         if (rKey == "upper")
         {
-            Time aUpper(0, rValue.toInt32());
+            Time aUpper(rValue.toInt32());
             rTarget.SetMax(aUpper);
             rTarget.SetLast(aUpper);
         }
         else if (rKey == "lower")
         {
-            Time aLower(0, rValue.toInt32());
+            Time aLower(rValue.toInt32());
             rTarget.SetMin(aLower);
             rTarget.SetFirst(aLower);
         }
         else if (rKey == "value")
         {
-            Time aValue(0, rValue.toInt32());
+            Time aValue(rValue.toInt32());
             rTarget.SetTime(aValue);
         }
         else
@@ -2572,6 +2594,36 @@ void VclBuilder::mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustme
     }
 }
 
+void VclBuilder::mungeAdjustment(DateField &rTarget, const Adjustment &rAdjustment)
+{
+    for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
+    {
+        const OString &rKey = aI->first;
+        const OString &rValue = aI->second;
+
+        if (rKey == "upper")
+        {
+            Date aUpper(rValue.toInt32());
+            rTarget.SetMax(aUpper);
+            rTarget.SetLast(aUpper);
+        }
+        else if (rKey == "lower")
+        {
+            Date aLower(rValue.toInt32());
+            rTarget.SetMin(aLower);
+            rTarget.SetFirst(aLower);
+        }
+        else if (rKey == "value")
+        {
+            Date aValue(rValue.toInt32());
+            rTarget.SetDate(aValue);
+        }
+        else
+        {
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
+        }
+    }
+}
 
 void VclBuilder::mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment)
 {
