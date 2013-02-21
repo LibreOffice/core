@@ -343,6 +343,8 @@ public:
     /** Final conversion after importing the worksheet. */
     void                finalizeWorksheetImport();
 
+    void finalizeDrawingImport();
+
 private:
     typedef ::std::vector< sal_Int32 >                  OutlineLevelVec;
     typedef ::std::pair< ColumnModel, sal_Int32 >       ColumnModelRange;
@@ -957,9 +959,12 @@ void WorksheetGlobals::finalizeWorksheetImport()
     lclUpdateProgressBar( mxFinalProgress, 0.5 );
     convertColumns();
     convertRows();
-    lclUpdateProgressBar( mxFinalProgress, 0.75 );
-    finalizeDrawings();
     lclUpdateProgressBar( mxFinalProgress, 1.0 );
+}
+
+void WorksheetGlobals::finalizeDrawingImport()
+{
+    finalizeDrawings();
 
     // forget current sheet index in global data
     setCurrentSheetIndex( -1 );
@@ -1578,6 +1583,11 @@ void WorksheetHelper::initializeWorksheetImport()
 void WorksheetHelper::finalizeWorksheetImport()
 {
     mrSheetGlob.finalizeWorksheetImport();
+}
+
+void WorksheetHelper::finalizeDrawingImport()
+{
+    mrSheetGlob.finalizeDrawingImport();
 }
 
 void WorksheetHelper::setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString& rTokenStr )
