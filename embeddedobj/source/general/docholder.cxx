@@ -601,7 +601,7 @@ void DocumentHolder::FindConnectPoints(
 }
 
 //---------------------------------------------------------------------------
-uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenuesForInplace(
+uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenusForInplace(
         const uno::Reference< container::XIndexAccess >& xContMenu,
         const uno::Reference< frame::XDispatchProvider >& xContDisp,
         const ::rtl::OUString& aContModuleName,
@@ -648,7 +648,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenuesForInplace(
 }
 
 //---------------------------------------------------------------------------
-sal_Bool DocumentHolder::MergeMenues_Impl( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
+sal_Bool DocumentHolder::MergeMenus_Impl( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
                                                const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
                                             const uno::Reference< frame::XDispatchProvider >& xContDisp,
                                             const ::rtl::OUString& aContModuleName )
@@ -667,7 +667,7 @@ sal_Bool DocumentHolder::MergeMenues_Impl( const uno::Reference< ::com::sun::sta
         uno::Reference< container::XIndexAccess > xOwnMenu = RetrieveOwnMenu_Impl();
         uno::Reference< frame::XDispatchProvider > xOwnDisp( m_xFrame, uno::UNO_QUERY_THROW );
 
-        uno::Reference< container::XIndexAccess > xMergedMenu = MergeMenuesForInplace( xContMenu, xContDisp, aContModuleName, xOwnMenu, xOwnDisp );
+        uno::Reference< container::XIndexAccess > xMergedMenu = MergeMenusForInplace( xContMenu, xContDisp, aContModuleName, xOwnMenu, xOwnDisp );
         uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
                                                                                          uno::UNO_QUERY_THROW );
         bMenuMerged = xMerge->setMergedMenuBar( xMergedMenu );
@@ -709,7 +709,7 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
                 xOwnLM->setDockingAreaAcceptor( xDocAreaAcc );
 
                 // try to merge menus; don't do anything else if it fails
-                if ( MergeMenues_Impl( xOwnLM, xContainerLM, xContainerDP, aContModuleName ) )
+                if ( MergeMenus_Impl( xOwnLM, xContainerLM, xContainerDP, aContModuleName ) )
                 {
                     // make sure that the container LM does not control the size of the containers window anymore
                     // this must be done after merging menus as we won't get the container menu otherwise

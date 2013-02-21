@@ -58,7 +58,7 @@ private:
     ::osl::Mutex            maMutex;
     Menu*                   mpMenu;
     MenuListenerMultiplexer maMenuListeners;
-    PopupMenuRefList        maPopupMenueRefs;
+    PopupMenuRefList        maPopupMenuRefs;
 
 protected:
     ::osl::Mutex&           GetMutex() { return maMutex; }

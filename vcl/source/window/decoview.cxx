@@ -796,7 +796,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                         ImplDraw2ColorFrame( pDev, rRect,
                                              rStyleSettings.GetMenuBorderColor(),
                                              rStyleSettings.GetDarkShadowColor() );
-                        if ( !rStyleSettings.GetUseFlatMenues() )
+                        if ( !rStyleSettings.GetUseFlatMenus() )
                         {
                             ImplDraw2ColorFrame( pDev, rRect,
                                                  rStyleSettings.GetLightColor(),

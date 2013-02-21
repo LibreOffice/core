@@ -914,7 +914,7 @@ void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
     DPLaunchFieldPopupMenu(OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol, nRow, nTab), pDPObj);
 }
 
-void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
+void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
 {
     delete pFilterBox;
     delete pFilterFloat;
@@ -1862,7 +1862,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     ScRange aScenRange;
     if ( rMEvt.IsLeft() && HasScenarioButton( aPos, aScenRange ) )
     {
-        DoScenarioMenue( aScenRange );
+        DoScenarioMenu( aScenRange );
         return;
     }
 

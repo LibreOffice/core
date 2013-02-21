@@ -325,7 +325,7 @@ private:
     sal_uLong                           mnLogoDisplayTime;
     sal_uLong                           mnDisplayOptions;
     sal_uLong                           mnToolbarIconSize;
-    sal_uLong                           mnUseFlatMenues;
+    sal_uLong                           mnUseFlatMenus;
     sal_uLong                           mnOptions;
     sal_uInt16                          mnScreenZoom;
     sal_uInt16                          mnScreenFontZoom;
@@ -630,10 +630,10 @@ public:
                                         { CopyData(); mpData->mnUseFlatBorders = bUseFlatBorders; }
     sal_Bool                            GetUseFlatBorders() const
                                         { return (sal_Bool) mpData->mnUseFlatBorders; }
-    void                            SetUseFlatMenues( sal_Bool bUseFlatMenues )
-                                        { CopyData(); mpData->mnUseFlatMenues = bUseFlatMenues; }
-    sal_Bool                            GetUseFlatMenues() const
-                                        { return (sal_Bool) mpData->mnUseFlatMenues; }
+    void                            SetUseFlatMenus( sal_Bool bUseFlatMenus )
+                                        { CopyData(); mpData->mnUseFlatMenus = bUseFlatMenus; }
+    sal_Bool                            GetUseFlatMenus() const
+                                        { return (sal_Bool) mpData->mnUseFlatMenus; }
     void                            SetUseImagesInMenus( sal_Bool bUseImagesInMenus )
                                         { CopyData(); mpData->mnUseImagesInMenus = bUseImagesInMenus; }
     sal_Bool                            GetUseImagesInMenus() const;

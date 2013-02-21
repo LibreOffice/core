@@ -84,8 +84,8 @@ VCLXMenu::VCLXMenu( Menu* pMenu ) : maMenuListeners( *this )
 VCLXMenu::~VCLXMenu()
 {
     DBG_DTOR( VCLXMenu, 0 );
-    for ( size_t n = maPopupMenueRefs.size(); n; ) {
-        delete maPopupMenueRefs[ --n ];
+    for ( size_t n = maPopupMenuRefs.size(); n; ) {
+        delete maPopupMenuRefs[ --n ];
     }
     if ( mpMenu )
     {
@@ -499,7 +499,7 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
         // Selbst eine Ref halten!
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pNewRef = new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > ;
         *pNewRef = rxPopupMenu;
-        maPopupMenueRefs.push_back( pNewRef );
+        maPopupMenuRefs.push_back( pNewRef );
 
         mpMenu->SetPopupMenu( nItemId, (PopupMenu*) pVCLMenu->GetMenu() );
     }
@@ -514,9 +514,9 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
     Menu* pMenu = mpMenu ? mpMenu->GetPopupMenu( nItemId ) : NULL;
     if ( pMenu )
     {
-        for ( size_t n = maPopupMenueRefs.size(); n; )
+        for ( size_t n = maPopupMenuRefs.size(); n; )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenueRefs[ --n ];
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenuRefs[ --n ];
             Menu* pM = ((VCLXMenu*)pRef->get())->GetMenu();
             if ( pM == pMenu )
             {
@@ -524,7 +524,7 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
                 break;
             }
         }
-        // it seems the popup menu is not insert into maPopupMenueRefs
+        // it seems the popup menu is not insert into maPopupMenuRefs
         // if the popup men is not created by stardiv.Toolkit.VCLXPopupMenu
         if( !aRef.is() )
         {
