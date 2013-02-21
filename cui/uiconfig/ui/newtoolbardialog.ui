@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkAction" id="action1"/>
   <object class="GtkDialog" id="NewToolbarDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -21,6 +20,8 @@
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -87,6 +88,7 @@
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Toolbar Name</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">edit</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -95,10 +97,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry1">
+                  <object class="GtkEntry" id="edit">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
+                    <property name="width_chars">26</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -126,6 +129,7 @@
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Save In</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">savein</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -134,7 +138,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="comboboxtext1">
+                  <object class="GtkComboBoxText" id="savein">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="entry_text_column">0</property>

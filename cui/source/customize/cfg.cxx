@@ -4653,24 +4653,24 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
         SaveInData* pData =
             (SaveInData*) aSaveInListBox.GetEntryData( i );
 
-        nInsertPos = pNameDialog->aSaveInListBox.InsertEntry(
+        nInsertPos = pNameDialog->m_pSaveInListBox->InsertEntry(
             aSaveInListBox.GetEntry( i ) );
 
-        pNameDialog->aSaveInListBox.SetEntryData( nInsertPos, pData );
+        pNameDialog->m_pSaveInListBox->SetEntryData( nInsertPos, pData );
     }
 
-    pNameDialog->aSaveInListBox.SelectEntryPos(
+    pNameDialog->m_pSaveInListBox->SelectEntryPos(
         aSaveInListBox.GetSelectEntryPos(), sal_True );
 
     bool ret = pNameDialog->Execute();
     if ( ret == RET_OK )
     {
-        pNameDialog->GetName( aNewName );
+        aNewName = pNameDialog->GetName();
 
-        nInsertPos = pNameDialog->aSaveInListBox.GetSelectEntryPos();
+        nInsertPos = pNameDialog->m_pSaveInListBox->GetSelectEntryPos();
 
         ToolbarSaveInData* pData = (ToolbarSaveInData*)
-            pNameDialog->aSaveInListBox.GetEntryData( nInsertPos );
+            pNameDialog->m_pSaveInListBox->GetEntryData( nInsertPos );
 
         if ( GetSaveInData() != pData )
         {
@@ -4954,24 +4954,16 @@ sal_Bool SvxToolbarEntriesListBox::NotifyCopying(
     return sal_False;
 }
 
-SvxNewToolbarDialog::SvxNewToolbarDialog(
-    Window* pWindow, const String& rName )
-    :
-    ModalDialog     ( pWindow, CUI_RES( MD_NEW_TOOLBAR ) ),
-    aFtDescription  ( this, CUI_RES( FT_NAME ) ),
-    aEdtName        ( this, CUI_RES( EDT_STRING ) ),
-    aSaveInText     ( this, CUI_RES( TXT_SAVEIN ) ),
-    aBtnOK          ( this, CUI_RES( BTN_OK ) ),
-    aBtnCancel      ( this, CUI_RES( BTN_CANCEL ) ),
-    aBtnHelp        ( this, CUI_RES( BTN_HELP ) ),
-    aSaveInListBox  ( this, CUI_RES( LB_SAVEIN ) )
+SvxNewToolbarDialog::SvxNewToolbarDialog(Window* pWindow, const OUString& rName)
+    : ModalDialog(pWindow, "NewToolbarDialog", "cui/ui/newtoolbardialog.ui")
 {
-    FreeResource();
-
-    aEdtName.SetText( rName );
-    aEdtName.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    ModifyHdl(&aEdtName);
-    aEdtName.SetModifyHdl(LINK(this, SvxNewToolbarDialog, ModifyHdl));
+    get(m_pEdtName, "edit");
+    get(m_pBtnOK, "ok");
+    get(m_pSaveInListBox, "savein");
+    m_pEdtName->SetText( rName );
+    m_pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
+    ModifyHdl(m_pEdtName);
+    m_pEdtName->SetModifyHdl(LINK(this, SvxNewToolbarDialog, ModifyHdl));
 }
 
 IMPL_LINK(SvxNewToolbarDialog, ModifyHdl, Edit*, pEdit)
@@ -4979,7 +4971,7 @@ IMPL_LINK(SvxNewToolbarDialog, ModifyHdl, Edit*, pEdit)
     (void)pEdit;
 
     if(aCheckNameHdl.IsSet())
-        aBtnOK.Enable(aCheckNameHdl.Call(this) > 0);
+        m_pBtnOK->Enable(aCheckNameHdl.Call(this) > 0);
 
     return 0;
 }

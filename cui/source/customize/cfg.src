@@ -483,66 +483,6 @@ ModalDialog MD_MENU_ORGANISER
     };
 };
 
-// MD_NEW_TOOLBAR -------------------------------------------------
-ModalDialog MD_NEW_TOOLBAR
-{
-    HelpID = "cui:ModalDialog:MD_NEW_TOOLBAR";
-    OutputSize = TRUE ;
-    SvLook = TRUE ;
-    Size = MAP_APPFONT ( 165 , 63 ) ;
-    Text [ en-US ] = "Name" ;
-    Moveable = TRUE ;
-    FixedText FT_NAME
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 98 , 8 ) ;
-        TEXT_TOOLBAR_NAME
-        WordBreak = TRUE ;
-    };
-    Edit EDT_STRING
-    {
-        HelpID = "cui:Edit:MD_NEW_TOOLBAR:EDT_STRING";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 97 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    FixedText TXT_SAVEIN
-    {
-        Pos = MAP_APPFONT ( 6 , 35 ) ;
-        Size = MAP_APPFONT ( 98 , 8 ) ;
-        Group = TRUE ;
-        TEXT_SAVE_IN
-    };
-    ListBox LB_SAVEIN
-    {
-        HelpID = "cui:ListBox:MD_NEW_TOOLBAR:LB_SAVEIN";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 43 ) ;
-        Size = MAP_APPFONT ( 97 , 53 ) ;
-        DropDown = TRUE ;
-    };
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 109 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 109 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 109 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-};
-
 #ifndef IMAGE_STDBTN_COLOR
 #define IMAGE_STDBTN_COLOR Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
 #endif

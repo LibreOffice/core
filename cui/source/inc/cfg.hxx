@@ -684,32 +684,34 @@ public:
 class SvxNewToolbarDialog : public ModalDialog
 {
 private:
-    FixedText       aFtDescription;
-    Edit            aEdtName;
-    FixedText       aSaveInText;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    Edit*           m_pEdtName;
+    OKButton*       m_pBtnOK;
 
     Link            aCheckNameHdl;
 
     DECL_LINK(ModifyHdl, Edit*);
 
 public:
-    SvxNewToolbarDialog( Window* pWindow, const String& rName );
+    SvxNewToolbarDialog(Window* pWindow, const OUString& rName);
 
-    ListBox         aSaveInListBox;
+    ListBox*        m_pSaveInListBox;
 
-    void    GetName( rtl::OUString& rName ){rName = aEdtName.GetText();}
+    OUString GetName()
+    {
+        return m_pEdtName->GetText();
+    }
 
-    void    SetCheckNameHdl( const Link& rLink, bool bCheckImmediately = false )
+    void SetCheckNameHdl( const Link& rLink, bool bCheckImmediately = false )
     {
         aCheckNameHdl = rLink;
         if ( bCheckImmediately )
-            aBtnOK.Enable( rLink.Call( this ) > 0 );
+            m_pBtnOK->Enable( rLink.Call( this ) > 0 );
     }
 
-    void    SetEditHelpId( const rtl::OString& aHelpId) {aEdtName.SetHelpId(aHelpId);}
+    void SetEditHelpId( const rtl::OString& aHelpId)
+    {
+        m_pEdtName->SetHelpId(aHelpId);
+    }
 };
 
 class SvxIconSelectorDialog : public ModalDialog
