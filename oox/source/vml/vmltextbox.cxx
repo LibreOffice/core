@@ -21,7 +21,9 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 
 namespace oox {
 namespace vml {
@@ -87,6 +89,12 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
         for (std::vector<beans::PropertyValue>::iterator i = aPropVec.begin(); i != aPropVec.end(); ++i)
             *pValues++ = *i;
         xTextAppend->appendTextPortion(aIt->maText, aPropSeq);
+    }
+
+    if ( maLayoutFlow == "vertical" )
+    {
+        uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
+        xProperties->setPropertyValue( "TextWritingMode", uno::makeAny( text::WritingMode_TB_RL ) );
     }
 }
 

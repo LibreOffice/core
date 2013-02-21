@@ -178,6 +178,17 @@ TextBoxContext::TextBoxContext( ContextHandler2Helper& rParent, TextBox& rTextBo
             value.isEmpty() ? "0.05in" : value, 0, false, false );
         rTextBox.borderDistanceSet = true;
     }
+
+    OUString sStyle = rAttribs.getString( XML_style, OUString() );
+    sal_Int32 nIndex = 0;
+    while( nIndex >= 0 )
+    {
+        OUString aName, aValue;
+        if( ConversionHelper::separatePair( aName, aValue, sStyle.getToken( 0, ';', nIndex ), ':' ) )
+        {
+            if( aName == "layout-flow" )      rTextBox.maLayoutFlow = aValue;
+        }
+    }
 }
 
 ContextHandlerRef TextBoxContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )

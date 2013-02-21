@@ -86,6 +86,7 @@ public:
     /// Text distance from the border (inset attribute of v:textbox), valid only if set.
     bool borderDistanceSet;
     int borderDistanceLeft, borderDistanceTop, borderDistanceRight, borderDistanceBottom;
+    OUString maLayoutFlow;
 
 private:
     typedef ::std::vector< TextPortionModel > PortionVector;
