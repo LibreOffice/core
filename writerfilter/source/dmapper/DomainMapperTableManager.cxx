@@ -24,7 +24,6 @@
 #include <CellMarginHandler.hxx>
 #include <ConversionHelper.hxx>
 #include <MeasureHandler.hxx>
-#include <TablePositionHandler.hxx>
 #include <TDefTableHandler.hxx>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
@@ -322,9 +321,14 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     if (pProperties.get())
                     {
-                        TablePositionHandlerPtr pHandler( new TablePositionHandler );
+                        TablePositionHandlerPtr pHandler = m_aTablePositions.back();
+                        if ( !pHandler )
+                        {
+                            m_aTablePositions.pop_back();
+                            pHandler.reset( new TablePositionHandler );
+                            m_aTablePositions.push_back( pHandler );
+                        }
                         pProperties->resolve(*pHandler);
-                        m_aTablePosition = pHandler->getTablePosition();
                     }
                 }
                 break;
@@ -360,6 +364,14 @@ boost::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentCel
     return m_aCellWidths.back( );
 }
 
+const uno::Sequence<beans::PropertyValue> DomainMapperTableManager::getCurrentTablePosition( )
+{
+    if ( !m_aTablePositions.empty( ) && m_aTablePositions.back() )
+        return m_aTablePositions.back( )->getTablePosition();
+    else
+        return uno::Sequence< beans::PropertyValue >( 0 );
+}
+
 void DomainMapperTableManager::startLevel( )
 {
     DomainMapperTableManager_Base_t::startLevel( );
@@ -375,9 +387,11 @@ void DomainMapperTableManager::startLevel( )
     IntVectorPtr pNewGrid( new vector<sal_Int32> );
     IntVectorPtr pNewSpans( new vector<sal_Int32> );
     IntVectorPtr pNewCellWidths( new vector<sal_Int32> );
+    TablePositionHandlerPtr pNewPositionHandler;
     m_aTableGrid.push_back( pNewGrid );
     m_aGridSpans.push_back( pNewSpans );
     m_aCellWidths.push_back( pNewCellWidths );
+    m_aTablePositions.push_back( pNewPositionHandler );
     m_nCell.push_back( 0 );
     m_nTableWidth = 0;
 
@@ -394,6 +408,7 @@ void DomainMapperTableManager::endLevel( )
     m_nCell.pop_back( );
     m_nTableWidth = 0;
 
+
     DomainMapperTableManager_Base_t::endLevel( );
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("dmappertablemanager.endLevel");
@@ -403,6 +418,10 @@ void DomainMapperTableManager::endLevel( )
 
     dmapper_logger->endElement();
 #endif
+
+    // Pop back the table position after endLevel as it's used
+    // in the endTable method called in endLevel.
+    m_aTablePositions.pop_back();
 }
 
 
@@ -576,7 +595,6 @@ void DomainMapperTableManager::clearData()
     m_nRow = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = 0;
     m_sTableStyleName = OUString();
     m_pTableStyleTextProperies.reset();
-    m_aTablePosition = uno::Sequence<beans::PropertyValue>(0);
 }
 
 

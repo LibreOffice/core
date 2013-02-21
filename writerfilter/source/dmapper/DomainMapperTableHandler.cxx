@@ -717,7 +717,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         uno::Reference<text::XTextRange> xStart;
         uno::Reference<text::XTextRange> xEnd;
         // If we want to make this table a floating one.
-        uno::Sequence<beans::PropertyValue> aFrameProperties = m_rDMapper_Impl.getTableManager().getTablePosition();
+        uno::Sequence<beans::PropertyValue> aFrameProperties = m_rDMapper_Impl.getTableManager().getCurrentTablePosition();
         bool bFloating = aFrameProperties.hasElements();
         // Additional checks: if we can do this.
         if (bFloating && (*m_pTableSeq)[0].getLength() > 0 && (*m_pTableSeq)[0][0].getLength() > 0)
