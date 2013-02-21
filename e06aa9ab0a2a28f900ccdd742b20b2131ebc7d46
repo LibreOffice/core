@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///bQ\u003d",
+        "filename": "apache-commons/ExternalProject_apache_commons_codec.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-02-21T06:40:38Z",
+      "side": 1,
+      "message": "I once thought about providing function gb_ExternalProject_run (or some similar name), which would cd to the workdir and then invoke the passed command (and then maybe even touch the target ($@)). At the end I rejected the idea, because it did not seem like it added enough functionality to justify an additional function. But this logging of the command output seems to fit nicely into that and it adds enough boilerplate to the makefiles that it looks like a good idea to hide it in a function.",
+      "revId": "e06aa9ab0a2a28f900ccdd742b20b2131ebc7d46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///bI\u003d",
+        "filename": "apache-commons/ExternalProject_apache_commons_codec.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-02-21T06:40:38Z",
+      "side": 1,
+      "message": "I really do not like this. The log file passed to gb_Helper_print_on_error feels like it is actually a part of the command and it requires some thinking to realize it is not. It would be better to make it the first argument (if my other suggestion to hide the whole logging into a function is rejected).",
+      "revId": "e06aa9ab0a2a28f900ccdd742b20b2131ebc7d46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///b4\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-02-21T06:40:38Z",
+      "side": 1,
+      "message": "typo .-)",
+      "revId": "e06aa9ab0a2a28f900ccdd742b20b2131ebc7d46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///bo\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-02-21T06:40:38Z",
+      "side": 1,
+      "message": "Do we really need this configure option? I argue that the captured output should be printed in case of error in silent build and always in verbose build. For example, packagers like verbose builds, because it is easier to see what went wrong when there is a good build to compare to.",
+      "revId": "e06aa9ab0a2a28f900ccdd742b20b2131ebc7d46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
