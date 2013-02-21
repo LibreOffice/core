@@ -283,6 +283,7 @@ namespace drawinglayer
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const SvgGradientEntryVector& rGradientEntries,
             const basegfx::B2DPoint& rStart,
+            bool bUseUnitCoordinates,
             SpreadMethod aSpreadMethod)
         :   maPolyPolygon(rPolyPolygon),
             maGradientEntries(rGradientEntries),
@@ -291,7 +292,8 @@ namespace drawinglayer
             mbPreconditionsChecked(false),
             mbCreatesContent(false),
             mbSingleEntry(false),
-            mbFullyOpaque(true)
+            mbFullyOpaque(true),
+            mbUseUnitCoordinates(bUseUnitCoordinates)
         {
         }
 
@@ -302,6 +304,7 @@ namespace drawinglayer
             return (getPolyPolygon() == rCompare.getPolyPolygon()
                 && getGradientEntries() == rCompare.getGradientEntries()
                 && getStart() == rCompare.getStart()
+                && getUseUnitCoordinates() == rCompare.getUseUnitCoordinates()
                 && getSpreadMethod() == rCompare.getSpreadMethod());
         }
 
@@ -388,20 +391,37 @@ namespace drawinglayer
                     basegfx::tools::createScaleTranslateB2DHomMatrix(
                         fPolyWidth, fPolyHeight,
                         aPolyRange.getMinX(), aPolyRange.getMinY()));
+                basegfx::B2DHomMatrix aUnitGradientToObject;
+                static bool bInterpretAbsolute(true);
 
-                // create unit transform from unit vector [0.0 .. 1.0] along the X-Axis to given
-                // gradient vector defined by Start,End
-                const basegfx::B2DVector aVector(getEnd() - getStart());
-                const double fVectorLength(aVector.getLength());
-                basegfx::B2DHomMatrix aUnitGradientToGradient;
+                if(getUseUnitCoordinates())
+                {
+                    // interpret in unit coordinate system -> object aspect ratio will scale result
+                    // create unit transform from unit vector [0.0 .. 1.0] along the X-Axis to given
+                    // gradient vector defined by Start,End
+                    const basegfx::B2DVector aVector(getEnd() - getStart());
+                    const double fVectorLength(aVector.getLength());
+                    basegfx::B2DHomMatrix aUnitGradientToGradient;
 
-                aUnitGradientToGradient.scale(fVectorLength, 1.0);
-                aUnitGradientToGradient.rotate(atan2(aVector.getY(), aVector.getX()));
-                aUnitGradientToGradient.translate(getStart().getX(), getStart().getY());
+                    aUnitGradientToGradient.scale(fVectorLength, 1.0);
+                    aUnitGradientToGradient.rotate(atan2(aVector.getY(), aVector.getX()));
+                    aUnitGradientToGradient.translate(getStart().getX(), getStart().getY());
 
-                // create full transform from unit gradient coordinates to object coordinates
-                // including the SvgGradient transformation
-                basegfx::B2DHomMatrix aUnitGradientToObject(aObjectTransform * aUnitGradientToGradient);
+                    // create full transform from unit gradient coordinates to object coordinates
+                    // including the SvgGradient transformation
+                    aUnitGradientToObject = aObjectTransform * aUnitGradientToGradient;
+                }
+                else
+                {
+                    // interpret in object coordinate system -> object aspect ratio will not scale result
+                    const basegfx::B2DPoint aStart(aObjectTransform * getStart());
+                    const basegfx::B2DPoint aEnd(aObjectTransform * getEnd());
+                    const basegfx::B2DVector aVector(aEnd - aStart);
+
+                    aUnitGradientToObject.scale(aVector.getLength(), 1.0);
+                    aUnitGradientToObject.rotate(atan2(aVector.getY(), aVector.getX()));
+                    aUnitGradientToObject.translate(aStart.getX(), aStart.getY());
+                }
 
                 // create inverse from it
                 basegfx::B2DHomMatrix aObjectToUnitGradient(aUnitGradientToObject);
@@ -525,9 +545,10 @@ namespace drawinglayer
             const SvgGradientEntryVector& rGradientEntries,
             const basegfx::B2DPoint& rStart,
             const basegfx::B2DPoint& rEnd,
+            bool bUseUnitCoordinates,
             SpreadMethod aSpreadMethod)
         :   BufferedDecompositionPrimitive2D(),
-            SvgGradientHelper(rPolyPolygon, rGradientEntries, rStart, aSpreadMethod),
+            SvgGradientHelper(rPolyPolygon, rGradientEntries, rStart, bUseUnitCoordinates, aSpreadMethod),
             maEnd(rEnd)
         {
         }
@@ -698,16 +719,31 @@ namespace drawinglayer
                     basegfx::tools::createScaleTranslateB2DHomMatrix(
                         fPolyWidth, fPolyHeight,
                         aPolyRange.getMinX(), aPolyRange.getMinY()));
+                basegfx::B2DHomMatrix aUnitGradientToObject;
+                static bool bInterpretAbsolute(true);
 
-                // create unit transform from unit vector to given linear gradient vector
-                basegfx::B2DHomMatrix aUnitGradientToGradient;
+                if(getUseUnitCoordinates())
+                {
+                    // interpret in unit coordinate system -> object aspect ratio will scale result
+                    // create unit transform from unit vector to given linear gradient vector
+                    basegfx::B2DHomMatrix aUnitGradientToGradient;
 
-                aUnitGradientToGradient.scale(getRadius(), getRadius());
-                aUnitGradientToGradient.translate(getStart().getX(), getStart().getY());
+                    aUnitGradientToGradient.scale(getRadius(), getRadius());
+                    aUnitGradientToGradient.translate(getStart().getX(), getStart().getY());
 
-                // create full transform from unit gradient coordinates to object coordinates
-                // including the SvgGradient transformation
-                basegfx::B2DHomMatrix aUnitGradientToObject(aObjectTransform * aUnitGradientToGradient);
+                    // create full transform from unit gradient coordinates to object coordinates
+                    // including the SvgGradient transformation
+                    aUnitGradientToObject = aObjectTransform * aUnitGradientToGradient;
+                }
+                else
+                {
+                    // interpret in object coordinate system -> object aspect ratio will not scale result
+                    const double fRadius((aObjectTransform * basegfx::B2DVector(getRadius(), 0.0)).getLength());
+                    const basegfx::B2DPoint aStart(aObjectTransform * getStart());
+
+                    aUnitGradientToObject.scale(fRadius, fRadius);
+                    aUnitGradientToObject.translate(aStart.getX(), aStart.getY());
+                }
 
                 // create inverse from it
                 basegfx::B2DHomMatrix aObjectToUnitGradient(aUnitGradientToObject);
@@ -780,10 +816,11 @@ namespace drawinglayer
             const SvgGradientEntryVector& rGradientEntries,
             const basegfx::B2DPoint& rStart,
             double fRadius,
+            bool bUseUnitCoordinates,
             SpreadMethod aSpreadMethod,
             const basegfx::B2DPoint* pFocal)
         :   BufferedDecompositionPrimitive2D(),
-            SvgGradientHelper(rPolyPolygon, rGradientEntries, rStart, aSpreadMethod),
+            SvgGradientHelper(rPolyPolygon, rGradientEntries, rStart, bUseUnitCoordinates, aSpreadMethod),
             mfRadius(fRadius),
             maFocal(rStart),
             maFocalVector(0.0, 0.0),

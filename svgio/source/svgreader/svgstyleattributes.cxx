@@ -407,6 +407,7 @@ namespace svgio
                             aSvgGradientEntryVector,
                             aStart,
                             aEnd,
+                            userSpaceOnUse != rFillGradient.getGradientUnits(),
                             rFillGradient.getSpreadMethod()));
                 }
                 else
@@ -467,6 +468,7 @@ namespace svgio
                             aSvgGradientEntryVector,
                             aStart,
                             fRadius,
+                            userSpaceOnUse != rFillGradient.getGradientUnits(),
                             rFillGradient.getSpreadMethod(),
                             bFocal ? &aFocal : 0));
                 }
