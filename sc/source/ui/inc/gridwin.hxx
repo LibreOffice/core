@@ -320,7 +320,7 @@ public:
     void            UpdateFormulas();
 
     void            LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelect );
-    void            DoScenarioMenue( const ScRange& rScenRange );
+    void            DoScenarioMenu( const ScRange& rScenRange );
 
     void            LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow);
     void            RefreshAutoFilterButton(const ScAddress& rPos);

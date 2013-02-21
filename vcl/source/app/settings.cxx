@@ -333,7 +333,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnHighContrast              = rData.mnHighContrast;
     mnUseSystemUIFonts          = rData.mnUseSystemUIFonts;
     mnUseFlatBorders            = rData.mnUseFlatBorders;
-    mnUseFlatMenues             = rData.mnUseFlatMenues;
+    mnUseFlatMenus              = rData.mnUseFlatMenus;
     mnAutoMnemonic              = rData.mnAutoMnemonic;
     mnUseImagesInMenus          = rData.mnUseImagesInMenus;
     mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
@@ -426,7 +426,7 @@ void ImplStyleData::SetStandardStyles()
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 1;
     mnUseFlatBorders            = 0;
-    mnUseFlatMenues             = 0;
+    mnUseFlatMenus              = 0;
     mbPreferredUseImagesInMenus = sal_True;
     mnSkipDisabledInMenus       = (sal_uInt16)sal_False;
     mbHideDisabledMenuItems     = sal_False;
@@ -879,7 +879,7 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnHighContrast            == rSet.mpData->mnHighContrast)             &&
          (mpData->mnUseSystemUIFonts        == rSet.mpData->mnUseSystemUIFonts)         &&
          (mpData->mnUseFlatBorders          == rSet.mpData->mnUseFlatBorders)           &&
-         (mpData->mnUseFlatMenues           == rSet.mpData->mnUseFlatMenues)            &&
+         (mpData->mnUseFlatMenus            == rSet.mpData->mnUseFlatMenus)             &&
          (mpData->mnSymbolsStyle            == rSet.mpData->mnSymbolsStyle)             &&
          (mpData->mnPreferredSymbolsStyle   == rSet.mpData->mnPreferredSymbolsStyle)    &&
          (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&

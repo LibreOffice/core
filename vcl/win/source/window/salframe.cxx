@@ -2779,7 +2779,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetMenuBarColor( aStyleSettings.GetMenuColor() );
     aStyleSettings.SetMenuBorderColor( aStyleSettings.GetLightBorderColor() ); // overriden below for flat menus
     aStyleSettings.SetUseFlatBorders( FALSE );
-    aStyleSettings.SetUseFlatMenues( FALSE );
+    aStyleSettings.SetUseFlatMenus( FALSE );
     aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
     aStyleSettings.SetMenuBarTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
     aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
@@ -2789,11 +2789,11 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     if ( aSalShlData.mbWXP )
     {
         // only xp supports a different menu bar color
-        long bFlatMenues = 0;
-        SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenues, 0);
-        if( bFlatMenues )
+        long bFlatMenus = 0;
+        SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenus, 0);
+        if( bFlatMenus )
         {
-            aStyleSettings.SetUseFlatMenues( TRUE );
+            aStyleSettings.SetUseFlatMenus( TRUE );
             aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
             aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
             aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );

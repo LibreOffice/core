@@ -93,7 +93,7 @@ private:
     void ResizeWindows_Impl( const ::com::sun::star::awt::Rectangle& aHatchRect );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > RetrieveOwnMenu_Impl();
-    sal_Bool MergeMenues_Impl(
+    sal_Bool MergeMenus_Impl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp,
@@ -106,7 +106,7 @@ public:
         sal_Int32 nConnectPoints[2] )
             throw ( ::com::sun::star::uno::Exception );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > MergeMenuesForInplace(
+    static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > MergeMenusForInplace(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xContMenu,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp,
         const ::rtl::OUString& aContModuleName,
