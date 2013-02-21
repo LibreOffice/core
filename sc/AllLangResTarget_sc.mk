@@ -93,7 +93,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/pagedlg/hfedtdlg.src \
     sc/source/ui/styleui/scstyles.src \
     sc/source/ui/styleui/styledlg.src \
-    sc/source/ui/dbgui/asciiopt.src \
     sc/source/ui/dbgui/pivot.src \
     sc/source/ui/dbgui/dpgroupdlg.src \
     sc/source/ui/dbgui/consdlg.src \
