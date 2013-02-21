@@ -163,6 +163,12 @@ else
 gb_KEEP_PRISTINE := $(false)
 endif
 
+ifeq ($(findstring s,$(MAKEFLAGS)),)
+gb_QUIET_EXTERNAL := $(false)
+else
+gb_QUIET_EXTERNAL := $(true)
+endif
+
 # save user-supplied flags for latter use
 # TODO remove after the old build system is abolished
 ifneq ($(strip $(ENVCFLAGS)),)

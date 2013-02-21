@@ -28,23 +28,23 @@ ifeq ($(OS)$(COM),WNTMSC)
 # nmake is invoked
 $(call gb_ExternalProject_get_state_target,python3,build) :
 ifeq ($(VCVER),110)
-	cd $(EXTERNAL_WORKDIR)/PCbuild \
+	$(call gb_ExternalProject_run,build,\
 	&& MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 \
 	&& cd $(EXTERNAL_WORKDIR) \
 	&& ln -s PCbuild LO_lib \
-	&& touch $@
+	,PCBuild)
 else ifeq ($(VCVER),100)
-	cd $(EXTERNAL_WORKDIR)/PCbuild \
-	&& MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /ToolsVersion:4.0 \
-	&& cd $(EXTERNAL_WORKDIR) \
-	&& ln -s PCbuild LO_lib \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /ToolsVersion:4.0 \
+		&& cd $(EXTERNAL_WORKDIR) \
+		&& ln -s PCbuild LO_lib \
+	,PCBuild)
 else ifeq ($(VCVER),90)
-	cd $(EXTERNAL_WORKDIR)/PC/VS9.0 \
-	&& MAKEFLAGS= $(COMPATH)/vcpackages/vcbuild.exe pcbuild.sln "Release|$(if $(filter INTEL,$(CPUNAME)),Win32,x64)" \
-	&& cd $(EXTERNAL_WORKDIR) \
-	&& ln -s PC/VS9.0 LO_lib \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		MAKEFLAGS= $(COMPATH)/vcpackages/vcbuild.exe pcbuild.sln "Release|$(if $(filter INTEL,$(CPUNAME)),Win32,x64)" \
+		&& cd $(EXTERNAL_WORKDIR) \
+		&& ln -s PC/VS9.0 LO_lib \
+	,PC/VS9.0)
 endif
 
 else
@@ -65,8 +65,8 @@ ifeq ($(OS),AIX)
 endif
 
 $(call gb_ExternalProject_get_state_target,python3,build) :
-	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure \
+	$(call gb_ExternalProject_run,build,\
+		./configure \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		--with-system-expat \
 		$(if $(filter TRUE,$(ENABLE_VALGRIND)),--with-valgrind) \
@@ -90,9 +90,9 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(filter WNT-GCC,$(OS)-$(COM)), -shared-libgcc \
 				$(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols)) \
 			)" \
-	&& MAKEFLAGS=$(if $(VERBOSE)$(verbose),,s) $(MAKE) $(if $(filter MACOSX,$(OS)), DESTDIR=$(EXTERNAL_WORKDIR)/python-inst install) \
-	&& ln -s build/lib.* LO_lib \
-	&& touch $@
+		&& MAKEFLAGS=$(if $(VERBOSE)$(verbose),,s) $(MAKE) $(if $(filter MACOSX,$(OS)), DESTDIR=$(EXTERNAL_WORKDIR)/python-inst install) \
+		&& ln -s build/lib.* LO_lib \
+	)
 
 endif
 
