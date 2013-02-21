@@ -63,13 +63,13 @@ copy-stuff:
 	echo 'BRAND_BASE_DIR=file:///assets' >> assets/program/fundamentalrc
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
-	echo 'URE_MORE_TYPES=$(APP_DATA_PATH)/program/offapi.rdb $(APP_DATA_PATH)/program/oovbaapi.rdb' >> assets/program/fundamentalrc
+	echo 'URE_MORE_TYPES=file://$(APP_DATA_PATH)/program/offapi.rdb file://$(APP_DATA_PATH)/program/oovbaapi.rdb' >> assets/program/fundamentalrc
 	echo 'URE_MORE_SERVICES=file:///assets/xml/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
 #
 # Set up unorc
 	echo '[Bootstrap]' > assets/program/unorc
 	echo "URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/unorc
-	echo 'UNO_TYPES=$(APP_DATA_PATH)/program/ure/types.rdb $(APP_DATA_PATH)/program/types.rdb $${URE_MORE_TYPES}' >> assets/program/unorc
+	echo 'UNO_TYPES=file://$(APP_DATA_PATH)/program/ure/types.rdb file://$(APP_DATA_PATH)/program/types.rdb $${URE_MORE_TYPES}' >> assets/program/unorc
 	echo 'UNO_SERVICES=file:///assets/xml/ure/services.rdb $${URE_MORE_SERVICES}' >> assets/program/unorc
 #
 # Set up bootstraprc

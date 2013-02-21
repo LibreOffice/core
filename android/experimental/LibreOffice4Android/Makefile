@@ -67,7 +67,7 @@ copy-stuff:
 # Set up unorc
 	echo '[Bootstrap]' > assets/program/unorc
 	echo 'URE_INTERNAL_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/unorc
-	echo 'UNO_TYPES=$$APP_DATA_DIR/program/ure/types.rdb $$APP_DATA_DIR/program/types.rdb $$APP_DATA_DIR/program/offapi.rdb $$APP_DATA_DIR/program/oovbaapi.rdb' >> assets/program/unorc
+	echo 'UNO_TYPES=file://$$APP_DATA_DIR/program/ure/types.rdb file://$$APP_DATA_DIR/program/types.rdb file://$$APP_DATA_DIR/program/offapi.rdb file://$$APP_DATA_DIR/program/oovbaapi.rdb' >> assets/program/unorc
 	echo 'UNO_SERVICES=file:///assets/xml/ure/services.rdb file:///assets/xml/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/unorc
 #
 # Set up bootstraprc
