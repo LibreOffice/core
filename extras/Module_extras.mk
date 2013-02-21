@@ -13,6 +13,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	AllLangZip_autotextshare \
 	CustomTarget_autocorr \
 	Package_fonts \
+	Package_glade \
 	Package_labels \
 	Package_newfiles \
 	Package_wordbook \

@@ -382,6 +382,10 @@ else
 endif
 endif
 	@rm -f $(SRCDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
+	@echo
+	@echo "If you want to edit the .ui files with glade first execute:"
+	@echo
+	@echo "export GLADE_CATALOG_SEARCH_PATH=$(SRCDIR)/install/share/glade"
 ifeq ($(OS),LINUX)
 	@echo
 	@echo "Developer installation finished, you can now execute:"

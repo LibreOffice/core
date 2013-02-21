@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<!--
+ * To get glade to use this, put this .xml into a dir e.g. ~/glade
+ * and
+ * export GLADE_CATALOG_SEARCH_PATH=~/glade
+ * for system-wide installation copy into /usr/share/glade/catalogs/
+-->
+<glade-catalog name="LibreOffice" domain="glade-3" depends="gtk+" version="1.0">
+  <glade-widget-classes>
+    <glade-widget-class title="Thesaurus View" name="cuilo-ThesaurusAlternativesCtrl"
+                        generic-name="ThesaurusAlternativesCtrl" parent="GtkTextView"
+                        icon-name="widget-gtk-textview"/>
+    <glade-widget-class title="Thesaurus Edit" name="cuilo-ReplaceEdit"
+                        generic-name="ReplaceEdit" parent="GtkEntry"
+                        icon-name="widget-gtk-textentry"/>
+    <glade-widget-class title="Thesaurus Lookup" name="cuilo-LookUpComboBox"
+                        generic-name="LookUpComboBox" parent="GtkEntry"
+                        icon-name="widget-gtk-comboboxtext"/>
+    <glade-widget-class title="Hyphen Edit" name="cuilo-HyphenEdit"
+                        generic-name="ReplaceEdit" parent="GtkEntry"
+                        icon-name="widget-gtk-textentry"/>
+    <glade-widget-class title="Color ListBox" name="svtlo-ColorListBox"
+                        generic-name="LookUpComboBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Line ListBox" name="svtlo-LineListBox"
+                        generic-name="LineListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Language ListBox" name="svxcorelo-SvxLanguageBox"
+                        generic-name="LanguageBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Font ListBox" name="svtlo-FontStyleBox"
+                        generic-name="FontStyleBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Font Preview" name="svxlo-SvxFontPrevWindow"
+                        generic-name="Font Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+  </glade-widget-classes>
+</glade-catalog>
