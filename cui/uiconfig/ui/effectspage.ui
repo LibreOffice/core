@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name gchararray1 -->
@@ -273,7 +274,7 @@
                     <property name="label" translatable="yes">Overlining</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -287,7 +288,7 @@
                     <property name="label" translatable="yes">Strikethrough</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -301,7 +302,7 @@
                     <property name="label" translatable="yes">Underlining</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">4</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -315,7 +316,7 @@
                     <property name="label" translatable="yes">Overline color</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">3</property>
                     <property name="top_attach">0</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -329,7 +330,7 @@
                     <property name="label" translatable="yes">Underline Color</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">3</property>
                     <property name="top_attach">4</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -367,7 +368,7 @@
                     <property name="model">liststore6</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">1</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -393,7 +394,7 @@
                     <property name="model">liststore6</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">5</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -406,7 +407,7 @@
                     <property name="model">liststore5</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">3</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -418,7 +419,7 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">3</property>
                     <property name="top_attach">5</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -430,7 +431,7 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">3</property>
                     <property name="top_attach">1</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -497,7 +498,7 @@
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">6</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -510,7 +511,7 @@
                     <property name="model">liststore3</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">9</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -523,7 +524,7 @@
                     <property name="model">liststore4</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">3</property>
                     <property name="top_attach">9</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -537,7 +538,7 @@
                     <property name="label" translatable="yes">Position</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">3</property>
                     <property name="top_attach">8</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -551,7 +552,7 @@
                     <property name="label" translatable="yes">Emphasis mark</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">8</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -572,6 +573,32 @@
                     <property name="top_attach">7</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">4</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">10</property>
                   </packing>
                 </child>
                 <child>
