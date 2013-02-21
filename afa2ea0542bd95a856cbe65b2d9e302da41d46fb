@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///Yo\u003d",
+        "filename": "sw/source/core/text/txtdrop.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-02-21T11:54:22Z",
+      "side": 1,
+      "message": "this syntax only exists in C++11 and we have to build on C++98 compilers too.\n\nhere i get this with a simple:  make sw CXXFLAGS\u003d\"-std\u003dc++98\"\n\n/sw/source/core/text/txtdrop.cxx:698:29: error: extended initializer lists only available with -std\u003dc++11 or -std\u003dgnu++11 [-Werror]",
+      "revId": "afa2ea0542bd95a856cbe65b2d9e302da41d46fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
