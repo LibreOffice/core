@@ -1,5 +1,0 @@
-..\%__SRC%\bin\odkcommon.zip %_DEST%\bin\odkcommon.zip
-
-..\%__SRC%\bin\uno_loader_classes.zip %_DEST%\bin\uno_loader_classes.zip
-
-..\%__SRC%\bin\odkexamples.zip %COMMON_DEST%\bin\odkexamples.zip

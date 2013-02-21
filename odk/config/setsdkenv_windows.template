@@ -94,7 +94,7 @@ if not defined OO_SDK_ZIP_HOME (
    goto :error
  )
 
-REM Set library path. 
+REM Set library path.
 set LIB=%OO_SDK_HOME%\lib;%LIB%
 if defined CPP_WINDOWS_SDK (
    set LIB=%LIB%;%CPP_WINDOWS_SDK%\lib
