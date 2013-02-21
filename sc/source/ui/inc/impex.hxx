@@ -102,6 +102,8 @@ public:
     bool IsUndo() const      { return bUndo; }
     void SetUndo( bool b )   { bUndo = b;    }
 
+    SC_DLLPUBLIC static void EmbeddedNullTreatment( OUString & rStr );
+
     static bool  IsFormatSupported( sal_uLong nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
             String& rField, sal_Unicode cStr, const sal_Unicode* pSeps,
