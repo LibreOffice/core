@@ -836,7 +836,7 @@ void SwXViewSettings::_preGetValues ()
 void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
     throw(UnknownPropertyException, WrappedTargetException )
 {
-    sal_Bool bBool = sal_True;
+    bool bBool = true;
     sal_Bool bBoolVal;
     switch( rInfo.mnHandle )
     {
@@ -871,28 +871,28 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : bBoolVal = mpConstViewOption->IsGridVisible(); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : bBoolVal = mpConstViewOption->IsSnap(); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
-            bBool = sal_False;
+            bBool = false;
             rValue <<= (sal_Int32) TWIP_TO_MM100(mpConstViewOption->GetSnapSize().Width());
         break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_Y   :
-            bBool = sal_False;
+            bBool = false;
             rValue <<= (sal_Int32) TWIP_TO_MM100(mpConstViewOption->GetSnapSize().Height());
         break;
         case  HANDLE_VIEWSET_RASTER_SUBDIVISION_X  :
-            bBool = sal_False;
+            bBool = false;
             rValue <<= (sal_Int32) mpConstViewOption->GetDivisionX();
         break;
         case  HANDLE_VIEWSET_RASTER_SUBDIVISION_Y  :
-            bBool = sal_False;
+            bBool = false;
             rValue <<= (sal_Int32) mpConstViewOption->GetDivisionY();
         break;
         case  HANDLE_VIEWSET_ZOOM                   :
-                bBool = sal_False;
+                bBool = false;
                 rValue <<= (sal_Int16)mpConstViewOption->GetZoom();
         break;
         case HANDLE_VIEWSET_ZOOM_TYPE:
         {
-            bBool = sal_False;
+            bBool = false;
             sal_Int16 nRet(0);
             switch (mpConstViewOption->GetZoomType())
             {
@@ -926,7 +926,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         {
             if ( pView )
             {
-                bBool = sal_False;
+                bBool = false;
                 OUStringBuffer sHelpURL;
                 sHelpURL.appendAscii ( INET_HID_SCHEME );
                 SwEditWin &rEditWin = pView->GetEditWin();
@@ -950,7 +950,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
                 const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref( bWeb );
                 rValue <<= (sal_Int32)pUsrPref->GetHScrollMetric();
             }
-            bBool = sal_False;
+            bBool = false;
         }
         break;
         case HANDLE_VIEWSET_VERT_RULER_METRIC:
@@ -966,7 +966,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
                 const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref( bWeb );
                 rValue <<= (sal_Int32)pUsrPref->GetVScrollMetric();
             }
-            bBool = sal_False;
+            bBool = false;
         }
         break;
         default: OSL_FAIL("there is no such ID!");

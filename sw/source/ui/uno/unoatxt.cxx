@@ -327,7 +327,7 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
         throw uno::RuntimeException();
 }
 
-static sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextRange* pxRange)
+static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextRange* pxRange)
 {
     OSL_ENSURE( pInsDoc, "no InsDoc");
 
@@ -393,7 +393,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
 
         String sOnlyTxt;
         String* pOnlyTxt = 0;
-        sal_Bool bNoAttr = !pxCursor && !pxRange;
+        bool bNoAttr = !pxCursor && !pxRange;
         if(bNoAttr)
         {
             sOnlyTxt = OUString(xTextRange->getString());
@@ -647,7 +647,7 @@ void SwXAutoTextGroup::setPropertyValue(
             aValue >>= sNewTitle;
             if(sNewTitle.isEmpty())
                 throw lang::IllegalArgumentException();
-            sal_Bool bChanged = !sNewTitle.equals(pGlosGroup->GetName());
+            bool bChanged = !sNewTitle.equals(pGlosGroup->GetName());
             pGlosGroup->SetName(sNewTitle);
             if(bChanged && HasGlossaryList())
                 GetGlossaryList()->ClearGroups();

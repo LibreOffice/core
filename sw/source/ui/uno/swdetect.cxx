@@ -315,9 +315,9 @@ SwFilterDetect::~SwFilterDetect()
                     else
                         pFilter = SfxFilterMatcher().GetFilter4EA( aTypeName );
 
-                    sal_Bool bTestWriter = !pFilter || pFilter->GetServiceName() == "com.sun.star.text.TextDocument" ||
+                    bool bTestWriter = !pFilter || pFilter->GetServiceName() == "com.sun.star.text.TextDocument" ||
                         pFilter->GetServiceName() == "com.sun.star.text.WebDocument";
-                    sal_Bool bTestGlobal = !pFilter || pFilter->GetServiceName() == "com.sun.star.text.GlobalDocument";
+                    bool bTestGlobal = !pFilter || pFilter->GetServiceName() == "com.sun.star.text.GlobalDocument";
 
                     const SfxFilter* pOrigFilter = NULL;
                     if ( !bTestWriter && !bTestGlobal && pFilter )
@@ -327,7 +327,7 @@ SwFilterDetect::~SwFilterDetect()
                         // example: HTML filter for Calc
                         pOrigFilter = pFilter;
                         pFilter = SfxFilterMatcher().GetFilter4EA( pFilter->GetTypeName() );
-                        bTestWriter = sal_True;
+                        bTestWriter = true;
                     }
 
                     sal_uLong nErr = ERRCODE_NONE;

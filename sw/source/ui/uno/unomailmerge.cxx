@@ -139,11 +139,11 @@ static CloseResult CloseModelAndDocSh(
 
 ////////////////////////////////////////////////////////////
 
-static sal_Bool LoadFromURL_impl(
+static bool LoadFromURL_impl(
         Reference< frame::XModel > &rxModel,
         SfxObjectShellRef &rxDocSh,
         const String &rURL,
-        sal_Bool bClose )
+        bool bClose )
     throw (RuntimeException)
 {
     // try to open the document readonly and hidden
@@ -160,7 +160,7 @@ static sal_Bool LoadFromURL_impl(
     }
     catch (const Exception&)
     {
-        return sal_False;
+        return false;
     }
 
     // try to get the DocShell
@@ -173,7 +173,7 @@ static sal_Bool LoadFromURL_impl(
         pTmpDocShell = pTextDoc ? pTextDoc->GetDocShell() : 0;
     }
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (xTmpModel.is() && pTmpDocShell)    // everything available?
     {
         if (bClose)
@@ -181,7 +181,7 @@ static sal_Bool LoadFromURL_impl(
         // set new stuff
         rxModel = xTmpModel;
         rxDocSh = pTmpDocShell;
-        bRes = sal_True;
+        bRes = true;
     }
     else
     {
@@ -260,14 +260,14 @@ namespace
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
         try
         {
             sal_Bool bDeliverOwnership = ( 0 == m_nPendingDeleteAttempts );
                 // if this is our last attemt, then anybody which vetoes this has to take the consequences
                 // (means take the ownership)
             m_xDocument->close( bDeliverOwnership );
-            bSuccess = sal_True;
+            bSuccess = true;
         }
         catch (const util::CloseVetoException&)
         {
@@ -279,12 +279,12 @@ namespace
                 m_aDeleteTimer.Start();
             }
             else
-                bSuccess = sal_True;    // can't do anything here ...
+                bSuccess = true;    // can't do anything here ...
         }
         catch (const Exception&)
         {
             OSL_FAIL("DelayedFileDeletion::OnTryDeleteFile: caught a strange exception!" );
-            bSuccess = sal_True;
+            bSuccess = true;
                 // can't do anything here ...
         }
 
@@ -494,7 +494,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         {
             bOK = rValue >>= aCurDocumentURL;
             if (!aCurDocumentURL.isEmpty()
-                && !LoadFromURL_impl( xCurModel, xCurDocSh, aCurDocumentURL, sal_False ))
+                && !LoadFromURL_impl( xCurModel, xCurDocSh, aCurDocumentURL, false ))
                 throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Failed to create document from URL: " ) ) + aCurDocumentURL, static_cast < cppu::OWeakObject * > ( this ) );
         }
         else if (rName.equalsAscii( GetPropName( UNO_NAME_OUTPUT_URL ) ))
@@ -565,7 +565,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     {
         Sequence< Any > aTranslated( aCurSelection.getLength() );
 
-        sal_Bool bValid = sal_False;
+        bool bValid = false;
         Reference< sdbcx::XRowLocate > xRowLocate( xCurResultSet, UNO_QUERY );
         if ( xRowLocate.is() )
         {
@@ -576,20 +576,20 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
             try
             {
-                sal_Bool bEverythingsFine = sal_True;
+                bool bEverythingsFine = true;
                 for ( ; ( pBookmarks != pBookmarksEnd ) && bEverythingsFine; ++pBookmarks )
                 {
                     if ( xRowLocate->moveToBookmark( *pBookmarks ) )
                         *pTranslated <<= xCurResultSet->getRow();
                     else
-                        bEverythingsFine = sal_False;
+                        bEverythingsFine = false;
                 }
                 if ( bEverythingsFine )
-                    bValid = sal_True;
+                    bValid = true;
             }
             catch (const Exception&)
             {
-                bValid = sal_False;
+                bValid = false;
             }
         }
 
@@ -783,13 +783,13 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     aTmpFileName = aTempFile.GetName();
 
     Reference< XStorable > xStorable( xCurModel, UNO_QUERY );
-    sal_Bool bStoredAsTemporary = sal_False;
+    bool bStoredAsTemporary = false;
     if ( xStorable.is() )
     {
         try
         {
             xStorable->storeAsURL( aTmpFileName, Sequence< PropertyValue >() );
-            bStoredAsTemporary = sal_True;
+            bStoredAsTemporary = true;
         }
         catch (const Exception&)
         {
@@ -917,7 +917,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
         }
         Any aOld( pData, *pType );
 
-        sal_Bool bChanged = sal_False;
+        bool bChanged = false;
         sal_Bool bOK = sal_True;
         if (aOld != rValue)
         {
@@ -940,7 +940,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
                 OUString aText;
                 bOK = rValue >>= aText;
                 if (!aText.isEmpty()
-                    && !LoadFromURL_impl( xModel, xDocSh, aText, sal_True ))
+                    && !LoadFromURL_impl( xModel, xDocSh, aText, true ))
                     throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Failed to create document from URL: " ) ) + aText, static_cast < cppu::OWeakObject * > ( this ) );
                 aDocumentURL = aText;
             }
@@ -1005,7 +1005,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
                 OSL_FAIL("invalid pointer" );
             }
             OSL_ENSURE( bOK, "set value failed" );
-            bChanged = sal_True;
+            bChanged = true;
         }
         if (!bOK)
             throw IllegalArgumentException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property type mismatch or property not set: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );

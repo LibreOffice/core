@@ -66,7 +66,7 @@ void SwView::GetState(SfxItemSet &rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
     sal_uInt16 eFrmType = FRMTYPE_NONE;
     int bGetFrmType = sal_False;
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    bool bWeb = 0 != PTR_CAST(SwWebView, this);
 
     while(nWhich)
     {
@@ -430,7 +430,7 @@ void SwView::GetState(SfxItemSet &rSet)
 void SwView::GetDrawState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    bool bWeb = 0 != PTR_CAST(SwWebView, this);
 
     for( sal_uInt16 nWhich = aIter.FirstWhich(); nWhich;
                                             nWhich = aIter.NextWhich() )

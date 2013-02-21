@@ -521,7 +521,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     pWrtShell->Pop(sal_False);
     pWait = new SwWait( *GetDocShell(), sal_True );
 
-    sal_Bool bSrchBkwrd = DOCPOS_START == aOpts.eEnd;
+    bool bSrchBkwrd = DOCPOS_START == aOpts.eEnd;
 
     aOpts.eEnd =  bSrchBkwrd ? DOCPOS_START : DOCPOS_END;
     aOpts.eStart = bSrchBkwrd ? DOCPOS_END : DOCPOS_START;

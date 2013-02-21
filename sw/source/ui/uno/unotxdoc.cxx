@@ -1652,7 +1652,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
         {
             sal_Int32 nIndex = COM_SUN_STAR__DRAWING_LENGTH;
             OUString sCategory = rServiceName.getToken( 0, '.', nIndex );
-            sal_Bool bShape = sCategory == "drawing";
+            bool bShape = sCategory == "drawing";
             if( bShape || sCategory == "form")
             {
                 if(bShape)
@@ -1783,9 +1783,9 @@ sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( R
     if ( rServiceName == "com.sun.star.document.OfficeDocument" || rServiceName == "com.sun.star.text.GenericTextDocument" )
         return sal_True;
 
-    sal_Bool bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
-    sal_Bool bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
-    sal_Bool bTextDoc   = (!bWebDoc && !bGlobalDoc);
+    bool bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
+    bool bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
+    bool bTextDoc   = (!bWebDoc && !bGlobalDoc);
 
     return ( (bWebDoc    && rServiceName == "com.sun.star.text.WebDocument")
           || (bGlobalDoc && rServiceName == "com.sun.star.text.GlobalDocument")
@@ -1794,9 +1794,9 @@ sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( R
 
 Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    sal_Bool bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
-    sal_Bool bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
-    sal_Bool bTextDoc   = (!bWebDoc && !bGlobalDoc);
+    bool bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
+    bool bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
+    bool bTextDoc   = (!bWebDoc && !bGlobalDoc);
 
     Sequence< OUString > aRet (3);
     OUString* pArray = aRet.getArray();
@@ -3510,7 +3510,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
     throw( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
     Any aRet;
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     //cut link extension and call the real NameAccess
     String sParam = rName;
     String sSuffix(sLinkSuffix);
@@ -3537,7 +3537,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
                     {
                         Reference< XPropertySet >  xOutline = new SwXOutlineTarget(sParam);
                         aRet.setValue(&xOutline, ::getCppuType((Reference<XPropertySet>*)0));
-                        bFound = sal_True;
+                        bFound = true;
                     }
                 }
             }
@@ -3549,7 +3549,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
                     throw RuntimeException();
                 Reference< XPropertySet >  xProp(xInt, UNO_QUERY);
                 aRet <<= xProp;
-                bFound = sal_True;
+                bFound = true;
             }
         }
     }
