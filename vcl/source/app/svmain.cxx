@@ -40,7 +40,7 @@
 #include "vcl/unowrap.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/lazydelete.hxx"
-#include "vcl/temporaryfonts.hxx"
+#include "vcl/embeddedfontshelper.hxx"
 
 #ifdef WNT
 #include <svsys.h>
@@ -251,7 +251,7 @@ sal_Bool InitVCL()
     if( pExceptionHandler != NULL )
         return sal_False;
 
-    TemporaryFonts::clear();
+    EmbeddedFontsHelper::clearTemporaryFontFiles();
 
     if( ! ImplGetSVData() )
         ImplInitSVData();
@@ -581,7 +581,7 @@ void DeInitVCL()
         pOwnSvApp = NULL;
     }
 
-    TemporaryFonts::clear();
+    EmbeddedFontsHelper::clearTemporaryFontFiles();
 }
 
 // only one call is allowed

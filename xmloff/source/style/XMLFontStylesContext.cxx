@@ -26,7 +26,7 @@
 
 #include <osl/file.hxx>
 #include <rtl/logfile.hxx>
-#include <vcl/temporaryfonts.hxx>
+#include <vcl/embeddedfontshelper.hxx>
 
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -241,7 +241,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
     OUString fontName = font.familyName();
     const char* style = "";
     // OOXML needs to know what kind of style the font is (regular, italic, bold, bold-italic),
-    // and the TemporaryFonts class is modelled after it. But ODF doesn't (need to) include
+    // and the EmbeddedFontsHelper class is modelled after it. But ODF doesn't (need to) include
     // this information, so try to guess from the name (LO encodes the style), otherwise
     // go with regular and hope it works.
     if( url.endsWithIgnoreAsciiCase( "bi.ttf" ))
@@ -258,7 +258,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
         if( url.indexOf( '/' ) > -1 ) // TODO what if more levels?
             storage.set( storage->openStorageElement( url.copy( 0, url.indexOf( '/' )),
                 ::embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
-        OUString fileUrl = TemporaryFonts::fileUrlForFont( fontName, style );
+        OUString fileUrl = EmbeddedFontsHelper::fileUrlForTemporaryFont( fontName, style );
         osl::File file( fileUrl );
         switch( file.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write ))
         {
@@ -291,7 +291,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
             osl::File::remove( fileUrl );
             return;
         }
-        TemporaryFonts::activateFont( fontName, fileUrl );
+        EmbeddedFontsHelper::activateFont( fontName, fileUrl );
         GetImport().NotifyEmbeddedFontRead();
     }
     else
