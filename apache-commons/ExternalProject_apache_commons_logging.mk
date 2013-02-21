@@ -23,7 +23,7 @@ $(eval $(call gb_ExternalProject_register_targets,apache_commons_logging,\
 ))
 
 $(call gb_ExternalProject_get_state_target,apache_commons_logging,build) :
-	cd "$(call gb_UnpackedTarball_get_dir,apache_commons_logging)" && \
+	$(call gb_ExternalProject_run,build,\
 	ANT_OPTS="$$ANT_OPTS -Dfile.encoding=ISO-8859-1" \
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
@@ -39,7 +39,7 @@ $(call gb_ExternalProject_get_state_target,apache_commons_logging,build) :
 				-Dant.build.javac.target=$(JAVA_TARGET_VER) \
 		) \
 		$(if $(debug),-Dbuild.debug="on") \
-		compile build-jar && \
-	touch $@
+		compile build-jar \
+	)
 
 # vim: set noet sw=4 ts=4:

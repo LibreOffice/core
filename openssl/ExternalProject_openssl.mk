@@ -35,34 +35,35 @@ OPENSSL_PLATFORM := $(if $(filter LINUX FREEBSD ANDROID,$(OS)),\
 
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,openssl,build):
-	cd $(EXTERNAL_WORKDIR) \
-	&& export CC="$(shell cygpath -w $(CC))" \
-	&& export PERL="$(shell cygpath -w $(PERL))" \
-	&& export LIB="$(ILIB)" \
-	&& $(PERL) Configure $(OPENSSL_PLATFORM) no-idea \
-	&& cmd /c "ms\do_ms.bat $(PERL) $(OPENSSL_PLATFORM)" \
-	&& unset MAKEFLAGS \
-	&& nmake -f "ms\ntdll.mak" \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		export CC="$(shell cygpath -w $(CC))" \
+		&& export PERL="$(shell cygpath -w $(PERL))" \
+		&& export LIB="$(ILIB)" \
+		&& $(PERL) Configure $(OPENSSL_PLATFORM) no-idea \
+		&& cmd /c "ms\do_ms.bat $(PERL) $(OPENSSL_PLATFORM)" \
+		&& unset MAKEFLAGS \
+		&& nmake -f "ms\ntdll.mak" \
+	)
+
 else
 $(call gb_ExternalProject_get_state_target,openssl,build):
-	cd $(EXTERNAL_WORKDIR) \
-	&& MAKE="$(MAKE) -j1" \
-	$(if $(filter LINUX FREEBSD ANDROID SOLARIS IOS,$(OS)),./Configure,\
-	$(if $(filter WNT,$(OS)),$(PERL) Configure,./config)) \
-	$(OPENSSL_PLATFORM) \
-	$(if $(filter ANDROID,$(OS)),\
-	shared no-idea,\
-	$(if $(filter IOS,$(OS)),no-shared no-idea,\
-	$(if $(filter WNT,$(OS)),shared,\
-	shared no-idea \
-	$(if $(SYSBASE),-I$(SYSBASE)/usr/include -L$(SYSBASE)/usr/lib)))) \
-	$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-	&& export MAKEFLAGS="$(MAKEFLAGS:r=)" \
-	&& $(MAKE) -j1 build_libs \
-	CC="$(CC) $(if $(filter-out WNT,$(OS)),\
-	$(if $(filter TRUE,$(HAVE_GCC_VISIBILITY_FEATURE)),\
-	-fvisibility=hidden))" \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		MAKE="$(MAKE) -j1" \
+		$(if $(filter LINUX FREEBSD ANDROID SOLARIS IOS,$(OS)),./Configure,\
+		$(if $(filter WNT,$(OS)),$(PERL) Configure,./config)) \
+			$(OPENSSL_PLATFORM) \
+			$(if $(filter ANDROID,$(OS)),\
+			shared no-idea,\
+			$(if $(filter IOS,$(OS)),no-shared no-idea,\
+			$(if $(filter WNT,$(OS)),shared,\
+			shared no-idea \
+			$(if $(SYSBASE),-I$(SYSBASE)/usr/include -L$(SYSBASE)/usr/lib)))) \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+		&& export MAKEFLAGS="$(MAKEFLAGS:r=)" \
+		&& $(MAKE) -j1 build_libs \
+			CC="$(CC) $(if $(filter-out WNT,$(OS)),\
+			$(if $(filter TRUE,$(HAVE_GCC_VISIBILITY_FEATURE)),\
+			-fvisibility=hidden))" \
+	)
 endif
 # vim: set noet sw=4 ts=4:

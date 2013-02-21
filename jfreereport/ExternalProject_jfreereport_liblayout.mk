@@ -34,23 +34,21 @@ $(eval $(call gb_ExternalProject_register_targets,jfreereport_liblayout,\
 ))
 
 $(call gb_ExternalProject_get_state_target,jfreereport_liblayout,build) :
-	cd "$(call gb_UnpackedTarball_get_dir,jfreereport_liblayout)" && \
-	$(ICECREAM_RUN) "$(ANT)" \
-		-q \
-		-f build.xml \
-		-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
-		$(if $(filter YES,$(SYSTEM_APACHE_COMMONS))\
-			,-Dcommons-logging.jar=$(COMMONS_LOGGING_JAR) \
-		)\
-		$(if $(filter yes,$(JAVACISGCJ))\
-			,-Dbuild.compiler=gcj \
-			,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
-			-Dant.build.javac.target=$(JAVA_TARGET_VER) \
-		) \
-		-Dantcontrib.available="true" \
-		-Dbuild.id="10682" \
-		-Dlib=$(OUTDIR)/bin \
-		$(if $(debug),-Dbuild.debug="on") jar && \
-	touch $@
+	$(call gb_ExternalProject_run,build,\
+		$(ICECREAM_RUN) "$(ANT)" \
+			-q \
+			-f build.xml \
+			-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
+			$(if $(filter YES,$(SYSTEM_APACHE_COMMONS)),-Dcommons-logging.jar=$(COMMONS_LOGGING_JAR) )\
+			$(if $(filter yes,$(JAVACISGCJ))\
+				,-Dbuild.compiler=gcj \
+				,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
+				 -Dant.build.javac.target=$(JAVA_TARGET_VER) \
+			) \
+			-Dantcontrib.available="true" \
+			-Dbuild.id="10682" \
+			-Dlib=$(OUTDIR)/bin \
+			$(if $(debug),-Dbuild.debug="on") jar \
+	)
 
 # vim: set noet sw=4 ts=4:

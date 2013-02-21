@@ -18,36 +18,36 @@ $(eval $(call gb_ExternalProject_register_targets,xml2,\
 ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 $(call gb_ExternalProject_get_state_target,xml2,build):
-	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure --disable-ipv6 --without-python --without-zlib \
-	--disable-static --without-debug lt_cv_cc_dll_switch="-shared" \
-	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
-	LIBS="-lws2_32 $(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED_LIBSTDCPP))" \
-	LDFLAGS="-Wl,--no-undefined -Wl,--enable-runtime-pseudo-reloc-v2" \
-	OBJDUMP=objdump \
-	&& $(MAKE) \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		./configure --disable-ipv6 --without-python --without-zlib \
+			--disable-static --without-debug lt_cv_cc_dll_switch="-shared" \
+			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
+			LIBS="-lws2_32 $(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED_LIBSTDCPP))" \
+			LDFLAGS="-Wl,--no-undefined -Wl,--enable-runtime-pseudo-reloc-v2" \
+			OBJDUMP=objdump \
+		&& $(MAKE) \
+	)
 else # COM=MSC
 $(call gb_ExternalProject_get_state_target,xml2,build):
-	cd $(EXTERNAL_WORKDIR)/win32 \
-	&& cscript configure.js iconv=no sax1=yes \
-	&& unset MAKEFLAGS \
-	&& LIB="$(ILIB)" nmake \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		cscript configure.js iconv=no sax1=yes \
+		&& unset MAKEFLAGS \
+		&& LIB="$(ILIB)" nmake \
+	,win32)
 endif
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,xml2,build):
-	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure --disable-ipv6 --without-python --without-zlib --with-sax1 \
-	$(if $(debug),--with-run-debug) \
-	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-	LDFLAGS="$(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
-	CFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(if $(debug),-g)" \
-	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
-	&& $(MAKE) \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		./configure --disable-ipv6 --without-python --without-zlib --with-sax1 \
+			$(if $(debug),--with-run-debug) \
+			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			LDFLAGS="$(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
+			CFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(if $(debug),-g)" \
+			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
+		&& $(MAKE) \
+	)
 endif
 
 # vim: set noet sw=4 ts=4:
