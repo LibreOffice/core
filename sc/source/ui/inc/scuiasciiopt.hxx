@@ -37,44 +37,38 @@ class ScImportAsciiDlg : public ModalDialog
 
     rtl::OUString               maPreviewLine[ CSV_PREVIEW_LINES ];
 
-    FixedLine                   aFlFieldOpt;
-    FixedText                   aFtCharSet;
-    SvxTextEncodingBox          aLbCharSet;
-    FixedText                   aFtCustomLang;
-    SvxLanguageBox              aLbCustomLang;
+    FixedText*                  pFtCharSet;
 
-    FixedText                   aFtRow;
-    NumericField                aNfRow;
+    SvxTextEncodingBox*         pLbCharSet;
 
-    FixedLine                   aFlSepOpt;
-    RadioButton                 aRbFixed;
-    RadioButton                 aRbSeparated;
+    FixedText*                  pFtCustomLang;
 
-    CheckBox                    aCkbTab;
-    CheckBox                    aCkbSemicolon;
-    CheckBox                    aCkbComma;
-    CheckBox                    aCkbSpace;
-    CheckBox                    aCkbOther;
-    Edit                        aEdOther;
-    CheckBox                    aCkbAsOnce;
+    SvxLanguageBox*             pLbCustomLang;
 
-    FixedLine                   aFlOtherOpt;
+    FixedText*                  pFtRow;
+    NumericField*               pNfRow;
 
-    FixedText                   aFtTextSep;
-    ComboBox                    aCbTextSep;
+    RadioButton*                pRbFixed;
+    RadioButton*                pRbSeparated;
 
-    CheckBox                    aCkbQuotedAsText;
-    CheckBox                    aCkbDetectNumber;
+    CheckBox*                   pCkbTab;
+    CheckBox*                   pCkbSemicolon;
+    CheckBox*                   pCkbComma;
+    CheckBox*                   pCkbSpace;
+    CheckBox*                   pCkbOther;
+    Edit*                       pEdOther;
+    CheckBox*                   pCkbAsOnce;
 
-    FixedLine                   aFlWidth;
-    FixedText                   aFtType;
-    ListBox                     aLbType;
+    FixedText*                  pFtTextSep;
+    ComboBox*                   pCbTextSep;
 
-    ScCsvTableBox               maTableBox;
+    CheckBox*                   pCkbQuotedAsText;
+    CheckBox*                   pCkbDetectNumber;
 
-    OKButton                    aBtnOk;
-    CancelButton                aBtnCancel;
-    HelpButton                  aBtnHelp;
+    FixedText*                  pFtType;
+    ListBox*                    pLbType;
+
+    ScCsvTableBox*               mpTableBox;
 
     String                      aCharSetUser;
     String                      aColumnUser;
