@@ -2006,12 +2006,14 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
         if (aPam.GetPoint()->nNode.GetNode().IsTxtNode())
         {
             const SwTxtNode& rTxtNode = (const SwTxtNode&)aPam.GetPoint()->nNode.GetNode();
-            const SwAttrSet* pAttrSet = rTxtNode.GetpSwAttrSet();
-            const SvxCharRotateItem& rCharRotate = pAttrSet->GetCharRotate();
-            if (rCharRotate.GetValue() == 900)
+            if( const SwAttrSet* pAttrSet = rTxtNode.GetpSwAttrSet())
             {
-                m_pSerializer->singleElementNS( XML_w, XML_textDirection, FSNS( XML_w, XML_val ), "btLr", FSEND );
-                m_bBtLr = true;
+                const SvxCharRotateItem& rCharRotate = pAttrSet->GetCharRotate();
+                if (rCharRotate.GetValue() == 900)
+                {
+                    m_pSerializer->singleElementNS( XML_w, XML_textDirection, FSNS( XML_w, XML_val ), "btLr", FSEND );
+                    m_bBtLr = true;
+                }
             }
         }
     }
