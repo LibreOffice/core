@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///Ys\u003d",
+        "filename": "oox/inc/oox/ppt/annotation_buffer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-02-21T12:23:42Z",
+      "side": 1,
+      "message": "I suggest to remove this header altogether, see other comments",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///Yc\u003d",
+        "filename": "oox/inc/oox/ppt/comments.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-02-21T12:23:42Z",
+      "side": 1,
+      "message": "This is missing the header from TEMPLATE.SOURCECODE.HEADER",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///YY\u003d",
+        "filename": "oox/inc/oox/ppt/comments.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-02-21T12:23:42Z",
+      "side": 1,
+      "message": "this applies to all the string functions - can you move that over to use OString/OUString exclusively? If not, what is missing?",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///YU\u003d",
+        "filename": "oox/inc/oox/ppt/comments.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-02-21T12:23:42Z",
+      "side": 1,
+      "message": "Since this is purely a data holder - why not make it a struct, get rid of all the inline getter/setters, and access data members directly? This is ok for \"dumb\" classes, and makes for less code and complexity.",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///YQ\u003d",
+        "filename": "oox/inc/oox/ppt/slidepersist.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-02-21T12:23:42Z",
+      "side": 1,
+      "message": "Conversely here - why is this not private?",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///YI\u003d",
+        "filename": "oox/source/core/fragmenthandler2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-02-21T12:23:42Z",
+      "side": 1,
+      "message": "No globals please if at all possible.\n\nBut more generally, this is a base class - please stick specific functionality into derived classes. You already did that in SlideFragmentHandler for parts of it - for PPT_TOKEN( text ), when it comes in the SlideFragmentHandler context, just generate a new child context - e.g. like new SlideTimingContext( *this, mpSlidePersistPtr-\u003egetTimeNodeList() ) in that file.\n\nWith that, you will get rid of that global state anyway.",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///X8\u003d",
+        "filename": "oox/source/ppt/presentationfragmenthandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-02-21T12:23:42Z",
+      "side": 1,
+      "message": "All of this can probably move down to be local to PresentationFragmentHandler::finalizeImport() ?",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///X0\u003d",
+        "filename": "oox/source/ppt/slidefragmenthandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-02-21T12:23:42Z",
+      "side": 1,
+      "message": "This line can probably go with a dedicated commenttextfragment object. globals are generally not a good idea in LibreOffice, you never know who calls you reentrant from where...",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
