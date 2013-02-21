@@ -87,7 +87,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo:HyphenEdit" id="worded">
+              <object class="cuilo-HyphenEdit" id="worded">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>

@@ -52,7 +52,7 @@
                     <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
                     <child>
-                      <object class="svxlo:SvxFrameSelector" id="framesel">
+                      <object class="svxlo-SvxFrameSelector" id="framesel">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">center</property>
@@ -98,7 +98,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo:ValueSet" id="presets">
+                      <object class="svtlo-ValueSet" id="presets">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
@@ -198,7 +198,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo:LineListBox" id="linestylelb">
+                      <object class="svtlo-LineListBox" id="linestylelb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -226,7 +226,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo:ColorListBox" id="linecolorlb">
+                      <object class="svtlo-ColorListBox" id="linecolorlb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -536,7 +536,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:ColorListBox" id="shadowcolorlb">
+                  <object class="svtlo-ColorListBox" id="shadowcolorlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -548,7 +548,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:ValueSet" id="shadows">
+                  <object class="svtlo-ValueSet" id="shadows">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>

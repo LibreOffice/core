@@ -161,7 +161,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="swuilo:AutoFmtPreview" id="preview">
+                          <object class="swuilo-AutoFmtPreview" id="preview">
                             <property name="width_request">200</property>
                             <property name="height_request">200</property>
                             <property name="visible">True</property>

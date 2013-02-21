@@ -336,7 +336,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:ColorListBox" id="fontcolorlb">
+                  <object class="svtlo-ColorListBox" id="fontcolorlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -413,7 +413,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:ColorListBox" id="underlinecolorlb">
+                  <object class="svtlo-ColorListBox" id="underlinecolorlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -425,7 +425,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:ColorListBox" id="overlinecolorlb">
+                  <object class="svtlo-ColorListBox" id="overlinecolorlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -623,7 +623,7 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="svxlo:SvxFontPrevWindow" id="preview">
+              <object class="svxlo-SvxFontPrevWindow" id="preview">
                 <property name="height_request">100</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>

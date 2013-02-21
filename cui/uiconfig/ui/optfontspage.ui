@@ -82,7 +82,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo:FontNameBox" id="font1">
+                      <object class="svtlo-FontNameBox" id="font1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
@@ -96,7 +96,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo:FontNameBox" id="font2">
+                      <object class="svtlo-FontNameBox" id="font2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
@@ -162,7 +162,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxcorelo:SvxSimpleTableContainer" id="checklb">
+                      <object class="svxcorelo-SvxSimpleTableContainer" id="checklb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="vexpand">True</property>

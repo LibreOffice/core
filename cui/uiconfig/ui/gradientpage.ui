@@ -212,7 +212,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:ColorLB" id="colorfromlb">
+                      <object class="svxlo-ColorLB" id="colorfromlb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="entry_text_column">0</property>
@@ -255,7 +255,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:ColorLB" id="colortolb">
+                      <object class="svxlo-ColorLB" id="colortolb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="entry_text_column">0</property>
@@ -341,7 +341,7 @@
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">6</property>
                     <child>
-                      <object class="svxlo:GradientLB" id="gradientslb">
+                      <object class="svxlo-GradientLB" id="gradientslb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="entry_text_column">0</property>
@@ -355,7 +355,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:SvxXRectPreview" id="previewctl">
+                      <object class="svxlo-SvxXRectPreview" id="previewctl">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>

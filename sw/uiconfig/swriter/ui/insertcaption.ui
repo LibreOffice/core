@@ -210,7 +210,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="swuilo:CategoryBox" id="category">
+                          <object class="swuilo-CategoryBox" id="category">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="entry_text_column">0</property>
@@ -259,7 +259,7 @@
                     <property name="bottom_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="swuilo:SwCaptionPreview" id="preview">
+                      <object class="swuilo-SwCaptionPreview" id="preview">
                         <property name="width_request">200</property>
                         <property name="height_request">50</property>
                         <property name="visible">True</property>

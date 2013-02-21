@@ -84,7 +84,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="swlo:TableNameEdit" id="name">
+                          <object class="swlo-TableNameEdit" id="name">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>

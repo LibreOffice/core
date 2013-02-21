@@ -707,7 +707,7 @@
                         <property name="can_focus">False</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="svxcorelo:SvxLanguageBox" id="langlb">
+                          <object class="svxcorelo-SvxLanguageBox" id="langlb">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                           </object>

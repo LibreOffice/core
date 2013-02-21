@@ -130,7 +130,7 @@
                     <property name="vexpand">True</property>
                     <property name="column_spacing">3</property>
                     <child>
-                      <object class="svxlo:RubyEdit" id="Left2ED">
+                      <object class="svxlo-RubyEdit" id="Left2ED">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
@@ -143,7 +143,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:RubyEdit" id="Left1ED">
+                      <object class="svxlo-RubyEdit" id="Left1ED">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -155,7 +155,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:RubyEdit" id="Right1ED">
+                      <object class="svxlo-RubyEdit" id="Right1ED">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
@@ -168,7 +168,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:RubyEdit" id="Right2ED">
+                      <object class="svxlo-RubyEdit" id="Right2ED">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -180,7 +180,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:RubyEdit" id="Left3ED">
+                      <object class="svxlo-RubyEdit" id="Left3ED">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -192,7 +192,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:RubyEdit" id="Right3ED">
+                      <object class="svxlo-RubyEdit" id="Right3ED">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -204,7 +204,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:RubyEdit" id="Right4ED">
+                      <object class="svxlo-RubyEdit" id="Right4ED">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -216,7 +216,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:RubyEdit" id="Left4ED">
+                      <object class="svxlo-RubyEdit" id="Left4ED">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -385,7 +385,7 @@
               </packing>
             </child>
             <child>
-              <object class="svxlo:RubyPreview" id="preview">
+              <object class="svxlo-RubyPreview" id="preview">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>

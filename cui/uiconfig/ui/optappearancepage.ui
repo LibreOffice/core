@@ -198,7 +198,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="cuilo:ColorConfigCtrl" id="colorconfig">
+                  <object class="cuilo-ColorConfigCtrl" id="colorconfig">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>

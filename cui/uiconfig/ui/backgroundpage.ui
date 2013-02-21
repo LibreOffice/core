@@ -143,7 +143,7 @@
                 <property name="row_spacing">4</property>
                 <property name="column_spacing">42</property>
                 <child>
-                  <object class="svtlo:ValueSet" id="backgroundcolorset">
+                  <object class="svtlo-ValueSet" id="backgroundcolorset">
                     <property name="width_request">150</property>
                     <property name="height_request">250</property>
                     <property name="visible">True</property>
@@ -199,7 +199,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="cuilo:BackgroundPreview" id="preview1">
+                  <object class="cuilo-BackgroundPreview" id="preview1">
                     <property name="width_request">150</property>
                     <property name="height_request">10</property>
                     <property name="visible">True</property>
@@ -407,7 +407,7 @@
                         <property name="row_spacing">12</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="svxlo:SvxRectCtl" id="windowpos">
+                          <object class="svxlo-SvxRectCtl" id="windowpos">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
@@ -573,7 +573,7 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <child>
-              <object class="cuilo:BackgroundPreview" id="preview2">
+              <object class="cuilo-BackgroundPreview" id="preview2">
                 <property name="no_show_all">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
@@ -639,7 +639,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="svxlo:GradientLB" id="gradientslb">
+                      <object class="svxlo-GradientLB" id="gradientslb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -651,7 +651,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:SvxXRectPreview" id="previewctl">
+                      <object class="svxlo-SvxXRectPreview" id="previewctl">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>

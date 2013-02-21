@@ -97,7 +97,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo:SvxLanguageBox" id="westlanglb-nocjk">
+                  <object class="svxcorelo-SvxLanguageBox" id="westlanglb-nocjk">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -111,7 +111,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:FontNameBox" id="westfontnamelb-nocjk">
+                  <object class="svtlo-FontNameBox" id="westfontnamelb-nocjk">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="dropdown">False</property>
@@ -124,7 +124,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:FontStyleBox" id="weststylelb-nocjk">
+                  <object class="svtlo-FontStyleBox" id="weststylelb-nocjk">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="dropdown">False</property>
@@ -137,7 +137,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:FontSizeBox" id="westsizelb-nocjk">
+                  <object class="svtlo-FontSizeBox" id="westsizelb-nocjk">
                     <property name="height_request">150</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -299,7 +299,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:FontNameBox" id="westfontnamelb-cjk">
+                  <object class="svtlo-FontNameBox" id="westfontnamelb-cjk">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -312,7 +312,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:FontStyleBox" id="weststylelb-cjk">
+                  <object class="svtlo-FontStyleBox" id="weststylelb-cjk">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -325,7 +325,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:FontSizeBox" id="westsizelb-cjk">
+                  <object class="svtlo-FontSizeBox" id="westsizelb-cjk">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -338,7 +338,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo:SvxLanguageBox" id="westlanglb-cjk">
+                  <object class="svxcorelo-SvxLanguageBox" id="westlanglb-cjk">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -486,7 +486,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:FontNameBox" id="eastfontnamelb">
+                  <object class="svtlo-FontNameBox" id="eastfontnamelb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -499,7 +499,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:FontStyleBox" id="eaststylelb">
+                  <object class="svtlo-FontStyleBox" id="eaststylelb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -512,7 +512,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:FontSizeBox" id="eastsizelb">
+                  <object class="svtlo-FontSizeBox" id="eastsizelb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -525,7 +525,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo:SvxLanguageBox" id="eastlanglb">
+                  <object class="svxcorelo-SvxLanguageBox" id="eastlanglb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -673,7 +673,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:FontNameBox" id="ctlfontnamelb">
+                  <object class="svtlo-FontNameBox" id="ctlfontnamelb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -686,7 +686,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:FontStyleBox" id="ctlstylelb">
+                  <object class="svtlo-FontStyleBox" id="ctlstylelb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -699,7 +699,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo:FontSizeBox" id="ctlsizelb">
+                  <object class="svtlo-FontSizeBox" id="ctlsizelb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -712,7 +712,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo:SvxLanguageBox" id="ctllanglb">
+                  <object class="svxcorelo-SvxLanguageBox" id="ctllanglb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -784,7 +784,7 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="svxlo:SvxFontPrevWindow" id="preview">
+              <object class="svxlo-SvxFontPrevWindow" id="preview">
                 <property name="height_request">100</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>

@@ -1160,7 +1160,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else
     {
-        sal_Int32 nDelim = name.indexOf(':');
+        sal_Int32 nDelim = name.indexOf('-');
         if (nDelim != -1)
         {
 #ifndef DISABLE_DYNLOADING

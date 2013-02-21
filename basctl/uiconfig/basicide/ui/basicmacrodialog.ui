@@ -189,7 +189,7 @@
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="svtlo:SvTreeListBox" id="macros">
+                      <object class="svtlo-SvTreeListBox" id="macros">
                         <property name="use_action_appearance">False</property>
                         <property name="width_request">280</property>
                         <property name="height_request">300</property>
@@ -259,7 +259,7 @@
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="basctllo:TreeListBox" id="libraries">
+                      <object class="basctllo-TreeListBox" id="libraries">
                         <property name="use_action_appearance">False</property>
                         <property name="width_request">280</property>
                         <property name="height_request">300</property>

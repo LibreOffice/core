@@ -208,7 +208,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="swlo:SwNumberingTypeListBox" id="numberinglb">
+                  <object class="swlo-SwNumberingTypeListBox" id="numberinglb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>

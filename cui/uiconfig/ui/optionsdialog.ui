@@ -100,7 +100,7 @@
               </packing>
             </child>
             <child>
-              <object class="svtlo:SvTreeListBox" id="pages">
+              <object class="svtlo-SvTreeListBox" id="pages">
                 <property name="visible">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>

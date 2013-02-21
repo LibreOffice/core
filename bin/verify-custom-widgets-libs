@@ -15,10 +15,10 @@
 # its easy to put the wrong lib name in if developing
 # under Linux
 
-FOO=`grep -h -r lo: */uiconfig | sed -e "s/<object class=\"//g" | sed -e "s/\".*$//"| sed 's/^[ \t]*//;s/[ \t]*$//'|sort|uniq`
+FOO=`grep -h -r lo- */uiconfig | sed -e "s/<object class=\"//g" | sed -e "s/\".*$//"| sed 's/^[ \t]*//;s/[ \t]*$//'|sort|uniq`
 for foo in $FOO; do
-    lib=$(echo $foo | cut -f1 -d:)
-    symbol=$(echo $foo | cut -f2 -d:)
+    lib=$(echo $foo | cut -f1 -d-)
+    symbol=$(echo $foo | cut -f2 -d-)
     echo testing if lib$lib.so contains make$symbol
     nm -D solver/unxlng*/lib/lib$lib.so | grep make$symbol > /dev/null
     if [ $? != 0 ]; then

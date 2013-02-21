@@ -95,7 +95,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:ColorLB" id="colorlb">
+                      <object class="svxlo-ColorLB" id="colorlb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
@@ -129,7 +129,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svtlo:ValueSet" id="colorset">
+                          <object class="svtlo-ValueSet" id="colorset">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -170,7 +170,7 @@
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">6</property>
                     <child>
-                      <object class="svxlo:SvxXRectPreview" id="oldpreview">
+                      <object class="svxlo-SvxXRectPreview" id="oldpreview">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
@@ -184,7 +184,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo:SvxXRectPreview" id="newpreview">
+                      <object class="svxlo-SvxXRectPreview" id="newpreview">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>

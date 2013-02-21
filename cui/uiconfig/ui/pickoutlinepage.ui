@@ -18,7 +18,7 @@
         <property name="top_padding">6</property>
         <property name="left_padding">12</property>
         <child>
-          <object class="svxlo:SvxNumValueSet" id="valueset">
+          <object class="svxlo-SvxNumValueSet" id="valueset">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>

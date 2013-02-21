@@ -410,7 +410,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svtlo:ColorListBox" id="color">
+                          <object class="svtlo-ColorListBox" id="color">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                           </object>
@@ -613,7 +613,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="cuilo:SvxNumberingPreview" id="preview">
+                      <object class="cuilo-SvxNumberingPreview" id="preview">
                         <property name="width_request">150</property>
                         <property name="height_request">300</property>
                         <property name="visible">True</property>

@@ -91,7 +91,7 @@
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
             <child>
-              <object class="svxcorelo:SvxLanguageBox" id="languagelb">
+              <object class="svxcorelo-SvxLanguageBox" id="languagelb">
                 <property name="visible">True</property>
                 <property name="halign">end</property>
               </object>
@@ -134,7 +134,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo:SentenceEditWindow" id="sentence">
+              <object class="cuilo-SentenceEditWindow" id="sentence">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
