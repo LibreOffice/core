@@ -237,50 +237,13 @@ static void save_Separators(
 
 ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall ) :
-        ModalDialog ( pParent, ScResId( RID_SCDLG_ASCII ) ),
+        ModalDialog (pParent, "TextImportCsvDialog",
+            "modules/scalc/ui/textimportcsv.ui"),
         mpDatStream  ( pInStream ),
         mnStreamPos( pInStream ? pInStream->Tell() : 0 ),
 
         mpRowPosArray( NULL ),
         mnRowPosCount(0),
-
-        aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
-        aFtCharSet  ( this, ScResId( FT_CHARSET ) ),
-        aLbCharSet  ( this, ScResId( LB_CHARSET ) ),
-        aFtCustomLang( this, ScResId( FT_CUSTOMLANG ) ),
-        aLbCustomLang( this, ScResId( LB_CUSTOMLANG ) ),
-
-        aFtRow      ( this, ScResId( FT_AT_ROW  ) ),
-        aNfRow      ( this, ScResId( NF_AT_ROW  ) ),
-
-        aFlSepOpt   ( this, ScResId( FL_SEPOPT ) ),
-        aRbFixed    ( this, ScResId( RB_FIXED ) ),
-        aRbSeparated( this, ScResId( RB_SEPARATED ) ),
-
-        aCkbTab     ( this, ScResId( CKB_TAB ) ),
-        aCkbSemicolon(this, ScResId( CKB_SEMICOLON ) ),
-        aCkbComma   ( this, ScResId( CKB_COMMA  ) ),
-        aCkbSpace   ( this, ScResId( CKB_SPACE   ) ),
-        aCkbOther   ( this, ScResId( CKB_OTHER ) ),
-        aEdOther    ( this, ScResId( ED_OTHER ) ),
-        aCkbAsOnce  ( this, ScResId( CB_ASONCE) ),
-        aFlOtherOpt ( this, ScResId( FL_OTHER_OPTIONS ) ),
-
-        aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
-        aCbTextSep  ( this, ScResId( CB_TEXTSEP ) ),
-
-        aCkbQuotedAsText( this, ScResId(CB_QUOTED_AS_TEXT) ),
-        aCkbDetectNumber( this, ScResId(CB_DETECT_SPECIAL_NUMBER) ),
-
-        aFlWidth    ( this, ScResId( FL_WIDTH ) ),
-        aFtType     ( this, ScResId( FT_TYPE ) ),
-        aLbType     ( this, ScResId( LB_TYPE1 ) ),
-
-        maTableBox  ( this, ScResId( CTR_TABLEBOX ) ),
-
-        aBtnOk      ( this, ScResId( BTN_OK ) ),
-        aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp    ( this, ScResId( BTN_HELP ) ),
 
         aCharSetUser( ScResId( SCSTR_CHARSET_USER ) ),
         aColumnUser ( ScResId( SCSTR_COLUMN_USER ) ),
@@ -289,7 +252,28 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         maStrTextToColumns( ScResId( STR_TEXTTOCOLUMNS ) ),
         meCall(eCall)
 {
-    FreeResource();
+    get(pFtCharSet, "textcharset");
+    get(pLbCharSet, "charset");
+    get(pFtCustomLang, "textlanguage");
+    get(pLbCustomLang, "language");
+    get(pFtRow, "textfromrow");
+    get(pNfRow, "fromrow");
+    get(pRbFixed, "tofixedwidth");
+    get(pRbSeparated, "toseparatedby");
+    get(pCkbTab, "tab");
+    get(pCkbSemicolon, "semicolon");
+    get(pCkbComma, "comma");
+    get(pCkbSpace, "space");
+    get(pCkbOther, "other");
+    get(pEdOther, "inputother");
+    get(pCkbAsOnce, "mergedelimiters");
+    get(pFtTextSep, "texttextdelimiter");
+    get(pCbTextSep, "textdelimiter");
+    get(pCkbQuotedAsText, "quotedfieldastext");
+    get(pCkbDetectNumber, "detectspecialnumbers");
+    get(pFtType, "textcolumntype");
+    get(pLbType, "columntype");
+    get(mpTableBox, "scrolledwindowcolumntype");
 
     String aName = GetText();
     switch (meCall)
@@ -321,15 +305,15 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     maFieldSeparators = String(sFieldSeparators);
 
     if( bMergeDelimiters )
-        aCkbAsOnce.Check();
+        pCkbAsOnce->Check();
     if (bQuotedFieldAsText)
-        aCkbQuotedAsText.Check();
+        pCkbQuotedAsText->Check();
     if (bDetectSpecialNum)
-        aCkbDetectNumber.Check();
+        pCkbDetectNumber->Check();
     if( bFixedWidth )
-        aRbFixed.Check();
+        pRbFixed->Check();
     if( nFromRow != 1 )
-        aNfRow.SetValue( nFromRow );
+        pNfRow->SetValue( nFromRow );
 
     // Set Separators in the dialog from maFieldSeparators (empty are not set)
     SetSeparators();
@@ -381,90 +365,90 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         mnStreamPos = mpDatStream->Tell();
     }
 
-    aNfRow.SetModifyHdl( LINK( this, ScImportAsciiDlg, FirstRowHdl ) );
+    pNfRow->SetModifyHdl( LINK( this, ScImportAsciiDlg, FirstRowHdl ) );
 
     // *** Separator characters ***
-    lcl_FillCombo( aCbTextSep, aTextSepList, mcTextSep );
-    aCbTextSep.SetText( sTextSeparators );
+    lcl_FillCombo( *pCbTextSep, aTextSepList, mcTextSep );
+    pCbTextSep->SetText( sTextSeparators );
 
     Link aSeparatorHdl =LINK( this, ScImportAsciiDlg, SeparatorHdl );
-    aCbTextSep.SetSelectHdl( aSeparatorHdl );
-    aCbTextSep.SetModifyHdl( aSeparatorHdl );
-    aCkbTab.SetClickHdl( aSeparatorHdl );
-    aCkbSemicolon.SetClickHdl( aSeparatorHdl );
-    aCkbComma.SetClickHdl( aSeparatorHdl );
-    aCkbAsOnce.SetClickHdl( aSeparatorHdl );
-    aCkbQuotedAsText.SetClickHdl( aSeparatorHdl );
-    aCkbDetectNumber.SetClickHdl( aSeparatorHdl );
-    aCkbSpace.SetClickHdl( aSeparatorHdl );
-    aCkbOther.SetClickHdl( aSeparatorHdl );
-    aEdOther.SetModifyHdl( aSeparatorHdl );
+    pCbTextSep->SetSelectHdl( aSeparatorHdl );
+    pCbTextSep->SetModifyHdl( aSeparatorHdl );
+    pCkbTab->SetClickHdl( aSeparatorHdl );
+    pCkbSemicolon->SetClickHdl( aSeparatorHdl );
+    pCkbComma->SetClickHdl( aSeparatorHdl );
+    pCkbAsOnce->SetClickHdl( aSeparatorHdl );
+    pCkbQuotedAsText->SetClickHdl( aSeparatorHdl );
+    pCkbDetectNumber->SetClickHdl( aSeparatorHdl );
+    pCkbSpace->SetClickHdl( aSeparatorHdl );
+    pCkbOther->SetClickHdl( aSeparatorHdl );
+    pEdOther->SetModifyHdl( aSeparatorHdl );
 
     // *** text encoding ListBox ***
     // all encodings allowed, including Unicode, but subsets are excluded
-    aLbCharSet.FillFromTextEncodingTable( sal_True );
+    pLbCharSet->FillFromTextEncodingTable( sal_True );
     // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
     // independent document linkage.
-    aLbCharSet.InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
-    aLbCharSet.SelectTextEncoding( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW ?
+    pLbCharSet->InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
+    pLbCharSet->SelectTextEncoding( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW ?
             osl_getThreadTextEncoding() : ePreselectUnicode );
 
     if( nCharSet >= 0 && ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW )
-        aLbCharSet.SelectEntryPos( static_cast<sal_uInt16>(nCharSet) );
+        pLbCharSet->SelectEntryPos( static_cast<sal_uInt16>(nCharSet) );
 
     SetSelectedCharSet();
-    aLbCharSet.SetSelectHdl( LINK( this, ScImportAsciiDlg, CharSetHdl ) );
+    pLbCharSet->SetSelectHdl( LINK( this, ScImportAsciiDlg, CharSetHdl ) );
 
-    aLbCustomLang.SetLanguageList(
+    pLbCustomLang->SetLanguageList(
         LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, false, false);
-    aLbCustomLang.InsertLanguage(LANGUAGE_SYSTEM);
-    aLbCustomLang.SelectLanguage(static_cast<LanguageType>(nLanguage), true);
+    pLbCustomLang->InsertLanguage(LANGUAGE_SYSTEM);
+    pLbCustomLang->SelectLanguage(static_cast<LanguageType>(nLanguage), true);
 
     // *** column type ListBox ***
     xub_StrLen nCount = comphelper::string::getTokenCount(aColumnUser, ';');
     for (xub_StrLen i=0; i<nCount; i++)
-        aLbType.InsertEntry( aColumnUser.GetToken( i ) );
+        pLbType->InsertEntry( aColumnUser.GetToken( i ) );
 
-    aLbType.SetSelectHdl( LINK( this, ScImportAsciiDlg, LbColTypeHdl ) );
-    aFtType.Disable();
-    aLbType.Disable();
+    pLbType->SetSelectHdl( LINK( this, ScImportAsciiDlg, LbColTypeHdl ) );
+    pFtType->Disable();
+    pLbType->Disable();
 
     // *** table box preview ***
-    maTableBox.Init();
-    maTableBox.SetUpdateTextHdl( LINK( this, ScImportAsciiDlg, UpdateTextHdl ) );
-    maTableBox.InitTypes( aLbType );
-    maTableBox.SetColTypeHdl( LINK( this, ScImportAsciiDlg, ColTypeHdl ) );
+    mpTableBox->Init();
+    mpTableBox->SetUpdateTextHdl( LINK( this, ScImportAsciiDlg, UpdateTextHdl ) );
+    mpTableBox->InitTypes( *pLbType );
+    mpTableBox->SetColTypeHdl( LINK( this, ScImportAsciiDlg, ColTypeHdl ) );
 
-    aRbSeparated.SetClickHdl( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
-    aRbFixed.SetClickHdl( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
+    pRbSeparated->SetClickHdl( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
+    pRbFixed->SetClickHdl( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
 
     SetupSeparatorCtrls();
-    RbSepFixHdl( &aRbFixed );
+    RbSepFixHdl( pRbFixed );
 
     UpdateVertical();
 
-    maTableBox.Execute( CSVCMD_NEWCELLTEXTS );
+    mpTableBox->Execute( CSVCMD_NEWCELLTEXTS );
 
-    aEdOther.SetAccessibleName(aCkbOther.GetText());
-    aEdOther.SetAccessibleRelationLabeledBy(&aCkbOther);
+    pEdOther->SetAccessibleName(pCkbOther->GetText());
+    pEdOther->SetAccessibleRelationLabeledBy(pCkbOther);
 
     if (meCall == SC_TEXTTOCOLUMNS)
     {
-        aFtCharSet.Disable();
-        aLbCharSet.Disable();
-        aFtCustomLang.Disable();
-        aLbCustomLang.SelectLanguage(LANGUAGE_SYSTEM);
-        aLbCustomLang.Disable();
-        aFtRow.Disable();
-        aNfRow.Disable();
+        pFtCharSet->Disable();
+        pLbCharSet->Disable();
+        pFtCustomLang->Disable();
+        pLbCustomLang->SelectLanguage(LANGUAGE_SYSTEM);
+        pLbCustomLang->Disable();
+        pFtRow->Disable();
+        pNfRow->Disable();
 
         // Quoted field as text option is not used for text-to-columns mode.
-        aCkbQuotedAsText.Check(false);
-        aCkbQuotedAsText.Disable();
+        pCkbQuotedAsText->Check(false);
+        pCkbQuotedAsText->Disable();
 
         // Always detect special numbers for text-to-columns mode.
-        aCkbDetectNumber.Check();
-        aCkbDetectNumber.Disable();
+        pCkbDetectNumber->Check();
+        pCkbDetectNumber->Disable();
     }
 }
 
@@ -483,7 +467,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, rtl::OUString &rText )
         return false;
 
     bool bRet = true;
-    bool bFixed = aRbFixed.IsChecked();
+    bool bFixed = pRbFixed->IsChecked();
 
     if (!mpRowPosArray)
         mpRowPosArray = new sal_uLong[ASCIIDLG_MAXROWS + 2];
@@ -550,29 +534,29 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
 {
     rOpt.SetCharSet( meCharSet );
     rOpt.SetCharSetSystem( mbCharSetSystem );
-    rOpt.SetLanguage(aLbCustomLang.GetSelectLanguage());
-    rOpt.SetFixedLen( aRbFixed.IsChecked() );
-    rOpt.SetStartRow( (long)aNfRow.GetValue() );
-    maTableBox.FillColumnData( rOpt );
-    if( aRbSeparated.IsChecked() )
+    rOpt.SetLanguage(pLbCustomLang->GetSelectLanguage());
+    rOpt.SetFixedLen( pRbFixed->IsChecked() );
+    rOpt.SetStartRow( (long)pNfRow->GetValue() );
+    mpTableBox->FillColumnData( rOpt );
+    if( pRbSeparated->IsChecked() )
     {
         rOpt.SetFieldSeps( GetSeparators() );
-        rOpt.SetMergeSeps( aCkbAsOnce.IsChecked() );
-        rOpt.SetTextSep( lcl_CharFromCombo( aCbTextSep, aTextSepList ) );
+        rOpt.SetMergeSeps( pCkbAsOnce->IsChecked() );
+        rOpt.SetTextSep( lcl_CharFromCombo( *pCbTextSep, aTextSepList ) );
     }
 
-    rOpt.SetQuotedAsText(aCkbQuotedAsText.IsChecked());
-    rOpt.SetDetectSpecialNumber(aCkbDetectNumber.IsChecked());
+    rOpt.SetQuotedAsText(pCkbQuotedAsText->IsChecked());
+    rOpt.SetDetectSpecialNumber(pCkbDetectNumber->IsChecked());
 }
 
 void ScImportAsciiDlg::SaveParameters()
 {
-    save_Separators( maFieldSeparators, aCbTextSep.GetText(), aCkbAsOnce.IsChecked(),
-                     aCkbQuotedAsText.IsChecked(), aCkbDetectNumber.IsChecked(),
-                     aRbFixed.IsChecked(),
-                     static_cast<sal_Int32>(aNfRow.GetValue()),
-                     static_cast<sal_Int32>(aLbCharSet.GetSelectEntryPos()),
-                     static_cast<sal_Int32>(aLbCustomLang.GetSelectLanguage()), meCall );
+    save_Separators( maFieldSeparators, pCbTextSep->GetText(), pCkbAsOnce->IsChecked(),
+                     pCkbQuotedAsText->IsChecked(), pCkbDetectNumber->IsChecked(),
+                     pRbFixed->IsChecked(),
+                     static_cast<sal_Int32>(pNfRow->GetValue()),
+                     static_cast<sal_Int32>(pLbCharSet->GetSelectEntryPos()),
+                     static_cast<sal_Int32>(pLbCustomLang->GetSelectLanguage()), meCall );
 }
 
 void ScImportAsciiDlg::SetSeparators()
@@ -585,20 +569,20 @@ void ScImportAsciiDlg::SetSeparators()
     {
         switch( aSep[i] )
         {
-            case '\t':  aCkbTab.Check();        break;
-            case ';':   aCkbSemicolon.Check();  break;
-            case ',':   aCkbComma.Check();      break;
-            case ' ':   aCkbSpace.Check();      break;
+            case '\t':  pCkbTab->Check();        break;
+            case ';':   pCkbSemicolon->Check();  break;
+            case ',':   pCkbComma->Check();      break;
+            case ' ':   pCkbSpace->Check();      break;
             default:
-                aCkbOther.Check();
-               aEdOther.SetText( aEdOther.GetText() + OUString( aSep[i] ) );
+                pCkbOther->Check();
+               pEdOther->SetText( pEdOther->GetText() + OUString( aSep[i] ) );
         }
     }
 }
 
 void ScImportAsciiDlg::SetSelectedCharSet()
 {
-    meCharSet = aLbCharSet.GetSelectTextEncoding();
+    meCharSet = pLbCharSet->GetSelectTextEncoding();
     mbCharSetSystem = (meCharSet == RTL_TEXTENCODING_DONTKNOW);
     if( mbCharSetSystem )
         meCharSet = osl_getThreadTextEncoding();
@@ -607,31 +591,31 @@ void ScImportAsciiDlg::SetSelectedCharSet()
 String ScImportAsciiDlg::GetSeparators() const
 {
     String aSepChars;
-    if( aCkbTab.IsChecked() )
+    if( pCkbTab->IsChecked() )
         aSepChars += '\t';
-    if( aCkbSemicolon.IsChecked() )
+    if( pCkbSemicolon->IsChecked() )
         aSepChars += ';';
-    if( aCkbComma.IsChecked() )
+    if( pCkbComma->IsChecked() )
         aSepChars += ',';
-    if( aCkbSpace.IsChecked() )
+    if( pCkbSpace->IsChecked() )
         aSepChars += ' ';
-    if( aCkbOther.IsChecked() )
-        aSepChars += aEdOther.GetText();
+    if( pCkbOther->IsChecked() )
+        aSepChars += pEdOther->GetText();
     return aSepChars;
 }
 
 void ScImportAsciiDlg::SetupSeparatorCtrls()
 {
-    sal_Bool bEnable = aRbSeparated.IsChecked();
-    aCkbTab.Enable( bEnable );
-    aCkbSemicolon.Enable( bEnable );
-    aCkbComma.Enable( bEnable );
-    aCkbSpace.Enable( bEnable );
-    aCkbOther.Enable( bEnable );
-    aEdOther.Enable( bEnable );
-    aCkbAsOnce.Enable( bEnable );
-    aFtTextSep.Enable( bEnable );
-    aCbTextSep.Enable( bEnable );
+    sal_Bool bEnable = pRbSeparated->IsChecked();
+    pCkbTab->Enable( bEnable );
+    pCkbSemicolon->Enable( bEnable );
+    pCkbComma->Enable( bEnable );
+    pCkbSpace->Enable( bEnable );
+    pCkbOther->Enable( bEnable );
+    pEdOther->Enable( bEnable );
+    pCkbAsOnce->Enable( bEnable );
+    pFtTextSep->Enable( bEnable );
+    pCbTextSep->Enable( bEnable );
 }
 
 void ScImportAsciiDlg::UpdateVertical()
@@ -648,13 +632,13 @@ IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 {
     OSL_ENSURE( pButton, "ScImportAsciiDlg::RbSepFixHdl - missing sender" );
 
-    if( (pButton == &aRbFixed) || (pButton == &aRbSeparated) )
+    if( (pButton == pRbFixed) || (pButton == pRbSeparated) )
     {
         SetPointer( Pointer( POINTER_WAIT ) );
-        if( aRbFixed.IsChecked() )
-            maTableBox.SetFixedWidthMode();
+        if( pRbFixed->IsChecked() )
+            mpTableBox->SetFixedWidthMode();
         else
-            maTableBox.SetSeparatorsMode();
+            mpTableBox->SetSeparatorsMode();
         SetPointer( Pointer( POINTER_ARROW ) );
 
         SetupSeparatorCtrls();
@@ -665,25 +649,25 @@ IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
 {
     OSL_ENSURE( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
-    OSL_ENSURE( !aRbFixed.IsChecked(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
+    OSL_ENSURE( !pRbFixed->IsChecked(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
 
     /*  #i41550# First update state of the controls. The GetSeparators()
         function needs final state of the check boxes. */
-    if( (pCtrl == &aCkbOther) && aCkbOther.IsChecked() )
-        aEdOther.GrabFocus();
-    else if( pCtrl == &aEdOther )
-        aCkbOther.Check( !aEdOther.GetText().isEmpty() );
+    if( (pCtrl == pCkbOther) && pCkbOther->IsChecked() )
+        pEdOther->GrabFocus();
+    else if( pCtrl == pEdOther )
+        pCkbOther->Check( !pEdOther->GetText().isEmpty() );
 
     String aOldFldSeps( maFieldSeparators);
     maFieldSeparators = GetSeparators();
     sal_Unicode cOldSep = mcTextSep;
-    mcTextSep = lcl_CharFromCombo( aCbTextSep, aTextSepList );
+    mcTextSep = lcl_CharFromCombo( *pCbTextSep, aTextSepList );
     // Any separator changed may result in completely different lines due to
     // embedded line breaks.
     if (cOldSep != mcTextSep || aOldFldSeps != maFieldSeparators)
         UpdateVertical();
 
-    maTableBox.Execute( CSVCMD_NEWCELLTEXTS );
+    mpTableBox->Execute( CSVCMD_NEWCELLTEXTS );
     return 0;
 }
 
@@ -691,7 +675,7 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
 {
     OSL_ENSURE( pCharSetBox, "ScImportAsciiDlg::CharSetHdl - missing sender" );
 
-    if( (pCharSetBox == &aLbCharSet) && (pCharSetBox->GetSelectEntryCount() == 1) )
+    if( (pCharSetBox == pLbCharSet) && (pCharSetBox->GetSelectEntryCount() == 1) )
     {
         SetPointer( Pointer( POINTER_WAIT ) );
         CharSet eOldCharSet = meCharSet;
@@ -700,7 +684,7 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
         if (eOldCharSet != meCharSet)
             UpdateVertical();
 
-        maTableBox.Execute( CSVCMD_NEWCELLTEXTS );
+        mpTableBox->Execute( CSVCMD_NEWCELLTEXTS );
         SetPointer( Pointer( POINTER_ARROW ) );
     }
     return 0;
@@ -709,22 +693,22 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
 IMPL_LINK( ScImportAsciiDlg, FirstRowHdl, NumericField*, pNumField )
 {
     OSL_ENSURE( pNumField, "ScImportAsciiDlg::FirstRowHdl - missing sender" );
-    maTableBox.Execute( CSVCMD_SETFIRSTIMPORTLINE, sal::static_int_cast<sal_Int32>( pNumField->GetValue() - 1 ) );
+    mpTableBox->Execute( CSVCMD_SETFIRSTIMPORTLINE, sal::static_int_cast<sal_Int32>( pNumField->GetValue() - 1 ) );
     return 0;
 }
 
 IMPL_LINK( ScImportAsciiDlg, LbColTypeHdl, ListBox*, pListBox )
 {
     OSL_ENSURE( pListBox, "ScImportAsciiDlg::LbColTypeHdl - missing sender" );
-    if( pListBox == &aLbType )
-        maTableBox.Execute( CSVCMD_SETCOLUMNTYPE, pListBox->GetSelectEntryPos() );
+    if( pListBox == pLbType )
+        mpTableBox->Execute( CSVCMD_SETCOLUMNTYPE, pListBox->GetSelectEntryPos() );
     return 0;
 }
 
 IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl)
 {
-    sal_Int32 nBaseLine = maTableBox.GetFirstVisLine();
-    sal_Int32 nRead = maTableBox.GetVisLineCount();
+    sal_Int32 nBaseLine = mpTableBox->GetFirstVisLine();
+    sal_Int32 nRead = mpTableBox->GetVisLineCount();
     // If mnRowPosCount==0, this is an initializing call, read ahead for row
     // count and resulting scroll bar size and position to be able to scroll at
     // all. When adding lines, read only the amount of next lines to be
@@ -741,9 +725,9 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl)
     for (; i < CSV_PREVIEW_LINES; i++)
         maPreviewLine[i] = rtl::OUString();
 
-    maTableBox.Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
-    bool bMergeSep = (aCkbAsOnce.IsChecked() == sal_True);
-    maTableBox.SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep);
+    mpTableBox->Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
+    bool bMergeSep = (pCkbAsOnce->IsChecked() == sal_True);
+    mpTableBox->SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep);
 
     return 0;
 }
@@ -753,20 +737,20 @@ IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox*, pTableBox )
     OSL_ENSURE( pTableBox, "ScImportAsciiDlg::ColTypeHdl - missing sender" );
 
     sal_Int32 nType = pTableBox->GetSelColumnType();
-    sal_Int32 nTypeCount = aLbType.GetEntryCount();
+    sal_Int32 nTypeCount = pLbType->GetEntryCount();
     bool bEmpty = (nType == CSV_TYPE_MULTI);
     bool bEnable = ((0 <= nType) && (nType < nTypeCount)) || bEmpty;
 
-    aFtType.Enable( bEnable );
-    aLbType.Enable( bEnable );
+    pFtType->Enable( bEnable );
+    pLbType->Enable( bEnable );
 
-    Link aSelHdl = aLbType.GetSelectHdl();
-    aLbType.SetSelectHdl( Link() );
+    Link aSelHdl = pLbType->GetSelectHdl();
+    pLbType->SetSelectHdl( Link() );
     if( bEmpty )
-        aLbType.SetNoSelection();
+        pLbType->SetNoSelection();
     else if( bEnable )
-        aLbType.SelectEntryPos( static_cast< sal_uInt16 >( nType ) );
-    aLbType.SetSelectHdl( aSelHdl );
+        pLbType->SelectEntryPos( static_cast< sal_uInt16 >( nType ) );
+    pLbType->SetSelectHdl( aSelHdl );
 
     return 0;
 }
