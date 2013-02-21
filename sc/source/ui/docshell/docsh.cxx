@@ -122,8 +122,6 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::lang::XMultiServiceFactory;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::boost::shared_ptr;
 using ::std::vector;
 
@@ -947,30 +945,31 @@ sal_Bool ScDocShell::LoadFrom( SfxMedium& rMedium )
 static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLang, bool& rDateConvert)
 {
     OUStringBuffer aBuf;
-    OUString aTokens[2];
+    std::vector< OUString > aTokens;
     sal_Int32 n = rOption.getLength();
     const sal_Unicode* p = rOption.getStr();
-    sal_Int32 nTokenId = 0;
     for (sal_Int32 i = 0; i < n; ++i)
     {
         const sal_Unicode c = p[i];
         if (c == sal_Unicode(' '))
         {
             if (aBuf.getLength())
-                aTokens[nTokenId++] = aBuf.makeStringAndClear();
+                aTokens.push_back( aBuf.makeStringAndClear() );
         }
         else
             aBuf.append(c);
-
-        if (nTokenId >= 2)
-            break;
     }
 
     if (aBuf.getLength())
-        aTokens[nTokenId] = aBuf.makeStringAndClear();
+        aTokens.push_back( aBuf.makeStringAndClear() );
 
-    rLang = static_cast<LanguageType>(aTokens[0].toInt32());
-    rDateConvert = static_cast<bool>(aTokens[1].toInt32());
+    rLang = LanguageType( 0 );
+    rDateConvert = false;
+
+    if (aTokens.size() > 0)
+        rLang = static_cast<LanguageType>(aTokens[0].toInt32());
+    if (aTokens.size() > 1)
+        rDateConvert = static_cast<bool>(aTokens[1].toInt32());
 }
 
 sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
