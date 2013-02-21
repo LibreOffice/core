@@ -21,13 +21,13 @@
   </object>
   <object class="GtkDialog" id="BreakDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">Insert Break</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -95,12 +95,14 @@
               <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkBox" id="box1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="linerb">
                         <property name="label" translatable="yes">Line break</property>
@@ -156,8 +158,11 @@
                       <object class="GtkLabel" id="styleft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_top">6</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Style</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">stylelb</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -183,11 +188,9 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="margin_top">6</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <accessibility>
-                          <relation type="label-for" target="pagenumsb"/>
-                        </accessibility>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -196,29 +199,16 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="box2">
+                      <object class="GtkSpinButton" id="pagenumsb">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <object class="GtkSpinButton" id="pagenumsb">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
-                            <property name="invisible_char_set">True</property>
-                            <property name="adjustment">adjustment1</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="pagenumcb"/>
-                            </accessibility>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="halign">start</property>
+                        <property name="invisible_char">●</property>
+                        <property name="invisible_char_set">True</property>
+                        <property name="adjustment">adjustment1</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="pagenumcb"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="expand">False</property>
