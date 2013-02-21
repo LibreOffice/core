@@ -597,9 +597,8 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
 
     // re-calculate selection count
     nSelCount = 0;
-    for ( size_t i = 0, n = aSels.size(); i < n; ++ i ) {
-        nSelCount += pRange->Len();
-    }
+    for ( size_t i = 0, n = aSels.size(); i < n; ++ i )
+        nSelCount += aSels[i]->Len();
 
     bCurValid = sal_False;
     nCurIndex = 0;
