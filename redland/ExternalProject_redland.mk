@@ -45,10 +45,10 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 	&& CFLAGS="$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden)" \
 	PATH="$(OUTDIR)/bin:$$PATH" \
 	LDFLAGS="-L$(OUTDIR)/lib \
-	$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl$(COMMA)-noinhibit-exec) \
-	$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl)) \
-	$(if $(filter MACOSX,$(OS)), -Wl$(COMMA)-dylib_file$(COMMA)@loader_path/libraptor-lo.1.dylib:$(OUTDIR)/lib/libraptor-lo.1.dylib \
-	$(if $(filter NO,$(SYSTEM_LIBXML)),-Wl$(COMMA)-dylib_file$(COMMA)@loader_path/../ure-link/lib/libxml2.2.dylib:$(OUTDIR)/lib/libxml2.2.dylib))" \
+		$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib" -Wl$(COMMA)-noinhibit-exec) \
+		$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl)) \
+		$(if $(filter MACOSX,$(OS)), -Wl$(COMMA)-dylib_file$(COMMA)@loader_path/libraptor-lo.1.dylib:$(OUTDIR)/lib/libraptor-lo.1.dylib \
+		$(if $(filter NO,$(SYSTEM_LIBXML)),-Wl$(COMMA)-dylib_file$(COMMA)@loader_path/../ure-link/lib/libxml2.2.dylib:$(OUTDIR)/lib/libxml2.2.dylib))" \
 	CPPFLAGS="-I$(OUTDIR)/inc/external $(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \
 	./configure --disable-gtk-doc --with-openssl-digests \
 	--with-xml-parser=libxml --with-raptor=system --with-rasqal=system \
