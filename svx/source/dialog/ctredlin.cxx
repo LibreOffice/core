@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/shl.hxx>
 #include <sfx2/app.hxx>
@@ -486,170 +487,121 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 //----------------------------------------------------------------------------
 
 SvxTPView::SvxTPView( Window * pParent)
-    : TabPage( pParent, SVX_RES(SID_REDLIN_VIEW_PAGE)),
-    m_aViewDataContainer(this, SVX_RES(DG_VIEW)),
-    aViewData(m_aViewDataContainer),
-    PbAccept    ( this, SVX_RES(PB_ACCEPT    ) ),
-    PbReject    ( this, SVX_RES(PB_REJECT  ) ),
-    PbAcceptAll ( this, SVX_RES(PB_ACCEPTALL  ) ),
-    PbRejectAll ( this, SVX_RES(PB_REJECTALL  ) ),
-    PbUndo      ( this, SVX_RES(PB_UNDO  ) ),
-    aTitle1     ( SVX_RES( STR_TITLE1 ) ),      // local resource
-    aTitle2     ( SVX_RES( STR_TITLE2 ) ),
-    aTitle3     ( SVX_RES( STR_TITLE3 ) ),
-    aTitle4     ( SVX_RES( STR_TITLE4 ) ),
-    aTitle5     ( SVX_RES( STR_TITLE5 ) )
+    : TabPage(pParent, "RedlineViewPage", "svx/ui/redlineviewpage.ui")
 {
-    aViewData.SetAccessibleName(String(SVX_RES(STR_TREE)));
-    FreeResource();
+    get(m_pAccept, "accept");
+    get(m_pReject, "reject");
+    get(m_pAcceptAll, "acceptall");
+    get(m_pRejectAll, "rejectall");
+    get(m_pUndo, "undo");
 
-    aViewData.SetHelpId(HID_REDLINING_VIEW_DG_VIEW_TABLE);
-    aViewData.SetHeaderBarHelpId(HID_REDLINING_VIEW_DG_VIEW_HEADER);
-
-    aMinSize=GetSizePixel();
+    SvxSimpleTableContainer* pTable = get<SvxSimpleTableContainer>("changes");
+    Size aControlSize(221, 130);
+    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    pTable->set_width_request(aControlSize.Width());
+    pTable->set_height_request(aControlSize.Height());
+    m_pViewData = new SvxRedlinTable(*pTable, 0);
 
     Link aLink=LINK( this, SvxTPView, PbClickHdl);
 
-    PbAccept.SetClickHdl(aLink);
-    PbAcceptAll.SetClickHdl(aLink);
-    PbReject.SetClickHdl(aLink);
-    PbRejectAll.SetClickHdl(aLink);
-    PbUndo.SetClickHdl(aLink);
+    m_pAccept->SetClickHdl(aLink);
+    m_pAcceptAll->SetClickHdl(aLink);
+    m_pReject->SetClickHdl(aLink);
+    m_pRejectAll->SetClickHdl(aLink);
+    m_pUndo->SetClickHdl(aLink);
 
-    nDistance=PbAccept.GetSizePixel().Height()+2*MIN_DISTANCE;
-    aViewData.SetTabs(nStaticTabs);
+    m_pViewData->SetTabs(nStaticTabs);
 }
 
-void SvxTPView::Resize()
+SvxTPView::~SvxTPView()
 {
-    Size aSize=GetOutputSizePixel();
-    Point aPos = m_aViewDataContainer.GetPosPixel();
-    aSize.Height()-=aPos.Y()+nDistance;
-    aSize.Width()-=2*aPos.X();
-
-    long newY=aPos.Y()+aSize.Height()+MIN_DISTANCE;
-    aPos=PbAccept.GetPosPixel();
-    aPos.Y()=newY;
-    PbAccept.SetPosPixel(aPos);
-    aPos=PbAcceptAll.GetPosPixel();
-    aPos.Y()=newY;
-    PbAcceptAll.SetPosPixel(aPos);
-    aPos=PbReject.GetPosPixel();
-    aPos.Y()=newY;
-    PbReject.SetPosPixel(aPos);
-    aPos=PbRejectAll.GetPosPixel();
-    aPos.Y()=newY;
-    PbRejectAll.SetPosPixel(aPos);
-
-    if(PbUndo.IsVisible())
-    {
-        aPos=PbUndo.GetPosPixel();
-        aPos.Y()=newY;
-        PbUndo.SetPosPixel(aPos);
-    }
-    m_aViewDataContainer.SetSizePixel(aSize);
+    delete m_pViewData;
 }
 
 void SvxTPView::InsertWriterHeader()
 {
-    rtl::OUString aStrTab('\t');
-    String aString(aTitle1);
-    aString+=aStrTab;
-    aString+=aTitle3;
-    aString+=aStrTab;
-    aString+=aTitle4;
-    aString+=aStrTab;
-    aString+=aTitle5;
-    aViewData.ClearHeader();
-    aViewData.InsertHeaderEntry(aString);
+    OUString aStrTab('\t');
+    OUString aString(get<FixedText>("action")->GetText());
+    aString += aStrTab;
+    aString += get<FixedText>("author")->GetText();
+    aString += aStrTab;
+    aString += get<FixedText>("date")->GetText();
+    aString += aStrTab;
+    aString += get<FixedText>("comment")->GetText();
+    m_pViewData->ClearHeader();
+    m_pViewData->InsertHeaderEntry(aString);
 }
 
 void SvxTPView::InsertCalcHeader()
 {
-    rtl::OUString aStrTab('\t');
-    String aString(aTitle1);
-    aString+=aStrTab;
-    aString+=aTitle2;
-    aString+=aStrTab;
-    aString+=aTitle3;
-    aString+=aStrTab;
-    aString+=aTitle4;
-    aString+=aStrTab;
-    aString+=aTitle5;
-    aViewData.ClearHeader();
-    aViewData.InsertHeaderEntry(aString);
+    OUString aStrTab('\t');
+    OUString aString(get<FixedText>("action")->GetText());
+    aString += aStrTab;
+    aString += get<FixedText>("position")->GetText();
+    aString += aStrTab;
+    aString += get<FixedText>("author")->GetText();
+    aString += aStrTab;
+    aString += get<FixedText>("date")->GetText();
+    aString += aStrTab;
+    aString += get<FixedText>("comment")->GetText();
+    m_pViewData->ClearHeader();
+    m_pViewData->InsertHeaderEntry(aString);
 }
 
 void SvxTPView::EnableAccept(sal_Bool nFlag)
 {
-    PbAccept.Enable(nFlag);
+    m_pAccept->Enable(nFlag);
 }
 
 void SvxTPView::EnableAcceptAll(sal_Bool nFlag)
 {
-    PbAcceptAll.Enable(nFlag);
+    m_pAcceptAll->Enable(nFlag);
 }
 
 void SvxTPView::EnableReject(sal_Bool nFlag)
 {
-    PbReject.Enable(nFlag);
+    m_pReject->Enable(nFlag);
 }
 
 void SvxTPView::EnableRejectAll(sal_Bool nFlag)
 {
-    PbRejectAll.Enable(nFlag);
+    m_pRejectAll->Enable(nFlag);
 }
 
 void SvxTPView::ShowUndo(sal_Bool nFlag)
 {
-    PbUndo.Show(nFlag);
+    m_pUndo->Show(nFlag);
 }
 
 void SvxTPView::EnableUndo(sal_Bool nFlag)
 {
-    PbUndo.Enable(nFlag);
+    m_pUndo->Enable(nFlag);
 }
-
-Size SvxTPView::GetMinSizePixel()
-{
-    Size aSize=aMinSize;
-    if(PbUndo.IsVisible())
-    {
-        sal_uIntPtr nSize=PbUndo.GetSizePixel().Width()
-                    +PbUndo.GetPosPixel().X()
-                    +PbAccept.GetPosPixel().X();
-
-        aSize.Width()=nSize;
-    }
-
-    return aSize;
-}
-
 
 SvxRedlinTable* SvxTPView::GetTableControl()
 {
-    return &aViewData;
+    return m_pViewData;
 }
 
 IMPL_LINK( SvxTPView, PbClickHdl, PushButton*, pPushB )
 {
-    if(pPushB==&PbAccept)
+    if (pPushB == m_pAccept)
     {
         AcceptClickLk.Call(this);
     }
-    else if(pPushB==&PbAcceptAll)
+    else if (pPushB == m_pAcceptAll)
     {
         AcceptAllClickLk.Call(this);
     }
-    else if(pPushB==&PbReject)
+    else if (pPushB == m_pReject)
     {
         RejectClickLk.Call(this);
     }
-    else if(pPushB==&PbRejectAll)
+    else if (pPushB == m_pRejectAll)
     {
         RejectAllClickLk.Call(this);
     }
-    else if(pPushB==&PbUndo)
+    else if (pPushB == m_pUndo)
     {
         UndoClickLk.Call(this);
     }
@@ -1212,7 +1164,8 @@ SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, const ResId& rResId )
 {
     pTPFilter=new SvxTPFilter(&aTCAccept);
     pTPView=new SvxTPView(&aTCAccept);
-    aMinSize=pTPView->GetMinSizePixel();
+
+    aMinSize = VclContainer::getLayoutRequisition(*pTPView);
 
     aTCAccept.InsertPage( TP_VIEW,   SVX_RESSTR(RID_SVXSTR_VIEW));
     aTCAccept.InsertPage( TP_FILTER, SVX_RESSTR(RID_SVXSTR_FILTER));
@@ -1244,7 +1197,7 @@ SvxAcceptChgCtr::~SvxAcceptChgCtr()
 
 void SvxAcceptChgCtr::Resize()
 {
-    aMinSize=pTPView->GetMinSizePixel();
+    aMinSize = VclContainer::getLayoutRequisition(*pTPView);
     Size aSize=GetOutputSizePixel();
     sal_Bool bFlag=sal_False;
 
@@ -1272,7 +1225,7 @@ void SvxAcceptChgCtr::Resize()
 
 Size SvxAcceptChgCtr::GetMinSizePixel() const
 {
-    Size aSize=pTPView->GetMinSizePixel();
+    Size aSize = VclContainer::getLayoutRequisition(*pTPView);
     aSize.Height()+=gDiffSize.Height();
     aSize.Width()+=gDiffSize.Width();
     return aSize;

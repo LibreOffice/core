@@ -14,6 +14,7 @@ $(eval $(call gb_UI_add_uifiles,svx,\
 	svx/uiconfig/ui/chineseconversiondialog \
 	svx/uiconfig/ui/compressgraphicdialog \
 	svx/uiconfig/ui/redlinefilterpage \
+	svx/uiconfig/ui/redlineviewpage \
 ))
 
 # vim: set noet sw=4 ts=4:

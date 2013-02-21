@@ -304,30 +304,18 @@ private:
     Link            RejectAllClickLk;
     Link            UndoClickLk;
 
-    SvxSimpleTableContainer m_aViewDataContainer;
-    SvxRedlinTable  aViewData;
-    PushButton      PbAccept;
-    PushButton      PbReject;
-    PushButton      PbAcceptAll;
-    PushButton      PbRejectAll;
-    PushButton      PbUndo;
-    String          aTitle1;
-    String          aTitle2;
-    String          aTitle3;
-    String          aTitle4;
-    String          aTitle5;
-    long            nDistance;
-    Size            aMinSize;
+    SvxRedlinTable* m_pViewData;
+    PushButton*     m_pAccept;
+    PushButton*     m_pReject;
+    PushButton*     m_pAcceptAll;
+    PushButton*     m_pRejectAll;
+    PushButton*     m_pUndo;
 
     DECL_LINK( PbClickHdl, PushButton* );
 
-
-protected:
-
-    void            Resize();
-
 public:
-                    SvxTPView( Window * pParent);
+    SvxTPView(Window * pParent);
+    ~SvxTPView();
 
     void            InsertWriterHeader();
     void            InsertCalcHeader();
@@ -348,8 +336,6 @@ public:
     void            ShowUndo(sal_Bool nFlag=sal_True);
     void            HideUndo()          {ShowUndo(sal_False);}
     sal_Bool            IsUndoVisible();
-
-    Size            GetMinSizePixel();
 
     void            SetAcceptClickHdl( const Link& rLink ) { AcceptClickLk = rLink; }
     const Link&     GetAcceptClickHdl() const { return AcceptClickLk; }

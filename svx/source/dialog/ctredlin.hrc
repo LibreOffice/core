@@ -16,27 +16,5 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svxids.hrc> // ->SID_REDLIN_VIEW_PAGE
-
 #define TP_FILTER       11
 #define TP_VIEW         12
-
-#define DG_VIEW         2
-#define PB_ACCEPT       3
-#define PB_ACCEPTALL    4
-#define PB_REJECT       5
-#define PB_REJECTALL    6
-#define PB_UNDO         7
-#define STR_VIEW        8
-
-#define STR_TITLE1      1
-#define STR_TITLE2      2
-#define STR_TITLE3      3
-#define STR_TITLE4      4
-#define STR_TITLE5      5
-#define STR_DATE_COMBOX 6
-#define STR_DATE_SPIN   7
-#define STR_DATE_SPIN1  8
-#define STR_DATE_TIME_SPIN 9
-#define STR_DATE_TIME_SPIN1 10
-#define STR_TREE            11
