@@ -141,7 +141,7 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-            pDlg->AddTabPage(TP_DOC_FONTS, SW_RESSTR(STR_DOC_FONTS),pFact->GetTabPageCreatorFunc( TP_DOC_FONTS ),0);
+            pDlg->AddFontTabPage();
             pDlg->AddTabPage(TP_DOC_STAT, SW_RESSTR(STR_DOC_STAT),pFact->GetTabPageCreatorFunc( TP_DOC_STAT ),0);
         }
     }

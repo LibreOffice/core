@@ -47,7 +47,6 @@
 #include "dbinsdlg.hxx" //add for  SwInsertDBColAutoPilot
 #include "docfnote.hxx" //add for SwFootNoteOptionDlg
 #include "docstdlg.hxx" //add for SwDocStatPage
-#include "documentfontsdialog.hxx"
 #include "DropDownFieldDialog.hxx" //add for DropDownFieldDialog
 #include "envlop.hxx" //add for SwEnvDlg
 #include "label.hxx" //add for SwLabDlg
@@ -1456,9 +1455,6 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             break;
         case TP_DOC_STAT :
             pRet = SwDocStatPage::Create;
-            break;
-        case TP_DOC_FONTS :
-            pRet = SwDocumentFontsPage::Create;
             break;
         case RID_SW_TP_MAILCONFIG:
             pRet = SwMailConfigPage::Create;

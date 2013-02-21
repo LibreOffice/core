@@ -265,6 +265,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
             case osl::File::E_None:
                 break; // ok
             case osl::File::E_EXIST:
+                GetImport().NotifyEmbeddedFontRead();
                 return; // Assume it's already been added correctly.
             default:
                 SAL_WARN( "xmloff", "Cannot open file for temporary font" );

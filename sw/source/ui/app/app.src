@@ -305,11 +305,6 @@ String STR_DOC_STAT
     Text [ en-US ] = "Statistics" ;
 };
 
-String STR_DOC_FONTS
-{
-    Text [ en-US ] = "Fonts" ;
-};
-
  // ----------------------------
  // Statusbar-titles
  // ----------------------------

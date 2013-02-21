@@ -30,7 +30,6 @@
 #define STR_LOAD_GLOBAL_DOC         (RC_GLOBALS_BEGIN + 2)
 
 #define STR_DOC_STAT                (RC_GLOBALS_BEGIN + 10)
-#define STR_DOC_FONTS               (RC_GLOBALS_BEGIN + 107)
 
 #define STR_PAGE                    (RC_GLOBALS_BEGIN + 14)
 #define STR_PRINTOPTUI              (RC_GLOBALS_BEGIN + 15)
@@ -139,7 +138,6 @@
 #define TP_COLUMN                   (RC_GLOBALS_BEGIN +  13)
 
 #define TP_DOC_STAT                 (RC_GLOBALS_BEGIN +  15)
-#define TP_DOC_FONTS                (RC_GLOBALS_BEGIN + 108)
 
 #define TP_HEADER_PAGE              (RC_GLOBALS_BEGIN +  16)
 #define TP_FOOTER_PAGE              (RC_GLOBALS_BEGIN +  17)

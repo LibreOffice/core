@@ -1194,6 +1194,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::EMBED_FONTS );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
+        break;
         case HANDLE_EMBED_SYSTEM_FONTS:
         {
             sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::EMBED_SYSTEM_FONTS );

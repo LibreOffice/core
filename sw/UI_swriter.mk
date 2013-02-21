@@ -21,7 +21,6 @@ $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/columnpage \
 	sw/uiconfig/swriter/ui/columnwidth \
 	sw/uiconfig/swriter/ui/converttexttable \
-	sw/uiconfig/swriter/ui/documentfontspage \
 	sw/uiconfig/swriter/ui/endnotepage \
 	sw/uiconfig/swriter/ui/editcategories \
 	sw/uiconfig/swriter/ui/exchangedatabases \
