@@ -5,81 +5,20 @@
   <object class="GtkBox" id="RedlineViewPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">6</property>
     <child>
-      <object class="GtkBox" id="box2">
-        <property name="visible">True</property>
+      <object class="GtkBox" id="box3">
         <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
-        <property name="orientation">vertical</property>
+        <property name="no_show_all">True</property>
+        <property name="homogeneous">True</property>
         <child>
-          <object class="GtkBox" id="box3">
+          <object class="GtkLabel" id="action">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <property name="homogeneous">True</property>
-            <child>
-              <object class="GtkLabel" id="action">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Action</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="position">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Postion</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="author">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Author</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="date">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Date</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="comment">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Comment</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">4</property>
-              </packing>
-            </child>
+            <property name="label" translatable="yes">Action</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -88,60 +27,10 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-SvxSimpleTableContainer" id="changes">
+          <object class="GtkLabel" id="position">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="changes-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Changes</property>
-              </object>
-            </child>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection" id="Simple Table Container-selection1"/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkButtonBox" id="buttonbox1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">12</property>
-        <property name="layout_style">spread</property>
-        <child>
-          <object class="GtkButton" id="accept">
-            <property name="label" translatable="yes">_Accept</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="reject">
-            <property name="label" translatable="yes">_Reject</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
+            <property name="label" translatable="yes">Postion</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -150,12 +39,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="acceptall">
-            <property name="label" translatable="yes">A_ccept All</property>
+          <object class="GtkLabel" id="author">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Author</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -164,12 +51,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="rejectall">
-            <property name="label" translatable="yes">R_eject All</property>
+          <object class="GtkLabel" id="date">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Date</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -178,12 +63,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="undo">
-            <property name="label">gtk-undo</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="no_show_all">True</property>
-            <property name="use_stock">True</property>
+          <object class="GtkLabel" id="comment">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Comment</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -195,7 +78,28 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="svxcorelo-SvxSimpleTableContainer" id="changes">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="changes-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes">Changes</property>
+          </object>
+        </child>
+        <child internal-child="selection">
+          <object class="GtkTreeSelection" id="Simple Table Container-selection"/>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
       </packing>
     </child>
   </object>

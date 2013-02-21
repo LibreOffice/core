@@ -351,32 +351,31 @@ public:
 
     void            SetUndoClickHdl( const Link& rLink ) { UndoClickLk = rLink; }
     const Link&     GetUndoAllClickHdl() const { return UndoClickLk; }
+
+    virtual void    ActivatePage();
+    virtual void    DeactivatePage();
 };
 
 //==================================================================
 //  Redlining - Control (Accept- Changes)
 //==================================================================
 
-class SVX_DLLPUBLIC SvxAcceptChgCtr : public Control
+class SVX_DLLPUBLIC SvxAcceptChgCtr
+    : public TabControl
+    , public VclBuilderContainer
 {
 private:
 
-    Link            aMinSizeLink;
-    TabControl      aTCAccept;
     SvxTPFilter*    pTPFilter;
     SvxTPView*      pTPView;
-    Size            aMinSize;
 
-protected:
-
-    virtual void    Resize();
+    sal_uInt16      m_nViewPageId;
+    sal_uInt16      m_nFilterPageId;
 
 public:
-                    SvxAcceptChgCtr( Window* pParent, const ResId& rResId );
+                    SvxAcceptChgCtr(Window* pParent);
 
                     ~SvxAcceptChgCtr();
-
-    Size            GetMinSizePixel() const;
 
     void            ShowFilterPage();
     void            ShowViewPage();
@@ -384,9 +383,6 @@ public:
     SvxTPFilter*    GetFilterPage();
     SvxTPView*      GetViewPage();
     SvxRedlinTable* GetViewTable();
-
-    void            SetMinSizeHdl( const Link& rLink ) { aMinSizeLink= rLink; }
-    const Link&     GetMinSizeHdl() const { return aMinSizeLink; }
 };
 
 

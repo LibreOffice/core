@@ -603,7 +603,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            AbstractSwModalRedlineAcceptDlg* pDlg = pFact->CreateSwModalRedlineAcceptDlg( &GetView().GetEditWin(), DLG_MOD_REDLINE_ACCEPT );
+            AbstractSwModalRedlineAcceptDlg* pDlg = pFact->CreateSwModalRedlineAcceptDlg(&GetView().GetEditWin());
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
             switch (lcl_AskRedlineMode(&GetView().GetEditWin()))

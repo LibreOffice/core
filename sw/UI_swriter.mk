@@ -10,7 +10,6 @@
 $(eval $(call gb_UI_UI,modules/swriter))
 
 $(eval $(call gb_UI_add_uifiles,modules/swriter,\
-	sw/uiconfig/swriter/ui/acceptrejectchanges \
 	sw/uiconfig/swriter/ui/autoformattable \
 	sw/uiconfig/swriter/ui/autotext \
 	sw/uiconfig/swriter/ui/bibliographyentry \

@@ -636,6 +636,23 @@
 
 #define STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE 509
 
-#define STR_COUNT                   510
+#define STR_CHG_INSERT_COLS         510
+#define STR_CHG_INSERT_ROWS         511
+#define STR_CHG_INSERT_TABS         512
+#define STR_CHG_DELETE_COLS         513
+#define STR_CHG_DELETE_ROWS         514
+#define STR_CHG_DELETE_TABS         515
+#define STR_CHG_MOVE                516
+#define STR_CHG_CONTENT             517
+#define STR_CHG_REJECT              518
+#define STR_CHG_ACCEPTED            519
+#define STR_CHG_REJECTED            520
+#define STR_CHG_NO_ENTRY            521
+#define STR_CHG_CONTENT_WITH_CHILD  522
+#define STR_CHG_CHILD_CONTENT       523
+#define STR_CHG_CHILD_ORGCONTENT    524
+#define STR_CHG_EMPTY               525
+
+#define STR_COUNT                   526
 
 #endif

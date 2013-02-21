@@ -17,138 +17,71 @@
  */
 
 #include "acredlin.hrc"
+#include "globstr.hrc"
 
-ModelessDialog RID_SCDLG_CHANGES
+String STR_CHG_INSERT_COLS
 {
-    OutputSize = TRUE ;
-    HelpId = CMD_FID_CHG_ACCEPT ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 282 , 142 ) ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-     // Dieser Dialog hat einen Cancel-Button !
-    Control CTR_REDLINING
-    {
-        HelpId = HID_SC_REDLIN_CTR ;
-        Pos = MAP_APPFONT ( 2 , 2 ) ;
-        Size = MAP_APPFONT ( 270 , 105 ) ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 271 , 105 ) ;
-        Size = MAP_APPFONT ( 1 , 1 ) ;
-        TabStop = FALSE ;
-    };
-    FixedText FT_ASSIGN
-    {
-        Hide = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 105 ) ;
-        Size = MAP_APPFONT ( 128 , 12 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Range" ;
-    };
-    Edit ED_ASSIGN
-    {
-        HelpID = "sc:Edit:RID_SCDLG_CHANGES:ED_ASSIGN";
-        Hide = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
-        Size = MAP_APPFONT ( 128 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    ImageButton RB_ASSIGN
-    {
-        HelpID = "sc:ImageButton:RID_SCDLG_CHANGES:RB_ASSIGN";
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 142 , 118 ) ;
-        Size = MAP_APPFONT ( 13 , 15 ) ;
-        TabStop = FALSE ;
-        QuickHelpText [ en-US ] = "Minimize/Maximize" ;
-    };
-    String STR_INSERT_COLS
-    {
-        Text [ en-US ] = "Column inserted" ;
-    };
-    String STR_INSERT_ROWS
-    {
-        Text [ en-US ] = "Row inserted " ;
-    };
-    String STR_INSERT_TABS
-    {
-        Text [ en-US ] = "Sheet inserted " ;
-    };
-    String STR_DELETE_COLS
-    {
-        Text [ en-US ] = "Column deleted" ;
-    };
-    String STR_DELETE_ROWS
-    {
-        Text [ en-US ] = "Row deleted" ;
-    };
-    String STR_DELETE_TABS
-    {
-        Text [ en-US ] = "Sheet deleted" ;
-    };
-    String STR_MOVE
-    {
-        Text [ en-US ] = "Range moved" ;
-    };
-    String STR_CONTENT
-    {
-        Text [ en-US ] = "Changed contents" ;
-    };
-    String STR_CONTENT_WITH_CHILD
-    {
-        Text [ en-US ] = "Changed contents" ;
-    };
-    String STR_CHILD_CONTENT
-    {
-        Text [ en-US ] = "Changed to " ;
-    };
-    String STR_CHILD_ORGCONTENT
-    {
-        Text [ en-US ] = "Original" ;
-    };
-    String STR_REJECT
-    {
-        Text [ en-US ] = "Changes rejected" ;
-    };
-    String STR_ACCEPTED
-    {
-        Text [ en-US ] = "Accepted" ;
-    };
-    String STR_REJECTED
-    {
-        Text [ en-US ] = "Rejected" ;
-    };
-    String STR_NO_ENTRY
-    {
-        Text [ en-US ] = "No Entry" ;
-    };
-    String STR_EMPTY
-    {
-        Text [ en-US ] = "<empty>" ;
-    };
-    Bitmap BMP_STR_CLOSE
-    {
-        File = "dir-clos.png" ;
-    };
-    Bitmap BMP_STR_OPEN
-    {
-        File = "dir-open.png" ;
-    };
-    Bitmap BMP_STR_END
-    {
-        File = "basobj2.png" ;
-    };
-    Bitmap BMP_STR_ERROR
-    {
-        File = "basbrk.png" ;
-    };
-    Text [ en-US ] = "Accept or Reject Changes" ;
+    Text [ en-US ] = "Column inserted" ;
+};
+String STR_CHG_INSERT_ROWS
+{
+    Text [ en-US ] = "Row inserted " ;
+};
+String STR_CHG_INSERT_TABS
+{
+    Text [ en-US ] = "Sheet inserted " ;
+};
+String STR_CHG_DELETE_COLS
+{
+    Text [ en-US ] = "Column deleted" ;
+};
+String STR_CHG_DELETE_ROWS
+{
+    Text [ en-US ] = "Row deleted" ;
+};
+String STR_CHG_DELETE_TABS
+{
+    Text [ en-US ] = "Sheet deleted" ;
+};
+String STR_CHG_MOVE
+{
+    Text [ en-US ] = "Range moved" ;
+};
+String STR_CHG_CONTENT
+{
+    Text [ en-US ] = "Changed contents" ;
+};
+String STR_CHG_CONTENT_WITH_CHILD
+{
+    Text [ en-US ] = "Changed contents" ;
+};
+String STR_CHG_CHILD_CONTENT
+{
+    Text [ en-US ] = "Changed to " ;
+};
+String STR_CHG_CHILD_ORGCONTENT
+{
+    Text [ en-US ] = "Original" ;
+};
+String STR_CHG_REJECT
+{
+    Text [ en-US ] = "Changes rejected" ;
+};
+String STR_CHG_ACCEPTED
+{
+    Text [ en-US ] = "Accepted" ;
+};
+String STR_CHG_REJECTED
+{
+    Text [ en-US ] = "Rejected" ;
+};
+String STR_CHG_NO_ENTRY
+{
+    Text [ en-US ] = "No Entry" ;
+};
+String STR_CHG_EMPTY
+{
+    Text [ en-US ] = "<empty>" ;
 };
 
 Menu RID_POPUP_CHANGES

@@ -21,7 +21,6 @@
 #define TP_GENERAL          1
 #define TP_SAVE             2
 #define TP_PATH             3
-#define TP_VIEW             5
 #define TP_CALC             6
 #define TP_USERLISTS        7
 #define TP_PRINT            8

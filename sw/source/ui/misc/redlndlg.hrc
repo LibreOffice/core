@@ -15,7 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define CTRL_TABPAGES       1
 
 #define MN_EDIT_COMMENT     1
 #define MN_SUB_SORT         2
@@ -24,6 +23,3 @@
 #define MN_SORT_DATE        5
 #define MN_SORT_COMMENT     6
 #define MN_SORT_POSITION    7
-
-#define XBORDER     3
-#define YBORDER     3

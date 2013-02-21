@@ -84,15 +84,13 @@ sal_Bool SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
     return bRet;
 }
 
-SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg( SfxBindings* _pBindings,
-                                                        SwChildWinWrapper* pChild,
-                                                        Window *_pParent) :
-    SfxModelessDialog(_pBindings, pChild, _pParent, SW_RES(DLG_REDLINE_ACCEPT)),
-    pChildWin       (pChild)
+SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg(
+    SfxBindings* _pBindings, SwChildWinWrapper* pChild, Window *_pParent)
+    : SfxModelessDialog(_pBindings, pChild, _pParent,
+        "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui")
+    , pChildWin       (pChild)
 {
     pImplDlg = new SwRedlineAcceptDlg(this);
-
-    FreeResource();
 }
 
 void SwModelessRedlineAcceptDlg::Activate()
@@ -139,12 +137,6 @@ void SwModelessRedlineAcceptDlg::FillInfo(SfxChildWinInfo& rInfo) const
     pImplDlg->FillInfo(rInfo.aExtraString);
 }
 
-void SwModelessRedlineAcceptDlg::Resize()
-{
-    pImplDlg->Resize();
-    SfxModelessDialog::Resize();
-}
-
 SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
 {
     delete pImplDlg;
@@ -152,7 +144,7 @@ SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
 
 SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, sal_Bool bAutoFmt) :
     pParentDlg      (pParent),
-    aTabPagesCTRL   (pParent, SW_RES(CTRL_TABPAGES)),
+    aTabPagesCTRL   (pParent->get_content_area()),
     aPopup          (SW_RES(MN_REDLINE_POPUP)),
     sInserted       (SW_RES(STR_REDLINE_INSERTED)),
     sDeleted        (SW_RES(STR_REDLINE_DELETED)),
@@ -205,19 +197,6 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, sal_Bool bAutoFmt) :
     };
 
     pTable->SetTabs(aStaticTabs);
-
-    // set minimum size
-    Size aMinSz(aTabPagesCTRL.GetMinSizePixel());
-    Point aPos(aTabPagesCTRL.GetPosPixel());
-
-    aMinSz.Width() += (aPos.X() * 2 - 1);
-    aMinSz.Height() += (aPos.Y() * 2 - 1);
-    pParentDlg->SetMinOutputSizePixel(aMinSz);
-
-    if (pParentDlg->GetOutputSizePixel().Width() < aMinSz.Width())
-        pParentDlg->SetOutputSizePixel(Size(aMinSz.Width(), pParentDlg->GetOutputSizePixel().Height()));
-    if (pParentDlg->GetOutputSizePixel().Height() < aMinSz.Height())
-        pParentDlg->SetOutputSizePixel(Size(pParentDlg->GetOutputSizePixel().Width(), aMinSz.Height()));
 
     pTable->SortByCol(nSortMode, bSortDir);
 
@@ -360,18 +339,6 @@ const String &SwRedlineAcceptDlg::GetActionText(const SwRedline& rRedln, sal_uIn
     }
 
     return aEmptyStr;
-}
-
-void SwRedlineAcceptDlg::Resize()
-{
-    Size aSz(pParentDlg->GetOutputSizePixel());
-
-    Point aPos(aTabPagesCTRL.GetPosPixel());
-
-    aSz.Width() -= (aPos.X() * 2 - 1);
-    aSz.Height() -= (aPos.Y() * 2 - 1);
-
-    aTabPagesCTRL.SetOutputSizePixel(aSz);
 }
 
 /*--------------------------------------------------------------------

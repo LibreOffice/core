@@ -83,7 +83,6 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     String                  sFmtCollSet;
     String                  sFilterAction;
     String                  sAutoFormat;
-    Size                    aBorderSz;
     SvxTPView*              pTPView;
     SvxRedlinTable*         pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
     Link                    aOldSelectHdl;
@@ -131,15 +130,12 @@ public:
     void            FillInfo(String &rExtraData) const;
 
     virtual void    Activate();
-    virtual void    Resize();
 };
 
 class SwModelessRedlineAcceptDlg : public SfxModelessDialog
 {
     SwRedlineAcceptDlg*     pImplDlg;
     SwChildWinWrapper*      pChildWin;
-
-    virtual void    Resize();
 
 public:
     SwModelessRedlineAcceptDlg(SfxBindings*, SwChildWinWrapper*, Window *pParent);

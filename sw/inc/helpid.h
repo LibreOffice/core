@@ -138,7 +138,6 @@
 #define HID_FILEDLG_SRCVIEW                                     "SW_HID_FILEDLG_SRCVIEW"
 #define HID_FILEDLG_WIZDOKU                                     "SW_HID_FILEDLG_WIZDOKU"
 
-#define HID_REDLINE_AUTOFMT_ACCEPT                              "SW_HID_REDLINE_AUTOFMT_ACCEPT"
 #define HID_MULTI_TOX_DLG                                       "SW_HID_MULTI_TOX_DLG"
 #define HID_ASCII_FILTER                                        "SW_HID_ASCII_FILTER"
 #define HID_GLBLTREE_EDIT_LINK                                  "SW_HID_GLBLTREE_EDIT_LINK"
@@ -175,7 +174,6 @@
 #define HID_OPTSHDWCRSR                                         "SW_HID_OPTSHDWCRSR"
 #define HID_NUMPARA                                             "SW_HID_NUMPARA"
 #define HID_REDLINE_OPT                                         "SW_HID_REDLINE_OPT"
-#define HID_REDLINE_ACCEPT                                      "SW_HID_REDLINE_ACCEPT"
 #define HID_EDIT_FLD_DB                                         "SW_HID_EDIT_FLD_DB"
 #define HID_EDIT_FLD_DOKINF                                     "SW_HID_EDIT_FLD_DOKINF"
 #define HID_EDIT_FLD_VAR                                        "SW_HID_EDIT_FLD_VAR"

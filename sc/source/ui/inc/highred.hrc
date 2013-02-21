@@ -26,8 +26,6 @@
 #define CB_HIGHLIGHT_REJECT 7
 
 #define FL_FILTER           10
-#define TP_FILTER           11
-#define TP_VIEW             12
 #define CB_HIGHLIGHT        13
 
 #define FT_ASSIGN           14
@@ -43,9 +41,3 @@
 #define STR_MOVE        26
 #define STR_CONTENT     27
 #define STR_REJECT      28
-
-// Bitmaps
-#define BMP_STR_CLOSE       31
-#define BMP_STR_OPEN        32
-#define BMP_STR_END         33
-#define BMP_STR_ERROR       34

@@ -34,7 +34,6 @@
 #include <helpid.h>
 #include <cmdid.h>
 #include <misc.hrc>
-#include <redlndlg.hrc>
 #include <shells.hrc>
 
 #include <vector>
@@ -43,15 +42,14 @@
 
 #include <unomid.h>
 
-SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
-    SfxModalDialog(pParent, SW_RES(DLG_MOD_REDLINE_ACCEPT))
+SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent)
+    : SfxModalDialog(pParent,
+        "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui")
 {
     pImplDlg = new SwRedlineAcceptDlg(this, sal_True);
 
     pImplDlg->Initialize(GetExtraData());
     pImplDlg->Activate();   // for data's initialisation
-
-    FreeResource();
 }
 
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
@@ -64,12 +62,6 @@ SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 
 void SwModalRedlineAcceptDlg::Activate()
 {
-}
-
-void SwModalRedlineAcceptDlg::Resize()
-{
-    pImplDlg->Resize();
-    SfxModalDialog::Resize();
 }
 
 void SwModalRedlineAcceptDlg::AcceptAll( sal_Bool bAccept )

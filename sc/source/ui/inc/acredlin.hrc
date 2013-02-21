@@ -22,37 +22,6 @@
 #define BTN_CANCEL      2
 #define BTN_HELP        5
 
-#define CTR_REDLINING   10
-#define TP_FILTER       11
-#define TP_VIEW         12
-
-#define FT_ASSIGN       14
-#define ED_ASSIGN       15
-#define RB_ASSIGN       16
-
-#define STR_INSERT_COLS  20
-#define STR_INSERT_ROWS 21
-#define STR_INSERT_TABS 22
-#define STR_DELETE_COLS 23
-#define STR_DELETE_ROWS 24
-#define STR_DELETE_TABS 25
-#define STR_MOVE        26
-#define STR_CONTENT     27
-#define STR_REJECT      28
-#define STR_ACCEPTED    29
-#define STR_REJECTED    30
-#define STR_NO_ENTRY    31
-#define STR_CONTENT_WITH_CHILD  32
-#define STR_CHILD_CONTENT       33
-#define STR_CHILD_ORGCONTENT    34
-#define STR_EMPTY               35
-
-// Bitmaps
-#define BMP_STR_CLOSE       41
-#define BMP_STR_OPEN        42
-#define BMP_STR_END         43
-#define BMP_STR_ERROR       44
-
 #define SC_CHANGES_COMMENT  49
 #define SC_SUB_SORT         50
 #define SC_SORT_ACTION      51

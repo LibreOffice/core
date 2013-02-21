@@ -27,8 +27,6 @@ class SwModalRedlineAcceptDlg : public SfxModalDialog
 {
     SwRedlineAcceptDlg*     pImplDlg;
 
-    virtual void    Resize();
-
 public:
     SwModalRedlineAcceptDlg(Window *pParent);
     ~SwModalRedlineAcceptDlg();

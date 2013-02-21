@@ -99,7 +99,7 @@ private:
 
     Timer                   aSelectionTimer;
     Timer                   aReOpenTimer;
-    SvxAcceptChgCtr         aAcceptChgCtr;
+    SvxAcceptChgCtr*        m_pAcceptChgCtr;
     ScViewData*             pViewData;
     ScDocument*             pDoc;
     ScRangeName             aLocalRangeName;
@@ -107,7 +107,6 @@ private:
     SvxTPFilter*            pTPFilter;
     SvxTPView*              pTPView;
     SvxRedlinTable*         pTheView; // #i48648 now SvHeaderTabListBox
-    Size                    MinSize;
     ScRangeList             aRangeList;
     ScChangeViewSettings    aChangeViewSet;
     rtl::OUString           aStrInsertCols;
@@ -143,7 +142,6 @@ private:
     DECL_LINK( FilterHandle, SvxTPFilter* );
     DECL_LINK( RefHandle, void* );
     DECL_LINK( FilterModified, void* );
-    DECL_LINK( MinSizeHandle, SvxAcceptChgCtr*);
     DECL_LINK( RejectHandle, SvxTPView*);
     DECL_LINK( AcceptHandle, SvxTPView*);
     DECL_LINK( RejectAllHandle, void*);

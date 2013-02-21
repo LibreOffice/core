@@ -21,39 +21,6 @@
 #include "misc.hrc"
 #include "helpid.h"
 
-#define WIDTH 297
-#define HEIGHT 169
-
-#define REDLNDLG \
-    OutputSize = TRUE ; \
-    SVLook = TRUE ; \
-    Size = MAP_APPFONT ( WIDTH , HEIGHT ) ; \
-    Moveable = TRUE ; \
-    Closeable = TRUE ; \
-    Sizeable = TRUE ; \
-    Hide = TRUE ; \
-    Control CTRL_TABPAGES\
-    {\
-        Pos = MAP_APPFONT ( XBORDER , YBORDER ) ; \
-        Size = MAP_APPFONT ( WIDTH - XBORDER * 2 , HEIGHT - YBORDER * 2 ) ; \
-        HelpID = HID_REDLINE_CTRL ; \
-        TabStop = TRUE ; \
-    };
-
-ModelessDialog DLG_REDLINE_ACCEPT
-{
-    HelpID = HID_REDLINE_ACCEPT ;
-    Text [ en-US ] = "Accept or Reject Changes" ;
-    REDLNDLG
-};
-
-ModalDialog DLG_MOD_REDLINE_ACCEPT
-{
-    HelpID = HID_REDLINE_AUTOFMT_ACCEPT ;
-    REDLNDLG
-    Text [ en-US ] = "Accept or Reject AutoCorrect Changes";
-};
-
 Menu MN_REDLINE_POPUP
 {
     ItemList =

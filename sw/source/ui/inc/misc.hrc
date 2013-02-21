@@ -26,11 +26,8 @@
 #define DLG_NUM_NAMES               (RC_MISC_BEGIN + 18)
 #define DLG_SORTING                 (RC_MISC_BEGIN + 19)
 #define DLG_RENAME_GLOS             (RC_MISC_BEGIN + 25)
-#define DLG_REDLINE_ACCEPT          (RC_MISC_BEGIN + 29)
 
 #define DLG_TAB_OUTLINE             (RC_MISC_BEGIN + 31)
-#define DLG_MOD_REDLINE_ACCEPT      (RC_MISC_BEGIN + 32)
-
 
 #define MSG_DOUBLE_SHORTNAME        (RC_MISC_BEGIN + 30)
 #define MSG_QUERY_DELETE            (RC_MISC_BEGIN + 31)

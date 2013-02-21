@@ -488,7 +488,7 @@ public:
     virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg( Window* pParent, //add for SwRenameXNamedDlg
                                                                 ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
                                                                 ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess, int nResId );
-    virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg ( Window *pParent, int nResId ); //add for SwModalRedlineAcceptDlg
+    virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(Window *pParent); //add for SwModalRedlineAcceptDlg
 
     virtual VclAbstractDialog*          CreateSwVclDialog( int nResId,
                                                 Window* pParent, sal_Bool& rWithPrev ); //add for SwMergeTblDlg

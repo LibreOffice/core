@@ -1035,21 +1035,10 @@ AbstractSwRenameXNamedDlg * SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDl
     return 0;
 }
 
-AbstractSwModalRedlineAcceptDlg * SwAbstractDialogFactory_Impl::CreateSwModalRedlineAcceptDlg ( Window *pParent, int nResId )
+AbstractSwModalRedlineAcceptDlg * SwAbstractDialogFactory_Impl::CreateSwModalRedlineAcceptDlg(Window *pParent)
 {
-    SwModalRedlineAcceptDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_MOD_REDLINE_ACCEPT :
-            pDlg = new SwModalRedlineAcceptDlg( pParent );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwModalRedlineAcceptDlg_Impl( pDlg );
-    return 0;
+    SwModalRedlineAcceptDlg* pDlg = new SwModalRedlineAcceptDlg( pParent );
+    return new AbstractSwModalRedlineAcceptDlg_Impl( pDlg );
 }
 
 VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwVclDialog( int nResId,

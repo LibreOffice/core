@@ -93,30 +93,29 @@ ScRedlinData::~ScRedlinData()
 //============================================================================
 //  class ScAcceptChgDlg
 //----------------------------------------------------------------------------
-ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                      ScViewData*       ptrViewData)
-
-    :   SfxModelessDialog( pB, pCW, pParent, ScResId(RID_SCDLG_CHANGES) ),
-        aAcceptChgCtr           ( this, ScResId( CTR_REDLINING ) ),
+ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+    ScViewData* ptrViewData)
+    : SfxModelessDialog(pB, pCW, pParent,
+        "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui"),
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
         aLocalRangeName ( *(pDoc->GetRangeName()) ),
-        aStrInsertCols       (SC_RESSTR(STR_INSERT_COLS)),
-        aStrInsertRows       (SC_RESSTR(STR_INSERT_ROWS)),
-        aStrInsertTabs       (SC_RESSTR(STR_INSERT_TABS)),
-        aStrDeleteCols       (SC_RESSTR(STR_DELETE_COLS)),
-        aStrDeleteRows       (SC_RESSTR(STR_DELETE_ROWS)),
-        aStrDeleteTabs       (SC_RESSTR(STR_DELETE_TABS)),
-        aStrMove             (SC_RESSTR(STR_MOVE)),
-        aStrContent          (SC_RESSTR(STR_CONTENT)),
-        aStrReject           (SC_RESSTR(STR_REJECT)),
-        aStrAllAccepted      (SC_RESSTR(STR_ACCEPTED)),
-        aStrAllRejected      (SC_RESSTR(STR_REJECTED)),
-        aStrNoEntry          (SC_RESSTR(STR_NO_ENTRY)),
-        aStrContentWithChild (SC_RESSTR(STR_CONTENT_WITH_CHILD)),
-        aStrChildContent     (SC_RESSTR(STR_CHILD_CONTENT)),
-        aStrChildOrgContent  (SC_RESSTR(STR_CHILD_ORGCONTENT)),
-        aStrEmpty            (SC_RESSTR(STR_EMPTY)),
+        aStrInsertCols       (SC_RESSTR(STR_CHG_INSERT_COLS)),
+        aStrInsertRows       (SC_RESSTR(STR_CHG_INSERT_ROWS)),
+        aStrInsertTabs       (SC_RESSTR(STR_CHG_INSERT_TABS)),
+        aStrDeleteCols       (SC_RESSTR(STR_CHG_DELETE_COLS)),
+        aStrDeleteRows       (SC_RESSTR(STR_CHG_DELETE_ROWS)),
+        aStrDeleteTabs       (SC_RESSTR(STR_CHG_DELETE_TABS)),
+        aStrMove             (SC_RESSTR(STR_CHG_MOVE)),
+        aStrContent          (SC_RESSTR(STR_CHG_CONTENT)),
+        aStrReject           (SC_RESSTR(STR_CHG_REJECT)),
+        aStrAllAccepted      (SC_RESSTR(STR_CHG_ACCEPTED)),
+        aStrAllRejected      (SC_RESSTR(STR_CHG_REJECTED)),
+        aStrNoEntry          (SC_RESSTR(STR_CHG_NO_ENTRY)),
+        aStrContentWithChild (SC_RESSTR(STR_CHG_CONTENT_WITH_CHILD)),
+        aStrChildContent     (SC_RESSTR(STR_CHG_CHILD_CONTENT)),
+        aStrChildOrgContent  (SC_RESSTR(STR_CHG_CHILD_ORGCONTENT)),
+        aStrEmpty            (SC_RESSTR(STR_CHG_EMPTY)),
         aUnknown(RTL_CONSTASCII_USTRINGPARAM("Unknown")),
         bAcceptEnableFlag(true),
         bRejectEnableFlag(true),
@@ -126,21 +125,14 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         bHasFilterEntry(false),
         bUseColor(false)
 {
-    FreeResource();
+    m_pAcceptChgCtr = new SvxAcceptChgCtr(get_content_area());
     nAcceptCount=0;
     nRejectCount=0;
     aReOpenTimer.SetTimeout(50);
     aReOpenTimer.SetTimeoutHdl(LINK( this, ScAcceptChgDlg, ReOpenTimerHdl ));
 
-    //  dialog is now only hidden, not deleted, on switching views,
-    //  so there's no need to restore settings when reopening
-    MinSize=aAcceptChgCtr.GetMinSizePixel();
-    MinSize.Height()+=2;
-    MinSize.Width()+=2;
-    SetMinOutputSizePixel(MinSize);
-
-    pTPFilter=aAcceptChgCtr.GetFilterPage();
-    pTPView=aAcceptChgCtr.GetViewPage();
+    pTPFilter=m_pAcceptChgCtr->GetFilterPage();
+    pTPView=m_pAcceptChgCtr->GetViewPage();
     pTheView=pTPView->GetTableControl();
     aSelectionTimer.SetTimeout(100);
     aSelectionTimer.SetTimeoutHdl(LINK( this, ScAcceptChgDlg, UpdateSelectionHdl ));
@@ -166,8 +158,6 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
 
     Init();
 
-    aAcceptChgCtr.SetMinSizeHdl( LINK( this, ScAcceptChgDlg, MinSizeHandle ));
-
     UpdateView();
     SvTreeListEntry* pEntry=pTheView->First();
     if(pEntry!=NULL)
@@ -175,6 +165,7 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         pTheView->Select(pEntry);
     }
 }
+
 ScAcceptChgDlg::~ScAcceptChgDlg()
 {
     ClearView();
@@ -185,6 +176,8 @@ ScAcceptChgDlg::~ScAcceptChgDlg()
         Link aLink;
         pChanges->SetModifiedLink(aLink);
     }
+
+    delete m_pAcceptChgCtr;
 }
 
 void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
@@ -277,12 +270,8 @@ void ScAcceptChgDlg::Init()
         pTPFilter->SetRange(aRefStr);
     }
 
-    Point aPoint(1,1);
-    aAcceptChgCtr.SetPosPixel(aPoint);
     InitFilter();
 }
-
-
 
 void ScAcceptChgDlg::ClearView()
 {
@@ -896,15 +885,7 @@ void ScAcceptChgDlg::Resize()
 {
     SfxModelessDialog::Resize();
     Size aOutSize=GetOutputSizePixel();
-    aAcceptChgCtr.SetSizePixel(aOutSize);
-}
-
-IMPL_LINK( ScAcceptChgDlg, MinSizeHandle, SvxAcceptChgCtr*, pCtr )
-{
-    if(pCtr==&aAcceptChgCtr)
-        if(!IsRollUp())
-            SetOutputSizePixel(MinSize);
-    return 0;
+    m_pAcceptChgCtr->SetSizePixel(aOutSize);
 }
 
 IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle)
@@ -1686,7 +1667,7 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
 IMPL_LINK_NOARG(ScAcceptChgDlg, ReOpenTimerHdl)
 {
     ScSimpleRefDlgWrapper::SetAutoReOpen(true);
-    aAcceptChgCtr.ShowFilterPage();
+    m_pAcceptChgCtr->ShowFilterPage();
     RefHandle(NULL);
 
     return 0;

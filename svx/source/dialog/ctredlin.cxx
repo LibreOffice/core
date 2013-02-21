@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/shl.hxx>
@@ -486,17 +487,18 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 //  class SvxTPView
 //----------------------------------------------------------------------------
 
-SvxTPView::SvxTPView( Window * pParent)
+SvxTPView::SvxTPView(Window * pParent)
     : TabPage(pParent, "RedlineViewPage", "svx/ui/redlineviewpage.ui")
 {
-    get(m_pAccept, "accept");
-    get(m_pReject, "reject");
-    get(m_pAcceptAll, "acceptall");
-    get(m_pRejectAll, "rejectall");
-    get(m_pUndo, "undo");
+    Dialog *pTopLevel = GetParentDialog();
+    pTopLevel->get(m_pAccept, "accept");
+    pTopLevel->get(m_pReject, "reject");
+    pTopLevel->get(m_pAcceptAll, "acceptall");
+    pTopLevel->get(m_pRejectAll, "rejectall");
+    pTopLevel->get(m_pUndo, "undo");
 
     SvxSimpleTableContainer* pTable = get<SvxSimpleTableContainer>("changes");
-    Size aControlSize(221, 130);
+    Size aControlSize(221, 65);
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pTable->set_width_request(aControlSize.Width());
     pTable->set_height_request(aControlSize.Height());
@@ -511,6 +513,26 @@ SvxTPView::SvxTPView( Window * pParent)
     m_pUndo->SetClickHdl(aLink);
 
     m_pViewData->SetTabs(nStaticTabs);
+}
+
+void SvxTPView::ActivatePage()
+{
+    m_pAccept->Enable();
+    m_pReject->Enable();
+    m_pAcceptAll->Enable();
+    m_pRejectAll->Enable();
+    m_pUndo->Enable();
+    TabPage::ActivatePage();
+}
+
+void SvxTPView::DeactivatePage()
+{
+    TabPage::DeactivatePage();
+    m_pAccept->Disable();
+    m_pReject->Disable();
+    m_pAcceptAll->Disable();
+    m_pRejectAll->Disable();
+    m_pUndo->Disable();
 }
 
 SvxTPView::~SvxTPView()
@@ -1153,40 +1175,28 @@ IMPL_LINK( SvxTPFilter, RefHandle, PushButton*, pRef )
     return 0;
 }
 
-static Size gDiffSize;
 //============================================================================
 //  class SvxAcceptChgCtr
 //----------------------------------------------------------------------------
 
-SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, const ResId& rResId )
-        :   Control(pParent,rResId ),
-            aTCAccept(this,WB_TABSTOP |WB_DIALOGCONTROL)
+SvxAcceptChgCtr::SvxAcceptChgCtr(Window* pParent)
+    : TabControl(pParent, WB_TABSTOP | WB_DIALOGCONTROL)
 {
-    pTPFilter=new SvxTPFilter(&aTCAccept);
-    pTPView=new SvxTPView(&aTCAccept);
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "svx/ui/redlinecontrol.ui", "RedlineControl");
 
-    aMinSize = VclContainer::getLayoutRequisition(*pTPView);
+    pTPFilter = new SvxTPFilter(this);
+    pTPView = new SvxTPView(this);
 
-    aTCAccept.InsertPage( TP_VIEW,   SVX_RESSTR(RID_SVXSTR_VIEW));
-    aTCAccept.InsertPage( TP_FILTER, SVX_RESSTR(RID_SVXSTR_FILTER));
-    aTCAccept.SetTabPage( TP_VIEW,   pTPView);
-    aTCAccept.SetTabPage( TP_FILTER, pTPFilter);
-    aTCAccept.SetHelpId(HID_REDLINING_TABCONTROL);
-
-    aTCAccept.SetTabPageSizePixel(aMinSize);
-    Size aSize=aTCAccept.GetSizePixel();
-
-    gDiffSize.Height()=aSize.Height()-aMinSize.Height();
-    gDiffSize.Width()=aSize.Width()-aMinSize.Width();
-
+    m_nViewPageId = GetPageId("view");
+    m_nFilterPageId = GetPageId("filter");
+    SetTabPage(m_nViewPageId, pTPView);
+    SetTabPage(m_nFilterPageId, pTPFilter);
 
     pTPFilter->SetRedlinTable(GetViewTable());
-    WinBits nWinStyle=GetStyle()|WB_DIALOGCONTROL;
-    SetStyle(nWinStyle);
 
-    aTCAccept.Show();
     ShowViewPage();
-    Resize();
+
+    Show();
 }
 
 SvxAcceptChgCtr::~SvxAcceptChgCtr()
@@ -1195,50 +1205,14 @@ SvxAcceptChgCtr::~SvxAcceptChgCtr()
     delete pTPFilter;
 }
 
-void SvxAcceptChgCtr::Resize()
-{
-    aMinSize = VclContainer::getLayoutRequisition(*pTPView);
-    Size aSize=GetOutputSizePixel();
-    sal_Bool bFlag=sal_False;
-
-    if(aMinSize.Height()>aSize.Height())
-    {
-        aSize.Height()=aMinSize.Height();
-        bFlag=sal_True;
-    }
-    if(aMinSize.Width()>aSize.Width())
-    {
-        aSize.Width()=aMinSize.Width();
-        bFlag=sal_True;
-    }
-
-    if(bFlag)
-    {
-        SetOutputSizePixel(aSize);
-        aMinSizeLink.Call(this);
-    }
-
-    aSize.Height()-=2;
-    aSize.Width()-=2;
-    aTCAccept.SetSizePixel(aSize);
-}
-
-Size SvxAcceptChgCtr::GetMinSizePixel() const
-{
-    Size aSize = VclContainer::getLayoutRequisition(*pTPView);
-    aSize.Height()+=gDiffSize.Height();
-    aSize.Width()+=gDiffSize.Width();
-    return aSize;
-}
-
 void SvxAcceptChgCtr::ShowFilterPage()
 {
-    aTCAccept.SetCurPageId(TP_FILTER);
+    SetCurPageId(m_nFilterPageId);
 }
 
 void SvxAcceptChgCtr::ShowViewPage()
 {
-    aTCAccept.SetCurPageId(TP_VIEW);
+    SetCurPageId(m_nViewPageId);
 }
 
 SvxTPFilter* SvxAcceptChgCtr::GetFilterPage()
@@ -1253,15 +1227,7 @@ SvxTPView* SvxAcceptChgCtr::GetViewPage()
 
 SvxRedlinTable* SvxAcceptChgCtr::GetViewTable()
 {
-    if(pTPView!=NULL)
-    {
-        return pTPView->GetTableControl();
-    }
-    else
-    {
-        return NULL;
-    }
+    return pTPView ? pTPView->GetTableControl() : NULL;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

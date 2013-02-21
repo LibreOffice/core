@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkNotebook" id="notebook1">
+  <object class="GtkNotebook" id="RedlineControl">
     <property name="visible">True</property>
     <property name="can_focus">True</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <child>
       <placeholder/>
     </child>
     <child type="tab">
-      <object class="GtkLabel" id="label1">
+      <object class="GtkLabel" id="view">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">List</property>
@@ -21,7 +23,7 @@
       <placeholder/>
     </child>
     <child type="tab">
-      <object class="GtkLabel" id="label2">
+      <object class="GtkLabel" id="filter">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Filter</property>
