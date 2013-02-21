@@ -218,7 +218,7 @@ void Calendar::ImplInit( WinBits nWinStyle )
 
     // Tagestexte anlegen
     for (sal_Int32 i = 0; i < 31; ++i)
-        mpDayText[i] = new String(OUString::valueOf(i+1));
+        maDayTexts[i] = OUString::valueOf(i+1);
 
     maDragScrollTimer.SetTimeoutHdl( STATIC_LINK( this, Calendar, ScrollHdl ) );
     maDragScrollTimer.SetTimeout( GetSettings().GetMouseSettings().GetScrollRepeat() );
@@ -264,13 +264,8 @@ Calendar::~Calendar()
     delete mpSundayColor;
 
     delete mpSelectTable;
-    if ( mpOldSelectTable )
-        delete mpOldSelectTable;
-    if ( mpRestoreSelectTable )
-        delete mpRestoreSelectTable;
-
-    for ( sal_uInt16 i = 0; i < 31; i++ )
-        delete mpDayText[i];
+    delete mpOldSelectTable;
+    delete mpRestoreSelectTable;
 }
 
 // -----------------------------------------------------------------------
@@ -715,7 +710,7 @@ void Calendar::ImplDrawDate( long nX, long nY,
                              sal_Bool bBack, sal_Bool bOther, sal_uLong nToday )
 {
     Color*          pTextColor = NULL;
-    const String&   rDay = *(mpDayText[nDay-1]);
+    const OUString& rDay = maDayTexts[nDay-1];
     Rectangle       aDateRect( nX, nY, nX+mnDayWidth-1, nY+mnDayHeight-1 );
 
     sal_Bool bSel = sal_False;

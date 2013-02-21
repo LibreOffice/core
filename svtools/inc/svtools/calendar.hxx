@@ -162,9 +162,9 @@ private:
     IntDateSet*     mpSelectTable;
     IntDateSet*     mpOldSelectTable;
     IntDateSet*     mpRestoreSelectTable;
-    XubString*      mpDayText[31];
-    XubString       maDayText;
-    XubString       maWeekText;
+    OUString        maDayTexts[31];
+    OUString        maDayText;
+    OUString        maWeekText;
     CalendarWrapper maCalendarWrapper;
     Rectangle       maPrevRect;
     Rectangle       maNextRect;
