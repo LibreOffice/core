@@ -1,15 +1,2 @@
 od      odk     ::      cppuhelper jurt javaunohelper udkapi ridljar offapi autodoc DESKTOP:unodevtools external NULL
-od	odk					usr1	-	all	od_mkout NULL
-od	odk\inc				nmake	-	all	od_inc NULL
-od	odk\source\com\sun\star\lib\loader	nmake	-	all	od_loader od_inc NULL
-od	odk\source\unoapploader\win	nmake	-	n	od_unoapploaderwin od_inc NULL
-od	odk\source\unoapploader\unx	nmake	-	u	od_unoapploaderunx od_inc NULL
-od	odk\source\unowinreg\win	nmake	-	all	od_unowinreg od_inc NULL
-od	odk\pack\unzip_udk			nmake	-	all	od_unzip_udk NULL
-od	odk\pack\copying			nmake	-	all	od_copying od_unzip_udk od_loader od_unoapploaderwin.n od_unoapploaderunx.u od_unowinreg NULL
-od	odk\pack\checkinc			nmake	-	all	od_checkinc od_copying NULL
-od	odk\pack\checkinc2			nmake	-	all	od_checkinc2 od_copying NULL
-od	odk\pack\checkidl			nmake	-	all	od_checkidl od_copying NULL
-od	odk\pack\gendocu			nmake	-	all	od_gendocu od_copying NULL
-od	odk\pack\checkbin			nmake	-	all	od_checkbin od_copying od_gendocu NULL
-od	odk\util				nmake	-	all	od_util od_checkbin od_checkinc od_checkinc2 od_checkidl NULL
+od	odk\prj				nmake	-	all	od_util  NULL
