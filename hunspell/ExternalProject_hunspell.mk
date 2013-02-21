@@ -16,13 +16,13 @@ $(eval $(call gb_ExternalProject_register_targets,hunspell,\
 ))
 
 $(call gb_ExternalProject_get_state_target,hunspell,build):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& LIBS="$(gb_STDLIBS) $(LIBS)" ./configure --disable-shared --disable-nls --with-pic \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
 	$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
 	$(if $(filter C53,$(COM)),CFLAGS="-xc99=none") \
 	$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 # vim: set noet sw=4 ts=4:

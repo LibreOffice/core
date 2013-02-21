@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,jfreereport_sac,\
 ))
 
 $(call gb_ExternalProject_get_state_target,jfreereport_sac,build) :
-	cd "$(call gb_UnpackedTarball_get_dir,jfreereport_sac)" && \
+	$(call gb_Helper_print_on_error,cd "$(call gb_UnpackedTarball_get_dir,jfreereport_sac)" && \
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
@@ -28,6 +28,6 @@ $(call gb_ExternalProject_get_state_target,jfreereport_sac,build) :
 		) \
 		-Dantcontrib.available="true" \
 		$(if $(debug),-Dbuild.debug="on") all && \
-	touch $@
+	touch $@,$(call gb_UnpackedTarball_get_dir,jfreereport_sac)/build.log)
 
 # vim: set noet sw=4 ts=4:

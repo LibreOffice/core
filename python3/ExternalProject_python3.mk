@@ -28,23 +28,23 @@ ifeq ($(OS)$(COM),WNTMSC)
 # nmake is invoked
 $(call gb_ExternalProject_get_state_target,python3,build) :
 ifeq ($(VCVER),110)
-	cd $(EXTERNAL_WORKDIR)/PCbuild \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/PCbuild \
 	&& MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 \
 	&& cd $(EXTERNAL_WORKDIR) \
 	&& ln -s PCbuild LO_lib \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else ifeq ($(VCVER),100)
-	cd $(EXTERNAL_WORKDIR)/PCbuild \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/PCbuild \
 	&& MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /ToolsVersion:4.0 \
 	&& cd $(EXTERNAL_WORKDIR) \
 	&& ln -s PCbuild LO_lib \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else ifeq ($(VCVER),90)
-	cd $(EXTERNAL_WORKDIR)/PC/VS9.0 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/PC/VS9.0 \
 	&& MAKEFLAGS= $(COMPATH)/vcpackages/vcbuild.exe pcbuild.sln "Release|$(if $(filter INTEL,$(CPUNAME)),Win32,x64)" \
 	&& cd $(EXTERNAL_WORKDIR) \
 	&& ln -s PC/VS9.0 LO_lib \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 
 else
@@ -65,7 +65,7 @@ ifeq ($(OS),AIX)
 endif
 
 $(call gb_ExternalProject_get_state_target,python3,build) :
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& ./configure \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		--with-system-expat \
@@ -92,7 +92,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			)" \
 	&& MAKEFLAGS=$(if $(VERBOSE)$(verbose),,s) $(MAKE) $(if $(filter MACOSX,$(OS)), DESTDIR=$(EXTERNAL_WORKDIR)/python-inst install) \
 	&& ln -s build/lib.* LO_lib \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 endif
 

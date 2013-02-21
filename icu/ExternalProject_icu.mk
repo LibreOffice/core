@@ -23,14 +23,14 @@ ifeq ($(OS),WNT)
 
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,icu,build) :
-	cd $(EXTERNAL_WORKDIR)/source \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/source \
 	&& export LIB="$(ILIB)" \
 	&& CFLAGS="$(SOLARINC)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="$(SOLARINC)" ./runConfigureICU Cygwin/MSVC \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else
 $(call gb_ExternalProject_get_state_target,icu,build) :
-	cd $(EXTERNAL_WORKDIR)/source \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/source \
 	&& CPPFLAGS=$(icu_CPPFLAGS) CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" \
 	LIBS="$(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED_LIBSTDCPP))" \
 	LDFLAGS="-L$(COMPATH)/lib -Wl,--enable-runtime-pseudo-reloc-v2 \
@@ -43,7 +43,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 	&& for lib in icudata icuin icuuc icule icutu; do \
 	@touch $$lib; \
 	done \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 
 else # $(OS)
@@ -64,7 +64,7 @@ icu_LDFLAGS:="$(if $(filter TRUE,$(HAVE_LD_HASH_STYLE)),-Wl$(COMMA)--hash-style=
 	    $(if $(filter ANDROID,$(OS)),-lgnustl_shared -lm)"
 
 $(call gb_ExternalProject_get_state_target,icu,build) :
-	cd $(EXTERNAL_WORKDIR)/source \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/source \
 	&& CPPFLAGS=$(icu_CPPFLAGS) CFLAGS=$(icu_CFLAGS) \
 	CXXFLAGS=$(icu_CXXFLAGS) LDFLAGS=$(icu_LDFLAGS) \
 	./configure \
@@ -78,7 +78,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
 			--with-cross-build=$(subst $(INPATH),$(INPATH_FOR_BUILD),$(call gb_UnpackedTarball_get_dir,icu))/source)\
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 endif
 

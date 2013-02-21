@@ -18,27 +18,27 @@ $(eval $(call gb_ExternalProject_register_targets,pixman,\
 ifeq ($(OS)$(COM),WNTMSC)
 
 $(call gb_ExternalProject_get_state_target,pixman,build) :
-	cd $(EXTERNAL_WORKDIR)/pixman \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/pixman \
 	&& $(MAKE) -f Makefile.win32 MMX=on SSE2=on CFG=release \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 else
 
 # ANDROID:
-# The pixman-cpu.c code wants to read /proc/<pid>/auxv, but 
+# The pixman-cpu.c code wants to read /proc/<pid>/auxv, but
 # the Android headers don't define Elf32_auxv_t.
 #
 # Maybe we should instead just patch the arm_has_* booleans in
 # pixman-cpu.c to be hardcoded as TRUE and patch out the run-time
 # check?
 $(call gb_ExternalProject_get_state_target,pixman,build) :
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& ./configure \
 		$(if $(filter MACOSX IOS,$(OS)),--disable-shared,--disable-static) \
 		$(if $(filter ANDROID,$(OS)),--disable-arm-simd --disable-arm-neon --disable-arm-iwmmxt) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 endif
 

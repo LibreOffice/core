@@ -22,14 +22,14 @@ $(eval $(call gb_ExternalProject_register_targets,postgresql,\
 ifeq ($(OS)$(COM),WNTMSC)
 
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
-	cd $(EXTERNAL_WORKDIR)/src \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/src \
 	&& MAKEFLAGS= && nmake -f win32.mak USE_SSL=1 USE_LDAP=1 \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 else
 
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& ./configure \
 		--without-readline --disable-shared --with-openssl --with-ldap \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
@@ -45,7 +45,7 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 		) \
 	&& cd src/interfaces/libpq \
 	&& MAKEFLAGS= && $(MAKE) all-static-lib libpq-flags.mk \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 endif
 

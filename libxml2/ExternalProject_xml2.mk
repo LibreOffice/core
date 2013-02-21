@@ -18,7 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,xml2,\
 ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 $(call gb_ExternalProject_get_state_target,xml2,build):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& ./configure --disable-ipv6 --without-python --without-zlib \
 	--disable-static --without-debug lt_cv_cc_dll_switch="-shared" \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
@@ -27,18 +27,18 @@ $(call gb_ExternalProject_get_state_target,xml2,build):
 	LDFLAGS="-Wl,--no-undefined -Wl,--enable-runtime-pseudo-reloc-v2" \
 	OBJDUMP=objdump \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else # COM=MSC
 $(call gb_ExternalProject_get_state_target,xml2,build):
-	cd $(EXTERNAL_WORKDIR)/win32 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/win32 \
 	&& cscript configure.js iconv=no sax1=yes \
 	&& unset MAKEFLAGS \
 	&& LIB="$(ILIB)" nmake \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,xml2,build):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& ./configure --disable-ipv6 --without-python --without-zlib --with-sax1 \
 	$(if $(debug),--with-run-debug) \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
@@ -47,7 +47,7 @@ $(call gb_ExternalProject_get_state_target,xml2,build):
 	CFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(if $(debug),-g)" \
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 
 # vim: set noet sw=4 ts=4:

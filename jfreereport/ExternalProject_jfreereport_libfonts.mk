@@ -19,7 +19,7 @@ $(eval $(call gb_ExternalProject_register_targets,jfreereport_libfonts,\
 ))
 
 $(call gb_ExternalProject_get_state_target,jfreereport_libfonts,build) :
-	cd "$(call gb_UnpackedTarball_get_dir,jfreereport_libfonts)" && \
+	$(call gb_Helper_print_on_error,cd "$(call gb_UnpackedTarball_get_dir,jfreereport_libfonts)" && \
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
@@ -33,6 +33,6 @@ $(call gb_ExternalProject_get_state_target,jfreereport_libfonts,build) :
 		-Dbuild.id="10682" \
 		-Dproject.revision="$(LIBFONTS_VERSION)" \
 		$(if $(debug),-Dbuild.debug="on") jar && \
-	touch $@
+	touch $@,$(call gb_UnpackedTarball_get_dir,jfreereport_libfonts)/build.log)
 
 # vim: set noet sw=4 ts=4:

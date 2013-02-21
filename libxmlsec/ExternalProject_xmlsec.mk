@@ -21,7 +21,7 @@ ifeq ($(OS),WNT)
 
 ifeq ($(COM),GCC)
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& autoreconf \
 	&& ./configure --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 	--without-libxslt --without-openssl --without-gnutls --disable-crypto-dl \
@@ -30,22 +30,22 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	LDFLAGS="-Wl,--no-undefined $(ILIB:;= -L)" \
 	LIBS="$(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED__LIBSTDCPP))" \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 else
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
-	cd $(EXTERNAL_WORKDIR)/win32 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/win32 \
 	&& cscript configure.js crypto=mscrypto xslt=no iconv=no static=no \
 	$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
 	&& unset MAKEFLAGS \
 	&& LIB="$(ILIB)" nmake \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 
 else
 
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& $(if $(filter MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") autoreconf \
 	&& ./configure \
 		--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls \
@@ -57,7 +57,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	LDFLAGS="-L$(SYSBASE)/usr/lib $(if $(filter-out LINUX FREEBSD,$(OS)),,-Wl,-z,origin -Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib')",\
 	$(if $(filter-out MACOSX,$(OS)),,LDFLAGS="-Wl,-dylib_file,@executable_path/libnssutil3.dylib:$(OUTDIR)/lib/libnssutil3.dylib")) \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 endif
 

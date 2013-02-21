@@ -26,40 +26,40 @@ ifeq ($(OS)$(COM),WNTMSC)
 
 ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& $(COMPATH)/vcpackages/vcbuild.exe libvisio.vcproj "Release|Win32" \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else ifeq ($(VCVER),100)
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& msbuild.exe libvisio.vcxproj /p:Configuration=Release \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
-	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& msbuild.exe libvisio.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 
 else
 
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& PKG_CONFIG="" \
 	./configure \
 		--with-pic \
@@ -72,7 +72,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 		$(if $(filter NO,$(SYSTEM_LIBXML)),-I$(call gb_UnpackedTarball_get_dir,xml2)/include)" \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 
 endif
 

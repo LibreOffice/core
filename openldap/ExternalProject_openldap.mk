@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,openldap,\
 ))
 
 $(call gb_ExternalProject_get_state_target,openldap,build) :
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& ./configure \
 		--disable-slapd \
 		--with-pic \
@@ -37,6 +37,7 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 			LDFLAGS="-L$(OUTDIR)/lib" \
 		) \
 	&& MAKEFLAGS= && $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
+
 
 # vim: set noet sw=4 ts=4:

@@ -19,7 +19,7 @@ $(eval $(call gb_ExternalProject_register_targets,raptor,\
 
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,raptor,build):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 	LDFLAGS="-Wl,--no-undefined -Wl,--enable-runtime-pseudo-reloc-v2 -Wl,--export-all-symbols $(subst ;, -L,$(ILIB))" \
 	LIBXML2LIB="$(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_LIBS),-lxml2)" \
@@ -32,10 +32,10 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 	--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --target=$(HOST_PLATFORM) \
 	lt_cv_cc_dll_switch="-shared" \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 else
 $(call gb_ExternalProject_get_state_target,raptor,build):
-	cd $(EXTERNAL_WORKDIR) \
+	$(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR) \
 	&& $(if $(filter IOS,$(OS)),LIBS="-liconv") \
 	CFLAGS="$(if $(debug),-g,-O) $(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) \
 	$(if $(filter GCCLINUXPOWERPC64,$(COM)$(OS)$(CPUNAME)),-mminimal-toc)" \
@@ -56,6 +56,6 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 		LIBXML2LIB=-lxml2 \
 		--with-xml2-config=$(OUTDIR)/bin/xml2-config) \
 	&& $(MAKE) \
-	&& touch $@
+	&& touch $@,$(EXTERNAL_WORKDIR)/build.log)
 endif
 # vim: set noet sw=4 ts=4:

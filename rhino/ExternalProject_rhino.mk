@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,rhino,\
 ))
 
 $(call gb_ExternalProject_get_state_target,rhino,build) :
-	cd "$(call gb_UnpackedTarball_get_dir,rhino)" && \
+	$(call gb_Helper_print_on_error,cd "$(call gb_UnpackedTarball_get_dir,rhino)" && \
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
@@ -29,6 +29,6 @@ $(call gb_ExternalProject_get_state_target,rhino,build) :
 		) \
 		$(if $(debug),-Dbuild.debug="on") \
 		jar && \
-	touch $@
+	touch $@,$(call gb_UnpackedTarball_get_dir,rhino)/build.log)
 
 # vim: set noet sw=4 ts=4:
