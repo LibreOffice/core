@@ -111,6 +111,11 @@ namespace drawinglayer
             bool                        mbSingleEntry : 1;
             bool                        mbFullyOpaque : 1;
 
+            // true = interpret in unit coordinate system -> object aspect ratio will scale result
+            // false = interpret in object coordinate system -> object aspect ratio will not scale result
+            // (related to SVG's gradientUnits (userSpaceOnUse|objectBoundingBox)
+            bool                        mbUseUnitCoordinates : 1;
+
         protected:
             /// local helpers
             Primitive2DSequence createSingleGradientEntryFill() const;
@@ -145,6 +150,7 @@ namespace drawinglayer
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 const SvgGradientEntryVector& rGradientEntries,
                 const basegfx::B2DPoint& rStart,
+                bool bUseUnitCoordinates,
                 SpreadMethod aSpreadMethod = Spread_pad);
 	    virtual ~SvgGradientHelper() {}
 
@@ -152,6 +158,7 @@ namespace drawinglayer
             const basegfx::B2DPolyPolygon& getPolyPolygon() const { return maPolyPolygon; }
             const SvgGradientEntryVector& getGradientEntries() const { return maGradientEntries; }
             const basegfx::B2DPoint& getStart() const { return maStart; }
+            bool getUseUnitCoordinates() const { return mbUseUnitCoordinates; }
             SpreadMethod getSpreadMethod() const { return maSpreadMethod; }
 
             /// compare operator
@@ -194,6 +201,7 @@ namespace drawinglayer
                 const SvgGradientEntryVector& rGradientEntries,
                 const basegfx::B2DPoint& rStart,
                 const basegfx::B2DPoint& rEnd,
+                bool bUseUnitCoordinates,
                 SpreadMethod aSpreadMethod = Spread_pad);
         virtual ~SvgLinearGradientPrimitive2D() {}
 
@@ -261,6 +269,7 @@ namespace drawinglayer
                 const SvgGradientEntryVector& rGradientEntries,
                 const basegfx::B2DPoint& rStart,
                 double fRadius,
+                bool bUseUnitCoordinates,
                 SpreadMethod aSpreadMethod = Spread_pad,
                 const basegfx::B2DPoint* pFocal = 0);
 
