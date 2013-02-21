@@ -42,5 +42,8 @@
     <glade-widget-class title="Font Preview" name="svxlo-SvxFontPrevWindow"
                         generic-name="Font Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Table Container" name="svxcorelo-SvxSimpleTableContainer"
+                        generic-name="Simple Table Container" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
   </glade-widget-classes>
 </glade-catalog>
