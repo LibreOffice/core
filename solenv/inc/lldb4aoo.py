@@ -1,4 +1,4 @@
-# to activate the AOO-LLDB helper script run the line below into LLDB
+# to activate the AOO-LLDB helper script type the line below into LLDB
 #	command script import path-to-script/lldb4aoo.py
 # or activate it automatically by adding the line to ~/.lldbinit
 
@@ -17,22 +17,22 @@ def __lldb_init_module( dbg, dict):
 	# register a generic helper function for pimpl types
 	dbg.HandleCommand( 'type summary add -F %s.%s -v -C yes -n PIMPL %s' % ( __name__,'get_pimpl_info', ' '.join(pimpl_types)))
 
+
 # local functions for use by the AOO-type summary providers
 
-def walk_ptrchain( v, info):
+def walk_ptrchain( v):
+	info = ''
 	while v.TypeIsPointerType():
 		n = v.GetValueAsUnsigned()
 		if n == 0:
 			info += 'NULL'
 			return (None, info)
-		else:
-			info += '0x%04X-> ' % (n)
-			v = v.Dereference()
+		info += '0x%04X-> ' % (n)
+		v = v.Dereference()
 	return (v, info)
 
 def ret_strdata_info( v, refvar, lenvar, aryvar):
-	info = ''
-	(v, info) = walk_ptrchain( v, info)
+	(v, info) = walk_ptrchain( v)
 	if not v:
 		return info
 	r = v.GetChildMemberWithName( refvar).GetValueAsSigned()
@@ -50,12 +50,13 @@ def ret_strdata_info( v, refvar, lenvar, aryvar):
 # definitions for our individual LLDB type summary providers
 
 def get_pimpl_info( valobj, dict):
-	v = walk_ptrchain( valobj, '')
+	(v, info) = walk_ptrchain( valobj)
 	p = v.GetChildAtIndex(0)
-	info = v.GetName()
-	if v.GetValueAsUnsigned() == 0:
-		return '(%s==NULL)' % (info)
-	info = '(%s=0x%04X)-> ' % (info,n)
+	pname = p.GetName()
+	n = p.GetValueAsUnsigned()
+	if n == 0:
+		return '%s(%s==NULL)' % (info, pname)
+	info = '%s(%s=0x%04X)-> ' % (info, pname, n)
 	return info + p.Dereference().GetSummary()
 
 
@@ -70,5 +71,4 @@ def getinfo_for__ByteStringData( valobj, dict):
 
 def getinfo_for__UniStringData( valobj, dict):
 	return ret_strdata_info( valobj, 'mnRefCount', 'mnLen', 'maStr') 
-
 
