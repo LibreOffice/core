@@ -1335,6 +1335,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             if ( rStrm.IsEof() && aLine.isEmpty() )
                 break;
 
+            EmbeddedNullTreatment( aLine);
+
             sal_Int32 nLineLen = aLine.getLength();
             SCCOL nCol = nStartCol;
             bool bMultiLine = false;
@@ -1470,6 +1472,23 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
         EndPaste();
 
     return true;
+}
+
+
+void ScImportExport::EmbeddedNullTreatment( OUString & rStr )
+{
+    // A nasty workaround for data with embedded NULL characters. As long as we
+    // can't handle them properly as cell content (things assume 0-terminated
+    // strings at too many places) simply strip all NULL characters from raw
+    // data. Excel does the same. See fdo#57841 for sample data.
+
+    // The normal case is no embedded NULL, check first before de-/allocating
+    // ustring stuff.
+    sal_Unicode cNull = 0;
+    if (rStr.indexOf( cNull) >= 0)
+    {
+        rStr = rStr.replaceAll( OUString( &cNull, 1), OUString());
+    }
 }
 
 
