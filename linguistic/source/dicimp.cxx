@@ -423,7 +423,7 @@ struct TmpDictionary
         return xStream;
     }
 
-    bool renameTmpToURL()
+    sal_uLong renameTmpToURL()
     {
         try
         {
