@@ -147,7 +147,7 @@ private:
 
 CTransferable::CTransferable( ) :
     m_FlavorList( 1 ),
-    m_Data( OUString("Ich habe mir ein neues Fahrrad gekauft!") )
+    m_Data( OUString("I bought a new bike!") )
 {
     DataFlavor df;
 
