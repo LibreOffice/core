@@ -181,7 +181,6 @@ private:
     sal_Int64           mnPropFlagsStart;     ///< pos of Prop flags
     sal_Int64           mnPropFlags;        ///< Flags specifying existing properties.
     sal_Int64           mnNextProp;         ///< Next property to read.
-    sal_Int64           mnPropsEnd;         ///< End position of simple/large properties.
     bool                mbValid;            ///< True = stream still valid.
     bool                mb64BitPropFlags;
 };
