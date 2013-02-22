@@ -2860,7 +2860,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
         {
             // try to generate the encryption data based on password
             SFX_ITEMSET_ARG( mpMedium->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False );
-            if ( pPasswordItem && pPasswordItem->GetValue().Len() && pPasswordItem->GetValue().Len() <= 15 )
+            if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() && pPasswordItem->GetValue().getLength() <= 15 )
             {
                 // Generate random number with a seed of time as salt.
                 TimeValue aTime;
@@ -2875,8 +2875,10 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
 
                 sal_Unicode aPassword[16];
                 memset( aPassword, 0, sizeof( aPassword ) );
-                for ( xub_StrLen nChar = 0; nChar < pPasswordItem->GetValue().Len(); ++nChar )
-                    aPassword[nChar] = pPasswordItem->GetValue().GetChar(nChar);
+
+                OUString sPassword(pPasswordItem->GetValue());
+                for ( sal_Int32 nChar = 0; nChar < sPassword.getLength(); ++nChar )
+                    aPassword[nChar] = sPassword[nChar];
 
                 rCodec.InitKey( aPassword, pDocId );
                 aEncryptionData = rCodec.GetEncryptionData();

@@ -159,7 +159,7 @@ void SwDoc::PropagateOutlineRule()
             const SwNumRuleItem & rCollRuleItem = pColl->GetNumRule( sal_False );
 
             // Check on document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE no longer needed.
-            if ( rCollRuleItem.GetValue().Len() == 0 )
+            if ( rCollRuleItem.GetValue().isEmpty() )
             {
                 SwNumRule * pMyOutlineRule = GetOutlineNumRule();
 

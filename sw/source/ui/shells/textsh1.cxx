@@ -412,7 +412,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, nSlot , sal_False );
             if ( pNameItem )
                 aStr = pNameItem->GetValue();
-            bool bFont = pFont && pFont->GetValue().Len();
+            bool bFont = pFont && !pFont->GetValue().isEmpty();
             rWrtSh.StartUndo( UNDO_UI_INSERT_FOOTNOTE );
             rWrtSh.InsertFootnote( aStr, nSlot == FN_INSERT_ENDNOTE, !bFont );
             if ( bFont )
@@ -993,7 +993,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.StartAction();
                     if ( SFX_ITEM_SET == pSet->GetItemState(FN_DROP_TEXT, sal_False, &pItem) )
                     {
-                        if ( ((SfxStringItem*)pItem)->GetValue().Len() )
+                        if ( !((SfxStringItem*)pItem)->GetValue().isEmpty() )
                             rWrtSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue(), pPaM);
                     }
                     rWrtSh.SetAttr( *pSet, 0, pPaM );

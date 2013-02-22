@@ -1041,7 +1041,7 @@ sal_Bool SwCntntNode::InvalidateNumRule()
     const SfxPoolItem* pItem;
     if( GetNodes().IsDocNodes() &&
         0 != ( pItem = GetNoCondAttr( RES_PARATR_NUMRULE, sal_True )) &&
-        ((SwNumRuleItem*)pItem)->GetValue().Len() &&
+        !((SwNumRuleItem*)pItem)->GetValue().isEmpty() &&
         0 != (pRule = GetDoc()->FindNumRulePtr(
                                 ((SwNumRuleItem*)pItem)->GetValue() ) ) )
     {
@@ -1405,7 +1405,7 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
             const SfxPoolItem* pNameItem = 0;
             if ( 0 != GetCondFmtColl() ||
                  SFX_ITEM_SET != mpAttrSet->GetItemState( RES_FRMATR_STYLE_NAME, sal_False, &pNameItem ) ||
-                 0 == static_cast<const SfxStringItem*>(pNameItem)->GetValue().Len() )
+                 static_cast<const SfxStringItem*>(pNameItem)->GetValue().isEmpty() )
                 AttrSetHandleHelper::SetParent( mpAttrSet, *this, &GetAnyFmtColl(), GetFmtColl() );
             else
                 const_cast<SfxItemSet*>(mpAttrSet.get())->SetParent( &GetFmtColl()->GetAttrSet() );

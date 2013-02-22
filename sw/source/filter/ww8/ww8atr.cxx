@@ -266,7 +266,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
             AttrOutput().OutputItem( *pItem );
 
             // switch off the numerbering?
-            if ( !( (SwNumRuleItem*)pItem )->GetValue().Len() &&
+            if ( ( (SwNumRuleItem*)pItem )->GetValue().isEmpty() &&
                  SFX_ITEM_SET != rSet.GetItemState( RES_LR_SPACE, false) &&
                  SFX_ITEM_SET == rSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
             {
@@ -3272,7 +3272,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
     const SwTxtNode* pTxtNd = 0;
     sal_uInt16 nNumId;
     sal_uInt8 nLvl = 0;
-    if ( rNumRule.GetValue().Len() )
+    if (!rNumRule.GetValue().isEmpty())
     {
         const SwNumRule* pRule = GetExport().pDoc->FindNumRulePtr(
                                         rNumRule.GetValue() );

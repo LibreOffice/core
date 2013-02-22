@@ -458,7 +458,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                     rSh.StartUndo( UNDO_START );
                     if ( SFX_ITEM_SET == aSet.GetItemState(HINT_END,sal_False,&pItem) )
                     {
-                        if ( ((SfxStringItem*)pItem)->GetValue().Len() )
+                        if ( !((SfxStringItem*)pItem)->GetValue().isEmpty() )
                             rSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
                     }
                     rSh.SetAttr(*pDlg->GetOutputItemSet());

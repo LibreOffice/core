@@ -300,7 +300,7 @@ SfxItemPresentation SwNumRuleItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            if( GetValue().Len() )
+            if( !GetValue().isEmpty() )
                 rText = SW_RESSTR( STR_NUMRULE_ON ) +
                     "(" + GetValue() + ")";
             else

@@ -2358,7 +2358,7 @@ SwNumRule* SwTxtNode::_GetNumRule(sal_Bool bInParent) const
             if ( pColl )
             {
                 const SwNumRuleItem& rDirectItem = pColl->GetNumRule( sal_False );
-                if ( rDirectItem.GetValue().Len() == 0 )
+                if ( rDirectItem.GetValue().isEmpty() )
                 {
                     pRet = 0L;
                 }
@@ -3465,7 +3465,7 @@ namespace {
                     if ( rTxtNode.IsEmptyListStyleDueToSetOutlineLevelAttr() )
                     {
                         const SwNumRuleItem& rNumRuleItem = rTxtNode.GetTxtColl()->GetNumRule();
-                        if ( rNumRuleItem.GetValue().Len() > 0 )
+                        if ( !rNumRuleItem.GetValue().isEmpty() )
                         {
                             rTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
                         }
@@ -4292,7 +4292,7 @@ namespace {
 
                 const SwNumRuleItem& pNumRuleItem =
                                 dynamic_cast<const SwNumRuleItem&>(pItem);
-                if ( pNumRuleItem.GetValue().Len() > 0 )
+                if ( !pNumRuleItem.GetValue().isEmpty() )
                 {
                     mbAddTxtNodeToList = true;
                     // #i105562#
@@ -4406,7 +4406,7 @@ namespace {
 
             const SwNumRuleItem* pNumRuleItem =
                             dynamic_cast<const SwNumRuleItem*>(pItem);
-            if ( pNumRuleItem->GetValue().Len() > 0 )
+            if ( !pNumRuleItem->GetValue().isEmpty() )
             {
                 mbAddTxtNodeToList = true;
                 // #i70748#

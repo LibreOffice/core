@@ -371,7 +371,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             {
                 if ( pAsLink )
                     bAsLink = pAsLink->GetValue();
-                if ( pStyle && pStyle->GetValue().Len() )
+                if ( pStyle && !pStyle->GetValue().isEmpty() )
                     sGraphicFormat = pStyle->GetValue();
             }
             else

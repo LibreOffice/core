@@ -226,7 +226,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                     break;
                     case RES_PARATR_NUMRULE:
                     {
-                        bSave = 0 != ((SwNumRuleItem*)pItem)->GetValue().Len();
+                        bSave = !((SwNumRuleItem*)pItem)->GetValue().isEmpty();
                     }
                     break;
                     case RES_PARATR_OUTLINELEVEL:               //#outline level,add by zhaojianwei
