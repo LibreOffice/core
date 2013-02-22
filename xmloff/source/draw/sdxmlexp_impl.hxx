@@ -174,6 +174,7 @@ class SdXMLExport : public SvXMLExport
 protected:
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
     virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
+    virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
 
 public:
     SdXMLExport(

@@ -2901,4 +2901,17 @@ OUString SAL_CALL SdXMLExport::getImplementationName() throw( uno::RuntimeExcept
     }
 }
 
+XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
+{
+    bool bEmbedFonts = false;
+    Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
+    if( xFac.is() )
+    {
+        Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), UNO_QUERY );
+        if( xProps.is() )
+            xProps->getPropertyValue("EmbedFonts") >>= bEmbedFonts;
+    }
+    return new XMLFontAutoStylePool( *this, bEmbedFonts );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
