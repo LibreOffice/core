@@ -606,7 +606,7 @@ sub get_languagefilename
 {
     my ($idtfilename, $basedir) = @_;
 
-    $idtfilename =~ s/\.idt/\.mlf/;
+    $idtfilename =~ s/\.idt/\.ulf/;
 
     my $languagefilename = $basedir . $installer::globals::separator . $idtfilename;
 
