@@ -115,7 +115,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
             {
                 OUString aComment;
                 aPropItem.Read( aComment );
-                if ( aComment.indexOf( "Applixware", 0 ) != STRING_NOTFOUND )
+                if ( aComment.indexOf( "Applixware" ) >= 0 )
                 {
                     nImportFlags |= PPT_IMPORTFLAGS_NO_TEXT_ASSERT;
                 }
