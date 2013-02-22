@@ -31,12 +31,6 @@
 #include <vcl/svapp.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuPoor::FuPoor(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
     pView(pViewP),
@@ -56,26 +50,13 @@ FuPoor::FuPoor(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
     aDragTimer.SetTimeout(SELENG_DRAGDROP_TIMEOUT);
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
 FuPoor::~FuPoor()
 {
     aDragTimer.Stop();
     aScrollTimer.Stop();
 
-    if (pDialog)
-        delete pDialog;
+    delete pDialog;
 }
-
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
 
 void FuPoor::Activate()
 {
@@ -84,12 +65,6 @@ void FuPoor::Activate()
         pDialog->Show();
     }
 }
-
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
 
 void FuPoor::Deactivate()
 {
@@ -226,12 +201,6 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
         return pView->Command(rCEvt,pWindow);
 }
 
-/*************************************************************************
-|*
-|* Cut object to clipboard
-|*
-\************************************************************************/
-
 void FuPoor::DoCut()
 {
     if (pView)
@@ -253,12 +222,6 @@ void FuPoor::DoCopy()
 //!     pView->DoCopy(pWindow);
     }
 }
-
-/*************************************************************************
-|*
-|* Paste object from clipboard
-|*
-\************************************************************************/
 
 void FuPoor::DoPaste()
 {
