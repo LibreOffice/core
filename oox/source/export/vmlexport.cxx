@@ -35,14 +35,15 @@ using namespace sax_fastparser;
 using namespace oox::vml;
 
 VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport )
-    : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), 0 ),
-      m_pSerializer( pSerializer ),
-      m_pTextExport( pTextExport ),
-      m_pSdrObject( 0 ),
-      m_pShapeAttrList( NULL ),
-      m_nShapeType( ESCHER_ShpInst_Nil ),
-      m_pShapeStyle( new OStringBuffer( 200 ) ),
-      m_pShapeTypeWritten( new bool[ ESCHER_ShpInst_COUNT ] )
+    : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), 0 )
+    , m_pSerializer( pSerializer )
+    , m_pTextExport( pTextExport )
+    , m_pSdrObject( 0 )
+    , m_pShapeAttrList( NULL )
+    , m_nShapeType( ESCHER_ShpInst_Nil )
+    , m_nShapeFlags(0)
+    , m_pShapeStyle( new OStringBuffer( 200 ) )
+    , m_pShapeTypeWritten( new bool[ ESCHER_ShpInst_COUNT ] )
 {
     mnGroupLevel = 1;
     memset( m_pShapeTypeWritten, 0, ESCHER_ShpInst_COUNT * sizeof( bool ) );
