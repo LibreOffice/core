@@ -1,3 +1,0 @@
-mkdir: %_DEST%\pus
-..\%COMMON_OUTDIR%\bin\hid\userfeedback_VCL_names.csv %COMMON_DEST%\bin\userfeedback_VCL_names.csv
-..\%__SRC%\misc\*.update.xml %_DEST%\pus\*.update.xml

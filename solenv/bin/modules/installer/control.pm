@@ -327,7 +327,6 @@ sub check_logfile
 
         my $compareline = $line;
         $compareline =~ s/Error\.idt//g;    # removing all occurrences of "Error.idt"
-        $compareline =~ s/Error\.mlf//g;    # removing all occurrences of "Error.mlf"
         $compareline =~ s/Error\.ulf//g;    # removing all occurrences of "Error.ulf"
         $compareline =~ s/Error\.idl//g;    # removing all occurrences of "Error.idl"
         $compareline =~ s/Error\.html//g;   # removing all occurrences of "Error.html"
