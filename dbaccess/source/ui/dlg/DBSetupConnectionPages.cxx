@@ -856,7 +856,6 @@ DBG_NAME(OFinalDBPageSetup)
     {
         DBG_CTOR(OFinalDBPageSetup,NULL);
 
-        OUString stext = m_aFTFinalHeader.GetText();
         SetControlFontWeight(&m_aFTFinalHeader);
         m_aCBOpenAfterwards.SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
         m_aCBStartTableWizard.SetClickHdl(getControlModifiedLink());
