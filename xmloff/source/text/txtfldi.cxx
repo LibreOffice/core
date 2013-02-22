@@ -2670,22 +2670,26 @@ void XMLPageVarSetFieldImportContext::ProcessAttribute(
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_ACTIVE:
+    case XML_TOK_TEXTFIELD_ACTIVE:
+    {
+        bool bTmp(false);
+        if (::sax::Converter::convertBool(bTmp, sAttrValue))
         {
-            bool bTmp(false);
-            if (::sax::Converter::convertBool(bTmp, sAttrValue))
-            {
-                bActive = bTmp;
-            }
+            bActive = bTmp;
         }
-        case XML_TOK_TEXTFIELD_PAGE_ADJUST:
+        break;
+    }
+    case XML_TOK_TEXTFIELD_PAGE_ADJUST:
+    {
+        sal_Int32 nTmp(0);
+        if (::sax::Converter::convertNumber(nTmp, sAttrValue))
         {
-            sal_Int32 nTmp;
-            if (::sax::Converter::convertNumber(nTmp, sAttrValue))
-            {
-                nAdjust = (sal_Int16)nTmp;
-            }
+            nAdjust = (sal_Int16)nTmp;
         }
+        break;
+    }
+    default:
+        break;
     }
 }
 
