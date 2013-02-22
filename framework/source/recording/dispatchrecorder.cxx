@@ -59,8 +59,8 @@ DEFINE_XTYPEPROVIDER_6(
 DEFINE_XSERVICEINFO_MULTISERVICE(
     DispatchRecorder,
     ::cppu::OWeakObject,
-    SERVICENAME_DISPATCHRECORDER,
-    IMPLEMENTATIONNAME_DISPATCHRECORDER)
+    OUString("com.sun.star.frame.DispatchRecorder"),
+    OUString("com.sun.star.comp.framework.DispatchRecorder"))
 
 DEFINE_INIT_SERVICE(
     DispatchRecorder,

@@ -149,6 +149,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	AutoRecovery \
 	Desktop \
 	DispatchHelper \
+	DispatchRecorder \
 	DispatchRecorderSupplier \
 	DocumentTemplates \
 	GlobalEventBroadcaster \
@@ -872,7 +873,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/frame,\
 	DesktopTask \
 	DesktopTasks \
 	DispatchProvider \
-	DispatchRecorder \
 	Frame \
 	FrameControl \
 	FrameLoader \

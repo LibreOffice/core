@@ -20,7 +20,6 @@
 #define __com_sun_star_frame_DispatchRecorder_idl__
 
 #include <com/sun/star/frame/XDispatchRecorder.idl>
-#include <com/sun/star/container/XIndexReplace.idl>
 
 
  module com {  module sun {  module star {  module frame {
@@ -42,15 +41,7 @@
 
     @since OOo 1.1.2
  */
-published service DispatchRecorder
-{
-    /** provides the record functionality and access on the generated code
-     */
-    interface com::sun::star::frame::XDispatchRecorder;
-    /** provides replacement capability of recorded statements
-    */
-    interface com::sun::star::container::XIndexReplace;
-};
+published service DispatchRecorder : XDispatchRecorder;
 
 
 }; }; }; };
