@@ -33,6 +33,41 @@
       "revId": "1da3af5f1eb6a32fd0ab10da7cf2f8ddb298a3a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///Kk\u003d",
+        "filename": "dbaccess/source/ui/dlg/DbAdminImpl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-02-22T17:31:40Z",
+      "side": 1,
+      "message": "\"you should get a warning about an \"unused result\" here but strangely i\u0027m not seeing a warning with gcc 4.7\"\n\nyes, it does not work with optimization disabled IIRC :(",
+      "parentUuid": "AAAAVn///LM\u003d",
+      "revId": "1da3af5f1eb6a32fd0ab10da7cf2f8ddb298a3a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///KM\u003d",
+        "filename": "svl/source/items/custritm.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2013-02-22T17:31:40Z",
+      "side": 1,
+      "message": "compareTo does not return COMPARE_*. \n\nfixed in commit 046ad9ffad7b4647fcc66291dec73bbb67a7fe85",
+      "revId": "1da3af5f1eb6a32fd0ab10da7cf2f8ddb298a3a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
