@@ -287,31 +287,28 @@ public class Desktop
         }
 
         Log.i(TAG, "onCreate - set content view\n");
-        setContentView(new BitmapView(this, this));
+        setContentView(new BitmapView());
     }
-}
 
     class BitmapView extends android.view.View
     {
-        Desktop mDesktop;
         Bitmap mBitmap;
 
-        public BitmapView(Context context, Desktop desktop)
+        public BitmapView()
         {
-            super(context);
-            mDesktop = desktop;
+            super(Desktop.this);
             mBitmap = Bitmap.createBitmap(1000, 600, Bitmap.Config.ARGB_8888);
         }
 
         @Override protected void onDraw(Canvas canvas) {
 //            canvas.drawColor(0xFF1ABCDD);
 
-            mDesktop.renderVCL(mBitmap);
+            renderVCL(mBitmap);
             canvas.drawBitmap(mBitmap, 0, 0, null);
 
             // re-call ourselves a bit later ...
             invalidate();
         }
     }
-
+}
 // vim:set shiftwidth=4 softtabstop=4 expandtab:
