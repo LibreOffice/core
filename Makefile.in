@@ -67,7 +67,7 @@ $(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(wildcard */prj/dmake) $(BUILD
 	echo "gbuild_modules:= tail_build \\" > $@
 	for m in */Module_*.mk; do echo $$m | sed -e 's/\/.*$$/ \\/'; done >> $@
 	echo >> $@
-	echo -n "dmake_modules:= helpcontent2 instsetoo_native" >> $@
+	echo -n "dmake_modules:= helpcontent2" >> $@
 	echo >> $@
 
 -include $(WORKDIR)/modules.mk
@@ -257,7 +257,7 @@ $(WORKDIR)/bootstrap:
 #
 # Build
 #
-build-postprocess: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
+build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
 ifeq ($(DISABLE_SCRIPTING),TRUE)
 # We must get the headers from vbahelper "delivered" because
 # as we don't link to any libs from there they won't otherwise be, or
@@ -270,16 +270,9 @@ ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
 # Ditto for dbconnectivity in the --disable-database-connectivity case
 	$(GNUMAKE) connectivity
 endif
-	cd $(SRC_ROOT)/postprocess && unset MAKEFLAGS && \
+	cd $(SRCDIR)/postprocess && unset MAKEFLAGS && \
 		$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
-
-build: build-postprocess
-ifeq ($(OS_FOR_BUILD),WNT)
-	cd $(SRC_ROOT)/instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl
-else
-	cd $(SRC_ROOT)/instsetoo_native && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(PARALLELISM) -- -P$(PARALLELISM)
-endif
+	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 ifeq ($(OS),ANDROID)
 	cd android && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 endif
@@ -322,9 +315,7 @@ dev-install: build
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd $(SRC_ROOT)/instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl LIBO_DEV_INSTALL=TRUE
-	unzip -q -d "$(DEVINSTALLDIR)" "$(SRCDIR)/instsetoo_native/$(INPATH)/LibreOffice/archive/install/en-US/LibreOffice*_archive.zip"
-	mv "$(DEVINSTALLDIR)"/LibreOffice*_archive/* "$(DEVINSTALLDIR)"/opt
+	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_DEV_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
 ifeq ($(DISABLE_LINKOO),TRUE)
 	@ooinstall $(DEVINSTALLDIR)/opt
@@ -413,9 +404,7 @@ install-tb:
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd $(SRC_ROOT)/instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl LIBO_DEV_INSTALL=TRUE
-	unzip -q -d "$(DEVINSTALLDIR)" "$(SRCDIR)/instsetoo_native/$(INPATH)/LibreOffice/archive/install/en-US/LibreOffice*_archive.zip"
-	mv "$(DEVINSTALLDIR)"/LibreOffice*_archive/* "$(DEVINSTALLDIR)"/opt
+	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_DEV_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
 	@ooinstall $(DEVINSTALLDIR)/opt
 	@install-gdb-printers
