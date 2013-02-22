@@ -93,6 +93,7 @@ certain functionality.
 @li @c filter.xslt - xslt import/export
 @li @c oox.xmlstream - XmlStream class
 @li @c oox.storage - ZipStorage class
+@li @c oox.ppt - pptx filter
 
 @section formula
 
