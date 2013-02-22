@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3////M\u003d",
+        "filename": "sd/source/core/stlsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-02-22T22:45:05Z",
+      "side": 1,
+      "message": "This use of the OUString::indexOf() result is problematic.\n\nThe old code used String::Search() that if nothing was found returned STRING_NOTFOUND that effectively was 0xFFFF, and the String::Erase() accepted arguments with an offset greater than the string length, doing nothing then.\n\nOUString::indexOf() returns -1 instead if nothing was found and feeding that to OUString::copy() will lead to undefined behavior.\n\nInstead, the result of indexOf() must be checked and only if \u003e\u003d0 the remaining portion of string be copied.",
+      "revId": "7b8716120b8e4a06cb080dc6c33da1c5ebe9e485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3////I\u003d",
+        "filename": "sd/source/core/stlsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-02-22T22:45:05Z",
+      "side": 1,
+      "message": "Instead of OUString::getLength()\u003d\u003d0 please use OUString::isEmpty()",
+      "revId": "7b8716120b8e4a06cb080dc6c33da1c5ebe9e485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3////E\u003d",
+        "filename": "sd/source/core/stlsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-02-22T22:45:05Z",
+      "side": 1,
+      "message": "Same caveat here about indexOf() and Search() results.",
+      "revId": "7b8716120b8e4a06cb080dc6c33da1c5ebe9e485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3////A\u003d",
+        "filename": "sd/source/core/stlsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-02-22T22:45:05Z",
+      "side": 1,
+      "message": "Same caveat here about indexOf() and Search() results.",
+      "revId": "7b8716120b8e4a06cb080dc6c33da1c5ebe9e485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///+8\u003d",
+        "filename": "sd/source/core/stlsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-02-22T22:45:05Z",
+      "side": 1,
+      "message": "Note that OUstring positions are sal_Int32 instead of sal_uInt16.",
+      "revId": "7b8716120b8e4a06cb080dc6c33da1c5ebe9e485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///+s\u003d",
+        "filename": "vcl/inc/svdata.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-02-22T22:45:05Z",
+      "side": 1,
+      "message": "Just a nitpick: if member variables are nicely aligned please keep alignment, in this case by inserting one blank before the name.",
+      "revId": "7b8716120b8e4a06cb080dc6c33da1c5ebe9e485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///+o\u003d",
+        "filename": "vcl/inc/vcl/svapp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-02-22T22:45:05Z",
+      "side": 1,
+      "message": "Same comment about nice alignment..",
+      "revId": "7b8716120b8e4a06cb080dc6c33da1c5ebe9e485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
