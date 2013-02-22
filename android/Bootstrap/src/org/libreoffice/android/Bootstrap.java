@@ -29,28 +29,22 @@
 package org.libreoffice.android;
 
 import android.app.Activity;
-import android.app.NativeActivity;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.util.Log;
-
-import fi.iki.tml.CommandLine;
 
 import java.io.File;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Scanner;
 
-// We extend NativeActivity so that we can get at the intent of the
-// activity and its extra parameters, that we use to tell us what
-// actual LibreOffice "program" to run. I.e. something that on desktop
-// OSes would be a program, but for Android is actually built as a
-// shared object, with a "lo_main" function.
-
-public class Bootstrap extends NativeActivity
+// final because subclassing would be meaningless.
+public final class Bootstrap
 {
+    // private constructor because instantiating would be meaningless
+    private Bootstrap()
+    {
+    }
+
     private static String TAG = "lo-bootstrap";
 
     // Native methods in this class are all implemented in
@@ -61,9 +55,6 @@ public class Bootstrap extends NativeActivity
     private static native boolean setup(String dataDir,
                                         String cacheDir,
                                         String apkFile);
-
-    public static native boolean setup(Object lo_main_argument,
-                                       int lo_main_delay);
 
     // Extracts files in the .apk that need to be extraced into the app's tree
     static native void extract_files();
@@ -110,8 +101,8 @@ public class Bootstrap extends NativeActivity
 
     static boolean setup_done = false;
 
-    // This setup() method is called 1) in apps that use *this* class as their activity from onCreate(),
-    // and 2) should be called from other kinds of LO code using apps.
+    // This setup() method should be called from the upper Java level of
+    // LO-based apps.
     public static synchronized void setup(Activity activity)
     {
         if (setup_done)
@@ -152,92 +143,6 @@ public class Bootstrap extends NativeActivity
         putenv("TMPDIR=" + activity.getCacheDir().getAbsolutePath());
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        setup(this);
-
-        String mainLibrary = getIntent().getStringExtra("lo-main-library");
-
-        if (mainLibrary == null)
-            mainLibrary = "libcppunittester";
-
-        mainLibrary += ".so";
-
-        Log.i(TAG, String.format("mainLibrary=%s", mainLibrary));
-
-        // Get "command line" to pass to the LO "program"
-        String cmdLine = getIntent().getStringExtra("lo-main-cmdline");
-
-        if (cmdLine == null) {
-            String indirectFile = getIntent().getStringExtra("lo-main-indirect-cmdline");
-            if (indirectFile != null) {
-                try {
-                    // Somewhat stupid but short way to read a file into a string
-                    cmdLine = new Scanner(new File(indirectFile), "UTF-8").useDelimiter("\\A").next().trim();
-                }
-                catch (java.io.FileNotFoundException e) {
-                    Log.i(TAG, String.format("Could not read %s: %s",indirectFile, e.toString()));
-                }
-            }
-
-            if (cmdLine == null)
-                cmdLine = "";
-        }
-
-        Log.i(TAG, String.format("cmdLine=%s", cmdLine));
-
-        String[] argv = CommandLine.split(cmdLine);
-
-        // Handle env var assignments in the command line.
-        while (argv.length > 0 &&
-               argv[0].matches("[A-Z_]+=.*")) {
-            putenv(argv[0]);
-            argv = Arrays.copyOfRange(argv, 1, argv.length);
-        }
-
-        // argv[0] will be replaced by android_main() in lo-bootstrap.c by the
-        // pathname of the mainLibrary.
-        String[] newargv = new String[argv.length + 1];
-        newargv[0] = "dummy-program-name";
-        System.arraycopy(argv, 0, newargv, 1, argv.length);
-        argv = newargv;
-
-        // Load the LO "program" here
-        System.loadLibrary(mainLibrary);
-
-        // Start a strace on ourself if requested.
-
-        // Note that the started strace will have its stdout and
-        // stderr connected to /dev/null, so you definitely want to
-        // specify an -o option in the lo-strace extra. Also, strace
-        // will trace only *this* thread, which is not the one that
-        // eventually will run android_main() and lo_main(), so you
-        // also want the -f option.
-        String strace_args = getIntent().getStringExtra("lo-strace");
-        if (strace_args != null)
-            system("/system/xbin/strace -p " + getpid() + " " + (strace_args != "yes" ? strace_args : "" ) + " &");
-
-        int delay = 0;
-        String sdelay = getIntent().getStringExtra("lo-main-delay");
-        if (sdelay != null)
-            delay = Integer.parseInt(sdelay);
-
-        // Tell lo-bootstrap.c the stuff it needs to know
-        if (!setup(argv, delay))
-            return;
-
-        // Finally, call our super-class, NativeActivity's onCreate(),
-        // which eventually calls the ANativeActivity_onCreate() in
-        // android_native_app_glue.c, which starts a thread in which
-        // android_main() from lo-bootstrap.c is called.
-
-        // android_main() calls the lo_main() defined in sal/main.h
-        // through the function pointer passed to setup() above, with
-        // the argc and argv also saved from the setup() call.
-        super.onCreate(savedInstanceState);
-    }
-
     // Now with static loading we always have all native code in one native
     // library which we always call liblo-native-code.so, regardless of the
     // app. The library has already been unpacked into /data/data/<app
@@ -246,4 +151,5 @@ public class Bootstrap extends NativeActivity
         System.loadLibrary("lo-native-code");
     }
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
