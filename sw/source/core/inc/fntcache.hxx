@@ -113,6 +113,7 @@ public:
     inline sal_Bool     IsSymbol() const { return bSymbol; }
 
     void   DrawText( SwDrawTextInfo &rInf );
+    /// determine the TextSize (of the printer)
     Size  GetTextSize( SwDrawTextInfo &rInf );
     xub_StrLen GetCrsrOfst( SwDrawTextInfo &rInf );
 

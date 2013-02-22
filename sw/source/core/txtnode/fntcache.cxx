@@ -1766,16 +1766,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     }
 }
 
-
-/*************************************************************************
- *
- *  Size SwFntObj::GetTextSize( const OutputDevice *pOut, const String &rTxt,
- *           const sal_uInt16 nIdx, const sal_uInt16 nLen, const short nKern = 0 );
- *
- *  determine the TextSize (of the printer)
- *
- *************************************************************************/
-
 Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 {
     Size aTxtSize;
