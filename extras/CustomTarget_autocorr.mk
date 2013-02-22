@@ -12,6 +12,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,extras/source/autotext))
 extras_AUTOCORR_LANGS := \
 	af-ZA:af-ZA \
 	bg:bg-BG \
+	ca:ca \
 	cs:cs-CZ \
 	da:da-DK \
 	de:de-DE \
@@ -61,6 +62,11 @@ extras_AUTOCORR_XMLFILES := \
 	bg/acor/META-INF/manifest.xml \
 	bg/acor/SentenceExceptList.xml \
 	bg/acor/WordExceptList.xml \
+	ca/acor/BlockList.xml \
+	ca/acor/DocumentList.xml \
+	ca/acor/META-INF/manifest.xml \
+	ca/acor/SentenceExceptList.xml \
+	ca/acor/WordExceptList.xml \
 	cs/acor/BlockList.xml \
 	cs/acor/DocumentList.xml \
 	cs/acor/META-INF/manifest.xml \
@@ -228,6 +234,7 @@ extras_AUTOCORR_XMLFILES := \
 extras_AUTOCORR_MIMETYPEFILES := \
 	af-ZA/acor/mimetype \
 	bg/acor/mimetype \
+	ca/acor/mimetype \
 	cs/acor/mimetype \
 	da/acor/mimetype \
 	de/acor/mimetype \
