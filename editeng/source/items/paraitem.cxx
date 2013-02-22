@@ -1357,7 +1357,7 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
 )   const
 {
     rText = OUString();
-    bool bSet = ( GetValue().Len() > 0 );
+    bool bSet = !GetValue().isEmpty();
 
     switch ( ePres )
     {

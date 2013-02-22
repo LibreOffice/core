@@ -510,7 +510,7 @@ void LanguageBox::Update( const SfxStringItem* pItem )
 {
     FillBox();
 
-    if ( pItem && pItem->GetValue().Len() > 0 )
+    if ( pItem && !pItem->GetValue().isEmpty() )
     {
         m_sCurrentText = pItem->GetValue();
         if ( GetSelectEntry() != m_sCurrentText )
