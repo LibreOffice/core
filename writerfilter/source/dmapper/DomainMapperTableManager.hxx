@@ -92,7 +92,6 @@ public:
     IntVectorPtr getCurrentCellWidths( );
 
     const ::rtl::OUString& getTableStyleName() const { return m_sTableStyleName; }
-    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getTablePosition() { return m_aTablePosition; }
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getCurrentTablePosition();
 
     /// copy the text properties of the table style and its parent into pContext
