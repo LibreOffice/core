@@ -96,9 +96,8 @@ sal_Int32 lcl_getBuildIDFromGenerator( const ::rtl::OUString& rGenerator )
     //returns -1 if nothing found
     sal_Int32 nBuildId = -1;
     const OUString sBuildCompare(  "$Build-"  );
-    sal_Int32 nEnd = -1;
-    sal_Int32 nBegin = rGenerator.indexOf( sBuildCompare, nEnd );
-    if( nBegin != -1 )
+    sal_Int32 nBegin = rGenerator.indexOf( sBuildCompare );
+    if( nBegin >= 0 )
     {
         OUString sBuildId( rGenerator.copy( nBegin + sBuildCompare.getLength() ) );
         nBuildId = sBuildId.toInt32();
