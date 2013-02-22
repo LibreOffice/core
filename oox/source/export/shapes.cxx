@@ -1311,11 +1311,11 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                 // this part now supports only embedded spreadsheets, it can be extended to support remaining ooxml documents
                 // only exporter, counter and object filename are specific to spreadsheet
                 Reference< XSpreadsheetDocument > xSheetDoc( mAny, UNO_QUERY );
-                if( xSheetDoc.is() )
+                if( xSheetDoc.is() && mpFB)
                 {
                     Reference< XComponent > xDocument( mAny, UNO_QUERY );
                     Reference< XExporter > xExporter( mpFB->getServiceFactory()->createInstance( "com.sun.star.comp.oox.ExcelFilterExport" ), UNO_QUERY );
-                    if( xDocument.is() && xExporter.is() && mpFB )
+                    if( xDocument.is() && xExporter.is())
                     {
                         Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
                                                                                           .appendAscii( GetComponentDir() )
