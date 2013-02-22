@@ -59,12 +59,12 @@ namespace dbmm
         bool        hadFailure() const;
 
         /// logs the fact that the database document has been backed up
-        void        backedUpDocument( const ::rtl::OUString& _rNewDocumentLocation );
+        void        backedUpDocument( const OUString& _rNewDocumentLocation );
 
         /** logs that the migration for a certain sub document has been started, returns
             a unique ID for this sub document which is to be used in later calls
         */
-        DocumentID  startedDocument( const SubDocumentType _eType, const ::rtl::OUString& _rName );
+        DocumentID  startedDocument( const SubDocumentType _eType, const OUString& _rName );
 
         /** logs the event that a macro or script library has been moved from within a
             sub document to the database document
@@ -72,8 +72,8 @@ namespace dbmm
         void        movedLibrary(
                         const DocumentID _nDocID,
                         const ScriptType _eScriptType,
-                        const ::rtl::OUString& _rOriginalLibName,
-                        const ::rtl::OUString& _rNewLibName
+                        const OUString& _rOriginalLibName,
+                        const OUString& _rNewLibName
                     );
 
         /** logs that the migration for a certain document has been finished
@@ -89,11 +89,11 @@ namespace dbmm
             <member>movedLibrary</member>. If not, an assertion will be raised in
             the non-product builds, and an empty string will be returned.
         */
-        const ::rtl::OUString&
+        const OUString&
                     getNewLibraryName(
                         DocumentID _nDocID,
                         ScriptType _eScriptType,
-                        const ::rtl::OUString& _rOriginalLibName
+                        const OUString& _rOriginalLibName
                     ) const;
 
         /** determines whether for the given document, any library needed to be (and was) moved
@@ -103,7 +103,7 @@ namespace dbmm
         /** provides a human-readable version of the log, explaining a user what happened during
             the migration.
         */
-        ::rtl::OUString
+        OUString
                     getCompleteLog() const;
 
     private:

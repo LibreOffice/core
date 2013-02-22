@@ -32,7 +32,7 @@ namespace dbmm
     //= helper
     //====================================================================
     //--------------------------------------------------------------------
-    String getScriptTypeDisplayName( const ScriptType _eType )
+    OUString getScriptTypeDisplayName( const ScriptType _eType )
     {
         sal_uInt16 nResId( 0 );
 
@@ -46,7 +46,7 @@ namespace dbmm
         case eDialog:       nResId = STR_DIALOG;        break;
         }
         OSL_ENSURE( nResId != 0, "getScriptTypeDisplayName: illegal script type!" );
-        return nResId ? String( MacroMigrationResId( nResId ) ) : String();
+        return nResId ? OUString( MacroMigrationResId( nResId ) ) : OUString();
     }
 
 //........................................................................

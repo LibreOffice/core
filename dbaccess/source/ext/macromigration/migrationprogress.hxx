@@ -31,12 +31,12 @@ namespace dbmm
     class SAL_NO_VTABLE IMigrationProgress
     {
     public:
-        virtual void    startObject( const ::rtl::OUString& _rObjectName, const ::rtl::OUString& _rCurrentAction, const sal_uInt32 _nRange ) = 0;
-        virtual void    setObjectProgressText( const ::rtl::OUString& _rText ) = 0;
+        virtual void    startObject( const OUString& _rObjectName, const OUString& _rCurrentAction, const sal_uInt32 _nRange ) = 0;
+        virtual void    setObjectProgressText( const OUString& _rText ) = 0;
         virtual void    setObjectProgressValue( const sal_uInt32 _nValue ) = 0;
         virtual void    endObject() = 0;
         virtual void    start( const sal_uInt32 _nOverallRange ) = 0;
-        virtual void    setOverallProgressText( const ::rtl::OUString& _rText ) = 0;
+        virtual void    setOverallProgressText( const OUString& _rText ) = 0;
         virtual void    setOverallProgressValue( const sal_uInt32 _nValue ) = 0;
 
     protected:
