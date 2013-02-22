@@ -99,13 +99,13 @@ void TestBreakIterator::testLineBreaking()
         {
             //Here we want the line break to leave text here) on the next line
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("(some tex"), aLocale, 0, aHyphOptions, aUserOptions);
-            CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == 6);
+            CPPUNIT_ASSERT_MESSAGE("Expected a break at the start of the word", aResult.breakIndex == 6);
         }
 
         {
             //Here we want the line break to leave "here)" on the next line
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("(some text here"), aLocale, 0, aHyphOptions, aUserOptions);
-            CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == 11);
+            CPPUNIT_ASSERT_MESSAGE("Expected a break at the start of the word", aResult.breakIndex == 11);
         }
     }
 
@@ -121,7 +121,7 @@ void TestBreakIterator::testLineBreaking()
         {
             //Here we want the line break to happen at the whitespace
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, aTest.getLength()-1, aLocale, 0, aHyphOptions, aUserOptions);
-            CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == aWord.getLength()+1);
+            CPPUNIT_ASSERT_MESSAGE("Expected a break at the start of the word", aResult.breakIndex == aWord.getLength()+1);
         }
     }
 

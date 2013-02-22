@@ -262,7 +262,7 @@ OUString SAL_CALL
     {
         // Return the "private:resource/<type>/" prefix.
 
-        // Get the the prefix that ends with the second "/".
+        // Get the prefix that ends with the second "/".
         const OUString& rsResourceURL (maResourceURLs[0]);
         sal_Int32 nPrefixEnd (rsResourceURL.indexOf(sal_Unicode('/'), 0));
         if (nPrefixEnd >= 0)

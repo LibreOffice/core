@@ -85,7 +85,7 @@ const sal_Int32 MAXCHARS = 65534;
  // information is currently imported.
  // To reflect the current state of this importer the sax events sent
  // to the document handler are also the simplest possible. In addition to
- // the the basic attributes set up for the 'office:document' element
+ // the basic attributes set up for the 'office:document' element
  // all the imported text is inserted into 'text:p' elements.
  // The parser extracts the pure text and creates simple a simple 'text:p'
  // element to contain that text. In the event of the text exceeding

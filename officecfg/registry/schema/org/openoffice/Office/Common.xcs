@@ -4980,7 +4980,7 @@
           <prop
               oor:name="PixelExportUnit" oor:type="xs:int" oor:nillable="false">
             <info>
-              <desc>Specifies the unit default that is used in the the graphic
+              <desc>Specifies the unit default that is used in the graphic
               export dialog if exporting pixel graphics.</desc>
             </info>
             <constraints>
@@ -5028,7 +5028,7 @@
               oor:nillable="false">
             <info>
               <desc>Specifies the unit default for the resolution that is used
-              in the the graphic export dialog if exporting pixel
+              in the graphic export dialog if exporting pixel
               graphics.</desc>
             </info>
             <constraints>
@@ -5081,7 +5081,7 @@
               oor:name="VectorExportUnit" oor:type="xs:int"
               oor:nillable="false">
             <info>
-              <desc>Specifies the unit default that is used in the the graphic
+              <desc>Specifies the unit default that is used in the graphic
               export dialog if exporting vector graphics.</desc>
             </info>
             <constraints>

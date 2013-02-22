@@ -689,7 +689,7 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
  *  The "next" node in tree order is defined as:
  *  1. If a node has children, then the first child is;
  *  2. otherwise, if it has a following sibling, then this sibling node is;
- *  3. otherwise, if it has a parent node, the the parent's next sibling
+ *  3. otherwise, if it has a parent node, the parent's next sibling
  *     node is;
  *  4. otherwise, no "next" node exists.
  *

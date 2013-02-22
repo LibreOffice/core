@@ -122,7 +122,7 @@ namespace pcr
         m_pControlWindow->SetSizePixel(aComboBox.GetSizePixel());
 
         // TODO/UNOize: why do the controls this themselves? Shouldn't this be the task
-        // of the the browser listbox/line?
+        // of the browser listbox/line?
     }
 
     //------------------------------------------------------------------

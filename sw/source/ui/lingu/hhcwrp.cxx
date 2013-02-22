@@ -144,7 +144,7 @@ SwHHCWrapper::~SwHHCWrapper()
     if( m_nPageCount )
         ::EndProgress( m_pView->GetDocShell() );
 
-    // finally for chinese translation we need to change the the documents
+    // finally for chinese translation we need to change the documents
     // default language and font to the new ones to be used.
     LanguageType nTargetLang = GetTargetLanguage();
     if (IsChinese( nTargetLang ))

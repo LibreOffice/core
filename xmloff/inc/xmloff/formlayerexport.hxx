@@ -122,7 +122,7 @@ namespace xmloff
             shapes in the drawing layer may have such references)</p>
 
             <p>No top level element describing the whole collection is inserted. I.e. if within your document, you
-            expect the the forms collection to be stored like
+            expect the forms collection to be stored like
                 <listing>
                     &lt;Forms&gt;
                         ....    // all the forms stuff here

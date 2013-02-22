@@ -3396,7 +3396,7 @@ void WW8TabDesc::SetNumRuleName( const String& rName )
 
 bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
 {
-    // Entering a table so make sure the the FirstPara flag gets set
+    // Entering a table so make sure the FirstPara flag gets set
     bFirstPara = true;
     // keine rekursiven Tabellen Nicht bei EinfuegenDatei in Tabelle oder
     // Fussnote

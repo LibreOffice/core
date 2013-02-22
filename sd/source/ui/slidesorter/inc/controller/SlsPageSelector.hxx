@@ -148,7 +148,7 @@ public:
         const ::boost::shared_ptr<PageSelection>& rSelection,
         const bool bUpdateCurrentPage = true);
 
-    /** Call this method after the the model has changed to set the number
+    /** Call this method after the model has changed to set the number
         of selected pages.
     */
     void CountSelectedPages (void);

@@ -1034,7 +1034,7 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
 sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
 {
     // get range of text within node to be converted
-    // (either all the text or the the text within the selection
+    // (either all the text or the text within the selection
     // when the conversion was started)
     xub_StrLen nTextBegin, nTextEnd;
     //

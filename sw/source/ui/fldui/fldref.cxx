@@ -355,7 +355,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
         {
             case TYP_GETREFFLD:
                 if (REFFLDFLAG & (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(nOld))
-                    // the the old one stays
+                    // the old one stays
                     nFldDlgFmtSel = aFormatLB.GetSelectEntryPos();
                 bName = sal_True;
                 break;

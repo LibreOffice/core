@@ -276,7 +276,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void OGeneralPage::onTypeSelected(const ::rtl::OUString& _sURLPrefix)
     {
-        // the the new URL text as indicated by the selection history
+        // the new URL text as indicated by the selection history
         implSetCurrentType( _sURLPrefix );
 
         switchMessage(_sURLPrefix);

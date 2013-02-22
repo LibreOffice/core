@@ -146,7 +146,7 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
                        bUsed, XML_STYLE_FAMILY_TEXT_PARAGRAPH, 0);
     exportStyleFamily( "CharacterStyles", GetXMLToken(XML_TEXT), GetTextPropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_TEXT );
-    // get shape export to make sure the the frame family is added correctly.
+    // get shape export to make sure the frame family is added correctly.
     GetExport().GetShapeExport();
     exportStyleFamily( "FrameStyles", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), GetFramePropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_FRAME, 0);

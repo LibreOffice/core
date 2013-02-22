@@ -2484,7 +2484,7 @@ void FormController::implControlInserted( const Reference< XControl>& _rxControl
     {
         Reference< XControlModel > xModel( _rxControl->getModel() );
 
-        // we want to know about the reset of the the model of our controls
+        // we want to know about the reset of the model of our controls
         // (for correctly resetting m_bModified)
         Reference< XReset >  xReset( xModel, UNO_QUERY );
         if ( xReset.is() )

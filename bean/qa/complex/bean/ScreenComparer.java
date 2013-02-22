@@ -164,7 +164,7 @@ class ScreenComparer
 
         m_imgDiff = new BufferedImage(w1, h1, BufferedImage.TYPE_INT_ARGB);
 
-        //First check if the the images differ.
+        //First check if the images differ.
         int lenAr = pixels1.length;
         int index = 0;
         for (index = 0; index < lenAr; index++)

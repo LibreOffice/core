@@ -315,7 +315,7 @@ protected:
         css::uno::Reference<css::uno::XComponentContext> const & xContext );
 
     /* creates a folder with a unique name.
-       If url is empty then it is created in the the backend folder, otherwise
+       If url is empty then it is created in the backend folder, otherwise
        at a location relative to that folder specified by url.
     */
     ::rtl::OUString createFolder(

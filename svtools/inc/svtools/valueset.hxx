@@ -137,7 +137,7 @@ an item could be calculated (for this the free space defined by
 SetExtraSpacing() will not be included).
 
 The background color could be specified by SetColor(), with which the image
-or UserDraw items will be underlayed. If no color is specified the the color
+or UserDraw items will be underlayed. If no color is specified the color
 of other windows (WindowColor) will be used for the background.
 
 --------------------------------------------------------------------------

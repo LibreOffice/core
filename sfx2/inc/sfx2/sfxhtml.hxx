@@ -71,7 +71,7 @@ public:
 
 protected:
     // Start a file download. This is done asynchronously or synchronously.
-    // In the synchronous case, the parser is in the the working state after
+    // In the synchronous case, the parser is in the working state after
     // it has been called. The read file can then be picked up directly with
     // FinishFileDownload. In the asynchronous case, the parser is in the
     // pending state after it hs been called. The parser then has to leave

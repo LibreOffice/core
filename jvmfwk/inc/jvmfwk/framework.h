@@ -302,7 +302,7 @@ JVMFWK_DLLPUBLIC sal_Bool SAL_CALL jfw_areEqualJavaInfo(
 
 /** determines if a Java Virtual Machine is already running.
 
-    <p>As long as the the office and the JREs only support one
+    <p>As long as the office and the JREs only support one
     Virtual Machine per process the Java settings, particulary the
     selected Java, are not effective immediatly after changing when
     a VM has already been running. That is, if a JRE A was used to start

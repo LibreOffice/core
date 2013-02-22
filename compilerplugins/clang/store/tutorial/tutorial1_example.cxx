@@ -1,5 +1,5 @@
 // This is just an example file to see what AST looks like for return statements.
-// To the the AST, run :
+// To the AST, run :
 // clang++ -fsyntax-only -Xclang -ast-dump tutorial1_example.cxx
 
 void f()

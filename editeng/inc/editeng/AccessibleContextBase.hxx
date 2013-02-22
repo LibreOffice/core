@@ -361,7 +361,7 @@ private:
     */
     StringOrigin meDescriptionOrigin;
 
-    /** Name of this object.  It changes according the the draw page's
+    /** Name of this object.  It changes according the draw page's
         display mode.
     */
     ::rtl::OUString msName;

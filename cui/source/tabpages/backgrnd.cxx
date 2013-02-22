@@ -1250,7 +1250,7 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
 
 /*  [Description]
 
-    Hide the the controls for color settings
+    Hide the controls for color settings
     and show controls for editing the bitmap instead.
 */
 

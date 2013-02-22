@@ -684,7 +684,7 @@ namespace dbmm
             Reference< XStorageBasedDocument > xStorageDoc( _rxDocument, UNO_QUERY_THROW );
             Reference< XStorage > xDocStorage( xStorageDoc->getDocumentStorage(), UNO_QUERY_THROW );
 
-            // the the "Scripts" storage exist, or if it does not (yet) exist and we are in write mode
+            // the "Scripts" storage exist, or if it does not (yet) exist and we are in write mode
             // => open the storage
             if  (   (   xDocStorage->hasByName( lcl_getScriptsStorageName() )
                     &&  xDocStorage->isStorageElement( lcl_getScriptsStorageName() )

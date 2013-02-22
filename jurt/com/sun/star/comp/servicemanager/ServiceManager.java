@@ -290,7 +290,7 @@ public class ServiceManager implements XMultiServiceFactory,
     /**
      * Look up the factory for a given service or implementation name.
      * First the requested service name is search in the list of avaible services. If it can not be found
-     * the name is looked up in the the implementation list.
+     * the name is looked up in the implementation list.
      * <p>
      * @return  the factory of the service / implementation
      * @param   serviceName    indicates the service or implementation name

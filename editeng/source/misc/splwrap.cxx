@@ -345,7 +345,7 @@ void SvxSpellWrapper::StartThesaurus( const String &rWord, sal_uInt16 nLanguage 
 // -----------------------------------------------------------------------
 
 void SvxSpellWrapper::ReplaceAll( const String &, sal_Int16 )
-{   // Replace Word from the the Replace list
+{   // Replace Word from the Replace list
 }
 
 // -----------------------------------------------------------------------

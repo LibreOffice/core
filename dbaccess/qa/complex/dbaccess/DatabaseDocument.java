@@ -543,7 +543,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
      *  created when needed.
      *  In particular, a document can be closed (this is what happens when the last UI window displaying
      *  this document is closed), and then dies. Now when the other "view", the data source, still exists,
-     *  the the underlying document data is not discarded, but kept alive (else the data source would die
+     *  the underlying document data is not discarded, but kept alive (else the data source would die
      *  just because the document dies, which is not desired). If the document is loaded, again, then
      *  it is re-created, using the data of its previous "incarnation".
      *

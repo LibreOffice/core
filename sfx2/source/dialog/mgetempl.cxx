@@ -519,7 +519,7 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 
 /*  [Description]
 
-    ActivatePage handler of SfxTabDialog, is used for the the update of the
+    ActivatePage handler of SfxTabDialog, is used for the update of the
     descriptive text, since this might have changed through changes of data on
     other pages.
 

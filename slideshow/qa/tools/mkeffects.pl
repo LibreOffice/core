@@ -77,7 +77,7 @@ sub zip_dirtree
 
     #   First transfer the drive from $cwd to $zip_name.  This is a
     #   workaround for a bug in file_name_is_absolute which thinks
-    #   the the path \bla is an absolute path under DOS.
+    #   the path \bla is an absolute path under DOS.
     my ($volume,$directories,$file) = File::Spec->splitpath ($zip_name);
     my ($volume_cwd,$directories_cwd,$file_cwd) = File::Spec->splitpath ($cwd);
     $volume = $volume_cwd if ($volume eq "");

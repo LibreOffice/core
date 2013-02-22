@@ -595,7 +595,7 @@ XMultiPropertySet
      *  If a member is an UNO interface, then <em>setVal</em> is queried for this interface and the result is returned.
      *  If <em>setVal</em> is null then <em>newVal</em> will be null too after return.
      *  <p>
-     *  If a property value is stored using a primitive type the the out-parameters
+     *  If a property value is stored using a primitive type the out-parameters
      *  <em>curVal</em> and <em>newVal</em> contain the respective wrapper class (e.g.java.lang.Byte, etc.).
      *  curVal is used in calls to the XVetoableChangeListener and XPropertyChangeListener.
      *

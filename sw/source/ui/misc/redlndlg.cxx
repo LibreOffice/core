@@ -833,7 +833,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
                        &aRewriter);
     }
 
-    // accept/reject the the redlines in aRedlines. The absolute
+    // accept/reject the redlines in aRedlines. The absolute
     // position may change during the process (e.g. when two redlines
     // are merged in result of another one being deleted), so the
     // position must be resolved late and checked before using it.

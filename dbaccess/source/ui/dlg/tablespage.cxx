@@ -393,7 +393,7 @@ DBG_NAME(OTableSubscriptionPage)
                 pExpand = NULL;
         }
 
-        // update the toolbox according the the current selection and check state
+        // update the toolbox according the current selection and check state
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 

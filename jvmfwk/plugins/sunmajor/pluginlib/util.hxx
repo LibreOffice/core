@@ -31,7 +31,7 @@ class VendorBase;
 std::vector<rtl::OUString> getVectorFromCharArray(char const * const * ar, int size);
 
 /*   The function uses the relative paths, such as "bin/java.exe" and the provided
-     path to derive the the home directory. The home directory is then used as
+     path to derive the home directory. The home directory is then used as
      argument to getJREInfoByPath. For example usBinDir is
      file:///c:/j2sdk/jre/bin then file:///c:/j2sdk/jre would be derived.
  */

@@ -1579,7 +1579,7 @@ public:
         return (RC) osl_getFileStatus( _pData, &rStatus._aStatus, rStatus._nMask );
     }
 
-/** Determine if a directory item point the the same underlying file
+/** Determine if a directory item point the same underlying file
 
     The comparison is done first by URL, and then by resolving links to
     find the target, and finally by comparing inodes on unix.

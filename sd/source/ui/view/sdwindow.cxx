@@ -468,7 +468,7 @@ long Window::SetZoomFactor(long nZoom)
     // Update the map mode's origin (to what effect?).
     UpdateMapOrigin();
 
-    // Update the view's snapping to the the new zoom factor.
+    // Update the view's snapping to the new zoom factor.
     if ( mpViewShell && mpViewShell->ISA(DrawViewShell) )
         ((DrawViewShell*) mpViewShell)->GetView()->
                                         RecalcLogicSnapMagnetic(*this);

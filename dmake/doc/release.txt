@@ -169,7 +169,7 @@ NEW FEATURES:
     how it works.  Any macro that is not a predefined function macro and
     is invoked with parameters is looked up as a user defined function
     macro.  A new macro scope is created.  The n'th argument to the
-    macro is then assigned to the value of the the macro $n where n is 0
+    macro is then assigned to the value of the macro $n where n is 0
     for the first argument, 1 for the second argument and so on.  The
     argument is expanded before it is assigned.  The original macro is
     then expanded.  For example:

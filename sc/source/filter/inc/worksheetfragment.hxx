@@ -83,9 +83,9 @@ private:
     void                importHyperlink( const AttributeList& rAttribs );
     /** Imports individual break that is either within row or column break context. */
     void                importBrk( const AttributeList& rAttribs, bool bRowBreak );
-    /** Imports the the relation identifier for the DrawingML part. */
+    /** Imports the relation identifier for the DrawingML part. */
     void                importDrawing( const AttributeList& rAttribs );
-    /** Imports the the relation identifier for the legacy VML drawing part. */
+    /** Imports the relation identifier for the legacy VML drawing part. */
     void                importLegacyDrawing( const AttributeList& rAttribs );
     /** Imports additional data for an OLE object. */
     void                importOleObject( const AttributeList& rAttribs );

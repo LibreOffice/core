@@ -1392,7 +1392,7 @@ SfxLinkUndoAction::SfxLinkUndoAction(::svl::IUndoManager *pManager)
     pUndoManager = pManager;
     SfxUndoManager* pUndoManagerImplementation = dynamic_cast< SfxUndoManager* >( pManager );
     ENSURE_OR_THROW( pUndoManagerImplementation != NULL, "unsupported undo manager implementation!" );
-        // yes, this cast is dirty. But reaching into the the SfxUndoManager's implementation,
+        // yes, this cast is dirty. But reaching into the SfxUndoManager's implementation,
         // directly accessing its internal stack, and tampering with an action on that stack
         // is dirty, too.
     if ( pManager->GetMaxUndoActionCount() )

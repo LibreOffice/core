@@ -159,7 +159,7 @@ Dim oField as Object
 	MaxIndex = Ubound(DialogModel.lstSelFields.StringItemList())
 	Dim ColumnMap(MaxIndex)as Integer
 	FieldNames() = DialogModel.lstSelFields.StringItemList()
-	&apos; Build a structure which maps the position of a selected field (within the selection) to the the column position within
+	&apos; Build a structure which maps the position of a selected field (within the selection) to the column position within
 	&apos; the table. So we ensure that the controls are placed in the same order the according fields are selected.
 	For i = 0 To Ubound(FieldNames())
 		sFieldName = FieldNames(i)

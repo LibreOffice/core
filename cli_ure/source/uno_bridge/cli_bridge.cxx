@@ -173,7 +173,7 @@ namespace cli_uno
 
 //__________________________________________________________________________________________________
 /** ToDo
-    I doubt that the the case that the ref count raises from 0 to 1
+    I doubt that the case that the ref count raises from 0 to 1
     can occur.  uno_ext_getMapping returns an acquired mapping. Every time
     that function is called then a new mapping is created. Following the
     rules of ref counted objects, then if the ref count is null noone has

@@ -1431,7 +1431,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
         // from the post-it doc to the physical page of the document
         std::map< sal_Int32, sal_Int32 >  aPostItLastStartPageNum;
 
-        // add all post-its on valid pages within the the page range to the
+        // add all post-its on valid pages within the page range to the
         // temporary post-it document.
         // Since the array of post-it fileds is sorted by page and line number we will
         // already get them in the correct order

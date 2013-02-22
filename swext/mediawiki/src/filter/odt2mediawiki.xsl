@@ -1053,7 +1053,7 @@
 		Function for looking up the position of a node identified by the given 
 		'current-id' within a node set 'context'. 
 		
-		The search starts with the the index 'test-index'. The search is recursive 
+		The search starts with the index 'test-index'. The search is recursive 
 		in the 'test-index' argument. To save recursion depth, each recursive call 
 		iteratively tests a fixed number of indexes (by loop unrolling).
 	 -->

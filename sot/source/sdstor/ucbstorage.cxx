@@ -951,7 +951,7 @@ sal_uLong UCBStorageStream_Impl::SeekPos( sal_uLong nPos )
     }
     else
     {
-        // the problem is that even if nPos is larger the the length
+        // the problem is that even if nPos is larger the length
         // of the stream the stream pointer will be moved to this position
         // so we have to check if temporary stream does not contain required position
 

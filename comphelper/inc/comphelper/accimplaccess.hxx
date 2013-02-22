@@ -42,7 +42,7 @@ namespace comphelper
                                 >   OAccImpl_Base;
     struct OAccImpl_Impl;
 
-    /** This is a helper class which allows accessing several aspects of the the implementation
+    /** This is a helper class which allows accessing several aspects of the implementation
         of an AccessibleContext.
 
         <p>For instance, when you want to implement a context which can be re-parented, you:

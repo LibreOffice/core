@@ -293,7 +293,7 @@ private:
     // cancels all pending async events
     void cancelEvents();
 
-    /// the the auto focus to the first (in terms of the tab order) control
+    /// the auto focus to the first (in terms of the tab order) control
     void AutoFocus( sal_Bool _bSync = sal_False );
     DECL_LINK( OnActivate, void* );
     DECL_LINK( OnAutoFocus, void* );

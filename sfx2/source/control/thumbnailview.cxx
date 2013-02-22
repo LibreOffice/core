@@ -921,7 +921,7 @@ bool ThumbnailView::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
 
     // if necessary abort an existing action
 
-    // Check out if the the clicked on page is selected. If this is not the
+    // Check out if the clicked on page is selected. If this is not the
     // case set it as the current item. We only check mouse actions since
     // drag-and-drop can also be triggered by the keyboard
     sal_uInt16 nSelId;

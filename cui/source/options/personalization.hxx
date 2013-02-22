@@ -23,7 +23,7 @@ private:
     RadioButton *m_pDefaultBackground;      ///< Use the built-in bitmap for Writer background
     RadioButton *m_pOwnBackground;          ///< Use the user-defined bitmap
     PushButton *m_pSelectBackground;        ///< Let the user select in the 'own' case
-    OUString m_aBackgroundURL;              ///< URL of the the background image in the 'own' case
+    OUString m_aBackgroundURL;              ///< URL of the background image in the 'own' case
 
     RadioButton *m_pNoPersona;              ///< Just the default look, without any bitmap
     RadioButton *m_pDefaultPersona;         ///< Use the built-in bitmap

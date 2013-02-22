@@ -134,7 +134,7 @@ private:
     bool createSettingsDocument() const;
 
     /** returns the system path to the data file which is to be used. The value
-        depends on the the member m_layer and the bootstrap parameters
+        depends on the member m_layer and the bootstrap parameters
         UNO_JAVA_JFW_USER_DATA and UNO_JAVA_JFW_SHARED_DATA.
     */
     ::rtl::OString getSettingsPath() const;

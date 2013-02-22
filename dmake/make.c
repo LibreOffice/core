@@ -525,7 +525,7 @@ CELLPTR setdirroot;
        * than one prerequisite. */
       /* A new A_DYNAMIC attribute could save a lot of strchr( ,'$') calls. */
       if ( tcp && !(tcp->ce_flag & F_MARK) && strchr(tcp->CE_NAME, '$') ) {
-     /* Replace this dynamic prerequisite with the the real prerequisite,
+     /* Replace this dynamic prerequisite with the real prerequisite,
       * and add the additional prerequisites if there are more than one.*/
 
      name = Expand( tcp->CE_NAME );
@@ -546,7 +546,7 @@ CELLPTR setdirroot;
      }
       }
 
-      /* Dynamic expansion results in a NULL cell only when the the new
+      /* Dynamic expansion results in a NULL cell only when the new
        * prerequisite is already in the prerequisite list or empty. In this
        * case delete the cell and continue. */
       if ( tcp == NIL(CELL) ) {

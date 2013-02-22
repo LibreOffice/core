@@ -104,7 +104,7 @@ OUString get_module_path()
 
 /** Make the absolute directory of a base and
     a relative directory, if the relative
-    directory is absolute the the relative
+    directory is absolute the relative
     directory will be returned unchanged.
     Base and relative directory should be
     system paths the returned directory is

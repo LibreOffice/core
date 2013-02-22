@@ -8190,7 +8190,7 @@ void Window::SetComponentInterface( ::com::sun::star::uno::Reference< ::com::sun
 
 void Window::ImplCallDeactivateListeners( Window *pNew )
 {
-    // no deactivation if the the newly activated window is my child
+    // no deactivation if the newly activated window is my child
     if ( !pNew || !ImplIsChild( pNew ) )
     {
         ImplDelData aDogtag( this );
@@ -8209,7 +8209,7 @@ void Window::ImplCallDeactivateListeners( Window *pNew )
 
 void Window::ImplCallActivateListeners( Window *pOld )
 {
-    // no activation if the the old active window is my child
+    // no activation if the old active window is my child
     if ( !pOld || !ImplIsChild( pOld ) )
     {
         ImplDelData aDogtag( this );

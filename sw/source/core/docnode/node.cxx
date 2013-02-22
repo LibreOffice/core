@@ -945,7 +945,7 @@ SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
 SwCntntNode::~SwCntntNode()
 {
     // The base class SwClient of SwFrm excludes itself from the dependency list!
-    // Thus, we need to delete all Frames in the the dependency list.
+    // Thus, we need to delete all Frames in the dependency list.
     if( GetDepends() )
         DelFrms();
 

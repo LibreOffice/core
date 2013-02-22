@@ -254,7 +254,7 @@ namespace toolkit
         // * the PosSize of our peer, relative to it's parent window
         // * the parent window which the PosSize is relative to
         // * our foreign controlled accessible parent
-        // from this info, we can determine the the position of our peer relative to the foreign parent
+        // from this info, we can determine the position of our peer relative to the foreign parent
 
         // our control
         Reference< awt::XWindow > xWindow;

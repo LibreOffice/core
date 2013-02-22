@@ -434,7 +434,7 @@
 			</prop>
 			<prop oor:type="xs:boolean"  oor:name="PaperCompanyAddressReceiverField">
 				<info>
-					<desc>Enables the the Sender Address Line in the Receiver Field for Business Paper.</desc>
+					<desc>Enables the Sender Address Line in the Receiver Field for Business Paper.</desc>
 				</info>
 			</prop>
 			<prop oor:type="xs:boolean"  oor:name="PaperFooter">

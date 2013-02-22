@@ -181,7 +181,7 @@ namespace fileaccess {
         /**
          *  Used to associate and deassociate a new property with
          *  the content belonging to URL UnqPath.
-         *  The default value and the the attributes are input
+         *  The default value and the attributes are input
          */
 
         void SAL_CALL associate( const rtl::OUString& UnqPath,
@@ -242,7 +242,7 @@ namespace fileaccess {
 
 
         /**
-         *  This method returns the result set containing the the children of the directory belonging
+         *  This method returns the result set containing the children of the directory belonging
          *  to file URL aUnqPath
          */
 

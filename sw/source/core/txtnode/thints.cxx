@@ -754,7 +754,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                     boost::shared_ptr<SfxItemSet> pOldStyle = static_cast<const SwFmtAutoFmt&>(pOther->GetAttr()).GetStyleHandle();
 
                     // For each attribute in the automatic style check if it
-                    // is also set the the new character style:
+                    // is also set the new character style:
                     SfxItemSet aNewSet( *pOldStyle->GetPool(),
                         aCharAutoFmtSetRange);
                     SfxItemIter aItemIter( *pOldStyle );

@@ -1427,7 +1427,7 @@ AC_ARG_WITH(system-apache-commons,
 AC_ARG_WITH(system-mysql,
     AS_HELP_STRING([--with-system-mysql],
         [Use MySQL libraries already on system, for building the MySQL Connector/LibreOffice
-         extension. If the the mysql_config executable is not in PATH, use MYSQLCONFIG to
+         extension. If the mysql_config executable is not in PATH, use MYSQLCONFIG to
          point to it.]),,
     [with_system_mysql="$with_system_libs"])
 

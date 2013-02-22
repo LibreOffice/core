@@ -31,7 +31,7 @@ Simple usage scenario:
    Data->DataPilot->Start...
 5. select "External source/interface -> Ok
 6. select the example DataPilot
-   Use the the drop down list and select the service
+   Use the drop down list and select the service
    "ExampleDataPilotSource" -> Ok
 7. Place some number fields in the field areas
    For example:

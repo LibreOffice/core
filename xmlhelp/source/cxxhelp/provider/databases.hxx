@@ -228,7 +228,7 @@ namespace chelp {
 
 
         /**
-         *  Changes the the stylesheet for further reads.
+         *  Changes the stylesheet for further reads.
          */
 
         void changeCSS(const rtl::OUString& newStyleSheet);
@@ -245,7 +245,7 @@ namespace chelp {
                             int* byteCount );
 
         /**
-         *  Has the purpose of forcing the the jarfile to stay open
+         *  Has the purpose of forcing the jarfile to stay open
          */
 
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >

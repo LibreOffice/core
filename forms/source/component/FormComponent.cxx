@@ -2331,7 +2331,7 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
 
     try
     {
-        // release our mutex once (it's acquired in one of the the calling methods), as setting aggregate properties
+        // release our mutex once (it's acquired in one of the calling methods), as setting aggregate properties
         // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
         // our own mutex locked
         MutexRelease aRelease( m_aMutex );

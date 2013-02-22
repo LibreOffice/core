@@ -141,7 +141,7 @@ protected:
     void ScrolledOut( const SwRect& rOldVisArea );
 
     // Invalidate the states of all children of the specified SwFrm. The
-    // SwFrm might belong the the current object or to any child or grandchild!
+    // SwFrm might belong the current object or to any child or grandchild!
     // #i27301# - use new type definition for <_nStates>
     void InvalidateChildrenStates( const SwFrm* _pFrm,
                                    tAccessibleStates _nStates );

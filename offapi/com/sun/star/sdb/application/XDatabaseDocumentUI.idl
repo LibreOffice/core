@@ -250,7 +250,7 @@ interface XDatabaseDocumentUI
         <p>In opposite to <member>loadComponent</member>, this method allows you to specify
         additional arguments which are passed to the to-be-loaded component.</p>
 
-        <p>The meaning of the the arguments is defined at the service which is effectively
+        <p>The meaning of the arguments is defined at the service which is effectively
         created. See the <a href="#component_types">above table</a> for a list of those
         services.</p>
     */
@@ -285,7 +285,7 @@ interface XDatabaseDocumentUI
         <p>In opposite to <member>createComponent</member>, this method allows you to specify
         additional arguments which are passed to the to-be-loaded component.</p>
 
-        <p>The meaning of the the arguments is defined at the service which is effectively
+        <p>The meaning of the arguments is defined at the service which is effectively
         created. See the <a href="#component_types">above table</a> for a list of those
         services.</p>
 

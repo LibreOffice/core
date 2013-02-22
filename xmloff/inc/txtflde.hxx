@@ -185,7 +185,7 @@ public:
     /// to be called once at beginning of document body.
     void ExportFieldDeclarations();
 
-    /// export field declarations for fields used in the the particular XText.
+    /// export field declarations for fields used in the particular XText.
     /// (Requires that a list of used field declarations has previously been
     ///  built-up in ExportFieldAutoStyle() )
     void ExportFieldDeclarations(

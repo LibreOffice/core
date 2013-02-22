@@ -6,7 +6,7 @@ APP_PACKAGE=org.libreoffice.android.qa.sc
 # The name of the Bootstrap activity class
 BOOTSTRAP=org.libreoffice.android.Bootstrap
 
-# The full path the the app's directory needs to be supplied in a
+# The full path the app's directory needs to be supplied in a
 # couple of places, unfortunately.
 
 APP_DATA_PATH=/data/data/$(APP_PACKAGE)

@@ -462,7 +462,7 @@ public:
     queryContentIdentifier( sal_uInt32 nIndex ) = 0;
 
     /**
-     * This method returns the the content at the specified index.
+     * This method returns the content at the specified index.
      *
      * @param nIndex is the zero-based index within the logical data array
      *               of the supplier; must be non-negative.
@@ -512,7 +512,7 @@ public:
      * The implementation should call m_pResultSet->rowCountFinal(...) if
      * it has inserted all entries in its logical result array.
      *
-     * @return true, if the the value returned by currentCount() won't change
+     * @return true, if the value returned by currentCount() won't change
                anymore.
      */
     virtual sal_Bool isCountFinal() = 0;

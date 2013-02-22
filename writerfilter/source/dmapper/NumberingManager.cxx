@@ -491,7 +491,7 @@ uno::Sequence< uno::Sequence< beans::PropertyValue > > ListDef::GetPropertyValue
         uno::Sequence< beans::PropertyValue > level = aThis[i];
         if ( level.getLength( ) == 0 )
         {
-            // If the the element contains something, merge it
+            // If the element contains something, merge it
             lcl_mergeProperties( level, aAbstract[i] );
         }
     }

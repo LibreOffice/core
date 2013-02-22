@@ -228,7 +228,7 @@ public:
     */
     void    DeactivatePanelByResource( const ::rtl::OUString& i_rPanelResourceURL );
 
-    /** provides access to the the VCL window of the panel deck
+    /** provides access to the VCL window of the panel deck
     */
           ::sfx2::ModuleTaskPane& GetTaskPane()       { return *m_pTaskPane; }
     const ::sfx2::ModuleTaskPane& GetTaskPane() const { return *m_pTaskPane; }

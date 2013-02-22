@@ -1371,7 +1371,7 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 }
 
                 //check previous position if this exists
-                //that is a redundant in the case the the attribute found above already is on the left cursor side
+                //that is a redundant in the case the attribute found above already is on the left cursor side
                 //but it's o.k. for two errors/fields side by side
                 if(aCursor.GetIndex())
                 {

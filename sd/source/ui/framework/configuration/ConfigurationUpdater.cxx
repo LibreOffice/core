@@ -188,7 +188,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
             mpBroadcaster->NotifyListeners(aEvent);
 
             // Do the actual update.  All exceptions are caught and ignored,
-            // so that the the end of the update is notified always.
+            // so that the end of the update is notified always.
             try
             {
                 if (mnLockCount == 0)
@@ -347,7 +347,7 @@ void ConfigurationUpdater::CheckPureAnchors (
         // Skip all resources that are no pure anchors.
         if (xResource.is() && xResource->isAnchorOnly())
         {
-            // When xResource is not an anchor of the the next resource in
+            // When xResource is not an anchor of the next resource in
             // the list then it is the anchor of no resource at all.
             if (nIndex == nCount-1)
             {

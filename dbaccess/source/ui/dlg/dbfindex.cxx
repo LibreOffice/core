@@ -282,7 +282,7 @@ void ODbaseIndexDialog::Init()
     // All indizes are first added to a list of free indizes.
     // Afterwards, check the index of each table in the Inf-file.
     // These indizes are removed from the list of free indizes and
-    // entered in the indexlist of the the table.
+    // entered in the indexlist of the table.
 
     // if the string does not contain a path, cut the string
     INetURLObject aURL;

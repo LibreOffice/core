@@ -800,13 +800,13 @@ bool FindControl(const ScriptEvent& evt, void* pPara)
     return false;
 }
 
-//if the the given control type in evt.Arguments[0] appears in the type list in pPara, then approve the execution
+//if the given control type in evt.Arguments[0] appears in the type list in pPara, then approve the execution
 bool ApproveType(const ScriptEvent& evt, void* pPara)
 {
     return FindControl(evt, pPara);
 }
 
-//if the the given control type in evt.Arguments[0] appears in the type list in pPara, then deny the execution
+//if the given control type in evt.Arguments[0] appears in the type list in pPara, then deny the execution
 bool DenyType(const ScriptEvent& evt, void* pPara)
 {
     return !FindControl(evt, pPara);

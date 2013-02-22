@@ -61,7 +61,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
     */
     void    allActionsCleared( [in] ::com::sun::star::lang::EventObject i_event );
 
-    /** is called when the the Redo stack has been cleared.
+    /** is called when the Redo stack has been cleared.
 
         @see XUndoManager::clearRedo
     */

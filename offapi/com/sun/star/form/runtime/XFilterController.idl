@@ -33,7 +33,7 @@ interface XFilterControllerListener;
 
     <p>In a form based filter, form controls bound to a searchable database field are replaced with a control
     which allows entering a search expression. This so-called <em>predicate expression</em> is basically a part of an
-    SQL <code>WHERE</code> clause, but without the the part denoting the database column. For instance, if you
+    SQL <code>WHERE</code> clause, but without the part denoting the database column. For instance, if you
     have a form control bound to a table column named <code>Name</code>, then entering the string
     <q>LIKE '%Smith%'</q> effectively constitutes a SQL <code>WHERE</code> clause <code>"Name" LIKE '%Smith%'</code>.</p>
 

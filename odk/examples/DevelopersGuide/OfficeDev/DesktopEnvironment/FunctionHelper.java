@@ -330,7 +330,7 @@ public class FunctionHelper
      * It use a special JNI functionality to pass the office XWindow over a java window.
      * This java window can be inserted into another java window container for complex layouting.
      * If this parent java window isn't used, a top level system window will be created.
-     * The the resulting office frame isn't plugged into this java application.
+     * The resulting office frame isn't plugged into this java application.
      *
      * @param sName
      *          name to set it on the new created frame

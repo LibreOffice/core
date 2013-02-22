@@ -142,7 +142,7 @@ namespace dbaui
 
         void switchMessage(const ::rtl::OUString& _sURLPrefix);
 
-        /// sets the the title of the parent dialog
+        /// sets the title of the parent dialog
         void setParentTitle(const ::rtl::OUString& _sURLPrefix);
 
         DECL_LINK(OnDatasourceTypeSelected, ListBox*);

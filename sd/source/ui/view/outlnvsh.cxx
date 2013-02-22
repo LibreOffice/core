@@ -1260,7 +1260,7 @@ void OutlineViewShell::Execute(SfxRequest& rReq)
             break;
 
         case SID_SEARCH_ITEM:
-            // Forward this request to the the common (old) code of the
+            // Forward this request to the common (old) code of the
             // document shell.
             GetDocSh()->Execute (rReq);
             bForwardCall = false;

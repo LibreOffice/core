@@ -410,7 +410,7 @@ SFPCatalog	Catalog	N					Binary		SFP Catalog
 SFPCatalog	Dependency	Y					Formatted		Parent catalog - only used by SFP
 SFPCatalog	SFPCatalog	N					Filename		File name for the catalog.
 Shortcut	Arguments	Y					Formatted		The command-line arguments for the shortcut.
-Shortcut	Component_	N			Component	1	Identifier		Foreign key into the Component table denoting the component whose selection gates the the shortcut creation/deletion.
+Shortcut	Component_	N			Component	1	Identifier		Foreign key into the Component table denoting the component whose selection gates the shortcut creation/deletion.
 Shortcut	Description	Y					Text		The description for the shortcut.
 Shortcut	Directory_	N			Directory	1	Identifier		Foreign key into the Directory table denoting the directory where the shortcut file is created.
 Shortcut	Hotkey	Y	0	32767					The hotkey for the shortcut. It has the virtual-key code for the key in the low-order byte, and the modifier flags in the high-order byte. 

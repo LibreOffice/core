@@ -81,7 +81,7 @@
 		 To access contents of a office file (content like the meta.xml, styles.xml file or  graphics) a URL could be choosen.
 	 This could be even a JAR URL. The sourceBase of the content URL "jar:file:/C:/temp/Test.sxw!/content.xml" would be
 	 "jar:file:/C:/temp/Test.sxw!/" for example.
-		 When working with OpenOffice API a Package-URL encoded over HTTP can be used to access the jared contents of the the jared document. -->
+		 When working with OpenOffice API a Package-URL encoded over HTTP can be used to access the jared contents of the jared document. -->
 	<xsl:param name="sourceBaseURL" select="'./'" />
 
 	<!-- OPTIONAL: (MANDATORY: for session management by URL rewriting)

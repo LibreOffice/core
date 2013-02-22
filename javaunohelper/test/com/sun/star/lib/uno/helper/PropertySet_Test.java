@@ -1305,7 +1305,7 @@ class TestClass extends PropertySet
             r[i++]= ((Boolean)value).booleanValue() == ((Boolean) outNewVal[0]).booleanValue();
             r[i++]= convertPropertyValue(propBoolC, outNewVal,  outOldVal, value);
             r[i++]= ((Boolean)value).booleanValue() == ((Boolean) outNewVal[0]).booleanValue();
-            // must fail because the the member boolPropD is private
+            // must fail because the member boolPropD is private
             try{
                 convertPropertyValue(propBoolD, outNewVal,  outOldVal, value);
                 i++;
@@ -1411,7 +1411,7 @@ class TestClass extends PropertySet
             r[i++]= boolPropB == ((Boolean) value).booleanValue();
             setPropertyValueNoBroadcast(propBoolC, value);
             r[i++]= boolPropC == ((Boolean) value).booleanValue();
-            // must fail because the the member boolPropD is private
+            // must fail because the member boolPropD is private
             try{
             setPropertyValueNoBroadcast(propBoolD, value);
             }catch(com.sun.star.lang.WrappedTargetException e)

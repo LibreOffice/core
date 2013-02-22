@@ -26,7 +26,7 @@ d) gcc will only emit code for inlines if those inlines are used, so
    sometimes something is listed correctly as unused but some inline
    code takes a pointer or reference to something which cannot be 
    instantiated so removal of some method/class fails at build time because
-   gcc never emits any code for the the unused inline but trips over it at
+   gcc never emits any code for the unused inline but trips over it at
    compile time after an attempt at removal. i.e. generally the inline method
    can go as well because nothing calls it either, a double win.
 e) if a constructor is listed as unused, and it's the *only* ctor in the class,

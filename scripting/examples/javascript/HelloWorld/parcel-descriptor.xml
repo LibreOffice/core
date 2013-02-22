@@ -22,7 +22,7 @@
         <locale lang="en">
             <displayname value="Hello World"/>
             <description>
-                Adds the the string "Hello World" into the current text doc.
+                Adds the string "Hello World" into the current text doc.
             </description>
         </locale>
         <functionname value="helloworld.js"/>

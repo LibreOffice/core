@@ -310,7 +310,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_acquireDirectoryItem(
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_releaseDirectoryItem(
         oslDirectoryItem Item );
 
-/** Determine if two directory items point the the same underlying file
+/** Determine if two directory items point the same underlying file
 
     The comparison is done first by URL, and then by resolving links to
     find the target, and finally by comparing inodes on unix.

@@ -159,7 +159,7 @@ namespace drawinglayer
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
             /** provide unique ID for fast identifying of known primitive implementations in renderers. These use
-                the the defines from drawinglayer_primitivetypes2d.hxx to define unique IDs.
+                the defines from drawinglayer_primitivetypes2d.hxx to define unique IDs.
                 This method is normally defined using DeclPrimitrive2DIDBlock()
              */
             virtual sal_uInt32 getPrimitive2DID() const = 0;

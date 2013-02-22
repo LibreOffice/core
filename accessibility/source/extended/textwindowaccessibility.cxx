@@ -1487,7 +1487,7 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
             // TEXT_HINT_FORMATPARAs, followed by an optional
             // TEXT_HINT_TEXTHEIGHTCHANGED, followed in all cases by one
             // TEXT_HINT_TEXTFORMATTED.  Only the TEXT_HINT_FORMATPARAs contain
-            // the the numbers of the affected paragraphs, but they are sent
+            // the numbers of the affected paragraphs, but they are sent
             // before the changes are applied.  Therefore, TEXT_HINT_FORMATPARAs
             // are just buffered until another hint comes in:
             {

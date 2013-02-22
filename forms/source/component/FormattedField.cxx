@@ -1122,7 +1122,7 @@ Any OFormattedModel::translateControlValueToExternalValue( ) const
 
     Any aExternalValue;
 
-    // translate into the the external value type
+    // translate into the external value type
     Type aExternalValueType( getExternalValueType() );
     switch ( aExternalValueType.getTypeClass() )
     {

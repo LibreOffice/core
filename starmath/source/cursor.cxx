@@ -1162,7 +1162,7 @@ void SmCursor::InsertCommand(sal_uInt16 nCommand) {
 }
 
 void SmCursor::InsertCommandText(OUString aCommandText) {
-    //Parse the the sub expression
+    //Parse the sub expression
     SmNode* pSubExpr = SmParser().ParseExpression(aCommandText);
 
     //Prepare the subtree

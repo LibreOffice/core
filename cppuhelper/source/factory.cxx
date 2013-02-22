@@ -838,7 +838,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
         // the location of the program code of the implementation
         Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
             OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/URL") ) );
-        // is the the key of the right type ?
+        // is the key of the right type ?
         if( xLocationKey.is() && xLocationKey->getValueType() == RegistryValueType_ASCII )
         {
             // one implementation found -> try to activate

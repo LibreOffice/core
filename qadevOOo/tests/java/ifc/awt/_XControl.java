@@ -111,7 +111,7 @@ public class _XControl extends MultiMethodTest {
     }
 
     /**
-    * Test calls the method. Then the the object ralation 'WINPEER' is
+    * Test calls the method. Then the object ralation 'WINPEER' is
     * obtained, and compared with the peer, gotten from (XControl) oObj
     * variable.<p>
     * Has <b> OK </b> status if peer gotten isn't null

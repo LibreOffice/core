@@ -86,7 +86,7 @@ Rectangle AccessibleViewForwarder::GetVisibleArea (void) const
 
 
 
-/** Tansform the given point into pixel coordiantes.  After the the pixel
+/** Tansform the given point into pixel coordiantes.  After the pixel
     coordiantes of the window origin are added to make the point coordinates
     absolute.
 */

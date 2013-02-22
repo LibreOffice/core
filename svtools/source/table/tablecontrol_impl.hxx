@@ -453,7 +453,7 @@ namespace svt { namespace table
         /** retrieves the area occupied by the totality of (at least partially) visible cells
 
             The returned area includes row and column headers. Also, it takes into
-            account the the fact that there might be less columns than would normally
+            account the fact that there might be less columns than would normally
             find room in the control.
 
             As a result of respecting the partial visibility of rows and columns,

@@ -308,7 +308,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     }
                     else if ( bConversionParamsEvent && bConversionEvent )
                     {
-                        // first argument must be the the params
+                        // first argument must be the params
                         m_conversionparams = aArg;
                         bConversionParamsEvent = false;
                     }

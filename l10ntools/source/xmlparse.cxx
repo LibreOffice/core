@@ -954,7 +954,7 @@ void SimpleXMLParser::StartElement(
 void SimpleXMLParser::EndElement( const XML_Char *name )
 /*****************************************************************************/
 {
-    // This variable is not used at all, but the the sax C interface can't be changed
+    // This variable is not used at all, but the sax C interface can't be changed
     // To prevent warnings this dummy assignment is used
     // +++
     (void) name;

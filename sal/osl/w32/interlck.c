@@ -27,7 +27,7 @@ extern int osl_isSingleCPU;
 /* For all Intel x86 above x486 we use a spezial inline assembler implementation.
    The main reason is that WIN9? does not return the result of the operation.
    Instead there is only returned a value greater than zero is the increment
-   result is greater than zero, but not the the result of the addition.
+   result is greater than zero, but not the result of the addition.
    For Windows NT the native function could be used, because the correct result
    is returned. Beacuse of simpler code maintance and performace reasons we use
    on every x86-Windows-Platform the inline assembler implementation.

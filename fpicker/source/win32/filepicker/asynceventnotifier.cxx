@@ -153,7 +153,7 @@ void SAL_CALL CAsyncEventNotifier::shutdown()
     m_bRun = false;
     m_EventList.clear();
 
-    // awake the the notifier thread
+    // awake the notifier thread
     SetEvent(m_ResumeNotifying);
     SetEvent(m_NotifyEvent);
 

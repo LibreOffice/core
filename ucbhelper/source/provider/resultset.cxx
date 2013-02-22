@@ -632,7 +632,7 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
 {
 /*
     Attempting to move beyond the first/last row in the result set
-    positions the cursor before/after the the first/last row.
+    positions the cursor before/after the first/last row.
 
     Calling relative( 0 ) is valid, but does not change the cursor position.
 

@@ -103,7 +103,7 @@ namespace abp
             const ::rtl::OUString& _rTableName
         ) SAL_THROW ( ( ) );
 
-        /** writes the configuration entry which states the the pilot has been completed successfully
+        /** writes the configuration entry which states the pilot has been completed successfully
         */
         void markPilotSuccess(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext

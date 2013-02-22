@@ -336,7 +336,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcessWithTimeout(
     @param[out] pInfo   a pointer to a vaid oslProcessInfo structure.
                         the Size field has to be initialized with the size
                         of the oslProcessInfo structure.
-                        on success the the Field member holds the (or'ed)
+                        on success the Field member holds the (or'ed)
                         retrieved valid information fields.
     @return osl_Process_E_None on success, osl_Process_E_Unknown on failure.
  */

@@ -156,7 +156,7 @@ public class SheetSettings implements OfficeConstants {
     }
 
     /**
-     * Gets the the leftmost column visibile in the right pane.
+     * Gets the leftmost column visibile in the right pane.
      *
      * @return the 0-based index to the column
      */

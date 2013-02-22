@@ -110,7 +110,7 @@ interface XLanguageGuessing
     /** determines the single most probable language of a sub-string.
 
         <p>Please note that because statistical analysis is part
-        of the algorithm the the likelihood to get the correct
+        of the algorithm the likelihood to get the correct
         result increases with the length of the sub-string.
         A word is much less likely guessed correctly compared to
         a sentence or even a whole paragraph.</p>

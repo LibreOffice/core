@@ -4754,7 +4754,7 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
             break;
         case SVX_TAB_ADJUST_DECIMAL:
             /*
-            Theres nothing we can do btw the the decimal seperator has been
+            Theres nothing we can do btw the decimal seperator has been
             customized, but if you think different remember that different
             locales have different seperators, i.e. german is a , while english
             is a .

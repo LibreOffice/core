@@ -88,7 +88,7 @@ public interface MenuPresenter {
      * if applicable the presenter should present the submenu.
      *
      * @param subMenu SubMenu being opened
-     * @return true if the the event was handled, false otherwise.
+     * @return true if the event was handled, false otherwise.
      */
     public boolean onSubMenuSelected(SubMenuBuilder subMenu);
 

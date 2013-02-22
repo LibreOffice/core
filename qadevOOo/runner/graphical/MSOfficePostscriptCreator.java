@@ -409,7 +409,7 @@ public class MSOfficePostscriptCreator implements IOffice
             out.write( "    print STDERR \"Usage: word_print.pl  <Word file> <name of printer> <output file> .\\n     " + ls );
             out.write( "                  Please use the same string for the name of the printer as you can find \\n  " + ls );
             out.write( "                  under Start-Control Panel-Printer and Faxes  \\n                        " + ls );
-            out.write( "                  The name could look like the the following line: \\n                        " + ls );
+            out.write( "                  The name could look like the following line: \\n                        " + ls );
             out.write( "                  Apple LaserWriter II NT v47.0 \\n                                           " + ls );
             out.write( "                  Sample command line: \\n                                                    " + ls );
             out.write( "                  execl_print.pl  c:\\book1.doc Apple LaserWriter II NT v47.0 c:\\output\\book1.ps \\n\";  " + ls );
@@ -634,7 +634,7 @@ public class MSOfficePostscriptCreator implements IOffice
             out.write( "    print STDERR \"Usage: printViaExcel.pl  <Excel file> <name of printer> <output file> .\\n                       " + ls );
             out.write( "                  Please use the same string for the name of the printer as you can find \\n                      " + ls );
             out.write( "                  under Start-Control Panel-Printer and Faxes  \\n                                            " + ls );
-            out.write( "                  The name could look like the the following line: \\n                                            " + ls );
+            out.write( "                  The name could look like the following line: \\n                                            " + ls );
             out.write( "                  Apple LaserWriter II NT v47.0 \\n                                                               " + ls );
             out.write( "                  Sample command line: \\n                                                                        " + ls );
             out.write( "                  execl_print.pl  c:\\book1.xls Apple LaserWriter II NT v47.0 c:\\output\\book1.ps \\n\";     " + ls );
@@ -821,7 +821,7 @@ public class MSOfficePostscriptCreator implements IOffice
             out.write( "    print STDERR \"Usage: powerpoint_print.pl  <PowerPoint file> <name of printer> <output file> .\\n                    " + ls );
             out.write( "                  Please use the same string for the name of the printer as you can find \\n                            " + ls );
             out.write( "                  under Start-Control Panel-Printer and Faxes  \\n                                                  " + ls );
-            out.write( "                  The name could look like the the following line: \\n                                                  " + ls );
+            out.write( "                  The name could look like the following line: \\n                                                  " + ls );
             out.write( "                  Apple LaserWriter II NT v47.0 \\n                                                                     " + ls );
             out.write( "                  Sample command line: \\n                                                                              " + ls );
             out.write( "                  powerpoint_print.pl  c:\\book.ppt Apple LaserWriter II NT v47.0 c:\\output\\book.ps \\n\";         " + ls );

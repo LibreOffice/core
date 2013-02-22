@@ -26,7 +26,7 @@ import java.util.LinkedList;
 
 /** An XAdapter implementation that holds a weak reference (java.lang.ref.WeakReference)
  *  to an object. Clients can register listener (com.sun.star.lang.XReference) which
- *  are notified when the the object (the one which is kept weak) is being finalized. That
+ *  are notified when the object (the one which is kept weak) is being finalized. That
  *  is, that object is being destroyed because there are not any hard references
  *  to it.
  */

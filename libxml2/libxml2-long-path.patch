@@ -6,7 +6,7 @@
  
 -    /* sanitize filename starting with // so it can be used as URI */
 +#if defined(_WIN32) 	
-+	//We must not change the backslashes to slashes if the the path starts with
++	//We must not change the backslashes to slashes if the path starts with
 +	// \\?\
 +	//Those paths can be up to 32k characters long.
 +	len = xmlStrlen(path);

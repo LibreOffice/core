@@ -43,7 +43,7 @@ namespace frm
         we need to ensure that the state does not contradict the model property "too much".
 
         As an example, consider a form control which, according to its model's property, is disabled.
-        Now when the parent VCL window of the control's VCL window is enabled, then the the control's
+        Now when the parent VCL window of the control's VCL window is enabled, then the control's
         window is enabled, too - which contradicts the model property.
 
         A WindowStateGuard helps you preventing such inconsistent states.

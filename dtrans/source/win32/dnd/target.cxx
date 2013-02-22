@@ -641,7 +641,7 @@ void DropTarget::_rejectDrag( const Reference<XDropTargetDragContext>& context)
 // is then checked against the allowed actions which can be set through
 // XDropTarget::setDefaultActions. Only those values which are also
 // default actions are returned. If setDefaultActions has not been called
-// beforehand the the default actions comprise all possible actions.
+// beforehand the default actions comprise all possible actions.
 // params: grfKeyState - the modifier keys and mouse buttons currently pressed
 inline sal_Int8 DropTarget::getFilteredActions( DWORD grfKeyState, DWORD dwEffect)
 {

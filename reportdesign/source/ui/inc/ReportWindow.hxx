@@ -173,7 +173,7 @@ namespace rptui
         */
         sal_Bool        handleKeyEvent(const KeyEvent& _rEvent);
 
-        /** the the section as marked or not marked
+        /** the section as marked or not marked
             @param  _pSectionView   the section where to set the marked flag
             @param  _bMark  the marked flag
         */

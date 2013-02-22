@@ -45,7 +45,7 @@ protected:
     virtual void        finalizeImport();
 
 private:
-    /** Imports the the relation identifier for the DrawingML part. */
+    /** Imports the relation identifier for the DrawingML part. */
     void                importDrawing( const AttributeList& rAttribs );
     /** Imports the DRAWING record containing the relation identifier for the DrawingML part. */
     void                importDrawing( SequenceInputStream& rStrm );

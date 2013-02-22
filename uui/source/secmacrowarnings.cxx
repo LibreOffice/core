@@ -240,7 +240,7 @@ void MacroWarning::InitControls()
         Point aNewPos = maViewSignsBtn.GetPosPixel();
         aNewPos.X() -= nDelta;
         maViewSignsBtn.SetPosPixel( aNewPos );
-        // the the left fixedtext must be smaller
+        // the left fixedtext must be smaller
         aNewSize = maSignsFI.GetSizePixel();
         aNewSize.Width() -= nDelta;
         maSignsFI.SetSizePixel( aNewSize );

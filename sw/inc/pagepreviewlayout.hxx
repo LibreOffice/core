@@ -57,12 +57,12 @@ private:
     /** boolean indicating, if the layout information (number of columns and rows)
        are valid. */
     bool        mbLayoutInfoValid;
-    /** boolean indicating, if the the calculated print preview layout sizes
+    /** boolean indicating, if the calculated print preview layout sizes
        ( windows size in twips, maximal page size, column width, row height,
          width and height of a print preview page, size of the print preview
          document ) are valid */
     bool        mbLayoutSizesValid;
-    /** boolean indicating, if the the paint information ( physical number of
+    /** boolean indicating, if the paint information ( physical number of
          start page, start column and row, paint offsets, rectangle visible of
          the print preview document. */
     bool        mbPaintInfoValid;

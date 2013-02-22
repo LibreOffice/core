@@ -2482,7 +2482,7 @@ sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContaine
         if (( rContainerSize.Width > aWorkArea.GetWidth() ) || ( rContainerSize.Height > aWorkArea.GetHeight() ))
             return sal_False;
         // Strictly, this is not correct. If we have a multi-screen display (css.awt.DisplayAccess.MultiDisplay == true),
-        // the the "effective work area" would be much larger than the work area of a single display, since we could in theory
+        // the "effective work area" would be much larger than the work area of a single display, since we could in theory
         // position the container window across multiple screens.
         // However, this should suffice as a heuristics here ... (nobody really wants to check whether the different screens are
         // stacked horizontally or vertically, whether their work areas can really be combined, or are separated by non-work-areas,

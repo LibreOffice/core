@@ -100,7 +100,7 @@ public class ShareActionProvider extends ActionProvider {
     private static final int DEFAULT_INITIAL_ACTIVITY_COUNT = 4;
 
     /**
-     * The the maximum number activities shown in the sub-menu.
+     * The maximum number activities shown in the sub-menu.
      */
     private int mMaxShownActivityCount = DEFAULT_INITIAL_ACTIVITY_COUNT;
 

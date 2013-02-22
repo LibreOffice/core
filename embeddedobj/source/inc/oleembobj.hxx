@@ -174,7 +174,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
     // link related stuff
     ::rtl::OUString m_aLinkURL; // ???
 
-    // points to own view provider if the the object has no server
+    // points to own view provider if the object has no server
     OwnView_Impl*   m_pOwnView;
 
     // whether the object should be initialized from clipboard in case of default initialization

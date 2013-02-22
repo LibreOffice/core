@@ -103,7 +103,7 @@ namespace drawinglayer
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 
             /** provide unique ID for fast identifying of known primitive implementations in renderers. These use
-                the the defines from primitivetypes3d.hxx to define unique IDs.
+                the defines from primitivetypes3d.hxx to define unique IDs.
              */
             virtual sal_uInt32 getPrimitive3DID() const = 0;
 

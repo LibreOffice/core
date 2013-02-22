@@ -25,7 +25,7 @@ import util.utils;
 
 /**
  * This class is printing to a <CODE>LogWriter</CODE>. This could be usefull if a UNO-API
- * function runns longer the the time out. To avoid the assumption of death applikation
+ * function runns longer the time out. To avoid the assumption of death applikation
  * a simple string is logged for 100 times of time out.</br>
  * Example:</br>
  *          logger = new LoggingThread((LogWriter)log, tParam);

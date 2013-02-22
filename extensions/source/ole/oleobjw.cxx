@@ -1237,7 +1237,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
 void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
     // 1.parameter is IUnknown
-    // 2.parameter is a boolean which indicates if the the COM pointer was a IUnknown or IDispatch
+    // 2.parameter is a boolean which indicates if the COM pointer was a IUnknown or IDispatch
     // 3.parameter is a Sequence<Type>
     o2u_attachCurrentThread();
     OSL_ASSERT(aArguments.getLength() == 3);

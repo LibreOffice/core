@@ -43,7 +43,7 @@ namespace connectivity
 {
     struct OTypeInfo
     {
-        ::rtl::OUString aTypeName;      // Name of the the type in the database
+        ::rtl::OUString aTypeName;      // Name of the type in the database
         ::rtl::OUString aLiteralPrefix; // Prefix for literals
         ::rtl::OUString aLiteralSuffix; // Suffix for literals
         ::rtl::OUString aCreateParams;  // Parameters to create

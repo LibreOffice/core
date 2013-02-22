@@ -68,7 +68,7 @@ service OfficeDatabaseDocument
     */
     interface ::com::sun::star::script::provider::XScriptProviderSupplier;
 
-    /** allows to initialize the the document, either from scratch, or from a stored
+    /** allows to initialize the document, either from scratch, or from a stored
         database document.
 
         <p>A newly instantiated database document cannot be operated until it is fully

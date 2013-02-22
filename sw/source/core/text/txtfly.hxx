@@ -285,7 +285,7 @@ public:
 
     /**
         sal_True when a frame or DrawObj must to be taken in account. The optimizations
-        like Paint/FormatEmpty for empty sentences or the the virtual OutputDevice can
+        like Paint/FormatEmpty for empty sentences or the virtual OutputDevice can
         be used only when sal_False is returned.
 
         \param rRect

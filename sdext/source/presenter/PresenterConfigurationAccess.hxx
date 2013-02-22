@@ -87,7 +87,7 @@ public:
     */
     bool GoToChild (const ::rtl::OUString& rsPathToNode);
 
-    /** Move the focused node to the first direct child that fulfills the the given predicate.
+    /** Move the focused node to the first direct child that fulfills the given predicate.
     */
     bool GoToChild (const Predicate& rPredicate);
 

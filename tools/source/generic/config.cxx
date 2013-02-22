@@ -152,7 +152,7 @@ static sal_Bool ImplSysWriteConfig( const rtl::OUString& rFileName,
         aFile.setSize( 0 );
         sal_uInt64 nWritten;
 
-        //write the the byte-order-mark 0xEF 0xBB 0xBF first , if it was UTF8 files
+        //write the byte-order-mark 0xEF 0xBB 0xBF first , if it was UTF8 files
         if ( rbIsUTF8BOM )
         {
             unsigned char BOM[3] = {0xEF, 0xBB, 0xBF};

@@ -120,7 +120,7 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
     // If the possible hyphenation position in 'multi-line-editor' are to eb marked
     // by '=' then the text will look like this 'mul=ti-line-ed=it=or'.
     // If now the first line is only large enough for 'multi-line-edi' we need to discard
-    // the last possible hyphnation point because of 1). The the right most valid
+    // the last possible hyphnation point because of 1). The right most valid
     // hyphenation position is "ed=itor". The first '-' left of this position is
     // "line-ed", thus because of 2) we now need to discard all possible hyphneation
     // positions to the left of that as well. Thus in the end leaving us with just

@@ -2181,7 +2181,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
     try
     {
         OSL_ENSURE(descriptor.is(),"ODbaseTable::alterColumn: descriptor can not be null!");
-        // creates a copy of the the original column and copy all properties from descriptor in xCopyColumn
+        // creates a copy of the original column and copy all properties from descriptor in xCopyColumn
         Reference<XPropertySet> xCopyColumn;
         if(xOldColumn.is())
             xCopyColumn = xOldColumn->createDataDescriptor();

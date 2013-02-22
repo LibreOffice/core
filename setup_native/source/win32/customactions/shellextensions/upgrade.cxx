@@ -81,7 +81,7 @@ namespace
     // Convert the upgrade code (which is a GUID) according
     // to the way the windows installer does when writing it
     // to the registry
-    // The first 8 bytes will be inverted, from the the last
+    // The first 8 bytes will be inverted, from the last
     // 8 bytes always the nibbles will be inverted for further
     // details look in the MSDN under compressed registry keys
     string ConvertGuid(const string& guid)
