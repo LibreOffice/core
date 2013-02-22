@@ -562,8 +562,6 @@ Desktop::~Desktop()
 
 void Desktop::Init()
 {
-    fprintf (stderr, "Desktop::Init()\n");
-
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Init" );
     SetBootstrapStatus(BS_OK);
 
@@ -594,8 +592,6 @@ void Desktop::Init()
                 SetBootstrapError( BE_OFFICECONFIG_BROKEN, OUString() );
         }
     }
-
-    fprintf( stderr, "OfficeIPCThread %d ...\n", m_aBootstrapError == BE_OK );
 
     if ( 1 )
     {

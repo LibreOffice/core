@@ -341,7 +341,6 @@ SalPrinter* GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
 #if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
     mbPrinterInit = true;
-    fprintf(stderr, "gtk printer\n");
     return new GtkSalPrinter( pInfoPrinter );
 #else
     return Superclass_t::CreatePrinter( pInfoPrinter );
