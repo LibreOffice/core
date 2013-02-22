@@ -8014,7 +8014,7 @@ if test $_os = Darwin -o $_os = iOS -o $_os = Android; then
     enable_gtk=no
 fi
 if test "$enable_nsplugin" != "no"; then
-    if test "$enable_gtk" != "no"; then
+    if test "$enable_gtk" != "no" -o "$_os" == WINNT; then
         AC_MSG_RESULT([yes])
         ENABLE_NSPLUGIN=YES
     else
