@@ -337,19 +337,21 @@ ODsnTypeCollection::TypeIterator ODsnTypeCollection::end() const
 DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
 {
     OUString sDsn(comphelper::string::stripEnd(_rDsn, '*'));
-    sal_uInt16 nSeparator = sDsn.indexOf((sal_Unicode)':');
-    if (STRING_NOTFOUND == nSeparator)
+    sal_Int32 nSeparator = sDsn.indexOf(static_cast<sal_Unicode>(':'));
+    if (-1 == nSeparator)
     {
         // there should be at least one such separator
         OSL_FAIL("ODsnTypeCollection::implDetermineType : missing the colon !");
         return DST_UNKNOWN;
     }
     // find first :
-    sal_uInt16 nOracleSeparator = sDsn.indexOf((sal_Unicode)':', nSeparator + 1);
-    if ( nOracleSeparator != STRING_NOTFOUND )
+    sal_Int32 nOracleSeparator =
+        sDsn.indexOf(static_cast<sal_Unicode>(':'), nSeparator + 1);
+    if (-1 != nOracleSeparator)
     {
-        nOracleSeparator = sDsn.indexOf((sal_Unicode)':', nOracleSeparator + 1);
-        if (nOracleSeparator != STRING_NOTFOUND && sDsn.equalsIgnoreAsciiCaseAsciiL("jdbc:oracle:thin", nOracleSeparator))
+        nOracleSeparator =
+            sDsn.indexOf(static_cast<sal_Unicode>(':'), nOracleSeparator + 1);
+        if (-1 != nOracleSeparator && sDsn.equalsIgnoreAsciiCaseAsciiL("jdbc:oracle:thin", nOracleSeparator))
             return DST_ORACLE_JDBC;
     }
 
@@ -360,8 +362,8 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
         return DST_EMBEDDED_HSQLDB;
 
     // find second :
-    nSeparator = sDsn.indexOf((sal_Unicode)':', nSeparator + 1);
-    if (STRING_NOTFOUND == nSeparator)
+    nSeparator = sDsn.indexOf(static_cast<sal_Unicode>(':'), nSeparator + 1);
+    if (-1 == nSeparator)
     {
         // at the moment only jdbc is allowed to have just one separator
         OSL_FAIL("ODsnTypeCollection::implDetermineType : missing the second colon !");
@@ -370,11 +372,11 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
 
     if (sDsn.equalsIgnoreAsciiCaseAsciiL("sdbc:ado:", nSeparator))
     {
-        nSeparator = sDsn.indexOf((sal_Unicode)':', nSeparator + 1);
-        if (STRING_NOTFOUND != nSeparator && sDsn.equalsIgnoreAsciiCaseAsciiL("sdbc:ado:access", nSeparator) )
+        nSeparator = sDsn.indexOf(static_cast<sal_Unicode>(':'), nSeparator + 1);
+        if (-1 != nSeparator && sDsn.equalsIgnoreAsciiCaseAsciiL("sdbc:ado:access", nSeparator) )
         {
-            nSeparator = sDsn.indexOf((sal_Unicode)';', nSeparator + 1);
-            if (STRING_NOTFOUND != nSeparator && sDsn.equalsIgnoreAsciiCaseAsciiL("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0", nSeparator) )
+            nSeparator = sDsn.indexOf(static_cast<sal_Unicode>(';'), nSeparator + 1);
+            if (-1 != nSeparator && sDsn.equalsIgnoreAsciiCaseAsciiL("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0", nSeparator) )
                 return DST_MSACCESS_2007;
 
             return DST_MSACCESS;
