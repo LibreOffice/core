@@ -665,12 +665,10 @@ void OdgGenerator::startGraphics(const ::WPXPropertyList &propList)
 
     WPXString sValue;
     if (propList["draw:name"])
-        pDrawPageOpenElement->addAttribute("draw:name", propList["draw:name"]->getStr());
+        sValue = WPXString(propList["draw:name"]->getStr(), true); // escape special xml characters
     else
-    {
         sValue.sprintf("page%i", mpImpl->miPageIndex);
-        pDrawPageOpenElement->addAttribute("draw:name", sValue);
-    }
+    pDrawPageOpenElement->addAttribute("draw:name", sValue);
 #ifdef MULTIPAGE_WORKAROUND
     pStyleMasterPageOpenElement->addAttribute("style:page-layout-name", "PM0");
     pStylePageLayoutOpenElement->addAttribute("style:page-layout-name", "PM0");
