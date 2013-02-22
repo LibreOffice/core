@@ -729,6 +729,7 @@ bool FontCache::listDirectory( const OString& rDir, std::list< PrintFontManager:
 {
     PrintFontManager& rManager( PrintFontManager::get() );
     int nDirID = rManager.getDirectoryAtom( rDir );
+
     FontCacheData::const_iterator dir = m_aCache.find( nDirID );
     bool bFound = (dir != m_aCache.end());
 

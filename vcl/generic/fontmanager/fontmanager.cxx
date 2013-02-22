@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unistd.h>
 #include <sys/stat.h>
 #include <dirent.h>
@@ -223,14 +222,14 @@ PrintFontManager::BuiltinFont::~BuiltinFont()
 
 bool PrintFontManager::Type1FontFile::queryMetricPage( int /*nPage*/, MultiAtomProvider* pProvider )
 {
-    return readAfmMetrics( PrintFontManager::get().getAfmFile( this ), pProvider, false, false );
+    return readAfmMetrics( pProvider, false, false );
 }
 
 // -------------------------------------------------------------------------
 
 bool PrintFontManager::BuiltinFont::queryMetricPage( int /*nPage*/, MultiAtomProvider* pProvider )
 {
-    return readAfmMetrics( PrintFontManager::get().getAfmFile( this ), pProvider, false, false );
+    return readAfmMetrics( pProvider, false, false );
 }
 
 // -------------------------------------------------------------------------
@@ -557,9 +556,10 @@ static bool familyNameOverride( const OUString& i_rPSname, OUString& o_rFamilyNa
     return bReplaced;
 };
 
-bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, MultiAtomProvider* pProvider, bool bFillEncodingvector, bool bOnlyGlobalAttributes )
+bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, bool bFillEncodingvector, bool bOnlyGlobalAttributes )
 {
     PrintFontManager& rManager( PrintFontManager::get() );
+    const OString& rFileName = rManager.getAfmFile( this );
 
     FontInfo* pInfo = NULL;
     parseFile( rFileName.getStr(), &pInfo, P_ALL );
@@ -1154,7 +1154,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
                 pFont->m_aFontFile      = rFontFile;
                 pFont->m_aMetricFile    = aAfmFile;
 
-                if( ! pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, false, true ) )
+                if( ! pFont->readAfmMetrics( m_pAtoms, false, true ) )
                 {
                     delete pFont;
                     pFont = NULL;
@@ -1167,13 +1167,10 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
     }
     else if (eFormat == AFM)
     {
-        rtl::OStringBuffer aFilePath(aDir);
-        aFilePath.append('/').append(rFontFile);
         BuiltinFont* pFont = new BuiltinFont();
         pFont->m_nDirectory     = nDirID;
         pFont->m_aMetricFile    = rFontFile;
-        if( pFont->readAfmMetrics( aFilePath.makeStringAndClear(), m_pAtoms,
-            false, true ) )
+        if( pFont->readAfmMetrics( m_pAtoms, false, true ) )
         {
             rNewFonts.push_back( pFont );
         }
@@ -1757,6 +1754,8 @@ void PrintFontManager::initialize()
                 else if( (*it)->m_eType == fonttype::Builtin )
                     m_aFontFileToFontID[ static_cast<BuiltinFont*>(*it)->m_aMetricFile ].insert( aFont );
 #if OSL_DEBUG_LEVEL > 1
+                else
+                    fprintf(stderr, "Un-cached type '%d'\n", (*it)->m_eType);
                 if( (*it)->m_eType == fonttype::Builtin )
                     nBuiltinFonts++;
                 nCached++;
@@ -2119,7 +2118,7 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo
     {
         // might be a truetype font not analyzed or type1 without metrics read
         if( pFont->m_eType == fonttype::Type1 )
-            pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, false, false );
+            pFont->readAfmMetrics( m_pAtoms, false, false );
         else if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
     }
@@ -2188,7 +2187,7 @@ bool PrintFontManager::getFontBoundingBox( fontID nFontID, int& xMin, int& yMin,
         {
             // might be a truetype font not analyzed or type1 without metrics read
             if( pFont->m_eType == fonttype::Type1 || pFont->m_eType == fonttype::Builtin )
-                pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, false, true );
+                pFont->readAfmMetrics( m_pAtoms, false, true );
             else if( pFont->m_eType == fonttype::TrueType )
                 analyzeTrueTypeFile( pFont );
         }
@@ -2363,7 +2362,7 @@ int PrintFontManager::getFontAscend( fontID nFontID ) const
         if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
         else if( pFont->m_eType == fonttype::Type1 || pFont->m_eType == fonttype::Builtin )
-            pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, false, true );
+            pFont->readAfmMetrics( m_pAtoms, false, true );
     }
     return pFont->m_nAscend;
 }
@@ -2379,7 +2378,7 @@ int PrintFontManager::getFontDescend( fontID nFontID ) const
         if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
         else if( pFont->m_eType == fonttype::Type1 || pFont->m_eType == fonttype::Builtin )
-            pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, false, true );
+            pFont->readAfmMetrics( m_pAtoms, false, true );
     }
     return pFont->m_nDescend;
 }
@@ -2482,7 +2481,7 @@ bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, i
     {
         // might be a font not yet analyzed
         if( pFont->m_eType == fonttype::Type1 || pFont->m_eType == fonttype::Builtin )
-            pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, false, false );
+            pFont->readAfmMetrics( m_pAtoms, false, false );
         else if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
     }
@@ -2529,7 +2528,7 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
     {
         // might be a font not yet analyzed
         if( pFont->m_eType == fonttype::Type1 || pFont->m_eType == fonttype::Builtin )
-            pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, false, false );
+            pFont->readAfmMetrics( m_pAtoms, false, false );
         else if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
     }
@@ -2773,7 +2772,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
     else if( pFont->m_eType == fonttype::Type1 )
     {
         if( ! pFont->m_aEncodingVector.size() )
-            pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, true, true );
+            pFont->readAfmMetrics( m_pAtoms, true, true );
         if( pFont->m_pMetrics )
         {
             rUnicodeEnc.clear();
@@ -2804,7 +2803,7 @@ const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( font
         return NULL;
 
     if( ! pFont->m_aEncodingVector.size() )
-        pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, true, true );
+        pFont->readAfmMetrics( m_pAtoms, true, true );
 
     if( pNonEncoded )
         *pNonEncoded = pFont->m_aNonEncoded.size() ? &pFont->m_aNonEncoded : NULL;

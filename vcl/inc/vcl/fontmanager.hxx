@@ -220,7 +220,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         virtual ~PrintFont();
         virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) = 0;
 
-        bool readAfmMetrics( const rtl::OString& rFileName, utl::MultiAtomProvider* pProvider, bool bFillEncodingvector, bool bOnlyGlobalAttributes );
+        bool readAfmMetrics( utl::MultiAtomProvider* pProvider, bool bFillEncodingvector, bool bOnlyGlobalAttributes );
     };
 
     struct Type1FontFile : public PrintFont
