@@ -392,7 +392,6 @@ namespace drawinglayer
                         fPolyWidth, fPolyHeight,
                         aPolyRange.getMinX(), aPolyRange.getMinY()));
                 basegfx::B2DHomMatrix aUnitGradientToObject;
-                static bool bInterpretAbsolute(true);
 
                 if(getUseUnitCoordinates())
                 {
@@ -720,7 +719,6 @@ namespace drawinglayer
                         fPolyWidth, fPolyHeight,
                         aPolyRange.getMinX(), aPolyRange.getMinY()));
                 basegfx::B2DHomMatrix aUnitGradientToObject;
-                static bool bInterpretAbsolute(true);
 
                 if(getUseUnitCoordinates())
                 {
