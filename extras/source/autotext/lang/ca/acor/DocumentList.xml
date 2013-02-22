@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<!---
+
+    Aquest document és (c)2013 Jordi Mas i Hernàndez <jmas@softcatala.org>.
+
+    Han col·laborat Jordi Jover <jordijn@softcatala.org>, Joan Moratinos
+     <jmo@softcatala.org> i Joan Montane <jmontane@softcatala.org>
+
+     Es permet l'ús, distribució i modificació d'aquest document d'acord
+     amb la GNU Lesser General Public License versió 3.0 o superior publicada
+     per la Free Software Foundation o la Mozilla Public Licences versió 2.0
+    o superior publicada per la Mozilla Foundation, a la vostra elecció.
+
+     Requisits:
+
+     1. Al ser un sistema automàtic no volem que les correccions pugin
+     introduir nous errors. Per aquest motiu, per exemple, no es fa substitució
+     automàtica de barbarismes quan el gènere de la incorrecció és diferent
+     al del mot correcte.
+
+     2. Volem que la llista contingui aproximadament un 200 mots per no relantizar
+     el funcionament del LibreOffice.
+
+     3. Volem que sigui capaç de corregir els errors més comuns fent un
+     blanceig entre anàlisi estadístic, errors tipogràfics comuns, i errades
+     documentades en reculls lingüístics.
+
+     PART 1. Implementació:
+
+     Per elaborar aquesta part s'ha creat un corpus amb uns 10.000 documents
+     provinents d'Internet i s'han escollit les paraules amb una freqüència (tf, term
+     frequency) d'aparició més alta. Un cop classificades s'han seguit els següents criteris:
+
+         1. Que podem escriure sense accent i que només tenen un forma correcta.
+
+         2. Que s'escriuen amb doble ss i poden ser escrites amb una s
+
+         3. Que s'escriuen amb doble mm i poden ser escrites amb nm per influència del castellà
+
+         4. Que s'escriuen amb diesi i que poden ser escrites sense
+
+         5. Que s'escriuen amb ela geminada i que poden ser escrites sense
+
+     PART 2. Errors tipogràfics comuns
+
+     PART 3. Barbarimes. S'han intentat escollir els barbarismes més comuns
+
+     PART 4. Errors comuns registrats a diferents reculls lingüístics
+
+
+ -->
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <!-- part 1.1-->
+  <!--tf="0.002894"-->
+  <block-list:block block-list:abbreviated-name="pero" block-list:name="però"/>
+  <!--tf="0.001796"-->
+  <block-list:block block-list:abbreviated-name="tambe" block-list:name="també"/>
+  <!--tf="0.001697"-->
+  <block-list:block block-list:abbreviated-name="perque" block-list:name="perquè"/>
+  <!--tf="0.001040"-->
+  <block-list:block block-list:abbreviated-name="nomes" block-list:name="només"/>
+  <!--tf="0.000949"-->
+  <block-list:block block-list:abbreviated-name="interprets" block-list:name="intèrprets"/>
+  <!--tf="0.000926"-->
+  <block-list:block block-list:abbreviated-name="pais" block-list:name="país"/>
+  <!--tf="0.000926"-->
+  <block-list:block block-list:abbreviated-name="aixo" block-list:name="això"/>
+  <block-list:block block-list:abbreviated-name="aço" block-list:name="açò"/>
+  <!--tf="0.000758"-->
+  <block-list:block block-list:abbreviated-name="politica" block-list:name="política"/>
+  <!--tf="0.000662"-->
+  <block-list:block block-list:abbreviated-name="catala" block-list:name="català"/>
+  <!--tf="0.000274" -->
+  <block-list:block block-list:abbreviated-name="unio" block-list:name="unió"/>
+  <!--tf="0.000269"-->
+  <block-list:block block-list:abbreviated-name="familia" block-list:name="família"/>
+  <!--tf="0.000259" -->
+  <block-list:block block-list:abbreviated-name="frances" block-list:name="francès"/>
+  <!--tf="0.000231" -->
+  <block-list:block block-list:abbreviated-name="ultims" block-list:name="últims"/>
+  <!--tf="0.000226" -->
+  <block-list:block block-list:abbreviated-name="proces" block-list:name="procés"/>
+  <!--tf="0.000210" -->
+  <block-list:block block-list:abbreviated-name="gairebe" block-list:name="gairebé"/>
+  <!--tf="0.000568" -->
+  <block-list:block block-list:abbreviated-name="aixi" block-list:name="així"/>
+  <!--tf="0.000454" -->
+  <block-list:block block-list:abbreviated-name="sera" block-list:name="serà"/>
+  <!--tf="0.000162" -->
+  <block-list:block block-list:abbreviated-name="dificil" block-list:name="difícil"/>
+  <!--tf="0.000198" -->
+  <block-list:block block-list:abbreviated-name="aqui" block-list:name="aquí"/>
+  <block-list:block block-list:abbreviated-name="aci" block-list:name="ací"/>
+  <!--tf="0.000198" -->
+  <block-list:block block-list:abbreviated-name="ningu" block-list:name="ningú"/>
+  <!-- part 1.2-->
+  <!--tf="0.000776" -->
+  <block-list:block block-list:abbreviated-name="pasat" block-list:name="passat"/>
+  <!--tf="0.000279" -->
+  <block-list:block block-list:abbreviated-name="posible" block-list:name="possible"/>
+  <!--tf="0.000203" -->
+  <block-list:block block-list:abbreviated-name="sesions" block-list:name="sessions"/>
+  <!--tf="0.000195" -->
+  <block-list:block block-list:abbreviated-name="comisió" block-list:name="comissió"/>
+  <!--tf="0.000193" -->
+  <block-list:block block-list:abbreviated-name="asegurar" block-list:name="assegurar"/>
+  <!--tf="0.000157" -->
+  <block-list:block block-list:abbreviated-name="posibilitat" block-list:name="possibilitat"/>
+  <!--tf="0.000150" -->
+  <block-list:block block-list:abbreviated-name="necesitat" block-list:name="necessitat"/>
+  <!--tf="0.000122" -->
+  <block-list:block block-list:abbreviated-name="presió" block-list:name="pressió"/>
+  <!--tf="0.000114" -->
+  <block-list:block block-list:abbreviated-name="profesional" block-list:name="professional"/>
+  <!--tf="0.000112" -->
+  <block-list:block block-list:abbreviated-name="pasada" block-list:name="passada"/>
+  <!--tf="0.000089" -->
+  <block-list:block block-list:abbreviated-name="masiva" block-list:name="massiva"/>
+  <!--tf="0.000089" -->
+  <block-list:block block-list:abbreviated-name="asegura" block-list:name="assegura"/>
+  <!--tf="0.000086" -->
+  <block-list:block block-list:abbreviated-name="profesor" block-list:name="professor"/>
+  <block-list:block block-list:abbreviated-name="profesora" block-list:name="professora"/>
+  <!--tf="0.000084" -->
+  <block-list:block block-list:abbreviated-name="terrasa" block-list:name="terrassa"/>
+  <!--tf="0.000079" -->
+  <block-list:block block-list:abbreviated-name="misió" block-list:name="missió"/>
+  <!--tf="0.000079" -->
+  <block-list:block block-list:abbreviated-name="necesari" block-list:name="necessari"/>
+  <block-list:block block-list:abbreviated-name="necesaris" block-list:name="necessaris"/>
+  <!--tf="0.000076" -->
+  <block-list:block block-list:abbreviated-name="misatge" block-list:name="missatge"/>
+  <!--tf="0.000074" -->
+  <block-list:block block-list:abbreviated-name="interesos" block-list:name="interessos"/>
+  <!--tf="0.000071" -->
+  <block-list:block block-list:abbreviated-name="posibles" block-list:name="possibles"/>
+  <!--tf="0.000068" -->
+  <block-list:block block-list:abbreviated-name="profesionals" block-list:name="professionals"/>
+  <!--tf="0.000066" -->
+  <block-list:block block-list:abbreviated-name="posibilitats" block-list:name="possibilitats"/>
+  <!--tf="0.000066" -->
+  <block-list:block block-list:abbreviated-name="asistir" block-list:name="assistir"/>
+  <!--tf="0.000063" -->
+  <block-list:block block-list:abbreviated-name="expresar" block-list:name="expressar"/>
+  <!--tf="0.000058" -->
+  <block-list:block block-list:abbreviated-name="diseny" block-list:name="disseny"/>
+  <!--tf="0.000058" -->
+  <block-list:block block-list:abbreviated-name="ingresos" block-list:name="ingressos"/>
+  <!--tf="0.000058" -->
+  <block-list:block block-list:abbreviated-name="pasió" block-list:name="passió"/>
+  <!--tf="0.000058" -->
+  <block-list:block block-list:abbreviated-name="imposible" block-list:name="impossible"/>
+  <!-- part 1.3-->
+  <!--tf="0.000043" -->
+  <block-list:block block-list:abbreviated-name="inmediata" block-list:name="immediata"/>
+  <!--tf="0.000041" -->
+  <block-list:block block-list:abbreviated-name="inmigrants" block-list:name="immigrants"/>
+  <!--tf="0.000036" -->
+  <block-list:block block-list:abbreviated-name="inmediatament" block-list:name="immediatament"/>
+  <!--tf="0.000030" -->
+  <block-list:block block-list:abbreviated-name="inmensa" block-list:name="immensa"/>
+  <!--tf="0.000030" -->
+  <block-list:block block-list:abbreviated-name="inmediat" block-list:name="immediat"/>
+  <!--tf="0.000025" -->
+  <block-list:block block-list:abbreviated-name="inmigració" block-list:name="immigració"/>
+  <!--tf="0.000015" -->
+  <block-list:block block-list:abbreviated-name="inmobiliari" block-list:name="immobiliari"/>
+  <!--tf="0.000015" -->
+  <block-list:block block-list:abbreviated-name="inmobiliàries" block-list:name="immobiliàries"/>
+  <!--tf="0.000013" -->
+  <block-list:block block-list:abbreviated-name="inmens" block-list:name="immens"/>
+  <!--tf="0.000010" -->
+  <block-list:block block-list:abbreviated-name="inmunitat" block-list:name="immunitat"/>
+  <!--tf="0.000010" -->
+  <block-list:block block-list:abbreviated-name="inmoble" block-list:name="immoble"/>
+  <!--tf="0.000010" -->
+  <block-list:block block-list:abbreviated-name="inmigrant" block-list:name="immigrant"/>
+  <!--tf="0.000010" -->
+  <block-list:block block-list:abbreviated-name="inmersió" block-list:name="immersió"/>
+  <!-- part 1.4-->
+  <!--tf="0.000335" -->
+  <block-list:block block-list:abbreviated-name="paisos" block-list:name="països"/>
+  <!--tf="0.000160" -->
+  <block-list:block block-list:abbreviated-name="veins" block-list:name="veïns"/>
+  <!--tf="0.000053" -->
+  <block-list:block block-list:abbreviated-name="produit" block-list:name="produït"/>
+  <!--tf="0.000048" -->
+  <block-list:block block-list:abbreviated-name="continuitat" block-list:name="continuïtat"/>
+  <!--tf="0.000036" -->
+  <block-list:block block-list:abbreviated-name="Suissa" block-list:name="Suïssa"/>
+  <!--tf="0.000023" -->
+  <block-list:block block-list:abbreviated-name="veina" block-list:name="veïna"/>
+  <!--tf="0.000020" -->
+  <block-list:block block-list:abbreviated-name="construit" block-list:name="construït"/>
+  <!--tf="0.000015" -->
+  <block-list:block block-list:abbreviated-name="traduit" block-list:name="traduït"/>
+  <!--tf="0.000015" -->
+  <block-list:block block-list:abbreviated-name="reduit" block-list:name="reduït"/>
+  <!--tf="0.000015" -->
+  <block-list:block block-list:abbreviated-name="arruinada" block-list:name="arruïnada"/>
+  <!--tf="0.000013" -->
+  <block-list:block block-list:abbreviated-name="cocaina" block-list:name="cocaïna"/>
+  <!--tf="0.000013" -->
+  <block-list:block block-list:abbreviated-name="aillada" block-list:name="aïllada"/>
+  <!--tf="0.000013" -->
+  <block-list:block block-list:abbreviated-name="atribuit" block-list:name="atribuït"/>
+  <!--tf="0.000013" -->
+  <block-list:block block-list:abbreviated-name="suicidi" block-list:name="suïcidi"/>
+  <!--tf="0.000013" -->
+  <block-list:block block-list:abbreviated-name="increible" block-list:name="increïble"/>
+  <!--tf="0.000010" -->
+  <block-list:block block-list:abbreviated-name="traició" block-list:name="traïció"/>
+  <!--tf="0.000010" -->
+  <block-list:block block-list:abbreviated-name="reduida" block-list:name="reduïda"/>
+  <!--tf="0.000010" -->
+  <block-list:block block-list:abbreviated-name="gratuitament" block-list:name="gratuïtament"/>
+  <!--tf="0.000010" -->
+  <block-list:block block-list:abbreviated-name="destruit" block-list:name="destruït"/>
+  <!--tf="0.000010" -->
+  <block-list:block block-list:abbreviated-name="aigues" block-list:name="aigües"/>
+  <!-- part 1.5-->
+  <!--tf="0.000365" -->
+  <block-list:block block-list:abbreviated-name="novela" block-list:name="novel·la"/>
+  <!--tf="0.000114" -->
+  <block-list:block block-list:abbreviated-name="película" block-list:name="pel·lícula"/>
+  <!--tf="0.000076" -->
+  <block-list:block block-list:abbreviated-name="colaboració" block-list:name="col·laboració"/>
+  <!--tf="0.000061" -->
+  <block-list:block block-list:abbreviated-name="colegi" block-list:name="col·legi"/>
+  <!--tf="0.000056" -->
+  <block-list:block block-list:abbreviated-name="colectiu" block-list:name="col·lectiu"/>
+  <!--tf="0.000048" -->
+  <block-list:block block-list:abbreviated-name="ilusió" block-list:name="il·lusió"/>
+  <!--tf="0.000041" -->
+  <block-list:block block-list:abbreviated-name="instalacions" block-list:name="instal·lacions"/>
+  <block-list:block block-list:abbreviated-name="instalació" block-list:name="instal·lació"/>
+  <!--tf="0.000038" -->
+  <block-list:block block-list:abbreviated-name="inteligent" block-list:name="intel·ligent"/>
+  <!--tf="0.000036" -->
+  <block-list:block block-list:abbreviated-name="ilegal" block-list:name="il·legal"/>
+  <!--tf="0.000033" -->
+  <block-list:block block-list:abbreviated-name="colecció" block-list:name="col·lecció"/>
+  <!--tf="0.000030" -->
+  <block-list:block block-list:abbreviated-name="excelent" block-list:name="excel·lent"/>
+  <!--tf="0.000028" -->
+  <block-list:block block-list:abbreviated-name="intelectual" block-list:name="intel·lectual"/>
+  <!-- Part 2  -->
+  <block-list:block block-list:abbreviated-name="--" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name="--&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="-&gt;" block-list:name="→"/>
+  <!--<block-list:block block-list:abbreviated-name="..." block-list:name="…"/> -->
+  <block-list:block block-list:abbreviated-name="(C)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(R)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name="(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name="&lt;-" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="qeu" block-list:name="que"/>
+  <block-list:block block-list:abbreviated-name="sab" block-list:name="sap"/>
+  <block-list:block block-list:abbreviated-name="reb" block-list:name="rep"/>
+  <block-list:block block-list:abbreviated-name="dle" block-list:name="del"/>
+  <block-list:block block-list:abbreviated-name="lse" block-list:name="les"/>
+  <!-- problemàtic <block-list:block block-list:abbreviated-name=" y " block-list:name="i"/> -->
+  <!-- Part 3  -->
+  <block-list:block block-list:abbreviated-name="el tamany" block-list:name="la mida"/>
+  <block-list:block block-list:abbreviated-name="els tamanys" block-list:name="les mides"/>
+  <block-list:block block-list:abbreviated-name="un tamany" block-list:name="una mida"/>
+  <block-list:block block-list:abbreviated-name="uns tamanys" block-list:name="unes mides"/>
+  <block-list:block block-list:abbreviated-name="programaris" block-list:name="programari"/>
+  <block-list:block block-list:abbreviated-name="maquinaris" block-list:name="maquinari"/>
+  <block-list:block block-list:abbreviated-name="contrassenya" block-list:name="contrasenya"/>
+  <block-list:block block-list:abbreviated-name="contrassenyes" block-list:name="contrasenyes"/>
+  <block-list:block block-list:abbreviated-name="SoftCatalà" block-list:name="Softcatalà"/>
+  <block-list:block block-list:abbreviated-name="la sugerència" block-list:name="el suggeriment"/>
+  <block-list:block block-list:abbreviated-name="les sugerències" block-list:name="els suggeriments"/>
+  <block-list:block block-list:abbreviated-name="la suggerència" block-list:name="el suggeriment"/>
+  <block-list:block block-list:abbreviated-name="les suggerències" block-list:name="els suggeriments"/>
+  <block-list:block block-list:abbreviated-name="una sugerència" block-list:name="la suggeriment"/>
+  <block-list:block block-list:abbreviated-name="unes sugerències" block-list:name="els suggeriments"/>
+  <block-list:block block-list:abbreviated-name="una suggerència" block-list:name="el suggeriment"/>
+  <block-list:block block-list:abbreviated-name="unes suggerències" block-list:name="els suggeriments"/>
+  <block-list:block block-list:abbreviated-name="búsqueda" block-list:name="cerca"/>
+  <block-list:block block-list:abbreviated-name="despreci" block-list:name="menyspreu"/>
+  <block-list:block block-list:abbreviated-name="enfermetat" block-list:name="malaltia"/>
+  <block-list:block block-list:abbreviated-name="cantitat" block-list:name="quantitat"/>
+  <block-list:block block-list:abbreviated-name="fetxa" block-list:name="data"/>
+  <block-list:block block-list:abbreviated-name="impar" block-list:name="imparell"/>
+  <block-list:block block-list:abbreviated-name="promedi" block-list:name="mitjana "/>
+  <block-list:block block-list:abbreviated-name="títul" block-list:name="títol"/>
+  <block-list:block block-list:abbreviated-name="cumpleanys" block-list:name="aniversari"/>
+  <block-list:block block-list:abbreviated-name="aconteixement" block-list:name="esdeveniment"/>
+  <block-list:block block-list:abbreviated-name="agravi" block-list:name="greuge"/>
+  <block-list:block block-list:abbreviated-name="antigüetat" block-list:name="antiguitat"/>
+  <block-list:block block-list:abbreviated-name="apertura" block-list:name="obertura"/>
+  <block-list:block block-list:abbreviated-name="atrassar" block-list:name="endarrerir"/>
+  <block-list:block block-list:abbreviated-name="deshauci" block-list:name="desnonament"/>
+  <block-list:block block-list:abbreviated-name="extrany" block-list:name="estrany"/>
+  <block-list:block block-list:abbreviated-name="per lo tant" block-list:name="per tant"/>
+  <block-list:block block-list:abbreviated-name="cumanda" block-list:name="comanda"/>
+  <!-- Part 4  -->
+  <!-- formes verbals -->
+  <block-list:block block-list:abbreviated-name="tinc que" block-list:name="he de"/>
+  <block-list:block block-list:abbreviated-name="tenen que" block-list:name="s'han de"/>
+  <!-- Apostròfs -->
+  <block-list:block block-list:abbreviated-name="l'icona" block-list:name="la icona"/>
+  <block-list:block block-list:abbreviated-name="l'instalació" block-list:name="la instal·lació"/>
+  <block-list:block block-list:abbreviated-name="l'universitat" block-list:name="la universitat"/>
+  <block-list:block block-list:abbreviated-name="la última" block-list:name="l'última"/>
+  <!--v/b -->
+  <block-list:block block-list:abbreviated-name="avans" block-list:name="abans"/>
+  <block-list:block block-list:abbreviated-name="cambia" block-list:name="canvia"/>
+  <block-list:block block-list:abbreviated-name="aburrit" block-list:name="avorrit"/>
+  <block-list:block block-list:abbreviated-name="camvi" block-list:name="canvi"/>
+  <!-- Altres  -->
+  <block-list:block block-list:abbreviated-name="es sap" block-list:name="se sap"/>
+  <block-list:block block-list:abbreviated-name="embaixada" block-list:name="ambaixada"/>
+  <block-list:block block-list:abbreviated-name="menu" block-list:name="menú"/>
+  <block-list:block block-list:abbreviated-name="quasevols" block-list:name="quassevol"/>
+  <block-list:block block-list:abbreviated-name="endevant" block-list:name="endavant"/>
+  <block-list:block block-list:abbreviated-name="agraiment" block-list:name="agraïment"/>
+  <block-list:block block-list:abbreviated-name="agraiments" block-list:name="agraïments"/>
+  <block-list:block block-list:abbreviated-name="neixement" block-list:name="naixement"/>
+  <block-list:block block-list:abbreviated-name="endarrera" block-list:name="endarrere"/>
+  <block-list:block block-list:abbreviated-name="a munt" block-list:name="amunt"/>
+  <block-list:block block-list:abbreviated-name="a baix" block-list:name="abaix"/>
+  <block-list:block block-list:abbreviated-name="seguent" block-list:name="següent"/>
+  <block-list:block block-list:abbreviated-name="siusplau" block-list:name="si us plau"/>
+  <block-list:block block-list:abbreviated-name="tantmateix" block-list:name="tanmateix"/>
+  <block-list:block block-list:abbreviated-name="email" block-list:name="correu electrònic"/>
+  <block-list:block block-list:abbreviated-name="periode" block-list:name="període"/>
+  <block-list:block block-list:abbreviated-name="errònea" block-list:name="errònia"/>
+  <block-list:block block-list:abbreviated-name="pendre" block-list:name="prendre"/>
+  <block-list:block block-list:abbreviated-name="cancelar" block-list:name="cancel·lar"/>
+  <block-list:block block-list:abbreviated-name="anular" block-list:name="anul·lar"/>
+  <block-list:block block-list:abbreviated-name="conectar" block-list:name="connectar"/>
+  <block-list:block block-list:abbreviated-name="conexió" block-list:name="connexió"/>
+  <block-list:block block-list:abbreviated-name="escritori" block-list:name="escriptori"/>
+  <block-list:block block-list:abbreviated-name="línea" block-list:name="línia"/>
+  <block-list:block block-list:abbreviated-name="errònea" block-list:name="errònia"/>
+  <block-list:block block-list:abbreviated-name="asunto" block-list:name="assumpte"/>
+  <block-list:block block-list:abbreviated-name="solicitar" block-list:name="sol·licitar"/>
+  <block-list:block block-list:abbreviated-name="solicitut" block-list:name="sol·licitud"/>
+  <block-list:block block-list:abbreviated-name="solicitud" block-list:name="sol·licitud"/>
+  <block-list:block block-list:abbreviated-name="donat que" block-list:name="atès que"/>
+  <block-list:block block-list:abbreviated-name="tals com" block-list:name="com ara"/>
+</block-list:block-list>
