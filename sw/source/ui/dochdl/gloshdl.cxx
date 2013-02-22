@@ -437,7 +437,7 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
         {
             // get group name with path-extension
             String sTitle;
-            String sGroupName = pGlossaryList->GetGroupName(i - 1, sal_False, &sTitle);
+            String sGroupName = pGlossaryList->GetGroupName(i - 1, false, &sTitle);
             if(sGroupName == pGlossary->GetName())
                 continue;
             sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);

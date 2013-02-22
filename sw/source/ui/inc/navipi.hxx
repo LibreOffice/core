@@ -150,7 +150,7 @@ public:
 
     void            Update() { FillBox(); }
     void            UpdateListBox();
-    void            MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget, sal_Bool bWithCilds);
+    void            MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget, bool bWithCilds);
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                             const SfxPoolItem* pState );
@@ -168,7 +168,7 @@ public:
     sal_Bool            IsGlobalMode() const {return    bGlobalMode;}
 
     SwView*         GetCreateView() const;
-    void            CreateNavigationTool(const Rectangle& rRect, sal_Bool bSetFocus);
+    void            CreateNavigationTool(const Rectangle& rRect, bool bSetFocus);
 };
 
 class SwNavigationChild : public SfxChildWindowContext

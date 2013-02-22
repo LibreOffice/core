@@ -82,7 +82,7 @@ void SwNavigationPI::CleanEntry( String& rEntry )
 ------------------------------------------------------------------------*/
 
 void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
-                                                    sal_Bool bWithChildren)
+                                                    bool bWithChildren)
 {
     SwView *pView = GetCreateView();
     SwWrtShell &rSh = pView->GetWrtShell();
@@ -227,7 +227,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
     // mit Ctrl Unterebenen nicht mitnehmen
     sal_Bool bOutlineWithChildren  = ( KEY_MOD1 != pBox->GetModifier());
     int nFuncId = 0;
-    sal_Bool bFocusToDoc = sal_False;
+    bool bFocusToDoc = false;
     switch (nCurrItemId)
     {
         case FN_UP:
@@ -270,7 +270,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
             }
             else if (rSh.GotoFooterTxt())
                 nFuncId = FN_TO_FOOTER;
-            bFocusToDoc = sal_True;
+            bFocusToDoc = true;
         }
         break;
         case FN_SELECT_HEADER:
@@ -284,7 +284,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
             }
             else if (rSh.GotoHeaderTxt())
                 nFuncId = FN_TO_HEADER;
-            bFocusToDoc = sal_True;
+            bFocusToDoc = true;
         }
         break;
         case FN_SELECT_FOOTNOTE:
@@ -309,7 +309,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
                 else if (rSh.GotoPrevFtnAnchor())
                     nFuncId = FN_PREV_FOOTNOTE;
             }
-            bFocusToDoc = sal_True;
+            bFocusToDoc = true;
         }
         break;
 
@@ -379,7 +379,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
     {
         case FN_CREATE_NAVIGATION:
         {
-            CreateNavigationTool(pBox->GetItemRect(FN_CREATE_NAVIGATION), sal_True);
+            CreateNavigationTool(pBox->GetItemRect(FN_CREATE_NAVIGATION), true);
         }
         break;
 
@@ -443,13 +443,13 @@ void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
     if(rEvt.GetButtons() == MOUSE_LEFT &&
             FN_CREATE_NAVIGATION == GetItemId(rEvt.GetPosPixel()))
     {
-        ((SwNavigationPI*)GetParent())->CreateNavigationTool(GetItemRect(FN_CREATE_NAVIGATION), sal_False);
+        ((SwNavigationPI*)GetParent())->CreateNavigationTool(GetItemRect(FN_CREATE_NAVIGATION), false);
     }
     else
         SwHelpToolBox::MouseButtonDown(rEvt);
 }
 
-void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, sal_Bool bSetFocus)
+void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, bool bSetFocus)
 {
     Reference< XFrame > xFrame = GetCreateView()->GetViewFrame()->GetFrame().GetFrameInterface();
     SwScrollNaviPopup* pPopup = new
@@ -1066,7 +1066,7 @@ void SwNavigationPI::UpdateListBox()
     aDocListBox.SetUpdateMode(sal_False);
     aDocListBox.Clear();
     SwView *pActView = GetCreateView();
-    sal_Bool bDisable = pActView == 0;
+    bool bDisable = pActView == 0;
     SwView *pView = SwModule::GetFirstView();
     sal_uInt16 nCount = 0;
     sal_uInt16 nAct = 0;
@@ -1112,7 +1112,7 @@ void SwNavigationPI::UpdateListBox()
         sEntry += aStatusArr[ST_HIDDEN - ST_STATUS_FIRST];
         sEntry += ')';
         aDocListBox.InsertEntry(sEntry);
-        bDisable = sal_False;
+        bDisable = false;
     }
     if(aContentTree.IsActiveView())
     {

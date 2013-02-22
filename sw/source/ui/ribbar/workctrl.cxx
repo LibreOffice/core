@@ -304,7 +304,7 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
 
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
         String sShortName;
-        String sGroup = pGlossaryList->GetGroupName(nBlock - 1, sal_False);
+        String sGroup = pGlossaryList->GetGroupName(nBlock - 1, false);
 
         SwGlossaryHdl* pGlosHdl = pView->GetGlosHdl();
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

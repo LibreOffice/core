@@ -186,7 +186,7 @@ sal_uInt16  SwGlossaryList::GetGroupCount()
     return aGroupArr.size();
 }
 
-String SwGlossaryList::GetGroupName(sal_uInt16 nPos, sal_Bool bNoPath, String* pTitle)
+String SwGlossaryList::GetGroupName(sal_uInt16 nPos, bool bNoPath, String* pTitle)
 {
     OSL_ENSURE(aGroupArr.size() > nPos, "group not available");
     String sRet;
@@ -321,7 +321,7 @@ void SwGlossaryList::Update()
                 // aktuellen Teilpfad registriert sind
                 if( nGroupPath == static_cast<sal_uInt16>(nPath) )
                 {
-                    sal_Bool bFound = sal_False;
+                    bool bFound = false;
                     String sCompareGroup = pGroup->sName.GetToken(0, GLOS_DELIM);
                     for(std::vector<String>::const_iterator j = aFoundGroupNames.begin(); j != aFoundGroupNames.end() && !bFound; ++j)
                         bFound = (sCompareGroup == *j);

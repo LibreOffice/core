@@ -209,7 +209,7 @@ SwGlossaries* GetGlossaries()
     return (pGlossaries);
 }
 
-sal_Bool HasGlossaryList()
+bool HasGlossaryList()
 {
     return pGlossaryList != 0;
 }

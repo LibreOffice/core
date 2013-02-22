@@ -61,7 +61,7 @@ public:
                                         String& rShortName, String& rGroupName );
 
     sal_uInt16          GetGroupCount();
-    String          GetGroupName(sal_uInt16 nPos, sal_Bool bNoPath = sal_True, String* pTitle = 0);
+    String          GetGroupName(sal_uInt16 nPos, bool bNoPath = true, String* pTitle = 0);
     sal_uInt16          GetBlockCount(sal_uInt16 nGroup);
     String          GetBlockName(sal_uInt16 nGroup, sal_uInt16 nBlock, String& rShortName);
 

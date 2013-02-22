@@ -123,24 +123,24 @@ static const char* aHelpForMenu[] =
 
 class SwGlobalFrameListener_Impl : public SfxListener
 {
-    sal_Bool bValid;
+    bool bValid;
 public:
     SwGlobalFrameListener_Impl(SfxViewFrame& rFrame) :
-        bValid(sal_True)
+        bValid(true)
         {
             StartListening(rFrame);
         }
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    sal_Bool                IsValid() const {return bValid;}
+    bool                IsValid() const {return bValid;}
 };
 
 void    SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if( rHint.ISA(SfxSimpleHint) &&
             (((SfxSimpleHint&) rHint).GetId() == SFX_HINT_DYING))
-        bValid = sal_False;
+        bValid = false;
 }
 
 SwGlobalTree::SwGlobalTree(Window* pParent, const ResId& rResId) :
@@ -453,7 +453,7 @@ sal_uInt16  SwGlobalTree::GetEnableFlags() const
 
 void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
 {
-    sal_Bool bParent = sal_True;
+    bool bParent = true;
     Update(sal_True);
     Display(true);
     if( rHEvt.GetMode() & HELPMODE_QUICK )
@@ -464,7 +464,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
                             (const SwGlblDocContent*)pEntry->GetUserData() : 0;
         if( pCont &&  GLBLDOC_SECTION == pCont->GetType())
         {
-            bParent = sal_False;
+            bParent = false;
             SvLBoxTab* pTab;
             SvLBoxItem* pItem = GetItem( pEntry, aPos.X(), &pTab );
             if (pItem && SV_ITEM_ID_LBOXSTRING == pItem->GetType())
@@ -506,7 +506,7 @@ void     SwGlobalTree::SelectHdl()
     SvTreeListEntry* pSel = FirstSelected();
     sal_uInt16 nAbsPos = pSel ? (sal_uInt16)GetModel()->GetAbsPos(pSel) : 0;
     SwNavigationPI* pNavi = GetParentWindow();
-    sal_Bool bReadonly = !pActiveShell ||
+    bool bReadonly = !pActiveShell ||
                 pActiveShell->GetView().GetDocShell()->IsReadOnly();
     pNavi->aGlobalToolBox.EnableItem(FN_GLOBAL_EDIT,  nSelCount == 1 && !bReadonly);
     pNavi->aGlobalToolBox.EnableItem(FN_GLOBAL_OPEN,  nSelCount <= 1 && !bReadonly);
@@ -1056,7 +1056,7 @@ void    SwGlobalTree::ExecCommand(sal_uInt16 nCmd)
     {
         if(GetSelectionCount() == 1)
         {
-            sal_Bool bMove = sal_False;
+            bool bMove = false;
             sal_uInt16 nSource = (sal_uInt16)GetModel()->GetAbsPos(pEntry);
             sal_uInt16 nDest = nSource;
             switch(nCmd)
@@ -1164,14 +1164,14 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
 {
     String sFileName(pCont->GetSection()->GetLinkFileName().GetToken(0,
             sfx2::cTokenSeperator));
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     const SfxObjectShell* pCurr = SfxObjectShell::GetFirst();
     while( !bFound && pCurr )
     {
         if(pCurr->GetMedium() &&
             String(pCurr->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI)) == sFileName)
         {
-            bFound = sal_True;
+            bFound = true;
             SwGlobalTree::SetShowShell(pCurr);
             Application::PostUserEvent( STATIC_LINK(
                         this, SwGlobalTree, ShowFrameHdl ) );
@@ -1262,12 +1262,12 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
     sal_Int32 nFiles = _rFiles.getLength();
     if ( nFiles )
     {
-        sal_Bool bMove = sal_False;
+        bool bMove = false;
         if ( !_pContent )
         {
             SvTreeListEntry* pLast = (SvTreeListEntry*)LastVisible();
             _pContent = (SwGlblDocContent*)pLast->GetUserData();
-            bMove = sal_True;
+            bMove = true;
         }
         String sFilePassword;
         sal_uInt16 nEntryCount = (sal_uInt16)GetEntryCount();
