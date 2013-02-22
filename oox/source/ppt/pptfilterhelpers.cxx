@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
-
+#include <rtl/ustrbuf.hxx>
 #include "pptfilterhelpers.hxx"
 
 namespace oox { namespace ppt {
@@ -92,34 +91,100 @@ namespace oox { namespace ppt {
     {
         bool bRet = false;
 
-        const sal_Char* pSource[] = { "ppt_x", "ppt_y", "ppt_w", "ppt_h", NULL };
-        const sal_Char* pDest[] = { "x", "y", "width", "height", NULL };
+        /* here we want to substitute all occurance of
+         * [#]ppt_[xyhw] with
+         * x,y,height and width respectively
+         */
         sal_Int32 nIndex = 0;
+        sal_Int32 nLastIndex = 0;
 
-        const sal_Char** ps = pSource;
-        const sal_Char** pd = pDest;
-
-        while( *ps )
+        nIndex = rString.indexOf("ppt_");
+        // bail out early if there is no substitution to be made
+        if(nIndex >= 0)
         {
-            const OUString aSearch( OUString::createFromAscii( *ps ) );
-            while( (nIndex = rString.indexOf( aSearch, nIndex )) != -1  )
+            OUStringBuffer sRes(rString.getLength());
+
+            do
             {
-                sal_Int32 nLength = aSearch.getLength();
-                if( nIndex && (rString.getStr()[nIndex-1] == '#' ) )
+                // copy the non matching inverval verbatim
+                if(nIndex > nLastIndex)
                 {
-                    nIndex--;
-                    nLength++;
+                    sRes.append(rString.getStr() + nLastIndex, (nIndex - nLastIndex));
                 }
-
-                const OUString aNew( OUString::createFromAscii( *pd ) );
-                rString = rString.replaceAt( nIndex, nLength, aNew );
-                nIndex += aNew.getLength();
-                bRet = true;
+                // we are searching for ppt_[xywh] so we need and extra char behind the match
+                if(nIndex + 4 < rString.getLength())
+                {
+                    switch(rString[nIndex + 4])
+                    {
+                    case (sal_Unicode)'h': // we found ppt_h
+                        // if it was #ppt_h we already copied the #
+                        // which we do not want in the target, so remove it
+                        if(nIndex && (rString[nIndex - 1] == (sal_Unicode)'#'))
+                        {
+                            sRes.remove(sRes.getLength() - 1, 1);
+                        }
+                        sRes.append("height");
+                        bRet = true;
+                        break;
+                    case (sal_Unicode)'w':
+                        if(nIndex && (rString[nIndex - 1] == (sal_Unicode)'#'))
+                        {
+                            sRes.remove(sRes.getLength() - 1, 1);
+                        }
+                        sRes.append("width");
+                        bRet = true;
+                        break;
+                    case (sal_Unicode)'x':
+                        if(nIndex && (rString[nIndex - 1] == (sal_Unicode)'#'))
+                        {
+                            sRes[sRes.getLength() - 1] = (sal_Unicode)'x';
+                        }
+                        else
+                        {
+                            sRes.append((sal_Unicode)'x');
+                        }
+                        bRet = true;
+                        break;
+                    case (sal_Unicode)'y':
+                        if(nIndex && (rString[nIndex - 1] == (sal_Unicode)'#'))
+                        {
+                            sRes[sRes.getLength() - 1] = (sal_Unicode)'y';
+                        }
+                        else
+                        {
+                            sRes.append((sal_Unicode)'y');
+                        }
+                        bRet = true;
+                        break;
+                    default:
+                        // this was ppt_ without an interesting thing after that
+                        // just copy it verbatim
+                        sRes.append("ppt_");
+                        // we are going to ajust for ppt_@ after the swtich
+                        // so compensate for the fact we did not really process
+                        // an extra character after ppt_
+                        nIndex -= 1;
+                        break;
+                    }
+                }
+                else
+                {
+                    sRes.append("ppt_");
+                    nIndex += 4;
+                    nLastIndex = nIndex;
+                    break;
+                }
+                nIndex += 5;
+                nLastIndex = nIndex;
             }
-            ps++;
-            pd++;
+            while((nIndex = rString.indexOf("ppt_", nIndex)) > 0);
+            // copy the non matching tail if any
+            if(nLastIndex < rString.getLength())
+            {
+                sRes.append(rString.getStr() + nLastIndex, rString.getLength() - nLastIndex );
+            }
+            rString = sRes.makeStringAndClear();
         }
-
         return bRet;
     }
 
