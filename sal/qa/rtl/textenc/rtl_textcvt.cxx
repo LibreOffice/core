@@ -252,7 +252,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
         rtl_destroyTextToUnicodeConverter(aConverter);
     }
     if (rTest.m_bNoContext && rTest.m_bForward) {
-        sal_Unicode aUnicode[TEST_STRING_SIZE];
+        sal_Unicode aUnicode[TEST_STRING_SIZE] = { 0, };
         int nSize = 0;
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rTest.m_nEncoding);
