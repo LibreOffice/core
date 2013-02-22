@@ -228,10 +228,7 @@ static ::rtl::OUString RetrieveLabelFromCommand(
     ::rtl::OUString aLabel;
     css::uno::Reference< css::frame::XModuleManager2 > xModuleManager( s_xModuleManager );
     css::uno::Reference< css::container::XNameAccess > xNameAccess( s_xNameAccess );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR(
-        ::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::uno::XComponentContext >     xContext(
-        ::comphelper::getProcessComponentContext(), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
     try
     {
@@ -246,8 +243,7 @@ static ::rtl::OUString RetrieveLabelFromCommand(
         if ( !xNameAccess.is() )
         {
             xNameAccess = css::uno::Reference< css::container::XNameAccess >(
-                css::frame::UICommandDescription::create(
-                        comphelper::getComponentContext(xSMGR)),
+                css::frame::UICommandDescription::create(xContext),
                     css::uno::UNO_QUERY_THROW );
             s_xNameAccess = xNameAccess;
         }
@@ -362,9 +358,8 @@ enum ETypeFamily
 {
     try
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR         (::comphelper::getProcessServiceFactory()        , css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::uno::XComponentContext >     xContext      (::comphelper::getProcessComponentContext()        , css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::frame::XModuleManager2 >      xModuleManager(css::frame::ModuleManager::create(xContext));
+        css::uno::Reference< css::uno::XComponentContext >  xContext      (::comphelper::getProcessComponentContext());
+        css::uno::Reference< css::frame::XModuleManager2 >  xModuleManager(css::frame::ModuleManager::create(xContext));
 
         ::rtl::OUString sModule = xModuleManager->identify(xFrame);
         ::rtl::OUString sType   ;
