@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3////8\u003d",
+        "filename": "tools/source/string/tustring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-02-22T18:27:20Z",
+      "side": 1,
+      "message": "that is why one should review \u0027automated\u0027 change.",
+      "revId": "cf4cf5e433993ed2499902b1277b5abf0c715345",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
