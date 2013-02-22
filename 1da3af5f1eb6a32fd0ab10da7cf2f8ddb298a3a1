@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVn///LQ\u003d",
+        "filename": "dbaccess/source/core/misc/dsntypes.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-02-22T16:34:46Z",
+      "side": 1,
+      "message": "this comparison with STRING_NOTFOUND must be adapted as well, as indexOf returns -1 when it\u0027s not found (also, sal_uInt16 \u003d\u003e sal_Int32 at the same time to be able to store -1).\n\nfixed in commit 5677e3f2514d5b797c239d99edce0189d5cf364b",
+      "revId": "1da3af5f1eb6a32fd0ab10da7cf2f8ddb298a3a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVn///LM\u003d",
+        "filename": "dbaccess/source/ui/dlg/DbAdminImpl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-02-22T16:34:46Z",
+      "side": 1,
+      "message": "OUString::replaceAll does not modify the OUString but returns a new OUString instead.\nthis means that when converting an existing String *Replace* call you need to assign the returned value to the original string.\n\nyou should get a warning about an \"unused result\" here but strangely\ni\u0027m not seeing a warning with gcc 4.7, no idea why...\nat least the Clang tinderbox caught the problem.\n\nfixed in commit 03a381eaa58d77cf26dfa8d916d1ecda865c1937",
+      "revId": "1da3af5f1eb6a32fd0ab10da7cf2f8ddb298a3a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
