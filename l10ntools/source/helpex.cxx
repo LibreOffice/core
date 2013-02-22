@@ -41,7 +41,7 @@ void WriteUsage()
         << " Prj: Project\n"
         << " Root: Path to project root (../.. etc.)\n"
         << " FileIn + i:   Source file (*.xhp)\n"
-        << " FileIn + -mi: File including pathes of source files"
+        << " FileIn + -mi: File including paths of source files"
         << " (only for merge)"
         << " FileOut:  Destination file (*.*) or files (in case of -mi)\n"
         << " DataBase: Mergedata (*.po)\n"
