@@ -66,7 +66,7 @@ namespace dbmm
     struct MigrationError
     {
         const MigrationErrorType            eType;
-        ::std::vector< ::rtl::OUString >    aErrorDetails;
+        ::std::vector< OUString >    aErrorDetails;
         const ::com::sun::star::uno::Any    aCaughtException;
 
         MigrationError(
@@ -85,7 +85,7 @@ namespace dbmm
 
         MigrationError(
                 const MigrationErrorType _eType,
-                const ::rtl::OUString& _rDetail )
+                const OUString& _rDetail )
             :eType( _eType )
         {
             impl_constructDetails( _rDetail );
@@ -93,7 +93,7 @@ namespace dbmm
 
         MigrationError(
                 const MigrationErrorType _eType,
-                const ::rtl::OUString& _rDetail,
+                const OUString& _rDetail,
                 const ::com::sun::star::uno::Any& _rCaughtException )
             :eType( _eType )
             ,aCaughtException( _rCaughtException )
@@ -103,8 +103,8 @@ namespace dbmm
 
         MigrationError(
                 const MigrationErrorType _eType,
-                const ::rtl::OUString& _rDetail1,
-                const ::rtl::OUString& _rDetail2 )
+                const OUString& _rDetail1,
+                const OUString& _rDetail2 )
             :eType( _eType )
         {
             impl_constructDetails( _rDetail1, _rDetail2 );
@@ -112,8 +112,8 @@ namespace dbmm
 
         MigrationError(
                 const MigrationErrorType _eType,
-                const ::rtl::OUString& _rDetail1,
-                const ::rtl::OUString& _rDetail2,
+                const OUString& _rDetail1,
+                const OUString& _rDetail2,
                 const ::com::sun::star::uno::Any& _rCaughtException )
             :eType( _eType )
             ,aCaughtException( _rCaughtException )
@@ -123,9 +123,9 @@ namespace dbmm
 
         MigrationError(
                 const MigrationErrorType _eType,
-                const ::rtl::OUString& _rDetail1,
-                const ::rtl::OUString& _rDetail2,
-                const ::rtl::OUString& _rDetail3,
+                const OUString& _rDetail1,
+                const OUString& _rDetail2,
+                const OUString& _rDetail3,
                 const ::com::sun::star::uno::Any& _rCaughtException )
             :eType( _eType )
             ,aCaughtException( _rCaughtException )
@@ -135,9 +135,9 @@ namespace dbmm
 
         MigrationError(
                 const MigrationErrorType _eType,
-                const ::rtl::OUString& _rDetail1,
-                const ::rtl::OUString& _rDetail2,
-                const ::rtl::OUString& _rDetail3 )
+                const OUString& _rDetail1,
+                const OUString& _rDetail2,
+                const OUString& _rDetail3 )
             :eType( _eType )
         {
             impl_constructDetails( _rDetail1, _rDetail2, _rDetail3 );
@@ -145,9 +145,9 @@ namespace dbmm
 
     private:
         void    impl_constructDetails(
-                    const ::rtl::OUString& _rDetail1,
-                    const ::rtl::OUString& _rDetail2 = ::rtl::OUString(),
-                    const ::rtl::OUString& _rDetail3 = ::rtl::OUString()
+                    const OUString& _rDetail1,
+                    const OUString& _rDetail2 = OUString(),
+                    const OUString& _rDetail3 = OUString()
                 )
         {
             if ( !_rDetail1.isEmpty() ) aErrorDetails.push_back( _rDetail1 );
