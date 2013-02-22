@@ -64,9 +64,9 @@ namespace sdbtools
     {
         SdbtClient      m_aModuleClient;    // keep the module alive as long as this instance lives
 
-        ::rtl::OUString sCatalog;
-        ::rtl::OUString sSchema;
-        ::rtl::OUString sName;
+        OUString sCatalog;
+        OUString sSchema;
+        OUString sName;
     };
 
     //====================================================================
@@ -89,49 +89,49 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL TableName::getCatalogName() throw (RuntimeException)
+    OUString SAL_CALL TableName::getCatalogName() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         return m_pImpl->sCatalog;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL TableName::setCatalogName( const ::rtl::OUString& _catalogName ) throw (RuntimeException)
+    void SAL_CALL TableName::setCatalogName( const OUString& _catalogName ) throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         m_pImpl->sCatalog = _catalogName;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL TableName::getSchemaName() throw (RuntimeException)
+    OUString SAL_CALL TableName::getSchemaName() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         return m_pImpl->sSchema;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL TableName::setSchemaName( const ::rtl::OUString& _schemaName ) throw (RuntimeException)
+    void SAL_CALL TableName::setSchemaName( const OUString& _schemaName ) throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         m_pImpl->sSchema = _schemaName;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL TableName::getTableName() throw (RuntimeException)
+    OUString SAL_CALL TableName::getTableName() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         return m_pImpl->sName;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL TableName::setTableName( const ::rtl::OUString& _tableName ) throw (RuntimeException)
+    void SAL_CALL TableName::setTableName( const OUString& _tableName ) throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         m_pImpl->sName = _tableName;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL TableName::getNameForSelect() throw (RuntimeException)
+    OUString SAL_CALL TableName::getNameForSelect() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         return composeTableNameForSelect( getConnection(), m_pImpl->sCatalog, m_pImpl->sSchema, m_pImpl->sName );
@@ -177,7 +177,7 @@ namespace sdbtools
             ||  !xPSI->hasPropertyByName( PROPERTY_NAME )
             )
             throw IllegalArgumentException(
-                String( SdbtRes( STR_NO_TABLE_OBJECT ) ),
+                OUString( SdbtRes( STR_NO_TABLE_OBJECT ) ),
                 *this,
                 0
             );
@@ -225,7 +225,7 @@ namespace sdbtools
                     found = true;
             if ( !found )
                 throw IllegalArgumentException(
-                    String( SdbtRes( STR_INVALID_COMPOSITION_TYPE ) ),
+                    OUString( SdbtRes( STR_INVALID_COMPOSITION_TYPE ) ),
                     NULL,
                     0
                 );
@@ -235,7 +235,7 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL TableName::getComposedName( ::sal_Int32 _Type, ::sal_Bool _Quote ) throw (IllegalArgumentException, RuntimeException)
+    OUString SAL_CALL TableName::getComposedName( ::sal_Int32 _Type, ::sal_Bool _Quote ) throw (IllegalArgumentException, RuntimeException)
     {
         EntryGuard aGuard( *this );
 
@@ -246,7 +246,7 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL TableName::setComposedName( const ::rtl::OUString& _ComposedName, ::sal_Int32 _Type ) throw (RuntimeException)
+    void SAL_CALL TableName::setComposedName( const OUString& _ComposedName, ::sal_Int32 _Type ) throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
 
