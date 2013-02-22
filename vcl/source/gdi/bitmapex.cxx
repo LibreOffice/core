@@ -368,7 +368,9 @@ sal_Bool BitmapEx::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
 {
     sal_Bool bRet;
 
-    if( aBitmapSize.Width() && aBitmapSize.Height() )
+    if( aBitmapSize.Width() && aBitmapSize.Height() &&
+        ( rNewSize.Width()  != aBitmapSize.Width() ||
+          rNewSize.Height() != aBitmapSize.Height() ) )
     {
         bRet = Scale( (double) rNewSize.Width() / aBitmapSize.Width(),
                       (double) rNewSize.Height() / aBitmapSize.Height(),
