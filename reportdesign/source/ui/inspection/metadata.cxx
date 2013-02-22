@@ -47,7 +47,7 @@ namespace rptui
         sal_uInt32      nUIFlags;
 
         OPropertyInfoImpl(
-                        const ::rtl::OUString&      rName,
+                        const OUString&      rName,
                         sal_Int32                   _nId,
                         const String&               aTranslation,
                         const rtl::OString&         _sHelpId,
@@ -55,7 +55,7 @@ namespace rptui
     };
 
     //------------------------------------------------------------------------
-    OPropertyInfoImpl::OPropertyInfoImpl(const ::rtl::OUString& _rName, sal_Int32 _nId,
+    OPropertyInfoImpl::OPropertyInfoImpl(const OUString& _rName, sal_Int32 _nId,
                                    const String& aString, const rtl::OString& sHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
        ,sTranslation(aString)
@@ -226,7 +226,7 @@ namespace rptui
     }
 
     //------------------------------------------------------------------------
-    bool OPropertyInfoService::isComposable( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _rxFormComponentHandler )
+    bool OPropertyInfoService::isComposable( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _rxFormComponentHandler )
     {
         sal_Int32 nId = getPropertyId( _rPropertyName );
         if ( nId != -1 )
@@ -242,40 +242,40 @@ namespace rptui
     void OPropertyInfoService::getExcludeProperties(::std::vector< beans::Property >& _rExcludeProperties,const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _xFormComponentHandler)
     {
         uno::Sequence< beans::Property > aProps = _xFormComponentHandler->getSupportedProperties();
-        static const ::rtl::OUString pExcludeProperties[] =
+        static const OUString pExcludeProperties[] =
         {
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Printable")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordBreak")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MultiLine")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tag")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpText")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpURL")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxTextLen")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tabstop")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ValueMin")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ValueMax")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Spin")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SpinValue")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SpinValueMin")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SpinValueMax")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultSpinValue")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SpinIncrement")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Repeat")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepeatDelay")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlLabel")), /// TODO: has to be checked
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LabelControl")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")), // comment this out if you want to have title feature for charts
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Printable")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("WordBreak")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("MultiLine")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Tag")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("HelpText")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("HelpURL")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("MaxTextLen")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Tabstop")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("ValueMin")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("ValueMax")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Spin")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("SpinValue")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("SpinValueMin")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("SpinValueMax")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultSpinValue")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("SpinIncrement")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Repeat")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("RepeatDelay")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("ControlLabel")), /// TODO: has to be checked
+                OUString(RTL_CONSTASCII_USTRINGPARAM("LabelControl")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Title")), // comment this out if you want to have title feature for charts
                 PROPERTY_MAXTEXTLEN,
                 PROPERTY_EFFECTIVEDEFAULT,
                 PROPERTY_EFFECTIVEMAX,
                 PROPERTY_EFFECTIVEMIN,
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HideInactiveSelection")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SubmitAction")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputRequired")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VerticalAlign")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("HideInactiveSelection")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("SubmitAction")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("InputRequired")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("VerticalAlign")),
                 PROPERTY_ALIGN,
                 PROPERTY_EMPTY_IS_NULL,
                 PROPERTY_FILTERPROPOSAL
