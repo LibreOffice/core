@@ -41,8 +41,12 @@ TextPortionModel::TextPortionModel( const TextFontModel& rFont, const OUString& 
 }
 
 TextBox::TextBox(ShapeTypeModel& rTypeModel)
-    : mrTypeModel(rTypeModel),
-    borderDistanceSet( false )
+    : mrTypeModel(rTypeModel)
+    , borderDistanceSet( false )
+    , borderDistanceLeft(0)
+    , borderDistanceTop(0)
+    , borderDistanceRight(0)
+    , borderDistanceBottom(0)
 {
 }
 
