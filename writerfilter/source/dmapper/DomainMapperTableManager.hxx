@@ -54,6 +54,8 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     bool            m_bPushCurrentWidth;
     /// Individual table cell width values, used only in case the number of cells doesn't match the table grid.
     ::std::vector< IntVectorPtr >  m_aCellWidths;
+    /// Remember if a cell already set this, then it should not be set at a row level.
+    bool m_bRowSizeTypeInserted;
 
     TablePropertiesHandler   *m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
@@ -118,6 +120,11 @@ public:
         else
            DomainMapperTableManager_Base_t::insertTableProps( pProps );
     };
+
+    bool IsRowSizeTypeInserted() const
+    {
+        return m_bRowSizeTypeInserted;
+    }
 
 };
 

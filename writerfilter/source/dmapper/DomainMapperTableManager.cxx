@@ -52,6 +52,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_nTableWidth(0),
     m_bOOXML( bOOXML ),
     m_bPushCurrentWidth(false),
+    m_bRowSizeTypeInserted(false),
     m_pTablePropsHandler( new TablePropertiesHandler( bOOXML ) )
 {
     m_pTablePropsHandler->SetTableManager( this );
@@ -261,10 +262,18 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
                         break;
                     case 3:  // btLr
+                        {
                         // We have to fake this text direction
                          pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( text::WritingMode2::LR_TB ));
                          pPropMap->Insert( PROP_CHAR_ROTATION, false, uno::makeAny( sal_Int16( 900 ) ));
                         SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
+
+                        // We're faking a text direction, so don't allow multiple lines.
+                        TablePropertyMapPtr pRowPropMap( new TablePropertyMap );
+                        pRowPropMap->Insert(PROP_SIZE_TYPE, false, uno::makeAny(text::SizeType::FIX));
+                        m_bRowSizeTypeInserted = true;
+                        insertRowProps(pRowPropMap);
+                        }
                         break;
                     case 4: // lrTbV
                         pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( text::WritingMode2::LR_TB ));
@@ -583,6 +592,7 @@ void DomainMapperTableManager::endOfRowAction()
     pCellWidths->clear();
 
     m_nGridBefore = m_nGridAfter = 0;
+    m_bRowSizeTypeInserted = false;
 
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement();

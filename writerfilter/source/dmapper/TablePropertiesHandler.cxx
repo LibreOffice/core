@@ -24,6 +24,7 @@
 #include "MeasureHandler.hxx"
 #include "TablePropertiesHandler.hxx"
 #include "TDefTableHandler.hxx"
+#include "DomainMapperTableManager.hxx"
 
 #include <ooxml/resourceids.hxx>
 #include <doctok/sprmids.hxx>
@@ -92,7 +93,12 @@ namespace dmapper {
                     MeasureHandlerPtr pMeasureHandler( new MeasureHandler );
                     pProperties->resolve(*pMeasureHandler);
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                    pPropMap->Insert( PROP_SIZE_TYPE, false, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ));
+
+                    // In case a cell already wanted fixed size, we should not overwrite it here.
+                    DomainMapperTableManager* pManager = dynamic_cast<DomainMapperTableManager*>(m_pTableManager);
+                    if (!pManager || !pManager->IsRowSizeTypeInserted())
+                        pPropMap->Insert( PROP_SIZE_TYPE, false, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ), false);
+
                     pPropMap->Insert( PROP_HEIGHT, false, uno::makeAny(pMeasureHandler->getMeasureValue() ));
                     insertRowProps(pPropMap);
                 }

@@ -51,6 +51,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
+#include <com/sun/star/text/SizeType.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -115,6 +116,7 @@ public:
     void testN793998();
     void testGroupshapeLine();
     void testN779642();
+    void testTbLrHeight();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -182,6 +184,7 @@ void Test::run()
         {"n793998.docx", &Test::testN793998},
         {"groupshape-line.docx", &Test::testGroupshapeLine},
         {"n779642.docx", &Test::testN779642},
+        {"tblr-height.docx", &Test::testTbLrHeight},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1181,6 +1184,16 @@ void Test::testN779642()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", nValue, text::VertOrientation::BOTTOM);
     xFrame->getPropertyValue("VertOrientRelation") >>= nValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation relation", nValue, text::RelOrientation::PAGE_PRINT_AREA);
+}
+
+void Test::testTbLrHeight()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    // btLr text direction was imported as MIN, it should be FIX to avoid incorrectly large height in case of too much content.
+    CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, getProperty<sal_Int16>(xTableRows->getByIndex(0), "SizeType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
