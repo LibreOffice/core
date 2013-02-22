@@ -114,7 +114,7 @@ namespace sdbtools
             ::dbtools::DatabaseMetaData aMeta( m_xConnection );
             if ( aMeta.supportsSubqueriesInFrom() )
             {
-                String sNeedDistinctNames( SdbtRes( STR_QUERY_AND_TABLE_DISTINCT_NAMES ) );
+                OUString sNeedDistinctNames( SdbtRes( STR_QUERY_AND_TABLE_DISTINCT_NAMES ) );
                 aError.NextException <<= SQLException( sNeedDistinctNames, m_xConnection, OUString(), 0, Any() );
             }
 
@@ -313,7 +313,7 @@ namespace sdbtools
             &&  ( _nCommandType != CommandType::QUERY )
             )
             throw IllegalArgumentException(
-                String( SdbtRes( STR_INVALID_COMMAND_TYPE ) ),
+                OUString( SdbtRes( STR_INVALID_COMMAND_TYPE ) ),
                 NULL,
                 0
             );
@@ -337,7 +337,7 @@ namespace sdbtools
         catch( const Exception& )
         {
             throw IllegalArgumentException(
-                String( SdbtRes( STR_CONN_WITHOUT_QUERIES_OR_TABLES ) ),
+                OUString( SdbtRes( STR_CONN_WITHOUT_QUERIES_OR_TABLES ) ),
                 NULL,
                 0
             );
@@ -413,13 +413,13 @@ namespace sdbtools
 
         PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( getContext(), _CommandType, getConnection() ) );
 
-        String sBaseName( _BaseName );
-        if ( sBaseName.Len() == 0 )
+        OUString sBaseName( _BaseName );
+        if ( sBaseName.isEmpty() )
         {
             if ( _CommandType == CommandType::TABLE )
-                sBaseName = String( SdbtRes( STR_BASENAME_TABLE ) );
+                sBaseName = OUString( SdbtRes( STR_BASENAME_TABLE ) );
             else
-                sBaseName = String( SdbtRes( STR_BASENAME_QUERY ) );
+                sBaseName = OUString( SdbtRes( STR_BASENAME_QUERY ) );
         }
 
         OUString sName( sBaseName );
