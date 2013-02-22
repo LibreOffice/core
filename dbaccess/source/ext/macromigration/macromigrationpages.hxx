@@ -88,7 +88,7 @@ namespace dbmm
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
     public:
-        ::rtl::OUString getBackupLocation() const { return m_aLocationController.getURL(); }
+        OUString getBackupLocation() const { return m_aLocationController.getURL(); }
         void            grabLocationFocus() { m_aSaveAsLocation.GrabFocus(); }
 
     protected:
@@ -126,12 +126,12 @@ namespace dbmm
 
     protected:
         // IMigrationProgress
-        virtual void    startObject( const ::rtl::OUString& _rObjectName, const ::rtl::OUString& _rCurrentAction, const sal_uInt32 _bRange );
-        virtual void    setObjectProgressText( const ::rtl::OUString& _rText );
+        virtual void    startObject( const OUString& _rObjectName, const OUString& _rCurrentAction, const sal_uInt32 _bRange );
+        virtual void    setObjectProgressText( const OUString& _rText );
         virtual void    setObjectProgressValue( const sal_uInt32 _nValue );
         virtual void    endObject();
         virtual void    start( const sal_uInt32 _nOverallRange );
-        virtual void    setOverallProgressText( const ::rtl::OUString& _rText );
+        virtual void    setOverallProgressText( const OUString& _rText );
         virtual void    setOverallProgressValue( const sal_uInt32 _nValue );
 
     private:
@@ -157,13 +157,13 @@ namespace dbmm
 
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
-        void            displayMigrationLog( const bool _bSuccessful, const String& _rLog );
+        void            displayMigrationLog( const bool _bSuccessful, const OUString& _rLog );
 
     private:
         FixedText       m_aChangesLabel;
         MultiLineEdit   m_aChanges;
-        String          m_aSuccessful;
-        String          m_aUnsuccessful;
+        OUString          m_aSuccessful;
+        OUString          m_aUnsuccessful;
     };
 
 //........................................................................
