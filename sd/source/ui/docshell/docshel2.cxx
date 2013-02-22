@@ -283,7 +283,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
             if ( pPageView->GetLockedLayers() != pFrameView->GetLockedLayers() )
                 pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
 
-                pPageView->SetHelpLines( pFrameView->GetStandardHelpLines() );
+            pPageView->SetHelpLines( pFrameView->GetStandardHelpLines() );
         }
 
         if ( pView->GetActiveLayer() != pFrameView->GetActiveLayer() )
