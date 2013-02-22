@@ -1431,7 +1431,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
     }
     else if (      PropertyName.equalsAsciiL(PROPERTY_FORMULA.ascii, PROPERTY_FORMULA.length)
                 || PropertyName.equalsAsciiL(PROPERTY_INITIALFORMULA.ascii, PROPERTY_INITIALFORMULA.length)
-                || PropertyName.equalsAsciiL(PROPERTY_DATAFIELD.ascii, PROPERTY_INITIALFORMULA.length)
+                || PropertyName.equalsAsciiL(PROPERTY_DATAFIELD.ascii, PROPERTY_DATAFIELD.length)
                 || PropertyName.equalsAsciiL(PROPERTY_CONDITIONALPRINTEXPRESSION.ascii, PROPERTY_CONDITIONALPRINTEXPRESSION.length))
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
