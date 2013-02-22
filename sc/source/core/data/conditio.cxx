@@ -1992,15 +1992,15 @@ void ScConditionalFormat::CompileXML()
 }
 
 void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bCopyAsMove )
 {
-    if( eUpdateRefMode == URM_COPY && nDz != 0 )
+    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+        itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
+
+    if( eUpdateRefMode == URM_COPY && bCopyAsMove )
         maRanges.UpdateReference( URM_MOVE, pDoc, rRange, nDx, nDy, nDz );
     else
         maRanges.UpdateReference( eUpdateRefMode, pDoc, rRange, nDx, nDy, nDz );
-
-    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
-        itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
 }
 
 void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
