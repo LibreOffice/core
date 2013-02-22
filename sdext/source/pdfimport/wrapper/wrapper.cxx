@@ -484,7 +484,7 @@ int Parser::parseFontRemoveSuffix( const sal_Unicode* pCopy, const char* s, sal_
     for (int i = 0; i < l; i++)
         if ( pCopy[nLen - l + i] != s[i] )
             return 0;
-        nLen -= l;
+    nLen -= l;
     return l;
 }
 

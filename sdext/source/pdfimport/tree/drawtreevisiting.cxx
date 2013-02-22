@@ -1014,7 +1014,6 @@ void DrawXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::co
     // get styles for paragraphs
     PropertyMap aPageProps;
     PropertyMap aPageLayoutProps;
-    rtl::OUStringBuffer aBuf( 64 );
     aPageLayoutProps[ "fo:margin-top" ]     =  unitMMString( top_margin );
     aPageLayoutProps[ "fo:margin-bottom" ]  =  unitMMString( bottom_margin );
     aPageLayoutProps[ "fo:margin-left" ]    =  unitMMString( left_margin );
@@ -1039,9 +1038,6 @@ void DrawXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::co
     StyleContainer::Style aFooterStyle( "style:footer", PropertyMap() );
 
     elem.StyleId = m_rStyleContainer.impl_getStyleId( aMPStyle,false );
-
-
-    rtl::OUString aMasterPageName = m_rStyleContainer.getStyleName( elem.StyleId );
 
     // create styles for children
     elem.applyToChildren(*this);

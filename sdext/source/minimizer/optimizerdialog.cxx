@@ -158,7 +158,6 @@ void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool 
 void OptimizerDialog::UpdateConfiguration()
 {
     sal_Int16   nInt16 = 0;
-    OUString    aString;
     Any         aAny;
 
     Sequence< sal_Int16 > aSelectedItems;

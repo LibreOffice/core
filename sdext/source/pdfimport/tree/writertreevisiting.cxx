@@ -1145,7 +1145,6 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     // get styles for paragraphs
     PropertyMap aPageProps;
     PropertyMap aPageLayoutProps;
-    rtl::OUStringBuffer aBuf( 64 );
     aPageLayoutProps[ "fo:page-width" ]     = unitMMString( page_width );
     aPageLayoutProps[ "fo:page-height" ]    = unitMMString( page_height );
     aPageLayoutProps[ "style:print-orientation" ]

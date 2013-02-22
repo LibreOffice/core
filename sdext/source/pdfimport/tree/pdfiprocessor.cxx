@@ -466,8 +466,6 @@ GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
     geometry::RealRectangle2D   rRect = rGlyph.getRect();
     geometry::Matrix2D          rFontMatrix = rGlyph.getFontMatrix();
 
-    rtl::OUString tempStr( 32 );
-
     basegfx::B2DHomMatrix aFontMatrix;
     basegfx::unotools::homMatrixFromMatrix(
         aFontMatrix,

@@ -487,7 +487,7 @@ void SAL_CALL PresenterSlideShowView::setMouseCursor(::sal_Int16 nPointerShape)
 awt::Rectangle SAL_CALL PresenterSlideShowView::getCanvasArea(  ) throw (RuntimeException)
 {
     if( mxViewWindow.is() && mxTopPane.is() )
-    return mxPresenterHelper->getWindowExtentsRelative( mxViewWindow, mxTopPane->getWindow() );
+        return mxPresenterHelper->getWindowExtentsRelative( mxViewWindow, mxTopPane->getWindow() );
 
     awt::Rectangle aRectangle;
 
