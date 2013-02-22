@@ -31,7 +31,8 @@ $(eval $(call gb_Module_Module,sal))
 $(eval $(call gb_Module_add_targets,sal,\
 	CustomTarget_generated \
 	CustomTarget_sal_allheaders \
-	Executable_cppunittester \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
+		Executable_cppunittester) \
 	$(if $(filter $(OS),ANDROID), \
 		Library_lo-bootstrap) \
 	Library_sal \
@@ -45,13 +46,14 @@ $(eval $(call gb_Module_add_targets,sal,\
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
 $(eval $(call gb_Module_add_targets,sal,\
 		Executable_osl_process_child \
 ))
+
 $(eval $(call gb_Module_add_check_targets,sal,\
 		CppunitTest_sal_osl_process \
 ))
-endif
 
 $(eval $(call gb_Module_add_check_targets,sal,\
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,CppunitTest_Module_DLL) \
@@ -87,6 +89,8 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_osl_setthreadname \
 	CppunitTest_sal_rtl_math \
 ))
+
+endif
 
 # CppunitTest_sal_osl_pipe has circular dependency on unotest
 # $(eval $(call gb_Module_add_subsequentcheck_targets,sal,\

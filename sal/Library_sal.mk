@@ -181,7 +181,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/module \
 	sal/osl/unx/process \
 	sal/osl/unx/process_impl \
-	sal/osl/unx/salinit \
+        $(if $(filter DESKTOP,$(BUILD_TYPE)), sal/osl/unx/salinit) \
 	sal/osl/unx/uunxapi \
 ))
 $(eval $(call gb_Library_add_cobjects,sal,\
