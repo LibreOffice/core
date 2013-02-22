@@ -595,8 +595,9 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const ::rtl::OUString& aFilte
     {
         throw;
     }
-    catch( const uno::Exception& )
+    catch( const uno::Exception& e )
     {
+        SAL_WARN("sfx2.doc", "ignoring UNO exception " << e.Message);
     }
 
     return bDialogUsed;
