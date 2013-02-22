@@ -1058,8 +1058,13 @@ End
 #endif
 #endif
 
+#if defined(OS2)
+STD_LIB_FILE(gid_File_Lib_Mysql,mysql)
+STD_LIB_FILE(gid_File_Lib_Odbc,odbc)
+#else
 STD_LIB_FILE(gid_File_Lib_Mysql,mysql.uno)
 STD_LIB_FILE(gid_File_Lib_Odbc,odbc.uno)
+#endif
 
 // STD_LIB_FILE( gid_File_Lib_Ofa , ofa)
 

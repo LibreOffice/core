@@ -55,7 +55,11 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 # --- Library -----------------------------------
 
+.IF "$(GUI)" == "OS2"
+REALNAME:=$(MYSQL_TARGET)
+.ELSE
 REALNAME:=$(MYSQL_TARGET).uno
+.ENDIF
 SHL1TARGET=$(REALNAME)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
