@@ -104,8 +104,8 @@ namespace dbaui
         OTableCopyHelper::DropDescriptor    m_aAsyncDrop;
         OTableCopyHelper                    m_aTableCopyHelper;
 
-        ::rtl::OUString         m_sQueryCommand;    // the command of the query currently loaded (if any)
-        //::rtl::OUString         m_sToBeLoaded;      // contains the element name which should be loaded if any
+        OUString         m_sQueryCommand;    // the command of the query currently loaded (if any)
+        //OUString         m_sToBeLoaded;      // contains the element name which should be loaded if any
 
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;
@@ -123,7 +123,7 @@ namespace dbaui
                                 m_aDocScriptSupport;    // relevant if and only if we are associated with exactly one DBDoc
 
 
-        virtual ::rtl::OUString getPrivateTitle( ) const;
+        virtual OUString getPrivateTitle( ) const;
     // attribute access
     public:
         SbaTableQueryBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
@@ -148,8 +148,8 @@ namespace dbaui
         static sal_Int32    getDatabaseObjectType( EntryType _eType );
 
         // need by registration
-        static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
@@ -186,7 +186,7 @@ namespace dbaui
         virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
         // XContainerListener
@@ -234,7 +234,7 @@ namespace dbaui
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         // IControlActionListener overridables
-        virtual sal_Bool    requestQuickHelp( const SvTreeListEntry* _pEntry, String& _rText ) const;
+        virtual sal_Bool    requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const;
         virtual sal_Bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt );
@@ -371,8 +371,8 @@ namespace dbaui
 
         /// selects the entry given and loads the grid control with the object's data
         sal_Bool implSelect(
-            const ::rtl::OUString& _rDataSourceName,
-            const ::rtl::OUString& _rCommand,
+            const OUString& _rDataSourceName,
+            const OUString& _rCommand,
             const sal_Int32 _nCommandType,
             const sal_Bool _bEscapeProcessing,
             const SharedConnection& _rxConnection,
@@ -389,7 +389,7 @@ namespace dbaui
         );
 
         /// loads the grid control with the data object specified (which may be a table, a query or a command)
-        sal_Bool implLoadAnything(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
+        sal_Bool implLoadAnything(const OUString& _rDataSourceName, const OUString& _rCommand,
             const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing, const SharedConnection& _rxConnection = SharedConnection() );
 
         /** retrieves the tree entry for the object described by <arg>_rDescriptor</arg>
@@ -423,7 +423,7 @@ namespace dbaui
                 If <TRUE/>, all ancestor on the way to the entry will be expanded
         */
         SvTreeListEntry* getObjectEntry(
-            const ::rtl::OUString& _rDataSource, const ::rtl::OUString& _rCommand, sal_Int32 _nCommandType,
+            const OUString& _rDataSource, const OUString& _rCommand, sal_Int32 _nCommandType,
             SvTreeListEntry** _ppDataSourceEntry = NULL, SvTreeListEntry** _ppContainerEntry = NULL,
             sal_Bool _bExpandAncestors = sal_True,
             const SharedConnection& _rxConnection = SharedConnection()
@@ -433,12 +433,12 @@ namespace dbaui
         void checkDocumentDataSource();
 
         void extractDescriptorProps(const ::svx::ODataAccessDescriptor& _rDescriptor,
-            ::rtl::OUString& _rDataSource, ::rtl::OUString& _rCommand, sal_Int32& _rCommandType, sal_Bool& _rEscapeProcessing);
+            OUString& _rDataSource, OUString& _rCommand, sal_Int32& _rCommandType, sal_Bool& _rEscapeProcessing);
 
-        void transferChangedControlProperty(const ::rtl::OUString& _rProperty, const ::com::sun::star::uno::Any& _rNewValue);
+        void transferChangedControlProperty(const OUString& _rProperty, const ::com::sun::star::uno::Any& _rNewValue);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connectWithStatus(
-            const ::rtl::OUString& _rDataSourceName,
+            const OUString& _rDataSourceName,
             void* _pTreeListUserData    // in rela a DBTreeListUserData*, but we do not know this class here ....
         );
 
@@ -453,7 +453,7 @@ namespace dbaui
         /** get the signature (command/escape processing) of the query the form is based on
             <p>If the for is not based on a query or not even loaded, nothing happens and <FALSE/> is returned.</p>
         */
-        sal_Bool implGetQuerySignature( ::rtl::OUString& _rCommand, sal_Bool& _bEscapeProcessing );
+        sal_Bool implGetQuerySignature( OUString& _rCommand, sal_Bool& _bEscapeProcessing );
 
         sal_Bool isEntryCopyAllowed(SvTreeListEntry* _pEntry) const;
 
