@@ -248,9 +248,9 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
 
 // -----------------------------------------------------------------------
 
-String SfxContentHelper::GetActiveHelpString( const String& rURL )
+OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
 {
-    String aRet;
+    OUStringBuffer aRet;
     try
     {
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -268,7 +268,7 @@ String SfxContentHelper::GetActiveHelpString( const String& rURL )
             for( sal_Int32 i = 0; i < nRead; ++i )
                 sBuffer.append( (sal_Char)lData[i] );
             OUString sString = OStringToOUString( sBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
-            aRet += String( sString );
+            aRet.append( sString );
 
             nRead = xStream->readBytes( lData, 1024 );
         }
@@ -277,12 +277,12 @@ String SfxContentHelper::GetActiveHelpString( const String& rURL )
     {
     }
 
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SfxContentHelper::IsHelpErrorDocument( const String& rURL )
+sal_Bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
 {
     sal_Bool bRet = sal_False;
     try

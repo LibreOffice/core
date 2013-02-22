@@ -126,12 +126,12 @@ static OUString HelpLocaleString()
             if (!osl::DirectoryItem::get(sHelpPath, aDirItem) == osl::FileBase::E_None)
             {
                 bOk = false;
-                String sLang(aLocaleStr);
-                xub_StrLen nSepPos = sLang.Search( '-' );
-                if (nSepPos != STRING_NOTFOUND)
+                OUString sLang(aLocaleStr);
+                sal_Int32 nSepPos = sLang.indexOf( '-' );
+                if (nSepPos != -1)
                 {
                     bOk = true;
-                    sLang = sLang.Copy( 0, nSepPos );
+                    sLang = sLang.copy( 0, nSepPos );
                     sHelpPath = aBaseInstallPath +
                         OUString::createFromAscii(szHelpPath) + sLang;
                     if (!osl::DirectoryItem::get(sHelpPath, aDirItem) == osl::FileBase::E_None)
@@ -185,7 +185,7 @@ sal_Bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
 
             if ( !sAnchor.isEmpty() )
             {
-                _rAnchor = String( sAnchor );
+                _rAnchor = sAnchor;
                 bRet = sal_True;
             }
         }
@@ -307,7 +307,7 @@ public:
     ~SfxHelp_Impl();
 
     SfxHelpOptions_Impl*    GetOptions();
-    static String           GetHelpText( const OUString& aCommandURL, const String& rModule );
+    static OUString         GetHelpText( const OUString& aCommandURL, const OUString& rModule );
 };
 
 SfxHelp_Impl::SfxHelp_Impl() :
@@ -322,14 +322,17 @@ SfxHelp_Impl::~SfxHelp_Impl()
     delete m_pOpt;
 }
 
-String SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const String& rModule )
+OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString& rModule )
 {
     // create help url
-    String aHelpURL = SfxHelp::CreateHelpURL( aCommandURL, rModule );
+    OUStringBuffer aHelpURL( SfxHelp::CreateHelpURL( aCommandURL, rModule ) );
     // added 'active' parameter
-    aHelpURL.Insert( String( "&Active=true" ), aHelpURL.SearchBackward( '#' ) );
+    sal_Int32 nIndex = aHelpURL.lastIndexOf( '#' );
+    if ( nIndex < 0 )
+        nIndex = aHelpURL.getLength();
+    aHelpURL.insert( nIndex, "&Active=true" );
     // load help string
-    return SfxContentHelper::GetActiveHelpString( aHelpURL );
+    return SfxContentHelper::GetActiveHelpString( aHelpURL.makeStringAndClear() );
 }
 
 SfxHelpOptions_Impl* SfxHelp_Impl::GetOptions()
@@ -619,13 +622,13 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const Window* pWindo
     if ( bIsDebug )
     {
         sHelpText += "\n-------------\n";
-        sHelpText += String( sModuleName );
+        sHelpText += sModuleName;
         sHelpText += ": ";
         sHelpText += aCommandURL;
         if ( !aNewHelpId.isEmpty() )
         {
             sHelpText += " - ";
-            sHelpText += String(OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8));
+            sHelpText += OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8);
         }
     }
 
@@ -644,7 +647,7 @@ static bool impl_hasHelpInstalled( const OUString &rLang = OUString() )
 
 sal_Bool SfxHelp::SearchKeyword( const OUString& rKeyword )
 {
-    return Start_Impl( String(), NULL, rKeyword );
+    return Start_Impl( OUString(), NULL, rKeyword );
 }
 
 sal_Bool SfxHelp::Start( const OUString& rURL, const Window* pWindow )
@@ -653,14 +656,14 @@ sal_Bool SfxHelp::Start( const OUString& rURL, const Window* pWindow )
 }
 
 /// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
-static bool impl_showOnlineHelp( const String& rURL )
+static bool impl_showOnlineHelp( const OUString& rURL )
 {
-    String aInternal( "vnd.sun.star.help://"  );
-    if ( rURL.Len() <= aInternal.Len() || rURL.Copy( 0, aInternal.Len() ) != aInternal )
+    OUString aInternal( "vnd.sun.star.help://"  );
+    if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
         return false;
 
     OUString aHelpLink( "http://help.libreoffice.org/"  );
-    aHelpLink += rURL.Copy( aInternal.Len() );
+    aHelpLink += rURL.copy( aInternal.getLength() );
     try
     {
         Reference< XSystemShellExecute > xSystemShell(
@@ -692,10 +695,10 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
        Help keyword search now is implemented as own method; in former versions it
        was done via Help::Start, but this implementation conflicted with the upward search.
     */
-    String aHelpURL;
+    OUString aHelpURL;
     INetURLObject aParser( rURL );
     INetProtocol nProtocol = aParser.GetProtocol();
-    String aHelpModuleName( GetHelpModuleName_Impl() );
+    OUString aHelpModuleName( GetHelpModuleName_Impl() );
 
     switch ( nProtocol )
     {
@@ -727,7 +730,7 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
                         if (!pParent)
                         {
                             // create help url of start page ( helpid == 0 -> start page)
-                            aHelpURL = CreateHelpURL( String(), aHelpModuleName );
+                            aHelpURL = CreateHelpURL( OUString(), aHelpModuleName );
                         }
                         else if (pParent->IsDialog() && !bTriedTabPage)
                         {
