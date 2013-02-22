@@ -96,7 +96,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
                 (!lP.Value.hasValue())
                )
                 throw css::beans::IllegalTypeException(
-                        OUString( "PropertyValue struct contains no usefull informations." ),
+                        OUString( "PropertyValue struct contains no useful informations." ),
                         css::uno::Reference< css::uno::XInterface >());
             (*this)[lP.Name] = lP.Value;
             continue;
@@ -110,7 +110,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
                 (!lN.Value.hasValue())
                )
                 throw css::beans::IllegalTypeException(
-                        OUString( "NamedValue struct contains no usefull informations." ),
+                        OUString( "NamedValue struct contains no useful informations." ),
                         css::uno::Reference< css::uno::XInterface >());
             (*this)[lN.Name] = lN.Value;
             continue;

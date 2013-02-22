@@ -222,7 +222,7 @@ DMAKE(1)                                                              DMAKE(1)
               m      Notify of target update operations only.
 
               r      Force  output of recipe lines, warnings and executed com-
-                     mands. This switch is usefull  when  debugging  makefiles
+                     mands. This switch is useful  when  debugging  makefiles
                      that  disable  the  output using the @ or @@ property for
                      recipe lines or the .SILENT  target/attribute.   It  also
                      overrides the -s flag.

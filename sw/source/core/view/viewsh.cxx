@@ -1731,7 +1731,7 @@ void ViewShell::Paint(const Rectangle &rRect)
 
             if ( IsPreView() )
             {
-                //When usefull, process or destroy the old InvalidRect.
+                //When useful, process or destroy the old InvalidRect.
                 if ( aRect.IsInside( aInvalidRect ) )
                     ResetInvalidRect();
                 ViewShell::bLstAct = sal_True;
@@ -1752,7 +1752,7 @@ void ViewShell::Paint(const Rectangle &rRect)
                     // <--
                     PaintDesktop( aRect );
 
-                    //When usefull, process or destroy the old InvalidRect.
+                    //When useful, process or destroy the old InvalidRect.
                     if ( aRect.IsInside( aInvalidRect ) )
                         ResetInvalidRect();
                     ViewShell::bLstAct = sal_True;

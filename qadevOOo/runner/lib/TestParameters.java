@@ -64,7 +64,7 @@ public class TestParameters extends HashMap<String,Object> {
     /**
      * If this parameter is <CODE>true</CODE> the <CODE>OfficeProvider</CODE> tries
      * to get the URL to the binary of the office and to fill the
-     * <CODE>AppExecutionCommand</CODE> with usefull content if needet
+     * <CODE>AppExecutionCommand</CODE> with useful content if needet
      */
     public boolean AutoRestart = false;
 

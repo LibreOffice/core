@@ -191,7 +191,7 @@ public:
 
     /**
       * This method provides access to the "native" UCB content interface(s).
-      * This is usefull in case the convenience methods provided by this
+      * This is useful in case the convenience methods provided by this
       * class are insufficient for your needs. You may obtain all interfaces
       * supported by the underlying UCB content by calling this method and
       * after that doing a queryInterface call.

@@ -127,7 +127,7 @@ private:
                     should be returned. Of course using of it can fail too ... but its a try :-)
 
                     As an optimization - this method collects the names of all used deep
-                    detection services. This information can be usefull inside the may be
+                    detection services. This information can be useful inside the may be
                     afterwards called method "impl_detectTypeDeepOnly()"!
 
         @param      rDescriptor

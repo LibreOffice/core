@@ -40,7 +40,7 @@ JobResult::JobResult()
 {
     // reset the flag mask!
     // It will reset the accessible state of this object.
-    // That can be usefull if something will fail here ...
+    // That can be useful if something will fail here ...
     m_eParts = E_NOPART;
 }
 
@@ -97,7 +97,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
 
     // reset the flag mask!
     // It will reset the accessible state of this object.
-    // That can be usefull if something will fail here ...
+    // That can be useful if something will fail here ...
     m_eParts = E_NOPART;
 
     // analyze the result and update our other members

@@ -120,7 +120,7 @@
             </prop>
             <prop oor:name="SoftClose" oor:type="xs:boolean" oor:nillable="false">
                 <info>
-                    <desc>Specifies that a user interface element shouldn't be closed forever. This is usefull for context sensitive ui elements which must be visible whenever their context is active. This property is only used by toolbars or floating window user interface elements.</desc>
+                    <desc>Specifies that a user interface element shouldn't be closed forever. This is useful for context sensitive ui elements which must be visible whenever their context is active. This property is only used by toolbars or floating window user interface elements.</desc>
                 </info>
                 <value>false</value>
             </prop>

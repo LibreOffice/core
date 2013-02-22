@@ -101,7 +101,7 @@ places...
 		<!-- - - -->
 		
 		<!-- use this to group documents, it
-		is for example usefull when generating tables -->
+		is for example useful when generating tables -->
 		
 		
 		

@@ -196,7 +196,7 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
             case OLEIVERB_OPEN:
                 OSL_ENSURE(m_pDocHolder,"no document to open");
 
-                // the commented code could be usefull in case
+                // the commented code could be useful in case
                 // outer window would be resized depending from inner one
                 // RECTL aEmbArea;
                 // m_pDocHolder->GetVisArea( &aEmbArea );

@@ -81,7 +81,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *
      *  @param  eMode
      *          specify the open mode for the returned configuration access.
-     *          It's interpreted as a flag field and can be any usefull combination
+     *          It's interpreted as a flag field and can be any useful combination
      *          of values of EConfigurationModes.
      *
      *  @throw  Any exceptions the underlying configuration can throw.
@@ -206,7 +206,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      * Because it opens the specified configuration package, reads the key and
      * closes the configuration again.
      *
-     * So its not very usefull to use this method for reading multiple keys at the same time.
+     * So its not very useful to use this method for reading multiple keys at the same time.
      * (Excepting these keys exists inside different configuration packages ...))
      */
     static css::uno::Any readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
@@ -222,7 +222,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      * Because it opens the specified configuration package, writes the key, flush
      * all changes and closes the configuration again.
      *
-     * So its not very usefull to use this method for writing multiple keys at the same time.
+     * So its not very useful to use this method for writing multiple keys at the same time.
      * (Excepting these keys exists inside different configuration packages ...))
      */
     static void writeDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,

@@ -34,7 +34,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
 /**
- * This class contains some usefull mathods to handle Calc documents
+ * This class contains some useful mathods to handle Calc documents
  * and its sheets.
  */
 public class CalcTools {

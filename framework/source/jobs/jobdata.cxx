@@ -504,7 +504,7 @@ sal_Bool JobData::hasConfig() const
                 And there exist two of them: one for an administrator ... and one for the
                 current user. We change it for the user layer only. So this JobDispatch can't be
                 started any more ... till the administrator change his timestamp.
-                That can be usefull for post setup scenarios, which must run one time only.
+                That can be useful for post setup scenarios, which must run one time only.
 
                 Note: This method don't do anything, if ths represented job doesn't have a configuration!
  */

@@ -318,20 +318,20 @@ class ScriptImpl implements XScript
         {
             LogUtils.DEBUG("Beanshell error RAW message " + e.getMessage());
             String message = e.getMessage();
-            int usefullInfoIndex = message.lastIndexOf("\' :" );
+            int usefulInfoIndex = message.lastIndexOf("\' :" );
             int lineNum = e.getErrorLineNumber();
 
             raiseEditor( lineNum );
 
             //String stackTrace = te.getScriptStackTrace();  // never seems to have any info??
-            if ( usefullInfoIndex > -1 )
+            if ( usefulInfoIndex > -1 )
             {
-                message = message.substring( usefullInfoIndex + 2 );
+                message = message.substring( usefulInfoIndex + 2 );
             }
             if ( e instanceof bsh.TargetError )
             {
                 LogUtils.DEBUG("got instance of  TargetError");
-                if ( usefullInfoIndex == -1 )
+                if ( usefulInfoIndex == -1 )
                 {
                     message =  ( ( bsh.TargetError)e ).getTarget().getMessage();
                 }

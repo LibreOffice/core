@@ -81,7 +81,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
         SequenceAsHashMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lSource);
 
         //---------------------------------------
-        /** @short  not realy used but maybe usefull :-)
+        /** @short  not realy used but maybe useful :-)
          */
         ~SequenceAsHashMap();
 

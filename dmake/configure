@@ -7892,7 +7892,7 @@ _ACEOF
 fi
 done
 
-# Usefull, but special to newlib/MSVC
+# Useful, but special to newlib/MSVC
 
 for ac_func in strlwr
 do

@@ -130,8 +130,8 @@ char *cygdospath(char *src, int winpath);
 #endif
 
 
-/* Define some usefull macros. This is done here and not in config.h
- * to keep this changes usefull even when not using the autotools based
+/* Define some useful macros. This is done here and not in config.h
+ * to keep this changes useful even when not using the autotools based
  * build, i.e. using config.h files that are local to the architecture. */
 #if defined(_WIN32) || defined(__CYGWIN__) || defined(MSDOS) || defined(OS2) || defined(__EMX__)
 #  define HAVE_DRIVE_LETTERS 1

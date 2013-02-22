@@ -339,7 +339,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
 
             // "iflags="        => not allowed
             // "iflags=-1"      => not allowed
-            // "iflags=0"       => not usefull
+            // "iflags=0"       => not useful
             // "iflags=283648"  => only filter, which has set these flag field will be addressed
             sal_Int32 nCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, (sal_Int32)0);
             if (
@@ -352,7 +352,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
 
             // "eflags="        => not allowed
             // "eflags=-1"      => not allowed
-            // "eflags=0"       => not usefull
+            // "eflags=0"       => not useful
             // "eflags=283648"  => only filter, which has not set these flag field will be addressed
             if (
                 (nEFlags > 0                       ) &&

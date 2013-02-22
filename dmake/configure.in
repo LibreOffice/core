@@ -212,7 +212,7 @@ AC_TYPE_SIGNAL
 AC_FUNC_UTIME_NULL
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(getcwd getwd strerror setvbuf tzset settz mkstemp tempnam gettimeofday setenv)
-# Usefull, but special to newlib/MSVC
+# Useful, but special to newlib/MSVC
 AC_CHECK_FUNCS(strlwr)
 
 dnl *** output to disk ***

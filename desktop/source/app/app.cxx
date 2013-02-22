@@ -1082,7 +1082,7 @@ sal_Bool Desktop::isCrashReporterEnabled()
     @param  bCrashed [boolean ... out!]
             the office crashed last times.
             But may be there are no recovery data.
-            Usefull to trigger the error report tool without
+            Useful to trigger the error report tool without
             showing the recovery UI.
 
     @param  bRecoveryDataExists [boolean ... out!]

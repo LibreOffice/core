@@ -3063,7 +3063,7 @@ void SvtFileDialog::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
 sal_Bool SvtFileDialog::setShowState( sal_Bool /*bShowState*/ )
 {
     // #97633 for the system filedialog it's
-    // usefull to make the preview switchable
+    // useful to make the preview switchable
     // because the preview occupies
     // half of the size of the file listbox
     // which is not the case here,

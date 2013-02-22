@@ -177,7 +177,7 @@ public class OfficeProvider implements AppProvider
         // be usesfull to restart the office if possible and continuing the tests.
         // Example: The UNO-API-Tests in the projects will be executed by calling
         // 'damke'. This connects to an existing office. If the office crashes
-        // it is usefull to restart the office and continuing the tests.
+        // it is useful to restart the office and continuing the tests.
         if ((param.getBool(util.PropertyName.AUTO_RESTART)) && (msf != null))
         {
             makeAppExecCommand(msf, param);

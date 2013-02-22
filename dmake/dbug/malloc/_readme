@@ -27,7 +27,7 @@ Features of this library:
     beyound the size requested on the initial malloc is checked to 
     verify that it is still filled with the original fill characters.
 
-	This is usefull for catching things like:
+	This is useful for catching things like:
 
 		ptr = malloc(5);
 		ptr[5] = '\0';
@@ -41,7 +41,7 @@ Features of this library:
     so that you can easily determine if you are still using free'd space.
     The fill pattern for free'd areas is 0x02.
 
-	This is usefull for catching things like:
+	This is useful for catching things like:
 
 		ptr = malloc(20);
 
@@ -67,7 +67,7 @@ Features of this library:
 		If the operation goes beyond requested malloc space
 			call malloc_warning()
 
-	This is usefull for catching things like:
+	This is useful for catching things like:
 
 		ptr = malloc(5);
 		strcpy(ptr,"abcde");

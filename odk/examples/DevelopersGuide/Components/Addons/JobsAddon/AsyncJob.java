@@ -192,7 +192,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         aSaveRequest.Name  = "SaveArguments";
         aSaveRequest.Value = lJobConfig;
 
-        // Deactivation is usefull inside EXECUTOR environment only
+        // Deactivation is useful inside EXECUTOR environment only
         if (sEnvType.equals("EXECUTOR"))
         {
             ++c;
@@ -201,7 +201,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
             aDeactivation.Value = java.lang.Boolean.TRUE;
         }
 
-        // Sending of result events is usefull inside DISPATCH environment only
+        // Sending of result events is useful inside DISPATCH environment only
         if (sEnvType.equals("DISPATCH"))
         {
             ++c;

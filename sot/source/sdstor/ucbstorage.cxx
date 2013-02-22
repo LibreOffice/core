@@ -743,7 +743,7 @@ sal_Bool UCBStorageStream_Impl::Init()
 
     if( m_bSourceRead && !m_rSource.is() )
     {
-        // source file contain usefull information and is not opened
+        // source file contain useful information and is not opened
         // open it from the point of noncopied data
 
         try
@@ -2663,7 +2663,7 @@ sal_Bool UCBStorage::CopyTo( const String& rElemName, BaseStorage* pDest, const 
     }
     else
     {
-        // for copying no optimization is usefull, because in every case the stream data must be copied
+        // for copying no optimization is useful, because in every case the stream data must be copied
             UCBStorageElement_Impl* pElement = FindElement_Impl( rElemName );
         if ( pElement )
             return CopyStorageElement_Impl( *pElement, pDest, rNew );

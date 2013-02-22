@@ -996,7 +996,7 @@ void ViewShell::UpdatePreview (SdPage*, sal_Bool )
 {
     // Do nothing.  After the actual preview has been removed,
     // OutlineViewShell::UpdatePreview() is the place where something
-    // usefull is still done.
+    // useful is still done.
 }
 
 ::svl::IUndoManager* ViewShell::ImpGetUndoManager (void) const

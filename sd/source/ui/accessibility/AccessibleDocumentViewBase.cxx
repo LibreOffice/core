@@ -744,7 +744,7 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
 
 void AccessibleDocumentViewBase::Activated (void)
 {
-    // Empty.  Overwrite to do something usefull.
+    // Empty.  Overwrite to do something useful.
 }
 
 
@@ -752,7 +752,7 @@ void AccessibleDocumentViewBase::Activated (void)
 
 void AccessibleDocumentViewBase::Deactivated (void)
 {
-    // Empty.  Overwrite to do something usefull.
+    // Empty.  Overwrite to do something useful.
 }
 
 

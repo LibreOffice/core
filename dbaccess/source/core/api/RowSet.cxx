@@ -1586,7 +1586,7 @@ void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxSta
 
     if ( bRespectDriverRST )
     {
-        // try type/concurrency settings with decreasing usefullness, and rely on what the connection claims
+        // try type/concurrency settings with decreasing usefulness, and rely on what the connection claims
         // to support
         Reference< XDatabaseMetaData > xMeta( m_xActiveConnection->getMetaData() );
 

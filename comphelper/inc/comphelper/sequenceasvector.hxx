@@ -35,7 +35,7 @@ namespace comphelper{
 
     @descr  That provides the possibility to modify
             sequences very easy ...
-            Of course this can be usefull only, if
+            Of course this can be useful only, if
             count of modifications is high, so copying
             of the sequence make sense!
  */

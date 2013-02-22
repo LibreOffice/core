@@ -1043,7 +1043,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                             bBrokenLine = sal_True;
                         }
                         // Compression in Fields????
-                        // I think this could be a little bit difficult and is not very usefull
+                        // I think this could be a little bit difficult and is not very useful
                         bCompressedChars = sal_False;
                     }
                     break;

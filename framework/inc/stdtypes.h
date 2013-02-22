@@ -92,7 +92,7 @@ struct KeyEventEqualsFunc
 
 /**
     Basic string list based on a std::vector()
-    It implements some additional funtionality which can be usefull but
+    It implements some additional funtionality which can be useful but
     is missing at the normal vector implementation.
 */
 class OUStringList : public ::comphelper::SequenceAsVector< ::rtl::OUString >
@@ -127,7 +127,7 @@ class OUStringList : public ::comphelper::SequenceAsVector< ::rtl::OUString >
 
 /**
     Basic string queue based on a std::queue()
-    It implements some additional funtionality which can be usefull but
+    It implements some additional funtionality which can be useful but
     is missing at the normal std implementation.
 */
 typedef ::std::queue< ::rtl::OUString > OUStringQueue;
@@ -136,7 +136,7 @@ typedef ::std::queue< ::rtl::OUString > OUStringQueue;
 
 /**
     Basic hash based on a boost::unordered_map() which provides key=[OUString] and value=[template type] pairs
-    It implements some additional funtionality which can be usefull but
+    It implements some additional funtionality which can be useful but
     is missing at the normal hash implementation.
 */
 template< class TType >

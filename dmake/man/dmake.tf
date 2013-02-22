@@ -224,7 +224,7 @@ Notify of inference algorithm operation only.
 Notify of target update operations only.
 .IP "\fBr\fP"
 Force output of recipe lines, warnings and executed commands. This switch
-is usefull when debugging makefiles that disable the output using the @
+is useful when debugging makefiles that disable the output using the @
 or @@ property for recipe lines or the .SILENT target/attribute.
 It also overrides the -s flag.
 .IP "\fBt\fP"

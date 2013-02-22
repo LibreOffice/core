@@ -310,7 +310,7 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 
     // for pure home paths ( ~username ) the '.' at the end of rMatch
     // means that it poits to root catalog
-    // this is done only for file contents since home paths parsing is usefull only for them
+    // this is done only for file contents since home paths parsing is useful only for them
     if ( bPureHomePath && rMatch.Equals( rtl::OUString("file:///.") ) )
     {
         // a home that refers to /

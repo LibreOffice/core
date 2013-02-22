@@ -88,7 +88,7 @@ class SVT_DLLPUBLIC ContextMenuHelper
         bool            associateUIConfigurationManagers();
 
         // resets associations to create associations again on-demand.
-        // Usefull for implementations which recycle frames. Normal
+        // Useful for implementations which recycle frames. Normal
         // implementations can profit from caching and should set
         // auto refresh on ctor to false (default).
         void            resetAssociations()

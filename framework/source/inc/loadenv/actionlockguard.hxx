@@ -57,7 +57,7 @@ class ActionLockGuard : private ThreadHelpBase
         //---------------------------------------
         /** @short  default ctor to initialize a "non working guard".
 
-            @descr  That can be usefull in cases, where no resource still exists,
+            @descr  That can be useful in cases, where no resource still exists,
                     but will be available next time. Then this guard can be used
                     in a mode "use guard for more then one resources".
          */

@@ -35,7 +35,7 @@ namespace comphelper
     //= OContainerListener
     //=====================================================================
     /** a non-UNO container listener
-        <p>Usefull if you have a non-refcountable class which should act as container listener.<br/>
+        <p>Useful if you have a non-refcountable class which should act as container listener.<br/>
         In this case, derive this class from OContainerListener, and create an adapter
         <type>OContainerListenerAdapter</type> which multiplexes the changes.</p>
     */

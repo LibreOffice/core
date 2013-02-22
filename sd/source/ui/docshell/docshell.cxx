@@ -205,7 +205,7 @@ DrawDocShell::~DrawDocShell()
     // Tell all listeners that the doc shell is about to be
     // destroyed.  This has been introduced for the PreviewRenderer to
     // free its view (that uses the item poll of the doc shell) but
-    // may be usefull in other places as well.
+    // may be useful in other places as well.
     Broadcast(SfxSimpleHint(SFX_HINT_DYING));
 
     mbInDestruction = sal_True;

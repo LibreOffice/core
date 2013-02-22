@@ -3634,7 +3634,7 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
 
     nPopupModeFlags |= FLOATWIN_POPUPMODE_NOKEYCLOSE;
 
-    // could be usefull during debugging.
+    // could be useful during debugging.
     // nPopupModeFlags |= FLOATWIN_POPUPMODE_NOFOCUSCLOSE;
 
     ImplDelData aDelData;

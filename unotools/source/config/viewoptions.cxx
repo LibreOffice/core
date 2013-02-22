@@ -88,7 +88,7 @@ sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0  
 /*-************************************************************************************************************//**
     @descr  declare one configuration item
             These struct hold information about one view item. But not all member are used for all entries!
-            User must decide which information are usefull and which not. We are a container iztem only and doesnt
+            User must decide which information are useful and which not. We are a container iztem only and doesnt
             know anything about the context.
             But; we support a feature:
                 decision between items with default values (should not realy exist in configuration!)

@@ -368,7 +368,7 @@ public class utils {
 
     /**
      * Gets StarOffice temp directory without 'file:///' prefix.
-     * For example is usefull for Registry URL specifying.
+     * For example is useful for Registry URL specifying.
      * @msf Office factory for accessing its settings.
      * @return SOffice temporary directory in form for example
      * 'd:/Office60/user/temp/'.

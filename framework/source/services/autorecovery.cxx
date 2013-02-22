@@ -1323,7 +1323,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
         catch(const css::uno::Exception&)
         {
             // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
-            // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
+            // b) unknown problem (may be locking problem)                              => reset RETRY value to more useful value(!) (e.g. retry=3)
             // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
 
             // SAFE ->
@@ -2359,7 +2359,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
             bError = sal_True;
 
             // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
-            // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
+            // b) unknown problem (may be locking problem)                              => reset RETRY value to more useful value(!) (e.g. retry=3)
             // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
 
             // SAFE ->

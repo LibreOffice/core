@@ -630,7 +630,7 @@
 			</info>
 			<prop oor:name="FillAsynchronously" oor:type="xs:boolean" oor:nillable="false">
 				<info>
-					<desc>Specifies whether the dialog should fill its view asynchronously. Asnychronous filling allows the user to cancel blocking operations, which may be usefull for instance for mounted, but dead NFS devices.</desc>
+					<desc>Specifies whether the dialog should fill its view asynchronously. Asnychronous filling allows the user to cancel blocking operations, which may be useful for instance for mounted, but dead NFS devices.</desc>
 				</info>
 				<value>false</value>
 			</prop>

@@ -22,7 +22,7 @@
 
 //_______________________________________________
 
-#define _FILTER_CONFIG_MIGRATION_Q_     // usefull for migration time, to support some old functionality temp. :-)
+#define _FILTER_CONFIG_MIGRATION_Q_     // useful for migration time, to support some old functionality temp. :-)
 
 #endif // _FILTER_CONFIG_VERSIONS_HXX_
 

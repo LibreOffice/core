@@ -536,7 +536,7 @@ public class _XFrame extends MultiMethodTest {
         try {
             oObj.initialize(win) ;
         } catch (com.sun.star.uno.RuntimeException e){
-            String message="Frame::initialized() is called more then once, which isnt usefull nor allowed.";
+            String message="Frame::initialized() is called more then once, which isnt useful nor allowed.";
             if (e.toString().indexOf(message) != -1){
                 log.println(e.toString());
                 log.println("methods throws exception, but it's OK");

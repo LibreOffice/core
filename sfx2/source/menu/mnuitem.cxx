@@ -134,7 +134,7 @@ SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
 {
     // This constructor should make it possible already during the design
     // to fall back to the bindings, but can as always be bound later.
-    // The usefullness of this is for example if a StatusForwarder should
+    // The usefulness of this is for example if a StatusForwarder should
     // be created in the constructor of a derived class.
     UnBind();
 }

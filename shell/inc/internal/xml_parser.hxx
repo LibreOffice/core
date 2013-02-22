@@ -72,7 +72,7 @@ public:
         @param      IsFinal
                     Indicates whether these are the last xml data
                     of an xml document to parse. For very large
-                    xml documents it may be usefull to read and
+                    xml documents it may be useful to read and
                     parse the document partially.
 
         @precond    XmlData must not be null

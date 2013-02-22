@@ -268,7 +268,7 @@ public class _XUserInputInterception extends MultiMethodTest {
             return true;
         }
         /**
-         * This event does nothing usefull
+         * This event does nothing useful
          * @param oEvent refers to the object that fired the event.
          */
         public void disposing( EventObject oEvent ){
@@ -305,7 +305,7 @@ public class _XUserInputInterception extends MultiMethodTest {
             return true;
         }
         /**
-         * This event does nothing usefull
+         * This event does nothing useful
          * @param oEvent refers to the object that fired the event.
          */
         public void disposing( EventObject oEvent ){
@@ -342,7 +342,7 @@ public class _XUserInputInterception extends MultiMethodTest {
             return true;
         }
         /**
-         * This event does nothing usefull
+         * This event does nothing useful
          * @param oEvent refers to the object that fired the event.
          */
         public void disposing( EventObject oEvent ){
@@ -380,7 +380,7 @@ public class _XUserInputInterception extends MultiMethodTest {
             return true;
         }
         /**
-         * This event does nothing usefull
+         * This event does nothing useful
          * @param oEvent refers to the object that fired the event.
          */
         public void disposing( EventObject oEvent ){

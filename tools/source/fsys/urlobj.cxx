@@ -3937,7 +3937,7 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
         {
             // If the URL paths of two file URLs only differ in that one has a
             // final '/' and the other has not, take the two paths as
-            // equivalent (this could be usefull for other schemes, too):
+            // equivalent (this could be useful for other schemes, too):
             sal_Int32 nLength = aPath1.getLength();
             switch (nLength - aPath2.getLength())
             {

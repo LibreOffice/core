@@ -47,7 +47,7 @@ namespace framework{
                     be automaticly used by the framework dispatch mechanism if such URL occurred.
                     His job is to create any registered uno components which must be coded inside
                     dispatched URL (may with some optional given parameters). After that such created
-                    service must be hold his self alive. Such mechanism can be usefull for UI components
+                    service must be hold his self alive. Such mechanism can be useful for UI components
                     (e.g. Dialogs, Wizards) only.
 
     @base           ThreadHelpBase

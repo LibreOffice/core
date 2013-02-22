@@ -264,7 +264,7 @@ public:
                 But may this check was already made by the caller of this method and
                 passing this information to this LoadEnv instance can supress this
                 might expensive check.
-                That can be usefull in case this information is needed outside too,
+                That can be useful in case this information is needed outside too,
                 to decide if its neccessary to create some resources for this load
                 request ... or to reject the request imidiatly if it seems to be not
                 loadable in general.

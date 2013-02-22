@@ -47,7 +47,7 @@ a directory of your choice.  You may also want to copy the man/
 sub-directory for future access to the manual page.
 
 
-All other systems might look in the public/ directory for usefull hints.
+All other systems might look in the public/ directory for useful hints.
 
 
 The original sources of dmake were available on http://dmake.wticorp.com.

@@ -531,7 +531,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     if ( m_xContainerWindow.is() )
         throw css::uno::RuntimeException(
-                ::rtl::OUString("Frame::initialized() is called more then once, which isnt usefull nor allowed."),
+                ::rtl::OUString("Frame::initialized() is called more then once, which isnt useful nor allowed."),
                 static_cast< css::frame::XFrame* >(this));
 
     // Look for rejected calls first!

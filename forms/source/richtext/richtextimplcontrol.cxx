@@ -116,7 +116,7 @@ namespace frm
             // type (Latin, Asian, Complex). However, if we have an observer who is interested
             // in the state of this attribute, we have to kind of *merge* the three attributes
             // to only one.
-            // This is usefull in case the observer is for instance a toolbox which contains only
+            // This is useful in case the observer is for instance a toolbox which contains only
             // an, e.g., "bold" slot, and thus not interested in the particular script type of the
             // current selection.
             SvxScriptSetItem aNormalizedSet( (WhichId)_pHandler->first, *m_pView->GetAttribs().GetPool() );

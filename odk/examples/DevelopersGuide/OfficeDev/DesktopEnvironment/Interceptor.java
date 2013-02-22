@@ -305,7 +305,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         // Don't look for ignoring actions - it was done already inside original frameAction() call!
         boolean bRegister = false;
 
-        // analyze the event and decide which reaction is usefull
+        // analyze the event and decide which reaction is useful
         switch(aEvent.Action.getValue())
         {
             case com.sun.star.frame.FrameAction.COMPONENT_ATTACHED_value   : bRegister = true ; break;

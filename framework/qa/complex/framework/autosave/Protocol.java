@@ -166,7 +166,7 @@ public class Protocol extends JComponent
         private int m_nType;
         /// of course, we have to know the logged message too :-)
         private String m_sMessage;
-        /// and it can be usefull to know the current time, when this line was created
+        /// and it can be useful to know the current time, when this line was created
         private Timestamp m_aStamp;
 
         /** ctor for fast initializing of such line */

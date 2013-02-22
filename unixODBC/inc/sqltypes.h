@@ -10,7 +10,7 @@
  * You can include this file directly but it is almost always
  * included indirectly, by including.. for example sqlext.h
  *
- * This include makes no effort to be usefull on any platforms other
+ * This include makes no effort to be useful on any platforms other
  * than Linux (with some exceptions for UNIX in general).
  *
  * !!!DO NOT CONTAMINATE THIS FILE WITH NON-Linux CODE!!!
