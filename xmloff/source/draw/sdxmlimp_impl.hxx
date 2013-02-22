@@ -310,6 +310,7 @@ public:
     ::rtl::OUString GetFooterDecl( const ::rtl::OUString& rName ) const;
     ::rtl::OUString GetDateTimeDecl( const ::rtl::OUString& rName, sal_Bool& rbFixed, ::rtl::OUString& rDateTimeFormat );
 
+    virtual void NotifyEmbeddedFontRead() SAL_OVERRIDE;
 };
 
 #endif  //  _SDXMLIMP_HXX
