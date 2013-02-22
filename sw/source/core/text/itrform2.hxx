@@ -112,7 +112,7 @@ class SwTxtFormatter : public SwTxtPainter
         Mainly to correct the X position.
      */
     void UpdatePos( SwLineLayout *pCurr, Point aStart, xub_StrLen nStartIdx,
-            sal_Bool bAllWays = sal_False ) const;
+            sal_Bool bAlways = sal_False ) const;
 
     /**
         Set all anchored as character objects to the passed BaseLine

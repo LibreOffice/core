@@ -742,7 +742,7 @@ void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
         {
             CalcAdjLine( pCurrent );
             // For e.g. centered fly we need to switch the RefPoint
-            // That's why bAllWays = sal_True
+            // That's why bAlways = sal_True
             UpdatePos( pCurrent, GetTopLeft(), GetStart(), sal_True );
         }
     }
@@ -2005,7 +2005,7 @@ void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 
 
 void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
-    xub_StrLen nStartIdx, sal_Bool bAllWays ) const
+    xub_StrLen nStartIdx, sal_Bool bAlways ) const
 {
     OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
             "SwTxtFormatter::UpdatePos with unswapped frame" );
@@ -2060,7 +2060,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
         // adjustment) could be relevant for a portion: We need to SetRefPoint
         // for FlyCntPortions.
         if( ( pPos->IsFlyCntPortion() || pPos->IsGrfNumPortion() )
-            && ( bAllWays || !IsQuick() ) )
+            && ( bAlways || !IsQuick() ) )
         {
             pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
 
@@ -2114,7 +2114,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
             xub_StrLen nStIdx = aTmpInf.GetIdx();
             do
             {
-                UpdatePos( pLay, aSt, nStIdx, bAllWays );
+                UpdatePos( pLay, aSt, nStIdx, bAlways );
                 nStIdx = nStIdx + pLay->GetLen();
                 aSt.Y() += pLay->Height();
                 pLay = pLay->GetNext();
