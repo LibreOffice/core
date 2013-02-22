@@ -94,8 +94,8 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     sal_Bool                    bBlock;
 
     // keep track of open rubies
-    ::rtl::OUString             sOpenRubyText;
-    ::rtl::OUString             sOpenRubyCharStyle;
+    OUString             sOpenRubyText;
+    OUString             sOpenRubyCharStyle;
     sal_Bool                    bOpenRuby;
 
     XMLTextListsHelper* mpTextListsHelper;
@@ -108,92 +108,92 @@ public:
 
 protected:
 
-    const ::rtl::OUString sActualSize;
+    const OUString sActualSize;
     // Implement Title/Description Elements UI (#i73249#)
-    const ::rtl::OUString sTitle;
-    const ::rtl::OUString sDescription;
-    const ::rtl::OUString sAnchorCharStyleName;
-    const ::rtl::OUString sAnchorPageNo;
-    const ::rtl::OUString sAnchorType;
-    const ::rtl::OUString sBeginNotice;
-    const ::rtl::OUString sBookmark;
-    const ::rtl::OUString sCategory;
-    const ::rtl::OUString sChainNextName;
-    const ::rtl::OUString sCharStyleName;
-    const ::rtl::OUString sCharStyleNames;
-    const ::rtl::OUString sContourPolyPolygon;
-    const ::rtl::OUString sDocumentIndex;
-    const ::rtl::OUString sDocumentIndexMark;
-    const ::rtl::OUString sEndNotice;
-    const ::rtl::OUString sFootnote;
-    const ::rtl::OUString sFootnoteCounting;
-    const ::rtl::OUString sFrame;
-    const ::rtl::OUString sFrameHeightAbsolute;
-    const ::rtl::OUString sFrameHeightPercent;
-    const ::rtl::OUString sFrameStyleName;
-    const ::rtl::OUString sFrameWidthAbsolute;
-    const ::rtl::OUString sFrameWidthPercent;
-    const ::rtl::OUString sGraphicFilter;
-    const ::rtl::OUString sGraphicRotation;
-    const ::rtl::OUString sGraphicURL;
-    const ::rtl::OUString sReplacementGraphicURL;
-    const ::rtl::OUString sHeight;
-    const ::rtl::OUString sHoriOrient;
-    const ::rtl::OUString sHoriOrientPosition;
-    const ::rtl::OUString sHyperLinkName;
-    const ::rtl::OUString sHyperLinkTarget;
-    const ::rtl::OUString sHyperLinkURL;
-    const ::rtl::OUString sIsAutomaticContour;
-    const ::rtl::OUString sIsCollapsed;
-    const ::rtl::OUString sIsPixelContour;
-    const ::rtl::OUString sIsStart;
-    const ::rtl::OUString sIsSyncHeightToWidth;
-    const ::rtl::OUString sIsSyncWidthToHeight;
-    const ::rtl::OUString sNumberingRules;
-    const ::rtl::OUString sNumberingType;
-    const ::rtl::OUString sPageDescName;
-    const ::rtl::OUString sPageStyleName;
-    const ::rtl::OUString sParaChapterNumberingLevel;
-    const ::rtl::OUString sParaConditionalStyleName;
-    const ::rtl::OUString sParagraphService;
-    const ::rtl::OUString sParaStyleName;
-    const ::rtl::OUString sPositionEndOfDoc;
-    const ::rtl::OUString sPrefix;
-    const ::rtl::OUString sRedline;
-    const ::rtl::OUString sReferenceId;
-    const ::rtl::OUString sReferenceMark;
-    const ::rtl::OUString sRelativeHeight;
-    const ::rtl::OUString sRelativeWidth;
-    const ::rtl::OUString sRuby;
-    const ::rtl::OUString sRubyAdjust;
-    const ::rtl::OUString sRubyCharStyleName;
-    const ::rtl::OUString sRubyText;
-    const ::rtl::OUString sServerMap;
-    const ::rtl::OUString sShapeService;
-    const ::rtl::OUString sSizeType;
-    const ::rtl::OUString sSoftPageBreak;
-    const ::rtl::OUString sStartAt;
-    const ::rtl::OUString sSuffix;
-    const ::rtl::OUString sTableService;
-    const ::rtl::OUString sText;
-    const ::rtl::OUString sTextContentService;
-    const ::rtl::OUString sTextEmbeddedService;
-    const ::rtl::OUString sTextEndnoteService;
-    const ::rtl::OUString sTextField;
-    const ::rtl::OUString sTextFieldService;
-    const ::rtl::OUString sTextFrameService;
-    const ::rtl::OUString sTextGraphicService;
-    const ::rtl::OUString sTextPortionType;
-    const ::rtl::OUString sTextSection;
-    const ::rtl::OUString sUnvisitedCharStyleName;
-    const ::rtl::OUString sVertOrient;
-    const ::rtl::OUString sVertOrientPosition;
-    const ::rtl::OUString sVisitedCharStyleName;
-    const ::rtl::OUString sWidth;
-    const ::rtl::OUString sWidthType;
-    const ::rtl::OUString sTextFieldStart;
-    const ::rtl::OUString sTextFieldEnd;
-    const ::rtl::OUString sTextFieldStartEnd;
+    const OUString sTitle;
+    const OUString sDescription;
+    const OUString sAnchorCharStyleName;
+    const OUString sAnchorPageNo;
+    const OUString sAnchorType;
+    const OUString sBeginNotice;
+    const OUString sBookmark;
+    const OUString sCategory;
+    const OUString sChainNextName;
+    const OUString sCharStyleName;
+    const OUString sCharStyleNames;
+    const OUString sContourPolyPolygon;
+    const OUString sDocumentIndex;
+    const OUString sDocumentIndexMark;
+    const OUString sEndNotice;
+    const OUString sFootnote;
+    const OUString sFootnoteCounting;
+    const OUString sFrame;
+    const OUString sFrameHeightAbsolute;
+    const OUString sFrameHeightPercent;
+    const OUString sFrameStyleName;
+    const OUString sFrameWidthAbsolute;
+    const OUString sFrameWidthPercent;
+    const OUString sGraphicFilter;
+    const OUString sGraphicRotation;
+    const OUString sGraphicURL;
+    const OUString sReplacementGraphicURL;
+    const OUString sHeight;
+    const OUString sHoriOrient;
+    const OUString sHoriOrientPosition;
+    const OUString sHyperLinkName;
+    const OUString sHyperLinkTarget;
+    const OUString sHyperLinkURL;
+    const OUString sIsAutomaticContour;
+    const OUString sIsCollapsed;
+    const OUString sIsPixelContour;
+    const OUString sIsStart;
+    const OUString sIsSyncHeightToWidth;
+    const OUString sIsSyncWidthToHeight;
+    const OUString sNumberingRules;
+    const OUString sNumberingType;
+    const OUString sPageDescName;
+    const OUString sPageStyleName;
+    const OUString sParaChapterNumberingLevel;
+    const OUString sParaConditionalStyleName;
+    const OUString sParagraphService;
+    const OUString sParaStyleName;
+    const OUString sPositionEndOfDoc;
+    const OUString sPrefix;
+    const OUString sRedline;
+    const OUString sReferenceId;
+    const OUString sReferenceMark;
+    const OUString sRelativeHeight;
+    const OUString sRelativeWidth;
+    const OUString sRuby;
+    const OUString sRubyAdjust;
+    const OUString sRubyCharStyleName;
+    const OUString sRubyText;
+    const OUString sServerMap;
+    const OUString sShapeService;
+    const OUString sSizeType;
+    const OUString sSoftPageBreak;
+    const OUString sStartAt;
+    const OUString sSuffix;
+    const OUString sTableService;
+    const OUString sText;
+    const OUString sTextContentService;
+    const OUString sTextEmbeddedService;
+    const OUString sTextEndnoteService;
+    const OUString sTextField;
+    const OUString sTextFieldService;
+    const OUString sTextFrameService;
+    const OUString sTextGraphicService;
+    const OUString sTextPortionType;
+    const OUString sTextSection;
+    const OUString sUnvisitedCharStyleName;
+    const OUString sVertOrient;
+    const OUString sVertOrientPosition;
+    const OUString sVisitedCharStyleName;
+    const OUString sWidth;
+    const OUString sWidthType;
+    const OUString sTextFieldStart;
+    const OUString sTextFieldEnd;
+    const OUString sTextFieldStartEnd;
 
     SinglePropertySetInfoCache aCharStyleNamesPropInfoCache;
 
@@ -232,7 +232,7 @@ protected:
     const SvXMLAutoStylePoolP& GetAutoStylePool() const { return rAutoStylePool; }
 
 public:
-    ::rtl::OUString FindTextStyleAndHyperlink(
+    OUString FindTextStyleAndHyperlink(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet > & rPropSet,
             sal_Bool& rbHyperlink,
@@ -259,8 +259,8 @@ protected:
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet >& rPropSet,
         sal_Bool bShape,
-        ::rtl::OUString *pMinHeightValue = 0,
-        ::rtl::OUString *pMinWidthValue = 0 );
+        OUString *pMinHeightValue = 0,
+        OUString *pMinWidthValue = 0 );
 
     virtual void exportStyleAttributes(
         const ::com::sun::star::uno::Reference<
@@ -378,13 +378,13 @@ protected:
     virtual void setTextEmbeddedGraphicURL(
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet >& rPropSet,
-        ::rtl::OUString& rStreamName ) const;
+        OUString& rStreamName ) const;
 
     /// export a footnote and styles
     void exportTextFootnote(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropSet,
-        const ::rtl::OUString& sString,
+        const OUString& sString,
         sal_Bool bAutoStyles, sal_Bool bProgress );
 
     /// helper for exportTextFootnote
@@ -393,7 +393,7 @@ protected:
             ::com::sun::star::text::XFootnote > & rPropSet,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XText> & rText,
-        const ::rtl::OUString& sString,
+        const OUString& sString,
         sal_Bool bAutoStyles,
         sal_Bool bIsEndnote, sal_Bool bProgress );
 
@@ -408,7 +408,7 @@ protected:
     void exportTextMark(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & xPropSet,
-        const ::rtl::OUString& rProperty,
+        const OUString& rProperty,
         const enum ::xmloff::token::XMLTokenEnum pElements[],
         sal_Bool bAutoStyles);
 
@@ -504,11 +504,11 @@ public:
         const XMLPropertyState** pAddState = NULL, bool bDontSeek = false );
 
     /// find style name for specified family and parent
-    ::rtl::OUString Find(
+    OUString Find(
         sal_uInt16 nFamily,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rPropSet,
-        const ::rtl::OUString& rParent,
+        const OUString& rParent,
         const XMLPropertyState** pAddState = NULL ) const;
 
     static SvXMLExportPropertyMapper *CreateShapeExtPropMapper(
@@ -565,7 +565,7 @@ public:
 
     // This method exports the given OUString
     void exportText(
-        const ::rtl::OUString& rText,
+        const OUString& rText,
         bool& rPrevCharWasSpace );
 
     // This method collects all automatic styles for the given XText
