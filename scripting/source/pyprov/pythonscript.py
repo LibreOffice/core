@@ -320,7 +320,7 @@ class ProviderContext:
     def removePackageByUrl( self, url ):
         items = self.mapPackageName2Path.items()
         for i in items:
-            if url in i[1].pathes:
+            if url in i[1].paths:
                 self.mapPackageName2Path.pop(i[0])
                 break
 
@@ -330,7 +330,7 @@ class ProviderContext:
         log.isDebugLevel() and log.debug( "addPackageByUrl : " + packageName + ", " + transientPart + "("+url+")" + ", rootUrl="+self.rootUrl )
         if packageName in self.mapPackageName2Path:
             package = self.mapPackageName2Path[ packageName ]
-            package.pathes = package.pathes + (url, )
+            package.paths = package.paths + (url, )
         else:
             package = Package( (url,), transientPart)
             self.mapPackageName2Path[ packageName ] = package
@@ -338,8 +338,8 @@ class ProviderContext:
     def isUrlInPackage( self, url ):
         values = self.mapPackageName2Path.values()
         for i in values:
-#	    print ("checking " + url + " in " + str(i.pathes))
-            if url in i.pathes:
+#	    print ("checking " + url + " in " + str(i.paths))
+            if url in i.paths:
                return True
 #        print ("false")
         return False
@@ -686,7 +686,7 @@ def isPyFileInPath( sfa, path ):
     return ret
 
 # extracts META-INF directory from 
-def getPathesFromPackage( rootUrl, sfa ):
+def getPathsFromPackage( rootUrl, sfa ):
     ret = ()
     try:
         fileUrl = rootUrl + "/META-INF/manifest.xml" 
@@ -701,14 +701,14 @@ def getPathesFromPackage( rootUrl, sfa ):
         ret = tuple( handler.urlList )
     except UnoException:
         text = lastException2String()
-        log.debug( "getPathesFromPackage " + fileUrl + " Exception: " +text )
+        log.debug( "getPathsFromPackage " + fileUrl + " Exception: " +text )
         pass
     return ret
     
 
 class Package:
-    def __init__( self, pathes, transientPathElement ):
-        self.pathes = pathes
+    def __init__( self, paths, transientPathElement ):
+        self.paths = paths
         self.transientPathElement = transientPathElement
 
 class DummyInteractionHandler( unohelper.Base, XInteractionHandler ):
@@ -770,11 +770,11 @@ def getPackageName2PathMap( sfa, storageType ):
         log.isDebugLevel() and log.debug( "inspecting package " + i.Name + "("+i.Identifier.Value+")" )
         transientPathElement = penultimateElement( i.URL )
         j = expandUri( i.URL )
-        pathes = getPathesFromPackage( j, sfa )
-        if len( pathes ) > 0:
+        paths = getPathsFromPackage( j, sfa )
+        if len( paths ) > 0:
             # map package name to url, we need this later
-            log.isErrorLevel() and log.error( "adding Package " + transientPathElement + " " + str( pathes ) )
-            ret[ lastElement( j ) ] = Package( pathes, transientPathElement )
+            log.isErrorLevel() and log.error( "adding Package " + transientPathElement + " " + str( paths ) )
+            ret[ lastElement( j ) ] = Package( paths, transientPathElement )
     return ret
 
 def penultimateElement( aStr ):
@@ -798,11 +798,11 @@ class PackageBrowseNode( unohelper.Base, XBrowseNode ):
         items = self.provCtx.mapPackageName2Path.items()
         browseNodeList = []
         for i in items:
-            if len( i[1].pathes ) == 1:
+            if len( i[1].paths ) == 1:
                 browseNodeList.append(
-                    DirBrowseNode( self.provCtx, i[0], i[1].pathes[0] ))
+                    DirBrowseNode( self.provCtx, i[0], i[1].paths[0] ))
             else:
-                for j in i[1].pathes:
+                for j in i[1].paths:
                     browseNodeList.append(
                         DirBrowseNode( self.provCtx, i[0]+"."+lastElement(j), j ) )
         return tuple( browseNodeList )
