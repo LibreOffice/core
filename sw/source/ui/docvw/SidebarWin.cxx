@@ -417,7 +417,6 @@ void SwSidebarWin::CheckMetaText()
     {
         mpMetadataDate->SetText(sMeta);
     }
-
 }
 
 void SwSidebarWin::Rescale()
