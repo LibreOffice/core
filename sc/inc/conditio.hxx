@@ -411,7 +411,7 @@ public:
     void            CompileAll();
     void            CompileXML();
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bCopyAsMove = false );
     void            DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void            UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
     void            RenameCellStyle( const rtl::OUString& rOld, const rtl::OUString& rNew );
