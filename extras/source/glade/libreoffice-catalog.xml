@@ -30,8 +30,14 @@
     <glade-widget-class title="Color ListBox" name="svtlo-ColorListBox"
                         generic-name="LookUpComboBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Font Name ListBox" name="svtlo-FontNameBox"
+                        generic-name="Font name ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Font Size ListBox" name="svtlo-FontSizeBox"
+                        generic-name="Font Size ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Line ListBox" name="svtlo-LineListBox"
-                        generic-name="LineListBox" parent="GtkComboBox"
+                        generic-name="Line ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Language ListBox" name="svxcorelo-SvxLanguageBox"
                         generic-name="LanguageBox" parent="GtkComboBox"
