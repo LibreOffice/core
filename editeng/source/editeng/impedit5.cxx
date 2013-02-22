@@ -494,7 +494,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_
     aSel.Adjust( aEditDoc );
 
     // When no selection => use the Attribute on the word.
-    // ( the RTF-parser should actually never call the Method whithout a Range )
+    // ( the RTF-parser should actually never call the Method without a Range )
     if ( ( nSpecial == ATTRSPECIAL_WHOLEWORD ) && !aSel.HasRange() )
         aSel = SelectWord( aSel, ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_False );
 

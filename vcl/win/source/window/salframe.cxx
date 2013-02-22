@@ -1433,7 +1433,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
             aRect2.bottom = pt.y+2;
 
             // dualmonitor support:
-            // Get screensize of the monitor whith the mouse pointer
+            // Get screensize of the monitor with the mouse pointer
             ImplSalGetWorkArea( mhWnd, &aRect2, &aRect2 );
 
             nX = ((aRect2.right-aRect2.left)-nWidth)/2 + aRect2.left;
@@ -3936,7 +3936,7 @@ static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pPa
     // calculate and set frame geometry of a maximized window - useful if the window is still hidden
 
     // dualmonitor support:
-    // Get screensize of the monitor whith the mouse pointer
+    // Get screensize of the monitor with the mouse pointer
 
     RECT aRectMouse;
     if( ! pParentRect )

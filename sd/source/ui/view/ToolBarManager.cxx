@@ -270,7 +270,7 @@ public:
     /** Release all tool bar shells and the associated framework tool bars.
         Typically called when the main view shell is being replaced by
         another, all tool bar shells are released.  In that process the
-        shells are destroyed anyway and whithout calling this method they
+        shells are destroyed anyway and without calling this method they
         would still be referenced.
     */
     void ReleaseAllToolBarShells (void);

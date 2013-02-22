@@ -2031,7 +2031,7 @@ Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
     if ( pPPortion )
     {
 
-        // If someone calls GetLineHeight() whith an empty Engine.
+        // If someone calls GetLineHeight() with an empty Engine.
         DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetDocPosTopLeft: Doc not formatted - unable to format!" );
         if ( !pImpEditEngine->IsFormatted() )
             pImpEditEngine->FormatAndUpdate();

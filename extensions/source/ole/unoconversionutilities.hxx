@@ -1015,7 +1015,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
 }
 
 // Creates an SAFEARRAY of the specified element and if necessary
-// creates a SAFEARRAY whith multiple dimensions.
+// creates a SAFEARRAY with multiple dimensions.
 // Used by sal_Bool anyToVariant(VARIANT* pVariant, const Any& rAny, VARTYPE type);
 template<class T>
 SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq, VARTYPE elemtype)

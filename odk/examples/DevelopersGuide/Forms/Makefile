@@ -175,7 +175,7 @@ FormsExample : $(APP1_JAR)  $(APP2_JAR)  $(APP3_JAR)  $(APP4_JAR)
 	@echo $(MAKE) $(APP3_NAME).run
 	@echo $(MAKE) $(APP4_NAME).run
 	@echo -
-	@echo Note: The data awareness example needs a running data source whith name
+	@echo Note: The data awareness example needs a running data source with name
 	@echo $(SQM)      $(SQM)"$(QM)OO_SDK_Demo_DB$(QM)". Make sure that you have created such a data source,
 	@echo -
 	@echo The document "$(QM)ProgrammaticScriptAssignment.odt$(QM)" demonstrates

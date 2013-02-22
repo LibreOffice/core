@@ -1338,7 +1338,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
                 bNeedTrigger = sal_True;
             }
             else
-            {   // is it an entry whith children, and not yet expanded?
+            {   // is it an entry with children, and not yet expanded?
                 SvTreeListEntry* pDropppedOn = GetEntry(aDropPos);
                 if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
                 {

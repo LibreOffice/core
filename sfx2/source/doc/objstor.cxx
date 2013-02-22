@@ -2093,7 +2093,7 @@ sal_Bool SfxObjectShell::ConvertFrom
 
     This method is called for loading of documents over all filters which are
     not SFX_FILTER_OWN or for which no clipboard format has been registered
-    (thus no storage format that is used). In other words, whith this method
+    (thus no storage format that is used). In other words, with this method
     it is imported.
 
     Files which are to be opened here should be opened through 'rMedium'

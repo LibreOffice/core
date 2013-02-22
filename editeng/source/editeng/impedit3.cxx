@@ -3935,7 +3935,7 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_uInt16 nNe
     // ( and correspondingly in between as well...)
     if ( pCurView && ( GetUpdateMode() == sal_True ) )
     {
-        // in this case one can redraw directly whithout invalidating the
+        // in this case one can redraw directly without invalidating the
         // Portions
         sal_uInt16 nFirstPortion = Min( (sal_uInt16)aOldPositions.Min(), nNewPos );
         sal_uInt16 nLastPortion = Max( (sal_uInt16)aOldPositions.Max(), nNewPos );

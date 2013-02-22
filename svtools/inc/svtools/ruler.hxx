@@ -116,7 +116,7 @@ the values on the ruler. The following units are accepted:
 --------------------------------------------------------------------------
 
 SetMargin1() sets the upper/left margin and SetMargin2() sets the
-bottom/right margin. If these methods are called whithout arguments,
+bottom/right margin. If these methods are called without arguments,
 no margins are displayed. Otherwise, the following arguments can be passed:
 
     long    nPos            - offset in pixels relative to the origin
