@@ -98,6 +98,7 @@ void ListBox::ImplInitListBoxData()
     mbDDAutoSize    = sal_True;
     mnSaveValue     = LISTBOX_ENTRY_NOTFOUND;
     mnLineCount     = 0;
+    m_nMaxWidthChars = -1;
 }
 
 // -----------------------------------------------------------------------
@@ -1344,6 +1345,15 @@ Size ListBox::CalcSubEditSize() const
         aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
         // size to maxmimum entry width
         aSz.Width() = mpImplLB->GetMaxEntryWidth();
+
+        if (m_nMaxWidthChars != -1)
+        {
+            //MAP_APPFONT == 1/8th avg char
+            long nMaxWidth = LogicToPixel(Size(m_nMaxWidthChars * 8, 0),
+                MapMode(MAP_APPFONT)).Width();
+            aSz.Width() = std::min(aSz.Width(), nMaxWidth);
+        }
+
         // do not create ultrathin ListBoxes, it doesn't look good
         if( aSz.Width() < GetSettings().GetStyleSettings().GetScrollBarSize() )
             aSz.Width() = GetSettings().GetStyleSettings().GetScrollBarSize();
@@ -1552,10 +1562,21 @@ const Wallpaper& ListBox::GetDisplayBackground() const
     return mpImplLB->GetDisplayBackground();
 }
 
+void ListBox::setMaxWidthChars(sal_Int32 nWidth)
+{
+    if (nWidth != m_nMaxWidthChars)
+    {
+        m_nMaxWidthChars = nWidth;
+        queue_resize();
+    }
+}
+
 bool ListBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
     if (rKey == "active")
         SelectEntryPos(rValue.toInt32());
+    else if (rKey == "max-width-chars")
+        setMaxWidthChars(rValue.toInt32());
     else
         return Control::set_property(rKey, rValue);
     return true;

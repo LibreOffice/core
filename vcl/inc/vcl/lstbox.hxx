@@ -44,6 +44,7 @@ private:
     sal_uInt16                      mnDDHeight;
     sal_uInt16                      mnSaveValue;
     sal_Bool                        mbDDAutoSize;
+    sal_Int32 m_nMaxWidthChars;
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
     sal_uInt16 mnLineCount;
@@ -218,6 +219,9 @@ public:
      */
     using Control::GetIndexForPoint;
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rPos ) const;
+
+    sal_Int32 getMaxWidthChars() const { return m_nMaxWidthChars; }
+    void setMaxWidthChars(sal_Int32 nWidth);
 
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 };
