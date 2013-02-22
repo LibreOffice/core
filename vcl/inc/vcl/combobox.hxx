@@ -47,6 +47,7 @@ private:
     sal_Bool                        mbDDAutoSize        : 1;
     sal_Bool                        mbSyntheticModify   : 1;
     sal_Bool                        mbMatchCase         : 1;
+    sal_Int32 m_nMaxWidthChars;
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
 
@@ -214,6 +215,9 @@ public:
      */
     using Control::GetIndexForPoint;
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rPos ) const;
+
+    sal_Int32 getMaxWidthChars() const { return m_nMaxWidthChars; }
+    void setMaxWidthChars(sal_Int32 nWidth);
 };
 
 #endif  // _COMBOBOX_HXX
