@@ -1610,7 +1610,7 @@ void SdXMLImExSvgDElement::AddPolygon(
 
         for(sal_Int32 a(0L); a < nCnt; a++)
         {
-            if(!pFlags || drawing::PolygonFlags_CONTROL != *pFlagArray)
+            if(!pFlags || drawing::PolygonFlags_CONTROL != *pFlagArray++)
             {
                 bool bDidWriteAsCurve(false);
 
@@ -2093,7 +2093,6 @@ void SdXMLImExSvgDElement::AddPolygon(
 
             // next point
             pPointArray++;
-            pFlagArray++;
         }
 
         // close path if closed poly
