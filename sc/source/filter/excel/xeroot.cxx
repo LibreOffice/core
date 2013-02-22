@@ -341,7 +341,7 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GetEncryptionData() const
     {
         // try to get the encryption data from the password
         SFX_ITEMSET_ARG( GetMedium().GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false );
-        if ( pPasswordItem && pPasswordItem->GetValue().Len() )
+        if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
             aEncryptionData = GenerateEncryptionData( pPasswordItem->GetValue() );
     }
 

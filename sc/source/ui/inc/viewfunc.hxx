@@ -292,7 +292,7 @@ public:
                                             sal_Bool bColorOnly );
 
     void            SetNoteText( const ScAddress& rPos, const String& rNoteText );
-    void            ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate );
+    void            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate );
     void            DoRefConversion( sal_Bool bRecord = sal_True );
 
     void            DoHangulHanjaConversion( sal_Bool bRecord = true );

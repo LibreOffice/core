@@ -105,7 +105,7 @@ public:
     inline bool             HideNote( const ScAddress& rPos ) { return ShowNote( rPos, false ); }
 
     virtual bool            SetNoteText( const ScAddress& rPos, const String& rNoteText, sal_Bool bApi );
-    virtual bool            ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate, sal_Bool bApi );
+    virtual bool            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, sal_Bool bApi );
 
     virtual sal_Bool        ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                              sal_Bool bRecord, sal_Bool bApi );

@@ -2535,7 +2535,7 @@ void ScViewFunc::SetNoteText( const ScAddress& rPos, const String& rNoteText )
     GetViewData()->GetDocShell()->GetDocFunc().SetNoteText( rPos, rNoteText, false );
 }
 
-void ScViewFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate )
+void ScViewFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate )
 {
     GetViewData()->GetDocShell()->GetDocFunc().ReplaceNote( rPos, rNoteText, pAuthor, pDate, false );
 }

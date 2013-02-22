@@ -2345,11 +2345,11 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
         if ( GetMedium() )
         {
             SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false);
-            if ( pPasswordItem && pPasswordItem->GetValue().Len() )
+            if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
             {
                 aArgs.realloc( 2 );
-                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Password" ));
-                aArgs[1].Value <<= ::rtl::OUString( pPasswordItem->GetValue() );
+                aArgs[1].Name = OUString("Password");
+                aArgs[1].Value <<= pPasswordItem->GetValue();
             }
         }
 

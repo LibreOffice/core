@@ -394,7 +394,7 @@ static sal_Bool lcl_GetHyperlinkCell(ScDocument* pDoc, SCCOL& rPosX, SCROW& rPos
         else
         {
             const ScPatternAttr* pPattern = pDoc->GetPattern( rPosX, rPosY, nTab );
-            if ( ((SfxStringItem&)pPattern->GetItem(ATTR_HYPERLINK)).GetValue().Len() > 0 )
+            if ( !((SfxStringItem&)pPattern->GetItem(ATTR_HYPERLINK)).GetValue().isEmpty() )
             {
                 rURL =  ((SfxStringItem&)pPattern->GetItem(ATTR_HYPERLINK)).GetValue();
                 bFound = true;

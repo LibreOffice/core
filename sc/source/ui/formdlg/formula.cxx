@@ -546,7 +546,7 @@ void ScFormulaDlg::dispatch(sal_Bool _bOK,sal_Bool _bMartixChecked)
 
     // Wenn durch Dokument-Umschalterei die Eingabezeile weg war/ist,
     // ist der String leer. Dann nicht die alte Formel loeschen.
-    if ( !aStrItem.GetValue().Len() )
+    if ( aStrItem.GetValue().isEmpty() )
         aRetItem.SetValue( false );     // sal_False = Cancel
 
     m_aHelper.SetDispatcherLock( false ); // Modal-Modus ausschalten

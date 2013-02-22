@@ -803,11 +803,11 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             aValues[0].Value <<= ::rtl::OUString( GetMedium()->GetFilter()->GetFilterName() );
 
                                             SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false);
-                                            if ( pPasswordItem && pPasswordItem->GetValue().Len() )
+                                            if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
                                             {
                                                 aValues.realloc( 2 );
-                                                aValues[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Password") );
-                                                aValues[1].Value <<= ::rtl::OUString( pPasswordItem->GetValue() );
+                                                aValues[1].Name = OUString("Password");
+                                                aValues[1].Value <<= pPasswordItem->GetValue();
                                             }
 
                                             SC_MOD()->SetInSharedDocSaving( true );
