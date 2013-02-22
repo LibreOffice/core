@@ -260,11 +260,12 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             OUString sTemp = sName;
             sName = ::dbaui::getStrippedDatabaseName(NULL,sTemp);
             if ( sName.getLength() )
-                sLoginRequest.replaceAll("$name$", sName);
+                sLoginRequest = sLoginRequest.replaceAll("$name$", sName);
             else
             {
-                sLoginRequest.replaceAll("\"$name$\"", OUString());
-                sLoginRequest.replaceAll("$name$", OUString()); // just to be sure that in other languages the string will be deleted
+                sLoginRequest = sLoginRequest.replaceAll("\"$name$\"", OUString());
+                // ensure that in other languages the string will be deleted
+                sLoginRequest = sLoginRequest.replaceAll("$name$", OUString());
             }
 
             // the request
