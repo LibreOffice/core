@@ -55,7 +55,7 @@ public:
 
     /** This update lock for the ToolBarManager exists in order to avoid
         problems with tool bars being displayed while the mouse button is
-        pressed.  Whith docked tool bars this can lead to a size change of
+        pressed.  With docked tool bars this can lead to a size change of
         the view.  This would change the relative mouse coordinates and thus
         interpret every mouse click as move command.
     */

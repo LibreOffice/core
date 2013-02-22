@@ -1640,7 +1640,7 @@ void Bridge::map_to_cli(
                 }
                 OSL_ASSERT (nPos != -1);
                 int offset = pCTD->pMemberOffsets[nPos];
-                //Whith the offset within the exception we can get the message string
+                //With the offset within the exception we can get the message string
                 System::String^ sMessage = mapUnoString(*(rtl_uString**)
                                                         ((char*) uno_data + offset));
                 //We need to find a constructor for the exception that takes the message string
