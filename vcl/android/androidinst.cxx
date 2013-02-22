@@ -34,7 +34,6 @@
 #include <android/looper.h>
 #include <android/bitmap.h>
 #include <osl/detail/android-bootstrap.h>
-#include <osl/detail/android_native_app_glue.h>
 #include <rtl/strbuf.hxx>
 #include <basebmp/scanlineformats.hxx>
 
@@ -47,6 +46,8 @@ public:
     virtual void ErrorTrapPush() {}
     virtual bool ErrorTrapPop( bool ) { return false; }
 };
+
+#if 0  // Code from NativeActivity-based times left for reference inside #if 0 here and later
 
 static rtl::OString MotionEdgeFlagsToString(int32_t nFlags)
 {
@@ -193,6 +194,8 @@ static sal_uInt16 KeyToCode(AInputEvent *event)
     fprintf (stderr, "mapped %d -> %d\n", AKeyEvent_getKeyCode(event), nCode);
     return nCode;
 }
+
+#endif
 
 static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
                                     const basebmp::BitmapDeviceSharedPtr& aDev,
@@ -355,6 +358,8 @@ void AndroidSalInstance::damaged(AndroidSalFrame */* frame */, const Rectangle &
     mbQueueReDraw = true;
 }
 
+#if 0
+
 static const char *app_cmd_name(int cmd)
 {
     switch (cmd) {
@@ -381,16 +386,21 @@ static const char *app_cmd_name(int cmd)
     }
 }
 
+#endif
+
 void AndroidSalInstance::GetWorkArea( Rectangle& rRect )
 {
-    if (!mpApp || !mpApp->window)
-        rRect = Rectangle( Point( 0, 0 ),
-                           Size( 1280, 750 ) );
-    else
-        rRect = Rectangle( Point( 0, 0 ),
-                           Size( ANativeWindow_getWidth( mpApp->window ),
-                                 ANativeWindow_getHeight( mpApp->window ) ) );
+    rRect = Rectangle( Point( 0, 0 ),
+                       Size( 1280, 750 ) );
+
+#if 0
+    rRect = Rectangle( Point( 0, 0 ),
+                       Size( ANativeWindow_getWidth( mpApp->window ),
+                             ANativeWindow_getHeight( mpApp->window ) ) );
+#endif
 }
+
+#if 0
 
 void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
 {
@@ -583,6 +593,8 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
     return bHandled ? 1 : 0;
 }
 
+#endif
+
 AndroidSalInstance *AndroidSalInstance::getInstance()
 {
     if (!ImplGetSVData())
@@ -592,6 +604,8 @@ AndroidSalInstance *AndroidSalInstance::getInstance()
         return NULL;
     return static_cast<AndroidSalInstance *>(pData->m_pInstance);
 }
+
+#if 0
 
 extern "C" {
     void onAppCmd_cb (struct android_app *app, int32_t cmd)
@@ -605,23 +619,14 @@ extern "C" {
     }
 }
 
+#endif
+
 AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
-    , mpApp( NULL )
     , mbQueueReDraw( false )
 {
-    mpApp = lo_get_app();
-    fprintf (stderr, "created Android Sal Instance for app %p window %p thread: %d\n",
-             mpApp,
-             mpApp ? mpApp->window : NULL,
+    fprintf (stderr, "created Android Sal Instance thread: %d\n",
              (int)pthread_self());
-    if (mpApp)
-    {
-        pthread_mutex_lock (&mpApp->mutex);
-        mpApp->onAppCmd = onAppCmd_cb;
-        mpApp->onInputEvent = onInputEvent_cb;
-        pthread_mutex_unlock (&mpApp->mutex);
-    }
 }
 
 AndroidSalInstance::~AndroidSalInstance()
@@ -632,10 +637,7 @@ AndroidSalInstance::~AndroidSalInstance()
 void AndroidSalInstance::Wakeup()
 {
     fprintf (stderr, "Wakeup alooper\n");
-    if (mpApp && mpApp->looper)
-        ALooper_wake (mpApp->looper);
-    else
-        fprintf (stderr, "busted - no global looper\n");
+    fprintf (stderr, "busted - no global looper\n");
 }
 
 void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
@@ -644,10 +646,15 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
         fprintf( stderr, "hit idle !\n" );
     bHitIdle = true;
 
+#if 1
     // Presumably this should never be called at all except in
-    // NativeActivity-based apps with a GUI, like android/qa/desktop, where
-    // the message pump is run here in vcl?
-    if (!mpApp) {
+    // NativeActivity-based apps with a GUI, where the message pump is
+    // run here in vcl, but we don't have any NativeActivitry-based
+    // apps any more.
+
+    (void) nTimeoutMS;
+
+    {
         static bool beenhere = false;
         if (!beenhere)
         {
@@ -656,7 +663,7 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
         }
         return;
     }
-
+#else
     // release yield mutex
     sal_uLong nAcquireCount = ReleaseYieldMutex();
 
@@ -685,6 +692,7 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
 
     if (mbQueueReDraw && mpApp && mpApp->window)
         AndroidSalInstance::getInstance()->RedrawWindows (mpApp->window);
+#endif
 }
 
 bool AndroidSalInstance::AnyInput( sal_uInt16 nType )

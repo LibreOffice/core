@@ -68,7 +68,6 @@ public:
     void      damaged(AndroidSalFrame *frame, const Rectangle &rRect);
 protected:
     virtual void DoReleaseYield( int nTimeoutMS );
-    struct android_app *mpApp;
     Region maRedrawRegion;
     bool   mbQueueReDraw;
 };

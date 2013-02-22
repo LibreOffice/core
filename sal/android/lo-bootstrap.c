@@ -30,31 +30,28 @@
  * instead of those above.
  */
 
-#include <string.h>
-#include <stdlib.h>
+#include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/time.h>
+#include <time.h>
 
-#include <unistd.h>
-#include <fcntl.h>
 #include <dlfcn.h>
+#include <fcntl.h>
+#include <pthread.h>
 #include <sys/mman.h>
+#include <unistd.h>
 
-#include <zlib.h>
 #include <jni.h>
+#include <zlib.h>
 
 #include <android/log.h>
 
 #include "uthash.h"
 
 #include "osl/detail/android-bootstrap.h"
-
-#pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
-
-#include "android_native_app_glue.c"
-
-#pragma GCC diagnostic warning "-Wdeclaration-after-statement"
 
 #undef LOGI
 #undef LOGW
@@ -71,15 +68,6 @@
 struct engine {
     int dummy;
 };
-
-/* These vars are valid / used only when this library is used from
- *  NativeActivity-based apps.
- */
-static struct android_app *app;
-static int (*lo_main)(int, const char **);
-static int lo_main_argc;
-static const char **lo_main_argv;
-static int sleep_time = 0;
 
 /* These are valid / used in all apps. */
 static const char *data_dir;
@@ -278,26 +266,6 @@ setup_assets_tree(void)
     return 1;
 }
 
-static void
-engine_handle_cmd(struct android_app* state,
-                  int32_t cmd)
-{
-    (void) state;
-
-    switch (cmd) {
-    case APP_CMD_SAVE_STATE:
-        break;
-    case APP_CMD_INIT_WINDOW:
-        break;
-    case APP_CMD_TERM_WINDOW:
-        break;
-    case APP_CMD_GAINED_FOCUS:
-        break;
-    case APP_CMD_LOST_FOCUS:
-        break;
-    }
-}
-
 /* The lo-native-code shared library is always loaded from Java, so this is
  * always called by JNI first.
  */
@@ -404,33 +372,12 @@ get_jni_string_array(JNIEnv *env,
         const char *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, strv, i), NULL);
         (*argv)[i] = strdup(s);
         (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, strv, i), s);
-        /* LOGI("argv[%d] = %s", i, lo_main_argv[i]); */
     }
     (*argv)[*argc] = NULL;
 
     return JNI_TRUE;
 }
 
-
-// public static native boolean setup(Object lo_main_argument,
-//                                    int lo_main_delay);
-
-__attribute__ ((visibility("default")))
-jboolean
-Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_Object_2I(JNIEnv* env,
-                                                                    jobject clazz,
-                                                                    jobject lo_main_argument,
-                                                                    jint lo_main_delay)
-{
-    (void) clazz;
-
-    if (!get_jni_string_array(env, "setup: lo_main_argument", lo_main_argument, &lo_main_argc, &lo_main_argv))
-        return JNI_FALSE;
-
-    sleep_time = lo_main_delay;
-
-    return JNI_TRUE;
-}
 
 // public static native int getpid();
 
@@ -1310,61 +1257,6 @@ const char *
 lo_get_app_data_dir(void)
 {
     return data_dir;
-}
-
-__attribute__ ((visibility("default")))
-struct android_app *
-lo_get_app(void)
-{
-    return app;
-}
-
-/* Note that android_main() is used only in NativeActivity-based apps.  Only
- * the android/qa/sc unit test app is such, and it is unclear whether there is
- * any reason to continue maintaining that buildable.
- */
-__attribute__ ((visibility("default")))
-void
-android_main(struct android_app* state)
-{
-    jint nRet;
-    JNIEnv *pEnv = NULL;
-    struct engine engine;
-    Dl_info lo_main_info;
-    JavaVMAttachArgs aArgs = {
-        JNI_VERSION_1_2,
-        "LibreOfficeThread",
-        NULL
-    };
-
-    fprintf (stderr, "android_main in thread: %d\n", (int)pthread_self());
-
-    if (sleep_time != 0) {
-        LOGI("android_main: Sleeping for %d seconds, start ndk-gdb NOW if that is your intention", sleep_time);
-        sleep(sleep_time);
-    }
-
-    nRet = (*(*state->activity->vm)->AttachCurrentThreadAsDaemon)(state->activity->vm, &pEnv, &aArgs);
-    fprintf (stderr, "attach thread returned %d %p\n", nRet, pEnv);
-
-    app = state;
-
-    memset(&engine, 0, sizeof(engine));
-    state->userData = &engine;
-    state->onAppCmd = engine_handle_cmd;
-
-    /* Look up lo_main() dynamically even if it is in the same .so as this code,
-     * but that is only in the case for code built to be used in a NativeActivity-based app.
-     */
-    lo_main = dlsym(RTLD_DEFAULT, "lo_main");
-
-    if (dladdr(lo_main, &lo_main_info) != 0) {
-        lo_main_argv[0] = lo_main_info.dli_fname;
-    }
-
-    lo_main(lo_main_argc, lo_main_argv);
-    nRet = (*(*state->activity->vm)->DetachCurrentThread)(state->activity->vm);
-    fprintf (stderr, "exit android_main\n");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

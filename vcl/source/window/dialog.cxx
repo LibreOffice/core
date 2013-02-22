@@ -791,11 +791,9 @@ sal_Bool Dialog::Close()
 sal_Bool Dialog::ImplStartExecuteModal()
 {
 #ifdef ANDROID
-    // If a non-NativeActivity app, we shouldn't be showing any dialogs
-    if (lo_get_app() == NULL) {
-        fprintf(stderr, "%s: Should not do anything, returning false\n", __FUNCTION__);
-        return sal_False;
-    }
+    // Not sure if the idea is that this will be called on Android or
+    // not? But OK, let's try to have the below code reached on
+    // Android...
 #endif
 
     if ( mbInExecute )
