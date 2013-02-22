@@ -8590,7 +8590,7 @@ dnl ===================================================================
 dnl Check for NPAPI interface to plug LibreOffice into browser windows
 dnl ===================================================================
 AC_MSG_CHECKING([whether to plug LibreOffice into browser windows])
-if test "$_os" != Android -a "$_os" != Darwin -a "$_os" != iOS -a \
+if test "$_os" == WINNT -o "$_os" != Android -a "$_os" != Darwin -a "$_os" != iOS -a \
         "$enable_headless" != yes -a "$enable_gtk" != no
 then
     AC_MSG_RESULT([yes])
