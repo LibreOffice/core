@@ -109,13 +109,13 @@ lo_get_libmap(void)
         { NULL, NULL }
     };
 
-    // We need to pull this in, too, as it isn't in any of the libs we
+    // We need to pull these in, too, as they aren't in any of the libs we
     // link with -Wl,--whole-archive.
-    extern void Java_org_libreoffice_android_examples_LODesktop_spawnMain();
-    volatile void *p = (void *) Java_org_libreoffice_android_examples_LODesktop_spawnMain;
+    extern void Java_org_libreoffice_experimental_desktop_Desktop_spawnMain();
+    volatile void *p = (void *) Java_org_libreoffice_experimental_desktop_Desktop_spawnMain;
 
-    extern void Java_org_libreoffice_android_examples_LODesktop_renderVCL();
-    volatile void *q = (void *) Java_org_libreoffice_android_examples_LODesktop_renderVCL;
+    extern void Java_org_libreoffice_experimental_desktop_Desktop_renderVCL();
+    p = (void *) Java_org_libreoffice_experimental_desktop_Desktop_renderVCL;
 
     return map;
 }

@@ -4,7 +4,7 @@ include ../../../config_host.mk
 all: build-ant
 
 # The package of this app
-APP_PACKAGE=org.libreoffice.android.examples
+APP_PACKAGE=org.libreoffice.experimental.desktop
 
 BOOTSTRAPDIR=../../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
@@ -18,12 +18,8 @@ copy-stuff:
 # Then "assets". Let the directory structure under assets mimic
 # that under solver for now.
 #
-# Please note that I have no idea what all of this is really necessary and for
-# much of this stuff being copied, no idea whether it makes any sense at all.
-# Much of this is copy-pasted from android/qa/sc/Makefile (where a couple of
-# unit tests for sc are built, and those do seem to mostly work) and
-# android/qa/desktop/Makefile (mmeeks's desktop demo, also works to some
-# extent).
+# Please note that some of thses files being set up to be present in
+# the .apk and/or unpacked at install time might be unnecessary.
 #
 	mkdir -p assets/gz.unpack/program/ure assets/lib assets/program assets/xml/ure assets/ComponentTarget/i18npool/util
 	gzip -9 <$(OUTDIR)/bin/offapi.rdb >assets/gz.unpack/program/offapi.rdb
@@ -160,5 +156,4 @@ build-ant: android_version_setup copy-stuff link-so properties setup-jars
 	unset JAVA_HOME && $(ANT) debug
 
 run:
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n org.libreoffice.android.examples/.LODesktop -e input /asset/test1.odt
-# -e lo-main-delay 20  -e lo-strace yes
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/.Desktop

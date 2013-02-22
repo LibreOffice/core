@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="org.libreoffice.android.examples"
+      package="org.libreoffice.experimental.desktop"
       android:versionCode="1"
       android:versionName="1.0">
     <uses-sdk android:minSdkVersion="9"
               android:targetSdkVersion="14"/>
-    <application android:label="LO Desktop App"
+    <application android:label="LibreOffice Desktop"
                  android:debuggable="true"
                  android:largeHeap="true"
                  android:hardwareAccelerated="true">
-        <activity android:name=".LODesktop"
-                  android:label="LO Desktop App"
+        <activity android:name=".Desktop"
+                  android:label="LibreOffice Desktop"
                   android:configChanges="keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

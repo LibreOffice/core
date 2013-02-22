@@ -9,6 +9,11 @@
 // This is just a testbed for ideas and implementations. (Still, it might turn
 // out to be somewhat useful as such while waiting for "real" apps.)
 
+// ================ NOTE ================
+// Note that these comments are copy-pasted from another test app,
+// DocumentLoader, and might or might not be much relevant for this
+// source file and how it will evolve.
+
 // Important points:
 
 // Everything that might take a long time should be done asynchronously:
@@ -54,7 +59,7 @@
 // has finished and then the affected tiles are replaced with
 // higher-resolution ones.
 
-package org.libreoffice.android.examples;
+package org.libreoffice.experimental.desktop;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -117,7 +122,7 @@ import java.util.ArrayList;
 
 import org.libreoffice.android.Bootstrap;
 
-public class LODesktop
+public class Desktop
     extends Activity
 {
     private static final String TAG = "LODesktop";
@@ -288,10 +293,10 @@ public class LODesktop
 
     class BitmapView extends android.view.View
     {
-        LODesktop mDesktop;
+        Desktop mDesktop;
         Bitmap mBitmap;
 
-        public BitmapView(Context context, LODesktop desktop)
+        public BitmapView(Context context, Desktop desktop)
         {
             super(context);
             mDesktop = desktop;

@@ -889,9 +889,9 @@ int AndroidSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
 
 // Render everything
 extern "C" SAL_JNI_EXPORT void JNICALL
-Java_org_libreoffice_android_examples_LODesktop_renderVCL(JNIEnv *env,
-                                                          jobject /* dummy */,
-                                                          jobject bitmap)
+Java_org_libreoffice_experimental_desktop_Desktop_renderVCL(JNIEnv *env,
+                                                            jobject /* dummy */,
+                                                            jobject bitmap)
 {
     if (!bHitIdle)
         return;

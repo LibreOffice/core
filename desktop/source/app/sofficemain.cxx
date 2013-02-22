@@ -103,8 +103,8 @@ public:
 };
 
 extern "C" SAL_JNI_EXPORT void JNICALL
-Java_org_libreoffice_android_examples_LODesktop_spawnMain(JNIEnv* /* env */,
-                                                          jobject /* dummy */)
+Java_org_libreoffice_experimental_desktop_Desktop_spawnMain(JNIEnv* /* env */,
+                                                            jobject /* dummy */)
 {
     fprintf(stderr, "Spawn main!\n");
     new MainThread();
