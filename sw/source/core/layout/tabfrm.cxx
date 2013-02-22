@@ -5565,7 +5565,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
             nKeepHeight = lcl_GetHeightOfRows( GetLower(), nKeepRows );
     }
 
-    // For master tables, the height of the headlines + the heigth of the
+    // For master tables, the height of the headlines + the height of the
     // keeping lines (if any) has to be considered. For follow tables, we
     // only consider the height of the keeping rows without the repeated lines:
     if ( !IsFollow() )

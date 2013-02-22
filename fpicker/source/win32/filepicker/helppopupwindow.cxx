@@ -123,7 +123,7 @@ void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
 {
     OSL_ENSURE( NULL == m_hwnd, "method should not be called twice in sequence" );
 
-    // we create a window with length and heigth of 0
+    // we create a window with length and height of 0
     // first in order to get a device context of this
     // window, then we calculate the upper left corner
     // and the dimensions and resize the window

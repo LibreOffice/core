@@ -1685,7 +1685,7 @@ void GtkSalFrame::Enable( sal_Bool /*bEnable*/ )
 void GtkSalFrame::setMinMaxSize()
 {
     /*  #i34504# metacity (and possibly others) do not treat
-     *  _NET_WM_STATE_FULLSCREEN and max_width/heigth independently;
+     *  _NET_WM_STATE_FULLSCREEN and max_width/height independently;
      *  whether they should is undefined. So don't set the max size hint
      *  for a full screen window.
     */

@@ -209,7 +209,7 @@ private:
     long            mnMaxImgWidth;   // Maximum width of an image item
     long            mnMaxImgHeight;  // Maximum height of an image item
     long            mnMaxWidth;      // Maximum width of an entry
-    long            mnMaxHeight;     // Maximum heigth of an entry
+    long            mnMaxHeight;     // Maximum height of an entry
 
     sal_uInt16          mnCurrentPos;    // Position (Focus)
     sal_uInt16          mnTrackingSaveSelection; // Selection before Tracking();

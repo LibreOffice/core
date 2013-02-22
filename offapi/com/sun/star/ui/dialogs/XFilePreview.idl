@@ -65,7 +65,7 @@ published interface XFilePreview: com::sun::star::uno::XInterface
         0 will be returned.
 
         @returns
-        The heigth of the preview window in pixel.
+        The height of the preview window in pixel.
     */
     long getAvailableHeight( );
 

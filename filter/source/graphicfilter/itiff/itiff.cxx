@@ -68,7 +68,7 @@ private:
     sal_uLong               nNewSubFile;                //
     sal_uLong               nSubFile;                   //
     sal_uLong               nImageWidth;                // picture width in pixels
-    sal_uLong               nImageLength;               // picture heigth in pixels
+    sal_uLong               nImageLength;               // picture height in pixels
     sal_uLong               nBitsPerSample;             // bits per pixel per layer
     sal_uLong               nCompression;               // kind of compression
     sal_uLong               nPhotometricInterpretation; //

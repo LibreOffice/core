@@ -59,7 +59,7 @@ private:
     PCDResolution       eResolution;    // which resolution we want
 
     sal_uLong               nWidth;         // width of the PCD picture
-    sal_uLong               nHeight;        // heigth of the PCD picture
+    sal_uLong               nHeight;        // height of the PCD picture
     sal_uLong               nImagePos;      // position of the picture within the PCD file
 
     // temporary lLue-Green-Red-Bitmap

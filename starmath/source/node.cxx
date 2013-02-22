@@ -2680,7 +2680,7 @@ void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
     GetFont().FreezeBorderWidth();
     Size  aFntSize (GetFont().GetSize());
 
-    // Since we only want to scale the heigth, we might have
+    // Since we only want to scale the height, we might have
     // to determine the font width in order to keep it
     if (aFntSize.Width() == 0)
     {
@@ -3056,7 +3056,7 @@ void SmBlankNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
-    // make distance depend on the font heigth
+    // make distance depend on the font height
     // (so that it increases when scaling (e.g. size *2 {a ~ b})
     long  nDist  = GetFont().GetSize().Height() / 10L,
           nSpace = nNum * nDist;
