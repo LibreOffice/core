@@ -68,18 +68,18 @@ using ::com::sun::star::uno::Reference;
 using namespace ::toolkit;
 
 #define IMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
-    ::rtl::OUString SAL_CALL ImplName::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString( "stardiv.Toolkit." #ImplName ); } \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ImplName::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException) \
+    OUString SAL_CALL ImplName::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return OUString( "stardiv.Toolkit." #ImplName ); } \
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL ImplName::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException) \
                             { \
-                                ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = BaseClass::getSupportedServiceNames( ); \
+                                ::com::sun::star::uno::Sequence< OUString > aNames = BaseClass::getSupportedServiceNames( ); \
                                 aNames.realloc( aNames.getLength() + 1 ); \
-                                aNames[ aNames.getLength() - 1 ] = ::rtl::OUString::createFromAscii( ServiceName ); \
+                                aNames[ aNames.getLength() - 1 ] = OUString::createFromAscii( ServiceName ); \
                                 return aNames; \
                             } \
 
 
 uno::Reference< graphic::XGraphic >
-ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& xOutGraphicObj, const ::rtl::OUString& _rURL )
+ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& xOutGraphicObj, const OUString& _rURL )
 {
     if( ( _rURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 ) )
     {
@@ -94,7 +94,7 @@ ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic:
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-ImageHelper::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
+ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
 {
     uno::Reference< graphic::XGraphic > xGraphic;
     if ( _rURL.isEmpty() )
@@ -105,7 +105,7 @@ ImageHelper::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
         uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         uno::Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
         uno::Sequence< beans::PropertyValue > aMediaProperties(1);
-        aMediaProperties[0].Name = ::rtl::OUString( "URL" );
+        aMediaProperties[0].Name = OUString( "URL" );
         aMediaProperties[0].Value <<= _rURL;
         xGraphic = xProvider->queryGraphic( aMediaProperties );
     }
@@ -125,9 +125,9 @@ UnoControlEditModel::UnoControlEditModel( const Reference< XComponentContext >& 
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXEdit );
 }
 
-::rtl::OUString UnoControlEditModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlEditModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlEditModel );
+    return OUString::createFromAscii( szServiceName_UnoControlEditModel );
 }
 
 uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -140,7 +140,7 @@ uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         aReturn <<= (sal_Int16)awt::LineEndFormat::LINE_FEED;   // LF
         break;
     case BASEPROPERTY_DEFAULTCONTROL:
-        aReturn <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlEdit );
+        aReturn <<= OUString::createFromAscii( szServiceName_UnoControlEdit );
         break;
     default:
         aReturn = UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -210,16 +210,16 @@ void SAL_CALL UnoEditControl::release(  ) throw ()
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoEditControl, UnoControlBase, UnoEditControl_Base )
 
-::rtl::OUString UnoEditControl::GetComponentServiceName()
+OUString UnoEditControl::GetComponentServiceName()
 {
     // by default, we want a simple edit field
-    ::rtl::OUString sName( "Edit" );
+    OUString sName( "Edit" );
 
     // but maybe we are to display multi-line text?
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_MULTILINE ) );
     sal_Bool b = sal_Bool();
     if ( ( aVal >>= b ) && b )
-        sName= ::rtl::OUString("MultiLineEdit");
+        sName= OUString("MultiLineEdit");
 
     return sName;
 }
@@ -231,7 +231,7 @@ sal_Bool SAL_CALL UnoEditControl::setModel(const uno::Reference< awt::XControlMo
     return bReturn;
 }
 
-void UnoEditControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
+void UnoEditControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
 {
     sal_Bool bDone = sal_False;
     if ( GetPropertyId( rPropName ) == BASEPROPERTY_TEXT )
@@ -240,7 +240,7 @@ void UnoEditControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, cons
         uno::Reference < awt::XTextComponent > xTextComponent( getPeer(), uno::UNO_QUERY );
         if ( xTextComponent.is() )
         {
-            ::rtl::OUString sText;
+            OUString sText;
             rVal >>= sText;
             ImplCheckLocalize( sText );
             xTextComponent->setText( sText );
@@ -304,7 +304,7 @@ void UnoEditControl::removeTextListener(const uno::Reference< awt::XTextListener
     maTextListeners.removeInterface( l );
 }
 
-void UnoEditControl::setText( const ::rtl::OUString& aText ) throw(uno::RuntimeException)
+void UnoEditControl::setText( const OUString& aText ) throw(uno::RuntimeException)
 {
     if ( mbHasTextProperty )
     {
@@ -339,7 +339,7 @@ namespace
     }
 }
 
-void UnoEditControl::insertText( const awt::Selection& rSel, const ::rtl::OUString& rNewText ) throw(uno::RuntimeException)
+void UnoEditControl::insertText( const awt::Selection& rSel, const OUString& rNewText ) throw(uno::RuntimeException)
 {
     // normalize the selection - OUString::replaceAt has a strange behaviour if the min is greater than the max
     awt::Selection aSelection( rSel );
@@ -359,16 +359,16 @@ void UnoEditControl::insertText( const awt::Selection& rSel, const ::rtl::OUStri
     aNewSelection.Min = aNewSelection.Max;
 #endif
 
-    ::rtl::OUString aOldText = getText();
-    ::rtl::OUString  aNewText = aOldText.replaceAt( aSelection.Min, aSelection.Max - aSelection.Min, rNewText );
+    OUString aOldText = getText();
+    OUString  aNewText = aOldText.replaceAt( aSelection.Min, aSelection.Max - aSelection.Min, rNewText );
     setText( aNewText );
 
     setSelection( aNewSelection );
 }
 
-::rtl::OUString UnoEditControl::getText() throw(uno::RuntimeException)
+OUString UnoEditControl::getText() throw(uno::RuntimeException)
 {
-    ::rtl::OUString aText = maText;
+    OUString aText = maText;
 
     if ( mbHasTextProperty )
         aText = ImplGetPropertyValue_UString( BASEPROPERTY_TEXT );
@@ -382,9 +382,9 @@ void UnoEditControl::insertText( const awt::Selection& rSel, const ::rtl::OUStri
     return aText;
 }
 
-::rtl::OUString UnoEditControl::getSelectedText( void ) throw(uno::RuntimeException)
+OUString UnoEditControl::getSelectedText( void ) throw(uno::RuntimeException)
 {
-    ::rtl::OUString sSelected;
+    OUString sSelected;
         uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
     if ( xText.is() )
         sSelected = xText->getSelectedText();
@@ -473,16 +473,16 @@ void UnoEditControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) t
     Impl_getColumnsAndLines( nCols, nLines );
 }
 
-::rtl::OUString UnoEditControl::getImplementationName(  ) throw(uno::RuntimeException)
+OUString UnoEditControl::getImplementationName(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString( "stardiv.Toolkit.UnoEditControl" );
+    return OUString( "stardiv.Toolkit.UnoEditControl" );
 }
 
-uno::Sequence< ::rtl::OUString > UnoEditControl::getSupportedServiceNames() throw(uno::RuntimeException)
+uno::Sequence< OUString > UnoEditControl::getSupportedServiceNames() throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aNames = UnoControlBase::getSupportedServiceNames( );
+    uno::Sequence< OUString > aNames = UnoControlBase::getSupportedServiceNames( );
     aNames.realloc( aNames.getLength() + 1 );
-    aNames[ aNames.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEdit );
+    aNames[ aNames.getLength() - 1 ] = OUString::createFromAscii( szServiceName2_UnoControlEdit );
     return aNames;
 }
 
@@ -512,9 +512,9 @@ UnoControlFileControlModel::UnoControlFileControlModel( const Reference< XCompon
     ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
 
-::rtl::OUString UnoControlFileControlModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlFileControlModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFileControlModel );
+    return OUString::createFromAscii( szServiceName_UnoControlFileControlModel );
 }
 
 uno::Any UnoControlFileControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -522,7 +522,7 @@ uno::Any UnoControlFileControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlFileControl );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlFileControl );
         return aAny;
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -554,9 +554,9 @@ UnoFileControl::UnoFileControl()
 {
 }
 
-::rtl::OUString UnoFileControl::GetComponentServiceName()
+OUString UnoFileControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("filecontrol");
+    return OUString("filecontrol");
 }
 
 //  ----------------------------------------------------
@@ -584,7 +584,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
             if ( !mbAdjustingGraphic && ImplHasProperty( BASEPROPERTY_GRAPHIC ) )
             {
                 mbAdjustingGraphic = true;
-                ::rtl::OUString sImageURL;
+                OUString sImageURL;
                 OSL_VERIFY( rValue >>= sImageURL );
                 setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::makeAny( ImageHelper::getGraphicFromURL_nothrow( sImageURL ) ) );
                 mbAdjustingGraphic = false;
@@ -595,7 +595,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
             if ( !mbAdjustingGraphic && ImplHasProperty( BASEPROPERTY_IMAGEURL ) )
             {
                 mbAdjustingGraphic = true;
-                setDependentFastPropertyValue( BASEPROPERTY_IMAGEURL, uno::makeAny( ::rtl::OUString() ) );
+                setDependentFastPropertyValue( BASEPROPERTY_IMAGEURL, uno::makeAny( OUString() ) );
                 mbAdjustingGraphic = false;
             }
             break;
@@ -646,9 +646,9 @@ UnoControlButtonModel::UnoControlButtonModel( const Reference< XComponentContext
     osl_atomic_decrement( &m_refCount );
 }
 
-::rtl::OUString UnoControlButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlButtonModel );
+    return OUString::createFromAscii( szServiceName_UnoControlButtonModel );
 }
 
 uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -656,7 +656,7 @@ uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlButton ) );
+        return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlButton ) );
     case BASEPROPERTY_TOGGLE:
         return uno::makeAny( (sal_Bool)sal_False );
     case BASEPROPERTY_ALIGN:
@@ -698,9 +698,9 @@ UnoButtonControl::UnoButtonControl()
     maComponentInfos.nHeight = 14;
 }
 
-::rtl::OUString UnoButtonControl::GetComponentServiceName()
+OUString UnoButtonControl::GetComponentServiceName()
 {
-    ::rtl::OUString aName( "pushbutton" );
+    OUString aName( "pushbutton" );
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_PUSHBUTTONTYPE ) );
     sal_Int16 n = sal_Int16();
     if ( ( aVal >>= n ) && n )
@@ -708,11 +708,11 @@ UnoButtonControl::UnoButtonControl()
         // Use PushButtonType later when available...
         switch ( n )
         {
-            case 1 /*PushButtonType::OK*/:      aName= ::rtl::OUString("okbutton");
+            case 1 /*PushButtonType::OK*/:      aName= OUString("okbutton");
                                                 break;
-            case 2 /*PushButtonType::CANCEL*/:  aName= ::rtl::OUString("cancelbutton");
+            case 2 /*PushButtonType::CANCEL*/:  aName= OUString("cancelbutton");
                                                 break;
-            case 3 /*PushButtonType::HELP*/:    aName= ::rtl::OUString("helpbutton");
+            case 3 /*PushButtonType::HELP*/:    aName= OUString("helpbutton");
                                                 break;
             default:
             {
@@ -794,14 +794,14 @@ void SAL_CALL UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent )
     maItemListeners.itemStateChanged( aEvent );
 }
 
-void UnoButtonControl::setLabel( const ::rtl::OUString&  rLabel ) throw(uno::RuntimeException)
+void UnoButtonControl::setLabel( const OUString&  rLabel ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= rLabel;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, sal_True );
 }
 
-void UnoButtonControl::setActionCommand( const ::rtl::OUString& rCommand ) throw(uno::RuntimeException)
+void UnoButtonControl::setActionCommand( const OUString& rCommand ) throw(uno::RuntimeException)
 {
     maActionCommand = rCommand;
     if ( getPeer().is() )
@@ -836,15 +836,15 @@ UnoControlImageControlModel::UnoControlImageControlModel( const Reference< XComp
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXImageControl );
 }
 
-::rtl::OUString UnoControlImageControlModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlImageControlModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageControlModel );
+    return OUString::createFromAscii( szServiceName_UnoControlImageControlModel );
 }
 
 uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
-        return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageControl ) );
+        return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlImageControl ) );
 
     if ( nPropId == BASEPROPERTY_IMAGE_SCALE_MODE )
         return makeAny( awt::ImageScaleMode::Anisotropic );
@@ -920,9 +920,9 @@ UnoImageControlControl::UnoImageControlControl()
     maComponentInfos.nHeight = 100;
 }
 
-::rtl::OUString UnoImageControlControl::GetComponentServiceName()
+OUString UnoImageControlControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("fixedimage");
+    return OUString("fixedimage");
 }
 
 void UnoImageControlControl::dispose() throw(uno::RuntimeException)
@@ -962,9 +962,9 @@ UnoControlRadioButtonModel::UnoControlRadioButtonModel( const Reference< XCompon
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXRadioButton );
 }
 
-::rtl::OUString UnoControlRadioButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlRadioButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlRadioButtonModel );
+    return OUString::createFromAscii( szServiceName_UnoControlRadioButtonModel );
 }
 
 uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -972,7 +972,7 @@ uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlRadioButton ) );
+        return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlRadioButton ) );
 
     case BASEPROPERTY_VISUALEFFECT:
         return uno::makeAny( (sal_Int16)awt::VisualEffect::LOOK3D );
@@ -1013,9 +1013,9 @@ UnoRadioButtonControl::UnoRadioButtonControl()
     maComponentInfos.nHeight = 12;
 }
 
-::rtl::OUString UnoRadioButtonControl::GetComponentServiceName()
+OUString UnoRadioButtonControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("radiobutton");
+    return OUString("radiobutton");
 }
 
 void UnoRadioButtonControl::dispose() throw(uno::RuntimeException)
@@ -1082,14 +1082,14 @@ void UnoRadioButtonControl::removeActionListener(const uno::Reference< awt::XAct
     maActionListeners.removeInterface( l );
 }
 
-void UnoRadioButtonControl::setLabel( const ::rtl::OUString&  rLabel ) throw(uno::RuntimeException)
+void UnoRadioButtonControl::setLabel( const OUString&  rLabel ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= rLabel;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, sal_True );
 }
 
-void UnoRadioButtonControl::setActionCommand( const ::rtl::OUString& rCommand ) throw(uno::RuntimeException)
+void UnoRadioButtonControl::setActionCommand( const OUString& rCommand ) throw(uno::RuntimeException)
 {
     maActionCommand = rCommand;
     if ( getPeer().is() )
@@ -1172,9 +1172,9 @@ UnoControlCheckBoxModel::UnoControlCheckBoxModel( const Reference< XComponentCon
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXCheckBox );
 }
 
-::rtl::OUString UnoControlCheckBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlCheckBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlCheckBoxModel );
+    return OUString::createFromAscii( szServiceName_UnoControlCheckBoxModel );
 }
 
 uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1182,7 +1182,7 @@ uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlCheckBox ) );
+        return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlCheckBox ) );
 
     case BASEPROPERTY_VISUALEFFECT:
         return uno::makeAny( (sal_Int16)awt::VisualEffect::LOOK3D );
@@ -1222,9 +1222,9 @@ UnoCheckBoxControl::UnoCheckBoxControl()
     maComponentInfos.nHeight = 12;
 }
 
-::rtl::OUString UnoCheckBoxControl::GetComponentServiceName()
+OUString UnoCheckBoxControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("checkbox");
+    return OUString("checkbox");
 }
 
 void UnoCheckBoxControl::dispose() throw(uno::RuntimeException)
@@ -1283,7 +1283,7 @@ void UnoCheckBoxControl::removeActionListener(const uno::Reference< awt::XAction
     maActionListeners.removeInterface( l );
 }
 
-void UnoCheckBoxControl::setActionCommand( const ::rtl::OUString& rCommand ) throw(uno::RuntimeException)
+void UnoCheckBoxControl::setActionCommand( const OUString& rCommand ) throw(uno::RuntimeException)
 {
     maActionCommand = rCommand;
     if ( getPeer().is() )
@@ -1294,7 +1294,7 @@ void UnoCheckBoxControl::setActionCommand( const ::rtl::OUString& rCommand ) thr
 }
 
 
-void UnoCheckBoxControl::setLabel( const ::rtl::OUString&  rLabel ) throw(uno::RuntimeException)
+void UnoCheckBoxControl::setLabel( const OUString&  rLabel ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= rLabel;
@@ -1357,9 +1357,9 @@ UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel( const Reference< X
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXFixedHyperlink );
 }
 
-::rtl::OUString UnoControlFixedHyperlinkModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlFixedHyperlinkModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedHyperlinkModel );
+    return OUString::createFromAscii( szServiceName_UnoControlFixedHyperlinkModel );
 }
 
 uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1367,7 +1367,7 @@ uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId 
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedHyperlink );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlFixedHyperlink );
         return aAny;
     }
     else if ( nPropId == BASEPROPERTY_BORDER )
@@ -1379,7 +1379,7 @@ uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId 
     else if ( nPropId == BASEPROPERTY_URL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString();
+        aAny <<= OUString();
         return aAny;
     }
 
@@ -1415,9 +1415,9 @@ UnoFixedHyperlinkControl::UnoFixedHyperlinkControl()
     maComponentInfos.nHeight = 12;
 }
 
-::rtl::OUString UnoFixedHyperlinkControl::GetComponentServiceName()
+OUString UnoFixedHyperlinkControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("fixedhyperlink");
+    return OUString("fixedhyperlink");
 }
 
 // uno::XInterface
@@ -1441,26 +1441,26 @@ sal_Bool UnoFixedHyperlinkControl::isTransparent() throw(uno::RuntimeException)
     return sal_True;
 }
 
-void UnoFixedHyperlinkControl::setText( const ::rtl::OUString& Text ) throw(uno::RuntimeException)
+void UnoFixedHyperlinkControl::setText( const OUString& Text ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= Text;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, sal_True );
 }
 
-::rtl::OUString UnoFixedHyperlinkControl::getText() throw(uno::RuntimeException)
+OUString UnoFixedHyperlinkControl::getText() throw(uno::RuntimeException)
 {
     return ImplGetPropertyValue_UString( BASEPROPERTY_LABEL );
 }
 
-void UnoFixedHyperlinkControl::setURL( const ::rtl::OUString& URL ) throw(::com::sun::star::uno::RuntimeException)
+void UnoFixedHyperlinkControl::setURL( const OUString& URL ) throw(::com::sun::star::uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= URL;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_URL ), aAny, sal_True );
 }
 
-::rtl::OUString UnoFixedHyperlinkControl::getURL(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString UnoFixedHyperlinkControl::getURL(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ImplGetPropertyValue_UString( BASEPROPERTY_URL );
 }
@@ -1544,9 +1544,9 @@ UnoControlFixedTextModel::UnoControlFixedTextModel( const Reference< XComponentC
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXFixedText );
 }
 
-::rtl::OUString UnoControlFixedTextModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlFixedTextModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedTextModel );
+    return OUString::createFromAscii( szServiceName_UnoControlFixedTextModel );
 }
 
 uno::Any UnoControlFixedTextModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1554,7 +1554,7 @@ uno::Any UnoControlFixedTextModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedText );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlFixedText );
         return aAny;
     }
     else if ( nPropId == BASEPROPERTY_BORDER )
@@ -1596,9 +1596,9 @@ UnoFixedTextControl::UnoFixedTextControl()
     maComponentInfos.nHeight = 12;
 }
 
-::rtl::OUString UnoFixedTextControl::GetComponentServiceName()
+OUString UnoFixedTextControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("fixedtext");
+    return OUString("fixedtext");
 }
 
 // uno::XInterface
@@ -1622,14 +1622,14 @@ sal_Bool UnoFixedTextControl::isTransparent() throw(uno::RuntimeException)
     return sal_True;
 }
 
-void UnoFixedTextControl::setText( const ::rtl::OUString& Text ) throw(uno::RuntimeException)
+void UnoFixedTextControl::setText( const OUString& Text ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= Text;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, sal_True );
 }
 
-::rtl::OUString UnoFixedTextControl::getText() throw(uno::RuntimeException)
+OUString UnoFixedTextControl::getText() throw(uno::RuntimeException)
 {
     return ImplGetPropertyValue_UString( BASEPROPERTY_LABEL );
 }
@@ -1685,9 +1685,9 @@ UnoControlGroupBoxModel::UnoControlGroupBoxModel( const Reference< XComponentCon
     ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
 }
 
-::rtl::OUString UnoControlGroupBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlGroupBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlGroupBoxModel );
+    return OUString::createFromAscii( szServiceName_UnoControlGroupBoxModel );
 }
 
 uno::Any UnoControlGroupBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1695,7 +1695,7 @@ uno::Any UnoControlGroupBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlGroupBox );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlGroupBox );
         return aAny;
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -1729,9 +1729,9 @@ UnoGroupBoxControl::UnoGroupBoxControl()
     maComponentInfos.nHeight = 100;
 }
 
-::rtl::OUString UnoGroupBoxControl::GetComponentServiceName()
+OUString UnoGroupBoxControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("groupbox");
+    return OUString("groupbox");
 }
 
 sal_Bool UnoGroupBoxControl::isTransparent() throw(uno::RuntimeException)
@@ -1744,8 +1744,8 @@ sal_Bool UnoGroupBoxControl::isTransparent() throw(uno::RuntimeException)
 // =====================================================================================================================
 struct ListItem
 {
-    ::rtl::OUString ItemText;
-    ::rtl::OUString ItemImageURL;
+    OUString ItemText;
+    OUString ItemImageURL;
     Any             ItemData;
 
     ListItem()
@@ -1755,7 +1755,7 @@ struct ListItem
     {
     }
 
-    ListItem( const ::rtl::OUString& i_rItemText )
+    ListItem( const OUString& i_rItemText )
         :ItemText( i_rItemText )
         ,ItemImageURL()
         ,ItemData()
@@ -1763,7 +1763,7 @@ struct ListItem
     }
 };
 
-typedef beans::Pair< ::rtl::OUString, ::rtl::OUString > UnoListItem;
+typedef beans::Pair< OUString, OUString > UnoListItem;
 
 struct StripItemData : public ::std::unary_function< ListItem, UnoListItem >
 {
@@ -1787,7 +1787,7 @@ struct UnoControlListBoxModel_Data
     const ListItem& getItem( const sal_Int32 i_nIndex ) const
     {
         if ( ( i_nIndex < 0 ) || ( i_nIndex >= sal_Int32( m_aListItems.size() ) ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), m_rAntiImpl );
+            throw IndexOutOfBoundsException( OUString(), m_rAntiImpl );
         return m_aListItems[ i_nIndex ];
     }
 
@@ -1799,7 +1799,7 @@ struct UnoControlListBoxModel_Data
     ListItem& insertItem( const sal_Int32 i_nIndex )
     {
         if ( ( i_nIndex < 0 ) || ( i_nIndex > sal_Int32( m_aListItems.size() ) ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), m_rAntiImpl );
+            throw IndexOutOfBoundsException( OUString(), m_rAntiImpl );
         return *m_aListItems.insert( m_aListItems.begin() + i_nIndex, ListItem() );
     }
 
@@ -1823,7 +1823,7 @@ struct UnoControlListBoxModel_Data
     void    removeItem( const sal_Int32 i_nIndex )
     {
         if ( ( i_nIndex < 0 ) || ( i_nIndex >= sal_Int32( m_aListItems.size() ) ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), m_rAntiImpl );
+            throw IndexOutOfBoundsException( OUString(), m_rAntiImpl );
         m_aListItems.erase( m_aListItems.begin() + i_nIndex );
     }
 
@@ -1868,9 +1868,9 @@ UnoControlListBoxModel::~UnoControlListBoxModel()
 }
 IMPL_SERVICEINFO_DERIVED( UnoControlListBoxModel, UnoControlModel, szServiceName2_UnoControlListBoxModel )
 // ---------------------------------------------------------------------------------------------------------------------
-::rtl::OUString UnoControlListBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlListBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlListBoxModel );
+    return OUString::createFromAscii( szServiceName_UnoControlListBoxModel );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -1879,7 +1879,7 @@ uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlListBox );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlListBox );
         return aAny;
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -1908,9 +1908,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlListBoxModel::getPropertySet
 // ---------------------------------------------------------------------------------------------------------------------
 namespace
 {
-    struct CreateListItem : public ::std::unary_function< ::rtl::OUString, ListItem >
+    struct CreateListItem : public ::std::unary_function< OUString, ListItem >
     {
-        ListItem operator()( const ::rtl::OUString& i_rItemText )
+        ListItem operator()( const OUString& i_rItemText )
         {
             return ListItem( i_rItemText );
         }
@@ -1933,7 +1933,7 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
         if ( !m_pData->m_bSettingLegacyProperty )
         {
             // synchronize the legacy StringItemList property with our list items
-            Sequence< ::rtl::OUString > aStringItemList;
+            Sequence< OUString > aStringItemList;
             Any aPropValue;
             getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
             OSL_VERIFY( aPropValue >>= aStringItemList );
@@ -1978,7 +1978,7 @@ void UnoControlListBoxModel::ImplNormalizePropertySequence( const sal_Int32 _nCo
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoControlListBoxModel::insertItem( ::sal_Int32 i_nPosition, const ::rtl::OUString& i_rItemText, const ::rtl::OUString& i_rItemImageURL ) throw (IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL UnoControlListBoxModel::insertItem( ::sal_Int32 i_nPosition, const OUString& i_rItemText, const OUString& i_rItemImageURL ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
@@ -1991,26 +1991,26 @@ void SAL_CALL UnoControlListBoxModel::insertItem( ::sal_Int32 i_nPosition, const
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoControlListBoxModel::insertItemText( ::sal_Int32 i_nPosition, const ::rtl::OUString& i_rItemText ) throw (IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL UnoControlListBoxModel::insertItemText( ::sal_Int32 i_nPosition, const OUString& i_rItemText ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_pData->insertItem( i_nPosition ) );
     rItem.ItemText = i_rItemText;
 
-    impl_handleInsert( i_nPosition, i_rItemText, ::boost::optional< ::rtl::OUString >(), aGuard );
+    impl_handleInsert( i_nPosition, i_rItemText, ::boost::optional< OUString >(), aGuard );
     // <----- SYNCHRONIZED
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoControlListBoxModel::insertItemImage( ::sal_Int32 i_nPosition, const ::rtl::OUString& i_rItemImageURL ) throw (IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL UnoControlListBoxModel::insertItemImage( ::sal_Int32 i_nPosition, const OUString& i_rItemImageURL ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_pData->insertItem( i_nPosition ) );
     rItem.ItemImageURL = i_rItemImageURL;
 
-    impl_handleInsert( i_nPosition, ::boost::optional< ::rtl::OUString >(), i_rItemImageURL, aGuard );
+    impl_handleInsert( i_nPosition, ::boost::optional< OUString >(), i_rItemImageURL, aGuard );
     // <----- SYNCHRONIZED
 }
 
@@ -2037,31 +2037,31 @@ void SAL_CALL UnoControlListBoxModel::removeAllItems(  ) throw (::com::sun::star
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoControlListBoxModel::setItemText( ::sal_Int32 i_nPosition, const ::rtl::OUString& i_rItemText ) throw (IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL UnoControlListBoxModel::setItemText( ::sal_Int32 i_nPosition, const OUString& i_rItemText ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_pData->getItem( i_nPosition ) );
     rItem.ItemText = i_rItemText;
 
-    impl_handleModify( i_nPosition, i_rItemText, ::boost::optional< ::rtl::OUString >(), aGuard );
+    impl_handleModify( i_nPosition, i_rItemText, ::boost::optional< OUString >(), aGuard );
     // <----- SYNCHRONIZED
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoControlListBoxModel::setItemImage( ::sal_Int32 i_nPosition, const ::rtl::OUString& i_rItemImageURL ) throw (IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL UnoControlListBoxModel::setItemImage( ::sal_Int32 i_nPosition, const OUString& i_rItemImageURL ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_pData->getItem( i_nPosition ) );
     rItem.ItemImageURL = i_rItemImageURL;
 
-    impl_handleModify( i_nPosition, ::boost::optional< ::rtl::OUString >(), i_rItemImageURL, aGuard );
+    impl_handleModify( i_nPosition, ::boost::optional< OUString >(), i_rItemImageURL, aGuard );
     // <----- SYNCHRONIZED
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoControlListBoxModel::setItemTextAndImage( ::sal_Int32 i_nPosition, const ::rtl::OUString& i_rItemText, const ::rtl::OUString& i_rItemImageURL ) throw (IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL UnoControlListBoxModel::setItemTextAndImage( ::sal_Int32 i_nPosition, const OUString& i_rItemText, const OUString& i_rItemImageURL ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
@@ -2082,7 +2082,7 @@ void SAL_CALL UnoControlListBoxModel::setItemData( ::sal_Int32 i_nPosition, cons
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL UnoControlListBoxModel::getItemText( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString SAL_CALL UnoControlListBoxModel::getItemText( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     const ListItem& rItem( m_pData->getItem( i_nPosition ) );
@@ -2090,7 +2090,7 @@ void SAL_CALL UnoControlListBoxModel::setItemData( ::sal_Int32 i_nPosition, cons
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL UnoControlListBoxModel::getItemImage( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString SAL_CALL UnoControlListBoxModel::getItemImage( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     const ListItem& rItem( m_pData->getItem( i_nPosition ) );
@@ -2098,11 +2098,11 @@ void SAL_CALL UnoControlListBoxModel::setItemData( ::sal_Int32 i_nPosition, cons
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-beans::Pair< ::rtl::OUString, ::rtl::OUString > SAL_CALL UnoControlListBoxModel::getItemTextAndImage( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
+beans::Pair< OUString, OUString > SAL_CALL UnoControlListBoxModel::getItemTextAndImage( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     const ListItem& rItem( m_pData->getItem( i_nPosition ) );
-    return beans::Pair< ::rtl::OUString, ::rtl::OUString >( rItem.ItemText, rItem.ItemImageURL );
+    return beans::Pair< OUString, OUString >( rItem.ItemText, rItem.ItemImageURL );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -2114,7 +2114,7 @@ Any SAL_CALL UnoControlListBoxModel::getItemData( ::sal_Int32 i_nPosition ) thro
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-Sequence< beans::Pair< ::rtl::OUString, ::rtl::OUString > > SAL_CALL UnoControlListBoxModel::getAllItems(  ) throw (RuntimeException)
+Sequence< beans::Pair< OUString, OUString > > SAL_CALL UnoControlListBoxModel::getAllItems(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     return m_pData->getAllItems();
@@ -2135,9 +2135,9 @@ void SAL_CALL UnoControlListBoxModel::removeItemListListener( const uno::Referen
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void UnoControlListBoxModel::impl_getStringItemList( ::std::vector< ::rtl::OUString >& o_rStringItems ) const
+void UnoControlListBoxModel::impl_getStringItemList( ::std::vector< OUString >& o_rStringItems ) const
 {
-    Sequence< ::rtl::OUString > aStringItemList;
+    Sequence< OUString > aStringItemList;
     Any aPropValue;
     getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
     OSL_VERIFY( aPropValue >>= aStringItemList );
@@ -2151,9 +2151,9 @@ void UnoControlListBoxModel::impl_getStringItemList( ::std::vector< ::rtl::OUStr
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void UnoControlListBoxModel::impl_setStringItemList_nolck( const ::std::vector< ::rtl::OUString >& i_rStringItems )
+void UnoControlListBoxModel::impl_setStringItemList_nolck( const ::std::vector< OUString >& i_rStringItems )
 {
-    Sequence< ::rtl::OUString > aStringItems( i_rStringItems.size() );
+    Sequence< OUString > aStringItems( i_rStringItems.size() );
     ::std::copy(
         i_rStringItems.begin(),
         i_rStringItems.end(),
@@ -2173,17 +2173,17 @@ void UnoControlListBoxModel::impl_setStringItemList_nolck( const ::std::vector< 
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void UnoControlListBoxModel::impl_handleInsert( const sal_Int32 i_nItemPosition, const ::boost::optional< ::rtl::OUString >& i_rItemText,
-        const ::boost::optional< ::rtl::OUString >& i_rItemImageURL, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
+void UnoControlListBoxModel::impl_handleInsert( const sal_Int32 i_nItemPosition, const ::boost::optional< OUString >& i_rItemText,
+        const ::boost::optional< OUString >& i_rItemImageURL, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
 {
     // SYNCHRONIZED ----->
     // sync with legacy StringItemList property
-    ::std::vector< ::rtl::OUString > aStringItems;
+    ::std::vector< OUString > aStringItems;
     impl_getStringItemList( aStringItems );
     OSL_ENSURE( size_t( i_nItemPosition ) <= aStringItems.size(), "UnoControlListBoxModel::impl_handleInsert" );
     if ( size_t( i_nItemPosition ) <= aStringItems.size() )
     {
-        const ::rtl::OUString sItemText( !!i_rItemText ? *i_rItemText : ::rtl::OUString() );
+        const OUString sItemText( !!i_rItemText ? *i_rItemText : OUString() );
         aStringItems.insert( aStringItems.begin() + i_nItemPosition, sItemText );
     }
 
@@ -2201,7 +2201,7 @@ void UnoControlListBoxModel::impl_handleRemove( const sal_Int32 i_nItemPosition,
     // SYNCHRONIZED ----->
     const bool bAllItems = ( i_nItemPosition < 0 );
     // sync with legacy StringItemList property
-    ::std::vector< ::rtl::OUString > aStringItems;
+    ::std::vector< OUString > aStringItems;
     impl_getStringItemList( aStringItems );
     if ( !bAllItems )
     {
@@ -2228,20 +2228,20 @@ void UnoControlListBoxModel::impl_handleRemove( const sal_Int32 i_nItemPosition,
     }
     else
     {
-        impl_notifyItemListEvent_nolck( i_nItemPosition, ::boost::optional< ::rtl::OUString >(), ::boost::optional< ::rtl::OUString >(),
+        impl_notifyItemListEvent_nolck( i_nItemPosition, ::boost::optional< OUString >(), ::boost::optional< OUString >(),
             &XItemListListener::listItemRemoved );
     }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void UnoControlListBoxModel::impl_handleModify( const sal_Int32 i_nItemPosition, const ::boost::optional< ::rtl::OUString >& i_rItemText,
-        const ::boost::optional< ::rtl::OUString >& i_rItemImageURL, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
+void UnoControlListBoxModel::impl_handleModify( const sal_Int32 i_nItemPosition, const ::boost::optional< OUString >& i_rItemText,
+        const ::boost::optional< OUString >& i_rItemImageURL, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
 {
     // SYNCHRONIZED ----->
     if ( !!i_rItemText )
     {
         // sync with legacy StringItemList property
-        ::std::vector< ::rtl::OUString > aStringItems;
+        ::std::vector< OUString > aStringItems;
         impl_getStringItemList( aStringItems );
         OSL_ENSURE( size_t( i_nItemPosition ) < aStringItems.size(), "UnoControlListBoxModel::impl_handleModify" );
         if ( size_t( i_nItemPosition ) < aStringItems.size() )
@@ -2264,8 +2264,8 @@ void UnoControlListBoxModel::impl_handleModify( const sal_Int32 i_nItemPosition,
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void UnoControlListBoxModel::impl_notifyItemListEvent_nolck( const sal_Int32 i_nItemPosition, const ::boost::optional< ::rtl::OUString >& i_rItemText,
-    const ::boost::optional< ::rtl::OUString >& i_rItemImageURL,
+void UnoControlListBoxModel::impl_notifyItemListEvent_nolck( const sal_Int32 i_nItemPosition, const ::boost::optional< OUString >& i_rItemText,
+    const ::boost::optional< OUString >& i_rItemImageURL,
     void ( SAL_CALL XItemListListener::*NotificationMethod )( const ItemListEvent& ) )
 {
     ItemListEvent aEvent;
@@ -2297,9 +2297,9 @@ UnoListBoxControl::UnoListBoxControl()
     maComponentInfos.nHeight = 12;
 }
 
-::rtl::OUString UnoListBoxControl::GetComponentServiceName()
+OUString UnoListBoxControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("listbox");
+    return OUString("listbox");
 }
 IMPL_SERVICEINFO_DERIVED( UnoListBoxControl, UnoControlBase, szServiceName2_UnoControlListBox )
 
@@ -2339,11 +2339,11 @@ void UnoListBoxControl::updateFromModel()
     // notify the change of the SelectedItems property, again. While our base class, in updateFromModel,
     // already did this, our peer(s) can only legitimately set the selection after they have the string
     // item list, which we just notified with the itemListChanged call.
-    const ::rtl::OUString sSelectedItemsPropName( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ) );
+    const OUString sSelectedItemsPropName( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ) );
     ImplSetPeerProperty( sSelectedItemsPropName, ImplGetPropertyValue( sSelectedItemsPropName ) );
 }
 
-void UnoListBoxControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
+void UnoListBoxControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
 {
     if ( rPropName == GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) )
         // do not forward this to our peer. We are a XItemListListener at our model, and changes in the string item
@@ -2395,25 +2395,25 @@ void UnoListBoxControl::removeItemListener(const uno::Reference < awt::XItemList
     maItemListeners.removeInterface( l );
 }
 
-void UnoListBoxControl::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(uno::RuntimeException)
+void UnoListBoxControl::addItem( const OUString& aItem, sal_Int16 nPos ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString> aSeq( 1 );
+    uno::Sequence< OUString> aSeq( 1 );
     aSeq.getArray()[0] = aItem;
     addItems( aSeq, nPos );
 }
 
-void UnoListBoxControl::addItems( const uno::Sequence< ::rtl::OUString>& aItems, sal_Int16 nPos ) throw(uno::RuntimeException)
+void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_Int16 nPos ) throw(uno::RuntimeException)
 {
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< ::rtl::OUString> aSeq;
+    uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nNewItems = (sal_uInt16)aItems.getLength();
     sal_uInt16 nOldLen = (sal_uInt16)aSeq.getLength();
     sal_uInt16 nNewLen = nOldLen + nNewItems;
 
-    uno::Sequence< ::rtl::OUString> aNewSeq( nNewLen );
-    ::rtl::OUString* pNewData = aNewSeq.getArray();
-    ::rtl::OUString* pOldData = aSeq.getArray();
+    uno::Sequence< OUString> aNewSeq( nNewLen );
+    OUString* pNewData = aNewSeq.getArray();
+    OUString* pOldData = aSeq.getArray();
 
     if ( ( nPos < 0 ) || ( nPos > nOldLen ) )
         nPos = (sal_uInt16) nOldLen;
@@ -2439,7 +2439,7 @@ void UnoListBoxControl::addItems( const uno::Sequence< ::rtl::OUString>& aItems,
 void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(uno::RuntimeException)
 {
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< ::rtl::OUString> aSeq;
+    uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nOldLen = (sal_uInt16)aSeq.getLength();
     if ( nOldLen && ( nPos < nOldLen ) )
@@ -2449,9 +2449,9 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(un
 
         sal_uInt16 nNewLen = nOldLen - nCount;
 
-        uno::Sequence< ::rtl::OUString> aNewSeq( nNewLen );
-        ::rtl::OUString* pNewData = aNewSeq.getArray();
-        ::rtl::OUString* pOldData = aSeq.getArray();
+        uno::Sequence< OUString> aNewSeq( nNewLen );
+        OUString* pNewData = aNewSeq.getArray();
+        OUString* pOldData = aSeq.getArray();
 
         sal_uInt16 n;
         // Items vor der Entfern-Position
@@ -2471,26 +2471,26 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(un
 sal_Int16 UnoListBoxControl::getItemCount() throw(uno::RuntimeException)
 {
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< ::rtl::OUString> aSeq;
+    uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     return (sal_Int16)aSeq.getLength();
 }
 
-::rtl::OUString UnoListBoxControl::getItem( sal_Int16 nPos ) throw(uno::RuntimeException)
+OUString UnoListBoxControl::getItem( sal_Int16 nPos ) throw(uno::RuntimeException)
 {
-    ::rtl::OUString aItem;
+    OUString aItem;
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< ::rtl::OUString> aSeq;
+    uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     if ( nPos < aSeq.getLength() )
         aItem = aSeq.getConstArray()[nPos];
     return aItem;
 }
 
-uno::Sequence< ::rtl::OUString> UnoListBoxControl::getItems() throw(uno::RuntimeException)
+uno::Sequence< OUString> UnoListBoxControl::getItems() throw(uno::RuntimeException)
 {
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< ::rtl::OUString> aSeq;
+    uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     return aSeq;
 }
@@ -2517,9 +2517,9 @@ uno::Sequence<sal_Int16> UnoListBoxControl::getSelectedItemsPos() throw(uno::Run
     return aSeq;
 }
 
-::rtl::OUString UnoListBoxControl::getSelectedItem() throw(uno::RuntimeException)
+OUString UnoListBoxControl::getSelectedItem() throw(uno::RuntimeException)
 {
-    ::rtl::OUString aItem;
+    OUString aItem;
     if ( getPeer().is() )
     {
         uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
@@ -2528,9 +2528,9 @@ uno::Sequence<sal_Int16> UnoListBoxControl::getSelectedItemsPos() throw(uno::Run
     return aItem;
 }
 
-uno::Sequence< ::rtl::OUString> UnoListBoxControl::getSelectedItems() throw(uno::RuntimeException)
+uno::Sequence< OUString> UnoListBoxControl::getSelectedItems() throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString> aSeq;
+    uno::Sequence< OUString> aSeq;
     if ( getPeer().is() )
     {
         uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
@@ -2559,7 +2559,7 @@ void UnoListBoxControl::selectItemsPos( const uno::Sequence<sal_Int16>& aPositio
     ImplUpdateSelectedItemsProperty();
 }
 
-void UnoListBoxControl::selectItem( const ::rtl::OUString& aItem, sal_Bool bSelect ) throw(uno::RuntimeException)
+void UnoListBoxControl::selectItem( const OUString& aItem, sal_Bool bSelect ) throw(uno::RuntimeException)
 {
     if ( getPeer().is() )
     {
@@ -2738,9 +2738,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySe
 }
 
 
-::rtl::OUString UnoControlComboBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlComboBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlComboBoxModel );
+    return OUString::createFromAscii( szServiceName_UnoControlComboBoxModel );
 }
 void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& rValue ) throw (uno::Exception)
 {
@@ -2749,7 +2749,7 @@ void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int
     if ( nHandle == BASEPROPERTY_STRINGITEMLIST && !m_pData->m_bSettingLegacyProperty)
     {
         // synchronize the legacy StringItemList property with our list items
-        Sequence< ::rtl::OUString > aStringItemList;
+        Sequence< OUString > aStringItemList;
         Any aPropValue;
         getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
         OSL_VERIFY( aPropValue >>= aStringItemList );
@@ -2779,7 +2779,7 @@ uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlComboBox );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlComboBox );
         return aAny;
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -2798,9 +2798,9 @@ UnoComboBoxControl::UnoComboBoxControl()
 }
 IMPL_SERVICEINFO_DERIVED( UnoComboBoxControl, UnoEditControl, szServiceName2_UnoControlComboBox )
 
-::rtl::OUString UnoComboBoxControl::GetComponentServiceName()
+OUString UnoComboBoxControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("combobox");
+    return OUString("combobox");
 }
 
 void UnoComboBoxControl::dispose() throw(uno::RuntimeException)
@@ -2845,7 +2845,7 @@ void UnoComboBoxControl::updateFromModel()
     EventObject aEvent( getModel() );
     xItemListListener->itemListChanged( aEvent );
 }
-void UnoComboBoxControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
+void UnoComboBoxControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
 {
     if ( rPropName == GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) )
         // do not forward this to our peer. We are a XItemListListener at our model, and changes in the string item
@@ -2986,25 +2986,25 @@ void SAL_CALL UnoComboBoxControl::itemListChanged( const lang::EventObject& i_rE
         xPeerListener->itemListChanged( i_rEvent );
 }
 
-void UnoComboBoxControl::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(uno::RuntimeException)
+void UnoComboBoxControl::addItem( const OUString& aItem, sal_Int16 nPos ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString> aSeq( 1 );
+    uno::Sequence< OUString> aSeq( 1 );
     aSeq.getArray()[0] = aItem;
     addItems( aSeq, nPos );
 }
 
-void UnoComboBoxControl::addItems( const uno::Sequence< ::rtl::OUString>& aItems, sal_Int16 nPos ) throw(uno::RuntimeException)
+void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_Int16 nPos ) throw(uno::RuntimeException)
 {
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< ::rtl::OUString> aSeq;
+    uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nNewItems = (sal_uInt16)aItems.getLength();
     sal_uInt16 nOldLen = (sal_uInt16)aSeq.getLength();
     sal_uInt16 nNewLen = nOldLen + nNewItems;
 
-    uno::Sequence< ::rtl::OUString> aNewSeq( nNewLen );
-    ::rtl::OUString* pNewData = aNewSeq.getArray();
-    const ::rtl::OUString* pOldData = aSeq.getConstArray();
+    uno::Sequence< OUString> aNewSeq( nNewLen );
+    OUString* pNewData = aNewSeq.getArray();
+    const OUString* pOldData = aSeq.getConstArray();
 
     if ( ( nPos < 0 ) || ( nPos > nOldLen ) )
         nPos = (sal_uInt16) nOldLen;
@@ -3030,7 +3030,7 @@ void UnoComboBoxControl::addItems( const uno::Sequence< ::rtl::OUString>& aItems
 void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(uno::RuntimeException)
 {
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< ::rtl::OUString> aSeq;
+    uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nOldLen = (sal_uInt16)aSeq.getLength();
     if ( nOldLen && ( nPos < nOldLen ) )
@@ -3040,9 +3040,9 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(u
 
         sal_uInt16 nNewLen = nOldLen - nCount;
 
-        uno::Sequence< ::rtl::OUString> aNewSeq( nNewLen );
-        ::rtl::OUString* pNewData = aNewSeq.getArray();
-        ::rtl::OUString* pOldData = aSeq.getArray();
+        uno::Sequence< OUString> aNewSeq( nNewLen );
+        OUString* pNewData = aNewSeq.getArray();
+        OUString* pOldData = aSeq.getArray();
 
         sal_uInt16 n;
         // items before the deletion position
@@ -3062,26 +3062,26 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(u
 sal_Int16 UnoComboBoxControl::getItemCount() throw(uno::RuntimeException)
 {
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< ::rtl::OUString> aSeq;
+    uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     return (sal_Int16)aSeq.getLength();
 }
 
-::rtl::OUString UnoComboBoxControl::getItem( sal_Int16 nPos ) throw(uno::RuntimeException)
+OUString UnoComboBoxControl::getItem( sal_Int16 nPos ) throw(uno::RuntimeException)
 {
-    ::rtl::OUString aItem;
+    OUString aItem;
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< ::rtl::OUString> aSeq;
+    uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     if ( nPos < aSeq.getLength() )
         aItem = aSeq.getConstArray()[nPos];
     return aItem;
 }
 
-uno::Sequence< ::rtl::OUString> UnoComboBoxControl::getItems() throw(uno::RuntimeException)
+uno::Sequence< OUString> UnoComboBoxControl::getItems() throw(uno::RuntimeException)
 {
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< ::rtl::OUString> aSeq;
+    uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     return aSeq;
 }
@@ -3200,9 +3200,9 @@ UnoControlDateFieldModel::UnoControlDateFieldModel( const Reference< XComponentC
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXDateField );
 }
 
-::rtl::OUString UnoControlDateFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlDateFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlDateFieldModel );
+    return OUString::createFromAscii( szServiceName_UnoControlDateFieldModel );
 }
 
 uno::Any UnoControlDateFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -3210,7 +3210,7 @@ uno::Any UnoControlDateFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlDateField );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlDateField );
         return aAny;
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -3248,9 +3248,9 @@ UnoDateFieldControl::UnoDateFieldControl()
     mbLongFormat = 2;
 }
 
-::rtl::OUString UnoDateFieldControl::GetComponentServiceName()
+OUString UnoDateFieldControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("datefield");
+    return OUString("datefield");
 }
 
 // uno::XInterface
@@ -3286,7 +3286,7 @@ void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
     // also change the text property (#i25106#)
     if ( xPeer.is() )
     {
-        ::rtl::OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
+        OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
         ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), sal_False );
     }
 
@@ -3442,9 +3442,9 @@ UnoControlTimeFieldModel::UnoControlTimeFieldModel( const Reference< XComponentC
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXTimeField );
 }
 
-::rtl::OUString UnoControlTimeFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlTimeFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlTimeFieldModel );
+    return OUString::createFromAscii( szServiceName_UnoControlTimeFieldModel );
 }
 
 uno::Any UnoControlTimeFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -3452,7 +3452,7 @@ uno::Any UnoControlTimeFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlTimeField );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlTimeField );
         return aAny;
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -3489,9 +3489,9 @@ UnoTimeFieldControl::UnoTimeFieldControl()
     mnLast = Time( 23, 59, 59, 99 ).GetTime();
 }
 
-::rtl::OUString UnoTimeFieldControl::GetComponentServiceName()
+OUString UnoTimeFieldControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("timefield");
+    return OUString("timefield");
 }
 
 // uno::XInterface
@@ -3521,7 +3521,7 @@ void UnoTimeFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
 {
     // also change the text property (#i25106#)
     uno::Reference< awt::XVclWindowPeer > xPeer( getPeer(), uno::UNO_QUERY );
-    ::rtl::OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
+    OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
     ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), sal_False );
 
     // re-calc the Time property
@@ -3643,9 +3643,9 @@ UnoControlNumericFieldModel::UnoControlNumericFieldModel( const Reference< XComp
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXNumericField );
 }
 
-::rtl::OUString UnoControlNumericFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlNumericFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlNumericFieldModel );
+    return OUString::createFromAscii( szServiceName_UnoControlNumericFieldModel );
 }
 
 uno::Any UnoControlNumericFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -3653,7 +3653,7 @@ uno::Any UnoControlNumericFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlNumericField );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlNumericField );
         return aAny;
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -3690,9 +3690,9 @@ UnoNumericFieldControl::UnoNumericFieldControl()
     mnLast = 0x7FFFFFFF;
 }
 
-::rtl::OUString UnoNumericFieldControl::GetComponentServiceName()
+OUString UnoNumericFieldControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("numericfield");
+    return OUString("numericfield");
 }
 
 // uno::XInterface
@@ -3841,9 +3841,9 @@ UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel( const Reference< XCo
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXCurrencyField );
 }
 
-::rtl::OUString UnoControlCurrencyFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlCurrencyFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlCurrencyFieldModel );
+    return OUString::createFromAscii( szServiceName_UnoControlCurrencyFieldModel );
 }
 
 uno::Any UnoControlCurrencyFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -3851,7 +3851,7 @@ uno::Any UnoControlCurrencyFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId )
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlCurrencyField );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlCurrencyField );
         return aAny;
     }
     if ( nPropId == BASEPROPERTY_CURSYM_POSITION )
@@ -3892,9 +3892,9 @@ UnoCurrencyFieldControl::UnoCurrencyFieldControl()
     mnLast = 0x7FFFFFFF;
 }
 
-::rtl::OUString UnoCurrencyFieldControl::GetComponentServiceName()
+OUString UnoCurrencyFieldControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("longcurrencyfield");
+    return OUString("longcurrencyfield");
 }
 
 // uno::XInterface
@@ -4042,9 +4042,9 @@ UnoControlPatternFieldModel::UnoControlPatternFieldModel( const Reference< XComp
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXPatternField );
 }
 
-::rtl::OUString UnoControlPatternFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlPatternFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlPatternFieldModel );
+    return OUString::createFromAscii( szServiceName_UnoControlPatternFieldModel );
 }
 
 uno::Any UnoControlPatternFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -4052,7 +4052,7 @@ uno::Any UnoControlPatternFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlPatternField );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlPatternField );
         return aAny;
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -4085,26 +4085,26 @@ UnoPatternFieldControl::UnoPatternFieldControl()
 {
 }
 
-::rtl::OUString UnoPatternFieldControl::GetComponentServiceName()
+OUString UnoPatternFieldControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("patternfield");
+    return OUString("patternfield");
 }
 
-void UnoPatternFieldControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
+void UnoPatternFieldControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
 {
     sal_uInt16 nType = GetPropertyId( rPropName );
     if ( ( nType == BASEPROPERTY_TEXT ) || ( nType == BASEPROPERTY_EDITMASK ) || ( nType == BASEPROPERTY_LITERALMASK ) )
     {
         // These masks cannot be set consecutively
-        ::rtl::OUString Text = ImplGetPropertyValue_UString( BASEPROPERTY_TEXT );
-        ::rtl::OUString EditMask = ImplGetPropertyValue_UString( BASEPROPERTY_EDITMASK );
-        ::rtl::OUString LiteralMask = ImplGetPropertyValue_UString( BASEPROPERTY_LITERALMASK );
+        OUString Text = ImplGetPropertyValue_UString( BASEPROPERTY_TEXT );
+        OUString EditMask = ImplGetPropertyValue_UString( BASEPROPERTY_EDITMASK );
+        OUString LiteralMask = ImplGetPropertyValue_UString( BASEPROPERTY_LITERALMASK );
 
         uno::Reference < awt::XPatternField >  xPF( getPeer(), uno::UNO_QUERY );
         if (xPF.is())
         {
             // same comment as in UnoControl::ImplSetPeerProperty - see there
-            ::rtl::OUString sText( Text );
+            OUString sText( Text );
             ImplCheckLocalize( sText );
             xPF->setString( sText );
             xPF->setMasks( EditMask, LiteralMask );
@@ -4129,17 +4129,17 @@ IMPL_XTYPEPROVIDER_START( UnoPatternFieldControl )
     UnoSpinFieldControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-void UnoPatternFieldControl::setString( const ::rtl::OUString& rString ) throw(uno::RuntimeException)
+void UnoPatternFieldControl::setString( const OUString& rString ) throw(uno::RuntimeException)
 {
     setText( rString );
 }
 
-::rtl::OUString UnoPatternFieldControl::getString() throw(uno::RuntimeException)
+OUString UnoPatternFieldControl::getString() throw(uno::RuntimeException)
 {
     return getText();
 }
 
-void UnoPatternFieldControl::setMasks( const ::rtl::OUString& EditMask, const ::rtl::OUString& LiteralMask ) throw(uno::RuntimeException)
+void UnoPatternFieldControl::setMasks( const OUString& EditMask, const OUString& LiteralMask ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= EditMask;
@@ -4148,7 +4148,7 @@ void UnoPatternFieldControl::setMasks( const ::rtl::OUString& EditMask, const ::
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LITERALMASK ), aAny, sal_True );
 }
 
-void UnoPatternFieldControl::getMasks( ::rtl::OUString& EditMask, ::rtl::OUString& LiteralMask ) throw(uno::RuntimeException)
+void UnoPatternFieldControl::getMasks( OUString& EditMask, OUString& LiteralMask ) throw(uno::RuntimeException)
 {
     EditMask = ImplGetPropertyValue_UString( BASEPROPERTY_EDITMASK );
     LiteralMask = ImplGetPropertyValue_UString( BASEPROPERTY_LITERALMASK );
@@ -4188,9 +4188,9 @@ UnoControlProgressBarModel::UnoControlProgressBarModel( const Reference< XCompon
     ImplRegisterProperty( BASEPROPERTY_PROGRESSVALUE_MIN );
 }
 
-::rtl::OUString UnoControlProgressBarModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlProgressBarModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBarModel );
+    return OUString::createFromAscii( szServiceName_UnoControlProgressBarModel );
 }
 
 uno::Any UnoControlProgressBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -4198,7 +4198,7 @@ uno::Any UnoControlProgressBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBar );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlProgressBar );
         return aAny;
     }
 
@@ -4232,9 +4232,9 @@ UnoProgressBarControl::UnoProgressBarControl()
 {
 }
 
-::rtl::OUString UnoProgressBarControl::GetComponentServiceName()
+OUString UnoProgressBarControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("ProgressBar");
+    return OUString("ProgressBar");
 }
 
 // uno::XInterface
@@ -4319,9 +4319,9 @@ UnoControlFixedLineModel::UnoControlFixedLineModel( const Reference< XComponentC
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
 }
 
-::rtl::OUString UnoControlFixedLineModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlFixedLineModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedLineModel );
+    return OUString::createFromAscii( szServiceName_UnoControlFixedLineModel );
 }
 
 uno::Any UnoControlFixedLineModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -4329,7 +4329,7 @@ uno::Any UnoControlFixedLineModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedLine );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoControlFixedLine );
         return aAny;
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -4363,9 +4363,9 @@ UnoFixedLineControl::UnoFixedLineControl()
     maComponentInfos.nHeight = 100;     // ??
 }
 
-::rtl::OUString UnoFixedLineControl::GetComponentServiceName()
+OUString UnoFixedLineControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("FixedLine");
+    return OUString("FixedLine");
 }
 
 sal_Bool UnoFixedLineControl::isTransparent() throw(uno::RuntimeException)

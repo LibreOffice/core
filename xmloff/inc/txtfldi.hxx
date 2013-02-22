@@ -125,16 +125,16 @@ enum XMLTextFieldAttrTokens
 /// abstract class for text field import
 class XMLTextFieldImportContext : public SvXMLImportContext
 {
-    const ::rtl::OUString sIsFixed;
+    const OUString sIsFixed;
 
     // data members
-    ::rtl::OUStringBuffer sContentBuffer;   /// collect character data
-    ::rtl::OUString sContent;               /// character data after collection
-    ::rtl::OUString sServiceName;           /// service name for text field
+    OUStringBuffer sContentBuffer;   /// collect character data
+    OUString sContent;               /// character data after collection
+    OUString sServiceName;           /// service name for text field
     XMLTextImportHelper& rTextImportHelper; /// the import helper
 
 protected:
-    ::rtl::OUString sServicePrefix;
+    OUString sServicePrefix;
 
     // data members for use in subclasses
     sal_Bool bValid;                        /// ist dieses Feld gültig?
@@ -148,12 +148,12 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         const sal_Char* pService,               /// name of SO API service
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& rLocalName);     /// element name w/o prefix
+        const OUString& rLocalName);     /// element name w/o prefix
 
     virtual ~XMLTextFieldImportContext();
 
     /// process character data: will be collected in member sContentBuffer
-    virtual void Characters( const ::rtl::OUString& sContent );
+    virtual void Characters( const OUString& sContent );
 
     /// parses attributes and calls ProcessAttribute
     virtual void StartElement(
@@ -169,7 +169,7 @@ public:
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rName,
+        const OUString& rName,
         sal_uInt16 nToken);
 
 
@@ -178,14 +178,14 @@ protected:
     /// get helper
     inline XMLTextImportHelper& GetImportHelper() { return rTextImportHelper; }
 
-    inline ::rtl::OUString GetServiceName() { return sServiceName; }
-    inline void SetServiceName(::rtl::OUString sStr) { sServiceName = sStr; }
+    inline OUString GetServiceName() { return sServiceName; }
+    inline void SetServiceName(OUString sStr) { sServiceName = sStr; }
 
-    ::rtl::OUString GetContent();
+    OUString GetContent();
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue ) = 0;
+                                   const OUString& sAttrValue ) = 0;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -195,7 +195,7 @@ protected:
     /// create field from ServiceName
     sal_Bool CreateField(::com::sun::star::uno::Reference<
                          ::com::sun::star::beans::XPropertySet> & xField,
-                         const ::rtl::OUString& sServiceName);
+                         const OUString& sServiceName);
 
     /// force an update of the field's value
     /// call update on optional XUptadeable interface; (disable Fixed property)
@@ -211,10 +211,10 @@ class XMLSenderFieldImportContext : public XMLTextFieldImportContext
 
     sal_Int16 nSubType;         /// API subtype for ExtUser field
 
-    const ::rtl::OUString sEmpty;       /// empty string
-    const ::rtl::OUString sPropertyFixed;
-    const ::rtl::OUString sPropertyFieldSubType;
-    const ::rtl::OUString sPropertyContent;
+    const OUString sEmpty;       /// empty string
+    const OUString sPropertyFixed;
+    const OUString sPropertyFieldSubType;
+    const OUString sPropertyContent;
 
 protected:
 
@@ -230,7 +230,7 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName,      /// element name w/o prefix
+        const OUString& sLocalName,      /// element name w/o prefix
         sal_uInt16 nToken);                     /// element token
 
 protected:
@@ -242,7 +242,7 @@ protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -256,10 +256,10 @@ class XMLAuthorFieldImportContext : public XMLSenderFieldImportContext
 {
 
     sal_Bool bAuthorFullName;
-    const ::rtl::OUString sServiceAuthor;
-    const ::rtl::OUString sPropertyAuthorFullName;
-    const ::rtl::OUString sPropertyFixed;
-    const ::rtl::OUString sPropertyContent;
+    const OUString sServiceAuthor;
+    const OUString sPropertyAuthorFullName;
+    const OUString sPropertyFixed;
+    const OUString sPropertyContent;
 
 public:
 
@@ -269,7 +269,7 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName,      /// element name w/o prefix
+        const OUString& sLocalName,      /// element name w/o prefix
         sal_uInt16 nToken);                     /// element token
 
 protected:
@@ -290,13 +290,13 @@ protected:
 class XMLPlaceholderFieldImportContext : public XMLTextFieldImportContext
 {
 
-    const ::rtl::OUString sEmpty;       /// empty string
-    const ::rtl::OUString sServiceJumpEdit;
-    const ::rtl::OUString sPropertyPlaceholderType;
-    const ::rtl::OUString sPropertyPlaceholder;
-    const ::rtl::OUString sPropertyHint;
+    const OUString sEmpty;       /// empty string
+    const OUString sServiceJumpEdit;
+    const OUString sPropertyPlaceholderType;
+    const OUString sPropertyPlaceholder;
+    const OUString sPropertyHint;
 
-    ::rtl::OUString sDescription;
+    OUString sDescription;
 
     sal_Int16 nPlaceholderType;
 
@@ -308,13 +308,13 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        const OUString& sLocalName);     /// element name w/o prefix
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -326,13 +326,13 @@ class XMLTimeFieldImportContext : public XMLTextFieldImportContext
 {
 
 protected:
-    const ::rtl::OUString sPropertyNumberFormat;
-    const ::rtl::OUString sPropertyFixed;
-    const ::rtl::OUString sPropertyDateTimeValue;
-    const ::rtl::OUString sPropertyDateTime;
-    const ::rtl::OUString sPropertyAdjust;
-    const ::rtl::OUString sPropertyIsDate;
-    const ::rtl::OUString sPropertyIsFixedLanguage;
+    const OUString sPropertyNumberFormat;
+    const OUString sPropertyFixed;
+    const OUString sPropertyDateTimeValue;
+    const OUString sPropertyDateTime;
+    const OUString sPropertyAdjust;
+    const OUString sPropertyIsDate;
+    const OUString sPropertyIsFixedLanguage;
 
     double fTimeValue;
     ::com::sun::star::util::DateTime aDateTimeValue;
@@ -353,11 +353,11 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        const OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -379,22 +379,22 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        const OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 };
 
 
 /** import page continuation fields (<text:page-continuation-string>) */
 class XMLPageContinuationImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertySubType;
-    const ::rtl::OUString sPropertyUserText;
-    const ::rtl::OUString sPropertyNumberingType;
+    const OUString sPropertySubType;
+    const OUString sPropertyUserText;
+    const OUString sPropertyNumberingType;
 
-    ::rtl::OUString sString;            /// continuation string
+    OUString sString;            /// continuation string
     com::sun::star::text::PageNumberType eSelectPage;   /// previous, current
                                                         /// or next page
     sal_Bool sStringOK;                 /// continuation string encountered?
@@ -407,12 +407,12 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        const OUString& sLocalName);     /// element name w/o prefix
 
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -424,12 +424,12 @@ public:
 /** import page number fields (<text:page-number>) */
 class XMLPageNumberImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertySubType;
-    const ::rtl::OUString sPropertyNumberingType;
-    const ::rtl::OUString sPropertyOffset;
+    const OUString sPropertySubType;
+    const OUString sPropertyNumberingType;
+    const OUString sPropertyOffset;
 
-    ::rtl::OUString sNumberFormat;
-    ::rtl::OUString sNumberSync;
+    OUString sNumberFormat;
+    OUString sNumberSync;
     sal_Int16 nPageAdjust;
     com::sun::star::text::PageNumberType eSelectPage;   /// previous, current
                                                         /// or next page
@@ -443,12 +443,12 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        const OUString& sLocalName);     /// element name w/o prefix
 
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -460,15 +460,15 @@ public:
 /** superclass for database fields: handle database and table names */
 class XMLDatabaseFieldImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyDataBaseName;
-    const ::rtl::OUString sPropertyDataBaseURL;
-    const ::rtl::OUString sPropertyTableName;
-    const ::rtl::OUString sPropertyDataCommandType;
-    const ::rtl::OUString sPropertyIsVisible;
+    const OUString sPropertyDataBaseName;
+    const OUString sPropertyDataBaseURL;
+    const OUString sPropertyTableName;
+    const OUString sPropertyDataCommandType;
+    const OUString sPropertyIsVisible;
 
-    ::rtl::OUString sDatabaseName;
-    ::rtl::OUString sDatabaseURL;
-    ::rtl::OUString sTableName;
+    OUString sDatabaseName;
+    OUString sDatabaseURL;
+    OUString sTableName;
 
     sal_Int32 nCommandType;
     sal_Bool bCommandTypeOK;
@@ -488,7 +488,7 @@ protected:
                                   XMLTextImportHelper& rHlp,
                                   const sal_Char* pServiceName,
                                   sal_uInt16 nPrfx,
-                                  const ::rtl::OUString& sLocalName,
+                                  const OUString& sLocalName,
                                   bool bUseDisplay );
 
 public:
@@ -497,7 +497,7 @@ TYPEINFO();
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -507,7 +507,7 @@ TYPEINFO();
     /// handle database-location children
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };
@@ -522,20 +522,20 @@ public:
     XMLDatabaseNameImportContext(SvXMLImport& rImport,
                                  XMLTextImportHelper& rHlp,
                                  sal_uInt16 nPrfx,
-                                 const ::rtl::OUString& sLocalName);
+                                 const OUString& sLocalName);
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 };
 
 
 /** import database next fields (<text:database-next>) */
 class XMLDatabaseNextImportContext : public XMLDatabaseFieldImportContext
 {
-    const ::rtl::OUString sPropertyCondition;
-    const ::rtl::OUString sTrue;
-    ::rtl::OUString sCondition;
+    const OUString sPropertyCondition;
+    const OUString sTrue;
+    OUString sCondition;
     sal_Bool bConditionOK;
 
 protected:
@@ -545,7 +545,7 @@ protected:
                                  XMLTextImportHelper& rHlp,
                                  const sal_Char* pServiceName,
                                  sal_uInt16 nPrfx,
-                                 const ::rtl::OUString& sLocalName);
+                                 const OUString& sLocalName);
 
 public:
 
@@ -554,11 +554,11 @@ public:
     XMLDatabaseNextImportContext(SvXMLImport& rImport,
                                  XMLTextImportHelper& rHlp,
                                  sal_uInt16 nPrfx,
-                                 const ::rtl::OUString& sLocalName);
+                                 const OUString& sLocalName);
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -571,7 +571,7 @@ public:
 /** import database select fields (<text:database-select>) */
 class XMLDatabaseSelectImportContext : public XMLDatabaseNextImportContext
 {
-    const ::rtl::OUString sPropertySetNumber;
+    const OUString sPropertySetNumber;
     sal_Int32 nNumber;
     sal_Bool bNumberOK;
 
@@ -582,11 +582,11 @@ public:
     XMLDatabaseSelectImportContext(SvXMLImport& rImport,
                                    XMLTextImportHelper& rHlp,
                                    sal_uInt16 nPrfx,
-                                   const ::rtl::OUString& sLocalName);
+                                   const OUString& sLocalName);
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -598,10 +598,10 @@ public:
 /** import database display number fields (<text:database-row-number>) */
 class XMLDatabaseNumberImportContext : public XMLDatabaseFieldImportContext
 {
-    const ::rtl::OUString sPropertyNumberingType;
-    const ::rtl::OUString sPropertySetNumber;
-    ::rtl::OUString sNumberFormat;
-    ::rtl::OUString sNumberSync;
+    const OUString sPropertyNumberingType;
+    const OUString sPropertySetNumber;
+    OUString sNumberFormat;
+    OUString sNumberSync;
     sal_Int32 nValue;
     sal_Bool bValueOK;
 
@@ -612,11 +612,11 @@ public:
     XMLDatabaseNumberImportContext(SvXMLImport& rImport,
                                    XMLTextImportHelper& rHlp,
                                    sal_uInt16 nPrfx,
-                                   const ::rtl::OUString& sLocalName);
+                                   const OUString& sLocalName);
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -628,10 +628,10 @@ public:
 /** import docinfo fields with only fixed atribute */
 class XMLSimpleDocInfoImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyFixed;
-    const ::rtl::OUString sPropertyContent;
-    const ::rtl::OUString sPropertyAuthor;
-    const ::rtl::OUString sPropertyCurrentPresentation;
+    const OUString sPropertyFixed;
+    const OUString sPropertyContent;
+    const OUString sPropertyAuthor;
+    const OUString sPropertyCurrentPresentation;
 
 protected:
     sal_Bool bFixed;
@@ -645,7 +645,7 @@ public:
     XMLSimpleDocInfoImportContext(SvXMLImport& rImport,
                                   XMLTextImportHelper& rHlp,
                                   sal_uInt16 nPrfx,
-                                  const ::rtl::OUString& sLocalName,
+                                  const OUString& sLocalName,
                                   sal_uInt16 nToken,
                                   sal_Bool bContent,
                                   sal_Bool bAuthor);
@@ -654,7 +654,7 @@ protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -669,9 +669,9 @@ protected:
 /** import docinfo fields with date or time attributes and numberformats */
 class XMLDateTimeDocInfoImportContext : public XMLSimpleDocInfoImportContext
 {
-    const ::rtl::OUString sPropertyNumberFormat;
-    const ::rtl::OUString sPropertyIsDate;
-    const ::rtl::OUString sPropertyIsFixedLanguage;
+    const OUString sPropertyNumberFormat;
+    const OUString sPropertyIsDate;
+    const OUString sPropertyIsFixedLanguage;
 
     sal_Int32 nFormat;
     sal_Bool bFormatOK;
@@ -686,14 +686,14 @@ public:
     XMLDateTimeDocInfoImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
-                                    const ::rtl::OUString& sLocalName,
+                                    const OUString& sLocalName,
                                     sal_uInt16 nToken);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -706,7 +706,7 @@ protected:
 /** import revision field (<text:editing-cycles>) */
 class XMLRevisionDocInfoImportContext : public XMLSimpleDocInfoImportContext
 {
-    const ::rtl::OUString sPropertyRevision;
+    const OUString sPropertyRevision;
 
 public:
 
@@ -715,7 +715,7 @@ public:
     XMLRevisionDocInfoImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
-                                    const ::rtl::OUString& sLocalName,
+                                    const OUString& sLocalName,
                                     sal_uInt16 nToken);
 
 protected:
@@ -732,9 +732,9 @@ protected:
 class XMLUserDocInfoImportContext : public XMLSimpleDocInfoImportContext
 {
     rtl::OUString aName;
-    const ::rtl::OUString sPropertyName;
-    const ::rtl::OUString sPropertyNumberFormat;
-    const ::rtl::OUString sPropertyIsFixedLanguage;
+    const OUString sPropertyName;
+    const OUString sPropertyNumberFormat;
+    const OUString sPropertyIsFixedLanguage;
     sal_Int32   nFormat;
     sal_Bool    bFormatOK;
     sal_Bool    bIsDefaultLanguage;
@@ -746,14 +746,14 @@ public:
     XMLUserDocInfoImportContext(SvXMLImport& rImport,
                                 XMLTextImportHelper& rHlp,
                                 sal_uInt16 nPrfx,
-                                const ::rtl::OUString& sLocalName,
+                                const OUString& sLocalName,
                                 sal_uInt16 nToken);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
@@ -764,10 +764,10 @@ protected:
 /** import hidden paragraph fields (<text:hidden-paragraph>) */
 class XMLHiddenParagraphImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyCondition;
-    const ::rtl::OUString sPropertyIsHidden;
+    const OUString sPropertyCondition;
+    const OUString sPropertyIsHidden;
 
-    ::rtl::OUString sCondition;
+    OUString sCondition;
     sal_Bool bIsHidden;
 
 public:
@@ -777,13 +777,13 @@ public:
     XMLHiddenParagraphImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
-                                    const ::rtl::OUString& sLocalName);
+                                    const OUString& sLocalName);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -796,15 +796,15 @@ protected:
 /** import conditional text fields (<text:conditional-text>) */
 class XMLConditionalTextImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyCondition;
-    const ::rtl::OUString sPropertyTrueContent;
-    const ::rtl::OUString sPropertyFalseContent;
-    const ::rtl::OUString sPropertyIsConditionTrue;
-    const ::rtl::OUString sPropertyCurrentPresentation;
+    const OUString sPropertyCondition;
+    const OUString sPropertyTrueContent;
+    const OUString sPropertyFalseContent;
+    const OUString sPropertyIsConditionTrue;
+    const OUString sPropertyCurrentPresentation;
 
-    ::rtl::OUString sCondition;
-    ::rtl::OUString sTrueContent;
-    ::rtl::OUString sFalseContent;
+    OUString sCondition;
+    OUString sTrueContent;
+    OUString sFalseContent;
 
     sal_Bool bConditionOK;
     sal_Bool bTrueOK;
@@ -818,13 +818,13 @@ public:
     XMLConditionalTextImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
-                                    const ::rtl::OUString& sLocalName);
+                                    const OUString& sLocalName);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -837,12 +837,12 @@ protected:
 /** import conditional text fields (<text:hidden-text>) */
 class XMLHiddenTextImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyCondition;
-    const ::rtl::OUString sPropertyContent;
-    const ::rtl::OUString sPropertyIsHidden;
+    const OUString sPropertyCondition;
+    const OUString sPropertyContent;
+    const OUString sPropertyIsHidden;
 
-    ::rtl::OUString sCondition;
-    ::rtl::OUString sString;
+    OUString sCondition;
+    OUString sString;
 
     sal_Bool bConditionOK;
     sal_Bool bStringOK;
@@ -855,13 +855,13 @@ public:
     XMLHiddenTextImportContext(SvXMLImport& rImport,
                                XMLTextImportHelper& rHlp,
                                sal_uInt16 nPrfx,
-                               const ::rtl::OUString& sLocalName);
+                               const OUString& sLocalName);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -874,9 +874,9 @@ protected:
 /** import file name fields (<text:file-name>) */
 class XMLFileNameImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyFixed;
-    const ::rtl::OUString sPropertyFileFormat;
-    const ::rtl::OUString sPropertyCurrentPresentation;
+    const OUString sPropertyFixed;
+    const OUString sPropertyFileFormat;
+    const OUString sPropertyCurrentPresentation;
 
     sal_Int16 nFormat;
     sal_Bool bFixed;
@@ -888,13 +888,13 @@ public:
     XMLFileNameImportContext(SvXMLImport& rImport,
                              XMLTextImportHelper& rHlp,
                              sal_uInt16 nPrfx,
-                             const ::rtl::OUString& sLocalName);
+                             const OUString& sLocalName);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -907,7 +907,7 @@ protected:
 /** import document template name fields (<text:template-name>) */
 class XMLTemplateNameImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyFileFormat;
+    const OUString sPropertyFileFormat;
 
     sal_Int16 nFormat;
 
@@ -918,13 +918,13 @@ public:
     XMLTemplateNameImportContext(SvXMLImport& rImport,
                                  XMLTextImportHelper& rHlp,
                                  sal_uInt16 nPrfx,
-                                 const ::rtl::OUString& sLocalName);
+                                 const OUString& sLocalName);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -936,8 +936,8 @@ protected:
 /** import chapter fields (<text:chapter>) */
 class XMLChapterImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyChapterFormat;
-    const ::rtl::OUString sPropertyLevel;
+    const OUString sPropertyChapterFormat;
+    const OUString sPropertyLevel;
 
     sal_Int16 nFormat;
     sal_Int8 nLevel;
@@ -949,13 +949,13 @@ public:
     XMLChapterImportContext(SvXMLImport& rImport,
                             XMLTextImportHelper& rHlp,
                             sal_uInt16 nPrfx,
-                            const ::rtl::OUString& sLocalName);
+                            const OUString& sLocalName);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -968,10 +968,10 @@ protected:
 /** import count fields (<text:[XXX]-count>) */
 class XMLCountFieldImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyNumberingType;
+    const OUString sPropertyNumberingType;
 
-    ::rtl::OUString sNumberFormat;
-    ::rtl::OUString sLetterSync;
+    OUString sNumberFormat;
+    OUString sLetterSync;
 
     sal_Bool bNumberFormatOK;
 
@@ -982,14 +982,14 @@ public:
     XMLCountFieldImportContext(SvXMLImport& rImport,
                                XMLTextImportHelper& rHlp,
                                sal_uInt16 nPrfx,
-                               const ::rtl::OUString& sLocalName,
+                               const OUString& sLocalName,
                                sal_uInt16 nToken);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1003,10 +1003,10 @@ protected:
 /** import page variable fields (<text:get-page-variable>) */
 class XMLPageVarGetFieldImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyNumberingType;
+    const OUString sPropertyNumberingType;
 
-    ::rtl::OUString sNumberFormat;
-    ::rtl::OUString sLetterSync;
+    OUString sNumberFormat;
+    OUString sLetterSync;
 
     sal_Bool bNumberFormatOK;
 
@@ -1017,13 +1017,13 @@ public:
     XMLPageVarGetFieldImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
-                                    const ::rtl::OUString& sLocalName);
+                                    const OUString& sLocalName);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1035,8 +1035,8 @@ protected:
 /** import page variable fields (<text:get-page-variable>) */
 class XMLPageVarSetFieldImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyOn;
-    const ::rtl::OUString sPropertyOffset;
+    const OUString sPropertyOn;
+    const OUString sPropertyOffset;
 
     sal_Int16 nAdjust;
     sal_Bool bActive;
@@ -1048,13 +1048,13 @@ public:
     XMLPageVarSetFieldImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
-                                    const ::rtl::OUString& sLocalName);
+                                    const OUString& sLocalName);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1067,15 +1067,15 @@ protected:
 class XMLMacroFieldImportContext : public XMLTextFieldImportContext
 {
 
-    const ::rtl::OUString sPropertyHint;
-    const ::rtl::OUString sPropertyMacroName;
-    const ::rtl::OUString sPropertyScriptURL;
-    const ::rtl::OUString sPropertyLibraryName;
+    const OUString sPropertyHint;
+    const OUString sPropertyMacroName;
+    const OUString sPropertyScriptURL;
+    const OUString sPropertyLibraryName;
 
-    ::rtl::OUString sDescription;
+    OUString sDescription;
     SvXMLImportContextRef xEventContext;
 
-    ::rtl::OUString sMacro; // macro for old documents (pre 638i)
+    OUString sMacro; // macro for old documents (pre 638i)
 
     sal_Bool bDescriptionOK;
 
@@ -1086,20 +1086,20 @@ public:
     XMLMacroFieldImportContext(SvXMLImport& rImport,
                                XMLTextImportHelper& rHlp,
                                sal_uInt16 nPrfx,
-                               const ::rtl::OUString& sLocalName);
+                               const OUString& sLocalName);
 
 protected:
 
     /// for <office:events> children
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1112,12 +1112,12 @@ protected:
 /** import reference fields (<text:reference-get>) */
 class XMLReferenceFieldImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyReferenceFieldPart;
-    const ::rtl::OUString sPropertyReferenceFieldSource;
-    const ::rtl::OUString sPropertySourceName;
-    const ::rtl::OUString sPropertyCurrentPresentation;
+    const OUString sPropertyReferenceFieldPart;
+    const OUString sPropertyReferenceFieldSource;
+    const OUString sPropertySourceName;
+    const OUString sPropertyCurrentPresentation;
 
-    ::rtl::OUString sName;
+    OUString sName;
     sal_uInt16 nElementToken;
     sal_Int16 nSource;
     sal_Int16 nType;
@@ -1133,7 +1133,7 @@ public:
                                    XMLTextImportHelper& rHlp,
                                    sal_uInt16 nToken,
                                    sal_uInt16 nPrfx,
-                                   const ::rtl::OUString& sLocalName);
+                                   const OUString& sLocalName);
 
 protected:
 
@@ -1144,7 +1144,7 @@ protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1166,11 +1166,11 @@ public:
 
     XMLDdeFieldDeclsImportContext(SvXMLImport& rImport,
                                   sal_uInt16 nPrfx,
-                                  const ::rtl::OUString& sLocalName);
+                                  const OUString& sLocalName);
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 
@@ -1182,11 +1182,11 @@ public:
 /** import dde field declaration (<text:dde-connection-decl>) */
 class XMLDdeFieldDeclImportContext : public SvXMLImportContext
 {
-    const ::rtl::OUString sPropertyIsAutomaticUpdate;
-    const ::rtl::OUString sPropertyName;
-    const ::rtl::OUString sPropertyDDECommandType;
-    const ::rtl::OUString sPropertyDDECommandFile;
-    const ::rtl::OUString sPropertyDDECommandElement;
+    const OUString sPropertyIsAutomaticUpdate;
+    const OUString sPropertyName;
+    const OUString sPropertyDDECommandType;
+    const OUString sPropertyDDECommandFile;
+    const OUString sPropertyDDECommandElement;
 
     const SvXMLTokenMap& rTokenMap;
 
@@ -1196,7 +1196,7 @@ public:
 
     XMLDdeFieldDeclImportContext(SvXMLImport& rImport,
                                  sal_uInt16 nPrfx,
-                                 const ::rtl::OUString& sLocalName,
+                                 const OUString& sLocalName,
                                  const SvXMLTokenMap& rMap);
 
     // create fieldmaster
@@ -1210,8 +1210,8 @@ public:
 /** import dde fields (<text:dde-connection>) */
 class XMLDdeFieldImportContext : public XMLTextFieldImportContext
 {
-    ::rtl::OUString sName;
-    ::rtl::OUString sPropertyContent;
+    OUString sName;
+    OUString sPropertyContent;
 public:
 
     TYPEINFO();
@@ -1219,13 +1219,13 @@ public:
     XMLDdeFieldImportContext(SvXMLImport& rImport,
                              XMLTextImportHelper& rHlp,
                              sal_uInt16 nPrfx,
-                             const ::rtl::OUString& sLocalName);
+                             const OUString& sLocalName);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// create textfield, attach master, and insert into document
     virtual void EndElement();
@@ -1249,13 +1249,13 @@ public:
     XMLSheetNameImportContext(SvXMLImport& rImport,
                               XMLTextImportHelper& rHlp,
                               sal_uInt16 nPrfx,
-                              const ::rtl::OUString& sLocalName);
+                              const OUString& sLocalName);
 
 protected:
 
     /// no attributes -> empty method
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// no atributes -> empty method
     virtual void PrepareField(
@@ -1267,12 +1267,12 @@ protected:
 class XMLUrlFieldImportContext : public XMLTextFieldImportContext
 {
 
-    const ::rtl::OUString sPropertyURL;
-    const ::rtl::OUString sPropertyTargetFrame;
-    const ::rtl::OUString sPropertyRepresentation;
+    const OUString sPropertyURL;
+    const OUString sPropertyTargetFrame;
+    const OUString sPropertyRepresentation;
 
-    ::rtl::OUString sURL;
-    ::rtl::OUString sFrame;
+    OUString sURL;
+    OUString sFrame;
     sal_Bool bFrameOK;
 
 public:
@@ -1282,13 +1282,13 @@ public:
     XMLUrlFieldImportContext(SvXMLImport& rImport,
                              XMLTextImportHelper& rHlp,
                              sal_uInt16 nPrfx,
-                             const ::rtl::OUString& sLocalName);
+                             const OUString& sLocalName);
 
 protected:
 
     /// no attributes -> empty method
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// no atributes -> empty method
     virtual void PrepareField(
@@ -1300,7 +1300,7 @@ protected:
 class XMLBibliographyFieldImportContext : public XMLTextFieldImportContext
 {
 
-    const ::rtl::OUString sPropertyFields;
+    const OUString sPropertyFields;
 
     ::std::vector< ::com::sun::star::beans::PropertyValue> aValues;
 
@@ -1311,7 +1311,7 @@ public:
     XMLBibliographyFieldImportContext(SvXMLImport& rImport,
                                       XMLTextImportHelper& rHlp,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& sLocalName);
+                                      const OUString& sLocalName);
 
 protected:
 
@@ -1322,14 +1322,14 @@ protected:
 
     /// empty method; all attributes are handled in StartElement
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// convert aValues into sequence and set property
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 
-    static const sal_Char* MapBibliographyFieldName(::rtl::OUString sName);
+    static const sal_Char* MapBibliographyFieldName(OUString sName);
 
 };
 
@@ -1337,18 +1337,18 @@ protected:
 /** Import an annotation field (<text:annotation>) */
 class XMLAnnotationImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyAuthor;
-    const ::rtl::OUString sPropertyInitials;
-    const ::rtl::OUString sPropertyContent;
-    const ::rtl::OUString sPropertyDate;
-    const ::rtl::OUString sPropertyTextRange;
-    const ::rtl::OUString sPropertyName;
+    const OUString sPropertyAuthor;
+    const OUString sPropertyInitials;
+    const OUString sPropertyContent;
+    const OUString sPropertyDate;
+    const OUString sPropertyTextRange;
+    const OUString sPropertyName;
 
-    ::rtl::OUStringBuffer aAuthorBuffer;
-    ::rtl::OUStringBuffer aInitialsBuffer;
+    OUStringBuffer aAuthorBuffer;
+    OUStringBuffer aInitialsBuffer;
     OUString aName;
-    ::rtl::OUStringBuffer aTextBuffer;
-    ::rtl::OUStringBuffer aDateBuffer;
+    OUStringBuffer aTextBuffer;
+    OUStringBuffer aDateBuffer;
 
     com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > mxField;
     com::sun::star::uno::Reference < com::sun::star::text::XTextCursor >  mxCursor;
@@ -1365,13 +1365,13 @@ public:
                                XMLTextImportHelper& rHlp,
                                sal_uInt16 nToken,
                                sal_uInt16 nPrfx,
-                               const ::rtl::OUString& sLocalName);
+                               const OUString& sLocalName);
 
 protected:
 
     /// process attributes
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// set properties
     virtual void PrepareField(
@@ -1380,7 +1380,7 @@ protected:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
@@ -1390,12 +1390,12 @@ protected:
 /** Import a script field (<text:script>) */
 class XMLScriptImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyScriptType;
-    const ::rtl::OUString sPropertyURLContent;
-    const ::rtl::OUString sPropertyContent;
+    const OUString sPropertyScriptType;
+    const OUString sPropertyURLContent;
+    const OUString sPropertyContent;
 
-    ::rtl::OUString sContent;
-    ::rtl::OUString sScriptType;
+    OUString sContent;
+    OUString sScriptType;
 
     sal_Bool bContentOK;
     sal_Bool bScriptTypeOK;
@@ -1407,13 +1407,13 @@ public:
     XMLScriptImportContext(SvXMLImport& rImport,
                            XMLTextImportHelper& rHlp,
                            sal_uInt16 nPrfx,
-                           const ::rtl::OUString& sLocalName);
+                           const OUString& sLocalName);
 
 protected:
 
     /// process attributes
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// set properties
     virtual void PrepareField(
@@ -1432,13 +1432,13 @@ public:
     XMLMeasureFieldImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
-                                    const ::rtl::OUString& sLocalName);
+                                    const OUString& sLocalName);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1471,18 +1471,18 @@ public:
     XMLDropDownFieldImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
-                                    const ::rtl::OUString& sLocalName);
+                                    const OUString& sLocalName);
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1500,11 +1500,11 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        const OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1522,11 +1522,11 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        const OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1544,11 +1544,11 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        const OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1558,10 +1558,10 @@ public:
 
 class XMLCustomPropertyFieldImportContext : public XMLTextFieldImportContext
 {
-    ::rtl::OUString sName;
+    OUString sName;
     ::com::sun::star::uno::Any aValue;
-    const ::rtl::OUString sPropertyName;
-    const ::rtl::OUString sPropertyValue;
+    const OUString sPropertyName;
+    const OUString sPropertyValue;
 
 public:
 
@@ -1570,13 +1570,13 @@ public:
     XMLCustomPropertyFieldImportContext (SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
-                                    const ::rtl::OUString& sLocalName);
+                                    const OUString& sLocalName);
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
