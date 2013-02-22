@@ -119,10 +119,10 @@ namespace framework
         static const int nItemId_Extensions = 1;
         static const int nItemId_Info = 3;
         static const int nItemId_TplRep = 4;
-        static const int nShadowTop = 37;
-        static const int nShadowLeft = 38;
-        static const int nShadowRight = 38;
-        static const int nShadowBottom = 38;
+        static const int nShadowTop = 31;
+        static const int nShadowLeft = 35;
+        static const int nShadowRight = 45;
+        static const int nShadowBottom = 40;
 
         void loadImage( const ResId& i_rId, PushButton& i_rButton );
 
