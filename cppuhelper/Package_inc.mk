@@ -77,6 +77,7 @@ $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/queryinterface.h
 $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/shlib.hxx,cppuhelper/shlib.hxx))
 $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/supportsservice.hxx,cppuhelper/supportsservice.hxx))
 $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/typeprovider.hxx,cppuhelper/typeprovider.hxx))
+$(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/unoidl.hxx,cppuhelper/unoidl.hxx))
 $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/unourl.hxx,cppuhelper/unourl.hxx))
 $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/weakagg.hxx,cppuhelper/weakagg.hxx))
 $(eval $(call gb_Package_add_file,cppuhelper_inc,inc/cppuhelper/weak.hxx,cppuhelper/weak.hxx))
