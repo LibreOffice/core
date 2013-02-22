@@ -580,6 +580,7 @@ public:
                                       xub_StrLen nLen = STRING_LEN ) const;
     /// Height where any character of the current font fits; in logic coordinates.
     long                GetTextHeight() const;
+    float               approximate_char_width() const;
     void                DrawTextArray( const Point& rStartPt, const XubString& rStr,
                                        const sal_Int32* pDXAry = NULL,
                                        xub_StrLen nIndex = 0,

@@ -110,6 +110,7 @@ void ComboBox::ImplInitComboBoxData()
     mbSyntheticModify   = sal_False;
     mbMatchCase         = sal_False;
     mcMultiSep          = ';';
+    m_nMaxWidthChars    = -1;
 }
 
 // -----------------------------------------------------------------------
@@ -1068,6 +1069,11 @@ Size ComboBox::CalcMinimumSize() const
         aSz.Height() = Edit::CalcMinimumSizeForText(GetText()).Height();
 
         aSz.Width() = mpImplLB->GetMaxEntryWidth();
+        if (m_nMaxWidthChars != -1)
+        {
+            long nMaxWidth = m_nMaxWidthChars * approximate_char_width();
+            aSz.Width() = std::min(aSz.Width(), nMaxWidth);
+        }
         aSz.Width() += getMaxWidthScrollBarAndDownButton();
         ComboBoxBounds aBounds(calcComboBoxDropDownComponentBounds(
             Size(0xFFFF, 0xFFFF), Size(0xFFFF, 0xFFFF)));
@@ -1544,6 +1550,15 @@ ComboBox::ComboBoxBounds ComboBox::calcComboBoxDropDownComponentBounds(const Siz
         aBounds.aButtonSize = Size(nSBWidth, (nBottom-nTop));
     }
     return aBounds;
+}
+
+void ComboBox::setMaxWidthChars(sal_Int32 nWidth)
+{
+    if (nWidth != m_nMaxWidthChars)
+    {
+        m_nMaxWidthChars = nWidth;
+        queue_resize();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

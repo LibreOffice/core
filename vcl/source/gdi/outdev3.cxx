@@ -5758,6 +5758,11 @@ long OutputDevice::GetTextHeight() const
     return nHeight;
 }
 
+float OutputDevice::approximate_char_width() const
+{
+    return GetTextWidth(rtl::OUString("aemnnxEM")) / 8.0;
+}
+
 // -----------------------------------------------------------------------
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
