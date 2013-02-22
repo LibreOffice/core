@@ -323,7 +323,7 @@ void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         SvTreeListEntry* pEntry = GetEntry( aPos );
         if( pEntry )
         {
-            String sQuickHelpText;
+            OUString sQuickHelpText;
             if ( m_pActionListener->requestQuickHelp( pEntry, sQuickHelpText ) )
             {
                 Size aSize( GetOutputSizePixel().Width(), GetEntryHeight() );
@@ -408,7 +408,7 @@ sal_Bool DBTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& /*_aSe
     return m_aEditingHandler.Call(pEntry) != 0;
 }
 // -----------------------------------------------------------------------------
-sal_Bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText )
+sal_Bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     DBTreeEditedEntry aEntry;
     aEntry.pEntry = pEntry;
@@ -475,7 +475,7 @@ namespace
                 }
                 else
                 {
-                    ::rtl::OUString sCommandURL( _pPopup->GetItemCommand( nId ) );
+                    OUString sCommandURL( _pPopup->GetItemCommand( nId ) );
                     bool bEnabled =  sCommandURL.isEmpty()
                                   ? _rController.isCommandEnabled( nId )
                                   : _rController.isCommandEnabled( sCommandURL );
@@ -515,7 +515,7 @@ namespace
 
             // more things to preserve:
             // - the help command
-            ::rtl::OUString sHelpURL = _rMenu.GetHelpCommand( nId );
+            OUString sHelpURL = _rMenu.GetHelpCommand( nId );
             if ( !sHelpURL.isEmpty() )
                 _rMenu.SetHelpCommand(  nCommandId, sHelpURL  );
 

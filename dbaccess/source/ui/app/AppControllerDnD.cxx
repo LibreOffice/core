@@ -102,7 +102,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::util;
 
 // -----------------------------------------------------------------------------
-void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>& _rList)
+void OApplicationController::deleteTables(const ::std::vector< OUString>& _rList)
 {
     SharedConnection xConnection( ensureConnection() );
 
@@ -115,10 +115,10 @@ void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>&
         if ( xDrop.is() )
         {
             bool bConfirm = true;
-            ::std::vector< ::rtl::OUString>::const_iterator aEnd = _rList.end();
-            for (::std::vector< ::rtl::OUString>::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter)
+            ::std::vector< OUString>::const_iterator aEnd = _rList.end();
+            for (::std::vector< OUString>::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter)
             {
-                ::rtl::OUString sTableName = *aIter;
+                OUString sTableName = *aIter;
 
                 sal_Int32 nResult = RET_YES;
                 if ( bConfirm )
@@ -179,14 +179,14 @@ void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>&
         }
         else
         {
-            String sMessage(ModuleRes(STR_MISSING_TABLES_XDROP));
+            OUString sMessage(ModuleRes(STR_MISSING_TABLES_XDROP));
             ErrorBox aError(getView(), WB_OK, sMessage);
             aError.Execute();
         }
     }
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::deleteObjects( ElementType _eType, const ::std::vector< ::rtl::OUString>& _rList, bool _bConfirm )
+void OApplicationController::deleteObjects( ElementType _eType, const ::std::vector< OUString>& _rList, bool _bConfirm )
 {
     Reference< XNameContainer > xNames( getElements( _eType ), UNO_QUERY );
     Reference< XHierarchicalNameContainer > xHierarchyName( xNames, UNO_QUERY );
@@ -199,19 +199,19 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
         // be the ancestor or child of another element from the list.
         // We want to ensure that ancestors get deleted first, so we normalize the list in this respect.
         // #i33353#
-        ::std::set< ::rtl::OUString > aDeleteNames;
-            // Note that this implicitly uses ::std::less< ::rtl::OUString > a comparison operation, which
+        ::std::set< OUString > aDeleteNames;
+            // Note that this implicitly uses ::std::less< OUString > a comparison operation, which
             // results in lexicographical order, which is exactly what we need, because "foo" is *before*
             // any "foo/bar" in this order.
         ::std::copy(
             _rList.begin(), _rList.end(),
-            ::std::insert_iterator< ::std::set< ::rtl::OUString > >( aDeleteNames, aDeleteNames.begin() )
+            ::std::insert_iterator< ::std::set< OUString > >( aDeleteNames, aDeleteNames.begin() )
         );
 
-        ::std::set< ::rtl::OUString >::size_type nCount = aDeleteNames.size();
-        for ( ::std::set< ::rtl::OUString >::size_type nObjectsLeft = nCount; !aDeleteNames.empty(); )
+        ::std::set< OUString >::size_type nCount = aDeleteNames.size();
+        for ( ::std::set< OUString >::size_type nObjectsLeft = nCount; !aDeleteNames.empty(); )
         {
-            ::std::set< ::rtl::OUString >::iterator  aThisRound = aDeleteNames.begin();
+            ::std::set< OUString >::iterator  aThisRound = aDeleteNames.begin();
 
             if ( eResult != svtools::QUERYDELETE_ALL )
             {
@@ -254,15 +254,15 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                     // which may also be a part of the list
                     // #i33353#
                     OSL_ENSURE( aThisRound->getLength() - 1 >= 0, "OApplicationController::deleteObjects: empty name?" );
-                    ::rtl::OUStringBuffer sSmallestSiblingName( *aThisRound );
+                    OUStringBuffer sSmallestSiblingName( *aThisRound );
                     sSmallestSiblingName.append( (sal_Unicode)( '/' + 1) );
 
-                    ::std::set< ::rtl::OUString >::iterator aUpperChildrenBound = aDeleteNames.lower_bound( sSmallestSiblingName.makeStringAndClear() );
-                    for ( ::std::set< ::rtl::OUString >::iterator aObsolete = aThisRound;
+                    ::std::set< OUString >::iterator aUpperChildrenBound = aDeleteNames.lower_bound( sSmallestSiblingName.makeStringAndClear() );
+                    for ( ::std::set< OUString >::iterator aObsolete = aThisRound;
                           aObsolete != aUpperChildrenBound;
                         )
                     {
-                        ::std::set< ::rtl::OUString >::iterator aNextObsolete = aObsolete; ++aNextObsolete;
+                        ::std::set< OUString >::iterator aNextObsolete = aObsolete; ++aNextObsolete;
                         aDeleteNames.erase( aObsolete );
                         --nObjectsLeft;
                         aObsolete = aNextObsolete;
@@ -304,7 +304,7 @@ void OApplicationController::deleteEntries()
 
     if ( getContainer() )
     {
-        ::std::vector< ::rtl::OUString> aList;
+        ::std::vector< OUString> aList;
         getSelectionElementNames(aList);
         ElementType eType = getContainer()->getElementType();
         switch(eType)
@@ -335,8 +335,8 @@ const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQL
     if ( !m_xDataSourceConnection.is() )
     {
         WaitObject aWO(getView());
-        String sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
-        sConnectingContext.SearchAndReplaceAscii("$name$", getStrippedDatabaseName());
+        OUString sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
+        sConnectingContext = sConnectingContext.replaceFirst("$name$", getStrippedDatabaseName());
 
         m_xDataSourceConnection.reset( connect( getDatabaseName(), sConnectingContext, _pErrorInfo ) );
         if ( m_xDataSourceConnection.is() )
@@ -443,7 +443,7 @@ Reference< XNameAccess > OApplicationController::getElements( ElementType _eType
     return xElements;
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames) const
+void OApplicationController::getSelectionElementNames(::std::vector< OUString>& _rNames) const
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -496,10 +496,10 @@ TransferableHelper* OApplicationController::copyObject()
                 if ( xConnection.is() )
                     xMetaData = xConnection->getMetaData();
 
-                ::rtl::OUString sName = getContainer()->getQualifiedName( NULL );
+                OUString sName = getContainer()->getQualifiedName( NULL );
                 if ( !sName.isEmpty() )
                 {
-                    ::rtl::OUString sDataSource = getDatabaseName();
+                    OUString sDataSource = getDatabaseName();
 
                     if ( eType == E_TABLE )
                     {
@@ -515,7 +515,7 @@ TransferableHelper* OApplicationController::copyObject()
             case E_FORM:
             case E_REPORT:
             {
-                ::std::vector< ::rtl::OUString> aList;
+                ::std::vector< OUString> aList;
                 getSelectionElementNames(aList);
                 Reference< XHierarchicalNameAccess > xElements(getElements(eType),UNO_QUERY);
                 if ( xElements.is() && !aList.empty() )
@@ -543,7 +543,7 @@ TransferableHelper* OApplicationController::copyObject()
     return NULL;
 }
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAccessDescriptor& _rPasteData,const String& _sParentFolder ,sal_Bool _bMove)
+sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAccessDescriptor& _rPasteData,const OUString& _sParentFolder ,sal_Bool _bMove)
 {
     try
     {
@@ -557,7 +557,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
             {
                 // read all necessary data
 
-                ::rtl::OUString sCommand;
+                OUString sCommand;
                 sal_Bool bEscapeProcessing = sal_True;
 
                 _rPasteData[daCommand] >>= sCommand;
@@ -566,7 +566,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                 // plausibility check
                 sal_Bool bValidDescriptor = sal_False;
-                ::rtl::OUString sDataSourceName = _rPasteData.getDataSource();
+                OUString sDataSourceName = _rPasteData.getDataSource();
                 if (CommandType::QUERY == nCommandType)
                     bValidDescriptor = sDataSourceName.getLength() && sCommand.getLength();
                 else if (CommandType::COMMAND == nCommandType)
@@ -578,7 +578,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 }
 
                 // the target object name (as we'll suggest it to the user)
-                ::rtl::OUString sTargetName;
+                OUString sTargetName;
                 try
                 {
                     if ( CommandType::QUERY == nCommandType )
@@ -586,8 +586,8 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                     if ( sTargetName.isEmpty() )
                     {
-                        String sDefaultName = String( ModuleRes( STR_QRY_TITLE ) );
-                        sDefaultName = sDefaultName.GetToken( 0, ' ' );
+                        OUString sDefaultName = OUString( ModuleRes( STR_QRY_TITLE ) );
+                        sDefaultName = sDefaultName.getToken( 0, ' ' );
 
                         Reference< XNameAccess > xQueries( getQueryDefintions(), UNO_QUERY_THROW );
                         sTargetName = ::dbtools::createUniqueName( xQueries, sDefaultName, sal_False );
@@ -695,9 +695,9 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                             {
                                 Reference<XPropertySet> xDstProp(xFac->createDataDescriptor());
 
-                                Sequence< ::rtl::OUString> aSeq = xSrcNameAccess->getElementNames();
-                                const ::rtl::OUString* pIter = aSeq.getConstArray();
-                                const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+                                Sequence< OUString> aSeq = xSrcNameAccess->getElementNames();
+                                const OUString* pIter = aSeq.getConstArray();
+                                const OUString* pEnd   = pIter + aSeq.getLength();
                                 for( ; pIter != pEnd ; ++pIter)
                                 {
                                     Reference<XPropertySet> xSrcProp(xSrcNameAccess->getByName(*pIter),UNO_QUERY);
@@ -781,10 +781,10 @@ IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
         {
             Reference<XContent> xContent;
             m_aAsyncDrop.aDroppedData[daComponent] >>= xContent;
-            ::std::vector< ::rtl::OUString> aList;
+            ::std::vector< OUString> aList;
             sal_Int32 nIndex = 0;
-            ::rtl::OUString sName = xContent->getIdentifier()->getContentIdentifier();
-            ::rtl::OUString sErase = sName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part
+            OUString sName = xContent->getIdentifier()->getContentIdentifier();
+            OUString sErase = sName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part
             if ( nIndex != -1 )
             {
                 aList.push_back(sName.copy(sErase.getLength() + 1));

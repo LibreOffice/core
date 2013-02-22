@@ -139,9 +139,9 @@ void OApplicationController::convertToView(const OUString& _sName)
 
         Reference< XDatabaseMetaData  > xMeta = xConnection->getMetaData();
 
-        String aName = String(ModuleRes(STR_TBL_TITLE));
-        aName = aName.GetToken(0,' ');
-        String aDefaultName = ::dbaui::createDefaultName(xMeta,xTables,aName);
+        OUString aName = OUString(ModuleRes(STR_TBL_TITLE));
+        aName = aName.getToken(0,' ');
+        OUString aDefaultName = ::dbaui::createDefaultName(xMeta,xTables,aName);
 
         DynamicTableOrQueryNameCheck aNameChecker( xConnection, CommandType::TABLE );
         OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker );
@@ -154,7 +154,7 @@ void OApplicationController::convertToView(const OUString& _sName)
                 ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sName, sal_False, ::dbtools::eInTableDefinitions ) );
             Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
             if ( !xView.is() )
-                throw SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,OUString("S1000") ,0,Any());
+                throw SQLException(OUString(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,OUString( "S1000" ) ,0,Any());
             getContainer()->elementAdded(E_TABLE,sNewName,makeAny(xView));
         }
     }
@@ -390,9 +390,8 @@ void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeEx
             aError.doThrow();
 
         // no particular error, but nonetheless could not connect -> throw a generic exception
-        String sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
-        sConnectingContext.SearchAndReplaceAscii( "$name$", getStrippedDatabaseName() );
-        ::dbtools::throwGenericSQLException( sConnectingContext, *this );
+        OUString sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
+        ::dbtools::throwGenericSQLException( sConnectingContext.replaceFirst( "$name$", getStrippedDatabaseName() ), *this );
     }
 }
 
@@ -664,7 +663,7 @@ void OApplicationController::onDocumentOpened( const OUString& _rName, const sal
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::insertHierachyElement(ElementType _eType,const String& _sParentFolder,sal_Bool _bCollection,const Reference<XContent>& _xContent,sal_Bool _bMove)
+sal_Bool OApplicationController::insertHierachyElement(ElementType _eType,const OUString& _sParentFolder,sal_Bool _bCollection,const Reference<XContent>& _xContent,sal_Bool _bMove)
 {
     Reference<XHierarchicalNameContainer> xNames(getElements(_eType), UNO_QUERY);
     return dbaui::insertHierachyElement(getView()
