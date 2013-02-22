@@ -59,7 +59,7 @@ namespace dbaccess
     public:
         /** loads the string with the specified resource id
         */
-        static ::rtl::OUString  loadString(sal_uInt16 _nResId);
+        static OUString  loadString(sal_uInt16 _nResId);
 
         /** loads a string from the resource file, substituting a placeholder with a given string
 
@@ -70,10 +70,10 @@ namespace dbaccess
             @param  _rReplace
                 the string which should substitute the placeholder
         */
-        static ::rtl::OUString  loadString(
+        static OUString  loadString(
                 sal_uInt16              _nResId,
                 const sal_Char*         _pPlaceholderAscii,
-                const ::rtl::OUString&  _rReplace
+                const OUString&  _rReplace
         );
 
         /** loads a string from the resource file, substituting two placeholders with given strings
@@ -89,12 +89,12 @@ namespace dbaccess
             @param  _rReplace2
                 the string which should substitute the second placeholder
         */
-        static ::rtl::OUString  loadString(
+        static OUString  loadString(
                 sal_uInt16              _nResId,
                 const sal_Char*         _pPlaceholderAscii1,
-                const ::rtl::OUString&  _rReplace1,
+                const OUString&  _rReplace1,
                 const sal_Char*         _pPlaceholderAscii2,
-                const ::rtl::OUString&  _rReplace2
+                const OUString&  _rReplace2
         );
     };
 

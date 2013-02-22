@@ -56,32 +56,31 @@ namespace dbaccess
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString ResourceManager::loadString(sal_uInt16 _nResId)
+    OUString ResourceManager::loadString(sal_uInt16 _nResId)
     {
-        ::rtl::OUString sReturn;
+        OUString sReturn;
 
         ensureImplExists();
         if (m_pImpl)
-            sReturn = String(ResId(_nResId,*m_pImpl));
+            sReturn = OUString(ResId(_nResId,*m_pImpl));
 
         return sReturn;
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString ResourceManager::loadString( sal_uInt16 _nResId, const sal_Char* _pPlaceholderAscii, const ::rtl::OUString& _rReplace )
+    OUString ResourceManager::loadString( sal_uInt16 _nResId, const sal_Char* _pPlaceholderAscii, const OUString& _rReplace )
     {
-        String sString( loadString( _nResId ) );
-        sString.SearchAndReplaceAscii( _pPlaceholderAscii, _rReplace );
-        return sString;
+        OUString sString( loadString( _nResId ) );
+        return sString.replaceFirst( OUString::createFromAscii(_pPlaceholderAscii), _rReplace );
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString ResourceManager::loadString( sal_uInt16 _nResId, const sal_Char* _pPlaceholderAscii1, const ::rtl::OUString& _rReplace1,
-        const sal_Char* _pPlaceholderAscii2, const ::rtl::OUString& _rReplace2 )
+    OUString ResourceManager::loadString( sal_uInt16 _nResId, const sal_Char* _pPlaceholderAscii1, const OUString& _rReplace1,
+        const sal_Char* _pPlaceholderAscii2, const OUString& _rReplace2 )
     {
-        String sString( loadString( _nResId ) );
-        sString.SearchAndReplaceAscii( _pPlaceholderAscii1, _rReplace1 );
-        sString.SearchAndReplaceAscii( _pPlaceholderAscii2, _rReplace2 );
+        OUString sString( loadString( _nResId ) );
+        sString = sString.replaceFirst( OUString::createFromAscii(_pPlaceholderAscii1), _rReplace1 );
+        sString = sString.replaceFirst( OUString::createFromAscii(_pPlaceholderAscii2), _rReplace2 );
         return sString;
     }
 

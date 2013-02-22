@@ -54,7 +54,7 @@ OApplicationIconControl::OApplicationIconControl(Window* _pParent)
     for ( size_t i=0; i < sizeof(aCategories)/sizeof(aCategories[0]); ++i)
     {
         SvxIconChoiceCtrlEntry* pEntry = InsertEntry(
-            String( ModuleRes( aCategories[i].nLabelResId ) ) ,
+            OUString( ModuleRes( aCategories[i].nLabelResId ) ) ,
             Image(  ModuleRes( aCategories[i].nImageResId ) ) );
         if ( pEntry )
             pEntry->SetUserData( new ElementType( aCategories[i].eType ) );

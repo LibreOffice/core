@@ -428,13 +428,13 @@ void OTasksWindow::setHelpText(sal_uInt16 _nId)
     DBG_CHKTHIS(OTasksWindow,NULL);
     if ( _nId )
     {
-        String sText = ModuleRes(_nId);
+        OUString sText = ModuleRes(_nId);
 
         m_aHelpText.SetText(sText);
     }
     else
     {
-        m_aHelpText.SetText(String());
+        m_aHelpText.SetText(OUString());
 }
 }
 // -----------------------------------------------------------------------------

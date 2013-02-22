@@ -93,7 +93,7 @@ namespace
     {
         SvTreeListEntry* pReturn = NULL;
         sal_Int32 nIndex = 0;
-        String sName( _rName.getToken(0,'/',nIndex) );
+        OUString sName( _rName.getToken(0,'/',nIndex) );
 
         SvTreeListEntry* pEntry = _pFirst;
         while( pEntry )
@@ -1111,7 +1111,7 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
                     Reference<document::XDocumentProperties> xProp(
                         aPreview, UNO_QUERY);
                     if ( xProp.is() )
-                        m_aDocumentInfo.fill(xProp,String());
+                        m_aDocumentInfo.fill(xProp,OUString());
                 }
             }
             else
