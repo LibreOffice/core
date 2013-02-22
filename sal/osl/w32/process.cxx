@@ -525,7 +525,7 @@ static sal_Bool ReadPipe(oslPipe hPipe,
                 sal_Int32* nBytes)
 {
         *nBytes = osl_receivePipe(hPipe, pBuffer, BytesToRead);
-        OSL_TRACE("tried to recieve %d, recieved %d.\n",
+        OSL_TRACE("tried to receive %d, received %d.\n",
                         BytesToRead, *nBytes);
         return (sal_Bool)((*nBytes >= 0) && (osl_getLastPipeError(hPipe) == osl_Pipe_E_None));
 }

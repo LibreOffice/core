@@ -327,7 +327,7 @@ inline sal_Bool isURL( const ::rtl::OUString pathname )
     return ( ( pathname.indexOf( aPreURL ) == 0 ) ? sal_True : sal_False );
 }
 
-/** concat two part to form a URL or system path, add PATH_SEPERATOR between them if necessary, add "file:///" to begining if necessary.
+/** concat two part to form a URL or system path, add PATH_SEPERATOR between them if necessary, add "file:///" to beginning if necessary.
 */
 inline void concatURL( ::rtl::OUString & pathname1, const ::rtl::OUString & pathname2 )
 {
@@ -521,7 +521,7 @@ inline sal_Bool ifFileExist( const ::rtl::OUString & str )
     return ( osl::FileBase::E_None == testFile.open( osl_File_OpenFlag_Read ) );
 }
 
-//check if the file can be writen
+//check if the file can be written
 inline sal_Bool ifFileCanWrite( const ::rtl::OUString & str )
 {
     sal_Bool  bCheckResult = sal_False;
@@ -976,7 +976,7 @@ namespace osl_FileBase
         the second only on windows based systems
         the first parameter are a file URL where we want to get the system path of,
         the second parameter is the assumed error of the osl_getSystemPathFromFileURL() function,
-        the thrid parameter is the assumed result string, the string will only test, if it's length is greater 0
+        the third parameter is the assumed result string, the string will only test, if it's length is greater 0
     */
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_1()
@@ -1134,7 +1134,7 @@ namespace osl_FileBase
 
         }
 
-        //CJK charactors case
+        //CJK characters case
     void SystemPath_FileURL::getSystemPathFromFileURL_005()
         {
             ::rtl::OUString aUStr;
@@ -3909,7 +3909,7 @@ namespace osl_File
             nError1 = testFile.close();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            CPPUNIT_ASSERT_MESSAGE( "test for read function: read from a special positon in the file",
+            CPPUNIT_ASSERT_MESSAGE( "test for read function: read from a special position in the file",
                                      ( 52 == nFilePointer ) && ( 26 == nCount_read ) && ( 0 == strncmp( buffer_read, &pBuffer_Char[26], 26 ) ) );
         }
 
@@ -3958,7 +3958,7 @@ namespace osl_File
             //get the current pointer;
              nError1 = testFile.getPos( nFilePointer );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            //reset pointer to the begining;
+            //reset pointer to the beginning;
              nError1 = testFile.setPos( osl_Pos_Absolut, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.read( buffer_read, 10, nCount_read );
@@ -6221,7 +6221,7 @@ class GlobalObject
     {
         try
         {
-            //~ special clean up task in Windows and Unix seperately;
+            //~ special clean up task in Windows and Unix separately;
 #if ( defined UNX )
             //~ some clean up task  for UNIX OS
             ;

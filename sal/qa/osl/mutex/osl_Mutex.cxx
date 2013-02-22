@@ -484,7 +484,7 @@ namespace osl_Mutex
             if ( bRes2 == sal_True )
                 aMutex.release( );
 
-            CPPUNIT_ASSERT_MESSAGE( "release Mutex: try to aquire before and after the mutex has been released",
+            CPPUNIT_ASSERT_MESSAGE( "release Mutex: try to acquire before and after the mutex has been released",
                 bRes1 == sal_False && bRes2 == sal_True && bRunning == sal_True );
 
         }
@@ -630,7 +630,7 @@ namespace osl_Guard
             aMutex.release( );
             myThread.join( );
 
-            CPPUNIT_ASSERT_MESSAGE("GuardThread constructor: reference initialization, aquire the mutex before running the thread, then check if it is blocking.",
+            CPPUNIT_ASSERT_MESSAGE("GuardThread constructor: reference initialization, acquire the mutex before running the thread, then check if it is blocking.",
                 bRes == sal_True);
         }
 
@@ -694,7 +694,7 @@ namespace osl_ClearableGuard
             /// it will return sal_False if the aMutex has not been Guarded.
             sal_Bool bRes = aMutex.release( );
 
-            CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the aquire operation when initilized.",
+            CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the acquire operation when initilized.",
                 bRes == sal_True );
         }
 
@@ -708,7 +708,7 @@ namespace osl_ClearableGuard
             /// it will return sal_False if the aMutex has not been Guarded.
             sal_Bool bRes = aMutex.release( );
 
-            CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the aquire operation when initilized, we use reference constructor this time.",
+            CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the acquire operation when initilized, we use reference constructor this time.",
                 bRes == sal_True );
         }
 
@@ -833,7 +833,7 @@ namespace osl_ResettableGuard
             /// it will return sal_False if the aMutex has not been Guarded.
             sal_Bool bRes = aMutex.release( );
 
-            CPPUNIT_ASSERT_MESSAGE("ResettableMutexGuard constructor, test the aquire operation when initilized.",
+            CPPUNIT_ASSERT_MESSAGE("ResettableMutexGuard constructor, test the acquire operation when initilized.",
                 bRes == sal_True );
         }
 
@@ -847,7 +847,7 @@ namespace osl_ResettableGuard
             /// it will return sal_False if the aMutex has not been Guarded.
             sal_Bool bRes = aMutex.release( );
 
-            CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard constructor, test the aquire operation when initilized, we use reference constructor this time.",
+            CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard constructor, test the acquire operation when initilized, we use reference constructor this time.",
                 bRes == sal_True );
         }
 
@@ -895,7 +895,7 @@ namespace osl_ResettableGuard
             myMutexGuard.reset( );
             sal_Bool bRes1 = aMutex.release( );
 
-            CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard method: reset, release after clear and reset, on Solaris, the mutex can be release without aquire, so it can not passed on (SOLARIS), but not the reason for reset_002",
+            CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard method: reset, release after clear and reset, on Solaris, the mutex can be release without acquire, so it can not passed on (SOLARIS), but not the reason for reset_002",
                 ( sal_False == bRes ) && ( sal_True == bRes1 ) );
         }
 

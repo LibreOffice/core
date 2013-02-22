@@ -847,7 +847,7 @@ namespace osl_SocketAddr
             ::osl::SocketAddr saSocketAddr( aHostIp1, IP_PORT_FTP );
             printUString(saSocketAddr.getHostname( ), "ctors_hostname_port_001:getHostname");
 
-            CPPUNIT_ASSERT_MESSAGE("test for SocketAddr tcpip specif constructor function: do a constructor using tcpip spec, check the result.",
+            CPPUNIT_ASSERT_MESSAGE("test for SocketAddr tcpip specific constructor function: do a constructor using tcpip spec, check the result.",
                                     saSocketAddr.is( ) == sal_True &&
                                     ( saSocketAddr.getPort( ) == IP_PORT_FTP )/*&&
                                     ( sal_True == compareUString( saSocketAddr.getHostname( ), aHostName1 ) ) */);
@@ -859,7 +859,7 @@ namespace osl_SocketAddr
             /// tcpip-specif constructor.
             ::osl::SocketAddr saSocketAddr( aHostIpInval1, IP_PORT_MYPORT2 );
 
-            CPPUNIT_ASSERT_MESSAGE("test for SocketAddr tcpip specif constructor function: using an invalid IP address, the socketaddr ctors should fail", sal_False == saSocketAddr.is( ));
+            CPPUNIT_ASSERT_MESSAGE("test for SocketAddr tcpip specific constructor function: using an invalid IP address, the socketaddr ctors should fail", sal_False == saSocketAddr.is( ));
         }
         CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_none );
@@ -3071,7 +3071,7 @@ protected:
             oslSocketResult eResult = asSocket.acceptConnection( ssConnectionSocket );
             CPPUNIT_ASSERT_MESSAGE("shutdown_002: acceptConnection fail", eResult == osl_Socket_Ok );
 
-            /* set socket option SO_LINGER 0, so close immediatly */
+            /* set socket option SO_LINGER 0, so close immediately */
             linger aLingerSet;
                 sal_Int32 nBufferLen = sizeof( struct linger );
                     aLingerSet.l_onoff = 0;
@@ -3296,7 +3296,7 @@ namespace osl_ConnectorSocket
                 sal_True == compareSocketAddr( saPeerSocketAddr, saLocalSocketAddr  )  ) ;
         }
         // really an error or just delayed
-        // how to design senarios that will return osl_Socket_Interrupted, osl_Socket_TimedOut
+        // how to design scenarios that will return osl_Socket_Interrupted, osl_Socket_TimedOut
         void connect_003()
         {
             ::osl::SocketAddr saTargetSocketAddr1( aHostIp1, IP_PORT_MYPORT3 );

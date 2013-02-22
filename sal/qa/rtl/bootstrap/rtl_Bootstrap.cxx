@@ -166,7 +166,7 @@ namespace rtl_Bootstrap
                 //              but try to use ${file::KEYVALUE} than 'file' will only used out of the 'executable path'/file
                 //              not from the path given from the absolute path.
 
-                // Due to the fact, we create at this position a file (createTestshl2rc() ), we check for existance
+                // Due to the fact, we create at this position a file (createTestshl2rc() ), we check for existence
                 bool bFileExist = t_fileExist( suGetname );
                 CPPUNIT_ASSERT_MESSAGE("ctor error with initial file.", bFileExist == true );
             }

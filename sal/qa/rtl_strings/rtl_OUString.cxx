@@ -733,7 +733,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_op_eq(
         {"null and Ustr1", new OUString, new OUString(aUStr1)},
         {"Ustr2 and Ustr1", new OUString(aUStr2),
          new OUString(aUStr1)},
-        {""" and Ustr1 from bit charactor buffer",
+        {""" and Ustr1 from bit character buffer",
          new OUString(aUStr1),
          new OUString( "",
                        0,

@@ -792,7 +792,7 @@ namespace osl_StreamSocket
                 oslSocketResult eResult = asSocket.acceptConnection( ssConnectionSocket );
                 CPPUNIT_ASSERT_MESSAGE("shutdown_002: acceptConnection fail", eResult == osl_Socket_Ok );
 
-                /* set socket option SO_LINGER 0, so close immediatly */
+                /* set socket option SO_LINGER 0, so close immediately */
                 linger aLingerSet;
                 sal_Int32 nBufferLen = sizeof( struct linger );
                 aLingerSet.l_onoff = 0;
@@ -957,7 +957,7 @@ namespace osl_StreamSocket
                     {
                         t_print("read()\n");
                         m_nReadCount = aSocket.read( m_pBuffer, m_nBufferSize );
-                        t_print("%d bytes recived.\n", (int) m_nReadCount);
+                        t_print("%d bytes received.\n", (int) m_nReadCount);
                     }
                 }
                 else
@@ -1028,12 +1028,12 @@ namespace osl_StreamSocket
 
                 if (! aSocketAddr.setPort(IP_PORT_TEST))
                 {
-                    t_print("# cant set port\n" );
+                    t_print("# can not set port\n" );
                 }
 
                 if (! aSocketAddr.setHostname(rtl::OUString::createFromAscii(_sAddr.getStr())))
                 {
-                    t_print("# cant set hostname/ip\n" );
+                    t_print("# can not set hostname/ip\n" );
                 }
 
                 rtl::OUString aHostname = aSocketAddr.getHostname();

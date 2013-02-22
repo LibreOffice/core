@@ -357,7 +357,7 @@ static ListenerMap& getListenerMap()
 // This queue contains cookies which have been passed out by rtl_addUnloadingListener and
 // which have been regainded by rtl_removeUnloadingListener. When rtl_addUnloadingListener
 // is called then a cookie has to be returned. First we look into the set if there is one
-// availabe. Otherwise a new cookie will be provided.
+// available. Otherwise a new cookie will be provided.
 // not a new value is returned.
 
 typedef std::deque<

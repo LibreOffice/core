@@ -998,7 +998,7 @@ oslFileError SAL_CALL osl_searchFileURL(
             LPCTSTR lpszSearchFile = reinterpret_cast<LPCTSTR>(ustrSysPath->buffer);
 
             /* Allocate space for buffer according to previous returned count of required chars */
-            /* +1 is not neccessary if we follow MSDN documentation but for robustness we do so */
+            /* +1 is not necessary if we follow MSDN documentation but for robustness we do so */
             nBufferLength = dwResult + 1;
             lpBuffer = lpBuffer ?
                 reinterpret_cast<LPTSTR>(rtl_reallocateMemory(lpBuffer, nBufferLength * sizeof(TCHAR))) :

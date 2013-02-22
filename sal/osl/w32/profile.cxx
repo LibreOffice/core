@@ -2332,7 +2332,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
 
         rtl_uString_release(strTmp);
 
-        /* seperate path from filename */
+        /* separate path from filename */
         if ((nPos = rtl_ustr_lastIndexOfChar(strExecutable->buffer, L'\\')) == -1)
         {
             if ((nPos = rtl_ustr_lastIndexOfChar(strExecutable->buffer, L':')) == -1)

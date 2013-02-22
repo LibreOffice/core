@@ -46,7 +46,7 @@ void sal_detail_initialize(int argc, char ** argv) {
     // <https://bugs.freedesktop.org/show_bug.cgi?id=50603> "Unable to update
     // LibreOffice without resetting user profile").  But closing fds in
     // restartOnMac before calling exec does not work, as additional threads
-    // might still be running then, wich can still use those fds and cause
+    // might still be running then, which can still use those fds and cause
     // crashes.  Therefore, the simples solution is to close fds at process
     // start (as early as possible, so that no other threads have been created
     // yet that might already have opened some fds); this is done for all kinds

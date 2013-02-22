@@ -143,7 +143,7 @@ sal_Size ImplConvertUtf8ToUnicode(
         else
         {
             /*
-             This byte is preceeded by a broken UTF-8 sequence; if this byte
+             This byte is preceded by a broken UTF-8 sequence; if this byte
              is neither in the range [0x80..0xBF] nor in the range
              [0xFE..0xFF], assume that this byte does not belong to that
              broken sequence, but instead starts a new, legal UTF-8 sequence:

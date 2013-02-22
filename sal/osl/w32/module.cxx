@@ -267,7 +267,7 @@ typedef BOOL (WINAPI *SymGetModuleInfo_PROC)(
     PIMAGEHLP_MODULE  ModuleInfo
     );
 
-/* Seems that IMAGEHLP.DLL is always availiable on NT 4. But MSDN from Platform SDK says Win 2K is required. MSDN from VS 6.0a says
+/* Seems that IMAGEHLP.DLL is always available on NT 4. But MSDN from Platform SDK says Win 2K is required. MSDN from VS 6.0a says
     it's O.K on NT 4 ???!!!
     BTW: We are using ANSI function because not all version of IMAGEHLP.DLL contain Unicode support
 */

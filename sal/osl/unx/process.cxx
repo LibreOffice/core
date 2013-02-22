@@ -1158,7 +1158,7 @@ static int is_timeout(const struct timeval* tend)
 }
 
 /**********************************************
- kill(pid, 0) is usefull for checking if a
+ kill(pid, 0) is useful for checking if a
  process is still alive, but remember that
  kill even returns 0 if the process is already
  a zombie.

@@ -201,7 +201,7 @@ namespace osl_ConnectorSocket
                 sal_True == compareSocketAddr( saPeerSocketAddr, saLocalSocketAddr  )  ) ;
         }
         // really an error or just delayed
-        // how to design senarios that will return osl_Socket_Interrupted, osl_Socket_TimedOut
+        // how to design scenarios that will return osl_Socket_Interrupted, osl_Socket_TimedOut
         void connect_003()
         {
             ::osl::SocketAddr saTargetSocketAddr1( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT3 );

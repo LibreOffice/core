@@ -182,7 +182,7 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
         {
             nOffset += nIndex;
 
-            /* break url down in '/' devided tokens tokens */
+            /* break url down in '/' divided tokens tokens */
             nIndex = rtl_ustr_indexOfChar_WithLength( ustrFileURL->buffer + nOffset, ustrFileURL->length - nOffset, (sal_Unicode) '/' );
 
             /* copy token to new string */
