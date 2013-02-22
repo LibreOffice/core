@@ -188,6 +188,8 @@ private:
 
     std::vector< rtl::OUString > maAnnotationAuthors;
 
+    bool                mbUseEmbedFonts;
+
 protected:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
@@ -556,6 +558,9 @@ public:
     void SetCalcFieldValueHdl( ::Outliner* pOutliner);
 
     sal_uInt16 GetAnnotationAuthorIndex( const rtl::OUString& rAuthor );
+
+    bool IsUsingEmbededFonts() { return mbUseEmbedFonts; }
+    void SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
 
 private:
     /** This member stores the printer independent layout mode.  Please

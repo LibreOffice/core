@@ -29,6 +29,7 @@
 #include <svl/aeitem.hxx>
 #include <svl/flagitem.hxx>
 #include <sot/storage.hxx>
+#include <sfx2/dinfdlg.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/dispatch.hxx>
@@ -995,6 +996,18 @@ void DrawDocShell::OpenBookmark( const String& rBookmarkURL )
     SfxStringItem   aReferer( SID_REFERER, GetMedium()->GetName() );
     const SfxPoolItem* ppArgs[] = { &aStrItem, &aReferer, 0 };
     ( mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
+}
+
+SfxDocumentInfoDialog* DrawDocShell::CreateDocumentInfoDialog( ::Window *pParent, const SfxItemSet &rSet )
+{
+    SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );
+    DrawDocShell*          pDocSh = PTR_CAST(DrawDocShell,SfxObjectShell::Current());
+
+    if( pDocSh == this )
+    {
+        pDlg->AddFontTabPage();
+    }
+    return pDlg;
 }
 
 } // end of namespace sd

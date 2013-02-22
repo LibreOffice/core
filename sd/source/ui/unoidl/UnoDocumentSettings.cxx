@@ -141,7 +141,7 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_PRINTER_INDEPENDENT_LAYOUT
     // #i33095#
     ,HANDLE_LOAD_READONLY, HANDLE_SAVE_VERSION
-    ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL
+    ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL, HANDLE_EMBED_FONTS
 };
 
 #define MID_PRINTER 1
@@ -202,6 +202,7 @@ enum SdDocumentSettingsPropertyHandles
             // --> #i33095#
             { MAP_LEN("LoadReadonly"),          HANDLE_LOAD_READONLY,       &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("EmbedFonts"),            HANDLE_EMBED_FONTS,         &::getBooleanCppuType(),                0,  0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -902,6 +903,18 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             }
             break;
 
+            case HANDLE_EMBED_FONTS:
+            {
+                sal_Bool bNewValue = sal_False;
+                if ( *pValues >>= bNewValue )
+                {
+                    bChanged = ( pDoc->IsUsingEmbededFonts() != bNewValue );
+                    pDoc->SetIsUsingEmbededFonts( bNewValue );
+                    bOk = true;
+                }
+            }
+            break;
+
             default:
                 throw UnknownPropertyException();
         }
@@ -1126,6 +1139,12 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
             case HANDLE_SAVE_VERSION:
             {
                 *pValue <<= pDocSh->IsSaveVersionOnClose();
+            }
+            break;
+
+            case HANDLE_EMBED_FONTS:
+            {
+                *pValue <<= pDoc->IsUsingEmbededFonts();
             }
             break;
 
