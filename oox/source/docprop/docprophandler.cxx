@@ -614,7 +614,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
                         case VT_TOKEN( date ):
                         case VT_TOKEN( filetime ):
                             AddCustomProperty( uno::makeAny( GetDateTimeFromW3CDTF( aChars ) ) );
-
+                            break;
                         case VT_TOKEN( i1 ):
                         case VT_TOKEN( i2 ):
                             AddCustomProperty( uno::makeAny( (sal_Int16)aChars.toInt32() ) );
