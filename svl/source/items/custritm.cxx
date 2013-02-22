@@ -54,19 +54,9 @@ int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith) const
     DBG_CHKTHIS(CntUnencodedStringItem, 0);
     DBG_ASSERT(rWith.ISA(CntUnencodedStringItem),
                 "CntUnencodedStringItem::Compare(): Bad type");
-    switch (m_aValue.compareTo(static_cast< CntUnencodedStringItem const * >(
-                                       &rWith)->
-                                   m_aValue))
-    {
-        case COMPARE_LESS:
-            return -1;
-
-        case COMPARE_EQUAL:
-            return 0;
-
-        default: // COMPARE_GREATER
-            return 1;
-    }
+    sal_Int32 nCmp = m_aValue.compareTo(
+        static_cast< CntUnencodedStringItem const * >(&rWith)->m_aValue);
+    return (nCmp == 0) ? 0 : (nCmp < 0) ? -1 : 1;
 }
 
 //============================================================================
