@@ -1721,12 +1721,12 @@ sal_Bool SfxMedium::TryDirectTransfer( const ::rtl::OUString& aURL, SfxItemSet& 
     SFX_ITEMSET_ARG( &aTargetSet, pNewPassItem, SfxStringItem, SID_PASSWORD, false );
     SFX_ITEMSET_ARG( GetItemSet(), pOldPassItem, SfxStringItem, SID_PASSWORD, false );
     if ( ( !pNewPassItem && !pOldPassItem )
-      || ( pNewPassItem && pOldPassItem && pNewPassItem->GetValue().Equals( pOldPassItem->GetValue() ) ) )
+      || ( pNewPassItem && pOldPassItem && pNewPassItem->GetValue() == pOldPassItem->GetValue() ) )
     {
         // the filter must be the same
         SFX_ITEMSET_ARG( &aTargetSet, pNewFilterItem, SfxStringItem, SID_FILTER_NAME, false );
         SFX_ITEMSET_ARG( GetItemSet(), pOldFilterItem, SfxStringItem, SID_FILTER_NAME, false );
-        if ( pNewFilterItem && pOldFilterItem && pNewFilterItem->GetValue().Equals( pOldFilterItem->GetValue() ) )
+        if ( pNewFilterItem && pOldFilterItem && pNewFilterItem->GetValue() == pOldFilterItem->GetValue() )
         {
             // get the input stream and copy it
             // in case of success return true
@@ -2459,7 +2459,7 @@ void SfxMedium::Init_Impl()
     pImp->bDisposeStorage = false;
 
     SFX_ITEMSET_ARG( pImp->m_pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false);
-    if ( pSalvageItem && !pSalvageItem->GetValue().Len() )
+    if ( pSalvageItem && pSalvageItem->GetValue().isEmpty() )
     {
         pSalvageItem = NULL;
         pImp->m_pSet->ClearItem( SID_DOC_SALVAGE );
@@ -2492,7 +2492,7 @@ void SfxMedium::Init_Impl()
         }
     }
 
-    if ( pSalvageItem && pSalvageItem->GetValue().Len() )
+    if ( pSalvageItem && !pSalvageItem->GetValue().isEmpty() )
     {
         pImp->m_aLogicName = pSalvageItem->GetValue();
         DELETEZ( pImp->m_pURLObj );
@@ -2894,7 +2894,7 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
     if( pSalvageItem )
     {
         // QUESTION: there is some treatment of Salvage in Init_Impl; align!
-        if ( pSalvageItem->GetValue().Len() )
+        if ( !pSalvageItem->GetValue().isEmpty() )
         {
             // if an URL is provided in SalvageItem that means that the FileName refers to a temporary file
             // that must be copied here

@@ -551,7 +551,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
 
     sal_Bool bPreview = rMedium.IsPreview_Impl();
     SFX_ITEMSET_ARG(rMedium.GetItemSet(), pReferer, SfxStringItem, SID_REFERER, sal_False);
-    if ( bPreview && rMedium.IsRemote() && ( !pReferer || pReferer->GetValue().CompareToAscii("private:searchfolder:",21 ) != COMPARE_EQUAL ) )
+    if ( bPreview && rMedium.IsRemote() && ( !pReferer || !pReferer->GetValue().match("private:searchfolder:") ) )
         return ERRCODE_ABORT;
 
     ErrCode nErr = GuessFilter( rMedium, &pFilter );
