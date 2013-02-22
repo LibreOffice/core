@@ -824,6 +824,7 @@
               <value>
                 <it>.*/autotext/.*</it>
                 <it>.*/autocorr/.*</it>
+                <it>.*/basic/.*</it>
                 <it>.*/config/.*\.so[bcdegh]</it>
                 <it>.*/config/soffice.cfg/modules/.*/menubar/.*\.xml</it>
                 <it>.*/config/soffice.cfg/modules/.*/statusbar/.*\.xml</it>
@@ -860,16 +861,23 @@
                 <it>/org.openoffice.Office.Common/I18N</it>
                 <it>/org.openoffice.Office.Common/InternalMSExport</it>
                 <it>/org.openoffice.Office.Common/Load</it>
+                <it>/org.openoffice.Office.Common/Misc/AlwaysAllowSave</it>
+                <it>/org.openoffice.Office.Common/Misc/DisableUICustomization</it>
+                <it>/org.openoffice.Office.Common/Misc/ExperimentalMode</it>
                 <it>/org.openoffice.Office.Common/Misc/FormControlPilotsEnabled</it>
+                <it>/org.openoffice.Office.Common/Misc/MacroRecorderMode</it>
                 <it>/org.openoffice.Office.Common/Misc/PluginsEnabled</it>
+                <it>/org.openoffice.Office.Common/Misc/ShowLinkWarningDialog</it>
                 <it>/org.openoffice.Office.Common/Misc/SymbolSet</it>
+                <it>/org.openoffice.Office.Common/Misc/SymbolStyle</it>
+                <it>/org.openoffice.Office.Common/Misc/ToolboxStyle</it>
                 <it>/org.openoffice.Office.Common/Misc/UseSystemFileDialog</it>
                 <it>/org.openoffice.Office.Common/Misc/UseSystemPrintDialog</it>
-                <it>/org.openoffice.Office.Common/Misc/SymbolStyle</it>
                 <it>/org.openoffice.Office.Common/Misc/FilePickerPlacesNames</it>
                 <it>/org.openoffice.Office.Common/Misc/FilePickerPlacesUrls</it>
                 <it>/org.openoffice.Office.Common/ODF</it>
                 <it>/org.openoffice.Office.Common/Passwords</it>
+                <it>/org.openoffice.Office.Common/Path</it>
                 <it>/org.openoffice.Office.Common/Print/PrintingModifiesDocument</it>
                 <it>/org.openoffice.Office.Common/Print/Warning</it>
                 <it>/org.openoffice.Office.Common/Vectorize</it>
@@ -935,6 +943,11 @@
           <node oor:name="Security" oor:op="replace">
             <prop oor:name="IncludedNodes">
               <value>/org.openoffice.Office.Security</value>
+            </prop>
+          </node>
+          <node oor:name="Setup" oor:op="replace">
+            <prop oor:name="IncludedNodes">
+              <value>/org.openoffice.Setup/Office/Factories</value>
             </prop>
           </node>
           <node oor:name="UI" oor:op="replace">
