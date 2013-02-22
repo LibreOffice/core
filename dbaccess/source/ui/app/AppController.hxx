@@ -280,7 +280,7 @@ namespace dbaui
             @return
                 <TRUE/> if the paste opertions was successfull, otherwise <FALSE/>.
         */
-        sal_Bool paste( ElementType _eType,const ::svx::ODataAccessDescriptor& _rPasteData ,const String& _sParentFolder = String(),sal_Bool _bMove = sal_False);
+        sal_Bool paste( ElementType _eType,const ::svx::ODataAccessDescriptor& _rPasteData ,const OUString& _sParentFolder = String(),sal_Bool _bMove = sal_False);
 
         /// returns the system clipboard.
         const TransferableDataHelper& getViewClipboard() const { return m_aSystemClipboard; }
@@ -349,7 +349,7 @@ namespace dbaui
                 <TRUE/> if the insert opertions was successfull, otherwise <FALSE/>.
         */
         sal_Bool insertHierachyElement(  ElementType _eType
-                                    ,const String& _sParentFolder
+                                    ,const OUString& _sParentFolder
                                     ,sal_Bool _bCollection = sal_True
                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>()
                                     ,sal_Bool _bMove = sal_False);
@@ -523,7 +523,7 @@ namespace dbaui
         virtual bool        interceptUserInput( const NotifyEvent& _rEvent );
 
         // IControlActionListener overridables
-        virtual sal_Bool        requestQuickHelp( const SvTreeListEntry* _pEntry, String& _rText ) const;
+        virtual sal_Bool        requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const;
         virtual sal_Bool        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
         virtual sal_Int8        queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
         virtual sal_Int8        executeDrop( const ExecuteDropEvent& _rEvt );
