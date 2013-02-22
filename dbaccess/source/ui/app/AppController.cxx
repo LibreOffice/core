@@ -2437,7 +2437,7 @@ Any OApplicationController::getCurrentSelection( Control& _rControl ) const
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::requestQuickHelp( const SvTreeListEntry* /*_pEntry*/, String& /*_rText*/ ) const
+sal_Bool OApplicationController::requestQuickHelp( const SvTreeListEntry* /*_pEntry*/, OUString& /*_rText*/ ) const
 {
     return sal_False;
 }
@@ -2930,7 +2930,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
             case DatabaseObjectContainer::REPORTS:
                 if ( eSelectedCategory != E_NONE )
                     throw IllegalArgumentException(
-                        String(ModuleRes(RID_STR_NO_DIFF_CAT)),
+                        OUString(ModuleRes(RID_STR_NO_DIFF_CAT)),
                         *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ) );
                 eSelectedCategory =
                         ( pObject->Type == DatabaseObjectContainer::TABLES )  ? E_TABLE
@@ -2945,7 +2945,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
             {
                 OUString sMessage(
                     OUString(
-                        String(ModuleRes(RID_STR_UNSUPPORTED_OBJECT_TYPE))).
+                        OUString(ModuleRes(RID_STR_UNSUPPORTED_OBJECT_TYPE))).
                     replaceFirst("$type$", OUString::valueOf(sal_Int32(pObject->Type))));
                 throw IllegalArgumentException(sMessage, *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ));
             }
