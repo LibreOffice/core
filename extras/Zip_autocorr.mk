@@ -13,6 +13,7 @@ $(eval $(call gb_Zip_add_files,autocorr,\
 	acor_af-ZA.dat \
 	acor_bg-BG.dat \
 	acor_cs-CZ.dat \
+	acor_ca.dat \
 	acor_da-DK.dat \
 	acor_de-DE.dat \
 	acor_en-AU.dat \
