@@ -610,6 +610,8 @@ void Desktop::Init()
             // the normal OS X mechanism that prevents multiple
             // instances of an app from being started should work
             // fine. I hope.
+#elif defined ANDROID
+            // Ignore crack pipe errors on Android, too
 #else
             // Keep using this oddly named BE_PATHINFO_MISSING value
             // for pipe-related errors on other platforms. Of course
