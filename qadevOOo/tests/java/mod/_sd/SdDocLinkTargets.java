@@ -77,7 +77,7 @@ public class SdDocLinkTargets extends TestCase {
 
     /**
     * Creating a Testenvironment for the interfaces to be tested.
-    * Retrieves the possible links to childrens of the drawing document using
+    * Retrieves the possible links to children of the drawing document using
     * the interface <code>XLinkTargetSupplier</code>. The retrieved collection
     * is the instance of the service <code>com.sun.star.document.LinkTargets</code>.
     * @see com.sun.star.document.XLinkTargetSupplier

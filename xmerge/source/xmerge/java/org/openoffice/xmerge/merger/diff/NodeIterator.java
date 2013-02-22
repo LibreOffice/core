@@ -230,7 +230,7 @@ public abstract class NodeIterator implements Iterator {
                 break childrenCheck;
             }
 
-            // compare all the childrens
+            // compare all the children
             equal = true;
 
             for (int i = 0; i < node1Children.getLength(); i++) {

@@ -278,7 +278,7 @@ namespace accessibility
             from the main office thread.
 
             This method reevaluates the visibility of all
-            childrens. Call this method if your visibility state has
+            children. Call this method if your visibility state has
             changed somehow, e.g. if the visible area has changed and
             the AccessibleTextHelper isn't notified internally
             (e.g. via TEXT_HINT_VIEWSCROLLED). Normally, there should

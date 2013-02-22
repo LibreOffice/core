@@ -1110,7 +1110,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
         // II.II) TASKS
         //  This is a special flag. Normaly it regulate search inside tasks and forbid access to parent trees.
         //  But the desktop exists outside such task trees. They are our sub trees. So the desktop implement
-        //  a special feature: We use it to start search on our direct childrens only. That means we supress
+        //  a special feature: We use it to start search on our direct children only. That means we supress
         //  search on ALL child frames. May that can be usefull to get access on opened document tasks
         //  only without filter out all non realy required sub frames ...
         //  Used helper method on our container doesn't create any frame - its a search only.

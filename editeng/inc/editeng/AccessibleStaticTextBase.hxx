@@ -205,7 +205,7 @@ namespace accessibility
             only be called from the main office thread.
 
             This method reevaluates the visibility of all
-            childrens. Call this method if your visibility state has
+            children. Call this method if your visibility state has
             changed somehow, e.g. if the visible area has changed and
             the AccessibleStaticTextHelper isn't notified
             internally. Normally, there should not be a need to call

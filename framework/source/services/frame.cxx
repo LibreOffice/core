@@ -829,7 +829,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
 
     //-----------------------------------------------------------------------------------------------------
     // I.V) "_beamer"
-    //  This is a special sub frame of any task. We must return it if we found it on our direct childrens
+    //  This is a special sub frame of any task. We must return it if we found it on our direct children
     //  or create it there if it not already exists.
     //  Note: Such beamer exists for task(top) frames only!
     //-----------------------------------------------------------------------------------------------------
@@ -912,13 +912,13 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
         {
             //-------------------------------------------------------------------------------------------------
             // II.III.I) SIBLINGS
-            //  Search on all our direct siblings - means all childrens of our parent.
+            //  Search on all our direct siblings - means all children of our parent.
             //  Use this flag in combination with TASK. We must supress such upper search if
             //  user has not set it and if we are a top frame.
             //  Attention: Don't forward this request to our parent as a findFrame() call.
             //  In such case we must protect us against recursive calls.
             //  Use snapshot of our parent. But don't use queryFrames() of XFrames interface.
-            //  Because it's return all siblings and all her childrens including our children too
+            //  Because it's return all siblings and all her children including our children too
             //  if we call it with the CHILDREN flag. We doesn't need that - we need the direct container
             //  items of our parent only to start searches there. So we must use the container interface
             //  XIndexAccess instead of XFrames.
@@ -966,7 +966,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
             // II.III.II) PARENT
             //  Forward search to our parent (if he exists.)
             //  To prevent us against recursive and superflous calls (which can occure if we allow him
-            //  to search on his childrens too) we must change used search flags.
+            //  to search on his children too) we must change used search flags.
             //-------------------------------------------------------------------------------------------------
             if (
                 ( ! xTarget.is()                                    ) &&
