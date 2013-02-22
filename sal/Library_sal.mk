@@ -106,30 +106,30 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/all/log  \
 	sal/osl/all/trace  \
 	sal/osl/all/utility \
-	sal/rtl/source/alloc_arena \
-	sal/rtl/source/alloc_cache \
-	sal/rtl/source/alloc_fini \
-	sal/rtl/source/alloc_global \
-	sal/rtl/source/bootstrap \
-	sal/rtl/source/byteseq \
-	sal/rtl/source/cipher \
-	sal/rtl/source/cmdargs \
-	sal/rtl/source/crc \
-	sal/rtl/source/digest \
-	sal/rtl/source/hash \
-	sal/rtl/source/locale \
-	sal/rtl/source/logfile \
-	sal/rtl/source/math \
-	sal/rtl/source/random \
-	sal/rtl/source/rtl_process \
-	sal/rtl/source/strbuf \
-	sal/rtl/source/strimp \
-	sal/rtl/source/string \
-	sal/rtl/source/unload \
-	sal/rtl/source/uri \
-	sal/rtl/source/ustrbuf \
-	sal/rtl/source/ustring \
-	sal/rtl/source/uuid \
+	sal/rtl/alloc_arena \
+	sal/rtl/alloc_cache \
+	sal/rtl/alloc_fini \
+	sal/rtl/alloc_global \
+	sal/rtl/bootstrap \
+	sal/rtl/byteseq \
+	sal/rtl/cipher \
+	sal/rtl/cmdargs \
+	sal/rtl/crc \
+	sal/rtl/digest \
+	sal/rtl/hash \
+	sal/rtl/locale \
+	sal/rtl/logfile \
+	sal/rtl/math \
+	sal/rtl/random \
+	sal/rtl/rtl_process \
+	sal/rtl/strbuf \
+	sal/rtl/strimp \
+	sal/rtl/string \
+	sal/rtl/unload \
+	sal/rtl/uri \
+	sal/rtl/ustrbuf \
+	sal/rtl/ustring \
+	sal/rtl/uuid \
 	sal/textenc/converter \
 	sal/textenc/convertsimple \
     sal/textenc/handleundefinedunicodetotextchar \
