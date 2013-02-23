@@ -186,7 +186,7 @@ namespace rptui
         *
         * \param _sQuotedFunction the quoted function name
         * \param _Out_rDataField the data field which is used in the function
-        * \param _xFunctionsSupplier teh function supplier to search or empty if not used
+        * \param _xFunctionsSupplier the function supplier to search or empty if not used
         * \param _bSet If set to sal_True than the m_sDefaultFunction and m_sScope vars will be set if successful.
         * \return sal_True with known otherwise sal_False
         */

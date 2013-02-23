@@ -940,7 +940,7 @@ void ScUndoReplace::SetChangeTrack()
     if ( pChangeTrack )
     {
         if ( pUndoDoc )
-        {   //! UndoDoc includes only teh changed cells,
+        {   //! UndoDoc includes only the changed cells,
             // that is why an Iterator can be used
             pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc,
                 nStartChangeAction, nEndChangeAction );

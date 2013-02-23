@@ -124,7 +124,7 @@ private:
 
     /** converts a string into his constant value if it exists, otherwise the type converter is used.
     * \param _rValue the value to be converted
-    * \param _ePropertyType teh type of the propery to be converted into
+    * \param _ePropertyType the type of the propery to be converted into
     * \return the converted value
     */
     uno::Any convertStringToSimple( const ::rtl::OUString& _rValue,const uno::TypeClass& _ePropertyType );

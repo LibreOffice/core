@@ -234,7 +234,7 @@ public:
         @return
             This method returns <TRUE/> when the navigation positions stored
             in SdrObjects are up to date.
-            It returns <FALSE/> when teh navigation positions are not valid,
+            It returns <FALSE/> when the navigation positions are not valid,
             for example because no explicit navigation order has been
             defined, i.e. HasObjectNavigationOrder() would return <FALSE/>.
     */

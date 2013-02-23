@@ -558,7 +558,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     m_lnkContextSupplier.Call(&fmscContext);
     DBG_ASSERT(nResult > 0, "FmSearchDialog::InitContext : ContextSupplier didn't give me any controls !");
 
-    // put teh field names into the respective listbox
+    // put the field names into the respective listbox
     m_lbField.Clear();
 
     if (fmscContext.sFieldDisplayNames.Len() != 0)

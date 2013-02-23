@@ -87,7 +87,7 @@ public:
         return lhs;
     }
 };
-/** returns teh object type depending on the service name
+/** returns the object type depending on the service name
     @param  _xComponent the report component
 */
 REPORTDESIGN_DLLPUBLIC sal_uInt16 getObjectType(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);

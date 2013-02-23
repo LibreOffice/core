@@ -293,7 +293,7 @@ void SmCursor::Delete(){
     //Take the selected nodes and delete them...
     SmNodeList::iterator patchIt = TakeSelectedNodesFromList(pLineList);
 
-    //Get teh position to set after delete
+    //Get the position to set after delete
     PosAfterDelete = PatchLineList(pLineList, patchIt);
 
     //Finish editing

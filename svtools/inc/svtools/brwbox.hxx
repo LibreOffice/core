@@ -660,7 +660,7 @@ public:
         @param  _nRowId
             the current row
         @param  _nColId
-            teh column id
+            the column id
         @param  _bOnScreen
             <TRUE/> when the rectangle should be calculated OnScreen
         @return

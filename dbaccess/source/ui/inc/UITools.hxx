@@ -188,7 +188,7 @@ namespace dbaui
     */
     ::com::sun::star::awt::FontDescriptor CreateFontDescriptor( const Font& _rFont );
 
-    /** call teh format dialog and set the selected format at the column
+    /** call the format dialog and set the selected format at the column
         @param  _xAffectedCol   Font to be converted
         @param  _xField         Font to be converted
     */

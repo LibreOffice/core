@@ -34,7 +34,7 @@ namespace dbaui
     //= OConnectionTabPage
     //=========================================================================
 
-    /** implements the connection page of teh data source properties dialog.
+    /** implements the connection page of the data source properties dialog.
     */
     class OConnectionTabPage : public OConnectionHelper
     {

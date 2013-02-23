@@ -229,7 +229,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
 
     while( nPos < nTxtLen )
     {
-        // first in turn are teh uppercase letters
+        // first in turn are the uppercase letters
 
         // There are characters that are both upper- and lower-case L (eg blank)
         // Such ambiguities lead to chaos, this is why these characters are

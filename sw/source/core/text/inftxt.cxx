@@ -1602,7 +1602,7 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
     else
         bOn = pPor->GetExpTxt( *pNew, aTxt );
 
-    // Teh text is replaced ...
+    // The text is replaced ...
     if( bOn )
     {
         pInf = (SwTxtSizeInfo*)pNew;

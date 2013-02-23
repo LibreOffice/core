@@ -260,7 +260,7 @@ protected:
     virtual bool        drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency );
 
 public:
-    // public SalGraphics methods, the interface to teh independent vcl part
+    // public SalGraphics methods, the interface to the independent vcl part
 
     // get device resolution
     virtual void            GetResolution( long& rDPIX, long& rDPIY );

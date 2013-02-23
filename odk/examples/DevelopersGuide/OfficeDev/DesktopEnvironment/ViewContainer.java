@@ -139,7 +139,7 @@ public class ViewContainer extends Thread
         // We use a system.exit() to finish the whole application.
         // And further we have registered THIS instance as a possible shutdown
         // hook at the runtime class. So our run() method will be called.
-        // Teh our view container should be empty - but
+        // Our view container should be empty - but
         // our listener container can include some references.
         // These objects wich to be informed then and release e.g. some
         // remote references.
