@@ -171,7 +171,7 @@ OUString SAL_CALL CWinClipbImpl::getName(  ) throw( RuntimeException )
 
 sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  ) throw( RuntimeException )
 {
-    return ( Delayed | Persistant );
+    return ( Delayed | Persistent );
 }
 
 //------------------------------------------------------------------------

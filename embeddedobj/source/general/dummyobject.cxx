@@ -324,7 +324,7 @@ void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
       && ( m_nObjectState == -1 || nEntryConnectionMode != embed::EntryInitModes::NO_INIT ) )
     {
         throw embed::WrongStateException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Can't change persistant representation of activated object!\n" )),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Can't change persistent representation of activated object!\n" )),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 

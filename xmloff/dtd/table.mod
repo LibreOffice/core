@@ -365,7 +365,7 @@
 	table:is-selection %boolean; "false"
 	table:on-update-keep-styles %boolean; "false"
 	table:on-update-keep-size %boolean; "true"
-	table:has-persistant-data %boolean; "true"
+	table:has-persistent-data %boolean; "true"
 	table:orientation (row | column) "row"
 	table:contains-header %boolean; "true"
 	table:display-filter-buttons %boolean; "false"
