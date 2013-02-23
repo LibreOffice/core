@@ -27,9 +27,9 @@
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <editsh.hxx>
-#include <edimp.hxx>    // fuer MACROS
+#include <edimp.hxx>    // for MACROS
 #include <doc.hxx>
-#include <swundo.hxx>   // fuer UNDO-Ids
+#include <swundo.hxx>   // for UNDO-Ids
 #include <ndtxt.hxx>
 #include <ftnidx.hxx>
 #include <expfld.hxx>
@@ -47,12 +47,12 @@
 
 #include <algorithm>
 
-/*************************************
- * harte Formatierung (Attribute)
- *************************************/
+/**
+ * hard Formatting (Attributes)
+ */
 
-// wenn Selektion groesser Max Nodes oder mehr als Max Selektionen
-// => keine Attribute
+// if selection is bigger as max nodes or more than max selections
+// => no attributes
 const sal_uInt16& getMaxLookup()
 {
     static const sal_uInt16 nMaxLookup = 1000;
@@ -117,8 +117,8 @@ sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
             return sal_False;
         }
 
-        // beim 1.Node traegt der Node die Werte in den GetSet ein (Initial)
-        // alle weiteren Nodes werden zum GetSet zu gemergt
+        // at first node the node enter his values into the GetSet (Initial)
+        // all additional nodes are additional merged to GetSet
         for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
         {
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
@@ -277,7 +277,7 @@ SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
 
 sal_Bool SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
 {
-    // der Cursor muss auf dem akt. Fussnoten-Anker stehen:
+    // The cursor must be positioned on the current footnotes anchor:
     SwPaM* pCrsr = GetCrsr();
     SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
     if( !pTxtNd )
@@ -287,7 +287,7 @@ sal_Bool SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
         pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
     if( pFtn && pFillFtn )
     {
-        // Daten vom Attribut uebertragen
+        // Transfer data from the attribute
         const SwFmtFtn &rFtn = ((SwTxtFtn*)pFtn)->GetFtn();
         pFillFtn->SetNumber( rFtn );
         pFillFtn->SetEndNote( rFtn.IsEndNote() );
@@ -327,7 +327,7 @@ bool SwEditShell::HasFtns( bool bEndNotes ) const
 }
 
 
-    // gebe Liste aller Fussnoten und deren Anfangstexte
+    // Give a List of all footnotes and their beginning texts
 sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 {
     rList.Clear();
@@ -424,7 +424,7 @@ void SwEditShell::MoveLeftMargin( bool bRight, bool bModulus )
     StartUndo( UNDO_START );
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )         // Multiple selection ?
     {
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
