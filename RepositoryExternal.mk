@@ -1926,15 +1926,6 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 endif # SYSTEM_POSTGRESQL
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-ifeq ($(SYSTEM_MOZILLA),YES)
-
-# Nothing needed here ATM
-define gb_LinkTarget__use_mozilla
-
-endef
-
-else # !SYSTEM_MOZILLA
-
 define gb_LinkTarget__use_mozilla
 
 $(call gb_LinkTarget_add_defs,$(1),\
@@ -1943,8 +1934,7 @@ $(call gb_LinkTarget_add_defs,$(1),\
 
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/mozilla/moz \
-	-I$(OUTDIR)/inc/mozilla/nspr \
+	-I$(OUTDIR)/inc/mozilla \
 )
 
 $(call gb_LinkTarget_use_libraries,$(1),\
@@ -1957,8 +1947,6 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 	embed_base_s \
 	mozreg_s \
 )
-
-ifeq ($(OS),WNT)
 
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DMOZILLA_CLIENT \
@@ -2001,33 +1989,6 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endif # !GCC
 
-else
-
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DMOZILLA_CLIENT \
-	-DXP_UNIX \
-	$(if $(filter LINUX,$(OS)),-DOJI) \
-	$(if $(filter LINUX MACOSX NETBSD,$(OS)),-DTRACING) \
-)
-
-$(call gb_LinkTarget_add_cflags,$(1),\
-	$(if $(filter LINUX,$(OS)),-g) \
-	$(if $(filter LINUX MACOSX NETBSD,$(OS)),-fPIC) \
-)
-
-$(call gb_LinkTarget_add_cxxflags,$(1),\
-	-Wcast-align \
-	-Wconversion \
-	-Wno-long-long \
-	-Woverloaded-virtual \
-	-Wpointer-arith \
-	-Wsynth \
-	$(if $(filter LINUX,$(OS)),-pthread) \
-	$(if $(filter MACOSX NETBSD,$(OS)),-Wno-deprecated) \
-)
-
-endif # UNX
-
 endef
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,\
@@ -2040,7 +2001,6 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 	mozreg_s \
 ))
 
-endif # SYSTEM_MOZILLA
 endif # DESKTOP
 
 ifeq ($(ENABLE_KDE),TRUE)
