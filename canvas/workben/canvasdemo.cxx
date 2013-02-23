@@ -629,7 +629,7 @@ USHORT DemoApp::Exception( USHORT nError )
     switch( nError & EXC_MAJORTYPE )
     {
         case EXC_RSCNOTLOADED:
-            Abort( String::CreateFromAscii( "Error: could not load language resources.\nPlease check your installation.\n" ) );
+            Abort( "Error: could not load language resources.\nPlease check your installation.\n" );
             break;
     }
     return 0;
