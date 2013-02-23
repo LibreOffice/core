@@ -88,9 +88,9 @@ class ScFormatFilterPlugin {
     virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc ) = 0;
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) = 0;
         // eFormat == EIF_AUTO  -> matching filter is used automatically
-        // eFormat == EIF_BIFF5 -> only Biff5 stream is read sucessfully (in an Excel97 doc, too)
-        // eFormat == EIF_BIFF8 -> only Biff8 stream is read sucessfully (only in Excel97 docs)
-        // eFormat == EIF_BIFF_LE4 -> only non storage files _might_ be read sucessfully
+        // eFormat == EIF_BIFF5 -> only Biff5 stream is read successfully (in an Excel97 doc, too)
+        // eFormat == EIF_BIFF8 -> only Biff8 stream is read successfully (only in Excel97 docs)
+        // eFormat == EIF_BIFF_LE4 -> only non storage files _might_ be read successfully
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) = 0;
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;

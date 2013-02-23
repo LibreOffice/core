@@ -41,7 +41,7 @@ import java.util.HashMap;
 public class Type {
     // The following private static members and static initializer must come
     // first in the class definition, so that the class can be initialized
-    // sucessfully:
+    // successfully:
 
     private static final String TYPE_NAME_VOID = "void";
     private static final String TYPE_NAME_BOOLEAN = "boolean";

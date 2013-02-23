@@ -212,7 +212,7 @@ class JobData : private ThreadHelpBase
         css::uno::Sequence< css::beans::NamedValue > m_lArguments;
 
         /**
-            after a job was sucessfully executed (by any outside code using our
+            after a job was successfully executed (by any outside code using our
             informations) it can return a result. This member make it part of this
             container too. So it can be used for further things.
             We use it also to update our internal state and the configuration

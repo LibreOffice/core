@@ -198,7 +198,7 @@
 	* msdos/runargv.c, tests/recipes-9, unix/runargv.c:
 
 	#i80598# Always issue a warning if the actual execution of a recipe line
-	(this does not include sucessfully executed, but failing programs) fails.
+	(this does not include successfully executed, but failing programs) fails.
 
 2007-09-24 17:45  vq
 

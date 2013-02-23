@@ -438,7 +438,7 @@ public class _XFrame extends MultiMethodTest {
 
     /**
     * Test calls the method. Remembered old creater is restored at the end. <p>
-    * Has <b> OK </b> status if the method sucessfully set new value to (XFrame)
+    * Has <b> OK </b> status if the method successfully set new value to (XFrame)
     * oObj object.
     */
     public void _setCreator() {

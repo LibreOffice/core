@@ -96,7 +96,7 @@ SAL_IMPLEMENT_MAIN()
             return 1;
         }
 
-        printf( "Connected sucessfully to the office\n" );
+        printf( "Connected successfully to the office\n" );
     }
     catch( Exception &e )
     {

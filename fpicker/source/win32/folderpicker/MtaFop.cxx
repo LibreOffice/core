@@ -199,7 +199,7 @@ CMtaFolderPicker::~CMtaFolderPicker( )
 
             // we place unregister class here because
             // if we have a valid window we must have
-            // sucessfully registered a window class
+            // successfully registered a window class
             // if the creation of the window itself
             // failed after registering the window
             // class we have unregistered it immediately

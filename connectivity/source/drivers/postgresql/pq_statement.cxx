@@ -521,7 +521,7 @@ bool executePostgresCommand( const rtl::OString & cmd, struct CommandData *data 
             rtl::OStringBuffer buf( 128 );
             buf.append( "executed command '" );
             buf.append( cmd.getStr() );
-            buf.append( "' sucessfully (" );
+            buf.append( "' successfully (" );
             buf.append( *( data->pMultipleResultUpdateCount ) );
             buf.append( ")" );
             buf.append( ", duration=" );
@@ -672,7 +672,7 @@ bool executePostgresCommand( const rtl::OString & cmd, struct CommandData *data 
             rtl::OStringBuffer buf( 128 );
             buf.append( RTL_CONSTASCII_STRINGPARAM("executed query '") );
             buf.append( cmd );
-            buf.append( RTL_CONSTASCII_STRINGPARAM("' sucessfully") );
+            buf.append( RTL_CONSTASCII_STRINGPARAM("' successfully") );
             buf.append( RTL_CONSTASCII_STRINGPARAM(", duration=") );
             buf.append( duration );
             buf.append( RTL_CONSTASCII_STRINGPARAM("ms, returnedRows=") );

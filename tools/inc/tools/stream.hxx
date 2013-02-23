@@ -589,12 +589,12 @@ template<typename prefix> sal_Size write_lenPrefixed_uInt16s_FromOUString(SvStre
 /// Attempt to read 8bit units to an OString until a zero terminator is
 /// encountered, returned rtl::OString's length is number of units *definitely*
 /// successfully read, check SvStream::good() to see if null terminator was
-/// sucessfully read
+/// successfully read
 TOOLS_DLLPUBLIC rtl::OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm);
 
 /// Attempt to read 8bit units assuming source encoding eEnc to an OUString
 /// until a zero terminator is encountered. Check SvStream::good() to see if
-/// null terminator was sucessfully read
+/// null terminator was successfully read
 TOOLS_DLLPUBLIC rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStrm, rtl_TextEncoding eEnc);
 
 /// Attempt to read a pascal-style length (of type prefix) prefixed sequence of
