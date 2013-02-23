@@ -59,7 +59,6 @@ export LIBXML_TARBALL := 7740a8ec23878a2f50120e1faa2730f2-libxml2-2.7.6.tar.gz
 export LIBXSLT_TARBALL := e61d0364a30146aaa3001296f853b2b9-libxslt-1.1.26.tar.gz
 export LPSOLVE_TARBALL := 26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz
 export MDDS_TARBALL := 9f9e15966b5624834157fe3d748312bc-mdds_0.6.1.tar.bz2
-export MOZ_TARBALL := a169ab152209200a7bad29a275cb0333-seamonkey-1.1.14.source.tar.gz
 export MYSQLCPPCONN_TARBALL := 0981bda6548a8c8233ffce2b6e4b2a23-mysql-connector-c++-1.1.0.tar.gz
 export MYTHES_TARBALL := 46e92b68e31e858512b680b3b61dc4c1-mythes-1.2.3.tar.gz
 export NEON_TARBALL := ff369e69ef0f0143beb5626164e87ae2-neon-0.29.5.tar.gz
