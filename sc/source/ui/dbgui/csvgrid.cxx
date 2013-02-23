@@ -1216,6 +1216,8 @@ void ScCsvGrid::ImplDrawBackgrDev()
         Point( GetFirstX() + 1, 0 ), Size( GetWidth() - GetHdrWidth(), GetHeight() ) ) );
 
     sal_uInt32 nLastCol = GetLastVisColumn();
+    if (nLastCol == CSV_COLUMN_INVALID)
+        return;
     for( sal_uInt32 nColIx = GetFirstVisColumn(); nColIx <= nLastCol; ++nColIx )
         ImplDrawColumnBackgr( nColIx );
 
@@ -1259,6 +1261,8 @@ void ScCsvGrid::ImplDrawGridDev()
 {
     maGridDev.DrawOutDev( Point(), maWinSize, Point(), maWinSize, maBackgrDev );
     sal_uInt32 nLastCol = GetLastVisColumn();
+    if (nLastCol == CSV_COLUMN_INVALID)
+        return;
     for( sal_uInt32 nColIx = GetFirstVisColumn(); nColIx <= nLastCol; ++nColIx )
         ImplDrawColumnSelection( nColIx );
 }
