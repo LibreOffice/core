@@ -172,8 +172,7 @@ public:
     void            SetBaseOffs( sal_uInt16 nOffs ) { nBaseOffs = nOffs; }
     sal_uInt16          GetBaseOffs() const { return nBaseOffs; }
 
-    // Check whether this button can be modified via UI, sounding a beep if it
-    // cannot be modified:
+    // Check whether this button can be modified via UI
     bool            CheckModification() const;
 };
 
