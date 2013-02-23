@@ -71,7 +71,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	embedserv \
 	$(call gb_Helper_optional,EPM,epm) \
 	eventattacher \
+	$(call gb_Helper_optional,EXPAT,expat) \
 	extensions \
+	external \
 	extras \
 	fileaccess \
 	filter \
@@ -125,12 +127,14 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	$(call gb_Helper_optional,MDDS,mdds) \
 	Mesa \
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
+	$(call gb_Helper_optional,MOZ,moz) \
 	$(call gb_Helper_optional,MYSQLC,mysqlc) \
 	$(call gb_Helper_optional,MYSQLCPPCONN,mysqlcppconn) \
 	$(call gb_Helper_optional,MYTHES,mythes) \
 	$(call gb_Helper_optional,NEON,neon) \
 	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
 	np_sdk \
+	$(call gb_Helper_optional,NSS,nss) \
 	o3tl \
 	$(call gb_Helper_optional,ODK,odk) \
 	offapi \
@@ -138,10 +142,12 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	oovbaapi \
 	oox \
 	$(call gb_Helper_optional,OPENLDAP,openldap) \
+	$(call gb_Helper_optional,OPENSSL,openssl) \
 	package \
 	padmin \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
 	psprint_config \
+	$(call gb_Helper_optional,PYTHON,python3) \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 	readlicense_oo \
@@ -169,6 +175,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	shell \
 	slideshow \
 	smoketest \
+	soltools \
 	sot \
 	starmath \
 	stoc \
