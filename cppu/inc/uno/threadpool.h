@@ -60,7 +60,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_getIdOfCurrentThread( sal_Sequence **ppThreadId
 
 
 /**
-  If the internal refcount drops to zero, the association betwen threadId and
+  If the internal refcount drops to zero, the association between threadId and
   thread is broken.
  */
 CPPU_DLLPUBLIC void SAL_CALL uno_releaseIdFromCurrentThread()

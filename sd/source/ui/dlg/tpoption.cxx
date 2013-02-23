@@ -665,7 +665,7 @@ void    SdTpOptionsMisc::SetDrawMode()
     lcl_MoveWin( aTxtTabstop, -nDiff );
     lcl_MoveWin( aMtrFldTabstop, -nDiff );
 
-    // Move the scale controls so that they are visually centered betwen the
+    // Move the scale controls so that they are visually centered between the
     // group controls above and below.
     lcl_MoveWin (aFtScale, -17);
     lcl_MoveWin (aCbScale, -17);
