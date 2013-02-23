@@ -6936,6 +6936,7 @@ if test "$enable_epm" = "yes"; then
         elif "$RPM" --help 2>&1 | $EGREP buildroot >/dev/null; then
             RPM_PATH=`which $RPM`
             AC_MSG_RESULT([$RPM_PATH])
+            SCPDEFS="$SCPDEFS -DWITH_RPM"
         else
             AC_MSG_ERROR([cannot build packages. Try installing rpmbuild.])
         fi

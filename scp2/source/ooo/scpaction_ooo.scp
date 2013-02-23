@@ -53,7 +53,7 @@ ScpAction scp_Copy_Readme_Txt
 End
 #endif
 
-#if !defined(WNT) && !defined(MACOSX)
+#if !defined(WNT) && !defined(MACOSX) && defined(WITH_RPM)
 ScpAction scp_Copy_Install
     Copy = "userscripts/install";
     Name = "install";
