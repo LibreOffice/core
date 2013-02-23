@@ -381,10 +381,10 @@ public final class OwnEmbeddedObject extends WeakBase
           && ( m_nObjectState == -1 || nEntryConnectionMode != com.sun.star.embed.EntryInitModes.NO_INIT ) )
         {
             // if the object is not loaded
-            // it can not get persistant representation without initialization
+            // it can not get persistent representation without initialization
 
             // if the object is loaded
-            // it can switch persistant representation only without initialization
+            // it can switch persistent representation only without initialization
 
             throw new com.sun.star.embed.WrongStateException();
         }

@@ -1737,7 +1737,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 {
                     if(bIsNotPersist)
                     {
-                        // Not-Persistant Attribute, hole diese extra
+                        // Not-Persistent Attribute, hole diese extra
                         mpObj->TakeNotPersistAttr(*pSet, sal_False);
                     }
                 }
@@ -1833,7 +1833,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
             {
                 if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
                 {
-                    // Not-Persistant Attribute, hole diese extra
+                    // Not-Persistent Attribute, hole diese extra
                     mpObj->TakeNotPersistAttr(aSet, sal_False);
                 }
             }
