@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///4s\u003d",
+        "filename": "tail_build/prj/build.lst",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-23T22:20:51Z",
+      "side": 1,
+      "message": "bad idea to remove here solenv and add it to tail_build?\nJust restore it for now?\n\n tb      tail_build : solenv NULL",
+      "revId": "b184d52d8f7a0cb9442d26854074c734046c1e70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
