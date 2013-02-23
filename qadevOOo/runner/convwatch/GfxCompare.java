@@ -51,7 +51,7 @@ public class GfxCompare extends EnhancedComplexTestCase
 
     /**
      *
-     * @return a List of software which must accessable as an external executable
+     * @return a List of software which must accessible as an external executable
      */
     protected String[] mustInstalledSoftware()
         {
@@ -77,7 +77,7 @@ public class GfxCompare extends EnhancedComplexTestCase
         {
             GlobalLogWriter.set(log);
 
-            // check if all need software is installed and accessable
+            // check if all need software is installed and accessible
             checkEnvironment(mustInstalledSoftware());
 
             m_aArguments = getGraphicalTestArguments();

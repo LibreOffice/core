@@ -39,7 +39,7 @@ class SvNumberFormatsSupplierServiceObject
             ,public ::com::sun::star::lang::XInitialization
             ,public ::com::sun::star::io::XPersistObject
             ,public ::com::sun::star::lang::XServiceInfo
-{   // don't want the Set-/GetNumberFormatter to be accessable from outside
+{   // don't want the Set-/GetNumberFormatter to be accessible from outside
 
     friend ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         SAL_CALL SvNumberFormatsSupplierServiceObject_CreateInstance(

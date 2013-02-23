@@ -549,7 +549,7 @@ char            **argv;
                             break;      /* Exit case statement  */
                         perror(ap);     /* Error, can't append  */
                         exit(errno);    /* After access test    */
-                    }                   /* If file accessable   */
+                    }                   /* If file accessible   */
                 }
                 /*
                  * On vms, we want to create the file using "standard"

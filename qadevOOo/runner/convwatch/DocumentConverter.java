@@ -125,7 +125,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
         }
 
     /**
-     * Function returns a List of software which must accessable as an external executable
+     * Function returns a List of software which must accessible as an external executable
      */
     protected String[] mustInstalledSoftware()
         {
@@ -138,7 +138,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
     public void convert()
         {
             GlobalLogWriter.set(log);
-            // check if all need software is installed and accessable
+            // check if all need software is installed and accessible
             checkEnvironment(mustInstalledSoftware());
 
             // test_removeFirstDirectorysAndBasenameFrom();

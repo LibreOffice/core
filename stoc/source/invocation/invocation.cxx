@@ -1111,11 +1111,11 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
         OUString(
             RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection")) )
                 >>= xCoreReflection;
-    OSL_ENSURE( xCoreReflection.is(), "### CoreReflection singleton not accessable!?" );
+    OSL_ENSURE( xCoreReflection.is(), "### CoreReflection singleton not accessible!?" );
     if (! xCoreReflection.is())
     {
         throw DeploymentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessable") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessible") ),
             Reference< XInterface >() );
     }
 //         xCoreReflection = Reference<XIdlReflection>(

@@ -147,7 +147,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
 
     /**
      *
-     * @return a List of software which must accessable as an external executable
+     * @return a List of software which must accessible as an external executable
      */
     protected String[] mustInstalledSoftware()
         {
@@ -184,7 +184,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
         {
             GlobalLogWriter.set(log);
             String sDBConnection = (String)param.get( PropertyName.DB_CONNECTION_STRING );
-            // check if all need software is installed and accessable
+            // check if all need software is installed and accessible
             checkEnvironment(mustInstalledSoftware());
 
             GraphicalTestArguments aGTA = getGraphicalTestArguments();

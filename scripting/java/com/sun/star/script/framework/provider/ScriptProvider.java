@@ -349,7 +349,7 @@ public abstract class ScriptProvider
 
     // TODO need to encapsulate this better,
     // Some factory concept for creating/accessing Editor
-    // How this is passed down or how it is accessable by BrowseNode
+    // How this is passed down or how it is accessible by BrowseNode
     // implementations needs thinking about
     // This method is used to determine whether the ScriptProvider
     // has a ScriptEditor

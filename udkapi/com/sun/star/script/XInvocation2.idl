@@ -29,17 +29,17 @@
 
 /**
     Extension of XInvocation to provide additional information
-    about the methods and properties that are accessable via
+    about the methods and properties that are accessible via
     XInvocation.
     </p>
  */
 published interface XInvocation2: com::sun::star::script::XInvocation
 {
-    /** returns the names of all methods and properties accessable via XInvocation.
+    /** returns the names of all methods and properties accessible via XInvocation.
      */
     sequence< string > getMemberNames();
 
-    /** returns information items for all methods and properties accessable via XInvocation.
+    /** returns information items for all methods and properties accessible via XInvocation.
 
         @see com::sun::star::script::Invocation
      */

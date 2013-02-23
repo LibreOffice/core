@@ -35,7 +35,7 @@
     <type scope="com::sun::star::reflection">TypeDescriptionProvider</type>s
     and may cache type descriptions.<br>
     Using cppuhelper's bootstrapping routines bootstrapping an initial
-    component context, there is a singleton accessable via key
+    component context, there is a singleton accessible via key
     "/singletons/com.sun.star.reflection.theTypeDescriptionManager".
     This singleton object is hooked into the C UNO runtime typelib and
     lives until the context is shut down.<br>

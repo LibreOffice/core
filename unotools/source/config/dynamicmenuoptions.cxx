@@ -350,7 +350,7 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     :   ConfigItem( ROOTNODE_MENUS )
     // Init member then...
 {
-    // Get names and values of all accessable menu entries and fill internal structures.
+    // Get names and values of all accessible menu entries and fill internal structures.
     // See impl_GetPropertyNames() for further informations.
     sal_uInt32              nNewCount           = 0;
     sal_uInt32              nWizardCount        = 0;

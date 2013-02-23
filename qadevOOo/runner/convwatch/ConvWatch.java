@@ -42,7 +42,7 @@ public class ConvWatch
     }
     /**
      * Check if given document (_sAbsoluteInputFile) and it's postscript representation (_sAbsoluteReferenceFile) produce
-     * the same output like the StarOffice / OpenOffice.org which is accessable with XMultiServiceFactory.
+     * the same output like the StarOffice / OpenOffice.org which is accessible with XMultiServiceFactory.
      * Here a simple graphically difference check is run through.
      *
      * Hint: In the OutputPath all needed files will create, there must

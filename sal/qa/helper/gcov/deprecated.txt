@@ -206,7 +206,7 @@
 
 # LLA:
 # marked as deprecated, due to the fact there is no access from outside
-# so this functions are not really accessable
+# so this functions are not really accessible
 # They are used in rtl/source/locale.c
         rtl_hashentry_destroy;
         rtl_hashfunc;

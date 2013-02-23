@@ -208,7 +208,7 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     :   ConfigItem( ROOTNODE_CMDOPTIONS )
     // Init member then...
 {
-    // Get names and values of all accessable menu entries and fill internal structures.
+    // Get names and values of all accessible menu entries and fill internal structures.
     // See impl_GetPropertyNames() for further informations.
     Sequence< OUString >    lNames              = impl_GetPropertyNames ();
     Sequence< Any >         lValues             = GetProperties         ( lNames         );

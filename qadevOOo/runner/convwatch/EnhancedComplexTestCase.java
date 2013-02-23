@@ -51,7 +51,7 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
 
             if (sText.length() == 0)
             {
-                String sError = "Must quit. " + _sName + " may be not accessable.";
+                String sError = "Must quit. " + _sName + " may be not accessible.";
                 assure(sError, false);
                 // System.exit(1);
             }

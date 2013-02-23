@@ -373,7 +373,7 @@ SAL_IMPLEMENT_MAIN()
             OUString( "/singletons/com.sun.star.reflection.theCoreReflection") )
                         >>= xRefl;
         OSL_ENSURE(
-            xRefl.is(), "### CoreReflection singleton not accessable!?" );
+            xRefl.is(), "### CoreReflection singleton not accessible!?" );
 
         bSucc = test_corefl( xRefl );
 

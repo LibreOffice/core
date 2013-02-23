@@ -178,12 +178,12 @@ Reference< XIdlReflection > getCoreReflection_Impl( void )
             xContext->getValueByName(
                 OUString( "/singletons/com.sun.star.reflection.theCoreReflection" ) )
                     >>= xCoreReflection;
-            OSL_ENSURE( xCoreReflection.is(), "### CoreReflection singleton not accessable!?" );
+            OSL_ENSURE( xCoreReflection.is(), "### CoreReflection singleton not accessible!?" );
         }
         if( !xCoreReflection.is() )
         {
             throw DeploymentException(
-                OUString( "/singletons/com.sun.star.reflection.theCoreReflection singleton not accessable" ),
+                OUString( "/singletons/com.sun.star.reflection.theCoreReflection singleton not accessible" ),
                 Reference< XInterface >() );
         }
     }
@@ -222,12 +222,12 @@ Reference< XHierarchicalNameAccess > getTypeProvider_Impl( void )
             xContext->getValueByName(
                 OUString( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) )
                     >>= xAccess;
-            OSL_ENSURE( xAccess.is(), "### TypeDescriptionManager singleton not accessable!?" );
+            OSL_ENSURE( xAccess.is(), "### TypeDescriptionManager singleton not accessible!?" );
         }
         if( !xAccess.is() )
         {
             throw DeploymentException(
-                    OUString("/singletons/com.sun.star.reflection.theTypeDescriptionManager singleton not accessable"),
+                    OUString("/singletons/com.sun.star.reflection.theTypeDescriptionManager singleton not accessible"),
                 Reference< XInterface >() );
         }
     }
@@ -251,7 +251,7 @@ Reference< XTypeConverter > getTypeConverter_Impl( void )
         if( !xTypeConverter.is() )
         {
             throw DeploymentException(
-                OUString("com.sun.star.script.Converter service not accessable"),
+                OUString("com.sun.star.script.Converter service not accessible"),
                 Reference< XInterface >() );
         }
     }

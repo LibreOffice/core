@@ -238,7 +238,7 @@ public class URLHelper
      *
      * @return  [Vector]
      *              a filtered list of java File objects of all available files of the start dir
-     *              and all accessable sub directories.
+     *              and all accessible sub directories.
      */
     public static ArrayList<File> getSystemFilesFromDir(String sStartDir)
     {

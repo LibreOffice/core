@@ -365,7 +365,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
     :   ConfigItem( ROOTNODE_OPTIONS )
     // Init member then...
 {
-    // Get names and values of all accessable menu entries and fill internal structures.
+    // Get names and values of all accessible menu entries and fill internal structures.
     // See impl_GetPropertyNames() for further informations.
     Sequence< OUString > lNodes;
     Sequence< OUString > lNames = impl_GetPropertyNames( lNodes );
