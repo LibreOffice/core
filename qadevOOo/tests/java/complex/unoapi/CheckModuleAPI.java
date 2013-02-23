@@ -379,31 +379,12 @@ public class CheckModuleAPI extends ComplexTestCase
 
     private String getModulePath(String module)
     {
-
-        // String sUnoapi = null;
-        // final String sep = System.getProperty("file.separator");
-        // final File srcRoot = new File(mSRC_ROOT);
-
-        // final FolderFilter qaFilter = new FolderFilter(module);
-        // final File[] moduleTree = srcRoot.listFiles(qaFilter);
-//        if (moduleTree != null)
-//        {
-//            if (mDebug)
-//            {
-//                log.println("moduleTree length:" + moduleTree.length);
-//                log.println("moduleTree: " + moduleTree[0].getAbsolutePath());
-//            }
-//            if (moduleTree != null)
-//            {
-//                sUnoapi = moduleTree[0].getAbsolutePath() + sep + "qa" + sep + "unoapi";
-//            }
-//        }
         String sUnoapi = getQaUnoApiPath(mSRC_ROOT, module);
         return sUnoapi;
     }
 
     /**
-    Some modules contains more the one project. This methods translates given project paramater to the
+    Some modules contains more the one project. This methods translates given project parameter to the
      *  correspind module name.
      *
      * fwk -> framework

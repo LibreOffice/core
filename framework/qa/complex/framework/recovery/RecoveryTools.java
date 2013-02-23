@@ -246,7 +246,7 @@ public class RecoveryTools {
 
     /**
      * The office must be started WITH restore and crashreporter functionality.
-     * Therefore the paramater '<CODE>--norestore</CODE>' and '<CODE>--nocrashreport</CODE>'
+     * Therefore the parameter '<CODE>--norestore</CODE>' and '<CODE>--nocrashreport</CODE>'
      * was removed from the <CODE>AppExecutionCommand</CODE> parameter
      */
     public void removeParametersFromAppExecutionCommand(){

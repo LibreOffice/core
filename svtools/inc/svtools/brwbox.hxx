@@ -714,8 +714,8 @@ public:
     // Conversions ------------------------------------------------------------
 
     /** Converts a point relative to the data window origin to a cell address.
-        @param rnRow  Out-paramater that takes the row index.
-        @param rnColumnId  Out-paramater that takes the column ID.
+        @param rnRow  Out-parameter that takes the row index.
+        @param rnColumnId  Out-parameter that takes the column ID.
         @param rPoint  The position in pixels relative to the data window.
         @return <TRUE/>, if the point could be converted to a valid address. */
     virtual sal_Bool ConvertPointToCellAddress(
@@ -723,21 +723,21 @@ public:
 
     /** Converts a point relative to the row header bar origin to a row header
         index.
-        @param rnRow  Out-paramater that takes the row index.
+        @param rnRow  Out-parameter that takes the row index.
         @param rPoint  The position in pixels relative to the header bar.
         @return <TRUE/>, if the point could be converted to a valid index. */
     virtual sal_Bool ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint );
 
     /** Converts a point relative to the column header bar origin to a column
         header index.
-        @param rnColumnId  Out-paramater that takes the column ID.
+        @param rnColumnId  Out-parameter that takes the column ID.
         @param rPoint  The position in pixels relative to the header bar.
         @return <TRUE/>, if the point could be converted to a valid index. */
     virtual sal_Bool ConvertPointToColumnHeader( sal_uInt16& rnColumnPos, const Point& rPoint );
 
     /** Converts a point relative to the BrowseBox origin to the index of an
         existing control.
-        @param rnRow  Out-paramater that takes the 0-based control index.
+        @param rnRow  Out-parameter that takes the 0-based control index.
         @param rPoint  The position in pixels relative to the BrowseBox.
         @return <TRUE/>, if the point could be converted to a valid index. */
     virtual sal_Bool ConvertPointToControlIndex( sal_Int32& rnIndex, const Point& rPoint );

@@ -164,7 +164,7 @@ void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const u
     throw (uno::RuntimeException)
 {
     if ( !Number.hasValue() )
-        throw uno::RuntimeException( OUString("Missing Required Paramater"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString("Missing Required Parameter"), uno::Reference< uno::XInterface >() );
     Number >>= m_nNumber;
     Description >>= m_sDescription;
     Source >>= m_sSource;

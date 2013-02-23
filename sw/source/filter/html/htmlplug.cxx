@@ -1205,7 +1205,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     }
     else if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
-        // fuer Plugins die Paramater als Optionen schreiben
+        // fuer Plugins die Parameter als Optionen schreiben
 
         uno::Sequence < beans::PropertyValue > aProps;
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")) );

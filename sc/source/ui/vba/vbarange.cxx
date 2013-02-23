@@ -3634,7 +3634,7 @@ ScVbaRange::Delete( const uno::Any& Shift ) throw (uno::RuntimeException)
                 mode = sheet::CellDeleteMode_LEFT;
                 break;
             default:
-                throw uno::RuntimeException( rtl::OUString( "Illegal paramater " ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( rtl::OUString( "Illegal parameter " ), uno::Reference< uno::XInterface >() );
         }
     }
     else
@@ -4545,7 +4545,7 @@ ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ ) thro
                 mode = sheet::CellInsertMode_DOWN;
                 break;
             default:
-                throw uno::RuntimeException( rtl::OUString( "Illegal paramater " ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( rtl::OUString( "Illegal parameter " ), uno::Reference< uno::XInterface >() );
         }
     }
     else
