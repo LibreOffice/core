@@ -129,7 +129,7 @@ public class MyPersistObject implements XPersistObject, XTypeProvider,
     }
 
     /**
-     * Fuction reads properties from this input stream
+     * Function reads properties from this input stream
      * @param inStream the input stream
      * @see com.sun.star.io.XPersistObject
      */
@@ -147,7 +147,7 @@ public class MyPersistObject implements XPersistObject, XTypeProvider,
     }
 
     /**
-     * Fuction writes properties on this output stream
+     * Function writes properties on this output stream
      * @param outStream the output stream
      * @see com.sun.star.io.XPersistObject
      */

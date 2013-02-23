@@ -148,7 +148,7 @@ public:
         regression curves, the first one is replaced by the one given by the
         type. All remaining curves are remnoved.
 
-        <p>This fuction ignores mean-value lines.</p>
+        <p>This function ignores mean-value lines.</p>
      */
     static void replaceOrAddCurveAndReduceToOne(
         tRegressionType eType,

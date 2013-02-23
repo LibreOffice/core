@@ -32,7 +32,7 @@
  * than int in argument passing.  If this is definded, and LONGINT is not,
  * the compiler must support the type unsingned long.
  *
- * Most quirks and bugs of the available fprintf fuction are duplicated,
+ * Most quirks and bugs of the available fprintf function are duplicated,
  * however * in the width and precision fields will work correctly
  * even if fprintf does not support this.  The %n format and the return
  * count will only work if fprintf returns the number of characters

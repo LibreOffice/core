@@ -129,7 +129,7 @@ typedef boost::unordered_map
 RequestDataMap;
 
 // -------------------------------------------------------------------
-// Helper fuction
+// Helper function
 // -------------------------------------------------------------------
 static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
 {

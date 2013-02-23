@@ -387,7 +387,7 @@ public:
         function_ = reinterpret_cast< TextEncodingFunction * >(
             module_.getFunctionSymbol("sal_getFullTextEncodingData"));
         if (function_ == 0) {
-            SAL_WARN( "sal.textenc", "Obtaining sal_getFullTextEncodingData fuction from sal_textenc"
+            SAL_WARN( "sal.textenc", "Obtaining sal_getFullTextEncodingData function from sal_textenc"
                 " library failed");
             std::abort();
         }

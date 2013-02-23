@@ -65,7 +65,7 @@ public:
     void         SetSlotId(sal_uInt16 nSlot) {m_nSlotId = nSlot;}
     sal_uInt16       GetSlotId() { return m_nSlotId;}
 
-    virtual void Activate(const sal_uInt16 nSlotId);    // activate fuction
+    virtual void Activate(const sal_uInt16 nSlotId);    // activate function
     virtual void Deactivate();                      // deactivate function
 
     virtual void CreateDefaultObject();

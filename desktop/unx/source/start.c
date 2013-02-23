@@ -739,7 +739,7 @@ exec_javaldx (Args *args)
 
     if( err != osl_Process_E_None)
     {
-        fprintf (stderr, "Warning: failed to launch javaldx - java may not fuction correctly\n");
+        fprintf (stderr, "Warning: failed to launch javaldx - java may not function correctly\n");
         if (javaldx)
             osl_freeProcessHandle(javaldx);
         if (fileOut)
