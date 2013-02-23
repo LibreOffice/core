@@ -144,7 +144,7 @@ const rtl::OUString SvtLanguageTable::GetString( const LanguageType eType, bool 
 
     //Rather than return a fairly useless "Unknown" name, return a geeky but usable-in-a-pinch lang-tag
     OUString sLangTag(LanguageTag(eType).getBcp47());
-    SAL_WARN("svtools", "Language: 0x"
+    SAL_WARN("svtools.misc", "Language: 0x"
         << std::hex << eType
         << " with unknown name, so returning lang-tag of: "
         << sLangTag);

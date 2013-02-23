@@ -339,7 +339,7 @@ void FileSink::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
     {
         size_t nItems = Buffer.getLength();
         bool bSuccess = (fwrite(Buffer.getConstArray(), 1, nItems, fp) == nItems);
-        SAL_WARN_IF( !bSuccess, "extensions", "short write");
+        SAL_WARN_IF( !bSuccess, "extensions.plugin", "short write");
     }
 }
 

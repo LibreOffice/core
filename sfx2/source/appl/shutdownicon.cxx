@@ -664,7 +664,7 @@ void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject
 void SAL_CALL ShutdownIcon::queryTermination( const ::com::sun::star::lang::EventObject& )
 throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException)
 {
-    SAL_INFO("sfx2.shutdown", "ShutdownIcon::queryTermination: veto is " << m_bVeto);
+    SAL_INFO("sfx2.appl", "ShutdownIcon::queryTermination: veto is " << m_bVeto);
     ::osl::ClearableMutexGuard  aGuard( m_aMutex );
 
     if ( m_bVeto )

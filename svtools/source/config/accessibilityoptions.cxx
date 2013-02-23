@@ -122,7 +122,7 @@ SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
     catch(const css::uno::Exception& ex)
     {
         m_xCfg.clear();
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -143,7 +143,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetAutoDetectSystemHC()
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -161,7 +161,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsForPagePreviews() const
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
     return bRet;
 }
@@ -178,7 +178,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsHelpTipsDisappear() const
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -196,7 +196,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedGraphics() const
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -214,7 +214,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedText() const
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -232,7 +232,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsAutomaticFontColor() const
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -250,7 +250,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsSystemFont() const
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -268,7 +268,7 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetHelpTipSeconds() const
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return nRet;
@@ -286,7 +286,7 @@ sal_Bool SvtAccessibilityOptions_Impl::IsSelectionInReadonly() const
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -308,7 +308,7 @@ void SvtAccessibilityOptions_Impl::SetAutoDetectSystemHC(sal_Bool bSet)
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -328,7 +328,7 @@ void SvtAccessibilityOptions_Impl::SetIsForPagePreviews(sal_Bool bSet)
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -348,7 +348,7 @@ void SvtAccessibilityOptions_Impl::SetIsHelpTipsDisappear(sal_Bool bSet)
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -368,7 +368,7 @@ void SvtAccessibilityOptions_Impl::SetIsAllowAnimatedGraphics(sal_Bool bSet)
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -388,7 +388,7 @@ void SvtAccessibilityOptions_Impl::SetIsAllowAnimatedText(sal_Bool bSet)
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -408,7 +408,7 @@ void SvtAccessibilityOptions_Impl::SetIsAutomaticFontColor(sal_Bool bSet)
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -428,7 +428,7 @@ void SvtAccessibilityOptions_Impl::SetIsSystemFont(sal_Bool bSet)
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -448,7 +448,7 @@ void SvtAccessibilityOptions_Impl::SetHelpTipSeconds(sal_Int16 nSet)
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -468,7 +468,7 @@ void SvtAccessibilityOptions_Impl::SetSelectionInReadonly(sal_Bool bSet)
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 

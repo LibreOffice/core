@@ -25,11 +25,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <com/sun/star/container/XNameAccess.hpp>
-
 #include <com/sun/star/container/XNameContainer.hpp>
-
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <comphelper/configurationhelper.hxx>
@@ -174,7 +171,7 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
     {
         m_xNode.clear();
         m_xCfg.clear();
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -192,7 +189,7 @@ sal_Bool SvtPrintOptions_Impl::IsReduceTransparency() const
     }
     catch (const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -212,7 +209,7 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedTransparencyMode() const
     }
     catch (const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return  nRet;
@@ -234,7 +231,7 @@ sal_Bool SvtPrintOptions_Impl::IsReduceGradients() const
     }
     catch (const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -256,7 +253,7 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedGradientMode() const
     }
     catch (const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return nRet;
@@ -278,7 +275,7 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedGradientStepCount() const
     }
     catch (const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return nRet;
@@ -300,7 +297,7 @@ sal_Bool SvtPrintOptions_Impl::IsReduceBitmaps() const
     }
     catch (const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -322,7 +319,7 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedBitmapMode() const
     }
     catch (const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return nRet;
@@ -344,7 +341,7 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedBitmapResolution() const
     }
     catch (const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return  nRet;
@@ -366,7 +363,7 @@ sal_Bool SvtPrintOptions_Impl::IsReducedBitmapIncludesTransparency() const
     }
     catch (const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return  bRet;
@@ -388,7 +385,7 @@ sal_Bool SvtPrintOptions_Impl::IsConvertToGreyscales() const
     }
     catch (const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return  bRet;
@@ -411,7 +408,7 @@ sal_Bool SvtPrintOptions_Impl::IsPDFAsStandardPrintJobFormat() const
     }
     catch (const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 
     return  bRet;
@@ -502,7 +499,7 @@ void SvtPrintOptions_Impl::impl_setValue (const ::rtl::OUString& sProp,
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -530,7 +527,7 @@ void SvtPrintOptions_Impl::impl_setValue (const ::rtl::OUString& sProp,
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
 

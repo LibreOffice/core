@@ -197,7 +197,7 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
 
     if (nMinimumNumberOfDaysInWeek < 1 || 7 < nMinimumNumberOfDaysInWeek)
     {
-        SAL_WARN( "tools", "Date::GetWeekOfYear: invalid nMinimumNumberOfDaysInWeek" );
+        SAL_WARN( "tools.datetime", "Date::GetWeekOfYear: invalid nMinimumNumberOfDaysInWeek" );
         nMinimumNumberOfDaysInWeek = 4;
     }
 

@@ -164,7 +164,7 @@ SvtUserOptions::Impl::Impl() :
     catch (uno::Exception const& ex)
     {
         m_xCfg.clear();
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -182,7 +182,7 @@ OUString SvtUserOptions::Impl::GetToken (sal_uInt16 nToken) const
         }
         catch (uno::Exception const& ex)
         {
-            SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
+            SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
         }
     }
     else
@@ -204,7 +204,7 @@ void SvtUserOptions::Impl::SetToken (sal_uInt16 nToken, OUString const& sToken)
         }
         catch (uno::Exception const& ex)
         {
-            SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
+            SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
         }
     }
     else

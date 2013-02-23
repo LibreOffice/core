@@ -584,7 +584,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
             }
             catch (const uno::Exception& ex)
             {
-                SAL_WARN("svtools", "discarding broken embedded object preview: " << ex.Message);
+                SAL_WARN("svtools.misc", "discarding broken embedded object preview: " << ex.Message);
                 delete pStream;
                 xStream.clear();
             }

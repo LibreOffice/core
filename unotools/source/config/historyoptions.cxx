@@ -32,15 +32,10 @@
 #include "itemholder1.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <com/sun/star/container/XNameAccess.hpp>
-
 #include <com/sun/star/container/XNameContainer.hpp>
-
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-
 #include <comphelper/configurationhelper.hxx>
-
 #include <comphelper/processfactory.hxx>
 
 using namespace ::std     ;
@@ -153,7 +148,7 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
         m_xCfg.clear();
         m_xCommonXCU.clear();
 
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -199,7 +194,7 @@ sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
     }
 
     return nSize;
@@ -259,7 +254,7 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -319,7 +314,7 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -404,7 +399,7 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
                     // ignore such corrupted individual items here, so that at
                     // least newly added items are successfully reported back
                     // from this function:
-                    SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
+                    SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
                 }
             }
             assert(nCount <= nLength);
@@ -414,7 +409,7 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
     }
 
     return seqReturn;
@@ -571,7 +566,7 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
+        SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
     }
 }
 

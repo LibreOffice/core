@@ -642,7 +642,7 @@ sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     //stupidly big, forget about it
     if (maTargetSize.Width() >= SAL_MAX_INT32 / nBytesPerPixel / maTargetSize.Height())
     {
-        SAL_WARN( "vcl", "overlarge png dimensions: " <<
+        SAL_WARN( "vcl.gdi", "overlarge png dimensions: " <<
             maTargetSize.Width() << " x " << maTargetSize.Height() << " depth: " << mnTargetDepth);
         return sal_False;
     }

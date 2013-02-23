@@ -861,7 +861,7 @@ void ResMgr::Init( const OUString& rFileName )
             InternalResMgr::FreeGlobalRes( aResHandle, pVoid );
         else
         {
-            SAL_WARN("tools", "Wrong version: " << pImpRes->aFileName);
+            SAL_WARN("tools.rc", "Wrong version: " << pImpRes->aFileName);
         }
     }
 #endif

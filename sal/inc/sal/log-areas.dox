@@ -29,6 +29,11 @@ certain functionality.
 
 @li @c basctl.basicide
 
+@section basic
+
+@li @c basic
+@li @c basic.sbx
+
 @section canvas
 
 @li @c canvas
@@ -85,6 +90,7 @@ certain functionality.
 @section extensions
 
 @li @c extensions.plugin
+@li @c extensions.update
 @li @c extensions.scanner
 
 @section Filter
@@ -103,6 +109,12 @@ certain functionality.
 
 @li @c fpicker.aqua
 @li @c fpicker.office
+
+@section framework
+
+@li @c fwk - framework
+@li @c fwk.desktop
+@li @c fwk.session
 
 @section i18npool
 
@@ -143,6 +155,7 @@ certain functionality.
 @section slideshow
 
 @li @c slideshow.opengl
+@li @c slideshow.eventqueue
 
 @section svl
 
@@ -157,17 +170,25 @@ certain functionality.
 @li @c svtools.dialogs
 @li @c svtools.filter
 @li @c svtools.misc
+@li @c svtools.table
 @li @c svtools.uno
 
 @section svx
 
 @li @c svx.dialog
 @li @c svx.form
+@li @c svx.stbcrtls
+@li @c svx.table
 @li @c svx.tbxcrtls
+
+@section toolkit
+
+@li @c toolkit.controls
 
 @section tools
 
 @li @c tools.debug
+@li @c tools.datetime
 @li @c tools.memtools
 @li @c tools.rc - resource manager
 @li @c tools.stream - SvStream class
@@ -181,19 +202,31 @@ certain functionality.
 
 @li @c unotools.config
 @li @c unotools.i18n
+@li @c unotools.misc
+@li @c unotools.ucbhelper
 
 @section URE
 
 @li @c rtl.string - ::rtl::OString, ::rtl::OUString, and related functionality
 @li @c salhelper.thread - ::salhelper::Thread class
 
+@section sax
+
+@li @c sax.cppunit
+
 @section stoc
 
 @li @c stoc.corerefl
 @li @c stoc.tdmanager
 
+@section svl
+
+@li @c svl.items
+
 @section VCL
 
+@li @c vcl
+@li @c vcl.a11y
 @li @c vcl.atsui - ATSUI (obsolete) -using code for Mac OS X
 @li @c vcl.control
 @li @c vcl.coretext - CoreText-using code for Mac OS X and iOS
@@ -201,7 +234,6 @@ certain functionality.
 @li @c vcl.gtk - Gtk+ 2/3 plugin
 @li @c vcl.layout - Widget layout
 @li @c vcl.sm
-
 
 @section Writer
 
@@ -236,7 +268,6 @@ certain functionality.
 @li @c accessibility
 @li @c avmedia
 @li @c basebmp
-@li @c basic
 @li @c binaryurp
 @li @c bridges
 @li @c comphelper
@@ -244,8 +275,9 @@ certain functionality.
 @li @c cppcanvas
 @li @c cppuhelper
 @li @c cppu
+@li @c dbaccess
 @li @c editeng
-@li @c framework
+@li @c forms
 @li @c helpcompiler
 @li @c jvmfwk
 @li @c linguistic
@@ -254,6 +286,7 @@ certain functionality.
 @li @c sax
 @li @c shell
 @li @c stoc
+@li @c svg
 @li @c svx
 @li @c ucbhelper
 @li @c xmlhelp

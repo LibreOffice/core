@@ -199,7 +199,7 @@ bool RenameModule (
 
             // update tabwriter
             sal_uInt16 nId = pShell->GetWindowId( pWin );
-            SAL_WARN_IF( nId == 0 , "basctl.basicide ", "No entry in Tabbar!");
+            SAL_WARN_IF( nId == 0 , "basctl.basicide", "No entry in Tabbar!");
             if ( nId )
             {
                 TabBar& rTabBar = pShell->GetTabBar();

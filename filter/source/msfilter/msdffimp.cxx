@@ -5435,7 +5435,7 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
                 {
                     sal_Size nMaxEntriesPossible = rStCtrl.remainingSize() / nFIDCLsize;
                     SAL_WARN_IF(nMaxEntriesPossible < mnIdClusters,
-                        "escher", "FIDCL list longer than remaining bytes, ppt or parser is wrong");
+                        "filter.ms", "FIDCL list longer than remaining bytes, ppt or parser is wrong");
                     mnIdClusters = std::min(nMaxEntriesPossible, static_cast<sal_Size>(mnIdClusters));
 
                     maFidcls.resize(mnIdClusters);

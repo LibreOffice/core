@@ -62,7 +62,7 @@ namespace {
 
 rtl::OUString canonic(rtl::OUString const & url) {
     INetURLObject o(url);
-    SAL_WARN_IF(o.HasError(), "unotools", "Invalid URL \"" << url << '"');
+    SAL_WARN_IF(o.HasError(), "unotools.ucbhelper", "Invalid URL \"" << url << '"');
     return o.GetMainURL(INetURLObject::NO_DECODE);
 }
 
@@ -103,7 +103,7 @@ std::vector<rtl::OUString> getContents(rtl::OUString const & url) {
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
         SAL_INFO(
-            "unotools",
+            "unotools.ucbhelper",
             "getContents(" << url << ") " << e.getValueType().getTypeName()
                 << " \"" << e.get<css::uno::Exception>().Message << '"');
         return std::vector<rtl::OUString>();
@@ -137,7 +137,7 @@ bool utl::UCBContentHelper::IsDocument(rtl::OUString const & url) {
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
         SAL_INFO(
-            "unotools",
+            "unotools.ucbhelper",
             "UCBContentHelper::IsDocument(" << url << ") "
                 << e.getValueType().getTypeName() << " \""
                 << e.get<css::uno::Exception>().Message << '"');
@@ -158,7 +158,7 @@ css::uno::Any utl::UCBContentHelper::GetProperty(
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
         SAL_INFO(
-            "unotools",
+            "unotools.ucbhelper",
             "UCBContentHelper::GetProperty(" << url << ", " << property << ") "
                 << e.getValueType().getTypeName() << " \""
                 << e.get<css::uno::Exception>().Message << '"');
@@ -177,7 +177,7 @@ bool utl::UCBContentHelper::IsFolder(rtl::OUString const & url) {
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
         SAL_INFO(
-            "unotools",
+            "unotools.ucbhelper",
             "UCBContentHelper::IsFolder(" << url << ") "
                 << e.getValueType().getTypeName() << " \""
                 << e.get<css::uno::Exception>().Message << '"');
@@ -199,7 +199,7 @@ bool utl::UCBContentHelper::GetTitle(
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
         SAL_INFO(
-            "unotools",
+            "unotools.ucbhelper",
             "UCBContentHelper::GetTitle(" << url << ") "
                 << e.getValueType().getTypeName() << " \""
                 << e.get<css::uno::Exception>().Message << '"');
@@ -221,7 +221,7 @@ bool utl::UCBContentHelper::Kill(rtl::OUString const & url) {
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
         SAL_INFO(
-            "unotools",
+            "unotools.ucbhelper",
             "UCBContentHelper::Kill(" << url << ") "
                 << e.getValueType().getTypeName() << " \""
                 << e.get<css::uno::Exception>().Message << '"');
@@ -263,7 +263,7 @@ bool utl::UCBContentHelper::MakeFolder(
             exists = true;
         } else {
             SAL_INFO(
-                "unotools",
+                "unotools.ucbhelper",
                 "UCBContentHelper::MakeFolder(" << title
                     << ") InteractiveIOException \"" << e.Message
                     << "\", code " << +e.Code);
@@ -278,7 +278,7 @@ bool utl::UCBContentHelper::MakeFolder(
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
         SAL_INFO(
-            "unotools",
+            "unotools.ucbhelper",
             "UCBContentHelper::MakeFolder(" << title << ") "
                 << e.getValueType().getTypeName() << " \""
                 << e.get<css::uno::Exception>().Message << '"');
@@ -298,7 +298,7 @@ sal_Int64 utl::UCBContentHelper::GetSize(rtl::OUString const & url) {
         sal_Int64 n = 0;
         bool ok = (content(url).getPropertyValue(rtl::OUString("Size")) >>= n);
         SAL_INFO_IF(
-            !ok, "unotools",
+            !ok, "unotools.ucbhelper",
             "UCBContentHelper::GetSize(" << url
                 << "): Size cannot be determined");
         return n;
@@ -310,7 +310,7 @@ sal_Int64 utl::UCBContentHelper::GetSize(rtl::OUString const & url) {
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
         SAL_INFO(
-            "unotools",
+            "unotools.ucbhelper",
             "UCBContentHelper::GetSize(" << url << ") "
                 << e.getValueType().getTypeName() << " \""
                 << e.get<css::uno::Exception>().Message << '"');
@@ -339,7 +339,7 @@ bool utl::UCBContentHelper::IsYounger(
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
         SAL_INFO(
-            "unotools",
+            "unotools.ucbhelper",
             "UCBContentHelper::IsYounger(" << younger << ", " << older << ") "
                 << e.getValueType().getTypeName() << " \""
                 << e.get<css::uno::Exception>().Message << '"');
@@ -429,7 +429,7 @@ bool utl::UCBContentHelper::IsSubPath(
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
         SAL_INFO(
-            "unotools",
+            "unotools.ucbhelper",
             "UCBContentHelper::IsSubPath(" << parent << ", " << child << ") "
                 << e.getValueType().getTypeName() << " \""
                 << e.get<css::uno::Exception>().Message << '"');
