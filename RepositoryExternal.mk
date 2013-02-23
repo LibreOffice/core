@@ -1943,7 +1943,7 @@ $(call gb_LinkTarget_add_defs,$(1),\
 
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/mozilla/moz \
+	-I$(OUTDIR)/inc/mozilla \
 	-I$(OUTDIR)/inc/mozilla/nspr \
 )
 
