@@ -89,7 +89,7 @@ void SwEditShell::DeleteTOXMark( SwTOXMark* pMark )
     SET_CURR_SHELL( this );
     StartAllAction();
 
-    pDoc->DeleteTOXMark( pMark );
+    mpDoc->DeleteTOXMark( pMark );
 
     EndAllAction();
 }
@@ -147,7 +147,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     ::SetProgressText( STR_STATSTR_TOX_INSERT, pDocSh );
 
     // Einfuegen des Verzeichnisses
-    const SwTOXBaseSection* pTOX = pDoc->InsertTableOf(
+    const SwTOXBaseSection* pTOX = mpDoc->InsertTableOf(
                                         *GetCrsr()->GetPoint(), rTOX, pSet, true );
     OSL_ENSURE(pTOX, "Kein aktuelles Verzeichnis");
 
@@ -160,7 +160,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     pTOX->SetPosAtStartEnd( *GetCrsr()->GetPoint() );
 
     // Fix fuer leere Verzeichnisse
-    InvalidateWindows( aVisArea );
+    InvalidateWindows( maVisArea );
     ::EndProgress( pDocSh );
     EndAllAction();
 }
@@ -233,7 +233,7 @@ bool SwEditShell::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 
 const SwTOXType* SwEditShell::GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const
 {
-    return pDoc->GetTOXType(eTyp, nId);
+    return mpDoc->GetTOXType(eTyp, nId);
 }
 
 /*--------------------------------------------------------------------

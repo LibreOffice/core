@@ -340,7 +340,7 @@ void SwEditShell::ReRead( const String& rGrfName, const String& rFltName,
                     const Graphic* pGraphic, const GraphicObject* pGrfObj )
 {
     StartAllAction();
-    pDoc->ReRead( *GetCrsr(), rGrfName, rFltName, pGraphic, pGrfObj );
+    mpDoc->ReRead( *GetCrsr(), rGrfName, rFltName, pGraphic, pGrfObj );
     EndAllAction();
 }
 
@@ -653,7 +653,7 @@ String SwEditShell::Calculate()
 
 sfx2::LinkManager& SwEditShell::GetLinkManager()
 {
-    return pDoc->GetLinkManager();
+    return mpDoc->GetLinkManager();
 }
 
 

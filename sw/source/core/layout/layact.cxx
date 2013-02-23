@@ -2315,7 +2315,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         std::vector<bool> aBools;
         ViewShell *pSh = pImp->GetShell();
         do
-        {   ++pSh->nStartAction;
+        {   ++pSh->mnStartAction;
             sal_Bool bVis = sal_False;
             if ( pSh->ISA(SwCrsrShell) )
             {
@@ -2337,7 +2337,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         sal_uInt16 nBoolIdx = 0;
         do
         {
-            --pSh->nStartAction;
+            --pSh->mnStartAction;
 
             if ( pSh->Imp()->GetRegion() )
                 bActions = sal_True;

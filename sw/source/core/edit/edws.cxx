@@ -234,13 +234,13 @@ SwFrmFmt *SwEditShell::GetTableFmt()    // OPT: schnellster Test auf Tabelle?
 
 sal_uInt16 SwEditShell::GetTOXTypeCount(TOXTypes eTyp) const
 {
-    return pDoc->GetTOXTypeCount(eTyp);
+    return mpDoc->GetTOXTypeCount(eTyp);
 }
 
 
 void SwEditShell::InsertTOXType(const SwTOXType& rTyp)
 {
-    pDoc->InsertTOXType(rTyp);
+    mpDoc->InsertTOXType(rTyp);
 }
 
 

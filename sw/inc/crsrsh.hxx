@@ -737,7 +737,7 @@ public:
     // is the whole document protected/hidden (for UI...)
     sal_Bool IsAllProtect() const { return bAllProtect; }
 
-    sal_Bool BasicActionPend() const    { return nBasicActionCnt != nStartAction; }
+    sal_Bool BasicActionPend() const    { return nBasicActionCnt != mnStartAction; }
 
     bool GotoRegion( const String& rName );
 

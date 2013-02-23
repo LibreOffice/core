@@ -194,7 +194,7 @@ SwNoTxtFrm::~SwNoTxtFrm()
 
 void SetOutDev( ViewShell *pSh, OutputDevice *pOut )
 {
-    pSh->pOut = pOut;
+    pSh->mpOut = pOut;
 }
 
 

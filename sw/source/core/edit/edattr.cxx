@@ -303,7 +303,7 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 
     SwPaM* pCrsr = GetCrsr(), *pFirst = pCrsr;
     do {
-        bChgd |=  pDoc->SetCurFtn( *pCrsr, rFillFtn.GetNumStr(),
+        bChgd |=  mpDoc->SetCurFtn( *pCrsr, rFillFtn.GetNumStr(),
                                             rFillFtn.GetNumber(),
                                             rFillFtn.IsEndNote() );
 
@@ -316,7 +316,7 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 
 bool SwEditShell::HasFtns( bool bEndNotes ) const
 {
-    const SwFtnIdxs &rIdxs = pDoc->GetFtnIdxs();
+    const SwFtnIdxs &rIdxs = mpDoc->GetFtnIdxs();
     for ( sal_uInt16 i = 0; i < rIdxs.size(); ++i )
     {
         const SwFmtFtn &rFtn = rIdxs[i]->GetFtn();
@@ -332,11 +332,11 @@ sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 {
     rList.Clear();
 
-    sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().size();
+    sal_uInt16 n, nFtnCnt = mpDoc->GetFtnIdxs().size();
     SwTxtFtn* pTxtFtn;
     for( n = 0; n < nFtnCnt; ++n )
     {
-        pTxtFtn = pDoc->GetFtnIdxs()[ n ];
+        pTxtFtn = mpDoc->GetFtnIdxs()[ n ];
         const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
         if ( rFtn.IsEndNote() != bEndNotes )
             continue;
@@ -347,11 +347,11 @@ sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
             SwNodeIndex aIdx( *pIdx, 1 );
             SwTxtNode* pTxtNd = aIdx.GetNode().GetTxtNode();
             if( !pTxtNd )
-                pTxtNd = (SwTxtNode*)pDoc->GetNodes().GoNext( &aIdx );
+                pTxtNd = (SwTxtNode*)mpDoc->GetNodes().GoNext( &aIdx );
 
             if( pTxtNd )
             {
-                String sTxt( rFtn.GetViewNumStr( *pDoc ));
+                String sTxt( rFtn.GetViewNumStr( *mpDoc ));
                 if( sTxt.Len() )
                     sTxt += ' ';
                 sTxt += pTxtNd->GetExpandTxt( 0, USHRT_MAX );

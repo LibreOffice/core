@@ -105,7 +105,7 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
         else
             nStt = nEnd = pPam->GetPoint()->nContent.GetIndex();
 
-        SfxItemSet aSet( pDoc->GetAttrPool(),
+        SfxItemSet aSet( mpDoc->GetAttrPool(),
                             pCharFmt->GetAttrSet().GetRanges() );
         pTxtNode->GetAttr( aSet, nStt, nEnd );
         pCharFmt->SetFmtAttr( aSet );
@@ -165,22 +165,22 @@ SwPageDesc* SwEditShell::GetPageDescFromPool( sal_uInt16 nId )
 
 bool SwEditShell::IsUsed( const SwModify& rModify ) const
 {
-    return pDoc->IsUsed( rModify );
+    return mpDoc->IsUsed( rModify );
 }
 
 const SwFlyFrmFmt* SwEditShell::FindFlyByName( const String& rName, sal_uInt8 nNdTyp ) const
 {
-    return pDoc->FindFlyByName(rName, nNdTyp);
+    return mpDoc->FindFlyByName(rName, nNdTyp);
 }
 
 SwCharFmt* SwEditShell::FindCharFmtByName( const String& rName ) const
 {
-    return pDoc->FindCharFmtByName( rName );
+    return mpDoc->FindCharFmtByName( rName );
 }
 
 SwTxtFmtColl* SwEditShell::FindTxtFmtCollByName( const String& rName ) const
 {
-    return pDoc->FindTxtFmtCollByName( rName );
+    return mpDoc->FindTxtFmtCollByName( rName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

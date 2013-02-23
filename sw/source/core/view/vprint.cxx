@@ -190,7 +190,7 @@ void SwPaintQueue::Remove( ViewShell *pSh )
 void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, sal_Bool /*bPDFExport*/ )
 {
     OSL_ENSURE( !pSh->GetWin(), "Drucken mit Window?" );
-    pSh->aVisArea = rRect;
+    pSh->maVisArea = rRect;
     pSh->Imp()->SetFirstVisPageInvalid();
     Point aPt( rRect.Pos() );
 
@@ -218,9 +218,9 @@ void ViewShell::InitPrt( OutputDevice *pOutDev )
     //betrachten.
     if ( pOutDev )
     {
-        aPrtOffst = Point();
+        maPrtOffst = Point();
 
-        aPrtOffst += pOutDev->GetMapMode().GetOrigin();
+        maPrtOffst += pOutDev->GetMapMode().GetOrigin();
         MapMode aMapMode( pOutDev->GetMapMode() );
         aMapMode.SetMapUnit( MAP_TWIP );
         pOutDev->SetMapMode( aMapMode );
@@ -228,10 +228,10 @@ void ViewShell::InitPrt( OutputDevice *pOutDev )
         pOutDev->SetFillColor();
     }
     else
-        aPrtOffst.X() = aPrtOffst.Y() = 0;
+        maPrtOffst.X() = maPrtOffst.Y() = 0;
 
-    if ( !pWin )
-        pOut = pOutDev;    //Oder was sonst?
+    if ( !mpWin )
+        mpOut = pOutDev;    //Oder was sonst?
 }
 
 /******************************************************************************
@@ -243,7 +243,7 @@ void ViewShell::InitPrt( OutputDevice *pOutDev )
 
 void ViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
 {
-    OSL_ENSURE( nStartAction, "missing an Action" );
+    OSL_ENSURE( mnStartAction, "missing an Action" );
     SET_CURR_SHELL( this );
 
     sal_uInt16 nAll = GetDoc()->GetPageDescCnt();
@@ -289,7 +289,7 @@ void ViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
 
 void ViewShell::ChgAllPageSize( Size &rSz )
 {
-    OSL_ENSURE( nStartAction, "missing an Action" );
+    OSL_ENSURE( mnStartAction, "missing an Action" );
     SET_CURR_SHELL( this );
 
     SwDoc* pMyDoc = GetDoc();
@@ -337,7 +337,7 @@ void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
     {
         pPage->Calc();
         SwRect aOldVis( VisArea() );
-        aVisArea = pPage->Frm();
+        maVisArea = pPage->Frm();
         Imp()->SetFirstVisPageInvalid();
         aAction.Reset();
         aAction.SetPaint( sal_False );
@@ -346,7 +346,7 @@ void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 
         aAction.Action();
 
-        aVisArea = aOldVis;             //Zuruecksetzen wg. der Paints!
+        maVisArea = aOldVis;             //Zuruecksetzen wg. der Paints!
         Imp()->SetFirstVisPageInvalid();
 //       SwPaintQueue::Repaint();
     }
@@ -522,8 +522,8 @@ sal_Bool ViewShell::PrintOrPDFExport(
         SET_CURR_SHELL( pShell );
 
         //JP 01.02.99: das ReadOnly Flag wird NIE mitkopiert; Bug 61335
-        if( pOpt->IsReadonly() )
-            pShell->pOpt->SetReadonly( sal_True );
+        if( mpOpt->IsReadonly() )
+            pShell->mpOpt->SetReadonly( sal_True );
 
         // save options at draw view:
         SwDrawViewSave aDrawViewSave( pShell->GetDrawView() );
@@ -608,7 +608,7 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
         pSh->SetPrtFormatOption( sal_True );
 
         SwRect aSwRect( rRect );
-        pSh->aVisArea = aSwRect;
+        pSh->maVisArea = aSwRect;
 
         if ( pSh->GetViewOptions()->getBrowseMode() &&
              pSh->GetNext() == pSh )
@@ -648,9 +648,9 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
 sal_Bool ViewShell::IsAnyFieldInDoc() const
 {
     const SfxPoolItem* pItem;
-    sal_uInt32 nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
+    sal_uInt32 nMaxItems = mpDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )))
+        if( 0 != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )))
         {
             const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
@@ -692,12 +692,12 @@ SwDrawViewSave::~SwDrawViewSave()
 // OD 09.01.2003 #i6467# - method also called for page preview
 void ViewShell::PrepareForPrint( const SwPrintData &rOptions )
 {
-    pOpt->SetGraphic ( sal_True == rOptions.bPrintGraphic );
-    pOpt->SetTable   ( sal_True == rOptions.bPrintTable );
-    pOpt->SetDraw    ( sal_True == rOptions.bPrintDraw  );
-    pOpt->SetControl ( sal_True == rOptions.bPrintControl );
-    pOpt->SetPageBack( sal_True == rOptions.bPrintPageBackground );
-    pOpt->SetBlackFont( sal_True == rOptions.bPrintBlackFont );
+    mpOpt->SetGraphic ( sal_True == rOptions.bPrintGraphic );
+    mpOpt->SetTable   ( sal_True == rOptions.bPrintTable );
+    mpOpt->SetDraw    ( sal_True == rOptions.bPrintDraw  );
+    mpOpt->SetControl ( sal_True == rOptions.bPrintControl );
+    mpOpt->SetPageBack( sal_True == rOptions.bPrintPageBackground );
+    mpOpt->SetBlackFont( sal_True == rOptions.bPrintBlackFont );
 
     if ( HasDrawView() )
     {

@@ -890,7 +890,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     rDrawObj.SetLayer( getIDocumentDrawModelAccess()->GetHeavenId() );
 
     // find anchor position
-    SwPaM aPam( pDoc->GetNodes() );
+    SwPaM aPam( mpDoc->GetNodes() );
     {
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aTmpPt( rInsertPosition );
@@ -932,9 +932,9 @@ void SwFEShell::GetPageObjs( std::vector<SwFrmFmt*>& rFillArr )
 {
     rFillArr.clear();
 
-    for( sal_uInt16 n = 0; n < pDoc->GetSpzFrmFmts()->size(); ++n )
+    for( sal_uInt16 n = 0; n < mpDoc->GetSpzFrmFmts()->size(); ++n )
     {
-        SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[n];
+        SwFrmFmt* pFmt = (*mpDoc->GetSpzFrmFmts())[n];
         if (FLY_AT_PAGE == pFmt->GetAnchor().GetAnchorId())
         {
             rFillArr.push_back( pFmt );
@@ -962,7 +962,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrmFmt*>& rFillArr, int nOffse
     for( sal_uInt16 n = 0; n < rFillArr.size(); ++n )
     {
         SwFrmFmt* pFmt = rFillArr[n];
-        if( pDoc->GetSpzFrmFmts()->Contains( pFmt ))
+        if( mpDoc->GetSpzFrmFmts()->Contains( pFmt ))
         {
             // FlyFmt is still valid, therefore process
 
@@ -986,7 +986,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrmFmt*>& rFillArr, int nOffse
                 bTmpAssert = true;
             }
             aNewAnchor.SetPageNum( sal_uInt16(nNewPage) );
-            pDoc->SetAttr( aNewAnchor, *pFmt );
+            mpDoc->SetAttr( aNewAnchor, *pFmt );
         }
     }
 
@@ -1478,12 +1478,12 @@ SwFrmFmt* SwFEShell::WizzardGetFly()
 {
     // do not search the Fly via the layout. Now we can delete a frame
     // without a valid layout. ( e.g. for the wizards )
-    SwFrmFmts& rSpzArr = *pDoc->GetSpzFrmFmts();
+    SwFrmFmts& rSpzArr = *mpDoc->GetSpzFrmFmts();
     sal_uInt16 nCnt = rSpzArr.size();
     if( nCnt )
     {
         SwNodeIndex& rCrsrNd = GetCrsr()->GetPoint()->nNode;
-        if( rCrsrNd.GetIndex() > pDoc->GetNodes().GetEndOfExtras().GetIndex() )
+        if( rCrsrNd.GetIndex() > mpDoc->GetNodes().GetEndOfExtras().GetIndex() )
             // Cursor is in the body area!
             return 0;
 
@@ -1848,7 +1848,7 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
         SwFrmFmt *pFmt = FindFrmFmt( pObj );
 
         // store attributes, then set the graphic
-        SfxItemSet aFrmSet( pDoc->GetAttrPool(),
+        SfxItemSet aFrmSet( mpDoc->GetAttrPool(),
                             pFmt->GetAttrSet().GetRanges() );
         aFrmSet.Set( pFmt->GetAttrSet() );
 
@@ -1923,21 +1923,21 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
     SwFrmFmt * pOldChainPrev = (SwFrmFmt *) rChain.GetPrev();
 
     if (pOldChainNext)
-        pDoc->Unchain(rFmt);
+        mpDoc->Unchain(rFmt);
 
     if (pOldChainPrev)
-        pDoc->Unchain(*pOldChainPrev);
+        mpDoc->Unchain(*pOldChainPrev);
 
-    sal_uInt16 nCnt = pDoc->GetFlyCount(FLYCNTTYPE_FRM);
+    sal_uInt16 nCnt = mpDoc->GetFlyCount(FLYCNTTYPE_FRM);
 
     /* potential successors resp. predecessors */
     ::std::vector< const SwFrmFmt * > aTmpSpzArray;
 
-    pDoc->FindFlyByName(rReference);
+    mpDoc->FindFlyByName(rReference);
 
     for (sal_uInt16 n = 0; n < nCnt; n++)
     {
-        const SwFrmFmt & rFmt1 = *(pDoc->GetFlyNum(n, FLYCNTTYPE_FRM));
+        const SwFrmFmt & rFmt1 = *(mpDoc->GetFlyNum(n, FLYCNTTYPE_FRM));
 
         /*
            pFmt is a potential successor of rFmt if it is chainable after
@@ -1950,9 +1950,9 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
         int nChainState;
 
         if (bSuccessors)
-            nChainState = pDoc->Chainable(rFmt, rFmt1);
+            nChainState = mpDoc->Chainable(rFmt, rFmt1);
         else
-            nChainState = pDoc->Chainable(rFmt1, rFmt);
+            nChainState = mpDoc->Chainable(rFmt1, rFmt);
 
         if (nChainState == SW_CHAIN_OK)
         {
@@ -1999,10 +1999,10 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
     }
 
     if (pOldChainNext)
-        pDoc->Chain(rFmt, *pOldChainNext);
+        mpDoc->Chain(rFmt, *pOldChainNext);
 
     if (pOldChainPrev)
-        pDoc->Chain(*pOldChainPrev, rFmt);
+        mpDoc->Chain(*pOldChainPrev, rFmt);
 
     EndAction();
 }

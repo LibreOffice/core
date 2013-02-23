@@ -806,7 +806,7 @@ uno::Any SwEditShell::SpellContinue(
     //JP 18.07.95: verhinder bei Fehlermeldungen die Anzeige der Selektionen
     //              KEIN StartAction, da damit auch die Paints abgeschaltet
     //              werden !!!!!
-    ++nStartAction;
+    ++mnStartAction;
     rtl::OUString aRet;
     uno::Reference< uno::XInterface >  xRet;
     if (pConvArgs)
@@ -819,7 +819,7 @@ uno::Any SwEditShell::SpellContinue(
         pSpellIter->Continue( pPageCnt, pPageSt ) >>= xRet;
         aRes <<= xRet;
     }
-    --nStartAction;
+    --mnStartAction;
 
     if( !aRet.isEmpty() || xRet.is() )
     {
@@ -923,10 +923,10 @@ uno::Reference< uno::XInterface >
     //JP 18.07.95: verhinder bei Fehlermeldungen die Anzeige der Selektionen
     //              KEIN StartAction, da damit auch die Paints abgeschaltet
     //              werden !!!!!
-    ++nStartAction;
+    ++mnStartAction;
     uno::Reference< uno::XInterface >  xRet;
     pHyphIter->Continue( pPageCnt, pPageSt ) >>= xRet;
-    --nStartAction;
+    --mnStartAction;
 
     if( xRet.is() )
         pHyphIter->ShowSelection();
@@ -962,9 +962,9 @@ void SwEditShell::HyphIgnore()
     //JP 18.07.95: verhinder bei Fehlermeldungen die Anzeige der Selektionen
     //              KEIN StartAction, da damit auch die Paints abgeschaltet
     //              werden !!!!!
-    ++nStartAction;
+    ++mnStartAction;
     pHyphIter->Ignore();
-    --nStartAction;
+    --mnStartAction;
 
     pHyphIter->ShowSelection();
 }
@@ -1115,11 +1115,11 @@ bool SwEditShell::GetGrammarCorrection(
         {
             String const aText(pNode->GetTxt().copy(nBegin, nLen));
 
-            uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( pDoc->GetGCIterator() );
+            uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( mpDoc->GetGCIterator() );
             if (xGCIterator.is())
             {
 //                LanguageType eActLang = (LanguageType)pNode->GetLang( nBegin, nLen );
-                uno::Reference< lang::XComponent > xDoc( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
+                uno::Reference< lang::XComponent > xDoc( mpDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
 
                 // Expand the string:
                 const ModelToViewHelper aConversionMap(*pNode);
@@ -1280,7 +1280,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // iterate over the new portions, beginning at the end to take advantage of the previously
         // saved content positions
 
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_UI_TEXT_CORRECTION, NULL );
+        mpDoc->GetIDocumentUndoRedo().StartUndo( UNDO_UI_TEXT_CORRECTION, NULL );
         StartAction();
 
         SwPaM *pCrsr = GetCrsr();
@@ -1334,11 +1334,11 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                 if(aCurrentNewPortion->sText != aCurrentOldPortion->sText)
                 {
                     //change text ...
-                    pDoc->DeleteAndJoin(*pCrsr);
+                    mpDoc->DeleteAndJoin(*pCrsr);
                     // ... and apply language if necessary
                     if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                         SetAttr( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId), nLangWhichId );
-                    pDoc->InsertString(*pCrsr, aCurrentNewPortion->sText);
+                    mpDoc->InsertString(*pCrsr, aCurrentNewPortion->sText);
                 }
                 else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                 {
@@ -1368,7 +1368,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
             pCrsr->GetMark()->nContent = aCurrentEndPosition->nRight;
 
             //delete the sentence completely
-            pDoc->DeleteAndJoin(*pCrsr);
+            mpDoc->DeleteAndJoin(*pCrsr);
             svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.begin();
             while(aCurrentNewPortion != rNewPortions.end())
             {
@@ -1386,7 +1386,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                 if(rLang.GetLanguage() != aCurrentNewPortion->eLanguage)
                     SetAttr( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
                 //insert the new string
-                pDoc->InsertString(*pCrsr, aCurrentNewPortion->sText);
+                mpDoc->InsertString(*pCrsr, aCurrentNewPortion->sText);
 
                 //set the cursor to the end of the inserted string
                 *pCrsr->Start() = *pCrsr->End();
@@ -1409,7 +1409,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // set continuation position for spell/grammar checking to the end of this sentence
         pSpellIter->SetCurr( new SwPosition( *pCrsr->Start() ) );
 
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_UI_TEXT_CORRECTION, NULL );
+        mpDoc->GetIDocumentUndoRedo().EndUndo( UNDO_UI_TEXT_CORRECTION, NULL );
         EndAction();
     }
 }

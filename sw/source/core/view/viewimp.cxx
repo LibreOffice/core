@@ -176,7 +176,7 @@ sal_Bool SwViewImp::IsUpdateExpFlds()
 
 void SwViewImp::SetFirstVisPage()
 {
-    if ( pSh->bDocSizeChgd && pSh->VisArea().Top() > pSh->GetLayout()->Frm().Height() )
+    if ( pSh->mbDocSizeChgd && pSh->VisArea().Top() > pSh->GetLayout()->Frm().Height() )
     {
         //We are in an action and because of erase actions the VisArea is
         //after the first visible page.

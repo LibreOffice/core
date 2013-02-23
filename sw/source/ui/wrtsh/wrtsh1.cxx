@@ -480,7 +480,7 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
     // set parent to get correct VisArea(in case of object needing parent printer)
     uno::Reference < container::XChild > xChild( xRef.GetObject(), uno::UNO_QUERY );
     if ( xChild.is() )
-        xChild->setParent( pDoc->GetDocShell()->GetModel() );
+        xChild->setParent( mpDoc->GetDocShell()->GetModel() );
 
     SvGlobalName aCLSID( xRef->getClassID() );
     bStarMath = ( SotExchange::IsMath( aCLSID ) != 0 );
@@ -536,7 +536,7 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
     SwFlyFrmFmt *pFmt = SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
 
     // --> #i972#
-    if ( bStarMath && pDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) )
+    if ( bStarMath && mpDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) )
         AlignFormulaToBaseline( xRef.GetObject() );
 
     if (pFlyFrmFmt)
@@ -1057,7 +1057,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
     {
         // retrieve numbering rule at paragraph
         // style, which is found at current cursor position in the document.
-        SwNumRule* pCollRule = pDoc->FindNumRulePtr(pColl->GetNumRule().GetValue());
+        SwNumRule* pCollRule = mpDoc->FindNumRulePtr(pColl->GetNumRule().GetValue());
         // #125993# - The outline numbering rule isn't allowed
         // to be derived from a parent paragraph style to a derived one.
         // Thus check, if the found outline numbering rule is directly
@@ -1065,7 +1065,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
         if ( pCollRule && pCollRule == GetDoc()->GetOutlineNumRule() )
         {
             const SwNumRule* pDirectCollRule =
-                    pDoc->FindNumRulePtr(pColl->GetNumRule( sal_False ).GetValue());
+                    mpDoc->FindNumRulePtr(pColl->GetNumRule( sal_False ).GetValue());
             if ( !pDirectCollRule )
             {
                 pCollRule = 0;
@@ -1634,7 +1634,7 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
         ResetAttr( std::set<sal_uInt16>(), pCrsr );
         SetAttr(aCoreSet, 0, pCrsr);
     }
-    pDoc->ChgFmt(*pColl, rStyleSet );
+    mpDoc->ChgFmt(*pColl, rStyleSet );
     EndAction();
 }
 
@@ -1779,7 +1779,7 @@ String SwWrtShell::GetSelDescr() const
         }
         break;
     default:
-        if (0 != pDoc)
+        if (0 != mpDoc)
             aResult = GetCrsrDescr();
     }
 

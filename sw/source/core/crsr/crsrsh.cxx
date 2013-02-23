@@ -246,7 +246,7 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
     }
 
     // Update all invalid numberings before the last action
-    if( 1 == nStartAction )
+    if( 1 == mnStartAction )
         GetDoc()->UpdateNumRule();
 
     // #i76923#: Don't show the cursor in the ViewShell::EndAction() - call.
@@ -400,11 +400,11 @@ void SwCrsrShell::MarkListLevel( const String& sListId,
          nListLevel != nMarkedListLevel)
     {
         if ( sMarkedListId.Len() > 0 )
-            pDoc->MarkListLevel( sMarkedListId, nMarkedListLevel, false );
+            mpDoc->MarkListLevel( sMarkedListId, nMarkedListLevel, false );
 
         if ( sListId.Len() > 0 )
         {
-            pDoc->MarkListLevel( sListId, nListLevel, true );
+            mpDoc->MarkListLevel( sListId, nListLevel, true );
         }
 
         sMarkedListId = sListId;
@@ -813,7 +813,7 @@ void SwCrsrShell::ClearMark()
             // move content part from mark to nodes array if not all indices
             // were moved correctly (e.g. when deleting header/footer)
             SwPosition& rPos = *pCurCrsr->GetMark();
-            rPos.nNode.Assign( pDoc->GetNodes(), 0 );
+            rPos.nNode.Assign( mpDoc->GetNodes(), 0 );
             rPos.nContent.Assign( 0, 0 );
             pCurCrsr->DeleteMark();
         }
@@ -830,7 +830,7 @@ void SwCrsrShell::ClearMark()
         // move content part from mark to nodes array if not all indices
         // were moved correctly (e.g. when deleting header/footer)
         SwPosition& rPos = *pCurCrsr->GetMark();
-        rPos.nNode.Assign( pDoc->GetNodes(), 0 );
+        rPos.nNode.Assign( mpDoc->GetNodes(), 0 );
         rPos.nContent.Assign( 0, 0 );
         pCurCrsr->DeleteMark();
         if( !nCrsrMove )
@@ -1202,7 +1202,7 @@ void SwCrsrShell::VisPortChgd( const SwRect & rRect )
 void SwCrsrShell::UpdateCrsrPos()
 {
     SET_CURR_SHELL( this );
-    ++nStartAction;
+    ++mnStartAction;
     SwShellCrsr* pShellCrsr = getShellCrsr( true );
     Size aOldSz( GetDocSize() );
     SwCntntNode *pCNode = pShellCrsr->GetCntntNode();
@@ -1220,7 +1220,7 @@ void SwCrsrShell::UpdateCrsrPos()
     IGrammarContact *pGrammarContact = GetDoc() ? GetDoc()->getGrammarContact() : 0;
     if( pGrammarContact )
         pGrammarContact->updateCursorPosition( *pCurCrsr->GetPoint() );
-    --nStartAction;
+    --mnStartAction;
     if( aOldSz != GetDocSize() )
         SizeChgNotify();
 }
@@ -1308,7 +1308,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
     // then the table mode is active (also if it is already active: pTblCrsr)
     SwPaM* pTstCrsr = getShellCrsr( true );
     if( pTstCrsr->HasMark() && !pBlockCrsr &&
-        pDoc->IsIdxInTbl( pTstCrsr->GetPoint()->nNode ) &&
+        mpDoc->IsIdxInTbl( pTstCrsr->GetPoint()->nNode ) &&
           ( pTblCrsr ||
             pTstCrsr->GetNode( sal_True )->StartOfSectionNode() !=
             pTstCrsr->GetNode( sal_False )->StartOfSectionNode() ) )
@@ -1474,8 +1474,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         if( pSectNd && ( pSectNd->GetSection().IsHiddenFlag() ||
             ( !IsReadOnlyAvailable() &&
               pSectNd->GetSection().IsProtectFlag() &&
-             ( !pDoc->GetDocShell() ||
-               !pDoc->GetDocShell()->IsReadOnly() || bAllProtect )) ) )
+             ( !mpDoc->GetDocShell() ||
+               !mpDoc->GetDocShell()->IsReadOnly() || bAllProtect )) ) )
         {
             if( !FindValidCntntNode( !HasDrawView() ||
                     0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
@@ -1577,8 +1577,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             if( !IsReadOnlyAvailable() && pFrm->IsProtected() &&
                 ( !Imp()->GetDrawView() ||
                   !Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() ) &&
-                (!pDoc->GetDocShell() ||
-                 !pDoc->GetDocShell()->IsReadOnly() || bAllProtect ) )
+                (!mpDoc->GetDocShell() ||
+                 !mpDoc->GetDocShell()->IsReadOnly() || bAllProtect ) )
             {
                 // look for a valid position
                 bool bChgState = true;
@@ -2054,7 +2054,7 @@ SwCntntFrm *SwCrsrShell::GetCurrFrm( const sal_Bool bCalcFrm ) const
     {
         if ( bCalcFrm )
         {
-            const sal_uInt16* pST = &nStartAction;
+            const sal_uInt16* pST = &mnStartAction;
             ++(*((sal_uInt16*)pST));
             const Size aOldSz( GetDocSize() );
             pRet = pNd->getLayoutFrm( GetLayout(), &pCurCrsr->GetPtPos(), pCurCrsr->GetPoint() );
@@ -2670,7 +2670,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
     // first check for frames
     SwNodeIndex& rNdIdx = pCurCrsr->GetPoint()->nNode;
     sal_uLong nNdIdx = rNdIdx.GetIndex(); // keep backup
-    SwNodes& rNds = pDoc->GetNodes();
+    SwNodes& rNds = mpDoc->GetNodes();
     SwCntntNode* pCNd = rNdIdx.GetNode().GetCntntNode();
     const SwCntntFrm * pFrm;
 
@@ -2701,8 +2701,8 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
     else if( bOnlyText && pCNd && pCNd->IsNoTxtNode() )
     {
         // set to beginning of document
-        rNdIdx = pDoc->GetNodes().GetEndOfExtras();
-        pCurCrsr->GetPoint()->nContent.Assign( pDoc->GetNodes().GoNext(
+        rNdIdx = mpDoc->GetNodes().GetEndOfExtras();
+        pCurCrsr->GetPoint()->nContent.Assign( mpDoc->GetNodes().GoNext(
                                                             &rNdIdx ), 0 );
         nNdIdx = rNdIdx.GetIndex();
     }
@@ -2933,7 +2933,7 @@ short SwCrsrShell::GetTextDirection( const Point* pPt ) const
         GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState );
     }
 
-    return pDoc->GetTextDirection( aPos, &aPt );
+    return mpDoc->GetTextDirection( aPos, &aPt );
 }
 
 bool SwCrsrShell::IsInVerticalText( const Point* pPt ) const

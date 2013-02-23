@@ -7129,9 +7129,9 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
 void SetOutDevAndWin( ViewShell *pSh, OutputDevice *pO,
                       Window *pW, sal_uInt16 nZoom )
 {
-    pSh->pOut = pO;
-    pSh->pWin = pW;
-    pSh->pOpt->SetZoom( nZoom );
+    pSh->mpOut = pO;
+    pSh->mpWin = pW;
+    pSh->mpOpt->SetZoom( nZoom );
 }
 
 Graphic SwFrmFmt::MakeGraphic( ImageMap* )

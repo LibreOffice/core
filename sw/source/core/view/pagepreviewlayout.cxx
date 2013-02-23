@@ -1152,7 +1152,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
             }
             else
             {
-                mrParentViewShell.aVisArea = aPageRect;
+                mrParentViewShell.maVisArea = aPageRect;
                 aPxPaintRect.Intersection( aPxOutRect );
                 Rectangle aPaintRect = pOutputDev->PixelToLogic( aPxPaintRect );
                 mrParentViewShell.Paint( aPaintRect );
@@ -1197,7 +1197,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
     }
 
     pOutputDev->SetMapMode( aSavedMapMode );
-    mrParentViewShell.aVisArea.Clear();
+    mrParentViewShell.maVisArea.Clear();
 
     // OD 07.11.2003 #i22014#
     mbInPaint = false;

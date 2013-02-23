@@ -637,7 +637,7 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
         if( RES_INPUTFLD == pFldType->Which() )
         {
             // there are hidden input fields in the set exp. fields
-            const SwFldTypes& rFldTypes = *pDoc->GetFldTypes();
+            const SwFldTypes& rFldTypes = *mpDoc->GetFldTypes();
             const sal_uInt16 nSize = rFldTypes.size();
 
             // iterate over all types
@@ -649,7 +649,7 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
     }
     else
     {
-        const SwFldTypes& rFldTypes = *pDoc->GetFldTypes();
+        const SwFldTypes& rFldTypes = *mpDoc->GetFldTypes();
         const sal_uInt16 nSize = rFldTypes.size();
 
         // iterate over all types
@@ -681,15 +681,15 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
         if( bDelFld )
         {
             SwFmtFld* pFmtFld = new SwFmtFld( SwDateTimeField(
-                (SwDateTimeFieldType*)pDoc->GetSysFldType( RES_DATETIMEFLD ) ) );
+                (SwDateTimeFieldType*)mpDoc->GetSysFldType( RES_DATETIMEFLD ) ) );
 
             pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex(),
-                        pDoc->IsClipBoard() );
+                        mpDoc->IsClipBoard() );
             pTxtFld->ChgTxtNode( pTNd );
         }
 
         _SetGetExpFld aSrch( rPos.nNode, pTxtFld, &rPos.nContent );
-        if( rPos.nNode.GetIndex() < pDoc->GetNodes().GetEndOfExtras().GetIndex() )
+        if( rPos.nNode.GetIndex() < mpDoc->GetNodes().GetEndOfExtras().GetIndex() )
         {
             // also at collection use only the first frame
             Point aPt;
@@ -798,7 +798,7 @@ bool SwCrsrShell::GotoOutline( const String& rName )
     SwCrsrSaveState aSaveState( *pCrsr );
 
     bool bRet = false;
-    if( pDoc->GotoOutline( *pCrsr->GetPoint(), rName ) && !pCrsr->IsSelOvr() )
+    if( mpDoc->GotoOutline( *pCrsr->GetPoint(), rName ) && !pCrsr->IsSelOvr() )
     {
         UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
         bRet = true;
@@ -1659,7 +1659,7 @@ bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
 
 const SwFmtINetFmt* SwCrsrShell::FindINetAttr( const String& rName ) const
 {
-    return pDoc->FindINetAttr( rName );
+    return mpDoc->FindINetAttr( rName );
 }
 
 sal_Bool SwCrsrShell::GetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode,

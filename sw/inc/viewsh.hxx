@@ -111,51 +111,51 @@ class SW_DLLPUBLIC ViewShell : public Ring
     // Set SwVisArea in order to enable clean formatting before printing.
     friend void SetSwVisArea( ViewShell *pSh, const SwRect &, sal_Bool bPDFExport = sal_False );
 
-    static BitmapEx*    pReplaceBmp;    // replaced display of still loaded images
-    static BitmapEx*    pErrorBmp;      // error display of missed images
+    static BitmapEx*    mpReplaceBmp;    ///< replaced display of still loaded images
+    static BitmapEx*    mpErrorBmp;      ///< error display of missed images
 
-    static sal_Bool bLstAct;        // sal_True if EndAction of last Shell
+    static sal_Bool mbLstAct;        // sal_True if EndAction of last Shell
                                     // i.e. if the EndActions of the other
                                     // Shells on the document are through.
 
-    Point         aPrtOffst;         // Ofst for Printer,
+    Point         maPrtOffst;         // Ofst for Printer,
                                      // non-printable margin.
-     Size         aBrowseBorder;     // Border for frame documents.
-    SwRect        aInvalidRect;
+     Size         maBrowseBorder;     // Border for frame documents.
+    SwRect        maInvalidRect;
 
-    SfxViewShell *pSfxViewShell;
-    SwViewImp    *pImp;             // Core-internals of ViewShell.
+    SfxViewShell *mpSfxViewShell;
+    SwViewImp    *mpImp;             // Core-internals of ViewShell.
                                     // The pointer is never 0.
 
-    Window       *pWin;              // = 0 during printing or pdf export
-    OutputDevice *pOut;              // Window, Printer, VirtDev, ...
+    Window       *mpWin;              ///< = 0 during printing or pdf export
+    OutputDevice *mpOut;              ///< Window, Printer, VirtDev, ...
     OutputDevice* mpTmpRef;           // Temporariy reference device. Is used
                                      // during (printer depending) prospect
                                      // and page preview printing
                                      // (because a scaling has to be set at
                                      // the original printer)
 
-    SwViewOption *pOpt;
-    SwAccessibilityOptions* pAccOptions;
+    SwViewOption *mpOpt;
+    SwAccessibilityOptions* mpAccOptions;
 
 
-    sal_Bool  bDocSizeChgd     :1;  // For DocChgNotify(): Announce new DocSize
+    sal_Bool  mbDocSizeChgd     :1;  // For DocChgNotify(): Announce new DocSize
                                     // at EndAction to DocMDI.
-    sal_Bool  bPaintWorks      :1;  // Normal Painting if sal_True,
+    sal_Bool  mbPaintWorks      :1;  // Normal Painting if sal_True,
                                     // remember Paint if sal_False.
-    sal_Bool  bPaintInProgress :1;  // Block any double paint.
-    sal_Bool  bViewLocked      :1;  // Lock visible range;
+    sal_Bool  mbPaintInProgress :1;  // Block any double paint.
+    sal_Bool  mbViewLocked      :1;  // Lock visible range;
                                     // in this case MakeVisible is ineffectual.
-    sal_Bool  bInEndAction     :1;  // Avoid problems, cf. viewsh.cxx.
-    sal_Bool  bPreView         :1;  // If sal_True it is a PreView-ViewShell.
-    sal_Bool  bFrameView       :1;  // If sal_True it is a  (HTML-)Frame.
-    sal_Bool  bEnableSmooth    :1;  // Disable SmoothScroll, e.g. for drag
+    sal_Bool  mbInEndAction     :1;  // Avoid problems, cf. viewsh.cxx.
+    sal_Bool  mbPreView         :1;  // If sal_True it is a PreView-ViewShell.
+    sal_Bool  mbFrameView       :1;  // If sal_True it is a  (HTML-)Frame.
+    sal_Bool  mbEnableSmooth    :1;  // Disable SmoothScroll, e.g. for drag
                                     // of scrollbars.
-    sal_Bool  bEndActionByVirDev:1; // Paints from EndAction always via virtual device
+    sal_Bool  mbEndActionByVirDev:1; // Paints from EndAction always via virtual device
                                     // (e.g. when browsing).
-    bool      bShowHeaderSeparator:1; ///< Flag to say that we are showing the header control
-    bool      bShowFooterSeparator:1; ///< Flag to say that we are showing the footer control
-    bool      bHeaderFooterEdit:1;  ///< Flag to say that we are editing header or footer (according to the bShow(Header|Footer)Separator above)
+    bool      mbShowHeaderSeparator:1; ///< Flag to say that we are showing the header control
+    bool      mbShowFooterSeparator:1; ///< Flag to say that we are showing the footer control
+    bool      mbHeaderFooterEdit:1;  ///< Flag to say that we are editing header or footer (according to the bShow(Header|Footer)Separator above)
 
     // boolean, indicating that class in in constructor.
     bool mbInConstructor:1;
@@ -163,7 +163,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
     SdrPaintWindow*         mpTargetPaintWindow;
     OutputDevice*           mpBufferedOut;
 
-    SwRootFrmPtr            pLayout;            //swmod 080116
+    SwRootFrmPtr            mpLayout;
 
     // Initialization; called by the diverse constructors.
     SW_DLLPRIVATE void Init( const SwViewOption *pNewOpt );
@@ -185,20 +185,20 @@ class SW_DLLPUBLIC ViewShell : public Ring
     SW_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
 protected:
-    static ShellResource*   pShellRes;      // Resources for the Shell.
-    static Window*          pCareWindow;    // Avoid this window.
+    static ShellResource*   mpShellRes;      ///< Resources for the Shell.
+    static Window*          mpCareWindow;    ///< Avoid this window.
 
-    SwRect                  aVisArea;       // The modern version of VisArea.
-    SwDoc                   *pDoc;          // The document; never 0.
+    SwRect                  maVisArea;       ///< The modern version of VisArea.
+    SwDoc                   *mpDoc;          ///< The document; never 0.
 
-    sal_uInt16 nStartAction; // != 0 if at least one ::com::sun::star::chaos::Action is active.
-    sal_uInt16 nLockPaint;   // != 0 if Paint is locked.
+    sal_uInt16 mnStartAction; ///< != 0 if at least one ::com::sun::star::chaos::Action is active.
+    sal_uInt16 mnLockPaint;   ///< != 0 if Paint is locked.
 
 public:
     TYPEINFO();
 
-          SwViewImp *Imp() { return pImp; }
-    const SwViewImp *Imp() const { return pImp; }
+          SwViewImp *Imp() { return mpImp; }
+    const SwViewImp *Imp() const { return mpImp; }
 
     const SwNodes& GetNodes() const;
 
@@ -210,19 +210,19 @@ public:
            void ImplStartAction();
     inline void EndAction( const sal_Bool bIdleEnd = sal_False );
            void ImplEndAction( const sal_Bool bIdleEnd = sal_False );
-    sal_uInt16 ActionCount() const { return nStartAction; }
-    sal_Bool ActionPend() const { return nStartAction != 0; }
-    sal_Bool IsInEndAction() const { return bInEndAction; }
+    sal_uInt16 ActionCount() const { return mnStartAction; }
+    sal_Bool ActionPend() const { return mnStartAction != 0; }
+    sal_Bool IsInEndAction() const { return mbInEndAction; }
 
-    void SetEndActionByVirDev( sal_Bool b ) { bEndActionByVirDev = b; }
-    sal_Bool IsEndActionByVirDev()          { return bEndActionByVirDev; }
+    void SetEndActionByVirDev( sal_Bool b ) { mbEndActionByVirDev = b; }
+    sal_Bool IsEndActionByVirDev()          { return mbEndActionByVirDev; }
 
     // The ActionCount for all Shells is temporarily set to zero and then
     // restored at the RootFrame via UNO.
     void    SetRestoreActions(sal_uInt16 nSet);
     sal_uInt16  GetRestoreActions() const;
 
-    inline sal_Bool HasInvalidRect() const { return aInvalidRect.HasArea(); }
+    inline sal_Bool HasInvalidRect() const { return maInvalidRect.HasArea(); }
     void ChgHyphenation() { Reformat(); }
     void ChgNumberDigits();
 
@@ -244,7 +244,7 @@ public:
     //////////////////////////////////////////////////////////////////////////////
 
     virtual void Paint(const Rectangle &rRect);
-    sal_Bool IsPaintInProgress() const { return bPaintInProgress; }
+    sal_Bool IsPaintInProgress() const { return mbPaintInProgress; }
     bool IsDrawingLayerPaintInProgress() const { return !mPrePostPaintRegions.empty(); }
 
     // Notification that visible area has been changed.
@@ -253,9 +253,9 @@ public:
     // in order to avoid pixel errors when scrolling.
     virtual void VisPortChgd( const SwRect & );
     sal_Bool SmoothScroll( long lXDiff, long lYDiff, const Rectangle* );//Browser
-    void EnableSmooth( sal_Bool b ) { bEnableSmooth = b; }
+    void EnableSmooth( sal_Bool b ) { mbEnableSmooth = b; }
 
-    const SwRect& VisArea() const { return aVisArea; }
+    const SwRect& VisArea() const { return maVisArea; }
 
     // If necessary scroll until passed Rect is situated in visible sector.
     void MakeVisible( const SwRect & );
@@ -283,7 +283,7 @@ public:
 
     const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
 
-    inline SwDoc *GetDoc()  const { return pDoc; }  //Never 0.
+    inline SwDoc *GetDoc()  const { return mpDoc; }  //Never 0.
 
     /** Provides access to the document setting interface
      */
@@ -339,10 +339,10 @@ public:
     // 2. GetWin:      Available if we not printing
     // 3. GetOut:      Printer, Window or Virtual device
     OutputDevice& GetRefDev() const;
-    inline Window* GetWin()    const { return pWin; }
-    inline OutputDevice* GetOut()     const { return pOut; }
+    inline Window* GetWin()    const { return mpWin; }
+    inline OutputDevice* GetOut()     const { return mpOut; }
 
-    static inline sal_Bool IsLstEndAction() { return ViewShell::bLstAct; }
+    static inline sal_Bool IsLstEndAction() { return ViewShell::mbLstAct; }
 
     // Change of all page descriptors.
     void   ChgAllPageOrientation( sal_uInt16 eOri );
@@ -414,7 +414,7 @@ public:
     // Calls Idle-formatter of Layout.
     void LayoutIdle();
 
-    inline const SwViewOption *GetViewOptions() const { return pOpt; }
+    inline const SwViewOption *GetViewOptions() const { return mpOpt; }
     virtual void  ApplyViewOptions( const SwViewOption &rOpt );
            void  SetUIOptions( const SwViewOption &rOpt );
     virtual void  SetReadonlyOption(sal_Bool bSet);          // Set readonly-bit of ViewOptions.
@@ -422,18 +422,18 @@ public:
            void  SetPrtFormatOption(sal_Bool bSet);         // Set PrtFormat-Bit of ViewOptions.
            void  SetReadonlySelectionOption(sal_Bool bSet); // Change the selection mode in readonly docs.
 
-    const SwAccessibilityOptions* GetAccessibilityOptions() const { return pAccOptions;}
+    const SwAccessibilityOptions* GetAccessibilityOptions() const { return mpAccOptions;}
 
-    static void           SetShellRes( ShellResource* pRes ) { pShellRes = pRes; }
+    static void           SetShellRes( ShellResource* pRes ) { mpShellRes = pRes; }
     static ShellResource* GetShellRes();
 
     static void           SetCareWin( Window* pNew );
     static Window*        GetCareWin(ViewShell& rVSh)
-                          { return pCareWindow ? pCareWindow : CareChildWin(rVSh); }
+                          { return mpCareWindow ? mpCareWindow : CareChildWin(rVSh); }
     static Window*        CareChildWin(ViewShell& rVSh);
 
-    inline SfxViewShell   *GetSfxViewShell() { return pSfxViewShell; }
-    inline void           SetSfxViewShell(SfxViewShell *pNew) { pSfxViewShell = pNew; }
+    inline SfxViewShell   *GetSfxViewShell() { return mpSfxViewShell; }
+    inline void           SetSfxViewShell(SfxViewShell *pNew) { mpSfxViewShell = pNew; }
 
     // Selection of  Draw ::com::sun::star::script::Engine has been changed.
     virtual void DrawSelChanged();
@@ -452,14 +452,14 @@ public:
     */
     void AdjustOptionsForPagePreview( SwPrintData const& rPrintOptions );
 
-    sal_Bool IsViewLocked() const { return bViewLocked; }
-    void LockView( sal_Bool b )   { bViewLocked = b;    }
+    sal_Bool IsViewLocked() const { return mbViewLocked; }
+    void LockView( sal_Bool b )   { mbViewLocked = b;    }
 
     inline void LockPaint();
            void ImplLockPaint();
     inline void UnlockPaint( sal_Bool bVirDev = sal_False );
            void ImplUnlockPaint( sal_Bool bVirDev );
-           sal_Bool IsPaintLocked() const { return nLockPaint != 0; }
+           sal_Bool IsPaintLocked() const { return mnLockPaint != 0; }
 
     // Get/set DrawView and PageView.
     sal_Bool HasDrawView() const;
@@ -476,11 +476,11 @@ public:
     inline const SfxItemPool& GetAttrPool() const;
                  SfxItemPool& GetAttrPool();
 
-    sal_Bool IsPreView() const { return bPreView; }
+    sal_Bool IsPreView() const { return mbPreView; }
 
-    sal_Bool IsFrameView()  const { return bFrameView; }
+    sal_Bool IsFrameView()  const { return mbFrameView; }
     void SetFrameView( const Size& rBrowseBorder )
-           { bFrameView = sal_True; aBrowseBorder = rBrowseBorder; }
+           { mbFrameView = sal_True; maBrowseBorder = rBrowseBorder; }
 
     // Makes the necessary invalidations:
     // If BrowseMode has changed bBrowseChgd == sal_True
@@ -561,9 +561,9 @@ public:
     /// Acts both for headers / footers, depending on the bShow(Header|Footer)Separator flags
     void ToggleHeaderFooterEdit();
     /// Acts both for headers / footers, depending on the bShow(Header|Footer)Separator flags
-    bool IsHeaderFooterEdit() const { return bHeaderFooterEdit; }
-    bool IsShowHeaderFooterSeparator( FrameControlType eControl ) { return (eControl == Header)? bShowHeaderSeparator: bShowFooterSeparator; }
-    virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) { if ( eControl == Header ) bShowHeaderSeparator = bShow; else bShowFooterSeparator = bShow; }
+    bool IsHeaderFooterEdit() const { return mbHeaderFooterEdit; }
+    bool IsShowHeaderFooterSeparator( FrameControlType eControl ) { return (eControl == Header)? mbShowHeaderSeparator: mbShowFooterSeparator; }
+    virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) { if ( eControl == Header ) mbShowHeaderSeparator = bShow; else mbShowFooterSeparator = bShow; }
 };
 
 //---- class CurrShell manages global ShellPointer -------------------
@@ -580,29 +580,29 @@ public:
 
 inline void ViewShell::ResetInvalidRect()
 {
-   aInvalidRect.Clear();
+   maInvalidRect.Clear();
 }
 
 inline void ViewShell::StartAction()
 {
-    if ( !nStartAction++ )
+    if ( !mnStartAction++ )
         ImplStartAction();
 }
 inline void ViewShell::EndAction( const sal_Bool bIdleEnd )
 {
-    if( 0 == (nStartAction - 1) )
+    if( 0 == (mnStartAction - 1) )
         ImplEndAction( bIdleEnd );
-    --nStartAction;
+    --mnStartAction;
 }
 
 inline void ViewShell::LockPaint()
 {
-    if ( !nLockPaint++ )
+    if ( !mnLockPaint++ )
         ImplLockPaint();
 }
 inline void ViewShell::UnlockPaint( sal_Bool bVirDev )
 {
-    if ( 0 == --nLockPaint )
+    if ( 0 == --mnLockPaint )
         ImplUnlockPaint( bVirDev );
 }
 inline const SfxItemPool& ViewShell::GetAttrPool() const

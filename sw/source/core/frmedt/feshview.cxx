@@ -2383,7 +2383,7 @@ sal_Bool SwFEShell::GotoFly( const String& rName, FlyCntType eType, sal_Bool bSe
              /* FLYCNTTYPE_OLE */   ND_OLENODE
             };
 
-    const SwFlyFrmFmt* pFlyFmt = pDoc->FindFlyByName( rName, aChkArr[ eType]);
+    const SwFlyFrmFmt* pFlyFmt = mpDoc->FindFlyByName( rName, aChkArr[ eType]);
     if( pFlyFmt )
     {
         SET_CURR_SHELL( this );
@@ -2484,7 +2484,7 @@ sal_uInt8 SwFEShell::IsSelObjProtected( sal_uInt16 eType ) const
                             // set FLYPROTECT_POS if it is a Math object anchored 'as char' and baseline alignment is activated
                             const bool bProtectMathPos = SotExchange::IsMath( xObj->getClassID() )
                                     && FLY_AS_CHAR == pFly->GetFmt()->GetAnchor().GetAnchorId()
-                                    && pDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
+                                    && mpDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
                             if ((FLYPROTECT_POS & eType) && bProtectMathPos)
                                 nChk |= FLYPROTECT_POS;
                         }

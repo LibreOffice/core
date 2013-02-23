@@ -213,10 +213,10 @@ void ViewShell::PrintProspect(
         if( pStPage )
         {
             aShell.Imp()->SetFirstVisPageInvalid();
-            aShell.aVisArea = pStPage->Frm();
+            aShell.maVisArea = pStPage->Frm();
 
             Point aPos( aSttPt );
-            aPos -= aShell.aVisArea.Pos();
+            aPos -= aShell.maVisArea.Pos();
 //            aPos -= aPrtOff;
             aMapMode.SetOrigin( aPos );
             pPrinter->SetMapMode( aMapMode );
