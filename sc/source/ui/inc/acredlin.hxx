@@ -160,9 +160,6 @@ private:
 
 protected:
 
-    virtual void    Resize();
-    virtual sal_Bool    Close();
-
     void            RejectFiltered();
     void            AcceptFiltered();
 

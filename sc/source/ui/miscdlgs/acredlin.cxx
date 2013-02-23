@@ -873,19 +873,6 @@ void ScAcceptChgDlg::UpdateView()
         pTheView->Select(pEntry);
 }
 
-//----------------------------------------------------------------------------
-sal_Bool ScAcceptChgDlg::Close()
-{
-    return SfxModelessDialog::Close();
-}
-
-void ScAcceptChgDlg::Resize()
-{
-    SfxModelessDialog::Resize();
-    Size aOutSize=GetOutputSizePixel();
-    m_pAcceptChgCtr->SetSizePixel(aOutSize);
-}
-
 IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle)
 {
     sal_uInt16 nId  =ScSimpleRefDlgWrapper::GetChildWindowId();
