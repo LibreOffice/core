@@ -308,7 +308,7 @@ void SvxConfigGroupListBox::fillScriptList( const Reference< browse::XBrowseNode
                 //#139111# some crash reports show that it might be unset
                 if ( !theChild.is() )
                     continue;
-                ::rtl::OUString sUIName = theChild->getName();
+                OUString sUIName = theChild->getName();
                 sal_Bool bDisplay = sal_True;
 
                 if  (   bIsRootNode
@@ -409,7 +409,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
         try{
             aModuleId = xModuleManager->identify( m_xFrame );
         }catch(const uno::Exception&)
-            { aModuleId = ::rtl::OUString(); }
+            { aModuleId = OUString(); }
 
         Reference< container::XNameAccess > const xNameAccess(
                 frame::UICommandDescription::create(xContext) );
@@ -417,8 +417,8 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
 
         Reference< container::XNameAccess > xAllCategories(
             xMCF->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ui.UICategoryDescription" )),
+                OUString(
+                    "com.sun.star.ui.UICategoryDescription" ),
                 xContext ),
             UNO_QUERY );
 
@@ -494,7 +494,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
     try
     {
         Reference< browse::XBrowseNodeFactory > xFac( xContext->getValueByName(
-                                                          OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory")) ), UNO_QUERY_THROW );
+                                                          OUString( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
         rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
     }
     catch( const Exception& )
@@ -553,7 +553,7 @@ Image SvxConfigGroupListBox::GetImage(
                 Any aAny = xModuleManager->getByName(appModule);
                 if( sal_True != ( aAny >>= moduleDescr ) )
                 {
-                    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("SFTreeListBox::Init: failed to get PropertyValue")), Reference< XInterface >());
+                    throw RuntimeException(OUString("SFTreeListBox::Init: failed to get PropertyValue"), Reference< XInterface >());
                 }
                 beans::PropertyValue const * pmoduleDescr =
                     moduleDescr.getConstArray();
@@ -706,7 +706,7 @@ void SvxConfigGroupListBox::GroupSelected()
                     }
 
                     SvxGroupInfo_Impl *_pGroupInfo = new SvxGroupInfo_Impl(
-                        SVX_CFGFUNCTION_SLOT, 123, aCmdURL, ::rtl::OUString() );
+                        SVX_CFGFUNCTION_SLOT, 123, aCmdURL, OUString() );
 
                     pFunctionListBox->aArr.push_back( _pGroupInfo );
 
@@ -742,13 +742,13 @@ void SvxConfigGroupListBox::GroupSelected()
                             }
 
                             Any value = xPropSet->getPropertyValue(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URI")));
+                                OUString("URI"));
                             value >>= uri;
 
                             try
                             {
                                 value = xPropSet->getPropertyValue(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")));
+                                    OUString("Description"));
                                 value >>= description;
                             }
                             catch (Exception &) {

@@ -177,8 +177,8 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
         // 1) remove all not usable hyphenation positions from the end of the string
         nPos = nIdx == STRING_NOTFOUND ? 0 : nIdx + 1;
         nPos1 = nPos;   //save for later use in 2) below
-        const rtl::OUString aTmp( sal_Unicode( HYPH_POS_CHAR ) );
-        const rtl::OUString aEmpty;
+        const OUString aTmp( sal_Unicode( HYPH_POS_CHAR ) );
+        const OUString aEmpty;
         while (nPos != STRING_NOTFOUND)
             nPos = aTxt.SearchAndReplace( aTmp, aEmpty, nPos + 1 );
 
@@ -359,7 +359,7 @@ IMPL_LINK( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, EMPTYARG /*pButt
         try
         {
             uno::Reference< beans::XPropertySet >  xProp( SvxGetLinguPropertySet() );
-            const rtl::OUString aName( RTL_CONSTASCII_USTRINGPARAM( "IsHyphAuto" ) );
+            const OUString aName( "IsHyphAuto" );
             uno::Any aAny;
 
             aAny <<= sal_True;

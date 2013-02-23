@@ -66,11 +66,11 @@ using namespace svx;
 #define ITEMID_TYPE       1
 #define ITEMID_PATH       2
 
-#define POSTFIX_INTERNAL    rtl::OUString("_internal")
-#define POSTFIX_USER        rtl::OUString("_user")
-#define POSTFIX_WRITABLE    rtl::OUString("_writable")
-#define VAR_ONE             rtl::OUString("%1")
-#define IODLG_CONFIGNAME    rtl::OUString("FilePicker_Save")
+#define POSTFIX_INTERNAL    OUString("_internal")
+#define POSTFIX_USER        OUString("_user")
+#define POSTFIX_WRITABLE    OUString("_writable")
+#define VAR_ONE             OUString("%1")
+#define IODLG_CONFIGNAME    OUString("FilePicker_Save")
 
 // struct OptPath_Impl ---------------------------------------------------
 
@@ -133,7 +133,7 @@ static String getCfgName_Impl( sal_uInt16 _nHandle )
         if ( Hdl2CfgMap_Impl[ nIndex ].m_nHandle == _nHandle )
         {
             // config name found
-            sCfgName = rtl::OUString::createFromAscii( Hdl2CfgMap_Impl[ nIndex ].m_pCfgName );
+            sCfgName = OUString::createFromAscii( Hdl2CfgMap_Impl[ nIndex ].m_pCfgName );
             break;
         }
         ++nIndex;
@@ -488,7 +488,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
     // old path is an URL?
     INetURLObject aObj( sWritable );
     bool bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
-    rtl::OUString aPathStr( _rFolder );
+    OUString aPathStr( _rFolder );
     INetURLObject aNewObj( aPathStr );
     aNewObj.removeFinalSlash();
 
@@ -725,8 +725,7 @@ void SvxPathTabPage::GetPathList(
     {
         Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
         pImpl->m_xPathSettings = Reference< XPropertySet >( xSMgr->createInstance(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.util.PathSettings") ) ), UNO_QUERY );
+            OUString( "com.sun.star.util.PathSettings" ) ), UNO_QUERY );
     }
 
     try
@@ -738,11 +737,11 @@ void SvxPathTabPage::GetPathList(
             sProp = sCfgName;
             sProp += POSTFIX_INTERNAL;
             Any aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
-            Sequence< ::rtl::OUString > aPathSeq;
+            Sequence< OUString > aPathSeq;
             if ( aAny >>= aPathSeq )
             {
                 long i, nCount = aPathSeq.getLength();
-                const ::rtl::OUString* pPaths = aPathSeq.getConstArray();
+                const OUString* pPaths = aPathSeq.getConstArray();
 
                 for ( i = 0; i < nCount; ++i )
                 {
@@ -758,7 +757,7 @@ void SvxPathTabPage::GetPathList(
             if ( aAny >>= aPathSeq )
             {
                 long i, nCount = aPathSeq.getLength();
-                const ::rtl::OUString* pPaths = aPathSeq.getConstArray();
+                const OUString* pPaths = aPathSeq.getConstArray();
 
                 for ( i = 0; i < nCount; ++i )
                 {
@@ -771,7 +770,7 @@ void SvxPathTabPage::GetPathList(
             sProp = sCfgName;
             sProp += POSTFIX_WRITABLE;
             aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
-            ::rtl::OUString sWritablePath;
+            OUString sWritablePath;
             if ( aAny >>= sWritablePath )
                 _rWritablePath = String( sWritablePath );
 
@@ -800,8 +799,7 @@ void SvxPathTabPage::SetPathList(
     {
         Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
         pImpl->m_xPathSettings = Reference< XPropertySet >( xSMgr->createInstance(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.util.PathSettings") ) ), UNO_QUERY );
+                "com.sun.star.util.PathSettings" ), UNO_QUERY );
     }
 
     try
@@ -811,10 +809,10 @@ void SvxPathTabPage::SetPathList(
             // save user paths
             char cDelim = MULTIPATH_DELIMITER;
             sal_uInt16 nCount = comphelper::string::getTokenCount(_rUserPath, cDelim);
-            Sequence< ::rtl::OUString > aPathSeq( nCount );
-            ::rtl::OUString* pArray = aPathSeq.getArray();
+            Sequence< OUString > aPathSeq( nCount );
+            OUString* pArray = aPathSeq.getArray();
             for ( sal_uInt16 i = 0; i < nCount; ++i )
-                pArray[i] = ::rtl::OUString( _rUserPath.GetToken( i, cDelim ) );
+                pArray[i] = OUString( _rUserPath.GetToken( i, cDelim ) );
             String sProp( sCfgName );
             sProp += POSTFIX_USER;
             Any aValue = makeAny( aPathSeq );

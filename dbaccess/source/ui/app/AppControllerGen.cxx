@@ -125,7 +125,7 @@ public:
 
 };
 // -----------------------------------------------------------------------------
-void OApplicationController::convertToView(const ::rtl::OUString& _sName)
+void OApplicationController::convertToView(const OUString& _sName)
 {
     try
     {
@@ -147,14 +147,14 @@ void OApplicationController::convertToView(const ::rtl::OUString& _sName)
         OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker );
         if ( aDlg.Execute() == RET_OK )
         {
-            ::rtl::OUString sName = aDlg.getName();
-            ::rtl::OUString sCatalog = aDlg.getCatalog();
-            ::rtl::OUString sSchema  = aDlg.getSchema();
-            ::rtl::OUString sNewName(
+            OUString sName = aDlg.getName();
+            OUString sCatalog = aDlg.getCatalog();
+            OUString sSchema  = aDlg.getSchema();
+            OUString sNewName(
                 ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sName, sal_False, ::dbtools::eInTableDefinitions ) );
             Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
             if ( !xView.is() )
-                throw SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
+                throw SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,OUString("S1000") ,0,Any());
             getContainer()->elementAdded(E_TABLE,sNewName,makeAny(xView));
         }
     }
@@ -193,11 +193,11 @@ void OApplicationController::pasteFormat(sal_uInt32 _nFormatId)
 // -----------------------------------------------------------------------------
 void OApplicationController::openDataSourceAdminDialog()
 {
-    openDialog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DatasourceAdministrationDialog" ) ) );
+    openDialog( OUString( "com.sun.star.sdb.DatasourceAdministrationDialog" ) );
 }
 
 // -----------------------------------------------------------------------------
-void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
+void OApplicationController::openDialog( const OUString& _sServiceName )
 {
     try
     {
@@ -216,19 +216,19 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
                 xWindow = VCLUnoHelper::GetInterface(getView()->Window::GetParent());
         }
         // the parent window
-        aArgs[nArgPos++] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
+        aArgs[nArgPos++] <<= PropertyValue( OUString("ParentWindow"),
                                     0,
                                     makeAny(xWindow),
                                     PropertyState_DIRECT_VALUE);
 
         // the initial selection
-        ::rtl::OUString sInitialSelection;
+        OUString sInitialSelection;
         if ( getContainer() )
             sInitialSelection = getDatabaseName();
         if ( !sInitialSelection.isEmpty() )
         {
             aArgs[ nArgPos++ ] <<= PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialSelection" ) ), 0,
+                OUString( "InitialSelection" ), 0,
                 makeAny( sInitialSelection ), PropertyState_DIRECT_VALUE );
         }
 
@@ -259,7 +259,7 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
 // -----------------------------------------------------------------------------
 void OApplicationController::openTableFilterDialog()
 {
-    openDialog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.TableFilterDialog" ) ) );
+    openDialog( OUString( "com.sun.star.sdb.TableFilterDialog" ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -311,7 +311,7 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
         const ElementType eType = getContainer()->getElementType();
         if ( eType == E_FORM || eType == E_REPORT )
         {
-            ::rtl::OUString sOldName,sNewName;
+            OUString sOldName,sNewName;
             evt.OldValue >>= sOldName;
             evt.NewValue >>= sNewName;
 
@@ -325,7 +325,7 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
                 {
                     Reference<XContent> xContent(xChild->getParent(),UNO_QUERY);
                     if ( xContent.is() )
-                        sOldName = xContent->getIdentifier()->getContentIdentifier() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sOldName;
+                        sOldName = xContent->getIdentifier()->getContentIdentifier() + OUString("/") + sOldName;
                 }
 
                 getContainer()->elementReplaced( eType , sOldName, sNewName );
@@ -397,22 +397,22 @@ void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeEx
 }
 
 // -----------------------------------------------------------------------------
-beans::Pair< ::sal_Int32, ::rtl::OUString > SAL_CALL OApplicationController::identifySubComponent( const Reference< XComponent >& i_rSubComponent ) throw (IllegalArgumentException, RuntimeException)
+beans::Pair< ::sal_Int32, OUString > SAL_CALL OApplicationController::identifySubComponent( const Reference< XComponent >& i_rSubComponent ) throw (IllegalArgumentException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
     sal_Int32 nType = -1;
-    ::rtl::OUString sName;
+    OUString sName;
 
     if ( !m_pSubComponentManager->lookupSubComponent( i_rSubComponent, sName, nType ) )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        throw IllegalArgumentException( OUString(), *this, 1 );
 
     if ( nType == SID_DB_APP_DSRELDESIGN )
         // this is somewhat hacky ... we're expected to return a DatabaseObject value. However, there is no such
         // value for the relation design. /me thinks we should change the API definition here ...
         nType = -1;
 
-    return beans::Pair< ::sal_Int32, ::rtl::OUString >( nType, sName );
+    return beans::Pair< ::sal_Int32, OUString >( nType, sName );
 }
 
 // -----------------------------------------------------------------------------
@@ -445,7 +445,7 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
-void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::boost::optional< ::rtl::OUString >& i_rObjectName )
+void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::boost::optional< OUString >& i_rObjectName )
 {
     // ensure we're connected
     if ( !isConnected() )
@@ -460,7 +460,7 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
         &&  ( _nObjectType != DatabaseObject::FORM )
         &&  ( _nObjectType != DatabaseObject::REPORT )
         )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        throw IllegalArgumentException( OUString(), *this, 1 );
 
     if ( !i_rObjectName )
         return;
@@ -470,7 +470,7 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
     if ( !xContainer.is() )
         // all possible reasons for this (e.g. not being connected currently) should
         // have been handled before
-        throw RuntimeException( ::rtl::OUString(), *this );
+        throw RuntimeException( OUString(), *this );
 
     bool bExistentObject = false;
     switch ( _nObjectType )
@@ -494,14 +494,14 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
 
 // -----------------------------------------------------------------------------
 Reference< XComponent > SAL_CALL OApplicationController::loadComponent( ::sal_Int32 _ObjectType,
-    const ::rtl::OUString& _ObjectName, ::sal_Bool _ForEditing ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
+    const OUString& _ObjectName, ::sal_Bool _ForEditing ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
 {
     return loadComponentWithArguments( _ObjectType, _ObjectName, _ForEditing, Sequence< PropertyValue >() );
 }
 
 // -----------------------------------------------------------------------------
 Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArguments( ::sal_Int32 _ObjectType,
-    const ::rtl::OUString& _ObjectName, ::sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
+    const OUString& _ObjectName, ::sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -531,7 +531,7 @@ Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArgu
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
-    impl_validateObjectTypeAndName_throw( i_nObjectType, ::boost::optional< ::rtl::OUString >() );
+    impl_validateObjectTypeAndName_throw( i_nObjectType, ::boost::optional< OUString >() );
 
     Reference< XComponent > xComponent( newElement(
         lcl_objectType2ElementType( i_nObjectType ),
@@ -615,9 +615,9 @@ void OApplicationController::askToReconnect()
 }
 
 // -----------------------------------------------------------------------------
-::rtl::OUString OApplicationController::getDatabaseName() const
+OUString OApplicationController::getDatabaseName() const
 {
-    ::rtl::OUString sDatabaseName;
+    OUString sDatabaseName;
     try
     {
         if ( m_xDataSource.is() )
@@ -633,14 +633,14 @@ void OApplicationController::askToReconnect()
 }
 
 // -----------------------------------------------------------------------------
-::rtl::OUString OApplicationController::getStrippedDatabaseName() const
+OUString OApplicationController::getStrippedDatabaseName() const
 {
-    ::rtl::OUString sDatabaseName;
+    OUString sDatabaseName;
     return ::dbaui::getStrippedDatabaseName( m_xDataSource, sDatabaseName );
 }
 
 // -----------------------------------------------------------------------------
-void OApplicationController::onDocumentOpened( const ::rtl::OUString& _rName, const sal_Int32 _nType,
+void OApplicationController::onDocumentOpened( const OUString& _rName, const sal_Int32 _nType,
         const ElementOpenMode _eMode, const Reference< XComponent >& _xDocument, const Reference< XComponent >& _rxDefinition )
 {
     if ( !_xDocument.is() )
@@ -695,7 +695,7 @@ sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bo
             bCompareRes = getContainer()->getSelectionCount() == 1;
             if ( bEnabled && bCompareRes && E_TABLE == eType )
             {
-                ::std::vector< ::rtl::OUString> aList;
+                ::std::vector< OUString> aList;
                 getSelectionElementNames(aList);
 
                 try
@@ -722,7 +722,7 @@ void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::fra
 
     if ( _xLayoutManager.is() )
     {
-        static ::rtl::OUString s_sStatusbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/statusbar/statusbar"));
+        static OUString s_sStatusbar("private:resource/statusbar/statusbar");
         _xLayoutManager->createElement( s_sStatusbar );
         _xLayoutManager->requestElement( s_sStatusbar );
 
@@ -752,7 +752,7 @@ void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::fra
 // -----------------------------------------------------------------------------
 void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMode)
 {
-    ::std::vector< ::rtl::OUString> aList;
+    ::std::vector< OUString> aList;
     getSelectionElementNames(aList);
     ElementType eType = getContainer()->getElementType();
     ::comphelper::NamedValueCollection aArguments;
@@ -763,16 +763,16 @@ void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMod
         eOpenMode = E_OPEN_NORMAL;
     }
 
-    ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > > aCompoments;
-    ::std::vector< ::rtl::OUString>::iterator aEnd = aList.end();
-    for (::std::vector< ::rtl::OUString>::iterator aIter = aList.begin(); aIter != aEnd; ++aIter)
+    ::std::vector< ::std::pair< OUString ,Reference< XModel > > > aCompoments;
+    ::std::vector< OUString>::iterator aEnd = aList.end();
+    for (::std::vector< OUString>::iterator aIter = aList.begin(); aIter != aEnd; ++aIter)
     {
         if ( SID_DB_APP_CONVERTTOVIEW == _nId )
             convertToView(*aIter);
         else
         {
             Reference< XModel > xModel( openElementWithArguments( *aIter, eType, eOpenMode, _nId,aArguments ), UNO_QUERY );
-            aCompoments.push_back( ::std::pair< ::rtl::OUString, Reference< XModel > >( *aIter, xModel ) );
+            aCompoments.push_back( ::std::pair< OUString, Reference< XModel > >( *aIter, xModel ) );
         }
     }
 
@@ -780,9 +780,9 @@ void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMod
     if ( _eOpenMode == E_OPEN_FOR_MAIL )
     {
 
-        ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator componentIter = aCompoments.begin();
-        ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator componentEnd = aCompoments.end();
-        ::rtl::OUString aDocTypeString;
+        ::std::vector< ::std::pair< OUString ,Reference< XModel > > >::iterator componentIter = aCompoments.begin();
+        ::std::vector< ::std::pair< OUString ,Reference< XModel > > >::iterator componentEnd = aCompoments.end();
+        OUString aDocTypeString;
         SfxMailModel aSendMail;
         SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_OK;
         for (; componentIter != componentEnd && SfxMailModel::SEND_MAIL_OK == eResult; ++componentIter)

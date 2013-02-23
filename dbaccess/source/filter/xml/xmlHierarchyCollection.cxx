@@ -42,11 +42,11 @@ DBG_NAME(OXMLHierarchyCollection)
 
 OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XNameAccess >& _xParentContainer
-                ,const ::rtl::OUString& _sCollectionServiceName
-                ,const ::rtl::OUString& _sComponentServiceName) :
+                ,const OUString& _sCollectionServiceName
+                ,const OUString& _sComponentServiceName) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_xParentContainer(_xParentContainer)
     ,m_sCollectionServiceName(_sCollectionServiceName)
@@ -60,10 +60,10 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
@@ -79,11 +79,11 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
             Sequence< Any > aArguments(2);
             PropertyValue aValue;
             // set as folder
-            aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+            aValue.Name = OUString("Name");
             aValue.Value <<= m_sName;
             aArguments[0] <<= aValue;
             //parent
-            aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
+            aValue.Name = OUString("Parent");
             aValue.Value <<= _xParentContainer;
             aArguments[1] <<= aValue;
 
@@ -105,7 +105,7 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
 // -----------------------------------------------------------------------------
 OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XNameAccess >& _xContainer
                 ,const Reference< XPropertySet >& _xTable
             ) :
@@ -125,7 +125,7 @@ OXMLHierarchyCollection::~OXMLHierarchyCollection()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

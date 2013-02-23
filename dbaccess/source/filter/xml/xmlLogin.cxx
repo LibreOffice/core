@@ -37,7 +37,7 @@ namespace dbaxml
 DBG_NAME(OXMLLogin)
 
 OXMLLogin::OXMLLogin( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& _sLocalName,
+                sal_uInt16 nPrfx, const OUString& _sLocalName,
                 const Reference< XAttributeList > & _xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
@@ -50,14 +50,14 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
     Reference<XPropertySet> xDataSource(rImport.getDataSource());
 
     const sal_Int16 nLength = (xDataSource.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
-    static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
+    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     bool bUserFound = false;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = _xAttrList->getValueByIndex( i );
 
         try
         {
@@ -92,7 +92,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                     {
                         bUserFound = true;
                         PropertyValue aProperty;
-                        aProperty.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSystemUser"));
+                        aProperty.Name = OUString("UseSystemUser");
                         aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
                         rImport.addInfo(aProperty);
                     }

@@ -189,8 +189,8 @@ void WebConnectionInfoDialog::FillPasswordList()
             {
                 for ( sal_Int32 nUserInd = 0; nUserInd < aURLEntries[nURLInd].UserList.getLength(); nUserInd++ )
                 {
-                    ::rtl::OUString aUIEntry( aURLEntries[nURLInd].Url );
-                    aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
+                    OUString aUIEntry( aURLEntries[nURLInd].Url );
+                    aUIEntry += OUString::valueOf( (sal_Unicode)'\t' );
                     aUIEntry += aURLEntries[nURLInd].UserList[nUserInd].UserName;
                     SvTreeListEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
                     pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
@@ -200,14 +200,14 @@ void WebConnectionInfoDialog::FillPasswordList()
             // remember pos of first url container entry.
             m_nPos = nCount;
 
-            uno::Sequence< rtl::OUString > aUrls
+            uno::Sequence< OUString > aUrls
                 = xMasterPasswd->getUrls( sal_True /* OnlyPersistent */ );
 
             for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
             {
-                ::rtl::OUString aUIEntry( aUrls[ nURLIdx ] );
-                aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
-                aUIEntry += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*" ) );
+                OUString aUIEntry( aUrls[ nURLIdx ] );
+                aUIEntry += OUString::valueOf( (sal_Unicode)'\t' );
+                aUIEntry += OUString( "*" );
                 SvTreeListEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
                 pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
             }
@@ -225,8 +225,8 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
         SvTreeListEntry* pEntry = m_aPasswordsLB.GetCurEntry();
         if ( pEntry )
         {
-            ::rtl::OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
-            ::rtl::OUString aUserName = m_aPasswordsLB.GetEntryText( pEntry, 1 );
+            OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
+            OUString aUserName = m_aPasswordsLB.GetEntryText( pEntry, 1 );
 
             uno::Reference< task::XPasswordContainer2 > xPasswdContainer(
                 task::PasswordContainer::create(comphelper::getProcessComponentContext()));
@@ -260,7 +260,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl)
         // should the master password be requested before?
         xPasswdContainer->removeAllPersistent();
 
-        uno::Sequence< rtl::OUString > aUrls
+        uno::Sequence< OUString > aUrls
             = xPasswdContainer->getUrls( sal_True /* OnlyPersistent */ );
         for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
             xPasswdContainer->removeUrl( aUrls[ nURLIdx ] );
@@ -281,8 +281,8 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
         SvTreeListEntry* pEntry = m_aPasswordsLB.GetCurEntry();
         if ( pEntry )
         {
-            ::rtl::OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
-            ::rtl::OUString aUserName = m_aPasswordsLB.GetEntryText( pEntry, 1 );
+            OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
+            OUString aUserName = m_aPasswordsLB.GetEntryText( pEntry, 1 );
 
             ::comphelper::SimplePasswordRequest* pPasswordRequest
                   = new ::comphelper::SimplePasswordRequest( task::PasswordRequestMode_PASSWORD_CREATE );
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
             if ( pPasswordRequest->isPassword() )
             {
                 String aNewPass = pPasswordRequest->getPassword();
-                uno::Sequence< ::rtl::OUString > aPasswd( 1 );
+                uno::Sequence< OUString > aPasswd( 1 );
                 aPasswd[0] = aNewPass;
 
                 uno::Reference< task::XPasswordContainer2 > xPasswdContainer(

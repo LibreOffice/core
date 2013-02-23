@@ -133,7 +133,7 @@ static sal_Int32 lcl_SeqGetEntryPos(
     return i < nLen ? i : -1;
 }
 
-static void lcl_OpenURL( ::rtl::OUString sURL )
+static void lcl_OpenURL( OUString sURL )
 {
     if ( !sURL.isEmpty() )
     {
@@ -144,12 +144,12 @@ static void lcl_OpenURL( ::rtl::OUString sURL )
                 ::comphelper::getProcessComponentContext();
             uno::Reference< css::system::XSystemShellExecute > xSystemShell(
                 css::system::SystemShellExecute::create(xContext) );
-            xSystemShell->execute( sURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
+            xSystemShell->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
         }
         catch( const uno::Exception& e )
         {
              OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-                rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+                OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         }
     }
 }
@@ -375,7 +375,7 @@ static const char * aEidToPropName[] =
 static inline String lcl_GetPropertyName( EID_OPTIONS eEntryId )
 {
     DBG_ASSERT( (unsigned int) eEntryId < SAL_N_ELEMENTS(aEidToPropName), "index out of range" );
-    return rtl::OUString::createFromAscii( aEidToPropName[ (int) eEntryId ] );
+    return OUString::createFromAscii( aEidToPropName[ (int) eEntryId ] );
 }
 
 // class OptionsUserData -------------------------------------------------
@@ -474,7 +474,7 @@ void BrwString_Impl::Paint(
         OptionsUserData aData( (sal_uLong) pEntry->GetUserData() );
         if(aData.HasNumericValue())
         {
-            rtl::OUStringBuffer sTxt;
+            OUStringBuffer sTxt;
             sTxt.append(' ').append(static_cast<sal_Int32>(aData.GetNumericValue()));
             rDev.SetFont( aFont );
             rDev.DrawText( aNewPos, sTxt.makeStringAndClear() );
@@ -1108,7 +1108,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
         aMoreDictsLink.SetURL( String(
-            RTL_CONSTASCII_USTRINGPARAM( "http://extensions.libreoffice.org/dictionaries/" ) ) );
+             "http://extensions.libreoffice.org/dictionaries/"  ) );
         aMoreDictsLink.SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
     }
     else
@@ -1579,7 +1579,7 @@ IMPL_LINK_NOARG(SvxLinguTabPage, PostDblClickHdl_Impl)
 
 IMPL_LINK_NOARG(SvxLinguTabPage, OpenURLHdl_Impl)
 {
-    ::rtl::OUString sURL( aMoreDictsLink.GetURL() );
+    OUString sURL( aMoreDictsLink.GetURL() );
     lcl_OpenURL( sURL );
     return 0;
 }
@@ -1962,7 +1962,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
         aMoreDictsLink.SetURL( String(
-            RTL_CONSTASCII_USTRINGPARAM( "http://extensions.libreoffice.org/dictionaries/" ) ) );
+             "http://extensions.libreoffice.org/dictionaries/" ) );
         aMoreDictsLink.SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
     }
     else
@@ -2405,7 +2405,7 @@ IMPL_LINK_NOARG(SvxEditModulesDlg, BackHdl_Impl)
 
 IMPL_LINK_NOARG(SvxEditModulesDlg, OpenURLHdl_Impl)
 {
-    ::rtl::OUString sURL( aMoreDictsLink.GetURL() );
+    OUString sURL( aMoreDictsLink.GetURL() );
     lcl_OpenURL( sURL );
     return 0;
 }

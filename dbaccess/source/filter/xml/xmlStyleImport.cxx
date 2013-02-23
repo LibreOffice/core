@@ -60,11 +60,11 @@ TYPEINIT1( OTableStylesContext, SvXMLStylesContext );
 DBG_NAME(OTableStyleContext)
 
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
-        sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+        sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle )
     :XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
-    ,sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")))
+    ,sNumberFormat(OUString("NumberFormat"))
     ,pStyles(&rStyles)
     ,m_nNumberFormat(-1)
 {
@@ -138,8 +138,8 @@ void OTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any&
 }
 // -----------------------------------------------------------------------------
 void OTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const ::rtl::OUString& rLocalName,
-                                        const ::rtl::OUString& rValue )
+                                        const OUString& rLocalName,
+                                        const OUString& rValue )
 {
     // TODO: use a map here
     if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
@@ -159,13 +159,13 @@ DBG_NAME(OTableStylesContext)
 
 OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx ,
-        const ::rtl::OUString& rLName ,
+        const OUString& rLName ,
         const Reference< XAttributeList > & xAttrList,
         const sal_Bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
-    sTableStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ))),
-    sColumnStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))),
-    sCellStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ))),
+    sTableStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )),
+    sColumnStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),
+    sCellStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME )),
     m_nNumberFormatIndex(-1),
     bAutoStyles(bTempAutoStyles)
 {
@@ -229,7 +229,7 @@ UniReference < SvXMLImportPropertyMapper >
 }
 // ----------------------------------------------------------------------------
 SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
-        sal_uInt16 nFamily, sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
@@ -259,9 +259,9 @@ Reference < XNameContainer >
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
+OUString OTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
-    rtl::OUString sServiceName = SvXMLStylesContext::GetServiceName(nFamily);
+    OUString sServiceName = SvXMLStylesContext::GetServiceName(nFamily);
     if (sServiceName.isEmpty())
     {
         switch( nFamily )

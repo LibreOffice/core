@@ -90,7 +90,7 @@ namespace sdbtools
         return new DataSourceMetaData( getContext(), getConnection() );
     }
     //--------------------------------------------------------------------
-    Reference< container::XNameAccess > SAL_CALL ConnectionTools::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const ::rtl::OUString& command, Reference< lang::XComponent >& keepFieldsAlive ) throw (sdbc::SQLException, RuntimeException)
+    Reference< container::XNameAccess > SAL_CALL ConnectionTools::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, Reference< lang::XComponent >& keepFieldsAlive ) throw (sdbc::SQLException, RuntimeException)
     {
         EntryGuard aGuard( *this );
         ::dbtools::SQLExceptionInfo aErrorInfo;
@@ -100,7 +100,7 @@ namespace sdbtools
         return xRet;
     }
     //--------------------------------------------------------------------
-    Reference< sdb::XSingleSelectQueryComposer > SAL_CALL ConnectionTools::getComposer( ::sal_Int32 commandType, const ::rtl::OUString& command ) throw (::com::sun::star::uno::RuntimeException)
+    Reference< sdb::XSingleSelectQueryComposer > SAL_CALL ConnectionTools::getComposer( ::sal_Int32 commandType, const OUString& command ) throw (::com::sun::star::uno::RuntimeException)
     {
         EntryGuard aGuard( *this );
         dbtools::StatementComposer aComposer(getConnection(), command, commandType, sal_True );
@@ -109,37 +109,37 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ConnectionTools::getImplementationName() throw (RuntimeException)
+    OUString SAL_CALL ConnectionTools::getImplementationName() throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL ConnectionTools::supportsService(const ::rtl::OUString & _ServiceName) throw (RuntimeException)
+    ::sal_Bool SAL_CALL ConnectionTools::supportsService(const OUString & _ServiceName) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
-        const ::rtl::OUString* begin = aSupported.getConstArray();
-        const ::rtl::OUString* end = aSupported.getConstArray() + aSupported.getLength();
+        Sequence< OUString > aSupported( getSupportedServiceNames() );
+        const OUString* begin = aSupported.getConstArray();
+        const OUString* end = aSupported.getConstArray() + aSupported.getLength();
         return ::std::find( begin, end, _ServiceName ) != end;
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ConnectionTools::getSupportedServiceNames() throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames() throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ConnectionTools::getImplementationName_static()
+    OUString SAL_CALL ConnectionTools::getImplementationName_static()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.dbaccess.ConnectionTools" ) );
+        return OUString( "com.sun.star.comp.dbaccess.ConnectionTools" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ConnectionTools::getSupportedServiceNames_static()
+    Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames_static()
     {
-        Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.tools.ConnectionTools" ) );
+        Sequence< OUString > aSupported( 1 );
+        aSupported[0] = OUString( "com.sun.star.sdb.tools.ConnectionTools" );
         return aSupported;
     }
 

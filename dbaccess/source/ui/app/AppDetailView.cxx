@@ -64,7 +64,7 @@ using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 // -----------------------------------------------------------------------------
 TaskEntry::TaskEntry( const sal_Char* _pAsciiUNOCommand, sal_uInt16 _nHelpID, sal_uInt16 _nTitleResourceID, bool _bHideWhenDisabled )
-    :sUNOCommand( ::rtl::OUString::createFromAscii( _pAsciiUNOCommand ) )
+    :sUNOCommand( OUString::createFromAscii( _pAsciiUNOCommand ) )
     ,nHelpID( _nHelpID )
     ,sTitle( ModuleRes( _nTitleResourceID ) )
     ,bHideWhenDisabled( _bHideWhenDisabled )
@@ -480,13 +480,13 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
             ModuleUIConfigurationManagerSupplier::create( getDetailView()->getBorderWin().getView()->getORB() );
         Reference< XUIConfigurationManager > xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OfficeDatabaseDocument" ) )
+            OUString( "com.sun.star.sdb.OfficeDatabaseDocument" )
         );
         Reference< XImageManager > xImageMgr( xUIConfigMgr->getImageManager(), UNO_QUERY );
 
         // copy the commands so we can use them with the config managers
-        Sequence< ::rtl::OUString > aCommands( _rList.size() );
-        ::rtl::OUString* pCommands = aCommands.getArray();
+        Sequence< OUString > aCommands( _rList.size() );
+        OUString* pCommands = aCommands.getArray();
         TaskEntryList::const_iterator aEnd = _rList.end();
         for ( TaskEntryList::const_iterator pCopyTask = _rList.begin(); pCopyTask != aEnd; ++pCopyTask, ++pCommands )
             *pCommands = pCopyTask->sUNOCommand;
@@ -766,7 +766,7 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
 }
 
 // -----------------------------------------------------------------------------
-::rtl::OUString OApplicationDetailView::getQualifiedName( SvTreeListEntry* _pEntry ) const
+OUString OApplicationDetailView::getQualifiedName( SvTreeListEntry* _pEntry ) const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->getQualifiedName( _pEntry );
@@ -835,7 +835,7 @@ sal_Int32 OApplicationDetailView::getElementCount()
 }
 
 // -----------------------------------------------------------------------------
-void OApplicationDetailView::getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const
+void OApplicationDetailView::getSelectionElementNames( ::std::vector< OUString>& _rNames ) const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->getSelectionElementNames( _rNames );
@@ -853,7 +853,7 @@ void OApplicationDetailView::describeCurrentSelectionForType( const ElementType 
     m_pControlHelper->describeCurrentSelectionForType( _eType, _out_rSelectedObjects );
 }
 // -----------------------------------------------------------------------------
-void OApplicationDetailView::selectElements(const Sequence< ::rtl::OUString>& _aNames)
+void OApplicationDetailView::selectElements(const Sequence< OUString>& _aNames)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->selectElements( _aNames );
@@ -884,21 +884,21 @@ void OApplicationDetailView::paste()
     m_pControlHelper->paste();
 }
 // -----------------------------------------------------------------------------
-SvTreeListEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const ::rtl::OUString& _rName, const Any& _rObject )
+SvTreeListEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const OUString& _rName, const Any& _rObject )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->elementAdded(_eType,_rName, _rObject );
 }
 // -----------------------------------------------------------------------------
-void OApplicationDetailView::elementRemoved(ElementType _eType,const ::rtl::OUString& _rName )
+void OApplicationDetailView::elementRemoved(ElementType _eType,const OUString& _rName )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->elementRemoved(_eType,_rName );
 }
 // -----------------------------------------------------------------------------
 void OApplicationDetailView::elementReplaced(ElementType _eType
-                                                    ,const ::rtl::OUString& _rOldName
-                                                    ,const ::rtl::OUString& _rNewName )
+                                                    ,const OUString& _rOldName
+                                                    ,const OUString& _rNewName )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->elementReplaced( _eType, _rOldName, _rNewName );
@@ -928,8 +928,8 @@ void OApplicationDetailView::showPreview(const Reference< XContent >& _xContent)
     m_pControlHelper->showPreview(_xContent);
 }
 // -----------------------------------------------------------------------------
-void OApplicationDetailView::showPreview(   const ::rtl::OUString& _sDataSourceName,
-                                            const ::rtl::OUString& _sName,
+void OApplicationDetailView::showPreview(   const OUString& _sDataSourceName,
+                                            const OUString& _sName,
                                             sal_Bool _bTable)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);

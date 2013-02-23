@@ -42,10 +42,10 @@ DBG_NAME(OXMLTable)
 
 OXMLTable::OXMLTable( ODBFilter& _rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const uno::Reference< XAttributeList > & _xAttrList
                 ,const uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
-                ,const ::rtl::OUString& _sServiceName
+                ,const OUString& _sServiceName
                 )
     :SvXMLImportContext( _rImport, nPrfx, _sLocalName )
     ,m_xParentContainer(_xParentContainer)
@@ -62,10 +62,10 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
@@ -92,11 +92,11 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
     Sequence< Any > aArguments(2);
     PropertyValue aValue;
     // set as folder
-    aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+    aValue.Name = OUString("Name");
     aValue.Value <<= m_sName;
     aArguments[0] <<= aValue;
     //parent
-    aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
+    aValue.Name = OUString("Parent");
     aValue.Value <<= m_xParentContainer;
     aArguments[1] <<= aValue;
     m_xTable.set(
@@ -113,7 +113,7 @@ OXMLTable::~OXMLTable()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLTable::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const uno::Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
@@ -124,14 +124,14 @@ SvXMLImportContext* OXMLTable::CreateChildContext(
         case XML_TOK_FILTER_STATEMENT:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                ::rtl::OUString s1,s2,s3;
+                OUString s1,s2,s3;
                 fillAttributes(nPrefix, rLocalName,xAttrList,m_sFilterStatement,s1,s2,s3);
             }
             break;
         case XML_TOK_ORDER_STATEMENT:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                ::rtl::OUString s1,s2,s3;
+                OUString s1,s2,s3;
                 fillAttributes(nPrefix, rLocalName,xAttrList,m_sOrderStatement,s1,s2,s3);
             }
             break;
@@ -217,12 +217,12 @@ void OXMLTable::EndElement()
 }
 // -----------------------------------------------------------------------------
 void OXMLTable::fillAttributes(sal_uInt16 /*nPrfx*/
-                                ,const ::rtl::OUString& /*_sLocalName*/
+                                ,const OUString& /*_sLocalName*/
                                 ,const uno::Reference< XAttributeList > & _xAttrList
-                                , ::rtl::OUString& _rsCommand
-                                ,::rtl::OUString& _rsTableName
-                                ,::rtl::OUString& _rsTableSchema
-                                ,::rtl::OUString& _rsTableCatalog
+                                ,OUString& _rsCommand
+                                ,OUString& _rsTableName
+                                ,OUString& _rsTableSchema
+                                ,OUString& _rsTableCatalog
                                 )
 {
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
@@ -232,10 +232,10 @@ void OXMLTable::fillAttributes(sal_uInt16 /*nPrfx*/
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {

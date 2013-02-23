@@ -34,7 +34,7 @@ namespace dbaxml
 DBG_NAME(OXMLServerDatabase)
 
 OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& _sLocalName,
+                sal_uInt16 nPrfx, const OUString& _sLocalName,
                 const Reference< XAttributeList > & _xAttrList) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
@@ -49,13 +49,13 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
     PropertyValue aProperty;
 
     const sal_Int16 nLength = (xDataSource.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
-    ::rtl::OUString sType,sHostName,sPortNumber,sDatabaseName;
+    OUString sType,sHostName,sPortNumber,sDatabaseName;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        const OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        const OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
@@ -69,7 +69,7 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
                 sPortNumber = sValue;
                 break;
             case XML_TOK_LOCAL_SOCKET:
-                aProperty.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalSocket"));
+                aProperty.Name = OUString("LocalSocket");
                 aProperty.Value <<= sValue;
                 rImport.addInfo(aProperty);
                 break;
