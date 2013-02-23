@@ -389,7 +389,7 @@ public:
     unsigned            mbEndOfBullet : 1;
 
     sal_uInt8 GetBiDiLevel() const { return mnBiDiLevel; }
-    sal_Bool IsRTL() const;
+    sal_Bool IsRTL() const { return mnBiDiLevel % 2 ? sal_True : sal_False; }
 
     DrawPortionInfo(
         const Point& rPos,
