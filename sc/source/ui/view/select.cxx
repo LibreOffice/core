@@ -45,7 +45,7 @@ static sal_Bool bDidSwitch = false;
 // -----------------------------------------------------------------------
 
 //
-//                  View (Gridwin / Tastatur)
+//                  View (Gridwin / keyboard)
 //
 
 ScViewFunctionSet::ScViewFunctionSet( ScViewData* pNewViewData ) :
@@ -54,7 +54,7 @@ ScViewFunctionSet::ScViewFunctionSet( ScViewData* pNewViewData ) :
         bAnchor( false ),
         bStarted( false )
 {
-    OSL_ENSURE(pViewData, "ViewData==0 bei FunctionSet");
+    OSL_ENSURE(pViewData, "ViewData==0 at FunctionSet");
 }
 
 ScSplitPos ScViewFunctionSet::GetWhich()
@@ -299,11 +299,11 @@ sal_Bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool
     if ( bDidSwitch )
     {
         if ( rPointPixel == aSwitchPos )
-            return false;                   // nicht auf falschem Fenster scrollen
+            return false;                   // don't scroll in wrong window
         else
             bDidSwitch = false;
     }
-    aSwitchPos = rPointPixel;       // nur wichtig, wenn bDidSwitch
+    aSwitchPos = rPointPixel;       // only important, if bDidSwitch
 
     //  treat position 0 as -1, so scrolling is always possible
     //  (with full screen and hidden headers, the top left border may be at 0)
@@ -327,10 +327,10 @@ sal_Bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool
     SCsCOL  nPosX;
     SCsROW  nPosY;
     pViewData->GetPosFromPixel( aEffPos.X(), aEffPos.Y(), GetWhich(),
-                                nPosX, nPosY, sal_True, sal_True );     // mit Repair
+                                nPosX, nPosY, sal_True, sal_True );     // with Repair
 
-    //  fuer AutoFill in der Mitte der Zelle umschalten
-    //  dabei aber nicht das Scrolling nach rechts/unten verhindern
+    // for Autofill switch in the center of cell
+    // thereby don't prevent scrolling to bottom/right
     if ( pViewData->IsFillMode() || pViewData->GetFillMode() == SC_FILL_MATRIX )
     {
         sal_Bool bLeft, bTop;
@@ -348,10 +348,10 @@ sal_Bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool
                     nPosY = -1;
             }
         }
-        //  negativ ist erlaubt
+        // negative value is allowed
     }
 
-    //  ueber Fixier-Grenze bewegt?
+    // moved out of fix limit?
 
     ScSplitPos eWhich = GetWhich();
     if ( eWhich == pViewData->GetActivePart() )
@@ -454,7 +454,7 @@ sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Boo
     else if (pViewData->IsFillMode() ||
             (pViewData->GetFillMode() == SC_FILL_MATRIX && (nScFillModeMouseModifier & KEY_MOD1) ))
     {
-        //  Wenn eine Matrix angefasst wurde, kann mit Ctrl auf AutoFill zurueckgeschaltet werden
+        // If a matrix got touched, switch back to Autofill is possible with Ctrl
 
         SCCOL nStartX, nEndX;
         SCROW nStartY, nEndY; // Block
@@ -472,9 +472,9 @@ sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Boo
 
         if ( nPosX+1 >= (SCsCOL) nStartX && nPosX <= (SCsCOL) nEndX &&
              nPosY+1 >= (SCsROW) nStartY && nPosY <= (SCsROW) nEndY &&
-             ( nPosX != nEndX || nPosY != nEndY ) )                     // verkleinern ?
+             ( nPosX != nEndX || nPosY != nEndY ) )                     // minimize?
         {
-            //  Richtung (links oder oben)
+            // direction (left or top)
 
             long nSizeX = 0;
             for (SCCOL i=nPosX+1; i<=nEndX; i++)
@@ -487,14 +487,14 @@ sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Boo
                 nDelStartX = nPosX + 1;
             else
                 nDelStartY = nPosY + 1;
-            // 0 braucht nicht mehr getrennt abgefragt zu werden, weil nPosX/Y auch negativ wird
+            // there is no need to check for zero, because nPosX/Y is also negative
 
             if ( nDelStartX < nStartX )
                 nDelStartX = nStartX;
             if ( nDelStartY < nStartY )
                 nDelStartY = nStartY;
 
-            //  Bereich setzen
+            // set range
 
             pViewData->SetDelMark( ScRange( nDelStartX,nDelStartY,nTab,
                                             nEndX,nEndY,nTab ) );
@@ -503,10 +503,10 @@ sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Boo
             pViewData->GetView()->
                 PaintArea( nStartX,nDelStartY, nEndX,nEndY, SC_UPDATE_MARKS );
 
-            nPosX = nEndX;      // roten Rahmen um ganzen Bereich lassen
+            nPosX = nEndX;      // keep red border around range
             nPosY = nEndY;
 
-            //  Referenz wieder richtigherum, falls unten umgedreht
+            // reference the right way up, if it's upside down below
             if ( nStartX != pViewData->GetRefStartX() || nStartY != pViewData->GetRefStartY() )
             {
                 pViewData->GetView()->DoneRefMode();
@@ -553,7 +553,7 @@ sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Boo
             else
                 nSizeY += pDoc->GetRowHeight( nEndY+1, nPosY, nTab );
 
-            if ( nSizeX > nSizeY )          // Fill immer nur in einer Richtung
+            if ( nSizeX > nSizeY )          // Fill only ever in one direction
             {
                 nPosY = nEndY;
                 bNegY = false;
@@ -613,14 +613,14 @@ sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Boo
 
             pView->UpdateRef( nPosX, nPosY, nTab );
         }
-        // else neue Modi
+        // else new modes
     }
-    else                    // normales Markieren
+    else                    // regular selection
     {
         sal_Bool bHideCur = bAnchor && ( (SCCOL)nPosX != pViewData->GetCurX() ||
                                      (SCROW)nPosY != pViewData->GetCurY() );
         if (bHideCur)
-            pView->HideAllCursors();            // sonst zweimal: Block und SetCursor
+            pView->HideAllCursors();            // otherwise twice: Block and SetCursor
 
         if (bAnchor)
         {
@@ -712,7 +712,7 @@ sal_Bool ScViewFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 
 void ScViewFunctionSet::DeselectAtPoint( const Point& /* rPointPixel */ )
 {
-    //  gibt's nicht
+    // doesn't exist
 }
 
 void ScViewFunctionSet::DeselectAll()
@@ -741,7 +741,6 @@ ScViewSelectionEngine::ScViewSelectionEngine( Window* pWindow, ScTabView* pView,
         SelectionEngine( pWindow, pView->GetFunctionSet() ),
         eWhich( eSplitPos )
 {
-    //  Parameter einstellen
     SetSelectionMode( MULTIPLE_SELECTION );
     EnableDrag( sal_True );
 }
@@ -750,7 +749,7 @@ ScViewSelectionEngine::ScViewSelectionEngine( Window* pWindow, ScTabView* pView,
 //------------------------------------------------------------------------
 
 //
-//                  Spalten- / Zeilenheader
+//                  column and row headers
 //
 
 ScHeaderFunctionSet::ScHeaderFunctionSet( ScViewData* pNewViewData ) :
@@ -760,7 +759,7 @@ ScHeaderFunctionSet::ScHeaderFunctionSet( ScViewData* pNewViewData ) :
         bAnchor( false ),
         nCursorPos( 0 )
 {
-    OSL_ENSURE(pViewData, "ViewData==0 bei FunctionSet");
+    OSL_ENSURE(pViewData, "ViewData==0 at FunctionSet");
 }
 
 void ScHeaderFunctionSet::SetColumn( sal_Bool bSet )
@@ -775,7 +774,7 @@ void ScHeaderFunctionSet::SetWhich( ScSplitPos eNew )
 
 void ScHeaderFunctionSet::BeginDrag()
 {
-    // gippsnich
+    // doesn't exist
 }
 
 void ScHeaderFunctionSet::CreateAnchor()
@@ -808,9 +807,9 @@ sal_Bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bo
 {
     if ( bDidSwitch )
     {
-        //  die naechste gueltige Position muss vom anderen Fenster kommen
+        // next valid position has to be originated from another window
         if ( rPointPixel == aSwitchPos )
-            return false;                   // nicht auf falschem Fenster scrollen
+            return false;                   // don't scroll in the wrong window
         else
             bDidSwitch = false;
     }
@@ -824,7 +823,7 @@ sal_Bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bo
     else
         bScroll = ( rPointPixel.Y() < 0 || rPointPixel.Y() >= aWinSize.Height() );
 
-    //  ueber Fixier-Grenze bewegt?
+    // moved out of fix limit?
 
     sal_Bool bSwitched = false;
     if ( bColumn )
@@ -840,7 +839,7 @@ sal_Bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bo
             }
         }
     }
-    else                // Zeilenkoepfe
+    else                // column headers
     {
         if ( pViewData->GetVSplitMode() == SC_SPLIT_FIX )
         {
@@ -857,10 +856,8 @@ sal_Bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bo
     {
         aSwitchPos = rPointPixel;
         bDidSwitch = sal_True;
-        return false;               // nicht mit falschen Positionen rechnen
+        return false;               // do not crunch with wrong positions
     }
-
-    //
 
     SCsCOL  nPosX;
     SCsROW  nPosY;
@@ -890,7 +887,7 @@ sal_Bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bo
     if ( !bAnchor || !pView->IsBlockMode() )
     {
         pView->DoneBlockMode( sal_True );
-        pViewData->GetMarkData().MarkToMulti();         //! wer verstellt das ???
+        pViewData->GetMarkData().MarkToMulti();         //! who changes this?
         pView->InitBlockMode( nPosX, nPosY, pViewData->GetTabNo(), sal_True, bColumn, !bColumn );
 
         bAnchor = sal_True;
@@ -898,7 +895,7 @@ sal_Bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bo
 
     pView->MarkCursor( nPosX, nPosY, pViewData->GetTabNo(), bColumn, !bColumn );
 
-    //  SelectionChanged innerhalb von HideCursor wegen UpdateAutoFillMark
+    // SelectionChanged inside of HideCursor because of UpdateAutoFillMark
     pView->SelectionChanged();
 
     if (bHide)
@@ -936,13 +933,8 @@ void ScHeaderFunctionSet::DeselectAll()
 ScHeaderSelectionEngine::ScHeaderSelectionEngine( Window* pWindow, ScHeaderFunctionSet* pFuncSet ) :
         SelectionEngine( pWindow, pFuncSet )
 {
-    //  Parameter einstellen
     SetSelectionMode( MULTIPLE_SELECTION );
     EnableDrag( false );
 }
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

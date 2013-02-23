@@ -159,7 +159,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
     bool bProtected = false;
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB i=0; i<nTabCount; i++)
-        if (pDoc->IsTabProtected(i))                // ueberhaupt eine Tabelle geschuetzt?
+        if (pDoc->IsTabProtected(i))                // look after protected table
             bProtected = true;
 
     SfxWhichIter    aIter(rSet);
@@ -179,7 +179,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
                     rSet.DisableItem( nSlotId );
                 break;
 
-            case SID_STYLE_FAMILY2:     // Zellvorlagen
+            case SID_STYLE_FAMILY2:     // cell style sheets
             {
                 SfxStyleSheet* pStyleSheet = (SfxStyleSheet*)
                                              pTabViewShell->GetStyleSheetFromMarked();
@@ -191,7 +191,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
             }
             break;
 
-            case SID_STYLE_FAMILY4:     // Seitenvorlagen
+            case SID_STYLE_FAMILY4:     // page style sheets
             {
                 SCTAB           nCurTab     = GetViewData()->GetTabNo();
                 String          aPageStyle  = pDoc->GetPageStyle( nCurTab );
@@ -248,7 +248,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 
 void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 {
-    // Wenn ToolBar vertikal :
+    // in case of vertical toolbar
     if ( !rReq.GetArgs() )
     {
         pViewData->GetDispatcher().Execute( SID_STYLE_DESIGNER, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
@@ -416,7 +416,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 break;
         }
 
-        // Neuen Style fuer WaterCan-Mode setzen
+        // set new style for WaterCan-Mode
         if ( nSlotId == SID_STYLE_APPLY && pScMod->GetIsWaterCan() && pStyleSheet )
             ((ScStyleSheetPool*)pStylePool)->SetActualStyleSheet( pStyleSheet );
 
@@ -460,7 +460,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     {
                         if ( pStyleSheet && !pScMod->GetIsWaterCan() )
                         {
-                            // Anwenden der Vorlage auf das Dokument
+                            // apply style sheet to document
                             pTabViewShell->SetStyleSheetToMarked( (SfxStyleSheet*)pStyleSheet );
                             pTabViewShell->InvalidateAttribs();
                             rReq.Done();
@@ -471,8 +471,8 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     case SID_STYLE_NEW_BY_EXAMPLE:
                     case SID_STYLE_UPDATE_BY_EXAMPLE:
                     {
-                        // Vorlage erzeugen/ersetzen durch Attribute
-                        // an der Cursor-Position:
+                        // create/replace style sheet by attributes
+                        // at cursor position:
 
                         const ScPatternAttr* pAttrItem = NULL;
 

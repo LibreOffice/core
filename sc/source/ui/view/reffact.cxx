@@ -101,7 +101,7 @@ namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
 //-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScNameDlgWrapper, FID_DEFINE_NAME )
-    //
+
 //-------------------------------------------------------------------------
 // ScNameDlgWrapper
 //-------------------------------------------------------------------------
@@ -296,7 +296,7 @@ void ScSimpleRefDlgWrapper::StartRefInput()
 
 
 //-------------------------------------------------------------------------
-// ScAcceptChgDlgWrapper //Kommentar: sollte in die ViewShell
+// ScAcceptChgDlgWrapper //FIXME: should be moved into ViewShell
 //-------------------------------------------------------------------------
 
 ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParentP,
