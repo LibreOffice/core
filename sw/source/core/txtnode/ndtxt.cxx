@@ -2946,15 +2946,13 @@ XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx,
         }
     }
 
-    if ( bWithSpacesForLevel && GetActualListLevel() > 0 )
+    if (bWithSpacesForLevel)
     {
-        int nLevel( GetActualListLevel() );
-        while ( nLevel > 0 )
+        const sal_Unicode aSpace = ' ';
+        for (int nLevel = GetActualListLevel(); nLevel > 0; --nLevel)
         {
-            const sal_Unicode aSpace = ' ';
             aTxt.Insert( aSpace , 0 );
             aTxt.Insert( aSpace , 0 );
-            --nLevel;
         }
     }
 
