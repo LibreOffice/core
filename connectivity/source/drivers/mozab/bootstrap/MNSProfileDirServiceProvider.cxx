@@ -104,16 +104,16 @@ NS_IMPL_THREADSAFE_ISUPPORTS1(nsProfileDirServiceProvider,
 // nsProfileDirServiceProvider::nsIDirectoryServiceProvider
 
 NS_IMETHODIMP
-nsProfileDirServiceProvider::GetFile(const char *prop, PRBool *persistant, nsIFile **_retval)
+nsProfileDirServiceProvider::GetFile(const char *prop, PRBool *persistent, nsIFile **_retval)
 {
   NS_ENSURE_ARG(prop);
-  NS_ENSURE_ARG_POINTER(persistant);
+  NS_ENSURE_ARG_POINTER(persistent);
   NS_ENSURE_ARG_POINTER(_retval);
 
   if (!mProfileDir)
     return NS_ERROR_FAILURE;
 
-  *persistant = PR_TRUE;
+  *persistent = PR_TRUE;
   nsIFile* domainDir = mProfileDir;
 
 

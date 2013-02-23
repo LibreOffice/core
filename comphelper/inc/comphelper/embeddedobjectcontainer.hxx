@@ -100,7 +100,7 @@ public:
                         CreateEmbeddedObject( const com::sun::star::uno::Sequence < sal_Int8 >&,
                         const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, ::rtl::OUString& );
 
-    // insert an embedded object into the container - objects persistant representation will be added to the storage
+    // insert an embedded object into the container - objects persistent representation will be added to the storage
     sal_Bool            InsertEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString& );
 
     // load an embedded object from a MediaDescriptor and insert it into the container
