@@ -953,7 +953,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
 
     // allow application key listeners to remove the key event
     // but make sure we're not forwarding external KeyEvents, (ie where bForward is sal_False)
-    // becasue those are coming back from the listener itself and MUST be processed
+    // because those are coming back from the listener itself and MUST be processed
     KeyEvent aKeyEvent( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
     if( bForward )
     {

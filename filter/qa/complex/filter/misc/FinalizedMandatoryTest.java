@@ -180,7 +180,7 @@ public class FinalizedMandatoryTest
                 // testobject must new created for every test.
                 // We change in a loop the container and try to flush this changes.
                 // If we get an expected exception this container is corrupt. It's
-                // similar to a document which could not be saved beacuse of invalid
+                // similar to a document which could not be saved because of invalid
                 // contend. While you don't remove the invalid conted you will never
                 // be able to save the document. Same here.
                 try
