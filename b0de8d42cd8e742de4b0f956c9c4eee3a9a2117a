@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///8k\u003d",
+        "filename": "instsetoo_native/CustomTarget_install.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000172
+      },
+      "writtenOn": "2013-02-23T17:01:12Z",
+      "side": 1,
+      "message": "Will be fixed in next patchset.",
+      "parentUuid": "AAAAV3///9I\u003d",
+      "revId": "b0de8d42cd8e742de4b0f956c9c4eee3a9a2117a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///9E\u003d",
         "filename": "instsetoo_native/CustomTarget_install.mk",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2013-02-23T09:52:08Z",
       "side": 1,
       "message": "Why do we set PYTHONPATH here at all? AFAIK installer creation does not need Python.",
+      "revId": "b0de8d42cd8e742de4b0f956c9c4eee3a9a2117a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///8g\u003d",
+        "filename": "instsetoo_native/CustomTarget_install.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000172
+      },
+      "writtenOn": "2013-02-23T17:01:12Z",
+      "side": 1,
+      "message": "Will be fixed in next patchset.",
+      "parentUuid": "AAAAV3///9E\u003d",
       "revId": "b0de8d42cd8e742de4b0f956c9c4eee3a9a2117a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
