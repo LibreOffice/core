@@ -57,7 +57,7 @@ enum Unit
     default font of the imported/exported document. The default font is always
     the first font in the styles font list, and is always referenced by the
     default cell style ("Normal" style in Excel) which is used by all empty
-    unformatted cells in the document. To be able to calculate the charcter
+    unformatted cells in the document. To be able to calculate the character
     width correctly, the default font must be known, which is the case after
     the finalizeImport() or finalizeExport() functions have been called. Caller
     must make sure to not call the character width conversion functions before.
