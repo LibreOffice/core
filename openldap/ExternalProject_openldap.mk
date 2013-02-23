@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalProject_ExternalProject,openldap))
 
 $(eval $(call gb_ExternalProject_use_unpacked,openldap,openldap))
 
+$(eval $(call gb_ExternalProject_use_package,openldap,nss))
+
 $(eval $(call gb_ExternalProject_register_targets,openldap,\
 	build \
 ))

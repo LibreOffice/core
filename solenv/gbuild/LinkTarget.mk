@@ -449,7 +449,8 @@ $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) 
 	$(call gb_LinkTarget__command_objectlist,$@,$*)
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,%) :
+$(call gb_LinkTarget_get_dep_target,%) : $(call gb_Package_get_target,solenv_concat-deps)
+
 	$(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCOBJECTS),$(OBJCXXOBJECTS),$(ASMOBJECTS),$(GENCOBJECTS),$(GENCXXOBJECTS))
 endif
 
