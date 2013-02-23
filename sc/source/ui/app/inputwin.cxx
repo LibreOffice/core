@@ -1224,7 +1224,7 @@ IMPL_LINK(ScMultiTextWnd, NotifyHdl, EENotify*, pNotify)
 {
     // need to process EE_NOTIFY_TEXTVIEWSCROLLED here
     // sometimes we don't seem to get EE_NOTIFY_TEXTVIEWSCROLLED e.g. when
-    // we insert text at the begining of the text so the cursor never moves
+    // we insert text at the beginning of the text so the cursor never moves
     // down to generate a scroll event
 
     if ( pNotify && ( pNotify->eNotificationType == EE_NOTIFY_TEXTVIEWSCROLLED

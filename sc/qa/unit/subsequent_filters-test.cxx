@@ -1895,7 +1895,7 @@ void ScFiltersTest::testMiscRowHeights()
 {
     TestParam::RowData DfltRowData[] =
     {
-        // check rows at the begining and end of document
+        // check rows at the beginning and end of document
         // and make sure they are reported as the default row
         // height ( indicated by -1 )
         { 2, 4, 0, -1, 0, false  },

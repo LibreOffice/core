@@ -21,9 +21,9 @@
  * Narrative:   IF fill character is non-blank
  *          Determine base
  *              If base is HEX
- *                  add "0x" to begining of string
+ *                  add "0x" to beginning of string
  *              IF base is OCTAL
- *                  add "0" to begining of string
+ *                  add "0" to beginning of string
  *
  *      While value is greater than zero
  *          use val % base as index into xlation str to get cur char

@@ -455,7 +455,7 @@ public class _XBreakIterator extends MultiMethodTest {
     private static String arabic = new String(new char[] {0x0641, 0x0642}) ;
 
     /**
-    * Tries to find the begining of the nearest script specified
+    * Tries to find the beginning of the nearest script specified
     * relatively to position passed. <p>
     * Has <b>OK</b> status if the starting position of script is returned.
     */

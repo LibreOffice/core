@@ -217,7 +217,7 @@ public:
     sal_Bool AddToCplSttExceptList(const String& rNew);
 
     // Load, Set, Get the exception list for 2 Capital letters at the
-    // begining of a word.
+    // beginning of a word.
     SvStringsISortDtor* LoadWrdSttExceptList();
     void SaveWrdSttExceptList();
     void SetWrdSttExceptList( SvStringsISortDtor* pList );

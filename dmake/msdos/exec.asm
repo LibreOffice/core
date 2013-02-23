@@ -526,7 +526,7 @@ reset_file_resource proc near
 		mov	bx, [tmphandle]
 		xor	cx, cx
 		mov	dx, cx
-		mov	ax, 04200H		; seek to begining of file
+		mov	ax, 04200H		; seek to beginning of file
 		int	21H
 		ret
 reset_file_resource endp

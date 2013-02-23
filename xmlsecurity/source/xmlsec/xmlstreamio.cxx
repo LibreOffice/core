@@ -156,7 +156,7 @@ int xmlEnableStreamInputCallbacks()
     if( !( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) ) {
         //Register the callbacks into xmlSec
         //In order to make the xmlsec io finding the callbacks firstly,
-        //I put the callbacks at the very begining.
+        //I put the callbacks at the very beginning.
 
         //Cleanup the older callbacks.
         //Notes: all none default callbacks will lose.

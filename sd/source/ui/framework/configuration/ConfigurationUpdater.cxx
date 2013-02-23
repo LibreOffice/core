@@ -181,7 +181,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
             ConfigurationTracer::TraceConfiguration(
                 mxCurrentConfiguration, "current configuration");
 #endif
-            // Notify the begining of the update.
+            // Notify the beginning of the update.
             ConfigurationChangeEvent aEvent;
             aEvent.Type = FrameworkHelper::msConfigurationUpdateStartEvent;
             aEvent.Configuration = mxRequestedConfiguration;

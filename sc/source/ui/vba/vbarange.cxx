@@ -3226,7 +3226,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
         uno::Reference< uno::XInterface > xInterface = xStartCell.is() ? xSearch->findNext( xStartCell, xDescriptor) : xSearch->findFirst( xDescriptor );
         uno::Reference< table::XCellRange > xCellRange( xInterface, uno::UNO_QUERY );
         // if we are searching from a starting cell and failed to find a match
-        // then try from the begining
+        // then try from the beginning
         if ( !xCellRange.is() && xStartCell.is() )
         {
             xInterface = xSearch->findFirst( xDescriptor );
