@@ -48,8 +48,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-static ::rtl::OUString aVndSunStarUNO( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.UNO:") );
-static ::rtl::OUString aVndSunStarScript( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:") );
+static OUString aVndSunStarUNO( "vnd.sun.star.UNO:" );
+static OUString aVndSunStarScript( "vnd.sun.star.script:" );
 
 _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet ) :
     pAssignFT( NULL ),
@@ -226,7 +226,7 @@ _SvxMacroTabPage::~_SvxMacroTabPage()
     SvTreeListEntry* pE = rListBox.GetEntry( 0 );
     while( pE )
     {
-        ::rtl::OUString* pEventName = (::rtl::OUString*)pE->GetUserData();
+        OUString* pEventName = (OUString*)pE->GetUserData();
         delete pEventName;
         pE->SetUserData((void*)0);
         pE = rListBox.NextSibling( pE );
@@ -322,7 +322,7 @@ sal_Bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     try
     {
-        ::rtl::OUString eventName;
+        OUString eventName;
         if( m_xAppEvents.is() )
         {
             EventsHash::iterator h_itEnd =  m_appEventsHash.end();
@@ -384,7 +384,7 @@ void _SvxMacroTabPage::Reset()
 
     try
     {
-            ::rtl::OUString sEmpty;
+            OUString sEmpty;
             if( m_xAppEvents.is() )
             {
                 EventsHash::iterator h_itEnd =  m_appEventsHash.end();
@@ -458,14 +458,14 @@ void IconLBoxString::Paint(
     String aTxt( GetText() );
     if( aTxt.Len() )
     {
-        ::rtl::OUString aURL( aTxt );
+        OUString aURL( aTxt );
         sal_Int32 nIndex = aURL.indexOf( aVndSunStarUNO );
         bool bUNO = nIndex == 0;
 
         const Image* pImg = bUNO ? m_pComponentImg : m_pMacroImg;
         aDevice.DrawImage( aPos, *pImg );
 
-        ::rtl::OUString aPureMethod;
+        OUString aPureMethod;
         if( bUNO )
         {
             sal_Int32 nBegin = aVndSunStarUNO.getLength();
@@ -513,12 +513,12 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         return;
     }
 
-    Sequence< ::rtl::OUString > eventNames = nameReplace->getElementNames();
-    ::std::set< ::rtl::OUString > aEventNamesCache;
+    Sequence< OUString > eventNames = nameReplace->getElementNames();
+    ::std::set< OUString > aEventNamesCache;
     ::std::copy(
         eventNames.getConstArray(),
         eventNames.getConstArray() + eventNames.getLength(),
-        ::std::insert_iterator< ::std::set< ::rtl::OUString > >( aEventNamesCache, aEventNamesCache.end() )
+        ::std::insert_iterator< ::std::set< OUString > >( aEventNamesCache, aEventNamesCache.end() )
     );
 
     for (   EventDisplayNames::const_iterator displayableEvent = aDisplayNames.begin();
@@ -526,7 +526,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
             ++displayableEvent
         )
     {
-        ::rtl::OUString sEventName( ::rtl::OUString::createFromAscii( displayableEvent->pAsciiEventName ) );
+        OUString sEventName( OUString::createFromAscii( displayableEvent->pAsciiEventName ) );
         if ( !nameReplace->hasByName( sEventName ) )
             continue;
 
@@ -537,12 +537,12 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
             continue;
         }
 
-        ::rtl::OUString eventURL = h_it->second.second;
+        OUString eventURL = h_it->second.second;
         String displayName( CUI_RES( displayableEvent->nEventResourceID ) );
 
         displayName += '\t';
         SvTreeListEntry*    _pE = rListBox.InsertEntry( displayName );
-        ::rtl::OUString* pEventName = new ::rtl::OUString( sEventName );
+        OUString* pEventName = new OUString( sEventName );
         _pE->SetUserData( (void*)pEventName );
         String sNew( eventURL );
         _pE->ReplaceItem( new IconLBoxString( _pE, 0, sNew,
@@ -608,10 +608,10 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
 
     const sal_Bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
 
-    ::rtl::OUString* pEventName = (::rtl::OUString*)pE->GetUserData();
+    OUString* pEventName = (OUString*)pE->GetUserData();
 
-    ::rtl::OUString sEventURL;
-    ::rtl::OUString sEventType;
+    OUString sEventURL;
+    OUString sEventType;
     if(pThis->bAppEvents)
     {
         EventsHash::iterator h_it = pThis->m_appEventsHash.find( *pEventName );
@@ -636,8 +636,8 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     if( pBtn == pImpl->pDeletePB )
     {
         // delete pressed
-        sEventType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script") );
-        sEventURL = ::rtl::OUString();
+        sEventType = OUString( "Script" );
+        sEventURL = OUString();
         if(!pThis->bAppEvents)
             pThis->bDocModified = true;
     }
@@ -654,7 +654,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
         short ret = pAssignDlg->Execute();
         if( ret )
         {
-            sEventType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO"));
+            sEventType = OUString("UNO");
             sEventURL = pAssignDlg->getURL();
             if(!pThis->bAppEvents)
                 pThis->bDocModified = true;
@@ -670,7 +670,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
             short ret = pDlg->Execute();
             if ( ret )
             {
-                sEventType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
+                sEventType = OUString("Script");
                 sEventURL = pDlg->GetScriptURL();
                 if(!pThis->bAppEvents)
                     pThis->bDocModified = true;
@@ -746,7 +746,7 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
     {
         return;
     }
-    Sequence< ::rtl::OUString > eventNames = m_xAppEvents->getElementNames();
+    Sequence< OUString > eventNames = m_xAppEvents->getElementNames();
     sal_Int32 nEventCount = eventNames.getLength();
     for(sal_Int32 nEvent = 0; nEvent < nEventCount; ++nEvent )
     {
@@ -777,9 +777,9 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
 }
 
 // returns the two props EventType & Script for a given event name
-Any _SvxMacroTabPage::GetPropsByName( const ::rtl::OUString& eventName, EventsHash& eventsHash )
+Any _SvxMacroTabPage::GetPropsByName( const OUString& eventName, EventsHash& eventsHash )
 {
-    const ::std::pair< ::rtl::OUString, ::rtl::OUString >& rAssignedEvent( eventsHash[ eventName ] );
+    const ::std::pair< OUString, OUString >& rAssignedEvent( eventsHash[ eventName ] );
 
     Any aReturn;
     ::comphelper::NamedValueCollection aProps;
@@ -795,10 +795,10 @@ Any _SvxMacroTabPage::GetPropsByName( const ::rtl::OUString& eventName, EventsHa
 
 // converts the Any returned by GetByName into a pair which can be stored in
 // the EventHash
-::std::pair< ::rtl::OUString, ::rtl::OUString  > _SvxMacroTabPage::GetPairFromAny( Any aAny )
+::std::pair< OUString, OUString  > _SvxMacroTabPage::GetPairFromAny( Any aAny )
 {
     Sequence< beans::PropertyValue > props;
-    ::rtl::OUString type, url;
+    OUString type, url;
     if( sal_True == ( aAny >>= props ) )
     {
         ::comphelper::NamedValueCollection aProps( props );
@@ -872,8 +872,8 @@ SvxMacroAssignDlg::~SvxMacroAssignDlg()
 
 IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler)
 {
-    ::rtl::OUString aMethodName = maMethodEdit.GetText();
-    maURL = ::rtl::OUString();
+    OUString aMethodName = maMethodEdit.GetText();
+    maURL = OUString();
     if( !aMethodName.isEmpty() )
     {
         maURL = aVndSunStarUNO;
@@ -883,7 +883,7 @@ IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler)
     return 0;
 }
 
-AssignComponentDialog::AssignComponentDialog( Window * pParent, const ::rtl::OUString& rURL )
+AssignComponentDialog::AssignComponentDialog( Window * pParent, const OUString& rURL )
     : ModalDialog( pParent, CUI_RES( RID_SVXDLG_ASSIGNCOMPONENT ) )
     , maMethodLabel( this, CUI_RES( FT_METHOD ) )
     , maMethodEdit( this, CUI_RES( EDIT_METHOD ) )
@@ -895,7 +895,7 @@ AssignComponentDialog::AssignComponentDialog( Window * pParent, const ::rtl::OUS
     FreeResource();
     maOKButton.SetClickHdl(LINK(this, AssignComponentDialog, ButtonHandler));
 
-    ::rtl::OUString aMethodName;
+    OUString aMethodName;
     if( !maURL.isEmpty() )
     {
         sal_Int32 nIndex = maURL.indexOf( aVndSunStarUNO );

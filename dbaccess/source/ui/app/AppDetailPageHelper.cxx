@@ -89,7 +89,7 @@ namespace dbaui
 
 namespace
 {
-    SvTreeListEntry* lcl_findEntry_impl(DBTreeListBox& rTree,const ::rtl::OUString& _rName,SvTreeListEntry* _pFirst)
+    SvTreeListEntry* lcl_findEntry_impl(DBTreeListBox& rTree,const OUString& _rName,SvTreeListEntry* _pFirst)
     {
         SvTreeListEntry* pReturn = NULL;
         sal_Int32 nIndex = 0;
@@ -116,10 +116,10 @@ namespace
         }
         return pReturn;
     }
-    SvTreeListEntry* lcl_findEntry(DBTreeListBox& rTree,const ::rtl::OUString& _rName,SvTreeListEntry* _pFirst)
+    SvTreeListEntry* lcl_findEntry(DBTreeListBox& rTree,const OUString& _rName,SvTreeListEntry* _pFirst)
     {
         sal_Int32 nIndex = 0;
-        ::rtl::OUString sErase = _rName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part
+        OUString sErase = _rName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part
         return (nIndex != -1 ? lcl_findEntry_impl(rTree,_rName.copy(sErase.getLength() + 1),_pFirst) : NULL);
     }
     //==================================================================
@@ -320,7 +320,7 @@ void OAppDetailPageHelper::sortUp()
         sort(nPos,SortAscending);
 }
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const
+void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< OUString>& _rNames ) const
 {
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
@@ -339,11 +339,11 @@ void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< ::rtl::OUStr
             }
             else
             {
-                ::rtl::OUString sName = rTree.GetEntryText(pEntry);
+                OUString sName = rTree.GetEntryText(pEntry);
                 SvTreeListEntry* pParent = rTree.GetParent(pEntry);
                 while(pParent)
                 {
-                    sName = rTree.GetEntryText(pParent) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sName;
+                    sName = rTree.GetEntryText(pParent) + OUString("/") + sName;
                     pParent = rTree.GetParent(pParent);
                 }
                 _rNames.push_back(sName);
@@ -400,11 +400,11 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
         case E_FORM:
         case E_REPORT:
         {
-            ::rtl::OUString sName = pList->GetEntryText(pEntry);
+            OUString sName = pList->GetEntryText(pEntry);
             SvTreeListEntry* pParent = pList->GetParent(pEntry);
             while ( pParent )
             {
-                ::rtl::OUStringBuffer buffer;
+                OUStringBuffer buffer;
                 buffer.append( pList->GetEntryText( pParent ) );
                 buffer.append( sal_Unicode( '/' ) );
                 buffer.append( sName );
@@ -438,15 +438,15 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
 }
 
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::selectElements(const Sequence< ::rtl::OUString>& _aNames)
+void OAppDetailPageHelper::selectElements(const Sequence< OUString>& _aNames)
 {
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         DBTreeListBox& rTree = *m_pLists[nPos];
         rTree.SelectAll(sal_False);
-        const ::rtl::OUString* pIter = _aNames.getConstArray();
-        const ::rtl::OUString* pEnd  = pIter + _aNames.getLength();
+        const OUString* pIter = _aNames.getConstArray();
+        const OUString* pEnd  = pIter + _aNames.getLength();
         for(;pIter != pEnd;++pIter)
         {
             SvTreeListEntry* pEntry = rTree.GetEntryPosByName(*pIter);
@@ -456,10 +456,10 @@ void OAppDetailPageHelper::selectElements(const Sequence< ::rtl::OUString>& _aNa
     }
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OAppDetailPageHelper::getQualifiedName( SvTreeListEntry* _pEntry ) const
+OUString OAppDetailPageHelper::getQualifiedName( SvTreeListEntry* _pEntry ) const
 {
     int nPos = getVisibleControlIndex();
-    ::rtl::OUString sComposedName;
+    OUString sComposedName;
 
     if ( nPos >= E_ELEMENT_TYPE_COUNT )
         return sComposedName;
@@ -485,7 +485,7 @@ void OAppDetailPageHelper::selectElements(const Sequence< ::rtl::OUString>& _aNa
         SvTreeListEntry* pParent = rTree.GetParent(pEntry);
         while(pParent)
         {
-            sComposedName = rTree.GetEntryText(pParent) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sComposedName;
+            sComposedName = rTree.GetEntryText(pParent) + OUString("/") + sComposedName;
             pParent = rTree.GetParent(pParent);
         }
     }
@@ -655,7 +655,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
     OSL_ENSURE(E_TABLE != _eType,"E_TABLE isn't allowed.");
 
     sal_uInt16 nImageId = 0;
-    rtl::OString sHelpId;
+    OString sHelpId;
     ImageProvider aImageProvider;
     Image aFolderImage;
     switch( _eType )
@@ -748,9 +748,9 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
     {
         const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
 
-        Sequence< ::rtl::OUString> aSeq = _xContainer->getElementNames();
-        const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd  = pIter + aSeq.getLength();
+        Sequence< OUString> aSeq = _xContainer->getElementNames();
+        const OUString* pIter = aSeq.getConstArray();
+        const OUString* pEnd  = pIter + aSeq.getLength();
         for(;pIter != pEnd;++pIter)
         {
             SvTreeListEntry* pEntry = NULL;
@@ -773,7 +773,7 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
     }
 }
 // -----------------------------------------------------------------------------
-DBTreeListBox* OAppDetailPageHelper::createSimpleTree( const rtl::OString& _sHelpId, const Image& _rImage)
+DBTreeListBox* OAppDetailPageHelper::createSimpleTree( const OString& _sHelpId, const Image& _rImage)
 {
     DBTreeListBox* pTreeView = new DBTreeListBox(this,
                        WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
@@ -828,13 +828,13 @@ sal_Bool OAppDetailPageHelper::isFilled() const
 }
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::elementReplaced(ElementType _eType
-                                                    ,const ::rtl::OUString& _rOldName
-                                                    ,const ::rtl::OUString& _rNewName )
+                                                    ,const OUString& _rOldName
+                                                    ,const OUString& _rNewName )
 {
     DBTreeListBox* pTreeView = getCurrentView();
     if ( pTreeView )
     {
-        ::rtl::OUString sNewName = _rNewName;
+        OUString sNewName = _rNewName;
         SvTreeListEntry* pEntry = NULL;
         switch( _eType )
         {
@@ -861,7 +861,7 @@ void OAppDetailPageHelper::elementReplaced(ElementType _eType
     }
 }
 // -----------------------------------------------------------------------------
-SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::rtl::OUString& _rName, const Any& _rObject )
+SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const OUString& _rName, const Any& _rObject )
 {
     SvTreeListEntry* pRet = NULL;
     DBTreeListBox* pTreeView = m_pLists[_eType];
@@ -879,7 +879,7 @@ SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::r
             Reference<XContent> xContent(xChild->getParent(),UNO_QUERY);
             if ( xContent.is() )
             {
-                ::rtl::OUString sName = xContent->getIdentifier()->getContentIdentifier();
+                OUString sName = xContent->getIdentifier()->getContentIdentifier();
                 pEntry = lcl_findEntry(*pTreeView,sName,pTreeView->First());
             }
         }
@@ -905,7 +905,7 @@ SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::r
     return pRet;
 }
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::elementRemoved( ElementType _eType,const ::rtl::OUString& _rName )
+void OAppDetailPageHelper::elementRemoved( ElementType _eType,const OUString& _rName )
 {
     DBTreeListBox* pTreeView = getCurrentView();
     if ( pTreeView )
@@ -1080,9 +1080,9 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
             {
                 com::sun::star::ucb::Command aCommand;
                 if ( m_ePreviewMode == E_DOCUMENT )
-                    aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("preview"));
+                    aCommand.Name = OUString("preview");
                 else
-                    aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getDocumentInfo"));
+                    aCommand.Name = OUString("getDocumentInfo");
 
                 Any aPreview = xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
                 if ( m_ePreviewMode == E_DOCUMENT )
@@ -1127,8 +1127,8 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
     }
 }
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
-                                        const ::rtl::OUString& _sName,
+void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
+                                        const OUString& _sName,
                                         sal_Bool _bTable)
 {
     if ( isPreviewEnabled() )
@@ -1141,14 +1141,14 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
         {
             try
             {
-                m_xFrame = Reference < XFrame > ( getBorderWin().getView()->getORB()->getServiceManager()->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")), getBorderWin().getView()->getORB() ), UNO_QUERY );
+                m_xFrame = Reference < XFrame > ( getBorderWin().getView()->getORB()->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.frame.Frame"), getBorderWin().getView()->getORB() ), UNO_QUERY );
                 m_xFrame->initialize( m_xWindow );
 
                 // no layout manager (and thus no toolbars) in the preview
                 // Must be called after initialize ... but before any other call to this frame.
                 // Otherwise frame throws "life time exceptions" as e.g. NON_INITIALIZED
                 Reference< XPropertySet > xFrameProps( m_xFrame, UNO_QUERY_THROW );
-                xFrameProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ), makeAny(Reference< XLayoutManager >()) );
+                xFrameProps->setPropertyValue( OUString( "LayoutManager" ), makeAny(Reference< XLayoutManager >()) );
 
                 Reference<XFramesSupplier> xSup(getBorderWin().getView()->getAppController().getXController()->getFrame(),UNO_QUERY);
                 if ( xSup.is() )
@@ -1175,7 +1175,7 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
         aArgs.put( "Preview", sal_True );
         aArgs.put( "ReadOnly", sal_True );
         aArgs.put( "AsTemplate", sal_False );
-        aArgs.put( (::rtl::OUString)PROPERTY_SHOWMENU, sal_False );
+        aArgs.put( (OUString)PROPERTY_SHOWMENU, sal_False );
 
         Reference< XController > xPreview( pDispatcher->openExisting( makeAny( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
         sal_Bool bClearPreview = !xPreview.is();

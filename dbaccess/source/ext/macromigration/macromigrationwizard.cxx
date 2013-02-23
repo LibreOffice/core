@@ -73,8 +73,8 @@ namespace dbmm
         virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
         // XInitialization
         virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
@@ -88,8 +88,8 @@ namespace dbmm
 
         // helper for factories
         static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& _rxContext );
-        static ::rtl::OUString SAL_CALL getImplementationName_static() throw(RuntimeException);
-        static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static() throw(RuntimeException);
+        static OUString SAL_CALL getImplementationName_static() throw(RuntimeException);
+        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static() throw(RuntimeException);
 
     protected:
         ~MacroMigrationDialogService();
@@ -162,27 +162,27 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL MacroMigrationDialogService::getImplementationName_static() throw(RuntimeException)
+    OUString SAL_CALL MacroMigrationDialogService::getImplementationName_static() throw(RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.dbaccess.macromigration.MacroMigrationDialogService" ) );
+        return OUString( "com.sun.star.comp.dbaccess.macromigration.MacroMigrationDialogService" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL MacroMigrationDialogService::getSupportedServiceNames_static() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL MacroMigrationDialogService::getSupportedServiceNames_static() throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices(1);
-        aServices[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.application.MacroMigrationWizard" ) );
+        Sequence< OUString > aServices(1);
+        aServices[0] = OUString( "com.sun.star.sdb.application.MacroMigrationWizard" );
         return aServices;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL MacroMigrationDialogService::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL MacroMigrationDialogService::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL MacroMigrationDialogService::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL MacroMigrationDialogService::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
@@ -192,7 +192,7 @@ namespace dbmm
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( m_bInitialized )
-            throw AlreadyInitializedException( ::rtl::OUString(), *this );
+            throw AlreadyInitializedException( OUString(), *this );
 
         if ( _rArguments.getLength() != 1 )
             throw IllegalArgumentException(

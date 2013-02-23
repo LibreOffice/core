@@ -71,8 +71,8 @@ namespace sdbtools
     class INameValidation
     {
     public:
-        virtual bool validateName( const ::rtl::OUString& _rName ) = 0;
-        virtual void validateName_throw( const ::rtl::OUString& _rName ) = 0;
+        virtual bool validateName( const OUString& _rName ) = 0;
+        virtual void validateName_throw( const OUString& _rName ) = 0;
 
         virtual ~INameValidation() { }
     };
@@ -98,12 +98,12 @@ namespace sdbtools
         }
 
         // INameValidation
-        virtual bool validateName( const ::rtl::OUString& _rName )
+        virtual bool validateName( const OUString& _rName )
         {
             return !m_xContainer->hasByName( _rName );
         }
 
-        virtual void validateName_throw( const ::rtl::OUString& _rName )
+        virtual void validateName_throw( const OUString& _rName )
         {
             if ( validateName( _rName ) )
                 return;
@@ -115,7 +115,7 @@ namespace sdbtools
             if ( aMeta.supportsSubqueriesInFrom() )
             {
                 String sNeedDistinctNames( SdbtRes( STR_QUERY_AND_TABLE_DISTINCT_NAMES ) );
-                aError.NextException <<= SQLException( sNeedDistinctNames, m_xConnection, ::rtl::OUString(), 0, Any() );
+                aError.NextException <<= SQLException( sNeedDistinctNames, m_xConnection, OUString(), 0, Any() );
             }
 
             throw aError;
@@ -137,17 +137,17 @@ namespace sdbtools
         {
         }
 
-        virtual bool validateName( const ::rtl::OUString& _rName )
+        virtual bool validateName( const OUString& _rName )
         {
             ::dbtools::DatabaseMetaData aMeta( m_xConnection );
             if  ( !aMeta.restrictIdentifiersToSQL92() )
                 return true;
 
-            ::rtl::OUString sCatalog, sSchema, sName;
+            OUString sCatalog, sSchema, sName;
             ::dbtools::qualifiedNameComponents(
                 m_xConnection->getMetaData(), _rName, sCatalog, sSchema, sName, ::dbtools::eInTableDefinitions );
 
-            ::rtl::OUString sExtraNameCharacters( m_xConnection->getMetaData()->getExtraNameCharacters() );
+            OUString sExtraNameCharacters( m_xConnection->getMetaData()->getExtraNameCharacters() );
             if  (   ( !sCatalog.isEmpty() && !::dbtools::isValidSQLName( sCatalog, sExtraNameCharacters ) )
                 ||  ( !sSchema.isEmpty() && !::dbtools::isValidSQLName( sSchema, sExtraNameCharacters ) )
                 ||  ( !sName.isEmpty() && !::dbtools::isValidSQLName( sName, sExtraNameCharacters ) )
@@ -157,7 +157,7 @@ namespace sdbtools
             return true;
         }
 
-        virtual void validateName_throw( const ::rtl::OUString& _rName )
+        virtual void validateName_throw( const OUString& _rName )
         {
             if ( validateName( _rName ) )
                 return;
@@ -182,7 +182,7 @@ namespace sdbtools
         {
         }
 
-        inline ::connectivity::ErrorCondition validateName_getErrorCondition( const ::rtl::OUString& _rName )
+        inline ::connectivity::ErrorCondition validateName_getErrorCondition( const OUString& _rName )
         {
             if  (   ( _rName.indexOf( (sal_Unicode)34  ) >= 0 )  // "
                 ||  ( _rName.indexOf( (sal_Unicode)39  ) >= 0 )  // '
@@ -199,14 +199,14 @@ namespace sdbtools
             return 0;
         }
 
-        virtual bool validateName( const ::rtl::OUString& _rName )
+        virtual bool validateName( const OUString& _rName )
         {
             if ( validateName_getErrorCondition( _rName ) != 0 )
                 return false;
             return true;
         }
 
-        virtual void validateName_throw( const ::rtl::OUString& _rName )
+        virtual void validateName_throw( const OUString& _rName )
         {
             ::connectivity::ErrorCondition nErrorCondition = validateName_getErrorCondition( _rName );
             if ( nErrorCondition != 0 )
@@ -235,12 +235,12 @@ namespace sdbtools
         }
 
         // INameValidation
-        virtual bool validateName( const ::rtl::OUString& _rName )
+        virtual bool validateName( const OUString& _rName )
         {
             return m_pPrimary->validateName( _rName ) && m_pSecondary->validateName( _rName );
         }
 
-        virtual void validateName_throw( const ::rtl::OUString& _rName )
+        virtual void validateName_throw( const OUString& _rName )
         {
             m_pPrimary->validateName_throw( _rName );
             m_pSecondary->validateName_throw( _rName );
@@ -369,7 +369,7 @@ namespace sdbtools
         catch( const Exception& )
         {
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The connection could not provide its database's meta data." ) ),
+                OUString( "The connection could not provide its database's meta data." ),
                 NULL,
                 0
             );
@@ -407,7 +407,7 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ObjectNames::suggestName( ::sal_Int32 _CommandType, const ::rtl::OUString& _BaseName ) throw (IllegalArgumentException, RuntimeException)
+    OUString SAL_CALL ObjectNames::suggestName( ::sal_Int32 _CommandType, const OUString& _BaseName ) throw (IllegalArgumentException, RuntimeException)
     {
         EntryGuard aGuard( *this );
 
@@ -422,11 +422,11 @@ namespace sdbtools
                 sBaseName = String( SdbtRes( STR_BASENAME_QUERY ) );
         }
 
-        ::rtl::OUString sName( sBaseName );
+        OUString sName( sBaseName );
         sal_Int32 i = 1;
         while ( !pNameCheck->validateName( sName ) )
         {
-            ::rtl::OUStringBuffer aNameBuffer;
+            OUStringBuffer aNameBuffer;
             aNameBuffer.append( sBaseName );
             aNameBuffer.appendAscii( " " );
             aNameBuffer.append( (sal_Int32)++i );
@@ -437,7 +437,7 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ObjectNames::convertToSQLName( const ::rtl::OUString& Name ) throw (RuntimeException)
+    OUString SAL_CALL ObjectNames::convertToSQLName( const OUString& Name ) throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         Reference< XDatabaseMetaData > xMeta( getConnection()->getMetaData(), UNO_QUERY_THROW );
@@ -445,7 +445,7 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL ObjectNames::isNameUsed( ::sal_Int32 _CommandType, const ::rtl::OUString& _Name ) throw (IllegalArgumentException, RuntimeException)
+    ::sal_Bool SAL_CALL ObjectNames::isNameUsed( ::sal_Int32 _CommandType, const OUString& _Name ) throw (IllegalArgumentException, RuntimeException)
     {
         EntryGuard aGuard( *this );
 
@@ -454,7 +454,7 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL ObjectNames::isNameValid( ::sal_Int32 _CommandType, const ::rtl::OUString& _Name ) throw (IllegalArgumentException, RuntimeException)
+    ::sal_Bool SAL_CALL ObjectNames::isNameValid( ::sal_Int32 _CommandType, const OUString& _Name ) throw (IllegalArgumentException, RuntimeException)
     {
         EntryGuard aGuard( *this );
 
@@ -463,7 +463,7 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL ObjectNames::checkNameForCreate( ::sal_Int32 _CommandType, const ::rtl::OUString& _Name ) throw (SQLException, RuntimeException)
+    void SAL_CALL ObjectNames::checkNameForCreate( ::sal_Int32 _CommandType, const OUString& _Name ) throw (SQLException, RuntimeException)
     {
         EntryGuard aGuard( *this );
 

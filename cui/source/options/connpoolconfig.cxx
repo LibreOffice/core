@@ -37,44 +37,44 @@ namespace offapp
     using namespace ::com::sun::star::uno;
 
     //--------------------------------------------------------------------
-    static const ::rtl::OUString& getConnectionPoolNodeName()
+    static const OUString& getConnectionPoolNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/ConnectionPool") );
+        static OUString s_sNodeName("org.openoffice.Office.DataAccess/ConnectionPool" );
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
-    static const ::rtl::OUString& getEnablePoolingNodeName()
+    static const OUString& getEnablePoolingNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("EnablePooling"));
+        static OUString s_sNodeName("EnablePooling");
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
-    static const ::rtl::OUString& getDriverSettingsNodeName()
+    static const OUString& getDriverSettingsNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverSettings"));
+        static OUString s_sNodeName("DriverSettings");
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
-    static const ::rtl::OUString& getDriverNameNodeName()
+    static const OUString& getDriverNameNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverName"));
+        static OUString s_sNodeName("DriverName");
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
-    static const ::rtl::OUString& getEnableNodeName()
+    static const OUString& getEnableNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Enable"));
+        static OUString s_sNodeName("Enable");
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
-    static const ::rtl::OUString& getTimeoutNodeName()
+    static const OUString& getTimeoutNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Timeout"));
+        static OUString s_sNodeName("Timeout");
         return s_sNodeName;
     }
 
@@ -109,14 +109,14 @@ namespace offapp
         // then look for which of them settings are stored in the configuration
         OConfigurationNode aDriverSettings = aConnectionPoolRoot.openNode(getDriverSettingsNodeName());
 
-        Sequence< ::rtl::OUString > aDriverKeys = aDriverSettings.getNodeNames();
-        const ::rtl::OUString* pDriverKeys = aDriverKeys.getConstArray();
-        const ::rtl::OUString* pDriverKeysEnd = pDriverKeys + aDriverKeys.getLength();
+        Sequence< OUString > aDriverKeys = aDriverSettings.getNodeNames();
+        const OUString* pDriverKeys = aDriverKeys.getConstArray();
+        const OUString* pDriverKeysEnd = pDriverKeys + aDriverKeys.getLength();
         for (;pDriverKeys != pDriverKeysEnd; ++pDriverKeys)
         {
             // the name of the driver in this round
             OConfigurationNode aThisDriverSettings = aDriverSettings.openNode(*pDriverKeys);
-            ::rtl::OUString sThisDriverName;
+            OUString sThisDriverName;
             aThisDriverSettings.getNodeValue(getDriverNameNodeName()) >>= sThisDriverName;
 
             // look if we (resp. the driver manager) know this driver
@@ -176,7 +176,7 @@ namespace offapp
             if (!aDriverSettings.isValid())
                 return;
 
-            ::rtl::OUString sThisDriverName;
+            OUString sThisDriverName;
             OConfigurationNode aThisDriverSettings;
 
             const DriverPoolingSettings& rNewSettings = pDriverSettings->getSettings();
@@ -185,7 +185,7 @@ namespace offapp
                     ++aLoop
                 )
             {
-                // need the name as ::rtl::OUString
+                // need the name as OUString
                 sThisDriverName = aLoop->sName;
 
                 // the sub-node for this driver
