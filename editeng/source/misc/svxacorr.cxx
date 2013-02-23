@@ -235,7 +235,8 @@ sal_Bool SvxAutoCorrect::IsAutoCorrectChar( sal_Unicode cChar )
             cChar == ' '  || cChar == '\'' || cChar == '\"' ||
             cChar == '*'  || cChar == '_'  || cChar == '%' ||
             cChar == '.'  || cChar == ','  || cChar == ';' ||
-            cChar == ':'  || cChar == '?' || cChar == '!' || cChar == '/';
+            cChar == ':'  || cChar == '?' || cChar == '!' ||
+            cChar == '/'  || cChar == '-';
 }
 
 sal_Bool SvxAutoCorrect::NeedsHardspaceAutocorr( sal_Unicode cChar )
@@ -358,39 +359,76 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
         if( rCC.isLetterNumeric( rTxt, nEndPos - 1 ))
             break;
 
-    // Two capital letters at the beginning of word?
-    if( nSttPos+2 < nEndPos &&
-        IsUpperLetter( rCC.getCharacterType( rTxt, nSttPos )) &&
-        IsUpperLetter( rCC.getCharacterType( rTxt, ++nSttPos )) &&
-        // Is the third character a lower case
-        IsLowerLetter( rCC.getCharacterType( rTxt, nSttPos +1 )) &&
-        // Do not replace special attributes
-        0x1 != rTxt.GetChar( nSttPos ) && 0x2 != rTxt.GetChar( nSttPos ))
+    // Is the word a compounded word seperated by delimiters?
+    // If so, keep track of all delimiters so each constituent
+    // word can be checked for two initial capital letters.
+    xub_StrLen n = 0;
+    std::deque<xub_StrLen> aDelimiters;
+
+    // Always check for two capitals at the beginning
+    // of the entire word, so start at nSttPos.
+    aDelimiters.push_back(nSttPos);
+
+    // Find all compound word delimiters
+    for (n = nSttPos; n < nEndPos; n++)
     {
-        // test if the word is in an exception list
-        String sWord( rTxt.Copy( nSttPos - 1, nEndPos - nSttPos + 1 ));
-        if( !FindInWrdSttExceptList(eLang, sWord) )
+        if (IsAutoCorrectChar(rTxt.GetChar( n )))
         {
-            // Check that word isn't correctly spelled before correcting:
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XSpellChecker1 > xSpeller =
-                SvxGetSpellChecker();
-            if( xSpeller->hasLanguage(eLang) )
+            aDelimiters.push_back( n + 1 ); // Get position of char after delimiter
+        }
+
+    }
+
+    // Decide where to put the terminating delimiter.
+    // If the last AutoCorrect char was a newline, then the AutoCorrect
+    // char will not be included in rTxt.
+    // If the last AutoCorrect char was not a newline, then the AutoCorrect
+    // character will be the last character in rTxt.
+    if (!IsAutoCorrectChar(rTxt.GetChar(nEndPos-1)))
+        aDelimiters.push_back(nEndPos);
+
+    // Iterate through the word and all words that compose it.
+    n = aDelimiters.size();
+
+    // Two capital letters at the beginning of word?
+    for(n = 0; n < aDelimiters.size() - 1; n++)
+    {
+        nSttPos = aDelimiters.at( n );
+        nEndPos = aDelimiters.at( n + 1 );
+
+        if( nSttPos+2 < nEndPos &&
+            IsUpperLetter( rCC.getCharacterType( rTxt, nSttPos )) &&
+            IsUpperLetter( rCC.getCharacterType( rTxt, ++nSttPos )) &&
+            // Is the third character a lower case
+            IsLowerLetter( rCC.getCharacterType( rTxt, nSttPos +1 )) &&
+            // Do not replace special attributes
+            0x1 != rTxt.GetChar( nSttPos ) && 0x2 != rTxt.GetChar( nSttPos ))
+        {
+            // test if the word is in an exception list
+            String sWord( rTxt.Copy( nSttPos - 1, nEndPos - nSttPos + 1 ));
+            if( !FindInWrdSttExceptList(eLang, sWord) )
             {
-                Sequence< ::com::sun::star::beans::PropertyValue > aEmptySeq;
-                if (!xSpeller->spell(sWord, eLang, aEmptySeq).is())
+                // Check that word isn't correctly spelled before correcting:
+                ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XSpellChecker1 > xSpeller =
+                    SvxGetSpellChecker();
+                if( xSpeller->hasLanguage(eLang) )
                 {
-                    return false;
+                    Sequence< ::com::sun::star::beans::PropertyValue > aEmptySeq;
+                    if (!xSpeller->spell(sWord, eLang, aEmptySeq).is())
+                    {
+                        return false;
+                    }
                 }
-            }
-            sal_Unicode cSave = rTxt.GetChar( nSttPos );
-            rtl::OUString sChar( cSave );
-            sChar = rCC.lowercase( sChar );
-            if( sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
-            {
-                if( SaveWordWrdSttLst & nFlags )
-                    rDoc.SaveCpltSttWord( CptlSttWrd, nSttPos, sWord, cSave );
-                bRet = sal_True;
+                sal_Unicode cSave = rTxt.GetChar( nSttPos );
+                rtl::OUString sChar( cSave );
+                sChar = rCC.lowercase( sChar );
+                if( sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
+                {
+                    if( SaveWordWrdSttLst & nFlags )
+                        rDoc.SaveCpltSttWord( CptlSttWrd, nSttPos, sWord, cSave );
+                    bRet = sal_True;
+                }
             }
         }
     }
