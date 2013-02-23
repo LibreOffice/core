@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="SpellingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -46,11 +47,12 @@
             </child>
             <child>
               <object class="GtkButton" id="undo">
-                <property name="label" translatable="yes">_Undo</property>
+                <property name="label">gtk-undo</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -93,6 +95,7 @@
             <child>
               <object class="svxcorelo-SvxLanguageBox" id="languagelb">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="halign">end</property>
               </object>
               <packing>
