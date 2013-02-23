@@ -23,7 +23,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>       // for the UndoIds
 #include <section.hxx>
 #include <edimp.hxx>
 #include <sectfrm.hxx>      // SwSectionFrm
@@ -78,11 +78,11 @@ const SwSection* SwEditShell::GetCurrSection() const
     return GetDoc()->GetCurrSection( *GetCrsr()->GetPoint() );
 }
 
-/*--------------------------------------------------
- * SwEditShell::GetAnySection liefert den fuer Spalten
- * zustaendigen Bereich, bei Fussnoten kann es nicht der
- * Bereich innerhalb der Fussnote sein.
- * --------------------------------------------------*/
+/**
+ * SwEditShell::GetAnySection delivers the responsible area
+ * of the columns, in footnotes it may not be the
+ * area within the footnote.
+ */
 
 const SwSection* SwEditShell::GetAnySection( sal_Bool bOutOfTab, const Point* pPt ) const
 {
@@ -161,7 +161,7 @@ void SwEditShell::DelSectionFmt( sal_uInt16 nFmt )
 {
     StartAllAction();
     GetDoc()->DelSectionFmt( GetDoc()->GetSections()[ nFmt ] );
-    // rufe das AttrChangeNotify auf der UI-Seite.
+    // Call the AttrChangeNotify on the UI page.
     CallChgLnk();
     EndAllAction();
 }
@@ -172,7 +172,7 @@ void SwEditShell::UpdateSection(sal_uInt16 const nSect,
 {
     StartAllAction();
     GetDoc()->UpdateSection( nSect, rNewData, pAttr );
-    // rufe das AttrChangeNotify auf der UI-Seite.
+    // Call the AttrChangeNotify on the UI page.
     CallChgLnk();
     EndAllAction();
 }
@@ -249,7 +249,7 @@ void SwEditShell::_SetSectionAttr( SwSectionFmt& rSectFmt,
     else
         GetDoc()->SetAttr( rSet, rSectFmt );
 
-    // rufe das AttrChangeNotify auf der UI-Seite.
+    // Call the AttrChangeNotify on the UI page.
     CallChgLnk();
     EndAllAction();
 }
@@ -274,7 +274,7 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
             break;
         }
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!
 // what about table at start or end ?
 //      There is no selection possible!
 // What about only a table inside the section ?

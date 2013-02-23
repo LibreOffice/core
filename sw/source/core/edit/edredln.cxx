@@ -92,7 +92,7 @@ sal_Bool SwEditShell::RejectRedline( sal_uInt16 nPos )
     return bRet;
 }
 
-// Kommentar am Redline setzen
+// Set the comment at the Redline
 sal_Bool SwEditShell::SetRedlineComment( const String& rS )
 {
     sal_Bool bRet = sal_False;
@@ -122,8 +122,8 @@ void SwEditShell::UpdateRedlineAttr()
     }
 }
 
-    // suche das Redline zu diesem Data und returne die Pos im Array
-    // USHRT_MAX wird returnt, falls nicht vorhanden
+    // Search the Redline of this data and return the Pos of the Array
+    // return USHRT_MAX if not present
 sal_uInt16 SwEditShell::FindRedlineOfData( const SwRedlineData& rData ) const
 {
     const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
