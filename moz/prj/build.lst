@@ -1,4 +1,2 @@
 moz	moz : solenv NSS:nss NULL
-moz	moz				usr1	-	all	moz_mkout NULL
 moz	moz				nmake	-	all	moz_mozilla     NULL
-moz	moz\zipped			nmake	-	all	moz_zipped	moz_mozilla NULL
