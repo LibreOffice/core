@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///6s\u003d",
+        "filename": "Makefile.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-23T19:34:03Z",
+      "side": 1,
+      "message": "Bingo!",
+      "revId": "e0cd7a5e5deff22b6a6405df639ad9fcc66df643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
