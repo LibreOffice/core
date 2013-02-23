@@ -920,13 +920,6 @@ AC_ARG_ENABLE(telepathy,
         [Determines whether to enable Telepathy for collaboration.]),
 ,enable_telepathy=no)
 
-AC_ARG_ENABLE(build-mozab,
-    AS_HELP_STRING([--disable-build-mozab],
-        [Use this option if you do not want to build the Mozilla address book
-         components from the Mozilla source code but take precompiled zips.
-         Meaningful only after --enable-win-mozab-driver.]),
-,)
-
 AC_ARG_ENABLE(tde,
     AS_HELP_STRING([--enable-tde],
         [Determines whether to use TQt/TDE vclplug on platforms where TQt and
@@ -8283,10 +8276,6 @@ if test "$_os" = "WINNT"; then
     if test "$enable_win_mozab_driver" = "yes" -a "$WITH_MINGW" != "YES" ; then
         AC_MSG_RESULT([yes])
         WITH_MOZAB4WIN=YES
-        BUILD_MOZAB=YES
-        if test "$enable_build_mozab" = "no" ; then
-            BUILD_MOZAB=NO
-        fi
         AC_MSG_RESULT([yes, internal (old windows mozab driver)])
         BUILD_TYPE="$BUILD_TYPE MOZ"
         EXTMSV80=`cygpath  -u "$SRC_ROOT/external/msvcp80"`
@@ -8323,7 +8312,6 @@ if test "$_os" = "WINNT"; then
     fi
 fi
 AC_SUBST(WITH_MOZAB4WIN)
-AC_SUBST(BUILD_MOZAB)
 AC_SUBST(MSVC80_DLL_DIR)
 AC_SUBST(MSVC80_MNFST)
 AC_SUBST(EXTMSV80)
